@@ -34,7 +34,7 @@ classical information is represented by one quantum subsystem.
 Let's consider the classical dataset :math:`\mathcal{D}` mentioned above. For basis embedding, each
 example has to be a N-bit binary string; :math:`x^{(m)}=(b_1,\ldots,b_N)` with :math:`b_i \in \{0,1\}`
 for :math:`i=1,\ldots,N`. Assuming all features are represented with unit binary precision (one bit),
-each input example :math:`x^{(m)}` can be directly mapped to the quantum state :math:`| x^{(m)}\rangle`. **This means that the number of quantum subsystems,** :math:`\bm{n}` **, must be at least equal to** :math:`\bm{N}`. An entire dataset can be represented in superpositions of computational
+each input example :math:`x^{(m)}` can be directly mapped to the quantum state :math:`| x^{(m)}\rangle`. **This means that the number of quantum subsystems,** :math:`\mathbf{n}` **, must be at least equal to** :math:`\mathbf{N}`. An entire dataset can be represented in superpositions of computational
 basis states as
 
 .. math:: | \mathcal{D} \rangle = \frac{1}{\sqrt{M}} \sum_{m=1}^{M} |x^{(m)} \rangle.
@@ -75,7 +75,7 @@ where :math:`C_{norm}` is the normalization constant; this vector must be normal
 
 where :math:`\alpha_i` are the elements of the amplitude vector :math:`\alpha` and :math:`| i \rangle`
 are the computational basis states. The number of amplitudes to be encoded is :math:`N \times M`. 
-As a system of :math:`n` qubits provides :math:`2^n` amplitudes, **amplitude embedding requires** :math:`\bm{n \geq \log_2({NM})}`  **qubits.**
+As a system of :math:`n` qubits provides :math:`2^n` amplitudes, **amplitude embedding requires** :math:`\mathbf{n \geq \log_2({NM})}`  **qubits.**
 
 
 .. note::

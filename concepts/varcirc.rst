@@ -10,11 +10,11 @@ A variational circuit consists of three ingredients:
 
 1. Preparation of a fixed **initial state** (e.g., the vacuum state or the zero state).
 
-2. A **quantum circuit** :math:`U(x; \bm{\theta})`, parameterized by both the input :math:`x` and the free parameters :math:`\bm{\theta}`.
+2. A **quantum circuit** :math:`U(x; \mathbf{\theta})`, parameterized by both the input :math:`x` and the free parameters :math:`\mathbf{\theta}`.
 
 3. **Measurement** of an observable :math:`\hat{B}` at the output. This observable may be made up from local observables for each wire in the circuit, or just a subset of wires.
 
-The expectation values :math:`f(x;\bm{\theta})=\langle 0 | U^\dagger(x; \bm{\theta}) \hat{B} U(x; \bm{\theta}) | 0 \rangle` of one or more such circuits — possibly with some classical post-processing — define a scalar cost for a given task. The free parameters :math:`\bm{\theta}` of the circuit are tuned to optimize this cost function.
+The expectation values :math:`f(x;\mathbf{\theta})=\langle 0 | U^\dagger(x; \mathbf{\theta}) \hat{B} U(x; \mathbf{\theta}) | 0 \rangle` of one or more such circuits — possibly with some classical post-processing — define a scalar cost for a given task. The free parameters :math:`\mathbf{\theta}` of the circuit are tuned to optimize this cost function.
 
 
 :html:`<br>`
@@ -43,18 +43,18 @@ Building the circuit
     :width: 70%
     :target: javascript:void(0);
 
-    Example circuit showing how the argument :math:`x` and the variational parameters :math:`\bm{\theta}` enter the quantum circuit. Circuits can also contain gates which have no free parameters (e.g., a CNOT).
+    Example circuit showing how the argument :math:`x` and the variational parameters :math:`\mathbf{\theta}` enter the quantum circuit. Circuits can also contain gates which have no free parameters (e.g., a CNOT).
 
 :html:`<br>`
 
-Both the input :math:`x` and the variational parameters :math:`\bm{\theta}` enter the quantum circuit in the same way: as arguments for the circuit's gates. This allows us to convert *classical information* (the values of :math:`x` and :math:`\bm{\theta}`) into *quantum information* (the quantum state :math:`U(x;\bm{\theta})|0\rangle`).
+Both the input :math:`x` and the variational parameters :math:`\mathbf{\theta}` enter the quantum circuit in the same way: as arguments for the circuit's gates. This allows us to convert *classical information* (the values of :math:`x` and :math:`\mathbf{\theta}`) into *quantum information* (the quantum state :math:`U(x;\mathbf{\theta})|0\rangle`).
 
 Quantum information is turned *back into classical information* by evaluating the expectation value of the observable :math:`\hat{B}`,
 
-.. math:: f(x; \bm{\theta}) = \langle \hat{B} \rangle = \langle 0 | U^\dagger(x;\bm{\theta})\hat{B}U(x;\bm{\theta}) | 0 \rangle.
+.. math:: f(x; \mathbf{\theta}) = \langle \hat{B} \rangle = \langle 0 | U^\dagger(x;\mathbf{\theta})\hat{B}U(x;\mathbf{\theta}) | 0 \rangle.
 
 
-Beyond the basic rule that the inputs and parameters :math:`(x;\bm{\theta})` are used as the arguments of gates, exactly how the gates are arranged, the *circuit architecture*, is essentially arbitrary.
+Beyond the basic rule that the inputs and parameters :math:`(x;\mathbf{\theta})` are used as the arguments of gates, exactly how the gates are arranged, the *circuit architecture*, is essentially arbitrary.
 
 .. note:: As shown in the figure above, the circuit can also include additional gates which have no free parameter associated with them.
 
@@ -65,9 +65,9 @@ Examples
 Data-embedding
 ~~~~~~~~~~~~~~
 
-As explained in :ref:`concept_embeddings`, the first few gates in the circuit can be used to embed the input :math:`x` into a quantum state (which functions as a feature map :cite:`schuld2018quantum`), while the subsequent gates have parameters :math:`\bm{\theta}` as arguments.
+As explained in :ref:`concept_embeddings`, the first few gates in the circuit can be used to embed the input :math:`x` into a quantum state (which functions as a feature map :cite:`schuld2018quantum`), while the subsequent gates have parameters :math:`\mathbf{\theta}` as arguments.
 
-As an example, consider a photonic quantum computer (similar examples can be constructed for qubits). For simplicity, we temporarily omit the parameters :math:`\bm{\theta}`. We take the initial state to be the *vacuum* state and the measured observable :math:`\hat{B}` to be the position operator :math:`x`. The vacuum state has expectation value :math:`\langle\hat{x}\rangle = \langle 0 | \hat{x} | 0 \rangle = 0`.
+As an example, consider a photonic quantum computer (similar examples can be constructed for qubits). For simplicity, we temporarily omit the parameters :math:`\mathbf{\theta}`. We take the initial state to be the *vacuum* state and the measured observable :math:`\hat{B}` to be the position operator :math:`x`. The vacuum state has expectation value :math:`\langle\hat{x}\rangle = \langle 0 | \hat{x} | 0 \rangle = 0`.
 
 Suppose we have an input :math:`x`, which has :math:`N` dimensions. We can embed this into a quantum circuit with :math:`N` wires using the `displacement operator <https://en.wikipedia.org/wiki/Displacement_operator>`_. For every component :math:`x_i` of :math:`x`, we apply :math:`D(x_i)` to wire :math:`i`. This is called displacement embedding. 
 
@@ -80,7 +80,7 @@ Thus, the displacement gate — combined with vacuum input and position measurem
 Data processing
 ~~~~~~~~~~~~~~~
 
-Having embedded our data into a quantum state, we would now like to perform some processing. As it stands, our example circuit currently represents the *identity* :math:`f(x)=x`, which has no free parameters. By introducing additional gates, with parameters :math:`\bm{\theta}`, we can start building up more complex functions.
+Having embedded our data into a quantum state, we would now like to perform some processing. As it stands, our example circuit currently represents the *identity* :math:`f(x)=x`, which has no free parameters. By introducing additional gates, with parameters :math:`\mathbf{\theta}`, we can start building up more complex functions.
 
 For clarity, we restrict to a one-dimensional input :math:`x` and add in a single rotation operator, with free parameter :math:`\theta`. After applying this gate, the quantum node evaluated by our circuit becomes
 
