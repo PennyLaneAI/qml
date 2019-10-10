@@ -1,0 +1,71 @@
+ .. role:: html(raw)
+   :format: html
+
+QML Implementations
+===================
+
+Take a deeper dive into quantum machine learning by exploring cutting-edge
+algorithms using PennyLane and near-term quantum hardware.
+
+.. customgalleryitem::
+    :tooltip: Do arbitrary state preparation on a real quantum computer.
+    :figure: implementations/state_preparation/NOON.png
+    :description: :doc:`app/tutorial_state_preparation`
+
+.. customgalleryitem::
+    :tooltip: Use PennyLane to create a simple QGAN
+    :figure: implementations/QGAN/qgan3.png
+    :description: :doc:`app/tutorial_QGAN`
+
+.. customgalleryitem::
+    :tooltip: A quantum variational classifier
+    :figure: implementations/variational_classifier/classifier_output_59_0.png
+    :description: :doc:`app/tutorial_variational_classifier`
+
+.. customgalleryitem::
+    :tooltip: Fit one dimensional noisy data with a quantum neural network.
+    :figure: implementations/quantum_neural_net/qnn_output_28_0.png
+    :description: :doc:`app/quantum_neural_net`
+
+.. customgalleryitem::
+    :tooltip: Find the ground state of a Hamiltonian.
+    :figure: implementations/variational_quantum_eigensolver/vqe_output_22_0.png
+    :description: :doc:`app/tutorial_variational_quantum_eigensolver`
+
+.. customgalleryitem::
+    :tooltip: Universal Quantum Classifier with data-reuploading
+    :figure: implementations/data_reuploading/universal_dnn.png
+    :description: :doc:`app/tutorial_data_reuploading_classifier`
+
+.. customgalleryitem::
+    :tooltip: Faster optimization convergence using quantum natural gradient
+    :figure: implementations/quantum_natural_gradient/qng_optimization.png
+    :description: :doc:`app/tutorial_quantum_natural_gradient`
+
+.. customgalleryitem::
+    :tooltip: Perform QAOA for MaxCut
+    :figure: implementations/qaoa_maxcut/qaoa_maxcut_partition.png
+    :description: :doc:`app/tutorial_qaoa_maxcut`
+
+.. customgalleryitem::
+    :tooltip: Barren plateaus in quantum neural networks
+    :figure: implementations/barren_plateaus/surface.png
+    :description: :doc:`app/tutorial_barren_plateaus`
+
+:html:`<div style='clear:both'></div>`
+
+
+.. toctree::
+    :maxdepth: 2
+    :caption: QML Implementations
+    :hidden:
+
+    app/tutorial_state_preparation
+    app/tutorial_QGAN
+    app/tutorial_variational_classifier
+    app/quantum_neural_net
+    app/tutorial_variational_quantum_eigensolver
+    app/tutorial_data_reuploading_classifier
+    app/tutorial_quantum_natural_gradient
+    app/tutorial_qaoa_maxcut
+    app/tutorial_barren_plateaus

@@ -1,0 +1,18 @@
+--find-links https://download.pytorch.org/whl/torch_stable.html
+appdirs
+autograd
+numpy
+pygments-github-lexers
+semantic_version==2.6
+git+git://github.com/XanaduAI/pennylane-sf.git#egg=PennyLane_SF
+pennylane-forest
+pyquil==2.10
+scipy
+sphinx==1.8.5
+sphinxcontrib-bibtex
+sphinx_gallery
+strawberryfields
+tensorflow==1.13.2
+toml
+torch==1.2.0+cpu
+torchvision==0.4.0+cpu
