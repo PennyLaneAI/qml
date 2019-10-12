@@ -54,11 +54,17 @@ body {
   width: 100%;
   /*min-height: calc(100vh - 90px);*/
   height: auto;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 50px 0 rgba(0, 0, 0, 0.19);
   margin-right: auto;
   border-radius: 20px;
   margin-bottom: 100px;
   margin-top: 30px;
+  /*border: 1px #eeeeee solid;*/
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 50px 0 rgba(0, 0, 0, 0.19);*/
+}
+
+.page-shadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 50px 0 rgba(0, 0, 0, 0.19);
+  border: 0px;
 }
 
 a.headerlink {
@@ -690,7 +696,7 @@ td {
   width: 300px;
   top: 119px;
   max-width: 300px;
-  right: calc(50% - 790px);
+  right: calc(50% - 820px);
   position: fixed;
   transition-property: opacity;
   transition-duration: 1s;
@@ -1608,7 +1614,7 @@ span.eqno {
 
   #right-column {
     margin-left: 0;
-    margin-top: 0;
+    margin-top: -30px;
     padding: 50px 20px 80px 20px;
     width: 100%;
     float: none;
@@ -1651,6 +1657,24 @@ span.eqno {
 
   .xanadu-call-to-action-links {
     display: none;
+  }
+
+  .gallery-grid {
+    justify-content: center!important;
+  }
+
+  .navbar {
+    box-shadow: none!important;
+    border-bottom: 1px #ddd solid;
+  }
+
+  .nav-item.active {
+      font-weight: bold;
+  }
+
+  .nav-item:hover:after,
+  .nav-item.active:after {
+      border-bottom: 0px!important;
   }
 
 }
@@ -1841,6 +1865,7 @@ footer.page-footer .footer-copyright {
     border: 0;
     border-radius: 10px!important;
     transition-duration: 0.4s;
+    background-color: white;
 }
 
 

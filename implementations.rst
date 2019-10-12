@@ -7,6 +7,8 @@ QML Implementations
 Take a deeper dive into quantum machine learning by exploring cutting-edge
 algorithms using PennyLane and near-term quantum hardware.
 
+:html:`<div class="gallery-grid row">`
+
 .. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: implementations/state_preparation/NOON.png
@@ -52,7 +54,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/barren_plateaus/surface.png
     :description: :doc:`app/tutorial_barren_plateaus`
 
-:html:`<div style='clear:both'></div>`
+:html:`</div><div style='clear:both'></div>`
 
 
 .. toctree::

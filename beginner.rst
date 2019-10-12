@@ -8,6 +8,7 @@ Beginner tutorials
 The following tutorial introduce the core PennyLane concepts, including QNodes,
 plugins, and devices, via simple and easy-to-follow implementations.
 
+:html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
     :tooltip: Use quantum machine learning to rotate a qubit.
@@ -33,7 +34,7 @@ plugins, and devices, via simple and easy-to-follow implementations.
     :figure: beginner/pytorch_noise/bloch.gif
     :description: :doc:`tutorial/pytorch_noise`
 
-:html:`<div style='clear:both'></div>`
+:html:`</div><div style='clear:both'></div>`
 
 
 .. toctree::

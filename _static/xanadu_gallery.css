@@ -10,7 +10,7 @@ Tested for Read the Docs theme 0.1.7 */
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.005);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.08);
   float: left;
   margin: 5px;
   min-height: 230px;
@@ -18,11 +18,19 @@ Tested for Read the Docs theme 0.1.7 */
   position: relative;
   text-align: center;
   border-radius: 10px;
+  transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .sphx-glr-thumbcontainer:hover {
   border: solid #b4ddfc 0px;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.1);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.2);
+  transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
+/*.sphx-glr-thumbcontainer:hover > .figure > img {*/
+  /*transform: scale(1.08);*/
+  /*transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);*/
+/*}*/
+
+
 .sphx-glr-thumbcontainer a.internal {
   bottom: 0;
   display: block;
