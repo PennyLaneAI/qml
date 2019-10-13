@@ -34,7 +34,7 @@ author = "Xanadu Inc."
 # The short X.Y version
 version = ""
 # The full version, including alpha/beta/rc tags
-release = "0.1"
+release = ""
 
 
 # -- General configuration ---------------------------------------------------
@@ -142,7 +142,7 @@ html_theme_options = {
     "touch_icon_small": "_static/xanadu_small.png",
     "large_toc": True,
     # Set GA account ID to enable tracking
-    # "google_analytics_account": "UA-116279123-2",
+    "google_analytics_account": "UA-130507810-1",
     # colors
     "navigation_button": "#19b37b",
     "navigation_button_hover": "#0e714d",
