@@ -74,8 +74,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
 }
 
-
-mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
 # Remove warnings that occur when generating the the tutorials
 warnings.filterwarnings(

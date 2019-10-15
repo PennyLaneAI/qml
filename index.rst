@@ -24,7 +24,8 @@ Quantum machine learning
                             <div class="text-center d-flex align-items-center pb-4">
                                 <div>
                                     <h3 class="card-title">
-                                    <i class="fas fa-key green-text" style="font-size:xx-large;"></i><br>
+                                    <img src="_static/key.png" class="img-fluid" style="max-width: 80px;"></img>
+                                    <br>
                                     <strong>Key concepts</strong>
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore and understand the key concepts underpinning variational quantum circuits and quantum machine learning.</p>
@@ -41,7 +42,8 @@ Quantum machine learning
                         <div class="text-center d-flex align-items-center pb-4">
                             <div>
                                 <h3 class="card-title">
-                                <i class="fas fa-chalkboard-teacher red-text" style="font-size:xx-large;"></i><br>
+                                <img src="_static/board.png" class="img-fluid" style="max-width: 86px;"></img>
+                                <br>
                                 <strong>Beginners</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Tutorials to introduce core QML concepts, including quantum nodes, optimization, and devices, via easy-to-follow examples.</p>
@@ -57,7 +59,8 @@ Quantum machine learning
                         <div class="text-center d-flex align-items-center pb-4">
                             <div>
                                 <h3 class="card-title">
-                                <i class="fas fa-flask blue-text" style="font-size:xx-large;"></i><br>
+                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <br>
                                 <strong>Implementations</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms on near-term quantum hardware.</p>
@@ -78,7 +81,8 @@ Quantum machine learning
         <!-- Grid column -->
         <div class="col-md-3">
             <div class="text-center">
-                <i class="fa fa-graduation-cap fa-3x green-text text-center"></i>
+                <img src="_static/research.png" class="img-fluid"></img>
+                <br>
                 <h5 class="font-weight-bold my-4">Research focused</h5>
             </div>
             <p class="grey-text mb-0">Xanadu is not just a software company; we also perform high-impact research and build quantum hardware. Our software gets used internally across the company &mdash; check out some of the <a href="https://xanadu.ai/research">papers released</a> using our open-source software tools.
@@ -88,7 +92,8 @@ Quantum machine learning
     <!-- Grid column -->
     <div class="col-md-3">
         <div class="text-center">
-            <i class="fa fa-book fa-3x red-text"></i>
+            <img src="_static/book.png" class="img-fluid"></img>
+            <br>
             <h5 class="font-weight-bold my-4">Documented</h5>
         </div>
         <p class="grey-text mb-md-0 mb-5">Code documentation is important; it encourages everyone to dive straight in and begin tinkering with the code. We have the highest standard for documentation &mdash; our aim is to make everything accessible, from code to theory.
@@ -98,7 +103,8 @@ Quantum machine learning
     <!-- Grid column -->
     <div class="col-md-3">
         <div class="text-center">
-            <i class="fa fa-code-branch fa-3x cyan-text"></i>
+            <img src="_static/fork.png" class="img-fluid"></img>
+            <br>
             <h5 class="font-weight-bold my-4">Open source</h5>
         </div>
         <p class="grey-text mb-md-0 mb-5">The physics community is embracing open-source software, bringing transparency and reproducibility to physics research. All of our software is open-source, and we are excited to be along for the ride.
@@ -108,7 +114,8 @@ Quantum machine learning
     <!-- Grid column -->
     <div class="col-md-3">
         <div class="text-center">
-            <i class="fa fa-users fa-3x orange-text"></i>
+            <img src="_static/community.png" class="img-fluid"></img>
+            <br>
             <h5 class="font-weight-bold my-4">Community driven</h5>
         </div>
             <p class="grey-text mb-0">When we release software, we have the community in mind. Development takes place publicly on GitHub, and members of our team are available to chat on our <a href="https://u.strawberryfields.ai/slack">Strawberry Fields Slack</a> and <a href="https://discuss.pennylane.ai">PennyLane forum</a>.
