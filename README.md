@@ -17,22 +17,8 @@ at https://pennylane.ai/qml. Content includes:
 
 ## Contributing
 
-There are three ways you can contribute: add or extend to the QML key concepts section,
-write a beginners QML tutorial, or by submitting an implementation of a recent
+You can contribute by submitting a tutorial or an implementation of a recent
 quantum machine learning paper/result.
-
-### Adding new concepts
-
-* All sections in the Key Concepts section are written using
-  [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
-  markup, and are placed in the `concepts` folder. Have a look at some of the
-  existing files, such as `concept_embeddings.rst`, for examples and to see
-  how math is scripted.
-
-* Once written, a small summary and a link should be added in the top-level `concepts.rst`
-  file.
-
-* You are now ready to submit a pull request!
 
 ### Adding tutorials and implementations
 
@@ -111,11 +97,16 @@ there are a couple of guidelines to keep in mind.
 
 * Thumbnails should be legible, interesting, and unique --- but not too busy!
   Any included text should be minimal and legible
+  
+* If your content contains random variables/outputs, a fixed seed should 
+  be set for reproducibility.
 
 * All content must be original or free to reuse subject to license compatibility.
   For example, if you are implementing someone elses research, reach out first to
   recieve permission to reproduce exact figures. Otherwise, avoid direct screenshots
   from papers, and instead refer to figures in the paper within the text.
+  
+* All submissions must pass code review before being merged into the repository.
 
 ## Building
 
