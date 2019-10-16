@@ -171,7 +171,7 @@ def opt_theta(d, params, cost):
     # restrict output to lie in (-pi,pi], a convention
     # consistent with the Rotosolve paper
     if params[d] <= -np.pi:
-        params[d] += 2*np.pi
+        params[d] += 2 * np.pi
 
 
 # one cycle of rotosolve
@@ -310,6 +310,7 @@ def circuit_rsel(params, generators=None):  # generators will be passed as a key
     ansatz_rsel(params, generators)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliY(1))
 
+
 @qml.qnode(dev)
 def circuit_rsel2(params, generators=None):  # generators will be passed as a keyword arg
     ansatz_rsel(params, generators)
@@ -339,7 +340,7 @@ def rotosolve(d, params, generators, cost, M_0):  # M_0 only calculated once
     )  # returns value in (-pi,pi]
     params[d] = -np.pi / 2.0 - a
     if params[d] <= -np.pi:
-        params[d] += 2*np.pi
+        params[d] += 2 * np.pi
     return cost(params, generators)
 
 
@@ -420,7 +421,9 @@ X = np.linspace(-4.0, 4.0, 40)
 Y = np.linspace(-4.0, 4.0, 40)
 xx, yy = np.meshgrid(X, Y)
 # plot cost for fixed optimal generators
-Z = np.array([[cost_rsel([x, y], generators=generators) for x in X] for y in Y]).reshape(len(Y), len(X))
+Z = np.array([[cost_rsel([x, y], generators=generators) for x in X] for y in Y]).reshape(
+    len(Y), len(X)
+)
 surf = ax.plot_surface(xx, yy, Z, cmap=cm.coolwarm, antialiased=False)
 
 ax.set_xlabel(r"$\theta_1$")
