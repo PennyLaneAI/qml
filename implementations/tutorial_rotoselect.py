@@ -8,8 +8,8 @@ Quantum circuit structure learning
 This example shows how to learn a good selection of rotation
 gates so as to minimize a cost
 function using the Rotoselect algorithm of `Ostaszewski et al.
-(2019) <https://arxiv.org/abs/1905.09692>`__. We apply this algorithm to minimize a Hamiltonian for a 
-variational quantum eigensolver (VQE) problem, 
+(2019) <https://arxiv.org/abs/1905.09692>`__. We apply this algorithm to minimize a Hamiltonian for a
+variational quantum eigensolver (VQE) problem,
 and improve upon an initial circuit structure ansatz.
 """
 ##############################################################################
@@ -121,6 +121,7 @@ dev = qml.device("default.qubit", analytic=True, wires=2)
 #    :alt: original_ansatz
 #
 # |
+#
 # Next, we set up a circuit with a fixed ansatz structure---which will later be subject to change---and encode
 # the Hamiltonian into a cost function. The structure is shown in the figure above.
 
@@ -274,6 +275,7 @@ plt.show()
 #    :alt: rotoselect_structure
 #
 # |
+#
 # We now implement the Rotoselect algorithm to learn a good selection of gates to minimize
 # our cost function. The structure is similar to the original ansatz, but the generators of rotation are
 # selected from the set of Pauli gates :math:`P_d \in \{X,Y,Z\}` as shown in the figure above. For example,
@@ -410,6 +412,7 @@ plt.show()
 #    :alt: learned_structure
 #
 # |
+#
 # Finally, we plot the cost function surface for the newly discovered optimized
 # circuit structure shown in the figure above. It is apparent from the minima in the plot that
 # the new circuit structure is better suited for the problem.
