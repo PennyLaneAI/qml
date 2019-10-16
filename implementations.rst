@@ -54,6 +54,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/barren_plateaus/surface.png
     :description: :doc:`app/tutorial_barren_plateaus`
 
+.. customgalleryitem::
+    :tooltip: Rotoselect algorithm
+    :figure: implementations/rotoselect/rotoselect_structure.png
+    :description: :doc:`app/tutorial_rotoselect`
+
 :html:`</div><div style='clear:both'></div>`
 
 
@@ -71,3 +76,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_quantum_natural_gradient
     app/tutorial_qaoa_maxcut
     app/tutorial_barren_plateaus
+    app/tutorial_rotoselect
