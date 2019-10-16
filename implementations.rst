@@ -17,7 +17,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Ising model example with PennyLane PyTorch interface.
     :figure: implementations/Ising_model/isingspins.png
-    :description: :ref:`isingmodel_PyTorch`
+    :description: :doc:`app/tutorial_isingmodel_PyTorch`
 
 .. customgalleryitem::
     :tooltip: Use PennyLane to create a simple QGAN
@@ -68,7 +68,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :hidden:
 
     app/tutorial_state_preparation
-    app/pennylane_run_isingmodel_PyTorch
+    app/tutorial_isingmodel_PyTorch
     app/tutorial_QGAN
     app/tutorial_variational_classifier
     app/quantum_neural_net
