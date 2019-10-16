@@ -54,6 +54,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/barren_plateaus/surface.png
     :description: :doc:`app/tutorial_barren_plateaus`
 
+.. customgalleryitem::
+    :tooltip: Doubly stochastic gradient descent
+    :figure: implementations/doubly_stochastic/single_shot.png
+    :description: :doc:`Doubly stochastic gradient descent <app/tutorial_doubly_stochastic>`
+
 :html:`</div><div style='clear:both'></div>`
 
 
@@ -71,3 +76,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_quantum_natural_gradient
     app/tutorial_qaoa_maxcut
     app/tutorial_barren_plateaus
+    app/tutorial_doubly_stochastic
