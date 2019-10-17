@@ -56,7 +56,7 @@ Variational quantum linear solver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The approach used in a VQLS is to approximate the solution :math:`|x\rangle` with a variational quantum 
-circuit, i.e., a unitary circuit depending on a finite number of classical real parameters 
+circuit, i.e., a unitary circuit :math:`V` depending on a finite number of classical real parameters 
 :math:`w = (w_0, w_1, \dots)`:
 
 .. math::
