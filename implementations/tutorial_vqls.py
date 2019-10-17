@@ -496,7 +496,7 @@ c_probs = c_probs / np.sum(c_probs)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ##############################################################################
-# Given the quantum variational weights ``w`` that we have previously optimized,
+# Given the variational weights ``w`` that we have previously optimized,
 # we can generate the quantum state :math:`|x\rangle`.
 
 
