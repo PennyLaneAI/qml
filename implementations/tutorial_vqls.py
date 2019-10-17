@@ -3,6 +3,8 @@ r"""
 
 Variational Quantum Linear Solver
 ====================================
+*Author: Andrea Mari*
+
 In this tutorial we implement a quantum algorithm known as the *variational quantum linear 
 solver* (VQLS), originally introduced in 
 `Bravo-Prieto et al. (2019) <https://arxiv.org/abs/1909.05820>`_.
