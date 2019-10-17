@@ -172,7 +172,7 @@ Eventually we will compare the quantum solution with the classical one.
 ##############################################################################
 # General setup
 # ------------------------
-# This Python code requires *PennyLane* and plotting library *matplotlib*.
+# This Python code requires *PennyLane* and the plotting library *matplotlib*.
 
 # Pennylane
 import pennylane as qml
