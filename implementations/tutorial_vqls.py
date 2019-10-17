@@ -211,15 +211,13 @@ c = np.array([1.0, 0.2, 0.2])
 
 
 def U_b():
-    """Unitary matrix rotating the ground state to the problem vector |b> = U_b |0>.
-    """
+    """Unitary matrix rotating the ground state to the problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
 
 
 def CA(idx):
-    """Controlled versions of the unitary components A_l of the problem matrix A.
-    """
+    """Controlled versions of the unitary components A_l of the problem matrix A."""
     if idx == 0:
         # Identity operation
         None
@@ -237,14 +235,12 @@ def CA(idx):
 
 
 def U_b_dag():
-    """Adjoint of the unitary matrix U_b, where |b> = U_b |0>.
-    """
+    """Adjoint of the unitary matrix U_b, where |b> = U_b |0>."""
     U_b()  # In this particular example the operation is self-adjoint.
 
 
 def CA_dag(idx):
-    """Adjoint of the controlled unitary components of A.
-    """
+    """Adjoint of the controlled unitary components of A."""
     if idx == 0:
         CA(0)  # In this particular example the operations are self-adjoint.
     elif idx == 1:
@@ -264,8 +260,7 @@ def CA_dag(idx):
 
 
 def variational_block(weights):
-    """Variational circuit mapping the ground state |0> to the ansatz state |x>.
-    """
+    """Variational circuit mapping the ground state |0> to the ansatz state |x>."""
     # We first prepare an equal superposition of all the states of the computational basis.
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
@@ -359,8 +354,7 @@ def mu(weights, l=None, lp=None, j=None):
 
 
 def psi_norm(weights):
-    """Returns the normalization constant <psi|psi>, where |psi> = A |x>.
-    """
+    """Returns the normalization constant <psi|psi>, where |psi> = A |x>."""
     norm = 0.0
 
     for l in range(0, len(c)):
@@ -377,8 +371,7 @@ def psi_norm(weights):
 
 
 def cost_loc(weights):
-    """Local version of the problem cost function. This function tends to zero when A |x> is proportional to |b>.
-    """
+    """Local version of the problem cost function. This function tends to zero when A |x> is proportional to |b>."""
     mu_sum = 0.0
 
     for l in range(0, len(c)):
