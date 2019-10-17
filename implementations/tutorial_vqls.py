@@ -437,7 +437,6 @@ plt.style.use("seaborn")
 plt.plot(cost_history, "g")
 plt.ylabel("Cost function")
 plt.xlabel("Optimization steps")
-plt.legend()
 plt.show()
 
 ##############################################################################
