@@ -15,6 +15,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_state_preparation`
 
 .. customgalleryitem::
+    :tooltip: Ising model example with PennyLane PyTorch interface.
+    :figure: implementations/Ising_model/isingspins.png
+    :description: :doc:`app/tutorial_isingmodel_PyTorch`
+
+.. customgalleryitem::
     :tooltip: Use PennyLane to create a simple QGAN
     :figure: implementations/QGAN/qgan3.png
     :description: :doc:`app/tutorial_QGAN`
@@ -55,10 +60,19 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_barren_plateaus`
 
 .. customgalleryitem::
+    :tooltip: Rotoselect algorithm
+    :figure: implementations/rotoselect/rotoselect_structure.png
+    :description: :doc:`app/tutorial_rotoselect`
+
+.. customgalleryitem::
+    :tooltip: Doubly stochastic gradient descent
+    :figure: implementations/doubly_stochastic/single_shot.png
+    :description: :doc:`Doubly stochastic gradient descent <app/tutorial_doubly_stochastic>`
+
+.. customgalleryitem::
     :tooltip: Variational Quantum Linear Solver
     :figure: implementations/vqls/vqls_zoom.png
     :description: :doc:`app/tutorial_vqls`
-
 
 :html:`</div><div style='clear:both'></div>`
 
@@ -69,6 +83,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :hidden:
 
     app/tutorial_state_preparation
+    app/tutorial_isingmodel_PyTorch
     app/tutorial_QGAN
     app/tutorial_variational_classifier
     app/quantum_neural_net
@@ -77,4 +92,6 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_quantum_natural_gradient
     app/tutorial_qaoa_maxcut
     app/tutorial_barren_plateaus
+    app/tutorial_rotoselect
+    app/tutorial_doubly_stochastic
     app/tutorial_vqls

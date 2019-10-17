@@ -86,7 +86,7 @@ Let us write :math:`C_G` more explicitly:
 
 All expectation values of the previous expression could be estimated with a
 `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_,
-which is a standard quantum computation technique. This method however might be experimentally challenging since it requires to apply
+which is a standard quantum computation technique. This method however might be experimentally challenging since it requires us to apply
 all the unitaries (:math:`U^\dagger, A_l` and :math:`V`) in a controlled way,
 i.e., conditioned on the state of an ancillary qubit. A possible workaround for estimating the same expectation values in a simpler
 way has been proposed in Ref. [1], but will not be considered here.
@@ -137,7 +137,7 @@ which can be computed whenever we are able to measure the following coefficients
 where we used the convention that if :math:`j=-1`,  :math:`Z_{-1}` is replaced with the identity.
 
 Also in this case the complex coefficients :math:`\mu_{l, l', j}` can be experimentally measured with an Hadamard test.
-The corresponding quantum circuit is represented in the figure placed below the title of this tutorial.
+The corresponding quantum circuit is shown in the image at the top of this tutorial.
 Compared with the previous method, the main advantage of this approach is that only the unitary operations
 :math:`A_l, A_l^\dagger` and :math:`Z_j` need to be controlled by an external ancillary qubit,
 while :math:`V, V^\dagger, U` and :math:`U^\dagger` can be directly applied to the system.
@@ -145,7 +145,7 @@ This is particularly convenient whenever :math:`V` has a complex structure, e.g.
 many variational layers.
 
 A simple example
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 In this tutorial we consider the following simple example based on a system of 3 qubits (plus an ancilla)
 which is very similar to the one experimentally tested in Ref. [1]:
@@ -154,7 +154,7 @@ which is very similar to the one experimentally tested in Ref. [1]:
         A  &=&  c_0 A_0 + c_1 A_1 + c_2 A_2 = \mathbb{I} + 0.2 X_0 Z_1 + 0.2 X_0, \\
         |b\rangle &=& U |0 \rangle = H_0  H_1  H_2 |0\rangle,
 
-where :math:`Z_j, X_j, H_j` represent the Pauli Z, Pauli X and Hadamard gates applied to the qubit with index :math:`j`.
+where :math:`Z_j, X_j, H_j` represent the Pauli :math:`Z`, Pauli :math:`X` and Hadamard gates applied to the qubit with index :math:`j`.
 
 This problem is computationally quite easy since a single layer of local rotations is enough to generate the
 solution state, i.e., we can use the following simple ansatz:
@@ -201,9 +201,9 @@ rng_seed = 0  # Seed for random number generator
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ##############################################################################
-# We now define the unitary operations associated to the *simple example*
+# We now define the unitary operations associated to the simple example
 # presented in the introduction.
-# Since we want to implement an Hadamard test, we need the unitary operations
+# Since we want to implement a Hadamard test, we need the unitary operations
 # :math:`A_j` to be controlled by the state of an ancillary qubit.
 
 # Coefficients of the linear combination A = c_0 A_0 + c_1 A_1 ...
@@ -329,11 +329,11 @@ def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=No
     qml.Hadamard(wires=ancilla_idx)
 
     # Expectation value of Z for the ancillary qubit.
-    return qml.expval.PauliZ(wires=ancilla_idx)
+    return qml.expval(qml.PauliZ(wires=ancilla_idx))
 
 
 ##############################################################################################
-# To get the real and immaginary parts of :math:`\mu_{l,l',j}`, one needs to run the previous
+# To get the real and imaginary parts of :math:`\mu_{l,l',j}`, one needs to run the previous
 # quantum circuit with and without a phase-shift of the ancillary qubit. This is automatically
 # done by the following function.
 
