@@ -464,7 +464,7 @@ A_2 = np.kron(np.kron(X, Id), Id)
 
 A_num = c[0] * A_0 + c[1] * A_1 + c[2] * A_2
 
-b = np.ones(8) / 8.0
+b = np.ones(8) / np.sqrt(8)
 
 ##############################################################################
 # We can print the explicit values of :math:`A` and :math:`b`:
