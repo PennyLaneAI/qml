@@ -496,7 +496,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 
 ##############################################################################
 # Given the variational weights ``w`` that we have previously optimized,
-# we can generate the quantum state :math:`|x\rangle`. By measuring it
+# we can generate the quantum state :math:`|x\rangle`. By measuring :math:`|x\rangle`
 # in the computational basis we can estimate the probability of each basis state.
 #
 # For this task, we initialize a new PennyLane device and define the associated
