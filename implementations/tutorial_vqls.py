@@ -201,14 +201,6 @@ q_depth = 1                     # Depth of the quantum circuit (number of variat
 q_delta = 0.001                 # Initial spread of random quantum weights
 rng_seed = 0                    # Seed for random number generator
 
-##############################################################################
-# We initialize two PennyLane devices with the ``default.qubit`` backend.
-# The first divice will be used to estimate and minimize the cost function.
-# The second device will be used to prepare the solution state :math:`|x\rangle`.
-
-dev_mu = qml.device("default.qubit", wires=tot_qubits)
-dev_x = qml.device("default.qubit", wires=n_qubits)
-
 
 ##############################################################################
 # Circuits of the quantum linear problem
@@ -297,13 +289,17 @@ def variational_block(weights):
 ##############################################################################
 # Hadamard test
 # --------------
-# We define a PennyLane ``qnode`` object representing a model of the actual quantum computation.
+#
+# We first initialize a PennyLane device with the ``default.qubit`` backend. 
+#
+# As a second step, we define a PennyLane ``qnode`` object representing a model of the actual quantum computation.
 #
 # The circuit is based on the
 # `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_
 # and will be used to estimate the coefficients :math:`\mu_{l,l',j}` defined in the introduction.
-#
 # A graphical representation of this circuit is given in the figure placed below the title of this tutorial. 
+
+dev_mu = qml.device("default.qubit", wires=tot_qubits)
 
 @qml.qnode(dev_mu)
 def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=None):
@@ -499,7 +495,11 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 ##############################################################################
 # Given the variational weights ``w`` that we have previously optimized,
 # we can generate the quantum state :math:`|x\rangle`.
+#
+# For this task, we initialize a new PennyLane device and define the associated
+# *qnode* object.
 
+dev_x = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev_x)
 def prepare_x(weights):
