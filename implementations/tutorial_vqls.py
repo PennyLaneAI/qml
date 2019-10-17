@@ -96,7 +96,7 @@ Second method
 
 The second method, which is the one used in this tutorial, is to minimize a "local" version of the cost function which is easier to
 measure and, at the same time, leads to the same optimal solution.
-Such local cost function, originally proposed in Ref. [1], can be obtained by replacing the blue colored projector
+This local cost function, originally proposed in Ref. [1], can be obtained by replacing the blue colored projector
 :math:`\color{blue}{|0\rangle\langle 0|}` in the previous expression with the following positive operator:
 
 .. math::
@@ -291,7 +291,7 @@ def variational_block(weights):
 # The circuit is based on the
 # `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_
 # and will be used to estimate the coefficients :math:`\mu_{l,l',j}` defined in the introduction.
-# A graphical representation of this circuit is given in the figure placed below the title of this tutorial.
+# A graphical representation of this circuit is shown at the top of this tutorial.
 
 dev_mu = qml.device("default.qubit", wires=tot_qubits)
 
@@ -299,15 +299,15 @@ dev_mu = qml.device("default.qubit", wires=tot_qubits)
 @qml.qnode(dev_mu)
 def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=None):
 
-    # Variational circuit generating a guess for the solution vector |x>
-    variational_block(weights)
-
     # First Hadamard gate applied to the ancillary qubit.
     qml.Hadamard(wires=ancilla_idx)
 
     # For estimating the imaginary part of the coefficient "mu", we must add a "-i" phase gate.
     if part == "Im" or part == "im":
-        qml.PhaseShift(3 / 2 * np.pi, wires=ancilla_idx)
+        qml.PhaseShift(-np.pi / 2, wires=ancilla_idx)
+
+    # Variational circuit generating a guess for the solution vector |x>
+    variational_block(weights)
 
     # Controlled application of the unitary component A_idx of the problem matrix A.
     CA(A_idx)
@@ -342,7 +342,7 @@ def mu(weights, l=None, lp=None, j=None):
     r"""Generates the matrix element \mu_{l, lp ,j} = <0| V^dag A_lp^dag U Z_j  U^dag A_l V |0>,
     where Z_j is the Z operator applied to the qubit with index j.
     If j=-1, then Z_{-1} is replaced with the identity.
-    This quantity can be used to compute a "local" version of the variational cost.
+    This quantity can be used to compute a "local" version of the variational cost function.
     """
 
     mu_real = local_hadamard_test(weights, A_idx=l, A_dag_idx=lp, Z_idx=j, part="Re")
@@ -398,15 +398,11 @@ def cost_loc(weights):
 #
 # We first initialize the variational weights with random parameters (with a fixed seed).
 
-
-# Random number generator with seed.
-rng = np.random.RandomState(rng_seed)
-
-# Random initial weights.
-w = q_delta * rng.randn(q_depth, n_qubits)
+np.random.seed(rng_seed)
+w = q_delta * np.random.randn(q_depth, n_qubits)
 
 ##############################################################################
-# To minimize the cost function we use the *gradient-descent optimizer*.
+# To minimize the cost function we use the gradient-descent optimizer.
 opt = qml.GradientDescentOptimizer(eta)
 
 
@@ -423,8 +419,8 @@ for it in range(steps):
 
 ##############################################################################
 # We plot the cost function with respect to the optimization steps.
-# We remark that this quantity is not an abstract optimization tool,
-# but it actually quantifies the error between the generated state
+# We remark that this is not an abstract mathematical quantity
+# since it also represents a bound for the error between the generated state
 # and the exact solution of the problem.
 
 plt.style.use("seaborn")
@@ -450,7 +446,6 @@ plt.show()
 Id = np.identity(2)
 Z = np.array([[1, 0], [0, -1]])
 X = np.array([[0, 1], [1, 0]])
-H = np.sqrt(2) * np.array([[0, 1], [1, 0]])
 
 A_0 = np.identity(8)
 A_1 = np.kron(np.kron(X, Z), Id)
@@ -472,12 +467,6 @@ print("b = \n", b)
 
 A_inv = np.linalg.inv(A_num)
 x = np.dot(A_inv, b)
-
-##############################################################################
-# To check that the solution is correct, we compute and print the error.
-
-err = np.sum(np.abs(np.dot(A_num, x) - b) ** 2)
-print("|A x - b|^2 = ", err)
 
 ##############################################################################
 # Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
