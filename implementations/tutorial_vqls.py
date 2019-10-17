@@ -86,7 +86,7 @@ Let us write :math:`C_G` more explicitly:
 
 All expectation values of the previous expression could be estimated with a
 `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_,
-which is a standard quantum computation technique. This method however might be experimentally challenging since it requires to apply
+which is a standard quantum computation technique. This method however might be experimentally challenging since it requires us to apply
 all the unitaries (:math:`U^\dagger, A_l` and :math:`V`) in a controlled way,
 i.e., conditioned on the state of an ancillary qubit. A possible workaround for estimating the same expectation values in a simpler
 way has been proposed in Ref. [1], but will not be considered here.
