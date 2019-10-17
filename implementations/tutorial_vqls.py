@@ -329,7 +329,7 @@ def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=No
     qml.Hadamard(wires=ancilla_idx)
 
     # Expectation value of Z for the ancillary qubit.
-    return qml.expval.PauliZ(wires=ancilla_idx)
+    return qml.expval(qml.PauliZ(wires=ancilla_idx))
 
 
 ##############################################################################################
