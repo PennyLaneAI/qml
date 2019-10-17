@@ -412,7 +412,7 @@ rng = np.random.RandomState(rng_seed)
 w = q_delta * rng.randn(q_depth, n_qubits)
 
 ##############################################################################
-# To minimize the cost function we use the *gradient descent optimizer*.
+# To minimize the cost function we use the *gradient-descent optimizer*.
 opt = qml.GradientDescentOptimizer(eta)
 
 
