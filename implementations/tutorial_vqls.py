@@ -201,7 +201,7 @@ rng_seed = 0  # Seed for random number generator
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ##############################################################################
-# We now define the unitary operations associated to the *simple example*
+# We now define the unitary operations associated to the simple example
 # presented in the introduction.
 # Since we want to implement an Hadamard test, we need the unitary operations
 # :math:`A_j` to be controlled by the state of an ancillary qubit.
