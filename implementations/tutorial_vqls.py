@@ -181,11 +181,6 @@ from pennylane import numpy as np
 # Plotting
 import matplotlib.pyplot as plt
 
-# Other tools
-import time
-import os
-
-
 ##############################################################################
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
