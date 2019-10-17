@@ -51,7 +51,7 @@ The problem that we aim to solve is that of preparing a quantum state :math:`|x\
 
 .. math::
 
-    |\Psi\rangle =  \frac{A |x\rangle}{\sqrt{\langle x |A^\dagger A |x\rangle}} = |b\rangle.
+    |\Psi\rangle :=  \frac{A |x\rangle}{\sqrt{\langle x |A^\dagger A |x\rangle}} \approx |b\rangle.
 
 
 Variational quantum linear solver
@@ -412,7 +412,7 @@ rng = np.random.RandomState(rng_seed)
 w = q_delta * rng.randn(q_depth, n_qubits)
 
 ##############################################################################
-# To minimize the cost function we use the Adam optimizer.
+# To minimize the cost function we use the *gradient descent optimizer*.
 opt = qml.GradientDescentOptimizer(eta)
 
 
