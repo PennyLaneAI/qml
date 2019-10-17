@@ -154,7 +154,7 @@ which is very similar to the one experimentally tested in Ref. [1]:
         A  &=&  c_0 A_0 + c_1 A_1 + c_2 A_2 = \mathbb{1} + 0.2 X_0 Z_1 + 0.2 X_0, \\
         |b\rangle &=& U |0 \rangle = H_0 \otimes H_1 \otimes H_2 |0\rangle,
 
-where :math:`Z_j, X_j, H_j` represent the Pauli Z, Pauli X and Hadamard gates applied to the qubit with index :math:`j`.
+where :math:`Z_j, X_j, H_j` represent the Pauli :math:`Z`, Pauli :math:`X` and Hadamard gates applied to the qubit with index :math:`j`.
 
 This problem is computationally quite easy since a single layer of local rotations is enough to generate the
 solution state, i.e., we can use the following simple ansatz:
