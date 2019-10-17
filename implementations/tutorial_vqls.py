@@ -151,8 +151,8 @@ In this tutorial we consider the following simple example based on a system of 3
 which is very similar to the one experimentally tested in Ref. [1]:
 
 .. math::
-        A  &=&  c_0 A_0 + c_1 A_1 + c_2 A_2 = \mathbb{1} + 0.2 X_0 Z_1 + 0.2 X_0, \\
-        |b\rangle &=& U |0 \rangle = H_0 \otimes H_1 \otimes H_2 |0\rangle,
+        A  &=&  c_0 A_0 + c_1 A_1 + c_2 A_2 = \mathbb{I} + 0.2 X_0 Z_1 + 0.2 X_0, \\
+        |b\rangle &=& U |0 \rangle = H_0  H_1  H_2 |0\rangle,
 
 where :math:`Z_j, X_j, H_j` represent the Pauli Z, Pauli X and Hadamard gates applied to the qubit with index :math:`j`.
 
@@ -160,7 +160,7 @@ This problem is computationally quite easy since a single layer of local rotatio
 solution state, i.e., we can use the following simple ansatz:
 
 .. math::
-        |x\rangle = V(w) |0\rangle = R_y(w_1) \otimes  R_y(w_2) \otimes  R_y(w_3) |0\rangle.
+        |x\rangle = V(w) |0\rangle = \Big [  R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2) \Big ]  H_0  H_1  H_2 |0\rangle.
 
 
 In the code presented below we solve this particular problem by minimizing the local cost function :math:`C_L`.
