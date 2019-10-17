@@ -333,7 +333,7 @@ def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=No
 
 
 ##############################################################################################
-# To get the real and immaginary parts of :math:`\mu_{l,l',j}`, one needs to run the previous
+# To get the real and imaginary parts of :math:`\mu_{l,l',j}`, one needs to run the previous
 # quantum circuit with and without a phase-shift of the ancillary qubit. This is automatically
 # done by the following function.
 
