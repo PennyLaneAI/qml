@@ -145,7 +145,7 @@ This is particularly convenient whenever :math:`V` has a complex structure, e.g.
 many variational layers.
 
 A simple example
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 In this tutorial we consider the following simple example based on a system of 3 qubits (plus an ancilla)
 which is very similar to the one experimentally tested in Ref. [1]:
