@@ -193,9 +193,10 @@ import os
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 n_qubits = 3                    # Number of system qubits.
+n_shots = 10 ** 6               # Number of quantum measurements.
 tot_qubits = n_qubits + 1       # Addition of an ancillary qubit.
 ancilla_idx = n_qubits          # Index of the ancillary qubit (last position).
-steps = 30                      # Number of optimization steps
+steps = 2                       # Number of optimization steps
 eta = 0.8                       # Learning rate
 q_depth = 1                     # Depth of the quantum circuit (number of variational layers)
 q_delta = 0.001                 # Initial spread of random quantum weights
@@ -492,9 +493,11 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # Preparation of the quantum solution
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+
 ##############################################################################
 # Given the variational weights ``w`` that we have previously optimized,
-# we can generate the quantum state :math:`|x\rangle`.
+# we can generate the quantum state :math:`|x\rangle`. By measuring it
+# in the computational basis we can estimate the probability of each basis state.
 #
 # For this task, we initialize a new PennyLane device and define the associated
 # *qnode* object.
@@ -502,22 +505,24 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 dev_x = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev_x)
-def prepare_x(weights):
+def prepare_and_sample(weights):
 
     # Variational circuit generating a guess for the solution vector |x>
     variational_block(weights)
 
-    # Arbitrary observable.
-    # In this case we are actually interested only on the state probabilities.
-    obs = [qml.expval.Identity(k) for k in range(0, n_qubits)]
-    return obs
+    # We assume that the system is measured in the computational basis.
+    # If we label each basis state with a decimal integer j = 0, 1, ... 2 ** n_qubits - 1, 
+    # this is equivalent to a measurement of the following diagonal observable.
+    basis_obs = qml.Hermitian(np.diag(range(2 ** n_qubits)), wires=range(n_qubits))
 
+    return qml.sample(basis_obs, n=n_shots)
 
-prepare_x(w)
+##############################################################################
+# To estimate the probability distribution over the basis states we first take ``n_shots``
+# samples and then compute the relative frequency of each outcome.
 
-# In PennyLane one can easily extract the squared modulus of the state amplitudes, 
-# evaluated before the final measurement.
-q_probs = list(dev_x.probability().values())
+samples = prepare_and_sample(w).astype(int)
+q_probs = np.bincount(samples) / n_shots
 
 ##############################################################################
 # Comparison
@@ -528,7 +533,7 @@ print("x_n^2 =\n", c_probs)
 
 ##############################################################################
 # The previous probabilities should match the following quantum state probabilities.
-print("|<x|n>|^2=\n", list(q_probs))
+print("|<x|n>|^2=\n", q_probs)
 
 ##############################################################################
 # Let us graphically visualize both distributions.
