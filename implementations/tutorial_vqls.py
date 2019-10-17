@@ -84,7 +84,7 @@ Let us write :math:`C_G` more explicitly:
     C_G = 1- \frac{ \sum_{l, l'}  c_l c_{l'}^* \langle 0|  V^\dagger A_{l'}^\dagger U \color{blue}{|0\rangle \langle 0|} U^\dagger A_l  V |0\rangle}
     {\sum_{l,l'} c_l c_{l'}^* \langle 0| V^\dagger A_{l'}^\dagger A_l V |0\rangle} .
 
-All expectation values of the previous expression could be estimated with an 
+All expectation values of the previous expression could be estimated with a 
 `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_,
 which is a standard quantum computation technique. This method however might be experimentally challenging since it requires to apply
 all the unitaries (:math:`U^\dagger, A_l` and :math:`V`) in a controlled way,
