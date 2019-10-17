@@ -17,7 +17,7 @@ solver* (VQLS), originally introduced in
 Introduction
 ------------
 
-We first define the probelm and the general structure of a VQLS. 
+We first define the problem and the general structure of a VQLS. 
 As a second step, we consider a particular case and we solve it explicitly with PennyLane.
 
 The problem
