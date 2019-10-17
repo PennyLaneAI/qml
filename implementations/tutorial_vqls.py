@@ -489,9 +489,8 @@ x = np.dot(A_inv, b)
 err = np.sum(np.abs(np.dot(A_num, x) - b) ** 2)
 print("|A x - b|^2 = ", err)
 
-# Finally, in order to compare x with the quantum state |x>, we square and normalize its elements.
-c_probs = x ** 2
-c_probs = c_probs / np.sum(c_probs)
+# Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
+c_probs = (x / np.linalg.norm(x)) ** 2
 
 ##############################################################################
 # Preparation of the quantum solution
