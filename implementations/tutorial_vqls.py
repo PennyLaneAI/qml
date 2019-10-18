@@ -101,7 +101,7 @@ This local cost function, originally proposed in Ref. [1], can be obtained by re
 
 .. math::
 
-    P =  \frac{1}{2} + \frac{1}{2n}\sum_{j=0}^{n-1} Z_j,
+     \color{blue}{P} =  \frac{1}{2} + \frac{1}{2n}\sum_{j=0}^{n-1} Z_j,
 
 where :math:`Z_j` is the Pauli :math:`Z` operator locally applied to the :math:`j\rm{th}` qubit. This gives a new cost function:
 
