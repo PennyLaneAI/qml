@@ -320,8 +320,8 @@ def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
 def mu(weights, l=None, lp=None, j=None):
     """Generates the coefficients to compute the "local" cost function C_L."""
 
-    mu_real = local_hadamard_test(weights, A_idx=l, A_dag_idx=lp, Z_idx=j, part="Re")
-    mu_imag = local_hadamard_test(weights, A_idx=l, A_dag_idx=lp, Z_idx=j, part="Im")
+    mu_real = local_hadamard_test(weights, l=l, lp=lp, j=j, part="Re")
+    mu_imag = local_hadamard_test(weights, l=l, lp=lp, j=j, part="Im")
 
     return mu_real + 1.0j * mu_imag
 
@@ -415,7 +415,7 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^
 # To solve the problem in a classical way, we use the explicit matrix representation in
 # terms of numerical NumPy arrays.
-
+ 
 Id = np.identity(2)
 Z = np.array([[1, 0], [0, -1]])
 X = np.array([[0, 1], [1, 0]])
