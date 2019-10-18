@@ -5,11 +5,17 @@ orbs:
 
 jobs:
   build:
+    executor: aws-cli/default
+      python-version: '3.7.2'
+
     docker:
       - image: circleci/python:3.7.2
 
     steps:
       - checkout
+
+      - aws-cli/setup:
+          aws-region: us-east-1
 
       - run:
           name: Install dependencies
