@@ -12,15 +12,15 @@ jobs:
       - checkout
 
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: pip install -r requirements.txt
 
       - run:
-          name: build tutorials
+          name: Build tutorials
           command: make html
 
       - deploy:
-          name: deploy to AWS
+          name: Deploy to AWS
           command: |
             if [ "${CIRCLE_BRANCH}" = "master" ]; then
               aws s3 sync _build/html s3://pennylane.ai/qml --delete
