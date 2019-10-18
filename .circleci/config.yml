@@ -16,7 +16,7 @@ jobs:
       - checkout
 
       - aws-cli/setup:
-          aws-region: us-east-1
+          aws-region: AWS_REGION
 
       - run:
           name: Install dependencies
