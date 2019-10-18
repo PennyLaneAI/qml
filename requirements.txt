@@ -4,6 +4,7 @@ autograd
 numpy
 pygments-github-lexers
 semantic_version==2.6
+git+git://github.com/XanaduAI/pennylane.git#egg=pennylane
 git+git://github.com/XanaduAI/pennylane-sf.git#egg=PennyLane_SF
 pennylane-forest
 pyquil==2.10
