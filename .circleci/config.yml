@@ -28,7 +28,6 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-
       - restore_cache:
           keys:
             - gallery
