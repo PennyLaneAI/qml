@@ -30,7 +30,9 @@ jobs:
 
       - run:
           name: Build tutorials
-          command: make html
+          command: |
+            . venv/bin/activate
+            make html
 
       - deploy:
           name: Deploy to AWS
