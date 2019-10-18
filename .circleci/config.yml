@@ -22,9 +22,8 @@ jobs:
           name: Install dependencies
           command: |
             python3 -m venv venv
-            python3 --version
             . venv/bin/activate
-            pip install pip --upgrade
+            pip install pip setuptools --upgrade
             pip install -r requirements.txt
 
       - restore_cache:
