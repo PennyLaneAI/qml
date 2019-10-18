@@ -251,7 +251,7 @@ def variational_block(weights):
     """Variational circuit mapping the ground state |0> to the ansatz state |x>."""
     # We first prepare an equal superposition of all the states of the computational basis.
     for idx in range(n_qubits):
-        qml.Hadamard(wires=idx)
+     qml.Hadamard(wires=idx)
 
     # A very minimal variational circuit.
     for idx, element in enumerate(weights):
@@ -425,7 +425,6 @@ A_1 = np.kron(np.kron(X, Z), Id)
 A_2 = np.kron(np.kron(X, Id), Id)
 
 A_num = c[0] * A_0 + c[1] * A_1 + c[2] * A_2
-
 b = np.ones(8) / np.sqrt(8)
 
 ##############################################################################
@@ -459,7 +458,6 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # *qnode* object.
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
-
 
 @qml.qnode(dev_x)
 def prepare_and_sample(weights):
@@ -517,4 +515,4 @@ plt.show()
 # 1. Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles.
 #    "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems."
 #    `arXiv:1909.05820 <https://arxiv.org/abs/1909.05820>`__, 2019.
-#
+# 
