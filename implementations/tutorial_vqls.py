@@ -211,12 +211,10 @@ rng_seed = 0  # Seed for random number generator
 # Coefficients of the linear combination A = c_0 A_0 + c_1 A_1 ...
 c = np.array([1.0, 0.2, 0.2])
 
-
 def U_b():
     """Unitary matrix rotating the ground state to the problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
-
 
 def CA(idx):
     """Controlled versions of the unitary components A_l of the problem matrix A."""
@@ -230,23 +228,6 @@ def CA(idx):
 
     elif idx == 2:
         qml.CNOT(wires=[ancilla_idx, 0])
-
-
-def U_b_dag():
-    """Adjoint of the unitary matrix U_b, where |b> = U_b |0>."""
-    U_b()  # In this particular example the operation is self-adjoint.
-
-
-def CA_dag(idx):
-    """Adjoint of the controlled unitary components of A."""
-    if idx == 0:
-        CA(0)  # In this particular example the operations are self-adjoint.
-    elif idx == 1:
-        CA(1)
-    elif idx == 2:
-        CA(2)
-    elif idx == 3:
-        CA(3)
 
 
 ##############################################################################
@@ -292,9 +273,8 @@ def variational_block(weights):
 
 dev_mu = qml.device("default.qubit", wires=tot_qubits)
 
-
 @qml.qnode(dev_mu)
-def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=None):
+def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
 
     # First Hadamard gate applied to the ancillary qubit.
     qml.Hadamard(wires=ancilla_idx)
@@ -306,21 +286,23 @@ def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=No
     # Variational circuit generating a guess for the solution vector |x>
     variational_block(weights)
 
-    # Controlled application of the unitary component A_idx of the problem matrix A.
-    CA(A_idx)
+    # Controlled application of the unitary component A_l of the problem matrix A.
+    CA(l)
 
-    # Adjoint of the unitary U_b associated to the problem vector |b>.
-    U_b_dag()
+    # Adjoint of the unitary U_b associated to the problem vector |b>. 
+    # In this specific example adjoint(U_b)=U_b.
+    U_b()
 
-    # Controlled Z operator at position Z_idx. If Z_idx=-1, apply the identity.
-    if Z_idx != -1:
-        qml.CZ(wires=[ancilla_idx, Z_idx])
+    # Controlled Z operator at position j. If j=-1, apply the identity.
+    if j != -1:
+        qml.CZ(wires=[ancilla_idx, j])
 
     # Unitary U_b associated to the problem vector |b>.
     U_b()
 
-    # Controlled application of the unitary A_idx^dag.
-    CA_dag(A_dag_idx)
+    # Controlled application of the adjoint(A_lp).
+    # In this specific example adjoint(A_lp)=A_lp.
+    CA(lp)
 
     # Second Hadamard gate applied to the ancillary qubit.
     qml.Hadamard(wires=ancilla_idx)
