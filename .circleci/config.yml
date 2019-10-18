@@ -10,6 +10,7 @@ jobs:
 
     steps:
       - checkout
+        path: ~/qml
 
       - run:
           name: Install dependencies
