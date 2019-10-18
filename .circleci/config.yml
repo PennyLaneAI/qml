@@ -28,11 +28,22 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
+
+      - restore_cache:
+          keys:
+            - gallery
+
       - run:
           name: Build tutorials
           command: |
             . venv/bin/activate
             make html
+
+      - save_cache:
+          paths:
+            - ./tutorial
+            - ./app
+          key: gallery
 
       - deploy:
           name: Deploy to AWS
