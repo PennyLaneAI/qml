@@ -69,6 +69,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/doubly_stochastic/single_shot.png
     :description: :doc:`Doubly stochastic gradient descent <app/tutorial_doubly_stochastic>`
 
+.. customgalleryitem::
+    :tooltip: Coherent Variational Quantum Linear Solver
+    :figure: implementations/coherent-vqls/vqls_zoom.png
+    :description: :doc:`app/tutorial_coherent_vqls`
+
+
 :html:`</div><div style='clear:both'></div>`
 
 
@@ -89,3 +95,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_barren_plateaus
     app/tutorial_rotoselect
     app/tutorial_doubly_stochastic
+    app/tutorial_coherent_vqls
