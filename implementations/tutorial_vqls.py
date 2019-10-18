@@ -351,7 +351,7 @@ def psi_norm(weights):
 
 
 def cost_loc(weights):
-    """Local version of the problem cost function, which tends to zero when A |x> is proportional to |b>."""
+    """Local version of the cost function, which tends to zero when A |x> is proportional to |b>."""
     mu_sum = 0.0
 
     for l in range(0, len(c)):
