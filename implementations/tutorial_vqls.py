@@ -290,18 +290,18 @@ def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
     CA(l)
 
     # Adjoint of the unitary U_b associated to the problem vector |b>. 
-    # In this specific example adjoint(U_b)=U_b.
+    # In this specific example Adjoint(U_b) = U_b.
     U_b()
 
-    # Controlled Z operator at position j. If j=-1, apply the identity.
+    # Controlled Z operator at position j. If j = -1, apply the identity.
     if j != -1:
         qml.CZ(wires=[ancilla_idx, j])
 
     # Unitary U_b associated to the problem vector |b>.
     U_b()
 
-    # Controlled application of the adjoint(A_lp).
-    # In this specific example adjoint(A_lp)=A_lp.
+    # Controlled application of Adjoint(A_lp).
+    # In this specific example Adjoint(A_lp) = A_lp.
     CA(lp)
 
     # Second Hadamard gate applied to the ancillary qubit.
