@@ -231,10 +231,6 @@ def CA(idx):
     elif idx == 2:
         qml.CNOT(wires=[ancilla_idx, 0])
 
-    # If necessary, further unitary components can be added below.
-    # elif idx==3:
-    # ...
-
 
 def U_b_dag():
     """Adjoint of the unitary matrix U_b, where |b> = U_b |0>."""
@@ -277,7 +273,7 @@ def variational_block(weights):
         qml.Hadamard(wires=idx)
 
     # A very minimal variational circuit.
-    for idx, element in enumerate(weights[0]):
+    for idx, element in enumerate(weights):
         qml.RY(element, wires=idx)
 
 
@@ -340,11 +336,7 @@ def local_hadamard_test(weights, A_idx=None, A_dag_idx=None, Z_idx=None, part=No
 
 
 def mu(weights, l=None, lp=None, j=None):
-    r"""Generates the matrix element \mu_{l, lp ,j} = <0| V^dag A_lp^dag U Z_j  U^dag A_l V |0>,
-    where Z_j is the Z operator applied to the qubit with index j.
-    If j=-1, then Z_{-1} is replaced with the identity.
-    This quantity can be used to compute a "local" version of the variational cost function.
-    """
+    """Generates the coefficients to compute the "local" cost function C_L."""
 
     mu_real = local_hadamard_test(weights, A_idx=l, A_dag_idx=lp, Z_idx=j, part="Re")
     mu_imag = local_hadamard_test(weights, A_idx=l, A_dag_idx=lp, Z_idx=j, part="Im")
