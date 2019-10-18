@@ -1,0 +1,36 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@0.1.16
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.2
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: pip install -r requirements.txt
+
+      - run:
+          name: build tutorials
+          command: make html
+
+      - deploy:
+          name: deploy to AWS
+          command: |
+            if [ "${CIRCLE_BRANCH}" = "master" ]; then
+              aws s3 sync _build/html s3://pennylane.ai/qml --delete
+              aws cloudfront create-invalidation --distribution-id EQO2PENH3I2OG --paths /qml/*
+            else
+              echo "Not master branch, dry run only"
+            fi
+
+workflows:
+  workflow:
+    jobs:
+      - build:
+          context: aws_credentials
