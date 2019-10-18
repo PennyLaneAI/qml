@@ -5,7 +5,8 @@ orbs:
 
 jobs:
   build:
-    executor: aws-cli/default
+    executor:
+      name: aws-cli/default
       python-version: '3.7.2'
 
     docker:
