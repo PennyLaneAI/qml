@@ -194,7 +194,6 @@ tot_qubits = n_qubits + 1  # Addition of an ancillary qubit.
 ancilla_idx = n_qubits  # Index of the ancillary qubit (last position).
 steps = 30  # Number of optimization steps
 eta = 0.8  # Learning rate
-q_depth = 1  # Depth of the quantum circuit (number of variational layers)
 q_delta = 0.001  # Initial spread of random quantum weights
 rng_seed = 0  # Seed for random number generator
 
@@ -260,6 +259,15 @@ def CA_dag(idx):
 #
 # What follows is the variational quantum circuit that should generate the solution
 # state :math:`|x\rangle= V(w)|0\rangle`.
+#
+# The first layer of the circuit is a product of Hadamard gates preparing a
+# balanced superposition of all basis states.
+#
+# After that, we apply a very simple variational ansatz
+# which is just a single layer of qubit rotations
+# :math:`R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2)`.
+# For solving more complex problems, we suggest to use more expressive circuits as,
+# e.g., the PennyLane template `pennylane.templates.layers.StronglyEntanglingLayers()`.
 
 
 def variational_block(weights):
@@ -268,14 +276,9 @@ def variational_block(weights):
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
 
-    # Model A
-    # For this specific example we use a very simple variational circuit.
+    # A very minimal variational circuit.
     for idx, element in enumerate(weights[0]):
         qml.RY(element, wires=idx)
-
-    # Model B
-    # For a more expressive circuit, comment "Model A" and uncomment the following template.
-    # qml.templates.layers.StronglyEntanglingLayers(weights, range(0, n_qubits))
 
 
 ##############################################################################
@@ -374,7 +377,7 @@ def psi_norm(weights):
 
 
 def cost_loc(weights):
-    """Local version of the problem cost function. This function tends to zero when A |x> is proportional to |b>."""
+    """Local version of the problem cost function, which tends to zero when A |x> is proportional to |b>."""
     mu_sum = 0.0
 
     for l in range(0, len(c)):
@@ -395,7 +398,7 @@ def cost_loc(weights):
 # We first initialize the variational weights with random parameters (with a fixed seed).
 
 np.random.seed(rng_seed)
-w = q_delta * np.random.randn(q_depth, n_qubits)
+w = q_delta * np.random.randn(n_qubits)
 
 ##############################################################################
 # To minimize the cost function we use the gradient-descent optimizer.
