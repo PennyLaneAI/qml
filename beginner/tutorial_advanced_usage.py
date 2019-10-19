@@ -10,11 +10,11 @@ In the previous three introductory tutorials (:ref:`qubit rotation <qubit_rotati
 :ref:`plugins & hybrid computation <plugins_hybrid>`) we explored the basic concepts of
 PennyLane, including qubit- and CV-model quantum computations, gradient-based optimization,
 and the construction of hybrid classical-quantum computations.
-
-In this tutorial, we will highlight some of the more advanced features of Pennylane.
 """
 
 ##############################################################################
+# In this tutorial, we will highlight some of the more advanced features of Pennylane.
+#
 # Multiple measurements
 # ---------------------
 #
@@ -82,7 +82,7 @@ def circuit1(param):
 #
 # PennyLane uses the pattern that *all positional arguments to quantum functions are available
 # to be differentiated*, while *keyword arguments are never differentiated*. Thus, when using the
-# gradient-descent-based :ref:`optimizers <optimization_methods>` included in PennyLane, all
+# gradient-descent-based :doc:`introduction/optimizers` included in PennyLane, all
 # numerical parameters appearing in non-keyword arguments will be updated, while all numerical
 # values included as keyword arguments will not be updated.
 #

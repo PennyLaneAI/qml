@@ -36,17 +36,19 @@ What is this circuit doing?
    albeit a rotation (by angle :math:`\phi`) instead of a displacement.
 
 4. **Finally, we measure the mean photon number** :math:`\langle\hat{n}\rangle =
-   \langle\hat{a}^\dagger \hat{a}\rangle`. This quantity, which tells us the average amount of photons in the final state, is proportional to the energy of the photonic system.
-
-The aim of this tutorial is to optimize the circuit parameters :math:`(\alpha, \phi)`
-such that the mean photon number is equal to one. The rotation gate is actually a
-*passive transformation*, meaning that it does not change the energy of the system.
-The displacement gate is an *active transformation*, which modifies the energy of the
-photonic system.
+   \langle\hat{a}^\dagger \hat{a}\rangle`. This quantity, which tells us the average amount of
+   photons in the final state, is proportional to the energy of the photonic system.
 """
 
 
 ###############################################################################
+#
+# The aim of this tutorial is to optimize the circuit parameters :math:`(\alpha, \phi)`
+# such that the mean photon number is equal to one. The rotation gate is actually a
+# *passive transformation*, meaning that it does not change the energy of the system.
+# The displacement gate is an *active transformation*, which modifies the energy of the
+# photonic system.
+#
 # Constructing the QNode
 # ----------------------
 #
@@ -65,7 +67,7 @@ dev_gaussian = qml.device("default.gaussian", wires=1)
 
 ###############################################################################
 # After initializing the device, we can construct our quantum node. As before, we use the
-# :mod:`qnode decorator <pennylane.decorator>` to convert our quantum function
+# :func:`~.pennylane.qnode` to convert our quantum function
 # (encoded by the circuit above) into a quantum node running on the ``default.gaussian``
 # device.
 
@@ -115,7 +117,7 @@ print(cost(init_params))
 #     We avoided initial parameters which are exactly zero because that
 #     corresponds to a critical point with zero gradient.
 #
-# Now, let's use the :class:`~.GradientDescentOptimizer`, and update the circuit
+# Now, let's use the :class:`~.pennylane.GradientDescentOptimizer`, and update the circuit
 # parameters over 100 optimization steps.
 
 # initialise the optimizer

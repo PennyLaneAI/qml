@@ -113,7 +113,7 @@ from pennylane import numpy as np
 #
 # .. tip::
 #
-#    *Devices are loaded in PennyLane via the function* :func:`pennylane.device`
+#    *Devices are loaded in PennyLane via the function* :func:`~.pennylane.device`
 #
 #
 # PennyLane supports devices using both the qubit model of quantum computation and devices
@@ -151,8 +151,8 @@ dev1 = qml.device("default.qubit", wires=1)
 #
 # .. tip::
 #
-#    *QNodes can be constructed via the* :class:`pennylane.QNode`
-#    *class, or by using the provided* :mod:`qnode decorator <pennylane.qnode>`.
+#    *QNodes can be constructed via the* :class:`~.pennylane.QNode`
+#    *class, or by using the provided* :func:`~.pennylane.qnode` decorator.
 #
 # First, we need to define the quantum function that will be evaluated in the QNode:
 
@@ -187,7 +187,7 @@ def circuit(params):
 #   As a result, the quantum function always returns a classical quantity, allowing
 #   the QNode to interface with other classical functions (and also other QNodes).
 #
-#   For a full list of observables, see ::doc:`the documentation <introduction/operations>`.
+#   For a full list of observables, see :doc:`the documentation <introduction/operations>`.
 #   The documentation also provides details on supported :doc:`measurement return types <introduction/measurements>`.
 #
 # * **Quantum functions must not contain any classical processing of circuit parameters.**
@@ -198,8 +198,8 @@ def circuit(params):
 #     operations/observables, or may even provide additional operations/observables.
 #     Please consult the documentation for the plugin/device for more details.
 #
-# Once we have written the quantum function, we convert it into a :class:`~pennylane.QNode` running
-# on device ``dev1`` by applying the :mod:`qnode decorator <pennylane.qnode>`
+# Once we have written the quantum function, we convert it into a :class:`~.pennylane.QNode` running
+# on device ``dev1`` by applying the :func:`~.pennylane.qnode` decorator.
 # **directly above** the function definition:
 
 
@@ -211,7 +211,7 @@ def circuit(params):
 
 
 ##############################################################################
-# Thus, our ``circuit()`` quantum function is now a :class:`~pennylane.QNode`, which will run on
+# Thus, our ``circuit()`` quantum function is now a :class:`~.pennylane.QNode`, which will run on
 # device ``dev1`` every time it is evaluated.
 #
 # To evaluate, we simply call the function with some appropriate numerical inputs:
