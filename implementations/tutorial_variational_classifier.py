@@ -9,26 +9,27 @@ quantum classifiers - quantum circuits that can be trained from labelled
 data to classify new data samples. The architecture is inspired by
 `Farhi and Neven (2018) <https://arxiv.org/abs/1802.06002>`__ as well as
 `Schuld et al. (2018) <https://arxiv.org/abs/1804.00633>`__.
-
-We will first show that the variational quantum classifier can reproduce
-the parity function
-
-.. math::
-
-    f: x \in \{0,1\}^{\otimes n} \rightarrow y =
-    \begin{cases} 1 \text{  if uneven number of ones in } x \\ 0
-    \text{ otherwise} \end{cases}.
-
-This optimization example demonstrates how to encode binary inputs into
-the initial state of the variational circuit, which is simply a
-computational basis state.
-
-We then show how to encode real vectors as amplitude vectors (*amplitude
-encoding*) and train the model to recognize the first two classes of
-flowers in the Iris dataset.
 """
 
 ##############################################################################
+#
+# We will first show that the variational quantum classifier can reproduce
+# the parity function
+#
+# .. math::
+#
+#     f: x \in \{0,1\}^{\otimes n} \rightarrow y =
+#     \begin{cases} 1 \text{  if uneven number of ones in } x \\ 0
+#     \text{ otherwise} \end{cases}.
+#
+# This optimization example demonstrates how to encode binary inputs into
+# the initial state of the variational circuit, which is simply a
+# computational basis state.
+#
+# We then show how to encode real vectors as amplitude vectors (*amplitude
+# encoding*) and train the model to recognize the first two classes of
+# flowers in the Iris dataset.
+#
 # 1. Fitting the parity function
 # ------------------------------
 #
@@ -82,7 +83,7 @@ def layer(W):
 #
 # .. math::  x = 0101 \rightarrow |\psi \rangle = |0101 \rangle .
 #
-# We use the ``BasisState`` function provided by PennyLane, which expects
+# We use the :class:`~.BasisState` function provided by PennyLane, which expects
 # ``x`` to be a list of zeros and ones, i.e. ``[0,1,0,1]``.
 
 
