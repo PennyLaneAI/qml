@@ -54,6 +54,8 @@ extensions = [
     "sphinx_gallery.gen_gallery",
 ]
 
+autodoc_mock_imports = ["tensorflow.log"]
+
 
 sphinx_gallery_conf = {
     # path to your example scripts
