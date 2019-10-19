@@ -78,14 +78,12 @@ of shots is 1!
     At the same time, a reduced number of shots may significantly reduce the
     wall time of each optimization step, leading to a reduction in the overall
     optimization time.
-
-Let's consider a simple example in PennyLane, comparing analytic gradient
-descent (with exact expectation values) to stochastic gradient descent
-using a finite number of shots.
-
 """
 
 ##############################################################################
+# Let's consider a simple example in PennyLane, comparing analytic gradient
+# descent (with exact expectation values) to stochastic gradient descent
+# using a finite number of shots.
 #
 # A single-shot stochastic gradient descent
 # -----------------------------------------
