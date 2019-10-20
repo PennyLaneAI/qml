@@ -701,6 +701,7 @@ td {
   transition-property: opacity;
   transition-duration: 1s;
   opacity: 0.5;
+  height: calc(100% - 119px);
 }
 
 .comment-container:hover {
@@ -1652,7 +1653,7 @@ span.eqno {
     margin-bottom: unset;
   }
 
-  #comments {
+  .comment-container {
     display: none;
   }
 
