@@ -67,6 +67,10 @@ body {
   border: 0px;
 }
 
+a {
+  color: #2a6496;
+}
+
 a.headerlink {
   visibility: hidden;
   color: #ddd;
