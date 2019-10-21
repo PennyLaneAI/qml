@@ -7,8 +7,8 @@ Coherent Variational Quantum Linear Solver
 
 In this tutorial we implement the *coherent variational quantum linear solver* (CVQLS). 
 This is an algorithm inspired by the VQLS proposed in 
-Ref. [1], but it has an important difference: the matrix _A_ defining of the linear 
-problem is physically applied as probabilistic coherent operation.
+Ref. [1], but it has an important difference: the matrix :math:`A` defining of the linear 
+problem is physically applied as a probabilistic coherent operation.
 
 
 Introduction
@@ -70,19 +70,47 @@ The parameters should be optimized in order to maximize the overlap between the 
 such that its minimization with respect to the variational parameters should lead towards the problem solution.
 
 The approach used in Ref. [1] is to decompose the cost function in terms of many expectation values associated to the
-individual components :math:`A_l` of the problem matrix :math:`A`. In fact, in the VQLS proposed in Ref. [1],
+individual components :math:`A_l` of the problem matrix :math:`A`. For this reason, in the VQLS proposed in Ref. [1],
 the state vector proportional to :math:`A |x\rangle` is never physically prepared.
 
 On the contrary, the idea presented in this tutorial is to physically implement the linear map :math:`A` as
-a coherent probabilistic operation. This apporach allows to prepare the state 
-:math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}` which can be used to estimate the cost function 
-in a more direct way.
+a coherent probabilistic operation. This approach allows to prepare the state 
+:math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}` which can be used to estimate the
+overlap :math:`|\langle b | \Psi \rangle|` and so the cost function of the problem.
 
 
+Coherently applying :math:`A`
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-State preparation
->>>>>>>>>>>>>>>>>
+Without loss of generality we can assume that the complex coefficients :math:`c=(c_1, c_2, \dots c_L)` appearing
+in the definition of :math:`A` are normalized and that :math:`L=2^m` for some positive integer :math:`m`.
+Indeed the linear problem is defined up to a constant scaling factor and, moreover, we can
+always pad  :math:`c` with additional zero elements.
 
+
+Let us consider a unitary circuit :math:`U_C`, embedding the classical vector :math:`c` into the quantum state :math:`|c\rangle` of :math:`m` ancillary qubits:
+
+.. math::
+
+    |c \rangle =  U_c |0\rangle = \sum_{l=0}^{L-1} c_l | l \rangle,
+
+where :math:`\{ |l\rangle \}` is the computational basis of the ancillary system.
+
+
+Now, for each unitary component :math:`A_l` of the problem matrix :math:`A`, we can define the associated generalized controlled operation
+acting on the system and ancillary qubits as follows:
+
+.. math::
+
+    CA_l \, |j\rangle |l' \rangle  = 
+    \left\{
+    \begin{array}{c}
+    \left(A_l \otimes \mathbb{I}\right) \, |j\rangle |l \rangle \quad \mathrm{for}\; l'=l \\
+    \qquad \; \; \;|j\rangle |l' \rangle  \quad \mathrm{for}\; l'\neq l 
+    \end{array}
+    \right\},
+
+i.e., the unitary :math:`A_l` is applied only when the ancillary system is in state :math:`|l\rangle`.
 
 
 A simple example
