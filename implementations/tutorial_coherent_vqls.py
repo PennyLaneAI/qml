@@ -113,8 +113,6 @@ Eventually we will compare the quantum solution with the classical one.
 """
 
 
-"""
-
 
 ##############################################################################
 # General setup
@@ -136,7 +134,7 @@ n_qubits = 3  # Number of system qubits.
 n_shots = 10 ** 6  # Number of quantum measurements.
 tot_qubits = n_qubits + 1  # Addition of an ancillary qubit.
 ancilla_idx = n_qubits  # Index of the ancillary qubit (last position).
-steps = 30  # Number of optimization steps
+steps = 1  # Number of optimization steps
 eta = 0.8  # Learning rate
 q_delta = 0.001  # Initial spread of random quantum weights
 rng_seed = 0  # Seed for random number generator
