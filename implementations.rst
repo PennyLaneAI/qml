@@ -71,7 +71,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Coherent Variational Quantum Linear Solver
-    :figure: implementations/coherent-vqls/vqls_zoom.png
+    :figure: implementations/coherent_vqls/vqls_zoom.png
     :description: :doc:`app/tutorial_coherent_vqls`
 
 

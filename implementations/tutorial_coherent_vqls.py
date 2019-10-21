@@ -2,23 +2,19 @@ r"""
 .. _coherent_vqls:
 
 Coherent Variational Quantum Linear Solver
-====================================
+==========================================
 *Author: Andrea Mari*
 
 In this tutorial we implement the *coherent variational quantum linear
-solver* algorithm. This is a new algorithm, inspired by the VQLS proposed in 
-Ref. [1], but with a key difference: the matrix _A_ defining of the linear 
-problem is probabilistically applied as a unique coherent operation.
+solver* algorithm (CVQLS). This is algorithm is inspired by the VQLS proposed in 
+Ref. [1], but has a key difference: the matrix _A_ defining of the linear 
+problem is probabilistically applied as a single coherent operation.
 
-.. figure:: ../implementations/coherent_vqls/vqls_circuit.png
-    :align: center
-    :width: 100%
-    :target: javascript:void(0)
 
 Introduction
 ------------
 
-We first define the problem and the general structure of a VQLS.
+We first define the problem and the general structure of the CVQLS. 
 As a second step, we consider a particular case and we solve it explicitly with PennyLane.
 
 The problem
@@ -53,10 +49,10 @@ The problem that we aim to solve is that of preparing a quantum state :math:`|x\
     |\Psi\rangle :=  \frac{A |x\rangle}{\sqrt{\langle x |A^\dagger A |x\rangle}} \approx |b\rangle.
 
 
-Variational quantum linear solver
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Coherent Variational Quantum Linear Solver (CVQLS)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The approach used in a VQLS is to approximate the solution :math:`|x\rangle` with a variational quantum
+We approximate the solution :math:`|x\rangle` with a variational quantum
 circuit, i.e., a unitary circuit :math:`V` depending on a finite number of classical real parameters
 :math:`w = (w_0, w_1, \dots)`:
 
@@ -73,77 +69,21 @@ The parameters should be optimized in order to maximize the overlap between the 
 
 such that its minimization with respect to the variational parameters should lead towards the problem solution.
 
-Now we discuss two alternative methods which could be used to experimentally solve the minimization problem.
+The approach used in Ref. [1] is to decompose the cost function in terms of many expectation values associated to the
+individual components :math:`A_l` of the problem matrix :math:`A`. In fact, in the VQLS proposed in Ref. [1],
+the state vector proportional to :math:`A |x\rangle` is never physically prepared.
 
-First method
->>>>>>>>>>>>>
+On the contrary, the idea presented in this tutorial is to physically implement the linear map :math:`A` as
+a coherent probabilistic operation. This apporach allows to prepare the state 
+:math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}` which can be used to estimate the cost function 
+in a more direct way.
 
-Let us write :math:`C_G` more explicitly:
 
-.. math::
 
-    C_G = 1- \frac{ \sum_{l, l'}  c_l c_{l'}^* \langle 0|  V^\dagger A_{l'}^\dagger U \color{blue}{|0\rangle \langle 0|} U^\dagger A_l  V |0\rangle}
-    {\sum_{l,l'} c_l c_{l'}^* \langle 0| V^\dagger A_{l'}^\dagger A_l V |0\rangle} .
+State preparation
+>>>>>>>>>>>>>>>>>
 
-All expectation values of the previous expression could be estimated with a
-`Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_,
-which is a standard quantum computation technique. This method however might be experimentally challenging since it requires us to apply
-all the unitaries (:math:`U^\dagger, A_l` and :math:`V`) in a controlled way,
-i.e., conditioned on the state of an ancillary qubit. A possible workaround for estimating the same expectation values in a simpler
-way has been proposed in Ref. [1], but will not be considered here.
 
-Second method
->>>>>>>>>>>>>
-
-The second method, which is the one used in this tutorial, is to minimize a "local" version of the cost function which is easier to
-measure and, at the same time, leads to the same optimal solution.
-This local cost function, originally proposed in Ref. [1], can be obtained by replacing the blue colored projector
-:math:`\color{blue}{|0\rangle\langle 0|}` in the previous expression with the following positive operator:
-
-.. math::
-
-     \color{blue}{P} =  \frac{1}{2} + \frac{1}{2n}\sum_{j=0}^{n-1} Z_j,
-
-where :math:`Z_j` is the Pauli :math:`Z` operator locally applied to the :math:`j\rm{th}` qubit. This gives a new cost function:
-
-.. math::
-
-    C_L = 1- \frac{ \sum_{l, l'}  c_l c_{l'}^* \langle 0|  V^\dagger A_{l'}^\dagger U \color{blue}{P} U^\dagger A_l  V |0\rangle}
-    {\sum_{l,l'} c_l c_{l'}^* \langle 0| V^\dagger A_{l'}^\dagger A_l V |0\rangle},
-
-which, as shown in Ref. [1], satisfies
-
-.. math::
-
-   C_G \rightarrow 0   \Leftrightarrow C_L \rightarrow 0,
-
-and so we can solve our problem by minimizing :math:`C_L` instead of :math:`C_G`.
-
-Substituting the definition of :math:`P` into the expression for :math:`C_L` we get:
-
-.. math::
-
-    C_L
-    &=& \frac{1}{2} - \frac{1}{2n} \frac{ \sum_{j=0}^{n-1} \sum_{l, l'}  c_l c_{l'}^* \langle 0|  V^\dagger A_{l'}^\dagger U Z_j U^\dagger A_l  V |0\rangle}
-    {\sum_{l,l'} c_l c_{l'}^* \langle 0| V^\dagger A_{l'}^\dagger A_l V |0\rangle} \\
-    &&\\
-    &=& \frac{1}{2} - \frac{1}{2n} \frac{ \sum_{j=0}^{n-1} \sum_{l, l'}  c_l c_{l'}^* \mu_{l,l',j}}
-    {\sum_{l,l'} c_l c_{l'}^* \mu_{l,l',-1}},
-
-which can be computed whenever we are able to measure the following coefficients
-
-.. math::
-    \mu_{l, l', j} = \langle 0|  V^\dagger A_{l'}^\dagger U Z_j U^\dagger A_l  V |0\rangle,
-
-where we used the convention that if :math:`j=-1`,  :math:`Z_{-1}` is replaced with the identity.
-
-Also in this case the complex coefficients :math:`\mu_{l, l', j}` can be experimentally measured with an Hadamard test.
-The corresponding quantum circuit is shown in the image at the top of this tutorial.
-Compared with the previous method, the main advantage of this approach is that only the unitary operations
-:math:`A_l, A_l^\dagger` and :math:`Z_j` need to be controlled by an external ancillary qubit,
-while :math:`V, V^\dagger, U` and :math:`U^\dagger` can be directly applied to the system.
-This is particularly convenient whenever :math:`V` has a complex structure, e.g., if it is composed of
-many variational layers.
 
 A simple example
 ^^^^^^^^^^^^^^^^
@@ -169,6 +109,9 @@ solution state, i.e., we can use the following simple ansatz:
 
 In the code presented below we solve this particular problem by minimizing the local cost function :math:`C_L`.
 Eventually we will compare the quantum solution with the classical one.
+
+"""
+
 
 """
 
