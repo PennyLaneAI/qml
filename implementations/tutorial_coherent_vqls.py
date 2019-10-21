@@ -5,10 +5,10 @@ Coherent Variational Quantum Linear Solver
 ==========================================
 *Author: Andrea Mari*
 
-In this tutorial we implement the *coherent variational quantum linear
-solver* algorithm (CVQLS). This is algorithm is inspired by the VQLS proposed in 
-Ref. [1], but has a key difference: the matrix _A_ defining of the linear 
-problem is probabilistically applied as a single coherent operation.
+In this tutorial we implement the *coherent variational quantum linear solver* (CVQLS). 
+This is an algorithm inspired by the VQLS proposed in 
+Ref. [1], but it has an important difference: the matrix _A_ defining of the linear 
+problem is physically applied as probabilistic coherent operation.
 
 
 Introduction
