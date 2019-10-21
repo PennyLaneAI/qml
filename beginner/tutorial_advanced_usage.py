@@ -56,20 +56,33 @@ print(circuit1(np.pi / 2))
 #
 # .. note::
 #
-#     It is important to emphasize that the expectation values in ``circuit`` are both **local**,
+#     It is important to emphasize that the expectation values in ``circuit1`` are both **local**,
 #     i.e., this circuit is evaluating :math:`\left\langle \sigma_z\right\rangle_0` and :math:`\left\langle \sigma_z\right\rangle_1`,
-#     not :math:`\left\langle \sigma_z\otimes \sigma_z\right\rangle_{01}` (where the subscript denotes which wires the
-#     observable is located on).
+#     not :math:`\left\langle \sigma_z\otimes \sigma_z\right\rangle_{01}` (where the subscript
+#     denotes which wires the observable is located on). 
+#
+# In order to measure :math:`\langle\sigma_z \otimes \sigma_z \rangle _{01}`, PennyLane's tensor
+# observable feature can be used.
+
+@qml.qnode(dev)
+def circuit2(param):
+    qml.RX(param, wires=0)
+    qml.CNOT(wires=[0, 1])
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+
+print(circuit2(np.pi / 2))
+
+##############################################################################
+# This outcome is expected, as both spins are either up or down.
 #
 # We may even mix different return types, for example expectation values and variances:
 
 
 @qml.qnode(dev)
-def circuit1(param):
+def circuit3(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0)), qml.var(qml.PauliZ(1))
-
 
 ##############################################################################
 # Keyword arguments
