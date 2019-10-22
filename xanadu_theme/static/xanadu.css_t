@@ -1763,6 +1763,10 @@ span.eqno {
   #comments {
     display: none;
   }
+
+  .comment-container {
+    display: none;
+  }
 }
 
 /* Sphinx gallery
