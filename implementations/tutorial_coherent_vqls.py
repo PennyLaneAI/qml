@@ -231,7 +231,7 @@ c = c  / c .sum()
 # of the ancillary state.
 
 def U_c():
-    """Unitary matrix rotating the ground state to the ancillary qubits to |sqrt(c)> = U_c |0>."""
+    """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
     # To be defined
 
 
