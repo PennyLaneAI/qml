@@ -5,10 +5,13 @@ Coherent Variational Quantum Linear Solver
 ==========================================
 *Author: Andrea Mari*
 
-In this tutorial we implement the *coherent variational quantum linear solver* (CVQLS). 
-This is an algorithm inspired by the VQLS proposed in 
-Ref. [1], but it has an important difference: the matrix :math:`A` defining of the linear 
-problem is physically applied as a probabilistic coherent operation.
+In this tutorial we propose and implement an algorithm that we call
+*coherent variational quantum linear solver* (CVQLS). 
+This is inspired by the VQLS proposed in Ref. [1], with an important difference: 
+the matrix :math:`A` associated to the problem is physically 
+applied as a probabilistic coherent operation. This approach as some advantages and
+disadvantages and its practical convenience depends on experimental aspects 
+and on the specific linear problem to be solved.
 
 
 Introduction
@@ -37,9 +40,9 @@ applied to the ground state of :math:`n` qubits. , i.e.,
 
 .. math::
 
-    |b\rangle = U |0\rangle,
+    |b\rangle = U_b |0\rangle,
 
-where again we assume that :math:`U` can be efficiently implemented with a quantum circuit.
+where again we assume that :math:`U_b` can be efficiently implemented with a quantum circuit.
 
 The problem that we aim to solve is that of preparing a quantum state :math:`|x\rangle`, such that
 :math:`A |x\rangle` is proportional to :math:`|b\rangle` or, equivalently, such that
@@ -65,53 +68,68 @@ The parameters should be optimized in order to maximize the overlap between the 
 
 .. math::
 
-    C_G = 1- |\langle b | \Psi \rangle|^2,
+    C = 1- |\langle b | \Psi \rangle|^2,
 
 such that its minimization with respect to the variational parameters should lead towards the problem solution.
 
 The approach used in Ref. [1] is to decompose the cost function in terms of many expectation values associated to the
-individual components :math:`A_l` of the problem matrix :math:`A`. For this reason, in the VQLS proposed in Ref. [1],
-the state vector proportional to :math:`A |x\rangle` is never physically prepared.
-
+individual components :math:`A_l` of the problem matrix :math:`A`. For this reason, in the VQLS of Ref. [1],
+the state vector proportional to :math:`A |x\rangle` is not physically prepared.
 On the contrary, the idea presented in this tutorial is to physically implement the linear map :math:`A` as
 a coherent probabilistic operation. This approach allows to prepare the state 
 :math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}` which can be used to estimate the
-overlap :math:`|\langle b | \Psi \rangle|` and so the cost function of the problem.
+cost function of the problem in a more direct way.
 
 
 Coherently applying :math:`A`
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-Without loss of generality we can assume that the complex coefficients :math:`c=(c_1, c_2, \dots c_L)` appearing
-in the definition of :math:`A` are normalized and that :math:`L=2^m` for some positive integer :math:`m`.
-Indeed the linear problem is defined up to a constant scaling factor and, moreover, we can
-always pad  :math:`c` with additional zero elements.
+Without loss of generality we can assume that the coefficients :math:`c=(c_1, c_2, \dots c_L)` appearing
+in the definition of :math:`A` represent a positive and normalized probability distribution. i.e.
 
+.. math::
+    
+    c_l>0 \quad \forall l,  \qquad \sum_{l=0}^{L-1} c_l=1.
+
+Indeed the complex phase of each coefficient :math:`c_l` can always be absorbed into the associated unitary :math:`A_l`, obtaining
+in this way a list of positive coefficients. Moreover, since the linear problem is 
+defined up to a constant scaling factor, we can also normalize the coefficients to get a probability distribution.
+
+For simplicity, since we can always pad :math:`c` with additional zeros, we can also assume that :math:`L=2^m` for some positive integer :math:`m`.
 
 Let us consider a unitary circuit :math:`U_C`, embedding the classical vector :math:`c` into the quantum state :math:`|c\rangle` of :math:`m` ancillary qubits:
 
 .. math::
 
-    |c \rangle =  U_c |0\rangle = \sum_{l=0}^{L-1} c_l | l \rangle,
+    |c \rangle =  U_c |0\rangle = \sum_{l=0}^{L-1} \sqrt{c_l} | l \rangle,
 
 where :math:`\{ |l\rangle \}` is the computational basis of the ancillary system.
 
 
-Now, for each unitary component :math:`A_l` of the problem matrix :math:`A`, we can define the associated generalized controlled operation
-acting on the system and ancillary qubits as follows:
+Now, for each component :math:`A_l` of the problem matrix :math:`A`, we can define an associated controlled unitary operation :math:`CA_l`,
+acting on the system and on the ancillary basis states as follows:
 
 .. math::
 
     CA_l \, |j\rangle |l' \rangle  = 
-    \left\{
+    \Bigg\{
     \begin{array}{c}
-    \left(A_l \otimes \mathbb{I}\right) \, |j\rangle |l \rangle \quad \mathrm{for}\; l'=l \\
-    \qquad \; \; \;|j\rangle |l' \rangle  \quad \mathrm{for}\; l'\neq l 
-    \end{array}
-    \right\},
+    \left(A_l \otimes \mathbb{I}\right) \; |j\rangle |l \rangle \quad \; \mathrm{for}\; l'=l \\
+    \qquad \qquad |j\rangle |l' \rangle  \quad \mathrm{for}\; l'\neq l 
+    \end{array},
 
-i.e., the unitary :math:`A_l` is applied only when the ancillary system is in state :math:`|l\rangle`.
+i.e., the unitary :math:`A_l` is applied only when the ancillary system is in the corresponding basis state :math:`|l\rangle`.
 
+A natural generalization of the Hadamard test to :math:`L` ancillary dimensions is the following protocol:
+
+1. Prepare all qubits in the ground state.
+2. Apply :math:`U_c` to the ancillary qubits.
+3. Apply all the controlled unitaries :math:`CA_l` for all values of :math:`l`.
+4. Apply :math:`U_c^\dagger` to the ancillary qubits.
+5. Measure the ancillary qubits in the computational basis.
+6. If the outcome of the measurement is the ground state, the system is prepared
+   in the state :math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}`.
+   If the outcome is not the ground state, repeat the experiment.
 
 A simple example
 ^^^^^^^^^^^^^^^^
@@ -486,3 +504,8 @@ plt.show()
 #    "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems."
 #    `arXiv:1909.05820 <https://arxiv.org/abs/1909.05820>`__, 2019.
 # 
+# 2. Robin Kothari.
+#    "Efficient algorithms in quantum query complexity."
+#    PhD thesis, University of Waterloo, 2014.
+# 
+
