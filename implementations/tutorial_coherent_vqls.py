@@ -97,11 +97,11 @@ defined up to a constant scaling factor, we can also normalize the coefficients 
 
 For simplicity, since we can always pad :math:`c` with additional zeros, we can also assume that :math:`L=2^m` for some positive integer :math:`m`.
 
-Let us consider a unitary circuit :math:`U_C`, embedding the classical vector :math:`c` into the quantum state :math:`|c\rangle` of :math:`m` ancillary qubits:
+Let us consider a unitary circuit :math:`U_c`, embedding the classical vector :math:`c` into the quantum state :math:`|c\rangle` of :math:`m` ancillary qubits:
 
 .. math::
 
-    |c \rangle =  U_c |0\rangle = \sum_{l=0}^{L-1} \sqrt{c_l} | l \rangle,
+    |\sqrt{c} \rangle =  U_c |0\rangle = \sum_{l=0}^{L-1} \sqrt{c_l} | l \rangle,
 
 where :math:`\{ |l\rangle \}` is the computational basis of the ancillary system.
 
@@ -120,28 +120,52 @@ acting on the system and on the ancillary basis states as follows:
 
 i.e., the unitary :math:`A_l` is applied only when the ancillary system is in the corresponding basis state :math:`|l\rangle`.
 
-A natural generalization of the Hadamard test to :math:`L` ancillary dimensions is the following protocol:
+A natural generalization of the Hadamard test to :math:`m` ancillary qubits is the following protocol, originally proposed
+in Ref. [2]:
 
 1. Prepare all qubits in the ground state.
 2. Apply :math:`U_c` to the ancillary qubits.
 3. Apply all the controlled unitaries :math:`CA_l` for all values of :math:`l`.
 4. Apply :math:`U_c^\dagger` to the ancillary qubits.
 5. Measure the ancillary qubits in the computational basis.
-6. If the outcome of the measurement is the ground state, the system is prepared
-   in the state :math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}`.
-   If the outcome is not the ground state, repeat the experiment.
+6. If the outcome of the measurement is the ground state, the state of the system collapses to
+   :math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}`.
+   If the outcome is not the ground state, the experiment should be repeated.
+
+
+Estimating the cost function
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+From a technical point of view, the previous steps are the most difficult part of the algorithm. 
+Once we have at our disposal the quantum system prepared in the state :math:`|\Psi\rangle`,
+it is very easy to compute the cost function.
+Indeed one could simply continue the previous protocol with the following two steps:
+
+7. Apply :math:`U_b^\dagger` to the system.
+8. Measure the system in the computational basis. The probability of measuring it
+   in the ground state (given the ancillary qubits measured in their ground state),
+   is :math:`|\langle 0 | U_b^\dagger \Psi \rangle|^2 = |\langle b | \Psi \rangle|^2`.
+
+Therefore, by repeating the full experiment with the same fixed settings, one can directly estimate
+the cost function of the problem.
+
+Importantly, the operations of steps 6 and 7 commute. Therefore all measurements can be
+delayed at the end of the quantum circuit, making the structure of the experiment much more feasible.  
+
+
+
 
 A simple example
 ^^^^^^^^^^^^^^^^
 
-In this tutorial we consider the following simple example based on a system of 3 qubits (plus an ancilla)
-which is very similar to the one experimentally tested in Ref. [1]:
+In this tutorial we apply the previous theory to the following simple example 
+based on a system of 3 qubits, which was also considered in Ref. [1] and in one of our previous tutorials (VQLS):
 
 .. math::
         \begin{align}
         A  &=  c_0 A_0 + c_1 A_1 + c_2 A_2 = \mathbb{I} + 0.2 X_0 Z_1 + 0.2 X_0, \\
         \\
-        |b\rangle &= U |0 \rangle = H_0  H_1  H_2 |0\rangle,
+        |b\rangle &= U_b |0 \rangle = H_0  H_1  H_2 |0\rangle,
         \end{align}
 
 where :math:`Z_j, X_j, H_j` represent the Pauli :math:`Z`, Pauli :math:`X` and Hadamard gates applied to the qubit with index :math:`j`.
@@ -153,7 +177,7 @@ solution state, i.e., we can use the following simple ansatz:
         |x\rangle = V(w) |0\rangle = \Big [  R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2) \Big ]  H_0  H_1  H_2 |0\rangle.
 
 
-In the code presented below we solve this particular problem by minimizing the local cost function :math:`C_L`.
+In the code presented below we solve this particular problem, by following the general scheme of the CVQLS previously discussed.
 Eventually we will compare the quantum solution with the classical one.
 
 """
@@ -178,12 +202,12 @@ import matplotlib.pyplot as plt
 
 n_qubits = 3  # Number of system qubits.
 n_shots = 10 ** 6  # Number of quantum measurements.
-tot_qubits = n_qubits + 1  # Addition of an ancillary qubit.
-ancilla_idx = n_qubits  # Index of the ancillary qubit (last position).
-steps = 1  # Number of optimization steps
-eta = 0.8  # Learning rate
-q_delta = 0.001  # Initial spread of random quantum weights
-rng_seed = 0  # Seed for random number generator
+tot_qubits = n_qubits + 2  # Addition of two ancillary qubits.
+ancilla_idx = n_qubits  # Index of the first ancillary qubit.
+steps = 1  # Number of optimization steps.
+eta = 0.8  # Learning rate.
+q_delta = 0.001  # Initial spread of random quantum weights.
+rng_seed = 0  # Seed for random number generator.
 
 
 ##############################################################################
@@ -193,16 +217,37 @@ rng_seed = 0  # Seed for random number generator
 ##############################################################################
 # We now define the unitary operations associated to the simple example
 # presented in the introduction.
-# Since we want to implement a Hadamard test, we need the unitary operations
-# :math:`A_j` to be controlled by the state of an ancillary qubit.
+#
+# The coefficients of the linear combination are three positive numbers :math:`(1, 0.2, 0.2)`.
+# So we can embed them in the state of  :math:`m=2` ancillary qubits by adding a final zero element and
+# normalizing their sum:
 
-# Coefficients of the linear combination A = c_0 A_0 + c_1 A_1 ...
-c = np.array([1.0, 0.2, 0.2])
+c = np.array([1, 0.2, 0.2, 0])
+c = c  / c .sum()
+
+
+##############################################################################
+# New we need to embed the square root of the probability distribution ``c`` into the amplitudes
+# of the ancillary state.
+
+def U_c():
+    """Unitary matrix rotating the ground state to the ancillary qubits to |sqrt(c)> = U_c |0>."""
+    # To be defined
+
+
+##############################################################################
+# The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
 
 def U_b():
-    """Unitary matrix rotating the ground state to the problem vector |b> = U_b |0>."""
+    """Unitary matrix rotating the system ground state to the problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
+
+##############################################################################
+# We are left to define the controlled-unitaries :math:`CA_l`, which should act
+# as :math:`A_l` on the system qubits whenever the ancillary ones are in the state
+# :math:`|l\rangle`. In our case this simply corresponds to conditioning :math:`A_1` and
+# :math:`A_2` to the first and second ancillary qubits respectively.
 
 def CA(idx):
     """Controlled versions of the unitary components A_l of the problem matrix A."""
@@ -215,7 +260,11 @@ def CA(idx):
         qml.CZ(wires=[ancilla_idx, 1])
 
     elif idx == 2:
-        qml.CNOT(wires=[ancilla_idx, 0])
+        qml.CNOT(wires=[ancilla_idx + 1, 0])
+    
+    elif idx == 3:
+        # Identity operation
+        None
 
 
 ##############################################################################
@@ -507,5 +556,6 @@ plt.show()
 # 2. Robin Kothari.
 #    "Efficient algorithms in quantum query complexity."
 #    PhD thesis, University of Waterloo, 2014.
+#
 # 
 
