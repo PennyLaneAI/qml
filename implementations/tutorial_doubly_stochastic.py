@@ -289,7 +289,7 @@ params = init_params
 opt = qml.GradientDescentOptimizer(0.005)
 
 for _ in range(250):
-    cost.append(qnode_stochastic(params))
+    cost.append(loss(params))
     params = opt.step(loss, params)
 
 ##############################################################################
@@ -352,7 +352,7 @@ for i in range(250):
     def loss(params):
         return 4 + (5 / n) * circuit(params, n=n)
 
-    cost.append(qnode_stochastic(params))
+    cost.append(loss(params))
     params = opt.step(loss, params)
 
 average = np.vstack([np.arange(25, 200), moving_average(cost, n=50)[:-26]])
