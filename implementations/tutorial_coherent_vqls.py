@@ -144,7 +144,7 @@ Indeed one could simply continue the previous protocol with the following two st
 7. Apply :math:`U_b^\dagger` to the system.
 8. Measure the system in the computational basis. The probability of measuring it
    in the ground state (given the ancillary qubits measured in their ground state),
-   is :math:`|\langle 0 | U_b^\dagger \Psi \rangle|^2 = |\langle b | \Psi \rangle|^2`.
+   is :math:`|\langle 0 | U_b^\dagger |\Psi \rangle|^2 = |\langle b | \Psi \rangle|^2`.
 
 Therefore, by repeating the full experiment with the same fixed settings, one can directly estimate
 the cost function of the problem.
