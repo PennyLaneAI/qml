@@ -203,9 +203,9 @@ import matplotlib.pyplot as plt
 n_qubits = 3                # Number of system qubits.
 m = 2                       # Number of ancillary qubits
 n_shots = 10 ** 6           # Number of quantum measurements.
-tot_qubits = n_qubits + m   # Addition of two ancillary qubits.
+tot_qubits = n_qubits + m   # Addition of ancillary qubits.
 ancilla_idx = n_qubits      # Index of the first ancillary qubit.
-steps = 1                   # Number of optimization steps.
+steps = 10                  # Number of optimization steps.
 eta = 0.8                   # Learning rate.
 q_delta = 0.001             # Initial spread of random quantum weights.
 rng_seed = 0                # Seed for random number generator.
@@ -304,11 +304,7 @@ def variational_block(weights):
 # Full quantum circuit
 # --------------------
 #
-# We first initialize a PennyLane device with the ``default.qubit`` backend.
-#
-# As a second step, we define a PennyLane ``qnode`` object representing a model of the actual quantum computation.
-#
-# The circuit implements the CVQLS protocol presented in the introduction.
+# Now, we can define the full circuit associated to the CVQLS protocol presented in the introduction.
 
 def full_circuit(weights):
     """Full quantum circuit necessary for the CVQLS protocol, without the final measurement."""
@@ -330,10 +326,13 @@ def full_circuit(weights):
 # To measure the overlap of the ground state with the post-selected state, we
 # use the Bayes' theorem:
 # 
-#.. math::
-#
-#   P
-#
+# .. math::
+#   P( \mathrm{sys}=\mathrm{ground}\,|\, \mathrm{anc} = \mathrm{ground}) = 
+#   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
+# 
+# To evaluate the two probabilities appearing on the r.h.s. of the previous equation
+# we initialize two PennyLane devices with the ``default.qubit`` backend,
+# and we define two different ``qnode`` objects.
 
 dev_full = qml.device("default.qubit", wires=tot_qubits)
 @qml.qnode(dev_full)
@@ -361,18 +360,156 @@ def ancilla_ground(weights):
 # Variational optimization
 # -----------------------------
 #
-# We first initialize the variational weights with random parameters (with a fixed seed).
+# We first define the cost function :math:`C` of our minimization problem.
+
+def cost(weights):
+    """Cost function which tends to zero when A |x> is proportional to |b>."""
+    
+    p_global_ground = global_ground(weights)
+    p_ancilla_ground = ancilla_ground(weights)
+    p_cond = p_global_ground / p_ancilla_ground
+    
+    return 1 - p_cond
+
+
+##############################################################################
+# To minimize the cost function we use the gradient-descent optimizer.
+opt = qml.GradientDescentOptimizer(eta)
+
+##############################################################################
+# We initialize the variational weights with random parameters (with a fixed seed).
 
 np.random.seed(rng_seed)
 w = q_delta * np.random.randn(n_qubits)
 
-p_global_ground = global_ground(w)
-p_ancilla_ground = ancilla_ground(w)
-p_cond = p_global_ground / p_ancilla_ground
-print("p_global_ground:", p_global_ground)
-print("p_ancilla_ground:", p_ancilla_ground)
-print("p_cond:", p_cond)
+##############################################################################
+# We are ready to perform the optimization loop.
 
+cost_history = []
+for it in range(steps):
+    w = opt.step(cost, w)
+    _cost = cost(w)
+    print("Step {:3d}       Cost = {:9.7f}".format(it, _cost))
+    cost_history.append(_cost)
+
+
+##############################################################################
+# We plot the cost function with respect to the optimization steps.
+# We remark that this is not an abstract mathematical quantity
+# since it also represents a bound for the error between the generated state
+# and the exact solution of the problem.
+
+plt.style.use("seaborn")
+plt.plot(cost_history, "g")
+plt.ylabel("Cost function")
+plt.xlabel("Optimization steps")
+plt.show()
+
+##############################################################################
+# Comparison of quantum and classical results
+# -------------------------------------------
+#
+# Since the specific problem considered in this tutorial has a small size, we can also
+# solve it in a classical way and then compare the results with our quantum solution.
+#
+
+##############################################################################
+# Classical algorithm
+# ^^^^^^^^^^^^^^^^^^^
+# To solve the problem in a classical way, we use the explicit matrix representation in
+# terms of numerical NumPy arrays.
+ 
+Id = np.identity(2)
+Z = np.array([[1, 0], [0, -1]])
+X = np.array([[0, 1], [1, 0]])
+
+A_0 = np.identity(8)
+A_1 = np.kron(np.kron(X, Z), Id)
+A_2 = np.kron(np.kron(X, Id), Id)
+
+A_num = c[0] * A_0 + c[1] * A_1 + c[2] * A_2
+b = np.ones(8) / np.sqrt(8)
+
+##############################################################################
+# We can print the explicit values of :math:`A` and :math:`b`:
+
+print("A = \n", A_num)
+print("b = \n", b)
+
+
+##############################################################################
+# The solution can be computed via a matrix inversion:
+
+A_inv = np.linalg.inv(A_num)
+x = np.dot(A_inv, b)
+
+##############################################################################
+# Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
+c_probs = (x / np.linalg.norm(x)) ** 2
+
+##############################################################################
+# Preparation of the quantum solution
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+##############################################################################
+# Given the variational weights ``w`` that we have previously optimized,
+# we can generate the quantum state :math:`|x\rangle`. By measuring :math:`|x\rangle`
+# in the computational basis we can estimate the probability of each basis state.
+#
+# For this task, we initialize a new PennyLane device and define the associated
+# *qnode* object.
+
+dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+
+@qml.qnode(dev_x)
+def prepare_and_sample(weights):
+
+    # Variational circuit generating a guess for the solution vector |x>
+    variational_block(weights)
+
+    # We assume that the system is measured in the computational basis.
+    # If we label each basis state with a decimal integer j = 0, 1, ... 2 ** n_qubits - 1,
+    # this is equivalent to a measurement of the following diagonal observable.
+    basis_obs = qml.Hermitian(np.diag(range(2 ** n_qubits)), wires=range(n_qubits))
+
+    return qml.sample(basis_obs)
+
+
+##############################################################################
+# To estimate the probability distribution over the basis states we first take ``n_shots``
+# samples and then compute the relative frequency of each outcome.
+
+samples = prepare_and_sample(w).astype(int)
+q_probs = np.bincount(samples) / n_shots
+
+##############################################################################
+# Comparison
+# ^^^^^^^^^^
+#
+# Let us print the classical result.
+print("x_n^2 =\n", c_probs)
+
+##############################################################################
+# The previous probabilities should match the following quantum state probabilities.
+print("|<x|n>|^2=\n", q_probs)
+
+##############################################################################
+# Let us graphically visualize both distributions.
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4))
+
+ax1.bar(np.arange(0, 2 ** n_qubits), c_probs, color="blue")
+ax1.set_xlim(-0.5, 2 ** n_qubits - 0.5)
+ax1.set_xlabel("Vector space basis")
+ax1.set_title("Classical probabilities")
+
+ax2.bar(np.arange(0, 2 ** n_qubits), q_probs, color="green")
+ax2.set_xlim(-0.5, 2 ** n_qubits - 0.5)
+ax2.set_xlabel("Hilbert space basis")
+ax2.set_title("Quantum probabilities")
+
+plt.show()
 
 
 ##############################################################################
