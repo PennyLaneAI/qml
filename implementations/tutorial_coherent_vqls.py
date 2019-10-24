@@ -136,7 +136,7 @@ in Ref. [2]:
 Estimating the cost function
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-From a technical point of view, the previous steps are the most difficult part of the algorithm. 
+From a technical point of view, the previous steps represent the most difficult part of the algorithm. 
 Once we have at our disposal the quantum system prepared in the state :math:`|\Psi\rangle`,
 it is very easy to compute the cost function.
 Indeed one could simply continue the previous protocol with the following two steps:
