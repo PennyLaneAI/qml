@@ -149,8 +149,8 @@ Indeed one could simply continue the previous protocol with the following two st
 Therefore, by repeating the full experiment with the same fixed settings, one can directly estimate
 the cost function of the problem.
 
-Importantly, the operations of steps 6 and 7 commute. Therefore all measurements can be
-delayed at the end of the quantum circuit, making the structure of the experiment much more feasible.  
+Importantly, the operations of steps 6 and 7 commute. Therefore all the measurements can be
+delayed at the end of the quantum circuit, making the structure of the experiment more straightforward.  
 
 
 
