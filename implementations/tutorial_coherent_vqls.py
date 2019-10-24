@@ -89,7 +89,7 @@ in the definition of :math:`A` represent a positive and normalized probability d
 
 .. math::
     
-    c_l>0 \quad \forall l,  \qquad \sum_{l=0}^{L-1} c_l=1.
+    c_l \ge 0 \quad \forall l,  \qquad \sum_{l=0}^{L-1} c_l=1.
 
 Indeed the complex phase of each coefficient :math:`c_l` can always be absorbed into the associated unitary :math:`A_l`, obtaining
 in this way a list of positive coefficients. Moreover, since the linear problem is 
@@ -200,14 +200,15 @@ import matplotlib.pyplot as plt
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-n_qubits = 3  # Number of system qubits.
-n_shots = 10 ** 6  # Number of quantum measurements.
-tot_qubits = n_qubits + 2  # Addition of two ancillary qubits.
-ancilla_idx = n_qubits  # Index of the first ancillary qubit.
-steps = 1  # Number of optimization steps.
-eta = 0.8  # Learning rate.
-q_delta = 0.001  # Initial spread of random quantum weights.
-rng_seed = 0  # Seed for random number generator.
+n_qubits = 3                # Number of system qubits.
+m = 2                       # Number of ancillary qubits
+n_shots = 10 ** 6           # Number of quantum measurements.
+tot_qubits = n_qubits + m   # Addition of two ancillary qubits.
+ancilla_idx = n_qubits      # Index of the first ancillary qubit.
+steps = 1                   # Number of optimization steps.
+eta = 0.8                   # Learning rate.
+q_delta = 0.001             # Initial spread of random quantum weights.
+rng_seed = 0                # Seed for random number generator.
 
 
 ##############################################################################
@@ -232,8 +233,15 @@ c = c  / c .sum()
 
 def U_c():
     """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
-    # To be defined
+    # TO BE DONE. THIS IS A DRAFT.
+    qml.RY(-np.arcsin(c[1]), wires=ancilla_idx)
+    qml.RY(-np.arcsin(c[2]), wires=ancilla_idx + 1)
 
+def U_c_dagger():
+    """Adjoint of U_c."""
+    # TO BE DONE. THIS IS A DRAFT.
+    qml.RY(np.arcsin(c[1]), wires=ancilla_idx)
+    qml.RY(np.arcsin(c[2]), wires=ancilla_idx + 1)
 
 ##############################################################################
 # The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
@@ -249,22 +257,19 @@ def U_b():
 # :math:`|l\rangle`. In our case this simply corresponds to conditioning :math:`A_1` and
 # :math:`A_2` to the first and second ancillary qubits respectively.
 
-def CA(idx):
-    """Controlled versions of the unitary components A_l of the problem matrix A."""
-    if idx == 0:
-        # Identity operation
-        None
-
-    elif idx == 1:
+def CA(l):
+    """Controlled versions of the unitary components A_l of the problem matrix A."""  
+    
+    if l == 1:
         qml.CNOT(wires=[ancilla_idx, 0])
         qml.CZ(wires=[ancilla_idx, 1])
 
-    elif idx == 2:
+    elif l == 2:
         qml.CNOT(wires=[ancilla_idx + 1, 0])
     
-    elif idx == 3:
-        # Identity operation
-        None
+    # For all other values of "l", A_l = Identity.
+    
+    
 
 
 ##############################################################################
@@ -296,110 +301,60 @@ def variational_block(weights):
 
 
 ##############################################################################
-# Hadamard test
-# --------------
+# Full quantum circuit
+# --------------------
 #
 # We first initialize a PennyLane device with the ``default.qubit`` backend.
 #
 # As a second step, we define a PennyLane ``qnode`` object representing a model of the actual quantum computation.
 #
-# The circuit is based on the
-# `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_
-# and will be used to estimate the coefficients :math:`\mu_{l,l',j}` defined in the introduction.
-# A graphical representation of this circuit is shown at the top of this tutorial.
+# The circuit implements the CVQLS protocol presented in the introduction.
 
-dev_mu = qml.device("default.qubit", wires=tot_qubits)
-
-@qml.qnode(dev_mu)
-def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
-
-    # First Hadamard gate applied to the ancillary qubit.
-    qml.Hadamard(wires=ancilla_idx)
-
-    # For estimating the imaginary part of the coefficient "mu", we must add a "-i" phase gate.
-    if part == "Im" or part == "im":
-        qml.PhaseShift(-np.pi / 2, wires=ancilla_idx)
+def full_circuit(weights):
+    """Full quantum circuit necessary for the CVQLS protocol, without the final measurement."""
+    # U_c applied to the ancillary qubits.
+    U_c()
 
     # Variational circuit generating a guess for the solution vector |x>
     variational_block(weights)
 
-    # Controlled application of the unitary component A_l of the problem matrix A.
-    CA(l)
+    # Application of all controlled-unitaries CA_l associated to the problem matrix A.
+    for l in range(2 ** m):
+        CA(l)
 
-    # Adjoint of the unitary U_b associated to the problem vector |b>. 
-    # In this specific example Adjoint(U_b) = U_b.
-    U_b()
-
-    # Controlled Z operator at position j. If j = -1, apply the identity.
-    if j != -1:
-        qml.CZ(wires=[ancilla_idx, j])
-
-    # Unitary U_b associated to the problem vector |b>.
-    U_b()
-
-    # Controlled application of Adjoint(A_lp).
-    # In this specific example Adjoint(A_lp) = A_lp.
-    CA(lp)
-
-    # Second Hadamard gate applied to the ancillary qubit.
-    qml.Hadamard(wires=ancilla_idx)
-
-    # Expectation value of Z for the ancillary qubit.
-    return qml.expval(qml.PauliZ(wires=ancilla_idx))
-
-
-##############################################################################################
-# To get the real and imaginary parts of :math:`\mu_{l,l',j}`, one needs to run the previous
-# quantum circuit with and without a phase-shift of the ancillary qubit. This is automatically
-# done by the following function.
-
-
-def mu(weights, l=None, lp=None, j=None):
-    """Generates the coefficients to compute the "local" cost function C_L."""
-
-    mu_real = local_hadamard_test(weights, l=l, lp=lp, j=j, part="Re")
-    mu_imag = local_hadamard_test(weights, l=l, lp=lp, j=j, part="Im")
-
-    return mu_real + 1.0j * mu_imag
+    # Adjoint of U_c, applied to the ancillary qubits.
+    U_c_dagger()
 
 
 ##############################################################################
-# Local cost function
-# ------------------------------------
+# To measure the overlap of the ground state with the post-selected state, we
+# use the Bayes' theorem:
+# 
+#.. math::
 #
-# Let us first define a function for estimating :math:`\langle x| A^\dagger A|x\rangle`.
+#   P
+#
 
+dev_full = qml.device("default.qubit", wires=tot_qubits)
+@qml.qnode(dev_full)
+def global_ground(weights):
+    # Circuit gates
+    full_circuit(weights)
+    # Projector on the global ground state.
+    P_zero = np.zeros((2 ** tot_qubits, 2 ** tot_qubits))
+    P_zero[0, 0] = 1.0 
+    return qml.expval(qml.Hermitian(P_zero, wires=range(tot_qubits)))
 
-def psi_norm(weights):
-    """Returns the normalization constant <psi|psi>, where |psi> = A |x>."""
-    norm = 0.0
+dev_partial = qml.device("default.qubit", wires=tot_qubits)
+@qml.qnode(dev_partial)
+def ancilla_ground(weights):
+    # Circuit gates
+    full_circuit(weights)
+    # Projector on the ancilla ground state.
+    P_zero = np.zeros((2 ** m, 2 ** m))
+    P_zero[0, 0] = 1.0 
+    return qml.expval(qml.Hermitian(P_zero, wires=range(n_qubits, tot_qubits)))
 
-    for l in range(0, len(c)):
-        for lp in range(0, len(c)):
-            norm = norm + c[l] * np.conj(c[lp]) * mu(weights, l, lp, -1)
-
-    return abs(norm)
-
-
-##############################################################################
-# We can finally define the cost function of our minimization problem.
-# We use the analytical expression of :math:`C_L` in terms of the
-# coefficients :math:`\mu_{l,l',j}` given in the introduction.
-
-
-def cost_loc(weights):
-    """Local version of the cost function, which tends to zero when A |x> is proportional to |b>."""
-    mu_sum = 0.0
-
-    for l in range(0, len(c)):
-        for lp in range(0, len(c)):
-            for j in range(0, n_qubits):
-                mu_sum = mu_sum + c[l] * np.conj(c[lp]) * mu(weights, l, lp, j)
-
-    mu_sum = abs(mu_sum)
-
-    # Cost function C_L
-    return 0.5 - 0.5 * mu_sum / (n_qubits * psi_norm(weights))
 
 
 ##############################################################################
@@ -411,139 +366,14 @@ def cost_loc(weights):
 np.random.seed(rng_seed)
 w = q_delta * np.random.randn(n_qubits)
 
-##############################################################################
-# To minimize the cost function we use the gradient-descent optimizer.
-opt = qml.GradientDescentOptimizer(eta)
+p_global_ground = global_ground(w)
+p_ancilla_ground = ancilla_ground(w)
+p_cond = p_global_ground / p_ancilla_ground
+print("p_global_ground:", p_global_ground)
+print("p_ancilla_ground:", p_ancilla_ground)
+print("p_cond:", p_cond)
 
 
-##############################################################################
-# We are ready to perform the optimization loop.
-
-cost_history = []
-for it in range(steps):
-    w = opt.step(cost_loc, w)
-    cost = cost_loc(w)
-    print("Step {:3d}       Cost_L = {:9.7f}".format(it, cost))
-    cost_history.append(cost)
-
-
-##############################################################################
-# We plot the cost function with respect to the optimization steps.
-# We remark that this is not an abstract mathematical quantity
-# since it also represents a bound for the error between the generated state
-# and the exact solution of the problem.
-
-plt.style.use("seaborn")
-plt.plot(cost_history, "g")
-plt.ylabel("Cost function")
-plt.xlabel("Optimization steps")
-plt.show()
-
-##############################################################################
-# Comparison of quantum and classical results
-# -------------------------------------------
-#
-# Since the specific problem considered in this tutorial has a small size, we can also
-# solve it in a classical way and then compare the results with our quantum solution.
-#
-
-##############################################################################
-# Classical algorithm
-# ^^^^^^^^^^^^^^^^^^^
-# To solve the problem in a classical way, we use the explicit matrix representation in
-# terms of numerical NumPy arrays.
- 
-Id = np.identity(2)
-Z = np.array([[1, 0], [0, -1]])
-X = np.array([[0, 1], [1, 0]])
-
-A_0 = np.identity(8)
-A_1 = np.kron(np.kron(X, Z), Id)
-A_2 = np.kron(np.kron(X, Id), Id)
-
-A_num = c[0] * A_0 + c[1] * A_1 + c[2] * A_2
-b = np.ones(8) / np.sqrt(8)
-
-##############################################################################
-# We can print the explicit values of :math:`A` and :math:`b`:
-
-print("A = \n", A_num)
-print("b = \n", b)
-
-
-##############################################################################
-# The solution can be computed via a matrix inversion:
-
-A_inv = np.linalg.inv(A_num)
-x = np.dot(A_inv, b)
-
-##############################################################################
-# Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
-c_probs = (x / np.linalg.norm(x)) ** 2
-
-##############################################################################
-# Preparation of the quantum solution
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-##############################################################################
-# Given the variational weights ``w`` that we have previously optimized,
-# we can generate the quantum state :math:`|x\rangle`. By measuring :math:`|x\rangle`
-# in the computational basis we can estimate the probability of each basis state.
-#
-# For this task, we initialize a new PennyLane device and define the associated
-# *qnode* object.
-
-dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
-
-@qml.qnode(dev_x)
-def prepare_and_sample(weights):
-
-    # Variational circuit generating a guess for the solution vector |x>
-    variational_block(weights)
-
-    # We assume that the system is measured in the computational basis.
-    # If we label each basis state with a decimal integer j = 0, 1, ... 2 ** n_qubits - 1,
-    # this is equivalent to a measurement of the following diagonal observable.
-    basis_obs = qml.Hermitian(np.diag(range(2 ** n_qubits)), wires=range(n_qubits))
-
-    return qml.sample(basis_obs)
-
-
-##############################################################################
-# To estimate the probability distribution over the basis states we first take ``n_shots``
-# samples and then compute the relative frequency of each outcome.
-
-samples = prepare_and_sample(w).astype(int)
-q_probs = np.bincount(samples) / n_shots
-
-##############################################################################
-# Comparison
-# ^^^^^^^^^^
-#
-# Let us print the classical result.
-print("x_n^2 =\n", c_probs)
-
-##############################################################################
-# The previous probabilities should match the following quantum state probabilities.
-print("|<x|n>|^2=\n", q_probs)
-
-##############################################################################
-# Let us graphically visualize both distributions.
-
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4))
-
-ax1.bar(np.arange(0, 2 ** n_qubits), c_probs, color="blue")
-ax1.set_xlim(-0.5, 2 ** n_qubits - 0.5)
-ax1.set_xlabel("Vector space basis")
-ax1.set_title("Classical probabilities")
-
-ax2.bar(np.arange(0, 2 ** n_qubits), q_probs, color="green")
-ax2.set_xlim(-0.5, 2 ** n_qubits - 0.5)
-ax2.set_xlabel("Hilbert space basis")
-ax2.set_title("Quantum probabilities")
-
-plt.show()
 
 ##############################################################################
 # References
