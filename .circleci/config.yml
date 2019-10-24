@@ -20,8 +20,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-            - v1-dependencies-
+            - v2-dependencies-{{ checksum "requirements.txt" }}
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -34,7 +34,7 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          key: v2-dependencies-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
