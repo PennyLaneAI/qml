@@ -18,6 +18,11 @@ jobs:
       - aws-cli/setup:
           aws-region: AWS_REGION
 
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-
+
       - run:
           name: Install dependencies
           command: |
@@ -25,6 +30,11 @@ jobs:
             . venv/bin/activate
             pip install pip setuptools --upgrade
             pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:

@@ -1,6 +1,6 @@
 r"""
-Doubly stochastic gradient descent
-==================================
+Doubly stochastic gradient descent on IBM Q
+===========================================
 
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
@@ -256,7 +256,10 @@ print("Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(para
 # convergence continues to be guaranteed!
 #
 # Let's create a QNode that randomly samples a single term from the above
-# Hamiltonian as the observable to be measured.
+# Hamiltonian as the observable to be measured. This time, we will run
+# the example using IBM Q quantum hardware.
+
+dev_stochastic = qml.device("qiskit.ibmq", wires=2, backend="ibmqx2", shots=100)
 
 I = np.identity(2)
 X = np.array([[0, 1], [1, 0]])

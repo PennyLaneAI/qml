@@ -7,6 +7,7 @@ semantic_version==2.6
 pennylane
 pennylane-sf
 pennylane-forest
+pennylane-qiskit
 pyquil==2.10
 scipy
 sphinx==1.8.5
