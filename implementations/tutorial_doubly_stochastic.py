@@ -101,9 +101,6 @@ of shots is 1!
 #
 # We can solve for the ground state energy using
 # the variational quantum eigensolver (VQE) algorithm.
-#
-# Let's use the ``default.qubit`` simulator for both the analytic gradient,
-# as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}`.
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -119,8 +116,25 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
+##############################################################################
+# Let's use the ``default.qubit`` simulator for the analytic gradient,
+# as well as the estimated gradient using 100 shots.
+
 dev_analytic = qml.device("default.qubit", wires=num_wires, analytic=True)
-dev_stochastic = qml.device("default.qubit", wires=num_wires, analytic=False)
+dev_stochastic = qml.device("default.qubit", wires=num_wires, analytic=False, shots=100)
+
+##############################################################################
+# Let's also create a device that randomly samples a single shot.
+# This time, rather than using a simulator, we will run
+# this device using IBM Q quantum hardware.
+
+dev_ibmq = qml.device("qiskit.ibmq", wires=2, backend="ibmqx2", shots=1)
+
+##############################################################################
+# .. note::
+#
+#   You will need to install the PennyLane-Qiskit plugin to create this device.
+#   This can be done via `pip install pennylane-qiskit`.
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
@@ -140,6 +154,7 @@ def circuit(params):
 
 qnode_analytic = qml.QNode(circuit, dev_analytic)
 qnode_stochastic = qml.QNode(circuit, dev_stochastic)
+qnode_ibmq = qml.QNode(circuit, dev_ibmq)
 
 init_params = strong_ent_layers_uniform(num_layers, num_wires)
 
@@ -153,20 +168,8 @@ for _ in range(steps):
     cost_GD.append(qnode_analytic(params_GD))
     params_GD = opt.step(qnode_analytic, params_GD)
 
-# Optimizing using stochastic gradient descent with shots=1
-
-dev_stochastic.shots = 1
-cost_SGD1 = []
-params_SGD1 = init_params
-opt = qml.GradientDescentOptimizer(eta)
-
-for _ in range(steps):
-    cost_SGD1.append(qnode_stochastic(params_SGD1))
-    params_SGD1 = opt.step(qnode_stochastic, params_SGD1)
-
 # Optimizing using stochastic gradient descent with shots=100
 
-dev_stochastic.shots = 100
 cost_SGD100 = []
 params_SGD100 = init_params
 opt = qml.GradientDescentOptimizer(eta)
@@ -175,6 +178,15 @@ for _ in range(steps):
     cost_SGD100.append(qnode_stochastic(params_SGD100))
     params_SGD100 = opt.step(qnode_stochastic, params_SGD100)
 
+# Optimizing using stochastic gradient descent with shots=1
+
+cost_SGD1 = []
+params_SGD1 = init_params
+opt = qml.GradientDescentOptimizer(eta)
+
+for _ in range(steps):
+    cost_SGD1.append(qnode_ibmq(params_SGD1))
+    params_SGD1 = opt.step(qnode_ibmq, params_SGD1)
 
 ##############################################################################
 # Note that in the latter two cases we are sampling from an unbiased
@@ -256,10 +268,7 @@ print("Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(para
 # convergence continues to be guaranteed!
 #
 # Let's create a QNode that randomly samples a single term from the above
-# Hamiltonian as the observable to be measured. This time, we will run
-# the example using IBM Q quantum hardware.
-
-dev_stochastic = qml.device("qiskit.ibmq", wires=2, backend="ibmqx2", shots=100)
+# Hamiltonian as the observable to be measured.
 
 I = np.identity(2)
 X = np.array([[0, 1], [1, 0]])
