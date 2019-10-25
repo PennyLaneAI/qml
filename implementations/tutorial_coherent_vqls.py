@@ -205,7 +205,7 @@ m = 2                       # Number of ancillary qubits
 n_shots = 10 ** 6           # Number of quantum measurements.
 tot_qubits = n_qubits + m   # Addition of ancillary qubits.
 ancilla_idx = n_qubits      # Index of the first ancillary qubit.
-steps = 10                  # Number of optimization steps.
+steps = 2                   # Number of optimization steps.
 eta = 0.8                   # Learning rate.
 q_delta = 0.001             # Initial spread of random quantum weights.
 rng_seed = 0                # Seed for random number generator.
@@ -224,24 +224,35 @@ rng_seed = 0                # Seed for random number generator.
 # normalizing their sum:
 
 c = np.array([1, 0.2, 0.2, 0])
-c = c  / c .sum()
-
+c = c / np.sum(c)
 
 ##############################################################################
 # New we need to embed the square root of the probability distribution ``c`` into the amplitudes
-# of the ancillary state.
+# of the ancillary state. It is easy to check that one can always embed 3 positive 
+# amplitudes with just three gates: 
+# a local :math:`R_y` rotation, controlled-:math:`R_y` and controlled-NOT.
 
 def U_c():
     """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
-    # TO BE DONE. THIS IS A DRAFT.
-    qml.RY(-np.arcsin(c[1]), wires=ancilla_idx)
-    qml.RY(-np.arcsin(c[2]), wires=ancilla_idx + 1)
+    
+    # We need to embed the square root of the vector c
+    sqrt_c = np.sqrt(c)
+
+    # Local rotation of the first ancillary qubit
+    qml.RY(-np.arccos(sqrt_c[0]), wires=ancilla_idx)
+    
+    # Hadamard gate on the second ancillary qubit controlled by first.
+    qml.CRY(-np.arctan(sqrt_c[2]/sqrt_c[1]), wires=[ancilla_idx + 1, ancilla_idx])
+
+    # Controlled-NOT on the fist qubit controleld by the second.
+    qml.CNOT(wires=[ancilla_idx, ancilla_idx + 1])
 
 def U_c_dagger():
     """Adjoint of U_c."""
-    # TO BE DONE. THIS IS A DRAFT.
-    qml.RY(np.arcsin(c[1]), wires=ancilla_idx)
-    qml.RY(np.arcsin(c[2]), wires=ancilla_idx + 1)
+    qml.CNOT(wires=[ancilla_idx, ancilla_idx + 1])
+    qml.CRY(np.arctan(c[2]/c[1]), wires=[ancilla_idx + 1, ancilla_idx])
+    qml.RY(np.arccos(c[0]), wires=ancilla_idx)
+
 
 ##############################################################################
 # The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
