@@ -251,7 +251,7 @@ def variational_block(weights):
     """Variational circuit mapping the ground state |0> to the ansatz state |x>."""
     # We first prepare an equal superposition of all the states of the computational basis.
     for idx in range(n_qubits):
-     qml.Hadamard(wires=idx)
+        qml.Hadamard(wires=idx)
 
     # A very minimal variational circuit.
     for idx, element in enumerate(weights):
