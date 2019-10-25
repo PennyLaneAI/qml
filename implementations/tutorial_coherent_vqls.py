@@ -84,6 +84,9 @@ cost function of the problem in a more direct way.
 Coherently applying :math:`A`
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+The problem of coherently applying a liner combination of unitary operations has been already studied in Ref. [2]
+and here we follow a very similar approach.
+
 Without loss of generality we can assume that the coefficients :math:`c=(c_1, c_2, \dots c_L)` appearing
 in the definition of :math:`A` represent a positive and normalized probability distribution. i.e.
 
@@ -92,12 +95,12 @@ in the definition of :math:`A` represent a positive and normalized probability d
     c_l \ge 0 \quad \forall l,  \qquad \sum_{l=0}^{L-1} c_l=1.
 
 Indeed the complex phase of each coefficient :math:`c_l` can always be absorbed into the associated unitary :math:`A_l`, obtaining
-in this way a list of positive coefficients. Moreover, since the linear problem is 
+in this way a vector of positive values. Moreover, since the linear problem is 
 defined up to a constant scaling factor, we can also normalize the coefficients to get a probability distribution.
 
-For simplicity, since we can always pad :math:`c` with additional zeros, we can also assume that :math:`L=2^m` for some positive integer :math:`m`.
+For simplicity, since we can always pad :math:`c` with additional zeros, we assume that :math:`L=2^m` for some positive integer :math:`m`.
 
-Let us consider a unitary circuit :math:`U_c`, embedding the classical vector :math:`c` into the quantum state :math:`|c\rangle` of :math:`m` ancillary qubits:
+Let us consider a unitary circuit :math:`U_c`, embedding the square root of :math:`c` into the quantum state :math:`|\sqrt{c}\rangle` of :math:`m` ancillary qubits:
 
 .. math::
 
@@ -120,8 +123,7 @@ acting on the system and on the ancillary basis states as follows:
 
 i.e., the unitary :math:`A_l` is applied only when the ancillary system is in the corresponding basis state :math:`|l\rangle`.
 
-A natural generalization of the Hadamard test to :math:`m` ancillary qubits is the following protocol, originally proposed
-in Ref. [2]:
+A natural generalization of the `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_, to the case of multiple unitary operations, is the following:
 
 1. Prepare all qubits in the ground state.
 2. Apply :math:`U_c` to the ancillary qubits.
@@ -146,14 +148,11 @@ Indeed one could simply continue the previous protocol with the following two st
    in the ground state (given the ancillary qubits measured in their ground state),
    is :math:`|\langle 0 | U_b^\dagger |\Psi \rangle|^2 = |\langle b | \Psi \rangle|^2`.
 
-Therefore, by repeating the full experiment with the same fixed settings, one can directly estimate
+So, with sufficiently many shots of the previous experiment, one can directly estimate
 the cost function of the problem.
 
 Importantly, the operations of steps 6 and 7 commute. Therefore all the measurements can be
 delayed at the end of the quantum circuit, making the structure of the experiment more straightforward.  
-
-
-
 
 A simple example
 ^^^^^^^^^^^^^^^^
@@ -203,7 +202,7 @@ import matplotlib.pyplot as plt
 n_qubits = 3                # Number of system qubits.
 m = 2                       # Number of ancillary qubits
 n_shots = 10 ** 6           # Number of quantum measurements.
-tot_qubits = n_qubits + m   # Addition of ancillary qubits.
+tot_qubits = n_qubits + m   # System + ancillary qubits.
 ancilla_idx = n_qubits      # Index of the first ancillary qubit.
 steps = 10                  # Number of optimization steps.
 eta = 0.8                   # Learning rate.
@@ -221,57 +220,48 @@ rng_seed = 0                # Seed for random number generator.
 #
 # The coefficients of the linear combination are three positive numbers :math:`(1, 0.2, 0.2)`.
 # So we can embed them in the state of  :math:`m=2` ancillary qubits by adding a final zero element and
-# normalizing their sum:
+# normalizing their sum to :math:`1`:
 
 c = np.array([1, 0.2, 0.2, 0])
 c = c / np.sum(c)
+# We also compute the square root of c
+sqrt_c = np.sqrt(c)
 
 ##############################################################################
 # We need to embed the square root of the probability distribution ``c`` into the amplitudes
 # of the ancillary state. It is easy to check that one can always embed 3 positive 
 # amplitudes with just three gates: 
-# a local :math:`R_y` rotation, controlled-:math:`R_y` and controlled-NOT.
+# a local :math:`R_y` rotation, a controlled-:math:`R_y` and a controlled-NOT.
 
 def U_c():
     """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
-    
-    # Square root of the vector c
-    sqrt_c = np.sqrt(c)
-
-    # Local rotation of the first ancillary qubit
+    # Circuit mapping |00> to sqrt_c[0] |00> + sqrt_c[1] |01> + sqrt_c[2] |10>
     qml.RY(-2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
-    
-    # Ry rotation of the second ancillary qubit, controlled by the first.
     qml.CRY(-2 * np.arctan(sqrt_c[2] / sqrt_c[1]), wires=[ancilla_idx, ancilla_idx + 1])
-
-    # CNOT applied to fist ancillary qubit, controleld by the second.
     qml.CNOT(wires=[ancilla_idx + 1, ancilla_idx])
 
 def U_c_dagger():
     """Adjoint of U_c."""
-    sqrt_c = np.sqrt(c)
     qml.CNOT(wires=[ancilla_idx + 1, ancilla_idx])
     qml.CRY(2 * np.arctan(sqrt_c[2] / sqrt_c[1]), wires=[ancilla_idx, ancilla_idx + 1])
     qml.RY(2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
 
 
 ##############################################################################
-# We are left to define the controlled-unitaries :math:`CA_l`, which should act
-# as :math:`A_l` on the system qubits whenever the ancillary ones are in the state
-# :math:`|l\rangle`. In our case this simply corresponds to conditioning :math:`A_1` and
-# :math:`A_2` to the first and second ancillary qubits respectively.
+# We are left to define the sequence of all controlled-unitaries :math:`CA_l`, acting
+# as :math:`A_l` on the system whenever the ancillary state is :math:`|l\rangle`.
+# Since in our case :math:`A_0=\mathbb{I}`, we only need to apply :math:`A_1` and
+# :math:`A_2` controlled by the first and second ancillary qubits respectively.
 
-def CA(l):
-    """Controlled versions of the unitary components A_l of the problem matrix A."""  
-    
-    if l == 1:
-        qml.CNOT(wires=[ancilla_idx, 0])
-        qml.CZ(wires=[ancilla_idx, 1])
+def CA_all():
+    """Controlled application of all the unitary components A_l of the problem matrix A."""  
+    # Controlled-A_1
+    qml.CNOT(wires=[ancilla_idx, 0])
+    qml.CZ(wires=[ancilla_idx, 1])
 
-    elif l == 2:
-        qml.CNOT(wires=[ancilla_idx + 1, 0])
+    # Controlled-A2
+    qml.CNOT(wires=[ancilla_idx + 1, 0])
 
-    # For other values of "l", A_l = Identity.
     
 ##############################################################################
 # The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
@@ -324,9 +314,8 @@ def full_circuit(weights):
     # Variational circuit generating a guess for the solution vector |x>
     variational_block(weights)
 
-    # Application of all controlled-unitaries CA_l associated to the problem matrix A.
-    for l in range(2 ** m):
-        CA(l)
+    # Application of all the controlled-unitaries CA_l associated to the problem matrix A.
+    CA_all()
    
     # Adjoint of U_b, where U_b |0> = |b>. 
     # For this particular problem adjoint(U_b)=U_b
@@ -374,10 +363,10 @@ def ancilla_ground(weights):
 # Variational optimization
 # -----------------------------
 #
-# We first define the cost function :math:`C` of our minimization problem.
+# We first define the cost function :math:`C = 1- |\langle b | \Psi \rangle|^2` of our minimization problem.
 
 def cost(weights):
-    """Cost function which tends to zero when A |x> is proportional to |b>."""
+    """Cost function which tends to zero when A |x> tends to |b>."""
     
     p_global_ground = global_ground(weights)
     p_ancilla_ground = ancilla_ground(weights)
