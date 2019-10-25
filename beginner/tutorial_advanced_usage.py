@@ -35,7 +35,7 @@ dev = qml.device("default.qubit", wires=2)
 
 
 @qml.qnode(dev)
-def circuit1(param):
+def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1))
@@ -47,16 +47,16 @@ def circuit1(param):
 # subsystem are completely mixed, and local expectation values — like those we are measuring —
 # will average to zero.
 
-print(circuit1(np.pi / 2))
+print(circuit(np.pi / 2))
 
 ##############################################################################
 # Notice that the output of the circuit is a NumPy array with ``shape=(2,)``, i.e., a two-dimensional
 # vector. These two dimensions match the number of expectation values returned in our quantum
-# function ``circuit1``.
+# function ``circuit``.
 #
 # .. note::
 #
-#     It is important to emphasize that the expectation values in ``circuit1`` are both **local**,
+#     It is important to emphasize that the expectation values in ``circuit`` are both **local**,
 #     i.e., this circuit is evaluating :math:`\left\langle \sigma_z\right\rangle_0` and :math:`\left\langle \sigma_z\right\rangle_1`,
 #     not :math:`\left\langle \sigma_z\otimes \sigma_z\right\rangle_{01}` (where the subscript
 #     denotes which wires the observable is located on). 
@@ -65,12 +65,12 @@ print(circuit1(np.pi / 2))
 # the matrix multiplication operator ``@`` can be used:
 
 @qml.qnode(dev)
-def circuit2(param):
+def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-print(circuit2(np.pi / 2))
+print(circuit(np.pi / 2))
 
 ##############################################################################
 # Notice how this expectation value differs from the local versions above.
@@ -79,7 +79,7 @@ print(circuit2(np.pi / 2))
 
 
 @qml.qnode(dev)
-def circuit3(param):
+def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0)), qml.var(qml.PauliZ(1))
