@@ -205,7 +205,7 @@ m = 2                       # Number of ancillary qubits
 n_shots = 10 ** 6           # Number of quantum measurements.
 tot_qubits = n_qubits + m   # Addition of ancillary qubits.
 ancilla_idx = n_qubits      # Index of the first ancillary qubit.
-steps = 2                   # Number of optimization steps.
+steps = 10                  # Number of optimization steps.
 eta = 0.8                   # Learning rate.
 q_delta = 0.001             # Initial spread of random quantum weights.
 rng_seed = 0                # Seed for random number generator.
@@ -216,7 +216,7 @@ rng_seed = 0                # Seed for random number generator.
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ##############################################################################
-# We now define the unitary operations associated to the simple example
+# We need to define the unitary operations associated to the simple example
 # presented in the introduction.
 #
 # The coefficients of the linear combination are three positive numbers :math:`(1, 0.2, 0.2)`.
@@ -227,7 +227,7 @@ c = np.array([1, 0.2, 0.2, 0])
 c = c / np.sum(c)
 
 ##############################################################################
-# New we need to embed the square root of the probability distribution ``c`` into the amplitudes
+# We need to embed the square root of the probability distribution ``c`` into the amplitudes
 # of the ancillary state. It is easy to check that one can always embed 3 positive 
 # amplitudes with just three gates: 
 # a local :math:`R_y` rotation, controlled-:math:`R_y` and controlled-NOT.
@@ -235,32 +235,25 @@ c = c / np.sum(c)
 def U_c():
     """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
     
-    # We need to embed the square root of the vector c
+    # Square root of the vector c
     sqrt_c = np.sqrt(c)
 
     # Local rotation of the first ancillary qubit
-    qml.RY(-np.arccos(sqrt_c[0]), wires=ancilla_idx)
+    qml.RY(-2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
     
-    # Hadamard gate on the second ancillary qubit controlled by first.
-    qml.CRY(-np.arctan(sqrt_c[2]/sqrt_c[1]), wires=[ancilla_idx + 1, ancilla_idx])
+    # Ry rotation of the second ancillary qubit, controlled by the first.
+    qml.CRY(-2 * np.arctan(sqrt_c[2] / sqrt_c[1]), wires=[ancilla_idx, ancilla_idx + 1])
 
-    # Controlled-NOT on the fist qubit controleld by the second.
-    qml.CNOT(wires=[ancilla_idx, ancilla_idx + 1])
+    # CNOT applied to fist ancillary qubit, controleld by the second.
+    qml.CNOT(wires=[ancilla_idx + 1, ancilla_idx])
 
 def U_c_dagger():
     """Adjoint of U_c."""
-    qml.CNOT(wires=[ancilla_idx, ancilla_idx + 1])
-    qml.CRY(np.arctan(c[2]/c[1]), wires=[ancilla_idx + 1, ancilla_idx])
-    qml.RY(np.arccos(c[0]), wires=ancilla_idx)
+    sqrt_c = np.sqrt(c)
+    qml.CNOT(wires=[ancilla_idx + 1, ancilla_idx])
+    qml.CRY(2 * np.arctan(sqrt_c[2] / sqrt_c[1]), wires=[ancilla_idx, ancilla_idx + 1])
+    qml.RY(2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
 
-
-##############################################################################
-# The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
-
-def U_b():
-    """Unitary matrix rotating the system ground state to the problem vector |b> = U_b |0>."""
-    for idx in range(n_qubits):
-        qml.Hadamard(wires=idx)
 
 ##############################################################################
 # We are left to define the controlled-unitaries :math:`CA_l`, which should act
@@ -277,10 +270,16 @@ def CA(l):
 
     elif l == 2:
         qml.CNOT(wires=[ancilla_idx + 1, 0])
+
+    # For other values of "l", A_l = Identity.
     
-    # For all other values of "l", A_l = Identity.
-    
-    
+##############################################################################
+# The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
+
+def U_b():
+    """Unitary matrix rotating the system ground state to the problem vector |b> = U_b |0>."""
+    for idx in range(n_qubits):
+        qml.Hadamard(wires=idx)    
 
 
 ##############################################################################
@@ -328,6 +327,10 @@ def full_circuit(weights):
     # Application of all controlled-unitaries CA_l associated to the problem matrix A.
     for l in range(2 ** m):
         CA(l)
+   
+    # Adjoint of U_b, where U_b |0> = |b>. 
+    # For this particular problem adjoint(U_b)=U_b
+    U_b()
 
     # Adjoint of U_c, applied to the ancillary qubits.
     U_c_dagger()
@@ -351,9 +354,9 @@ def global_ground(weights):
     # Circuit gates
     full_circuit(weights)
     # Projector on the global ground state.
-    P_zero = np.zeros((2 ** tot_qubits, 2 ** tot_qubits))
-    P_zero[0, 0] = 1.0 
-    return qml.expval(qml.Hermitian(P_zero, wires=range(tot_qubits)))
+    P = np.zeros((2 ** tot_qubits, 2 ** tot_qubits))
+    P[0, 0] = 1.0 
+    return qml.expval(qml.Hermitian(P, wires=range(tot_qubits)))
 
 dev_partial = qml.device("default.qubit", wires=tot_qubits)
 @qml.qnode(dev_partial)
@@ -361,9 +364,9 @@ def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
     # Projector on the ancilla ground state.
-    P_zero = np.zeros((2 ** m, 2 ** m))
-    P_zero[0, 0] = 1.0 
-    return qml.expval(qml.Hermitian(P_zero, wires=range(n_qubits, tot_qubits)))
+    P_anc = np.zeros((2 ** m, 2 ** m))
+    P_anc[0, 0] = 1.0 
+    return qml.expval(qml.Hermitian(P_anc, wires=range(n_qubits, tot_qubits)))
 
 
 
@@ -492,7 +495,7 @@ def prepare_and_sample(weights):
 # samples and then compute the relative frequency of each outcome.
 
 samples = prepare_and_sample(w).astype(int)
-q_probs = np.bincount(samples) / n_shots
+q_probs = np.bincount(samples, minlength=2 ** n_qubits) / n_shots
 
 ##############################################################################
 # Comparison
