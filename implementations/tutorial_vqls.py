@@ -136,7 +136,7 @@ which can be computed whenever we are able to measure the following coefficients
 
 where we used the convention that if :math:`j=-1`,  :math:`Z_{-1}` is replaced with the identity.
 
-Also in this case the complex coefficients :math:`\mu_{l, l', j}` can be experimentally measured with an Hadamard test.
+Also in this case the complex coefficients :math:`\mu_{l, l', j}` can be experimentally measured with a Hadamard test.
 The corresponding quantum circuit is shown in the image at the top of this tutorial.
 Compared with the previous method, the main advantage of this approach is that only the unitary operations
 :math:`A_l, A_l^\dagger` and :math:`Z_j` need to be controlled by an external ancillary qubit,
