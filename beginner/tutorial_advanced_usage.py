@@ -62,7 +62,7 @@ print(circuit1(np.pi / 2))
 #     denotes which wires the observable is located on). 
 #
 # In order to measure a tensor-product observable like :math:`\langle\sigma_z \otimes \sigma_z \rangle _{01}`, 
-# observable feature can be used.
+# the matrix multiplication operator ``@`` can be used:
 
 @qml.qnode(dev)
 def circuit2(param):
