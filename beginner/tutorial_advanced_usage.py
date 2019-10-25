@@ -73,7 +73,7 @@ def circuit2(param):
 print(circuit2(np.pi / 2))
 
 ##############################################################################
-# This outcome is expected, as both spins are either up or down.
+# Notice how this expectation value differs from the local versions above.
 #
 # We may even mix different return types, for example expectation values and variances:
 
