@@ -244,7 +244,7 @@ def CA(idx):
 # which is just a single layer of qubit rotations
 # :math:`R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2)`.
 # For solving more complex problems, we suggest to use more expressive circuits as,
-# e.g., the PennyLane template `pennylane.templates.layers.StronglyEntanglingLayers()`.
+# e.g., the PennyLane ``StronglyEntanglingLayers`` template.
 
 
 def variational_block(weights):
