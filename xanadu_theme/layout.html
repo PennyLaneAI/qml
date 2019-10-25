@@ -14,12 +14,8 @@
   <!-- Material Design Bootstrap -->
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet"> -->
 
-  <!-- JQuery -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+  <!-- nanoscroller -->
+  <link rel="stylesheet" type="text/css" href="{{ pathto('_static/css/nanoscroller.css', 1) }}" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/x-mathjax-config">
@@ -165,31 +161,58 @@
   {%- endblock %}
 
 {%- block footer %}
-<script type="text/javascript">
-var downloadNote = $(".sphx-glr-download-link-note.admonition.note");
-if (downloadNote.length >= 1) {
-    var tutorialUrlArray = $("#tutorial-type").text().split('/');
 
-    if (tutorialUrlArray[0] == "tutorial") {
-      tutorialUrlArray[0] = "beginner";
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+    <!-- Nanoscroller -->
+    <script type="text/javascript" src="{{ pathto('_static/js/nanoscroller.min.js', 1) }}"></script>
+
+    <script type="text/javascript">
+      $(".document > .section").removeClass("section");
+      $(".nano").nanoScroller();
+    </script>
+    <script type="text/javascript">
+      $(window).scroll(function(){
+        var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
+        if (scrollBottom < 342) {
+          $('.comment-container').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
+        }
+      });
+      $(document).ready(function () {
+          $(".css-transitions-only-after-page-load").each(function (index, element) {
+              setTimeout(function () { $(element).removeClass("css-transitions-only-after-page-load") }, 10);
+          });
+      });
+    </script>
+
+    <script type="text/javascript">
+    var downloadNote = $(".sphx-glr-download-link-note.admonition.note");
+    if (downloadNote.length >= 1) {
+      var tutorialUrlArray = $("#tutorial-type").text().split('/');
+
+      if (tutorialUrlArray[0] == "tutorial") {
+        tutorialUrlArray[0] = "beginner";
+      } else {
+        tutorialUrlArray[0] = "implementations";
+      }
+
+      var githubLink = "https://github.com/" + "{{ theme_github_repo }}" + "/blob/master/" + tutorialUrlArray.join("/") + ".py",
+          pythonLink = $(".reference.download")[0].href,
+          notebookLink = $(".reference.download")[1].href,
+          notebookDownloadPath = notebookLink.split('_downloads')[1].split('/').pop();
+
+      $("#download-python-link").wrap("<a href=" + pythonLink + " data-behavior='call-to-action-event' data-response='Download Python script' download target='_blank'/>");
+      $("#download-notebook-link").wrap("<a href=" + notebookLink + " data-behavior='call-to-action-event' data-response='Download Notebook' download target='_blank'/>");
+      $("#github-view-link").wrap("<a href=" + githubLink + " data-behavior='call-to-action-event' data-response='View on Github' target='_blank'/>");
+      $("#right-column").addClass("page-shadow");
     } else {
-      tutorialUrlArray[0] = "implementations";
+      $(".xanadu-call-to-action-links").hide();
     }
+    </script>
 
-    var githubLink = "https://github.com/" + "{{ theme_github_repo }}" + "/blob/master/" + tutorialUrlArray.join("/") + ".py",
-        pythonLink = $(".reference.download")[0].href,
-        notebookLink = $(".reference.download")[1].href,
-        notebookDownloadPath = notebookLink.split('_downloads')[1].split('/').pop();
-
-    $("#download-python-link").wrap("<a href=" + pythonLink + " data-behavior='call-to-action-event' data-response='Download Python script' download target='_blank'/>");
-    $("#download-notebook-link").wrap("<a href=" + notebookLink + " data-behavior='call-to-action-event' data-response='Download Notebook' download target='_blank'/>");
-    $("#github-view-link").wrap("<a href=" + githubLink + " data-behavior='call-to-action-event' data-response='View on Github' target='_blank'/>");
-    $("#right-column").addClass("page-shadow");
-} else {
-    $(".xanadu-call-to-action-links").hide();
-}
-</script>
-
-
-            {% include "footer.html" %}
+  {% include "footer.html" %}
 {%- endblock %}

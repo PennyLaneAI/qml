@@ -3,33 +3,31 @@
 
 PyTorch and noisy devices
 =========================
-
-Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
-using the default NumPy/autograd QNode interface, we'll use the :ref:`torch_qnode`.
-We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm`` device, to
-see how the optimization responds to noisy qubits.
-
-
-To follow along with this tutorial on your own computer, you will require the
-following dependencies:
-
-* The `Forest SDK <https://rigetti.com/forest>`_, which contains the quantum virtual
-  machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
-  started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
-
-* `PennyLane-Forest plugin <https://pennylane-forest.readthedocs.io>`_, in order
-  to access the QVM as a PennyLane device. This can be installed via pip:
-
-  .. code-block:: bash
-
-      pip install pennylane-forest
-
-* `PyTorch <https://pytorch.org/get-started/locally/>`_, in order to access the PyTorch
-  QNode interface. Follow the link for instructions on the best way to install PyTorch
-  for your system.
 """
-
 ##############################################################################
+# Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
+# using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
+# We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm`` device, to
+# see how the optimization responds to noisy qubits.
+#
+# To follow along with this tutorial on your own computer, you will require the
+# following dependencies:
+#
+# * The `Forest SDK <https://rigetti.com/forest>`_, which contains the quantum virtual
+#   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
+#   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
+#
+# * `PennyLane-Forest plugin <https://pennylane-forest.readthedocs.io>`_, in order
+#   to access the QVM as a PennyLane device. This can be installed via pip:
+#
+#   .. code-block:: bash
+#
+#       pip install pennylane-forest
+#
+# * `PyTorch <https://pytorch.org/get-started/locally/>`_, in order to access the PyTorch
+#   QNode interface. Follow the link for instructions on the best way to install PyTorch
+#   for your system.
+#
 # Setting up the device
 # ---------------------
 #
@@ -62,7 +60,7 @@ dev = qml.device("forest.qvm", device="2q", noisy=True)
 # ----------------------
 #
 # Now that we have initialized the device, we can construct our quantum node. Like the
-# other tutorials, we use the :mod:`qnode decorator <pennylane.decorator>` to convert
+# other tutorials, we use the :mod:`~.pennylane.qnode` decorator to convert
 # our quantum function (encoded by the circuit above) into a quantum node
 # running on the QVM.
 
@@ -202,4 +200,4 @@ for i in range(400):
 # device. Once done, it will return a tensor containing the QNode result, and
 # automatically copy it back to the GPU for any further classical processing.
 #
-# .. note:: For more details on the PyTorch interface, see :ref:`torch_qnode`.
+# .. note:: For more details on the PyTorch interface, see :doc:`introduction/interfaces/torch`.

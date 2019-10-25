@@ -3,116 +3,114 @@ r"""
 
 Plugins and Hybrid computation
 ==============================
-
-This tutorial introduces the notion of hybrid computation by combining several PennyLane
-plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
-and use it to explore a non-Gaussian photonic circuit. We then combine this photonic circuit with a
-qubit circuit — along with some classical processing — to create and optimize a fully hybrid computation.
-Be sure to read through the introductory :ref:`qubit rotation <qubit_rotation>` and
-:ref:`Gaussian transformation <gaussian_transformation>` tutorials before attempting this tutorial.
-
-.. note::
-
-    To follow along with this tutorial on your own computer, you will require the
-    `PennyLane-SF plugin <https://pennylane-sf.readthedocs.io>`_, in order to access the
-    `Strawberry Fields <https://strawberryfields.readthedocs.io>`_ Fock backend using
-    PennyLane. It can be installed via pip:
-
-    .. code-block:: bash
-
-        pip install pennylane-sf
-
-.. _photon_redirection:
-
-
-A non-Gaussian circuit
-----------------------
-
-We first consider a photonic circuit which is similar in spirit to the
-:ref:`qubit rotation <qubit_rotation>` circuit:
-
-.. figure:: ../beginner/plugins_hybrid/photon_redirection.png
-    :align: center
-    :width: 30%
-    :target: javascript:void(0);
-
-Breaking this down, step-by-step:
-
-1. **We start the computation with two qumode subsystems**. In PennyLane, we use the
-   shorthand 'wires' to refer to quantum subsystems, whether they are qumodes, qubits, or
-   any other kind of quantum register.
-
-2. **Prepare the state** :math:`\left|1,0\right\rangle`. That is, the first wire (wire 0) is prepared
-   in a single-photon state, while the second
-   wire (wire 1) is prepared in the vacuum state. The former state is non-Gaussian,
-   necessitating the use of the ``'strawberryfields.fock'`` backend device.
-
-3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta`and :math:`\phi`.
-   Here, we have the convention that the beamsplitter transmission amplitude is :math:`t=\cos\theta`,
-   and the reflection amplitude is
-   :math:`r=e^{i\phi}\sin\theta`. See :ref:`operations` for a full list of operation conventions.
-
-4. **Finally, we measure the mean photon number** :math:`\left\langle \hat{n}\right\rangle` of the second wire, where
-
-   .. math:: \hat{n} = \ad\a
-
-   is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle`.
-
-The aim of this tutorial is to optimize the beamsplitter parameters :math:`(\theta, \phi)` such
-that the expected photon number of the second wire is **maximized**. Since the beamsplitter
-is a passive optical element that preserves the total photon number, this to the output
-state :math:`\left|0,1\right\rangle` — i.e., when the incident photon from the first wire has been
-'redirected' to the second wire.
-
-.. _photon_redirection_calc:
-
-Exact calculation
-~~~~~~~~~~~~~~~~~
-
-To compare with later numerical results, we can first consider what happens analytically.
-The initial state of the circuit is :math:`\left|\psi_0\right\rangle=\left|1,0\right\rangle`, and the output state
-of the system is of the form :math:`\left|\psi\right\rangle = a\left|1, 0\right\rangle + b\left|0,1\right\rangle`, where
-:math:`|a|^2+|b|^2=1`. We may thus write the output state as a vector in this
-computational basis, :math:`\left|\psi\right\rangle = \begin{bmatrix}a & b\end{bmatrix}^T`.
-
-The beamsplitter acts on this two-dimensional subspace as follows:
-
-.. math::
-    \left|\psi\right\rangle = B(\theta, \phi)\left|1, 0\right\rangle = \begin{bmatrix}
-        \cos\theta & -e^{-i\phi}\sin\theta\\
-        e^{i\phi}\sin\theta & \cos\theta
-    \end{bmatrix}\begin{bmatrix} 1\\ 0\end{bmatrix} = \begin{bmatrix}
-        \cos\theta\\
-        e^{i\phi} \sin\theta
-    \end{bmatrix}
-
-Furthermore, the mean photon number of the second wire is
-
-.. math::
-
-    \left\langle{\hat{n}_1}\right\rangle = \langle{\psi}\mid{\hat{n}_1}\mid{\psi}\rangle = |e^{i\phi} \sin\theta|^2
-    \langle{0,1}\mid{\hat{n}_1}\mid{0,1}\rangle = \sin^2 \theta.
-
-Therefore, we can see that:
-
-1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1`: the output of the quantum circuit is
-   bound between 0 and 1;
-
-2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0`: the output of the
-   quantum circuit is independent of the beamsplitter phase :math:`\phi`;
-
-3. The output of the quantum circuit above is maximised when :math:`\theta=(2m+1)\pi/2`
-   for :math:`m\in\mathbb{Z}_0`.
 """
-
 ##############################################################################
+# This tutorial introduces the notion of hybrid computation by combining several PennyLane
+# plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
+# and use it to explore a non-Gaussian photonic circuit. We then combine this photonic circuit with a
+# qubit circuit — along with some classical processing — to create and optimize a fully hybrid computation.
+# Be sure to read through the introductory :ref:`qubit rotation <qubit_rotation>` and
+# :ref:`Gaussian transformation <gaussian_transformation>` tutorials before attempting this tutorial.
+#
+# .. note::
+#
+#     To follow along with this tutorial on your own computer, you will require the
+#     `PennyLane-SF plugin <https://pennylane-sf.readthedocs.io>`_, in order to access the
+#     `Strawberry Fields <https://strawberryfields.readthedocs.io>`_ Fock backend using
+#     PennyLane. It can be installed via pip:
+#
+#     .. code-block:: bash
+#
+#         pip install pennylane-sf
+#
+# .. _photon_redirection:
+#
+# A non-Gaussian circuit
+# ----------------------
+#
+# We first consider a photonic circuit which is similar in spirit to the
+# :ref:`qubit rotation <qubit_rotation>` circuit:
+#
+# .. figure:: ../beginner/plugins_hybrid/photon_redirection.png
+#     :align: center
+#     :width: 30%
+#     :target: javascript:void(0);
+#
+# Breaking this down, step-by-step:
+#
+# 1. **We start the computation with two qumode subsystems**. In PennyLane, we use the
+#    shorthand 'wires' to refer to quantum subsystems, whether they are qumodes, qubits, or
+#    any other kind of quantum register.
+#
+# 2. **Prepare the state** :math:`\left|1,0\right\rangle`. That is, the first wire (wire 0) is prepared
+#    in a single-photon state, while the second
+#    wire (wire 1) is prepared in the vacuum state. The former state is non-Gaussian,
+#    necessitating the use of the ``'strawberryfields.fock'`` backend device.
+#
+# 3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta`and :math:`\phi`.
+#    Here, we have the convention that the beamsplitter transmission amplitude is :math:`t=\cos\theta`,
+#    and the reflection amplitude is
+#    :math:`r=e^{i\phi}\sin\theta`. See :doc:`introduction/operations` for a full list of operation conventions.
+#
+# 4. **Finally, we measure the mean photon number** :math:`\left\langle \hat{n}\right\rangle` of the second wire, where
+#
+#    .. math:: \hat{n} = \ad\a
+#
+#    is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle`.
+#
+# The aim of this tutorial is to optimize the beamsplitter parameters :math:`(\theta, \phi)` such
+# that the expected photon number of the second wire is **maximized**. Since the beamsplitter
+# is a passive optical element that preserves the total photon number, this to the output
+# state :math:`\left|0,1\right\rangle` — i.e., when the incident photon from the first wire has been
+# 'redirected' to the second wire.
+#
+# .. _photon_redirection_calc:
+#
+# Exact calculation
+# ~~~~~~~~~~~~~~~~~
+#
+# To compare with later numerical results, we can first consider what happens analytically.
+# The initial state of the circuit is :math:`\left|\psi_0\right\rangle=\left|1,0\right\rangle`, and the output state
+# of the system is of the form :math:`\left|\psi\right\rangle = a\left|1, 0\right\rangle + b\left|0,1\right\rangle`, where
+# :math:`|a|^2+|b|^2=1`. We may thus write the output state as a vector in this
+# computational basis, :math:`\left|\psi\right\rangle = \begin{bmatrix}a & b\end{bmatrix}^T`.
+#
+# The beamsplitter acts on this two-dimensional subspace as follows:
+#
+# .. math::
+#     \left|\psi\right\rangle = B(\theta, \phi)\left|1, 0\right\rangle = \begin{bmatrix}
+#         \cos\theta & -e^{-i\phi}\sin\theta\\
+#         e^{i\phi}\sin\theta & \cos\theta
+#     \end{bmatrix}\begin{bmatrix} 1\\ 0\end{bmatrix} = \begin{bmatrix}
+#         \cos\theta\\
+#         e^{i\phi} \sin\theta
+#     \end{bmatrix}
+#
+# Furthermore, the mean photon number of the second wire is
+#
+# .. math::
+#
+#     \left\langle{\hat{n}_1}\right\rangle = \langle{\psi}\mid{\hat{n}_1}\mid{\psi}\rangle = |e^{i\phi} \sin\theta|^2
+#     \langle{0,1}\mid{\hat{n}_1}\mid{0,1}\rangle = \sin^2 \theta.
+#
+# Therefore, we can see that:
+#
+# 1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1`: the output of the quantum circuit is
+#    bound between 0 and 1;
+#
+# 2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0`: the output of the
+#    quantum circuit is independent of the beamsplitter phase :math:`\phi`;
+#
+# 3. The output of the quantum circuit above is maximised when :math:`\theta=(2m+1)\pi/2`
+#    for :math:`m\in\mathbb{Z}_0`.
+#
 # Loading the plugin device
 # -------------------------
 #
 # While PennyLane provides a basic qubit simulator (``'default.qubit'``) and a basic CV
 # Gaussian simulator (``'default.gaussian'``), the true power of PennyLane comes from its
-# :ref:`plugin ecosystem <plugins>`, allowing quantum computations to be run on a variety
-# of quantum simulator and hardware devices.
+# `plugin ecosystem <https://pennylane.ai/plugins.html>`_, allowing quantum computations
+# to be run on a variety of quantum simulator and hardware devices.
 #
 # For this circuit, we will be using the ``'strawberryfields.fock'`` device to construct
 # a QNode. This allows the underlying quantum computation to be performed using the
@@ -147,7 +145,7 @@ dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=2)
 # ----------------------
 #
 # Now that we have initialized the device, we can construct our quantum node. Like
-# the other tutorials, we use the :mod:`qnode decorator <pennylane.decorator>`
+# the other tutorials, we use the :mod:`~.pennylane.qnode` decorator
 # to convert our quantum function (encoded by the circuit above) into a quantum node
 # running on Strawberry Fields.
 
@@ -161,7 +159,7 @@ def photon_redirection(params):
 
 ##############################################################################
 # The ``'strawberryfields.fock'`` device supports all CV objects provided by PennyLane;
-# see :ref:`CV operations <cv_ops>`.
+# see :ref:`CV operations <intro_ref_ops_cv>`.
 
 
 ##############################################################################
@@ -202,7 +200,7 @@ dphoton_redirection = qml.grad(photon_redirection, argnum=0)
 print(dphoton_redirection([0.0, 0.0]))
 
 ##############################################################################
-# Now, let's use the :class:`~.GradientDescentOptimizer`, and update the circuit
+# Now, let's use the :class:`~.pennylane.GradientDescentOptimizer`, and update the circuit
 # parameters over 100 optimization steps.
 
 # initialise the optimizer
@@ -310,7 +308,7 @@ def cost(params, phi1=0.5, phi2=0.1):
 
 
 ##############################################################################
-# Now, we use the built-in :class:`~.GradientDescentOptimizer` to perform the optimization
+# Now, we use the built-in :class:`~.pennylane.GradientDescentOptimizer` to perform the optimization
 # for 100 steps. As before, we choose initial beamsplitter parameters of
 # :math:`\theta=0.01`, :math:`\phi=0.01`.
 

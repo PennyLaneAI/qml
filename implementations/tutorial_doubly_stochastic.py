@@ -78,14 +78,13 @@ of shots is 1!
     At the same time, a reduced number of shots may significantly reduce the
     wall time of each optimization step, leading to a reduction in the overall
     optimization time.
-
-Let's consider a simple example in PennyLane, comparing analytic gradient
-descent (with exact expectation values) to stochastic gradient descent
-using a finite number of shots.
-
 """
 
 ##############################################################################
+# Let's consider a simple example in PennyLane, comparing analytic gradient
+# descent (with exact expectation values) to stochastic gradient descent
+# using a finite number of shots.
+#
 # A single-shot stochastic gradient descent
 # -----------------------------------------
 #
@@ -290,7 +289,7 @@ params = init_params
 opt = qml.GradientDescentOptimizer(0.005)
 
 for _ in range(250):
-    cost.append(qnode_stochastic(params))
+    cost.append(loss(params))
     params = opt.step(loss, params)
 
 ##############################################################################
@@ -353,7 +352,7 @@ for i in range(250):
     def loss(params):
         return 4 + (5 / n) * circuit(params, n=n)
 
-    cost.append(qnode_stochastic(params))
+    cost.append(loss(params))
     params = opt.step(loss, params)
 
 average = np.vstack([np.arange(25, 200), moving_average(cost, n=50)[:-26]])

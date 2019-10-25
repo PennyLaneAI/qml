@@ -67,6 +67,10 @@ body {
   border: 0px;
 }
 
+a {
+  color: #2a6496;
+}
+
 a.headerlink {
   visibility: hidden;
   color: #ddd;
@@ -701,6 +705,7 @@ td {
   transition-property: opacity;
   transition-duration: 1s;
   opacity: 0.5;
+  height: calc(100% - 119px);
 }
 
 .comment-container:hover {
@@ -1652,7 +1657,7 @@ span.eqno {
     margin-bottom: unset;
   }
 
-  #comments {
+  .comment-container {
     display: none;
   }
 
@@ -1756,6 +1761,10 @@ span.eqno {
   }
 
   #comments {
+    display: none;
+  }
+
+  .comment-container {
     display: none;
   }
 }
