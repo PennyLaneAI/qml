@@ -389,9 +389,9 @@ print(np.round(g, 8))
 
 
 ##############################################################################
-# PennyLane contains a built-in method for computing the Fubini-Study metric
-# tensor, :meth:`.QNode.metric_tensor`, which we can use to verify this
-# result:
+# PennyLane QNodes contain a built-in method for computing the Fubini-Study metric
+# tensor, :meth:`~.pennylane.QNode.metric_tensor`, which
+# we can use to verify this result:
 print(np.round(circuit.metric_tensor(params), 8))
 
 ##############################################################################
@@ -406,7 +406,7 @@ print(np.round(circuit.metric_tensor(params), 8))
 # and :math:`L` parametrized layers, a total of :math:`2d+L` quantum evaluations
 # are required per optimization step.
 #
-# Note that the :meth:`.QNode.metric_tensor` method also supports computing the diagonal
+# Note that the :meth:`~.pennylane.QNode.metric_tensor` method also supports computing the diagonal
 # approximation to the metric tensor:
 print(circuit.metric_tensor(params, diag_approx=True))
 
@@ -415,8 +415,8 @@ print(circuit.metric_tensor(params, diag_approx=True))
 # -------------------------------------
 #
 # PennyLane provides an implementation of the quantum natural gradient
-# optimizer, :class:`~.QNGOptimizer`. Let's compare the optimization convergence
-# of the QNG Optimizer and the :class:`~.GradientDescentOptimizer` for the simple variational
+# optimizer, :class:`~.pennylane.QNGOptimizer`. Let's compare the optimization convergence
+# of the QNG Optimizer and the :class:`~.pennylane.GradientDescentOptimizer` for the simple variational
 # circuit above.
 
 steps = 200

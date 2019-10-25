@@ -63,11 +63,12 @@ Using the above to calculate the exact expectation value, we find that
 Depending on the circuit parameters :math:`\phi_1` and :math:`\phi_2`, the
 output expectation lies between :math:`1` (if :math:`\left|\psi\right\rangle = \left|0\right\rangle`)
 and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
-
-Let's see how we can easily implement and optimize this circuit using PennyLane.
 """
 
 ##############################################################################
+#
+# Let's see how we can easily implement and optimize this circuit using PennyLane.
+#
 # Importing PennyLane and NumPy
 # -----------------------------
 #
@@ -112,7 +113,7 @@ from pennylane import numpy as np
 #
 # .. tip::
 #
-#    *Devices are loaded in PennyLane via the function* :func:`pennylane.device`
+#    *Devices are loaded in PennyLane via the function* :func:`~.pennylane.device`
 #
 #
 # PennyLane supports devices using both the qubit model of quantum computation and devices
@@ -150,9 +151,8 @@ dev1 = qml.device("default.qubit", wires=1)
 #
 # .. tip::
 #
-#    *QNodes can be constructed via the* :class:`pennylane.QNode <pennylane.qnode.QNode>`
-#    *class, or by using the provided* :mod:`qnode decorator <pennylane.decorator>`.
-#
+#    *QNodes can be constructed via the* :class:`~.pennylane.QNode`
+#    *class, or by using the provided* :func:`~.pennylane.qnode` decorator.
 #
 # First, we need to define the quantum function that will be evaluated in the QNode:
 
@@ -180,15 +180,15 @@ def circuit(params):
 #   by passing the ``wires`` argument; this may be a list or an integer, depending
 #   on how many wires the operation acts on.
 #
-#   For a full list of quantum operations, see :mod:`supported operations <pennylane.ops>`.
+#   For a full list of quantum operations, see :doc:`the documentation <introduction/operations>`.
 #
 # * **Quantum functions must return either a single or a tuple of measured observables**.
 #
 #   As a result, the quantum function always returns a classical quantity, allowing
 #   the QNode to interface with other classical functions (and also other QNodes).
 #
-#   See the full list of :mod:`quantum observables <pennylane.ops>`, as well
-#   supported :mod:`measurement return types <pennylane.measure>`.
+#   For a full list of observables, see :doc:`the documentation <introduction/operations>`.
+#   The documentation also provides details on supported :doc:`measurement return types <introduction/measurements>`.
 #
 # * **Quantum functions must not contain any classical processing of circuit parameters.**
 #
@@ -198,8 +198,8 @@ def circuit(params):
 #     operations/observables, or may even provide additional operations/observables.
 #     Please consult the documentation for the plugin/device for more details.
 #
-# Once we have written the quantum function, we convert it into a :class:`~.QNode` running
-# on device ``dev1`` by applying the :mod:`qnode decorator <pennylane.decorator>`
+# Once we have written the quantum function, we convert it into a :class:`~.pennylane.QNode` running
+# on device ``dev1`` by applying the :func:`~.pennylane.qnode` decorator.
 # **directly above** the function definition:
 
 
@@ -211,7 +211,7 @@ def circuit(params):
 
 
 ##############################################################################
-# Thus, our ``circuit()`` quantum function is now a :class:`~.QNode`, which will run on
+# Thus, our ``circuit()`` quantum function is now a :class:`~.pennylane.QNode`, which will run on
 # device ``dev1`` every time it is evaluated.
 #
 # To evaluate, we simply call the function with some appropriate numerical inputs:
@@ -292,7 +292,7 @@ print(dcircuit(0.54, 0.12))
 #
 # .. tip::
 #
-#    *See* :mod:`pennylane.optimize` *for details and documentation of available optimizers*
+#    *See* :doc:`introduction/optimizers` *for details and documentation of available optimizers*
 #
 # Next, let's make use of PennyLane's built-in optimizers to optimize the two circuit
 # parameters :math:`\phi_1` and :math:`\phi_2` such that the qubit, originally in state
@@ -330,7 +330,7 @@ print(cost(init_params))
 # We can see that, for these initial parameter values, the cost function is close to :math:`1`.
 #
 # Finally, we use an optimizer to update the circuit parameters for 100 steps. We can use the built-in
-# :class:`pennylane.optimize.GradientDescentOptimizer` class:
+# :class:`~.pennylane.GradientDescentOptimizer` class:
 
 # initialise the optimizer
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
@@ -359,7 +359,7 @@ print("Optimized rotation angles: {}".format(params))
 #
 # .. note::
 #
-#     Some optimizers, such as :class:`~.pennylane.optimize.AdagradOptimizer`, have
+#     Some optimizers, such as :class:`~.pennylane.AdagradOptimizer`, have
 #     internal hyperparameters that are stored in the optimizer instance. These can
 #     be reset using the :meth:`reset` method.
 #

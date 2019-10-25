@@ -6,7 +6,7 @@
 Hybrid computation
 ==================
 
-In the introduction, we briefly introduced the notion of :mod:`quantum nodes <pennylane.qnode>`. This abstraction lets us combine quantum functions with classical functions as part of a larger hybrid quantum-classical computation.
+In the introduction, we briefly introduced the notion of quantum nodes. This abstraction lets us combine quantum functions with classical functions as part of a larger hybrid quantum-classical computation.
 
 Hybrid computations have been considered in many existing proposals. However, the division of labour between the quantum and classical components is often very rigid. Typically, quantum devices are used to evaluate some circuit(s), and the resulting expectation values are combined in a single classical cost function.
 
