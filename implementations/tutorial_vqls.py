@@ -96,7 +96,7 @@ Second method
 
 The second method, which is the one used in this tutorial, is to minimize a "local" version of the cost function which is easier to
 measure and, at the same time, leads to the same optimal solution.
-This local cost function, originally proposed in Ref. [1], can be obtained by replacing the blue colored projector
+This local cost function, originally proposed in Ref. [1], can be obtained by replacing the blue-colored projector
 :math:`\color{blue}{|0\rangle\langle 0|}` in the previous expression with the following positive operator:
 
 .. math::
