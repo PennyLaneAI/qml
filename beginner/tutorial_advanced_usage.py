@@ -111,7 +111,7 @@ def circuit(param):
 
 
 @qml.qnode(dev)
-def circuit3(param, fixed=None):
+def circuit(param, fixed=None):
     qml.RX(fixed, wires=0)
     qml.RX(param, wires=1)
     qml.CNOT(wires=[0, 1])
@@ -121,16 +121,16 @@ def circuit3(param, fixed=None):
 ##############################################################################
 # Calling the circuit, we can feed values to the keyword argument ``fixed``:
 
-print(circuit3(0.1, fixed=-0.2))
+print(circuit(0.1, fixed=-0.2))
 
-print(circuit3(0.1, fixed=1.2))
+print(circuit(0.1, fixed=1.2))
 
 ##############################################################################
 # Since keyword arguments do not get considered when computing gradients, the
 # Jacobian will still be a 2-dimensional vector.
 
-j3 = qml.jacobian(circuit3, argnum=0)
-print(j3(2.5, fixed=3.2))
+j = qml.jacobian(circuit, argnum=0)
+print(j(2.5, fixed=3.2))
 
 ##############################################################################
 # Once defined, keyword arguments must *always* be passed as keyword arguments. PennyLane does
@@ -138,17 +138,17 @@ print(j3(2.5, fixed=3.2))
 #
 # For example, the following circuit evaluation will correctly update the value of the fixed parameter:
 
-print(circuit3(0.1, fixed=0.4))
+print(circuit(0.1, fixed=0.4))
 
 ##############################################################################
 # However, attempting to pass the fixed parameter as a positional argument will
 # not work, and PennyLane will attempt to use the default value (``None``) instead:
 #
-# >>> circuit3(0.1, 0.4)
+# >>> circuit(0.1, 0.4)
 # ---------------------------------------------------------------------------
 # TypeError                                 Traceback (most recent call last)
 # <ipython-input-6-949e31911afa> in <module>()
-# ----> 1 circuit3(0.1, 0.4)
+# ----> 1 circuit(0.1, 0.4)
 # ~/pennylane/variable.py in val(self)
 #     134
 #     135         # The variable is a placeholder for a keyword argument
