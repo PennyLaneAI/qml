@@ -455,7 +455,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # in the computational basis we can estimate the probability of each basis state.
 #
 # For this task, we initialize a new PennyLane device and define the associated
-# *qnode* object.
+# *qnode* circuit.
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
 
