@@ -61,7 +61,7 @@ print(circuit1(np.pi / 2))
 #     not :math:`\left\langle \sigma_z\otimes \sigma_z\right\rangle_{01}` (where the subscript
 #     denotes which wires the observable is located on). 
 #
-# In order to measure :math:`\langle\sigma_z \otimes \sigma_z \rangle _{01}`, PennyLane's tensor
+# In order to measure a tensor-product observable like :math:`\langle\sigma_z \otimes \sigma_z \rangle _{01}`, 
 # observable feature can be used.
 
 @qml.qnode(dev)
