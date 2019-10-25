@@ -35,7 +35,7 @@ dev = qml.device("default.qubit", wires=2)
 
 
 @qml.qnode(dev)
-def circuit1(param):
+def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1))
@@ -47,29 +47,42 @@ def circuit1(param):
 # subsystem are completely mixed, and local expectation values — like those we are measuring —
 # will average to zero.
 
-print(circuit1(np.pi / 2))
+print(circuit(np.pi / 2))
 
 ##############################################################################
 # Notice that the output of the circuit is a NumPy array with ``shape=(2,)``, i.e., a two-dimensional
 # vector. These two dimensions match the number of expectation values returned in our quantum
-# function ``circuit1``.
+# function ``circuit``.
 #
 # .. note::
 #
 #     It is important to emphasize that the expectation values in ``circuit`` are both **local**,
 #     i.e., this circuit is evaluating :math:`\left\langle \sigma_z\right\rangle_0` and :math:`\left\langle \sigma_z\right\rangle_1`,
-#     not :math:`\left\langle \sigma_z\otimes \sigma_z\right\rangle_{01}` (where the subscript denotes which wires the
-#     observable is located on).
+#     not :math:`\left\langle \sigma_z\otimes \sigma_z\right\rangle_{01}` (where the subscript
+#     denotes which wires the observable is located on). 
+#
+# In order to measure a tensor-product observable like :math:`\langle\sigma_z \otimes \sigma_z \rangle _{01}`, 
+# the matrix multiplication operator ``@`` can be used:
+
+@qml.qnode(dev)
+def circuit(param):
+    qml.RX(param, wires=0)
+    qml.CNOT(wires=[0, 1])
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+
+print(circuit(np.pi / 2))
+
+##############################################################################
+# Notice how this expectation value differs from the local versions above.
 #
 # We may even mix different return types, for example expectation values and variances:
 
 
 @qml.qnode(dev)
-def circuit1(param):
+def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0)), qml.var(qml.PauliZ(1))
-
 
 ##############################################################################
 # Keyword arguments
@@ -98,7 +111,7 @@ def circuit1(param):
 
 
 @qml.qnode(dev)
-def circuit3(param, fixed=None):
+def circuit(param, fixed=None):
     qml.RX(fixed, wires=0)
     qml.RX(param, wires=1)
     qml.CNOT(wires=[0, 1])
@@ -108,16 +121,16 @@ def circuit3(param, fixed=None):
 ##############################################################################
 # Calling the circuit, we can feed values to the keyword argument ``fixed``:
 
-print(circuit3(0.1, fixed=-0.2))
+print(circuit(0.1, fixed=-0.2))
 
-print(circuit3(0.1, fixed=1.2))
+print(circuit(0.1, fixed=1.2))
 
 ##############################################################################
 # Since keyword arguments do not get considered when computing gradients, the
 # Jacobian will still be a 2-dimensional vector.
 
-j3 = qml.jacobian(circuit3, argnum=0)
-print(j3(2.5, fixed=3.2))
+j = qml.jacobian(circuit, argnum=0)
+print(j(2.5, fixed=3.2))
 
 ##############################################################################
 # Once defined, keyword arguments must *always* be passed as keyword arguments. PennyLane does
@@ -125,17 +138,17 @@ print(j3(2.5, fixed=3.2))
 #
 # For example, the following circuit evaluation will correctly update the value of the fixed parameter:
 
-print(circuit3(0.1, fixed=0.4))
+print(circuit(0.1, fixed=0.4))
 
 ##############################################################################
 # However, attempting to pass the fixed parameter as a positional argument will
 # not work, and PennyLane will attempt to use the default value (``None``) instead:
 #
-# >>> circuit3(0.1, 0.4)
+# >>> circuit(0.1, 0.4)
 # ---------------------------------------------------------------------------
 # TypeError                                 Traceback (most recent call last)
 # <ipython-input-6-949e31911afa> in <module>()
-# ----> 1 circuit3(0.1, 0.4)
+# ----> 1 circuit(0.1, 0.4)
 # ~/pennylane/variable.py in val(self)
 #     134
 #     135         # The variable is a placeholder for a keyword argument
