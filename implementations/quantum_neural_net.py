@@ -3,17 +3,18 @@
 
 Function fitting with a quantum neural network
 ==============================================
-
-In this example we show how a variational circuit can be used to learn a
-fit for a one-dimensional function when being trained with noisy samples
-from that function.
-
-The variational circuit we use is the continuous-variable quantum neural
-network model described in `Killoran et al.
-(2018) <https://arxiv.org/abs/1806.06871>`__.
 """
 
 ##############################################################################
+#
+# In this example we show how a variational circuit can be used to learn a
+# fit for a one-dimensional function when being trained with noisy samples
+# from that function.
+#
+# The variational circuit we use is the continuous-variable quantum neural
+# network model described in `Killoran et al.
+# (2018) <https://arxiv.org/abs/1806.06871>`__.
+#
 # Imports
 # ~~~~~~~
 #

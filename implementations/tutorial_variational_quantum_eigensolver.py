@@ -3,38 +3,37 @@ r"""
 
 Variational quantum eigensolver
 ===============================
-
-This example demonstrates the principle of a variational quantum
-eigensolver (VQE), originally proposed in `Peruzzo et al.
-(2014) <https://www.nature.com/articles/ncomms5213>`__. To showcase the
-hybrid computational capabilities of PennyLane, we first train a quantum
-circuit to minimize the squared energy expectation for a Hamiltonian
-:math:`H`,
-
-.. math::
-
-    \langle \psi_v | H | \psi_v \rangle^2  =( 0.1 \langle \psi_{v} | X_2 |
-    \psi_v \rangle + 0.5 \langle \psi_v | Y_2 | \psi_v \rangle )^2.
-
-Here, :math:`|\psi_v\rangle` is the state
-obtained after applying a quantum circuit to an initial state
-:math:`|0\rangle`. The quantum circuit depends on trainable variables
-:math:`v = \{v_1, v_2\}`, and :math:`X_2`, :math:`Y_2` denote the
-Pauli-X and Pauli-Y operator acting on the second qubit (*Note: We apply
-the square to make the optimization landscapes more interesting, but in
-common applications the cost is directly the energy expectation value*).
-
-After doing this, we will then turn things around and use a fixed
-quantum circuit to prepare a state :math:`|\psi\rangle`, but train the coefficients of
-the Hamiltonian to minimize
-
-.. math::
-
-    \langle \psi | H | \psi \rangle^2  = (v_1 \langle \psi | X_2 | \psi
-    \rangle + v_2 \langle \psi | Y_2 | \psi \rangle )^2 .
 """
-
 ##############################################################################
+# This example demonstrates the principle of a variational quantum
+# eigensolver (VQE), originally proposed in `Peruzzo et al.
+# (2014) <https://www.nature.com/articles/ncomms5213>`__. To showcase the
+# hybrid computational capabilities of PennyLane, we first train a quantum
+# circuit to minimize the squared energy expectation for a Hamiltonian
+# :math:`H`,
+#
+# .. math::
+#
+#     \langle \psi_v | H | \psi_v \rangle^2  =( 0.1 \langle \psi_{v} | X_2 |
+#     \psi_v \rangle + 0.5 \langle \psi_v | Y_2 | \psi_v \rangle )^2.
+#
+# Here, :math:`|\psi_v\rangle` is the state
+# obtained after applying a quantum circuit to an initial state
+# :math:`|0\rangle`. The quantum circuit depends on trainable variables
+# :math:`v = \{v_1, v_2\}`, and :math:`X_2`, :math:`Y_2` denote the
+# Pauli-X and Pauli-Y operator acting on the second qubit (*Note: We apply
+# the square to make the optimization landscapes more interesting, but in
+# common applications the cost is directly the energy expectation value*).
+#
+# After doing this, we will then turn things around and use a fixed
+# quantum circuit to prepare a state :math:`|\psi\rangle`, but train the coefficients of
+# the Hamiltonian to minimize
+#
+# .. math::
+#
+#     \langle \psi | H | \psi \rangle^2  = (v_1 \langle \psi | X_2 | \psi
+#     \rangle + v_2 \langle \psi | Y_2 | \psi \rangle )^2 .
+#
 # 1. Optimizing the quantum circuit
 # ---------------------------------
 #
