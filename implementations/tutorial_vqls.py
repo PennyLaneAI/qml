@@ -264,7 +264,7 @@ def variational_block(weights):
 #
 # We first initialize a PennyLane device with the ``default.qubit`` backend.
 #
-# As a second step, we define a PennyLane ``qnode`` object representing a model of the actual quantum computation.
+# As a second step, we define a PennyLane ``qnode`` representing a model of the actual quantum computation.
 #
 # The circuit is based on the
 # `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_
