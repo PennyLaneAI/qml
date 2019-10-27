@@ -17,6 +17,9 @@
   <!-- nanoscroller -->
   <link rel="stylesheet" type="text/css" href="{{ pathto('_static/css/nanoscroller.css', 1) }}" />
 
+  <!-- lightslider -->
+  <link type="text/css" rel="stylesheet" href="{{ pathto('_static/css/lightslider.min.css', 1) }}" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -170,6 +173,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
     <!-- Nanoscroller -->
     <script type="text/javascript" src="{{ pathto('_static/js/nanoscroller.min.js', 1) }}"></script>
+    <!-- lightslider -->
+    <script src="{{ pathto('_static/js/lightslider.min.js', 1) }}"></script>
 
     <script type="text/javascript">
       $(".document > .section").removeClass("section");
@@ -213,6 +218,32 @@
       $(".xanadu-call-to-action-links").hide();
     }
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#light-slider").lightSlider({
+                item: 2,
+                autoWidth: false,
+                slideMove: 1, // slidemove will be 1 if loop is true
+                slideMargin: 1,
+                auto: true,
+                loop: true,
+                controls: false,
+                pause: 5000,
+                responsive : [
+                    {
+                        breakpoint:768,
+                        settings: {
+                            item:1,
+                            slideMove:1,
+                            slideMargin:6,
+                          }
+                    }
+                ]
+            });
+        });
+    </script>
+
 
   {% include "footer.html" %}
 {%- endblock %}

@@ -1928,6 +1928,49 @@ footer.page-footer .footer-copyright {
     border-radius: 10px!important;
 }
 
+#light-slider {
+  height: 100%!important;
+}
+
+#light-slider li {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+#light-slider .card h4 {
+    margin-top: 0px;
+}
+
+#light-slider .card {
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: hidden;
+}
+
+#light-slider .card .card-body {
+    z-index: 2;
+}
+
+#light-slider .card:hover {
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.05)!important;
+    border: 0;
+    transition-duration: 0.4s;
+    border-radius: 10px!important;
+}
+
+
+#light-slider .card img {
+    transform: scale(1);
+    transition-duration: 1s;
+}
+
+#light-slider .card:hover img {
+    transform: scale(1.10);
+    transition-duration: 1s;
+}
+
+
+
 /* Syntax highlighting
 -------------------------------------------------- */
 
