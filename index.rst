@@ -80,7 +80,7 @@ Quantum machine learning
                     <a href="app/tutorial_data_reuploading_classifier.html">
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_static/thumbs/universal_dnn.png"                        alt="Card image cap">
-                          <div class="card-body heavy-rain-gradient">
+                          <div class="card-body">
                             <h4 class="card-title">Data re-uploading classifier</h4>
                             <p class="card-text">A universal single-qubit quantum classifier using the idea of 'data re-uploading' by Pérez-Salinas et al. (2019), akin to a single hidden-layered neural network.</p>
                           </div>
@@ -92,7 +92,7 @@ Quantum machine learning
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_images/sphx_glr_tutorial_doubly_stochastic_002.png"
                             alt="Card image cap">
-                          <div class="card-body heavy-rain-gradient">
+                          <div class="card-body">
                             <h4 class="card-title">Doubly stochastic gradient descent</h4>
                             <p class="card-text">Quantum gradient descent with finite number of shots is a form of stochastic gradient descent. By sampling from terms in the VQE Hamiltonian, we get "doubly stochastic gradient descent".</p>
                           </div>
@@ -104,7 +104,7 @@ Quantum machine learning
                         <div class="card">
                           <img class="card-img-top" src="_static/thumbs/surface.png"
                             alt="Card image cap">
-                          <div class="card-body heavy-rain-gradient">
+                          <div class="card-body">
                             <h4 class="card-title">Barren plateaus in QNNs</h4>
                             <p class="card-text">We show how variational quantum circuits face the problem of barren plateaus. We partly reproduce some of the findings in McClean et al. (2018) with just a few lines of code.</p>
                           </div>
