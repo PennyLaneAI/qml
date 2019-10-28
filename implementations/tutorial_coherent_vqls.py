@@ -10,8 +10,8 @@ In this tutorial we propose and implement an algorithm that we call
 This is inspired by the VQLS proposed in Ref. [1], with an important difference: 
 the matrix :math:`A` associated to the problem is physically 
 applied as a probabilistic coherent operation. This approach has some advantages and
-disadvantages and its practical convenience depends on experimental aspects 
-and on the specific linear problem to be solved.
+disadvantages and its practical convenience depends on the specific linear problem 
+to be solved and on experimental constraints.
 
 .. figure:: ../implementations/coherent_vqls/cvqls_circuit.png
     :align: center
@@ -127,14 +127,16 @@ acting on the system and on the ancillary basis states as follows:
 
 i.e., the unitary :math:`A_l` is applied only when the ancillary system is in the corresponding basis state :math:`|l\rangle`.
 
-A natural generalization of the `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_, to the case of multiple unitary operations, is the following:
+A natural generalization of the `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_, to the case of multiple unitary operations, is the following
+(see also the figure at the top of this tutorial):
 
 1. Prepare all qubits in the ground state.
 2. Apply :math:`U_c` to the ancillary qubits.
-3. Apply all the controlled unitaries :math:`CA_l` for all values of :math:`l`.
-4. Apply :math:`U_c^\dagger` to the ancillary qubits.
-5. Measure the ancillary qubits in the computational basis.
-6. If the outcome of the measurement is the ground state, the state of the system collapses to
+3. Apply the variational circuit :math:`V` to the system qubits.
+4. Apply all the controlled unitaries :math:`CA_l` for all values of :math:`l`.
+5. Apply :math:`U_c^\dagger` to the ancillary qubits.
+6. Measure the ancillary qubits in the computational basis.
+7. If the outcome of the measurement is the ground state, the system collapses to
    :math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}`.
    If the outcome is not the ground state, the experiment should be repeated.
 
@@ -147,22 +149,23 @@ Once we have at our disposal the quantum system prepared in the state :math:`|\P
 it is very easy to compute the cost function.
 Indeed one could simply continue the previous protocol with the following two steps:
 
-7. Apply :math:`U_b^\dagger` to the system.
-8. Measure the system in the computational basis. The probability of measuring it
+8. Apply :math:`U_b^\dagger` to the system.
+9. Measure the system in the computational basis. The probability of finding it
    in the ground state (given the ancillary qubits measured in their ground state),
    is :math:`|\langle 0 | U_b^\dagger |\Psi \rangle|^2 = |\langle b | \Psi \rangle|^2`.
 
 So, with sufficiently many shots of the previous experiment, one can directly estimate
 the cost function of the problem.
 
-Importantly, the operations of steps 6 and 7 commute. Therefore all the measurements can be
-delayed at the end of the quantum circuit, making the structure of the experiment more straightforward.  
+Importantly, the operations of steps 7 and 8 commute. Therefore all the measurements can be
+delayed at the end of the quantum circuit as represented in the figure at the top of this tutorial,
+making the structure of the experiment more straightforward.  
 
 A simple example
 ^^^^^^^^^^^^^^^^
 
 In this tutorial we apply the previous theory to the following simple example 
-based on a system of 3 qubits, which was also considered in Ref. [1] and in one of our previous tutorials (VQLS):
+based on a system of 3 qubits, which was also considered in Ref. [1] and reproduced in one of our previous tutorials (VQLS):
 
 .. math::
         \begin{align}
@@ -308,7 +311,8 @@ def variational_block(weights):
 # Full quantum circuit
 # --------------------
 #
-# Now, we can define the full circuit associated to the CVQLS protocol presented in the introduction.
+# Now, we can define the full circuit associated to the CVQLS protocol presented in the introduction and
+# corresponding to the figure at the top of this tutorial.
 
 def full_circuit(weights):
     """Full quantum circuit necessary for the CVQLS protocol, without the final measurement."""
@@ -330,10 +334,13 @@ def full_circuit(weights):
 
 
 ##############################################################################
-# To measure the overlap of the ground state with the post-selected state, we
-# use the Bayes' theorem:
+# To estimate the overlap of the ground state with the post-selected state, one could
+# directly make use the measurement samples. However, since we want to optimize the cost
+# function, it is useful to express everything in terms of expectation values through the
+# the Bayes' theorem:
 # 
 # .. math::
+#   |\langle b | \Psi \rangle|^2=
 #   P( \mathrm{sys}=\mathrm{ground}\,|\, \mathrm{anc} = \mathrm{ground}) = 
 #   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
 # 
@@ -356,7 +363,7 @@ dev_partial = qml.device("default.qubit", wires=tot_qubits)
 def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
-    # Projector on the ancilla ground state.
+    # Projector on the ground state of the ancillary system.
     P_anc = np.zeros((2 ** m, 2 ** m))
     P_anc[0, 0] = 1.0 
     return qml.expval(qml.Hermitian(P_anc, wires=range(n_qubits, tot_qubits)))
@@ -367,7 +374,9 @@ def ancilla_ground(weights):
 # Variational optimization
 # -----------------------------
 #
-# We first define the cost function :math:`C = 1- |\langle b | \Psi \rangle|^2` of our minimization problem.
+# In order to variationally solve our lineaer problem, we first define the cost function
+# :math:`C = 1- |\langle b | \Psi \rangle|^2` that we are going to minimize.
+# As explained above, we express it in terms of expectation values thorugh the Bayes' theorem.
 
 def cost(weights):
     """Cost function which tends to zero when A |x> tends to |b>."""
