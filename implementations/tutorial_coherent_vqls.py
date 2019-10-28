@@ -165,7 +165,7 @@ A simple example
 ^^^^^^^^^^^^^^^^
 
 In this tutorial we apply the previous theory to the following simple example 
-based on a system of 3 qubits, which was also considered in Ref. [1] and reproduced in one of our previous tutorials (VQLS):
+based on a system of 3 qubits, which was already considered in Ref. [1] and also reproduced in PannyLane (VQLS):
 
 .. math::
         \begin{align}
@@ -258,7 +258,7 @@ def U_c_dagger():
 ##############################################################################
 # We are left to define the sequence of all controlled-unitaries :math:`CA_l`, acting
 # as :math:`A_l` on the system whenever the ancillary state is :math:`|l\rangle`.
-# Since in our case :math:`A_0=\mathbb{I}`, we only need to apply :math:`A_1` and
+# Since in our case :math:`A_0=\mathbb{I}` and ``c[3] = 0``, we only need to apply :math:`A_1` and
 # :math:`A_2` controlled by the first and second ancillary qubits respectively.
 
 
@@ -354,7 +354,6 @@ def full_circuit(weights):
 
 dev_full = qml.device("default.qubit", wires=tot_qubits)
 
-
 @qml.qnode(dev_full)
 def global_ground(weights):
     # Circuit gates
@@ -366,7 +365,6 @@ def global_ground(weights):
 
 
 dev_partial = qml.device("default.qubit", wires=tot_qubits)
-
 
 @qml.qnode(dev_partial)
 def ancilla_ground(weights):
@@ -486,7 +484,6 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # *qnode* circuit.
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
-
 
 @qml.qnode(dev_x)
 def prepare_and_sample(weights):
