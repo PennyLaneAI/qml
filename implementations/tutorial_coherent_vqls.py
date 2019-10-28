@@ -189,7 +189,6 @@ Eventually we will compare the quantum solution with the classical one.
 """
 
 
-
 ##############################################################################
 # General setup
 # ------------------------
@@ -236,9 +235,10 @@ sqrt_c = np.sqrt(c)
 
 ##############################################################################
 # We need to embed the square root of the probability distribution ``c`` into the amplitudes
-# of the ancillary state. It is easy to check that one can always embed 3 positive 
-# amplitudes with just three gates: 
+# of the ancillary state. It is easy to check that one can always embed 3 positive
+# amplitudes with just three gates:
 # a local :math:`R_y` rotation, a controlled-:math:`R_y` and a controlled-NOT.
+
 
 def U_c():
     """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
@@ -246,6 +246,7 @@ def U_c():
     qml.RY(-2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
     qml.CRY(-2 * np.arctan(sqrt_c[2] / sqrt_c[1]), wires=[ancilla_idx, ancilla_idx + 1])
     qml.CNOT(wires=[ancilla_idx + 1, ancilla_idx])
+
 
 def U_c_dagger():
     """Adjoint of U_c."""
@@ -260,8 +261,9 @@ def U_c_dagger():
 # Since in our case :math:`A_0=\mathbb{I}`, we only need to apply :math:`A_1` and
 # :math:`A_2` controlled by the first and second ancillary qubits respectively.
 
+
 def CA_all():
-    """Controlled application of all the unitary components A_l of the problem matrix A."""  
+    """Controlled application of all the unitary components A_l of the problem matrix A."""
     # Controlled-A_1
     qml.CNOT(wires=[ancilla_idx, 0])
     qml.CZ(wires=[ancilla_idx, 1])
@@ -269,14 +271,15 @@ def CA_all():
     # Controlled-A2
     qml.CNOT(wires=[ancilla_idx + 1, 0])
 
-    
+
 ##############################################################################
 # The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
+
 
 def U_b():
     """Unitary matrix rotating the system ground state to the problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
-        qml.Hadamard(wires=idx)    
+        qml.Hadamard(wires=idx)
 
 
 ##############################################################################
@@ -314,6 +317,7 @@ def variational_block(weights):
 # Now, we can define the full circuit associated to the CVQLS protocol presented in the introduction and
 # corresponding to the figure at the top of this tutorial.
 
+
 def full_circuit(weights):
     """Full quantum circuit necessary for the CVQLS protocol, without the final measurement."""
     # U_c applied to the ancillary qubits.
@@ -324,8 +328,8 @@ def full_circuit(weights):
 
     # Application of all the controlled-unitaries CA_l associated to the problem matrix A.
     CA_all()
-   
-    # Adjoint of U_b, where U_b |0> = |b>. 
+
+    # Adjoint of U_b, where U_b |0> = |b>.
     # For this particular problem adjoint(U_b)=U_b
     U_b()
 
@@ -338,36 +342,40 @@ def full_circuit(weights):
 # directly make use the measurement samples. However, since we want to optimize the cost
 # function, it is useful to express everything in terms of expectation values through the
 # the Bayes' theorem:
-# 
+#
 # .. math::
 #   |\langle b | \Psi \rangle|^2=
-#   P( \mathrm{sys}=\mathrm{ground}\,|\, \mathrm{anc} = \mathrm{ground}) = 
+#   P( \mathrm{sys}=\mathrm{ground}\,|\, \mathrm{anc} = \mathrm{ground}) =
 #   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
-# 
+#
 # To evaluate the two probabilities appearing on the r.h.s. of the previous equation
 # we initialize two PennyLane devices with the ``default.qubit`` backend,
 # and we define two different ``qnode`` circuits.
 
 dev_full = qml.device("default.qubit", wires=tot_qubits)
+
+
 @qml.qnode(dev_full)
 def global_ground(weights):
     # Circuit gates
     full_circuit(weights)
     # Projector on the global ground state.
     P = np.zeros((2 ** tot_qubits, 2 ** tot_qubits))
-    P[0, 0] = 1.0 
+    P[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P, wires=range(tot_qubits)))
 
+
 dev_partial = qml.device("default.qubit", wires=tot_qubits)
+
+
 @qml.qnode(dev_partial)
 def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
     # Projector on the ground state of the ancillary system.
     P_anc = np.zeros((2 ** m, 2 ** m))
-    P_anc[0, 0] = 1.0 
+    P_anc[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P_anc, wires=range(n_qubits, tot_qubits)))
-
 
 
 ##############################################################################
@@ -378,13 +386,14 @@ def ancilla_ground(weights):
 # :math:`C = 1- |\langle b | \Psi \rangle|^2` that we are going to minimize.
 # As explained above, we express it in terms of expectation values thorugh the Bayes' theorem.
 
+
 def cost(weights):
     """Cost function which tends to zero when A |x> tends to |b>."""
-    
+
     p_global_ground = global_ground(weights)
     p_ancilla_ground = ancilla_ground(weights)
     p_cond = p_global_ground / p_ancilla_ground
-    
+
     return 1 - p_cond
 
 
@@ -434,7 +443,7 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^
 # To solve the problem in a classical way, we use the explicit matrix representation in
 # terms of numerical NumPy arrays.
- 
+
 Id = np.identity(2)
 Z = np.array([[1, 0], [0, -1]])
 X = np.array([[0, 1], [1, 0]])
@@ -477,6 +486,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # *qnode* circuit.
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+
 
 @qml.qnode(dev_x)
 def prepare_and_sample(weights):
@@ -535,10 +545,9 @@ plt.show()
 # 1. Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles.
 #    "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems."
 #    `arXiv:1909.05820 <https://arxiv.org/abs/1909.05820>`__, 2019.
-# 
+#
 # 2. Robin Kothari.
 #    "Efficient algorithms in quantum query complexity."
 #    PhD thesis, University of Waterloo, 2014.
 #
-# 
-
+#
