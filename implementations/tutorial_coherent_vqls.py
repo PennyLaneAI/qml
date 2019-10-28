@@ -293,14 +293,14 @@ def U_b():
 # which is just a single layer of qubit rotations
 # :math:`R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2)`.
 # For solving more complex problems, we suggest to use more expressive circuits as,
-# e.g., the PennyLane template `pennylane.templates.layers.StronglyEntanglingLayers()`.
+# e.g., the PennyLane ``StronglyEntanglingLayers`` template.
 
 
 def variational_block(weights):
     """Variational circuit mapping the ground state |0> to the ansatz state |x>."""
     # We first prepare an equal superposition of all the states of the computational basis.
     for idx in range(n_qubits):
-     qml.Hadamard(wires=idx)
+        qml.Hadamard(wires=idx)
 
     # A very minimal variational circuit.
     for idx, element in enumerate(weights):
@@ -346,7 +346,7 @@ def full_circuit(weights):
 # 
 # To evaluate the two probabilities appearing on the r.h.s. of the previous equation
 # we initialize two PennyLane devices with the ``default.qubit`` backend,
-# and we define two different ``qnode`` objects.
+# and we define two different ``qnode`` circuits.
 
 dev_full = qml.device("default.qubit", wires=tot_qubits)
 @qml.qnode(dev_full)
@@ -474,7 +474,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # in the computational basis we can estimate the probability of each basis state.
 #
 # For this task, we initialize a new PennyLane device and define the associated
-# *qnode* object.
+# *qnode* circuit.
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
 
