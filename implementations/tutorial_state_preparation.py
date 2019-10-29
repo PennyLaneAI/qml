@@ -1,8 +1,8 @@
 r"""
 .. _state_preparation:
 
-State preparation tutorial
-==========================
+State preparation on Rigetti Forest
+===================================
 
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
