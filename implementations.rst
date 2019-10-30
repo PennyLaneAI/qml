@@ -20,7 +20,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_isingmodel_PyTorch`
 
 .. customgalleryitem::
-    :tooltip: Use PennyLane to create a simple QGAN
+    :tooltip: Create a simple QGAN with Cirq and TensorFlow.
     :figure: implementations/QGAN/qgan3.png
     :description: :doc:`app/tutorial_QGAN`
 
