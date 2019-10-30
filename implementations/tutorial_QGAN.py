@@ -11,7 +11,7 @@ This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (2018) <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.012324>`__)
 using two subcircuits, a *generator* and a *discriminator*. The
 generator attempts to generate synthetic quantum data to match a pattern
-of “real” data, while the discriminator tries to discern real data from
+of "real" data, while the discriminator tries to discern real data from
 fake data (see image below). The gradient of the discriminator’s output provides a
 training signal for the generator to improve its fake generated data.
 
@@ -30,10 +30,10 @@ training signal for the generator to improve its fake generated data.
 ##############################################################################
 # Using Cirq + TensorFlow
 # ~~~~~~~~~~~~~~~~~~~~~~~
-# PennyLane allows us to mix and match quantum devices and classical machine 
-# learning software. For this demo, we will link together 
+# PennyLane allows us to mix and match quantum devices and classical machine
+# learning software. For this demo, we will link together
 # Google's `Cirq <https://cirq.readthedocs.io/en/stable/>`_ and `TensorFlow <https://www.tensorflow.org/>`_ libraries.
-# 
+#
 # We begin by importing PennyLane, NumPy, and TensorFlow.
 
 import pennylane as qml
@@ -102,7 +102,7 @@ def discriminator(w):
 ##############################################################################
 # We create two QNodes. One where the real data source is wired up to the
 # discriminator, and one where the generator is connected to the
-# discriminator. In order to pass TensorFlow Variables into the quantum 
+# discriminator. In order to pass TensorFlow Variables into the quantum
 # circuits, we specify the ``"tf"`` interface.
 
 @qml.qnode(dev, interface="tf")
@@ -123,11 +123,11 @@ def gen_disc_circuit(gen_weights, disc_weights):
 # QGAN cost functions
 # ~~~~~~~~~~~~~~~~~~~
 #
-# There are two cost functions of interest, corresponding to the two 
-# stages of QGAN training. These cost functions are built from two pieces: 
-# the first piece is the probability that the discriminator correctly 
-# classifies real data as real. The second piece is the probability that the 
-# discriminator classifies fake data (i.e., a state prepared by the 
+# There are two cost functions of interest, corresponding to the two
+# stages of QGAN training. These cost functions are built from two pieces:
+# the first piece is the probability that the discriminator correctly
+# classifies real data as real. The second piece is the probability that the
+# discriminator classifies fake data (i.e., a state prepared by the
 # generator) as real.
 #
 # The discriminator is trained to maximize the probability of
@@ -217,7 +217,7 @@ print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weight
 
 ##############################################################################
 # In the adversarial game we now have to train the generator to better
-# fool the discriminator. For this demo, we only perform one stage of the 
+# fool the discriminator. For this demo, we only perform one stage of the
 # game. For more complex models, we would continue training the models in an
 # alternating fashion until we reach the optimum point of the two-player
 # adversarial game.
@@ -239,9 +239,9 @@ print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weight
 
 
 ##############################################################################
-# At the joint optimum the discriminator cost will be close to zero, 
-# indicating that the discriminator assigns equal probability to both real and 
-# generated data. 
+# At the joint optimum the discriminator cost will be close to zero,
+# indicating that the discriminator assigns equal probability to both real and
+# generated data.
 
 print("Discriminator cost: ", disc_cost(disc_weights).numpy())
 
