@@ -34,7 +34,7 @@ import torch.optim as optim
 num_classes = 3
 margin = 0.20
 feature_size = 4
-batch_size = 32
+batch_size = 10
 lr_adam = 0.01
 train_split = 0.75
 num_qubits = 2
