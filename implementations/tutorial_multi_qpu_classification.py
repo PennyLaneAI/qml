@@ -59,6 +59,7 @@ dev = qml.device("default.qubit", wires=num_qubits)
 # circuits. It consists of rotation gates for each qubit, followed by
 # entangling/CNOT gates
 
+
 def layer(W):
     qml.Rot(W[0, 0], W[0, 1], W[0, 2], wires=0)
     qml.Rot(W[1, 0], W[1, 1], W[1, 2], wires=1)
@@ -72,36 +73,42 @@ def layer(W):
 # belongs to class 1 or not and so on. Data is embedded in each circuit using
 # amplitude embedding
 
+
 @qml.qnode(dev, interface="torch")
 def circuit1(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0,1], pad=True, normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
         layer(W)
     return qml.expval(qml.PauliZ(0))
+
 
 @qml.qnode(dev, interface="torch")
 def circuit2(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0,1], pad=True, normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
         layer(W)
     return qml.expval(qml.PauliZ(0))
 
+
 @qml.qnode(dev, interface="torch")
 def circuit3(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0,1], pad=True, normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
         layer(W)
     return qml.expval(qml.PauliZ(0))
+
 
 ##############################################################################
 # The variational quantum is parametrized by the weights. We use a classical
 # bias term that is applied after the processing the quantum circuit's output.
 # Both variational circuit weights and classical bias term are optimized.
 
+
 def variational_classifier(q_circuit, params, feat):
     weights = params[0]
     bias = params[1]
     return q_circuit(weights, feat=feat) + bias
+
 
 ##############################################################################
 # Loss Function
@@ -109,9 +116,9 @@ def variational_classifier(q_circuit, params, feat):
 #
 # Implementing multiclass classifiers as a number of one-vs-all classifiers
 # generally evokes using the margin loss. The output of classifier :math:'i', :math:'c_i'
-# on input :math:'x' is interpreted as a score, :math:'s_i' between [-1,1]. 
+# on input :math:'x' is interpreted as a score, :math:'s_i' between [-1,1].
 # More concretely, we have:
-# 
+#
 # .. math::  s_i = c_i(x; \theta)
 #
 # The multiclass margin loss attempts to ensure that the score for the correct
@@ -124,23 +131,29 @@ def variational_classifier(q_circuit, params, feat):
 # where :math:'\Delta' denotes the margin. The margin parameter is chosen as a hyperparameter.
 # For more information: see 'Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>'__
 
+
 def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
     loss = 0
     num_samples = len(true_labels)
     for i, feat in enumerate(features):
-        s_true = variational_classifier(q_circuits[int(true_labels[i])], \
-                (all_params[0][int(true_labels[i])], all_params[1][int(true_labels[i])]), feat)
+        s_true = variational_classifier(
+            q_circuits[int(true_labels[i])],
+            (all_params[0][int(true_labels[i])], all_params[1][int(true_labels[i])]),
+            feat,
+        )
         s_true = s_true.float()
         li = 0
         for j in range(num_classes):
             if j != int(true_labels[i]):
-                s_j = variational_classifier(q_circuits[j], \
-                        (all_params[0][j], all_params[1][j]), feat)
+                s_j = variational_classifier(
+                    q_circuits[j], (all_params[0][j], all_params[1][j]), feat
+                )
                 s_j = s_j.float()
                 li += torch.max(torch.zeros(1).float(), s_j - s_true + margin)
         loss += li
 
-    return loss/num_samples
+    return loss / num_samples
+
 
 ##############################################################################
 # Classification Function
@@ -148,12 +161,15 @@ def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
 #
 # Compute the score for each class and chose the class that has the highest score
 
+
 def classify(q_circuits, all_params, features, labels):
     predicted_labels = []
     for i, feat in enumerate(features):
-        scores = [0, 0, 0] 
+        scores = [0, 0, 0]
         for c in range(num_classes):
-            score = variational_classifier(q_circuits[c], (all_params[0][c], all_params[1][c]), feat)
+            score = variational_classifier(
+                q_circuits[c], (all_params[0][c], all_params[1][c]), feat
+            )
             scores[c] = float(score)
         pred_class = np.argmax(scores)
         predicted_labels.append(pred_class)
@@ -168,6 +184,7 @@ def accuracy(labels, hard_predictions):
     loss = loss / labels.shape[0]
     return loss
 
+
 ##############################################################################
 # Data Loading and Processing
 # ~~~~
@@ -175,11 +192,12 @@ def accuracy(labels, hard_predictions):
 # Load in the wheat seed data. Normalize the features so that the sum of the feature
 # elements squared is 1 (l2 norm is 1)
 
+
 def load_and_process_data():
-    data = np.loadtxt("multi_qpu_classification/iris.csv", delimiter=',')
+    data = np.loadtxt("multi_qpu_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
     print("First X sample (original)  :", X[0])
-   
+
     # normalize each input
     normalization = torch.sqrt(torch.sum(X ** 2, dim=1))
     X_norm = X / normalization.reshape(len(X), 1)
@@ -212,6 +230,7 @@ def split_data(features, Y):
 # minibatch training - the average loss for a batch of samples is computed, and the
 # optimization step is based on this.
 
+
 def training(features, Y):
     num_data = Y.shape[0]
     feats_train, feats_test, Y_train, Y_test = split_data(features, Y)
@@ -219,13 +238,14 @@ def training(features, Y):
     q_circuits = [circuit1, circuit2, circuit3]
 
     # Initialize the parameters
-    all_weights = [Variable(0.1*torch.randn(num_layers, num_qubits, 3), \
-            requires_grad=True) for i in range(num_classes)]
-    all_bias = [Variable(0.1*torch.ones(1), requires_grad=True) \
-            for i in range(num_classes)]
-    optimizer = optim.Adam(all_weights+all_bias, lr=lr_adam)
+    all_weights = [
+        Variable(0.1 * torch.randn(num_layers, num_qubits, 3), requires_grad=True)
+        for i in range(num_classes)
+    ]
+    all_bias = [Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)]
+    optimizer = optim.Adam(all_weights + all_bias, lr=lr_adam)
     params = (all_weights, all_bias)
-    print("Num params: ", 3*num_layers*num_qubits*3 + 3)
+    print("Num params: ", 3 * num_layers * num_qubits * 3 + 3)
 
     costs, train_acc, test_acc = [], [], []
 
@@ -234,7 +254,7 @@ def training(features, Y):
         batch_index = np.random.randint(0, num_train, (batch_size,))
         feats_train_batch = feats_train[batch_index]
         Y_train_batch = Y_train[batch_index]
-       
+
         optimizer.zero_grad()
         curr_cost = multiclass_svm_loss(q_circuits, params, feats_train_batch, Y_train_batch)
         curr_cost.backward()
@@ -245,17 +265,18 @@ def training(features, Y):
         predictions_test = classify(q_circuits, params, feats_test, Y_test)
         acc_train = accuracy(Y_train, predictions_train)
         acc_test = accuracy(Y_test, predictions_test)
-        
+
         print(
             "Iter: {:5d} | Cost: {:0.7f} | Acc train: {:0.7f} | Acc test: {:0.7f} "
             "".format(it + 1, curr_cost.item(), acc_train, acc_test)
         )
-        
+
         costs.append(curr_cost.item())
         train_acc.append(acc_train)
         test_acc.append(acc_test)
 
     return costs, train_acc, test_acc
+
 
 # We now run our training regime and plot the results. Note that
 # for plotting, the matplotlib library is required
@@ -264,23 +285,22 @@ features, Y = load_and_process_data()
 costs, train_acc, test_acc = training(features, Y)
 
 import matplotlib.pyplot as plt
+
 fig, ax1 = plt.subplots()
 iters = np.arange(0, total_iterations, 1)
-colors = ['tab:red', 'tab:blue']
+colors = ["tab:red", "tab:blue"]
 ax1.set_xlabel("Iteration", fontsize=17)
 ax1.set_ylabel("Cost", fontsize=17, color=colors[0])
 ax1.plot(iters, costs, color=colors[0], linewidth=4)
-ax1.tick_params(axis='y', labelsize=14, labelcolor=colors[0])
+ax1.tick_params(axis="y", labelsize=14, labelcolor=colors[0])
 
 ax2 = ax1.twinx()
 ax2.set_ylabel("Test Acc.", fontsize=17, color=colors[1])
 ax2.plot(iters, test_acc, color=colors[1], linewidth=4)
 
-ax2.tick_params(axis='x', labelsize=14)
-ax2.tick_params(axis='y', labelsize=14, labelcolor=colors[1])
+ax2.tick_params(axis="x", labelsize=14)
+ax2.tick_params(axis="y", labelsize=14, labelcolor=colors[1])
 
 plt.grid(False)
 plt.tight_layout()
 plt.show()
-
-
