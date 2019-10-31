@@ -73,7 +73,7 @@ from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
 
-##################################################
+##############################################################################
 # Next, we create a randomized variational circuit
 
 # Set a seed for reproducibility
@@ -110,7 +110,7 @@ def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
     return qml.expval(qml.Hermitian(H, wirelist))
 
 
-############################################################
+##############################################################################
 # Now we can compute the gradient and calculate the variance.
 # While we only sample 200 random circuits to allow the code
 # to run in a reasonable amount of time, this can be
@@ -133,11 +133,10 @@ print("Variance of the gradients for {} random circuits: {}".format(num_samples,
 print("Mean of the gradients for {} random circuits: {}".format(num_samples, np.mean(grad_vals)))
 
 
-###########################################################
+##############################################################################
 # Evaluate the gradient for more qubits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# We can repeat the above analysis with increasing number
-# of qubits.
+# We can repeat the above analysis with increasing number of qubits.
 
 
 qubits = [2, 3, 4, 5, 6]
