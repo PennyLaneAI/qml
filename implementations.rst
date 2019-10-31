@@ -69,6 +69,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/doubly_stochastic/single_shot.png
     :description: :doc:`Doubly stochastic gradient descent <app/tutorial_doubly_stochastic>`
 
+.. customgalleryitem::
+    :tooltip: Margin Classifier on multiple QPUs
+    :figure: implementations/multi_qpu_classification/iris_training.png
+    :description: :doc:`Margin classifier on multiple QPUs <app/tutorial_multi_qpu_classifier>`
+
 :html:`</div><div style='clear:both'></div>`
 
 
