@@ -115,8 +115,8 @@ def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
 # While we only sample 200 random circuits to allow the code
 # to run in a reasonable amount of time, this can be
 # increased for more accurate results. We only consider the
-# gradient of the output wr.t. to the last parameter in the
-# circuit. Hence we choose to save gradient[-1] only.
+# gradient of the output with respect to the last parameter in the
+# circuit. Hence we choose to save ``gradient[-1]`` only.
 
 grad_vals = []
 num_samples = 200
