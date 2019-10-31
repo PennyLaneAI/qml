@@ -28,6 +28,7 @@ jobs:
           command: |
             . venv/bin/activate
             make html
+          no_output_timeout: 30m
 
       - save_cache:
           paths:
@@ -66,6 +67,7 @@ jobs:
           command: |
             . venv/bin/activate
             make html
+          no_output_timeout: 30m
 
       - save_cache:
           paths:
