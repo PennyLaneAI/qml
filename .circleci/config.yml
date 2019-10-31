@@ -5,9 +5,8 @@ orbs:
 
 jobs:
   build:
-    executor:
-      name: aws-cli/default
-      python-version: '3.7.2'
+    docker:
+      - image: circleci/python:3.7.2
 
     steps:
       - checkout
@@ -36,36 +35,60 @@ jobs:
             - ./app
           key: gallery
 
-      - persist_to_workspace:
-          root: $CIRCLE_WORKING_DIRECTORY
-
   deploy:
     executor:
       name: aws-cli/default
       python-version: '3.7.2'
 
+    docker:
+      - image: circleci/python:3.7.2
+
     steps:
+      - checkout
+
       - aws-cli/setup:
           aws-region: AWS_REGION
 
-      - attach_workspace:
-          at: $CIRCLE_WORKING_DIRECTORY
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install pip setuptools --upgrade
+            pip install -r requirements.txt
+
+      - restore_cache:
+          keys:
+            - gallery
+
+      - run:
+          name: Build tutorials
+          command: |
+            . venv/bin/activate
+            make html
+
+      - save_cache:
+          paths:
+            - ./tutorial
+            - ./app
+          key: gallery
 
       - deploy:
           name: Deploy to AWS
           command: |
-              aws s3 sync _build/html s3://pennylane.ai/qml --delete
-              aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+            aws s3 sync _build/html s3://pennylane.ai/qml --delete
+            aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
-  build_and_deploy:
-      jobs:
-        - build
-        - deploy:
-          context: aws_credentials
-          requires:
-            - build
+  workflow:
+    jobs:
+      - build:
           filters:
             branches:
-              only:
-                - master
+              ignore: master
+
+      - deploy:
+          context: aws_credentials
+          filters:
+            branches:
+              only: master
