@@ -9,14 +9,8 @@ jobs:
       name: aws-cli/default
       python-version: '3.7.2'
 
-    docker:
-      - image: circleci/python:3.7.2
-
     steps:
       - checkout
-
-      - aws-cli/setup:
-          aws-region: AWS_REGION
 
       - run:
           name: Install dependencies
@@ -42,18 +36,36 @@ jobs:
             - ./app
           key: gallery
 
+      - persist_to_workspace:
+          root: $CIRCLE_WORKING_DIRECTORY
+
+  deploy:
+    executor:
+      name: aws-cli/default
+      python-version: '3.7.2'
+
+    steps:
+      - aws-cli/setup:
+          aws-region: AWS_REGION
+
+      - attach_workspace:
+          at: $CIRCLE_WORKING_DIRECTORY
+
       - deploy:
           name: Deploy to AWS
           command: |
-            if [ "${CIRCLE_BRANCH}" = "master" ]; then
               aws s3 sync _build/html s3://pennylane.ai/qml --delete
               aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
-            else
-              echo "Not master branch, dry run only"
-            fi
 
 workflows:
-  workflow:
-    jobs:
-      - build:
+  build_and_deploy:
+      jobs:
+        - build
+        - deploy
           context: aws_credentials
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
