@@ -21,7 +21,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - gallery
+            - gallery-{{ .Branch }}-{{ .Revision }}
+            - gallery-{{ .Branch }}-
+            - gallery-
 
       - run:
           name: Build tutorials
@@ -34,7 +36,7 @@ jobs:
           paths:
             - ./tutorial
             - ./app
-          key: gallery
+          key: gallery-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
           path: ./tutorial
@@ -69,7 +71,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - gallery
+            - gallery-{{ .Branch }}-{{ .Revision }}
+            - gallery-{{ .Branch }}-
+            - gallery-
 
       - run:
           name: Build tutorials
@@ -82,7 +86,7 @@ jobs:
           paths:
             - ./tutorial
             - ./app
-          key: gallery
+          key: gallery-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
           name: Deploy to AWS
