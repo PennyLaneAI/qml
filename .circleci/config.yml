@@ -36,6 +36,15 @@ jobs:
             - ./app
           key: gallery
 
+      - store_artifacts:
+          path: ./tutorial
+
+      - store_artifacts:
+          path: ./app
+
+      - store_artifacts:
+          path: ./_build/html
+
   deploy:
     executor:
       name: aws-cli/default
