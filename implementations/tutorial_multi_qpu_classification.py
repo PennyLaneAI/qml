@@ -28,7 +28,7 @@ import torch.optim as optim
 
 ##############################################################################
 # Constants
-# ~~~~~~~
+# ~~~~~~~~~
 #
 # Define the constants that will be used in this tutorial
 
@@ -44,7 +44,7 @@ total_iterations = 100
 
 ##############################################################################
 # Quantum Device
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~
 #
 # Recall our feature size is 7, and we plan on using amplitude embedding;
 # As such, we create a quantum device with three “wires” (or qubits).
@@ -56,7 +56,7 @@ dev3 = qml.device("default.qubit", wires=num_qubits)
 
 ##############################################################################
 # Quantum Circuit
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~
 #
 # We first create the layer that will be repeated in our variational quantum
 # circuits. It consists of rotation gates for each qubit, followed by
@@ -115,7 +115,7 @@ def variational_classifier(q_circuit, params, feat):
 
 ##############################################################################
 # Loss Function
-# ~~~~
+# ~~~~~~~~~~~~~
 #
 # Implementing multiclass classifiers as a number of one-vs-all classifiers
 # generally evokes using the margin loss. The output of classifier :math:'i', :math:'c_i'
@@ -160,7 +160,7 @@ def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
 
 ##########################################################################################
 # Classification Function
-# ~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Next, we compute the score for each class and chose the class that has the highest score
 
@@ -190,7 +190,7 @@ def accuracy(labels, hard_predictions):
 
 #################################################################################
 # Data Loading and Processing
-# ~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Load in the iris dataset. Normalize the features so that the sum of the feature
 # elements squared is 1 (l2 norm is 1).
@@ -225,7 +225,7 @@ def split_data(features, Y):
 
 ##############################################################################
 # Training Procedure
-# ~~~~
+# ~~~~~~~~~~~~~~~~~~
 #
 # In the training procedure, we begin by first initializing randomly the parameters
 # we wish to learn (variational circuit weights and classical bias). As these are
