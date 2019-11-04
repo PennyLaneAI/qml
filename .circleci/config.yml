@@ -21,19 +21,31 @@ jobs:
 
       - restore_cache:
           keys:
-            - gallery
+            - gallery-{{ .Branch }}-{{ .Revision }}
+            - gallery-{{ .Branch }}-
+            - gallery-
 
       - run:
           name: Build tutorials
           command: |
             . venv/bin/activate
             make html
+          no_output_timeout: 30m
 
       - save_cache:
           paths:
             - ./tutorial
             - ./app
-          key: gallery
+          key: gallery-{{ .Branch }}-{{ .Revision }}
+
+      - store_artifacts:
+          path: ./tutorial
+
+      - store_artifacts:
+          path: ./app
+
+      - store_artifacts:
+          path: ./_build/html
 
   deploy:
     executor:
@@ -59,19 +71,22 @@ jobs:
 
       - restore_cache:
           keys:
-            - gallery
+            - gallery-{{ .Branch }}-{{ .Revision }}
+            - gallery-{{ .Branch }}-
+            - gallery-
 
       - run:
           name: Build tutorials
           command: |
             . venv/bin/activate
             make html
+          no_output_timeout: 30m
 
       - save_cache:
           paths:
             - ./tutorial
             - ./app
-          key: gallery
+          key: gallery-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
           name: Deploy to AWS
