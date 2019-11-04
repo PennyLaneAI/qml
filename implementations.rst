@@ -70,6 +70,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`Doubly stochastic gradient descent <app/tutorial_doubly_stochastic>`
 
 .. customgalleryitem::
+    :tooltip: Variational Quantum Linear Solver
+    :figure: implementations/vqls/vqls_zoom.png
+    :description: :doc:`app/tutorial_vqls`
+
+.. customgalleryitem::
     :tooltip: Margin Classifier on multiple QPUs
     :figure: implementations/multi_qpu_classification/iris_training.png
     :description: :doc:`Margin classifier on multiple QPUs <app/tutorial_multi_qpu_classifier>`
@@ -94,3 +99,5 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_barren_plateaus
     app/tutorial_rotoselect
     app/tutorial_doubly_stochastic
+    app/tutorial_vqls
+    app/tutorial_multi_qpu_classifier
