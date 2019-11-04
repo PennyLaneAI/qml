@@ -2,23 +2,23 @@ r"""
 .. _multiclass_margin_classifier:
 
 Multiclass margin classifier
-======================
+============================
 
-In this tutorial, we show how to use the pyTorch interface for PennyLane 
+In this tutorial, we show how to use the PyTorch interface for PennyLane 
 to implement a multiclass variational classifier. We consider the iris database
 from UCI, which 4 features and 3 classes. We use a multiple one-vs-all
-classifiers with a margin loss (see 'Multiclass Linear SVM
-<http://cs231n.github.io/linear-classify/>'__) to classify data. Each classifier is implemented
+classifiers with a margin loss (see `Multiclass Linear SVM
+<http://cs231n.github.io/linear-classify/>`__) to classify data. Each classifier is implemented
 on an individual variational circuit, whose architecture is inspired by
 `Farhi and Neven (2018) <https://arxiv.org/abs/1802.06002>`__ as well as
 `Schuld et al. (2018) <https://arxiv.org/abs/1804.00633>`__.
-"""
 
-# Imports
-# ~~~~~~~
-#
-# We import PennyLane, the PennyLane-provided version of NumPy,
-# and relevent torch modules
+Imports
+~~~~~~~
+
+We import PennyLane, the PennyLane-provided version of NumPy,
+and relevent torch modules
+"""
 
 import pennylane as qml
 import torch
@@ -26,13 +26,14 @@ from pennylane import numpy as np
 from torch.autograd import Variable
 import torch.optim as optim
 
+##############################################################################
 # Constants
 # ~~~~~~~
 #
 # Define the constants that will be used in this tutorial
 
 num_classes = 3
-margin = 0.20
+margin = 0.1
 feature_size = 4
 batch_size = 10
 lr_adam = 0.01
@@ -48,7 +49,9 @@ total_iterations = 100
 # Recall our feature size is 7, and we plan on using amplitude embedding;
 # As such, we create a quantum device with three “wires” (or qubits).
 
-dev = qml.device("default.qubit", wires=num_qubits)
+dev1 = qml.device("default.qubit", wires=num_qubits)
+dev2 = qml.device("default.qubit", wires=num_qubits)
+dev3 = qml.device("default.qubit", wires=num_qubits)
 
 
 ##############################################################################
@@ -69,12 +72,12 @@ def layer(W):
 ##############################################################################
 # We now define the quantum nodes that will be used. As we are implementing our
 # multiclass classifier as multiple one-vs-all classifier, we will use 3 qnodes,
-# each representing one such classifier. That is, circuit1 classifies if a samples
+# each representing one such classifier. That is, ``circuit1`` classifies if a samples
 # belongs to class 1 or not and so on. Data is embedded in each circuit using
-# amplitude embedding
+# amplitude embedding:
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev1, interface="torch")
 def circuit1(weights, feat=None):
     qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
@@ -82,7 +85,7 @@ def circuit1(weights, feat=None):
     return qml.expval(qml.PauliZ(0))
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev2, interface="torch")
 def circuit2(weights, feat=None):
     qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
@@ -90,7 +93,7 @@ def circuit2(weights, feat=None):
     return qml.expval(qml.PauliZ(0))
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev3, interface="torch")
 def circuit3(weights, feat=None):
     qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
@@ -99,7 +102,7 @@ def circuit3(weights, feat=None):
 
 
 ##############################################################################
-# The variational quantum is parametrized by the weights. We use a classical
+# The variational quantum circuit is parametrized by the weights. We use a classical
 # bias term that is applied after the processing the quantum circuit's output.
 # Both variational circuit weights and classical bias term are optimized.
 
@@ -129,7 +132,7 @@ def variational_classifier(q_circuit, params, feat):
 # .. math::  L(x,y) = \sum_{j \ne y}{\max{\left(0, s_j - s_y + \Delta)\right)}}
 #
 # where :math:'\Delta' denotes the margin. The margin parameter is chosen as a hyperparameter.
-# For more information: see 'Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>'__
+# For more information: see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__
 
 
 def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
@@ -155,11 +158,11 @@ def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
     return loss / num_samples
 
 
-##############################################################################
+##########################################################################################
 # Classification Function
 # ~~~~
 #
-# Compute the score for each class and chose the class that has the highest score
+# Next, we compute the score for each class and chose the class that has the highest score
 
 
 def classify(q_circuits, all_params, features, labels):
@@ -185,12 +188,12 @@ def accuracy(labels, hard_predictions):
     return loss
 
 
-##############################################################################
+#################################################################################
 # Data Loading and Processing
 # ~~~~
 #
-# Load in the wheat seed data. Normalize the features so that the sum of the feature
-# elements squared is 1 (l2 norm is 1)
+# Load in the iris dataset. Normalize the features so that the sum of the feature
+# elements squared is 1 (l2 norm is 1).
 
 
 def load_and_process_data():
@@ -230,6 +233,11 @@ def split_data(features, Y):
 # minibatch training - the average loss for a batch of samples is computed, and the
 # optimization step is based on this.
 
+def adjust_learning_rate(base_lr, optimizer, iteration):
+    adjusted_lr = base_lr*np.exp(-2*(iteration/total_iterations))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = adjusted_lr
+    return adjusted_lr
 
 def training(features, Y):
     num_data = Y.shape[0]
@@ -274,11 +282,14 @@ def training(features, Y):
         costs.append(curr_cost.item())
         train_acc.append(acc_train)
         test_acc.append(acc_test)
+        
+        #adjusted_lr = adjust_learning_rate(lr_adam, optimizer, it)
+        #print("New learning rate: ", adjusted_lr)
 
     return costs, train_acc, test_acc
 
 
-# We now run our training regime and plot the results. Note that
+# We now run our training algorithm and plot the results. Note that
 # for plotting, the matplotlib library is required
 
 features, Y = load_and_process_data()
