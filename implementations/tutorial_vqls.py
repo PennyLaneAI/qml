@@ -169,13 +169,10 @@ solution state, i.e., we can use the following simple ansatz:
 In the code presented below we solve this particular problem by minimizing the local cost function :math:`C_L`.
 Eventually we will compare the quantum solution with the classical one.
 
+General setup
+------------------------
+This Python code requires *PennyLane* and the plotting library *matplotlib*.
 """
-
-
-##############################################################################
-# General setup
-# ------------------------
-# This Python code requires *PennyLane* and the plotting library *matplotlib*.
 
 # Pennylane
 import pennylane as qml
