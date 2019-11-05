@@ -223,7 +223,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $("#light-slider").lightSlider({
-                item: 2,
+                item: 3,
                 autoWidth: false,
                 slideMove: 1, // slidemove will be 1 if loop is true
                 slideMargin: 0,
@@ -235,6 +235,14 @@
                 prevHtml: "<i class='fas fa-chevron-left black-text' style='font-size: xx-large;'></i>",
                 nextHtml: "<i class='fas fa-chevron-right black-text' style='font-size: xx-large;'></i>",
                 responsive : [
+                    {
+                        breakpoint:1400,
+                        settings: {
+                            item:2,
+                            slideMove:1,
+                            slideMargin:0,
+                          }
+                    },
                     {
                         breakpoint:768,
                         settings: {

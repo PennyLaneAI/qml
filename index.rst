@@ -19,11 +19,11 @@ Quantum machine learning
             This, in turn, is driving the development of quantum machine learning and variational quantum circuits.</p>
 
         <section class="my-5">
-            <div class="row">
+            <div class="row" id="main-cards">
                 <div class="col-lg-4 mb-5">
                     <a href="concepts.html">
                         <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-4">
+                            <div class="text-center d-flex align-items-center pb-2">
                                 <div>
                                     <h3 class="card-title">
                                     <img src="_static/key.png" class="img-fluid" style="max-width: 80px;"></img>
@@ -41,7 +41,7 @@ Quantum machine learning
                 <div class="col-lg-4 mb-5">
                     <a href="beginner.html">
                     <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-4">
+                        <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/board.png" class="img-fluid" style="max-width: 86px;"></img>
@@ -58,7 +58,7 @@ Quantum machine learning
                 <div class="col-lg-4 mb-5">
                     <a href="implementations.html">
                     <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-4">
+                        <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
@@ -82,7 +82,7 @@ Quantum machine learning
                           <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap" style="min-width: 500px!important;">
                           <div class="card-body">
                             <h4 class="card-title">Variational quantum linear solver</h4>
-                            <p class="card-text">Explore how variational quantum circuits can be used to solve systems of linear equations.</p>
+                            <p class="card-text">Explore how variational quantum circuits can be used to solve systems of linear equations. Here, we solve a system of 8 linear equations using 3 qubits and an ancilla.</p>
                           </div>
                         </div>
                     </a>
