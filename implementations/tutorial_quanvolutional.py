@@ -39,7 +39,9 @@ import matplotlib.pyplot as plt
 
 n_qubits = 3    # Number of system qubits.
 num_epochs = 1  # Number of optimization epochs
+eta = 0.01      # Learning rate
 rng_seed = 0    # Seed for random number generator
+tf.keras.backend.set_floatx('float64')
 
 ##############################################################################
 # We import the MNIST dataset from *Keras*.
@@ -50,22 +52,45 @@ mnist_dataset = keras.datasets.mnist
 # Normalize pixel values from 0 to 1.
 train_images = train_images / 255.0
 test_images = test_images / 255.0
+# Add a channels dimension
+train_images_2 = train_images[..., tf.newaxis]
+test_images_2 = test_images[..., tf.newaxis]
 
-model = keras.Sequential([
-    keras.layers.Flatten(input_shape=(28, 28)),
-    keras.layers.Dense(10, activation='softmax')
-])
+train_ds = tf.data.Dataset.from_tensor_slices((train_images_2, train_labels)).shuffle(10000).batch(32)
 
-model.compile(optimizer='adam',
+test_ds = tf.data.Dataset.from_tensor_slices((test_images_2, test_labels)).batch(32)
+
+
+##############################################################################
+# Quantum circuit
+
+
+dev = qml.device('default.qubit', wires=2)
+@qml.qnode(dev, interface='tf')
+def circuit(phi):
+    qml.RX(phi, wires=0)
+    qml.RY(phi, wires=1)
+    qml.CNOT(wires=[0, 1])
+    return qml.expval(qml.PauliZ(0))
+
+q = tf.Variable(0.3, dtype=tf.float64)
+
+##############################################################################
+# Custom hybrid model
+
+inputs = keras.Input(shape=(28, 28))   # Returns an input placeholder
+x = keras.layers.Flatten()(inputs)
+x = x * circuit(q)
+predictions = keras.layers.Dense(10, activation='softmax')(x)
+
+model = keras.Model(inputs=inputs, outputs=predictions)
+
+model.compile(optimizer=keras.optimizers.SGD(learning_rate=eta),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_images, train_labels, epochs=num_epochs)
-
-predictions = model.predict(test_images)
-
-print('Label 0:', test_labels[0])
-print('Prediction 0:', np.argmax(predictions[0]))
+# Trains for 5 epochs
+model.fit(train_images, train_labels, epochs=1)
 
 
 ##############################################################################
