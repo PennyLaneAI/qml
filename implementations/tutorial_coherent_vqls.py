@@ -344,12 +344,11 @@ def full_circuit(weights):
 #   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
 #
 # To evaluate the two probabilities appearing on the right hand side of the previous equation
-# we initialize two PennyLane devices with the ``default.qubit`` device,
-# and we define two different ``qnode`` circuits.
+# we initialize a ``default.qubit`` device and we define two different ``qnode`` circuits.
 
-dev_full = qml.device("default.qubit", wires=tot_qubits)
+dev = qml.device("default.qubit", wires=tot_qubits)
 
-@qml.qnode(dev_full)
+@qml.qnode(dev)
 def global_ground(weights):
     # Circuit gates
     full_circuit(weights)
@@ -358,10 +357,7 @@ def global_ground(weights):
     P[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P, wires=range(tot_qubits)))
 
-
-dev_partial = qml.device("default.qubit", wires=tot_qubits)
-
-@qml.qnode(dev_partial)
+@qml.qnode(dev)
 def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
