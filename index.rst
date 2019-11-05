@@ -79,7 +79,7 @@ Quantum machine learning
                 <li>
                     <a href="app/tutorial_vqls.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap">
+                          <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap" style="min-width: 500px!important;">
                           <div class="card-body">
                             <h4 class="card-title">Variational quantum linear solver</h4>
                             <p class="card-text">Explore how variational quantum circuits can be used to solve systems of linear equations.</p>
