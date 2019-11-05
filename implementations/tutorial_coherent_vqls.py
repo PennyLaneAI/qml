@@ -349,7 +349,7 @@ def full_circuit(weights):
 #   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
 #
 # To evaluate the two probabilities appearing on the r.h.s. of the previous equation
-# we initialize two PennyLane devices with the ``default.qubit`` backend,
+# we initialize two PennyLane devices with the ``default.qubit`` device,
 # and we define two different ``qnode`` circuits.
 
 dev_full = qml.device("default.qubit", wires=tot_qubits)
