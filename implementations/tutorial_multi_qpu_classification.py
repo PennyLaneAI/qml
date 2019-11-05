@@ -26,6 +26,7 @@ from pennylane import numpy as np
 from torch.autograd import Variable
 import torch.optim as optim
 
+
 ##############################################################################
 # Constants
 # ~~~~~~~~~
@@ -33,14 +34,15 @@ import torch.optim as optim
 # Define the constants that will be used in this tutorial
 
 num_classes = 3
-margin = 0.1
+margin = 0.15
 feature_size = 4
-batch_size = 10
+batch_size = 16
 lr_adam = 0.01
 train_split = 0.75
 num_qubits = 2
 num_layers = 6
-total_iterations = 100
+total_iterations = 65
+
 
 ##############################################################################
 # Quantum Device
@@ -62,7 +64,6 @@ dev3 = qml.device("default.qubit", wires=num_qubits)
 # circuits. It consists of rotation gates for each qubit, followed by
 # entangling/CNOT gates
 
-
 def layer(W):
     qml.Rot(W[0, 0], W[0, 1], W[0, 2], wires=0)
     qml.Rot(W[1, 0], W[1, 1], W[1, 2], wires=1)
@@ -72,40 +73,26 @@ def layer(W):
 ##############################################################################
 # We now define the quantum nodes that will be used. As we are implementing our
 # multiclass classifier as multiple one-vs-all classifier, we will use 3 qnodes,
-# each representing one such classifier. That is, ``circuit1`` classifies if a samples
-# belongs to class 1 or not and so on. Data is embedded in each circuit using
-# amplitude embedding:
+# each representing one such classifier. That is, ``circuit1`` classifies if a 
+# samples belongs to class 1 or not and so on. The circuit architecture for all
+# 3 nodes are the same. We use the PyTorch interface for the QNodes.
+# Data is embedded in each circuit using amplitude embedding:
 
-
-@qml.qnode(dev1, interface="torch")
-def circuit1(weights, feat=None):
+def circuit(weights, feat=None):
     qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
     for W in weights:
         layer(W)
     return qml.expval(qml.PauliZ(0))
 
-
-@qml.qnode(dev2, interface="torch")
-def circuit2(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
-    for W in weights:
-        layer(W)
-    return qml.expval(qml.PauliZ(0))
-
-
-@qml.qnode(dev3, interface="torch")
-def circuit3(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
-    for W in weights:
-        layer(W)
-    return qml.expval(qml.PauliZ(0))
+qnode1 = qml.QNode(circuit, dev1).to_torch()
+qnode2 = qml.QNode(circuit, dev2).to_torch()
+qnode3 = qml.QNode(circuit, dev3).to_torch()
 
 
 ##############################################################################
 # The variational quantum circuit is parametrized by the weights. We use a classical
 # bias term that is applied after the processing the quantum circuit's output.
 # Both variational circuit weights and classical bias term are optimized.
-
 
 def variational_classifier(q_circuit, params, feat):
     weights = params[0]
@@ -133,7 +120,6 @@ def variational_classifier(q_circuit, params, feat):
 #
 # where :math:'\Delta' denotes the margin. The margin parameter is chosen as a hyperparameter.
 # For more information: see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__
-
 
 def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
     loss = 0
@@ -164,7 +150,6 @@ def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
 #
 # Next, we compute the score for each class and chose the class that has the highest score
 
-
 def classify(q_circuits, all_params, features, labels):
     predicted_labels = []
     for i, feat in enumerate(features):
@@ -177,7 +162,6 @@ def classify(q_circuits, all_params, features, labels):
         pred_class = np.argmax(scores)
         predicted_labels.append(pred_class)
     return predicted_labels
-
 
 def accuracy(labels, hard_predictions):
     loss = 0
@@ -195,7 +179,6 @@ def accuracy(labels, hard_predictions):
 # Load in the iris dataset. Normalize the features so that the sum of the feature
 # elements squared is 1 (l2 norm is 1).
 
-
 def load_and_process_data():
     data = np.loadtxt("multi_qpu_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
@@ -208,7 +191,6 @@ def load_and_process_data():
 
     Y = torch.tensor(data[:, -1])
     return X, Y
-
 
 # Create a train and test split. Use a seed for reproducability
 def split_data(features, Y):
@@ -243,7 +225,7 @@ def training(features, Y):
     num_data = Y.shape[0]
     feats_train, feats_test, Y_train, Y_test = split_data(features, Y)
     num_train = Y_train.shape[0]
-    q_circuits = [circuit1, circuit2, circuit3]
+    q_circuits = [qnode1, qnode2, qnode3]
 
     # Initialize the parameters
     all_weights = [
