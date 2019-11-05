@@ -348,7 +348,7 @@ def full_circuit(weights):
 #   P( \mathrm{sys}=\mathrm{ground}\,|\, \mathrm{anc} = \mathrm{ground}) =
 #   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
 #
-# To evaluate the two probabilities appearing on the r.h.s. of the previous equation
+# To evaluate the two probabilities appearing on the right hand side of the previous equation
 # we initialize two PennyLane devices with the ``default.qubit`` device,
 # and we define two different ``qnode`` circuits.
 
