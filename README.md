@@ -22,7 +22,7 @@ quantum machine learning paper/result.
 
 ### Adding tutorials and implementations
 
-* Tutorials and implementations are written in the form of an executable Python script.
+* Tutorials and demonstrations are written in the form of an executable Python script.
   Any package listed in `requirements.txt` you can assume is available to be imported.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
