@@ -63,7 +63,7 @@ Quantum machine learning
                                 <h3 class="card-title">
                                 <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
                                 <br>
-                                <strong>Implementations</strong>
+                                <strong>Demos</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms on near-term quantum hardware.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -77,9 +77,20 @@ Quantum machine learning
 
             <ul id="light-slider">
                 <li>
+                    <a href="app/tutorial_vqls.html">
+                        <div class="card">
+                          <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">Variational quantum linear solver</h4>
+                            <p class="card-text">Explore how variational quantum circuits can be used to solve systems of linear equations.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
                     <a href="app/tutorial_data_reuploading_classifier.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_static/thumbs/universal_dnn.png"                        alt="Card image cap">
+                          <img class="card-img-top img-fluid" src="_static/thumbs/universal_dnn.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Data re-uploading classifier</h4>
                             <p class="card-text">A universal single-qubit quantum classifier using the idea of 'data re-uploading' by Pérez-Salinas et al. (2019), akin to a single hidden-layered neural network.</p>
@@ -90,8 +101,7 @@ Quantum machine learning
                 <li>
                     <a href="app/tutorial_doubly_stochastic.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_images/sphx_glr_tutorial_doubly_stochastic_002.png"
-                            alt="Card image cap">
+                          <img class="card-img-top img-fluid" src="_images/sphx_glr_tutorial_doubly_stochastic_002.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Doubly stochastic gradient descent</h4>
                             <p class="card-text">Quantum gradient descent with finite number of shots is a form of stochastic gradient descent. By sampling from terms in the VQE Hamiltonian, we get "doubly stochastic gradient descent".</p>
@@ -102,8 +112,7 @@ Quantum machine learning
                 <li>
                     <a href="app/tutorial_barren_plateaus.html">
                         <div class="card">
-                          <img class="card-img-top" src="_static/thumbs/surface.png"
-                            alt="Card image cap">
+                          <img class="card-img-top" src="_static/thumbs/surface.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Barren plateaus in QNNs</h4>
                             <p class="card-text">We show how variational quantum circuits face the problem of barren plateaus. We partly reproduce some of the findings in McClean et al. (2018) with just a few lines of code.</p>
