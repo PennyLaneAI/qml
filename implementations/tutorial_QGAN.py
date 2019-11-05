@@ -1,8 +1,8 @@
 """
 .. _quantum_GAN:
 
-Quantum Generative Adversarial Network
-======================================
+Quantum Generative Adversarial Networks with Cirq + TensorFlow
+==============================================================
 
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
@@ -11,8 +11,8 @@ This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (2018) <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.012324>`__)
 using two subcircuits, a *generator* and a *discriminator*. The
 generator attempts to generate synthetic quantum data to match a pattern
-of “real” data, while the discriminator, tries to discern real data from
-fake data; see image below. The gradient of the discriminator’s output provides a
+of "real" data, while the discriminator tries to discern real data from
+fake data (see image below). The gradient of the discriminator’s output provides a
 training signal for the generator to improve its fake generated data.
 
 |
@@ -28,24 +28,27 @@ training signal for the generator to improve its fake generated data.
 """
 
 ##############################################################################
-# Imports
-# ~~~~~~~
-
-# As usual, we import PennyLane, the PennyLane-provided version of NumPy,
-# and an optimizer.
+# Using Cirq + TensorFlow
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# PennyLane allows us to mix and match quantum devices and classical machine
+# learning software. For this demo, we will link together
+# Google's `Cirq <https://cirq.readthedocs.io/en/stable/>`_ and `TensorFlow <https://www.tensorflow.org/>`_ libraries.
+#
+# We begin by importing PennyLane, NumPy, and TensorFlow.
 
 import pennylane as qml
-from pennylane import numpy as np
-from pennylane.optimize import GradientDescentOptimizer
+import numpy as np
+import tensorflow as tf
+
 
 ##############################################################################
-# We also declare a 3-qubit device.
+# We also declare a 3-qubit simulator device running in Cirq.
 
+dev  = qml.device('cirq.simulator', wires=3)
 
-dev = qml.device("default.qubit", wires=3)
 
 ##############################################################################
-# Classical and quantum nodes
+# Generator and Discriminator
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # In classical GANs, the starting point is to draw samples either from
@@ -56,7 +59,6 @@ dev = qml.device("default.qubit", wires=3)
 # For this simple example, our real data will be a qubit that has been
 # rotated (from the starting state :math:`\left|0\right\rangle`) to some
 # arbitrary, but fixed, state.
-
 
 def real(phi, theta, omega):
     qml.Rot(phi, theta, omega, wires=0)
@@ -70,7 +72,6 @@ def real(phi, theta, omega):
 # which will be connected as an input to the discriminator. Wire 1 is
 # provided as a workspace for the generator, while the discriminator’s
 # output will be on wire 2.
-
 
 def generator(w):
     qml.RX(w[0], wires=0)
@@ -101,17 +102,17 @@ def discriminator(w):
 ##############################################################################
 # We create two QNodes. One where the real data source is wired up to the
 # discriminator, and one where the generator is connected to the
-# discriminator.
+# discriminator. In order to pass TensorFlow Variables into the quantum
+# circuits, we specify the ``"tf"`` interface.
 
-
-@qml.qnode(dev)
+@qml.qnode(dev, interface="tf")
 def real_disc_circuit(phi, theta, omega, disc_weights):
     real(phi, theta, omega)
     discriminator(disc_weights)
     return qml.expval(qml.PauliZ(2))
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="tf")
 def gen_disc_circuit(gen_weights, disc_weights):
     generator(gen_weights)
     discriminator(disc_weights)
@@ -119,21 +120,22 @@ def gen_disc_circuit(gen_weights, disc_weights):
 
 
 ##############################################################################
-# Cost
-# ~~~~
+# QGAN cost functions
+# ~~~~~~~~~~~~~~~~~~~
 #
-# There are two ingredients to the cost here. The first is the probability
-# that the discriminator correctly classifies real data as real. The
-# second ingredient is the probability that the discriminator classifies
-# fake data (i.e., a state prepared by the generator) as real.
+# There are two cost functions of interest, corresponding to the two
+# stages of QGAN training. These cost functions are built from two pieces:
+# the first piece is the probability that the discriminator correctly
+# classifies real data as real. The second piece is the probability that the
+# discriminator classifies fake data (i.e., a state prepared by the
+# generator) as real.
 #
-# The discriminator’s objective is to maximize the probability of
+# The discriminator is trained to maximize the probability of
 # correctly classifying real data, while minimizing the probability of
 # mistakenly classifying fake data.
 #
-# The generator’s objective is to maximize the probability that the
+# The generator is trained to maximize the probability that the
 # discriminator accepts fake data as real.
-
 
 def prob_real_true(disc_weights):
     true_disc_output = real_disc_circuit(phi, theta, omega, disc_weights)
@@ -146,7 +148,7 @@ def prob_fake_true(gen_weights, disc_weights):
     fake_disc_output = gen_disc_circuit(gen_weights, disc_weights)
     # convert to probability
     prob_fake_true = (fake_disc_output + 1) / 2
-    return prob_fake_true  # generator wants to minimize this prob
+    return prob_fake_true
 
 
 def disc_cost(disc_weights):
@@ -159,8 +161,8 @@ def gen_cost(gen_weights):
 
 
 ##############################################################################
-# Optimization
-# ~~~~~~~~~~~~
+# Training the QGAN
+# ~~~~~~~~~~~~~~~~~
 #
 # We initialize the fixed angles of the “real data” circuit, as well as
 # the initial parameters for both generator and discriminator. These are
@@ -172,64 +174,76 @@ theta = np.pi / 2
 omega = np.pi / 7
 np.random.seed(0)
 eps = 1e-2
-gen_weights = np.array([np.pi] + [0] * 8) + np.random.normal(scale=eps, size=[9])
-disc_weights = np.random.normal(size=[9])
+init_gen_weights = np.array([np.pi] + [0] * 8) + \
+                   np.random.normal(scale=eps, size=(9,))
+init_disc_weights = np.random.normal(size=(9,))
+
+gen_weights = tf.Variable(init_gen_weights)
+disc_weights = tf.Variable(init_disc_weights)
+
 
 ##############################################################################
 # We begin by creating the optimizer:
 
-opt = GradientDescentOptimizer(0.1)
+opt = tf.keras.optimizers.SGD(0.1)
+
 
 ##############################################################################
 # In the first stage of training, we optimize the discriminator while
 # keeping the generator parameters fixed.
 
-for it in range(50):
-    disc_weights = opt.step(disc_cost, disc_weights)
-    cost = disc_cost(disc_weights)
-    if it % 5 == 0:
-        print("Step {}: cost = {}".format(it + 1, cost))
+cost = lambda: disc_cost(disc_weights)
+
+for step in range(50):
+    opt.minimize(cost, disc_weights)
+    if step % 5 == 0:
+        cost_val = cost().numpy()
+        print("Step {}: cost = {}".format(step, cost_val))
+
 
 ##############################################################################
 # At the discriminator’s optimum, the probability for the discriminator to
 # correctly classify the real data should be close to one.
 
-print(prob_real_true(disc_weights))
+print("Prob(real classified as real): ", prob_real_true(disc_weights).numpy())
 
 
 ##############################################################################
 # For comparison, we check how the discriminator classifies the
 # generator’s (still unoptimized) fake data:
 
-print(prob_fake_true(gen_weights, disc_weights))
+print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weights).numpy())
 
 
 ##############################################################################
-# In the adverserial game we have to now train the generator to better
-# fool the discriminator (we can continue training the models in an
+# In the adversarial game we now have to train the generator to better
+# fool the discriminator. For this demo, we only perform one stage of the
+# game. For more complex models, we would continue training the models in an
 # alternating fashion until we reach the optimum point of the two-player
-# adversarial game).
+# adversarial game.
 
-for it in range(200):
-    gen_weights = opt.step(gen_cost, gen_weights)
-    cost = -gen_cost(gen_weights)
-    if it % 5 == 0:
-        print("Step {}: cost = {}".format(it, cost))
+cost = lambda: gen_cost(gen_weights)
+
+for step in range(200):
+    opt.minimize(cost, gen_weights)
+    if step % 5 == 0:
+        cost_val = cost().numpy()
+        print("Step {}: cost = {}".format(step, cost_val))
 
 
 ##############################################################################
 # At the optimum of the generator, the probability for the discriminator
 # to be fooled should be close to 1.
 
-print(prob_fake_true(gen_weights, disc_weights))
+print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weights).numpy())
 
 
 ##############################################################################
-# At the joint optimum the overall cost will be close to zero.
+# At the joint optimum the discriminator cost will be close to zero,
+# indicating that the discriminator assigns equal probability to both real and
+# generated data.
 
-print(disc_cost(disc_weights))
+print("Discriminator cost: ", disc_cost(disc_weights).numpy())
 
-
-##############################################################################
 # The generator has successfully learned how to simulate the real data
 # enough to fool the discriminator.

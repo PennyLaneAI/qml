@@ -17,12 +17,12 @@ at https://pennylane.ai/qml. Content includes:
 
 ## Contributing
 
-You can contribute by submitting a tutorial or an implementation of a recent
+You can contribute by submitting a tutorial or a demonstration of a recent
 quantum machine learning paper/result.
 
 ### Adding tutorials and implementations
 
-* Tutorials and implementations are written in the form of an executable Python script.
+* Tutorials and demonstrations are written in the form of an executable Python script.
   Any package listed in `requirements.txt` you can assume is available to be imported.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 

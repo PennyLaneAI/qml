@@ -5,6 +5,37 @@ orbs:
 
 jobs:
   build:
+    docker:
+      - image: circleci/python:3.7.2
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install pip setuptools --upgrade
+            pip install -r requirements.txt
+
+      - restore_cache:
+          keys:
+            - gallery
+
+      - run:
+          name: Build tutorials
+          command: |
+            . venv/bin/activate
+            make html
+
+      - save_cache:
+          paths:
+            - ./tutorial
+            - ./app
+          key: gallery
+
+  deploy:
     executor:
       name: aws-cli/default
       python-version: '3.7.2'
@@ -45,15 +76,19 @@ jobs:
       - deploy:
           name: Deploy to AWS
           command: |
-            if [ "${CIRCLE_BRANCH}" = "master" ]; then
-              aws s3 sync _build/html s3://pennylane.ai/qml --delete
-              aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
-            else
-              echo "Not master branch, dry run only"
-            fi
+            aws s3 sync _build/html s3://pennylane.ai/qml --delete
+            aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
   workflow:
     jobs:
       - build:
+          filters:
+            branches:
+              ignore: master
+
+      - deploy:
           context: aws_credentials
+          filters:
+            branches:
+              only: master

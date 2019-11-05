@@ -20,7 +20,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_isingmodel_PyTorch`
 
 .. customgalleryitem::
-    :tooltip: Use PennyLane to create a simple QGAN
+    :tooltip: Create a simple QGAN with Cirq and TensorFlow.
     :figure: implementations/QGAN/qgan3.png
     :description: :doc:`app/tutorial_QGAN`
 
@@ -70,10 +70,14 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`Doubly stochastic gradient descent <app/tutorial_doubly_stochastic>`
 
 .. customgalleryitem::
+    :tooltip: Variational Quantum Linear Solver
+    :figure: implementations/vqls/vqls_zoom.png
+    :description: :doc:`app/tutorial_vqls`
+    
+.. customgalleryitem::
     :tooltip: Coherent Variational Quantum Linear Solver
     :figure: implementations/coherent_vqls/cvqls_zoom.png
     :description: :doc:`app/tutorial_coherent_vqls`
-
 
 :html:`</div><div style='clear:both'></div>`
 
@@ -95,4 +99,5 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_barren_plateaus
     app/tutorial_rotoselect
     app/tutorial_doubly_stochastic
+    app/tutorial_vqls
     app/tutorial_coherent_vqls

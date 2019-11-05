@@ -17,10 +17,14 @@
   <!-- nanoscroller -->
   <link rel="stylesheet" type="text/css" href="{{ pathto('_static/css/nanoscroller.css', 1) }}" />
 
+  <!-- lightslider -->
+  <link type="text/css" rel="stylesheet" href="{{ pathto('_static/css/lightslider.min.css', 1) }}" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
        "HTML-CSS": { scale: 90, linebreaks: { automatic: true } },
+       SVG: { linebreaks: { automatic: true } },
        TeX: {
          Macros: {
            pr : ['|\#1\\rangle\\langle\#1|',1],
@@ -170,6 +174,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
     <!-- Nanoscroller -->
     <script type="text/javascript" src="{{ pathto('_static/js/nanoscroller.min.js', 1) }}"></script>
+    <!-- lightslider -->
+    <script src="{{ pathto('_static/js/lightslider.min.js', 1) }}"></script>
 
     <script type="text/javascript">
       $(".document > .section").removeClass("section");
@@ -213,6 +219,43 @@
       $(".xanadu-call-to-action-links").hide();
     }
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#light-slider").lightSlider({
+                item: 3,
+                autoWidth: false,
+                slideMove: 1, // slidemove will be 1 if loop is true
+                slideMargin: 0,
+                auto: true,
+                loop: true,
+                controls: true,
+                pause: 5000,
+                pager: false,
+                prevHtml: "<i class='fas fa-chevron-left black-text' style='font-size: xx-large;'></i>",
+                nextHtml: "<i class='fas fa-chevron-right black-text' style='font-size: xx-large;'></i>",
+                responsive : [
+                    {
+                        breakpoint:1400,
+                        settings: {
+                            item:2,
+                            slideMove:1,
+                            slideMargin:0,
+                          }
+                    },
+                    {
+                        breakpoint:768,
+                        settings: {
+                            item:1,
+                            slideMove:1,
+                            slideMargin:6,
+                          }
+                    }
+                ]
+            });
+        });
+    </script>
+
 
   {% include "footer.html" %}
 {%- endblock %}

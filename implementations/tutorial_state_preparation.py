@@ -1,8 +1,8 @@
 r"""
 .. _state_preparation:
 
-State preparation tutorial
-==========================
+State preparation with Rigetti Forest + PyTorch
+===============================================
 
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
@@ -31,9 +31,15 @@ how to:
 # :math:`p=1` and maximally mixed if :math:`p=1/2`. In this example, we
 # select the target state by choosing a random Bloch vector and
 # renormalizing it to have a specified purity.
+#
+# To start, we import PennyLane, NumPy, and PyTorch for the optimization:
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+import torch
+from torch.autograd import Variable
+
+np.random.seed(42)
 
 # we generate a three-dimensional random vector by sampling
 # each entry from a standard normal distribution
@@ -73,6 +79,7 @@ nr_layers = 2
 
 # randomly initialize parameters from a normal distribution
 params = np.random.normal(0, np.pi, (nr_qubits, nr_layers, 3))
+params = Variable(torch.tensor(params), requires_grad=True)
 
 # a layer of the circuit ansatz
 def layer(params, j):
@@ -98,13 +105,16 @@ def layer(params, j):
 dev = qml.device("forest.qvm", device="3q-pyqvm", shots=1000)
 
 ##############################################################################
-# When defining the qnode, we introduce as input a Hermitian operator
+# When defining the QNode, we introduce as input a Hermitian operator
 # :math:`A` that specifies the expectation value being evaluated. This
 # choice later allows us to easily evaluate several expectation values
-# without having to define a new qnode each time.
+# without having to define a new QNode each time.
+#
+# Since we will be optimizing using PyTorch, we configure the QNode
+# to use the PyTorch interface:
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="torch")
 def circuit(params, A=None):
 
     # repeatedly apply each layer in the circuit
@@ -130,13 +140,13 @@ def circuit(params, A=None):
 def cost_fn(params):
     cost = 0
     for k in range(3):
-        cost += np.abs(circuit(params, A=Paulis[k]) - bloch_v[k])
+        cost += torch.abs(circuit(params, A=Paulis[k]) - bloch_v[k])
 
     return cost
 
 
 # set up the optimizer
-opt = qml.AdamOptimizer()
+opt = torch.optim.Adam([params], lr=0.1)
 
 # number of steps in the optimization routine
 steps = 200
@@ -150,16 +160,18 @@ print("Cost after 0 steps is {:.4f}".format(cost_fn(params)))
 
 # optimization begins
 for n in range(steps):
-    params = opt.step(cost_fn, params)
-    current_cost = cost_fn(params)
+    opt.zero_grad()
+    loss = cost_fn(params)
+    loss.backward()
+    opt.step()
 
     # keeps track of best parameters
-    if current_cost < best_cost:
+    if loss < best_cost:
         best_params = params
 
     # Keep track of progress every 10 steps
     if n % 10 == 9 or n == steps - 1:
-        print("Cost after {} steps is {:.4f}".format(n + 1, current_cost))
+        print("Cost after {} steps is {:.4f}".format(n + 1, loss))
 
 # calculate the Bloch vector of the output state
 output_bloch_v = np.zeros(3)
