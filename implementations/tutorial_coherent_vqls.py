@@ -68,7 +68,7 @@ circuit, i.e., a unitary circuit :math:`V` depending on a finite number of class
     |x \rangle = V(w) |0\rangle.
 
 The parameters should be optimized in order to maximize the overlap between the quantum states
-:math:`|\Psi\rangle` and :math:`|b\rangle`. This suggests to define the following cost function:
+:math:`|\Psi\rangle` and :math:`|b\rangle`. We define the following cost function,
 
 .. math::
 
