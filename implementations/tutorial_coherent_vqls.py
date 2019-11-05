@@ -186,19 +186,14 @@ solution state, i.e., we can use the following simple ansatz:
 In the code presented below we solve this particular problem, by following the general scheme of the CVQLS previously discussed.
 Eventually we will compare the quantum solution with the classical one.
 
+General setup
+-------------
+This Python code requires *PennyLane* and the plotting library *matplotlib*.
+
 """
 
-
-##############################################################################
-# General setup
-# ------------------------
-# This Python code requires *PennyLane* and the plotting library *matplotlib*.
-
-# Pennylane
 import pennylane as qml
 from pennylane import numpy as np
-
-# Plotting
 import matplotlib.pyplot as plt
 
 ##############################################################################
