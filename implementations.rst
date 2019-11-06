@@ -71,7 +71,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Margin Classifier on multiple QPUs
-    :figure: implementations/multi_qpu_classification/iris_training.png
+    :figure: implementations/multi_qpu_classification/margin_2.png
     :description: :doc:`Margin classifier on multiple QPUs <app/tutorial_multi_qpu_classifier>`
 
 :html:`</div><div style='clear:both'></div>`
