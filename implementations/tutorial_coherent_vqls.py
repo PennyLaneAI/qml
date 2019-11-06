@@ -273,7 +273,8 @@ def CA_all():
 
 
 def U_b():
-    """Unitary matrix rotating the system ground state to the problem vector |b> = U_b |0>."""
+    """Unitary matrix rotating the system ground state to the 
+    problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
 
