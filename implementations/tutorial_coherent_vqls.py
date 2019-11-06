@@ -376,7 +376,7 @@ def ancilla_ground(weights):
 #
 # In order to variationally solve our linear problem, we first define the cost function
 # :math:`C = 1- |\langle b | \Psi \rangle|^2` that we are going to minimize.
-# As explained above, we express it in terms of expectation values thorugh the Bayes' theorem.
+# As explained above, we express it in terms of expectation values through Bayes' theorem.
 
 
 def cost(weights):
