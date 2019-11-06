@@ -236,7 +236,8 @@ sqrt_c = np.sqrt(c)
 
 
 def U_c():
-    """Unitary matrix rotating the ground state of the ancillary qubits to |sqrt(c)> = U_c |0>."""
+    """Unitary matrix rotating the ground state of the ancillary qubits 
+    to |sqrt(c)> = U_c |0>."""
     # Circuit mapping |00> to sqrt_c[0] |00> + sqrt_c[1] |01> + sqrt_c[2] |10>
     qml.RY(-2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
     qml.CRY(-2 * np.arctan(sqrt_c[2] / sqrt_c[1]), wires=[ancilla_idx, ancilla_idx + 1])
