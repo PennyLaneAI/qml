@@ -158,7 +158,7 @@ So, with sufficiently many shots of the previous experiment, one can directly es
 the cost function of the problem.
 
 Importantly, the operations of steps 7 and 8 commute. Therefore all the measurements can be
-delayed at the end of the quantum circuit as represented in the figure at the top of this tutorial,
+delayed until the end of the quantum circuit (as shown in the figure at the top of this tutorial),
 making the structure of the experiment more straightforward.  
 
 A simple example
