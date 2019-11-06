@@ -316,7 +316,8 @@ def variational_block(weights):
 
 
 def full_circuit(weights):
-    """Full quantum circuit necessary for the CVQLS protocol, without the final measurement."""
+    """Full quantum circuit necessary for the CVQLS protocol, 
+    without the final measurement."""
     # U_c applied to the ancillary qubits.
     U_c()
 
