@@ -165,7 +165,7 @@ A simple example
 ^^^^^^^^^^^^^^^^
 
 In this tutorial we apply the previous theory to the following simple example 
-based on a system of 3 qubits, which was already considered in Ref. [1] and also reproduced in PannyLane (VQLS):
+based on a system of 3 qubits, which was already considered in Ref. [1] and also reproduced in PennyLane (VQLS):
 
 .. math::
         \begin{align}
