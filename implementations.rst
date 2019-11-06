@@ -73,6 +73,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :tooltip: Variational Quantum Linear Solver
     :figure: implementations/vqls/vqls_zoom.png
     :description: :doc:`app/tutorial_vqls`
+    
+.. customgalleryitem::
+    :tooltip: Coherent implementation of a variational quantum linear solver
+    :figure: implementations/coherent_vqls/cvqls_zoom.png
+    :description: :doc:`app/tutorial_coherent_vqls`
 
 :html:`</div><div style='clear:both'></div>`
 
@@ -95,3 +100,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_rotoselect
     app/tutorial_doubly_stochastic
     app/tutorial_vqls
+    app/tutorial_coherent_vqls
