@@ -92,7 +92,7 @@ The problem of coherently applying a liner combination of unitary operations has
 and here we follow a very similar approach.
 
 Without loss of generality we can assume that the coefficients :math:`c=(c_1, c_2, \dots c_L)` appearing
-in the definition of :math:`A` represent a positive and normalized probability distribution. i.e.,
+in the definition of :math:`A` represent a positive and normalized probability distribution, i.e.,
 
 .. math::
     
