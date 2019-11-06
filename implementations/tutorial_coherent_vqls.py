@@ -200,15 +200,15 @@ import matplotlib.pyplot as plt
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-n_qubits = 3                # Number of system qubits.
+n_qubits = 3                # Number of system qubits
 m = 2                       # Number of ancillary qubits
-n_shots = 10 ** 6           # Number of quantum measurements.
-tot_qubits = n_qubits + m   # System + ancillary qubits.
-ancilla_idx = n_qubits      # Index of the first ancillary qubit.
-steps = 10                  # Number of optimization steps.
-eta = 0.8                   # Learning rate.
-q_delta = 0.001             # Initial spread of random quantum weights.
-rng_seed = 0                # Seed for random number generator.
+n_shots = 10 ** 6           # Number of quantum measurements
+tot_qubits = n_qubits + m   # System + ancillary qubits
+ancilla_idx = n_qubits      # Index of the first ancillary qubit
+steps = 10                  # Number of optimization steps
+eta = 0.8                   # Learning rate
+q_delta = 0.001             # Initial spread of random quantum weights
+rng_seed = 0                # Seed for random number generator
 
 
 ##############################################################################
@@ -298,11 +298,11 @@ def U_b():
 
 def variational_block(weights):
     """Variational circuit mapping the ground state |0> to the ansatz state |x>."""
-    # We first prepare an equal superposition of all the states of the computational basis.
+    # We first prepare an equal superposition of all the states of the computational basis
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
 
-    # A very minimal variational circuit.
+    # A very minimal variational circuit
     for idx, element in enumerate(weights):
         qml.RY(element, wires=idx)
 
@@ -318,20 +318,20 @@ def variational_block(weights):
 def full_circuit(weights):
     """Full quantum circuit necessary for the CVQLS protocol, 
     without the final measurement."""
-    # U_c applied to the ancillary qubits.
+    # U_c applied to the ancillary qubits
     U_c()
 
     # Variational circuit generating a guess for the solution vector |x>
     variational_block(weights)
 
-    # Application of all the controlled-unitaries CA_l associated to the problem matrix A.
+    # Application of all the controlled-unitaries CA_l associated to the problem matrix A
     CA_all()
 
-    # Adjoint of U_b, where U_b |0> = |b>.
+    # Adjoint of U_b, where U_b |0> = |b>
     # For this particular problem adjoint(U_b)=U_b
     U_b()
 
-    # Adjoint of U_c, applied to the ancillary qubits.
+    # Adjoint of U_c, applied to the ancillary qubits
     U_c_dagger()
 
 
@@ -355,7 +355,7 @@ dev = qml.device("default.qubit", wires=tot_qubits)
 def global_ground(weights):
     # Circuit gates
     full_circuit(weights)
-    # Projector on the global ground state.
+    # Projector on the global ground state
     P = np.zeros((2 ** tot_qubits, 2 ** tot_qubits))
     P[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P, wires=range(tot_qubits)))
@@ -364,7 +364,7 @@ def global_ground(weights):
 def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
-    # Projector on the ground state of the ancillary system.
+    # Projector on the ground state of the ancillary system
     P_anc = np.zeros((2 ** m, 2 ** m))
     P_anc[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P_anc, wires=range(n_qubits, tot_qubits)))
