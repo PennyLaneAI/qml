@@ -17,7 +17,7 @@ at https://pennylane.ai/qml. Content includes:
 
 ## Contributing
 
-You can contribute by submitting a tutorial or an implementation of a recent
+You can contribute by submitting a tutorial or a demonstration of a recent
 quantum machine learning paper/result.
 
 ### Adding tutorials and implementations
