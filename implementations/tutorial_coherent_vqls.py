@@ -339,7 +339,7 @@ def full_circuit(weights):
 # To estimate the overlap of the ground state with the post-selected state, one could
 # directly make use of the measurement samples. However, since we want to optimize the cost
 # function, it is useful to express everything in terms of expectation values through 
-# the Bayes' theorem:
+# Bayes' theorem:
 #
 # .. math::
 #   |\langle b | \Psi \rangle|^2=
