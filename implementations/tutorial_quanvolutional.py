@@ -19,28 +19,30 @@ General setup
 This Python code requires *PennyLane* with the *TensorFlow* interface and the plotting library *matplotlib*.
 """
 
-# Pennylane
 import pennylane as qml
 from pennylane import numpy as np
+from pennylane.templates.layers import RandomLayer
 
-# TensorFlow and Keras
 import tensorflow as tf
 from tensorflow import keras
 
-# Plotting
 import matplotlib.pyplot as plt
 
-
-
+import time 
+init_time = time.time()
 
 ##############################################################################
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 n_qubits = 3    # Number of system qubits.
-num_epochs = 1  # Number of optimization epochs
-eta = 0.01      # Learning rate
-rng_seed = 0    # Seed for random number generator
+n_epochs = 40   # Number of optimization epochs
+eta = 0.05      # Learning rate
+n_gates = 8     # Number of random gates
+# rng_seed = 0  # Seed for random number generator
+n_train = 50    # Size of train and test datasets
+n_test = 30     # Size of train and test datasets
+
 tf.keras.backend.set_floatx('float64')
 
 ##############################################################################
@@ -49,11 +51,17 @@ tf.keras.backend.set_floatx('float64')
 mnist_dataset = keras.datasets.mnist
 (train_images, train_labels), (test_images, test_labels) = mnist_dataset.load_data()
 
+# Reduce size of dataset
+train_images = train_images[:n_train]
+train_labels = train_labels[:n_train]
+test_images = test_images[:n_test]
+test_labels = test_labels[:n_test]
+
 # Normalize pixel values from 0 to 1.
 train_images = train_images / 255.0
 test_images = test_images / 255.0
 
-# Add a dimension for convolution channels
+# Add extra dimension for convolution channels
 train_images = train_images[..., tf.newaxis]
 test_images = test_images[..., tf.newaxis]
 
@@ -64,65 +72,81 @@ test_images = test_images[..., tf.newaxis]
 
 dev = qml.device('default.qubit', wires=4)
 @qml.qnode(dev)
-def circuit(phi):
-    qml.RY(phi[0], wires=0)
-    qml.RY(phi[1], wires=1)
-    qml.RY(phi[2], wires=2)
-    qml.RY(phi[3], wires=3)
+def circuit(phi=None):
+    # Encoding of 4 classical input values
+    qml.RY(np.pi * phi[0], wires=0)
+    qml.RY(np.pi * phi[1], wires=1)
+    qml.RY(np.pi * phi[2], wires=2)
+    qml.RY(np.pi * phi[3], wires=3)
+    # Random quantum circuit
+    RandomLayer(list(range(n_gates)), wires=list(range(4)), seed=42)
+    # Measurement producing 4 classical output values
     return (
-    qml.expval(qml.PauliZ(0)), 
-    qml.expval(qml.PauliZ(1)), 
-    qml.expval(qml.PauliZ(2)), 
-    qml.expval(qml.PauliZ(3))
+        qml.expval(qml.PauliZ(0)), 
+        qml.expval(qml.PauliZ(1)), 
+        qml.expval(qml.PauliZ(2)), 
+        qml.expval(qml.PauliZ(3))
     )
 
 
-q = tf.Variable([0.3, 0.3, 0.3, 0.3], dtype=tf.float64)
-
 def quanv(image):
     'Convolves the input image with many applications of the same quantum circuit.'
-    out = np.zeros((28, 28, 4))
-    # Loop over image coordinates
-    for j in range(28):
-        for k in range(28):
-            # Process a 2X2 region of the image with a quantum circuit
-            q_results = circuit([image[j, k, 0], image[j, k + 1, 0], image[j, k, 0], image[j, k, 0]])
-            # Assign each expectation value to a different channel of the pixel (j, k)
-            for c in range(4)
-                out[j, k, c] = q_results[c]
+    out = np.zeros((14, 14, 4))
+    # Loop over input image coordinates
+    for j in range(0, 28, 2):
+        for k in range(2, 28, 2):
+            # Process a squared 2x2 region of the image with a quantum circuit
+            q_results = circuit(phi=[image[j, k, 0], image[j, (k + 1) % 28, 0], image[(j + 1) % 28, k, 0], image[(j+ 1) % 28, (k + 1) % 28, 0]])
+            # Assign quantum expectation values to different channels of the output pixel (j/2, k/2)
+            for c in range(4):
+                out[j // 2, k // 2, c] = q_results[c]
     return out
 
-img_in = train_images[7]
-img_out = quanv(img_in)
+q_train_images = []
+print('Quantum preprocessing of train images:')
+for idx, img in enumerate(train_images):
+    print('{}/{}        '.format(idx +1,n_train), end='\r')
+    q_train_images.append(quanv(img))
+q_train_images = np.asarray(q_train_images)
 
-print('in_shape', img_in.shape)
-print('out_shape', img_out.shape)
+q_test_images = []
+print('\nQuantum preprocessing of test images:')
+for idx, img in enumerate(test_images):
+    print('{}/{}        '.format(idx +1,n_test), end='\r')
+    q_test_images.append(quanv(img))
+q_test_images = np.asarray(q_test_images)
 
 
-plt.imshow(img_in[:,:,0],  cmap='gray')
-plt.show()
-plt.imshow(img_out[:,:,0],  cmap='gray')
-plt.show()
-
-"""
 ##############################################################################
-# Custom hybrid model
+# Hybrid Model
 
-inputs = keras.Input(shape=(28, 28, 1))   # Returns an input placeholder
-x = quanv(inputs)
-x = keras.layers.Flatten()(x)
-predictions = keras.layers.Dense(10, activation='softmax')(x)
-
-model = keras.Model(inputs=inputs, outputs=predictions)
+model = keras.models.Sequential([
+  #keras.layers.Conv2D(4, 4, activation='relu'),
+  tf.keras.layers.MaxPool2D(4),
+  keras.layers.Flatten(),
+  keras.layers.Dense(10, activation='softmax')
+])
 
 model.compile(optimizer=keras.optimizers.SGD(learning_rate=eta),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Trains for 5 epochs
-model.fit(train_images, train_labels, epochs=1)
+# Training
+history = model.fit(q_train_images, train_labels, validation_data=(q_test_images, test_labels), batch_size=4, epochs=n_epochs, verbose=True)
 
-"""
+print('Training completed in {} seconds.'.format(time.time() - init_time))
+
+plt.style.use("seaborn")
+plt.plot(history.history['loss'], "b", label="Train")
+plt.plot(history.history['val_loss'], "g", label="Test")
+plt.ylabel("Loss")
+plt.xlabel("Epoch")
+plt.legend()
+plt.show()
+
+
+
+
 ##############################################################################
 # References
 # ----------
