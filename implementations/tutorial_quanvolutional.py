@@ -35,15 +35,17 @@ init_time = time.time()
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-n_qubits = 3    # Number of system qubits.
 n_epochs = 40   # Number of optimization epochs
-eta = 0.05      # Learning rate
+eta = 0.03      # Learning rate
 n_gates = 8     # Number of random gates
-# rng_seed = 0  # Seed for random number generator
 n_train = 50    # Size of train and test datasets
 n_test = 30     # Size of train and test datasets
 
+
+SAVE_PATH = 'quanvolution/'
 tf.keras.backend.set_floatx('float64')
+np.random.seed(0)      # Seed for NumPy random number generator
+tf.random.set_seed(0)  # Seed for TensorFlow random number generator
 
 ##############################################################################
 # We import the MNIST dataset from *Keras*.
@@ -102,6 +104,7 @@ def quanv(image):
                 out[j // 2, k // 2, c] = q_results[c]
     return out
 
+
 q_train_images = []
 print('Quantum preprocessing of train images:')
 for idx, img in enumerate(train_images):
@@ -116,29 +119,56 @@ for idx, img in enumerate(test_images):
     q_test_images.append(quanv(img))
 q_test_images = np.asarray(q_test_images)
 
+# Save pre-processed images
+np.save(SAVE_PATH + 'q_train_images.npy', q_train_images) 
+np.save(SAVE_PATH + 'q_test_images.npy', q_test_images) 
+
+
+# Load pre-processed images
+q_train_images = np.load(SAVE_PATH + 'q_train_images.npy') 
+q_test_images = np.load(SAVE_PATH + 'q_test_images.npy') 
 
 ##############################################################################
 # Hybrid Model
 
-model = keras.models.Sequential([
-  #keras.layers.Conv2D(4, 4, activation='relu'),
-  tf.keras.layers.MaxPool2D(4),
+q_model = keras.models.Sequential([
+  #tf.keras.layers.MaxPool2D(2),
   keras.layers.Flatten(),
+  keras.layers.Dense(128, activation='relu'),
   keras.layers.Dense(10, activation='softmax')
 ])
 
-model.compile(optimizer=keras.optimizers.SGD(learning_rate=eta),
+q_model.compile(optimizer=keras.optimizers.SGD(learning_rate=eta),
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+c_model = keras.models.Sequential([
+  keras.layers.Flatten(),
+  keras.layers.Dense(128, activation='relu'),
+  keras.layers.Dense(10, activation='softmax')
+])
+
+c_model.compile(optimizer=keras.optimizers.SGD(learning_rate=eta),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 # Training
-history = model.fit(q_train_images, train_labels, validation_data=(q_test_images, test_labels), batch_size=4, epochs=n_epochs, verbose=True)
+q_history = q_model.fit(q_train_images, train_labels, validation_data=(q_test_images, test_labels), batch_size=4, epochs=n_epochs)
+c_history = c_model.fit(train_images, train_labels, validation_data=(test_images, test_labels), batch_size=4, epochs=n_epochs)
 
 print('Training completed in {} seconds.'.format(time.time() - init_time))
 
 plt.style.use("seaborn")
-plt.plot(history.history['loss'], "b", label="Train")
-plt.plot(history.history['val_loss'], "g", label="Test")
+plt.plot(q_history.history['val_accuracy'], "b", label="Hybrid")
+plt.plot(c_history.history['val_accuracy'], "g", label="Classical")
+plt.ylabel("Accuracy")
+plt.xlabel("Epoch")
+plt.legend()
+plt.show()
+
+plt.style.use("seaborn")
+plt.plot(q_history.history['val_loss'], "b", label="Hybrid")
+plt.plot(c_history.history['val_loss'], "g", label="Classical")
 plt.ylabel("Loss")
 plt.xlabel("Epoch")
 plt.legend()
