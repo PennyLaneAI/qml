@@ -99,3 +99,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_rotoselect
     app/tutorial_doubly_stochastic
     app/tutorial_vqls
+    app/tutorial_quanvolution

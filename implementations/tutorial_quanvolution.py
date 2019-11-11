@@ -1,5 +1,5 @@
 r"""
-.. _quanvolutional:
+.. _quanvolution:
 
 Quanvolutional Neural Networks
 ==============================
