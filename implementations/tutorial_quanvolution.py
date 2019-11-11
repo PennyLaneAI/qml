@@ -26,10 +26,6 @@ from pennylane.templates.layers import RandomLayer
 import tensorflow as tf
 from tensorflow import keras
 
-import matplotlib.pyplot as plt
-
-import time 
-init_time = time.time()
 
 ##############################################################################
 # Setting of the main hyper-parameters of the model
@@ -38,14 +34,13 @@ init_time = time.time()
 n_epochs = 30   # Number of optimization epochs
 eta = 0.05      # Learning rate
 n_gates = 4     # Number of random gates
-n_train = 50    # Size of train and test datasets
-n_test = 30     # Size of train and test datasets
+n_train = 50    # Size of train dataset
+n_test = 30     # Size of test dataset
 
-
-SAVE_PATH = 'quanvolution/'
-tf.keras.backend.set_floatx('float64')
-np.random.seed(0)      # Seed for NumPy random number generator
-tf.random.set_seed(0)  # Seed for TensorFlow random number generator
+SAVE_PATH = 'quanvolution/' # Data saving folder
+PREPROCESS = True           # If False, load data from SAVE_PATH
+np.random.seed(0)           # Seed for NumPy random number generator
+tf.random.set_seed(0)       # Seed for TensorFlow random number generator
 
 ##############################################################################
 # We import the MNIST dataset from *Keras*.
@@ -59,7 +54,7 @@ train_labels = train_labels[:n_train]
 test_images = test_images[:n_test]
 test_labels = test_labels[:n_test]
 
-# Normalize pixel values from 0 to 1.
+# Normalize pixel values from 0 to 1
 train_images = train_images / 255.0
 test_images = test_images / 255.0
 
@@ -104,25 +99,25 @@ def quanv(image):
                 out[j // 2, k // 2, c] = q_results[c]
     return out
 
-"""
-q_train_images = []
-print('Quantum preprocessing of train images:')
-for idx, img in enumerate(train_images):
-    print('{}/{}        '.format(idx +1,n_train), end='\r')
-    q_train_images.append(quanv(img))
-q_train_images = np.asarray(q_train_images)
+if PREPROCESS == True:
+    q_train_images = []
+    print('Quantum preprocessing of train images:')
+    for idx, img in enumerate(train_images):
+        print('{}/{}        '.format(idx + 1, n_train), end='\r')
+        q_train_images.append(quanv(img))
+    q_train_images = np.asarray(q_train_images)
 
-q_test_images = []
-print('\nQuantum preprocessing of test images:')
-for idx, img in enumerate(test_images):
-    print('{}/{}        '.format(idx +1,n_test), end='\r')
-    q_test_images.append(quanv(img))
-q_test_images = np.asarray(q_test_images)
+    q_test_images = []
+    print('\nQuantum preprocessing of test images:')
+    for idx, img in enumerate(test_images):
+        print('{}/{}        '.format(idx + 1, n_test), end='\r')
+        q_test_images.append(quanv(img))
+    q_test_images = np.asarray(q_test_images)
 
-# Save pre-processed images
-np.save(SAVE_PATH + 'q_train_images.npy', q_train_images) 
-np.save(SAVE_PATH + 'q_test_images.npy', q_test_images) 
-"""
+    # Save pre-processed images
+    np.save(SAVE_PATH + 'q_train_images.npy', q_train_images) 
+    np.save(SAVE_PATH + 'q_test_images.npy', q_test_images) 
+
 
 # Load pre-processed images
 q_train_images = np.load(SAVE_PATH + 'q_train_images.npy') 
@@ -149,30 +144,38 @@ c_model.compile(optimizer=keras.optimizers.SGD(learning_rate=eta),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
+##############################################################################
 # Training
-q_history = q_model.fit(q_train_images, train_labels, validation_data=(q_test_images, test_labels), batch_size=4, epochs=n_epochs)
-c_history = c_model.fit(train_images, train_labels, validation_data=(test_images, test_labels), batch_size=4, epochs=n_epochs)
+# --------
 
-print('Training completed in {} seconds.'.format(time.time() - init_time))
+q_history = q_model.fit(q_train_images, train_labels, validation_data=(q_test_images, test_labels), batch_size=4, epochs=n_epochs, verbose=2)
+c_history = c_model.fit(train_images, train_labels, validation_data=(test_images, test_labels), batch_size=4, epochs=n_epochs, verbose=2)
+
+
+##############################################################################
+# Results
+# -------
+
+import matplotlib.pyplot as plt
 
 plt.style.use("seaborn")
-plt.plot(q_history.history['val_accuracy'], "-ob", label="With quantum layer")
-plt.plot(c_history.history['val_accuracy'], "-og", label="Without quantum layer")
-plt.ylabel("Accuracy")
-plt.ylim([0, 1])
-plt.xlabel("Epoch")
-plt.legend()
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 9))
+
+ax1.plot(q_history.history['val_accuracy'], "-ob", label="With quantum layer")
+ax1.plot(c_history.history['val_accuracy'], "-og", label="Without quantum layer")
+ax1.set_ylabel("Accuracy")
+ax1.set_ylim([0, 1])
+ax1.set_xlabel("Epoch")
+ax1.legend()
+
+ax2.plot(q_history.history['val_loss'],  "-ob", label="With quantum layer")
+ax2.plot(c_history.history['val_loss'],  "-og", label="Without quantum layer")
+ax2.set_ylabel("Loss")
+ax2.set_ylim(top=2.5)
+ax2.set_xlabel("Epoch")
+ax2.legend()
+plt.tight_layout()
 plt.show()
-
-plt.plot(q_history.history['val_loss'],  "-ob", label="Hybrid")
-plt.plot(c_history.history['val_loss'],  "-og", label="Classical")
-plt.ylabel("Loss")
-plt.ylim(top=4)
-plt.xlabel("Epoch")
-plt.legend()
-plt.show()
-
-
 
 
 ##############################################################################
