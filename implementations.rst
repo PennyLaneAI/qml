@@ -74,6 +74,10 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/vqls/vqls_zoom.png
     :description: :doc:`app/tutorial_vqls`
 
+.. customgalleryitem::
+    :tooltip: Pre-process images with a quantum convolution
+    :description: :doc:`app/tutorial_quanvolution`
+
 :html:`</div><div style='clear:both'></div>`
 
 
