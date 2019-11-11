@@ -26,6 +26,7 @@ from pennylane.templates.layers import RandomLayer
 import tensorflow as tf
 from tensorflow import keras
 
+import matplotlib.pyplot as plt
 
 ##############################################################################
 # Setting of the main hyper-parameters of the model
@@ -91,7 +92,7 @@ def quanv(image):
     out = np.zeros((14, 14, 4))
     # Loop over input image coordinates
     for j in range(0, 28, 2):
-        for k in range(2, 28, 2):
+        for k in range(0, 28, 2):
             # Process a squared 2x2 region of the image with a quantum circuit
             q_results = circuit(phi=[image[j, k, 0], image[j, (k + 1) % 28, 0], image[(j + 1) % 28, k, 0], image[(j+ 1) % 28, (k + 1) % 28, 0]])
             # Assign quantum expectation values to different channels of the output pixel (j/2, k/2)
@@ -122,6 +123,28 @@ if PREPROCESS == True:
 # Load pre-processed images
 q_train_images = np.load(SAVE_PATH + 'q_train_images.npy') 
 q_test_images = np.load(SAVE_PATH + 'q_test_images.npy') 
+
+##############################################################################
+# Let us visualize the effect of the quantum convolution layer on a few samples
+
+n_samples = 4
+n_channels = 4
+fig, axes = plt.subplots(1 + n_channels, n_samples, figsize=(10, 10))
+for k in range(n_samples):
+    axes[0, 0].set_ylabel('Input')
+    if k != 0:
+        axes[0, k].yaxis.set_visible(False)
+    axes[0, k].imshow(train_images[k, :, :, 0], cmap="gray")
+
+    # Plot all output channels
+    for c in range(n_channels):
+        axes[c + 1, 0].set_ylabel('Output [ch. {}]'.format(c))
+        if k != 0:
+            axes[c, k].yaxis.set_visible(False)
+        axes[c + 1, k].imshow(q_train_images[k, :, :, c], cmap="gray")
+        
+plt.tight_layout()
+plt.show()
 
 ##############################################################################
 # Hybrid Model
@@ -176,6 +199,7 @@ ax2.set_xlabel("Epoch")
 ax2.legend()
 plt.tight_layout()
 plt.show()
+
 
 
 ##############################################################################
