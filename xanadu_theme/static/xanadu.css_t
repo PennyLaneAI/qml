@@ -1718,6 +1718,10 @@ span.eqno {
   footer.page-footer .footer-copyright {
     font-size: x-small;
   }
+  .lSSlideOuter {
+      margin-left: 0px !important;
+      width: 100% !important;
+  }
 
 }
 
@@ -1766,6 +1770,10 @@ span.eqno {
 
   .comment-container {
     display: none;
+  }
+  .lSSlideOuter {
+      margin-left: 0px !important;
+      width: 100% !important;
   }
 }
 
@@ -1920,6 +1928,13 @@ footer.page-footer .footer-copyright {
     background-color: white;
 }
 
+#main-cards .card h3 {
+    margin-top: 20px;
+}
+#main-cards .card h5 {
+    margin-top: 10px;
+}
+
 
 .card:hover {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.2)!important;
@@ -1957,6 +1972,11 @@ footer.page-footer .footer-copyright {
     padding-top: 20px;
     position: relative;
     background-image: linear-gradient(to right,#fff6ea 0,#ffefe9 100%);
+}
+
+.lSSlideOuter {
+    margin-left: calc(100% - 980px);
+    width: 150%;
 }
 
 #light-slider .card .card-body:after {

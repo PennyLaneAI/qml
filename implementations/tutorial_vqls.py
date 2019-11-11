@@ -241,7 +241,7 @@ def CA(idx):
 # which is just a single layer of qubit rotations
 # :math:`R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2)`.
 # For solving more complex problems, we suggest to use more expressive circuits as,
-# e.g., the PennyLane ``StronglyEntanglingLayers`` template.
+# e.g., the PennyLane :func:`~.StronglyEntanglingLayers` template.
 
 
 def variational_block(weights):
@@ -261,7 +261,7 @@ def variational_block(weights):
 #
 # We first initialize a PennyLane device with the ``default.qubit`` backend.
 #
-# As a second step, we define a PennyLane ``qnode`` representing a model of the actual quantum computation.
+# As a second step, we define a PennyLane ``QNode`` representing a model of the actual quantum computation.
 #
 # The circuit is based on the
 # `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`_
@@ -438,7 +438,8 @@ A_inv = np.linalg.inv(A_num)
 x = np.dot(A_inv, b)
 
 ##############################################################################
-# Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
+# Finally, in order to compare x with the quantum state :math:`|x\rangle`, we normalize
+# and square its elements.
 c_probs = (x / np.linalg.norm(x)) ** 2
 
 ##############################################################################
