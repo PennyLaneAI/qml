@@ -6,12 +6,22 @@ Multiclass margin classifier
 
 In this tutorial, we show how to use the PyTorch interface for PennyLane 
 to implement a multiclass variational classifier. We consider the iris database
-from UCI, which 4 features and 3 classes. We use a multiple one-vs-all
+from UCI, which has 4 features and 3 classes. We use multiple one-vs-all
 classifiers with a margin loss (see `Multiclass Linear SVM
 <http://cs231n.github.io/linear-classify/>`__) to classify data. Each classifier is implemented
 on an individual variational circuit, whose architecture is inspired by
 `Farhi and Neven (2018) <https://arxiv.org/abs/1802.06002>`__ as well as
 `Schuld et al. (2018) <https://arxiv.org/abs/1804.00633>`__.
+
+|
+
+.. figure:: ../implementations/multi_qpu_classification/margin_2.png
+    :align: center
+    :width: 100%
+    :target: javascript:void(0)
+
+|
+
 
 Imports
 ~~~~~~~
@@ -27,7 +37,7 @@ from torch.autograd import Variable
 import torch.optim as optim
 
 
-##############################################################################
+#################################################################################
 # Constants
 # ~~~~~~~~~
 #
@@ -44,19 +54,21 @@ num_layers = 6
 total_iterations = 100
 
 
-##############################################################################
+#################################################################################
 # Quantum Device
 # ~~~~~~~~~~~~~~
 #
-# Recall our feature size is 7, and we plan on using amplitude embedding;
-# As such, we create a quantum device with three “wires” (or qubits).
+# Recall our feature size is 4, and we plan on using amplitude embedding;
+# This means that the each possible state's amplitude will correspond to 
+# a single feature. With 2 qubits (wires), there are 4 possible states, 
+# and as such, we can encode a feature vector of size 4.
 
 dev1 = qml.device("default.qubit", wires=num_qubits)
 dev2 = qml.device("default.qubit", wires=num_qubits)
 dev3 = qml.device("default.qubit", wires=num_qubits)
 
 
-##############################################################################
+#################################################################################
 # Quantum Circuit
 # ~~~~~~~~~~~~~~~
 #
@@ -70,11 +82,11 @@ def layer(W):
     qml.CNOT(wires=[0, 1])
 
 
-##############################################################################
+#################################################################################
 # We now define the quantum nodes that will be used. As we are implementing our
-# multiclass classifier as multiple one-vs-all classifier, we will use 3 qnodes,
+# multiclass classifier as multiple one-vs-all classifiers, we will use 3 qnodes,
 # each representing one such classifier. That is, ``circuit1`` classifies if a 
-# samples belongs to class 1 or not and so on. The circuit architecture for all
+# samples belongs to class 1 or not, and so on. The circuit architecture for all
 # 3 nodes are the same. We use the PyTorch interface for the QNodes.
 # Data is embedded in each circuit using amplitude embedding:
 
@@ -89,10 +101,10 @@ qnode2 = qml.QNode(circuit, dev2).to_torch()
 qnode3 = qml.QNode(circuit, dev3).to_torch()
 
 
-##############################################################################
-# The variational quantum circuit is parametrized by the weights. We use a classical
-# bias term that is applied after the processing the quantum circuit's output.
-# Both variational circuit weights and classical bias term are optimized.
+#################################################################################
+# The variational quantum circuit is parametrized by the weights. We use a 
+# classical bias term that is applied after processing the quantum circuit's
+# output. Both variational circuit weights and classical bias term are optimized.
 
 def variational_classifier(q_circuit, params, feat):
     weights = params[0]
@@ -121,21 +133,26 @@ def variational_classifier(q_circuit, params, feat):
 # where :math:'\Delta' denotes the margin. The margin parameter is chosen as a hyperparameter.
 # For more information: see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__
 
-def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
+def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
     loss = 0
     num_samples = len(true_labels)
-    for i, feat in enumerate(features):
+    for i, feature_vec in enumerate(feature_vecs):
+        # Compute the score given to this sample by the classifier corresponding to the
+        # true label. So for a true label of 1, get the score computed by classifer 1,
+        # which distinguishes between class 1 or not class 1.
         s_true = variational_classifier(
             q_circuits[int(true_labels[i])],
             (all_params[0][int(true_labels[i])], all_params[1][int(true_labels[i])]),
-            feat,
+            feature_vec,
         )
         s_true = s_true.float()
         li = 0
+
+        # Get the scores computed for this sample by the other classifiers
         for j in range(num_classes):
             if j != int(true_labels[i]):
                 s_j = variational_classifier(
-                    q_circuits[j], (all_params[0][j], all_params[1][j]), feat
+                    q_circuits[j], (all_params[0][j], all_params[1][j]), feature_vec
                 )
                 s_j = s_j.float()
                 li += torch.max(torch.zeros(1).float(), s_j - s_true + margin)
@@ -148,15 +165,17 @@ def multiclass_svm_loss(q_circuits, all_params, features, true_labels):
 # Classification Function
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Next, we compute the score for each class and chose the class that has the highest score
+# Next, we use the learned models to classify our samples. For a given sample, 
+# compute the score given to it by classifier i, which quantifies how likely it is that 
+# this sample belongs to class i. For each sample, return the class with the highest score
 
-def classify(q_circuits, all_params, features, labels):
+def classify(q_circuits, all_params, feature_vecs, labels):
     predicted_labels = []
-    for i, feat in enumerate(features):
+    for i, feature_vec in enumerate(feature_vecs):
         scores = [0, 0, 0]
         for c in range(num_classes):
             score = variational_classifier(
-                q_circuits[c], (all_params[0][c], all_params[1][c]), feat
+                q_circuits[c], (all_params[0][c], all_params[1][c]), feature_vec
             )
             scores[c] = float(score)
         pred_class = np.argmax(scores)
@@ -177,7 +196,7 @@ def accuracy(labels, hard_predictions):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Load in the iris dataset. Normalize the features so that the sum of the feature
-# elements squared is 1 (l2 norm is 1).
+# elements squared is 1 (:math:`ell_2` norm is 1).
 
 def load_and_process_data():
     data = np.loadtxt("multi_qpu_classification/iris.csv", delimiter=",")
@@ -193,37 +212,32 @@ def load_and_process_data():
     return X, Y
 
 # Create a train and test split. Use a seed for reproducability
-def split_data(features, Y):
+def split_data(feature_vecs, Y):
     np.random.seed(0)
     num_data = len(Y)
     num_train = int(train_split * num_data)
     index = np.random.permutation(range(num_data))
-    feats_train = features[index[:num_train]]
+    feat_vecs_train = feature_vecs[index[:num_train]]
     Y_train = Y[index[:num_train]]
-    feats_test = features[index[num_train:]]
+    feat_vecs_test = feature_vecs[index[num_train:]]
     Y_test = Y[index[num_train:]]
-    return feats_train, feats_test, Y_train, Y_test
+    return feat_vecs_train, feat_vecs_test, Y_train, Y_test
 
 
-##############################################################################
+#################################################################################
 # Training Procedure
 # ~~~~~~~~~~~~~~~~~~
 #
 # In the training procedure, we begin by first initializing randomly the parameters
 # we wish to learn (variational circuit weights and classical bias). As these are
 # the variables we wish to optimize, we set the requires_grad flag to True. We use
-# minibatch training - the average loss for a batch of samples is computed, and the
-# optimization step is based on this.
-
-def adjust_learning_rate(base_lr, optimizer, iteration):
-    adjusted_lr = base_lr*np.exp(-2*(iteration/total_iterations))
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = adjusted_lr
-    return adjusted_lr
+# minibatch training --- the average loss for a batch of samples is computed, and the
+# optimization step is based on this. Total training time with the default parameters
+# is roughly 15 minutes.
 
 def training(features, Y):
     num_data = Y.shape[0]
-    feats_train, feats_test, Y_train, Y_test = split_data(features, Y)
+    feat_vecs_train, feat_vecs_test, Y_train, Y_test = split_data(features, Y)
     num_train = Y_train.shape[0]
     q_circuits = [qnode1, qnode2, qnode3]
 
@@ -242,17 +256,17 @@ def training(features, Y):
     # train the variational classifier
     for it in range(total_iterations):
         batch_index = np.random.randint(0, num_train, (batch_size,))
-        feats_train_batch = feats_train[batch_index]
+        feat_vecs_train_batch = feat_vecs_train[batch_index]
         Y_train_batch = Y_train[batch_index]
 
         optimizer.zero_grad()
-        curr_cost = multiclass_svm_loss(q_circuits, params, feats_train_batch, Y_train_batch)
+        curr_cost = multiclass_svm_loss(q_circuits, params, feat_vecs_train_batch, Y_train_batch)
         curr_cost.backward()
         optimizer.step()
 
         # Compute predictions on train and validation set
-        predictions_train = classify(q_circuits, params, feats_train, Y_train)
-        predictions_test = classify(q_circuits, params, feats_test, Y_test)
+        predictions_train = classify(q_circuits, params, feat_vecs_train, Y_train)
+        predictions_test = classify(q_circuits, params, feat_vecs_test, Y_test)
         acc_train = accuracy(Y_train, predictions_train)
         acc_test = accuracy(Y_test, predictions_test)
 
@@ -265,9 +279,6 @@ def training(features, Y):
         train_acc.append(acc_train)
         test_acc.append(acc_test)
         
-        #adjusted_lr = adjust_learning_rate(lr_adam, optimizer, it)
-        #print("New learning rate: ", adjusted_lr)
-
     return costs, train_acc, test_acc
 
 
