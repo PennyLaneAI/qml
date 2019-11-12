@@ -14,6 +14,39 @@ machine learning model originally introduced in
 Introduction
 ------------
 
+Classical convolution
+^^^^^^^^^^^^^^^^^^^^^
+The *convolutional neural network* (CNN) is a standard model in classical machine learning which is particularely
+suitable for processing images.
+The model is based on the idea of a *convolution layer* in which, instead of processing the full input data with a global function, 
+a local convolution is applied. 
+
+For example, if the input is an image, only small regions are sequentially processed with the same linear kernel (which can followed by
+standard activation functions). The results obtained for each region are usually associated to different channels
+of a single output pixel. The union of all the output pixels results in a new image-like object, which can be further processed by
+additional layers.
+
+
+Quantum convolution
+^^^^^^^^^^^^^^^^^^^
+One can extend the same idea also to the context of quantum variational circuits. 
+Given an input image, a small region can be embedded into a quantum circuit
+producing n_c classical results which will represent n_c different channels the output pixel.
+Iterating the same procedure over many regions, one can scan the full input image, 
+producing a new image-like object. 
+
+The main difference with respect to a classical convolution is that a quantum circuit can 
+generate highly complex kernels whose computation could be, at least in principle, classically intractable.
+
+Quantum convolutions can be easily combined with classical layers, obtaining a *hybrid network*. 
+In this tutorial we follow the approach of Ref. [1] in which a fixed non-trainable quantum
+circuit is used as a "quanvolutional" layer, while subsequent classical layers 
+are trained for a specific task.
+On the other had, by leveraging the PennyLane capability of evaluating gradients of 
+quantum circuits, it should be relatively easy to implement quantum convolution layers 
+which can be variationally trained.
+
+
 General setup
 ------------------------
 This Python code requires *PennyLane* with the *TensorFlow* interface and the plotting library *matplotlib*.
