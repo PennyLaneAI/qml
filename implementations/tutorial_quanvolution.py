@@ -9,7 +9,10 @@ In this tutorial we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
 `Henderson et al. (2019) <https://arxiv.org/abs/1904.04767>`_.
 
-
+.. figure:: ../implementations/quanvolution/circuit.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
 
 Introduction
 ------------
@@ -21,7 +24,7 @@ suitable for processing images.
 The model is based on the idea of a *convolution layer* in which, instead of processing the full input data with a global function, 
 a local convolution is applied. 
 
-For example, if the input is an image, only small regions are sequentially processed with the same linear kernel (which can followed by
+For example, if the input is an image, only small regions are sequentially processed with the same linear kernel (which can be followed by
 standard activation functions). The results obtained for each region are usually associated to different channels
 of a single output pixel. The union of all the output pixels results in a new image-like object, which can be further processed by
 additional layers.
@@ -31,7 +34,7 @@ Quantum convolution
 ^^^^^^^^^^^^^^^^^^^
 One can extend the same idea also to the context of quantum variational circuits. 
 Given an input image, a small region can be embedded into a quantum circuit
-producing n_c classical results which will represent n_c different channels the output pixel.
+producing :math:`n_c` classical results which will represent :math:`n_c` different channels the output pixel.
 Iterating the same procedure over many regions, one can scan the full input image, 
 producing a new image-like object. 
 
