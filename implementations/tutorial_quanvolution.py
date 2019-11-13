@@ -34,7 +34,8 @@ Quantum convolution
 ^^^^^^^^^^^^^^^^^^^
 One can extend the same idea also to the context of quantum variational circuits. 
 Given an input image, a small region can be embedded into a quantum circuit
-producing :math:`n_c` classical results which will represent :math:`n_c` different channels the output pixel.
+producing :math:`n_c` classical results which will represent :math:`n_c` different channels of the output pixel 
+(measurements could also be classically post-processed as proposed in Ref. [1]).
 Iterating the same procedure over many regions, one can scan the full input image, 
 producing a new image-like object. 
 
