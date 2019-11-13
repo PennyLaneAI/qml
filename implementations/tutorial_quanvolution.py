@@ -32,7 +32,8 @@ additional layers.
 
 Quantum convolution
 ^^^^^^^^^^^^^^^^^^^
-One can extend the same idea also to the context of quantum variational circuits. 
+One can extend the same idea also to the context of quantum variational circuits (see the figure at the top of
+this demo). 
 Given an input image, a small region can be embedded into a quantum circuit
 producing :math:`n_c` classical results which will represent :math:`n_c` different channels of the output pixel 
 (measurements could also be classically post-processed as proposed in Ref. [1]).
@@ -45,8 +46,8 @@ generate highly complex kernels whose computation could be, at least in principl
 Quantum convolutions can be easily combined with classical layers, obtaining a *hybrid network*. 
 In this tutorial we follow the approach of Ref. [1] in which a fixed non-trainable quantum
 circuit is used as a "quanvolutional" layer, while subsequent classical layers 
-are trained for a specific task.
-On the other had, by leveraging the PennyLane capability of evaluating gradients of 
+are trained for a classification task.
+On the other hand, by leveraging the PennyLane capability of evaluating gradients of 
 quantum circuits, it should be relatively easy to implement quantum convolution layers 
 which can be variationally trained.
 
