@@ -138,7 +138,7 @@ test_images = test_images[..., tf.newaxis]
 
 dev = qml.device("default.qubit", wires=4)
 # Random circuit parameters
-rand_params = np.random.uniform(low=0, high=2 * np.pi, size=(n_layers, 4))
+rand_params = np.random.uniform(high=2 * np.pi, size=(n_layers, 4))
 
 @qml.qnode(dev)
 def circuit(phi=None):
