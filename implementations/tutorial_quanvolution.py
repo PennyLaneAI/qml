@@ -74,7 +74,7 @@ This Python code requires *PennyLane* with the *TensorFlow* interface and the pl
 
 import pennylane as qml
 from pennylane import numpy as np
-from pennylane.templates.layers import RandomLayers
+from pennylane.templates import RandomLayers
 import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
