@@ -202,7 +202,7 @@ def quanv(image):
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Since we are not going to train the quantum convolution layer, it is more
-# efficient ot apply it as a "pre-processing" layer to all the images of our dataset.
+# efficient to apply it as a "pre-processing" layer to all the images of our dataset.
 # Later an entirely classical model will be directly trained and tested on the
 # pre-processed dataset, avoiding unnecessary repetitions of quantum computations.
 #
