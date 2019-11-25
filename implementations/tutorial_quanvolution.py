@@ -142,21 +142,14 @@ dev = qml.device("default.qubit", wires=4)
 @qml.qnode(dev)
 def circuit(phi=None):
     # Encoding of 4 classical input values
-    qml.RY(np.pi * phi[0], wires=0)
-    qml.RY(np.pi * phi[1], wires=1)
-    qml.RY(np.pi * phi[2], wires=2)
-    qml.RY(np.pi * phi[3], wires=3)
+    for j in range(4):
+        qml.RY(np.pi * phi[j], wires=j)
     
     # Random quantum circuit
     RandomLayer(list(range(n_gates)), wires=list(range(4)), seed=0)
 
     # Measurement producing 4 classical output values
-    return (
-        qml.expval(qml.PauliZ(0)),
-        qml.expval(qml.PauliZ(1)),
-        qml.expval(qml.PauliZ(2)),
-        qml.expval(qml.PauliZ(3)),
-    )
+    return [qml.expval(qml.PauliZ(j)) for j in range(4)]
 
 
 ##############################################################################
