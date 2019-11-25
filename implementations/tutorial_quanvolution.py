@@ -69,7 +69,7 @@ generate highly complex kernels whose computation could be, at least in principl
     circuit is used as a "quanvolution" kernel, while the subsequent classical layers 
     are trained for the classification problem of interest.
     However, by leveraging the PennyLane capability of evaluating gradients of 
-    quantum circuits, also the quantum kernel could be trained.
+    quantum circuits, the quantum kernel could also be trained.
 
 
 General setup
