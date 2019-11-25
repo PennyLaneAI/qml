@@ -74,7 +74,7 @@ This Python code requires *PennyLane* with the *TensorFlow* interface and the pl
 
 import pennylane as qml
 from pennylane import numpy as np
-from pennylane.templates.layers import RandomLayer
+from pennylane.templates.layers import RandomLayers
 import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
@@ -85,7 +85,7 @@ import matplotlib.pyplot as plt
 
 n_epochs = 30   # Number of optimization epochs
 eta = 0.05      # Learning rate
-n_gates = 4     # Number of random gates
+n_layers = 1    # Number of random layers
 n_train = 50    # Size of the train dataset
 n_test = 30     # Size of the test dataset
 
@@ -93,7 +93,6 @@ SAVE_PATH = "quanvolution/" # Data saving folder
 PREPROCESS = True           # If False, skip quantum processing and load data from SAVE_PATH
 np.random.seed(0)           # Seed for NumPy random number generator
 tf.random.set_seed(0)       # Seed for TensorFlow random number generator
-
 
 ##############################################################################
 # Loading of the MNIST dataset
@@ -132,12 +131,14 @@ test_images = test_images[..., tf.newaxis]
 #
 # 1. an embedding layer of local :math:`R_y` rotations (with angles scaled by a factor of :math:`\pi`);
 #
-# 2. a random circuit of ``n_gates``;
+# 2. a random circuit of ``n_layers``;
 #
 # 3. a final measurement in the computational basis, estimating :math:`4` expectation values.
 
-dev = qml.device("default.qubit", wires=4)
 
+dev = qml.device("default.qubit", wires=4)
+# Random circuit parameters
+rand_params = np.random.uniform(low=0, high=2 * np.pi, size=(n_layers, 4))
 
 @qml.qnode(dev)
 def circuit(phi=None):
@@ -146,7 +147,7 @@ def circuit(phi=None):
         qml.RY(np.pi * phi[j], wires=j)
     
     # Random quantum circuit
-    RandomLayer(list(range(n_gates)), wires=list(range(4)), seed=0)
+    RandomLayers(rand_params, wires=list(range(4)))
 
     # Measurement producing 4 classical output values
     return [qml.expval(qml.PauliZ(j)) for j in range(4)]
