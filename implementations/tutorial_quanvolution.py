@@ -68,7 +68,7 @@ generate highly complex kernels whose computation could be, at least in principl
     In this tutorial we follow the approach of Ref. [1] in which a fixed non-trainable quantum
     circuit is used as a "quanvolution" kernel, while the subsequent classical layers 
     are trained for the classification problem of interest.
-    However, by leveraging the PennyLane capability of evaluating gradients of 
+    However, by leveraging the ability of PennyLane to evaluate gradients of 
     quantum circuits, the quantum kernel could also be trained.
 
 
