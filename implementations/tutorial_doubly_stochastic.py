@@ -130,7 +130,7 @@ H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]])
 
 
 def circuit(params):
-    StronglyEntanglingLayers(*params, wires=[0, 1])
+    StronglyEntanglingLayers(weights=params, wires=[0, 1])
     return expval(qml.Hermitian(H, wires=[0, 1]))
 
 
@@ -270,7 +270,7 @@ terms = np.array(
 
 @qml.qnode(dev_stochastic)
 def circuit(params, n=None):
-    StronglyEntanglingLayers(*params, wires=[0, 1])
+    StronglyEntanglingLayers(weights=params, wires=[0, 1])
     idx = np.random.choice(np.arange(5), size=n, replace=False)
     A = np.sum(terms[idx], axis=0)
     return expval(qml.Hermitian(A, wires=[0, 1]))
