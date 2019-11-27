@@ -84,7 +84,7 @@ def layer(W):
 
 #################################################################################
 # We now define the quantum nodes that will be used. As we are implementing our
-# multiclass classifier as multiple one-vs-all classifiers, we will use 3 qnodes,
+# multiclass classifier as multiple one-vs-all classifiers, we will use 3 QNodes,
 # each representing one such classifier. That is, ``circuit1`` classifies if a 
 # samples belongs to class 1 or not, and so on. The circuit architecture for all
 # 3 nodes are the same. We use the PyTorch interface for the QNodes.
