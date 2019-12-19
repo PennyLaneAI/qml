@@ -90,7 +90,7 @@ Quantum machine learning
                 <li>
                     <a href="app/tutorial_quantum_transfer_learning.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_images/transfer_learning_general.png" alt="Card image cap" style="min-width: 350px!important;">
+                          <img class="card-img-top img-fluid" src="_images/transfer_images.png" alt="Card image cap" style="min-width: 350px!important;">
                           <div class="card-body">
                             <h4 class="card-title">Quantum transfer learning</h4>
                             <p class="card-text">Learn how to apply a machine learning method, known as transfer learning, to a hybrid classical-quantum image classifier.</p>

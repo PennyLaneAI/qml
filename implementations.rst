@@ -81,7 +81,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Quantum transfer learning
-    :figure: implementations/quantum_transfer_learning/transfer_learning_general.png
+    :figure: implementations/quantum_transfer_learning/transfer_images.png
     :description: :doc:`app/tutorial_quantum_transfer_learning`
 
 :html:`</div><div style='clear:both'></div>`
