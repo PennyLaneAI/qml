@@ -29,7 +29,7 @@ and :math:`B`, independently from their quantum or classical physical nature.
 |
 
 
-.. figure:: ../../examples/figures/transfer_learning_general.png
+.. figure:: ../implementations/figures/transfer_learning_general.png
    :scale: 45%
    :alt: transfer_general
    :align: center
@@ -89,7 +89,7 @@ We focus on the CQ transfer learning scheme discussed in the previous section an
 
 A graphical representation of the full data processing pipeline is given in the figure below.
 
-.. figure:: ../../examples/figures/transfer_learning_c2q.png
+.. figure:: ../implementations/transfer_learning_c2q.png
    :scale: 55%
    :alt: transfer_c2q
    :align: center
@@ -172,7 +172,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # .. note::
 #     The dataset containing images of *ants* and *bees* can be downloaded
 #     `here <https://download.pytorch.org/tutorial/hymenoptera_data.zip>`_ and
-#     should be extracted in the subfolder ``[working directory]/data/hymenoptera_data``.
+#     should be extracted in the subfolder ``../_data/hymenoptera_data``.
 #
 # This is a very small dataset (roughly 250 images), too small for training from scratch a
 # classical or quantum model, however it is enough when using *transfer learning* approach.
@@ -329,11 +329,11 @@ def q_net(q_in, q_weights_flat):
 #
 # This is a concatenation of:
 #
-#  * A classical pre-processing layer (``nn.Linear``).
-#  * A classical activation function (``torch.tanh``).
-#  * A constant ``np.pi/2.0`` scaling.
-#  * The previously defined quantum circuit (``q_net``).
-#  * A classical post-processing layer (``nn.Linear``).
+# * A classical pre-processing layer (``nn.Linear``).
+# * A classical activation function (``torch.tanh``).
+# * A constant ``np.pi/2.0`` scaling.
+# * The previously defined quantum circuit (``q_net``).
+# * A classical post-processing layer (``nn.Linear``).
 #
 # The input of the module is a batch of vectors with 512 real parameters (features) and
 # the output is a batch of vectors with two real outputs (associated with the two classes
@@ -367,9 +367,9 @@ class Quantumnet(nn.Module):
 # We are finally ready to build our full hybrid classical-quantum network.
 # We follow the *transfer learning* approach:
 #
-#  1. First load the classical pre-trained network *ResNet18* from the ``torchvision.models`` zoo.
-#  2. Freeze all the weights since they should not be trained.
-#  3. Replace the last fully connected layer with our trainable dressed quantum circuit (``Quantumnet``).
+# 1. First load the classical pre-trained network *ResNet18* from the ``torchvision.models`` zoo.
+# 2. Freeze all the weights since they should not be trained.
+# 3. Replace the last fully connected layer with our trainable dressed quantum circuit (``Quantumnet``).
 #
 # .. note::
 #   The *ResNet18* model is automatically downloaded by PyTorch and it may take several minutes (only the first time).
