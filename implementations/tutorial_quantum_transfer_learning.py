@@ -2,7 +2,7 @@ r"""
 .. _quantum_transfer_learning:
 
 Quantum transfer learning
-====================================
+=========================
 
 In this tutorial we apply a machine learning method, known as *transfer learning*, to an
 image classifier based on a hybrid classical-quantum network.
