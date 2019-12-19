@@ -12,7 +12,7 @@ This example follows the general structure of the PyTorch
 by Sasank Chilamkurthy, with the crucial difference of using a quantum circuit to perform the
 final classification task.
 
-More details on this topic can be found in the research paper [1] (`Mari et al. (2019) <https://arxiv.org/>`_).
+More details on this topic can be found in the research paper [1] (`Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_).
 
 
 Introduction
@@ -557,7 +557,7 @@ plt.show()
 # ------------
 #
 # [1] Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, and Nathan Killoran.
-# *Transfer learning in hybrid classical-quantum neural networks*. arXiv:xxxx.xxxx (2019).
+# *Transfer learning in hybrid classical-quantum neural networks*. arXiv:1912.08278 (2019).
 #
 # [2] Rajat Raina, Alexis Battle, Honglak  Lee,  Benjamin Packer, and Andrew Y Ng.
 # *Self-taught learning:  transfer learning from unlabeled data*.
