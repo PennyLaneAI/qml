@@ -152,7 +152,7 @@ num_epochs = 1              # Number of training epochs
 q_depth = 6                 # Depth of the quantum circuit (number of variational layers)
 gamma_lr_scheduler = 0.1    # Learning rate reduction applied every 10 epochs.
 q_delta = 0.01              # Initial spread of random quantum weights
-rng_seed = 1                # Seed for random number generator
+rng_seed = 0                # Seed for random number generator
 start_time = time.time()    # Start of the computation timer
 
 ##############################################################################
