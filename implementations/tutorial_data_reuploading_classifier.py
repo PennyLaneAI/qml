@@ -187,7 +187,7 @@ def circle(samples, center=[0.0, 0.0], radius=np.sqrt(2 / np.pi)):
 
     Returns:
         Xvals (array[tuple]): coordinates of points
-        Xvals (array[int]): classification labels
+        yvals (array[int]): classification labels
     """
     Xvals, yvals = [], []
 
