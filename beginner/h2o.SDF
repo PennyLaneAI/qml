@@ -1,0 +1,49 @@
+Water
+  NIST    07301310173D 1   1.00000   -76.40895
+Copyright by the U.S. Sec. Commerce on behalf of U.S.A. All rights reserved.
+  3  2 0  0  0  0  0  0  0  0999 V2000
+   -0.0211   -0.0020    0.0000 H    0  0  0  0  0  0  0  0  0  0  0  0
+    0.8345    0.4519    0.0000 O    0  0  0  0  0  0  0  0  0  0  0  0
+    1.4769   -0.2730    0.0000 H    0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0     0  0
+  2  3  1  0     0  0
+M  END
+> <COPYRIGHT>
+Collection (C) 2016 copyright by the U.S. Secretary of Commerce on behalf of the United States of America. All rights reserved.
+
+> <DATE>
+2013-07-30
+
+> <CAS.NUMBER>
+7732-18-5
+
+> <SYNONYMS>
+Water
+
+> <METHOD>
+B3LYP/6-31G*
+
+> <DIPOLE.MOMENT>
+2.0962 debye
+
+> <ELECTRONIC.ENERGY>
+-76.4089547246 hartree
+
+> <IR.FREQUENCIES>
+"Frequency (cm-1)"   "Intensity (km/mol)"
+1713.5711  75.7263
+3729.9547  1.6912
+3851.5408  19.3003
+
+> <ROTATIONAL.CONSTANTS>
+786.82917 GHz
+432.74827 GHz
+279.19421 GHz
+
+> <SOFTWARE>
+Gaussian 09, Revision D.01
+
+> <CONTRIBUTOR>
+Jennifer Skerritt
+
+$$$$
