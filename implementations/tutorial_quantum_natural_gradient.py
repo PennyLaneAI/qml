@@ -392,7 +392,7 @@ print(np.round(g, 8))
 # PennyLane QNodes contain a built-in method for computing the Fubini-Study metric
 # tensor, :meth:`~.pennylane.QNode.metric_tensor`, which
 # we can use to verify this result:
-print(np.round(circuit.metric_tensor(params), 8))
+print(np.round(circuit.metric_tensor([params]), 8))
 
 ##############################################################################
 # As opposed to our manual computation, which required 6 different quantum
@@ -408,7 +408,7 @@ print(np.round(circuit.metric_tensor(params), 8))
 #
 # Note that the :meth:`~.pennylane.QNode.metric_tensor` method also supports computing the diagonal
 # approximation to the metric tensor:
-print(circuit.metric_tensor(params, diag_approx=True))
+print(circuit.metric_tensor([params], diag_approx=True))
 
 ##############################################################################
 # Quantum natural gradient optimization

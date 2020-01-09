@@ -37,7 +37,7 @@ plugins, and devices, via simple and easy-to-follow implementations.
 .. customgalleryitem::
     :tooltip: Explore quantum chemistry in PennyLane.
     :figure: beginner/quantum_chemistry/water_structure.png
-    :description: :doc:`tutorial/quantum_chemistry`
+    :description: :doc:`tutorial/tutorial_quantum_chemistry`
 
 :html:`</div><div style='clear:both'></div>`
 
@@ -52,4 +52,4 @@ plugins, and devices, via simple and easy-to-follow implementations.
     tutorial/tutorial_plugins_hybrid
     tutorial/tutorial_advanced_usage
     tutorial/pytorch_noise
-    tutorial/quantum_chemistry
+    tutorial/tutorial_quantum_chemistry
