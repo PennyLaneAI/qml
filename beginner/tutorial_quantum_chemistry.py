@@ -42,11 +42,11 @@ import pennylane as qml
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms.  The
 # equilibrium geometry of water can be downloaded from the The `NIST Chemistry WebBook
 # <https://webbook.nist.gov/chemistry>`_ data base to the structure-data file
-# :download:`h2o.SDF </beginner/h2o.SDF>`.
+# :download:`h2o.xyz </beginner/h2o.xyz>`.
 # We read the equilibrium geometry of water and store it in a list
 # containing the symbol and the Cartesian coordinates of each atomic species:
 
-geometry = qml.qchem.read_structure('h2o.SDF')
+geometry = qml.qchem.read_structure('h2o.xyz')
 print("The total number of atoms is: {}".format(len(geometry)))
 print(geometry)
 
@@ -54,7 +54,9 @@ print(geometry)
 # .. note::
 #
 #     The xyz format is supported out of the box. If `Open Babel <http://openbabel.org/wiki/Main_Page>`_
-#     is installed, any format recognized by Open Babel is also supported.
+#     is installed, any format recognized by Open Babel is also supported
+#     by PennyLane, such as ``.mol`` and ``.sdf``.
+#
 #     Please see the :func:`~.read_structure` and Open Babel documentation
 #     for more information on installing Open Babel.
 #
@@ -234,9 +236,13 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(activ
 # fermionic Hamiltonian are retrieved from the previously generated file
 # ``'./pyscf/sto-3g/water.hdf5'``.
 
-qubit_hamiltonian = qml.qchem.decompose_hamiltonian(name, hf_data, mapping='jordan_wigner',
-                                                      docc_mo_indices=d_occ_indices,
-                                                      active_mo_indices=active_indices)
+qubit_hamiltonian = qml.qchem.decompose_hamiltonian(
+	name,
+	hf_data,
+	mapping='jordan_wigner',
+	docc_mo_indices=d_occ_indices,
+    active_mo_indices=active_indices
+)
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
 print(qubit_hamiltonian)
 
@@ -246,11 +252,17 @@ print(qubit_hamiltonian)
 # the functions described above.
 #
 # An example usage is shown below,
-qubit_hamiltonian, n_qubits = qml.qchem.generate_hamiltonian(name, 'h2o.SDF', charge, multiplicity,
-                                                             basis_set, qc_package='psi4',
-                                                             n_active_electrons=4,
-                                                             n_active_orbitals=4,
-                                                             mapping='jordan_wigner')
+qubit_hamiltonian, n_qubits = qml.qchem.generate_hamiltonian(
+	name,
+	'h2o.SDF',
+	charge,
+	multiplicity,
+	basis_set,
+	qc_package='pyscf',
+	n_active_electrons=4,
+    n_active_orbitals=4,
+    mapping='jordan_wigner'
+)
 
 print("Number of qubits required to perform quantum simulations: {:}".format(n_qubits))
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
