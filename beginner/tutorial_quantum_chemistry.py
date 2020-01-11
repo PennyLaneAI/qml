@@ -254,7 +254,7 @@ print(qubit_hamiltonian)
 # An example usage is shown below,
 qubit_hamiltonian, n_qubits = qml.qchem.generate_hamiltonian(
 	name,
-	'h2o.SDF',
+	'h2o.xyz',
 	charge,
 	multiplicity,
 	basis_set,
