@@ -241,7 +241,7 @@ qubit_hamiltonian = qml.qchem.decompose_hamiltonian(
 	hf_data,
 	mapping='jordan_wigner',
 	docc_mo_indices=d_occ_indices,
-    active_mo_indices=active_indices
+	active_mo_indices=active_indices
 )
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
 print(qubit_hamiltonian)
@@ -260,8 +260,8 @@ qubit_hamiltonian, n_qubits = qml.qchem.generate_hamiltonian(
 	basis_set,
 	qc_package='pyscf',
 	n_active_electrons=4,
-    n_active_orbitals=4,
-    mapping='jordan_wigner'
+	n_active_orbitals=4,
+	mapping='jordan_wigner'
 )
 
 print("Number of qubits required to perform quantum simulations: {:}".format(n_qubits))
