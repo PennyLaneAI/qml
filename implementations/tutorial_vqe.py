@@ -177,26 +177,28 @@ for n in range(max_iterations):
     conv = np.abs(energy - prev_energy)
 
     if n % 20 == 0:
-        print('Iteration = {:},  Ground-state energy = {:.12f} Ha,  Convergence parameter = {'
-              ':.12f} Ha'.format(n, energy, conv))
+        print('Iteration = {:},  Ground-state energy = {:.8f} Ha,  Convergence parameter = {'
+              ':.8f} Ha'.format(n, energy, conv))
 
     if conv <= conv_tol:
         break
 
     prev_energy = energy
 
-print('Final value of the ground-state energy = {:.12f} Ha'.format(energy))
-print('Accuracy of the estimated energy: {:.8f} kcal/mol'.
-    format(np.abs(energy - (-1.136189454088))*627.503))
-print('Final convergence parameter = {:.12f} Ha'.format(conv))
+print()
+print('Final convergence parameter = {:.8f} Ha'.format(conv))
+print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
+print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
+        format(np.abs(energy - (-1.136189454088)), np.abs(energy - (-1.136189454088))*627.503))
+print()
 print('Final circuit parameters = ', params)
 
 ##############################################################################
 # Success! 🎉🎉🎉 The ground-state energy of the hydrogen molecule has been estimated with chemical
-# accuracy with respect to the exact value of -1.136189454088 Hartree (Ha) obtained from a full
-# configuration-interaction (FCI) calculation. This is because, for the optimized values of the
-# single-qubit rotation angles, the state prepared by the VQE ansatz is precisely the FCI
-# ground-state of the :math:`H_2` molecule :math:`|H_2\rangle_{gs} = 0.99 |1100\rangle - 0.10
+# accuracy (< 1 kcal/mol) with respect to the exact value of -1.136189454088 Hartree (Ha) obtained
+# from a full configuration-interaction (FCI) calculation. This is because, for the optimized 
+# values of the single-qubit rotation angles, the state prepared by the VQE ansatz is precisely
+# the FCI ground-state of the :math:`H_2` molecule :math:`|H_2\rangle_{gs} = 0.99 |1100\rangle - 0.10
 # |0011\rangle`.
 #
 # What other molecules would you like to study using PennyLane?
