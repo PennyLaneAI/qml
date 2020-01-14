@@ -87,7 +87,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Training an embedding to perform metric learning
     :figure: implementations/embedding_metric_learning/training.png
-    :description: :doc:`app/tutorial_embedding_metric_learning`
+    :description: :doc:`app/tutorial_embeddings_metric_learning`
 
 :html:`</div><div style='clear:both'></div>`
 
@@ -112,4 +112,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_vqls
     app/tutorial_coherent_vqls
     app/tutorial_quantum_transfer_learning
-    app/tutorial_embedding_metric_learning
+    app/tutorial_embeddings_metric_learning
