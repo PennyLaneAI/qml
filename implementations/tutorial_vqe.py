@@ -9,7 +9,7 @@ deceiving — we are still required to describe the molecule's Hamiltonian in th
 a task that is not straightforward for non-experts. Optimizing quantum circuits can also be
 challenging unless we are provided with adequate software tools.
 
-The PennyLane allows users to implement the full VQE algorithm using only a few
+The PennyLane library allows users to implement the full VQE algorithm using only a few
 lines of code. In this tutorial, we guide you through a calculation of the ground-state energy of
 the hydrogen molecule. Let's get started! ⚛️
 
@@ -25,7 +25,7 @@ from pennylane import numpy as np
 ##############################################################################
 # The second step is to specify the molecule whose properties we aim to calculate.
 # This is done by providing three pieces of information: the geometry and charge of the molecule,
-# and the multiplicity of the electronic configuration.
+# and the spin multiplicity of the electronic configuration.
 #
 # The geometry of a molecule is given by the three-dimensional coordinates and symbols of all
 # its atomic species. There are several databases such as `the NIST Chemistry
@@ -66,7 +66,7 @@ basis_set = 'sto-3g'
 ##############################################################################
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.decompose_hamiltonian`. The first input to
+# single line by calling the function :func:`~.generate_hamiltonian`. The first input to
 # the function is a string denoting the name of the molecule, which will determine the name given to
 # the saved files that are produced during the calculations.
 
@@ -110,8 +110,8 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 # In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
 # Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
 # prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
-# variational circuit that is capable of preparing states of the form :math:`\alpha|0011\rangle +
-# \beta|1100\rangle`, where :math:`\alpha,\beta` are, in general, complex parameters satisfying
+# variational circuit that is capable of preparing states of the form :math:`\alpha|1100\rangle +
+# \beta|0011\rangle`, where :math:`\alpha,\beta` are, in general, complex parameters satisfying
 # :math:`|\alpha|^2+|\beta|^2=1`. The circuit consists of single-qubit rotations on all
 # wires, followed by three entangling CNOT gates, as shown in the figure below:
 #
@@ -128,7 +128,7 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 # In the circuit, we apply single-qubit rotations, followed by CNOT gates:
 
 
-def circuit(*params, wires):
+def circuit(params, wires):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
     for i in wires:
         qml.Rot(*params[i], wires=i)
@@ -148,9 +148,7 @@ def circuit(*params, wires):
 # circuit, target Hamiltonian, and the device:
 
 
-def cost_fn(params):
-    cost = qml.beta.vqe.cost(params, circuit, h, dev)
-    return np.real(cost)
+cost_fn = qml.vqe.cost(circuit, h, dev)
 
 
 ##############################################################################
@@ -180,8 +178,7 @@ for n in range(max_iterations):
 
     if n % 20 == 0:
         print('Iteration = {:},  Ground-state energy = {:.12f} Ha,  Convergence parameter = {'
-              ':.12f} Ha'
-              .format(n, energy, conv))
+              ':.12f} Ha'.format(n, energy, conv))
 
     if conv <= conv_tol:
         break
@@ -189,6 +186,8 @@ for n in range(max_iterations):
     prev_energy = energy
 
 print('Final value of the ground-state energy = {:.12f} Ha'.format(energy))
+print('Accuracy of the estimated energy: {:.8f} kcal/mol'.
+    format(np.abs(energy - (-1.136189454088))*627.503))
 print('Final convergence parameter = {:.12f} Ha'.format(conv))
 print('Final circuit parameters = ', params)
 
