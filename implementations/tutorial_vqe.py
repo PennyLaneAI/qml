@@ -191,7 +191,7 @@ print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
 print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
         format(np.abs(energy - (-1.136189454088)), np.abs(energy - (-1.136189454088))*627.503))
 print()
-print('Final circuit parameters = ', params)
+print('Final circuit parameters = \n', params)
 
 ##############################################################################
 # Success! 🎉🎉🎉 The ground-state energy of the hydrogen molecule has been estimated with chemical
