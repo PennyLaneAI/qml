@@ -5,7 +5,7 @@ Quantum embeddings and metric learning
 **Authors: Maria Schuld and Aroosa Ijaz**
 
 This tutorial illustrates the idea of quantum embeddings for metric
-learning presented in `Lloyd, Schuld, Ijaz, Izaac, Killoran (2019) <https://arxiv.org/abs/XXX>`_,
+learning presented in `Lloyd, Schuld, Ijaz, Izaac, Killoran (2019) <https://arxiv.org/abs/2001.03622>`_,
 by training a hybrid classical-quantum data
 embedding to classify images of ants and bees. The example was inspired
 by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_,
@@ -104,7 +104,7 @@ from pennylane import RX, RY, RZ, CNOT
 # maps the images to a 2-dimensional *intermediate feature space*.
 #
 # For the quantum part we use the QAOA embedding proposed
-# in `Lloyd et al. (2019) <https://arxiv.org/abs/XXX>`_.
+# in `Lloyd et al. (2019) <https://arxiv.org/abs/2001.03622>`_.
 # The feature map is represented by a layered variational circuit, which
 # alternates a "feature-encoding Hamiltonian" and an "Ising-like" Hamiltonian
 # with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY`` gates as local fields.
