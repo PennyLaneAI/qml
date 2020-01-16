@@ -143,12 +143,12 @@ def circuit(params, wires):
 #     Hartree-Fock state of the hydrogen molecule described with a `minimal basis
 #     <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__.
 #
-# The cost function for optimizing the circuit can be defined using the :func:`~.vqe.cost`
+# The cost function for optimizing the circuit can be defined using the :func:`~.VQECost`
 # function, which is tailored for VQE optimization. It requires specifying the parameters,
 # circuit, target Hamiltonian, and the device:
 
 
-cost_fn = qml.vqe.cost(circuit, h, dev)
+cost_fn = qml.VQECost(circuit, h, dev)
 
 
 ##############################################################################
