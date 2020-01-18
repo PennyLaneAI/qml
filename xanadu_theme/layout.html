@@ -134,6 +134,21 @@
                 </div>
 
               {% block body %} {% endblock %}
+              <div id="bottom-dl" class="xanadu-call-to-action-links">
+                <div id="tutorial-type">{{ pagename }}</div>
+                <div class="download-python-link">
+                  <i class="fab fa-python"></i>&nbsp;
+                  <div class="call-to-action-desktop-view">Download Python script</div>
+                </div>
+                <div class="download-notebook-link">
+                  <i class="fas fa-download"></i>&nbsp;
+                  <div class="call-to-action-desktop-view">Download Notebook</div>
+                </div>
+                <div class="github-view-link">
+                  <i class="fab fa-github"></i>&nbsp;
+                  <div class="call-to-action-desktop-view">View on GitHub</div>
+                </div>
+              </div>
             </div>
             <!-- {%- block bottom_rel_links %} -->
               <!-- {{ render_relations() }} -->
@@ -211,12 +226,13 @@
           notebookLink = $(".reference.download")[1].href,
           notebookDownloadPath = notebookLink.split('_downloads')[1].split('/').pop();
 
-      $("#download-python-link").wrap("<a href=" + pythonLink + " data-behavior='call-to-action-event' data-response='Download Python script' download target='_blank'/>");
-      $("#download-notebook-link").wrap("<a href=" + notebookLink + " data-behavior='call-to-action-event' data-response='Download Notebook' download target='_blank'/>");
-      $("#github-view-link").wrap("<a href=" + githubLink + " data-behavior='call-to-action-event' data-response='View on Github' target='_blank'/>");
+      $(".download-python-link").wrap("<a href=" + pythonLink + " data-behavior='call-to-action-event' data-response='Download Python script' download target='_blank'/>");
+      $(".download-notebook-link").wrap("<a href=" + notebookLink + " data-behavior='call-to-action-event' data-response='Download Notebook' download target='_blank'/>");
+      $(".github-view-link").wrap("<a href=" + githubLink + " data-behavior='call-to-action-event' data-response='View on Github' target='_blank'/>");
       $("#right-column").addClass("page-shadow");
     } else {
       $(".xanadu-call-to-action-links").hide();
+      $("#bottom-dl").attr('style','display: none !important');
     }
     </script>
 
