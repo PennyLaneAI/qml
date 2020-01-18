@@ -187,7 +187,7 @@ def circle(samples, center=[0.0, 0.0], radius=np.sqrt(2 / np.pi)):
 
     Returns:
         Xvals (array[tuple]): coordinates of points
-        Xvals (array[int]): classification labels
+        yvals (array[int]): classification labels
     """
     Xvals, yvals = [], []
 
@@ -269,20 +269,6 @@ def qcircuit(params, x=None, y=None):
     return qml.expval(qml.Hermitian(y, wires=[0]))
 
 
-def fidelity(state1, state2):
-    """
-    Calculates the fidelity between two state vectors
-
-    Args:
-        state1 (array[float]): State vector representation
-        state2 (array[float]): State vector representation
-
-    Returns:
-        float: fidelity between `state1` and `state2`
-    """
-    return np.abs(np.dot(np.conj(state1), state2))
-
-
 def cost(params, x, y, state_labels=None):
     """Cost function to be minimized.
 
@@ -324,31 +310,18 @@ def test(params, x, y, state_labels=None):
         output_states (array[float]): output quantum states from the circuit
     """
     fidelity_values = []
-    output_states = []
     dm_labels = [density_matrix(s) for s in state_labels]
+    predicted = []
+
     for i in range(len(x)):
-        expectation = qcircuit(params, x=x[i], y=dm_labels[y[i]])
-        output_states.append(dev._state)
-    predicted = predicted_labels(output_states, state_labels)
-    return predicted, output_states
+        fidel_function = lambda y: qcircuit(params, x=x[i], y=y)
+        fidelities = [fidel_function(dm) for dm in dm_labels]
+        best_fidel = np.argmax(fidelities)
 
+        predicted.append(best_fidel)
+        fidelity_values.append(fidelities)
 
-def predicted_labels(states, state_labels=None):
-    """
-    Computes the label of the predicted state by selecting the one
-    with maximum fidelity.
-
-    Args:
-        weights (array[float]): array of weights
-        x (array[float]): 2-d array of input vectors
-        y (array[float]): 1-d array of targets
-        state_labels (array[float]): 1-d array of state representations for labels
-
-    Returns:
-        float: loss value to be minimized
-    """
-    output_labels = [np.argmax([fidelity(s, label) for label in state_labels]) for s in states]
-    return np.array(output_labels)
+    return np.array(predicted), np.array(fidelity_values)
 
 
 def accuracy_score(y_true, y_pred):
@@ -401,7 +374,7 @@ X_test = np.hstack((Xtest, np.zeros((Xtest.shape[0], 1))))
 # Train using Adam optimizer and evaluate the classifier
 num_layers = 3
 learning_rate = 0.6
-epochs = 20
+epochs = 10
 batch_size = 32
 
 opt = AdamOptimizer(learning_rate, beta1=0.9, beta2=0.999)
@@ -409,10 +382,10 @@ opt = AdamOptimizer(learning_rate, beta1=0.9, beta2=0.999)
 # initialize random weights
 params = np.random.uniform(size=(num_layers, 3))
 
-predicted_train, states_train = test(params, X_train, y_train, state_labels)
+predicted_train, fidel_train = test(params, X_train, y_train, state_labels)
 accuracy_train = accuracy_score(y_train, predicted_train)
 
-predicted_test, states_test = test(params, X_test, y_test, state_labels)
+predicted_test, fidel_test = test(params, X_test, y_test, state_labels)
 accuracy_test = accuracy_score(y_test, predicted_test)
 
 # save predictions with random weights for comparison
@@ -430,14 +403,18 @@ for it in range(epochs):
     for Xbatch, ybatch in iterate_minibatches(X_train, y_train, batch_size=batch_size):
         params = opt.step(lambda v: cost(v, Xbatch, ybatch, state_labels), params)
 
-    predicted_train, states_train = test(params, X_train, y_train, state_labels)
+    predicted_train, fidel_train = test(params, X_train, y_train, state_labels)
     accuracy_train = accuracy_score(y_train, predicted_train)
     loss = cost(params, X_train, y_train, state_labels)
 
-    predicted_test, states_test = test(params, X_test, y_test, state_labels)
+    predicted_test, fidel_test = test(params, X_test, y_test, state_labels)
     accuracy_test = accuracy_score(y_test, predicted_test)
     res = [it + 1, loss, accuracy_train, accuracy_test]
-    print("Epoch: {:2d} | Loss: {:3f} | Train accuracy: {:3f} | Test accuracy: {:3f}".format(*res))
+    print(
+        "Epoch: {:2d} | Loss: {:3f} | Train accuracy: {:3f} | Test accuracy: {:3f}".format(
+            *res
+        )
+    )
 
 
 ##############################################################################

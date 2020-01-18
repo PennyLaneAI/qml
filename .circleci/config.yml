@@ -29,6 +29,7 @@ jobs:
           name: Build tutorials
           command: |
             . venv/bin/activate
+            make download
             make html
           no_output_timeout: 30m
 
@@ -79,6 +80,7 @@ jobs:
           name: Build tutorials
           command: |
             . venv/bin/activate
+            make download
             make html
           no_output_timeout: 30m
 
