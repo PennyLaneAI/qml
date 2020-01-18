@@ -1781,6 +1781,75 @@ span.eqno {
   }
 }
 
+@media screen and (max-width: 1000px){
+  .sphx-glr-thumbcontainer {
+    margin: 5px!important;
+  }
+}
+
+/* filters and tags */
+
+.filters {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-left: 0;
+}
+
+.filters * {
+  display: inline-block;
+}
+
+.filters label {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.25rem;
+  border-radius: 2rem;
+  min-width: 50px;
+  line-height: normal;
+  cursor: pointer;
+  transition: all 0.1s;
+  border: #19b37b4a solid 1px;
+  color: {{ theme_download_button }};
+  font-size: 90%;
+}
+
+.filters label:hover {
+  background: {{ theme_download_button }};
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);
+}
+
+.controls {
+  display: none;
+}
+
+[value="All"]:checked ~ .gallery-grid [data-category] {
+  display: block;
+}
+
+[value="tensorflow"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="tensorflow"]),
+[value="pytorch"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="pytorch"]),
+[value="autograd"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="autograd"]),
+[value="forest"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="forest"]),
+[value="cirq"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="cirq"]),
+[value="qiskit"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="qiskit"]),
+[value="strawberryfields"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="strawberryfields"]) {
+  display: none;
+}
+
+[value="All"]:checked ~ .filters [for="All"],
+[value="tensorflow"]:checked ~ .filters [for="tensorflow"],
+[value="pytorch"]:checked ~ .filters [for="pytorch"],
+[value="autograd"]:checked ~ .filters [for="autograd"],
+[value="forest"]:checked ~ .filters [for="forest"],
+[value="cirq"]:checked ~ .filters [for="cirq"],
+[value="qiskit"]:checked ~ .filters [for="qiskit"],
+[value="strawberryfields"]:checked ~ .filters [for="strawberryfields"] {
+  background: {{ theme_download_button }};
+  border: {{ theme_download_button }} solid 1px;
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);
+}
+
 /* Sphinx gallery
 -----------------------------------------*/
 
