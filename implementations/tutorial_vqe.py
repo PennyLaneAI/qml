@@ -1,4 +1,4 @@
-"""
+r"""
 A brief overview of VQE
 =======================
 
@@ -9,10 +9,10 @@ expectation value of its electronic Hamiltonian while a classical optimizer is u
 quantum circuit parameters in order to find the molecule's ground state energy.
 
 For example, for the hydrogen molecule described with a minimal basis set the exact ground state 
-wave function can be encoded in a quantum computer as the entangled state of four qubits
-:math:`| \Psi \rangle = \alpha |1100 \rangle + \beta |0011 \rangle` where the first 
-and second terms represent the Hartree-Fock and doubly-excited configurations entering the 
-many-body wave function. Ultimately, the goal of the VQE algorithm, is to find the values of 
+wave function can be encoded in a quantum computer by preparing the four-qubits entangled state
+:math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` to account for 
+the Hartree-Fock and doubly-excited configurations entering the many-body wave function. 
+Ultimately, the goal of the VQE algorithm, is to find the values of 
 :math:`\alpha` and :math:`\beta` that minimize the expectation value of the Hamiltonian. 
  
 The PennyLane library allows users to implement the full VQE algorithm using only a few
