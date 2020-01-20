@@ -8,12 +8,12 @@ a quantum computer is used to prepare a wave function ansatz of the molecule and
 expectation value of its electronic Hamiltonian while a classical optimizer is used to adjust the 
 quantum circuit parameters in order to find the molecule's ground state energy.
 
-For example, for the hydrogen molecule described with a minimal basis set the exact ground state 
-wave function can be encoded in a quantum computer by preparing the four-qubits entangled state
-:math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` to account for 
+For example, the exact ground state wave function of the hydrogen molecule described with a minimal
+basis can be encoded in a quantum computer by preparing the four-qubits entangled state
+:math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` accounting for 
 the Hartree-Fock and doubly-excited configurations entering the many-body wave function. 
-Ultimately, the goal of the VQE algorithm, is to find the values of 
-:math:`\alpha` and :math:`\beta` that minimize the expectation value of the Hamiltonian. 
+The goal of the VQE algorithm, is to find the values of :math:`\alpha` and :math:`\beta` that 
+minimize the expectation value of the hydrogen molecule Hamiltonian. 
  
 The PennyLane library allows users to implement the full VQE algorithm using only a few
 lines of code. In this tutorial, we guide you through a calculation of the ground-state energy of
