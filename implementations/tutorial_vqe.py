@@ -106,7 +106,7 @@ print('Hamiltonian is ', h)
 # Implementing the VQE algorithm
 # ------------------------------
 #
-# PennyLane contains the :mod:`~.vqe` module, specifically
+# PennyLane contains the :class:`~.VQECost` class, specifically
 # built to implement the VQE algorithm. We begin by defining the device, in this case a simple
 # qubit simulator:
 
@@ -150,9 +150,10 @@ def circuit(params, wires):
 #     Hartree-Fock state of the hydrogen molecule described with a `minimal basis
 #     <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__.
 #
-# The cost function for optimizing the circuit can be defined using the :func:`~.VQECost`
-# function, which is tailored for VQE optimization. It requires specifying the parameters,
-# circuit, target Hamiltonian, and the device:
+# The cost function for optimizing the circuit can be created using the :class:`~.VQECost`
+# class, which is tailored for VQE optimization. It requires specifying the
+# circuit, target Hamiltonian, and the device, and returns a cost function that can
+# be evaluated with the circuit parameters:
 
 
 cost_fn = qml.VQECost(circuit, h, dev)
