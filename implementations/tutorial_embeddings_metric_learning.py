@@ -506,7 +506,7 @@ print(prediction)
 # References
 # ----------
 # Seth Lloyd, Maria Schuld, Aroosa Ijaz, Josh Izaac, Nathan Killoran: "Quantum embeddings for machine learning"
-# arXiv preprint arXiv:XXXXX.
+# arXiv preprint arXiv:2001.03622.
 #
 # Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, Nathan Killoran: "Transfer learning
 # in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
