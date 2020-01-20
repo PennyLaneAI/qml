@@ -1,14 +1,20 @@
 """
-Variational quantum eigensolver
-===============================
+A brief overview of VQE
+=======================
 
-The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry with
-near-term quantum computers. Its power lies in its simplicity: electronic structure
-calculations can be reduced to optimizing parameters of quantum circuits. But this simplicity can be
-deceiving — we are still required to describe the molecule's Hamiltonian in the Pauli basis,
-a task that is not straightforward for non-experts. Optimizing quantum circuits can also be
-challenging unless we are provided with adequate software tools.
+The Variational Quantum Eigensolver (VQE) [1, 2] is a flagship algorithm for quantum chemistry using 
+near-term quantum computers. VQE is an application of the Rayleigh-Ritz variational principle where 
+a quantum computer is used to prepare a wave function ansatz of the molecule and estimate the 
+expectation value of its electronic Hamiltonian while a classical optimizer is used to adjust the 
+quantum circuit parameters in order to find the molecule's ground state energy.
 
+For example, for the hydrogen molecule described with a minimal basis set the exact ground state 
+wave function can be encoded in a quantum computer as the entangled state of four qubits
+:math:`| \Psi \rangle = \alpha |1100 \rangle + \beta |0011 \rangle` where the first 
+and second terms represent the Hartree-Fock and doubly-excited configurations entering the 
+many-body wave function. Ultimately, the goal of the VQE algorithm, is to find the values of 
+:math:`\alpha` and :math:`\beta` that minimize the expectation value of the Hamiltonian. 
+ 
 The PennyLane library allows users to implement the full VQE algorithm using only a few
 lines of code. In this tutorial, we guide you through a calculation of the ground-state energy of
 the hydrogen molecule. Let's get started! ⚛️
@@ -32,7 +38,7 @@ from pennylane import numpy as np
 # WebBook <https://webbook.nist.gov/chemistry/name-ser/>`_, `ChemSpider <http://www.chemspider.com/>`_
 # and `SMART-SNS <http://smart.sns.it/molecules/>`_ that provide
 # geometrical data for a large number of molecules. Here, we make use of a locally saved file in
-# ``.xyz`` format that contains the geometry of the hydrogen molecule, and specifies its name for
+# ``.xyz`` format that contains the geometry of the hydrogen molecule, and specify its name for
 # later use:
 
 geometry = 'h2.xyz'
@@ -40,7 +46,7 @@ geometry = 'h2.xyz'
 ##############################################################################
 # Alternatively, you can download the file here: :download:`h2.xyz </implementations/h2.xyz>`.
 #
-# The charge determines the number of electrons that have been added or removed compared to a
+# The charge determines the number of electrons that have been added or removed compared to the
 # neutral molecule. In this example, as is the case in many quantum chemistry simulations,
 # we will consider a neutral molecule:
 
@@ -48,10 +54,10 @@ charge = 0
 
 ##############################################################################
 # It is also important to define how the electrons occupy the molecular orbitals to be optimized
-# within the Hartree-Fock approximation. This is captured by the
-# `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_ parameter, which is
-# related to the number of unpaired electrons in the Hartree-Fock state. For the neutral hydrogen
-# molecule, the multiplicity is one:
+# within the `Hartree-Fock approximation <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__. 
+# This is captured by the `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_ 
+# parameter, which is related to the number of unpaired electrons in the Hartree-Fock state. For 
+# the neutral hydrogen molecule, the multiplicity is one:
 
 multiplicity = 1
 
@@ -67,8 +73,8 @@ basis_set = 'sto-3g'
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
 # single line by calling the function :func:`~.generate_hamiltonian`. The first input to
-# the function is a string denoting the name of the molecule, which will determine the name given to
-# the saved files that are produced during the calculations.
+# the function is a string denoting the name of the molecule, which will determine the name given 
+# to the saved files that are produced during the calculations:
 
 name = 'h2'
 
@@ -110,10 +116,11 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 # In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
 # Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
 # prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
-# variational circuit that is capable of preparing states of the form :math:`\alpha|1100\rangle +
-# \beta|0011\rangle`, where :math:`\alpha,\beta` are, in general, complex parameters satisfying
-# :math:`|\alpha|^2+|\beta|^2=1`. The circuit consists of single-qubit rotations on all
-# wires, followed by three entangling CNOT gates, as shown in the figure below:
+# variational circuit that is capable of preparing the normalized states of the form 
+# :math:`\alpha|1100\rangle + \beta|0011\rangle` which resemble precisely the structure of the 
+# ground state wave function of the hydrogen molecule described with a minimal basis set.   
+# The circuit consists of single-qubit rotations on all wires, followed by three entangling CNOT 
+# gates, as shown in the figure below:
 #
 # |
 #
@@ -202,3 +209,14 @@ print('Final circuit parameters = \n', params)
 # |0011\rangle`.
 #
 # What other molecules would you like to study using PennyLane?
+#
+# References
+# ----------
+#
+# 1. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+#    quantum processor". `Nature Communications 5, 4213 (2014).
+#    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+# 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#    `Chem. Rev. 2019, 119, 19, 10856-10915. 
+#    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
