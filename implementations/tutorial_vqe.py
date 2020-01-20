@@ -117,10 +117,9 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 # Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
 # prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
 # variational circuit that is capable of preparing the normalized states of the form 
-# :math:`\alpha|1100\rangle + \beta|0011\rangle` which resemble precisely the structure of the 
-# ground state wave function of the hydrogen molecule described with a minimal basis set.   
-# The circuit consists of single-qubit rotations on all wires, followed by three entangling CNOT 
-# gates, as shown in the figure below:
+# :math:`\alpha|1100\rangle + \beta|0011\rangle` which resemble the ground state wave function of 
+# the hydrogen molecule described with a minimal basis set. The circuit consists of single-qubit 
+# rotations on all wires, followed by three entangling CNOT gates, as shown in the figure below:
 #
 # |
 #
@@ -176,7 +175,8 @@ print(params)
 # -6}`.
 
 max_iterations = 200
-conv_tol = 1e-06
+conv_tol = 1e-02
+#conv_tol = 1e-06
 
 prev_energy = cost_fn(params)
 for n in range(max_iterations):
