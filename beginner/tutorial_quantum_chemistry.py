@@ -2,7 +2,7 @@ r"""
 Quantum Chemistry with PennyLane
 ================================
 
-In quantum chemistry and materials science the term *electronic structure methods* refers to
+In quantum chemistry and materials science, the term *electronic structure methods* encompasses 
 the approximations used to find the many-electron wave function of polyatomic systems.
 Electronic structure methods rely on the Born-Oppenheimer approximation [1],
 which allows to write the electronic Hamiltonian of the molecule as an operator which depends
@@ -40,7 +40,7 @@ import pennylane as qml
 ##############################################################################
 # In this example, we construct the electronic Hamiltonian of one of the most unique
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms.  The
-# equilibrium geometry of water can be downloaded from the The `NIST Chemistry WebBook
+# equilibrium geometry of water can be downloaded from the `NIST Chemistry WebBook
 # <https://webbook.nist.gov/chemistry>`_ data base to the file 
 # :download:`h2o.xyz </beginner/h2o.xyz>`.
 # We read the equilibrium geometry of water and store it in a list
@@ -219,7 +219,7 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 #
 # .. math::
 #     H = \sum_{p,q} h_{pq} c_p^\dagger c_q + \frac{1}{2} \sum_{p,q,r,s} h_{pqrs} c_p^\dagger c_q^\dagger
-#     c_r c_s
+#     c_r c_s,
 #
 # and apply the `Jordan-Wigner
 # <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`__ or `Bravyi-Kitaev
@@ -248,7 +248,7 @@ print(qubit_hamiltonian)
 
 ##############################################################################
 # Finally, the :func:`~.generate_hamiltonian`
-# function to automate the construction of the electronic Hamiltonian using
+# function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above.
 #
 # An example usage is shown below,
@@ -291,7 +291,7 @@ print(qubit_hamiltonian)
 # 2. Frank Jensen. "Introduction to Computational Chemistry". (John wiley & sons,
 #    2016).
 #
-# 3. Alberto Peruzzo, Jarrod McClean *et al.*. "A variational eigenvalue solver on a photonic
+# 3. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #    quantum processor". `Nature Communications 5, 4213 (2014).
 #    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
