@@ -175,8 +175,7 @@ print(params)
 # -6}`.
 
 max_iterations = 200
-conv_tol = 1e-02
-#conv_tol = 1e-06
+conv_tol = 1e-06
 
 prev_energy = cost_fn(params)
 for n in range(max_iterations):
