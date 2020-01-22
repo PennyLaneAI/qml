@@ -8,12 +8,13 @@ a quantum computer is used to prepare a wave function ansatz of the molecule and
 expectation value of its electronic Hamiltonian while a classical optimizer is used to adjust the 
 quantum circuit parameters in order to find the molecule's ground state energy.
 
-For example, the exact ground state wave function of the hydrogen molecule described with a minimal
-basis can be encoded in a quantum computer by preparing the four-qubits entangled state
-:math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` accounting for 
-the Hartree-Fock and doubly-excited configurations entering the many-body wave function. 
-The goal of the VQE algorithm, is to find the values of :math:`\alpha` and :math:`\beta` that 
-minimize the expectation value of the hydrogen molecule Hamiltonian. 
+For example, if we use a minimal basis, the ground state wave function of the hydrogen molecule 
+:math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` consists of only
+the Hartree-Fock component and a doubly-excited configuration where the two electrons occupy the 
+highest-energy molecular orbitals. If we use a quantum computer to prepare the four-qubit 
+entangled state :math:`\vert \Psi \rangle`, the ultimate goal of the VQE algorithm 
+is to find the values of :math:`\alpha` and :math:`\beta` that minimize the expectation value of 
+the electronic Hamiltonian.
  
 The PennyLane library allows users to implement the full VQE algorithm using only a few
 lines of code. In this tutorial, we guide you through a calculation of the ground-state energy of
@@ -117,7 +118,7 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 # Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
 # prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
 # variational circuit that is capable of preparing the normalized states of the form 
-# :math:`\alpha|1100\rangle + \beta|0011\rangle` which resemble the ground state wave function of 
+# :math:`\alpha|1100\rangle + \beta|0011\rangle` which encode the ground state wave function of 
 # the hydrogen molecule described with a minimal basis set. The circuit consists of single-qubit 
 # rotations on all wires, followed by three entangling CNOT gates, as shown in the figure below:
 #
