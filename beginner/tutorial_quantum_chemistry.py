@@ -186,7 +186,7 @@ print(hf_data)
 #     The number of *active spin-orbitals* determines the *number of qubits* required
 #     to perform quantum simulations of the electronic structure of the molecule.
 #
-# For the case of water molecule described using a minimal basis set, we have a total of ten
+# For the case of the water molecule described using a minimal basis set, we have a total of ten
 # electrons occupying the first five out of seven molecular orbitals in the HF reference state.
 # Let's partition the HF orbitals to define an active space of four electrons in four active
 # orbitals:
