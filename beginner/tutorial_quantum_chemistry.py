@@ -9,8 +9,9 @@ which allows to write the electronic Hamiltonian of the molecule as an operator 
 parametrically on the "frozen" nuclear positions.
 
 Once the electronic problem is well defined, estimating the molecular properties with chemical
-accuracy requires wave-function based electronic structure calculations. However,
-even if we have access to powerful High Performance Computers (HPC), the application of
+accuracy requires wave-function-based electronic structure calculations. However,
+
+even if we have access to powerful high-performance computers, the application of
 post-Hartree-Fock electron correlation methods [2] becomes extremely challenging even for
 molecular systems with a few atoms.
 
@@ -100,7 +101,8 @@ charge = 0
 # determinant resulting from occupying the first five lowest-energy molecular orbitals with two
 # *paired* electrons in each orbital, one with spin-up and the other with spin-down, is said to
 # be a closed-shell HF state with spin *multiplicity* one. Alternatively, if we define an
-# occupation where the first four orbitals are doubly-occupied and the next two are singly
+# occupation where the first four orbitals are doubly occupied and the next two are singly
+
 # occupied by *unpaired* electrons with spin-up, this is said to be an open-shell HF state with
 # *multiplicity* three.
 #
@@ -123,7 +125,8 @@ multiplicity = 1
 # Now we need to define the atomic basis set. Hartree-Fock molecular orbitals
 # are typically represented as a Linear Combination of Atomic Orbitals (LCAO) which are further
 # approximated by using Gaussian function. The `Basis Set Exchange
-# <https://www.basissetexchange.org/>`_ data base is an excellent source of Gaussian-type
+# <https://www.basissetexchange.org/>`_ database is an excellent source of Gaussian-type
+
 # orbitals, although many of these basis sets are already incorporated in modern quantum
 # chemistry packages. In this example we choose the `minimum basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__ ``'sto-3g'`` of
@@ -153,7 +156,8 @@ print(hf_data)
 [print(file) for file in os.listdir(hf_data)]
 
 ##############################################################################
-# At this stage, we have a basis set of molecular orbitals! Next, we can use the
+# At this stage, we have a basis set of molecular orbitals. Next, we can use the
+
 # function :func:`~.active_space` to define an *active space*. But, what is an active
 # space?
 #
@@ -169,7 +173,8 @@ print(hf_data)
 # becomes numerically intractable should we want to include the full set of molecular orbitals.
 #
 # In order to circumvent the combinatorial explosion, we can create an active space by classifying
-# the molecular orbitals as doubly-occupied, active and external orbitals:
+# the molecular orbitals as doubly-occupied, active, and external orbitals:
+
 #
 # * Doubly-occupied orbitals are always occupied by two electrons.
 # * Active orbitals can be occupied by zero, one, or two electrons.
@@ -204,7 +209,8 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(activ
 
 ##############################################################################
 # Notice that calling the :func:`~.active_space` function without specifying an active
-# space, results in no doubly-occupied orbitals --- *all* molecular orbitals are considered to be active.
+# space results in no doubly-occupied orbitals---*all* molecular orbitals are considered to be active.
+
 
 no_d_occ, all_active = qml.qchem.active_space(name, hf_data)
 print("List of doubly-occupied molecular orbitals: {:}".format(no_d_occ))
@@ -251,7 +257,8 @@ print(qubit_hamiltonian)
 # function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above.
 #
-# An example usage is shown below,
+# An example usage is shown below:
+
 qubit_hamiltonian, n_qubits = qml.qchem.generate_hamiltonian(
 	name,
 	'h2o.xyz',
@@ -288,7 +295,8 @@ print(qubit_hamiltonian)
 # 1. Jorge Kohanoff. "Electronic structure calculations for solids and molecules: theory and
 #    computational methods". (Cambridge University Press, 2006).
 #
-# 2. Frank Jensen. "Introduction to Computational Chemistry". (John wiley & sons,
+# 2. Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons,
+
 #    2016).
 #
 # 3. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
