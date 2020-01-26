@@ -206,7 +206,6 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(activ
 # Notice that calling the :func:`~.active_space` function without specifying an active
 # space results in no doubly-occupied orbitals---*all* molecular orbitals are considered to be active.
 
-
 no_d_occ, all_active = qml.qchem.active_space(name, hf_data)
 print("List of doubly-occupied molecular orbitals: {:}".format(no_d_occ))
 print("List of active molecular molecular orbitals: {:}".format(all_active))
