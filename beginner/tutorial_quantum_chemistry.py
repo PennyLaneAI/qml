@@ -154,7 +154,6 @@ print(hf_data)
 
 ##############################################################################
 # At this stage, we have a basis set of molecular orbitals. Next, we can use the
-
 # function :func:`~.active_space` to define an *active space*. But, what is an active
 # space?
 #
