@@ -3,10 +3,11 @@ A brief overview of VQE
 =======================
 
 The Variational Quantum Eigensolver (VQE) [1, 2] is a flagship algorithm for quantum chemistry using 
-near-term quantum computers. VQE is an application of the Rayleigh-Ritz variational principle where 
-a quantum computer is used to prepare a wave function ansatz of the molecule and estimate the 
-expectation value of its electronic Hamiltonian while a classical optimizer is used to adjust the 
-quantum circuit parameters in order to find the molecule's ground state energy.
+near-term quantum computers. VQE is an application of the `Ritz variational principle 
+<https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to prepare a wave 
+function ansatz of the molecule and estimate the expectation value of its electronic Hamiltonian 
+while a classical optimizer is used to adjust the quantum circuit parameters in order to find the 
+molecule's ground state energy.
 
 For example, if we use a minimal basis, the ground state wave function of the hydrogen molecule 
 :math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` consists of only
