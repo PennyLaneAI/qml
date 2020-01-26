@@ -10,7 +10,6 @@ parametrically on the "frozen" nuclear positions.
 
 Once the electronic problem is well defined, estimating the molecular properties with chemical
 accuracy requires wave-function-based electronic structure calculations. However,
-
 even if we have access to powerful high-performance computers, the application of
 post-Hartree-Fock electron correlation methods [2] becomes extremely challenging even for
 molecular systems with a few atoms.
