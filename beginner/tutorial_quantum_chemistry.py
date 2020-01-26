@@ -162,11 +162,11 @@ print(hf_data)
 #
 # In general, post-Hartree-Fock electron correlation methods expand the molecule's wave
 # function around the Hartree-Fock solution, by adding Slater determinants, commonly referred to as 
-# *configurations*, that result from exciting the electrons occupying the HF orbitals below the Fermi
-# level to the unoccupied orbitals above it. Despite the fact that there are different techniques to
-# truncate this expansion, the number of configurations increases combinatorially with the number 
-# of electrons and basis functions and the task of finding the wave function expansion coefficients
-# becomes numerically intractable should we want to include the full set of molecular orbitals.
+# *configurations*, that result from exciting the electrons from the occupied to the unoccupied 
+# HF orbitals. Despite the fact that there are different techniques to truncate this expansion, 
+# the number of configurations increases combinatorially with the number of electrons and basis 
+# functions and the task of finding the wave function expansion coefficients becomes numerically 
+# intractable should we want to include the full set of molecular orbitals.
 #
 # In order to circumvent the combinatorial explosion, we can create an active space by classifying
 # the molecular orbitals as doubly-occupied, active, and external orbitals:
