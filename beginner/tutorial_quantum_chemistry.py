@@ -290,7 +290,6 @@ print(qubit_hamiltonian)
 #    computational methods". (Cambridge University Press, 2006).
 #
 # 2. Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons,
-
 #    2016).
 #
 # 3. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
