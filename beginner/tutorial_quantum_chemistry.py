@@ -101,7 +101,6 @@ charge = 0
 # *paired* electrons in each orbital, one with spin-up and the other with spin-down, is said to
 # be a closed-shell HF state with spin *multiplicity* one. Alternatively, if we define an
 # occupation where the first four orbitals are doubly occupied and the next two are singly
-
 # occupied by *unpaired* electrons with spin-up, this is said to be an open-shell HF state with
 # *multiplicity* three.
 #
