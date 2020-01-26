@@ -170,7 +170,6 @@ print(hf_data)
 #
 # In order to circumvent the combinatorial explosion, we can create an active space by classifying
 # the molecular orbitals as doubly-occupied, active, and external orbitals:
-
 #
 # * Doubly-occupied orbitals are always occupied by two electrons.
 # * Active orbitals can be occupied by zero, one, or two electrons.
