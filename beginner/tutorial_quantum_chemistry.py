@@ -124,7 +124,6 @@ multiplicity = 1
 # are typically represented as a Linear Combination of Atomic Orbitals (LCAO) which are further
 # approximated by using Gaussian function. The `Basis Set Exchange
 # <https://www.basissetexchange.org/>`_ database is an excellent source of Gaussian-type
-
 # orbitals, although many of these basis sets are already incorporated in modern quantum
 # chemistry packages. In this example we choose the `minimum basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__ ``'sto-3g'`` of
