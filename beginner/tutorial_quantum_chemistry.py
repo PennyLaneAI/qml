@@ -40,11 +40,9 @@ import pennylane as qml
 ##############################################################################
 # In this example, we construct the electronic Hamiltonian of one of the most unique
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms.  The
-# equilibrium geometry of water can be downloaded from the `NIST Chemistry WebBook
-# <https://webbook.nist.gov/chemistry>`_ data base to the file 
-# :download:`h2o.xyz </beginner/h2o.xyz>`.
-# We read the equilibrium geometry of water and store it in a list
-# containing the symbol and the Cartesian coordinates of each atomic species:
+# equilibrium geometry of water is read from the file :download:`h2o.xyz </beginner/h2o.xyz>`
+# and store it in a list containing the symbol and the Cartesian coordinates of each atomic 
+# species:
 
 geometry = qml.qchem.read_structure('h2o.xyz')
 print("The total number of atoms is: {}".format(len(geometry)))
