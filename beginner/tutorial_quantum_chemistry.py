@@ -150,7 +150,8 @@ hf_data = qml.qchem.meanfield_data(name, geometry, charge,
 
 import os
 print(hf_data)
-[print(file) for file in os.listdir(hf_data)]
+for file in os.listdir(hf_data):
+    print(file)
 
 ##############################################################################
 # At this stage, we have a basis set of molecular orbitals. Next, we can use the
