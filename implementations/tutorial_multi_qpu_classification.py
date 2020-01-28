@@ -23,11 +23,19 @@ on an individual variational circuit, whose architecture is inspired by
 |
 
 
-Imports
-~~~~~~~
+Initial Setup
+~~~~~~~~~~~~~
 
 We import PennyLane, the PennyLane-provided version of NumPy,
-and relevent torch modules
+and relevent torch modules and define the constants that will 
+be used in this tutorial.
+
+We also declare the quantum devices. Our feature size is 4, and 
+we will use amplitude embedding. This means that each 
+possible state's amplitude (in the computational basis) will 
+correspond to a single feature. With 2 qubits (wires), there are 
+4 possible states, and as such, we can encode a feature vector 
+of size 4.
 """
 
 import pennylane as qml
@@ -35,13 +43,6 @@ import torch
 from pennylane import numpy as np
 from torch.autograd import Variable
 import torch.optim as optim
-
-
-#################################################################################
-# Constants
-# ~~~~~~~~~
-#
-# Define the constants that will be used in this tutorial
 
 num_classes = 3
 margin = 0.15
@@ -53,19 +54,7 @@ num_qubits = 2
 num_layers = 6
 total_iterations = 100
 
-
-#################################################################################
-# Quantum Device
-# ~~~~~~~~~~~~~~
-#
-# Recall our feature size is 4, and we plan on using amplitude embedding;
-# This means that the each possible state's amplitude will correspond to 
-# a single feature. With 2 qubits (wires), there are 4 possible states, 
-# and as such, we can encode a feature vector of size 4.
-
-dev1 = qml.device("default.qubit", wires=num_qubits)
-dev2 = qml.device("default.qubit", wires=num_qubits)
-dev3 = qml.device("default.qubit", wires=num_qubits)
+dev = qml.device("default.qubit", wires=num_qubits)
 
 
 #################################################################################
@@ -91,14 +80,14 @@ def layer(W):
 # Data is embedded in each circuit using amplitude embedding:
 
 def circuit(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=True, normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=0.0, normalize=True)
     for W in weights:
         layer(W)
     return qml.expval(qml.PauliZ(0))
 
-qnode1 = qml.QNode(circuit, dev1).to_torch()
-qnode2 = qml.QNode(circuit, dev2).to_torch()
-qnode3 = qml.QNode(circuit, dev3).to_torch()
+qnode1 = qml.QNode(circuit, dev).to_torch()
+qnode2 = qml.QNode(circuit, dev).to_torch()
+qnode3 = qml.QNode(circuit, dev).to_torch()
 
 
 #################################################################################
@@ -117,21 +106,21 @@ def variational_classifier(q_circuit, params, feat):
 # ~~~~~~~~~~~~~
 #
 # Implementing multiclass classifiers as a number of one-vs-all classifiers
-# generally evokes using the margin loss. The output of classifier :math:'i', :math:'c_i'
-# on input :math:'x' is interpreted as a score, :math:'s_i' between [-1,1].
+# generally evokes using the margin loss. The output of the :math:`i`th classifier, :math:`c_i`
+# on input :math:`x` is interpreted as a score, :math:`s_i` between [-1,1].
 # More concretely, we have:
 #
 # .. math::  s_i = c_i(x; \theta)
 #
 # The multiclass margin loss attempts to ensure that the score for the correct
-# class is higher than that of incorrect class by some margin. For a sample :math:'(x,y)'
-# where :math:'y' denotes the class label, we can analytically express the mutliclass
+# class is higher than that of incorrect class by some margin. For a sample :math:`(x,y)`
+# where :math:`y` denotes the class label, we can analytically express the mutliclass
 # loss on this sample as:
 #
 # .. math::  L(x,y) = \sum_{j \ne y}{\max{\left(0, s_j - s_y + \Delta)\right)}}
 #
-# where :math:'\Delta' denotes the margin. The margin parameter is chosen as a hyperparameter.
-# For more information: see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__
+# where :math:`\Delta` denotes the margin. The margin parameter is chosen as a hyperparameter.
+# For more information, see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__
 
 def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
     loss = 0
@@ -139,7 +128,7 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
     for i, feature_vec in enumerate(feature_vecs):
         # Compute the score given to this sample by the classifier corresponding to the
         # true label. So for a true label of 1, get the score computed by classifer 1,
-        # which distinguishes between class 1 or not class 1.
+        # which distinguishes between "class 1" or "not class 1".
         s_true = variational_classifier(
             q_circuits[int(true_labels[i])],
             (all_params[0][int(true_labels[i])], all_params[1][int(true_labels[i])]),
@@ -166,8 +155,8 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Next, we use the learned models to classify our samples. For a given sample, 
-# compute the score given to it by classifier i, which quantifies how likely it is that 
-# this sample belongs to class i. For each sample, return the class with the highest score
+# compute the score given to it by classifier :math:`i`, which quantifies how likely it is that 
+# this sample belongs to class :math:`i`. For each sample, return the class with the highest score
 
 def classify(q_circuits, all_params, feature_vecs, labels):
     predicted_labels = []
@@ -195,7 +184,7 @@ def accuracy(labels, hard_predictions):
 # Data Loading and Processing
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Load in the iris dataset. Normalize the features so that the sum of the feature
+# Now we load in the iris dataset and normalize the features so that the sum of the feature
 # elements squared is 1 (:math:`ell_2` norm is 1).
 
 def load_and_process_data():
@@ -230,7 +219,7 @@ def split_data(feature_vecs, Y):
 #
 # In the training procedure, we begin by first initializing randomly the parameters
 # we wish to learn (variational circuit weights and classical bias). As these are
-# the variables we wish to optimize, we set the requires_grad flag to True. We use
+# the variables we wish to optimize, we set the ``requires_grad`` flag to ``True``. We use
 # minibatch training --- the average loss for a batch of samples is computed, and the
 # optimization step is based on this. Total training time with the default parameters
 # is roughly 15 minutes.
