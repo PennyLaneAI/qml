@@ -36,7 +36,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
-    :figure: implementations/variational_quantum_eigensolver/thumbnail_vqe.png
+    :figure: implementations/variational_quantum_eigensolver/pes_h2.png
     :description: :doc:`app/tutorial_vqe`
 
 .. customgalleryitem::
