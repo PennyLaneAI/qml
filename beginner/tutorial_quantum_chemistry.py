@@ -42,7 +42,6 @@ import pennylane as qml
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms. The
 # equilibrium geometry of water is read from the file :download:`h2o.xyz </beginner/h2o.xyz>`
 # and stored in a list containing the symbol and the Cartesian coordinates of each atomic 
-
 # species:
 
 geometry = qml.qchem.read_structure('h2o.xyz')
@@ -71,7 +70,7 @@ print(geometry)
 # --------------------------------
 #
 # The next step is to solve the `Hartree-Fock (HF) equations
-# <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__ :ref:`[2]<qchem_references>` for our 
+# <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__ for our 
 # molecule. The HF method is a *mean field* approximation, where each electron in the molecule is 
 # treated as an *independent* particle that moves under the influence of the nuclei Coulomb 
 # potential and a `self-consistent field (SCF) <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__
