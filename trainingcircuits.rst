@@ -2,8 +2,8 @@
 .. role:: html(raw)
    :format: html
 
-Key concepts
-============
+Training Variational Circuits
+=============================
 
 The main principle underlying PennyLane is to make the interface between the quantum and classical worlds seamless. A quantum computing device should not be viewed as a competitor to a classical computer, but rather as an *accelerator*. Integrating both types of information processing gives rise to **hybrid computation**.
 
@@ -92,20 +92,3 @@ Evaluating quantum nodes is inefficient on classical computers, so we might expe
 
 We can thus **use the same quantum device** to compute both quantum nodes and also gradients of quantum nodes. This is accomplished with minor assistance of a classical coprocessor, which combines the terms.
 
-.. raw:: html
-
-    <a href="concepts/autograd_quantum.html">
-    <h5>read more <i class="fas fa-angle-double-right"></i></h5>
-    </a>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Key concepts
-   :hidden:
-
-   concepts/hybrid_computation
-   concepts/quantum_nodes
-   concepts/concept_embeddings
-   concepts/varcirc
-   concepts/autograd_quantum
-   zreferences
