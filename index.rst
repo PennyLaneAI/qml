@@ -21,16 +21,16 @@ Quantum machine learning
         <section class="my-5">
             <div class="row" id="main-cards">
                 <div class="col-lg-4 mb-5">
-                    <a href="summary.html">
+                    <a href="whatisqml.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/board.png" class="img-fluid" style="max-width: 86px;"></img>
+                                <img src="_static/dummy.png" class="img-fluid" style="max-width: 86px;"></img>
                                 <br>
                                 <strong>What is QML?</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">How the principles of quantum computing and machine learning create something new.</p>
+                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -38,16 +38,16 @@ Quantum machine learning
                 </a>
                 </div>
                 <div class="col-lg-4 mb-5">
-                    <a href="intro.html">
+                    <a href="trainingcircuits.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/board.png" class="img-fluid" style="max-width: 86px;"></img>
                                 <br>
-                                <strong>Training quantum circuits</strong>
+                                <strong>Training circuits</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Understand the basics of how to train variational quantum algorithms.</p>
+                                <p class="mb-1 grey-text px-3">Understand how variational quantum circuits are trained using the idea of quantum gradients.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@ Quantum machine learning
                                     <br>
                                     <strong>Key concepts</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Explore and understand specific concepts underpinning variational quantum circuits and quantum machine learning.</p>
+                                    <p class="mb-1 grey-text px-3">Explore different concepts underpinning variational quantum circuits and quantum machine learning.</p>
                                     <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                     <!-- <a href="concepts.html" class="btn peach-gradient">Get started</a> -->
                                 </div>
@@ -82,7 +82,7 @@ Quantum machine learning
                                 <br>
                                 <strong>Demos</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms on near-term quantum hardware.</p>
+                                <p class="mb-1 grey-text px-3">Take a dive into quantum machine learning by exploring cutting-edge algorithms on near-term quantum hardware.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -213,6 +213,7 @@ Quantum machine learning
     :maxdepth: 2
     :hidden:
 
+    whatisqml
+    trainingcircuits
     concepts
-    beginner
     implementations
