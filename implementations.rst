@@ -10,6 +10,30 @@ algorithms using PennyLane and near-term quantum hardware.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
+    :tooltip: Use quantum machine learning to rotate a qubit.
+    :figure: implementations/qubit_rotation/bloch.png
+    :description: :doc:`app/tutorial_qubit_rotation`
+
+.. customgalleryitem::
+    :tooltip: Use quantum machine learning to tune a beamsplitter.
+    :figure: implementations/gaussian_transformation/gauss-circuit.png
+    :description: :doc:`app/tutorial_gaussian_transformation`
+
+.. customgalleryitem::
+    :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
+    :figure: implementations/plugins_hybrid/photon_redirection.png
+    :description: :doc:`app/tutorial_plugins_hybrid`
+
+.. customgalleryitem::
+    :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
+    :description: :doc:`app/tutorial_advanced_usage`
+
+.. customgalleryitem::
+    :tooltip: Extend PyTorch with real quantum computing power.
+    :figure: implementations/pytorch_noise/bloch.gif
+    :description: :doc:`app/pytorch_noise`
+
+.. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: implementations/state_preparation/NOON.png
     :description: :doc:`app/tutorial_state_preparation`
@@ -97,6 +121,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :caption: QML Implementations
     :hidden:
 
+    app/tutorial_qubit_rotation
+    app/tutorial_gaussian_transformation
+    app/tutorial_plugins_hybrid
+    app/tutorial_advanced_usage
+    app/pytorch_noise
     app/tutorial_state_preparation
     app/tutorial_isingmodel_PyTorch
     app/tutorial_QGAN

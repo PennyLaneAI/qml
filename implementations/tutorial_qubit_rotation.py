@@ -17,7 +17,7 @@ The quantum circuit
 
 In the qubit rotation example, we wish to implement the following quantum circuit:
 
-.. figure:: ../beginner/qubit_rotation/rotation_circuit.png
+.. figure:: ../implementations/qubit_rotation/rotation_circuit.png
     :align: center
     :width: 40%
     :target: javascript:void(0);
@@ -303,7 +303,7 @@ print(dcircuit(0.54, 0.12))
 # In other words, the optimization procedure will find the weights
 # :math:`\phi_1` and :math:`\phi_2` that result in the following rotation on the Bloch sphere:
 #
-# .. figure:: ../beginner/qubit_rotation/bloch.png
+# .. figure:: ../implementations/qubit_rotation/bloch.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
