@@ -33,7 +33,7 @@ jobs:
       - save_cache:
           paths:
             - ./tutorial
-            - ./app
+            - ./demos
           key: gallery
 
   deploy:
@@ -72,7 +72,7 @@ jobs:
       - save_cache:
           paths:
             - ./tutorial
-            - ./app
+            - ./demos
           key: gallery
 
       - deploy:
