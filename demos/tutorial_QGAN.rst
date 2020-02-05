@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_QGAN.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_QGAN.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_QGAN.py:
+.. _sphx_glr_demos_tutorial_QGAN.py:
 
 
 .. _quantum_GAN:
@@ -25,7 +25,7 @@ training signal for the generator to improve its fake generated data.
 
 |
 
-.. figure:: ../implementations/QGAN/qgan.png
+.. figure:: ../demonstrations/QGAN/qgan.png
     :align: center
     :width: 75%
     :target: javascript:void(0)
@@ -52,11 +52,6 @@ We begin by importing PennyLane, NumPy, and TensorFlow.
 
 
 
-
-
-
-
-
 We also declare a 3-qubit simulator device running in Cirq.
 
 
@@ -64,11 +59,6 @@ We also declare a 3-qubit simulator device running in Cirq.
 
 
     dev  = qml.device('cirq.simulator', wires=3)
-
-
-
-
-
 
 
 
@@ -90,11 +80,6 @@ arbitrary, but fixed, state.
 
     def real(phi, theta, omega):
         qml.Rot(phi, theta, omega, wires=0)
-
-
-
-
-
 
 
 
@@ -137,11 +122,6 @@ output will be on wire 2.
 
 
 
-
-
-
-
-
 We create two QNodes. One where the real data source is wired up to the
 discriminator, and one where the generator is connected to the
 discriminator. In order to pass TensorFlow Variables into the quantum
@@ -163,11 +143,6 @@ circuits, we specify the ``"tf"`` interface.
         generator(gen_weights)
         discriminator(disc_weights)
         return qml.expval(qml.PauliZ(2))
-
-
-
-
-
 
 
 
@@ -216,11 +191,6 @@ discriminator accepts fake data as real.
 
 
 
-
-
-
-
-
 Training the QGAN
 ~~~~~~~~~~~~~~~~~
 
@@ -247,11 +217,6 @@ is very close to the :math:`\left| 1 \right\rangle` state.
 
 
 
-
-
-
-
-
 We begin by creating the optimizer:
 
 
@@ -259,11 +224,6 @@ We begin by creating the optimizer:
 
 
     opt = tf.keras.optimizers.SGD(0.1)
-
-
-
-
-
 
 
 
@@ -284,27 +244,6 @@ keeping the generator parameters fixed.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Step 0: cost = -0.1094201769647043
-    Step 5: cost = -0.38998838139377767
-    Step 10: cost = -0.6660191301125451
-    Step 15: cost = -0.8550836384511058
-    Step 20: cost = -0.9454460225917956
-    Step 25: cost = -0.9805878255020275
-    Step 30: cost = -0.9931367838787679
-    Step 35: cost = -0.9974893059307561
-    Step 40: cost = -0.9989861294952895
-    Step 45: cost = -0.999499912682503
-
-
 At the discriminator’s optimum, the probability for the discriminator to
 correctly classify the real data should be close to one.
 
@@ -316,18 +255,6 @@ correctly classify the real data should be close to one.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Prob(real classified as real):  0.9998971697286834
-
-
 For comparison, we check how the discriminator classifies the
 generator’s (still unoptimized) fake data:
 
@@ -337,18 +264,6 @@ generator’s (still unoptimized) fake data:
 
     print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weights).numpy())
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Prob(fake classified as real):  0.0002428841737298626
 
 
 In the adversarial game we now have to train the generator to better
@@ -371,57 +286,6 @@ adversarial game.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Step 0: cost = -0.0002663484193758947
-    Step 5: cost = -0.0004265993908529886
-    Step 10: cost = -0.0006873900747690342
-    Step 15: cost = -0.0011113692917046336
-    Step 20: cost = -0.0018002498164300107
-    Step 25: cost = -0.002917927839000356
-    Step 30: cost = -0.004727620673591559
-    Step 35: cost = -0.007646681336993311
-    Step 40: cost = -0.012325897896118931
-    Step 45: cost = -0.019754579341508816
-    Step 50: cost = -0.03136851320601863
-    Step 55: cost = -0.04909775442706632
-    Step 60: cost = -0.07520414905809503
-    Step 65: cost = -0.11169057964980311
-    Step 70: cost = -0.15917328641126005
-    Step 75: cost = -0.21566084044070521
-    Step 80: cost = -0.2763741277517511
-    Step 85: cost = -0.335417384615198
-    Step 90: cost = -0.38835027808318046
-    Step 95: cost = -0.4337177035855575
-    Step 100: cost = -0.4728487013510403
-    Step 105: cost = -0.5087772953153831
-    Step 110: cost = -0.5451969361121201
-    Step 115: cost = -0.585662230533103
-    Step 120: cost = -0.6327884996043167
-    Step 125: cost = -0.6872451918443119
-    Step 130: cost = -0.7468435674174998
-    Step 135: cost = -0.8066396918874688
-    Step 140: cost = -0.8607338632397017
-    Step 145: cost = -0.904840228981648
-    Step 150: cost = -0.9376678931274327
-    Step 155: cost = -0.9604098274034136
-    Step 160: cost = -0.9753705514718387
-    Step 165: cost = -0.9848743661772765
-    Step 170: cost = -0.9907762745791073
-    Step 175: cost = -0.994389756948916
-    Step 180: cost = -0.9965827705721335
-    Step 185: cost = -0.9979066118186722
-    Step 190: cost = -0.9987028814087249
-    Step 195: cost = -0.9991812122988303
-
-
 At the optimum of the generator, the probability for the discriminator
 to be fooled should be close to 1.
 
@@ -431,18 +295,6 @@ to be fooled should be close to 1.
 
     print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weights).numpy())
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Prob(fake classified as real):  0.9994220374031011
 
 
 At the joint optimum the discriminator cost will be close to zero,
@@ -459,24 +311,12 @@ generated data.
     # enough to fool the discriminator.
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Discriminator cost:  -0.0004751323255822726
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  35.530 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_QGAN.py:
+.. _sphx_glr_download_demos_tutorial_QGAN.py:
 
 
 .. only :: html

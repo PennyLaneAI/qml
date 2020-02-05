@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_rotoselect.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_rotoselect.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_rotoselect.py:
+.. _sphx_glr_demos_tutorial_rotoselect.py:
 
 
 
@@ -123,15 +123,10 @@ devices, simulators have the capability of doing these calculations without samp
     dev = qml.device("default.qubit", analytic=True, wires=2)
 
 
-
-
-
-
-
 Creating a fixed quantum circuit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: ../implementations/rotoselect/original_ansatz.png
+.. figure:: ../demonstrations/rotoselect/original_ansatz.png
    :scale: 65%
    :align: center
    :alt: original_ansatz
@@ -171,11 +166,6 @@ the Hamiltonian into a cost function. The structure is shown in the figure above
 
 
 
-
-
-
-
-
 Helper methods for the algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 We define methods to evaluate
@@ -212,11 +202,6 @@ our optimization algorithm.
 
 
 
-
-
-
-
-
 Optimization and comparison with gradient descent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 We set up some initial parameters for the :math:`R_x` and :math:`R_y`
@@ -236,11 +221,6 @@ Rotosolve algorithm.
     for i in range(n_steps):
         costs_rotosolve.append(cost(params_rsol))
         params_rsol = rotosolve_cycle(cost, params_rsol)
-
-
-
-
-
 
 
 We then compare the results of Rotosolve to an optimization
@@ -283,14 +263,6 @@ converges on the minimum after the first cycle for this simple circuit.
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_rotoselect_001.png
-    :class: sphx-glr-single-img
-
-
-
-
 Cost function surface for circuit ansatz
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Now, we plot the cost function surface for later comparison with the surface generated
@@ -320,14 +292,6 @@ by learning the circuit structure.
     plt.show()
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_rotoselect_002.png
-    :class: sphx-glr-single-img
-
-
-
-
 It is apparent that, based on the circuit structure
 chosen above, the cost function does not depend on the angle parameter :math:`\theta_2`
 for the rotation gate :math:`R_y`. As we will show in the following sections, this independence is not true
@@ -336,7 +300,7 @@ for alternative gate choices.
 Rotoselect
 ----------
 
-.. figure:: ../implementations/rotoselect/rotoselect_structure.png
+.. figure:: ../demonstrations/rotoselect/rotoselect_structure.png
    :scale: 65%
    :align: center
    :alt: rotoselect_structure
@@ -397,11 +361,6 @@ rotation specified by an element of ``generators``.
 
 
 
-
-
-
-
-
 Helper methods
 ~~~~~~~~~~~~~~
 We define helper methods in a similar fashion to Rotosolve. In this case,
@@ -447,11 +406,6 @@ we must iterate through the possible gate choices in addition to optimizing each
 
 
 
-
-
-
-
-
 Optimizing the circuit structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 We perform the optimization and print the optimal generators for the rotation gates. The minimum value of the
@@ -492,25 +446,10 @@ increasing the depth of the circuit by selecting better gates for the task of mi
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_rotoselect_003.png
-    :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Optimal generators are: ['Y', 'X']
-
-
 Cost function surface for learned circuit structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: ../implementations/rotoselect/learned_structure.png
+.. figure:: ../demonstrations/rotoselect/learned_structure.png
    :scale: 65%
    :align: center
    :alt: learned_structure
@@ -544,14 +483,6 @@ the new circuit structure is better suited for the problem.
     plt.show()
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_rotoselect_004.png
-    :class: sphx-glr-single-img
-
-
-
-
 References
 ----------
 
@@ -561,10 +492,10 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  8.709 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_rotoselect.py:
+.. _sphx_glr_download_demos_tutorial_rotoselect.py:
 
 
 .. only :: html

@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_data_reuploading_classifier.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_data_reuploading_classifier.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_data_reuploading_classifier.py:
+.. _sphx_glr_demos_tutorial_data_reuploading_classifier.py:
 
 
 .. _data_reuploading_classifier:
@@ -36,7 +36,7 @@ labeled as 1 (blue) or 0 (red) depending on whether they lie inside or
 outside a circle. The goal is to train a quantum circuit to predict the
 label (red or blue) given an input point’s coordinate.
 
-.. figure:: ../implementations/data_reuploading/universal_circles.png
+.. figure:: ../demonstrations/data_reuploading/universal_circles.png
    :scale: 65%
    :alt: circles
 
@@ -55,7 +55,7 @@ a vector :math:`(\alpha, \beta)` to represent the probabilities of a qubit
 being in a particular state and visualize it on the Bloch sphere as an
 arrow.
 
-.. figure:: ../implementations/data_reuploading/universal_bloch.png
+.. figure:: ../demonstrations/data_reuploading/universal_bloch.png
    :scale: 65%
    :alt: bloch
 
@@ -91,7 +91,7 @@ sets of weights,
 :math:`L(\vec \theta_1, \vec x) L(\vec \theta_2, , \vec x) ... L(\vec \theta_L, \vec x)`
 for :math:`L` layers. The quantum circuit would look like the following:
 
-.. figure:: ../implementations/data_reuploading/universal_layers.png
+.. figure:: ../demonstrations/data_reuploading/universal_layers.png
    :scale: 75%
    :alt: Layers
 
@@ -164,7 +164,7 @@ of qubits. So, multiple qubits with entanglement between them could
 provide some quantum advantage over classical neural networks. But here,
 we will only implement a single qubit classifier.
 
-.. figure:: ../implementations/data_reuploading/universal_dnn.png
+.. figure:: ../demonstrations/data_reuploading/universal_dnn.png
    :scale: 35%
    :alt: DNN
 
@@ -255,14 +255,6 @@ we will only implement a single qubit classifier.
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_data_reuploading_classifier_001.png
-    :class: sphx-glr-single-img
-
-
-
-
 Simple classifier with data reloading and fidelity loss
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -311,11 +303,6 @@ Simple classifier with data reloading and fidelity loss
             f = qcircuit(params, x=x[i], y=dm_labels[y[i]])
             loss = loss + (1 - f) ** 2
         return loss / len(x)
-
-
-
-
-
 
 
 
@@ -389,11 +376,6 @@ Utility functions for testing and creating batches
 
 
 
-
-
-
-
-
 Train a quantum classifier on the circle dataset
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -459,28 +441,6 @@ Train a quantum classifier on the circle dataset
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Epoch:  0 | Cost: 0.415535 | Train accuracy: 0.460000 | Test Accuracy: 0.448500
-    Epoch:  1 | Loss: 0.200164 | Train accuracy: 0.675000 | Test accuracy: 0.704000
-    Epoch:  2 | Loss: 0.225628 | Train accuracy: 0.640000 | Test accuracy: 0.692500
-    Epoch:  3 | Loss: 0.164149 | Train accuracy: 0.750000 | Test accuracy: 0.746000
-    Epoch:  4 | Loss: 0.143985 | Train accuracy: 0.795000 | Test accuracy: 0.773000
-    Epoch:  5 | Loss: 0.116077 | Train accuracy: 0.860000 | Test accuracy: 0.827500
-    Epoch:  6 | Loss: 0.117629 | Train accuracy: 0.845000 | Test accuracy: 0.807000
-    Epoch:  7 | Loss: 0.103391 | Train accuracy: 0.890000 | Test accuracy: 0.853000
-    Epoch:  8 | Loss: 0.100581 | Train accuracy: 0.910000 | Test accuracy: 0.861500
-    Epoch:  9 | Loss: 0.106676 | Train accuracy: 0.870000 | Test accuracy: 0.821500
-    Epoch: 10 | Loss: 0.099787 | Train accuracy: 0.900000 | Test accuracy: 0.871000
-
-
 Results
 ~~~~~~~
 
@@ -510,25 +470,6 @@ Results
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_data_reuploading_classifier_002.png
-    :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Cost: 0.099787 | Train accuracy 0.900000 | Test Accuracy : 0.871000
-    Learned weights
-    Layer 0: [ 0.53841959  1.21036237 -0.08101526]
-    Layer 1: [-0.33445488  0.64181687 -0.59442591]
-    Layer 2: [-2.29400846 -1.18534645  0.32099704]
-
-
 This tutorial was generated using the following Pennylane version:
 
 
@@ -537,50 +478,6 @@ This tutorial was generated using the following Pennylane version:
 
     qml.about()
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Name: PennyLane
-    Version: 0.8.0.dev0
-    Summary: PennyLane is a Python quantum machine learning library by Xanadu Inc.
-    Home-page: https://github.com/XanaduAI/pennylane
-    Author: None
-    Author-email: None
-    License: Apache License 2.0
-    Location: /home/maria/Desktop/XANADU/pennylane
-    Requires: numpy, scipy, networkx, autograd, toml, appdirs, semantic-version
-    Required-by: PennyLane-qiskit
-    Platform info:           Linux-5.0.0-37-generic-x86_64-with-Ubuntu-18.04-bionic
-    Python version:          3.6.7
-    Numpy version:           1.16.2
-    Scipy version:           1.2.1
-    Installed devices:
-    - strawberryfields.fock (PennyLane-SF-0.2.1)
-    - strawberryfields.gaussian (PennyLane-SF-0.2.1)
-    - microsoft.QuantumSimulator (PennyLane-qsharp-0.2.0)
-    - qiskit.aer (PennyLane-qiskit-0.0.8)
-    - qiskit.basicaer (PennyLane-qiskit-0.0.8)
-    - qiskit.ibmq (PennyLane-qiskit-0.0.8)
-    - projectq.classical (PennyLane-PQ-0.2.1)
-    - projectq.ibm (PennyLane-PQ-0.2.1)
-    - projectq.simulator (PennyLane-PQ-0.2.1)
-    - forest.qpu (PennyLane-Forest-0.1.1)
-    - forest.qvm (PennyLane-Forest-0.1.1)
-    - forest.wavefunction (PennyLane-Forest-0.1.1)
-    - cirq.simulator (PennyLane-Cirq-0.1.0)
-    - qulacs.simulator (pennylane-qulacs-0.0.3)
-    - default.gaussian (PennyLane-0.8.0.dev0)
-    - default.qubit (PennyLane-0.8.0.dev0)
-    - expt.tensornet (PennyLane-0.8.0.dev0)
-    - expt.tensornet.tf (PennyLane-0.8.0.dev0)
 
 
 References
@@ -598,10 +495,10 @@ method for large scale optimization." Mathematical programming
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  2.090 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_data_reuploading_classifier.py:
+.. _sphx_glr_download_demos_tutorial_data_reuploading_classifier.py:
 
 
 .. only :: html

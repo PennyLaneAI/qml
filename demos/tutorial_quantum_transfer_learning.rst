@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_quantum_transfer_learning.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_quantum_transfer_learning.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_quantum_transfer_learning.py:
+.. _sphx_glr_demos_tutorial_quantum_transfer_learning.py:
 
 
 .. _quantum_transfer_learning:
@@ -37,7 +37,7 @@ and :math:`B`, independently from their quantum or classical physical nature.
 |
 
 
-.. figure:: ../implementations/quantum_transfer_learning/transfer_learning_general.png
+.. figure:: ../demonstrations/quantum_transfer_learning/transfer_learning_general.png
    :scale: 45%
    :alt: transfer_general
    :align: center
@@ -59,7 +59,7 @@ transfer learning method**:
    new dataset :math:`D_B` and/or for a new task of interest :math:`T_B`.
 
 When dealing with hybrid systems, depending on the physical nature (classical or quantum) of the
-networks :math:`A` and :math:`B`, one can have different implementations of transfer learning as
+networks :math:`A` and :math:`B`, one can have different demonstrations of transfer learning as
 summarized in following table:
 
 |
@@ -97,7 +97,7 @@ We focus on the CQ transfer learning scheme discussed in the previous section an
 
 A graphical representation of the full data processing pipeline is given in the figure below.
 
-.. figure:: ../implementations/quantum_transfer_learning/transfer_learning_c2q.png
+.. figure:: ../demonstrations/quantum_transfer_learning/transfer_learning_c2q.png
    :scale: 55%
    :alt: transfer_c2q
    :align: center
@@ -147,11 +147,6 @@ plotting library *matplotlib*.
 
 
 
-
-
-
-
-
 Setting of the main hyper-parameters of the model
 ------------------------------------------------------------
 
@@ -175,11 +170,6 @@ Setting of the main hyper-parameters of the model
     start_time = time.time()    # Start of the computation timer
 
 
-
-
-
-
-
 We initialize a PennyLane device with a ``default.qubit`` backend.
 
 
@@ -189,11 +179,6 @@ We initialize a PennyLane device with a ``default.qubit`` backend.
     dev = qml.device("default.qubit", wires=n_qubits)
 
 
-
-
-
-
-
 We configure PyTorch to use CUDA only if available. Otherwise the CPU is used.
 
 
@@ -201,11 +186,6 @@ We configure PyTorch to use CUDA only if available. Otherwise the CPU is used.
 
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-
-
-
-
 
 
 Dataset loading
@@ -273,30 +253,6 @@ and performing standard preliminary image operations: resize, center, crop, norm
         plt.imshow(inp)
         if title is not None:
             plt.title(title)
-
-
-
-
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/home/maria/Desktop/XANADU/venv_dev_pl/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
-        out = func()
-      File "/home/maria/Desktop/XANADU/venv_dev_pl/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
-        exec(self.code, self.globals)
-      File "/home/maria/Desktop/XANADU/qml/implementations/tutorial_quantum_transfer_learning.py", line 207, in <module>
-        x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ["train", "val"]
-      File "/home/maria/Desktop/XANADU/qml/implementations/tutorial_quantum_transfer_learning.py", line 207, in <dictcomp>
-        x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ["train", "val"]
-      File "/home/maria/Desktop/XANADU/venv_dev_pl/lib/python3.6/site-packages/torchvision/datasets/folder.py", line 209, in __init__
-        is_valid_file=is_valid_file)
-      File "/home/maria/Desktop/XANADU/venv_dev_pl/lib/python3.6/site-packages/torchvision/datasets/folder.py", line 93, in __init__
-        classes, class_to_idx = self._find_classes(self.root)
-      File "/home/maria/Desktop/XANADU/venv_dev_pl/lib/python3.6/site-packages/torchvision/datasets/folder.py", line 122, in _find_classes
-        classes = [d.name for d in os.scandir(dir) if d.is_dir()]
-    FileNotFoundError: [Errno 2] No such file or directory: '../_data/hymenoptera_data/train'
-
 
 
 
@@ -689,10 +645,10 @@ Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 7
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.278 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_quantum_transfer_learning.py:
+.. _sphx_glr_download_demos_tutorial_quantum_transfer_learning.py:
 
 
 .. only :: html

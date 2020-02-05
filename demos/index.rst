@@ -2,7 +2,7 @@
 
 
 
-.. _sphx_glr_app:
+.. _sphx_glr_demos:
 
 
 
@@ -13,9 +13,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_advanced_usage_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_advanced_usage_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_advanced_usage.py`
+        :ref:`sphx_glr_demos_tutorial_advanced_usage.py`
 
 .. raw:: html
 
@@ -25,7 +25,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_advanced_usage
+   /demos/tutorial_advanced_usage
 
 .. raw:: html
 
@@ -33,9 +33,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_gaussian_transformation_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_gaussian_transformation_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_gaussian_transformation.py`
+        :ref:`sphx_glr_demos_tutorial_gaussian_transformation.py`
 
 .. raw:: html
 
@@ -45,7 +45,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_gaussian_transformation
+   /demos/tutorial_gaussian_transformation
 
 .. raw:: html
 
@@ -53,9 +53,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_qubit_rotation_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_qubit_rotation_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_qubit_rotation.py`
+        :ref:`sphx_glr_demos_tutorial_qubit_rotation.py`
 
 .. raw:: html
 
@@ -65,7 +65,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_qubit_rotation
+   /demos/tutorial_qubit_rotation
 
 .. raw:: html
 
@@ -73,9 +73,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_pytorch_noise_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_pytorch_noise_thumb.png
 
-        :ref:`sphx_glr_app_pytorch_noise.py`
+        :ref:`sphx_glr_demos_pytorch_noise.py`
 
 .. raw:: html
 
@@ -85,7 +85,7 @@
 .. toctree::
    :hidden:
 
-   /app/pytorch_noise
+   /demos/pytorch_noise
 
 .. raw:: html
 
@@ -93,9 +93,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_quantum_neural_net_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_quantum_neural_net_thumb.png
 
-        :ref:`sphx_glr_app_quantum_neural_net.py`
+        :ref:`sphx_glr_demos_quantum_neural_net.py`
 
 .. raw:: html
 
@@ -105,7 +105,7 @@
 .. toctree::
    :hidden:
 
-   /app/quantum_neural_net
+   /demos/quantum_neural_net
 
 .. raw:: html
 
@@ -113,9 +113,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_plugins_hybrid_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_plugins_hybrid_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_plugins_hybrid.py`
+        :ref:`sphx_glr_demos_tutorial_plugins_hybrid.py`
 
 .. raw:: html
 
@@ -125,7 +125,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_plugins_hybrid
+   /demos/tutorial_plugins_hybrid
 
 .. raw:: html
 
@@ -133,9 +133,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_state_preparation_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_state_preparation_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_state_preparation.py`
+        :ref:`sphx_glr_demos_tutorial_state_preparation.py`
 
 .. raw:: html
 
@@ -145,7 +145,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_state_preparation
+   /demos/tutorial_state_preparation
 
 .. raw:: html
 
@@ -153,9 +153,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_barren_plateaus_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_barren_plateaus_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_barren_plateaus.py`
+        :ref:`sphx_glr_demos_tutorial_barren_plateaus.py`
 
 .. raw:: html
 
@@ -165,7 +165,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_barren_plateaus
+   /demos/tutorial_barren_plateaus
 
 .. raw:: html
 
@@ -173,9 +173,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_QGAN_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_QGAN_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_QGAN.py`
+        :ref:`sphx_glr_demos_tutorial_QGAN.py`
 
 .. raw:: html
 
@@ -185,7 +185,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_QGAN
+   /demos/tutorial_QGAN
 
 .. raw:: html
 
@@ -193,9 +193,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_isingmodel_PyTorch_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_isingmodel_PyTorch_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_isingmodel_PyTorch.py`
+        :ref:`sphx_glr_demos_tutorial_isingmodel_PyTorch.py`
 
 .. raw:: html
 
@@ -205,7 +205,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_isingmodel_PyTorch
+   /demos/tutorial_isingmodel_PyTorch
 
 .. raw:: html
 
@@ -213,9 +213,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_qaoa_maxcut_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_qaoa_maxcut_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_qaoa_maxcut.py`
+        :ref:`sphx_glr_demos_tutorial_qaoa_maxcut.py`
 
 .. raw:: html
 
@@ -225,7 +225,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_qaoa_maxcut
+   /demos/tutorial_qaoa_maxcut
 
 .. raw:: html
 
@@ -233,9 +233,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_quantum_natural_gradient_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_quantum_natural_gradient_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_quantum_natural_gradient.py`
+        :ref:`sphx_glr_demos_tutorial_quantum_natural_gradient.py`
 
 .. raw:: html
 
@@ -245,7 +245,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_quantum_natural_gradient
+   /demos/tutorial_quantum_natural_gradient
 
 .. raw:: html
 
@@ -253,9 +253,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_variational_quantum_eigensolver_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_variational_quantum_eigensolver_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_variational_quantum_eigensolver.py`
+        :ref:`sphx_glr_demos_tutorial_variational_quantum_eigensolver.py`
 
 .. raw:: html
 
@@ -265,7 +265,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_variational_quantum_eigensolver
+   /demos/tutorial_variational_quantum_eigensolver
 
 .. raw:: html
 
@@ -273,9 +273,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_doubly_stochastic_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_doubly_stochastic_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_doubly_stochastic.py`
+        :ref:`sphx_glr_demos_tutorial_doubly_stochastic.py`
 
 .. raw:: html
 
@@ -285,7 +285,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_doubly_stochastic
+   /demos/tutorial_doubly_stochastic
 
 .. raw:: html
 
@@ -293,9 +293,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_coherent_vqls_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_coherent_vqls_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_coherent_vqls.py`
+        :ref:`sphx_glr_demos_tutorial_coherent_vqls.py`
 
 .. raw:: html
 
@@ -305,7 +305,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_coherent_vqls
+   /demos/tutorial_coherent_vqls
 
 .. raw:: html
 
@@ -313,9 +313,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_embeddings_metric_learning_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_embeddings_metric_learning_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_embeddings_metric_learning.py`
+        :ref:`sphx_glr_demos_tutorial_embeddings_metric_learning.py`
 
 .. raw:: html
 
@@ -325,7 +325,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_embeddings_metric_learning
+   /demos/tutorial_embeddings_metric_learning
 
 .. raw:: html
 
@@ -333,9 +333,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_vqls_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_vqls_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_vqls.py`
+        :ref:`sphx_glr_demos_tutorial_vqls.py`
 
 .. raw:: html
 
@@ -345,7 +345,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_vqls
+   /demos/tutorial_vqls
 
 .. raw:: html
 
@@ -353,9 +353,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_rotoselect_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_rotoselect_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_rotoselect.py`
+        :ref:`sphx_glr_demos_tutorial_rotoselect.py`
 
 .. raw:: html
 
@@ -365,7 +365,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_rotoselect
+   /demos/tutorial_rotoselect
 
 .. raw:: html
 
@@ -373,9 +373,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_data_reuploading_classifier_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_data_reuploading_classifier_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_data_reuploading_classifier.py`
+        :ref:`sphx_glr_demos_tutorial_data_reuploading_classifier.py`
 
 .. raw:: html
 
@@ -385,7 +385,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_data_reuploading_classifier
+   /demos/tutorial_data_reuploading_classifier
 
 .. raw:: html
 
@@ -393,9 +393,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_variational_classifier_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_variational_classifier_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_variational_classifier.py`
+        :ref:`sphx_glr_demos_tutorial_variational_classifier.py`
 
 .. raw:: html
 
@@ -405,7 +405,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_variational_classifier
+   /demos/tutorial_variational_classifier
 
 .. raw:: html
 
@@ -413,9 +413,9 @@
 
 .. only:: html
 
-    .. figure:: /app/images/thumb/sphx_glr_tutorial_quantum_transfer_learning_thumb.png
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_quantum_transfer_learning_thumb.png
 
-        :ref:`sphx_glr_app_tutorial_quantum_transfer_learning.py`
+        :ref:`sphx_glr_demos_tutorial_quantum_transfer_learning.py`
 
 .. raw:: html
 
@@ -425,7 +425,7 @@
 .. toctree::
    :hidden:
 
-   /app/tutorial_quantum_transfer_learning
+   /demos/tutorial_quantum_transfer_learning
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -440,13 +440,13 @@
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: app_python.zip <//home/maria/Desktop/XANADU/qml/app/app_python.zip>`
+    :download:`Download all examples in Python source code: demos_python.zip <//home/maria/Desktop/XANADU/qml/demos/demos_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: app_jupyter.zip <//home/maria/Desktop/XANADU/qml/app/app_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: demos_jupyter.zip <//home/maria/Desktop/XANADU/qml/demos/demos_jupyter.zip>`
 
 
 .. only:: html

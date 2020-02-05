@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_embeddings_metric_learning.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_embeddings_metric_learning.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_embeddings_metric_learning.py:
+.. _sphx_glr_demos_tutorial_embeddings_metric_learning.py:
 
 
 Quantum embeddings and metric learning
@@ -37,11 +37,6 @@ The tutorial requires the following imports:
 
 
 
-
-
-
-
-
 Idea
 ----
 
@@ -50,7 +45,7 @@ quantum circuit that encodes classical data into quantum states—to
 separate different classes of data in the Hilbert space of the quantum
 system.
 
-.. figure:: ../implementations/embedding_metric_learning/training.png
+.. figure:: ../demonstrations/embedding_metric_learning/training.png
    :align: center
    :width: 40%
 
@@ -60,7 +55,7 @@ special measurement compares it to the two embedded classes.
 The decision boundary of the measurement in quantum state space is nearly
 linear (red dashed line).
 
-.. figure:: ../implementations/embedding_metric_learning/classification.png
+.. figure:: ../demonstrations/embedding_metric_learning/classification.png
    :align: center
    :width: 40%
 
@@ -69,7 +64,7 @@ more complex metric in the original data space, the simple decision
 boundary can translate to a non-trivial decision boundary in the
 original space of the data.
 
-.. figure:: ../implementations/embedding_metric_learning/dec_boundary.png
+.. figure:: ../demonstrations/embedding_metric_learning/dec_boundary.png
    :align: center
    :width: 40%
 
@@ -103,7 +98,7 @@ feature map:
 
 |
 
-.. figure:: ../implementations/embedding_metric_learning/pipeline.png
+.. figure:: ../demonstrations/embedding_metric_learning/pipeline.png
    :align: center
    :width: 100%
 
@@ -153,11 +148,6 @@ with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY``
         feature_encoding_hamiltonian(features, wires)
 
 
-
-
-
-
-
 Overall, the embedding has 1024 + 12 trainable parameters - 1024 for the
 classical part of the model and 12 for the four layers of the QAOA
 embedding.
@@ -177,7 +167,7 @@ are images of ants (:math:`A`) and bees (:math:`B`), taken from `Kaggle's
 hymenoptera dataset <https://www.kaggle.com/ajayrana/hymenoptera-data>`__.
 This is a sample of four images:
 
-.. figure:: ../implementations/embedding_metric_learning/data_example.png
+.. figure:: ../demonstrations/embedding_metric_learning/data_example.png
    :align: center
    :width: 50%
 
@@ -210,19 +200,6 @@ layer).
     print(A.shape)
     print(B.shape)
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    (83, 512)
-    (70, 512)
 
 
 Cost
@@ -263,11 +240,6 @@ PennyLane's ``'default.qubit'`` backend.
 
 
 
-
-
-
-
-
 We use a SWAP test to measure the overlap
 :math:`|\langle \psi | \phi \rangle|^2` between two quantum feature
 states :math:`|\psi\rangle` and :math:`|\phi\rangle`, prepared by a
@@ -293,11 +265,6 @@ states :math:`|\psi\rangle` and :math:`|\phi\rangle`, prepared by a
         qml.Hadamard(wires=0)
 
         return qml.expval(qml.PauliZ(0))
-
-
-
-
-
 
 
 
@@ -331,11 +298,6 @@ before calling the swap test:
 
 
 
-
-
-
-
-
 In the ``overlaps()`` function, ``weights`` is a list of two arrays, the first
 representing the matrix of the linear layer, and the second containing
 the quantum circuit parameters.
@@ -361,11 +323,6 @@ inter- and intra-cluster overlaps.
 
 
 
-
-
-
-
-
 Optimization
 ------------
 The initial parameters for the trainable classical and quantum part of the embedding are
@@ -383,11 +340,6 @@ dimension of `init_pars_quantum`.
     init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, 512))
 
     init_pars = [init_pars_classical, init_pars_quantum]
-
-
-
-
-
 
 
 We can now train the embedding with an ``RMSPropOptimizer``, sampling
@@ -421,19 +373,6 @@ five training points from each class in every step, here shown for 2 steps.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Step 0 done.
-    Step 1 done.
-
-
 Optimizing a hybrid quantum-classical model with 1024 + 12 parameters
 takes an awfully long time. We will
 therefore load a set of `already trained parameters
@@ -456,25 +395,6 @@ optimizer used.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    [array([[ 0.07892546,  0.18963997,  0.01267011, ..., -0.41917757,
-             0.13794201, -0.31620719],
-           [-0.49709026, -0.49160803, -0.16817771, ...,  0.35410417,
-            -0.28687695,  0.25804757]])
-     array([[ 1.28247918e-03, -2.53456415e-05, -2.53456415e-05],
-           [ 1.55648560e-06,  1.65446338e-02,  1.55648553e-06],
-           [ 8.12333186e-06, -1.99865981e-04,  6.71177010e-03],
-           [-2.92851167e-03,  8.12333185e-06,  1.09834400e-03]])]
-
-
 Analysis
 --------
 
@@ -488,11 +408,6 @@ selecting the first 10 points from either class.
 
 
     select = 10
-
-
-
-
-
 
 
 
@@ -510,19 +425,6 @@ follows:
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Cost for pretrained parameters on training set: 1.853538574958513e-05
-    Cost for pretrained parameters on validation set: 1.853538574958513e-05
-
-
 A useful way to visualize the distance of data points is to plot a Gram
 matrix of the overlaps of different feature states. For this we join the
 first 10 examples of each of the two classes.
@@ -533,11 +435,6 @@ first 10 examples of each of the two classes.
 
 
     A_B = np.r_[A[:select], B[:select]]
-
-
-
-
-
 
 
 
@@ -560,14 +457,6 @@ in the Gram matrix:
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_embeddings_metric_learning_001.png
-    :class: sphx-glr-single-img
-
-
-
-
 After training, the gram matrix clearly separates the two classes.
 
 
@@ -583,14 +472,6 @@ After training, the gram matrix clearly separates the two classes.
     cax = divider.append_axes("right", size="5%", pad=0.05)
     plt.colorbar(im, cax=cax)
     plt.show()
-
-
-
-
-
-.. image:: /app/images/sphx_glr_tutorial_embeddings_metric_learning_002.png
-    :class: sphx-glr-single-img
-
 
 
 
@@ -614,14 +495,6 @@ layer, the classes are arbitrarily intermixed.
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_embeddings_metric_learning_003.png
-    :class: sphx-glr-single-img
-
-
-
-
 However, after training, the linear layer learned to arrange the
 intermediate feature vectors on a periodic grid.
 
@@ -637,14 +510,6 @@ intermediate feature vectors on a periodic grid.
     for b in B:
         intermediate_b = pretrained_pars[0] @ b
         plt.scatter(intermediate_b[:][0], intermediate_b[:][1], c="blue")
-
-
-
-
-
-.. image:: /app/images/sphx_glr_tutorial_embeddings_metric_learning_004.png
-    :class: sphx-glr-single-img
-
 
 
 
@@ -666,7 +531,7 @@ our model never saw it during training):
 
 |
 
-.. figure:: ../implementations/embedding_metric_learning/ant.jpg
+.. figure:: ../demonstrations/embedding_metric_learning/ant.jpg
    :align: center
    :width: 40%
 
@@ -684,18 +549,6 @@ linear layer), the 512-dimensional feature vector is given by
 
     print(x_new.shape)
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    (512,)
 
 
 We compare the new input with randomly selected samples. The more
@@ -728,25 +581,13 @@ samples used, the smaller the variance in the prediction.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    -0.6449875690772007
-
-
 Since the result is negative, the new data point is (correctly) predicted
 to be a picture of an ant, which was the class with -1 labels.
 
 References
 ----------
 Seth Lloyd, Maria Schuld, Aroosa Ijaz, Josh Izaac, Nathan Killoran: "Quantum embeddings for machine learning"
-arXiv preprint arXiv:XXXXX.
+arXiv preprint arXiv:2001.03622.
 
 Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, Nathan Killoran: "Transfer learning
 in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
@@ -754,10 +595,10 @@ in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  19.625 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_embeddings_metric_learning.py:
+.. _sphx_glr_download_demos_tutorial_embeddings_metric_learning.py:
 
 
 .. only :: html

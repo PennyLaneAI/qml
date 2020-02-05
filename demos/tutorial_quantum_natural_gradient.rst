@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_quantum_natural_gradient.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_quantum_natural_gradient.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_quantum_natural_gradient.py:
+.. _sphx_glr_demos_tutorial_quantum_natural_gradient.py:
 
 
 
@@ -29,7 +29,7 @@ of the quantum device. Examples of such algorithms include the :ref:`variational
 eigensolver (VQE) <vqe>`, the `quantum approximate optimization algorithm (QAOA) <https://arxiv.org/abs/1411.4028>`__,
 and :ref:`quantum neural networks (QNN) <quantum_neural_net>`.
 
-Most recent implementations
+Most recent demonstrations
 of variational quantum algorithms have used gradient-free classical optimization
 methods, such as the Nelder-Mead algorithm. However, the parameter-shift rule
 (as implemented in PennyLane) allows the user to automatically compute
@@ -65,7 +65,7 @@ using two different coordinate systems, :math:`(\theta_0, \theta_1)`, and
 
 |
 
-.. figure:: ../implementations/quantum_natural_gradient/qng7.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng7.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -218,15 +218,10 @@ Let's consider a small variational quantum circuit example coded in PennyLane:
     params = np.array([0.432, -0.123, 0.543, 0.233])
 
 
-
-
-
-
-
 The above circuit consists of 4 parameters, with two distinct parametrized
 layers of 2 parameters each.
 
-.. figure:: ../implementations/quantum_natural_gradient/qng1.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng1.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -238,7 +233,7 @@ is simply the identity.) Since there are two layers, each with two parameters,
 the block-diagonal approximation consists of two
 :math:`2\times 2` matrices, :math:`g^{(0)}` and :math:`g^{(1)}`.
 
-.. figure:: ../implementations/quantum_natural_gradient/qng2.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng2.png
     :align: center
     :width: 30%
     :target: javascript:void(0)
@@ -247,7 +242,7 @@ To compute the first block-diagonal :math:`g^{(0)}`, we create subcircuits consi
 of all gates prior to the layer, and observables corresponding to
 the *generators* of the gates in the layer:
 
-.. figure:: ../implementations/quantum_natural_gradient/qng3.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng3.png
     :align: center
     :width: 30%
     :target: javascript:void(0)
@@ -268,15 +263,10 @@ the *generators* of the gates in the layer:
 
 
 
-
-
-
-
-
 We then post-process the measurement results in order to determine :math:`g^{(0)}`,
 as follows.
 
-.. figure:: ../implementations/quantum_natural_gradient/qng4.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng4.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -298,11 +288,6 @@ We can see that the diagonal terms are simply given by the variance:
     varK0, varK1 = layer0_diag(params)
     g0[0, 0] = varK0 / 4
     g0[1, 1] = varK1 / 4
-
-
-
-
-
 
 
 The following two subcircuits are then used to calculate the
@@ -334,18 +319,13 @@ off-diagonal covariance terms of :math:`g^{(0)}`:
     g0[1, 0] = (exK0K1 - exK0 * exK1) / 4
 
 
-
-
-
-
-
 Note that, by definition, the block-diagonal matrices must be real and
 symmetric.
 
 We can repeat the above process to compute :math:`g^{(1)}`. The subcircuit
 required is given by
 
-.. figure:: ../implementations/quantum_natural_gradient/qng8.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng8.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -375,14 +355,9 @@ required is given by
 
 
 
-
-
-
-
-
 Using this subcircuit, we can now generate the submatrix :math:`g^{(1)}`.
 
-.. figure:: ../implementations/quantum_natural_gradient/qng5.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng5.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -399,11 +374,6 @@ Using this subcircuit, we can now generate the submatrix :math:`g^{(1)}`.
 
 
 
-
-
-
-
-
 As previously, the diagonal terms are simply given by the variance,
 
 
@@ -413,11 +383,6 @@ As previously, the diagonal terms are simply given by the variance,
     varK0, varK1 = layer1_diag(params)
     g1[0, 0] = varK0 / 4
     g1[1, 1] = varK1 / 4
-
-
-
-
-
 
 
 
@@ -453,11 +418,6 @@ observables to be computed.
 
 
 
-
-
-
-
-
 Putting this altogether, the block-diagonal approximation to the Fubini-Study
 metric tensor for this variational quantum circuit is
 
@@ -471,21 +431,6 @@ metric tensor for this variational quantum circuit is
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    [[ 0.125       0.          0.          0.        ]
-     [ 0.          0.1875      0.          0.        ]
-     [ 0.          0.          0.24973433 -0.01524701]
-     [ 0.          0.         -0.01524701  0.20293623]]
-
-
 PennyLane QNodes contain a built-in method for computing the Fubini-Study metric
 tensor, :meth:`~.pennylane.QNode.metric_tensor`, which
 we can use to verify this result:
@@ -494,21 +439,6 @@ we can use to verify this result:
 .. code-block:: default
 
     print(np.round(circuit.metric_tensor(params), 8))
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    [[ 0.125       0.          0.          0.        ]
-     [ 0.          0.1875      0.          0.        ]
-     [ 0.          0.          0.24973433 -0.01524701]
-     [ 0.          0.         -0.01524701  0.20293623]]
 
 
 As opposed to our manual computation, which required 6 different quantum
@@ -531,21 +461,6 @@ approximation to the metric tensor:
     print(circuit.metric_tensor(params, diag_approx=True))
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    [[0.125      0.         0.         0.        ]
-     [0.         0.1875     0.         0.        ]
-     [0.         0.         0.24973433 0.        ]
-     [0.         0.         0.         0.20293623]]
-
-
 Quantum natural gradient optimization
 -------------------------------------
 
@@ -562,11 +477,6 @@ circuit above.
     init_params = np.array([0.432, -0.123, 0.543, 0.233])
 
 
-
-
-
-
-
 Performing vanilla gradient descent:
 
 
@@ -580,11 +490,6 @@ Performing vanilla gradient descent:
     for _ in range(steps):
         theta = opt.step(circuit, theta)
         gd_cost.append(circuit(theta))
-
-
-
-
-
 
 
 Performing quantum natural gradient descent:
@@ -603,11 +508,6 @@ Performing quantum natural gradient descent:
 
 
 
-
-
-
-
-
 Plotting the cost vs optimization step for both optimization strategies:
 
 
@@ -623,14 +523,6 @@ Plotting the cost vs optimization step for both optimization strategies:
     plt.xlabel("Optimization steps")
     plt.legend()
     plt.show()
-
-
-
-
-.. image:: /app/images/sphx_glr_tutorial_quantum_natural_gradient_001.png
-    :class: sphx-glr-single-img
-
-
 
 
 References
@@ -652,10 +544,10 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.246 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_quantum_natural_gradient.py:
+.. _sphx_glr_download_demos_tutorial_quantum_natural_gradient.py:
 
 
 .. only :: html

@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_qaoa_maxcut.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_qaoa_maxcut.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_qaoa_maxcut.py:
+.. _sphx_glr_demos_tutorial_qaoa_maxcut.py:
 
 
 .. _qaoa_maxcut:
@@ -25,7 +25,7 @@ The MaxCut problem
 The aim of MaxCut is to maximize the number of edges (yellow lines) in a graph that are "cut" by
 a given partition of the vertices (blue circles) into two sets (see figure below).
 
-.. figure:: ../implementations/qaoa_maxcut/qaoa_maxcut_partition.png
+.. figure:: ../demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
    :align: center
    :scale: 65%
    :alt: qaoa_operators
@@ -99,7 +99,7 @@ In other words, we make :math:`p` layers of parametrized :math:`U_bU_C` gates.
 These can be implemented on a quantum circuit using the gates depicted below, up to an irrelevant constant
 that gets absorbed into the parameters.
 
-.. figure:: ../implementations/qaoa_maxcut/qaoa_operators.png
+.. figure:: ../demonstrations/qaoa_maxcut/qaoa_operators.png
    :align: center
    :scale: 100%
    :alt: qaoa_operators
@@ -116,7 +116,7 @@ computational basis.
 In the case of the graph shown above, we want to measure either 0101 or 1010 from our state since these correspond to
 the optimal partitions.
 
-.. figure:: ../implementations/qaoa_maxcut/qaoa_optimal_state.png
+.. figure:: ../demonstrations/qaoa_maxcut/qaoa_optimal_state.png
   :align: center
   :scale: 60%
   :alt: optimal_state
@@ -143,11 +143,6 @@ version of NumPy.
 
     import pennylane as qml
     from pennylane import numpy as np
-
-
-
-
-
 
 
 
@@ -185,11 +180,6 @@ each edge in the graph.
 
 
 
-
-
-
-
-
 We will need a way to sample
 a measurement of multiple qubits in the computational basis, so we define
 a Hermitian operator to do this. The eigenvalues of the operator are
@@ -206,11 +196,6 @@ the qubit measurement values in integer form.
 
 
 
-
-
-
-
-
 Circuit
 ~~~~~~~
 Next, we create a quantum device with 4 qubits.
@@ -220,11 +205,6 @@ Next, we create a quantum device with 4 qubits.
 
 
     dev = qml.device("default.qubit", wires=n_wires, analytic=True, shots=1)
-
-
-
-
-
 
 
 We also require a quantum node which will apply the operators according to the
@@ -258,11 +238,6 @@ if executed with the ``edge`` keyword set to ``None``. Additionally, we specify 
         # during the optimization phase we are evaluating a term
         # in the objective using expval
         return qml.expval(qml.Hermitian(pauli_z_2, wires=edge))
-
-
-
-
-
 
 
 
@@ -331,40 +306,6 @@ in PennyLane.
     bitstrings2 = qaoa_maxcut(n_layers=2)[1]
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    p=1
-    Objective after step     5:  2.7868695
-    Objective after step    10:  2.9986421
-    Objective after step    15:  2.9999918
-    Objective after step    20:  3.0000000
-    Objective after step    25:  3.0000000
-    Objective after step    30:  3.0000000
-    Optimized (gamma, beta) vectors:
-    [[-0.78539816]
-     [-1.17809772]]
-    Most frequently sampled bit string is: 1010
-
-    p=2
-    Objective after step     5:  3.2349721
-    Objective after step    10:  3.4865826
-    Objective after step    15:  3.8340727
-    Objective after step    20:  3.9894404
-    Objective after step    25:  3.9994548
-    Objective after step    30:  3.9999730
-    Optimized (gamma, beta) vectors:
-    [[ 1.56901706 -0.78422063]
-     [-1.17869    -0.78641302]]
-    Most frequently sampled bit string is: 1010
-
-
 In the case where we set ``n_layers=2``, we recover the optimal
 objective function :math:`C=4`
 
@@ -401,20 +342,12 @@ and in the case where we set ``n_layers=2`` we obtain one of the optimal partiti
     plt.show()
 
 
-
-.. image:: /app/images/sphx_glr_tutorial_qaoa_maxcut_001.png
-    :class: sphx-glr-single-img
-
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  17.990 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_qaoa_maxcut.py:
+.. _sphx_glr_download_demos_tutorial_qaoa_maxcut.py:
 
 
 .. only :: html

@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_barren_plateaus.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_barren_plateaus.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_barren_plateaus.py:
+.. _sphx_glr_demos_tutorial_barren_plateaus.py:
 
 
 .. _barren_plateaus:
@@ -41,7 +41,7 @@ option to choose while implementing variational quantum
 algorithms.
 
 
-.. figure:: ../implementations/barren_plateaus/surface.png
+.. figure:: ../demonstrations/barren_plateaus/surface.png
    :width: 90%
    :align: center
    :alt: surface
@@ -81,11 +81,6 @@ First, we import PennyLane, NumPy, and Matplotlib
     import pennylane as qml
     from pennylane import numpy as np
     import matplotlib.pyplot as plt
-
-
-
-
-
 
 
 
@@ -130,11 +125,6 @@ Next, we create a randomized variational circuit
 
 
 
-
-
-
-
-
 Now we can compute the gradient and calculate the variance.
 While we only sample 200 random circuits to allow the code
 to run in a reasonable amount of time, this can be
@@ -160,19 +150,6 @@ circuit. Hence we choose to save ``gradient[-1]`` only.
     print("Variance of the gradients for {} random circuits: {}".format(num_samples, np.var(grad_vals)))
     print("Mean of the gradients for {} random circuits: {}".format(num_samples, np.mean(grad_vals)))
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Variance of the gradients for 200 random circuits: 0.005681513693081505
-    Mean of the gradients for 200 random circuits: -0.0010002268976521333
 
 
 Evaluate the gradient for more qubits
@@ -221,14 +198,6 @@ We can repeat the above analysis with increasing number of qubits.
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_barren_plateaus_001.png
-    :class: sphx-glr-single-img
-
-
-
-
 This tutorial was generated using the following PennyLane version:
 
 
@@ -237,50 +206,6 @@ This tutorial was generated using the following PennyLane version:
 
     qml.about()
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Name: PennyLane
-    Version: 0.8.0.dev0
-    Summary: PennyLane is a Python quantum machine learning library by Xanadu Inc.
-    Home-page: https://github.com/XanaduAI/pennylane
-    Author: None
-    Author-email: None
-    License: Apache License 2.0
-    Location: /home/maria/Desktop/XANADU/pennylane
-    Requires: numpy, scipy, networkx, autograd, toml, appdirs, semantic-version
-    Required-by: PennyLane-qiskit
-    Platform info:           Linux-5.0.0-37-generic-x86_64-with-Ubuntu-18.04-bionic
-    Python version:          3.6.7
-    Numpy version:           1.16.2
-    Scipy version:           1.2.1
-    Installed devices:
-    - strawberryfields.fock (PennyLane-SF-0.2.1)
-    - strawberryfields.gaussian (PennyLane-SF-0.2.1)
-    - microsoft.QuantumSimulator (PennyLane-qsharp-0.2.0)
-    - qiskit.aer (PennyLane-qiskit-0.0.8)
-    - qiskit.basicaer (PennyLane-qiskit-0.0.8)
-    - qiskit.ibmq (PennyLane-qiskit-0.0.8)
-    - projectq.classical (PennyLane-PQ-0.2.1)
-    - projectq.ibm (PennyLane-PQ-0.2.1)
-    - projectq.simulator (PennyLane-PQ-0.2.1)
-    - forest.qpu (PennyLane-Forest-0.1.1)
-    - forest.qvm (PennyLane-Forest-0.1.1)
-    - forest.wavefunction (PennyLane-Forest-0.1.1)
-    - cirq.simulator (PennyLane-Cirq-0.1.0)
-    - qulacs.simulator (pennylane-qulacs-0.0.3)
-    - default.gaussian (PennyLane-0.8.0.dev0)
-    - default.qubit (PennyLane-0.8.0.dev0)
-    - expt.tensornet (PennyLane-0.8.0.dev0)
-    - expt.tensornet.tf (PennyLane-0.8.0.dev0)
 
 
 References
@@ -302,10 +227,10 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  33.234 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_barren_plateaus.py:
+.. _sphx_glr_download_demos_tutorial_barren_plateaus.py:
 
 
 .. only :: html

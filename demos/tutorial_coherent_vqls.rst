@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_app_tutorial_coherent_vqls.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_demos_tutorial_coherent_vqls.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_app_tutorial_coherent_vqls.py:
+.. _sphx_glr_demos_tutorial_coherent_vqls.py:
 
 
 .. _coherent_vqls:
@@ -21,7 +21,7 @@ applied as a probabilistic coherent operation. This approach has some advantages
 disadvantages and its practical convenience depends on the specific linear problem 
 to be solved and on experimental constraints.
 
-.. figure:: ../implementations/coherent_vqls/cvqls_circuit.png
+.. figure:: ../demonstrations/coherent_vqls/cvqls_circuit.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
@@ -208,11 +208,6 @@ This Python code requires *PennyLane* and the plotting library *matplotlib*.
     import matplotlib.pyplot as plt
 
 
-
-
-
-
-
 Setting of the main hyper-parameters of the model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -229,11 +224,6 @@ Setting of the main hyper-parameters of the model
     eta = 0.8                   # Learning rate
     q_delta = 0.001             # Initial spread of random quantum weights
     rng_seed = 0                # Seed for random number generator
-
-
-
-
-
 
 
 
@@ -255,11 +245,6 @@ normalizing their sum to :math:`1`:
     c = c / np.sum(c)
     # We also compute the square root of c
     sqrt_c = np.sqrt(c)
-
-
-
-
-
 
 
 We need to embed the square root of the probability distribution ``c`` into the amplitudes
@@ -289,11 +274,6 @@ a local :math:`R_y` rotation, a controlled-:math:`R_y` and a controlled-NOT.
 
 
 
-
-
-
-
-
 We are left to define the sequence of all controlled-unitaries :math:`CA_l`, acting
 as :math:`A_l` on the system whenever the ancillary state is :math:`|l\rangle`.
 Since in our case :math:`A_0=\mathbb{I}` and ``c[3] = 0``, we only need to apply :math:`A_1` and
@@ -315,11 +295,6 @@ Since in our case :math:`A_0=\mathbb{I}` and ``c[3] = 0``, we only need to apply
 
 
 
-
-
-
-
-
 The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
 
 
@@ -332,11 +307,6 @@ The circuit for preparing the problem vector :math:`|b\rangle` is very simple:
         problem vector |b> = U_b |0>."""
         for idx in range(n_qubits):
             qml.Hadamard(wires=idx)
-
-
-
-
-
 
 
 
@@ -372,11 +342,6 @@ e.g., the PennyLane ``StronglyEntanglingLayers`` template.
 
 
 
-
-
-
-
-
 Full quantum circuit
 --------------------
 
@@ -406,11 +371,6 @@ corresponding to the figure at the top of this tutorial.
 
         # Adjoint of U_c, applied to the ancillary qubits
         U_c_dagger()
-
-
-
-
-
 
 
 
@@ -453,11 +413,6 @@ we initialize a ``default.qubit`` device and we define two different ``qnode`` c
 
 
 
-
-
-
-
-
 Variational optimization
 -----------------------------
 
@@ -481,22 +436,12 @@ As explained above, we express it in terms of expectation values through Bayes' 
 
 
 
-
-
-
-
-
 To minimize the cost function we use the gradient-descent optimizer.
 
 
 .. code-block:: default
 
     opt = qml.GradientDescentOptimizer(eta)
-
-
-
-
-
 
 
 We initialize the variational weights with random parameters (with a fixed seed).
@@ -507,11 +452,6 @@ We initialize the variational weights with random parameters (with a fixed seed)
 
     np.random.seed(rng_seed)
     w = q_delta * np.random.randn(n_qubits)
-
-
-
-
-
 
 
 We are ready to perform the optimization loop.
@@ -529,27 +469,6 @@ We are ready to perform the optimization loop.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Step   0       Cost = 0.0111488
-    Step   1       Cost = 0.0041483
-    Step   2       Cost = 0.0014305
-    Step   3       Cost = 0.0004695
-    Step   4       Cost = 0.0001495
-    Step   5       Cost = 0.0000468
-    Step   6       Cost = 0.0000145
-    Step   7       Cost = 0.0000045
-    Step   8       Cost = 0.0000014
-    Step   9       Cost = 0.0000004
-
-
 We plot the cost function with respect to the optimization steps.
 We remark that this is not an abstract mathematical quantity
 since it also represents a bound for the error between the generated state
@@ -564,14 +483,6 @@ and the exact solution of the problem.
     plt.ylabel("Cost function")
     plt.xlabel("Optimization steps")
     plt.show()
-
-
-
-
-.. image:: /app/images/sphx_glr_tutorial_coherent_vqls_001.png
-    :class: sphx-glr-single-img
-
-
 
 
 Comparison of quantum and classical results
@@ -602,11 +513,6 @@ terms of numerical NumPy arrays.
     b = np.ones(8) / np.sqrt(8)
 
 
-
-
-
-
-
 We can print the explicit values of :math:`A` and :math:`b`:
 
 
@@ -616,37 +522,6 @@ We can print the explicit values of :math:`A` and :math:`b`:
     print("A = \n", A_num)
     print("b = \n", b)
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    A = 
-     [[0.71428571 0.         0.         0.         0.28571429 0.
-      0.         0.        ]
-     [0.         0.71428571 0.         0.         0.         0.28571429
-      0.         0.        ]
-     [0.         0.         0.71428571 0.         0.         0.
-      0.         0.        ]
-     [0.         0.         0.         0.71428571 0.         0.
-      0.         0.        ]
-     [0.28571429 0.         0.         0.         0.71428571 0.
-      0.         0.        ]
-     [0.         0.28571429 0.         0.         0.         0.71428571
-      0.         0.        ]
-     [0.         0.         0.         0.         0.         0.
-      0.71428571 0.        ]
-     [0.         0.         0.         0.         0.         0.
-      0.         0.71428571]]
-    b = 
-     [0.35355339 0.35355339 0.35355339 0.35355339 0.35355339 0.35355339
-     0.35355339 0.35355339]
 
 
 The solution can be computed via a matrix inversion:
@@ -659,22 +534,12 @@ The solution can be computed via a matrix inversion:
     x = np.dot(A_inv, b)
 
 
-
-
-
-
-
 Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
 
 
 .. code-block:: default
 
     c_probs = (x / np.linalg.norm(x)) ** 2
-
-
-
-
-
 
 
 Preparation of the quantum solution
@@ -708,11 +573,6 @@ QNode.
 
 
 
-
-
-
-
-
 To estimate the probability distribution over the basis states we first take ``n_shots``
 samples and then compute the relative frequency of each outcome.
 
@@ -722,11 +582,6 @@ samples and then compute the relative frequency of each outcome.
 
     samples = prepare_and_sample(w).astype(int)
     q_probs = np.bincount(samples, minlength=2 ** n_qubits) / n_shots
-
-
-
-
-
 
 
 Comparison
@@ -740,39 +595,12 @@ Let us print the classical result.
     print("x_n^2 =\n", c_probs)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    x_n^2 =
-     [0.08445946 0.08445946 0.16554054 0.16554054 0.08445946 0.08445946
-     0.16554054 0.16554054]
-
-
 The previous probabilities should match the following quantum state probabilities.
 
 
 .. code-block:: default
 
     print("|<x|n>|^2=\n", q_probs)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    |<x|n>|^2=
-     [0.084366 0.084768 0.164876 0.165119 0.085023 0.084483 0.165655 0.16571 ]
 
 
 Let us graphically visualize both distributions.
@@ -797,14 +625,6 @@ Let us graphically visualize both distributions.
 
 
 
-
-
-.. image:: /app/images/sphx_glr_tutorial_coherent_vqls_002.png
-    :class: sphx-glr-single-img
-
-
-
-
 References
 ----------
 
@@ -821,10 +641,10 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.985 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
-.. _sphx_glr_download_app_tutorial_coherent_vqls.py:
+.. _sphx_glr_download_demos_tutorial_coherent_vqls.py:
 
 
 .. only :: html
