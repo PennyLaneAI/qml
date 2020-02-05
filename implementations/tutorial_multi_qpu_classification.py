@@ -26,13 +26,12 @@ on an individual variational circuit, whose architecture is inspired by
 Initial Setup
 ~~~~~~~~~~~~~
 
-We import PennyLane, the PennyLane-provided version of NumPy,
-and relevent torch modules and define the constants that will 
-be used in this tutorial.
-
-We also declare the quantum devices. Our feature size is 4, and 
-we will use amplitude embedding. This means that each 
-possible state's amplitude (in the computational basis) will 
+We import PennyLane, the PennyLane-provided version of NumPy, 
+relevent torch modules, and define the constants that will 
+be used in this tutorial. 
+ 
+Our feature size is 4, and we will use amplitude embedding. 
+This means that each possible amplitude (in the computational basis) will 
 correspond to a single feature. With 2 qubits (wires), there are 
 4 possible states, and as such, we can encode a feature vector 
 of size 4.
@@ -75,7 +74,7 @@ def layer(W):
 # We now define the quantum nodes that will be used. As we are implementing our
 # multiclass classifier as multiple one-vs-all classifiers, we will use 3 QNodes,
 # each representing one such classifier. That is, ``circuit1`` classifies if a 
-# samples belongs to class 1 or not, and so on. The circuit architecture for all
+# sample belongs to class 1 or not, and so on. The circuit architecture for all
 # 3 nodes are the same. We use the PyTorch interface for the QNodes.
 # Data is embedded in each circuit using amplitude embedding:
 
@@ -106,21 +105,21 @@ def variational_classifier(q_circuit, params, feat):
 # ~~~~~~~~~~~~~
 #
 # Implementing multiclass classifiers as a number of one-vs-all classifiers
-# generally evokes using the margin loss. The output of the :math:`i`th classifier, :math:`c_i`
+# generally evokes using the margin loss. The output of the :math:`i` th classifier, :math:`c_i`
 # on input :math:`x` is interpreted as a score, :math:`s_i` between [-1,1].
 # More concretely, we have:
 #
 # .. math::  s_i = c_i(x; \theta)
 #
 # The multiclass margin loss attempts to ensure that the score for the correct
-# class is higher than that of incorrect class by some margin. For a sample :math:`(x,y)`
+# class is higher than that of incorrect classes by some margin. For a sample :math:`(x,y)`
 # where :math:`y` denotes the class label, we can analytically express the mutliclass
 # loss on this sample as:
 #
 # .. math::  L(x,y) = \sum_{j \ne y}{\max{\left(0, s_j - s_y + \Delta)\right)}}
 #
 # where :math:`\Delta` denotes the margin. The margin parameter is chosen as a hyperparameter.
-# For more information, see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__
+# For more information, see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__.
 
 def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
     loss = 0
@@ -156,7 +155,7 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
 #
 # Next, we use the learned models to classify our samples. For a given sample, 
 # compute the score given to it by classifier :math:`i`, which quantifies how likely it is that 
-# this sample belongs to class :math:`i`. For each sample, return the class with the highest score
+# this sample belongs to class :math:`i`. For each sample, return the class with the highest score.
 
 def classify(q_circuits, all_params, feature_vecs, labels):
     predicted_labels = []
@@ -185,7 +184,7 @@ def accuracy(labels, hard_predictions):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now we load in the iris dataset and normalize the features so that the sum of the feature
-# elements squared is 1 (:math:`ell_2` norm is 1).
+# elements squared is 1 (:math:`\ell_2` norm is 1).
 
 def load_and_process_data():
     data = np.loadtxt("multi_qpu_classification/iris.csv", delimiter=",")
@@ -220,7 +219,7 @@ def split_data(feature_vecs, Y):
 # In the training procedure, we begin by first initializing randomly the parameters
 # we wish to learn (variational circuit weights and classical bias). As these are
 # the variables we wish to optimize, we set the ``requires_grad`` flag to ``True``. We use
-# minibatch training --- the average loss for a batch of samples is computed, and the
+# minibatch training---the average loss for a batch of samples is computed, and the
 # optimization step is based on this. Total training time with the default parameters
 # is roughly 15 minutes.
 
