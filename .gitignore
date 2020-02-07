@@ -4,3 +4,10 @@ tutorial
 app
 _static/thumbs/*
 .idea
+beginner/pyscf/*
+beginner/structure.xyz
+implementations/pyscf/*
+implementations/structure.xyz
+_data/*
+
+
