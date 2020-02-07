@@ -222,8 +222,8 @@
       }
 
       var githubLink = "https://github.com/" + "{{ theme_github_repo }}" + "/blob/master/" + tutorialUrlArray.join("/") + ".py",
-          pythonLink = $(".reference.download")[0].href,
-          notebookLink = $(".reference.download")[1].href,
+          pythonLink = $(".sphx-glr-download .reference.download")[0].href,
+          notebookLink = $(".sphx-glr-download .reference.download")[1].href,
           notebookDownloadPath = notebookLink.split('_downloads')[1].split('/').pop();
 
       $(".download-python-link").wrap("<a href=" + pythonLink + " data-behavior='call-to-action-event' data-response='Download Python script' download target='_blank'/>");
