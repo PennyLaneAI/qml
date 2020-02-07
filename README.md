@@ -1,28 +1,30 @@
-# Quantum machine learning tutorials and implementations
+# Quantum machine learning tutorials
 
-This repository contains the Python tutorials and implementations available
+This repository contains the Python demos available
 at https://pennylane.ai/qml. Content includes:
 
-* [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Explore and
+* [What is QML?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum 
+  computing means for machine learning.
+  
+* [Training quantum circuits](https://pennylane.ai/qml/trainingcircuits.html). Explore and
   understand the key concepts underpinning variational quantum circuits and
   quantum machine learning.
+  
+* [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Look up terms around 
+  quantum machine learning and optimization.
 
-* [Beginner tutorials](https://pennylane.ai/qml/beginner.html). Tutorials
-  introduce core QML concepts, including quantum nodes, optimization, and devices,
-  via easy-to-follow examples.
-
-* [Implementations of cutting-edge QML research](https://pennylane.ai/qml/implementations.html).
-  Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms
+* [Demonstrations of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
+  Take a dive into quantum machine learning by exploring cutting-edge algorithms
   on near-term quantum hardware.
 
 ## Contributing
 
-You can contribute by submitting a tutorial or a demonstration of a recent
+You can contribute by submitting a tutorial implementing a recent
 quantum machine learning paper/result.
 
-### Adding tutorials and implementations
+### Adding tutorials
 
-* Tutorials and demonstrations are written in the form of an executable Python script.
+* Tutorials are written in the form of an executable Python script.
   Any package listed in `requirements.txt` you can assume is available to be imported.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
@@ -32,9 +34,8 @@ quantum machine learning paper/result.
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
 
-* All tutorials/implementations should have a file name beginning with `tutorial_`.
-  Beginner tutorials go in the `beginner` directory, while implementations go in
-  the `implementations` directory.
+* All tutorials should have a file name beginning with `tutorial_`.
+  The python files are saved in the `demonstrations` directory.
 
 * [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
   sections may be anywhere within the script by beginning the comment with
@@ -44,27 +45,23 @@ quantum machine learning paper/result.
 
   ```python
   ##############################################################################
-  #.. figure:: ../<tutorial type>/<tutorial name>/image.png
+  #.. figure:: ../demonstrations/<tutorial name>/image.png
   #    :align: center
   #    :width: 90%
   ```
 
-  where `<tutorial type>` is one of `beginner` or `implementation` (depending on what
-  content you submitting), and `<tutorial name>` is a sub-directory with the name of
+  where `<tutorial name>` is a sub-directory with the name of
   your tutorial.
 
-* When complete, create a gallery link to your tutorial/implementation, by adding the
-  following to either `beginner.rst` or `implementations.rst`:
+* When complete, create a gallery link to your tutorial, by adding the
+  following to `demonstrations.rst`:
 
   ```rest
   .. customgalleryitem::
-      :tooltip: An extended description of the tutorial/implementation
-      :figure: <tutorial type>/<tutorial name>/thumbnail.png
-      :description: :doc:`<build location>/pytorch_noise`
+      :tooltip: An extended description of the demo
+      :figure: demonstrations/<tutorial name>/thumbnail.png
+      :description: :doc:`demos/pytorch_noise`
   ```
-
-  Here, `<build_location>` is either `tutorial` (for beginner tutorials), or `app` (for
-  implementations).
 
   You should also add a link to your tutorial to the table of contents, by adding to the
   end of the `.. toctree::`.
@@ -81,7 +78,7 @@ quantum machine learning paper/result.
 
 #### Tutorial guidelines
 
-While you are free to be as creative as you like with your tutorial or implementation,
+While you are free to be as creative as you like with your demo,
 there are a couple of guidelines to keep in mind.
 
 * Submissions should include your name (and optionally email) at the top
@@ -89,10 +86,10 @@ there are a couple of guidelines to keep in mind.
 
 * All contributions must be made under the Apache 2.0 license.
 
-* The title should be clear and concise, and if an implementation, be similar to the paper
+* The title should be clear and concise, and if based on a paper it should be similar to the paper
   that is being implemented.
 
-* All tutorials/implementations should include a summary below the title.
+* All demos should include a summary below the title.
   The summary should be 1-3 sentences that makes clear the
   goal and outcome of the tutorial, and links to any papers/resources used.
 
@@ -118,12 +115,12 @@ To build the website locally, simply run `make html`. The rendered HTML files
 will now be available in `_build/html`. Open `_build/html/index.html` to browse
 the built site locally.
 
-Note that the above command may take some time, as all tutorials and implementations
+Note that the above command may take some time, as all demos
 will be executed and built! Once built, only _modified_ tutorials will
 be re-executed/re-built.
 
 Alternatively, you may run `make html-norun` to build the website _without_ executing
-tutorials/implementations.
+tutorials.
 
 ## Support
 
@@ -137,7 +134,7 @@ Please read and respect the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
 
 ## License
 
-The materials, tutorials, and implementations in this repository are **free** and
+The materials and demos in this repository are **free** and
 **open source**, released under the Apache License, Version 2.0.
 
 The file `custom_directives.py` is available under the BSD 3-Clause License with

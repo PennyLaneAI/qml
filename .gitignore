@@ -1,7 +1,6 @@
 _build
 __pycache__
 tutorial
-app
 demos
 _static/thumbs/*
 .idea

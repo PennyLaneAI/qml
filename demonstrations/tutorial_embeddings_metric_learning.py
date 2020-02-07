@@ -9,7 +9,7 @@ learning presented in `Lloyd, Schuld, Ijaz, Izaac, Killoran (2019) <https://arxi
 by training a hybrid classical-quantum data
 embedding to classify images of ants and bees. The example was inspired
 by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_,
-(see also this `tutorial <https://pennylane.ai/qml/app/tutorial_quantum_transfer_learning.html>`_),
+(see also this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_),
 and reproduces some of the subplots in Figure 5 of Lloyd et al.
 """
 
