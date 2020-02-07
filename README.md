@@ -78,7 +78,7 @@ quantum machine learning paper/result.
 
 #### Tutorial guidelines
 
-While you are free to be as creative as you like with your demo,
+While you are free to be as creative as you like with your tutorial,
 there are a couple of guidelines to keep in mind.
 
 * Submissions should include your name (and optionally email) at the top
