@@ -51,7 +51,8 @@ transfer learning method**:
    new dataset :math:`D_B` and/or for a new task of interest :math:`T_B`.
 
 When dealing with hybrid systems, depending on the physical nature (classical or quantum) of the
-networks :math:`A` and :math:`B`, one can have different demonstrations of transfer learning as
+networks :math:`A` and :math:`B`, one can have different implementations of transfer learning as
+
 summarized in following table:
 
 |
