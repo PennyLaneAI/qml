@@ -36,8 +36,8 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
-    :figure: implementations/variational_quantum_eigensolver/vqe_output_22_0.png
-    :description: :doc:`app/tutorial_variational_quantum_eigensolver`
+    :figure: implementations/variational_quantum_eigensolver/pes_h2.png
+    :description: :doc:`app/tutorial_vqe`
 
 .. customgalleryitem::
     :tooltip: Universal Quantum Classifier with data-reuploading
@@ -102,7 +102,7 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_QGAN
     app/tutorial_variational_classifier
     app/quantum_neural_net
-    app/tutorial_variational_quantum_eigensolver
+    app/tutorial_vqe
     app/tutorial_data_reuploading_classifier
     app/tutorial_quantum_natural_gradient
     app/tutorial_qaoa_maxcut
