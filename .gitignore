@@ -1,7 +1,6 @@
 _build
 __pycache__
 tutorial
-demos
 _static/thumbs/*
 .idea
 demonstrations/pyscf/*
