@@ -138,7 +138,7 @@ Quantum machine learning
                     </a>
                 </li>
                 <li>
-                    <a href="demos/tutorial_barren_plateaus.html">
+                    <a href="demos/barren_plateaus.html">
                         <div class="card">
                           <img class="card-img-top" src="_static/thumbs/surface.png" alt="Card image cap">
                           <div class="card-body">
@@ -151,7 +151,7 @@ Quantum machine learning
             </ul>
 
             <p class="grey-text mx-auto mt-5" style="font-size: small;margin-top:-10px;">
-                All content above is free, open-source, and available as executable code downloads. If you would like to contribute a tutorial, please make a pull request over at our <a href="https://github.com/XanaduAI/qml">GitHub repository</a>.
+                All content above is free, open-source, and available as executable code downloads. If you would like to contribute a demo, please make a pull request over at our <a href="https://github.com/XanaduAI/qml">GitHub repository</a>.
             </p>
 
         </section>
