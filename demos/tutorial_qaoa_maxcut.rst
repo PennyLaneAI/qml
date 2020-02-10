@@ -146,11 +146,6 @@ version of NumPy.
 
 
 
-
-
-
-
-
 Operators
 ~~~~~~~~~
 We specify the number of qubits (vertices) with ``n_wires`` and
@@ -185,11 +180,6 @@ each edge in the graph.
 
 
 
-
-
-
-
-
 We will need a way to sample
 a measurement of multiple qubits in the computational basis, so we define
 a Hermitian operator to do this. The eigenvalues of the operator are
@@ -206,11 +196,6 @@ the qubit measurement values in integer form.
 
 
 
-
-
-
-
-
 Circuit
 ~~~~~~~
 Next, we create a quantum device with 4 qubits.
@@ -220,11 +205,6 @@ Next, we create a quantum device with 4 qubits.
 
 
     dev = qml.device("default.qubit", wires=n_wires, analytic=True, shots=1)
-
-
-
-
-
 
 
 We also require a quantum node which will apply the operators according to the
@@ -258,11 +238,6 @@ if executed with the ``edge`` keyword set to ``None``. Additionally, we specify 
         # during the optimization phase we are evaluating a term
         # in the objective using expval
         return qml.expval(qml.Hermitian(pauli_z_2, wires=edge))
-
-
-
-
-
 
 
 
@@ -331,54 +306,6 @@ in PennyLane.
     bitstrings2 = qaoa_maxcut(n_layers=2)[1]
 
 
-
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
-        out = func()
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
-        exec(self.code, self.globals)
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 275, in <module>
-        bitstrings2 = qaoa_maxcut(n_layers=2)[1]
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 253, in qaoa_maxcut
-        params = opt.step(objective, params)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/optimize/gradient_descent.py", line 64, in step
-        g = self.compute_grad(objective_fn, x, grad_fn=grad_fn)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/optimize/gradient_descent.py", line 88, in compute_grad
-        g = autograd.grad(objective_fn)(x)  # pylint: disable=no-value-for-parameter
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/wrap_util.py", line 20, in nary_f
-        return unary_operator(unary_f, x, *nary_op_args, **nary_op_kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/differential_operators.py", line 25, in grad
-        vjp, ans = _make_vjp(fun, x)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/core.py", line 10, in make_vjp
-        end_value, end_node =  trace(start_node, fun, x)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/tracer.py", line 10, in trace
-        end_box = fun(start_box)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/wrap_util.py", line 15, in unary_f
-        return fun(*subargs, **kwargs)
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 243, in objective
-        neg_obj -= 0.5 * (1 - circuit(gammas, betas, edge=edge, n_layers=n_layers))
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/interfaces/autograd.py", line 47, in __call__
-        return self.evaluate(args, kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/tracer.py", line 44, in f_wrapped
-        ans = f_wrapped(*argvals, **kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/tracer.py", line 48, in f_wrapped
-        return f_raw(*args, **kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/qnodes/base.py", line 765, in evaluate
-        self._construct(args, kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/qnodes/jacobian.py", line 60, in _construct
-        super()._construct(args, kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/qnodes/base.py", line 519, in _construct
-        res = self.func(*self.arg_vars, **kwargs)
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 206, in circuit
-        U_C(gammas[i])
-    IndexError: index 1 is out of bounds for axis 0 with size 1
-
-
-
-
 In the case where we set ``n_layers=2``, we recover the optimal
 objective function :math:`C=4`
 
@@ -417,7 +344,7 @@ and in the case where we set ``n_layers=2`` we obtain one of the optimal partiti
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.776 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_qaoa_maxcut.py:

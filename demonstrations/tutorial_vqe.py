@@ -46,7 +46,7 @@ from pennylane import numpy as np
 geometry = 'h2.xyz'
 
 ##############################################################################
-# Alternatively, you can download the file here: :download:`h2.xyz </implementations/h2.xyz>`.
+# Alternatively, you can download the file here: :download:`h2.xyz </demonstrations/h2.xyz>`.
 #
 # The charge determines the number of electrons that have been added or removed compared to the
 # neutral molecule. In this example, as is the case in many quantum chemistry simulations,
@@ -125,7 +125,7 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 #
 # |
 #
-# .. figure:: /implementations/variational_quantum_eigensolver/sketch_circuit.png
+# .. figure:: /demonstrations/variational_quantum_eigensolver/sketch_circuit.png
 #     :width: 50%
 #     :align: center
 #

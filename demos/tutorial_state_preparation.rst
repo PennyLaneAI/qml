@@ -68,11 +68,6 @@ To start, we import PennyLane, NumPy, and PyTorch for the optimization:
     Paulis[2] = [[1, 0], [0, -1]]
 
 
-
-
-
-
-
 Unitary operations map pure states to pure states. So how can we prepare
 mixed states using unitary circuits? The trick is to introduce
 additional qubits and perform a unitary transformation on this larger
@@ -113,11 +108,6 @@ when declaring the layer function, we introduce an input parameter
 
 
 
-
-
-
-
-
 To set up the device, we select a plugin that is compatible with
 evaluating expectations through sampling: the ``forest.qvm`` plugin. The
 syntax is slightly different than for other plugins, we need to also
@@ -131,30 +121,6 @@ number of samples used to estimate expectation values.
 
 
     dev = qml.device("forest.qvm", device="3q-pyqvm", shots=1000)
-
-
-
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
-        out = func()
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
-        exec(self.code, self.globals)
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_state_preparation.py", line 105, in <module>
-        dev = qml.device("forest.qvm", device="3q-pyqvm", shots=1000)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/__init__.py", line 151, in device
-        plugin_device_class = plugin_devices[name].load()
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2444, in load
-        self.require(*args, **kwargs)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2467, in require
-        items = working_set.resolve(reqs, env, installer, extras=self.extras)
-      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pkg_resources/__init__.py", line 792, in resolve
-        raise VersionConflict(dist, req).with_context(dependent_req)
-    pkg_resources.VersionConflict: (pyquil 2.10.0 (/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages), Requirement.parse('pyquil>=2.16'))
-
-
 
 
 When defining the QNode, we introduce as input a Hermitian operator
@@ -245,7 +211,7 @@ Finally, we compare the Bloch vectors of the target and output state.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.608 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_state_preparation.py:

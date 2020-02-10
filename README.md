@@ -1,6 +1,7 @@
 # Quantum machine learning tutorials
 
-This repository contains the Python demos available
+This repository contains a basic introduction into Quantum Machine Learning, 
+as well as the Python tutorials or demonstrations available
 at https://pennylane.ai/qml. Content includes:
 
 * [What is QML?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum 
