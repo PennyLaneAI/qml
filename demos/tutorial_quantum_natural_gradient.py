@@ -21,7 +21,7 @@ of the quantum device. Examples of such algorithms include the :ref:`variational
 eigensolver (VQE) <vqe>`, the `quantum approximate optimization algorithm (QAOA) <https://arxiv.org/abs/1411.4028>`__,
 and :ref:`quantum neural networks (QNN) <quantum_neural_net>`.
 
-Most recent implementations
+Most recent demonstrations
 of variational quantum algorithms have used gradient-free classical optimization
 methods, such as the Nelder-Mead algorithm. However, the parameter-shift rule
 (as implemented in PennyLane) allows the user to automatically compute
@@ -57,7 +57,7 @@ using two different coordinate systems, :math:`(\theta_0, \theta_1)`, and
 
 |
 
-.. figure:: ../implementations/quantum_natural_gradient/qng7.png
+.. figure:: ../demonstrations/quantum_natural_gradient/qng7.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -211,7 +211,7 @@ params = np.array([0.432, -0.123, 0.543, 0.233])
 # The above circuit consists of 4 parameters, with two distinct parametrized
 # layers of 2 parameters each.
 #
-# .. figure:: ../implementations/quantum_natural_gradient/qng1.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/qng1.png
 #     :align: center
 #     :width: 90%
 #     :target: javascript:void(0)
@@ -223,7 +223,7 @@ params = np.array([0.432, -0.123, 0.543, 0.233])
 # the block-diagonal approximation consists of two
 # :math:`2\times 2` matrices, :math:`g^{(0)}` and :math:`g^{(1)}`.
 #
-# .. figure:: ../implementations/quantum_natural_gradient/qng2.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/qng2.png
 #     :align: center
 #     :width: 30%
 #     :target: javascript:void(0)
@@ -232,7 +232,7 @@ params = np.array([0.432, -0.123, 0.543, 0.233])
 # of all gates prior to the layer, and observables corresponding to
 # the *generators* of the gates in the layer:
 #
-# .. figure:: ../implementations/quantum_natural_gradient/qng3.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/qng3.png
 #     :align: center
 #     :width: 30%
 #     :target: javascript:void(0)
@@ -252,7 +252,7 @@ def layer0_subcircuit(params):
 # We then post-process the measurement results in order to determine :math:`g^{(0)}`,
 # as follows.
 #
-# .. figure:: ../implementations/quantum_natural_gradient/qng4.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/qng4.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
@@ -303,7 +303,7 @@ g0[1, 0] = (exK0K1 - exK0 * exK1) / 4
 # We can repeat the above process to compute :math:`g^{(1)}`. The subcircuit
 # required is given by
 #
-# .. figure:: ../implementations/quantum_natural_gradient/qng8.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/qng8.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
@@ -331,7 +331,7 @@ def layer1_subcircuit(params):
 ##############################################################################
 # Using this subcircuit, we can now generate the submatrix :math:`g^{(1)}`.
 #
-# .. figure:: ../implementations/quantum_natural_gradient/qng5.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/qng5.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
@@ -392,7 +392,7 @@ print(np.round(g, 8))
 # PennyLane QNodes contain a built-in method for computing the Fubini-Study metric
 # tensor, :meth:`~.pennylane.QNode.metric_tensor`, which
 # we can use to verify this result:
-print(np.round(circuit.metric_tensor([params]), 8))
+print(np.round(circuit.metric_tensor(params), 8))
 
 ##############################################################################
 # As opposed to our manual computation, which required 6 different quantum
@@ -408,7 +408,7 @@ print(np.round(circuit.metric_tensor([params]), 8))
 #
 # Note that the :meth:`~.pennylane.QNode.metric_tensor` method also supports computing the diagonal
 # approximation to the metric tensor:
-print(circuit.metric_tensor([params], diag_approx=True))
+print(circuit.metric_tensor(params, diag_approx=True))
 
 ##############################################################################
 # Quantum natural gradient optimization

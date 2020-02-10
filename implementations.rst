@@ -34,6 +34,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/pytorch_noise`
 
 .. customgalleryitem::
+    :tooltip: Explore quantum chemistry in PennyLane.
+    :figure: beginner/quantum_chemistry/water_structure.png
+    :description: :doc:`tutorial/tutorial_quantum_chemistry`
+
+.. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: implementations/state_preparation/NOON.png
     :description: :doc:`app/tutorial_state_preparation`
@@ -60,8 +65,8 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
-    :figure: implementations/variational_quantum_eigensolver/vqe_output_22_0.png
-    :description: :doc:`app/tutorial_variational_quantum_eigensolver`
+    :figure: implementations/variational_quantum_eigensolver/pes_h2.png
+    :description: :doc:`app/tutorial_vqe`
 
 .. customgalleryitem::
     :tooltip: Universal Quantum Classifier with data-reuploading
@@ -126,12 +131,13 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_plugins_hybrid
     app/tutorial_advanced_usage
     app/pytorch_noise
+    app/tutorial_quantum_chemistry
     app/tutorial_state_preparation
     app/tutorial_isingmodel_PyTorch
     app/tutorial_QGAN
     app/tutorial_variational_classifier
     app/quantum_neural_net
-    app/tutorial_variational_quantum_eigensolver
+    app/tutorial_vqe
     app/tutorial_data_reuploading_classifier
     app/tutorial_quantum_natural_gradient
     app/tutorial_qaoa_maxcut
