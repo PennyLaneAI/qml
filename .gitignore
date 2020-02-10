@@ -3,6 +3,7 @@ __pycache__
 tutorial
 _static/thumbs/*
 .idea
+demos/*
 demonstrations/pyscf/*
 demonstrations/structure.xyz
 demonstrations/pyscf/*
