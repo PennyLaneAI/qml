@@ -737,7 +737,7 @@ samples used, the smaller the variance in the prediction.
 
  .. code-block:: none
 
-    -0.5399898025031251
+    -0.539989802503125
 
 
 Since the result is negative, the new data point is (correctly) predicted
@@ -754,7 +754,7 @@ in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  24.068 seconds)
+   **Total running time of the script:** ( 1 minutes  47.937 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_embeddings_metric_learning.py:

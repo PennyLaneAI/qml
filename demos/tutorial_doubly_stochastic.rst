@@ -273,9 +273,9 @@ evaluate the analytic quantum device:
 
  .. code-block:: none
 
-    Vanilla gradient descent min energy =  -4.605247234069292
-    Stochastic gradient descent (shots=100) min energy =  -4.600655176916144
-    Stochastic gradient descent (shots=1) min energy =  -4.457668962761634
+    Vanilla gradient descent min energy =  -4.60524723406929
+    Stochastic gradient descent (shots=100) min energy =  -4.600655176916141
+    Stochastic gradient descent (shots=1) min energy =  -4.457668962761632
 
 
 Amazingly, we see that even the ``shots=1`` optimization converged
@@ -433,7 +433,7 @@ number of shots:
 
  .. code-block:: none
 
-    Doubly stochastic gradient descent min energy =  -4.534664233327497
+    Doubly stochastic gradient descent min energy =  -4.534664233327493
 
 
 While stochastic gradient descent requires more optimization steps to achieve
@@ -494,7 +494,7 @@ the optimization proceeds, as well as increasing the number of shots.
 
  .. code-block:: none
 
-    Adaptive QSGD min energy =  -4.601100861099866
+    Adaptive QSGD min energy =  -4.601100861099867
 
 
 References
@@ -508,7 +508,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  39.195 seconds)
+   **Total running time of the script:** ( 0 minutes  59.903 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_doubly_stochastic.py:

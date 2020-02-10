@@ -523,7 +523,7 @@ functions can be combined in many different and interesting ways.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  25.224 seconds)
+   **Total running time of the script:** ( 0 minutes  29.656 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_plugins_hybrid.py:

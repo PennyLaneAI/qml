@@ -493,7 +493,7 @@ we can use to verify this result:
 
 .. code-block:: default
 
-    print(np.round(circuit.metric_tensor(params), 8))
+    print(np.round(circuit.metric_tensor([params]), 8))
 
 
 
@@ -528,7 +528,7 @@ approximation to the metric tensor:
 
 .. code-block:: default
 
-    print(circuit.metric_tensor(params, diag_approx=True))
+    print(circuit.metric_tensor([params], diag_approx=True))
 
 
 
@@ -652,7 +652,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.192 seconds)
+   **Total running time of the script:** ( 0 minutes  6.292 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_quantum_natural_gradient.py:

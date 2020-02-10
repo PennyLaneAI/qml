@@ -249,31 +249,31 @@ This tutorial was generated using the following PennyLane version:
  .. code-block:: none
 
     Name: PennyLane
-    Version: 0.7.0
+    Version: 0.8.0
     Summary: PennyLane is a Python quantum machine learning library by Xanadu Inc.
     Home-page: https://github.com/XanaduAI/pennylane
     Author: None
     Author-email: None
     License: Apache License 2.0
-    Location: /home/maria/.local/lib/python3.6/site-packages
-    Requires: networkx, appdirs, scipy, semantic-version, autograd, toml, numpy
+    Location: /home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages
+    Requires: appdirs, semantic-version, numpy, scipy, toml, networkx, autograd
     Required-by: 
     Platform info:           Linux-5.3.0-28-generic-x86_64-with-Ubuntu-18.04-bionic
     Python version:          3.6.9
     Numpy version:           1.18.1
     Scipy version:           1.3.2
     Installed devices:
-    - default.gaussian (PennyLane-0.7.0)
-    - default.qubit (PennyLane-0.7.0)
-    - expt.tensornet (PennyLane-0.7.0)
-    - expt.tensornet.tf (PennyLane-0.7.0)
+    - default.gaussian (PennyLane-0.8.0)
+    - default.qubit (PennyLane-0.8.0)
+    - default.tensor (PennyLane-0.8.0)
+    - default.tensor.tf (PennyLane-0.8.0)
     - strawberryfields.fock (PennyLane-SF-0.8.0)
     - strawberryfields.gaussian (PennyLane-SF-0.8.0)
+    - cirq.simulator (PennyLane-Cirq-0.8.0)
     - forest.numpy_wavefunction (PennyLane-Forest-0.6.0)
     - forest.qpu (PennyLane-Forest-0.6.0)
     - forest.qvm (PennyLane-Forest-0.6.0)
     - forest.wavefunction (PennyLane-Forest-0.6.0)
-    - cirq.simulator (PennyLane-Cirq-0.8.0)
 
 
 References
@@ -295,7 +295,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  36.221 seconds)
+   **Total running time of the script:** ( 6 minutes  36.496 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_barren_plateaus.py:

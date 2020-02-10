@@ -821,7 +821,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.961 seconds)
+   **Total running time of the script:** ( 0 minutes  2.008 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_coherent_vqls.py:

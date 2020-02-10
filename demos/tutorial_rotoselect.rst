@@ -561,7 +561,7 @@ References
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.402 seconds)
+   **Total running time of the script:** ( 0 minutes  9.515 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_rotoselect.py:

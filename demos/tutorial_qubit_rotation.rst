@@ -532,7 +532,7 @@ continuous-variable (CV) quantum nodes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.322 seconds)
+   **Total running time of the script:** ( 0 minutes  0.328 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_qubit_rotation.py:

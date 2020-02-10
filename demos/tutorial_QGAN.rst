@@ -69,29 +69,6 @@ We also declare a 3-qubit simulator device running in Cirq.
 
 
 
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/home/maria/.local/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
-        out = func()
-      File "/home/maria/.local/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
-        exec(self.code, self.globals)
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_QGAN.py", line 47, in <module>
-        dev  = qml.device('cirq.simulator', wires=3)
-      File "/home/maria/.local/lib/python3.6/site-packages/pennylane/__init__.py", line 119, in device
-        plugin_device_class = plugin_devices[name].load()
-      File "/home/maria/.local/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2444, in load
-        return self.resolve()
-      File "/home/maria/.local/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2450, in resolve
-        module = __import__(self.module_name, fromlist=['__name__'], level=0)
-      File "/home/maria/.local/lib/python3.6/site-packages/pennylane_cirq/__init__.py", line 18, in <module>
-        from .simulator_device import SimulatorDevice
-      File "/home/maria/.local/lib/python3.6/site-packages/pennylane_cirq/simulator_device.py", line 38, in <module>
-        from .cirq_device import CirqDevice
-      File "/home/maria/.local/lib/python3.6/site-packages/pennylane_cirq/cirq_device.py", line 38, in <module>
-        from pennylane import QubitDevice
-    ImportError: cannot import name 'QubitDevice'
-
 
 
 
@@ -113,6 +90,11 @@ arbitrary, but fixed, state.
 
     def real(phi, theta, omega):
         qml.Rot(phi, theta, omega, wires=0)
+
+
+
+
+
 
 
 
@@ -155,6 +137,11 @@ output will be on wire 2.
 
 
 
+
+
+
+
+
 We create two QNodes. One where the real data source is wired up to the
 discriminator, and one where the generator is connected to the
 discriminator. In order to pass TensorFlow Variables into the quantum
@@ -176,6 +163,11 @@ circuits, we specify the ``"tf"`` interface.
         generator(gen_weights)
         discriminator(disc_weights)
         return qml.expval(qml.PauliZ(2))
+
+
+
+
+
 
 
 
@@ -224,6 +216,11 @@ discriminator accepts fake data as real.
 
 
 
+
+
+
+
+
 Training the QGAN
 ~~~~~~~~~~~~~~~~~
 
@@ -250,6 +247,11 @@ is very close to the :math:`\left| 1 \right\rangle` state.
 
 
 
+
+
+
+
+
 We begin by creating the optimizer:
 
 
@@ -257,6 +259,11 @@ We begin by creating the optimizer:
 
 
     opt = tf.keras.optimizers.SGD(0.1)
+
+
+
+
+
 
 
 
@@ -277,6 +284,27 @@ keeping the generator parameters fixed.
 
 
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Step 0: cost = -0.10942014679312706
+    Step 5: cost = -0.3899883683770895
+    Step 10: cost = -0.6660191221162677
+    Step 15: cost = -0.8550836374051869
+    Step 20: cost = -0.9454460255801678
+    Step 25: cost = -0.9805878275074065
+    Step 30: cost = -0.9931367967510596
+    Step 35: cost = -0.9974893236067146
+    Step 40: cost = -0.9989861474605277
+    Step 45: cost = -0.9994997430330841
+
+
 At the discriminator’s optimum, the probability for the discriminator to
 correctly classify the real data should be close to one.
 
@@ -288,6 +316,18 @@ correctly classify the real data should be close to one.
 
 
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Prob(real classified as real):  0.9998971883615013
+
+
 For comparison, we check how the discriminator classifies the
 generator’s (still unoptimized) fake data:
 
@@ -297,6 +337,18 @@ generator’s (still unoptimized) fake data:
 
     print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weights).numpy())
 
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Prob(fake classified as real):  0.00024289608700200915
 
 
 In the adversarial game we now have to train the generator to better
@@ -319,6 +371,57 @@ adversarial game.
 
 
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Step 0: cost = -0.00026636153052095324
+    Step 5: cost = -0.00042660595499910414
+    Step 10: cost = -0.0006873353268019855
+    Step 15: cost = -0.0011113660875707865
+    Step 20: cost = -0.001800207479391247
+    Step 25: cost = -0.0029180023120716214
+    Step 30: cost = -0.004727608757093549
+    Step 35: cost = -0.007646640995517373
+    Step 40: cost = -0.012325902469456196
+    Step 45: cost = -0.019754532724618912
+    Step 50: cost = -0.03136847913265228
+    Step 55: cost = -0.04909771494567394
+    Step 60: cost = -0.07520400732755661
+    Step 65: cost = -0.11169053986668587
+    Step 70: cost = -0.15917328000068665
+    Step 75: cost = -0.21566066145896912
+    Step 80: cost = -0.27637405693531036
+    Step 85: cost = -0.3354172706604004
+    Step 90: cost = -0.38835008442401886
+    Step 95: cost = -0.4337175488471985
+    Step 100: cost = -0.4728485941886902
+    Step 105: cost = -0.5087772309780121
+    Step 110: cost = -0.5451968759298325
+    Step 115: cost = -0.585662230849266
+    Step 120: cost = -0.6327883154153824
+    Step 125: cost = -0.6872449368238449
+    Step 130: cost = -0.7468433082103729
+    Step 135: cost = -0.8066394627094269
+    Step 140: cost = -0.8607337176799774
+    Step 145: cost = -0.9048400558531284
+    Step 150: cost = -0.937667777761817
+    Step 155: cost = -0.9604097697883844
+    Step 160: cost = -0.9753705067560077
+    Step 165: cost = -0.984874417539686
+    Step 170: cost = -0.9907763195224106
+    Step 175: cost = -0.9943897356279194
+    Step 180: cost = -0.9965827631531283
+    Step 185: cost = -0.9979065986117348
+    Step 190: cost = -0.9987028733594343
+    Step 195: cost = -0.9991812075313646
+
+
 At the optimum of the generator, the probability for the discriminator
 to be fooled should be close to 1.
 
@@ -328,6 +431,18 @@ to be fooled should be close to 1.
 
     print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weights).numpy())
 
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Prob(fake classified as real):  0.9994220492662862
 
 
 At the joint optimum the discriminator cost will be close to zero,
@@ -344,9 +459,21 @@ generated data.
     # enough to fool the discriminator.
 
 
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Discriminator cost:  -0.00047513909521512687
+
+
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.358 seconds)
+   **Total running time of the script:** ( 0 minutes  29.271 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_QGAN.py:

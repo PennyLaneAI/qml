@@ -89,6 +89,46 @@
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="The Variational Quantum Eigensolver (VQE) :ref:`[1, 2]&lt;vqe_references&gt;` is a flagship algorithm...">
+
+.. only:: html
+
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_vqe_thumb.png
+
+        :ref:`sphx_glr_demos_tutorial_vqe.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /demos/tutorial_vqe
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In quantum chemistry and materials science, the term *electronic structure methods* encompasses...">
+
+.. only:: html
+
+    .. figure:: /demos/images/thumb/sphx_glr_tutorial_quantum_chemistry_thumb.png
+
+        :ref:`sphx_glr_demos_tutorial_quantum_chemistry.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /demos/tutorial_quantum_chemistry
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Function fitting with a quantum neural network">
 
 .. only:: html
@@ -246,26 +286,6 @@
    :hidden:
 
    /demos/tutorial_quantum_natural_gradient
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Variational quantum eigensolver">
-
-.. only:: html
-
-    .. figure:: /demos/images/thumb/sphx_glr_tutorial_variational_quantum_eigensolver_thumb.png
-
-        :ref:`sphx_glr_demos_tutorial_variational_quantum_eigensolver.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /demos/tutorial_variational_quantum_eigensolver
 
 .. raw:: html
 

@@ -36,7 +36,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Explore quantum chemistry in PennyLane.
     :figure: beginner/quantum_chemistry/water_structure.png
-    :description: :doc:`tutorial/tutorial_quantum_chemistry`
+    :description: :doc:`demos/tutorial_quantum_chemistry`
 
 .. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.

@@ -226,13 +226,13 @@ Now we use the PyTorch gradient descent optimizer to minimize the cost:
 
     Energy after step    80: -2.0000000 | Angles: [array([1.96323939e+00, 2.01953845e-07, 2.32767565e+00]), array([0.65212549, 3.14128437, 2.4299563 ])] 
 
-    Energy after step    85: -2.0000000 | Angles: [array([1.96323939e+00, 6.61762372e-08, 2.32767565e+00]), array([0.65212549, 3.14141062, 2.4299563 ])] 
+    Energy after step    85: -2.0000000 | Angles: [array([1.96323939e+00, 6.61762373e-08, 2.32767565e+00]), array([0.65212549, 3.14141062, 2.4299563 ])] 
 
-    Energy after step    90: -2.0000000 | Angles: [array([1.96323939e+00, 2.16846296e-08, 2.32767565e+00]), array([0.65212549, 3.14148516, 2.4299563 ])] 
+    Energy after step    90: -2.0000000 | Angles: [array([1.96323939e+00, 2.16846295e-08, 2.32767565e+00]), array([0.65212549, 3.14148516, 2.4299563 ])] 
 
-    Energy after step    95: -2.0000000 | Angles: [array([1.96323939e+00, 7.10561941e-09, 2.32767565e+00]), array([0.65212549, 3.14152918, 2.4299563 ])] 
+    Energy after step    95: -2.0000000 | Angles: [array([1.96323939e+00, 7.10561945e-09, 2.32767565e+00]), array([0.65212549, 3.14152918, 2.4299563 ])] 
 
-    Energy after step   100: -2.0000000 | Angles: [array([1.96323939e+00, 2.32836930e-09, 2.32767565e+00]), array([0.65212549, 3.14155517, 2.4299563 ])]
+    Energy after step   100: -2.0000000 | Angles: [array([1.96323939e+00, 2.32836939e-09, 2.32767565e+00]), array([0.65212549, 3.14155517, 2.4299563 ])]
 
 
 .. note::
@@ -445,7 +445,7 @@ Springer, 2018.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.494 seconds)
+   **Total running time of the script:** ( 0 minutes  3.139 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_isingmodel_PyTorch.py:

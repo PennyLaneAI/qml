@@ -135,6 +135,25 @@ number of samples used to estimate expectation values.
 
 
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
+        out = func()
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
+        exec(self.code, self.globals)
+      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_state_preparation.py", line 105, in <module>
+        dev = qml.device("forest.qvm", device="3q-pyqvm", shots=1000)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/__init__.py", line 151, in device
+        plugin_device_class = plugin_devices[name].load()
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2444, in load
+        self.require(*args, **kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2467, in require
+        items = working_set.resolve(reqs, env, installer, extras=self.extras)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pkg_resources/__init__.py", line 792, in resolve
+        raise VersionConflict(dist, req).with_context(dependent_req)
+    pkg_resources.VersionConflict: (pyquil 2.10.0 (/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages), Requirement.parse('pyquil>=2.16'))
+
 
 
 
@@ -160,11 +179,6 @@ to use the PyTorch interface:
 
         # returns the expectation of the input matrix A on the first qubit
         return qml.expval(qml.Hermitian(A, wires=0))
-
-
-
-
-
 
 
 
@@ -229,43 +243,9 @@ Finally, we compare the Bloch vectors of the target and output state.
     print("Output Bloch vector = ", output_bloch_v)
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Cost after 0 steps is 1.0865
-    Cost after 10 steps is 0.1436
-    Cost after 20 steps is 0.2645
-    Cost after 30 steps is 0.1675
-    Cost after 40 steps is 0.1235
-    Cost after 50 steps is 0.0895
-    Cost after 60 steps is 0.1704
-    Cost after 70 steps is 0.1065
-    Cost after 80 steps is 0.2973
-    Cost after 90 steps is 0.1844
-    Cost after 100 steps is 0.1495
-    Cost after 110 steps is 0.0685
-    Cost after 120 steps is 0.1253
-    Cost after 130 steps is 0.1815
-    Cost after 140 steps is 0.1005
-    Cost after 150 steps is 0.1705
-    Cost after 160 steps is 0.0987
-    Cost after 170 steps is 0.0945
-    Cost after 180 steps is 0.2045
-    Cost after 190 steps is 0.1167
-    Cost after 200 steps is 0.1793
-    Target Bloch vector =  [ 0.33941241 -0.09447812  0.44257553]
-    Output Bloch vector =  [ 0.26  -0.028  0.484]
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  10.336 seconds)
+   **Total running time of the script:** ( 0 minutes  1.608 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_state_preparation.py:

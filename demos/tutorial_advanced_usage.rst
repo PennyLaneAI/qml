@@ -282,7 +282,7 @@ TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.161 seconds)
+   **Total running time of the script:** ( 0 minutes  1.634 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_advanced_usage.py:

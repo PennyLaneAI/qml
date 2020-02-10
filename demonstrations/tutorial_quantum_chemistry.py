@@ -40,7 +40,7 @@ import pennylane as qml
 ##############################################################################
 # In this example, we construct the electronic Hamiltonian of one of the most unique
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms. The
-# equilibrium geometry of water is read from the file :download:`h2o.xyz </beginner/h2o.xyz>`
+# equilibrium geometry of water is read from the file :download:`h2o.xyz </demonstrations/h2o.xyz>`
 # and stored in a list containing the symbol and the Cartesian coordinates of each atomic 
 # species:
 
@@ -62,7 +62,7 @@ print(geometry)
 # ``structure.xyz``, which we can use to visualize our molecule using any molecule editor,
 # e.g., `Avogadro <https://avogadro.cc/>`_.
 #
-# .. figure:: ../beginner/quantum_chemistry/water_structure.png
+# .. figure:: ../demonstrations/quantum_chemistry/water_structure.png
 #     :width: 50%
 #     :align: center
 #
@@ -104,7 +104,7 @@ charge = 0
 #
 # |
 #
-# .. figure:: ../beginner/quantum_chemistry/hf_references.png
+# .. figure:: ../demonstrations/quantum_chemistry/hf_references.png
 #     :width: 50%
 #     :align: center
 #
@@ -177,7 +177,7 @@ for file in os.listdir(hf_data):
 # Within this approximation, a certain number of *active electrons* can populate the  *active
 # orbitals* from which we can generate a finite-size space of Slater determinants.
 #
-# .. figure:: ../beginner/quantum_chemistry/sketch_active_space.png
+# .. figure:: ../demonstrations/quantum_chemistry/sketch_active_space.png
 #     :width: 50%
 #     :align: center
 #

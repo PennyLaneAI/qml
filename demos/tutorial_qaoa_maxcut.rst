@@ -333,36 +333,50 @@ in PennyLane.
 
 
 
+.. code-block:: pytb
 
-.. rst-class:: sphx-glr-script-out
+    Traceback (most recent call last):
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
+        out = func()
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
+        exec(self.code, self.globals)
+      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 275, in <module>
+        bitstrings2 = qaoa_maxcut(n_layers=2)[1]
+      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 253, in qaoa_maxcut
+        params = opt.step(objective, params)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/optimize/gradient_descent.py", line 64, in step
+        g = self.compute_grad(objective_fn, x, grad_fn=grad_fn)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/optimize/gradient_descent.py", line 88, in compute_grad
+        g = autograd.grad(objective_fn)(x)  # pylint: disable=no-value-for-parameter
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/wrap_util.py", line 20, in nary_f
+        return unary_operator(unary_f, x, *nary_op_args, **nary_op_kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/differential_operators.py", line 25, in grad
+        vjp, ans = _make_vjp(fun, x)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/core.py", line 10, in make_vjp
+        end_value, end_node =  trace(start_node, fun, x)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/tracer.py", line 10, in trace
+        end_box = fun(start_box)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/wrap_util.py", line 15, in unary_f
+        return fun(*subargs, **kwargs)
+      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 243, in objective
+        neg_obj -= 0.5 * (1 - circuit(gammas, betas, edge=edge, n_layers=n_layers))
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/interfaces/autograd.py", line 47, in __call__
+        return self.evaluate(args, kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/tracer.py", line 44, in f_wrapped
+        ans = f_wrapped(*argvals, **kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/autograd/tracer.py", line 48, in f_wrapped
+        return f_raw(*args, **kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/qnodes/base.py", line 765, in evaluate
+        self._construct(args, kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/qnodes/jacobian.py", line 60, in _construct
+        super()._construct(args, kwargs)
+      File "/home/maria/Desktop/XANADU/venv_dev_qml/lib/python3.6/site-packages/pennylane/qnodes/base.py", line 519, in _construct
+        res = self.func(*self.arg_vars, **kwargs)
+      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_qaoa_maxcut.py", line 206, in circuit
+        U_C(gammas[i])
+    IndexError: index 1 is out of bounds for axis 0 with size 1
 
- Out:
 
- .. code-block:: none
-
-    p=1
-    Objective after step     5:  2.7849245
-    Objective after step    10:  2.9985851
-    Objective after step    15:  2.9999913
-    Objective after step    20:  2.9999999
-    Objective after step    25:  3.0000000
-    Objective after step    30:  3.0000000
-    Optimized (gamma, beta) vectors:
-    [[-0.78539816]
-     [-1.17809774]]
-    Most frequently sampled bit string is: 1010
-
-    p=2
-    Objective after step     5:  3.4004597
-    Objective after step    10:  3.5828007
-    Objective after step    15:  3.8605258
-    Objective after step    20:  3.9885366
-    Objective after step    25:  3.9992324
-    Objective after step    30:  3.9999506
-    Optimized (gamma, beta) vectors:
-    [[ 1.56890358 -0.78423803]
-     [-1.17667386 -0.78490355]]
-    Most frequently sampled bit string is: 0101
 
 
 In the case where we set ``n_layers=2``, we recover the optimal
@@ -401,17 +415,9 @@ and in the case where we set ``n_layers=2`` we obtain one of the optimal partiti
     plt.show()
 
 
-
-.. image:: /demos/images/sphx_glr_tutorial_qaoa_maxcut_001.png
-    :class: sphx-glr-single-img
-
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  16.293 seconds)
+   **Total running time of the script:** ( 0 minutes  6.776 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_qaoa_maxcut.py:

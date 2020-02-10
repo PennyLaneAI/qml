@@ -279,25 +279,6 @@ and performing standard preliminary image operations: resize, center, crop, norm
 
 
 
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/home/maria/.local/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 394, in _memory_usage
-        out = func()
-      File "/home/maria/.local/lib/python3.6/site-packages/sphinx_gallery/gen_rst.py", line 382, in __call__
-        exec(self.code, self.globals)
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_quantum_transfer_learning.py", line 208, in <module>
-        x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ["train", "val"]
-      File "/home/maria/Desktop/XANADU/qml/demonstrations/tutorial_quantum_transfer_learning.py", line 208, in <dictcomp>
-        x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ["train", "val"]
-      File "/home/maria/.local/lib/python3.6/site-packages/torchvision/datasets/folder.py", line 209, in __init__
-        is_valid_file=is_valid_file)
-      File "/home/maria/.local/lib/python3.6/site-packages/torchvision/datasets/folder.py", line 93, in __init__
-        classes, class_to_idx = self._find_classes(self.root)
-      File "/home/maria/.local/lib/python3.6/site-packages/torchvision/datasets/folder.py", line 122, in _find_classes
-        classes = [d.name for d in os.scandir(dir) if d.is_dir()]
-    FileNotFoundError: [Errno 2] No such file or directory: '../_data/hymenoptera_data/train'
-
 
 
 
@@ -323,6 +304,14 @@ Let us show a batch of the test data, just to have an idea of the classification
         x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True)
         for x in ["train", "val"]
     }
+
+
+
+
+
+.. image:: /demos/images/sphx_glr_tutorial_quantum_transfer_learning_001.png
+    :class: sphx-glr-single-img
+
 
 
 
@@ -359,6 +348,11 @@ We first define some quantum layers that will compose the quantum circuit.
             qml.CNOT(wires=[i, i + 1])
         for i in range(1, nqubits - 1, 2):  # Loop over odd indices:  i=1,3,...N-3
             qml.CNOT(wires=[i, i + 1])
+
+
+
+
+
 
 
 
@@ -405,6 +399,11 @@ The structure is that of a typical variational quantum circuit:
 
 
 
+
+
+
+
+
 Dressed quantum circuit
 ------------------------
 
@@ -448,6 +447,11 @@ of images: *ants* and *bees*).
 
 
 
+
+
+
+
+
 Hybrid classical-quantum model
 ------------------------------------
 
@@ -478,6 +482,11 @@ We follow the *transfer learning* approach:
     model_hybrid = model_hybrid.to(device)
 
 
+
+
+
+
+
 Training and results
 ------------------------
 
@@ -494,6 +503,11 @@ directly available within ``torch.nn``.
     criterion = nn.CrossEntropyLoss()
 
 
+
+
+
+
+
 We also initialize the *Adam optimizer* which is called at each training step
 in order to update the weights of the model.
 
@@ -505,6 +519,11 @@ in order to update the weights of the model.
     optimizer_hybrid = optim.Adam(model_hybrid.fc.parameters(), lr=step)
 
 
+
+
+
+
+
 We schedule to reduce the learning rate by a factor of ``gamma_lr_scheduler``
 every 10 epochs.
 
@@ -514,6 +533,11 @@ every 10 epochs.
 
 
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler)
+
+
+
+
+
 
 
 What follows is a training function that will be called later.
@@ -618,6 +642,11 @@ This function should return a trained model that can be used to make predictions
 
 
 
+
+
+
+
+
 We are ready to perform the actual training process.
 
 
@@ -627,6 +656,22 @@ We are ready to perform the actual training process.
     model_hybrid = train_model(
         model_hybrid, criterion, optimizer_hybrid, exp_lr_scheduler, num_epochs=num_epochs
     )
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Training started:
+    Phase: train Epoch: 1/1 Iter: 1/62 Batch time: 1.6129    Phase: train Epoch: 1/1 Iter: 2/62 Batch time: 1.5169    Phase: train Epoch: 1/1 Iter: 3/62 Batch time: 1.4862    Phase: train Epoch: 1/1 Iter: 4/62 Batch time: 1.4910    Phase: train Epoch: 1/1 Iter: 5/62 Batch time: 1.5273    Phase: train Epoch: 1/1 Iter: 6/62 Batch time: 1.5113    Phase: train Epoch: 1/1 Iter: 7/62 Batch time: 1.5937    Phase: train Epoch: 1/1 Iter: 8/62 Batch time: 1.5711    Phase: train Epoch: 1/1 Iter: 9/62 Batch time: 1.6352    Phase: train Epoch: 1/1 Iter: 10/62 Batch time: 1.5718    Phase: train Epoch: 1/1 Iter: 11/62 Batch time: 1.5721    Phase: train Epoch: 1/1 Iter: 12/62 Batch time: 1.4812    Phase: train Epoch: 1/1 Iter: 13/62 Batch time: 1.5735    Phase: train Epoch: 1/1 Iter: 14/62 Batch time: 1.5213    Phase: train Epoch: 1/1 Iter: 15/62 Batch time: 1.4790    Phase: train Epoch: 1/1 Iter: 16/62 Batch time: 1.4451    Phase: train Epoch: 1/1 Iter: 17/62 Batch time: 1.7216    Phase: train Epoch: 1/1 Iter: 18/62 Batch time: 1.7464    Phase: train Epoch: 1/1 Iter: 19/62 Batch time: 1.5157    Phase: train Epoch: 1/1 Iter: 20/62 Batch time: 1.5986    Phase: train Epoch: 1/1 Iter: 21/62 Batch time: 1.4976    Phase: train Epoch: 1/1 Iter: 22/62 Batch time: 1.6289    Phase: train Epoch: 1/1 Iter: 23/62 Batch time: 1.5516    Phase: train Epoch: 1/1 Iter: 24/62 Batch time: 1.5104    Phase: train Epoch: 1/1 Iter: 25/62 Batch time: 1.4955    Phase: train Epoch: 1/1 Iter: 26/62 Batch time: 1.6132    Phase: train Epoch: 1/1 Iter: 27/62 Batch time: 1.9221    Phase: train Epoch: 1/1 Iter: 28/62 Batch time: 1.7058    Phase: train Epoch: 1/1 Iter: 29/62 Batch time: 1.5294    Phase: train Epoch: 1/1 Iter: 30/62 Batch time: 1.4744    Phase: train Epoch: 1/1 Iter: 31/62 Batch time: 1.4862    Phase: train Epoch: 1/1 Iter: 32/62 Batch time: 1.5113    Phase: train Epoch: 1/1 Iter: 33/62 Batch time: 1.5224    Phase: train Epoch: 1/1 Iter: 34/62 Batch time: 1.6965    Phase: train Epoch: 1/1 Iter: 35/62 Batch time: 1.4400    Phase: train Epoch: 1/1 Iter: 36/62 Batch time: 1.4742    Phase: train Epoch: 1/1 Iter: 37/62 Batch time: 1.6011    Phase: train Epoch: 1/1 Iter: 38/62 Batch time: 1.6177    Phase: train Epoch: 1/1 Iter: 39/62 Batch time: 1.5032    Phase: train Epoch: 1/1 Iter: 40/62 Batch time: 1.5147    Phase: train Epoch: 1/1 Iter: 41/62 Batch time: 1.6103    Phase: train Epoch: 1/1 Iter: 42/62 Batch time: 1.5827    Phase: train Epoch: 1/1 Iter: 43/62 Batch time: 1.4945    Phase: train Epoch: 1/1 Iter: 44/62 Batch time: 1.4717    Phase: train Epoch: 1/1 Iter: 45/62 Batch time: 1.6356    Phase: train Epoch: 1/1 Iter: 46/62 Batch time: 1.4900    Phase: train Epoch: 1/1 Iter: 47/62 Batch time: 1.5732    Phase: train Epoch: 1/1 Iter: 48/62 Batch time: 1.4953    Phase: train Epoch: 1/1 Iter: 49/62 Batch time: 1.4504    Phase: train Epoch: 1/1 Iter: 50/62 Batch time: 1.4471    Phase: train Epoch: 1/1 Iter: 51/62 Batch time: 1.5055    Phase: train Epoch: 1/1 Iter: 52/62 Batch time: 1.5442    Phase: train Epoch: 1/1 Iter: 53/62 Batch time: 1.4790    Phase: train Epoch: 1/1 Iter: 54/62 Batch time: 1.5420    Phase: train Epoch: 1/1 Iter: 55/62 Batch time: 1.5209    Phase: train Epoch: 1/1 Iter: 56/62 Batch time: 1.5958    Phase: train Epoch: 1/1 Iter: 57/62 Batch time: 1.6180    Phase: train Epoch: 1/1 Iter: 58/62 Batch time: 2.1867    Phase: train Epoch: 1/1 Iter: 59/62 Batch time: 2.3948    Phase: train Epoch: 1/1 Iter: 60/62 Batch time: 2.0731    Phase: train Epoch: 1/1 Iter: 61/62 Batch time: 2.4895    Phase: train Epoch: 1/1 Loss: 0.6916 Acc: 0.5164        
+    Phase: val Epoch: 1/1 Iter: 1/39 Batch time: 0.3958    Phase: val Epoch: 1/1 Iter: 2/39 Batch time: 0.3613    Phase: val Epoch: 1/1 Iter: 3/39 Batch time: 0.3457    Phase: val Epoch: 1/1 Iter: 4/39 Batch time: 0.3577    Phase: val Epoch: 1/1 Iter: 5/39 Batch time: 0.3697    Phase: val Epoch: 1/1 Iter: 6/39 Batch time: 0.3610    Phase: val Epoch: 1/1 Iter: 7/39 Batch time: 0.3670    Phase: val Epoch: 1/1 Iter: 8/39 Batch time: 0.3700    Phase: val Epoch: 1/1 Iter: 9/39 Batch time: 0.4653    Phase: val Epoch: 1/1 Iter: 10/39 Batch time: 0.4056    Phase: val Epoch: 1/1 Iter: 11/39 Batch time: 0.3718    Phase: val Epoch: 1/1 Iter: 12/39 Batch time: 0.3615    Phase: val Epoch: 1/1 Iter: 13/39 Batch time: 0.3508    Phase: val Epoch: 1/1 Iter: 14/39 Batch time: 0.3444    Phase: val Epoch: 1/1 Iter: 15/39 Batch time: 0.3843    Phase: val Epoch: 1/1 Iter: 16/39 Batch time: 0.3536    Phase: val Epoch: 1/1 Iter: 17/39 Batch time: 0.3835    Phase: val Epoch: 1/1 Iter: 18/39 Batch time: 0.4077    Phase: val Epoch: 1/1 Iter: 19/39 Batch time: 0.3463    Phase: val Epoch: 1/1 Iter: 20/39 Batch time: 0.3754    Phase: val Epoch: 1/1 Iter: 21/39 Batch time: 0.3434    Phase: val Epoch: 1/1 Iter: 22/39 Batch time: 0.3629    Phase: val Epoch: 1/1 Iter: 23/39 Batch time: 0.3566    Phase: val Epoch: 1/1 Iter: 24/39 Batch time: 0.3107    Phase: val Epoch: 1/1 Iter: 25/39 Batch time: 0.3248    Phase: val Epoch: 1/1 Iter: 26/39 Batch time: 0.3344    Phase: val Epoch: 1/1 Iter: 27/39 Batch time: 0.3159    Phase: val Epoch: 1/1 Iter: 28/39 Batch time: 0.3377    Phase: val Epoch: 1/1 Iter: 29/39 Batch time: 0.3339    Phase: val Epoch: 1/1 Iter: 30/39 Batch time: 0.3281    Phase: val Epoch: 1/1 Iter: 31/39 Batch time: 0.3353    Phase: val Epoch: 1/1 Iter: 32/39 Batch time: 0.3257    Phase: val Epoch: 1/1 Iter: 33/39 Batch time: 0.3430    Phase: val Epoch: 1/1 Iter: 34/39 Batch time: 0.3475    Phase: val Epoch: 1/1 Iter: 35/39 Batch time: 0.3302    Phase: val Epoch: 1/1 Iter: 36/39 Batch time: 0.3169    Phase: val Epoch: 1/1 Iter: 37/39 Batch time: 0.3097    Phase: val Epoch: 1/1 Iter: 38/39 Batch time: 0.3265    Phase: val Epoch: 1/1 Iter: 39/39 Batch time: 0.0959    Phase: val   Epoch: 1/1 Loss: 0.6475 Acc: 0.6732        
+    Training completed in 1m 55s
+    Best test loss: 0.6475 | Best test accuracy: 0.6732
 
 
 Visualizing the model predictions
@@ -660,6 +705,11 @@ We first define a visualization function for a batch of test data.
 
 
 
+
+
+
+
+
 Finally, we can run the previous function to see a batch of images
 with the corresponding predictions.
 
@@ -669,6 +719,14 @@ with the corresponding predictions.
 
     visualize_model(model_hybrid, num_images=batch_size)
     plt.show()
+
+
+
+
+.. image:: /demos/images/sphx_glr_tutorial_quantum_transfer_learning_002.png
+    :class: sphx-glr-single-img
+
+
 
 
 References
@@ -690,7 +748,7 @@ Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 7
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.178 seconds)
+   **Total running time of the script:** ( 1 minutes  57.152 seconds)
 
 
 .. _sphx_glr_download_demos_tutorial_quantum_transfer_learning.py:
