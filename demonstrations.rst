@@ -41,7 +41,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: demonstrations/state_preparation/NOON.png
-    :description: :doc:`demos/tutorial_state_preparation`
+    :description: :doc:`demos/state_preparation`
 
 .. customgalleryitem::
     :tooltip: Ising model example with PennyLane PyTorch interface.
@@ -81,12 +81,12 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Perform QAOA for MaxCut
     :figure: demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
-    :description: :doc:`demos/tutorial_qaoa_maxcut`
+    :description: :doc:`demos/qaoa_maxcut`
 
 .. customgalleryitem::
     :tooltip: Barren plateaus in quantum neural networks
     :figure: demonstrations/barren_plateaus/surface.png
-    :description: :doc:`demos/tutorial_barren_plateaus`
+    :description: :doc:`demos/barren_plateaus`
 
 .. customgalleryitem::
     :tooltip: Rotoselect algorithm
@@ -132,7 +132,7 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_advanced_usage
     demos/pytorch_noise
     demos/tutorial_quantum_chemistry
-    demos/tutorial_state_preparation
+    demos/state_preparation
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_QGAN
     demos/tutorial_variational_classifier
@@ -140,8 +140,8 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqe
     demos/tutorial_data_reuploading_classifier
     demos/tutorial_quantum_natural_gradient
-    demos/tutorial_qaoa_maxcut
-    demos/tutorial_barren_plateaus
+    demos/qaoa_maxcut
+    demos/barren_plateaus
     demos/tutorial_rotoselect
     demos/tutorial_doubly_stochastic
     demos/tutorial_vqls
