@@ -1,8 +1,8 @@
-# Quantum machine learning tutorials
+# Quantum machine learning
 
-This repository contains a basic introduction into Quantum Machine Learning, 
-as well as the Python tutorials or demonstrations available
-at https://pennylane.ai/qml. Content includes:
+This repository contains introductory pages on Quantum Machine Learning, 
+as well as the Python demos; both are available at
+at https://pennylane.ai/qml. The content consists of four basic pages:
 
 * [What is QML?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum 
   computing means for machine learning.
@@ -14,28 +14,28 @@ at https://pennylane.ai/qml. Content includes:
 * [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Look up terms around 
   quantum machine learning and optimization.
 
-* [Demonstrations of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
+* [Demons of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
   Take a dive into quantum machine learning by exploring cutting-edge algorithms
   on near-term quantum hardware.
 
 ## Contributing
 
-You can contribute by submitting a tutorial implementing a recent
+You can contribute by submitting a demo implementing a recent
 quantum machine learning paper/result.
 
-### Adding tutorials
+### Adding demos
 
-* Tutorials are written in the form of an executable Python script.
+* Demos are written in the form of an executable Python script.
   Any package listed in `requirements.txt` you can assume is available to be imported.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
   
-* If you would like to write the tutorial using a Jupyter notebook, you can convert
+* If you would like to write the demo using a Jupyter notebook, you can convert
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
 
-* All tutorials should have a file name beginning with `tutorial_`.
+* All demos should have a file name beginning with `tutorial_`.
   The python files are saved in the `demonstrations` directory.
 
 * [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
@@ -46,32 +46,32 @@ quantum machine learning paper/result.
 
   ```python
   ##############################################################################
-  #.. figure:: ../demonstrations/<tutorial name>/image.png
+  #.. figure:: ../demonstrations/<demo name>/image.png
   #    :align: center
   #    :width: 90%
   ```
 
-  where `<tutorial name>` is a sub-directory with the name of
-  your tutorial.
+  where `<demo name>` is a sub-directory with the name of
+  your demo.
 
-* When complete, create a gallery link to your tutorial, by adding the
+* When complete, create a gallery link to your demo, by adding the
   following to `demonstrations.rst`:
 
   ```rest
   .. customgalleryitem::
       :tooltip: An extended description of the demo
-      :figure: demonstrations/<tutorial name>/thumbnail.png
+      :figure: demonstrations/<demo name>/thumbnail.png
       :description: :doc:`demos/pytorch_noise`
   ```
 
-  You should also add a link to your tutorial to the table of contents, by adding to the
+  You should also add a link to your demo to the table of contents, by adding to the
   end of the `.. toctree::`.
 
 * Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
 
   ```bash
   pip install black
-  black -l 100 tutorial_new.py
+  black -l 100 demo_new.py
   ```
 
   and you are ready to submit a pull request!
@@ -79,7 +79,7 @@ quantum machine learning paper/result.
 
 #### Tutorial guidelines
 
-While you are free to be as creative as you like with your tutorial,
+While you are free to be as creative as you like with your demo,
 there are a couple of guidelines to keep in mind.
 
 * Submissions should include your name (and optionally email) at the top
@@ -92,7 +92,7 @@ there are a couple of guidelines to keep in mind.
 
 * All demos should include a summary below the title.
   The summary should be 1-3 sentences that makes clear the
-  goal and outcome of the tutorial, and links to any papers/resources used.
+  goal and outcome of the demo, and links to any papers/resources used.
 
 * Code should be clearly commented and explained, either
   as a ReST-formatted comment or a standard Python comment.
@@ -117,11 +117,11 @@ will now be available in `_build/html`. Open `_build/html/index.html` to browse
 the built site locally.
 
 Note that the above command may take some time, as all demos
-will be executed and built! Once built, only _modified_ tutorials will
+will be executed and built! Once built, only _modified_ demos will
 be re-executed/re-built.
 
 Alternatively, you may run `make html-norun` to build the website _without_ executing
-tutorials.
+demos.
 
 ## Support
 
