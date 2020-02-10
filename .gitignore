@@ -4,3 +4,10 @@ tutorial
 demos
 _static/thumbs/*
 .idea
+demonstrations/pyscf/*
+demonstrations/structure.xyz
+demonstrations/pyscf/*
+demonstrations/structure.xyz
+_data/*
+
+

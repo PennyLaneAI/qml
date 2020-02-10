@@ -34,6 +34,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/pytorch_noise`
 
 .. customgalleryitem::
+    :tooltip: Explore quantum chemistry in PennyLane.
+    :figure: beginner/quantum_chemistry/water_structure.png
+    :description: :doc:`tutorial/tutorial_quantum_chemistry`
+
+.. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: demonstrations/state_preparation/NOON.png
     :description: :doc:`demos/tutorial_state_preparation`
@@ -126,6 +131,7 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_plugins_hybrid
     demos/tutorial_advanced_usage
     demos/pytorch_noise
+    demos/tutorial_quantum_chemistry
     demos/tutorial_state_preparation
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_QGAN
