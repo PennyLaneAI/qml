@@ -8,7 +8,7 @@ of the potential energy surface of molecular hydrogen.
 
 Using a VQE setup, we task two devices from the
 [PennyLane-Forest](https://pennylane-forest.readthedocs.io/en/latest/) plugin with evaluating
-separate terms in the qubit Hamiltonian of $H_2$. As these devices are allowed to operate
+separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
 asynchronously, i.e., at the same time and without having to wait for each other,
 the calculation can be performed in roughly half the time.
 
@@ -32,12 +32,12 @@ from pennylane import qchem
 #    pip install pennylane-forest
 #    pip install dask[delayed]
 #
-# Finding the qubit Hamiltonians of $H_{2}$
-# -----------------------------------------
+# Finding the qubit Hamiltonians of :math:`H_{2}`
+# -----------------------------------------------
 #
 # The objective of this tutorial is to evaluate the potential energy surface of molecular
-# hydrogen. This is achieved by finding the ground state energy of $H_{2}$ for a range of atomic
-# separations.
+# hydrogen. This is achieved by finding the ground state energy of :math:`H_{2}` for a range of
+# atomic separations.
 #
 # Each atomic separation results in a different qubit Hamiltonian. To find the corresponding
 # Hamiltonian, we use the :func:`~.generate_hamiltonian` function of the :mod:`~.qchem` package.
