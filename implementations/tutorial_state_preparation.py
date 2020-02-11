@@ -145,7 +145,7 @@ def cost_fn(params):
 opt = torch.optim.Adam([params], lr=0.1)
 
 # number of steps in the optimization routine
-steps = 200
+steps = 100
 
 # the final stage of optimization isn't always the best, so we keep track of
 # the best parameters along the way
