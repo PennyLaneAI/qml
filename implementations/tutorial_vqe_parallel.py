@@ -1,5 +1,5 @@
 # coding=utf-8
-r'''
+r"""
 VQE with parallel QPUs on Rigetti-Forest
 ========================================
 
@@ -13,14 +13,14 @@ asynchronously, i.e., at the same time and without having to wait for each other
 the calculation can be performed in half the time.
 
 We begin by importing the prerequisite libraries:
-'''
+"""
 
-import pennylane as qml
-from pennylane import qchem
+import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-import time
+import pennylane as qml
+from pennylane import qchem
 
 ##############################################################################
 # The ```pennylane-qchem``` module is installed separately using ```pip install
@@ -44,16 +44,16 @@ import time
 # saved in ```.xyz``` format.
 
 data = {  # keys: atomic separations (ångström), values: corresponding files
-    0.3: 'xyz/h2_0.30.xyz',
-    0.5: 'xyz/h2_0.50.xyz',
-    0.7: 'xyz/h2_0.70.xyz',
-    0.9: 'xyz/h2_0.90.xyz',
-    1.1: 'xyz/h2_1.10.xyz',
-    1.3: 'xyz/h2_1.30.xyz',
-    1.5: 'xyz/h2_1.50.xyz',
-    1.7: 'xyz/h2_1.70.xyz',
-    1.9: 'xyz/h2_1.90.xyz',
-    2.1: 'xyz/h2_2.10.xyz',
+    0.3: "xyz/h2_0.30.xyz",
+    0.5: "xyz/h2_0.50.xyz",
+    0.7: "xyz/h2_0.70.xyz",
+    0.9: "xyz/h2_0.90.xyz",
+    1.1: "xyz/h2_1.10.xyz",
+    1.3: "xyz/h2_1.30.xyz",
+    1.5: "xyz/h2_1.50.xyz",
+    1.7: "xyz/h2_1.70.xyz",
+    1.9: "xyz/h2_1.90.xyz",
+    2.1: "xyz/h2_2.10.xyz",
 }
 
 ##############################################################################
@@ -65,17 +65,18 @@ hamiltonians = [
         mol_geo_file=file,
         mol_charge=0,
         multiplicity=1,
-        basis_set='sto-3g',
+        basis_set="sto-3g",
         n_active_electrons=2,
         n_active_orbitals=2,
     )[0]
-    for separation, file in data.items()]
+    for separation, file in data.items()
+]
 
 ##############################################################################
 # Each Hamiltonian can be written as a linear combination of fifteen tensor products of Pauli
 # matrices.
 
-[len(h.ops) for h in hamiltonians]
+print([len(h.ops) for h in hamiltonians])
 
 ##############################################################################
 # Defining the energy function
@@ -97,14 +98,15 @@ hamiltonians = [
 # To do this, start by instantiating a device for each term:
 
 # Use forest.qpu if hardware access is available
-devs_4 = [qml.device('forest.qvm', device="Aspen-4-4Q-D") for _ in range(8)]
-devs_7 = [qml.device('forest.qvm', device="Aspen-7-4Q-C") for _ in range(7)]
+devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-D") for _ in range(8)]
+devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-C") for _ in range(7)]
 devs = devs_4 + devs_7
 
 ##############################################################################
 # We must also define a circuit to prepare the ground state. The simple circuit below is able to
 # accurately capture the ground state encoded into qubits. It has a single free parameter setting
 # a Y-rotation on the third qubit.
+
 
 def circuit(param, wires):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
@@ -113,6 +115,7 @@ def circuit(param, wires):
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[3, 1])
 
+
 ##############################################################################
 # Each molecular separation requires a different Y-rotation parameter. The values of these
 # parameters can be found by minimizing the ground state energy as outlined in
@@ -120,7 +123,7 @@ def circuit(param, wires):
 # pre-optimized rotations and focus on comparing the speed of evaluating the potential energy
 # surface with sequential and parallel evaluation.
 
-params = np.load('RY_params.npy')
+params = np.load("RY_params.npy")
 
 ##############################################################################
 # Finally, the energies as a function of rotation angle can be given using ```VQECost```.
@@ -139,31 +142,32 @@ energies = [qml.VQECost(circuit, h, devs) for h in hamiltonians]
 # We can use this feature to compare the sequential and parallel times to calculate the potential
 # energy surface. The following function calculates the surface:
 
+
 def calculate_surface(parallel=True):
     t0 = time.time()
-    surface = []
+    s = []
 
     for i, e in enumerate(energies):
-        print('Running for molecular separation {} Å'.format(list(data.keys())[i]))
-        s = e(params[i], parallel=parallel)
-        surface.append(s)
+        print("Running for molecular separation {} Å".format(list(data.keys())[i]))
+        s.append(e(params[i], parallel=parallel))
 
     t1 = time.time()
 
-    print('Evaluation time: {0:.2f} s'.format(t1 - t0))
-    return(surface)
+    print("Evaluation time: {0:.2f} s".format(t1 - t0))
+    return s
 
-print('Evaluating the potential energy surface sequentially')
+
+print("Evaluating the potential energy surface sequentially")
 surface = calculate_surface(False)
 
-print('\nEvaluating the potential energy surface in parallel')
+print("\nEvaluating the potential energy surface in parallel")
 surface = calculate_surface(True)
 
 ##############################################################################
 # We can finally plot the potential energy surface.
 
-plt.plot(surface, linewidth=2.2, marker='o')
-plt.title('Potential energy surface for molecular hydrogen', fontsize=12)
-plt.xlabel('Atomic separation (Å)', fontsize=16)
-plt.ylabel('Ground state energy (Ha)', fontsize=16)
+plt.plot(surface, linewidth=2.2, marker="o")
+plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
+plt.xlabel("Atomic separation (Å)", fontsize=16)
+plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
