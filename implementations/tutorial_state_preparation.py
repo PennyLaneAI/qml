@@ -1,15 +1,15 @@
 r"""
 .. _state_preparation:
 
-State preparation with Rigetti Forest + PyTorch
-===============================================
+State preparation with Qiskit + PyTorch
+=======================================
 
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
 how to:
 
 1. Construct compact expressions for circuits composed of many layers.
-2. Succintly evaluate expectation values of many observables.
+2. Succinctly evaluate expectation values of many observables.
 3. Estimate expectation values from repeated measurements, as in real
    hardware.
 """
@@ -95,14 +95,10 @@ def layer(params, j):
 
 ##############################################################################
 # To set up the device, we select a plugin that is compatible with
-# evaluating expectations through sampling: the ``forest.qvm`` plugin. The
-# syntax is slightly different than for other plugins, we need to also
-# feed a ``device`` keyword specifying the number of qubits in the format
-# ``[number of qubits]q-pyqvm``. The keyword ``shots`` indicates the
-# number of samples used to estimate expectation values.
-#
+# evaluating expectations through sampling: the ``qiskit.aer`` plugin. The keyword ``shots``
+# indicates the number of samples used to estimate expectation values.
 
-dev = qml.device("forest.qvm", device="3q-pyqvm", shots=1000)
+dev = qml.device('qiskit.aer', wires=3, shots=1000)
 
 ##############################################################################
 # When defining the QNode, we introduce as input a Hermitian operator
