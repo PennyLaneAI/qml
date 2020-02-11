@@ -23,9 +23,13 @@ import pennylane as qml
 from pennylane import qchem
 
 ##############################################################################
-# The ```pennylane-qchem``` module is installed separately using ```pip install
-# pennylane-qchem```. This tutorial also requires the ```pennylane-forest``` package, which can
-# be installed using ```pip install pennylane-forest```.
+# This tutorial requires the ```pennylane-qchem```, ```pennylane-forest``` and ```dask```
+# packages, which are installed separately to PennyLane using:
+#
+# .. code-block:: bash
+#    pip install pennylane-qchem
+#    pip install pennylane-forest
+#    pip install dask[delayed]
 #
 # Finding the qubit Hamiltonians of $H_{2}$
 # -----------------------------------------
