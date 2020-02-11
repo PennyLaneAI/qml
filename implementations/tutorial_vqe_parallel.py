@@ -44,16 +44,16 @@ from pennylane import qchem
 # saved in ```.xyz``` format.
 
 data = {  # keys: atomic separations (ångström), values: corresponding files
-    0.3: "tutorial_vqe_parallel/h2_0.30.xyz",
-    0.5: "tutorial_vqe_parallel/h2_0.50.xyz",
-    0.7: "tutorial_vqe_parallel/h2_0.70.xyz",
-    0.9: "tutorial_vqe_parallel/h2_0.90.xyz",
-    1.1: "tutorial_vqe_parallel/h2_1.10.xyz",
-    1.3: "tutorial_vqe_parallel/h2_1.30.xyz",
-    1.5: "tutorial_vqe_parallel/h2_1.50.xyz",
-    1.7: "tutorial_vqe_parallel/h2_1.70.xyz",
-    1.9: "tutorial_vqe_parallel/h2_1.90.xyz",
-    2.1: "tutorial_vqe_parallel/h2_2.10.xyz",
+    0.3: "vqe_parallel/h2_0.30.xyz",
+    0.5: "vqe_parallel/h2_0.50.xyz",
+    0.7: "vqe_parallel/h2_0.70.xyz",
+    0.9: "vqe_parallel/h2_0.90.xyz",
+    1.1: "vqe_parallel/h2_1.10.xyz",
+    1.3: "vqe_parallel/h2_1.30.xyz",
+    1.5: "vqe_parallel/h2_1.50.xyz",
+    1.7: "vqe_parallel/h2_1.70.xyz",
+    1.9: "vqe_parallel/h2_1.90.xyz",
+    2.1: "vqe_parallel/h2_2.10.xyz",
 }
 
 ##############################################################################
@@ -127,7 +127,7 @@ def circuit(param, wires):
 # pre-optimized rotations and focus on comparing the speed of evaluating the potential energy
 # surface with sequential and parallel evaluation.
 
-params = np.load("tutorial_vqe_parallel/RY_params.npy")
+params = np.load("vqe_parallel/RY_params.npy")
 
 ##############################################################################
 # Finally, the energies as functions of rotation angle can be given using :class:`~.VQECost`.
