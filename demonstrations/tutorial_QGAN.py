@@ -17,7 +17,7 @@ training signal for the generator to improve its fake generated data.
 
 |
 
-.. figure:: ../implementations/QGAN/qgan.png
+.. figure:: ../demonstrations/QGAN/qgan.png
     :align: center
     :width: 75%
     :target: javascript:void(0)

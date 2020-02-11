@@ -127,7 +127,7 @@ plt.show()
 
 
 ##############################################################################
-# .. image:: ../implementations/quantum_neural_net/qnn_output_20_0.png
+# .. image:: ../demonstrations/quantum_neural_net/qnn_output_20_0.png
 #
 # The network’s weights (called ``var`` here) are initialized with values
 # sampled from a normal distribution. We use 4 layers; performance has
@@ -690,7 +690,7 @@ plt.tick_params(axis="both", which="minor")
 plt.show()
 
 ##############################################################################
-# .. image:: ../implementations/quantum_neural_net/qnn_output_28_0.png
+# .. image:: ../demonstrations/quantum_neural_net/qnn_output_28_0.png
 #
 # The model has learned to smooth the noisy data.
 #
@@ -721,4 +721,4 @@ plt.tick_params(axis="both", which="minor")
 plt.show()
 
 ##############################################################################
-# .. image:: ../implementations/quantum_neural_net/qnn_output_30_0.png
+# .. image:: ../demonstrations/quantum_neural_net/qnn_output_30_0.png

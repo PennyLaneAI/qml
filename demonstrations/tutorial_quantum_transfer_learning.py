@@ -29,7 +29,7 @@ and :math:`B`, independently from their quantum or classical physical nature.
 |
 
 
-.. figure:: ../implementations/quantum_transfer_learning/transfer_learning_general.png
+.. figure:: ../demonstrations/quantum_transfer_learning/transfer_learning_general.png
    :scale: 45%
    :alt: transfer_general
    :align: center
@@ -52,6 +52,7 @@ transfer learning method**:
 
 When dealing with hybrid systems, depending on the physical nature (classical or quantum) of the
 networks :math:`A` and :math:`B`, one can have different implementations of transfer learning as
+
 summarized in following table:
 
 |
@@ -89,7 +90,7 @@ We focus on the CQ transfer learning scheme discussed in the previous section an
 
 A graphical representation of the full data processing pipeline is given in the figure below.
 
-.. figure:: ../implementations/quantum_transfer_learning/transfer_learning_c2q.png
+.. figure:: ../demonstrations/quantum_transfer_learning/transfer_learning_c2q.png
    :scale: 55%
    :alt: transfer_c2q
    :align: center

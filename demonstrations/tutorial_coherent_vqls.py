@@ -13,7 +13,7 @@ applied as a probabilistic coherent operation. This approach has some advantages
 disadvantages and its practical convenience depends on the specific linear problem 
 to be solved and on experimental constraints.
 
-.. figure:: ../implementations/coherent_vqls/cvqls_circuit.png
+.. figure:: ../demonstrations/coherent_vqls/cvqls_circuit.png
     :align: center
     :width: 100%
     :target: javascript:void(0)

@@ -9,7 +9,7 @@ learning presented in `Lloyd, Schuld, Ijaz, Izaac, Killoran (2019) <https://arxi
 by training a hybrid classical-quantum data
 embedding to classify images of ants and bees. The example was inspired
 by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_,
-(see also this `tutorial <https://pennylane.ai/qml/app/tutorial_quantum_transfer_learning.html>`_),
+(see also this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_),
 and reproduces some of the subplots in Figure 5 of Lloyd et al.
 """
 
@@ -36,7 +36,7 @@ from pennylane import RX, RY, RZ, CNOT
 # separate different classes of data in the Hilbert space of the quantum
 # system.
 #
-# .. figure:: ../implementations/embedding_metric_learning/training.png
+# .. figure:: ../demonstrations/embedding_metric_learning/training.png
 #    :align: center
 #    :width: 40%
 #
@@ -46,7 +46,7 @@ from pennylane import RX, RY, RZ, CNOT
 # The decision boundary of the measurement in quantum state space is nearly
 # linear (red dashed line).
 #
-# .. figure:: ../implementations/embedding_metric_learning/classification.png
+# .. figure:: ../demonstrations/embedding_metric_learning/classification.png
 #    :align: center
 #    :width: 40%
 #
@@ -55,7 +55,7 @@ from pennylane import RX, RY, RZ, CNOT
 # boundary can translate to a non-trivial decision boundary in the
 # original space of the data.
 #
-# .. figure:: ../implementations/embedding_metric_learning/dec_boundary.png
+# .. figure:: ../demonstrations/embedding_metric_learning/dec_boundary.png
 #    :align: center
 #    :width: 40%
 #
@@ -89,7 +89,7 @@ from pennylane import RX, RY, RZ, CNOT
 #
 # |
 #
-# .. figure:: ../implementations/embedding_metric_learning/pipeline.png
+# .. figure:: ../demonstrations/embedding_metric_learning/pipeline.png
 #    :align: center
 #    :width: 100%
 #
@@ -154,7 +154,7 @@ def QAOAEmbedding(features, weights, wires):
 # hymenoptera dataset <https://www.kaggle.com/ajayrana/hymenoptera-data>`__.
 # This is a sample of four images:
 #
-# .. figure:: ../implementations/embedding_metric_learning/data_example.png
+# .. figure:: ../demonstrations/embedding_metric_learning/data_example.png
 #    :align: center
 #    :width: 50%
 #
@@ -458,7 +458,7 @@ for b in B:
 #
 # |
 #
-# .. figure:: ../implementations/embedding_metric_learning/ant.jpg
+# .. figure:: ../demonstrations/embedding_metric_learning/ant.jpg
 #    :align: center
 #    :width: 40%
 #

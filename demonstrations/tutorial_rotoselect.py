@@ -115,7 +115,7 @@ dev = qml.device("default.qubit", analytic=True, wires=2)
 # Creating a fixed quantum circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../implementations/rotoselect/original_ansatz.png
+# .. figure:: ../demonstrations/rotoselect/original_ansatz.png
 #    :scale: 65%
 #    :align: center
 #    :alt: original_ansatz
@@ -269,7 +269,7 @@ plt.show()
 # Rotoselect
 # ----------
 #
-# .. figure:: ../implementations/rotoselect/rotoselect_structure.png
+# .. figure:: ../demonstrations/rotoselect/rotoselect_structure.png
 #    :scale: 65%
 #    :align: center
 #    :alt: rotoselect_structure
@@ -406,7 +406,7 @@ plt.show()
 # Cost function surface for learned circuit structure
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../implementations/rotoselect/learned_structure.png
+# .. figure:: ../demonstrations/rotoselect/learned_structure.png
 #    :scale: 65%
 #    :align: center
 #    :alt: learned_structure

@@ -73,7 +73,7 @@ Quantum machine learning
                     </a>
                 </div>
                 <div class="col-lg-4 mb-5">
-                    <a href="implementations.html">
+                    <a href="demonstrations.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
@@ -94,7 +94,7 @@ Quantum machine learning
 
             <ul id="light-slider">
                 <li>
-                    <a href="app/tutorial_vqls.html">
+                    <a href="demos/tutorial_vqls.html">
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap" style="min-width: 500px!important;">
                           <div class="card-body">
@@ -105,7 +105,7 @@ Quantum machine learning
                     </a>
                 </li>
                 <li>
-                    <a href="app/tutorial_quantum_transfer_learning.html">
+                    <a href="demos/tutorial_quantum_transfer_learning.html">
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_images/transfer_images.png" alt="Card image cap" style="min-width: 350px!important;">
                           <div class="card-body">
@@ -116,7 +116,7 @@ Quantum machine learning
                     </a>
                 </li>
                 <li>
-                    <a href="app/tutorial_data_reuploading_classifier.html">
+                    <a href="demos/tutorial_data_reuploading_classifier.html">
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_static/thumbs/universal_dnn.png" alt="Card image cap">
                           <div class="card-body">
@@ -127,7 +127,7 @@ Quantum machine learning
                     </a>
                 </li>
                 <li>
-                    <a href="app/tutorial_doubly_stochastic.html">
+                    <a href="demos/tutorial_doubly_stochastic.html">
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_images/sphx_glr_tutorial_doubly_stochastic_002.png" alt="Card image cap">
                           <div class="card-body">
@@ -138,7 +138,7 @@ Quantum machine learning
                     </a>
                 </li>
                 <li>
-                    <a href="app/tutorial_barren_plateaus.html">
+                    <a href="demos/barren_plateaus.html">
                         <div class="card">
                           <img class="card-img-top" src="_static/thumbs/surface.png" alt="Card image cap">
                           <div class="card-body">
@@ -151,7 +151,7 @@ Quantum machine learning
             </ul>
 
             <p class="grey-text mx-auto mt-5" style="font-size: small;margin-top:-10px;">
-                All content above is free, open-source, and available as executable code downloads. If you would like to contribute a tutorial or QML implementation, please make a pull request over at our <a href="https://github.com/XanaduAI/qml">GitHub repository</a>.
+                All content above is free, open-source, and available as executable code downloads. If you would like to contribute a demo, please make a pull request over at our <a href="https://github.com/XanaduAI/qml">GitHub repository</a>.
             </p>
 
         </section>
@@ -216,4 +216,4 @@ Quantum machine learning
     whatisqml
     trainingcircuits
     concepts
-    implementations
+    demonstrations

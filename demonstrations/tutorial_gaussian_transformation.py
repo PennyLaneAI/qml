@@ -16,7 +16,7 @@ The quantum circuit
 For this basic tutorial, we will consider a special subset of CV operations:
 the *Gaussian transformations*. We work with the following simple Gaussian circuit:
 
-.. figure:: ../implementations/gaussian_transformation/gaussian_transformation.svg
+.. figure:: ../demonstrations/gaussian_transformation/gaussian_transformation.svg
     :align: center
     :width: 40%
     :target: javascript:void(0);
