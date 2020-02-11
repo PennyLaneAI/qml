@@ -27,6 +27,7 @@ from pennylane import qchem
 # packages, which are installed separately to PennyLane using:
 #
 # .. code-block:: bash
+#
 #    pip install pennylane-qchem
 #    pip install pennylane-forest
 #    pip install dask[delayed]
