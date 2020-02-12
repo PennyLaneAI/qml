@@ -1,4 +1,4 @@
-r'''
+r"""
 Ensemble classification with Rigetti and Qiskit devices
 =======================================================
 
@@ -12,17 +12,18 @@ tutorial, consisting of three classes of iris flower. Using a pre-trained model,
 that this approach to ensembling allows the QPUs to specialize towards different classes.
 
 Let's begin by importing the prerequisite libraries:
-'''
+"""
 
 from collections import Counter
-import torch
+
 import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
 import numpy as np
 import pennylane as qml
 import sklearn.datasets
 import sklearn.decomposition
+import torch
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 ##############################################################################
 # This tutorial requires the ```pennylane-forest``` and ```pennylane-qiskit``` packages.
@@ -37,8 +38,8 @@ n_classes = 3
 n_samples = 150
 
 data = sklearn.datasets.load_iris()
-x = data['data']
-y = data['target']
+x = data["data"]
+y = data["target"]
 
 ##############################################################################
 # We shuffle the data and then embed the four features into a two-dimensional space for ease of
@@ -59,8 +60,6 @@ x = pca.transform(x)
 # and hence renormalize our features to be between $[-\pi, \pi]$.
 
 
-
-
 x_min = np.min(x, axis=0)
 x_max = np.max(x, axis=0)
 
@@ -69,8 +68,6 @@ x = 2 * np.pi * (x - x_min) / (x_max - x_min) - np.pi
 ##############################################################################
 # The data is split between a training and a test set. This tutorial uses a model that is
 # pre-trained on the training set.
-
-
 
 
 split = 125
@@ -84,9 +81,7 @@ y_test = y[split:]
 # Finally, let's take a quick look at our data:
 
 
-
-
-colours = ['#ec6f86', '#4573e7', '#ad61ed']
+colours = ["#ec6f86", "#4573e7", "#ad61ed"]
 
 
 def plot_points(x_train, y_train, x_test, y_test):
@@ -100,35 +95,43 @@ def plot_points(x_train, y_train, x_test, y_test):
         c_test.append(colours[y])
 
     plt.scatter(x_train[:, 0], x_train[:, 1], c=c_train)
-    plt.scatter(x_test[:, 0], x_test[:, 1], c=c_test, marker='x')
+    plt.scatter(x_test[:, 0], x_test[:, 1], c=c_test, marker="x")
 
-    plt.xlabel('Feature 1', fontsize=16)
-    plt.ylabel('Feature 2', fontsize=16)
+    plt.xlabel("Feature 1", fontsize=16)
+    plt.ylabel("Feature 2", fontsize=16)
 
     ax = plt.gca()
     ax.set_aspect(1)
 
-    c_transparent = '#00000000'
+    c_transparent = "#00000000"
 
     custom_lines = [
-        Patch(facecolor=colours[0], edgecolor=c_transparent,
-              label='Class 0'),
-        Patch(facecolor=colours[1], edgecolor=c_transparent,
-              label='Class 1'),
-        Patch(facecolor=colours[2], edgecolor=c_transparent,
-              label='Class 2'),
-        Line2D([0], [0], marker='o', color=c_transparent, label='Train',
-               markerfacecolor='black', markersize=10),
-        Line2D([0], [0], marker='x', color=c_transparent, label='Test',
-               markerfacecolor='black', markersize=10),
+        Patch(facecolor=colours[0], edgecolor=c_transparent, label="Class 0"),
+        Patch(facecolor=colours[1], edgecolor=c_transparent, label="Class 1"),
+        Patch(facecolor=colours[2], edgecolor=c_transparent, label="Class 2"),
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color=c_transparent,
+            label="Train",
+            markerfacecolor="black",
+            markersize=10,
+        ),
+        Line2D(
+            [0],
+            [0],
+            marker="x",
+            color=c_transparent,
+            label="Test",
+            markerfacecolor="black",
+            markersize=10,
+        ),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
 
     return ax
-
-
-
 
 
 plot_points(x_train, y_train, x_test, y_test)
@@ -159,24 +162,18 @@ plot_points(x_train, y_train, x_test, y_test)
 # We begin by defining the two QPU devices and the circuits to be run on them.
 
 
-
-
 n_wires = 4
 
 
-
-
 # Use forest.qpu if hardware access is available
-dev0 = qml.device('forest.qvm', device="Aspen-4-4Q-E")
+dev0 = qml.device("forest.qvm", device="Aspen-4-4Q-E")
 
 # Use qiskit.ibmq if access is available
-dev1 = qml.device('qiskit.aer', wires=4)
+dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
 ##############################################################################
 # The circuits run on both devices are shown in the figure below: TODO
-
-
 
 
 def layer0(params, x=None):
@@ -193,9 +190,6 @@ def layer0(params, x=None):
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1)), qml.expval(qml.PauliZ(2))
 
 
-
-
-
 def layer1(params, x=None):
     for i in range(n_wires):
         qml.RX(x[i % n_features], wires=i)
@@ -209,14 +203,14 @@ def layer1(params, x=None):
         qml.Rot(*params[0, 1, i], wires=i)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1)), qml.expval(qml.PauliZ(2))
 
+
 ##############################################################################
 # We finally combine the two devices into a :class:`QNodeCollection`:
 
 
-
-
 qnodes = qml.QNodeCollection(
-    [qml.QNode(layer0, dev0, interface='torch'), qml.QNode(layer1, dev1, interface='torch')])
+    [qml.QNode(layer0, dev0, interface="torch"), qml.QNode(layer1, dev1, interface="torch")]
+)
 
 ##############################################################################
 # Postprocessing into a prediction
@@ -232,8 +226,6 @@ qnodes = qml.QNodeCollection(
 # other.
 
 
-
-
 def decision(softmax):
     return int(torch.argmax(softmax))
 
@@ -245,10 +237,9 @@ def predict_point(params, x_point=None, parallel=True):
     chosen_softmax = softmax[choice]
     return decision(chosen_softmax), decision(softmax[0]), decision(softmax[1]), int(choice)
 
+
 ##############################################################################
 # Next, let's define a function to make a predictions over multiple data points.
-
-
 
 
 def predict(params, x=None, parallel=True):
@@ -259,7 +250,7 @@ def predict(params, x=None, parallel=True):
 
     for i, x_point in enumerate(x):
         if i % 10 == 0 and i > 0:
-            print('Completed up to iteration {}'.format(i))
+            print("Completed up to iteration {}".format(i))
         results = predict_point(params, x_point=x_point, parallel=parallel)
         predictions_ensemble.append(results[0])
         predictions_0.append(results[1])
@@ -268,6 +259,7 @@ def predict(params, x=None, parallel=True):
 
     return predictions_ensemble, predictions_0, predictions_1, choices
 
+
 ##############################################################################
 # Make predictions
 # ----------------
@@ -275,19 +267,15 @@ def predict(params, x=None, parallel=True):
 # To test our model, we first load a pre-trained set of parameters.
 
 
-
-
-params = np.load('params.npy')
+params = np.load("params.npy")
 
 ##############################################################################
 # We can then make predictions for the training and test datasets.
 
 
-
-
-print('Predicting on training dataset')
+print("Predicting on training dataset")
 p_train, p_train_0, p_train_1, choices_train = predict(params, x=x_train)
-print('Predicting on test dataset')
+print("Predicting on test dataset")
 p_test, p_test_0, p_test_1, choices_test = predict(params, x=x_test)
 
 ##############################################################################
@@ -298,8 +286,6 @@ p_test, p_test_0, p_test_1, choices_test = predict(params, x=x_test)
 #
 # Accuracy
 # ^^^^^^^^
-
-
 
 
 def accuracy(predictions, actuals):
@@ -313,19 +299,14 @@ def accuracy(predictions, actuals):
     return accuracy
 
 
+print("Training accuracy (ensemble): {}".format(accuracy(p_train, y_train)))
+print("Training accuracy (QPU0):  {}".format(accuracy(p_train_0, y_train)))
+print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 
 
-
-print('Training accuracy (ensemble): {}'.format(accuracy(p_train, y_train)))
-print('Training accuracy (QPU0):  {}'.format(accuracy(p_train_0, y_train)))
-print('Training accuracy (QPU1):  {}'.format(accuracy(p_train_1, y_train)))
-
-
-
-
-print('Test accuracy (ensemble): {}'.format(accuracy(p_test, y_test)))
-print('Test accuracy (QPU0):  {}'.format(accuracy(p_test_0, y_test)))
-print('Test accuracy (QPU1):  {}'.format(accuracy(p_test_1, y_test)))
+print("Test accuracy (ensemble): {}".format(accuracy(p_test, y_test)))
+print("Test accuracy (QPU0):  {}".format(accuracy(p_test_0, y_test)))
+print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 ##############################################################################
 # These numbers tell us a few things:
 #
@@ -348,17 +329,13 @@ print('Test accuracy (QPU1):  {}'.format(accuracy(p_test_1, y_test)))
 # the ensemble model? Let's investigate.
 
 
-
-
 # Combine choices data to simplify analysis
 choices = np.append(choices_train, choices_test)
-print('Choices: {}'.format(choices))
-print('Choices counts: {}'.format(Counter(choices)))
+print("Choices: {}".format(choices))
+print("Choices counts: {}".format(Counter(choices)))
 
 ##############################################################################
 # The following lines keep track of choices and corresponding predictions in the ensemble model.
-
-
 
 
 predictions = np.append(p_train, p_test)
@@ -368,20 +345,16 @@ choice_vs_prediction = np.array([(choices[i], predictions[i]) for i in range(n_s
 # We can hence find the predictions each QPU was responsible for.
 
 
-
-
 choices_vs_prediction_0 = choice_vs_prediction[choice_vs_prediction[:, 0] == 0]
 choices_vs_prediction_1 = choice_vs_prediction[choice_vs_prediction[:, 0] == 1]
 predictions_0 = choices_vs_prediction_0[:, 1]
 predictions_1 = choices_vs_prediction_1[:, 1]
 
 
-
-
-expl = 'When the QPU{} was chosen by the ensemble, it made the following distribution of predictions: {}'
-print(expl.format('0', Counter(predictions_0)))
-print('\n' + expl.format('1', Counter(predictions_1)))
-print('\nDistribution of classes in iris dataset: {}'.format(Counter(y)))
+expl = "When the QPU{} was chosen by the ensemble, it made the following distribution of predictions: {}"
+print(expl.format("0", Counter(predictions_0)))
+print("\n" + expl.format("1", Counter(predictions_1)))
+print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
 
 ##############################################################################
 # These results show us that QPU0 specializes to making predictions on classes 0 and 2,
@@ -394,10 +367,8 @@ print('\nDistribution of classes in iris dataset: {}'.format(Counter(y)))
 # function plots correctly predicted points in green and incorrectly predicted points in red.
 
 
-
-
-colours_prediction = {'correct': '#83b5b9', 'incorrect': '#f98d91'}
-markers = ['o', 'v', 'd']
+colours_prediction = {"correct": "#83b5b9", "incorrect": "#f98d91"}
+markers = ["o", "v", "d"]
 
 
 def plot_points_prediction(x, y, p, title):
@@ -407,57 +378,73 @@ def plot_points_prediction(x, y, p, title):
     for i in range(n_samples):
         x_[y[i]].append(x[i])
         if p[i] == y[i]:
-            c[y[i]].append(colours_prediction['correct'])
+            c[y[i]].append(colours_prediction["correct"])
         else:
-            c[y[i]].append(colours_prediction['incorrect'])
+            c[y[i]].append(colours_prediction["incorrect"])
 
     for i in range(n_classes):
         x_class = np.array(x_[i])
         plt.scatter(x_class[:, 0], x_class[:, 1], c=c[i], marker=markers[i])
 
-    plt.xlabel('Feature 1', fontsize=16)
-    plt.ylabel('Feature 2', fontsize=16)
-    plt.title('Predictions from {} model'.format(title))
+    plt.xlabel("Feature 1", fontsize=16)
+    plt.ylabel("Feature 2", fontsize=16)
+    plt.title("Predictions from {} model".format(title))
 
     ax = plt.gca()
     ax.set_aspect(1)
 
-    c_transparent = '#00000000'
+    c_transparent = "#00000000"
 
     custom_lines = [
-        Patch(facecolor=colours_prediction['correct'], edgecolor=c_transparent,
-              label='Correct'),
-        Patch(facecolor=colours_prediction['incorrect'], edgecolor=c_transparent,
-              label='Incorrect'),
-        Line2D([0], [0], marker=markers[0], color=c_transparent, label='Class 0',
-               markerfacecolor='black', markersize=10),
-        Line2D([0], [0], marker=markers[1], color=c_transparent, label='Class 1',
-               markerfacecolor='black', markersize=10),
-        Line2D([0], [0], marker=markers[2], color=c_transparent, label='Class 2',
-               markerfacecolor='black', markersize=10),
+        Patch(facecolor=colours_prediction["correct"], edgecolor=c_transparent, label="Correct"),
+        Patch(
+            facecolor=colours_prediction["incorrect"], edgecolor=c_transparent, label="Incorrect"
+        ),
+        Line2D(
+            [0],
+            [0],
+            marker=markers[0],
+            color=c_transparent,
+            label="Class 0",
+            markerfacecolor="black",
+            markersize=10,
+        ),
+        Line2D(
+            [0],
+            [0],
+            marker=markers[1],
+            color=c_transparent,
+            label="Class 1",
+            markerfacecolor="black",
+            markersize=10,
+        ),
+        Line2D(
+            [0],
+            [0],
+            marker=markers[2],
+            color=c_transparent,
+            label="Class 2",
+            markerfacecolor="black",
+            markersize=10,
+        ),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
 
     return ax
 
+
 ##############################################################################
 # We can again compare the ensemble model with the individual models from each QPU.
 
 
+plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 
 
-plot_points_prediction(x, y, predictions, 'ensemble')  # ensemble
+plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 
 
-
-
-plot_points_prediction(x, y, np.append(p_train_0, p_test_0), 'QPU0')  # QPU 0
-
-
-
-
-plot_points_prediction(x, y, np.append(p_train_1, p_test_1), 'QPU1')  # QPU 1
+plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 
 ##############################################################################
 # These plots reinforce the specialization of the two QPUs. QPU1 concentrates on doing a good job
