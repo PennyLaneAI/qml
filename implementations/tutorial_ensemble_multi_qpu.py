@@ -5,7 +5,7 @@ Ensemble classification with Rigetti and Qiskit devices
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
 
-We use the ```forest.qvm``` device to simulate one QPU and the ```qiskit.aer``` device to
+We use the ``forest.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
 simulate another. Each QPU is allowed to make an independent prediction, and an ensemble model is
 formed by choosing the prediction of the most confident QPU. The iris dataset is used in this
 tutorial, consisting of three classes of iris flower. Using a pre-trained model, we shall see
@@ -26,7 +26,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
 ##############################################################################
-# This tutorial requires the ```pennylane-forest``` and ```pennylane-qiskit``` packages.
+# This tutorial requires the ``pennylane-forest`` and ``pennylane-qiskit`` packages.
 #
 # Load data
 # ---------
@@ -57,7 +57,7 @@ x = pca.transform(x)
 
 ##############################################################################
 # We will be encoding these two features into quantum circuits using :class:`~.RX` rotations,
-# and hence renormalize our features to be between $[-\pi, \pi]$.
+# and hence renormalize our features to be between :math:`[-\pi, \pi]`.
 
 
 x_min = np.min(x, axis=0)
@@ -143,8 +143,8 @@ plot_points(x_train, y_train, x_test, y_test)
 # Define model
 # ------------
 #
-# Our model is summarized in the figure below. We use two 4-qubit devices: ```Aspen-4-4Q-E```
-# from the PennyLane-Forest plugin and ```qiskit.aer``` from the PennyLane-Qiskit plugin.
+# Our model is summarized in the figure below. We use two 4-qubit devices: ``Aspen-4-4Q-E``
+# from the PennyLane-Forest plugin and ``qiskit.aer`` from the PennyLane-Qiskit plugin.
 #
 # Data is input using :class:`~.RX` rotations and then a different circuit is enacted for each
 # device with a unique set of trainable parameters. The output of both circuits is a
@@ -222,12 +222,12 @@ qnodes = qml.QNodeCollection(
 # Postprocessing into a prediction
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# The ```predict_point``` function allows us to find the ensemble prediction, as well as keeping
+# The ``predict_point`` function allows us to find the ensemble prediction, as well as keeping
 # track of the individual predictions from each QPU.
 #
-# We include a ```parallel``` keyword argument for evaluating the :class:```QNodeCollection``` in
-# a parallel asynchronous manner. This feature requires the ```dask``` library, which can be
-# installed using ```dask[delayed]```. With ```parallel = True```, we are able to make
+# We include a ``parallel`` keyword argument for evaluating the :class:``QNodeCollection`` in
+# a parallel asynchronous manner. This feature requires the ``dask`` library, which can be
+# installed using ``dask[delayed]``. With ``parallel = True``, we are able to make
 # predictions faster because we do not need to wait for one QPU to output before running on the
 # other.
 
@@ -271,7 +271,7 @@ def predict(params, x=None, parallel=True):
 # ----------------
 #
 # To test our model, we first load a pre-trained set of parameters which can also be downloaded
-# by clicking :download:`here <implementations/ensemble_multi_qpu/params.npy>`
+# by clicking :download:`here <../implementations/ensemble_multi_qpu/params.npy>`.
 
 
 params = np.load("ensemble_multi_qpu/params.npy")
@@ -448,9 +448,11 @@ def plot_points_prediction(x, y, p, title):
 
 plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 
+##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 
+##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 
