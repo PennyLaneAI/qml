@@ -267,7 +267,7 @@ def predict(params, x=None, parallel=True):
 # To test our model, we first load a pre-trained set of parameters.
 
 
-params = np.load("params.npy")
+params = np.load("embedding_metric_learning/params.npy")
 
 ##############################################################################
 # We can then make predictions for the training and test datasets.
