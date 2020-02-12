@@ -182,7 +182,7 @@ devs = [dev0, dev1]
 #    :align: center
 
 
-def layer0(params, x=None):
+def circuit0(params, x=None):
     for i in range(n_wires):
         qml.RX(x[i % n_features], wires=i)
         qml.Rot(*params[1, 0, i], wires=i)
@@ -196,7 +196,7 @@ def layer0(params, x=None):
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1)), qml.expval(qml.PauliZ(2))
 
 
-def layer1(params, x=None):
+def circuit1(params, x=None):
     for i in range(n_wires):
         qml.RX(x[i % n_features], wires=i)
         qml.Rot(*params[0, 0, i], wires=i)
@@ -215,7 +215,7 @@ def layer1(params, x=None):
 
 
 qnodes = qml.QNodeCollection(
-    [qml.QNode(layer0, dev0, interface="torch"), qml.QNode(layer1, dev1, interface="torch")]
+    [qml.QNode(circuit0, dev0, interface="torch"), qml.QNode(circuit1, dev1, interface="torch")]
 )
 
 ##############################################################################
