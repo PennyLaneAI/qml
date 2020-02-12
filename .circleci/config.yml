@@ -8,9 +8,9 @@ jobs:
     docker:
       - image: circleci/python:3.7.2
       - image: rigetti/quilc
-        command: [-R, -p 5555]
+        command: ['-R', '-p 5555']
       - image: rigetti/qvm
-        command: [-S, -p 5000]
+        command: ['-S', '-p 5000']
 
     steps:
       - checkout
