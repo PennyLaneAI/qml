@@ -154,7 +154,9 @@ plot_points(x_train, y_train, x_test, y_test)
 # Finally, the ensemble model chooses the QPU with the largest entry in its probability vector
 # and uses that to make a prediction.
 #
-# <img src="diagram.png">
+# .. figure:: /implementations/embedding_metric_learning/diagram.png
+#    :width: 50%
+#    :align: center
 #
 # Quantum nodes
 # ^^^^^^^^^^^^^
@@ -173,7 +175,11 @@ dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
 ##############################################################################
-# The circuits run on both devices are shown in the figure below: TODO
+# The circuits run on both devices are shown in the figure below:
+#
+# .. figure:: /implementations/embedding_metric_learning/diagram_circuits.png
+#    :width: 50%
+#    :align: center
 
 
 def layer0(params, x=None):
