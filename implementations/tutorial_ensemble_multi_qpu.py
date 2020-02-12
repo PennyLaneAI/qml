@@ -351,7 +351,8 @@ predictions_0 = choices_vs_prediction_0[:, 1]
 predictions_1 = choices_vs_prediction_1[:, 1]
 
 
-expl = "When the QPU{} was chosen by the ensemble, it made the following distribution of predictions: {}"
+expl = "When the QPU{} was chosen by the ensemble, it made the following distribution of " \
+       "predictions: {}"
 print(expl.format("0", Counter(predictions_0)))
 print("\n" + expl.format("1", Counter(predictions_1)))
 print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
