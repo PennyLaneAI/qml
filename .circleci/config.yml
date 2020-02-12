@@ -24,8 +24,12 @@ jobs:
       - run:
           name: Docker for qvm and quilc
           command: |
-            docker run --rm -it -d -p 5555:5555 rigetti/quilc -R -p 5555
-            docker run --rm -it -d -p 5000:5000 rigetti/qvm -S -p 5000
+#            docker run --rm -it -d -p 5555:5555 rigetti/quilc -R -p 5555
+#            docker run --rm -it -d -p 5000:5000 rigetti/qvm -S -p 5000
+             docker run -rm -d --name quilc rigetti/quilc -R -p 5555
+             docker run --network container:quilc appropriate/curl --retry 10 --retry-connrefused http://localhost:5555
+             docker run -rm -d --name qvm rigetti/qvm -S -p 5000
+             docker run --network container:qvm appropriate/curl --retry 10 --retry-connrefused http://localhost:5000
 
       - restore_cache:
           keys:
