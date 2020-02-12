@@ -7,6 +7,10 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.2
+      - image: rigetti/quilc
+        command: [-R, -p 5555]
+      - image: rigetti/qvm
+        command: [-S, -p 5000]
 
     steps:
       - checkout
@@ -21,15 +25,15 @@ jobs:
             pip install pip setuptools --upgrade
             pip install -r requirements.txt
 
-      - run:
-          name: Docker for qvm and quilc
-          command: |
-#            docker run --rm -it -d -p 5555:5555 rigetti/quilc -R -p 5555
-#            docker run --rm -it -d -p 5000:5000 rigetti/qvm -S -p 5000
-             docker run --rm -d --name quilc rigetti/quilc -R -p 5555
-             docker run --network container:quilc curl --retry 10 --retry-connrefused http://127.0.0.1:5555
-             docker run --rm -d --name qvm rigetti/qvm -S -p 5000
-             docker run --network container:qvm curl --retry 10 --retry-connrefused http://127.0.0.1:5000
+#      - run:
+#          name: Docker for qvm and quilc
+#          command: |
+##            docker run --rm -it -d -p 5555:5555 rigetti/quilc -R -p 5555
+##            docker run --rm -it -d -p 5000:5000 rigetti/qvm -S -p 5000
+#             docker run --rm -d --name quilc rigetti/quilc -R -p 5555
+#             docker run --network container:quilc curl --retry 10 --retry-connrefused http://127.0.0.1:5555
+#             docker run --rm -d --name qvm rigetti/qvm -S -p 5000
+#             docker run --network container:qvm curl --retry 10 --retry-connrefused http://127.0.0.1:5000
 
       - restore_cache:
           keys:
