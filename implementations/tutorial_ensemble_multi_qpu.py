@@ -154,7 +154,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # Finally, the ensemble model chooses the QPU with the largest entry in its probability vector
 # and uses that to make a prediction.
 #
-# .. figure:: /implementations/embedding_metric_learning/diagram.png
+# .. figure:: /implementations/ensemble_multi_qpu/diagram.png
 #    :width: 50%
 #    :align: center
 #
@@ -177,7 +177,7 @@ devs = [dev0, dev1]
 ##############################################################################
 # The circuits run on both devices are shown in the figure below:
 #
-# .. figure:: /implementations/embedding_metric_learning/diagram_circuits.png
+# .. figure:: /implementations/ensemble_multi_qpu/diagram_circuits.png
 #    :width: 50%
 #    :align: center
 
@@ -271,10 +271,10 @@ def predict(params, x=None, parallel=True):
 # ----------------
 #
 # To test our model, we first load a pre-trained set of parameters which can also be downloaded
-# by clicking :download:`here <implementations/embedding_metric_learning/params.npy>`
+# by clicking :download:`here <implementations/ensemble_multi_qpu/params.npy>`
 
 
-params = np.load("embedding_metric_learning/params.npy")
+params = np.load("ensemble_multi_qpu/params.npy")
 
 ##############################################################################
 # We can then make predictions for the training and test datasets.
