@@ -46,7 +46,8 @@ from pennylane import qchem
 # :ref:`Quantum Chemistry with PennyLane <qchem-implementations>` tutorials.
 #
 # We begin by creating a dictionary containing molecular separations and corresponding data files
-# saved in ```.xyz``` format.
+# saved in ```.xyz``` format. The data files can be downloaded by clicking :download:`here
+# <implementations/vqe_parallel/h2.zip>`.
 
 data = {  # keys: atomic separations (ångström), values: corresponding files
     0.3: "vqe_parallel/h2_0.30.xyz",
@@ -130,7 +131,8 @@ def circuit(param, wires):
 # parameters can be found by minimizing the ground state energy as outlined in
 # :ref:`Quantum Chemistry with PennyLane <qchem-implementations>`. In this tutorial, we load
 # pre-optimized rotations and focus on comparing the speed of evaluating the potential energy
-# surface with sequential and parallel evaluation.
+# surface with sequential and parallel evaluation. These parameters can be downloaded by clicking
+# :download:`here <implementations/vqe_parallel/RY_params.npy>`.
 
 params = np.load("vqe_parallel/RY_params.npy")
 
