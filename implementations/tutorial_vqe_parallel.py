@@ -1,5 +1,7 @@
 # coding=utf-8
 r"""
+.. _vqe-parallel:
+
 VQE with parallel QPUs on Rigetti-Forest
 ========================================
 
