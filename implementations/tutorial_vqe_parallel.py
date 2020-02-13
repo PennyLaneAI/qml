@@ -36,10 +36,10 @@ from pennylane import qchem
 # -----------------------------------------------
 #
 # The objective of this tutorial is to evaluate the potential energy surface of molecular
-# hydrogen. This is achieved by finding the ground state energy of :math:`H_{2}` for a range of
-# atomic separations.
+# hydrogen. This is achieved by finding the ground state energy of :math:`H_{2}` as we increase
+# the bond length between the hydrogen atoms.
 #
-# Each atomic separation results in a different qubit Hamiltonian. To find the corresponding
+# Each inter-atomic distance results in a different qubit Hamiltonian. To find the corresponding
 # Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.generate_hamiltonian` function of the
 # :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
@@ -47,10 +47,10 @@ from pennylane import qchem
 # tutorials.
 #
 # We begin by creating a dictionary containing molecular separations and corresponding data files
-# saved in ```.xyz``` format. The data files can be downloaded by clicking :download:`here
+# saved in ``.xyz`` format. The data files can be downloaded by clicking :download:`here
 # <../implementations/vqe_parallel/h2.zip>`.
 
-data = {  # keys: atomic separations (ångström), values: corresponding files
+data = {  # keys: atomic separations (in Angstrom), values: corresponding files
     0.3: "vqe_parallel/h2_0.30.xyz",
     0.5: "vqe_parallel/h2_0.50.xyz",
     0.7: "vqe_parallel/h2_0.70.xyz",
@@ -64,7 +64,7 @@ data = {  # keys: atomic separations (ångström), values: corresponding files
 }
 
 ##############################################################################
-# The next step is to create the qubit Hamiltonians for each value of molecular separation.
+# The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
 
 hamiltonians = [
     qchem.generate_hamiltonian(
@@ -132,8 +132,12 @@ def circuit(param, wires):
 
 
 ##############################################################################
-# Each molecular separation has a different Y-rotation parameter. The values of these
-# parameters can be found by minimizing the ground state energy as outlined in
+# The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
+# This is because the contribution of the Hartree-Fock (:math:`|1100\rangle`) and doubly-excited
+# (:math:`|0011\rangle`) configurations to ground-state wave function vary along the potential
+# energy surface.
+#
+# The values of these Y-rotations can be found by minimizing the ground state energy as outlined in
 # :doc:`../app/tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
@@ -166,7 +170,7 @@ def calculate_surface(parallel=True):
     t0 = time.time()
 
     for i, e in enumerate(energies):
-        print("Running for molecular separation {} Å".format(list(data.keys())[i]))
+        print("Running for inter-atomic distance {} Å".format(list(data.keys())[i]))
         s.append(e(params[i], parallel=parallel))
 
     t1 = time.time()
