@@ -151,10 +151,10 @@ energies = [qml.VQECost(circuit, h, devs) for h in hamiltonians]
 # ----------------------------------------
 #
 # :class:`~.pennylane.VQECost` returns a :class:`~.pennylane.QNodeCollection` which can be
-# evaluated using the input parameters to the ansatz circuit. As of ``v0.8.0`` of PennyLane,
-# the :class:`~.pennylane.QNodeCollection` can be evaluated asynchronously by specifying the
-# ``parallel = True`` keyword argument. With the default ``parallel = False``, the QNodes are
-# evaluated sequentially.
+# evaluated using the input parameters to the ansatz circuit. The
+# :class:`~.pennylane.QNodeCollection` can be evaluated asynchronously by passing the keyword
+# argument ``parallel=True``. When ``parallel=False`` (the default behaviour), the QNodes are
+# instead evaluated sequentially.
 #
 # We can use this feature to compare the sequential and parallel times required to calculate the
 # potential energy surface. The following function calculates the surface:
