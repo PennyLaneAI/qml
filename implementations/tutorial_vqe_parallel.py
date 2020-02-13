@@ -1,6 +1,6 @@
 # coding=utf-8
 r"""
-VQE with parallel QPUs on Rigetti-Forest
+VQE with parallel QPUs on Rigetti Forest
 ========================================
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
