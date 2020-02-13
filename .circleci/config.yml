@@ -10,7 +10,7 @@ jobs:
       - image: rigetti/quilc:933daac1
         command:
         - -R
-      - image: rigetti/qvm
+      - image: rigetti/qvm:69c3627a
         command:
         - -S
 
