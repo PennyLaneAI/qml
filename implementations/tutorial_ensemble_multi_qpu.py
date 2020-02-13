@@ -8,8 +8,9 @@ classification problem.
 We use the ``forest.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
 simulate another. Each QPU is allowed to make an independent prediction, and an ensemble model is
 formed by choosing the prediction of the most confident QPU. The iris dataset is used in this
-tutorial, consisting of three classes of iris flower. Using a pre-trained model, we shall see
-that this approach to ensembling allows the QPUs to specialize towards different classes.
+tutorial, consisting of three classes of iris flower. Using a pre-trained model and the PyTorch
+interface, we see in this tutorial that ensembling allows the QPUs to specialize towards
+different classes.
 
 Let's begin by importing the prerequisite libraries:
 """
@@ -26,7 +27,8 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
 ##############################################################################
-# This tutorial requires the ``pennylane-forest`` and ``pennylane-qiskit`` packages.
+# This tutorial requires the ``pennylane-forest`` and ``pennylane-qiskit`` packages, which can be
+# installed by following the instructions `here <https://pennylane.ai/install.html>`__
 #
 # Load data
 # ---------
