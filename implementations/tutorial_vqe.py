@@ -1,6 +1,4 @@
 r"""
-.. _qchem-implementations:
-
 A brief overview of VQE
 =======================
 

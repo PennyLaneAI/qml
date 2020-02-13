@@ -1,6 +1,4 @@
 r"""
-.. _qchem-beginner:
-
 Quantum Chemistry with PennyLane
 ================================
 
