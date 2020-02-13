@@ -43,21 +43,18 @@ y = data["target"]
 
 ##############################################################################
 # We shuffle the data and then embed the four features into a two-dimensional space for ease of
-# plotting later on:
+# plotting later on. The first two components of a PCA are used.
 
 np.random.seed(1967)
 x, y = zip(*np.random.permutation(list(zip(x, y))))
-
-##############################################################################
-# The first two components of a PCA are used.
 
 pca = sklearn.decomposition.PCA(n_components=n_features)
 pca.fit(x)
 x = pca.transform(x)
 
 ##############################################################################
-# We will be encoding these two features into quantum circuits using :class:`~.RX` rotations,
-# and hence renormalize our features to be between :math:`[-\pi, \pi]`.
+# We will be encoding these two features into quantum circuits using :class:`~.pennylane.RX`
+# rotations, and hence renormalize our features to be between :math:`[-\pi, \pi]`.
 
 
 x_min = np.min(x, axis=0)
@@ -146,10 +143,10 @@ plot_points(x_train, y_train, x_test, y_test)
 # Our model is summarized in the figure below. We use two 4-qubit devices: ``Aspen-4-4Q-E``
 # from the PennyLane-Forest plugin and ``qiskit.aer`` from the PennyLane-Qiskit plugin.
 #
-# Data is input using :class:`~.RX` rotations and then a different circuit is enacted for each
-# device with a unique set of trainable parameters. The output of both circuits is a
-# :class:`PauliZ` measurement on three of the qubits. This is then fed through a softmax,
-# resulting in two 3-dimensional probability vectors corresponding to the 3 classes.
+# Data is input using :class:`~.pennylane.RX` rotations and then a different circuit is enacted
+# for each device with a unique set of trainable parameters. The output of both circuits is a
+# :class:`~.pennylane.PauliZ` measurement on three of the qubits. This is then fed through a
+# softmax, resulting in two 3-dimensional probability vectors corresponding to the 3 classes.
 #
 # Finally, the ensemble model chooses the QPU with the largest entry in its probability vector
 # and uses that to make a prediction.
@@ -165,7 +162,6 @@ plot_points(x_train, y_train, x_test, y_test)
 
 
 n_wires = 4
-
 
 # Use forest.qpu if hardware access is available
 dev0 = qml.device("forest.qvm", device="Aspen-4-4Q-E")
@@ -211,7 +207,7 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`QNodeCollection`:
+# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection`:
 
 
 qnodes = qml.QNodeCollection(
@@ -222,12 +218,12 @@ qnodes = qml.QNodeCollection(
 # Postprocessing into a prediction
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# The ``predict_point`` function allows us to find the ensemble prediction, as well as keeping
+# The ``predict_point`` function below allows us to find the ensemble prediction, as well as keeping
 # track of the individual predictions from each QPU.
 #
-# We include a ``parallel`` keyword argument for evaluating the :class:``QNodeCollection`` in
-# a parallel asynchronous manner. This feature requires the ``dask`` library, which can be
-# installed using ``dask[delayed]``. With ``parallel = True``, we are able to make
+# We include a ``parallel`` keyword argument for evaluating the :class:`~.pennylane.QNodeCollection`
+# in a parallel asynchronous manner. This feature requires the ``dask`` library, which can be
+# installed using ``dask[delayed]``. When ``parallel=True``, we are able to make
 # predictions faster because we do not need to wait for one QPU to output before running on the
 # other.
 
@@ -305,11 +301,13 @@ def accuracy(predictions, actuals):
     accuracy = count / (len(predictions))
     return accuracy
 
+##############################################################################
 
 print("Training accuracy (ensemble): {}".format(accuracy(p_train, y_train)))
 print("Training accuracy (QPU0):  {}".format(accuracy(p_train_0, y_train)))
 print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 
+##############################################################################
 
 print("Test accuracy (ensemble): {}".format(accuracy(p_test, y_test)))
 print("Test accuracy (QPU0):  {}".format(accuracy(p_test_0, y_test)))
@@ -321,9 +319,9 @@ print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 #   QPU. This provides a nice example of how QPUs can be used in parallel to gain a performance
 #   advantage.
 #
-# - The accuracy of QPU1 is much higher than the accuracy of QPU2. This does not mean that one
+# - The accuracy of QPU0 is much higher than the accuracy of QPU1. This does not mean that one
 #   device is intrinsically better than the other. In fact, another set of parameters can lead to
-#   QPU2 becoming more accurate. We see in the following that the difference in accuracy is due
+#   QPU1 becoming more accurate. We see in the following that the difference in accuracy is due
 #   to specialization of each QPU.
 #
 # - The test accuracy is lower than the training accuracy. Here our focus is on analyzing the
@@ -359,7 +357,7 @@ predictions_1 = choices_vs_prediction_1[:, 1]
 
 
 expl = "When the QPU{} was chosen by the ensemble, it made the following distribution of " \
-       "predictions: {}"
+       "predictions:\n{}"
 print(expl.format("0", Counter(predictions_0)))
 print("\n" + expl.format("1", Counter(predictions_1)))
 print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
