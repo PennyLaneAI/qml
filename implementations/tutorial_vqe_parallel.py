@@ -179,24 +179,30 @@ def calculate_surface(parallel=True):
 
 
 print("Evaluating the potential energy surface sequentially")
-surface, t_seq = calculate_surface(parallel=False)
+surface_seq, t_seq = calculate_surface(parallel=False)
 
 print("\nEvaluating the potential energy surface in parallel")
-surface, t_par = calculate_surface(parallel=True)
+surface_par, t_par = calculate_surface(parallel=True)
 
 ##############################################################################
-# We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel and the
-# resultant speed up in processing:
+# We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel. This results
+# in a speed up in processing:
 
 print("Speedup: {0:.2f}".format(t_seq / t_par))
 
 ##############################################################################
 # Can you think of other ways to combine multiple QPUs to improve the
 # performance of quantum algorithms? To conclude the tutorial, let's plot the calculated
-# potential energy surface:
+# potential energy surfaces:
 
-plt.plot(surface, linewidth=2.2, marker="o")
+plt.plot(surface_seq, linewidth=2.2, marker="o", color='red')
+plt.plot(surface_par, linewidth=2.2, marker="d", color='blue')
 plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
 plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
+
+##############################################################################
+# These surfaces overlap, with any variation due to the limited number of shots used to evaluate the
+# expectation values in the ``forest.qvm`` device (we are using the default value of
+# ``shots=1024``).
