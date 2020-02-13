@@ -10,7 +10,7 @@ algorithms using PennyLane and near-term quantum hardware.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Do arbitrary state preparation on a real quantum computer.
+    :tooltip: Learn to prepare arbitrary states.
     :figure: implementations/state_preparation/NOON.png
     :description: :doc:`app/tutorial_state_preparation`
 
