@@ -160,7 +160,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # Quantum nodes
 # ^^^^^^^^^^^^^
 #
-# We begin by defining the two QPU devices and the circuits to be run on them.
+# We begin by defining the two quantum devices and the circuits to be run on them.
 
 
 n_wires = 4
