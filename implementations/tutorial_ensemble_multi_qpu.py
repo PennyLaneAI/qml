@@ -460,6 +460,6 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 # the resultant ensemble performs better.
 #
 # This tutorial shows how QPUs can work in parallel to realize a performance advantage. Check out
-# our :ref:`VQE with parallel QPUs <vqe-parallel>` tutorial to see how multiple QPUs can be
+# our :doc:`../app/tutorial_vqe_parallel.py` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!
