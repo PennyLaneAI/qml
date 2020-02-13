@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.2
-      - image: rigetti/quilc
+      - image: rigetti/quilc:933daac1
         command:
         - -R
       - image: rigetti/qvm
