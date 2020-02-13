@@ -120,8 +120,10 @@ devs = devs_4 + devs_7
 ##############################################################################
 # We must also define a circuit to prepare the ground state. The simple circuit below is able to
 # prepare states of the form :math:`\alpha |1100\rangle + \beta |0011\rangle` which encode the
-# ground state wave function of the hydrogen molecule in qubits. The circuit has a single free
-# parameter setting a Y-rotation on the third qubit.
+# ground state wave function of the hydrogen molecule. The circuit has a single free
+
+# parameter, which controls a Y-rotation on the third qubit.
+
 
 
 def circuit(param, wires):
