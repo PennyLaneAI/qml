@@ -94,7 +94,8 @@ def layer(params, j):
 
 
 ##############################################################################
-# We use the ``default.qubit`` device.
+# Here, we use the ``default.qubit`` device to perform the optimization, but this can be changed to
+# any other supported device.
 
 dev = qml.device("default.qubit", wires=3)
 
