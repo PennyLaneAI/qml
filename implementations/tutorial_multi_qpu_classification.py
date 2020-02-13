@@ -17,7 +17,7 @@ on an individual variational circuit, whose architecture is inspired by
 
 .. figure:: ../implementations/multi_qpu_classification/margin_2.png
     :align: center
-    :width: 100%
+    :width: 50%
     :target: javascript:void(0)
 
 |
