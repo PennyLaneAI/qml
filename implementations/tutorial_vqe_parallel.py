@@ -40,10 +40,11 @@ from pennylane import qchem
 # atomic separations.
 #
 # Each atomic separation results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.generate_hamiltonian` function of the :mod:`~.qchem` package.
-# Further details on the mapping from the electronic Hamiltonian of a molecule to a qubit
-# Hamiltonian can be found in the :ref:`Quantum Chemistry with PennyLane <qchem-beginner>` and
-# :ref:`A brief overview of VQE <qchem-implementations>` tutorials.
+# Hamiltonian, we use the :func:`~.pennylane.qchem.generate_hamiltonian` function of the
+# :mod:`~.pennylane.qchem` package. Further details on the mapping from the electronic
+# Hamiltonian of a molecule to a qubit Hamiltonian can be found in the :ref:`Quantum Chemistry
+# with PennyLane <qchem-beginner>` and :ref:`A brief overview of VQE <qchem-implementations>`
+# tutorials.
 #
 # We begin by creating a dictionary containing molecular separations and corresponding data files
 # saved in ```.xyz``` format. The data files can be downloaded by clicking :download:`here
@@ -74,7 +75,7 @@ hamiltonians = [
         basis_set="sto-3g",
         n_active_electrons=2,
         n_active_orbitals=2,
-    )[0]
+    )[0]  # We take the zeroth element (the Hamiltonian), the first element is the qubit number
     for separation, file in data.items()
 ]
 
@@ -93,9 +94,11 @@ print([len(h.ops) for h in hamiltonians])
 # However, this task is highly suited to parallelization. With access to multiple QPUs,
 # we can split up evaluating the terms between the QPUs and gain an increase in processing speed.
 #
-# Note that some of the Pauli terms commute, and so they can be evaluated in practice with fewer
-# than fifteen quantum circuit runs. Nevertheless, these quantum circuit runs can still be
-# parallelized to multiple QPUs.
+#
+# .. note::
+#    Some of the Pauli terms commute, and so they can be evaluated in practice with fewer than
+#    fifteen quantum circuit runs. Nevertheless, these quantum circuit runs can still be
+#    parallelized to multiple QPUs.
 #
 # Let's suppose we have access to two QPUs: ``Aspen-4-4Q-E`` and ``Aspen-7-4Q-C`` from
 # Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
@@ -114,8 +117,9 @@ devs = devs_4 + devs_7
 
 ##############################################################################
 # We must also define a circuit to prepare the ground state. The simple circuit below is able to
-# accurately capture the ground state encoded into qubits. It has a single free parameter setting
-# a Y-rotation on the third qubit.
+# prepare states of the form :math:`\alpha |1100\rangle + \beta |0011\rangle` which encode the
+# ground state wave function of the hydrogen molecule in qubits. The circuit has a single free
+# parameter setting a Y-rotation on the third qubit.
 
 
 def circuit(param, wires):
@@ -137,7 +141,8 @@ def circuit(param, wires):
 params = np.load("vqe_parallel/RY_params.npy")
 
 ##############################################################################
-# Finally, the energies as functions of rotation angle can be given using :class:`~.VQECost`.
+# Finally, the energies as functions of rotation angle can be given using
+# :class:`~.pennylane.VQECost`.
 
 energies = [qml.VQECost(circuit, h, devs) for h in hamiltonians]
 
@@ -145,10 +150,11 @@ energies = [qml.VQECost(circuit, h, devs) for h in hamiltonians]
 # Calculating the potential energy surface
 # ----------------------------------------
 #
-# :class:`~.VQECost` returns a :class:`QNodeCollection` which can be evaluated using the input
-# parameters to the ansatz circuit. As of ``v0.8.0`` of PennyLane, the :class:`QNodeCollection`
-# can be evaluated asynchronously by specifying the ``parallel = True`` keyword argument.
-# With the default ``parallel = False``, the QNodes are evaluated sequentially.
+# :class:`~.pennylane.VQECost` returns a :class:`~.pennylane.QNodeCollection` which can be
+# evaluated using the input parameters to the ansatz circuit. As of ``v0.8.0`` of PennyLane,
+# the :class:`~.pennylane.QNodeCollection` can be evaluated asynchronously by specifying the
+# ``parallel = True`` keyword argument. With the default ``parallel = False``, the QNodes are
+# evaluated sequentially.
 #
 # We can use this feature to compare the sequential and parallel times required to calculate the
 # potential energy surface. The following function calculates the surface:
@@ -175,8 +181,8 @@ print("\nEvaluating the potential energy surface in parallel")
 surface, t_par = calculate_surface(parallel=True)
 
 ##############################################################################
-# We have seen how a :class:`QNodeCollection` can be evaluated in parallel and the resultant
-# speed up in processing:
+# We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel and the
+# resultant speed up in processing:
 
 print("Speedup: {0:.2f}".format(t_seq / t_par))
 
