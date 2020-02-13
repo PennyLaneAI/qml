@@ -42,8 +42,8 @@ from pennylane import qchem
 # atomic separations.
 #
 # Each atomic separation results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.pennylane.qchem.generate_hamiltonian` function of the
-# :mod:`~.pennylane.qchem` package. Further details on the mapping from the electronic
+# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.generate_hamiltonian` function of the
+# :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the :ref:`Quantum Chemistry
 # with PennyLane <qchem-beginner>` and :ref:`A brief overview of VQE <qchem-implementations>`
 # tutorials.
