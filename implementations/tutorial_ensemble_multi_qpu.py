@@ -28,7 +28,10 @@ from matplotlib.patches import Patch
 
 ##############################################################################
 # This tutorial requires the ``pennylane-forest`` and ``pennylane-qiskit`` packages, which can be
-# installed by following the instructions `here <https://pennylane.ai/install.html>`__.
+# installed by following the instructions `here <https://pennylane.ai/install.html>`__. We also
+# make use of the `PyTorch interface <https://pennylane.readthedocs.io/en/stable/introduction
+# /interfaces.html>`_, which can be installed from `here
+# <https://pytorch.org/get-started/locally/>`__.
 #
 # Load data
 # ---------
@@ -108,29 +111,13 @@ def plot_points(x_train, y_train, x_test, y_test):
         Patch(facecolor=colours[0], edgecolor=c_transparent, label="Class 0"),
         Patch(facecolor=colours[1], edgecolor=c_transparent, label="Class 1"),
         Patch(facecolor=colours[2], edgecolor=c_transparent, label="Class 2"),
-        Line2D(
-            [0],
-            [0],
-            marker="o",
-            color=c_transparent,
-            label="Train",
-            markerfacecolor="black",
-            markersize=10,
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker="x",
-            color=c_transparent,
-            label="Test",
-            markerfacecolor="black",
-            markersize=10,
-        ),
+        Line2D([0], [0], marker="o", color=c_transparent, label="Train", markerfacecolor="black",
+               markersize=10),
+        Line2D([0], [0], marker="x", color=c_transparent, label="Test", markerfacecolor="black",
+               markersize=10),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
-
-    return ax
 
 
 plot_points(x_train, y_train, x_test, y_test)
@@ -164,17 +151,29 @@ plot_points(x_train, y_train, x_test, y_test)
 #
 # We begin by defining the two quantum devices and the circuits to be run on them.
 
-
 n_wires = 4
 
-# Use forest.qpu if hardware access is available
 dev0 = qml.device("forest.qvm", device="Aspen-4-4Q-E")
-
-# Use qiskit.ibmq if access is available
 dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
 ##############################################################################
+# .. note::
+#    If you have access to Rigetti hardware, you can swap out ``forest.qvm`` for ``forest.qpu``.
+#    Users with access to the IBM Q Experience can swap ``qiskit.aer`` for ``qiskit.ibmq`` and
+#    specify their chosen backend (see `here
+#    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
+#
+# .. warning::
+#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
+#    can be installed by consulting the `Rigetti documentation
+#    <http://docs.rigetti.com/en/stable/>`__ or, for users with Docker, by running:
+#
+#    .. code-block:: bash
+#
+#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
+#
 # The circuits for both QPUs are shown in the figure below:
 #
 # .. figure:: /implementations/ensemble_multi_qpu/diagram_circuits.png
@@ -228,7 +227,7 @@ qnodes = qml.QNodeCollection(
 #
 # We include a ``parallel`` keyword argument for evaluating the :class:`~.pennylane.QNodeCollection`
 # in a parallel asynchronous manner. This feature requires the ``dask`` library, which can be
-# installed using ``dask[delayed]``. When ``parallel=True``, we are able to make
+# installed using ``pip install "dask[delayed]"``. When ``parallel=True``, we are able to make
 # predictions faster because we do not need to wait for one QPU to output before running on the
 # other.
 
@@ -340,7 +339,7 @@ print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 # the ensemble model? Let's investigate.
 
 
-# Combine choices data to simplify analysis
+# Combine choices_train and choices_test to simplify analysis
 choices = np.append(choices_train, choices_test)
 print("Choices: {}".format(choices))
 print("Choices counts: {}".format(Counter(choices)))
@@ -362,7 +361,7 @@ predictions_0 = choices_vs_prediction_0[:, 1]
 predictions_1 = choices_vs_prediction_1[:, 1]
 
 
-expl = "When the QPU{} was chosen by the ensemble, it made the following distribution of " \
+expl = "When QPU{} was chosen by the ensemble, it made the following distribution of " \
        "predictions:\n{}"
 print(expl.format("0", Counter(predictions_0)))
 print("\n" + expl.format("1", Counter(predictions_1)))
@@ -412,38 +411,15 @@ def plot_points_prediction(x, y, p, title):
         Patch(
             facecolor=colours_prediction["incorrect"], edgecolor=c_transparent, label="Incorrect"
         ),
-        Line2D(
-            [0],
-            [0],
-            marker=markers[0],
-            color=c_transparent,
-            label="Class 0",
-            markerfacecolor="black",
-            markersize=10,
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker=markers[1],
-            color=c_transparent,
-            label="Class 1",
-            markerfacecolor="black",
-            markersize=10,
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker=markers[2],
-            color=c_transparent,
-            label="Class 2",
-            markerfacecolor="black",
-            markersize=10,
-        ),
+        Line2D([0], [0], marker=markers[0], color=c_transparent, label="Class 0",
+               markerfacecolor="black", markersize=10),
+        Line2D([0], [0], marker=markers[1], color=c_transparent, label="Class 1",
+               markerfacecolor="black", markersize=10),
+        Line2D([0], [0], marker=markers[2], color=c_transparent, label="Class 2",
+               markerfacecolor="black", markersize=10),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
-
-    return ax
 
 
 ##############################################################################
