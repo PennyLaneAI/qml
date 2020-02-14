@@ -30,7 +30,7 @@ from pennylane import qchem
 #
 #    pip install pennylane-qchem
 #    pip install pennylane-forest
-#    pip install dask[delayed]
+#    pip install "dask[delayed]"
 #
 # Finding the qubit Hamiltonians of :math:`H_{2}`
 # -----------------------------------------------
@@ -46,12 +46,12 @@ from pennylane import qchem
 # :doc:`../tutorial/tutorial_quantum_chemistry` and :doc:`../app/tutorial_vqe`
 # tutorials.
 #
-# We begin by creating a dictionary containing molecular separations and corresponding data files
-# saved in ``.xyz`` format. The data files can be downloaded by clicking :download:`here
-# <../implementations/vqe_parallel/h2.zip>`.
+# We begin by creating a dictionary containing a selection of bond lengths and corresponding data
+# files saved in `XYZ <https://en.wikipedia.org/wiki/XYZ_file_format>`__ format. These files
+# follow a standard format for specifying the geometry of a molecule and can be downloaded as a
+# Zip from :download:`here <../implementations/vqe_parallel/vqe_parallel.zip>`.
 
 data = {  # keys: atomic separations (in Angstroms), values: corresponding files
-
     0.3: "vqe_parallel/h2_0.30.xyz",
     0.5: "vqe_parallel/h2_0.50.xyz",
     0.7: "vqe_parallel/h2_0.70.xyz",
@@ -74,17 +74,19 @@ hamiltonians = [
         mol_charge=0,
         multiplicity=1,
         basis_set="sto-3g",
-        n_active_electrons=2,
-        n_active_orbitals=2,
     )[0]  # We take the zero element (the Hamiltonian). The other element is the qubit number
     for separation, file in data.items()
 ]
 
 ##############################################################################
 # Each Hamiltonian can be written as a linear combination of fifteen tensor products of Pauli
-# matrices.
+# matrices. Let's take a look more closely at one of the Hamiltonians:
 
-print([len(h.ops) for h in hamiltonians])
+h = hamiltonians[0]
+
+print('Number of terms: {}\n'.format(len(h.ops)))
+for op in h.ops:
+    print('Measurement {} on wires {}'.format(op.name, op.wires))
 
 ##############################################################################
 # Defining the energy function
@@ -111,17 +113,19 @@ print([len(h.ops) for h in hamiltonians])
 #
 # To do this, start by instantiating a device for each term:
 
-# Use forest.qpu if hardware access is available
 devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-E") for _ in range(8)]
 devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-D") for _ in range(7)]
 devs = devs_4 + devs_7
 
 ##############################################################################
-# We must also define a circuit to prepare the ground state. The simple circuit below is able to
-# prepare states of the form :math:`\alpha |1100\rangle + \beta |0011\rangle` which encode the
-# ground state wave function of the hydrogen molecule. The circuit has a single free
-# parameter, which controls a Y-rotation on the third qubit.
-
+# .. note::
+#     You can swap out ``forest.qvm`` for ``forest.qpu`` if hardware access is available.
+#
+# We must also define a circuit to prepare the ground state, which is a superposition of the
+# Hartree-Fock (:math:`|1100\rangle`) and doubly-excited (:math:`|0011\rangle`) configurations.
+# The simple circuit below is able to prepare states of the form :math:`\alpha |1100\rangle +
+# \beta |0011\rangle` and hence encode the ground state wave function of the hydrogen molecule. The
+# circuit has a single free parameter, which controls a Y-rotation on the third qubit.
 
 
 def circuit(param, wires):
@@ -134,10 +138,6 @@ def circuit(param, wires):
 
 ##############################################################################
 # The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
-# This is because the contribution of the Hartree-Fock (:math:`|1100\rangle`) and doubly-excited
-# (:math:`|0011\rangle`) configurations to ground-state wave function vary along the potential
-# energy surface.
-#
 # The values of these Y-rotations can be found by minimizing the ground state energy as outlined in
 # :doc:`../app/tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
@@ -190,7 +190,7 @@ surface_par, t_par = calculate_surface(parallel=True)
 # We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel. This results
 # in a speed up in processing:
 
-print("Speedup: {0:.2f}".format(t_seq / t_par))
+print("Speed up: {0:.2f}".format(t_seq / t_par))
 
 ##############################################################################
 # Can you think of other ways to combine multiple QPUs to improve the
