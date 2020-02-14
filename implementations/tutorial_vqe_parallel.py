@@ -123,6 +123,16 @@ devs = devs_4 + devs_7
 # .. note::
 #     You can swap out ``forest.qvm`` for ``forest.qpu`` if hardware access is available.
 #
+# .. warning::
+#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
+#    can be installed by consulting the `Rigetti documentation
+#    <http://docs.rigetti.com/en/stable/>`__ or, for users with Docker, by running:
+#
+#    .. code-block:: bash
+#
+#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
+#
 # We must also define a circuit to prepare the ground state, which is a superposition of the
 # Hartree-Fock (:math:`|1100\rangle`) and doubly-excited (:math:`|0011\rangle`) configurations.
 # The simple circuit below is able to prepare states of the form :math:`\alpha |1100\rangle +
