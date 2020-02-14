@@ -100,9 +100,9 @@ print([len(h.ops) for h in hamiltonians])
 #    fifteen quantum circuit runs. Nevertheless, these quantum circuit runs can still be
 #    parallelized to multiple QPUs.
 #
-# Let's suppose we have access to two QPUs: ``Aspen-4-4Q-E`` and ``Aspen-7-4Q-C`` from
+# Let's suppose we have access to two QPUs: ``Aspen-4-4Q-E`` and ``Aspen-7-4Q-D`` from
 # Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
-# ``Aspen-4-4Q-E`` and seven terms run on ``Aspen-7-4Q-C``, as summarized by the diagram below:
+# ``Aspen-4-4Q-E`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
 #
 # .. figure:: /implementations/vqe_parallel/diagram.png
 #    :width: 65%
@@ -112,7 +112,7 @@ print([len(h.ops) for h in hamiltonians])
 
 # Use forest.qpu if hardware access is available
 devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-E") for _ in range(8)]
-devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-C") for _ in range(7)]
+devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-D") for _ in range(7)]
 devs = devs_4 + devs_7
 
 ##############################################################################
