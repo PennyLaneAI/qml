@@ -7,9 +7,6 @@ Key concepts
 
 Look up the different concepts from the literature on quantum machine learning and variational circuits.
 
-.. raw:: html
-
-
 .. toctree::
    :maxdepth: 1
 
