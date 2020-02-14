@@ -74,9 +74,9 @@ basis_set = 'sto-3g'
 ##############################################################################
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.generate_hamiltonian`. The first input to
-# the function is a string denoting the name of the molecule, which will determine the name given 
-# to the saved files that are produced during the calculations:
+# single line by calling the function :func:`~.pennylane_qchem.qchem.generate_hamiltonian`. The
+# first input to the function is a string denoting the name of the molecule, which will determine
+# the name given to the saved files that are produced during the calculations:
 
 name = 'h2'
 
@@ -108,7 +108,7 @@ print('Hamiltonian is ', h)
 # Implementing the VQE algorithm
 # ------------------------------
 #
-# PennyLane contains the :class:`~.VQECost` class, specifically
+# PennyLane contains the :class:`~.pennylane.VQECost` class, specifically
 # built to implement the VQE algorithm. We begin by defining the device, in this case a simple
 # qubit simulator:
 
@@ -151,7 +151,7 @@ def circuit(params, wires):
 #     Hartree-Fock state of the hydrogen molecule described with a `minimal basis
 #     <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__.
 #
-# The cost function for optimizing the circuit can be created using the :class:`~.VQECost`
+# The cost function for optimizing the circuit can be created using the :class:`~.pennylane.VQECost`
 # class, which is tailored for VQE optimization. It requires specifying the
 # circuit, target Hamiltonian, and the device, and returns a cost function that can
 # be evaluated with the circuit parameters:
