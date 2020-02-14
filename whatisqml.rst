@@ -44,7 +44,7 @@ Field-Programmable Gate Arrays (FPGAs).
 :html:`<br>`
 
 The quantum device is used as a neural network: Data gets "loaded" into the quantum state of the
-hardware and then processed. A measurement reveals the outcome of the machine learning model, for example
+hardware and then processed. A measurement reveals the outcome of the machine learning model, for example,
 if an image showed a cat or a dog. The crucial point is that near-term quantum computers are just physical
 machines that are programmed by control parameters, such as an electromagnetic field. By systematically
 adapting these parameters, the quantum computation - and hence the machine learning algorithm - becomes
