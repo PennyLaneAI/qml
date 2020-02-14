@@ -148,10 +148,12 @@ plot_points(x_train, y_train, x_test, y_test)
 # Data is input using :class:`~.pennylane.RX` rotations and then a different circuit is enacted
 # for each device with a unique set of trainable parameters. The output of both circuits is a
 # :class:`~.pennylane.PauliZ` measurement on three of the qubits. This is then fed through a
-# softmax function, resulting in two 3-dimensional probability vectors corresponding to the 3 classes.
+# softmax function, resulting in two 3-dimensional probability vectors corresponding to the 3
+# classes.
 #
-# Finally, the ensemble model chooses the QPU which is most confident about its prediction (i.e., the class with the highest overall probability over all QPUs)
-# and uses that to make a prediction.
+# Finally, the ensemble model chooses the QPU which is most confident about its prediction
+# (i.e., the class with the highest overall probability over all QPUs) and uses that to make a
+# prediction.
 #
 # .. figure:: /implementations/ensemble_multi_qpu/diagram.png
 #    :width: 50%
@@ -209,7 +211,8 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection` that uses the PyTorch interface:
+# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection` that uses the
+# PyTorch interface:
 
 
 qnodes = qml.QNodeCollection(
@@ -323,8 +326,9 @@ print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 #
 # - The accuracy of QPU0 is much higher than the accuracy of QPU1. This does not mean that one
 #   device is intrinsically better than the other. In fact, another set of parameters can lead to
-#   QPU1 becoming more accurate. We will see in the next section that the difference in accuracy is due
-#   to specialization of each QPU, which leads to overall better performance of the ensemble model.
+#   QPU1 becoming more accurate. We will see in the next section that the difference in accuracy
+#   is due to specialization of each QPU, which leads to overall better performance of the
+#   ensemble model.
 #
 # - The test accuracy is lower than the training accuracy. Here our focus is on analyzing the
 #   performance of the ensemble model, rather than minimizing the generalization error.
