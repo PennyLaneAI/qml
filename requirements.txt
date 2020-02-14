@@ -13,9 +13,10 @@ protobuf==3.8.0
 pennylane==0.8.0
 pennylane-qchem==0.8.0
 pennylane-sf==0.8.0
--e git://github.com/rigetti/pennylane-forest.git#egg=pennylane-forest
+pennylane-forest==0.8.0
 pennylane-cirq==0.8.0
-pyquil==2.10
+pennylane-qiskit==0.8.0
+pyquil==2.17
 scipy==1.3.2
 sphinx==1.8.5
 sphinxcontrib-bibtex==0.4.2
@@ -24,3 +25,4 @@ tensorflow==2.0.1
 toml
 torch==1.3.0+cpu
 torchvision==0.4.1+cpu
+dask[delayed]==2.10.1

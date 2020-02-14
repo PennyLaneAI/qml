@@ -55,10 +55,10 @@ print(geometry)
 #     is installed, any format recognized by Open Babel is also supported
 #     by PennyLane, such as ``.mol`` and ``.sdf``.
 #
-#     Please see the :func:`~.read_structure` and Open Babel documentation
+#     Please see the :func:`~.pennylane_qchem.qchem.read_structure` and Open Babel documentation
 #     for more information on installing Open Babel.
 #
-# Calling the function :func:`~.read_structure` also creates the file
+# Calling the function :func:`~.pennylane_qchem.qchem.read_structure` also creates the file
 # ``structure.xyz``, which we can use to visualize our molecule using any molecule editor,
 # e.g., `Avogadro <https://avogadro.cc/>`_.
 #
@@ -79,10 +79,11 @@ print(geometry)
 # and `Coupled Cluster (CC) <https://en.wikipedia.org/wiki/Coupled_cluster>`__ methods among
 # others :ref:`[2]<qchem_references>`.
 #
-# Before launching the HF calculation using the function :func:`meanfield_data`, we
-# need to specify a string to label the molecule and the net charge of the molecule. In this
-# example we choose ``'water'`` as the string. On the other hand, although positively or
-# negatively charged molecules can be simulated, we choose a neutral system.
+# Before launching the HF calculation using the function
+# :func:`~.pennylane_qchem.qchem.meanfield_data`, we need to specify a string to label the molecule
+# and the net charge of the molecule. In this example we choose ``'water'`` as the string. On the
+# other hand, although positively or negatively charged molecules can be simulated, we choose a
+# neutral system.
 
 name = 'water'
 charge = 0
@@ -131,8 +132,8 @@ multiplicity = 1
 basis_set = 'sto-3g'
 
 ##############################################################################
-# Finally, we can call the function :func:`~.meanfield_data` to launch the mean field
-# calculation. At present, the quantum chemistry packages `PySCF
+# Finally, we can call the function :func:`~.pennylane_qchem.qchem.meanfield_data` to launch the
+# mean field calculation. At present, the quantum chemistry packages `PySCF
 # <https://sunqm.github.io/pyscf/>`_ or `Psi4 <http://www.psicode.org/>`_ can be chosen to solve
 # the Hartree-Fock equations. In this example, we choose ``'pyscf'``, which is the default option,
 # but the same results can be obtained using ``'psi4'``.
@@ -153,8 +154,8 @@ for file in os.listdir(hf_data):
 
 ##############################################################################
 # At this stage, we have a basis set of molecular orbitals. Next, we can use the
-# function :func:`~.active_space` to define an *active space*. But, what is an active
-# space?
+# function :func:`~.pennylane_qchem.qchem.active_space` to define an *active space*. But,
+# what is an active space?
 #
 # Defining an active space
 # ------------------------
@@ -202,8 +203,9 @@ print("List of active molecular orbitals: {:}".format(active_indices))
 print("Number of qubits required for quantum simulation: {:}".format(2*len(active_indices)))
 
 ##############################################################################
-# Notice that calling the :func:`~.active_space` function without specifying an active
-# space results in no doubly-occupied orbitals---*all* molecular orbitals are considered to be active.
+# Notice that calling the :func:`~.pennylane_qchem.qchem.active_space` function without
+# specifying an active space results in no doubly-occupied orbitals---*all* molecular orbitals
+# are considered to be active.
 
 no_d_occ, all_active = qml.qchem.active_space(name, hf_data)
 print("List of doubly-occupied molecular orbitals: {:}".format(no_d_occ))
@@ -246,7 +248,7 @@ print("Electronic Hamiltonian of the water molecule represented in the Pauli bas
 print(qubit_hamiltonian)
 
 ##############################################################################
-# Finally, the :func:`~.generate_hamiltonian`
+# Finally, the :func:`~.pennylane_qchem.qchem.generate_hamiltonian`
 # function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above.
 #
@@ -279,7 +281,7 @@ print(qubit_hamiltonian)
 #
 #     If you have built your electronic Hamiltonian independently by using `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ tools, no problem! The
-#     :func:`~.convert_hamiltonian` function converts the `OpenFermion
+#     :func:`~.pennylane_qchem.qchem.convert_hamiltonian` function converts the `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ QubitOperator to PennyLane observables.
 #
 # .. _qchem_references:

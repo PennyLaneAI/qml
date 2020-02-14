@@ -94,6 +94,16 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/multi_qpu_classification/margin_2.png
     :description: :doc:`Margin classifier on multiple QPUs <app/tutorial_multi_qpu_classification>`
 
+.. customgalleryitem::
+    :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
+    :figure: implementations/vqe_parallel/diagram.png
+    :description: :doc:`app/tutorial_vqe_parallel`
+    
+.. customgalleryitem::
+    :tooltip: Use multiple QPUs to improve classification
+    :figure: implementations/ensemble_multi_qpu/diagram.png
+    :description: :doc:`app/tutorial_ensemble_multi_qpu`
+
 :html:`</div><div style='clear:both'></div>`
 
 
@@ -119,3 +129,5 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_quantum_transfer_learning
     app/tutorial_embeddings_metric_learning
     app/tutorial_multi_qpu_classifier
+    app/tutorial_vqe_parallel
+    app/tutorial_ensemble_multi_qpu
