@@ -6,10 +6,10 @@ This tutorial outlines how two QPUs can be combined in parallel to help solve a 
 classification problem.
 
 We use the ``forest.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
-simulate another. Each QPU is allowed to make an independent prediction, and an ensemble model is
+simulate another. Each QPU makes an independent prediction, and an ensemble model is
 formed by choosing the prediction of the most confident QPU. The iris dataset is used in this
 tutorial, consisting of three classes of iris flower. Using a pre-trained model and the PyTorch
-interface, we see in this tutorial that ensembling allows the QPUs to specialize towards
+interface, we'll see that ensembling allows the QPUs to specialize towards
 different classes.
 
 Let's begin by importing the prerequisite libraries:
@@ -28,7 +28,7 @@ from matplotlib.patches import Patch
 
 ##############################################################################
 # This tutorial requires the ``pennylane-forest`` and ``pennylane-qiskit`` packages, which can be
-# installed by following the instructions `here <https://pennylane.ai/install.html>`__
+# installed by following the instructions `here <https://pennylane.ai/install.html>`__.
 #
 # Load data
 # ---------
@@ -45,7 +45,7 @@ y = data["target"]
 
 ##############################################################################
 # We shuffle the data and then embed the four features into a two-dimensional space for ease of
-# plotting later on. The first two components of a PCA are used.
+# plotting later on. The first two principal components of the data are used.
 
 np.random.seed(1967)
 x, y = zip(*np.random.permutation(list(zip(x, y))))
@@ -148,9 +148,9 @@ plot_points(x_train, y_train, x_test, y_test)
 # Data is input using :class:`~.pennylane.RX` rotations and then a different circuit is enacted
 # for each device with a unique set of trainable parameters. The output of both circuits is a
 # :class:`~.pennylane.PauliZ` measurement on three of the qubits. This is then fed through a
-# softmax, resulting in two 3-dimensional probability vectors corresponding to the 3 classes.
+# softmax function, resulting in two 3-dimensional probability vectors corresponding to the 3 classes.
 #
-# Finally, the ensemble model chooses the QPU with the largest entry in its probability vector
+# Finally, the ensemble model chooses the QPU which is most confident about its prediction (i.e., the class with the highest overall probability over all QPUs)
 # and uses that to make a prediction.
 #
 # .. figure:: /implementations/ensemble_multi_qpu/diagram.png
@@ -173,7 +173,7 @@ dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
 ##############################################################################
-# The circuits run on both devices are shown in the figure below:
+# The circuits for both QPUs are shown in the figure below:
 #
 # .. figure:: /implementations/ensemble_multi_qpu/diagram_circuits.png
 #    :width: 50%
@@ -209,7 +209,7 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection`:
+# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection` that uses the PyTorch interface:
 
 
 qnodes = qml.QNodeCollection(
@@ -323,8 +323,8 @@ print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 #
 # - The accuracy of QPU0 is much higher than the accuracy of QPU1. This does not mean that one
 #   device is intrinsically better than the other. In fact, another set of parameters can lead to
-#   QPU1 becoming more accurate. We see in the following that the difference in accuracy is due
-#   to specialization of each QPU.
+#   QPU1 becoming more accurate. We will see in the next section that the difference in accuracy is due
+#   to specialization of each QPU, which leads to overall better performance of the ensemble model.
 #
 # - The test accuracy is lower than the training accuracy. Here our focus is on analyzing the
 #   performance of the ensemble model, rather than minimizing the generalization error.
@@ -458,7 +458,7 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 
 ##############################################################################
 # These plots reinforce the specialization of the two QPUs. QPU1 concentrates on doing a good job
-# at predicting class 1 points, while QPU0 is focused on classes 0 and 2. By combining together,
+# at predicting class 1, while QPU0 is focused on classes 0 and 2. By combining together,
 # the resultant ensemble performs better.
 #
 # This tutorial shows how QPUs can work in parallel to realize a performance advantage. Check out
