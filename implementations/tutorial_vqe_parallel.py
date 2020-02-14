@@ -67,16 +67,18 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 ##############################################################################
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
 
-hamiltonians = [
-    qchem.generate_hamiltonian(
+hamiltonians = []
+
+for separation, file in data.items():
+    h, nr_qubits = qchem.generate_hamiltonian(
         mol_name=str(separation),
         mol_geo_file=file,
         mol_charge=0,
         multiplicity=1,
         basis_set="sto-3g",
-    )[0]  # We take the zero element (the Hamiltonian). The other element is the qubit number
-    for separation, file in data.items()
-]
+    )
+
+    hamiltonians.append(h)
 
 ##############################################################################
 # Each Hamiltonian can be written as a linear combination of fifteen tensor products of Pauli
@@ -84,9 +86,9 @@ hamiltonians = [
 
 h = hamiltonians[0]
 
-print('Number of terms: {}\n'.format(len(h.ops)))
+print("Number of terms: {}\n".format(len(h.ops)))
 for op in h.ops:
-    print('Measurement {} on wires {}'.format(op.name, op.wires))
+    print("Measurement {} on wires {}".format(op.name, op.wires))
 
 ##############################################################################
 # Defining the energy function
@@ -197,8 +199,8 @@ print("Speed up: {0:.2f}".format(t_seq / t_par))
 # performance of quantum algorithms? To conclude the tutorial, let's plot the calculated
 # potential energy surfaces:
 
-plt.plot(surface_seq, linewidth=2.2, marker="o", color='red')
-plt.plot(surface_par, linewidth=2.2, marker="d", color='blue')
+plt.plot(surface_seq, linewidth=2.2, marker="o", color="red")
+plt.plot(surface_par, linewidth=2.2, marker="d", color="blue")
 plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
 plt.ylabel("Ground state energy (Ha)", fontsize=16)
