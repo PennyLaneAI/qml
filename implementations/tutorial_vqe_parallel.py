@@ -50,7 +50,8 @@ from pennylane import qchem
 # saved in ``.xyz`` format. The data files can be downloaded by clicking :download:`here
 # <../implementations/vqe_parallel/h2.zip>`.
 
-data = {  # keys: atomic separations (in Angstrom), values: corresponding files
+data = {  # keys: atomic separations (in Angstroms), values: corresponding files
+
     0.3: "vqe_parallel/h2_0.30.xyz",
     0.5: "vqe_parallel/h2_0.50.xyz",
     0.7: "vqe_parallel/h2_0.70.xyz",

@@ -90,7 +90,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_embeddings_metric_learning`
 
 .. customgalleryitem::
-    :tooltip: Evaluate potential energy surface of H2 with parallel QPUs
+    :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
     :figure: implementations/vqe_parallel/diagram.png
     :description: :doc:`app/tutorial_vqe_parallel`
 
