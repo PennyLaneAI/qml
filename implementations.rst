@@ -89,6 +89,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: implementations/embedding_metric_learning/training.png
     :description: :doc:`app/tutorial_embeddings_metric_learning`
 
+.. customgalleryitem::
+    :tooltip: Use multiple QPUs to improve classification
+    :figure: implementations/ensemble_multi_qpu/diagram.png
+    :description: :doc:`app/tutorial_ensemble_multi_qpu`
+
 :html:`</div><div style='clear:both'></div>`
 
 
@@ -113,3 +118,4 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_coherent_vqls
     app/tutorial_quantum_transfer_learning
     app/tutorial_embeddings_metric_learning
+    app/tutorial_ensemble_multi_qpu
