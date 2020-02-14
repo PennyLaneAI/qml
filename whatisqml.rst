@@ -27,7 +27,7 @@ we run our algorithms on - for example, the success of modern-day deep learning 
 enabled by parallel GPU clusters.
 
 Quantum machine learning extends the pool of hardware for machine learning by an entirely
-new type of computing device - the quantum computer. Information processing with quantum computers
+new type of computing device --- the quantum computer. Information processing with quantum computers
 underlies substantially different laws of physics, namely quantum theory.
 
 
