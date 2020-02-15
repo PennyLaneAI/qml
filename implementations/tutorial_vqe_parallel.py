@@ -109,7 +109,7 @@ for op in h.ops:
 # Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
 # ``Aspen-4-4Q-E`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
 #
-# .. figure:: /implementations/vqe_parallel/diagram.png
+# .. figure:: /implementations/vqe_parallel/vqe_diagram.png
 #    :width: 65%
 #    :align: center
 #
