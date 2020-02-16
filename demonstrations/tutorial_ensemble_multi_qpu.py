@@ -142,7 +142,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # (i.e., the class with the highest overall probability over all QPUs) and uses that to make a
 # prediction.
 #
-# .. figure:: /implementations/ensemble_multi_qpu/ensemble_diagram.png
+# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_diagram.png
 #    :width: 50%
 #    :align: center
 #
@@ -176,7 +176,7 @@ devs = [dev0, dev1]
 #
 # The circuits for both QPUs are shown in the figure below:
 #
-# .. figure:: /implementations/ensemble_multi_qpu/diagram_circuits.png
+# .. figure:: /demonstrations/ensemble_multi_qpu/diagram_circuits.png
 #    :width: 50%
 #    :align: center
 
@@ -271,7 +271,7 @@ def predict(params, x=None, parallel=True):
 # ----------------
 #
 # To test our model, we first load a pre-trained set of parameters which can also be downloaded
-# by clicking :download:`here <../implementations/ensemble_multi_qpu/params.npy>`.
+# by clicking :download:`here <../demonstrations/ensemble_multi_qpu/params.npy>`.
 
 
 params = np.load("ensemble_multi_qpu/params.npy")
