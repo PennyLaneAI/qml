@@ -65,7 +65,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
-    :figure: implementations/variational_quantum_eigensolver/pes_h2.png
+    :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
     :description: :doc:`app/tutorial_vqe`
 
 .. customgalleryitem::
@@ -120,12 +120,12 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
-    :figure: implementations/vqe_parallel/vqe_diagram.png
+    :figure: demonstrations/vqe_parallel/vqe_diagram.png
     :description: :doc:`demos/tutorial_vqe_parallel`
 
 .. customgalleryitem::
     :tooltip: Use multiple QPUs to improve classification
-    :figure: implementations/ensemble_multi_qpu/ensemble_diagram.png
+    :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
     :description: :doc:`demos/tutorial_ensemble_multi_qpu`
 
 :html:`</div><div style='clear:both'></div>`
@@ -142,7 +142,7 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_advanced_usage
     demos/pytorch_noise
     demos/tutorial_quantum_chemistry
-    demos/state_preparation
+    demos/tutorial_state_preparation
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_QGAN
     demos/tutorial_variational_classifier
@@ -151,7 +151,7 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_data_reuploading_classifier
     demos/tutorial_quantum_natural_gradient
     demos/qaoa_maxcut
-    demos/barren_plateaus
+    demos/tutorial_barren_plateaus
     demos/tutorial_rotoselect
     demos/tutorial_doubly_stochastic
     demos/tutorial_vqls
