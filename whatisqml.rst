@@ -71,7 +71,7 @@ In the near-term branch of quantum machine learning,
 **quantum devices are used and trained like neural networks**.
 This is done by systematically adapting the physical control parameters,
 such as an electromagnetic field strength or a laser pulse frequency, to solve a machine learning problem.
-Afterwards, the trained circuit can for example be used to classify the content of images - by encoding
+For example, the trained circuit can be used to classify the content of images—by encoding
 the image into the physical state of the device and taking measurements.
 
 The bigger picture: Making computers differentiable
