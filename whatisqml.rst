@@ -26,7 +26,7 @@ The limits of what machines can learn have always been defined by the computer h
 we run our algorithms on—for example, the success of modern-day deep learning with neural networks is
 enabled by parallel GPU clusters.
 
-Quantum machine learning extends the pool of hardware for machine learning by an entirely
+Quantum machine learning extends the pool of hardware for machine learning with an entirely
 new type of computing device --- the quantum computer. Information processing with quantum computers
 underlies substantially different laws of physics, namely quantum theory.
 
