@@ -27,7 +27,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - gallery
+            - gallery-{{ .Branch }}-{{ .Revision }}
+            - gallery-{{ .Branch }}-
+            - gallery-
 
       - run:
           name: Build tutorials
@@ -39,9 +41,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ./tutorial
             - ./demos
-          key: gallery
+          key: gallery-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
           path: /tmp/qml_html.zip
