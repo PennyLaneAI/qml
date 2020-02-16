@@ -41,7 +41,7 @@ Near-term quantum devices
     :width: 80%
     :target: javascript:void(0);
 
-    Current day quantum computers are special purpose chips.
+    Current-day quantum computers are special-purpose chips.
 
 :html:`<br>`
 
