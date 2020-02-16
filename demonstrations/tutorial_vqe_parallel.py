@@ -43,13 +43,13 @@ from pennylane import qchem
 # Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.generate_hamiltonian` function of the
 # :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
-# :doc:`../tutorial/tutorial_quantum_chemistry` and :doc:`../app/tutorial_vqe`
+# :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
 # tutorials.
 #
 # We begin by creating a dictionary containing a selection of bond lengths and corresponding data
 # files saved in `XYZ <https://en.wikipedia.org/wiki/XYZ_file_format>`__ format. These files
 # follow a standard format for specifying the geometry of a molecule and can be downloaded as a
-# Zip from :download:`here <../implementations/vqe_parallel/vqe_parallel.zip>`.
+# Zip from :download:`here <../demonstrations/vqe_parallel/vqe_parallel.zip>`.
 
 data = {  # keys: atomic separations (in Angstroms), values: corresponding files
     0.3: "vqe_parallel/h2_0.30.xyz",
@@ -109,7 +109,7 @@ for op in h.ops:
 # Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
 # ``Aspen-4-4Q-E`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
 #
-# .. figure:: /implementations/vqe_parallel/vqe_diagram.png
+# .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
 #    :width: 65%
 #    :align: center
 #
@@ -151,10 +151,10 @@ def circuit(param, wires):
 ##############################################################################
 # The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
 # The values of these Y-rotations can be found by minimizing the ground state energy as outlined in
-# :doc:`../app/tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
+# :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
-# <../implementations/vqe_parallel/RY_params.npy>`.
+# <../demonstrations/vqe_parallel/RY_params.npy>`.
 
 params = np.load("vqe_parallel/RY_params.npy")
 
