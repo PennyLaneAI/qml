@@ -313,7 +313,7 @@ optimizer = qml.RMSPropOptimizer(stepsize=0.01)
 batch_size = 5
 pars = init_pars
 
-for i in range(2):
+for j in range(2):
 
     # Sample a batch of training inputs from each class
     selectA = np.random.choice(range(len(A)), size=(batch_size,), replace=True)
@@ -323,10 +323,10 @@ for i in range(2):
 
     # Walk one optimization step
     pars = optimizer.step(lambda w: cost(w, A=A_batch, B=B_batch), pars)
-    print("Step", i, "done.")
+    print("Step", j, "done.")
 
     # Print the validation cost every 10 steps
-    if i % 5 == 0 and i != 0:
+    if j % 5 == 0 and j != 0:
         cst = cost(pars, A=A_val, B=B_val)
         print("Cost on validation set {:2f}".format(cst))
 
