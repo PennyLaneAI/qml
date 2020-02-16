@@ -10,6 +10,6 @@
   "author": "Xanadu, inc.",
   "license": "Apache 2.0",
   "dependencies": {
-    "circle-github-bot": "^2.0.1",
+    "circle-github-bot": "^2.0.1"
   }
 }
