@@ -51,17 +51,14 @@ jobs:
 
   comment:
     docker:
-      - image: circleci/node:8.10.0
+      - image: circleci/python:3.7.2
 
     steps:
       - checkout
 
       - run:
           name: Comment artifacts
-          command: |
-            npm install
-            npm run build
-            ./comment.js
+          command: python3 comment.py
 
   deploy:
     executor:
