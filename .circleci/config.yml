@@ -7,6 +7,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.2
+      - image: circleci/node:8.10.0
       - image: rigetti/quilc
         command:
         - -R
@@ -36,6 +37,9 @@ jobs:
             make download
             make html
             cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
+            npm install
+            npm run build
+            ./comment.js
 
       - save_cache:
           paths:
@@ -45,6 +49,9 @@ jobs:
 
       - store_artifacts:
           path: /tmp/qml_html.zip
+
+      - store_artifacts:
+          path: _build/html
 
   deploy:
     executor:
