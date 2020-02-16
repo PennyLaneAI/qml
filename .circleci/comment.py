@@ -32,4 +32,16 @@ comment = """\
 g = Github(GH_TOKEN)
 repo = g.get_repo("XanaduAI/qml")
 pr = repo.get_pull(PR)
-pr.create_issue_comment(comment)
+
+cmts = pr.get_issue_comments()
+existing_comment = None
+
+for c in cmts:
+    if "<h3>Website build</h3>" in c.body and "josh146" == c.user.login:
+        existing_comment = c
+        break
+
+if existing_comment is None:
+    pr.create_issue_comment(comment)
+else:
+    existing_comment.edit(comment)
