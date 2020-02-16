@@ -4,7 +4,7 @@ r"""
 Multiclass margin classifier
 ============================
 
-In this tutorial, we show how to use the PyTorch interface for PennyLane 
+In this tutorial, we show how to use the PyTorch interface for PennyLane
 to implement a multiclass variational classifier. We consider the iris database
 from UCI, which has 4 features and 3 classes. We use multiple one-vs-all
 classifiers with a margin loss (see `Multiclass Linear SVM
@@ -15,7 +15,7 @@ on an individual variational circuit, whose architecture is inspired by
 
 |
 
-.. figure:: ../implementations/multi_qpu_classification/margin_2.png
+.. figure:: ../implementations/multiclass_classification/margin_2.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -26,14 +26,14 @@ on an individual variational circuit, whose architecture is inspired by
 Initial Setup
 ~~~~~~~~~~~~~
 
-We import PennyLane, the PennyLane-provided version of NumPy, 
-relevent torch modules, and define the constants that will 
-be used in this tutorial. 
- 
-Our feature size is 4, and we will use amplitude embedding. 
-This means that each possible amplitude (in the computational basis) will 
-correspond to a single feature. With 2 qubits (wires), there are 
-4 possible states, and as such, we can encode a feature vector 
+We import PennyLane, the PennyLane-provided version of NumPy,
+relevent torch modules, and define the constants that will
+be used in this tutorial.
+
+Our feature size is 4, and we will use amplitude embedding.
+This means that each possible amplitude (in the computational basis) will
+correspond to a single feature. With 2 qubits (wires), there are
+4 possible states, and as such, we can encode a feature vector
 of size 4.
 """
 
@@ -73,7 +73,7 @@ def layer(W):
 #################################################################################
 # We now define the quantum nodes that will be used. As we are implementing our
 # multiclass classifier as multiple one-vs-all classifiers, we will use 3 QNodes,
-# each representing one such classifier. That is, ``circuit1`` classifies if a 
+# each representing one such classifier. That is, ``circuit1`` classifies if a
 # sample belongs to class 1 or not, and so on. The circuit architecture for all
 # 3 nodes are the same. We use the PyTorch interface for the QNodes.
 # Data is embedded in each circuit using amplitude embedding:
@@ -90,7 +90,7 @@ qnode3 = qml.QNode(circuit, dev).to_torch()
 
 
 #################################################################################
-# The variational quantum circuit is parametrized by the weights. We use a 
+# The variational quantum circuit is parametrized by the weights. We use a
 # classical bias term that is applied after processing the quantum circuit's
 # output. Both variational circuit weights and classical bias term are optimized.
 
@@ -153,8 +153,8 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
 # Classification Function
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Next, we use the learned models to classify our samples. For a given sample, 
-# compute the score given to it by classifier :math:`i`, which quantifies how likely it is that 
+# Next, we use the learned models to classify our samples. For a given sample,
+# compute the score given to it by classifier :math:`i`, which quantifies how likely it is that
 # this sample belongs to class :math:`i`. For each sample, return the class with the highest score.
 
 def classify(q_circuits, all_params, feature_vecs, labels):
@@ -187,7 +187,7 @@ def accuracy(labels, hard_predictions):
 # elements squared is 1 (:math:`\ell_2` norm is 1).
 
 def load_and_process_data():
-    data = np.loadtxt("multi_qpu_classification/iris.csv", delimiter=",")
+    data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
     print("First X sample (original)  :", X[0])
 
@@ -266,7 +266,7 @@ def training(features, Y):
         costs.append(curr_cost.item())
         train_acc.append(acc_train)
         test_acc.append(acc_test)
-        
+
     return costs, train_acc, test_acc
 
 
