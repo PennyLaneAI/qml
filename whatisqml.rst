@@ -31,7 +31,7 @@ we run our algorithms on—for example, the success of modern-day deep learning 
 enabled by parallel GPU clusters.
 
 **Quantum machine learning extends the pool of hardware for machine learning by an entirely
-new type of computing device --- the quantum computer.** Information processing with quantum computers
+new type of computing device—the quantum computer.** Information processing with quantum computers
 relies on substantially different laws of physics, namely quantum theory.
 
 
@@ -45,7 +45,7 @@ Near-term quantum devices
     :width: 80%
     :target: javascript:void(0);
 
-    Current day quantum computers are special purpose chips.
+    Current-day quantum computers are special-purpose chips.
 
 :html:`<br>`
 
@@ -71,7 +71,7 @@ Using quantum devices like neural networks
 
 :html:`<br>`
 
-In the near-term branch of quantum machine learning,
+In the modern viewpoint on quantum machine learning,
 **quantum devices are used and trained like neural networks**.
 This is done by systematically adapting the physical control parameters,
 such as an electromagnetic field strength or a laser pulse frequency, to solve a machine learning problem.
