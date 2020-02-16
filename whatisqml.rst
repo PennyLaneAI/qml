@@ -87,7 +87,7 @@ The bigger picture: Making computers differentiable
 :html:`<br>`
 
 
-But the story does not end here. Quantum circuits turn out to be *differentiable*, which means that a quantum computer
+But the story does not end here. Quantum circuits turn out to be *differentiable*, which means that a quantum computer itself
 can compute the change in control parameters needed to become better at a given task. Differentiable programming
 is the very basis of deep learning, implemented in software libraries such as TensorFlow and PyTorch.
 Differentiable programming is also more than deep learning: it is a programming paradigm where steps of an
