@@ -118,6 +118,16 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/embedding_metric_learning/training.png
     :description: :doc:`demos/tutorial_embeddings_metric_learning`
 
+.. customgalleryitem::
+    :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
+    :figure: implementations/vqe_parallel/vqe_diagram.png
+    :description: :doc:`app/tutorial_vqe_parallel`
+
+.. customgalleryitem::
+    :tooltip: Use multiple QPUs to improve classification
+    :figure: implementations/ensemble_multi_qpu/ensemble_diagram.png
+    :description: :doc:`app/tutorial_ensemble_multi_qpu`
+
 :html:`</div><div style='clear:both'></div>`
 
 
@@ -148,3 +158,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_coherent_vqls
     demos/tutorial_quantum_transfer_learning
     demos/tutorial_embeddings_metric_learning
+    demos/tutorial_vqe_parallel
+    demos/tutorial_ensemble_multi_qpu

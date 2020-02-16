@@ -1,17 +1,17 @@
 # Quantum machine learning
 
-This repository contains introductory pages on Quantum Machine Learning, 
+This repository contains introductory pages on Quantum Machine Learning,
 as well as the Python demos; both are available at
 at https://pennylane.ai/qml. The content consists of four basic pages:
 
-* [What is QML?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum 
+* [What is QML?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum
   computing means for machine learning.
-  
+
 * [Training quantum circuits](https://pennylane.ai/qml/trainingcircuits.html). Explore and
   understand the key concepts underpinning variational quantum circuits and
   quantum machine learning.
-  
-* [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Look up terms around 
+
+* [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Look up terms around
   quantum machine learning and optimization.
 
 * [Demons of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
@@ -30,8 +30,9 @@ quantum machine learning paper/result.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
-  
+
 * If you would like to write the demo using a Jupyter notebook, you can convert
+
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
 
@@ -99,15 +100,15 @@ there are a couple of guidelines to keep in mind.
 
 * Thumbnails should be legible, interesting, and unique --- but not too busy!
   Any included text should be minimal and legible
-  
-* If your content contains random variables/outputs, a fixed seed should 
+
+* If your content contains random variables/outputs, a fixed seed should
   be set for reproducibility.
 
 * All content must be original or free to reuse subject to license compatibility.
   For example, if you are implementing someone elses research, reach out first to
   recieve permission to reproduce exact figures. Otherwise, avoid direct screenshots
   from papers, and instead refer to figures in the paper within the text.
-  
+
 * All submissions must pass code review before being merged into the repository.
 
 ## Building
