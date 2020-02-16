@@ -23,7 +23,7 @@ Replacing classical hardware by quantum computers
 
 
 The limits of what machines can learn have always been defined by the computer hardware
-we run our algorithms on - for example, the success of modern-day deep learning  with neural networks is
+we run our algorithms on—for example, the success of modern-day deep learning with neural networks is
 enabled by parallel GPU clusters.
 
 Quantum machine learning extends the pool of hardware for machine learning by an entirely
