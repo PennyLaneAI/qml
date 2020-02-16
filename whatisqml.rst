@@ -102,4 +102,4 @@ design quantum algorithms :cite:`anschuetz2018variational`
 or correct errors :cite:`johnson2017qvector`.
 
 PennyLane is a software framework that is built around the concept of
-*differentiable quantum computation*, and allows users to fully exploit the power quantum machine learning and beyond.
+*differentiable quantum computation*, and allows users to fully exploit the power of quantum machine learning and beyond.
