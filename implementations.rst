@@ -10,7 +10,7 @@ algorithms using PennyLane and near-term quantum hardware.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Do arbitrary state preparation on a real quantum computer.
+    :tooltip: Learn to prepare arbitrary states.
     :figure: implementations/state_preparation/NOON.png
     :description: :doc:`app/tutorial_state_preparation`
 
@@ -90,6 +90,16 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_embeddings_metric_learning`
 
 .. customgalleryitem::
+    :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
+    :figure: implementations/vqe_parallel/vqe_diagram.png
+    :description: :doc:`app/tutorial_vqe_parallel`
+    
+.. customgalleryitem::
+    :tooltip: Use multiple QPUs to improve classification
+    :figure: implementations/ensemble_multi_qpu/ensemble_diagram.png
+    :description: :doc:`app/tutorial_ensemble_multi_qpu`
+
+.. customgalleryitem::
     :tooltip: Pre-process images with a quantum convolution
     :figure: implementations/quanvolution/zoom.png
     :description: :doc:`app/tutorial_quanvolution`
@@ -118,4 +128,6 @@ algorithms using PennyLane and near-term quantum hardware.
     app/tutorial_coherent_vqls
     app/tutorial_quantum_transfer_learning
     app/tutorial_embeddings_metric_learning
+    app/tutorial_vqe_parallel
+    app/tutorial_ensemble_multi_qpu
     app/tutorial_quanvolution

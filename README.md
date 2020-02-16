@@ -27,7 +27,7 @@ quantum machine learning paper/result.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
-  
+
 * If you would like to write the tutorial using a Jupyter notebook, you can convert
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).

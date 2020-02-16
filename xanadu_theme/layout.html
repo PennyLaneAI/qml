@@ -189,6 +189,20 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
     <!-- Nanoscroller -->
     <script type="text/javascript" src="{{ pathto('_static/js/nanoscroller.min.js', 1) }}"></script>
+    <script type="text/javascript">
+        $('a.reference.internal').each(function(){
+          var link = $(this).attr("href");
+          var hash = link.split('#')[1];
+          var page = link.split('#')[0].split('/').slice(-1)[0].replace(".html", "");
+          if (hash == page) {
+            $(this).attr('href', link.split('#')[0]);
+          }
+        });
+        $(".document > .section").removeClass("section");
+        $(".comment-container .nano-content").css("height", $("#content").height());
+        $(".comment-container").css("height", $("#content").height());
+        $(".nano").nanoScroller();
+    </script>
     <!-- lightslider -->
     <script src="{{ pathto('_static/js/lightslider.min.js', 1) }}"></script>
 
