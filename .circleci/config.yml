@@ -35,12 +35,16 @@ jobs:
             . venv/bin/activate
             make download
             make html
+            cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
 
       - save_cache:
           paths:
             - ./tutorial
             - ./demos
           key: gallery
+
+      - store_artifacts:
+          path: /tmp/qml_html.zip
 
   deploy:
     executor:
