@@ -142,7 +142,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # (i.e., the class with the highest overall probability over all QPUs) and uses that to make a
 # prediction.
 #
-# .. figure:: /implementations/ensemble_multi_qpu/diagram.png
+# .. figure:: /implementations/ensemble_multi_qpu/ensemble_diagram.png
 #    :width: 50%
 #    :align: center
 #
@@ -442,6 +442,6 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 # the resultant ensemble performs better.
 #
 # This tutorial shows how QPUs can work in parallel to realize a performance advantage. Check out
-# our :doc:`../app/tutorial_vqe_parallel.py` tutorial to see how multiple QPUs can be
+# our :doc:`tutorial_vqe_parallel` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!

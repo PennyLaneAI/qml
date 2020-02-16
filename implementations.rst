@@ -96,12 +96,12 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
-    :figure: implementations/vqe_parallel/diagram.png
+    :figure: implementations/vqe_parallel/vqe_diagram.png
     :description: :doc:`app/tutorial_vqe_parallel`
     
 .. customgalleryitem::
     :tooltip: Use multiple QPUs to improve classification
-    :figure: implementations/ensemble_multi_qpu/diagram.png
+    :figure: implementations/ensemble_multi_qpu/ensemble_diagram.png
     :description: :doc:`app/tutorial_ensemble_multi_qpu`
 
 :html:`</div><div style='clear:both'></div>`
