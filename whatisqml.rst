@@ -45,7 +45,7 @@ Near-term quantum devices
 
 :html:`<br>`
 
-While a lot of research focuses on ideal, universal quantum processing units (QPUs) whose development
+While a lot of research focuses on ideal universal quantum processing units (QPUs) whose development
 is still a thing of the future, a large share of quantum machine learning
 is interested in near-term quantum devices :cite:`farhi2018classification`
 :cite:`schuld2018circuit` :cite:`grant2018hierarchical` :cite:`liu2018differentiable`.
