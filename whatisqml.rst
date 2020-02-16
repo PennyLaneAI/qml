@@ -67,7 +67,7 @@ Using quantum devices like neural networks
 
 :html:`<br>`
 
-In the near-term branch of quantum machine learning,
+In the modern viewpoint on quantum machine learning,
 **quantum devices are used and trained like neural networks**.
 This is done by systematically adapting the physical control parameters,
 such as an electromagnetic field strength or a laser pulse frequency, to solve a machine learning problem.
