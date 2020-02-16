@@ -1,0 +1,15 @@
+{
+  "name": "qml",
+  "version": "0.1.0",
+  "description": "Introductions to key concepts in quantum machine learning, as well as tutorials and implementations from cutting-edge QML research.",
+  "main": "comment.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/XanaduAI/qml.git"
+  },
+  "author": "Xanadu, inc.",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "circle-github-bot": "^2.0.1",
+  }
+}
