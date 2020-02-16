@@ -91,7 +91,7 @@ But the story does not end here. Quantum circuits turn out to be *differentiable
 can compute the change in control parameters needed to become better at a given task. Differentiable programming
 is the very basis of deep learning, implemented in software libraries such as TensorFlow and PyTorch.
 Differentiable programming is also more than deep learning: it is a programming paradigm where steps of an
-algorithm are not hand-coded but learnt.
+algorithm are not hand-coded but learned.
 
 Similarly, the idea of trainable quantum computations is larger than quantum machine learning. It includes,
 and in fact originates from, a field called *quantum chemistry* :cite:`peruzzo2014variational`
