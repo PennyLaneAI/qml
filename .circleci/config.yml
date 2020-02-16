@@ -49,16 +49,9 @@ jobs:
       - store_artifacts:
           path: _build/html
 
-  comment:
-    docker:
-      - image: circleci/python:3.7.2
-
-    steps:
-      - checkout
-
       - run:
           name: Comment artifacts
-          command: pip3 install pygithub --user && python3 comment.py
+          command: pip3 install pygithub --user && python3 .circleci/comment.py
 
   deploy:
     executor:
@@ -118,10 +111,6 @@ workflows:
           filters:
             branches:
               ignore: master
-
-      - comment:
-          requires:
-            - build
 
       - deploy:
           context: aws_credentials
