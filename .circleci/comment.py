@@ -26,7 +26,8 @@ comment = """\
 <strong>Commit:</strong> {hash}\n
 <strong>Circle build number:</strong> {job}\n
 <strong>Website zip:</strong> <a href={zip}>{zip}</a>\n
-<strong>Website url:</strong> <a href={web}>{web}</a>
+<strong>Website url:</strong> <a href={web}>{web}</a>\n
+<em>Please double check the rendered website build to make sure everything is correct.</em>
 """.format(hash=SHA1, job=JOB_ID, zip=zip_url, web=web_url)
 
 g = Github(GH_TOKEN)
