@@ -58,7 +58,7 @@ jobs:
 
       - run:
           name: Comment artifacts
-          command: pip3 install pygithub && python3 comment.py
+          command: pip3 install pygithub --user && python3 comment.py
 
   deploy:
     executor:
