@@ -29,7 +29,6 @@ jobs:
           keys:
             - gallery-{{ .Branch }}-{{ .Revision }}
             - gallery-{{ .Branch }}-
-            - gallery-
 
       - run:
           name: Build tutorials
