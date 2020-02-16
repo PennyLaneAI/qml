@@ -122,7 +122,7 @@ def ising_hamiltonian(weights, wires, l):
         CNOT(wires=wires)
         # local fields
         for w in wires:
-            RY(weights[l, i + 1], wires=w)
+            RY(weights[l, l - 1], wires=w)
 
 def QAOAEmbedding(features, weights, wires):
 
