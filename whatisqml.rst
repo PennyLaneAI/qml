@@ -5,10 +5,14 @@ What is Quantum Machine Learning?
 =================================
 
 Quantum machine learning is a field at the intersection of artificial intelligence and physics,
-which investigates a new way in which machines can learn from data.
+which investigates the consequences of using quantum computers for machine learning. Important questions
+include whether quantum computers can speed up the time it takes to train or evaluate a machine learning model,
+whether they can improve generalization performance on unseen data, and whether the theory of what is learnable
+changes under quantum information processing.
 
-Replacing classical hardware by quantum computers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using quantum computers in machine learning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :html:`<br>`
 
@@ -17,7 +21,7 @@ Replacing classical hardware by quantum computers
     :width: 60%
     :target: javascript:void(0);
 
-    Replacing GPUs by quantum computers changes the way we do machine learning.
+    Quantum computers change the way we can do machine learning.
 
 :html:`<br>`
 
@@ -26,9 +30,9 @@ The limits of what machines can learn have always been defined by the computer h
 we run our algorithms on—for example, the success of modern-day deep learning with neural networks is
 enabled by parallel GPU clusters.
 
-Quantum machine learning extends the pool of hardware for machine learning by an entirely
-new type of computing device --- the quantum computer. Information processing with quantum computers
-underlies substantially different laws of physics, namely quantum theory.
+**Quantum machine learning extends the pool of hardware for machine learning by an entirely
+new type of computing device --- the quantum computer.** Information processing with quantum computers
+relies on substantially different laws of physics, namely quantum theory.
 
 
 Near-term quantum devices
@@ -45,12 +49,12 @@ Near-term quantum devices
 
 :html:`<br>`
 
-While a lot of research focuses on ideal, universal quantum processing units (QPUs) whose development
-is still a thing of the future, a large share of quantum machine learning
-is interested in near term quantum devices :cite:`farhi2018classification`
+While a lot of research focuses on ideal, universal quantum processing units ("fault-tolerant QPUs")
+whose development is still a thing of the future, **a large share of quantum machine learning
+is interested in near term quantum devices** :cite:`farhi2018classification`
 :cite:`schuld2018circuit` :cite:`grant2018hierarchical` :cite:`liu2018differentiable`.
 One can understand these devices
-as special purpose hardware in between Application-Specific Integrated Circuits (ASICs) and
+as a form of special purpose hardware, like Application-Specific Integrated Circuits (ASICs) and
 Field-Programmable Gate Arrays (FPGAs).
 
 Using quantum devices like neural networks
@@ -63,7 +67,7 @@ Using quantum devices like neural networks
     :width: 70%
     :target: javascript:void(0);
 
-    Quantum algorithms can be trained and used like neural networks.
+    Quantum algorithms can be used and trained like neural networks.
 
 :html:`<br>`
 
@@ -87,11 +91,12 @@ The bigger picture: Making computers differentiable
 :html:`<br>`
 
 
-But the story does not end here. Quantum circuits turn out to be *differentiable*, which means that a quantum computer itself
-can compute the change in control parameters needed to become better at a given task. Differentiable programming
+But the story does not end here. Quantum circuits turn out to be *differentiable*, which means that a quantum computer
+itself can compute the change in control parameters needed to become better at a given task.
+:ref:`Differentiable programming <https://en.wikipedia.org/wiki/Differentiable_programming>`
 is the very basis of deep learning, implemented in software libraries such as TensorFlow and PyTorch.
-Differentiable programming is also more than deep learning: it is a programming paradigm where steps of an
-algorithm are not hand-coded but learned.
+**Differentiable programming is also more than deep learning: it is a programming paradigm where steps of an
+algorithm are not hand-coded but learned.**
 
 Similarly, the idea of trainable quantum computations is larger than quantum machine learning. It includes,
 and in fact originates from, a field called *quantum chemistry* :cite:`peruzzo2014variational`
