@@ -7,7 +7,6 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.2
-      - image: circleci/node:8.10.0
       - image: rigetti/quilc
         command:
         - -R
@@ -52,6 +51,20 @@ jobs:
 
       - store_artifacts:
           path: _build/html
+
+  comment:
+    docker:
+      - image: circleci/node:8.10.0
+
+    steps:
+      - checkout
+
+      - run:
+          name: Comment artifacts
+          command: |
+            npm install
+            npm run build
+            ./comment.js
 
   deploy:
     executor:
@@ -111,6 +124,10 @@ workflows:
           filters:
             branches:
               ignore: master
+
+      - comment:
+          requires:
+            - build
 
       - deploy:
           context: aws_credentials
