@@ -41,7 +41,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: demonstrations/state_preparation/NOON.png
-    :description: :doc:`demos/state_preparation`
+    :description: :doc:`demos/tutorial_state_preparation`
 
 .. customgalleryitem::
     :tooltip: Ising model example with PennyLane PyTorch interface.
@@ -86,7 +86,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Barren plateaus in quantum neural networks
     :figure: demonstrations/barren_plateaus/surface.png
-    :description: :doc:`demos/barren_plateaus`
+    :description: :doc:`demos/tutorial_barren_plateaus`
 
 .. customgalleryitem::
     :tooltip: Rotoselect algorithm
