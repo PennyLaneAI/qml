@@ -43,7 +43,7 @@ from pennylane import qchem
 # Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.generate_hamiltonian` function of the
 # :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
-# :doc:`../tutorial/tutorial_quantum_chemistry` and :doc:`../app/tutorial_vqe`
+# :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
 # tutorials.
 #
 # We begin by creating a dictionary containing a selection of bond lengths and corresponding data
@@ -151,7 +151,7 @@ def circuit(param, wires):
 ##############################################################################
 # The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
 # The values of these Y-rotations can be found by minimizing the ground state energy as outlined in
-# :doc:`../app/tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
+# :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
 # <../demonstrations/vqe_parallel/RY_params.npy>`.

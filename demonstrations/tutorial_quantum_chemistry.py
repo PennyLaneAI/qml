@@ -273,7 +273,7 @@ print(qubit_hamiltonian)
 # Hamiltonian.
 #
 # To see how simple it is to implement the VQE algorithm to compute the ground-state energy of
-# your molecule using PennyLane, take a look at the tutorial :doc:`/app/tutorial_vqe`.
+# your molecule using PennyLane, take a look at the tutorial :doc:`tutorial_vqe`.
 #
 # .. note::
 #

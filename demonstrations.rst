@@ -35,7 +35,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Explore quantum chemistry in PennyLane.
-    :figure: beginner/quantum_chemistry/water_structure.png
+    :figure: demonstrations/quantum_chemistry/water_structure.png
     :description: :doc:`demos/tutorial_quantum_chemistry`
 
 .. customgalleryitem::
@@ -66,7 +66,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
     :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
-    :description: :doc:`app/tutorial_vqe`
+    :description: :doc:`demos/tutorial_vqe`
 
 .. customgalleryitem::
     :tooltip: Universal Quantum Classifier with data-reuploading
