@@ -50,7 +50,7 @@ is still a thing of the future, a large share of quantum machine learning
 is interested in near-term quantum devices :cite:`farhi2018classification`
 :cite:`schuld2018circuit` :cite:`grant2018hierarchical` :cite:`liu2018differentiable`.
 One can understand these devices
-as special purpose hardware in between Application-Specific Integrated Circuits (ASICs) and
+as special purpose hardware in-between Application-Specific Integrated Circuits (ASICs) and
 Field-Programmable Gate Arrays (FPGAs).
 
 Using quantum devices like neural networks
