@@ -1,5 +1,5 @@
 r"""
-Ensemble classification with Rigetti and Qiskit devices
+Ensemble classification with Forest and Qiskit devices
 =======================================================
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
@@ -111,10 +111,10 @@ def plot_points(x_train, y_train, x_test, y_test):
         Patch(facecolor=colours[0], edgecolor=c_transparent, label="Class 0"),
         Patch(facecolor=colours[1], edgecolor=c_transparent, label="Class 1"),
         Patch(facecolor=colours[2], edgecolor=c_transparent, label="Class 2"),
-        Line2D([0], [0], marker="o", color=c_transparent, label="Train", markerfacecolor="black",
-               markersize=10),
-        Line2D([0], [0], marker="x", color=c_transparent, label="Test", markerfacecolor="black",
-               markersize=10),
+        Line2D([0], [0], marker="o", color=c_transparent, label="Train", 
+               markerfacecolor="black", markersize=10),
+        Line2D([0], [0], marker="x", color=c_transparent, label="Test", 
+               markerfacecolor="black", markersize=10),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
@@ -215,7 +215,8 @@ def circuit1(params, x=None):
 
 
 qnodes = qml.QNodeCollection(
-    [qml.QNode(circuit0, dev0, interface="torch"), qml.QNode(circuit1, dev1, interface="torch")]
+    [qml.QNode(circuit0, dev0, interface="torch"), 
+     qml.QNode(circuit1, dev1, interface="torch")]
 )
 
 ##############################################################################
@@ -407,9 +408,13 @@ def plot_points_prediction(x, y, p, title):
     c_transparent = "#00000000"
 
     custom_lines = [
-        Patch(facecolor=colours_prediction["correct"], edgecolor=c_transparent, label="Correct"),
         Patch(
-            facecolor=colours_prediction["incorrect"], edgecolor=c_transparent, label="Incorrect"
+            facecolor=colours_prediction["correct"], 
+            edgecolor=c_transparent, label="Correct"
+        ),
+        Patch(
+            facecolor=colours_prediction["incorrect"], 
+            edgecolor=c_transparent, label="Incorrect"
         ),
         Line2D([0], [0], marker=markers[0], color=c_transparent, label="Class 0",
                markerfacecolor="black", markersize=10),
