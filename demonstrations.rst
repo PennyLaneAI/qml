@@ -11,48 +11,17 @@ algorithms using PennyLane and near-term quantum hardware.
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
     <div class="tags">
-        <input type="radio" class="controls" id="all" name="categories" value="all" checked>
-        <input type="radio" class="controls" id="beginner" name="categories" value="beginner" checked>
-        <input type="radio" class="controls" id="chemistry" name="categories" value="chemistry" checked>
-        <input type="radio" class="controls" id="tensorflow" name="categories" value="tensorflow">
-        <input type="radio" class="controls" id="pytorch" name="categories" value="pytorch">
-        <input type="radio" class="controls" id="autograd" name="categories" value="autograd">
-        <input type="radio" class="controls" id="forest" name="categories" value="forest">
-        <input type="radio" class="controls" id="cirq" name="categories" value="cirq">
-        <input type="radio" class="controls" id="qiskit" name="categories" value="qiskit">
-        <input type="radio" class="controls" id="strawberryfields" name="categories" value="strawberryfields">
-        <ol class="filters">
-            <li>
-                <label for="all">all</label>
-            </li>
-            <li>
-                <label for="beginner">beginner</label>
-            </li>
-            <li>
-                <label for="chemistry">quantum chemistry</label>
-            </li>
-            <li>
-                <label for="tensorflow">TensorFlow</label>
-            </li>
-            <li>
-                <label for="pytorch">PyTorch</label>
-            </li>
-            <li>
-                <label for="autograd">NumPy/Autograd</label>
-            </li>
-            <li>
-                <label for="forest">Rigetti Forest</label>
-            </li>
-            <li>
-                <label for="cirq">Cirq</label>
-            </li>
-            <li>
-                <label for="qiskit">Qiskit</label>
-            </li>
-            <li>
-                <label for="strawberryfields">Strawberry Fields</label>
-            </li>
-        </ol>
+    <input type="radio" class="controls" id="all" name="categories" value="all" checked>
+    <input type="radio" class="controls" id="beginner" name="categories" value="beginner">
+    <input type="radio" class="controls" id="chemistry" name="categories" value="chemistry">
+    <input type="radio" class="controls" id="tensorflow" name="categories" value="tensorflow">
+    <input type="radio" class="controls" id="pytorch" name="categories" value="pytorch">
+    <input type="radio" class="controls" id="autograd" name="categories" value="autograd">
+    <input type="radio" class="controls" id="forest" name="categories" value="forest">
+    <input type="radio" class="controls" id="cirq" name="categories" value="cirq">
+    <input type="radio" class="controls" id="qiskit" name="categories" value="qiskit">
+    <input type="radio" class="controls" id="strawberryfields" name="categories" value="strawberryfields">
+
 
 :html:`<div class="gallery-grid row">`
 
@@ -199,7 +168,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_ensemble_multi_qpu`
     :tags: pytorch forest qiskit
 
-:html:`</div><div style='clear:both'></div>`
+:html:`</div></div><div style='clear:both'>`
 
 
 .. toctree::

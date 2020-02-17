@@ -1790,9 +1790,10 @@ span.eqno {
 /* filters and tags */
 
 .filters {
-  text-align: center;
+  /*text-align: center;*/
   margin-bottom: 2rem;
   padding-left: 0;
+  display: grid;
 }
 
 .filters * {
@@ -1822,7 +1823,7 @@ span.eqno {
   display: none;
 }
 
-[value="All"]:checked ~ .gallery-grid [data-category] {
+[value="all"]:checked ~ .gallery-grid [data-category] {
   display: block;
 }
 
@@ -1838,16 +1839,7 @@ span.eqno {
   display: none;
 }
 
-[value="All"]:checked ~ .filters [for="All"],
-[value="beginner"]:checked ~ .filters [for="beginner"],
-[value="chemistry"]:checked ~ .filters [for="chemistry"],
-[value="tensorflow"]:checked ~ .filters [for="tensorflow"],
-[value="pytorch"]:checked ~ .filters [for="pytorch"],
-[value="autograd"]:checked ~ .filters [for="autograd"],
-[value="forest"]:checked ~ .filters [for="forest"],
-[value="cirq"]:checked ~ .filters [for="cirq"],
-[value="qiskit"]:checked ~ .filters [for="qiskit"],
-[value="strawberryfields"]:checked ~ .filters [for="strawberryfields"] {
+.filters label.active {
   background: {{ theme_download_button }};
   border: {{ theme_download_button }} solid 1px;
   color: #fff;

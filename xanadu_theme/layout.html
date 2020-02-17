@@ -150,12 +150,27 @@
                 </div>
               </div>
             </div>
-            <!-- {%- block bottom_rel_links %} -->
-              <!-- {{ render_relations() }} -->
-            <!-- {%- endblock %} -->
           </div>
           {%- block comments -%}
-            {% include "localtoc.html" %}
+            {% if pagename == "demonstrations" %}
+              {% include "filters.html" %}
+              <style>
+                .comment-container {
+                    opacity: 1;
+                }
+              </style>
+              <script type="text/javascript">
+                var val = $(".tags input[type='radio']:checked").val();
+                $(".filters label[for="+  val  +"]").addClass("active");
+                $(".tags input").on("change", function() {
+                  var val = $(".tags input[type='radio']:checked").val();
+                  $(".filters label[for="+  val  +"]").addClass("active");
+                  $(".filters label:not([for="+  val  +"])").removeClass("active");
+                });
+              </script>
+            {% else %}
+              {% include "localtoc.html" %}
+            {% endif %}
           {%- endblock %}
 
           <div class="up-button">
