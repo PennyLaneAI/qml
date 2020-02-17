@@ -231,7 +231,7 @@ def qaoa_maxcut(n_layers=1):
     print("\np={:d}".format(n_layers))
 
     # initialize the parameters near zero
-    init_params = 0.01 * np.random.rand(2, n_layers)
+    init_params = 0.01 * np.random.rand(2, 2)
 
     # minimize the negative of the objective function
     def objective(params):
@@ -263,7 +263,7 @@ def qaoa_maxcut(n_layers=1):
     # print optimal parameters and most frequently sampled bitstring
     counts = np.bincount(np.array(bit_strings))
     most_freq_bit_string = np.argmax(counts)
-    print("Optimized (gamma, beta) vectors:\n{}".format(params))
+    print("Optimized (gamma, beta) vectors:\n{}".format(params[:, :n_layers]))
     print("Most frequently sampled bit string is: {:04b}".format(most_freq_bit_string))
 
     return -objective(params), bit_strings
