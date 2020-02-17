@@ -1826,6 +1826,8 @@ span.eqno {
   display: block;
 }
 
+[value="beginner"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="beginner"]),
+[value="chemistry"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="chemistry"]),
 [value="tensorflow"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="tensorflow"]),
 [value="pytorch"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="pytorch"]),
 [value="autograd"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="autograd"]),
@@ -1837,6 +1839,8 @@ span.eqno {
 }
 
 [value="All"]:checked ~ .filters [for="All"],
+[value="beginner"]:checked ~ .filters [for="beginner"],
+[value="chemistry"]:checked ~ .filters [for="chemistry"],
 [value="tensorflow"]:checked ~ .filters [for="tensorflow"],
 [value="pytorch"]:checked ~ .filters [for="pytorch"],
 [value="autograd"]:checked ~ .filters [for="autograd"],
