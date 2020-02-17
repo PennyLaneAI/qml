@@ -53,7 +53,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ./demos
+            - ./app
+            - ./tutorial
           key: gallery-v0-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
@@ -121,7 +122,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ./demos
+            - ./app
+            - ./tutorial
           key: gallery-v0-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
