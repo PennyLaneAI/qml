@@ -52,7 +52,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: demonstrations/state_preparation/NOON.png
     :description: :doc:`demos/tutorial_state_preparation`
-    :tags: autograd
+    :tags: pytorch
 
 .. customgalleryitem::
     :tooltip: Ising model example with PennyLane PyTorch interface.
