@@ -160,12 +160,23 @@
                 }
               </style>
               <script type="text/javascript">
-                var val = $(".tags input[type='radio']:checked").val();
-                $(".filters label[for="+  val  +"]").addClass("active");
-                $(".tags input").on("change", function() {
+                function toggle_filters() {
                   var val = $(".tags input[type='radio']:checked").val();
                   $(".filters label[for="+  val  +"]").addClass("active");
                   $(".filters label:not([for="+  val  +"])").removeClass("active");
+
+                  if (val != "all"){
+                    $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").css("display", "none")
+                    $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").css("display", "block")
+                  } else {
+                    $(".gallery-grid .sphx-glr-thumbcontainer").css("display", "block")
+                  }
+                }
+
+                toggle_filters();
+
+                $(".tags input").on("change", function() {
+                  toggle_filters();
                 });
               </script>
             {% else %}

@@ -10,18 +10,6 @@ algorithms using PennyLane and near-term quantum hardware.
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
-    <div class="tags">
-    <input type="radio" class="controls" id="all" name="categories" value="all" checked>
-    <input type="radio" class="controls" id="beginner" name="categories" value="beginner">
-    <input type="radio" class="controls" id="chemistry" name="categories" value="chemistry">
-    <input type="radio" class="controls" id="tensorflow" name="categories" value="tensorflow">
-    <input type="radio" class="controls" id="pytorch" name="categories" value="pytorch">
-    <input type="radio" class="controls" id="autograd" name="categories" value="autograd">
-    <input type="radio" class="controls" id="forest" name="categories" value="forest">
-    <input type="radio" class="controls" id="cirq" name="categories" value="cirq">
-    <input type="radio" class="controls" id="qiskit" name="categories" value="qiskit">
-    <input type="radio" class="controls" id="strawberryfields" name="categories" value="strawberryfields">
-
 
 :html:`<div class="gallery-grid row">`
 

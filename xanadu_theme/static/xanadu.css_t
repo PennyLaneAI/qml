@@ -1823,22 +1823,6 @@ span.eqno {
   display: none;
 }
 
-[value="all"]:checked ~ .gallery-grid [data-category] {
-  display: block;
-}
-
-[value="beginner"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="beginner"]),
-[value="chemistry"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="chemistry"]),
-[value="tensorflow"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="tensorflow"]),
-[value="pytorch"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="pytorch"]),
-[value="autograd"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="autograd"]),
-[value="forest"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="forest"]),
-[value="cirq"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="cirq"]),
-[value="qiskit"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="qiskit"]),
-[value="strawberryfields"]:checked ~ .gallery-grid .sphx-glr-thumbcontainer:not([data-category~="strawberryfields"]) {
-  display: none;
-}
-
 .filters label.active {
   background: {{ theme_download_button }};
   border: {{ theme_download_button }} solid 1px;
