@@ -81,7 +81,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Perform QAOA for MaxCut
     :figure: demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
-    :description: :doc:`demos/qaoa_maxcut`
+    :description: :doc:`demos/tutorial_qaoa_maxcut`
 
 .. customgalleryitem::
     :tooltip: Barren plateaus in quantum neural networks
@@ -150,7 +150,7 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqe
     demos/tutorial_data_reuploading_classifier
     demos/tutorial_quantum_natural_gradient
-    demos/qaoa_maxcut
+    demos/tutorial_qaoa_maxcut
     demos/tutorial_barren_plateaus
     demos/tutorial_rotoselect
     demos/tutorial_doubly_stochastic
