@@ -67,7 +67,7 @@ jobs:
           name: Comment artifacts
           command: |
             if [ -z "$GH_AUTH_TOKEN" ]; then
-              echo "No credentials available, artifacts will not be commented.""
+              echo "No credentials available, artifacts will not be commented."
             else
               echo "Credentials are available. Commenting artifacts to GitHub PR..."
               pip3 install pygithub --user && python3 .circleci/comment.py
