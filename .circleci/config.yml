@@ -104,7 +104,7 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v0-{{ .Branch }}-{{ checksum "requirement.txt" }}
+          key: pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
