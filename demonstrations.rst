@@ -76,7 +76,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tooltip: Fit one dimensional noisy data with a quantum neural network.
     :figure: demonstrations/quantum_neural_net/qnn_output_28_0.png
     :description: :doc:`demos/quantum_neural_net`
-    :tags: autograd strawberryfields
+    :tags: autograd strawberryfields photonics
 
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
