@@ -45,11 +45,11 @@ jobs:
 
       - run:
           name: Build tutorials
+          no_output_timeout: 30m
           command: |
             . venv/bin/activate
             make download
             make html
-            no_output_timeout: 30m
             cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
 
       - save_cache:
@@ -116,11 +116,11 @@ jobs:
 
       - run:
           name: Build tutorials
+          no_output_timeout: 30m
           command: |
             . venv/bin/activate
             make download
             make html
-          no_output_timeout: 30m
 
       - save_cache:
           paths:
