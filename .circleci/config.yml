@@ -17,6 +17,13 @@ jobs:
     steps:
       - checkout
 
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v0-{{ .Branch }}-
+            - pip-v0-
+
       - run:
           name: Install dependencies
           command: |
@@ -25,11 +32,16 @@ jobs:
             pip install pip setuptools --upgrade
             pip install -r requirements.txt
 
+      - save_cache:
+          paths:
+            - venv
+          key: pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
       - restore_cache:
           keys:
-            - gallery-{{ .Branch }}-{{ .Revision }}
-            - gallery-{{ .Branch }}-
-            - gallery-
+            - gallery-v0-{{ .Branch }}-{{ .Revision }}
+            - gallery-v0-{{ .Branch }}-
+            - gallery-v0-
 
       - run:
           name: Build tutorials
@@ -37,22 +49,24 @@ jobs:
             . venv/bin/activate
             make download
             make html
-          no_output_timeout: 30m
+            no_output_timeout: 30m
+            cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
 
       - save_cache:
           paths:
-            - ./tutorial
             - ./app
-          key: gallery-{{ .Branch }}-{{ .Revision }}
+            - ./tutorial
+          key: gallery-v0-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
-          path: ./tutorial
+          path: /tmp/qml_html.zip
 
       - store_artifacts:
-          path: ./app
+          path: _build/html
 
-      - store_artifacts:
-          path: ./_build/html
+      - run:
+          name: Comment artifacts
+          command: pip3 install pygithub --user && python3 .circleci/comment.py
 
   deploy:
     executor:
@@ -74,6 +88,13 @@ jobs:
       - aws-cli/setup:
           aws-region: AWS_REGION
 
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v0-{{ .Branch }}-
+            - pip-v0-
+
       - run:
           name: Install dependencies
           command: |
@@ -82,11 +103,16 @@ jobs:
             pip install pip setuptools --upgrade
             pip install -r requirements.txt
 
+      - save_cache:
+          paths:
+            - venv
+          key: pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
       - restore_cache:
           keys:
-            - gallery-{{ .Branch }}-{{ .Revision }}
-            - gallery-{{ .Branch }}-
-            - gallery-
+            - gallery-v0-{{ .Branch }}-{{ .Revision }}
+            - gallery-v0-{{ .Branch }}-
+            - gallery-v0-
 
       - run:
           name: Build tutorials
@@ -98,9 +124,9 @@ jobs:
 
       - save_cache:
           paths:
-            - ./tutorial
             - ./app
-          key: gallery-{{ .Branch }}-{{ .Revision }}
+            - ./tutorial
+          key: gallery-v0-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
           name: Deploy to AWS
