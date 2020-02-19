@@ -217,3 +217,4 @@ Quantum machine learning
     trainingcircuits
     concepts
     demonstrations
+    faq
