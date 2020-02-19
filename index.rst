@@ -214,6 +214,5 @@ Quantum machine learning
     :hidden:
 
     whatisqml
-    trainingcircuits
-    concepts
+    glossary
     demonstrations
