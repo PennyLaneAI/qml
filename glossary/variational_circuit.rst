@@ -1,7 +1,7 @@
 .. role:: html(raw)
    :format: html
 
-.. _varcirc:
+.. _glossary_variational_circuit:
 
 Variational circuits
 ====================
@@ -10,7 +10,8 @@ A variational circuit consists of three ingredients:
 
 1. Preparation of a fixed **initial state** (e.g., the vacuum state or the zero state).
 
-2. A **quantum circuit** :math:`U(x; \mathbf{\theta})`, parameterized by both the input :math:`x` and the free parameters :math:`\mathbf{\theta}`.
+2. A **quantum circuit** :math:`U(x; \mathbf{\theta})`, parameterized by both the
+input :math:`x` and the free parameters :math:`\mathbf{\theta}`.
 
 3. **Measurement** of an observable :math:`\hat{B}` at the output. This observable may be made up from local observables for each wire in the circuit, or just a subset of wires.
 

@@ -1,7 +1,7 @@
 .. role:: html(raw)
    :format: html
 
-.. _quantum_nodes:
+.. _glossary_quantum_node:
 
 Quantum nodes
 -------------

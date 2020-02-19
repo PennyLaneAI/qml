@@ -1,7 +1,7 @@
 .. role:: html(raw)
    :format: html
 
-.. _autograd_quantum:
+.. _glossary_quantum_gradient:
 
 Quantum gradients
 =================

@@ -1,7 +1,7 @@
 .. role:: html(raw)
    :format: html
 
-.. _concept_embeddings:
+.. _glossary_embeddings:
 
 Quantum embeddings
 ===================

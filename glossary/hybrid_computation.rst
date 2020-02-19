@@ -1,7 +1,7 @@
 .. role:: html(raw)
    :format: html
 
-.. _hybrid_computation:
+.. _glossary_hybrid_computation:
 
 Hybrid computation
 ==================
