@@ -5,10 +5,15 @@
 Glossary
 =========
 
-Look up the background details on how :ref:`variational quantum circuits <glossary_variational_circuit>` are trained using
-`parameter shift rules <glossary_parameter_shift_rule>.
-
 .. glossary::
+
+    :ref:`Automatic Differentiation <glossary_automatic_differentiation>`
+        Automatically computing derivatives of the outputs of computer programs.
+
+    :ref:`Circuit Ansatz <glossary_circuit_ansatz>`
+        An ansatz is commonly known as a basic architecture of a circuit, i.e., a set of gates that act on
+        specific subsystems. The architecture defines which algorithms a variational circuit can implement by
+        fixing the trainable parameters. A circuit ansatz is similar to the architecture of a neural network.
 
     Differentiable quantum programming
         The paradigm of making quantum programs differentiable, and thereby trainable. See also
@@ -28,8 +33,8 @@ Look up the background details on how :ref:`variational quantum circuits <glossa
     :ref:`Hybrid Computation <glossary_hybrid_computation>`
         A computation that includes classical *and* quantum subroutines, executed on different devices.
 
-    :ref:`(Quantum) Node <glossary_quantum_node>`
-        A quantum computation executed as part of a larger hybrid computation.
+    (Quantum) Node
+        A quantum computation executed as part of a larger :ref:`hybrid computation <glossary_hybrid_computation>`.
 
     :ref:`Variational circuit <glossary_variational_circuit>`
         Variational circuits are quantum algorithms that depend on tunable parameters, and can therefore
