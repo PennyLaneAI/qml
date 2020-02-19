@@ -92,14 +92,14 @@ or **quantum error correction** :cite:`johnson2017qvector`.
 PennyLane for differentiable quantum computing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/jigsaw.png
-    :align: right
-    :width: 60%
-    :target: javascript:void(0);
-
 PennyLane is a **software framework that is built around the concept of
 differentiable quantum computation**. It seamlessly integrates classical machine learning libraries with
 and quantum simulators and hardware to give users the power to train quantum circuits themselves.
 
 To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io/en/stable/>`_, or
 check out the gallery of `hands-on demonstrations <https://pennylane.ai/qml/demos.html>`_.
+
+.. figure:: /_static/whatisqml/jigsaw.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
