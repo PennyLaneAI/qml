@@ -23,13 +23,26 @@ for f in res["items"]:
 
 comment = """\
 <h3>Website build</h3>
-<strong>Commit:</strong> {}
-<strong>Circle build number:</strong> {}
-<strong>Website build:</strong> {}
-<strong>Website zip:</strong> {}
-""".format(SHA1, JOB_ID, zip_url, web_url)
+<strong>Commit:</strong> {hash}\n
+<strong>Circle build number:</strong> {job}\n
+<strong>Website zip:</strong> <a href={zip}>{zip}</a>\n
+<strong>Website url:</strong> <a href={web}>{web}</a>\n
+<em>Please double check the rendered website build to make sure everything is correct.</em>
+""".format(hash=SHA1, job=JOB_ID, zip=zip_url, web=web_url)
 
 g = Github(GH_TOKEN)
 repo = g.get_repo("XanaduAI/qml")
 pr = repo.get_pull(PR)
-pr.create_issue_comment(comment)
+
+cmts = pr.get_issue_comments()
+existing_comment = None
+
+for c in cmts:
+    if "<h3>Website build</h3>" in c.body and "josh146" == c.user.login:
+        existing_comment = c
+        break
+
+if existing_comment is None:
+    pr.create_issue_comment(comment)
+else:
+    existing_comment.edit(comment)

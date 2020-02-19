@@ -60,13 +60,12 @@ with just a few lines of code.
     the effective depth of the circuits used to calculate the first
     parameter update so that they cannot be stuck in a barren plateau
     at the start of training."*
-"""
 
-##############################################################################
-# Exploring the barren plateau problem with PennyLane
-# ---------------------------------------------------
-#
-# First, we import PennyLane, NumPy, and Matplotlib
+Exploring the barren plateau problem with PennyLane
+---------------------------------------------------
+
+First, we import PennyLane, NumPy, and Matplotlib
+"""
 
 import pennylane as qml
 from pennylane import numpy as np

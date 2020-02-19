@@ -461,7 +461,8 @@ A_inv = np.linalg.inv(A_num)
 x = np.dot(A_inv, b)
 
 ##############################################################################
-# Finally, in order to compare x with the quantum state |x>, we normalize and square its elements.
+# Finally, in order to compare :math:`x` with the quantum state :math:`|x\rangle`,
+# we normalize and square its elements.
 c_probs = (x / np.linalg.norm(x)) ** 2
 
 ##############################################################################
