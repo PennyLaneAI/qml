@@ -4,26 +4,20 @@
 What is Quantum Machine Learning?
 =================================
 
-Quantum machine learning is a field at the intersection of artificial intelligence and physics,
-which investigates the consequences of using quantum computers for machine learning. Important questions
-include whether quantum computers can speed up the time it takes to train or evaluate a machine learning model,
-whether they can improve generalization performance on unseen data, and whether the theory of what is learnable
-changes under quantum information processing.
+Quantum machine learning investigates the **consequences of using quantum computers for machine learning**.
+
+For example, quantum machine learning researchers want to find out whether quantum computers can speed up the
+time it takes to train or evaluate a machine learning model, or whether using quantum information
+can improve the generalization performance on unseen data.
 
 
-Using quantum computers in machine learning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Quantum computers as AI accelerators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:html:`<br>`
-
-.. figure:: /_static/whatisml/gpu_to_qpu.png
-    :align: center
-    :width: 60%
+.. image:: /_static/whatisqml/gpu_to_qpu.png
+    :align: right
+    :width: 45%
     :target: javascript:void(0);
-
-    Quantum computers change the way we can do machine learning.
-
-:html:`<br>`
 
 
 The limits of what machines can learn have always been defined by the computer hardware
@@ -32,79 +26,80 @@ enabled by parallel GPU clusters.
 
 **Quantum machine learning extends the pool of hardware for machine learning by an entirely
 new type of computing device—the quantum computer.** Information processing with quantum computers
-relies on substantially different laws of physics, namely quantum theory.
+relies on substantially different laws of physics known as *quantum theory*.
 
 
-Near-term quantum devices
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Machine learning with near-term quantum devices
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:html:`<br>`
-
-.. figure:: /_static/whatisml/quantum_devices_ai.png
-    :align: center
-    :width: 80%
+.. image:: /_static/whatisqml/quantum_devices_ai.png
+    :align: left
+    :width: 60%
     :target: javascript:void(0);
 
-    Current-day quantum computers are special-purpose chips.
-
-:html:`<br>`
-
 While a lot of research focuses on ideal, universal quantum processing units ("fault-tolerant QPUs")
-whose development is still a thing of the future, **a large share of quantum machine learning
-is interested in near term quantum devices** :cite:`farhi2018classification`
-:cite:`schuld2018circuit` :cite:`grant2018hierarchical` :cite:`liu2018differentiable`.
-One can understand these devices
-as a form of special purpose hardware, like Application-Specific Integrated Circuits (ASICs) and
-Field-Programmable Gate Arrays (FPGAs).
+whose development is still further in the future, **a large share of quantum machine learning
+focuses on**
+`near-term quantum devices <https://www.cornell.edu/video/john-preskill-quantum-computing-nisq-era-beyond>`_.
+
+One can `understand these devices <https://medium.com/xanaduai/quantum-machine-learning-1-0-76a525c8cf69>`_
+as a form of special-purpose hardware
+like Application-Specific Integrated Circuits (ASICs) and
+Field-Programmable Gate Arrays (FPGAs), as they are limited in the number and type of operations
+that can be executed in a single run.
+
 
 Using quantum devices like neural networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:html:`<br>`
-
-.. figure:: /_static/whatisml/trainable_circuit.png
-    :align: center
-    :width: 70%
+.. image:: /_static/whatisqml/trainable_circuit.png
+    :align: right
+    :width: 55%
     :target: javascript:void(0);
 
-    Quantum algorithms can be used and trained like neural networks.
-
-:html:`<br>`
-
 In the modern viewpoint on quantum machine learning,
-**quantum devices are used and trained like neural networks**.
+**near-term quantum devices are used and trained like neural networks**.
+
 This is done by systematically adapting the physical control parameters,
 such as an electromagnetic field strength or a laser pulse frequency, to solve a machine learning problem.
-For example, the trained circuit can be used to classify the content of images—by encoding
+
+For example, the trained circuit can be used to classify the content of images by encoding
 the image into the physical state of the device and taking measurements.
 
 The bigger picture: Making computers differentiable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:html:`<br>`
-
-.. figure:: /_static/whatisml/applications.png
-    :align: center
-    :width: 50%
-    :target: javascript:void(0);
-
-:html:`<br>`
-
-
 But the story does not end here. Quantum circuits turn out to be *differentiable*, which means that a quantum computer
 itself can compute the change in control parameters needed to become better at a given task.
-:ref:`Differentiable programming <https://en.wikipedia.org/wiki/Differentiable_programming>`
+
+`Differentiable programming <https://en.wikipedia.org/wiki/Differentiable_programming>`_
 is the very basis of deep learning, implemented in software libraries such as TensorFlow and PyTorch.
 **Differentiable programming is also more than deep learning: it is a programming paradigm where steps of an
-algorithm are not hand-coded but learned.**
+algorithm are not hand-coded, but learned.**
+
+.. figure:: /_static/whatisqml/applications.png
+    :align: center
+    :width: 65%
+    :target: javascript:void(0);
+
 
 Similarly, the idea of trainable quantum computations is larger than quantum machine learning. It includes,
-and in fact originates from, a field called *quantum chemistry* :cite:`peruzzo2014variational`
-:cite:`mcclean2016theory`, in which adaptable quantum circuits are
-used to find ground state energies of atoms and molecules. Trainable circuits also feature
-in *quantum optimization* :cite:`farhi2014quantum` and can be used to
-design quantum algorithms :cite:`anschuetz2018variational`
-or correct errors :cite:`johnson2017qvector`.
+and in fact originates from, other fields like **quantum chemistry** :cite:`peruzzo2014variational`
+:cite:`mcclean2016theory`, **quantum optimization** :cite:`farhi2014quantum`, and extends to a variety of
+applications such as the **design of quantum algorithms** :cite:`anschuetz2018variational`
+or **quantum error correction** :cite:`johnson2017qvector`.
 
-PennyLane is a software framework that is built around the concept of
-*differentiable quantum computation*, and allows users to fully exploit the power of quantum machine learning and beyond.
+PennyLane for differentiable quantum computing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: /_static/whatisqml/jigsaw.png
+    :align: right
+    :width: 60%
+    :target: javascript:void(0);
+
+PennyLane is a **software framework that is built around the concept of
+differentiable quantum computation**. It seamlessly integrates classical machine learning libraries with
+and quantum simulators and hardware to give users the power to train quantum circuits themselves.
+
+To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io/en/stable/>`_, or
+check out the gallery of `hands-on demonstrations <https://pennylane.ai/qml/demos.html>`_.
