@@ -7,14 +7,12 @@ Hybrid computation
 ==================
 
 In the context of quantum computing, the term *hybrid* refers to the strategy of mixing classical and quantum
-computations. This lies at the heard of optimizing :ref:`variational circuits <glossary_variational_circuit>`,
+computations. This lies at the heard of optimizing :doc:`variational circuits </glossary/variational_circuit>`,
 where a quantum algorithm is optimized with the help of a classical co-processor.
 
-Here, quantum devices are typically used to estimate averages of measurement results (i.e., expectations
+Typically, quantum devices used to estimate averages of measurement results (i.e., *expectations
 of quantum observables*), which are combined in a single classical cost function that determines how "good"
-the quantum circuits are.
-
-For example, in *variational quantum eigensolvers* :cite:`peruzzo2014variational`, the results of
+the quantum circuits are. For example, in *variational quantum eigensolvers* :cite:`peruzzo2014variational`, the results of
 some quantum expectations :math:`\langle \hat{B}_i \rangle` are summed up.
 
 :html:`<br>`
@@ -30,8 +28,8 @@ some quantum expectations :math:`\langle \hat{B}_i \rangle` are summed up.
 Directed acyclic graphs
 -----------------------
 
-It is easy to imagine many more interesting ways we could combine quantum and classical ingredients into a larger
-and more complex hybrid computation. In general, one can understand these computations as *classical* and
+It is easy to imagine more interesting ways we could combine quantum and classical ingredients into a larger
+and more complex hybrid computation. In general, one can understand these subroutines as *classical* and
 *quantum nodes*.
 
 :html:`<br>`
@@ -69,7 +67,7 @@ learning models are trained.
 .. note::
     The ability to backpropagate through hybrid computations does not mean that one can backpropagate (i.e.,
     compute errors) *through a quantum computation*. The quantum node is more considered as a black box whose
-    gradient is known.
+    gradient is known to the backpropagation algorithm.
 
 .. seealso:: PennyLane effectively implements differentiable hybrid computations, and offers interfaces
     with NumPy (powered by the Autograd_ library), Pytorch_, Tensorflow_.

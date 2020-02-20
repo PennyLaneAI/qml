@@ -6,9 +6,6 @@
 Quantum gradients
 =================
 
-Computing gradients of quantum circuits
-----------------------------------------
-
 The outputs of :ref:`variational circuits <glossary_variational_circuit>` can be formally expressed as
 parameterized functions :math:`f(\mathbf{\theta})` which are evaluated by measuring the output of a quantum circuit.
 If we can compute the gradient of such a *quantum function*,
@@ -16,7 +13,10 @@ we can then use this information in an optimization or machine learning algorith
 circuit via `gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_ to produce a desired
 output.
 
-How is this accomplished? It turns out that the gradient of a quantum function :math:`f(\mathbf{\theta})`
+Computing gradients of quantum circuits
+----------------------------------------
+
+It turns out that the gradient of a quantum function :math:`f(\mathbf{\theta})`
 can in many cases be expressed as a linear combination of other quantum functions. In fact, these other
 quantum functions typically use the same circuit, differing only in a shift of the argument.
 
@@ -282,12 +282,6 @@ Finally, its gradient can be expressed as
 In the general case, Squeezing is a two-parameter gate, containing a squeezing magnitude and a squeezing angle.
 However, we can always decompose the two-parameter form into a Squeezing gate like the one above,
 followed by a Rotation gate.
-
-.. _Theano: https://github.com/Theano/Theano
-.. _Autograd: https://github.com/HIPS/autograd
-.. _Tensorflow: http://tensorflow.org/
-.. _Pytorch: https://pytorch.org/
-
 
 .. rubric:: Footnotes
 

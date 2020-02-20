@@ -6,7 +6,7 @@
 Variational circuits
 ====================
 
-*Variational circuit are also known as **Parametrized Quantum Circuits** *.
+*Variational circuit are also known as "Parametrized Quantum Circuits".*
 
 Adaptable quantum circuits
 --------------------------
@@ -136,12 +136,3 @@ The above examples were kept very simple to illustrate the principles behind emb
 into quantum circuits. Indeed, the function evaluated in the example is tractable classically. However, by
 increasing the number of subsystems and the circuit depth, the corresponding functions can become progressively
 harder to evaluate classically, and a quantum device must be used.
-
-
-.. rubric:: Footnotes
-
-.. [#] For example, see the following non-exhaustive list: :cite:`shepherd2009temporally`
-:cite:`farhi2014quantum` :cite:`miles2016supervised` :cite:`romero2017quantum` :cite:`arrazola2017quantum`
-:cite:`farhi2017quantum` :cite:`benedetti2018generative` :cite:`huggins2018towards` :cite:`schuld2018quantum`
-:cite:`havlicek2018supervised` :cite:`schuld2018circuit` :cite:`dallaire2018quantum` :cite:`killoran2018continuous`
-:cite:`steinbrecher2018quantum`.
