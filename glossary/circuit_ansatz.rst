@@ -16,9 +16,6 @@ of an architecture varies depending on the desired use-case, and it is not alway
 One can distinguish three different base structures of architectures, namely
 **layered gate architectures**, **alternating operator architectures** and **tensor network architectures**.
 
-.. seealso:: In PennyLane, an ansatz is called a *template*. PennyLane contains
-    a :ref:`growing library <intro_ref_temp>` of such circuit architectures.
-
 Layered gate architectures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -186,6 +183,8 @@ the more complex the circuit ansatz.
     necessarily give rise to classically intractable quantum nodes, but have found use as machine learning
     models :cite:`miles2016supervised`.
 
+.. seealso:: In PennyLane, an ansatz is called a *template*. PennyLane contains
+    a :ref:`growing library <intro_ref_temp>` of such circuit architectures.
 
 .. rubric:: Footnotes
 
