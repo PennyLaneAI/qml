@@ -48,7 +48,7 @@ and :math:`x^{(2)}=11`. The corresponding basis encoding uses two qubits to repr
 .. math:: | \mathcal{D} \rangle = \frac{1}{\sqrt{2}}|01 \rangle + \frac{1}{\sqrt{2}} |11 \rangle.
 
 .. note:: For :math:`N` bits, there are :math:`2^N` possible basis states. Given :math:`M \ll 2^N`, the
-basis embedding of :math:`\mathcal{D}` will be sparse.
+    basis embedding of :math:`\mathcal{D}` will be sparse.
 
 
 Amplitude Embedding
