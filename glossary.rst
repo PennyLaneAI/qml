@@ -23,7 +23,7 @@ Glossary
         Representation of classical data as a quantum state.
 
     (Quantum) Feature Map
-        The mathematical map that embedds classical data into a quantum state. Usually executed by a variational
+        The mathematical map that embeds classical data into a quantum state. Usually executed by a variational
         quantum circuit whose parameters depend on the input data. See also
         :doc:`Quantum Embedding </glossary/quantum_embedding>`.
 
