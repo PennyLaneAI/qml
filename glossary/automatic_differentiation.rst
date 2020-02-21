@@ -16,7 +16,7 @@ function :math:`h(x)` (which may include mathematical expressions, but also cont
 statements like :code:`if`, :code:`for`, etc.), then automatic differentiation provides an
 algorithm for :math:`\nabla h(x)` with the same degree of complexity as the original function.
 
-*Automatic* differentiation should be distinguished from other forms of differentiation.
+*Automatic* differentiation should be distinguished from other forms of differentiation:
 
 * *Symbolic differentiation*, where the actual equation of the derivative function is computed and
   evaluated, has a limited scope since it requires "hand-written" support for new functions.
