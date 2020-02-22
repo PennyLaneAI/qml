@@ -100,9 +100,9 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`app/tutorial_ensemble_multi_qpu`
 
 .. customgalleryitem::
-    :tooltip: Margin Classifier on multiple QPUs
+    :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset
     :figure: implementations/multiclass_classification/margin_2.png
-    :description: :doc:`Margin classifier on multiple QPUs <app/tutorial_multiclass_classification>`
+    :description: :doc:`app/tutorial_multiclass_classification`
 
 :html:`</div><div style='clear:both'></div>`
 
