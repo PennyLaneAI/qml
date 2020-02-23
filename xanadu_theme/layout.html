@@ -216,7 +216,7 @@
     <!-- Nanoscroller -->
     <script type="text/javascript" src="{{ pathto('_static/js/nanoscroller.min.js', 1) }}"></script>
     <script type="text/javascript">
-        $('a.reference.internal').each(function(){
+        $('a.reference.external').each(function(){
           var link = $(this).attr("href");
           var hash = link.split('#')[1];
           var page = link.split('#')[0].split('/').slice(-1)[0].replace(".html", "");
