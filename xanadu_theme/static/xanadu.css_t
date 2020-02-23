@@ -1903,7 +1903,7 @@ span.eqno {
 
 .navbar {
   background-color: white;
-  box-shadow: -1px 14px 30px -20px rgba(0,0,0,0.61);
+  box-shadow: -1px 14px 30px -20px rgba(0,0,0,0.3)!important;
 }
 
 .navbar-nav {
