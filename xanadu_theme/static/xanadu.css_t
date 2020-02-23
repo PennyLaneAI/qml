@@ -2118,7 +2118,8 @@ footer.page-footer .footer-copyright {
     overflow: hidden;
     max-width: 375px;
     margin-bottom: 30px;
-    background-image: linear-gradient(to top,#e9f2ef 0,#f7f9fb 100%);
+    /*background-image: linear-gradient(to top,#e9f2ef 0,#f7f9fb 100%);*/
+    background-color: #fff;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.2)!important;
 }
 
@@ -2127,7 +2128,8 @@ footer.page-footer .footer-copyright {
     box-sizing: content-box;
     padding-top: 20px;
     position: relative;
-    background-image: linear-gradient(to top,#e9f2ef 0,#f7f9fb 100%);
+    /*background-image: linear-gradient(to top,#e9f2ef 0,#f7f9fb 100%);*/
+    background-color: #fff;
     margin-bottom: 45px;
 }
 
