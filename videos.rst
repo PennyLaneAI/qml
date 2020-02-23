@@ -30,7 +30,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :author: Gavin Crooks (X, The Moonshot Factory)
 
     See how the space of all 2-qubit gates can be mapped to a pyramid --- which
-    can be printed and folded for personal reference! By using known 2-qubit
+    can be printed and folded for personal reference! By using known 2-qubit gate
     decompositions, the parameter-shift rule for calculating quantum gradients
     on hardware can be extended to any 2-qubit unitary operation.
 
