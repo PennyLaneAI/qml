@@ -1825,7 +1825,7 @@ span.eqno {
 .filters label:hover {
   background: {{ theme_download_button }};
   color: #fff;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);
+  /*box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);*/
 }
 
 .controls {
@@ -1836,7 +1836,7 @@ span.eqno {
   background: {{ theme_download_button }};
   border: {{ theme_download_button }} solid 1px;
   color: #fff;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);
+  /*box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);*/
 }
 
 /* Sphinx gallery
