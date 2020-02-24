@@ -62,7 +62,6 @@ training deep learning models.
 
 This means that **we can differentiate end-to-end through hybrid quantum-classical computations**.
 Quantum machine learning models can thus be trained in basically the same way that classical deep
-learning models are trained.
 
 .. note::
     The ability to backpropagate through hybrid computations does not mean that one can backpropagate (i.e.,
