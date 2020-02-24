@@ -2,8 +2,8 @@
 .. role:: html(raw)
    :format: html
 
-Glossary
-=========
+Key Concepts
+============
 
 .. glossary::
 
