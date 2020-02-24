@@ -37,7 +37,7 @@ Glossary
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
     Parameter shift rule
-        A parameter shift rule is a recipe of how to estimate gradients of quantum circuits.
+        A parameter-shift rule is a recipe for how to estimate gradients of quantum circuits.
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Variational circuit </glossary/variational_circuit>`
