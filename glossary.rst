@@ -11,7 +11,7 @@ Glossary
         Automatically computing derivatives of the steps of computer programs.
 
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
-        An ansatz is commonly known as a basic architecture of a circuit, i.e., a set of gates that act on
+        An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
         specific subsystems. The architecture defines which algorithms a variational circuit can implement by
         fixing the trainable parameters. A circuit ansatz is similar to the architecture of a neural network.
 
