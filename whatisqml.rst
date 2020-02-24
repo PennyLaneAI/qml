@@ -6,7 +6,7 @@ What is Quantum Machine Learning?
 
 Quantum machine learning investigates the **consequences of using quantum computers for machine learning**.
 
-For example, quantum machine learning researchers want to find out whether quantum computers can speed up the
+For example, we might want to find out whether quantum computers can speed up the
 time it takes to train or evaluate a machine learning model, or whether using quantum information
 can improve the generalization performance on unseen data.
 
