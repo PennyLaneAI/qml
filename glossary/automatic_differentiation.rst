@@ -19,7 +19,7 @@ algorithm for :math:`\nabla h(x)` with the same degree of complexity as the orig
 *Automatic* differentiation should be distinguished from other forms of differentiation:
 
 * *Symbolic differentiation*, where the actual equation of the derivative function is computed and
-  evaluated, has a limited scope since it requires "hand-written" support for new functions.
+  evaluated; has a limited scope since it requires "hand-written" support for new functions.
 * *Numerical differentiation*, such as the finite-difference
   method familiar from high-school calculus, where the derivative of a function is approximated by
   numerically evaluating the function at two infinitesimally separated points. However, the approximation can be
