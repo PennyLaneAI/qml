@@ -84,10 +84,9 @@ algorithm are not hand-coded, but learned.**
 
 
 Similarly, the idea of trainable quantum computations is larger than quantum machine learning. It includes,
-and in fact originates from, other fields like **quantum chemistry** :cite:`peruzzo2014variational`
-:cite:`mcclean2016theory`, **quantum optimization** :cite:`farhi2014quantum`, and extends to a variety of
-applications such as the **design of quantum algorithms** :cite:`anschuetz2018variational`
-or **quantum error correction** :cite:`johnson2017qvector`.
+and in fact originates from, other fields like **quantum chemistry**, **quantum optimization**,
+and extends to a variety of applications such as the **design of quantum algorithms**
+or **quantum error correction**.
 
 PennyLane for differentiable quantum computing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,7 +96,7 @@ differentiable quantum computation**. It seamlessly integrates classical machine
 and quantum simulators and hardware to give users the power to train quantum circuits themselves.
 
 To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io/en/stable/>`_, or
-check out the gallery of `hands-on demonstrations <https://pennylane.ai/qml/demos.html>`_.
+check out the gallery of :doc:`hands-on demonstrations <demonstrations>`.
 
 .. figure:: /_static/whatisqml/jigsaw.png
     :align: center
