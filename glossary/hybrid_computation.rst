@@ -7,7 +7,7 @@ Hybrid computation
 ==================
 
 In the context of quantum computing, the term *hybrid* refers to the strategy of mixing classical and quantum
-computations. This lies at the heard of optimizing :doc:`variational circuits </glossary/variational_circuit>`,
+computations. This lies at the heart of optimizing :doc:`variational circuits </glossary/variational_circuit>`,
 where a quantum algorithm is optimized with the help of a classical co-processor.
 
 Typically, quantum devices used to estimate averages of measurement results (i.e., *expectations
@@ -61,8 +61,7 @@ algorithm (also known as *reverse-mode automatic differentiation*), the workhors
 training deep learning models.
 
 This means that **we can differentiate end-to-end through hybrid quantum-classical computations**.
-Quantum machine learning models can thus be trained in basically the same way that classical deep
-learning models are trained.
+Quantum machine learning models can thus be trained in basically the same way as classical deep learning models.
 
 .. note::
     The ability to backpropagate through hybrid computations does not mean that one can backpropagate (i.e.,

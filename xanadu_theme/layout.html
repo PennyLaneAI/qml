@@ -150,12 +150,38 @@
                 </div>
               </div>
             </div>
-            <!-- {%- block bottom_rel_links %} -->
-              <!-- {{ render_relations() }} -->
-            <!-- {%- endblock %} -->
           </div>
           {%- block comments -%}
-            {% include "localtoc.html" %}
+            {% if pagename == "demonstrations" %}
+              {% include "filters.html" %}
+              <style>
+                .comment-container {
+                    opacity: 1;
+                }
+              </style>
+              <script type="text/javascript">
+                function toggle_filters() {
+                  var val = $(".tags input[type='radio']:checked").val();
+                  $(".filters label[for="+  val  +"]").addClass("active");
+                  $(".filters label:not([for="+  val  +"])").removeClass("active");
+
+                  if (val != "all"){
+                    $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").css("display", "none")
+                    $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").css("display", "block")
+                  } else {
+                    $(".gallery-grid .sphx-glr-thumbcontainer").css("display", "block")
+                  }
+                }
+
+                toggle_filters();
+
+                $(".tags input").on("change", function() {
+                  toggle_filters();
+                });
+              </script>
+            {% else %}
+              {% include "localtoc.html" %}
+            {% endif %}
           {%- endblock %}
 
           <div class="up-button">
@@ -190,7 +216,7 @@
     <!-- Nanoscroller -->
     <script type="text/javascript" src="{{ pathto('_static/js/nanoscroller.min.js', 1) }}"></script>
     <script type="text/javascript">
-        $('a.reference.internal').each(function(){
+        $('a.reference.external').each(function(){
           var link = $(this).attr("href");
           var hash = link.split('#')[1];
           var page = link.split('#')[0].split('/').slice(-1)[0].replace(".html", "");

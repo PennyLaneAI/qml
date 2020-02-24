@@ -14,7 +14,7 @@ Many variational circuit architectures have been proposed by the quantum computi
 of an architecture varies depending on the desired use-case, and it is not always clear what makes a good ansatz.
 
 One can distinguish three different base structures of architectures, namely
-**layered gate architectures**, **alternating operator architectures** and **tensor network architectures**.
+**layered gate architectures**, **alternating operator architectures**, and **tensor network architectures**.
 
 Layered gate architectures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
