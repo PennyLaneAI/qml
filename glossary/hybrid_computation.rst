@@ -61,7 +61,7 @@ algorithm (also known as *reverse-mode automatic differentiation*), the workhors
 training deep learning models.
 
 This means that **we can differentiate end-to-end through hybrid quantum-classical computations**.
-Quantum machine learning models can thus be trained in basically the same way that classical deep
+Quantum machine learning models can thus be trained in basically the same way as classical deep learning models.
 
 .. note::
     The ability to backpropagate through hybrid computations does not mean that one can backpropagate (i.e.,
