@@ -7,7 +7,7 @@ Hybrid computation
 ==================
 
 In the context of quantum computing, the term *hybrid* refers to the strategy of mixing classical and quantum
-computations. This lies at the heard of optimizing :doc:`variational circuits </glossary/variational_circuit>`,
+computations. This lies at the heart of optimizing :doc:`variational circuits </glossary/variational_circuit>`,
 where a quantum algorithm is optimized with the help of a classical co-processor.
 
 Typically, quantum devices used to estimate averages of measurement results (i.e., *expectations
