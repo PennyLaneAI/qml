@@ -8,7 +8,7 @@ Glossary
 .. glossary::
 
     :doc:`Automatic Differentiation </glossary/automatic_differentiation>`
-        Automatically computing derivatives of the outputs of computer programs.
+        Automatically computing derivatives of the steps of computer programs.
 
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
         An ansatz is commonly known as a basic architecture of a circuit, i.e., a set of gates that act on
