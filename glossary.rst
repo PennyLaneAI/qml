@@ -13,7 +13,7 @@ Glossary
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
         An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
         specific subsystems. The architecture defines which algorithms a variational circuit can implement by
-        fixing the trainable parameters. A circuit ansatz is similar to the architecture of a neural network.
+        fixing the trainable parameters. A circuit ansatz is analogous to the architecture of a neural network.
 
     Differentiable quantum programming
         The paradigm of making quantum programs differentiable, and thereby trainable. See also
