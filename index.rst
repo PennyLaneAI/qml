@@ -45,7 +45,7 @@ Quantum machine learning
                                     <h3 class="card-title">
                                     <img src="_static/key.png" class="img-fluid" style="max-width: 80px;"></img>
                                     <br>
-                                    <strong>Glossary</strong>
+                                    <strong>Key Concepts</strong>
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore different concepts underpinning variational quantum circuits and quantum machine learning.</p>
                                     <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>

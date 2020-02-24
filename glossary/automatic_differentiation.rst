@@ -25,8 +25,8 @@ algorithm for :math:`\nabla h(x)` with the same degree of complexity as the orig
   numerically evaluating the function at two infinitesimally separated points. However, the approximation can be
   unstable, and in many settings an exact gradient is preferred.
 
-The ability to compute :doc:`quantum gradients <glossary/quantum_gradient>` means that quantum computations
-can become part of automatically differentiable :doc:`hybrid computation <glossary/hybrid_computation>` pipelines.
+The ability to compute :doc:`quantum gradients </glossary/quantum_gradient>` means that quantum computations
+can become part of automatically differentiable :doc:`hybrid computation </glossary/hybrid_computation>` pipelines.
 
 .. _Theano: https://github.com/Theano/Theano
 .. _Autograd: https://github.com/HIPS/autograd

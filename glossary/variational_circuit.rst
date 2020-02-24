@@ -48,7 +48,9 @@ linear algebra, and feature embeddings.
 Variational circuits have become popular as a way to think about quantum algorithms for near-term quantum devices.
 Such devices can only run short gate sequences, and have a high error. Usually, a quantum algorithm is
 decomposed into a set of standard elementary operations, which are in turn implemented by the
-quantum hardware. The intriguing idea of variational circuit for near-term devices is to merge
+quantum hardware.
+
+The intriguing idea of variational circuit for near-term devices is to merge
 this two-step procedure into a single step by "learning" the circuit on the noisy device for a given task.
 This way, the "natural" tunable gates of a device can be used to formulate the algorithm, without the
 detour via a fixed elementary gate set. Furthermore, systematic errors can automatically be corrected

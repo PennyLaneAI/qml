@@ -51,9 +51,11 @@ Each of these gates is unitary, and therefore must have the form
 which generates the gate and :math:`\gamma_j` is the gate parameter.
 We have omitted which wire each unitary acts on, since it is not necessary for the following discussion.
 
-.. note:: In this example, we have used the input :math:`x` as the argument for gate :math:`U_0`
-and the parameters :math:`\mathbf{\theta}` for the remaining gates. This is not required.
-Inputs and parameters can be arbitrarily assigned to different gates.
+.. note::
+
+    In this example, we have used the input :math:`x` as the argument for gate :math:`U_0`
+    and the parameters :math:`\mathbf{\theta}` for the remaining gates. This is not required.
+    Inputs and parameters can be arbitrarily assigned to different gates.
 
 A single parameterized gate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,7 +92,7 @@ transformation :math:`\mathcal{M}` and independent of the value of :math:`\theta
 .. note::
 
     While this construction bears some resemblance to the numerical finite-difference method for
-computing derivatives, here :math:`s` is finite rather than infinitesimal.
+    computing derivatives, here :math:`s` is finite rather than infinitesimal.
 
 Multiple parameterized gates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,9 +117,11 @@ This gradient has the exact same form as the single-gate case, except we modify 
 all other gates as they are, and only modify gate :math:`U(\theta_i)` when we want to
 differentiate with respect to the parameter :math:`\theta_i`.
 
-.. note:: Sometimes we may want to use the same classical parameter with multiple gates in the circuit.
-Due to the `product rule <https://en.wikipedia.org/wiki/Product_rule>`_, the total gradient will then
-involve contributions from each gate that uses that parameter.
+.. note::
+
+    Sometimes we may want to use the same classical parameter with multiple gates in the circuit.
+    Due to the `product rule <https://en.wikipedia.org/wiki/Product_rule>`_, the total gradient will then
+    involve contributions from each gate that uses that parameter.
 
 Pauli gate example
 ~~~~~~~~~~~~~~~~~~~
@@ -278,10 +282,12 @@ Finally, its gradient can be expressed as
                        = & \frac{1}{2\sinh(s)}\left[f(y; r+s) - f(y; r-s)\right].
    \end{align}
 
-.. note:: For simplicity of the discussion, we have set the phase angle of the Squeezing gate to be zero.
-In the general case, Squeezing is a two-parameter gate, containing a squeezing magnitude and a squeezing angle.
-However, we can always decompose the two-parameter form into a Squeezing gate like the one above,
-followed by a Rotation gate.
+.. note::
+
+    For simplicity of the discussion, we have set the phase angle of the Squeezing gate to be zero.
+    In the general case, Squeezing is a two-parameter gate, containing a squeezing magnitude and a squeezing angle.
+    However, we can always decompose the two-parameter form into a Squeezing gate like the one above,
+    followed by a Rotation gate.
 
 .. rubric:: Footnotes
 
