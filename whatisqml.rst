@@ -95,7 +95,7 @@ PennyLane is a **software framework that is built around the concept of
 differentiable quantum computation**. It seamlessly integrates classical machine learning libraries with
 and quantum simulators and hardware to give users the power to train quantum circuits themselves.
 
-To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io/en/stable/>`_, or
+To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or
 check out the gallery of :doc:`hands-on demonstrations <demonstrations>`.
 
 .. figure:: /_static/whatisqml/jigsaw.png
