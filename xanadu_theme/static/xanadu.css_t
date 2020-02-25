@@ -1781,6 +1781,55 @@ span.eqno {
   }
 }
 
+@media screen and (max-width: 1000px){
+  .sphx-glr-thumbcontainer {
+    margin: 5px!important;
+  }
+}
+
+/* filters and tags */
+
+.filters {
+  /*text-align: center;*/
+  margin-bottom: 2rem;
+  padding-left: 0;
+  display: grid;
+}
+
+.filters * {
+  display: inline-block;
+}
+
+.filters label {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.25rem;
+  border-radius: 2rem;
+  min-width: 50px;
+  line-height: normal;
+  cursor: pointer;
+  transition: all 0.1s;
+  border: #19b37b4a solid 1px;
+  color: {{ theme_download_button }};
+  font-size: 90%;
+}
+
+.filters label:hover {
+  background: {{ theme_download_button }};
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);
+}
+
+.controls {
+  display: none;
+}
+
+.filters label.active {
+  background: {{ theme_download_button }};
+  border: {{ theme_download_button }} solid 1px;
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1),0 2px 25px 2px rgba(0,0,0,.2);
+}
+
 /* Sphinx gallery
 -----------------------------------------*/
 

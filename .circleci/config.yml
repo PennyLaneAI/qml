@@ -130,7 +130,6 @@ jobs:
             - ./demos
           key: gallery-v1-{{ .Branch }}-{{ .Revision }}
 
-
       - deploy:
           name: Deploy to AWS
           command: |

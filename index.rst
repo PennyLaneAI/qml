@@ -38,35 +38,18 @@ Quantum machine learning
                 </a>
                 </div>
                 <div class="col-lg-4 mb-5">
-                    <a href="trainingcircuits.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/board.png" class="img-fluid" style="max-width: 86px;"></img>
-                                <br>
-                                <strong>Training circuits</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Understand how variational quantum circuits are trained using the idea of quantum gradients.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <a href="concepts.html">
+                    <a href="glossary.html">
                         <div class="card rounded-lg">
                             <div class="text-center d-flex align-items-center pb-2">
                                 <div>
                                     <h3 class="card-title">
                                     <img src="_static/key.png" class="img-fluid" style="max-width: 80px;"></img>
                                     <br>
-                                    <strong>Key concepts</strong>
+                                    <strong>Key Concepts</strong>
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore different concepts underpinning variational quantum circuits and quantum machine learning.</p>
                                     <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                                    <!-- <a href="concepts.html" class="btn peach-gradient">Get started</a> -->
+                                    <!-- <a href="glossary.html" class="btn peach-gradient">Get started</a> -->
                                 </div>
                             </div>
                         </div>
@@ -214,6 +197,5 @@ Quantum machine learning
     :hidden:
 
     whatisqml
-    trainingcircuits
-    concepts
+    glossary
     demonstrations

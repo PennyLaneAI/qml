@@ -153,7 +153,7 @@ class GalleryItemDirective(Directive):
 GALLERY_TEMPLATE = """
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="{tooltip}">
+    <div class="sphx-glr-thumbcontainer" data-category="{tags}" tooltip="{tooltip}">
 
 .. only:: html
 
@@ -189,7 +189,8 @@ class CustomGalleryItemDirective(Directive):
     final_argument_whitespace = True
     option_spec = {'tooltip': directives.unchanged,
                    'figure': directives.unchanged,
-                   'description': directives.unchanged}
+                   'description': directives.unchanged,
+                   'tags': directives.unchanged}
 
     has_content = False
     add_index = False
@@ -200,6 +201,10 @@ class CustomGalleryItemDirective(Directive):
                 tooltip = self.options['tooltip'][:195]
             else:
                 raise ValueError('tooltip not found')
+
+            tags = ""
+            if 'tags' in self.options:
+                tags = self.options['tags']
 
             if 'figure' in self.options:
                 env = self.state.document.settings.env
@@ -230,7 +235,8 @@ class CustomGalleryItemDirective(Directive):
 
         thumbnail_rst = GALLERY_TEMPLATE.format(tooltip=tooltip,
                                                 thumbnail=thumbnail,
-                                                description=description)
+                                                description=description,
+                                                tags=tags)
         thumbnail = StringList(thumbnail_rst.split('\n'))
         thumb = nodes.paragraph()
         self.state.nested_parse(thumbnail, self.content_offset, thumb)
