@@ -26,7 +26,7 @@ Quantum machine learning
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/dummy.png" class="img-fluid" style="max-width: 86px;"></img>
+                                <img src="_static/brain_board.png" class="img-fluid" style="max-width: 86px;"></img>
                                 <br>
                                 <strong>What is QML?</strong>
                                 </h3>
