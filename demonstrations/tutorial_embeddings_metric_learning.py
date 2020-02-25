@@ -135,6 +135,12 @@ def QAOAEmbedding(features, weights, wires):
     feature_encoding_hamiltonian(features, wires)
 
 ######################################################################
+# .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane contains
+#           a pre-coded template. To use it, simply replace the cell above
+#           by ``from pennylane.templates import QAOAEmbedding``. This will also allow you to use
+#           a different number of qubits in your experiment.
+#
+#
 # Overall, the embedding has 1024 + 12 trainable parameters - 1024 for the
 # classical part of the model and 12 for the four layers of the QAOA
 # embedding.
@@ -295,6 +301,11 @@ def cost(weights, A=None, B=None):
 # The initial parameters for the trainable classical and quantum part of the embedding are
 # chosen at random. The number of layers in the quantum circuit is derived from the first
 # dimension of `init_pars_quantum`.
+#
+# .. note:: You can use the utility function :func:`qaoa_embedding_normal`
+#           to conveniently generate the correct shape of initial parameters for
+#           the ``QAOAEmbedding``. Import it with the statement
+#           ``from pennylane.init import qaoa_embedding_normal``.
 
 # generate initial parameters for circuit
 init_pars_quantum = np.random.normal(loc=0, scale=0.1, size=(4, 3))
