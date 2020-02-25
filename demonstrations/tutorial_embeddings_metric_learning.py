@@ -140,7 +140,6 @@ def QAOAEmbedding(features, weights, wires):
 #           by ``from pennylane.templates import QAOAEmbedding``. This will also allow you to use
 #           a different number of qubits in your experiment.
 #
-#
 # Overall, the embedding has 1024 + 12 trainable parameters - 1024 for the
 # classical part of the model and 12 for the four layers of the QAOA
 # embedding.
