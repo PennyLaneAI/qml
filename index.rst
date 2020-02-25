@@ -72,10 +72,27 @@ Quantum machine learning
                     </div>
                 </a>
                 </div>
+                <div class="col-lg-4 mb-5">
+                    <a href="videos.html">
+                    <div class="card rounded-lg">
+                        <div class="text-center d-flex align-items-center pb-2">
+                            <div>
+                                <h3 class="card-title">
+                                <i class="fas fa-film" style="font-size:55px;"></i>
+                                <br>
+                                <strong>Videos</strong>
+                                </h3>
+                                <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
+                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                </div>
             </div>
             <h2 class="text-center mx-auto my-0">Featured</h2>
 
-            <ul id="light-slider">
+            <ul class="light-slider" id="featured-demos">
                 <li>
                     <a href="demos/tutorial_vqls.html">
                         <div class="card">
