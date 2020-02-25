@@ -339,8 +339,8 @@ for i in range(2):
 # (from running the cell above for 1500 steps).
 #
 # .. note:: Training is sensitive to the hyperparameters
-# such as the batch size, initial parameters and
-# optimizer used.
+#           such as the batch size, initial parameters and
+#           optimizer used.
 #
 
 pretrained_pars = np.load("embedding_metric_learning/pretrained_parameters.npy",
