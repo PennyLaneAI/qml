@@ -51,6 +51,7 @@ like the famous `backpropagation <https://en.wikipedia.org/wiki/Backpropagation>
 This means that **PennyLane can differentiate end-to-end through hybrid quantum-classical computations**. Quantum machine learning models can thus be trained in basically the same way that classical deep learning models are trained.
 
 .. note::
+
     PennyLane leverages the Python library `autograd <https://github.com/HIPS/autograd>`_,
     which wraps the regular NumPy mathematical library, providing automatic differentiation features.
     PennyLane can support any classical machine learning model which is supported by autograd, as
