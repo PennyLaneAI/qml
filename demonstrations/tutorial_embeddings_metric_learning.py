@@ -135,8 +135,8 @@ def QAOAEmbedding(features, weights, wires):
     feature_encoding_hamiltonian(features, wires)
 
 ######################################################################
-# .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane contains
-#           a built-in template. To use it, simply replace the cell above
+# .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane provides
+#           a built-in :func:`~.QAOAEmbedding` template. To use it, simply replace the cell above
 #           by ``from pennylane.templates import QAOAEmbedding``. This will also allow you to use
 #           a different number of qubits in your experiment.
 #
@@ -311,7 +311,7 @@ init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, 512))
 init_pars = [init_pars_classical, init_pars_quantum]
 
 ######################################################################
-# .. note:: You can alternatively use the utility function :func:`qaoa_embedding_normal`
+# .. note:: You can alternatively use the utility function :func:`~.pennylane.init.qaoa_embedding_normal`
 #           to conveniently generate the correct shape of ``init_pars_quantum`` for
 #           the ``QAOAEmbedding``. Import it with the statement
 #           ``from pennylane.init import qaoa_embedding_normal``.

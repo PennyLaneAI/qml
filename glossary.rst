@@ -5,6 +5,8 @@
 Key Concepts
 ============
 
+Here you find a growing glossary of key concepts around the training of variational circuits.
+
 .. glossary::
 
     :doc:`Automatic Differentiation </glossary/automatic_differentiation>`
