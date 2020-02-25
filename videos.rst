@@ -17,14 +17,14 @@ Sit back and explore quantum machine learning and quantum programming with our c
 
     <br><div class="video-gallery gallery-grid row">
 
-.. ytoutube:: EwGaU-qOPUQ
+.. youtube:: EwGaU-qOPUQ
     :title: Using Multiple QPUs
     :author: Nathan Killoran (Xanadu)
 
     What would you do with 1000 QPUs? In the latest release of PennyLane,
-    we’ve introduced a number of new features to make computations involving multiple QPUs more
+    we've introduced a number of new features to make computations involving multiple QPUs more
     seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
-    provide a benefit over a single QPU, even for today’s small and noisy devices.
+    provide a benefit over a single QPU, even for today's small and noisy devices.
 
 .. youtube:: Z_P_qjrMDvY
     :title: Welcome to QHACK'19
