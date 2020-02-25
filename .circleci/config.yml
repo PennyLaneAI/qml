@@ -64,7 +64,13 @@ jobs:
 
       - run:
           name: Comment artifacts
-          command: pip3 install pygithub --user && python3 .circleci/comment.py
+          command: |
+            if [[ -z "${GH_AUTH_TOKEN}" ]]; then
+              echo "GitHub token not available, skipping uploading artifacts..."
+            else
+              echo "Commenting artifacts..."
+              pip3 install pygithub --user && python3 .circleci/comment.py
+            fi
 
   deploy:
     executor:
