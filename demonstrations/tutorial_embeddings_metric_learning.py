@@ -136,7 +136,7 @@ def QAOAEmbedding(features, weights, wires):
 
 ######################################################################
 # .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane contains
-#           a pre-coded template. To use it, simply replace the cell above
+#           a built-in template. To use it, simply replace the cell above
 #           by ``from pennylane.templates import QAOAEmbedding``. This will also allow you to use
 #           a different number of qubits in your experiment.
 #
@@ -302,10 +302,6 @@ def cost(weights, A=None, B=None):
 # chosen at random. The number of layers in the quantum circuit is derived from the first
 # dimension of `init_pars_quantum`.
 #
-# .. note:: You can use the utility function :func:`qaoa_embedding_normal`
-#           to conveniently generate the correct shape of initial parameters for
-#           the ``QAOAEmbedding``. Import it with the statement
-#           ``from pennylane.init import qaoa_embedding_normal``.
 
 # generate initial parameters for circuit
 init_pars_quantum = np.random.normal(loc=0, scale=0.1, size=(4, 3))
@@ -316,6 +312,11 @@ init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, 512))
 init_pars = [init_pars_classical, init_pars_quantum]
 
 ######################################################################
+# .. note:: You can alternatively use the utility function :func:`qaoa_embedding_normal`
+#           to conveniently generate the correct shape of ``init_pars_quantum`` for
+#           the ``QAOAEmbedding``. Import it with the statement
+#           ``from pennylane.init import qaoa_embedding_normal``.
+#
 # We can now train the embedding with an ``RMSPropOptimizer``, sampling
 # five training points from each class in every step, here shown for 2 steps.
 #
