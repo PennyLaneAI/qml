@@ -108,6 +108,7 @@ from pennylane import RX, RY, RZ, CNOT
 # The feature map is represented by a layered variational circuit, which
 # alternates a "feature-encoding Hamiltonian" and an "Ising-like" Hamiltonian
 # with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY`` gates as local fields.
+#
 
 def feature_encoding_hamiltonian(features, wires):
 
@@ -313,7 +314,7 @@ init_pars = [init_pars_classical, init_pars_quantum]
 ######################################################################
 # .. note:: You can alternatively use the utility function :func:`~.pennylane.init.qaoa_embedding_normal`
 #           to conveniently generate the correct shape of ``init_pars_quantum`` for
-#           the ``QAOAEmbedding``. Import it with the statement
+#           :func:`~.QAOAEmbedding`. Import it with the statement
 #           ``from pennylane.init import qaoa_embedding_normal``.
 #
 # We can now train the embedding with an ``RMSPropOptimizer``, sampling
