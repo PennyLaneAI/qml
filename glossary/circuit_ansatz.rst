@@ -10,11 +10,11 @@ In the context of variational circuits, an *ansatz* usually describes a subrouti
 applied to specific wires. Similar to the architecture of a neural network, this only defines the base structure,
 while the types of gates and/or their free parameters can be optimized by the variational procedure.
 
-Many variational circuit architectures have been proposed by the quantum computing community [#]_. The strength
-of an architecture varies depending on the desired use-case, and it is not always clear what makes a good ansatz.
+Many variational circuit ansaetze have been proposed by the quantum computing community [#]_. The strength
+of an ansatz depends on the desired use-case, and it is not always clear what makes a good ansatz.
 
-One can distinguish three different base structures of architectures, namely
-**layered gate architectures**, **alternating operator architectures**, and **tensor network architectures**.
+One can distinguish three different base structures, namely a
+**layered gate ansatz**, an **alternating operator ansatz**, and a **tensor network ansatz**.
 
 Layered gate architectures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,13 +41,13 @@ both single-wire gates as well as entangling gates.
     :target: javascript:void(0);
 
 
-Layered gate architectures can differ in three regards:
+Layered gate ansaetze can differ in three regards:
 
 * Whether only :math:`A`, only :math:`B`, or both :math:`A` and :math:`B` are parametrized
 * Which types of gates are used in :math:`A` and :math:`B`
 * Whether the gates in Block :math:`B` are arranged randomly, fixed, or determined by a hyperparameter
 
-Such layered architectures appear in both discrete and continuous-variable quantum computing models.
+Such layered ansaetze appear in both discrete and continuous-variable quantum computing models.
 
 A parametrized, B fixed
 ***********************
@@ -129,11 +129,11 @@ nets :cite:`killoran2018continuous` :cite:`steinbrecher2018quantum`.
     :target: javascript:void(0);
 
 
-Alternating operator architectures
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Alternating operator ansatz
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-The alternating operator architecture was first introduced in Farhi and Goldstone's
+The alternating operator ansatz was first introduced in Farhi and Goldstone's
 *Quantum Approximate Optimization Algorithm* (QAOA) :cite:`farhi2014quantum` and later used
 for machine learning :cite:`verdon2017quantum` and other domain-specific applications :cite:`fingerhuth2018quantum`.
 
@@ -151,8 +151,8 @@ in the ground state of :math:`A` and adiabatically evolves to the ground state o
 alternating (i.e., *stroboscopic*) applications of  :math:`A` and  :math:`B` for very short times :math:`\Delta t`
 can be used as a heuristic to approximate this evolution.
 
-Tensor network architectures
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Tensor network ansatz
+~~~~~~~~~~~~~~~~~~~~~
 
 Amongst the architectures that do not consist of layers, but a single fixed structure, are gate sequences
 inspired by tensor networks :cite:`huggins2018towards` :cite:`du2018expressive`. The simplest one is a tree
