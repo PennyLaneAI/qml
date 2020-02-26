@@ -216,3 +216,4 @@ Quantum machine learning
     whatisqml
     glossary
     demonstrations
+    videos
