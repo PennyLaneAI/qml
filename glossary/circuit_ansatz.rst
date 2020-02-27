@@ -10,7 +10,7 @@ In the context of variational circuits, an *ansatz* usually describes a subrouti
 applied to specific wires. Similar to the architecture of a neural network, this only defines the base structure,
 while the types of gates and/or their free parameters can be optimized by the variational procedure.
 
-Many variational circuit ansaetze have been proposed by the quantum computing community [#]_. The strength
+Many variational circuit ansaetze [#]_ have been proposed by the quantum computing community. The strength
 of an ansatz depends on the desired use-case, and it is not always clear what makes a good ansatz.
 
 One can distinguish three different base structures, namely a
@@ -67,7 +67,8 @@ A parametrized, B parametrized
 
 We can also have both :math:`A` and :math:`B` parametrized and the arrangements of the two-qubit gates
 depends on a hyperparameter defining the range of two-qubit
-gates (see also :cite:`romero2017quantum`, :cite:`schuld2018circuit`).
+gates (see also `Romero, Olson and Aspuru-Guzik (2016) <https://arxiv.org/abs/1612.02806>`_,
+`Schuld et al. (2018) <https://arxiv.org/abs/1804.00633>`_).
 
 
 .. figure:: ../_static/concepts/vc_cc.svg
@@ -76,7 +77,8 @@ gates (see also :cite:`romero2017quantum`, :cite:`schuld2018circuit`).
     :target: javascript:void(0);
 
 
-A fully parametrized architecture specific to continuous-variable systems has been proposed in :cite:`schuld2018quantum`.
+A fully parametrized architecture specific to continuous-variable systems has been proposed in
+`Schuld & Killoran (2018) <https://arxiv.org/abs/1803.07128>`_.
 
 
 .. figure:: ../_static/concepts/vc_cvkernels.svg
@@ -95,7 +97,8 @@ A fixed, B parametrized
 
 An example where the single-qubit gates are fixed is a so-called *Instantaneous Quantum Polynomial (IQP)*
 circuit, where :math:`A` consists of Hadamard gates and :math:`B` is made up of parametrized diagonal
-one- and two-qubit gates :cite:`shepherd2009temporally`:cite:`havlicek2018supervised`.
+one- and two-qubit gates (`Shepherd & Bremner (2008) <https://arxiv.org/abs/0809.0847>`_,
+`Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`_).
 
 
 .. figure:: ../_static/concepts/vc_iqp.svg
@@ -104,7 +107,8 @@ one- and two-qubit gates :cite:`shepherd2009temporally`:cite:`havlicek2018superv
     :target: javascript:void(0);
 
 
-Analogous circuits can also be considered for continuous-variable systems :cite:`arrazola2017quantum`.
+Analogous circuits can also be considered for continuous-variable systems
+`Arrazola, Rebentrost and Weedbrook (2017) <https://arxiv.org/abs/1712.07288>`_.
 
 
 .. figure:: ../_static/concepts/vc_iqp_cv.svg
@@ -120,7 +124,8 @@ Other structures
 
 Generalizing the simple two-block structure allows to build more complex layers, such as this layer of a
 photonic neural network which emulates how information is processed in classical neural
-nets :cite:`killoran2018continuous` :cite:`steinbrecher2018quantum`.
+nets (`Killoran et al. (2018) <https://arxiv.org/abs/1806.06871>`_,
+`Steinbrecher et al. (2018) <https://arxiv.org/abs/1808.10047>`_).
 
 
 .. figure:: ../_static/concepts/vc_cvqnn.svg
@@ -133,9 +138,11 @@ Alternating operator ansatz
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-The alternating operator ansatz was first introduced in Farhi and Goldstone's
-*Quantum Approximate Optimization Algorithm* (QAOA) :cite:`farhi2014quantum` and later used
-for machine learning :cite:`verdon2017quantum` and other domain-specific applications :cite:`fingerhuth2018quantum`.
+The alternating operator ansatz was first introduced by
+`Farhi, Goldstone and Gutmann (2014) <https://arxiv.org/abs/1411.4028>`_ as the
+*Quantum Approximate Optimization Algorithm* (QAOA), and later used
+for machine learning (`Verdon, Broughton, Biamonte (2017) <https://arxiv.org/abs/1712.05304>`_)
+and other domain-specific applications (`Fingerhuth et al. (2018) <https://arxiv.org/abs/1810.13411>`_).
 
 Again, we use layers of two blocks. The difference is that this time the unitaries representing
 these blocks are defined via Hamiltonians :math:`A` and :math:`B` which are evolved for a short time :math:`\Delta t`.
@@ -155,7 +162,8 @@ Tensor network ansatz
 ~~~~~~~~~~~~~~~~~~~~~
 
 Amongst the architectures that do not consist of layers, but a single fixed structure, are gate sequences
-inspired by tensor networks :cite:`huggins2018towards` :cite:`du2018expressive`. The simplest one is a tree
+inspired by tensor networks (`Huggins et al. (2018) <https://arxiv.org/abs/1803.11537>`_,
+`Du et al. (2018) <https://arxiv.org/abs/1810.11922>`_). The simplest one is a tree
 architecture that consecutively entangles subsets of qubits.
 
 
@@ -181,15 +189,11 @@ the more complex the circuit ansatz.
     Tensor networks such as matrix product states were invented to simulate certain quantum systems
     efficiently (though not universally) on classical computers. Hence, tensor network architectures do not
     necessarily give rise to classically intractable quantum nodes, but have found use as machine learning
-    models :cite:`miles2016supervised`.
+    models (`Stoudenmire & Schwab (2016) <https://arxiv.org/abs/1605.05775>`_).
 
 .. seealso:: In PennyLane, an ansatz is called a *template*. PennyLane contains
     a :ref:`growing library <intro_ref_temp>` of such circuit architectures.
 
 .. rubric:: Footnotes
 
-.. [#] For example, see the following non-exhaustive list: :cite:`shepherd2009temporally`
-    :cite:`farhi2014quantum` :cite:`miles2016supervised` :cite:`romero2017quantum` :cite:`arrazola2017quantum`
-    :cite:`farhi2017quantum` :cite:`benedetti2018generative` :cite:`huggins2018towards` :cite:`schuld2018quantum`
-    :cite:`havlicek2018supervised` :cite:`schuld2018circuit` :cite:`dallaire2018quantum` :cite:`killoran2018continuous`
-    :cite:`steinbrecher2018quantum`.
+.. [#] "Ansaetze" is the German plural for "ansatz".

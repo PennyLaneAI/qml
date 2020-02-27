@@ -96,9 +96,11 @@ parameters. Together with a final measurement, this setup can be interpreted as 
 Data-embedding
 ~~~~~~~~~~~~~~
 
-As explained in the section on :ref:`quantum embeddings <glossary_quantum_embeddings>`,
+As explained in the section on :ref:`quantum embeddings <glossary_quantum_embedding>`,
 the first few gates in the circuit can be used to embed
-the input :math:`x` into a quantum state (which functions as a feature map :cite:`schuld2018quantum`),
+the input :math:`x` into a quantum state (which functions as a feature map, see
+`Schuld & Killoran et al. (2018) <https://arxiv.org/abs/1803.07128>`_ and
+`Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`_),
 while the subsequent gates have parameters :math:`\mathbf{\theta}` as arguments.
 
 As an example, consider a photonic quantum computer (similar examples can be constructed for qubits). For

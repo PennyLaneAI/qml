@@ -4,11 +4,17 @@ r"""
 3-qubit Ising model in PyTorch
 ==============================
 
-The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__ can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__ and `Boltzmann machines <https://en.wikipedia.org/wiki/Boltzmann_machine>`__ :cite:`schuld2018supervised`. They also closely imitate the underlying mathematics of a subclass of computational problems called
+The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__
+can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__
+and `Boltzmann machines <https://en.wikipedia.org/wiki/Boltzmann_machine>`__
+(`Schuld & Petruccione (2018) <https://www.springer.com/gp/book/9783319964232>`_).
+They also closely imitate the underlying mathematics of a subclass of computational problems called
 `Quadratic Unconstrained Binary Optimization (QUBO) <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__ problems. 
 
-Ising models are commonly encountered in the subject area of adiabatic quantum computing. Quantum annealing algorithms (for example, as performed on a D-wave system) are often used to find low-energy configurations of Ising problems.
-The optimization landscape of the Ising model is non-convex, which can make finding global minima challenging. In this tutorial, we get a closer look at this phenomenon by applying gradient descent techniques to a toy Ising model.  
+Ising models are commonly encountered in the subject area of adiabatic quantum computing. Quantum annealing algorithms
+(for example, as performed on a D-wave system) are often used to find low-energy configurations of Ising problems.
+The optimization landscape of the Ising model is non-convex, which can make finding global minima challenging.
+In this tutorial, we get a closer look at this phenomenon by applying gradient descent techniques to a toy Ising model. 
 
 PennyLane implementation
 ------------------------
