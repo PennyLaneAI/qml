@@ -62,6 +62,11 @@ body {
   /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 50px 0 rgba(0, 0, 0, 0.19);*/
 }
 
+#main-cards {
+  width: 150%;
+  margin-left: -200px;
+}
+
 .page-shadow {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 50px 0 rgba(0, 0, 0, 0.19);
   border: 0px;
@@ -1793,6 +1798,13 @@ span.eqno {
 @media screen and (max-width: 1000px){
   .sphx-glr-thumbcontainer {
     margin: 5px!important;
+  }
+}
+
+@media screen and (max-width: 1200px){
+  #main-cards {
+    width: 100%;
+    margin-left: 0px;
   }
 }
 

@@ -108,6 +108,7 @@ from pennylane import RX, RY, RZ, CNOT
 # The feature map is represented by a layered variational circuit, which
 # alternates a "feature-encoding Hamiltonian" and an "Ising-like" Hamiltonian
 # with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY`` gates as local fields.
+#
 
 def feature_encoding_hamiltonian(features, wires):
 
@@ -135,8 +136,9 @@ def QAOAEmbedding(features, weights, wires):
     feature_encoding_hamiltonian(features, wires)
 
 ######################################################################
-# .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane contains
-#           a built-in template. To use it, simply replace the cell above
+# .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane provides
+#           a built-in :func:`QAOAEmebedding <pennylane.templates.QAOAEmbedding>` template.
+#           To use it, simply replace the cell above
 #           by ``from pennylane.templates import QAOAEmbedding``. This will also allow you to use
 #           a different number of qubits in your experiment.
 #
@@ -311,9 +313,9 @@ init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, 512))
 init_pars = [init_pars_classical, init_pars_quantum]
 
 ######################################################################
-# .. note:: You can alternatively use the utility function :func:`qaoa_embedding_normal`
+# .. note:: You can alternatively use the utility function :func:`pennylane.init.qaoa_embedding_normal`
 #           to conveniently generate the correct shape of ``init_pars_quantum`` for
-#           the ``QAOAEmbedding``. Import it with the statement
+#           :func:`pennylane.templates.QAOAEmbedding`. Import it with the statement
 #           ``from pennylane.init import qaoa_embedding_normal``.
 #
 # We can now train the embedding with an ``RMSPropOptimizer``, sampling
@@ -350,8 +352,8 @@ for i in range(2):
 # (from running the cell above for 1500 steps).
 #
 # .. note:: Training is sensitive to the hyperparameters
-# such as the batch size, initial parameters and
-# optimizer used.
+#           such as the batch size, initial parameters and
+#           optimizer used.
 #
 
 pretrained_pars = np.load("embedding_metric_learning/pretrained_parameters.npy",

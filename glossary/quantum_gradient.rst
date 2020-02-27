@@ -150,7 +150,7 @@ Substituting this into the quantum circuit function :math:`f(x; \mathbf{\theta})
 where :math:`[X,Y]=XY-YX` is the commutator.
 
 We now make use of the following mathematical identity for commutators involving Pauli
-operators :cite:`mitarai2018quantum`:
+operators (`Mitarai et al. (2018) <https://arxiv.org/abs/1803.00745>`_):
 
 .. math:: \left[ \hat{P}_i, \hat{B} \right] = -i\left(U_i^\dagger\left(\tfrac{\pi}{2}\right)\hat{B}U_i\left(\tfrac{\pi}{2}\right) - U_i^\dagger\left(-\tfrac{\pi}{2}\right)\hat{B}U_i\left(-\tfrac{\pi}{2}\right) \right).
 

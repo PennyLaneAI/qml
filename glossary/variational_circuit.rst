@@ -25,14 +25,14 @@ quantum circuits, they consist of three ingredients:
 Typically, the expectation values
 :math:`f(\mathbf{\theta})=\langle 0 | U^\dagger(\mathbf{\theta}) \hat{B} U(\mathbf{\theta}) | 0 \rangle`
 of one or more such circuits — possibly with some classical post-processing — define a scalar cost for a
-given task. The free parameters :math:`\mathbf{\theta}` of the circuit are tuned to optimize this cost function.
+given task. The free parameters :math:`\mathbf{\theta}` of the circuit(s) are tuned to optimize this cost function.
 
 
 :html:`<br>`
 
 .. figure:: ../_static/concepts/variational_rough.png
     :align: center
-    :width: 40%
+    :width: 50%
     :target: javascript:void(0);
 
     The principle of a *variational circuit*.
@@ -40,15 +40,14 @@ given task. The free parameters :math:`\mathbf{\theta}` of the circuit are tuned
 :html:`<br>`
 
 Variational circuits are trained by a classical optimization algorithm that makes queries to
-the quantum device. The optimization is an iterative scheme that searches out better candidates for
-the parameters :math:`\theta` with every step. Variational circuits have been proposed for various
-near-term applications, such as optimization, quantum chemistry, machine learning, data compression,
-linear algebra, and feature embeddings.
+the quantum device. The optimization is usually an iterative scheme that searches out better candidates for
+the parameters :math:`\theta` with every step.
 
 Variational circuits have become popular as a way to think about quantum algorithms for near-term quantum devices.
-Such devices can only run short gate sequences, and have a high error. Usually, a quantum algorithm is
-decomposed into a set of standard elementary operations, which are in turn implemented by the
-quantum hardware.
+Such devices can only run short gate sequences, since without fault tolerance every gate increases
+the error in the output.
+Usually, a quantum algorithm is decomposed into a set of standard elementary operations,
+which are in turn implemented by the quantum hardware.
 
 The intriguing idea of variational circuit for near-term devices is to merge
 this two-step procedure into a single step by "learning" the circuit on the noisy device for a given task.
@@ -69,9 +68,11 @@ Building the circuit
 
 :html:`<br>`
 
-The variational parameters :math:`\mathbf{\theta}` enter the quantum circuit as arguments for the circuit's gates.
-This allows us to convert *classical information* (the values :math:`\mathbf{\theta}`)
-into *quantum information* (the quantum state :math:`U(x;\mathbf{\theta})|0\rangle`).
+The variational parameters :math:`\theta`, possibly together with an additional set of non-adaptable
+parameters :math:`x`, enter the quantum circuit as arguments for the circuit's gates.
+This allows us to convert *classical information* (the values :math:`\theta` and :math:`x`)
+into *quantum information* (the quantum state :math:`U(x;\mathbf{\theta})|0\rangle`). As we will see in the
+example below, the non-adaptable gate parameters usually play the role of *data inputs* in quantum machine learning.
 
 Quantum information is turned *back into classical information* by evaluating the
 expectation value of the observable :math:`\hat{B}`,
@@ -82,10 +83,8 @@ expectation value of the observable :math:`\hat{B}`,
 Beyond the basic rule that the parameters :math:`\mathbf{\theta}` are used as the arguments of gates,
 exactly how the gates are arranged, the *circuit architecture*, is essentially arbitrary.
 
-.. note:: As shown in the figure above, the circuit can also include additional gates which
-          have no free parameter associated with them. Furthermore, one can fix some parameters to feed input
-          data into a quantum circuit.
-
+.. note:: As shown in the figure above, the circuit can also include additional gates :math:`U` which
+          have no free parameters associated with them.
 
 Example
 -------
@@ -97,9 +96,11 @@ parameters. Together with a final measurement, this setup can be interpreted as 
 Data-embedding
 ~~~~~~~~~~~~~~
 
-As explained in the section on :ref:`quantum embeddings <glossary_quantum_embeddings>`,
+As explained in the section on :ref:`quantum embeddings <glossary_quantum_embedding>`,
 the first few gates in the circuit can be used to embed
-the input :math:`x` into a quantum state (which functions as a feature map :cite:`schuld2018quantum`),
+the input :math:`x` into a quantum state (which functions as a feature map, see
+`Schuld & Killoran et al. (2018) <https://arxiv.org/abs/1803.07128>`_ and
+`Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`_),
 while the subsequent gates have parameters :math:`\mathbf{\theta}` as arguments.
 
 As an example, consider a photonic quantum computer (similar examples can be constructed for qubits). For

@@ -10,7 +10,11 @@ A *quantum embedding* represents classical data as quantum states in a Hilbert s
 feature map*. It takes a classical datapoint :math:`x` and translates it into a set of gate
 parameters in a quantum circuit, creating a quantum state :math:`| \psi_x \rangle`. This process is
 a crucial part of designing quantum algorithms and affects their computational power—for more
-details, see :cite:`schuld2018supervised` and :cite:`schuld2018quantum`.
+details, see `Schuld & Petruccione (2018) <https://www.springer.com/gp/book/9783319964232>`_, but
+also
+`Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`_,
+`Schuld & Killoran (2018) <https://arxiv.org/abs/1803.07128>`_,
+`Lloyd et al. (2020) <https://arxiv.org/abs/2001.03622>`_.
 
 Let's consider classical input data consisting of :math:`M` examples, with :math:`N` features each,
 
@@ -91,7 +95,7 @@ As a system of :math:`n` qubits provides :math:`2^n` amplitudes, **amplitude emb
 .. note::
     If the total number of amplitudes to embed, i.e., :math:`N \times M`, is less than
     :math:`2^n`, *non-informative* constants can be *padded* to :math:`\alpha`
-    :cite:`schuld2018supervised`.
+    (`Schuld & Petruccione (2018) <https://www.springer.com/gp/book/9783319964232>`_).
 
     For example, if we have 3 examples with 2 features each, we have
     :math:`3\times 2= 6` amplitudes to embed. However, we have to use at least
@@ -105,6 +109,6 @@ As a system of :math:`n` qubits provides :math:`2^n` amplitudes, **amplitude emb
     with continuous-variable quantum computing models, where classical information
     is encoded in the squeezing and displacement operator parameters.
     *Hamiltonian embedding* uses an implicit technique by encoding information in the
-    evolution of a quantum system :cite:`schuld2018supervised`.
+    evolution of a quantum system (`Schuld & Petruccione (2018) <https://www.springer.com/gp/book/9783319964232>`_).
 
 .. seealso:: PennyLane provides built-in embedding templates; see :doc:`introduction/templates` for more details.

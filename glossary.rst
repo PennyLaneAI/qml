@@ -5,6 +5,8 @@
 Key Concepts
 ============
 
+Here you can find a growing glossary of key concepts for quantum machine learning.
+
 .. glossary::
 
     :doc:`Automatic Differentiation </glossary/automatic_differentiation>`

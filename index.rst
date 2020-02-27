@@ -20,7 +20,7 @@ Quantum machine learning
 
         <section class="my-5">
             <div class="row" id="main-cards">
-                <div class="col-lg-4 mb-5">
+                <div class="col-lg-3 mb-5">
                     <a href="whatisqml.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
@@ -37,7 +37,7 @@ Quantum machine learning
                     </div>
                 </a>
                 </div>
-                <div class="col-lg-4 mb-5">
+                <div class="col-lg-3 mb-5">
                     <a href="glossary.html">
                         <div class="card rounded-lg">
                             <div class="text-center d-flex align-items-center pb-2">
@@ -55,7 +55,7 @@ Quantum machine learning
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-4 mb-5">
+                <div class="col-lg-3 mb-5">
                     <a href="demonstrations.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
@@ -72,7 +72,7 @@ Quantum machine learning
                     </div>
                 </a>
                 </div>
-                <div class="col-lg-4 mb-5">
+                <div class="col-lg-3 mb-5">
                     <a href="videos.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
@@ -216,3 +216,4 @@ Quantum machine learning
     whatisqml
     glossary
     demonstrations
+    videos

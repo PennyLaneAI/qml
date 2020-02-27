@@ -12,7 +12,8 @@ where a quantum algorithm is optimized with the help of a classical co-processor
 
 Typically, quantum devices used to estimate averages of measurement results (i.e., *expectations
 of quantum observables*), which are combined in a single classical cost function that determines how "good"
-the quantum circuits are. For example, in *variational quantum eigensolvers* :cite:`peruzzo2014variational`, the results of
+the quantum circuits are. For example, in *variational quantum eigensolvers*
+(`Peruzzo et al. (2013) <https://arxiv.org/abs/1304.3061>`_), the results of
 some quantum expectations :math:`\langle \hat{B}_i \rangle` are summed up.
 
 :html:`<br>`
