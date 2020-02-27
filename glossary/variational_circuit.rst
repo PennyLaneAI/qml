@@ -69,7 +69,7 @@ Building the circuit
 :html:`<br>`
 
 The variational parameters :math:`\theta`, possibly together with an additional set of non-adaptable
-gate parameters :math:`x`, enter the quantum circuit as arguments for the circuit's gates.
+parameters :math:`x`, enter the quantum circuit as arguments for the circuit's gates.
 This allows us to convert *classical information* (the values :math:`\theta` and :math:`x`)
 into *quantum information* (the quantum state :math:`U(x;\mathbf{\theta})|0\rangle`). As we will see in the
 example below, the non-adaptable gate parameters usually play the role of *data inputs* in quantum machine learning.

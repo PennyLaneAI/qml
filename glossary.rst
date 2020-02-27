@@ -5,7 +5,7 @@
 Key Concepts
 ============
 
-Here you find a growing glossary of key concepts around the training of variational circuits.
+Here you can find a growing glossary of key concepts for quantum machine learning.
 
 .. glossary::
 
