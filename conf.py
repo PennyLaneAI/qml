@@ -50,7 +50,6 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
-    "sphinxcontrib.bibtex",
     "sphinx_gallery.gen_gallery",
 ]
 
