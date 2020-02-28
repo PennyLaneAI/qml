@@ -1,13 +1,9 @@
 _build
 __pycache__
 tutorial
-app
 _static/thumbs/*
 .idea
-beginner/pyscf/*
-beginner/structure.xyz
-implementations/pyscf/*
-implementations/structure.xyz
+demos/*
+demonstrations/pyscf/*
+demonstrations/structure.xyz
 _data/*
-
-

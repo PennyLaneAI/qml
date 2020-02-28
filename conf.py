@@ -50,16 +50,15 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
-    "sphinxcontrib.bibtex",
     "sphinx_gallery.gen_gallery",
 ]
 
 
 sphinx_gallery_conf = {
     # path to your example scripts
-    "examples_dirs": ["beginner", "implementations"],
+    "examples_dirs": ["demonstrations"],
     # path where to save gallery generated examples
-    "gallery_dirs": ["tutorial", "app"],
+    "gallery_dirs": ["demos"],
     # execute files that match the following filename pattern,
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
@@ -182,11 +181,12 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://pennylane.readthedocs.io/en/latest/": None}
 
-from custom_directives import IncludeDirective, GalleryItemDirective, CustomGalleryItemDirective
+from custom_directives import IncludeDirective, GalleryItemDirective, CustomGalleryItemDirective, YoutubeItemDirective
 
 
 def setup(app):
     app.add_directive("includenodoc", IncludeDirective)
     app.add_directive("galleryitem", GalleryItemDirective)
     app.add_directive("customgalleryitem", CustomGalleryItemDirective)
+    app.add_directive("youtube", YoutubeItemDirective)
     app.add_stylesheet("xanadu_gallery.css")
