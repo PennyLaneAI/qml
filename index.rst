@@ -78,7 +78,7 @@ Quantum machine learning
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <i class="fas fa-film" style="font-size:55px;"></i>
+                                <img src="_static/video.png" class="img-fluid" style="max-width: 63px;"></img>
                                 <br>
                                 <strong>Videos</strong>
                                 </h3>
