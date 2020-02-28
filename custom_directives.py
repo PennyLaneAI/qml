@@ -28,7 +28,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from docutils.parsers.rst import Directive, directives
-from docutils.statemachine import StringList 
+from docutils.statemachine import StringList
 from docutils import nodes
 import re
 import os
@@ -153,7 +153,7 @@ class GalleryItemDirective(Directive):
 GALLERY_TEMPLATE = """
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="{tooltip}">
+    <div class="sphx-glr-thumbcontainer" data-category="{tags}" tooltip="{tooltip}">
 
 .. only:: html
 
@@ -171,7 +171,7 @@ class CustomGalleryItemDirective(Directive):
     """Create a sphinx gallery style thumbnail.
 
     tooltip and figure are self explanatory. Description could be a link to
-    a document like in below example. 
+    a document like in below example.
 
     Example usage:
 
@@ -189,7 +189,8 @@ class CustomGalleryItemDirective(Directive):
     final_argument_whitespace = True
     option_spec = {'tooltip': directives.unchanged,
                    'figure': directives.unchanged,
-                   'description': directives.unchanged}
+                   'description': directives.unchanged,
+                   'tags': directives.unchanged}
 
     has_content = False
     add_index = False
@@ -200,6 +201,10 @@ class CustomGalleryItemDirective(Directive):
                 tooltip = self.options['tooltip'][:195]
             else:
                 raise ValueError('tooltip not found')
+
+            tags = ""
+            if 'tags' in self.options:
+                tags = self.options['tags']
 
             if 'figure' in self.options:
                 env = self.state.document.settings.env
@@ -230,7 +235,58 @@ class CustomGalleryItemDirective(Directive):
 
         thumbnail_rst = GALLERY_TEMPLATE.format(tooltip=tooltip,
                                                 thumbnail=thumbnail,
-                                                description=description)
+                                                description=description,
+                                                tags=tags)
+        thumbnail = StringList(thumbnail_rst.split('\n'))
+        thumb = nodes.paragraph()
+        self.state.nested_parse(thumbnail, self.content_offset, thumb)
+        return [thumb]
+
+
+YOUTUBE_TEMPLATE = """
+.. raw:: html
+
+    <a href="https://youtube.com/watch?v={id}" target="_blank">
+        <div class="card">
+            <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/{id}/hqdefault.jpg"/>
+            <div class="card-body">
+                <h4 class="card-title">{title}</h4>
+                <p class="card-text grey-text">{author}</p>
+                <p class="card-text">
+                    {description}
+                </p>
+            </div>
+            <div class="white-text watch">
+                <hr>
+                <h5>Watch <i class="fas fa-angle-double-right"></i></h5>
+            </div>
+        </div>
+    </a>
+"""
+
+
+class YoutubeItemDirective(Directive):
+    """Create a sphinx gallery style thumbnail.
+    """
+
+    required_arguments = 1
+    optional_arguments = 2
+    option_spec = {
+        'title': directives.unchanged,
+        'author': directives.unchanged}
+
+    final_argument_whitespace = False
+    has_content = True
+    add_index = False
+
+    def run(self):
+        ytid = self.arguments[0]
+        description = [i if i != "" else "<br><br>" for i in self.content]
+
+        thumbnail_rst = YOUTUBE_TEMPLATE.format(id=ytid,
+                                                title=self.options["title"],
+                                                author=self.options["author"],
+                                                description=" ".join(description))
         thumbnail = StringList(thumbnail_rst.split('\n'))
         thumb = nodes.paragraph()
         self.state.nested_parse(thumbnail, self.content_offset, thumb)
