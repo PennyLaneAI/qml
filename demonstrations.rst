@@ -158,8 +158,8 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Pre-process images with a quantum convolution
-    :figure: implementations/quanvolution/zoom.png
-    :description: :doc:`app/tutorial_quanvolution`
+    :figure: demonstrations/quanvolution/zoom.png
+    :description: :doc:`demos/tutorial_quanvolution`
     :tags: tensorflow
 
 :html:`</div></div><div style='clear:both'>`
