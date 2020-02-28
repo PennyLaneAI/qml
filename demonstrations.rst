@@ -158,8 +158,8 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset
-    :figure: implementations/multiclass_classification/margin_2.png
-    :description: :doc:`app/tutorial_multiclass_classification`
+    :figure: demonstrations/multiclass_classification/margin_2.png
+    :description: :doc:`demos/tutorial_multiclass_classification`
     :tags: pytorch
 
 :html:`</div></div><div style='clear:both'>`
@@ -194,4 +194,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_embeddings_metric_learning
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
-    app/tutorial_multiclass_classifier
+    demos/tutorial_multiclass_classifier

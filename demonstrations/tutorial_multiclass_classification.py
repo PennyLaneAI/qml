@@ -15,7 +15,7 @@ on an individual variational circuit, whose architecture is inspired by
 
 |
 
-.. figure:: ../implementations/multiclass_classification/margin_2.png
+.. figure:: ../demonstrations/multiclass_classification/margin_2.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
