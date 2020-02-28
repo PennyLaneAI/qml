@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v0-{{ .Branch }}-
-            - pip-v0-
+            - pip-v1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v1-{{ .Branch }}-
+            - pip-v1-
 
       - run:
           name: Install dependencies
@@ -35,13 +35,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v1-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v0-{{ .Branch }}-{{ .Revision }}
-            - gallery-v0-{{ .Branch }}-
-            - gallery-v0-
+            - gallery-v1-{{ .Branch }}-{{ .Revision }}
+            - gallery-v1-{{ .Branch }}-
+            - gallery-v1-
 
       - run:
           name: Build tutorials
@@ -54,9 +54,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ./app
-            - ./tutorial
-          key: gallery-v0-{{ .Branch }}-{{ .Revision }}
+            - ./demos
+          key: gallery-v1-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
           path: /tmp/qml_html.zip
@@ -66,7 +65,13 @@ jobs:
 
       - run:
           name: Comment artifacts
-          command: pip3 install pygithub --user && python3 .circleci/comment.py
+          command: |
+            if [[ -z "${GH_AUTH_TOKEN}" ]]; then
+              echo "GitHub token not available, skipping uploading artifacts..."
+            else
+              echo "Commenting artifacts..."
+              pip3 install pygithub --user && python3 .circleci/comment.py
+            fi
 
   deploy:
     executor:
@@ -91,9 +96,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v0-{{ .Branch }}-
-            - pip-v0-
+            - pip-v1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v1-{{ .Branch }}-
+            - pip-v1-
 
       - run:
           name: Install dependencies
@@ -106,13 +111,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v0-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v1-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v0-{{ .Branch }}-{{ .Revision }}
-            - gallery-v0-{{ .Branch }}-
-            - gallery-v0-
+            - gallery-v1-{{ .Branch }}-{{ .Revision }}
+            - gallery-v1-{{ .Branch }}-
+            - gallery-v1-
 
       - run:
           name: Build tutorials
@@ -124,9 +129,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ./app
-            - ./tutorial
-          key: gallery-v0-{{ .Branch }}-{{ .Revision }}
+            - ./demos
+          key: gallery-v1-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
           name: Deploy to AWS
