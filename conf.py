@@ -51,7 +51,11 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
+    "sphinx_sitemap",
 ]
+
+
+html_baseurl = 'https://pennylane.ai/qml/'
 
 
 sphinx_gallery_conf = {
