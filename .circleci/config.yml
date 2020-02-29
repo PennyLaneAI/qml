@@ -124,6 +124,8 @@ jobs:
             . venv/bin/activate
             make download
             make html
+            touch _build/html/implementations.html
+            touch _build/html/beginner.html
 
       - save_cache:
           paths:
