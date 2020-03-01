@@ -7,7 +7,7 @@ Key Concepts
 
 .. meta::
    :property="og:description": A growing glossary of key concepts for quantum machine learning.
-   :property="og:image": https://pennylane.ai/qml/_static/brain_board.png
+   :property="og:image": https://pennylane.ai/qml/_static/board.png
 
 .. glossary::
 
