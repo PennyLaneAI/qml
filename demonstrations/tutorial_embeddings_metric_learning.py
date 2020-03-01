@@ -2,6 +2,12 @@
 Quantum embeddings and metric learning
 ======================================
 
+.. meta::
+    :property="og:description": This demonstration illustrates the idea of training
+        a quantum embedding for metric learning. This technique is used to train
+        a hybrid quantum-classical data embedding to classify images of ants and bees.
+    :property="og:image": https://pennylane.ai/qml/_images/training.png
+
 **Authors: Maria Schuld and Aroosa Ijaz**
 
 This tutorial illustrates the idea of quantum embeddings for metric

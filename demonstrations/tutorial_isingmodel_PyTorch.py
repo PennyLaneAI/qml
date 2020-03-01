@@ -4,6 +4,11 @@ r"""
 3-qubit Ising model in PyTorch
 ==============================
 
+.. meta::
+    :property="og:description": This demonstration uses the PyTorch interface of
+        PennyLane to optimize a 3-qubit Ising model.
+    :property="og:image": https://pennylane.ai/qml/_images/isingspins.png
+
 The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__
 can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__
 and `Boltzmann machines <https://en.wikipedia.org/wiki/Boltzmann_machine>`__

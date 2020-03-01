@@ -3,39 +3,44 @@
 
 PyTorch and noisy devices
 =========================
+
+.. meta::
+    :property="og:description": Extend PyTorch with real quantum computing power,
+        by using it to optimize a noisy quantum hardware device.
+    :property="og:image": https://pennylane.ai/qml/_images/bloch.gif
+
+Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
+using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
+We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm`` device, to
+see how the optimization responds to noisy qubits.
+
+To follow along with this tutorial on your own computer, you will require the
+following dependencies:
+
+* The `Forest SDK <https://rigetti.com/forest>`_, which contains the quantum virtual
+  machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
+  started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
+
+* `PennyLane-Forest plugin <https://pennylane-forest.readthedocs.io>`_, in order
+  to access the QVM as a PennyLane device. This can be installed via pip:
+
+  .. code-block:: bash
+
+      pip install pennylane-forest
+
+* `PyTorch <https://pytorch.org/get-started/locally/>`_, in order to access the PyTorch
+  QNode interface. Follow the link for instructions on the best way to install PyTorch
+  for your system.
+
+Setting up the device
+---------------------
+
+Once the dependencies above are installed, let's begin importing the required packages
+and setting up our quantum device.
+
+To start with, we import PennyLane, and, as we are using the PyTorch interface,
+PyTorch as well:
 """
-##############################################################################
-# Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
-# using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
-# We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm`` device, to
-# see how the optimization responds to noisy qubits.
-#
-# To follow along with this tutorial on your own computer, you will require the
-# following dependencies:
-#
-# * The `Forest SDK <https://rigetti.com/forest>`_, which contains the quantum virtual
-#   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
-#   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
-#
-# * `PennyLane-Forest plugin <https://pennylane-forest.readthedocs.io>`_, in order
-#   to access the QVM as a PennyLane device. This can be installed via pip:
-#
-#   .. code-block:: bash
-#
-#       pip install pennylane-forest
-#
-# * `PyTorch <https://pytorch.org/get-started/locally/>`_, in order to access the PyTorch
-#   QNode interface. Follow the link for instructions on the best way to install PyTorch
-#   for your system.
-#
-# Setting up the device
-# ---------------------
-#
-# Once the dependencies above are installed, let's begin importing the required packages
-# and setting up our quantum device.
-#
-# To start with, we import PennyLane, and, as we are using the PyTorch interface,
-# PyTorch as well:
 
 import pennylane as qml
 import torch

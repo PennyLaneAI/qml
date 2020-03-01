@@ -3,6 +3,11 @@ r"""
 VQE with parallel QPUs on Rigetti Forest
 ========================================
 
+.. meta::
+    :property="og:description": This demonstration showcases how parallel QPUs can
+        speed up the calculation of the potential energy surface of molecular Hamiltonian.
+    :property="og:image": https://pennylane.ai/qml/_images/vqe_diagram.png
+
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 

@@ -2,6 +2,10 @@ r"""
 Quantum Chemistry with PennyLane
 ================================
 
+.. meta::
+    :property="og:description": Explore quantum chemistry with Pennylane.
+    :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
+
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
 the approximations used to find the many-electron wave function of polyatomic systems.
 Electronic structure methods rely on the Born-Oppenheimer approximation

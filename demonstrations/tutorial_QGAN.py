@@ -4,6 +4,11 @@
 Quantum Generative Adversarial Networks with Cirq + TensorFlow
 ==============================================================
 
+.. meta::
+    :property="og:description": This demo constructs and trains a Quantum
+        Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.
+    :property="og:image": https://pennylane.ai/qml/_images/qgan3.png
+
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
 (2018) <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.121.040502>`__,

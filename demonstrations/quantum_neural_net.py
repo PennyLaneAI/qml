@@ -3,23 +3,27 @@
 
 Function fitting with a quantum neural network
 ==============================================
-"""
 
-##############################################################################
-#
-# In this example we show how a variational circuit can be used to learn a
-# fit for a one-dimensional function when being trained with noisy samples
-# from that function.
-#
-# The variational circuit we use is the continuous-variable quantum neural
-# network model described in `Killoran et al.
-# (2018) <https://arxiv.org/abs/1806.06871>`__.
-#
-# Imports
-# ~~~~~~~
-#
-# We import PennyLane, the wrapped version of NumPy provided by PennyLane,
-# and an optimizer.
+.. meta::
+    :property="og:description": In this demonstration, we show how a variational
+        circuit can be used to learn a fit for a one-dimensional function
+        from noisy samples.
+    :property="og:image": https://pennylane.ai/qml/_images/qnn_output_28_0.png
+
+In this example we show how a variational circuit can be used to learn a
+fit for a one-dimensional function when being trained with noisy samples
+from that function.
+
+The variational circuit we use is the continuous-variable quantum neural
+network model described in `Killoran et al.
+(2018) <https://arxiv.org/abs/1806.06871>`__.
+
+Imports
+~~~~~~~
+
+We import PennyLane, the wrapped version of NumPy provided by PennyLane,
+and an optimizer.
+"""
 
 import pennylane as qml
 from pennylane import numpy as np

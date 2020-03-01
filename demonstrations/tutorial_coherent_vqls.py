@@ -5,12 +5,17 @@ Coherent Variational Quantum Linear Solver
 ==========================================
 *Author: Andrea Mari*
 
+.. meta::
+    :property="og:description": This demonstration extends the variational quantum
+        linear solver to solve linear equations defined by a probabilistic coherent operation.
+    :property="og:image": https://pennylane.ai/qml/_images/cvqls_zoom.png
+
 In this tutorial we propose and implement an algorithm that we call
-*coherent variational quantum linear solver* (CVQLS). 
-This is inspired by the VQLS proposed in Ref. [1] (implemented in a :doc:`previous demo <tutorial_vqls>`), with an important difference: 
-the matrix :math:`A` associated to the problem is physically 
+*coherent variational quantum linear solver* (CVQLS).
+This is inspired by the VQLS proposed in Ref. [1] (implemented in a :doc:`previous demo <tutorial_vqls>`), with an important difference:
+the matrix :math:`A` associated to the problem is physically
 applied as a probabilistic coherent operation. This approach has some advantages and
-disadvantages and its practical convenience depends on the specific linear problem 
+disadvantages and its practical convenience depends on the specific linear problem
 to be solved and on experimental constraints.
 
 .. figure:: ../demonstrations/coherent_vqls/cvqls_circuit.png
@@ -21,7 +26,7 @@ to be solved and on experimental constraints.
 Introduction
 ------------
 
-We first define the problem and the general structure of the CVQLS. 
+We first define the problem and the general structure of the CVQLS.
 As a second step, we consider a particular case and we solve it explicitly with PennyLane.
 
 The problem
@@ -80,7 +85,7 @@ The approach used in Ref. [1] is to decompose the cost function in terms of many
 individual components :math:`A_l` of the problem matrix :math:`A`. For this reason, in the VQLS of Ref. [1],
 the state vector proportional to :math:`A |x\rangle` is not physically prepared.
 On the contrary, the idea presented in this tutorial is to physically implement the linear map :math:`A` as
-a coherent probabilistic operation. This approach allows to prepare the state 
+a coherent probabilistic operation. This approach allows to prepare the state
 :math:`|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}` which can be used to estimate the
 cost function of the problem in a more direct way.
 
@@ -95,11 +100,11 @@ Without loss of generality we can assume that the coefficients :math:`c=(c_1, c_
 in the definition of :math:`A` represent a positive and normalized probability distribution, i.e.,
 
 .. math::
-    
+
     c_l \ge 0 \quad \forall l,  \qquad \sum_{l=0}^{L-1} c_l=1.
 
 Indeed the complex phase of each coefficient :math:`c_l` can always be absorbed into the associated unitary :math:`A_l`, obtaining
-in this way a vector of positive values. Moreover, since the linear problem is 
+in this way a vector of positive values. Moreover, since the linear problem is
 defined up to a constant scaling factor, we can also normalize the coefficients to get a probability distribution.
 
 For simplicity, since we can always pad :math:`c` with additional zeros, we assume that :math:`L=2^m` for some positive integer :math:`m`.
@@ -118,11 +123,11 @@ acting on the system and on the ancillary basis states as follows:
 
 .. math::
 
-    CA_l \, |j\rangle |l' \rangle  = 
+    CA_l \, |j\rangle |l' \rangle  =
     \Bigg\{
     \begin{array}{c}
     \left(A_l \otimes \mathbb{I}\right) \; |j\rangle |l \rangle \quad \; \mathrm{for}\; l'=l \\
-    \qquad \qquad |j\rangle |l' \rangle  \quad \mathrm{for}\; l'\neq l 
+    \qquad \qquad |j\rangle |l' \rangle  \quad \mathrm{for}\; l'\neq l
     \end{array},
 
 i.e., the unitary :math:`A_l` is applied only when the ancillary system is in the corresponding basis state :math:`|l\rangle`.
@@ -144,7 +149,7 @@ A natural generalization of the `Hadamard test <https://en.wikipedia.org/wiki/Ha
 Estimating the cost function
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-From a technical point of view, the previous steps represent the most difficult part of the algorithm. 
+From a technical point of view, the previous steps represent the most difficult part of the algorithm.
 Once we have at our disposal the quantum system prepared in the state :math:`|\Psi\rangle`,
 it is very easy to compute the cost function.
 Indeed one could simply continue the previous protocol with the following two steps:
@@ -159,12 +164,12 @@ the cost function of the problem.
 
 Importantly, the operations of steps 7 and 8 commute. Therefore all the measurements can be
 delayed until the end of the quantum circuit (as shown in the figure at the top of this tutorial),
-making the structure of the experiment more straightforward.  
+making the structure of the experiment more straightforward.
 
 A simple example
 ^^^^^^^^^^^^^^^^
 
-In this tutorial we apply the previous theory to the following simple example 
+In this tutorial we apply the previous theory to the following simple example
 based on a system of 3 qubits, which was already considered in Ref. [1] and also reproduced in PennyLane (:doc:`VQLS <tutorial_vqls>`):
 
 .. math::
@@ -236,7 +241,7 @@ sqrt_c = np.sqrt(c)
 
 
 def U_c():
-    """Unitary matrix rotating the ground state of the ancillary qubits 
+    """Unitary matrix rotating the ground state of the ancillary qubits
     to |sqrt(c)> = U_c |0>."""
     # Circuit mapping |00> to sqrt_c[0] |00> + sqrt_c[1] |01> + sqrt_c[2] |10>
     qml.RY(-2 * np.arccos(sqrt_c[0]), wires=ancilla_idx)
@@ -273,7 +278,7 @@ def CA_all():
 
 
 def U_b():
-    """Unitary matrix rotating the system ground state to the 
+    """Unitary matrix rotating the system ground state to the
     problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
@@ -316,7 +321,7 @@ def variational_block(weights):
 
 
 def full_circuit(weights):
-    """Full quantum circuit necessary for the CVQLS protocol, 
+    """Full quantum circuit necessary for the CVQLS protocol,
     without the final measurement."""
     # U_c applied to the ancillary qubits
     U_c()
@@ -338,7 +343,7 @@ def full_circuit(weights):
 ##############################################################################
 # To estimate the overlap of the ground state with the post-selected state, one could
 # directly make use of the measurement samples. However, since we want to optimize the cost
-# function, it is useful to express everything in terms of expectation values through 
+# function, it is useful to express everything in terms of expectation values through
 # Bayes' theorem:
 #
 # .. math::

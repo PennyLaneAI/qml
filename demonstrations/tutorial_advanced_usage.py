@@ -5,6 +5,11 @@ r"""
 Advanced Usage
 ==============
 
+.. meta::
+    :property="og:description": Learn how to use multiple expectation values, Jacobians,
+        and keyword arguments in PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
+
 In the previous three introductory tutorials (:ref:`qubit rotation <qubit_rotation>`,
 :ref:`Gaussian transformation <gaussian_transformation>`, and
 :ref:`plugins & hybrid computation <plugins_hybrid>`) we explored the basic concepts of

@@ -4,6 +4,11 @@ r"""
 Quantum transfer learning
 =========================
 
+.. meta::
+    :property="og:description": In this demonstration, transfer learning is applied
+        to a hybrid quantum-classical image classifier using PyTorch and PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_images/transfer_images.png
+
 In this tutorial we apply a machine learning method, known as *transfer learning*, to an
 image classifier based on a hybrid classical-quantum network.
 
