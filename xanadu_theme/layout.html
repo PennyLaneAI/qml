@@ -262,10 +262,8 @@
     if (downloadNote.length >= 1) {
       var tutorialUrlArray = $("#tutorial-type").text().split('/');
 
-      if (tutorialUrlArray[0] == "tutorial") {
-        tutorialUrlArray[0] = "beginner";
-      } else {
-        tutorialUrlArray[0] = "implementations";
+      if (tutorialUrlArray[0] == "demos") {
+        tutorialUrlArray[0] = "demonstrations";
       }
 
       var githubLink = "https://github.com/" + "{{ theme_github_repo }}" + "/blob/master/" + tutorialUrlArray.join("/") + ".py",
