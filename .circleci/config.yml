@@ -136,8 +136,8 @@ jobs:
           name: Deploy to AWS
           command: |
             aws s3 sync _build/html s3://pennylane.ai/qml --delete
-            aws s3 cp _build/html/implementations.html s3://pennylane.ai/qml/implementations.html --metadata '{"Website-Redirect-Location":"https://pennylane.ai/qml/demonstations.html"}'
-            aws s3 cp _build/html/beginner.html s3://pennylane.ai/qml/beginner.html --metadata '{"Website-Redirect-Location":"https://pennylane.ai/qml/demonstations.html"}'
+            aws s3 cp _build/html/implementations.html s3://pennylane.ai/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstations.html
+            aws s3 cp _build/html/beginner.html s3://pennylane.ai/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstations.html
             aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
