@@ -85,7 +85,7 @@
       </script>
     {%- endif %}
   {%- endblock %}
-  {{ super() }}
+  <title>{{ title|striptags|e }} &#8212; PennyLane</title>
 {%- endblock %}
 
 {# Displays the next and previous links both before and after content #}
