@@ -8,6 +8,11 @@
   <meta property="og:url" content="{{ pageurl }}">
   <meta name="twitter:card" content="summary_large_image">
 
+  {% if metatags is defined %}
+  {% set description = metatags.split('\n') %}
+  {{ description[0] | replace("og:", "") | replace("property", "name") }}
+  {% endif %}
+
   <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
