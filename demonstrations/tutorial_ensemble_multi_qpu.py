@@ -2,6 +2,12 @@ r"""
 Ensemble classification with Forest and Qiskit devices
 =======================================================
 
+.. meta::
+    :property="og:description": This demonstration outlines how two QPUs can be
+        combined in parallel to help solve a machine learning classification problem,
+        using PyTorch and PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_images/ensemble_diagram.png
+
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
 
@@ -111,9 +117,9 @@ def plot_points(x_train, y_train, x_test, y_test):
         Patch(facecolor=colours[0], edgecolor=c_transparent, label="Class 0"),
         Patch(facecolor=colours[1], edgecolor=c_transparent, label="Class 1"),
         Patch(facecolor=colours[2], edgecolor=c_transparent, label="Class 2"),
-        Line2D([0], [0], marker="o", color=c_transparent, label="Train", 
+        Line2D([0], [0], marker="o", color=c_transparent, label="Train",
                markerfacecolor="black", markersize=10),
-        Line2D([0], [0], marker="x", color=c_transparent, label="Test", 
+        Line2D([0], [0], marker="x", color=c_transparent, label="Test",
                markerfacecolor="black", markersize=10),
     ]
 
@@ -129,7 +135,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # Define model
 # ------------
 #
-# Our model is summarized in the figure below. We use two 4-qubit devices: ``Aspen-4-4Q-E``
+# Our model is summarized in the figure below. We use two 4-qubit devices: ``Aspen-4-4Q-F``
 # from the PennyLane-Forest plugin and ``qiskit.aer`` from the PennyLane-Qiskit plugin.
 #
 # Data is input using :class:`~.pennylane.RX` rotations and then a different circuit is enacted
@@ -153,7 +159,7 @@ plot_points(x_train, y_train, x_test, y_test)
 
 n_wires = 4
 
-dev0 = qml.device("forest.qvm", device="Aspen-4-4Q-E")
+dev0 = qml.device("forest.qvm", device="Aspen-4-4Q-F")
 dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
@@ -215,7 +221,7 @@ def circuit1(params, x=None):
 
 
 qnodes = qml.QNodeCollection(
-    [qml.QNode(circuit0, dev0, interface="torch"), 
+    [qml.QNode(circuit0, dev0, interface="torch"),
      qml.QNode(circuit1, dev1, interface="torch")]
 )
 
@@ -409,11 +415,11 @@ def plot_points_prediction(x, y, p, title):
 
     custom_lines = [
         Patch(
-            facecolor=colours_prediction["correct"], 
+            facecolor=colours_prediction["correct"],
             edgecolor=c_transparent, label="Correct"
         ),
         Patch(
-            facecolor=colours_prediction["incorrect"], 
+            facecolor=colours_prediction["incorrect"],
             edgecolor=c_transparent, label="Incorrect"
         ),
         Line2D([0], [0], marker=markers[0], color=c_transparent, label="Class 0",

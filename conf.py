@@ -51,8 +51,11 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
+    "sphinx_sitemap",
 ]
 
+
+html_baseurl = 'https://pennylane.ai/qml/'
 
 sphinx_gallery_conf = {
     # path to your example scripts
@@ -181,12 +184,9 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://pennylane.readthedocs.io/en/latest/": None}
 
-from custom_directives import IncludeDirective, GalleryItemDirective, CustomGalleryItemDirective, YoutubeItemDirective
-
+from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective
 
 def setup(app):
-    app.add_directive("includenodoc", IncludeDirective)
-    app.add_directive("galleryitem", GalleryItemDirective)
     app.add_directive("customgalleryitem", CustomGalleryItemDirective)
     app.add_directive("youtube", YoutubeItemDirective)
     app.add_stylesheet("xanadu_gallery.css")

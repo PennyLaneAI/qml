@@ -4,6 +4,12 @@ r"""
 State preparation with PyTorch
 ==============================
 
+.. meta::
+    :property="og:description": Build and optimize a circuit to prepare
+        arbitrary single-qubit states, including mixed states, with PyTorch
+        and PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_images/NOON.png
+
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
 how to:

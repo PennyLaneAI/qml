@@ -5,7 +5,9 @@
 Key Concepts
 ============
 
-Here you can find a growing glossary of key concepts for quantum machine learning.
+.. meta::
+   :property="og:description": A growing glossary of key concepts for quantum machine learning.
+   :property="og:image": https://pennylane.ai/qml/_static/board.png
 
 .. glossary::
 

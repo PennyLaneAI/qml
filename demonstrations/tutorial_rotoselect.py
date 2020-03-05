@@ -4,6 +4,13 @@ r"""
 
 Quantum circuit structure learning
 ==================================
+
+.. meta::
+    :property="og:description": This demonstration appliues the Rotoselect optimization
+        algorithm to minimize a Hamiltonian using VQE.
+    :property="og:image": https://pennylane.ai/qml/_images/rotoselect_structure.png
+
+
 """
 ##############################################################################
 # This example shows how to learn a good selection of rotation
