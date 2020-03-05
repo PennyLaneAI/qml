@@ -97,6 +97,9 @@
   {%- endblock %}
 
   <title>{{ title|striptags|e }} &#8212; PennyLane</title>
+  {% if pagename == "whatisqml" %}
+    {% include "whatisqml_structured.html" %}
+  {% endif %}
 {%- endblock %}
 
 {# Displays the next and previous links both before and after content #}
@@ -164,9 +167,6 @@
           </div>
           {%- block comments -%}
 
-            {% if pagename == "whatisqml" %}
-                {% include "whatisqml_structured.html" %}
-            {% endif %}
             {% if pagename == "demonstrations" %}
               {% include "filters.html" %}
               <style>
