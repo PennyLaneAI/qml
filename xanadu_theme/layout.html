@@ -163,6 +163,10 @@
             </div>
           </div>
           {%- block comments -%}
+
+            {% if pagename == "whatisqml" %}
+                {% include "whatisqml_structured.html" %}
+            {% endif %}
             {% if pagename == "demonstrations" %}
               {% include "filters.html" %}
               <style>
