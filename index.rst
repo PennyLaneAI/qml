@@ -9,6 +9,11 @@
 Quantum machine learning
 ========================
 
+.. meta::
+   :property="og:description": Sit back and learn about the field of quantum machine learning, explore key concepts, download and run QML demonstrations, and view our selection of curated videos.
+   :property="og:image": https://pennylane.ai/qml/_static/qml_card.png
+
+
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">

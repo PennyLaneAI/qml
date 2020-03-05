@@ -5,6 +5,10 @@ Barren plateaus in quantum neural networks
 ==========================================
 *Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com)*
 
+.. meta::
+   :property="og:description": In this tutorial, we will show how randomized quantum circuits face the problem of barren plateaus using PennyLane. We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.
+   :property="og:image": https://pennylane.ai/qml/_images/surface.png
+
 In classical optimization, it is suggested that saddle
 points, not local minima, provide a fundamental impediment
 to rapid high-dimensional non-convex optimization

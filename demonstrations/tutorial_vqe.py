@@ -2,21 +2,26 @@ r"""
 A brief overview of VQE
 =======================
 
+.. meta::
+    :property="og:description": Find the ground state of a Hamiltonian using the
+        variational quantum eigensolver algorithm in PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
+
 The Variational Quantum Eigensolver (VQE) :ref:`[1, 2]<vqe_references>` is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
-principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to 
+principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
 prepare a wave function ansatz of the molecule and estimate the expectation value of its electronic
-Hamiltonian while a classical optimizer is used to adjust the quantum circuit parameters in order 
+Hamiltonian while a classical optimizer is used to adjust the quantum circuit parameters in order
 to find the molecule's ground state energy.
 
-For example, if we use a minimal basis, the ground state wave function of the hydrogen molecule 
+For example, if we use a minimal basis, the ground state wave function of the hydrogen molecule
 :math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` consists of only
-the Hartree-Fock component and a doubly-excited configuration where the two electrons occupy the 
-highest-energy molecular orbitals. If we use a quantum computer to prepare the four-qubit 
-entangled state :math:`\vert \Psi \rangle`, the ultimate goal of the VQE algorithm 
-is to find the values of :math:`\alpha` and :math:`\beta` that minimize the expectation value of 
+the Hartree-Fock component and a doubly-excited configuration where the two electrons occupy the
+highest-energy molecular orbitals. If we use a quantum computer to prepare the four-qubit
+entangled state :math:`\vert \Psi \rangle`, the ultimate goal of the VQE algorithm
+is to find the values of :math:`\alpha` and :math:`\beta` that minimize the expectation value of
 the electronic Hamiltonian.
- 
+
 The PennyLane library allows users to implement the full VQE algorithm using only a few
 lines of code. In this tutorial, we guide you through a calculation of the ground-state energy of
 the hydrogen molecule. Let's get started! ⚛️
@@ -56,9 +61,9 @@ charge = 0
 
 ##############################################################################
 # It is also important to define how the electrons occupy the molecular orbitals to be optimized
-# within the `Hartree-Fock approximation <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__. 
-# This is captured by the `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_ 
-# parameter, which is related to the number of unpaired electrons in the Hartree-Fock state. For 
+# within the `Hartree-Fock approximation <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__.
+# This is captured by the `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_
+# parameter, which is related to the number of unpaired electrons in the Hartree-Fock state. For
 # the neutral hydrogen molecule, the multiplicity is one:
 
 multiplicity = 1
@@ -75,7 +80,7 @@ basis_set = 'sto-3g'
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
 # single line by calling the function :func:`~.generate_hamiltonian`. The first input to
-# the function is a string denoting the name of the molecule, which will determine the name given 
+# the function is a string denoting the name of the molecule, which will determine the name given
 # to the saved files that are produced during the calculations:
 
 name = 'h2'
@@ -118,9 +123,9 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 # In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
 # Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
 # prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
-# variational circuit that is capable of preparing the normalized states of the form 
-# :math:`\alpha|1100\rangle + \beta|0011\rangle` which encode the ground state wave function of 
-# the hydrogen molecule described with a minimal basis set. The circuit consists of single-qubit 
+# variational circuit that is capable of preparing the normalized states of the form
+# :math:`\alpha|1100\rangle + \beta|0011\rangle` which encode the ground state wave function of
+# the hydrogen molecule described with a minimal basis set. The circuit consists of single-qubit
 # rotations on all wires, followed by three entangling CNOT gates, as shown in the figure below:
 #
 # |
@@ -205,7 +210,7 @@ print('Final circuit parameters = \n', params)
 ##############################################################################
 # Success! 🎉🎉🎉 The ground-state energy of the hydrogen molecule has been estimated with chemical
 # accuracy (< 1 kcal/mol) with respect to the exact value of -1.136189454088 Hartree (Ha) obtained
-# from a full configuration-interaction (FCI) calculation. This is because, for the optimized 
+# from a full configuration-interaction (FCI) calculation. This is because, for the optimized
 # values of the single-qubit rotation angles, the state prepared by the VQE ansatz is precisely
 # the FCI ground-state of the :math:`H_2` molecule :math:`|H_2\rangle_{gs} = 0.99 |1100\rangle - 0.10
 # |0011\rangle`.
@@ -222,5 +227,5 @@ print('Final circuit parameters = \n', params)
 #    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
 # 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
-#    `Chem. Rev. 2019, 119, 19, 10856-10915. 
+#    `Chem. Rev. 2019, 119, 19, 10856-10915.
 #    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__

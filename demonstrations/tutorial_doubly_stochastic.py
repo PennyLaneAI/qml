@@ -2,6 +2,12 @@ r"""
 Doubly stochastic gradient descent
 ==================================
 
+.. meta::
+    :property="og:description": In this demonstration, doubly stochastic gradient
+        descent is used to minimize a Hamiltonian via an adapative shot optimization
+        stratgy.
+    :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
+
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
 it is shown that quantum gradient descent, where a finite number of measurement samples

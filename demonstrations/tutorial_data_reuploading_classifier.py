@@ -5,6 +5,10 @@ Data-reuploading classifer
 ==========================
 *Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com)*
 
+.. meta::
+   :property="og:description": Implement a single-qubit universal quantum classifier using PennyLane.
+   :property="og:image": https://pennylane.ai/qml/_images/universal_dnn1.png
+
 A single-qubit quantum circuit which can implement arbitrary unitary
 operations can be used as a universal classifier much like a single
 hidden-layered Neural Network. As surprising as it sounds,

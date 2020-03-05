@@ -3,6 +3,11 @@ r"""
 VQE with parallel QPUs on Rigetti Forest
 ========================================
 
+.. meta::
+    :property="og:description": This demonstration showcases how parallel QPUs can
+        speed up the calculation of the potential energy surface of molecular Hamiltonian.
+    :property="og:image": https://pennylane.ai/qml/_images/vqe_diagram.png
+
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
@@ -105,9 +110,9 @@ for op in h.ops:
 #    fifteen quantum circuit runs. Nevertheless, these quantum circuit runs can still be
 #    parallelized to multiple QPUs.
 #
-# Let's suppose we have access to two QPUs: ``Aspen-4-4Q-E`` and ``Aspen-7-4Q-D`` from
+# Let's suppose we have access to two QPUs: ``Aspen-4-4Q-F`` and ``Aspen-7-4Q-D`` from
 # Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
-# ``Aspen-4-4Q-E`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
+# ``Aspen-4-4Q-F`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
 #
 # .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
 #    :width: 65%
@@ -115,7 +120,7 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-E") for _ in range(8)]
+devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-F") for _ in range(8)]
 devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-D") for _ in range(7)]
 devs = devs_4 + devs_7
 
