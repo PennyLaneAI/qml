@@ -8,7 +8,8 @@ What is Quantum Machine Learning?
    :property="og:description": Learn what quantum machine learning is, and the key ideas and technology underpinnning it.
    :property="og:image": https://pennylane.ai/qml/_static/whatisqml/gpu_to_qpu.png
 
-Quantum machine learning investigates the **consequences of using quantum computers for machine learning**.
+Quantum machine learning is a research area that investigates the
+**consequences of using quantum computers for machine learning**.
 
 For example, we might want to find out whether quantum computers can speed up the
 time it takes to train or evaluate a machine learning model, or whether using quantum information
