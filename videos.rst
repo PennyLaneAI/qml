@@ -51,7 +51,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Quantum Machine Learning with PennyLane
     :author: Josh Izaac (Xanadu)
 
-    A 20 minute crash-course on PennyLane, its features,
+    A 20-minute crash-course on PennyLane, its features,
     and how it can be used to streamline quantum machine learning.
 
 .. youtube:: uf_BRg5ovtg
@@ -78,6 +78,25 @@ Sit back and explore quantum machine learning and quantum programming with our c
     strategies of automatic differentiation, and how to integrate quantum circuits with
     machine learning frameworks such as PyTorch and Tensorflow using open-source software.
 
+.. youtube:: LpyRdBAMEEY
+    :title: IBM Quantum Experience & Qiskit: A Platform for your NISQ needs
+    :author: Thomas Alexander (IBM)
+
+    Learn how IBM's software and hardware can be used to perform quantum computing and 
+    quantum machine learning with near-term devices.
+
+.. youtube:: vMDampJPE7E
+    :title: Quantum Optimization in NISQ Devices and Beyond
+    :author: Leonardo Banchi (University of Florence)
+
+    The good, the bad, and the ugly about how we can undertake quantum optimization tasks on noisy quantum 
+    hardware.
+    
+.. youtube:: KYNFf2xaCcw
+    :title: Using Quantum Circuits as Machine Learning Models
+    :author: Maria Schuld (Xanadu)
+    
+    Making links between quantum circuits, neural networks, kernel methods, and generative models. 
 
 .. raw:: html
 
