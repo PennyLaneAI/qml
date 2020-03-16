@@ -20,6 +20,13 @@ Quantum circuit structure learning
 # variational quantum eigensolver (VQE) problem,
 # and improve upon an initial circuit structure ansatz.
 #
+# .. note::
+#
+#     The Rotoselect and Rotosolve algorithms are directly implemented and
+#     available in :class:`pennylane.Rotoselect` and :class:`pennylane.Rotosolve`, respectively,
+#     and can be used to run the optimizations described in this tutorial without the need to define the
+#     algorithms explicitly.
+#
 # Background
 # ----------
 #
