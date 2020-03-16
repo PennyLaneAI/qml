@@ -30,14 +30,6 @@ Sit back and explore quantum machine learning and quantum programming with our c
     seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
     provide a benefit over a single QPU, even for today's small and noisy devices.
 
-.. youtube:: Z_P_qjrMDvY
-    :title: Welcome to QHACK'19
-    :author: Nathan Killoran (Xanadu)
-
-    The Xanadu team hosted its first quantum machine learning hackathon, QHACK, from
-    Nov 25–26, 2019, bringing together experts and enthusiasts in quantum computing
-    and quantum machine learning.
-
 .. youtube:: cobp2Sf5f3o
     :title: Quantum Gates and Gradients
     :author: Gavin Crooks (X, The Moonshot Factory)
@@ -77,19 +69,6 @@ Sit back and explore quantum machine learning and quantum programming with our c
     algorithms, including their role in the development of near-term quantum technologies,
     strategies of automatic differentiation, and how to integrate quantum circuits with
     machine learning frameworks such as PyTorch and Tensorflow using open-source software.
-
-.. youtube:: vMDampJPE7E
-    :title: Quantum Optimization in NISQ Devices and Beyond
-    :author: Leonardo Banchi (University of Florence)
-
-    The good, the bad, and the ugly about how we can undertake quantum optimization tasks on noisy quantum 
-    hardware.
-    
-.. youtube:: KYNFf2xaCcw
-    :title: Using Quantum Circuits as Machine Learning Models
-    :author: Maria Schuld (Xanadu)
-    
-    Making links between quantum circuits, neural networks, kernel methods, and generative models. 
 
 .. raw:: html
 
