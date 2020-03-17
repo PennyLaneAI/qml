@@ -23,9 +23,8 @@ Quantum circuit structure learning
 # .. note::
 #
 #     The Rotoselect and Rotosolve algorithms are directly implemented and
-#     available in :class:`pennylane.Rotoselect` and :class:`pennylane.Rotosolve`, respectively,
-#     and can be used to run the optimizations described in this tutorial without the need to define the
-#     algorithms explicitly.
+#     available in PennyLane via the optimizers :class:`~.pennylane.RotoselectOptimizer`
+#     and :class:`~.pennylane.RotosolveOptimizer`, respectively.
 #
 # Background
 # ----------
