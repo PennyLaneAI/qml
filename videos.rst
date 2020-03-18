@@ -29,6 +29,14 @@ Sit back and explore quantum machine learning and quantum programming with our c
     we've introduced a number of new features to make computations involving multiple QPUs more
     seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
     provide a benefit over a single QPU, even for today's small and noisy devices.
+    
+.. youtube:: WBVnE8ChGX8
+    :title: Welcome to QHACK'19
+    :author: Nathan Killoran (Xanadu)
+
+    The Xanadu team hosted its first quantum machine learning hackathon, QHACK, from
+    Nov 25–26, 2019, bringing together experts and enthusiasts in quantum computing
+    and quantum machine learning.
 
 .. youtube:: cobp2Sf5f3o
     :title: Quantum Gates and Gradients
@@ -38,6 +46,12 @@ Sit back and explore quantum machine learning and quantum programming with our c
     can be printed and folded for personal reference! By using known 2-qubit gate
     decompositions, the parameter-shift rule for calculating quantum gradients
     on hardware can be extended to any 2-qubit unitary operation.
+    
+.. youtube:: 7ALa_JZvV3o
+    :title: Using Quantum Circuits as Machine Learning Models
+    :author: Maria Schuld (Xanadu)
+
+    Exploring links between quantum circuits, neural networks, kernel methods, and generative models. 
 
 .. youtube:: eShyPOLIfYk
     :title: Quantum Machine Learning with PennyLane
