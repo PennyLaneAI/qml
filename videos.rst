@@ -29,7 +29,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     we've introduced a number of new features to make computations involving multiple QPUs more
     seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
     provide a benefit over a single QPU, even for today's small and noisy devices.
-    
+
 .. youtube:: WBVnE8ChGX8
     :title: Welcome to QHACK'19
     :author: Nathan Killoran (Xanadu)
