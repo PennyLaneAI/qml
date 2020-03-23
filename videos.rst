@@ -30,7 +30,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
     provide a benefit over a single QPU, even for today's small and noisy devices.
 
-.. youtube:: Z_P_qjrMDvY
+.. youtube:: WBVnE8ChGX8
     :title: Welcome to QHACK'19
     :author: Nathan Killoran (Xanadu)
 
@@ -46,12 +46,18 @@ Sit back and explore quantum machine learning and quantum programming with our c
     can be printed and folded for personal reference! By using known 2-qubit gate
     decompositions, the parameter-shift rule for calculating quantum gradients
     on hardware can be extended to any 2-qubit unitary operation.
+    
+.. youtube:: 7ALa_JZvV3o
+    :title: Using Quantum Circuits as Machine Learning Models
+    :author: Maria Schuld (Xanadu)
+
+    Exploring links between quantum circuits, neural networks, kernel methods, and generative models. 
 
 .. youtube:: eShyPOLIfYk
     :title: Quantum Machine Learning with PennyLane
     :author: Josh Izaac (Xanadu)
 
-    A 20 minute crash-course on PennyLane, its features,
+    A 20-minute crash-course on PennyLane, its features,
     and how it can be used to streamline quantum machine learning.
 
 .. youtube:: uf_BRg5ovtg
@@ -77,7 +83,6 @@ Sit back and explore quantum machine learning and quantum programming with our c
     algorithms, including their role in the development of near-term quantum technologies,
     strategies of automatic differentiation, and how to integrate quantum circuits with
     machine learning frameworks such as PyTorch and Tensorflow using open-source software.
-
 
 .. raw:: html
 
