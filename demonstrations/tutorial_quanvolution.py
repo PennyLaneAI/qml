@@ -5,9 +5,8 @@ Quanvolutional Neural Networks
 ==============================
 
 .. meta::
-    :property="og:description": In this demonstration, a quantum convolutional network,
-        combining a classical convolutional network with quantum kernels, is trained to
-        classify MNIST images.
+    :property="og:description": Train a quantum convolutional neural network
+        to classify MNIST images.
     :property="og:image": https://pennylane.ai/qml/_images/circuit.png
 
 *Author: Andrea Mari*
