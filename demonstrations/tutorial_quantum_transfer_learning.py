@@ -307,7 +307,10 @@ def entangling_layer(nqubits):
 
 
 @qml.qnode(dev, interface="torch")
-def q_net(q_in, q_weights_flat):
+def quantum_net(q_input_features, q_weights_flat):
+    """
+    The variational quantum circuit.
+    """
 
     # Reshape weights
     q_weights = q_weights_flat.reshape(q_depth, n_qubits)
@@ -316,7 +319,7 @@ def q_net(q_in, q_weights_flat):
     H_layer(n_qubits)
 
     # Embed features in the quantum node
-    RY_layer(q_in)
+    RY_layer(q_input_features)
 
     # Sequence of trainable variational layers
     for k in range(q_depth):
@@ -339,7 +342,7 @@ def q_net(q_in, q_weights_flat):
 # * A classical pre-processing layer (``nn.Linear``).
 # * A classical activation function (``torch.tanh``).
 # * A constant ``np.pi/2.0`` scaling.
-# * The previously defined quantum circuit (``q_net``).
+# * The previously defined quantum circuit (``quantum_net``).
 # * A classical post-processing layer (``nn.Linear``).
 #
 # The input of the module is a batch of vectors with 512 real parameters (features) and
@@ -347,14 +350,29 @@ def q_net(q_in, q_weights_flat):
 # of images: *ants* and *bees*).
 
 
-class Quantumnet(nn.Module):
+class DressedQuantumNet(nn.Module):
+    """
+    Torch module implementing the *dressed* quantum net.
+    """
+
     def __init__(self):
+        """
+        Definition of the *dressed* layout.
+        """
+
         super().__init__()
         self.pre_net = nn.Linear(512, n_qubits)
         self.q_params = nn.Parameter(q_delta * torch.randn(q_depth * n_qubits))
         self.post_net = nn.Linear(n_qubits, 2)
 
     def forward(self, input_features):
+        """
+        Defining how tensors are supposed to move through the *dressed* quantum
+        net.
+        """
+
+        # obtain the input features for the quantum circuit
+        # by reducing the feature dimension from 512 to 4
         pre_out = self.pre_net(input_features)
         q_in = torch.tanh(pre_out) * np.pi / 2.0
 
@@ -362,8 +380,10 @@ class Quantumnet(nn.Module):
         q_out = torch.Tensor(0, n_qubits)
         q_out = q_out.to(device)
         for elem in q_in:
-            q_out_elem = q_net(elem, self.q_params).float().unsqueeze(0)
+            q_out_elem = quantum_net(elem, self.q_params).float().unsqueeze(0)
             q_out = torch.cat((q_out, q_out_elem))
+
+        # return the two-dimensional prediction from the postprocessing layer
         return self.post_net(q_out)
 
 
@@ -376,7 +396,7 @@ class Quantumnet(nn.Module):
 #
 # 1. First load the classical pre-trained network *ResNet18* from the ``torchvision.models`` zoo.
 # 2. Freeze all the weights since they should not be trained.
-# 3. Replace the last fully connected layer with our trainable dressed quantum circuit (``Quantumnet``).
+# 3. Replace the last fully connected layer with our trainable dressed quantum circuit (``DressedQuantumNet``).
 #
 # .. note::
 #   The *ResNet18* model is automatically downloaded by PyTorch and it may take several minutes (only the first time).
@@ -388,7 +408,7 @@ for param in model_hybrid.parameters():
 
 
 # Notice that model_hybrid.fc is the last layer of ResNet18
-model_hybrid.fc = Quantumnet()
+model_hybrid.fc = DressedQuantumNet()
 
 # Use CUDA or CPU according to the "device" object.
 model_hybrid = model_hybrid.to(device)
