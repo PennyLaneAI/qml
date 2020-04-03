@@ -28,7 +28,7 @@ which is based on the general intuition that if a pre-trained network is good at
 given problem, then, with just a bit of additional training, it can be used to also solve a different
 but related problem.
 
-As discussed in Ref. [1], this idea can be formalized in terms of two abstract netwoks :math:`A`
+As discussed in Ref. [1], this idea can be formalized in terms of two abstract networks :math:`A`
 and :math:`B`, independently from their quantum or classical physical nature.
 
 |
@@ -65,7 +65,7 @@ summarized in following table:
 .. rst-class:: docstable
 
 +-----------+-----------+-----------------------------------------------------+
-| Network A | Network B | Tansfer learning scheme                             |
+| Network A | Network B | Transfer learning scheme                             |
 +===========+===========+=====================================================+
 | Classical | Classical | CC - Standard classical method. See e.g., Ref. [2]. |
 +-----------+-----------+-----------------------------------------------------+
