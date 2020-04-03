@@ -210,15 +210,16 @@ data_transforms = {
 
 data_dir = "../_data/hymenoptera_data"
 image_datasets = {
-    x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ["train", "val"]
+    x if x == "train" else "validation": datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
+    for x in ["train", "val"]
 }
-dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "val"]}
+dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "validation"]}
 class_names = image_datasets["train"].classes
 
 # Initialize dataloader
 dataloaders = {
     x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True)
-    for x in ["train", "val"]
+    for x in ["train", "validation"]
 }
 
 # function to plot images
@@ -239,7 +240,7 @@ def imshow(inp, title=None):
 # Let us show a batch of the test data, just to have an idea of the classification problem.
 
 # Get a batch of training data
-inputs, classes = next(iter(dataloaders["val"]))
+inputs, classes = next(iter(dataloaders["validation"]))
 
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
@@ -252,7 +253,7 @@ imshow(out, title=[class_names[x] for x in classes])
 torch.manual_seed(rng_seed)
 dataloaders = {
     x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True)
-    for x in ["train", "val"]
+    for x in ["train", "validation"]
 }
 
 
@@ -436,7 +437,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
     for epoch in range(num_epochs):
 
         # Each epoch has a training and validation phase
-        for phase in ["train", "val"]:
+        for phase in ["train", "validation"]:
             if phase == "train":
                 scheduler.step()
                 # Set model to training mode
@@ -489,7 +490,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
             epoch_acc = running_corrects / dataset_sizes[phase]
             print(
                 "Phase: {} Epoch: {}/{} Loss: {:.4f} Acc: {:.4f}        ".format(
-                    "train" if phase == "train" else "val  ",
+                    "train" if phase == "train" else "validation  ",
                     epoch + 1,
                     num_epochs,
                     epoch_loss,
@@ -498,10 +499,10 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
             )
 
             # Check if this is the best model wrt previous epochs
-            if phase == "val" and epoch_acc > best_acc:
+            if phase == "validation" and epoch_acc > best_acc:
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
-            if phase == "val" and epoch_loss < best_loss:
+            if phase == "validation" and epoch_loss < best_loss:
                 best_loss = epoch_loss
             if phase == "train" and epoch_acc > best_acc_train:
                 best_acc_train = epoch_acc
@@ -536,7 +537,7 @@ def visualize_model(model, num_images=6, fig_name="Predictions"):
     _fig = plt.figure(fig_name)
     model.eval()
     with torch.no_grad():
-        for _i, (inputs, labels) in enumerate(dataloaders["val"]):
+        for _i, (inputs, labels) in enumerate(dataloaders["validation"]):
             inputs = inputs.to(device)
             labels = labels.to(device)
             outputs = model(inputs)
