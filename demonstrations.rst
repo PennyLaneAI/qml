@@ -166,6 +166,13 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/quanvolution/zoom.png
     :description: :doc:`demos/tutorial_quanvolution`
     :tags: tensorflow
+    
+.. customgalleryitem::
+    :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset
+    :figure: demonstrations/multiclass_classification/margin_2.png
+    :description: :doc:`demos/tutorial_multiclass_classification`
+    :tags: pytorch
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -200,3 +207,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quanvolution
+    demos/tutorial_multiclass_classifier
