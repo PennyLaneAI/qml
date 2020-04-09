@@ -42,7 +42,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Quantum Gates and Gradients
     :author: Gavin Crooks (X, The Moonshot Factory)
 
-    See how the space of all 2-qubit gates can be mapped to a pyramid---which
+    See how the space of all 2-qubit gates can be mapped to a pyramid—which
     can be printed and folded for personal reference! By using known 2-qubit gate
     decompositions, the parameter-shift rule for calculating quantum gradients
     on hardware can be extended to any 2-qubit unitary operation.
@@ -57,8 +57,8 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Everything and the (Quantum) Kitchen Sink: Quantum Machine Learning at Rigetti
     :author: Max Henderson (Rigetti)
 
-    Learn about two of the best-named quantum machine learning models---Quantum Kitchen Sinks and 
-    Quanvolutional Neural Networks---courtesy of Max Henderson of Rigetti Computing.
+    Learn about two of the best-named quantum machine learning models—Quantum Kitchen Sinks and 
+    Quanvolutional Neural Networks—courtesy of Max Henderson of Rigetti Computing.
 
 .. youtube:: eShyPOLIfYk
     :title: Quantum Machine Learning with PennyLane
@@ -70,6 +70,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
 .. youtube:: ijY7WSa7u-4
     :title: Barren Plateau Issues for Variational Quantum-Classical Algorithms
     :author: Patrick Coles (Los Alamos National Lab)
+    
     In order to train quantum circuits, we need to pay careful attention to the cost functions 
     that we choose to optimize, otherwise the training can suffer from barren plateau problems.
 
