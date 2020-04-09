@@ -53,6 +53,12 @@ Sit back and explore quantum machine learning and quantum programming with our c
 
     Exploring links between quantum circuits, neural networks, kernel methods, and generative models. 
 
+.. youtube:: QRt5wKwzzFQ
+    :title: Everything and the (Quantum) Kitchen Sink: Quantum Machine Learning at Rigetti
+    :author: Max Henderson (Rigetti)
+
+    Learn about two of the best-named quantum machine learning models---Quantum Kitchen Sinks and Quanvolutional Neural Networks---courtesy of Max Henderson of Rigetti Computing.
+
 .. youtube:: eShyPOLIfYk
     :title: Quantum Machine Learning with PennyLane
     :author: Josh Izaac (Xanadu)
