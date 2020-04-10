@@ -4,6 +4,11 @@ r"""
 Multiclass margin classifier
 ============================
 
+.. meta::
+    :property="og:description": Use PyTorch to implement a multiclass
+        quantum variational classifier on MNIST data.
+    :property="og:image": https://pennylane.ai/qml/_images/margin_2.png
+
 In this tutorial, we show how to use the PyTorch interface for PennyLane
 to implement a multiclass variational classifier. We consider the iris database
 from UCI, which has 4 features and 3 classes. We use multiple one-vs-all
