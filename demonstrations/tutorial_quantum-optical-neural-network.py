@@ -44,15 +44,13 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 # one-at-a-time.
 #
 
+
 def layer(theta, phi, wires):
     M = len(wires)
     phi_nonlinear = np.ones(M) * np.pi
 
     qml.templates.interferometer.Interferometer(
-        theta, phi, np.ones(M),
-        wires=wires,
-        mesh='rectangular',
-        beamsplitter='clements'
+        theta, phi, np.ones(M), wires=wires, mesh="rectangular", beamsplitter="clements"
     )
 
     [qml.Kerr(phi_nonlinear[i], wires=i) for i in wires]
@@ -62,6 +60,7 @@ def layer(theta, phi, wires):
 # Define the full QONN by building each layer one-by-one and then
 # returning the mean photon number of each mode.
 #
+
 
 @qml.qnode(dev)
 def quantum_neural_net(var, x=None):
@@ -75,7 +74,7 @@ def quantum_neural_net(var, x=None):
 
     # "layer" subcircuits
     for i, v in enumerate(var):
-        layer(v[:len(v)//2], v[len(v)//2:], wires)
+        layer(v[: len(v) // 2], v[len(v) // 2 :], wires)
 
     return [qml.expval(qml.NumberOperator(w)) for w in wires]
 
@@ -89,6 +88,7 @@ def quantum_neural_net(var, x=None):
 # 0 means that ``labels`` and ``predictions`` are equal and 1 means that
 # the vectors are fully orthogonal.
 #
+
 
 def square_loss(labels, predictions):
     term = 0
@@ -107,6 +107,7 @@ def square_loss(labels, predictions):
 # inputs (``data_inputs``) and then calculates the square loss between the
 # predictions and the wanted outputs (``labels``).
 #
+
 
 def cost(var, data_input, labels):
     predictions = np.array([quantum_neural_net(var, x=x) for x in data_input])
@@ -128,12 +129,12 @@ def cost(var, data_input, labels):
 
 # Define the CNOT input-output states
 
-#X = np.array([[1, 0, 1, 0],
+# X = np.array([[1, 0, 1, 0],
 #              [1, 0, 0, 1],
 #              [0, 1, 1, 0],
 #              [0, 1, 0, 1]])
 
-#Y = np.array([[1, 0, 1, 0],
+# Y = np.array([[1, 0, 1, 0],
 #              [1, 0, 0, 1],
 #              [0, 1, 0, 1],
 #              [0, 1, 1, 0]])
@@ -143,7 +144,6 @@ def cost(var, data_input, labels):
 
 X = np.array([[0, 1], [1, 0]])
 Y = np.array([[1, 0], [0, 1]])
-
 
 
 ######################################################################
@@ -173,6 +173,8 @@ print_every = 1
 
 # Wrap the cost so that NLopt can use it for gradient-based optimizations
 evals = 0
+
+
 def cost_wrapper(var, grad=[]):
     global evals
     evals += 1
