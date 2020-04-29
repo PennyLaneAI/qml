@@ -14,7 +14,7 @@ at https://pennylane.ai/qml. The content consists of four basic pages:
 * [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Look up terms around
   quantum machine learning and optimization.
 
-* [Demons of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
+* [Demos of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
   Take a dive into quantum machine learning by exploring cutting-edge algorithms
   on near-term quantum hardware.
 
