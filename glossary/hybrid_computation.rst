@@ -18,9 +18,9 @@ some quantum expectations :math:`\langle \hat{B}_i \rangle` are summed up.
 
 :html:`<br>`
 
-.. figure:: ../_static/concepts/simple_hybrid_graph.svg
+.. figure:: ../_static/concepts/vqe.png
     :align: center
-    :width: 50%
+    :width: 40%
     :target: javascript:void(0);
 
 :html:`<br>`
@@ -35,9 +35,9 @@ and more complex hybrid computation. In general, one can understand these subrou
 
 :html:`<br>`
 
-.. figure:: ../_static/concepts/hybrid_graph.svg
+.. figure:: ../_static/concepts/hybrid_graph.png
     :align: center
-    :width: 70%
+    :width: 90%
     :target: javascript:void(0);
 
 :html:`<br>`
