@@ -7,27 +7,35 @@ Quantum gradients
 =================
 
 The outputs of :ref:`variational circuits <glossary_variational_circuit>` can be formally expressed as
-parameterized functions :math:`f(\mathbf{\theta})` which are evaluated by measuring the output of a quantum circuit.
+parameterized functions :math:`f(\theta)` which are evaluated by measuring the final
+state of the circuit.
 If we can compute the gradient of such a *quantum function*,
 we can then use this information in an optimization or machine learning algorithm, tuning the quantum
 circuit via `gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_ to produce a desired
 output.
 
+:html:`<br>`
+
+.. figure:: ../_static/concepts/quantum_gradient.png
+    :align: center
+    :width: 40%
+    :target: javascript:void(0);
+
+:html:`<br>`
+
 Computing gradients of quantum circuits
 ----------------------------------------
 
-It turns out that the gradient of a quantum function :math:`f(\mathbf{\theta})`
+It turns out that the gradient of a quantum function :math:`f(\theta)`
 can in many cases be expressed as a linear combination of other quantum functions. In fact, these other
 quantum functions typically use the same circuit, differing only in a shift of the argument.
 
 :html:`<br>`
 
-.. figure:: ../_static/concepts/quantum_gradient.svg
+.. figure:: ../_static/concepts/gradients2.png
     :align: center
-    :width: 70%
+    :width: 50%
     :target: javascript:void(0);
-
-    Decomposing the gradient of a quantum circuit function as a linear combination of quantum circuit functions.
 
 :html:`<br>`
 
@@ -44,7 +52,7 @@ A more technical explanation
 Quantum circuits are specified by a sequence of gates. The unitary transformation
 carried out by the circuit can thus be broken down into a product of unitaries:
 
-.. math:: U(x; \mathbf{\theta}) = U_N(\theta_{N}) U_{N-1}(\theta_{N-1}) \cdots U_i(\theta_i) \cdots U_1(\theta_1) U_0(x).
+.. math:: U(x; \theta) = U_N(\theta_{N}) U_{N-1}(\theta_{N-1}) \cdots U_i(\theta_i) \cdots U_1(\theta_1) U_0(x).
 
 Each of these gates is unitary, and therefore must have the form
 :math:`U_{j}(\gamma_j)=\exp{(i\gamma_j H_j)}` where :math:`H_j` is a Hermitian operator
@@ -54,7 +62,7 @@ We have omitted which wire each unitary acts on, since it is not necessary for t
 .. note::
 
     In this example, we have used the input :math:`x` as the argument for gate :math:`U_0`
-    and the parameters :math:`\mathbf{\theta}` for the remaining gates. This is not required.
+    and the parameters :math:`\theta` for the remaining gates. This is not required.
     Inputs and parameters can be arbitrarily assigned to different gates.
 
 A single parameterized gate
@@ -105,11 +113,11 @@ Similarly, any gates applied after gate :math:`i` are combined with the observab
 
 With this simplification, the quantum circuit function becomes
 
-.. math:: f(x; \mathbf{\theta}) = \langle \psi_{i-1} | U_i^\dagger(\theta_i) \hat{B}_{i+1} U_i(\theta_i) | \psi_{i-1} \rangle = \langle \psi_{i-1} | \mathcal{M}_{\theta_i} (\hat{B}_{i+1}) | \psi_{i-1} \rangle,
+.. math:: f(x; \theta) = \langle \psi_{i-1} | U_i^\dagger(\theta_i) \hat{B}_{i+1} U_i(\theta_i) | \psi_{i-1} \rangle = \langle \psi_{i-1} | \mathcal{M}_{\theta_i} (\hat{B}_{i+1}) | \psi_{i-1} \rangle,
 
 and its gradient is
 
-.. math:: \nabla_{\theta_i}f(x; \mathbf{\theta}) = \langle \psi_{i-1} | \nabla_{\theta_i}\mathcal{M}_{\theta_i} (\hat{B}_{i+1}) | \psi_{i-1} \rangle.
+.. math:: \nabla_{\theta_i}f(x; \theta) = \langle \psi_{i-1} | \nabla_{\theta_i}\mathcal{M}_{\theta_i} (\hat{B}_{i+1}) | \psi_{i-1} \rangle.
 
 This gradient has the exact same form as the single-gate case, except we modify the state
 :math:`|x\rangle \rightarrow |\psi_{i-1}\rangle` and the measurement operator
@@ -136,13 +144,13 @@ The gradient of this unitary is
 
 .. math:: \nabla_{\theta_i}U_i(\theta_i) = -\tfrac{i}{2}\hat{P}_i U_i(\theta_i) = -\tfrac{i}{2}U_i(\theta_i)\hat{P}_i .
 
-Substituting this into the quantum circuit function :math:`f(x; \mathbf{\theta})`, we get
+Substituting this into the quantum circuit function :math:`f(x; \theta)`, we get
 
 .. math::
    :nowrap:
 
    \begin{align}
-       \nabla_{\theta_i}f(x; \mathbf{\theta}) = &
+       \nabla_{\theta_i}f(x; \theta) = &
        \frac{i}{2}\langle \psi_{i-1} | U_i^\dagger(\theta_i) \left( P_i \hat{B}_{i+1} - \hat{B}_{i+1} P_i \right) U_i(\theta_i)| \psi_{i-1} \rangle \\
        = & \frac{i}{2}\langle \psi_{i-1} | U_i^\dagger(\theta_i) \left[P_i, \hat{B}_{i+1}\right]U_i(\theta_i) | \psi_{i-1} \rangle,
    \end{align}
@@ -160,13 +168,13 @@ Substituting this into the previous equation, we obtain the gradient expression
    :nowrap:
 
    \begin{align}
-       \nabla_{\theta_i}f(x; \mathbf{\theta}) = & \hphantom{-} \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i + \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i + \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle \\
+       \nabla_{\theta_i}f(x; \theta) = & \hphantom{-} \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i + \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i + \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle \\
        & - \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i - \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i - \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle.
    \end{align}
 
 Finally, we can rewrite this in terms of quantum functions:
 
-.. math:: \nabla_{\mathbf{\theta}}f(x; \mathbf{\theta}) = \tfrac{1}{2}\left[ f(x; \mathbf{\theta} + \tfrac{\pi}{2}) - f(x; \mathbf{\theta} - \tfrac{\pi}{2}) \right].
+.. math:: \nabla_{\theta}f(x; \theta) = \tfrac{1}{2}\left[ f(x; \theta + \tfrac{\pi}{2}) - f(x; \theta - \tfrac{\pi}{2}) \right].
 
 Gaussian gate example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
