@@ -10,6 +10,15 @@ Derivatives and gradients are ubiquitous throughout science and engineering.
 In recent years, automatic differentiation has become a key feature in many numerical software libraries,
 in particular for machine learning (e.g., Theano_, Autograd_, Tensorflow_, or Pytorch_).
 
+:html:`<br>`
+
+.. figure:: ../_static/concepts/autodiff_classical.png
+    :align: center
+    :width: 30%
+    :target: javascript:void(0);
+
+:html:`<br>`
+
 Generally speaking, automatic differentiation is the ability for a software library to compute
 the derivatives of arbitrary numerical code. If you write an algorithm to compute some
 function :math:`h(x)` (which may include mathematical expressions, but also control flow
@@ -24,6 +33,15 @@ algorithm for :math:`\nabla h(x)` with the same degree of complexity as the orig
   method familiar from high-school calculus, where the derivative of a function is approximated by
   numerically evaluating the function at two infinitesimally separated points. However, the approximation can be
   unstable, and in many settings an exact gradient is preferred.
+
+:html:`<br>`
+
+.. figure:: ../_static/concepts/autodiff_quantum.png
+    :align: center
+    :width: 30%
+    :target: javascript:void(0);
+
+:html:`<br>`
 
 The ability to compute :doc:`quantum gradients </glossary/quantum_gradient>` means that quantum computations
 can become part of automatically differentiable :doc:`hybrid computation </glossary/hybrid_computation>` pipelines.
