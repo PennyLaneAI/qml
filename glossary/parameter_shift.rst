@@ -15,7 +15,7 @@ quantum functions typically use the same circuit, differing only in a shift of t
 partial derivatives of a variational circuit can be computed by using the same variational circuit architecture.
 
 Recipes of how to get partial derivatives by evaluated parameter-shifted instances of a variational circuit
-are called ``parameter-shift rules'', and have been first introduced to quantum machine learning in
+are called *parameter-shift rules*, and have been first introduced to quantum machine learning in
 `Mitarai et al. (2018) <https://arxiv.org/abs/1803.00745>`_, and extended in
 `Schuld et al. (2018) <https://arxiv.org/abs/1811.11184>`_.
 
