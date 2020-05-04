@@ -41,6 +41,6 @@ In this case, the output is described by a vector-valued function
 
 It turns out that the gradient of a quantum function :math:`f(\theta)`
 can in many cases be expressed as a linear combination of other quantum functions via
-:ref:`parameter shift rules <glossary_parameter_shift>`. This means that quantum gradients can be
+:ref:`parameter-shift rules <glossary_parameter_shift>`. This means that quantum gradients can be
 computed by quantum computers, opening up quantum computing to gradient-based optimization such as
 `gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_, which is widely used in machine learning.

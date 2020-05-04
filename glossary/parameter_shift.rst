@@ -3,7 +3,7 @@
 
 .. _glossary_parameter_shift:
 
-Parameter shift rules
+Parameter-shift rules
 =====================
 
 The output of a :ref:`variational circuit <glossary_variational_circuit>` can be expressed as a
