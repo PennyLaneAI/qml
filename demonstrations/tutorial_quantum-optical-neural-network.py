@@ -50,10 +50,11 @@ def layer(theta, phi, wires):
     phi_nonlinear = np.ones(M) * np.pi
 
     qml.templates.interferometer.Interferometer(
-        theta, phi, np.ones(M), wires=wires, mesh="rectangular", beamsplitter="clements"
+        theta, phi, np.ones(M), wires=wires, mesh="rectangular", beamsplitter="pennylane"
     )
 
-    [qml.Kerr(phi_nonlinear[i], wires=i) for i in wires]
+    for i in wires:
+        qml.Kerr(phi_nonlinear[i], wires=i)
 
 
 ######################################################################
@@ -67,7 +68,8 @@ def quantum_neural_net(var, x=None):
     wires = list(range(len(x)))
 
     # Encode input x into a sequence of quantum fock states
-    [qml.FockState(x[i], wires=i) for i in wires]
+    for i in wires:
+        qml.FockState(x[i], wires=i)
 
     # Not sure why this doesn't work.
     # qml.FockStateVector(x, wires=wires)
@@ -130,14 +132,14 @@ def cost(var, data_input, labels):
 # Define the CNOT input-output states
 
 # X = np.array([[1, 0, 1, 0],
-#              [1, 0, 0, 1],
-#              [0, 1, 1, 0],
-#              [0, 1, 0, 1]])
+#               [1, 0, 0, 1],
+#               [0, 1, 1, 0],
+#               [0, 1, 0, 1]])
 
 # Y = np.array([[1, 0, 1, 0],
-#              [1, 0, 0, 1],
-#              [0, 1, 0, 1],
-#              [0, 1, 1, 0]])
+#               [1, 0, 0, 1],
+#               [0, 1, 0, 1],
+#               [0, 1, 1, 0]])
 
 
 # The swap gate over two modes
