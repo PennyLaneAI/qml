@@ -40,7 +40,7 @@ Key Concepts
     (Quantum) Node
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
-    Parameter-shift rule
+    :doc:`Parameter shift rule </glossary/parameter_shift>`
         A parameter-shift rule is a recipe for how to estimate gradients of quantum circuits.
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
@@ -57,4 +57,5 @@ Key Concepts
     /glossary/quantum_embedding
     /glossary/quantum_gradient
     /glossary/hybrid_computation
+    /glossary/parameter_shift
     /glossary/variational_circuit
