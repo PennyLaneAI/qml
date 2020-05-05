@@ -178,7 +178,7 @@ def gen_cost(gen_weights):
 # is very close to the :math:`\left| 1 \right\rangle` state.
 
 phi = np.pi / 6
-theta = np.pi / 3
+theta = np.pi / 2
 omega = np.pi / 7
 np.random.seed(0)
 eps = 1e-2
@@ -202,7 +202,7 @@ opt = tf.keras.optimizers.SGD(0.4)
 
 cost = lambda: disc_cost(disc_weights)
 
-for step in range(100):
+for step in range(50):
     opt.minimize(cost, disc_weights)
     if step % 5 == 0:
         cost_val = cost().numpy()
