@@ -6,9 +6,8 @@
 Parameter-shift rules
 =====================
 
-The output of a :ref:`variational circuit <glossary_variational_circuit>` can be expressed as a
-"quantum function" :math:`f(\theta)` parametrized by parameters :math:`\theta = \theta_1, \theta_2,...`.
-
+The output of a :ref:`variational circuit <glossary_variational_circuit>` (i.e., the expectation of an observable)
+can be written as a "quantum function" :math:`f(\theta)` parametrized by :math:`\theta = \theta_1, \theta_2, \dots`.
 The partial derivative of :math:`f(\theta)` can in many cases be expressed as a linear combination of
 other quantum functions. Importantly, these other
 quantum functions typically use the same circuit, differing only in a shift of the argument. This means that

@@ -8,7 +8,8 @@ Quantum gradients
 
 The output of a :ref:`variational circuit <glossary_variational_circuit>` is the expectation value of a
 measurement observable, which can be formally written as a
-parameterized "quantum function" :math:`f(\theta)` in the tunable parameters :math:`\theta = \theta_1, \theta_2,...`.
+parameterized "quantum function" :math:`f(\theta)` in the tunable parameters :math:`\theta = \theta_1, \theta_2, \dots`.
+As with any other such function, one can define partial derivatives of :math:`f` with respect to its parameters.
 
 :html:`<br>`
 
@@ -20,7 +21,7 @@ parameterized "quantum function" :math:`f(\theta)` in the tunable parameters :ma
 :html:`<br>`
 
 
-A *quantum gradient* is the vector of partial derivatives of :math:`f(\theta)`:
+A *quantum gradient* is the vector of partial derivatives of a quantum function :math:`f(\theta)`:
 
 .. math::
 
@@ -37,7 +38,6 @@ In this case, the output is described by a vector-valued function
                                 \partial_{\theta_2}f_1 & \partial_{\theta_2} f_2 & \dots\\
                                 \vdots &  & \ddots\\
                            \end{pmatrix}
-
 
 It turns out that the gradient of a quantum function :math:`f(\theta)`
 can in many cases be expressed as a linear combination of other quantum functions via
