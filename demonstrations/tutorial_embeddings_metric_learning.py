@@ -115,6 +115,19 @@ from pennylane import RX, RY, RZ, CNOT
 # alternates a "feature-encoding Hamiltonian" and an "Ising-like" Hamiltonian
 # with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY`` gates as local fields.
 #
+#
+# .. note::
+#
+#       A bug has been fixed in the ``ZZ`` coupling in the ``ising_hamiltonian`` function, and
+#       previous versions of this tutorial may instead use the gate sequence
+#
+#       .. code-block:: python
+#
+#         # ZZ coupling
+#         CNOT(wires=wires)
+#         RZ(weights[l, 0], wires=wires[0])
+#         CNOT(wires=wires)
+#
 
 def feature_encoding_hamiltonian(features, wires):
 
@@ -124,9 +137,9 @@ def feature_encoding_hamiltonian(features, wires):
 def ising_hamiltonian(weights, wires, l):
 
         # ZZ coupling
-        CNOT(wires=wires)
-        RZ(2 * weights[l, 0], wires=wires[0])
-        CNOT(wires=wires)
+        CNOT(wires=[wires[1], wires[0]])
+        RZ(weights[l, 0], wires=wires[0])
+        CNOT(wires=[wires[1], wires[0]])
         # local fields
         for idx, w in enumerate(wires):
             RY(weights[l, idx + 1], wires=w)
@@ -332,7 +345,7 @@ optimizer = qml.RMSPropOptimizer(stepsize=0.01)
 batch_size = 5
 pars = init_pars
 
-for i in range(2):
+for i in range(1):
 
     # Sample a batch of training inputs from each class
     selectA = np.random.choice(range(len(A)), size=(batch_size,), replace=True)
@@ -355,7 +368,7 @@ for i in range(2):
 # takes an awfully long time. We will
 # therefore load a set of `already trained parameters
 # <https://github.com/XanaduAI/qml/blob/master/implementations/embedding_metric_learning/pretrained_parameters.npy>`_
-# (from running the cell above for 1500 steps).
+# (from running the cell above for 200 steps).
 #
 # .. note:: Training is sensitive to the hyperparameters
 #           such as the batch size, initial parameters and
