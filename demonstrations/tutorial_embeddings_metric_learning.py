@@ -118,16 +118,17 @@ from pennylane import RX, RY, RZ, CNOT
 #
 # .. note::
 #
-#       A bug has been fixed in the ``ZZ`` coupling in the ``ising_hamiltonian`` function, and
-#       previous versions of this tutorial may instead use the gate sequence
+#       Previous versions of this tutorial may instead use the following gate sequence:
 #
 #       .. code-block:: python
 #
 #         # ZZ coupling
 #         CNOT(wires=wires)
-#         RZ(weights[l, 0], wires=wires[0])
+#         RZ(2*weights[l, 0], wires=wires[0])
 #         CNOT(wires=wires)
 #
+#       The current version fixes a bug in the ``CNOT`` wires and does
+#       not multiply the weight parameter by a factor ``2``.
 
 def feature_encoding_hamiltonian(features, wires):
 
@@ -345,7 +346,7 @@ optimizer = qml.RMSPropOptimizer(stepsize=0.01)
 batch_size = 5
 pars = init_pars
 
-for i in range(1):
+for i in range(2):
 
     # Sample a batch of training inputs from each class
     selectA = np.random.choice(range(len(A)), size=(batch_size,), replace=True)
@@ -368,7 +369,7 @@ for i in range(1):
 # takes an awfully long time. We will
 # therefore load a set of `already trained parameters
 # <https://github.com/XanaduAI/qml/blob/master/implementations/embedding_metric_learning/pretrained_parameters.npy>`_
-# (from running the cell above for 200 steps).
+# (from running the cell above for 1500 steps).
 #
 # .. note:: Training is sensitive to the hyperparameters
 #           such as the batch size, initial parameters and
