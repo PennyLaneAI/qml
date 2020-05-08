@@ -2,7 +2,7 @@
 
 This repository contains introductory materials on Quantum Machine Learning,
 as well as Python code demos. Both can be accessed at
-[PennyLane's quantum machine learning page](https://pennylane.ai/qml>). The content consists of four main areas:
+[PennyLane's quantum machine learning page](https://pennylane.ai/qml). The content consists of four main areas:
 
 * [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum
   computing means for machine learning.
