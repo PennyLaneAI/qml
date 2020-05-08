@@ -7,10 +7,10 @@ as well as Python code demos. Both can be accessed at
 * [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum
   computing means for machine learning.
 
+* [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum machine learning with fully-coded implementations of major works.
+
 * [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
   quantum machine learning and optimization.
-
-* [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum machine learning with fully-coded implementations of major works.
   
 * [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos discussing various aspects of quantum machine learning.
 
