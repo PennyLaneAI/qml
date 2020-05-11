@@ -19,8 +19,8 @@ Key Concepts
         specific subsystems. The architecture defines which algorithms a variational circuit can implement by
         fixing the trainable parameters. A circuit ansatz is analogous to the architecture of a neural network.
 
-    Differentiable quantum programming
-        The paradigm of making quantum programs differentiable, and thereby trainable. See also
+    Quantum differentiable programming
+        The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
         :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`(Quantum) Embedding </glossary/quantum_embedding>`
