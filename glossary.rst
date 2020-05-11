@@ -22,7 +22,7 @@ Key Concepts
     :doc:`Hybrid Computation </glossary/hybrid_computation>`
         A computation that includes classical *and* quantum subroutines, executed on different devices.
 
-    :doc:`Parameter-shift rule </glossary/parameter_shift>`
+    :doc:`Parameter-shift Rule </glossary/parameter_shift>`
         The parameter-shift rule is a recipe for how to estimate gradients of quantum circuits.
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
