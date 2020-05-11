@@ -40,6 +40,10 @@ Key Concepts
 
     :doc:`Quantum Gradient </glossary/quantum_gradient>`
         The derivative of a quantum computation with respect to the parameters of a circuit.
+        
+    :doc:`Quantum Machine Learning </whatisqml>`
+        Quantum machine learning is a research area that explores the interplay of ideas from quantum 
+        computing and machine learning.
 
     Quantum Node
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
