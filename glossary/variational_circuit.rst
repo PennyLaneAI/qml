@@ -6,7 +6,7 @@
 Variational circuits
 ====================
 
-*Variational circuit are also known as "Parametrized Quantum Circuits".*
+*Variational circuits are also known as "parametrized quantum circuits".*
 
 Adaptable quantum circuits
 --------------------------
