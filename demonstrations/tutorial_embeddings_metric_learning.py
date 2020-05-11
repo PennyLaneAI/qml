@@ -124,9 +124,9 @@ def feature_encoding_hamiltonian(features, wires):
 def ising_hamiltonian(weights, wires, l):
 
         # ZZ coupling
-        CNOT(wires=wires)
-        RZ(2 * weights[l, 0], wires=wires[0])
-        CNOT(wires=wires)
+        CNOT(wires=[wires[1], wires[0]])
+        RZ(weights[l, 0], wires=wires[0])
+        CNOT(wires=[wires[1], wires[0]])
         # local fields
         for idx, w in enumerate(wires):
             RY(weights[l, idx + 1], wires=w)
@@ -529,3 +529,20 @@ print(prediction)
 #
 # Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, Nathan Killoran: "Transfer learning
 # in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
+#
+# Erratum
+# -------
+#
+# Previous versions of this tutorial may instead use the following gate sequence in the
+# ``ising_hamiltonian`` function:
+#
+# .. code-block:: python
+#
+#   # ZZ coupling
+#   CNOT(wires=wires)
+#   RZ(2*weights[l, 0], wires=wires[0])
+#   CNOT(wires=wires)
+#
+# The current version fixes a bug in the ``CNOT`` wires and does
+# not multiply the weight parameter by a factor ``2``. It is consistent with the in-built ``QAOAEmbedding``
+# of PennyLane v0.9 and higher.

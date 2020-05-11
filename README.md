@@ -1,22 +1,18 @@
 # Quantum machine learning
 
-This repository contains introductory pages on Quantum Machine Learning,
-as well as the Python demos; both are available at
-at https://pennylane.ai/qml. The content consists of four basic pages:
+This repository contains introductory materials on Quantum Machine Learning,
+as well as Python code demos. Both can be accessed at
+[PennyLane's quantum machine learning page](https://pennylane.ai/qml). The content consists of four main areas:
 
-* [What is QML?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum
+* [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum
   computing means for machine learning.
 
-* [Training quantum circuits](https://pennylane.ai/qml/trainingcircuits.html). Explore and
-  understand the key concepts underpinning variational quantum circuits and
-  quantum machine learning.
+* [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum machine learning with fully-coded implementations of major works.
 
-* [Key concepts of QML](https://pennylane.ai/qml/concepts.html). Look up terms around
+* [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
   quantum machine learning and optimization.
-
-* [Demos of cutting-edge QML research](https://pennylane.ai/qml/demonstrations.html).
-  Take a dive into quantum machine learning by exploring cutting-edge algorithms
-  on near-term quantum hardware.
+  
+* [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos discussing various aspects of quantum machine learning.
 
 ## Contributing
 
