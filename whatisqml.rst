@@ -65,7 +65,7 @@ For example, a trained circuit can be used to classify the content of images, by
 the image into the physical state of the device and taking measurements. 
 
 The bigger picture: differentiable programming
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 But the story is bigger than just using quantum computers to tackle machine learning problems. 
 Quantum circuits are *differentiable*, and a quantum computer
