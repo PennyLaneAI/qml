@@ -26,7 +26,7 @@ Key Concepts
         The parameter-shift rule is a recipe for how to estimate gradients of quantum circuits.
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
-    Quantum differentiable programming
+    Quantum Differentiable Programming
         The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
         :doc:`quantum gradient </glossary/quantum_gradient>`.
 
@@ -44,7 +44,7 @@ Key Concepts
     Quantum Node
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
-    :doc:`Variational circuit </glossary/variational_circuit>`
+    :doc:`Variational Circuit </glossary/variational_circuit>`
         Variational circuits are quantum algorithms that depend on tunable parameters, and can therefore
         be optimized.
 
