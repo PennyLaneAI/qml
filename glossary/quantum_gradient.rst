@@ -6,7 +6,7 @@
 Quantum gradients
 =================
 
-The output of a :ref:`variational circuit <glossary_variational_circuit>` is the expectation value of a
+The output of a :doc:`variational circuit </glossary/variational_circuit>` is the expectation value of a
 measurement observable, which can be formally written as a
 parameterized "quantum function" :math:`f(\theta)` in the tunable parameters :math:`\theta = \theta_1, \theta_2, \dots`.
 As with any other such function, one can define partial derivatives of :math:`f` with respect to its parameters.
@@ -41,6 +41,6 @@ In this case, the output is described by a vector-valued function
 
 It turns out that the gradient of a quantum function :math:`f(\theta)`
 can in many cases be expressed as a linear combination of other quantum functions via
-:ref:`parameter-shift rules <glossary_parameter_shift>`. This means that quantum gradients can be
+:doc:`parameter-shift rules </glossary/parameter_shift>`. This means that quantum gradients can be
 computed by quantum computers, opening up quantum computing to gradient-based optimization such as
 `gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_, which is widely used in machine learning.
