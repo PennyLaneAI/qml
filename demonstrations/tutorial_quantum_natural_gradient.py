@@ -6,9 +6,7 @@ Quantum natural gradient
 ========================
 
 .. meta::
-    :property="og:description": This demonstration highlights faster optimization
-        convergence using the quantum natural gradient, which takes into account
-        the quantum geometry.
+    :property="og:description": The quantum natural gradient method can achieve faster convergence for quantum machine learning problems by taking into account the intrinsic geometry of qubits.
     :property="og:image": https://pennylane.ai/qml/_images/qng_optimization.png
 
 This example demonstrates the quantum natural gradient optimization technique

@@ -6,7 +6,7 @@
 Variational circuits
 ====================
 
-*Variational circuit are also known as "Parametrized Quantum Circuits".*
+*Variational circuits are also known as "parametrized quantum circuits".*
 
 Adaptable quantum circuits
 --------------------------
@@ -92,10 +92,10 @@ As an example, consider a *variational quantum classifier* which uses two variat
 associates the gate parameters with fixed data inputs, while the second circuit depends on free, trainable
 parameters. Together with a final measurement, this setup can be interpreted as a machine learning model.
 
-Data-embedding
+Data embedding
 ~~~~~~~~~~~~~~
 
-As explained in the section on :ref:`quantum embeddings <glossary_quantum_embedding>`,
+As explained in the section on :doc:`quantum embeddings </glossary/quantum_embedding>`,
 the first few gates in the circuit can be used to embed
 the input :math:`x` into a quantum state (which functions as a feature map, see
 `Schuld & Killoran et al. (2018) <https://arxiv.org/abs/1803.07128>`_ and
