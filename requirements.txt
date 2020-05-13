@@ -17,7 +17,7 @@ pennylane-forest==0.8.0
 git+https://github.com/XanaduAI/pennylane-cirq.git
 git+https://github.com/XanaduAI/pennylane-qiskit.git
 pyquil==2.19
-scipy==1.4
+scipy==1.4.1
 sphinx==1.8.5
 sphinx-sitemap
 sphinx_gallery==0.3.1
