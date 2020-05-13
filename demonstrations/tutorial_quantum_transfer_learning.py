@@ -65,7 +65,7 @@ summarized in following table:
 .. rst-class:: docstable
 
 +-----------+-----------+-----------------------------------------------------+
-| Network A | Network B | Transfer learning scheme                             |
+| Network A | Network B | Transfer learning scheme                            |
 +===========+===========+=====================================================+
 | Classical | Classical | CC - Standard classical method. See e.g., Ref. [2]. |
 +-----------+-----------+-----------------------------------------------------+
