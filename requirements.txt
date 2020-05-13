@@ -13,7 +13,7 @@ protobuf==3.8.0
 git+https://github.com/XanaduAI/pennylane.git
 git+https://github.com/XanaduAI/pennylane.git#subdirectory=qchem
 git+https://github.com/XanaduAI/pennylane-sf.git
-git+https://github.com/XanaduAI/pennylane-forest.git
+git+https://github.com/rigetti/pennylane-forest.git
 git+https://github.com/XanaduAI/pennylane-cirq.git
 git+https://github.com/XanaduAI/pennylane-qiskit.git
 pyquil==2.19
