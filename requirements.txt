@@ -6,9 +6,9 @@ networkx==2.4
 pygments-github-lexers
 semantic_version==2.6
 strawberryfields==0.14.0
-sympy==1.4
+sympy==1.5
 pillow==6.2.0
-pip==19.2
+pip==20.1
 protobuf==3.8.0
 git+https://github.com/XanaduAI/pennylane.git
 git+https://github.com/XanaduAI/pennylane.git#subdirectory=qchem
