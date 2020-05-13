@@ -49,7 +49,7 @@ import tensorflow as tf
 ##############################################################################
 # We also declare a 3-qubit simulator device running in Cirq.
 
-dev  = qml.device('cirq.simulator', wires=3)
+dev = qml.device('cirq.simulator', wires=3)
 
 
 ##############################################################################
@@ -65,8 +65,9 @@ dev  = qml.device('cirq.simulator', wires=3)
 # rotated (from the starting state :math:`\left|0\right\rangle`) to some
 # arbitrary, but fixed, state.
 
-def real(phi, theta, omega):
-    qml.Rot(phi, theta, omega, wires=0)
+def real(angles, **kwargs):
+    qml.Hadamard(wires=0)
+    qml.Rot(*angles, wires=0)
 
 
 ##############################################################################
@@ -78,7 +79,8 @@ def real(phi, theta, omega):
 # provided as a workspace for the generator, while the discriminator’s
 # output will be on wire 2.
 
-def generator(w):
+def generator(w, **kwargs):
+    qml.Hadamard(wires=0)
     qml.RX(w[0], wires=0)
     qml.RX(w[1], wires=1)
     qml.RY(w[2], wires=0)
@@ -92,13 +94,14 @@ def generator(w):
 
 
 def discriminator(w):
+    qml.Hadamard(wires=0)
     qml.RX(w[0], wires=0)
     qml.RX(w[1], wires=2)
     qml.RY(w[2], wires=0)
     qml.RY(w[3], wires=2)
     qml.RZ(w[4], wires=0)
     qml.RZ(w[5], wires=2)
-    qml.CNOT(wires=[1, 2])
+    qml.CNOT(wires=[0, 2])
     qml.RX(w[6], wires=2)
     qml.RY(w[7], wires=2)
     qml.RZ(w[8], wires=2)
@@ -112,7 +115,7 @@ def discriminator(w):
 
 @qml.qnode(dev, interface="tf")
 def real_disc_circuit(phi, theta, omega, disc_weights):
-    real(phi, theta, omega)
+    real([phi, theta, omega])
     discriminator(disc_weights)
     return qml.expval(qml.PauliZ(2))
 
@@ -190,7 +193,7 @@ disc_weights = tf.Variable(init_disc_weights)
 ##############################################################################
 # We begin by creating the optimizer:
 
-opt = tf.keras.optimizers.SGD(0.1)
+opt = tf.keras.optimizers.SGD(0.4)
 
 
 ##############################################################################
@@ -229,7 +232,7 @@ print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weight
 
 cost = lambda: gen_cost(gen_weights)
 
-for step in range(200):
+for step in range(50):
     opt.minimize(cost, gen_weights)
     if step % 5 == 0:
         cost_val = cost().numpy()
@@ -250,5 +253,19 @@ print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weight
 
 print("Discriminator cost: ", disc_cost(disc_weights).numpy())
 
+##############################################################################
 # The generator has successfully learned how to simulate the real data
 # enough to fool the discriminator.
+#
+# Let's conclude by comparing the states of the real data circuit and the generator. We expect
+# the generator to have learned to be in a state that is very close to the one prepared in the
+# real data circuit. An easy way to access the state of the first qubit is through its
+# `Bloch sphere <https://en.wikipedia.org/wiki/Bloch_sphere>`__ representation:
+
+obs = [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
+
+bloch_vector_real = qml.map(real, obs, dev, interface="tf")
+bloch_vector_generator = qml.map(generator, obs, dev, interface="tf")
+
+print("Real Bloch vector: {}".format(bloch_vector_real([phi, theta, omega])))
+print("Generator Bloch vector: {}".format(bloch_vector_generator(gen_weights)))
