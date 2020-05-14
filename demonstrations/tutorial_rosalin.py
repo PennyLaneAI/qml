@@ -273,8 +273,9 @@ plt.show()
 # all Hamiltonian terms. However, deterministic shot distribution approaches
 # will always have a minimum shot value required per expectation value, as below
 # this threshold they become biased estimators. This is not the case with random
-# sampling; as we saw in the doc:`doubly stochastic gradient descent demonstration
-# </demos/tutorial_doubly_stochastic>`, the introduction of randomness allows for as little
+# sampling; as we saw in the
+# doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+# the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
 # Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal shot
@@ -310,9 +311,10 @@ plt.show()
 #
 #    * :math:`c_i` the coefficients of the Hamiltonian, and
 #
-#    * :math:`\alpha` is the learning rate, and *must* be bound such that :math:`alpha < 2/L`
+#    * :math:`\alpha` is the learning rate, and *must* be bound such that :math:`\alpha < 2/L`
 #      for the above expression to hold.
 #
+
 # 5. Finally, the new values of :math:`s_i` (shots for partial derivative of parameter
 #    :math:`\theta_i`) is given by:
 #
