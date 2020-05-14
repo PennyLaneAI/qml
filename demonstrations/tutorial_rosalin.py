@@ -44,7 +44,7 @@ can lead to marked improvements when training variational quantum algorithms:
   Jonas Kuebler et al. [#kubler2020]_ adapts the number
   of shots measurements during training, by maximizing the expected gain per shot.
 
-In this latest result by [#arrasmith2020]_, the
+In this latest result by Arrasmith et al. [#arrasmith2020]_, the
 idea of doubly stochastic gradient descent has been used to extend the iCANS optimizer,
 resulting in faster convergence. Let's explore their results.
 
@@ -375,9 +375,9 @@ class Rosalin:
         self.s = np.zeros_like(params, dtype=np.float64) + min_shots
 
         # Running average of the parameter gradients
-        self.chi = np.zeros_like(params, dtype=np.float64)
+        self.chi = None
         # Running average of the variance of the parameter gradients
-        self.xi = np.zeros_like(params, dtype=np.float64)
+        self.xi = None
 
     def estimate_hamiltonian(self, params, shots):
         """Returns an array containing length ``shots`` single-shot estimates
@@ -458,6 +458,10 @@ class Rosalin:
 
         # gradient descent update
         params = params - self.lr * grad
+
+        if self.xi is None:
+            self.chi = np.zeros_like(params, dtype=np.float64)
+            self.xi = np.zeros_like(params, dtype=np.float64)
 
         # running average of the gradient variance
         self.xi = self.mu * self.xi + (1 - self.mu) * S
