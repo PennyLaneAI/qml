@@ -4,7 +4,7 @@ Frugal shot optimization with Rosalin
 
 .. meta::
     :property="og:description": In this demonstration, the Rosalin optimizer
-    	is used to minimize a Hamiltonian via an adapative shot optimization strategy.
+    	is used to minimize a Hamiltonian via an frugal shot optimization strategy.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
 In this tutorial we investigate and implement the Roaslin (Random Operator Sampling for
