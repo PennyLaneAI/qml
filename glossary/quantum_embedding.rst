@@ -16,6 +16,15 @@ also
 `Schuld & Killoran (2018) <https://arxiv.org/abs/1803.07128>`_,
 `Lloyd et al. (2020) <https://arxiv.org/abs/2001.03622>`_.
 
+:html:`<br>`
+
+.. figure:: ../_static/concepts/embedding.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0);
+
+:html:`<br>`
+
 Let's consider classical input data consisting of :math:`M` examples, with :math:`N` features each,
 
 .. math:: \mathcal{D}=\{x^{(1)}, \ldots, x^{(m)}, \ldots, x^{(M)}\},
