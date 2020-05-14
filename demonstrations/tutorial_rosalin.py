@@ -314,7 +314,6 @@ plt.show()
 #    * :math:`\alpha` is the learning rate, and *must* be bound such that :math:`\alpha < 2/L`
 #      for the above expression to hold.
 #
-
 # 5. Finally, the new values of :math:`s_i` (shots for partial derivative of parameter
 #    :math:`\theta_i`) is given by:
 #
