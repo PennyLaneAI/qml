@@ -9,7 +9,7 @@ Frugal shot optimization with Rosalin
 
 In this tutorial we investigate and implement the Roaslin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
-Arrasmith et al. [[#arrasmith2020]_]. In this paper, a strategy
+Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy
 is introduced for reducing the number of shots required when optimizing variational quantum
 algorithms, by randomly sampling operators from the cost Hamiltonian.
 
@@ -23,7 +23,7 @@ quantum resource dependence --- is not as frequently considered. Instead, common
 'out-of-the-box' classical optimization techniques, such as gradient-free
 (COBLYA, Nelder-Mead), gradient-descent, and Hessian-free (L-BFGS) tend to be used.
 
-However, for variational algorithms such as :doc:`VQE <demos/tutorial_vqe>`, which involve evaluating
+However, for variational algorithms such as :doc:`VQE </demos/tutorial_vqe>`, which involve evaluating
 a large number of non-commuting operators in the cost function, decreasing the number of
 quantum evaluations required for convergence, while still minimizing shot noise, can
 be delicate balance.
@@ -31,20 +31,20 @@ be delicate balance.
 Recent work has highlighted that 'quantum-aware' optimization techniques
 can lead to marked improvements when training variational quantum algorithms:
 
-* :doc:`demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [[#stokes2019]_], which
+* :doc:`/demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
   takes into account the quantum geometry during the gradient-descent update step.
 
-* The work of Ryan Sweke et al. [[#sweke2020]_], which shows
+* The work of Ryan Sweke et al. [#sweke2019]_, which shows
   that quantum gradient descent with a finite number of shots is equivalent to
   `stochastic gradient descent <https://en.wikipedia.org/wiki/Stochastic_gradient_descent>`_,
   and has guaranteed convergence. Furthermore, combining a finite number of shots with
-  weighted sampling of the cost function terms leads to :doc:`demos/tutorial_doubly_stochastic`.
+  weighted sampling of the cost function terms leads to :doc:`/demos/tutorial_doubly_stochastic`.
 
 * The iCANS (individual Coupled Adaptive Number of Shots) optimization technique by
-  Jonas Kuebler et al. [[#kubler2020]_] adapts the number
+  Jonas Kuebler et al. [#kubler2020]_ adapts the number
   of shots measurements during training, by maximizing the expected gain per shot.
 
-In this latest result by [[#arrasmith2020]_], the
+In this latest result by [#arrasmith2020]_, the
 idea of doubly stochastic gradient descent has been used to extend the iCANS optimizer,
 resulting in faster convergence. Let's explore their results.
 
@@ -61,7 +61,7 @@ can be expressed as the weighted sum of each individual term:
 
 .. math:: \langle H\rangle = \sum_{i=1}^N c_i \langle h_i\rangle.
 
-In :doc:`doubly stochastic gradient descent demonstration <demos/tutorial_doubly_stochastic>`,
+In :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
 we estimated this expectation value by **uniformly sampling** a subset of the terms
 at each optimization step, and evaluating each term by using the same finite number of shots
 :math:`N`.
@@ -72,7 +72,7 @@ the number of shots used to determine the expectation value :math:`\langle h_i\r
 is a discrete random variable distributed according to a
 `multinomial distribution <https://en.wikipedia.org/wiki/Multinomial_distribution>`__,
 
-.. math:: S \tilde \text{Multinomial}(p_i),
+.. math:: S \sim \text{Multinomial}(p_i),
 
 with event probabilities
 
@@ -111,7 +111,7 @@ obs = [
 ##############################################################################
 # We can now create our quantum device (lets use the ``default.qubit`` simulator),
 # and begin constructing our QNodes. For our ansatz, we'll use the
-# :class:`~.pennylane.templates.StronglyEntanglingLayers`.
+# :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 
 from pennylane import expval
 from pennylane.init import strong_ent_layers_uniform
@@ -171,7 +171,7 @@ print(sum(samples))
 #    by querying the required QNode.
 #
 # 3. And, last but not least, estimate the expectation value
-#    :math:`\langle H\rangle = \sum_i \frac{c_i}{p_i}\langle h_i\rangle`.
+#    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle`.
 #
 
 def cost(params):
@@ -220,16 +220,6 @@ for i in range(100):
 # Let's compare this against an optimization not using weighted random sampling.
 # Here, we will split the 1000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
-#
-# .. note::
-#
-#     While not covered here, another approach that could be taken is
-#     *weighted deterministic sampling*. Here, the number of shots is distributed
-#     across terms as per
-#
-#     .. math:: s_i = \lfloor N \frac{|c_i|}{\sum_i |c_i|}\rfloor,
-#
-#     where :math:`N` is the total number of shots.
 
 non_analytic_dev.shots = total_shots / len(coeffs)
 
@@ -263,6 +253,18 @@ plt.legend()
 plt.show()
 
 ##############################################################################
+# .. note::
+#
+#     While not covered here, another approach that could be taken is
+#     *weighted deterministic sampling*. Here, the number of shots is distributed
+#     across terms as per
+#
+#     .. math:: s_i = \left\lfloor N \frac{|c_i|}{\sum_i |c_i|}\right\rfloor,
+#
+#     where :math:`N` is the total number of shots.
+#
+
+##############################################################################
 # Rosalin: Frugal shot optimization
 # ---------------------------------
 #
@@ -272,11 +274,11 @@ plt.show()
 # will always have a minimum shot value required per expectation value, as below
 # this threshold they become biased estimators. This is not the case with random
 # sampling; as we saw in the doc:`doubly stochastic gradient descent demonstration
-# <demos/tutorial_doubly_stochastic>`, the introduction of randomness allows for as little
+# </demos/tutorial_doubly_stochastic>`, the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
-# Using this insight, Arrasmith et al. [[#arrasmith2020]_] modified the iCANS1 frugal shot
-# optimization technique [[#kubler2020]_]
+# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal shot
+# optimization technique [#kubler2020]_
 #
 # iCANS optimizer
 # ~~~~~~~~~~~~~~~
@@ -299,23 +301,25 @@ plt.show()
 #
 #    .. math::
 #
-#        \gamma_i = \frac{1}{s_i}\left[  \left(\alpha - \frac{1}{2} L\alpha^2)g_i^2 -
-#        \frac{L\alpha^2}{2s_i}v_i \right],
+#        \gamma_i = \frac{1}{s_i} \left[ \left(\alpha - \frac{1}{2} L\alpha^2\right)
+#                    g_i^2 - \frac{L\alpha^2}{2s_i}v_i \right],
 #
-#   where:
+#    where:
 #
-#   * :math:`L \leq \sum_i|c_i|` is the Lipschitz constant,
+#    * :math:`L \leq \sum_i|c_i|` is the Lipschitz constant,
 #
-#   * :math:`c_i` the coefficients of the Hamiltonian, and
+#    * :math:`c_i` the coefficients of the Hamiltonian, and
 #
-#   * :math:`\alpha` is the learning rate, and *must* be bound such that :math:`alpha < 2/L`
-#     for the above expression to hold.
+#    * :math:`\alpha` is the learning rate, and *must* be bound such that :math:`alpha < 2/L`
+#      for the above expression to hold.
 #
 # 5. Finally, the new values of :math:`s_i` (shots for partial derivative of parameter
 #    :math:`\theta_i`) is given by:
 #
-#    .. math:: s_i = \frac{2L\alpha}{2-L\alpha}\left(\frac{v_i}{g_i^2}\right)\propto
-#    \frac{v_i}{g_i^2}.
+#    .. math::
+#
+#        s_i = \frac{2L\alpha}{2-L\alpha}\left(\frac{v_i}{g_i^2}\right)\propto
+#              \frac{v_i}{g_i^2}.
 #
 # In addition to the above, to counteract the presence of noise in the system, a
 # running average of :math:`g_i` and :math:`s_i` (:math:`\chi_i` and :math:`\xi_i` respectively)
@@ -521,15 +525,15 @@ for i in range(50):
 
 
 ##############################################################################
-# Let's compare this to a standard Adam optimization, using 100 shots per quantum
-# evaluation, and thus
+# Let's compare this to a standard Adam optimization. Using 100 shots per quantum
+# evaluation, for each update step there are 2 quantum evaluations per parameter.
 
 adam_shots_per_eval = 100
 adam_shots_per_step = 2 * adam_shots_per_eval * len(params.flatten())
 print(adam_shots_per_step)
 
 ##############################################################################
-# 2400 shots per update step.
+# Thus, Adam is using 2400 shots per update step.
 
 params = init_params
 opt = qml.AdamOptimizer(0.07)
