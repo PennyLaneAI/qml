@@ -279,7 +279,8 @@ plt.show()
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
 # Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal shot
-# optimization technique [#kubler2020]_
+# optimization technique [#kubler2020]_ to include weighted random sampling, making it
+# 'doubly stochastic'.
 #
 # iCANS optimizer
 # ~~~~~~~~~~~~~~~
