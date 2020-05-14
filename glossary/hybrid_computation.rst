@@ -18,9 +18,9 @@ some quantum expectations :math:`\langle \hat{B}_i \rangle` are summed up.
 
 :html:`<br>`
 
-.. figure:: ../_static/concepts/simple_hybrid_graph.svg
+.. figure:: ../_static/concepts/vqe.png
     :align: center
-    :width: 50%
+    :width: 40%
     :target: javascript:void(0);
 
 :html:`<br>`
@@ -35,9 +35,9 @@ and more complex hybrid computation. In general, one can understand these subrou
 
 :html:`<br>`
 
-.. figure:: ../_static/concepts/hybrid_graph.svg
+.. figure:: ../_static/concepts/hybrid_graph.png
     :align: center
-    :width: 70%
+    :width: 90%
     :target: javascript:void(0);
 
 :html:`<br>`
@@ -55,14 +55,14 @@ This DAG structure is similar to that appearing in modern deep learning models.
 Backpropagation through hybrid computations
 -------------------------------------------
 
-Since we can estimate the :ref:`gradients <glossary_quantum_gradient>` of variational quantum circuits, hybrid
+Since we can estimate the :doc:`gradients </glossary/quantum_gradient>` of variational quantum circuits, hybrid
 computations are compatible with techniques like the
 famous `backpropagation <https://en.wikipedia.org/wiki/Backpropagation>`_
 algorithm (also known as *reverse-mode automatic differentiation*), the workhorse algorithm for
 training deep learning models.
 
 This means that **we can differentiate end-to-end through hybrid quantum-classical computations**.
-Quantum machine learning models can thus be trained in basically the same way as classical deep learning models.
+Quantum algorithms can thus be trained the same way as classical deep learning models.
 
 .. note::
     The ability to backpropagate through hybrid computations does not mean that one can backpropagate (i.e.,
