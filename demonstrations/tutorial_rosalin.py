@@ -16,9 +16,7 @@ Background
 ----------
 
 While a large number of papers in variational quantum algorithms focus on the
-
 choice of circuit ansatz, cost function, gradient computation, or initialization method,
-
 the optimization strategy---an important component affecting both convergence time and
 quantum resource dependence---is not as frequently considered. Instead, common
 'out-of-the-box' classical optimization techniques, such as gradient-free
@@ -69,7 +67,6 @@ at each optimization step, and evaluating each term by using the same finite num
 :math:`N`.
 
 However, what happens if we use a weighted approach to determine how to distribute
-
 our samples across the terms of the Hamiltonian? In **weighted random sampling** (WRS),
 the number of shots used to determine the expectation value :math:`\langle h_i\rangle`
 is a discrete random variable distributed according to a
@@ -97,7 +94,7 @@ import numpy as np
 import pennylane as qml
 
 # set the random seed
-np.random.seed(3)
+np.random.seed(2)
 
 coeffs = [2, 4, -1, 5, 2]
 
@@ -113,7 +110,6 @@ obs = [
 ##############################################################################
 # We can now create our quantum device (lets use the ``default.qubit`` simulator),
 # and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
-
 # :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 
 from pennylane import expval
@@ -221,7 +217,6 @@ for i in range(100):
 ##############################################################################
 # Let's compare this against an optimization not using weighted random sampling.
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
-
 # also known as *uniform deterministic sampling*.
 
 non_analytic_dev.shots = total_shots / len(coeffs)
@@ -281,16 +276,14 @@ plt.show()
 # the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
-# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal 
+# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal
 # shot-optimization technique [#kubler2020]_ to include weighted random sampling, making it
-
 # 'doubly stochastic'.
 #
 # iCANS optimizer
 # ~~~~~~~~~~~~~~~
 #
 # The iCANS1 optimizer, on which Rosalin is based, frugally distributes a shot budget
-
 # across the partial derivatives of each parameter, which are computed using the
 # :doc:`parameter-shift rule </glossary/quantum_gradient>`. It works roughly as follows:
 #
@@ -301,7 +294,10 @@ plt.show()
 #    for each parameter :math:`\theta_i`, parameters, as well as the *variances*
 #    :math:`v_i` of the estimated gradients.
 #
-# 3. Gradient descent is performed: :math:`\theta = \theta - \alpha g`.
+# 3. Gradient descent is performed for each parameter :math:`\theta_i`, using
+#    the pre-defined learning rate :math:`\alpha` and the gradient information :math:`g_i`:
+#
+#    .. math:: \theta_i = \theta_i - \alpha g_i.
 #
 # 4. The improvement in the cost function per shot, for a specific parameter value,
 #    is then calculated via
@@ -313,7 +309,8 @@ plt.show()
 #
 #    where:
 #
-#    * :math:`L \leq \sum_i|c_i|` is the Lipschitz constant,
+#    * :math:`L \leq \sum_i|c_i|` is the `Lipschitz constant <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__
+#       of the variational quantum algorithm,
 #
 #    * :math:`c_i` are the coefficients of the Hamiltonian, and
 #
@@ -331,6 +328,15 @@ plt.show()
 # In addition to the above, to counteract the presence of noise in the system, a
 # running average of :math:`g_i` and :math:`s_i` (:math:`\chi_i` and :math:`\xi_i` respectively)
 # are used when computing :math:`\gamma_i` and :math:`s_i`.
+#
+# .. note::
+#
+#     In classical machine learning, the Lipschitz constant of the cost function is generally
+#     unknown. However, for a variational quantum algorithm with cost of the form
+#     :math:`f(x) = \langle \psi(x) | \hat{H} |\psi(x)\rangle`,
+#     an upper bound on the Lipschitz constant is given by :math:`L < \sum_i|c_i|`,
+#     where :math:`c_i` are the coefficients of :math:`\hat{H}` when decomposed
+#     into a linear combination of Pauli operator tensor products.
 #
 # Rosalin implementation
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -354,6 +360,7 @@ plt.show()
 #
 # Since the Rosalin optimizer has a state that must be preserved between optimization steps,
 # let's use a class to create our optimizer.
+#
 
 class Rosalin:
 
@@ -442,7 +449,7 @@ class Rosalin:
     def step(self, params):
         """Perform a single step of the Rosalin optimizater."""
         # keep track of the number of shots run
-        self.shots_used += 2 * np.sum(self.s)
+        self.shots_used += int(2 * np.sum(self.s))
 
         # compute the gradient, as well as the variance in the gradient,
         # using the number of shots determined by the array s.
@@ -508,7 +515,6 @@ class Rosalin:
 # must be able to generate single-shot samples from our device.
 
 
-np.random.seed(3)
 rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
 
@@ -528,7 +534,7 @@ params = init_params
 cost_rosalin = [cost_analytic(params)]
 shots_rosalin = [0]
 
-for i in range(50):
+for i in range(60):
     params = opt.step(params)
     cost_rosalin.append(cost_analytic(params))
     shots_rosalin.append(opt.shots_used)
@@ -555,7 +561,7 @@ cost = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=non_analyti
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]
 
-for i in range(200):
+for i in range(100):
     params = opt.step(cost, params)
     cost_adam.append(cost_analytic(params))
     shots_adam.append(adam_shots_per_step*i)
@@ -572,7 +578,6 @@ plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
 plt.show()
-plt.savefig("test.png")
 
 
 ##############################################################################
