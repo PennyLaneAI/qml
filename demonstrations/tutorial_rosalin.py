@@ -116,7 +116,6 @@ obs = [
 
 ##############################################################################
 # We can now create our quantum device (let's use the ``default.qubit`` simulator),
-
 # and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
 # :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 
@@ -168,7 +167,6 @@ print(sum(samples))
 # Note that the sampled shots sum to give the total number of shots.
 #
 # Let's now create our cost function. Recall that the cost function must do the
-
 # following:
 #
 # 1. It must sample from the multinomial distribution we created above,
