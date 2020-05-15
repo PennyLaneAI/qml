@@ -10,7 +10,10 @@ In this tutorial we investigate and implement the Rosalin (Random Operator Sampl
 Adaptive Learning with Individual Number of shots) from
 Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy
 is introduced for reducing the number of shots required when optimizing variational quantum
-algorithms, by randomly sampling operators from the cost Hamiltonian.
+algorithms, by both:
+
+* Frugally adapting the number of shots used per parameter update, and
+* Performing a weighted sampling of operators from the cost Hamiltonian.
 
 Background
 ----------
@@ -45,7 +48,12 @@ can lead to marked improvements when training variational quantum algorithms:
 
 In this latest result by Arrasmith et al. [#arrasmith2020]_, the
 idea of doubly stochastic gradient descent has been used to extend the iCANS optimizer,
-resulting in faster convergence. Let's explore their results.
+resulting in faster convergence.
+
+Over the course of this tutorial, we will explore their results; beginning first with a
+demonstration of *weighted random sampling* of the cost Hamiltonian operators, before
+combining this with the shot-frugal iCANS optimizer to perform doubly stochastic
+Rosalin optimization.
 
 Weighted random sampling
 ------------------------
@@ -252,6 +260,13 @@ plt.legend()
 plt.show()
 
 ##############################################################################
+# We can see that weighted random sampling performs just as well as the uniform
+# deterministic sampling. However, weighted random sampling begins to show an
+# non-negligable improvement over deterministic sampling for large Hamiltonians
+# with highly non-uniform coefficients. For example, see Fig (3) and (4) of
+# Arrasmith et al. [#arrasmith2020]_, comparing weighted random sampling VQE optimization
+# for both :math:`\text{H}_2` and :math:`\text{LiH}` molecules.
+#
 # .. note::
 #
 #     While not covered here, another approach that could be taken is
@@ -579,6 +594,17 @@ plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
 plt.show()
+
+##############################################################################
+# The Rosalin optimizer performs significantly better than the Adam optimizer,
+# approaching the ground state energy of the Hamiltonian with strikingly
+# fewer shots.
+#
+# While beyond the scope of this demonstration, the Rosalin optimizer can be
+# modified in various other ways; for instance, by incorporating *weighted hybrid
+# sampling* (which distributes some shots deterministically, with the remainder
+# done randomly), or by adapating the variant iCANS2 optimizer. Have a go downloading
+# this demonstration from the sidebar 👉 and giving it a go! ⚛️
 
 
 ##############################################################################
