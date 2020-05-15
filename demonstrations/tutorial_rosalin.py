@@ -164,7 +164,7 @@ print(samples)
 print(sum(samples))
 
 ##############################################################################
-# Note that the sampled shots sum to give the total number of shots.
+# As expected, if we sum the sampled shots per term, we recover the total number of shots.
 #
 # Let's now create our cost function. Recall that the cost function must do the
 # following:
@@ -259,7 +259,7 @@ plt.show()
 
 ##############################################################################
 # We can see that weighted random sampling performs just as well as the uniform
-# deterministic sampling. However, weighted random sampling begins to show an
+# deterministic sampling. However, weighted random sampling begins to show a
 # non-negligable improvement over deterministic sampling for large Hamiltonians
 # with highly non-uniform coefficients. For example, see Fig (3) and (4) of
 # Arrasmith et al. [#arrasmith2020]_, comparing weighted random sampling VQE optimization
@@ -323,8 +323,8 @@ plt.show()
 #
 #    where:
 #
-#    * :math:`L \leq \sum_i|c_i|` is the `Lipschitz constant
-#      <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__ of the variational quantum algorithm,
+#    * :math:`L \leq \sum_i|c_i|` is the bound on the `Lipschitz constant
+#      <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__ of the variational quantum algorithm objective function,
 #
 #    * :math:`c_i` are the coefficients of the Hamiltonian, and
 #
@@ -350,7 +350,7 @@ plt.show()
 #     :math:`f(x) = \langle \psi(x) | \hat{H} |\psi(x)\rangle`,
 #     an upper bound on the Lipschitz constant is given by :math:`L < \sum_i|c_i|`,
 #     where :math:`c_i` are the coefficients of :math:`\hat{H}` when decomposed
-#     into a linear combination of Pauli operator tensor products.
+#     into a linear combination of Pauli-operator tensor products.
 #
 # Rosalin implementation
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -533,7 +533,7 @@ rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
 
 ##############################################################################
-# Let's also create an analytic cost function, so that we can keep track of the
+# Let's also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
 cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev))
@@ -601,8 +601,8 @@ plt.show()
 # While beyond the scope of this demonstration, the Rosalin optimizer can be
 # modified in various other ways; for instance, by incorporating *weighted hybrid
 # sampling* (which distributes some shots deterministically, with the remainder
-# done randomly), or by adapating the variant iCANS2 optimizer. Have a go downloading
-# this demonstration from the sidebar 👉 and giving it a go! ⚛️
+# done randomly), or by adapating the variant iCANS2 optimizer. Download
+# this demonstration from the sidebar 👉 and give it a go! ⚛️
 
 
 ##############################################################################
