@@ -13,7 +13,7 @@ protobuf==3.8.0
 pennylane==0.9
 pennylane-qchem==0.8
 pennylane-sf==0.9
-git+https://github.com/rigetti/pennylane-forest.git
+git+https://github.com/rigetti/pennylane-forest.git@v0.9.0
 git+https://github.com/XanaduAI/pennylane-cirq.git
 git+https://github.com/XanaduAI/pennylane-qiskit.git
 pyquil==2.19
