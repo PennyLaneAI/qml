@@ -25,7 +25,6 @@ methods (COBLYA, Nelder-Mead), gradient-descent, and Hessian-free methods (L-BFG
 However, for variational algorithms such as :doc:`VQE </demos/tutorial_vqe>`, which involve evaluating
 a large number of non-commuting operators in the cost function, decreasing the number of
 quantum evaluations required for convergence, while still minimizing statistical noise, can
-
 be a delicate balance.
 
 Recent work has highlighted that 'quantum-aware' optimization techniques
@@ -108,7 +107,8 @@ obs = [
 
 
 ##############################################################################
-# We can now create our quantum device (lets use the ``default.qubit`` simulator),
+# We can now create our quantum device (let's use the ``default.qubit`` simulator),
+
 # and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
 # :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 
@@ -159,7 +159,8 @@ print(sum(samples))
 ##############################################################################
 # Note that the sampled shots sum to give the total number of shots.
 #
-# Let's now create our cost function. Recall that our cost function must do the
+# Let's now create our cost function. Recall that the cost function must do the
+
 # following:
 #
 # 1. It must sample from the multinomial distribution we created above,
