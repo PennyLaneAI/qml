@@ -290,13 +290,14 @@ plt.show()
 # the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
-# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal
+# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS frugal
 # shot-optimization technique [#kubler2020]_ to include weighted random sampling, making it
 # 'doubly stochastic'.
 #
 # iCANS optimizer
 # ~~~~~~~~~~~~~~~
 #
+# Two variants of the iCANS optimizer were introduced in Kübler et al., iCANS1 and iCANS2.
 # The iCANS1 optimizer, on which Rosalin is based, frugally distributes a shot budget
 # across the partial derivatives of each parameter, which are computed using the
 # :doc:`parameter-shift rule </glossary/quantum_gradient>`. It works roughly as follows:
