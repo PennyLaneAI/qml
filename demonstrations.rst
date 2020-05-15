@@ -175,7 +175,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Frugal shot optimization with the Rosalin optimizer
-    :figure: demonstrations/multiclass_classification/margin_2.png
+    :figure: demonstrations/rosalin/rosalin_thumb.png
     :description: :doc:`demos/tutorial_rosalin`
 
 :html:`</div></div><div style='clear:both'>`
