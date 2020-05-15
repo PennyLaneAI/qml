@@ -309,8 +309,8 @@ plt.show()
 #
 #    where:
 #
-#    * :math:`L \leq \sum_i|c_i|` is the `Lipschitz constant <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__
-#       of the variational quantum algorithm,
+#    * :math:`L \leq \sum_i|c_i|` is the `Lipschitz constant
+#      <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__ of the variational quantum algorithm,
 #
 #    * :math:`c_i` are the coefficients of the Hamiltonian, and
 #
