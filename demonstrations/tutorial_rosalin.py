@@ -579,7 +579,7 @@ shots_adam = [0]
 for i in range(100):
     params = opt.step(cost, params)
     cost_adam.append(cost_analytic(params))
-    shots_adam.append(adam_shots_per_step*i)
+    shots_adam.append(adam_shots_per_step * (i + 1))
     print("Step {}: cost = {} shots_used = {}".format(i, cost_adam[-1], shots_adam[-1]))
 
 ##############################################################################
