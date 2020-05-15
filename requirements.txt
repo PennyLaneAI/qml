@@ -10,9 +10,9 @@ sympy==1.5
 pillow==6.2.0
 pip==20.1
 protobuf==3.8.0
-git+https://github.com/XanaduAI/pennylane.git
-git+https://github.com/XanaduAI/pennylane.git#subdirectory=qchem
-git+https://github.com/XanaduAI/pennylane-sf.git
+pennylane==0.9
+pennylane-qchem==0.8
+pennylane-sf==0.9
 git+https://github.com/rigetti/pennylane-forest.git
 git+https://github.com/XanaduAI/pennylane-cirq.git
 git+https://github.com/XanaduAI/pennylane-qiskit.git
