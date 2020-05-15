@@ -3,11 +3,10 @@ Frugal shot optimization with Rosalin
 =====================================
 
 .. meta::
-    :property="og:description": In this demonstration, the Rosalin optimizer
-    	is used to minimize a Hamiltonian via an frugal shot optimization strategy.
+    :property="og:description": The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the number of times a quantum computer is accessed.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
-In this tutorial we investigate and implement the Roaslin (Random Operator Sampling for
+In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
 Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy
 is introduced for reducing the number of shots required when optimizing variational quantum
@@ -16,17 +15,20 @@ algorithms, by randomly sampling operators from the cost Hamiltonian.
 Background
 ----------
 
-While a large number of results in variational quantum algorithms focus on the
-choice of circuit ansatz, cost function, gradient computation, or initialization strategy,
-the optimization strategy --- an important component affecting both convergence time and
-quantum resource dependence --- is not as frequently considered. Instead, common
+While a large number of papers in variational quantum algorithms focus on the
+
+choice of circuit ansatz, cost function, gradient computation, or initialization method,
+
+the optimization strategy---an important component affecting both convergence time and
+quantum resource dependence---is not as frequently considered. Instead, common
 'out-of-the-box' classical optimization techniques, such as gradient-free
-(COBLYA, Nelder-Mead), gradient-descent, and Hessian-free (L-BFGS) tend to be used.
+methods (COBLYA, Nelder-Mead), gradient-descent, and Hessian-free methods (L-BFGS) tend to be used.
 
 However, for variational algorithms such as :doc:`VQE </demos/tutorial_vqe>`, which involve evaluating
 a large number of non-commuting operators in the cost function, decreasing the number of
-quantum evaluations required for convergence, while still minimizing shot noise, can
-be delicate balance.
+quantum evaluations required for convergence, while still minimizing statistical noise, can
+
+be a delicate balance.
 
 Recent work has highlighted that 'quantum-aware' optimization techniques
 can lead to marked improvements when training variational quantum algorithms:
@@ -34,7 +36,7 @@ can lead to marked improvements when training variational quantum algorithms:
 * :doc:`/demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
   takes into account the quantum geometry during the gradient-descent update step.
 
-* The work of Ryan Sweke et al. [#sweke2019]_, which shows
+* The work of Sweke et al. [#sweke2019]_, which shows
   that quantum gradient descent with a finite number of shots is equivalent to
   `stochastic gradient descent <https://en.wikipedia.org/wiki/Stochastic_gradient_descent>`_,
   and has guaranteed convergence. Furthermore, combining a finite number of shots with
@@ -61,12 +63,13 @@ can be expressed as the weighted sum of each individual term:
 
 .. math:: \langle H\rangle = \sum_{i=1}^N c_i \langle h_i\rangle.
 
-In :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+In the :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
 we estimated this expectation value by **uniformly sampling** a subset of the terms
 at each optimization step, and evaluating each term by using the same finite number of shots
 :math:`N`.
 
-However, what happens if we use a weighted random approach to determine how to distribute
+However, what happens if we use a weighted approach to determine how to distribute
+
 our samples across the terms of the Hamiltonian? In **weighted random sampling** (WRS),
 the number of shots used to determine the expectation value :math:`\langle h_i\rangle`
 is a discrete random variable distributed according to a
@@ -96,7 +99,6 @@ import pennylane as qml
 # set the random seed
 np.random.seed(3)
 
-
 coeffs = [2, 4, -1, 5, 2]
 
 obs = [
@@ -110,7 +112,8 @@ obs = [
 
 ##############################################################################
 # We can now create our quantum device (lets use the ``default.qubit`` simulator),
-# and begin constructing our QNodes. For our ansatz, we'll use the
+# and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
+
 # :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 
 from pennylane import expval
@@ -197,7 +200,6 @@ def cost(params):
 
 init_params = strong_ent_layers_uniform(n_layers=num_layers, n_wires=num_wires)
 print(cost(init_params))
-params = init_params
 
 
 ##############################################################################
@@ -218,7 +220,8 @@ for i in range(100):
 
 ##############################################################################
 # Let's compare this against an optimization not using weighted random sampling.
-# Here, we will split the 1000 total shots evenly across all Hamiltonian terms,
+# Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
+
 # also known as *uniform deterministic sampling*.
 
 non_analytic_dev.shots = total_shots / len(coeffs)
@@ -274,18 +277,20 @@ plt.show()
 # will always have a minimum shot value required per expectation value, as below
 # this threshold they become biased estimators. This is not the case with random
 # sampling; as we saw in the
-# doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+# :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
 # the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
-# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal shot
-# optimization technique [#kubler2020]_ to include weighted random sampling, making it
+# Using this insight, Arrasmith et al. [#arrasmith2020]_ modified the iCANS1 frugal 
+# shot-optimization technique [#kubler2020]_ to include weighted random sampling, making it
+
 # 'doubly stochastic'.
 #
 # iCANS optimizer
 # ~~~~~~~~~~~~~~~
 #
-# The iCANS1 optimizer, of which Rosalin is based, frugally distributes a shot budget
+# The iCANS1 optimizer, on which Rosalin is based, frugally distributes a shot budget
+
 # across the partial derivatives of each parameter, which are computed using the
 # :doc:`parameter-shift rule </glossary/quantum_gradient>`. It works roughly as follows:
 #
@@ -310,7 +315,7 @@ plt.show()
 #
 #    * :math:`L \leq \sum_i|c_i|` is the Lipschitz constant,
 #
-#    * :math:`c_i` the coefficients of the Hamiltonian, and
+#    * :math:`c_i` are the coefficients of the Hamiltonian, and
 #
 #    * :math:`\alpha` is the learning rate, and *must* be bound such that :math:`\alpha < 2/L`
 #      for the above expression to hold.
@@ -335,7 +340,7 @@ plt.show()
 #
 # Rosalin takes several hyper-parameters:
 #
-# * ``min_shots``: the minimum number of shots use to estimate the expectations
+# * ``min_shots``: the minimum number of shots used to estimate the expectations
 #   of each term in the Hamiltonian. Note that this must be larger than 2 for the variance
 #   of the gradients to be computed.
 #
@@ -421,7 +426,7 @@ class Rosalin:
 
     def evaluate_grad_var(self, i, params, shots):
         """Evaluate the gradient, as well as the variance in the gradient,
-        for the ith parameter in params, using the parameter shift rule.
+        for the ith parameter in params, using the parameter-shift rule.
         """
         shift = np.zeros_like(params)
         shift[i] = np.pi / 2
