@@ -1,4 +1,7 @@
 r"""
+.. role:: html(raw)
+   :format: html
+
 .. _variational_classifier:
 
 Variational classifier
@@ -186,7 +189,8 @@ def cost(var, X, Y):
 # .. note::
 #
 #     The parity dataset can be downloaded
-#     `here <https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt>`_ and
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt"
+#     download=parity.txt target="_blank">here</a>` and
 #     should be placed in the subfolder ``variational_classifer/data``.
 
 data = np.loadtxt("variational_classifier/data/parity.txt")
@@ -372,8 +376,9 @@ def cost(weights, features, labels):
 # .. note::
 #
 #     The Iris dataset can be downloaded
-#     `here <https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/iris_classes1and2_scaled.txt>`_
-#     and should be placed in the subfolder ``variational_classifer/data``.
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/iris_classes1and2_scaled.txt"
+#     download=parity.txt target="_blank">here</a>` and should be placed
+#     in the subfolder ``variational_classifer/data``.
 
 data = np.loadtxt("variational_classifier/data/iris_classes1and2_scaled.txt")
 X = data[:, 0:2]
