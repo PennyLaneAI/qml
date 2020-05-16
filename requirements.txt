@@ -10,6 +10,7 @@ sympy==1.5
 pillow==6.2.0
 pip==20.1
 protobuf==3.8.0
+pyscf==1.7.1
 pennylane==0.9
 pennylane-qchem==0.8
 pennylane-sf==0.9
