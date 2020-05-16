@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v3-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v3-{{ .Branch }}-
-            - pip-v3-
+            - pip-v4-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v4-{{ .Branch }}-
+            - pip-v4-
 
       - run:
           name: Install dependencies
@@ -35,13 +35,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v3-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v4-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v3-{{ .Branch }}-{{ .Revision }}
-            - gallery-v3-{{ .Branch }}-
-            - gallery-v3-
+            - gallery-v4-{{ .Branch }}-{{ .Revision }}
+            - gallery-v4-{{ .Branch }}-
+            - gallery-v4-
 
       - run:
           name: Build tutorials
@@ -56,7 +56,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v3-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v4-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
           path: /tmp/qml_html.zip
@@ -100,9 +100,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v3-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v3-{{ .Branch }}-
-            - pip-v3-
+            - pip-v4-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v4-{{ .Branch }}-
+            - pip-v4-
 
       - run:
           name: Install dependencies
@@ -115,13 +115,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v3-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v4-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v3-{{ .Branch }}-{{ .Revision }}
-            - gallery-v3-{{ .Branch }}-
-            - gallery-v3-
+            - gallery-v4-{{ .Branch }}-{{ .Revision }}
+            - gallery-v4-{{ .Branch }}-
+            - gallery-v4-
 
       - run:
           name: Build tutorials
@@ -136,7 +136,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v3-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v4-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
           name: Deploy to AWS
