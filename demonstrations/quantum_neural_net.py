@@ -120,7 +120,7 @@ X = data[:, 0]
 Y = data[:, 1]
 
 ##############################################################################
-# Before training a model, let’s examine the data.
+# Before training a model, let's examine the data.
 #
 # *Note: For the next cell to work you need the matplotlib library.*
 
