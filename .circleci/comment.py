@@ -14,8 +14,8 @@ URL = "https://circleci.com/api/v2/project/github/XanaduAI/qml/{}/artifacts".for
 
 res = requests.get(URL, headers=HEADERS).json()
 
-zip_url = res["items"][0]["url"]
-demo_url = res["items"][1]["url"]
+zip_url = res["items"][1]["url"]
+demo_url = res["items"][0]["url"]
 
 for f in res["items"]:
     if "html/index.html" in f["url"]:
