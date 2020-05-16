@@ -129,6 +129,7 @@ where :math:`g^{+}` refers to the pseudo-inverse.
     the dynamics of the system are equivalent to imaginary-time
     evolution within the variational subspace, as proposed in
     `McArdle et al. (2018) <https://arxiv.org/abs/1804.03023>`__.
+
 """
 
 ##############################################################################

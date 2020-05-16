@@ -84,6 +84,7 @@ of shots is 1!
     At the same time, a reduced number of shots may significantly reduce the
     wall time of each optimization step, leading to a reduction in the overall
     optimization time.
+
 """
 
 ##############################################################################

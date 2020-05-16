@@ -42,6 +42,7 @@ What is this circuit doing?
 4. **Finally, we measure the mean photon number** :math:`\langle\hat{n}\rangle =
    \langle\hat{a}^\dagger \hat{a}\rangle`. This quantity, which tells us the average amount of
    photons in the final state, is proportional to the energy of the photonic system.
+
 """
 
 
