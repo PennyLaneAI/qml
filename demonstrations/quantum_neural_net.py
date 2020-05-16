@@ -1,4 +1,7 @@
 """
+.. role:: html(raw)
+   :format: html
+
 .. _quantum_neural_net:
 
 Function fitting with a quantum neural network
@@ -108,14 +111,16 @@ def cost(var, features, labels):
 # Optimization
 # ~~~~~~~~~~~~
 #
-# We load noisy data samples of a sine function.
+# We load noisy data samples of a sine function from the external file ``sine.txt``
+# (:html:`<a href="https://raw.githubusercontent.com/XanaduAI/pennylane/v0.3.0/examples/data/sine.txt"
+# download="sine.txt" target="_blank">download the file here</a>`).
 
-data = np.loadtxt("data/sine.txt")
+data = np.loadtxt("sine.txt")
 X = data[:, 0]
 Y = data[:, 1]
 
 ##############################################################################
-# Before training a model, let’s examine the data.
+# Before training a model, let's examine the data.
 #
 # *Note: For the next cell to work you need the matplotlib library.*
 
