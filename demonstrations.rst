@@ -211,5 +211,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quanvolution
-    demos/tutorial_multiclass_classifier
+    demos/tutorial_multiclass_classification
     demos/tutorial_rosalin
