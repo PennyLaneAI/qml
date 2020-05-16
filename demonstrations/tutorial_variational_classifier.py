@@ -182,6 +182,12 @@ def cost(var, X, Y):
 # ~~~~~~~~~~~~
 #
 # Let’s now load and preprocess some data.
+#
+# .. note::
+#
+#     The parity dataset can be downloaded
+#     `here <https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt>`_ and
+#     should be placed in the subfolder ``variational_classifer/data``.
 
 data = np.loadtxt("variational_classifier/data/parity.txt")
 X = data[:, :-1]
@@ -362,6 +368,12 @@ def cost(weights, features, labels):
 # order to encode the inputs into the amplitudes of a quantum state. In
 # the last preprocessing step, we translate the inputs x to rotation
 # angles using the ``get_angles`` function we defined above.
+#
+# .. note::
+#
+#     The Iris dataset can be downloaded
+#     `here <https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/iris_classes1and2_scaled.txt>`_
+#     and should be placed in the subfolder ``variational_classifer/data``.
 
 data = np.loadtxt("variational_classifier/data/iris_classes1and2_scaled.txt")
 X = data[:, 0:2]
