@@ -26,7 +26,7 @@ comment = """\
 <h3>Website build</h3>
 <strong>Commit:</strong> {hash}\n
 <strong>Circle build number:</strong> {job}\n
-<strong>Built demos:</strong> <a href={demo}>{demo}</a>\n
+<strong>Built <code>demos</code> directory:</strong> <a href={demo}>{demo}</a>\n
 <strong>Website zip:</strong> <a href={zip}>{zip}</a>\n
 <strong>Website url:</strong> <a href={web}>{web}</a>\n
 <em>Please double check the rendered website build to make sure everything is correct.</em>
