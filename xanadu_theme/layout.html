@@ -121,9 +121,10 @@
   {% endif %}
 {%- endmacro %}
 
-          {%- block header -%}
-            {% include "header.html" %}
-          {%- endblock %}
+{%- block header -%}
+  <link rel="stylesheet" type="text/css" href="_static/xanadu_gallery.css" />
+  {% include "header.html" %}
+{%- endblock %}
 
 
 {%- block content %}
