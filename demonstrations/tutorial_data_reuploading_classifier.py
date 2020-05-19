@@ -447,12 +447,6 @@ plt.show()
 
 
 ##############################################################################
-# This tutorial was generated using the following Pennylane version:
-
-qml.about()
-
-
-##############################################################################
 # References
 # ----------
 # [1] Pérez-Salinas, Adrián, et al. “Data re-uploading for a universal
