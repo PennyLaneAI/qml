@@ -118,8 +118,9 @@ A graphical representation of the full data processing pipeline is given in the 
 # https://github.com/pytorch/tutorials/blob/master/beginner_source/transfer_learning_tutorial.py
 # License: BSD
 
-# Plotting
-import matplotlib.pyplot as plt
+import time
+import os
+import copy
 
 # PyTorch
 import torch
@@ -127,16 +128,14 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import torchvision
-from torchvision import datasets, models, transforms
+from torchvision import datasets, transforms
 
 # Pennylane
 import pennylane as qml
 from pennylane import numpy as np
 
-# Other tools
-import time
-import os
-import copy
+# Plotting
+import matplotlib.pyplot as plt
 
 # OpenMP: number of parallel threads.
 os.environ["OMP_NUM_THREADS"] = "1"
@@ -527,7 +526,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
                 best_acc_train = epoch_acc
             if phase == "train" and epoch_loss < best_loss_train:
                 best_loss_train = epoch_loss
-            
+      
             # Update learning rate
             if phase == "train":
                 scheduler.step()
