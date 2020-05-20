@@ -173,6 +173,10 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_multiclass_classification`
     :tags: pytorch
 
+.. customgalleryitem::
+    :tooltip: Frugal shot optimization with the Rosalin optimizer
+    :figure: demonstrations/rosalin/rosalin_thumb.png
+    :description: :doc:`demos/tutorial_rosalin`
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -208,3 +212,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quanvolution
     demos/tutorial_multiclass_classification
+    demos/tutorial_rosalin
