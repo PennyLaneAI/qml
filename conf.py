@@ -182,7 +182,7 @@ htmlhelp_basename = "QMLdoc"
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://pennylane.readthedocs.io/en/latest/": None}
+intersphinx_mapping = {"https://pennylane.readthedocs.io/en/stable/": None}
 
 from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective
 

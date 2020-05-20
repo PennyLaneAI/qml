@@ -18,6 +18,7 @@ how to:
 2. Succinctly evaluate expectation values of many observables.
 3. Estimate expectation values from repeated measurements, as in real
    hardware.
+
 """
 
 ##############################################################################
