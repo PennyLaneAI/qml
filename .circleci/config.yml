@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v5-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v5-{{ .Branch }}-
-            - pip-v5-
+            - pip-v6-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v6-{{ .Branch }}-
+            - pip-v6-
 
       - run:
           name: Install dependencies
@@ -35,13 +35,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v5-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v6-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v5-{{ .Branch }}-{{ .Revision }}
-            - gallery-v5-{{ .Branch }}-
-            - gallery-v5-
+            - gallery-v6-{{ .Branch }}-{{ .Revision }}
+            - gallery-v6-{{ .Branch }}-
+            - gallery-v6-
 
       - run:
           name: Build tutorials
@@ -52,11 +52,12 @@ jobs:
             make html
             cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
             zip -r /tmp/qml_demos.zip demos
+            zip -r /tmp/qml_backreferences backreferences
 
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v5-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v6-{{ .Branch }}-{{ .Revision }}
 
       - store_artifacts:
           path: /tmp/qml_html.zip
@@ -65,7 +66,16 @@ jobs:
           path: /tmp/qml_demos.zip
 
       - store_artifacts:
+          path: /tmp/qml_backreferences.zip
+
+      - store_artifacts:
           path: _build/html
+
+      - store_test_results:
+          path: _build/test-results
+
+      - store_artifacts:
+          path: _build/test-results
 
       - run:
           name: Comment artifacts
@@ -100,9 +110,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v5-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v5-{{ .Branch }}-
-            - pip-v5-
+            - pip-v6-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v6-{{ .Branch }}-
+            - pip-v6-
 
       - run:
           name: Install dependencies
@@ -115,13 +125,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v5-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v6-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v5-{{ .Branch }}-{{ .Revision }}
-            - gallery-v5-{{ .Branch }}-
-            - gallery-v5-
+            - gallery-v6-{{ .Branch }}-{{ .Revision }}
+            - gallery-v6-{{ .Branch }}-
+            - gallery-v6-
 
       - run:
           name: Build tutorials
@@ -136,7 +146,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v5-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v6-{{ .Branch }}-{{ .Revision }}
 
       - deploy:
           name: Deploy to AWS
