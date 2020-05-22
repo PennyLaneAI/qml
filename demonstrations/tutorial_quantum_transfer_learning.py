@@ -118,8 +118,9 @@ A graphical representation of the full data processing pipeline is given in the 
 # https://github.com/pytorch/tutorials/blob/master/beginner_source/transfer_learning_tutorial.py
 # License: BSD
 
-# Plotting
-import matplotlib.pyplot as plt
+import time
+import os
+import copy
 
 # PyTorch
 import torch
@@ -127,16 +128,14 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import torchvision
-from torchvision import datasets, models, transforms
+from torchvision import datasets, transforms
 
 # Pennylane
 import pennylane as qml
 from pennylane import numpy as np
 
-# Other tools
-import time
-import os
-import copy
+# Plotting
+import matplotlib.pyplot as plt
 
 # OpenMP: number of parallel threads.
 os.environ["OMP_NUM_THREADS"] = "1"
@@ -158,7 +157,7 @@ num_epochs = 1              # Number of training epochs
 q_depth = 6                 # Depth of the quantum circuit (number of variational layers)
 gamma_lr_scheduler = 0.1    # Learning rate reduction applied every 10 epochs.
 q_delta = 0.01              # Initial spread of random quantum weights
-rng_seed = 0                # Seed for random number generator
+rng_seed = 3                # Seed for random number generator
 start_time = time.time()    # Start of the computation timer
 
 ##############################################################################
@@ -459,7 +458,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
         # Each epoch has a training and validation phase
         for phase in ["train", "validation"]:
             if phase == "train":
-                scheduler.step()
                 # Set model to training mode
                 model.train()
             else:
@@ -528,6 +526,10 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
                 best_acc_train = epoch_acc
             if phase == "train" and epoch_loss < best_loss_train:
                 best_loss_train = epoch_loss
+      
+            # Update learning rate
+            if phase == "train":
+                scheduler.step()
 
     # Print final results
     model.load_state_dict(best_model_wts)
