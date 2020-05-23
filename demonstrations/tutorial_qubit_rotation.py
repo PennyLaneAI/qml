@@ -321,8 +321,8 @@ print(dcircuit(0.54, 0.12))
 # cost directly as the output of the QNode:
 
 
-def cost(var):
-    return circuit(var)
+def cost(x):
+    return circuit(x)
 
 
 ################################################################################
