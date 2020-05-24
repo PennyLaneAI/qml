@@ -53,15 +53,15 @@ expectation value as :math:`\langle \hat{C}(\theta)\rangle`. This means that the
 :math:`\frac{\partial \langle \hat{C} \rangle}{\partial \theta}` exist and gradient descent can be used. 
 
 Before digging deeper, we will first set establish some basic notation. For simplicity, though a circuit 
-may contain many gates, we can concentrate on just a single gate :math:`U` that we want to differentiate
+may contain many gates, we can concentrate on just a single gate :math:`\hat{U}` that we want to differentiate
 (other gates will follow the same pattern).
 
 .. figure:: ../demonstrations/stochastic_parameter_shift/quantum_circuit.png
     :align: center
     :width: 90%
 
-All gates appearing before :math:`U` can be absorbed into an initial state preparation 
-:math:`\vert \psi_0 \rangle`, and all gates appearing after :math:`U` can be absorbed with the measurement
+All gates appearing before :math:`\hat{U}` can be absorbed into an initial state preparation 
+:math:`\vert \psi_0 \rangle`, and all gates appearing after :math:`\hat{U}` can be absorbed with the measurement
 operator :math:`\hat{A}` to make a new effective measurement operator :math:`\hat{A}`.
 The expectation value :math:`\hat{A}` in the simpler one-gate circuit is identical to 
 the expectation value :math:`\hat{C}` in the larger circuit.
@@ -70,9 +70,9 @@ We can also write any unitary gate in the form
 
 .. math::
 
-    U(\theta) = e^{i\theta\hat{V}},
+    \hat{U}(\theta) = e^{i\theta\hat{V}},
     
-where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`U`.
+where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`\hat{U}`.
 
 Now, how do we actually obtain the numerical values for the derivatives necessary for gradient descent? 
 
@@ -149,7 +149,8 @@ param_shift_vals = [param_shift(theta) for theta in angles]
 plt.plot(angles, expvals, 'b', label="Expecation value")
 plt.plot(angles, grad_vals, 'r', label="Gradient")
 plt.plot(angles, param_shift_vals, 'mx', label="Parameter-shift rule")
-plt.legend();
+plt.legend()
+plt.show()
 
 
 ##############################################################################
@@ -219,7 +220,7 @@ plt.legend();
 #
 # i) Sample a value for the variable :math:`s` uniformly form 
 #    :math:`[0,1]`.
-# ii) In place of gate :math:`U(\theta)`, apply the following
+# ii) In place of gate :math:`\hat{U}(\theta)`, apply the following
 #     three gates:
 #
 #     a) :math:`e^{i(1-s)\hat{G}}`
@@ -250,7 +251,8 @@ plt.legend();
 #
 # .. math::
 #
-#     U_{CR}(t, b, c) = \exp\left[ it(\hat{X}\otimes\hat{\mathbf{1}} - 
+#     \hat{U}_{CR}(\theta_1, \theta_2, \theta_3) 
+#                        = \exp\left[ it(\hat{X}\otimes\hat{\mathbf{1}} - 
 #                                   b\hat{Z}\otimes\hat{X} + 
 #                                   c\hat{\mathbf{1}}\otimes\hat{X}
 #                                    ) \right]
@@ -260,12 +262,12 @@ I = np.eye(2)
 X = np.array([[0, 1], [1, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
-def Generator(t, b, c):
+def Generator(theta1, theta2, theta3):
     # the inputs will show up as Pennylane variables;
     # we have to extract their numerical values
-    G = t.val * (np.kron(X, I) - 
-        b.val * np.kron(Z, X) + 
-        c.val * np.kron(I, X))
+    G = theta1.val * np.kron(X, I) - 
+        theta2.val * np.kron(Z, X) + 
+        theta3.val * np.kron(I, X)
     return G
     
 # A simple circuit that contains the cross-resonance gate
@@ -278,7 +280,7 @@ def crossres_circuit(gate_pars):
 # Subcircuit implementing the gates necessary for the
 # stochastic parameter-shift rule. 
 # In this example, we will differentiate the first term of
-# the circuit (i.e., our variable is :math:`\theta = t`).
+# the circuit (i.e., our variable is :math:`\theta_1`).
 def SPSRgates(gate_pars, s, sign):
     G = Generator(*gate_pars)
     # step a)
@@ -296,25 +298,70 @@ def spsr_circuit(gate_pars, s=None, sign=+1):
     return qml.expval(qml.PauliZ(0))
 
 # Fix the other parameters of the gate
-b, c = -0.15, 1.6
+theta2, theta3 = -0.15, 1.6
 
 # Obtain r+ and r-
 # Even 10 samples gives a good result for this example
-pos_vals = np.array([[spsr_circuit([t, b, c], s=s, sign=+1) 
+pos_vals = np.array([[spsr_circuit([theta1, theta2, theta3], s=s, sign=+1) 
                       for s in np.random.uniform(size=10)]
-                      for t in angles])
-neg_vals = np.array([[spsr_circuit([t, b, c], s=s, sign=-1) 
+                      for theta1 in angles])
+neg_vals = np.array([[spsr_circuit([theta1, theta2, theta3], s=s, sign=-1) 
                       for s in np.random.uniform(size=10)]
-                      for t in angles])
+                      for theta1 in angles])
 
 # Plot the results
-evals = [crossres_circuit([t, -0.15, 1.6]) for t in angles]
+evals = [crossres_circuit([theta1, theta2, theta3]) for theta1 in angles]
 spsr_vals = (pos_vals - neg_vals).mean(axis=1)
 
-plt.plot(angles, evals, 'b', label="Expectation Value") # looks like cos(2*theta)
-plt.plot(angles, spsr_vals, 'r', label="Stochastic PSR") # looks like -2 * sin(2 * theta)!
-plt.legend();
+plt.plot(angles, evals, 'b', label="Expectation Value")
+plt.plot(angles, spsr_vals, 'r', label="Stochastic parameter-shift")
+plt.legend()
+plt.show()
 
+##############################################################################
+# By inspection, we can see that the expectation values of the cross-resonance
+# gate lead to a functional form :math:`\cos(2\theta_1)`. 
+# Also by inspection, the results from the stochastic parameter-shift rule
+# have the functional form :math:`-2\sin(2\theta_1)`, which is the derivative
+# of :math:`\cos(2\theta_1)`!
+
+##############################################################################
+# Finally, it is interesting to notice how the stochastic parameter-shift rule
+# reduces to the vanilla parameter-shift rule. Consider again the case
+# where the gate has just a single term: 
+#
+# .. math::
+#
+#     \hat{U}(\theta) = e^{i\theta\hat{V}}
+#
+# In this case, the terms encapsulated in the operator :math:`\hat{H}` are all
+# zero, and the gates :math:`e^{i(1-s)\hat{U}}`, 
+# :math:`e^{\pm i\tfrac{\pi}{4}\hat{V}}`, and :math:`e^{is\hat{U}}` which 
+# appear in the stochastic parameter-shift rule all commute. Therefore, 
+# we can combine them together into a single gate:
+#
+# .. math::
+#
+#     \begin{align}
+#        e^{i(1-s)\hat{U}}e^{\pm i\tfrac{\pi}{4}\hat{V}}e^{is\hat{U}}
+#         & = e^{i(1-s)\hat{U}}e^{is\hat{U}}e^{\pm i\tfrac{\pi}{4}\hat{V}} \\
+#         & = e^{i\hat{U}}e^{\pm i\tfrac{\pi}{4}\hat{V}} \\
+#         & = e^{i\theta\hat{V}}e^{\pm i\tfrac{\pi}{4}\hat{V}} \\
+#         & = e^{i\left(\theta\pm\tfrac{\pi}{4}\right)\hat{V}}
+#     \end{align}
+#
+# Since the random variable :math:`s` no longer appears in this equation, 
+# averaging over it has no effect, and the stochastic parameter-shift rule
+# nicely reduces back to the ordinary parameter-shift rule!
+#
+# .. math::
+#
+#     \begin{align}
+#        \mathbb{E}_{s\in\mathcal{U}[0,1]}\left[
+#            e^{i(1-s)\hat{U}}e^{\pm i\tfrac{\pi}{4}\hat{V}}e^{is\hat{U}}
+#        \right]
+#        = & e^{i\left(\theta\pm\tfrac{\pi}{4}\right)\hat{V}}
+#     \end{align}  
 
 ##############################################################################
 # References
