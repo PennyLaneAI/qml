@@ -6,25 +6,25 @@ The Stochastic Parameter-shift Rule
     :property="og:description": Differentiate any qubit gate with the stochastic parameter-shift rule.
     :property="og:image": https://pennylane.ai/qml/_images/some_image.png # TODO: add image
 
-We demonstrate how the stochastic parameter-shift rule (Banchi and Crooks [#banchi2020]_)
+We demonstrate how the stochastic parameter-shift rule, discovered by Banchi and Crooks [#banchi2020]_,
 can be used to differentiate arbitrary qubit gates, generalizing the original 
-:doc:`parameter-shift rule </glossary/parameter_shift>`_, which applies only for gates of a particular 
+:doc:`parameter-shift rule </glossary/parameter_shift>`, which applies only for gates of a particular 
 (but widely encountered) form.
 
 Background
 ----------
 
 One of the main ideas encountered in near-term quantum machine learning is the 
-:doc:`variational circuit </glossary/variational_circuit>`_. 
+:doc:`variational circuit </glossary/variational_circuit>`. 
 Evolving from earlier concepts pioneered by domain-specific algorithms like the 
-:doc:`variational quantum eigensolver </demonstrations/tutorial_vqe>`_ and the 
-:doc:`quantum approximate optimization algorithm </demonstrations/tutorial_qaoa_maxcut>`_,
+:doc:`variational quantum eigensolver </demos/tutorial_vqe>` and the 
+:doc:`quantum approximate optimization algorithm </demos/tutorial_qaoa_maxcut>`,
 this class of quantum algorithms makes heavy use of two distinguishing ingredients: 
 
 i) Gates have free parameters
 ii) Expectation values of measurements are taken 
 
-These two ingredients allow one circuit to actually represent an entire _family of circuits_. 
+These two ingredients allow one circuit to actually represent an entire *family of circuits*. 
 An objective function---encapsulating some problem-specific goal---is built from the expectation values, 
 and the circuit's free parameters are progressively tuned to optimize this function. 
 At each step, the circuit has the same gate layout, but slightly different parameters, making 
@@ -72,16 +72,17 @@ We can also write any unitary gate in the form
 
     U(\theta) = e^{i\theta\hat{V}},
     
-where :math:`\hat{V}` is the Hermitian _generator_ of the gate :math:`U`.
+where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`U`.
 
 Now, how do we actually obtain the numerical values for the derivatives necessary for gradient descent? 
 
-This is where the parameter-shift rule [#li2016], [#mitarai2018], [#schuld2018] enters the story. In short, the parameter-shift rule says that for 
+This is where the parameter-shift rule [#li2016]_, [#mitarai2018]_, [#schuld2018]_ enters the story. 
+In short, the parameter-shift rule says that for 
 many gates of interest---including all single-qubit gates---we can obtain the value of the derivative 
 :math:`\frac{\partial \langle \hat{A}(\theta) \rangle}{\partial \theta}` by subtracting two related 
 circuit evaluations:
 
-..math::
+.. math::
 
    \frac{\partial \langle \hat{A} \rangle}{\partial \theta} = 
    \langle \hat{A}(\theta + \tfrac{\pi}{4}) \rangle -
@@ -95,16 +96,19 @@ circuit evaluations:
 
     Depending on the convention used, there may be additional constant multipliers appearing in this formula. 
     For example, PennyLane actually uses a convention where most qubit gates are parametrized as 
-    :math:`exp(-i\tfrac{\theta}{2}\hat{V})`. This results in a slightly different, but equivalent, form 
+    :math:`\exp(-i\tfrac{\theta}{2}\hat{V})`. This results in a slightly different, but equivalent, form 
     for the parameter-shift rule. Here we use the simplest form, which also tracks the notation from
     [#banchi2020]_.
 
-The parameter-shift rule is _exact_, i.e., the formula for the gradient doesn't involve any approximations. 
-For quantum hardware, we can only take a finite number of samples, so we can never determine a circuit's expectation values _exactly_. However, the parameter-shift rule provides the guarantee that it is an _unbiased estimator_, meaning that if we could take a infinite number of samples, it converges to the correct gradient value. 
+The parameter-shift rule is *exact*, i.e., the formula for the gradient doesn't involve any approximations. 
+For quantum hardware, we can only take a finite number of samples, so we can never determine a circuit's
+expectation values *exactly*. However, the parameter-shift rule provides the guarantee that it is an 
+*unbiased estimator*, meaning that if we could take a infinite number of samples, it converges to the 
+correct gradient value. 
 
-Let's jump into some code and take a look at the parameter-shift rule in action. 
-
+Let's jump into some code and take a look at the parameter-shift rule in action.
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
@@ -117,7 +121,7 @@ dev = qml.device('default.qubit', wires=2)
 
 ##############################################################################
 # We will consider a very simple circuit, containing just a single-qubit 
-# rotation about the x-axis, followed by a measurement along the z-axis.
+# rotation about the x-axis, followed by a measurement along the z-axis. 
 
 @qml.qnode(dev)
 def rotation_circuit(theta):
@@ -150,34 +154,37 @@ plt.legend();
 
 ##############################################################################
 # We have evaluated the expectation value at all possible values for the angle
-# :math:`theta`. By inspection, we can see that the functional dependence is
-# :math:`\cos(\theta)`. The parameter-shift evaluations are plotted with x's.
-# Again, by inspection, we can see that these have the functional form 
-# :math:`-\sin(\theta)`, and they match the values provided by the ``grad``
-# function.
+# :math:`\theta`. By inspection, we can see that the functional dependence is
+# :math:`\cos(\theta)`. The parameter-shift evaluations are plotted with 'x'
+# markers.
 #
-# The parameter-shift works really nicely for many gates---like the rotaiton
+# Again, by inspection, we can see that these have the functional form 
+# :math:`-\sin(\theta)`---the expected derivative of :math:`\cos(\theta)`
+# and they match the values provided by PennyLane's ``grad`` function.
+#
+# The parameter-shift works really nicely for many gates---like the rotation
 # gate we used in our example above. But it does have constraints. There are 
 # some technical conditions that, if a gate satisfies them, we can guarantee
-# it has a parameter-shift rule [#schuld2018]. Furthermore, we can derive
-# similar parameter-shift recipes for some other gates that _don't_ meet 
+# it has a parameter-shift rule [#schuld2018]_. Furthermore, we can derive
+# similar parameter-shift recipes for some other gates that *don't* meet 
 # those technical conditions. 
 #
 # But, in general, the parameter-shift rule is not universally applicable.
-# In cases where it doesn't hold (or is not yet known to hold). you would
+# In cases where it does not hold (or is not yet known to hold), we would
 # either have to decompose the gate into compatible gates, or use an
 # alternate estimator for the gradient, e.g., the finite-difference
 # approximation. But both of these alternatives can have drawbacks due
 # to increased circuit complexity or potential errors in the gradient
-# value. If only there was a method that could be used for _any_
+# value. If only there was a method that could be used for *any*
 # qubit gate.
-#
+
+##############################################################################
 # The Stochastic Parameter-shift Rule
 # -----------------------------------
 #
 # Here's where the stochastic parameter-shift rule makes its appearance
 # on the stage. 
-
+#
 # The stochastic parameter-shift rule introduces two new ingredients to
 # the parameter-shift recipe:  
 #
@@ -188,23 +195,24 @@ plt.legend();
 #
 # These additions allow the stochastic parameter-shift rule to work 
 # for arbitrary qubit gates. Every gate is unitary, which means they 
-# have the form :math:`e^{i\theta \hat{G}` for some generator :math:`G`. 
+# have the form :math:`e^{i\theta \hat{G}}` for some generator :math:`G`. 
 # Additionally, every multi-qubit operator can be expressed as a 
 # sum of tensor products of Pauli operators, so let's assume, 
-# without loss of generality, the following form for :math:`G`:
+# without loss of generality, the following form for :math:`\hat{G}`:
 #
-#  .. math::
+# .. math::
 #
-#      G = \hat{H} + \theta \hat{V}, 
+#     \hat{G} = \hat{H} + \theta \hat{V}, 
 #
 # where :math:`\hat{V}` is a "Pauli word", i.e., a tensor 
 # product of Pauli operators (e.g., 
-# :math:`\hat{Z}_0\otimes\hat{Y}_1) and :math:`\hat{H}` can 
+# :math:`\hat{Z}_0\otimes\hat{Y}_1)` and :math:`\hat{H}` can 
 # be an arbitrary linear combination of Pauli-operator
 # tensor products. For simplicity, we assume that the parameter
 # :math:`\theta` appears only in front of :math:`\hat{V}` (other
 # cases can be handled using the chain rule). 
-#
+
+##############################################################################
 # The stochastic parameter-shift rule gives the following recipe for
 # computing the gradient of the expectation value 
 # :math:`\langle \hat{A} (\theta) \rangle`:
@@ -237,14 +245,15 @@ plt.legend();
 #
 # Let's see this method in action.
 #
-# Following [#banchi2020], we will use the cross-resonance gate as a
+# Following [#banchi2020]_, we will use the cross-resonance gate as a
 # working example. This gate is defined as
 #
 # .. math::
-#     U_{CR}(t, b, c) = exp\left[ it(\hat{X}\otimes\hat{\mathbb{1} - 
+#
+#     U_{CR}(t, b, c) = \exp\left[ it(\hat{X}\otimes\hat{\mathbf{1}} - 
 #                                   b\hat{Z}\otimes\hat{X} + 
-#                                   c\hat{\mathbb{1}}\otimes\hat{X}
-#                                   ) \right]
+#                                   c\hat{\mathbf{1}}\otimes\hat{X}
+#                                    ) \right]
 
 # First we define some basic Pauli matrices
 I = np.eye(2)
