@@ -3,13 +3,13 @@ The Stochastic Parameter-shift Rule
 ===================================
 
 .. meta::
-    :property="og:description": You can differentiate any qubit gate with the stochastic parameter-shift rule.
+    :property="og:description": Differentiate any qubit gate with the stochastic parameter-shift rule.
     :property="og:image": https://pennylane.ai/qml/_images/some_image.png # TODO: add image
 
-In this tutorial we demonstrate how the stochastic parameter-shift rule (Banchi and Crooks [#banchi2020]_)
- can be used to differentiate arbitrary qubit gates, generalizing the original 
- :doc:`parameter-shift rule </glossary/parameter_shift>`_, which applies only for gates of a particular 
- (but widely encountered) form.
+We demonstrate how the stochastic parameter-shift rule (Banchi and Crooks [#banchi2020]_)
+can be used to differentiate arbitrary qubit gates, generalizing the original 
+:doc:`parameter-shift rule </glossary/parameter_shift>`_, which applies only for gates of a particular 
+(but widely encountered) form.
 
 Background
 ----------
@@ -277,7 +277,7 @@ def SPSRgates(gate_pars, s, sign):
     # step b)
     qml.QubitUnitary(expm(1j * sign * np.pi / 4 * X), wires=0)
     # step c)
-    qml.QubitUnitary(expm(1j * s * H), wires=[0,1])
+    qml.QubitUnitary(expm(1j * s * G), wires=[0,1])
     
 # Function which can obtain all expectation vals needed 
 # for the stochastic parameter-shift rule
