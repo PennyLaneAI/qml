@@ -111,6 +111,7 @@ Let's jump into some code and take a look at the parameter-shift rule in action.
 
 import pennylane as qml
 from pennylane import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from scipy.linalg import expm
 
@@ -147,8 +148,10 @@ expvals = [rotation_circuit(theta) for theta in angles]
 grad_vals = [gradient(theta) for theta in angles]
 param_shift_vals = [param_shift(theta) for theta in angles]
 plt.plot(angles, expvals, 'b', label="Expecation value")
-plt.plot(angles, grad_vals, 'r', label="Gradient")
+plt.plot(angles, grad_vals, 'r', label="qml.grad function")
 plt.plot(angles, param_shift_vals, 'mx', label="Parameter-shift rule")
+matplotlib.rcParams['text.usetex'] = True
+plt.xlabel(r"\theta")
 plt.legend()
 plt.show()
 
@@ -314,7 +317,8 @@ evals = [crossres_circuit([theta1, theta2, theta3]) for theta1 in angles]
 spsr_vals = (pos_vals - neg_vals).mean(axis=1)
 
 plt.plot(angles, evals, 'b', label="Expectation Value")
-plt.plot(angles, spsr_vals, 'r', label="Stochastic parameter-shift")
+plt.plot(angles, spsr_vals, 'r', label="Stochastic parameter-shift rule")
+plt.xlabel(r"\theta_1")
 plt.legend()
 plt.show()
 
