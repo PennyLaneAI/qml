@@ -21,8 +21,8 @@ Evolving from earlier concepts pioneered by domain-specific algorithms like the
 :doc:`quantum approximate optimization algorithm </demonstrations/tutorial_qaoa_maxcut>`_,
 this class of quantum algorithms makes heavy use of two distinguishing ingredients: 
 
-i) gates have free parameters
-ii) expectation values of measurements are taken 
+i) Gates have free parameters
+ii) Expectation values of measurements are taken 
 
 These two ingredients allow one circuit to actually represent an entire _family of circuits_. 
 An objective function---encapsulating some problem-specific goal---is built from the expectation values, 
@@ -53,15 +53,15 @@ expectation value as :math:`\langle \hat{C}(\theta)\rangle`. This means that the
 :math:`\frac{\partial \langle \hat{C} \rangle}{\partial \theta}` exist and gradient descent can be used. 
 
 Before digging deeper, we will first set establish some basic notation. For simplicity, though a circuit 
-may contain many gates, we can concentrate on just a single gate :math:`G` that we want to differentiate
+may contain many gates, we can concentrate on just a single gate :math:`U` that we want to differentiate
 (other gates will follow the same pattern).
 
 .. figure:: ../demonstrations/stochastic_parameter_shift/quantum_circuit.png
     :align: center
     :width: 90%
 
-All gates appearing before :math:`G` can be absorbed into an initial state preparation 
-:math:`\vert \psi_0 \rangle`, and all gates appearing after :math:`G` can be absorbed with the measurement
+All gates appearing before :math:`U` can be absorbed into an initial state preparation 
+:math:`\vert \psi_0 \rangle`, and all gates appearing after :math:`U` can be absorbed with the measurement
 operator :math:`\hat{A}` to make a new effective measurement operator :math:`\hat{A}`.
 The expectation value :math:`\hat{A}` in the simpler one-gate circuit is identical to 
 the expectation value :math:`\hat{C}` in the larger circuit.
@@ -70,9 +70,9 @@ We can also write any unitary gate in the form
 
 .. math::
 
-    G(\theta) = e^{i\theta\hat{V}},
+    U(\theta) = e^{i\theta\hat{V}},
     
-where :math:`\hat{V}` is the Hermitian _generator_ of the gate :math:`G`.
+where :math:`\hat{V}` is the Hermitian _generator_ of the gate :math:`U`.
 
 Now, how do we actually obtain the numerical values for the derivatives necessary for gradient descent? 
 
@@ -87,7 +87,7 @@ circuit evaluations:
    \langle \hat{A}(\theta + \tfrac{\pi}{4}) \rangle -
    \langle \hat{A}(\theta - \tfrac{\pi}{4}) \rangle 
    
-.. figure:: ../demonstrations/stochastic_parameter_shift/quantum_circuit.png
+.. figure:: ../demonstrations/stochastic_parameter_shift/parameter_shift_circuits.png
     :align: center
     :width: 90%
     
@@ -120,20 +120,26 @@ dev = qml.device('default.qubit', wires=2)
 # rotation about the x-axis, followed by a measurement along the z-axis.
 
 @qml.qnode(dev)
-def circuit1(x):
-    qml.RX(x, wires=0)
+def rotation_circuit(theta):
+    qml.RX(theta, wires=0)
     return qml.expval(qml.PauliZ(0))
-    
-param = 0.5
-circuit1(param)
 
-gradient = qml.grad(circuit1, argnum=0)
-gradient(param)
 
-def param_shift(x):
-    return 0.5 * (circuit1(x + np.pi / 2) - circuit1(x - np.pi / 2))
-                  
-expvals = [circuit1(theta) for theta in angles]
+##############################################################################
+# We will examine the gradient with respect to the parameter :math:`\theta`.
+# The parameter-shift prescribes taking the difference of two  circuit 
+# evaluations, with a forward/backward shift in angles.
+# PennyLane also provides a convenience function ``grad`` to automatically
+# compute the gradient. We can use it here for comparison.
+
+def param_shift(theta):
+    r_plus = 0.5 * rotation_circuit(theta + np.pi / 2)
+    r_minus = 0.5 * rotation_circuit(theta - np.pi / 2)
+    return r_plus - r_minus
+
+gradient = qml.grad(rotation_circuit, argnum=0)
+
+expvals = [rotation_circuit(theta) for theta in angles]
 grad_vals = [gradient(theta) for theta in angles]
 param_shift_vals = [param_shift(theta) for theta in angles]
 plt.plot(angles, expvals, 'b', label="Expecation value")
@@ -141,8 +147,106 @@ plt.plot(angles, grad_vals, 'r', label="Gradient")
 plt.plot(angles, param_shift_vals, 'mx', label="Parameter-shift rule")
 plt.legend();
 
-# Now the Stochasic PSR
 
+##############################################################################
+# We have evaluated the expectation value at all possible values for the angle
+# :math:`theta`. By inspection, we can see that the functional dependence is
+# :math:`\cos(\theta)`. The parameter-shift evaluations are plotted with x's.
+# Again, by inspection, we can see that these have the functional form 
+# :math:`-\sin(\theta)`, and they match the values provided by the ``grad``
+# function.
+#
+# The parameter-shift works really nicely for many gates---like the rotaiton
+# gate we used in our example above. But it does have constraints. There are 
+# some technical conditions that, if a gate satisfies them, we can guarantee
+# it has a parameter-shift rule [#schuld2018]. Furthermore, we can derive
+# similar parameter-shift recipes for some other gates that _don't_ meet 
+# those technical conditions. 
+#
+# But, in general, the parameter-shift rule is not universally applicable.
+# In cases where it doesn't hold (or is not yet known to hold). you would
+# either have to decompose the gate into compatible gates, or use an
+# alternate estimator for the gradient, e.g., the finite-difference
+# approximation. But both of these alternatives can have drawbacks due
+# to increased circuit complexity or potential errors in the gradient
+# value. If only there was a method that could be used for _any_
+# qubit gate.
+#
+# The Stochastic Parameter-shift Rule
+# -----------------------------------
+#
+# Here's where the stochastic parameter-shift rule makes its appearance
+# on the stage. 
+
+# The stochastic parameter-shift rule introduces two new ingredients to
+# the parameter-shift recipe:  
+#
+# i) A random parameter :math:`s`, sampled uniformly from :math:`[0,1]`
+#    (this is the origin of the "stochastic" in the name);
+# ii) Sandwiching the "shifted" gate applicaion with one additional 
+#     gate on each side.
+#
+# These additions allow the stochastic parameter-shift rule to work 
+# for arbitrary qubit gates. Every gate is unitary, which means they 
+# have the form :math:`e^{i\theta \hat{G}` for some generator :math:`G`. 
+# Additionally, every multi-qubit operator can be expressed as a 
+# sum of tensor products of Pauli operators, so let's assume, 
+# without loss of generality, the following form for :math:`G`:
+#
+#  .. math::
+#
+#      G = \hat{H} + \theta \hat{V}, 
+#
+# where :math:`\hat{V}` is a "Pauli word", i.e., a tensor 
+# product of Pauli operators (e.g., 
+# :math:`\hat{Z}_0\otimes\hat{Y}_1) and :math:`\hat{H}` can 
+# be an arbitrary linear combination of Pauli-operator
+# tensor products. For simplicity, we assume that the parameter
+# :math:`\theta` appears only in front of :math:`\hat{V}` (other
+# cases can be handled using the chain rule). 
+#
+# The stochastic parameter-shift rule gives the following recipe for
+# computing the gradient of the expectation value 
+# :math:`\langle \hat{A} (\theta) \rangle`:
+#
+# i) Sample a value for the variable :math:`s` uniformly form 
+#    :math:`[0,1]`.
+# ii) In place of gate :math:`U(\theta)`, apply the following
+#     three gates:
+#
+#     a) :math:`e^{i(1-s)\hat{G}}`
+#     b) :math:`e^{+i\tfrac{\pi}{4}\hat{V}}`
+#     c) :math:`e^{is\hat{G}}`
+#
+#     Call the resulting expectation value of :math:`r_+`
+#
+# iii) Repeat step ii), but flip the sign of the generator
+#      in part b). Call the resulting expectation value
+#      :math:`r_-`.
+#
+# The gradient can be obtained from the average value of
+# :math:`r_+ - r_-`, i.e.,
+#
+# .. math::
+#
+#     \mathbb{E}_{s\in\mathcal{U}[0,1]}[r_+ - r_-]
+#
+# .. figure:: ../demonstrations/stochastic_parameter_shift/stochastic_parameter_shift_circuit.png
+#    :align: center
+#    :width: 90%
+#
+# Let's see this method in action.
+#
+# Following [#banchi2020], we will use the cross-resonance gate as a
+# working example. This gate is defined as
+#
+# .. math::
+#     U_{CR}(t, b, c) = exp\left[ it(\hat{X}\otimes\hat{\mathbb{1} - 
+#                                   b\hat{Z}\otimes\hat{X} + 
+#                                   c\hat{\mathbb{1}}\otimes\hat{X}
+#                                   ) \right]
+
+# First we define some basic Pauli matrices
 I = np.eye(2)
 X = np.array([[0, 1], [1, 0]])
 Z = np.array([[1, 0], [0, -1]])
@@ -150,51 +254,52 @@ Z = np.array([[1, 0], [0, -1]])
 def Generator(t, b, c):
     # the inputs will show up as Pennylane variables;
     # we have to extract their numerical values
-    h = t.val * (np.kron(X, I) - 
-                 b.val * np.kron(Z, X) + 
-                 c.val * np.kron(I, X))
-    return h
+    G = t.val * (np.kron(X, I) - 
+        b.val * np.kron(Z, X) + 
+        c.val * np.kron(I, X))
+    return G
     
-# This is the circuit that we will try to apply SPSR to
+# A simple circuit that contains the cross-resonance gate
 @qml.qnode(dev)
-def circuit3(gate_pars):
-    H = Generator(*gate_pars)
-    qml.QubitUnitary(expm(-1j * H), wires=[0, 1])
+def crossres_circuit(gate_pars):
+    G = Generator(*gate_pars)
+    qml.QubitUnitary(expm(-1j * G), wires=[0, 1])
     return qml.expval(qml.PauliZ(0))
     
-# subcircuit implementing the quantum gates necessary for SPSR
-# would be nicer if this was implemented in a way that was
-# more easily modifiable
+# Subcircuit implementing the gates necessary for the
+# stochastic parameter-shift rule. 
+# In this example, we will differentiate the first term of
+# the circuit (i.e., our variable is :math:`\theta = t`).
 def SPSRgates(gate_pars, s, sign):
-    H = Generator(*gate_pars)
-    qml.QubitUnitary(expm(1j * (1 - s) * H), wires=[0, 1])
-    # Note: we're differentiating first term of H (i.e., variable `t`)
-    # Also: extra (-2) sign needed to match PL convention
-    #qml.RX(sign * np.pi / 4 * (-2), wires=0) 
-    # line below is equivalent to line above, 
-    # but more clear (doesn't require extra sign)
+    G = Generator(*gate_pars)
+    # step a)
+    qml.QubitUnitary(expm(1j * (1 - s) * G), wires=[0, 1])
+    # step b)
     qml.QubitUnitary(expm(1j * sign * np.pi / 4 * X), wires=0)
+    # step c)
     qml.QubitUnitary(expm(1j * s * H), wires=[0,1])
     
-# obtain all expvals needed for for SPSR
+# Function which can obtain all expectation vals needed 
+# for the stochastic parameter-shift rule
 @qml.qnode(dev)
-def spsr_circuit3(gate_pars, s=None, sign=+1):
+def spsr_circuit(gate_pars, s=None, sign=+1):
     SPSRgates(gate_pars, s, sign)
     return qml.expval(qml.PauliZ(0))
 
-# QNodeCollections would be perfect here, but QNodes
-# but QNodes don't seem to be compatible with `functools.partial`
-
+# Fix the other parameters of the gate
 b, c = -0.15, 1.6
-pos_vals = np.array([[spsr_circuit3([t, b, c], s=s, sign=+1) 
-                      for s in np.random.uniform(size=10)]
-                      for t in angles])
-neg_vals = np.array([[spsr_circuit3([t, b, c], s=s, sign=-1) 
-                      for s in np.random.uniform(size=10)]
-                      for t in angles])
-# even 10 samples gives a good result for this example
 
-evals = [circuit3([t, -0.15, 1.6]) for t in angles]
+# Obtain r+ and r-
+# Even 10 samples gives a good result for this example
+pos_vals = np.array([[spsr_circuit([t, b, c], s=s, sign=+1) 
+                      for s in np.random.uniform(size=10)]
+                      for t in angles])
+neg_vals = np.array([[spsr_circuit([t, b, c], s=s, sign=-1) 
+                      for s in np.random.uniform(size=10)]
+                      for t in angles])
+
+# Plot the results
+evals = [crossres_circuit([t, -0.15, 1.6]) for t in angles]
 spsr_vals = (pos_vals - neg_vals).mean(axis=1)
 
 plt.plot(angles, evals, 'b', label="Expectation Value") # looks like cos(2*theta)
