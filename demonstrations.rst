@@ -177,6 +177,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :tooltip: Frugal shot optimization with the Rosalin optimizer
     :figure: demonstrations/rosalin/rosalin_thumb.png
     :description: :doc:`demos/tutorial_rosalin`
+    
+.. customgalleryitem::
+    :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule
+    :figure: demonstrations/stochastic_parameter_shift/thumbnail.png
+    :description: :doc:`demos/tutorial_stochastic_parameter_shift`
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -213,3 +218,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_quanvolution
     demos/tutorial_multiclass_classification
     demos/tutorial_rosalin
+    demos/tutorial_stochastic_parameter_shift
