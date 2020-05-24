@@ -105,7 +105,6 @@ def cost_global(rotations):
 
 
 global_circuit = qml.QNode(global_cost_simple, dev)
-
 local_circuit = qml.QNode(local_cost_simple, dev)
 
 
@@ -117,6 +116,9 @@ local_circuit = qml.QNode(local_cost_simple, dev)
 RX = np.random.uniform(low=-np.pi, high=np.pi)
 RY = np.random.uniform(low=-np.pi, high=np.pi)
 rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
+
+print(global_circuit(rotations))
+print(local_circuit(rotations))
 
 
 ######################################################################
