@@ -253,7 +253,6 @@ cost_global(params_local)
 # Interestingly, the global cost function is still 1. If we trained the
 # local cost function, why hasnt the global cost function changed?
 #
-
 # The answer is that we have trained the global cost a *little bit*, but
 # not enough to see a change with only 10000 shots. To see the effect,
 # we'll need to increase the number of shots to an unreasonable amount.
