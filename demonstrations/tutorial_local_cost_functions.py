@@ -21,7 +21,7 @@ plateaus for shallow circuits.
 
 
 Installs and Imports
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 In this notebook, we investigate the effect of barren plateaus in
 variational quantum algorithms, and how they can be mitigated using
@@ -39,7 +39,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 ######################################################################
 # Visualizing the problem
-# =======================
+# -----------------------
 #
 # To start, lets look at the toy problem of learning the identity gate
 # across multiple qubits. This will help us visualize the problem and get
