@@ -180,7 +180,7 @@ algorithms using PennyLane and near-term quantum hardware.
     
 .. customgalleryitem::
     :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule
-    :figure: demonstrations/stochastic_parameter_shift/tmp_thumb.png
+    :figure: demonstrations/stochastic_parameter_shift/thumb.png
     :description: :doc:`demos/tutorial_stochastic_parameter_shift`
 
 :html:`</div></div><div style='clear:both'>`
