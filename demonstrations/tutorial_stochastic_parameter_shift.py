@@ -4,7 +4,7 @@ The Stochastic Parameter-Shift Rule
 
 .. meta::
     :property="og:description": Differentiate any qubit gate with the stochastic parameter-shift rule.
-    :property="og:image": https://pennylane.ai/qml/_images/stochastic_parameter_shift_thumb.png # TODO: add image
+    :property="og:image": https://pennylane.ai/qml/_images/stochastic_parameter_shift_thumbnail.png
 
 We demonstrate how the stochastic parameter-shift rule, discovered by Banchi and Crooks [#banchi2020]_,
 can be used to differentiate arbitrary qubit gates, generalizing the original 
