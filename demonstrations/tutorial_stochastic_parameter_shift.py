@@ -269,8 +269,8 @@ Z = np.array([[1, 0], [0, -1]])
 def Generator(theta1, theta2, theta3):
     # the inputs will show up as Pennylane variable objects;
     # we have to extract their numerical values
-    G = theta1.val * np.kron(X, I) - 
-        theta2.val * np.kron(Z, X) + 
+    G = theta1.val * np.kron(X, I) - \
+        theta2.val * np.kron(Z, X) + \
         theta3.val * np.kron(I, X)
     return G
     
