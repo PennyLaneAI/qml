@@ -74,7 +74,7 @@ We can also write any unitary gate in the form
     
 where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`\hat{U}`.
 
-Now, how do we actually obtain the numerical values for the gradient necessary for gradient descent? 
+Now, how do we actually obtain the numerical values of the gradient necessary for gradient descent? 
 
 This is where the parameter-shift rule [#li2016]_ [#mitarai2018]_ [#schuld2018]_ enters the story. 
 In short, the parameter-shift rule says that for 
@@ -161,7 +161,7 @@ plt.show()
 #
 # The parameter-shift evaluations are plotted with 'x' markers.
 # Again, by simple inspection, we can see that these have the functional form 
-# :math:`-\sin(\theta)`, the expected derivative of :math:`\cos(\theta)`
+# :math:`-\sin(\theta)`, the expected derivative of :math:`\cos(\theta)`,
 # and that they match the values provided by the :func:`~pennylane.grad` 
 # function.
 #
@@ -198,11 +198,13 @@ plt.show()
 #
 # i) A random parameter :math:`s`, sampled uniformly from :math:`[0,1]`
 #    (this is the origin of the "stochastic" in the name);
-# ii) Sandwiching the "shifted" gate applicaion with one additional 
+# ii) Sandwiching the "shifted" gate application with one additional 
 #     gate on each side.
 #
 # These additions allow the stochastic parameter-shift rule to work 
-# for arbitrary qubit gates. Every gate is unitary, which means they 
+# for arbitrary qubit gates. 
+#
+# Every gate is unitary, which means they 
 # have the form :math:`\hat{U}(\theta) = e^{i\theta \hat{G}}` 
 # for some generator :math:`G`. 
 # Additionally, every multi-qubit operator can be expressed as a 
@@ -238,8 +240,8 @@ plt.show()
 #     Measure the observable :math:`\hat{A}` and call the resulting 
 #     expectation value of :math:`\langle r_+\rangle`.
 #
-# iii) Repeat step ii), but flip the sign of the angle :math:`\tfrac{\pi}{4}`
-#      in part b). Call the resulting expectation value
+# iii) Repeat step ii, but flip the sign of the angle :math:`\tfrac{\pi}{4}`
+#      in part b. Call the resulting expectation value
 #      :math:`\langle r_-\rangle`.
 #
 # The gradient can be obtained from the average value of
@@ -272,7 +274,7 @@ X = np.array([[0, 1], [1, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
 def Generator(theta1, theta2, theta3):
-    # the inputs will show up as Pennylane variable objects;
+    # the inputs will show up as Pennylane Variable objects;
     # we have to extract their numerical values
     G = theta1.val * np.kron(X, I) - \
         theta2.val * np.kron(Z, X) + \
@@ -341,7 +343,7 @@ plt.show()
 #
 # .. math::
 #
-#     \hat{U}(\theta) = e^{i\theta\hat{V}}
+#     \hat{U}(\theta) = e^{i\theta\hat{V}}.
 #
 # In this case, the terms encapsulated in the operator :math:`\hat{H}` are all
 # zero, and the gates :math:`e^{i(1-s)\hat{G}}`, 
