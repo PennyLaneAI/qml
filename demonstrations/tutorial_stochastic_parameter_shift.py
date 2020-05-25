@@ -76,7 +76,7 @@ where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`\hat{U}`.
 
 Now, how do we actually obtain the numerical values for the gradient necessary for gradient descent? 
 
-This is where the parameter-shift rule [#li2016]_, [#mitarai2018]_, [#schuld2018]_ enters the story. 
+This is where the parameter-shift rule [#li2016]_ [#mitarai2018]_ [#schuld2018]_ enters the story. 
 In short, the parameter-shift rule says that for 
 many gates of interest---including all single-qubit gates---we can obtain the value of the derivative 
 :math:`\nabla_\theta \langle \hat{A}(\theta) \rangle` by subtracting two related 
@@ -97,12 +97,12 @@ circuit evaluations:
 .. note::
 
     The multiplier :math:`u` in this formula is arbitrary and can differ between implementations. 
-    For example, PennyLane internally uses the convention where :math:`u=\tfrac{1}{2}:.
+    For example, PennyLane internally uses the convention where :math:`u=\tfrac{1}{2}`.
 
 The parameter-shift rule is *exact*, i.e., the formula for the gradient doesn't involve any approximations. 
 For quantum hardware, we can only take a finite number of samples, so we can never determine a circuit's
 expectation values *exactly*. However, the parameter-shift rule provides the guarantee that it is an 
-*unbiased estimator*, meaning that if we could take a infinite number of samples, it converges to the 
+`unbiased estimator <https://en.wikipedia.org/wiki/Bias_of_an_estimator>`_, meaning that if we could take a infinite number of samples, it converges to the 
 correct gradient value. 
 
 Let's jump into some code and take a look at the parameter-shift rule in action.
@@ -132,8 +132,8 @@ def rotation_circuit(theta):
 # We will examine the gradient with respect to the parameter :math:`\theta`.
 # The parameter-shift recipe requires taking the difference of two circuit 
 # evaluations, with forward and backward shifts in angles.
-# PennyLane also provides a convenience function ``grad`` to automatically
-# compute the gradient. We can use it here for comparison.
+# PennyLane also provides a convenience function :func:`~pennylane.grad` 
+# to automatically compute the gradient. We can use it here for comparison.
 
 def param_shift(theta):
     # using the convention u=1/2
@@ -162,14 +162,18 @@ plt.show()
 # The parameter-shift evaluations are plotted with 'x' markers.
 # Again, by simple inspection, we can see that these have the functional form 
 # :math:`-\sin(\theta)`, the expected derivative of :math:`\cos(\theta)`
-# and that they match the values provided by PennyLane's ``grad`` function.
+# and that they match the values provided by the :func:`~pennylane.grad` 
+# function.
 #
 # The parameter-shift works really nicely for many gates---like the rotation
 # gate we used in our example above. But it does have constraints. There are 
 # some technical conditions that, if a gate satisfies them, we can guarantee
-# it has a parameter-shift rule [#schuld2018]_. Furthermore, we can derive
+# it has a parameter-shift rule [#schuld2018]_. Concretely, the 
+# parameter-shift rule holds for any gate of the form 
+# :math:`e^{i\theta\hat{G}}` where :math:`\hat{G}^2=\mathbb{1}`.
+# Furthermore, we can derive
 # similar parameter-shift recipes for some other gates that *don't* meet 
-# those technical conditions. 
+# this technical conditions, on a one-by-one basis. 
 #
 # But, in general, the parameter-shift rule is not universally applicable.
 # In cases where it does not hold (or is not yet known to hold), we would
@@ -179,7 +183,8 @@ plt.show()
 # to increased circuit complexity or potential errors in the gradient
 # value. 
 #
-# If only there was a method that could be used for *any* qubit gate. 🤔
+# If only there was a parameter-shift method that could be used 
+# for *any* qubit gate. 🤔
 
 ##############################################################################
 # The Stochastic Parameter-Shift Rule
@@ -226,9 +231,9 @@ plt.show()
 # ii) In place of gate :math:`\hat{U}(\theta)`, apply the following
 #     three gates:
 #
-#     a) :math:`\hat{U}\left((1-s)\theta\right)`
+#     a) :math:`e^{i(1-s)(\hat{H} + \theta\hat{V})}`
 #     b) :math:`e^{+i\tfrac{\pi}{4}\hat{V}}`
-#     c) :math:`\hat{U}(s\theta)`
+#     c) :math:`e^{is(\hat{H} + \theta\hat{V})}`
 #
 #     Measure the observable :math:`\hat{A}` and call the resulting 
 #     expectation value of :math:`\langle r_+\rangle`.
@@ -284,7 +289,7 @@ def crossres_circuit(gate_pars):
 # Subcircuit implementing the gates necessary for the
 # stochastic parameter-shift rule. 
 # In this example, we will differentiate the first term of
-# the circuit (i.e., our variable is :math:`\theta_1`).
+# the circuit (i.e., our variable is theta1).
 def SPSRgates(gate_pars, s, sign):
     G = Generator(*gate_pars)
     # step a)
