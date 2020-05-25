@@ -92,7 +92,7 @@ circuit evaluations:
    
 .. figure:: ../demonstrations/stochastic_parameter_shift/parameter_shift_rule.png
     :align: center
-    :width: 90%
+    :width: 80%
     
 .. note::
 
