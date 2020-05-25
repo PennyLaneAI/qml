@@ -158,7 +158,7 @@ plt.show()
 # We have evaluated the expectation value at all possible values for the angle
 # :math:`\theta`. By inspection, we can see that the functional dependence is
 # :math:`\cos(\theta)`. 
-
+#
 # The parameter-shift evaluations are plotted with 'x' markers.
 # Again, by simple inspection, we can see that these have the functional form 
 # :math:`-\sin(\theta)`, the expected derivative of :math:`\cos(\theta)`
