@@ -179,7 +179,7 @@ plt.show()
 # to increased circuit complexity or potential errors in the gradient
 # value. 
 #
-# If only there was a method that could be used for *any* qubit gate.
+# If only there was a method that could be used for *any* qubit gate. 🤔
 
 ##############################################################################
 # The Stochastic Parameter-Shift Rule
