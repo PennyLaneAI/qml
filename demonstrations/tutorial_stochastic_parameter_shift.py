@@ -88,7 +88,7 @@ circuit evaluations:
    u\left[
      \langle \hat{A}(\theta + \tfrac{\pi}{4u}) \rangle -
      \langle \hat{A}(\theta - \tfrac{\pi}{4u}) \rangle
-   \right
+   \right]
    
 .. figure:: ../demonstrations/stochastic_parameter_shift/parameter_shift_rule.png
     :align: center
