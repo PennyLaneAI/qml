@@ -110,9 +110,9 @@ for op in h.ops:
 #    fifteen quantum circuit runs. Nevertheless, these quantum circuit runs can still be
 #    parallelized to multiple QPUs.
 #
-# Let's suppose we have access to two QPUs: ``Aspen-4-4Q-F`` and ``Aspen-7-4Q-D`` from
+# Let's suppose we have access to two quantum devices: ``Aspen-8`` and ``4q-qvm`` from
 # Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
-# ``Aspen-4-4Q-F`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
+# ``Aspen-8`` and seven terms run on ``4q-qvm``, as summarized by the diagram below:
 #
 # .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
 #    :width: 65%
@@ -120,13 +120,20 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-F") for _ in range(8)]
-devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-D") for _ in range(7)]
-devs = devs_4 + devs_7
+devs_aspen_8 = [qml.device("forest.qvm", device="Aspen-8") for _ in range(8)]
+devs_4q_qvm = [qml.device("forest.qvm", device="4q-qvm") for _ in range(7)]
+devs = devs_aspen_8 + devs_4q_qvm
 
 ##############################################################################
 # .. note::
-#     You can swap out ``forest.qvm`` for ``forest.qpu`` if hardware access is available.
+#
+#     For the purposes of this demonstration, we are simulating the QPUs using the
+#     ``forest.qvm`` simulator. To run this demonstration on hardware, simply
+#     swap ``forest.qvm`` for ``forest.qpu``, and make sure to use a valid QPU
+#     identifier.
+#
+#     Please refer to the `Rigetti website <https://rigetti.com/>`__ for an up-to-date
+#     list on available QPUs.
 #
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
