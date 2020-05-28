@@ -120,9 +120,9 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-devs_aspen_8 = [qml.device("forest.qvm", device="Aspen-8") for _ in range(8)]
-devs_4q_qvm = [qml.device("forest.qvm", device="4q-qvm") for _ in range(7)]
-devs = devs_aspen_8 + devs_4q_qvm
+dev1 = [qml.device("forest.qvm", device="4q-qvm") for _ in range(8)]
+dev2 = [qml.device("forest.qvm", device="4q-qvm") for _ in range(7)]
+devs = dev1 + dev2
 
 ##############################################################################
 # .. note::
