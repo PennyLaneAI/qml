@@ -165,9 +165,9 @@ devs = [dev0, dev1]
 
 ##############################################################################
 # .. note::
-#    If you have access to Rigetti hardware, you can swap out ``forest.qvm`` for ``forest.qpu``.
-#    Users with access to the IBM Q Experience can swap ``qiskit.aer`` for ``qiskit.ibmq`` and
-#    specify their chosen backend (see `here
+#    If you have access to Rigetti hardware, you can swap out ``forest.qvm`` for ``forest.qpu``
+#    and specify the hardware device to run on. Users with access to the IBM Q Experience can
+#    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
 #    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
 #
 # .. warning::
