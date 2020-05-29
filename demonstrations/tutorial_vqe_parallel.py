@@ -110,9 +110,12 @@ for op in h.ops:
 #    fifteen quantum circuit runs. Nevertheless, these quantum circuit runs can still be
 #    parallelized to multiple QPUs.
 #
-# Let's suppose we have access to two QPUs: ``Aspen-4-4Q-F`` and ``Aspen-7-4Q-D`` from
-# Rigetti. We can evaluate the expectation value of each Hamiltonian with eight terms run on
-# ``Aspen-4-4Q-F`` and seven terms run on ``Aspen-7-4Q-D``, as summarized by the diagram below:
+# Let's suppose we have access to two quantum devices. In this tutorial we consider two
+# simulators from Rigetti: ``4q-qvm`` and ``9q-square-qvm``, but we could also run on hardware
+# devices from Rigetti or other providers.
+#
+# We can evaluate the expectation value of each Hamiltonian with eight terms run on
+# one device and seven terms run on the other, as summarized by the diagram below:
 #
 # .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
 #    :width: 65%
@@ -120,13 +123,19 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-devs_4 = [qml.device("forest.qvm", device="Aspen-4-4Q-F") for _ in range(8)]
-devs_7 = [qml.device("forest.qvm", device="Aspen-7-4Q-D") for _ in range(7)]
-devs = devs_4 + devs_7
+dev1 = [qml.device("forest.qvm", device="4q-qvm") for _ in range(8)]
+dev2 = [qml.device("forest.qvm", device="9q-square-qvm") for _ in range(7)]
+devs = dev1 + dev2
 
 ##############################################################################
 # .. note::
-#     You can swap out ``forest.qvm`` for ``forest.qpu`` if hardware access is available.
+#
+#     For the purposes of this demonstration, we are simulating the QPUs using the
+#     ``forest.qvm`` simulator. To run this demonstration on hardware, simply
+#     swap ``forest.qvm`` for ``forest.qpu`` and specify the hardware device to run on.
+#
+#     Please refer to the `Rigetti website <https://rigetti.com/>`__ for an up-to-date
+#     list on available QPUs.
 #
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
