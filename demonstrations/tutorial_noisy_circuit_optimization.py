@@ -145,8 +145,8 @@ import inspect
 # Note that the 'Operation' op is a generic base class
 # from PennyLane core.
 # All other ops are specific to Cirq.
-available_ops = inspect.getmembers(cirq_ops, inspect.isclass
-print("\n".join(f"{op_name},{op}") for op_name, op in available_ops))
+available_ops = inspect.getmembers(cirq_ops, inspect.isclass)
+print("\n".join([f"{op_name},{op}" for op_name, op in available_ops]))
 
 ##############################################################################
 # PennyLane operations and framework-specific operations can be 
