@@ -3,7 +3,7 @@ Optimizing noisy circuits in Cirq
 =================================
 
 .. meta::
-    :property="og:description": Learn how to optimize and train noisy quantum computations.
+    :property="og:description": Learn how noise can affect the optimization and training of quantum computations.
     :property="og:image": https://pennylane.ai/qml/_images/noisy_circuit_optimization_thumbnail.png
 
 Until we have fault-tolerant quantum computers, 

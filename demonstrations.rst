@@ -182,6 +182,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule
     :figure: demonstrations/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png
     :description: :doc:`demos/tutorial_stochastic_parameter_shift`
+    
+.. customgalleryitem::
+    :tooltip: Learn how noise can affect the optimization and training of quantum computations
+    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
+    :description: :doc:`demos/tutorial_noisy_circuit_optimization`
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -219,3 +224,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_multiclass_classification
     demos/tutorial_rosalin
     demos/tutorial_stochastic_parameter_shift
+    demos/tutorial_noisy_circuit_optimization
