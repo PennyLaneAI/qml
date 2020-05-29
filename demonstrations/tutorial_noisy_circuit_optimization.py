@@ -15,15 +15,15 @@ Background
 ----------
 
 Quantum pure-state simulators are great and readily available in 
-a number of quantum software packages. 
+a number of quantum software packages.
 They allow us to experiment, prototype, test, and validate algorithms
-and research ideas---up to a certain number of qubits, at least 😉.
+and research ideas---up to a certain number of qubits, at least.
 
 But present-day hardware is not ideal. We're forced to confront 
 decoherence, bit flips, amplitude damping, and so on. Does the 
 presence of noise in near-term devices impact their use in, 
 for example, 
-:doc:`variational quantum algorithms </glossary/variational_circuit>_`?
+:doc:`variational quantum algorithms </glossary/variational_circuit>`?
 Won't our models, trained so carefully in simulators, fall apart 
 when we run on noisy devices?
 
@@ -65,8 +65,8 @@ that supports noise and density-state representations of quantum
 states (in contrast to many simulators, which use a pure-state
 representation). 
 
-`Cirq <https://cirq.readthedocs.io>`_ provides mixed-state
-simulators and noisy operations natively, so we'll use the 
+Fortunately, `Cirq <https://cirq.readthedocs.io>`_ provides mixed-state
+simulators and noisy operations natively, so we can use the 
 PennyLane-Cirq plugin to carry out our noisy simulations.
 """
 
@@ -128,9 +128,9 @@ print(CHSH_expval)
 # "quantum". 
 #
 # .. note:: In this situation "quantum" means that there is 
-#     no local hidden variable theory which could produce these
-#     measurement outcomes. It does not specifically mean the 
-#     presence of entanglement.
+#     no `local hidden variable theory <https://en.wikipedia.org/wiki/Local_hidden-variable_theory>`_ 
+#     which could produce these measurement outcomes. It does not strictly
+#     mean the presence of entanglement.
 #
 # Now let's turn up the noise! 📢 📢 📢
 #
@@ -144,12 +144,12 @@ from pennylane_cirq import ops as cirq_ops
 import inspect
 # Note that the 'Operation' op is a generic base class
 # from PennyLane core.
-# All other ops are specific to Cirq.
+# All other ops are provided by Cirq.
 available_ops = inspect.getmembers(cirq_ops, inspect.isclass)
 print("\n".join([f"{op_name},{op}" for op_name, op in available_ops]))
 
 ##############################################################################
-# PennyLane operations and framework-specific operations can be 
+# PennyLane operations and external framework-specific operations can be 
 # interwoven freely in circuits that use that plugin's device
 # for execution.
 # In this case, the Cirq-provided channels can be used with 
@@ -197,7 +197,7 @@ plt.show()
 # :math:`\hat{A}_1\otimes \hat{B}_1` 
 # and :math:`\hat{A}_1\otimes \hat{B}_2` are sensitive to this 
 # noise parameter. Their value is weakened when the noise parameter is not 
-# 0 or 1 (note that the the CHSH inequality is symmetric with 
+# 0 or 1 (note that the the CHSH operator is symmetric with 
 # respect to bit flips).
 #
 # The latter two observables, on the other hand, are seemingly 
@@ -225,7 +225,7 @@ plt.show()
 # quantumness we created in our circuit. But if we only have a little
 # noise, the quantumness undeniably remains. So there is still hope
 # that quantum algorithms can do something useful, even on noisy 
-# near-term devices.
+# near-term devices, so long as the noise is not high.
 #
 # .. note::
 #
@@ -244,6 +244,11 @@ plt.show()
 # Let's consider an analog of the basic 
 # :doc:`qubit rotation tutorial </demos/tutorial_qubit_rotation>`,
 # but where we add an extra noise channel after the gates.
+#
+# .. note:: We model the noise process as the application of ideal noise-free
+#           gates, followed by the action of a noisy channel. This is a common
+#           technique for modelling noise, but may not be appropriate for all
+#           situations.
 
 @qml.qnode(dev)
 def circuit(gate_params, noise_param=0.0):
@@ -266,15 +271,18 @@ print("Expectation value:", circuit(gate_pars))
 # (at the value :math:`p=\frac{3}{4}`, it passes through the 
 # maximally mixed state).
 # We can see this in our circuit by looking at how the final 
-# ``PauliZ`` expectation value changes as a function of the 
-# noise strength 
+# :class:`~pennylane.ops.PauliZ` expectation value changes as 
+# a function of the noise strength.
 
 noise_vals = np.linspace(0., 1., 20)
 expvals = [circuit(gate_pars, noise_param=p) for p in noise_vals]
 
-plt.plot(noise_vals, expvals)
+plt.plot(noise_vals, expvals, label="Expectation value")
+plt.plot(noise_vals, np.ones_like(noise_vals), '--', label="Highest possible")
+plt.plot(noise_vals, -np.ones_like(noise_vals), '--', label="Lowest possible")
 plt.ylabel(r"Expectation value $\langle \hat{Z} \rangle$") 
-plt.xlabel("Noise strength p")
+plt.xlabel(r"Noise strength $p$")
+plt.legend()
 plt.show()
 
 ##############################################################################
@@ -318,26 +326,29 @@ print("Optimized rotation angles (noisy case):")
 print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 
 ##############################################################################
-# There are a couple interesting observations here. 
+# There are a couple interesting observations here: 
 #
-# First, the noisy circuit isn't able to achieve the same final
-# cost function value as the ideal circuit. This is because 
-# the noise causes the state to be come irreversibly mixed. 
-# Mixed states can't achieve the same extremal expectation values
-# as pure states.
+# i) The noisy circuit isn't able to achieve the same final
+#    cost function value as the ideal circuit. This is because 
+#    the noise causes the state to become irreversibly mixed. 
+#    Mixed states can't achieve the same extremal expectation values
+#    as pure states.
 #
-# The second observation is that both circuits still converge to 
-# the *same parameter values* :math:`(0,\pi)`, despite having 
-# different final states. 
+# ii) However, both circuits still converge to 
+#     the *same parameter values* :math:`(0,\pi)`, despite having 
+#     different final states. 
 #
 # It could have been the case that noisy devices irreparably 
 # damage the optimization of variational circuits, steering us 
 # towards parameter values which are not at all useful. 
 # Luckily, at least for the simple example above, this is not the case. 
-# Optimizations on noisy devices can still lead to similar parameter 
-# values as when we run on ideal devices. 
+# *Optimizations on noisy devices can still lead to similar parameter 
+# values as when we run on ideal devices.* 
 
 ##############################################################################
+# Understanding the effect of noisy channels
+# ------------------------------------------
+#
 # Let's dig a bit into the underlying quantum information theory
 # to understand better what's happening.
 # Expectation values of :doc:`variational circuits </glossary/variational_circuit>`, 
@@ -347,7 +358,8 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 # ii) a parameterized unitary transformation :math:`U(\theta)`); and
 # iii) measurement of a final observable :math:`\hat{B}`.
 #
-# The equation for the expectation value is given by the Born rule:
+# The equation for the expectation value is given by the 
+# `Born rule <https://en.wikipedia.org/wiki/Born_rule>`_:
 #
 # .. math::
 #
@@ -359,16 +371,18 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # .. math::
 #
-#   \frac{\partial}{\partial \theta}\langle \hat{B} \rangle(\theta)
+#   \nabla_\theta\langle \hat{B} \rangle(\theta)
 #      =  \frac{1}{2}
 #            \left[
 #                \langle \hat{B} \rangle\left(\theta + \frac{\pi}{2}\right)
 #              - \langle \hat{B} \rangle\left(\theta - \frac{\pi}{2}\right)
 #            \right].
 #
-# In our example, the unitary is split into two gates, 
-# :math:`U_1=R_X` and :math:`U_1=R_Y`, each of which takes an independent 
+# In our example, the parametrized unitary :math:`U(\theta)` is split into two gates, 
+# :math:`U = U_2 U_1`,
+# where :math:`U_1=R_X` and :math:`U_1=R_Y`, and each takes an independent 
 # parameter :math:`\theta_i`. 
+#
 # What happens when we apply a 
 # noisy channel :math:`\Lambda` after the gates? In this case, 
 # the expectation value becomes
@@ -381,10 +395,11 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #                      \right]\right).
 #
 # Using the Heisenberg picture, we can transfer the channel 
-# \Lambda acting on the state :math:`U(\theta)\rho U^\dagger(\theta)`
+# :math:`\Lambda` acting on the state :math:`U(\theta)\rho U^\dagger(\theta)`
 # into the *adjoint channel* :math:`\Lambda^\dagger` acting on the 
 # observable :math:`\hat{B}`, transforming it to a new observable
-# :math:`\hat{B} = \Lambda^\dagger[\hat{B}]=\hat{B}'`
+# :math:`\hat{B} = \Lambda^\dagger[\hat{B}]=\hat{B}'`.
+#
 # With the channel present, the expectation value can be interpreted
 # as if we had the same variational state, but measured a different
 # observable:
@@ -399,7 +414,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # .. math::
 #
-#    \frac{\partial}{\partial \theta}\langle \hat{B} \rangle(\theta)
+#    \nabla_\theta\langle \hat{B} \rangle(\theta)
 #      =  \frac{1}{2}
 #            \left[
 #                \langle \hat{B}' \rangle\left(\theta + \frac{\pi}{2}\right)
@@ -407,13 +422,84 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #            \right].
 #
 # In other words, the parameter-shift rule continues to hold for all
-# gates, even when we add additional channels! 
+# gates, even when we have additional noise! 
 #
-# .. note:: In the above, we implicitly assumed that the channel 
-#          is independent of the gate's parameters. 
+# .. note:: In the above derivation, we implicitly assumed that the channel 
+#           does not depend on the variational circuit's parameters. If the
+#           channel depended on the particular state, or if it depended
+#           on the parameters :math:`\theta`, we would need to be more careful.
+#
 # 
-# 
-# Let's confirm the above derivations with our example.
+# Let's confirm the above derivation with an example.
+
+angles = np.linspace(0, 2 * np.pi, 50)
+theta2 = np.pi / 4
+
+def param_shift(theta1):
+    return 0.5 * (noisy_cost([theta1 + np.pi / 2, theta2]) - \
+             noisy_cost([theta1 - np.pi / 2, theta2]))
+
+noisy_expvals = [noisy_cost([theta1, theta2]) for theta1 in angles]
+noisy_param_shift = [param_shift(theta1) for theta1 in angles]
+
+plt.plot(angles, noisy_expvals, 
+         label="Expectation value")  # looks like 0.4 * cos(phi)
+plt.plot(angles, noisy_param_shift,
+         label="Parameter-shift value")  # looks like -0.4 * sin(phi)
+plt.ylabel(r"Expectation value $\langle \hat{Z} \rangle$") 
+plt.xlabel(r"Angle $\theta_1$")
+plt.legend()
+plt.show()
+
+
+##############################################################################
+# By inspecting the two curves, we can see that the parameter-shift rule 
+# gives the correct gradient of the expectation value, even with the presence
+# of the noisy channel! 
+#
+# In this example, the influence of the channel is to 
+# attenuate the maximal amplitude that the qubit state can acheive 
+# (:math:`\approx 0.4`). But even though the qubit's amplitude is attenuated,
+# the gradient computed by the parameter-shift rule still "points in the
+# right direction". 
+#
+# This backs up the observation we made earlier that
+# the result of the optimization gave the correct values for the angle 
+# parameters, but the value of the final cost function was lower than
+# the noise-free case.
+#
+
+##############################################################################
+# Interpreting noisy circuit optimizations
+# ----------------------------------------
+#
+# Despite the observations that we can compute gradients for 
+# noisy channels, and that optimization may lead to the same parameter
+# values for both noise-free and noisy circuits, we must still remain
+# cautious in how we interpret the results. 
+#
+# We can evaluate the correct gradient for the expectation value 
+#
+# .. math::
+#
+#    \langle \hat{B} \rangle = 
+#           \mathrm{Tr}\left(\hat{B}\Lambda\left[
+#                          U(\theta)\rho U^\dagger(\theta)
+#                      \right]\right),
+#
+# but, because the noisy channel is present, *this expectation value may not
+# reflect the actual expectation value we wanted to compute*. This is 
+# important to keep in mind for certain algorithms that have a physical 
+# interpretation for the variational circuit.
+#
+# For example, in the
+# :doc:`variational quantum eigensolver </demos/tutorial_vqe>`, we 
+# want to find the ground-state energy of a physical system. 
+# If there is an appreciable amount of noise present, 
+# the state we are optimizing will necessarily become mixed, and 
+# we should be careful interpreting the optimum value as the exact 
+# ground-state energy.
+
 
 ##############################################################################
 # References
