@@ -71,7 +71,8 @@ representation).
 
 Fortunately, `Cirq <https://cirq.readthedocs.io>`_ provides mixed-state
 simulators and noisy operations natively, so we can use the 
-PennyLane-Cirq plugin to carry out our noisy simulations.
+`PennyLane-Cirq plugin <https://pennylane-cirq.readthedocs.io>`_ 
+to carry out our noisy simulations.
 """
 
 import pennylane as qml
@@ -145,11 +146,10 @@ print(CHSH_expval)
 # circuit declarations.
 
 from pennylane_cirq import ops as cirq_ops
-import inspect
 # Note that the 'Operation' op is a generic base class
 # from PennyLane core.
 # All other ops are provided by Cirq.
-available_ops = inspect.getmembers(cirq_ops, inspect.isclass)
+available_ops = [op for op in dir(cirq_ops) if not i.startswith('_')]
 print("\n".join([f"{op_name},{op}" for op_name, op in available_ops]))
 
 ##############################################################################
@@ -270,7 +270,7 @@ print("Expectation value:", circuit(gate_pars))
 # 
 # .. math::
 #
-#     \tfrac{1}{3}\left[X\rho X + Y\rho Y + Z\rho Z\right]
+#     \rho' = \tfrac{1}{3}\left[X\rho X + Y\rho Y + Z\rho Z\right]
 #
 # (at the value :math:`p=\frac{3}{4}`, it passes through the 
 # maximally mixed state).
@@ -299,6 +299,7 @@ plt.show()
 # declare the cost functions to be optimized
 def cost(x):
     return circuit(x, noise_param=0.0)
+    
 def noisy_cost(x):
     return circuit(x, noise_param=0.3)
 
@@ -367,7 +368,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # .. math::
 #
-#   \langle \hat{B} \rangle = 
+#   \langle \hat{B}(\theta) \rangle = 
 #           \mathrm{Tr}(\hat{B}U(\theta)\rho U^\dagger(\theta)).
 #
 # When optimizing, we can compute gradients of many common gates 
