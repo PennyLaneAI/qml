@@ -149,8 +149,8 @@ from pennylane_cirq import ops as cirq_ops
 # Note that the 'Operation' op is a generic base class
 # from PennyLane core.
 # All other ops are provided by Cirq.
-available_ops = [op for op in dir(cirq_ops) if not i.startswith('_')]
-print("\n".join([f"{op_name},{op}" for op_name, op in available_ops]))
+available_ops = [op for op in dir(cirq_ops) if not op.startswith('_')]
+print("\n".join(available_ops))
 
 ##############################################################################
 # PennyLane operations and external framework-specific operations can be 
