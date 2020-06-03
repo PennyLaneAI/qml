@@ -236,7 +236,7 @@ plt.show()
 #     In Google's quantum supremacy paper [#arute2019]_, 
 #     they were able to show that some 
 #     small signature of quantumness remained in their computations, 
-#     even after a deep many-qubit circuit was executed.
+#     even after a deep many-qubit noisy circuit was executed.
 
 ##############################################################################
 # Optimizing noisy circuits
@@ -355,7 +355,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 # ------------------------------------------
 #
 # Let's dig a bit into the underlying quantum information theory
-# to understand better what's happening.
+# to understand better what's happening [#meyer2020]_.
 # Expectation values of :doc:`variational circuits </glossary/variational_circuit>`, 
 # like the one we are measuring, are composed of three pieces:
 #
@@ -368,7 +368,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # .. math::
 #
-#   \langle \hat{B}(\theta) \rangle = 
+#   \langle \hat{B} \rangle (\theta) = 
 #           \mathrm{Tr}(\hat{B}U(\theta)\rho U^\dagger(\theta)).
 #
 # When optimizing, we can compute gradients of many common gates 
@@ -390,16 +390,21 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # What happens when we apply a 
 # noisy channel :math:`\Lambda` after the gates? In this case, 
-# the expectation value becomes
+# the expectation value is now taken with 
+# respect to the noisy circuit:
 #
 # .. math::
 #
-#    \langle \hat{B} \rangle = 
+#    \langle \hat{B} \rangle (\theta) = 
 #           \mathrm{Tr}\left(\hat{B}\Lambda\left[
 #                          U(\theta)\rho U^\dagger(\theta)
 #                      \right]\right).
 #
-# Using the Heisenberg picture, we can transfer the channel 
+# Thus, we can treat it as the expectation value of the same
+# observable, but with respect to a different state
+# :math:`\rho' = \Lambda\left[U(\theta)\rho U^\dagger(\theta)\right]`.
+#
+# Alternatively, using the Heisenberg picture, we can transfer the channel 
 # :math:`\Lambda` acting on the state :math:`U(\theta)\rho U^\dagger(\theta)`
 # into the *adjoint channel* :math:`\Lambda^\dagger` acting on the 
 # observable :math:`\hat{B}`, transforming it to a new observable
@@ -411,8 +416,8 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # .. math::
 #
-#    \langle \hat{B} \rangle = 
-#           \mathrm{Tr}(\hat{B}'(\theta)\rho U^\dagger(\theta)).
+#    \langle \hat{B} \rangle (\theta) = 
+#           \mathrm{Tr}(\hat{B}'U(\theta)\rho U^\dagger(\theta)).
 #
 # This has immediate consequences for the parameter-shift rule. With
 # the channel present, we have simply
@@ -516,5 +521,8 @@ plt.show()
 #     superconducting processor." 
 #     Nature, 574(7779), 505-510.
 #
-
+# .. [#meyer2020]
+#
+#    Johannes Jakob Meyer et al. In preparation.
+# 
 
