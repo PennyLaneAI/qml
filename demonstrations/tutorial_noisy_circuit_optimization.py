@@ -417,7 +417,8 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 # .. math::
 #
 #    \langle \hat{B} \rangle (\theta) = 
-#           \mathrm{Tr}(\hat{B}'U(\theta)\rho U^\dagger(\theta)).
+#           \mathrm{Tr}(\hat{B}'U(\theta)\rho U^\dagger(\theta)) = 
+#           \langle \hat{B} \rangle (\theta).
 #
 # This has immediate consequences for the parameter-shift rule. With
 # the channel present, we have simply
