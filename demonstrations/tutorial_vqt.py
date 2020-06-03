@@ -1,6 +1,6 @@
 """
 The Variational Quantum Thermalizer
------------------------------------
+===================================
 
 """
 
@@ -21,7 +21,7 @@ import seaborn
 
 ######################################################################
 # Introduction
-# ~~~~~~~~~~~~
+# ------------
 #
 # The goal of this Notebook will be to help the reader understand a very
 # interesting, recently-proposed NISQ algorithm called the **Variational
@@ -41,7 +41,7 @@ import seaborn
 
 ######################################################################
 # The Variational Quantum Thermalizer: The Problem Statement
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------------------------
 #
 # Before we actually jump into simulations of this algorithm, we will
 # attempt to understand the mathematical and physical theory that makes
@@ -139,7 +139,9 @@ import seaborn
 # :math:`|\psi'\rangle \ = \ U|\psi\rangle`, we know that some density
 # matrix will evolve as:
 #
-# .. math:: \rho \ = \ \displaystyle\sum_{i} p_i |\psi_i\rangle \langle \psi_i | \ \rightarrow \ \displaystyle\sum_{i} p_i |\psi_i'\rangle \langle \psi_i' | \ = \ \displaystyle\sum_{i} p_i U |\psi_i\rangle \langle \psi_i | U^{\dagger} \ = \ U \rho U^{\dagger}
+# .. math:: \rho \ = \ \displaystyle\sum_{i} p_i |\psi_i\rangle \langle \psi_i | \ \rightarrow \
+# \displaystyle\sum_{i} p_i |\psi_i'\rangle \langle \psi_i' | \ = \ \displaystyle\sum_{i} p_i U
+# |\psi_i\rangle \langle \psi_i | U^{\dagger} \ = \ U \rho U^{\dagger}
 #
 # Anyways, getting back to :math:`K_{\theta}`, we must consider a method
 # for selecting it. Luckily, the paper gives us a fairly obvious choice
@@ -154,7 +156,12 @@ import seaborn
 # different basis states. We can then construct our initial mixed state as
 # follows:
 #
-# .. math:: \rho_{\theta} \ = \ \frac{1}{\mathcal{Z}_{\theta}} e^{-K_{\theta}} \ = \ \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{n \ = \ 0}^{\infty} \ \frac{(-K_{\theta})^n}{n!} \ = \ = \ \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{n \ = \ 0}^{\infty} \ \frac{(-\sum_{k} \theta_k |k\rangle \langle k|)^n}{n!} \ = \ \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{n \ = \ 0}^{\infty} \displaystyle\sum_{k} \ \frac{(-\theta_k)^n}{n!} |k\rangle \langle k| \ = \ \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{k} e^{-\theta_k} |k\rangle \langle k |
+# .. math:: \rho_{\theta} \ = \ \frac{1}{\mathcal{Z}_{\theta}} e^{-K_{\theta}} \ = \
+# \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{n \ = \ 0}^{\infty} \ \frac{(-K_{\theta})^n}{n!}
+# \ = \ = \ \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{n \ = \ 0}^{\infty} \ \frac{(-\sum_{k}
+# \theta_k |k\rangle \langle k|)^n}{n!} \ = \ \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{n \
+# = \ 0}^{\infty} \displaystyle\sum_{k} \ \frac{(-\theta_k)^n}{n!} |k\rangle \langle k| \ = \
+# \frac{1}{\mathcal{Z}_{\theta}} \displaystyle\sum_{k} e^{-\theta_k} |k\rangle \langle k |
 #
 # This is great! All we have to do is sample from the probability
 # distribution of
@@ -165,13 +172,15 @@ import seaborn
 # value and the cost function.
 #
 # The Cost Function
-# ^^^^^^^^^^^^^^^^^
+# ~~~~~~~~~~~~~~~~~
 #
 # Let’s talk more about the cost function. We will define our cost
 # function to be the following, which we call the **relative free energy**
 # of our system:
 #
-# .. math:: \mathcal{L}(\theta, \ \phi) \ = \ \beta \langle \hat{H} \rangle \ - \ S_\theta \ = \ \beta \ \text{Tr} (\hat{H} \ \rho_{\theta \phi}) \ - \ S_\theta \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta
+# .. math:: \mathcal{L}(\theta, \ \phi) \ = \ \beta \langle \hat{H} \rangle \ - \ S_\theta \ = \
+# \beta \ \text{Tr} (\hat{H} \ \rho_{\theta \phi}) \ - \ S_\theta \ = \ \beta \ \text{Tr}( \hat{H} \
+# \hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta
 #
 # This is very similar to the concept of **Helmholtz free energy** from
 # thermal physics, which is given as:
@@ -209,7 +218,8 @@ import seaborn
 # the Von Neumann entropy is higher, whereas if our state (let’s call it
 # :math:`\sigma`) is complete pure, then:
 #
-# .. math:: S(\sigma) \ = \ \displaystyle\sum_{n} p_n \log p_n \ = \ - p_k \log p_k \ = \ - 1 \cdot \log 1 \ = \ -1 \cdot 0 \ = \ 0
+# .. math:: S(\sigma) \ = \ \displaystyle\sum_{n} p_n \log p_n \ = \ - p_k \log p_k \ = \ - 1 \cdot
+# \log 1 \ = \ -1 \cdot 0 \ = \ 0
 #
 # Because by definition of a pure state, one eigenstate has a probability
 # of :math:`1`, while the rest of probability :math:`0`. The entropy is
@@ -232,7 +242,9 @@ import seaborn
 # If we take the relative entropy of some state :math:`\rho` with respect
 # to our thermal state, we get:
 #
-# .. math:: D(\rho || \rho_{\text{Thermal}}) \ = \ \text{Tr} (\rho \log \rho) \ - \ \text{Tr}(\rho \log \rho_{\text{Thermal}}) \ = \ \text{Tr} (\rho \log \rho) \ - \ \text{Tr}(\rho \log \rho_{\text{Thermal}}) \ = \ \beta \text{Tr}(\rho \hat{H}) \ - \ S(\rho) \ + \ \log \mathcal{Z}
+# .. math:: D(\rho || \rho_{\text{Thermal}}) \ = \ \text{Tr} (\rho \log \rho) \ - \ \text{Tr}(\rho
+# \log \rho_{\text{Thermal}}) \ = \ \text{Tr} (\rho \log \rho) \ - \ \text{Tr}(\rho \log
+# \rho_{\text{Thermal}}) \ = \ \beta \text{Tr}(\rho \hat{H}) \ - \ S(\rho) \ + \ \log \mathcal{Z}
 #
 # Now, since relative entropy will always be greater than or equal to
 # :math:`0`, we know that this quantity that we have calculated will be
@@ -254,7 +266,11 @@ import seaborn
 # representation of the thermal state corresponding to :math:`\hat{H}` and
 # :math:`\beta`:
 #
-# .. math:: \mathcal{L}_{\text{Thermal}} \ = \ \beta \text{Tr}(\rho_{\text{Thermal}} \hat{H}) \ + \ \text{Tr} ( \rho_{\text{Thermal}} \ \log \rho_{\text{Thermal}} ) \ = \ \beta \text{Tr}\Bigg( \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \hat{H} \Bigg) \ + \ \text{Tr} \Bigg( \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \log \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \Bigg)
+# .. math:: \mathcal{L}_{\text{Thermal}} \ = \ \beta \text{Tr}(\rho_{\text{Thermal}} \hat{H}) \ + \
+# \text{Tr} ( \rho_{\text{Thermal}} \ \log \rho_{\text{Thermal}} ) \ = \ \beta \text{Tr}\Bigg(
+# \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \hat{H} \Bigg) \ + \ \text{Tr} \Bigg(
+# \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \log \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}}
+# \Bigg)
 #
 # Where the partition function is given as:
 #
@@ -262,7 +278,17 @@ import seaborn
 #
 # Continuing this expansion, we get:
 #
-# .. math:: \beta \text{Tr}\Bigg( \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \hat{H} \Bigg) \ + \ \text{Tr} \Bigg( \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \log \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \Bigg) \ = \ \frac{1}{\mathcal{Z}_{\beta}} \ \Bigg[ \beta  \text{Tr} \big( \hat{H} \ e^{ -\beta \hat{H}} \big) \ + \ \text{Tr} \Bigg( e^{-\beta \hat{H}} \ \log \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \Bigg) \Bigg] \ = \ \frac{1}{\mathcal{Z}_{\beta}} \ \Bigg[ \beta  \text{Tr} \big( \hat{H} \ e^{ -\beta \hat{H}} \big) \ + \ \text{Tr} ( e^{-\beta \hat{H}} \ ( \log e^{-\beta \hat{H}} \ - \ \log \mathcal{Z}_{\beta} )) \Bigg] \ = \ \frac{1}{\mathcal{Z}_{\beta}} \ \Bigg[ \beta  \text{Tr} \big( \hat{H} \ e^{ -\beta \hat{H}} \big) \ - \ \beta \text{Tr} \big( e^{-\beta \hat{H}} \hat{H} \big) \ - \ \text{Tr} \big( e^{-\beta \hat{H}} \log \mathcal{Z}_{\beta} \big) \Bigg] \ = \ - \frac{\text{Tr} \big( e^{-\beta \hat{H}} \big) \log \mathcal{Z}_{\beta}}{\mathcal{Z}_{\beta}} \ = \ - \log \mathcal{Z}_{\beta}
+# .. math:: \beta \text{Tr}\Bigg( \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \hat{H} \Bigg) \ +
+# \ \text{Tr} \Bigg( \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \log \frac{e^{-\beta
+# \hat{H}}}{\mathcal{Z}_{\beta}} \Bigg) \ = \ \frac{1}{\mathcal{Z}_{\beta}} \ \Bigg[ \beta
+# \text{Tr} \big( \hat{H} \ e^{ -\beta \hat{H}} \big) \ + \ \text{Tr} \Bigg( e^{-\beta \hat{H}} \
+# \log \frac{e^{-\beta \hat{H}}}{\mathcal{Z}_{\beta}} \Bigg) \Bigg] \ = \
+# \frac{1}{\mathcal{Z}_{\beta}} \ \Bigg[ \beta  \text{Tr} \big( \hat{H} \ e^{ -\beta \hat{H}} \big)
+# \ + \ \text{Tr} ( e^{-\beta \hat{H}} \ ( \log e^{-\beta \hat{H}} \ - \ \log \mathcal{Z}_{\beta} ))
+# \Bigg] \ = \ \frac{1}{\mathcal{Z}_{\beta}} \ \Bigg[ \beta  \text{Tr} \big( \hat{H} \ e^{ -\beta
+# \hat{H}} \big) \ - \ \beta \text{Tr} \big( e^{-\beta \hat{H}} \hat{H} \big) \ - \ \text{Tr} \big(
+# e^{-\beta \hat{H}} \log \mathcal{Z}_{\beta} \big) \Bigg] \ = \ - \frac{\text{Tr} \big( e^{-\beta
+# \hat{H}} \big) \log \mathcal{Z}_{\beta}}{\mathcal{Z}_{\beta}} \ = \ - \log \mathcal{Z}_{\beta}
 #
 # This makes sense, since substituting it into the original expression for
 # relative entropy gives us a value of :math:`0`, meaning that we have
@@ -284,21 +310,28 @@ import seaborn
 #
 # And then consider the entropy of our transformed state:
 #
-# .. math:: S(\rho') \ = \ - \text{Tr} (\rho' \log \rho') \ = \ - \text{Tr} ( U \rho U^{\dagger} \log (U \rho U^{\dagger})) \ = \ - \text{Tr} ( U \rho U^{\dagger} \log \rho) \ = \ - \text{Tr} ( U \rho \log \rho U^{\dagger}) \ = \ - \text{Tr} ( \rho \log \rho U^{\dagger} U) \ = \ - \text{Tr} ( \rho \log \rho) \ = \ S(\rho)
+# .. math:: S(\rho') \ = \ - \text{Tr} (\rho' \log \rho') \ = \ - \text{Tr} ( U \rho U^{\dagger}
+# \log (U \rho U^{\dagger})) \ = \ - \text{Tr} ( U \rho U^{\dagger} \log \rho) \ = \ - \text{Tr} ( U
+# \rho \log \rho U^{\dagger}) \ = \ - \text{Tr} ( \rho \log \rho U^{\dagger} U) \ = \ - \text{Tr} (
+# \rho \log \rho) \ = \ S(\rho)
 #
 # Therefore the entropy remains invariant under a unitary transformation,
 # as:
 #
-# .. math:: \log (U \rho U^{\dagger}) \ = \ \log U \ + \ \log \rho \ + \ \log U^{\dagger} \ = \ \log U \ + \ \log U^{\dagger} \ + \ \log \rho \ = \ \log (U^{\dagger} U) \ + \ \log \rho \ = \ \log \rho
+# .. math:: \log (U \rho U^{\dagger}) \ = \ \log U \ + \ \log \rho \ + \ \log U^{\dagger} \ = \ \log
+# U \ + \ \log U^{\dagger} \ + \ \log \rho \ = \ \log (U^{\dagger} U) \ + \ \log \rho \ = \ \log
+# \rho
 #
 # We also take advantage of the fact that
 # :math:`\text{Tr}(AB) \ = \ \text{Tr}(BA)`. This can also be proved
 # fairly easily as well:
 #
-# .. math:: \text{Tr}(AB) \ = \ \displaystyle\sum_{j} AB_{jj} \ = \ \displaystyle\sum_{j, \ k} A_{jk} B_{kj} \ = \ \displaystyle\sum_{j, \ k} B_{kj} A_{jk} \ = \ \displaystyle\sum_{k} BA_{kk} \ = \ \text{Tr} (BA)
+# .. math:: \text{Tr}(AB) \ = \ \displaystyle\sum_{j} AB_{jj} \ = \ \displaystyle\sum_{j, \ k}
+# A_{jk} B_{kj} \ = \ \displaystyle\sum_{j, \ k} B_{kj} A_{jk} \ = \ \displaystyle\sum_{k} BA_{kk} \
+# = \ \text{Tr} (BA)
 #
 # Scalability of the Algorithm
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now, we have outlined a pretty great process for learning thermal
 # states, however, we have yet to address one large issue:
@@ -327,7 +360,9 @@ import seaborn
 #
 # Remembering the exponential structure of our initial mixed state:
 #
-# .. math:: \rho_\theta \ = \ \frac{1}{\mathcal{Z}_{\theta}} e^{-K_{\theta}} \ = \ \frac{1}{\mathcal{Z}_{\theta}} e^{-{\sum_j K_{\theta_j}}} \ \Rightarrow \ \bigotimes_{j} \ \frac{1}{\mathcal{Z}_{\theta}} e^{-{K_{\theta_j}}}
+# .. math:: \rho_\theta \ = \ \frac{1}{\mathcal{Z}_{\theta}} e^{-K_{\theta}} \ = \
+# \frac{1}{\mathcal{Z}_{\theta}} e^{-{\sum_j K_{\theta_j}}} \ \Rightarrow \ \bigotimes_{j} \
+# \frac{1}{\mathcal{Z}_{\theta}} e^{-{K_{\theta_j}}}
 #
 # It becomes a tensor product of the individual subspaces if we define our
 # initial mixed states :math:`\rho_j` only over the smaller Hilbert space
@@ -339,14 +374,22 @@ import seaborn
 #
 # After we do this, we may re-write our initial state:
 #
-# .. math:: \rho_{\theta_j} \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} e^{-K_{\theta_j}} \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{n \ = \ 0}^{\infty} \ \frac{(-K_{\theta_j})^n}{n!} \ = \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{n \ = \ 0}^{\infty} \ \frac{(-\sum_{k} \theta_{jk} |k\rangle \langle k|_j)^n}{n!} \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{n \ = \ 0}^{\infty} \displaystyle\sum_{k} \ \frac{(-\theta_{jk})^n}{n!} |k\rangle \langle k|_j \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{k} e^{-\theta_{jk}} |k\rangle \langle k |_j
+# .. math:: \rho_{\theta_j} \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} e^{-K_{\theta_j}} \ = \
+# \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{n \ = \ 0}^{\infty} \
+# \frac{(-K_{\theta_j})^n}{n!} \ = \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{n \ = \
+# 0}^{\infty} \ \frac{(-\sum_{k} \theta_{jk} |k\rangle \langle k|_j)^n}{n!} \ = \
+# \frac{1}{\mathcal{Z}_{\theta_j}} \displaystyle\sum_{n \ = \ 0}^{\infty} \displaystyle\sum_{k} \
+# \frac{(-\theta_{jk})^n}{n!} |k\rangle \langle k|_j \ = \ \frac{1}{\mathcal{Z}_{\theta_j}}
+# \displaystyle\sum_{k} e^{-\theta_{jk}} |k\rangle \langle k |_j
 #
 # So, if we are operating in a Hilbert space with dimension :math:`2` (we
 # will likely be performing this experiment with qubits, thus this will be
 # the case, however, thr algorithm can be generalized to :math:`d`-level
 # qudits), in the basis of :math:`|k\rangle_j`, we have:
 #
-# .. math:: \rho_{\theta_j} \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \begin{pmatrix} e^{-\theta_{j0}} & 0 \\ 0 & e^{-\theta_{j1}} \end{pmatrix} \ = \ \begin{pmatrix} p_j(\theta_{j0}) & 0 \\ 0 & p_j(\theta_{j1}) \end{pmatrix}
+# .. math:: \rho_{\theta_j} \ = \ \frac{1}{\mathcal{Z}_{\theta_j}} \begin{pmatrix} e^{-\theta_{j0}}
+# & 0 \\ 0 & e^{-\theta_{j1}} \end{pmatrix} \ = \ \begin{pmatrix} p_j(\theta_{j0}) & 0 \\ 0 &
+# p_j(\theta_{j1}) \end{pmatrix}
 #
 # This form suggests to us that we may be able to make the algorithm even
 # more scalable. Right now, we require :math:`2n` parameters in the set
@@ -363,7 +406,9 @@ import seaborn
 #
 # And making it so that each :math:`\rho_j` is given as:
 #
-# .. math:: \rho_{\theta_j} \ = \ \begin{pmatrix} p_j(\theta_{j}) & 0 \\ 0 & 1 \ - \ p_j(\theta_{j}) \end{pmatrix} \ = \ \begin{pmatrix} e^{-\theta_{j}} & 0 \\ 0 & 1 \ - \ e^{-\theta_{j}} \end{pmatrix}
+# .. math:: \rho_{\theta_j} \ = \ \begin{pmatrix} p_j(\theta_{j}) & 0 \\ 0 & 1 \ - \ p_j(\theta_{j})
+# \end{pmatrix} \ = \ \begin{pmatrix} e^{-\theta_{j}} & 0 \\ 0 & 1 \ - \ e^{-\theta_{j}}
+# \end{pmatrix}
 #
 # Where we have renamed :math:`\theta_{j0}` to :math:`\theta_{j}`, as we
 # are left with only one parameter. This is a huge improvement, we have
@@ -376,7 +421,7 @@ import seaborn
 # will discuss this in more depth for each simulation that we run.
 #
 # VQT At Zero Temperature: The Variational Quantum Eigensolver
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # There is one more thing that we have to discuss before we start taking a
 # look at some real simulations. This, in my humble opinion, is one of the
@@ -391,13 +436,15 @@ import seaborn
 # :math:`\beta`, it just acts as some overall scaling parameter: the
 # minimum of the function remains unchanged). We get:
 #
-# .. math:: \frac{1}{\beta} \ \mathcal{L}(\theta, \ \phi) \ = \ \langle \hat{H} \rangle \ - \ \frac{1}{\beta} \ S_\theta \ = \ \langle H \rangle \ - \ T S_\theta
+# .. math:: \frac{1}{\beta} \ \mathcal{L}(\theta, \ \phi) \ = \ \langle \hat{H} \rangle \ - \
+# \frac{1}{\beta} \ S_\theta \ = \ \langle H \rangle \ - \ T S_\theta
 #
 # So in the limit of :math:`0` temperature, since we know that the Von
 # Neumann entropy is bounded above and below, the entropy/temperature term
 # will approach :math:`0`, and we will get:
 #
-# .. math:: \frac{1}{\beta} \ \mathcal{L}(\theta, \ \phi) \ \rightarrow \ \langle H \rangle \ \ \ \ \text{for} \ \ \ T \ \rightarrow \ 0
+# .. math:: \frac{1}{\beta} \ \mathcal{L}(\theta, \ \phi) \ \rightarrow \ \langle H \rangle \ \ \ \
+# \text{for} \ \ \ T \ \rightarrow \ 0
 #
 # Which is exactly the Variational Quantum Eigensolver: preparring some
 # arbitrary quantum state and then minimizing the exepcted value of the
@@ -409,13 +456,10 @@ import seaborn
 
 ######################################################################
 # The 3-Qubit Ising Model on a Line
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------------
 #
-
-
-######################################################################
 # Numerical Calculation of Target State
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We begin by calculating the target state numerically, so that it can be
 # compared to the state our circuit prepares. We begin by defining a few
@@ -555,11 +599,8 @@ seaborn.heatmap(abs(final_density_matrix))
 
 ######################################################################
 # Variational Quantum Thermalization of the Heisenberg Model
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-
-
-######################################################################
 # Now that we know exactly what our thermal state should look like, let’s
 # attempt to construct it with the VQT. Let’s begin by constructing the
 # classical probability distribution, which gives us the probabilities
@@ -772,7 +813,8 @@ def exact_cost(params):
 
     s = [[int(i) for i in list(bin(k)[2:].zfill(qubit))] for k in range(0, 2 ** qubit)]
 
-    # Passes each basis state through the variational circuit and multiplis the calculated energy EV with the associated probability from the distribution
+    # Passes each basis state through the variational circuit and multiplis the calculated energy EV
+    # with the associated probability from the distribution
 
     final_cost = 0
     for i in s:
@@ -897,16 +939,13 @@ seaborn.heatmap(abs(final_density_matrix))
 
 ######################################################################
 # The 4-Qubit Heisenberg Model on a Square
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------
 #
 # Let’s look at one more example of the VQT in action, this time, for a
 # slightly more complicated model.
 #
-
-
-######################################################################
 # Numerical Calculation of Target State
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # As we did in the above example, we define our fixed values:
 #
