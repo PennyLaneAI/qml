@@ -4,38 +4,20 @@ The Variational Quantum Thermalizer
 
 *Author: Jack Ceroni*
 
+
+In this Notebook, we will be discussing how to go about implementing and
+experimenting a recently proposed quantum algorithm called the
+**Variational Quantum Thermalizer**. Essentially, this algorithm is able
+to use a variational approach to reconstruct the thermal state of a
+given Hamiltonian at a given temperature. This is a task that is
+performed much more efficiently on a quantum device than a classical
+simulations performing the same calculations (for large enough systems).
+In fact, the original paper demonstrates that the VQT is actually a
+generalization of VQE, and as the effective "temperature" of our
+simulation approaches zero, our algorithm similarly approaches the VQE.
 """
 
-# Starts by importing all of the necessary dependencies
-
-import pennylane as qml
-from matplotlib import pyplot as plt
-import numpy as np
-from numpy import array
-import scipy
-from scipy.optimize import minimize
-import random
-import math
-from tqdm import tqdm
-import networkx as nx
-import seaborn
-
-
 ######################################################################
-# Introduction
-# ------------
-#
-# In this Notebook, we will be discussing how to go about implementing and
-# experimenting a recently proposed quantum algorithm called the
-# **Variational Quantum Thermalizer**. Essentially, this algorithm is able
-# to use a variational approach to reconstruct the thermal state of a
-# given Hamiltonian at a given temperature. This is a task that is
-# performed much more efficiently on a quantum device than a classical
-# simulations performing the same calculations (for large enough systems).
-# In fact, the original paper demonstrates that the VQT is actually a
-# generalization of VQE, and as the effective "temperature" of our
-# simulation approaches zero, our algorithm similarly approaches the VQE.
-#
 # The Idea
 # --------
 #
@@ -182,6 +164,20 @@ import seaborn
 # compared to the state our circuit prepares. We begin by defining a few
 # fixed values that we will use throughout this example:
 #
+
+# Starts by importing all of the necessary dependencies
+
+import pennylane as qml
+from matplotlib import pyplot as plt
+import numpy as np
+from numpy import array
+import scipy
+from scipy.optimize import minimize
+import random
+import math
+from tqdm import tqdm
+import networkx as nx
+import seaborn
 
 # Defines all necessary variables
 
