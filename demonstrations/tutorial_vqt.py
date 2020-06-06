@@ -124,9 +124,12 @@ import seaborn
 # under unitary transformations:
 #
 # .. math::
-#     S(\rho') \ = \ - \text{Tr} (\rho' \log \rho') \ = \ - \text{Tr} ( U \rho U^{\dagger} \log (U \rho U^{\dagger})) \ = \
-#     - \text{Tr} ( U \rho U^{\dagger} \log \rho) \ = \ - \text{Tr} ( U \rho \log \rho U^{\dagger}) \ = \
-#     - \text{Tr} ( \rho \log \rho U^{\dagger} U) \ = \ - \text{Tr} ( \rho \log \rho) \ = \ S(\rho)
+#     S(\rho') = \ - \text{Tr} (\rho' \log \rho') &= \ - \text{Tr} ( U \rho U^{\dagger} \log (U \rho U^{\dagger}))  \\
+#              &= - \text{Tr} ( U \rho U^{\dagger} \log \rho)  \\
+#			   &= \ - \text{Tr} ( U \rho \log \rho U^{\dagger}) \\
+#              &= - \text{Tr} ( \rho \log \rho U^{\dagger} U) \\
+#              &= \ - \text{Tr} ( \rho \log \rho) \\
+#              &= \ S(\rho)
 #
 # We repeat the algorithm with new parameters until we minimize free
 # energy. Once we have done this, we have arrived at the thermal state.
@@ -140,10 +143,10 @@ import seaborn
 # :math:`\rho_2` be our thermal state, we get:
 #
 # .. math::
-#     D(\rho_{\theta \phi} || \rho_{\text{Thermal}}) \ = \
-#     -S_{\theta} \ - \ \text{Tr}(\rho_{\theta \phi} (-\beta \hat{H} \ - \ \log Z_{\beta})) \ = \
-#     \beta \text{Tr} (\rho_{\theta \phi} \hat{H}) \ + \ \log Z_{\beta} \text{Tr}(\rho_{\theta \phi}) \ - \ S_{\theta} \ = \
-#     \beta \langle \hat{H} \rangle \ - \ S_{\theta} \ + \ \log Z_{\beta} \ = \ \mathcal{L}(\theta, \ \phi) \ + \ \log Z_{\beta}
+#     D(\rho_{\theta \phi} || \rho_{\text{Thermal}}) &= -S_{\theta} \ - \ \text{Tr}(\rho_{\theta \phi} (-\beta \hat{H} \ - \ \log Z_{\beta})) \\
+#     &= \beta \text{Tr} (\rho_{\theta \phi} \hat{H}) \ + \ \log Z_{\beta} \text{Tr}(\rho_{\theta \phi}) \ - \ S_{\theta} \\
+#     &= \beta \langle \hat{H} \rangle \ - \ S_{\theta} \ + \ \log Z_{\beta} \\
+#     &= \mathcal{L}(\theta, \ \phi) \ + \ \log Z_{\beta}
 #
 # Since relative entropy must be positive, and is clearly :math:`0` when
 # :math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`, it follows that
