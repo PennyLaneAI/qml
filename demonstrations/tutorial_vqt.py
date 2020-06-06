@@ -36,9 +36,6 @@ import seaborn
 # generalization of VQE, and as the effective "temperature" of our
 # simulation approaches zero, our algorithm similarly approaches the VQE.
 #
-
-
-######################################################################
 # The Idea
 # --------
 #
