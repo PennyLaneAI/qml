@@ -1,4 +1,4 @@
-"""
+r"""
 The Variational Quantum Thermalizer
 ===================================
 
@@ -15,157 +15,146 @@ simulations performing the same calculations (for large enough systems).
 In fact, the original paper demonstrates that the VQT is actually a
 generalization of VQE, and as the effective "temperature" of our
 simulation approaches zero, our algorithm similarly approaches the VQE.
+
+The Idea
+--------
+
+Before we actually jump into simulations of this algorithm, we will
+attempt to understand the mathematical and physical theory that makes
+this theory possible. For more background on variational quantum
+algorithms, and why VQE actually works, check out the other tutorials in
+the QML gallery (like `this
+one <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__).
+
+First off all, let us consider what we are actually trying to accomplish
+using this algorithm. We want to construct a **thermal state**, which is
+defined as:
+
+.. math::
+    \rho_\text{thermal} \ = \ \frac{e^{- H \beta / k_B}}{\text{Tr}(e^{- H \beta / k_B})} \ =
+    \ \frac{e^{- H \beta / k_B}}{Z_{\beta}}
+
+Where :math:`H` is the Hamiltonian of our system,
+:math:`\beta \ = \ 1/T`, where :math:`T` is the temperature of our
+system, and :math:`k_B` is Boltzman's constant, which we will set to
+:math:`1` for the remainder of this Notebook.
+
+The thermal state is the state of some quantum system, corresponding to
+some arbitrary Hamiltonian, such that the system is in **thermal
+equilibrium**. If we initialize some collection of particles at some
+arbitrary temperature, then over time, as entropy increases, the entire
+system approaches thermal equilibrium. The state of the system when it
+evolves into this thermal equilibrium is this thermal state. Knowing
+this state, allows us to in turn extract information about the system
+that we are studying, allowing to better understand the properties of
+materials/systems (for instance, superconductors, Bose-Hubbard models,
+etc.) **at thermal equilibrium**.
+
+Inputed into our algorithm is an arbitrary Hamiltonian :math:`H`, and
+our goal is to find :math:`\rho_\text{thermal}`, or more specifically,
+the variational parameters that give us a state that is very "close" to
+:math:`\rho_\text{thermal}`, as one does in any kind of variational
+quantum algorithm.
+
+In order to do this, we will pick some "simple" mixed state to begin our
+process. This initial density matrix will be parametrized by a
+collection of parameters :math:`\boldsymbol\theta`, which will describe
+the probabilities corresponding to different pure states. In this
+implementation of the algorithm, we will use the idea of a **factorized
+latent space** where the initial density matrix describing our quantum
+system in completely un-correlated. It is simply a tensor product of
+multiple :math:`2 \times 2`, diagonal (in the computational basis)
+density matrices, each corresponding to one qubit. This works well for
+scalability of the algorithm, because instead of requiring
+:math:`|\boldsymbol\theta| = 2^n`, for an :math:`n` qubit, diagonal
+density matrix, where we assign probabilities to each possible basis
+state, :math:`|\theta| = n`, since for qubit :math:`i`, we can assign
+probability :math:`p_i(\theta_i)` to :math:`|0\rangle`, and
+:math:`1 - p_i(\theta_i)` to :math:`|1\rangle`.
+
+We will then sample from the probability distribution of measurements of
+different pure states. More concretely, if we have some initial mixed
+state:
+
+.. math:: \rho \ = \ \displaystyle\sum_{i} p_i |x_i\rangle \langle x_i|
+
+Then the probability of our system being in state :math:`|x_i\rangle` is
+given by :math:`p_i`. We repeatedly sample values of :math:`x_i`
+corresponding to pure states in the expansion of our "simple" mixed
+state and pass the corresponding :math:`|x_i\rangle` through a
+parametrized quantum circuit. We repeat this process, calculating the
+expectation value of the Hamiltonian with respect to the unitary-evolved
+density matrix. We then use this value along with the Von Neumann
+entropy of our state to create a **free energy cost function**, which is
+given by:
+
+.. math::
+    \mathcal{L}(\theta, \ \phi) \ = \ \beta \langle \hat{H} \rangle \ - \ S_\theta \ = \
+    \beta \ \text{Tr} (\hat{H} \ \rho_{\theta \phi}) \ - \ S_\theta \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi)
+    \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta
+
+Where :math:`\rho_\theta` is the initial density matrix, :math:`U(\phi)`
+is the paramterized ansatz, and :math:`S_\theta` is the von Neumann
+entropy of :math:`\rho_{\theta \phi}`. It is important to note that the
+von Neumann entropy of :math:`\rho_{\theta \phi}` is the same as the von
+Neumann entropy of :math:`\phi_{\theta}`, since entropy is invariant
+under unitary transformations:
+
+.. math::
+    S(\rho') = \ - \text{Tr} (\rho' \log \rho') &= \ - \text{Tr} ( U \rho U^{\dagger} \log (U \rho U^{\dagger}))  \\
+             &= - \text{Tr} ( U \rho U^{\dagger} \log \rho)  \\
+             &= \ - \text{Tr} ( U \rho \log \rho U^{\dagger}) \\
+             &= - \text{Tr} ( \rho \log \rho U^{\dagger} U) \\
+             &= \ - \text{Tr} ( \rho \log \rho) \\
+             &= \ S(\rho)
+
+We repeat the algorithm with new parameters until we minimize free
+energy. Once we have done this, we have arrived at the thermal state.
+this comes from the fact that our free enrgy cost function is equivalent
+to the relative entropy between :math:`\rho_{\theta \phi}` and our
+target thermal state. Relative entropy is defined as:
+
+.. math:: D(\rho_1 || \rho_2) \ = \ \text{Tr} (\rho_1 \log \rho_1) \ - \ \text{Tr}(\rho_1 \log \rho_2)
+
+If we let :math:`\rho_1` be :math:`\rho_{\theta \phi}` and
+:math:`\rho_2` be our thermal state, we get:
+
+.. math::
+    D(\rho_{\theta \phi} || \rho_{\text{Thermal}}) &= -S_{\theta} \ - \ \text{Tr}(\rho_{\theta \phi} (-\beta \hat{H} \ - \ \log Z_{\beta})) \\
+    &= \beta \text{Tr} (\rho_{\theta \phi} \hat{H}) \ + \ \log Z_{\beta} \text{Tr}(\rho_{\theta \phi}) \ - \ S_{\theta} \\
+    &= \beta \langle \hat{H} \rangle \ - \ S_{\theta} \ + \ \log Z_{\beta} \\
+    &= \mathcal{L}(\theta, \ \phi) \ + \ \log Z_{\beta}
+
+Since relative entropy must be positive, and is clearly :math:`0` when
+:math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`, it follows that
+relative entropy, and hence :math:`\mathcal{L}(\theta, \ \phi)` (since
+it only differs from rleative entropy by an overall additive constant),
+are minimized when
+:math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`. So, we know that
+we have to minimize :math:`\mathcal{L}` to find the thermal state. More
+specifically, when
+:math:`\mathcal(\theta, \ \phi) \ = \ - \log Z_{\beta}`, then we have
+minimized the cost function and have found the thermal state.
+
+For a diagramatic representation of how this works, check out Figure 3
+from the `original VQT paper <https://arxiv.org/abs/1910.02071>`__.
+
+The 3-Qubit Ising Model on a Line
+---------------------------------
+
+We will begin by consdering the Ising model on a linear graph, for 3
+qubits. This is a fairly simple model, and will act as a good test to
+see if the VQT is working as it is supposed to.
+
+Numerical Calculation of Target State
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We begin by calculating the target state numerically, so that it can be
+compared to the state our circuit prepares. We begin by defining a few
+fixed values that we will use throughout this example:
 """
 
-######################################################################
-# The Idea
-# --------
-#
-# Before we actually jump into simulations of this algorithm, we will
-# attempt to understand the mathematical and physical theory that makes
-# this theory possible. For more background on variational quantum
-# algorithms, and why VQE actually works, check out the other tutorials in
-# the QML gallery (like `this
-# one <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__).
-#
-# First off all, let us consider what we are actually trying to accomplish
-# using this algorithm. We want to construct a **thermal state**, which is
-# defined as:
-#
-# .. math::
-#     \rho_\text{thermal} \ = \ \frac{e^{- H \beta / k_B}}{\text{Tr}(e^{- H \beta / k_B})} \ =
-#     \ \frac{e^{- H \beta / k_B}}{Z_{\beta}}
-#
-# Where :math:`H` is the Hamiltonian of our system,
-# :math:`\beta \ = \ 1/T`, where :math:`T` is the temperature of our
-# system, and :math:`k_B` is Boltzman's constant, which we will set to
-# :math:`1` for the remainder of this Notebook.
-#
-# The thermal state is the state of some quantum system, corresponding to
-# some arbitrary Hamiltonian, such that the system is in **thermal
-# equilibrium**. If we initialize some collection of particles at some
-# arbitrary temperature, then over time, as entropy increases, the entire
-# system approaches thermal equilibrium. The state of the system when it
-# evolves into this thermal equilibrium is this thermal state. Knowing
-# this state, allows us to in turn extract information about the system
-# that we are studying, allowing to better understand the properties of
-# materials/systems (for instance, superconductors, Bose-Hubbard models,
-# etc.) **at thermal equilibrium**.
-#
-# Inputed into our algorithm is an arbitrary Hamiltonian :math:`H`, and
-# our goal is to find :math:`\rho_\text{thermal}`, or more specifically,
-# the variational parameters that give us a state that is very "close" to
-# :math:`\rho_\text{thermal}`, as one does in any kind of variational
-# quantum algorithm.
-#
-# In order to do this, we will pick some "simple" mixed state to begin our
-# process. This initial density matrix will be parametrized by a
-# collection of parameters :math:`\boldsymbol\theta`, which will describe
-# the probabilities corresponding to different pure states. In this
-# implementation of the algorithm, we will use the idea of a **factorized
-# latent space** where the initial density matrix describing our quantum
-# system in completely un-correlated. It is simply a tensor product of
-# multiple :math:`2 \times 2`, diagonal (in the computational basis)
-# density matrices, each corresponding to one qubit. This works well for
-# scalability of the algorithm, because instead of requiring
-# :math:`|\boldsymbol\theta| = 2^n`, for an :math:`n` qubit, diagonal
-# density matrix, where we assign probabilities to each possible basis
-# state, :math:`|\theta| = n`, since for qubit :math:`i`, we can assign
-# probability :math:`p_i(\theta_i)` to :math:`|0\rangle`, and
-# :math:`1 - p_i(\theta_i)` to :math:`|1\rangle`.
-#
-# We will then sample from the probability distribution of measurements of
-# different pure states. More concretely, if we have some initial mixed
-# state:
-#
-# .. math:: \rho \ = \ \displaystyle\sum_{i} p_i |x_i\rangle \langle x_i|
-#
-# Then the probability of our system being in state :math:`|x_i\rangle` is
-# given by :math:`p_i`. We repeatedly sample values of :math:`x_i`
-# corresponding to pure states in the expansion of our "simple" mixed
-# state and pass the corresponding :math:`|x_i\rangle` through a
-# parametrized quantum circuit. We repeat this process, calculating the
-# expectation value of the Hamiltonian with respect to the unitary-evolved
-# density matrix. We then use this value along with the Von Neumann
-# entropy of our state to create a **free energy cost function**, which is
-# given by:
-#
-# .. math::
-#     \mathcal{L}(\theta, \ \phi) \ = \ \beta \langle \hat{H} \rangle \ - \ S_\theta \ = \
-#     \beta \ \text{Tr} (\hat{H} \ \rho_{\theta \phi}) \ - \ S_\theta \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi)
-#     \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta
-#
-# Where :math:`\rho_\theta` is the initial density matrix, :math:`U(\phi)`
-# is the paramterized ansatz, and :math:`S_\theta` is the von Neumann
-# entropy of :math:`\rho_{\theta \phi}`. It is important to note that the
-# von Neumann entropy of :math:`\rho_{\theta \phi}` is the same as the von
-# Neumann entropy of :math:`\phi_{\theta}`, since entropy is invariant
-# under unitary transformations:
-#
-# .. math::
-#     S(\rho') = \ - \text{Tr} (\rho' \log \rho') &= \ - \text{Tr} ( U \rho U^{\dagger} \log (U \rho U^{\dagger}))  \\
-#              &= - \text{Tr} ( U \rho U^{\dagger} \log \rho)  \\
-#			   &= \ - \text{Tr} ( U \rho \log \rho U^{\dagger}) \\
-#              &= - \text{Tr} ( \rho \log \rho U^{\dagger} U) \\
-#              &= \ - \text{Tr} ( \rho \log \rho) \\
-#              &= \ S(\rho)
-#
-# We repeat the algorithm with new parameters until we minimize free
-# energy. Once we have done this, we have arrived at the thermal state.
-# this comes from the fact that our free enrgy cost function is equivalent
-# to the relative entropy between :math:`\rho_{\theta \phi}` and our
-# target thermal state. Relative entropy is defined as:
-#
-# .. math:: D(\rho_1 || \rho_2) \ = \ \text{Tr} (\rho_1 \log \rho_1) \ - \ \text{Tr}(\rho_1 \log \rho_2)
-#
-# If we let :math:`\rho_1` be :math:`\rho_{\theta \phi}` and
-# :math:`\rho_2` be our thermal state, we get:
-#
-# .. math::
-#     D(\rho_{\theta \phi} || \rho_{\text{Thermal}}) &= -S_{\theta} \ - \ \text{Tr}(\rho_{\theta \phi} (-\beta \hat{H} \ - \ \log Z_{\beta})) \\
-#     &= \beta \text{Tr} (\rho_{\theta \phi} \hat{H}) \ + \ \log Z_{\beta} \text{Tr}(\rho_{\theta \phi}) \ - \ S_{\theta} \\
-#     &= \beta \langle \hat{H} \rangle \ - \ S_{\theta} \ + \ \log Z_{\beta} \\
-#     &= \mathcal{L}(\theta, \ \phi) \ + \ \log Z_{\beta}
-#
-# Since relative entropy must be positive, and is clearly :math:`0` when
-# :math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`, it follows that
-# relative entropy, and hence :math:`\mathcal{L}(\theta, \ \phi)` (since
-# it only differs from rleative entropy by an overall additive constant),
-# are minimized when
-# :math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`. So, we know that
-# we have to minimize :math:`\mathcal{L}` to find the thermal state. More
-# specifically, when
-# :math:`\mathcal(\theta, \ \phi) \ = \ - \log Z_{\beta}`, then we have
-# minimized the cost function and have found the thermal state.
-#
-# For a diagramatic representation of how this works, check out Figure 3
-# from the `original VQT paper <https://arxiv.org/abs/1910.02071>`__.
-#
-
-
-######################################################################
-# The 3-Qubit Ising Model on a Line
-# ---------------------------------
-#
-
-
-######################################################################
-# We will begin by consdering the Ising model on a linear graph, for 3
-# qubits. This is a fairly simple model, and will act as a good test to
-# see if the VQT is working as it is supposed to.
-#
-
-
-######################################################################
-# Numerical Calculation of Target State
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# We begin by calculating the target state numerically, so that it can be
-# compared to the state our circuit prepares. We begin by defining a few
-# fixed values that we will use throughout this example:
-#
-
-# Starts by importing all of the necessary dependencies
+# Start by importing all of the necessary dependencies
 
 import pennylane as qml
 from matplotlib import pyplot as plt
