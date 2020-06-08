@@ -459,7 +459,7 @@ qnode = qml.QNode(quantum_circuit, dev)
 
 # Tests and draws the QNode
 
-results = qnode([1 for i in range(0, 12 * depth)], qubits, [1, 0, 1, 0], 3)
+results = qnode(np.ones([12 * depth]), qubits, [1, 0, 1, 0], 3)
 print(qnode.draw())
 
 
