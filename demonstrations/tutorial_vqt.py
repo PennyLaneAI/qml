@@ -50,7 +50,7 @@ that we are studying, allowing to better understand the properties of
 materials/systems (for instance, superconductors, Bose-Hubbard models,
 etc.) **at thermal equilibrium**.
 
-Inputed into our algorithm is an arbitrary Hamiltonian :math:`H`, and
+The input into our algorithm is an arbitrary Hamiltonian :math:`H`, and
 our goal is to find :math:`\rho_\text{thermal}`, or more specifically,
 the variational parameters that give us a state that is very "close" to
 :math:`\rho_\text{thermal}`, as one does in any kind of variational
