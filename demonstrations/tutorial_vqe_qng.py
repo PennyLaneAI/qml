@@ -157,7 +157,7 @@ print("Number of iterations = ", n)
 
 ##############################################################################
 # Visualizing the results
-# -----------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^
 #
 # For single-qubit examples, we can visualize the optimization process in several ways.
 #
@@ -296,6 +296,8 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 
 
 ##############################################################################
+# Note: the qubit register has been initialized to |1100⟩, which encodes for
+# the Hartree-Fock state of the hydrogen molecule described with a minimal basis.
 # Again, we define the cost function using the ``VQECost`` class.
 
 cost = qml.VQECost(ansatz, hamiltonian, dev)
@@ -391,6 +393,9 @@ print()
 print("Final circuit parameters = \n", params)
 
 ##############################################################################
+# Visualizing the results
+# ^^^^^^^^^^^^^^^^^^^^^^^
+#
 # To evaluate the performance of our two optimizers, we can compare: (a) the
 # number of steps it takes to reach our ground state estimate and (b) the quality of our ground
 # state estimate by comparing the final optimization energy to the exact value.
