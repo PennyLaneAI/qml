@@ -133,7 +133,7 @@ are minimized when
 :math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`. So, we know that
 we have to minimize :math:`\mathcal{L}` to find the thermal state. More
 specifically, when
-:math:`\mathcal(\theta, \ \phi) \ = \ - \log Z_{\beta}`, then we have
+:math:`\mathcal{L}(\theta, \ \phi) \ = \ - \log Z_{\beta}`, then we have
 minimized the cost function and have found the thermal state.
 
 For a diagramatic representation of how this works, check out Figure 3
