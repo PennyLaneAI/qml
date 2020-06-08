@@ -117,7 +117,7 @@ print("Final value of the energy = {:.8f} Ha".format(energy))
 print("Number of iterations = ", n)
 
 ##############################################################################
-# We then repeat the process for teh optimizer employing quantum natural gradients:
+# We then repeat the process for the optimizer employing quantum natural gradients:
 
 opt = qml.QNGOptimizer(stepsize=step_size, diag_approx=False)
 
@@ -412,6 +412,31 @@ plt.show()
 # While further benchmark studies are needed to better understand the advantages
 # of quantum natural gradient, preliminary studies such as this tutorial show the potentials
 # of the method.
+
+##############################################################################
+# Robustness of the QNG
+#^^^^^^^^^^^^^^^^^^^^^^ 
+
+##############################################################################
+# Before we celebrate, let's take a look at the 'robustness' of this new optimizer. 
+# Yes, we found that in the previous example we out-performed the regular gradient descent, 
+# but how do we know this will always be the case, regardless of the parameter initialization?
+#
+# Using the same hamiltonian, ansatz and device as before, we're going to test the robustness of the 
+# parameter initialization  and see if the QNG will out perform the vanilla gradient descent regardless of where we start 
+# in the cost space, we're going to run 10 different trials with random parameter initializations. 
+# In this example, we don't terminate based on energy improvement, but on a fixed number of iterations (in our case, 150).
+# Down below, you can see the plot generated based on 10 different trials runs. The mean and standard deviation
+# of the QNG shows that QNG outperforms vanilla gradient descent, regardless of the initial parameter initialization.
+#
+# .. figure:: ../demonstrations/k_runs.png
+#     :align: center
+#     :width: 80%
+#     :target: javascript:void(0)
+#
+# This goes to show that the QNG optimization is much more efficient for VQE problems, and this makes sense, because after all,
+# we are optimizing in a much more, 'natural' way. 😉
+
 
 
 ##############################################################################
