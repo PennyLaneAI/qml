@@ -589,7 +589,7 @@ def prepare_state(params, device):
         state = device.state
         for j in range(0, len(i)):
             state = np.sqrt(distribution[j][i[j]]) * state
-        final_density_matrix_2 = np.add(final_density_matrix, np.outer(state, np.conj(state)))
+        final_density_matrix_2 = np.add(final_density_matrix_2, np.outer(state, np.conj(state)))
 
     return final_density_matrix_2
 
