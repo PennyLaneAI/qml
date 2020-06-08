@@ -110,7 +110,7 @@ under unitary transformations:
 
 We repeat the algorithm with new parameters until we minimize free
 energy. Once we have done this, we have arrived at the thermal state.
-this comes from the fact that our free enrgy cost function is equivalent
+This comes from the fact that our free energy cost function is equivalent
 to the relative entropy between :math:`\rho_{\theta \phi}` and our
 target thermal state. Relative entropy is defined as:
 
