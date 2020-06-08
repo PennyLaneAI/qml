@@ -74,11 +74,11 @@ probability :math:`p_i(\theta_i)` to :math:`|0\rangle`, and
 
 We will then sample from the probability distribution of measurements of
 different pure states. More concretely, if we have some initial mixed
-state:
+state,
 
-.. math:: \rho \ = \ \displaystyle\sum_{i} p_i |x_i\rangle \langle x_i|
+.. math:: \rho \ = \ \displaystyle\sum_{i} p_i |x_i\rangle \langle x_i|,
 
-Then the probability of our system being in state :math:`|x_i\rangle` is
+then the probability of our system being in state :math:`|x_i\rangle` is
 given by :math:`p_i`. We repeatedly sample values of :math:`x_i`
 corresponding to pure states in the expansion of our "simple" mixed
 state and pass the corresponding :math:`|x_i\rangle` through a
