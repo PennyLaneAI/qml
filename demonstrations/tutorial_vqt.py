@@ -91,9 +91,9 @@ given by:
 .. math::
     \mathcal{L}(\theta, \ \phi) \ = \ \beta \langle \hat{H} \rangle \ - \ S_\theta \ = \
     \beta \ \text{Tr} (\hat{H} \ \rho_{\theta \phi}) \ - \ S_\theta \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi)
-    \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta
+    \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta,
 
-Where :math:`\rho_\theta` is the initial density matrix, :math:`U(\phi)`
+where :math:`\rho_\theta` is the initial density matrix, :math:`U(\phi)`
 is the paramterized ansatz, and :math:`S_\theta` is the von Neumann
 entropy of :math:`\rho_{\theta \phi}`. It is important to note that the
 von Neumann entropy of :math:`\rho_{\theta \phi}` is the same as the von
