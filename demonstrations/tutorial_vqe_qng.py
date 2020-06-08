@@ -439,7 +439,7 @@ plt.show()
 #     :width: 80%
 #     :target: javascript:void(0)
 #
-# We observe that quantum natural gradient consistently converges faster for this system.
+# We observe that quantum natural gradient on average converges faster for this system.
 #
 # While further benchmark studies are needed to better understand the advantages
 # of quantum natural gradient, preliminary studies such as this tutorial show the potentials
