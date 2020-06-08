@@ -428,8 +428,8 @@ plt.show()
 # of the ``QNGOptimizer`` by running 10 independent trials with random parameter initializations.
 # For this numerical test, our optimizer does not terminate based on energy improvement; we fix the number of 
 # iterations to 150.
-# We show the result of this test below, where we plot the mean and standard deviation of the energies over
-# optimization steps for quantum natural gradient and standard gradient descent. 
+# We show the result of this test below (after pre-computing), where we plot the mean and standard 
+# deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent. 
 #
 # .. figure:: ../demonstrations/k_runs.png
 #     :align: center
