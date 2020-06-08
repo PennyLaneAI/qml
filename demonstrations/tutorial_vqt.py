@@ -581,7 +581,8 @@ def prepare_state(params, device):
 
     s = [[int(i) for i in list(bin(k)[2:].zfill(qubit))] for k in range(0, 2 ** qubit)]
 
-    # Runs the circuit in the case of the optimal parameters, for each bitstring, and adds the result to the final density matrix
+    # Runs the circuit in the case of the optimal parameters, for each bitstring,
+    # and adds the result to the final density matrix.
 
     for i in s:
         qnode(unitary_params, qubits, i, 3)
