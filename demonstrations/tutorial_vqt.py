@@ -470,7 +470,7 @@ print(qnode.draw())
 # entropy is not too involved. We will take a probability distribution as
 # our argument, each entry of which corresponds to the digonal elements of
 # the :math:`1`-qubit subsystems. The entropy of a collection of
-# subsystems is the same as the sum of the entropies of the indiivdual
+# subsystems is the same as the sum of the entropies of the individual
 # systems, so we get:
 #
 
