@@ -130,15 +130,13 @@ from matplotlib import pyplot as plt
 import numpy as np
 import scipy
 from scipy.optimize import minimize
-import random
-import math
 import networkx as nx
 import seaborn
 import itertools
 
 # Defines all necessary variables
 
-beta = 0.5  # Note that B = 1/T
+beta = 0.5  # Note that beta = 1/T
 num_qubits = 3  # Number of qubits being used
 qubits = range(num_qubits)
 
@@ -148,9 +146,9 @@ dev = qml.device("default.qubit", wires=len(qubits))
 
 
 ######################################################################
-# The model that we are investigating lives on a linear graph, which we
-# will construct using ``networkx`` for the purposes of eventually
-# constructing our Hamiltonian:
+# The model that we are investigating is defined on a linear graph, which we
+# will construct using ``networkx`` for the purpose of eventually
+# constructing the Hamiltonian.
 #
 
 # Creates the graph of interactions for the Heisenberg grid, then draws it
@@ -163,17 +161,16 @@ nx.draw(interaction_graph)
 
 
 ######################################################################
-# Next, we can implemente a method that actually allows us to calculate
-# the matrix form of our Hamiltonian (in the :math:`Z`-basis). The Ising
+# Next, we implement a method that allows us to calculate
+# the matrix form of the Hamiltonian (in the computational-basis). The Ising
 # model Hamiltonian can be written as:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{j} X_{j} X_{j + 1} \ + \ \displaystyle\sum_{i} Z_{i}
 #
-# We can write this as a function, that returns the :math:`n`-qubit matrix
+# Where :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z gates acting on the :math:`i`-th 
+# qubit. We can write this as a function that returns the :math:`n`-qubit matrix
 # form of the Ising model Hamiltonian:
 #
-
-# Builds the Ising model Hamiltonian, for a given number of qubits and an interaction graph
 
 
 def create_hamiltonian_matrix(n, graph):
@@ -201,15 +198,15 @@ def create_hamiltonian_matrix(n, graph):
     return matrix
 
 
-# Constructs the Hamiltonian we will deal with in this simulation
+# Constructs the Hamiltonian
 
 ham_matrix = create_hamiltonian_matrix(num_qubits, interaction_graph)
 print(ham_matrix)
 
 
 ######################################################################
-# With all of this done, all that is left to do is construct the target
-# thermal state. We know that the thermal state is of the form:
+# All that is left to do is construct the target
+# thermal state, which is of the form:
 #
 # .. math:: \rho_{\text{thermal}} \ = \ \frac{e^{-\beta \hat{H}}}{Z_{\beta}}.
 #
@@ -221,24 +218,22 @@ print(ham_matrix)
 # target state. Thus, we will have:
 #
 
-# Creates the target density matrix
-
 
 def create_target(qubit, beta, ham, graph):
 
     # Calculates the matrix form of the density matrix, by taking the exponential of the Hamiltonian
 
     h = ham(num_qubits, graph)
-    y = -1 * float(beta) * h
+    y = -1 * beta * h
     new_matrix = scipy.linalg.expm(np.array(y))
     norm = np.trace(new_matrix)
     final_target = (1 / norm) * new_matrix
 
     # Calculates the entropy, the expectation value, and the final cost
 
-    entropy = -1 * np.trace(np.matmul(final_target, scipy.linalg.logm(final_target)))
-    ev = np.trace(np.matmul(final_target, h))
-    real_cost = beta * np.trace(np.matmul(final_target, h)) - entropy
+    entropy = -1 * np.trace(final_target @ scipy.linalg.logm(final_target))
+    ev = np.trace(final_target @ h)
+    real_cost = beta * np.trace(final_target @ h) - entropy
 
     # Prints the calculated values
 
@@ -250,12 +245,12 @@ def create_target(qubit, beta, ham, graph):
 
 
 ######################################################################
-# Finally, we can calculate the thermal state corresponding to our
+# Finally, we can calculate the thermal state corresponding to the
 # Hamiltonian and inverse temperature, and visualize it using the
 # ``seaborn`` data visualization library:
 #
 
-# Plots the final density matrix
+# Plots the absolute value of the final density matrix
 
 final_density_matrix = create_target(num_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 seaborn.heatmap(abs(final_density_matrix))
@@ -509,7 +504,7 @@ def exact_cost(params):
 # Creates the optimizer
 
 iterations = 0
-params = [random.randint(-100, 100) / 100 for i in range(0, (12 * depth) + num_qubits)]
+params = [np.random.randint(-100, 100) / 100 for i in range(0, (12 * depth) + num_qubits)]
 
 out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 2000})
 params = out["x"]
@@ -623,7 +618,7 @@ seaborn.heatmap(abs(final_density_matrix))
 
 # Defines all necessary variables
 
-beta = 1  # Note that B = 1/T
+beta = 1  # Note that beta = 1/T
 num_qubits = 4
 qubits = range(num_qubits)
 depth = 2
@@ -730,7 +725,7 @@ qnode = qml.QNode(quantum_circuit, dev2)
 
 iterations = 0
 
-params = [random.randint(-100, 100) / 100 for i in range(0, (16 * depth) + num_qubits)]
+params = [np.random.randint(-100, 100) / 100 for i in range(0, (16 * depth) + num_qubits)]
 out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1000})
 params = out["x"]
 print(out)
