@@ -248,7 +248,7 @@ print(ham_matrix)
 # With all of this done, all that is left to do is construct the target
 # thermal state. We know that the thermal state is of the form:
 #
-# .. math:: \rho_{\text{thermal}} \ = \ \frac{e^{-\beta \hat{H}}}{Z_{\beta}}
+# .. math:: \rho_{\text{thermal}} \ = \ \frac{e^{-\beta \hat{H}}}{Z_{\beta}}.
 #
 # Thus, we can calculate it by taking the matrix exponential of the
 # Hamiltonian. The partition function can be found by simply taking the
