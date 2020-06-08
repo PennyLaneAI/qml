@@ -32,9 +32,9 @@ defined as:
 
 .. math::
     \rho_\text{thermal} \ = \ \frac{e^{- H \beta / k_B}}{\text{Tr}(e^{- H \beta / k_B})} \ =
-    \ \frac{e^{- H \beta / k_B}}{Z_{\beta}}
+    \ \frac{e^{- H \beta / k_B}}{Z_{\beta}},
 
-Where :math:`H` is the Hamiltonian of our system,
+where :math:`H` is the Hamiltonian of our system,
 :math:`\beta \ = \ 1/T`, where :math:`T` is the temperature of our
 system, and :math:`k_B` is Boltzman's constant, which we will set to
 :math:`1` for the remainder of this Notebook.
