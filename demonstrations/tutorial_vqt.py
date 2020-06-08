@@ -309,7 +309,7 @@ seaborn.heatmap(abs(final_density_matrix))
 # attempt to construct it with the VQT. Let's begin by constructing the
 # classical probability distribution, which gives us the probabilities
 # corresponding to each basis state in the expansion of our density
-# matrix. As we discussed earlier in this Notebook, we will be using the
+# matrix. As we discussed earlier in this demonstration, we will be using the
 # factorized latent space model. We just have to decide how we will define
 # each probability in the factorized space. We will let the probability
 # associated with the :math:`j`-th one-qubit system be:
