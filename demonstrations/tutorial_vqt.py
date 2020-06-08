@@ -493,7 +493,7 @@ def calculate_entropy(distribution):
 # **exact** version of the VQT cost function. Instead of sampling from our
 # classical probability distribution, we simply calculate the probability
 # corresponding to every basis state, and thus calculate the energy
-# expectation exactly for each iteration. this is not how the VQT would
+# expectation exactly for each iteration. This is not how the VQT would
 # work in the real world, for large systems where the number of basis
 # states (and thus the size of the probability distribution) scales
 # exponentially, but for small toy-models such as this, the exact form
