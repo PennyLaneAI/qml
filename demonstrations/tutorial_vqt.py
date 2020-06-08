@@ -398,7 +398,7 @@ def ansatz_circuit(params, qubits, layers, graph, param_number):
     # Partitions the parameters into param lists
     partition = []
     for i in range(0, int((len(params) / number))):
-        partition.append(params[number * i.val : number * (i.val + 1)])
+        partition.append(params[number * i : number * (i + 1)])
 
     for j in range(0, depth):
 
