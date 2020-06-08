@@ -18,6 +18,7 @@ Before going through this tutorial, we recommend that readers refer to the
 `QNG tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html>`__ and
 `VQE tutorial <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ for overviews 
 of quantum natural gradient and the variational quantum eigensolver algorithm, respectively.
+Let's get started!
 
 
 (1) Single-qubit VQE example
@@ -60,9 +61,10 @@ H = qml.Hamiltonian(coeffs, obs)
 cost_fn = qml.VQECost(circuit, H, dev)
 
 ##############################################################################
-# To analyze performance of the quantum natural gradient on VQE calculations, 
-# we will set up and execute optimizations using the ``GradientDescentOptimizer``
-# and the ``QNGOptimizer`` using the block-diagonal approximation to the metric tensor.
+# To analyze the performance of quantum natural gradient on VQE calculations, 
+# we set up and execute optimizations using the ``GradientDescentOptimizer`` (which does not
+# utilize quantum gradients) and the ``QNGOptimizer`` that uses the block-diagonal approximation 
+# to the metric tensor.
 #
 # To perform a fair comparison, we fix the initial parameters for the two optimizers.
 
@@ -71,7 +73,8 @@ init_params = np.array([3.97507603, 3.00854038])
 
 ##############################################################################
 # We will carry out each optimization over a maximum of 500 steps. As was done in the VQE
-# tutorial, we aim to reach a convergence tolerance of around :math:`10^{-6}`. We use a step size of 0.01.
+# tutorial, we aim to reach a convergence tolerance of around :math:`10^{-6}`. 
+# We use a step size of 0.01.
 
 max_iterations = 500
 conv_tol = 1e-06
@@ -177,7 +180,7 @@ plt.show()
 # Energies at different grid points have been pre-computed, and they can be downloaded by
 # clicking :download:`here<../demonstrations/vqe_qng/param_landscape.npy>`.
 
-# Discretize parameter space
+# Discretize the parameter space
 theta0 = np.linspace(0.0, 2.0 * np.pi, 100)
 theta1 = np.linspace(0.0, 2.0 * np.pi, 100)
 
@@ -244,7 +247,7 @@ plt.show()
 # 
 # where again the black markers and line indicate the path taken by the ``QNGOptimizer``,
 # and the green markers and line indicate the path taken by the ``GradientDescentOptimizer``.
-# Using this visualization method, we can clearly see how the path using ``QNGOptimizer`` tightly
+# Using this visualization method, we can clearly see how the path using the ``QNGOptimizer`` tightly
 # "hugs" the curvature of the Bloch sphere and takes the shorter path.
 #
 # Now, we will move onto a more interesting example: estimating the ground state energy
@@ -296,8 +299,8 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 
 
 ##############################################################################
-# Note: the qubit register has been initialized to |1100⟩, which encodes for
-# the Hartree-Fock state of the hydrogen molecule described with a minimal basis.
+# Note that the qubit register has been initialized to |1100⟩, which encodes for
+# the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function using the ``VQECost`` class.
 
 cost = qml.VQECost(ansatz, hamiltonian, dev)
@@ -420,8 +423,8 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # While results above show a more rapid convergence for quantum natural gradients,
-# what if we were just lucky, i.e. started at a "good" point in parameter space?
-# How do we know this will be the case with high probability, regardless of the 
+# what if we were just lucky, i.e. we started at a "good" point in parameter space?
+# How do we know this will be the case with high probability regardless of the 
 # parameter initialization?   
 #
 # Using the same system Hamiltonian, ansatz, and device, we tested the robustness 
@@ -440,7 +443,7 @@ plt.show()
 #
 # While further benchmark studies are needed to better understand the advantages
 # of quantum natural gradient, preliminary studies such as this tutorial show the potentials
-# of the method.
+# of the method. 🎉
 #
 
 ##############################################################################
