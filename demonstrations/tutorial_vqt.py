@@ -398,14 +398,14 @@ def ansatz_circuit(params, qubits, layers, graph, param_number):
     # Partitions the parameters into param lists
     partition = []
     for i in range(0, int((len(params) / number))):
-        partition.append(params[number * i : number * (i + 1)])
+        partition.append(params[number * i.val : number * (i.val + 1)])
 
     for j in range(0, depth):
 
         # Implements the single qubit rotations
         sq = partition[j][0 : (number - len(graph.edges))]
         for i in qubits:
-            single_rotation(sq[i * param_number : (i + 1) * param_number], i)
+            single_rotation(sq[i.val * param_number : (i.val + 1) * param_number], i.val)
 
         # Implements the coupling layer of gates
         for count, i in enumerate(graph.edges):
