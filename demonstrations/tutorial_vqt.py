@@ -7,14 +7,15 @@ The Variational Quantum Thermalizer
 
 In this Notebook, we will be discussing how to go about implementing and
 experimenting a recently proposed quantum algorithm called the
-**Variational Quantum Thermalizer**. Essentially, this algorithm is able
-to use a variational approach to reconstruct the thermal state of a
-given Hamiltonian at a given temperature. This is a task that is
-performed much more efficiently on a quantum device than a classical
-simulations performing the same calculations (for large enough systems).
-In fact, the original paper demonstrates that the VQT is actually a
-generalization of VQE, and as the effective "temperature" of our
-simulation approaches zero, our algorithm similarly approaches the VQE.
+`Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>` __. 
+Essentially, this algorithm is able to use a variational approach to 
+reconstruct the thermal state of a given Hamiltonian at a given temperature. 
+This is a task that is  performed much more efficiently on a quantum device 
+than a classical simulations performing the same calculations 
+(for large enough systems). In fact, the original paper demonstrates that 
+the VQT is actually a generalization of VQE, and as the effective 
+"temperature" of our simulation approaches zero, our algorithm similarly 
+approaches the VQE.
 
 The Idea
 --------
@@ -97,7 +98,7 @@ where :math:`\rho_\theta` is the initial density matrix, :math:`U(\phi)`
 is the paramterized ansatz, and :math:`S_\theta` is the von Neumann
 entropy of :math:`\rho_{\theta \phi}`. It is important to note that the
 von Neumann entropy of :math:`\rho_{\theta \phi}` is the same as the von
-Neumann entropy of :math:`\phi_{\theta}`, since entropy is invariant
+Neumann entropy of :math:`\rho_{\theta}`, since entropy is invariant
 under unitary transformations:
 
 .. math::
@@ -116,8 +117,8 @@ target thermal state. Relative entropy is defined as:
 
 .. math:: D(\rho_1 || \rho_2) \ = \ \text{Tr} (\rho_1 \log \rho_1) \ - \ \text{Tr}(\rho_1 \log \rho_2)
 
-If we let :math:`\rho_1` be :math:`\rho_{\theta \phi}` and
-:math:`\rho_2` be our thermal state, we get:
+Using this to compute the relative entropy between :math:`\rho_{\theta \phi}` 
+and :math:`\rho_{\text{Thermal}}`:, we get:
 
 .. math::
     D(\rho_{\theta \phi} || \rho_{\text{Thermal}}) &= -S_{\theta} \ - \ \text{Tr}(\rho_{\theta \phi} (-\beta \hat{H} \ - \ \log Z_{\beta})) \\
@@ -128,7 +129,7 @@ If we let :math:`\rho_1` be :math:`\rho_{\theta \phi}` and
 Since relative entropy must be positive, and is clearly :math:`0` when
 :math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`, it follows that
 relative entropy, and hence :math:`\mathcal{L}(\theta, \ \phi)` (since
-it only differs from rleative entropy by an overall additive constant),
+it only differs from relative entropy by an overall additive constant),
 are minimized when
 :math:`\rho_{\theta \phi} \ = \ \rho_{\text{Thermal}}`. So, we know that
 we have to minimize :math:`\mathcal{L}` to find the thermal state. More
@@ -159,20 +160,19 @@ fixed values that we will use throughout this example:
 import pennylane as qml
 from matplotlib import pyplot as plt
 import numpy as np
-from numpy import array
 import scipy
 from scipy.optimize import minimize
 import random
 import math
-from tqdm import tqdm
 import networkx as nx
 import seaborn
+import itertools
 
 # Defines all necessary variables
 
 beta = 0.5  # Note that B = 1/T
-qubit = 3  # Number of qubits being used
-qubits = range(qubit)
+num_qubits = 3  # Number of qubits being used
+qubits = range(num_qubits)
 
 # Defines the device on which the simulation is run
 
@@ -188,7 +188,7 @@ dev = qml.device("default.qubit", wires=len(qubits))
 # Creates the graph of interactions for the Heisenberg grid, then draws it
 
 interaction_graph = nx.Graph()
-interaction_graph.add_nodes_from(range(0, qubit))
+interaction_graph.add_nodes_from(range(0, num_qubits))
 interaction_graph.add_edges_from([(0, 1), (1, 2)])
 
 nx.draw(interaction_graph)
@@ -210,29 +210,24 @@ nx.draw(interaction_graph)
 
 def create_hamiltonian_matrix(n, graph):
 
-    pauli_x = np.array([[0, 1], [1, 0]])
-    pauli_y = np.array([[0, -1j], [1j, 0]])
-    pauli_z = np.array([[1, 0], [0, -1]])
-    identity = np.array([[1, 0], [0, 1]])
-
     matrix = np.zeros((2 ** n, 2 ** n))
 
     for i in graph.edges:
         m = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                m = np.kron(m, pauli_x)
+                m = np.kron(m, qml.PauliX.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, m)
 
     for i in range(0, n):
         m = 1
         for j in range(0, n):
             if j == i:
-                m = np.kron(m, pauli_z)
+                m = np.kron(m, qml.PauliZ.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, m)
 
     return matrix
@@ -240,7 +235,7 @@ def create_hamiltonian_matrix(n, graph):
 
 # Constructs the Hamiltonian we will deal with in this simulation
 
-ham_matrix = create_hamiltonian_matrix(qubit, interaction_graph)
+ham_matrix = create_hamiltonian_matrix(num_qubits, interaction_graph)
 print(ham_matrix)
 
 
@@ -265,7 +260,7 @@ def create_target(qubit, beta, ham, graph):
 
     # Calculates the matrix form of the density matrix, by taking the exponential of the Hamiltonian
 
-    h = ham(qubit, graph)
+    h = ham(num_qubits, graph)
     y = -1 * float(beta) * h
     new_matrix = scipy.linalg.expm(np.array(y))
     norm = np.trace(new_matrix)
@@ -294,7 +289,7 @@ def create_target(qubit, beta, ham, graph):
 
 # Plots the final density matrix
 
-final_density_matrix = create_target(qubit, beta, create_hamiltonian_matrix, interaction_graph)
+final_density_matrix = create_target(num_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 seaborn.heatmap(abs(final_density_matrix))
 
 
@@ -327,8 +322,7 @@ seaborn.heatmap(abs(final_density_matrix))
 
 
 def sigmoid(x):
-
-    return math.exp(x) / (math.exp(x) + 1)
+    return np.exp(x) / (np.exp(x) + 1)
 
 
 ######################################################################
@@ -399,14 +393,12 @@ def single_rotation(phi_params, q):
 def ansatz_circuit(params, qubits, layers, graph, param_number):
 
     param_number = int(param_number.val)
-    number = param_number * qubit + len(graph.edges)
+    number = param_number * num_qubits + len(graph.edges)
 
     # Partitions the parameters into param lists
     partition = []
     for i in range(0, int((len(params) / number))):
         partition.append(params[number * i : number * (i + 1)])
-
-    qubits = range(qubit)
 
     for j in range(0, depth):
 
@@ -452,7 +444,7 @@ def quantum_circuit(params, qubits, sample, param_number):
 
     # Calculates the expectation value of the Hamiltonian, with respect to the preparred states
 
-    return qml.expval(qml.Hermitian(ham_matrix, wires=range(qubit)))
+    return qml.expval(qml.Hermitian(ham_matrix, wires=range(num_qubits)))
 
 
 qnode = qml.QNode(quantum_circuit, dev)
@@ -507,8 +499,8 @@ def exact_cost(params):
 
     # Separates the list of parameters
 
-    dist_params = params[0:qubit]
-    params = params[qubit:]
+    dist_params = params[0:num_qubits]
+    params = params[num_qubits:]
 
     # Creates the probability distribution
 
@@ -516,7 +508,8 @@ def exact_cost(params):
 
     # Generates a list of all computational basis states, of our qubit system
 
-    s = [[int(i) for i in list(bin(k)[2:].zfill(qubit))] for k in range(0, 2 ** qubit)]
+    combos = itertools.product([0, 1], repeat=num_qubits)
+    s = [list(i) for i in combos]
 
     # Passes each basis state through the variational circuit and multiplis the calculated energy EV
     # with the associated probability from the distribution
@@ -548,7 +541,7 @@ def exact_cost(params):
 # Creates the optimizer
 
 iterations = 0
-params = [random.randint(-100, 100) / 100 for i in range(0, (12 * depth) + qubit)]
+params = [random.randint(-100, 100) / 100 for i in range(0, (12 * depth) + num_qubits)]
 
 out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 2000})
 params = out["x"]
@@ -570,16 +563,17 @@ def prepare_state(params, device):
 
     # Initializes the density matrix
 
-    final_density_matrix_2 = np.zeros((2 ** qubit, 2 ** qubit))
+    final_density_matrix_2 = np.zeros((2 ** num_qubits, 2 ** num_qubits))
 
     # Prepares the optimal parameters, creates the distribution and the bitstrings
 
-    dist_params = params[0:qubit]
-    unitary_params = params[qubit:]
+    dist_params = params[0:num_qubits]
+    unitary_params = params[num_qubits:]
 
     distribution = prob_dist(dist_params)
 
-    s = [[int(i) for i in list(bin(k)[2:].zfill(qubit))] for k in range(0, 2 ** qubit)]
+    combos = itertools.product([0, 1], repeat=num_qubits)
+    s = [list(i) for i in combos]
 
     # Runs the circuit in the case of the optimal parameters, for each bitstring,
     # and adds the result to the final density matrix.
@@ -662,8 +656,8 @@ seaborn.heatmap(abs(final_density_matrix))
 # Defines all necessary variables
 
 beta = 1  # Note that B = 1/T
-qubit = 4
-qubits = range(qubit)
+num_qubits = 4
+qubits = range(num_qubits)
 depth = 2
 
 # Defines the device on which the simulation is run
@@ -678,7 +672,7 @@ dev2 = qml.device("default.qubit", wires=len(qubits))
 # Creates the graph of interactions for the Heisenberg grid, then draws it
 
 interaction_graph = nx.Graph()
-interaction_graph.add_nodes_from(range(0, qubit))
+interaction_graph.add_nodes_from(range(0, num_qubits))
 interaction_graph.add_edges_from([(0, 1), (2, 3), (0, 2), (1, 3)])
 
 nx.draw(interaction_graph)
@@ -701,44 +695,39 @@ nx.draw(interaction_graph)
 
 def create_hamiltonian_matrix(n, graph):
 
-    pauli_x = np.array([[0, 1], [1, 0]])
-    pauli_y = np.array([[0, -1j], [1j, 0]])
-    pauli_z = np.array([[1, 0], [0, -1]])
-    identity = np.array([[1, 0], [0, 1]])
-
     matrix = np.zeros((2 ** n, 2 ** n))
 
     for i in graph.edges:
         m = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                m = np.kron(pauli_x, m)
+                m = np.kron(m, qml.PauliX.matrix)
             else:
-                m = np.kron(identity, m)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, m)
 
     for i in graph.edges:
         m = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                m = np.kron(m, pauli_y)
+                m = np.kron(m, qml.PauliY.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, m)
 
     for i in graph.edges:
         m = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                m = np.kron(m, pauli_z)
+                m = np.kron(m, qml.PauliZ.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, m)
 
     return matrix
 
 
-ham_matrix = create_hamiltonian_matrix(qubit, interaction_graph)
+ham_matrix = create_hamiltonian_matrix(num_qubits, interaction_graph)
 print(ham_matrix)
 
 
@@ -749,7 +738,7 @@ print(ham_matrix)
 
 # Plots the final density matrix
 
-final_density_matrix = create_target(qubit, beta, create_hamiltonian_matrix, interaction_graph)
+final_density_matrix = create_target(num_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 seaborn.heatmap(abs(final_density_matrix))
 
 
@@ -773,7 +762,7 @@ qnode = qml.QNode(quantum_circuit, dev2)
 
 iterations = 0
 
-params = [random.randint(-100, 100) / 100 for i in range(0, (16 * depth) + qubit)]
+params = [random.randint(-100, 100) / 100 for i in range(0, (16 * depth) + num_qubits)]
 out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1000})
 params = out["x"]
 print(out)
