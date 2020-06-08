@@ -68,7 +68,7 @@ density matrices, each corresponding to one qubit. This works well for
 scalability of the algorithm, because instead of requiring
 :math:`|\boldsymbol\theta| = 2^n`, for an :math:`n` qubit, diagonal
 density matrix, where we assign probabilities to each possible basis
-state, :math:`|\theta| = n`, since for qubit :math:`i`, we can assign
+state, :math:`|\boldsymbol\theta| = n`, since for qubit :math:`i`, we can assign
 probability :math:`p_i(\theta_i)` to :math:`|0\rangle`, and
 :math:`1 - p_i(\theta_i)` to :math:`|1\rangle`.
 
