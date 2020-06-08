@@ -533,7 +533,7 @@ def exact_cost(params):
     entropy = calculate_entropy(distribution)
     final_final_cost = beta * final_cost - sum(entropy)
 
-    if iterations % 50 == 0:
+    if iterations % 100 == 0:
         print("Cost at Step " + str(iterations) + ": " + str(final_final_cost))
 
     iterations += 1
@@ -550,7 +550,7 @@ def exact_cost(params):
 iterations = 0
 params = [random.randint(-100, 100) / 100 for i in range(0, (12 * depth) + qubit)]
 
-out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1000})
+out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 2000})
 params = out["x"]
 print(out)
 
