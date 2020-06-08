@@ -430,13 +430,13 @@ plt.show()
 # Using the same system Hamiltonian, ansatz, and device, we tested the robustness 
 # of the ``QNGOptimizer`` by running 10 independent trials with random parameter initializations.
 # For this numerical test, our optimizer does not terminate based on energy improvement; we fix the number of 
-# iterations to 150.
+# iterations to 200.
 # We show the result of this test below (after pre-computing), where we plot the mean and standard 
 # deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent. 
 #
-# .. figure:: ../demonstrations/k_runs.png
+# .. figure:: ../demonstrations/vqe_qng/k_runs_.png
 #     :align: center
-#     :width: 80%
+#     :width: 60%
 #     :target: javascript:void(0)
 #
 # We observe that quantum natural gradient on average converges faster for this system.
