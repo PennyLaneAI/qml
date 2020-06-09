@@ -15,7 +15,7 @@ We will implement two small examples: estimating the ground state energy of (1) 
 problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule. 
     
 Before going through this tutorial, we recommend that readers refer to the 
-`QNG tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html>`__ and
+:doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
 `VQE tutorial <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ for overviews 
 of quantum natural gradient and the variational quantum eigensolver algorithm, respectively.
 Let's get started!
