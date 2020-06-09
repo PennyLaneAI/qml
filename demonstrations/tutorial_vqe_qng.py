@@ -443,6 +443,12 @@ plt.show()
 #
 # We observe that quantum natural gradient on average converges faster for this system.
 #
+# .. note::
+#
+#     While using QNG may help accelerate the VQE algorithm in terms of optimization steps,
+#     each QNG step is more costly than its vanilla gradient descent counterpart due to
+#     a greater number of calls to the quantum computer that are needed to compute the Fubini-Study metric tensor.
+#
 # While further benchmark studies are needed to better understand the advantages
 # of quantum natural gradient, preliminary studies such as this tutorial show the potentials
 # of the method. 🎉
