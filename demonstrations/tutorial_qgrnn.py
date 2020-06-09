@@ -26,13 +26,11 @@ import tensorflow as tf
 
 
 ######################################################################
-# In this Notebook, we will investigate the idea of a **quantum graph
-# neural network**, which is the quantum analogue of a classical graph
-# neural network. More specicically, the quantum neural network we will be
-# investigating is a **recurrent** quantum graph neural network. We will
-# disucss what makes this sublcass unique later in the Notebook, but for
-# now, we will note that these QGRNNs are very useful for learning the
-# dynamics of quantum systems that “live” on a graph.
+# In this tutorial, we investigate the idea of a quantum graph
+# neural network (`QGNN <https://arxiv.org/abs/1909.12264>`__), 
+# which is the quantum analogue of a classical graph neural network. 
+# In particular, the QGNN we discuss is a **recurrent** 
+# quantum graph neural network (QGRNN).
 #
 
 
@@ -45,12 +43,13 @@ import tensorflow as tf
 ######################################################################
 # In recent years, the idea of a quantum graph neural network has been
 # receving a lot of attention from the machine learning research community
-# for its ability to learn representations of data that is inhernelty
-# graph-theoretic in nature. More specifically, graph neural networks seek
+# for its ability to learn from data that is inherently
+# graph-theoretic. More specifically, graph neural networks seek
 # to learn a **representation** (a mapping of the data into a
 # lower-dimensional vector space) of a given graph, with features assigned
 # to nodes and edges, such that the each of the vectors in the learned
-# representation preserves the overall topology of the graph.
+# representation preserves the features, but also preserves the overall
+# topology of the graph.
 #
 
 
