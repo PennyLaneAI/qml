@@ -16,7 +16,7 @@ problem, which we can visualize using the Bloch sphere, and (2) the hydrogen mol
     
 Before going through this tutorial, we recommend that readers refer to the 
 :doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
-`VQE tutorial <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ for overviews 
+:doc:`VQE tutorial </demos/tutorial_vqe>` for overviews 
 of quantum natural gradient and the variational quantum eigensolver algorithm, respectively.
 Let's get started!
 
