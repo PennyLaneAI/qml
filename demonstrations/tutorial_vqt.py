@@ -2,25 +2,26 @@ r"""
 The Variational Quantum Thermalizer
 ===================================
 
-*Author: Jack Ceroni*
+*Author: Jack Ceroni `(jackceroni@gmail.com)`*
 
 
 This tutorial discusses theory and
 experiments relating to a recently proposed quantum algorithm called the
 `Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT). 
 The VQT algorithm takes a variational approach to 
-reconstructing the thermal state of a Hamiltonian at a given temperature. 
-In addition, the VQT is actually a generalization of the well-know Variational Quantum 
-Eigensolver (`VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__), and 
-as the effective "temperature" approaches zero, the VQT algorithm converges to 
-the standard VQE.
+finding the thermal state of a Hamiltonian at a given temperature, similar to 
+how the well-known Variational Quantum Eigensolver 
+(`VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__) finds the ground 
+state of a Hamiltonian. In fact, the VQT is a generalization of the VQE!
+As the effective "temperature" of the system approaches zero, the VQT algorithm 
+converges to the standard VQE.
 
 The Idea
 --------
 
 Before constructing the simulations, this tutorial first investigates
-the mathematical and physical theory that makes
-the VQT algorithm possible. For more background on variational quantum
+the mathematical ideas that make the VQT algorithm possible. 
+For more background on variational quantum
 algorithms and the VQE, check out the other tutorials in
 the QML gallery (like `this
 one <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__).
@@ -51,15 +52,16 @@ that is very close to :math:`\rho_\text{thermal}`.
 In order to do this, we pick a "simple" mixed state to begin the
 process. This initial density matrix is described by a
 collection of parameters :math:`\theta`, which determine
-the probabilities corresponding to different pure states. In this
-implementation of the algorithm, we use the idea of a **factorized
-latent space** where the initial density matrix describing the quantum
-system is completely un-correlated. It is simply a tensor product of
-multiple, :math:`2 \times 2` density matrices that are diagonal 
-in the computational basis. This makes the algorithm scale linearly, 
-rather than exponentially. If we describe each qubit by its own, 
-diagonal density matrix, we only require one probability, :math:`p_i(\theta_i)`, 
-to completely describe the state of the :math:`i`-th qubit. So, for :math:`N` qubits, 
+the probabilities corresponding to the different computational basis 
+states. In this implementation of the algorithm, we use the idea of 
+a **factorized latent space** where the initial density matrix 
+describing the quantum system is completely un-correlated. It is 
+simply a tensor product of multiple, :math:`2 \times 2` density 
+matrices that are diagonal in the computational basis. This makes 
+the algorithm scale linearly, rather than exponentially. If we 
+describe each qubit by its own, diagonal density matrix, we only 
+require one probability, :math:`p_i(\theta_i)`, to completely 
+describe the state of the :math:`i`-th qubit. As a result, for :math:`N` qubits, 
 we only require :math:`N` parameters. More concretely, the state of the 
 :math:`i`-th qubit is described by:
 
@@ -88,11 +90,10 @@ and :math:`S_\theta` is the von Neumann entropy of
 von Neumann entropy of :math:`\rho_{\theta \phi}` is the same as the von
 Neumann entropy of :math:`\rho_{\theta}`, since entropy is invariant
 under unitary transformations. This means that we only have to calculate 
-the entropy of the simple initial state, rather than concerning ourselves 
-with the transformed state.
+the entropy of the simple initial state.
 
 The algorithm is repeated with new parameters until we minimize free
-energy. In particular, the parameters being optimized over are 
+energy. In particular, the parameters being optimized are 
 :math:`\phi` and :math:`theta`, and they are chosen 
 by a classical optimizer after each step of the algorithm. Upon 
 minimizing the cost function, we have arrived at the thermal state.
@@ -105,8 +106,8 @@ target thermal state. Relative entropy between two arbitrary states
 
 Relative entropy is minimized (equal to zero) when :math:`\rho_1 \ = \ \rho_2`.
 Thus, when the cost function is minimized, it is true that 
-:math:`\rho_{\theta \phi} \ = \ \rho_{\text{thermal}}` which means that the 
-thermal state has been learned.
+:math:`\rho_{\theta \phi} \ = \ \rho_{\text{thermal}}` which means that we have 
+found the thermal state.
 
 For a diagramatic representation of how this whole process works, check out Figure 3
 from the `original VQT paper <https://arxiv.org/abs/1910.02071>`__.
