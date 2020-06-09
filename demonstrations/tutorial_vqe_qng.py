@@ -9,8 +9,8 @@ Accelerating VQEs with quantum natural gradient
         using quantum natural gradients in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qng_example.png
     
-This tutorial showcases how one can apply quantum natural gradients (QNG) :ref:`[1, 2]` 
-to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm :ref:`[3]`. 
+This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_ 
+to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_. 
 We will implement two small examples: estimating the ground state energy of (1) a single-qubit VQE 
 problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule. 
     
@@ -41,7 +41,7 @@ dev = qml.device("default.qubit", wires=1)
 
 ##############################################################################
 # For the variational ansatz, we use two single-qubit rotations, which the user may recognize
-# from a previous :doc:`tutorial </demos/tutorial_qubit_rotation.html>` on qubit rotations.
+# from a previous :doc:`tutorial </demos/tutorial_qubit_rotation>` on qubit rotations.
 
 
 def circuit(params, wires=0):
@@ -425,7 +425,7 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # While results above show a more rapid convergence for quantum natural gradients,
-# what if we were just lucky, i.e. we started at a "good" point in parameter space?
+# what if we were just lucky, i.e., we started at a "good" point in parameter space?
 # How do we know this will be the case with high probability regardless of the
 # parameter initialization?
 #
@@ -449,19 +449,24 @@ plt.show()
 #
 
 ##############################################################################
-# .. _references:
 #
 # References
 # --------------
 #
-# 1. Stokes, James, *et al.*, "Quantum Natural Gradient".
+# .. [#stokes2019]
+#
+#     Stokes, James, *et al.*, "Quantum Natural Gradient".
 #     `arXiv preprint arXiv:1909.02108 (2019).
 #     <https://arxiv.org/abs/1909.02108>`__
 #
-# 2. Yamamoto, Naoki, "On the natural gradient for variational quantum eigensolver".
+# .. [#yamamoto2019]
+#
+#     Yamamoto, Naoki, "On the natural gradient for variational quantum eigensolver".
 #     `arXiv preprint arXiv:1909.05074 (2019).
 #     <https://arxiv.org/abs/1909.05074>`__
 #
-# 3. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+# .. [#peruzzo2014]
+#
+#     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
