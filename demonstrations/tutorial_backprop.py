@@ -169,3 +169,48 @@ print(f"best of {repeat}: {min(times) / number} sec per loop")
 grad_fn = qml.grad(circuit)
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=number, repeat=repeat)
 print(f"best of {repeat}: {min(times) / number} sec per loop")
+
+##############################################################################
+# Backprop
+# --------
+#
+#
+
+import tensorflow as tf
+
+dev = qml.device("default.qubit.tf", wires=4)
+
+@tf.function
+@qml.qnode(dev, diff_method="backprop", interface="tf")
+def circuit(params):
+    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
+
+# initialize circuit parameters
+params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
+params = tf.Variable(params)
+
+##############################################################################
+# Let's see how long it takes to perform a forward pass of the circuit.
+
+import timeit
+
+repeat = 3
+number = 10
+times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
+print(f"best of {repeat}: {min(times) / number} sec per loop")
+
+
+##############################################################################
+# This is approximately the same time required when using the NumPy-based default qubit,
+# with some potential overhead from using TensorFlow. We can now time a backwards pass.
+
+with tf.GradientTape(persistent=True) as tape:
+    res = circuit(params)
+
+times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+print(f"best of {repeat}: {min(times) / number} sec per loop")
+
+##############################################################################
+# Unlike with the parameter-shift rule, there is now only a **constant overhead**
+# compared to the forward pass!
