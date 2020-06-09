@@ -151,7 +151,7 @@ params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
 print(params.size)
 
 ##############################################################################
-# This circuit has 90 parameters. Let's see how long it takes to perform a forward
+# This circuit has 180 parameters. Let's see how long it takes to perform a forward
 # pass of the circuit.
 
 import timeit
@@ -174,13 +174,23 @@ print(f"best of {repeat}: {min(times) / number} sec per loop")
 # Backprop
 # --------
 #
-#
+# Let's repeat the above experiment, but this time using the
+# :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`
+# device. This device is a pure state-vector simulator like ``default.qubit``,
+# however unlike ``default.qubit`` is written using TensorFlow rather than NumPy.
+# As a result, it supports classical backpropagation when using the
+# TensorFlow interface.
 
 import tensorflow as tf
 
 dev = qml.device("default.qubit.tf", wires=4)
 
-@tf.function
+##############################################################################
+# When defining the QNode, we specify ``diff_method="backprop"`` to ensure that
+# we are using backpropagation mode. Note that this will be the *default differentiation
+# mode* when ``interface="tf"``.
+
+
 @qml.qnode(dev, diff_method="backprop", interface="tf")
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
