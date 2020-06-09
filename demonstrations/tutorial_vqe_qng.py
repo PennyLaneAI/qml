@@ -61,9 +61,9 @@ H = qml.Hamiltonian(coeffs, obs)
 cost_fn = qml.VQECost(circuit, H, dev)
 
 ##############################################################################
-# To analyze the performance of quantum natural gradient on VQE calculations, 
+# To analyze the performance of quantum natural gradient on VQE calculations,
 # we set up and execute optimizations using the ``GradientDescentOptimizer`` (which does not
-# utilize quantum gradients) and the ``QNGOptimizer`` that uses the block-diagonal approximation 
+# utilize quantum gradients) and the ``QNGOptimizer`` that uses the block-diagonal approximation
 # to the metric tensor.
 #
 # To perform a fair comparison, we fix the initial parameters for the two optimizers.
@@ -73,7 +73,7 @@ init_params = np.array([3.97507603, 3.00854038])
 
 ##############################################################################
 # We will carry out each optimization over a maximum of 500 steps. As was done in the VQE
-# tutorial, we aim to reach a convergence tolerance of around :math:`10^{-6}`. 
+# tutorial, we aim to reach a convergence tolerance of around :math:`10^{-6}`.
 # We use a step size of 0.01.
 
 max_iterations = 500
@@ -191,8 +191,8 @@ parameter_landscape = np.load("vqe_qng/param_landscape.npy")
 fig, axes = plt.subplots(figsize=(6, 6))
 cmap = plt.cm.get_cmap("coolwarm")
 contour_plot = plt.contourf(theta0, theta1, parameter_landscape, cmap=cmap)
-plt.xlabel(r'$\theta_0$')
-plt.ylabel(r'$\theta_1$')
+plt.xlabel(r"$\theta_0$")
+plt.ylabel(r"$\theta_1$")
 
 # Plot optimization path for gradient descent. Plot every 10th point.
 gd_color = "g"
@@ -235,7 +235,7 @@ plt.show()
 
 ##############################################################################
 # Here, the red regions indicate states with lower energies, and the blue regions indicate
-# states with higher energies. We can see that the ``QNGOptimizer`` takes a more direct 
+# states with higher energies. We can see that the ``QNGOptimizer`` takes a more direct
 # route to the minimum in larger strides compared to the path taken by the ``GradientDescentOptimizer``.
 #
 # Lastly, we can visualize the same optimization paths on the Bloch sphere using routines
@@ -244,7 +244,7 @@ plt.show()
 # .. figure:: /demonstrations/vqe_qng/opt_paths_bloch.png
 #     :width: 50%
 #     :align: center
-# 
+#
 # where again the black markers and line indicate the path taken by the ``QNGOptimizer``,
 # and the green markers and line indicate the path taken by the ``GradientDescentOptimizer``.
 # Using this visualization method, we can clearly see how the path using the ``QNGOptimizer`` tightly
@@ -350,6 +350,7 @@ for n in range(max_iterations):
 
 print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))
+print("Number of iterations = ", n)
 print("Final value of the ground-state energy = {:.8f} Ha".format(energy))
 print(
     "Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)".format(
@@ -386,6 +387,7 @@ for n in range(max_iterations):
     prev_energy = energy
 
 print("Final convergence parameter = {:.8f} Ha".format(conv))
+print("Number of iterations = ", n)
 print("Final value of the ground-state energy = {:.8f} Ha".format(energy))
 print(
     "Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)".format(
@@ -424,15 +426,15 @@ plt.show()
 #
 # While results above show a more rapid convergence for quantum natural gradients,
 # what if we were just lucky, i.e. we started at a "good" point in parameter space?
-# How do we know this will be the case with high probability regardless of the 
-# parameter initialization?   
+# How do we know this will be the case with high probability regardless of the
+# parameter initialization?
 #
-# Using the same system Hamiltonian, ansatz, and device, we tested the robustness 
+# Using the same system Hamiltonian, ansatz, and device, we tested the robustness
 # of the ``QNGOptimizer`` by running 10 independent trials with random parameter initializations.
-# For this numerical test, our optimizer does not terminate based on energy improvement; we fix the number of 
+# For this numerical test, our optimizer does not terminate based on energy improvement; we fix the number of
 # iterations to 200.
-# We show the result of this test below (after pre-computing), where we plot the mean and standard 
-# deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent. 
+# We show the result of this test below (after pre-computing), where we plot the mean and standard
+# deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent.
 #
 # .. figure:: ../demonstrations/vqe_qng/k_runs_.png
 #     :align: center
