@@ -740,7 +740,7 @@ print(out)
 
 # Prepares the density matrix
 
-prepared_density_matrix_2 = prepare_state(params, dev2)
+prepared_density_matrix = prepare_state(params, dev2)
 
 
 ######################################################################
