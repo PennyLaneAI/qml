@@ -51,7 +51,7 @@ def circuit(params, wires=0):
 
 ##############################################################################
 # We then define our cost function using the ``VQECost`` class, which supports the computation of
-# block-diagonal or diagonal approximations to the Fubini-Study metric tensor. This tensor is a
+# block-diagonal or diagonal approximations to the Fubini-Study metric tensor :ref:`[1]`. This tensor is a
 # crucial component for optimizing with quantum natural gradients.
 
 coeffs = [1, 1]
