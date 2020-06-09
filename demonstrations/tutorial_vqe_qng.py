@@ -41,7 +41,7 @@ dev = qml.device("default.qubit", wires=1)
 
 ##############################################################################
 # For the variational ansatz, we use two single-qubit rotations, which the user may recognize
-# from a previous `tutorial <https://pennylane.ai/qml/demos/tutorial_qubit_rotation.html>`__ on qubit rotations.
+# from a previous :doc:`tutorial </demos/tutorial_qubit_rotation.html>` on qubit rotations.
 
 
 def circuit(params, wires=0):
