@@ -544,7 +544,7 @@ def prepare_state(params, device):
         state = device.state
         for j in range(0, len(i)):
             state = np.sqrt(distribution[j][i[j]]) * state
-        final_density_matrix = np.add(final_density_matrix_2, np.outer(state, np.conj(state)))
+        final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))
 
     # Returns the prepared density matrix
 
@@ -740,14 +740,14 @@ print(out)
 
 # Prepares the density matrix
 
-final_density_matrix_2 = prepare_state(params, dev2)
+prepared_density_matrix_2 = prepare_state(params, dev2)
 
 
 ######################################################################
 # We then calculate the trace distance:
 #
 
-print("Final Trace Distance: " + str(trace_distance(final_density_matrix_2, final_density_matrix)))
+print("Final Trace Distance: " + str(trace_distance(prepared_density_matrix, final_density_matrix)))
 
 
 ######################################################################
@@ -758,7 +758,7 @@ print("Final Trace Distance: " + str(trace_distance(final_density_matrix_2, fina
 # prepared density matrices. We begin with the prepared matrix:
 #
 
-seaborn.heatmap(abs(final_density_matrix_2))
+seaborn.heatmap(abs(prepared_density_matrix))
 
 
 ######################################################################
