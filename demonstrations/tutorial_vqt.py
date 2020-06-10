@@ -40,7 +40,7 @@ the thermal state allows us to extract information about the system. This is
 particularly useful in understanding quantum many-body systems, such as 
 Bose-Hubbard models.
 
-The input into our algorithm is an arbitrary Hamiltonian :math:`H`, and
+The input into the algorithm is an arbitrary Hamiltonian :math:`H`, and
 we wish to find :math:`\rho_\text{thermal}`, or more specifically
 the variational parameters of a circuit that prepare a state
 that is very close to :math:`\rho_\text{thermal}`.
@@ -265,10 +265,10 @@ seaborn.heatmap(abs(final_density_matrix))
 
 
 ######################################################################
-# Now that we know exactly what our thermal state should look like, we
+# Now that we know exactly what the thermal state should look like, we
 # attempt to construct it with the VQT. We begin by calculating the
 # classical probability distribution, which gives the probabilities
-# corresponding to each basis state in our initial, factorized density  
+# corresponding to each basis state in the initial, factorized density  
 # matrix. We let the probability associated with the :math:`i`-th one-qubit 
 # system be:
 #
@@ -276,7 +276,7 @@ seaborn.heatmap(abs(final_density_matrix))
 #
 # The motivation behind this choice comes from the fact that this function has a
 # range of :math:`0` to :math:`1`. This means that we don't need to constrain 
-# the values of our parameters to some subset of :math:`\mathbb{R}`. We can implement 
+# the values of the parameters to some subset of :math:`\mathbb{R}`. We can implement 
 # this function (which is called a sigmoid) as:
 #
 
@@ -322,7 +322,7 @@ def create_v_gate(prep_state):
 
 
 ######################################################################
-# Now, we build the parametrized circuit, through which we pass our initial
+# Now, we build the parametrized circuit, through which we pass the initial
 # states. We use a multi-layered ansatz, where each layer is composed
 # of :math:`RX`, :math:`RZ`, and :math:`RY` gates on each qubit, followed
 # by exponentiated :math:`CNOT` gates placed between qubits that share an
@@ -382,7 +382,7 @@ def ansatz_circuit(params, qubits, layers, graph, param_number):
 # over layers of the ansatz, for a given depth.
 #
 # With all of these components, we define a function 
-# that acts as our final quantum circuit, and pass it into a
+# that acts as the final quantum circuit, and pass it into a
 # QNode:
 #
 
@@ -441,7 +441,7 @@ def calculate_entropy(distribution):
 
 ######################################################################
 # Finally, we define the cost function. More specifically, this is an
-# **exact** version of the VQT cost function. Instead of sampling from our
+# **exact** version of the VQT cost function. Instead of sampling from the
 # classical probability distribution, we simply calculate the probability
 # corresponding to every basis state in the initial density matrix. We then pass 
 # each possible basis state through the ansatz, calculating the expectation value. 
@@ -612,7 +612,7 @@ seaborn.heatmap(abs(final_density_matrix))
 # Numerical Calculation of Target State
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We start by defining our fixed values:
+# We start by defining fixed values:
 #
 
 # Defines all necessary variables
@@ -713,7 +713,7 @@ seaborn.heatmap(abs(final_density_matrix))
 ######################################################################
 # To find the thermal state using the VQT, we use the same form of 
 # the initial state, ansatz, and cost function as above. All we have 
-# to do is re-define our qnode, since we are now using a device with 
+# to do is re-define the qnode, since we are now using a device with 
 # :math:`4` qubits rather than :math:`3`:
 #
 
@@ -723,7 +723,7 @@ qnode = qml.QNode(quantum_circuit, dev2)
 
 
 ######################################################################
-# We then run our optimizer (using COBYLA again):
+# We then run the optimizer (using COBYLA again):
 #
 
 # Creates the optimizer
@@ -737,7 +737,7 @@ print(out)
 
 
 ######################################################################
-# With our optimal parameters, we can post-process our data. We start by
+# With the optimal parameters, we can post-process the data. We start by
 # calculating the matrix form of the prepared density matrix:
 #
 
