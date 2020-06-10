@@ -11,12 +11,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 import scipy
 from scipy.optimize import minimize
-import random
-import math
 import networkx as nx
 import seaborn
-import timeit
-import tensorflow as tf
 
 
 ######################################################################
@@ -47,14 +43,14 @@ import tensorflow as tf
 # graph-theoretic. More specifically, graph neural networks seek
 # to learn a **representation** (a mapping of the data into a
 # lower-dimensional vector space) of a given graph, with features assigned
-# to nodes and edges, such that the each of the vectors in the learned
-# representation preserves the features, but also preserves the overall
+# to nodes and edges, such that each of the vectors in the learned
+# representation preserves not only the features, but also the overall
 # topology of the graph.
 #
 
 
 ######################################################################
-# We will attempt to modify the same task, but from a quantum
+# We attempt to perform the same task, but from a quantum
 # computational perspective. Specifically, we want to define an ansatz
 # that we can use for quantum machine learning tasks that are inherently
 # graph-theoretic. From the original QGNN paper, the general QGNN ansatz
@@ -70,11 +66,11 @@ import tensorflow as tf
 # mapping between interaction and bias terms, and the edges and vertices
 # (repsectively) of some graph :math:`G \ = \ (V, \ E)`. This form of the
 # Hamiltonian is very general, and as a result, has a lot of indices. The
-# subscripts on operators represent some operator acting on the
+# subscripts on operators represent action upon the
 # :math:`a`-th, :math:`b`-th or :math:`v`-th qubit, and the other
 # parameters (:math:`c` and :math:`d`) simply allow us to label each
-# parameter/type of operator in each term of both sums. This ansatz is
-# fairly general: all it essentially tells us is that the QGNN involves
+# parameter/type of operator in each term of both sums. This ansatz encompases
+# a broad class of unitaries: all it tells us is that the QGNN involves
 # many layers of parametrized operators that act on qubits according to
 # the structure of some graph.
 #
@@ -91,7 +87,7 @@ import tensorflow as tf
 # looks like, let’s discuss what distinguishes a quantum graph RNN from
 # its more general counterpart. With a graph RNN, we make one small change
 # to the :math:`\boldsymbol\gamma` parameters. Specifically, we tie these
-# parameters over temproal layers, meaning that each :math:`\gamma_{ij}`
+# parameters over temporal layers, meaning that each :math:`\gamma_{ij}`
 # is only determined by the index :math:`j`, and is the same across all
 # values of :math:`i` (with some fixed :math:`j`). As the paper explains,
 # this is equivalent to how a classical recurrent neural network behaves,
@@ -100,7 +96,8 @@ import tensorflow as tf
 #
 # .. math:: U_{\text{RNN}}(\gamma, \ \theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg]
 #
-# Now, the Trotter-Suzuki decomposition says that:
+# Now, we are in a position to understand what the QGRNN ansatz can be 
+# used for. The Trotter-Suzuki decomposition says that:
 #
 # .. math:: \exp \Bigg[ \displaystyle\sum_{n} A_n \Bigg] \ = \ \lim_{P \rightarrow \infty} \displaystyle\prod_{j \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{n} e^{A_n / P} \Bigg]
 #
@@ -109,14 +106,14 @@ import tensorflow as tf
 ######################################################################
 # Where finite :math:`P \ \gg \ 1` approximates the left-hand side of the
 # equation. It isn’t too difficult to see that the quantum graph RNN
-# resembles the Trotter-Suzuki decomposition. More specifically, the
+# resembles the Trotter-Suzuki decomposition. In fact, the
 # quantum graph RNN can be thought of as the Trotterization of the
 # time-evolution operator, for some Hamiltonian. Let us fix a time
-# :math:`T`. Let us also fix a parameter that controls the size of the
+# :math:`t`. Let us also fix a parameter that controls the size of the
 # Trotterization steps (essentially the :math:`1/P` in the above formula),
-# which we call :math:`\Delta`. This allows uas to keep the precision of
-# our approximate time-evolution for different values of :math:`T` the
-# same. Let us define:
+# which we call :math:`\Delta`. This allows us to keep the precision of
+# our approximate time-evolution for different values of :math:`t` the
+# same. We define:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{q} \hat{H}_{q}(\boldsymbol\theta)
 #
@@ -124,7 +121,7 @@ import tensorflow as tf
 # the time-evolution operator for this particular Hamiltonian can be
 # approximated as:
 #
-# .. math:: e^{-i T H} \ \approx \ \displaystyle\prod_{i \ = \ 1}^{T / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta H_{j}(\boldsymbol\theta)} \Bigg] \ = \ U_{\text{RNN}}(\Delta, \ \boldsymbol\theta)
+# .. math:: e^{-i t H} \ \approx \ \displaystyle\prod_{i \ = \ 1}^{t / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta H_{j}(\boldsymbol\theta)} \Bigg] \ = \ U_{\text{RNN}}(\Delta, \ \boldsymbol\theta)
 #
 
 
@@ -133,12 +130,12 @@ import tensorflow as tf
 # to us that this ansatz may be particularly useful for learning the
 # dynamics of quantum systems. Let’s say that we are given a set
 # :math:`\{|\Psi(t)\rangle\}_{t \in T}` of low-energy states that have
-# been evolved under some unknown Hamiltonian :math:`H`, for a bunch of
-# different times in the set :math:`T`. Our goal is to determine the
-# Hamiltonian of this system, given only this collection of states, and
+# been evolved under some unknown Hamiltonian :math:`H`, for a collection of
+# different time intervals, contained in the set :math:`T`. Our goal is to 
+# determine the Hamiltonian of this system, given only this collection of states, and
 # the “general model” by which our system evolves (Ising, Heisenberg,
 # etc.). In theory, one doesn’t have to know the “model” of the system,
-# but our algorithm would require an absurd amount of gates, and a lot of
+# but the algorithm would require an absurd amount of gates, and a lot of
 # quantum data, so we will stick to the simpler case.
 #
 
@@ -147,23 +144,23 @@ import tensorflow as tf
 # The Hamiltonian as a Feature Representation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# You may now be wondering: “how is this Hamiltonian learning a
-# graph-theoretic problem, fit for a **graph** neural network?”. It is
+# You may now be wondering: “how is this problem of Hamiltonian learning a
+# **graph-theoretic** problem, fit for a **graph** neural network?”. It is
 # actually very interesting to note that this process of learning the
-# Hamiltonian is actually a form of graph representation learning.
-# Specifically, the :math:`ZZ` terms of the Hamiltonian will encode
+# Hamiltonian is a form of graph representation learning.
+# Specifically, the interaction terms of the Hamiltonian will encode
 # exactly where the edges of our graph interactions are. In addition to
-# this, if we consider the state collection of states
+# this, if we consider the collection of states
 # :math:`\{ |\Psi(t)\rangle \}` to be the features associated with the
-# graph, then we are able to determine all of these by simply “using” the
+# graph, then we are able to determine all of these from the
 # Hamiltonian (all we have to do is evolve our fixed initial state forward
 # in time by some time :math:`t`). Thus, the Hamiltonian is exactly the
 # node representation that describes the graph along with its features. In
 # this paradigm, however, we are dealing with inherently quantum
 # mechanical data/features. This means that the data can’t always
 # necessarily be assigned to one node (in the case of entanglement between
-# nodes), and in many cases, computation required to prepare, store, and
-# process this quantum data scales poorly. Thus, our quantum graph neural
+# nodes), and storing the information contained in a state vector on a classical 
+# computer scales exponentially. Thus, our quantum graph neural
 # network is particularly well-suited to this task.
 #
 
@@ -172,7 +169,7 @@ import tensorflow as tf
 # The QGRNN Applied to an Ising Model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# In this Notebook we are going to investigate an application of the QGRNN
+# In this Notebook we apply the QGRNN
 # to learning the dynamics of a 4-qubit Ising model.
 #
 
@@ -198,9 +195,9 @@ vqe_dev = qml.device("default.qubit", wires=qubit_number)
 
 ######################################################################
 # We will begin by defining the graph on which our Ising model lives. We
-# choose the graph to be the completely connected graph with :math:`3`
-# nodes, denoted by :math:`K^3`. This is more commonly known as a
-# triangle. We can construct and visualize this graph using ``networkx``:
+# choose the graph to be the completely connected graph with :math:`4`
+# nodes, denoted by :math:`K^4`. This is more commonly known as a
+# square. We can construct and visualize this graph using ``networkx``:
 #
 
 # Creates the graph structure of the quantum system
@@ -217,22 +214,24 @@ print("Edges: " + str(ising_graph.edges))
 
 
 ######################################################################
-# Now, let’s define the Hamiltonian we will eventiually attempt to learn.
+# Now, let’s define the Hamiltonian we eventually learn.
 # There are two reasons for doing this. Firstly, we need to compare the
-# preparred Hamiltonian to the targt Hamiltonian, to make sure that our
+# prepared Hamiltonian to the targt Hamiltonian, to make sure that our
 # toy example of the QGRNN actually works, and secondly, we have to
-# prepare the quantum data that will be usd in training. In a real-world
+# prepare the quantum data that will be used in training. In a real-world
 # application of this algorithm, we would have access to a bunch of
 # quantum data that we could feed into the neural network, but in this
 # scenario, we have to generate the quantum data ourself. The only way to
 # do this is to know the Hamiltonian (and thus, the dynamics) of our
-# system. Our Ising model Hamiltonian will be of the form:
+# system *a priori*. Our Ising model Hamiltonian will be of the form:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{i, j} \alpha_{ij} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \beta_{i} Z_{i} \ + \ \displaystyle\sum_{i} X_{i}
 #
 # Where :math:`\boldsymbol\alpha` and :math:`\boldsymbol\beta` are the
 # matrix and vector of interaction and bias parameters we are trying to
-# learn, respectively. We will initialize :math:`\boldsymbol\alpha` and
+# learn, respectively, with :math:`\alpha_{ij}` and :math:`\beta_i` 
+# being the components. :math:`Z_i` and :math:`X_i` are the Pauli-Z and Pauli-X 
+# acting on the :math:`i`-th qubit. We initialize :math:`\boldsymbol\alpha` and
 # :math:`\boldsymbol\beta` randomly:
 #
 
@@ -240,10 +239,10 @@ print("Edges: " + str(ising_graph.edges))
 def create_params(graph):
 
     # Creates the interaction parameters
-    interaction = [random.randint(-200, 200) / 100 for i in range(0, len(graph.edges))]
+    interaction = [np.random.randint(-200, 200) / 100 for i in range(0, len(graph.edges))]
 
     # Creates the bias parameters
-    bias = [random.randint(-200, 200) / 100 for i in range(0, qubit_number)]
+    bias = [np.random.randint(-200, 200) / 100 for i in range(0, qubit_number)]
 
     return [interaction, bias]
 
@@ -254,8 +253,8 @@ print("Target parameters: " + str(matrix_params))
 
 
 ######################################################################
-# Wtih this knowledge, let’s now construct the matrix representation of
-# the Hamiltonian, in the :math:`Z`-basis:
+# With this knowledge, let’s now construct the matrix representation of
+# the Hamiltonian in the computational basis:
 #
 
 
@@ -302,7 +301,7 @@ def create_hamiltonian_matrix(n, graph, params):
     return matrix
 
 
-# Defines and prints the matrix for our interaction graph and parameters
+# Defines and prints the Ising Hamiltonian for our interaction graph and parameters
 ham_matrix = create_hamiltonian_matrix(qubit_number, ising_graph, matrix_params)
 print(ham_matrix)
 
@@ -322,22 +321,19 @@ def create_density_plot(data):
     array = np.array(data)
     plt.matshow(array)
     plt.colorbar()
+    plt.axis('off')
     plt.show()
 
 
-create_density_plot([np.diag(ham_matrix), np.diag(ham_matrix)])
-
-
 ######################################################################
-# We can then visualize the **diagonal** elements of the Hamiltonian, as
-# these are the only entries that correspond to trainable parameters (the
-# off-diagonal elements remain fixed, so there is no point in visualizing
-# them):
-#
+# Since the trainable parameters in the Ising model correspond only to 
+# :math:`Z` gates or :math:`ZZ` interactions, the diagonal elements of 
+# the Hamiltonian change over iterations while the off-diagonal 
+# components remain fixed. Thus, we are only really interested 
+# in visualizing the diagonal of the Hamiltonian:
 
-# Visual display of the target Hamiltonian diagonal
 
-create_density_plot([np.diag(ham_matrix), np.diag(ham_matrix)])
+create_density_plot([np.diag(ham_matrix)])
 
 
 ######################################################################
@@ -347,39 +343,40 @@ create_density_plot([np.diag(ham_matrix), np.diag(ham_matrix)])
 
 
 ######################################################################
-# Now that we have prepared the target Hamiltonian, we can use it to
-# prepare all of the necessary quantum data that we will use to train our
+# Now that we have constructed the target Hamiltonian, we use it to
+# prepare all of the necessary quantum data that we use to train the
 # QGRNN. As was discussed above, the data that will be fed into the neural
 # network is a collection of time-evolved, low-energy quantum states
-# corresponding to the target Hamiltonian. Thus, it follows that we must
-# first prepare the low-energy states at :math:`t \ = \ 0`, and evolve
-# them forward in time to arbitrary times from :math:`0` to :math:`T`. In
-# order to prepare low energy states of the Hamiltonian, we will use VQE.
-# Recall that the purpose of VQE is to find the ground energy state of a
-# given Hamiltonian. We don’t want to find the exact ground state of the
-# Hamiltonian, as it’s time evolution will just equate to the addition of
-# a global phase.
+# corresponding to the target Hamiltonian. This means that we must
+# first prepare copies of a low-energy state and evolve
+# them forward in time to arbitrary times from :math:`0` to :math:`T`, 
+# under the Ising Hamiltonian. In order to prepare low energy states 
+# of the Hamiltonian, we will use the VQE. Recall that the purpose of VQE 
+# is to find the ground energy state of a given Hamiltonian. We don’t 
+# want to find the **exact** ground state of the Hamiltonian, as it’s time 
+# evolution will just equate to the addition of a global phase:
 #
 # .. math:: U(t)|E_k\rangle \ = \ e^{-i H t / \hbar} |E_k\rangle \ = \ \displaystyle\sum_{n \ = \ 0}^{\infty} \Big( -\frac{i t}{\hbar} \Big)^n \frac{H^n |E_k\rangle}{n!} \ = \ \displaystyle\sum_{n \ = \ 0}^{\infty} \frac{1}{n!} \Big( \frac{- i E_k t}{\hbar} \Big)^n |E_k\rangle \ = \ e^{i E_k t / \hbar} |E_k\rangle
 #
-# Thus, this quantum data will be practically useless, as we are
+# Clearly this quantum data will be practically useless, as we are
 # essentially just giving ourselves a bunch of copies of the exact same
-# quantum state. Thus, instead of prearing the exact ground state, we wish
-# to prepare a state :math:`|\phi\rangle` that is “close” to the ground
-# state, :math:`|\psi_0\rangle` (meaning that
-# :math:`|\langle \phi | \psi_0 \rangle |^2` is close to :math:`1`). To do
-# this, we will preform VQE, but we will use an ansataz that we know
-# **won’t converge exactly towards the ground state**.
+# quantum state. Instead of prearing the exact ground state, we
+# prepare a state that is somewhat close to the ground
+# state, so that we have non-trivial time 
+# evolution. To do this, we will preform VQE, but we will 
+# use an ansataz that we know **won’t** converge exactly 
+# towards the ground state.
 #
 # For the specific example of the Hamiltonian we are considering in this
 # tutorial, we have :math:`ZZ` interaction terms between qubits that share
-# an edge on the graph. Thus, we know that it is likely that there will be
-# some kind of entanglement between qubits in the ground state. We will
+# an edge on the graph. This allows us to hypothesize that there will be 
+# correlations between qubits in the ground state. We will
 # then choose our ansatz such that the qubits remain **unentangled**. By
 # only applying single-qubit gates, we ensure that each of the qubits
-# remains completely uncorrelated from the others, thus making is so that
-# the ground state can never be reached by our optimizer. The initial
-# layer of our variational algorithms will be simply to create an even
+# remains completely uncorrelated from the others, making it so that
+# our optimizer can never converge to the ground state. 
+#
+# The initial layer of our VQE ansatz will be an even
 # superposition over all basis states:
 #
 
@@ -393,11 +390,11 @@ def even_superposition(qubits):
 
 
 ######################################################################
-# And the following layers will be alternating applications of :math:`RZ`
-# and :math:`RX` gates:
+# And the following layers will be alternating applications of 
+# single-qubit :math:`RZ` and :math:`RX` gates:
 #
 
-# Method that prepares a low-energy state
+# Defines the decoupled rotational ansatz
 
 
 def decoupled_layer(param1, param2, qubits):
@@ -410,7 +407,7 @@ def decoupled_layer(param1, param2, qubits):
 
 
 ######################################################################
-# We can then define our VQE ansatz as:
+# We then define the VQE ansatz as:
 #
 
 # Method that creates the decoupled VQE ansatz
@@ -425,7 +422,7 @@ def vqe_circuit(parameters, qubits, depth):
 
 
 ######################################################################
-# Finally, we can create a function and a QNode that allows us to run our
+# Finally, we create a function and a QNode that allows us to run our
 # VQE circuit:
 #
 
@@ -450,8 +447,8 @@ print(qnode.draw())
 
 
 ######################################################################
-# We have all of the code we need to optimize our quantum circuit, thus we
-# create an optimizer and run it:
+# Finally, we define our cost function, along with an optimizer and run 
+# it:
 #
 
 # Creates the cost function
@@ -467,7 +464,7 @@ def cost_function(params):
 optimizer = qml.AdamOptimizer(stepsize=0.8)
 
 steps = 200
-vqe_params = list([random.randint(-100, 100) / 10 for i in range(0, 2 * qubit_number)])
+vqe_params = list([np.random.randint(-100, 100) / 10 for i in range(0, 2 * qubit_number)])
 
 for i in range(0, steps):
     vqe_params = optimizer.step(cost_function, vqe_params)
@@ -478,8 +475,9 @@ print(vqe_params)
 
 
 ######################################################################
-# Now, let’s check to see if we generated a low-energy state. This will
-# require us to find the ground state energy of the Hamiltonian:
+# Now, let’s check to see if we generated a low-energy state. This
+# requires us to find the actual ground state energy of the Hamiltonian, and 
+# check if it is close to the energy of the VQE-generated state:
 #
 
 # Finds the ground state energy of a Hamiltonian
@@ -495,17 +493,17 @@ def ground_state_energy(matrix):
 
 
 ground_state = ground_state_energy(ham_matrix)
-print(ground_state)
+print("Ground State Energy: "+str(ground_state))
 
 
 ######################################################################
 # This is pretty close to the energy value we found above with our
 # decoupled VQE, so we can conclude that we have generated a low-energy
-# state. With a good initial state, we can now prepare our collection of
-# quantum data by evolving our initial state vector forward in time. We
-# can do this exactly in Pennylane, using a custom unitary gate, which we
-# define to be the time-evolution operator for our Ising model
-# Hamiltonian, which we defined above:
+# state. With our initial state, we can now prepare a collection of
+# quantum data, by evolving it forward in time under the Ising Hamiltonian. 
+# PennyLane allows us to do this exactly, by using a custom unitary gate, which we
+# define to be the time-evolution operator for the Hamiltonian that 
+# we defined above:
 #
 
 # Creates an exact time-evolution unitary
@@ -524,9 +522,9 @@ def state_evolve(hamiltonian, qubits, time):
 
 
 ######################################################################
-# This is all we need to prepare our quantum data. Now, let’s turn our
-# attention to the actual quantum graph neural network ansatz. Our goal is
-# to learn :math:`\hat{H}` by findings the parameters
+# We now have all the peices needed to generate the quantum data. Now, 
+# let’s turn our attention to the actual quantum graph neural network ansatz. 
+# Our goal is to learn :math:`\hat{H}` by findings the collections of parameters,
 # :math:`\boldsymbol\alpha` and :math:`\boldsymbol\beta`.
 #
 # The idea behind this protocol is for the QGRNN ansatz, with some inputed
@@ -614,7 +612,7 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 #
 # .. math:: \langle Z \rangle \ = \ (1) \text{P}(\text{Ancilla} \ = \ 0) \ + \ (-1) \text{P}(\text{Ancilla} \ = \ 1) \ = \ \text{P}(\text{Ancilla} \ = \ 0) \ - \ \big(1 \ - \ \text{P}(\text{Ancilla} \ = \ 0)\big) \ = \ 2\text{P}(\text{Ancilla} \ = \ 0) \ - \ 1
 #
-# So we have:
+# So we get:
 #
 # .. math:: \text{P}(\text{Ancilla} \ = \ 0) \ = \ \frac{1}{2} \ + \ \frac{1}{2} \langle Z \rangle
 #
@@ -777,7 +775,7 @@ iterations = 0
 optimizer = qml.AdamOptimizer(stepsize=0.5)
 steps = 100
 
-qgrnn_params = list([random.randint(-20, 20) / 10 for i in range(0, 10)])
+qgrnn_params = list([np.random.randint(-20, 20) / 10 for i in range(0, 10)])
 
 # Executes the optimization method
 
