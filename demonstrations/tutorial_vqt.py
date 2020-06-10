@@ -2,7 +2,7 @@ r"""
 The Variational Quantum Thermalizer
 ===================================
 
-*Author: Jack Ceroni `(jackceroni@gmail.com)`*
+*Author: Jack Ceroni (jackceroni@gmail.com)*
 
 
 This tutorial discusses theory and experiments relating to 
@@ -91,7 +91,7 @@ under unitary transformations. This means that we only have to calculate
 the entropy of the simple initial state.
 
 This entire process is then repeated with new :math:`\phi` and 
-:math:`theta` parameters, chosen after each step of the algorithm 
+:math:`\theta` parameters, chosen after each step of the algorithm 
 by a classical optimizer, until free energy is minimized. Upon 
 minimizing the cost function, we have arrived at the thermal state.
 This comes from the fact that the free energy cost function is equivalent
@@ -169,9 +169,9 @@ nx.draw(interaction_graph)
 # the case of :math:`n` qubits. The Ising model Hamiltonian can be 
 # written as:
 #
-# .. math:: \hat{H} \ = \ \displaystyle\sum_{j} X_{j} X_{j + 1} \ + \ \displaystyle\sum_{i} Z_{i}
+# .. math:: \hat{H} \ = \ \displaystyle\sum_{j} X_{j} X_{j + 1} \ + \ \displaystyle\sum_{i} Z_{i},
 #
-# Where :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z operations acting 
+# where :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z operations acting 
 # on the :math:`i`-th qubit.
 #
 
@@ -324,7 +324,7 @@ def create_v_gate(prep_state):
 ######################################################################
 # Now, we build the parametrized circuit, through which we pass our initial
 # states. We use a multi-layered ansatz, where each layer is composed
-# of :math:`RX`, :math:`RZ`, and. :math:`RY` gates on each qubit, followed
+# of :math:`RX`, :math:`RZ`, and :math:`RY` gates on each qubit, followed
 # by exponentiated :math:`CNOT` gates placed between qubits that share an
 # edge in the interaction graph of the Ising model. 
 # We first define the single-qubit rotations:
@@ -644,7 +644,7 @@ nx.draw(interaction_graph)
 # Recall that the two-dimensional Heiseberg model Hamiltonian can be
 # written as:
 #
-# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_{j} \ + \ Z_i Z_{j} \ + \ Y_i Y_{j}
+# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_{j} \ + \ Z_i Z_{j} \ + \ Y_i Y_{j},
 #
 # with :math:`X_i`, :math:`Y_i`, and :math:`Z_i` being the Pauli-X, 
 # Pauli-Y and Pauli-Z on the :math:`i`-th qubit.
@@ -705,10 +705,16 @@ seaborn.heatmap(abs(final_density_matrix))
 
 
 ######################################################################
-# We use the same form of the initial state, ansatz, and cost function
-# as above, so only minor modifications need to be made. We
-# re-define our qnode, since we are now using a device with :math:`4`
-# qubits rather than :math:`3`:
+# Variational Quantum Thermalization of the Ising Model
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+######################################################################
+# To find the thermal state using the VQT, we use the same form of 
+# the initial state, ansatz, and cost function as above. All we have 
+# to do is re-define our qnode, since we are now using a device with 
+# :math:`4` qubits rather than :math:`3`:
 #
 
 # Defines the new QNode
