@@ -70,10 +70,11 @@ import seaborn
 # subscripts on operators represent action upon the
 # :math:`a`-th, :math:`b`-th or :math:`v`-th qubit, and the other
 # parameters (:math:`c` and :math:`d`) simply allow us to label each
-# parameter/type of operator in each term of both sums. This ansatz encompases
-# a broad class of unitaries: all it tells us is that the QGNN involves
-# many layers of parametrized operators that act on qubits according to
-# the structure of some graph.
+# parameter/type of operator in every term of both sums. 
+# This leads the QGRNN ansatz to encompass a very broad class of unitaries.
+# In fact, all we can really learn from looking at the QGNN ansatz is that 
+# it involves many layers of parametrized rotation and coupling gates, that act on qubits 
+# according to the structure of some graph.
 #
 
 
@@ -86,8 +87,10 @@ import seaborn
 ######################################################################
 # Now that we have discussed what a general quantum graph neural network
 # looks like, let’s discuss what distinguishes a quantum graph RNN from
-# its more general counterpart. With a graph RNN, we make one small change
-# to the :math:`\boldsymbol\gamma` parameters. Specifically, we tie these
+# the more general QGNN. 
+#
+# With the QGRNN, we make one small change to the :math:`\boldsymbol\gamma` 
+# parameters in the QGNN ansatz. Specifically, we tie these
 # parameters over temporal layers, meaning that each :math:`\gamma_{ij}`
 # is only determined by the index :math:`j`, and is the same across all
 # values of :math:`i` (with some fixed :math:`j`). As the paper explains,
@@ -97,21 +100,21 @@ import seaborn
 #
 # .. math:: U_{\text{RNN}}(\gamma, \ \theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg]
 #
-# Now, we are in a position to understand what the QGRNN ansatz can be 
+# We are now in a position to understand what the QGRNN ansatz can be 
 # used for. The Trotter-Suzuki decomposition says that:
 #
-# .. math:: \exp \Bigg[ \displaystyle\sum_{n} A_n \Bigg] \ = \ \lim_{P \rightarrow \infty} \displaystyle\prod_{j \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{n} e^{A_n / P} \Bigg]
+# .. math:: \exp \Bigg[ \displaystyle\sum_{n} A_n \Bigg] \ = \ \lim_{P \rightarrow \infty} \displaystyle\prod_{j \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{n} e^{A_n / P} \Bigg],
 #
 
 
 ######################################################################
-# Where finite :math:`P \ \gg \ 1` approximates the left-hand side of the
+# where finite :math:`P \ \gg \ 1` approximates the left-hand side of the
 # equation. It isn’t too difficult to see that the quantum graph RNN
 # resembles the Trotter-Suzuki decomposition. In fact, the
 # quantum graph RNN can be thought of as the Trotterization of the
-# time-evolution operator, for some Hamiltonian. Let us fix a time
+# **time-evolution operator**, for some Hamiltonian. Let us fix a time
 # :math:`t`. Let us also fix a parameter that controls the size of the
-# Trotterization steps (essentially the :math:`1/P` in the above formula),
+# Trotterization steps (essentially :math:`1/P` in exponents, in the above formula),
 # which we call :math:`\Delta`. This allows us to keep the precision of
 # our approximate time-evolution for different values of :math:`t` the
 # same. We define:
@@ -127,7 +130,7 @@ import seaborn
 
 
 ######################################################################
-# Thus, time-evolution is just a case of the QGRNN ansatz. This suggests
+# Thus, time-evolution is just a specific case of the QGRNN ansatz. This suggests
 # to us that this ansatz may be particularly useful for learning the
 # dynamics of quantum systems. Let’s say that we are given a set
 # :math:`\{|\Psi(t)\rangle\}_{t \in T}` of low-energy states that have
@@ -136,7 +139,7 @@ import seaborn
 # determine the Hamiltonian of this system, given only this collection of states, and
 # the “general model” by which our system evolves (Ising, Heisenberg,
 # etc.). In theory, one doesn’t have to know the “model” of the system,
-# but the algorithm would require an absurd amount of gates, and a lot of
+# but the algorithm would then require an absurd amount of gates, and a lot of
 # quantum data, so we will stick to the simpler case.
 #
 
@@ -148,10 +151,10 @@ import seaborn
 # You may now be wondering: “how is this problem of Hamiltonian learning a
 # **graph-theoretic** problem, fit for a **graph** neural network?”. It is
 # actually very interesting to note that this process of learning the
-# Hamiltonian is a form of graph representation learning.
-# Specifically, the interaction terms of the Hamiltonian will encode
-# exactly where the edges of our graph interactions are. In addition to
-# this, if we consider the collection of states
+# Hamiltonian is a form of graph representation learning. 
+# The interaction terms of the Hamiltonian will encode
+# exactly where the edges of our graph interactions are. and, 
+# if we consider the collection of states
 # :math:`\{ |\Psi(t)\rangle \}` to be the features associated with the
 # graph, then we are able to determine all of these from the
 # Hamiltonian (all we have to do is evolve our fixed initial state forward
@@ -187,18 +190,20 @@ import seaborn
 # simulations:
 #
 
-# Initialize the device on which the simulation is run
+# Initializes fixed values
 
 qubit_number = 4
 qubits = range(qubit_number)
+
+# Initializes the device on which the simulation is run
+
 vqe_dev = qml.device("default.qubit", wires=qubit_number)
 
 
 ######################################################################
-# We will begin by defining the graph on which our Ising model lives. We
-# choose the graph to be the completely connected graph with :math:`4`
-# nodes, denoted by :math:`K^4`. This is more commonly known as a
-# square. We can construct and visualize this graph using ``networkx``:
+# We continue by defining the graph on which our Ising model is defined. We
+# choose the graph to be a cycle graph connected graph with :math:`4`
+# nodes. We can construct and visualize this graph using ``networkx``:
 #
 
 # Creates the graph structure of the quantum system
@@ -215,7 +220,7 @@ print("Edges: " + str(ising_graph.edges))
 
 
 ######################################################################
-# Now, let’s define the Hamiltonian we eventually learn.
+# Now, let’s define the Hamiltonian we eventually learn with the QGRNN.
 # There are two reasons for doing this. Firstly, we need to compare the
 # prepared Hamiltonian to the targt Hamiltonian, to make sure that our
 # toy example of the QGRNN actually works, and secondly, we have to
@@ -329,7 +334,7 @@ def create_density_plot(data):
 ######################################################################
 # Since the trainable parameters in the Ising model correspond only to 
 # :math:`Z` gates or :math:`ZZ` interactions, the diagonal elements of 
-# the Hamiltonian change over iterations while the off-diagonal 
+# the  Hamiltonian change over steps of the QGRNN while the off-diagonal 
 # components remain fixed. Thus, we are only really interested 
 # in visualizing the diagonal of the Hamiltonian:
 

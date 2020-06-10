@@ -191,6 +191,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq beginner
 
+.. customgalleryitem::
+    :tooltip: Learning the dynamics of quantum systems on graphs
+    :figure: demonstrations/qgrnn/thumbnail.png
+    :description: :doc:`demos/tutorial_qgrnn`
+    :tags: autograd
+
 :html:`</div></div><div style='clear:both'>`
 
 
