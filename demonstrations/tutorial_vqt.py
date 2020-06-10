@@ -23,7 +23,7 @@ we reccomend taking a look at the VQE tutorials in the QML gallery (like `this
 one <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__).
 
 The goal of the VQT is to construct the **thermal state** of
-a given Hamiltonian :math:`H` at a given temperature :math:`T`, 
+some arbitrary Hamiltonian :math:`H` at a given temperature :math:`T`, 
 which is defined as:
 
 .. math::
