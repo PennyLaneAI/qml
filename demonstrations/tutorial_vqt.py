@@ -15,7 +15,7 @@ with non-zero temperatures.
 The Idea
 --------
 
-Before diving into some simulations, this tutorial first investigates
+Before diving into the simulations, this tutorial first investigates
 the mathematical ideas that make the VQT algorithm possible. 
 This tutorial assumes some knowledge of variational quantum
 algorithms, so for readers unfamiliar with this concept, 
