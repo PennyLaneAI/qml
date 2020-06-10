@@ -5,16 +5,12 @@ The Variational Quantum Thermalizer
 *Author: Jack Ceroni `(jackceroni@gmail.com)`*
 
 
-This tutorial discusses theory and
-experiments relating to a recently proposed quantum algorithm called the
-`Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT). 
-The VQT algorithm takes a variational approach to 
-finding the thermal state of a Hamiltonian at a given temperature, similar to 
-how the well-known Variational Quantum Eigensolver 
-(`VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__) finds the ground 
-state of a Hamiltonian. In fact, the VQT is a generalization of the VQE!
-As the effective "temperature" of the system approaches zero, the VQT algorithm 
-converges to the standard VQE.
+This tutorial discusses theory and experiments relating to 
+a recently proposed quantum algorithm called the 
+`Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): 
+a generalization of the well-know Variational Quantum Eigensolver
+(`VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__) to systems 
+with non-zero temperatures.
 
 The Idea
 --------
@@ -22,21 +18,21 @@ The Idea
 Before diving into some simulations, this tutorial first investigates
 the mathematical ideas that make the VQT algorithm possible. 
 This tutorial assumes some knowledge of variational quantum
-algorithms. For readers unfamiliar with this concepts, 
+algorithms, so for readers unfamiliar with this concept, 
 we reccomend taking a look at the VQE tutorials in the QML gallery (like `this
 one <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__).
 
-The goal of the VQT is to construct a **thermal state**, which is
-defined as:
+The goal of the VQT is to construct the **thermal state** of
+a given Hamiltonian :math:`H` at a given temperature :math:`T`, 
+which is defined as:
 
 .. math::
     \rho_\text{thermal} \ = \ \frac{e^{- H \beta / k_B}}{\text{Tr}(e^{- H \beta / k_B})} \ =
     \ \frac{e^{- H \beta / k_B}}{Z_{\beta}},
 
-where :math:`H` is the Hamiltonian of the system,
-:math:`\beta \ = \ 1/T`, where :math:`T` is the temperature of the
-system, and :math:`k_B` is Boltzman's constant, which is set to
-:math:`1` for the remainder of this tutorial.
+where :math:`\beta \ = \ 1/T` and :math:`k_B` is Boltzman's 
+constant, which is set to :math:`1` for the remainder of this 
+tutorial.
 
 The thermal state is the state of a quantum system
 such that the system is in thermal equilibrium with an environment. Knowing
@@ -45,31 +41,31 @@ particularly useful in understanding quantum many-body systems, such as
 Bose-Hubbard models.
 
 The input into our algorithm is an arbitrary Hamiltonian :math:`H`, and
-our goal is to find :math:`\rho_\text{thermal}`, or more specifically
+we wish to find :math:`\rho_\text{thermal}`, or more specifically
 the variational parameters of a circuit that prepare a state
 that is very close to :math:`\rho_\text{thermal}`.
 
-In order to do this, we pick a "simple" mixed state to begin the
-process. This initial density matrix is described by a
+We begin the VQT processs by picking a "simple" mixed state. 
+This initial density matrix is described by a
 collection of parameters :math:`\theta`, which determine
 the probabilities corresponding to the different computational basis 
 states. In this implementation of the algorithm, we use the idea of 
-a **factorized latent space** where the initial density matrix 
-describing the quantum system is completely un-correlated. It is 
-simply a tensor product of multiple, :math:`2 \times 2` density 
-matrices that are diagonal in the computational basis. If we 
-assign each qubit its own diagonal density matrix, we only 
-require one probability, :math:`p_i(\theta_i)`, to completely 
-describe the state of the :math:`i`-th qubit, which we call :math:`\rho_i`:
+a **factorized latent space** where the initial density matrix is 
+completely un-correlated. It is simply a tensor product of 
+multiple, :math:`2 \times 2` density matrices that are diagonal 
+in the computational basis. If we assign each qubit its own 
+diagonal density matrix, we only require one probability, 
+:math:`p_i(\theta_i)`, to completely describe the state of the 
+:math:`i`-th qubit, which we call :math:`\rho_i`:
 
 .. math:: \rho_{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|
 
 As a result, for :math:`N` qubits, we only require :math:`N` parameters, 
-so the number of parameters scales linearly with qubits rather 
+so the number of parameters scales linearly with qubits, rather 
 than exponentially. 
 
-Once we have determined the probability distributions that describes each factorized subsystem,
-we sample from each, which gives us 
+Once we have determined the probability distributions that describe the 
+factorized subsystems, we sample from each, which gives us 
 a basis state. This basis state is passed through a parametrized ansatz, which we call
 :math:`U(\phi)`, and the expectation value of the Hamiltonian with respect to this new 
 state is calculated. This process is repeated many times, 
@@ -94,10 +90,9 @@ Neumann entropy of :math:`\rho_{\theta}`, since entropy is invariant
 under unitary transformations. This means that we only have to calculate 
 the entropy of the simple initial state.
 
-This entire process is then repeated with new parameters until free
-energy is minimized. In particular, the parameters being optimized are 
-:math:`\phi` and :math:`theta`, and they are chosen 
-by a classical optimizer after each step of the optimizer. Upon 
+This entire process is then repeated with new :math:`\phi` and 
+:math:`theta` parameters, chosen after each step of the algorithm 
+by a classical optimizer, until free energy is minimized. Upon 
 minimizing the cost function, we have arrived at the thermal state.
 This comes from the fact that the free energy cost function is equivalent
 to the relative entropy between :math:`\rho_{\theta \phi}` and the
@@ -106,7 +101,7 @@ target thermal state. Relative entropy between two arbitrary states
 
 .. math:: D(\rho_1 || \rho_2) \ = \ \text{Tr} (\rho_1 \log \rho_1) \ - \ \text{Tr}(\rho_1 \log \rho_2),
 
-and it is minimized (equal to zero) when :math:`\rho_1 \ = \ \rho_2`.
+and is minimized (equal to zero) when :math:`\rho_1 \ = \ \rho_2`.
 Thus, when the cost function is minimized, it is true that 
 :math:`\rho_{\theta \phi} \ = \ \rho_{\text{thermal}}` which means that we have 
 found the thermal state.
