@@ -25,8 +25,9 @@ import seaborn
 # In this tutorial, we investigate the idea of a quantum graph
 # neural network (`QGNN <https://arxiv.org/abs/1909.12264>`__), 
 # which is the quantum analogue of a classical graph neural network. 
-# In particular, the QGNN we discuss is a **recurrent** 
-# quantum graph neural network (QGRNN).
+# In particular, the QGNN we simulate is a **recurrent** 
+# quantum graph neural network (QGRNN), which is a subset of the more
+# general class of QGNNs
 #
 
 
@@ -37,7 +38,7 @@ import seaborn
 
 
 ######################################################################
-# In recent years, the idea of a quantum graph neural network has been
+# In recent years, the idea of a graph neural network has been
 # receving a lot of attention from the machine learning research community
 # for its ability to learn from data that is inherently
 # graph-theoretic. More specifically, graph neural networks seek
