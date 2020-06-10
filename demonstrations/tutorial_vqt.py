@@ -165,14 +165,14 @@ nx.draw(interaction_graph)
 
 ######################################################################
 # Next, we implement a method that allows us to calculate
-# the matrix form of the Hamiltonian (in the computational basis). The Ising
-# model Hamiltonian can be written as:
+# the matrix form of the Hamiltonian (in the computational basis), for 
+# the case of :math:`n` qubits. The Ising model Hamiltonian can be 
+# written as:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{j} X_{j} X_{j + 1} \ + \ \displaystyle\sum_{i} Z_{i}
 #
 # Where :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z operations acting 
-# on the :math:`i`-th qubit. Thus, we can a function that returns 
-# the :math:`n`-qubit matrix form of the Ising model Hamiltonian:
+# on the :math:`i`-th qubit.
 #
 
 
@@ -212,13 +212,12 @@ print(ham_matrix)
 #
 # .. math:: \rho_{\text{thermal}} \ = \ \frac{e^{-\beta \hat{H}}}{Z_{\beta}}.
 #
-# So all we have to do is take the matrix exponential of the
-# Hamiltonian. The partition function can be found by taking the
-# trace of the numerator (as it simply acts as a normalization factor). In
+# All we have to do is take the matrix exponential of the
+# Hamiltonian, and then calculate its trace to find the partition function. In
 # addition to finding the thermal state, we go one step further and
 # also calculate the value of the cost function associated with this
-# target state. Below, we write a general method for finding an arbitrary 
-# thermal state:
+# target state. Below, we write a general method for finding a
+# thermal state of some arbitrary Hamiltonian:
 #
 
 
@@ -249,7 +248,7 @@ def create_target(qubit, beta, ham, graph):
 
 ######################################################################
 # Finally, the thermal state corresponding to the pre-defined
-# Ising Hamiltonian and inverse temperature van be calculated. 
+# Ising Hamiltonian and inverse temperature can be calculated. 
 # We also visualize it using the ``seaborn`` library:
 #
 
@@ -269,18 +268,16 @@ seaborn.heatmap(abs(final_density_matrix))
 # Now that we know exactly what our thermal state should look like, we
 # attempt to construct it with the VQT. We begin by calculating the
 # classical probability distribution, which gives the probabilities
-# corresponding to each basis state in our initial factorized state. 
-# We let the probability associated with the :math:`i`-th one-qubit 
+# corresponding to each basis state in our initial, factorized density  
+# matrix. We let the probability associated with the :math:`i`-th one-qubit 
 # system be:
 #
 # .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}
 #
 # The motivation behind this choice comes from the fact that this function has a
 # range of :math:`0` to :math:`1`. This means that we don't need to constrain 
-# the values of our parameters to some subset of :math:`\mathbb{R}`. In 
-# addition, this function is called a sigmoid, and is a common choice as an 
-# activation function in classical neural networks. We can implement the
-# sigmoid as:
+# the values of our parameters to some subset of :math:`\mathbb{R}`. We can implement 
+# this function (which is called a sigmoid) as:
 #
 
 # Creates the probability distribution according to the theta parameters
@@ -309,9 +306,9 @@ def prob_dist(params):
 
 ######################################################################
 # Now, we can define the quantum components of the VQT.
-# Before any qubit register is passed through the variational circuit, we
-# must prepare it in a given basis state, so we write a function
-# that takes a list of bits and returns a quantum circuit that prepares
+# The first step of the VQT circuit is to prepare a given
+# basis state, so we write a function that takes a list 
+# of bits and returns a quantum circuit that prepares
 # the corresponding computational basis state:
 #
 
@@ -325,8 +322,7 @@ def create_v_gate(prep_state):
 
 
 ######################################################################
-# All that is left to do before we construct the cost function is to
-# build the parametrized circuit, through which we pass our initial
+# Now, we build the parametrized circuit, through which we pass our initial
 # states. We use a multi-layered ansatz, where each layer is composed
 # of :math:`RX`, :math:`RZ`, and. :math:`RY` gates on each qubit, followed
 # by exponentiated :math:`CNOT` gates placed between qubits that share an
@@ -376,12 +372,14 @@ def ansatz_circuit(params, qubits, layers, graph, param_number):
 ######################################################################
 # There are a lot of variables floating around in this function. The
 # ``param_number`` variable tells us how many unique parameters we
-# assign to each qubiit, for each application of the single-qubit 
+# assign to each qubit, for each application of the single-qubit 
 # rotation layer. We multiply this by the number of qubits, to get 
 # the total number of single-rotation parameters, and then add the 
 # number of edges in the interaction graph, which is the number 
 # of unique parameters needed for a layer of the :math:`CNOT` 
-# gates. 
+# gates, to get the total number of parameters used in one full
+# layer of the ansatz. We then repeatedly apply the same parameters 
+# over layers of the ansatz, for a given depth.
 #
 # With all of these components, we define a function 
 # that acts as our final quantum circuit, and pass it into a
@@ -422,9 +420,10 @@ print(qnode.draw())
 # function: write a method that calculates the entropy of a 
 # state. We take a probability distribution as 
 # an input, each entry of which corresponds to the digonal elements of 
-# the density matrix of one of the factorized subsystem. The entropy 
-# of a collection of subsystems is the same as the sum of the entropies 
-# of the individual systems, so we get:
+# the density matrix of one of the factorized subsystem. We output a list
+# of entropies for each subsystem, which we eventually sum together, as
+# the entropy of a collection of subsystems is the same as the sum of 
+# the entropies of the individual systems.
 #
 
 # Calculates the von Neumann entropy of the initial density matrices
@@ -444,8 +443,8 @@ def calculate_entropy(distribution):
 # Finally, we define the cost function. More specifically, this is an
 # **exact** version of the VQT cost function. Instead of sampling from our
 # classical probability distribution, we simply calculate the probability
-# corresponding to every basis state in the initial density matrix. We pass 
-# each basis state through the ansatz, calculating the expectation value. 
+# corresponding to every basis state in the initial density matrix. We then pass 
+# each possible basis state through the ansatz, calculating the expectation value. 
 # Finally, each probability is multiplied by its corresponding expectation value, 
 # and the energy expectation with respect to :math:`\rho_{\theta \phi}` is 
 # determined. This is not quite how the VQT would work in the practice. 
@@ -513,8 +512,8 @@ print(out)
 
 
 ######################################################################
-# With our optimal parameters we now prepare the state to which
-# they correspond, to see how close our prepared state is to the target
+# With the optimal parameters we now prepare the state to which
+# they correspond, to see how close the prepared state is to the target
 # state:
 #
 
@@ -553,7 +552,7 @@ prepared_density_matrix = prepare_state(params, dev)
 
 
 ######################################################################
-# To asess how "close together" the prepared and target state
+# To asess how "close together" the prepared and target states
 # are, we use the trace distance, which is a metric (a
 # "distance function" with certain properties) on the space of density
 # matrices defined by:
@@ -579,7 +578,7 @@ print("Final Trace Distance: " + str(trace_distance(prepared_density_matrix, fin
 # These results are good! A trace distance close to :math:`0` means that the
 # states are close together, thus we prepared a decent
 # approximation of the thermal state. If you prefer a visual
-# representation, the  absolute value of the prepared state can 
+# representation, the absolute value of the prepared state can 
 # be plotted as a heatmap:
 #
 
@@ -742,7 +741,8 @@ prepared_density_matrix = prepare_state(params, dev2)
 
 
 ######################################################################
-# We then calculate the trace distance:
+# We then calculate the trace distance between the prepared and 
+# target states:
 #
 
 print("Final Trace Distance: " + str(trace_distance(prepared_density_matrix, final_density_matrix)))
