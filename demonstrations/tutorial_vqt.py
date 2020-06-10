@@ -19,11 +19,11 @@ converges to the standard VQE.
 The Idea
 --------
 
-Before constructing the simulations, this tutorial first investigates
+Before diving into some simulations, this tutorial first investigates
 the mathematical ideas that make the VQT algorithm possible. 
-For more background on variational quantum
-algorithms and the VQE, check out the other tutorials in
-the QML gallery (like `this
+This tutorial assumes some knowledge of variational quantum
+algorithms. For readers unfamiliar with this concepts, 
+we reccomend taking a look at the VQE tutorials in the QML gallery (like `this
 one <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__).
 
 The goal of the VQT is to construct a **thermal state**, which is
@@ -57,26 +57,28 @@ states. In this implementation of the algorithm, we use the idea of
 a **factorized latent space** where the initial density matrix 
 describing the quantum system is completely un-correlated. It is 
 simply a tensor product of multiple, :math:`2 \times 2` density 
-matrices that are diagonal in the computational basis. This makes 
-the algorithm scale linearly, rather than exponentially. If we 
-describe each qubit by its own, diagonal density matrix, we only 
+matrices that are diagonal in the computational basis. If we 
+assign each qubit its own diagonal density matrix, we only 
 require one probability, :math:`p_i(\theta_i)`, to completely 
-describe the state of the :math:`i`-th qubit. As a result, for :math:`N` qubits, 
-we only require :math:`N` parameters. More concretely, the state of the 
-:math:`i`-th qubit is described by:
+describe the state of the :math:`i`-th qubit, which we call :math:`\rho_i`:
 
 .. math:: \rho_{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|
 
-We then sample from each one-qubit system, which gives us 
+As a result, for :math:`N` qubits, we only require :math:`N` parameters, 
+so the number of parameters scales linearly with qubits rather 
+than exponentially. 
+
+Once we have determined the probability distributions that describes each factorized subsystem,
+we sample from each, which gives us 
 a basis state. This basis state is passed through a parametrized ansatz, which we call
 :math:`U(\phi)`, and the expectation value of the Hamiltonian with respect to this new 
-state is subsequently calculated. This process is repeated many times, 
+state is calculated. This process is repeated many times, 
 and we take the average of all the calculated expectation values. This gives us
 the expectation value of the Hamiltonian with respect to the transformed density matrix, 
 :math:`U(\phi)\rho_{\theta}U(\phi)^{\dagger}`.
 
-Combining the energy expectation with the von Neumann
-entropy of the state, we define a **free energy cost function**, which is
+By combining the energy expectation with the von Neumann
+entropy of the transformed state, we define a **free energy cost function**, which is
 given by:
 
 .. math::
@@ -92,24 +94,24 @@ Neumann entropy of :math:`\rho_{\theta}`, since entropy is invariant
 under unitary transformations. This means that we only have to calculate 
 the entropy of the simple initial state.
 
-The algorithm is repeated with new parameters until we minimize free
-energy. In particular, the parameters being optimized are 
+This entire process is then repeated with new parameters until free
+energy is minimized. In particular, the parameters being optimized are 
 :math:`\phi` and :math:`theta`, and they are chosen 
-by a classical optimizer after each step of the algorithm. Upon 
+by a classical optimizer after each step of the optimizer. Upon 
 minimizing the cost function, we have arrived at the thermal state.
 This comes from the fact that the free energy cost function is equivalent
 to the relative entropy between :math:`\rho_{\theta \phi}` and the
 target thermal state. Relative entropy between two arbitrary states
-:math:`\rho_1` and :math:`\rho_2` is defined as:
+:math:`\rho_1` and :math:`\rho_2` is defined as
 
-.. math:: D(\rho_1 || \rho_2) \ = \ \text{Tr} (\rho_1 \log \rho_1) \ - \ \text{Tr}(\rho_1 \log \rho_2)
+.. math:: D(\rho_1 || \rho_2) \ = \ \text{Tr} (\rho_1 \log \rho_1) \ - \ \text{Tr}(\rho_1 \log \rho_2),
 
-Relative entropy is minimized (equal to zero) when :math:`\rho_1 \ = \ \rho_2`.
+and it is minimized (equal to zero) when :math:`\rho_1 \ = \ \rho_2`.
 Thus, when the cost function is minimized, it is true that 
 :math:`\rho_{\theta \phi} \ = \ \rho_{\text{thermal}}` which means that we have 
 found the thermal state.
 
-For a diagramatic representation of how this whole process works, check out Figure 3
+For a diagramatic representation of how the VQT works, check out Figure 3
 from the `original VQT paper <https://arxiv.org/abs/1910.02071>`__.
 
 The 3-Qubit Ising Model on a Line
