@@ -41,7 +41,7 @@ particularly useful in understanding quantum many-body systems, such as
 Bose-Hubbard models.
 
 The input into the algorithm is an arbitrary Hamiltonian :math:`H`, and
-we wish to find :math:`\rho_\text{thermal}`, or more specifically
+we wish to find :math:`\rho_\text{thermal}`, or more specifically,
 the variational parameters of a circuit that prepare a state
 that is very close to :math:`\rho_\text{thermal}`.
 
