@@ -72,11 +72,11 @@ import seaborn
 # subscripts on operators represent action upon the
 # :math:`a`-th, :math:`b`-th or :math:`v`-th qubit, and the other
 # parameters (:math:`c` and :math:`d`) simply allow us to label each
-# parameter/type of operator in every term of both sums. 
-# This leads the QGRNN ansatz to encompass a very broad class of unitaries.
+# parameter/type of operator in each term. 
+# This makes the QGRNN ansatz encompass a very broad class of unitaries.
 # In fact, all we can really learn from looking at the QGNN ansatz is that 
 # it involves many repeated layers of parametrized rotation and coupling 
-# gates, that act on qubits according to the structure of some graph.
+# gates, acting on qubits according to the structure of some graph.
 #
 
 
@@ -87,9 +87,9 @@ import seaborn
 
 
 ######################################################################
-# Now that we have discussed what a general quantum graph neural network
-# looks like, let’s discuss what distinguishes a quantum graph RNN from
-# the more general QGNN. 
+# Now that we have discussed what a general quantum graph neural network 
+# (QGRNN) looks like, let’s discuss what distinguishes a quantum graph 
+# RNN from the more general QGNN. 
 #
 # With the QGRNN, we tie the :math:`\boldysmbol\gamma` parameters
 # over temporal layers, meaning that each :math:`\gamma_{ij}`
@@ -281,7 +281,7 @@ def create_hamiltonian_matrix(n, graph, params):
             if i[0] == j or i[1] == j:
                 m = np.kron(m, qml.PauliZ.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, params[0][count] * m)
 
     # Creates the "bias" component of the matrix
@@ -291,7 +291,7 @@ def create_hamiltonian_matrix(n, graph, params):
             if j == i:
                 m = np.kron(m, qml.PauliZ.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, identity(2))
         matrix = np.add(matrix, params[1][i] * m)
 
     # Creates the X component of the matrix
@@ -301,7 +301,7 @@ def create_hamiltonian_matrix(n, graph, params):
             if j == i:
                 m = np.kron(m, qml.PauliX.matrix)
             else:
-                m = np.kron(m, identity)
+                m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, m)
 
     return matrix
