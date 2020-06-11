@@ -252,7 +252,7 @@ def create_target(qubit, beta, ham, graph):
 # We also visualize it using the ``seaborn`` library:
 #
 
-# Plots the absolute value of the final density matrix
+# Plots the entry-wise absolute value of the final density matrix
 
 final_density_matrix = create_target(num_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 seaborn.heatmap(abs(final_density_matrix))
