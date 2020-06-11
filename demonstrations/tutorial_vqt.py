@@ -306,7 +306,7 @@ def prob_dist(params):
 
 ######################################################################
 # Now, we can define the quantum components of the VQT.
-# The first step of the VQT circuit is to prepare a given
+# The first step of the circuit is to prepare a given
 # basis state, so we write a function that takes a list 
 # of bits and returns a quantum circuit that prepares
 # the corresponding computational basis state:
