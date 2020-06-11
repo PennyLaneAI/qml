@@ -51,7 +51,7 @@ collection of parameters :math:`\theta`, which determine
 the probabilities corresponding to the different computational basis 
 states. In this implementation of the algorithm, we use the idea of 
 a **factorized latent space** where the initial density matrix is 
-completely un-correlated. It is simply a tensor product of 
+completely un-correlated: it is simply a tensor product of 
 multiple, :math:`2 \times 2` density matrices that are diagonal 
 in the computational basis. If we assign each qubit its own 
 diagonal density matrix, we only require one probability, 
