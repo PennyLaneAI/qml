@@ -274,10 +274,10 @@ seaborn.heatmap(abs(final_density_matrix))
 #
 # .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}
 #
-# The motivation behind this choice comes from the fact that this function has a
-# range of :math:`0` to :math:`1`. This means that we don't need to constrain 
-# the values of the parameters to some subset of :math:`\mathbb{R}`. We can implement 
-# this function (which is called a sigmoid) as:
+# The motivation behind this choice is that the sigmoid has a
+# range of :math:`0` to :math:`1`, meaning we don't need to constrain 
+# the parameter values to some subset of :math:`\mathbb{R}`. We can implement 
+# this function as:
 #
 
 # Creates the probability distribution according to the theta parameters
