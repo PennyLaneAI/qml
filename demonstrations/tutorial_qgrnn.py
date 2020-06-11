@@ -43,7 +43,7 @@ import seaborn
 # for its ability to learn from data that is inherently
 # graph-theoretic. More specifically, graph neural networks seek
 # to learn a **representation** (a mapping of the data into a
-# lower-dimensional vector space) of a given graph, with features assigned
+# lower-dimensional vector space) of a given graph with features assigned
 # to nodes and edges, such that each of the vectors in the learned
 # representation preserves not only the features, but also the overall
 # topology of the graph.
@@ -59,10 +59,12 @@ import seaborn
 #
 # .. math:: U(\boldsymbol\gamma, \ \boldsymbol\theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{ij} H_{j}(\boldsymbol\theta) }\Bigg]
 #
-# Where we have:
+# With a collection of parametrized Hamiltonians of the form:
 #
-# .. math:: \hat{H}_{j}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(a,b) \in E} \displaystyle\sum_{c} V_{jabc} \hat{A}_{a}^{jc} \otimes \hat{B}_{b}^{jc} \ + \ \displaystyle\sum_{v \in V} \displaystyle\sum_{d} W_{jvd} \hat{C}_{v}^{jd}
+# .. math:: \hat{H}_{j}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(a,b) \in E} \displaystyle\sum_{c} \theta_{jabc}^{(1)} \hat{A}_{a}^{jc} \otimes \hat{B}_{b}^{jc} \ + \ \displaystyle\sum_{v \in V} \displaystyle\sum_{d} \theta_{jvd}^{(2)} \hat{C}_{v}^{jd}
 #
+# where :math:`\boldsymbol\theta \ = \ \{\boldsymbol F, \ \boldsymbol G\}`
+# is the set of coefficients associated with the interaction and bias terms
 # As you can see, this is the class of Hamiltonians that posses a direct
 # mapping between interaction and bias terms, and the edges and vertices
 # (repsectively) of some graph :math:`G \ = \ (V, \ E)`. This form of the
@@ -73,8 +75,8 @@ import seaborn
 # parameter/type of operator in every term of both sums. 
 # This leads the QGRNN ansatz to encompass a very broad class of unitaries.
 # In fact, all we can really learn from looking at the QGNN ansatz is that 
-# it involves many layers of parametrized rotation and coupling gates, that act on qubits 
-# according to the structure of some graph.
+# it involves many repeated layers of parametrized rotation and coupling 
+# gates, that act on qubits according to the structure of some graph.
 #
 
 
@@ -89,16 +91,15 @@ import seaborn
 # looks like, let’s discuss what distinguishes a quantum graph RNN from
 # the more general QGNN. 
 #
-# With the QGRNN, we make one small change to the :math:`\boldsymbol\gamma` 
-# parameters in the QGNN ansatz. Specifically, we tie these
-# parameters over temporal layers, meaning that each :math:`\gamma_{ij}`
+# With the QGRNN, we tie the :math:`\boldysmbol\gamma` parameters
+# over temporal layers, meaning that each :math:`\gamma_{ij}`
 # is only determined by the index :math:`j`, and is the same across all
 # values of :math:`i` (with some fixed :math:`j`). As the paper explains,
 # this is equivalent to how a classical recurrent neural network behaves,
 # where parameters remain the same over layers of the neural network.
 # Thus, we will have:
 #
-# .. math:: U_{\text{RNN}}(\gamma, \ \theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg]
+# .. math:: U_{\text{RNN}}(\boldsymbol\gamma, \ \boldsymbol\theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg]
 #
 # We are now in a position to understand what the QGRNN ansatz can be 
 # used for. The Trotter-Suzuki decomposition says that:
@@ -108,16 +109,17 @@ import seaborn
 
 
 ######################################################################
-# where finite :math:`P \ \gg \ 1` approximates the left-hand side of the
-# equation. It isn’t too difficult to see that the quantum graph RNN
-# resembles the Trotter-Suzuki decomposition. In fact, the
-# quantum graph RNN can be thought of as the Trotterization of the
-# **time-evolution operator**, for some Hamiltonian. Let us fix a time
-# :math:`t`. Let us also fix a parameter that controls the size of the
-# Trotterization steps (essentially :math:`1/P` in exponents, in the above formula),
-# which we call :math:`\Delta`. This allows us to keep the precision of
-# our approximate time-evolution for different values of :math:`t` the
-# same. We define:
+# In practice, we can't implement a quantum circuit with depth approaching 
+#ifninity, but we can perform an approximate Trotter-Suzuki  decomposition
+# with finite :math:`P \ \gg \ 1`. It isn’t too difficult to see that the
+# quantum graph RNN resembles the Trotter-Suzuki decomposition. In fact, there
+# is a specific case of the quantum graph RNN can be thought of as the 
+# Trotterization of the **time-evolution operator**, for some Hamiltonian. 
+# Let us fix a time :math:`t`. Let us also fix a parameter that controls the 
+# size of the Trotterization steps (essentially :math:`1/P` in exponents, in 
+# the above formula), which we call :math:`\Delta`. This allows us to keep 
+# the precision of our approximate time-evolution for different values of 
+# :math:`t` the same. We define:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{q} \hat{H}_{q}(\boldsymbol\theta)
 #
@@ -130,15 +132,18 @@ import seaborn
 
 
 ######################################################################
-# Thus, time-evolution is just a specific case of the QGRNN ansatz. This suggests
+# Thus, time-evolution is just a specific case of the QGRNN ansatz, for
+# some arbitrary collection of parametrized Hamiltonians. This suggests
 # to us that this ansatz may be particularly useful for learning the
-# dynamics of quantum systems. Let’s say that we are given a set
+# dynamics of quantum systems. 
+#
+# Let’s say that we are given a set
 # :math:`\{|\Psi(t)\rangle\}_{t \in T}` of low-energy states that have
 # been evolved under some unknown Hamiltonian :math:`H`, for a collection of
 # different time intervals, contained in the set :math:`T`. Our goal is to 
 # determine the Hamiltonian of this system, given only this collection of states, and
-# the “general model” by which our system evolves (Ising, Heisenberg,
-# etc.). In theory, one doesn’t have to know the “model” of the system,
+# the type of Hamiltonian by which the system evolves (Ising, Heisenberg,
+# etc.). In theory, one doesn’t have to know the type of Hamiltonian,
 # but the algorithm would then require an absurd amount of gates, and a lot of
 # quantum data, so we will stick to the simpler case.
 #
@@ -201,7 +206,7 @@ vqe_dev = qml.device("default.qubit", wires=qubit_number)
 
 
 ######################################################################
-# We continue by defining the graph on which our Ising model is defined using
+# We continue by defining the graph on which our Ising model is defined, using
 # `networkx`. For this simulation, we pick a :math:`4`-node cycle graph.
 #
 
@@ -230,16 +235,16 @@ print("Edges: " + str(ising_graph.edges))
 # do this is to know the Hamiltonian (and thus, the dynamics) of our
 # system *a priori*. Our Ising model Hamiltonian will be of the form:
 #
-# .. math:: \hat{H} \ = \ \displaystyle\sum_{i, j} \alpha_{ij} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \beta_{i} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
+# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} \alpha_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \alpha_{i}^(2) Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
 #
 # where :math:`Z_i` and :math:`X_i` are the Pauli-Z and Pauli-X 
-# acting on the :math:`i`-th qubit. In addition, :math:`\boldsymbol\alpha` and
-# :math:`\boldsymbol\beta` are the matrix and vector of interaction and bias
-# parameters, respectively, with :math:`\alpha_{ij}` 
-# and :math:`\beta_i` being the components. These are the collections of values 
-# that we are attempting to learn with the QGRNN. 
+# acting on the :math:`i`-th qubit, and :math:`E` is the set of edges of 
+# the interaction graph. In addition, :math:`\boldsymbol\alpha` is 
+# the collection of target parameters, composed of subsets :math:`\boldsymbol\alpha^{(1)}`
+# and :math:`\boldsymbol\alpha^{(2)}` of interaction and bias parameters, respectively.
+# These are the collections of values that we are attempting to learn with the QGRNN. 
 #
-#We initialize the target parameters randomly:
+# We initialize the target parameters randomly:
 #
 
 
@@ -416,7 +421,7 @@ def vqe_circuit(parameters, qubits, depth):
 
 
 ######################################################################
-# We create a function and a QNode that allow us to run our
+# Next, we create a function and a QNode that allow us to run our
 # VQE circuit:
 #
 
@@ -469,8 +474,9 @@ print(vqe_params)
 
 
 ######################################################################
-# Now, we numerically calculate the actual ground state energy of the 
-# Hamiltonian, and compare it to the energy of the VQE-generated state.
+# Let's verify our results by numerically calculating the actual ground 
+# state energy of the Hamiltonian, and compare it to the energy of the 
+# VQE-generated state.
 #
 
 # Finds the ground state energy of a Hamiltonian
@@ -493,8 +499,8 @@ print("Ground State Energy: "+str(ground_state))
 # found above with the decoupled VQE, so we can conclude that we have 
 # generated a low-energy, non-ground state. With this state, we can now prepare the
 # quantum data, by evolving it forward in time under the Ising Hamiltonian. 
-# PennyLane allows us to do this exactly, by using a custom unitary gate, which we
-# define to be the time-evolution operator for some Hamiltonian:
+# PennyLane allows us to do this exactly, so we implement a time-evolution unitary
+# gate:
 #
 
 # Creates an exact time-evolution unitary
@@ -513,27 +519,26 @@ def state_evolve(hamiltonian, qubits, time):
 
 ######################################################################
 # Now that have all the pieces needed to generate the quantum data,
-# let’s turn our attention to the QGRNN itself. 
-# Recall that the goal of the QGRNN is to learn :math:`\hat{H}` by 
-# finding the target collections of parameters, :math:`\mu_T`.
+# let’s turn our attention to the QGRNN itself.
 #
 # The process begins by preparing a piece of quantum data, at an arbitrary 
 # time :math:`t` from :math:`0` to :math:`T` in the first register of the quantum circuit. 
 # In the second register, we initialize the qubits in the low-energy state
 # we found with VQE in the previous section, which we call :math:`|\psi_0\rangle` for the remainder
 # of this tutorial. We then pass the second register through the QGRNN ansatz,
-# :math:`U_{\text{RNN}}(\Delta, \ \boldsymbol\mu)`, for fixed :math:`\Delta`, 
-# and where :math:`\boldsymbol\mu \ = \ \{ \boldsymbol\alpha', \ \boldsymbol\beta' \}`
-# is a collection of parameters inputed into the circuit. We define the depth of the outer
-# sequence index to be :math:`P \ = \ \frac{t}{\Delta}`.
-# In addition, motivated by the Ising Hamiltonian, we pick the parametrized Hamiltonians
-# in the ansatz to be:
+# :math:`U_{\text{RNN}}(\Delta, \ \boldsymbol\theta')`, for fixed :math:`\Delta`,  
+# where :math:`\boldsymbol\theta'` is the list of trainable parameters. We define 
+# the depth of the outer sequence index to be :math:`P \ = \ \frac{t}{\Delta}`.
+# In addition, since we know we are dealing with an Ising Hamiltonian, we pick 
+# the parametrized Hamiltonians in the ansatz to be:
 #
-# .. math:: H_1(\boldsymbol\theta) \ = \ \displaystyle\sum_{i, j} \boldsymbol\theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \boldsymbol\theta_{i}^{(2)} Z_{i}
+# .. math:: H_1(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E'} \boldsymbol\theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \boldsymbol\theta_{i}^{(2)} Z_{i}
 #
 # .. math:: H_2(\boldsymbol\theta) \ = \ \displaystyle\sum_{i} X_{i} 
 #
-# After passing the second register through the QGRNN, we perform a 
+# Where :math:`E'` is a guessed interaction graph (remember, the 
+# whole point is that we have no initial knowledge of the target set of 
+# edges, :math:`E`). After passing the second register through the QGRNN, we perform a 
 # `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__ between the 
 # two registers, which allows us to compute the inner product between the quantum 
 # data and the state prepared with the QGRNN, telling us how similar the two states 
@@ -543,21 +548,22 @@ def state_evolve(hamiltonian, qubits, time):
 #
 # .. math:: \mathcal{L}(\Delta, \ \boldsymbol\theta) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{i \ = \ 0}^{N} | \langle \Psi(t_i) | \ U_{\text{RNN}}(\Delta, \ \boldsymbol\mu)^{i} \ |\psi_0\rangle |^2
 #
-# This entire process is repeatedly executed, with new parameters 
-# :math:`\boldsymbol\mu` chosen by a classical optimizer until the 
+# where :math:`t_i` denotes the :math:`i`-th chosen time. This entire 
+# process is repeatedly executed, with new parameters 
+# :math:`\boldsymbol\theta'` chosen by a classical optimizer until the 
 # cost function is minimized and the QGRNN terminates.
 #
 # As the cost function decreases, we know that the inner product between the quantum
 # data and the parametrized  state is approaching one. This means that the states 
 # are becoming more  similar. Since both states were initialized in the same way, this implies
 # that the QGRNN ansatz acts similarly to the time-evolution operator under the target Hamiltonian.
-# Since we have chosen the parametrized Hamiltonians used in the QGRNN to 
+# We chose the parametrized Hamiltonians used in the QGRNN to 
 # contain identical operators to that of the target Ising model, and (as we demonstrated 
 # in the first part of the Notebook) this particular QGRNN ansatz is essentially 
-# equivalent to time-evolution under the sum of its parametrized Hamiltonians, the only
-# way that the QGRNN ansatz and the time-evolution operator could be performing the same 
-# action on some state vector is if the learned parameters :math:`\boldsymbol\mu` are approaching 
-# the target parameters, :math:`\boldsymbol\mu_{T}`. Thus, minimizing the cost function allows us to 
+# equivalent to time-evolution under the sum of its parametrized Hamiltonians. This means that 
+# the only way the QGRNN ansatz and the time-evolution operator could be performing the same 
+# action on some state vector is if the learned parameters :math:`\boldsymbol\theta'` are approaching 
+# the target parameters, :math:`\boldsymbol\theta`. Thus, minimizing the cost function allows us to 
 # learn the parameters corresponding to the target Hamiltonian.
 #
 # Here is a diagram depicting the entire quantum circuit:
@@ -569,7 +575,7 @@ def state_evolve(hamiltonian, qubits, time):
 #    </center>
 #
 # Without further delay, let's build the quantum circuit! 
-# Our Ising Hamiltonian involves :math:`ZZ` gates, so we need to write a
+# Th Ising Hamiltonian involves :math:`ZZ` gates, so we write a
 # method that allows us to construct :math:`RZZ` gates out of the standard
 # gate set in Pennylane:
 #
@@ -625,9 +631,9 @@ def swap_test(control, register1, register2):
 ######################################################################
 # From here, we can build our quantum circuit that corresponds to one
 # execution of our QGRNN, for a given time step. First, let’s define a new
-# quantum device with :math:`7` qubits rather than :math:`3`, as we will
-# need registers for our neural network, and data-preparation, plus an
-# extra qubit for the :math:`SWAP` test.
+# quantum device with :math:`9` qubits rather than :math:`4`, as we will
+# need registers for the neural network, and data-preparation, plus an
+# extra ancilla qubit for the :math:`SWAP` test.
 #
 
 # Defines the new
@@ -637,16 +643,15 @@ qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
 ######################################################################
 # We then define a few more fixed variables needed for our simulation,
 # like the two registers of qubits, the index of the
-# ancilla qubit (for the :math:`SWAP` test), the size of the
-# Trotterization steps, and a new graph of interations. It is important to
-# note that we do not know the interaction structure (which qubits are
-# “connected” by :math:`ZZ` interactions) of our model before we begin the
-# simulation. Thus, we initialize our model in a more general structure
-# than the cycle graph that we utilized at the beginning of this
-# tutorial: the complete graph :math:`K^4`. We then hope that as
-# our algorithm converges, it learn the structure of the graph by setting
-# the parameters corresponding to edge :math:`(0, \ 2)` and 
-# :math:`(1, \ 3)` to :math:`0`.
+# ancilla qubit, the size of the Trotterization steps, and the guessed 
+# graph of interations. As we previously noted, we do not know the
+# interaction structure (which qubits are “connected” by :math:`ZZ` 
+# interactions) of our model before we begin the simulation. Thus, 
+# we initialize our model in a more general structure than the cycle 
+# graph that we utilized at the beginning of this tutorial: the complete 
+# graph :math:`K^4`. We then hope that as our algorithm converges, 
+# it learn the structure of the graph by setting the parameters 
+# corresponding to edge :math:`(0, \ 2)` and :math:`(1, \ 3)` to :math:`0`.
 #
 
 # Defines some fixed values
@@ -687,10 +692,9 @@ def qgrnn(params1, params2, time):
     # Evolves the first qubit register with the time-evolution circuit
     state_evolve(ham_matrix, reg1, time.val)
 
-    # Applies the time-evolution layers to the second qubit register
+    # Applies the QGRNN layers to the second qubit register
     depth = time.val / trotter_step
     for i in range(0, int(depth)):
-        # qgrnn_layer(matrix_params[0], matrix_params[1], reg1, ising_graph, trotter_step)
         qgrnn_layer(params1, params2, reg2, new_ising_graph, trotter_step)
 
     # Applies the SWAP test between the registers
@@ -701,7 +705,7 @@ def qgrnn(params1, params2, time):
 
 
 ######################################################################
-# The reason we set our QNode to return the expectation value of the 
+# The reason we set the function to return the expectation value of the 
 # Pauli-Z with respect to the ancilla qubit is due to the SWAP test.
 # After performing the SWAP test, it is true that:
 #
@@ -714,23 +718,21 @@ def qgrnn(params1, params2, time):
 #                                 = \ \text{P}(\text{Ancilla} \ = \ 0) \ - \ \big(1 \ - \ \text{P}(\text{Ancilla} \ = \ 0)\big)
 #                                 = \ 2\text{P}(\text{Ancilla} \ = \ 0) \ - \ 1
 #
-# where :math:`Z_A` is the Pauli-Z operator corresponding to the 
+# where :math:`Z_A` is the Pauli-Z observable corresponding to the 
 # ancilla qubit. From the definition of the expectation value, we 
 # also get:
 #
 # .. math:: \text{P}(\text{Ancilla} \ = \ 0) \ = \ \frac{1}{2} \ + \ \frac{1}{2} \langle Z_A \rangle
 #
 # Thus, from the first and the third equation, we get
-# :math:`\langle Z_A \rangle \ = \ |\langle \psi | \phi \rangle|^2`.
-# This implies that all we have to do to find the inner product between
-# the two registers after the SWAP test is calculate 
-# :math:`\langle Z_A \rangle`.
+# :math:`\langle Z_A \rangle \ = \ |\langle \psi | \phi \rangle|^2`, 
+# which is the quantity we need to calculate the cost function.
 
 ######################################################################
 # We are now tasked with constructing the cost function of our model. To
 # evaluate the cost function, we simply have to choose a bunch of time
 # steps at which we will execute of QGRNN. We begin by defining a few more
-# values, along with our new QNode:
+# values, along with the new QNode:
 #
 
 batch = 15  # The number of different times that will be used
@@ -766,9 +768,9 @@ def cost_function(params):
         result = qnode(weight_params, bias_params, i)
         total_cost += 1 - result
 
-    # Prints the value of the cost function
+    # Prints the value of the fidelity
     print(
-        "Cost at Step "
+        "Fidelity at Step "
         + str(iterations)
         + ": "
         + str((1 - total_cost / batch)._value)
@@ -832,7 +834,7 @@ create_density_plot([np.diag(ham_matrix), np.diag(new_ham_matrix)])
 #          of steps lower than it should be for optimal performance, so we 
 #          strongly reccomend that the motivated reader play around with the 
 #          on their own! (Try starting with a learning rate of :math:`0.2`, 
-#          over :math:`200 steps`, and go from there).
+#          over :math:`200 steps`).
 # 
 
 ######################################################################
