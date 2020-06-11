@@ -190,6 +190,11 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq beginner
+    
+.. customgalleryitem::
+    :tooltip: VQE optimization using quantum natural gradient
+    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
+    :description: :doc:`demos/tutorial_vqe_qng`
 
 .. customgalleryitem::
     :tooltip: Learning the dynamics of quantum systems on graphs
@@ -234,3 +239,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_rosalin
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_vqe_qng
+    demos/tutorial_qgrnn
