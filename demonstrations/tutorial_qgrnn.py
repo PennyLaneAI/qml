@@ -568,11 +568,7 @@ def state_evolve(hamiltonian, qubits, time):
 #
 # Here is a diagram depicting the entire quantum circuit:
 #
-# .. raw:: html
-#
-#    <center>
-#      <img src="qgrnn/qgrnn.png" style="width:800px;">
-#    </center>
+# .. image:: qgrnn/qgrnn.png
 #
 # Without further delay, let's build the quantum circuit! 
 # Th Ising Hamiltonian involves :math:`ZZ` gates, so we write a
