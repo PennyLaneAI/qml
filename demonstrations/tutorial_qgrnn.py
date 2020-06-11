@@ -26,8 +26,8 @@ import seaborn
 # neural network (`QGNN <https://arxiv.org/abs/1909.12264>`__), 
 # which is the quantum analogue of a classical graph neural network. 
 # In particular, the QGNN we simulate is a **recurrent** 
-# quantum graph neural network (QGRNN), which is a subset of the more
-# general class of QGNNs
+# quantum graph neural network (QGRNN), which is a subclass of the general
+# QGNN.
 #
 
 
@@ -128,7 +128,7 @@ import seaborn
 # the time-evolution operator for this particular Hamiltonian can be
 # approximated as:
 #
-# .. math:: e^{-i t H} \ \approx \ \displaystyle\prod_{i \ = \ 1}^{t / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta H_{j}(\boldsymbol\theta)} \Bigg] \ = \ U_{\text{RNN}}(\Delta, \ \boldsymbol\theta)
+# .. math:: e^{-i t H} \ \approx \ \displaystyle\prod_{i \ = \ 1}^{t / \Delta} \Bigg[ \displaystyle\prod_{q \ = \ 1}^{Q} e^{-i \Delta H_{q}(\boldsymbol\theta)} \Bigg] \ = \ U_{\text{RNN}}(\Delta, \ \boldsymbol\theta)
 #
 
 
@@ -519,7 +519,13 @@ def state_evolve(hamiltonian, qubits, time):
 
 ######################################################################
 # Now that have all the pieces needed to generate the quantum data,
-# let’s turn our attention to the QGRNN itself.
+# let’s turn our attention to the QGRNN itself. The motivation for the 
+# following QGRNN ansatz comes from the first part of the 
+# tutorial, where we showed that the QGRNN can be used
+# to approximate time-evolution. If we construct the QGRNN such that it
+# is exactly a Trotterized version of an Ising model Hamiltonian, with tuneable
+# coefficients, then the neural network can learn the optimal parameters through training 
+# on the quantum data.
 #
 # The process begins by preparing a piece of quantum data, at an arbitrary 
 # time :math:`t` from :math:`0` to :math:`T` in the first register of the quantum circuit. 
