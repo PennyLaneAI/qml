@@ -270,7 +270,7 @@ seaborn.heatmap(abs(final_density_matrix))
 # classical probability distribution, which gives the probabilities
 # corresponding to each basis state in the initial, factorized density  
 # matrix. We let the probability associated with the :math:`i`-th one-qubit 
-# system be:
+# system be given by the sigmoid function:
 #
 # .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}
 #
