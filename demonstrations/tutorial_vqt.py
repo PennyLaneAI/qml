@@ -109,7 +109,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # Creates the graph of interactions for the Heisenberg grid, then draws it
 
 interaction_graph = nx.Graph()
-interaction_graph.add_nodes_from(range(0, N))
+interaction_graph.add_nodes_from(range(0, 4))
 interaction_graph.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0)])
 
 nx.draw(interaction_graph)
