@@ -157,7 +157,7 @@ def create_hamiltonian_matrix(n, graph):
     return matrix
 
 
-ham_matrix = create_hamiltonian_matrix(N, interaction_graph)
+ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 print(ham_matrix)
 
 
