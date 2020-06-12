@@ -500,7 +500,7 @@ target_density_matrix = create_target(N, beta, create_hamiltonian_matrix, intera
 
 # Plots the final density matrix
 
-seaborn.heatmap(abs(final_density_matrix))
+seaborn.heatmap(abs(target_density_matrix))
 
 
 ######################################################################
@@ -524,7 +524,7 @@ def trace_distance(one, two):
     return 0.5 * np.trace(np.absolute(np.add(one, -1 * two)))
 
 
-print("Trace Distance: " + str(trace_distance(final_density_matrix_2, final_density_matrix)))
+print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_density_matrix)))
 
 
 ######################################################################
