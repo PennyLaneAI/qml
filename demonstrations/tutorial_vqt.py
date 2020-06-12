@@ -221,7 +221,7 @@ def prob_dist(params):
 
 
 ######################################################################
-# With this done, we can move on to defining the ansatz circuit
+# With this done, we can move on to defining the ansatz circuit,
 # :math:`U(\phi)`. The ansatz must begin by preparing some arbitrary
 # computational basis state sampled from the initial density matrix. This
 # is easily implemented in PennyLane with the ``BasisStatePreparation``
