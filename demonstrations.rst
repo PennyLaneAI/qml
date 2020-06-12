@@ -195,6 +195,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tooltip: VQE optimization using quantum natural gradient
     :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
     :description: :doc:`demos/tutorial_vqe_qng`
+    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
