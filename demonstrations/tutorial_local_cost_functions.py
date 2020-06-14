@@ -46,7 +46,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 # Cerezo et al. shows that circuits are trainible under certain ranges, so
 # how many quibits we train on will effect our results.
 #
-# .. figure:: ../demonstrations/<local_cost_functions>/Cerezo_et_al_local_cost_functions.png
+# .. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
 #    :align: center
 #    :width: 90%
 
