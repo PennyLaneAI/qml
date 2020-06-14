@@ -11,7 +11,7 @@ as well as Python code demos. Both can be accessed at
 
 * [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
   quantum machine learning and optimization.
-  
+
 * [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos discussing various aspects of quantum machine learning.
 
 ## Contributing
