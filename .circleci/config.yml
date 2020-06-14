@@ -45,7 +45,7 @@ jobs:
 
       - run:
           name: Build tutorials
-          no_output_timeout: 30m
+          no_output_timeout: 60m
           command: |
             . venv/bin/activate
             make download
@@ -135,7 +135,7 @@ jobs:
 
       - run:
           name: Build tutorials
-          no_output_timeout: 30m
+          no_output_timeout: 60m
           command: |
             . venv/bin/activate
             make download
