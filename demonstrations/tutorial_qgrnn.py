@@ -187,10 +187,10 @@ print("Edges: " + str(ising_graph.edges))
 def create_params(graph):
 
     # Creates the interaction parameters
-    interaction = [random.randint(-200, 200) / 100 for i in range(0, len(graph.edges))]
+    interaction = [np.random.randint(-200, 200) / 100 for i in range(0, len(graph.edges))]
 
     # Creates the bias parameters
-    bias = [random.randint(-200, 200) / 100 for i in range(0, qubit_number)]
+    bias = [np.random.randint(-200, 200) / 100 for i in range(0, qubit_number)]
 
     return [interaction, bias]
 
@@ -328,7 +328,7 @@ vqe_qnode = qml.QNode(vqe_circuit, vqe_dev)
 optimizer = qml.AdamOptimizer(stepsize=0.8)
 
 steps = 200
-vqe_params = list([random.randint(-100, 100) / 10 for i in range(0, 4 * qubit_number)])
+vqe_params = list([np.random.randint(-100, 100) / 10 for i in range(0, 4 * qubit_number)])
 
 for i in range(0, steps):
     vqe_params = optimizer.step(vqe_qnode, vqe_params)
@@ -580,7 +580,7 @@ iterations = 0
 
 optimizer = qml.AdamOptimizer(stepsize=0.5)
 steps = 100
-qgrnn_params = list([random.randint(-20, 20) / 50 for i in range(0, 10)])
+qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
 
 # Executes the optimization method
 
