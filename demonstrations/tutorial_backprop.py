@@ -224,3 +224,41 @@ print(f"best of {repeat}: {min(times) / number} sec per loop")
 ##############################################################################
 # Unlike with the parameter-shift rule, there is now only a **constant overhead**
 # compared to the forward pass!
+
+##############################################################################
+# Reversible backprop
+# -------------------
+#
+
+import tensorflow as tf
+
+dev = qml.device("default.qubit", wires=4)
+
+
+@qml.qnode(dev, diff_method="reversible")
+def circuit(params):
+    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
+
+# initialize circuit parameters
+params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
+print(circuit.__class__.__base__)
+
+##############################################################################
+# Let's see how long it takes to perform a forward pass of the circuit.
+
+import timeit
+
+repeat = 3
+number = 10
+times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
+print(f"best of {repeat}: {min(times) / number} sec per loop")
+
+
+##############################################################################
+# We can now time a backwards pass.
+
+grad_fn = qml.grad(circuit)
+times = timeit.repeat("grad_fn(params)", globals=globals(), number=number, repeat=repeat)
+print(f"best of {repeat}: {min(times) / number} sec per loop")
+
