@@ -78,8 +78,8 @@ We can compute the Fisher information matrix for the entries of :math:`\boldsymb
 
 where :math:`J_{kl} = \partial f_k / \partial \phi_l` is the Jacobian of :math:`\boldsymbol{f}`.
 
-Code 
-----
+Setup 
+-----
 
 """
 import pennylane as qml
@@ -133,8 +133,15 @@ def experiment(weights, phi, gamma=0.0):
 
     return qml.probs(wires=[0, 1, 2])
 
+# Make a dry run to be able to draw
+experiment(np.zeros(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS), np.zeros(3), gamma=0.2)
+print(experiment.draw(show_variable_names=True))
+
 
 ##############################################################################
+# Cost function
+# ------------
+#
 # Now, let's turn to the cost function itself. The most important ingredient
 # is the Classical Fisher Information Matrix, which we compute using a separate
 # function.
@@ -188,11 +195,14 @@ jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
 ##############################################################################
+# Optimization
+# ------------
+#
 # We can now turn to the optimization of the protocol. We will fix the dehpasing
-# constant at :math:`\gamma=0.1` and the ground truth of the sensing parameters at
-# :math:``\boldsymbol{\phi} = (0.1, 0.2, -0.12)`` and use an equal weighting of the Fourier amplitudes.
-gamma = 0.1
-phi = np.array([0.1, 0.2, -0.12])
+# constant at :math:`\gamma=0.2` and the ground truth of the sensing parameters at
+# :math:`\boldsymbol{\phi} = (1.1, 0.7, -0.6)` and use an equal weighting of the Fourier amplitudes.
+gamma = 0.2
+phi = np.array([1.1, 0.7, -0.6])
 J = jacobian(*phi)
 
 ##############################################################################
@@ -205,15 +215,65 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
 np.random.seed(395)
 weights = np.random.uniform(0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
 
-opt = qml.AdagradOptimizer(stepsize=0.01)
-costs = [opt_cost(weights)]
+opt = qml.AdagradOptimizer(stepsize=0.1)
 
-for i in range(100):
+print("Initialization: Cost = {:6.4f}".format(opt_cost(weights)))
+for i in range(20):
     weights = opt.step(opt_cost, weights)
-    costs.append(opt_cost(weights))
 
     #if (i + 1) % 10 == 0:
-    print("Iteration {:>3}: Cost = {:6.4f}".format(i + 1, costs[-1]))
+    print("Iteration {:>4}: Cost = {:6.4f}".format(i + 1, opt_cost(weights)))
+
+##############################################################################
+# Comparison
+# ----------
+#
+# Now we want to see how our protocol compares to known alternatives, namely
+# using a GHZ state and regular Ramsay interferometry with :math:`|+\rangle`
+# states. These are in the scope of our experimental model and can be created
+# using specific weights.
+# GHZ_weights = np.zeros_like(weights)
+# GHZ_weights[13] = np.pi / 2
+# GHZ_weights[15] = np.pi / 2
+# GHZ_weights[17] = np.pi / 2
+# GHZ_weights[19] = np.pi / 2
+
+# print("Cost for GHZ sensing = {:6.4f}".format(opt_cost(GHZ_weights)))
+
+Ramsay_weights = np.zeros_like(weights)
+Ramsay_weights[1] = np.pi / 2
+Ramsay_weights[3] = np.pi / 2
+Ramsay_weights[5] = np.pi / 2
+Ramsay_weights[15] = np.pi / 2
+Ramsay_weights[17] = np.pi / 2
+Ramsay_weights[19] = np.pi / 2
+
+print("Cost for regular Ramsay sensing = {:6.4f}".format(opt_cost(Ramsay_weights)))
+
+##############################################################################
+# We will now make a plot to compare the noise scaling of the above probes.
+gammas = np.linspace(0, .75, 21)
+comparison_costs = {
+    "optimized" : [],
+    # "GHZ" : [],
+    "standard" : [],
+}
+
+for gamma in gammas:
+    comparison_costs["optimized"].append(cost(weights, phi, gamma, J, np.eye(2)))
+    # comparison_costs["GHZ"].append(cost(GHZ_weights, phi, gamma, J, np.eye(2)))
+    comparison_costs["standard"].append(cost(Ramsay_weights, phi, gamma, J, np.eye(2)))
+
+import matplotlib.pyplot as plt
+
+plt.semilogy(gammas, comparison_costs["optimized"], label="Optimized")
+#plt.semilogy(gammas, comparison_costs["GHZ"], label="GHZ")
+plt.semilogy(gammas, comparison_costs["standard"], label="Standard")
+plt.xlabel(r"$\gamma$")
+plt.ylabel("Weighted Cramér-Rao bound")
+plt.legend()
+plt.grid()
+plt.show()
 
 ##############################################################################
 # References
