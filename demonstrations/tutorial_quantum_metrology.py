@@ -3,7 +3,7 @@ Quantum Metrology
 ==================================
 
 .. meta::
-    :property="og:description": In this demonstration, a variational algorithm is 
+    :property="og:description": In this demonstration, a variational algorithm is
         used to optimize a quantum sensing protocol.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
@@ -18,29 +18,93 @@ Quantum metrology is a particular application of quantum technologies that explo
 effects to enhance the sensitivity of measurement processes. A sensing protocol can be modeled in
 the following way:
 
-As a first step, a *probe state* :math:`\rho_0(\boldsymbol{\theta})` with variational parameters
-:math:`\boldsymbol{\theta}` is prepared. This probe state then undergoes a possibly noisy quantum
+As a first step, a *probe state* :math:`\rho_0` is prepared. This probe state then undergoes a possibly noisy quantum
 evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}`. The resulting state
-:math:`\rho(\boldsymbol{\theta}, \boldsymbol{\phi})` is then measured using a parametrized positive
-operator-valued measurement :math:`\{ \Pi_l(\boldsymbol{\mu}) \}`, yielding an output probability
+:math:`\rho(\boldsymbol{\phi})` is then measured using a parametrized positive
+operator-valued measurement :math:`\{ \Pi_l \}`, yielding an output probability
 distribution
 
-.. math:: p_l(\boldsymbol{\theta}, \boldsymbol{\phi}, \boldsymbol{\mu}) =
-    \operatorname{Tr}(\rho(\boldsymbol{\theta}, \boldsymbol{\phi}), \Pi_l(\boldsymbol{\mu}))
+.. math:: p_l(\boldsymbol{\phi}) =
+    \operatorname{Tr}(\rho(\boldsymbol{\phi}) \Pi_l).
 
-We now seek to estimate the vector of parameters :math:`\boldsymbol{\phi}` or a multi-variate function
-:math:`\boldsymbol{f}(\boldsymbol{\phi})` thereof from the output probability distribution. The best achievable
-estimation precision in doing this can be quantified by the *Cramér-Rao bound*: For any unbiased estimator
-:math:`\mathbb{E}(\hat{\boldsymbol{f}}) = \boldsymbol{f}`, we have
+We now seek to estimate the vector of parameters :math:`\boldsymbol{\phi}` from this probability distribution.
+Intuitively, we will get the best precision in doing so if the probe state is most "susceptible" to the
+physical evolution and the corresponding measurement can distinguish the states for different parameter values well. 
 
-.. math:: \operatorname{Cov}(\hat{\boldsymbol{f}}) \geq \frac{1}{n} I^{-1}_{\boldsymbol{f}},
+Luckily, there exists a mathematical tool to quantify the best achievable esitmation precision,
+the *Cramér-Rao bound*: For any unbiased estimator
+:math:`\mathbb{E}(\hat{\boldsymbol{\varphi}}) = \boldsymbol{\phi}`, we have
 
-where :math:`n` is the number of samples and :math:`I_{\boldsymbol{f}}` is the *Classical Fisher Information Matrix*
-with respect to the entries of :math:`\boldsymbol{f}`.
+.. math:: \operatorname{Cov}(\hat{\boldsymbol{\varphi}}) \geq \frac{1}{n} I^{-1}_{\boldsymbol{\phi}},
 
-- The Variational Algorithm
+where :math:`n` is the number of samples and :math:`I_{\boldsymbol{\phi}}` is the *Classical Fisher Information Matrix*
+with respect to the entries of :math:`\boldsymbol{\phi}`, defined as
+
+.. math:: [I_{\boldsymbol{\phi}}]_{jk} := \sum_l \frac{(\partial_j p_l)(\partial_k p_l)}{p_l}.
+
+The variational algorithm now proceeds by parametrizing both the probe state :math:`\rho_0 = \rho_0(\boldsymbol{\theta})`
+and the POVM :math:`\Pi_l = \Pi_l(\boldsymbol{\mu})`. The parameters :math:`\boldsymbol{\theta}` and :math:`\boldsymbol{\mu}`
+are then adjusted to reduce a cost function derived from the Cramér-Rao bound. Its right-hand side already gives
+the best attainable precision, but is only a scalar if there is only one paramter to be estimated. To also obtain a scalar
+quantity in the multi-variate case, we apply a positive-semidefinite weighting matrix :math:`W` to both side of the bound
+and perform a trace, yielding the scalar inequality
+
+.. math:: \operatorname{Tr}(W\operatorname{Cov}(\hat{\boldsymbol{\varphi}})) \geq \frac{1}{n} \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}).
+
+As its name suggests, :math:`W` can be used to weight the importance of the different entries of :math:`\boldsymbol{\phi}`.
+The right-hand side is now a scalar quantifying the best attainable weighted precision and can be readily used as a cost function
+
+.. math:: C_W(\boldsymbol{\theta}, \boldsymbol{\mu}) = \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}(\boldsymbol{\theta}, \boldsymbol{\mu}))
+
+Ramsay spectroscopy
+------------------
+
+As an example, we will study Ramsay spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
+The metrological parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions 
+modeled as two-level systems with an external driving force. We model the noise in the parameter encoding as local
+dephasing with dephasing constant :math:`\gamma`. We consider a pure probe state on three qubits and a projective measurement, where
+the computational basis is parametrized by local unitaries.
+
+To add another interesting aspect, we will seek an optimal protocols for the estimation of the Fourier amplitudes
+of the phases:
+
+.. math:: f_j(\boldsymbol{\pphi}) = |\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}|^2
+
+
+Code 
+----
 
 """
+import pennylane as qml
+from pennylane import numpy as np
+
+##############################################################################
+# We will first specify the device to carry out the simulations. As we want to 
+# model a noisy system, it needs to be capable of mixed-state simulations.
+# We will choose the `cirq.mixedsimulator` device for this tutorial.
+dev = qml.device("cirq.mixedsimulator", wires=3)
+from pennylane_cirq import ops as cirq_ops
+
+##############################################################################
+# Next, we model the parameter encoding. Phase shifts can be recreated using
+# the Pauli Z rotation gate.
+@qml.template
+def encoding(phi, gamma):
+    for i in range(3):
+        qml.RZ(phi[i], wires=[i])
+        cirq_ops.PhaseDamp(gamma, wires=[i])
+
+##############################################################################
+# We now choose an ansatz for our circuit and the POVM. We make use of the 
+# Arbitrary state preparation templates from pennylane.
+@qml.template
+def ansatz(weights):
+    qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
+
+@qml.template
+def measurement(weights):
+    for i in range(3):
+        qml.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
 
 
 ##############################################################################
