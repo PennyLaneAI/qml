@@ -186,10 +186,10 @@ print("Edges: " + str(ising_graph.edges))
 def create_params(graph):
 
     # Creates the interaction parameters
-    interaction = [np.random.randint(-200, 200) / 100 for i in range(0, len(graph.edges))]
+    interaction = [np.random.randint(-150, 150) / 100 for i in range(0, len(graph.edges))]
 
     # Creates the bias parameters
-    bias = [np.random.randint(-200, 200) / 100 for i in range(0, qubit_number)]
+    bias = [np.random.randint(-150, 150) / 100 for i in range(0, qubit_number)]
 
     return [interaction, bias]
 
@@ -562,14 +562,14 @@ def cost_function(params):
 
 ######################################################################
 # The last step is to define and execute the optimizer. We use Adam,
-# with a step-size of :math:`0.3`:
+# with a step-size of :math:`0.2`:
 #
 
 # Defines the optimization method
 
 iterations = 0
 
-optimizer = qml.AdamOptimizer(stepsize=0.3)
+optimizer = qml.AdamOptimizer(stepsize=0.2)
 steps = 100
 qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
 
