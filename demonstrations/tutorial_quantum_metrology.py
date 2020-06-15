@@ -184,9 +184,28 @@ Omega = sympy.Matrix(
 ) / sympy.sqrt(3)
 
 # Compute Jacobian
-J = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi)
-J = sympy.lambdify((x, y, z), sympy.re(J))
+jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi)
+jacobian = sympy.lambdify((x, y, z), sympy.re(J))
 
+##############################################################################
+# We can now turn to the optimization of the protocol. We will fix the dehpasing
+# constant at :math:`\gamma=0.1` and the ground truth of the sensing parameters at
+# :math:``\boldsymbol{\phi} = (0.1, 0.2, -0.12)`` and use an equal weighting of the Fourier amplitudes.
+gamma = 0.1
+phi = np.array([0.1, 0.2, -0.12])
+J = jacobian(*phi)
+
+##############################################################################
+# We then define the cost function used in the gradient-based optimization and
+# initialize the weights at random.
+def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
+    return cost(weights, phi, gamma, J, W)
+
+init_weights = np.random.uniform(0, 2*np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
+
+##############################################################################
+# We construct the cost function that will be used in the optimization
+opt_cost =
 
 ##############################################################################
 # References
