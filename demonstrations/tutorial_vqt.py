@@ -44,9 +44,10 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # deviate from the standard variational method of passing a pure state
 # through an ansatz, and minimizing the energy expectation.
 #
-# The VQT begins with an initial density matrix, described by a
-# probability distribution parametrized by some collection of parameters
-# :math:`\theta`, and an ensemble of pure states,
+# The VQT begins with an initial `density matrix 
+# <https://en.wikipedia.org/wiki/Density_matrix>`__, :math:`\rho_{\theta}`, 
+# described by a probability distribution parametrized by some collection 
+# of parameters :math:`\theta`, and an ensemble of pure states,
 # :math:`\{|\psi_i\rangle\}`. We let :math:`p_i(\theta_i)` be the
 # probability corresponding to the :math:`i`-th pure state. We sample from
 # this probability distribution to get some pure state
@@ -66,7 +67,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # a good approximation to the ground state of :math:`\hat{H}`. In the VQT,
 # the goal is to arrive at a parametrized probability distribution, and a
 # parametrized ansatz, that generate a good approximation to the thermal
-# state, which in general will involve more than calculating the energy
+# state, which involves more than calculating the energy
 # expectation value. Luckily, we know that the thermal state of
 # :math:`\hat{H}` minimizes the following free-energy cost function:
 #
@@ -82,7 +83,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 #
 # All together, the outlined processes give us a general protocal to
 # generate thermal states. Throughout the Notebook, more nuances in
-# relation to the particular classical and quantum components will be
+# relation to the particular classical and quantum components are
 # mentioned as they are implemented.
 #
 
@@ -94,7 +95,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 
 
 ######################################################################
-# In this tutorial, we will be simulating the 4-qubit Heisenberg model,
+# In this tutorial, we simulate the 4-qubit Heisenberg model,
 # which is defined as:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_{j} \ + \ Z_i Z_{j} \ + \ Y_i Y_{j}
@@ -121,7 +122,6 @@ nx.draw(interaction_graph)
 #
 
 # Creates the target Hamiltonian matrix
-
 
 def create_hamiltonian_matrix(n, graph):
 
@@ -162,7 +162,7 @@ print(ham_matrix)
 
 
 ######################################################################
-# With this done, we can construct the VQT. We begin by defining some
+# With this done, we construct the VQT. We begin by defining some
 # fixed variables that are used throughout the simulation:
 #
 
@@ -181,7 +181,7 @@ N = 4  # Number of qubits
 # fact that in this factorized model, the number of :math:`\theta_i`
 # parameters needed to describe :math:`\rho_\theta` versus the number of
 # qubits scales linearly rather than exponentially, as for each one-qubit
-# system described by :math:`\rho_\theta^i`, we will have:
+# system described by :math:`\rho_\theta^i`, we have:
 #
 # .. math:: \rho_{\theta}^{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|
 #
@@ -192,7 +192,6 @@ N = 4  # Number of qubits
 #
 
 # Creates the probability distribution according to the theta parameters
-
 
 def sigmoid(x):
 
@@ -226,12 +225,11 @@ def prob_dist(params):
 # computational basis state sampled from the initial density matrix. This
 # is easily implemented in PennyLane with the ``BasisStatePreparation``
 # template. The next step is to build the rotational and coupling layers
-# used in the ansatz. The rotation layer will simply be :math:`RX`,
+# used in the ansatz. The rotation layer is simply :math:`RX`,
 # :math:`RY`, and :math:`RZ` gates applied to each qubit.
 #
 
 # Creates the single rotational ansatz
-
 
 def single_rotation(phi_params, qubits):
 
@@ -304,7 +302,6 @@ print(qnode.draw())
 
 # Calculate the Von Neumann entropy of the initial density matrices
 
-
 def calculate_entropy(distribution):
 
     total_entropy = 0
@@ -328,14 +325,16 @@ def calculate_entropy(distribution):
 # which is exactly the probability of sampling :math:`|x_i\rangle` from
 # the distribution. Summing each of these terms together gives us the
 # expected value of the Hamiltonian with respect to the transformed
-# density matrices. In the case of this small, simple model, exact
-# calculations reduce the number of circuit executions, and thus total
+# density matrices. 
+#
+# In the case of this small, simple model, exact
+# calculations such as this reduce the number of circuit executions, and thus total
 # execution time.
 #
 # You may have noticed previously that the “structure” of the list of
 # parameters passed into the ansatz is very complicated. We write a
 # general function that takes a one-dimensional list, and converts it into
-# the nestled list structure that can be inputted into the ansatz:
+# the nestled list structure that can be inputed into the ansatz:
 #
 
 
@@ -403,7 +402,11 @@ def exact_cost(params):
 
 ######################################################################
 # The last step is to define the optimizer, and execute the optimization
-# method:
+# method. We use the "Constrained Optimization by Linear Approximation" 
+# (`COBYLA <https://en.wikipedia.org/wiki/COBYLA>`__) optimization method, 
+# which a graidient-free optimizer. We observed that for this algorithm, COBYLA 
+# had a lower run-time than it gradient-based counterparts, so we utilize it 
+# in this tutorial:
 #
 
 # Creates the optimizer
@@ -419,7 +422,7 @@ print(out)
 ######################################################################
 # We can now check to see how well our optimization method performed. We
 # write a function that re-constructs the transformed density density
-# matrix of some initial state, with respect to some lists of
+# matrix of some initial state, with respect to lists of
 # :math:`\theta` and :math:`\phi` parameters:
 #
 
@@ -529,7 +532,7 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 
 ######################################################################
 # The closer to zero, the more similar the two states are. Thus, we have
-# numerical proof that we have found an approximation of the thermal state
+# numerical proof that we have found a close approximation of the thermal state
 # of :math:`H` with the VQT!
 #
 
