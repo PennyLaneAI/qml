@@ -204,10 +204,6 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
 init_weights = np.random.uniform(0, 2*np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
 
 ##############################################################################
-# We construct the cost function that will be used in the optimization
-opt_cost =
-
-##############################################################################
 # References
 # ----------
 #
