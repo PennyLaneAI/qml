@@ -101,11 +101,59 @@ def encoding(phi, gamma):
 def ansatz(weights):
     qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
+NUM_ANSATZ_PARAMETERS = 14
+
 @qml.template
 def measurement(weights):
     for i in range(3):
         qml.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
+        
+NUM_MEASUREMENT_PARAMETERS = 6
 
+##############################################################################
+# We now have everything at hand to model the quantum part of our experiment
+# as a QNode. We will return the output probabilities necessary to compute the
+# Classical Fisher Information Matrix.
+@qml.qnode(dev)
+def experiment(weights, phi, gamma):
+    ansatz(weights[ : NUM_ANSATZ_PARAMETERS])
+    encoding(phi, gamma)
+    measurement(weights[NUM_ANSATZ_PARAMETERS : ])
+
+    return qml.probs(wires=[0, 1, 2])
+
+
+##############################################################################
+# Now, let's turn to the cost function itself. The most important ingredient
+# is the Classical Fisher Information Matrix, which we compute using a separate
+# function.
+def CFIM(weights, phi, gamma):
+    p = experiment(weights, phi, gamma)
+    dp = []
+
+    for idx in range(3):
+        # We use the parameter-shift rule explicitly
+        # to compute the derivatives
+        shift = np.zeros_like(phi)
+        shift[idx] = np.pi / 2
+
+        plus = experiment(weights, phi + shift, gamma)
+        minus = experiment(weights, phi - shift, gamma)
+
+        dp.append(0.5 * (plus - minus))
+
+    matrix = [0] * 9
+    for i in range(3):
+        for j in range(3):
+            matrix[3 * i + j] = np.sum(dp[i] * dp[j] / p)
+
+    return np.array(matrix).reshape((3, 3))
+
+##############################################################################
+# As the cost function contains an inversion, we add a small regularization
+# to it to avoid inverting a singular matrix.
+def cost(weights, phi, gamma, W, epsilon=1e-10):
+    return np.trace(W @ np.linalg.inv(CFIM(weights, phi, gamma) + np.eye(3) * epsilon))
 
 ##############################################################################
 # References
