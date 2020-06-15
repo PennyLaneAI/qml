@@ -161,9 +161,10 @@ def CFIM(weights, phi, gamma):
 
 ##############################################################################
 # As the cost function contains an inversion, we add a small regularization
-# to it to avoid inverting a singular matrix.
-def cost(weights, phi, gamma, W, epsilon=1e-10):
-    return np.trace(W @ np.linalg.inv(CFIM(weights, phi, gamma) + np.eye(3) * epsilon))
+# to it to avoid inverting a singular matrix. As additional parameters, we add
+# the weighting matrix `W` and the Jacobian `J`.
+def cost(weights, phi, gamma, J, W, epsilon=1e-10):
+    return np.trace(W @ np.linalg.inv(J.T @ CFIM(weights, phi, gamma) @ J + np.eye(3) * epsilon))
 
 
 ##############################################################################
