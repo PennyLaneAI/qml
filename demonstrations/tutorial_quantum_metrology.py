@@ -168,6 +168,27 @@ def cost(weights, phi, gamma, J, W, epsilon=1e-10):
 
 
 ##############################################################################
+# To compute the Jacobian, we make use of sympy. Note that we only seek the 
+# Fourier amplitudes of which there are only two independent ones.
+import sympy
+import cmath
+
+# Prepare symbolic variables
+x, y, z = sympy.symbols("x y z", real=True)
+phi = sympy.Matrix([x, y, z])
+
+# Construct discrete Fourier transform matrix
+omega = sympy.exp((-1j * 2.0 * cmath.pi) / 3)
+Omega = sympy.Matrix(
+    [[1, 1, 1], [1, omega ** 1, omega ** 2]]
+) / sympy.sqrt(3)
+
+# Compute Jacobian
+J = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi)
+J = sympy.lambdify((x, y, z), sympy.re(J))
+
+
+##############################################################################
 # References
 # ----------
 #
