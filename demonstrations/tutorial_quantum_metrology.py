@@ -40,7 +40,9 @@ the *Cramér-Rao bound*: For any unbiased estimator
 where :math:`n` is the number of samples and :math:`I_{\boldsymbol{\phi}}` is the *Classical Fisher Information Matrix*
 with respect to the entries of :math:`\boldsymbol{\phi}`, defined as
 
-.. math:: [I_{\boldsymbol{\phi}}]_{jk} := \sum_l \frac{(\partial_j p_l)(\partial_k p_l)}{p_l}.
+.. math:: [I_{\boldsymbol{\phi}}]_{jk} := \sum_l \frac{(\partial_j p_l)(\partial_k p_l)}{p_l},
+
+where we used :math:`\partial_j` as a shorthand notation for :math:`\partial/\partial \phi_j`.
 
 The variational algorithm now proceeds by parametrizing both the probe state :math:`\rho_0 = \rho_0(\boldsymbol{\theta})`
 and the POVM :math:`\Pi_l = \Pi_l(\boldsymbol{\mu})`. The parameters :math:`\boldsymbol{\theta}` and :math:`\boldsymbol{\mu}`
@@ -105,7 +107,7 @@ def encoding(phi, gamma):
 # Arbitrary state preparation templates from pennylane.
 @qml.template
 def ansatz(weights):
-    qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
+    qml.templates.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
 
 NUM_ANSATZ_PARAMETERS = 14
@@ -114,7 +116,7 @@ NUM_ANSATZ_PARAMETERS = 14
 @qml.template
 def measurement(weights):
     for i in range(3):
-        qml.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
+        qml.templates.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
 
 
 NUM_MEASUREMENT_PARAMETERS = 6
@@ -124,7 +126,7 @@ NUM_MEASUREMENT_PARAMETERS = 6
 # as a QNode. We will return the output probabilities necessary to compute the
 # Classical Fisher Information Matrix.
 @qml.qnode(dev)
-def experiment(weights, phi, gamma):
+def experiment(weights, phi, gamma=0.0):
     ansatz(weights[:NUM_ANSATZ_PARAMETERS])
     encoding(phi, gamma)
     measurement(weights[NUM_ANSATZ_PARAMETERS:])
@@ -137,7 +139,7 @@ def experiment(weights, phi, gamma):
 # is the Classical Fisher Information Matrix, which we compute using a separate
 # function.
 def CFIM(weights, phi, gamma):
-    p = experiment(weights, phi, gamma)
+    p = experiment(weights, phi, gamma=gamma)
     dp = []
 
     for idx in range(3):
@@ -146,8 +148,8 @@ def CFIM(weights, phi, gamma):
         shift = np.zeros_like(phi)
         shift[idx] = np.pi / 2
 
-        plus = experiment(weights, phi + shift, gamma)
-        minus = experiment(weights, phi - shift, gamma)
+        plus = experiment(weights, phi + shift, gamma=gamma)
+        minus = experiment(weights, phi - shift, gamma=gamma)
 
         dp.append(0.5 * (plus - minus))
 
@@ -164,11 +166,11 @@ def CFIM(weights, phi, gamma):
 # to it to avoid inverting a singular matrix. As additional parameters, we add
 # the weighting matrix `W` and the Jacobian `J`.
 def cost(weights, phi, gamma, J, W, epsilon=1e-10):
-    return np.trace(W @ np.linalg.inv(J.T @ CFIM(weights, phi, gamma) @ J + np.eye(3) * epsilon))
+    return np.trace(W @ np.linalg.inv(J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon))
 
 
 ##############################################################################
-# To compute the Jacobian, we make use of sympy. Note that we only seek the 
+# To compute the Jacobian, we make use of sympy. Note that we only seek the
 # Fourier amplitudes of which there are only two independent ones.
 import sympy
 import cmath
@@ -179,12 +181,10 @@ phi = sympy.Matrix([x, y, z])
 
 # Construct discrete Fourier transform matrix
 omega = sympy.exp((-1j * 2.0 * cmath.pi) / 3)
-Omega = sympy.Matrix(
-    [[1, 1, 1], [1, omega ** 1, omega ** 2]]
-) / sympy.sqrt(3)
+Omega = sympy.Matrix([[1, 1, 1], [1, omega ** 1, omega ** 2]]) / sympy.sqrt(3)
 
 # Compute Jacobian
-jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi)
+jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
 ##############################################################################
@@ -201,7 +201,19 @@ J = jacobian(*phi)
 def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
     return cost(weights, phi, gamma, J, W)
 
-init_weights = np.random.uniform(0, 2*np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
+# Seed for reproducible results
+np.random.seed(395)
+weights = np.random.uniform(0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
+
+opt = qml.AdagradOptimizer(stepsize=0.01)
+costs = [opt_cost(weights)]
+
+for i in range(100):
+    weights = opt.step(opt_cost, weights)
+    costs.append(opt_cost(weights))
+
+    #if (i + 1) % 10 == 0:
+    print("Iteration {:>3}: Cost = {:6.4f}".format(i + 1, costs[-1]))
 
 ##############################################################################
 # References
