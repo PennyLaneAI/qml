@@ -133,6 +133,7 @@ def experiment(weights, phi, gamma=0.0):
 
     return qml.probs(wires=[0, 1, 2])
 
+
 # Make a dry run to be able to draw
 experiment(np.zeros(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS), np.zeros(3), gamma=0.2)
 print(experiment.draw(show_variable_names=True))
@@ -211,6 +212,7 @@ J = jacobian(*phi)
 def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
     return cost(weights, phi, gamma, J, W)
 
+
 # Seed for reproducible results
 np.random.seed(395)
 weights = np.random.uniform(0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
@@ -221,24 +223,16 @@ print("Initialization: Cost = {:6.4f}".format(opt_cost(weights)))
 for i in range(20):
     weights = opt.step(opt_cost, weights)
 
-    #if (i + 1) % 10 == 0:
-    print("Iteration {:>4}: Cost = {:6.4f}".format(i + 1, opt_cost(weights)))
+    if (i + 1) % 5 == 0:
+        print("Iteration {:>4}: Cost = {:6.4f}".format(i + 1, opt_cost(weights)))
 
 ##############################################################################
 # Comparison
 # ----------
 #
-# Now we want to see how our protocol compares to known alternatives, namely
-# using a GHZ state and regular Ramsay interferometry with :math:`|+\rangle`
-# states. These are in the scope of our experimental model and can be created
-# using specific weights.
-# GHZ_weights = np.zeros_like(weights)
-# GHZ_weights[13] = np.pi / 2
-# GHZ_weights[15] = np.pi / 2
-# GHZ_weights[17] = np.pi / 2
-# GHZ_weights[19] = np.pi / 2
-
-# print("Cost for GHZ sensing = {:6.4f}".format(opt_cost(GHZ_weights)))
+# Now we want to see how our protocol compares to standard Ramsay interferometry
+# with :math:`|+\rangle` states as probes and :math:`|+\rangle / |-\rangle` measurements.
+# We can recreat the standard schemes with specific weights for our setup.
 
 Ramsay_weights = np.zeros_like(weights)
 Ramsay_weights[1] = np.pi / 2
@@ -248,32 +242,34 @@ Ramsay_weights[15] = np.pi / 2
 Ramsay_weights[17] = np.pi / 2
 Ramsay_weights[19] = np.pi / 2
 
-print("Cost for regular Ramsay sensing = {:6.4f}".format(opt_cost(Ramsay_weights)))
+print("Cost for standard Ramsay sensing = {:6.4f}".format(opt_cost(Ramsay_weights)))
 
 ##############################################################################
 # We will now make a plot to compare the noise scaling of the above probes.
-gammas = np.linspace(0, .75, 21)
+gammas = np.linspace(0, 0.75, 21)
 comparison_costs = {
-    "optimized" : [],
-    # "GHZ" : [],
-    "standard" : [],
+    "optimized": [],
+    "standard": [],
 }
 
 for gamma in gammas:
     comparison_costs["optimized"].append(cost(weights, phi, gamma, J, np.eye(2)))
-    # comparison_costs["GHZ"].append(cost(GHZ_weights, phi, gamma, J, np.eye(2)))
     comparison_costs["standard"].append(cost(Ramsay_weights, phi, gamma, J, np.eye(2)))
 
 import matplotlib.pyplot as plt
 
 plt.semilogy(gammas, comparison_costs["optimized"], label="Optimized")
-#plt.semilogy(gammas, comparison_costs["GHZ"], label="GHZ")
 plt.semilogy(gammas, comparison_costs["standard"], label="Standard")
 plt.xlabel(r"$\gamma$")
 plt.ylabel("Weighted Cramér-Rao bound")
 plt.legend()
 plt.grid()
 plt.show()
+
+##############################################################################
+# We see that after only 20 gradient steps, we already found a sensing protocol
+# that has a better noise resilience than standard Ramsay spectroscopy!
+
 
 ##############################################################################
 # References
