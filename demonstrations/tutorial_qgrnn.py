@@ -603,7 +603,7 @@ print(new_ham_matrix)
 # Creates the colour plot function
 
 
-def create_density_plot(data):
+def create_colour_plot(data):
 
     array = np.array(data)
     plt.matshow(array)
@@ -618,7 +618,7 @@ target_params.insert(4, 0)
 
 # Prints the colour plot of the parameters
 
-create_density_plot([target_params, qgrnn_params])
+create_colour_plot([target_params, qgrnn_params])
 
 
 ######################################################################
