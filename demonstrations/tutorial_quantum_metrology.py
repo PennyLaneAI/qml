@@ -68,8 +68,13 @@ the computational basis is parametrized by local unitaries.
 To add another interesting aspect, we will seek an optimal protocols for the estimation of the Fourier amplitudes
 of the phases:
 
-.. math:: f_j(\boldsymbol{\pphi}) = |\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}|^2
+.. math:: f_j(\boldsymbol{\boldsymbol{\phi}}) = |\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}|^2
 
+We can compute the Fisher information matrix for the entries of :math:`\boldsymbol{f}` using the following identity:
+
+.. math:: I_{\boldsymbol{f}} = J^T I_{\boldsymbol{\phi}} J,
+
+where :math:`J_{kl} = \partial f_k / \partial \phi_l` is the Jacobian of :math:`\boldsymbol{f}`.
 
 Code 
 ----
@@ -79,7 +84,7 @@ import pennylane as qml
 from pennylane import numpy as np
 
 ##############################################################################
-# We will first specify the device to carry out the simulations. As we want to 
+# We will first specify the device to carry out the simulations. As we want to
 # model a noisy system, it needs to be capable of mixed-state simulations.
 # We will choose the `cirq.mixedsimulator` device for this tutorial.
 dev = qml.device("cirq.mixedsimulator", wires=3)
@@ -94,20 +99,24 @@ def encoding(phi, gamma):
         qml.RZ(phi[i], wires=[i])
         cirq_ops.PhaseDamp(gamma, wires=[i])
 
+
 ##############################################################################
-# We now choose an ansatz for our circuit and the POVM. We make use of the 
+# We now choose an ansatz for our circuit and the POVM. We make use of the
 # Arbitrary state preparation templates from pennylane.
 @qml.template
 def ansatz(weights):
     qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
+
 NUM_ANSATZ_PARAMETERS = 14
+
 
 @qml.template
 def measurement(weights):
     for i in range(3):
         qml.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
-        
+
+
 NUM_MEASUREMENT_PARAMETERS = 6
 
 ##############################################################################
@@ -116,9 +125,9 @@ NUM_MEASUREMENT_PARAMETERS = 6
 # Classical Fisher Information Matrix.
 @qml.qnode(dev)
 def experiment(weights, phi, gamma):
-    ansatz(weights[ : NUM_ANSATZ_PARAMETERS])
+    ansatz(weights[:NUM_ANSATZ_PARAMETERS])
     encoding(phi, gamma)
-    measurement(weights[NUM_ANSATZ_PARAMETERS : ])
+    measurement(weights[NUM_ANSATZ_PARAMETERS:])
 
     return qml.probs(wires=[0, 1, 2])
 
@@ -149,16 +158,18 @@ def CFIM(weights, phi, gamma):
 
     return np.array(matrix).reshape((3, 3))
 
+
 ##############################################################################
 # As the cost function contains an inversion, we add a small regularization
 # to it to avoid inverting a singular matrix.
 def cost(weights, phi, gamma, W, epsilon=1e-10):
     return np.trace(W @ np.linalg.inv(CFIM(weights, phi, gamma) + np.eye(3) * epsilon))
 
+
 ##############################################################################
 # References
 # ----------
 #
-# 1. Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert. 
+# 1. Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert.
 #    "A variational toolbox for quantum multi-parameter estimation." `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
