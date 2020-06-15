@@ -185,7 +185,7 @@ Omega = sympy.Matrix(
 
 # Compute Jacobian
 jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi)
-jacobian = sympy.lambdify((x, y, z), sympy.re(J))
+jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
 ##############################################################################
 # We can now turn to the optimization of the protocol. We will fix the dehpasing
