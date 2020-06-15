@@ -562,7 +562,7 @@ def cost_function(params):
 
 ######################################################################
 # The last step is to define and execute the optimizer. We use Adam,
-# with a step-size of :math:`0.8`:
+# with a step-size of :math:`0.3`:
 #
 
 # Defines the optimization method
