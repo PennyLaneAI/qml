@@ -168,7 +168,7 @@ print(ham_matrix)
 
 # Defines all necessary variables
 
-beta = 1  # beta = 1/T
+beta = 2  # beta = 1/T
 N = 4  # Number of qubits
 
 
