@@ -185,7 +185,7 @@ def sigmoid(x):
 # :math:`[0, \ 1]`, meaning that we don’t need to restrict the domain of
 # :math:`\theta_i` to some subset of the real numbers. With the probability
 # function defined, we can write a method that gives us the diagonal
-# elements of each one-qubit density matrix, for some collection
+# elements of each one-qubit density matrix, for some parameters
 # :math:`\theta`:
 #
 
