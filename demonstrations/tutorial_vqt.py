@@ -306,7 +306,7 @@ def calculate_entropy(distribution):
 # You may have noticed previously that the “structure” of the
 # parameters list passed into the ansatz is quite complicated. We write a
 # general function that takes a one-dimensional list, and converts it into
-# the nestled list structure that can be inputed into the ansatz:
+# the nested list structure that can be inputed into the ansatz:
 #
 
 
