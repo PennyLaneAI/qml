@@ -41,6 +41,10 @@ Key Concepts
     :doc:`Quantum Gradient </glossary/quantum_gradient>`
         The derivative of a quantum computation with respect to the parameters of a circuit.
 
+    :doc:`Quantum Neural Network </glossary/quantum_neural_network>`
+        A term with many different meanings, usually refering to a generalization of artificial neural 
+        networks to quantum information processing. Also increasingly used to refer to :doc:`variational circuits </glossary/variational_circuit>` in the context of quantum machine learning.
+        
     Quantum Node
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
