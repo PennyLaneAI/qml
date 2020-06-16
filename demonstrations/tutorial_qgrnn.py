@@ -569,8 +569,8 @@ def cost_function(params):
 
 iterations = 0
 
-optimizer = qml.AdamOptimizer(stepsize=0.2)
-steps = 150
+optimizer = qml.AdamOptimizer(stepsize=0.3)
+steps = 100
 qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
 
 # Executes the optimization method
