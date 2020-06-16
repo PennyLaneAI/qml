@@ -72,7 +72,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # a good approximation to the ground state of :math:`\hat{H}`. In the VQT,
 # the goal is to arrive at a parametrized probability distribution, and a
 # parametrized ansatz, that generate a good approximation to the thermal
-# state, which involves more than calculating the energy
+# state. This generally involves more than calculating the energy
 # expectation value. Luckily, we know that the thermal state of
 # :math:`\hat{H}` minimizes the following free-energy cost function:
 #
@@ -90,10 +90,8 @@ from pennylane.templates.layers import BasicEntanglerLayers
 #     :width: 90%
 #     :align: center
 #
-# All together, the outlined processes give us a general protocal to
-# generate thermal states. Throughout the Notebook, more nuances in
-# relation to the particular classical and quantum components are
-# mentioned as they are implemented.
+# All together, the outlined processes give us a general protocol to
+# generate thermal states.
 #
 
 
@@ -236,12 +234,12 @@ def single_rotation(phi_params, qubits):
 
 
 ######################################################################
-# Notice the use of the ``AngleEmbeddings`` function, which allows us to
+# We make use of the ``AngleEmbeddings`` function, which allows us to
 # easily pass parameters into rotational layers. To construct the general
 # ansatz, we combine the method we have just defined with a collection of
 # parametrized coupling gates, placed between qubits that share an edge in
 # the interaction graph. In addition, we define the depth of the ansatz,
-# and the device on which the simulations are run;
+# and the device on which the simulations are run:
 #
 
 # Defines the depth of the variational circuit and the device on which
@@ -292,8 +290,8 @@ print(qnode.draw())
 # which is determined by the collection of :math:`p_i(\theta_i)`\ s. Since
 # the entropy of a collection of multiple uncorrelated susbsystems is the
 # same as the sum of the individual values of entropy for each subsystem,
-# we can sum the entropy of each one-qubit system in the factorized space
-# to get the total:
+# we can sum the entropy values of each one-qubit system in the factorized 
+# space to get the total:
 #
 
 # Calculate the Von Neumann entropy of the initial density matrices
@@ -314,21 +312,21 @@ def calculate_entropy(distribution):
 # function. In this tutorial, we deviate slightly from how VQT would be
 # performed in practice. Instead of sampling from the probability
 # distribution describing the initial mixed state, we use the ansatz to
-# calculate
+# calculate 
 # :math:`\langle x_i | U^{\dagger}(\phi) \hat{H} U(\phi) |x_i\rangle` for
 # each basis state :math:`|x_i\rangle`. We then multiply each of these
 # expectation values by their corresponding :math:`(\rho_\theta)_{ii}`,
 # which is exactly the probability of sampling :math:`|x_i\rangle` from
 # the distribution. Summing each of these terms together gives us the
 # expected value of the Hamiltonian with respect to the transformed
-# density matrices. 
+# density matrix. 
 #
 # In the case of this small, simple model, exact
 # calculations such as this reduce the number of circuit executions, and thus total
 # execution time.
 #
-# You may have noticed previously that the “structure” of the list of
-# parameters passed into the ansatz is very complicated. We write a
+# You may have noticed previously that the “structure” of the
+# parameters list passed into the ansatz is very complicated. We write a
 # general function that takes a one-dimensional list, and converts it into
 # the nestled list structure that can be inputed into the ansatz:
 #
@@ -400,8 +398,8 @@ def exact_cost(params):
 # The last step is to define the optimizer, and execute the optimization
 # method. We use the "Constrained Optimization by Linear Approximation" 
 # (`COBYLA <https://en.wikipedia.org/wiki/COBYLA>`__) optimization method, 
-# which a graidient-free optimizer. We observed that for this algorithm, COBYLA 
-# had a lower run-time than it gradient-based counterparts, so we utilize it 
+# which a graidient-free optimizer. We observe that for this algorithm, COBYLA 
+# has a lower run-time than it gradient-based counterparts, so we utilize it 
 # in this tutorial:
 #
 
@@ -416,8 +414,8 @@ print(out)
 
 
 ######################################################################
-# We can now check to see how well our optimization method performed. We
-# write a function that re-constructs the transformed density density
+# We can now check to see how well our optimization method performed by
+# writing a function that re-constructs the transformed density
 # matrix of some initial state, with respect to lists of
 # :math:`\theta` and :math:`\phi` parameters:
 #
@@ -460,7 +458,7 @@ print(prep_density_matrix)
 
 
 ######################################################################
-# If you prefer a visual rperesentation, we can plot a heatmap of the
+# If you prefer a visual representation, we can plot a heatmap of the
 # absolute value of the density matrix as well:
 #
 
@@ -515,7 +513,6 @@ seaborn.heatmap(abs(target_density_matrix))
 #
 
 # Finds the trace distance between two density matrices
-
 
 def trace_distance(one, two):
 
