@@ -348,7 +348,7 @@ def exact_cost(params):
     # Creates the probability distribution
     distribution = prob_dist(dist_params)
 
-    # Generates a list of all computational basis states, of our qubit system
+    # Generates a list of all computational basis states of our qubit system
     combos = itertools.product([0, 1], repeat=N)
     s = [list(i) for i in combos]
 
