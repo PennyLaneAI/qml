@@ -427,7 +427,7 @@ def prepare_state(params, device):
 
 
 ######################################################################
-# We then re-construct the state prepared by the VQT:
+# We then reconstruct the state prepared by the VQT:
 #
 
 prep_density_matrix = prepare_state(out_params, dev)
