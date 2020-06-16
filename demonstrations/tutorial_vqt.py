@@ -60,8 +60,13 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # matrix is analogous to the resulting pure state after passage through an
 # ansatz in VQE.
 #
+# .. image:: ../demonstrations/vqt/ev.png
+#     :width: 90%
+#     :align: center
+#
 # Arguably, the most important part of a variational circuit is its cost
-# function, which we atempt to minimize. In VQE, we generally try to
+# function, which we atempt to minimize with a classical optimizer. 
+# In VQE, we generally try to
 # minimize :math:`\langle \psi(\theta) | \hat{H} | \psi(\theta) \rangle`
 # which, upon minimization, gives us a parametrized circuit that prepares
 # a good approximation to the ground state of :math:`\hat{H}`. In the VQT,
@@ -80,6 +85,10 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # :math:`\hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} \ = \ \rho_{\text{thermal}}`,
 # so similarly to VQE, we minimize it with a classical optimizer to obtain
 # the target parameters, and thus the target state.
+#
+# .. image:: ../demonstrations/vqt/vqt.png
+#     :width: 90%
+#     :align: center
 #
 # All together, the outlined processes give us a general protocal to
 # generate thermal states. Throughout the Notebook, more nuances in
