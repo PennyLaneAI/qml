@@ -17,7 +17,7 @@ import networkx as nx
 ######################################################################
 # In this Notebook, we investigate the idea of a quantum graph
 # recurrent neural network (QGRNN), which is the quantum analogue of a
-# classical graph RNN, and a subclass of the more general quantum graph
+# classical graph RNN and a subclass of the more general quantum graph
 # neural network ansatz (`QGNN <https://arxiv.org/abs/1909.12264>`__).
 #
 
@@ -30,12 +30,12 @@ import networkx as nx
 
 ######################################################################
 # In recent years, the idea of a graph neural network has been
-# receving a lot of attention from the machine learning research community,
+# receving a lot of attention from the machine learning research community
 # for its ability to learn from data that is inherently
 # graph-theoretic. More specifically, graph neural networks seek
 # to learn a **representation** (a mapping of the data into a
-# lower-dimensional vector space) of a given graph, with features assigned
-# to nodes and edges, such that the each of the vectors in the learned
+# lower-dimensional vector space) of a given graph with features assigned
+# to nodes and edges such that the each of the vectors in the learned
 # representation preserves not only the features, but also the overall 
 # topology of the graph.
 #
@@ -99,7 +99,7 @@ import networkx as nx
 # we take a bunch of pieces of quantum data, :math:`|\psi(t)\rangle`, and
 # look at how “similar” they are to
 # :math:`U_{H}(\Delta, \boldsymbol\mu) |\psi_0\rangle` (each with
-# corresponding :math:`P \ = \ t/ \Delta`), for guessed parameters
+# corresponding :math:`P \ = \ t/ \Delta`) for guessed parameters
 # :math:`\boldsymbol\mu`, then optimizing this “similarity” leads to
 # :math:`\boldsymbol\mu \ = \ \boldsymbol\alpha`, and we have thus learned
 # the target parameters.
@@ -110,8 +110,8 @@ import networkx as nx
 #
 
 ######################################################################
-# You may now be wondering: “how is this problem of Hamiltonian learning a
-# **graph-theoretic** problem, fit for a **graph** neural network?”. Well,
+# You may now be wondering how this problem of Hamiltonian learning is a
+# **graph-theoretic** problem, fit for a **graph** neural network. Well,
 # firstly, the :math:`ZZ` terms of the
 # Hamiltonian encode exactly where the edges of our graph
 # interactions are. In addition to this, if we consider the
@@ -148,7 +148,6 @@ import networkx as nx
 # the simulation.
 #
 
-# Initializes fixed values
 
 qubit_number = 4
 qubits = range(qubit_number)
@@ -157,7 +156,7 @@ qubits = range(qubit_number)
 ######################################################################
 # In order to use the QGRNN, we need access to quantum data. In the real
 # world, this wouldn’t be a problem, but in this simulation, we have to
-# generate the quantum data ourself. To do this, we must have *a priori*
+# generate the quantum data ourselves. To do this, we must have *a priori*
 # knowledge of the target Hamiltonian and the interaction graph. We choose
 # the Hamiltonian to be a transerve field Ising model of the form:
 #
@@ -167,13 +166,8 @@ qubits = range(qubit_number)
 # the target interaction graph of the Hamiltonian to be the cycle graph:
 #
 
-# Creates the graph structure of the quantum system
 
-ising_graph = nx.Graph()
-ising_graph.add_nodes_from(range(0, qubit_number))
-ising_graph.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0)])
-
-# Plots the graph
+ising_graph = nx.complete_graph()
 
 nx.draw(ising_graph)
 print("Edges: " + str(ising_graph.edges))
@@ -223,8 +217,7 @@ def create_hamiltonian_matrix(n, graph, params):
 
     # Creates the "bias" components of the matrix
     for i in range(0, n):
-        m1 = 1
-        m2 = 1
+        m1 = m2 = 1
         for j in range(0, n):
             if j == i:
                 m1 = np.kron(m1, qml.PauliZ.matrix)
@@ -249,7 +242,7 @@ print(ham_matrix)
 
 ######################################################################
 # To generate the quantum data (a collection of time-evolved, low-energy quantum
-# states), the strategy we use involves preparing a low-energy state, and then evolving
+# states), the strategy we employ involves preparing a low-energy state, and then evolving
 # it forward in time with the time-evolution unitary, under the target
 # Hamiltonian.
 #
@@ -266,10 +259,10 @@ print(ham_matrix)
 # the interaction terms present in the Hamiltonian) that there are
 # correlations between qubits in the ground state. Thus, we pick an ansatz
 # that cannot learn correlations, and instead just rotates the individual
-# qubits. Our ansatz circuit is defined as:
+# qubits. We use the single-qubit rotations in the ``AngleEmbedding``
+# template for each layer of the ansatz, giving us:
 #
 
-# Defines the ansatz circuit
 
 def ansatz_circuit(params, vqe_depth, qubits):
 
@@ -286,13 +279,11 @@ def ansatz_circuit(params, vqe_depth, qubits):
 
 
 ######################################################################
-# Where we have used single-qubit rotations in the ``AngleEmbedding``
-# template for each layer. We then create the VQE circuit, 
+# We then create the VQE circuit, 
 # which returns the expected value of the target Hamiltonian with
 # respect to the prepared state.
 #
 
-# Defines the circuit that is used for VQE
 
 def vqe_circuit(params):
 
@@ -306,8 +297,8 @@ def vqe_circuit(params):
 ######################################################################
 # Notice how we defined two separate methods, ``ansatz_circuit`` and
 # ``vqe_circuit``. This is because we eventually have to
-# use ``ansatz_circuit`` as a sub-component of the QGRNN circuit, to
-# prepare the quantum data. Now, we are able to optimize the VQE circuit
+# use ``ansatz_circuit`` as a sub-component of the QGRNN circuit (to
+# prepare the quantum data). Now, we are able to optimize the VQE circuit
 # to arrive at the low-energy state:
 #
 
@@ -341,7 +332,6 @@ print("Parameters: {}".format(vqe_params))
 # matrix:
 #
 
-# Finds the ground state energy of a Hamiltonian
 
 def ground_state_energy(matrix):
 
@@ -359,11 +349,10 @@ print("Ground State Energy: " + str(ground_state))
 # This shows us that we have in fact found a low-energy, non-ground state, 
 # as the energy we arrived at is slightly greater than that of the true ground
 # state. The last step in preparing the quantum-data is to time-evolve
-# these low-energy states to arbitrary times, which we can do using the
-# time-evolution operator (implemented as a custom unitary in PennyLane):
+# these low-energy states to arbitrary times, with the 
+# time-evolution operator (implemented as a custom unitary in PennyLane).
 #
 
-# Creates an exact time-evolution unitary
 
 def state_evolve(hamiltonian, qubits, time):
 
@@ -372,8 +361,8 @@ def state_evolve(hamiltonian, qubits, time):
 
 
 ######################################################################
-# We won’t generate the quantum data quite yet, but we have all the pieces
-# we need for its preparation.
+# We don't actually generate the quantum data quite yet, but we now have 
+# all the pieces we need for its preparation.
 #
 
 
@@ -392,8 +381,6 @@ def state_evolve(hamiltonian, qubits, time):
 # collections of :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
 # Hamiltonian. This gives us:
 #
-
-# Method that prepares a time-evolution layer
 
 
 def qgrnn_layer(param1, param2, qubits, graph, trotter):
@@ -424,7 +411,6 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 # test <https://en.wikipedia.org/wiki/Swap_test>`__ between the registers:
 #
 
-# Implements the SWAP test between two qubit registers
 
 def swap_test(control, register1, register2):
 
@@ -435,7 +421,7 @@ def swap_test(control, register1, register2):
 
 
 ######################################################################
-# Before proceeding with defining the full QGRNN and the cost function, we
+# Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these fixed values is a "guessed"
 # interaction graph. Recall that part of the idea behind the QGRNN is that
 # we don’t know the interaction graph, and it has to be learned by setting
@@ -463,10 +449,9 @@ nx.draw(new_ising_graph)
 
 
 ######################################################################
-# Finally, we implement the QGRNN circuit:
+# Finally, we implement the QGRNN circuit for some given time value:
 #
 
-# Implements the quantum graph neural network for a given time step
 
 def qgrnn(params1, params2, time=None):
 
@@ -514,7 +499,7 @@ def qgrnn(params1, params2, time=None):
 # variables, the device, and the QNode:
 #
 
-N = 15  # The number of different times that are used
+N = 15  # The number of pieces of quantum data that are used
 max_time = 0.1  # The maximum value of time that can be used for quantum data
 
 # Defines the new device
@@ -530,7 +515,6 @@ qnode = qml.QNode(qgrnn, qgrnn_dev)
 # We then define the infidelity cost function:
 #
 
-# Defines the cost function
 
 def cost_function(params):
 
@@ -565,7 +549,6 @@ def cost_function(params):
 # with a step-size of :math:`0.3`:
 #
 
-# Defines the optimization method
 
 iterations = 0
 
@@ -597,8 +580,8 @@ print(new_ham_matrix)
 # and learned parameters, to assess their similarity.
 #
 
-# Creates the colour plot function
 
+# Creates the colour plot function
 
 def create_colour_plot(data):
 
