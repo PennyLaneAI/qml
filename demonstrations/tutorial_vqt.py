@@ -221,7 +221,7 @@ def single_rotation(phi_params, qubits):
 # We make use of the ``AngleEmbeddings`` function, which allows us to
 # easily pass parameters into rotational layers. To construct the general
 # ansatz, we combine the method we have just defined with a collection of
-# parametrized coupling gates, placed between qubits that share an edge in
+# parametrized coupling gates placed between qubits that share an edge in
 # the interaction graph. In addition, we define the depth of the ansatz,
 # and the device on which the simulations are run:
 #
