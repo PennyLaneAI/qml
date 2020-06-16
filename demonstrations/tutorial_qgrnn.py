@@ -160,7 +160,7 @@ qubits = range(qubit_number)
 #
 # .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i}
 #
-# where :math:`E` is the set of edges in the interaction graph. We define
+# where :math:`E` is the set of edges in the interaction graph. We then define
 # the target interaction graph of the Hamiltonian to be the cycle graph:
 #
 
@@ -192,7 +192,6 @@ def create_params(graph):
     bias = [np.random.randint(-100, 100) / 100 for i in range(0, qubit_number)]
 
     return [interaction, bias]
-
 
 # Creates and prints the parameters for our simulation
 matrix_params = create_params(ising_graph)
@@ -234,7 +233,6 @@ def create_hamiltonian_matrix(n, graph, params):
 
     return matrix
 
-
 # Defines and prints the matrix for the target interaction graph and parameters
 ham_matrix = create_hamiltonian_matrix(qubit_number, ising_graph, matrix_params)
 print(ham_matrix)
@@ -248,7 +246,7 @@ print(ham_matrix)
 
 ######################################################################
 # To generate the quantum data (a collection of time-evolved, low-energy quantum
-# states), the strategy we use is preparing a low-energy state, and then evolving
+# states), the strategy we use involves preparing a low-energy state, and then evolving
 # it forward in time with the time-evolution unitary, under the target
 # Hamiltonian.
 #
@@ -355,8 +353,8 @@ print("Ground State Energy: " + str(ground_state))
 
 
 ######################################################################
-# This shows us that we have found a low-energy, non-ground state, as the
-# energy we arrived at is slightly greater than that of the true ground
+# This shows us that we have in fact found a low-energy, non-ground state, 
+# as the energy we arrived at is slightly greater than that of the true ground
 # state. The last step in preparing the quantum-data is to time-evolve
 # these low-energy states to arbitrary times, which we can do using the
 # time-evolution operator (implemented as a custom unitary in PennyLane):
@@ -412,11 +410,11 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 
 ######################################################################
 # As was mentioned in the first section, the QGRNN has two qubit
-# registers. In one register, some piece of quantum data,
-# :math:`|\psi(t)\rangle`, is prepared, and in the other, we have
+# registers. In one register, some piece of quantum data
+# :math:`|\psi(t)\rangle` is prepared and in the other we have
 # :math:`U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle`. We need a
 # way to measure the similarity between the states contained in the
-# registers. One way that we can do this is using the fidelity, which is
+# registers. One way that we can do this is by using the fidelity, which is
 # simply the modulus squared of the inner product between the states,
 # :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
 # To calculate this value, we utilize a `SWAP
@@ -438,9 +436,9 @@ def swap_test(control, register1, register2):
 # define a few more fixed values. Among these fixed values is a "guessed"
 # interaction graph. Recall that part of the idea behind the QGRNN is that
 # we don’t know the interaction graph, and it has to be learned by setting
-# certain :math:`\boldsymbol\mu` parameters to :math:`0`, for corresponding
-# edges that don’t exist in the target interaction graph. We define the
-# initial “guessed” graph to simply be the complete graph:
+# certain :math:`\boldsymbol\mu` parameters to :math:`0` (the ones that 
+# correspond to edges that don’t exist in the target interaction graph). 
+# We define the initial “guessed” graph to simply be the complete graph:
 #
 
 # Defines some fixed values
@@ -490,9 +488,9 @@ def qgrnn(params1, params2, time=None):
 
 ######################################################################
 # Notice how the value returned from the circuit is
-# :math:`\langle Z \rangle`, with respect to the ancilla qubit, as after
-# performing a SWAP test between two states :math:`|\psi\rangle` and
-# :math:`|\phi\rangle`, it is tue that
+# :math:`\langle Z \rangle`, with respect to the ancilla qubit. This is
+# because after performing a SWAP test between two states 
+# :math:`|\psi\rangle` and :math:`|\phi\rangle`, it is tue that
 # :math:`\langle Z \rangle \ = \ |\langle \psi | \phi \rangle|^2`.
 #
 # We have the full QGRNN circuit, but we still need to define a cost
@@ -502,7 +500,7 @@ def qgrnn(params1, params2, time=None):
 # to minimize the quantity
 # :math:`1 \ - \ | \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
 # Since we are interested in calculating this value for many different
-# pieces of quantum data, and final cost function is the **average
+# pieces of quantum data, the final cost function is the **average
 # infidelity** between registers:
 #
 # .. math:: \mathcal{L}(\Delta, \ \boldsymbol\mu) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\Delta, \ \boldsymbol\mu) \ |\psi_0\rangle |^2
@@ -530,7 +528,6 @@ qnode = qml.QNode(qgrnn, qgrnn_dev)
 #
 
 # Defines the cost function
-
 
 def cost_function(params):
 
@@ -562,7 +559,7 @@ def cost_function(params):
 
 ######################################################################
 # The last step is to define and execute the optimizer. We use Adam,
-# with a step-size of :math:`0.2`:
+# with a step-size of :math:`0.3`:
 #
 
 # Defines the optimization method
