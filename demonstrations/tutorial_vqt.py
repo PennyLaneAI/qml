@@ -277,8 +277,8 @@ print(qnode.draw())
 def calculate_entropy(distribution):
 
     total_entropy = 0
-    for i in distribution:
-        total_entropy += -1 * i[0] * np.log(i[0]) + -1 * i[1] * np.log(i[1])
+    for d in distribution:
+        total_entropy += -1 * d[0] * np.log(d[0]) + -1 * d[1] * np.log(d[1])
 
     # Returns an array of the entropy values of the different initial density matrices
 
