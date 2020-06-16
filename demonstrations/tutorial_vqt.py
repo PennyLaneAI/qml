@@ -322,8 +322,8 @@ def convert_list(params):
     # Partitions the parameters into multiple lists
     split = np.split(ansatz_params_2, depth)
     rotation = []
-    for i in split:
-        rotation.append(np.split(i, 3))
+    for s in split:
+        rotation.append(np.split(s, 3))
 
     ansatz_params = [rotation, coupling]
 
