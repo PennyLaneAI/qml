@@ -152,7 +152,7 @@ print(ham_matrix)
 
 
 beta = 2  # beta = 1/T
-N = 4  # Number of qubits
+nr_qubits = 4
 
 
 ######################################################################
@@ -192,21 +192,16 @@ def sigmoid(x):
 
 def prob_dist(params):
 
-    dist = []
-    for i in params:
-        dist.append([sigmoid(i), 1 - sigmoid(i)])
-
-    return dist
+    return [[sigmoid(p), 1 - sigmoid(p)] for p in params]
 
 
 ######################################################################
 # With this done, we can move on to defining the ansatz circuit,
-# :math:`U(\phi)`. The ansatz must begin by preparing some arbitrary
-# computational basis state sampled from the initial density matrix. This
-# is easily implemented in PennyLane with the ``BasisStatePreparation``
-# template. The next step is to build the rotational and coupling layers
-# used in the ansatz. The rotation layer is simply :math:`RX`,
-# :math:`RY`, and :math:`RZ` gates applied to each qubit.
+# :math:`U(\phi)`, composed of rotational and coupling layers. The 
+# rotation layer is simply :math:`RX`, :math:`RY`, and :math:`RZ` 
+# gates applied to each qubit. We make use of the ``AngleEmbeddings`` 
+# function, which allows us to easily pass parameters into rotational 
+# layers. 
 #
 
 
@@ -218,32 +213,31 @@ def single_rotation(phi_params, qubits):
 
 
 ######################################################################
-# We make use of the ``AngleEmbeddings`` function, which allows us to
-# easily pass parameters into rotational layers. To construct the general
-# ansatz, we combine the method we have just defined with a collection of
-# parametrized coupling gates placed between qubits that share an edge in
-# the interaction graph. In addition, we define the depth of the ansatz,
-# and the device on which the simulations are run:
+# To construct the general ansatz, we combine the method we have just 
+# defined with a collection of parametrized coupling gates placed between 
+# qubits that share an edge in the interaction graph. In addition, we 
+# define the depth of the ansatz, and the device on which the simulations 
+# are run:
 #
 
 
 depth = 4
-dev = qml.device("default.qubit", wires=N)
+dev = qml.device("default.qubit", wires=nr_qubits)
 
 def quantum_circuit(rotation_params, coupling_params, sample=None):
 
     # Prepares the initial basis state corresponding to the sample
-    BasisStatePreparation(sample, wires=range(N))
+    BasisStatePreparation(sample, wires=range(nr_qubits))
 
     # Prepares the variational ansatz for the circuit
     for i in range(0, depth):
-        single_rotation(rotation_params[i], range(N))
+        single_rotation(rotation_params[i], range(nr_qubits))
         qml.broadcast(
-            unitary=qml.CRX, pattern="ring", wires=range(N), parameters=coupling_params[i]
+            unitary=qml.CRX, pattern="ring", wires=range(nr_qubits), parameters=coupling_params[i]
         )
 
     # Calculates the expectation value of the Hamiltonian with respect to the prepared states
-    return qml.expval(qml.Hermitian(ham_matrix, wires=range(N)))
+    return qml.expval(qml.Hermitian(ham_matrix, wires=range(nr_qubits)))
 
 # Constructs the QNode
 qnode = qml.QNode(quantum_circuit, dev)
@@ -313,9 +307,9 @@ def calculate_entropy(distribution):
 def convert_list(params):
 
     # Separates the list of parameters
-    dist_params = params[0:N]
-    ansatz_params_1 = params[N : (depth + 1) * N]
-    ansatz_params_2 = params[(depth + 1) * N :]
+    dist_params = params[0:nr_qubits]
+    ansatz_params_1 = params[nr_qubits:((depth + 1) * nr_qubits)]
+    ansatz_params_2 = params[((depth + 1) * nr_qubits):]
 
     coupling = np.split(ansatz_params_1, depth)
 
@@ -328,6 +322,29 @@ def convert_list(params):
     ansatz_params = [rotation, coupling]
 
     return [dist_params, ansatz_params]
+
+
+######################################################################
+# We also write a function that prepares the parameters with the 
+# `convert_list` method, the probability distribution, and the computational
+# basis bitstrings:
+#
+
+def prepare_params(params):
+
+    # Transforms the parameter list
+    parameters = convert_list(params)
+    dist_params = parameters[0]
+    ansatz_params = parameters[1]
+
+    # Creates the probability distribution
+    distribution = prob_dist(dist_params)
+
+    # Generates a list of all computational basis states of our qubit system
+    combos = itertools.product([0, 1], repeat=nr_qubits)
+    s = [list(c) for c in combos]
+
+    return []
 
 
 ######################################################################
@@ -349,27 +366,28 @@ def exact_cost(params):
     distribution = prob_dist(dist_params)
 
     # Generates a list of all computational basis states of our qubit system
-    combos = itertools.product([0, 1], repeat=N)
+    combos = itertools.product([0, 1], repeat=nr_qubits)
     s = [list(c) for c in combos]
 
-    # Passes each basis state through the variational circuit and multiplies the calculated energy EV with the associated probability from the distribution
-    final_cost = 0
+    # Passes each basis state through the variational circuit and multiplies 
+    # the calculated energy EV with the associated probability from the distribution
+    cost = 0
     for i in s:
         result = qnode(ansatz_params[0], ansatz_params[1], sample=i)
         for j in range(0, len(i)):
             result = result * distribution[j][i[j]]
-        final_cost += result
+        cost += result
 
     # Calculates the entropy and the final cost function
     entropy = calculate_entropy(distribution)
-    final_final_cost = beta * final_cost - entropy
+    final_cost = beta * cost - entropy
 
     if iterations % 20 == 0:
-        print("Cost at Step " + str(iterations) + ": " + str(final_final_cost))
+        print("Cost at Step {}: {}".format(iterations, final_cost))
 
     iterations += 1
 
-    return final_final_cost
+    return final_cost
 
 
 ######################################################################
@@ -384,7 +402,7 @@ def exact_cost(params):
 
 iterations = 0
 
-params = [np.random.randint(-300, 300) / 100 for i in range(0, (N * (1 + depth * 4)))]
+params = [np.random.randint(-300, 300) / 100 for i in range(0, (nr_qubits * (1 + depth * 4)))]
 out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1600})
 out_params = out["x"]
 print(out)
@@ -402,7 +420,7 @@ def prepare_state(params, device):
 
     # Initializes the density matrix
 
-    final_density_matrix = np.zeros((2 ** N, 2 ** N))
+    final_density_matrix = np.zeros((2 ** nr_qubits, 2 ** nr_qubits))
 
     # Prepares the optimal parameters, creates the distribution and the bitstrings
     parameters = convert_list(params)
@@ -411,8 +429,8 @@ def prepare_state(params, device):
 
     distribution = prob_dist(dist_params)
 
-    combos = itertools.product([0, 1], repeat=N)
-    s = [list(i) for i in combos]
+    combos = itertools.product([0, 1], repeat=nr_qubits)
+    s = [list(c) for c in combos]
 
     # Runs the circuit in the case of the optimal parameters, for each bitstring, and adds the result to the final density matrix
 
@@ -436,7 +454,7 @@ print(prep_density_matrix)
 
 ######################################################################
 # If you prefer a visual representation, we can plot a heatmap of the
-# absolute value of the density matrix as well:
+# entry-wise absolute value of the density matrix as well:
 #
 
 seaborn.heatmap(abs(prep_density_matrix))
@@ -462,11 +480,11 @@ def create_target(qubit, beta, ham, graph):
 
     return final_target
 
-target_density_matrix = create_target(N, beta, create_hamiltonian_matrix, interaction_graph)
+target_density_matrix = create_target(nr_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 
 
 ######################################################################
-# Finally, we can plot a heatmap of the target Hamiltonian:
+# Finally, we can plot a heatmap of the target density matrix:
 #
 
 
