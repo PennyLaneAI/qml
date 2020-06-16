@@ -137,34 +137,22 @@ def create_hamiltonian_matrix(n, graph):
     matrix = np.zeros((2 ** n, 2 ** n))
 
     for i in graph.edges:
-        m = 1
+        x = 1
+        y = 1
+        z = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                m = np.kron(m, qml.PauliX.matrix)
+                x = np.kron(x, qml.PauliX.matrix)
+                y = np.kron(y, qml.PauliY.matrix)
+                z = np.kron(z, qml.PauliZ.matrix) 
             else:
-                m = np.kron(m, np.identity(2))
-        matrix = np.add(matrix, m)
+                x = np.kron(x, np.identity(2))
+                y = np.kron(y, np.identity(2))
+                z = np.kron(z, np.identity(2))
 
-    for i in graph.edges:
-        m = 1
-        for j in range(0, n):
-            if j == i[0] or j == i[1]:
-                m = np.kron(m, qml.PauliY.matrix)
-            else:
-                m = np.kron(m, np.identity(2))
-        matrix = np.add(matrix, m)
-
-    for i in graph.edges:
-        m = 1
-        for j in range(0, n):
-            if j == i[0] or j == i[1]:
-                m = np.kron(m, qml.PauliZ.matrix)
-            else:
-                m = np.kron(m, np.identity(2))
-        matrix = np.add(matrix, m)
+        matrix = np.add(matrix, np.add(x, np.add(y, z)))
 
     return matrix
-
 
 ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 print(ham_matrix)
@@ -278,7 +266,6 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
 
     # Calculates the expectation value of the Hamiltonian, with respect to the prepared states
     return qml.expval(qml.Hermitian(ham_matrix, wires=range(N)))
-
 
 # Constructs the QNode
 qnode = qml.QNode(quantum_circuit, dev)
@@ -502,7 +489,6 @@ def create_target(qubit, beta, ham, graph):
 
     return final_target
 
-
 target_density_matrix = create_target(N, beta, create_hamiltonian_matrix, interaction_graph)
 
 
@@ -534,7 +520,6 @@ seaborn.heatmap(abs(target_density_matrix))
 def trace_distance(one, two):
 
     return 0.5 * np.trace(np.absolute(np.add(one, -1 * two)))
-
 
 print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_density_matrix)))
 
