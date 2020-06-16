@@ -377,7 +377,7 @@ def exact_cost(params):
 # method. We use the "Constrained Optimization by Linear Approximation" 
 # (`COBYLA <https://en.wikipedia.org/wiki/COBYLA>`__) optimization method, 
 # which is a gradient-free optimizer. We observe that for this algorithm, COBYLA 
-# has a lower run-time than it gradient-based counterparts, so we utilize it 
+# has a lower runtime than its gradient-based counterparts, so we utilize it 
 # in this tutorial:
 #
 
