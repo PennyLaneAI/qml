@@ -186,10 +186,10 @@ print("Edges: " + str(ising_graph.edges))
 def create_params(graph):
 
     # Creates the interaction parameters
-    interaction = [np.random.randint(-150, 150) / 100 for i in range(0, len(graph.edges))]
+    interaction = [np.random.randint(-100, 100) / 100 for i in range(0, len(graph.edges))]
 
     # Creates the bias parameters
-    bias = [np.random.randint(-150, 150) / 100 for i in range(0, qubit_number)]
+    bias = [np.random.randint(-100, 100) / 100 for i in range(0, qubit_number)]
 
     return [interaction, bias]
 
