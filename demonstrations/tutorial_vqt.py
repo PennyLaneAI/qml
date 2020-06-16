@@ -38,17 +38,15 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # .. math:: \rho_\text{thermal} \ = \ \frac{e^{- H \beta}}{\text{Tr}(e^{- H \beta})} \ = \ \frac{e^{- H \beta}}{Z_{\beta}}
 #
 # where :math:`\beta \ = \ 1/T`. The thermal state is a **mixed state**,
-# which means that it is described by an ensemble of pure states, each
-# corresponding to some probability in a classical probability
-# distribution. Since we are attempting to learn a mixed state, we must
+# which means that can be described by an ensemble of pure states. Since we are attempting to learn a mixed state, we must
 # deviate from the standard variational method of passing a pure state
-# through an ansatz, and minimizing the energy expectation.
+# through an ansatz circuit, and minimizing the energy expectation.
 #
 # The VQT begins with an initial `density matrix 
 # <https://en.wikipedia.org/wiki/Density_matrix>`__, :math:`\rho_{\theta}`, 
 # described by a probability distribution parametrized by some collection 
 # of parameters :math:`\theta`, and an ensemble of pure states,
-# :math:`\{|\psi_i\rangle\}`. We let :math:`p_i(\theta_i)` be the
+# :math:`\{|\psi_i\rangle\}`. Let :math:`p_i(\theta_i)` be the
 # probability corresponding to the :math:`i`-th pure state. We sample from
 # this probability distribution to get some pure state
 # :math:`|\psi_k\rangle`, which we pass through a parametrized circuit,
@@ -56,9 +54,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # :math:`\langle \psi_k | U^{\dagger}(\phi) \hat{H} U(\phi) |\psi_k\rangle`.
 # Repeating this process multiple times and taking the average of these
 # expectation values gives us the the expectation value of :math:`\hat{H}`
-# with respect to :math:`U \rho_{\theta} U^{\dagger}`. This new density
-# matrix is analogous to the resulting pure state after passage through an
-# ansatz in VQE.
+# with respect to :math:`U \rho_{\theta} U^{\dagger}`.
 #
 # .. image:: ../demonstrations/vqt/ev.png
 #     :width: 90%
@@ -105,7 +101,7 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # In this tutorial, we simulate the 4-qubit Heisenberg model,
 # which is defined as:
 #
-# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_{j} \ + \ Z_i Z_{j} \ + \ Y_i Y_{j}
+# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_j \ + \ Z_i Z_j \ + \ Y_i Y_j
 #
 # where :math:`X_i`, :math:`Y_i` and :math:`Z_i` are the Pauli gates
 # acting on the :math:`i`-th qubit. In addition, :math:`E` is the set of
@@ -114,30 +110,23 @@ from pennylane.templates.layers import BasicEntanglerLayers
 # be the cycle graph:
 #
 
-# Creates the graph of interactions for the Heisenberg grid, then draws it
 
-interaction_graph = nx.Graph()
-interaction_graph.add_nodes_from(range(0, 4))
-interaction_graph.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0)])
-
+interaction_graph = nx.cycle_graph(4)
 nx.draw(interaction_graph)
 
 
 ######################################################################
 # With this, we can calculate the matrix representation of the Heisenberg
-# Hamiltonian, in the computational basis:
+# Hamiltonian in the computational basis:
 #
 
-# Creates the target Hamiltonian matrix
 
 def create_hamiltonian_matrix(n, graph):
 
     matrix = np.zeros((2 ** n, 2 ** n))
 
     for i in graph.edges:
-        x = 1
-        y = 1
-        z = 1
+        x = y = z = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
                 x = np.kron(x, qml.PauliX.matrix)
@@ -161,7 +150,6 @@ print(ham_matrix)
 # fixed variables that are used throughout the simulation:
 #
 
-# Defines all necessary variables
 
 beta = 2  # beta = 1/T
 N = 4  # Number of qubits
@@ -171,12 +159,12 @@ N = 4  # Number of qubits
 # The first step of the VQT is to create the initial density matrix,
 # :math:`\rho_\theta`. In this tutorial, we let :math:`\rho_\theta` be
 # **factorized**, meaning that it can be written as an uncorrelated tensor
-# product of :math:`4` one-qubit, density matrices that are diagonal in
-# the computational basis. The motivation for this choice is due to the
-# fact that in this factorized model, the number of :math:`\theta_i`
-# parameters needed to describe :math:`\rho_\theta` versus the number of
-# qubits scales linearly rather than exponentially, as for each one-qubit
-# system described by :math:`\rho_\theta^i`, we have:
+# product of :math:`4` one-qubit density matrices that are diagonal in
+# the computational basis. The motivation is that in this factorized model, 
+# the number of :math:`\theta_i` parameters needed to describe 
+# :math:`\rho_\theta` scales linearly rather than exponentially with 
+# the number of qubits. For each one-qubit system described by 
+# :math:`\rho_\theta^i`, we have:
 #
 # .. math:: \rho_{\theta}^{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|
 #
@@ -186,7 +174,6 @@ N = 4  # Number of qubits
 # .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}
 #
 
-# Creates the probability distribution according to the theta parameters
 
 def sigmoid(x):
 
@@ -201,8 +188,6 @@ def sigmoid(x):
 # elements of each one-qubit density matrix, for some collection
 # :math:`\theta`:
 #
-
-# Creates the probability distributions for each of the one-qubit systems
 
 
 def prob_dist(params):
@@ -224,7 +209,6 @@ def prob_dist(params):
 # :math:`RY`, and :math:`RZ` gates applied to each qubit.
 #
 
-# Creates the single rotational ansatz
 
 def single_rotation(phi_params, qubits):
 
@@ -242,13 +226,9 @@ def single_rotation(phi_params, qubits):
 # and the device on which the simulations are run:
 #
 
-# Defines the depth of the variational circuit and the device on which
 
 depth = 4
 dev = qml.device("default.qubit", wires=N)
-
-# Creates the quantum circuit
-
 
 def quantum_circuit(rotation_params, coupling_params, sample=None):
 
@@ -274,7 +254,6 @@ qnode = qml.QNode(quantum_circuit, dev)
 # test circuit:
 #
 
-# Draws the QNode
 
 results = qnode(
     [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)],
@@ -294,7 +273,6 @@ print(qnode.draw())
 # space to get the total:
 #
 
-# Calculate the Von Neumann entropy of the initial density matrices
 
 def calculate_entropy(distribution):
 
@@ -403,7 +381,6 @@ def exact_cost(params):
 # in this tutorial:
 #
 
-# Creates the optimizer
 
 iterations = 0
 
@@ -472,8 +449,6 @@ seaborn.heatmap(abs(prep_density_matrix))
 # part of the tutorial.
 #
 
-# Creates the target density matrix
-
 
 def create_target(qubit, beta, ham, graph):
 
@@ -494,7 +469,6 @@ target_density_matrix = create_target(N, beta, create_hamiltonian_matrix, intera
 # Finally, we can plot a heatmap of the target Hamiltonian:
 #
 
-# Plots the final density matrix
 
 seaborn.heatmap(abs(target_density_matrix))
 
@@ -512,7 +486,6 @@ seaborn.heatmap(abs(target_density_matrix))
 # matrices:
 #
 
-# Finds the trace distance between two density matrices
 
 def trace_distance(one, two):
 
