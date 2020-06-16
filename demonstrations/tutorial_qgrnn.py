@@ -104,7 +104,10 @@ import networkx as nx
 # :math:`\boldsymbol\mu \ = \ \boldsymbol\alpha`, and we have thus learned
 # the target parameters.
 #
-
+# .. image:: ../demonstrations/qgrnn/qgrnn2.png
+#     :width: 90%
+#     :align: center
+#
 
 ######################################################################
 # You may now be wondering: “how is this problem of Hamiltonian learning a
