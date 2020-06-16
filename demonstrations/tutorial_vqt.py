@@ -300,7 +300,7 @@ def calculate_entropy(distribution):
 # density matrix. 
 #
 # In the case of this small, simple model, exact
-# calculations such as this reduce the number of circuit executions, and thus total
+# calculations such as this reduce the number of circuit executions, and thus the total
 # execution time.
 #
 # You may have noticed previously that the “structure” of the
