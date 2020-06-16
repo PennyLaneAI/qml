@@ -408,7 +408,7 @@ def exact_cost(params):
 iterations = 0
 
 params = [np.random.randint(-300, 300) / 100 for i in range(0, (N * (1 + depth * 4)))]
-out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1000})
+out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1600})
 out_params = out["x"]
 print(out)
 
