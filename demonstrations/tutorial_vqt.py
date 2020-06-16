@@ -392,7 +392,7 @@ print(out)
 
 ######################################################################
 # We can now check to see how well our optimization method performed by
-# writing a function that re-constructs the transformed density
+# writing a function that reconstructs the transformed density
 # matrix of some initial state, with respect to lists of
 # :math:`\theta` and :math:`\phi` parameters:
 #
