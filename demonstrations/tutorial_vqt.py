@@ -350,7 +350,7 @@ def exact_cost(params):
 
     # Generates a list of all computational basis states of our qubit system
     combos = itertools.product([0, 1], repeat=N)
-    s = [list(i) for i in combos]
+    s = [list(c) for c in combos]
 
     # Passes each basis state through the variational circuit and multiplies the calculated energy EV with the associated probability from the distribution
     final_cost = 0
