@@ -265,7 +265,7 @@ print(qnode.draw())
 
 ######################################################################
 # Recall that the final cost function depends not only on the expectation
-# value of the Hamiltonian, but also the von Neumann entropy of our state,
+# value of the Hamiltonian, but also the von Neumann entropy of the state,
 # which is determined by the collection of :math:`p_i(\theta_i)`\ s. Since
 # the entropy of a collection of multiple uncorrelated susbsystems is the
 # same as the sum of the individual values of entropy for each subsystem,
