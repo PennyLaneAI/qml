@@ -242,7 +242,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
             unitary=qml.CRX, pattern="ring", wires=range(N), parameters=coupling_params[i]
         )
 
-    # Calculates the expectation value of the Hamiltonian, with respect to the prepared states
+    # Calculates the expectation value of the Hamiltonian with respect to the prepared states
     return qml.expval(qml.Hermitian(ham_matrix, wires=range(N)))
 
 # Constructs the QNode
