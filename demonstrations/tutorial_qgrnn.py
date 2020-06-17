@@ -603,7 +603,6 @@ print(qgrnn_params)
 
 # Prints the colour plot of the parameters
 
-create_colour_plot([target_params, qgrnn_params])
 
 
 ######################################################################
