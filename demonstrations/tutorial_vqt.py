@@ -255,7 +255,7 @@ qnode = qml.QNode(quantum_circuit, dev)
 #
 
 
-rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)
+rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
 coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
 results = qnode(rotation_params, coupling_params, sample=[1, 0, 1, 0])
 print(qnode.draw())
