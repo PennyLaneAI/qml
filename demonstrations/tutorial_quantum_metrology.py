@@ -115,14 +115,15 @@ from pennylane import numpy as np
 # model a noisy system, it needs to be capable of mixed-state simulations.
 # We will choose the ``cirq.mixedsimulator`` device from the 
 # `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_ 
-# plugin for this tutorial. We also import the custom Cirq operations that include
-# the phase damping channel we use to model the noise in the encoding process.
+# plugin for this tutorial.
 dev = qml.device("cirq.mixedsimulator", wires=3)
-from pennylane_cirq import ops as cirq_ops
 
 ##############################################################################
-# Next, we model the parameter encoding. Phase shifts can be recreated using
-# the Pauli Z rotation gate.
+# Next, we model the parameter encoding. The phase shifts are recreated using
+# the Pauli Z rotation gate. The phase damping noise channel is available as
+# a custom Cirq gate.
+from pennylane_cirq import ops as cirq_ops
+
 @qml.template
 def encoding(phi, gamma):
     for i in range(3):
