@@ -8,7 +8,7 @@ Optimizing measurement protocols with variational methods
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
 In this tutorial we use the variational quantum algorithm from
-`Johannes Jakob Meyer et al. (2020) <https://arxiv.org/abs/2006.06303>`__ to optimize a quantum
+Johannes Jakob Meyer et al. [#meyer2020]_ to optimize a quantum
 sensing protocol.
 
 Background
@@ -329,12 +329,24 @@ plt.show()
 ##############################################################################
 # We see that after only 20 gradient steps, we already found a sensing protocol
 # that has a better noise resilience than standard Ramsay spectroscopy!
+#
+# This tutorial shows that variational methods are useful for quantum metrology.
+# The are numerous avenues open for further research: One could study more intricate
+# sensing problems, different noise models and other platforms like optical systems.
+#
+# For more intricate noise models that can't be realized on quantum hardware, the original 
+# work offers a way to move certain parts of the algorithm to the classical side.
+# It also provides extensions of the method to include prior knowledge
+# about the distribution of the underlying parameters or to factor in mutual time dependence
+# of parameters and encoding noise.
 
 
 ##############################################################################
 # References
 # ----------
 #
-# 1. Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert.
+# .. [#meyer2020]
+#
+#    Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert.
 #    "A variational toolbox for quantum multi-parameter estimation." `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
