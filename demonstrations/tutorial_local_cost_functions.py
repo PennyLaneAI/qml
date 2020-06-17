@@ -343,7 +343,7 @@ print(tunable_circuit.draw())
 # This may take up to 15 mins.
 #
 
-samples = 30
+samples = 2
 plateau = 0
 trained = 0
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
@@ -377,7 +377,7 @@ for runs in range(samples):
     print("Plateau'd: {:5d}".format(plateau))
 
 
-samples = 30
+samples = 2
 plateau = 0
 trained = 0
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
