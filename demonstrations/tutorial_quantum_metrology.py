@@ -1,10 +1,10 @@
 r"""
-Quantum Metrology
+Optimizing measurement protocols with variational methods
 ==================================
 
 .. meta::
-    :property="og:description": In this demonstration, a variational algorithm is
-        used to optimize a quantum sensing protocol.
+    :property="og:description": Using a variational algorithm to
+        optimize a quantum sensing protocol.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
 In this tutorial we use the variational quantum algorithm from
@@ -20,8 +20,8 @@ the following way:
 
 As a first step, a *probe state* :math:`\rho_0` is prepared. This probe state then undergoes a possibly noisy quantum
 evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}`. The resulting state
-:math:`\rho(\boldsymbol{\phi})` is then measured using a parametrized positive
-operator-valued measurement :math:`\{ \Pi_l \}`, yielding an output probability
+:math:`\rho(\boldsymbol{\phi})` is then measured using a parametrized `positive
+operator-valued measurement <https://en.wikipedia.org/wiki/POVM/>`_ :math:`\{ \Pi_l \}`, yielding an output probability
 distribution
 
 .. math:: p_l(\boldsymbol{\phi}) =
