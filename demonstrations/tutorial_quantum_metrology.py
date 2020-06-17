@@ -79,8 +79,12 @@ The right-hand side is now a scalar quantifying the best attainable weighted pre
 .. math:: C_W(\boldsymbol{\theta}, \boldsymbol{\mu}) = \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}(\boldsymbol{\theta}, \boldsymbol{\mu})).
 
 With the cost function in place, we can use Pennylane to optimize the variational parameters :math:`\boldsymbol{\theta}` and
-:math:`\boldsymbol{\mu}` to obtain a good sensing protocol.
+:math:`\boldsymbol{\mu}` to obtain a good sensing protocol. The whole pipeline is depicted below:
 
+.. figure:: ../demonstrations/quantum_metrology/illustration.png
+    :align: center
+    :width: 100%
+    :target: javascript:void(0)
 
 Ramsay spectroscopy
 ------------------
