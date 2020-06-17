@@ -7,8 +7,10 @@ Optimizing measurement protocols with variational methods
         optimize a quantum sensing protocol.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
+*Author: Johannes Jakob Meyer*
+
 In this tutorial we use the variational quantum algorithm from
-Johannes Jakob Meyer et al. [#meyer2020]_ to optimize a quantum
+JJM et al. [#meyer2020]_ to optimize a quantum
 sensing protocol.
 
 Background
