@@ -14,22 +14,31 @@ sensing protocol.
 Background
 ----------
 
-Quantum metrology is a particular application of quantum technologies that exploit non-classical
-effects to enhance the sensitivity of measurement processes. A sensing protocol can be modeled in
-the following way:
+Quantum technologies are a rapidly expanding field with applications ranging from quantum computers
+to quantum communication lines. In this tutorial, we study a particular application of quantum technologies,
+namely *Quantum Metrology*. It exploits quantum effects to enhance the precision of measurements. One of the
+most impressive examples of a successful application of quantum metrology are gravitational wave interferometers
+like `LIGO <https://en.wikipedia.org/wiki/LIGO>`_ that harness non-classical light to increase the sensitivity
+to passing graviational waves.
 
-As a first step, a *probe state* :math:`\rho_0` is prepared. This probe state then undergoes a possibly noisy quantum
-evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}`. The resulting state
-:math:`\rho(\boldsymbol{\phi})` is then measured using a parametrized `positive
-operator-valued measurement <https://en.wikipedia.org/wiki/POVM/>`_ :math:`\{ \Pi_l \}`, yielding an output probability
-distribution
+A quantum metrological experiment, which we call a *protocol*, can be modeled in the following way:
+As a first step, a quantum state :math:`\rho_0` is prepared. This state then undergoes a possibly noisy quantum
+evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}` we are interested in -- we say the quantum
+evolution *encodes* the parameters. The values :math:`\boldsymbol{\phi}` can for example be a set of phases that are 
+picked up in an interferometer. As we use the quantum state to *probe* the encoding evolution, we will call it the *probe state*.
 
-.. math:: p_l(\boldsymbol{\phi}) =
+After the parameters are encoded, we have a new state :math:`\rho(\boldsymbol{\phi})` which we then need to measure.
+We can describe any possible measurement in quantum mechanics using a `positive
+operator-valued measurement <https://en.wikipedia.org/wiki/POVM/>`_ consisting of a set of operators :math:`\{ \Pi_l \}`.
+Measuring those operators gives us the output probabilities
+
+.. math:: p_l(\boldsymbol{\phi}) = \langle \Pi_l \rangle =
     \operatorname{Tr}(\rho(\boldsymbol{\phi}) \Pi_l).
 
-We now seek to estimate the vector of parameters :math:`\boldsymbol{\phi}` from this probability distribution.
+As the last step of our protocol, we have to estimate the parameters :math:`\boldsymbol{\phi}` from these probabilities,
+*e.g.* through `maximum likelihood estimation <https://en.wikipedia.org/wiki/Maximum_likelihood_estimation>`_.
 Intuitively, we will get the best precision in doing so if the probe state is most "susceptible" to the
-physical evolution and the corresponding measurement can distinguish the states for different parameter values well. 
+encoding evolution and the corresponding measurement can well distinguish the states for different values of :math:`\boldsymbol{\phi}`. 
 
 Luckily, there exists a mathematical tool to quantify the best achievable estimation precision,
 the *Cramér-Rao bound*. For any unbiased estimator
