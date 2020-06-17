@@ -40,25 +40,34 @@ As the last step of our protocol, we have to estimate the parameters :math:`\bol
 Intuitively, we will get the best precision in doing so if the probe state is most "susceptible" to the
 encoding evolution and the corresponding measurement can well distinguish the states for different values of :math:`\boldsymbol{\phi}`. 
 
-Luckily, there exists a mathematical tool to quantify the best achievable estimation precision,
-the *Cramér-Rao bound*. For any unbiased estimator
-:math:`\mathbb{E}(\hat{\boldsymbol{\varphi}}) = \boldsymbol{\phi}`, we have
+The variational algorithm
+-------------------------
+
+We now introduce a variational algorithm to optimize such a sensing protocol. As a first step, we parametrize 
+both the probe state :math:`\rho_0 = \rho_0(\boldsymbol{\theta})` and the POVM :math:`\Pi_l = \Pi_l(\boldsymbol{\mu})`
+using suitable quantum circuits with parameters :math:`\boldsymbol{\theta}` and :math:`\boldsymbol{\mu}` respectively.
+The parameters should now be adjusted in a way that improves the sensing protocol, and to quantify this, we need a 
+suitable *cost function*.
+
+Luckily, there exists a mathematical tool to quantify the best achievable estimation precision, the *Cramér-Rao bound*.
+Any estimator :math:`\mathbb{E}(\hat{\boldsymbol{\varphi}}) = \boldsymbol{\phi}` we could construct fulfills the following
+condition on its covariance matrix which gives a measure of the precision of the estimation:
 
 .. math:: \operatorname{Cov}(\hat{\boldsymbol{\varphi}}) \geq \frac{1}{n} I^{-1}_{\boldsymbol{\phi}},
 
 where :math:`n` is the number of samples and :math:`I_{\boldsymbol{\phi}}` is the *Classical Fisher Information Matrix*
-with respect to the entries of :math:`\boldsymbol{\phi}`, defined as
+with respect to the entries of :math:`\boldsymbol{\phi}`. It is defined as
 
 .. math:: [I_{\boldsymbol{\phi}}]_{jk} := \sum_l \frac{(\partial_j p_l)(\partial_k p_l)}{p_l},
 
-where we used :math:`\partial_j` as a shorthand notation for :math:`\frac{\partial}{\partial \phi_j}`.
+where we used :math:`\partial_j` as a shorthand notation for :math:`\frac{\partial}{\partial \phi_j}`. The Cramér-Rao
+bound has the very powerful property that it can always be saturated in the limit of many samples! This means we are 
+guaranteed that we can construct a "best estimator" for the vector of parameters.
 
-The variational algorithm now proceeds by parametrizing both the probe state :math:`\rho_0 = \rho_0(\boldsymbol{\theta})`
-and the POVM :math:`\Pi_l = \Pi_l(\boldsymbol{\mu})`. The parameters :math:`\boldsymbol{\theta}` and :math:`\boldsymbol{\mu}`
-are then adjusted to reduce a cost function derived from the Cramér-Rao bound. Its right-hand side already gives
-the best attainable precision, but is only a scalar if there is just one parameter to be estimated. To also obtain a scalar
-quantity in the multi-variate case, we apply a positive-semidefinite weighting matrix :math:`W` to both sides of the bound
-and perform a trace, yielding the scalar inequality
+This in turn means that the right hand side of the Cramér-Rao bound would make for a great cost function. There is only
+one remaining problem, namely that it is matrix-valued, but we need a scalar cost function. To obtain such a scalar
+quantity, we multiply both sides of the inequaltiy with a positive-semidefinite weighting matrix :math:`W` and then perform
+a trace.
 
 .. math:: \operatorname{Tr}(W\operatorname{Cov}(\hat{\boldsymbol{\varphi}})) \geq \frac{1}{n} \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}).
 
@@ -66,6 +75,10 @@ As its name suggests, :math:`W` can be used to weight the importance of the diff
 The right-hand side is now a scalar quantifying the best attainable weighted precision and can be readily used as a cost function:
 
 .. math:: C_W(\boldsymbol{\theta}, \boldsymbol{\mu}) = \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}(\boldsymbol{\theta}, \boldsymbol{\mu})).
+
+With the cost function in place, we can use Pennylane to optimize the variational parameters :math:`\boldsymbol{\theta}` and
+:math:`\boldsymbol{\mu}` to obtain a good sensing protocol.
+
 
 Ramsay spectroscopy
 ------------------
