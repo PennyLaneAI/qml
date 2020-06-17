@@ -192,11 +192,16 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: cirq beginner
 
 .. customgalleryitem::
+    :tooltip: VQE optimization using quantum natural gradient
+    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
+    :description: :doc:`demos/tutorial_vqe_qng`
+    :tags: chemistry
+
+.. customgalleryitem::
     :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
     :figure: demonstrations/vqt/thumbnail.png
     :description: :doc:`demos/tutorial_vqt`
     :tags: chemistry
-
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -235,3 +240,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_rosalin
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_vqe_qng
+    demos/tutorial_vqt
