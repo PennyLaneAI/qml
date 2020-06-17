@@ -22,9 +22,9 @@ This demonstration discusses theory and experiments relating to a recently propo
 # The goal of the VQT is to prepare
 # the `thermal state <https://en.wikipedia.org/wiki/KMS_state>`__ 
 # of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T`, 
-# which is defined as:
+# which is defined as
 #
-# .. math:: \rho_\text{thermal} \ = \ \frac{e^{- H \beta}}{\text{Tr}(e^{- H \beta})} \ = \ \frac{e^{- H \beta}}{Z_{\beta}}
+# .. math:: \rho_\text{thermal} \ = \ \frac{e^{- H \beta}}{\text{Tr}(e^{- H \beta})} \ = \ \frac{e^{- H \beta}}{Z_{\beta}},
 #
 # where :math:`\beta \ = \ 1/T`. The thermal state is a `mixed state 
 # <https://en.wikipedia.org/wiki/Quantum_state#Mixed_states>`__,
@@ -52,7 +52,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 #     :align: center
 #
 # Arguably, the most important part of a variational circuit is its cost
-# function, which we atempt to minimize with a classical optimizer. 
+# function, which we attempt to minimize with a classical optimizer. 
 # In VQE, we generally try to
 # minimize :math:`\langle \psi(\theta) | \hat{H} | \psi(\theta) \rangle`
 # which, upon minimization, gives us a parametrized circuit that prepares
@@ -61,11 +61,12 @@ This demonstration discusses theory and experiments relating to a recently propo
 # parametrized ansatz, that generate a good approximation to the thermal
 # state. This generally involves more than calculating the energy
 # expectation value. Luckily, we know that the thermal state of
-# :math:`\hat{H}` minimizes the following free-energy cost function:
+# :math:`\hat{H}` minimizes the following free-energy cost function
 #
-# .. math:: \mathcal{L}(\theta, \ \phi) \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta
+# .. math:: \mathcal{L}(\theta, \ \phi) \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta,
 #
-# where :math:`S_{\theta}` is the von Neumann entropy of
+# where :math:`S_{\theta}` is the `von Neumann entropy  
+# <https://en.wikipedia.org/wiki/Von_Neumann_entropy>`__ of
 # :math:`U \rho_{\theta} U^{\dagger}`, which is the same as the von
 # Neumann entropy of :math:`\rho_{\theta}` due to invariance of entropy
 # under unitary transformations. This cost function is minimized when
@@ -105,9 +106,9 @@ import seaborn
 import itertools
 
 ######################################################################
-# The Heisenberg Hamiltonian is defined as:
+# The Heisenberg Hamiltonian is defined as
 #
-# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_j \ + \ Z_i Z_j \ + \ Y_i Y_j
+# .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_j \ + \ Z_i Z_j \ + \ Y_i Y_j,
 #
 # where :math:`X_i`, :math:`Y_i` and :math:`Z_i` are the Pauli gates
 # acting on the :math:`i`-th qubit. In addition, :math:`E` is the set of
@@ -151,6 +152,7 @@ ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 
 # Prints a visual representation of the Hamiltonian matrix
 seaborn.heatmap(ham_matrix.real)
+plt.show()
 
 
 ######################################################################
@@ -204,7 +206,7 @@ def prob_dist(params):
 ######################################################################
 # With this done, we can move on to defining the ansatz circuit,
 # :math:`U(\phi)`, composed of rotational and coupling layers. The 
-# rotation layer is simply :math:`RX`, :math:`RY`, and :math:`RZ` 
+# rotation layer is simply ``RX``, ``RY```, and ``RZ`` 
 # gates applied to each qubit. We make use of the ``AngleEmbeddings`` 
 # function, which allows us to easily pass parameters into rotational 
 # layers. 
@@ -413,7 +415,8 @@ def prepare_state(params, device):
     combos = itertools.product([0, 1], repeat=nr_qubits)
     s = [list(c) for c in combos]
 
-    # Runs the circuit in the case of the optimal parameters, for each bitstring, and adds the result to the final density matrix
+    # Runs the circuit in the case of the optimal parameters, for each bitstring, 
+    # and adds the result to the final density matrix
 
     for i in s:
         qnode(unitary_params[0], unitary_params[1], sample=i)
@@ -426,19 +429,12 @@ def prepare_state(params, device):
 
 
 ######################################################################
-# We then reconstruct the state prepared by the VQT:
-#
-
-prep_density_matrix = prepare_state(out_params, dev)
-print(prep_density_matrix)
-
-
-######################################################################
-# If you prefer a visual representation, we can plot a heatmap of the
-# entry-wise absolute value of the density matrix as well:
+# We then display the prepared state by plotting a heatmap of the
+# entry-wise absolute value of the density matrix:
 #
 
 seaborn.heatmap(abs(prep_density_matrix))
+plt.show()
 
 
 ######################################################################
@@ -450,7 +446,8 @@ seaborn.heatmap(abs(prep_density_matrix))
 
 def create_target(qubit, beta, ham, graph):
 
-    # Calculates the matrix form of the density matrix, by taking the exponential of the Hamiltonian
+    # Calculates the matrix form of the density matrix, by taking 
+    # the exponential of the Hamiltonian
 
     h = ham(qubit, graph)
     y = -1 * float(beta) * h
@@ -460,7 +457,12 @@ def create_target(qubit, beta, ham, graph):
 
     return final_target
 
-target_density_matrix = create_target(nr_qubits, beta, create_hamiltonian_matrix, interaction_graph)
+target_density_matrix = create_target(
+    nr_qubits, 
+    beta, 
+    create_hamiltonian_matrix, 
+    interaction_graph
+    )
 
 
 ######################################################################
@@ -469,6 +471,7 @@ target_density_matrix = create_target(nr_qubits, beta, create_hamiltonian_matrix
 
 
 seaborn.heatmap(abs(target_density_matrix))
+plt.show()
 
 
 ######################################################################
@@ -476,12 +479,11 @@ seaborn.heatmap(abs(target_density_matrix))
 # constructed a good approximation of the thermal state! Alternatively, if
 # you prefer a more quantitative measure of similarity, we can calculate
 # the trace distance between the two density matrices, which is defined
-# as:
+# as
 #
 # .. math:: T(\rho, \ \sigma) \ = \ \frac{1}{2} \text{Tr} \sqrt{(\rho \ - \ \sigma)^{\dagger} (\rho \ - \ \sigma)}
 #
-# and is a metric (a “distance function”) on the space of density
-# matrices:
+# and is a metric on the space of density matrices:
 #
 
 
@@ -493,8 +495,8 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 
 
 ######################################################################
-# The closer to zero, the more similar the two states are. Thus, we have
-# numerical proof that we have found a close approximation of the thermal state
+# The closer to zero, the more similar the two states are. Thus, we 
+# have found a close approximation of the thermal state
 # of :math:`H` with the VQT!
 #
 
