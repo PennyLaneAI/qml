@@ -594,15 +594,13 @@ def create_colour_plot(data):
 
 print(matrix_params)
 
-target_params = list(np.array(matrix_params).flatten())
+target_params = list(np.hstack(np.array(matrix_params)))
 target_params.insert(1, 0)
 target_params.insert(4, 0)
 
-print(target_params)
-print(qgrnn_params)
-
 # Prints the colour plot of the parameters
 
+create_colour_plot([target_params, qgrnn_params])
 
 
 ######################################################################
