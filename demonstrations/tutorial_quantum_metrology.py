@@ -113,8 +113,8 @@ from pennylane import numpy as np
 ##############################################################################
 # We will first specify the device to carry out the simulations. As we want to
 # model a noisy system, it needs to be capable of mixed-state simulations.
-# We will choose the ``cirq.mixedsimulator`` device from the 
-# `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_ 
+# We will choose the ``cirq.mixedsimulator`` device from the
+# `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_
 # plugin for this tutorial.
 dev = qml.device("cirq.mixedsimulator", wires=3)
 
@@ -123,6 +123,7 @@ dev = qml.device("cirq.mixedsimulator", wires=3)
 # the Pauli Z rotation gate. The phase damping noise channel is available as
 # a custom Cirq gate.
 from pennylane_cirq import ops as cirq_ops
+
 
 @qml.template
 def encoding(phi, gamma):
@@ -138,12 +139,17 @@ def encoding(phi, gamma):
 def ansatz(weights):
     qml.templates.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
+
 NUM_ANSATZ_PARAMETERS = 14
+
 
 @qml.template
 def measurement(weights):
     for i in range(3):
-        qml.templates.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
+        qml.templates.ArbitraryStatePreparation(
+            weights[2 * i : 2 * (i + 1)], wires=[i]
+        )
+
 
 NUM_MEASUREMENT_PARAMETERS = 6
 
@@ -161,9 +167,11 @@ def experiment(weights, phi, gamma=0.0):
 
 
 # Make a dry run to be able to draw
-experiment(np.zeros(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS), 
-           np.zeros(3), 
-           gamma=0.2)
+experiment(
+    np.zeros(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
+    np.zeros(3),
+    gamma=0.2,
+)
 print(experiment.draw(show_variable_names=True))
 
 
@@ -202,7 +210,12 @@ def CFIM(weights, phi, gamma):
 # to it to avoid inverting a singular matrix. As additional parameters, we add
 # the weighting matrix `W` and the Jacobian `J`.
 def cost(weights, phi, gamma, J, W, epsilon=1e-10):
-    return np.trace(W @ np.linalg.inv(J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon))
+    return np.trace(
+        W
+        @ np.linalg.inv(
+            J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon
+        )
+    )
 
 
 ##############################################################################
@@ -220,7 +233,9 @@ omega = sympy.exp((-1j * 2.0 * cmath.pi) / 3)
 Omega = sympy.Matrix([[1, 1, 1], [1, omega ** 1, omega ** 2]]) / sympy.sqrt(3)
 
 # Compute Jacobian
-jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
+jacobian = (
+    sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
+)
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
 ##############################################################################
@@ -240,9 +255,12 @@ J = jacobian(*phi)
 def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
     return cost(weights, phi, gamma, J, W)
 
+
 # Seed for reproducible results
 np.random.seed(395)
-weights = np.random.uniform(0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS)
+weights = np.random.uniform(
+    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS
+)
 
 opt = qml.AdagradOptimizer(stepsize=0.1)
 
@@ -251,7 +269,9 @@ for i in range(20):
     weights = opt.step(opt_cost, weights)
 
     if (i + 1) % 5 == 0:
-        print("Iteration {:>4}: Cost = {:6.4f}".format(i + 1, opt_cost(weights)))
+        print(
+            "Iteration {:>4}: Cost = {:6.4f}".format(i + 1, opt_cost(weights))
+        )
 
 ##############################################################################
 # Comparison
@@ -269,7 +289,11 @@ Ramsay_weights[15] = np.pi / 2
 Ramsay_weights[17] = np.pi / 2
 Ramsay_weights[19] = np.pi / 2
 
-print("Cost for standard Ramsay sensing = {:6.4f}".format(opt_cost(Ramsay_weights)))
+print(
+    "Cost for standard Ramsay sensing = {:6.4f}".format(
+        opt_cost(Ramsay_weights)
+    )
+)
 
 ##############################################################################
 # We can now make a plot to compare the noise scaling of the above probes.
@@ -280,8 +304,12 @@ comparison_costs = {
 }
 
 for gamma in gammas:
-    comparison_costs["optimized"].append(cost(weights, phi, gamma, J, np.eye(2)))
-    comparison_costs["standard"].append(cost(Ramsay_weights, phi, gamma, J, np.eye(2)))
+    comparison_costs["optimized"].append(
+        cost(weights, phi, gamma, J, np.eye(2))
+    )
+    comparison_costs["standard"].append(
+        cost(Ramsay_weights, phi, gamma, J, np.eye(2))
+    )
 
 import matplotlib.pyplot as plt
 
