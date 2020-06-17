@@ -133,15 +133,16 @@ def encoding(phi, gamma):
 
 
 ##############################################################################
-# We now choose an ansatz for our circuit and the POVM. We make use of the
-# ``ArbitraryStatePreparation`` templates from PennyLane.
+# We now choose a parametrization for both the probe state and the POVM.
+# To be able to parametrize all possible probe states and all local measurements,
+# we make use of the 
+# ``ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>``_ 
+# template from PennyLane.
 @qml.template
 def ansatz(weights):
     qml.templates.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
-
 NUM_ANSATZ_PARAMETERS = 14
-
 
 @qml.template
 def measurement(weights):
@@ -149,7 +150,6 @@ def measurement(weights):
         qml.templates.ArbitraryStatePreparation(
             weights[2 * i : 2 * (i + 1)], wires=[i]
         )
-
 
 NUM_MEASUREMENT_PARAMETERS = 6
 
