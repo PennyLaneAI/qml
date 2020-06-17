@@ -20,22 +20,22 @@ This demonstration discusses theory and experiments relating to a recently propo
 
 ######################################################################
 # The goal of the VQT is to prepare
-# the `thermal state <https://en.wikipedia.org/wiki/KMS_state>`__ 
-# of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T`, 
+# the `thermal state <https://en.wikipedia.org/wiki/KMS_state>`__
+# of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T`,
 # which is defined as
 #
 # .. math:: \rho_\text{thermal} \ = \ \frac{e^{- H \beta}}{\text{Tr}(e^{- H \beta})} \ = \ \frac{e^{- H \beta}}{Z_{\beta}},
 #
-# where :math:`\beta \ = \ 1/T`. The thermal state is a `mixed state 
+# where :math:`\beta \ = \ 1/T`. The thermal state is a `mixed state
 # <https://en.wikipedia.org/wiki/Quantum_state#Mixed_states>`__,
-# which means that can be described by an ensemble of pure states. 
+# which means that can be described by an ensemble of pure states.
 # Since we are attempting to learn a mixed state, we must
 # deviate from the standard variational method of passing a pure state
 # through an ansatz circuit, and minimizing the energy expectation.
 #
-# The VQT begins with an initial `density matrix 
-# <https://en.wikipedia.org/wiki/Density_matrix>`__, :math:`\rho_{\theta}`, 
-# described by a probability distribution parametrized by some collection 
+# The VQT begins with an initial `density matrix
+# <https://en.wikipedia.org/wiki/Density_matrix>`__, :math:`\rho_{\theta}`,
+# described by a probability distribution parametrized by some collection
 # of parameters :math:`\theta`, and an ensemble of pure states,
 # :math:`\{|\psi_i\rangle\}`. Let :math:`p_i(\theta_i)` be the
 # probability corresponding to the :math:`i`-th pure state. We sample from
@@ -52,7 +52,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 #     :align: center
 #
 # Arguably, the most important part of a variational circuit is its cost
-# function, which we attempt to minimize with a classical optimizer. 
+# function, which we attempt to minimize with a classical optimizer.
 # In VQE, we generally try to
 # minimize :math:`\langle \psi(\theta) | \hat{H} | \psi(\theta) \rangle`
 # which, upon minimization, gives us a parametrized circuit that prepares
@@ -65,7 +65,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 #
 # .. math:: \mathcal{L}(\theta, \ \phi) \ = \ \beta \ \text{Tr}( \hat{H} \ \hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} ) \ - \ S_\theta,
 #
-# where :math:`S_{\theta}` is the `von Neumann entropy  
+# where :math:`S_{\theta}` is the `von Neumann entropy
 # <https://en.wikipedia.org/wiki/Von_Neumann_entropy>`__ of
 # :math:`U \rho_{\theta} U^{\dagger}`, which is the same as the von
 # Neumann entropy of :math:`\rho_{\theta}` due to invariance of entropy
@@ -138,7 +138,7 @@ def create_hamiltonian_matrix(n, graph):
             if j == i[0] or j == i[1]:
                 x = np.kron(x, qml.PauliX.matrix)
                 y = np.kron(y, qml.PauliY.matrix)
-                z = np.kron(z, qml.PauliZ.matrix) 
+                z = np.kron(z, qml.PauliZ.matrix)
             else:
                 x = np.kron(x, np.identity(2))
                 y = np.kron(y, np.identity(2))
@@ -147,6 +147,7 @@ def create_hamiltonian_matrix(n, graph):
         matrix = np.add(matrix, np.add(x, np.add(y, z)))
 
     return matrix
+
 
 ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 
@@ -170,10 +171,10 @@ nr_qubits = 4
 # :math:`\rho_\theta`. In this demonstration, we let :math:`\rho_\theta` be
 # **factorized**, meaning that it can be written as an uncorrelated tensor
 # product of :math:`4` one-qubit density matrices that are diagonal in
-# the computational basis. The motivation is that in this factorized model, 
-# the number of :math:`\theta_i` parameters needed to describe 
-# :math:`\rho_\theta` scales linearly rather than exponentially with 
-# the number of qubits. For each one-qubit system described by 
+# the computational basis. The motivation is that in this factorized model,
+# the number of :math:`\theta_i` parameters needed to describe
+# :math:`\rho_\theta` scales linearly rather than exponentially with
+# the number of qubits. For each one-qubit system described by
 # :math:`\rho_\theta^i`, we have:
 #
 # .. math:: \rho_{\theta}^{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|
@@ -200,16 +201,23 @@ def sigmoid(x):
 
 
 def prob_dist(params):
-    return np.vstack([sigmoid(params), 1-sigmoid(params)]).T
+    return np.vstack([sigmoid(params), 1 - sigmoid(params)]).T
+
+
+######################################################################
+# Creating the Ansatz Circuit
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 
 
 ######################################################################
 # With this done, we can move on to defining the ansatz circuit,
-# :math:`U(\phi)`, composed of rotational and coupling layers. The 
-# rotation layer is simply ``RX``, ``RY```, and ``RZ`` 
-# gates applied to each qubit. We make use of the ``AngleEmbeddings`` 
-# function, which allows us to easily pass parameters into rotational 
-# layers. 
+# :math:`U(\phi)`, composed of rotational and coupling layers. The
+# rotation layer is simply ``RX``, ``RY```, and ``RZ``
+# gates applied to each qubit. We make use of the
+# ```AngleEmbedding`` <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.embeddings.AngleEmbedding.html>`__
+# function, which allows us to easily pass parameters into rotational
+# layers.
 #
 
 
@@ -221,16 +229,17 @@ def single_rotation(phi_params, qubits):
 
 
 ######################################################################
-# To construct the general ansatz, we combine the method we have just 
-# defined with a collection of parametrized coupling gates placed between 
-# qubits that share an edge in the interaction graph. In addition, we 
-# define the depth of the ansatz, and the device on which the simulations 
+# To construct the general ansatz, we combine the method we have just
+# defined with a collection of parametrized coupling gates placed between
+# qubits that share an edge in the interaction graph. In addition, we
+# define the depth of the ansatz, and the device on which the simulations
 # are run:
 #
 
 
 depth = 4
 dev = qml.device("default.qubit", wires=nr_qubits)
+
 
 def quantum_circuit(rotation_params, coupling_params, sample=None):
 
@@ -241,11 +250,15 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
     for i in range(0, depth):
         single_rotation(rotation_params[i], range(nr_qubits))
         qml.broadcast(
-            unitary=qml.CRX, pattern="ring", wires=range(nr_qubits), parameters=coupling_params[i]
+            unitary=qml.CRX, 
+            pattern="ring", 
+            wires=range(nr_qubits), 
+            parameters=coupling_params[i]
         )
 
     # Calculates the expectation value of the Hamiltonian with respect to the prepared states
     return qml.expval(qml.Hermitian(ham_matrix, wires=range(nr_qubits)))
+
 
 # Constructs the QNode
 qnode = qml.QNode(quantum_circuit, dev)
@@ -269,7 +282,7 @@ print(qnode.draw())
 # which is determined by the collection of :math:`p_i(\theta_i)`\ s. Since
 # the entropy of a collection of multiple uncorrelated susbsystems is the
 # same as the sum of the individual values of entropy for each subsystem,
-# we can sum the entropy values of each one-qubit system in the factorized 
+# we can sum the entropy values of each one-qubit system in the factorized
 # space to get the total:
 #
 
@@ -286,18 +299,24 @@ def calculate_entropy(distribution):
 
 
 ######################################################################
+# The Cost Function
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+
+
+######################################################################
 # Finally, we combine the ansatz and the entropy function to get the cost
 # function. In this demonstration, we deviate slightly from how VQT would be
 # performed in practice. Instead of sampling from the probability
 # distribution describing the initial mixed state, we use the ansatz to
-# calculate 
+# calculate
 # :math:`\langle x_i | U^{\dagger}(\phi) \hat{H} U(\phi) |x_i\rangle` for
 # each basis state :math:`|x_i\rangle`. We then multiply each of these
 # expectation values by their corresponding :math:`(\rho_\theta)_{ii}`,
 # which is exactly the probability of sampling :math:`|x_i\rangle` from
 # the distribution. Summing each of these terms together gives us the
 # expected value of the Hamiltonian with respect to the transformed
-# density matrix. 
+# density matrix.
 #
 # In the case of this small, simple model, exact
 # calculations such as this reduce the number of circuit executions, and thus the total
@@ -314,8 +333,8 @@ def convert_list(params):
 
     # Separates the list of parameters
     dist_params = params[0:nr_qubits]
-    ansatz_params_1 = params[nr_qubits:((depth + 1) * nr_qubits)]
-    ansatz_params_2 = params[((depth + 1) * nr_qubits):]
+    ansatz_params_1 = params[nr_qubits : ((depth + 1) * nr_qubits)]
+    ansatz_params_2 = params[((depth + 1) * nr_qubits) :]
 
     coupling = np.split(ansatz_params_1, depth)
 
@@ -352,7 +371,7 @@ def exact_cost(params):
     combos = itertools.product([0, 1], repeat=nr_qubits)
     s = [list(c) for c in combos]
 
-    # Passes each basis state through the variational circuit and multiplies 
+    # Passes each basis state through the variational circuit and multiplies
     # the calculated energy EV with the associated probability from the distribution
     cost = 0
     for i in s:
@@ -365,20 +384,33 @@ def exact_cost(params):
     entropy = calculate_entropy(distribution)
     final_cost = beta * cost - entropy
 
-    if iterations % 20 == 0:
-        print("Cost at Step {}: {}".format(iterations, final_cost))
-
-    iterations += 1
-
     return final_cost
 
 
 ######################################################################
+# We then create the function that is passed into the optimizer:
+#
+
+
+def cost_executions(params):
+
+    global iterations
+
+    cost = exact_cost(params)
+
+    if iterations % 20 == 0:
+        print("Cost at Step {}: {}".format(iterations, cost))
+
+    iterations += 1
+    return cost
+
+
+######################################################################
 # The last step is to define the optimizer, and execute the optimization
-# method. We use the "Constrained Optimization by Linear Approximation" 
-# (`COBYLA <https://en.wikipedia.org/wiki/COBYLA>`__) optimization method, 
-# which is a gradient-free optimizer. We observe that for this algorithm, COBYLA 
-# has a lower runtime than its gradient-based counterparts, so we utilize it 
+# method. We use the "Constrained Optimization by Linear Approximation"
+# (`COBYLA <https://en.wikipedia.org/wiki/COBYLA>`__) optimization method,
+# which is a gradient-free optimizer. We observe that for this algorithm, COBYLA
+# has a lower runtime than its gradient-based counterparts, so we utilize it
 # in this demonstration:
 #
 
@@ -386,7 +418,7 @@ def exact_cost(params):
 iterations = 0
 
 params = [np.random.randint(-300, 300) / 100 for i in range(0, (nr_qubits * (1 + depth * 4)))]
-out = minimize(exact_cost, x0=params, method="COBYLA", options={"maxiter": 1600})
+out = minimize(cost_execution, x0=params, method="COBYLA", options={"maxiter": 1600})
 out_params = out["x"]
 print(out)
 
@@ -415,7 +447,7 @@ def prepare_state(params, device):
     combos = itertools.product([0, 1], repeat=nr_qubits)
     s = [list(c) for c in combos]
 
-    # Runs the circuit in the case of the optimal parameters, for each bitstring, 
+    # Runs the circuit in the case of the optimal parameters, for each bitstring,
     # and adds the result to the final density matrix
 
     for i in s:
@@ -426,6 +458,9 @@ def prepare_state(params, device):
         final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))
 
     return final_density_matrix
+
+# Prepares the density matrix
+prep_density_matrix = prepare_state(out_params, dev)
 
 
 ######################################################################
@@ -438,6 +473,12 @@ plt.show()
 
 
 ######################################################################
+# Numerical Calculations
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+
+
+######################################################################
 # To verify that we have in fact prepared a good approximation of the
 # thermal state, let’s calculate it numerically by taking the matrix
 # exponential of the Heisenberg Hamiltonian, as was outlined earlier.
@@ -446,7 +487,7 @@ plt.show()
 
 def create_target(qubit, beta, ham, graph):
 
-    # Calculates the matrix form of the density matrix, by taking 
+    # Calculates the matrix form of the density matrix, by taking
     # the exponential of the Hamiltonian
 
     h = ham(qubit, graph)
@@ -457,12 +498,8 @@ def create_target(qubit, beta, ham, graph):
 
     return final_target
 
-target_density_matrix = create_target(
-    nr_qubits, 
-    beta, 
-    create_hamiltonian_matrix, 
-    interaction_graph
-    )
+
+target_density_matrix = create_target(nr_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 
 
 ######################################################################
@@ -491,11 +528,12 @@ def trace_distance(one, two):
 
     return 0.5 * np.trace(np.absolute(np.add(one, -1 * two)))
 
+
 print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_density_matrix)))
 
 
 ######################################################################
-# The closer to zero, the more similar the two states are. Thus, we 
+# The closer to zero, the more similar the two states are. Thus, we
 # have found a close approximation of the thermal state
 # of :math:`H` with the VQT!
 #
