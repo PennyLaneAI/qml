@@ -1,44 +1,35 @@
 """
 The Variational Quantum Thermalizer
------------------------------------
+===================================
+
+.. meta::
+    :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail.png
+
+This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the 
+`Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know 
+:doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` (VQE) to systems with non-zero temperatures. 
 
 """
 
-# Starts by importing all of the necessary dependencies
-
-import pennylane as qml
-from matplotlib import pyplot as plt
-import numpy as np
-from numpy import array
-import scipy
-from scipy.optimize import minimize
-import networkx as nx
-import seaborn
-import itertools
-from pennylane.templates.state_preparations import BasisStatePreparation
-from pennylane.templates.layers import BasicEntanglerLayers
-
-
 ######################################################################
 # The Idea
-# ~~~~~~~~
+# --------------
 #
 
 
 ######################################################################
-# This tutorial discusses theory and experiments relating to a recently
-# proposed quantum algorithm called the `Variational Quantum
-# Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a
-# generalization of the well-know `Variational Quantum
-# Eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ (VQE)
-# to systems with non-zero temperatures. The goal of the VQT is to prepare
-# the **thermal state** of a given Hamiltonian :math:`\hat{H}` at
-# temperature :math:`T`, which is defined as:
+# The goal of the VQT is to prepare
+# the `thermal state <https://en.wikipedia.org/wiki/KMS_state>`__ 
+# of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T`, 
+# which is defined as:
 #
 # .. math:: \rho_\text{thermal} \ = \ \frac{e^{- H \beta}}{\text{Tr}(e^{- H \beta})} \ = \ \frac{e^{- H \beta}}{Z_{\beta}}
 #
-# where :math:`\beta \ = \ 1/T`. The thermal state is a **mixed state**,
-# which means that can be described by an ensemble of pure states. Since we are attempting to learn a mixed state, we must
+# where :math:`\beta \ = \ 1/T`. The thermal state is a `mixed state 
+# <https://en.wikipedia.org/wiki/Quantum_state#Mixed_states>`__,
+# which means that can be described by an ensemble of pure states. 
+# Since we are attempting to learn a mixed state, we must
 # deviate from the standard variational method of passing a pure state
 # through an ansatz circuit, and minimizing the energy expectation.
 #
@@ -93,20 +84,35 @@ from pennylane.templates.layers import BasicEntanglerLayers
 
 ######################################################################
 # Simulating the VQT for a 4-Qubit Heisenberg Model
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------------------------------
 #
 
 
 ######################################################################
-# In this tutorial, we simulate the 4-qubit Heisenberg model,
-# which is defined as:
+# In this demonstration, we simulate the 4-qubit Heisenberg model. We can
+# begin by importing the necessary dependencies.
+#
+
+
+import pennylane as qml
+from matplotlib import pyplot as plt
+import numpy as np
+from numpy import array
+import scipy
+from scipy.optimize import minimize
+import networkx as nx
+import seaborn
+import itertools
+
+######################################################################
+# The Heisenberg Hamiltonian is defined as:
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_j \ + \ Z_i Z_j \ + \ Y_i Y_j
 #
 # where :math:`X_i`, :math:`Y_i` and :math:`Z_i` are the Pauli gates
 # acting on the :math:`i`-th qubit. In addition, :math:`E` is the set of
 # edges in the graph :math:`G \ = \ (V, \ E)` describing the interactions
-# between the qubits. In this tutorial, we define the interaction graph to
+# between the qubits. In this demonstration, we define the interaction graph to
 # be the cycle graph:
 #
 
@@ -142,7 +148,9 @@ def create_hamiltonian_matrix(n, graph):
     return matrix
 
 ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
-print(ham_matrix)
+
+# Prints a visual representation of the Hamiltonian matrix
+seaborn.heatmap(ham_matrix)
 
 
 ######################################################################
@@ -157,7 +165,7 @@ nr_qubits = 4
 
 ######################################################################
 # The first step of the VQT is to create the initial density matrix,
-# :math:`\rho_\theta`. In this tutorial, we let :math:`\rho_\theta` be
+# :math:`\rho_\theta`. In this demonstration, we let :math:`\rho_\theta` be
 # **factorized**, meaning that it can be written as an uncorrelated tensor
 # product of :math:`4` one-qubit density matrices that are diagonal in
 # the computational basis. The motivation is that in this factorized model, 
@@ -176,7 +184,6 @@ nr_qubits = 4
 
 
 def sigmoid(x):
-
     return np.exp(x) / (np.exp(x) + 1)
 
 
@@ -191,8 +198,7 @@ def sigmoid(x):
 
 
 def prob_dist(params):
-
-    return [[sigmoid(p), 1 - sigmoid(p)] for p in params]
+    return np.vstack([sigmoid(params), 1-sigmoid(params)]).T
 
 
 ######################################################################
@@ -209,7 +215,7 @@ def single_rotation(phi_params, qubits):
 
     rotations = ["Z", "Y", "X"]
     for i in range(0, len(rotations)):
-        qml.templates.embeddings.AngleEmbedding(phi_params[i], wires=qubits, rotation=rotations[i])
+        qml.templates.AngleEmbedding(phi_params[i], wires=qubits, rotation=rotations[i])
 
 
 ######################################################################
@@ -227,7 +233,7 @@ dev = qml.device("default.qubit", wires=nr_qubits)
 def quantum_circuit(rotation_params, coupling_params, sample=None):
 
     # Prepares the initial basis state corresponding to the sample
-    BasisStatePreparation(sample, wires=range(nr_qubits))
+    qml.templates.BasisStatePreparation(sample, wires=range(nr_qubits))
 
     # Prepares the variational ansatz for the circuit
     for i in range(0, depth):
@@ -249,11 +255,9 @@ qnode = qml.QNode(quantum_circuit, dev)
 #
 
 
-results = qnode(
-    [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)],
-    [[1, 1, 1, 1] for i in range(0, depth)],
-    sample=[1, 0, 1, 0],
-)
+rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)
+coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
+results = qnode(rotation_params, coupling_params, sample=[1, 0, 1, 0])
 print(qnode.draw())
 
 
@@ -281,7 +285,7 @@ def calculate_entropy(distribution):
 
 ######################################################################
 # Finally, we combine the ansatz and the entropy function to get the cost
-# function. In this tutorial, we deviate slightly from how VQT would be
+# function. In this demonstration, we deviate slightly from how VQT would be
 # performed in practice. Instead of sampling from the probability
 # distribution describing the initial mixed state, we use the ansatz to
 # calculate 
@@ -322,29 +326,6 @@ def convert_list(params):
     ansatz_params = [rotation, coupling]
 
     return [dist_params, ansatz_params]
-
-
-######################################################################
-# We also write a function that prepares the parameters with the 
-# `convert_list` method, the probability distribution, and the computational
-# basis bitstrings:
-#
-
-def prepare_params(params):
-
-    # Transforms the parameter list
-    parameters = convert_list(params)
-    dist_params = parameters[0]
-    ansatz_params = parameters[1]
-
-    # Creates the probability distribution
-    distribution = prob_dist(dist_params)
-
-    # Generates a list of all computational basis states of our qubit system
-    combos = itertools.product([0, 1], repeat=nr_qubits)
-    s = [list(c) for c in combos]
-
-    return []
 
 
 ######################################################################
@@ -396,7 +377,7 @@ def exact_cost(params):
 # (`COBYLA <https://en.wikipedia.org/wiki/COBYLA>`__) optimization method, 
 # which is a gradient-free optimizer. We observe that for this algorithm, COBYLA 
 # has a lower runtime than its gradient-based counterparts, so we utilize it 
-# in this tutorial:
+# in this demonstration:
 #
 
 
@@ -463,8 +444,7 @@ seaborn.heatmap(abs(prep_density_matrix))
 ######################################################################
 # To verify that we have in fact prepared a good approximation of the
 # thermal state, let’s calculate it numerically by taking the matrix
-# exponential of the Heisenberg Hamiltonian, as was outlined in the first
-# part of the tutorial.
+# exponential of the Heisenberg Hamiltonian, as was outlined earlier.
 #
 
 
