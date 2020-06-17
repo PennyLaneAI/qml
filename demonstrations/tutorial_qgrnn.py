@@ -553,7 +553,7 @@ def cost_function(params):
 iterations = 0
 
 optimizer = qml.AdamOptimizer(stepsize=0.3)
-steps = 100
+steps = 1
 qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
 
 # Executes the optimization method
@@ -592,9 +592,14 @@ def create_colour_plot(data):
 
 # Inserts 0s where there is no edge present in target parameters
 
+print(matrix_params)
+
 target_params = list(np.array(matrix_params).flatten())
 target_params.insert(1, 0)
 target_params.insert(4, 0)
+
+print(target_params)
+print(qgrnn_params)
 
 # Prints the colour plot of the parameters
 
