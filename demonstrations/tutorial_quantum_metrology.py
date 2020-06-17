@@ -111,6 +111,9 @@ import pennylane as qml
 from pennylane import numpy as np
 
 ##############################################################################
+# Modeling the sensing process
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We will first specify the device to carry out the simulations. As we want to
 # model a noisy system, it needs to be capable of mixed-state simulations.
 # We will choose the ``cirq.mixedsimulator`` device from the
@@ -165,7 +168,6 @@ def experiment(weights, phi, gamma=0.0):
 
     return qml.probs(wires=[0, 1, 2])
 
-
 # Make a dry run to be able to draw
 experiment(
     np.zeros(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
@@ -176,12 +178,13 @@ print(experiment.draw(show_variable_names=True))
 
 
 ##############################################################################
-# Cost function
-# ------------
+# Evaluating of the cost function
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now, let's turn to the cost function itself. The most important ingredient
 # is the Classical Fisher Information Matrix, which we compute using a separate
-# function.
+# function that uses the explicit `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_ 
+# to enable differentiation. 
 def CFIM(weights, phi, gamma):
     p = experiment(weights, phi, gamma=gamma)
     dp = []
@@ -208,7 +211,7 @@ def CFIM(weights, phi, gamma):
 ##############################################################################
 # As the cost function contains an inversion, we add a small regularization
 # to it to avoid inverting a singular matrix. As additional parameters, we add
-# the weighting matrix `W` and the Jacobian `J`.
+# the weighting matrix :math:`W` and the Jacobian :math:`J`.
 def cost(weights, phi, gamma, J, W, epsilon=1e-10):
     return np.trace(
         W
@@ -219,8 +222,9 @@ def cost(weights, phi, gamma, J, W, epsilon=1e-10):
 
 
 ##############################################################################
-# To compute the Jacobian, we make use of sympy. Note that we only seek the
-# Fourier amplitudes, of which there are only two independent ones.
+# To compute the Jacobian, we make use of `sympy <https://docs.sympy.org/latest/index.html>`_. 
+# The two independent Fourier amplitudes are computed using the `discrete Fourier transform matrix <https://en.wikipedia.org/wiki/DFT_matrix>`_
+# :math:`\Omega_{jk} = \frac{\omega^{jk}}{\sqrt{N}}` with :math:`\omega = \exp(-i \frac{2\pi}{N})`.
 import sympy
 import cmath
 
@@ -236,6 +240,7 @@ Omega = sympy.Matrix([[1, 1, 1], [1, omega ** 1, omega ** 2]]) / sympy.sqrt(3)
 jacobian = (
     sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
 )
+# Lambdify converts the symbolic expression to a python function
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
 ##############################################################################
