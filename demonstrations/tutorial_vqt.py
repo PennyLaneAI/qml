@@ -14,7 +14,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 
 ######################################################################
 # The Idea
-# --------------
+# -------------
 #
 
 
