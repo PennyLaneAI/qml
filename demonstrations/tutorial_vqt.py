@@ -150,7 +150,7 @@ def create_hamiltonian_matrix(n, graph):
 ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 
 # Prints a visual representation of the Hamiltonian matrix
-seaborn.heatmap(ham_matrix)
+seaborn.heatmap(ham_matrix.real)
 
 
 ######################################################################
