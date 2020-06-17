@@ -167,7 +167,7 @@ qubits = range(qubit_number)
 #
 
 
-ising_graph = nx.complete_graph()
+ising_graph = nx.complete_graph(qubit_number)
 
 nx.draw(ising_graph)
 print("Edges: " + str(ising_graph.edges))
