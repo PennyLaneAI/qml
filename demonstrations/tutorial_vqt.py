@@ -52,7 +52,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 #     :align: center
 #
 # Arguably, the most important part of a variational circuit is its cost
-# function, which we atempt to minimize with a classical optimizer. 
+# function, which we attempt to minimize with a classical optimizer. 
 # In VQE, we generally try to
 # minimize :math:`\langle \psi(\theta) | \hat{H} | \psi(\theta) \rangle`
 # which, upon minimization, gives us a parametrized circuit that prepares
