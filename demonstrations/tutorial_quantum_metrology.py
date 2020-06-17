@@ -244,20 +244,24 @@ jacobian = (
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
 ##############################################################################
-# Optimization
-# ------------
+# Optimizing the protocol
+# ~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can now turn to the optimization of the protocol. We will fix the dephasing
 # constant at :math:`\gamma=0.2` and the ground truth of the sensing parameters at
-# :math:`\boldsymbol{\phi} = (1.1, 0.7, -0.6)` and use an equal weighting of the Fourier amplitudes.
+# :math:`\boldsymbol{\phi} = (1.1, 0.7, -0.6)` and use an equal weighting of the 
+# two Fourier amplitudes, corresponding to :math:`W = \mathbb{I}_2`.
 gamma = 0.2
 phi = np.array([1.1, 0.7, -0.6])
 J = jacobian(*phi)
+W = np.eye(2)
 
 ##############################################################################
-# We then define the cost function used in the gradient-based optimization and
-# initialize the weights at random.
-def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=np.eye(2)):
+# We are now ready to perform the optimization. We will initialize the weights
+# at random. Then we make use of the ``Adagrad <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>``_
+# optimizer. Adaptive gradient descent methods are advantageous as the optimization 
+# of quantum sensing protocols is very sensitive to the stepsize.
+def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
     return cost(weights, phi, gamma, J, W)
 
 
@@ -279,21 +283,17 @@ for i in range(20):
         )
 
 ##############################################################################
-# Comparison
-# ----------
+# Comparison with the standard protocol
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Now we want to see how our protocol compares to standard Ramsay interferometry
-# with :math:`|+\rangle` states as probes and :math:`|+\rangle / |-\rangle` measurements.
+# Now we want to see how our protocol compares to the standard Ramsay interferometry protocol.
+# The probe state in this case is a tensor product of three separate :math:`|+\rangle` states
+# while the encoded state is measured in the :math:`|+\rangle / |-\rangle` basis.
 # We can recreate the standard schemes with specific weights for our setup.
 
 Ramsay_weights = np.zeros_like(weights)
-Ramsay_weights[1] = np.pi / 2
-Ramsay_weights[3] = np.pi / 2
-Ramsay_weights[5] = np.pi / 2
-Ramsay_weights[15] = np.pi / 2
-Ramsay_weights[17] = np.pi / 2
-Ramsay_weights[19] = np.pi / 2
-
+Ramsay_weights[1:6:2] = np.pi / 2
+Ramsay_weights[15:20:2] = np.pi / 2
 print(
     "Cost for standard Ramsay sensing = {:6.4f}".format(
         opt_cost(Ramsay_weights)
@@ -310,10 +310,10 @@ comparison_costs = {
 
 for gamma in gammas:
     comparison_costs["optimized"].append(
-        cost(weights, phi, gamma, J, np.eye(2))
+        cost(weights, phi, gamma, J, W)
     )
     comparison_costs["standard"].append(
-        cost(Ramsay_weights, phi, gamma, J, np.eye(2))
+        cost(Ramsay_weights, phi, gamma, J, W)
     )
 
 import matplotlib.pyplot as plt
