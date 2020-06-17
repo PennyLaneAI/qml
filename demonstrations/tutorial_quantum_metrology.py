@@ -113,7 +113,10 @@ from pennylane import numpy as np
 ##############################################################################
 # We will first specify the device to carry out the simulations. As we want to
 # model a noisy system, it needs to be capable of mixed-state simulations.
-# We will choose the ``cirq.mixedsimulator`` device for this tutorial.
+# We will choose the ``cirq.mixedsimulator`` device from the 
+# `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_ 
+# plugin for this tutorial. We also import the custom Cirq operations that include
+# the phase damping channel we use to model the noise in the encoding process.
 dev = qml.device("cirq.mixedsimulator", wires=3)
 from pennylane_cirq import ops as cirq_ops
 
