@@ -392,7 +392,7 @@ def exact_cost(params):
 #
 
 
-def cost_executions(params):
+def cost_execution(params):
 
     global iterations
 
