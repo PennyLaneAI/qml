@@ -83,24 +83,29 @@ With the cost function in place, we can use Pennylane to optimize the variationa
 Ramsay spectroscopy
 ------------------
 
-As an example, we will study Ramsay spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
-The metrological parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions 
-modeled as two-level systems with an external driving force. We model the noise in the parameter encoding as local
-dephasing with dephasing constant :math:`\gamma`. We consider a pure probe state on three qubits and a projective measurement, where
+In this demonstration, we will study Ramsay spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
+The encoded parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions 
+modeled as two-level systems with an external driving force. We represent the noise in the parameter encoding using a phase damping
+channel (also known as dephasing channel) with damping constant :math:`\gamma`. 
+We consider a pure probe state on three qubits and a projective measurement, where
 the computational basis is parametrized by local unitaries.
 
-To add another interesting aspect, we will seek an optimal protocol for the estimation of the Fourier amplitudes
-of the phases:
+The above method is actually not limited to the estimation of the parameters :math:`\boldsymbol{\phi}`, but 
+can also be used to optimize estimators for functions of those parameters! To add this interesting aspect
+to the tutorial, we will seek an optimal protocol for the estimation of the *Fourier amplitudes* of the phases:
 
 .. math:: f_j(\boldsymbol{\boldsymbol{\phi}}) = |\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}|^2.
 
-We can compute the Fisher information matrix for the entries of :math:`\boldsymbol{f}` using the following identity:
+For three phases, there are two independent amplitudes :math:`f_0` and :math:`f_1`. To include the effect of the function,
+we need to replace the classical Fisher information matrix with respect to :math:`\boldsymbol{\phi}` with the Fisher information
+matrix with respect to the entries :math:`f_0` and :math:`f_1`.
+To this end we can make use of the following identity which relates the two matrices:
 
 .. math:: I_{\boldsymbol{f}} = J^T I_{\boldsymbol{\phi}} J,
 
 where :math:`J_{kl} = \frac{\partial f_k}{\partial \phi_l}` is the Jacobian of :math:`\boldsymbol{f}`.
 
-
+We now turn to the actual implementation of the scheme.
 """
 import pennylane as qml
 from pennylane import numpy as np
