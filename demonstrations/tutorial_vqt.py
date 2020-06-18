@@ -26,7 +26,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T`,
 # which is defined as
 #
-# .. math:: \rho_\text{thermal} \ = \ \frac{e^{- H \beta}}{\text{Tr}(e^{- H \beta})} \ = \ \frac{e^{- H \beta}}{Z_{\beta}},
+# .. math:: \rho_\text{thermal} \ = \ \frac{e^{- \hat{H} \beta}}{\text{Tr}(e^{- \hat{H} \beta})} \ = \ \frac{e^{- \hat{H} \beta}}{Z_{\beta}},
 #
 # where :math:`\beta \ = \ 1/T`. The thermal state is a `mixed state
 # <https://en.wikipedia.org/wiki/Quantum_state#Mixed_states>`__,
@@ -50,7 +50,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # with respect to :math:`U \rho_{\theta} U^{\dagger}`.
 #
 # .. image:: ../demonstrations/vqt/ev.png
-#     :width: 90%
+#     :width: 100%
 #     :align: center
 #
 # Arguably, the most important part of a variational circuit is its cost
@@ -77,7 +77,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # the target parameters, and thus the target state.
 #
 # .. image:: ../demonstrations/vqt/vqt.png
-#     :width: 90%
+#     :width: 80%
 #     :align: center
 #
 # All together, the outlined processes give us a general protocol to
@@ -400,7 +400,7 @@ def cost_execution(params):
 
     cost = exact_cost(params)
 
-    if iterations % 20 == 0:
+    if iterations % 50 == 0:
         print("Cost at Step {}: {}".format(iterations, cost))
 
     iterations += 1
@@ -423,7 +423,6 @@ number = nr_qubits * (1 + depth * 4)
 params = [np.random.randint(-300, 300) / 100 for i in range(0, number)]
 out = minimize(cost_execution, x0=params, method="COBYLA", options={"maxiter": 1600})
 out_params = out["x"]
-print(out)
 
 
 ######################################################################
