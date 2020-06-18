@@ -215,7 +215,7 @@ def prob_dist(params):
 ######################################################################
 # With this done, we can move on to defining the ansatz circuit,
 # :math:`U(\phi)`, composed of rotational and coupling layers. The
-# rotation layer is simply ``RX``, ``RY```, and ``RZ``
+# rotation layer is simply ``RX``, ``RY``, and ``RZ``
 # gates applied to each qubit. We make use of the
 # ``AngleEmbedding``
 # function, which allows us to easily pass parameters into rotational
