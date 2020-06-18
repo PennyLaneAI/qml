@@ -1,5 +1,5 @@
 r"""
-Optimizing measurement protocols with variational methods
+Variationally optimizing measurement protocols
 ==================================
 
 .. meta::
