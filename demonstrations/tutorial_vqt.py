@@ -49,9 +49,13 @@ This demonstration discusses theory and experiments relating to a recently propo
 # expectation values gives us the the expectation value of :math:`\hat{H}`
 # with respect to :math:`U \rho_{\theta} U^{\dagger}`.
 #
-# .. image:: ../demonstrations/vqt/ev.png
+# .. figure:: ../demonstrations/vqt/ev.png
 #     :width: 100%
 #     :align: center
+#
+#     Inputted parameters create an initial density matrix and a parametrized
+#     ansatz, which are used to calculate the expectation value of the Hamiltonian 
+#     with respect to a new mixed state.
 #
 # Arguably, the most important part of a variational circuit is its cost
 # function, which we attempt to minimize with a classical optimizer.
@@ -76,9 +80,11 @@ This demonstration discusses theory and experiments relating to a recently propo
 # so similarly to VQE, we minimize it with a classical optimizer to obtain
 # the target parameters, and thus the target state.
 #
-# .. image:: ../demonstrations/vqt/vqt.png
+# .. figure:: ../demonstrations/vqt/vqt.png
 #     :width: 80%
 #     :align: center
+#     
+#     A high-level representation of how the VQT works.
 #
 # All together, the outlined processes give us a general protocol to
 # generate thermal states.
