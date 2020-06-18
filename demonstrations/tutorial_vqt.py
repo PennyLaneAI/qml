@@ -182,9 +182,9 @@ nr_qubits = 4
 # .. math:: \rho_{\theta}^{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|
 #
 # From here, all we have to do is define :math:`p_i(\theta_i)`, which we
-# choose to be the sigmoid:
+# choose to be the sigmoid
 #
-# .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}
+# .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}.
 #
 
 
