@@ -197,6 +197,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_vqe_qng`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Optimizing measurement protocols with variational methods
+    :figure: demonstrations/quantum_metrology/illustration.png
+    :description: :doc:`demos/tutorial_quantum_metrology`
+    :tags: cirq metrology autograd
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -235,3 +241,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
+    demos/tutorial_quantum_metrology
