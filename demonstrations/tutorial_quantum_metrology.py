@@ -1,6 +1,6 @@
 r"""
 Variationally optimizing measurement protocols
-==================================
+==============================================
 
 .. meta::
     :property="og:description": Using a variational algorithm to
@@ -90,7 +90,7 @@ Here, the encoding process is modeled as a unitary evolution :math:`U(\boldsymbo
 a parameter-independent noise channel :math:`\mathcal{N}`.
 
 Ramsay spectroscopy
-------------------
+-------------------
 
 In this demonstration, we will study Ramsay spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
 The encoded parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions 
@@ -188,7 +188,7 @@ print(experiment.draw(show_variable_names=True))
 
 ##############################################################################
 # Evaluating the cost function
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now, let's turn to the cost function itself. The most important ingredient
 # is the Classical Fisher Information Matrix, which we compute using a separate
