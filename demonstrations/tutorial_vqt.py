@@ -44,7 +44,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # this probability distribution to get some pure state
 # :math:`|\psi_k\rangle`, which we pass through a parametrized circuit,
 # :math:`U(\phi)`. From the results of this circuit, we then calculate
-# :math:`\langle \psi_k | U^{\dagger}(\phi) \hat{H} U(\phi) |\psi_k\rangle`.
+# :math:`\langle \psi_k | U^{\dagger}(\phi) \hat{H}\, U(\phi) |\psi_k\rangle`.
 # Repeating this process multiple times and taking the average of these
 # expectation values gives us the the expectation value of :math:`\hat{H}`
 # with respect to :math:`U \rho_{\theta} U^{\dagger}`.
