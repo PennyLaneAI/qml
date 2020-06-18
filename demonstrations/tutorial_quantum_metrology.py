@@ -10,7 +10,7 @@ Optimizing measurement protocols with variational methods
 *Author: Johannes Jakob Meyer*
 
 In this tutorial we use the variational quantum algorithm from
-JJM et al. [#meyer2020]_ to optimize a quantum
+Ref. [#meyer2020]_ to optimize a quantum
 sensing protocol.
 
 Background
@@ -85,6 +85,9 @@ With the cost function in place, we can use Pennylane to optimize the variationa
     :align: center
     :width: 50%
     :target: javascript:void(0)
+
+Here, the encoding process is modeled as a unitary evolution :math:`U(\boldsymbol{\phi})` followed by
+a parameter-independent noise channel :math:`\mathcal{N}`.
 
 Ramsay spectroscopy
 ------------------
@@ -340,8 +343,8 @@ plt.show()
 # The are numerous avenues open for further research: one could study more intricate
 # sensing problems, different noise models, and other platforms like optical systems.
 #
-# For more intricate noise models that can't be realized on quantum hardware, the original 
-# work offers a way to move certain parts of the algorithm to the classical side.
+# For more intricate noise models that can't be realized on quantum hardware, Ref. [#meyer2020]_
+# offers a way to move certain parts of the algorithm to the classical side.
 # It also provides extensions of the method to include prior knowledge
 # about the distribution of the underlying parameters or to factor in mutual time-dependence
 # of parameters and encoding noise.
