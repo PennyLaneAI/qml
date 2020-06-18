@@ -19,28 +19,28 @@ Background
 Quantum technologies are a rapidly expanding field with applications ranging from quantum computers
 to quantum communication lines. In this tutorial, we study a particular application of quantum technologies,
 namely *Quantum Metrology*. It exploits quantum effects to enhance the precision of measurements. One of the
-most impressive examples of a successful application of quantum metrology are gravitational wave interferometers
+most impressive examples of a successful application of quantum metrology is gravitational wave interferometers
 like `LIGO <https://en.wikipedia.org/wiki/LIGO>`_ that harness non-classical light to increase the sensitivity
 to passing graviational waves.
 
-A quantum metrological experiment, which we call a *protocol*, can be modeled in the following way:
+A quantum metrological experiment, which we call a *protocol*, can be modeled in the following way.
 As a first step, a quantum state :math:`\rho_0` is prepared. This state then undergoes a possibly noisy quantum
-evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}` we are interested in -- we say the quantum
+evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}` we are interested in—we say the quantum
 evolution *encodes* the parameters. The values :math:`\boldsymbol{\phi}` can for example be a set of phases that are 
 picked up in an interferometer. As we use the quantum state to *probe* the encoding evolution, we will call it the *probe state*.
 
 After the parameters are encoded, we have a new state :math:`\rho(\boldsymbol{\phi})` which we then need to measure.
 We can describe any possible measurement in quantum mechanics using a `positive
-operator-valued measurement <https://en.wikipedia.org/wiki/POVM/>`_ consisting of a set of operators :math:`\{ \Pi_l \}`.
+operator-valued measurement <https://en.wikipedia.org/wiki/POVM>`_ consisting of a set of operators :math:`\{ \Pi_l \}`.
 Measuring those operators gives us the output probabilities
 
 .. math:: p_l(\boldsymbol{\phi}) = \langle \Pi_l \rangle =
     \operatorname{Tr}(\rho(\boldsymbol{\phi}) \Pi_l).
 
 As the last step of our protocol, we have to estimate the parameters :math:`\boldsymbol{\phi}` from these probabilities,
-*e.g.* through `maximum likelihood estimation <https://en.wikipedia.org/wiki/Maximum_likelihood_estimation>`_.
+e.g., through `maximum likelihood estimation <https://en.wikipedia.org/wiki/Maximum_likelihood_estimation>`_.
 Intuitively, we will get the best precision in doing so if the probe state is most "susceptible" to the
-encoding evolution and the corresponding measurement can well distinguish the states for different values of :math:`\boldsymbol{\phi}`. 
+encoding evolution and the corresponding measurement can distinguish the states for different values of :math:`\boldsymbol{\phi}` well. 
 
 The variational algorithm
 -------------------------
@@ -68,8 +68,8 @@ guaranteed that we can construct a "best estimator" for the vector of parameters
 
 This in turn means that the right hand side of the Cramér-Rao bound would make for a great cost function. There is only
 one remaining problem, namely that it is matrix-valued, but we need a scalar cost function. To obtain such a scalar
-quantity, we multiply both sides of the inequaltiy with a positive-semidefinite weighting matrix :math:`W` and then perform
-a trace.
+quantity, we multiply both sides of the inequality with a positive-semidefinite weighting matrix :math:`W` and then perform
+a trace,
 
 .. math:: \operatorname{Tr}(W\operatorname{Cov}(\hat{\boldsymbol{\varphi}})) \geq \frac{1}{n} \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}).
 
@@ -100,7 +100,7 @@ The above method is actually not limited to the estimation of the parameters :ma
 can also be used to optimize estimators for functions of those parameters! To add this interesting aspect
 to the tutorial, we will seek an optimal protocol for the estimation of the *Fourier amplitudes* of the phases:
 
-.. math:: f_j(\boldsymbol{\boldsymbol{\phi}}) = |\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}|^2.
+.. math:: f_j(\boldsymbol{\boldsymbol{\phi}}) = \left|\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}\right|^2.
 
 For three phases, there are two independent amplitudes :math:`f_0` and :math:`f_1`. To include the effect of the function,
 we need to replace the classical Fisher information matrix with respect to :math:`\boldsymbol{\phi}` with the Fisher information
@@ -129,7 +129,7 @@ dev = qml.device("cirq.mixedsimulator", wires=3)
 
 ##############################################################################
 # Next, we model the parameter encoding. The phase shifts are recreated using
-# the Pauli Z rotation gate. The phase damping noise channel is available as
+# the Pauli Z rotation gate. The phase-damping noise channel is available as
 # a custom Cirq gate.
 from pennylane_cirq import ops as cirq_ops
 
@@ -184,7 +184,7 @@ print(experiment.draw(show_variable_names=True))
 
 
 ##############################################################################
-# Evaluating of the cost function
+# Evaluating the cost function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now, let's turn to the cost function itself. The most important ingredient
@@ -266,7 +266,7 @@ W = np.eye(2)
 # We are now ready to perform the optimization. We will initialize the weights
 # at random. Then we make use of the `Adagrad <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_
 # optimizer. Adaptive gradient descent methods are advantageous as the optimization 
-# of quantum sensing protocols is very sensitive to the stepsize.
+# of quantum sensing protocols is very sensitive to the step size.
 def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
     return cost(weights, phi, gamma, J, W)
 
@@ -337,13 +337,13 @@ plt.show()
 # that has a better noise resilience than standard Ramsay spectroscopy!
 #
 # This tutorial shows that variational methods are useful for quantum metrology.
-# The are numerous avenues open for further research: One could study more intricate
-# sensing problems, different noise models and other platforms like optical systems.
+# The are numerous avenues open for further research: one could study more intricate
+# sensing problems, different noise models, and other platforms like optical systems.
 #
 # For more intricate noise models that can't be realized on quantum hardware, the original 
 # work offers a way to move certain parts of the algorithm to the classical side.
 # It also provides extensions of the method to include prior knowledge
-# about the distribution of the underlying parameters or to factor in mutual time dependence
+# about the distribution of the underlying parameters or to factor in mutual time-dependence
 # of parameters and encoding noise.
 
 
