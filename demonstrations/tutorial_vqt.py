@@ -171,7 +171,7 @@ nr_qubits = 4
 ######################################################################
 # The first step of the VQT is to create the initial density matrix,
 # :math:`\rho_\theta`. In this demonstration, we let :math:`\rho_\theta` be
-# **factorized**, meaning that it can be written as an uncorrelated tensor
+# *factorized*, meaning that it can be written as an uncorrelated tensor
 # product of :math:`4` one-qubit density matrices that are diagonal in
 # the computational basis. The motivation is that in this factorized model,
 # the number of :math:`\theta_i` parameters needed to describe
