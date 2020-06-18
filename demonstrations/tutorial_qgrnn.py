@@ -592,13 +592,22 @@ def create_colour_plot(data):
 
 # Inserts 0s where there is no edge present in target parameters
 
+print(matrix_params)
+print(matrix_params[0])
+print(matrix_params[1])
+
 target_params = matrix_params[0] + matrix_params[1]
+
+print(target_params)
+
 target_params.insert(1, 0)
 target_params.insert(4, 0)
 
+print(target_params)
+
 # Prints the colour plot of the parameters
 
-create_colour_plot([target_params, qgrnn_params])
+#  create_colour_plot([target_params, qgrnn_params])
 
 
 ######################################################################
