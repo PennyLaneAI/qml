@@ -592,7 +592,7 @@ def create_colour_plot(data):
 
 # Inserts 0s where there is no edge present in target parameters
 
-target_params = list(np.hstack(np.array(matrix_params)))
+target_params = matrix_params[0] + matrix_params[1]
 target_params.insert(1, 0)
 target_params.insert(4, 0)
 
