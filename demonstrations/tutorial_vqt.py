@@ -312,7 +312,7 @@ def calculate_entropy(distribution):
 # performed in practice. Instead of sampling from the probability
 # distribution describing the initial mixed state, we use the ansatz to
 # calculate
-# :math:`\langle x_i | U^{\dagger}(\phi) \hat{H} U(\phi) |x_i\rangle` for
+# :math:`\langle x_i | U^{\dagger}(\phi) \hat{H} \,U(\phi) |x_i\rangle` for
 # each basis state :math:`|x_i\rangle`. We then multiply each of these
 # expectation values by their corresponding :math:`(\rho_\theta)_{ii}`,
 # which is exactly the probability of sampling :math:`|x_i\rangle` from
