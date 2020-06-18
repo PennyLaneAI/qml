@@ -520,7 +520,7 @@ plt.show()
 # the trace distance between the two density matrices, which is defined
 # as
 #
-# .. math:: T(\rho, \ \sigma) \ = \ \frac{1}{2} \text{Tr} \sqrt{(\rho \ - \ \sigma)^{\dagger} (\rho \ - \ \sigma)}
+# .. math:: T(\rho, \ \sigma) \ = \ \frac{1}{2} \text{Tr} \sqrt{(\rho \ - \ \sigma)^{\dagger} (\rho \ - \ \sigma)},
 #
 # and is a metric on the space of density matrices:
 #
