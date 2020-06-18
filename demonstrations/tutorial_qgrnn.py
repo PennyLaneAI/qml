@@ -1,18 +1,14 @@
 """
 The Quantum Graph Recurrrent Neural Network
--------------------------------------------
+===========================================
+
+.. meta::
+    :property="og:description": Using a quantum graph recurrrent neural network to learn quantum dynamics.
+    :property="og:image": https://pennylane.ai/qml/_images/qgrnn_thumbnail.png
+
+*Author: Jack Ceroni*
 
 """
-
-# Starts by importing all of the necessary dependencies
-
-import pennylane as qml
-from matplotlib import pyplot as plt
-import numpy as np
-import scipy
-from scipy.optimize import minimize
-import networkx as nx
-
 
 ######################################################################
 # In this Notebook, we investigate the idea of a quantum graph
@@ -24,12 +20,13 @@ import networkx as nx
 
 ######################################################################
 # The Idea
-# ~~~~~~~~
+# --------
 #
 
 
 ######################################################################
-# In recent years, the idea of a graph neural network has been
+# In recent years, the idea of a 
+# `graph neural network <https://arxiv.org/abs/1812.08434>`__ has been
 # receving a lot of attention from the machine learning research community
 # for its ability to learn from data that is inherently
 # graph-theoretic. More specifically, graph neural networks seek
@@ -48,17 +45,17 @@ import networkx as nx
 ######################################################################
 # We define the QGRNN to be a variational ansatz of the form:
 #
-# .. math:: U_{H}(\boldsymbol\gamma, \ \boldsymbol\theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg]
+# .. math:: U_{H}(\boldsymbol\gamma, \ \boldsymbol\theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg],
 #
 
 
 ######################################################################
-# Where we have:
+# where we have:
 #
 
 
 ######################################################################
-# .. math:: \hat{H}_{j}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(a,b) \in E} \displaystyle\sum_{c} V_{jabc} \hat{A}_{a}^{jc} \otimes \hat{B}_{b}^{jc} \ + \ \displaystyle\sum_{v \in V} \displaystyle\sum_{d} W_{jvd} \hat{C}_{v}^{jd}
+# .. math:: \hat{H}_{j}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(a,b) \in E} \displaystyle\sum_{c} V_{jabc} \hat{A}_{a}^{jc} \otimes \hat{B}_{b}^{jc} \ + \ \displaystyle\sum_{v \in V} \displaystyle\sum_{d} W_{jvd} \hat{C}_{v}^{jd}.
 #
 
 
@@ -76,7 +73,7 @@ import networkx as nx
 # our approximate time-evolution for different values of :math:`T` the
 # same. If we define:
 #
-# .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{q} \hat{H}_{q}(\boldsymbol\theta)
+# .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{q} \hat{H}_{q}(\boldsymbol\theta),
 #
 # then by using the Trotter-Suzuki decomposition defined above, we can see
 # that the time-evolution operator for this particular Hamiltonian can be
@@ -126,12 +123,12 @@ import networkx as nx
 
 ######################################################################
 # Learning an Ising Model with the QGRNN
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------------------
 #
 
 
 ######################################################################
-# In this tutorial, we attempt to learn the parameters corresponding
+# In this demonstration, we attempt to learn the parameters corresponding
 # to some randomly-initialized transverse field Ising model Hamiltonian,
 # using the QGRNN.
 #
@@ -139,12 +136,24 @@ import networkx as nx
 
 ######################################################################
 # Getting Started
-# ~~~~~~~~~~~~~~~
+# ^^^^^^^^^^^^^^^^
 #
 
 
 ######################################################################
-# We begin by defining some fixed values that are used throughout
+# We begin by importing the necessary dependencies:
+#
+
+
+import pennylane as qml
+from matplotlib import pyplot as plt
+import numpy as np
+import scipy
+import networkx as nx
+
+
+######################################################################
+# We can then define some fixed values that are used throughout
 # the simulation.
 #
 
@@ -160,17 +169,19 @@ qubits = range(qubit_number)
 # knowledge of the target Hamiltonian and the interaction graph. We choose
 # the Hamiltonian to be a transerve field Ising model of the form:
 #
-# .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i}
+# .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
 #
-# where :math:`E` is the set of edges in the interaction graph. We then define
-# the target interaction graph of the Hamiltonian to be the cycle graph:
+# where :math:`E` is the set of edges in the interaction graph.
+# :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the 
+# :math:`i`-th qubit. We then define the target interaction graph 
+# of the Hamiltonian to be the cycle graph:
 #
 
 
-ising_graph = nx.complete_graph(qubit_number)
+ising_graph = nx.cycle_graph(qubit_number)
 
 nx.draw(ising_graph)
-print("Edges: " + str(ising_graph.edges))
+print("Edges: {}" .format(ising_graph.edges))
 
 
 ######################################################################
@@ -192,7 +203,7 @@ def create_params(graph):
 
 # Creates and prints the parameters for our simulation
 matrix_params = create_params(ising_graph)
-print("Target parameters: " + str(matrix_params))
+print("Target parameters: {}".format(matrix_params))
 
 
 ######################################################################
@@ -215,7 +226,7 @@ def create_hamiltonian_matrix(n, graph, params):
                 m = np.kron(m, np.identity(2))
         matrix = np.add(matrix, params[0][count] * m)
 
-    # Creates the "bias" components of the matrix
+    # Creates the bias components of the matrix
     for i in range(0, n):
         m1 = m2 = 1
         for j in range(0, n):
@@ -229,24 +240,25 @@ def create_hamiltonian_matrix(n, graph, params):
 
     return matrix
 
-# Defines and prints the matrix for the target interaction graph and parameters
+# Prints a visual representation of the Hamiltonian matrix
 ham_matrix = create_hamiltonian_matrix(qubit_number, ising_graph, matrix_params)
-print(ham_matrix)
+plt.matshow(ham_matrix)
+plt.show()
 
 
 ######################################################################
 # Preparing Quantum Data with VQE
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 
 
 ######################################################################
-# To generate the quantum data (a collection of time-evolved, low-energy quantum
-# states), the strategy we employ involves preparing a low-energy state, and then evolving
-# it forward in time with the time-evolution unitary, under the target
-# Hamiltonian.
+# To generate the quantum data, we prepare a low-energy state, and 
+# then evolve it forward in time with the time-evolution unitary, 
+# under the target Hamiltonian.
 #
-# To prepare the initial, low-energy state, we use VQE. The VQE is
+# To prepare the initial low-energy state, we use the :doc:`Variational 
+# Quantum Eigensolver </demos/tutorial_vqe>` (VQE). The VQE is
 # usually used to prepare an approximate ground state of a given
 # Hamiltonian. However, in this particular scenario, we **don’t** want the
 # VQE to prepare the ground state, as it will have trivial time-dependence
@@ -273,7 +285,7 @@ def ansatz_circuit(params, vqe_depth, qubits):
     for i in range(0, vqe_depth):
         rotations = ["X", "Z", "X", "Z"]
         for j in range(0, len(rotations)):
-            qml.templates.embeddings.AngleEmbedding(
+            qml.templates.AngleEmbedding(
                 features=updated_params[j], wires=qubits, rotation=rotations[j]
             )
 
@@ -281,7 +293,7 @@ def ansatz_circuit(params, vqe_depth, qubits):
 ######################################################################
 # We then create the VQE circuit, 
 # which returns the expected value of the target Hamiltonian with
-# respect to the prepared state.
+# respect to the prepared state.:
 #
 
 
@@ -321,7 +333,7 @@ vqe_params = list([np.random.randint(-100, 100) / 10 for i in range(0, 4 * qubit
 for i in range(0, steps):
     vqe_params = optimizer.step(vqe_qnode, vqe_params)
     if i % 50 == 0:
-        print("Cost Step " + str(i) + ": " + str(vqe_qnode(vqe_params)))
+        print("Cost Step {}: {}".format(i, vqe_qnode(vqe_params)))
 
 print("Parameters: {}".format(vqe_params))
 
@@ -342,7 +354,7 @@ def ground_state_energy(matrix):
     return min(val)
 
 ground_state = ground_state_energy(ham_matrix)
-print("Ground State Energy: " + str(ground_state))
+print("Ground State Energy: {}".format(ground_state))
 
 
 ######################################################################
@@ -367,8 +379,8 @@ def state_evolve(hamiltonian, qubits, time):
 
 
 ######################################################################
-# Learning the Hamiltonian with a QGRNN
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Learning the Hamiltonian
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 
 
@@ -491,7 +503,7 @@ def qgrnn(params1, params2, time=None):
 # pieces of quantum data, the final cost function is the **average
 # infidelity** between registers:
 #
-# .. math:: \mathcal{L}(\Delta, \ \boldsymbol\mu) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\Delta, \ \boldsymbol\mu) \ |\psi_0\rangle |^2
+# .. math:: \mathcal{L}(\Delta, \ \boldsymbol\mu) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\Delta, \ \boldsymbol\mu) \ |\psi_0\rangle |^2,
 #
 # where we use :math:`N` pieces of quantum data.
 #
@@ -553,7 +565,7 @@ def cost_function(params):
 iterations = 0
 
 optimizer = qml.AdamOptimizer(stepsize=0.3)
-steps = 1
+steps = 100
 qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
 
 # Executes the optimization method
@@ -561,18 +573,19 @@ qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
 for i in range(0, steps):
     qgrnn_params = optimizer.step(cost_function, qgrnn_params)
 
-print(qgrnn_params)
+print("Final Parameters: {}".format(qgrnn_params))
 
 
 ######################################################################
-# With the learned parameters, we construct the Hamiltonian to which they
-# correspond:
+# With the learned parameters, we construct a visual representation 
+# of the Hamiltonian to which they correspond:
 #
 
 new_ham_matrix = create_hamiltonian_matrix(
     qubit_number, nx.complete_graph(qubit_number), [qgrnn_params[0:6], qgrnn_params[6:10]]
 )
-print(new_ham_matrix)
+plt.matshow(new_ham_matrix)
+plt.show()
 
 
 ######################################################################
@@ -592,22 +605,13 @@ def create_colour_plot(data):
 
 # Inserts 0s where there is no edge present in target parameters
 
-print(matrix_params)
-print(matrix_params[0])
-print(matrix_params[1])
-
 target_params = matrix_params[0] + matrix_params[1]
-
-print(target_params)
-
 target_params.insert(1, 0)
 target_params.insert(4, 0)
 
-print(target_params)
-
 # Prints the colour plot of the parameters
 
-#  create_colour_plot([target_params, qgrnn_params])
+create_colour_plot([target_params, qgrnn_params])
 
 
 ######################################################################
@@ -621,7 +625,7 @@ print("Learned parameters: {}".format(qgrnn_params))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ===========
 #
 # 1. Verdon, G., McCourt, T., Luzhnica, E., Singh, V., Leichenauer, S., &
 #    Hidary, J. (2019). Quantum Graph Neural Networks. arXiv preprint
