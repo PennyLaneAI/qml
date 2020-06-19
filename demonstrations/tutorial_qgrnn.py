@@ -39,12 +39,12 @@ The Quantum Graph Recurrrent Neural Network
 # A **graph neural network** seeks
 # to learn a representation (a mapping of data into a
 # lower-dimensional vector space) of a given graph with features assigned
-# to nodes and edges such that the each of the vectors in the learned
+# to nodes and edges.  Each of the vectors in the learned
 # representation preserves not only the features, but also the overall 
-# topology of the graph (which nodes are connected by edges). The 
+# topology of the graph, i.e., which nodes are connected by edges. The 
 # quantum graph neural network attempts to do something similar, but for
-# features that are quantum-mechanical (for instance, a
-# collection of quantum states).
+# features that are quantum-mechanical; for instance, a
+# collection of quantum states.
 #
 
 
