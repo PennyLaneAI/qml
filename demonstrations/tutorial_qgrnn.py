@@ -115,7 +115,7 @@ The Quantum Graph Recurrrent Neural Network
 # Continuing on with the Ising model example, let's imagine we have some system
 # governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
 # target parameters, 
-# :math:`\boldsymbol\alpha`. Let's also imagine we have access to a bunch of copies of some 
+# :math:`\boldsymbol\alpha`. Let's also suppose we have access to a bunch of copies of some 
 # low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`. In addition, 
 # we have access to a collection of time evolved states, 
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
