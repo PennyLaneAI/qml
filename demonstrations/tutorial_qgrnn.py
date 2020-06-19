@@ -33,7 +33,7 @@ The Quantum Graph Recurrrent Neural Network
 #     :width: 70%
 #     :align: center
 # 
-# In recent years, the idea of a 
+# In recent years, the concept of a 
 # `graph neural network <https://arxiv.org/abs/1812.08434>`__ has been
 # receving a lot of attention from the machine learning community. 
 # A **graph neural network** seeks
