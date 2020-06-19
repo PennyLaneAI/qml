@@ -75,7 +75,7 @@ The Quantum Graph Recurrrent Neural Network
 # graph-theoretic properties. Recall that the time-evolution operator 
 # with respect to some Hamiltonian :math:`H` is defined as:
 #
-# .. math:: U \ = \ e^{-it H}
+# .. math:: U \ = \ e^{-it H}.
 #
 # Thus, we have a clean way of taking our graph-theoretic Hamiltonians and turning 
 # them into unitaries (quantum circuits) that possess the same correspondance to a graph.
