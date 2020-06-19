@@ -136,7 +136,7 @@ The Quantum Graph Recurrrent Neural Network
 # from the QGRNN.
 #
 # As the QGRNN states becomes more "similar" to 
-# each time-evolved state (for each sampled time), it follows that 
+# each time-evolved state for each sampled time, it follows that 
 # :math:`\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha`
 # and we are able to learn the unknow parameters of the Hamiltonian.
 #
