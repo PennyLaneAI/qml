@@ -15,8 +15,6 @@ The Quantum Graph Recurrrent Neural Network
 # recurrent neural network (QGRNN), which is the quantum analogue of a
 # classical graph RNN and a subclass of the more general quantum graph
 # neural network ansatz (`QGNN <https://arxiv.org/abs/1909.12264>`__).
-#
-
 
 ######################################################################
 # The Idea
@@ -24,121 +22,127 @@ The Quantum Graph Recurrrent Neural Network
 #
 
 
-######################################################################
+###################################################################### 
+# Recall that a graph is defined as a set of **nodes**, along with a set of 
+# **edges**, which represent interactions or relationships between nodes. 
+# Sometimes, we like to encode information into graphs by assigning numbers 
+# to nodes and edges, which we call **weights**.
+# It is usually convenient to think of a graph visually:
+#
+# .. image:: ../demonstrations/qgrnn/graph.png
+#     :width: 70%
+#     :align: center
+# 
 # In recent years, the idea of a 
 # `graph neural network <https://arxiv.org/abs/1812.08434>`__ has been
 # receving a lot of attention from the machine learning research community. 
-# A graph neural network seeks
-# to learn a representation (a mapping of the data into a
+# A **graph neural network** seeks
+# to learn a representation (a mapping of data into a
 # lower-dimensional vector space) of a given graph with features assigned
 # to nodes and edges such that the each of the vectors in the learned
 # representation preserves not only the features, but also the overall 
-# topology of the graph.
-#
-# The quantum graph neural network attempts to do the same thing, but for
+# topology of the graph (which nodes are connected by edges). The 
+# quantum graph neural network attempts to do something similar, but for
 # features that are quantum-mechanical (for instance, a
 # collection of quantum states).
 #
 
 
 ######################################################################
-# In general, quantum neural networks are ususally trainable, variational ansatze.
-# We define the QGRNN to be a variational ansatz of the form:
+# Consider the class of Hamiltonians that are **quadratic**, meaning that 
+# the terms of the Hamiltonian represent either interactions between two 
+# qubits, or bias on one qubits. 
+# This class of Hamiltonians is naturally described by graphs, with 
+# second-order terms between qubits corresponding to weighted edges between
+# nodes, and first-order terms corresponding to node weights.
 #
-# .. math:: U_{H}(\boldsymbol\gamma, \ \boldsymbol\theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg],
+# A well known example of a quadratic Hamiltonian is the transverse 
+# field Ising model, which is defined as
+#
+# .. math:: \hat{H}_{\text{Ising}}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
+#
+# where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
+# In this Hamiltonian, the set :math:`E` that determines which pairs of qubits 
+# have :math:`ZZ` interactions is exactly the set of edges for some graph.
+# The :math:`\theta^{(1)}` parameters correspond to the edge weights and
+# the :math:`\theta^{(2)}` 
+# parameters correspond to weights on the nodes.
 #
 
 
 ######################################################################
-# where we have:
+# This result implies that we can think about **quantum circuits** with 
+# graph-theoretic properties. Recall that the time-evolution operator 
+# with respect to some Hamiltonian :math:`H` is defined as:
 #
-
+# .. math:: U \ = \ e^{-it H}
+#
+# Thus, we have a clean way of taking our graph-theoretic Hamiltonians and turning 
+# them into unitaries (quantum circuits) that possess the same correspondance to a graph.
+# In the case of the Ising Hamiltonian, we have:
+#
+# .. math:: U_{\text{Ising}} \ = \ e^{-it \hat{H}_{\text{Ising}} (\boldsymbol\theta)} \ = \ \exp \Big[ -it \Big( \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i} \Big) \Big]
+#
+# In general, this kind of unitary is very difficult to implement on a quantum computer, 
+# but luckily, we can approximate it using the `Trotter-Suzuki decomposition 
+# <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki-Trotter_expansion>`__:
+#
+# .. math:: \exp \Big[ -it \Big( \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i} \Big) \Big]
+#            \ \approx \ \displaystyle\prod_{k \ = \ 1}^{t / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta \hat{H}_{\text{Ising}}^{j}(\boldsymbol\theta)} \Bigg] 
+#
+# where :math:`\hat{H}_{\text{Ising}}^{j}(\boldsymbol\theta)` is the :math:`j`-th term of the 
+# Ising Hamiltonian. :math:`\Delta` is some small number.
+#
+# The circuit at which we have arrived is a specific instance of the **Quantum Graph 
+# Recurrent Neural Network**, which in general is defined as a variational ansatz of
+# the form
+#
+# .. math:: U_{H}(\boldsymbol\mu, \ \boldsymbol\gamma) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_j H^{j}(\boldsymbol\mu)} \Bigg],
+#
+# for some parametrized Hamiltonian, :math:`H(\boldsymbol\mu)`, of 
+# quadratic order.
 
 ######################################################################
-# .. math:: \hat{H}_{j}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(a,b) \in E} \displaystyle\sum_{c} V_{jabc} \hat{A}_{a}^{jc} \otimes \hat{B}_{b}^{jc} \ + \ \displaystyle\sum_{v \in V} \displaystyle\sum_{d} W_{jvd} \hat{C}_{v}^{jd}.
+# Using the QGRNN
+# ^^^^^^^^^^^^^^^^
 #
-
 
 ######################################################################
-# Each :math:`V_{jabc}` and :math:`W_{jvd}` is a real coefficient, and each
-# :math:`\hat{A}_{a}^{jc}`, :math:`\hat{B}_{b}^{jc}`, and :math:`\hat{C}_{v}^{jd}`
-# is an arbitrary unitary matrix.
+# Since the QGRNN ansatz is equivalent to the 
+# approximate time evolution of some quadratic Hamiltonian, we can use it
+# to learn the dynamics of a quantum system.
 #
-# This is a very general class of Hamiltonians that posses a direct
-# mapping between interaction and bias terms, and the edges and vertices
-# (repsectively) of some graph :math:`G \ = \ (V, \ E)`, which we call 
-# the interaction graph. Thus, the interaction graph simply tells us which pairs 
-# of qubits are associated with coupling terms in the Hamiltonian.
+# Continuing on with the Ising model example, let's imagine we have some system
+# governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
+# target parameters, 
+# :math:`\boldsymbol\alpha`. Let's also imagine we have access to a bunch of copies of some 
+# low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`. In addition, 
+# we have access to a collection of time evolved states, 
+# :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
 #
-# As a result of the Hamiltonian being so general, the
-# QGRNN encompasses a very broad class of unitaries. As it turns out,
-# one of the unitaries that falls under the umbrella of QGRNN ansatze is
-# the approximate `Trotterized simulation <https://arxiv.org/abs/1805.11568>`__ 
-# of a Hamiltonian. 
+# .. math:: |\psi(t_k)\rangle \ = \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\alpha)} |\psi_0\rangle
 #
-# Let us fix a time
-# :math:`T`. Let us also fix a parameter that controls the size of the
-# Trotterization steps,
-# which we call :math:`\Delta`. This allows us to keep the precision of
-# our approximate time-evolution for different values of :math:`T` the
-# same. If we define:
+# From here, we randomly pick a given number of time-evolved states
+# from our collection. For some state that we choose, which is
+# evolved to some arbitrary time :math:`t_k`, we compare it
+# to
 #
-# .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{q} \hat{H}_{q}(\boldsymbol\theta),
+# .. math:: U_{\hat{H}_{\text{Ising}}}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle \ \approx \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle
 #
-# then by using the `Trotter-Suzuki decomposition 
-# <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki-Trotter_expansion>`__, 
-# we can see that the `time-evolution operator 
-# <https://en.wikipedia.org/wiki/Time_evolution#In_quantum_mechanics>`__ for this 
-# particular Hamiltonian can be approximated as:
+# by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit 
+# with the QGRNN ansatz, with some "guessed" set of parameters :math:`\boldsymbol\mu`.
+# We then use a classical optimizer to maximize the average 
+# "similarity" between the time-evolved states and the states outputted
+# from the QGRNN.
 #
-# .. math:: e^{-i T \hat{H}(\boldsymbol\theta)} \ \approx \ \displaystyle\prod_{i \ = \ 1}^{T / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta H_{j}(\boldsymbol\theta)} \Bigg] \ = \ U_{H}(\Delta, \ \boldsymbol\theta)
-#
-# This tells us that the QGRNN ansatz, in the case of constant :math:`\gamma_j`,
-# can be thought of as the simulation of some Hamiltonian.
-#
-# Let’s say that we have some
-# Hamiltonian :math:`H_{T}(\boldsymbol\theta)`, that is a function of some collection 
-# of parameters, :math:`\boldsymbol\theta`. Consider an instance of this 
-# Hamiltonian defined in terms of an unknown collection of parameters,
-# :math:`\boldsymbol\theta \ = \ \boldsymbol\alpha` and an unknown interaction 
-# graph :math:`G`. Let's assume we are given copies of a low-energy
-# quantum state, which we call :math:`|\psi_0\rangle`. Let's also assume we have
-# access to a collection of quantum data,
-# :math:`\{|\psi(t)\rangle\}`, which is just :math:`|\psi_0\rangle` evolved 
-# under the target Hamiltonian for a range of times :math:`t`. We can use the QGRNN that we just
-# defined to learn the unknown parameters of the target Hamiltonian, and
-# the interaction graph. 
-#
-# If we take a bunch of pieces of quantum data, defined as: 
-#
-# .. math:: |\psi(t)\rangle \ = \ e^{-i t H_T(\boldsymbol\alpha)} |\psi_0\rangle,
-#
-# and look at how “similar” they are to:
-#
-# .. math:: U_{H_T}(\Delta, \boldsymbol\mu) |\psi_0\rangle \ \approx \ e^{-i t H_T(\boldsymbol\mu)} |\psi_0\rangle,
-#
-# each with corresponding :math:`P \ = \ t/ \Delta` for some guessed collection of parameters
-# :math:`\boldsymbol\mu` and a guessed interaction graph :math:`G'`, then 
-# optimizing this “similarity” leads to :math:`\boldsymbol\mu \ = \ \boldsymbol\alpha` 
-# and :math:`G' \ = \ G`.
+# Clearly, as the QGRNN states becomes more "similar" to 
+# each time-evolved state (for each sampled time), it follows that 
+# :math:`\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha`
+# and we are able to learn the unknow parameters of the Hamiltonian.
 #
 # .. image:: ../demonstrations/qgrnn/qgrnn2.png
 #     :width: 90%
 #     :align: center
-#
-
-######################################################################
-# You may now be wondering how this problem of Hamiltonian learning is a
-# **graph-theoretic** problem, fit for a **graph** neural network. Well,
-# firstly, the :math:`ZZ` terms of the
-# Hamiltonian encode exactly where the edges of our graph
-# interactions are. In addition to this, if we consider the
-# collection of quantum data, :math:`\{ |\psi(t)\rangle \}`, to be the features
-# associated with the graph, then we are able to reconstruct these
-# features using the Hamiltonian (all we have to do is evolve our fixed
-# initial state forward in time to :math:`t`). Thus, the
-# Hamiltonian is in fact a representation that describes the interaction
-# graph, along with its features.
 #
 
 
