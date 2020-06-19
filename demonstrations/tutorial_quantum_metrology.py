@@ -5,7 +5,7 @@ Variationally optimizing measurement protocols
 .. meta::
     :property="og:description": Using a variational algorithm to
         optimize a quantum sensing protocol.
-    :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
+    :property="og:image": https://pennylane.ai/qml/_images/illustration1.png
 
 *Author: Johannes Jakob Meyer*
 
