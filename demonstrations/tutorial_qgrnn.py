@@ -35,7 +35,7 @@ The Quantum Graph Recurrrent Neural Network
 # 
 # In recent years, the idea of a 
 # `graph neural network <https://arxiv.org/abs/1812.08434>`__ has been
-# receving a lot of attention from the machine learning research community. 
+# receving a lot of attention from the machine learning community. 
 # A **graph neural network** seeks
 # to learn a representation (a mapping of data into a
 # lower-dimensional vector space) of a given graph with features assigned
