@@ -77,8 +77,8 @@ The Quantum Graph Recurrrent Neural Network
 #
 # .. math:: U \ = \ e^{-it H}.
 #
-# Thus, we have a clean way of taking our graph-theoretic Hamiltonians and turning 
-# them into unitaries (quantum circuits) that possess the same correspondance to a graph.
+# Thus, we have a clean way of taking graph-theoretic Hamiltonians and turning 
+# them into unitaries (quantum circuits) that preserve the same correspondance to a graph.
 # In the case of the Ising Hamiltonian, we have:
 #
 # .. math:: U_{\text{Ising}} \ = \ e^{-it \hat{H}_{\text{Ising}} (\boldsymbol\theta)} \ = \ \exp \Big[ -it \Big( \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i} \Big) \Big]
