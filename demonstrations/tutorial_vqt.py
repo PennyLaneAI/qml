@@ -93,7 +93,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 
 ######################################################################
 # Simulating the VQT for a 4-Qubit Heisenberg Model
-# ---------------------------------------------------
+# --------------------------------------------------
 #
 
 
