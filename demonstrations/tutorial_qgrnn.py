@@ -11,9 +11,10 @@ The Quantum Graph Recurrrent Neural Network
 """
 
 ######################################################################
-# In this Notebook, we investigate the idea of a quantum graph
+# In this demonstration, we investigate the idea of a quantum graph
 # recurrent neural network (QGRNN), which is the quantum analogue of a
-# classical graph RNN and a subclass of the more general quantum graph
+# classical graph recurrent neural network and a subclass of the more 
+# general quantum graph
 # neural network ansatz (`QGNN <https://arxiv.org/abs/1909.12264>`__).
 
 ######################################################################
@@ -49,7 +50,7 @@ The Quantum Graph Recurrrent Neural Network
 
 
 ######################################################################
-# Consider the class of qubit Hamiltonians that are **quadratic**, meaning that 
+# Consider the class of qubit Hamiltonians that are *quadratic*, meaning that 
 # the terms of the Hamiltonian represent either interactions between two 
 # qubits, or the energy of individual qubits. 
 # This class of Hamiltonians is naturally described by graphs, with 
@@ -63,7 +64,8 @@ The Quantum Graph Recurrrent Neural Network
 #
 # where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
 # In this Hamiltonian, the set :math:`E` that determines which pairs of qubits 
-# have :math:`ZZ` interactions is exactly the set of edges for some graph.
+# have :math:`ZZ` interactions is exactly the set of edges for some graph. With 
+# the qubits as nodes we call thisgraph the *interaction graph*.
 # The :math:`\theta^{(1)}` parameters correspond to the edge weights and
 # the :math:`\theta^{(2)}` 
 # parameters correspond to weights on the nodes.
@@ -71,7 +73,7 @@ The Quantum Graph Recurrrent Neural Network
 
 
 ######################################################################
-# This result implies that we can think about **quantum circuits** with 
+# This result implies that we can think about *quantum circuits* with 
 # graph-theoretic properties. Recall that the time-evolution operator 
 # with respect to some Hamiltonian :math:`H` is defined as:
 #
@@ -115,13 +117,15 @@ The Quantum Graph Recurrrent Neural Network
 # Continuing on with the Ising model example, let's imagine we have some system
 # governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
 # target parameters, 
-# :math:`\boldsymbol\alpha`. Let's also suppose we have access to a bunch of copies of some 
+# :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also 
+#  suppose we have access to a bunch of copies of some 
 # low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`. In addition, 
 # we have access to a collection of time evolved states, 
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
 #
 # .. math:: |\psi(t_k)\rangle \ = \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\alpha)} |\psi_0\rangle
 #
+# We call the low-energy states, and the collection of time-evolved states *quantum data*.
 # From here, we randomly pick a given number of time-evolved states
 # from our collection. For some state that we choose, which is
 # evolved to some arbitrary time :math:`t_k`, we compare it
@@ -130,10 +134,11 @@ The Quantum Graph Recurrrent Neural Network
 # .. math:: U_{\hat{H}_{\text{Ising}}}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle \ \approx \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle
 #
 # by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit 
-# with the QGRNN ansatz, with some "guessed" set of parameters :math:`\boldsymbol\mu`.
+# with the QGRNN ansatz, with some "guessed" set of parameters :math:`\boldsymbol\mu`
+# and a guessed interaction graph, :math:`G'`.
 # We then use a classical optimizer to maximize the average 
-# "similarity" between the time-evolved states and the states outputted
-# from the QGRNN.
+# "similarity" between the time-evolved states and the states prepared
+# with the QGRNN.
 #
 # As the QGRNN states becomes more "similar" to 
 # each time-evolved state for each sampled time, it follows that 
@@ -153,7 +158,7 @@ The Quantum Graph Recurrrent Neural Network
 
 
 ######################################################################
-# In this demonstration, we attempt to learn the parameters corresponding
+# Keeping in form with the introduction, we now attempt to learn the parameters corresponding
 # to some randomly-initialized transverse field Ising model Hamiltonian,
 # using the QGRNN.
 #
