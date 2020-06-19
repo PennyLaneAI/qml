@@ -49,7 +49,7 @@ The Quantum Graph Recurrrent Neural Network
 
 
 ######################################################################
-# Consider the class of Hamiltonians that are **quadratic**, meaning that 
+# Consider the class of qubit Hamiltonians that are **quadratic**, meaning that 
 # the terms of the Hamiltonian represent either interactions between two 
 # qubits, or bias on one qubits. 
 # This class of Hamiltonians is naturally described by graphs, with 
