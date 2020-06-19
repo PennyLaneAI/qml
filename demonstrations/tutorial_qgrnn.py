@@ -27,22 +27,22 @@ The Quantum Graph Recurrrent Neural Network
 ######################################################################
 # In recent years, the idea of a 
 # `graph neural network <https://arxiv.org/abs/1812.08434>`__ has been
-# receving a lot of attention from the machine learning research community
-# for its ability to learn from data that is inherently
-# graph-theoretic. More specifically, graph neural networks seek
-# to learn a **representation** (a mapping of the data into a
+# receving a lot of attention from the machine learning research community. 
+# A graph neural network seeks
+# to learn a representation (a mapping of the data into a
 # lower-dimensional vector space) of a given graph with features assigned
 # to nodes and edges such that the each of the vectors in the learned
 # representation preserves not only the features, but also the overall 
 # topology of the graph.
 #
 # The quantum graph neural network attempts to do the same thing, but for
-# features that are inherently quantum-mechanical (for instance, a
+# features that are quantum-mechanical (for instance, a
 # collection of quantum states).
 #
 
 
 ######################################################################
+# In general, quantum neural networks are ususally trainable, variational ansatze.
 # We define the QGRNN to be a variational ansatz of the form:
 #
 # .. math:: U_{H}(\boldsymbol\gamma, \ \boldsymbol\theta) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_{j} H_{j}(\boldsymbol\theta) }\Bigg],
@@ -60,46 +60,67 @@ The Quantum Graph Recurrrent Neural Network
 
 
 ######################################################################
+# Each :math:`V_{jabc}` and :math:`W_{jvd}` is a real coefficient, and each
+# :math:`\hat{A}_{a}^{jc}`, :math:`\hat{B}_{b}^{jc}`, and :math:`\hat{C}_{v}^{jd}`
+# is an arbitrary unitary matrix.
+#
 # This is a very general class of Hamiltonians that posses a direct
 # mapping between interaction and bias terms, and the edges and vertices
 # (repsectively) of some graph :math:`G \ = \ (V, \ E)`, which we call 
-# the interaction graph. As a result, the
-# QGRNN encompasses a very general class of unitaries. As it turns out,
+# the interaction graph. Thus, the interaction graph simply tells us which pairs 
+# of qubits are associated with coupling terms in the Hamiltonian.
+#
+# As a result of the Hamiltonian being so general, the
+# QGRNN encompasses a very broad class of unitaries. As it turns out,
 # one of the unitaries that falls under the umbrella of QGRNN ansatze is
-# the Trotterized simulation of a Hamiltonian. Let us fix a time
+# the approximate `Trotterized simulation <https://arxiv.org/abs/1805.11568>`__ 
+# of a Hamiltonian. 
+#
+# Let us fix a time
 # :math:`T`. Let us also fix a parameter that controls the size of the
-# Trotterization steps (essentially the :math:`1/P` in the above formula),
+# Trotterization steps,
 # which we call :math:`\Delta`. This allows us to keep the precision of
 # our approximate time-evolution for different values of :math:`T` the
 # same. If we define:
 #
 # .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{q} \hat{H}_{q}(\boldsymbol\theta),
 #
-# then by using the Trotter-Suzuki decomposition defined above, we can see
-# that the time-evolution operator for this particular Hamiltonian can be
-# approximated as:
+# then by using the `Trotter-Suzuki decomposition 
+# <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki-Trotter_expansion>`__, 
+# we can see that the `time-evolution operator 
+# <https://en.wikipedia.org/wiki/Time_evolution#In_quantum_mechanics>`__ for this 
+# particular Hamiltonian can be approximated as:
 #
 # .. math:: e^{-i T \hat{H}(\boldsymbol\theta)} \ \approx \ \displaystyle\prod_{i \ = \ 1}^{T / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta H_{j}(\boldsymbol\theta)} \Bigg] \ = \ U_{H}(\Delta, \ \boldsymbol\theta)
 #
-# This suggests to us that the QGRNN ansatz can be used to learn the
-# quantum dynamics of a quantum system. Let’s say that we have some
-# Hamiltonian :math:`\hat{H}(\theta)`, with unkown target parameters
-# :math:`\boldsymbol\theta \ = \ \boldsymbol\alpha`. The interaction graph
-# of the Hamiltonian is also unknown. If given copies of low-energy
-# quantum state, which we call :math:`|\psi_0\rangle`, as well as a
-# collection of
-# :math:`|\psi(t)\rangle \ = \ e^{-itH(\boldsymbol\alpha)} |\psi_0\rangle`
-# for a range of times :math:`t`, we can use the QGRNN that we just
+# This tells us that the QGRNN ansatz, in the case of constant :math:`\gamma_j`,
+# can be thought of as the simulation of some Hamiltonian.
+#
+# Let’s say that we have some
+# Hamiltonian :math:`H_{T}(\boldsymbol\theta)`, that is a function of some collection 
+# of parameters, :math:`\boldsymbol\theta`. Consider an instance of this 
+# Hamiltonian defined in terms of an unknown collection of parameters,
+# :math:`\boldsymbol\theta \ = \ \boldsymbol\alpha` and an unknown interaction 
+# graph :math:`G`. Let's assume we are given copies of a low-energy
+# quantum state, which we call :math:`|\psi_0\rangle`. Let's also assume we have
+# access to a collection of quantum data,
+# :math:`\{|\psi(t)\rangle\}`, which is just :math:`|\psi_0\rangle` evolved 
+# under the target Hamiltonian for a range of times :math:`t`. We can use the QGRNN that we just
 # defined to learn the unknown parameters of the target Hamiltonian, and
-# thus the interaction graph. More concretely, we have just shown that in
-# this case, the QGRNN is equivalent to Trotterized time-evolution, so if
-# we take a bunch of pieces of quantum data, :math:`|\psi(t)\rangle`, and
-# look at how “similar” they are to
-# :math:`U_{H}(\Delta, \boldsymbol\mu) |\psi_0\rangle` (each with
-# corresponding :math:`P \ = \ t/ \Delta`) for guessed parameters
-# :math:`\boldsymbol\mu`, then optimizing this “similarity” leads to
-# :math:`\boldsymbol\mu \ = \ \boldsymbol\alpha`, and we have thus learned
-# the target parameters.
+# the interaction graph. 
+#
+# If we take a bunch of pieces of quantum data, defined as: 
+#
+# .. math:: |\psi(t)\rangle \ = \ e^{-i t H_T(\boldsymbol\alpha)} |\psi_0\rangle,
+#
+# and look at how “similar” they are to:
+#
+# .. math:: U_{H_T}(\Delta, \boldsymbol\mu) |\psi_0\rangle \ \approx \ e^{-i t H_T(\boldsymbol\mu)} |\psi_0\rangle,
+#
+# each with corresponding :math:`P \ = \ t/ \Delta` for some guessed collection of parameters
+# :math:`\boldsymbol\mu` and a guessed interaction graph :math:`G'`, then 
+# optimizing this “similarity” leads to :math:`\boldsymbol\mu \ = \ \boldsymbol\alpha` 
+# and :math:`G' \ = \ G`.
 #
 # .. image:: ../demonstrations/qgrnn/qgrnn2.png
 #     :width: 90%
@@ -163,11 +184,12 @@ qubits = range(qubit_number)
 
 
 ######################################################################
-# In order to use the QGRNN, we need access to quantum data. In the real
-# world, this wouldn’t be a problem, but in this simulation, we have to
-# generate the quantum data ourselves. To do this, we must have *a priori*
-# knowledge of the target Hamiltonian and the interaction graph. We choose
-# the Hamiltonian to be a transerve field Ising model of the form:
+# In order to use the QGRNN, we need access to quantum data. In this 
+# simulation, we don't have quantum data readily available to pass into 
+# the QGRNN, so we have to generate it ourselves. To do this, we must 
+# have *a priori* knowledge of the target Hamiltonian and the interaction 
+# graph. We choose the Hamiltonian to be a transerve field Ising model 
+# of the form:
 #
 # .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
 #
@@ -262,7 +284,7 @@ plt.show()
 # usually used to prepare an approximate ground state of a given
 # Hamiltonian. However, in this particular scenario, we **don’t** want the
 # VQE to prepare the ground state, as it will have trivial time-dependence
-# equating to the addition of a global phase, and we will effectively
+# equating to a global phase, and we will effectively
 # have a bunch of copies of the same state (which is useless).
 # In order to ensure that the VQE doesn’t converge, we pick an ansatz such
 # that the exact ground state cannot possibly be prepared.
@@ -293,7 +315,7 @@ def ansatz_circuit(params, vqe_depth, qubits):
 ######################################################################
 # We then create the VQE circuit, 
 # which returns the expected value of the target Hamiltonian with
-# respect to the prepared state.:
+# respect to the prepared state.
 #
 
 
@@ -435,11 +457,9 @@ def swap_test(control, register1, register2):
 ######################################################################
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these fixed values is a "guessed"
-# interaction graph. Recall that part of the idea behind the QGRNN is that
-# we don’t know the interaction graph, and it has to be learned by setting
-# certain :math:`\boldsymbol\mu` parameters to :math:`0` (the ones that 
-# correspond to edges that don’t exist in the target interaction graph). 
-# We define the initial “guessed” graph to simply be the complete graph:
+# interaction graph, which we define to be the complete graph. This choice 
+# is motivated by the fact that any target interactions graph will be a subgraph 
+# of this initial guess. 
 #
 
 # Defines some fixed values
@@ -461,7 +481,13 @@ nx.draw(new_ising_graph)
 
 
 ######################################################################
-# Finally, we implement the QGRNN circuit for some given time value:
+# Part of the idea behind the QGRNN is that
+# we don’t know the interaction graph, and it has to be learned. In this case, the graph  
+# is learned **automatically** as the target parameters are learned. The
+# :math:`\boldsymbol\mu` parameters that correspond to edges that don't exist in 
+# the target graph will simply approach :math:`0`.
+#
+# With this done, we implement the QGRNN circuit for some given time value:
 #
 
 
