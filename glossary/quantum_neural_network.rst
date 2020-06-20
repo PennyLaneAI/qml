@@ -6,42 +6,38 @@
 Quantum Neural Network
 ----------------------
 
-A quantum neural network (QNN) is a machine learning model that utilizes concepts from both quantum computing and artifical neural networks. Over the last three decades, the term has been used to describe a variety of models and approaches, ranging from implementations of neural networks with quantum technology, to general "trainable" quantum circuits which have only little mathematical resemblance with neural networks.
+A quantum neural network (QNN) is a machine learning model or algorithm that combines concepts from quantum computing and artifical neural networks. 
 
-.. figure:: ../_static/concepts/vc_general.svg
+Over the past decades, the term has been used to describe a variety of ideas, ranging from quantum computers emulating the exact computations of neural nets, to general "trainable" quantum circuits that bear only little resemblence with their multi-layer perceptron structure.
+
+Quantum versions of feed-forward neural networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: ../_static/concepts/qnn1.png
     :align: center
-    :width: 40%
+    :width: 30%
     :target: javascript:void(0);
 
+Already in the 1990s, quantum physicists have tried to come up with "quantum" versions of recurrent and feed-forward neural networks `Schuld et al. (2014) <https://arxiv.org/abs/1408.7005>`_. The models were attempts to recover the modular structure as well as the nonlinear activation function of neural networks, but add "something quantum". However, chains of linear and nonlinear computations are rather "unnatural" for quantum computers. [#]_ 
 
-Quantum implementations of neural networks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A lot of more recent research has tried to tackle this problem, and suggested special measurement schemes, or modifications of the neural nets that make them more ameneable to quantum computing, but the advantage of these models for machine learning is still controversial.
 
-Already in the 1990s, quantum physicists have tried to come up with "quantum" versions of recurrent and feed-forward neural networks REF. The models were essentially attempts to recover the modular structure of the neural nets, as well as the basic functionality of the perceptron building block that applies a nonlinear function to the signals from incoming neurons. 
+Quantum versions of Boltzmann machines
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The challenge for these models lays in the effective implementation of the irreversible nonlinearity, which is in some sense very "unnatural" for quantum computers. More recently, a series of proposals have suggested solutions based on non-trivial measurement strategies or the exploitation of nonlinear physical processes REF. Another idea uses photonic quantum computers, which can implement the linear and modular part of neural networks generically, and use nonlinear optics or ancilla systems for the nonlinear transformations REF.
-
-Potential quantum advantages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-It is not fully clear yet how quantum mechanics can actually improve neural networks. Several papers suggest loading data in superposition or using interference effect within the neural network, but a concrete example of a boost in runtime, data volume or generalisation power is yet to be found.
+Boltzmann machines, which are probabilistic graphical models that can be understood as stochastic recurrent neural networks, play an important role in the quantum machine learning literature. For example, it was suggested to use samples from a quantum computer to train classical Boltzmann machines, or to interpret spins as physical units of a "quantum" Boltzmann machine model.
 
 
-Variational circuits as QNNs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Variational circuits 
+~~~~~~~~~~~~~~~~~~~~
 
-Increasingly, the term quantum neural network is used to refer to variational or parametrized quantum circuits. The analogy refers to the trainability of the circuits, as well as the "modular" nature of quantum gates in a circuit. However, beyond these points, quantum circuits give rise to rather different machine learning models as they do not reproduce the mathematical structure of multi-layer perceptrons. 
+.. figure:: ../_static/concepts/qnn2.png
+    :align: center
+    :width: 30%
+    :target: javascript:void(0);
 
-
-
-
-
-
-
-
-
-.. seealso:: In PennyLane, ....
+Increasingly, the term "quantum neural network" is used in a much looser analogy to refer to variational or parametrized quantum circuits. While mathematically nsecessarily similar to neural networks, the reference highlights  the "modular" nature of quantum gates in a circuit, as well as the wide use of tricks from training neural networks used in the optimization of quantum circuits. 
 
 .. rubric:: Footnotes
 
-.. [#] Bla
+.. [#] This is not necessarily true for photonic quantum computers, which allow for very natural implementations of neural nets (see for example `Killoran et al. (2018) <https://arxiv.org/abs/1806.06871>`_ and `Steinbrecher et al. <https://arxiv.org/abs/1808.10047>`_).
