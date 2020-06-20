@@ -58,8 +58,9 @@ Key Concepts
 
     /glossary/automatic_differentiation
     /glossary/circuit_ansatz
-    /glossary/quantum_embedding
-    /glossary/quantum_gradient
     /glossary/hybrid_computation
     /glossary/parameter_shift
+    /glossary/quantum_embedding
+    /glossary/quantum_gradient
+    /glossary/quantum_neural_network
     /glossary/variational_circuit
