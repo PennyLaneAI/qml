@@ -40,4 +40,4 @@ Increasingly, the term "quantum neural network" is used in a much looser analogy
 
 .. rubric:: Footnotes
 
-.. [#] This is not necessarily true for photonic quantum computers, which allow for very natural implementations of neural nets (see for example `Killoran et al. (2018) <https://arxiv.org/abs/1806.06871>`_ and `Steinbrecher et al. <https://arxiv.org/abs/1808.10047>`_).
+.. [#] This is not necessarily true for photonic quantum computers, which allow for very natural implementations of neural nets (see for example `Killoran et al. (2018) <https://arxiv.org/abs/1806.06871>`_ and `Steinbrecher et al. (2018) <https://arxiv.org/abs/1808.10047>`_).
