@@ -15,7 +15,7 @@ Quantum versions of feed-forward neural networks
 
 .. figure:: ../_static/concepts/qnn1.png
     :align: center
-    :width: 50%
+    :width: 60%
     :target: javascript:void(0);
 
 `Already in the 1990s, <https://arxiv.org/abs/1408.7005>`_ quantum physicists have tried to come up with "quantum versions" of recurrent and feed-forward neural networks. The models were attempts to translate the modular structure as well as the nonlinear activation functions of neural networks into the language of quantum algorithms. However, one could argue that chains of linear and nonlinear computations are rather "unnatural" for quantum computers [#]_. 
