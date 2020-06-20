@@ -15,7 +15,7 @@ Quantum versions of feed-forward neural networks
 
 .. figure:: ../_static/concepts/qnn1.png
     :align: center
-    :width: 40%
+    :width: 50%
     :target: javascript:void(0);
 
 Already in the 1990s, quantum physicists have tried to come up with "quantum" versions of recurrent and feed-forward neural networks `Schuld et al. (2014) <https://arxiv.org/abs/1408.7005>`_. The models were attempts to recover the modular structure as well as the nonlinear activation function of neural networks in the language of quantum algorithms. However, chains of linear and nonlinear computations are rather "unnatural" for quantum computers. [#]_ 
@@ -33,7 +33,7 @@ Variational circuits
 
 .. figure:: ../_static/concepts/qnn2.png
     :align: center
-    :width: 40%
+    :width: 50%
     :target: javascript:void(0);
 
 Increasingly, the term "quantum neural network" is used in a much looser analogy to refer to variational or parametrized quantum circuits. While mathematically rather different from the inner workings of neural networks, the name highlights  the "modular" nature of quantum gates in a circuit, as well as the wide use of tricks from training neural networks used in the optimization of quantum algorithms. 
