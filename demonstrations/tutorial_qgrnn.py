@@ -380,7 +380,7 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 
 
 ######################################################################
-# As was mentioned in the first section, the QGRNN has two qubit
+# As was mentioned in the first section, the QGRNN has two
 # registers. In one register, some piece of quantum data
 # :math:`|\psi(t)\rangle` is prepared and in the other we have
 # :math:`U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle`. We need a
