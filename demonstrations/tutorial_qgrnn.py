@@ -128,7 +128,7 @@ The Quantum Graph Recurrrent Neural Network
 # We call the low-energy states and the collection of time-evolved states *quantum data*.
 # From here, we randomly pick a given number of time-evolved states
 # from our collection. For some state that we choose, which is
-# evolved to some arbitrary time :math:`t_k`, we compare it
+# evolved to some time :math:`t_k`, we compare it
 # to
 #
 # .. math:: U_{\hat{H}_{\text{Ising}}}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle \ \approx \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle
