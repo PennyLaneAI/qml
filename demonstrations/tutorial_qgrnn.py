@@ -284,7 +284,7 @@ plt.show()
 
 ######################################################################
 # The collection of quantum data needed to run the QGRNN has two componenets: 
-# copies of a low-energy state, and a collection of time-evolved state, each of which are
+# copies of a low-energy state, and a collection of time-evolved states, each of which are
 # simply the low-energy state evolved to different times. 
 # For the target Hamiltonian we 
 # defined, we find that a low-energy state is given by the following vector
