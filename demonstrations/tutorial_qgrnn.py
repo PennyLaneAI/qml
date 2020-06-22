@@ -93,7 +93,7 @@ The Quantum Graph Recurrrent Neural Network
 #            \ \approx \ \displaystyle\prod_{k \ = \ 1}^{t / \Delta} \Bigg[ \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \Delta \hat{H}_{\text{Ising}}^{j}(\boldsymbol\theta)} \Bigg] 
 #
 # where :math:`\hat{H}_{\text{Ising}}^{j}(\boldsymbol\theta)` is the :math:`j`-th term of the 
-# Ising Hamiltonian. :math:`\Delta` is some small number.
+# Ising Hamiltonian and :math:`\Delta` is some small number.
 #
 # The circuit at which we have arrived is a specific instance of the **Quantum Graph 
 # Recurrent Neural Network**, which in general is defined as a variational ansatz of
