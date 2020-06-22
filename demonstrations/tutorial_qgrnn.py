@@ -118,7 +118,7 @@ The Quantum Graph Recurrrent Neural Network
 # governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
 # target parameters, 
 # :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also 
-# suppose we have access to a bunch of copies of some 
+# suppose we have access to copies of some 
 # low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`. In addition, 
 # we have access to a collection of time evolved states, 
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
