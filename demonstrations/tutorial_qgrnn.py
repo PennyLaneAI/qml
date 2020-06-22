@@ -211,7 +211,7 @@ print("Edges: {}" .format(ising_graph.edges))
 
 
 ######################################################################
-# We then can initialize the “unknown” target parameters that describe the
+# We can then initialize the “unknown” target parameters that describe the
 # target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`.
 # Recall from the introduction that we have defined our parametrized 
 # Ising Hamiltonian to be of the form:
