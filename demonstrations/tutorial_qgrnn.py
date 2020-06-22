@@ -24,7 +24,7 @@ The Quantum Graph Recurrrent Neural Network
 
 
 ###################################################################### 
-# A graph is defined as a set of **nodes**, along with a set of 
+# A graph is defined as a set of *nodes*, along with a set of 
 # **edges**, which represent interactions or relationships between nodes. 
 # Sometimes, we like to encode information into graphs by assigning numbers 
 # to nodes and edges, which we call **weights**.
@@ -85,8 +85,8 @@ The Quantum Graph Recurrrent Neural Network
 #
 # .. math:: U_{\text{Ising}} \ = \ e^{-it \hat{H}_{\text{Ising}} (\boldsymbol\theta)} \ = \ \exp \Big[ -it \Big( \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i} \Big) \Big]
 #
-# In general, this kind of unitary is very difficult to implement on a quantum computer, 
-# but luckily, we can approximate it using the `Trotter-Suzuki decomposition 
+# In general, this kind of unitary is very difficult to implement on a quantum computer.
+# However, we can approximate it using the `Trotter-Suzuki decomposition 
 # <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki-Trotter_expansion>`__:
 #
 # .. math:: \exp \Big[ -it \Big( \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i} \Big) \Big]
@@ -222,7 +222,9 @@ print("Edges: {}" .format(ising_graph.edges))
 # :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the 
 # :math:`i`-th qubit. 
 #
-# For this tutorial, we choose the target parameters manually.
+# For this tutorial, we choose the target parameters manually, by sampling from 
+# a uniform probability distribution ranging from :math:`-1` to :math:`1`, with 
+# two-decimal precision.
 #
 
 
@@ -254,7 +256,7 @@ def create_hamiltonian_matrix(n, graph, params):
                 m = np.kron(m, qml.PauliZ.matrix)
             else:
                 m = np.kron(m, np.identity(2))
-        matrix = np.add(matrix, params[0][count] * m)
+        matrix += params[0][count] * m
 
     # Creates the bias components of the matrix
     for i in range(0, n):
@@ -266,7 +268,7 @@ def create_hamiltonian_matrix(n, graph, params):
             else:
                 m1 = np.kron(m1, np.identity(2))
                 m2 = np.kron(m2, np.identity(2))
-        matrix = np.add(matrix, np.add(params[1][i] * m1, m2))
+        matrix += (params[1][i] * m1 + m2)
 
     return matrix
 
@@ -287,7 +289,7 @@ plt.show()
 # copies of a low-energy state, and a collection of time-evolved states, each of which are
 # simply the low-energy state evolved to different times. 
 # For the target Hamiltonian we 
-# defined, the following is a low-energy state 
+# defined, the following is a low-energy state:
 #
 
 low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  0.06594626-0.02907913j,
@@ -299,6 +301,14 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 
 
 ######################################################################
+# This state can be arrived at by using a decoupled version of the 
+# :doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` algorithm (VQE). 
+# Essentially, we choose a
+# VQE ansatz such that the circuit cannot learn the exact ground state, 
+# but it can get fairly close. If we did use the exact ground state as 
+# :math:`|\psi_0\rangle`, then we would have trivial time-dependence 
+# and our data would be useless.
+#
 # We can verify that this is a low-energy
 # state by numerically finding the lowest eigenvalue of the Hamiltonian
 # matrix and comparing it to the energy expectation of the low-energy state:
@@ -306,22 +316,13 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 
 # Finds the energy expectation
 
-def expectation_value(vector, matrix):
-    return np.inner(np.conj(vector), (matrix @ vector))
-
 energy_exp = np.inner(np.conj(low_energy_state), (ham_matrix @ low_energy_state))
 print("Energy Expectation: {}".format(energy_exp))
 
-def ground_state_energy(matrix):
+# Finds the ground state energy
 
-    # Finds the eigenstates of the matrix
-    val = np.linalg.eig(matrix)[0]
-
-    # Returns the minimum eigenvalue
-    return min(val)
-
-ground_state = ground_state_energy(ham_matrix)
-print("Ground State Energy: {}".format(ground_state))
+ground_state_energy = min(np.linalg.eig(ham_matrix)[0])
+print("Ground State Energy: {}".format(ground_state_energy))
 
 
 ######################################################################
@@ -402,6 +403,13 @@ def swap_test(control, register1, register2):
 
 
 ######################################################################
+# After performing the SWAP test, the value returned from the circuit is
+# :math:`\langle Z \rangle`, with respect to the ancilla qubit. When a SWAP
+# test is performed, the probability of measuring the :math:`|0\rangle` state 
+# in the control qubit is related to the fidelity between registers. In addition, 
+# the probability of measuring :math:`|0\rangle` as also related to :math:`\langle Z \rangle`.
+# From a bit of algebra, we find that :math:`\langle Z \rangle` is equal to the fidelity.
+#
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these is a "guessed"
 # interaction graph, which we define to be the complete graph. This choice 
@@ -459,40 +467,27 @@ def qgrnn(params1, params2, time=None):
 
 
 ######################################################################
-# Notice how the value returned from the circuit is
-# :math:`\langle Z \rangle`, with respect to the ancilla qubit. This is
-# because after performing a SWAP test between two states 
-# :math:`|\psi\rangle` and :math:`|\phi\rangle`, it is tue that
-# :math:`\langle Z \rangle \ = \ |\langle \psi | \phi \rangle|^2`.
-#
 # We have the full QGRNN circuit, but we still need to define a cost
 # function to minimize. We know that
 # :math:`| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`
-# approaches :math:`1` as the states become more similar, thus we choose
+# approaches :math:`1` as the states become more similar and approaches 
+# :math:`0` as the states become orthogonal. Thus, we choose
 # to minimize the quantity
-# :math:`1 \ - \ | \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`.
+# :math:`-| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`.
 # Since we are interested in calculating this value for many different
 # pieces of quantum data, the final cost function is the **average
-# infidelity** between registers:
+# negative fidelity** between registers:
 #
-# .. math:: \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\boldsymbol\mu, \ \Delta) \ |\psi_0\rangle |^2,
+# .. math:: \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ - \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\boldsymbol\mu, \ \Delta) \ |\psi_0\rangle |^2,
 #
 # where we use :math:`N` pieces of quantum data.
 #
 # Before creating the cost function, we must define a few more fixed
-# variables, the device, and the QNode:
+# variables:
 #
 
 N = 15  # The number of pieces of quantum data that are used for each step
 max_time = 0.1  # The maximum value of time that can be used for quantum data
-
-# Defines the new device
-
-qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
-
-# Defines the new QNode
-
-qnode = qml.QNode(qgrnn, qgrnn_dev)
 
 
 ######################################################################
@@ -515,11 +510,11 @@ def cost_function(params):
     total_cost = 0
     for i in times_sampled:
         result = qnode(weight_params, bias_params, time=i)
-        total_cost += 1 - result
+        total_cost += -1 * result
 
     # Prints the value of the cost function
     if iterations % 5 == 0:
-        print("Cost at Step " + str(iterations) + ": " + str((1 - total_cost / N)._value))
+        print("Fidelity at Step " + str(iterations) + ": " + str((-1 * total_cost / N)._value))
         print("Parameters at Step " + str(iterations) + ": " + str(params._value))
         print("---------------------------------------------")
 
@@ -529,13 +524,20 @@ def cost_function(params):
 
 
 ######################################################################
-# The last step is to define and execute the optimizer. We use Adam,
+# The last step is to define the new device and QNode, and execute the 
+# optimizer. We use Adam,
 # with a step-size of :math:`0.3`:
 #
 
+# Defines the new device
+
+qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
+
+# Defines the new QNode
+
+qnode = qml.QNode(qgrnn, qgrnn_dev)
 
 iterations = 0
-
 optimizer = qml.AdamOptimizer(stepsize=0.3)
 steps = 100
 qgrnn_params = list([np.random.randint(-20, 20) / 50 for i in range(0, 10)])
@@ -561,19 +563,9 @@ plt.show()
 
 
 ######################################################################
-# In addition, we can construct a visual representation of the target 
-# and learned parameters, to assess their similarity.
-#
-
-
-# Creates the colour plot function
-
-def create_colour_plot(data):
-
-    array = np.array(data)
-    plt.matshow(array)
-    plt.colorbar()
-    plt.show()
+# We conclude this demonstration by verifying that the QGRNN found the 
+# target parameters by looking at the
+# exact values of the target and learned parameters:
 
 # Inserts 0s where there is no edge present in target parameters
 
@@ -581,21 +573,15 @@ target_params = matrix_params[0] + matrix_params[1]
 target_params.insert(1, 0)
 target_params.insert(4, 0)
 
-# Prints the colour plot of the parameters
-
-create_colour_plot([target_params, qgrnn_params])
-
-
-######################################################################
-# The top row is the target values, while the bottom row is the learned 
-# ones.
-# The similarity of colours indicates that the parameters are very
-# similar, which we can verify by looking at their exact values:
-#
-
 print("Target parameters: {}".format(target_params))
 print("Learned parameters: {}".format(qgrnn_params))
 
+
+######################################################################
+# Thus, the QGRNN is functioning properly, and has learned the target 
+# parameters of the Ising Hamiltonian to a high
+# degree of accuracy!
+#
 
 ######################################################################
 # References
