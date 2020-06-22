@@ -385,7 +385,7 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 # :math:`|\psi(t)\rangle` is prepared and in the other we have
 # :math:`U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle`. We need a
 # way to measure the similarity between these states. 
-# One way that we can do this is by using the fidelity, which is
+# We can do this by using the fidelity, which is
 # simply the modulus squared of the inner product between the states,
 # :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
 # To calculate this value, we utilize a `SWAP
