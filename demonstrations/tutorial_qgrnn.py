@@ -443,8 +443,8 @@ nx.draw(new_ising_graph)
 def qgrnn(params1, params2, time=None):
 
     # Prepares the low energy state in the two qubit registers
-    qml.QubitStateVector(state=low_energy_state, wires=reg1)
-    qml.QubitStateVector(state=low_energy_state, wires=reg2)
+    qml.QubitStateVector(low_energy_state, wires=reg1)
+    qml.QubitStateVector(low_energy_state, wires=reg2)
 
     # Evolves the first qubit register with the time-evolution circuit, to prepare a piece of quantum data
     state_evolve(ham_matrix, reg1, time)
