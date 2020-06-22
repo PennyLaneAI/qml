@@ -118,7 +118,7 @@ The Quantum Graph Recurrrent Neural Network
 # governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
 # target parameters, 
 # :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also 
-#  suppose we have access to a bunch of copies of some 
+# suppose we have access to a bunch of copies of some 
 # low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`. In addition, 
 # we have access to a collection of time evolved states, 
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
@@ -196,11 +196,13 @@ qubits = range(qubit_number)
 # In order to use the QGRNN, we need access to quantum data. In this 
 # simulation, we don't have quantum data readily available to pass into 
 # the QGRNN, so we have to generate it ourselves. To do this, we must 
-# have *a priori* knowledge of the target Hamiltonian and the interaction 
-# graph. We choose the Hamiltonian to be a transerve field Ising model 
-# of the form:
+# have knowledge of the target Hamiltonian and the target interaction 
+# graph.
 #
-# .. math:: \hat{H}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
+# Recall from the intorduction that we have defined our parametrized 
+# Ising Hamiltonian to be of the form:
+#
+# .. math:: \hat{H}_{\text{Ising}}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
 #
 # where :math:`E` is the set of edges in the interaction graph.
 # :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the 
@@ -217,7 +219,7 @@ print("Edges: {}" .format(ising_graph.edges))
 
 ######################################################################
 # We then can initialize the “unknown” target parameters that describe the
-# Hamiltonian, :math:`\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`,
+# target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`,
 # randomly
 #
 
@@ -239,7 +241,7 @@ print("Target parameters: {}".format(matrix_params))
 
 ######################################################################
 # Finally, we use this information to generate the matrix form of the
-# Ising model Hamiltonian (in the computational basis):
+# Ising model Hamiltonian in the computational basis:
 #
 
 
@@ -298,11 +300,13 @@ plt.show()
 # In order to ensure that the VQE doesn’t converge, we pick an ansatz such
 # that the exact ground state cannot possibly be prepared.
 #
-# In the case of the Ising model Hamiltonian, we hypothesize (based off of
-# the interaction terms present in the Hamiltonian) that there are
+# In the case of the Ising model Hamiltonian, we hypothesize, based off of
+# the interaction terms present in the Hamiltonian, that there are
 # correlations between qubits in the ground state. Thus, we pick an ansatz
 # that cannot learn correlations, and instead just rotates the individual
-# qubits. We use the single-qubit rotations in the ``AngleEmbedding``
+# qubits. 
+#
+# We use the single-qubit rotations in the ``AngleEmbedding``
 # template for each layer of the ansatz, giving us:
 #
 
@@ -445,7 +449,7 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 # As was mentioned in the first section, the QGRNN has two qubit
 # registers. In one register, some piece of quantum data
 # :math:`|\psi(t)\rangle` is prepared and in the other we have
-# :math:`U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle`. We need a
+# :math:`U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle`. We need a
 # way to measure the similarity between the states contained in the
 # registers. One way that we can do this is by using the fidelity, which is
 # simply the modulus squared of the inner product between the states,
@@ -651,7 +655,7 @@ create_colour_plot([target_params, qgrnn_params])
 
 ######################################################################
 # The similarity of colours indicates that the parameters are very
-# similar, which we can verify by looking at their numerical values:
+# similar, which we can verify by looking at their exact values:
 #
 
 print("Target parameters: {}".format(target_params))
