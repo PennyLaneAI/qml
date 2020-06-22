@@ -35,12 +35,12 @@ The Quantum Graph Recurrrent Neural Network
 #     :align: center
 # 
 # In recent years, the concept of a 
-# `graph neural network <https://arxiv.org/abs/1812.08434>`__ has been
+# `graph neural network <https://arxiv.org/abs/1812.08434>`__ (GNN) has been
 # receving a lot of attention from the machine learning community. 
-# A **graph neural network** seeks
+# A GNN seeks
 # to learn a representation (a mapping of data into a
 # lower-dimensional vector space) of a given graph with features assigned
-# to nodes and edges.  Each of the vectors in the learned
+# to nodes and edges. Each of the vectors in the learned
 # representation preserves not only the features, but also the overall 
 # topology of the graph, i.e., which nodes are connected by edges. The 
 # quantum graph neural network attempts to do something similar, but for
@@ -65,7 +65,7 @@ The Quantum Graph Recurrrent Neural Network
 # where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
 # In this Hamiltonian, the set :math:`E` that determines which pairs of qubits 
 # have :math:`ZZ` interactions is exactly the set of edges for some graph. With 
-# the qubits as nodes we call thisgraph the *interaction graph*.
+# the qubits as nodes we call this graph the *interaction graph*.
 # The :math:`\theta^{(1)}` parameters correspond to the edge weights and
 # the :math:`\theta^{(2)}` 
 # parameters correspond to weights on the nodes.
@@ -145,9 +145,11 @@ The Quantum Graph Recurrrent Neural Network
 # :math:`\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha`
 # and we are able to learn the unknow parameters of the Hamiltonian.
 #
-# .. image:: ../demonstrations/qgrnn/qgrnn2.png
+# .. figure:: ../demonstrations/qgrnn/qgrnn3.png
 #     :width: 90%
 #     :align: center
+#
+#     A visual representation of one execution of the QGRNN for one piece of quantum data
 #
 
 
@@ -212,16 +214,16 @@ print("Edges: {}" .format(ising_graph.edges))
 ######################################################################
 # We then can initialize the “unknown” target parameters that describe the
 # target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`.
-# Recall from the intorduction that we have defined our parametrized 
+# Recall from the introduction that we have defined our parametrized 
 # Ising Hamiltonian to be of the form:
 #
 # .. math:: \hat{H}_{\text{Ising}}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
 #
-# where :math:`E` is the set of edges in the interaction graph.
+# where :math:`E` is the set of edges in the interaction graph, and
 # :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the 
 # :math:`i`-th qubit. 
 #
-# For this tutorial, we choose the target parameters manually:
+# For this tutorial, we choose the target parameters manually.
 #
 
 
@@ -229,8 +231,13 @@ matrix_params = [[-0.3, 0.58, -0.77, 0.83], [0.7, 0.82, 0.17, 0.14]]
 
 
 ######################################################################
+# In theory, these parameters can
+# be any value we want, provided they are reasonbly small enough that the QGRNN can reach them 
+# in a tractable number of optimization steps.
 # The first list represents the :math:`ZZ` interaction parameters and 
-# the second list represents the single-qubit `Z` parameters. Finally, 
+# the second list represents the single-qubit `Z` parameters.
+# 
+# Finally, 
 # we use this information to generate the matrix form of the
 # Ising model Hamiltonian in the computational basis:
 #
@@ -280,24 +287,26 @@ plt.show()
 # The collection of quantum data needed to run the QGRNN has two componenets: 
 # copies of a low-energy state, and a collection of time-evolved state, each of which are
 # simply the low-energy state evolved to different times. 
-# For the target Hamiltonian we have 
+# For the target Hamiltonian we 
 # defined, we find that a low-energy state is given by the following vector
-# (represented by a numpy array):
+# (represented by a Numpy array):
 #
 
-low_energy_state = [-0.02086666+0.00920016j -0.00379192-0.00859852j  0.06594626-0.02907913j
-  0.0119852 +0.02717445j  0.07633593-0.03366391j  0.01387486+0.03145572j
- -0.24124938+0.10640219j -0.04385454-0.09941154j  0.06397641-0.02820407j
-  0.01162454+0.02636273j -0.20218878+0.08914518j -0.03674192-0.08331586j
- -0.23404312+0.10320031j -0.04253486-0.09644206j  0.73966164-0.32618732j
-  0.13444079+0.30479209j]
+low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  0.06594626-0.02907913j,
+  0.0119852 +0.02717445j,  0.07633593-0.03366391j,  0.01387486+0.03145572j,
+ -0.24124938+0.10640219j, -0.04385454-0.09941154j,  0.06397641-0.02820407j,
+  0.01162454+0.02636273j, -0.20218878+0.08914518j, -0.03674192-0.08331586j,
+ -0.23404312+0.10320031j, -0.04253486-0.09644206j,  0.73966164-0.32618732j,
+  0.13444079+0.30479209j])
 
 
 ######################################################################
-# We can verify that we have prepared a low-energy
+# We can verify that this is a low-energy
 # state by numerically finding the lowest eigenvalue of the Hamiltonian
 # matrix and comparing it to the energy expectation of the low-energy state:
 #
+
+# Finds the energy expectation
 
 def expectation_value(vector, matrix):
     return np.inner(np.conj(vector), (matrix @ vector))
@@ -319,7 +328,7 @@ print("Ground State Energy: {}".format(ground_state))
 
 ######################################################################
 # This shows us that we have in fact found a low-energy, non-ground state, 
-# as the energy expectation is slightly greater than that of the true ground
+# as the energy expectation is slightly greater than the energy of the true ground
 # state. This, however, is only half of the information we need. We also require 
 # a collection of time-evolved states. 
 # Luckily, evolving a state forward in time is fairly straightforward, all we 
@@ -377,8 +386,8 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 # registers. In one register, some piece of quantum data
 # :math:`|\psi(t)\rangle` is prepared and in the other we have
 # :math:`U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle`. We need a
-# way to measure the similarity between the states contained in the
-# registers. One way that we can do this is by using the fidelity, which is
+# way to measure the similarity between these states. 
+# One way that we can do this is by using the fidelity, which is
 # simply the modulus squared of the inner product between the states,
 # :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
 # To calculate this value, we utilize a `SWAP
@@ -398,7 +407,7 @@ def swap_test(control, register1, register2):
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these fixed values is a "guessed"
 # interaction graph, which we define to be the complete graph. This choice 
-# is motivated by the fact that any target interactions graph will be a subgraph 
+# is motivated by the fact that any target interaction graph will be a subgraph 
 # of this initial guess. 
 #
 
@@ -461,15 +470,15 @@ def qgrnn(params1, params2, time=None):
 #
 # We have the full QGRNN circuit, but we still need to define a cost
 # function to minimize. We know that
-# :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`
+# :math:`| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`
 # approaches :math:`1` as the states become more similar, thus we choose
 # to minimize the quantity
-# :math:`1 \ - \ | \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
+# :math:`1 \ - \ | \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`.
 # Since we are interested in calculating this value for many different
 # pieces of quantum data, the final cost function is the **average
 # infidelity** between registers:
 #
-# .. math:: \mathcal{L}(\Delta, \ \boldsymbol\mu) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\Delta, \ \boldsymbol\mu) \ |\psi_0\rangle |^2,
+# .. math:: \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ 1 \ - \ \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} | \langle \psi(t) | \ U_{H}(\boldsymbol\mu, \ \Delta) \ |\psi_0\rangle |^2,
 #
 # where we use :math:`N` pieces of quantum data.
 #
@@ -477,7 +486,7 @@ def qgrnn(params1, params2, time=None):
 # variables, the device, and the QNode:
 #
 
-N = 15  # The number of pieces of quantum data that are used
+N = 15  # The number of pieces of quantum data that are used for each step
 max_time = 0.1  # The maximum value of time that can be used for quantum data
 
 # Defines the new device
@@ -581,6 +590,8 @@ create_colour_plot([target_params, qgrnn_params])
 
 
 ######################################################################
+# The top row is the target values, while the bottom row is the learned 
+# ones.
 # The similarity of colours indicates that the parameters are very
 # similar, which we can verify by looking at their exact values:
 #
