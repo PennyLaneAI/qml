@@ -114,7 +114,7 @@ The Quantum Graph Recurrrent Neural Network
 # approximate time evolution of some quadratic Hamiltonian, we can use it
 # to learn the dynamics of a quantum system.
 #
-# Continuing on with the Ising model example, let's imagine we have some system
+# Continuing with the Ising model example, let's imagine we have some system
 # governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
 # target parameters, 
 # :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also 
