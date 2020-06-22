@@ -551,7 +551,7 @@ print("Final Parameters: {}".format(qgrnn_params))
 
 ######################################################################
 # With the learned parameters, we construct a visual representation 
-# of the Hamiltonian to which they correspond:
+# of the Hamiltonian:
 #
 
 new_ham_matrix = create_hamiltonian_matrix(
