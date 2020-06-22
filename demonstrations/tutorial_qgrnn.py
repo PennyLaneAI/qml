@@ -309,7 +309,7 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 def expectation_value(vector, matrix):
     return np.inner(np.conj(vector), (matrix @ vector))
 
-energy_exp = expectation_value(low_energy_state, ham_matrix)
+energy_exp = np.inner(np.conj(low_energy_state), (ham_matrix @ low_energy_state))
 print("Energy Expectation: {}".format(energy_exp))
 
 def ground_state_energy(matrix):
