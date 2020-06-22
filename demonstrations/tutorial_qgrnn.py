@@ -355,9 +355,9 @@ def state_evolve(hamiltonian, qubits, time):
 
 ######################################################################
 # With the quantum data defined, we are able to construct the QGRNN and
-# learn the target Hamiltonian. As was discussed above, we wish to use the
-# QGRNN to approximate time-evolution of the target Hamiltonian, with
-# guessed parameters. It follows that we let each of the three
+# learn the target Hamiltonian. We wish to use the
+# QGRNN to approximate time-evolution of the target Hamiltonian.
+#. We let each of the three terms
 # :math:`\hat{H}_{q}(\boldsymbol\mu)` used in the QGRNN ansatz be the
 # collections of :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
 # Hamiltonian. This gives us:
