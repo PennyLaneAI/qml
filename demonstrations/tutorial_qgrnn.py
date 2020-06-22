@@ -403,7 +403,7 @@ def swap_test(control, register1, register2):
 
 ######################################################################
 # Before creating the full QGRNN and the cost function, we
-# define a few more fixed values. Among these fixed values is a "guessed"
+# define a few more fixed values. Among these is a "guessed"
 # interaction graph, which we define to be the complete graph. This choice 
 # is motivated by the fact that any target interaction graph will be a subgraph 
 # of this initial guess. 
