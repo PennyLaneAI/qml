@@ -287,7 +287,7 @@ plt.show()
 # copies of a low-energy state, and a collection of time-evolved states, each of which are
 # simply the low-energy state evolved to different times. 
 # For the target Hamiltonian we 
-# defined, we find that a low-energy state is given by the following vector
+# defined, the following is a low-energy state 
 # (represented by a Numpy array):
 #
 
