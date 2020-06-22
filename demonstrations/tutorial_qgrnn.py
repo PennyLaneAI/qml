@@ -288,7 +288,6 @@ plt.show()
 # simply the low-energy state evolved to different times. 
 # For the target Hamiltonian we 
 # defined, the following is a low-energy state 
-# (represented by a Numpy array):
 #
 
 low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  0.06594626-0.02907913j,
