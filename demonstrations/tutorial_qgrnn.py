@@ -337,7 +337,7 @@ print("Ground State Energy: {}".format(ground_state))
 
 def state_evolve(hamiltonian, qubits, time):
 
-    U = scipy.linalg.expm(complex(0, -1) * hamiltonian * time)
+    U = scipy.linalg.expm(-1j* hamiltonian * time)
     qml.QubitUnitary(U, wires=qubits)
 
 
