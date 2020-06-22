@@ -159,7 +159,7 @@ The Quantum Graph Recurrrent Neural Network
 
 ######################################################################
 # Keeping in form with the introduction, we now attempt to learn the parameters corresponding
-# to some randomly-initialized transverse field Ising model Hamiltonian,
+# to some arbitrary transverse field Ising model Hamiltonian,
 # using the QGRNN.
 #
 
@@ -196,18 +196,10 @@ qubits = range(qubit_number)
 # In order to use the QGRNN, we need access to quantum data. In this 
 # simulation, we don't have quantum data readily available to pass into 
 # the QGRNN, so we have to generate it ourselves. To do this, we must 
-# have knowledge of the target Hamiltonian and the target interaction 
-# graph.
+# have knowledge of the target interaction graph and the target Hamiltonian.
 #
-# Recall from the intorduction that we have defined our parametrized 
-# Ising Hamiltonian to be of the form:
-#
-# .. math:: \hat{H}_{\text{Ising}}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
-#
-# where :math:`E` is the set of edges in the interaction graph.
-# :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the 
-# :math:`i`-th qubit. We then define the target interaction graph 
-# of the Hamiltonian to be the cycle graph:
+# We first define the target interaction graph 
+# of the Ising Hamiltonian to be the cycle graph:
 #
 
 
@@ -219,28 +211,27 @@ print("Edges: {}" .format(ising_graph.edges))
 
 ######################################################################
 # We then can initialize the “unknown” target parameters that describe the
-# target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`,
-# randomly
+# target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`.
+# Recall from the intorduction that we have defined our parametrized 
+# Ising Hamiltonian to be of the form:
+#
+# .. math:: \hat{H}_{\text{Ising}}(\boldsymbol\theta) \ = \ \displaystyle\sum_{(i, j) \in E} \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \ \displaystyle\sum_{i} X_{i},
+#
+# where :math:`E` is the set of edges in the interaction graph.
+# :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the 
+# :math:`i`-th qubit. 
+#
+# For this tutorial, we choose the target parameters manually:
 #
 
 
-def create_params(graph):
-
-    # Creates the interaction parameters
-    interaction = [np.random.randint(-100, 100) / 100 for i in range(0, len(graph.edges))]
-
-    # Creates the bias parameters
-    bias = [np.random.randint(-100, 100) / 100 for i in range(0, qubit_number)]
-
-    return [interaction, bias]
-
-# Creates and prints the parameters for our simulation
-matrix_params = create_params(ising_graph)
-print("Target parameters: {}".format(matrix_params))
+matrix_params = [[-0.3, 0.58, -0.77, 0.83], [0.7, 0.82, 0.17, 0.14]]
 
 
 ######################################################################
-# Finally, we use this information to generate the matrix form of the
+# The first list represents the :math:`ZZ` interaction parameters and 
+# the second list represents the single-qubit `Z` parameters. Finally, 
+# we use this information to generate the matrix form of the
 # Ising model Hamiltonian in the computational basis:
 #
 
@@ -280,105 +271,39 @@ plt.show()
 
 
 ######################################################################
-# Preparing Quantum Data with VQE
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Preparing Quantum Data
+# ^^^^^^^^^^^^^^^^^^^^^^
 #
 
 
 ######################################################################
-# To generate the quantum data, we prepare a low-energy state, and 
-# then evolve it forward in time with the time-evolution unitary, 
-# under the target Hamiltonian.
-#
-# To prepare the initial low-energy state, we use the :doc:`Variational 
-# Quantum Eigensolver </demos/tutorial_vqe>` (VQE). The VQE is
-# usually used to prepare an approximate ground state of a given
-# Hamiltonian. However, in this particular scenario, we **don’t** want the
-# VQE to prepare the ground state, as it will have trivial time-dependence
-# equating to a global phase, and we will effectively
-# have a bunch of copies of the same state (which is useless).
-# In order to ensure that the VQE doesn’t converge, we pick an ansatz such
-# that the exact ground state cannot possibly be prepared.
-#
-# In the case of the Ising model Hamiltonian, we hypothesize, based off of
-# the interaction terms present in the Hamiltonian, that there are
-# correlations between qubits in the ground state. Thus, we pick an ansatz
-# that cannot learn correlations, and instead just rotates the individual
-# qubits. 
-#
-# We use the single-qubit rotations in the ``AngleEmbedding``
-# template for each layer of the ansatz, giving us:
+# The collection of quantum data needed to run the QGRNN has two componenets: 
+# copies of a low-energy state, and a collection of time-evolved state, each of which are
+# simply the low-energy state evolved to different times. 
+# For the target Hamiltonian we have 
+# defined, we find that a low-energy state is given by the following vector
+# (represented by a numpy array):
 #
 
-
-def ansatz_circuit(params, vqe_depth, qubits):
-
-    # Splits the parameters
-    updated_params = np.split(np.array(params), 4)
-
-    # Applies single-qubit rotations
-    for i in range(0, vqe_depth):
-        rotations = ["X", "Z", "X", "Z"]
-        for j in range(0, len(rotations)):
-            qml.templates.AngleEmbedding(
-                features=updated_params[j], wires=qubits, rotation=rotations[j]
-            )
-
-
-######################################################################
-# We then create the VQE circuit, 
-# which returns the expected value of the target Hamiltonian with
-# respect to the prepared state.
-#
-
-
-def vqe_circuit(params):
-
-    # Adds the ansatz
-    ansatz_circuit(params, vqe_depth, qubits)
-
-    # Measures the expectation value of the Hamiltonian
-    return qml.expval(qml.Hermitian(ham_matrix, wires=qubits))
-
-
-######################################################################
-# Notice how we defined two separate methods, ``ansatz_circuit`` and
-# ``vqe_circuit``. This is because we eventually have to
-# use ``ansatz_circuit`` as a sub-component of the QGRNN circuit (to
-# prepare the quantum data). Now, we are able to optimize the VQE circuit
-# to arrive at the low-energy state:
-#
-
-# Defines the device on which we perform the simulations
-
-vqe_dev = qml.device("default.qubit", wires=qubit_number)
-vqe_depth = 1
-
-# Defines the QNode
-
-vqe_qnode = qml.QNode(vqe_circuit, vqe_dev)
-
-# Creates the optimizer for VQE
-
-optimizer = qml.AdamOptimizer(stepsize=0.8)
-
-steps = 200
-vqe_params = list([np.random.randint(-100, 100) / 10 for i in range(0, 4 * qubit_number)])
-
-for i in range(0, steps):
-    vqe_params = optimizer.step(vqe_qnode, vqe_params)
-    if i % 50 == 0:
-        print("Cost Step {}: {}".format(i, vqe_qnode(vqe_params)))
-
-print("Parameters: {}".format(vqe_params))
+low_energy_state = [-0.02086666+0.00920016j -0.00379192-0.00859852j  0.06594626-0.02907913j
+  0.0119852 +0.02717445j  0.07633593-0.03366391j  0.01387486+0.03145572j
+ -0.24124938+0.10640219j -0.04385454-0.09941154j  0.06397641-0.02820407j
+  0.01162454+0.02636273j -0.20218878+0.08914518j -0.03674192-0.08331586j
+ -0.23404312+0.10320031j -0.04253486-0.09644206j  0.73966164-0.32618732j
+  0.13444079+0.30479209j]
 
 
 ######################################################################
 # We can verify that we have prepared a low-energy
 # state by numerically finding the lowest eigenvalue of the Hamiltonian
-# matrix:
+# matrix and comparing it to the energy expectation of the low-energy state:
 #
 
+def expectation_value(vector, matrix):
+    return np.inner(np.conj(vector), (matrix @ vector))
+
+energy_exp = expectation_value(low_energy_state, ham_matrix)
+print("Energy Expectation: {}".format(energy_exp))
 
 def ground_state_energy(matrix):
 
@@ -394,10 +319,12 @@ print("Ground State Energy: {}".format(ground_state))
 
 ######################################################################
 # This shows us that we have in fact found a low-energy, non-ground state, 
-# as the energy we arrived at is slightly greater than that of the true ground
-# state. The last step in preparing the quantum-data is to time-evolve
-# these low-energy states to arbitrary times, with the 
-# time-evolution operator (implemented as a custom unitary in PennyLane).
+# as the energy expectation is slightly greater than that of the true ground
+# state. This, however, is only half of the information we need. We also require 
+# a collection of time-evolved states. 
+# Luckily, evolving a state forward in time is fairly straightforward, all we 
+# have to do is multiply the initial state by a time-evolution unitary. We define 
+# this operation as a custom gate in PennyLane:
 #
 
 
@@ -408,8 +335,8 @@ def state_evolve(hamiltonian, qubits, time):
 
 
 ######################################################################
-# We don't actually generate the quantum data quite yet, but we now have 
-# all the pieces we need for its preparation.
+# We don't actually generate this time-evolved quantum data quite yet, 
+# but we now have all the pieces required for its preparation.
 #
 
 
@@ -507,8 +434,8 @@ nx.draw(new_ising_graph)
 def qgrnn(params1, params2, time=None):
 
     # Prepares the low energy state in the two qubit registers
-    ansatz_circuit(vqe_params, vqe_depth, reg1)
-    ansatz_circuit(vqe_params, vqe_depth, reg2)
+    qml.QubitStateVector(low_energy_state, reg1)
+    qml.QubitStateVector(low_energy_state, reg2)
 
     # Evolves the first qubit register with the time-evolution circuit, to prepare a piece of quantum data
     state_evolve(ham_matrix, reg1, time)
