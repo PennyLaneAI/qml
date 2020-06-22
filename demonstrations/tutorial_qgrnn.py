@@ -329,7 +329,7 @@ print("Ground State Energy: {}".format(ground_state))
 # as the energy expectation is slightly greater than the energy of the true ground
 # state. This, however, is only half of the information we need. We also require 
 # a collection of time-evolved states. 
-# Luckily, evolving a state forward in time is fairly straightforward, all we 
+# Evolving a state forward in time is fairly straightforward: all we 
 # have to do is multiply the initial state by a time-evolution unitary. We define 
 # this operation as a custom gate in PennyLane:
 #
