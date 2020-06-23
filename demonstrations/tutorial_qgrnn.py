@@ -565,7 +565,7 @@ qnode = qml.QNode(qgrnn, qgrnn_dev)
 iterations = 0
 optimizer = qml.AdamOptimizer(stepsize=0.3)
 steps = 1
-qgrnn_params = list([0.0 for i in range(0, 10)])
+qgrnn_params = np.zeros([10], dtype=np.float64)
 
 # Executes the optimization method
 
