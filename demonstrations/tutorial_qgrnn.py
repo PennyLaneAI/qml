@@ -167,7 +167,7 @@ The Quantum Graph Recurrrent Neural Network
 #     :width: 90%
 #     :align: center
 #
-#     A visual representation of one execution of the QGRNN for one piece of quantum data
+#     A visual representation of one execution of the QGRNN for one piece of quantum data.
 #
 
 
