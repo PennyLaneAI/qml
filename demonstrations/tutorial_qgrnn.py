@@ -26,7 +26,7 @@ The Quantum Graph Recurrent Neural Network
 ######################################################################
 # A graph is defined as a set of *nodes*, along with a set of
 # **edges**, which represent interactions or relationships between nodes.
-# Sometimes, we like to encode information into graphs by assigning numbers
+# Information can be encoded into graphs by assigning numbers
 # to nodes and edges, which we call **weights**.
 # It is usually convenient to think of a graph visually:
 #
