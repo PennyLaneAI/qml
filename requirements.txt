@@ -16,6 +16,7 @@ pennylane-qchem==0.10
 pennylane-sf==0.9
 git+https://github.com/rigetti/pennylane-forest.git
 pennylane-cirq==0.9
+google-api-core=1.20.0
 pennylane-qiskit==0.9
 pyquil==2.19
 scipy==1.4.1
