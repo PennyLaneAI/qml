@@ -178,18 +178,30 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/rosalin/rosalin_thumb.png
     :description: :doc:`demos/tutorial_rosalin`
     :tags: autograd
-    
+
 .. customgalleryitem::
     :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule
     :figure: demonstrations/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png
     :description: :doc:`demos/tutorial_stochastic_parameter_shift`
     :tags: autograd
-    
+
 .. customgalleryitem::
     :tooltip: Learn how noise can affect the optimization and training of quantum computations
     :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq beginner
+
+.. customgalleryitem::
+    :tooltip: VQE optimization using quantum natural gradient
+    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
+    :description: :doc:`demos/tutorial_vqe_qng`
+    :tags: chemistry
+
+.. customgalleryitem::
+    :tooltip: Optimizing measurement protocols with variational methods
+    :figure: demonstrations/quantum_metrology/illustration.png
+    :description: :doc:`demos/tutorial_quantum_metrology`
+    :tags: cirq metrology autograd
 
 .. customgalleryitem::
     :tooltip: Learning the dynamics of quantum systems on graphs
@@ -234,3 +246,6 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_rosalin
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_vqe_qng
+    demos/tutorial_quantum_metrology
+    demos/tutorial_qgrnn
