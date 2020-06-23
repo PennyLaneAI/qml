@@ -13,7 +13,7 @@ The Quantum Graph Recurrrent Neural Network
 ######################################################################
 # In this demonstration, we investigate quantum graph
 # recurrent neural networks (QGRNN), which are the quantum analogue of a
-# classical graph recurrent neural network and a subclass of the more
+# classical graph recurrent neural network, and a subclass of the more
 # general quantum graph
 # neural network ansatz (`QGNN <https://arxiv.org/abs/1909.12264>`__).
 
