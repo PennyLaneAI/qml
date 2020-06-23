@@ -135,7 +135,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # Define model
 # ------------
 #
-# Our model is summarized in the figure below. We use two 4-qubit devices: ``Aspen-4-4Q-F``
+# Our model is summarized in the figure below. We use two 4-qubit devices: ``4q-qvm``
 # from the PennyLane-Forest plugin and ``qiskit.aer`` from the PennyLane-Qiskit plugin.
 #
 # Data is input using :class:`~.pennylane.RX` rotations and then a different circuit is enacted
@@ -159,15 +159,15 @@ plot_points(x_train, y_train, x_test, y_test)
 
 n_wires = 4
 
-dev0 = qml.device("forest.qvm", device="Aspen-4-4Q-F")
+dev0 = qml.device("forest.qvm", device="4q-qvm")
 dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
 ##############################################################################
 # .. note::
-#    If you have access to Rigetti hardware, you can swap out ``forest.qvm`` for ``forest.qpu``.
-#    Users with access to the IBM Q Experience can swap ``qiskit.aer`` for ``qiskit.ibmq`` and
-#    specify their chosen backend (see `here
+#    If you have access to Rigetti hardware, you can swap out ``forest.qvm`` for ``forest.qpu``
+#    and specify the hardware device to run on. Users with access to the IBM Q Experience can
+#    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
 #    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
 #
 # .. warning::

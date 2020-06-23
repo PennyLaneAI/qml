@@ -258,6 +258,7 @@
         var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
         if (scrollBottom < 342) {
           $('.comment-container').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
+          $('.comment-container .nano-content').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
         }
       });
       $(document).ready(function () {
