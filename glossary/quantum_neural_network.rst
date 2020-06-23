@@ -25,7 +25,7 @@ More recent research has tackled this problem, suggesting special measurement sc
 Quantum versions of Boltzmann machines
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Boltzmann machines, which are probabilistic graphical models that can be understood as stochastic recurrent neural networks, play an important role in the quantum machine learning literature. For example, it was suggested to use samples from a quantum computer to train classical Boltzmann machines, or to interpret spins as physical units of a "quantum" Boltzmann machine model.
+[Boltzmann machines](https://en.wikipedia.org/wiki/Boltzmann_machine), which are probabilistic graphical models that can be understood as stochastic recurrent neural networks, play an important role in the quantum machine learning literature. For example, it was suggested to use samples from a quantum computer to train classical Boltzmann machines, or to interpret spins as physical units of a "quantum" Boltzmann machine model.
 
 
 Variational circuits 
