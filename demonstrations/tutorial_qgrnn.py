@@ -502,7 +502,7 @@ def qgrnn(params1, params2, time=None):
 #
 # .. math::
 #
-#     \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ - \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} |
+#     \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ - \frac{1}{N} \displaystyle\sum_{i \ = \ 1}^{N} |
 #     \langle \psi(t_i) | \ U_{H}(\boldsymbol\mu, \ \Delta) \ |\psi_0\rangle |^2,
 #
 # where we use :math:`N` pieces of quantum data.
