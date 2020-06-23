@@ -69,7 +69,7 @@ The Quantum Graph Recurrent Neural Network
 # where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
 # In this Hamiltonian, the set :math:`E` that determines which pairs of qubits
 # have :math:`ZZ` interactions is exactly the set of edges for some graph. With
-# the qubits as nodes we call this graph the *interaction graph*.
+# the qubits as nodes, we call this graph the *interaction graph*.
 # The :math:`\theta^{(1)}` parameters correspond to the edge weights and
 # the :math:`\theta^{(2)}`
 # parameters correspond to weights on the nodes.
