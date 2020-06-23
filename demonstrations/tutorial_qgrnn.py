@@ -39,7 +39,7 @@ The Quantum Graph Recurrent Neural Network
 # receving a lot of attention from the machine learning community.
 # A GNN seeks
 # to learn a representation (a mapping of data into a
-# lower-dimensional vector space) of a given graph with features assigned
+# low-dimensional vector space) of a given graph with feature vectors assigned
 # to nodes and edges. Each of the vectors in the learned
 # representation preserves not only the features, but also the overall
 # topology of the graph, i.e., which nodes are connected by edges. The
