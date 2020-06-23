@@ -3,7 +3,7 @@ The Quantum Graph Recurrent Neural Network
 ===========================================
 
 .. meta::
-    :property="og:description": Using a quantum graph recurrrent neural network to learn quantum dynamics.
+    :property="og:description": Using a quantum graph recurrent neural network to learn quantum dynamics.
     :property="og:image": https://pennylane.ai/qml/_images/qgrnn_thumbnail.png
 
 *Author: Jack Ceroni*
