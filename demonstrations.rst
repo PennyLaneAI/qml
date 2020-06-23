@@ -193,7 +193,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Learning the dynamics of quantum systems on graphs
-    :figure: demonstrations/qgrnn/thumbnail.png
+    :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
     :description: :doc:`demos/tutorial_qgrnn`
     :tags: autograd
 
