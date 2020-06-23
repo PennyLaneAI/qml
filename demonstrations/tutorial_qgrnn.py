@@ -1,5 +1,5 @@
 """
-The Quantum Graph Recurrrent Neural Network
+The Quantum Graph Recurrent Neural Network
 ===========================================
 
 .. meta::
