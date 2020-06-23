@@ -225,7 +225,7 @@ qubits = range(qubit_number)
 ising_graph = nx.cycle_graph(qubit_number)
 
 nx.draw(ising_graph)
-print("Edges: {}" .format(ising_graph.edges))
+print("Edges: {}".format(ising_graph.edges))
 
 
 ######################################################################
