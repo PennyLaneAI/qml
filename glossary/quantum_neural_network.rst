@@ -36,7 +36,7 @@ Variational circuits
     :width: 60%
     :target: javascript:void(0);
 
-Increasingly, the term "quantum neural network" is used to refer to variational or parametrized quantum circuits. While mathematically rather different from the inner workings of neural networks, the analogy highlights the "modular" nature of quantum gates in a circuit, as well as the wide use of tricks from training neural networks used in the optimization of quantum algorithms. 
+Increasingly, the term "quantum neural network" is used to `refer to variational or parametrized quantum circuits <https://arxiv.org/abs/1802.06002>`_. While mathematically rather different from the inner workings of neural networks, the analogy highlights the "modular" nature of quantum gates in a circuit, as well as the wide use of tricks from training neural networks used in the optimization of quantum algorithms. 
 
 .. rubric:: Footnotes
 
