@@ -516,7 +516,7 @@ max_time = 0.1  # The maximum value of time that can be used for quantum data
 
 
 ######################################################################
-# We then define the infidelity cost function:
+# We then define the fidelity cost function:
 #
 
 
