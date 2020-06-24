@@ -489,8 +489,8 @@ def qgrnn(params1, params2, time=None):
 
 
 ######################################################################
-# We have the full QGRNN circuit, but we still need to define a cost
-# function to minimize. We know that
+# We have the full QGRNN circuit, but we still need to define a cost.
+#We know that
 # :math:`| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`
 # approaches :math:`1` as the states become more similar and approaches
 # :math:`0` as the states become orthogonal. Thus, we choose
