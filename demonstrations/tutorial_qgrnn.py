@@ -411,7 +411,7 @@ def qgrnn_layer(param1, param2, qubits, graph, trotter):
 # This can be done by using the fidelity, which is
 # simply the modulus squared of the inner product between the states,
 # :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
-# To calculate this value, we utilize a `SWAP
+# To calculate this value, we use a `SWAP
 # test <https://en.wikipedia.org/wiki/Swap_test>`__ between the registers:
 #
 
