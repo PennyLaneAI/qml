@@ -341,7 +341,6 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 energy_exp = np.vdot(low_energy_state, (ham_matrix @ low_energy_state))
 print(f"Energy Expectation: {np.real_if_close(energy_exp)}")
 
-# Finds the ground state energy
 
 ground_state_energy = np.real_if_close(min(np.linalg.eig(ham_matrix)[0]))
 print(f"Ground State Energy: {ground_state_energy}")
