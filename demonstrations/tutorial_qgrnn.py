@@ -425,7 +425,7 @@ def swap_test(control, register1, register2):
 
 
 ######################################################################
-# After performing this procedure, the value returned from measurement of the circuit is
+# After performing this procedure, the value returned from a measurement of the circuit is
 # :math:`\langle Z \rangle`, with respect to the ancilla qubit that is used to perform
 # the SWAP test. After a SWAP test, the probability of measuring the :math:`|0\rangle` state
 # in the control qubit is related to the fidelity between registers. In addition,
