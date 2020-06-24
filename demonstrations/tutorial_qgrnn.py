@@ -15,8 +15,8 @@ The Quantum Graph Recurrent Neural Network
 # recurrent neural networks (QGRNN), which are the quantum analogue of a
 # classical graph recurrent neural network, and a subclass of the more
 # general quantum graph
-# neural network ansatz. Both the QGNN and QGRNN were introduced by
-# `Verdon et al. (2019) <https://arxiv.org/abs/1909.12264>`__.
+# neural network ansatz. Both the QGNN and QGRNN were introduced in
+# `this paper (2019) <https://arxiv.org/abs/1909.12264>`__.
 
 ######################################################################
 # The Idea
