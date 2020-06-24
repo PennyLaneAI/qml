@@ -180,7 +180,7 @@ The Quantum Graph Recurrent Neural Network
 
 ######################################################################
 # We now attempt to use the QGRNN to learn the parameters corresponding
-# to an arbitrary transverse field Ising model Hamiltonian.
+# to an arbitrary transverse-field Ising model Hamiltonian.
 #
 
 
