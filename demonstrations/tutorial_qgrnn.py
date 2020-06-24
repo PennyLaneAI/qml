@@ -347,7 +347,7 @@ print(f"Ground State Energy: {ground_state_energy}")
 
 
 ######################################################################
-# This shows us that we have in fact found a low-energy, non-ground state,
+# We have in fact found a low-energy, non-ground state,
 # as the energy expectation is slightly greater than the energy of the true ground
 # state. This, however, is only half of the information needed. We also require
 # a collection of time-evolved states.
