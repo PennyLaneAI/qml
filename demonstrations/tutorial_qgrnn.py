@@ -583,11 +583,11 @@ new_ham_matrix = create_hamiltonian_matrix(
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(5, 3))
 
 axes[0].matshow(new_ham_matrix)
-axes[0].set_title("Learned Hamiltonian")
+axes[0].set_title("Learned Hamiltonian", y=1.08)
 
 
 axes[1].matshow(ham_matrix)
-axes[1].set_title("Target Hamiltonian")
+axes[1].set_title("Target Hamiltonian", y=1.08)
 
 fig.tight_layout()
 
