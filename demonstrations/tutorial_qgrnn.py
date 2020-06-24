@@ -429,7 +429,7 @@ def swap_test(control, register1, register2):
 # :math:`\langle Z \rangle`, with respect to the ancilla qubit. When a SWAP
 # test is performed, the probability of measuring the :math:`|0\rangle` state
 # in the control qubit is related to the fidelity between registers. In addition,
-# the probability of measuring :math:`|0\rangle` as also related to :math:`\langle Z \rangle`.
+# the probability of measuring :math:`|0\rangle` is also related to :math:`\langle Z \rangle`.
 # From a bit of algebra, we find that :math:`\langle Z \rangle` is equal to the fidelity.
 #
 # Before creating the full QGRNN and the cost function, we
