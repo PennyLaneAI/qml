@@ -152,7 +152,7 @@ The Quantum Graph Recurrent Neural Network
 #     U_{\hat{H}_{\text{Ising}}}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle \ \approx \ e^{-i t_k
 #     \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle
 #
-# by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit
+# This is done by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit
 # with the QGRNN ansatz, with some "guessed" set of parameters :math:`\boldsymbol\mu`
 # and a guessed interaction graph, :math:`G'`.
 # We then use a classical optimizer to maximize the average
