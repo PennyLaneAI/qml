@@ -383,9 +383,9 @@ def state_evolve(hamiltonian, qubits, time):
 # With the quantum data defined, we are able to construct the QGRNN and
 # learn the target Hamiltonian. We wish to use the
 # QGRNN to approximate time-evolution of the target Hamiltonian.
-# We let each of the three terms
-# :math:`\hat{H}_{q}(\boldsymbol\mu)` used in the QGRNN ansatz be the
-# collections of :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
+# We thus let each of the exponentiated Hamiltonians in the QGRNN ansatz,
+# :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, be the
+# :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
 # Hamiltonian. This gives us:
 #
 
@@ -428,8 +428,9 @@ def swap_test(control, register1, register2):
 
 
 ######################################################################
-# After performing the SWAP test, the value returned from the circuit is
-# :math:`\langle Z \rangle`, with respect to the ancilla qubit. When a SWAP
+# After performing this procedure, the value returned from measurement of the circuit is
+# :math:`\langle Z \rangle`, with respect to the ancilla qubit that is used to perform
+# the SWAP test. When a SWAP
 # test is performed, the probability of measuring the :math:`|0\rangle` state
 # in the control qubit is related to the fidelity between registers. In addition,
 # the probability of measuring :math:`|0\rangle` is also related to :math:`\langle Z \rangle`.
@@ -590,7 +591,7 @@ ax1 = plt.subplot(211)
 ax1.matshow(new_ham_matrix)
 ax1.set_title("Learned Hamiltonian")
 
-ax2 = plt.subplot(212)
+ax2 = plt.subplot(221)
 ax2.matshow(ham_matrix)
 ax2.set_title("Target Hamiltonian")
 
@@ -600,7 +601,7 @@ plt.show()
 ######################################################################
 # We conclude this demonstration by verifying that the QGRNN found the
 # target parameters by looking at the
-# exact values of the target and learned parameters:
+# exact values of the target and learned parameters.
 
 # Inserts 0s at positions corresponding to edges (1, 3) and (0, 2) 
 # in the complete graph
