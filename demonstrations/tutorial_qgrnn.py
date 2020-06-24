@@ -217,7 +217,7 @@ qubits = range(qubit_number)
 # the QGRNN, so we have to generate it ourselves. To do this, we must
 # have knowledge of the target interaction graph and the target Hamiltonian.
 #
-# We first define the target interaction graph
+# Let us use the following cyclic graph as our target interaction graph
 # of the Ising Hamiltonian to be the cycle graph:
 #
 
