@@ -213,7 +213,7 @@ qubits = range(qubit_number)
 
 
 ######################################################################
-# In order to use the QGRNN, we need access to quantum data. In this
+# In this
 # simulation, we don't have quantum data readily available to pass into
 # the QGRNN, so we have to generate it ourselves. To do this, we must
 # have knowledge of the target interaction graph and the target Hamiltonian.
