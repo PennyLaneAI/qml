@@ -333,7 +333,7 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 #
 # We can verify that this is a low-energy
 # state by numerically finding the lowest eigenvalue of the Hamiltonian
-# matrix and comparing it to the energy expectation of the low-energy state:
+# matrix and comparing it to the energy expectation of this low-energy state:
 #
 
 # Finds the energy expectation
