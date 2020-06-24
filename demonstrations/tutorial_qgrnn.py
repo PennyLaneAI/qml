@@ -159,7 +159,7 @@ The Quantum Graph Recurrent Neural Network
 # "similarity" between the time-evolved states and the states prepared
 # with the QGRNN.
 #
-# As the QGRNN states becomes more "similar" to
+# As the QGRNN states becomes more similar to
 # each time-evolved state for each sampled time, it follows that
 # :math:`\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha`
 # and we are able to learn the unknown parameters of the Hamiltonian.
