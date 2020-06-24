@@ -218,7 +218,7 @@ qubits = range(qubit_number)
 # have knowledge of the target interaction graph and the target Hamiltonian.
 #
 # Let us use the following cyclic graph as our target interaction graph
-# of the Ising Hamiltonian to be the cycle graph:
+# of the Ising Hamiltonian:
 #
 
 
