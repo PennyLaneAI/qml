@@ -117,8 +117,7 @@ The Quantum Graph Recurrent Neural Network
 #     U_{H}(\boldsymbol\mu, \ \boldsymbol\gamma) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[
 #     \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_j H^{j}(\boldsymbol\mu)} \Bigg],
 #
-# for some parametrized Hamiltonian, :math:`H(\boldsymbol\mu)`, of
-# quadratic order.
+# for some parametrized quadratic Hamiltonian, :math:`H(\boldsymbol\mu)`.
 
 ######################################################################
 # Using the QGRNN
