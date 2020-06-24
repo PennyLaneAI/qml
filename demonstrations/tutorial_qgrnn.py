@@ -587,13 +587,16 @@ new_ham_matrix = create_hamiltonian_matrix(
     qubit_number, nx.complete_graph(qubit_number), [qgrnn_params[0:6], qgrnn_params[6:10]]
 )
 
-ax1 = plt.subplot(211)
-ax1.matshow(new_ham_matrix)
-ax1.set_title("Learned Hamiltonian")
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(5, 3))
 
-ax2 = plt.subplot(221)
-ax2.matshow(ham_matrix)
-ax2.set_title("Target Hamiltonian")
+axes[0].matshow(new_ham_matrix)
+axes[0].set_title("Learned Hamiltonian")
+
+
+axes[1].matshow(ham_matrix)
+axes[1].set_title("Target Hamiltonian")
+
+fig.tight_layout()
 
 plt.show()
 
@@ -601,22 +604,35 @@ plt.show()
 ######################################################################
 # We conclude this demonstration by verifying that the QGRNN found the
 # target parameters by looking at the
-# exact values of the target and learned parameters.
+# exact values of the target and learned parameters. Recall how the target
+# interaction graph has :math:`4` edges while the complete graph has :math:`6`.
+# Thus, as the QGRNN converges to the optimal solution, the weights corresponding to 
+# edges :math:`(1, 3)` and :math:`(2, 0)` in the complete graph should go to :math:`0`, as
+# this indicates that they have no effect, and effectively do not exist in the learned 
+# Hamiltonian.
 
-# Inserts 0s at positions corresponding to edges (1, 3) and (0, 2) 
-# in the complete graph
+# We first pick out the weights of edges (1, 3) and (2, 0)
+# and then remove them from the list of target parameters
+
+zero_weights = [qgrnn_params[1], qgrnn_params[4]]
+
+del qgrnn_params[1]
+del qgrnn_params[3]
 
 target_params = matrix_params[0] + matrix_params[1]
-target_params.insert(1, 0)
-target_params.insert(4, 0)
 
 print(f"Target parameters: {target_params}")
 print(f"Learned parameters: {qgrnn_params}")
+print(f"Non-Existing Edge Parameters: {zero_weights}")
 
 
 ######################################################################
+# As can be seen here, the weights of edges :math:`(1, 3)` and :math:`(2, 0)`
+# are very close to :math:`0`, indicating we have learned the cycle graph 
+# from the complete graph. In addition, the remaining parameters in the learned 
+# Hamiltonian are very close to those of the target Hamiltonian.
 # Thus, the QGRNN is functioning properly, and has learned the target
-# parameters of the Ising Hamiltonian to a high
+# Ising Hamiltonian to a high
 # degree of accuracy!
 #
 
