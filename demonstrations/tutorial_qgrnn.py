@@ -322,7 +322,7 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 
 
 ######################################################################
-# This state can be arrived at by using a decoupled version of the
+# This state can be obtained by using a decoupled version of the
 # :doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` algorithm (VQE).
 # Essentially, we choose a
 # VQE ansatz such that the circuit cannot learn the exact ground state,
