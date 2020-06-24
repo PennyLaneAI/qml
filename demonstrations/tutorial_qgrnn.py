@@ -58,8 +58,8 @@ The Quantum Graph Recurrent Neural Network
 # second-order terms between qubits corresponding to weighted edges between
 # nodes, and first-order terms corresponding to node weights.
 #
-# A well known example of a quadratic Hamiltonian is the transverse
-# field Ising model, which is defined as
+# A well known example of a quadratic Hamiltonian is the transverse-field 
+# Ising model, which is defined as
 #
 # .. math::
 #
