@@ -383,7 +383,7 @@ def state_evolve(hamiltonian, qubits, time):
 # Hamiltonians in the QGRNN ansatz,
 # :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, are the
 # :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
-# Hamiltonian. This gives us:
+# Hamiltonian. This gives:
 #
 
 
