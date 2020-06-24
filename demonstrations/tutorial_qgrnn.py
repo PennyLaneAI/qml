@@ -1,9 +1,9 @@
 """
-The Quantum Graph Recurrrent Neural Network
+The Quantum Graph Recurrent Neural Network
 ===========================================
 
 .. meta::
-    :property="og:description": Using a quantum graph recurrrent neural network to learn quantum dynamics.
+    :property="og:description": Using a quantum graph recurrent neural network to learn quantum dynamics.
     :property="og:image": https://pennylane.ai/qml/_images/qgrnn_thumbnail.png
 
 *Author: Jack Ceroni*
@@ -27,7 +27,7 @@ The Quantum Graph Recurrrent Neural Network
 ######################################################################
 # A graph is defined as a set of *nodes*, along with a set of
 # **edges**, which represent interactions or relationships between nodes.
-# Sometimes, we like to encode information into graphs by assigning numbers
+# Information can be encoded into graphs by assigning numbers
 # to nodes and edges, which we call **weights**.
 # It is usually convenient to think of a graph visually:
 #
@@ -40,7 +40,7 @@ The Quantum Graph Recurrrent Neural Network
 # receving a lot of attention from the machine learning community.
 # A GNN seeks
 # to learn a representation (a mapping of data into a
-# lower-dimensional vector space) of a given graph with features assigned
+# low-dimensional vector space) of a given graph with feature vectors assigned
 # to nodes and edges. Each of the vectors in the learned
 # representation preserves not only the features, but also the overall
 # topology of the graph, i.e., which nodes are connected by edges. The
@@ -70,7 +70,7 @@ The Quantum Graph Recurrrent Neural Network
 # where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
 # In this Hamiltonian, the set :math:`E` that determines which pairs of qubits
 # have :math:`ZZ` interactions is exactly the set of edges for some graph. With
-# the qubits as nodes we call this graph the *interaction graph*.
+# the qubits as nodes, we call this graph the *interaction graph*.
 # The :math:`\theta^{(1)}` parameters correspond to the edge weights and
 # the :math:`\theta^{(2)}`
 # parameters correspond to weights on the nodes.
@@ -135,9 +135,7 @@ The Quantum Graph Recurrrent Neural Network
 # target parameters,
 # :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also
 # suppose we have access to copies of some
-# low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`, meaning that
-# :math:`\langle \psi_0 | \hat{H}_{\text{Ising}} | \psi_0 \rangle` is close to, but slightly larger 
-# than the ground state energy. In addition,
+# low-energy state of the target Hamiltonian, :math:`|\psi_0\rangle`. In addition,
 # we have access to a collection of time-evolved states,
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
 #
@@ -182,7 +180,7 @@ The Quantum Graph Recurrrent Neural Network
 
 ######################################################################
 # We now attempt to use the QGRNN to learn the parameters corresponding
-# to some arbitrary transverse field Ising model Hamiltonian.
+# to an arbitrary transverse field Ising model Hamiltonian.
 #
 
 
@@ -220,8 +218,8 @@ qubits = range(qubit_number)
 # the QGRNN, so we have to generate it ourselves. To do this, we must
 # have knowledge of the target interaction graph and the target Hamiltonian.
 #
-# We first define the target interaction graph
-# of the Ising Hamiltonian to be the cycle graph:
+# Let us use the following cyclic graph as our target interaction graph
+# of the Ising Hamiltonian:
 #
 
 
@@ -260,7 +258,7 @@ matrix_params = [[-0.3, 0.58, -0.77, 0.83], [0.7, 0.82, 0.17, 0.14]]
 # In theory, these parameters can
 # be any value we want, provided they are reasonbly small enough that the QGRNN can reach them
 # in a tractable number of optimization steps.
-# The first list represents the :math:`ZZ` interaction parameters and
+# In `matrix_params`, the first list represents the :math:`ZZ` interaction parameters and
 # the second list represents the single-qubit `Z` parameters.
 #
 # Finally,
@@ -338,7 +336,7 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 #
 # We can verify that this is a low-energy
 # state by numerically finding the lowest eigenvalue of the Hamiltonian
-# matrix and comparing it to the energy expectation of the low-energy state:
+# matrix and comparing it to the energy expectation of this low-energy state:
 #
 
 # Finds the energy expectation
@@ -434,12 +432,12 @@ def swap_test(control, register1, register2):
 # :math:`\langle Z \rangle`, with respect to the ancilla qubit. When a SWAP
 # test is performed, the probability of measuring the :math:`|0\rangle` state
 # in the control qubit is related to the fidelity between registers. In addition,
-# the probability of measuring :math:`|0\rangle` as also related to :math:`\langle Z \rangle`.
+# the probability of measuring :math:`|0\rangle` is also related to :math:`\langle Z \rangle`.
 # From a bit of algebra, we find that :math:`\langle Z \rangle` is equal to the fidelity.
 #
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these is a "guessed"
-# interaction graph, which we define to be the complete graph. This choice
+# interaction graph, for which we will use a complete graph. This choice
 # is motivated by the fact that any target interaction graph will be a subgraph
 # of this initial guess.
 #
@@ -507,8 +505,8 @@ def qgrnn(params1, params2, time=None):
 #
 # .. math::
 #
-#     \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ - \frac{1}{N} \displaystyle\sum_{t \ = \ 1}^{N} |
-#     \langle \psi(t) | \ U_{H}(\boldsymbol\mu, \ \Delta) \ |\psi_0\rangle |^2,
+#     \mathcal{L}(\boldsymbol\mu, \ \Delta) \ = \ - \frac{1}{N} \displaystyle\sum_{i \ = \ 1}^{N} |
+#     \langle \psi(t_i) | \ U_{H}(\boldsymbol\mu, \ \Delta) \ |\psi_0\rangle |^2,
 #
 # where we use :math:`N` pieces of quantum data.
 #
@@ -521,7 +519,7 @@ max_time = 0.1  # The maximum value of time that can be used for quantum data
 
 
 ######################################################################
-# We then define the infidelity cost function:
+# We then define the fidelity cost function:
 #
 
 
