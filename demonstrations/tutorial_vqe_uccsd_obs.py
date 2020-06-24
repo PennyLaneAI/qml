@@ -203,6 +203,7 @@ print(params)
 # -6}`.
 
 max_iterations = 200
+max_iterations = 1
 conv_tol = 1e-06
 
 prev_energy = cost_fn(params)
