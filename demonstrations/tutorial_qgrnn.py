@@ -138,7 +138,7 @@ The Quantum Graph Recurrent Neural Network
 # we have access to a collection of time-evolved states,
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
 #
-# .. math:: |\psi(t_k)\rangle \ = \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\alpha)} |\psi_0\rangle
+# .. math:: |\psi(t_k)\rangle \ = \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\alpha)} |\psi_0\rangle.
 #
 # We call the low-energy states and the collection of time-evolved states *quantum data*.
 # From here, we randomly pick a given number of time-evolved states
