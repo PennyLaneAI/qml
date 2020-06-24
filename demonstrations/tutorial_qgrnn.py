@@ -11,12 +11,12 @@ The Quantum Graph Recurrent Neural Network
 """
 
 ######################################################################
-# In this demonstration, we investigate quantum graph
+# This demonstration investigates quantum graph
 # recurrent neural networks (QGRNN), which are the quantum analogue of a
 # classical graph recurrent neural network, and a subclass of the more
 # general quantum graph
 # neural network ansatz. Both the QGNN and QGRNN were introduced in
-# `this paper (2019) <https://arxiv.org/abs/1909.12264>`__.
+# `this paper by Verdon et al. (2019) <https://arxiv.org/abs/1909.12264>`__.
 
 ######################################################################
 # The Idea
@@ -70,7 +70,7 @@ The Quantum Graph Recurrent Neural Network
 # where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
 # In this Hamiltonian, the set :math:`E` that determines which pairs of qubits
 # have :math:`ZZ` interactions can be represented by the set of edges for some graph. With
-# the qubits as nodes, we call this graph the *interaction graph*.
+# the qubits as nodes, this graph is called the *interaction graph*.
 # The :math:`\theta^{(1)}` parameters correspond to the edge weights and
 # the :math:`\theta^{(2)}`
 # parameters correspond to weights on the nodes.
@@ -217,7 +217,7 @@ qubits = range(qubit_number)
 # the QGRNN, so we have to generate it ourselves. To do this, we must
 # have knowledge of the target interaction graph and the target Hamiltonian.
 #
-# Let us use the following cyclic graph as our target interaction graph
+# Let us use the following cyclic graph as the target interaction graph
 # of the Ising Hamiltonian:
 #
 
@@ -352,11 +352,11 @@ print(f"Ground State Energy: {ground_state_energy}")
 ######################################################################
 # This shows us that we have in fact found a low-energy, non-ground state,
 # as the energy expectation is slightly greater than the energy of the true ground
-# state. This, however, is only half of the information we need. We also require
+# state. This, however, is only half of the information needed. We also require
 # a collection of time-evolved states.
 # Evolving a state forward in time is fairly straightforward: all we
-# have to do is multiply the initial state by a time-evolution unitary. We define
-# this operation as a custom gate in PennyLane:
+# have to do is multiply the initial state by a time-evolution unitary. This operation 
+# can be defined as a custom gate in PennyLane:
 #
 
 
@@ -382,8 +382,9 @@ def state_evolve(hamiltonian, qubits, time):
 # With the quantum data defined, we are able to construct the QGRNN and
 # learn the target Hamiltonian. We wish to use the
 # QGRNN to approximate time-evolution of the target Hamiltonian.
-# We thus let each of the exponentiated Hamiltonians in the QGRNN ansatz,
-# :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, be the
+# As was explained in the first section, each of the exponentiated 
+# Hamiltonians in the QGRNN ansatz,
+# :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, are the
 # :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
 # Hamiltonian. This gives us:
 #
@@ -429,15 +430,14 @@ def swap_test(control, register1, register2):
 ######################################################################
 # After performing this procedure, the value returned from measurement of the circuit is
 # :math:`\langle Z \rangle`, with respect to the ancilla qubit that is used to perform
-# the SWAP test. When a SWAP
-# test is performed, the probability of measuring the :math:`|0\rangle` state
+# the SWAP test. After a SWAP test, the probability of measuring the :math:`|0\rangle` state
 # in the control qubit is related to the fidelity between registers. In addition,
-# the probability of measuring :math:`|0\rangle` is also related to :math:`\langle Z \rangle`.
+# the probability of measuring :math:`|0\rangle` is related to :math:`\langle Z \rangle`.
 # From a bit of algebra, we find that :math:`\langle Z \rangle` is equal to the fidelity.
 #
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these is a "guessed"
-# interaction graph, for which we will use a complete graph. This choice
+# interaction graph, which we will choose to be a complete graph. This choice
 # is motivated by the fact that any target interaction graph will be a subgraph
 # of this initial guess.
 #
@@ -519,7 +519,7 @@ max_time = 0.1  # The maximum value of time that can be used for quantum data
 
 
 ######################################################################
-# We then define the fidelity cost function:
+# We then define the negative fidelity cost function:
 #
 
 
@@ -620,6 +620,10 @@ zero_weights = [qgrnn_params[1], qgrnn_params[4]]
 del qgrnn_params[1]
 del qgrnn_params[3]
 
+######################################################################
+# Then, we print all of the weights:
+#
+
 target_params = matrix_params[0] + matrix_params[1]
 
 print(f"Target parameters: {target_params}")
@@ -628,7 +632,7 @@ print(f"Non-Existing Edge Parameters: {zero_weights}")
 
 
 ######################################################################
-# As can be seen here, the weights of edges :math:`(1, 3)` and :math:`(2, 0)`
+# The weights of edges :math:`(1, 3)` and :math:`(2, 0)`
 # are very close to :math:`0`, indicating we have learned the cycle graph 
 # from the complete graph. In addition, the remaining parameters in the learned 
 # Hamiltonian are very close to those of the target Hamiltonian.
