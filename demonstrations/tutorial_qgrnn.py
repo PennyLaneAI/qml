@@ -598,7 +598,7 @@ plt.show()
 
 
 ######################################################################
-# We conclude this demonstration by verifying that the QGRNN found the
+# We conclude by verifying that the QGRNN found the
 # target parameters by looking at the
 # exact values of the target and learned parameters. Recall how the target
 # interaction graph has :math:`4` edges while the complete graph has :math:`6`.
