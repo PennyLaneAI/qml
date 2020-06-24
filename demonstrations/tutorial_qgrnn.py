@@ -245,7 +245,7 @@ print(f"Edges: {ising_graph.edges}")
 # :math:`X_i` and :math:`Z_i` are the Pauli-X and Pauli-Z on the
 # :math:`i`-th qubit.
 #
-# For this tutorial, we choose the target parameters manually, by sampling from
+# For this tutorial, we choose the target parameters by sampling from
 # a uniform probability distribution ranging from :math:`-1` to :math:`1`, with
 # two-decimal precision.
 #
