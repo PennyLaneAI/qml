@@ -328,9 +328,9 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 # VQE ansatz such that the circuit cannot learn the exact ground state,
 # but it can get fairly close. Another way to arrive at the same result is 
 # to perform VQE with a reasonable ansatz, but to terminate the algorithm 
-# before it converges to the ground state. If we did use the exact ground state as
-# :math:`|\psi_0\rangle`, then we would have trivial time-dependence
-# and our data would be useless.
+# before it converges to the ground state. If we used the exact ground state
+# :math:`|\psi_0\rangle`, the time-dependence would be trivial and the
+# data would be useless.
 #
 # We can verify that this is a low-energy
 # state by numerically finding the lowest eigenvalue of the Hamiltonian
