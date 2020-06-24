@@ -15,7 +15,8 @@ The Quantum Graph Recurrrent Neural Network
 # recurrent neural networks (QGRNN), which are the quantum analogue of a
 # classical graph recurrent neural network, and a subclass of the more
 # general quantum graph
-# neural network ansatz (`QGNN <https://arxiv.org/abs/1909.12264>`__).
+# neural network ansatz. Both the QGNN and QGRNN were introduced by
+# `Verdon et al. (2019) <https://arxiv.org/abs/1909.12264>`__.
 
 ######################################################################
 # The Idea
@@ -134,7 +135,9 @@ The Quantum Graph Recurrrent Neural Network
 # target parameters,
 # :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also
 # suppose we have access to copies of some
-# low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`. In addition,
+# low-energy state with respect to the target Hamiltonian, :math:`|\psi_0\rangle`, meaning that
+# :math:`\langle \psi_0 | \hat{H}_{\text{Ising}} | \psi_0 \rangle` is close to, but slightly larger 
+# than the ground state energy. In addition,
 # we have access to a collection of time-evolved states,
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
 #
@@ -225,7 +228,7 @@ qubits = range(qubit_number)
 ising_graph = nx.cycle_graph(qubit_number)
 
 nx.draw(ising_graph)
-print("Edges: {}".format(ising_graph.edges))
+print(f"Edges: {ising_graph.edges}")
 
 
 ######################################################################
@@ -327,7 +330,9 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 # :doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` algorithm (VQE).
 # Essentially, we choose a
 # VQE ansatz such that the circuit cannot learn the exact ground state,
-# but it can get fairly close. If we did use the exact ground state as
+# but it can get fairly close. Another way to arrive at the same result is 
+# to perform VQE with a reasonable ansatz, but to terminate the algorithm 
+# before it converges to the ground state. If we did use the exact ground state as
 # :math:`|\psi_0\rangle`, then we would have trivial time-dependence
 # and our data would be useless.
 #
@@ -338,13 +343,13 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 
 # Finds the energy expectation
 
-energy_exp = np.inner(np.conj(low_energy_state), (ham_matrix @ low_energy_state))
-print("Energy Expectation: {}".format(energy_exp))
+energy_exp = np.vdot(low_energy_state, (ham_matrix @ low_energy_state))
+print(f"Energy Expectation: {energy_exp}")
 
 # Finds the ground state energy
 
-ground_state_energy = min(np.linalg.eig(ham_matrix)[0])
-print("Ground State Energy: {}".format(ground_state_energy))
+ground_state_energy = np.real_if_close(min(np.linalg.eig(ham_matrix)[0]))
+print(f"Ground State Energy: {ground_state_energy}")
 
 
 ######################################################################
@@ -453,7 +458,7 @@ new_ising_graph = nx.Graph()
 new_ising_graph.add_nodes_from(range(qubit_number, 2 * qubit_number))
 new_ising_graph.add_edges_from([(4, 5), (5, 6), (6, 7), (4, 6), (7, 4), (5, 7)])
 
-print("Edges: " + str(new_ising_graph.edges))
+print(f"Edges: {new_ising_graph.edges}")
 nx.draw(new_ising_graph)
 
 
@@ -572,18 +577,25 @@ qgrnn_params = np.zeros([10], dtype=np.float64)
 for i in range(0, steps):
     qgrnn_params = optimizer.step(cost_function, qgrnn_params)
 
-print("Final Parameters: {}".format(qgrnn_params))
-
+print(f"Final Parameters: {qgrnn_params}")
 
 ######################################################################
 # With the learned parameters, we construct a visual representation
-# of the Hamiltonian:
+# of the Hamiltonian and compare it to the target Hamiltonian:
 #
 
 new_ham_matrix = create_hamiltonian_matrix(
     qubit_number, nx.complete_graph(qubit_number), [qgrnn_params[0:6], qgrnn_params[6:10]]
 )
-plt.matshow(new_ham_matrix)
+
+ax1 = plt.subplot(211)
+ax1.matshow(new_ham_matrix)
+ax1.set_title("Learned Hamiltonian")
+
+ax2 = plt.subplot(212)
+ax2.matshow(ham_matrix)
+ax2.set_title("Target Hamiltonian")
+
 plt.show()
 
 
@@ -592,14 +604,15 @@ plt.show()
 # target parameters by looking at the
 # exact values of the target and learned parameters:
 
-# Inserts 0s where there is no edge present in target parameters
+# Inserts 0s at positions corresponding to edges (1, 3) and (0, 2) 
+# in the complete graph
 
 target_params = matrix_params[0] + matrix_params[1]
 target_params.insert(1, 0)
 target_params.insert(4, 0)
 
-print("Target parameters: {}".format(target_params))
-print("Learned parameters: {}".format(qgrnn_params))
+print(f"Target parameters: {target_params}")
+print(f"Learned parameters: {qgrnn_params}")
 
 
 ######################################################################
