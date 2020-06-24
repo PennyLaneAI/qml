@@ -27,13 +27,9 @@ that the ground state with energy :math:`E_\mathrm{gs}=-1.136189` Ha has spin qu
 :math:`E^*=-0.478453` Ha, show a three-fold spin degeneracy with quantum numbers
 :math:`S=1` and :math:`S_z=0, \pm 1`.
 
-|
-
 .. figure:: /demonstrations/vqe_uccsd/energy_spectra_h2_sto3g.png
     :width: 50%
     :align: center
-
-|
 
 Similarly, in the framework of VQE, if the quantum computer can be programmed to prepare many-body
 states in a specific sector of the total-spin projection :math:`S_z`, the variational optimization
