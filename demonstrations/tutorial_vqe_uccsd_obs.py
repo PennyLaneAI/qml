@@ -1,6 +1,6 @@
 r"""
-VQE simulations in different sectors of the spin quantum number
-===============================================================
+VQE in different spin sectors with the Unitary Coupled Cluster
+==============================================================
 
 .. meta::
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different
@@ -27,13 +27,9 @@ that the ground state with energy :math:`E_\mathrm{gs}=-1.136189` Ha has spin qu
 :math:`E^*=-0.478453` Ha, show a three-fold spin degeneracy with quantum numbers
 :math:`S=1` and :math:`S_z=0, \pm 1`.
 
-|
-
 .. figure:: /demonstrations/vqe_uccsd/energy_spectra_h2_sto3g.png
     :width: 50%
     :align: center
-
-|
 
 Similarly, in the framework of VQE, if the quantum computer can be programmed to prepare many-body
 states in a specific sector of the total-spin projection :math:`S_z`, the variational optimization
@@ -41,12 +37,20 @@ algorithm will allow us to estimate the energy of the lowest-lying state in this
 More specifically, if we run a VQE simulation for the :math:`\mathrm{H}_2` molecule in the
 subspace of states with :math:`S_z=0` we will find the ground-state energy of the molecule. On the
 other hand, if the VQE simulation is carried out in the subspace with :math:`S_z=1` the
-optimized state will be in practice an excited state of the molecule as it is shown in the Figure 
+optimized state will be in practice an excited state of the molecule as it is shown in the Figure
 above.
 
+At the core of the VQE algorithm is variational quantum circuit that is optimized to prepare the
+desired quantum states. The choice of circuit is crucial for the success of the algorithm. The
+unitary coupled cluster [add ref] is a powerful circuit ansatz that is believed to outperform
+even the classical coupled cluster, traditionally referred to as the gold standard of quantum
+chemistry.
+
 In this tutorial we will demonstrate how different functionalities implemented in PennyLane-QChem
-can be put together to run VQE simulations in different sectors of the spin quantum numbers
-to estimate the energies of the ground and the lowest-lying excited states of the hydrogen
+can be put together to run VQE simulations in different sectors of the spin quantum numbers. We
+also specify how to implement the unitary coupled cluster, restricted to single and double
+excitations, as the ciruict ansatz for the algorithm. These functionalities can be
+combined to estimate the energies of the ground and the lowest-lying excited states of the hydrogen
 molecule.
 
 Let's get started! ⚛️
