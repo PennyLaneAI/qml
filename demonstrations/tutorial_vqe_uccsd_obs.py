@@ -27,9 +27,13 @@ that the ground state with energy :math:`E_\mathrm{gs}=-1.136189` Ha has spin qu
 :math:`E^*=-0.478453` Ha, show a three-fold spin degeneracy with quantum numbers
 :math:`S=1` and :math:`S_z=0, \pm 1`.
 
+|
+
 .. figure:: /demonstrations/vqe_uccsd/energy_spectra_h2_sto3g.png
     :width: 50%
     :align: center
+
+|
 
 Similarly, in the framework of VQE, if the quantum computer can be programmed to prepare many-body
 states in a specific sector of the total-spin projection :math:`S_z`, the variational optimization
@@ -47,84 +51,78 @@ molecule.
 
 Let's get started! ⚛️
 
-Building the electronic Hamiltonian
------------------------------------
+Building the Hamiltonian and the total spin observable :math:`\hat{S}^2`
+------------------------------------------------------------------------
 
 The first step is to import the required libraries and packages:
 """
 
 import pennylane as qml
 from pennylane import numpy as np
+from pennylane import qchem
+from pennylane.templates.subroutines import UCCSD
 
-##############################################################################
+##################################################################################
 # The second step is to specify the molecule whose properties we aim to calculate.
-# This is done by providing three pieces of information: the geometry and charge of the molecule,
-# and the spin multiplicity of the electronic configuration.
-#
-# The geometry of a molecule is given by the three-dimensional coordinates and symbols of all
-# its atomic species. There are several databases such as `the NIST Chemistry
-# WebBook <https://webbook.nist.gov/chemistry/name-ser/>`_, `ChemSpider <http://www.chemspider.com/>`_
-# and `SMART-SNS <http://smart.sns.it/molecules/>`_ that provide
-# geometrical data for a large number of molecules. Here, we make use of a locally saved file in
-# ``.xyz`` format that contains the geometry of the hydrogen molecule, and specify its name for
-# later use:
+# This is done by providing the name, geometry and charge of the molecule.
+
+name = 'h2'
+
+##################################################################################
+# The geometry of the molecule can be given in any format recognized by Open Babel.
+# Here, we used a locally saved file in
+# `xyz format <https://en.wikipedia.org/wiki/XYZ_file_format>`_ specifying the
+# three-dimensional coordinates and symbols of the atomic species.
 
 geometry = 'h2.xyz'
 
 ##############################################################################
-# Alternatively, you can download the file here: :download:`h2.xyz </demonstrations/h2.xyz>`.
-#
 # The charge determines the number of electrons that have been added or removed compared to the
-# neutral molecule. In this example, as is the case in many quantum chemistry simulations,
-# we will consider a neutral molecule:
+# neutral molecule. In this example, we will consider a neutral molecule:
 
 charge = 0
 
 ##############################################################################
-# It is also important to define how the electrons occupy the molecular orbitals to be optimized
-# within the `Hartree-Fock approximation <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__.
-# This is captured by the `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_
-# parameter, which is related to the number of unpaired electrons in the Hartree-Fock state. For
-# the neutral hydrogen molecule, the multiplicity is one:
+# Now, we need to define two input parameters required to compute the mean field
+# electronic structure of the molecule. First, the
+# `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_ of the 
+# `Hartree-Fock (HF) state <https://en.wikipedia.org/wiki/Hartree-Fock_method>`_, and
+# the second one is the `atomic basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_
+# used to represent the HF molecular orbitals. In this example, we will use the minimal
+# basis STO-3g.
 
 multiplicity = 1
-
-##############################################################################
-# Finally, we need to specify the `basis set <https://en.wikipedia.org/wiki/Basis_set_(
-# chemistry)>`_ used to approximate atomic orbitals. This is typically achieved by using a linear
-# combination of Gaussian functions. In this example, we will use the minimal basis STO-3g where a
-# set of 3 Gaussian functions are contracted to represent an atomic Slater-type orbital (STO):
-
 basis_set = 'sto-3g'
 
 ##############################################################################
-# At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
-# calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.generate_hamiltonian`. The first input to
-# the function is a string denoting the name of the molecule, which will determine the name given
-# to the saved files that are produced during the calculations:
+# PennyLane-QChem allows to define an `active space
+# <https://en.wikipedia.org/wiki/Complete_active_space>`_ to expand the second-quantized
+# Hamiltonian or any other observable relevant to compute different molecular properties.
+# The active space is built by specifying the number of active electrons and active orbitals.
+# For the hydrogen molecule described with a minimal basis set we will include all HF orbitals
+# in our basis of single-particle states.
 
-name = 'h2'
+n_electrons = 2
+n_orbitals = 2
 
 ##############################################################################
-# The geometry, charge, multiplicity, and basis set must also be specified as input. Finally,
-# the number of active electrons and active orbitals have to be indicated, as well as the
-# fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
-# (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
-# number of qubits needed to represent it:
+# Finally, to build the electronic Hamiltonian we have to define fermionic-to-qubit
+# mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
+# (``bravyi_kitaev``). The outputs of the function :func:`~.generate_hamiltonian` are
+# the qubit Hamiltonian of the molecule and the number of qubits needed to represent it:
 
-h, nr_qubits = qml.qchem.generate_hamiltonian(
+h, n_qubits = qml.qchem.generate_hamiltonian(
     name,
     geometry,
     charge,
     multiplicity,
     basis_set,
-    n_active_electrons=2,
-    n_active_orbitals=2,
+    n_active_electrons=n_electrons,
+    n_active_orbitals=n_orbitals,
     mapping='jordan_wigner'
 )
 
-print('Number of qubits = ', nr_qubits)
+print('Number of qubits = ', n_qubits)
 print('Hamiltonian is ', h)
 
 ##############################################################################
