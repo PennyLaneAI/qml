@@ -37,7 +37,7 @@ The Quantum Graph Recurrent Neural Network
 #
 # In recent years, the concept of a
 # `graph neural network <https://arxiv.org/abs/1812.08434>`__ (GNN) has been
-# receving a lot of attention from the machine learning community.
+# receiving a lot of attention from the machine learning community.
 # A GNN seeks
 # to learn a representation (a mapping of data into a
 # low-dimensional vector space) of a given graph with feature vectors assigned
@@ -134,7 +134,7 @@ The Quantum Graph Recurrent Neural Network
 # target parameters,
 # :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also
 # suppose we have access to copies of some
-# low-energy state of the target Hamiltonian, :math:`|\psi_0\rangle`. In addition,
+# low-energy, non-ground state of the target Hamiltonian, :math:`|\psi_0\rangle`. In addition,
 # we have access to a collection of time-evolved states,
 # :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
 #
@@ -142,7 +142,7 @@ The Quantum Graph Recurrent Neural Network
 #
 # We call the low-energy states and the collection of time-evolved states *quantum data*.
 # From here, we randomly pick a number of time-evolved states
-# from our collection. For some state that we choose, which is
+# from our collection. For any state that we choose, which is
 # evolved to some time :math:`t_k`, we compare it
 # to
 #
@@ -152,11 +152,11 @@ The Quantum Graph Recurrent Neural Network
 #     \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle.
 #
 # This is done by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit
-# with the QGRNN ansatz, with some "guessed" set of parameters :math:`\boldsymbol\mu`
+# with the QGRNN ansatz, with some guessed set of parameters :math:`\boldsymbol\mu`
 # and a guessed interaction graph, :math:`G'`.
 # We then use a classical optimizer to maximize the average
 # "similarity" between the time-evolved states and the states prepared
-# with the QGRNN.
+# with the QGRNN, by updating the guessed parameters.
 #
 # As the QGRNN states becomes more similar to
 # each time-evolved state for each sampled time, it follows that
@@ -202,7 +202,7 @@ import networkx as nx
 
 
 ######################################################################
-# We can then define some fixed values that are used throughout
+# We also define some fixed values that are used throughout
 # the simulation.
 #
 
@@ -349,9 +349,9 @@ print(f"Ground State Energy: {ground_state_energy}")
 ######################################################################
 # We have in fact found a low-energy, non-ground state,
 # as the energy expectation is slightly greater than the energy of the true ground
-# state. This, however, is only half of the information needed. We also require
-# a collection of time-evolved states.
-# Evolving a state forward in time is fairly straightforward: all we
+# state. This, however, is only half of the information we need. We also require
+# a collection of time-evolved, low-energy states.
+# Evolving the low-energy state forward in time is fairly straightforward: all we
 # have to do is multiply the initial state by a time-evolution unitary. This operation 
 # can be defined as a custom gate in PennyLane:
 #
@@ -378,7 +378,7 @@ def state_evolve(hamiltonian, qubits, time):
 ######################################################################
 # With the quantum data defined, we are able to construct the QGRNN and
 # learn the target Hamiltonian.
-# As was explained in the first section, each of the exponentiated 
+# Each of the exponentiated 
 # Hamiltonians in the QGRNN ansatz,
 # :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, are the
 # :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
@@ -486,8 +486,8 @@ def qgrnn(params1, params2, time=None):
 
 
 ######################################################################
-# We have the full QGRNN circuit, but we still need to define a cost.
-#We know that
+# We have the full QGRNN circuit, but we still need to define a cost function.
+# We know that
 # :math:`| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`
 # approaches :math:`1` as the states become more similar and approaches
 # :math:`0` as the states become orthogonal. Thus, we choose
@@ -573,7 +573,8 @@ print(f"Final Parameters: {qgrnn_params}")
 
 ######################################################################
 # With the learned parameters, we construct a visual representation
-# of the Hamiltonian and compare it to the target Hamiltonian:
+# of the Hamiltonian to which they correspond and compare it to the 
+# target Hamiltonian:
 #
 
 new_ham_matrix = create_hamiltonian_matrix(
@@ -595,9 +596,11 @@ plt.show()
 
 
 ######################################################################
-# To see exactly how the model learned the target Hamiltonian, we can look
-# at the exact values of the target and learned parameters.
+# These images look very similar, indicating the QGRNN has done a good job 
+# learning the target Hamiltonian.
 # 
+# We can also look
+# at the exact values of the target and learned parameters.
 # Recall how the target
 # interaction graph has :math:`4` edges while the complete graph has :math:`6`.
 # Thus, as the QGRNN converges to the optimal solution, the weights corresponding to 
@@ -629,8 +632,8 @@ print(f"Non-Existing Edge Parameters: {zero_weights}")
 ######################################################################
 # The weights of edges :math:`(1, 3)` and :math:`(2, 0)`
 # are very close to :math:`0`, indicating we have learned the cycle graph 
-# from the complete graph. In addition, the remaining parameters in the learned 
-# Hamiltonian are very close to those of the target Hamiltonian.
+# from the complete graph. In addition, the remaining learned weights
+# are very close to those of the target Hamiltonian.
 # Thus, the QGRNN is functioning properly, and has learned the target
 # Ising Hamiltonian to a high
 # degree of accuracy!
