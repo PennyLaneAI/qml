@@ -377,8 +377,7 @@ def state_evolve(hamiltonian, qubits, time):
 
 ######################################################################
 # With the quantum data defined, we are able to construct the QGRNN and
-# learn the target Hamiltonian. We wish to use the
-# QGRNN to approximate time-evolution of the target Hamiltonian.
+# learn the target Hamiltonian.
 # As was explained in the first section, each of the exponentiated 
 # Hamiltonians in the QGRNN ansatz,
 # :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, are the
@@ -387,19 +386,19 @@ def state_evolve(hamiltonian, qubits, time):
 #
 
 
-def qgrnn_layer(param1, param2, qubits, graph, trotter):
+def qgrnn_layer(param1, param2, qubits, graph, trotter_step):
 
-    # Applies a layer of coupling gates (based on a graph)
+    # Applies a layer of RZZ gates (based on a graph)
     for count, i in enumerate(graph.edges):
-        qml.MultiRZ(2 * param1[count] * trotter, wires=[i[0], i[1]])
+        qml.MultiRZ(2 * param1[count] * trotter_step, wires=[i[0], i[1]])
 
     # Applies a layer of RZ gates
     for count, i in enumerate(qubits):
-        qml.RZ(2 * param2[count] * trotter, wires=i)
+        qml.RZ(2 * param2[count] * trotter_step, wires=i)
 
     # Applies a layer of RX gates
     for i in qubits:
-        qml.RX(2 * trotter, wires=i)
+        qml.RX(2 * trotter_step, wires=i)
 
 
 ######################################################################
@@ -427,16 +426,20 @@ def swap_test(control, register1, register2):
 ######################################################################
 # After performing this procedure, the value returned from a measurement of the circuit is
 # :math:`\langle Z \rangle`, with respect to the ancilla qubit that is used to perform
-# the SWAP test. After a SWAP test, the probability of measuring the :math:`|0\rangle` state
-# in the control qubit is related to the fidelity between registers. In addition,
-# the probability of measuring :math:`|0\rangle` is related to :math:`\langle Z \rangle`.
+# the SWAP test. The probability of measuring the :math:`|0\rangle` state
+# in the control qubit is related to both the fidelity 
+# between registers and :math:`\langle Z \rangle`.
 # From a bit of algebra, we find that :math:`\langle Z \rangle` is equal to the fidelity.
 #
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these is a "guessed"
-# interaction graph, which we will choose to be a complete graph. This choice
+# interaction graph, which we choose to be a complete graph. This choice
 # is motivated by the fact that any target interaction graph will be a subgraph
-# of this initial guess.
+# of this initial guess. Part of the idea behind the QGRNN is that
+# we don’t know the interaction graph, and it has to be learned. In this case, the graph
+# is learned *automatically* as the target parameters are optimized. The
+# :math:`\boldsymbol\mu` parameters that correspond to edges that don't exist in
+# the target graph will simply approach :math:`0`.
 #
 
 # Defines some fixed values
@@ -458,12 +461,6 @@ nx.draw(new_ising_graph)
 
 
 ######################################################################
-# Part of the idea behind the QGRNN is that
-# we don’t know the interaction graph, and it has to be learned. In this case, the graph
-# is learned *automatically* as the target parameters are optimized. The
-# :math:`\boldsymbol\mu` parameters that correspond to edges that don't exist in
-# the target graph will simply approach :math:`0`.
-#
 # With this done, we implement the QGRNN circuit for some given time value:
 #
 
@@ -497,8 +494,8 @@ def qgrnn(params1, params2, time=None):
 # to minimize the quantity
 # :math:`-| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`.
 # Since we are interested in calculating this value for many different
-# pieces of quantum data, the final cost function is the **average
-# negative fidelity** between registers:
+# pieces of quantum data, the final cost function is the average
+# negative fidelity* between registers:
 #
 # .. math::
 #
@@ -598,9 +595,10 @@ plt.show()
 
 
 ######################################################################
-# We conclude by verifying that the QGRNN found the
-# target parameters by looking at the
-# exact values of the target and learned parameters. Recall how the target
+# To see exactly how the model learned the target Hamiltonian, we can look
+# at the exact values of the target and learned parameters.
+# 
+# Recall how the target
 # interaction graph has :math:`4` edges while the complete graph has :math:`6`.
 # Thus, as the QGRNN converges to the optimal solution, the weights corresponding to 
 # edges :math:`(1, 3)` and :math:`(2, 0)` in the complete graph should go to :math:`0`, as
