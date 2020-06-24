@@ -149,7 +149,7 @@ The Quantum Graph Recurrent Neural Network
 # .. math::
 #
 #     U_{\hat{H}_{\text{Ising}}}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle \ \approx \ e^{-i t_k
-#     \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle
+#     \hat{H}_{\text{Ising}}(\boldsymbol\mu)} |\psi_0\rangle.
 #
 # This is done by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit
 # with the QGRNN ansatz, with some "guessed" set of parameters :math:`\boldsymbol\mu`
