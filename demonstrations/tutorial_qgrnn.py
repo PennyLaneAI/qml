@@ -614,6 +614,8 @@ plt.show()
 # We first pick out the weights of edges (1, 3) and (2, 0)
 # and then remove them from the list of target parameters
 
+qgrnn_params = list(qgrnn_params)
+
 zero_weights = [qgrnn_params[1], qgrnn_params[4]]
 
 del qgrnn_params[1]
