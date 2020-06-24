@@ -108,7 +108,7 @@ The Quantum Graph Recurrent Neural Network
 # where :math:`\hat{H}_{\text{Ising}}^{j}(\boldsymbol\theta)` is the :math:`j`-th term of the
 # Ising Hamiltonian and :math:`\Delta` is some small number.
 #
-# The circuit at which we have arrived is a specific instance of the **Quantum Graph
+# This circuit is a specific instance of the **Quantum Graph
 # Recurrent Neural Network**, which in general is defined as a variational ansatz of
 # the form
 #
