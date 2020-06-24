@@ -203,6 +203,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_quantum_metrology`
     :tags: cirq metrology autograd
 
+.. customgalleryitem::
+    :tooltip: Learn how to create hybrid ML models using Keras and PyTorch
+    :figure: TODO
+    :description: :doc:`demos/tutorial_qnn_module`
+    :tags: pytorch tensorflow
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -242,3 +248,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
     demos/tutorial_quantum_metrology
+    demos/tutorial_qnn_module
