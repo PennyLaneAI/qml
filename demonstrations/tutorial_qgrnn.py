@@ -337,7 +337,6 @@ low_energy_state = np.array([-0.02086666+0.00920016j, -0.00379192-0.00859852j,  
 # and comparing it to the energy expectation of this low-energy state:
 #
 
-# Finds the energy expectation
 
 energy_exp = np.vdot(low_energy_state, (ham_matrix @ low_energy_state))
 print(f"Energy Expectation: {np.real_if_close(energy_exp)}")
