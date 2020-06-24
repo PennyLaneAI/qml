@@ -84,7 +84,7 @@ The Quantum Graph Recurrent Neural Network
 #
 # .. math:: U \ = \ e^{-it H}.
 #
-# Thus, we have a clean way of taking graph-theoretic Hamiltonians and turning
+# Thus, we have a clean way of taking quadratic Hamiltonians and turning
 # them into unitaries (quantum circuits) that preserve the same correspondance to a graph.
 # In the case of the Ising Hamiltonian, we have:
 #
