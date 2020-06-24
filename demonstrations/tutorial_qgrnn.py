@@ -460,7 +460,7 @@ nx.draw(new_ising_graph)
 ######################################################################
 # Part of the idea behind the QGRNN is that
 # we don’t know the interaction graph, and it has to be learned. In this case, the graph
-# is learned **automatically** as the target parameters are optimized. The
+# is learned *automatically* as the target parameters are optimized. The
 # :math:`\boldsymbol\mu` parameters that correspond to edges that don't exist in
 # the target graph will simply approach :math:`0`.
 #
