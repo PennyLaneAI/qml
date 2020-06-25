@@ -332,7 +332,7 @@ print(tunable_circuit.draw())
 #
 # But, how often does this problem occur? If we wanted to train this
 # circuit from a random starting point, how often would we be stuck in a
-# plateau? To investigate this, lets attempt to train the global cost
+# plateau? To investigate this, let's attempt to train the global cost
 # function using random starting positions and count how many times we run
 # into a barren plateau.
 #
