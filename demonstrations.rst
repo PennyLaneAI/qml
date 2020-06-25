@@ -204,7 +204,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: chemistry
 
 .. customgalleryitem::
-    :tooltip: Local and global cost functions
+    :tooltip: Understand the difference between local and global cost functions
     :figure: demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
     :description: :doc:`demos/tutorial_local_cost_functions`
     :tags: autograd
