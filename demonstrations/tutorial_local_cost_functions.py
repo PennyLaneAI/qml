@@ -12,6 +12,7 @@ initialized in one of these areas will be untrainable using any gradient based
 algorithm.
 
 
+
 In `"Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural
 Networks" <https://arxiv.org/abs/2001.00550>`__ Cerezo et al. demonstrate the
 idea that the barren plateau
@@ -19,6 +20,23 @@ phenomenon can be avoided by using cost functions that only have
 information from part of the circuit. These *local* cost functions are
 more robust to noise, and have more well-behaved gradients with no
 plateaus for shallow circuits.
+
+
+.. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
+   :align: center
+   :width: 50%
+   
+In a quick explanation, a global cost function is the type that is traditionally used.
+Information from the entire measurement is used to analyze the result of the 
+circuit, and a cost function is calculated from this to quantify the circuits 
+performance. A local cost function only considers information from a few qubits, 
+and attempts to analyze the behavior of the entire circuit from this limited scope.
+
+
+Cerezo et al. also handily prove that these local cost functions are bounded by the 
+global ones, i.e. if a global cost function is formulated in the manner discribed
+by Cerezo, then its corrisponding local cost function will always be 
+less than or equal to the global.
 
 Imports
 ~~~~~~~
@@ -44,36 +62,33 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 # a sense of what is happening in the cost landscape.
 #
 # First we define a number of wires we want to train on. The work by
-# Cerezo et al. shows that circuits are trainible under certain ranges, so
+# Cerezo et al. shows that circuits are trainible under certain regimes, so
 # how many qubits we train on will effect our results.
-#
-# .. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
-#    :align: center
-#    :width: 90%
 
 wires = 6
 dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 
 
 ######################################################################
-# Next, we want to define our qnodes, containing our ansatz. For this
+# Next, we want to define our QNodes, containing our ansatz. For this
 # simple example, an ansatz that works well is simply a rotation along X,
 # and a rotation along Y, repeated across all the qubits.
 #
 # We will also define our cost functions here. Since we are trying to
-# learn the identity gate, a natural cost function is
+# learn the identity gate, a natural cost function is the probablity of measuring the 
+# zero state.
 #
-# .. math:: C = 1-(P_{|0\rangle})
+# .. math:: C = 1-p_{|0\rangle}
 #
 # We will apply this across all qubits for our global cost function, i.e.:
 #
-# .. math:: C_{G} = 1-(P_{|00 \ldots 0\rangle})
+# .. math:: C_{G} = 1-p_{|00 \ldots 0\rangle}
 #
 # and only on one qubit for our local cost function:
 #
-# .. math:: C_{L} = 1-(P_{|0>,1}).
+# .. math:: C_{L} = 1-p_{|0>,1}.
 #
-# To implement this, we will define a separate qnode for the local cost
+# To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
 #
 
@@ -81,28 +96,26 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 def global_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
-    for i in range(wires):
         qml.RY(rotations[1][i], wires=i)
+    for i in range(wires-1):
+        qml.CNOT(wires=[i,i+1])    
     return qml.probs(wires=range(wires))
 
 
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
-    for i in range(wires):
         qml.RY(rotations[1][i], wires=i)
+    for i in range(wires-1):
+        qml.CNOT(wires=[i,i+1])    
     return qml.probs(wires=[0])
 
 
 def cost_local(rotations):
-    # result = circuit(rotations)
-    # return sum(abs(result[i]) for i in range(wires))
     return 1 - local_circuit(rotations)[0]
 
 
 def cost_global(rotations):
-    # result = circuit(rotations)
-    # return sum(abs(result[i]) for i in range(wires))
     return 1 - global_circuit(rotations)[0]
 
 
@@ -135,7 +148,10 @@ print(local_circuit.draw())
 
 ######################################################################
 # With this simple example, we can visualize the cost function, and see
-# the barren plateau effect graphically.
+# the barren plateau effect graphically. Although there are 2n (where n is the 
+# number of qubits) parameters, in order to make the cost landscape plot-able 
+# we must constrain ourselves. We will assume that all the X rotations are the 
+# same, and all the Y rotations are the same.
 
 X = np.arange(-np.pi, np.pi, 1)
 Y = np.arange(-np.pi, np.pi, 1)
@@ -220,7 +236,7 @@ print(global_circuit.draw())
 ######################################################################
 # After 100 steps, the cost function is still exactly 1. Clearly we are in
 # an untrainable area. Now, lets limit the ourselves to the local cost
-# function and see how it performs.
+# function and see how it performs. 
 #
 
 rotations = [[3.0 for i in range(wires)], [0 for i in range(wires)]]
@@ -240,7 +256,7 @@ print(local_circuit.draw())
 
 ######################################################################
 # It trained! And much faster than the global case. However, we know our
-# local cost function is faithful to the global one, but just how much
+# local cost function is bounded by the global one, but just how much
 # have we trained it?
 #
 
@@ -275,7 +291,7 @@ print(
 
 ######################################################################
 # Our circuit has definitely been trained, but not a useful amount. If we
-# attempt to use this circuit, we are no better than random chance.
+# attempt to use this circuit, it would act the same as if we never trained at all.
 # Furthermore, if we now attempt to train the global cost function, we are
 # still firmly in the plateau region. In order to fully train the global
 # circuit, we will need to increase the locality gradually as we train.
@@ -285,8 +301,9 @@ print(
 def tunable_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
-    for i in range(wires):
         qml.RY(rotations[1][i], wires=i)
+    for i in range(wires-1):
+        qml.CNOT(wires=[i,i+1])
     return qml.probs(range(locality))
 
 
@@ -336,7 +353,8 @@ print(tunable_circuit.draw())
 # function using random starting positions and count how many times we run
 # into a barren plateau.
 #
-# Let's use a more likely number of qubits: n=10. We will say that after
+# Let's use a number of qubits we are more likely to use in a real variational 
+# circuit: n=10. We will say that after
 # 400 steps, any run with a cost function of less than 0.9 (chosen
 # arbitrarily) will probably be trainable given more time. Any run with a
 # greater cost function will probably be in a plateau.
