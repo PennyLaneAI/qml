@@ -162,9 +162,10 @@ print(s2_matrix_elements)
 
 ##############################################################################
 # Here, we have input explicitly the path ``'pyscf/sto-3g'`` to the locally
-# saved file ``'pyscf/sto-3g/h2.hdf5'`` storing the stored HF electronic structure
-# of :math:`\mathrm{H}_2`. However, the :func:`~.meanfield_data` function can always be used
-# to generate this information. See the tutorial :doc:`tutorial_quantum_chemistry`.
+# saved file ``'pyscf/sto-3g/h2.hdf5'`` storing the HF electronic structure
+# of the :math:`\mathrm{H}_2` olecule. However, the :func:`~.meanfield_data` function
+# can also be used to generate this information. See the tutorial
+# :doc:`tutorial_quantum_chemistry`.
 #
 # Now that we have the two-particle spin matrix elements we call the
 # :func:`~.observable` function to build the Fermionic operator and represent it in
