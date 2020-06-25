@@ -5,7 +5,7 @@ Background
 Barren Plateaus
 ---------------
 
-Barren plateaus are large regions of the cost functions parameter space
+Barren plateaus are large regions of the cost function's parameter space
 where the variance of the gradient is almost 0; or, put another way, the
 cost function landscape is flat. This means that a variational circuit
 initialized in one of these areas will be untrainable using any gradient based
