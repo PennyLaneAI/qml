@@ -86,7 +86,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 #
 # and only on one qubit for our local cost function:
 #
-# .. math:: C_{L} = 1-p_{|0>,1}.
+# .. math:: C_{L} = 1-p_{|0>}.
 #
 # To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
@@ -197,7 +197,7 @@ plt.show()
 
 
 ######################################################################
-# However, when we change to the local cost function, the cost lanscape
+# However, when we change to the local cost function, the cost landscape
 # becomes much more trainable.
 #
 
@@ -211,7 +211,7 @@ plt.show()
 
 
 ######################################################################
-# Those are some nice pictures, but how do they refect actual
+# Those are some nice pictures, but how do they reflect actual
 # trainability? Lets try training both the local, and global cost
 # functions. Because we have a visualization of the total cost landscape,
 # lets pick a point to exaggerate the problem. The worst point in the
