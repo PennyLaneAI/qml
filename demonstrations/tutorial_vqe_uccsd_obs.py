@@ -25,7 +25,7 @@ shows the energy spectra of the Hydrogen molecule calculated in different sector
 spin projection. Notice, that the ground state with energy :math:`E_\mathrm{gs}=-1.136189` Ha has
 spin quantum number :math:`S=0` and :math:`S_z=0` while the lowest-lying excited states,
 with energy :math:`E^*=-0.478453` Ha and total spin :math:`S=1`, show a three-fold spin
-degeneracy related to the values of :math:`S_z=0, \pm 1`.
+degeneracy related to the values of :math:`S_z=-1, 0, 1`.
 
 .. figure:: /demonstrations/vqe_uccsd/energy_spectra_h2_sto3g.png
     :width: 50%
