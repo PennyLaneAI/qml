@@ -16,7 +16,7 @@ The Quantum Graph Recurrent Neural Network
 # classical graph recurrent neural network, and a subclass of the more
 # general quantum graph
 # neural network ansatz. Both the QGNN and QGRNN were introduced in
-# `this paper by Verdon et al. (2019) <https://arxiv.org/abs/1909.12264>`__.
+# `this paper (2019) <https://arxiv.org/abs/1909.12264>`__.
 
 ######################################################################
 # The Idea
@@ -156,7 +156,7 @@ The Quantum Graph Recurrent Neural Network
 # and a guessed interaction graph, :math:`G'`.
 # We then use a classical optimizer to maximize the average
 # "similarity" between the time-evolved states and the states prepared
-# with the QGRNN, by updating the guessed parameters.
+# with the QGRNN.
 #
 # As the QGRNN states becomes more similar to
 # each time-evolved state for each sampled time, it follows that
@@ -425,15 +425,15 @@ def swap_test(control, register1, register2):
 
 ######################################################################
 # After performing this procedure, the value returned from a measurement of the circuit is
-# :math:`\langle Z \rangle`, with respect to the ancilla qubit that is used to perform
-# the SWAP test. The probability of measuring the :math:`|0\rangle` state
-# in the control qubit is related to both the fidelity 
-# between registers and :math:`\langle Z \rangle`.
-# From a bit of algebra, we find that :math:`\langle Z \rangle` is equal to the fidelity.
+# :math:`\langle Z \rangle`, with respect to the ``control`` qubit. 
+# The probability of measuring the :math:`|0\rangle` state
+# in this control qubit is related to both the fidelity 
+# between registers and :math:`\langle Z \rangle`. Thus, with a bit of algebra,
+# we find that :math:`\langle Z \rangle` is equal to the fidelity.
 #
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these is a "guessed"
-# interaction graph, which we choose to be a complete graph. This choice
+# interaction graph, which we set to be a complete graph. This choice
 # is motivated by the fact that any target interaction graph will be a subgraph
 # of this initial guess. Part of the idea behind the QGRNN is that
 # we don’t know the interaction graph, and it has to be learned. In this case, the graph
@@ -561,7 +561,7 @@ qnode = qml.QNode(qgrnn, qgrnn_dev)
 
 iterations = 0
 optimizer = qml.AdamOptimizer(stepsize=0.3)
-steps = 1
+steps = 85
 qgrnn_params = np.zeros([10], dtype=np.float64)
 
 # Executes the optimization method
