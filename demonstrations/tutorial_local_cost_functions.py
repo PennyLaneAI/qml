@@ -41,7 +41,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 #
 # To start, lets look at the task of learning the identity gate
 # across multiple qubits. This will help us visualize the problem and get
-# a sense of what is happening in the cost landscape
+# a sense of what is happening in the cost landscape.
 #
 # First we define a number of wires we want to train on. The work by
 # Cerezo et al. shows that circuits are trainible under certain ranges, so
