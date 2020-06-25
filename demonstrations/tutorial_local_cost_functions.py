@@ -67,7 +67,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 #
 # We will apply this across all qubits for our global cost function, i.e.:
 #
-# .. math:: C_{G} = 1-(P_{|0>})
+# .. math:: C_{G} = 1-(P_{|00 \ldots 0\rangle})
 #
 # and only on one qubit for our local cost function:
 #
