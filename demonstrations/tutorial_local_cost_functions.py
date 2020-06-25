@@ -215,7 +215,7 @@ plt.show()
 # trainability? Lets try training both the local, and global cost
 # functions. Because we have a visualization of the total cost landscape,
 # lets pick a point to exaggerate the problem. The worst point in the
-# landscape is :math:`(\pi,0)`, so lets use that.
+# landscape is :math:`(\pi,0)`, so let's use that.
 #
 
 rotations = [[3 for i in range(wires)], [0 for i in range(wires)]]
