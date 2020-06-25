@@ -448,7 +448,7 @@ reg1 = list(range(qubit_number))  # First qubit register
 reg2 = list(range(qubit_number, 2 * qubit_number))  # Second qubit register
 
 control = 2 * qubit_number  # Index of control qubit
-trotter_step = 0.02  # Trotter step size
+trotter_step = 0.015  # Trotter step size
 
 # Defines the interaction graph for the new qubit system
 
@@ -561,7 +561,7 @@ qnode = qml.QNode(qgrnn, qgrnn_dev)
 
 iterations = 0
 optimizer = qml.AdamOptimizer(stepsize=0.3)
-steps = 75
+steps = 85
 qgrnn_params = np.zeros([10], dtype=np.float64)
 
 # Executes the optimization method
