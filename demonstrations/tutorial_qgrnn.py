@@ -596,7 +596,7 @@ plt.show()
 
 
 ######################################################################
-# These images look very similar, indicating the QGRNN has done a good job 
+# These images look very similar, indicating that the QGRNN has done a good job 
 # learning the target Hamiltonian.
 # 
 # We can also look
