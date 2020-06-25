@@ -30,10 +30,12 @@ model is constructed. Our objective is to classify points generated from scikit-
 `make_moons() <https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_moons.html>`__ dataset:
 """
 
-from sklearn.datasets import make_moons
 import matplotlib.pyplot as plt
+from sklearn.datasets import make_moons
+import tensorflow as tf
 
-X, y = make_moons(noise=0.1)
+X, y = make_moons(n_samples=200, noise=0.1)
+y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
 
 c = ['#1f77b4' if y_ == 0 else '#ff7f0e' for y_ in y]
 plt.axis('off')
@@ -114,15 +116,13 @@ qlayer_torch = qml.qnn.TorchLayer(qnode, weight_shapes)
 # Let's create a basic three-layered hybrid model consisting of:
 #
 # 1. A 2-neuron fully connected classical layer
-# 2. Our 2-qubit layer
+# 2. Our 2-qubit QNode converted into a layer
 # 3. Another 2-neuron fully connected classical layer
 # 4. A softmax activation to convert to a probability vector
 #
 # This can be done using the ``Sequential`` API in both `Keras <https://keras.io/>`__ and `torch.nn
 # <https://pytorch.org/docs/stable/nn.html>`__. First, using the `Keras <https://keras.io/>`__
 # `Sequential <https://www.tensorflow.org/api_docs/python/tf/keras/Sequential>`__:
-
-import tensorflow as tf
 
 clayer1_tf = tf.keras.layers.Dense(2)
 clayer2_tf = tf.keras.layers.Dense(2, activation="softmax")
@@ -139,7 +139,27 @@ clayer2_torch = torch.nn.Linear(2, 2)
 softmax_torch = torch.nn.Softmax(dim=1)
 model_torch = torch.nn.Sequential(clayer1_torch, qlayer_torch, clayer2_torch, softmax_torch)
 
-"""
-- Training the model
+###############################################################################
+# Constructing hybrid models is easy!
+#
+# Training the model
+# ------------------
+#
+# We can now train our hybrid model on the the classification dataset using the usual
+# approaches in `Keras <https://keras.io/>`__ and
+# `torch.nn <https://pytorch.org/docs/stable/nn.html>`__. Let's focus on Keras. We'll use the
+# standard `SGD <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD>`__ optimizer
+# and the mean absolute error loss function:
 
-"""
+opt = tf.keras.optimizers.SGD(learning_rate=0.2)
+model_tf.compile(opt, loss='mae', metrics=['accuracy'])
+
+###############################################################################
+# Note that there are more advanced combinations of optimizer and loss function, but here we are
+# focusing on the basics.
+#
+# The model is now ready to be trained!
+
+X = X.astype("float32")
+y = y.astype("float32")
+model_tf.fit(X, y, epochs=8, batch_size=5, validation_split=0.25)
