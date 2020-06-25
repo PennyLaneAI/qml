@@ -254,7 +254,7 @@ print(params)
 # tolerance (difference in cost function for subsequent optimization steps) of :math:`\sim 10^{
 # -6}`.
 
-max_iterations = 200
+max_iterations = 100
 max_iterations = 1
 conv_tol = 1e-06
 
