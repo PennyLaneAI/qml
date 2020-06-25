@@ -204,7 +204,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: cirq metrology autograd
 
 .. customgalleryitem::
-    :tooltip: "Using a quantum graph recurrent neural network to learn quantum dynamics"
+    :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics
     :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
     :description: :doc:`demos/tutorial_qgrnn`
     :tags: autograd
