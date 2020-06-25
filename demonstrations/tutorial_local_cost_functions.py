@@ -45,7 +45,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 #
 # First we define a number of wires we want to train on. The work by
 # Cerezo et al. shows that circuits are trainible under certain ranges, so
-# how many quibits we train on will effect our results.
+# how many qubits we train on will effect our results.
 #
 # .. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
 #    :align: center
