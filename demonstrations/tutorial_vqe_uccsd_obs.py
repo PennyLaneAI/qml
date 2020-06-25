@@ -1,6 +1,6 @@
 r"""
-VQE in different spin sectors with the Unitary Coupled Cluster
-==============================================================
+VQE in different spin sectors with the Unitary Coupled Cluster ansatz
+=====================================================================
 
 .. meta::
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different
@@ -11,9 +11,9 @@ VQE in different spin sectors with the Unitary Coupled Cluster
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical
 high-performance computers. In particular, the Variational Quantum Eigensolver (VQE) algorithm
-:ref:`[1, 2]<vqe_references>` has proven to be a valuable quantum-classical computational
+:ref:`[1, 2]<vqe_uccsd_references>` has proven to be a valuable quantum-classical computational
 approach to find the lowest-energy eigenstate of the electronic Hamiltonian by using Noisy
-Intermediate-Scale Quantum (NISQ) devices. (WILL ADD SOME REFERENCES HERE)
+Intermediate-Scale Quantum (NISQ) devices :ref:`[3]<vqe_uccsd_references>`.
 
 In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_ the
 electronic Hamiltonian matrix is block diagonal in the total spin quantum numbers. In other words,
@@ -40,18 +40,18 @@ other hand, if the VQE simulation is carried out in the subspace with :math:`S_z
 optimized state will be in practice an excited state of the molecule as it is shown in the Figure
 above.
 
-At the core of the VQE algorithm is variational quantum circuit that is optimized to prepare the
-desired quantum states. The choice of circuit is crucial for the success of the algorithm. The
-unitary coupled cluster [add ref] is a powerful circuit ansatz that is believed to outperform
-even the classical coupled cluster, traditionally referred to as the gold standard of quantum
-chemistry.
+At the core of the VQE algorithm is the variational quantum circuit that is optimized to prepare
+the desired quantum states. The choice of circuit is crucial for the success of the algorithm. The
+unitary coupled cluster ansatz :ref:`[4]<vqe_uccsd_references>` is a powerful quantum circuit that
+is believed to outperform the classical coupled cluster method :ref:`[5]<vqe_uccsd_references>`,
+traditionally referred to as the gold standard of quantum chemistry.
 
 In this tutorial we will demonstrate how different functionalities implemented in PennyLane-QChem
 can be put together to run VQE simulations in different sectors of the spin quantum numbers. We
-also specify how to implement the unitary coupled cluster, restricted to single and double
-excitations, as the ciruict ansatz for the algorithm. These functionalities can be
-combined to estimate the energies of the ground and the lowest-lying excited states of the hydrogen
-molecule.
+also specify how to use the unitary coupled cluster ansatz, restricted to single and double
+excitations, as the variational circuit for the algorithm. These functionalities can be
+combined to estimate the energies of the ground and the lowest-lying excited states of the 
+hydrogen molecule.
 
 Let's get started! ⚛️
 
@@ -110,12 +110,12 @@ n_electrons = 2
 n_orbitals = 2
 
 ##############################################################################
-# Finally, to build the electronic Hamiltonian we have to define fermionic-to-qubit
+# Finally, to build the electronic Hamiltonian we have to define the fermionic-to-qubit
 # mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
 # (``bravyi_kitaev``). The outputs of the function :func:`~.generate_hamiltonian` are
 # the qubit Hamiltonian of the molecule and the number of qubits needed to represent it:
 
-h, n_qubits = qml.qchem.generate_hamiltonian(
+h, n_qubits = qchem.generate_hamiltonian(
     name,
     geometry,
     charge,
@@ -130,9 +130,59 @@ print('Number of qubits = ', n_qubits)
 print('Hamiltonian is ', h)
 
 ##############################################################################
-# That's it! From here on, we can use PennyLane as usual, employing its entire stack of
-# algorithms and optimizers.
+# Now, we also want to build the total spin operator :math:`\hat{S}^2`,
 #
+# .. math::
+#
+#     \hat{S}^2 = \frac{3}{4} N_e + \sum_{\alpha, \beta, \gamma, \delta}
+#     \langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2
+#     \vert \gamma, \delta \rangle ~ \hat{c}_\alpha^\dagger \hat{c}_\beta^\dagger
+#     \hat{c}_\gamma \hat{c}_\delta.
+#
+# In the equation above :math:`N_e` is the number of active electrons,
+# :math:`\hat{c}_\alpha^\dagger` (:math:`\hat{c}_\alpha`) is the creation (annihilation)
+# electron operator acting on the :math:`\alpha`-th active (spin) orbital and 
+# :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
+# are the matrix elements of the two-particle spin operator :ref:`[6]<vqe_uccsd_references>`.
+#
+# First, we need to load the matrix elements of the two-particle spin operator
+# :math:`\hat{s}_1 \cdot \hat{s}_2`. This is achieved by calling the
+# :function:`~.get_spin2_matrix_elements` which reads the Hartree-Fock electronic
+# structure, defines the active space and outputs the first term :math:`\frac{3}{4} N_e`
+# and the table of matrix elements.
+
+s2_matrix_elements, first_term = qchem.get_spin2_matrix_elements(
+    name,
+    'pyscf/sto-3g',
+    n_active_electrons=n_electrons,
+    n_active_orbitals=n_orbitals
+)
+print(first_term)
+print(s2_matrix_elements)
+
+##############################################################################
+# Here, we have input explicitly the path ``'pyscf/sto-3g'`` to the locally
+# saved file ``'pyscf/sto-3g/h2.hdf5'`` storing the stored HF electronic structure
+# of :math:`\mathrm{H}_2`. However, the :func:`~.meanfield_data` function can always be used
+# to generate this information. See the tutorial :doc:`tutorial_quantum_chemistry`.
+#
+# Now that we have the two-particle spin matrix elements we call the
+# :func:`~.observable` function to build the Fermionic operator and represent it in
+# the basis of Pauli matrices.
+
+s2_obs = qchem.observable(s2_matrix_elements, init_term=first_term, mapping='jordan_wigner')
+print(s2_obs)
+
+###############################################################################
+# .. note::
+#
+#     The :func:`~.observable` function can be used to build any second-quantized many-body
+#     observables as long as we have access to the matrix elements of the single- and/or 
+#     two-particle operators. The keyword argument ``init_term`` contains the contribution
+#     of core orbitals, if any, or other quantity required to initialize the observable.
+
+
+##############################################################################
 # Implementing the VQE algorithm
 # ------------------------------
 #
@@ -140,7 +190,7 @@ print('Hamiltonian is ', h)
 # built to implement the VQE algorithm. We begin by defining the device, in this case a simple
 # qubit simulator:
 
-dev = qml.device('default.qubit', wires=nr_qubits)
+dev = qml.device('default.qubit', wires=n_qubits)
 
 ##############################################################################
 # In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
@@ -195,7 +245,7 @@ cost_fn = qml.VQECost(circuit, h, dev)
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 np.random.seed(0)
-params = np.random.normal(0, np.pi, (nr_qubits, 3))
+params = np.random.normal(0, np.pi, (n_qubits, 3))
 
 print(params)
 
@@ -241,7 +291,7 @@ print('Final circuit parameters = \n', params)
 #
 # What other molecules would you like to study using PennyLane?
 #
-# .. _vqe_references:
+# .. _vqe_uccsd_references:
 #
 # References
 # ----------
@@ -253,3 +303,16 @@ print('Final circuit parameters = \n', params)
 # 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
 #    `Chem. Rev. 2019, 119, 19, 10856-10915.
 #    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#
+# 3. Abhinav Kandala, Antonio Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
+#    Eigensolver for Small Molecules and Quantum Magnets". `arXiv:1704.05018 
+#    <https://arxiv.org/abs/1704.05018>`_
+#
+# 4. Jonathan Romero, Ryan Babbush, *et al.*,"Strategies for quantum computing molecular 
+#    energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
+#    <https://arxiv.org/abs/1701.02691>`_
+#
+# 5. Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons, 2016).
+#
+# 6. A. Fetter, J.D. Walecka, "Quantum Theory of many-particle systems". Courier Corporation, 2012.
+#
