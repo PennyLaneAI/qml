@@ -184,51 +184,63 @@ print(s2_obs)
 
 
 ##############################################################################
-# Implementing the VQE algorithm
-# ------------------------------
+# Implementing VQE with the UCCSD ansatz
+# --------------------------------------
 #
-# PennyLane contains the :class:`~.VQECost` class, specifically
-# built to implement the VQE algorithm. We begin by defining the device, in this case a simple
-# qubit simulator:
+# PennyLane contains the :class:`~.VQECost` class to implement the VQE algorithm.
+# We begin by defining the device, in this case a qubit simulator:
 
 dev = qml.device('default.qubit', wires=n_qubits)
 
 ##############################################################################
-# In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
-# Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
-# prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
-# variational circuit that is capable of preparing the normalized states of the form
-# :math:`\alpha|1100\rangle + \beta|0011\rangle` which encode the ground state wave function of
-# the hydrogen molecule described with a minimal basis set. The circuit consists of single-qubit
-# rotations on all wires, followed by three entangling CNOT gates, as shown in the figure below:
+# The next step is to define the variational quantum circuit used to prepare
+# the state that minimizes the expectation value of the electronic Hamiltonian.
+# ansatz. In this example, we will use the Unitary Coupled-Cluster ansatz truncated at
+# the level of single and double excitations (UCCSD) :ref:`[4]<vqe_uccsd_references>`.
+# But, how does UCCSD work in practice?.
+# 
+# The UCCSD method is a generalization of the traditional CCSD formalism used in quantum chemistry
+# to perform post-Hartree-Fock (HF) electron correlation calculations. Within the first-order
+# Trotter approximation, the UCCSD ground-state of the molecule is built via the exponential ansatz
+# :ref:`[7]<vqe_uccsd_references>`,
 #
-# |
+# .. math::
 #
-# .. figure:: /demonstrations/variational_quantum_eigensolver/sketch_circuit.png
-#     :width: 50%
-#     :align: center
+#     && \vert \Psi \rangle = \hat{U}(\vec{\theta}) \vert \mathrm{HF} \rangle \\ 
+#     && \vert \Psi \rangle = \prod_{p > r} \mathrm{exp}
+#     \Big\{\theta_{pr}(\hat{c}_p^\dagger \hat{c}_r-\mathrm{H.c.}) \Big\}
+#     \prod_{p > q > r > s} \mathrm{exp} \Big\{\theta_{pqrs}
+#     (\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s-\mathrm{H.c.}) \Big\}.
 #
-# |
+# In the latter equation, the indices :math:`r, s` and :math:`p, q` run, respectively, over the
+# occupied and unoccupied (virtual) molecular orbitals. Thus, the operator
+# :math:`\hat{c}_p^\dagger \hat{c}_r` acting on the HF state creates one particle-hole (ph)
+# excitation :ref:`[8]<vqe_uccsd_references>` since it annihilates a particle in the
+# occupied HF orbital :math:`r` (creates a hole) and create the particle in the virtual orbital
+# :math:`p`. Similarly, the the operator
+# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates two particle-hole (pphh)
+# excitations when acting on the HF state. The quantum circuits to exponentiate the
+# Jordan-Wigner representation of the ph and pphh excitation operators
+# :ref:`[7]<vqe_uccsd_references>` are implemented by the
+# :func:`~.SingleExcitationUnitary` and :func:`~.DoubleExcitationUnitary` and are part of
+# the PennyLane templates library. Finally, the amplitudes :math:`\theta_{pr}` and
+# :math:`\theta_{pqrs}` are precisely the parameters to be optimized to minimize the expectation
+# value,
 #
-
-##############################################################################
-# In the circuit, we apply single-qubit rotations, followed by CNOT gates:
-
-
-def circuit(params, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
-    for i in wires:
-        qml.Rot(*params[i], wires=i)
-    qml.CNOT(wires=[2, 3])
-    qml.CNOT(wires=[2, 0])
-    qml.CNOT(wires=[3, 1])
-
-##############################################################################
+# .. math::
+#
+#     E(\vec{\theta}) = \langle \mathrm{HF} \vert \hat{U}^\dagger(\vec{\theta})
+#     \hat{H} \hat{U}(\vec{\theta}) \vert \mathrm{HF} \rangle.
+#
+################################################################################
 # .. note::
 #
-#     The qubit register has been initialized to :math:`|1100\rangle` which encodes the
-#     Hartree-Fock state of the hydrogen molecule described with a `minimal basis
-#     <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__.
+#     The total number of particle-hole excitations depends on the number of electrons
+#     and orbitals included in the active space and determines the number of parameters
+#     :math:`\theta` to be optimized by the VQE algorithm.
+#
+################################################################################ 
+#In the circuit, we apply single-qubit rotations, followed by CNOT gates:
 #
 # The cost function for optimizing the circuit can be created using the :class:`~.VQECost`
 # class, which is tailored for VQE optimization. It requires specifying the
@@ -316,4 +328,10 @@ print('Final circuit parameters = \n', params)
 # 5. Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons, 2016).
 #
 # 6. A. Fetter, J.D. Walecka, "Quantum Theory of many-particle systems". Courier Corporation, 2012.
+#
+# 7. P.Kl. Barkoutsos, J.F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
+#    calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
+#    `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
+#
+# 8. P. Ring, P. Schuck. "The Nuclear Many-Body Problem". (Springer Science & Business Media, 2004).
 #
