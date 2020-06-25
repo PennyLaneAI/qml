@@ -19,8 +19,8 @@ information from part of the circuit. These *local* cost functions are
 more robust to noise, and have more well-behaved gradients with no
 plateaus for shallow circuits.
 
-Installs and Imports
-~~~~~~~~~~~~~~~~~~~~
+Imports
+~~~~~~~
 
 In this notebook, we investigate the effect of barren plateaus in
 variational quantum algorithms, and how they can be mitigated using
