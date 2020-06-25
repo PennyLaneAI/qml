@@ -113,7 +113,7 @@ local_circuit = qml.QNode(local_cost_simple, dev)
 
 ######################################################################
 # To analyze each of the circuits, we provide some random initial
-# :math:`\theta`\ 's for each rotation
+# parameters for each rotation
 #
 
 RX = np.random.uniform(low=-np.pi, high=np.pi)
