@@ -21,11 +21,11 @@ one can expand the many-electron wave function of the molecule as a linear
 combination of `Slater determinants <https://en.wikipedia.org/wiki/Slater_determinant>`_
 with the same total-spin projection :math:`S_z`, and diagonalize the Hamiltonian in this basis
 to obtain the energy spectrum in this particular subspace. For example, the figure below
-shows the energy spectra of the Hydrogen molecule calculated in different spin sectors. Notice,
-that the ground state with energy :math:`E_\mathrm{gs}=-1.136189` Ha has spin quantum numbers
-:math:`S=0`, :math:`S_z=0` while the lowest-lying excited states, with energy
-:math:`E^*=-0.478453` Ha, show a three-fold spin degeneracy with quantum numbers
-:math:`S=1` and :math:`S_z=0, \pm 1`.
+shows the energy spectra of the Hydrogen molecule calculated in different sectors of the total-
+spin projection. Notice, that the ground state with energy :math:`E_\mathrm{gs}=-1.136189` Ha has
+spin quantum number :math:`S=0` and :math:`S_z=0` while the lowest-lying excited states,
+with energy :math:`E^*=-0.478453` Ha and total spin :math:`S=1`, show a three-fold spin
+degeneracy related to the values of :math:`S_z=0, \pm 1`.
 
 .. figure:: /demonstrations/vqe_uccsd/energy_spectra_h2_sto3g.png
     :width: 50%
