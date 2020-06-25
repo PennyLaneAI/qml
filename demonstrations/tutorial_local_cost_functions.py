@@ -63,7 +63,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # We will also define our cost functions here. Since we are trying to
 # learn the identity gate, a natural cost function is
 #
-# .. math:: C = 1-(P_{|0>})
+# .. math:: C = 1-(P_{|0\rangle})
 #
 # We will apply this across all qubits for our global cost function, i.e.:
 #
