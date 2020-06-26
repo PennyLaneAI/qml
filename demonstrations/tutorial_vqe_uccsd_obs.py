@@ -348,7 +348,7 @@ print('Final circuit parameters = \n', params)
 
 ##############################################################################
 # Success! 🎉🎉🎉 We have estimated the lowest-energy state with total-spin projection
-# :math:`S_z=0` for the hydrogen molecule, which is indeed the ground state, with chemical
+# :math:`S_z=0` for the hydrogen molecule, which is the ground state, with chemical
 # accuracy. Notice also that the optimized UCCSD state is an eigenstate of the total spin
 # operator :math:`\hat{S}_2` with eigenvalue :math:`S=0`.
 #
