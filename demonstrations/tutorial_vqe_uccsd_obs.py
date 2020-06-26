@@ -304,7 +304,7 @@ cost_fn = qml.VQECost(vqe_ansatz, h, dev)
 s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
 
 ################################################################################ 
-# Notice that the total spin :math:`S` of the trial state can be obtained from the
+# The total spin :math:`S` of the trial state can be obtained from the
 # expectation value :math:`\langle \hat{S}^2 \rangle` as,
 #
 # .. math::
