@@ -197,7 +197,7 @@ dev = qml.device('default.qubit', wires=n_qubits)
 # the state that minimizes the expectation value of the electronic Hamiltonian.
 # ansatz. In this example, we will use the Unitary Coupled-Cluster ansatz truncated at
 # the level of single and double excitations (UCCSD) :ref:`[4]<vqe_uccsd_references>`.
-# But, how does UCCSD work?.
+# But, how do we build the UCCSD variational circuit?.
 # 
 # The UCCSD method is a generalization of the traditional CCSD formalism used in quantum chemistry
 # to perform post-Hartree-Fock (HF) electron correlation calculations. Within the first-order
