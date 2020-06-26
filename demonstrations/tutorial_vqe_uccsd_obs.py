@@ -164,7 +164,7 @@ print(s2_matrix_elements)
 # Here, we have input explicitly the path ``'pyscf/sto-3g'`` to the locally
 # saved file ``'pyscf/sto-3g/h2.hdf5'`` storing the HF electronic structure
 # of the :math:`\mathrm{H}_2` olecule. However, the :func:`~.meanfield_data` function
-# can also be used to generate this information. See the tutorial
+# can also be used to generate this information. See the quantum chemistry tutorial 
 # :doc:`tutorial_quantum_chemistry`.
 #
 # Now that we have the two-particle spin matrix elements we call the
@@ -197,7 +197,7 @@ dev = qml.device('default.qubit', wires=n_qubits)
 # the state that minimizes the expectation value of the electronic Hamiltonian.
 # ansatz. In this example, we will use the Unitary Coupled-Cluster ansatz truncated at
 # the level of single and double excitations (UCCSD) :ref:`[4]<vqe_uccsd_references>`.
-# But, how does UCCSD work in practice?.
+# But, how does UCCSD work?.
 # 
 # The UCCSD method is a generalization of the traditional CCSD formalism used in quantum chemistry
 # to perform post-Hartree-Fock (HF) electron correlation calculations. Within the first-order
@@ -213,19 +213,17 @@ dev = qml.device('default.qubit', wires=n_qubits)
 #     (\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s-\mathrm{H.c.}) \Big\}.
 #
 # In the latter equation, the indices :math:`r, s` and :math:`p, q` run, respectively, over the
-# occupied and unoccupied (virtual) molecular orbitals. Thus, the operator
-# :math:`\hat{c}_p^\dagger \hat{c}_r` acting on the HF state creates one particle-hole (ph)
+# occupied and unoccupied (virtual) molecular orbitals. The operator
+# :math:`\hat{c}_p^\dagger \hat{c}_r` acting on the HF state creates 1particle-1hole (ph)
 # excitation :ref:`[8]<vqe_uccsd_references>` since it annihilates a particle in the
-# occupied HF orbital :math:`r` (creates a hole) and create the particle in the virtual orbital
-# :math:`p`. Similarly, the the operator
-# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates two particle-hole (pphh)
-# excitations when acting on the HF state. The quantum circuits to exponentiate the
-# Jordan-Wigner representation of the ph and pphh excitation operators
-# :ref:`[7]<vqe_uccsd_references>` are implemented by the
-# :func:`~.SingleExcitationUnitary` and :func:`~.DoubleExcitationUnitary` and are part of
-# the PennyLane templates library. Finally, the amplitudes :math:`\theta_{pr}` and
-# :math:`\theta_{pqrs}` are precisely the parameters to be optimized to minimize the expectation
-# value,
+# occupied orbital :math:`r` (creates a hole) and create it in the virtual orbital
+# :math:`p`. Similarly, the operator
+# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates 2particle-2hole (pphh)
+# excitations. The quantum circuits to exponentiate the excitation operators in the 
+# Jordan-Wigner representation :ref:`[7]<vqe_uccsd_references>` are implemented by the
+# functions :func:`~.SingleExcitationUnitary` and :func:`~.DoubleExcitationUnitary` contained
+# in the PennyLane templates library. Finally, the amplitudes :math:`\theta_{pr}` and
+# :math:`\theta_{pqrs}` have to be optimized to minimize the expectation value,
 #
 # .. math::
 #
@@ -236,50 +234,104 @@ dev = qml.device('default.qubit', wires=n_qubits)
 # .. note::
 #
 #     The total number of particle-hole excitations depends on the number of electrons
-#     and orbitals included in the active space and determines the number of parameters
-#     :math:`\theta` to be optimized by the VQE algorithm.
+#     and orbitals in the active space and determines the number of parameters
+#     :math:`\theta` to be optimized by the VQE algorithm and the depth of the UCCSD 
+#     quantum circuit. For more details, check the extensive documentation of the
+#     :func:`~.SingleExcitationUnitary` and :func:`~.DoubleExcitationUnitary` functions.
 #
 ################################################################################ 
-#In the circuit, we apply single-qubit rotations, followed by CNOT gates:
+# Now, we demonstrate how to use PennyLane-QChem functionalities to build up the UCCSD
+# ansatz for our VQE simulations.
 #
-# The cost function for optimizing the circuit can be created using the :class:`~.VQECost`
-# class, which is tailored for VQE optimization. It requires specifying the
-# circuit, target Hamiltonian, and the device, and returns a cost function that can
-# be evaluated with the circuit parameters:
+# First, we use the :func:`~.sd_excitations` to generate the whole set of particle-hole
+# excitations for our active space with ``n_electrons`` electrons in
+# ``2*n_orbitals=n_qubits`` *spin*-orbitals. Furthermore, we can specify
+# the keyword argument ``delta_sz`` to prepare the trial state in a particular sector of
+# the total-spin projection :math:`S_z` with respect to the HF reference state. Here, we will
+# choose ``delta_sz = 0`` to prepare trial states with :math:`S_z = 0`. 
 
+ph, pphh = qchem.sd_excitations(n_electrons, n_qubits, delta_sz=0)
+print(ph)
+print(pphh)
 
-cost_fn = qml.VQECost(circuit, h, dev)
+################################################################################ 
+# The output lists ``ph`` and ``pphh`` contain the indices representing the one and two
+# particle-hole excitations. Now, we use the function
+# :func:`~.excitations_to_wires` to generate the set of wires the the UCCSD circuit will
+# act on from the indices stored in ``ph`` and ``pphh`` representing the particle-hole excitations.
+# (WE MIGHT NEED SOME INPUT FROM MARIA HERE, IF WE WANT TO ELABORATE MORE ON THIS)
 
+ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
+print(ph_wires)
+print(pphh_wires)
 
+################################################################################ 
+# Next, we need to define that the reference state the UCCSD unitary will act on is the
+# Hartree-Fock state. This can be done straightforwardly with :func:`~.hf_state` function. 
+# The output of this function is a array containing the occupation-number vector representing
+# the Hartree-Fock state.
+
+ref_state = qchem.hf_state(n_electrons, n_qubits)
+print(ref_state)
+
+################################################################################ 
+# Finally, we can use the :func:`~.UCCSD` function to define our VQE ansatz,
+
+def vqe_ansatz(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires):
+    UCCSD(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
+
+################################################################################ 
+# where, ``weights`` is a vector containing the parameters :math:`\theta_{pr}`
+# and :math:`\theta_{pqrs}` and ``wires`` contains the wires the template act on.
+#
+# Next, we use the PennyLane class :class:`~.VQECost` to define the cost function.
+# This requires specifying the circuit, target Hamiltonian, and the device, and returns
+# a cost function that can be evaluated with the circuit parameters:
+
+cost_fn = qml.VQECost(vqe_ansatz, h, dev)
+
+################################################################################ 
+# And, as a reminder in case you forgot, we also built above the total spin operator
+# :math:`\hat{S}^2` for which we can also define a function to compute its expectation
+# value.
+
+s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
+
+################################################################################ 
+# Notice that the total spin :math:`S` of the trial state can be computed from the
+# expectation value :math:`\langle \hat{S}^2 \rangle` from the evaluating the expression,
+#
+# .. math::
+#
+#     S = -\frac{1}{2} + \sqrt{\frac{1}{4} + \langle \hat{S}^2 \rangle}.
+#
 ##############################################################################
-# Wrapping up, we fix an optimizer and randomly initialize circuit parameters. For reliable
-# results, we fix the seed of the random number generator, since in practice it may be necessary
-# to re-initialize the circuit several times before convergence occurs.
+# Wrapping up, we fix an optimizer and randomly initialize the circuit parameters.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 np.random.seed(0)
-params = np.random.normal(0, np.pi, (n_qubits, 3))
-
+params = np.random.normal(0, np.pi, len(ph) + len(pphh))
 print(params)
 
 ##############################################################################
-# We carry out the optimization over a maximum of 200 steps, aiming to reach a convergence
+# We carry out the optimization over a maximum of 100 steps, aiming to reach a convergence
 # tolerance (difference in cost function for subsequent optimization steps) of :math:`\sim 10^{
-# -6}`.
+# -6}`. Furthermore, we will be tracking the value of the total spin of the prepared state as 
+# it is optimized through the iterative procedure. 
 
-max_iterations = 100
-max_iterations = 1
+max_iterations = 1  # This is temporal to check how the tutorial renders
 conv_tol = 1e-06
-
 prev_energy = cost_fn(params)
 for n in range(max_iterations):
     params = opt.step(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
-    if n % 20 == 0:
-        print('Iteration = {:},  Ground-state energy = {:.8f} Ha,  Convergence parameter = {'
-              ':.8f} Ha'.format(n, energy, conv))
+    total_spin = -0.5 + np.sqrt(1/4 + s2_exp_value(params))
+
+    if n % 2 == 0:
+        print('Iteration = {:},  energy = {:.8f} Ha,  Total Spin = {:.4f}, epsilon = {'':.8f} Ha'
+              .format(n, energy, total_spin, conv))        
 
     if conv <= conv_tol:
         break
@@ -290,19 +342,101 @@ print()
 print('Final convergence parameter = {:.8f} Ha'.format(conv))
 print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
 print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
-        format(np.abs(energy - (-1.136189454088)), np.abs(energy - (-1.136189454088))*627.503))
+        format(np.abs(energy - (-1.1361894507)), np.abs(energy - (-1.1361894507))*627.509474))
 print()
 print('Final circuit parameters = \n', params)
 
 ##############################################################################
-# Success! 🎉🎉🎉 The ground-state energy of the hydrogen molecule has been estimated with chemical
-# accuracy (< 1 kcal/mol) with respect to the exact value of -1.136189454088 Hartree (Ha) obtained
-# from a full configuration-interaction (FCI) calculation. This is because, for the optimized
-# values of the single-qubit rotation angles, the state prepared by the VQE ansatz is precisely
-# the FCI ground-state of the :math:`H_2` molecule :math:`|H_2\rangle_{gs} = 0.99 |1100\rangle - 0.10
-# |0011\rangle`.
+# Success! 🎉🎉🎉 We have estimated the lowest-energy state with total-spin projection
+# :math:`S_z=0` for the hydrogen molecule, which is indeed the ground state, with chemical
+# accuracy. Notice also that the optimized UCCSD state is an eigenstate of the total spin
+# operator :math:`\hat{S}_2` with eigenvalue :math:`S=0`.
 #
-# What other molecules would you like to study using PennyLane?
+#
+# Finding the lowest-energy excited state with :math:`S_z=1`
+# ----------------------------------------------------------
+# In the last part of the tutorial we want to demonstrate that VQE can also be used to find
+# the lowest-energy excited states with total-spin projection :math:`S_z` different from the one
+# of the ground state. For the hydrogen molecule, this is the case of the states with energy 
+# :math:`E = -0.4784529844` Ha and :math:`Sz=1` and :math:`Sz=-1`. To that aim we can use the
+# UCCSD ansatz to prepare trial states in any of these spin sectors.
+#
+# Let's consider for this example the case of :math:`S_z=1`. Now, we just use the
+# :func:`~.sd_excitations` with the keyword argument ``delta_sz=1`` to generate 
+# particle-hole excitations in this specific sector of :math:`S_z`.
+
+ph, pphh = qchem.sd_excitations(n_electrons, n_qubits, delta_sz=1)
+print(ph)
+print(pphh)
+
+##############################################################################
+# Notice that for the hydrogen molecule in a minimal basis set there are no
+# 2particle-2hole (pphh) excitations but only 1particle-1hole excitation (ph)
+# corresponding to the spin-flip transition between orbitals 1 and 3. And, that's it!.
+# From this point on the algorithm is the same as described above. Next, we need to
+# defined the new VQE ansatz in terms of the new set of excitations,
+
+ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
+
+ref_state = qchem.hf_state(n_electrons, n_qubits)
+
+def vqe_ansatz(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires):
+    UCCSD(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
+
+##############################################################################
+# Next, we re-defined the functions to compute the expectation values of the Hamiltonian
+# and the total spin operator in terms of the new ``vqe_ansatz``,
+
+cost_fn = qml.VQECost(vqe_ansatz, h, dev)
+
+s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
+
+##############################################################################
+# Then, we generate the new set of initial parameters,
+
+np.random.seed(0)
+params = np.random.normal(0, np.pi, len(ph) + len(pphh))
+print(params)
+
+##############################################################################
+# and proceed with the VQE algorithm to optimize the new variational circuit.
+
+max_iterations = 1  # This is temporal to check how the tutorial renders
+conv_tol = 1e-06
+prev_energy = cost_fn(params)
+for n in range(max_iterations):
+    params = opt.step(cost_fn, params)
+    energy = cost_fn(params)
+    conv = np.abs(energy - prev_energy)
+
+    total_spin = -0.5 + np.sqrt(1/4 + s2_exp_value(params))
+
+    if n % 2 == 0:
+        print('Iteration = {:},  energy = {:.8f} Ha,  Total Spin = {:.4f}, epsilon = {'':.8f} Ha'
+              .format(n, energy, total_spin, conv))        
+
+    if conv <= conv_tol:
+        break
+
+    prev_energy = energy
+
+print()
+print('Final convergence parameter = {:.8f} Ha'.format(conv))
+print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
+print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
+        format(np.abs(energy - (-0.4784529849)), np.abs(energy - (-0.4784529849))*627.509474))
+print()
+print('Final circuit parameters = \n', params)
+
+##############################################################################
+# As expected, we have successfully estimated the lowest-energy state with total-spin projection
+# :math:`S_z=1` for the hydrogen molecule, which is an excited state of molecule. Notice that 
+# the optimized UCCSD state is an eigenstate of the total spin operator :math:`\hat{S}_2` with
+# eigenvalue :math:`S=1`.
+#
+# Now, you can run a VQE simulation to find the degenerate excited state with 
+# spin quantum numbers :math:`S=1` and :math:`S_z=-1`.
+#
 #
 # .. _vqe_uccsd_references:
 #
