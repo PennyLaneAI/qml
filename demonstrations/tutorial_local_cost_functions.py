@@ -1,7 +1,10 @@
 """
-Background
+Avoiding barren plateaus with local cost functions
 ==========
-
+.. meta::
+    :property="og:description": Local cost functions are cost formulations for variational quantum computing that are more robust to barren plateaus, and noise.
+    :property="og:image": ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
+    
 Barren Plateaus
 ---------------
 
@@ -39,7 +42,7 @@ by Cerezo, then its corrisponding local cost function will always be
 less than or equal to the global.
 
 Imports
-~~~~~~~
+--------------
 
 In this notebook, we investigate the effect of barren plateaus in
 variational quantum algorithms, and how they can be mitigated using
@@ -55,7 +58,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 ######################################################################
 # Visualizing the problem
-# =======================
+# --------------
 #
 # To start, lets look at the task of learning the identity gate
 # across multiple qubits. This will help us visualize the problem and get
@@ -343,6 +346,9 @@ print(tunable_circuit.draw())
 
 
 ######################################################################
+# A more thorough analysis.
+# --------------
+
 # Now the circuit can be trained, even though we started from a place
 # where the global function has a barren plateau. The significance of this
 # is that we can now train from every starting location in this example.
