@@ -29,6 +29,8 @@ plateaus for shallow circuits.
    :align: center
    :width: 50%
    
+Reproduced from [#Cerezo2020].
+   
 In a quick explanation, a global cost function is the type that is traditionally used.
 Information from the entire measurement is used to analyze the result of the 
 circuit, and a cost function is calculated from this to quantify the circuits 
@@ -455,3 +457,15 @@ for runs in range(samples):
 # and most even trained in less time. While these examples are simple,
 # this local-vs-global cost behavior has been shown to extend to more
 # complex problems.
+    
+    
+##############################################################################
+# References
+# ----------
+#
+# .. [#Cerezo2020]
+#    
+#   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., &amp; Coles, P. (2020, February 04). 
+#   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks. 
+#   arXiv:2001.00550<https://arxiv.org/abs/2001.00550>
+#     
