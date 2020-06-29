@@ -524,6 +524,9 @@ plt.show()
 #
 # .. [#meyer2020]
 #
-#    Johannes Jakob Meyer et al. In preparation.
+#    Johannes Jakob Meyer, Johannes Borregaard, and Jens Eisert.
+#    "A variational toolbox for quantum multi-parameter estimation."
+#    `arXiv:2006.06303
+#    <https://arxiv.org/abs/2006.06303>`__, 2020. 
 # 
 

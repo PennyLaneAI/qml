@@ -135,20 +135,30 @@ print(grad_function(params)[0])
 # so does both the circuit depth (and thus 'forward' circuit evaluation) as well as
 # the 'backward' pass (the time taken to compute the gradient with respect to all parameters).
 #
+# Benchmarking
+# ~~~~~~~~~~~~
+#
 # Let's consider an example with a significantly larger number of parameters.
 # We'll make use of the :class:`~pennylane.templates.StronglyEntanglingLayers` template
 # to make a more complicated QNode.
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev, diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift", mutable=False)
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
+
+##############################################################################
+# Note that we specify that the QNode is **immutable**. This is more restrictive
+# than a standard mutable QNode (the quantum circuit cannot change/differ between
+# executions), however reduces processing overhead.
+
 # initialize circuit parameters
 params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
 print(params.size)
+print(circuit(params))
 
 ##############################################################################
 # This circuit has 180 parameters. Let's see how long it takes to perform a forward
@@ -159,27 +169,72 @@ import timeit
 repeat = 3
 number = 10
 times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
-print(f"best of {repeat}: {min(times) / number} sec per loop")
+forward_time = min(times) / number
+
+print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 
 ##############################################################################
 # We can now time a backwards pass (the time taken to compute all gradients),
 # and see how this compares.
 
+# create the gradient function
 grad_fn = qml.grad(circuit)
+
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=number, repeat=repeat)
-print(f"best of {repeat}: {min(times) / number} sec per loop")
+backward_time = min(times) / number
+
+print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 
 ##############################################################################
-# Backprop
-# --------
+# Based on the parameter-shift rule, we expect that the amount of time to compute the quantum
+# gradients should be approximately :math:`2p\Delta t_{f}` where :math:`p` is the number of
+# parameters and :math:`\Delta t_{f}` if the time taken for the forward pass. Let's verify this:
+
+print(2 * forward_time * params.size)
+
+
+##############################################################################
+# Backpropagation
+# ---------------
 #
-# Let's repeat the above experiment, but this time using the
-# :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`
-# device. This device is a pure state-vector simulator like ``default.qubit``,
-# however unlike ``default.qubit`` is written using TensorFlow rather than NumPy.
-# As a result, it supports classical backpropagation when using the
-# TensorFlow interface.
+# The parameter-shift rule can be considered a form of `forward-mode autodifferentiation
+# <https://en.wikipedia.org/wiki/forward_accumulation>`__, whereby the function to be differentiated
+# is evaluated multiple times for each independent input variable, gradient rules are applied for
+# each subexpression, and the final gradient accumulated from each of these independent forward
+# sweeps.
+#
+# An alternative to forward-mode autodifferentiation is `reverse-mode autodifferentiation
+# <https://en.wikipedia.org/wiki/Reverse_accumulation>`__; unlike forward-mode differentiation, it
+# requires only a *single* forward pass of the differentiable function to compute the gradient of
+# all variables, at the expense of increased memory usage. During the forward pass, the results and
+# the gradient of all intermediate subexpressions are stored; the computation is then traversed *in
+# reverse*, with the gradient computed by repeatedly applying the chain rule. In most classical
+# machine learning settings, reverse-mode autodifferentiation is the preferred method of
+# autodifferentiation---the reduction in computational time enabling larger and more complex models
+# to be successfully trained. The backpropagation algorithm is a particular special-case of
+# reverse-mode autodifferentiation, which has helped lead to the machine learning explosion we see
+# today.
+#
+# In quantum machine learning, however, the inability to store and utilize the results of
+# *intermediate* quantum operations on hardware remains a barrier; while reverse-mode
+# autodifferentiation works fine for small quantum simulations, only the forward-mode
+# parameter-shift rule can be used to compute gradients on quantum hardware directly. Nevertheless,
+# when training quantum models via classical simulation, it's useful to explore the regimes where
+# reverse-mode differentiation may be a better choice than the parameter-shift rule.
+#
+# Benchmarking
+# ~~~~~~~~~~~~
+#
+# When creating a QNode, PennyLane supports various methods of differentiation, including
+# ``"parameter-shift"`` (which we used previously), ``"finite-diff"``, and ``"backprop"``. While
+# ``"parameter-shift"`` works with all devices, simulator and hardware, ``"backprop"`` will only work
+# for specific simulator devices that are designed to support reverse-mode differentiation.
+#
+# One such device is :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`.
+# This device is a pure state-vector simulator like ``default.qubit``, however unlike
+# ``default.qubit``, is written using TensorFlow rather than NumPy. As a result, it supports
+# classical backpropagation when using the TensorFlow interface.
 
 import tensorflow as tf
 
@@ -199,6 +254,7 @@ def circuit(params):
 # initialize circuit parameters
 params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
 params = tf.Variable(params)
+print(circuit(params))
 
 ##############################################################################
 # Let's see how long it takes to perform a forward pass of the circuit.
@@ -208,57 +264,137 @@ import timeit
 repeat = 3
 number = 10
 times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
-print(f"best of {repeat}: {min(times) / number} sec per loop")
+forward_time = min(times) / number
+print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 
 ##############################################################################
-# This is approximately the same time required when using the NumPy-based default qubit,
-# with some potential overhead from using TensorFlow. We can now time a backwards pass.
+# Comparing this to the forward pass from ``default.qubit``, we note that there is some potential
+# overhead from using TensorFlow. We can now time a backwards pass.
 
 with tf.GradientTape(persistent=True) as tape:
     res = circuit(params)
 
 times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
-print(f"best of {repeat}: {min(times) / number} sec per loop")
+backward_time = min(times) / number
+print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 
 ##############################################################################
-# Unlike with the parameter-shift rule, there is now only a **constant overhead**
-# compared to the forward pass!
-
-##############################################################################
-# Reversible backprop
-# -------------------
+# Unlike with the parameter-shift rule, the time taken to perform the backwards pass seems
+# independent of the number of differentiable parameters, and instead seems of the order of a single
+# forward pass!
 #
+# Comparing parameter-shift and backprop
+# --------------------------------------
+#
+# Let's compare the two differentiation approaches as the number of trainable parameters
+# in the variational circuit increases, by timing both the forward and backward pass
+# as the number of strongly entangling layers is allowed to increase.
+#
+# For convenience, we'll create two devices; one using ``default.qubit`` for the parameter-shift
+# rule, and ``default.qubit.tf`` for backpropagation. For convenience, we'll use the TensorFlow
+# interface when creating both QNodes.
 
-import tensorflow as tf
+dev_shift = qml.device("default.qubit", wires=4)
+dev_backprop = qml.device("default.qubit.tf", wires=4)
 
-dev = qml.device("default.qubit", wires=4)
-
-
-@qml.qnode(dev, diff_method="reversible")
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
-# initialize circuit parameters
-params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
-print(circuit.__class__.__base__)
+##############################################################################
+# We'll continue to use the same ansatz as before, but to reduce the time taken
+# to collect the data, we'll reduce the number and repitions of timings per data
+# point. Below, we loop over a variational circuit depth ranging from 0 (no gates/
+# trainable parameters) to 20. Each layer will contain :math:`3N` parameters, where
+# :math:`N` is the number of wires (in this case, :math:`N=4`).
+
+repeat = 2
+number = 3
+
+forward_shift = []
+backward_shift = []
+forward_backprop = []
+backward_backprop = []
+
+for depth in range(0, 21):
+    params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=depth)
+    num_params = params.size
+    params = tf.Variable(params)
+
+    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
+
+    # forward pass timing
+    # ===================
+
+    # parameter-shift
+    times = timeit.repeat("qnode_shift(params)", globals=globals(), number=number, repeat=repeat)
+    forward_shift.append([num_params, min(times) / number])
+
+    # backprop
+    times = timeit.repeat("qnode_backprop(params)", globals=globals(), number=number, repeat=repeat)
+    forward_backprop.append([num_params, min(times) / number])
+
+    if num_params == 0:
+        continue
+
+    # Backward pass timing
+    # ====================
+
+    # parameter-shift
+    with tf.GradientTape(persistent=True) as tape:
+        res = qnode_shift(params)
+
+    times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+    backward_shift.append([num_params, min(times) / number])
+
+    # backprop
+    with tf.GradientTape(persistent=True) as tape:
+        res = qnode_backprop(params)
+
+    times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+    backward_backprop.append([num_params, min(times) / number])
+
+backward_shift = np.array(backward_shift).T
+backward_backprop = np.array(backward_backprop).T
+forward_shift = np.array(forward_shift).T
+forward_backprop = np.array(forward_backprop).T
 
 ##############################################################################
-# Let's see how long it takes to perform a forward pass of the circuit.
+# We now import matplotlib, and plot the results.
 
-import timeit
+from matplotlib import pyplot as plt
+plt.style.use("bmh")
 
-repeat = 3
-number = 10
-times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
-print(f"best of {repeat}: {min(times) / number} sec per loop")
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
+ax.plot(*backward_shift, '.-', label="Parameter-shift")
+ax.plot(*backward_backprop, '.-', label="Backprop")
+ax.set_ylabel("Time (s)")
+ax.set_xlabel("Number of parameters")
+ax.legend()
+
+plt.show()
 
 ##############################################################################
-# We can now time a backwards pass.
+# We can see that the computational time for the parameter-shift rule scales
+# approximately as :math:`\sim 2p`, as expected, whereas the computational time
+# for backprop appears much more constant, with perhaps a minor linear increase
+# with :math:`p`.
+#
+# For a better comparison, we can scale the time required for computing the quantum
+# gradients against the time taken for the corresponding forward pass:
 
-grad_fn = qml.grad(circuit)
-times = timeit.repeat("grad_fn(params)", globals=globals(), number=number, repeat=repeat)
-print(f"best of {repeat}: {min(times) / number} sec per loop")
+backward_shift_scaled = backward_shift / forward_shift[1:]
+backward_backprop_scaled = backward_backprop / forward_backprop[1:]
 
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+
+ax.plot(*backward_shift_scaled, '.-', label="Parameter-shift")
+ax.plot(*backward_backprop_scaled, '.-', label="Backprop")
+ax.set_ylabel("Normalized time")
+ax.set_xlabel("Number of parameters")
+ax.legend()
+
+plt.show()
