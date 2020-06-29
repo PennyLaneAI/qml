@@ -4,7 +4,7 @@ Quantum gradients with backpropagation
 
 .. meta::
     :property="og:description": Compare and contrast the parameter-shift rule with backpropagation.
-    :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_rosalin_002.png
+    :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_backprop_002.png
 
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
 trained using the :doc:`parameter-shift rule </glossary/parameter_shift>` to compute quantum
