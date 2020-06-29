@@ -392,8 +392,8 @@ backward_backprop[1] /= forward_backprop[1, 1:]
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-ax.plot(*backward_shift_scaled, '.-', label="Parameter-shift")
-ax.plot(*backward_backprop_scaled, '.-', label="Backprop")
+ax.plot(*backward_shift, '.-', label="Parameter-shift")
+ax.plot(*backward_backprop, '.-', label="Backprop")
 ax.set_ylabel("Normalized time")
 ax.set_xlabel("Number of parameters")
 ax.legend()
