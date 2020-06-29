@@ -226,10 +226,11 @@ print(2 * forward_time * params.size)
 # Benchmarking
 # ~~~~~~~~~~~~
 #
-# When creating a QNode, PennyLane supports various methods of differentiation, including
-# ``"parameter-shift"`` (which we used previously), ``"finite-diff"``, and ``"backprop"``. While
-# ``"parameter-shift"`` works with all devices, simulator and hardware, ``"backprop"`` will only work
-# for specific simulator devices that are designed to support reverse-mode differentiation.
+# When creating a QNode, :doc:`PennyLane supports various methods of differentiation
+# <code/api/pennylane.qnode>`, including ``"parameter-shift"`` (which we used previously),
+# ``"finite-diff"``, and ``"backprop"``. While ``"parameter-shift"`` works with all devices,
+# simulator and hardware, ``"backprop"`` will only work for specific simulator devices that are
+# designed to support reverse-mode differentiation.
 #
 # One such device is :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`.
 # This device is a pure state-vector simulator like ``default.qubit``, however unlike
@@ -386,8 +387,8 @@ plt.show()
 # For a better comparison, we can scale the time required for computing the quantum
 # gradients against the time taken for the corresponding forward pass:
 
-backward_shift_scaled = backward_shift / forward_shift[1:]
-backward_backprop_scaled = backward_backprop / forward_backprop[1:]
+backward_shift[1] /= forward_shift[1, 1:]
+backward_backprop[1] /= forward_backprop[1, 1:]
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
