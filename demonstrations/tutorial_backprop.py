@@ -284,8 +284,8 @@ print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 # independent of the number of differentiable parameters, and instead seems of the order of a single
 # forward pass!
 #
-# Comparing parameter-shift and backprop
-# --------------------------------------
+# Time comparison
+# ---------------
 #
 # Let's compare the two differentiation approaches as the number of trainable parameters
 # in the variational circuit increases, by timing both the forward and backward pass
@@ -329,12 +329,12 @@ for depth in range(0, 21):
     # ===================
 
     # parameter-shift
-    times = timeit.repeat("qnode_shift(params)", globals=globals(), number=number, repeat=repeat)
-    forward_shift.append([num_params, min(times) / number])
+    t = timeit.repeat("qnode_shift(params)", globals=globals(), number=number, repeat=repeat)
+    forward_shift.append([num_params, min(t) / number])
 
     # backprop
-    times = timeit.repeat("qnode_backprop(params)", globals=globals(), number=number, repeat=repeat)
-    forward_backprop.append([num_params, min(times) / number])
+    t = timeit.repeat("qnode_backprop(params)", globals=globals(), number=number, repeat=repeat)
+    forward_backprop.append([num_params, min(t) / number])
 
     if num_params == 0:
         continue
@@ -346,15 +346,15 @@ for depth in range(0, 21):
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_shift(params)
 
-    times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
-    backward_shift.append([num_params, min(times) / number])
+    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+    backward_shift.append([num_params, min(t) / number])
 
     # backprop
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_backprop(params)
 
-    times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
-    backward_backprop.append([num_params, min(times) / number])
+    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+    backward_backprop.append([num_params, min(t) / number])
 
 backward_shift = np.array(backward_shift).T
 backward_backprop = np.array(backward_backprop).T
