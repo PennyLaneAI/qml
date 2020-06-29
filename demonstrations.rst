@@ -248,3 +248,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
     demos/tutorial_quantum_metrology
+    demos/tutorial_backprop
