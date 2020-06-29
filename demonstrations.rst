@@ -205,7 +205,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Compare the parameter-shift rule with backpropagation
-    :figure: demonstrations/tutorial_backprop_thumbail.png
+    :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
     :tags: tensorflow autograd
 
