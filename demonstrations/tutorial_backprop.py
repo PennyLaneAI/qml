@@ -396,6 +396,14 @@ ax.plot(*backward_shift, '.-', label="Parameter-shift")
 ax.plot(*backward_backprop, '.-', label="Backprop")
 ax.set_ylabel("Normalized time")
 ax.set_xlabel("Number of parameters")
+ax.set_xscale("log")
+ax.set_yscale("log")
 ax.legend()
 
 plt.show()
+
+
+##############################################################################
+# We can now see clearly that there is constant overhead for backpropagation
+# with ``default.qubit.tf``, but the parameter-shift rule has a linear dependence
+# on number of parameter.
