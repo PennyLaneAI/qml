@@ -3,8 +3,8 @@ Hybrid quantum-classical ML using Keras and PyTorch
 ===================================================
 
 .. meta::
-    :property="og:description": TODO
-    :property="og:image": TODO
+    :property="og:description": Learn how to create hybrid ML models in PennyLane using the Keras and PyTorch interfaces
+    :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_qnn_module_001.png
 
 In PennyLane, variational quantum circuits are treated as :doc:`quantum nodes
 <../glossary/hybrid_computation>` (QNodes) that can be thought of simply as functions with a
@@ -124,9 +124,9 @@ qlayer_torch = qml.qnn.TorchLayer(qnode, weight_shapes)
 # <https://pytorch.org/docs/stable/nn.html>`__. First, using the `Keras <https://keras.io/>`__
 # `Sequential <https://www.tensorflow.org/api_docs/python/tf/keras/Sequential>`__:
 
-clayer1_tf = tf.keras.layers.Dense(2)
-clayer2_tf = tf.keras.layers.Dense(2, activation="softmax")
-model_tf = tf.keras.models.Sequential([clayer1_tf, qlayer_tf, clayer2_tf])
+clayer_tf_1 = tf.keras.layers.Dense(2)
+clayer_tf_2 = tf.keras.layers.Dense(2, activation="softmax")
+model_tf = tf.keras.models.Sequential([clayer_tf_1, qlayer_tf, clayer_tf_2])
 
 ###############################################################################
 # Similarly, using `torch.nn <https://pytorch.org/docs/stable/nn.html>`__
@@ -134,10 +134,10 @@ model_tf = tf.keras.models.Sequential([clayer1_tf, qlayer_tf, clayer2_tf])
 
 import torch
 
-clayer1_torch = torch.nn.Linear(2, 2)
-clayer2_torch = torch.nn.Linear(2, 2)
+clayer_torch_1 = torch.nn.Linear(2, 2)
+clayer_torch_2 = torch.nn.Linear(2, 2)
 softmax_torch = torch.nn.Softmax(dim=1)
-model_torch = torch.nn.Sequential(clayer1_torch, qlayer_torch, clayer2_torch, softmax_torch)
+model_torch = torch.nn.Sequential(clayer_torch_1, qlayer_torch, clayer_torch_2, softmax_torch)
 
 ###############################################################################
 # Constructing hybrid models is easy!
@@ -161,5 +161,81 @@ model_tf.compile(opt, loss='mae', metrics=['accuracy'])
 # The model is now ready to be trained!
 
 X = X.astype("float32")
-y = y.astype("float32")
-model_tf.fit(X, y, epochs=8, batch_size=5, validation_split=0.25)
+y_hot = y_hot.astype("float32")
+model_tf.fit(X, y_hot, epochs=8, batch_size=5, validation_split=0.25)
+
+###############################################################################
+# Creating non-sequential models
+# ------------------------------
+#
+# The models we created above were composed of a sequence of classical and quantum layers. This
+# type of model is very common and is suitable in a lot of situations. However, in some cases we
+# may want a greater degree of control over how the model is constructed, for example when we
+# have multiple inputs and outputs or when we want to distribute the output of one layer into
+# multiple subsequent layers.
+#
+# Suppose we want to make a hybrid model consisting of:
+#
+# 1. A 4-neuron fully connected classical layer
+# 2. A 2-qubit quantum layer connected to the first two neurons of the previous classical layer
+# 3. A 2-qubit quantum layer connected to the second two neurons of the previous classical layer
+# 4. A 2-neuron fully connected classical layer which takes a 4-dimensional input from the
+#    combination of the previous quantum layers
+# 5. A softmax activation to convert to a probability vector
+#
+# This model can also be constructed in the `Keras <https://keras.io/>`__ and
+# `torch.nn <https://pytorch.org/docs/stable/nn.html>`__ interfaces. For
+# `Keras <https://keras.io/>`__, we can use the
+# `Functional API <https://keras.io/guides/functional_api/>`__:
+
+# re-initialize the layers
+clayer_tf_1 = tf.keras.layers.Dense(4)
+qlayer_tf = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+qlayer_tf_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+clayer_tf_2 = tf.keras.layers.Dense(2, activation="softmax")
+
+# construct the model
+inputs = tf.keras.Input(shape=(2,))
+x = clayer_tf_1(inputs)
+x_1, x_2 = tf.split(x, 2, axis=1)
+x_1 = qlayer_tf(x_1)
+x_2 = qlayer_tf_2(x_2)
+x = tf.concat([x_1, x_2], axis=1)
+outputs = clayer_tf_2(x)
+
+model_tf = tf.keras.Model(inputs=inputs, outputs=outputs)
+
+###############################################################################
+# In `torch.nn <https://pytorch.org/docs/stable/nn.html>`__, we can create a new class that
+# inherits from `Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`__:
+
+# re-initialize the layers
+clayer_torch_1 = torch.nn.Linear(2, 4)
+qlayer_torch = qml.qnn.TorchLayer(qnode, weight_shapes)
+qlayer_torch_2 = qml.qnn.TorchLayer(qnode, weight_shapes)
+clayer_torch_2 = torch.nn.Linear(4, 2)
+softmax_torch = torch.nn.Softmax(dim=1)
+
+
+# construct the model
+class HybridModel(torch.nn.Module):
+    def forward(self, x):
+        x = clayer_torch_1(x)
+        x_1, x_2 = torch.split(x, 2, dim=1)
+        x_1 = qlayer_torch(x_1)
+        x_2 = qlayer_torch_2(x_2)
+        x = torch.cat([x_1, x_2], axis=1)
+        x = clayer_torch_2(x)
+        return softmax_torch(x)
+
+
+model_torch = HybridModel()
+
+###############################################################################
+# As a final step, let's train the `Keras <https://keras.io/>`__-based model to check if it's
+# working:
+
+opt = tf.keras.optimizers.SGD(learning_rate=0.2)
+model_tf.compile(opt, loss='mae', metrics=['accuracy'])
+
+model_tf.fit(X, y_hot, epochs=8, batch_size=5, validation_split=0.25)
