@@ -23,7 +23,7 @@ The parameter-shift rule
 ------------------------
 
 The parameter-shift rules states that, given a variational quantum circuit :math:`U(\boldsymbol
-\theta)` composed of paremtrized Pauli rotations, and some measured observable :math:`\hat{B}`, the
+\theta)` composed of parametrized Pauli rotations, and some measured observable :math:`\hat{B}`, the
 derivative of the expectation value
 
 .. math::
@@ -129,12 +129,12 @@ grad_function = qml.grad(circuit)
 print(grad_function(params)[0])
 
 ##############################################################################
-# If you count the number of quantum evalutions, you will notice that we had to evaluate the circuit
+# If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
 # ``2*len(params)`` number of times in order to compute the quantum gradient with respect to all
 # parameters. While reasonably fast for a small number of parameters, as the number of parameters in
 # our quantum circuit grows, so does both
 #
-# 1. he circuit depth (and thus the time taken to evaluate each expectation value or 'forward' pass), and
+# 1. the circuit depth (and thus the time taken to evaluate each expectation value or 'forward' pass), and
 #
 # 2. the number of parameter-shift evaluations required.
 #
@@ -298,7 +298,7 @@ print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 # in the variational circuit increases, by timing both the forward and backward pass
 # as the number of layers is allowed to increase.
 #
-# For convenience, we'll create two devices; one using ``default.qubit`` for the parameter-shift
+# We'll create two devices; one using ``default.qubit`` for the parameter-shift
 # rule, and ``default.qubit.tf`` for backpropagation. For convenience, we'll use the TensorFlow
 # interface when creating both QNodes.
 
@@ -311,7 +311,7 @@ def circuit(params):
 
 ##############################################################################
 # We'll continue to use the same ansatz as before, but to reduce the time taken
-# to collect the data, we'll reduce the number and repitions of timings per data
+# to collect the data, we'll reduce the number and repetitions of timings per data
 # point. Below, we loop over a variational circuit depth ranging from 0 (no gates/
 # trainable parameters) to 20. Each layer will contain :math:`3N` parameters, where
 # :math:`N` is the number of wires (in this case, :math:`N=4`).
@@ -385,9 +385,13 @@ ax.legend()
 plt.show()
 
 ##############################################################################
+# .. raw:: html
+#
+#     <br>
+#
 # We can see that the computational time for the parameter-shift rule scales
 # approximately as :math:`\sim 2p`, as expected, whereas the computational time
-# for backprop appears much more constant, with perhaps a minor linear increase
+# for backpropagation appears much more constant, with perhaps a minor linear increase
 # with :math:`p`.
 #
 # For a better comparison, we can scale the time required for computing the quantum
@@ -410,6 +414,10 @@ plt.show()
 
 
 ##############################################################################
+# .. raw:: html
+#
+#     <br>
+#
 # We can now see clearly that there is constant overhead for backpropagation
 # with ``default.qubit.tf``, but the parameter-shift rule has a linear dependence
-# on number of parameter.
+# on the number of parameters.
