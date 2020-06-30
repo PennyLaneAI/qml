@@ -206,7 +206,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics
     :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
-    :description: :doc:`demos/tutorial_qgrnn`
+    :description: :doc:`demos/qgrnn`
     :tags: autograd
 
 :html:`</div></div><div style='clear:both'>`
@@ -248,4 +248,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
     demos/tutorial_quantum_metrology
-    demos/tutorial_qgrnn
+    demos/qgrnn
