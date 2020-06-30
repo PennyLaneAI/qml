@@ -404,6 +404,15 @@ fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
 ax.plot(*backward_shift, '.-', label="Parameter-shift")
 ax.plot(*backward_backprop, '.-', label="Backprop")
+
+# perform a least squares regression to determine the gradient m
+x = backward_shift[0]
+m_shift, c_shift = np.polyfit(*backward_shift, deg=1)
+m_back, c_back = np.polyfit(*backward_backprop, deg=1)
+
+ax.plot(x, m_shift * x + c_shift, '--', label=f"{m_shift:.2f}$p${c_shift:+.2f}")
+ax.plot(x, m_back * x + c_back, '--', label=f"{m_back:.2f}$p${c_back:+.2f}")
+
 ax.set_ylabel("Normalized time")
 ax.set_xlabel("Number of parameters")
 ax.set_xscale("log")
@@ -411,7 +420,6 @@ ax.set_yscale("log")
 ax.legend()
 
 plt.show()
-
 
 ##############################################################################
 # .. raw:: html
