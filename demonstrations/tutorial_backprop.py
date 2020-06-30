@@ -405,7 +405,8 @@ fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 ax.plot(*backward_shift, '.-', label="Parameter-shift")
 ax.plot(*backward_backprop, '.-', label="Backprop")
 
-# perform a least squares regression to determine the gradient m
+# perform a least squares regression to determine the linear best fit/gradient
+# for the normalized time vs. number of parameters
 x = backward_shift[0]
 m_shift, c_shift = np.polyfit(*backward_shift, deg=1)
 m_back, c_back = np.polyfit(*backward_backprop, deg=1)
