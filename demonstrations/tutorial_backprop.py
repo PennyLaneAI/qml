@@ -426,6 +426,5 @@ plt.show()
 #
 #     <br>
 #
-# We can now see clearly that there is constant overhead for backpropagation
-# with ``default.qubit.tf``, but the parameter-shift rule has scales
-# approximately as :math:`\sim 2p`.
+# We can now see clearly that there is constant overhead for backpropagation with
+# ``default.qubit.tf``, but the parameter-shift rule scales as :math:`\sim 2p`.
