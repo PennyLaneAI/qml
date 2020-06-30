@@ -313,7 +313,7 @@ def circuit(params):
 # We'll continue to use the same ansatz as before, but to reduce the time taken
 # to collect the data, we'll reduce the number and repetitions of timings per data
 # point. Below, we loop over a variational circuit depth ranging from 0 (no gates/
-# trainable parameters) to 20. Each layer will contain :math:`N` parameters, where
+# trainable parameters) to 60. Each layer will contain :math:`N` parameters, where
 # :math:`N` is the number of wires (in this case, :math:`N=4`).
 
 repeat = 2
@@ -324,7 +324,7 @@ backward_shift = []
 forward_backprop = []
 backward_backprop = []
 
-for depth in range(0, 61):
+for depth in list(range(0, 41)) + list(range(41, 61, 2)):
     params = qml.init.basic_entangler_layers_normal(n_wires=4, n_layers=depth)
     num_params = params.size
     params = tf.Variable(params)
