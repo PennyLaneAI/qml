@@ -145,14 +145,14 @@ print(grad_function(params)[0])
 # ~~~~~~~~~~~~
 #
 # Let's consider an example with a significantly larger number of parameters.
-# We'll make use of the :class:`~pennylane.templates.BasicEntanglingLayers` template
+# We'll make use of the :class:`~pennylane.templates.BasicEntanglerLayers` template
 # to make a more complicated QNode.
 
 dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev, diff_method="parameter-shift", mutable=False)
 def circuit(params):
-    qml.templates.BasicEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.templates.BasicEntanglerLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 
@@ -255,7 +255,7 @@ dev = qml.device("default.qubit.tf", wires=4)
 
 @qml.qnode(dev, diff_method="backprop", interface="tf")
 def circuit(params):
-    qml.templates.BasicEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.templates.BasicEntanglerLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 # initialize circuit parameters
@@ -296,7 +296,7 @@ print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 #
 # Let's compare the two differentiation approaches as the number of trainable parameters
 # in the variational circuit increases, by timing both the forward and backward pass
-# as the number of entangling layers is allowed to increase.
+# as the number of layers is allowed to increase.
 #
 # For convenience, we'll create two devices; one using ``default.qubit`` for the parameter-shift
 # rule, and ``default.qubit.tf`` for backpropagation. For convenience, we'll use the TensorFlow
@@ -306,7 +306,7 @@ dev_shift = qml.device("default.qubit", wires=4)
 dev_backprop = qml.device("default.qubit.tf", wires=4)
 
 def circuit(params):
-    qml.templates.BasicEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.templates.BasicEntanglerLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 ##############################################################################
