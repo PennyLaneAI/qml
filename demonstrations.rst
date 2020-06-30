@@ -205,7 +205,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Learn how to create hybrid ML models using Keras and PyTorch
-    :figure: demonstrations/quantum_metrology/illustration.png
+    :figure: demonstrations/qnn_module/qnn3.png
     :description: :doc:`demos/tutorial_qnn_module`
     :tags: pytorch tensorflow
 
