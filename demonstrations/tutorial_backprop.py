@@ -389,9 +389,9 @@ plt.show()
 #
 #     <br>
 #
-# We can see that the computational time for the parameter-shift rule scales
-# approximately as :math:`\sim 2p`, as expected, whereas the computational time
-# for backpropagation appears much more constant, with perhaps a minor linear increase
+# We can see that the computational time for the parameter-shift rule increases with
+# increasing number of parameters, as expected, whereas the computational time
+# for backpropagation appears much more constant, with perhaps a minute linear increase
 # with :math:`p`.
 #
 # For a better comparison, we can scale the time required for computing the quantum
@@ -410,8 +410,8 @@ x = backward_shift[0]
 m_shift, c_shift = np.polyfit(*backward_shift, deg=1)
 m_back, c_back = np.polyfit(*backward_backprop, deg=1)
 
-ax.plot(x, m_shift * x + c_shift, '--', label=f"{m_shift:.2f}$p${c_shift:+.2f}")
-ax.plot(x, m_back * x + c_back, '--', label=f"{m_back:.2f}$p${c_back:+.2f}")
+ax.plot(x, m_shift * x + c_shift, '--', label=f"{m_shift:.2f}p{c_shift:+.2f}")
+ax.plot(x, m_back * x + c_back, '--', label=f"{m_back:.2f}p{c_back:+.2f}")
 
 ax.set_ylabel("Normalized time")
 ax.set_xlabel("Number of parameters")
@@ -427,5 +427,5 @@ plt.show()
 #     <br>
 #
 # We can now see clearly that there is constant overhead for backpropagation
-# with ``default.qubit.tf``, but the parameter-shift rule has a linear dependence
-# on the number of parameters.
+# with ``default.qubit.tf``, but the parameter-shift rule has scales
+# approximately as :math:`\sim 2p`.
