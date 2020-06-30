@@ -129,12 +129,17 @@ grad_function = qml.grad(circuit)
 print(grad_function(params)[0])
 
 ##############################################################################
-# If you count the number of quantum evalutions, you will notice that we had to
-# evaluate the circuit ``2*len(params)`` number of times in order to compute the
-# quantum gradient with respect to all parameters. While reasonably fast for a small;
-# number of parameters, as the number of parameters in our quantum circuit grows,
-# so does both the circuit depth (and thus 'forward' circuit evaluation) as well as
-# the 'backward' pass (the time taken to compute the gradient with respect to all parameters).
+# If you count the number of quantum evalutions, you will notice that we had to evaluate the circuit
+# ``2*len(params)`` number of times in order to compute the quantum gradient with respect to all
+# parameters. While reasonably fast for a small number of parameters, as the number of parameters in
+# our quantum circuit grows, so does both
+#
+# 1. he circuit depth (and thus the time taken to evaluate each expectation value or 'forward' pass), and
+#
+# 2. the number of parameter-shift evaluations required.
+#
+# Both of these factors increase the time taken to compute the gradient with
+# respect to all parameters (the 'backward' pass).
 #
 # Benchmarking
 # ~~~~~~~~~~~~
