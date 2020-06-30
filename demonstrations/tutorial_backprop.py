@@ -145,14 +145,14 @@ print(grad_function(params)[0])
 # ~~~~~~~~~~~~
 #
 # Let's consider an example with a significantly larger number of parameters.
-# We'll make use of the :class:`~pennylane.templates.BasicEntanglerLayers` template
+# We'll make use of the :class:`~pennylane.templates.StronglyEntanglingLayers` template
 # to make a more complicated QNode.
 
 dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev, diff_method="parameter-shift", mutable=False)
 def circuit(params):
-    qml.templates.BasicEntanglerLayers(params, wires=[0, 1, 2, 3])
+    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 
@@ -162,7 +162,7 @@ def circuit(params):
 # executions), however reduces processing overhead.
 
 # initialize circuit parameters
-params = qml.init.basic_entangler_layers_normal(n_wires=4, n_layers=45)
+params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
 print(params.size)
 print(circuit(params))
 
@@ -255,11 +255,11 @@ dev = qml.device("default.qubit.tf", wires=4)
 
 @qml.qnode(dev, diff_method="backprop", interface="tf")
 def circuit(params):
-    qml.templates.BasicEntanglerLayers(params, wires=[0, 1, 2, 3])
+    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 # initialize circuit parameters
-params = qml.init.basic_entangler_layers_normal(n_wires=4, n_layers=15)
+params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
 params = tf.Variable(params)
 print(circuit(params))
 
@@ -306,14 +306,14 @@ dev_shift = qml.device("default.qubit", wires=4)
 dev_backprop = qml.device("default.qubit.tf", wires=4)
 
 def circuit(params):
-    qml.templates.BasicEntanglerLayers(params, wires=[0, 1, 2, 3])
+    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 ##############################################################################
 # We'll continue to use the same ansatz as before, but to reduce the time taken
 # to collect the data, we'll reduce the number and repetitions of timings per data
 # point. Below, we loop over a variational circuit depth ranging from 0 (no gates/
-# trainable parameters) to 60. Each layer will contain :math:`N` parameters, where
+# trainable parameters) to 20. Each layer will contain :math:`3N` parameters, where
 # :math:`N` is the number of wires (in this case, :math:`N=4`).
 
 repeat = 2
@@ -324,8 +324,8 @@ backward_shift = []
 forward_backprop = []
 backward_backprop = []
 
-for depth in list(range(0, 41)) + list(range(41, 61, 2)):
-    params = qml.init.basic_entangler_layers_normal(n_wires=4, n_layers=depth)
+for depth in range(0, 21):
+    params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=depth)
     num_params = params.size
     params = tf.Variable(params)
 
