@@ -347,8 +347,8 @@ print(tunable_circuit.draw())
 
 
 ######################################################################
-# A more thorough analysis.
-# --------------
+# A more thorough analysis
+# ------------------------
 
 # Now the circuit can be trained, even though we started from a place
 # where the global function has a barren plateau. The significance of this
