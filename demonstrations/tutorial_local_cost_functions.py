@@ -28,8 +28,7 @@ plateaus for shallow circuits.
 .. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
    :align: center
    :width: 50%
-   
-Reproduced from [#Cerezo2020].
+   :caption: Reproduced from [#Cerezo2020].
    
 Traditionally, most variational quantum algorithms are constructed to use global cost functions.
 Information from the entire measurement is used to analyze the result of the 
