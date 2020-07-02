@@ -66,7 +66,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 # a sense of what is happening in the cost landscape.
 #
 # First we define a number of wires we want to train on. The work by
-# Cerezo et al. shows that circuits are trainible under certain regimes, so
+# Cerezo et al. shows that circuits are trainable under certain regimes, so
 # how many qubits we train on will effect our results.
 
 wires = 6
