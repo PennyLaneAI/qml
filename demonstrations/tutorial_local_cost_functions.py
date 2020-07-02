@@ -74,7 +74,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 
 
 ######################################################################
-# Next, we want to define our QNodes, containing our ansatz. For this
+# Next, we want to define our QNodes and our circuit ansatz. For this
 # simple example, an ansatz that works well is simply a rotation along X,
 # and a rotation along Y, repeated across all the qubits.
 #
