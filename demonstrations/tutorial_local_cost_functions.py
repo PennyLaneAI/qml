@@ -40,7 +40,7 @@ and attempts to analyze the behavior of the entire circuit from this limited sco
 
 Cerezo et al. also handily prove that these local cost functions are bounded by the 
 global ones, i.e. if a global cost function is formulated in the manner discribed
-by Cerezo, then its corrisponding local cost function will always be 
+by Cerezo, then its corresponding local cost function will always be 
 less than or equal to the global.
 
 Imports
