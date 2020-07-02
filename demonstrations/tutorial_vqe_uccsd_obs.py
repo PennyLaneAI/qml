@@ -25,9 +25,12 @@ projection :math:`S_z=0`.
 The lowest-lying excited states, with energy :math:`E^*=-0.478453` Ha and total spin
 :math:`S=1`, show a three-fold spin degeneracy related to the values of :math:`S_z=-1, 0, 1`.
 
-.. figure:: /demonstrations/vqe_uccsd/energy_spectra_h2_sto3g.png
-    :width: 50%
+|
+
+.. figure:: /demonstrations/vqe_uccsd_obs/energy_spectra_h2_sto3g.png
+    :width: 70%
     :align: center
+|    
 
 Similarly, in the framework of VQE, if the quantum computer can be programmed to prepare many-body
 states in a specific sector of the total-spin projection :math:`S_z`, the variational optimization
@@ -175,7 +178,7 @@ print(s2_obs)
 #
 #     The :func:`~.observable` function can be used to build any second-quantized many-body
 #     observable as long as we have access to the matrix elements of the one- and/or
-#     two-particle operators computed in the basis of single-particle states.
+#     two-particle operators in the basis of single-particle states.
 #     The keyword argument ``init_term`` contains the contribution
 #     of core orbitals, if any, or any other quantity required to initialize the observable.
 
@@ -306,14 +309,12 @@ s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
 #
 # .. math::
 #
-#     S = -\frac{1}{2} + \sqrt{\frac{1}{4} + \langle \hat{S}^2 \rangle}.#
+#     S = -\frac{1}{2} + \sqrt{\frac{1}{4} + \langle \hat{S}^2 \rangle}.
 #
 # We define a function to compute the total spin
 
-
 def total_spin(params):
     return -0.5 + np.sqrt(1 / 4 + s2_exp_value(params))
-
 
 ##############################################################################
 # Wrapping up, we fix an optimizer and randomly initialize the circuit parameters.
@@ -449,28 +450,31 @@ print(
 # References
 # ----------
 #
-# 1. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+# 1. A. Peruzzo, J. McClean *et al.*, "A variational eigenvalue solver on a photonic
 #    quantum processor". `Nature Communications 5, 4213 (2014).
 #    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
-# 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+# 2. Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
 #    `Chem. Rev. 2019, 119, 19, 10856-10915.
 #    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
-# 3. Abhinav Kandala, Antonio Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
+# 3. A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
 #    Eigensolver for Small Molecules and Quantum Magnets". `arXiv:1704.05018
 #    <https://arxiv.org/abs/1704.05018>`_
 #
-# 4. Jonathan Romero, Ryan Babbush, *et al.*,"Strategies for quantum computing molecular
+# 4. J. Romero, R. Babbush, *et al.*,"Strategies for quantum computing molecular
 #    energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #    <https://arxiv.org/abs/1701.02691>`_
 #
-# 5. Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons, 2016).
+# 5. F. Jensen. "Introduction to Computational Chemistry".
+#    (John Wiley & Sons, 2016).
 #
-# 6. A. Fetter, J.D. Walecka, "Quantum Theory of many-particle systems". Courier Corporation, 2012.
+# 6. A. Fetter, J.D. Walecka, "Quantum Theory of many-particle systems".
+#    Courier Corporation, 2012.
 #
 # 7. P.Kl. Barkoutsos, J.F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
 #    calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
 #    `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
 #
-# 8. P. Ring, P. Schuck. "The Nuclear Many-Body Problem". (Springer Science & Business Media, 2004).
+# 8. P. Ring, P. Schuck. "The Nuclear Many-Body Problem".
+#    (Springer Science & Business Media, 2004).
