@@ -463,4 +463,3 @@ print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
 #    `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
 #
 # 8. P. Ring, P. Schuck. "The Nuclear Many-Body Problem". (Springer Science & Business Media, 2004).
-#
