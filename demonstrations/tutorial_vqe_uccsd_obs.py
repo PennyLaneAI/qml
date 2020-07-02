@@ -353,8 +353,6 @@ print('Final convergence parameter = {:.8f} Ha'.format(conv))
 print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
 print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
         format(np.abs(energy - (-1.1361894507)), np.abs(energy - (-1.1361894507))*627.509474))
-print()
-print('Final circuit parameters = \n', params)
 
 ##############################################################################
 # Success! 🎉🎉🎉 We have estimated the lowest-energy state with total-spin projection
@@ -424,8 +422,6 @@ print('Final convergence parameter = {:.8f} Ha'.format(conv))
 print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
 print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
         format(np.abs(energy - (-0.4784529849)), np.abs(energy - (-0.4784529849))*627.509474))
-print()
-print('Final circuit parameters = \n', params)
 
 ##############################################################################
 # As expected, we have successfully estimated the lowest-energy state with total-spin projection
