@@ -466,5 +466,5 @@ for runs in range(samples):
 #    
 #   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., &amp; Coles, P. (2020, February 04). 
 #   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks. 
-#   arXiv:2001.00550<https://arxiv.org/abs/2001.00550>
+#   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
 #     
