@@ -31,7 +31,7 @@ plateaus for shallow circuits.
    
 Reproduced from [#Cerezo2020].
    
-In a quick explanation, a global cost function is the type that is traditionally used.
+Traditionally, most variational quantum algorithms are constructed to use global cost functions.
 Information from the entire measurement is used to analyze the result of the 
 circuit, and a cost function is calculated from this to quantify the circuits 
 performance. A local cost function only considers information from a few qubits, 
