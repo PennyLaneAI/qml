@@ -243,7 +243,7 @@ dev = qml.device('default.qubit', wires=n_qubits)
 # :math:`s_{z_p} - s_{z_r} = \Delta s_z` and
 # :math:`s_{z_p} + s_{z_q} - s_{z_r} - s_{z_s}= \Delta s_z` for the spin-projection of the
 # molecular orbitals involved in the ph and pphh excitations
-# using the the keyword argument ``delta_sz``. This is precisely what allows us to prepare a
+# using the keyword argument ``delta_sz``. This is precisely what allows us to prepare a
 # correlated trial state whose total-spin projection :math:`S_z` is different from the one of
 # the Hartree-Fock state by the quantity ``delta_sz``. Therefore, we choose ``delta_sz = 0`` to
 # prepare the ground state of the :math:`\mathrm{H}_2` molecule.
@@ -257,7 +257,7 @@ print(pphh)
 # particle-hole excitations. For the hydrogen molecule in a minimal basis set we have two ph
 # excitations and one pphh excitation. The latter means that in preparing the UCCSD ansatz the
 # :func:`~.pennylane.templates.SingleExcitationUnitary` function has to be called twice to
-# exponentiate the two ph excitation operator while the
+# exponentiate the two ph excitation operators while the
 # :func:`~.pennylane.templates.DoubleExcitationUnitary` function is invoked once to
 # exponentiate the pphh excitation. 
 #
@@ -381,7 +381,7 @@ print(pphh)
 ##############################################################################
 # Notice that for the hydrogen molecule in a minimal basis set there are no
 # 2particle-2hole (pphh) excitations but only 1particle-1hole excitation (ph)
-# corresponding to the spin-flip transition between orbitals 1 and 3. And, that's it!.
+# corresponding to the spin-flip transition between orbitals 1 and 2. And, that's it!.
 # From this point on the algorithm is the same as described above.
 
 ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
