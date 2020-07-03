@@ -28,7 +28,7 @@ The lowest-lying excited states, with energy :math:`E^*=-0.478453` Ha and total 
 |
 
 .. figure:: /demonstrations/vqe_uccsd_obs/energy_spectra_h2_sto3g.png
-    :width: 70%
+    :width: 75%
     :align: center
 |    
 
@@ -329,7 +329,7 @@ print(params)
 # tolerance of :math:`\sim 10^{-6}`. Furthermore, we track the value of
 # the total spin of the prepared state as it is optimized through the iterative procedure.
 
-max_iterations = 1  # TODO: This is temporary to check how the tutorial renders
+max_iterations = 100
 conv_tol = 1e-06
 prev_energy = cost_fn(params)
 for n in range(max_iterations):
@@ -405,7 +405,7 @@ s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
 np.random.seed(0)
 params = np.random.normal(0, np.pi, len(ph) + len(pphh))
 
-max_iterations = 1  # TODO: This is tempory to check how the tutorial renders
+max_iterations = 100
 conv_tol = 1e-06
 prev_energy = cost_fn(params)
 for n in range(max_iterations):
@@ -469,10 +469,10 @@ print(
 # 5. F. Jensen. "Introduction to Computational Chemistry".
 #    (John Wiley & Sons, 2016).
 #
-# 6. A. Fetter, J.D. Walecka, "Quantum Theory of many-particle systems".
+# 6. A. Fetter, J. D. Walecka, "Quantum Theory of many-particle systems".
 #    Courier Corporation, 2012.
 #
-# 7. P.Kl. Barkoutsos, J.F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
+# 7. P. Kl. Barkoutsos, J. F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
 #    calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
 #    `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
 #
