@@ -139,7 +139,7 @@ rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
 
 
 ######################################################################
-# And look at the results:
+# Examining the results:
 #
 
 print("Global Cost: {: .7f}".format(cost_global(rotations)))
