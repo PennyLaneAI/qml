@@ -79,8 +79,8 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # and a rotation along Y, repeated across all the qubits.
 #
 # We will also define our cost functions here. Since we are trying to
-# learn the identity gate, a natural cost function is the probablity of measuring the 
-# zero state.
+# learn the identity gate a natural cost function is the probablity of measuring the 
+# zero state, denoted here as :math:`p_{|0\rangle}`.
 #
 # .. math:: C = 1-p_{|0\rangle}
 #
@@ -153,8 +153,8 @@ print(local_circuit.draw())
 # With this simple example, we can visualize the cost function, and see
 # the barren plateau effect graphically. Although there are :math:`2n` (where :math:`n` is the 
 # number of qubits) parameters, in order to make the cost landscape plot-able 
-# we must constrain ourselves. We will assume that all the X rotations are the 
-# same, and all the Y rotations are the same.
+# we must constrain ourselves. We will consider the case where all X rotations 
+# have the same value, and all the Y rotations have the same value.
 
 X = np.arange(-np.pi, np.pi, 1)
 Y = np.arange(-np.pi, np.pi, 1)
