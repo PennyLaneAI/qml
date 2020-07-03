@@ -90,7 +90,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 #
 # and only on one qubit for our local cost function:
 #
-# .. math:: C_{L} = 1-p_{|0>}.
+# .. math:: C_{L} = 1-p_{| 0\rangle}.
 #
 # To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
