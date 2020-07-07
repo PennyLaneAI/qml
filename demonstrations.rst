@@ -198,11 +198,17 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: chemistry
 
 .. customgalleryitem::
+    :tooltip: Optimizing measurement protocols with variational methods
+    :figure: demonstrations/quantum_metrology/illustration.png
+    :description: :doc:`demos/tutorial_quantum_metrology`
+    :tags: cirq metrology autograd
+
+.. customgalleryitem::
     :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
     :figure: demonstrations/vqt/thumbnail.png
     :description: :doc:`demos/tutorial_vqt`
     :tags: chemistry
-
+    
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -241,4 +247,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
+    demos/tutorial_quantum_metrology
     demos/tutorial_vqt
