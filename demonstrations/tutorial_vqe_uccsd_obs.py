@@ -340,7 +340,7 @@ for n in range(max_iterations):
     spin = total_spin(params)
 
     if n % 2 == 0:
-        print("Iteration = {:},  E = {:.8f} Ha,  Spin = {:.4f}".format(n, energy, spin, conv))
+        print("Iteration = {:},  E = {:.8f} Ha,  Spin = {:.4f}".format(n, energy, spin))
 
     if conv <= conv_tol:
         break
@@ -368,7 +368,7 @@ print(
 # In the last part of the tutorial we want to demonstrate that VQE can also be used to find
 # the lowest-energy excited states with total-spin projection :math:`S_z \neq 0`.
 # For the hydrogen molecule, this is the case for the states with energy
-# :math:`E = -0.4784529844` Ha and :math:`Sz=1` and :math:`Sz=-1`.
+# :math:`E = -0.4784529844` Ha and :math:`S_z=1` and :math:`S_z=-1`.
 #
 # Let's consider the case of :math:`S_z=1`. We just use the
 # :func:`~.sd_excitations` with the keyword argument ``delta_sz=1`` to generate
@@ -411,7 +411,7 @@ for n in range(max_iterations):
     spin = total_spin(params)
 
     if n % 2 == 0:
-        print("Iteration = {:},  E = {:.8f} Ha,  Spin = {:.4f}".format(n, energy, spin, conv))
+        print("Iteration = {:},  E = {:.8f} Ha,  Spin = {:.4f}".format(n, energy, spin))
 
     if conv <= conv_tol:
         break
