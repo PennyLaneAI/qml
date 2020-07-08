@@ -101,7 +101,7 @@ def global_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    qml.broadcast(qml.CNOT, wires=wires, pattern="ring")
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
 
 
@@ -109,8 +109,7 @@ def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    for i in range(wires-1):
-        qml.CNOT(wires=[i,i+1])    
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=[0])
 
 
