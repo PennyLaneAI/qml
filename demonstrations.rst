@@ -204,8 +204,8 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: cirq metrology autograd
 
 .. customgalleryitem::
-    :tooltip: VQE in different sectors of the spin quantum numbers.
-    :figure: demonstrations/vqe_uccsd_obs/energy_spectra_h2_sto3g.png
+    :tooltip: VQE in different spin sectors
+    :figure: demonstrations/vqe_uccsd_obs/thumbnail_spectra_h2.png
     :description: :doc:`demos/tutorial_vqe_uccsd_obs`
     :tags: autograd chemistry
 

@@ -1,12 +1,12 @@
 r"""
-VQE in different spin sectors with the Unitary Coupled Cluster ansatz
-=====================================================================
+VQE in different spin sectors
+=============================
 
 .. meta::
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different
         spin sectors using the variational quantum eigensolver
         algorithm in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/energy_spectra_h2_sto3g.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical
