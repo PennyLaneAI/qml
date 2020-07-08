@@ -321,8 +321,10 @@ s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
 #
 # We define a function to compute the total spin
 
+
 def total_spin(params):
     return -0.5 + np.sqrt(1 / 4 + s2_exp_value(params))
+
 
 ##############################################################################
 # Wrapping up, we fix an optimizer and randomly initialize the circuit parameters.
@@ -394,8 +396,10 @@ print(pphh)
 ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
 ref_state = qchem.hf_state(n_electrons, n_qubits)
 
+
 def vqe_ansatz(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires):
     UCCSD(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
+
 
 cost_fn = qml.VQECost(vqe_ansatz, h, dev)
 s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
