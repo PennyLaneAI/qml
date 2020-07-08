@@ -258,8 +258,8 @@ print(ph)
 print(pphh)
 
 ##############################################################################
-# The output lists ``ph`` and ``pphh`` contain the indices representing the one and two
-# particle-hole excitations. For the hydrogen molecule in a minimal basis set we have two ph
+# The output lists ``ph`` and ``pphh`` contain the indices representing the particle-hole
+# excitations. For the hydrogen molecule in a minimal basis set we have two ph
 # excitations and one pphh excitation. The latter means that in preparing the UCCSD ansatz the
 # :func:`~.pennylane.templates.subroutines.SingleExcitationUnitary` function has to be called
 # twice to exponentiate the two ph excitation operators while the
@@ -378,8 +378,8 @@ print(
 # :math:`E = -0.4784529844` Ha and :math:`S_z=1` and :math:`S_z=-1`.
 #
 # Let's consider the case of :math:`S_z=1`. We just use the
-# :func:`~pennylane_qchem.qchem.sd_excitations` with the keyword argument ``delta_sz=1`` to
-# generate particle-hole excitations in this specific sector of :math:`S_z`.
+# :func:`~pennylane_qchem.qchem.sd_excitations` function with the keyword argument ``delta_sz=1``
+# to generate particle-hole excitations in this specific sector of :math:`S_z`.
 
 ph, pphh = qchem.sd_excitations(n_electrons, n_qubits, delta_sz=1)
 print(ph)
