@@ -178,9 +178,9 @@ print(s2_obs)
 ##############################################################################
 # .. note::
 #
-#     The :func:`~.observable` function can be used to build any second-quantized many-body
-#     observable as long as we have access to the matrix elements of the one- and/or
-#     two-particle operators in the basis of single-particle states.
+#     The :func:`~pennylane_qchem.qchem.observable` function can be used to build any
+#     second-quantized many-body observable as long as we have access to the matrix elements
+#     of the one- and/or two-particle operators in the basis of single-particle states.
 #     The keyword argument ``init_term`` contains the contribution
 #     of core orbitals, if any, or any other quantity required to initialize the observable.
 
