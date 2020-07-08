@@ -79,7 +79,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # and a rotation along Y, repeated across all the qubits.
 #
 # We will also define our cost functions here. Since we are trying to
-# learn the identity gate a natural cost function is the probablity of measuring the 
+# learn the identity gate a natural cost function is the probability of measuring the 
 # zero state, denoted here as :math:`p_{|0\rangle}`.
 #
 # .. math:: C = 1-p_{|0\rangle}
@@ -88,9 +88,10 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 #
 # .. math:: C_{G} = 1-p_{|00 \ldots 0\rangle}
 #
-# and only on one qubit for our local cost function:
+# and instead, we will sum the individual contributions from each qubit 
+# for the local cost function:
 #
-# .. math:: C_{L} = 1-p_{| 0\rangle}.
+# .. math:: C_{L} = 1-\sum p_{|0\rangle}.
 #
 # To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
@@ -101,20 +102,18 @@ def global_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
 
 
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
-        qml.RY(rotations[1][i], wires=i)
-    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
-    return qml.probs(wires=[0])
+        qml.RY(rotations[1][i], wires=i) 
+    return [qml.probs(wires=i) for i in range(wires)]
 
 
 def cost_local(rotations):
-    return 1 - local_circuit(rotations)[0]
+    return 1 - np.sum(local_circuit(rotations)[:,0])/wires
 
 
 def cost_global(rotations):
@@ -124,6 +123,9 @@ def cost_global(rotations):
 global_circuit = qml.QNode(global_cost_simple, dev)
 
 local_circuit = qml.QNode(local_cost_simple, dev)
+
+
+
 
 
 ######################################################################
@@ -154,10 +156,6 @@ print(local_circuit.draw())
 # number of qubits) parameters, in order to make the cost landscape plot-able 
 # we must constrain ourselves. We will consider the case where all X rotations 
 # have the same value, and all the Y rotations have the same value.
-
-X = np.arange(-np.pi, np.pi, 1)
-Y = np.arange(-np.pi, np.pi, 1)
-X, Y = np.meshgrid(X, Y)
 
 local_Z = []
 global_Z = []
@@ -215,10 +213,101 @@ plt.show()
 ######################################################################
 # Those are some nice pictures, but how do they reflect actual
 # trainability? Lets try training both the local, and global cost
-# functions. Because we have a visualization of the total cost landscape,
+# functions.
+# To use pennylane, we will have to change our cost function
+# a bit to work with the suite of optimizers we have available. We will go from:
+# 
+# .. math:: C_{L} = 1-\sum p_{|0\rangle}.
+#
+# Where we sum the marginal probabilities of each quibt, to:
+# 
+# .. math:: C_{L} = 1-p_{|0\rangle}.
+# 
+# where we only consider the probability of a single qubit to be in the 0 state. 
+# This is also a valid local cost function.
+#  
+# While we're at it, lets make our ansatz a little more like one we would encounter while 
+# trying to solve a VQE problem, and add entanglements.
+
+def global_cost_simple(rotations):
+    for i in range(wires):
+        qml.RX(rotations[0][i], wires=i)
+        qml.RY(rotations[1][i], wires=i)
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
+    return qml.probs(wires=range(wires))
+
+
+def local_cost_simple(rotations):
+    for i in range(wires):
+        qml.RX(rotations[0][i], wires=i)
+        qml.RY(rotations[1][i], wires=i) 
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
+    return qml.probs(wires=[0]) 
+
+
+def cost_local(rotations):
+    return 1 - local_circuit(rotations)[0]
+
+
+def cost_global(rotations):
+    return 1 - global_circuit(rotations)[0]
+
+
+global_circuit = qml.QNode(global_cost_simple, dev)
+
+local_circuit = qml.QNode(local_cost_simple, dev)
+
+######################################################################
+# Of course, now that we've changed both our cost function and our circuit,
+# we will need to scan the cost landscape again.
+
+local_Z = []
+global_Z = []
+local_z = []
+global_z = []
+
+X = np.arange(-np.pi, np.pi, 0.25)
+Y = np.arange(-np.pi, np.pi, 0.25)
+X, Y = np.meshgrid(X, Y)
+
+for x in X[0, :]:
+    for y in Y[:, 0]:
+        rotations = [[x for i in range(wires)], [y for i in range(wires)]]
+        local_z.append(cost_local(rotations))
+        global_z.append(cost_global(rotations))
+    local_Z.append(local_z)
+    global_Z.append(global_z)
+    local_z = []
+    global_z = []
+
+local_Z = np.asarray(local_Z)
+global_Z = np.asarray(global_Z)
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+surf = ax.plot_surface(X, Y, global_Z, cmap="viridis", linewidth=0, antialiased=False)
+ax.set_zlim(0, 1)
+ax.zaxis.set_major_locator(LinearLocator(10))
+ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
+plt.show()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+surf = ax.plot_surface(X, Y, local_Z, cmap="viridis", linewidth=0, antialiased=False)
+ax.set_zlim(0, 1)
+ax.zaxis.set_major_locator(LinearLocator(10))
+ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
+plt.show()
+
+######################################################################
+# It seems our changes didn't significantly alter the overall cost landscape.
+# This probably isn't a general trend, but it is a nice surprise.
+# Now, lets get back to training the local, and global cost functions.
+# Because we have a visualization of the total cost landscape,
 # lets pick a point to exaggerate the problem. The worst point in the
 # landscape is :math:`(\pi,0)`, so let's use that.
-#
+
 
 rotations = [[3 for i in range(wires)], [0 for i in range(wires)]]
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
@@ -304,8 +393,7 @@ def tunable_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    for i in range(wires-1):
-        qml.CNOT(wires=[i,i+1])
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(range(locality))
 
 
@@ -372,7 +460,7 @@ plateau = 0
 trained = 0
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
-wires = 10
+wires = 8
 
 dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 global_circuit = qml.QNode(global_cost_simple, dev)
@@ -406,7 +494,7 @@ plateau = 0
 trained = 0
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
-wires = 10
+wires = 8
 
 dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 tunable_circuit = qml.QNode(tunable_cost_simple, dev)
@@ -431,7 +519,7 @@ for runs in range(samples):
                 + str(locality)
             )
 
-        if runCost < 0.1 and locality < wires:
+        if runCost < 0.5 and locality < wires:
             print("---Switching Locality---")
             locality += 1
             continue
@@ -452,7 +540,7 @@ for runs in range(samples):
 #
 # Comparing that to our local cost function, every single area trained,
 # and most even trained in less time. While these examples are simple,
-# this local-vs-global cost behavior has been shown to extend to more
+# this local-vs-global cost behaviour has been shown to extend to more
 # complex problems.
     
     
