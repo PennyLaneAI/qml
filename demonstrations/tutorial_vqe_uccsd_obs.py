@@ -3,15 +3,16 @@ VQE in different spin sectors
 =============================
 
 .. meta::
-    :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
+    :property="og:description": Find the lowest-energy states of a Hamiltonian in different
+    spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical
 high-performance computers. In particular, the Variational Quantum Eigensolver (VQE) algorithm
-:ref:`[1, 2]<vqe_uccsd_references>` has proven to be a valuable quantum-classical
+[[#peruzzo2014]_, [#cao2019]_] has proven to be a valuable quantum-classical
 approach to find the lowest-energy eigenstate of the electronic Hamiltonian by using Noisy
-Intermediate-Scale Quantum (NISQ) devices :ref:`[3]<vqe_uccsd_references>`.
+Intermediate-Scale Quantum (NISQ) devices [[#kandala2017]_].
 
 In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_, the
 electronic Hamiltonian matrix is block diagonal in the total spin projection quantum number
@@ -40,9 +41,9 @@ practice an excited state of the molecule, as shown in the figure above.
 
 At the core of the VQE algorithm is the variational quantum circuit that is optimized to prepare
 the desired quantum states. The choice of the circuit is crucial for the success of the algorithm.
-The unitary coupled cluster ansatz :ref:`[4]<vqe_uccsd_references>` is a powerful quantum circuit
+The unitary coupled cluster ansatz [[#romero2017]_] is a powerful quantum circuit
 that is believed to outperform the classical coupled cluster method
-:ref:`[5]<vqe_uccsd_references>`, traditionally referred to as the gold standard of quantum
+[[#jensenbook]_], traditionally referred to as the gold standard of quantum
 chemistry.
 
 We demonstrate how different functionalities implemented in PennyLane
@@ -146,7 +147,7 @@ print("Hamiltonian is ", h)
 # :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
 # is the matrix element of the two-particle spin operator
 # :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of Hartree-Fock spin-orbitals
-# :ref:`[6]<vqe_uccsd_references>`.
+# [[#fetterbook]_].
 #
 # We need to compute these matrix elements. This is achieved by calling the function
 # :func:`~pennylane_qchem.qchem.get_spin2_matrix_elements`. It reads the Hartree-Fock electronic
@@ -196,12 +197,12 @@ dev = qml.device("default.qubit", wires=n_qubits)
 # The next step is to define the variational quantum circuit used to prepare
 # the state that minimizes the expectation value of the electronic Hamiltonian.
 # In this example, we use the unitary coupled cluster ansatz truncated at
-# the level of single and double excitations (UCCSD) :ref:`[4]<vqe_uccsd_references>`.
+# the level of single and double excitations (UCCSD) [[#romero2017]_].
 #
 # The UCCSD method is a generalization of the traditional CCSD formalism used in quantum chemistry
 # to perform post-Hartree-Fock electron correlation calculations. Within the first-order
 # Trotter approximation, the UCCSD ground state of the molecule is built via the exponential ansatz
-# :ref:`[7]<vqe_uccsd_references>`,
+# [[#barkoutsos2018]_],
 #
 # .. math::
 #
@@ -213,14 +214,14 @@ dev = qml.device("default.qubit", wires=n_qubits)
 # In the latter equation, the indices :math:`r, s` and :math:`p, q` run respectively over the
 # occupied and unoccupied (virtual) molecular orbitals. The operator
 # :math:`\hat{c}_p^\dagger \hat{c}_r` creates a 1particle-1hole (ph)
-# excitation :ref:`[8]<vqe_uccsd_references>` since it annihilates a particle in the
+# excitation [[#peterringbook]_] since it annihilates a particle in the
 # occupied orbital :math:`r` (creates a hole) and creates the particle in the virtual orbital
 # :math:`p`. Similarly, the operator
 # :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates 2particle-2hole (pphh)
 # excitations.
 #
 # The quantum circuits to exponentiate the excitation operators in the
-# Jordan-Wigner representation :ref:`[7]<vqe_uccsd_references>` are implemented by the
+# Jordan-Wigner representation [[#barkoutsos2018]_] are implemented by the
 # functions :func:`~.pennylane.templates.subroutines.SingleExcitationUnitary` and
 # :func:`~.pennylane.templates.subroutines.DoubleExcitationUnitary` contained
 # in the PennyLane templates library. Finally, the parameters :math:`\theta_{pr}` and
@@ -446,36 +447,50 @@ print(
 # spin quantum numbers :math:`S=1` and :math:`S_z=-1`. Give it a try!
 #
 #
-# .. _vqe_uccsd_references:
-#
 # References
 # ----------
 #
-# 1. A. Peruzzo, J. McClean *et al.*, "A variational eigenvalue solver on a photonic
-#    quantum processor". `Nature Communications 5, 4213 (2014).
-#    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+# .. [#peruzzo2014]
 #
-# 2. Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
-#    `Chem. Rev. 2019, 119, 19, 10856-10915.
-#    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#     A. Peruzzo, J. McClean *et al.*, "A variational eigenvalue solver on a photonic
+#     quantum processor". `Nature Communications 5, 4213 (2014).
+#     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
-# 3. A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
-#    Eigensolver for Small Molecules and Quantum Magnets". `arXiv:1704.05018
-#    <https://arxiv.org/abs/1704.05018>`_
+# .. [#cao2019]
 #
-# 4. J. Romero, R. Babbush, *et al.*,"Strategies for quantum computing molecular
-#    energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
-#    <https://arxiv.org/abs/1701.02691>`_
+#     Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     `Chem. Rev. 2019, 119, 19, 10856-10915.
+#     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
-# 5. F. Jensen. "Introduction to Computational Chemistry".
-#    (John Wiley & Sons, 2016).
+# .. [#kandala2017]
 #
-# 6. A. Fetter, J. D. Walecka, "Quantum Theory of many-particle systems".
-#    Courier Corporation, 2012.
+#     A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
+#     Eigensolver for Small Molecules and Quantum Magnets". `arXiv:1704.05018
+#     <https://arxiv.org/abs/1704.05018>`_
 #
-# 7. P. Kl. Barkoutsos, J. F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
-#    calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
-#    `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
+# .. [#romero2017]
 #
-# 8. P. Ring, P. Schuck. "The Nuclear Many-Body Problem".
-#    (Springer Science & Business Media, 2004).
+#     J. Romero, R. Babbush, *et al.*,"Strategies for quantum computing molecular
+#     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
+#     <https://arxiv.org/abs/1701.02691>`_
+#
+# .. [#jensenbook]
+#
+#     F. Jensen. "Introduction to Computational Chemistry".
+#     (John Wiley & Sons, 2016).
+#
+# .. [#fetterbook]
+#
+#     A. Fetter, J. D. Walecka, "Quantum Theory of many-particle systems".
+#     Courier Corporation, 2012.
+#
+# .. [#barkoutsos2018]
+#
+#     P. Kl. Barkoutsos, J. F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
+#     calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
+#     `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
+#
+# .. [#peterringbook]
+#
+#     P. Ring, P. Schuck. "The Nuclear Many-Body Problem".
+#     (Springer Science & Business Media, 2004).
