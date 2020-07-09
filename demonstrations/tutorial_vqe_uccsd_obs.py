@@ -65,6 +65,7 @@ import pennylane as qml
 from pennylane import numpy as np
 from pennylane import qchem
 from pennylane.templates.subroutines import UCCSD
+from functools import partial
 
 ##############################################################################
 # The second step is to specify the molecule whose properties we aim to calculate.
@@ -288,10 +289,7 @@ print(ref_state)
 # Finally, we can use the :func:`~.pennylane.templates.subroutines.UCCSD` function to define
 # our VQE ansatz,
 
-
-def vqe_ansatz(params, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires):
-    UCCSD(params, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
-
+vqe_ansatz = partial(UCCSD, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
 
 ##############################################################################
 # where ``wires`` contains the wires the template act on and ``params`` is a vector
@@ -395,10 +393,7 @@ print(pphh)
 ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
 ref_state = qchem.hf_state(n_electrons, n_qubits)
 
-
-def vqe_ansatz(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires):
-    UCCSD(weights, wires, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
-
+vqe_ansatz = partial(UCCSD, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
 
 cost_fn = qml.VQECost(vqe_ansatz, h, dev)
 s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
