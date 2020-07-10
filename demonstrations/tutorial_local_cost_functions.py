@@ -214,12 +214,11 @@ plt.show()
 # Those are some nice pictures, but how do they reflect actual
 # trainability? Lets try training both the local, and global cost
 # functions.
-# To use pennylane, we will have to change our cost function
-# a bit to work with the suite of optimizers we have available. We will go from:
+# To simplify this model, let's modify our cost function from
 # 
-# .. math:: C_{L} = 1-\sum p_{|0\rangle}.
+# .. math:: C_{L} = 1-\sum p_{|0\rangle},
 #
-# Where we sum the marginal probabilities of each quibt, to:
+# where we sum the marginal probabilities of each qubit, to
 # 
 # .. math:: C_{L} = 1-p_{|0\rangle}.
 # 
