@@ -198,7 +198,7 @@ plt.show()
 
 ######################################################################
 # However, when we change to the local cost function, the cost landscape
-# becomes much more trainable.
+# becomes much more trainable as the size of the barren plateau decreases.
 #
 
 fig = plt.figure()
