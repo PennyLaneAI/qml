@@ -86,7 +86,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 #
 # We will apply this across all qubits for our global cost function, i.e.,:
 #
-# .. math:: C_{G} = 1-p_{|00 \ldots 0\rangle}
+# .. math:: C_{G} = \langle | \psi(theta) | \left(I - |00 \ldots 0\rangle \langle 00 \ldots 0|\right) \rangle = 1-p_{|00 \ldots 0\rangle}
 #
 # and instead, we will sum the individual contributions from each qubit 
 # for the local cost function:
@@ -111,6 +111,9 @@ def local_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i) 
     return [qml.probs(wires=i) for i in range(wires)]
 
+global_circuit = qml.QNode(global_cost_simple, dev)
+
+local_circuit = qml.QNode(local_cost_simple, dev)
 
 def cost_local(rotations):
     return 1 - np.sum(local_circuit(rotations)[:,0])/wires
@@ -118,13 +121,6 @@ def cost_local(rotations):
 
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
-
-
-global_circuit = qml.QNode(global_cost_simple, dev)
-
-local_circuit = qml.QNode(local_cost_simple, dev)
-
-
 
 
 
@@ -242,6 +238,9 @@ def local_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=[0]) 
 
+global_circuit = qml.QNode(global_cost_simple, dev)
+
+local_circuit = qml.QNode(local_cost_simple, dev)
 
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
@@ -251,9 +250,6 @@ def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
 
 
-global_circuit = qml.QNode(global_cost_simple, dev)
-
-local_circuit = qml.QNode(local_cost_simple, dev)
 
 ######################################################################
 # Of course, now that we've changed both our cost function and our circuit,
