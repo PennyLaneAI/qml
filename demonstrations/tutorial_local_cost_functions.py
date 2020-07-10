@@ -220,10 +220,9 @@ plt.show()
 #
 # where we sum the marginal probabilities of each qubit, to
 # 
-# .. math:: C_{L} = 1-p_{|0\rangle}.
+# .. math:: C_{L} = 1-p_{|0\rangle},
 # 
 # where we only consider the probability of a single qubit to be in the 0 state. 
-# This is also a valid local cost function.
 #  
 # While we're at it, lets make our ansatz a little more like one we would encounter while 
 # trying to solve a VQE problem, and add entanglements.
