@@ -91,7 +91,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # and instead, we will sum the individual contributions from each qubit 
 # for the local cost function:
 #
-# .. math:: C_{L} = 1-\sum p_{|0\rangle}.
+# .. math:: C_{L} =  \langle | \psi(theta) | \left(I - \frac{1}{n} \sum_j |0\rangle \langle 0|_j\right) \rangle = 1-\sum_j p_{|0\rangle}_j.
 #
 # To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
