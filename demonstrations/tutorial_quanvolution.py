@@ -281,7 +281,6 @@ def MyModel():
     which is ready to be trained."""
     model = keras.models.Sequential([
         keras.layers.Flatten(),
-        keras.layers.Dense(50,activation="sigmoid"),
         keras.layers.Dense(10, activation="softmax")
     ])
 
