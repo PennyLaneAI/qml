@@ -285,7 +285,6 @@ ax.set_zlim(0, 1)
 ax.zaxis.set_major_locator(LinearLocator(10))
 ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
 plt.show()
-
 fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
 surf = ax.plot_surface(X, Y, local_Z, cmap="viridis", linewidth=0, antialiased=False)
