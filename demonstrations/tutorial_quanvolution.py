@@ -89,8 +89,7 @@ import matplotlib.pyplot as plt
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-n_epochs = 50   # Number of optimization epochs
-eta = 0.05      # Learning rate
+n_epochs = 30   # Number of optimization epochs
 n_layers = 1    # Number of random layers
 n_train = 50    # Size of the train dataset
 n_test = 30     # Size of the test dataset
