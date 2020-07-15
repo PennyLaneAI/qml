@@ -9,12 +9,13 @@ strawberryfields==0.14.0
 sympy==1.5
 pillow==6.2.0
 pip==20.1
-protobuf==3.8.0
 pyscf==1.7.1
-pennylane==0.9
-pennylane-qchem==0.8
+pennylane==0.10
+pennylane-qchem==0.10
 pennylane-sf==0.9
 git+https://github.com/rigetti/pennylane-forest.git
+google-api-core[grpc]<=1.14.0
+protobuf==3.8.0
 pennylane-cirq==0.9
 pennylane-qiskit==0.9
 pyquil==2.19
@@ -22,6 +23,7 @@ scipy==1.4.1
 sphinx==1.8.5
 sphinx-sitemap
 sphinx_gallery==0.7
+seaborn==0.10.1
 tensorflow==2.2.0
 toml
 torch==1.5.0+cpu
