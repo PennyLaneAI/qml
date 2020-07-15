@@ -84,12 +84,6 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: autograd strawberryfields photonics
 
 .. customgalleryitem::
-    :tooltip: Local cost functions to avoid barren plateaus
-    :figure: demonstrations/<local_cost_functions>/Local_Thumbnain.png
-    :description: :doc:`demos/tutorial_local_cost_functions`
-    :tags: barren plateaus cost functions local global autograd
-
-.. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
     :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
     :description: :doc:`demos/tutorial_vqe`
@@ -205,7 +199,7 @@ algorithms using PennyLane and near-term quantum hardware.
 
 .. customgalleryitem::
     :tooltip: Understand the difference between local and global cost functions
-    :figure: demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
+    :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
     :description: :doc:`demos/tutorial_local_cost_functions`
     :tags: autograd
 
