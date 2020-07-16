@@ -14,8 +14,6 @@ pennylane==0.10
 pennylane-qchem==0.10
 pennylane-sf==0.9
 git+https://github.com/rigetti/pennylane-forest.git
-google-api-core[grpc]<=1.14.0
-protobuf==3.8.0
 pennylane-cirq==0.9
 pennylane-qiskit==0.9
 pyquil==2.19
