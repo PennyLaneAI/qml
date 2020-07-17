@@ -76,9 +76,10 @@ import nlopt
 # lower cutoff value will cause loss of information, while a higher value
 # will only use unnecessary resources without any improvement).
 #
-# **Note:** You will need to have Strawberry Fields as well as the
-# Strawberry Fields plugin for PennyLane installed for this tutorial to
-# work.
+# **Note:** You will need to have
+# `Strawberry Fields <https://strawberryfields.ai/>`__ as well as the
+# `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
+# for PennyLane installed for this tutorial to work.
 #
 
 dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
