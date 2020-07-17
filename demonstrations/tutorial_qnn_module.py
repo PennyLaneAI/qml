@@ -49,8 +49,7 @@ plt.show()
 # Our next step is to define the QNode that we want to interface with `Keras <https://keras.io/>`__
 # or `torch.nn <https://pytorch.org/docs/stable/nn.html>`__. Any combination of device, operations
 # and measurements that is valid in PennyLane can be used to compose the QNode. However,
-# the QNode arguments must satisfy additional
-# `conditions <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qnn.KerasLayer.html#usageDetails>`__
+# the QNode arguments must satisfy additional :doc:`conditions <code/api/pennylane.qnn.KerasLayer>`
 # including having an argument called ``inputs``. All other arguments must be arrays or tensors
 # and are treated as trainable weights in the model. We fix a two-qubit QNode using the
 # :doc:`default.qubit <code/api/pennylane.plugins.default_qubit.DefaultQubit>` simulator and
