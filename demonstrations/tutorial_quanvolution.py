@@ -90,7 +90,6 @@ import matplotlib.pyplot as plt
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 n_epochs = 30   # Number of optimization epochs
-eta = 0.05      # Learning rate
 n_layers = 1    # Number of random layers
 n_train = 50    # Size of the train dataset
 n_test = 30     # Size of the test dataset
@@ -285,7 +284,7 @@ def MyModel():
     ])
 
     model.compile(
-        optimizer=keras.optimizers.SGD(learning_rate=eta),
+        optimizer='adam',
         loss="sparse_categorical_crossentropy",
         metrics=["accuracy"],
     )
