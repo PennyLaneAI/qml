@@ -34,7 +34,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_moons
 import tensorflow as tf
 
-X, y = make_moons(n_samples=200, noise=0.1)
+X, y = make_moons(n_samples=10, noise=0.1)
 y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
 
 c = ['#1f77b4' if y_ == 0 else '#ff7f0e' for y_ in y]  # colours for each class
@@ -170,7 +170,7 @@ model_tf.compile(opt, loss='mae', metrics=['accuracy'])
 
 X = X.astype("float32")
 y_hot = y_hot.astype("float32")
-model_tf.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
+model_tf.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
 
 ###############################################################################
 # Creating non-sequential models
@@ -252,4 +252,4 @@ model_torch = HybridModel()
 opt = tf.keras.optimizers.SGD(learning_rate=0.2)
 model_tf.compile(opt, loss='mae', metrics=['accuracy'])
 
-model_tf.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
+model_tf.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
