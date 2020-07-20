@@ -57,8 +57,7 @@ will be used.
 # optimizer from the ``pennylane.optimize`` module or we could use a
 # third-party optimizer. In this case we will mainly use the Nlopt library
 # which has several fast implementations of both gradient-free and
-# gradient-based optimizers. Finally, we also need to import ``autograd``
-# for calulculating the gradients when using gradient-based optimizers.
+# gradient-based optimizers.
 #
 
 import pennylane as qml
@@ -184,9 +183,9 @@ def cost(var, data_input, labels):
 # *insert-nice-image-of-cnot-gate-fock-state-transformations-here*
 #
 # We need to choose the inputs ``X`` and their labels ``Y``. They are
-# defined using dual-rail encoding, meaning that ``|0> = [1, 0]`` and
-# ``|1> = [0, 1]``, e.g. a CNOT transformation of ``|10> = [0, 1, 1, 0]``
-# would be ``|11> = [0, 1, 0, 1]``.
+# defined using dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` and
+# `|1\rangle = [0, 1]`, e.g. a CNOT transformation of `|10\rangle = [0, 1, 1, 0]`
+# would be `|11\rangle = [0, 1, 0, 1]`.
 #
 
 # Define the CNOT input-output states (dual-rail encoding) and initialize
