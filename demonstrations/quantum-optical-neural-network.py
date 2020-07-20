@@ -64,7 +64,6 @@ will be used.
 import pennylane as qml
 from pennylane import numpy as np
 
-import autograd
 import nlopt
 
 
@@ -126,7 +125,7 @@ def layer(theta, phi, wires):
 #
 
 @qml.qnode(dev)
-def quantum_neural_net(var, x=None):
+def quantum_neural_net(var, x):
     wires = list(range(len(x)))
 
     # Encode input x into a sequence of quantum fock states
@@ -156,7 +155,7 @@ def square_loss(labels, predictions):
         lnorm = l / np.linalg.norm(l)
         pnorm = p / np.linalg.norm(p)
 
-        term += np.abs(lnorm @ pnorm.T) ** 2
+        term = term + np.abs(np.dot(lnorm, pnorm.T)) ** 2
 
     return 1 - term / len(labels)
 
@@ -169,7 +168,7 @@ def square_loss(labels, predictions):
 #
 
 def cost(var, data_input, labels):
-    predictions = np.array([quantum_neural_net(var, x=x) for x in data_input])
+    predictions = np.array([quantum_neural_net(var, x) for x in data_input])
     sl = square_loss(labels, predictions)
 
     return sl
@@ -190,17 +189,18 @@ def cost(var, data_input, labels):
 # would be ``|11> = [0, 1, 0, 1]``.
 #
 
-# Define the CNOT input-output states (dual-rail encoding)
+# Define the CNOT input-output states (dual-rail encoding) and initialize
+# them as non-differentiable.
 
 X = np.array([[1, 0, 1, 0],
               [1, 0, 0, 1],
               [0, 1, 1, 0],
-              [0, 1, 0, 1]])
+              [0, 1, 0, 1]], requires_grad=False)
 
 Y = np.array([[1, 0, 1, 0],
               [1, 0, 0, 1],
               [0, 1, 0, 1],
-              [0, 1, 1, 0]])
+              [0, 1, 1, 0]], requires_grad=False)
 
 
 ######################################################################
@@ -290,7 +290,7 @@ print(var_init)
 # requirements of both NLopt and the above defined cost function.
 #
 
-cost_grad = autograd.grad(cost)
+cost_grad = qml.grad(cost)
 
 print_every = 1
 
@@ -301,7 +301,9 @@ def cost_wrapper(var, grad=[]):
     evals += 1
 
     if grad.size > 0:
-        grad[:] = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y).flatten()
+        # Get the gradient for `var` (idx 0) by first "unflattening" it
+        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)[0]
+        grad[:] = var_grad.flatten()
     cost_val = cost(var.reshape((num_layers, num_variables_per_layer)), X, Y)
 
     if evals % print_every == 0:
@@ -410,7 +412,7 @@ var = var.reshape(var_init.shape)
 
 print(f"The optimized parameters (layers, parameters):\n {var}\n")
 
-Y_pred = np.array([quantum_neural_net(var, x=x) for x in X])
+Y_pred = np.array([quantum_neural_net(var, x) for x in X])
 for i, x in enumerate(X):
     print(f"{x} --> {Y_pred[i].round(2)}, should be {Y[i]}")
 
