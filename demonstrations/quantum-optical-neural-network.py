@@ -18,7 +18,7 @@ We will focus on constructing a QONN as described in Steinbrecher et
 al. and training it to work as a basic CNOT gate using dual-rail state
 encodings. Since these simulations are fairly heavy, the third-party
 optimization library `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
-will be used instead of the build-in optimizers provided by PennyLane.
+will be used.
 
 """
 
@@ -76,10 +76,11 @@ import nlopt
 # lower cutoff value will cause loss of information, while a higher value
 # will only use unnecessary resources without any improvement).
 #
-# **Note:** You will need to have
-# `Strawberry Fields <https://strawberryfields.ai/>`__ as well as the
-# `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
-# for PennyLane installed for this tutorial to work.
+# .. note::
+#
+#     You will need to have `Strawberry Fields <https://strawberryfields.ai/>`__ as well as
+#     the `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
+#     for PennyLane installed for this tutorial to work.
 #
 
 dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
@@ -162,7 +163,7 @@ def square_loss(labels, predictions):
 
 ######################################################################
 # Finally, we define the cost function to be used during optimization. It
-# collects the outputs from the QONN (``predicitions``) for each input in
+# collects the outputs from the QONN (``predictions``) for each input in
 # (``data_inputs``) and then calculates the square loss between the
 # predictions and the true outputs (``labels``).
 #
@@ -207,7 +208,7 @@ Y = np.array([[1, 0, 1, 0],
 # combinations; just keep in mind that the input states should contain the
 # same total number of photons as the ouput, since no photons will be
 # created or lost (assuming loss-less circuits). Also, since the QONN will
-# act upon the states as a unitary operator there must be a bijection
+# act upon the states as a unitary operator, there must be a bijection
 # between the inputs and the outputs, i.e. two different inputs must have
 # two different outputs, and vice versa.
 #
@@ -249,14 +250,14 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # Now, we must set the number of layers to use and then calculate the
 # corresponding number of initial parameter values, initializing them with
-# a random value between -2pi and 2pi. For the CNOT gate 2 layers is
-# enough, although for more complex optimization tasks, much more layers
-# might be needed. Generally, the more layers there are, better the neural
-# network will finding a solution, including having better generalization
+# a random value between :math:`-2\pi` and :math:`2\pi`. For the CNOT gate 2 layers is
+# enough, although for more complex optimization tasks, many more layers
+# might be needed. Generally, the more layers there are, the better the neural
+# network will be at finding a solution, including having better generalization
 # power for predicting on un-trained data.
 #
 # The number of variables corresponds to the number of transmittivity
-# angles θ and the same number of phase angles ϕ, while the Kerr
+# angles :math:`\theta` and the same number of phase angles :math:`\phi`, while the Kerr
 # non-linearity is set to full strength.
 #
 
