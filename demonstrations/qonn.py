@@ -99,10 +99,6 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 # although any other interferometer scheme should work equally well, and
 # some might even be slightly faster.
 #
-# **Note**: while the interferometer must be applied on all modes at the
-# same time, the non-linear Kerr layer need to be applied on each mode
-# one-at-a-time.
-#
 
 def layer(theta, phi, wires):
     M = len(wires)
