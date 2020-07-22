@@ -73,6 +73,10 @@ import nlopt
 # cuttof dimension should be set to the same as the number of wires (a
 # lower cutoff value will cause loss of information, while a higher value
 # will only use unnecessary resources without any improvement).
+
+dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
+
+######################################################################
 #
 # .. note::
 #
@@ -80,9 +84,6 @@ import nlopt
 #     the `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
 #     for PennyLane installed for this tutorial to work.
 #
-
-dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
-
 
 ######################################################################
 # Creating the QONN
@@ -176,12 +177,15 @@ def cost(var, data_input, labels):
 # For this tutorial we will train the network to function as a CNOT gate.
 # That is, it should transform the input states in the following way:
 #
-# *insert-nice-image-of-cnot-gate-fock-state-transformations-here*
+# .. figure:: ../demonstrations/qonn/cnot.png
+#     :width: 30%
+#     :align: center
+# |
 #
 # We need to choose the inputs ``X`` and their labels ``Y``. They are
 # defined using dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` and
-# `|1\rangle = [0, 1]`, e.g. a CNOT transformation of `|10\rangle = [0, 1, 1, 0]`
-# would be `|11\rangle = [0, 1, 0, 1]`.
+# :math:`|1\rangle = [0, 1]`, e.g. a CNOT transformation of :math:`|10\rangle = [0, 1, 1, 0]`
+# would be :math:`|11\rangle = [0, 1, 0, 1]`.
 #
 
 # Define the CNOT input-output states (dual-rail encoding) and initialize
