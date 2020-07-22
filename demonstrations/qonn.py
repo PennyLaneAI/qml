@@ -1,8 +1,12 @@
 """
 .. _quantum_optical_neural_network:
 
-Optimizing Quantum Optical Neural Networks (QONN) using NLopt
-=============================================================
+Optimizing a quantum optical neural network
+===========================================
+
+.. meta::
+    :property="og:description": Optimizing a quantum optical neural network using the NLopt library for non-linear optimizations.
+    :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
 This tutorial is based on the paper from `Steinbrecher et
 al. (2019) <https://www.nature.com/articles/s41534-019-0174-7>`__ which
@@ -22,6 +26,14 @@ will be used.
 
 """
 
+######################################################################
+# .. figure:: ../demonstrations/qonn/qonn_thumbnail.png
+#     :width: 100%
+#     :align: center
+#
+#     A quantum optical neural network using the Reck encoding (green)
+#     with a Kerr non-linear layer (red)
+#
 
 ######################################################################
 # Background
@@ -415,7 +427,7 @@ for i, x in enumerate(X):
 #     [0 1 0 1] --> [0. 1. 1. 0.], should be [0 1 1 0]
 
 ##############################################################################
-# We can also print the circuit to see how the final network looks:
+# We can also print the circuit to see how the final network looks.
 
 quantum_neural_net(var_init, X[0])
 print(quantum_neural_net.draw())
