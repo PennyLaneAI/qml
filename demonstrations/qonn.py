@@ -214,35 +214,37 @@ Y = np.array([[1, 0, 1, 0],
 
 
 ######################################################################
-# Examples include the dual-rail encoded SWAP gate:
 #
-# .. code:: python
+# .. note::
+#     Other examples include the dual-rail encoded SWAP gate:
 #
-#    X = np.array([[1, 0, 1, 0],
-#                  [1, 0, 0, 1],
-#                  [0, 1, 1, 0],
-#                  [0, 1, 0, 1]])
+#     .. code:: python
 #
-#    Y = np.array([[1, 0, 1, 0],
-#                  [0, 1, 1, 0],
-#                  [0, 0, 0, 1],
-#                  [0, 1, 0, 1]])
+#         X = np.array([[1, 0, 1, 0],
+#                         [1, 0, 0, 1],
+#                         [0, 1, 1, 0],
+#                         [0, 1, 0, 1]])
 #
-# the single-rail encoded SWAP gate (remember to change the number of
-# modes to 2 in the device initialization above):
+#         Y = np.array([[1, 0, 1, 0],
+#                         [0, 1, 1, 0],
+#                         [0, 0, 0, 1],
+#                         [0, 1, 0, 1]])
 #
-# .. code:: python
+#     the single-rail encoded SWAP gate (remember to change the number of
+#     modes to 2 in the device initialization above):
 #
-#    X = np.array([[0, 1], [1, 0]])
-#    Y = np.array([[1, 0], [0, 1]])
+#     .. code:: python
 #
-# or the single 6-photon GHZ state (which needs 6 modes, and thus might be
-# very heavy on both memory and CPU):
+#         X = np.array([[0, 1], [1, 0]])
+#         Y = np.array([[1, 0], [0, 1]])
 #
-# .. code:: python
+#     or the single 6-photon GHZ state (which needs 6 modes, and thus might be
+#     very heavy on both memory and CPU):
 #
-#    X = np.array([1, 0, 1, 0, 1, 0])
-#    Y = (np.array([1, 0, 1, 0, 1, 0]) + np.array([1, 0, 1, 0, 1, 0])) / 2
+#     .. code:: python
+#
+#         X = np.array([1, 0, 1, 0, 1, 0])
+#         Y = (np.array([1, 0, 1, 0, 1, 0]) + np.array([1, 0, 1, 0, 1, 0])) / 2
 #
 
 
