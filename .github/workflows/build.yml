@@ -39,15 +39,9 @@ jobs:
         key: gallery-v1-
 
     - name: Build tutorials
-      uses: josh146/sphinx-action@master
-      with:
-        docs-folder: "./"
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        pre-build-command: "make download"
-        build-command: "sphinx-build -b html . _build -W --keep-going"
-
-    - name: Zip built tutorials
       run: |
+        make download
+        make html
         cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
         zip -r /tmp/qml_demos.zip demos
         zip -r /tmp/qml_backreferences backreferences
