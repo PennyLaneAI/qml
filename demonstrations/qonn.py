@@ -19,8 +19,8 @@ using both quantum data as well as quantum hardware based simulation
 methods.
 
 We will focus on constructing a QONN as described in Steinbrecher et
-al. and training it to work as a basic CNOT gate using dual-rail state
-encodings. Since these simulations are fairly heavy, the third-party
+al. and training it to work as a basic CNOT gate using a dual-rail state
+encoding. Since these simulations are fairly heavy, the third-party
 optimization library `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
 will be used.
 
@@ -43,15 +43,15 @@ will be used.
 # unitaries, using the encoding described in `Reck et
 # al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__, and Kerr
 # non-linearities applied on all involved modes. This setup can be
-# constructed using arrays of beamsplitters and programmable phaseshifts
+# constructed using arrays of beamsplitters and programmable phase shifts
 # along with some form of Kerr non-linear material.
 #
 # By constructing a cost function based on the input-output relationship
-# of the QONN, using the programmable phaseshifts variables as
+# of the QONN, using the programmable phase shift variables as
 # optimization parameters, it can be trained to both act as an artbitrary
 # quantum gate or to be able to generalize on previously unseen data. This
 # is very similar to classical neural networks, and many classical machine
-# learning task can in fact also be solved on these type of quantum deep
+# learning task can in fact also be solved by these types of quantum deep
 # neural networks.
 #
 
@@ -60,14 +60,14 @@ will be used.
 # Code and simulations
 # --------------------
 #
-# The first thing we need to do is to import PennyLane, NumPy and an
+# The first thing we need to do is to import PennyLane, NumPy as well as an
 # optimizer. Here we use a wrapped version of NumPy supplied by PennyLane
 # which uses Autograd to wrap essential functions to support automatic
 # differentiation.
 #
 # There are many optimizers to choose from. We could either use an
 # optimizer from the ``pennylane.optimize`` module or we could use a
-# third-party optimizer. In this case we will mainly use the Nlopt library
+# third-party optimizer. In this case we will use the Nlopt library
 # which has several fast implementations of both gradient-free and
 # gradient-based optimizers.
 #
@@ -80,9 +80,9 @@ import nlopt
 
 ######################################################################
 # Create a Strawberry Fields simulator device with as many quantum modes
-# (or wires) that you wish your quantum optical neural network to have. 4
-# modes are used for this demonstration due to the dual-rail encoding. The
-# cuttof dimension should be set to the same as the number of wires (a
+# (or wires) as you want your quantum optical neural network to have. 4
+# modes are used for this demonstration due to the use of a dual-rail encoding. The
+# cutoff dimension should be set to the same value as the number of wires (a
 # lower cutoff value will cause loss of information, while a higher value
 # will only use unnecessary resources without any improvement).
 
@@ -104,13 +104,13 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 # Create a layer function which defines one layer of the QONN, consisting
 # of a linear
 # `interferometer <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
-# (i.e. an array of beamsplitters and phase shifters) and a non-linear
+# (i.e. an array of beamsplitters and phase shifts) and a non-linear
 # Kerr interaction layer. Both the interferometer and the non-linear layer
 # are applied to all modes. The triangular mesh scheme, described in `Reck
 # et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is
 # chosen here due to its use in the paper from Steinbrecher et al.,
-# although any other interferometer scheme should work equally well, and
-# some might even be slightly faster.
+# although any other interferometer scheme should work equally well.
+# Some might even be slightly faster than the one we use here.
 #
 
 def layer(theta, phi, wires):
@@ -170,7 +170,7 @@ def square_loss(labels, predictions):
 
 ######################################################################
 # Finally, we define the cost function to be used during optimization. It
-# collects the outputs from the QONN (``predictions``) for each input in
+# collects the outputs from the QONN (``predictions``) for each input
 # (``data_inputs``) and then calculates the square loss between the
 # predictions and the true outputs (``labels``).
 #
@@ -194,10 +194,13 @@ def cost(var, data_input, labels):
 #     :align: center
 # |
 #
-# We need to choose the inputs ``X`` and their labels ``Y``. They are
+# We need to choose the inputs ``X`` and the corresponding labels ``Y``. They are
 # defined using dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` and
-# :math:`|1\rangle = [0, 1]`, e.g. a CNOT transformation of :math:`|10\rangle = [0, 1, 1, 0]`
+# :math:`|1\rangle = [0, 1]`, e.g. a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
 # would be :math:`|11\rangle = [0, 1, 0, 1]`.
+#
+# Furthermore, we want to make sure that the gradient isn't calculated with regards
+# to the inputs or the labels. We can do this by marking them with `requires_grad=False`.
 #
 
 # Define the CNOT input-output states (dual-rail encoding) and initialize
@@ -215,7 +218,7 @@ Y = np.array([[1, 0, 1, 0],
 
 
 ######################################################################
-# At this stage you could play around with other input-output
+# At this stage we could play around with other input-output
 # combinations; just keep in mind that the input states should contain the
 # same total number of photons as the ouput, since no photons will be
 # created or lost (assuming loss-less circuits). Also, since the QONN will
@@ -379,22 +382,23 @@ var = var.reshape(var_init.shape)
 
 
 ######################################################################
-# It’s also possible to use any of PennyLane’s built-in optimizers,
-# supporting both gradient-based and gradient-free optimization methods:
+# .. note::
 #
-# .. code:: python
+#     It’s also possible to use any of PennyLane’s built-in optimizers,
+#     supporting both gradient-based and gradient-free optimization methods:
 #
-#    from pennylane.optimize import AdamOptimizer
+#     .. code:: python
 #
-#    opt = AdamOptimizer(0.01, beta1=0.9, beta2=0.999)
+#         from pennylane.optimize import AdamOptimizer
 #
-#    var = var_init
-#    for it in range(200):
-#        var = opt.step(lambda v: cost(v, X, Y), var)
+#         opt = AdamOptimizer(0.01, beta1=0.9, beta2=0.999)
 #
-#        # Nice to print cost here, although the expensive `cost` function needs to be called again.
-#        if (it+1) % 20 == 0:
-#            print(f"Iter: {it+1:5d} | Cost: {cost(var, X, Y):0.7f} ")
+#         var = var_init
+#         for it in range(200):
+#             var = opt.step(lambda v: cost(v, X, Y), var)
+#
+#             if (it+1) % 20 == 0:
+#                 print(f"Iter: {it+1:5d} | Cost: {cost(var, X, Y):0.7f} ")
 #
 
 
