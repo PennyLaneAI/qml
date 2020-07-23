@@ -1,0 +1,57 @@
+name: "Build"
+on:
+- pull_request
+
+jobs:
+  build-website:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Run Forest Quilc
+      run: docker run --rm -it -p 5555:5555 rigetti/quilc -R
+
+    - name: Run Forest QVM
+      run: docker run --rm -it -p 5000:5000 rigetti/qvm -S
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: pip-v1-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          pip-v1-build-
+          pip-v1-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Cache built demos
+      uses: actions/cache@v2
+      with:
+        path: ./demos
+        key: gallery-v1-
+
+    - name: Build tutorials
+      uses: josh146/sphinx-action@master
+      with:
+        docs-folder: "./"
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        pre-build-command: "make download"
+        build-command: "sphinx-build -b html . _build -W --keep-going"
+
+    - name: Zip built tutorials
+      run: |
+        cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
+        zip -r /tmp/qml_demos.zip demos
+        zip -r /tmp/qml_backreferences backreferences
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: built-website
+        path: |
+          /tmp/qml_html.zip
+          /tmp/qml_demos.zip
+          /tmp/qml_backreferences.zip
+          _build/html
