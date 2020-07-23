@@ -9,10 +9,10 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Run Forest Quilc
-      run: docker run -p 5555:5555 rigetti/quilc -R
+      run: docker run -d --rm -p 5555:5555 rigetti/quilc -R
 
     - name: Run Forest QVM
-      run: docker run -p 5000:5000 rigetti/qvm -S
+      run: docker run -d --rm -p 5000:5000 rigetti/qvm -S
 
     - uses: actions/cache@v2
       with:
