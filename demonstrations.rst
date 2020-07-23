@@ -178,13 +178,13 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/rosalin/rosalin_thumb.png
     :description: :doc:`demos/tutorial_rosalin`
     :tags: autograd
-    
+
 .. customgalleryitem::
     :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule
     :figure: demonstrations/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png
     :description: :doc:`demos/tutorial_stochastic_parameter_shift`
     :tags: autograd
-    
+
 .. customgalleryitem::
     :tooltip: Learn how noise can affect the optimization and training of quantum computations
     :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
@@ -197,6 +197,18 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_vqe_qng`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Optimizing measurement protocols with variational methods
+    :figure: demonstrations/quantum_metrology/illustration.png
+    :description: :doc:`demos/tutorial_quantum_metrology`
+    :tags: cirq metrology autograd
+
+.. customgalleryitem::
+    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
+    :figure: demonstrations/vqt/thumbnail.png
+    :description: :doc:`demos/tutorial_vqt`
+    :tags: chemistry
+    
 .. customgalleryitem::
     :tooltip: Understand the difference between local and global cost functions
     :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
@@ -242,3 +254,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
     demos/tutorial_local_cost_functions
+    demos/tutorial_quantum_metrology
+    demos/tutorial_vqt
