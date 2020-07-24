@@ -89,10 +89,10 @@ With the cost function in place, we can use Pennylane to optimize the variationa
 Here, the encoding process is modeled as a unitary evolution :math:`U(\boldsymbol{\phi})` followed by
 a parameter-independent noise channel :math:`\mathcal{N}`.
 
-Ramsay spectroscopy
+Ramsey spectroscopy
 -------------------
 
-In this demonstration, we will study Ramsay spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
+In this demonstration, we will study Ramsey spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
 The encoded parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions 
 modeled as two-level systems with an external driving force. We represent the noise in the parameter encoding using a phase damping
 channel (also known as dephasing channel) with damping constant :math:`\gamma`. 
@@ -295,17 +295,17 @@ for i in range(20):
 # Comparison with the standard protocol
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Now we want to see how our protocol compares to the standard Ramsay interferometry protocol.
+# Now we want to see how our protocol compares to the standard Ramsey interferometry protocol.
 # The probe state in this case is a tensor product of three separate :math:`|+\rangle` states
 # while the encoded state is measured in the :math:`|+\rangle / |-\rangle` basis.
 # We can recreate the standard schemes with specific weights for our setup.
 
-Ramsay_weights = np.zeros_like(weights)
-Ramsay_weights[1:6:2] = np.pi / 2
-Ramsay_weights[15:20:2] = np.pi / 2
+Ramsey_weights = np.zeros_like(weights)
+Ramsey_weights[1:6:2] = np.pi / 2
+Ramsey_weights[15:20:2] = np.pi / 2
 print(
-    "Cost for standard Ramsay sensing = {:6.4f}".format(
-        opt_cost(Ramsay_weights)
+    "Cost for standard Ramsey sensing = {:6.4f}".format(
+        opt_cost(Ramsey_weights)
     )
 )
 
@@ -322,7 +322,7 @@ for gamma in gammas:
         cost(weights, phi, gamma, J, W)
     )
     comparison_costs["standard"].append(
-        cost(Ramsay_weights, phi, gamma, J, W)
+        cost(Ramsey_weights, phi, gamma, J, W)
     )
 
 import matplotlib.pyplot as plt
@@ -337,7 +337,7 @@ plt.show()
 
 ##############################################################################
 # We see that after only 20 gradient steps, we already found a sensing protocol
-# that has a better noise resilience than standard Ramsay spectroscopy!
+# that has a better noise resilience than standard Ramsey spectroscopy!
 #
 # This tutorial shows that variational methods are useful for quantum metrology.
 # The are numerous avenues open for further research: one could study more intricate

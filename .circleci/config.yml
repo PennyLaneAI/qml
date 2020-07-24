@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v10-{{ .Branch }}-
-            - pip-v10-
+            - pip-v15-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v15-{{ .Branch }}-
+            - pip-v15-
 
       - run:
           name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v15-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
@@ -110,9 +110,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v10-{{ .Branch }}-
-            - pip-v10-
+            - pip-v15-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v15-{{ .Branch }}-
+            - pip-v15-
 
       - run:
           name: Install dependencies
@@ -125,7 +125,7 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v15-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
