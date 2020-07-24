@@ -35,11 +35,25 @@ jobs:
           result="${result//$'\r'/'%0D'}"
           echo ::set-output name=result::$result
 
+      # - name: Get current PR
+      #   uses: jwalton/gh-find-current-pr@v1
+      #   id: findPr
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Get current PR
-        uses: jwalton/gh-find-current-pr@v1
+        uses: actions/github-script@0.3.0
         id: findPr
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{github.token}}
+          script: |
+            const core = require('@actions/core')
+            const prNumber = context.payload.number;
+            core.setOutput('number', prNumber);
+
+      - name: Check the PR
+        run: |
+          echo ${{ steps.findPr.outputs.number }}
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
@@ -57,10 +71,11 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: ${{ steps.comment-text.outputs.result }}
           reactions: eyes
+          edit-mode: replace
 
       - name: New comment
         uses: peter-evans/create-or-update-comment@v1
-        if: "!steps.fc.outputs.comment-id"
+        if: "!steps.fc.outputs.comment-id && steps.findPr.outputs.number"
         with:
           issue-number: ${{ steps.findPr.outputs.number }}
           body: ${{ steps.comment-text.outputs.result }}
