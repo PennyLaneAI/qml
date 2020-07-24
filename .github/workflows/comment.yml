@@ -42,14 +42,12 @@ jobs:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get current PR
-        uses: actions/github-script@0.3.0
         id: findPr
         with:
           github-token: ${{github.token}}
           script: |
-            const core = require('@actions/core')
-            const prNumber = context.payload.number;
-            core.setOutput('number', prNumber);
+            PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+            echo ::set-output name=number::$PR_NUMBER
 
       - name: Check the PR
         run: |
