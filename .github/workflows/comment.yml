@@ -23,15 +23,24 @@ jobs:
 
       - name: Check the URL
         run: |
-          curl --fail ${{ steps.getArtifact.outputs.url }} | grep $GITHUB_SHA
+          echo ${{ steps.getArtifact.outputs.url }}
+
+      - name: Create comment text
+        id: comment-text
+        run: |
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          url=$(echo ${{ steps.getArtifact.outputs.url }})
+          result=$(python .github/workflows/comment.py $git_hash $URL)
+          result="${result//'%'/'%25'}"
+          result="${result//$'\n'/'%0A'}"
+          result="${result//$'\r'/'%0D'}"
+          echo ::set-output name=result::$result
 
       - name: Get current PR
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          URL: ${{ steps.getArtifact.outputs.url }}
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
@@ -41,17 +50,6 @@ jobs:
           issue-number: ${{ steps.findPr.outputs.number }}
           comment-author: github-actions[bot]
           # body-includes: search string 1
-
-      - name: Create comment text
-        id: comment-text
-        run: |
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          echo $git_hash $URL
-          result=$(python .github/workflows/comment.py $git_hash $URL)
-          result="${result//'%'/'%25'}"
-          result="${result//$'\n'/'%0A'}"
-          result="${result//$'\r'/'%0D'}"
-          echo ::set-output name=result::$result
 
       - name: Update comment
         uses: peter-evans/create-or-update-comment@v1
