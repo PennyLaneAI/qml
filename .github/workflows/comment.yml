@@ -43,9 +43,7 @@ jobs:
 
       - name: Get current PR
         id: findPr
-        with:
-          github-token: ${{github.token}}
-          script: |
+        run: |
             PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
             echo ::set-output name=number::$PR_NUMBER
 
