@@ -6,7 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Run CircleCI artifacts redirector
     steps:
-      - name: GitHub Action step
+      - uses: actions/checkout@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+
+      - name: Get artifact URL
         id: getArtifact
         uses: larsoner/circleci-artifacts-redirector-action@master
         with:
@@ -14,11 +21,17 @@ jobs:
           artifact-path: 0/_build/html/index.html
           circleci-jobs: build
 
+      - name: Check the URL
+        run: |
+          curl --fail ${{ steps.getArtifact.outputs.url }} | grep $GITHUB_SHA
+
       - name: Get current PR
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          URL: ${{ steps.getArtifact.outputs.url }}
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
@@ -33,7 +46,8 @@ jobs:
         id: comment-text
         run: |
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          result=$(python .github/workflows/comment.py $git_hash ${{ steps.step1.outputs.url }})
+          echo $git_hash $URL
+          result=$(python .github/workflows/comment.py $git_hash $URL)
           result="${result//'%'/'%25'}"
           result="${result//$'\n'/'%0A'}"
           result="${result//$'\r'/'%0D'}"
@@ -49,7 +63,7 @@ jobs:
 
       - name: New comment
         uses: peter-evans/create-or-update-comment@v1
-        if: !steps.fc.outputs.comment-id
+        if: "!steps.fc.outputs.comment-id"
         with:
           issue-number: ${{ steps.findPr.outputs.number }}
           body: ${{ steps.comment-text.outputs.result }}
