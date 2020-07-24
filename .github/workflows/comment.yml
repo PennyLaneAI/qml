@@ -49,7 +49,7 @@ jobs:
 
       - name: New comment
         uses: peter-evans/create-or-update-comment@v1
-        if: !steps.fc.outputs.comment-id
+        if: "!steps.fc.outputs.comment-id"
         with:
           issue-number: ${{ steps.findPr.outputs.number }}
           body: ${{ steps.comment-text.outputs.result }}
