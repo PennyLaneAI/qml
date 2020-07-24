@@ -13,13 +13,17 @@ jobs:
         with:
           python-version: 3.6
 
-      - name: GitHub Action step
+      - name: Get artifact URL
         id: getArtifact
         uses: larsoner/circleci-artifacts-redirector-action@master
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifact-path: 0/_build/html/index.html
           circleci-jobs: build
+
+      - name: Check the URL
+        run: |
+          curl --fail ${{ steps.getArtifact.outputs.url }} | grep $GITHUB_SHA
 
       - name: Get current PR
         uses: jwalton/gh-find-current-pr@v1
