@@ -1,0 +1,56 @@
+name: Comment
+on: [status]
+
+jobs:
+  artifact-comment:
+    runs-on: ubuntu-latest
+    name: Run CircleCI artifacts redirector
+    steps:
+      - name: GitHub Action step
+        id: getArtifact
+        uses: larsoner/circleci-artifacts-redirector-action@master
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifact-path: 0/_build/html/index.html
+          circleci-jobs: build
+
+      - name: Get current PR
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        if: success() && steps.findPr.outputs.number
+        id: findComment
+        with:
+          issue-number: ${{ steps.findPr.outputs.number }}
+          comment-author: github-actions[bot]
+          # body-includes: search string 1
+
+      - name: Create comment text
+        id: comment-text
+        run: |
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          result=$(python .github/workflows/comment.py $git_hash ${{ steps.step1.outputs.url }})
+          result="${result//'%'/'%25'}"
+          result="${result//$'\n'/'%0A'}"
+          result="${result//$'\r'/'%0D'}"
+          echo ::set-output name=result::$result
+
+      - name: Update comment
+        uses: peter-evans/create-or-update-comment@v1
+        if: ${{ steps.fc.outputs.comment-id }}
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: ${{ steps.comment-text.outputs.result }}
+          reactions: eyes
+
+      - name: New comment
+        uses: peter-evans/create-or-update-comment@v1
+        if: !steps.fc.outputs.comment-id
+        with:
+          issue-number: ${{ steps.findPr.outputs.number }}
+          body: ${{ steps.comment-text.outputs.result }}
+          reactions: eyes
