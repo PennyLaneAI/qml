@@ -29,8 +29,7 @@ jobs:
         id: comment-text
         run: |
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          url=$(echo ${{ steps.getArtifact.outputs.url }})
-          result=$(python .github/workflows/comment.py $git_hash $URL)
+          result=$(python .github/workflows/comment.py $git_hash ${{ steps.getArtifact.outputs.url }})
           result="${result//'%'/'%25'}"
           result="${result//$'\n'/'%0A'}"
           result="${result//$'\r'/'%0D'}"
