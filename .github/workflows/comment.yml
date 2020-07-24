@@ -39,7 +39,7 @@ jobs:
       - name: Create comment text
         id: comment-text
         run: |
-          web_url=${{ steps.step1.outputs.url }}
+          web_url=${{ steps.getArtifact.outputs.url }}
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           result=$(python .github/workflows/comment.py $git_hash $web_url)
           result="${result//'%'/'%25'}"
