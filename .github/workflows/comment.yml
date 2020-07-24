@@ -23,15 +23,15 @@ jobs:
 
       - name: Check the URL
         run: |
-          curl --fail ${{ steps.getArtifact.outputs.url }} | grep $GITHUB_SHA
+          echo ${{ steps.getArtifact.outputs.url }}
+        env:
+          URL: ${{ steps.getArtifact.outputs.url }}
 
       - name: Get current PR
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          URL: ${{ steps.getArtifact.outputs.url }}
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
