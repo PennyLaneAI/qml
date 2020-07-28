@@ -296,7 +296,7 @@ plt.show()
 ######################################################################
 # It seems our changes didn't significantly alter the overall cost landscape.
 # This probably isn't a general trend, but it is a nice surprise.
-# Now, lets get back to training the local, and global cost functions.
+# Now, let us get back to training the local, and global cost functions.
 # Because we have a visualization of the total cost landscape,
 # lets pick a point to exaggerate the problem. The worst point in the
 # landscape is :math:`(\pi,0)`, so let's use that.
