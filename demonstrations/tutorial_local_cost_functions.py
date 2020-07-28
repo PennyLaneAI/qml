@@ -30,7 +30,7 @@ plateaus for shallow circuits.
    :width: 50%
    :caption: Reproduced from [#Cerezo2020].
    
-Traditionally, most variational quantum algorithms are constructed to use global cost functions.
+Many variational quantum algorithms are constructed to use global cost functions.
 Information from the entire measurement is used to analyze the result of the 
 circuit, and a cost function is calculated from this to quantify the circuits 
 performance. A local cost function only considers information from a few qubits, 
