@@ -19,7 +19,7 @@ algorithm.
 In `"Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural
 Networks" <https://arxiv.org/abs/2001.00550>`__ Cerezo et al. demonstrate the
 idea that the barren plateau
-phenomenon can be avoided by using cost functions that only have
+phenomenon can, under some circumstances, be avoided by using cost functions that only have
 information from part of the circuit. These *local* cost functions are
 more robust to noise, and have more well-behaved gradients with no
 plateaus for shallow circuits.
