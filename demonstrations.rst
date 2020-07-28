@@ -204,6 +204,18 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: cirq metrology autograd
 
 .. customgalleryitem::
+    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
+    :figure: demonstrations/vqt/thumbnail.png
+    :description: :doc:`demos/tutorial_vqt`
+    :tags: chemistry
+    
+.. customgalleryitem::
+    :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics
+    :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
+    :description: :doc:`demos/qgrnn`
+    :tags: autograd
+
+.. customgalleryitem::
     :tooltip: Compare the parameter-shift rule with backpropagation
     :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
@@ -248,4 +260,6 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
     demos/tutorial_quantum_metrology
+    demos/tutorial_vqt
+    demos/qgrnn
     demos/tutorial_backprop
