@@ -319,7 +319,7 @@ print(global_circuit.draw())
 
 ######################################################################
 # After 100 steps, the cost function is still exactly 1. Clearly we are in
-# an untrainable area. Now, lets limit the ourselves to the local cost
+# an "untrainable" area. Now, let us limit ourselves to the local cost
 # function and see how it performs. 
 #
 
