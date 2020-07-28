@@ -61,7 +61,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 # Visualizing the problem
 # --------------
 #
-# To start, lets look at the task of learning the identity gate
+# To start, let's look at the task of learning the identity gate
 # across multiple qubits. This will help us visualize the problem and get
 # a sense of what is happening in the cost landscape.
 #
