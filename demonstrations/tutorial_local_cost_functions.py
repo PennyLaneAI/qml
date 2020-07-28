@@ -149,7 +149,7 @@ print(local_circuit.draw())
 ######################################################################
 # With this simple example, we can visualize the cost function, and see
 # the barren plateau effect graphically. Although there are :math:`2n` (where :math:`n` is the 
-# number of qubits) parameters, in order to make the cost landscape plot-able 
+# number of qubits) parameters, in order to plot the cost landscape 
 # we must constrain ourselves. We will consider the case where all X rotations 
 # have the same value, and all the Y rotations have the same value.
 
