@@ -208,6 +208,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/vqt/thumbnail.png
     :description: :doc:`demos/tutorial_vqt`
     :tags: chemistry
+    
+.. customgalleryitem::
+    :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics
+    :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
+    :description: :doc:`demos/qgrnn`
+    :tags: autograd
 
 .. customgalleryitem::
     :tooltip: Learn how to create hybrid ML models using Keras and PyTorch
@@ -255,4 +261,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqe_qng
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
+    demos/qgrnn
     demos/tutorial_qnn_module
