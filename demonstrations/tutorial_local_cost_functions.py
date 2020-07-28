@@ -79,7 +79,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # and a rotation along Y, repeated across all the qubits.
 #
 # We will also define our cost functions here. Since we are trying to
-# learn the identity gate a natural cost function is the probability of measuring the 
+# learn the identity gate, a natural cost function is the probability of measuring the 
 # zero state, denoted here as :math:`p_{|0\rangle}`.
 #
 # .. math:: C = \langle | \psi(theta) | \left(I - |0\rangle \langle 0|_0\right) \rangle =1-p_{|0\rangle}
