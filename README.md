@@ -122,8 +122,8 @@ demos.
 
 ## Support
 
-- **Source Code:** https://github.com/XanaduAI/QML
-- **Issue Tracker:** https://github.com/XanaduAI/QML/issues
+- **Source Code:** https://github.com/PennyLaneAI/QML
+- **Issue Tracker:** https://github.com/PennyLaneAI/QML/issues
 
 If you are having issues, please let us know by posting the issue on our GitHub issue tracker.
 
