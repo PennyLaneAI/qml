@@ -210,6 +210,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: chemistry
     
 .. customgalleryitem::
+    :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics
+    :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
+    :description: :doc:`demos/qgrnn`
+    :tags: autograd
+    
+.. customgalleryitem::
     :tooltip: Understand the difference between local and global cost functions
     :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
     :description: :doc:`demos/tutorial_local_cost_functions`
@@ -253,6 +259,7 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_qng
-    demos/tutorial_local_cost_functions
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
+    demos/qgrnn
+    demos/tutorial_local_cost_functions
