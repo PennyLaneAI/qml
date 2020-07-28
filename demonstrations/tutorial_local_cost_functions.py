@@ -220,7 +220,7 @@ plt.show()
 # 
 # where we only consider the probability of a single qubit to be in the 0 state. 
 #  
-# While we're at it, lets make our ansatz a little more like one we would encounter while 
+# While we're at it, let us make our ansatz a little more like one we would encounter while 
 # trying to solve a VQE problem, and add entanglements.
 
 def global_cost_simple(rotations):
