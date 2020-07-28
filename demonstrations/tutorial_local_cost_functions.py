@@ -208,7 +208,7 @@ plt.show()
 
 ######################################################################
 # Those are some nice pictures, but how do they reflect actual
-# trainability? Lets try training both the local, and global cost
+# trainability? Let us try training both the local, and global cost
 # functions.
 # To simplify this model, let's modify our cost function from
 # 
