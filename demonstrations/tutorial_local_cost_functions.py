@@ -38,16 +38,17 @@ and attempts to analyze the behavior of the entire circuit from this limited sco
 
 
 Cerezo et al. also handily prove that these local cost functions are bounded by the 
-global ones, i.e. if a global cost function is formulated in the manner discribed
+global ones, i.e. if a global cost function is formulated in the manner described
 by Cerezo et al., then the value of its corresponding local cost function will always be 
 less than or equal to the value of the global cost function.
-
-Imports
---------------
 
 In this notebook, we investigate the effect of barren plateaus in
 variational quantum algorithms, and how they can be mitigated using
 local cost functions.
+
+Imports
+--------------
+We need to import the following modules.
 """
 
 
@@ -79,22 +80,28 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # and a rotation along Y, repeated across all the qubits.
 #
 # We will also define our cost functions here. Since we are trying to
-# learn the identity gate, a natural cost function is the probability of measuring the 
-# zero state, denoted here as :math:`p_{|0\rangle}`.
+# learn the identity gate, a natural cost function is 1 minus the probability of measuring the 
+# zero state, denoted here as :math:`1 - p_{|0\rangle}`.
 #
 # .. math:: C = \langle | \psi(theta) | \left(I - |0\rangle \langle 0|_0\right) \rangle =1-p_{|0\rangle}
 #
 # We will apply this across all qubits for our global cost function, i.e.,:
 #
-# .. math:: C_{G} = \langle | \psi(theta) | \left(I - |00 \ldots 0\rangle \langle 00 \ldots 0|\right) \rangle = 1-p_{|00 \ldots 0\rangle}
+# .. math:: C_{G} = \langle  \psi(\theta) | \left(I - |00 \ldots 0\rangle \langle 00 \ldots 0|\right) | \psi(\theta) \rangle  = 1-p_{|00 \ldots 0\rangle}
 #
 # and instead, we will sum the individual contributions from each qubit 
 # for the local cost function:
 #
 # .. math:: C_L = \langle \psi(\theta) | \left(I - \frac{1}{n} \sum_j |0\rangle \langle 0|_j\right)|\psi(\theta)\rangle = 1 - \sum_j p_{|0\rangle_j}.
 #
+# It might be clear to some readers now why this function can perform better.
+# By formatting our local cost function in this way, we have essentially divided 
+# the problem up into multiple runs of single qubit rotations, and summing all 
+# the results up.
+#
 # To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
+# 
 #
 
 
