@@ -305,8 +305,8 @@ plt.show()
 # This probably isn't a general trend, but it is a nice surprise.
 # Now, let us get back to training the local, and global cost functions.
 # Because we have a visualization of the total cost landscape,
-# lets pick a point to exaggerate the problem. The worst point in the
-# landscape is :math:`(\pi,0)`, so let's use that.
+# lets pick a point to exaggerate the problem. One of the worst points in the
+# landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
 rotations = [[3 for i in range(wires)], [0 for i in range(wires)]]
