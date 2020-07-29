@@ -83,7 +83,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # learn the identity gate, a natural cost function is 1 minus the probability of measuring the 
 # zero state, denoted here as :math:`1 - p_{|0\rangle}`.
 #
-# .. math:: C = \langle | \psi(theta) | \left(I - |0\rangle \langle 0|_0\right) \rangle =1-p_{|0\rangle}
+# .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|_0\right) \rangle  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
 #
 # We will apply this across all qubits for our global cost function, i.e.,:
 #
