@@ -5,7 +5,7 @@ Optimizing a quantum optical neural network
 ===========================================
 
 .. meta::
-    :property="og:description": Optimizing a quantum optical neural network using the NLopt library for non-linear optimizations.
+    :property="og:description": Optimizing a quantum optical neural network using PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
 This tutorial is based on the paper from `Steinbrecher et
