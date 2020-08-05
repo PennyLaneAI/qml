@@ -8,8 +8,7 @@ Variational classifier
 ======================
 
 .. meta::
-    :property="og:description": In this demonstration, we show how to use PennyLane
-        to implement quantum circuits that can be trained from labelled data to
+    :property="og:description": Using PennyLane to implement quantum circuits that can be trained from labelled data to
         classify new data samples.
     :property="og:image": https://pennylane.ai/qml/_images/classifier_output_59_0.png
 

@@ -3,7 +3,7 @@ Ensemble classification with Forest and Qiskit devices
 =======================================================
 
 .. meta::
-    :property="og:description": This demonstration outlines how two QPUs can be
+    :property="og:description": We demonstrate how two QPUs can be
         combined in parallel to help solve a machine learning classification problem,
         using PyTorch and PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/ensemble_diagram.png
