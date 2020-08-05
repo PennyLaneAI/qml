@@ -43,13 +43,13 @@ will be used.
 # The QONN is an optical architecture consisting of layers of linear
 # unitaries, using the encoding described in `Reck et
 # al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__, and Kerr
-# non-linearities applied on all involved modes. This setup can be
+# non-linearities applied on all involved optical modes. This setup can be
 # constructed using arrays of beamsplitters and programmable phase shifts
 # along with some form of Kerr non-linear material.
 #
 # By constructing a cost function based on the input-output relationship
-# of the QONN, using the programmable phase shift variables as
-# optimization parameters, it can be trained to both act as an artbitrary
+# of the QONN, using the programmable phase-shift variables as
+# optimization parameters, it can be trained to both act as an arbitrary
 # quantum gate or to be able to generalize on previously unseen data. This
 # is very similar to classical neural networks, and many classical machine
 # learning task can in fact also be solved by these types of quantum deep
@@ -61,7 +61,7 @@ will be used.
 # Code and simulations
 # --------------------
 #
-# The first thing we need to do is to import PennyLane, NumPy as well as an
+# The first thing we need to do is to import PennyLane, NumPy, as well as an
 # optimizer. Here we use a wrapped version of NumPy supplied by PennyLane
 # which uses Autograd to wrap essential functions to support automatic
 # differentiation.
@@ -80,12 +80,12 @@ import nlopt
 
 
 ######################################################################
-# Create a Strawberry Fields simulator device with as many quantum modes
-# (or wires) as you want your quantum optical neural network to have. 4
-# modes are used for this demonstration due to the use of a dual-rail encoding. The
-# cutoff dimension should be set to the same value as the number of wires (a
+# We create a Strawberry Fields simulator device with as many quantum modes
+# (or wires) as we want our quantum-optical neural network to have. Four
+# modes are used for this demonstration, due to the use of a dual-rail encoding. The
+# cutoff dimension is set to the same value as the number of wires (a
 # lower cutoff value will cause loss of information, while a higher value
-# will only use unnecessary resources without any improvement).
+# might use unnecessary resources without any improvement).
 
 dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 
