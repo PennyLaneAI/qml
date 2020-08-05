@@ -8,20 +8,21 @@ Optimizing a quantum optical neural network
     :property="og:description": Optimizing a quantum optical neural network using PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
-This tutorial is based on the paper from `Steinbrecher et
+This tutorial is based on a paper from `Steinbrecher et
 al. (2019) <https://www.nature.com/articles/s41534-019-0174-7>`__ which
-explores a fock-state based Quantum Optical Neural Network (QONN).
-Similar to the continuous-variable quantum neural network (CV QNN) model
-described by `Killoran et
-al. (2018) <https://arxiv.org/abs/1806.06871>`__, the QONN attempts to
-apply neural networks and deep learning theory to the quantum case;
-using both quantum data as well as quantum hardware based simulation
-methods.
+explores a Quantum Optical Neural Network (QONN) based on
+Fock states.
+Similar to the continuous-variable :doc:`quantum neural network </demos/quantum_neural_net>`
+(CV QNN) model described by 
+`Killoran et al. (2018) <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__, 
+the QONN attempts to apply neural networks and deep learning theory to the quantum case,
+using quantum data as well as a quantum hardware-based architecture.
 
 We will focus on constructing a QONN as described in Steinbrecher et
-al. and training it to work as a basic CNOT gate using a dual-rail state
-encoding. Since these simulations are fairly heavy, the third-party
-optimization library `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
+al. and training it to work as a basic CNOT gate using a "dual-rail" state
+encoding. This tutorial also provides a working example of how to use
+third-party optimization libraries with PennyLane; in this case, 
+`NLopt <https://nlopt.readthedocs.io/en/latest/>`__
 will be used.
 
 """
