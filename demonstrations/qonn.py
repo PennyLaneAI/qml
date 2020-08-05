@@ -93,7 +93,10 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 #
 # .. note::
 #
-#     You will need to have `Strawberry Fields <https://strawberryfields.ai/>`__ as well as
+#     You will need to have `S
+#
+# Create a layer function which def
+trawberry Fields <https://strawberryfields.ai/>`__ as well as
 #     the `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
 #     for PennyLane installed for this tutorial to work.
 #
@@ -105,7 +108,7 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 # Create a layer function which defines one layer of the QONN, consisting
 # of a linear
 # `interferometer <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
-# (i.e. an array of beamsplitters and phase shifts) and a non-linear
+# (i.e., an array of beamsplitters and phase shifts) and a non-linear
 # Kerr interaction layer. Both the interferometer and the non-linear layer
 # are applied to all modes. The triangular mesh scheme, described in `Reck
 # et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is
@@ -128,7 +131,7 @@ def layer(theta, phi, wires):
 
 ######################################################################
 # Next, we define the full QONN by building each layer one-by-one and then
-# returning the mean photon number of each mode. The parameters to be
+# measuring the mean photon number of each mode. The parameters to be
 # optimized are all contained in ``var``, where each element in ``var`` is
 # a list of parameters ``theta`` and ``phi`` for a specific layer.
 #
@@ -149,7 +152,7 @@ def quantum_neural_net(var, x):
 
 
 ######################################################################
-# Defining the cost-function
+# Defining the cost function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # A helper function is needed to calculate the normalized square loss of
@@ -196,9 +199,10 @@ def cost(var, data_input, labels):
 # |
 #
 # We need to choose the inputs ``X`` and the corresponding labels ``Y``. They are
-# defined using dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` and
-# :math:`|1\rangle = [0, 1]`, e.g. a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
-# would be :math:`|11\rangle = [0, 1, 0, 1]`.
+# defined using the dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` 
+# (as a vector in the Fock basis of a single mode), and
+# :math:`|1\rangle = [0, 1]`. So a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
+# would give :math:`|11\rangle = [0, 1, 0, 1]`.
 #
 # Furthermore, we want to make sure that the gradient isn't calculated with regards
 # to the inputs or the labels. We can do this by marking them with `requires_grad=False`.
@@ -221,10 +225,10 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # At this stage we could play around with other input-output
 # combinations; just keep in mind that the input states should contain the
-# same total number of photons as the ouput, since no photons will be
-# created or lost (assuming loss-less circuits). Also, since the QONN will
+# same total number of photons as the ouput, since we want to use
+# the dual-rail encoding. Also, since the QONN will
 # act upon the states as a unitary operator, there must be a bijection
-# between the inputs and the outputs, i.e. two different inputs must have
+# between the inputs and the outputs, i.e., two different inputs must have
 # two different outputs, and vice versa.
 #
 
@@ -232,22 +236,22 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 #
 # .. note::
-#     Other examples include the dual-rail encoded SWAP gate:
+#     Other example gates we could use include the dual-rail encoded SWAP gate,
 #
 #     .. code:: python
 #
 #         X = np.array([[1, 0, 1, 0],
-#                         [1, 0, 0, 1],
-#                         [0, 1, 1, 0],
-#                         [0, 1, 0, 1]])
+#                       [1, 0, 0, 1],
+#                       [0, 1, 1, 0],
+#                       [0, 1, 0, 1]])
 #
 #         Y = np.array([[1, 0, 1, 0],
-#                         [0, 1, 1, 0],
-#                         [0, 0, 0, 1],
-#                         [0, 1, 0, 1]])
+#                       [0, 1, 1, 0],
+#                       [0, 0, 0, 1],
+#                       [0, 1, 0, 1]])
 #
 #     the single-rail encoded SWAP gate (remember to change the number of
-#     modes to 2 in the device initialization above):
+#     modes to 2 in the device initialization above),
 #
 #     .. code:: python
 #
