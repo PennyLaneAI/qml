@@ -29,7 +29,7 @@ derivative of the expectation value
 .. math::
 
 	\langle \hat{B} \rangle (\boldsymbol\theta) =
-	\langle 0 \mid U(\boldsymbol\theta)^\dagger \hat{B} U(\boldsymbol\theta) \mid 0\rangle
+	\langle 0 \vert U(\boldsymbol\theta)^\dagger \hat{B} U(\boldsymbol\theta) \vert 0\rangle
 
 with respect to the input circuit parameters :math:`\boldsymbol{\theta}` is given by
 
@@ -159,7 +159,8 @@ def circuit(params):
 ##############################################################################
 # Note that we specify that the QNode is **immutable**. This is more restrictive
 # than a standard mutable QNode (the quantum circuit cannot change/differ between
-# executions), however reduces processing overhead.
+# executions); however, it reduces processing overhead.
+
 
 # initialize circuit parameters
 params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
@@ -224,7 +225,8 @@ print(2 * forward_time * params.size)
 #
 # In quantum machine learning, however, the inability to store and utilize the results of
 # *intermediate* quantum operations on hardware remains a barrier; while reverse-mode
-# autodifferentiation works fine for small quantum simulations, only the forward-mode
+# autodifferentiation works fine for small quantum simulations, only the 
+
 # parameter-shift rule can be used to compute gradients on quantum hardware directly. Nevertheless,
 # when training quantum models via classical simulation, it's useful to explore the regimes where
 # reverse-mode differentiation may be a better choice than the parameter-shift rule.
@@ -234,12 +236,14 @@ print(2 * forward_time * params.size)
 #
 # When creating a QNode, :doc:`PennyLane supports various methods of differentiation
 # <code/api/pennylane.qnode>`, including ``"parameter-shift"`` (which we used previously),
-# ``"finite-diff"``, and ``"backprop"``. While ``"parameter-shift"`` works with all devices,
+# ``"finite-diff"``, ``"reversible"``, and ``"backprop"``. While ``"parameter-shift"`` works with all devices,
+
 # simulator and hardware, ``"backprop"`` will only work for specific simulator devices that are
 # designed to support reverse-mode differentiation.
 #
 # One such device is :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`.
-# This device is a pure state-vector simulator like ``default.qubit``, however unlike
+# This device is a pure state-vector simulator like ``default.qubit``; however, unlike
+
 # ``default.qubit``, is written using TensorFlow rather than NumPy. As a result, it supports
 # classical backpropagation when using the TensorFlow interface.
 
@@ -287,9 +291,8 @@ backward_time = min(times) / number
 print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 
 ##############################################################################
-# Unlike with the parameter-shift rule, the time taken to perform the backwards pass seems
-# independent of the number of differentiable parameters, and instead seems of the order of a single
-# forward pass!
+# Unlike with the parameter-shift rule, the time taken to perform the backwards pass appears
+# of the order of a single forward pass!
 #
 # Time comparison
 # ---------------
