@@ -215,6 +215,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/qgrnn`
     :tags: autograd
 
+.. customgalleryitem::
+    :tooltip: Optimize a Quantum Optical Neural Network using NLopt.
+    :figure: demonstrations/qonn/qonn_thumbnail.png
+    :description: :doc:`demos/qonn`
+    :tags: autograd photonics
+ 
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -256,3 +262,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
     demos/qgrnn
+    demos/qonn
