@@ -271,15 +271,15 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # Now, we must set the number of layers to use and then calculate the
 # corresponding number of initial parameter values, initializing them with
-# a random value between :math:`-2\pi` and :math:`2\pi`. For the CNOT gate 2 layers is
+# a random value between :math:`-2\pi` and :math:`2\pi`. For the CNOT gate two layers is
 # enough, although for more complex optimization tasks, many more layers
-# might be needed. Generally, the more layers there are, the better the neural
-# network will be at finding a solution, including having better generalization
-# power for predicting on un-trained data.
+# might be needed. Generally, the more layers there are, the richer the
+# representational capabilities of the neural network, and the better it
+# will be at finding a good fit.
 #
 # The number of variables corresponds to the number of transmittivity
-# angles :math:`\theta` and the same number of phase angles :math:`\phi`, while the Kerr
-# non-linearity is set to full strength.
+# angles :math:`\theta` and phase angles :math:`\phi`, while the Kerr
+# non-linearity is set to a fixed strength.
 #
 
 num_layers = 2
@@ -307,7 +307,7 @@ print(var_init)
 # can access its gradients. This is done by calculating the gradient using
 # autograd and then saving it in the ``grad[:]`` variable inside of the
 # optimization function. The variables are flattened to conform to the
-# requirements of both NLopt and the above defined cost function.
+# requirements of both NLopt and the above-defined cost function.
 #
 
 cost_grad = qml.grad(cost)
@@ -389,8 +389,8 @@ var = var.reshape(var_init.shape)
 ######################################################################
 # .. note::
 #
-#     It’s also possible to use any of PennyLane’s built-in optimizers,
-#     supporting both gradient-based and gradient-free optimization methods:
+#     It’s also possible to use any of PennyLane’s built-in 
+#     gradient-based optimizers:
 #
 #     .. code:: python
 #
@@ -408,7 +408,7 @@ var = var.reshape(var_init.shape)
 
 
 ######################################################################
-# Finally, print the results.
+# Finally, we print the results.
 #
 
 print(f"The optimized parameters (layers, parameters):\n {var}\n")
