@@ -8,22 +8,18 @@ Optimizing a quantum optical neural network
     :property="og:description": Optimizing a quantum optical neural network using PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
-This tutorial is based on a paper from `Steinbrecher et
-al. (2019) <https://www.nature.com/articles/s41534-019-0174-7>`__ which
-explores a Quantum Optical Neural Network (QONN) based on
-Fock states.
-Similar to the continuous-variable :doc:`quantum neural network </demos/quantum_neural_net>`
-(CV QNN) model described by 
-`Killoran et al. (2018) <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__, 
-the QONN attempts to apply neural networks and deep learning theory to the quantum case,
-using quantum data as well as a quantum hardware-based architecture.
+This tutorial is based on a paper from `Steinbrecher et al. (2019)
+<https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
+Network (QONN) based on Fock states. Similar to the continuous-variable :doc:`quantum neural network
+</demos/quantum_neural_net>` (CV QNN) model described by `Killoran et al. (2018)
+<https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__, the QONN
+attempts to apply neural networks and deep learning theory to the quantum case, using quantum data
+as well as a quantum hardware-based architecture.
 
-We will focus on constructing a QONN as described in Steinbrecher et
-al. and training it to work as a basic CNOT gate using a "dual-rail" state
-encoding. This tutorial also provides a working example of how to use
-third-party optimization libraries with PennyLane; in this case, 
-`NLopt <https://nlopt.readthedocs.io/en/latest/>`__
-will be used.
+We will focus on constructing a QONN as described in Steinbrecher et al. and training it to work as
+a basic CNOT gate using a "dual-rail" state encoding. This tutorial also provides a working example
+of how to use third-party optimization libraries with PennyLane; in this case, `NLopt
+<https://nlopt.readthedocs.io/en/latest/>`__ will be used.
 
 """
 
@@ -93,28 +89,23 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 #
 # .. note::
 #
-#     You will need to have `S
-#
-# Create a layer function which def
-trawberry Fields <https://strawberryfields.ai/>`__ as well as
-#     the `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
-#     for PennyLane installed for this tutorial to work.
+#     You will need to have `Strawberry Fields <https://strawberryfields.ai/>`__ as well as the
+#     `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__ for PennyLane
+#     installed for this tutorial to work.
 #
 
 ######################################################################
 # Creating the QONN
 # ~~~~~~~~~~~~~~~~~
 #
-# Create a layer function which defines one layer of the QONN, consisting
-# of a linear
-# `interferometer <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
-# (i.e., an array of beamsplitters and phase shifts) and a non-linear
-# Kerr interaction layer. Both the interferometer and the non-linear layer
-# are applied to all modes. The triangular mesh scheme, described in `Reck
-# et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is
-# chosen here due to its use in the paper from Steinbrecher et al.,
-# although any other interferometer scheme should work equally well.
-# Some might even be slightly faster than the one we use here.
+# Create a layer function which defines one layer of the QONN, consisting of a linear
+# `interferometer
+# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
+# (i.e., an array of beamsplitters and phase shifts) and a non-linear Kerr interaction layer. Both
+# the interferometer and the non-linear layer are applied to all modes. The triangular mesh scheme,
+# described in `Reck et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is chosen here
+# due to its use in the paper from Steinbrecher et al., although any other interferometer scheme
+# should work equally well. Some might even be slightly faster than the one we use here.
 #
 
 def layer(theta, phi, wires):
@@ -199,7 +190,7 @@ def cost(var, data_input, labels):
 # |
 #
 # We need to choose the inputs ``X`` and the corresponding labels ``Y``. They are
-# defined using the dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` 
+# defined using the dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]`
 # (as a vector in the Fock basis of a single mode), and
 # :math:`|1\rangle = [0, 1]`. So a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
 # would give :math:`|11\rangle = [0, 1, 0, 1]`.
@@ -389,7 +380,7 @@ var = var.reshape(var_init.shape)
 ######################################################################
 # .. note::
 #
-#     It’s also possible to use any of PennyLane’s built-in 
+#     It’s also possible to use any of PennyLane’s built-in
 #     gradient-based optimizers:
 #
 #     .. code:: python
