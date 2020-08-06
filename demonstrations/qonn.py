@@ -5,24 +5,21 @@ Optimizing a quantum optical neural network
 ===========================================
 
 .. meta::
-    :property="og:description": Optimizing a quantum optical neural network using the NLopt library for non-linear optimizations.
+    :property="og:description": Optimizing a quantum optical neural network using PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
-This tutorial is based on the paper from `Steinbrecher et
-al. (2019) <https://www.nature.com/articles/s41534-019-0174-7>`__ which
-explores a fock-state based Quantum Optical Neural Network (QONN).
-Similar to the continuous-variable quantum neural network (CV QNN) model
-described by `Killoran et
-al. (2018) <https://arxiv.org/abs/1806.06871>`__, the QONN attempts to
-apply neural networks and deep learning theory to the quantum case;
-using both quantum data as well as quantum hardware based simulation
-methods.
+This tutorial is based on a paper from `Steinbrecher et al. (2019)
+<https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
+Network (QONN) based on Fock states. Similar to the continuous-variable :doc:`quantum neural network
+</demos/quantum_neural_net>` (CV QNN) model described by `Killoran et al. (2018)
+<https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__, the QONN
+attempts to apply neural networks and deep learning theory to the quantum case, using quantum data
+as well as a quantum hardware-based architecture.
 
-We will focus on constructing a QONN as described in Steinbrecher et
-al. and training it to work as a basic CNOT gate using a dual-rail state
-encoding. Since these simulations are fairly heavy, the third-party
-optimization library `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
-will be used.
+We will focus on constructing a QONN as described in Steinbrecher et al. and training it to work as
+a basic CNOT gate using a "dual-rail" state encoding. This tutorial also provides a working example
+of how to use third-party optimization libraries with PennyLane; in this case, `NLopt
+<https://nlopt.readthedocs.io/en/latest/>`__ will be used.
 
 """
 
@@ -42,13 +39,13 @@ will be used.
 # The QONN is an optical architecture consisting of layers of linear
 # unitaries, using the encoding described in `Reck et
 # al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__, and Kerr
-# non-linearities applied on all involved modes. This setup can be
+# non-linearities applied on all involved optical modes. This setup can be
 # constructed using arrays of beamsplitters and programmable phase shifts
 # along with some form of Kerr non-linear material.
 #
 # By constructing a cost function based on the input-output relationship
-# of the QONN, using the programmable phase shift variables as
-# optimization parameters, it can be trained to both act as an artbitrary
+# of the QONN, using the programmable phase-shift variables as
+# optimization parameters, it can be trained to both act as an arbitrary
 # quantum gate or to be able to generalize on previously unseen data. This
 # is very similar to classical neural networks, and many classical machine
 # learning task can in fact also be solved by these types of quantum deep
@@ -60,7 +57,7 @@ will be used.
 # Code and simulations
 # --------------------
 #
-# The first thing we need to do is to import PennyLane, NumPy as well as an
+# The first thing we need to do is to import PennyLane, NumPy, as well as an
 # optimizer. Here we use a wrapped version of NumPy supplied by PennyLane
 # which uses Autograd to wrap essential functions to support automatic
 # differentiation.
@@ -79,12 +76,12 @@ import nlopt
 
 
 ######################################################################
-# Create a Strawberry Fields simulator device with as many quantum modes
-# (or wires) as you want your quantum optical neural network to have. 4
-# modes are used for this demonstration due to the use of a dual-rail encoding. The
-# cutoff dimension should be set to the same value as the number of wires (a
+# We create a Strawberry Fields simulator device with as many quantum modes
+# (or wires) as we want our quantum-optical neural network to have. Four
+# modes are used for this demonstration, due to the use of a dual-rail encoding. The
+# cutoff dimension is set to the same value as the number of wires (a
 # lower cutoff value will cause loss of information, while a higher value
-# will only use unnecessary resources without any improvement).
+# might use unnecessary resources without any improvement).
 
 dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 
@@ -92,25 +89,23 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 #
 # .. note::
 #
-#     You will need to have `Strawberry Fields <https://strawberryfields.ai/>`__ as well as
-#     the `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__
-#     for PennyLane installed for this tutorial to work.
+#     You will need to have `Strawberry Fields <https://strawberryfields.ai/>`__ as well as the
+#     `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`__ for PennyLane
+#     installed for this tutorial to work.
 #
 
 ######################################################################
 # Creating the QONN
 # ~~~~~~~~~~~~~~~~~
 #
-# Create a layer function which defines one layer of the QONN, consisting
-# of a linear
-# `interferometer <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
-# (i.e. an array of beamsplitters and phase shifts) and a non-linear
-# Kerr interaction layer. Both the interferometer and the non-linear layer
-# are applied to all modes. The triangular mesh scheme, described in `Reck
-# et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is
-# chosen here due to its use in the paper from Steinbrecher et al.,
-# although any other interferometer scheme should work equally well.
-# Some might even be slightly faster than the one we use here.
+# Create a layer function which defines one layer of the QONN, consisting of a linear
+# `interferometer
+# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
+# (i.e., an array of beamsplitters and phase shifts) and a non-linear Kerr interaction layer. Both
+# the interferometer and the non-linear layer are applied to all modes. The triangular mesh scheme,
+# described in `Reck et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is chosen here
+# due to its use in the paper from Steinbrecher et al., although any other interferometer scheme
+# should work equally well. Some might even be slightly faster than the one we use here.
 #
 
 def layer(theta, phi, wires):
@@ -127,7 +122,7 @@ def layer(theta, phi, wires):
 
 ######################################################################
 # Next, we define the full QONN by building each layer one-by-one and then
-# returning the mean photon number of each mode. The parameters to be
+# measuring the mean photon number of each mode. The parameters to be
 # optimized are all contained in ``var``, where each element in ``var`` is
 # a list of parameters ``theta`` and ``phi`` for a specific layer.
 #
@@ -148,7 +143,7 @@ def quantum_neural_net(var, x):
 
 
 ######################################################################
-# Defining the cost-function
+# Defining the cost function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # A helper function is needed to calculate the normalized square loss of
@@ -195,9 +190,10 @@ def cost(var, data_input, labels):
 # |
 #
 # We need to choose the inputs ``X`` and the corresponding labels ``Y``. They are
-# defined using dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]` and
-# :math:`|1\rangle = [0, 1]`, e.g. a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
-# would be :math:`|11\rangle = [0, 1, 0, 1]`.
+# defined using the dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]`
+# (as a vector in the Fock basis of a single mode), and
+# :math:`|1\rangle = [0, 1]`. So a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
+# would give :math:`|11\rangle = [0, 1, 0, 1]`.
 #
 # Furthermore, we want to make sure that the gradient isn't calculated with regards
 # to the inputs or the labels. We can do this by marking them with `requires_grad=False`.
@@ -220,10 +216,10 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # At this stage we could play around with other input-output
 # combinations; just keep in mind that the input states should contain the
-# same total number of photons as the ouput, since no photons will be
-# created or lost (assuming loss-less circuits). Also, since the QONN will
+# same total number of photons as the ouput, since we want to use
+# the dual-rail encoding. Also, since the QONN will
 # act upon the states as a unitary operator, there must be a bijection
-# between the inputs and the outputs, i.e. two different inputs must have
+# between the inputs and the outputs, i.e., two different inputs must have
 # two different outputs, and vice versa.
 #
 
@@ -231,22 +227,22 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 #
 # .. note::
-#     Other examples include the dual-rail encoded SWAP gate:
+#     Other example gates we could use include the dual-rail encoded SWAP gate,
 #
 #     .. code:: python
 #
 #         X = np.array([[1, 0, 1, 0],
-#                         [1, 0, 0, 1],
-#                         [0, 1, 1, 0],
-#                         [0, 1, 0, 1]])
+#                       [1, 0, 0, 1],
+#                       [0, 1, 1, 0],
+#                       [0, 1, 0, 1]])
 #
 #         Y = np.array([[1, 0, 1, 0],
-#                         [0, 1, 1, 0],
-#                         [0, 0, 0, 1],
-#                         [0, 1, 0, 1]])
+#                       [0, 1, 1, 0],
+#                       [0, 0, 0, 1],
+#                       [0, 1, 0, 1]])
 #
 #     the single-rail encoded SWAP gate (remember to change the number of
-#     modes to 2 in the device initialization above):
+#     modes to 2 in the device initialization above),
 #
 #     .. code:: python
 #
@@ -266,15 +262,15 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # Now, we must set the number of layers to use and then calculate the
 # corresponding number of initial parameter values, initializing them with
-# a random value between :math:`-2\pi` and :math:`2\pi`. For the CNOT gate 2 layers is
+# a random value between :math:`-2\pi` and :math:`2\pi`. For the CNOT gate two layers is
 # enough, although for more complex optimization tasks, many more layers
-# might be needed. Generally, the more layers there are, the better the neural
-# network will be at finding a solution, including having better generalization
-# power for predicting on un-trained data.
+# might be needed. Generally, the more layers there are, the richer the
+# representational capabilities of the neural network, and the better it
+# will be at finding a good fit.
 #
 # The number of variables corresponds to the number of transmittivity
-# angles :math:`\theta` and the same number of phase angles :math:`\phi`, while the Kerr
-# non-linearity is set to full strength.
+# angles :math:`\theta` and phase angles :math:`\phi`, while the Kerr
+# non-linearity is set to a fixed strength.
 #
 
 num_layers = 2
@@ -302,7 +298,7 @@ print(var_init)
 # can access its gradients. This is done by calculating the gradient using
 # autograd and then saving it in the ``grad[:]`` variable inside of the
 # optimization function. The variables are flattened to conform to the
-# requirements of both NLopt and the above defined cost function.
+# requirements of both NLopt and the above-defined cost function.
 #
 
 cost_grad = qml.grad(cost)
@@ -384,8 +380,8 @@ var = var.reshape(var_init.shape)
 ######################################################################
 # .. note::
 #
-#     It’s also possible to use any of PennyLane’s built-in optimizers,
-#     supporting both gradient-based and gradient-free optimization methods:
+#     It’s also possible to use any of PennyLane’s built-in
+#     gradient-based optimizers:
 #
 #     .. code:: python
 #
@@ -403,7 +399,7 @@ var = var.reshape(var_init.shape)
 
 
 ######################################################################
-# Finally, print the results.
+# Finally, we print the results.
 #
 
 print(f"The optimized parameters (layers, parameters):\n {var}\n")
