@@ -3,7 +3,8 @@ Quantum Chemistry with PennyLane
 ================================
 
 .. meta::
-    :property="og:description": Explore quantum chemistry with Pennylane.
+    :property="og:description": Explore how PennyLane brings modern quantum computing tools
+        to tackle quantum chemistry problems.
     :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
 
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses

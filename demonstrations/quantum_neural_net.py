@@ -8,9 +8,7 @@ Function fitting with a quantum neural network
 ==============================================
 
 .. meta::
-    :property="og:description": In this demonstration, we show how a variational
-        circuit can be used to learn a fit for a one-dimensional function
-        from noisy samples.
+    :property="og:description": Fit to noisy data with a variational quantum circuit.
     :property="og:image": https://pennylane.ai/qml/_images/qnn_output_28_0.png
 
 In this example we show how a variational circuit can be used to learn a

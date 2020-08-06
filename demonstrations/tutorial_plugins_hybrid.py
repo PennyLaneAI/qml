@@ -6,7 +6,7 @@ Plugins and Hybrid computation
 
 .. meta::
     :property="og:description": This tutorial introduces the notion of hybrid
-        computation by combining several PennyLane plugins to train an algorithm
+        computation by combining several PennyLane device backends to train an algorithm
         containing both photonic and qubit devices.
     :property="og:image": https://pennylane.ai/qml/_images/photon_redirection.png
 

@@ -5,7 +5,7 @@ Multiclass margin classifier
 ============================
 
 .. meta::
-    :property="og:description": Use PyTorch to implement a multiclass
+    :property="og:description": Using PyTorch to implement a multiclass
         quantum variational classifier on MNIST data.
     :property="og:image": https://pennylane.ai/qml/_images/margin_2.png
 
