@@ -139,7 +139,8 @@ print(grad_function(params)[0])
 # 2. the number of parameter-shift evaluations required.
 #
 # Both of these factors increase the time taken to compute the gradient with
-# respect to all parameters (the 'backward' pass).
+# respect to all parameters.
+
 #
 # Benchmarking
 # ~~~~~~~~~~~~
@@ -182,7 +183,8 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 
 ##############################################################################
-# We can now time a backwards pass (the time taken to compute all gradients),
+# We can now estimate the time taken to compute the full gradient vector,
+
 # and see how this compares.
 
 # create the gradient function
@@ -191,7 +193,8 @@ grad_fn = qml.grad(circuit)
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=number, repeat=repeat)
 backward_time = min(times) / number
 
-print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
+print(f"Gradient computation (best of {repeat}): {backward_time} sec per loop")
+
 
 ##############################################################################
 # Based on the parameter-shift rule, we expect that the amount of time to compute the quantum
@@ -205,17 +208,13 @@ print(2 * forward_time * params.size)
 # Backpropagation
 # ---------------
 #
-# The parameter-shift rule can be considered a form of `forward-mode autodifferentiation
-# <https://en.wikipedia.org/wiki/forward_accumulation>`__, whereby the function to be differentiated
-# is evaluated multiple times for each independent input variable, gradient rules are applied for
-# each subexpression, and the final gradient accumulated from each of these independent forward
-# sweeps [#]_.
 #
 # An alternative to forward-mode autodifferentiation is `reverse-mode autodifferentiation
 # <https://en.wikipedia.org/wiki/Reverse_accumulation>`__; unlike forward-mode differentiation, it
-# requires a *single* forward pass of the differentiable function (per output dimension) to compute
+# requires a *single* forward pass of the differentiable function to compute
 # the gradient of all variables, at the expense of increased memory usage. During the forward pass,
-# the results and the gradient of all intermediate subexpressions are stored; the computation is
+# the results of all intermediate subexpressions are stored; the computation is
+
 # then traversed *in reverse*, with the gradient computed by repeatedly applying the chain rule. In
 # most classical machine learning settings (where we are training loss functions consisting of a large
 # number of parameters with a single output), reverse-mode autodifferentiation is the
@@ -442,4 +441,4 @@ plt.show()
 #     This is a particularly naïve implementation of forward-mode autodifferentiation; in practice,
 #     classical forward-mode differentiation is `implemented using dual numbers
 #     <https://en.wikipedia.org/wiki/Automatic_differentiation#Automatic_differentiation_using_dual_numbers>`__,
-#     which reduces the number of forward sweeps in favour of an increase in memory.
+#     which reduces the number of forward sweeps, but with an increase in memory.
