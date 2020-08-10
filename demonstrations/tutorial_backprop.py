@@ -3,7 +3,8 @@ Quantum gradients with backpropagation
 ======================================
 
 .. meta::
-    :property="og:description": Compare and contrast the parameter-shift rule with backpropagation.
+    :property="og:description": Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.
+
     :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_backprop_002.png
 
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
@@ -435,4 +436,3 @@ plt.show()
 #
 # We can now see clearly that there is constant overhead for backpropagation with
 # ``default.qubit.tf``, but the parameter-shift rule scales as :math:`\sim 2p`.
-
