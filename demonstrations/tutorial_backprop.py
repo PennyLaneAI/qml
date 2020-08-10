@@ -207,7 +207,7 @@ print(2 * forward_time * params.size)
 # ---------------
 #
 # An alternative to the parameter-shift rule for computing gradients is
-# `reverse-mode autodifferentiation <https://en.wikipedia.org/wiki/Reverse_accumulation>`__; 
+# `reverse-mode autodifferentiation <https://en.wikipedia.org/wiki/Reverse_accumulation>`__. 
 # Unlike the parameter-shift method, which requires :math:`2p` circuit evaluations for 
 # :math:`p` parameters, reverse-mode requires only a *single* forward pass of the 
 # differentiable function to compute
@@ -236,9 +236,9 @@ print(2 * forward_time * params.size)
 #
 # When creating a QNode, :doc:`PennyLane supports various methods of differentiation
 # <code/api/pennylane.qnode>`, including ``"parameter-shift"`` (which we used previously),
-# ``"finite-diff"``, ``"reversible"``, and ``"backprop"``. While ``"parameter-shift"`` works with all devices,
-# simulator and hardware, ``"backprop"`` will only work for specific simulator devices that are
-# designed to support reverse-mode differentiation.
+# ``"finite-diff"``, ``"reversible"``, and ``"backprop"``. While ``"parameter-shift"`` works with all devices
+# (simulator or hardware), ``"backprop"`` will only work for specific simulator devices that are
+# designed to support backpropagation.
 #
 # One such device is :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`.
 # This device is a pure state-vector simulator like ``default.qubit``; however, unlike
@@ -279,7 +279,8 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 ##############################################################################
 # Comparing this to the forward pass from ``default.qubit``, we note that there is some potential
-# overhead from using TensorFlow. We can now time a gradient via backpropagation.
+# overhead from using TensorFlow. We can now time how long it takes to perform a
+# gradient computation via backpropagation:
 
 with tf.GradientTape(persistent=True) as tape:
     res = circuit(params)
@@ -290,7 +291,8 @@ print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 
 ##############################################################################
 # Unlike with the parameter-shift rule, the time taken to perform the backwards pass appears
-# of the order of a single forward pass!
+# of the order of a single forward pass! The can significantly speed up training of simulated
+# circuits with many parameters.
 #
 # Time comparison
 # ---------------
@@ -347,8 +349,8 @@ for depth in range(0, 21):
     if num_params == 0:
         continue
 
-    # Backward pass timing
-    # ====================
+    # Gradient timing
+    # ===============
 
     # parameter-shift
     with tf.GradientTape(persistent=True) as tape:
