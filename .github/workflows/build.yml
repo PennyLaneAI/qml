@@ -1,0 +1,40 @@
+name: build-master
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  build-website:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Run Forest Quilc
+      run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
+
+    - name: Run Forest QVM
+      run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.6
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build tutorials
+      run: |
+        make download
+        make html
+        zip -r /tmp/qml_demos.zip demos
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: built-website
+        path: |
+          /tmp/qml_demos.zip
+          _build/html
