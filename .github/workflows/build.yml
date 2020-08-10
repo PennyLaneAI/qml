@@ -10,73 +10,83 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
-      with:
-        ref: master
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
 
-    - name: Run Forest Quilc
-      run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
+      - uses: actions/checkout@v2
+        with:
+          ref: master
 
-    - name: Run Forest QVM
-      run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
+      - name: Run Forest Quilc
+        run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.6
+      - name: Run Forest QVM
+        run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
 
-    - name: Build tutorials
-      run: |
-        make download
-        make html
-        zip -r /tmp/qml_demos.zip demos
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: built-website
-        path: |
-          /tmp/qml_demos.zip
-          _build/html
+      - name: Build tutorials
+        run: |
+          make download
+          make html
+          zip -r /tmp/qml_demos.zip demos
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: built-website
+          path: |
+            /tmp/qml_demos.zip
+            _build/html
 
   build-dev:
     runs-on: ubuntu-latest
 
     steps:
 
-    - uses: actions/checkout@v2
-      with:
-        ref: dev
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
 
-    - name: Run Forest Quilc
-      run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
+      - uses: actions/checkout@v2
+        with:
+          ref: dev
 
-    - name: Run Forest QVM
-      run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
+      - name: Run Forest Quilc
+        run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.6
+      - name: Run Forest QVM
+        run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
 
-    - name: Build tutorials
-      run: |
-        make download
-        make html
-        zip -r /tmp/qml_demos.zip demos
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: built-website
-        path: |
-          /tmp/qml_demos.zip
-          _build/html
+      - name: Build tutorials
+        run: |
+          make download
+          make html
+          zip -r /tmp/qml_demos.zip demos
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: built-website
+          path: |
+            /tmp/qml_demos.zip
+            _build/html
