@@ -209,24 +209,24 @@ print(2 * forward_time * params.size)
 # <https://en.wikipedia.org/wiki/forward_accumulation>`__, whereby the function to be differentiated
 # is evaluated multiple times for each independent input variable, gradient rules are applied for
 # each subexpression, and the final gradient accumulated from each of these independent forward
-# sweeps.
+# sweeps [#]_.
 #
 # An alternative to forward-mode autodifferentiation is `reverse-mode autodifferentiation
 # <https://en.wikipedia.org/wiki/Reverse_accumulation>`__; unlike forward-mode differentiation, it
-# requires only a *single* forward pass of the differentiable function to compute the gradient of
-# all variables, at the expense of increased memory usage. During the forward pass, the results and
-# the gradient of all intermediate subexpressions are stored; the computation is then traversed *in
-# reverse*, with the gradient computed by repeatedly applying the chain rule. In most classical
-# machine learning settings, reverse-mode autodifferentiation is the preferred method of
-# autodifferentiation---the reduction in computational time enabling larger and more complex models
-# to be successfully trained. The backpropagation algorithm is a particular special-case of
-# reverse-mode autodifferentiation, which has helped lead to the machine learning explosion we see
-# today.
+# requires a *single* forward pass of the differentiable function (per output dimension) to compute
+# the gradient of all variables, at the expense of increased memory usage. During the forward pass,
+# the results and the gradient of all intermediate subexpressions are stored; the computation is
+# then traversed *in reverse*, with the gradient computed by repeatedly applying the chain rule. In
+# most classical machine learning settings (where we are training loss functions consisting of a large
+# number of parameters with a single output), reverse-mode autodifferentiation is the
+# preferred method of autodifferentiation---the reduction in computational time enabling larger and
+# more complex models to be successfully trained. The backpropagation algorithm is a particular
+# special-case of reverse-mode autodifferentiation, which has helped lead to the machine learning
+# explosion we see today.
 #
 # In quantum machine learning, however, the inability to store and utilize the results of
 # *intermediate* quantum operations on hardware remains a barrier; while reverse-mode
-# autodifferentiation works fine for small quantum simulations, only the 
-
+# autodifferentiation works fine for small quantum simulations, only the
 # parameter-shift rule can be used to compute gradients on quantum hardware directly. Nevertheless,
 # when training quantum models via classical simulation, it's useful to explore the regimes where
 # reverse-mode differentiation may be a better choice than the parameter-shift rule.
@@ -395,7 +395,10 @@ plt.show()
 # We can see that the computational time for the parameter-shift rule increases with
 # increasing number of parameters, as expected, whereas the computational time
 # for backpropagation appears much more constant, with perhaps a minute linear increase
-# with :math:`p`.
+# with :math:`p`. Note that the plots are not perfectly linear, with some 'bumpiness' or
+# noisiness. This is likely due to low-level operating system jitter, and
+# other environmental fluctuations---increasing the number of repeats can help smooth
+# out the plot.
 #
 # For a better comparison, we can scale the time required for computing the quantum
 # gradients against the time taken for the corresponding forward pass:
@@ -432,3 +435,13 @@ plt.show()
 #
 # We can now see clearly that there is constant overhead for backpropagation with
 # ``default.qubit.tf``, but the parameter-shift rule scales as :math:`\sim 2p`.
+#
+# Footnotes
+# ---------
+#
+# .. [#]
+#
+#     This is a particularly naïve implementation of forward-mode autodifferentiation; in practice,
+#     classical forward-mode differentiation is `implemented using dual numbers
+#     <https://en.wikipedia.org/wiki/Automatic_differentiation#Automatic_differentiation_using_dual_numbers>`__,
+#     which reduces the number of forward sweeps in favour of an increase in memory.
