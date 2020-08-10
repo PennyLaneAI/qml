@@ -28,8 +28,8 @@ derivative of the expectation value
 
 .. math::
 
-	\langle \hat{B} \rangle (\boldsymbol\theta) =
-	\langle 0 \vert U(\boldsymbol\theta)^\dagger \hat{B} U(\boldsymbol\theta) \vert 0\rangle
+    \langle \hat{B} \rangle (\boldsymbol\theta) =
+    \langle 0 \vert U(\boldsymbol\theta)^\dagger \hat{B} U(\boldsymbol\theta) \vert 0\rangle
 
 with respect to the input circuit parameters :math:`\boldsymbol{\theta}` is given by
 
@@ -93,14 +93,14 @@ print(circuit.draw())
 # using the parameter-shift rule.
 
 def parameter_shift_term(qnode, params, i):
-	shifted = params.copy()
-	shifted[i] += np.pi/2
-	forward = qnode(shifted)  # forward evaluation
+    shifted = params.copy()
+    shifted[i] += np.pi/2
+    forward = qnode(shifted)  # forward evaluation
 
-	shifted[i] -= np.pi
-	backward = qnode(shifted) # backward evaluation
+    shifted[i] -= np.pi
+    backward = qnode(shifted) # backward evaluation
 
-	return 0.5 * (forward - backward)
+    return 0.5 * (forward - backward)
 
 # gradient with respect to the first parameter
 print(parameter_shift_term(circuit, params, 0))
@@ -110,12 +110,12 @@ print(parameter_shift_term(circuit, params, 0))
 # to loop over the index ``i``:
 
 def parameter_shift(qnode, params):
-	gradients = np.zeros([len(params)])
+    gradients = np.zeros([len(params)])
 
-	for i in range(len(params)):
-		gradients[i] = parameter_shift_term(qnode, params, i)
+    for i in range(len(params)):
+        gradients[i] = parameter_shift_term(qnode, params, i)
 
-	return gradients
+    return gradients
 
 print(parameter_shift(circuit, params))
 
@@ -237,13 +237,11 @@ print(2 * forward_time * params.size)
 # When creating a QNode, :doc:`PennyLane supports various methods of differentiation
 # <code/api/pennylane.qnode>`, including ``"parameter-shift"`` (which we used previously),
 # ``"finite-diff"``, ``"reversible"``, and ``"backprop"``. While ``"parameter-shift"`` works with all devices,
-
 # simulator and hardware, ``"backprop"`` will only work for specific simulator devices that are
 # designed to support reverse-mode differentiation.
 #
 # One such device is :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`.
 # This device is a pure state-vector simulator like ``default.qubit``; however, unlike
-
 # ``default.qubit``, is written using TensorFlow rather than NumPy. As a result, it supports
 # classical backpropagation when using the TensorFlow interface.
 
