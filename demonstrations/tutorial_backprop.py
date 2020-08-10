@@ -22,7 +22,7 @@ device.
 The parameter-shift rule
 ------------------------
 
-The parameter-shift rules states that, given a variational quantum circuit :math:`U(\boldsymbol
+The parameter-shift rule states that, given a variational quantum circuit :math:`U(\boldsymbol
 \theta)` composed of parametrized Pauli rotations, and some measured observable :math:`\hat{B}`, the
 derivative of the expectation value
 
@@ -140,7 +140,6 @@ print(grad_function(params)[0])
 #
 # Both of these factors increase the time taken to compute the gradient with
 # respect to all parameters.
-
 #
 # Benchmarking
 # ~~~~~~~~~~~~
@@ -184,7 +183,6 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 ##############################################################################
 # We can now estimate the time taken to compute the full gradient vector,
-
 # and see how this compares.
 
 # create the gradient function
@@ -208,23 +206,26 @@ print(2 * forward_time * params.size)
 # Backpropagation
 # ---------------
 #
-#
-# An alternative to forward-mode autodifferentiation is `reverse-mode autodifferentiation
-# <https://en.wikipedia.org/wiki/Reverse_accumulation>`__; unlike forward-mode differentiation, it
-# requires a *single* forward pass of the differentiable function to compute
-# the gradient of all variables, at the expense of increased memory usage. During the forward pass,
-# the results of all intermediate subexpressions are stored; the computation is
-
-# then traversed *in reverse*, with the gradient computed by repeatedly applying the chain rule. In
-# most classical machine learning settings (where we are training loss functions consisting of a large
-# number of parameters with a single output), reverse-mode autodifferentiation is the
-# preferred method of autodifferentiation---the reduction in computational time enabling larger and
+# An alternative to the parameter-shift rule for computing gradients is
+# `reverse-mode autodifferentiation <https://en.wikipedia.org/wiki/Reverse_accumulation>`__; 
+# Unlike the parameter-shift method, which requires :math:`2p` circuit evaluations for 
+# :math:`p` parameters, reverse-mode requires only a *single* forward pass of the 
+# differentiable function to compute
+# the gradient of all variables, at the expense of increased memory usage. 
+# During the forward pass, the results of all intermediate subexpressions are stored; 
+# the computation is then traversed *in reverse*, with the gradient computed by repeatedly
+# applying the chain rule. 
+# In most classical machine learning settings (where we are training scalar loss functions 
+# consisting of a large number of parameters), 
+# reverse-mode autodifferentiation is the
+# preferred method of autodifferentiation---the reduction in computational time enables larger and
 # more complex models to be successfully trained. The backpropagation algorithm is a particular
 # special-case of reverse-mode autodifferentiation, which has helped lead to the machine learning
 # explosion we see today.
 #
 # In quantum machine learning, however, the inability to store and utilize the results of
-# *intermediate* quantum operations on hardware remains a barrier; while reverse-mode
+# *intermediate* quantum operations on hardware remains a barrier to using backprop; 
+# while reverse-mode
 # autodifferentiation works fine for small quantum simulations, only the
 # parameter-shift rule can be used to compute gradients on quantum hardware directly. Nevertheless,
 # when training quantum models via classical simulation, it's useful to explore the regimes where
@@ -251,7 +252,7 @@ dev = qml.device("default.qubit.tf", wires=4)
 ##############################################################################
 # When defining the QNode, we specify ``diff_method="backprop"`` to ensure that
 # we are using backpropagation mode. Note that this will be the *default differentiation
-# mode* when ``interface="tf"``.
+# mode* for the ``default.qubit.tf`` device when ``interface="tf"``.
 
 
 @qml.qnode(dev, diff_method="backprop", interface="tf")
@@ -278,7 +279,7 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 ##############################################################################
 # Comparing this to the forward pass from ``default.qubit``, we note that there is some potential
-# overhead from using TensorFlow. We can now time a backwards pass.
+# overhead from using TensorFlow. We can now time a gradient via backpropagation.
 
 with tf.GradientTape(persistent=True) as tape:
     res = circuit(params)
@@ -295,8 +296,8 @@ print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 # ---------------
 #
 # Let's compare the two differentiation approaches as the number of trainable parameters
-# in the variational circuit increases, by timing both the forward and backward pass
-# as the number of layers is allowed to increase.
+# in the variational circuit increases, by timing both the forward pass and the gradient
+# computation as the number of layers is allowed to increase.
 #
 # We'll create two devices; one using ``default.qubit`` for the parameter-shift
 # rule, and ``default.qubit.tf`` for backpropagation. For convenience, we'll use the TensorFlow
@@ -314,15 +315,15 @@ def circuit(params):
 # to collect the data, we'll reduce the number and repetitions of timings per data
 # point. Below, we loop over a variational circuit depth ranging from 0 (no gates/
 # trainable parameters) to 20. Each layer will contain :math:`3N` parameters, where
-# :math:`N` is the number of wires (in this case, :math:`N=4`).
+# :math:`N` is the number of wires (in this case, we have :math:`N=4`).
 
 repeat = 2
 number = 3
 
 forward_shift = []
-backward_shift = []
+gradient_shift = []
 forward_backprop = []
-backward_backprop = []
+gradient_backprop = []
 
 for depth in range(0, 21):
     params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=depth)
@@ -354,17 +355,17 @@ for depth in range(0, 21):
         res = qnode_shift(params)
 
     t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
-    backward_shift.append([num_params, min(t) / number])
+    gradient_shift.append([num_params, min(t) / number])
 
     # backprop
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_backprop(params)
 
     t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
-    backward_backprop.append([num_params, min(t) / number])
+    gradient_backprop.append([num_params, min(t) / number])
 
-backward_shift = np.array(backward_shift).T
-backward_backprop = np.array(backward_backprop).T
+gradient_shift = np.array(gradient_shift).T
+gradient_backprop = np.array(gradient_backprop).T
 forward_shift = np.array(forward_shift).T
 forward_backprop = np.array(forward_backprop).T
 
@@ -376,8 +377,8 @@ plt.style.use("bmh")
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-ax.plot(*backward_shift, '.-', label="Parameter-shift")
-ax.plot(*backward_backprop, '.-', label="Backprop")
+ax.plot(*gradient_shift, '.-', label="Parameter-shift")
+ax.plot(*gradient_backprop, '.-', label="Backprop")
 ax.set_ylabel("Time (s)")
 ax.set_xlabel("Number of parameters")
 ax.legend()
@@ -400,19 +401,19 @@ plt.show()
 # For a better comparison, we can scale the time required for computing the quantum
 # gradients against the time taken for the corresponding forward pass:
 
-backward_shift[1] /= forward_shift[1, 1:]
-backward_backprop[1] /= forward_backprop[1, 1:]
+gradient_shift[1] /= forward_shift[1, 1:]
+gradient_backprop[1] /= forward_backprop[1, 1:]
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-ax.plot(*backward_shift, '.-', label="Parameter-shift")
-ax.plot(*backward_backprop, '.-', label="Backprop")
+ax.plot(*gradient_shift, '.-', label="Parameter-shift")
+ax.plot(*gradient_backprop, '.-', label="Backprop")
 
 # perform a least squares regression to determine the linear best fit/gradient
 # for the normalized time vs. number of parameters
-x = backward_shift[0]
-m_shift, c_shift = np.polyfit(*backward_shift, deg=1)
-m_back, c_back = np.polyfit(*backward_backprop, deg=1)
+x = gradient_shift[0]
+m_shift, c_shift = np.polyfit(*gradient_shift, deg=1)
+m_back, c_back = np.polyfit(*gradient_backprop, deg=1)
 
 ax.plot(x, m_shift * x + c_shift, '--', label=f"{m_shift:.2f}p{c_shift:+.2f}")
 ax.plot(x, m_back * x + c_back, '--', label=f"{m_back:.2f}p{c_back:+.2f}")
@@ -432,13 +433,4 @@ plt.show()
 #
 # We can now see clearly that there is constant overhead for backpropagation with
 # ``default.qubit.tf``, but the parameter-shift rule scales as :math:`\sim 2p`.
-#
-# Footnotes
-# ---------
-#
-# .. [#]
-#
-#     This is a particularly naïve implementation of forward-mode autodifferentiation; in practice,
-#     classical forward-mode differentiation is `implemented using dual numbers
-#     <https://en.wikipedia.org/wiki/Automatic_differentiation#Automatic_differentiation_using_dual_numbers>`__,
-#     which reduces the number of forward sweeps, but with an increase in memory.
+
