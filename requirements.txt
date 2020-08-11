@@ -18,7 +18,7 @@ git+https://github.com/rigetti/pennylane-forest.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
 git+https://github.com/PennyLaneAI/pennylane-qiskit.git
 pyquil==2.19
-scipy==1.5.2
+scipy==1.4.1
 sphinx==1.8.5
 sphinx-sitemap
 sphinx_gallery==0.7
