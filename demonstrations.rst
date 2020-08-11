@@ -221,6 +221,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/qonn`
     :tags: autograd photonics
  
+.. customgalleryitem::
+    :tooltip: Compare the parameter-shift rule with backpropagation
+    :figure: demonstrations/tutorial_backprop_thumbnail.png
+    :description: :doc:`demos/tutorial_backprop`
+    :tags: tensorflow autograd
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -263,3 +269,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqt
     demos/qgrnn
     demos/qonn
+    demos/tutorial_backprop
