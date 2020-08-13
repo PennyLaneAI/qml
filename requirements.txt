@@ -11,7 +11,6 @@ sympy==1.6.2
 pillow==6.2.0
 pip==20.1
 pyscf==1.7.1
-immutables==0.9
 git+https://github.com/PennyLaneAI/pennylane.git
 git+https://github.com/PennyLaneAI/pennylane.git#subdirectory=qchem
 git+https://github.com/PennyLaneAI/pennylane-sf.git
