@@ -230,7 +230,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
-    :description: :doc:`demos/tutorial_pasqal
+    :description: :doc:`demos/tutorial_pasqal`
     :tags: pasqal tensorflow
 
 :html:`</div></div><div style='clear:both'>`
