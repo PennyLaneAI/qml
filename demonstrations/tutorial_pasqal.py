@@ -19,7 +19,7 @@ exotic quantum-computing circuit topologies:
 
 .. figure:: https://raw.githubusercontent.com/lhenriet/cirq-pasqal/fc4f9c7792a8737fde76d4c05828aa538be8452e/pasqal-tutorials/files/eiffel_tower.png
     :align: center
-    :width: 90%
+    :width: 50%
     
     ..
     
@@ -80,7 +80,8 @@ subset_coords = coords[mask]
 xs = subset_coords[:,0]
 ys = subset_coords[:,1]
 zs = subset_coords[:,2]
-ax.scatter(xs, ys, zs, c='r',alpha=1.0);
+ax.scatter(xs, ys, zs, c='r',alpha=1.0)
+plt.show();
 
 ##############################################################################
 # Our next step will be to convert these coordinates into objects that 
@@ -254,14 +255,12 @@ def circuit(weights, data):
     return qml.expval(qml.PauliZ(wires=peak_qubit))
 
 ##############################################################################
-# In order to train the circuit, we will need a cost function to analyze
+# In order to train the circuit, we will need a cost function to analyze.
 
 data = tf.constant([-1.,1.,1.,-1], dtype=tf.float64)
 init_weights = np.random.rand(16)
 weights = tf.Variable(init_weights, dtype=tf.float64)
 cost = lambda: tf.abs(circuit(weights, data) - tf.reduce_prod(data))
-ds = [tf.constant([-1.,1.,1.,-1], dtype=tf.float64),
-      tf.constant([1.,1.,1.,1], dtype=tf.float64)]
 
 
 ##############################################################################
