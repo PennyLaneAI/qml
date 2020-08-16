@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 # Our first step will be to load and visualize the data for the Eiffel tower 
 # configuration, generously provided to us by the team at Pasqal.
 
-coords = np.loadtxt("../pasqal/Eiffel_tower_data.dat")
+coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
 ys = coords[:,1]
 zs = coords[:,2]
