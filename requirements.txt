@@ -15,6 +15,7 @@ pennylane==0.10
 pennylane-qchem==0.10
 pennylane-sf==0.9
 git+https://github.com/rigetti/pennylane-forest.git
+git+https://github.com/quantumlib/Cirq.git@master#egg=cirq
 git+https://github.com/PennyLaneAI/pennylane-cirq.git@pasqal-holding#egg=pennylane-cirq
 pennylane-qiskit==0.9
 pyquil==2.19
