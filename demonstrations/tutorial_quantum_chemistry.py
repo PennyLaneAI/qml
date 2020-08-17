@@ -38,9 +38,9 @@ Sit down, brew a hot drink, and let's take a look!
 
 Importing the molecular structure
 ---------------------------------
-The first step is to import PennyLane.
+The first step is to import the QChem package from PennyLane.
 """
-import pennylane as qml
+from pennylane import qchem
 
 ##############################################################################
 # In this example, we construct the electronic Hamiltonian of one of the most unique
@@ -49,16 +49,17 @@ import pennylane as qml
 # and stored in a list containing the symbol and the Cartesian coordinates of each atomic
 # species:
 
-geometry = qml.qchem.read_structure('h2o.xyz')
+geometry = qchem.read_structure('h2o.xyz')
 print("The total number of atoms is: {}".format(len(geometry)))
 print(geometry)
 
 ##############################################################################
 # .. note::
 #
-#     The xyz format is supported out of the box. If `Open Babel <http://openbabel.org/wiki/Main_Page>`_
-#     is installed, any format recognized by Open Babel is also supported
-#     by PennyLane, such as ``.mol`` and ``.sdf``.
+#     The xyz format is supported out of the box.
+#     If `Open Babel <http://openbabel.org/wiki/Main_Page>`_ is installed, any
+#     format recognized by Open Babel is also supported by PennyLane, such as
+#     ``.mol`` and ``.sdf``.
 #
 #     Please see the :func:`~.read_structure` and Open Babel documentation
 #     for more information on installing Open Babel.
@@ -84,10 +85,11 @@ print(geometry)
 # and `Coupled Cluster (CC) <https://en.wikipedia.org/wiki/Coupled_cluster>`__ methods among
 # others :ref:`[2]<qchem_references>`.
 #
-# Before launching the HF calculation using the function :func:`meanfield_data`, we
-# need to specify a string to label the molecule and the net charge of the molecule. In this
-# example we choose ``'water'`` as the string. On the other hand, although positively or
-# negatively charged molecules can be simulated, we choose a neutral system.
+# Before launching the HF calculation using the function :func:`meanfield`, we
+# need to specify a string to label the molecule and its geometry. In this
+# example we choose ``'water'`` as the string. Furthermore, the net charge of the
+# molecule may be specified to simulate positively or negatively charged molecules.
+# For this example, we choose a neutral system
 
 name = 'water'
 charge = 0
@@ -120,10 +122,10 @@ charge = 0
 # unpaired electrons, determines the occupation of the molecular orbitals in the HF calculations.
 # In this tutorial we will consider a closed-shell reference state.
 
-multiplicity = 1
+mult = 1
 
 ##############################################################################
-# Now we need to define the atomic basis set. Hartree-Fock molecular orbitals
+# We can also define the atomic basis set. Hartree-Fock molecular orbitals
 # are typically represented as a Linear Combination of Atomic Orbitals (LCAO) which are further
 # approximated by using Gaussian function. The `Basis Set Exchange
 # <https://www.basissetexchange.org/>`_ database is an excellent source of Gaussian-type
@@ -133,28 +135,24 @@ multiplicity = 1
 # Slater-type orbitals (STO) which provides the minimum number of atomic orbitals required to
 # accommodate the electrons of the neutral atoms.
 
-basis_set = 'sto-3g'
+basis = 'sto-3g'
 
 ##############################################################################
-# Finally, we can call the function :func:`~.meanfield_data` to launch the mean field
+# Finally, we can call the function :func:`~.meanfield` to launch the mean field
 # calculation. At present, the quantum chemistry packages `PySCF
 # <https://sunqm.github.io/pyscf/>`_ or `Psi4 <http://www.psicode.org/>`_ can be chosen to solve
 # the Hartree-Fock equations. In this example, we choose ``'pyscf'``, which is the default option,
 # but the same results can be obtained using ``'psi4'``.
 
-hf_data = qml.qchem.meanfield_data(name, geometry, charge,
-                                   multiplicity, basis_set, qc_package='pyscf')
+hf_file = qchem.meanfield(name, geometry, charge, mult, basis, package='pyscf')
 
 ##############################################################################
 # Once the calculation is completed,
-# the  string variable ``hf_data`` returned by the function stores the path to the directory
-# containing the file ``'water.hdf5'`` with the Hartree-Fock electronic structure of the water
-# molecule.
+# the string variable ``hf_file`` returned by the function stores the absolute path to the
+# the hdf5-formatted file ``'water'`` with the Hartree-Fock electronic structure
+# of the water molecule.
 
-import os
-print(hf_data)
-for file in os.listdir(hf_data):
-    print(file)
+print(hf_file)
 
 ##############################################################################
 # At this stage, we have a basis set of molecular orbitals. Next, we can use the
@@ -173,9 +171,9 @@ for file in os.listdir(hf_data):
 # intractable should we want to include the full set of molecular orbitals.
 #
 # In order to circumvent the combinatorial explosion, we can create an active space by classifying
-# the molecular orbitals as doubly-occupied, active, and external orbitals:
+# the molecular orbitals as core, active, and external orbitals:
 #
-# * Doubly-occupied orbitals are always occupied by two electrons.
+# * Core orbitals are always occupied by two electrons.
 # * Active orbitals can be occupied by zero, one, or two electrons.
 # * The external orbitals are never occupied.
 #
@@ -195,24 +193,24 @@ for file in os.listdir(hf_data):
 # Let's partition the HF orbitals to define an active space of four electrons in four active
 # orbitals:
 
-d_occ_indices, active_indices = qml.qchem.active_space(name, hf_data,
-                                                       n_active_electrons=4,
-                                                       n_active_orbitals=4)
+electrons = 10
+orbitals = 7
+core, active = qchem.active_space(electrons, orbitals, active_electrons=4, active_orbitals=4)
 
 ##############################################################################
 # Viewing the results:
 
-print("List of doubly-occupied molecular orbitals: {:}".format(d_occ_indices))
-print("List of active molecular orbitals: {:}".format(active_indices))
-print("Number of qubits required for quantum simulation: {:}".format(2*len(active_indices)))
+print("List of core orbitals: {:}".format(core))
+print("List of active orbitals: {:}".format(active))
+print("Number of qubits required for quantum simulation: {:}".format(2*len(active)))
 
 ##############################################################################
 # Notice that calling the :func:`~.active_space` function without specifying an active
-# space results in no doubly-occupied orbitals---*all* molecular orbitals are considered to be active.
+# space results in no core orbitals---*all* molecular orbitals are considered to be active.
 
-no_d_occ, all_active = qml.qchem.active_space(name, hf_data)
-print("List of doubly-occupied molecular orbitals: {:}".format(no_d_occ))
-print("List of active molecular molecular orbitals: {:}".format(all_active))
+no_core, all_active = qchem.active_space(electrons, orbitals)
+print("List of core orbitals: {:}".format(no_core))
+print("List of active orbitals: {:}".format(all_active))
 print("Number of qubits required for quantum simulation: {:}".format(2*len(all_active)))
 
 ##############################################################################
@@ -222,8 +220,8 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 # molecule, the next step is to build the second-quantized fermionic Hamiltonian,
 #
 # .. math::
-#     H = \sum_{p,q} h_{pq} c_p^\dagger c_q + \frac{1}{2} \sum_{p,q,r,s} h_{pqrs} c_p^\dagger c_q^\dagger
-#     c_r c_s,
+#     H = \sum_{p,q} h_{pq} c_p^\dagger c_q +
+#     \frac{1}{2} \sum_{p,q,r,s} h_{pqrs} c_p^\dagger c_q^\dagger c_r c_s,
 #
 # and apply the `Jordan-Wigner
 # <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`__ or `Bravyi-Kitaev
@@ -240,38 +238,22 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 # :ref:`[2]<qchem_references>` describing the fermionic Hamiltonian are retrieved from the
 # previously generated file ``'./pyscf/sto-3g/water.hdf5'``.
 
-qubit_hamiltonian = qml.qchem.decompose_hamiltonian(
-	name,
-	hf_data,
-	mapping='jordan_wigner',
-	docc_mo_indices=d_occ_indices,
-	active_mo_indices=active_indices
-)
+qubit_hamiltonian = qchem.decompose(hf_file, mapping="jordan_wigner", core=core, active=active)
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
 print(qubit_hamiltonian)
 
 ##############################################################################
-# Finally, the :func:`~.generate_hamiltonian`
+# Finally, the :func:`~.molecular_hamiltonian`
 # function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above.
 #
 # An example usage is shown below:
 
-qubit_hamiltonian, n_qubits = qml.qchem.generate_hamiltonian(
-	name,
-	'h2o.xyz',
-	charge,
-	multiplicity,
-	basis_set,
-	qc_package='pyscf',
-	n_active_electrons=4,
-	n_active_orbitals=4,
-	mapping='jordan_wigner'
-)
+H, qubits = qchem.molecular_hamiltonian(name, 'h2o.xyz')
 
-print("Number of qubits required to perform quantum simulations: {:}".format(n_qubits))
+print("Number of qubits required to perform quantum simulations: {:}".format(qubits))
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
-print(qubit_hamiltonian)
+print(H)
 
 ##############################################################################
 # You have completed the tutorial! Now, select your favorite molecule and build its electronic
@@ -284,7 +266,7 @@ print(qubit_hamiltonian)
 #
 #     If you have built your electronic Hamiltonian independently by using `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ tools, no problem! The
-#     :func:`~.convert_hamiltonian` function converts the `OpenFermion
+#     :func:`~.convert_observable` function converts the `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ QubitOperator to PennyLane observables.
 #
 # .. _qchem_references:
