@@ -580,7 +580,6 @@ plt.plot(x, predictions, c='blue', linewidth=5)
 plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, c='black', s=45)
 plt.ylim(-1,1)
-plt.savefig("x_to_x.svg")
 plt.show()
 
 
@@ -722,7 +721,8 @@ fig, ax = plt.subplots(1, n_coeffs)
 
 for idx, ax_ in enumerate(ax):
     ax_.set_title(r"c_{}".format(idx))
-    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx])
+    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx],
+		s=50, facecolor='white', linewidth=1.5, edgecolor='#ff6600ff')
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
