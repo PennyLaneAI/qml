@@ -11,7 +11,9 @@ Exploring the link between quantum models and Fourier series
 # `Schuld, Sweke and Meyer
 # (2020) <https://arxiv.org/pdf/XXX.XXXXX.pdf>`__.
 # 
-# 
+# .. figure:: ../demonstrations/expressivity_fourier_series/scheme_thumb.png
+#   :width: 50%
+#   :align: center
 # 
 
 
@@ -56,7 +58,7 @@ Exploring the link between quantum models and Fourier series
 # 
 # .. math::  f_{ \boldsymbol \theta}(x) = \sum_{\omega \in \Omega} c_{\omega}( \boldsymbol \theta) \; e^{i  \omega x}. 
 # 
-# As illustrated in the picture below (which is Figure 1 from the papper),
+# As illustrated in the picture below (which is Figure 1 from the paper),
 # the "encoding Hamiltonians" in :math:`S(x)` determine the set
 # :math:`\Omega` of available "frequencies", and the remainder of the
 # circuit, including the parameters, determine the coefficients
@@ -65,7 +67,9 @@ Exploring the link between quantum models and Fourier series
 
 
 ######################################################################
-# 
+# .. figure:: ../demonstrations/expressivity_fourier_series/scheme.png
+#   :width: 50%
+#   :align: center
 # 
 
 
@@ -110,7 +114,8 @@ Exploring the link between quantum models and Fourier series
 #    parametrised ansatz.
 # 
 # The code is presented so you can easily modify it in order to play
-# around with other settings and models.
+# around with other settings and models. The settings used in the paper 
+# are given in the various subsections.
 # 
 
 
@@ -122,7 +127,7 @@ Exploring the link between quantum models and Fourier series
 
 ######################################################################
 # First of all, let's make some imports and define a standard loss
-# function with which the training will be executed.
+# function for the training.
 # 
 
 import matplotlib.pyplot as plt
@@ -146,8 +151,8 @@ def square_loss(targets, predictions):
 
 
 ######################################################################
-# First we will reproduce Figures 3 and 4 from the paper. These are
-# supposed to show how quantum models that use Pauli rotations as data
+# First we will reproduce Figures 3 and 4 from the paper. These
+# show how quantum models that use Pauli rotations as data
 # encoding gates can only fit Fourier series up to a certain degree. The
 # degree corresponds to the number of times that the Pauli gate gets
 # repeated in the quantum model.
@@ -156,7 +161,9 @@ def square_loss(targets, predictions):
 # sequentially (as in Figure 2a of the paper). For simplicity we will only
 # look at single qubit circuits:
 # 
-# 
+# .. figure:: ../demonstrations/expressivity_fourier_series/single_qubit_model.png
+#   :width: 50%
+#   :align: center
 # 
 
 
@@ -201,37 +208,39 @@ plt.show()
 
 
 ######################################################################
-# To reproduce the figures in the paper, you can use the following
-# settings in the cells above:
+# .. note:: 
+#
+#     To reproduce the figures in the paper, you can use the following
+#     settings in the cells above:
 # 
-# -  For the settings
+#     -  For the settings
 # 
-#    ::
+#        ::
 # 
-#        degree = 1
-#        coeffs = [0.15 + 0.15j]*degree 
-#        coeff0 = 0.1
+#            degree = 1
+#            coeffs = [0.15 + 0.15j]*degree 
+#            coeff0 = 0.1
 # 
-#    this function is the ground truth
-#    :math:`g(x) = \sum_{n=-1}^1 c_{n} e^{-nix}` from Figure 3 in the
-#    paper.
+#        this function is the ground truth
+#        :math:`g(x) = \sum_{n=-1}^1 c_{n} e^{-nix}` from Figure 3 in the
+#        paper.
 # 
-# -  To get the ground truth :math:`g'(x) = \sum_{n=-2}^2 c_{n} e^{-nix}`
-#    with :math:`c_0=0.1` :math:`c_1 = c_2 = 0.15 - 0.15i` from Figure 3,
-#    you need to increase the degree to two:
+#     -  To get the ground truth :math:`g'(x) = \sum_{n=-2}^2 c_{n} e^{-nix}`
+#        with :math:`c_0=0.1` :math:`c_1 = c_2 = 0.15 - 0.15i` from Figure 3,
+#        you need to increase the degree to two:
 # 
-#    ::
+#        ::
 # 
-#        degree = 2
+#            degree = 2
 # 
-# -  The ground truth from Figure 4 can be reproduced by changing the
-#    settings to:
+#     -  The ground truth from Figure 4 can be reproduced by changing the
+#        settings to:
 # 
-#    ::
+#        ::
 # 
-#        degree = 5 
-#        coeffs = [0.05 + 0.05j]*degree 
-#        coeff0 = 0.0 
+#            degree = 5 
+#            coeffs = [0.05 + 0.05j]*degree 
+#            coeff0 = 0.0 
 # 
 
 
@@ -289,20 +298,19 @@ plt.show()
 
 
 ######################################################################
-# .. note::
 # 
-# ::
+# No matter what weights are picked, the single qubit model for `L=1` will always be a sine function 
+# of a fixed frequency. The weights merely influence the amplitude, y-shift and phase of the sine.
 # 
-#     No matter what weights are picked, the single qubit model for `L=1` will always be a sine function 
-#     of a fixed frequency. The weights merely influence the amplitude, y-shift and phase of the sine.
-# 
-#     This observation is formally derived in Section II.A of the paper.
+# This observation is formally derived in Section II.A of the paper.
 # 
 
 
 ######################################################################
-# You can increase the number of layers. Figure 4 from the paper, for
-# example, uses the settings ``L=1``, ``L=3`` and ``L=5``.
+# .. note:: 
+# 
+#     You can increase the number of layers. Figure 4 from the paper, for
+#     example, uses the settings ``L=1``, ``L=3`` and ``L=5``.
 # 
 
 
@@ -328,7 +336,7 @@ def cost(weights, x, y):
     predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 25
+max_steps = 50
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]# initial cost
@@ -362,7 +370,6 @@ plt.plot(x, predictions, c='blue')
 plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, c='black')
 plt.ylim(-1,1)
-plt.savefig("x_to_x.svg")
 plt.show()
 
 
@@ -379,10 +386,10 @@ plt.show()
 
 
 ######################################################################
-# With the initial settings, the quantum model learns to fit the ground
-# truth perfectly. This is expected, since the number of Pauli rotation
-# encoding gates and the degree of the ground truth Fourier series are
-# both one.
+# With the initial settings and enough training steps, the quantum model 
+# learns to fit the ground truth perfectly. This is expected, since 
+# the number of Pauli rotation encoding gates and the degree of the 
+# ground truth Fourier series are both one.
 # 
 # If the ground truth's degree is larger than the number of layers in the
 # quantum model, the fit will look much less accurate. And finally, we
@@ -395,8 +402,6 @@ plt.show()
 
 ######################################################################
 # .. note::
-# 
-# ::
 # 
 #     You will find that the training takes much longer, and needs a lot more steps to converge for 
 #     larger L. Some initial weights may not even converge to a good solution at all, the training 
@@ -423,11 +428,23 @@ plt.show()
 # least :math:`r` repetitions of the encoding gate in the quantum model.
 # However, in practice this experiment is a bit harder, since the
 # trainable unitaries :math:`W` grow quickly with the number of qubits.
+#
+# In the paper, the investigations are made with the assumption that the
+# purple trainable blocks :math:`W` are arbitrary unitaries. We could use
+# the ``pennylane.templates.ArbitraryUnitary`` template, but since this
+# template requires a number of parameters that grows exponentially with
+# the number of qubits (:math:`4^L-1` to be precise), this quickly becomes
+# cumbersome to train.
+# 
+# We therefore follow Figure 4 in the paper and use an ansatz for
+# :math:`W`. 
 # 
 
 
 ######################################################################
-# 
+# .. figure:: ../demonstrations/expressivity_fourier_series/parallel_model.png
+#   :width: 70%
+#   :align: center
 # 
 
 
@@ -438,15 +455,7 @@ plt.show()
 
 
 ######################################################################
-# In the paper, the investigations are made with the assumption that the
-# purple trainable blocks :math:`W` are arbitrary unitaries. We could use
-# the ``pennylane.templates.ArbitraryUnitary`` template, but since this
-# template requires a number of parameters that grows exponentially with
-# the number of qubits (:math:`4^L-1` to be precise), this quickly becomes
-# cumbersome to train.
-# 
-# We therefore follow Figure 4 in the paper and use an ansatz for
-# :math:`W`. The ansatz is PennyLane's layer structure called
+# The ansatz is PennyLane's layer structure called
 # ``StronglyEntanglingLayers``, and as the name suggests, it has itself a
 # user-defined number of layers (which we will call "ansatz layers" to
 # avoid confusion).
@@ -530,7 +539,7 @@ plt.show()
 ######################################################################
 # Training the model is done exactly as before, but it may take a lot
 # longer this time. We set a default of 25 steps, which you should
-# increase if necessary. Small models of <6 qubits should
+# increase if necessary. Small models of <6 qubits
 # usually converge after a few hundred steps at most - but this
 # depends on your settings.
 # 
@@ -560,6 +569,11 @@ for step in range(max_steps):
     if step % 10 == 0:
         print("step ", step, "cost", c)
 
+
+######################################################################
+# 
+
+
 predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, predictions, c='blue', linewidth=5)
@@ -569,6 +583,11 @@ plt.ylim(-1,1)
 plt.savefig("x_to_x.svg")
 plt.show()
 
+
+######################################################################
+# 
+
+
 plt.plot(range(len(cst)), cst, c='gray', linewidth=5)
 plt.ylabel("cost")
 plt.xlabel("steps")
@@ -576,6 +595,14 @@ plt.xlim(0,100)
 plt.ylim(0, 0.23)
 plt.show()
 
+
+
+######################################################################
+# .. note:: 
+#
+#     To reproduce the right column in Figure 4 from the paper, use the 
+#     correct ground truth, :math:`r=3` and ``trainable_block_layers=3``.
+#
 
 ######################################################################
 # Part III: Sampling Fourier coefficients
@@ -590,7 +617,8 @@ plt.show()
 # also depends on the Fourier coefficients the model can create.
 # 
 # Figure 5 in Schuld, Sweke and Meyer (2020) shows Fourier coefficients
-# from quantum models sampled from a model family. For this we need a
+# from quantum models sampled from a model family defined by an 
+# ansatz for the trainable circuit block. For this we need a
 # function that numerically computes the Fourier coefficients of a
 # periodic function f with period :math:`2 \pi`.
 # 
@@ -690,20 +718,17 @@ coeffs_imag = np.imag(coeffs)
 
 n_coeffs = len(coeffs_real[0])
 
-fig, ax = plt.subplots(1, n_coeffs, figsize=(15, 15))
+fig, ax = plt.subplots(1, n_coeffs)
 
 for idx, ax_ in enumerate(ax):
-    #ax_.set_title(r"c_{}".format(idx))
-    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], 
-                s=105, facecolor='white', linewidth=1.5, edgecolor='#ff6600ff')#'#008080ff')#'#800080ff')
+    ax_.set_title(r"c_{}".format(idx))
+    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx])
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
-    ax_.set_xticks([])
-    ax_.set_yticks([])
+
 
 plt.tight_layout(pad=0.5)
-plt.savefig("coeffs.svg")
 plt.show()
 
 
@@ -715,11 +740,13 @@ plt.show()
 
 
 ######################################################################
-# To reproduce the results from Figure 5 you have to change the ansatz (no
-# unitary, ``BasicEntanglerLayers`` or ``StronglyEntanglingLayers``, and
-# set ``n_ansatz_layers`` either to :math:`1` or :math:`5`. The
-# ``StronglyEntanglingLayers`` requires weights of shape
-# ``size=(2, n_ansatz_layers, n_qubits, 3)``.
+# .. note::
+#
+#     To reproduce the results from Figure 5 you have to change the ansatz (no
+#     unitary, ``BasicEntanglerLayers`` or ``StronglyEntanglingLayers``, and
+#     set ``n_ansatz_layers`` either to :math:`1` or :math:`5`. The
+#     ``StronglyEntanglingLayers`` requires weights of shape
+#     ``size=(2, n_ansatz_layers, n_qubits, 3)``.
 # 
 
 
