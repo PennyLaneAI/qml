@@ -122,7 +122,7 @@ charge = 0
 # unpaired electrons, determines the occupation of the molecular orbitals in the HF calculations.
 # In this tutorial we will consider a closed-shell reference state.
 
-mult = 1
+multiplicity = 1
 
 ##############################################################################
 # We can also define the atomic basis set. Hartree-Fock molecular orbitals
@@ -135,7 +135,7 @@ mult = 1
 # Slater-type orbitals (STO) which provides the minimum number of atomic orbitals required to
 # accommodate the electrons of the neutral atoms.
 
-basis = 'sto-3g'
+basis_set = 'sto-3g'
 
 ##############################################################################
 # Finally, we can call the function :func:`~.meanfield` to launch the mean field
@@ -144,7 +144,14 @@ basis = 'sto-3g'
 # the Hartree-Fock equations. In this example, we choose ``'pyscf'``, which is the default option,
 # but the same results can be obtained using ``'psi4'``.
 
-hf_file = qchem.meanfield(name, geometry, charge, mult, basis, package='pyscf')
+hf_file = qchem.meanfield(
+    name,
+    geometry,
+    charge=charge,
+    mult=multiplicity,
+    basis=basis_set,
+    package='pyscf'
+)
 
 ##############################################################################
 # Once the calculation is completed,
@@ -249,7 +256,17 @@ print(qubit_hamiltonian)
 #
 # An example usage is shown below:
 
-H, qubits = qchem.molecular_hamiltonian(name, 'h2o.xyz')
+H, qubits = qchem.molecular_hamiltonian(
+    name,
+    'h2o.xyz',
+    charge=charge,
+    mult=multiplicity,
+    basis=basis_set,
+    package='pyscf',
+    active_electrons=4,
+    active_orbitals=4,
+    mapping='jordan_wigner'
+)
 
 print("Number of qubits required to perform quantum simulations: {:}".format(qubits))
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
