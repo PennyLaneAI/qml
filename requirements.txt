@@ -15,6 +15,7 @@ git+https://github.com/PennyLaneAI/pennylane.git
 git+https://github.com/PennyLaneAI/pennylane.git#subdirectory=qchem
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/rigetti/pennylane-forest.git
+git+https://github.com/quantumlib/Cirq.git@master#egg=cirq
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
 git+https://github.com/PennyLaneAI/pennylane-qiskit.git
 pyquil==2.21
