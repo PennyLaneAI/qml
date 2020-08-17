@@ -1,6 +1,6 @@
 """
-Exploring the link between quantum models and Fourier series
-============================================================
+Quantum models as Fourier series
+================================
 
 """
 
