@@ -33,7 +33,7 @@ Quantum models as Fourier series
 
 
 ######################################################################
-# The work by Schuld, Sweke and Meyer (2020) considers quantum machine
+# The paper [1] considers quantum machine
 # learning models of the form
 # 
 # .. math:: f_{\boldsymbol \theta}(x) = \langle 0| U^{\dagger}(x,\boldsymbol \theta) M U(x, \boldsymbol \theta) | 0 \rangle 
