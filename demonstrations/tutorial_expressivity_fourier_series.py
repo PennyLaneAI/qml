@@ -684,7 +684,7 @@ def quantum_model(weights, x=None):
 
 n_ansatz_layers = 1
 
-def get_weights():
+def random_weights():
     return 2 * np.pi * np.random.random(size=(2, n_ansatz_layers, n_qubits))
 
 
