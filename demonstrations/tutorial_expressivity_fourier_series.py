@@ -786,7 +786,7 @@ def quantum_model(weights_, x=None):
     W(weights[1])
     return qml.expval(qml.X(wires=0))
 
-def get_weights():
+def random_weights():
     return np.random.normal(size=(2, 5*n_ansatz_layers), loc=0, scale=var)
 
 ######################################################################
