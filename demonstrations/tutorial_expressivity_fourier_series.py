@@ -802,3 +802,11 @@ def random_weights():
 #
 #         dev_cv = qml.device('strawberryfields.fock', wires=1, cutoff_dim=50)
 #
+
+
+##############################################################################
+# References
+# ---------------
+#
+# [1] Maria Schuld, Ryan Sweke and Johannes Jakob Meyer, *The effect of data encoding on
+# the expressive power of variational quantum machine learning models*, arxiv preprint arxiv:XXX.XXXXX.
