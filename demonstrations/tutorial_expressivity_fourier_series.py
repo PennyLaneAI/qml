@@ -760,7 +760,7 @@ plt.show()
 # Continuous-variable model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Schuld, Sweke and Meyer (2020) mention that a phase rotation in
+# Ref. [1] mentions that a phase rotation in
 # continuous-variable quantum computing has a spectrum that supports *all*
 # Fourier frequecies. To play with this model, we finally show you the
 # code for a continuous-variable circuit. For example, to see its Fourier
