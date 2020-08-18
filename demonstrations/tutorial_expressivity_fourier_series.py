@@ -48,7 +48,10 @@ Quantum models as Fourier series
 # :math:`W(\boldsymbol \theta)` that is controlled by the parameters
 # :math:`\boldsymbol \theta`. The data encoding block consists of gates of
 # the form :math:`\mathcal{G}(x) = e^{-ix H}`, where :math:`H` is a
-# Hamiltonian.
+# Hamiltonian. A prominent example of such gates are Pauli rotations.
+
+
+#
 # 
 
 
