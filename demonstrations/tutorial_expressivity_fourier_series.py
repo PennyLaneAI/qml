@@ -382,7 +382,7 @@ plt.show()
 # 
 
 plt.plot(range(len(cst)), cst, c='gray')
-plt.ylabel("cost")
+plt.ylabel("Cost")
 plt.xlabel("steps")
 plt.ylim(0, 0.23)
 plt.show()
