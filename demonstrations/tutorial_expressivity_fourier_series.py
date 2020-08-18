@@ -203,7 +203,7 @@ x = np.linspace(-6, 6, 70)
 target_y = np.array([target_function(x_) for x_ in x])
 
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black', s=20)
+plt.scatter(x, target_y, c='black', facecolor='white')
 plt.ylim(-1, 1)
 plt.show()
 
@@ -293,7 +293,7 @@ x = np.linspace(-6, 6, 70)
 random_quantum_model_y = [serial_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
-plt.scatter(x, random_quantum_model_y, c='blue', s=10)
+plt.scatter(x, random_quantum_model_y, c='blue', facecolor='white')
 plt.ylim(-1,1)
 plt.show()
 
@@ -337,7 +337,7 @@ def cost(weights, x, y):
     predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 50
+max_steps = 1
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]# initial cost
@@ -369,7 +369,7 @@ predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, predictions, c='blue')
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black')
+plt.scatter(x, target_y, c='black', facecolor='white')
 plt.ylim(-1,1)
 plt.show()
 
@@ -378,7 +378,7 @@ plt.show()
 # Let's also have a look at the cost during training.
 # 
 
-plt.plot(range(len(cst)), cst, c='gray')
+plt.plot(range(len(cst)), cst)
 plt.ylabel("cost")
 plt.xlabel("steps")
 plt.ylim(0, 0.23)
@@ -525,7 +525,7 @@ x = np.linspace(-6, 6, 70)
 random_quantum_model_y = [parallel_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
-plt.scatter(x, random_quantum_model_y, c='blue')
+plt.scatter(x, random_quantum_model_y, c='blue', facecolor='white')
 plt.ylim(-1,1)
 plt.show()
 
@@ -548,7 +548,7 @@ def cost(weights, x, y):
     predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 70
+max_steps = 1
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]# initial cost
@@ -578,7 +578,7 @@ predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, predictions, c='blue', linewidth=5)
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black', s=45)
+plt.scatter(x, target_y, c='black', facecolor='white')
 plt.ylim(-1,1)
 plt.show()
 
@@ -587,10 +587,9 @@ plt.show()
 # 
 
 
-plt.plot(range(len(cst)), cst, c='gray', linewidth=5)
+plt.plot(range(len(cst)), cst)
 plt.ylabel("cost")
 plt.xlabel("steps")
-plt.ylim(0, 0.23)
 plt.show()
 
 
@@ -723,8 +722,8 @@ fig, ax = plt.subplots(1, n_coeffs)
 
 for idx, ax_ in enumerate(ax):
     ax_.set_title(r"c_{}".format(idx))
-    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx],
-		s=30, facecolor='white', linewidth=1, edgecolor='#ff6600ff')
+    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], facecolor='white')
+		#s=30, , linewidth=1, edgecolor='#ff6600ff')
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
