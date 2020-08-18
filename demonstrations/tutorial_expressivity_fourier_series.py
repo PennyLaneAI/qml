@@ -701,7 +701,7 @@ n_samples = 100
 coeffs = []
 for i in range(n_samples):
 
-    weights = get_weights()
+    weights = random_weights()
 
     def f(x):
         return np.array([quantum_model(weights, x=x_) for x_ in x])
