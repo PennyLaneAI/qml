@@ -178,9 +178,10 @@ def square_loss(targets, predictions):
 
 
 ######################################################################
-# We first define a (classical) truncated Fourier series of a given
-# degree, which will be used as a "ground truth" that the quantum model
-# has to fit:
+# We first define a (classical) target function which will be used as a 
+# "ground truth" that the quantum model has to fit. The target function is 
+# constructed as a Fourier series of a specific degree:
+#
 # 
 
 degree = 1 # degree of the target function
