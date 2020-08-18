@@ -93,7 +93,7 @@ name = 'h2'
 # (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
 # number of qubits needed to represent it:
 
-h, qubits = qml.qchem.molecular_hamiltonian(
+h, qubits = qchem.molecular_hamiltonian(
     name,
     geometry,
     charge=charge,
