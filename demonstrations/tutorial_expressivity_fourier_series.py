@@ -543,7 +543,7 @@ plt.show()
 # Training the model is done exactly as before, but it may take a lot
 # longer this time. We set a default of 25 steps, which you should
 # increase if necessary. Small models of <6 qubits
-# usually converge after a few hundred steps at most - but this
+# usually converge after a few hundred steps at most -- but this
 # depends on your settings.
 # 
 
