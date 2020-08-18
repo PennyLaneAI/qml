@@ -359,7 +359,7 @@ for step in range(max_steps):
     c = cost(weights, x, target_y)
     cst.append(c)
     if (step + 1) % 10 == 0:
-        print("step ", step, "cost", c)
+        print("Cost at step {0:3}: {1}".format(step + 1, c))
 
 
 ######################################################################
