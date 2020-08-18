@@ -43,7 +43,7 @@ Quantum models as Fourier series
 # encodes a (here one-dimensional) data input :math:`x` and depends on a
 # set of parameters :math:`\boldsymbol \theta`.
 # 
-# The circuit itself repeats :math:`L` layers of a data encoding circuit
+# The circuit itself repeats :math:`L` layers, each consisting of a data encoding circuit
 # block :math:`S(x)` and a trainable circuit block
 # :math:`W(\boldsymbol \theta)` that is controlled by the parameters
 # :math:`\boldsymbol \theta`. The data encoding block consists of gates of
