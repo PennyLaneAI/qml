@@ -358,7 +358,7 @@ for step in range(max_steps):
     # Save, and possibly print, the current cost
     c = cost(weights, x, target_y)
     cst.append(c)
-    if step % 10 == 0:
+    if (step + 1) % 10 == 0:
         print("step ", step, "cost", c)
 
 
