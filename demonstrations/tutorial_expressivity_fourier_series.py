@@ -691,7 +691,7 @@ def random_weights():
 ######################################################################
 # Now we can compute the first few Fourier coefficients for samples from
 # this model. The samples are created by randomly sampling different
-# parameters using the ``get_weights()`` function.
+# parameters using the ``random_weights()`` function.
 # 
 
 n_coeffs = 5
