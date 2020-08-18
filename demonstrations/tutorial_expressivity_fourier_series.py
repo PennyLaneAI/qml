@@ -64,7 +64,7 @@ Quantum models as Fourier series
 # As illustrated in the picture below (which is Figure 1 from the paper),
 # the "encoding Hamiltonians" in :math:`S(x)` determine the set
 # :math:`\Omega` of available "frequencies", and the remainder of the
-# circuit, including the parameters, determine the coefficients
+# circuit, including the trainable parameters, determine the coefficients
 # :math:`c_{\omega}`.
 # 
 
