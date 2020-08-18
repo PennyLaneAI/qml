@@ -372,7 +372,7 @@ predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, predictions, c='blue')
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black')
+plt.scatter(x, target_y, c='black', facecolor='white', linewidth=1, edgecolor='black')
 plt.ylim(-1,1)
 plt.show()
 
