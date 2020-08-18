@@ -15,7 +15,7 @@ pennylane==0.11
 pennylane-qchem==0.11
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/rigetti/pennylane-forest.git
-pennylane-cirq==0.11
+git+https://github.com/PennyLaneAI/pennylane-cirq.git
 pennylane-qiskit==0.11
 pyquil==2.21
 scipy==1.4.1
