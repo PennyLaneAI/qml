@@ -734,7 +734,7 @@ plt.show()
 
 ######################################################################
 # Note also how the variance of the distribution decreases for growing
-# orders of the coefficients - an effect that ensures the convergence of a
+# orders of the coefficients - an effect linked to the convergence of a
 # Fourier series.
 # 
 
@@ -763,7 +763,7 @@ plt.show()
 
 var = 2
 n_ansatz_layers = 1
-dev_cv = qml.device('strawberryfields.fock', wires=1, cutoff_dim=50)
+dev_cv = qml.device('default.gaussian', wires=1)
 
 def S(x):
     qml.Rotation(x, wires=0)
@@ -773,7 +773,6 @@ def W(theta):
     for r_ in range(n_ansatz_layers):
         qml.Displacement(theta[0], theta[1], wires=0)
         qml.Squeezing(theta[2], theta[3], wires=0)
-        qml.Kerr(theta[4], wires=0)
 
 @qml.qnode(dev_cv)
 def quantum_model(weights_, x=None):
@@ -784,3 +783,16 @@ def quantum_model(weights_, x=None):
 
 def get_weights():
     return np.random.normal(size=(2, 5*n_ansatz_layers), loc=0, scale=var)
+
+######################################################################
+# .. note:: 
+#
+#     To find out what effect so-called "non-Gaussian" gates like the 
+#     ``Kerr`` gate have, you need to install the 
+#     `strawberryfields plugin <https://pennylane-sf.readthedocs.io/en/latest/>`_ 
+#     and change the device to 
+#     
+#     .. code-block:: python
+#
+#         dev_cv = qml.device('strawberryfields.fock', wires=1, cutoff_dim=50)
+#
