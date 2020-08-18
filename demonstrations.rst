@@ -230,7 +230,7 @@ algorithms using PennyLane and near-term quantum hardware.
 .. customgalleryitem::
     :tooltip: Understand the link between variational quantum models and Fourier series.
     :figure: demonstrations/expressivity_fourier_series/thumbnail.png
-    :description: :doc:`demos/tutorial_quantum_models_as_fourier_series.py`
+    :description: :doc:`demos/tutorial_expressivity_fourier_series.py`
     :tags: autograd
 
 :html:`</div></div><div style='clear:both'>`
