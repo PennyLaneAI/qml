@@ -165,7 +165,7 @@ def circuit(phi=None):
 #
 # 2. each square is processed by the quantum circuit;
 #
-# 3. the :math:`4` expecation values are mapped into :math:`4` different
+# 3. the :math:`4` expectation values are mapped into :math:`4` different
 #    channels of a single output pixel.
 #
 # .. note::
