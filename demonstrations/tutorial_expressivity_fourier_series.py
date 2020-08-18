@@ -9,7 +9,7 @@ Quantum models as Fourier series
 # This demonstration is based on the paper *The effect of data encoding on
 # the expressive power of variational quantum machine learning models* by
 # `Schuld, Sweke and Meyer
-# (2020) <https://arxiv.org/pdf/XXX.XXXXX.pdf>`__.
+# (2020) <https://arxiv.org/pdf/XXX.XXXXX.pdf>`__ [1].
 # 
 # .. figure:: ../demonstrations/expressivity_fourier_series/scheme_thumb.png
 #   :width: 50%
@@ -33,7 +33,7 @@ Quantum models as Fourier series
 
 
 ######################################################################
-# The work by Schuld, Sweke and Meyer (2020) considers quantum machine
+# Ref. [1] considers quantum machine
 # learning models of the form
 # 
 # .. math:: f_{\boldsymbol \theta}(x) = \langle 0| U^{\dagger}(x,\boldsymbol \theta) M U(x, \boldsymbol \theta) | 0 \rangle 
@@ -43,12 +43,12 @@ Quantum models as Fourier series
 # encodes a (here one-dimensional) data input :math:`x` and depends on a
 # set of parameters :math:`\boldsymbol \theta`.
 # 
-# The circuit itself repeats :math:`L` layers of a data encoding circuit
+# The circuit itself repeats :math:`L` layers, each consisting of a data encoding circuit
 # block :math:`S(x)` and a trainable circuit block
 # :math:`W(\boldsymbol \theta)` that is controlled by the parameters
 # :math:`\boldsymbol \theta`. The data encoding block consists of gates of
 # the form :math:`\mathcal{G}(x) = e^{-ix H}`, where :math:`H` is a
-# Hamiltonian.
+# Hamiltonian. A prominent example of such gates are Pauli rotations.
 # 
 
 
@@ -61,7 +61,7 @@ Quantum models as Fourier series
 # As illustrated in the picture below (which is Figure 1 from the paper),
 # the "encoding Hamiltonians" in :math:`S(x)` determine the set
 # :math:`\Omega` of available "frequencies", and the remainder of the
-# circuit, including the parameters, determine the coefficients
+# circuit, including the trainable parameters, determine the coefficients
 # :math:`c_{\omega}`.
 # 
 
@@ -70,6 +70,8 @@ Quantum models as Fourier series
 # .. figure:: ../demonstrations/expressivity_fourier_series/scheme.png
 #   :width: 50%
 #   :align: center
+#
+# |
 # 
 
 
@@ -175,9 +177,10 @@ def square_loss(targets, predictions):
 
 
 ######################################################################
-# We first define a (classical) truncated Fourier series of a given
-# degree, which will be used as a "ground truth" that the quantum model
-# has to fit:
+# We first define a (classical) target function which will be used as a 
+# "ground truth" that the quantum model has to fit. The target function is 
+# constructed as a Fourier series of a specific degree:
+#
 # 
 
 degree = 1 # degree of the target function
@@ -203,7 +206,7 @@ x = np.linspace(-6, 6, 70)
 target_y = np.array([target_function(x_) for x_ in x])
 
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black', facecolor='white')
+plt.scatter(x, target_y, facecolor='white', edgecolor='black')
 plt.ylim(-1, 1)
 plt.show()
 
@@ -293,7 +296,6 @@ x = np.linspace(-6, 6, 70)
 random_quantum_model_y = [serial_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
-plt.scatter(x, random_quantum_model_y, c='blue', facecolor='white')
 plt.ylim(-1,1)
 plt.show()
 
@@ -340,7 +342,7 @@ def cost(weights, x, y):
 max_steps = 1
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
-cst = [cost(weights, x, target_y)]# initial cost
+cst = [cost(weights, x, target_y)]  # initial cost
 
 for step in range(max_steps):
 
@@ -355,8 +357,8 @@ for step in range(max_steps):
     # Save, and possibly print, the current cost
     c = cost(weights, x, target_y)
     cst.append(c)
-    if step % 10 == 0:
-        print("step ", step, "cost", c)
+    if (step + 1) % 10 == 0:
+        print("Cost at step {0:3}: {1}".format(step + 1, c))
 
 
 ######################################################################
@@ -367,9 +369,9 @@ for step in range(max_steps):
 
 predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
 
-plt.plot(x, predictions, c='blue')
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black', facecolor='white')
+plt.scatter(x, target_y, facecolor='white', edgecolor='black')
+plt.plot(x, predictions, c='blue')
 plt.ylim(-1,1)
 plt.show()
 
@@ -379,8 +381,8 @@ plt.show()
 # 
 
 plt.plot(range(len(cst)), cst)
-plt.ylabel("cost")
-plt.xlabel("steps")
+plt.ylabel("Cost")
+plt.xlabel("Step")
 plt.ylim(0, 0.23)
 plt.show()
 
@@ -525,7 +527,6 @@ x = np.linspace(-6, 6, 70)
 random_quantum_model_y = [parallel_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
-plt.scatter(x, random_quantum_model_y, c='blue', facecolor='white')
 plt.ylim(-1,1)
 plt.show()
 
@@ -540,7 +541,7 @@ plt.show()
 # Training the model is done exactly as before, but it may take a lot
 # longer this time. We set a default of 25 steps, which you should
 # increase if necessary. Small models of <6 qubits
-# usually converge after a few hundred steps at most - but this
+# usually converge after a few hundred steps at most -- but this
 # depends on your settings.
 # 
 
@@ -551,7 +552,7 @@ def cost(weights, x, y):
 max_steps = 1
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
-cst = [cost(weights, x, target_y)]# initial cost
+cst = [cost(weights, x, target_y)]  # initial cost
 
 for step in range(max_steps):
 
@@ -566,8 +567,8 @@ for step in range(max_steps):
     # save, and possibly print, the current cost
     c = cost(weights, x, target_y)
     cst.append(c)
-    if step % 10 == 0:
-        print("step ", step, "cost", c)
+    if (step + 1) % 10 == 0:
+        print("Cost at step {0:3}: {1}".format(step + 1, c))
 
 
 ######################################################################
@@ -576,9 +577,9 @@ for step in range(max_steps):
 
 predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
 
-plt.plot(x, predictions, c='blue', linewidth=5)
 plt.plot(x, target_y, c='black')
-plt.scatter(x, target_y, c='black', facecolor='white')
+plt.scatter(x, target_y, facecolor='white', edgecolor='black')
+plt.plot(x, predictions, c='blue')
 plt.ylim(-1,1)
 plt.show()
 
@@ -588,8 +589,8 @@ plt.show()
 
 
 plt.plot(range(len(cst)), cst)
-plt.ylabel("cost")
-plt.xlabel("steps")
+plt.ylabel("Cost")
+plt.xlabel("Step")
 plt.show()
 
 
@@ -616,7 +617,7 @@ plt.show()
 # model cannot fit the circuit, since the expressivity of quantum models
 # also depends on the Fourier coefficients the model can create.
 # 
-# Figure 5 in Schuld, Sweke and Meyer (2020) shows Fourier coefficients
+# Figure 5 in [1] shows Fourier coefficients
 # from quantum models sampled from a model family defined by an 
 # ansatz for the trainable circuit block. For this we need a
 # function that numerically computes the Fourier coefficients of a
@@ -635,7 +636,7 @@ def fourier_coefficients(f, K):
 
 ######################################################################
 # Define your quantum model
-# -------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 
 
@@ -680,14 +681,14 @@ def quantum_model(weights, x=None):
 
 n_ansatz_layers = 1
 
-def get_weights():
+def random_weights():
     return 2 * np.pi * np.random.random(size=(2, n_ansatz_layers, n_qubits))
 
 
 ######################################################################
 # Now we can compute the first few Fourier coefficients for samples from
 # this model. The samples are created by randomly sampling different
-# parameters using the ``get_weights()`` function.
+# parameters using the ``random_weights()`` function.
 # 
 
 n_coeffs = 5
@@ -697,7 +698,7 @@ n_samples = 100
 coeffs = []
 for i in range(n_samples):
 
-    weights = get_weights()
+    weights = random_weights()
 
     def f(x):
         return np.array([quantum_model(weights, x=x_) for x_ in x])
@@ -721,9 +722,8 @@ n_coeffs = len(coeffs_real[0])
 fig, ax = plt.subplots(1, n_coeffs)
 
 for idx, ax_ in enumerate(ax):
-    ax_.set_title(r"c_{}".format(idx))
-    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], facecolor='white')
-		#s=30, , linewidth=1, edgecolor='#ff6600ff')
+    ax_.set_title(r"$c_{}$".format(idx))
+    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], s=20, facecolor='white', edgecolor='black')
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
@@ -755,7 +755,7 @@ plt.show()
 # Continuous-variable model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Schuld, Sweke and Meyer (2020) mention that a phase rotation in
+# Ref. [1] mentions that a phase rotation in
 # continuous-variable quantum computing has a spectrum that supports *all*
 # Fourier frequecies. To play with this model, we finally show you the
 # code for a continuous-variable circuit. For example, to see its Fourier
@@ -782,7 +782,7 @@ def quantum_model(weights_, x=None):
     W(weights[1])
     return qml.expval(qml.X(wires=0))
 
-def get_weights():
+def random_weights():
     return np.random.normal(size=(2, 5*n_ansatz_layers), loc=0, scale=var)
 
 ######################################################################
@@ -797,3 +797,11 @@ def get_weights():
 #
 #         dev_cv = qml.device('strawberryfields.fock', wires=1, cutoff_dim=50)
 #
+
+
+##############################################################################
+# References
+# ---------------
+#
+# [1] Maria Schuld, Ryan Sweke and Johannes Jakob Meyer, *The effect of data encoding on
+# the expressive power of variational quantum machine learning models*, arxiv preprint arxiv:XXX.XXXXX.

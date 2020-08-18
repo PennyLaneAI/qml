@@ -333,11 +333,11 @@ for depth in range(0, 21):
     num_params = params.size
     params = tf.Variable(params)
 
-    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
-
     # forward pass timing
     # ===================
+
+    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=number, repeat=repeat)
@@ -352,6 +352,9 @@ for depth in range(0, 21):
 
     # Gradient timing
     # ===============
+
+    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
 
     # parameter-shift
     with tf.GradientTape(persistent=True) as tape:
