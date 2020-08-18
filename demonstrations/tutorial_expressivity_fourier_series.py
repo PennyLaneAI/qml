@@ -725,7 +725,7 @@ n_coeffs = len(coeffs_real[0])
 fig, ax = plt.subplots(1, n_coeffs)
 
 for idx, ax_ in enumerate(ax):
-    ax_.set_title(r"c_{}".format(idx))
+    ax_.set_title(r"$c_{}$".format(idx))
     ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx],
 		s=30, facecolor='white', linewidth=1, edgecolor='#ff6600ff')
     ax_.set_aspect("equal")
