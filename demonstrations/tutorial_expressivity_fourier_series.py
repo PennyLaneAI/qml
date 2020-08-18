@@ -621,7 +621,7 @@ plt.show()
 # model cannot fit the circuit, since the expressivity of quantum models
 # also depends on the Fourier coefficients the model can create.
 # 
-# Figure 5 in Schuld, Sweke and Meyer (2020) shows Fourier coefficients
+# Figure 5 in [1] shows Fourier coefficients
 # from quantum models sampled from a model family defined by an 
 # ansatz for the trainable circuit block. For this we need a
 # function that numerically computes the Fourier coefficients of a
