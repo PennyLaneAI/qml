@@ -554,7 +554,7 @@ def cost(weights, x, y):
 max_steps = 70
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
-cst = [cost(weights, x, target_y)]# initial cost
+cst = [cost(weights, x, target_y)]  # initial cost
 
 for step in range(max_steps):
 
