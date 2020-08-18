@@ -339,7 +339,7 @@ def cost(weights, x, y):
     predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 1
+max_steps = 70
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]  # initial cost
@@ -549,7 +549,7 @@ def cost(weights, x, y):
     predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 1
+max_steps = 70
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]  # initial cost
@@ -723,7 +723,8 @@ fig, ax = plt.subplots(1, n_coeffs)
 
 for idx, ax_ in enumerate(ax):
     ax_.set_title(r"$c_{}$".format(idx))
-    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], s=20, facecolor='white', edgecolor='black')
+    ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], s=20, 
+                facecolor='white', edgecolor='black')
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
