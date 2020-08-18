@@ -74,6 +74,7 @@ Quantum models as Fourier series
 
 
 ######################################################################
+#
 # The paper demonstrates many of its findings for circuits in which
 # :math:`\mathcal{G}(x)` is a single-qubit Pauli rotation gate. For
 # example, it shows that :math:`r` repetitions of a Pauli rotation
@@ -380,7 +381,6 @@ plt.show()
 plt.plot(range(len(cst)), cst, c='gray')
 plt.ylabel("cost")
 plt.xlabel("steps")
-plt.xlim(0,100)
 plt.ylim(0, 0.23)
 plt.show()
 
@@ -548,7 +548,7 @@ def cost(weights, x, y):
     predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 25
+max_steps = 70
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]# initial cost
@@ -590,7 +590,6 @@ plt.show()
 plt.plot(range(len(cst)), cst, c='gray', linewidth=5)
 plt.ylabel("cost")
 plt.xlabel("steps")
-plt.xlim(0,100)
 plt.ylim(0, 0.23)
 plt.show()
 
@@ -600,7 +599,10 @@ plt.show()
 # .. note:: 
 #
 #     To reproduce the right column in Figure 4 from the paper, use the 
-#     correct ground truth, :math:`r=3` and ``trainable_block_layers=3``.
+#     correct ground truth, :math:`r=3` and ``trainable_block_layers=3``,
+#     as well as sufficiently many training steps. The amount of steps 
+#     depends on the initial weights and other hyperparameters, and 
+#     in some settings training may not converge to zero error at all.
 #
 
 ######################################################################
@@ -722,7 +724,7 @@ fig, ax = plt.subplots(1, n_coeffs)
 for idx, ax_ in enumerate(ax):
     ax_.set_title(r"c_{}".format(idx))
     ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx],
-		s=50, facecolor='white', linewidth=1.5, edgecolor='#ff6600ff')
+		s=30, facecolor='white', linewidth=1, edgecolor='#ff6600ff')
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
