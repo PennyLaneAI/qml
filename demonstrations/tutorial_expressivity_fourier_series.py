@@ -382,7 +382,7 @@ plt.show()
 # Let's also have a look at the cost during training.
 # 
 
-plt.plot(range(len(cst)), cst, c='gray')
+plt.plot(range(len(cst)), cst)
 plt.ylabel("Cost")
 plt.xlabel("Step")
 plt.ylim(0, 0.23)
