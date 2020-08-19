@@ -33,6 +33,7 @@ The first step is to import the required libraries and packages:
 """
 
 import pennylane as qml
+rom pennylane import qchem
 from pennylane import numpy as np
 
 ##############################################################################
@@ -79,31 +80,31 @@ basis_set = 'sto-3g'
 ##############################################################################
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.generate_hamiltonian`. The first input to
+# single line by calling the function :func:`~.molecular_hamiltonian`. The first input to
 # the function is a string denoting the name of the molecule, which will determine the name given
 # to the saved files that are produced during the calculations:
 
 name = 'h2'
 
 ##############################################################################
-# The geometry, charge, multiplicity, and basis set must also be specified as input. Finally,
-# the number of active electrons and active orbitals have to be indicated, as well as the
+# The charge, multiplicity, and basis set can also be specified as keyword arguments. Finally,
+# the number of active electrons and active orbitals may be indicated, as well as the
 # fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
 # (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
 # number of qubits needed to represent it:
 
-h, nr_qubits = qml.qchem.generate_hamiltonian(
+h, qubits = qchem.molecular_hamiltonian(
     name,
     geometry,
-    charge,
-    multiplicity,
-    basis_set,
-    n_active_electrons=2,
-    n_active_orbitals=2,
+    charge=charge,
+    mult=multiplicity,
+    basis=basis_set,
+    active_electrons=2,
+    active_orbitals=2,
     mapping='jordan_wigner'
 )
 
-print('Number of qubits = ', nr_qubits)
+print('Number of qubits = ', qubits)
 print('Hamiltonian is ', h)
 
 ##############################################################################
@@ -117,7 +118,7 @@ print('Hamiltonian is ', h)
 # built to implement the VQE algorithm. We begin by defining the device, in this case a simple
 # qubit simulator:
 
-dev = qml.device('default.qubit', wires=nr_qubits)
+dev = qml.device('default.qubit', wires=qubits)
 
 ##############################################################################
 # In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
@@ -172,7 +173,7 @@ cost_fn = qml.VQECost(circuit, h, dev)
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 np.random.seed(0)
-params = np.random.normal(0, np.pi, (nr_qubits, 3))
+params = np.random.normal(0, np.pi, (qubits, 3))
 
 print(params)
 
