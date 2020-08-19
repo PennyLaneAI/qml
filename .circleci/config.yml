@@ -80,7 +80,4 @@ jobs:
 workflows:
   workflow:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore: master
+      - build

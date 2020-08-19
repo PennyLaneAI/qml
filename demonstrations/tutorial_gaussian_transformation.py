@@ -5,7 +5,7 @@ Gaussian transformation
 =======================
 
 .. meta::
-    :property="og:description": Use quantum machine learning to tune a beamsplitter.
+    :property="og:description": Use quantum machine learning techniques to tune a beamsplitter.
     :property="og:image": https://pennylane.ai/qml/_images/gauss-circuit.png
 
 This tutorial demonstrates the basic working principles of PennyLane for

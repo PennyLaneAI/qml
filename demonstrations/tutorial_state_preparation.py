@@ -1,8 +1,8 @@
 r"""
 .. _state_preparation:
 
-State preparation with PyTorch
-==============================
+Training a quantum circuit with PyTorch
+=======================================
 
 .. meta::
     :property="og:description": Build and optimize a circuit to prepare
