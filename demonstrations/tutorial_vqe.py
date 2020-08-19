@@ -33,7 +33,7 @@ The first step is to import the required libraries and packages:
 """
 
 import pennylane as qml
-rom pennylane import qchem
+from pennylane import qchem
 from pennylane import numpy as np
 
 ##############################################################################
