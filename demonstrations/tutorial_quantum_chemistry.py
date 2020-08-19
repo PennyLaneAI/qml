@@ -9,21 +9,21 @@ Quantum Chemistry with PennyLane
 
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
 the approximations used to find the many-electron wave function of polyatomic systems.
-Electronic structure methods rely on the Born-Oppenheimer approximation
-:ref:`[1]<qchem_references>`, which allows to write the electronic Hamiltonian of the molecule as
+Electronic structure methods rely on the Born-Oppenheimer approximation [[#kohanoff2006]_]
+, which allows to write the electronic Hamiltonian of the molecule as
 an operator which depends parametrically on the "frozen" nuclear positions.
 
 Once the electronic problem is well defined, estimating the molecular properties with chemical
 accuracy requires wave-function-based electronic structure calculations. However,
 even if we have access to powerful high-performance computers, the application of
-post-Hartree-Fock electron correlation methods :ref:`[2]<qchem_references>` becomes extremely
+post-Hartree-Fock electron correlation methods [[#jensenbook]_] becomes extremely
 challenging even for molecular systems with a few atoms.
 
 Quantum computers offer a promising avenue for major breakthroughs in quantum chemistry. For
 example, a quantum computer consisting of 50 qubits could naturally encode the wave function of the
 water molecule, which on a classical computer would have to be obtained by diagonalizing a
 Hamiltonian matrix with dimensions on the order of :math:`\sim 10^{11}`. In particular,
-the Variational Quantum Eigensolver (VQE) :ref:`[3]<qchem_references>` is a promising hybrid
+the Variational Quantum Eigensolver (VQE) [[#peruzzo2014]_] is a promising hybrid
 quantum-classical computational scheme where a quantum computer is used to prepare the trial wave
 function of a molecule and to measure the expectation value of the **electronic Hamiltonian**,
 while a classical optimizer is used to adjust the quantum circuit parameters in order to find
@@ -61,10 +61,10 @@ print(geometry)
 #     format recognized by Open Babel is also supported by PennyLane, such as
 #     ``.mol`` and ``.sdf``.
 #
-#     Please see the :func:`~.read_structure` and Open Babel documentation
+#     Please see the :func:`~.pennylane_qchem.qchem.read_structure` and Open Babel documentation
 #     for more information on installing Open Babel.
 #
-# Calling the function :func:`~.read_structure` also creates the file
+# Calling the function :func:`~.pennylane_qchem.qchem.read_structure` also creates the file
 # ``structure.xyz``, which we can use to visualize our molecule using any molecule editor,
 # e.g., `Avogadro <https://avogadro.cc/>`_.
 #
@@ -83,20 +83,20 @@ print(geometry)
 # is typically the starting point for most electron correlation methods in quantum chemistry, such
 # as `Configuration Interaction (CI) <https://en.wikipedia.org/wiki/Configuration_interaction>`__
 # and `Coupled Cluster (CC) <https://en.wikipedia.org/wiki/Coupled_cluster>`__ methods among
-# others :ref:`[2]<qchem_references>`.
+# others [[#jensenbook]_].
 #
-# Before launching the HF calculation using the function :func:`meanfield`, we
-# need to specify a string to label the molecule and its geometry. In this
-# example we choose ``'water'`` as the string. Furthermore, the net charge of the
-# molecule may be specified to simulate positively or negatively charged molecules.
-# For this example, we choose a neutral system
+# Before launching the HF calculation using the function
+# :func:`~.pennylane_qchem.qchem.meanfield`, we need to specify a string to label the
+# molecule and its geometry. In this example we choose ``'water'`` as the string. Furthermore,
+# the net charge of the molecule may be specified to simulate positively or negatively
+# charged molecules. For this example, we choose a neutral system
 
 name = 'water'
 charge = 0
 
 ##############################################################################
 # In the Hartree-Fock method the many-electron wave function is approximated by a `Slater
-# determinant <https://en.wikipedia.org/wiki/Slater_determinant>`_ :ref:`[4]<qchem_references>`
+# determinant <https://en.wikipedia.org/wiki/Slater_determinant>`_ [[#pople1977]_]
 # that results from occupying the lowest-energy molecular orbitals until all electrons in the
 # molecule are accommodated. The way molecular orbitals are occupied matters as they determine the
 # self-consistent field.
@@ -138,8 +138,8 @@ multiplicity = 1
 basis_set = 'sto-3g'
 
 ##############################################################################
-# Finally, we can call the function :func:`~.meanfield` to launch the mean field
-# calculation. At present, the quantum chemistry packages `PySCF
+# Finally, we can call the function :func:`~.pennylane_qchem.qchem.meanfield` to launch
+# the mean field calculation. At present, the quantum chemistry packages `PySCF
 # <https://sunqm.github.io/pyscf/>`_ or `Psi4 <http://www.psicode.org/>`_ can be chosen to solve
 # the Hartree-Fock equations. In this example, we choose ``'pyscf'``, which is the default option,
 # but the same results can be obtained using ``'psi4'``.
@@ -163,8 +163,8 @@ print(hf_file)
 
 ##############################################################################
 # At this stage, we have a basis set of molecular orbitals. Next, we can use the
-# function :func:`~.active_space` to define an *active space*. But, what is an active
-# space?
+# function :func:`~.pennylane_qchem.qchem.active_space` to define an *active space*.
+# But, what is an active space?
 #
 # Defining an active space
 # ------------------------
@@ -212,8 +212,9 @@ print("List of active orbitals: {:}".format(active))
 print("Number of qubits required for quantum simulation: {:}".format(2*len(active)))
 
 ##############################################################################
-# Notice that calling the :func:`~.active_space` function without specifying an active
-# space results in no core orbitals---*all* molecular orbitals are considered to be active.
+# Notice that calling the :func:`~.pennylane_qchem.qchem.active_space` function without
+# specifying an active space results in no core orbitals---*all* molecular orbitals are
+# considered to be active.
 
 no_core, all_active = qchem.active_space(electrons, orbitals)
 print("List of core orbitals: {:}".format(no_core))
@@ -232,7 +233,7 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 #
 # and apply the `Jordan-Wigner
 # <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`__ or `Bravyi-Kitaev
-# <https://arxiv.org/abs/1208.5986>`__ transformation :ref:`[5]<qchem_references>` to map it to a
+# <https://arxiv.org/abs/1208.5986>`__ transformation [[#seeley2012]_] to map it to a
 # linear combination of tensor products of Pauli operators
 #
 # .. math::
@@ -242,7 +243,7 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 # Pauli matrix :math:`X`, :math:`Y` or :math:`Z` acting on the :math:`i`-th qubit.
 # To perform the fermionic-to-qubit transformation of the electronic Hamiltonian, the one-body
 # and two-body Coulomb matrix elements :math:`h_{pq}` and :math:`h_{pqrs}`
-# :ref:`[2]<qchem_references>` describing the fermionic Hamiltonian are retrieved from the
+# [[#jensenbook]_] describing the fermionic Hamiltonian are retrieved from the
 # previously generated file ``'./pyscf/sto-3g/water.hdf5'``.
 
 qubit_hamiltonian = qchem.decompose(hf_file, mapping="jordan_wigner", core=core, active=active)
@@ -250,7 +251,7 @@ print("Electronic Hamiltonian of the water molecule represented in the Pauli bas
 print(qubit_hamiltonian)
 
 ##############################################################################
-# Finally, the :func:`~.molecular_hamiltonian`
+# Finally, the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above.
 #
@@ -283,7 +284,7 @@ print(H)
 #
 #     If you have built your electronic Hamiltonian independently by using `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ tools, no problem! The
-#     :func:`~.convert_observable` function converts the `OpenFermion
+#     :func:`~.pennylane_qchem.qchem.convert_observable` function converts the `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ QubitOperator to PennyLane observables.
 #
 # .. _qchem_references:
@@ -291,20 +292,29 @@ print(H)
 # References
 # ----------
 #
-# 1. Jorge Kohanoff. "Electronic structure calculations for solids and molecules: theory and
-#    computational methods". (Cambridge University Press, 2006).
+# .. [#kohanoff2006]
 #
-# 2. Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons,
-#    2016).
+#     Jorge Kohanoff. "Electronic structure calculations for solids and molecules: theory and
+#     computational methods". (Cambridge University Press, 2006).
 #
-# 3. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
-#    quantum processor". `Nature Communications 5, 4213 (2014).
-#    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+# .. [#jensenbook]
 #
-# 4. Rolf Seeger, John Pople. "Self‐consistent molecular orbital methods. XVIII. Constraints and
-#    stability in Hartree–Fock theory". `Journal of Chemical Physics 66,
-#    3045 (1977). <https://aip.scitation.org/doi/abs/10.1063/1.434318>`__
+#     Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons, 2016).
 #
-# 5. Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
-#    quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
-#    <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
+# .. [#peruzzo2014]
+#
+#     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+#     quantum processor". `Nature Communications 5, 4213 (2014).
+#     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+# .. [#pople1977]
+#
+#     Rolf Seeger, John Pople. "Self‐consistent molecular orbital methods. XVIII. Constraints and
+#     stability in Hartree–Fock theory". `Journal of Chemical Physics 66,
+#     3045 (1977). <https://aip.scitation.org/doi/abs/10.1063/1.434318>`__
+#
+# .. [#seeley2012]
+#
+#     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
+#     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
+#     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__

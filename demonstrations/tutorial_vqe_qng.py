@@ -256,7 +256,8 @@ plt.show()
 # (2) Hydrogen VQE Example
 # ------------------------
 #
-# To construct our system Hamiltonian, we call the function :func:`~.molecular_hamiltonian`.
+# To construct our system Hamiltonian, we call the function
+# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
 
 name = "h2"
 geo_file = "h2.xyz"
@@ -326,8 +327,7 @@ for n in range(max_iterations):
 
     if n % 20 == 0:
         print(
-            "Iteration = {:},  Ground-state energy = {:.8f} Ha,  Convergence parameter = {"
-            ":.8f} Ha".format(n, energy, conv)
+            "Iteration = {:},  Energy = {:.8f} Ha".format(n, energy)
         )
 
     if conv <= conv_tol:
@@ -362,10 +362,9 @@ for n in range(max_iterations):
     energy = cost(params)
     conv = np.abs(energy - prev_energy)
 
-    if n % 20 == 0:
+    if n % 4 == 0:
         print(
-            "Iteration = {:},  Ground-state energy = {:.8f} Ha,  Convergence parameter = {"
-            ":.8f} Ha".format(n, energy, conv)
+            "Iteration = {:},  Energy = {:.8f} Ha".format(n, energy)
         )
 
     if conv <= conv_tol:
@@ -374,6 +373,7 @@ for n in range(max_iterations):
     qngd_cost.append(energy)
     prev_energy = energy
 
+print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))
 print("Number of iterations = ", n)
 print("Final value of the ground-state energy = {:.8f} Ha".format(energy))

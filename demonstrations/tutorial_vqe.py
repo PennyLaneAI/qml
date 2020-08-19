@@ -7,7 +7,7 @@ A brief overview of VQE
         variational quantum eigensolver algorithm in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
-The Variational Quantum Eigensolver (VQE) :ref:`[1, 2]<vqe_references>` is a flagship algorithm for
+The Variational Quantum Eigensolver (VQE) [[#peruzzo2014]_, [#yudong2019]_] is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
 prepare a wave function ansatz of the molecule and estimate the expectation value of its electronic
@@ -80,9 +80,9 @@ basis_set = 'sto-3g'
 ##############################################################################
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.molecular_hamiltonian`. The first input to
-# the function is a string denoting the name of the molecule, which will determine the name given
-# to the saved files that are produced during the calculations:
+# single line by calling the function :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# The first input to the function is a string denoting the name of the molecule, which
+# will determine the name given to the saved files that are produced during the calculations:
 
 name = 'h2'
 
@@ -182,7 +182,7 @@ print(params)
 # tolerance (difference in cost function for subsequent optimization steps) of :math:`\sim 10^{
 # -6}`.
 
-max_iterations = 5
+max_iterations = 200
 conv_tol = 1e-06
 
 prev_energy = cost_fn(params)
@@ -191,7 +191,7 @@ for n in range(max_iterations):
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
-    if n % 1 == 0:
+    if n % 20 == 0:
         print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
 
     if conv <= conv_tol:
@@ -222,10 +222,14 @@ print('Final circuit parameters = \n', params)
 # References
 # ----------
 #
-# 1. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
-#    quantum processor". `Nature Communications 5, 4213 (2014).
-#    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+# .. [#peruzzo2014]
 #
-# 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
-#    `Chem. Rev. 2019, 119, 19, 10856-10915.
-#    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+#     quantum processor". `Nature Communications 5, 4213 (2014).
+#     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+# .. [#yudong2019]
+#
+#     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     `Chem. Rev. 2019, 119, 19, 10856-10915.
+#     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
