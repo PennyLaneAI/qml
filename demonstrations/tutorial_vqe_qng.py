@@ -256,26 +256,14 @@ plt.show()
 # (2) Hydrogen VQE Example
 # ------------------------
 #
-# To construct our system Hamiltonian, we call the function :func:`~.generate_hamiltonian`.
+# To construct our system Hamiltonian, we call the function :func:`~.molecular_hamiltonian`.
 
 name = "h2"
-geometry = "h2.xyz"
-charge = 0
-multiplicity = 1
-basis_set = "sto-3g"
+geo_file = "h2.xyz"
 
-hamiltonian, nr_qubits = qml.qchem.generate_hamiltonian(
-    name,
-    geometry,
-    charge,
-    multiplicity,
-    basis_set,
-    n_active_electrons=2,
-    n_active_orbitals=2,
-    mapping="jordan_wigner",
-)
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(name, geo_file)
 
-print("Number of qubits = ", nr_qubits)
+print("Number of qubits = ", qubits)
 
 
 ##############################################################################
@@ -284,7 +272,7 @@ print("Number of qubits = ", nr_qubits)
 # but expand out the arbitrary single-qubit rotations to elementary
 # gates (RZ-RY-RZ).
 
-dev = qml.device("default.qubit", wires=nr_qubits)
+dev = qml.device("default.qubit", wires=qubits)
 
 
 def ansatz(params, wires=[0, 1, 2, 3]):
