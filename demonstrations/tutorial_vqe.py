@@ -182,7 +182,7 @@ print(params)
 # tolerance (difference in cost function for subsequent optimization steps) of :math:`\sim 10^{
 # -6}`.
 
-max_iterations = 200
+max_iterations = 5
 conv_tol = 1e-06
 
 prev_energy = cost_fn(params)
@@ -191,9 +191,8 @@ for n in range(max_iterations):
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
-    if n % 20 == 0:
-        print('Iteration = {:},  Ground-state energy = {:.8f} Ha,  Convergence parameter = {'
-              ':.8f} Ha'.format(n, energy, conv))
+    if n % 1 == 0:
+        print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
 
     if conv <= conv_tol:
         break
