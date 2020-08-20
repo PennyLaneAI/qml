@@ -69,68 +69,33 @@ from functools import partial
 
 ##############################################################################
 # The second step is to specify the molecule whose properties we aim to calculate.
-# This is done by providing the name, geometry and charge of the molecule. For more details
-# take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
+# This is done by providing the name and the geometry of the molecule.
 
 name = "h2"
+geometry = "h2.xyz"
 
 ##############################################################################
 # The geometry of the molecule can be given in any format recognized by Open Babel.
 # Here, we used a locally saved file in
 # `xyz format <https://en.wikipedia.org/wiki/XYZ_file_format>`_ specifying the
 # three-dimensional coordinates and symbols of the atomic species.
+#
+# Here, we use a minimal `basis set
+# <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ to model the hydrogen molecule.
+# In this approximation, the qubit Hamiltonian of the molecule in the Jordan-Wigner
+# representation is built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# function.
 
-geometry = "h2.xyz"
+H, qubits = qchem.molecular_hamiltonian(name, geometry, mapping="jordan_wigner")
 
-##############################################################################
-# In this example, we consider a neutral molecule:
-
-charge = 0
-
-##############################################################################
-# Now, we define two input parameters required to compute the Hartree-Fock (HF)
-# electronic structure of the molecule. First, the
-# `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_ of the
-# `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree-Fock_method>`_, and
-# the second one is the `atomic basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_
-# used to represent the molecular orbitals. In this example, we use the minimal
-# basis STO-3g.
-
-multiplicity = 1
-basis_set = "sto-3g"
+print("Number of qubits = ", qubits)
+print("Hamiltonian is ", H)
 
 ##############################################################################
-# PennyLane allows us to define an `active space
-# <https://en.wikipedia.org/wiki/Complete_active_space>`_ to expand the second-quantized
-# Hamiltonian or any other observable relevant to compute molecular properties.
-# The active space, as explained in the tutorial :doc:`tutorial_quantum_chemistry`, is built
-# by specifying the number of active electrons and active orbitals.
-# For the hydrogen molecule described with a minimal basis set we include all Hartree-Fock orbitals
-# in the basis of single-particle states.
-
-n_electrons = 2
-n_orbitals = 2
-
-##############################################################################
-# Finally, to build the electronic Hamiltonian we have to define the fermionic-to-qubit
-# mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
-# (``bravyi_kitaev``). The outputs of the function
-# :func:`~pennylane_qchem.qchem.generate_hamiltonian` are
-# the qubit Hamiltonian of the molecule and the number of qubits needed to represent it:
-
-h, n_qubits = qchem.generate_hamiltonian(
-    name,
-    geometry,
-    charge,
-    multiplicity,
-    basis_set,
-    n_active_electrons=n_electrons,
-    n_active_orbitals=n_orbitals,
-    mapping="jordan_wigner",
-)
-
-print("Number of qubits = ", n_qubits)
-print("Hamiltonian is ", h)
+# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function allows to define
+# an additional set of keyword arguments to provide the user with ample flexibility
+# to generate the Hamiltonian of more complicated systems. For more details take a look
+# at the tutorial :doc:`tutorial_quantum_chemistry`.
 
 ##############################################################################
 # We also want to build the total spin operator :math:`\hat{S}^2`,
@@ -147,42 +112,32 @@ print("Hamiltonian is ", h)
 # creation operators, and
 # :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
 # is the matrix element of the two-particle spin operator
-# :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of Hartree-Fock spin-orbitals
-# [[#fetterbook]_].
+# :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of Hartree-Fock *spin* orbitals
+# [[#fetterbook]_]. The :math:`\mathrm{H}_2` molecule has two electrons that populate,
+# within the minimal basis set approximation, four *spin* orbitals. As a reminder, the
+# variable ``qubits`` output by the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# above stores the number of spin orbitals included the basis.
 #
-# We need to compute these matrix elements. This is achieved by calling the function
-# :func:`~pennylane_qchem.qchem.get_spin2_matrix_elements`. It reads the Hartree-Fock electronic
-# structure, defines the active space, and outputs the first term :math:`\frac{3}{4} N_e`
-# as well as the table of non-zero matrix elements.
+# In order to build the spin operator :math:`\hat{S}^2` we call the
+# :func:`~.pennylane_qchem.qchem.spin2` function.
 
-s2_me, first_term = qchem.get_spin2_matrix_elements(
-    name, "pyscf/sto-3g", n_active_electrons=n_electrons, n_active_orbitals=n_orbitals
-)
-print(first_term)
-print(s2_me)
+electrons = 2
+S2 = qchem.spin2(electrons, qubits, mapping="jordan_wigner")
+print(S2)
 
 ##############################################################################
-# We have explicitly inputted the path ``'pyscf/sto-3g'`` to the locally
-# saved file ``'pyscf/sto-3g/h2.hdf5'`` storing the HF electronic structure
-# of the :math:`\mathrm{H}_2` molecule. This data file was generated by
-# :func:`~pennylane_qchem.qchem.meanfield_data` as it is used by the
-# function :func:`~pennylane_qchem.qchem.generate_hamiltonian` to build the Hamiltonian.
+# The :func:`~.pennylane_qchem.qchem.spin2` function uses the functions
+# :func:`~.pennylane_qchem.qchem._spin2_matrix_elements` and
+# :func:`~.pennylane_qchem.qchem.observable` to compute the 
+# matrix elements in the equation above and to build the many-body observable,
+# respectively.
 #
-# Now that we have the two-particle spin matrix elements, we call the
-# :func:`~pennylane_qchem.qchem.observable` function to build the Fermionic operator and
-# represent it in the basis of Pauli matrices.
-
-s2_obs = qchem.observable(s2_me, init_term=first_term, mapping="jordan_wigner")
-print(s2_obs)
-
-##############################################################################
 # .. note::
 #
-#     The :func:`~pennylane_qchem.qchem.observable` function can be used to build any
-#     second-quantized many-body observable as long as we have access to the matrix elements
-#     of the one- and/or two-particle operators in the basis of single-particle states.
-#     The keyword argument ``init_term`` contains the contribution
-#     of core orbitals, if any, or any other quantity required to initialize the observable.
+#     The :func:`~.pennylane_qchem.qchem.observable` function can be used to build any
+#     second-quantized many-body observable as long as we have access to the matrix
+#     elements of the one- or two-particle operators in the basis of single-particle
+#     states.
 
 
 ##############################################################################
@@ -192,7 +147,7 @@ print(s2_obs)
 # PennyLane contains the :class:`~.pennylane.VQECost` class to implement the VQE algorithm.
 # We begin by defining the device, in this case a qubit simulator:
 
-dev = qml.device("default.qubit", wires=n_qubits)
+dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
 # The next step is to define the variational quantum circuit used to prepare
@@ -213,13 +168,11 @@ dev = qml.device("default.qubit", wires=n_qubits)
 #     (\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s-\mathrm{H.c.}) \Big\}.
 #
 # In the latter equation, the indices :math:`r, s` and :math:`p, q` run respectively over the
-# occupied and unoccupied (virtual) molecular orbitals. The operator
-# :math:`\hat{c}_p^\dagger \hat{c}_r` creates a 1particle-1hole (ph)
-# excitation [[#peterringbook]_] since it annihilates a particle in the
-# occupied orbital :math:`r` (creates a hole) and creates the particle in the virtual orbital
+# occupied and unoccupied molecular orbitals. The operator
+# :math:`\hat{c}_p^\dagger \hat{c}_r` creates a single excitation [[#jensenbook]_] since it
+# annihilates an electron in the occupied orbital :math:`r` and creates it the unoccupied orbital
 # :math:`p`. Similarly, the operator
-# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates 2particle-2hole (pphh)
-# excitations.
+# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates double excitation.
 #
 # The quantum circuits to exponentiate the excitation operators in the
 # Jordan-Wigner representation [[#barkoutsos2018]_] are implemented by the
@@ -234,82 +187,77 @@ dev = qml.device("default.qubit", wires=n_qubits)
 #     \hat{H} \hat{U}(\vec{\theta}) \vert \mathrm{HF} \rangle,
 #
 # where :math:`\vert \mathrm{HF} \rangle` is the Hartree-Fock state. The total number of
-# particle-hole excitations determines the number of parameters
-# :math:`\theta` to be optimized by the VQE algorithm as well as the depth of the UCCSD
-# quantum circuit. For more details, check the documentation of the
+# excitations determines the number of parameters :math:`\theta` to be optimized by the
+# VQE algorithm as well as the depth of the UCCSD quantum circuit. For more details,
+# check the documentation of the
 # :func:`~.pennylane.templates.subroutines.SingleExcitationUnitary` and
 # :func:`~.pennylane.templates.subroutines.DoubleExcitationUnitary` functions.
 #
 # Now, we demonstrate how to use PennyLane functionalities to build up the UCCSD
-# ansatz for VQE simulations. First, we use the :func:`~pennylane_qchem.qchem.sd_excitations`
-# function to generate the whole set of particle-hole
-# excitations for our active space with ``n_electrons`` in
-# ``2*n_orbitals=n_qubits`` *spin*-orbitals. Furthermore, we can enforce the selection rules
+# ansatz for VQE simulations. First, we use the :func:`~.pennylane_qchem.qchem.excitations`
+# function to generate the whole set of single- and double-excitations for :math:`N_e`
+# ``electrons`` populating ``qubits`` spin orbitals. Furthermore, we can enforce the selection rules
 # :math:`s_{z_p} - s_{z_r} = \Delta s_z` and
 # :math:`s_{z_p} + s_{z_q} - s_{z_r} - s_{z_s}= \Delta s_z` for the spin-projection of the
-# molecular orbitals involved in the ph and pphh excitations
+# molecular orbitals involved in the single and double excitations
 # using the keyword argument ``delta_sz``. This is precisely what allows us to prepare a
 # correlated trial state whose total-spin projection :math:`S_z` is different from the one of
 # the Hartree-Fock state by the quantity ``delta_sz``. Therefore, we choose ``delta_sz = 0`` to
 # prepare the ground state of the :math:`\mathrm{H}_2` molecule.
 
-ph, pphh = qchem.sd_excitations(n_electrons, n_qubits, delta_sz=0)
-print(ph)
-print(pphh)
+singles, doubles = qchem.excitations(electrons, qubits, delta_sz=0)
+print(singles)
+print(doubles)
 
 ##############################################################################
-# The output lists ``ph`` and ``pphh`` contain the indices representing the particle-hole
-# excitations. For the hydrogen molecule in a minimal basis set we have two ph
-# excitations and one pphh excitation. The latter means that in preparing the UCCSD ansatz the
+# The output lists ``singles`` and ``doubles`` contain the indices representing the single and
+# double excitations. For the hydrogen molecule in a minimal basis set we have two single
+# and one double excitations. The latter means that in preparing the UCCSD ansatz the
 # :func:`~.pennylane.templates.subroutines.SingleExcitationUnitary` function has to be called
-# twice to exponentiate the two ph excitation operators while the
+# twice to exponentiate the two single-excitation operators while the
 # :func:`~.pennylane.templates.subroutines.DoubleExcitationUnitary` function is invoked once to
-# exponentiate the pphh excitation.
+# exponentiate the double excitation.
 #
 # We use the function
-# :func:`~pennylane_qchem.qchem.excitations_to_wires` to generate the set of wires that the UCCSD
+# :func:`~.pennylane_qchem.qchem.excitations_to_wires` to generate the set of wires that the UCCSD
 # circuit will act on. The inputs to this function are the indices stored in the
-# ``ph`` and ``pphh`` lists.
+# ``singles`` and ``doubles`` lists.
 
-ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
-print(ph_wires)
-print(pphh_wires)
+s_wires, d_wires = qchem.excitations_to_wires(singles, doubles)
+print(s_wires)
+print(d_wires)
 
 ##############################################################################
 # Next, we need to define the reference state that the UCCSD unitary acts on, which is
 # just the Hartree-Fock state. This can be done straightforwardly with the
-# :func:`~pennylane_qchem.qchem.hf_state`
+# :func:`~.pennylane_qchem.qchem.hf_state`
 # function. The output of this function is an array containing the occupation-number vector
 # representing the Hartree-Fock state.
 
-ref_state = qchem.hf_state(n_electrons, n_qubits)
-print(ref_state)
+hf_state = qchem.hf_state(electrons, qubits)
+print(hf_state)
 
 ##############################################################################
 # Finally, we can use the :func:`~.pennylane.templates.subroutines.UCCSD` function to define
 # our VQE ansatz,
 
-vqe_ansatz = partial(UCCSD, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
+ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
 
 ##############################################################################
-# where ``wires`` contains the wires the template act on and ``params`` is a vector
-# containing the trainable parameters :math:`\theta_{pr}` and :math:`\theta_{pqrs}`.
-#
 # Next, we use the PennyLane class :class:`~.pennylane.VQECost` to define the cost function.
 # This requires specifying the circuit, target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
-cost_fn = qml.VQECost(vqe_ansatz, h, dev)
+cost_fn = qml.VQECost(ansatz, H, dev)
 
 ##############################################################################
-# As a reminder, we also built the total spin operator
-# :math:`\hat{S}^2` for which we can now define a function to compute its expectation
-# value:
+# As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
+# we can now define a function to compute its expectation value:
 
-s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
+S2_exp_value = qml.VQECost(ansatz, S2, dev)
 
 ##############################################################################
-# The total spin :math:`S` of the trial state can be obtained from the
+# Notice that the total spin :math:`S` of the trial state can be obtained from the
 # expectation value :math:`\langle \hat{S}^2 \rangle` as,
 #
 # .. math::
@@ -320,7 +268,7 @@ s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
 
 
 def total_spin(params):
-    return -0.5 + np.sqrt(1 / 4 + s2_exp_value(params))
+    return -0.5 + np.sqrt(1 / 4 + S2_exp_value(params))
 
 
 ##############################################################################
@@ -328,13 +276,14 @@ def total_spin(params):
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 np.random.seed(0)  # for reproducibility
-params = np.random.normal(0, np.pi, len(ph) + len(pphh))
+params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 print(params)
 
 ##############################################################################
 # We carry out the optimization over a maximum of 100 steps, aiming to reach a convergence
 # tolerance of :math:`\sim 10^{-6}`. Furthermore, we track the value of
-# the total spin of the prepared state as it is optimized through the iterative procedure.
+# the total spin :math:`S` of the prepared state as it is optimized through
+# the iterative procedure.
 
 max_iterations = 100
 conv_tol = 1e-06
@@ -343,10 +292,11 @@ for n in range(max_iterations):
     params = opt.step(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
+
     spin = total_spin(params)
 
     if n % 2 == 0:
-        print("Iteration = {:},  E = {:.8f} Ha,  Spin = {:.4f}".format(n, energy, spin))
+        print("Iteration = {:},  E = {:.8f} Ha,  S = {:.4f}".format(n, energy, spin))
 
     if conv <= conv_tol:
         break
@@ -368,7 +318,6 @@ print(
 # accuracy. Notice also that the optimized UCCSD state is an eigenstate of the total spin
 # operator :math:`\hat{S}^2` with eigenvalue :math:`S=0`.
 #
-#
 # Finding the lowest-energy excited state with :math:`S_z=1`
 # ----------------------------------------------------------
 # In the last part of the tutorial we want to demonstrate that VQE can also be used to find
@@ -377,33 +326,33 @@ print(
 # :math:`E = -0.4784529844` Ha and :math:`S_z=1` and :math:`S_z=-1`.
 #
 # Let's consider the case of :math:`S_z=1`. We just use the
-# :func:`~pennylane_qchem.qchem.sd_excitations` function with the keyword argument ``delta_sz=1``
-# to generate particle-hole excitations in this specific sector of :math:`S_z`.
+# :func:`~.pennylane_qchem.qchem.excitations` function with the keyword argument ``delta_sz=1``
+# to generate excitations in this specific sector of :math:`S_z`.
 
-ph, pphh = qchem.sd_excitations(n_electrons, n_qubits, delta_sz=1)
-print(ph)
-print(pphh)
+singles, doubles = qchem.excitations(electrons, qubits, delta_sz=1)
+print(singles)
+print(doubles)
 
 ##############################################################################
 # Notice that for the hydrogen molecule in a minimal basis set there are no
-# 2particle-2hole (pphh) excitations but only 1particle-1hole excitation (ph)
+# double excitations but only a single excitation
 # corresponding to the spin-flip transition between orbitals 1 and 2. And, that's it!.
 # From this point on the algorithm is the same as described above.
 
-ph_wires, pphh_wires = qchem.excitations_to_wires(ph, pphh)
-ref_state = qchem.hf_state(n_electrons, n_qubits)
+s_wires, d_wires = qchem.excitations_to_wires(singles, doubles)
+hf_state = qchem.hf_state(electrons, qubits)
 
-vqe_ansatz = partial(UCCSD, init_state=ref_state, ph=ph_wires, pphh=pphh_wires)
+ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
 
-cost_fn = qml.VQECost(vqe_ansatz, h, dev)
-s2_exp_value = qml.VQECost(vqe_ansatz, s2_obs, dev)
+cost_fn = qml.VQECost(ansatz, H, dev)
+S2_exp_value = qml.VQECost(ansatz, S2, dev)
 
 ##############################################################################
 # Then, we generate the new set of initial parameters, and proceed with the VQE algorithm to
 # optimize the new variational circuit.
 
 np.random.seed(0)
-params = np.random.normal(0, np.pi, len(ph) + len(pphh))
+params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 
 max_iterations = 100
 conv_tol = 1e-06
@@ -416,7 +365,7 @@ for n in range(max_iterations):
     spin = total_spin(params)
 
     if n % 2 == 0:
-        print("Iteration = {:},  E = {:.8f} Ha,  Spin = {:.4f}".format(n, energy, spin))
+        print("Iteration = {:},  E = {:.8f} Ha,  S = {:.4f}".format(n, energy, spin))
 
     if conv <= conv_tol:
         break
@@ -484,8 +433,3 @@ print(
 #     P. Kl. Barkoutsos, J. F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
 #     calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
 #     `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
-#
-# .. [#peterringbook]
-#
-#     P. Ring, P. Schuck. "The Nuclear Many-Body Problem".
-#     (Springer Science & Business Media, 2004).
