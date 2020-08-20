@@ -142,7 +142,7 @@ np.random.seed(42)
 def square_loss(targets, predictions):
     loss = 0
     for t, p in zip(targets, predictions):
-        loss = loss + (t - p) ** 2
+        loss += (t - p) ** 2
     loss = loss / len(targets)
     return 0.5*loss
 
