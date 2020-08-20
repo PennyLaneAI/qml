@@ -728,7 +728,7 @@ coeffs_imag = np.imag(coeffs)
 
 n_coeffs = len(coeffs_real[0])
 
-fig, ax = plt.subplots(1, n_coeffs)
+fig, ax = plt.subplots(1, n_coeffs, figsize=(15, 4))
 
 for idx, ax_ in enumerate(ax):
     ax_.set_title(r"$c_{}$".format(idx))
@@ -751,7 +751,7 @@ plt.show()
 # that forces the even Fourier coefficients to zero, while
 # ``StronglyEntanglingLayers`` will have a non-zero variance
 # for all supported coefficients.
-
+#
 # Note also how the variance of the distribution decreases for growing
 # orders of the coefficients - an effect linked to the convergence of a
 # Fourier series.
@@ -794,7 +794,7 @@ def W(theta):
         qml.Squeezing(theta[2], theta[3], wires=0)
 
 @qml.qnode(dev_cv)
-def quantum_model(weights_, x=None):
+def quantum_model(weights, x=None):
     W(weights[0])
     S(x)
     W(weights[1])
