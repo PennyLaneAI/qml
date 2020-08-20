@@ -82,8 +82,8 @@ Quantum models as Fourier series
 # The paper demonstrates many of its findings for circuits in which
 # :math:`\mathcal{G}(x)` is a single-qubit Pauli rotation gate. For
 # example, it shows that :math:`r` repetitions of a Pauli rotation
-# encoding gate in "sequence" (on the same qubit, but with multiple layers $r=L$) or
-# in "parallel" (on $r$ different qubits, with $L=1$) creates a quantum
+# encoding gate in "sequence" (on the same qubit, but with multiple layers :math:`r=L`) or
+# in "parallel" (on :math:`r` different qubits, with :math:`L=1`) creates a quantum
 # model that can be expressed as a *Fourier series* of the form
 # 
 # .. math::  f_{ \boldsymbol \theta}(x) = \sum_{n \in \Omega} c_{n}(\boldsymbol \theta) e^{i  n x}, 
