@@ -7,7 +7,7 @@ A brief overview of VQE
         variational quantum eigensolver algorithm in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
-The Variational Quantum Eigensolver (VQE) [[#peruzzo2014]_, [#yudong2019]_] is a flagship algorithm for
+The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
 prepare a wave function ansatz of the molecule and estimate the expectation value of its electronic
