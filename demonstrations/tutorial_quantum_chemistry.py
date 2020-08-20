@@ -10,7 +10,8 @@ Quantum Chemistry with PennyLane
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
 the approximations used to find the many-electron wave function of polyatomic systems.
 Electronic structure methods rely on the Born-Oppenheimer approximation [[#kohanoff2006]_]
-, which allows to write the electronic Hamiltonian of the molecule as
+, which allows us to write the electronic Hamiltonian of the molecule as
+
 an operator which depends parametrically on the "frozen" nuclear positions.
 
 Once the electronic problem is well defined, estimating the molecular properties with chemical
