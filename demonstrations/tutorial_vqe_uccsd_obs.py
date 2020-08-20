@@ -295,7 +295,7 @@ for n in range(max_iterations):
 
     spin = total_spin(params)
 
-    if n % 2 == 0:
+    if n % 4 == 0:
         print("Iteration = {:},  E = {:.8f} Ha,  S = {:.4f}".format(n, energy, spin))
 
     if conv <= conv_tol:
@@ -364,7 +364,7 @@ for n in range(max_iterations):
 
     spin = total_spin(params)
 
-    if n % 2 == 0:
+    if n % 4 == 0:
         print("Iteration = {:},  E = {:.8f} Ha,  S = {:.4f}".format(n, energy, spin))
 
     if conv <= conv_tol:
