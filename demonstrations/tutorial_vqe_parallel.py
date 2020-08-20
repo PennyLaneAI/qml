@@ -56,7 +56,7 @@ from pennylane import qchem
 # follow a standard format for specifying the geometry of a molecule and can be downloaded as a
 # Zip from :download:`here <../demonstrations/vqe_parallel/vqe_parallel.zip>`.
 
-data = {  # keys: atomic separations (in Angstrom), values: corresponding files
+data = {  # keys: atomic separations (in Angstroms), values: corresponding files
     0.3: "vqe_parallel/h2_0.30.xyz",
     0.5: "vqe_parallel/h2_0.50.xyz",
     0.7: "vqe_parallel/h2_0.70.xyz",
