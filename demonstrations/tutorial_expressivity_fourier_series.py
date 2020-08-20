@@ -442,7 +442,7 @@ plt.show()
 #
 # In the paper, the investigations are made with the assumption that the
 # purple trainable blocks :math:`W` are arbitrary unitaries. We could use
-# the :class:`~.templates.ArbitraryUnitary` template, but since this
+# the :class:`~.pennylane.templates.ArbitraryUnitary` template, but since this
 # template requires a number of parameters that grows exponentially with
 # the number of qubits (:math:`4^L-1` to be precise), this quickly becomes
 # cumbersome to train.
@@ -467,7 +467,7 @@ plt.show()
 
 ######################################################################
 # The ansatz is PennyLane's layer structure called
-# :class:`~.templates.StronglyEntanglingLayers`, and as the name suggests, it has itself a
+# :class:`~.pennylane.templates.StronglyEntanglingLayers`, and as the name suggests, it has itself a
 # user-defined number of layers (which we will call "ansatz layers" to
 # avoid confusion).
 # 
@@ -653,7 +653,7 @@ def fourier_coefficients(f, K):
 # Now we need to define a quantum model. This could be any model, using a
 # qubit or continuous-variable circuit, or one of the quantum models from
 # above. We will use a slight derivation of the ``parallel_qubit_model()``
-# from above, this time using the :class:`~.templates.BasicEntanglerLayers` ansatz:
+# from above, this time using the :class:`~.pennylane.templates.BasicEntanglerLayers` ansatz:
 # 
 
 from pennylane.templates import BasicEntanglerLayers
