@@ -10,9 +10,9 @@ VQE in different spin sectors
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical
 high-performance computers. In particular, the Variational Quantum Eigensolver (VQE) algorithm
-[[#peruzzo2014]_, [#cao2019]_] has proven to be a valuable quantum-classical
+[#peruzzo2014]_, [#cao2019]_ has proven to be a valuable quantum-classical
 approach to find the lowest-energy eigenstate of the electronic Hamiltonian by using Noisy
-Intermediate-Scale Quantum (NISQ) devices [[#kandala2017]_].
+Intermediate-Scale Quantum (NISQ) devices [#kandala2017]_.
 
 In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_, the
 electronic Hamiltonian matrix is block diagonal in the total spin projection quantum number
@@ -41,9 +41,9 @@ practice an excited state of the molecule, as shown in the figure above.
 
 At the core of the VQE algorithm is the variational quantum circuit that is optimized to prepare
 the desired quantum states. The choice of the circuit is crucial for the success of the algorithm.
-The unitary coupled cluster ansatz [[#romero2017]_] is a powerful quantum circuit
+The unitary coupled cluster ansatz [#romero2017]_ is a powerful quantum circuit
 that is believed to outperform the classical coupled cluster method
-[[#jensenbook]_], traditionally referred to as the gold standard of quantum
+[#jensenbook]_, traditionally referred to as the gold standard of quantum
 chemistry.
 
 We demonstrate how different functionalities implemented in PennyLane
@@ -113,7 +113,7 @@ print("Hamiltonian is ", H)
 # :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
 # is the matrix element of the two-particle spin operator
 # :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of Hartree-Fock *spin* orbitals
-# [[#fetterbook]_]. The :math:`\mathrm{H}_2` molecule has two electrons that populate,
+# [#fetterbook]_. The :math:`\mathrm{H}_2` molecule has two electrons that populate,
 # within the minimal basis set approximation, four *spin* orbitals. As a reminder, the
 # variable ``qubits`` output by the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # above stores the number of spin orbitals included the basis.
@@ -153,12 +153,12 @@ dev = qml.device("default.qubit", wires=qubits)
 # The next step is to define the variational quantum circuit used to prepare
 # the state that minimizes the expectation value of the electronic Hamiltonian.
 # In this example, we use the unitary coupled cluster ansatz truncated at
-# the level of single and double excitations (UCCSD) [[#romero2017]_].
+# the level of single and double excitations (UCCSD) [#romero2017]_.
 #
 # The UCCSD method is a generalization of the traditional CCSD formalism used in quantum chemistry
 # to perform post-Hartree-Fock electron correlation calculations. Within the first-order
 # Trotter approximation, the UCCSD ground state of the molecule is built via the exponential ansatz
-# [[#barkoutsos2018]_],
+# [#barkoutsos2018]_,
 #
 # .. math::
 #
@@ -169,13 +169,13 @@ dev = qml.device("default.qubit", wires=qubits)
 #
 # In the latter equation, the indices :math:`r, s` and :math:`p, q` run respectively over the
 # occupied and unoccupied molecular orbitals. The operator
-# :math:`\hat{c}_p^\dagger \hat{c}_r` creates a single excitation [[#jensenbook]_] since it
+# :math:`\hat{c}_p^\dagger \hat{c}_r` creates a single excitation [#jensenbook]_ since it
 # annihilates an electron in the occupied orbital :math:`r` and creates it the unoccupied orbital
 # :math:`p`. Similarly, the operator
 # :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates double excitation.
 #
 # The quantum circuits to exponentiate the excitation operators in the
-# Jordan-Wigner representation [[#barkoutsos2018]_] are implemented by the
+# Jordan-Wigner representation [#barkoutsos2018]_ are implemented by the
 # functions :func:`~.pennylane.templates.subroutines.SingleExcitationUnitary` and
 # :func:`~.pennylane.templates.subroutines.DoubleExcitationUnitary` contained
 # in the PennyLane templates library. Finally, the parameters :math:`\theta_{pr}` and
