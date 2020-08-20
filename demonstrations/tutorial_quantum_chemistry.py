@@ -9,21 +9,22 @@ Quantum Chemistry with PennyLane
 
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
 the approximations used to find the many-electron wave function of polyatomic systems.
-Electronic structure methods rely on the Born-Oppenheimer approximation [[#kohanoff2006]_]
-, which allows to write the electronic Hamiltonian of the molecule as
+Electronic structure methods rely on the Born-Oppenheimer approximation [#kohanoff2006]_
+, which allows us to write the electronic Hamiltonian of the molecule as
+
 an operator which depends parametrically on the "frozen" nuclear positions.
 
 Once the electronic problem is well defined, estimating the molecular properties with chemical
 accuracy requires wave-function-based electronic structure calculations. However,
 even if we have access to powerful high-performance computers, the application of
-post-Hartree-Fock electron correlation methods [[#jensenbook]_] becomes extremely
+post-Hartree-Fock electron correlation methods [#jensenbook]_ becomes extremely
 challenging even for molecular systems with a few atoms.
 
 Quantum computers offer a promising avenue for major breakthroughs in quantum chemistry. For
 example, a quantum computer consisting of 50 qubits could naturally encode the wave function of the
 water molecule, which on a classical computer would have to be obtained by diagonalizing a
 Hamiltonian matrix with dimensions on the order of :math:`\sim 10^{11}`. In particular,
-the Variational Quantum Eigensolver (VQE) [[#peruzzo2014]_] is a promising hybrid
+the Variational Quantum Eigensolver (VQE) [#peruzzo2014]_ is a promising hybrid
 quantum-classical computational scheme where a quantum computer is used to prepare the trial wave
 function of a molecule and to measure the expectation value of the **electronic Hamiltonian**,
 while a classical optimizer is used to adjust the quantum circuit parameters in order to find
@@ -83,7 +84,7 @@ print(geometry)
 # is typically the starting point for most electron correlation methods in quantum chemistry, such
 # as `Configuration Interaction (CI) <https://en.wikipedia.org/wiki/Configuration_interaction>`__
 # and `Coupled Cluster (CC) <https://en.wikipedia.org/wiki/Coupled_cluster>`__ methods among
-# others [[#jensenbook]_].
+# others [#jensenbook]_.
 #
 # Before launching the HF calculation using the function
 # :func:`~.pennylane_qchem.qchem.meanfield`, we need to specify a string to label the
@@ -96,7 +97,7 @@ charge = 0
 
 ##############################################################################
 # In the Hartree-Fock method the many-electron wave function is approximated by a `Slater
-# determinant <https://en.wikipedia.org/wiki/Slater_determinant>`_ [[#pople1977]_]
+# determinant <https://en.wikipedia.org/wiki/Slater_determinant>`_ [#pople1977]_
 # that results from occupying the lowest-energy molecular orbitals until all electrons in the
 # molecule are accommodated. The way molecular orbitals are occupied matters as they determine the
 # self-consistent field.
@@ -233,7 +234,7 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 #
 # and apply the `Jordan-Wigner
 # <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`__ or `Bravyi-Kitaev
-# <https://arxiv.org/abs/1208.5986>`__ transformation [[#seeley2012]_] to map it to a
+# <https://arxiv.org/abs/1208.5986>`__ transformation [#seeley2012]_ to map it to a
 # linear combination of tensor products of Pauli operators
 #
 # .. math::
@@ -243,7 +244,7 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 # Pauli matrix :math:`X`, :math:`Y` or :math:`Z` acting on the :math:`i`-th qubit.
 # To perform the fermionic-to-qubit transformation of the electronic Hamiltonian, the one-body
 # and two-body Coulomb matrix elements :math:`h_{pq}` and :math:`h_{pqrs}`
-# [[#jensenbook]_] describing the fermionic Hamiltonian are retrieved from the
+# [#jensenbook]_ describing the fermionic Hamiltonian are retrieved from the
 # previously generated file ``'./pyscf/sto-3g/water.hdf5'``.
 
 qubit_hamiltonian = qchem.decompose(hf_file, mapping="jordan_wigner", core=core, active=active)
