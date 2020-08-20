@@ -6,7 +6,7 @@ networkx==2.4
 nlopt
 pygments-github-lexers
 semantic_version==2.6
-git+https://github.com/XanaduAI/strawberryfields.git
+strawberryfields==0.15
 sympy==1.6.2
 pillow==6.2.0
 pip==20.1
