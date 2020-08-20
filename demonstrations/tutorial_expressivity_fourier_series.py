@@ -21,7 +21,7 @@ Quantum models as Fourier series
 # The paper links common quantum machine learning models designed for
 # near-term quantum computers to Fourier series (and, in more general, to
 # Fourier-type sums). With this link, the class of functions a quantum
-# model can learn (i.e., its "expressivity") can be characterised by the
+# model can learn (i.e., its "expressivity") can be characterized by the
 # model's control of the Fourier series' frequencies and coefficients.
 # 
 
@@ -40,8 +40,10 @@ Quantum models as Fourier series
 # 
 # where :math:`M` is a measurement observable and
 # :math:`U(x, \boldsymbol \theta)` is a variational quantum circuit that
-# encodes a (here one-dimensional) data input :math:`x` and depends on a
-# set of parameters :math:`\boldsymbol \theta`.
+# encodes a data input :math:`x` and depends on a
+# set of parameters :math:`\boldsymbol \theta`. Here we will restrict ourselves
+# to one-dimensional data inputs, but the paper motivates that higher-dimensional
+# features simply generalize to multi-dimensional Fourier series.
 # 
 # The circuit itself repeats :math:`L` layers, each consisting of a data encoding circuit
 # block :math:`S(x)` and a trainable circuit block
@@ -80,8 +82,8 @@ Quantum models as Fourier series
 # The paper demonstrates many of its findings for circuits in which
 # :math:`\mathcal{G}(x)` is a single-qubit Pauli rotation gate. For
 # example, it shows that :math:`r` repetitions of a Pauli rotation
-# encoding gate in "sequence" (on the same qubit, but with :math:`L>1`) or
-# in "parallel" (on different qubits, with :math:`L=1`) creates a quantum
+# encoding gate in "sequence" (on the same qubit, but with multiple layers $r=L$) or
+# in "parallel" (on $r$ different qubits, with $L=1$) creates a quantum
 # model that can be expressed as a *Fourier series* of the form
 # 
 # .. math::  f_{ \boldsymbol \theta}(x) = \sum_{n \in \Omega} c_{n}(\boldsymbol \theta) e^{i  n x}, 
@@ -114,7 +116,7 @@ Quantum models as Fourier series
 # 
 # -  **Figure 5** plots the Fourier coefficients of randomly sampled
 #    instances from a family of quantum models which is defined by some
-#    parametrised ansatz.
+#    parametrized ansatz.
 # 
 # The code is presented so you can easily modify it in order to play
 # around with other settings and models. The settings used in the paper 
@@ -179,14 +181,21 @@ def square_loss(targets, predictions):
 ######################################################################
 # We first define a (classical) target function which will be used as a 
 # "ground truth" that the quantum model has to fit. The target function is 
-# constructed as a Fourier series of a specific degree:
+# constructed as a Fourier series of a specific degree.
 #
-# 
+# We also allow for a rescaling of the data by a hyperparameter ``scaling``,
+# which we will do in the quantum model as well. As shown in [1], for the quantum model to
+# learn the classical model in the experiment below,
+# the scaling of the quantum model and the target function have to match,
+# which is an important observation for
+# the design of quantum machine learning models.
+#
 
-degree = 1 # degree of the target function
-scaling = 1 # scaling of the data
-coeffs = [0.15 + 0.15j]*degree # coefficients of non-zero frequencies
-coeff0 = 0.1 # coefficient of zero frequency
+
+degree = 1  # degree of the target function
+scaling = 1  # scaling of the data
+coeffs = [0.15 + 0.15j]*degree  # coefficients of non-zero frequencies
+coeff0 = 0.1  # coefficient of zero frequency
 
 def target_function(x):
     """Generate a truncated Fourier series of degree, where the data gets re-scaled."""
@@ -331,7 +340,7 @@ print(serial_quantum_model.draw())
 
 
 ######################################################################
-# The next step is to optimise the weights in order to fit the ground
+# The next step is to optimize the weights in order to fit the ground
 # truth.
 # 
 
@@ -428,12 +437,12 @@ plt.show()
 # As shown in the paper, we expect similar results to the serial model: a
 # Fourier series of degree :math:`r` can only be fitted if there are at
 # least :math:`r` repetitions of the encoding gate in the quantum model.
-# However, in practice this experiment is a bit harder, since the
-# trainable unitaries :math:`W` grow quickly with the number of qubits.
+# However, in practice this experiment is a bit harder, since the dimension of the
+# trainable unitaries :math:`W` grows quickly with the number of qubits.
 #
 # In the paper, the investigations are made with the assumption that the
 # purple trainable blocks :math:`W` are arbitrary unitaries. We could use
-# the ``pennylane.templates.ArbitraryUnitary`` template, but since this
+# the :class:`~.templates.ArbitraryUnitary` template, but since this
 # template requires a number of parameters that grows exponentially with
 # the number of qubits (:math:`4^L-1` to be precise), this quickly becomes
 # cumbersome to train.
@@ -458,7 +467,7 @@ plt.show()
 
 ######################################################################
 # The ansatz is PennyLane's layer structure called
-# ``StronglyEntanglingLayers``, and as the name suggests, it has itself a
+# :class:`~.templates.StronglyEntanglingLayers`, and as the name suggests, it has itself a
 # user-defined number of layers (which we will call "ansatz layers" to
 # avoid confusion).
 # 
@@ -468,10 +477,10 @@ from pennylane.templates import StronglyEntanglingLayers
 
 ######################################################################
 # Let's have a quick look at the ansatz itself for 3 qubits by making a
-# dummy circuit of 1 ansatz layer:
+# dummy circuit of 2 ansatz layers:
 # 
 
-n_ansatz_layers = 1
+n_ansatz_layers = 2
 n_qubits = 3
 
 dev = qml.device('default.qubit', wires=4)
@@ -644,7 +653,7 @@ def fourier_coefficients(f, K):
 # Now we need to define a quantum model. This could be any model, using a
 # qubit or continuous-variable circuit, or one of the quantum models from
 # above. We will use a slight derivation of the ``parallel_qubit_model()``
-# from above, this time using the ``BasicEntanglerLayers`` ansatz:
+# from above, this time using the :class:`~.templates.BasicEntanglerLayers` ansatz:
 # 
 
 from pennylane.templates import BasicEntanglerLayers
@@ -724,7 +733,7 @@ fig, ax = plt.subplots(1, n_coeffs)
 for idx, ax_ in enumerate(ax):
     ax_.set_title(r"$c_{}$".format(idx))
     ax_.scatter(coeffs_real[:, idx], coeffs_imag[:, idx], s=20, 
-                facecolor='white', edgecolor='black')
+                facecolor='white', edgecolor='red')
     ax_.set_aspect("equal")
     ax_.set_ylim(-1, 1)
     ax_.set_xlim(-1, 1)
@@ -735,6 +744,14 @@ plt.show()
 
 
 ######################################################################
+# Playing around with different quantum models, you will find
+# that some quantum models create different distributions over
+# the coefficients than others. For example ``BasicEntanglingLayers``
+# (with the default Pauli-X rotation) seems to have a structure
+# that forces the even Fourier coefficients to zero, while
+# ``StronglyEntanglingLayers`` will have a non-zero variance
+# for all supported coefficients.
+
 # Note also how the variance of the distribution decreases for growing
 # orders of the coefficients - an effect linked to the convergence of a
 # Fourier series.
