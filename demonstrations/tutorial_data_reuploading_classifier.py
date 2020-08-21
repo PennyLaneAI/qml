@@ -140,7 +140,7 @@ the circuit and how noise might affect it. Or, we can use some
 gradient-free method such as L-BFGS (Liu, Dong C., and Nocedal, J., 1989)
 to evaluate the gradient and find the optimal weights where we can
 treat the quantum circuit as a black-box and the gradients are computed
-numerically using a fixed number of function evalutaions and iterations.
+numerically using a fixed number of function evaluations and iterations.
 The L-BFGS method can be used with the PyTorch interface for Pennylane.
 
 Multiple qubits, entanglement and Deep Neural Networks

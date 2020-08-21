@@ -469,7 +469,7 @@ plt.show()
 # of the noisy channel! 
 #
 # In this example, the influence of the channel is to 
-# attenuate the maximal amplitude that the qubit state can acheive 
+# attenuate the maximal amplitude that the qubit state can achieve 
 # (:math:`\approx 0.4`). But even though the qubit's amplitude is attenuated,
 # the gradient computed by the parameter-shift rule still "points in the
 # right direction". 

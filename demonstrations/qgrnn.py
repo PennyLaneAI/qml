@@ -274,7 +274,7 @@ matrix_params = [[0.56, 1.24, 1.67, -0.79], [-1.44, -1.43, 1.18, -0.93]]
 
 ######################################################################
 # In theory, these parameters can
-# be any value we want, provided they are reasonbly small enough that the QGRNN can reach them
+# be any value we want, provided they are reasonably small enough that the QGRNN can reach them
 # in a tractable number of optimization steps.
 # In `matrix_params`, the first list represents the :math:`ZZ` interaction parameters and
 # the second list represents the single-qubit `Z` parameters.
