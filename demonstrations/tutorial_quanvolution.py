@@ -272,7 +272,7 @@ plt.show()
 # 10 output nodes with a final *softmax* activation function.
 #
 # The model is compiled with a *stochastic-gradient-descent* optimizer,
-# and a *coross-entropy* loss function.
+# and a *cross-entropy* loss function.
 
 
 def MyModel():
@@ -330,7 +330,7 @@ c_history = c_model.fit(
 # Results
 # ^^^^^^^
 #
-# We can finanlly plot the test accuracy and the test loss with respect to the
+# We can finally plot the test accuracy and the test loss with respect to the
 # number of training epochs.
 
 import matplotlib.pyplot as plt
