@@ -9,7 +9,7 @@ Quantum models as Fourier series
 # This demonstration is based on the paper *The effect of data encoding on
 # the expressive power of variational quantum machine learning models* by
 # `Schuld, Sweke and Meyer
-# (2020) <https://arxiv.org/pdf/XXX.XXXXX.pdf>`__ [1].
+# (2020) <https://arxiv.org/abs/2008.08605>`__ [1].
 # 
 # .. figure:: ../demonstrations/expressivity_fourier_series/scheme_thumb.png
 #   :width: 50%
