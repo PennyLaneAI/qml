@@ -822,4 +822,4 @@ def random_weights():
 # ---------------
 #
 # [1] Maria Schuld, Ryan Sweke and Johannes Jakob Meyer, *The effect of data encoding on
-# the expressive power of variational quantum machine learning models*, arxiv preprint arxiv:XXX.XXXXX.
+# the expressive power of variational quantum machine learning models*, arxiv preprint arxiv:2008.08605.
