@@ -418,7 +418,7 @@ print(
 #     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #     <https://arxiv.org/abs/1701.02691>`_
 #
-# .. [#suzuki1985]_
+# .. [#suzuki1985]
 # 
 #     M. Suzuki. "Decomposition formulas of exponential operators and Lie exponentials
 #     with some applications to quantum mechanics and statistical physics".
