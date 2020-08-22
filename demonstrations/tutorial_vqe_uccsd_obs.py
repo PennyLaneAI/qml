@@ -92,7 +92,7 @@ print("Number of qubits = ", qubits)
 print("Hamiltonian is ", H)
 
 ##############################################################################
-# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function allows to define
+# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function allows us to define
 # an additional set of keyword arguments to provide the user with ample flexibility
 # to generate the Hamiltonian of more complicated systems. For more details take a look
 # at the tutorial :doc:`tutorial_quantum_chemistry`.
@@ -126,7 +126,7 @@ S2 = qchem.spin2(electrons, qubits, mapping="jordan_wigner")
 print(S2)
 
 ##############################################################################
-# The :func:`~.pennylane_qchem.qchem.spin2` function uses the functions
+# The :func:`~.pennylane_qchem.qchem.spin2` function uses
 # :func:`~.pennylane_qchem.qchem._spin2_matrix_elements` and
 # :func:`~.pennylane_qchem.qchem.observable` to compute the 
 # matrix elements in the equation above and to build the many-body observable,
@@ -257,7 +257,7 @@ cost_fn = qml.VQECost(ansatz, H, dev)
 S2_exp_value = qml.VQECost(ansatz, S2, dev)
 
 ##############################################################################
-# Notice that the total spin :math:`S` of the trial state can be obtained from the
+# The total spin :math:`S` of the trial state can be obtained from the
 # expectation value :math:`\langle \hat{S}^2 \rangle` as,
 #
 # .. math::
