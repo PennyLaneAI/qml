@@ -157,7 +157,7 @@ dev = qml.device("default.qubit", wires=qubits)
 #
 # The UCCSD method is a generalization of the traditional CCSD formalism used in quantum chemistry
 # to perform post-Hartree-Fock electron correlation calculations. Within the first-order
-# Trotter approximation, the UCCSD ground state of the molecule is built via the exponential ansatz
+# Trotter approximation [#suzuki1985]_, the UCCSD ground state of the molecule is built via the exponential ansatz
 # [#barkoutsos2018]_,
 #
 # .. math::
@@ -170,8 +170,8 @@ dev = qml.device("default.qubit", wires=qubits)
 # In the latter equation, the indices :math:`r, s` and :math:`p, q` run respectively over the
 # occupied and unoccupied molecular orbitals. The operator
 # :math:`\hat{c}_p^\dagger \hat{c}_r` creates a single excitation [#jensenbook]_ since it
-# annihilates an electron in the occupied orbital :math:`r` and creates it the unoccupied orbital
-# :math:`p`. Similarly, the operator
+# annihilates an electron in the occupied orbital :math:`r` and creates it in the unoccupied
+# orbital :math:`p`. Similarly, the operator
 # :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates double excitation.
 #
 # The quantum circuits to exponentiate the excitation operators in the
@@ -374,7 +374,7 @@ for n in range(max_iterations):
 
 print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))
-print("Final value of the ground-state energy = {:.8f} Ha".format(energy))
+print("Energy of the lowest-lying excited state = {:.8f} Ha".format(energy))
 print(
     "Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)".format(
         np.abs(energy - (-0.4784529849)), np.abs(energy - (-0.4784529849)) * 627.509474
@@ -417,6 +417,13 @@ print(
 #     J. Romero, R. Babbush, *et al.*,"Strategies for quantum computing molecular
 #     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #     <https://arxiv.org/abs/1701.02691>`_
+#
+# .. [#suzuki1985]_
+# 
+#     M. Suzuki. "Decomposition formulas of exponential operators and Lie exponentials
+#     with some applications to quantum mechanics and statistical physics".
+#     `Journal of Mathematical Physics 26, 601 (1985).
+#     <https://aip.scitation.org/doi/abs/10.1063/1.526596>`_
 #
 # .. [#jensenbook]
 #
