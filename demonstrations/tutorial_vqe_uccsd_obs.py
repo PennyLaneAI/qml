@@ -418,13 +418,6 @@ print(
 #     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #     <https://arxiv.org/abs/1701.02691>`_
 #
-# .. [#suzuki1985]
-# 
-#     M. Suzuki. "Decomposition formulas of exponential operators and Lie exponentials
-#     with some applications to quantum mechanics and statistical physics".
-#     `Journal of Mathematical Physics 26, 601 (1985).
-#     <https://aip.scitation.org/doi/abs/10.1063/1.526596>`_
-#
 # .. [#jensenbook]
 #
 #     F. Jensen. "Introduction to Computational Chemistry".
@@ -434,6 +427,13 @@ print(
 #
 #     A. Fetter, J. D. Walecka, "Quantum Theory of many-particle systems".
 #     Courier Corporation, 2012.
+#
+# .. [#suzuki1985]
+# 
+#     M. Suzuki. "Decomposition formulas of exponential operators and Lie exponentials
+#     with some applications to quantum mechanics and statistical physics".
+#     `Journal of Mathematical Physics 26, 601 (1985).
+#     <https://aip.scitation.org/doi/abs/10.1063/1.526596>`_
 #
 # .. [#barkoutsos2018]
 #
