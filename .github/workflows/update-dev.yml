@@ -1,4 +1,4 @@
-name: build-master
+name: update-dev
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-master:
+  update-dev:
     runs-on: ubuntu-latest
 
     steps:
