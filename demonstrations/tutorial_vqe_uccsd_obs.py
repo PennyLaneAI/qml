@@ -47,8 +47,9 @@ that is believed to outperform the classical coupled cluster method
 chemistry.
 
 We demonstrate how different functionalities implemented in PennyLane
-can be put together to run VQE simulations in different sectors of the total-spin projection
-:math:`S_z`. We also specify how to use the unitary coupled cluster ansatz, restricted to single
+can be put together to run VQE simulations to find the lowest-energy states of the
+:math:`\mathrm{H}_2` molecule in different sectors of the total spin :math:`S`.
+We also specify how to use the unitary coupled cluster ansatz, restricted to single
 and double excitations (UCCSD), as the variational circuit for the algorithm. These functionalities
 can be combined to estimate the energies of the ground and the lowest-lying excited states of the 
 hydrogen molecule.
@@ -196,12 +197,12 @@ dev = qml.device("default.qubit", wires=qubits)
 # Now, we demonstrate how to use PennyLane functionalities to build up the UCCSD
 # ansatz for VQE simulations. First, we use the :func:`~.pennylane_qchem.qchem.excitations`
 # function to generate the whole set of single- and double-excitations for :math:`N_e`
-# ``electrons`` populating ``qubits`` spin orbitals. Furthermore, we can enforce the selection rules
+# ``electrons`` populating ``qubits`` spin orbitals. Furthermore, we can define the selection rules
 # :math:`s_{z_p} - s_{z_r} = \Delta s_z` and
 # :math:`s_{z_p} + s_{z_q} - s_{z_r} - s_{z_s}= \Delta s_z` for the spin-projection of the
 # molecular orbitals involved in the single and double excitations
-# using the keyword argument ``delta_sz``. This is precisely what allows us to prepare a
-# correlated trial state whose total-spin projection :math:`S_z` is different from the one of
+# using the keyword argument ``delta_sz``. This allows us to prepare a
+# correlated state whose total-spin projection :math:`S_z` is different from the one of
 # the Hartree-Fock state by the quantity ``delta_sz``. Therefore, we choose ``delta_sz = 0`` to
 # prepare the ground state of the :math:`\mathrm{H}_2` molecule.
 
@@ -318,16 +319,15 @@ print(
 # accuracy. Notice also that the optimized UCCSD state is an eigenstate of the total spin
 # operator :math:`\hat{S}^2` with eigenvalue :math:`S=0`.
 #
-# Finding the lowest-energy excited state with :math:`S_z=1`
-# ----------------------------------------------------------
+# Finding the lowest-energy excited state with :math:`S=1`
+# --------------------------------------------------------
 # In the last part of the tutorial we want to demonstrate that VQE can also be used to find
-# the lowest-energy excited states with total-spin projection :math:`S_z \neq 0`.
+# the lowest-energy excited states with total spin :math:`S=1` and :math:`S_z \neq 0`.
 # For the hydrogen molecule, this is the case for the states with energy
 # :math:`E = -0.4784529844` Ha and :math:`S_z=1` and :math:`S_z=-1`.
 #
-# Let's consider the case of :math:`S_z=1`. We just use the
-# :func:`~.pennylane_qchem.qchem.excitations` function with the keyword argument ``delta_sz=1``
-# to generate excitations in this specific sector of :math:`S_z`.
+# Let's consider the case of :math:`S_z=-1` for which we can use the
+# :func:`~.pennylane_qchem.qchem.excitations` function with the keyword argument ``delta_sz=1``.
 
 singles, doubles = qchem.excitations(electrons, qubits, delta_sz=1)
 print(singles)
@@ -382,13 +382,11 @@ print(
 )
 
 ##############################################################################
-# As expected, we have successfully estimated the lowest-energy state with total-spin projection
-# :math:`S_z=1` for the hydrogen molecule, which is an excited state. Notice that
-# the optimized UCCSD state is an eigenstate of the total spin operator :math:`\hat{S}^2` with
-# eigenvalue :math:`S=1`.
+# As expected, we have successfully estimated the lowest-energy state with total spin
+# :math:`S=1` and :math:`S_z=-1` for the hydrogen molecule, which is an excited state.
 #
 # Now, you can run a VQE simulation to find the degenerate excited state with
-# spin quantum numbers :math:`S=1` and :math:`S_z=-1`. Give it a try!
+# spin quantum numbers :math:`S=1` and :math:`S_z=1`. Give it a try!
 #
 #
 # References
