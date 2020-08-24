@@ -96,7 +96,7 @@ To see this strategy in action, consider the Hamiltonian
 
 We can solve for the ground state energy using the variational quantum eigensolver (VQE) algorithm.
 
-First, lets import NumPy and PennyLane, and define our Hamiltonian.
+First, let's import NumPy and PennyLane, and define our Hamiltonian.
 """
 import numpy as np
 import pennylane as qml
@@ -150,7 +150,7 @@ prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
 print(prob_shots)
 
 ##############################################################################
-# We can now use SciPy to create our multinormial distributed random variable
+# We can now use SciPy to create our multinomial distributed random variable
 # :math:`S`, using the number of trials (total shot number) and probability values:
 
 from scipy.stats import multinomial
@@ -261,7 +261,7 @@ plt.show()
 ##############################################################################
 # We can see that weighted random sampling performs just as well as the uniform
 # deterministic sampling. However, weighted random sampling begins to show a
-# non-negligable improvement over deterministic sampling for large Hamiltonians
+# non-negligible improvement over deterministic sampling for large Hamiltonians
 # with highly non-uniform coefficients. For example, see Fig (3) and (4) of
 # Arrasmith et al. [#arrasmith2020]_, comparing weighted random sampling VQE optimization
 # for both :math:`\text{H}_2` and :math:`\text{LiH}` molecules.
@@ -603,7 +603,7 @@ plt.show()
 # While beyond the scope of this demonstration, the Rosalin optimizer can be
 # modified in various other ways; for instance, by incorporating *weighted hybrid
 # sampling* (which distributes some shots deterministically, with the remainder
-# done randomly), or by adapating the variant iCANS2 optimizer. Download
+# done randomly), or by adapting the variant iCANS2 optimizer. Download
 # this demonstration from the sidebar 👉 and give it a go! ⚛️
 
 

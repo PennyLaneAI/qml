@@ -17,7 +17,7 @@ When working with simulators, however, we *do* have access to the internal (clas
 computations being performed. This allows us to take advantage of other methods of computing the
 gradient, such as backpropagation, which may be advantageous in certain regimes. In this tutorial,
 we will compare and contrast the parameter-shift rule against backpropagation, using
-the PennyLane :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`
+the PennyLane :class:`default.qubit.tf <pennylane.devices.default_qubit_tf.DefaultQubitTF>`
 device.
 
 The parameter-shift rule
@@ -241,7 +241,7 @@ print(2 * forward_time * params.size)
 # (simulator or hardware), ``"backprop"`` will only work for specific simulator devices that are
 # designed to support backpropagation.
 #
-# One such device is :class:`default.qubit.tf <pennylane.plugins.default_qubit_tf.DefaultQubitTF>`.
+# One such device is :class:`default.qubit.tf <pennylane.devices.default_qubit_tf.DefaultQubitTF>`.
 # This device is a pure state-vector simulator like ``default.qubit``; however, unlike
 # ``default.qubit``, is written using TensorFlow rather than NumPy. As a result, it supports
 # classical backpropagation when using the TensorFlow interface.
