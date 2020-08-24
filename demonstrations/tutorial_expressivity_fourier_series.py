@@ -348,7 +348,7 @@ def cost(weights, x, y):
     predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 70
+max_steps = 50
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]  # initial cost
