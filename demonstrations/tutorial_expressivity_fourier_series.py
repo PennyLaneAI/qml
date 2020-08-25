@@ -85,8 +85,8 @@ Quantum models as Fourier series
 #
 # The paper demonstrates many of its findings for circuits in which
 # :math:`\mathcal{G}(x)` is a single-qubit Pauli rotation gate. For 
-# example, it shows that :math:`r` repetitions of a Pauli rotation
-# encoding gate in "sequence" (on the same qubit, but with multiple layers :math:`r=L`) or
+# example, it shows that :math:`r` repetitions of a Pauli rotation-encoding 
+# gate in "sequence" (on the same qubit, but with multiple layers :math:`r=L`) or
 # in "parallel" (on :math:`r` different qubits, with :math:`L=1`) creates a quantum
 # model that can be expressed as a *Fourier series* of the form
 # 
@@ -112,7 +112,7 @@ Quantum models as Fourier series
 # quantum models by showing how to reproduce the simulations underlying
 # Figures 3, 4 and 5 in Section II of the paper:
 # 
-# -  **Figures 3 and 4** are function fitting experiments, where quantum
+# -  **Figures 3 and 4** are function-fitting experiments, where quantum
 #    models with different encoding strategies have the task to fit
 #    Fourier series up to a certain degree. As in the paper, we will use
 #    examples of qubit-based quantum circuits where a single data feature
@@ -125,12 +125,6 @@ Quantum models as Fourier series
 # The code is presented so you can easily modify it in order to play
 # around with other settings and models. The settings used in the paper 
 # are given in the various subsections.
-# 
-
-
-######################################################################
-# Imports and global functions
-# ----------------------------
 # 
 
 
@@ -161,14 +155,14 @@ def square_loss(targets, predictions):
 
 ######################################################################
 # First we will reproduce Figures 3 and 4 from the paper. These
-# show how quantum models that use Pauli rotations as data
-# encoding gates can only fit Fourier series up to a certain degree. The
+# show how quantum models that use Pauli rotations as data-encoding 
+# gates can only fit Fourier series up to a certain degree. The
 # degree corresponds to the number of times that the Pauli gate gets
 # repeated in the quantum model.
 # 
-# First, let us consider circuits where a the encoding gate gets repeated
+# Let us consider circuits where the encoding gate gets repeated
 # sequentially (as in Figure 2a of the paper). For simplicity we will only
-# look at single qubit circuits:
+# look at single-qubit circuits:
 # 
 # .. figure:: ../demonstrations/expressivity_fourier_series/single_qubit_model.png
 #   :width: 50%
@@ -202,10 +196,10 @@ coeffs = [0.15 + 0.15j]*degree  # coefficients of non-zero frequencies
 coeff0 = 0.1  # coefficient of zero frequency
 
 def target_function(x):
-    """Generate a truncated Fourier series of degree, where the data gets re-scaled."""
+    """Generate a truncated Fourier series, where the data gets re-scaled."""
     res = coeff0
     for idx, coeff in enumerate(coeffs):
-        exponent = np.complex(0, scaling*(idx+1)*x)
+        exponent = np.complex(0, scaling * (idx+1) * x)
         conj_coeff = np.conjugate(coeff)
         res += coeff * np.exp(exponent) + conj_coeff * np.exp(-exponent)
     return np.real(res)
@@ -221,7 +215,7 @@ target_y = np.array([target_function(x_) for x_ in x])
 plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, facecolor='white', edgecolor='black')
 plt.ylim(-1, 1)
-plt.show()
+plt.show();
 
 
 ######################################################################
@@ -235,7 +229,7 @@ plt.show()
 #        ::
 # 
 #            degree = 1
-#            coeffs = [0.15 + 0.15j]*degree 
+#            coeffs = (0.15 + 0.15j) * degree 
 #            coeff0 = 0.1
 # 
 #        this function is the ground truth
@@ -243,7 +237,7 @@ plt.show()
 #        paper.
 # 
 #     -  To get the ground truth :math:`g'(x) = \sum_{n=-2}^2 c_{n} e^{-nix}`
-#        with :math:`c_0=0.1` :math:`c_1 = c_2 = 0.15 - 0.15i` from Figure 3,
+#        with :math:`c_0=0.1`, :math:`c_1 = c_2 = 0.15 - 0.15i` from Figure 3,
 #        you need to increase the degree to two:
 # 
 #        ::
@@ -256,7 +250,7 @@ plt.show()
 #        ::
 # 
 #            degree = 5 
-#            coeffs = [0.05 + 0.05j]*degree 
+#            coeffs = (0.05 + 0.05j) * degree 
 #            coeff0 = 0.0 
 # 
 
@@ -276,8 +270,8 @@ scaling = 1
 dev = qml.device('default.qubit', wires=1)
 
 def S(x):
-    """Data encoding circuit block."""
-    qml.RX(scaling*x, wires=0)
+    """Data-encoding circuit block."""
+    qml.RX(scaling * x, wires=0)
 
 def W(theta):
     """Trainable circuit block."""
@@ -291,7 +285,7 @@ def serial_quantum_model(weights, x=None):
         W(theta)
         S(x)
         
-    # L+1'th unitary
+    # (L+1)'th unitary
     W(weights[-1])
     
     return qml.expval(qml.PauliZ(wires=0))
@@ -303,7 +297,7 @@ def serial_quantum_model(weights, x=None):
 # 
 
 r = 1 # number of times the encoding gets repeated (here equal to the number of layers)
-weights = 2*np.pi*np.random.random(size=(r+1, 3)) # some random initial weights
+weights = 2 * np.pi * np.random.random(size=(r+1, 3)) # some random initial weights
 
 x = np.linspace(-6, 6, 70)
 random_quantum_model_y = [serial_quantum_model(weights, x=x_) for x_ in x]
@@ -316,7 +310,7 @@ plt.show()
 ######################################################################
 # 
 # No matter what weights are picked, the single qubit model for `L=1` will always be a sine function 
-# of a fixed frequency. The weights merely influence the amplitude, y-shift and phase of the sine.
+# of a fixed frequency. The weights merely influence the amplitude, y-shift, and phase of the sine.
 # 
 # This observation is formally derived in Section II.A of the paper.
 # 
@@ -386,7 +380,7 @@ plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, facecolor='white', edgecolor='black')
 plt.plot(x, predictions, c='blue')
 plt.ylim(-1,1)
-plt.show()
+plt.show();
 
 
 ######################################################################
@@ -397,13 +391,13 @@ plt.plot(range(len(cst)), cst)
 plt.ylabel("Cost")
 plt.xlabel("Step")
 plt.ylim(0, 0.23)
-plt.show()
+plt.show();
 
 
 ######################################################################
 # With the initial settings and enough training steps, the quantum model 
 # learns to fit the ground truth perfectly. This is expected, since 
-# the number of Pauli rotation encoding gates and the degree of the 
+# the number of Pauli-rotation-encoding gates and the degree of the 
 # ground truth Fourier series are both one.
 # 
 # If the ground truth's degree is larger than the number of layers in the
@@ -419,7 +413,7 @@ plt.show()
 # .. note::
 # 
 #     You will find that the training takes much longer, and needs a lot more steps to converge for 
-#     larger L. Some initial weights may not even converge to a good solution at all, the training 
+#     larger L. Some initial weights may not even converge to a good solution at all; the training 
 #     seems to get stuck in a minimum. 
 # 
 #     It is an open research question whether for asymptotically large L, the single qubit 
@@ -434,7 +428,7 @@ plt.show()
 
 
 ######################################################################
-# Our next task is to repeat the function fitting experiment for a circuit
+# Our next task is to repeat the function-fitting experiment for a circuit
 # where the Pauli rotation gate gets repeated :math:`r` times on
 # *different* qubits, using a single layer :math:`L=1`.
 # 
@@ -494,7 +488,7 @@ def ansatz(weights):
     StronglyEntanglingLayers(weights, wires=range(n_qubits))
     return qml.expval(qml.Identity(wires=0))
 
-weights_ansatz = 2*np.pi*np.random.random(size=(n_ansatz_layers, n_qubits, 3))
+weights_ansatz = 2 * np.pi * np.random.random(size=(n_ansatz_layers, n_qubits, 3))
 
 ansatz(weights_ansatz)
 print(ansatz.draw())
@@ -510,9 +504,9 @@ r = 3
 dev = qml.device('default.qubit', wires=r)
 
 def S(x):
-    """Data encoding circuit block."""
+    """Data-encoding circuit block."""
     for w in range(r):
-        qml.RX(scaling*x, wires=w)
+        qml.RX(scaling * x, wires=w)
 
 def W(theta):
     """Trainable circuit block."""
@@ -534,14 +528,14 @@ def parallel_quantum_model(weights, x=None):
 # 
 
 trainable_block_layers = 3
-weights = 2*np.pi*np.random.random(size=(2, trainable_block_layers, r, 3))
+weights = 2 * np.pi * np.random.random(size=(2, trainable_block_layers, r, 3))
 
 x = np.linspace(-6, 6, 70)
 random_quantum_model_y = [parallel_quantum_model(weights, x=x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
 plt.ylim(-1,1)
-plt.show()
+plt.show();
 
 
 ######################################################################
@@ -554,7 +548,7 @@ plt.show()
 # Training the model is done exactly as before, but it may take a lot
 # longer this time. We set a default of 25 steps, which you should
 # increase if necessary. Small models of <6 qubits
-# usually converge after a few hundred steps at most -- but this
+# usually converge after a few hundred steps at most—but this
 # depends on your settings.
 # 
 
@@ -594,7 +588,7 @@ plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, facecolor='white', edgecolor='black')
 plt.plot(x, predictions, c='blue')
 plt.ylim(-1,1)
-plt.show()
+plt.show();
 
 
 ######################################################################
@@ -604,7 +598,7 @@ plt.show()
 plt.plot(range(len(cst)), cst)
 plt.ylabel("Cost")
 plt.xlabel("Step")
-plt.show()
+plt.show();
 
 
 
@@ -641,8 +635,8 @@ def fourier_coefficients(f, K):
     """
     Computes the first 2*K+1 Fourier coefficients of a 2*pi periodic function.
     """
-    n_coeffs = 2*K+1
-    t = np.linspace(0, 2*np.pi, n_coeffs, endpoint=False)
+    n_coeffs = 2 * K + 1
+    t = np.linspace(0, 2 * np.pi, n_coeffs, endpoint=False)
     y = np.fft.rfft(f(t)) / t.size
     return y
 
@@ -670,7 +664,7 @@ dev = qml.device('default.qubit', wires=n_qubits)
 def S(x):
     """Data encoding circuit block."""
     for w in range(n_qubits):
-        qml.RX(scaling*x, wires=w)
+        qml.RX(scaling * x, wires=w)
 
 def W(theta):
     """Trainable circuit block."""
@@ -744,7 +738,7 @@ for idx, ax_ in enumerate(ax):
 
 
 plt.tight_layout(pad=0.5)
-plt.show()
+plt.show();
 
 
 ######################################################################
@@ -757,7 +751,7 @@ plt.show()
 # for all supported coefficients.
 #
 # Note also how the variance of the distribution decreases for growing
-# orders of the coefficients - an effect linked to the convergence of a
+# orders of the coefficients—an effect linked to the convergence of a
 # Fourier series.
 # 
 
@@ -767,7 +761,7 @@ plt.show()
 #
 #     To reproduce the results from Figure 5 you have to change the ansatz (no
 #     unitary, ``BasicEntanglerLayers`` or ``StronglyEntanglingLayers``, and
-#     set ``n_ansatz_layers`` either to :math:`1` or :math:`5`. The
+#     set ``n_ansatz_layers`` either to :math:`1` or :math:`5`). The
 #     ``StronglyEntanglingLayers`` requires weights of shape
 #     ``size=(2, n_ansatz_layers, n_qubits, 3)``.
 # 
@@ -805,7 +799,7 @@ def quantum_model(weights, x=None):
     return qml.expval(qml.X(wires=0))
 
 def random_weights():
-    return np.random.normal(size=(2, 5*n_ansatz_layers), loc=0, scale=var)
+    return np.random.normal(size=(2, 5 * n_ansatz_layers), loc=0, scale=var)
 
 ######################################################################
 # .. note:: 
