@@ -1,6 +1,10 @@
-"""
+r"""
 Quantum models as Fourier series
 ================================
+
+.. meta::
+    :property="og:description": The class of functions a quantum model can learn is characterized by the structure of its Fourier series.
+    :property="og:image": ...
 
 """
 
@@ -8,8 +12,8 @@ Quantum models as Fourier series
 ######################################################################
 # This demonstration is based on the paper *The effect of data encoding on
 # the expressive power of variational quantum machine learning models* by
-# `Schuld, Sweke and Meyer
-# (2020) <https://arxiv.org/abs/2008.08605>`__ [1].
+# `Schuld, Sweke, and Meyer
+# (2020) <https://arxiv.org/abs/2008.08605>`__ [#schuld2020]_.
 # 
 # .. figure:: ../demonstrations/expressivity_fourier_series/scheme_thumb.png
 #   :width: 50%
@@ -33,7 +37,7 @@ Quantum models as Fourier series
 
 
 ######################################################################
-# Ref. [1] considers quantum machine
+# Ref. [#schuld2020]_ considers quantum machine
 # learning models of the form
 # 
 # .. math:: f_{\boldsymbol \theta}(x) = \langle 0| U^{\dagger}(x,\boldsymbol \theta) M U(x, \boldsymbol \theta) | 0 \rangle 
@@ -45,7 +49,7 @@ Quantum models as Fourier series
 # to one-dimensional data inputs, but the paper motivates that higher-dimensional
 # features simply generalize to multi-dimensional Fourier series.
 # 
-# The circuit itself repeats :math:`L` layers, each consisting of a data encoding circuit
+# The circuit itself repeats :math:`L` layers, each consisting of a data-encoding circuit
 # block :math:`S(x)` and a trainable circuit block
 # :math:`W(\boldsymbol \theta)` that is controlled by the parameters
 # :math:`\boldsymbol \theta`. The data encoding block consists of gates of
@@ -184,7 +188,7 @@ def square_loss(targets, predictions):
 # constructed as a Fourier series of a specific degree.
 #
 # We also allow for a rescaling of the data by a hyperparameter ``scaling``,
-# which we will do in the quantum model as well. As shown in [1], for the quantum model to
+# which we will do in the quantum model as well. As shown in [#schuld2020]_, for the quantum model to
 # learn the classical model in the experiment below,
 # the scaling of the quantum model and the target function have to match,
 # which is an important observation for
@@ -626,7 +630,7 @@ plt.show()
 # model cannot fit the circuit, since the expressivity of quantum models
 # also depends on the Fourier coefficients the model can create.
 # 
-# Figure 5 in [1] shows Fourier coefficients
+# Figure 5 in [#schuld2020]_ shows Fourier coefficients
 # from quantum models sampled from a model family defined by an 
 # ansatz for the trainable circuit block. For this we need a
 # function that numerically computes the Fourier coefficients of a
@@ -773,7 +777,7 @@ plt.show()
 # Continuous-variable model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Ref. [1] mentions that a phase rotation in
+# Ref. [#schuld2020]_ mentions that a phase rotation in
 # continuous-variable quantum computing has a spectrum that supports *all*
 # Fourier frequecies. To play with this model, we finally show you the
 # code for a continuous-variable circuit. For example, to see its Fourier
@@ -821,5 +825,9 @@ def random_weights():
 # References
 # ---------------
 #
-# [1] Maria Schuld, Ryan Sweke and Johannes Jakob Meyer, *The effect of data encoding on
-# the expressive power of variational quantum machine learning models*, arxiv preprint arxiv:2008.08605.
+# .. [#schuld2020] 
+# 
+#     Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer. "The effect of data encoding on
+#     the expressive power of variational quantum machine learning models." 
+#     `arXiv:2008.08605 <https://arxiv.org/abs/2008.08605>`__ (2020).
+#
