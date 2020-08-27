@@ -34,7 +34,7 @@ training signal for the generator to improve its fake generated data.
 
 ##############################################################################
 # Using Cirq + TensorFlow
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------
 # PennyLane allows us to mix and match quantum devices and classical machine
 # learning software. For this demo, we will link together
 # Google's `Cirq <https://cirq.readthedocs.io/en/stable/>`_ and `TensorFlow <https://www.tensorflow.org/>`_ libraries.
@@ -54,7 +54,7 @@ dev = qml.device('cirq.simulator', wires=3)
 
 ##############################################################################
 # Generator and Discriminator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------
 #
 # In classical GANs, the starting point is to draw samples either from
 # some “real data” distribution, or from the generator, and feed them to
@@ -65,7 +65,7 @@ dev = qml.device('cirq.simulator', wires=3)
 # rotated (from the starting state :math:`\left|0\right\rangle`) to some
 # arbitrary, but fixed, state.
 
-def real(angles, **kwargs):
+def real(angles):
     qml.Hadamard(wires=0)
     qml.Rot(*angles, wires=0)
 
@@ -79,7 +79,7 @@ def real(angles, **kwargs):
 # provided as a workspace for the generator, while the discriminator’s
 # output will be on wire 2.
 
-def generator(w, **kwargs):
+def generator(w):
     qml.Hadamard(wires=0)
     qml.RX(w[0], wires=0)
     qml.RX(w[1], wires=1)
@@ -129,7 +129,7 @@ def gen_disc_circuit(gen_weights, disc_weights):
 
 ##############################################################################
 # QGAN cost functions
-# ~~~~~~~~~~~~~~~~~~~
+# -------------------
 #
 # There are two cost functions of interest, corresponding to the two
 # stages of QGAN training. These cost functions are built from two pieces:
@@ -170,7 +170,7 @@ def gen_cost(gen_weights):
 
 ##############################################################################
 # Training the QGAN
-# ~~~~~~~~~~~~~~~~~
+# -----------------
 #
 # We initialize the fixed angles of the “real data” circuit, as well as
 # the initial parameters for both generator and discriminator. These are
