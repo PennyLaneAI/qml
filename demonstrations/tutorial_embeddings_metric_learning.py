@@ -176,8 +176,9 @@ def QAOAEmbedding(features, weights, wires):
 # <https://github.com/XanaduAI/qml/blob/master/demonstrations/embedding_metric_learning/X_antbees.txt>`_.
 # These were created by
 # resizing, cropping and normalizing the images, and passing them through
-# PyTorch's pretrained ResNet 512 (that is, without the final linear
-# layer).
+# PyTorch's pretrained ResNet 512 (that is, without the final linear layer)
+# (see `script used for pre-processing
+# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embedding_metric_learning/image_to_resnet_output.py>`_).
 #
 
 X = np.loadtxt("embedding_metric_learning/X_antbees.txt", ndmin=2)  #1  pre-extracted inputs
