@@ -65,7 +65,7 @@ dev = qml.device('cirq.simulator', wires=3)
 # rotated (from the starting state :math:`\left|0\right\rangle`) to some
 # arbitrary, but fixed, state.
 
-def real(angles):
+def real(angles, **kwargs):
     qml.Hadamard(wires=0)
     qml.Rot(*angles, wires=0)
 
@@ -79,7 +79,7 @@ def real(angles):
 # provided as a workspace for the generator, while the discriminator’s
 # output will be on wire 2.
 
-def generator(w):
+def generator(w, **kwargs):
     qml.Hadamard(wires=0)
     qml.RX(w[0], wires=0)
     qml.RX(w[1], wires=1)
