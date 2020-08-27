@@ -224,7 +224,7 @@ print('Final circuit parameters = \n', params)
 #
 # 1. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #    quantum processor". `Nature Communications 5, 4213 (2014).
-#    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#    <https://www.nature.com/articles/ncomms5213>`__
 #
 # 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
 #    `Chem. Rev. 2019, 119, 19, 10856-10915.
