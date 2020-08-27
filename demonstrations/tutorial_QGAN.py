@@ -142,8 +142,17 @@ def gen_disc_circuit(gen_weights, disc_weights):
 # correctly classifying real data, while minimizing the probability of
 # mistakenly classifying fake data.
 #
+# .. math:: 
+# 
+#     Cost_D = \mathrm{Pr}(real|\mathrm{fake}) - \mathrm{Pr}(real|\mathrm{real})
+#
 # The generator is trained to maximize the probability that the
 # discriminator accepts fake data as real.
+#
+# .. math:: 
+# 
+#     Cost_G = - \mathrm{Pr}(real|\mathrm{fake})
+#
 
 def prob_real_true(disc_weights):
     true_disc_output = real_disc_circuit(phi, theta, omega, disc_weights)
