@@ -125,7 +125,7 @@ jobs:
 workflows:
   version: 2
 
-  build_deploy_prod:
+  build_deploy:
     jobs:
       - build
 
@@ -136,10 +136,6 @@ workflows:
           filters:
             branches:
               only: master
-
-  build_deploy_dev:
-    jobs:
-      - build
 
       - deploy_dev:
           context: aws
