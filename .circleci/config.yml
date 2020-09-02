@@ -82,6 +82,58 @@ jobs:
       - store_artifacts:
           path: _build/test-results
 
+  build_dev:
+    docker:
+      - image: circleci/python:3.7.2
+      - image: rigetti/quilc
+        command:
+        - -R
+      - image: rigetti/qvm
+        command:
+        - -S
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install pip setuptools --upgrade
+            pip install -r requirements.txt --use-feature=2020-resolver
+
+      - run:
+          name: Build tutorials
+          no_output_timeout: 30m
+          command: |
+            . venv/bin/activate
+            make download
+            make html
+            cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
+            zip -r /tmp/qml_demos.zip demos
+            zip -r /tmp/qml_backreferences backreferences
+
+      - save_cache:
+          paths:
+            - ./_build/html
+          key: html-{{ .Environment.CIRCLE_SHA1 }}
+
+      - store_artifacts:
+          path: /tmp/qml_html.zip
+
+      - store_artifacts:
+          path: /tmp/qml_demos.zip
+
+      - store_artifacts:
+          path: _build/html
+
+      - store_test_results:
+          path: _build/test-results
+
+      - store_artifacts:
+          path: _build/test-results
+
   deploy_dev:
     executor:
       name: aws-cli/default
@@ -129,7 +181,15 @@ workflows:
 
   build_deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore: dev
+
+      - build_dev:
+          filters:
+            branches:
+              only: dev
 
       - deploy_prod:
           context: aws
