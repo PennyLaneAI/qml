@@ -202,7 +202,7 @@ workflows:
       - deploy_dev:
           context: aws
           requires:
-            - build
+            - build_dev
           filters:
             branches:
               only: dev
