@@ -59,6 +59,11 @@ jobs:
             - ./demos
           key: gallery-v11-{{ .Branch }}-{{ .Revision }}
 
+      - save_cache:
+          paths:
+            - ./_build/html
+          key: html-{{ .Environment.CIRCLE_SHA1 }}
+
       - store_artifacts:
           path: /tmp/qml_html.zip
 
@@ -77,7 +82,53 @@ jobs:
       - store_artifacts:
           path: _build/test-results
 
+  deploy_dev:
+    steps:
+      - restore_cache:
+          keys:
+            - html-{{ .Environment.CIRCLE_SHA1 }}
+
+      - deploy:
+          name: Deploy to AWS S3
+          command: |
+            aws s3 sync _build/html s3://pennylane.ai-dev/qml --delete
+
+  deploy_prod:
+    steps:
+      - restore_cache:
+          keys:
+            - html-{{ .Environment.CIRCLE_SHA1 }}
+
+      - deploy:
+          name: Deploy to AWS S3
+          command: |
+            aws s3 sync _build/html s3://pennylane.ai-prod/qml --delete
+            aws s3 cp _build/html/implementations.html s3://pennylane.ai-prod/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstrations.html
+            aws s3 cp _build/html/beginner.html s3://pennylane.ai-prod/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstrations.html
+
+      # - run:
+      #     name: Invalidate CloudFront
+      #     command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+
 workflows:
-  workflow:
+  build_deploy_prod:
     jobs:
       - build
+
+      - deploy_prod:
+          context: aws
+          requires: build
+          filters:
+            branches:
+              only: dev
+
+  build_deploy_dev:
+    jobs:
+      - build
+
+      - deploy_dev:
+          context: aws
+          requires: build
+          filters:
+            branches:
+              only: master
