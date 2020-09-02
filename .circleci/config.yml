@@ -83,6 +83,10 @@ jobs:
           path: _build/test-results
 
   deploy_dev:
+    executor:
+      name: aws-cli/default
+      python-version: '3.7.2'
+
     steps:
       - restore_cache:
           keys:
@@ -94,6 +98,10 @@ jobs:
             aws s3 sync _build/html s3://pennylane.ai-dev/qml --delete
 
   deploy_prod:
+    executor:
+      name: aws-cli/default
+      python-version: '3.7.2'
+
     steps:
       - restore_cache:
           keys:
@@ -111,13 +119,16 @@ jobs:
       #     command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
+  version: 2
+
   build_deploy_prod:
     jobs:
       - build
 
       - deploy_prod:
           context: aws
-          requires: build
+          requires:
+            - build
           filters:
             branches:
               only: dev
@@ -128,7 +139,8 @@ workflows:
 
       - deploy_dev:
           context: aws
-          requires: build
+          requires:
+            - build
           filters:
             branches:
               only: master
