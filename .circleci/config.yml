@@ -88,6 +88,8 @@ jobs:
       python-version: '3.7.2'
 
     steps:
+      - aws-cli/setup
+
       - restore_cache:
           keys:
             - html-{{ .Environment.CIRCLE_SHA1 }}
@@ -103,6 +105,8 @@ jobs:
       python-version: '3.7.2'
 
     steps:
+      - aws-cli/setup
+
       - restore_cache:
           keys:
             - html-{{ .Environment.CIRCLE_SHA1 }}
@@ -131,7 +135,7 @@ workflows:
             - build
           filters:
             branches:
-              only: dev
+              only: master
 
   build_deploy_dev:
     jobs:
@@ -143,4 +147,4 @@ workflows:
             - build
           filters:
             branches:
-              only: master
+              only: dev
