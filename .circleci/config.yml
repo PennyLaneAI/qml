@@ -115,6 +115,8 @@ jobs:
           name: Deploy to AWS S3
           command: |
             aws s3 sync _build/html s3://pennylane.ai-prod/qml --delete
+            touch _build/html/implementations.html
+            touch _build/html/beginner.html
             aws s3 cp _build/html/implementations.html s3://pennylane.ai-prod/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstrations.html
             aws s3 cp _build/html/beginner.html s3://pennylane.ai-prod/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstrations.html
 
