@@ -64,7 +64,7 @@ dev = qml.device("default.qubit", wires=n_qubits)
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(n_qubits))
+    qml.templates.BasicEntanglingLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 
 ###############################################################################
@@ -88,13 +88,13 @@ def qnode(inputs, weights):
 # shape of each trainable weight for them to be initialized. The ``weight_shapes`` dictionary
 # maps from the argument names of the QNode to corresponding shapes:
 
-n_layers = 3
-weight_shapes = {"weights": (n_layers, n_qubits, 3)}
+n_layers = 6
+weight_shapes = {"weights": (n_layers, n_qubits)}
 
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
-# ``(n_layers, n_qubits, 3)`` which are passed to
-# :func:`~pennylane.templates.layers.StronglyEntanglingLayers`.
+# ``(n_layers, n_qubits)`` which are passed to
+# :func:`~pennylane.templates.layers.BasicEntanglingLayers`.
 #
 # With ``weight_shapes`` defined, it is easy to then convert the QNode. To convert to
 # `Keras <https://keras.io/>`__:
