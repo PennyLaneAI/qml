@@ -2,11 +2,18 @@
 
 [![](https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-master?label=master&logo=github&style=flat-square)](https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master) [![](https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-dev?label=dev&logo=github&style=flat-square)](https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev)
 
-<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="700px">
+This repository contains introductory materials on Quantum Machine Learning, as well as Python code
+demos using [PennyLane](https://pennylane.ai), a cross-platform Python library for `differentiable
+programming <https://en.wikipedia.org/wiki/Differentiable_programming>`__ of quantum computers.
 
-This repository contains introductory materials on Quantum Machine Learning,
-as well as Python code demos. Both can be accessed at
-[PennyLane's quantum machine learning page](https://pennylane.ai/qml). The content consists of four main areas:
+<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="900px">
+
+Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
+and can be downloaded as Jupyter notebooks and Python scripts.
+
+<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel2.png" width="900px">
+
+The content consists of four main areas:
 
 * [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html). Understand what
   quantum computing means for machine learning.
