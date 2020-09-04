@@ -3,7 +3,7 @@ Variationally optimizing measurement protocols
 ==============================================
 
 .. meta::
-    :property="og:description": Using a variational algorithm to
+    :property="og:description": Using a variational quantum algorithm to
         optimize a quantum sensing protocol.
     :property="og:image": https://pennylane.ai/qml/_images/illustration1.png
 
@@ -21,7 +21,7 @@ to quantum communication lines. In this tutorial, we study a particular applicat
 namely *Quantum Metrology*. It exploits quantum effects to enhance the precision of measurements. One of the
 most impressive examples of a successful application of quantum metrology is gravitational wave interferometers
 like `LIGO <https://en.wikipedia.org/wiki/LIGO>`_ that harness non-classical light to increase the sensitivity
-to passing graviational waves.
+to passing gravitational waves.
 
 A quantum metrological experiment, which we call a *protocol*, can be modeled in the following way.
 As a first step, a quantum state :math:`\rho_0` is prepared. This state then undergoes a possibly noisy quantum

@@ -3,9 +3,8 @@ Doubly stochastic gradient descent
 ==================================
 
 .. meta::
-    :property="og:description": In this demonstration, doubly stochastic gradient
-        descent is used to minimize a Hamiltonian via an adapative shot optimization
-        stratgy.
+    :property="og:description": Minimize a Hamiltonian via an adaptive shot optimization
+        strategy with doubly stochastic gradient descent.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
 In this tutorial we investigate and implement the doubly stochastic gradient descent

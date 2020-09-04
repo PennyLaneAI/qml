@@ -216,6 +216,24 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: autograd
 
 .. customgalleryitem::
+    :tooltip: Optimize a Quantum Optical Neural Network using NLopt.
+    :figure: demonstrations/qonn/qonn_thumbnail.png
+    :description: :doc:`demos/qonn`
+    :tags: autograd photonics
+ 
+.. customgalleryitem::
+    :tooltip: Compare the parameter-shift rule with backpropagation
+    :figure: demonstrations/tutorial_backprop_thumbnail.png
+    :description: :doc:`demos/tutorial_backprop`
+    :tags: tensorflow autograd
+
+.. customgalleryitem::
+    :tooltip: Understand the link between variational quantum models and Fourier series.
+    :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
+    :description: :doc:`demos/tutorial_expressivity_fourier_series`
+    :tags: autograd
+
+.. customgalleryitem::
     :tooltip: Learn how to create hybrid ML models using Keras and PyTorch
     :figure: demonstrations/qnn_module/qnn3.png
     :description: :doc:`demos/tutorial_qnn_module`
@@ -262,4 +280,10 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
     demos/qgrnn
+<<<<<<< HEAD
     demos/tutorial_qnn_module
+=======
+    demos/qonn
+    demos/tutorial_backprop
+    demos/tutorial_expressivity_fourier_series
+>>>>>>> master
