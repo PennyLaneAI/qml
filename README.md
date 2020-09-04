@@ -2,6 +2,8 @@
 
 [![](https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-master?label=master&logo=github&style=flat-square)](https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master) [![](https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-dev?label=dev&logo=github&style=flat-square)](https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev)
 
+<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static" width="700px">
+
 This repository contains introductory materials on Quantum Machine Learning,
 as well as Python code demos. Both can be accessed at
 [PennyLane's quantum machine learning page](https://pennylane.ai/qml). The content consists of four main areas:
