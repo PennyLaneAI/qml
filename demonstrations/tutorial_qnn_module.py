@@ -68,6 +68,9 @@ def qnode(inputs, weights):
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 
 ###############################################################################
+# Note that we do not need to specify the ``interface`` argument in the :func:`~pennylane.qnode`
+# decorator.
+#
 # Interfacing with Keras and Torch
 # --------------------------------
 #
