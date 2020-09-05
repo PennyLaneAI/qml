@@ -38,7 +38,7 @@ The content consists of four main areas:
 <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel3.png" width="900px">
 </a>
 
-<br><br>
+<br>
 
 Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
