@@ -1,7 +1,3 @@
-<a href="https://pennylane.ai/qml">
-  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="900px">
-</a>
-
 <p align="center"><img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_header.png"></p>
 
 
@@ -19,8 +15,9 @@ This repository contains introductory materials on Quantum Machine Learning, as 
 demos using [PennyLane](https://pennylane.ai), a cross-platform Python library for [differentiable
 programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantum computers.
 
-<a href="https://pennylane.ai/qml/demonstations.html">
-<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel2.png" width="900px">
+
+<a href="https://pennylane.ai/qml">
+  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="900px">
 </a>
 
 
@@ -37,6 +34,11 @@ The content consists of four main areas:
 
 * [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
   discussing various aspects of quantum machine learning.
+
+<a href="https://pennylane.ai/qml/demonstations.html">
+<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel2.png" width="900px">
+</a>
+
 
 Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
