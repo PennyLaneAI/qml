@@ -9,7 +9,7 @@
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev">
     <img src="https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-dev?label=dev&logo=github&style=flat-square" />
   </a>
-  <img src="https://img.shields.io/badge/contributions-welcome-orange"/>
+  <img src="https://img.shields.io/badge/contributions-welcome-orange&style=flat-square"/>
 </p>
 
 This repository contains introductory materials on Quantum Machine Learning, as well as Python code
