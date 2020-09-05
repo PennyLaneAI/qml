@@ -20,7 +20,7 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 
 The content consists of four main areas:
 
-* [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html). Understand what
+* [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning.
 
 * [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
