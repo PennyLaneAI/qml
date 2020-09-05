@@ -1,4 +1,8 @@
-<p align="center"><img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_header.png"></p>
+<p align="center">
+  <a href="https://pennylane.ai/qml">
+    <img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_header.png">
+  </a>
+</p>
 
 <p align="center">
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master">
