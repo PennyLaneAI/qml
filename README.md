@@ -1,3 +1,6 @@
+<a href="https://pennylane.ai/qml">
+  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="900px">
+</a>
 
 <p align="center"><img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_header.png"></p>
 
@@ -9,7 +12,7 @@
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev">
     <img src="https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-dev?label=dev&logo=github&style=flat-square" />
   </a>
-  <img src="https://img.shields.io/badge/contributions-welcome-orange&style=flat-square"/>
+  <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square"/>
 </p>
 
 This repository contains introductory materials on Quantum Machine Learning, as well as Python code
@@ -20,9 +23,6 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel2.png" width="900px">
 </a>
 
-<!-- <a href="https://pennylane.ai/qml">
-<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="900px">
-</a> -->
 
 The content consists of four main areas:
 
