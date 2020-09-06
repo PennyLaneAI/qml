@@ -68,7 +68,7 @@ plt.show()
 
 ######################################################################
 # Then, we define the cost and mixer Hamiltonians:
-# 
+#
 
 
 cost_h, mixer_h = qaoa.min_vertex_cover(graph)
@@ -98,9 +98,9 @@ print(mixer_h)
 # One of the most basic and important examples of such a circuit comes
 # from quantum mechanics: the time-evolution operator. This unitary is
 # defined as:
-# 
+#
 # .. math:: U(\hat{H}, \ t) \ = \ e^{-i \hat{H} t / \hbar}
-# 
+#
 # This unitary is determined completely in terms of a Hamiltonian,
 # :math:`\hat{H}` and a scalar :math:`t`. As it turns out, any unitary
 # :math:`U` can be written in the form :math:`e^{i H}`, where :math:`H` is
@@ -108,21 +108,21 @@ print(mixer_h)
 # important example of a circuit determined by a Hamiltonian. However, in
 # general, implementing a quantum circuit that exponentiates a Hamiltonian
 # with many non-commuting terms:
-# 
+#
 # .. math:: H \ = \ H_1 \ + \ H_2 \ + \ H_3 \ + \ \cdots \ + \ H_N
-# 
+#
 # is not an easy task, and involves very long strings of quantum gates.
 # However, we are able to make use of the Trotter-Suzuki decomposition
 # formula:
-# 
+#
 # .. math:: e^{A \ + \ B} \ \approx \ \Big(e^{A/n} e^{B/n}\Big)^{n} \ \ \ \ \ n \ \gg \ 1
-# 
+#
 # To implement an *approximate* time-evolution unitary:
-# 
+#
 # .. math:: U_{\text{Approx}}(\hat{H}, t, n) \ = \ \displaystyle\prod_{j \ = \ 1}^{n}
 #           \displaystyle\prod_{k} e^{-i \hat{H}_k t / n} \ \ \ \ \ \ \ \ \ \ \hat{H} \
 #           = \ \displaystyle\sum_{k} \hat{H}_k
-# 
+#
 # where :math:`U_{\text{Approx}}` approaches :math:`U` as :math:`n`
 # becomes larger. We can call this unitary with
 # ``qml.templates.ApproxTimeEvolution``. Since QAOA is essentially just
@@ -130,7 +130,7 @@ print(mixer_h)
 # can use ``qml.template.ApproxTimeEvolution`` to define methods
 # ``qaoa.cost_layer`` and ``qaoa.mixer_layer`` that exponentiate cost and
 # mixer Hamiltonians for use in QAOA:
-# 
+#
 
 
 # Creates a layer of the QAOA ansatz
@@ -144,20 +144,20 @@ def qaoa_layer(gamma, alpha):
 # .. figure:: ../demonstrations/qaoa_module/layer.png
 #     :align: center
 #     :width: 90%
-# 
+#
 
 
 ######################################################################
 # The QAOA Ansatz
 # ---------------
-# 
+#
 # With the general QAOA layer defined, we are able to build the
 # variational ansatz. The QAOA ansatz is defined as *alternating*
 # applications of the cost and mixer layers:
-# 
+#
 # .. math:: U_{\text{QAOA}}(\boldsymbol\gamma, \ \boldsymbol\alpha) \ = \ e^{-i \alpha_k H_M}
 #           e^{-i \gamma_k H_C} \ ... \ e^{-i \alpha_1 H_M} e^{-i \gamma_1 H_C}
-# 
+#
 # In other words, we are repetedly applying the ``qaoa_layer`` to a set of
 # wires. The idea of repetition is ubiquitous within quantum computing,
 # from amplitude amplification in Grover’s algorithm and HHL, to layers in
@@ -183,7 +183,7 @@ def qaoa_layer(gamma, alpha):
 # In the case of QAOA, this allows us to easily define the ansatz. We
 # begin. with an even superposition over all basis states. Then, we layer
 # ``qaoa_layer``:
-# 
+#
 
 
 # Defines the wires
@@ -193,23 +193,23 @@ depth = 2
 
 # Defines the full QAOA circuit
 def circuit(params, **kwargs):
-    
+
     for w in wires:
         qml.PauliX(wires=w)
-    
+
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
 
 ######################################################################
 # Notice that ``qml.layer`` allows us to pass variational parameters
 # ``params[0]`` and ``params[1]`` into each layer of ``qaoa_layer``.
-# 
+#
 
 
 ######################################################################
 # Optimizing the Cost Function
 # ----------------------------
-# 
+#
 # Now that we have defined the full QAOA ansatz, we must define and
 # optimize the cost function. As is the case with most variational quantum
 # algorithms, the cost function we wish to minimize is simply the
@@ -218,11 +218,11 @@ def circuit(params, **kwargs):
 # function easily. We also define the device on which simulation is
 # performed. In this example, we will use the PennyLane-Qulacs plugin to
 # run the simulation on the Qulacs simulator:
-# 
+#
 
 
 # Defines the device
-dev = qml.device('qulacs.simulator', wires=wires)
+dev = qml.device("qulacs.simulator", wires=wires)
 
 # Defines the cost function
 cost_function = qml.VQECost(circuit, cost_h, dev)
@@ -231,21 +231,21 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 ######################################################################
 # Finally, we optimize the cost function using the built-in
 # ``qml.GradientDescentOptimizer``:
-# 
+#
 
 
 # Defines the optimizer, steps, and initial parameters
 optimizer = qml.GradientDescentOptimizer()
 steps = 40
 params = [
-    [np.random.randint(-100, 100)/100 for i in range(2)],
-    [np.random.randint(-100, 100)/100 for i in range(2)]
+    [np.random.randint(-100, 100) / 100 for i in range(2)],
+    [np.random.randint(-100, 100) / 100 for i in range(2)],
 ]
 
 # Optimizes the cost function
 for i in range(steps):
     params = optimizer.step(cost_function, params)
-    print("Step {} / {}".format(i+1, steps))
+    print("Step {} / {}".format(i + 1, steps))
 
 # Prints the optimal parameters
 print("Optimal Parameters: {}".format(params))
@@ -256,7 +256,7 @@ print("Optimal Parameters: {}".format(params))
 # landscape, to make sure that the simulation worked. We re-define the
 # full QAOA circuit (with the optimal parameters), but this time, we
 # return the probabilities of measuring each bitstring:
-# 
+#
 
 
 @qml.qnode(dev)
@@ -264,17 +264,18 @@ def probability_circuit(gamma, alpha):
     circuit([gamma, alpha])
     return qml.probs(wires=wires)
 
+
 probs = probability_circuit(params[0], params[1])
 
 
 ######################################################################
 # Finally, we can display a bar graph demonstrating the probability of
 # measuring each bitstring:
-# 
+#
 
 
-plt.style.use('seaborn')
-plt.bar(range(2**len(wires)), probs)
+plt.style.use("seaborn")
+plt.bar(range(2 ** len(wires)), probs)
 plt.show()
 
 
@@ -284,14 +285,14 @@ plt.show()
 # :math:`|6\rangle \ = \ |0110\rangle` have the highest probabilities of
 # being measured. Both of these bitstrings represent the minimum vertex
 # covers of our graph:
-# 
+#
 
 
 pos = nx.spring_layout(graph)
 
 plt.figure(figsize=(9, 4))
 plt.subplot(121)
-nx.draw(graph, pos, node_color=['r', 'b', 'r', 'b'])
+nx.draw(graph, pos, node_color=["r", "b", "r", "b"])
 plt.subplot(122)
-nx.draw(graph, pos, node_color=['b', 'r', 'r', 'b'])
+nx.draw(graph, pos, node_color=["b", "r", "r", "b"])
 plt.show()
