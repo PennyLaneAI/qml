@@ -130,7 +130,7 @@ there are a couple of guidelines to keep in mind.
   be set for reproducibility.
 
 * All content must be original or free to reuse subject to license compatibility.
-  For example, if you are implementing someone elses research, reach out first to
+  For example, if you are implementing someone else's research, reach out first to
   recieve permission to reproduce exact figures. Otherwise, avoid direct screenshots
   from papers, and instead refer to figures in the paper within the text.
 
