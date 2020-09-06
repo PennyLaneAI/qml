@@ -233,6 +233,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
 
+.. customgalleryitem::
+    :tooltip: Use the PennyLane QAOA module to solve the MinVertexCover problem
+    :figure: demonstrations/qaoa_module/qaoa_layer.png
+    :description: :doc:`demos/qaoa_mod`
+    :tags: autograd beginner
+
 :html:`</div></div><div style='clear:both'>`
 
 
