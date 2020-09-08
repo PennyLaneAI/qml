@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://pennylane.ai/qml">
-    <img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_header.png">
+    <img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_header.png">
   </a>
 </p>
 
@@ -19,7 +19,7 @@ demos using [PennyLane](https://pennylane.ai), a cross-platform Python library f
 programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantum computers.
 
 <a href="https://pennylane.ai/qml">
-  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel1.png" width="900px">
+  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel1.png" width="900px">
 </a>
 
 The content consists of four main areas:
@@ -37,7 +37,7 @@ The content consists of four main areas:
   discussing various aspects of quantum machine learning.
 
 <a href="https://pennylane.ai/qml/demonstations.html">
-<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/update-readme/_static/readme_panel3.png" width="900px">
+<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel3.png" width="900px">
 </a>
 
 Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
