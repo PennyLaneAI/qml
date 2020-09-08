@@ -59,7 +59,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 ######################################################################
 # Visualizing the problem
-# --------------
+# -----------------------
 #
 # To start, let's look at the task of learning the identity gate
 # across multiple qubits. This will help us visualize the problem and get
