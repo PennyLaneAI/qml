@@ -25,8 +25,8 @@ class Identity(torch.nn.Module):
     def forward(self, x):
         return x
 
-train_data = datasets.ImageFolder('hymenoptera_data/train',  data_transforms)
-test_data = datasets.ImageFolder('hymenoptera_data/test',  data_transforms)
+train_data = datasets.ImageFolder('hymenoptera_data/train',  data_transforms['train'])
+test_data = datasets.ImageFolder('hymenoptera_data/val',  data_transforms['val'])
 class_names = train_data.classes
 
 model = models.resnet18(pretrained=True)
