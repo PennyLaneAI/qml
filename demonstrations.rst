@@ -233,6 +233,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
 
+.. customgalleryitem::
+    :tooltip: Understand the link between variational quantum models and Fourier series.
+    :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
+    :description: :doc:`demos/tutorial_expressivity_fourier_series`
+    :tags: autograd
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -276,5 +282,5 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/qgrnn
     demos/qonn
     demos/tutorial_backprop
+    demos/tutorial_expressivity_fourier_series
     demos/tutorial_pasqal
-    

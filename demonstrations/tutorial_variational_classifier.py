@@ -123,7 +123,7 @@ def circuit(weights, x=None):
 # gradient; they are never trained.
 #
 # If we want to add a “classical” bias parameter, the variational quantum
-# classifer also needs some post-processing. We define the final model by
+# classifier also needs some post-processing. We define the final model by
 # a classical node that uses the first variable, and feeds the remainder
 # into the quantum node. Before this, we reshape the list of remaining
 # variables for easy use in the quantum node.
@@ -204,7 +204,7 @@ print("...")
 
 ##############################################################################
 # We initialize the variables randomly (but fix a seed for
-# reproducability). The first variable in the list is used as a bias,
+# reproducibility). The first variable in the list is used as a bias,
 # while the rest is fed into the gates of the variational circuit.
 
 np.random.seed(0)

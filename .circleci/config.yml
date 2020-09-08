@@ -30,7 +30,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt
+            pip install -r requirements.txt --use-feature=2020-resolver
 
       - save_cache:
           paths:
@@ -59,6 +59,11 @@ jobs:
             - ./demos
           key: gallery-v11-{{ .Branch }}-{{ .Revision }}
 
+      - save_cache:
+          paths:
+            - ./_build/html
+          key: html-{{ .Environment.CIRCLE_SHA1 }}
+
       - store_artifacts:
           path: /tmp/qml_html.zip
 
@@ -77,7 +82,127 @@ jobs:
       - store_artifacts:
           path: _build/test-results
 
+  build_dev:
+    docker:
+      - image: circleci/python:3.7.2
+      - image: rigetti/quilc
+        command:
+        - -R
+      - image: rigetti/qvm
+        command:
+        - -S
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install pip setuptools --upgrade
+            pip install -r requirements.txt --use-feature=2020-resolver
+
+      - run:
+          name: Build tutorials
+          no_output_timeout: 30m
+          command: |
+            . venv/bin/activate
+            make download
+            make html
+            cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
+            zip -r /tmp/qml_demos.zip demos
+            zip -r /tmp/qml_backreferences backreferences
+
+      - save_cache:
+          paths:
+            - ./_build/html
+          key: html-{{ .Environment.CIRCLE_SHA1 }}
+
+      - store_artifacts:
+          path: /tmp/qml_html.zip
+
+      - store_artifacts:
+          path: /tmp/qml_demos.zip
+
+      - store_artifacts:
+          path: _build/html
+
+      - store_test_results:
+          path: _build/test-results
+
+      - store_artifacts:
+          path: _build/test-results
+
+  deploy_dev:
+    executor:
+      name: aws-cli/default
+      python-version: '3.7.2'
+
+    steps:
+      - aws-cli/setup
+
+      - restore_cache:
+          keys:
+            - html-{{ .Environment.CIRCLE_SHA1 }}
+
+      - deploy:
+          name: Deploy to AWS S3
+          command: |
+            aws s3 sync _build/html s3://pennylane.ai-dev/qml --delete
+
+  deploy_prod:
+    executor:
+      name: aws-cli/default
+      python-version: '3.7.2'
+
+    steps:
+      - aws-cli/setup
+
+      - restore_cache:
+          keys:
+            - html-{{ .Environment.CIRCLE_SHA1 }}
+
+      - deploy:
+          name: Deploy to AWS S3
+          command: |
+            aws s3 sync _build/html s3://pennylane.ai-prod/qml --delete
+            touch _build/html/implementations.html
+            touch _build/html/beginner.html
+            aws s3 cp _build/html/implementations.html s3://pennylane.ai-prod/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstrations.html
+            aws s3 cp _build/html/beginner.html s3://pennylane.ai-prod/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstrations.html
+
+      # - run:
+      #     name: Invalidate CloudFront
+      #     command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+
 workflows:
-  workflow:
+  version: 2
+
+  build_deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore: dev
+
+      - build_dev:
+          filters:
+            branches:
+              only: dev
+
+      - deploy_prod:
+          context: aws
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
+      - deploy_dev:
+          context: aws
+          requires:
+            - build_dev
+          filters:
+            branches:
+              only: dev
