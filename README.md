@@ -45,7 +45,7 @@ and can be downloaded as Jupyter notebooks and Python scripts.
 
 ## Contributing
 
-You can contribute by submitting a demo implementing a recent
+You can contribute by submitting a demo via pull request implementing a recent
 quantum machine learning paper/result.
 
 ### Adding demos
@@ -57,7 +57,6 @@ quantum machine learning paper/result.
   _Note: try and keep execution time of your script to within 10 minutes_.
 
 * If you would like to write the demo using a Jupyter notebook, you can convert
-
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
 
@@ -102,6 +101,10 @@ quantum machine learning paper/result.
 
   and you are ready to submit a pull request!
 
+If your demo uses the latest release of PennyLane, simply make your PR against the
+`master` branch. If you instead require the cutting-edge development versions of
+PennyLane or any relevant plugins, make your PR against the `dev` branch instead.
+
 
 #### Tutorial guidelines
 
@@ -124,7 +127,7 @@ there are a couple of guidelines to keep in mind.
   as a ReST-formatted comment or a standard Python comment.
 
 * Thumbnails should be legible, interesting, and unique --- but not too busy!
-  Any included text should be minimal and legible
+  Any included text should be minimal and legible.
 
 * If your content contains random variables/outputs, a fixed seed should
   be set for reproducibility.
@@ -147,7 +150,13 @@ will be executed and built! Once built, only _modified_ demos will
 be re-executed/re-built.
 
 Alternatively, you may run `make html-norun` to build the website _without_ executing
-demos.
+demos, or build only a single demo using the following command:
+
+```console
+sphinx-build -D sphinx_gallery_conf.filename_pattern=tutorial_QGAN\.py -b html . _build
+```
+
+where `tutorial_QGAN` should be replaced with the name of the demo to build.
 
 ## Support
 
