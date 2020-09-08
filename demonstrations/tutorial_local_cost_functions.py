@@ -1,6 +1,6 @@
 """
 Alleviating barren plateaus with local cost functions
-==========
+=====================================================
 .. meta::
     :property="og:description": Local cost functions are cost formulations for variational quantum computing that are more robust to barren plateaus, and noise.
     :property="og:image": ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
