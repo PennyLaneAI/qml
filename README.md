@@ -1,22 +1,51 @@
-# Quantum machine learning
+<p align="center">
+  <a href="https://pennylane.ai/qml">
+    <img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_header.png">
+  </a>
+</p>
 
-This repository contains introductory materials on Quantum Machine Learning,
-as well as Python code demos. Both can be accessed at
-[PennyLane's quantum machine learning page](https://pennylane.ai/qml). The content consists of four main areas:
+<p align="center">
+  <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master">
+    <img src="https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-master?label=master&logo=github&style=flat-square" />
+  </a>
+  <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev">
+    <img src="https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-dev?label=dev&logo=github&style=flat-square" />
+  </a>
+  <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square"/>
+</p>
 
-* [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html). Understand what quantum
-  computing means for machine learning.
+This repository contains introductory materials on Quantum Machine Learning, as well as Python code
+demos using [PennyLane](https://pennylane.ai), a cross-platform Python library for [differentiable
+programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantum computers.
 
-* [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum machine learning with fully-coded implementations of major works.
+<a href="https://pennylane.ai/qml">
+  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel1.png" width="900px">
+</a>
+
+The content consists of four main areas:
+
+* [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
+  quantum computing means for machine learning.
+
+* [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
+  machine learning with fully-coded implementations of major works.
 
 * [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
   quantum machine learning and optimization.
 
-* [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos discussing various aspects of quantum machine learning.
+* [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
+  discussing various aspects of quantum machine learning.
+
+<a href="https://pennylane.ai/qml/demonstations.html">
+<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel3.png" width="900px">
+</a>
+
+Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
+and can be downloaded as Jupyter notebooks and Python scripts.
 
 ## Contributing
 
-You can contribute by submitting a demo implementing a recent
+You can contribute by submitting a demo via pull request implementing a recent
 quantum machine learning paper/result.
 
 ### Adding demos
@@ -28,7 +57,6 @@ quantum machine learning paper/result.
   _Note: try and keep execution time of your script to within 10 minutes_.
 
 * If you would like to write the demo using a Jupyter notebook, you can convert
-
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
 
@@ -73,6 +101,10 @@ quantum machine learning paper/result.
 
   and you are ready to submit a pull request!
 
+If your demo uses the latest release of PennyLane, simply make your PR against the
+`master` branch. If you instead require the cutting-edge development versions of
+PennyLane or any relevant plugins, make your PR against the `dev` branch instead.
+
 
 #### Tutorial guidelines
 
@@ -95,13 +127,13 @@ there are a couple of guidelines to keep in mind.
   as a ReST-formatted comment or a standard Python comment.
 
 * Thumbnails should be legible, interesting, and unique --- but not too busy!
-  Any included text should be minimal and legible
+  Any included text should be minimal and legible.
 
 * If your content contains random variables/outputs, a fixed seed should
   be set for reproducibility.
 
 * All content must be original or free to reuse subject to license compatibility.
-  For example, if you are implementing someone elses research, reach out first to
+  For example, if you are implementing someone else's research, reach out first to
   recieve permission to reproduce exact figures. Otherwise, avoid direct screenshots
   from papers, and instead refer to figures in the paper within the text.
 
@@ -118,7 +150,13 @@ will be executed and built! Once built, only _modified_ demos will
 be re-executed/re-built.
 
 Alternatively, you may run `make html-norun` to build the website _without_ executing
-demos.
+demos, or build only a single demo using the following command:
+
+```console
+sphinx-build -D sphinx_gallery_conf.filename_pattern=tutorial_QGAN\.py -b html . _build
+```
+
+where `tutorial_QGAN` should be replaced with the name of the demo to build.
 
 ## Support
 

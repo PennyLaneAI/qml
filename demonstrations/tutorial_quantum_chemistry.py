@@ -3,7 +3,8 @@ Quantum Chemistry with PennyLane
 ================================
 
 .. meta::
-    :property="og:description": Explore quantum chemistry with Pennylane.
+    :property="og:description": Explore how PennyLane brings modern quantum computing tools
+        to tackle quantum chemistry problems.
     :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
 
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
@@ -283,7 +284,7 @@ print(qubit_hamiltonian)
 #
 #     If you have built your electronic Hamiltonian independently by using `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ tools, no problem! The
-#     :func:`~.convert_hamiltonian` function converts the `OpenFermion
+#     :func:`~.convert_observable` function converts the `OpenFermion
 #     <https://github.com/quantumlib/OpenFermion>`__ QubitOperator to PennyLane observables.
 #
 # .. _qchem_references:

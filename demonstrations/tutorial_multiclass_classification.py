@@ -5,7 +5,7 @@ Multiclass margin classifier
 ============================
 
 .. meta::
-    :property="og:description": Use PyTorch to implement a multiclass
+    :property="og:description": Using PyTorch to implement a multiclass
         quantum variational classifier on MNIST data.
     :property="og:image": https://pennylane.ai/qml/_images/margin_2.png
 
@@ -32,7 +32,7 @@ Initial Setup
 ~~~~~~~~~~~~~
 
 We import PennyLane, the PennyLane-provided version of NumPy,
-relevent torch modules, and define the constants that will
+relevant torch modules, and define the constants that will
 be used in this tutorial.
 
 Our feature size is 4, and we will use amplitude embedding.
