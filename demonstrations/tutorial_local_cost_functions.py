@@ -46,9 +46,8 @@ In this notebook, we investigate the effect of barren plateaus in
 variational quantum algorithms, and how they can be mitigated using
 local cost functions.
 
-Imports
---------------
-We need to import the following modules.
+
+We first need to import the following modules.
 """
 
 
