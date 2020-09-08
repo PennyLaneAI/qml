@@ -159,10 +159,7 @@ print(local_circuit.draw())
 # number of qubits) parameters, in order to plot the cost landscape 
 # we must constrain ourselves. We will consider the case where all X rotations 
 # have the same value, and all the Y rotations have the same value.
-
-
-
-######################################################################
+#
 # Firstly, we look at the global cost function. When plotting the cost
 # function across 6 qubits, much of the cost landscape is flat, and
 # difficult to train (even with a circuit depth of only 2!). This effect
