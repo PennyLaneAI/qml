@@ -160,27 +160,6 @@ print(local_circuit.draw())
 # we must constrain ourselves. We will consider the case where all X rotations 
 # have the same value, and all the Y rotations have the same value.
 
-local_Z = []
-global_Z = []
-local_z = []
-global_z = []
-
-X = np.arange(-np.pi, np.pi, 0.25)
-Y = np.arange(-np.pi, np.pi, 0.25)
-X, Y = np.meshgrid(X, Y)
-
-for x in X[0, :]:
-    for y in Y[:, 0]:
-        rotations = [[x for i in range(wires)], [y for i in range(wires)]]
-        local_z.append(cost_local(rotations))
-        global_z.append(cost_global(rotations))
-    local_Z.append(local_z)
-    global_Z.append(global_z)
-    local_z = []
-    global_z = []
-
-local_Z = np.asarray(local_Z)
-global_Z = np.asarray(global_Z)
 
 
 ######################################################################
@@ -190,27 +169,49 @@ global_Z = np.asarray(global_Z)
 # will worsen as the number of qubits increases.
 #
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection="3d")
-surf = ax.plot_surface(X, Y, global_Z, cmap="viridis", linewidth=0, antialiased=False)
-ax.set_zlim(0, 1)
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
-plt.show()
+def generate_surface(cost_function):
+    Z = []
+    Z_assembler = []
+    
+    X = np.arange(-np.pi, np.pi, 0.25)
+    Y = np.arange(-np.pi, np.pi, 0.25)
+    X, Y = np.meshgrid(X, Y)
+    
+    for x in X[0, :]:
+        for y in Y[:, 0]:
+            rotations = [[x for i in range(wires)], [y for i in range(wires)]]
+            Z_assembler.append(cost_function(rotations))
+        Z.append(Z_assembler)
+        Z_assembler = []
+    
+    Z = np.asarray(Z)
+    return Z
 
+def plot_surface(surface):
+    X = np.arange(-np.pi, np.pi, 0.25)
+    Y = np.arange(-np.pi, np.pi, 0.25)
+    X, Y = np.meshgrid(X, Y)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    surf = ax.plot_surface(X, Y, surface, cmap="viridis", linewidth=0, antialiased=False)
+    ax.set_zlim(0, 1)
+    ax.zaxis.set_major_locator(LinearLocator(10))
+    ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
+    plt.show()
+
+
+global_surface = generate_surface(cost_global)
+plot_surface(global_surface)
 
 ######################################################################
 # However, when we change to the local cost function, the cost landscape
 # becomes much more trainable as the size of the barren plateau decreases.
 #
+#
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection="3d")
-surf = ax.plot_surface(X, Y, local_Z, cmap="viridis", linewidth=0, antialiased=False)
-ax.set_zlim(0, 1)
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
-plt.show()
+local_surface = generate_surface(cost_local)
+plot_surface(local_surface)
+
 
 
 ######################################################################
@@ -262,43 +263,14 @@ def cost_global(rotations):
 # Of course, now that we've changed both our cost function and our circuit,
 # we will need to scan the cost landscape again.
 
-local_Z = []
-global_Z = []
-local_z = []
-global_z = []
 
-X = np.arange(-np.pi, np.pi, 0.25)
-Y = np.arange(-np.pi, np.pi, 0.25)
-X, Y = np.meshgrid(X, Y)
-
-for x in X[0, :]:
-    for y in Y[:, 0]:
-        rotations = [[x for i in range(wires)], [y for i in range(wires)]]
-        local_z.append(cost_local(rotations))
-        global_z.append(cost_global(rotations))
-    local_Z.append(local_z)
-    global_Z.append(global_z)
-    local_z = []
-    global_z = []
-
-local_Z = np.asarray(local_Z)
-global_Z = np.asarray(global_Z)
+global_surface = generate_surface(cost_global)
+plot_surface(global_surface)
 
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection="3d")
-surf = ax.plot_surface(X, Y, global_Z, cmap="viridis", linewidth=0, antialiased=False)
-ax.set_zlim(0, 1)
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
-plt.show()
-fig = plt.figure()
-ax = fig.add_subplot(111, projection="3d")
-surf = ax.plot_surface(X, Y, local_Z, cmap="viridis", linewidth=0, antialiased=False)
-ax.set_zlim(0, 1)
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
-plt.show()
+local_surface = generate_surface(cost_local)
+plot_surface(local_surface)
+
 
 ######################################################################
 # It seems our changes didn't significantly alter the overall cost landscape.
@@ -452,7 +424,7 @@ print(tunable_circuit.draw())
 # arbitrarily) will probably be trainable given more time. Any run with a
 # greater cost function will probably be in a plateau.
 #
-# This may take up to 15 mins.
+# This may take up to 15 minutes.
 #
 
 samples = 10
