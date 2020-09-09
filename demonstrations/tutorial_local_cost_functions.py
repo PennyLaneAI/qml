@@ -85,7 +85,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # learn the identity gate, a natural cost function is 1 minus the probability of measuring the 
 # zero state, denoted here as :math:`1 - p_{|0\rangle}`.
 #
-# .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right) \rangle  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
+# .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right)  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
 #
 # We will apply this across all qubits for our global cost function, i.e.,
 #
@@ -111,7 +111,6 @@ def global_cost_simple(rotations):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
     return qml.probs(wires=range(wires))
-
 
 def local_cost_simple(rotations):
     for i in range(wires):
@@ -261,7 +260,6 @@ def cost_global(rotations):
 global_surface = generate_surface(cost_global)
 plot_surface(global_surface)
 
-
 local_surface = generate_surface(cost_local)
 plot_surface(local_surface)
 
@@ -362,10 +360,8 @@ def tunable_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(range(locality))
 
-
 def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
-
 
 dev.analytic = False
 tunable_circuit = qml.QNode(tunable_cost_simple, dev)
