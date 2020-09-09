@@ -232,6 +232,12 @@ algorithms using PennyLane and near-term quantum hardware.
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
+    
+.. customgalleryitem::
+    :tooltip: Understand the difference between local and global cost functions
+    :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
+    :description: :doc:`demos/tutorial_local_cost_functions`
+    :tags: autograd
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -277,3 +283,4 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/qonn
     demos/tutorial_backprop
     demos/tutorial_expressivity_fourier_series
+    demos/tutorial_local_cost_functions
