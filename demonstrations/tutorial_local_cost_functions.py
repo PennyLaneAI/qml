@@ -1,6 +1,8 @@
 """
 Alleviating barren plateaus with local cost functions
 =====================================================
+*Author: Thomas Storwick (tstorwick@gmail.com)*
+
 .. meta::
     :property="og:description": Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.
     :property="og:image": ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
@@ -273,7 +275,7 @@ plot_surface(local_surface)
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
-rotations = [[3 for i in range(wires)], [0 for i in range(wires)]]
+rotations = [[3] * len(range(wires)), [0] * len(range(wires))]
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_global = rotations
@@ -281,7 +283,7 @@ for i in range(steps):
     # update the circuit parameters
     params_global = opt.step(cost_global, params_global)
 
-    if (i + 1) % 1 == 0:
+    if (i + 1) % 5 == 0:
         print("Cost after step {:5d}: {: .7f}".format(i + 1, cost_global(params_global)))
     if cost_global(params_global) < 0.1:
         break
