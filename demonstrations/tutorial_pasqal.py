@@ -9,11 +9,11 @@ Quantum computation with neutral atoms
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps, 
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These 
-quantum devices have some basic similarities to ion-traps. Ion-trap devices make use of atoms 
+quantum devices have some basic similarities to ion traps. Ion-trap devices make use of atoms 
 that have an imbalance between protons (positively charged) and electrons (negatively charged). 
 Neutral atoms, on the other hand, have an equal number of protons and electrons. 
 
-In neutral-atom systems, lasers are used to arrange atoms in various two- or 
+Uniquely, in neutral-atom systems, lasers can be used to arrange atoms in various two- or 
 three-dimensional configurations. This opens up some tantalizing possibilities for 
 exotic quantum-computing circuit topologies:
 
@@ -31,7 +31,7 @@ Pasqal has contributed some new features to the quantum software library Cirq.
  
 In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique abilities of 
 neutral atom devices, leveraging them to make a quantum machine learning circuit which has a
-very unique topology: the Eiffel tower. 
+very unique topology: *the Eiffel tower*. 
 
 Let's get to it!
 """
@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 # -------------------------
 #
 # Our first step will be to load and visualize the data for the Eiffel tower 
-# configuration, generously provided to us by the team at Pasqal.
+# configuration, generously provided by the team at Pasqal.
 
 coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
@@ -103,9 +103,9 @@ plt.show();
 # arrangement of the qubits.
 #
 # Now, neutral atom devices come with some physical restrictions. 
-# Specifically, qubits in a particular configuration can't arbitrarily be 
+# Specifically, qubits in a particular configuration can't be arbitrarily  
 # interacted with one another. Instead, there is the notion of a 
-# "control radius"; any atoms which are within the system's control radius 
+# *control radius*; any atoms which are within the system's control radius 
 # can interact with one another. Qubits separated by a distance larger than
 # the control radius cannot interact.
 # 
@@ -145,7 +145,7 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # as a single wire in a quantum circuit. Our circuit will consist of several
 # stages:
 #
-# i. Data is fed in to the first "ground" vertical level of qubits using
+# i. Data is fed in to the first vertical level of qubits ("the ground") using
 #    parametrized single-qubit Pauli-Y rotations (a simple data-embedding 
 #    strategy).
 #
