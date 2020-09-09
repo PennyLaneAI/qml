@@ -8,16 +8,16 @@ Alleviating barren plateaus with local cost functions
 Barren Plateaus
 ---------------
 
-Barren plateaus are large regions of the cost function's parameter space
+:doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are large regions of the cost function's parameter space
 where the variance of the gradient is almost 0; or, put another way, the
 cost function landscape is flat. This means that a variational circuit
-initialized in one of these areas will be untrainable using any gradient based
+initialized in one of these areas will be untrainable using any gradient-based
 algorithm.
 
 
 
 In `"Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural
-Networks" <https://arxiv.org/abs/2001.00550>`__ Cerezo et al. demonstrate the
+Networks" <https://arxiv.org/abs/2001.00550>`__ [#Cerezo2020]_, Cerezo et al. demonstrate the
 idea that the barren plateau
 phenomenon can, under some circumstances, be avoided by using cost functions that only have
 information from part of the circuit. These *local* cost functions can be
@@ -83,20 +83,19 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # learn the identity gate, a natural cost function is 1 minus the probability of measuring the 
 # zero state, denoted here as :math:`1 - p_{|0\rangle}`.
 #
-# .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|_0\right) \rangle  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
+# .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right) \rangle  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
 #
-# We will apply this across all qubits for our global cost function, i.e.,:
+# We will apply this across all qubits for our global cost function, i.e.,
 #
 # .. math:: C_{G} = \langle  \psi(\theta) | \left(I - |00 \ldots 0\rangle \langle 00 \ldots 0|\right) | \psi(\theta) \rangle  = 1-p_{|00 \ldots 0\rangle}
 #
-# and instead, we will sum the individual contributions from each qubit 
-# for the local cost function:
+# and for the local cost function, we will sum the individual contributions from each qubit: 
 #
 # .. math:: C_L = \langle \psi(\theta) | \left(I - \frac{1}{n} \sum_j |0\rangle \langle 0|_j\right)|\psi(\theta)\rangle = 1 - \sum_j p_{|0\rangle_j}.
 #
 # It might be clear to some readers now why this function can perform better.
 # By formatting our local cost function in this way, we have essentially divided 
-# the problem up into multiple runs of single qubit rotations, and summing all 
+# the problem up into multiple single-qubit terms, and summed all 
 # the results up.
 #
 # To implement this, we will define a separate QNode for the local cost
@@ -213,7 +212,7 @@ plot_surface(local_surface)
 
 ######################################################################
 # Those are some nice pictures, but how do they reflect actual
-# trainability? Let us try training both the local, and global cost
+# trainability? Let us try training both the local and global cost
 # functions.
 # To simplify this model, let's modify our cost function from
 # 
@@ -226,7 +225,7 @@ plot_surface(local_surface)
 # where we only consider the probability of a single qubit to be in the 0 state. 
 #  
 # While we're at it, let us make our ansatz a little more like one we would encounter while 
-# trying to solve a VQE problem, and add entanglements.
+# trying to solve a VQE problem, and add entanglement.
 
 def global_cost_simple(rotations):
     for i in range(wires):
@@ -234,8 +233,6 @@ def global_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
-
-
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
@@ -249,8 +246,6 @@ local_circuit = qml.QNode(local_cost_simple, dev)
 
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
-
-
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
 
@@ -272,9 +267,9 @@ plot_surface(local_surface)
 ######################################################################
 # It seems our changes didn't significantly alter the overall cost landscape.
 # This probably isn't a general trend, but it is a nice surprise.
-# Now, let us get back to training the local, and global cost functions.
+# Now, let us get back to training the local and global cost functions.
 # Because we have a visualization of the total cost landscape,
-# lets pick a point to exaggerate the problem. One of the worst points in the
+# let's pick a point to exaggerate the problem. One of the worst points in the
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
@@ -367,8 +362,6 @@ def tunable_cost_simple(rotations):
 
 
 def cost_tunable(rotations):
-    # result = circuit(rotations)
-    # return sum(abs(result[i]) for i in range(wires))
     return 1 - tunable_circuit(rotations)[0]
 
 
@@ -504,10 +497,10 @@ for runs in range(samples):
 
 ######################################################################
 # In the global case, anywhere between 70-80% of starting positions are
-# untrainable, a significant number. It is likely as the complexity of our
-# ansatz, and the number of qubits increases, this factor will increase.
+# untrainable, a significant number. It is likely that, as the complexity of our
+# ansatz—and the number of qubits—increases, this factor will increase.
 #
-# Comparing that to our local cost function, every single area trained,
+# We can compare that to our local cost function, where every single area trained,
 # and most even trained in less time. While these examples are simple,
 # this local-vs-global cost behaviour has been shown to extend to more
 # complex problems.
@@ -519,7 +512,7 @@ for runs in range(samples):
 #
 # .. [#Cerezo2020]
 #    
-#   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., &amp; Coles, P. (2020, February 04). 
+#   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P. (2020). 
 #   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks. 
 #   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
 #     
