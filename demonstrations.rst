@@ -19,54 +19,54 @@ algorithms using PennyLane and near-term quantum hardware.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Use quantum machine learning to rotate a qubit
+    :tooltip: Use quantum machine learning to rotate a qubit.
     :figure: demonstrations/qubit_rotation/bloch.png
     :description: :doc:`demos/tutorial_qubit_rotation`
     :tags: autograd beginner
 
 .. customgalleryitem::
-    :tooltip: Use quantum machine learning to tune a beamsplitter
+    :tooltip: Use quantum machine learning to tune a beamsplitter.
     :figure: demonstrations/gaussian_transformation/gauss-circuit.png
     :description: :doc:`demos/tutorial_gaussian_transformation`
     :tags: autograd photonics beginner
 
 .. customgalleryitem::
-    :tooltip: Use quantum machine learning in a multi-device quantum algorithm
+    :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
     :figure: demonstrations/plugins_hybrid/photon_redirection.png
     :description: :doc:`demos/tutorial_plugins_hybrid`
     :tags: autograd photonics beginner
 
 .. customgalleryitem::
-    :tooltip: Multiple expectation values, Jacobians, and keyword arguments
+    :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
     :description: :doc:`demos/tutorial_advanced_usage`
     :tags: autograd beginner
 
 .. customgalleryitem::
-    :tooltip: Extend PyTorch with real quantum computing power
+    :tooltip: Extend PyTorch with real quantum computing power.
     :figure: demonstrations/pytorch_noise/bloch.gif
     :description: :doc:`demos/pytorch_noise`
     :tags: forest pytorch beginner
 
 .. customgalleryitem::
-    :tooltip: Explore quantum chemistry in PennyLane
+    :tooltip: Explore quantum chemistry in PennyLane.
     :figure: demonstrations/quantum_chemistry/water_structure.png
     :description: :doc:`demos/tutorial_quantum_chemistry`
     :tags: chemistry beginner
 
 .. customgalleryitem::
-    :tooltip: Do arbitrary state preparation on a real quantum computer
+    :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: demonstrations/state_preparation/NOON.png
     :description: :doc:`demos/tutorial_state_preparation`
     :tags: pytorch
 
 .. customgalleryitem::
-    :tooltip: Ising model example with PennyLane PyTorch interface
+    :tooltip: Ising model example with PennyLane PyTorch interface.
     :figure: demonstrations/Ising_model/isingspins.png
     :description: :doc:`demos/tutorial_isingmodel_PyTorch`
     :tags: pytorch autograd
 
 .. customgalleryitem::
-    :tooltip: Create a simple QGAN with Cirq and TensorFlow
+    :tooltip: Create a simple QGAN with Cirq and TensorFlow.
     :figure: demonstrations/QGAN/qgan3.png
     :description: :doc:`demos/tutorial_QGAN`
     :tags: cirq tensorflow
@@ -78,13 +78,13 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Fit one dimensional noisy data with a quantum neural network
+    :tooltip: Fit one dimensional noisy data with a quantum neural network.
     :figure: demonstrations/quantum_neural_net/qnn_output_28_0.png
     :description: :doc:`demos/quantum_neural_net`
     :tags: autograd strawberryfields photonics
 
 .. customgalleryitem::
-    :tooltip: Find the ground state of a Hamiltonian
+    :tooltip: Find the ground state of a Hamiltonian.
     :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
     :description: :doc:`demos/tutorial_vqe`
     :tags: autograd chemistry
@@ -204,7 +204,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: cirq metrology autograd
 
 .. customgalleryitem::
-    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE
+    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
     :figure: demonstrations/vqt/thumbnail.png
     :description: :doc:`demos/tutorial_vqt`
     :tags: chemistry
@@ -216,7 +216,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Optimize a Quantum Optical Neural Network using NLopt
+    :tooltip: Optimize a Quantum Optical Neural Network using NLopt.
     :figure: demonstrations/qonn/qonn_thumbnail.png
     :description: :doc:`demos/qonn`
     :tags: autograd photonics
@@ -228,7 +228,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: tensorflow autograd
 
 .. customgalleryitem::
-    :tooltip: Understand the link between variational quantum models and Fourier series
+    :tooltip: Understand the link between variational quantum models and Fourier series.
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
