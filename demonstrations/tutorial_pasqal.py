@@ -8,12 +8,12 @@ Quantum computation with neutral atoms
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps, 
-photonics, silicon, and more. One really interesting physical substrate is *neutral atoms*. These 
+photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These 
 quantum devices have some basic similarities to ion-traps. Ion-trap devices make use of atoms 
 that have an imbalance between protons (positively charged) and electrons (negatively charged). 
 Neutral atoms, on the other hand, have an equal number of protons and electrons. 
 
-In neutral-atom systems, you use lasers to arrange atoms in various two- or 
+In neutral-atom systems, lasers are used to arrange atoms in various two- or 
 three-dimensional configurations. This opens up some tantalizing possibilities for 
 exotic quantum-computing circuit topologies:
 
@@ -23,12 +23,11 @@ exotic quantum-computing circuit topologies:
     
     ..
     
-    Image originally from [#barredo2017]_.
+    Neutral atoms (green dots) arranged in various configurations. Image originally from [#barredo2017]_.
     
-The startup company `Pasqal <https://pasqal.io/>`_ is one of the companies working to bring 
-neutral-atom quantum computing devices to the world. Recently, Pasqal merged some new 
-features into the quantum software library Cirq to support this new class of neutral atom 
-devices.
+The startup `Pasqal <https://pasqal.io/>`_ is one of the companies working to bring 
+neutral-atom quantum computing devices to the world. To support this new class of devices, 
+Pasqal has contributed some new features to the quantum software library Cirq.
  
 In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique abilities of 
 neutral atom devices, leveraging them to make a quantum machine learning circuit which has a
@@ -46,6 +45,9 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 ##############################################################################
+# Building the Eiffel tower
+# -------------------------
+#
 # Our first step will be to load and visualize the data for the Eiffel tower 
 # configuration, generously provided to us by the team at Pasqal.
 
@@ -57,6 +59,10 @@ zs = coords[:,2]
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.view_init(40, 15)
+fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+ax.set_xlim(-20, 20)
+ax.set_ylim(-20, 20)
+ax.set_zlim(-40, 10)
 plt.axis('off')
 ax.scatter(xs, ys, zs, c='g',alpha=0.3)
 plt.show();
@@ -71,6 +77,10 @@ plt.show();
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.view_init(40, 15)
+fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+ax.set_xlim(-20, 20)
+ax.set_ylim(-20, 20)
+ax.set_zlim(-40, 10)
 plt.axis('off')
 ax.scatter(xs, ys, zs, c='g',alpha=0.3)
 
@@ -84,16 +94,20 @@ ax.scatter(xs, ys, zs, c='r',alpha=1.0)
 plt.show();
 
 ##############################################################################
-# Our next step will be to convert these coordinates into objects that 
-# Cirq understands as qubits. For neutral-atom devices in Cirq, these are the
-# ``ThreeDQubit`` objects, which carry information about the three-dimensional
-# arrangement of qubits.
+# Converting to Cirq qubits
+# -------------------------
+#
+# Our next step will be to convert these datapoints into objects that 
+# Cirq understands as qubits. For neutral-atom devices in Cirq, we can use the
+# ``ThreeDQubit`` class, which carries information about the three-dimensional
+# arrangement of the qubits.
 #
 # Now, neutral atom devices come with some physical restrictions. 
 # Specifically, qubits in a particular configuration can't arbitrarily be 
 # interacted with one another. Instead, there is the notion of a 
 # "control radius"; any atoms which are within the system's control radius 
-# can interact with one another. 
+# can interact with one another. Qubits separated by a distance larger than
+# the control radius cannot interact.
 # 
 # In order to allow our Eiffel tower qubits to interact with 
 # one another more easily, we will artificially scale some dimensions
@@ -106,13 +120,16 @@ base_qubits = [ThreeDQubit(x,y,z) for x,y,z in subset_coords[:8]]
 tower_qubits = [ThreeDQubit(xy_scale*x,xy_scale*y,z_scale*z) 
                 for x,y,z in subset_coords[8:]]
 qubits = base_qubits + tower_qubits
-qubits
+
+print("ThreeDQubits:")
+print("\n".join(str(q) for q in qubits))
 
 ##############################################################################
 # To simulate a neutral-atom quantum computation, we can use the 
-# ``"cirq.pasqal"`` device, available via the Cirq plugin to PennyLane.
-# We will need to provide this device with the ``ThreeDQubits`` we created 
-# above. We will also need to instantiate it with a fixed control radius.
+# ``"cirq.pasqal"`` device, available via the 
+# `PennyLane-Cirq plugin <https://pennylane-cirq.readthedocs.io>`_.
+# We will need to provide this device with the ``ThreeDQubit``s we created 
+# above. We also need to instantiate the device with a fixed control radius.
 
 num_wires = len(qubits)
 control_radius = 32.4
@@ -120,8 +137,11 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
                  qubits=qubits, wires=num_wires)
 
 ##############################################################################
-# Our quantum-computing circuit will be based on the Eiffel tower
-# configuration. Each of the 13 qubits specified above can be thought of
+# Creating a quantum circuit
+# --------------------------
+# 
+# We can now make a quantum computing circuit out of the Eiffel tower configuration
+# from above. Each of the 13 qubits we are using can be thought of
 # as a single wire in a quantum circuit. Our circuit will consist of several
 # stages:
 #
@@ -130,7 +150,7 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 #    strategy).
 #
 # ii. Two-qubit interactions (in this case, CNOTs) are carried out
-#     between each ground-level qubit and the corresponding nearest qubit
+#     between each ground-level qubit and the corresponding 
 #     nearest qubits on the second vertical level.
 #
 # iii. At the second level, two-qubit CNOT gates are applied between all
@@ -147,7 +167,7 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # The output of our circuit is determined via a Pauli-Z measurement on
 # the "peak" qubit.
 #
-# Now, that's a lot to keep track of, so let's show the circuit via a 
+# That's a lot to keep track of, so let's show the circuit via a 
 # three-dimensional image:
 
 first_lvl_qubits = range(0,4)
@@ -171,6 +191,10 @@ peak_x, peak_y, peak_z = peak_coords
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.view_init(40, 15)
+fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+ax.set_xlim(-20, 20)
+ax.set_ylim(-20, 20)
+ax.set_zlim(-40, 10)
 plt.axis('off')
 
 ax.scatter(xs, ys, zs, c='r',alpha=1.0);
@@ -218,7 +242,8 @@ plt.show();
 # Data is loaded in at the bottom qubits (the "tower legs") and the final
 # measurement result is read out from the top "peak" qubit.
 #
-# Our next step is to actually create this configuration in a quantum circuit:
+# The code below creates this particular quantum circuit configuration in 
+# PennyLane:
 
 @qml.qnode(dev, interface="tf")
 def circuit(weights, data):
@@ -255,6 +280,9 @@ def circuit(weights, data):
     return qml.expval(qml.PauliZ(wires=peak_qubit))
 
 ##############################################################################
+# Training the circuit
+# --------------------
+# 
 # In order to train the circuit, we will need a cost function to analyze.
 
 data = tf.constant([-1.,1.,1.,-1], dtype=tf.float64)
