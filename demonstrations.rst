@@ -30,7 +30,7 @@ QML Demos
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
                                 <br>
                                 <strong>Learning</strong>
                                 </h3>
@@ -47,7 +47,7 @@ QML Demos
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
                                 <br>
                                 <strong>Research</strong>
                                 </h3>
@@ -64,7 +64,7 @@ QML Demos
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
                                 <br>
                                 <strong>Community</strong>
                                 </h3>
