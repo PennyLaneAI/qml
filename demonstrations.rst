@@ -77,6 +77,14 @@ QML Demos
                 </div>
             </div>
 
+            <blockquote class="blockquote border rounded ">
+                <p class="mb-0 text-muted text-center">
+                    Do you want to make you're own demo using PennyLane? Read
+                    the guidelines and submission instructions <a href="demos_submission.html">here</a>, and have
+                    your demo featured on our community page.
+                </p>
+            </blockquote>
+
             <h2 class="text-center mx-auto my-0">Featured</h2>
 
             <ul class="light-slider" id="featured-demos">
