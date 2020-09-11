@@ -1,5 +1,10 @@
- .. role:: html(raw)
-   :format: html
+.. raw:: html
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
 
 QML Demos
 =========
@@ -8,279 +13,142 @@ QML Demos
    :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
-
-Take a deeper dive into quantum machine learning by exploring cutting-edge
-algorithms using PennyLane and near-term quantum hardware.
-
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
 
-:html:`<div class="gallery-grid row">`
+    <div class="container">
+        <!-- Section: Features v.1 -->
+            <p class="lead grey-text text-center mx-auto mb-5">
+            Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.</p>
 
-.. customgalleryitem::
-    :tooltip: Use quantum machine learning to rotate a qubit.
-    :figure: demonstrations/qubit_rotation/bloch.png
-    :description: :doc:`demos/tutorial_qubit_rotation`
-    :tags: autograd beginner
+        <section class="my-5">
+            <div class="row justify-content-center" id="main-cards">
+                <div class="col-lg-3 mb-5">
+                    <a href="demos_learning.html">
+                    <div class="card rounded-lg">
+                        <div class="text-center d-flex align-items-center pb-2">
+                            <div>
+                                <h3 class="card-title">
+                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <br>
+                                <strong>Learning</strong>
+                                </h3>
+                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
+                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                </div>
+                <div class="col-lg-3 mb-5">
+                    <a href="demos_research.html">
+                    <div class="card rounded-lg">
+                        <div class="text-center d-flex align-items-center pb-2">
+                            <div>
+                                <h3 class="card-title">
+                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <br>
+                                <strong>Research</strong>
+                                </h3>
+                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
+                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                </div>
+                <div class="col-lg-3 mb-5">
+                    <a href="demos_community.html">
+                    <div class="card rounded-lg">
+                        <div class="text-center d-flex align-items-center pb-2">
+                            <div>
+                                <h3 class="card-title">
+                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                                <br>
+                                <strong>Community</strong>
+                                </h3>
+                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
+                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
 
-.. customgalleryitem::
-    :tooltip: Use quantum machine learning to tune a beamsplitter.
-    :figure: demonstrations/gaussian_transformation/gauss-circuit.png
-    :description: :doc:`demos/tutorial_gaussian_transformation`
-    :tags: autograd photonics beginner
+            <h2 class="text-center mx-auto my-0">Featured</h2>
 
-.. customgalleryitem::
-    :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
-    :figure: demonstrations/plugins_hybrid/photon_redirection.png
-    :description: :doc:`demos/tutorial_plugins_hybrid`
-    :tags: autograd photonics beginner
+            <ul class="light-slider" id="featured-demos">
+                <li>
+                    <a href="demos/tutorial_vqls.html">
+                        <div class="card">
+                          <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap" style="min-width: 500px!important;">
+                          <div class="card-body">
+                            <h4 class="card-title">Variational quantum linear solver</h4>
+                            <p class="card-text">Explore how variational quantum circuits can be used to solve systems of linear equations. Here, we solve a system of 8 linear equations using 3 qubits and an ancilla.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_quantum_transfer_learning.html">
+                        <div class="card">
+                          <img class="card-img-top img-fluid" src="_images/transfer_images.png" alt="Card image cap" style="min-width: 350px!important;">
+                          <div class="card-body">
+                            <h4 class="card-title">Quantum transfer learning</h4>
+                            <p class="card-text">Learn how to apply a machine learning method, known as transfer learning, to a hybrid classical-quantum image classifier.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_data_reuploading_classifier.html">
+                        <div class="card">
+                          <img class="card-img-top img-fluid" src="_static/thumbs/universal_dnn.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">Data re-uploading classifier</h4>
+                            <p class="card-text">A universal single-qubit quantum classifier using the idea of 'data re-uploading' by Pérez-Salinas et al. (2019), akin to a single hidden-layered neural network.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_doubly_stochastic.html">
+                        <div class="card">
+                          <img class="card-img-top img-fluid" src="_images/sphx_glr_tutorial_doubly_stochastic_002.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">Doubly stochastic gradient descent</h4>
+                            <p class="card-text">Quantum gradient descent with finite number of shots is a form of stochastic gradient descent. By sampling from terms in the VQE Hamiltonian, we get "doubly stochastic gradient descent".</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/barren_plateaus.html">
+                        <div class="card">
+                          <img class="card-img-top" src="_static/thumbs/surface.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">Barren plateaus in QNNs</h4>
+                            <p class="card-text">We show how variational quantum circuits face the problem of barren plateaus. We partly reproduce some of the findings in McClean et al. (2018) with just a few lines of code.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
 
-.. customgalleryitem::
-    :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
-    :description: :doc:`demos/tutorial_advanced_usage`
-    :tags: autograd beginner
+            <p class="grey-text mx-auto mt-5" style="font-size: small;margin-top:-10px;">
+                All content above is free, open-source, and available as executable code downloads. If you would like to contribute a demo, please make a pull request over at our <a href="https://github.com/PennyLaneAI/qml">GitHub repository</a>.
+            </p>
 
-.. customgalleryitem::
-    :tooltip: Extend PyTorch with real quantum computing power.
-    :figure: demonstrations/pytorch_noise/bloch.gif
-    :description: :doc:`demos/pytorch_noise`
-    :tags: forest pytorch beginner
-
-.. customgalleryitem::
-    :tooltip: Explore quantum chemistry in PennyLane.
-    :figure: demonstrations/quantum_chemistry/water_structure.png
-    :description: :doc:`demos/tutorial_quantum_chemistry`
-    :tags: chemistry beginner
-
-.. customgalleryitem::
-    :tooltip: Do arbitrary state preparation on a real quantum computer.
-    :figure: demonstrations/state_preparation/NOON.png
-    :description: :doc:`demos/tutorial_state_preparation`
-    :tags: pytorch
-
-.. customgalleryitem::
-    :tooltip: Ising model example with PennyLane PyTorch interface.
-    :figure: demonstrations/Ising_model/isingspins.png
-    :description: :doc:`demos/tutorial_isingmodel_PyTorch`
-    :tags: pytorch autograd
-
-.. customgalleryitem::
-    :tooltip: Create a simple QGAN with Cirq and TensorFlow.
-    :figure: demonstrations/QGAN/qgan3.png
-    :description: :doc:`demos/tutorial_QGAN`
-    :tags: cirq tensorflow
-
-.. customgalleryitem::
-    :tooltip: A quantum variational classifier
-    :figure: demonstrations/variational_classifier/classifier_output_59_0.png
-    :description: :doc:`demos/tutorial_variational_classifier`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Fit one dimensional noisy data with a quantum neural network.
-    :figure: demonstrations/quantum_neural_net/qnn_output_28_0.png
-    :description: :doc:`demos/quantum_neural_net`
-    :tags: autograd strawberryfields photonics
-
-.. customgalleryitem::
-    :tooltip: Find the ground state of a Hamiltonian.
-    :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
-    :description: :doc:`demos/tutorial_vqe`
-    :tags: autograd chemistry
-
-.. customgalleryitem::
-    :tooltip: Universal Quantum Classifier with data-reuploading
-    :figure: demonstrations/data_reuploading/universal_dnn.png
-    :description: :doc:`demos/tutorial_data_reuploading_classifier`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Faster optimization convergence using quantum natural gradient
-    :figure: demonstrations/quantum_natural_gradient/qng_optimization.png
-    :description: :doc:`demos/tutorial_quantum_natural_gradient`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Perform QAOA for MaxCut
-    :figure: demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
-    :description: :doc:`demos/tutorial_qaoa_maxcut`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Barren plateaus in quantum neural networks
-    :figure: demonstrations/barren_plateaus/surface.png
-    :description: :doc:`demos/tutorial_barren_plateaus`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Rotoselect algorithm
-    :figure: demonstrations/rotoselect/rotoselect_structure.png
-    :description: :doc:`demos/tutorial_rotoselect`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Doubly stochastic gradient descent
-    :figure: demonstrations/doubly_stochastic/single_shot.png
-    :description: :doc:`Doubly stochastic gradient descent <demos/tutorial_doubly_stochastic>`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Variational Quantum Linear Solver
-    :figure: demonstrations/vqls/vqls_zoom.png
-    :description: :doc:`demos/tutorial_vqls`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Coherent implementation of a variational quantum linear solver
-    :figure: demonstrations/coherent_vqls/cvqls_zoom.png
-    :description: :doc:`demos/tutorial_coherent_vqls`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Quantum transfer learning
-    :figure: demonstrations/quantum_transfer_learning/transfer_images.png
-    :description: :doc:`demos/tutorial_quantum_transfer_learning`
-    :tags: autograd pytorch
-
-.. customgalleryitem::
-    :tooltip: Training an embedding to perform metric learning
-    :figure: demonstrations/embedding_metric_learning/training.png
-    :description: :doc:`demos/tutorial_embeddings_metric_learning`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
-    :figure: demonstrations/vqe_parallel/vqe_diagram.png
-    :description: :doc:`demos/tutorial_vqe_parallel`
-    :tags: chemistry
-
-.. customgalleryitem::
-    :tooltip: Use multiple QPUs to improve classification
-    :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
-    :description: :doc:`demos/tutorial_ensemble_multi_qpu`
-    :tags: pytorch forest qiskit
-
-.. customgalleryitem::
-    :tooltip: Pre-process images with a quantum convolution
-    :figure: demonstrations/quanvolution/zoom.png
-    :description: :doc:`demos/tutorial_quanvolution`
-    :tags: tensorflow
-
-.. customgalleryitem::
-    :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset
-    :figure: demonstrations/multiclass_classification/margin_2.png
-    :description: :doc:`demos/tutorial_multiclass_classification`
-    :tags: pytorch
-
-.. customgalleryitem::
-    :tooltip: Frugal shot optimization with the Rosalin optimizer
-    :figure: demonstrations/rosalin/rosalin_thumb.png
-    :description: :doc:`demos/tutorial_rosalin`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule
-    :figure: demonstrations/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png
-    :description: :doc:`demos/tutorial_stochastic_parameter_shift`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Learn how noise can affect the optimization and training of quantum computations
-    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
-    :description: :doc:`demos/tutorial_noisy_circuit_optimization`
-    :tags: cirq beginner
-
-.. customgalleryitem::
-    :tooltip: VQE optimization using quantum natural gradient
-    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
-    :description: :doc:`demos/tutorial_vqe_qng`
-    :tags: chemistry
-
-.. customgalleryitem::
-    :tooltip: Optimizing measurement protocols with variational methods
-    :figure: demonstrations/quantum_metrology/illustration.png
-    :description: :doc:`demos/tutorial_quantum_metrology`
-    :tags: cirq metrology autograd
-
-.. customgalleryitem::
-    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
-    :figure: demonstrations/vqt/thumbnail.png
-    :description: :doc:`demos/tutorial_vqt`
-    :tags: chemistry
-    
-.. customgalleryitem::
-    :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics
-    :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
-    :description: :doc:`demos/qgrnn`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Optimize a Quantum Optical Neural Network using NLopt.
-    :figure: demonstrations/qonn/qonn_thumbnail.png
-    :description: :doc:`demos/qonn`
-    :tags: autograd photonics
- 
-.. customgalleryitem::
-    :tooltip: Compare the parameter-shift rule with backpropagation
-    :figure: demonstrations/tutorial_backprop_thumbnail.png
-    :description: :doc:`demos/tutorial_backprop`
-    :tags: tensorflow autograd
-
-.. customgalleryitem::
-    :tooltip: Understand the link between variational quantum models and Fourier series.
-    :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
-    :description: :doc:`demos/tutorial_expressivity_fourier_series`
-    :tags: autograd
-    
-.. customgalleryitem::
-    :tooltip: Understand the difference between local and global cost functions
-    :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
-    :description: :doc:`demos/tutorial_local_cost_functions`
-    :tags: autograd
-
-:html:`</div></div><div style='clear:both'>`
-
+        </section>
+    </div>
 
 .. toctree::
     :maxdepth: 2
     :caption: QML Demos
     :hidden:
 
-    demos/tutorial_qubit_rotation
-    demos/tutorial_gaussian_transformation
-    demos/tutorial_plugins_hybrid
-    demos/tutorial_advanced_usage
-    demos/pytorch_noise
-    demos/tutorial_quantum_chemistry
-    demos/tutorial_state_preparation
-    demos/tutorial_isingmodel_PyTorch
-    demos/tutorial_QGAN
-    demos/tutorial_variational_classifier
-    demos/quantum_neural_net
-    demos/tutorial_vqe
-    demos/tutorial_data_reuploading_classifier
-    demos/tutorial_quantum_natural_gradient
-    demos/tutorial_qaoa_maxcut
-    demos/tutorial_barren_plateaus
-    demos/tutorial_rotoselect
-    demos/tutorial_doubly_stochastic
-    demos/tutorial_vqls
-    demos/tutorial_coherent_vqls
-    demos/tutorial_quantum_transfer_learning
-    demos/tutorial_embeddings_metric_learning
-    demos/tutorial_vqe_parallel
-    demos/tutorial_ensemble_multi_qpu
-    demos/tutorial_quanvolution
-    demos/tutorial_multiclass_classification
-    demos/tutorial_rosalin
-    demos/tutorial_stochastic_parameter_shift
-    demos/tutorial_noisy_circuit_optimization
-    demos/tutorial_vqe_qng
-    demos/tutorial_quantum_metrology
-    demos/tutorial_vqt
-    demos/qgrnn
-    demos/qonn
-    demos/tutorial_backprop
-    demos/tutorial_expressivity_fourier_series
-    demos/tutorial_local_cost_functions
+    demos_learning
+    demos_research
+    demos_community
