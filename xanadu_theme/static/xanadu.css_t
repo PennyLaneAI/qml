@@ -1161,6 +1161,12 @@ div.seealso {
   border: 1px solid #ff6;
 }
 
+.admonition-example {
+    margin: -15px 0px 10px 0px;
+    background-color: #ccffcc;
+    border: 1px solid;
+    border-color: #99ff99;
+}
 
 .admonition.see {
     font-style: italic;
