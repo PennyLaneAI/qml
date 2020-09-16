@@ -119,171 +119,176 @@ differentiate with respect to the parameter :math:`\theta_i`.
     Due to the `product rule <https://en.wikipedia.org/wiki/Product_rule>`_, the total gradient will then
     involve contributions from each gate that uses that parameter.
 
-Pauli gate example
-~~~~~~~~~~~~~~~~~~~
+Examples
+--------
 
-Consider a quantum computer with parameterized gates of the form
+.. admonition:: Pauli gate example
+    :class: admonition-example
 
-.. math:: U_i(\theta_i)=\exp\left(-i\tfrac{\theta_i}{2}\hat{P}_i\right),
+    Consider a quantum computer with parameterized gates of the form
 
-where :math:`\hat{P}_i=\hat{P}_i^\dagger` is a Pauli operator.
+    .. math:: U_i(\theta_i)=\exp\left(-i\tfrac{\theta_i}{2}\hat{P}_i\right),
 
-The gradient of this unitary is
+    where :math:`\hat{P}_i=\hat{P}_i^\dagger` is a Pauli operator.
 
-.. math:: \nabla_{\theta_i}U_i(\theta_i) = -\tfrac{i}{2}\hat{P}_i U_i(\theta_i) = -\tfrac{i}{2}U_i(\theta_i)\hat{P}_i .
+    The gradient of this unitary is
 
-Substituting this into the quantum circuit function :math:`f(x; \theta)`, we get
+    .. math:: \nabla_{\theta_i}U_i(\theta_i) = -\tfrac{i}{2}\hat{P}_i U_i(\theta_i) = -\tfrac{i}{2}U_i(\theta_i)\hat{P}_i .
 
-.. math::
-   :nowrap:
+    Substituting this into the quantum circuit function :math:`f(x; \theta)`, we get
 
-   \begin{align}
-       \nabla_{\theta_i}f(x; \theta) = &
-       \frac{i}{2}\langle \psi_{i-1} | U_i^\dagger(\theta_i) \left( P_i \hat{B}_{i+1} - \hat{B}_{i+1} P_i \right) U_i(\theta_i)| \psi_{i-1} \rangle \\
-       = & \frac{i}{2}\langle \psi_{i-1} | U_i^\dagger(\theta_i) \left[P_i, \hat{B}_{i+1}\right]U_i(\theta_i) | \psi_{i-1} \rangle,
-   \end{align}
+    .. math::
+       :nowrap:
 
-where :math:`[X,Y]=XY-YX` is the commutator.
+       \begin{align}
+           \nabla_{\theta_i}f(x; \theta) = &
+           \frac{i}{2}\langle \psi_{i-1} | U_i^\dagger(\theta_i) \left( P_i \hat{B}_{i+1} - \hat{B}_{i+1} P_i \right) U_i(\theta_i)| \psi_{i-1} \rangle \\
+           = & \frac{i}{2}\langle \psi_{i-1} | U_i^\dagger(\theta_i) \left[P_i, \hat{B}_{i+1}\right]U_i(\theta_i) | \psi_{i-1} \rangle,
+       \end{align}
 
-We now make use of the following mathematical identity for commutators involving Pauli
-operators (`Mitarai et al. (2018) <https://arxiv.org/abs/1803.00745>`_):
+    where :math:`[X,Y]=XY-YX` is the commutator.
 
-.. math:: \left[ \hat{P}_i, \hat{B} \right] = -i\left(U_i^\dagger\left(\tfrac{\pi}{2}\right)\hat{B}U_i\left(\tfrac{\pi}{2}\right) - U_i^\dagger\left(-\tfrac{\pi}{2}\right)\hat{B}U_i\left(-\tfrac{\pi}{2}\right) \right).
+    We now make use of the following mathematical identity for commutators involving Pauli
+    operators (`Mitarai et al. (2018) <https://arxiv.org/abs/1803.00745>`_):
 
-Substituting this into the previous equation, we obtain the gradient expression
+    .. math:: \left[ \hat{P}_i, \hat{B} \right] = -i\left(U_i^\dagger\left(\tfrac{\pi}{2}\right)\hat{B}U_i\left(\tfrac{\pi}{2}\right) - U_i^\dagger\left(-\tfrac{\pi}{2}\right)\hat{B}U_i\left(-\tfrac{\pi}{2}\right) \right).
 
-.. math::
-   :nowrap:
+    Substituting this into the previous equation, we obtain the gradient expression
 
-   \begin{align}
-       \nabla_{\theta_i}f(x; \theta) = & \hphantom{-} \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i + \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i + \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle \\
-       & - \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i - \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i - \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle.
-   \end{align}
+    .. math::
+       :nowrap:
 
-Finally, we can rewrite this in terms of quantum functions:
+       \begin{align}
+           \nabla_{\theta_i}f(x; \theta) = & \hphantom{-} \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i + \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i + \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle \\
+           & - \tfrac{1}{2} \langle \psi_{i-1} | U_i^\dagger\left(\theta_i - \tfrac{\pi}{2} \right) \hat{B}_{i+1} U_i\left(\theta_i - \tfrac{\pi}{2} \right) | \psi_{i-1} \rangle.
+       \end{align}
 
-.. math:: \nabla_{\theta}f(x; \theta) = \tfrac{1}{2}\left[ f(x; \theta + \tfrac{\pi}{2}) - f(x; \theta - \tfrac{\pi}{2}) \right].
+    Finally, we can rewrite this in terms of quantum functions:
 
-Gaussian gate example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    .. math:: \nabla_{\theta}f(x; \theta) = \tfrac{1}{2}\left[ f(x; \theta + \tfrac{\pi}{2}) - f(x; \theta - \tfrac{\pi}{2}) \right].
 
-For quantum devices with continuous-valued operators, such as photonic quantum computers, it is
-convenient to employ the `Heisenberg picture <https://en.wikipedia.org/wiki/Heisenberg_picture>`_, i.e.,
-to track how the gates :math:`U_i(\theta_i)` transform the final measurement operator :math:`\hat{B}`.
+|
 
-As an example, we consider the `Squeezing gate <https://en.wikipedia.org/wiki/Squeeze_operator>`_. In the
-Heisenberg picture, the Squeezing gate causes the quadrature operators :math:`\hat{x}` and :math:`\hat{p}`
-to become rescaled:
+.. admonition:: Gaussian gate example
+    :class: admonition-example
 
-.. math::
-   :nowrap:
+    For quantum devices with continuous-valued operators, such as photonic quantum computers, it is
+    convenient to employ the `Heisenberg picture <https://en.wikipedia.org/wiki/Heisenberg_picture>`_, i.e.,
+    to track how the gates :math:`U_i(\theta_i)` transform the final measurement operator :math:`\hat{B}`.
 
-   \begin{align}
-       \mathcal{M}^S_r(\hat{x}) = & S^\dagger(r)\hat{x}S(r) \\
-                                   = & e^{-r}\hat{x}
-   \end{align}
+    As an example, we consider the `Squeezing gate <https://en.wikipedia.org/wiki/Squeeze_operator>`_. In the
+    Heisenberg picture, the Squeezing gate causes the quadrature operators :math:`\hat{x}` and :math:`\hat{p}`
+    to become rescaled:
 
-and
+    .. math::
+       :nowrap:
 
-.. math::
-   :nowrap:
+       \begin{align}
+           \mathcal{M}^S_r(\hat{x}) = & S^\dagger(r)\hat{x}S(r) \\
+                                       = & e^{-r}\hat{x}
+       \end{align}
 
-   \begin{align}
-       \mathcal{M}^S_r(\hat{p}) = & S^\dagger(r)\hat{p}S(r) \\
-                                   = & e^{r}\hat{p}.
-   \end{align}
+    and
 
-Expressing this in matrix notation, we have
+    .. math::
+       :nowrap:
 
-.. math::
-   :nowrap:
+       \begin{align}
+           \mathcal{M}^S_r(\hat{p}) = & S^\dagger(r)\hat{p}S(r) \\
+                                       = & e^{r}\hat{p}.
+       \end{align}
 
-   \begin{align}
-       \begin{bmatrix}
-           \hat{x} \\
-           \hat{p}
-       \end{bmatrix}
-       \rightarrow
-       \begin{bmatrix}
-          e^{-r} & 0 \\
-          0      & e^r
-       \end{bmatrix}
-       \begin{bmatrix}
-           \hat{x} \\
-           \hat{p}
-       \end{bmatrix}.
-   \end{align}
+    Expressing this in matrix notation, we have
 
-The gradient of this transformation can easily be found:
+    .. math::
+       :nowrap:
 
-.. math::
-   :nowrap:
+       \begin{align}
+           \begin{bmatrix}
+               \hat{x} \\
+               \hat{p}
+           \end{bmatrix}
+           \rightarrow
+           \begin{bmatrix}
+              e^{-r} & 0 \\
+              0      & e^r
+           \end{bmatrix}
+           \begin{bmatrix}
+               \hat{x} \\
+               \hat{p}
+           \end{bmatrix}.
+       \end{align}
 
-   \begin{align}
-       \nabla_r
-       \begin{bmatrix}
-           e^{-r} & 0 \\
-           0 & e^r
-       \end{bmatrix}
-       =
-       \begin{bmatrix}
-           -e^{-r} & 0 \\
-           0 & e^r
-       \end{bmatrix}.
-   \end{align}
+    The gradient of this transformation can easily be found:
 
-We notice that this can be rewritten this as a linear combination of squeeze operations:
+    .. math::
+       :nowrap:
 
-.. math::
-   :nowrap:
+       \begin{align}
+           \nabla_r
+           \begin{bmatrix}
+               e^{-r} & 0 \\
+               0 & e^r
+           \end{bmatrix}
+           =
+           \begin{bmatrix}
+               -e^{-r} & 0 \\
+               0 & e^r
+           \end{bmatrix}.
+       \end{align}
 
-   \begin{align}
-       \begin{bmatrix}
-           -e^{-r} & 0 \\
-           0 & e^r
-       \end{bmatrix}
-       =
-       \frac{1}{2\sinh(s)}
-       \left(
-       \begin{bmatrix}
-           e^{-(r+s)} & 0 \\
-           0 & e^{r+s}
-       \end{bmatrix}
-       -
-       \begin{bmatrix}
-           e^{-(r-s)} & 0 \\
-           0 & e^{r-s}
-       \end{bmatrix}
-       \right),
-   \end{align}
+    We notice that this can be rewritten this as a linear combination of squeeze operations:
 
-where :math:`s` is an arbitrary nonzero shift [#]_.
+    .. math::
+       :nowrap:
 
-As before, assume that an input :math:`y` has already been embedded into a quantum
-state :math:`|y\rangle = U_0(y)|0\rangle` before we apply the squeeze gate. If we measure the :math:`\hat{x}` operator,
-we will have the following quantum circuit function:
+       \begin{align}
+           \begin{bmatrix}
+               -e^{-r} & 0 \\
+               0 & e^r
+           \end{bmatrix}
+           =
+           \frac{1}{2\sinh(s)}
+           \left(
+           \begin{bmatrix}
+               e^{-(r+s)} & 0 \\
+               0 & e^{r+s}
+           \end{bmatrix}
+           -
+           \begin{bmatrix}
+               e^{-(r-s)} & 0 \\
+               0 & e^{r-s}
+           \end{bmatrix}
+           \right),
+       \end{align}
 
-.. math::
-   f(y;r) = \langle y | \mathcal{M}^S_r (\hat{x}) | y \rangle.
+    where :math:`s` is an arbitrary nonzero shift [#]_.
 
-Finally, its gradient can be expressed as
+    As before, assume that an input :math:`y` has already been embedded into a quantum
+    state :math:`|y\rangle = U_0(y)|0\rangle` before we apply the squeeze gate. If we measure the :math:`\hat{x}` operator,
+    we will have the following quantum circuit function:
 
-.. math::
-   :nowrap:
+    .. math::
+       f(y;r) = \langle y | \mathcal{M}^S_r (\hat{x}) | y \rangle.
 
-   \begin{align}
-       \nabla_r f(y;r) = &  \frac{1}{2\sinh(s)} \left[
-                            \langle y | \mathcal{M}^S_{r+s} (\hat{x}) | y \rangle
-                           -\langle y | \mathcal{M}^S_{r-s} (\hat{x}) | y \rangle \right] \\
-                       = & \frac{1}{2\sinh(s)}\left[f(y; r+s) - f(y; r-s)\right].
-   \end{align}
+    Finally, its gradient can be expressed as
 
-.. note::
+    .. math::
+       :nowrap:
 
-    For simplicity of the discussion, we have set the phase angle of the Squeezing gate to be zero.
-    In the general case, Squeezing is a two-parameter gate, containing a squeezing magnitude and a squeezing angle.
-    However, we can always decompose the two-parameter form into a Squeezing gate like the one above,
-    followed by a Rotation gate.
+       \begin{align}
+           \nabla_r f(y;r) = &  \frac{1}{2\sinh(s)} \left[
+                                \langle y | \mathcal{M}^S_{r+s} (\hat{x}) | y \rangle
+                               -\langle y | \mathcal{M}^S_{r-s} (\hat{x}) | y \rangle \right] \\
+                           = & \frac{1}{2\sinh(s)}\left[f(y; r+s) - f(y; r-s)\right].
+       \end{align}
+
+    .. note::
+
+        For simplicity of the discussion, we have set the phase angle of the Squeezing gate to be zero.
+        In the general case, Squeezing is a two-parameter gate, containing a squeezing magnitude and a squeezing angle.
+        However, we can always decompose the two-parameter form into a Squeezing gate like the one above,
+        followed by a Rotation gate.
 
 .. rubric:: Footnotes
 
