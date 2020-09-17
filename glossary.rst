@@ -36,7 +36,7 @@ QML glossary
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Quantum Approximate Optimization Algorithm (QAOA) </glossary/qaoa>`
-        A hybrid variational algorithm for that be used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating, parameterized components. 
+        A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating, parameterized components. 
 
     :doc:`Quantum Boltzmann Machine </glossary/quantum_boltzmann_machine>`
         Quantum analog of a classical Boltzmann machine, in which nodes are replaced by spins or qubits. An energy-based machine learning model.
