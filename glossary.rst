@@ -42,7 +42,7 @@ QML glossary
         Quantum analog of a classical Boltzmann machine, in which nodes are replaced by spins or qubits. An energy-based machine learning model.
 
     :doc:`Quantum Circuit Learning </glossary/quantum_circuit_learning>`
-        A variational framework that can be used to teach quantum neural networks to perform both linear and nonlienar function approximation and classification tasks.
+        A variational framework that can be used to teach quantum neural networks to perform both linear and nonlinear function approximation and classification tasks.
 
     :doc:`Quantum Convolutional Neural Network </glossary/quanvolutional_neural_network>`
         Quantum analog of a convolutional neural network.
