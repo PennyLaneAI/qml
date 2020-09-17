@@ -3,7 +3,7 @@
    :format: html
 
 QML glossary
-=======================
+============
 
 .. meta::
    :property="og:description": A growing glossary of key concepts for quantum machine learning.
@@ -30,13 +30,13 @@ QML glossary
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Quantum Approximate Optimization Algorithm (QAOA) </glossary/qaoa>`
-        A hybrid variational algorithm for that be used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating, parameterized components. 
+        A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating, parameterized components. 
 
     :doc:`Quantum Boltzmann Machine </glossary/quantum_boltzmann_machine>`
         Quantum analog of a classical Boltzmann machine, in which nodes are replaced by spins or qubits. An energy-based machine learning model.
 
     :doc:`Quantum Circuit Learning </glossary/quantum_circuit_learning>`
-        A variational framework that can be used to teach quantum neural networks to perform both linear and nonlienar function approximation and classification tasks.
+        A variational framework that can be used to teach quantum neural networks to perform both linear and nonlinear function approximation and classification tasks.
 
     :doc:`Quantum Convolutional Neural Network </glossary/quanvolutional_neural_network>`
         Quantum analog of a convolutional neural network.
@@ -127,4 +127,3 @@ QML glossary
     /glossary/variational_quantum_eigensolver
     /glossary/variational_quantum_linear_solver
     /glossary/variational_quantum_thermalizer
-
