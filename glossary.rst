@@ -14,8 +14,8 @@ QML glossary
     :doc:`Automatic Differentiation </glossary/automatic_differentiation>`
         Automatically computing derivatives of the steps of computer programs.
 
-    :doc:`Barren Plateaus </glossary/barren_plateaus>`
-        Points at which the gradient of a parameterized circuit disappear. The mortal enemy of many a variational algorithm. 
+    :doc:`Barren Plateaus </demos/tutorial_local_cost_functions>`
+        Points at which the gradient of a parameterized circuit disappear. The mortal enemy of many a variational algorithm, the variance of the gradients at these points is also close to 0. 
 
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
         An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
@@ -29,19 +29,17 @@ QML glossary
         The parameter-shift rule is a recipe for how to estimate gradients of quantum circuits.
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
-    :doc:`Quantum Approximate Optimization Algorithm (QAOA) </glossary/qaoa>`
+    :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_maxcut>`
         A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating, parameterized components. 
 
-    :doc:`Quantum Boltzmann Machine </glossary/quantum_boltzmann_machine>`
+    Quantum Boltzmann Machine
         Quantum analog of a classical Boltzmann machine, in which nodes are replaced by spins or qubits. An energy-based machine learning model.
 
-    :doc:`Quantum Circuit Learning </glossary/quantum_circuit_learning>`
-        A variational framework that can be used to teach quantum neural networks to perform both linear and nonlinear function approximation and classification tasks.
+    :doc:`Quantum Convolutional Neural Network </demos/tutorial_quanvolution>`
+        Quantum analog of a convolutional neural network. Affectionately referred to as 
+        *quanvolutional* neural networks.
 
-    :doc:`Quantum Convolutional Neural Network </glossary/quanvolutional_neural_network>`
-        Quantum analog of a convolutional neural network.
-
-    :doc:`Quantum Deep Learning </glossary/quantum_deep_learning>`
+    Quantum Deep Learning
         Refers to the paradigm of using a quantum computer to perform machine learning tasks that, like classical deep learning, may require multiple layers of abstraction to learn.
 
     Quantum Differentiable Programming
@@ -56,13 +54,16 @@ QML glossary
         quantum circuit whose parameters depend on the input data. See also
         :doc:`Quantum Embedding </glossary/quantum_embedding>`.
 
+    :doc:`Quantum Generative Adversarial Network </demos/tutorial_QGAN>`
+        Quantum analog of Generative Adversarial Networks (GANs).
+
     :doc:`Quantum Gradient </glossary/quantum_gradient>`
         The derivative of a quantum computation with respect to the parameters of a circuit.
 
-    :doc:`Quantum Graph Neural Network </glossary/quantum_graph_neural_network>`
+    :doc:`Quantum Graph Neural Network </demos/qgrnn>`
         A type of quantum neural network with an ansatz characterized by repeatedly evolving a chosen sequence of parameterizable Hamiltonians. 
 
-    :doc:`Quantum Hamiltonian-Based Models </glossary/quantum_hamiltonian_based_models>`
+    Quantum Hamiltonian-Based Models
         A type of generative, energy-based quantum neural network. 
 
     :doc:`Quantum Machine Learning <whatisqml>`
@@ -75,25 +76,25 @@ QML glossary
     Quantum Node
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
-    :doc:`Quantum Perceptron </glossary/quantum_perceptron>`
+    Quantum Perceptron
         Quantum system or operation capable of performing a task analogous to that of a classical perceptron.
 
-    :doc:`Quantum Variational Autoencoder (QVAE) </glossary/qvae>`
+    Quantum Variational Autoencoder (QVAE)
         Quantum analog of a variational autoencoder. QVAEs are a generative quantum machine learning model that learn a latent representation of a data set, and may use quantum hardware to subsequently generate new random samples from it.
 
     :doc:`Variational Circuit </glossary/variational_circuit>`
         Variational circuits are quantum algorithms that depend on tunable parameters, and can therefore be optimized.
 
-    :doc:`Variational Quantum Classifier (VQC) </glossary/variational_quantum_classifier>`
+    :doc:`Variational Quantum Classifier (VQC) </demos/tutorial_variational_classifier>`
         A supervised learning algorithm in which variational circuits (:abbr:`QNNs (Quantum Neural Networks)`) are trained to perform classification tasks.
 
-    :doc:`Variational Quantum Eigensolver (VQE) </glossary/variational_quantum_eigensolver>`
+    :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`
         A variational algorithm used for finding the ground state energy of a quantum system. The VQE is a hybrid algorithm that involves incorporating measurement results obtained from a quantum computer running a series of variational circuits into a classical optimization routine in order to find a set of optimal variational parameters. 
 
-    :doc:`Variational Quantum Linear Solver (VQLS) </glossary/variational_quantum_linear_solver>`
+    :doc:`Variational Quantum Linear Solver (VQLS) </demos/tutorial_vqls>`
         An algorithm for solving systems of linear equations on quantum computers. Based on short variational circuits, it is amenable to running on near-term quantum hardware. 
 
-    :doc:`Variational Quantum Thermalizer (VQT) </glossary/variational_quantum_thermalizer>`
+    :doc:`Variational Quantum Thermalizer (VQT) </demos/tutorial_vqt>`
         A generalization of the :abbr:`VQE (Variational Quantum Eigensolver)` to systems with non-zero temperatures. Uses :abbr:`QHBMs (Quantum Hamiltonian-Based Models)` to generate thermal states of Hamiltonians at a given temperature.
 
 
