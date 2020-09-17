@@ -3,7 +3,7 @@
    :format: html
 
 QML glossary
-=======================
+============
 
 .. meta::
    :property="og:description": A growing glossary of key concepts for quantum machine learning.
@@ -142,4 +142,3 @@ QML glossary
     /glossary/variational_quantum_eigensolver
     /glossary/variational_quantum_linear_solver
     /glossary/variational_quantum_thermalizer
-
