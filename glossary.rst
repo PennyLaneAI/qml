@@ -15,7 +15,7 @@ QML glossary
         Automatically computing derivatives of the steps of computer programs.
 
     :doc:`Barren Plateaus </demos/tutorial_local_cost_functions>`
-        Points at which the gradient of a parameterized circuit disappear. The mortal enemy of many a variational algorithm, the variance of the gradients at these points is also close to 0. 
+        Points at which the gradient of a parameterized circuit disappear. The mortal enemy of many a variational algorithm, the variance of the gradient at these points is also close to 0. 
 
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
         An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
@@ -63,14 +63,14 @@ QML glossary
     :doc:`Quantum Graph Neural Network </demos/qgrnn>`
         A type of quantum neural network with an ansatz characterized by repeatedly evolving a chosen sequence of parameterizable Hamiltonians. 
 
-    Quantum Hamiltonian-Based Models
-        A type of generative, energy-based quantum neural network. 
+    Quantum Hamiltonian-Based Model
+        A type of generative, energy-based quantum neural network characterized by its use of a parametererized Hamiltonian. 
 
     :doc:`Quantum Machine Learning <whatisqml>`
         A research area that explores ideas at the intersection of machine learning and quantum computing.
 
     :doc:`Quantum Neural Network </glossary/quantum_neural_network>`
-        A term with many different meanings, usually refering to a generalization of artificial neural 
+        A term with many different meanings, usually referring to a generalization of artificial neural 
         networks to quantum information processing. Also increasingly used to refer to :doc:`variational circuits </glossary/variational_circuit>` in the context of quantum machine learning.
         
     Quantum Node
@@ -109,18 +109,14 @@ QML glossary
     /glossary/parameter_shift
     /glossary/qaoa
     /glossary/quantum_boltzmann_machine
-    /glossary/quantum_circuit_learning
     /glossary/quantum_deep_learning
     /glossary/quantum_embedding
     /glossary/quantum_gan
     /glossary/quantum_gradient
     /glossary/quantum_graph_neural_network
     /glossary/quantum_hamiltonian_based_models
-    /glossary/quantum_kernel
-    /glossary/quantum_natural_gradient
     /glossary/quantum_neural_network
     /glossary/quantum_perceptron
-    /glossary/quantum_svm
     /glossary/quanvolutional_neural_network
     /glossary/qvae
     /glossary/variational_circuit
