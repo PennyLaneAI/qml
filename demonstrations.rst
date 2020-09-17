@@ -25,14 +25,14 @@ QML Demos
         <section class="my-5">
             <div class="row justify-content-center" id="main-cards">
                 <div class="col-lg-3 mb-5">
-                    <a href="demos_learning.html">
+                    <a href="demos_basics.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
                                 <br>
-                                <strong>Learning</strong>
+                                <strong>Basics</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -157,6 +157,6 @@ QML Demos
     :caption: QML Demos
     :hidden:
 
-    demos_learning
+    demos_basics
     demos_research
     demos_community
