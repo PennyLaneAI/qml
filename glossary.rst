@@ -22,12 +22,6 @@ QML glossary
         specific subsystems. The architecture defines which algorithms a variational circuit can implement by
         fixing the trainable parameters. A circuit ansatz is analogous to the architecture of a neural network.
 
-    :doc:`Dequantization </glossary/dequantization>`
-        The process of creating a classical algorithm that matches or improves on the complexity of the best-known quantum machine learning algorithm for a given task, thus negating its potential for quantum advantage. Such classical algorithms are often "quantum-inspired".
-
-    :doc:`HHL Algorithm </glossary/hhl_algorithm>`
-        A quantum algorithm for solving systems of linear equations. Used as a subroutine in numerous quantum machine learning algorithms.
-
     :doc:`Hybrid Computation </glossary/hybrid_computation>`
         A computation that includes classical *and* quantum subroutines, executed on different devices.
 
@@ -84,14 +78,8 @@ QML glossary
     :doc:`Quantum Perceptron </glossary/quantum_perceptron>`
         Quantum system or operation capable of performing a task analogous to that of a classical perceptron.
 
-    :doc:`Quantum RAM </glossary/quantum_ram>`
-        A device or unitary operation capable of loading classical data to a quantum computer in superposition. Required as a subroutine by a number of quantum algorithms that need classical data access.   
-
     :doc:`Quantum Variational Autoencoder (QVAE) </glossary/qvae>`
         Quantum analog of a variational autoencoder. QVAEs are a generative quantum machine learning model that learn a latent representation of a data set, and may use quantum hardware to subsequently generate new random samples from it.
-
-    :doc:`Unitary Parameterization </glossary/unitary_parameterization>`
-        A recipe for expressing unitary matrices in terms of real-valued parameters. 
 
     :doc:`Variational Circuit </glossary/variational_circuit>`
         Variational circuits are quantum algorithms that depend on tunable parameters, and can therefore be optimized.
@@ -116,7 +104,6 @@ QML glossary
     /glossary/automatic_differentiation
     /glossary/barren_plateaus
     /glossary/circuit_ansatz
-    /glossary/hhl_algorithm
     /glossary/hybrid_computation
     /glossary/parameter_shift
     /glossary/qaoa
@@ -132,11 +119,9 @@ QML glossary
     /glossary/quantum_natural_gradient
     /glossary/quantum_neural_network
     /glossary/quantum_perceptron
-    /glossary/quantum_ram
     /glossary/quantum_svm
     /glossary/quanvolutional_neural_network
     /glossary/qvae
-    /glossary/unitary_parameterization
     /glossary/variational_circuit
     /glossary/variational_quantum_classifier
     /glossary/variational_quantum_eigensolver
