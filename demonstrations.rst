@@ -34,7 +34,7 @@ QML Demos
                                 <br>
                                 <strong>Basics</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
+                                <p class="mb-1 grey-text px-3">Begin your journey into PennyLane and quantum machine learning.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@ QML Demos
                                 <br>
                                 <strong>Research</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
+                                <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@ QML Demos
                                 <br>
                                 <strong>Community</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
+                                <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
