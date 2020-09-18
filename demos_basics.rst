@@ -1,8 +1,8 @@
  .. role:: html(raw)
    :format: html
 
-Learn QML/PennyLane
-===================
+Basics
+======
 
 .. meta::
    :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
@@ -17,9 +17,12 @@ correct sections, and some of them might need to be moved to the Research page.
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
 
 
-Basic algorithms
-----------------
-Add a descriptive text here (and update the header above if needed)
+Getting started
+---------------
+
+Here you find simple "hello world" tutorials targeted at first-time users. These
+tutorials are focused on introducing PennyLane, and showing off what you can do
+with it.
 
 :html:`<div class="gallery-grid row">`
 
@@ -41,24 +44,26 @@ Add a descriptive text here (and update the header above if needed)
     :description: :doc:`demos/tutorial_plugins_hybrid`
     :tags: autograd photonics beginner
 
-:html:`</div></div><div style='clear:both'>`
-
-Using near term devices
------------------------
-Add a descriptive text here (and update the header above if needed)
-
-:html:`<div class="gallery-grid row">`
-
 .. customgalleryitem::
     :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
     :description: :doc:`demos/tutorial_advanced_usage`
     :tags: autograd beginner
 
 .. customgalleryitem::
-    :tooltip: Extend PyTorch with real quantum computing power.
-    :figure: demonstrations/pytorch_noise/bloch.gif
-    :description: :doc:`demos/pytorch_noise`
-    :tags: forest pytorch beginner
+    :tooltip: Compare the parameter-shift rule with backpropagation.
+    :figure: demonstrations/tutorial_backprop_thumbnail.png
+    :description: :doc:`demos/tutorial_backprop`
+    :tags: tensorflow autograd:html:`</div></div><div style='clear:both'>`
+
+:html:`</div></div><div style='clear:both'>`
+
+Applications
+------------
+
+Explore how PennyLane implements popular applications like Variational Quantum
+Eigensolvers, Quantum Chemistry, or Quantum Machine Learning.
+
+:html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
     :tooltip: Explore quantum chemistry in PennyLane.
@@ -67,18 +72,46 @@ Add a descriptive text here (and update the header above if needed)
     :tags: chemistry beginner
 
 .. customgalleryitem::
+    :tooltip: Find the ground state of a Hamiltonian.
+    :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
+    :description: :doc:`demos/tutorial_vqe`
+    :tags: autograd chemistry
+
+.. customgalleryitem::
+    :tooltip: A quantum variational classifier.
+    :figure: demonstrations/variational_classifier/classifier_output_59_0.png
+    :description: :doc:`demos/tutorial_variational_classifier`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Perform QAOA for MaxCut.
+    :figure: demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
+    :description: :doc:`demos/tutorial_qaoa_maxcut`
+    :tags: autograd
+
+.. customgalleryitem::
     :tooltip: Do arbitrary state preparation on a real quantum computer.
     :figure: demonstrations/state_preparation/NOON.png
     :description: :doc:`demos/tutorial_state_preparation`
     :tags: pytorch
 
-:html:`</div></div><div style='clear:both'>`
+.. customgalleryitem::
+    :tooltip: Ising model example with PennyLane PyTorch interface.
+    :figure: demonstrations/Ising_model/isingspins.png
+    :description: :doc:`demos/tutorial_isingmodel_PyTorch`
+    :tags: pytorch autograd
 
-Learning qml
-------------
-Add a descriptive text here (and update the header above if needed)
+.. customgalleryitem::
+    :tooltip: Extend PyTorch with real quantum computing power.
+    :figure: demonstrations/pytorch_noise/bloch.gif
+    :description: :doc:`demos/pytorch_noise`
+    :tags: forest pytorch beginner
 
-:html:`<div class="gallery-grid row">`
+.. customgalleryitem::
+    :tooltip: Learn how noise can affect the optimization and training of quantum computations.
+    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
+    :description: :doc:`demos/tutorial_noisy_circuit_optimization`
+    :tags: cirq beginner
 
 .. customgalleryitem::
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
@@ -87,26 +120,30 @@ Add a descriptive text here (and update the header above if needed)
     :tags: chemistry
 
 .. customgalleryitem::
-    :tooltip: Use multiple QPUs to improve classification
+    :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
     :description: :doc:`demos/tutorial_ensemble_multi_qpu`
     :tags: pytorch forest qiskit
-
-.. customgalleryitem::
-    :tooltip: Learn how noise can affect the optimization and training of quantum computations
-    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
-    :description: :doc:`demos/tutorial_noisy_circuit_optimization`
-    :tags: cirq beginner
-
-.. customgalleryitem::
-    :tooltip: Compare the parameter-shift rule with backpropagation
-    :figure: demonstrations/tutorial_backprop_thumbnail.png
-    :description: :doc:`demos/tutorial_backprop`
-    :tags: tensorflow autograd:html:`</div></div><div style='clear:both'>`
 
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
     :maxdepth: 2
-    :caption: Learning
+    :caption: Basics
     :hidden:
+
+    demos/tutorial_qubit_rotation
+    demos/tutorial_gaussian_transformation
+    demos/tutorial_plugins_hybrid
+    demos/tutorial_advanced_usage
+    demos/tutorial_backprop
+    demos/tutorial_quantum_chemistry
+    demos/tutorial_vqe
+    demos/tutorial_variational_classifier
+    demos/tutorial_qaoa_maxcut
+    demos/tutorial_state_preparation
+    demos/tutorial_isingmodel_PyTorch
+    demos/pytorch_noise
+    demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_vqe_parallel
+    demos/tutorial_ensemble_multi_qpu

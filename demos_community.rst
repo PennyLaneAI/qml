@@ -9,7 +9,8 @@ Community
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 
-Community demos page.
+These demos have been contributed by you, the PennyLane community. To add your
+own demo, see our guidelines and submission instructions <a href="demos_submission.html">here</a>.
 
 .. raw:: html
 
