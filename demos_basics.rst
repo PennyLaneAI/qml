@@ -12,7 +12,7 @@ Begin your journey into PennyLane and Quantum Machine Learning (QML) by
 exploring the tutorials below.
 
 The `Getting started`_ section is a great place to start if you've just
-discovered PennyLane and QML and want to learn more about the basics; or venture
+discovered PennyLane and QML and want to learn more about the basics. Or venture
 straight into the `Applications`_ section and explore how to implement trainable
 circuits for popular applications such as Variational Quantum Eigensolvers and
 Quantum Chemistry, using either simulators or near-term quantum hardware.
@@ -31,24 +31,24 @@ Getting started
     :tooltip: Use quantum machine learning to rotate a qubit.
     :figure: demonstrations/qubit_rotation/bloch.png
     :description: :doc:`demos/tutorial_qubit_rotation`
-    :tags: autograd beginner
+    :tags: autograd
 
 .. customgalleryitem::
     :tooltip: Use quantum machine learning to tune a beamsplitter.
     :figure: demonstrations/gaussian_transformation/gauss-circuit.png
     :description: :doc:`demos/tutorial_gaussian_transformation`
-    :tags: autograd photonics beginner
+    :tags: autograd photonics
 
 .. customgalleryitem::
     :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
     :figure: demonstrations/plugins_hybrid/photon_redirection.png
     :description: :doc:`demos/tutorial_plugins_hybrid`
-    :tags: autograd photonics beginner
+    :tags: autograd photonics strawberryfields
 
 .. customgalleryitem::
     :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
     :description: :doc:`demos/tutorial_advanced_usage`
-    :tags: autograd beginner
+    :tags: autograd
 
 .. customgalleryitem::
     :tooltip: Compare the parameter-shift rule with backpropagation.
@@ -67,7 +67,7 @@ Applications
     :tooltip: Explore quantum chemistry in PennyLane.
     :figure: demonstrations/quantum_chemistry/water_structure.png
     :description: :doc:`demos/tutorial_quantum_chemistry`
-    :tags: chemistry beginner
+    :tags: chemistry
 
 .. customgalleryitem::
     :tooltip: Find the ground state of a Hamiltonian.
@@ -103,13 +103,13 @@ Applications
     :tooltip: Extend PyTorch with real quantum computing power.
     :figure: demonstrations/pytorch_noise/bloch.gif
     :description: :doc:`demos/pytorch_noise`
-    :tags: forest pytorch beginner
+    :tags: forest pytorch
 
 .. customgalleryitem::
     :tooltip: Learn how noise can affect the optimization and training of quantum computations.
     :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
-    :tags: cirq beginner
+    :tags: cirq
 
 .. customgalleryitem::
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs

@@ -32,7 +32,7 @@ class_names = train_data.classes
 model = models.resnet18(pretrained=True)
 model.fc = Identity()
 
-Y_train = [1 if inp[1] == 0 else -1 for inp in test_data]
+Y_train = [1 if inp[1] == 0 else -1 for inp in train_data]
 Y_val = [1 if inp[1] == 0 else -1 for inp in test_data]
 
 X_train = []
@@ -48,6 +48,6 @@ for id, inp in enumerate(test_data):
     X_val.append(x)
 
 np.savetxt("X_antbees.txt", X_train)
-np.savetxt("Y_antbees_train.txt", Y_train)
+np.savetxt("Y_antbees.txt", Y_train)
 np.savetxt("X_antbees_test.txt", X_val)
 np.savetxt("Y_antbees_test.txt", Y_val)
