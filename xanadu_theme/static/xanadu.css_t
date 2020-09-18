@@ -203,6 +203,11 @@ div.highlight {
   background-color: none !important;
 }
 
+div.section {
+  padding-top: 40px;
+  margin-top: -40px;
+}
+
 a.internal em {
   font-style: normal;
 }
