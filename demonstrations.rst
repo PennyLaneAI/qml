@@ -105,7 +105,7 @@ QML Demos
                           <img class="card-img-top img-fluid" src="_static/thumbs/qgrnn_thumbnail.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">The quantum graph recurrent neural network</h4>
-                            <p class="card-text">Use a quantum graph recurrent neural network to learn quantum dynamics</p>
+                            <p class="card-text">Use a quantum graph recurrent neural network to learn quantum dynamics.</p>
                           </div>
                         </div>
                     </a>
@@ -127,7 +127,7 @@ QML Demos
                           <img class="card-img-top img-fluid" src="_static/thumbs/pes_h2.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Doubly stochastic gradient descent</h4>
-                            <p class="card-text">Quantum gradient descent with finite number of shots is a form of stochastic gradient descent. By sampling from terms in the VQE Hamiltonian, we get "doubly stochastic gradient descent".</p>
+                            <p class="card-text">Calculate the ground-state energy of the hydrogen molecule by sampling from terms in the VQE Hamiltonian, getting the doubly stochastic gradient descent.</p>
                           </div>
                         </div>
                     </a>
@@ -138,7 +138,7 @@ QML Demos
                           <img class="card-img-top" src="_static/thumbs/qng_optimization.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Quantum natural gradient</h4>
-                            <p class="card-text">Faster optimization convergence using quantum natural gradient.</p>
+                            <p class="card-text">Achieve faster optimization convergence using the quantum natural gradient.</p>
                           </div>
                         </div>
                     </a>
@@ -149,7 +149,7 @@ QML Demos
                           <img class="card-img-top" src="_static/thumbs/qaoa_maxcut_partition.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">QAOA for MaxCut</h4>
-                            <p class="card-text">Perform QAOA for MaxCut.</p>
+                            <p class="card-text">Implement the QAOA algorithm using PennyLane to solve the MaxCut problem.</p>
                           </div>
                         </div>
                     </a>
@@ -160,7 +160,7 @@ QML Demos
                           <img class="card-img-top" src="_static/thumbs/training.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Quantum embeddings and metric learning</h4>
-                            <p class="card-text">Training an embedding to perform metric learning.</p>
+                            <p class="card-text">Train a hybrid classical-quantum data embedding to classify images of ants and bees via metric learning.</p>
                           </div>
                         </div>
                     </a>
@@ -182,7 +182,7 @@ QML Demos
                           <img class="card-img-top" src="_static/thumbs/rosalin_thumb.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Frugal shot optimization with Rosalin </h4>
-                            <p class="card-text">Frugal shot optimization with the Rosalin optimizer.</p>
+                            <p class="card-text">Optimize variational quantum algorithms with a minimized number of shots by using the Rosalin optimizer.</p>
                           </div>
                         </div>
                     </a>
