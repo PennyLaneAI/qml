@@ -105,7 +105,7 @@ QML
     :tags: cirq tensorflow
 
 .. customgalleryitem::
-    :tooltip: Fit one dimensional noisy data with a quantum neural network.
+    :tooltip: Fit one-dimensional noisy data with a quantum neural network.
     :figure: demonstrations/quantum_neural_net/qnn_output_28_0.png
     :description: :doc:`demos/quantum_neural_net`
     :tags: autograd strawberryfields photonics
