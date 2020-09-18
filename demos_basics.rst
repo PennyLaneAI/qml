@@ -8,9 +8,14 @@ Basics
    :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
+Begin your journey into PennyLane and Quantum Machine Learning (QML) by
+exploring the tutorials below.
 
-Learn QML/PennyLane demos page. Note, the demos below aren't yet sorted into the
-correct sections, and some of them might need to be moved to the Research page.
+The `Getting started`_ section is a great place to start if you've just
+discovered PennyLane and QML and want to learn more about the basics; or venture
+straight into the `Applications`_ section and explore how to implement trainable
+circuits for popular applications such as Variational Quantum Eigensolvers and
+Quantum Chemistry, using either simulators or near-term quantum hardware.
 
 .. raw:: html
 
@@ -19,10 +24,6 @@ correct sections, and some of them might need to be moved to the Research page.
 
 Getting started
 ---------------
-
-Here you find simple "hello world" tutorials targeted at first-time users. These
-tutorials are focused on introducing PennyLane, and showing off what you can do
-with it.
 
 :html:`<div class="gallery-grid row">`
 
@@ -59,9 +60,6 @@ with it.
 
 Applications
 ------------
-
-Explore how PennyLane implements popular applications like Variational Quantum
-Eigensolvers, Quantum Chemistry, or Quantum Machine Learning.
 
 :html:`<div class="gallery-grid row">`
 

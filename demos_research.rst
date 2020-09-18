@@ -9,8 +9,11 @@ Research
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 
-Research demos page. Note, the demos below aren't yet sorted into the correct
-sections, and some of them might need to be moved to the Learning QML page.
+Explore cutting-edge research using PennyLane in the demonstrations below. Every
+demo here implements algorithms from either one or multiple papers. Explore a
+variety of different explicit use-cases for quantum machine learning in the
+`QML`_ section below or discover other variational quantum optimization
+algorithms under `Optimization`_.
 
 .. raw:: html
 
@@ -19,7 +22,6 @@ sections, and some of them might need to be moved to the Learning QML page.
 
 Optimization
 ------------
-Add a descriptive text here (and update the header above if needed)
 
 :html:`<div class="gallery-grid row">`
 
@@ -93,7 +95,6 @@ Add a descriptive text here (and update the header above if needed)
 
 QML
 ---
-Add a descriptive text here (and update the header above if needed)
 
 :html:`<div class="gallery-grid row">`
 

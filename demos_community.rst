@@ -10,7 +10,7 @@ Community
 
 
 These demos have been contributed by you, the PennyLane community. To add your
-own demo, see our guidelines and submission instructions <a href="demos_submission.html">here</a>.
+own demo, see our guidelines and submission instructions :html:`<a href="demos_submission.html">here</a>`.
 
 .. raw:: html
 
