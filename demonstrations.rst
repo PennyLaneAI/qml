@@ -79,7 +79,7 @@ QML Demos
 
             <blockquote class="blockquote border rounded ">
                 <p class="mb-0 text-muted text-center">
-                    Do you want to make you're own demo using PennyLane? Read
+                    Do you want to make your own demo using PennyLane? Read
                     the guidelines and submission instructions <a href="demos_submission.html">here</a>, and have
                     your demo featured on our community page.
                 </p>
@@ -105,7 +105,7 @@ QML Demos
                           <img class="card-img-top img-fluid" src="_static/thumbs/qgrnn_thumbnail.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">The quantum graph recurrent neural network</h4>
-                            <p class="card-text">Using a quantum graph recurrent neural network to learn quantum dynamics</p>
+                            <p class="card-text">Use a quantum graph recurrent neural network to learn quantum dynamics</p>
                           </div>
                         </div>
                     </a>

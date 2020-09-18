@@ -12,7 +12,7 @@ Begin your journey into PennyLane and Quantum Machine Learning (QML) by
 exploring the tutorials below.
 
 The `Getting started`_ section is a great place to start if you've just
-discovered PennyLane and QML and want to learn more about the basics; or venture
+discovered PennyLane and QML and want to learn more about the basics. Or venture
 straight into the `Applications`_ section and explore how to implement trainable
 circuits for popular applications such as Variational Quantum Eigensolvers and
 Quantum Chemistry, using either simulators or near-term quantum hardware.
@@ -43,7 +43,7 @@ Getting started
     :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
     :figure: demonstrations/plugins_hybrid/photon_redirection.png
     :description: :doc:`demos/tutorial_plugins_hybrid`
-    :tags: autograd photonics
+    :tags: autograd photonics strawberryfields
 
 .. customgalleryitem::
     :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
