@@ -204,3 +204,4 @@ QML Demos
     demos_basics
     demos_research
     demos_community
+    demos_submission
