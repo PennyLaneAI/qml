@@ -91,7 +91,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_quantum_transfer_learning.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_static/thumbs/transfer_images.png" alt="Card image cap" style="min-width: 500px!important;">
+                          <img class="card-img-top img-fluid" src="_static/thumbs/transfer_images.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Quantum transfer learning</h4>
                             <p class="card-text">Learn how to apply a machine learning method, known as transfer learning, to a hybrid classical-quantum image classifier.</p>
@@ -124,7 +124,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_vqe.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="demonstrations/variational_quantum_eigensolver/pes_h2.png" alt="Card image cap">
+                          <img class="card-img-top img-fluid" src="_static/thumbs/pes_h2.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Doubly stochastic gradient descent</h4>
                             <p class="card-text">Quantum gradient descent with finite number of shots is a form of stochastic gradient descent. By sampling from terms in the VQE Hamiltonian, we get "doubly stochastic gradient descent".</p>
