@@ -89,23 +89,23 @@ QML Demos
 
             <ul class="light-slider" id="featured-demos">
                 <li>
-                    <a href="demos/tutorial_vqls.html">
+                    <a href="demos/tutorial_quantum_transfer_learning.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_images/vqls_circuit.png" alt="Card image cap" style="min-width: 500px!important;">
+                          <img class="card-img-top img-fluid" src="demonstrations/quantum_transfer_learning/transfer_images.png" alt="Card image cap" style="min-width: 500px!important;">
                           <div class="card-body">
-                            <h4 class="card-title">Variational quantum linear solver</h4>
-                            <p class="card-text">Explore how variational quantum circuits can be used to solve systems of linear equations. Here, we solve a system of 8 linear equations using 3 qubits and an ancilla.</p>
+                            <h4 class="card-title">Quantum transfer learning</h4>
+                            <p class="card-text">Learn how to apply a machine learning method, known as transfer learning, to a hybrid classical-quantum image classifier.</p>
                           </div>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="demos/tutorial_quantum_transfer_learning.html">
+                    <a href="demos/qgrnn.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_images/transfer_images.png" alt="Card image cap" style="min-width: 350px!important;">
+                          <img class="card-img-top img-fluid" src="demonstrations/qgrnn/qgrnn_thumbnail.png" alt="Card image cap">
                           <div class="card-body">
-                            <h4 class="card-title">Quantum transfer learning</h4>
-                            <p class="card-text">Learn how to apply a machine learning method, known as transfer learning, to a hybrid classical-quantum image classifier.</p>
+                            <h4 class="card-title">The quantum graph recurrent neural network</h4>
+                            <p class="card-text">Using a quantum graph recurrent neural network to learn quantum dynamics</p>
                           </div>
                         </div>
                     </a>
@@ -122,9 +122,9 @@ QML Demos
                     </a>
                 </li>
                 <li>
-                    <a href="demos/tutorial_doubly_stochastic.html">
+                    <a href="demos/tutorial_vqe.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="_images/sphx_glr_tutorial_doubly_stochastic_002.png" alt="Card image cap">
+                          <img class="card-img-top img-fluid" src="demonstrations/variational_quantum_eigensolver/pes_h2.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Doubly stochastic gradient descent</h4>
                             <p class="card-text">Quantum gradient descent with finite number of shots is a form of stochastic gradient descent. By sampling from terms in the VQE Hamiltonian, we get "doubly stochastic gradient descent".</p>
@@ -133,12 +133,56 @@ QML Demos
                     </a>
                 </li>
                 <li>
-                    <a href="demos/barren_plateaus.html">
+                    <a href="demos/tutorial_quantum_natural_gradient.html">
                         <div class="card">
-                          <img class="card-img-top" src="_static/thumbs/surface.png" alt="Card image cap">
+                          <img class="card-img-top" src="demonstrations/quantum_natural_gradient/qng_optimization.png" alt="Card image cap">
                           <div class="card-body">
-                            <h4 class="card-title">Barren plateaus in QNNs</h4>
-                            <p class="card-text">We show how variational quantum circuits face the problem of barren plateaus. We partly reproduce some of the findings in McClean et al. (2018) with just a few lines of code.</p>
+                            <h4 class="card-title">Quantum natural gradient</h4>
+                            <p class="card-text">Faster optimization convergence using quantum natural gradient.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_qaoa_maxcut.html">
+                        <div class="card">
+                          <img class="card-img-top" src="demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">QAOA for MaxCut</h4>
+                            <p class="card-text">Perform QAOA for MaxCut.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_embeddings_metric_learning.html">
+                        <div class="card">
+                          <img class="card-img-top" src="demonstrations/embedding_metric_learning/training.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">Quantum embeddings and metric learning</h4>
+                            <p class="card-text">Training an embedding to perform metric learning.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_vqt.html">
+                        <div class="card">
+                          <img class="card-img-top" src="demonstrations/vqt/thumbnail.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">The variational quantum thermalizer</h4>
+                            <p class="card-text">Learn about the variational quantum thermalizer algorithm, an extension of VQE.</p>
+                          </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="demos/tutorial_rosalin.html">
+                        <div class="card">
+                          <img class="card-img-top" src="demonstrations/rosalin/rosalin_thumb.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h4 class="card-title">Frugal shot optimization with Rosalin </h4>
+                            <p class="card-text">Frugal shot optimization with the Rosalin optimizer.</p>
                           </div>
                         </div>
                     </a>
