@@ -91,7 +91,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_quantum_transfer_learning.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="demonstrations/quantum_transfer_learning/transfer_images.png" alt="Card image cap" style="min-width: 500px!important;">
+                          <img class="card-img-top img-fluid" src="_static/thumbs/transfer_images.png" alt="Card image cap" style="min-width: 500px!important;">
                           <div class="card-body">
                             <h4 class="card-title">Quantum transfer learning</h4>
                             <p class="card-text">Learn how to apply a machine learning method, known as transfer learning, to a hybrid classical-quantum image classifier.</p>
@@ -102,7 +102,7 @@ QML Demos
                 <li>
                     <a href="demos/qgrnn.html">
                         <div class="card">
-                          <img class="card-img-top img-fluid" src="demonstrations/qgrnn/qgrnn_thumbnail.png" alt="Card image cap">
+                          <img class="card-img-top img-fluid" src="_static/thumbs/qgrnn_thumbnail.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">The quantum graph recurrent neural network</h4>
                             <p class="card-text">Using a quantum graph recurrent neural network to learn quantum dynamics</p>
@@ -135,7 +135,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_quantum_natural_gradient.html">
                         <div class="card">
-                          <img class="card-img-top" src="demonstrations/quantum_natural_gradient/qng_optimization.png" alt="Card image cap">
+                          <img class="card-img-top" src="_static/thumbs/qng_optimization.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Quantum natural gradient</h4>
                             <p class="card-text">Faster optimization convergence using quantum natural gradient.</p>
@@ -146,7 +146,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_qaoa_maxcut.html">
                         <div class="card">
-                          <img class="card-img-top" src="demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png" alt="Card image cap">
+                          <img class="card-img-top" src="_static/thumbs/qaoa_maxcut_partition.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">QAOA for MaxCut</h4>
                             <p class="card-text">Perform QAOA for MaxCut.</p>
@@ -157,7 +157,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_embeddings_metric_learning.html">
                         <div class="card">
-                          <img class="card-img-top" src="demonstrations/embedding_metric_learning/training.png" alt="Card image cap">
+                          <img class="card-img-top" src="_static/thumbs/training.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Quantum embeddings and metric learning</h4>
                             <p class="card-text">Training an embedding to perform metric learning.</p>
@@ -168,7 +168,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_vqt.html">
                         <div class="card">
-                          <img class="card-img-top" src="demonstrations/vqt/thumbnail.png" alt="Card image cap">
+                          <img class="card-img-top" src="_static/thumbs/thumbnail.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">The variational quantum thermalizer</h4>
                             <p class="card-text">Learn about the variational quantum thermalizer algorithm, an extension of VQE.</p>
@@ -179,7 +179,7 @@ QML Demos
                 <li>
                     <a href="demos/tutorial_rosalin.html">
                         <div class="card">
-                          <img class="card-img-top" src="demonstrations/rosalin/rosalin_thumb.png" alt="Card image cap">
+                          <img class="card-img-top" src="_static/thumbs/rosalin_thumb.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Frugal shot optimization with Rosalin </h4>
                             <p class="card-text">Frugal shot optimization with the Rosalin optimizer.</p>
