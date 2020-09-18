@@ -20,79 +20,6 @@ algorithms under `Optimization`_.
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
 
 
-Optimization
-------------
-
-:html:`<div class="gallery-grid row">`
-
-.. customgalleryitem::
-    :tooltip: Faster optimization convergence using quantum natural gradient.
-    :figure: demonstrations/quantum_natural_gradient/qng_optimization.png
-    :description: :doc:`demos/tutorial_quantum_natural_gradient`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Barren plateaus in quantum neural networks.
-    :figure: demonstrations/barren_plateaus/surface.png
-    :description: :doc:`demos/tutorial_barren_plateaus`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Rotoselect algorithm.
-    :figure: demonstrations/rotoselect/rotoselect_structure.png
-    :description: :doc:`demos/tutorial_rotoselect`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Doubly stochastic gradient descent.
-    :figure: demonstrations/doubly_stochastic/single_shot.png
-    :description: :doc:`Doubly stochastic gradient descent <demos/tutorial_doubly_stochastic>`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Frugal shot optimization with the Rosalin optimizer.
-    :figure: demonstrations/rosalin/rosalin_thumb.png
-    :description: :doc:`demos/tutorial_rosalin`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Understand the difference between local and global cost functions.
-    :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
-    :description: :doc:`demos/tutorial_local_cost_functions`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Variational Quantum Linear Solver.
-    :figure: demonstrations/vqls/vqls_zoom.png
-    :description: :doc:`demos/tutorial_vqls`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Coherent implementation of a variational quantum linear solver.
-    :figure: demonstrations/coherent_vqls/cvqls_zoom.png
-    :description: :doc:`demos/tutorial_coherent_vqls`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Optimizing measurement protocols with variational methods.
-    :figure: demonstrations/quantum_metrology/illustration.png
-    :description: :doc:`demos/tutorial_quantum_metrology`
-    :tags: cirq metrology autograd
-
-.. customgalleryitem::
-    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
-    :figure: demonstrations/vqt/thumbnail.png
-    :description: :doc:`demos/tutorial_vqt`
-    :tags: chemistry
-
-.. customgalleryitem::
-    :tooltip: VQE optimization using quantum natural gradient.
-    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
-    :description: :doc:`demos/tutorial_vqe_qng`
-    :tags: chemistry
-
-:html:`</div></div><div style='clear:both'>`
-
 QML
 ---
 
@@ -163,6 +90,79 @@ QML
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
+
+:html:`</div></div><div style='clear:both'>`
+
+Optimization
+------------
+
+:html:`<div class="gallery-grid row">`
+
+.. customgalleryitem::
+    :tooltip: Faster optimization convergence using quantum natural gradient.
+    :figure: demonstrations/quantum_natural_gradient/qng_optimization.png
+    :description: :doc:`demos/tutorial_quantum_natural_gradient`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Barren plateaus in quantum neural networks.
+    :figure: demonstrations/barren_plateaus/surface.png
+    :description: :doc:`demos/tutorial_barren_plateaus`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Rotoselect algorithm.
+    :figure: demonstrations/rotoselect/rotoselect_structure.png
+    :description: :doc:`demos/tutorial_rotoselect`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Doubly stochastic gradient descent.
+    :figure: demonstrations/doubly_stochastic/single_shot.png
+    :description: :doc:`Doubly stochastic gradient descent <demos/tutorial_doubly_stochastic>`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Frugal shot optimization with the Rosalin optimizer.
+    :figure: demonstrations/rosalin/rosalin_thumb.png
+    :description: :doc:`demos/tutorial_rosalin`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Understand the difference between local and global cost functions.
+    :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
+    :description: :doc:`demos/tutorial_local_cost_functions`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Variational Quantum Linear Solver.
+    :figure: demonstrations/vqls/vqls_zoom.png
+    :description: :doc:`demos/tutorial_vqls`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Coherent implementation of a variational quantum linear solver.
+    :figure: demonstrations/coherent_vqls/cvqls_zoom.png
+    :description: :doc:`demos/tutorial_coherent_vqls`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Optimizing measurement protocols with variational methods.
+    :figure: demonstrations/quantum_metrology/illustration.png
+    :description: :doc:`demos/tutorial_quantum_metrology`
+    :tags: cirq metrology autograd
+
+.. customgalleryitem::
+    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
+    :figure: demonstrations/vqt/thumbnail.png
+    :description: :doc:`demos/tutorial_vqt`
+    :tags: chemistry
+
+.. customgalleryitem::
+    :tooltip: VQE optimization using quantum natural gradient.
+    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
+    :description: :doc:`demos/tutorial_vqe_qng`
+    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
