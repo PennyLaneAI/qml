@@ -103,24 +103,10 @@ QML glossary
     :hidden:
 
     /glossary/automatic_differentiation
-    /glossary/barren_plateaus
     /glossary/circuit_ansatz
     /glossary/hybrid_computation
     /glossary/parameter_shift
-    /glossary/qaoa
-    /glossary/quantum_boltzmann_machine
-    /glossary/quantum_deep_learning
     /glossary/quantum_embedding
-    /glossary/quantum_gan
     /glossary/quantum_gradient
-    /glossary/quantum_graph_neural_network
-    /glossary/quantum_hamiltonian_based_models
     /glossary/quantum_neural_network
-    /glossary/quantum_perceptron
-    /glossary/quanvolutional_neural_network
-    /glossary/qvae
     /glossary/variational_circuit
-    /glossary/variational_quantum_classifier
-    /glossary/variational_quantum_eigensolver
-    /glossary/variational_quantum_linear_solver
-    /glossary/variational_quantum_thermalizer
