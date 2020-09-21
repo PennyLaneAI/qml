@@ -1,6 +1,6 @@
 ---
 name: 'Bug report :bug:'
-about: Create a report to help us improve
+about: Let us know what needs fixing
 title: "[BUG]"
 labels: ''
 assignees: ''
