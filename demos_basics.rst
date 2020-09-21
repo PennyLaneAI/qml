@@ -25,7 +25,7 @@ Quantum Chemistry, using either simulators or near-term quantum hardware.
 Getting started
 ---------------
 Here you can learn the basic tools needed to use PennyLane along with a few
-demonstrations on e.g. how to train a circuit to rotate a qubit, machine
+demonstrations on, e.g., how to train a circuit to rotate a qubit, machine
 learning tools to optimize quantum circuits and introductory examples of
 photonic quantum computing.
 
