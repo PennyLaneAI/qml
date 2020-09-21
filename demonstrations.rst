@@ -144,12 +144,6 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: autograd pytorch
 
 .. customgalleryitem::
-    :tooltip: Training an embedding to perform metric learning
-    :figure: demonstrations/embedding_metric_learning/training.png
-    :description: :doc:`demos/tutorial_embeddings_metric_learning`
-    :tags: autograd
-
-.. customgalleryitem::
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
     :figure: demonstrations/vqe_parallel/vqe_diagram.png
     :description: :doc:`demos/tutorial_vqe_parallel`
@@ -268,7 +262,6 @@ algorithms using PennyLane and near-term quantum hardware.
     demos/tutorial_vqls
     demos/tutorial_coherent_vqls
     demos/tutorial_quantum_transfer_learning
-    demos/tutorial_embeddings_metric_learning
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quanvolution
