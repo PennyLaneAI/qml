@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: 'Feature request :sparkles:'
 about: Suggest an idea for something new
 title: "[FEATURE]"
 labels: enhancement
