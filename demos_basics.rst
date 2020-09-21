@@ -50,11 +50,6 @@ photonic quantum computing.
     :tags: autograd photonics strawberryfields
 
 .. customgalleryitem::
-    :tooltip: Multiple expectation values, Jacobians, and keyword arguments.
-    :description: :doc:`demos/tutorial_advanced_usage`
-    :tags: autograd
-
-.. customgalleryitem::
     :tooltip: Compare the parameter-shift rule with backpropagation.
     :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
@@ -142,7 +137,6 @@ hardware.
     demos/tutorial_qubit_rotation
     demos/tutorial_gaussian_transformation
     demos/tutorial_plugins_hybrid
-    demos/tutorial_advanced_usage
     demos/tutorial_backprop
     demos/tutorial_quantum_chemistry
     demos/tutorial_vqe
