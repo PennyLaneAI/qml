@@ -24,7 +24,7 @@ QML
 ---
 Delve into the plethora of exciting research made by the scientific community in
 quantum machine learning. Implement and run a vast array of different QML
-applications; either on your own local hardware, using simulators from Xanadu,
+applications; either on your own computer, using simulators from Xanadu,
 IBM, Google, Rigetti and many more, or on their real near-term hardware devices.
 
 :html:`<div class="gallery-grid row">`
@@ -99,10 +99,10 @@ IBM, Google, Rigetti and many more, or on their real near-term hardware devices.
 
 Optimization
 ------------
-Here you will find other optimization demonstrations not strictly related to
-QML. Explore various different optimizers and applications such as the
-shots-frugal Rosalin optimizer, the variational quantum thermalizer, or the
-constant issue of barren plateaus in quantum neural networks.
+Here you will find demonstrations showcasing quantum optimization. Explore
+various different optimizers and applications such as the shots-frugal Rosalin
+optimizer, the variational quantum thermalizer, or the constant issue of barren
+plateaus in quantum neural networks.
 
 :html:`<div class="gallery-grid row">`
 
