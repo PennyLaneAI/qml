@@ -16,9 +16,19 @@ Create a demo
 -------------
 Create a demonstration/tutorial that is using PennyLane and upload it to e.g.
 GitHub, Bitbucket or GitLab. Preferably, the demo is simply written as a Jupyter
-notebook or a Python document (using either Python comments or Restructured Text
-sections starting with 79 hashes ``#``), but you may write the demo in any way
-you like.
+notebook or a Python document, but you may write the demo in any way you like.
+
+.. raw:: html
+
+    <blockquote class="blockquote border rounded ">
+        <p class="mb-0 text-muted text-center">
+            You can also sumbit a link to a rendered Jupyter notebook using e.g.
+            <a href="https://colab.research.google.com/notebooks/intro.ipynb">Colab</a>,
+            <a href="https://nbviewer.jupyter.org/">nbviewer</a>,
+            <a href="https://aws.amazon.com/sagemaker/">Sagemaker</a>
+            or <a href="https://mybinder.org/">Binder</a>.
+        </p>
+    </blockquote>
 
 Guidelines
 ^^^^^^^^^^
@@ -43,18 +53,19 @@ couple of guidelines to keep in mind.
 
 * All content should be original or free to reuse subject to license
   compatibility. For example, if you are implementing someone else's research,
-  reach out first to recieve permission to reproduce exact figures. Otherwise,
+  reach out first to receive permission to reproduce exact figures. Otherwise,
   avoid direct screenshots from papers, and instead refer to figures in the
   paper within the text.
 
 
-Fill in template
-----------------
+Open an issue
+-------------
 
-Fill in the following template with the relevant information. Please include at
-least your name, a title, an abstract and a link to your uploaded
-demonstration/tutorial. An example follows (you can simply overwrite the
-relevant parts with your own information).
+Open a `new issue on the PennyLane QML GitHub repository
+<https://github.com/PennyLaneAI/qml/issues/new>`_ and choose the "Community
+demo" template. Please include at least your name, a title, an abstract and a
+link to your uploaded demonstration/tutorial. An example follows (you can simply
+replace relevant parts with your own information).
 
 .. code-block:: none
 
@@ -87,21 +98,11 @@ relevant parts with your own information).
     https://pennylane.ai/qml/demos/tutorial_rosalin.html
     https://arxiv.org/abs/2004.06252
 
+The title of your issue should be "[DEMO] your-demo-title" (e.g. "[DEMO] Frugal shot optimization with
+Rosalin", without the quotes), and there should be a "demos" label on the
+right-hand side.
 
-Open an issue
--------------
-
-Open a `new issue on the PennyLane QML GitHub repository
-<https://github.com/PennyLaneAI/qml/issues/new>`_ and paste the filled in
-template from above in the description box. Remove and replace all the text that
-was already there.
-
-Write "[DEMO] your-demo-title" (e.g. "[DEMO] Frugal shot optimization with
-Rosalin", without the quotes) as the title of the issue, and add the "demos"
-label to the issue by clicking on the cogwheel on the right-hand side of the
-**Labels** tag to the right of the text-box and then clicking on "demos".
-
-Don't forget to push the "Submit new issue" button!
+*Don't forget to push the "Submit new issue" button!*
 
 
 .. raw:: html
