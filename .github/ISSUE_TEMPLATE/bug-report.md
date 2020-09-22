@@ -25,8 +25,6 @@ if relevant. You may use the following template below
 
 * *Actual behavior:* (What actually happens)
 
-* *Reproduces how often:* (What percentage of the time does it reproduce?)
-
 * *System information:* (include your operating system, Python version, Sphinx version, etc.)
 
 #### Source code and tracebacks
