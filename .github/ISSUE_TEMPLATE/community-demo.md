@@ -1,6 +1,6 @@
 ---
 name: 'Community demo :black_nib'
-about: Template for submitting a demo to the community page.
+about: Template for submitting a demo to the community page
 title: "[DEMO]"
 labels: demos
 assignees: ''
