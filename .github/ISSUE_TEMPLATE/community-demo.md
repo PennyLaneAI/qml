@@ -10,7 +10,7 @@ assignees: ''
 #### General information
 
 **Name**
-Your full name (or pseudonym).
+Your full name (or username).
 
 **Affiliation**
 Your affiliation, if applicable; e.g. University, research institute, company.
