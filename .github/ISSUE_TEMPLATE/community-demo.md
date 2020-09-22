@@ -12,7 +12,7 @@ assignees: ''
 **Name**
 Your full name (or username).
 
-**Affiliation**
+**Affiliation** (optional)
 Your affiliation, if applicable; e.g. University, research institute, company.
 
 --------------------------------------------------------------------------------
