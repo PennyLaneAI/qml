@@ -10,13 +10,8 @@ Community
 
 .. raw:: html
 
-    <p class="lead grey-text text-center mx-auto mb-5">
-        These demos have been contributed by you, the PennyLane community. To add your
-        own demo, see our guidelines and submission instructions <a href="demos_submission.html">here</a>.
-    </p>
 
-    <div class="jumbotron p-0">
-
+    <div class="jumbotron p-0 other">
         <div class="view overlay rounded-top">
             <img src="_static/demo-quilt.png" class="img-fluid" alt="Sample image">
             <a href="#">
@@ -25,7 +20,7 @@ Community
         </div>
 
         <div class="card-body text-center mb-3">
-            <p class="card-text py-2">
+            <p class="card-text py-2 lead">
                 Have an existing GitHub repository or Jupyter notebook showing
                 off quantum machine learning with PennyLane? Read the guidelines
                 and submission instructions <a href="demos_submission.html">here</a>,
