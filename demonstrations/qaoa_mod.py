@@ -6,7 +6,7 @@ Intro to QAOA
     :property="og:description": Learn how to implement QAOA with PennyLane
     :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
 
-One of the most promising candidates for demonstrating quantum supremacy
+One of the most promising candidates for demonstrating quantum advantage
 on NISQ devices is using the Quantum Approximate Optimization Algorithm
 (QAOA) to solve a combinatorial optimization problem. The applications of QAOA are
 broad and far-reaching, and the performance of the algorithm is
@@ -84,7 +84,7 @@ print(mixer_h)
 # Constructing the QAOA Layers
 # ----------------------------
 #
-# Oftentimes, when considering quantum circuits or variational ansatzae,
+# Oftentimes, when considering quantum circuits or variational ansatze,
 # it is convenient to consider these processes as defined by a series of
 # quantum gates. But there are many instances where
 # it is useful to think of a quantum circuit in terms of a *Hamiltonian*.
@@ -212,9 +212,9 @@ def circuit(params, **kwargs):
 #
 # Now that we have defined the full QAOA ansatz, we must define and
 # optimize the cost function. As is the case with most variational quantum
-# algorithms, the cost function we wish to minimize is simply the
-# expectation value of :math:`H_C`, with respect to the state prepared by
-# the ansatz. We can therefore use ``qml.VQECost`` to define this cost
+# algorithms, the cost function is the
+# expectation value of :math:`H_C` with respect to the state prepared by
+# the circuit. We can therefore use ``qml.VQECost`` to define this cost
 # function easily. We also define the device on which simulation is
 # performed. In this example, we will use the PennyLane-Qulacs plugin to
 # run the simulation on the Qulacs simulator:
