@@ -1,5 +1,5 @@
 ---
-name: 'Community demo :black_nib'
+name: 'Community demo 🖍'
 about: Template for submitting a demo to the community page
 title: "[DEMO]"
 labels: demos
