@@ -10,7 +10,7 @@ How to submit a demo
 
 To submit your own demo you can follow the steps below, beginning with creating
 a demo, followed by filling in a demo-submission template and posting it as an
-issue to the `PennyLane QML GitHub repository <https://github.com/PennyLaneAI/qml>`_
+`issue to the PennyLane QML GitHub repository <https://github.com/PennyLaneAI/qml/issues/new?assignees=&labels=demos&template=community-demo.md&title=%5BDEMO%5D>`_
 
 Create a demo
 -------------
@@ -62,8 +62,8 @@ Open an issue
 -------------
 
 Open a `new issue on the PennyLane QML GitHub repository
-<https://github.com/PennyLaneAI/qml/issues/new>`_ and choose the "Community
-demo" template. Please include at least your name, a title, an abstract and a
+<https://github.com/PennyLaneAI/qml/issues/new?assignees=&labels=demos&template=community-demo.md&title=%5BDEMO%5D>`_
+using the "Community demo" template. Please include at least your name, a title, an abstract and a
 link to your uploaded demonstration/tutorial. An example follows (you can simply
 replace relevant parts with your own information).
 
