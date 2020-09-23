@@ -1,16 +1,16 @@
 r"""
-The PennyLane QAOA Module
+Intro to QAOA
 =========================
 
 .. meta::
-    :property="og:description": Use the PennyLane QAOA module to solve the MinVertexCover problem.
+    :property="og:description": Learn how to implement QAOA with PennyLane
     :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
 
 One of the most promising candidates for demonstrating quantum supremacy
 on NISQ devices is using the Quantum Approximate Optimization Algorithm
-(QAOA) to solve a combinatorial problem. The applications of QAOA are
-broad and far-reaching, and the performance of the algorithm itself is
-of great interest in the quantum computing research community.
+(QAOA) to solve a combinatorial optimization problem. The applications of QAOA are
+broad and far-reaching, and the performance of the algorithm is
+of great interest to the quantum computing research community.
 
 .. figure:: ../demonstrations/qaoa_module/qaoa_circuit.png
     :align: center
@@ -19,14 +19,14 @@ of great interest in the quantum computing research community.
 The goal of this tutorial is to introduce PennyLane’s built-in QAOA
 functionality, and in the process, highlight some of the abstract, yet
 powerful features that allow for the QAOA module to be intuitive and
-modular.
+flexible.
 
 Defining Cost and Mixer Hamiltonians
 ------------------------------------
 
 The first step of QAOA is to define cost and mixer Hamiltonians. The
 optimization problem we attempt to solve is finding the *minimum vertex
-cover* of a graph (we refer to this problem as MinVertexCover). A vertex
+cover* of a graph. We refer to this problem as MinVertexCover. A vertex
 cover is defined as a collection of vertices within a graph, such that
 each edge in the graph has at least one of the vertices in the cover as
 an endpoint. We wish to find the vertex cover that consists of the
@@ -86,7 +86,7 @@ print(mixer_h)
 #
 # Oftentimes, when considering quantum circuits or variational ansatzae,
 # it is convenient to consider these processes as defined by a series of
-# quantum gates. However, as it turns out, there are many instances where
+# quantum gates. But there are many instances where
 # it is useful to think of a quantum circuit in terms of a *Hamiltonian*.
 #
 #
@@ -112,18 +112,18 @@ print(mixer_h)
 # .. math:: H \ = \ H_1 \ + \ H_2 \ + \ H_3 \ + \ \cdots \ + \ H_N
 #
 # is not an easy task, and involves very long strings of quantum gates.
-# However, we are able to make use of the Trotter-Suzuki decomposition
+# Instead, we are able to make use of the Trotter-Suzuki decomposition
 # formula:
 #
-# .. math:: e^{A \ + \ B} \ \approx \ \Big(e^{A/n} e^{B/n}\Big)^{n} \ \ \ \ \ n \ \gg \ 1
+# .. math:: e^{A \ + \ B} \ \approx \ \Big(e^{A/n} e^{B/n}\Big)^{n} 
 #
-# To implement an *approximate* time-evolution unitary:
+# to implement an *approximate* time-evolution unitary:
 #
-# .. math:: U_{\text{Approx}}(\hat{H}, t, n) \ = \ \displaystyle\prod_{j \ = \ 1}^{n}
+# .. math:: U(\hat{H}, t, n) \ = \ \displaystyle\prod_{j \ = \ 1}^{n}
 #           \displaystyle\prod_{k} e^{-i \hat{H}_k t / n} \ \ \ \ \ \ \ \ \ \ \hat{H} \
 #           = \ \displaystyle\sum_{k} \hat{H}_k
 #
-# where :math:`U_{\text{Approx}}` approaches :math:`U` as :math:`n`
+# where :math:`U` approaches :math:`e^{-i \hat{H} t}` as :math:`n`
 # becomes larger. We can call this unitary with
 # ``qml.templates.ApproxTimeEvolution``. Since QAOA is essentially just
 # time-evolution under the Hamiltonians :math:`H_C` and :math:`H_M`, we
@@ -158,7 +158,7 @@ def qaoa_layer(gamma, alpha):
 # .. math:: U_{\text{QAOA}}(\boldsymbol\gamma, \ \boldsymbol\alpha) \ = \ e^{-i \alpha_k H_M}
 #           e^{-i \gamma_k H_C} \ ... \ e^{-i \alpha_1 H_M} e^{-i \gamma_1 H_C}
 #
-# In other words, we are repetedly applying the ``qaoa_layer`` to a set of
+# In other words, we are repeatedly applying the ``qaoa_layer`` to a set of
 # wires. The idea of repetition is ubiquitous within quantum computing,
 # from amplitude amplification in Grover’s algorithm and HHL, to layers in
 # quantum neural networks, to Trotterization in quantum simulation.
@@ -181,7 +181,7 @@ def qaoa_layer(gamma, alpha):
 #
 #
 # In the case of QAOA, this allows us to easily define the ansatz. We
-# begin. with an even superposition over all basis states. Then, we layer
+# begin with an even superposition over all basis states. Then, we layer
 # ``qaoa_layer``:
 #
 
