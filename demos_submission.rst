@@ -16,28 +16,24 @@ Create a demo
 -------------
 Create a demonstration/tutorial that is using PennyLane and upload it to e.g.
 GitHub, Bitbucket or GitLab. Preferably, the demo is simply written as a Jupyter
-notebook or a Python document, but you may write the demo in any way you like.
+notebook a Python document or simply as a repository (e.g. `like this <https://github.com/PatrickHuembeli/vqc_loss_landscapes>`_), but you may
+write the demo in any way you like.
 
-.. raw:: html
-
-    <blockquote class="blockquote border rounded ">
-        <p class="mb-0 text-muted text-center">
-            You can also sumbit a link to a rendered Jupyter notebook using e.g.
-            <a href="https://colab.research.google.com/notebooks/intro.ipynb">Colab</a>,
-            <a href="https://nbviewer.jupyter.org/">nbviewer</a>,
-            <a href="https://aws.amazon.com/sagemaker/">Sagemaker</a>
-            or <a href="https://mybinder.org/">Binder</a>.
-        </p>
-    </blockquote>
+Alternatively, you can also submit a link to a rendered Jupyter notebook using e.g. `Colab
+<https://colab.research.google.com/notebooks/intro.ipynb>`_, `nbviewer
+<https://nbviewer.jupyter.org/>`_, `Sagemaker <https://aws.amazon.com/sagemaker/>`_ or `Binder <https://mybinder.org/>`_.
 
 Guidelines
 ^^^^^^^^^^
 
 While you are free to be as creative as you like with your demo, there are a
-couple of guidelines to keep in mind.
+couple of guidelines that might be good keep in mind when creating a demo.
+Specifically when it's a Jupyter notebook or a single Python document. The
+following concerns the content of the demo itself, and is in addition to the
+submission details explained in the next section.
 
-* Submissions should include your name (and optionally email) at the top under
-  the title.
+* The demo should include your name (and optionally email) at the top under the
+  title.
 
 * The title should be clear and concise, and if based on a paper it should be
   similar to the paper that is being implemented.
@@ -56,6 +52,10 @@ couple of guidelines to keep in mind.
   reach out first to receive permission to reproduce exact figures. Otherwise,
   avoid direct screenshots from papers, and instead refer to figures in the
   paper within the text.
+
+* Include the demos dependencies (e.g. PennyLane version along with any relevant
+  PennyLane plugin version). If possible, include a ``requirements.txt`` file
+  along with your local output after running ``pip freeze``.
 
 
 Open an issue
