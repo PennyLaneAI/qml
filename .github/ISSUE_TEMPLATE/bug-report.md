@@ -1,5 +1,5 @@
 ---
-name: 'Bug report :bug:'
+name: 'Bug report 🐛'
 about: Let us know what needs fixing
 title: "[BUG]"
 labels: ''
