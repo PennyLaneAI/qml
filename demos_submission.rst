@@ -14,10 +14,17 @@ a demo, followed by filling in a demo-submission template and posting it as an
 
 Create a demo
 -------------
-Create a demonstration/tutorial that is using PennyLane and upload it to e.g.
-GitHub, Bitbucket or GitLab. Preferably, the demo is simply written as a Jupyter
-notebook a Python document or simply as a repository (e.g. `like this <https://github.com/PatrickHuembeli/vqc_loss_landscapes>`_), but you may
-write the demo in any way you like.
+Create a demonstration/tutorial using PennyLane and upload it to a source code
+hosting service such as GitHub, Bitbucket or GitLab. Good formats for a demonstration include:
+
+* Jupyter notebooks [`example <https://github.com/lanabozanic/quantum_natural_gradient/blob/master/qng_tutorial.ipynb>__`],
+
+* Python scripts with detailed comments and explanations
+  [`example <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_vqe.py>`__],
+
+* Repositories containing a collection of Python scripts, Jupyter notebooks, and
+  documentation [`example1 <https://github.com/PatrickHuembeli/vqc_loss_landscapes>`__,
+  `example2 <https://github.com/hsim13372/quantum_natural_gradient>`__].
 
 Alternatively, you can also submit a link to a rendered Jupyter notebook using e.g. `Colab
 <https://colab.research.google.com/notebooks/intro.ipynb>`_, `nbviewer
@@ -27,10 +34,9 @@ Guidelines
 ^^^^^^^^^^
 
 While you are free to be as creative as you like with your demo, there are a
-couple of guidelines that might be good keep in mind when creating a demo.
-Specifically when it's a Jupyter notebook or a single Python document. The
-following concerns the content of the demo itself, and is in addition to the
-submission details explained in the next section.
+couple of guidelines that might be good keep in mind.
+The following guidelines refer to the content of the demo itself, or, if submitting
+a GitHub repository, the repository documentation/README file.
 
 * The demo should include your name (and optionally email) at the top under the
   title.
