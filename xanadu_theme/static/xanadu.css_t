@@ -2184,6 +2184,11 @@ footer.page-footer .footer-copyright {
     bottom: 0;
 }
 
+.jumbotron {
+    box-shadow: 0 2px 20px 0 rgba(0,0,0,.08),0 2px 50px 0 rgba(0,0,0,.08) !important;
+    border-radius: 12px !important;
+}
+
 
 /* Syntax highlighting
 -------------------------------------------------- */
