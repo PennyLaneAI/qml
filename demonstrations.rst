@@ -234,7 +234,7 @@ algorithms using PennyLane and near-term quantum hardware.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Use the PennyLane QAOA module to solve the MinVertexCover problem
+    :tooltip: Learn how to implement QAOA workflows with PennyLane
     :figure: demonstrations/qaoa_module/qaoa_layer.png
     :description: :doc:`demos/qaoa_mod`
     :tags: autograd beginner
