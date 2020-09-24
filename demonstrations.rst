@@ -34,7 +34,7 @@ QML Demos
                                 <br>
                                 <strong>Basics</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Begin your journey into PennyLane and discover the wonders of quantum machine learning.</p>
+                                <p class="mb-1 grey-text px-3">Begin your journey into quantum machine learning using PennyLane.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
