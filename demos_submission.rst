@@ -17,13 +17,13 @@ Create a demo
 Create a demonstration/tutorial using PennyLane and upload it to a source code
 hosting service such as GitHub, Bitbucket or GitLab. Good formats for a demonstration include:
 
-* Jupyter notebooks [`example <https://github.com/lanabozanic/quantum_natural_gradient/blob/master/qng_tutorial.ipynb>__`],
+* Jupyter notebooks [`example <https://github.com/lanabozanic/quantum_natural_gradient/blob/master/qng_tutorial.ipynb>`__].
 
 * Python scripts with detailed comments and explanations
-  [`example <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_vqe.py>`__],
+  [`example <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_vqe.py>`__].
 
 * Repositories containing a collection of Python scripts, Jupyter notebooks, and
-  documentation [`example1 <https://github.com/PatrickHuembeli/vqc_loss_landscapes>`__,
+  documentation/dependencies [`example1 <https://github.com/PatrickHuembeli/vqc_loss_landscapes>`__,
   `example2 <https://github.com/hsim13372/quantum_natural_gradient>`__].
 
 Alternatively, you can also submit a link to a rendered Jupyter notebook using e.g. `Colab
