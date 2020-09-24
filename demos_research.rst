@@ -9,11 +9,10 @@ Research
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 
-Explore cutting-edge research using PennyLane in the demonstrations below. Every
-demo here implements algorithms from either one or multiple papers. Explore a
-variety of different explicit use-cases for quantum machine learning in the
-`QML`_ section below or discover other variational quantum optimization
-algorithms under `Optimization`_.
+Explore cutting-edge research using PennyLane. The demonstrations below implement 
+ideas from inspiring papers that investigate the training of quantum circuits. 
+You can find research that targets quantum machine learning in the `QML`_ section, 
+or discover other variational quantum optimization algorithms under `Optimization`_.
 
 .. raw:: html
 
