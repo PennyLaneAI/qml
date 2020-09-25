@@ -155,17 +155,6 @@ QML Demos
                     </a>
                 </li>
                 <li>
-                    <a href="demos/tutorial_embeddings_metric_learning.html">
-                        <div class="card">
-                          <img class="card-img-top" src="_static/thumbs/training.png" alt="Card image cap">
-                          <div class="card-body">
-                            <h4 class="card-title">Quantum embeddings and metric learning</h4>
-                            <p class="card-text">Train a hybrid classical-quantum data embedding to classify images of ants and bees via metric learning.</p>
-                          </div>
-                        </div>
-                    </a>
-                </li>
-                <li>
                     <a href="demos/tutorial_vqt.html">
                         <div class="card">
                           <img class="card-img-top" src="_static/thumbs/thumbnail.png" alt="Card image cap">
