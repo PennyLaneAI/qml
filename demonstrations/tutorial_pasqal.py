@@ -15,7 +15,7 @@ Neutral atoms, on the other hand, have an equal number of protons and electrons.
 
 Uniquely, in neutral-atom systems, lasers can be used to arrange atoms in various two- or 
 three-dimensional configurations. This opens up some tantalizing possibilities for 
-exotic quantum-computing circuit topologies:
+exotic quantum-computing circuit topologies.
 
 .. figure:: https://raw.githubusercontent.com/lhenriet/cirq-pasqal/fc4f9c7792a8737fde76d4c05828aa538be8452e/pasqal-tutorials/files/eiffel_tower.png
     :align: center
@@ -65,13 +65,13 @@ ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
 plt.axis('off')
 ax.scatter(xs, ys, zs, c='g',alpha=0.3)
-plt.show();
+#plt.show();
 
 ##############################################################################
 # This dataset contains 126 points. Each point represents a distinct 
-# neutral-atom qubit. This is currently outside the reach of any quantum
-# device (hardware or simulator), so for the purposes of this demo, 
-# we will cut this down to just 13 points, evenly spaced around the tower.
+# neutral-atom qubit. This is outside the reach of any quantum
+# simulator, so for the purposes of this demo, 
+# we will pare down to just 13 points, evenly spaced around the tower.
 # These are highlighted in red below:
 
 fig = plt.figure()
@@ -91,7 +91,7 @@ xs = subset_coords[:,0]
 ys = subset_coords[:,1]
 zs = subset_coords[:,2]
 ax.scatter(xs, ys, zs, c='r',alpha=1.0)
-plt.show();
+#plt.show();
 
 ##############################################################################
 # Converting to Cirq qubits
@@ -119,10 +119,12 @@ z_scale = 0.75
 base_qubits = [ThreeDQubit(x,y,z) for x,y,z in subset_coords[:8]]
 tower_qubits = [ThreeDQubit(xy_scale*x,xy_scale*y,z_scale*z) 
                 for x,y,z in subset_coords[8:]]
-qubits = base_qubits + tower_qubits
+qubits = base_qubits[4:] + tower_qubits
 
 print("ThreeDQubits:")
 print("\n".join(str(q) for q in qubits))
+print("\n".join(str(q) for q in sorted(qubits)))
+
 
 ##############################################################################
 # To simulate a neutral-atom quantum computation, we can use the 
@@ -220,20 +222,18 @@ for corner in range(4):
             zs=[third_z[corner], peak_z],
             c='k');
 
-index_pairs = combinations(range(4), 2)
-
 # Two-qubit gates between all pairs at second level
-for idx, jdx in index_pairs:
-    ax.plot(xs=[second_x[idx], second_x[jdx]],
-            ys=[second_y[idx], second_y[jdx]],
-            zs=[second_z[idx], second_z[jdx]],
+for idx in range(4):
+    ax.plot(xs=[second_x[idx], second_x[(idx + 1) % 4]],
+            ys=[second_y[idx], second_y[(idx + 1) % 4]],
+            zs=[second_z[idx], second_z[(idx + 1) % 4]],
             c='k');
 # Two-qubit gates between all pairs at third level
-    ax.plot(xs=[third_x[idx], third_x[jdx]],
-            ys=[third_y[idx], third_y[jdx]],
-            zs=[third_z[idx], third_z[jdx]],
+    ax.plot(xs=[third_x[idx], third_x[(idx + 1) % 4]],
+            ys=[third_y[idx], third_y[(idx + 1) % 4]],
+            zs=[third_z[idx], third_z[(idx + 1) % 4]],
             c='k');
-plt.show();
+#plt.show();
 
 ##############################################################################
 # In this figure, the red dots represent our qubits, arranged in a 
@@ -241,54 +241,120 @@ plt.show();
 # The black lines indicate CNOT gates between certain qubits.
 # Data is loaded in at the bottom qubits (the "tower legs") and the final
 # measurement result is read out from the top "peak" qubit.
-#
+# The order of gate execution proceeds vertically from bottom to top, and
+# clockwise at each level.
+# 
 # The code below creates this particular quantum circuit configuration in 
 # PennyLane:
+
+second_lvl_qubits = range(0,4)
+third_lvl_qubits = range(4,8)
+#third_lvl_qubits = range(8,12)
+peak_qubit = 8
+
+def controlled_rotation(phi, wires):
+    qml.RY(phi, wires=wires[1])
+    qml.CNOT(wires=wires)
+    qml.RY(-phi, wires=wires[1])
+    qml.CNOT(wires=wires)
 
 @qml.qnode(dev, interface="tf")
 def circuit(weights, data):
     
     # First level
-    for idx in first_lvl_qubits:
-        qml.RY(data[idx], wires=idx)  # data loading
-        qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit
+    for idx in range(4):
+        #qml.BasisState(data, wires=test)  # data loading
+        if data[idx]:
+            qml.PauliX(wires=idx)  # data loading
+        #qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit
 
     # Interact qubits from first and second levels
-    for idx, jdx in zip(first_lvl_qubits, second_lvl_qubits):
-        qml.CNOT(wires=[idx,jdx])
+    #for idx, jdx in zip(first_lvl_qubits, second_lvl_qubits):
+    #    qml.CNOT(wires=[idx,jdx])
     
     # Second level
-    for idx in second_lvl_qubits:
-        qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit 
-    for idx, jdx in combinations(second_lvl_qubits, 2):
-        qml.CNOT(wires=[idx,jdx])  # interact each qubit on this level    
+    #for idx in second_lvl_qubits:
+    #    qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit 
+    #for idx in range(4):
+    #    #qml.SWAP(wires=[idx, (idx + 1) % 4])  # interact each qubit on this level
+    #    controlled_rotation(weights[idx], wires=[idx, (idx + 1) % 4])    
     
     # Interact qubits from second and third levels
-    for idx, jdx in zip(second_lvl_qubits, third_lvl_qubits):
-        qml.CNOT(wires=[idx,jdx])
+    for idx in range(4):
+        qml.CNOT(wires=[idx, idx + 4])
         
     # Third level
-    for idx in third_lvl_qubits:
-        qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit 
-    for idx, jdx in combinations(third_lvl_qubits, 2):
-        qml.CNOT(wires=[idx,jdx])  # interact each qubit on this level
+    #for idx in third_lvl_qubits:
+    #    qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit 
+    #for idx in range(4):
+    #    #qml.SWAP(wires=[4 + idx, 4 + (idx + 1) % 4])  # interact each qubit on this level
+    #    jdx = idx + 4
+    #    if jdx == 7:
+    #        controlled_rotation(weights[jdx], wires=[jdx, 4])  
+    #    else: 
+    #        controlled_rotation(weights[jdx], wires=[jdx, jdx + 1])
         
     # Interact qubits from third level with peak
-    for idx in third_lvl_qubits:
-        qml.CNOT(wires=[idx, peak_qubit])
+    #for idx in range(4):
+    #    #qml.SWAP(wires=[idx, peak_qubit])
+    #    jdx = idx + 4
+    #    kdx = idx + 8
+    #    controlled_rotation(weights[kdx], wires=[jdx, peak_qubit])   
+    
+    controlled_rotation(weights[0], wires=[4, peak_qubit])
+    controlled_rotation(weights[1], wires=[5, peak_qubit])
+    controlled_rotation(weights[2], wires=[6, peak_qubit])
+    controlled_rotation(weights[3], wires=[7, peak_qubit])
         
     return qml.expval(qml.PauliZ(wires=peak_qubit))
-
+    
+    
 ##############################################################################
 # Training the circuit
 # --------------------
 # 
-# In order to train the circuit, we will need a cost function to analyze.
+# In order to train our circuit, we will need a cost function to analyze. For
+# the purposes of this demo, we will consider a very simple classifier: If 
+# the first input qubit is in state :math:`\vert 0\rangle`, the model should make the 
+# prediction "0", and if that qubit is in state :math:`\vert 1 \rangle`,
+# the model should predict "1" (independent of what the other qubit 
+# states are. In other words, the idealized trained model should learn an 
+# identity transformation between the first qubit and the final one, while
+# ignoring the states of the other qubits.
 
-data = tf.constant([-1.,1.,1.,-1], dtype=tf.float64)
-init_weights = np.random.rand(16)
+np.random.seed(143)
+#init_weights = np.zeros(4) #np.random.rand(12)
+#init_weights[0] = 0.5 * np.pi / 2
+init_weights = np.pi * np.random.rand(4)
+
 weights = tf.Variable(init_weights, dtype=tf.float64)
-cost = lambda: tf.abs(circuit(weights, data) - tf.reduce_prod(data))
+
+data = np.random.randint(0, 2, size=4)
+circuit(init_weights, data)
+print(circuit.draw())
+
+def cost():
+    data = np.random.randint(0, 2, size=4)
+    label = data[0]
+    output = (-circuit(weights, data) + 1) / 2
+    print(label, data, output)
+    return tf.abs(output - label) ** 2
+
+opt = tf.keras.optimizers.Adam(learning_rate=0.1)
+
+cost_vals = []
+for step in range(30):
+    cost_vals.append(cost().numpy())
+ 
+    opt.minimize(cost, weights)
+    data = np.random.randint(0, 2, size=4)
+    print("Step {}: cost={}".format(step, cost()))
+    print("        weights={}".format(weights))
+        
+import matplotlib.pyplot as plt
+fig = plt.figure()
+plt.plot(range(step+1), cost_vals)
+plt.show()
 
 
 ##############################################################################
