@@ -78,7 +78,7 @@ replace relevant parts with your own information).
     #### General information
 
     **name**
-    John Doe
+    Ada Lovelace
 
     **affiliation**
     Quantum University
