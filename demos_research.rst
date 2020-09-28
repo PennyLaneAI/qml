@@ -11,7 +11,7 @@ Research
 
 Explore cutting-edge research using PennyLane. The demonstrations below implement 
 ideas from inspiring papers that investigate the training of quantum circuits. 
-You can find research that targets quantum machine learning in the `QML`_ section, 
+You can find research that targets quantum machine learning in the `Quantum machine learning`_ section, 
 or discover other variational quantum optimization algorithms under `Optimization`_.
 
 .. raw:: html
@@ -19,7 +19,7 @@ or discover other variational quantum optimization algorithms under `Optimizatio
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
 
 
-QML
+Quantum machine learning
 ---
 Delve into the plethora of exciting research made by the scientific community in
 quantum machine learning. Implement and run a vast array of different QML

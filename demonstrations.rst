@@ -6,7 +6,7 @@
         }
     </style>
 
-QML Demos
+Demos
 =========
 
 .. meta::
