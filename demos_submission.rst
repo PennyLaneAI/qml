@@ -5,7 +5,7 @@ How to submit a demo
 ====================
 
 .. meta::
-   :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
+   :property="og:description": Submit a demonstration implementing your research with PennyLane and have it featured on our community page.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 To submit your own demo you can follow the steps below, beginning with creating

@@ -5,7 +5,7 @@ Community
 =========
 
 .. meta::
-   :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
+   :property="og:description": Discover PennyLane demonstrations created by other users; showcasing quantum machine learning and other research.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 .. raw:: html

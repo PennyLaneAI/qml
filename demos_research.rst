@@ -5,13 +5,13 @@ Research
 ============
 
 .. meta::
-   :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
+   :property="og:description": Implement papers that investigate the training of quantum circuits and explore cutting-edge research in quantum machine learning using PennyLane.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 
-Explore cutting-edge research using PennyLane. The demonstrations below implement 
-ideas from inspiring papers that investigate the training of quantum circuits. 
-You can find research that targets quantum machine learning in the `Quantum machine learning`_ section, 
+Explore cutting-edge research using PennyLane. The demonstrations below implement
+ideas from inspiring papers that investigate the training of quantum circuits.
+You can find research that targets quantum machine learning in the `Quantum machine learning`_ section,
 or discover other variational quantum optimization algorithms under `Optimization`_.
 
 .. raw:: html

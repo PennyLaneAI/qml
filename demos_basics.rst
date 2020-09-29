@@ -5,7 +5,7 @@ Basics
 ======
 
 .. meta::
-   :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
+   :property="og:description": Begin your journey into quantum machine learning using PennyLane by exploring tutorials and basic applications.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 Begin your journey into PennyLane and Quantum Machine Learning (QML) by
