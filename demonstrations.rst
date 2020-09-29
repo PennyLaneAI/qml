@@ -27,7 +27,7 @@ Demos
                 <div class="col-lg-3 mb-5">
                     <a href="demos_basics.html">
                     <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
+                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
@@ -44,7 +44,7 @@ Demos
                 <div class="col-lg-3 mb-5">
                     <a href="demos_research.html">
                     <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
+                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
@@ -61,7 +61,7 @@ Demos
                 <div class="col-lg-3 mb-5">
                     <a href="demos_community.html">
                     <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
+                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
                             <div>
                                 <h3 class="card-title">
                                 <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
