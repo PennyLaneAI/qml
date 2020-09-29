@@ -15,26 +15,26 @@ a demo, followed by filling in a demo-submission template and posting it as an
 Create a demo
 -------------
 Create a demonstration/tutorial using PennyLane and upload it to a source code
-hosting service such as GitHub, Bitbucket or GitLab. Good formats for a demonstration include:
+hosting service such as GitHub, Bitbucket, or GitLab. Good formats for a demonstration include:
 
-* Jupyter notebooks [`example <https://github.com/lanabozanic/quantum_natural_gradient/blob/master/qng_tutorial.ipynb>`__].
+* Jupyter notebooks [`example <https://github.com/lanabozanic/quantum_natural_gradient/blob/master/qng_tutorial.ipynb>`__]
 
 * Python scripts with detailed comments and explanations
-  [`example <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_vqe.py>`__].
+  [`example <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_vqe.py>`__]
 
 * Repositories containing a collection of Python scripts, Jupyter notebooks, and
   documentation/dependencies [`example1 <https://github.com/PatrickHuembeli/vqc_loss_landscapes>`__,
-  `example2 <https://github.com/hsim13372/quantum_natural_gradient>`__].
+  `example2 <https://github.com/hsim13372/quantum_natural_gradient>`__]
 
-Alternatively, you can also submit a link to a rendered Jupyter notebook using e.g. `Colab
+Alternatively, you can also submit a link to a rendered Jupyter notebook using e.g., `Colab
 <https://colab.research.google.com/notebooks/intro.ipynb>`_, `nbviewer
-<https://nbviewer.jupyter.org/>`_, `Sagemaker <https://aws.amazon.com/sagemaker/>`_ or `Binder <https://mybinder.org/>`_.
+<https://nbviewer.jupyter.org/>`_, `Sagemaker <https://aws.amazon.com/sagemaker/>`_, or `Binder <https://mybinder.org/>`_.
 
 Guidelines
 ^^^^^^^^^^
 
 While you are free to be as creative as you like with your demo, there are a
-couple of guidelines that might be good keep in mind.
+couple of guidelines that might be good to keep in mind.
 The following guidelines refer to the content of the demo itself, or, if submitting
 a GitHub repository, the repository documentation/README file.
 
@@ -59,7 +59,7 @@ a GitHub repository, the repository documentation/README file.
   avoid direct screenshots from papers, and instead refer to figures in the
   paper within the text.
 
-* Include the demos dependencies (e.g. PennyLane version along with any relevant
+* Include the demo's dependencies (e.g., PennyLane version along with any relevant
   PennyLane plugin version). If possible, include a ``requirements.txt`` file
   along with your local output after running ``pip freeze``.
 
@@ -69,7 +69,7 @@ Open an issue
 
 Open a `new issue on the PennyLane QML GitHub repository
 <https://github.com/PennyLaneAI/qml/issues/new?assignees=&labels=demos&template=community-demo.md&title=%5BDEMO%5D>`_
-using the "Community demo" template. Please include at least your name, a title, an abstract and a
+using the "Community demo" template. Please include at least your name, a title, an abstract, and a
 link to your uploaded demonstration/tutorial. An example follows (you can simply
 replace relevant parts with your own information).
 
@@ -104,9 +104,9 @@ replace relevant parts with your own information).
     https://pennylane.ai/qml/demos/tutorial_rosalin.html
     https://arxiv.org/abs/2004.06252
 
-The title of your issue should be "[DEMO] your-demo-title" (e.g. "[DEMO] Frugal shot optimization with
-Rosalin", without the quotes), and there should be a "demos" label on the
-right-hand side.
+The title of your issue should be "[DEMO] your-demo-title" (e.g., "[DEMO] Frugal shot optimization with
+Rosalin", without the quotes), and make sure the "demos" label on the
+right-hand side is checked.
 
 *Don't forget to push the "Submit new issue" button!*
 
