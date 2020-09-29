@@ -20,11 +20,11 @@ or discover other variational quantum optimization algorithms under `Optimizatio
 
 
 Quantum machine learning
----
+------------------------
 Delve into the plethora of exciting research made by the scientific community in
 quantum machine learning. Implement and run a vast array of different QML
-applications; either on your own computer, using simulators from Xanadu,
-IBM, Google, Rigetti and many more, or on their real near-term hardware devices.
+applications on your own computer—using simulators from Xanadu,
+IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 :html:`<div class="gallery-grid row">`
 
@@ -99,8 +99,8 @@ IBM, Google, Rigetti and many more, or on their real near-term hardware devices.
 Optimization
 ------------
 Here you will find demonstrations showcasing quantum optimization. Explore
-various different optimizers and applications such as the shots-frugal Rosalin
-optimizer, the variational quantum thermalizer, or the constant issue of barren
+various topics and ideas, such as the shots-frugal Rosalin
+optimizer, the variational quantum thermalizer, or the issue of barren
 plateaus in quantum neural networks.
 
 :html:`<div class="gallery-grid row">`

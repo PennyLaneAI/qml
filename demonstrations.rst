@@ -7,7 +7,7 @@
     </style>
 
 Demos
-=========
+=====
 
 .. meta::
    :property="og:description": Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.

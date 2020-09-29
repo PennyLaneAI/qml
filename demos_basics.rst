@@ -24,9 +24,8 @@ Quantum Chemistry, using either simulators or near-term quantum hardware.
 
 Getting started
 ---------------
-Here you can learn the basic tools needed to use PennyLane along with a few
-demonstrations on, e.g., how to train a circuit to rotate a qubit, machine
-learning tools to optimize quantum circuits and introductory examples of
+Here you can discover the basic tools needed to use PennyLane through simple demonstrations. Learn about training a circuit to rotate a qubit, machine
+learning tools to optimize quantum circuits, and introductory examples of
 photonic quantum computing.
 
 :html:`<div class="gallery-grid row">`
@@ -60,8 +59,8 @@ photonic quantum computing.
 Applications
 ------------
 Get familiar with more advanced applications of PennyLane and quantum machine
-learning in this section. Learn how to implement a variation quantum
-eigensolver, play around with quantum chemistry and graph problems such as
+learning in this section. Learn how to implement a variational quantum
+eigensolver, play around with quantum chemistry simulations, solve graph problems such as
 MaxCut, or implement quantum machine learning circuits on real near-term
 hardware.
 
