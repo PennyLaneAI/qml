@@ -127,7 +127,7 @@ Demos
                           <img class="card-img-top img-fluid" src="_static/thumbs/pes_h2.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">Doubly stochastic gradient descent</h4>
-                            <p class="card-text">Calculate the ground-state energy of the hydrogen molecule by sampling from terms in the VQE Hamiltonian, getting the doubly stochastic gradient descent.</p>
+                            <p class="card-text">Calculate the ground-state energy of the hydrogen molecule by sampling from terms in the VQE Hamiltonian.</p>
                           </div>
                         </div>
                     </a>
