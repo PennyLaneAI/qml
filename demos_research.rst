@@ -5,7 +5,7 @@ Research
 ============
 
 .. meta::
-   :property="og:description": Implement papers that investigate the training of quantum circuits and explore cutting-edge research in quantum machine learning using PennyLane.
+   :property="og:description": Implementations of the latest cutting-edge ideas and research from quantum machine learning using PennyLane.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 
