@@ -17,11 +17,14 @@ Community
     .up-button {
         left: calc(50% - 650px);
     }
+    .jumbotron {
+        box-shadow: none!important;
+    }
     </style>
 
 
     <div class="jumbotron p-0 other">
-        <div class="view rounded-top">
+        <div class="view">
             <img src="_static/demo-quilt-wide.png" class="img-fluid" alt="Sample image">
             <a href="#">
             <div class="mask rgba-stylish-slight"></div>
