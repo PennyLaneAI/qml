@@ -4,8 +4,8 @@
 
 .. _quantum_neural_net:
 
-Function fitting with a quantum neural network
-==============================================
+Function fitting with a photonic quantum neural network
+=======================================================
 
 .. meta::
     :property="og:description": Fit to noisy data with a variational quantum circuit.

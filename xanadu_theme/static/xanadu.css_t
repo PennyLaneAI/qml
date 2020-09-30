@@ -203,6 +203,11 @@ div.highlight {
   background-color: none !important;
 }
 
+div.section {
+  padding-top: 40px;
+  margin-top: -40px;
+}
+
 a.internal em {
   font-style: normal;
 }
@@ -2177,6 +2182,11 @@ footer.page-footer .footer-copyright {
     right: 20px;
     position: absolute;
     bottom: 0;
+}
+
+.jumbotron {
+    box-shadow: 0 2px 20px 0 rgba(0,0,0,.08),0 2px 50px 0 rgba(0,0,0,.08) !important;
+    border-radius: 12px !important;
 }
 
 

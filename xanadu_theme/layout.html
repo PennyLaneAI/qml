@@ -168,7 +168,7 @@
           </div>
           {%- block comments -%}
 
-            {% if pagename == "demonstrations" %}
+            {% if pagename in ["demos_basics", "demos_research"] %}
               {% include "filters.html" %}
               <style>
                 .comment-container {
