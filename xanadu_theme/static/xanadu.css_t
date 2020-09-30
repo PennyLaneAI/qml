@@ -2029,57 +2029,6 @@ footer.page-footer .footer-copyright {
     border-radius: 10px!important;
 }
 
-
-.plugin-card {
-    position: relative;
-    background-image: none;
-    z-index: 1;
-    transition-duration: 0.4s;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.05) !important;
-}
-
-.plugin-card:hover {
-    transition-duration: 0.4s;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .05), 0 2px 25px 2px rgba(0, 0, 0, .15) !important;
-}
-
-.plugin-card img {
-    max-width: 60%;
-}
-
-.plugin-card .card-header {
-    margin-top: 0px;
-    padding-top: 20px;
-    border-radius: 10px 10px 0 0;
-}
-
-.plugin-card .plugin-logo {
-    height: 35px;
-    width: unset;
-    right: 20px;
-    position: absolute;
-    top: 14px;
-}
-
-.weird-blue-gradient {
-    background-image: linear-gradient(120deg,#abccdf9c 0,#e2ebf0 100%);
-}
-
-.hidden-card {
-    box-shadow: none!important;
-    border: 0;
-    border-radius: 10px !important;
-    transition-duration: 0.4s;
-    background-color: white;
-}
-
-.hidden-card:hover {
-    box-shadow: none !important;
-    border: 0;
-    transition-duration: 0.4s;
-    border-radius: 10px !important;
-}
-
 .light-slider {
   height: 100%!important;
 }
