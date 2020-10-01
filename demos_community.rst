@@ -44,9 +44,19 @@ Community
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
 
     <hr>
+    <br>
 
 
-:html:`<div class="card-deck mt-5">`
+.. For two cards per row, create a new card deck every two cards.
+
+:html:`<div class="card-deck">`
+
+.. Community card required options:
+     - title
+     - author
+     - date
+   All remaining options (code, paper, color) are *optional*.
+   All fields, including the description can contain arbitrary HTML.
 
 .. community-card::
     :title: Characterizing the loss landscape of variational quantum circuits
@@ -59,6 +69,9 @@ Community
     Using PennyLane and complex PyTorch, we compute the Hessian of the loss function of VQCs and
     show how to characterize the loss landscape with it. We show how the Hessian can be used to
     escape flat regions of the loss landscape.
+
+.. If the final card deck only has a single card, we insert a 'hidden card'
+   so that the card does not become full-width.
 
 :html:`<div class="card hidden-card"></div></div>`
 
