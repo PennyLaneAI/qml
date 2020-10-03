@@ -190,30 +190,30 @@ COMMUNITY_CARD_TEMPLATE = """
         <h4 class="card-header {color} lighten-4">{title}</h4>
         <div class="card-body">
             <h6>{author}</h6>
-            <p class="card-text">
-                {description}
-            </p>
-        </div>
-        <div class="rounded-bottom mdb-color lighten-5 text-right pt-3 pr-1">
-            <ul class="list-unstyled list-inline font-small">
-                {paper_footer}
-                {code_footer}
-                <li class="list-inline-item pr-2 black-text">
-                    <i class="far fa-clock pr-1"></i>{date}
-                </li>
-            </ul>
+            <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+            <div class="row d-flex align-items-center">
+                <div class="col-lg-8">
+                    <p class="card-text">
+                        {description}
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    {paper_footer}
+                    {code_footer}
+                </div>
+            </div>
         </div>
     </div>
 """
 
-PAPER_FOOTER = """<li class="list-inline-item pr-2">
-                    <a href="{paper}" class="black-text"><i class="fas fa-book"></i> Paper</a>
-                </li>
+PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+                <i class="fas fa-book"></i> Paper
+            </a>
 """
 
-CODE_FOOTER = """<li class="list-inline-item pr-2"><a href="{code}" class="black-text">
-                    <i class="fas fa-code-branch"></i></i> Code</a>
-                </li>
+CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="box-shadow: unset; border-radius:5px; width:90%;">
+                <i class="fas fa-code-branch"></i></i> Code
+            </a>
 """
 
 
@@ -237,7 +237,7 @@ class CommunityCardDirective(Directive):
 
     def run(self):
         description = [i if i != "" else "<br><br>" for i in self.content]
-        color = self.options.get("color", "teal")
+        color = self.options.get("color", "heavy-rain-gradient")
         code_footer = ""
         paper_footer = ""
 

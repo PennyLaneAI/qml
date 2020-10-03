@@ -64,7 +64,7 @@ Community
     :date: 30/09/2020
     :code: https://github.com/PatrickHuembeli/vqc_loss_landscapes
     :paper: https://arxiv.org/abs/2008.02785
-    :color: teal
+    :color: heavy-rain-gradient
 
     Using PennyLane and complex PyTorch, we compute the Hessian of the loss function of VQCs and
     show how to characterize the loss landscape with it. We show how the Hessian can be used to
