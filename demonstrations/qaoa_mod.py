@@ -38,6 +38,7 @@ Indeed, gates are physically implemented by performing time evolution under a ca
 Hamiltonian. These transformations are described by the time evolution operator,
 which is a unitary defined as:"""
 
+######################################################################
 #  .. math:: U(\hat{H}, \ t) \ = \ e^{-i \hat{H} t / \hbar}.
 #
 # .. figure:: ../demonstrations/qaoa_module/ham_circuit.png
@@ -46,7 +47,7 @@ which is a unitary defined as:"""
 #
 # The time evolution operator is determined completely in terms of a Hamiltonian
 # :math:`\hat{H}` and a scalar :math:`t` representing time. In fact, any unitary
-# :math:`U` can be written in the form :math:`e^{i H \gamma}`, where :math:`\gamma` is a scalar
+# :math:`U` can be written in the form :math:`e^{i \gamma H}`, where :math:`\gamma` is a scalar
 # and :math:`H` is a Hermitian operator,
 # interpreted as a Hamiltonian. Thus, time evolution establishes a connection that allows us to
 # describe quantum circuits in terms of Hamiltonians. 🤯
@@ -57,7 +58,7 @@ which is a unitary defined as:"""
 # .. math:: H \ = \ H_1 \ + \ H_2 \ + \ H_3 \ + \ \cdots \ + \ H_N
 #
 # is very challenging. Instead, we can use the
-# `Trotter-Suzuki <https://en.wikipedia.org/wiki/Lie_product_formula>__ decomposition formula
+# `Trotter-Suzuki <https://en.wikipedia.org/wiki/Lie_product_formula>`__ decomposition formula
 #
 # .. math:: e^{A \ + \ B} \ \approx \ \Big(e^{A/n} e^{B/n}\Big)^{n},
 #
@@ -78,6 +79,7 @@ which is a unitary defined as:"""
 ######################################################################
 # Layering circuits
 # -----------------
+#
 # Think of all the times you have copied a text or image, then pasted it repeatedly to create
 # many duplicates. This is also a useful feature when designing quantum algorithms!
 # The idea of repetition is ubiquitous in quantum computing:
@@ -92,7 +94,7 @@ which is a unitary defined as:"""
 #
 # .. figure:: ../demonstrations/qaoa_module/repeat.png
 #     :align: center
-#     :width: 90%
+#     :width: 100%
 #
 #
 # Circuit repetition is implemented in PennyLane using the ``qml.layer`` function. This method
@@ -106,6 +108,7 @@ which is a unitary defined as:"""
 # To create a larger circuit consisting of many repetitions, we pass the circuit to be
 # repeated as an argument and specify the number of repetitions:
 # (TODO: add code snippet with circuit printout)
+#
 
 ######################################################################
 #
@@ -116,6 +119,7 @@ which is a unitary defined as:"""
 # We have learnt how time evolution can be used to create circuits from Hamiltonians,
 # and how these can be layered to create longer circuits. This means we are now ready to
 # explore QAOA.
+#
 
 
 ######################################################################
@@ -128,29 +132,35 @@ which is a unitary defined as:"""
 # steps:
 #
 # 1. Define a *cost Hamiltonian* :math:`H_C` such that its ground state
-# encodes the solution to the optimization problem.
+#    encodes the solution to the optimization problem.
+#
 # 2. Define a *mixer Hamiltonian* :math:`H_C`.
+#
 # 3. Construct the circuits :math:`e^{-i \gamma H_C}` and :math:`e^{-i\alpha H_M}`. We call
-# these the *cost* and *mixer layers*, respectively.
+#    these the *cost* and *mixer layers*, respectively.
+#
 # 4. Choose a parameter :math:`n\geq 1` and build the circuit
 #
-# .. math:: U_{\text{QAOA}}(\boldsymbol\gamma, \ \boldsymbol\alpha) \ = \ e^{-i \alpha_n H_M}
-#           e^{-i \gamma_n H_C} \ ... \ e^{-i \alpha_1 H_M} e^{-i \gamma_1 H_C},
+#    .. math:: U_{\text{QAOA}}(\boldsymbol\gamma, \ \boldsymbol\alpha) \ = \ e^{-i \alpha_n H_M}
+#              e^{-i \gamma_n H_C} \ ... \ e^{-i \alpha_1 H_M} e^{-i \gamma_1 H_C},
 #
-# consisting of repeated application of the cost and mixer layers.
+#    consisting of repeated application of the cost and mixer layers.
+#
 # 5. Prepare an initial state, apply :math:`U(\boldsymbol\gamma,\boldsymbol\alpha)`,
-# and use classical techniques, e.g. gradient descent, to optimize the parameters.
+#    and use classical techniques, e.g. gradient descent, to optimize the parameters.
+#
 # 6. After the circuit has been optimized, measurements of the output state reveal
-# approximate solutions to the optimization problem.
+#    approximate solutions to the optimization problem.
 #
 # In summary, the starting point of QAOA is the specification of cost and mixer Hamiltonians.
-# We then employ time evolution and layering to create a variational circuit and optimize its
-# parameters. The resulting circuit can be used to sample approximate solution. Let's see
-# it in action! 🚀
+# We then use time evolution and layering to create a variational circuit and optimize its
+# parameters. Finally, we sample from the circuit to get an approximate solution to
+# the optimization problem. Let's see it in action! 🚀
 #
+
 ######################################################################
 # Minimum Vertex Cover with QAOA
-# ---------------------------------------
+# ------------------------------
 #
 # Our goal is to find the `minimum vertex
 # cover <https://en.wikipedia.org/wiki/Vertex_cover>`__ of a graph.
@@ -167,6 +177,7 @@ which is a unitary defined as:"""
 #     :width: 90%
 #
 # To implement QAOA with PennyLane, we first import the necessary dependencies:
+#
 
 
 import pennylane as qml
@@ -177,7 +188,8 @@ import networkx as nx
 
 
 ######################################################################
-# We also define the four-vertex graph for which we want to find the minimum vertex cover:
+# We also define the four-vertex graph for which we
+# want to find the minimum vertex cover:
 
 # Defines the graph
 edges = [(0, 1), (1, 2), (2, 0), (2, 3)]
@@ -314,7 +326,7 @@ plt.show()
 # The states
 # :math:`|10\rangle \ = \ |1010\rangle` and
 # :math:`|6\rangle \ = \ |0110\rangle` have the highest probabilities of
-# being measured, just as expected. #
+# being measured, just as expected!
 
 
 pos = nx.spring_layout(graph)
