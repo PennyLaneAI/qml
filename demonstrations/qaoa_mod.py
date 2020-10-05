@@ -214,11 +214,10 @@ plt.show()
 #
 # In our case, the cost
 # Hamiltonian has two ground states, :math:`|1010\rangle` and :math:`|0110\rangle`, coinciding
-# with the solutions of the problem. The recommended
-# mixer Hamiltonian is designed such that, starting from a state representing a valid cover,
-# we never leave the space of valid covers when evolving under the cost or mixer Hamiltonians.
+# with the solutions of the problem. The mixer Hamiltonian is the simple, non-commuting sum of Pauli-X
+# operations on each node of the graph:
 
-cost_h, mixer_h = qaoa.min_vertex_cover(graph)
+cost_h, mixer_h = qaoa.min_vertex_cover(graph, contrained=False)
 
 print("Cost Hamiltonian")
 print(cost_h)
@@ -239,8 +238,8 @@ def qaoa_layer(gamma, alpha):
 
 ######################################################################
 # We are now ready to build the full variational circuit. The number of wires is equal to
-# the number of vertices of the graph. We initialize the state to a valid
-# cover, in this case the state :math:`|1111\rangle`.
+# the number of vertices of the graph. We initialize the state to an even superposition over
+# all basis states.
 # For this example, we employ a circuit consisting of two QAOA layers:
 
 
@@ -252,7 +251,7 @@ depth = 2
 def circuit(params, **kwargs):
     # prepares initial state
     for w in wires:
-        qml.PauliX(wires=w)
+        qml.Hadamard(wires=w)
     # creates repetitions of the QAOA layer
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
@@ -339,5 +338,79 @@ nx.draw(graph, pos, node_color=["b", "r", "r", "b"])
 plt.show()
 
 ######################################################################
-# TODO: Add example with Hamiltonian arithmetic
+# Customizing QAOA
+# ----------------
+#
+# QAOA is not one-size-fits-all when it comes to solving optimization problems. In many cases,
+# cost and mixer Hamiltonians will be very specific to one scenario, and not necessarily
+# fit within the mold of the pre-defined problems in the ``qml.qaoa`` submodule. Luckily,
+# one of the core principles behind the entire PennyLane library is customizability, and this principle hold true for
+# QAOA submodule as well!
+#
+# The QAOA workflow above gave us two optimal solutions: :math:`|6\rangle = |0110\rangle`
+# and :math:`|10\rangle = |1010\rangle`. However, what if we were to add an addition constraint
+# that made one of these solutions "better" than the other? Let's imagine that we are interested in
+# solutions that minimize the original cost function,
+# *but also have their first and last vertices coloured with* :math:`0`. A constraint of this form will
+# favour :math:`|6\rangle`, making it the only ground state.
+#
+# It is easy to introduce constraints of this form in PennyLane. We can use the ``qml.qaoa.edge_driver`` cost
+# Hamiltonian to "reward" cases in which a first and last vertices of the graph
+# are :math:`0`:
+
+cost_term = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
+
+######################################################################
+# Then, we can weight this now constraining term appropriately, and add
+# it to the original minimum vertex cover Hamiltonian:
+
+new_cost_h = cost_h + 2*cost_term
+
+######################################################################
+# Notice that PennyLane allows for simple addition and multiplication
+# Hamiltonian objects using inline arithmetic operations! Finally, we can
+# use this new cost Hamiltonian to define a new QAOA workflow:
+
+
+def qaoa_layer(gamma, alpha):
+    qaoa.cost_layer(gamma, new_cost_h)
+    qaoa.mixer_layer(alpha, mixer_h)
+
+def circuit(params, **kwargs):
+    for w in wires:
+        qml.Hadamard(wires=w)
+    qml.layer(qaoa_layer, depth, params[0], params[1])
+
+cost_function = qml.VQECost(circuit, new_cost_h, dev)
+
+params = np.random.normal(0, 1, (2, 2))
+
+for i in range(steps):
+    params = optimizer.step(cost_function, params)
+    print("Step {} / {}".format(i + 1, steps))
+
+print("Optimal Parameters: {}".format(params))
+
+######################################################################
+# We then reconstruct the probability landscape with the optimal parameters:
+#
+
+@qml.qnode(dev)
+def probability_circuit(gamma, alpha):
+    circuit([gamma, alpha])
+    return qml.probs(wires=wires)
+
+probs = probability_circuit(params[0], params[1])
+
+plt.style.use("seaborn")
+plt.bar(range(2 ** len(wires)), probs)
+plt.show()
+
+######################################################################
+# Just as we expected, the :math:`|6\rangle` state is now favoured
+# over :math:`|10\rangle`!
+#
+
+######################################################################
 # TODO: Add conclusion
+#
