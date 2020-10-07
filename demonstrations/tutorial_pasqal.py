@@ -27,10 +27,10 @@ exotic quantum-computing circuit topologies.
     
 The startup `Pasqal <https://pasqal.io/>`_ is one of the companies working to bring 
 neutral-atom quantum computing devices to the world. To support this new class of devices, 
-Pasqal has contributed some new features to the quantum software library Cirq.
+Pasqal has contributed some new features to the quantum software library `Cirq <https://cirq.readthedocs.io/en/stable/>`_.
  
 In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique abilities of 
-neutral atom devices, leveraging them to make a quantum machine learning circuit which has a
+neutral atom devices, leveraging them to make a variational quantum circuit which has a
 very unique topology: *the Eiffel tower*. 
 
 Let's get to it!
@@ -39,7 +39,7 @@ Let's get to it!
 # First we load some necessary libraries and functions
 from itertools import combinations
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 import tensorflow as tf
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 # -------------------------
 #
 # Our first step will be to load and visualize the data for the Eiffel tower 
-# configuration, generously provided by the team at Pasqal.
+# configuration, which was generously provided by the team at Pasqal.
 
 coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
@@ -65,14 +65,15 @@ ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
 plt.axis('off')
 ax.scatter(xs, ys, zs, c='g',alpha=0.3)
-#plt.show();
+plt.show();
 
 ##############################################################################
 # This dataset contains 126 points. Each point represents a distinct 
-# neutral-atom qubit. This is outside the reach of any quantum
-# simulator, so for the purposes of this demo, 
-# we will pare down to just 13 points, evenly spaced around the tower.
-# These are highlighted in red below:
+# neutral-atom qubit. Simulating this many qubits would be outside the
+# reach of Cirq's built-in simulators, so for this demo,
+# we will pare down to just 9 points, evenly spaced around the tower.
+# These are highlighted in red below.
+#
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -82,16 +83,18 @@ ax.set_xlim(-20, 20)
 ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
 plt.axis('off')
-ax.scatter(xs, ys, zs, c='g',alpha=0.3)
+ax.scatter(xs, ys, zs, c='g', alpha=0.3)
 
-mask = [3,7,11,15,48,51,60,63,96,97,98,99,125]
-subset_coords = coords[mask]
+base_mask = [3, 7, 11, 15]
+qubit_mask = [48, 51, 60, 63, 96, 97, 98, 99, 125]
+base_coords = coords[base_mask]
+qubit_coords = coords[qubit_mask]
 
-xs = subset_coords[:,0]
-ys = subset_coords[:,1]
-zs = subset_coords[:,2]
-ax.scatter(xs, ys, zs, c='r',alpha=1.0)
-#plt.show();
+subset_xs = qubit_coords[:, 0]
+subset_ys = qubit_coords[:, 1]
+subset_zs = qubit_coords[:, 2]
+ax.scatter(subset_xs, subset_ys, subset_zs, c='r', alpha=1.0)
+plt.show();
 
 ##############################################################################
 # Converting to Cirq qubits
@@ -105,7 +108,7 @@ ax.scatter(xs, ys, zs, c='r',alpha=1.0)
 # Now, neutral atom devices come with some physical restrictions. 
 # Specifically, qubits in a particular configuration can't be arbitrarily  
 # interacted with one another. Instead, there is the notion of a 
-# *control radius*; any atoms which are within the system's control radius 
+# *control radius;* any atoms which are within the system's control radius
 # can interact with one another. Qubits separated by a distance larger than
 # the control radius cannot interact.
 # 
@@ -116,21 +119,14 @@ ax.scatter(xs, ys, zs, c='r',alpha=1.0)
 from cirq.pasqal import ThreeDQubit
 xy_scale = 1.5
 z_scale = 0.75
-base_qubits = [ThreeDQubit(x,y,z) for x,y,z in subset_coords[:8]]
-tower_qubits = [ThreeDQubit(xy_scale*x,xy_scale*y,z_scale*z) 
-                for x,y,z in subset_coords[8:]]
-qubits = base_qubits[4:] + tower_qubits
-
-print("ThreeDQubits:")
-print("\n".join(str(q) for q in qubits))
-print("\n".join(str(q) for q in sorted(qubits)))
-
+qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
+                for x, y, z in qubit_coords]
 
 ##############################################################################
 # To simulate a neutral-atom quantum computation, we can use the 
 # ``"cirq.pasqal"`` device, available via the 
 # `PennyLane-Cirq plugin <https://pennylane-cirq.readthedocs.io>`_.
-# We will need to provide this device with the ``ThreeDQubit``s we created 
+# We will need to provide this device with the ``ThreeDQubit``s we created
 # above. We also need to instantiate the device with a fixed control radius.
 
 num_wires = len(qubits)
@@ -142,51 +138,39 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # Creating a quantum circuit
 # --------------------------
 # 
-# We can now make a quantum computing circuit out of the Eiffel tower configuration
-# from above. Each of the 13 qubits we are using can be thought of
-# as a single wire in a quantum circuit. Our circuit will consist of several
+# We will now make a variational circuit out of the Eiffel tower configuration
+# from above. Each of the 9 qubits we are using can be thought of
+# as a single wire in a quantum circuit. We will interact these qubits through
+# a sequence of two-qubit gates. Specifically, the circuit consists of several
 # stages:
 #
-# i. Data is fed in to the first vertical level of qubits ("the ground") using
-#    parametrized single-qubit Pauli-Y rotations (a simple data-embedding 
-#    strategy).
+# i. Input classical data is converted into quantum information at the
+#    first vertical level of qubits, by using single-qubit bit flips
+#    (a simple data-embedding strategy).
 #
-# ii. Two-qubit interactions (in this case, CNOTs) are carried out
-#     between each ground-level qubit and the corresponding 
-#     nearest qubits on the second vertical level.
-#
-# iii. At the second level, two-qubit CNOT gates are applied between all
-#      pairs of qubits.
+# ii. For each each corner of the tower, CNOTs are enacted between the first
+#     and second level qubits.
 # 
-# iv. This pattern is repeated for the third vertical level of qubits.
-# 
-# v. All qubits from the third level interact with a single "peak" qubit
-#    using CNOTs.
-#
-# vi. At each vertical level, parametrized single-qubit rotations are applied
-#     (in this case, Pauli-Y rotations).
+# iii. All qubits from the second level interact with a single "peak" qubit
+#      using a parametrized controlled-rotation operation. The free parameters
+#      of our variational circuit enter here.
 #
 # The output of our circuit is determined via a Pauli-Z measurement on
-# the "peak" qubit.
+# the final "peak" qubit.
 #
-# That's a lot to keep track of, so let's show the circuit via a 
+# That's a few things to keep track of, so let's show the circuit via a
 # three-dimensional image:
 
-first_lvl_qubits = range(0,4)
-second_lvl_qubits = range(4,8)
-third_lvl_qubits = range(8,12)
-peak_qubit = 12
+input_coords = base_coords
+first_lvl_coords = qubit_coords[:4]
+second_lvl_coords = qubit_coords[4:8]
+peak_coords = qubit_coords[8]
 
-first_lvl_coords = subset_coords[first_lvl_qubits]
-second_lvl_coords = subset_coords[second_lvl_qubits]
-third_lvl_coords = subset_coords[third_lvl_qubits]
-peak_coords = subset_coords[peak_qubit]
-
-first_x, first_y, first_z = [first_lvl_coords[:,idx] 
+input_x, input_y, input_z = [input_coords[:, idx]
                              for idx in range(3)]
-second_x, second_y, second_z = [second_lvl_coords[:,idx] 
+second_x, second_y, second_z = [first_lvl_coords[:, idx]
                                 for idx in range(3)]
-third_x, third_y, third_z = [third_lvl_coords[:,idx] 
+third_x, third_y, third_z = [second_lvl_coords[:, idx]
                              for idx in range(3)]
 peak_x, peak_y, peak_z = peak_coords
 
@@ -199,14 +183,8 @@ ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
 plt.axis('off')
 
-ax.scatter(xs, ys, zs, c='r',alpha=1.0);
-
-# Two-qubit gates between first and second level
-for corner in range(4):
-    ax.plot(xs=[first_x[corner], second_x[corner]],
-            ys=[first_y[corner], second_y[corner]],
-            zs=[first_z[corner], second_z[corner]],
-            c='k');
+ax.scatter(xs, ys, zs, c='g', alpha=0.3)
+ax.scatter(subset_xs, subset_ys, subset_zs, c='r', alpha=1.0);
 
 # Two-qubit gates between second and third levels
 for corner in range(4):
@@ -214,7 +192,7 @@ for corner in range(4):
             ys=[second_y[corner], third_y[corner]],
             zs=[second_z[corner], third_z[corner]],
             c='k');
-    
+
 # Two-qubit gates between third level and peak
 for corner in range(4):
     ax.plot(xs=[third_x[corner], peak_x],
@@ -222,34 +200,38 @@ for corner in range(4):
             zs=[third_z[corner], peak_z],
             c='k');
 
-# Two-qubit gates between all pairs at second level
-for idx in range(4):
-    ax.plot(xs=[second_x[idx], second_x[(idx + 1) % 4]],
-            ys=[second_y[idx], second_y[(idx + 1) % 4]],
-            zs=[second_z[idx], second_z[(idx + 1) % 4]],
-            c='k');
-# Two-qubit gates between all pairs at third level
-    ax.plot(xs=[third_x[idx], third_x[(idx + 1) % 4]],
-            ys=[third_y[idx], third_y[(idx + 1) % 4]],
-            zs=[third_z[idx], third_z[(idx + 1) % 4]],
-            c='k');
-#plt.show();
+# Additional lines to guide the eye
+for corner in range(4):
+    ax.plot(xs=[input_x[corner], second_x[corner]],
+            ys=[input_y[corner], second_y[corner]],
+            zs=[input_z[corner], second_z[corner]],
+            c='grey', linestyle='--');
+    ax.plot(xs=[second_x[corner], second_x[(corner + 1) % 4]],
+            ys=[second_y[corner], second_y[(corner + 1) % 4]],
+            zs=[second_z[corner], second_z[(corner + 1) % 4]],
+            c='grey', linestyle='--');
+    ax.plot(xs=[third_x[corner], third_x[(corner + 1) % 4]],
+            ys=[third_y[corner], third_y[(corner + 1) % 4]],
+            zs=[third_z[corner], third_z[(corner + 1) % 4]],
+            c='grey', linestyle='--');
+
+plt.show();
 
 ##############################################################################
-# In this figure, the red dots represent our qubits, arranged in a 
-# three-dimensional configuration roughly resembling the Eiffel tower.
-# The black lines indicate CNOT gates between certain qubits.
-# Data is loaded in at the bottom qubits (the "tower legs") and the final
-# measurement result is read out from the top "peak" qubit.
+# In this figure, the red dots represent the specific qubits we will use in
+# our circuit (the green dots are not used in thie demo).
+# The solid black lines indicate two-qubit gates between these qubits.
+# The dashed grey lines are meant to guide the eye, but could also be
+# used to make a more complex model by adding further two-qubit gates.
+#
+# Classical data is loaded in at the bottom qubits (the "tower legs") and
+# the final measurement result is read out from the top "peak" qubit.
 # The order of gate execution proceeds vertically from bottom to top, and
 # clockwise at each level.
 # 
 # The code below creates this particular quantum circuit configuration in 
 # PennyLane:
 
-second_lvl_qubits = range(0,4)
-third_lvl_qubits = range(4,8)
-#third_lvl_qubits = range(8,12)
 peak_qubit = 8
 
 def controlled_rotation(phi, wires):
@@ -261,50 +243,18 @@ def controlled_rotation(phi, wires):
 @qml.qnode(dev, interface="tf")
 def circuit(weights, data):
     
-    # First level
+    # Input classical data loaded into qubits at second level
     for idx in range(4):
-        #qml.BasisState(data, wires=test)  # data loading
         if data[idx]:
-            qml.PauliX(wires=idx)  # data loading
-        #qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit
-
-    # Interact qubits from first and second levels
-    #for idx, jdx in zip(first_lvl_qubits, second_lvl_qubits):
-    #    qml.CNOT(wires=[idx,jdx])
-    
-    # Second level
-    #for idx in second_lvl_qubits:
-    #    qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit 
-    #for idx in range(4):
-    #    #qml.SWAP(wires=[idx, (idx + 1) % 4])  # interact each qubit on this level
-    #    controlled_rotation(weights[idx], wires=[idx, (idx + 1) % 4])    
+            qml.PauliX(wires=idx)
     
     # Interact qubits from second and third levels
     for idx in range(4):
         qml.CNOT(wires=[idx, idx + 4])
         
-    # Third level
-    #for idx in third_lvl_qubits:
-    #    qml.RY(weights[idx], wires=idx)  # parameterized rotations on each qubit 
-    #for idx in range(4):
-    #    #qml.SWAP(wires=[4 + idx, 4 + (idx + 1) % 4])  # interact each qubit on this level
-    #    jdx = idx + 4
-    #    if jdx == 7:
-    #        controlled_rotation(weights[jdx], wires=[jdx, 4])  
-    #    else: 
-    #        controlled_rotation(weights[jdx], wires=[jdx, jdx + 1])
-        
-    # Interact qubits from third level with peak
-    #for idx in range(4):
-    #    #qml.SWAP(wires=[idx, peak_qubit])
-    #    jdx = idx + 4
-    #    kdx = idx + 8
-    #    controlled_rotation(weights[kdx], wires=[jdx, peak_qubit])   
-    
-    controlled_rotation(weights[0], wires=[4, peak_qubit])
-    controlled_rotation(weights[1], wires=[5, peak_qubit])
-    controlled_rotation(weights[2], wires=[6, peak_qubit])
-    controlled_rotation(weights[3], wires=[7, peak_qubit])
+    # Interact qubits from third level with peak using parameterized gates
+    for idx, wire in enumerate(range(4, 8)):
+        controlled_rotation(weights[idx], wires=[wire, peak_qubit])
         
     return qml.expval(qml.PauliZ(wires=peak_qubit))
     
@@ -314,48 +264,46 @@ def circuit(weights, data):
 # --------------------
 # 
 # In order to train our circuit, we will need a cost function to analyze. For
-# the purposes of this demo, we will consider a very simple classifier: If 
-# the first input qubit is in state :math:`\vert 0\rangle`, the model should make the 
-# prediction "0", and if that qubit is in state :math:`\vert 1 \rangle`,
+# the purposes of this simple demo, we will consider a very simple classifier:
+# if the first input qubit is in state :math:`\vert 0 \rangle`, the model
+# should make the prediction "0", and if that qubit is in state
+# :math:`\vert 1 \rangle`,
 # the model should predict "1" (independent of what the other qubit 
 # states are. In other words, the idealized trained model should learn an 
 # identity transformation between the first qubit and the final one, while
 # ignoring the states of the other qubits.
 
 np.random.seed(143)
-#init_weights = np.zeros(4) #np.random.rand(12)
-#init_weights[0] = 0.5 * np.pi / 2
 init_weights = np.pi * np.random.rand(4)
 
 weights = tf.Variable(init_weights, dtype=tf.float64)
 
 data = np.random.randint(0, 2, size=4)
-circuit(init_weights, data)
-print(circuit.draw())
 
 def cost():
     data = np.random.randint(0, 2, size=4)
     label = data[0]
     output = (-circuit(weights, data) + 1) / 2
-    print(label, data, output)
     return tf.abs(output - label) ** 2
 
 opt = tf.keras.optimizers.Adam(learning_rate=0.1)
 
-cost_vals = []
-for step in range(30):
-    cost_vals.append(cost().numpy())
- 
+for step in range(100):
     opt.minimize(cost, weights)
     data = np.random.randint(0, 2, size=4)
     print("Step {}: cost={}".format(step, cost()))
-    print("        weights={}".format(weights))
-        
-import matplotlib.pyplot as plt
-fig = plt.figure()
-plt.plot(range(step+1), cost_vals)
-plt.show()
 
+print("Final cost value: {}".format(cost()))
+
+##############################################################################
+# Success! The circuit has learned to transfer the state of the first qubit
+# to the state of the last qubit, while ignoring the state of all other input
+# qubits.
+#
+# The programmable three-dimensional configurations of neutral atom quantum
+# computers provide a special tool that is hard to replicate in other
+# platforms. What possibilities could this open up for quantum computing,
+# quantum chemistry, or quantum machine learning?
 
 ##############################################################################
 # References
@@ -368,4 +316,3 @@ plt.show()
 #    `arXiv:1712.02727
 #    <https://arxiv.org/abs/1712.02727>`__, 2017. 
 # 
-
