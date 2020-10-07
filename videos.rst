@@ -46,18 +46,18 @@ Sit back and explore quantum machine learning and quantum programming with our c
     can be printed and folded for personal reference! By using known 2-qubit gate
     decompositions, the parameter-shift rule for calculating quantum gradients
     on hardware can be extended to any 2-qubit unitary operation.
-    
+
 .. youtube:: 7ALa_JZvV3o
     :title: Using Quantum Circuits as Machine Learning Models
     :author: Maria Schuld (Xanadu)
 
-    Exploring links between quantum circuits, neural networks, kernel methods, and generative models. 
+    Exploring links between quantum circuits, neural networks, kernel methods, and generative models.
 
 .. youtube:: QRt5wKwzzFQ
     :title: Everything and the (Quantum) Kitchen Sink: Quantum Machine Learning at Rigetti
     :author: Max Henderson (Rigetti)
 
-    Learn about two of the best-named quantum machine learning models—Quantum Kitchen Sinks and 
+    Learn about two of the best-named quantum machine learning models—Quantum Kitchen Sinks and
     Quanvolutional Neural Networks—courtesy of Max Henderson of Rigetti Computing.
 
 .. youtube:: eShyPOLIfYk
@@ -70,8 +70,8 @@ Sit back and explore quantum machine learning and quantum programming with our c
 .. youtube:: ijY7WSa7u-4
     :title: Barren Plateau Issues for Variational Quantum-Classical Algorithms
     :author: Patrick Coles (Los Alamos National Lab)
-    
-    In order to train quantum circuits, we need to pay careful attention to the cost functions 
+
+    In order to train quantum circuits, we need to pay careful attention to the cost functions
     that we choose to optimize, otherwise the training can suffer from barren plateau problems.
 
 .. youtube:: uf_BRg5ovtg

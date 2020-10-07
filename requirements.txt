@@ -24,7 +24,7 @@ sphinx==1.8.5
 sphinx-sitemap
 sphinx_gallery==0.7
 seaborn==0.10.1
-tensorflow==2.3.0
+tensorflow==2.3.1
 toml
 torch==1.6.0+cpu
 torchvision==0.7.0+cpu
