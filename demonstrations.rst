@@ -184,7 +184,6 @@ Demos
 
         </section>
     </div>
->>>>>>> master
 
 .. toctree::
     :maxdepth: 2
