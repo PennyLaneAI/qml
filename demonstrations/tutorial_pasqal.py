@@ -290,8 +290,8 @@ opt = tf.keras.optimizers.Adam(learning_rate=0.1)
 
 for step in range(100):
     opt.minimize(cost, weights)
-    data = np.random.randint(0, 2, size=4)
-    print("Step {}: cost={}".format(step, cost()))
+    if step % 5 == 0:
+        print("Step {}: cost={}".format(step, cost()))
 
 print("Final cost value: {}".format(cost()))
 
