@@ -22,7 +22,7 @@ connection between Hamiltonians and quantum circuits, and how to layer
 these circuits to create more powerful algorithms. These simple ingredients,
 together with the ability to optimize quantum circuits, are the building blocks of QAOA. By focusing
 on the fundamentals, PennyLane provides general and flexible capabilities that can be tailored and
-refined to implement QAOA for a wide variety of problems. In the last of the tutorial, you will
+refined to implement QAOA for a wide variety of problems. In the last part of the tutorial, you will
 learn how to bring these pieces together and deploy a complete workflow for using QAOA to solve the
 minimum vertex cover problem. Let's get started! 🎉
 
@@ -55,7 +55,7 @@ which is a unitary defined as:"""
 # In general, implementing a quantum circuit that exactly exponentiates a Hamiltonian
 # with many non-commuting terms, i.e., a Hamiltonian of the form:
 #
-# .. math:: H \ = \ H_1 \ + \ H_2 \ + \ H_3 \ + \ \cdots \ + \ H_N
+# .. math:: H \ = \ H_1 \ + \ H_2 \ + \ H_3 \ + \ \cdots \ + \ H_N,
 #
 # is very challenging. Instead, we can use the
 # `Trotter-Suzuki <https://en.wikipedia.org/wiki/Lie_product_formula>`__ decomposition formula
@@ -86,7 +86,7 @@ which is a unitary defined as:"""
 # from amplitude amplification in `Grover’s algorithm
 # <https://en.wikipedia.org/wiki/Grover%27s_algorithm>`__
 # to layers in `quantum neural networks
-# <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__,
+# <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__
 # and `Hamiltonian simulation
 # <https://en.wikipedia.org/wiki/Hamiltonian_simulation>`__, repeated application
 # of a circuit is a central tool in quantum algorithms.
@@ -117,7 +117,7 @@ which is a unitary defined as:"""
 #     :width: 90%
 #
 # We have learnt how time evolution can be used to create circuits from Hamiltonians,
-# and how these can be layered to create longer circuits. This means we are now ready to
+# and how these can be layered to create longer circuits. We are now ready to
 # explore QAOA.
 #
 
@@ -141,7 +141,7 @@ which is a unitary defined as:"""
 #
 # 4. Choose a parameter :math:`n\geq 1` and build the circuit
 #
-#    .. math:: U_{\text{QAOA}}(\boldsymbol\gamma, \ \boldsymbol\alpha) \ = \ e^{-i \alpha_n H_M}
+#    .. math:: U(\boldsymbol\gamma, \ \boldsymbol\alpha) \ = \ e^{-i \alpha_n H_M}
 #              e^{-i \gamma_n H_C} \ ... \ e^{-i \alpha_1 H_M} e^{-i \gamma_1 H_C},
 #
 #    consisting of repeated application of the cost and mixer layers.
@@ -166,11 +166,11 @@ which is a unitary defined as:"""
 # cover <https://en.wikipedia.org/wiki/Vertex_cover>`__ of a graph.
 # A vertex cover is a collection of vertices such that
 # each edge in the graph contains at least one of the vertices in the cover. Hence,
-# these vertices "cover" all the edges.
+# these vertices "cover" all the edges 👍.
 # We wish to find the vertex cover that has the
 # smallest possible number of vertices. Vertex covers can be represented by a bit string
 # where each bit denotes whether the corresponding vertex is present in the cover. For example,
-# the bit string 1001 represents a cover consisting of the first and last vertex.
+# the bit string 01010 represents a cover consisting of the second and fourth vertex in a graph with five vertices.
 #
 # .. figure:: ../demonstrations/qaoa_module/minvc.png
 #     :align: center
@@ -217,7 +217,7 @@ plt.show()
 # with the solutions of the problem. The mixer Hamiltonian is the simple, non-commuting sum of Pauli-X
 # operations on each node of the graph:
 
-cost_h, mixer_h = qaoa.min_vertex_cover(graph, contrained=False)
+cost_h, mixer_h = qaoa.min_vertex_cover(graph, constrained=False)
 
 print("Cost Hamiltonian")
 print(cost_h)
@@ -323,8 +323,8 @@ plt.show()
 
 ######################################################################
 # The states
-# :math:`|10\rangle \ = \ |1010\rangle` and
-# :math:`|6\rangle \ = \ |0110\rangle` have the highest probabilities of
+# :math:`|6\rangle \ = \ |0110\rangle` and
+# :math:`|10\rangle \ = \ |1010\rangle` have the highest probabilities of
 # being measured, just as expected!
 
 
@@ -355,7 +355,7 @@ plt.show()
 # favour :math:`|6\rangle`, making it the only ground state.
 #
 # It is easy to introduce constraints of this form in PennyLane. We can use the ``qml.qaoa.edge_driver`` cost
-# Hamiltonian to "reward" cases in which a first and last vertices of the graph
+# Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
 cost_term = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
@@ -367,7 +367,7 @@ cost_term = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
 new_cost_h = cost_h + 2*cost_term
 
 ######################################################################
-# Notice that PennyLane allows for simple addition and multiplication
+# Notice that PennyLane allows for simple addition and multiplication of
 # Hamiltonian objects using inline arithmetic operations! Finally, we can
 # use this new cost Hamiltonian to define a new QAOA workflow:
 
