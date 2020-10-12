@@ -27,6 +27,9 @@ learn how to bring these pieces together and deploy a complete workflow for usin
 minimum vertex cover problem. Let's get started! 🎉
 
 
+TODO: Add list of learning goals
+
+
 Circuits and Hamiltonians
 -------------------------
 
@@ -72,9 +75,29 @@ which is a unitary defined as:"""
 # becomes larger.
 #
 # In PennyLane, this is implemented using the ``qml.templates.ApproxTimeEvolution`` template.
-# For example,  (TODO: add  example, with circuit printout)
-#
+# For example, let's say we have the following Hamiltonian:
 
+
+H = qml.Hamiltonian(
+    [1, 1, 0.5],
+    [qml.PauliX(0), qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)]
+)
+print(H)
+
+
+######################################################################
+# We can easily implement the approximate time-evolution operator corresponding to this
+# Hamiltonian in a quantum circuit:
+
+dev = qml.device('default.qubit', wires=2)
+
+@qml.qnode(dev)
+def circuit():
+    qml.templates.ApproxTimeEvolution(H, 1, 2)
+    return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
+circuit()
+print(circuit.draw())
 
 ######################################################################
 # Layering circuits
@@ -106,16 +129,27 @@ which is a unitary defined as:"""
 #     :width: 90%
 #
 # To create a larger circuit consisting of many repetitions, we pass the circuit to be
-# repeated as an argument and specify the number of repetitions:
-# (TODO: add code snippet with circuit printout)
-#
+# repeated as an argument and specify the number of repetitions. For example, let's
+# say that we want to layer the following circuit three times:
+
+def circ(theta):
+    qml.RX(theta, wires=0)
+    qml.Hadamard(wires=1)
+    qml.CNOT(wires=[0, 1])
 
 ######################################################################
+# We simply pass this function into the ``qml.layer`` function:
 #
-# .. figure:: ../demonstrations/qaoa_module/layer.png
-#     :align: center
-#     :width: 90%
-#
+
+@qml.qnode(dev)
+def circuit(params, **kwargs):
+    qml.layer(circ, 2, params)
+    return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
+circuit([0.3, 0.5])
+print(circuit.draw())
+
+######################################################################
 # We have learnt how time evolution can be used to create circuits from Hamiltonians,
 # and how these can be layered to create longer circuits. This means we are now ready to
 # explore QAOA.
@@ -227,7 +261,13 @@ print(mixer_h)
 
 ######################################################################
 # A single layer of QAOA consists of time evolution under these
-# Hamiltonians. While it is possible to use `ApproxTimeEvolution`, the QAOA module allows you to
+# Hamiltonians:
+#
+# .. figure:: ../demonstrations/qaoa_module/layer.png
+#     :align: center
+#     :width: 90%
+#
+# While it is possible to use `ApproxTimeEvolution`, the QAOA module allows you to
 # build the cost and mixer layers directly using the functions ``cost_layer()`` and
 # ``mixer_layer()``, which take as input the respective Hamiltonian and variational parameters:
 
@@ -412,5 +452,5 @@ plt.show()
 #
 
 ######################################################################
-# TODO: Add conclusion
+#
 #
