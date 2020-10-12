@@ -13,9 +13,12 @@ quantum devices have some basic similarities to ion traps. Ion-trap devices make
 that have an imbalance between protons (positively charged) and electrons (negatively charged). 
 Neutral atoms, on the other hand, have an equal number of protons and electrons. 
 
-Uniquely, in neutral-atom systems, lasers can be used to arrange atoms in various two- or 
-three-dimensional configurations. This opens up some tantalizing possibilities for 
-exotic quantum-computing circuit topologies.
+In neutral-atom systems, the individual atoms can be easily programmed into various two- or
+three-dimensional configurations. Like ion-trap systems, individual qubits can be encoded into
+the energy levels of the atoms. The qubits thus retain the three-dimensional geometry of their
+parent atoms. Qubits that are nearby in space can be programmed to interact with one another, e.g.,
+via two-qubit gates. This opens up some tantalizing possibilities for exotic quantum-computing
+circuit topologies.
 
 .. figure:: https://raw.githubusercontent.com/lhenriet/cirq-pasqal/fc4f9c7792a8737fde76d4c05828aa538be8452e/pasqal-tutorials/files/eiffel_tower.png
     :align: center
@@ -23,7 +26,8 @@ exotic quantum-computing circuit topologies.
     
     ..
     
-    Neutral atoms (green dots) arranged in various configurations. Image originally from [#barredo2017]_.
+    Neutral atoms (green dots) arranged in various configurations. These atoms can be
+    used to encode qubits and carry out quantum computations. Image originally from [#barredo2017]_.
     
 The startup `Pasqal <https://pasqal.io/>`_ is one of the companies working to bring 
 neutral-atom quantum computing devices to the world. To support this new class of devices, 
@@ -31,31 +35,33 @@ Pasqal has contributed some new features to the quantum software library `Cirq <
  
 In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique abilities of 
 neutral atom devices, leveraging them to make a variational quantum circuit which has a
-very unique topology: *the Eiffel tower*. 
+very unique topology: *the Eiffel tower*. Specifically, we will build a simple toy
+circuit whose qubits are arranged like the Eiffel tower. The girders between
+these points on the tower will represent two-qubit gates, with the final output of our
+circuit coming at the very peak of the tower.
 
 Let's get to it!
 """
-
-# First we load some necessary libraries and functions
-from itertools import combinations
-import pennylane as qml
-import numpy as np
-import tensorflow as tf
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 
 ##############################################################################
 # Building the Eiffel tower
 # -------------------------
 #
 # Our first step will be to load and visualize the data for the Eiffel tower 
-# configuration, which was generously provided by the team at Pasqal.
+# configuration, which was generously provided by the team at Pasqal. The
+# data can be found
+# `here <https://github.com/PennyLaneAI/qml/blob/pasqal/demonstrations/pasqal/Eiffel_tower_data.dat>`_
+# (if running locally, the line below should be updated with the local
+# path where you have saved the downloaded data).
+
+import numpy as np
 
 coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
 ys = coords[:,1]
 zs = coords[:,2]
 
+import matplotlib.pyplot as plt
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.view_init(40, 15)
@@ -87,7 +93,7 @@ ax.scatter(xs, ys, zs, c='g', alpha=0.3)
 
 base_mask = [3, 7, 11, 15]
 qubit_mask = [48, 51, 60, 63, 96, 97, 98, 99, 125]
-base_coords = coords[base_mask]
+input_coords = coords[base_mask]  # we'll need this for a plot later
 qubit_coords = coords[qubit_mask]
 
 subset_xs = qubit_coords[:, 0]
@@ -106,11 +112,11 @@ plt.show();
 # arrangement of the qubits.
 #
 # Now, neutral atom devices come with some physical restrictions. 
-# Specifically, qubits in a particular configuration can't be arbitrarily  
-# interacted with one another. Instead, there is the notion of a 
-# *control radius;* any atoms which are within the system's control radius
-# can interact with one another. Qubits separated by a distance larger than
-# the control radius cannot interact.
+# Specifically, in a particular three-dimensional configuration, qubits that
+# are too distant from one another can't easily interact. Instead, there is
+# a notion of a *control radius;* any atoms which are within the system's
+# control radius can interact with one another. Qubits separated by a
+# distance larger than the control radius cannot interact.
 # 
 # In order to allow our Eiffel tower qubits to interact with 
 # one another more easily, we will artificially scale some dimensions
@@ -129,6 +135,7 @@ qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
 # We will need to provide this device with the ``ThreeDQubit``s we created
 # above. We also need to instantiate the device with a fixed control radius.
 
+import pennylane as qml
 num_wires = len(qubits)
 control_radius = 32.4
 dev = qml.device("cirq.pasqal", control_radius=control_radius, 
@@ -141,13 +148,13 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # We will now make a variational circuit out of the Eiffel tower configuration
 # from above. Each of the 9 qubits we are using can be thought of
 # as a single wire in a quantum circuit. We will cause these qubits to interact by applying
-
 # a sequence of two-qubit gates. Specifically, the circuit consists of several
 # stages:
 #
-# i. Input classical data is converted into quantum information at the
-#    first (lowest) vertical level of qubits, by using single-qubit bit flips
-#    (a simple data-embedding strategy).
+# i. Input classical data is converted into quantum information at the first
+#    (lowest) vertical level of qubits. In this example, our classical data
+#    will be simple bit strings, which we can embed by using single-qubit
+#    bit flips (a simple data-embedding strategy).
 #
 # ii. For each each corner of the tower, CNOTs are enacted between the first
 #     and second level qubits.
@@ -162,7 +169,6 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # That's a few things to keep track of, so let's show the circuit via a
 # three-dimensional image:
 
-input_coords = base_coords
 first_lvl_coords = qubit_coords[:4]
 second_lvl_coords = qubit_coords[4:8]
 peak_coords = qubit_coords[8]
@@ -264,17 +270,28 @@ def circuit(weights, data):
 ##############################################################################
 # Training the circuit
 # --------------------
-# 
-# In order to train our circuit, we will need a cost function to analyze. For
-# the purposes of this simple demo, we will consider a very simple classifier:
-# if the first input qubit is in state :math:`\vert 0 \rangle`, the model
-# should make the prediction "0", and if that qubit is in state
-# :math:`\vert 1 \rangle`,
-# the model should predict "1" (independent of what the other qubit 
-# states are. In other words, the idealized trained model should learn an 
+#
+# Let's now leverage this variational circuit to tackle a toy classification
+# problem.
+# For the purposes of this demo, we will consider a very simple classifier:
+#
+# * if the first input qubit is in the state :math:`\mid 0 \rangle`, the model
+#   should make the prediction "0", and
+#
+# * if the first input qubit is in the state :math:`\mid 1 \rangle`, the model
+#   should predict "1" (independent of the states of all other qubits).
+#
+# In other words, the idealized trained model should learn an
 # identity transformation between the first qubit and the final one, while
-# ignoring the states of the other qubits.
+# ignoring the states of all other qubits.
+#
+# With this goal in mind, we can create a basic cost function. This cost
+# function randomly samples possible 4-bit input bitstrings, and compares
+# the circuit's output with the value of the first bit. The other bits
+# can be thought of as noise that we don't want our model to learn.
 
+
+import tensorflow as tf
 np.random.seed(143)
 init_weights = np.pi * np.random.rand(4)
 
@@ -302,10 +319,17 @@ print("Final cost value: {}".format(cost()))
 # to the state of the last qubit, while ignoring the state of all other input
 # qubits.
 #
-# The programmable three-dimensional configurations of neutral atom quantum
+# The programmable three-dimensional configurations of neutral-atom quantum
 # computers provide a special tool that is hard to replicate in other
-# platforms. What possibilities could this open up for quantum computing,
-# quantum chemistry, or quantum machine learning?
+# platforms. Could the physical
+# arrangement of qubits, in particular the third dimension, be leveraged to
+# make quantum algorithms more sparse or efficient? Could neutral atom
+# systems—with their unique programmability of the geometry—allow us to
+# rapidly prototype and experiment with new circuit topologies even for
+# integrated hardware devices like superconducting qubits? What possibilities
+# could this open up for quantum computing, quantum chemistry, or quantum
+# machine learning?
+#
 
 ##############################################################################
 # References
