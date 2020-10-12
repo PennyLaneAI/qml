@@ -16,7 +16,7 @@ Neutral atoms, on the other hand, have an equal number of protons and electrons.
 In neutral-atom systems, the individual atoms can be easily programmed into various two- or
 three-dimensional configurations. Like ion-trap systems, individual qubits can be encoded into
 the energy levels of the atoms. The qubits thus retain the three-dimensional geometry of their
-parent atoms. Qubits that are nearby in space can be programmed to interact with one another, e.g.,
+host atoms. Qubits that are nearby in space can be programmed to interact with one another
 via two-qubit gates. This opens up some tantalizing possibilities for exotic quantum-computing
 circuit topologies.
 
@@ -38,7 +38,7 @@ neutral atom devices, leveraging them to make a variational quantum circuit whic
 very unique topology: *the Eiffel tower*. Specifically, we will build a simple toy
 circuit whose qubits are arranged like the Eiffel tower. The girders between
 the points on the tower will represent two-qubit gates, with the final output of our
-circuit coming at the very peak of the tower.
+variational circuit coming at the very peak of the tower.
 
 Let's get to it!
 """
@@ -154,7 +154,7 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 #    (lowest) vertical level of qubits. In this example, our classical data
 #    will be simple bit strings, which we can embed by using single-qubit
 #    bit flips (a simple
-#    `data-embedding https://pennylane.ai/qml/glossary/quantum_embedding.html`_
+#    `data-embedding <https://pennylane.ai/qml/glossary/quantum_embedding.html>`_
 #    strategy).
 #
 # ii. For each corner of the tower, CNOTs are enacted between the first-
