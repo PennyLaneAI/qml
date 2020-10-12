@@ -26,10 +26,6 @@ refined to implement QAOA for a wide variety of problems. In the last part of th
 learn how to bring these pieces together and deploy a complete workflow for using QAOA to solve the
 minimum vertex cover problem. Let's get started! 🎉
 
-
-TODO: Add list of learning goals
-
-
 Circuits and Hamiltonians
 -------------------------
 
@@ -42,14 +38,14 @@ Hamiltonian. These transformations are described by the time evolution operator,
 which is a unitary defined as:"""
 
 ######################################################################
-#  .. math:: U(\hat{H}, \ t) \ = \ e^{-i \hat{H} t / \hbar}.
+#  .. math:: U(H, \ t) \ = \ e^{-i H t / \hbar}.
 #
 # .. figure:: ../demonstrations/qaoa_module/ham_circuit.png
 #     :align: center
 #     :width: 70%
 #
 # The time evolution operator is determined completely in terms of a Hamiltonian
-# :math:`\hat{H}` and a scalar :math:`t` representing time. In fact, any unitary
+# :math:`H` and a scalar :math:`t` representing time. In fact, any unitary
 # :math:`U` can be written in the form :math:`e^{i \gamma H}`, where :math:`\gamma` is a scalar
 # and :math:`H` is a Hermitian operator,
 # interpreted as a Hamiltonian. Thus, time evolution establishes a connection that allows us to
@@ -67,16 +63,17 @@ which is a unitary defined as:"""
 #
 # to implement an *approximate* time-evolution unitary:
 #
-# .. math:: U(\hat{H}, t, n) \ = \ \displaystyle\prod_{j \ = \ 1}^{n}
-#           \displaystyle\prod_{k} e^{-i \hat{H}_k t / n} \ \ \ \ \ \ \ \ \ \ \hat{H} \
-#           = \ \displaystyle\sum_{k} \hat{H}_k,
+# .. math:: U(H, t, n) \ = \ \displaystyle\prod_{j \ = \ 1}^{n}
+#           \displaystyle\prod_{k} e^{-i H_k t / n} \ \ \ \ \ \ \ \ \ \ H \
+#           = \ \displaystyle\sum_{k} H_k,
 #
-# where :math:`U` approaches :math:`e^{-i \hat{H} t}` as :math:`n`
+# where :math:`U` approaches :math:`e^{-i H t}` as :math:`n`
 # becomes larger.
 #
 # In PennyLane, this is implemented using the ``qml.templates.ApproxTimeEvolution`` template.
 # For example, let's say we have the following Hamiltonian:
 
+import pennylane as qml
 
 H = qml.Hamiltonian(
     [1, 1, 0.5],
@@ -213,8 +210,6 @@ print(circuit.draw())
 # To implement QAOA with PennyLane, we first import the necessary dependencies:
 #
 
-
-import pennylane as qml
 from pennylane import qaoa
 import numpy as np
 from matplotlib import pyplot as plt
@@ -287,12 +282,9 @@ wires = range(4)
 depth = 2
 
 
-# Defines the full QAOA circuit
 def circuit(params, **kwargs):
-    # prepares initial state
     for w in wires:
         qml.Hadamard(wires=w)
-    # creates repetitions of the QAOA layer
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
 
@@ -309,10 +301,7 @@ def circuit(params, **kwargs):
 # run the circuit on the Qulacs simulator:
 #
 
-# Defines the device
 dev = qml.device("qulacs.simulator", wires=wires)
-
-# Defines the cost function
 cost_function = qml.VQECost(circuit, cost_h, dev)
 
 
@@ -322,17 +311,14 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 # parameters randomly from a normal distribution:
 
 
-# Defines the optimizer, steps, and initial parameters
 optimizer = qml.GradientDescentOptimizer()
 steps = 40
 params = np.random.normal(0, 1, (2, 2))
 
-# Optimizes the cost function
 for i in range(steps):
     params = optimizer.step(cost_function, params)
     print("Step {} / {}".format(i + 1, steps))
 
-# Prints the optimal parameters
 print("Optimal Parameters: {}".format(params))
 
 
@@ -398,13 +384,13 @@ plt.show()
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
-cost_term = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
+reward_h = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
 
 ######################################################################
-# Then, we can weight this now constraining term appropriately, and add
+# We then weigh the constraining term appropriately and add
 # it to the original minimum vertex cover Hamiltonian:
 
-new_cost_h = cost_h + 2*cost_term
+new_cost_h = cost_h + 2*reward_h
 
 ######################################################################
 # Notice that PennyLane allows for simple addition and multiplication of
@@ -452,5 +438,15 @@ plt.show()
 #
 
 ######################################################################
+# Conclusion
+# ----------
 #
+# In summary, this tutorial has demonstrated how to use the PennyLane QAOA functionality, while
+# also surveying some of the fundmental PennyLane features that make the QAOA module so simple and
+# flexible. Now, it's your turn to experiment with QAOA! If you need some inspiration for how to get
+# started:
+#
+# - Experiment with different optimizers and different devices. Which ones work the best?
+# - Play around with some of the other built-in cost and mixer Hamiltonians.
+# - Try making your own custom constraining terms. Is QAOA properly amplifying some bitstrings over others?
 #
