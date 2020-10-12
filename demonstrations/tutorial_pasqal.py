@@ -37,7 +37,7 @@ In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique
 neutral atom devices, leveraging them to make a variational quantum circuit which has a
 very unique topology: *the Eiffel tower*. Specifically, we will build a simple toy
 circuit whose qubits are arranged like the Eiffel tower. The girders between
-these points on the tower will represent two-qubit gates, with the final output of our
+the points on the tower will represent two-qubit gates, with the final output of our
 circuit coming at the very peak of the tower.
 
 Let's get to it!
@@ -50,12 +50,11 @@ Let's get to it!
 # Our first step will be to load and visualize the data for the Eiffel tower 
 # configuration, which was generously provided by the team at Pasqal. The
 # data can be found
-# `here <https://github.com/PennyLaneAI/qml/blob/pasqal/demonstrations/pasqal/Eiffel_tower_data.dat>`_
+# `here <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/pasqal/Eiffel_tower_data.dat>`_
 # (if running locally, the line below should be updated with the local
 # path where you have saved the downloaded data).
 
 import numpy as np
-
 coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
 ys = coords[:,1]
@@ -111,7 +110,7 @@ plt.show();
 # ``ThreeDQubit`` class, which carries information about the three-dimensional
 # arrangement of the qubits.
 #
-# Now, neutral atom devices come with some physical restrictions. 
+# Now, neutral-atom devices come with some physical restrictions.
 # Specifically, in a particular three-dimensional configuration, qubits that
 # are too distant from one another can't easily interact. Instead, there is
 # a notion of a *control radius;* any atoms which are within the system's
@@ -154,10 +153,12 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # i. Input classical data is converted into quantum information at the first
 #    (lowest) vertical level of qubits. In this example, our classical data
 #    will be simple bit strings, which we can embed by using single-qubit
-#    bit flips (a simple data-embedding strategy).
+#    bit flips (a simple
+#    `data-embedding https://pennylane.ai/qml/glossary/quantum_embedding.html`_
+#    strategy).
 #
-# ii. For each each corner of the tower, CNOTs are enacted between the first
-#     and second level qubits.
+# ii. For each corner of the tower, CNOTs are enacted between the first-
+#     and second-level qubits.
 # 
 # iii. All qubits from the second level interact with a single "peak" qubit
 #      using a parametrized controlled-rotation operation. The free parameters
@@ -227,7 +228,7 @@ plt.show();
 ##############################################################################
 # In this figure, the red dots represent the specific qubits we will use in
 # our circuit (the green dots are not used in this demo).
-
+#
 # The solid black lines indicate two-qubit gates between these qubits.
 # The dashed grey lines are meant to guide the eye, but could also be
 # used to make a more complex model by adding further two-qubit gates.
@@ -323,12 +324,11 @@ print("Final cost value: {}".format(cost()))
 # computers provide a special tool that is hard to replicate in other
 # platforms. Could the physical
 # arrangement of qubits, in particular the third dimension, be leveraged to
-# make quantum algorithms more sparse or efficient? Could neutral atom
-# systems—with their unique programmability of the geometry—allow us to
-# rapidly prototype and experiment with new circuit topologies even for
-# integrated hardware devices like superconducting qubits? What possibilities
-# could this open up for quantum computing, quantum chemistry, or quantum
-# machine learning?
+# make quantum algorithms more sparse or efficient? Could neutral-atom
+# systems—with their unique programmability over the geometry—allow us to
+# rapidly prototype and experiment with new circuit topologies? What
+# possibilities could this open up for quantum computing, quantum chemistry,
+# or quantum machine learning?
 #
 
 ##############################################################################
