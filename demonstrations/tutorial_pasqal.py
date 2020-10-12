@@ -140,12 +140,13 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 # 
 # We will now make a variational circuit out of the Eiffel tower configuration
 # from above. Each of the 9 qubits we are using can be thought of
-# as a single wire in a quantum circuit. We will interact these qubits through
+# as a single wire in a quantum circuit. We will cause these qubits to interact by applying
+
 # a sequence of two-qubit gates. Specifically, the circuit consists of several
 # stages:
 #
 # i. Input classical data is converted into quantum information at the
-#    first vertical level of qubits, by using single-qubit bit flips
+#    first (lowest) vertical level of qubits, by using single-qubit bit flips
 #    (a simple data-embedding strategy).
 #
 # ii. For each each corner of the tower, CNOTs are enacted between the first
@@ -219,7 +220,8 @@ plt.show();
 
 ##############################################################################
 # In this figure, the red dots represent the specific qubits we will use in
-# our circuit (the green dots are not used in thie demo).
+# our circuit (the green dots are not used in this demo).
+
 # The solid black lines indicate two-qubit gates between these qubits.
 # The dashed grey lines are meant to guide the eye, but could also be
 # used to make a more complex model by adding further two-qubit gates.
