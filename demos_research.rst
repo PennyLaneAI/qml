@@ -63,6 +63,18 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/quanvolution/zoom.png
     :description: :doc:`demos/tutorial_quanvolution`
     :tags: tensorflow
+    
+.. customgalleryitem::
+    :tooltip: Variational Quantum Linear Solver.
+    :figure: demonstrations/vqls/vqls_zoom.png
+    :description: :doc:`demos/tutorial_vqls`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Coherent implementation of a variational quantum linear solver.
+    :figure: demonstrations/coherent_vqls/cvqls_zoom.png
+    :description: :doc:`demos/tutorial_coherent_vqls`
+    :tags: autograd    
 
 .. customgalleryitem::
     :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset.
@@ -93,6 +105,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
+    
+.. customgalleryitem::
+    :tooltip: Making a quantum machine learning model using neutral atoms
+    :figure: demonstrations/pasqal/pasqal_thumbnail.png
+    :description: :doc:`demos/tutorial_pasqal`
+    :tags: cirq tensorflow
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -142,18 +160,6 @@ plateaus in quantum neural networks.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Variational Quantum Linear Solver.
-    :figure: demonstrations/vqls/vqls_zoom.png
-    :description: :doc:`demos/tutorial_vqls`
-    :tags: autograd
-
-.. customgalleryitem::
-    :tooltip: Coherent implementation of a variational quantum linear solver.
-    :figure: demonstrations/coherent_vqls/cvqls_zoom.png
-    :description: :doc:`demos/tutorial_coherent_vqls`
-    :tags: autograd
-
-.. customgalleryitem::
     :tooltip: Optimizing measurement protocols with variational methods.
     :figure: demonstrations/quantum_metrology/illustration.png
     :description: :doc:`demos/tutorial_quantum_metrology`
@@ -196,6 +202,7 @@ plateaus in quantum neural networks.
     demos/tutorial_quanvolution
     demos/tutorial_multiclass_classification
     demos/tutorial_stochastic_parameter_shift
+    demos/tutorial_pasqal
     demos/qgrnn
     demos/qonn
     demos/tutorial_expressivity_fourier_series

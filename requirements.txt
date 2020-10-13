@@ -1,7 +1,7 @@
 --find-links https://download.pytorch.org/whl/torch_stable.html
 appdirs
 autograd
-numpy
+numpy<1.19,~=1.16
 networkx==2.4
 nlopt
 pygments-github-lexers
@@ -15,7 +15,7 @@ pennylane==0.11
 pennylane-qchem==0.11
 pennylane-sf==0.11
 git+https://github.com/rigetti/pennylane-forest.git
-pennylane-cirq==0.11
+pennylane-cirq==0.12
 pennylane-qiskit==0.11
 pyquil==2.21
 scipy==1.4.1
