@@ -325,7 +325,8 @@ print("Final cost value: {}".format(cost()))
 # platforms. Could the physical
 # arrangement of qubits, in particular the third dimension, be leveraged to
 # make quantum algorithms more sparse or efficient? Could neutral-atom
-# systems—with their unique programmability over the geometry—allow us to
+# systems—with their unique programmability of the geometry—allow us to
+
 # rapidly prototype and experiment with new circuit topologies? What
 # possibilities could this open up for quantum computing, quantum chemistry,
 # or quantum machine learning?
