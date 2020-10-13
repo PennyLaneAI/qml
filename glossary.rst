@@ -2,12 +2,71 @@
 .. role:: html(raw)
    :format: html
 
-QML glossary
+Key concepts
 ============
 
 .. meta::
    :property="og:description": A growing glossary of key concepts for quantum machine learning.
    :property="og:image": https://pennylane.ai/qml/_static/board.png
+
+
+.. raw:: html
+
+    <script type="application/ld_json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity" :
+        [
+            {
+                "@type": "Question", 
+                "name" : "What is automatic differentiation?",
+                "acceptedAnswer" :
+                {
+                    "@type": "Answer",
+                    "text": "Automatic differntiation is the process of automatically computing derivatives of the steps of 
+                    computer programs."
+                }
+            },
+
+            {
+                "@type": "Question", 
+                "name" : "What are barren plateaus?",
+                "acceptedAnswer" :
+                {
+                    "@type": "Answer",
+                    "text": "Barren plateaus are areas in the cost landscape at which the gradient of a parameterized circuit disappear. 
+                    The mortal enemy of many a variational algorithm, the variance of the gradient at these points is also close to 0."
+                }
+            },
+
+             {
+                "@type": "Question", 
+                "name" : "What is a circuit ansatz?",
+                "acceptedAnswer" :
+                {
+                    "@type": "Answer",
+                    "text": "An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
+                        specific subsystems. The architecture defines which algorithms a variational circuit can implement by
+                        fixing the trainable parameters. A circuit ansatz is analogous to the architecture of a neural network."
+                }
+            },
+
+            {
+                "@type": "Question", 
+                "name" : "What is hybrid computation?",
+                "acceptedAnswer" :
+                {
+                    "@type": "Answer",
+                    "text": "A hybrid computation is a computation that includes classical *and* quantum subroutines, 
+                    executed on different devices."
+                }
+            }
+
+        ]
+
+    }
+    </script>
 
 .. glossary::
 
