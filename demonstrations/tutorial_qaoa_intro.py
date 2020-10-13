@@ -199,7 +199,9 @@ print(circuit.draw())
 # each edge in the graph contains at least one of the vertices in the cover. Hence,
 # these vertices "cover" all the edges 👍.
 # We wish to find the vertex cover that has the
-# smallest possible number of vertices. Vertex covers can be represented by a bit string
+# smallest possible number of vertices.
+#
+# Vertex covers can be represented by a bit string
 # where each bit denotes whether the corresponding vertex is present in the cover. For example,
 # the bit string 01010 represents a cover consisting of the second and fourth vertex in a graph with five vertices.
 #
@@ -217,19 +219,19 @@ import networkx as nx
 
 
 ######################################################################
+#
 # We also define the four-vertex graph for which we
 # want to find the minimum vertex cover:
 
-# Defines the graph
 edges = [(0, 1), (1, 2), (2, 0), (2, 3)]
 graph = nx.Graph(edges)
 
-# Draws the graph
 nx.draw(graph)
 plt.show()
 
 
 ######################################################################
+#
 # There are two minimum vertex covers of this graph: the vertices 0 and 2,
 # and the vertices 1 and 2. These can be respectively represented by the bit strings 1010 and
 # 0110. The goal of the algorithm is to sample these bit strings with high probability.
@@ -250,11 +252,12 @@ cost_h, mixer_h = qaoa.min_vertex_cover(graph, constrained=False)
 
 print("Cost Hamiltonian")
 print(cost_h)
-print("--------------------")
+
 print("Mixer Hamiltonian")
 print(mixer_h)
 
 ######################################################################
+#
 # A single layer of QAOA consists of time evolution under these
 # Hamiltonians:
 #
@@ -272,6 +275,7 @@ def qaoa_layer(gamma, alpha):
     qaoa.mixer_layer(alpha, mixer_h)
 
 ######################################################################
+#
 # We are now ready to build the full variational circuit. The number of wires is equal to
 # the number of vertices of the graph. We initialize the state to an even superposition over
 # all basis states.
@@ -281,7 +285,6 @@ def qaoa_layer(gamma, alpha):
 wires = range(4)
 depth = 2
 
-
 def circuit(params, **kwargs):
     for w in wires:
         qml.Hadamard(wires=w)
@@ -289,6 +292,7 @@ def circuit(params, **kwargs):
 
 
 ######################################################################
+#
 # Note that `~.pennylane.layer` allows us to pass variational parameters
 # ``params[0]`` and ``params[1]`` into each layer of the circuit. That's it! The last
 # step is PennyLane's specialty: optimizing the circuit parameters.
@@ -306,6 +310,7 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 
 
 ######################################################################
+#
 # Finally, we optimize the cost function using the built-in
 # `~.pennylane.GradientDescentOptimizer`. We perform optimization for forty steps and initialize the
 # parameters randomly from a normal distribution:
@@ -323,6 +328,7 @@ print("Optimal Parameters: {}".format(params))
 
 
 ######################################################################
+#
 # With the optimal parameters, we can now reconstruct the probability
 # landscape. We redefine the
 # full QAOA circuit with the optimal parameters, but this time we
@@ -339,6 +345,7 @@ probs = probability_circuit(params[0], params[1])
 
 
 ######################################################################
+#
 # Finally, we can display a bar graph showing the probability of
 # measuring each bitstring:
 
@@ -348,6 +355,7 @@ plt.show()
 
 
 ######################################################################
+#
 # The states
 # :math:`|6\rangle \ = \ |0110\rangle` and
 # :math:`|10\rangle \ = \ |1010\rangle` have the highest probabilities of
@@ -387,12 +395,14 @@ plt.show()
 reward_h = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
 
 ######################################################################
+#
 # We then weigh the constraining term appropriately and add
 # it to the original minimum vertex cover Hamiltonian:
 
 new_cost_h = cost_h + 2*reward_h
 
 ######################################################################
+#
 # Notice that PennyLane allows for simple addition and multiplication of
 # Hamiltonian objects using inline arithmetic operations! ➕ ➖ ✖️➗ Finally, we can
 # use this new cost Hamiltonian to define a new QAOA workflow:
@@ -418,6 +428,7 @@ for i in range(steps):
 print("Optimal Parameters: {}".format(params))
 
 ######################################################################
+#
 # We then reconstruct the probability landscape with the optimal parameters:
 #
 
@@ -433,6 +444,7 @@ plt.bar(range(2 ** len(wires)), probs)
 plt.show()
 
 ######################################################################
+#
 # Just as we expected, the :math:`|6\rangle` state is now favoured
 # over :math:`|10\rangle`!
 #
