@@ -70,7 +70,7 @@ which is a unitary defined as:"""
 # where :math:`U` approaches :math:`e^{-i H t}` as :math:`n`
 # becomes larger.
 #
-# In PennyLane, this is implemented using the ``qml.templates.ApproxTimeEvolution`` template.
+# In PennyLane, this is implemented using the `~.pennylane.templates.ApproxTimeEvolution` template.
 # For example, let's say we have the following Hamiltonian:
 
 import pennylane as qml
@@ -117,7 +117,7 @@ print(circuit.draw())
 #     :width: 100%
 #
 #
-# Circuit repetition is implemented in PennyLane using the ``qml.layer`` function. This method
+# Circuit repetition is implemented in PennyLane using the `~.pennylane.layer` function. This method
 # allows us to take a function containing either quantum operations, a template, or even a single
 # quantum gate, and repeatedly apply it to a set of wires.
 #
@@ -135,7 +135,7 @@ def circ(theta):
     qml.CNOT(wires=[0, 1])
 
 ######################################################################
-# We simply pass this function into the ``qml.layer`` function:
+# We simply pass this function into the `~.pennylane.layer` function:
 #
 
 @qml.qnode(dev)
@@ -262,9 +262,9 @@ print(mixer_h)
 #     :align: center
 #     :width: 90%
 #
-# While it is possible to use `ApproxTimeEvolution`, the QAOA module allows you to
-# build the cost and mixer layers directly using the functions ``cost_layer()`` and
-# ``mixer_layer()``, which take as input the respective Hamiltonian and variational parameters:
+# While it is possible to use `~.pennylane.templates.ApproxTimeEvolution`, the QAOA module allows you to
+# build the cost and mixer layers directly using the functions `~.pennylane.qaoa.cost_layer` and
+# `~.pennylane.qaoa.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
 
 
 def qaoa_layer(gamma, alpha):
@@ -289,12 +289,12 @@ def circuit(params, **kwargs):
 
 
 ######################################################################
-# Note that ``qml.layer`` allows us to pass variational parameters
+# Note that `~.pennylane.layer` allows us to pass variational parameters
 # ``params[0]`` and ``params[1]`` into each layer of the circuit. That's it! The last
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
 # The cost function is the expectation value of :math:`H_C`, which we want to minimize. The
-# function ``qml.VQECost`` is designed for this purpose: it returns the
+# function `~.pennylane.VQECost` is designed for this purpose: it returns the
 # expectation value of an input Hamiltonian with respect to the circuit's output state.
 # We also define the device on which the simulation is
 # performed. We use the PennyLane-Qulacs plugin to
@@ -307,7 +307,7 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 
 ######################################################################
 # Finally, we optimize the cost function using the built-in
-# ``qml.GradientDescentOptimizer``. We perform optimization for forty steps and initialize the
+# `~.pennylane.GradientDescentOptimizer`. We perform optimization for forty steps and initialize the
 # parameters randomly from a normal distribution:
 
 
@@ -380,7 +380,7 @@ plt.show()
 # *but also have their first and last vertices coloured with* :math:`0`. A constraint of this form will
 # favour :math:`|6\rangle`, making it the only ground state.
 #
-# It is easy to introduce constraints of this form in PennyLane. We can use the ``qml.qaoa.edge_driver`` cost
+# It is easy to introduce constraints of this form in PennyLane. We can use the `~.pennylane.qaoa.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
@@ -441,7 +441,7 @@ plt.show()
 # Conclusion
 # ----------
 #
-# You have learnt how to use the PennyLane QAOA functionality, while
+# You have learned how to use the PennyLane QAOA functionality, while
 # also surveying some of the fundamental features that make the QAOA module simple and
 # flexible. Now, it's your turn to experiment with QAOA! If you need some inspiration for how to get
 # started:
