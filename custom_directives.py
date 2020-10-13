@@ -181,3 +181,87 @@ class YoutubeItemDirective(Directive):
         thumb = nodes.paragraph()
         self.state.nested_parse(thumbnail, self.content_offset, thumb)
         return [thumb]
+
+
+COMMUNITY_CARD_TEMPLATE = """
+.. raw:: html
+
+    <div class="card plugin-card">
+        <h4 class="card-header {color} lighten-4">{title}</h4>
+        <div class="card-body">
+            <h6>{author}</h6>
+            <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+            <div class="row d-flex align-items-center">
+                <div class="col-lg-8">
+                    <p class="card-text">
+                        {description}
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    {paper_footer}
+                    {code_footer}
+                </div>
+            </div>
+        </div>
+    </div>
+"""
+
+PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+                <i class="fas fa-book"></i> Paper
+            </a>
+"""
+
+CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="box-shadow: unset; border-radius:5px; width:90%;">
+                <i class="fas fa-code-branch"></i></i> Code
+            </a>
+"""
+
+
+class CommunityCardDirective(Directive):
+    """Create a community card."""
+
+    required_arguments = 0
+    optional_arguments = 2
+    option_spec = {
+        'title': directives.unchanged,
+        'author': directives.unchanged,
+        'paper': directives.unchanged,
+        'code': directives.unchanged,
+        'date': directives.unchanged,
+        'color': directives.unchanged,
+    }
+
+    final_argument_whitespace = False
+    has_content = True
+    add_index = False
+
+    def run(self):
+        description = [i if i != "" else "<br><br>" for i in self.content]
+        color = self.options.get("color", "heavy-rain-gradient")
+        code_footer = ""
+        paper_footer = ""
+
+        paper_url = self.options.get("paper", None)
+
+        if paper_url is not None:
+            paper_footer = PAPER_FOOTER.format(paper=paper_url)
+
+        code_url = self.options.get("code", None)
+
+        if code_url is not None:
+            code_footer = CODE_FOOTER.format(code=code_url)
+
+        card_rst = COMMUNITY_CARD_TEMPLATE.format(
+            title=self.options["title"],
+            author=self.options["author"],
+            description=" ".join(description),
+            date=self.options["date"],
+            paper_footer=paper_footer,
+            code_footer=code_footer,
+            color=color
+        )
+
+        thumbnail = StringList(card_rst.split('\n'))
+        thumb = nodes.paragraph()
+        self.state.nested_parse(thumbnail, self.content_offset, thumb)
+        return [thumb]
