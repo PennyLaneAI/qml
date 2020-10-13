@@ -89,7 +89,7 @@ QML glossary
         A supervised learning algorithm in which variational circuits (:abbr:`QNNs (Quantum Neural Networks)`) are trained to perform classification tasks.
 
     :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`
-        A variational algorithm used for finding the ground state energy of a quantum system. The VQE is a hybrid algorithm that involves incorporating measurement results obtained from a quantum computer running a series of variational circuits into a classical optimization routine in order to find a set of optimal variational parameters. 
+        A variational algorithm used for finding the ground-state energy of a quantum system. The VQE is a hybrid algorithm that involves incorporating measurement results obtained from a quantum computer running a series of variational circuits into a classical optimization routine in order to find a set of optimal variational parameters. 
 
     :doc:`Variational Quantum Linear Solver (VQLS) </demos/tutorial_vqls>`
         An algorithm for solving systems of linear equations on quantum computers. Based on short variational circuits, it is amenable to running on near-term quantum hardware. 
