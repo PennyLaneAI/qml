@@ -441,8 +441,8 @@ plt.show()
 # Conclusion
 # ----------
 #
-# In summary, this tutorial has demonstrated how to use the PennyLane QAOA functionality, while
-# also surveying some of the fundmental PennyLane features that make the QAOA module so simple and
+# You have learnt how to use the PennyLane QAOA functionality, while
+# also surveying some of the fundamental features that make the QAOA module simple and
 # flexible. Now, it's your turn to experiment with QAOA! If you need some inspiration for how to get
 # started:
 #
