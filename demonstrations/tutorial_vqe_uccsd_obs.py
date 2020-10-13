@@ -81,7 +81,7 @@ geometry = "h2.xyz"
 # `xyz format <https://en.wikipedia.org/wiki/XYZ_file_format>`_ specifying the
 # three-dimensional coordinates and symbols of the atomic species.
 #
-# Here, we use a minimal `basis set
+# In this example, we use a minimal `basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ to model the hydrogen molecule.
 # In this approximation, the qubit Hamiltonian of the molecule in the Jordan-Wigner
 # representation is built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
@@ -136,9 +136,8 @@ print(S2)
 # .. note::
 #
 #     The :func:`~.pennylane_qchem.qchem.observable` function can be used to build any
-#     second-quantized many-body observable as long as we have access to the matrix
-#     elements of the one- or two-particle operators in the basis of single-particle
-#     states.
+#     many-body observable as long as we have access to the matrix elements of the
+#     one- and/or two-particle operators in the basis of single-particle states.
 
 
 ##############################################################################
@@ -173,7 +172,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # :math:`\hat{c}_p^\dagger \hat{c}_r` creates a single excitation [#jensenbook]_ since it
 # annihilates an electron in the occupied orbital :math:`r` and creates it in the unoccupied
 # orbital :math:`p`. Similarly, the operator
-# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates double excitation.
+# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates a double excitation.
 #
 # The quantum circuits to exponentiate the excitation operators in the
 # Jordan-Wigner representation [#barkoutsos2018]_ are implemented by the
