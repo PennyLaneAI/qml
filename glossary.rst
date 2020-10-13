@@ -2,7 +2,7 @@
 .. role:: html(raw)
    :format: html
 
-Key concepts
+Key Concepts
 ============
 
 .. meta::
