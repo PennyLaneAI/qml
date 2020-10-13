@@ -12,7 +12,7 @@ Key concepts
 
 .. raw:: html
 
-    <script type="application/ld_json">
+    <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -24,7 +24,7 @@ Key concepts
                 "acceptedAnswer" :
                 {
                     "@type": "Answer",
-                    "text": "Automatic differntiation is the process of automatically computing derivatives of the steps of 
+                    "text": "Automatic differentiation is the process of automatically computing derivatives of the steps of 
                     computer programs."
                 }
             },
@@ -62,9 +62,7 @@ Key concepts
                     executed on different devices."
                 }
             }
-
         ]
-
     }
     </script>
 
