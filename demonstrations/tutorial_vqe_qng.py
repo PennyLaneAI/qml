@@ -373,8 +373,7 @@ for n in range(max_iterations):
     qngd_cost.append(energy)
     prev_energy = energy
 
-print()
-print("Final convergence parameter = {:.8f} Ha".format(conv))
+print("\nFinal convergence parameter = {:.8f} Ha".format(conv))
 print("Number of iterations = ", n)
 print("Final value of the ground-state energy = {:.8f} Ha".format(energy))
 print(
