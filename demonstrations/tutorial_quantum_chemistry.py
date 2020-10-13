@@ -217,8 +217,8 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(activ
 # specifying an active space results in no core orbitals---*all* molecular orbitals are
 # considered to be active.
 
-no_core, all_active = qchem.active_space(electrons, orbitals)
-print("List of core orbitals: {:}".format(no_core))
+no_core_orbitals, all_active = qchem.active_space(electrons, orbitals)
+print("List of core orbitals: {:}".format(no_core_orbitals))
 print("List of active orbitals: {:}".format(all_active))
 print("Number of qubits required for quantum simulation: {:}".format(2*len(all_active)))
 
