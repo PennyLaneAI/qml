@@ -15,7 +15,7 @@ QML glossary
         Automatically computing derivatives of the steps of computer programs.
 
     :doc:`Barren Plateaus </demos/tutorial_local_cost_functions>`
-        Areas in the cost landscape at which the gradient of a parameterized circuit disappear. The mortal enemy of many a variational algorithm, the variance of the gradient at these points is also close to 0. 
+        Areas in the cost landscape where the gradient of a parameterized circuit disappears. The mortal enemy of many a variational algorithm, the variance of the gradient at these points is also close to zero in all directions. 
 
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
         An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
