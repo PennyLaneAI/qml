@@ -23,7 +23,7 @@ these circuits to create more powerful algorithms. These simple ingredients,
 together with the ability to optimize quantum circuits, are the building blocks of QAOA. By focusing
 on the fundamentals, PennyLane provides general and flexible capabilities that can be tailored and
 refined to implement QAOA for a wide variety of problems. In the last part of the tutorial, you will
-learn how to bring these pieces together and deploy a complete workflow for using QAOA to solve the
+learn how to bring these pieces together and deploy a complete QAOA workflow to solve the
 minimum vertex cover problem. Let's get started! 🎉
 
 Circuits and Hamiltonians
@@ -39,10 +39,6 @@ which is a unitary defined as:"""
 
 ######################################################################
 #  .. math:: U(H, \ t) \ = \ e^{-i H t / \hbar}.
-#
-# .. figure:: ../demonstrations/qaoa_module/ham_circuit.png
-#     :align: center
-#     :width: 70%
 #
 # The time evolution operator is determined completely in terms of a Hamiltonian
 # :math:`H` and a scalar :math:`t` representing time. In fact, any unitary
@@ -70,6 +66,10 @@ which is a unitary defined as:"""
 # where :math:`U` approaches :math:`e^{-i H t}` as :math:`n`
 # becomes larger.
 #
+# .. figure:: ../demonstrations/qaoa_module/ham_circuit.png
+#     :align: center
+#     :width: 70%
+#
 # In PennyLane, this is implemented using the `~.pennylane.templates.ApproxTimeEvolution` template.
 # For example, let's say we have the following Hamiltonian:
 
@@ -83,14 +83,18 @@ print(H)
 
 
 ######################################################################
-# We can easily implement the approximate time-evolution operator corresponding to this
-# Hamiltonian in a quantum circuit:
+#
+# We can implement the approximate time-evolution operator corresponding to this
+# Hamiltonian:
 
 dev = qml.device('default.qubit', wires=2)
 
+t = 1
+n = 2
+
 @qml.qnode(dev)
 def circuit():
-    qml.templates.ApproxTimeEvolution(H, 1, 2)
+    qml.templates.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
 circuit()
@@ -135,6 +139,7 @@ def circ(theta):
     qml.CNOT(wires=[0, 1])
 
 ######################################################################
+#
 # We simply pass this function into the `~.pennylane.layer` function:
 #
 
@@ -147,6 +152,7 @@ circuit([0.3, 0.5])
 print(circuit.draw())
 
 ######################################################################
+#
 # We have learnt how time evolution can be used to create circuits from Hamiltonians,
 # and how these can be layered to create longer circuits. We are now ready to
 # explore QAOA.
