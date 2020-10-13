@@ -131,6 +131,12 @@ hardware.
     :figure: demonstrations/vqe_uccsd_obs/thumbnail_spectra_h2.png
     :description: :doc:`demos/tutorial_vqe_uccsd_obs`
     :tags: chemistry
+    
+.. customgalleryitem::
+    :tooltip: Learn how to implement QAOA workflows with PennyLane
+    :figure: demonstrations/qaoa_module/qaoa_layer.png
+    :description: :doc:`demos/tutorial_qaoa_intro`
+    :tags: autograd beginner
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -153,3 +159,4 @@ hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
+    demos/tutorial_qaoa_intro
