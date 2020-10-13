@@ -178,14 +178,14 @@ print(circuit.draw())
 #    consisting of repeated application of the cost and mixer layers.
 #
 # 5. Prepare an initial state, apply :math:`U(\boldsymbol\gamma,\boldsymbol\alpha)`,
-#    and use classical techniques, e.g. gradient descent, to optimize the parameters.
+#    and use classical techniques to optimize the parameters.
 #
 # 6. After the circuit has been optimized, measurements of the output state reveal
 #    approximate solutions to the optimization problem.
 #
 # In summary, the starting point of QAOA is the specification of cost and mixer Hamiltonians.
 # We then use time evolution and layering to create a variational circuit and optimize its
-# parameters. Finally, we sample from the circuit to get an approximate solution to
+# parameters. The algorithm concludes by sampling from the circuit to get an approximate solution to
 # the optimization problem. Let's see it in action! 🚀
 #
 
@@ -194,8 +194,8 @@ print(circuit.draw())
 # ------------------------------
 #
 # Our goal is to find the `minimum vertex
-# cover <https://en.wikipedia.org/wiki/Vertex_cover>`__ of a graph.
-# A vertex cover is a collection of vertices such that
+# cover <https://en.wikipedia.org/wiki/Vertex_cover>`__ of a graph:
+# a collection of vertices such that
 # each edge in the graph contains at least one of the vertices in the cover. Hence,
 # these vertices "cover" all the edges 👍.
 # We wish to find the vertex cover that has the
@@ -369,12 +369,12 @@ plt.show()
 #
 # QAOA is not one-size-fits-all when it comes to solving optimization problems. In many cases,
 # cost and mixer Hamiltonians will be very specific to one scenario, and not necessarily
-# fit within the mold of the pre-defined problems in the ``qml.qaoa`` submodule. Luckily,
+# fit within the structure of the pre-defined problems in the ``qml.qaoa`` submodule. Luckily,
 # one of the core principles behind the entire PennyLane library is customizability, and this principle hold true for
 # QAOA submodule as well!
 #
 # The QAOA workflow above gave us two optimal solutions: :math:`|6\rangle = |0110\rangle`
-# and :math:`|10\rangle = |1010\rangle`. However, what if we were to add an addition constraint
+# and :math:`|10\rangle = |1010\rangle`. What if we add a constraint
 # that made one of these solutions "better" than the other? Let's imagine that we are interested in
 # solutions that minimize the original cost function,
 # *but also have their first and last vertices coloured with* :math:`0`. A constraint of this form will
@@ -394,7 +394,7 @@ new_cost_h = cost_h + 2*reward_h
 
 ######################################################################
 # Notice that PennyLane allows for simple addition and multiplication of
-# Hamiltonian objects using inline arithmetic operations! Finally, we can
+# Hamiltonian objects using inline arithmetic operations! ➕ ➖ ✖️➗ Finally, we can
 # use this new cost Hamiltonian to define a new QAOA workflow:
 
 
