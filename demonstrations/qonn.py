@@ -216,7 +216,7 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # At this stage we could play around with other input-output
 # combinations; just keep in mind that the input states should contain the
-# same total number of photons as the ouput, since we want to use
+# same total number of photons as the output, since we want to use
 # the dual-rail encoding. Also, since the QONN will
 # act upon the states as a unitary operator, there must be a bijection
 # between the inputs and the outputs, i.e., two different inputs must have
