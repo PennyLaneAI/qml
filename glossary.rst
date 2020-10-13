@@ -315,7 +315,7 @@ Key concepts
         Automatically computing derivatives of the steps of computer programs.
 
     :doc:`Barren Plateaus </demos/tutorial_local_cost_functions>`
-        Areas in the cost landscape at which the gradient of a parameterized circuit disappear. The mortal enemy of many a variational algorithm, the variance of the gradient at these points is also close to 0. 
+        Areas in the cost landscape where the gradient of a parameterized circuit disappears. The mortal enemy of many a variational algorithm, the variance of the gradient at these points is also close to zero in all directions. 
 
     :doc:`Circuit Ansatz </glossary/circuit_ansatz>`
         An ansatz is a basic architecture of a circuit, i.e., a set of gates that act on
@@ -389,7 +389,7 @@ Key concepts
         A supervised learning algorithm in which variational circuits (:abbr:`QNNs (Quantum Neural Networks)`) are trained to perform classification tasks.
 
     :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`
-        A variational algorithm used for finding the ground state energy of a quantum system. The VQE is a hybrid algorithm that involves incorporating measurement results obtained from a quantum computer running a series of variational circuits into a classical optimization routine in order to find a set of optimal variational parameters. 
+        A variational algorithm used for finding the ground-state energy of a quantum system. The VQE is a hybrid algorithm that involves incorporating measurement results obtained from a quantum computer running a series of variational circuits into a classical optimization routine in order to find a set of optimal variational parameters. 
 
     :doc:`Variational Quantum Linear Solver (VQLS) </demos/tutorial_vqls>`
         An algorithm for solving systems of linear equations on quantum computers. Based on short variational circuits, it is amenable to running on near-term quantum hardware. 
