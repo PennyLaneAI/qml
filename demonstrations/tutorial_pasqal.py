@@ -3,15 +3,15 @@ Quantum computation with neutral atoms
 ======================================
 
 .. meta::
-    :property="og:description": Neutral atom quantum devices allow you to place 
+    :property="og:description": Neutral atom quantum devices allow you to place
         qubits within interesting three-dimensional configurations.
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
-Quantum computing architectures come in many flavours: superconducting qubits, ion traps, 
-photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These 
-quantum devices have some basic similarities to ion traps. Ion-trap devices make use of atoms 
-that have an imbalance between protons (positively charged) and electrons (negatively charged). 
-Neutral atoms, on the other hand, have an equal number of protons and electrons. 
+Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
+photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
+quantum devices have some basic similarities to ion traps. Ion-trap devices make use of atoms
+that have an imbalance between protons (positively charged) and electrons (negatively charged).
+Neutral atoms, on the other hand, have an equal number of protons and electrons.
 
 In neutral-atom systems, the individual atoms can be easily programmed into various two- or
 three-dimensional configurations. Like ion-trap systems, individual qubits can be encoded into
@@ -23,17 +23,17 @@ circuit topologies.
 .. figure:: https://raw.githubusercontent.com/lhenriet/cirq-pasqal/fc4f9c7792a8737fde76d4c05828aa538be8452e/pasqal-tutorials/files/eiffel_tower.png
     :align: center
     :width: 50%
-    
+
     ..
-    
+
     Neutral atoms (green dots) arranged in various configurations. These atoms can be
     used to encode qubits and carry out quantum computations. Image originally from [#barredo2017]_.
-    
-The startup `Pasqal <https://pasqal.io/>`_ is one of the companies working to bring 
-neutral-atom quantum computing devices to the world. To support this new class of devices, 
+
+The startup `Pasqal <https://pasqal.io/>`_ is one of the companies working to bring
+neutral-atom quantum computing devices to the world. To support this new class of devices,
 Pasqal has contributed some new features to the quantum software library `Cirq <https://cirq.readthedocs.io/en/stable/>`_.
- 
-In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique abilities of 
+
+In this demo, we will use PennyLane, Cirq, and TensorFlow to show off the unique abilities of
 neutral atom devices, leveraging them to make a variational quantum circuit which has a
 very unique topology: *the Eiffel tower*. Specifically, we will build a simple toy
 circuit whose qubits are arranged like the Eiffel tower. The girders between
@@ -47,7 +47,7 @@ Let's get to it!
 # Building the Eiffel tower
 # -------------------------
 #
-# Our first step will be to load and visualize the data for the Eiffel tower 
+# Our first step will be to load and visualize the data for the Eiffel tower
 # configuration, which was generously provided by the team at Pasqal. The
 # data can be found
 # `here <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/pasqal/Eiffel_tower_data.dat>`_
@@ -73,7 +73,7 @@ ax.scatter(xs, ys, zs, c='g',alpha=0.3)
 plt.show();
 
 ##############################################################################
-# This dataset contains 126 points. Each point represents a distinct 
+# This dataset contains 126 points. Each point represents a distinct
 # neutral-atom qubit. Simulating this many qubits would be outside the
 # reach of Cirq's built-in simulators, so for this demo,
 # we will pare down to just 9 points, evenly spaced around the tower.
@@ -105,7 +105,7 @@ plt.show();
 # Converting to Cirq qubits
 # -------------------------
 #
-# Our next step will be to convert these datapoints into objects that 
+# Our next step will be to convert these datapoints into objects that
 # Cirq understands as qubits. For neutral-atom devices in Cirq, we can use the
 # ``ThreeDQubit`` class, which carries information about the three-dimensional
 # arrangement of the qubits.
@@ -116,10 +116,10 @@ plt.show();
 # a notion of a *control radius;* any atoms which are within the system's
 # control radius can interact with one another. Qubits separated by a
 # distance larger than the control radius cannot interact.
-# 
-# In order to allow our Eiffel tower qubits to interact with 
+#
+# In order to allow our Eiffel tower qubits to interact with
 # one another more easily, we will artificially scale some dimensions
-# when placing the atoms. 
+# when placing the atoms.
 
 from cirq.pasqal import ThreeDQubit
 xy_scale = 1.5
@@ -128,8 +128,8 @@ qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
                 for x, y, z in qubit_coords]
 
 ##############################################################################
-# To simulate a neutral-atom quantum computation, we can use the 
-# ``"cirq.pasqal"`` device, available via the 
+# To simulate a neutral-atom quantum computation, we can use the
+# ``"cirq.pasqal"`` device, available via the
 # `PennyLane-Cirq plugin <https://pennylane-cirq.readthedocs.io>`_.
 # We will need to provide this device with the ``ThreeDQubit``s we created
 # above. We also need to instantiate the device with a fixed control radius.
@@ -137,13 +137,13 @@ qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
 import pennylane as qml
 num_wires = len(qubits)
 control_radius = 32.4
-dev = qml.device("cirq.pasqal", control_radius=control_radius, 
+dev = qml.device("cirq.pasqal", control_radius=control_radius,
                  qubits=qubits, wires=num_wires)
 
 ##############################################################################
 # Creating a quantum circuit
 # --------------------------
-# 
+#
 # We will now make a variational circuit out of the Eiffel tower configuration
 # from above. Each of the 9 qubits we are using can be thought of
 # as a single wire in a quantum circuit. We will cause these qubits to interact by applying
@@ -159,7 +159,7 @@ dev = qml.device("cirq.pasqal", control_radius=control_radius,
 #
 # ii. For each corner of the tower, CNOTs are enacted between the first-
 #     and second-level qubits.
-# 
+#
 # iii. All qubits from the second level interact with a single "peak" qubit
 #      using a parametrized controlled-rotation operation. The free parameters
 #      of our variational circuit enter here.
@@ -237,8 +237,8 @@ plt.show();
 # the final measurement result is read out from the top "peak" qubit.
 # The order of gate execution proceeds vertically from bottom to top, and
 # clockwise at each level.
-# 
-# The code below creates this particular quantum circuit configuration in 
+#
+# The code below creates this particular quantum circuit configuration in
 # PennyLane:
 
 peak_qubit = 8
@@ -251,23 +251,23 @@ def controlled_rotation(phi, wires):
 
 @qml.qnode(dev, interface="tf")
 def circuit(weights, data):
-    
+
     # Input classical data loaded into qubits at second level
     for idx in range(4):
         if data[idx]:
             qml.PauliX(wires=idx)
-    
+
     # Interact qubits from second and third levels
     for idx in range(4):
         qml.CNOT(wires=[idx, idx + 4])
-        
+
     # Interact qubits from third level with peak using parameterized gates
     for idx, wire in enumerate(range(4, 8)):
         controlled_rotation(weights[idx], wires=[wire, peak_qubit])
-        
+
     return qml.expval(qml.PauliZ(wires=peak_qubit))
-    
-    
+
+
 ##############################################################################
 # Training the circuit
 # --------------------
@@ -341,5 +341,5 @@ print("Final cost value: {}".format(cost()))
 #    Daniel Barredo, Vincent Lienhard, Sylvain de Leseleuc, Thierry Lahaye, and Antoine Browaeys.
 #    "Synthetic three-dimensional atomic structures assembled atom by atom."
 #    `arXiv:1712.02727
-#    <https://arxiv.org/abs/1712.02727>`__, 2017. 
-# 
+#    <https://arxiv.org/abs/1712.02727>`__, 2017.
+#
