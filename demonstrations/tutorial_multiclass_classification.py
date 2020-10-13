@@ -32,7 +32,7 @@ Initial Setup
 ~~~~~~~~~~~~~
 
 We import PennyLane, the PennyLane-provided version of NumPy,
-relevent torch modules, and define the constants that will
+relevant torch modules, and define the constants that will
 be used in this tutorial.
 
 Our feature size is 4, and we will use amplitude embedding.
