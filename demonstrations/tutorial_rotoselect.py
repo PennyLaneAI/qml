@@ -10,6 +10,9 @@ Quantum circuit structure learning
         a variational quantum algorithm.
     :property="og:image": https://pennylane.ai/qml/_images/rotoselect_structure.png
 
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
 
 """
 ##############################################################################

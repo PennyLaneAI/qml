@@ -7,6 +7,11 @@ Doubly stochastic gradient descent
         strategy with doubly stochastic gradient descent.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
 
+.. related::
+
+   tutorial_backprop Quantum gradients with backprop
+   tutorial_quantum_natural_gradient Quantum natural gradient
+
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
 it is shown that quantum gradient descent, where a finite number of measurement samples

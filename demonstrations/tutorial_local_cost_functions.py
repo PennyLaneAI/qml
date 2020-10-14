@@ -6,6 +6,10 @@ Alleviating barren plateaus with local cost functions
 .. meta::
     :property="og:description": Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.
     :property="og:image": ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
+
+.. related::
+
+   tutorial_barren_plateaus Barren plateaus in QNNs
     
 Barren Plateaus
 ---------------
