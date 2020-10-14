@@ -289,7 +289,7 @@ class RelatedDirective(Directive):
     add_index = False
 
     def run(self):
-        urls = [f"\"/demos/{u.split(' ')[0]}.html\"" for u in list(self.content)]
+        urls = [f"\"{u.split(' ')[0]}.html\"" for u in list(self.content)]
         linkText = [' '.join(u.split(' ')[1:]) for u in list(self.content)]
         urls = ", ".join(urls)
         html = RELATED.format(urls=urls, linkText=linkText)
