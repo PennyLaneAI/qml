@@ -217,7 +217,7 @@ Key Concepts
             },                                         
 
 	    {
-	        "@type": Question",
+	        "@type": "Question",
 		"name" : "What is a quanvolutional neural network?",
 		"acceptedAnswer" :
 		{
