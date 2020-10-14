@@ -17,6 +17,7 @@ git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/rigetti/pennylane-forest.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
 git+https://github.com/PennyLaneAI/pennylane-qiskit.git
+qulacs
 git+https://github.com/PennyLaneAI/pennylane-qulacs.git
 pyquil==2.21
 scipy==1.4.1
