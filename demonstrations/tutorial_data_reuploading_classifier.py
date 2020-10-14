@@ -1,8 +1,8 @@
 r"""
 .. _data_reuploading_classifier:
 
-Data-reuploading classifer
-==========================
+Data-reuploading classifier
+===========================
 *Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com)*
 
 .. meta::
