@@ -148,8 +148,9 @@ Key Concepts
                 "acceptedAnswer" :
                 {
                     "@type": "Answer",
-                    "text": "The quantum analog of a convolutional neural network. They are affectionately referred 
-                    to as *quanvolutional* neural networks."
+		    "text" : "A quantum neural network that mirrors the structure of a convolutional
+		              neural network. Characterized by alternating convolutional layers, and
+			      pooling layers which are effected by performing quantum measurements."
                 }
             },
 
@@ -215,6 +216,18 @@ Key Concepts
                 }
             },                                         
 
+	    {
+	        "@type": Question",
+		"name" : "What is a quanvolutional neural network?",
+		"acceptedAnswer" :
+		{
+                    "@type": "Answer",
+		    "text": "A hybrid classical-quantum model in which classical
+	            convolutional neural networks are augmented by layers of
+		    variational quantum circuits."
+		}
+	    },
+	    
             {
                 "@type": "Question", 
                 "name" : "What is the variational quantum classifier (VQC)?",
@@ -225,7 +238,7 @@ Key Concepts
                     classification tasks."
                 }
             },         
-
+	    
             {
                 "@type": "Question", 
                 "name" : "What is the variational quantum linear solver?",
@@ -280,9 +293,12 @@ Key Concepts
         Quantum analog of a classical `Boltzmann machine <https://en.wikipedia.org/wiki/Boltzmann_machine>`_, in which nodes are 
         replaced by spins or qubits. An energy-based quantum machine learning model.
 
-    :doc:`Quantum Convolutional Neural Network </demos/tutorial_quanvolution>`
-        Quantum analog of a `convolutional neural network <https://en.wikipedia.org/wiki/Convolutional_neural_network>`_. Affectionately referred to as 
-        *quanvolutional* neural networks.
+    Quantum Convolutional Neural Network
+        A quantum neural network that mirrors the structure of a `convolutional
+	neural network
+	<https://en.wikipedia.org/wiki/Convolutional_neural_network>`_. 
+	Characterized by alternating convolutional layers, and pooling layers which
+	are effected by performing quantum measurements.
 
     Quantum Differentiable Programming
         The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
@@ -312,6 +328,11 @@ Key Concepts
     Quantum Node
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
+    :doc:`Quanvolutional Neural Network </demos/tutorial_quanvolution>`
+	A hybrid classical-quantum model in which classical :abbr:`CNNs
+	(Convolutional Neural Networks)` are augmented by layers of variational
+	quantum circuits. 
+	
     :doc:`Variational Circuit </glossary/variational_circuit>`
         Variational circuits are quantum algorithms that depend on tunable parameters, and can therefore be optimized.
 
