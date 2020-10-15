@@ -72,7 +72,7 @@ Key Concepts
                 {
                     "@type": "Answer",
                     "text": "A hybrid variational algorithm that is used to find approximate solutions for combinatorial 
-                    optimization problems. It's characterized by a circuit ansatz featuring two alternating, parameterized components."
+                    optimization problems. It's characterized by a circuit ansatz featuring two alternating parameterized components."
                 }
             },
 
