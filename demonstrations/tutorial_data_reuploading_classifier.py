@@ -13,6 +13,7 @@ Data-reuploading classifier
 
    tutorial_variational_classifier Variational quantum classifier
    tutorial_multiclass_classification Multiclass margin classifier
+   tutorial_expressivity_fourier_series Quantum models as Fourier series
 
 A single-qubit quantum circuit which can implement arbitrary unitary
 operations can be used as a universal classifier much like a single
