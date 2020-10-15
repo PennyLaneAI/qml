@@ -410,7 +410,7 @@ new_cost_h = cost_h + 2*reward_h
 ######################################################################
 #
 # Notice that PennyLane allows for simple addition and multiplication of
-# Hamiltonian objects using inline arithmetic operations! ➕ ➖ ✖️➗ Finally, we can
+# Hamiltonian objects using inline arithmetic operations ➕ ➖ ✖️➗! Finally, we can
 # use this new cost Hamiltonian to define a new QAOA workflow:
 
 
