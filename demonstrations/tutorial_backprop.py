@@ -9,7 +9,6 @@ Quantum gradients with backpropagation
 
 .. related::
 
-   parameter_shift Parameter-shift rules
    tutorial_quantum_natural_gradient Quantum natural gradient
 
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
