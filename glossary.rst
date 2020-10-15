@@ -122,7 +122,7 @@ Key Concepts
 
             {
                 "@type": "Question", 
-                "name" : "What is the parameter shift rule?",
+                "name" : "What is the parameter-shift rule?",
                 "acceptedAnswer" :
                 {
                     "@type": "Answer",
