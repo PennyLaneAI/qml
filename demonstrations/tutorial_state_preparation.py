@@ -14,6 +14,7 @@ Training a quantum circuit with PyTorch
 
    tutorial_qubit_rotation Basic tutorial: qubit rotation
    pytorch_noise PyTorch and noisy devices 
+   tutorial_isingmodel_PyTorch 3-qubit Ising model in PyTorch
 
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
