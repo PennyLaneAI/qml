@@ -287,7 +287,7 @@ Key Concepts
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_maxcut>`
-        A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating, parameterized components. 
+        A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating parameterized components. 
 
     Quantum Boltzmann Machine
         Quantum analog of a classical `Boltzmann machine <https://en.wikipedia.org/wiki/Boltzmann_machine>`_, in which nodes are 
