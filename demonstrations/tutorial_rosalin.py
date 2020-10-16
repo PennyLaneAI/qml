@@ -7,6 +7,13 @@ Frugal shot optimization with Rosalin
          number of times a quantum computer is accessed.
     :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_rosalin_002.png
 
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
+   tutorial_quantum_natural_gradient Quantum natural gradient
+   tutorial_doubly_stochastic Doubly stochastic gradient descent
+   tutorial_rotoselect Quantum circuit structure learning
+
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
 Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy

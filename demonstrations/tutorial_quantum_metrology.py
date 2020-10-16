@@ -7,6 +7,10 @@ Variationally optimizing measurement protocols
         optimize a quantum sensing protocol.
     :property="og:image": https://pennylane.ai/qml/_images/illustration1.png
 
+.. related::
+
+   tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
+
 *Author: Johannes Jakob Meyer*
 
 In this tutorial we use the variational quantum algorithm from
