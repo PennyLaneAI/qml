@@ -10,6 +10,11 @@ Quantum circuit structure learning
         a variational quantum algorithm.
     :property="og:image": https://pennylane.ai/qml/_images/rotoselect_structure.png
 
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
+   tutorial_rosalin Frugal shot optimization with Rosalin
 
 """
 ##############################################################################

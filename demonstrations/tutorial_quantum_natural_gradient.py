@@ -10,6 +10,12 @@ Quantum natural gradient
         learning problems by taking into account the intrinsic geometry of qubits.
     :property="og:image": https://pennylane.ai/qml/_images/qng_optimization.png
 
+.. related::
+
+   tutorial_backprop Quantum gradients with backprop
+   tutorial_vqe_qng Accelerating VQE with QNG
+   
+
 This example demonstrates the quantum natural gradient optimization technique
 for variational quantum circuits, originally proposed in
 `Stokes et al. (2019) <https://arxiv.org/abs/1909.02108>`__.

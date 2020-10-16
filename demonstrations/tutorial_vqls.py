@@ -10,6 +10,11 @@ Variational Quantum Linear Solver
         quantum linear solver to solve a system of linear equation with a quantum device.
     :property="og:image": https://pennylane.ai/qml/_images/vqls_zoom.png
 
+.. related::
+
+    tutorial_coherent_vqls Coherent VQLS
+    
+
 In this tutorial we implement a quantum algorithm known as the *variational quantum linear
 solver* (VQLS), originally introduced in
 `Bravo-Prieto et al. (2019) <https://arxiv.org/abs/1909.05820>`_.
