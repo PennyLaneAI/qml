@@ -189,8 +189,8 @@ htmlhelp_basename = "QMLdoc"
 
 # Options for thebe interactivity
 thebe_config = {
-    "repository_url": "https://github.com/executablebooks/jupyter-book/",
-    #"repository_branch": "binder-test", 
+    "repository_url": "https://github.com/PennyLaneAI/qml/",
+    "repository_branch": "add-interactivity", 
     "selector": "div.highlight",
     "codemirror-theme": "eclipse"
 }
