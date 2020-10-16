@@ -70,7 +70,7 @@ which is a unitary defined as:"""
 #     :align: center
 #     :width: 70%
 #
-# In PennyLane, this is implemented using the `~.pennylane.templates.ApproxTimeEvolution` template.
+# In PennyLane, this is implemented using the :func:`~.templates.ApproxTimeEvolution` template.
 # For example, let's say we have the following Hamiltonian:
 
 import pennylane as qml
