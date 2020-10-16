@@ -52,6 +52,7 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
     "sphinx_sitemap",
+    "sphinx_thebe"
 ]
 
 
@@ -184,6 +185,15 @@ html_sidebars = {"**": ["logo-text.html", "searchbox.html", "localtoc.html"]}
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "QMLdoc"
+
+
+# Options for thebe interactivity
+thebe_config = {
+    "repository_url": "https://github.com/executablebooks/jupyter-book/",
+    #"repository_branch": "binder-test", 
+    "selector": "div.highlight",
+    "codemirror-theme": "eclipse"
+}
 
 
 # -- Options for intersphinx extension ---------------------------------------

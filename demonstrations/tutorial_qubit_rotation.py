@@ -7,7 +7,7 @@ Basic tutorial: qubit rotation
 .. meta::
     :property="og:description": To see how PennyLane allows the easy construction and optimization
         of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
-    :property="og:image": https://pennylane.ai/qml/_images/bloch.png
+    :property="og:image": https://pennylane.ai/qml/_images/bloch.png 
 
 .. related::
 
@@ -85,6 +85,9 @@ and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 #
 # The first thing we need to do is import PennyLane, as well as the wrapped version
 # of NumPy provided by PennyLane.
+
+##############################################################################
+# .. thebe-button:: Engage interactivity!
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -212,7 +215,6 @@ def circuit(params):
 # Once we have written the quantum function, we convert it into a :class:`~.pennylane.QNode` running
 # on device ``dev1`` by applying the :func:`~.pennylane.qnode` decorator.
 # **directly above** the function definition:
-
 
 @qml.qnode(dev1)
 def circuit(params):
