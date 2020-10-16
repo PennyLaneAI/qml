@@ -179,8 +179,8 @@ tt {
 }
 
 code, pre {
-  line-height: 23px;
-  margin: 20px 0;
+  line-height: 23px !important;
+  margin: 20px 0 !important;
   word-wrap: normal;
   background-color: #fff;
 }
@@ -1165,7 +1165,6 @@ div.seealso {
   background-color: #ffc;
   border: 1px solid #ff6;
 }
-
 
 .admonition.see {
     font-style: italic;
