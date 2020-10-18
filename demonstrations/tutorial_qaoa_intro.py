@@ -121,7 +121,7 @@ print(circuit.draw())
 #     :width: 100%
 #
 #
-# Circuit repetition is implemented in PennyLane using the `~.pennylane.layer` function. This method
+# Circuit repetition is implemented in PennyLane using the :func:`~.layer` function. This method
 # allows us to take a function containing either quantum operations, a template, or even a single
 # quantum gate, and repeatedly apply it to a set of wires.
 #
@@ -138,17 +138,25 @@ def circ(theta):
     qml.Hadamard(wires=1)
     qml.CNOT(wires=[0, 1])
 
+@qml.qnode(dev)
+def circuit(param):
+    circ(param)
+    return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
+circuit(0.5)
+print(circuit.draw())
+
 ######################################################################
 #
-# We simply pass this function into the `~.pennylane.layer` function:
+# We simply pass this function into the :func:`~.layer` function:
 #
 
 @qml.qnode(dev)
 def circuit(params, **kwargs):
-    qml.layer(circ, 2, params)
+    qml.layer(circ, 3, params)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit([0.3, 0.5])
+circuit([0.3, 0.4, 0.5])
 print(circuit.draw())
 
 ######################################################################
@@ -256,11 +264,8 @@ plt.show()
 
 cost_h, mixer_h = qaoa.min_vertex_cover(graph, constrained=False)
 
-print("Cost Hamiltonian")
-print(cost_h)
-
-print("Mixer Hamiltonian")
-print(mixer_h)
+print("Cost Hamiltonian", cost_h)
+print("Mixer Hamiltonian", mixer_h)
 
 ######################################################################
 #
@@ -271,9 +276,9 @@ print(mixer_h)
 #     :align: center
 #     :width: 90%
 #
-# While it is possible to use `~.pennylane.templates.ApproxTimeEvolution`, the QAOA module allows you to
-# build the cost and mixer layers directly using the functions `~.pennylane.qaoa.cost_layer` and
-# `~.pennylane.qaoa.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
+# While it is possible to use :func:`~.templates.ApproxTimeEvolution`, the QAOA module allows you to
+# build the cost and mixer layers directly using the functions :func:`~.qaoa.cost_layer` and
+# :func:`~.qaoa.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
 
 
 def qaoa_layer(gamma, alpha):
@@ -299,12 +304,12 @@ def circuit(params, **kwargs):
 
 ######################################################################
 #
-# Note that `~.pennylane.layer` allows us to pass variational parameters
+# Note that :func:`~.layer` allows us to pass variational parameters
 # ``params[0]`` and ``params[1]`` into each layer of the circuit. That's it! The last
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
 # The cost function is the expectation value of :math:`H_C`, which we want to minimize. The
-# function `~.pennylane.VQECost` is designed for this purpose: it returns the
+# function :func:`~.VQECost` is designed for this purpose: it returns the
 # expectation value of an input Hamiltonian with respect to the circuit's output state.
 # We also define the device on which the simulation is
 # performed. We use the PennyLane-Qulacs plugin to
@@ -318,7 +323,7 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 ######################################################################
 #
 # Finally, we optimize the cost function using the built-in
-# `~.pennylane.GradientDescentOptimizer`. We perform optimization for forty steps and initialize the
+# :func:`~.GradientDescentOptimizer`. We perform optimization for forty steps and initialize the
 # parameters randomly from a normal distribution:
 
 
@@ -394,7 +399,7 @@ plt.show()
 # *but also have their first and last vertices coloured with* :math:`0`. A constraint of this form will
 # favour :math:`|6\rangle`, making it the only ground state.
 #
-# It is easy to introduce constraints of this form in PennyLane. We can use the `~.pennylane.qaoa.edge_driver` cost
+# It is easy to introduce constraints of this form in PennyLane. We can use the :func:`~.qaoa.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
