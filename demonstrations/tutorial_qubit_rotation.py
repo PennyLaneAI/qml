@@ -15,6 +15,21 @@ Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
    tutorial_state_preparation Training a quantum circuit with PyTorch
 
+.. raw:: html
+
+    <script>
+    thebelab.events.on("request-kernel")(() => {
+        // Find any cells with an initialization tag and ask Thebe to run them when ready
+        var thebeInitCells = document.querySelectorAll('.thebe-init');
+        thebeInitCells.forEach((cell) => {
+            console.log("Initializing Thebe with cell: " + cell.id);
+            const initButton = cell.querySelector('.thebelab-run-button');
+            initButton.click();
+        });
+    }
+    </script>
+
+
 To see how PennyLane allows the easy construction and optimization of quantum functions, let's
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
 example.
@@ -89,6 +104,9 @@ and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 ##############################################################################
 # .. thebe-button:: Engage interactivity!
 
+
+##############################################################################
+# .. cssclass:: thebe thebe-init
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -138,6 +156,9 @@ from pennylane import numpy as np
 # For this tutorial, we are using the qubit model, so let's initialize the ``'default.qubit'`` device
 # provided by PennyLane; a simple pure-state qubit simulator.
 
+##############################################################################
+# .. cssclass:: thebe thebe-init
+
 dev1 = qml.device("default.qubit", wires=1)
 
 ##############################################################################
@@ -170,6 +191,8 @@ dev1 = qml.device("default.qubit", wires=1)
 #
 # First, we need to define the quantum function that will be evaluated in the QNode:
 
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 def circuit(params):
     qml.RX(params[0], wires=0)
@@ -216,6 +239,9 @@ def circuit(params):
 # on device ``dev1`` by applying the :func:`~.pennylane.qnode` decorator.
 # **directly above** the function definition:
 
+##############################################################################
+# .. cssclass:: thebe thebe-init
+
 @qml.qnode(dev1)
 def circuit(params):
     qml.RX(params[0], wires=0)
@@ -228,6 +254,9 @@ def circuit(params):
 # device ``dev1`` every time it is evaluated.
 #
 # To evaluate, we simply call the function with some appropriate numerical inputs:
+
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 print(circuit([0.54, 0.12]))
 
@@ -248,6 +277,9 @@ print(circuit([0.54, 0.12]))
 # partial derivatives) of ``circuit``. The gradient can be evaluated in the same
 # way as the original function:
 
+##############################################################################
+# .. cssclass:: thebe thebe-init
+
 dcircuit = qml.grad(circuit, argnum=0)
 
 ##############################################################################
@@ -256,6 +288,9 @@ dcircuit = qml.grad(circuit, argnum=0)
 # In this case, the function ``circuit`` takes one argument (``params``), so we
 # specify ``argnum=0``. Because the argument has two elements, the returned gradient
 # is two-dimensional. We can then evaluate this gradient function at any point in the parameter space.
+
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 print(dcircuit([0.54, 0.12]))
 
@@ -267,6 +302,8 @@ print(dcircuit([0.54, 0.12]))
 # For example, we could have defined the above quantum circuit function using
 # two positional arguments, instead of one array argument:
 
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 @qml.qnode(dev1)
 def circuit2(phi1, phi2):
@@ -281,6 +318,9 @@ def circuit2(phi1, phi2):
 # with respect to only the first parameter (``phi1``), and ``argnum=1`` will give
 # the gradient for ``phi2``. To get the gradient with respect to both parameters,
 # we can use ``argnum=[0,1]``:
+
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 dcircuit = qml.grad(circuit2, argnum=[0, 1])
 print(dcircuit(0.54, 0.12))
@@ -328,6 +368,8 @@ print(dcircuit(0.54, 0.12))
 # know that the Pauli-Z expectation is bound between :math:`[-1, 1]`, we can define our
 # cost directly as the output of the QNode:
 
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 def cost(x):
     return circuit(x)
@@ -335,6 +377,9 @@ def cost(x):
 
 ################################################################################
 # To begin our optimization, let's choose small initial values of :math:`\phi_1` and :math:`\phi_2`:
+
+##############################################################################
+# .. cssclass:: thebe thebe-init
 
 init_params = np.array([0.011, 0.012])
 print(cost(init_params))
@@ -344,6 +389,10 @@ print(cost(init_params))
 #
 # Finally, we use an optimizer to update the circuit parameters for 100 steps. We can use the built-in
 # :class:`~.pennylane.GradientDescentOptimizer` class:
+
+##############################################################################
+# .. cssclass:: thebe thebe-init
+
 
 # initialise the optimizer
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
