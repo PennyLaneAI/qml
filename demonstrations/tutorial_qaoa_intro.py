@@ -407,10 +407,10 @@ reward_h = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
 
 ######################################################################
 #
-# We then add the constraining term
+# We then weigh and add the constraining term
 # to the original minimum vertex cover Hamiltonian:
 
-new_cost_h = cost_h + reward_h
+new_cost_h = cost_h + 0.75*reward_h
 
 ######################################################################
 #
