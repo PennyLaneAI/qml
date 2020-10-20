@@ -126,6 +126,12 @@ hardware.
     :description: :doc:`demos/tutorial_ensemble_multi_qpu`
     :tags: pytorch forest qiskit
 
+.. customgalleryitem::
+    :tooltip: VQE in different spin sectors
+    :figure: demonstrations/vqe_uccsd_obs/thumbnail_spectra_h2.png
+    :description: :doc:`demos/tutorial_vqe_uccsd_obs`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::

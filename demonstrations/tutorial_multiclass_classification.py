@@ -50,7 +50,7 @@ of size 4.
 
 import pennylane as qml
 import torch
-from pennylane import numpy as np
+import numpy as np
 from torch.autograd import Variable
 import torch.optim as optim
 
