@@ -277,7 +277,9 @@ import timeit
 
 repeat = 3
 number = 10
-times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
+times = timeit.repeat(
+    "circuit(params)", globals=globals(), number=number, repeat=repeat
+)
 forward_time = min(times) / number
 print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
@@ -290,7 +292,9 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 with tf.GradientTape(persistent=True) as tape:
     res = circuit(params)
 
-times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+times = timeit.repeat(
+    "tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat
+)
 backward_time = min(times) / number
 print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 
@@ -344,11 +348,15 @@ for depth in range(0, 21):
     qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
 
     # parameter-shift
-    t = timeit.repeat("qnode_shift(params)", globals=globals(), number=number, repeat=repeat)
+    t = timeit.repeat(
+        "qnode_shift(params)", globals=globals(), number=number, repeat=repeat
+    )
     forward_shift.append([num_params, min(t) / number])
 
     # backprop
-    t = timeit.repeat("qnode_backprop(params)", globals=globals(), number=number, repeat=repeat)
+    t = timeit.repeat(
+        "qnode_backprop(params)", globals=globals(), number=number, repeat=repeat
+    )
     forward_backprop.append([num_params, min(t) / number])
 
     if num_params == 0:
@@ -364,14 +372,18 @@ for depth in range(0, 21):
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_shift(params)
 
-    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+    t = timeit.repeat(
+        "tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat
+    )
     gradient_shift.append([num_params, min(t) / number])
 
     # backprop
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_backprop(params)
 
-    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat)
+    t = timeit.repeat(
+        "tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat
+    )
     gradient_backprop.append([num_params, min(t) / number])
 
 gradient_shift = np.array(gradient_shift).T
