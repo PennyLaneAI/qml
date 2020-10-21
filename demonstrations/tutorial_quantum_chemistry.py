@@ -250,7 +250,9 @@ print("Number of qubits required for quantum simulation: {:}".format(2*len(all_a
 # [#jensenbook]_ describing the fermionic Hamiltonian are retrieved from the
 # previously generated file ``'./pyscf/sto-3g/water.hdf5'``.
 
-qubit_hamiltonian = qchem.decompose(hf_file, mapping="jordan_wigner", core=core, active=active)
+qubit_hamiltonian = qchem.decompose(
+    hf_file, mapping="jordan_wigner", core=core, active=active
+)
 print("Electronic Hamiltonian of the water molecule represented in the Pauli basis")
 print(qubit_hamiltonian)
 
