@@ -338,9 +338,9 @@ global_circuit = qml.QNode(global_cost_simple, dev)
 print(
     "Current cost: "
     + str(cost_global(params_local))
-    + ". Initial cost: "
+    + ".\n Initial cost: "
     + str(cost_global([[3.0 for i in range(wires)], [0 for i in range(wires)]]))
-    + ". Difference: "
+    + ".\n Difference: "
     + str(
         cost_global([[3.0 for i in range(wires)], [0 for i in range(wires)]])
         - cost_global(params_local)
@@ -384,7 +384,9 @@ for i in range(steps):
     runCost = cost_tunable(params_tunable)
     if (i + 1) % 10 == 0:
         print(
-            "Cost after step {:5d}: {: .7f}".format(i + 1, runCost) + ". Locality: " + str(locality)
+            "Cost after step {:5d}: {: .7f}".format(i + 1, runCost)
+            + ". Locality: "
+            + str(locality)
         )
 
     if runCost < 0.1 and locality < wires:
