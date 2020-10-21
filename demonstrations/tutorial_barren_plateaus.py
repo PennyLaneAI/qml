@@ -140,11 +140,11 @@ for i in range(num_samples):
 print("Variance of the gradients for {} random circuits: {}".format(
     num_samples, np.var(grad_vals)
     )
+)
 print("Mean of the gradients for {} random circuits: {}".format(
     num_samples, np.mean(grad_vals)
     )
 )
-      
 
 ##############################################################################
 # Evaluate the gradient for more qubits
