@@ -126,7 +126,9 @@ for i in range(100):
         cost_pt.append(costn)
 
         # for clarity, the angles are printed as numpy arrays
-        print("Energy after step {:5d}: {: .7f} | Angles: {}".format(i+1, costn, [p1n.detach().numpy(), p2n.detach().numpy()]),"\n")
+        print("Energy after step {:5d}: {: .7f} | Angles: {}".format(
+            i+1, costn, [p1n.detach().numpy(), p2n.detach().numpy()]),"\n"
+        )
         
 
 ###############################################################################
@@ -200,7 +202,9 @@ for j in range(100):
         cost_pt_loc.append(costn)
 
         # for clarity, the angles are printed as numpy arrays
-        print('Energy after step {:5d}: {: .7f} | Angles: {}'.format(j+1, costn, [p3n.detach().numpy(), p4n.detach().numpy()]),"\n")
+        print('Energy after step {:5d}: {: .7f} | Angles: {}'.format(
+            j+1, costn, [p3n.detach().numpy(), p4n.detach().numpy()]),"\n"
+        )
 
 ###############################################################################
 
