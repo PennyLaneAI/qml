@@ -259,7 +259,9 @@ def training(features, Y):
         Y_train_batch = Y_train[batch_index]
 
         optimizer.zero_grad()
-        curr_cost = multiclass_svm_loss(q_circuits, params, feat_vecs_train_batch, Y_train_batch)
+        curr_cost = multiclass_svm_loss(
+            q_circuits, params, feat_vecs_train_batch, Y_train_batch
+        )
         curr_cost.backward()
         optimizer.step()
 
