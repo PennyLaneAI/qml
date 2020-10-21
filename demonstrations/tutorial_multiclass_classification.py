@@ -245,7 +245,9 @@ def training(features, Y):
         Variable(0.1 * torch.randn(num_layers, num_qubits, 3), requires_grad=True)
         for i in range(num_classes)
     ]
-    all_bias = [Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)]
+    all_bias = [
+        Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)
+    ]
     optimizer = optim.Adam(all_weights + all_bias, lr=lr_adam)
     params = (all_weights, all_bias)
     print("Num params: ", 3 * num_layers * num_qubits * 3 + 3)

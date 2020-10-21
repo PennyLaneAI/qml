@@ -96,8 +96,11 @@ p2 = Variable((np.pi * torch.rand(3, dtype=torch.float64)), requires_grad=True)
 var_init = [p1, p2]
 cost_init = cost(p1, p2)
 
-print("Randomly initialized angles:", var_init)
-print("Corresponding cost before optimization:", cost_init)
+print("Randomly initialized angles:")
+print(p1)
+print(p2)
+print("Corresponding cost before optimization:")
+print(cost_init)
 
 ###############################################################################
 # Optimization
@@ -149,8 +152,11 @@ for i in range(100):
 # the third spin. Note that gradient descent optimization might not find this global minimum due to the non-convex cost function, as is shown in the next section.
 
 p1_final, p2_final = opt.param_groups[0]["params"]
-print("Optimized angles:", p1_final, p2_final)
-print("Final cost after optimization:", cost(p1_final, p2_final))
+print("Optimized angles:")
+print(p1_final)
+print(p2_final)
+print("Final cost after optimization:")
+print(cost(p1_final, p2_final))
 
 ###############################################################################
 
@@ -177,7 +183,8 @@ p4 = Variable((np.pi*torch.rand(3, dtype = torch.float64)), requires_grad = True
 var_init_loc = [p3, p4]
 cost_init_loc = cost(p3, p4)
 
-print("Corresponding cost before optimization:", cost_init_loc)
+print("Corresponding cost before optimization:")
+print(cost_init_loc)
 
 
 ###############################################################################

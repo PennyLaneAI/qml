@@ -338,9 +338,9 @@ global_circuit = qml.QNode(global_cost_simple, dev)
 print(
     "Current cost: "
     + str(cost_global(params_local))
-    + ".\n Initial cost: "
+    + ".\nInitial cost: "
     + str(cost_global([[3.0 for i in range(wires)], [0 for i in range(wires)]]))
-    + ".\n Difference: "
+    + ".\nDifference: "
     + str(
         cost_global([[3.0 for i in range(wires)], [0 for i in range(wires)]])
         - cost_global(params_local)
