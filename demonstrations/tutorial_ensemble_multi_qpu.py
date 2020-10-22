@@ -8,6 +8,10 @@ Ensemble classification with Forest and Qiskit devices
         using PyTorch and PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/ensemble_diagram.png
 
+.. related
+
+   tutorial_variational_classifier Variational quantum classifier
+
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
 

@@ -8,6 +8,10 @@ Optimizing a quantum optical neural network
     :property="og:description": Optimizing a quantum optical neural network using PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
+.. related::
+
+   quantum_neural_net Function fitting with a photonic QNN
+
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
 Network (QONN) based on Fock states. Similar to the continuous-variable :doc:`quantum neural network

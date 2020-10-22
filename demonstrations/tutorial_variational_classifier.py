@@ -12,6 +12,12 @@ Variational classifier
         classify new data samples.
     :property="og:image": https://pennylane.ai/qml/_images/classifier_output_59_0.png
 
+.. related::
+
+   tutorial_data_reuploading_classifier Data-reuploading classifier
+   tutorial_multiclass_classification Multiclass margin classifier
+   tutorial_ensemble_multi_qpu Ensemble classification
+
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
 data to classify new data samples. The architecture is inspired by
@@ -410,25 +416,25 @@ Y = data[:, -1]
 import matplotlib.pyplot as plt
 
 plt.figure()
-plt.scatter(X[:, 0][Y == 1], X[:, 1][Y == 1], c="r", marker="o", edgecolors="k")
-plt.scatter(X[:, 0][Y == -1], X[:, 1][Y == -1], c="b", marker="o", edgecolors="k")
+plt.scatter(X[:, 0][Y == 1], X[:, 1][Y == 1], c="b", marker="o", edgecolors="k")
+plt.scatter(X[:, 0][Y == -1], X[:, 1][Y == -1], c="r", marker="o", edgecolors="k")
 plt.title("Original data")
 plt.show()
 
 plt.figure()
 dim1 = 0
 dim2 = 1
-plt.scatter(X_norm[:, dim1][Y == 1], X_norm[:, dim2][Y == 1], c="r", marker="o", edgecolors="k")
-plt.scatter(X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="b", marker="o", edgecolors="k")
+plt.scatter(X_norm[:, dim1][Y == 1], X_norm[:, dim2][Y == 1], c="b", marker="o", edgecolors="k")
+plt.scatter(X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="r", marker="o", edgecolors="k")
 plt.title("Padded and normalised data (dims {} and {})".format(dim1, dim2))
 plt.show()
 
 plt.figure()
 dim1 = 0
 dim2 = 3
-plt.scatter(features[:, dim1][Y == 1], features[:, dim2][Y == 1], c="r", marker="o", edgecolors="k")
+plt.scatter(features[:, dim1][Y == 1], features[:, dim2][Y == 1], c="b", marker="o", edgecolors="k")
 plt.scatter(
-    features[:, dim1][Y == -1], features[:, dim2][Y == -1], c="b", marker="o", edgecolors="k"
+    features[:, dim1][Y == -1], features[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
 )
 plt.title("Feature vectors (dims {} and {})".format(dim1, dim2))
 plt.show()

@@ -7,6 +7,10 @@ Quantum gradients with backpropagation
 
     :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_backprop_002.png
 
+.. related::
+
+   tutorial_quantum_natural_gradient Quantum natural gradient
+
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
 trained using the :doc:`parameter-shift rule </glossary/parameter_shift>` to compute quantum
 gradients. Indeed, the parameter-shift rule is ideally suited to hardware devices, as it does

@@ -11,6 +11,10 @@ VQE with parallel QPUs on Rigetti Forest
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
+
 Using a VQE setup, we task two devices from the
 `PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
@@ -45,7 +49,7 @@ from pennylane import qchem
 # the bond length between the hydrogen atoms.
 #
 # Each inter-atomic distance results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.generate_hamiltonian` function of the
+# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function of the
 # :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
 # :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
@@ -75,14 +79,7 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 hamiltonians = []
 
 for separation, file in data.items():
-    h, nr_qubits = qchem.generate_hamiltonian(
-        mol_name=str(separation),
-        mol_geo_file=file,
-        mol_charge=0,
-        multiplicity=1,
-        basis_set="sto-3g",
-    )
-
+    h = qchem.molecular_hamiltonian(name=str(separation), geo_file=file)[0]
     hamiltonians.append(h)
 
 ##############################################################################

@@ -4,12 +4,18 @@
 
 .. _quantum_neural_net:
 
-Function fitting with a quantum neural network
-==============================================
+Function fitting with a photonic quantum neural network
+=======================================================
 
 .. meta::
     :property="og:description": Fit to noisy data with a variational quantum circuit.
     :property="og:image": https://pennylane.ai/qml/_images/qnn_output_28_0.png
+
+.. related::
+ 
+   qonn Optimizing a quantum optical neural network
+   pytorch_noise PyTorch and noisy devices
+   tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
 In this example we show how a variational circuit can be used to learn a
 fit for a one-dimensional function when being trained with noisy samples

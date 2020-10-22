@@ -191,9 +191,11 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://pennylane.readthedocs.io/en/stable/": None}
 
-from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective
+from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective
 
 def setup(app):
     app.add_directive("customgalleryitem", CustomGalleryItemDirective)
     app.add_directive("youtube", YoutubeItemDirective)
+    app.add_directive("community-card", CommunityCardDirective)
+    app.add_directive("related", RelatedDirective)
     app.add_stylesheet("xanadu_gallery.css")
