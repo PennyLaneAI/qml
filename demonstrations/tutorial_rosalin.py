@@ -562,7 +562,8 @@ for i in range(60):
     cost_rosalin.append(cost_analytic(params))
     shots_rosalin.append(opt.shots_used)
     print(
-        "Step {}: cost = {} shots_used = {}".format(i, cost_rosalin[-1], shots_rosalin[-1])
+        "Step {}: cost = {}, shots_used = {}".format(i, cost_rosalin[-1], shots_rosalin[-1])
+
     )
 
 
