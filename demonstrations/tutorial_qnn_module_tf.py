@@ -98,7 +98,7 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 # ``(n_layers, n_qubits)``, which is passed to
 # :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
 #
-# With ``weight_shapes`` defined, it is easy to then convert the QNode:
+# Now that ``weight_shapes`` is defined, it is easy to then convert the QNode:
 
 qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 
