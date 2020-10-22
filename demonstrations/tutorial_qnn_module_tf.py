@@ -1,6 +1,6 @@
 """
-Adding quantum nodes as Keras Layers
-====================================
+Turning quantum nodes into Keras Layers
+=======================================
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
@@ -26,7 +26,7 @@ model.compile(loss="mae")
 # **What if we want to add a quantum layer to our model?** This is possible in PennyLane:
 # :doc:`QNodes <../glossary/hybrid_computation>` can be converted into Keras layers and combined
 # with the wide range of built-in classical
-# `layers <https://www.tensorflow.org/api_docs/python/tf/keras/layers>__ to create truly hybrid
+# `layers <https://www.tensorflow.org/api_docs/python/tf/keras/layers>`__ to create truly hybrid
 # models. This tutorial will guide you through a simple example to show you how it's done!
 #
 # Fixing the dataset and problem
@@ -34,12 +34,13 @@ model.compile(loss="mae")
 #
 # Let us begin by choosing a simple dataset and problem to allow us to focus on how the hybrid
 # model is constructed. Our objective is to classify points generated from scikit-learn's
+# binary-class
 # `make_moons() <https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_moons.html>`__ dataset:
 
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_moons
 
-X, y = make_moons(n_samples=10, noise=0.1)
+X, y = make_moons(n_samples=200, noise=0.1)
 y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
 
 c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
@@ -56,9 +57,9 @@ plt.show()
 # QNode. However, the QNode arguments must satisfy additional :doc:`conditions
 # <code/api/pennylane.qnn.KerasLayer>` including having an argument called ``inputs``. All other
 # arguments must be arrays or tensors and are treated as trainable weights in the model. We fix a
-# two-qubit QNode using the :doc:`default.qubit
-# <code/api/pennylane.plugins.default_qubit.DefaultQubit>` simulator and operations from the
-# :doc:`templates <introduction/templates>` module.
+# two-qubit QNode using the
+# :doc:`default.qubit <code/api/pennylane.devices.default_qubit.DefaultQubit>` simulator and
+# operations from the :doc:`templates <introduction/templates>` module.
 
 import pennylane as qml
 
@@ -77,7 +78,7 @@ def qnode(inputs, weights):
 # Interfacing with Keras
 # ----------------------
 #
-# With the QNode defined, we are ready to interface with Keras This is achieved using the
+# With the QNode defined, we are ready to interface with Keras. This is achieved using the
 # :class:`~pennylane.qnn.KerasLayer` class of the :mod:`~pennylane.qnn` module, which converts the
 # QNode to the elementary building block of Keras: a *layer*. We shall see in the following how the
 # resultant layer can be combined with other well-known neural network layers to form a hybrid
@@ -94,7 +95,7 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
-# ``(n_layers, n_qubits)`` which are passed to
+# ``(n_layers, n_qubits)``, which is passed to
 # :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
 #
 # With ``weight_shapes`` defined, it is easy to then convert the QNode:
@@ -134,7 +135,7 @@ model = tf.keras.models.Sequential([clayer_1, qlayer, clayer_2])
 # Training the model
 # ------------------
 #
-# We can now train our hybrid model on the the classification dataset using the usual Keras
+# We can now train our hybrid model on the classification dataset using the usual Keras
 # approach. We'll use the
 # standard `SGD <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD>`__ optimizer
 # and the mean absolute error loss function:
@@ -150,13 +151,13 @@ model.compile(opt, loss="mae", metrics=["accuracy"])
 
 X = X.astype("float32")
 y_hot = y_hot.astype("float32")
-model.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
+fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
 ###############################################################################
 # Creating non-sequential models
 # ------------------------------
 #
-# The models we created above were composed of a sequence of classical and quantum layers. This
+# The model we created above was composed of a sequence of classical and quantum layers. This
 # type of model is very common and is suitable in a lot of situations. However, in some cases we
 # may want a greater degree of control over how the model is constructed, for example when we
 # have multiple inputs and outputs or when we want to distribute the output of one layer into
@@ -203,4 +204,9 @@ model = tf.keras.Model(inputs=inputs, outputs=outputs)
 opt = tf.keras.optimizers.SGD(learning_rate=0.2)
 model.compile(opt, loss="mae", metrics=["accuracy"])
 
-model.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
+model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
+
+###############################################################################
+# Great! We've mastered the basics of constructing hybrid classical-quantum models using
+# PennyLane and Keras. Can you think of any interesting hybrid models to construct? How do they
+# perform on realistic datasets?
