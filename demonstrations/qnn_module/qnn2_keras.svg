@@ -15,8 +15,8 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="qnn2.svg"
-   inkscape:export-filename="/home/tom/Documents/Coding/qml/demonstrations/qnn_module/qnn2.png"
+   sodipodi:docname="qnn2_keras.svg"
+   inkscape:export-filename="/home/tom/Documents/Coding/qml/demonstrations/qnn_module/qnn2_keras.png"
    inkscape:export-xdpi="199.99753"
    inkscape:export-ydpi="199.99753">
   <defs
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.40604277"
-     inkscape:cx="770.9026"
-     inkscape:cy="617.69871"
+     inkscape:zoom="2.2593192"
+     inkscape:cx="646.0977"
+     inkscape:cy="642.583"
      inkscape:document-units="mm"
      inkscape:current-layer="g1824"
      showgrid="false"
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -509,14 +509,14 @@
           <text
              xml:space="preserve"
              style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-             x="190.40082"
+             x="179.81763"
              y="87.042175"
              id="text983-1"><tspan
                sodipodi:role="line"
                id="tspan981-2"
-               x="190.40082"
+               x="179.81763"
                y="87.042175"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:Lato;-inkscape-font-specification:Lato;stroke-width:0.26458332">Layer</tspan></text>
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:Lato;-inkscape-font-specification:Lato;stroke-width:0.26458332">Circuit layer</tspan></text>
           <rect
              style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3462466;stroke-miterlimit:4;stroke-dasharray:2.07747956, 0.6924932;stroke-dashoffset:0;stroke-opacity:1"
              id="rect964-2"
@@ -576,17 +576,19 @@
            xml:space="preserve"
            id="flowRoot1322-4-7"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-           transform="matrix(0.26458333,0,0,0.26458333,151.51945,15.167485)"><flowRegion
+           transform="matrix(0.26458333,0,0,0.26458333,129.25163,14.067641)"><flowRegion
              id="flowRegion1324-8-7"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;text-anchor:middle"><rect
                id="rect1326-9-3"
-               width="290.50092"
-               height="110.37856"
+               width="492.78458"
+               height="122.19075"
                x="286.11285"
                y="-32.098164"
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;text-anchor:middle" /></flowRegion><flowPara
              id="flowPara1328-6-7"
-             style="-inkscape-font-specification:Lato;font-family:Lato;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">2-qubit quantum layer</flowPara></flowRoot>      </g>
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Lato;-inkscape-font-specification:Lato">2-qubit</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Lato;-inkscape-font-specification:Lato"
+             id="flowPara210">quantum Keras layer</flowPara></flowRoot>      </g>
       <path
          inkscape:connector-curvature="0"
          id="path1286-2"
@@ -1050,14 +1052,14 @@
           <text
              xml:space="preserve"
              style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-             x="190.40082"
+             x="179.81763"
              y="87.042175"
              id="text983-1-6"><tspan
                sodipodi:role="line"
                id="tspan981-2-5"
-               x="190.40082"
+               x="179.81763"
                y="87.042175"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:Lato;-inkscape-font-specification:Lato;stroke-width:0.26458332">Layer</tspan></text>
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:Lato;-inkscape-font-specification:Lato;stroke-width:0.26458332">Circuit layer</tspan></text>
           <rect
              style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3462466;stroke-miterlimit:4;stroke-dasharray:2.07747956, 0.6924932;stroke-dashoffset:0;stroke-opacity:1"
              id="rect964-2-6"
@@ -1117,17 +1119,19 @@
            xml:space="preserve"
            id="flowRoot1322-4-7-7"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-           transform="matrix(0.26458333,0,0,0.26458333,151.51945,15.167485)"><flowRegion
+           transform="matrix(0.26458333,0,0,0.26458333,144.11107,15.167485)"><flowRegion
              id="flowRegion1324-8-7-4"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;text-anchor:middle"><rect
                id="rect1326-9-3-4"
-               width="292.96371"
-               height="112.84135"
+               width="369.74289"
+               height="106.93526"
                x="286.11285"
                y="-32.098164"
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;text-anchor:middle" /></flowRegion><flowPara
              id="flowPara1328-6-7-3"
-             style="-inkscape-font-specification:Lato;font-family:Lato;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">2-qubit quantum layer</flowPara></flowRoot>      </g>
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Lato;-inkscape-font-specification:Lato">2-qubit</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Lato;-inkscape-font-specification:Lato"
+             id="flowPara208">quantum Keras layer</flowPara></flowRoot>      </g>
     </g>
   </g>
 </svg>

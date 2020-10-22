@@ -15,8 +15,8 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="qnn.svg"
-   inkscape:export-filename="/home/tom/Documents/Coding/qml/demonstrations/qnn_module/qnn.png"
+   sodipodi:docname="qnn_torch.svg"
+   inkscape:export-filename="/home/tom/Documents/Coding/qml/demonstrations/qnn_module/qnn_torch.png"
    inkscape:export-xdpi="199.98253"
    inkscape:export-ydpi="199.98253">
   <defs
@@ -28,11 +28,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.47889984"
-     inkscape:cx="745.04352"
-     inkscape:cy="375.50237"
+     inkscape:zoom="1.8842369"
+     inkscape:cx="505.22355"
+     inkscape:cy="146.11584"
      inkscape:document-units="mm"
-     inkscape:current-layer="g1251"
+     inkscape:current-layer="g1677"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
@@ -545,15 +545,14 @@
           <text
              xml:space="preserve"
              style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-             x="300.45724"
-             y="75.063202"
-             id="text983-1"
-             transform="translate(-111.11476,11.97897)"><tspan
+             x="177.17181"
+             y="87.042175"
+             id="text983-1"><tspan
                sodipodi:role="line"
                id="tspan981-2"
-               x="300.45724"
-               y="75.063202"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';stroke-width:0.26458332">Layer</tspan></text>
+               x="177.17181"
+               y="87.042175"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';stroke-width:0.26458332">Circuit layer</tspan></text>
           <rect
              style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3462466;stroke-miterlimit:4;stroke-dasharray:2.07747956, 0.6924932;stroke-dashoffset:0;stroke-opacity:1"
              id="rect964-2"
@@ -641,19 +640,19 @@
            xml:space="preserve"
            id="flowRoot1322-4-7"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-           transform="matrix(0.26458333,0,0,0.26458333,127.29073,49.597817)"><flowRegion
+           transform="matrix(0.26458333,0,0,0.26458333,118.82401,49.597817)"><flowRegion
              id="flowRegion1324-8-7"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;text-anchor:middle"><rect
                id="rect1326-9-3"
-               width="302.81485"
-               height="110.37856"
+               width="366.5509"
+               height="113.03423"
                x="286.11285"
                y="-32.098164"
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:center;text-anchor:middle" /></flowRegion><flowPara
              id="flowPara1328-6-7"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Lato;-inkscape-font-specification:Lato">2-qubit</flowPara><flowPara
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Lato;-inkscape-font-specification:Lato"
-             id="flowPara130">quantum layer</flowPara></flowRoot>        <path
+             id="flowPara130">quantum Torch layer </flowPara></flowRoot>        <path
            style="fill:#ff5555;fill-opacity:1;stroke:#ff5555;stroke-width:2.6974113;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            d="M 8.1536093,120.34038 H 43.205233"
            id="path1286-1"
