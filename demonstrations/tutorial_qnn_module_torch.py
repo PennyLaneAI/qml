@@ -28,6 +28,12 @@ model = torch.nn.Sequential(*layers)
 # `layers <https://pytorch.org/docs/stable/nn.html>`__ to create truly hybrid
 # models. This tutorial will guide you through a simple example to show you how it's done!
 #
+# .. note::
+#
+#     A similar demo explaining how to
+#     :doc:`turn quantum nodes into Keras layers <tutorial_qnn_module_tf>`
+#     is also available.
+#
 # Fixing the dataset and problem
 # ------------------------------
 #
@@ -40,7 +46,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_moons
 import tensorflow as tf
 
-X, y = make_moons(n_samples=200, noise=0.1)
+X, y = make_moons(n_samples=2, noise=0.1)
 y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
 
 c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class

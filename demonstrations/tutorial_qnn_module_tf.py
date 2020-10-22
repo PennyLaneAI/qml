@@ -29,6 +29,12 @@ model.compile(loss="mae")
 # `layers <https://www.tensorflow.org/api_docs/python/tf/keras/layers>`__ to create truly hybrid
 # models. This tutorial will guide you through a simple example to show you how it's done!
 #
+# .. note::
+#
+#     A similar demo explaining how to
+#     :doc:`turn quantum nodes into Torch layers <tutorial_qnn_module_torch>`
+#     is also available.
+#
 # Fixing the dataset and problem
 # ------------------------------
 #
