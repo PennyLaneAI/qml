@@ -132,6 +132,12 @@ hardware.
     :description: :doc:`demos/tutorial_vqe_uccsd_obs`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Learn how to create hybrid ML models using Keras and PyTorch
+    :figure: demonstrations/qnn_module/qnn3.png
+    :description: :doc:`demos/tutorial_qnn_module`
+    :tags: pytorch tensorflow
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -153,3 +159,4 @@ hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
+    demos/tutorial_qnn_module
