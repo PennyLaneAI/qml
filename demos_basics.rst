@@ -140,7 +140,7 @@ hardware.
 
 .. customgalleryitem::
     :tooltip: Learn how to create hybrid ML models using Torch
-    :figure: _static/PyTorch_icon.svg
+    :figure: _static/PyTorch_icon.png
     :description: :doc:`demos/tutorial_qnn_module_torch`
     :tags: pytorch
 
