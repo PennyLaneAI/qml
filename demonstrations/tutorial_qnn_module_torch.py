@@ -234,6 +234,7 @@ model = HybridModel()
 ###############################################################################
 # As a final step, let's train the model to check if it's working:
 
+opt = torch.optim.SGD(model.parameters(), lr=0.2)
 epochs = 6
 
 for epoch in range(epochs):
