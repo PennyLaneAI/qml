@@ -200,12 +200,12 @@ def accuracy(labels, hard_predictions):
 def load_and_process_data():
     data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
-    print("First X sample (original)  :", X[0])
+    print("First X sample, original  : ", X[0])
 
     # normalize each input
     normalization = torch.sqrt(torch.sum(X ** 2, dim=1))
     X_norm = X / normalization.reshape(len(X), 1)
-    print("First X sample (normalized):", X_norm[0])
+    print("First X sample, normalized: ", X_norm[0])
 
     Y = torch.tensor(data[:, -1])
     return X, Y

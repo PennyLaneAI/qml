@@ -55,7 +55,8 @@ from pennylane import qchem
 
 geometry = qchem.read_structure('h2o.xyz')
 print("The total number of atoms is: {}".format(len(geometry)))
-print(geometry)
+for atom in geometry:
+    print(atom)
 
 ##############################################################################
 # .. note::
