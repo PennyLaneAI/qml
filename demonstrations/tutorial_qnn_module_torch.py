@@ -1,32 +1,31 @@
-r"""
-Adding quantum nodes as Keras Layers
-====================================
+"""
+Turning quantum nodes into Torch Layers
+=======================================
 
 .. meta::
-    :property="og:description": Learn how to create hybrid ML models in PennyLane using the Keras and PyTorch interfaces
-    :property="og:image": https://pennylane.ai/qml/_images/qnn21.png
+    :property="og:description": Learn how to create hybrid ML models in PennyLane using Torch
+    :property="og:image": https://pennylane.ai/qml/_images/PyTorch_icon.png
 
-Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
-elementary *layers* and can be trained using a high-level API. For example, the following code
-defines a two-layer network that could be used for binary classification:
+Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
+`nn module <https://pytorch.org/docs/stable/nn.html>`__. Models are constructed from elementary
+*layers* and can be trained using the PyTorch API. For example, the following code defines a
+two-layer network that could be used for binary classification:
 """
 
-import tensorflow as tf
+import torch
 
-layer_1 = tf.keras.layers.Dense(2)
-layer_2 = tf.keras.layers.Dense(2, activation="softmax")
+layer_1 = torch.nn.Linear(2, 2)
+layer_2 = torch.nn.Linear(2, 2)
+softmax = torch.nn.Softmax(dim=1)
 
-model = tf.keras.Sequential([layer_1, layer_2])
-model.compile(loss="mae")
+layers = [layer_1, layer_2, softmax]
+model = torch.nn.Sequential(*layers)
 
 ###############################################################################
-# The model can then be trained using `model.fit()
-# <https://www.tensorflow.org/api_docs/python/tf/keras/Model#fit>`__.
-#
 # **What if we want to add a quantum layer to our model?** This is possible in PennyLane:
-# :doc:`QNodes <../glossary/hybrid_computation>` can be converted into Keras layers and combined
-# with the wide range of built-in classical
-# `layers <https://www.tensorflow.org/api_docs/python/tf/keras/layers>__ to create truly hybrid
+# :doc:`QNodes <../glossary/hybrid_computation>` can be converted into ``torch.nn`` layers and
+# combined with the wide range of built-in classical
+# `layers <https://pytorch.org/docs/stable/nn.html>`__ to create truly hybrid
 # models. This tutorial will guide you through a simple example to show you how it's done!
 #
 # Fixing the dataset and problem
@@ -34,17 +33,18 @@ model.compile(loss="mae")
 #
 # Let us begin by choosing a simple dataset and problem to allow us to focus on how the hybrid
 # model is constructed. Our objective is to classify points generated from scikit-learn's
+# binary-class
 # `make_moons() <https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_moons.html>`__ dataset:
 
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_moons
 import tensorflow as tf
 
-X, y = make_moons(n_samples=10, noise=0.1)
+X, y = make_moons(n_samples=200, noise=0.1)
 y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
 
-c = ['#1f77b4' if y_ == 0 else '#ff7f0e' for y_ in y]  # colours for each class
-plt.axis('off')
+c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
+plt.axis("off")
 plt.scatter(X[:, 0], X[:, 1], c=c)
 plt.show()
 
@@ -52,13 +52,13 @@ plt.show()
 # Defining a QNode
 # ----------------
 #
-# Our next step is to define the QNode that we want to interface with Keras
-# or `torch.nn <https://pytorch.org/docs/stable/nn.html>`__. Any combination of device, operations
-# and measurements that is valid in PennyLane can be used to compose the QNode. However,
-# the QNode arguments must satisfy additional :doc:`conditions <code/api/pennylane.qnn.KerasLayer>`
-# including having an argument called ``inputs``. All other arguments must be arrays or tensors
-# and are treated as trainable weights in the model. We fix a two-qubit QNode using the
-# :doc:`default.qubit <code/api/pennylane.plugins.default_qubit.DefaultQubit>` simulator and
+# Our next step is to define the QNode that we want to interface with ``torch.nn``. Any
+# combination of device, operations and measurements that is valid in PennyLane can be used to
+# compose the QNode. However, the QNode arguments must satisfy additional :doc:`conditions
+# <code/api/pennylane.qnn.TorchLayer>` including having an argument called ``inputs``. All other
+# arguments must be arrays or tensors and are treated as trainable weights in the model. We fix a
+# two-qubit QNode using the
+# :doc:`default.qubit <code/api/pennylane.devices.default_qubit.DefaultQubit>` simulator and
 # operations from the :doc:`templates <introduction/templates>` module.
 
 import pennylane as qml
@@ -70,47 +70,41 @@ dev = qml.device("default.qubit", wires=n_qubits)
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
-    qml.templates.BasicEntanglingLayers(weights, wires=range(n_qubits))
+    qml.templates.BasicEntanglerLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 
+
 ###############################################################################
-# Interfacing with Keras and Torch
-# --------------------------------
+# Interfacing with Torch
+# ----------------------
 #
-# With the QNode defined, we are ready to interface with Keras or
-# torch.nn. This is achieved using the
-# :class:`~pennylane.qnn.KerasLayer` and :class:`~pennylane.qnn.TorchLayer` classes of the
-# :mod:`~pennylane.qnn` module, which convert the QNode to the elementary building block of these
-# high-level frameworks: a *layer*. We shall see in the following how the resultant layer can be
-# combined with other well-known neural network layers to form a hybrid model.
+# With the QNode defined, we are ready to interface with ``torch.nn``. This is achieved using the
+# :class:`~pennylane.qnn.TorchLayer` class of the :mod:`~pennylane.qnn` module, which converts the
+# QNode to the elementary building block of ``torch.nn``: a *layer*. We shall see in the
+# following how the resultant layer can be combined with other well-known neural network layers
+# to form a hybrid model.
 #
 # We must first define the ``weight_shapes`` dictionary. Recall that all of
 # the arguments of the QNode (except the one named ``inputs``) are treated as trainable
-# weights. For the QNode to be successfully converted to a layer in Keras or
-# torch.nn, we need to provide the details of the
-# shape of each trainable weight for them to be initialized. The ``weight_shapes`` dictionary
-# maps from the argument names of the QNode to corresponding shapes:
+# weights. For the QNode to be successfully converted to a layer in ``torch.nn``, we need to provide
+# the details of the shape of each trainable weight for them to be initialized. The
+# ``weight_shapes`` dictionary maps from the argument names of the QNode to corresponding shapes:
 
 n_layers = 6
 weight_shapes = {"weights": (n_layers, n_qubits)}
 
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
-# ``(n_layers, n_qubits)`` which are passed to
-# :func:`~pennylane.templates.layers.BasicEntanglingLayers`.
+# ``(n_layers, n_qubits)``, which is passed to
+# :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
 #
-# With ``weight_shapes`` defined, it is easy to then convert the QNode. To convert to
-# Keras:
+# Now that ``weight_shapes`` is defined, it is easy to then convert the QNode:
 
-qlayer_tf = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-
-###############################################################################
-# To convert to torch.nn:
-
-qlayer_torch = qml.qnn.TorchLayer(qnode, weight_shapes)
+qlayer = qml.qnn.TorchLayer(qnode, weight_shapes)
 
 ###############################################################################
-# With this done, the rest is just working with your favourite classical machine learning library!
+# With this done, the QNode can now be treated just like any other ``torch.nn`` layer and we can
+# proceed using the familiar Torch workflow.
 #
 # Creating a hybrid model
 # -----------------------
@@ -124,29 +118,18 @@ qlayer_torch = qml.qnn.TorchLayer(qnode, weight_shapes)
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn.png
+# .. figure:: /demonstrations/qnn_module/qnn_torch.png
 #    :width: 100%
 #    :align: center
 #
-# We can construct the model using the ``Sequential`` API in both Keras and
-# torch.nn. First, using Keras
-# `Sequential <https://www.tensorflow.org/api_docs/python/tf/keras/Sequential>`__:
+# We can construct the model using the
+# `Sequential <https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html>`__ API:
 
-clayer_tf_1 = tf.keras.layers.Dense(2)
-clayer_tf_2 = tf.keras.layers.Dense(2, activation="softmax")
-model_tf = tf.keras.models.Sequential([clayer_tf_1, qlayer_tf, clayer_tf_2])
-
-###############################################################################
-# Similarly, using torch.nn
-# `Sequential <https://pytorch.org/docs/stable/nn.html#sequential>`__:
-
-import torch
-
-clayer_torch_1 = torch.nn.Linear(2, 2)
-clayer_torch_2 = torch.nn.Linear(2, 2)
-softmax_torch = torch.nn.Softmax(dim=1)
-layers_torch = [clayer_torch_1, qlayer_torch, clayer_torch_2, softmax_torch]
-model_torch = torch.nn.Sequential(*layers_torch)
+clayer_1 = torch.nn.Linear(2, 2)
+clayer_2 = torch.nn.Linear(2, 2)
+softmax = torch.nn.Softmax(dim=1)
+layers = [clayer_1, qlayer, clayer_2, softmax]
+model = torch.nn.Sequential(*layers)
 
 ###############################################################################
 # Constructing hybrid models is easy!
@@ -154,14 +137,13 @@ model_torch = torch.nn.Sequential(*layers_torch)
 # Training the model
 # ------------------
 #
-# We can now train our hybrid model on the the classification dataset using the usual
-# approaches in Keras and
-# torch.nn. Let's focus on Keras. We'll use the
-# standard `SGD <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD>`__ optimizer
+# We can now train our hybrid model on the classification dataset using the usual Torch
+# approach. We'll use the
+# standard `SGD <https://pytorch.org/docs/stable/optim.html#torch.optim.SGD>`__ optimizer
 # and the mean absolute error loss function:
 
-opt = tf.keras.optimizers.SGD(learning_rate=0.2)
-model_tf.compile(opt, loss='mae', metrics=['accuracy'])
+opt = torch.optim.SGD(model.parameters(), lr=0.2)
+loss = torch.nn.L1Loss()
 
 ###############################################################################
 # Note that there are more advanced combinations of optimizer and loss function, but here we are
@@ -169,15 +151,39 @@ model_tf.compile(opt, loss='mae', metrics=['accuracy'])
 #
 # The model is now ready to be trained!
 
-X = X.astype("float32")
-y_hot = y_hot.astype("float32")
-model_tf.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
+X = torch.tensor(X, requires_grad=True).float()
+y_hot = torch.tensor(y_hot)
+
+batch_size = 5
+batches = 200 // batch_size
+
+data_loader = torch.utils.data.DataLoader(list(zip(X, y_hot)), batch_size=5,
+                                          shuffle=True, drop_last=True)
+
+epochs = 6
+
+for epoch in range(epochs):
+
+    running_loss = 0
+
+    for x, y in data_loader:
+        opt.zero_grad()
+
+        loss_evaluated = loss(model(x), y)
+        loss_evaluated.backward()
+
+        opt.step()
+
+        running_loss += loss_evaluated
+
+    avg_loss = running_loss / batches
+    print("Average loss over epoch {}: {:.4f}".format(epoch + 1, avg_loss))
 
 ###############################################################################
 # Creating non-sequential models
 # ------------------------------
 #
-# The models we created above were composed of a sequence of classical and quantum layers. This
+# The model we created above was composed of a sequence of classical and quantum layers. This
 # type of model is very common and is suitable in a lot of situations. However, in some cases we
 # may want a greater degree of control over how the model is constructed, for example when we
 # have multiple inputs and outputs or when we want to distribute the output of one layer into
@@ -194,63 +200,58 @@ model_tf.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn2.png
+# .. figure:: /demonstrations/qnn_module/qnn2_torch.png
 #    :width: 100%
 #    :align: center
 #
-# This model can also be constructed in the Keras and
-# torch.nn interfaces. For
-# Keras, we can use the
-# `Functional API <https://keras.io/guides/functional_api/>`__:
+# This model can also be constructed by creating a new class that inherits from the
+# ``torch.nn`` `Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`__ and
+# overriding the ``forward()`` method:
 
-# re-define the layers
-clayer_tf_1 = tf.keras.layers.Dense(4)
-qlayer_tf = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-qlayer_tf_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-clayer_tf_2 = tf.keras.layers.Dense(2, activation="softmax")
-
-# construct the model
-inputs = tf.keras.Input(shape=(2,))
-x = clayer_tf_1(inputs)
-x_1, x_2 = tf.split(x, 2, axis=1)
-x_1 = qlayer_tf(x_1)
-x_2 = qlayer_tf_2(x_2)
-x = tf.concat([x_1, x_2], axis=1)
-outputs = clayer_tf_2(x)
-
-model_tf = tf.keras.Model(inputs=inputs, outputs=outputs)
-
-###############################################################################
-# In torch.nn, we can create a new class that
-# inherits from `Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`__:
-
-# re-define the layers
-clayer_torch_1 = torch.nn.Linear(2, 4)
-qlayer_torch = qml.qnn.TorchLayer(qnode, weight_shapes)
-qlayer_torch_2 = qml.qnn.TorchLayer(qnode, weight_shapes)
-clayer_torch_2 = torch.nn.Linear(4, 2)
-softmax_torch = torch.nn.Softmax(dim=1)
-
-
-# construct the model
 class HybridModel(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.clayer_1 = torch.nn.Linear(2, 4)
+        self.qlayer_1 = qml.qnn.TorchLayer(qnode, weight_shapes)
+        self.qlayer_2 = qml.qnn.TorchLayer(qnode, weight_shapes)
+        self.clayer_2 = torch.nn.Linear(4, 2)
+        self.softmax = torch.nn.Softmax(dim=1)
+
     def forward(self, x):
-        x = clayer_torch_1(x)
+        x = self.clayer_1(x)
         x_1, x_2 = torch.split(x, 2, dim=1)
-        x_1 = qlayer_torch(x_1)
-        x_2 = qlayer_torch_2(x_2)
+        x_1 = self.qlayer_1(x_1)
+        x_2 = self.qlayer_2(x_2)
         x = torch.cat([x_1, x_2], axis=1)
-        x = clayer_torch_2(x)
-        return softmax_torch(x)
+        x = self.clayer_2(x)
+        return self.softmax(x)
 
 
-model_torch = HybridModel()
+model = HybridModel()
 
 ###############################################################################
-# As a final step, let's train the Keras-based model to check if it's
-# working:
+# As a final step, let's train the model to check if it's working:
 
-opt = tf.keras.optimizers.SGD(learning_rate=0.2)
-model_tf.compile(opt, loss='mae', metrics=['accuracy'])
+epochs = 6
 
-model_tf.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
+for epoch in range(epochs):
+
+    running_loss = 0
+
+    for x, y in data_loader:
+        opt.zero_grad()
+
+        loss_evaluated = loss(model(x), y)
+        loss_evaluated.backward()
+
+        opt.step()
+
+        running_loss += loss_evaluated
+
+    avg_loss = running_loss / batches
+    print("Average loss over epoch {}: {:.4f}".format(epoch + 1, avg_loss))
+
+###############################################################################
+# Great! We've mastered the basics of constructing hybrid classical-quantum models using
+# PennyLane and Torch. Can you think of any interesting hybrid models to construct? How do they
+# perform on realistic datasets?
