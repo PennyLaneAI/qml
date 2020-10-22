@@ -133,8 +133,8 @@ hardware.
     :tags: chemistry
 
 .. customgalleryitem::
-    :tooltip: Learn how to create hybrid ML models using Keras and PyTorch
-    :figure: demonstrations/qnn_module/qnn3.png
+    :tooltip: Learn how to create hybrid ML models using Keras
+    :figure: _static/Keras_logo.png
     :description: :doc:`demos/tutorial_qnn_module`
     :tags: pytorch tensorflow
 

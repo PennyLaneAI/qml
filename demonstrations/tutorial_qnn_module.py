@@ -1,4 +1,4 @@
-r"""
+"""
 Adding quantum nodes as Keras Layers
 ====================================
 
@@ -38,13 +38,12 @@ model.compile(loss="mae")
 
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_moons
-import tensorflow as tf
 
 X, y = make_moons(n_samples=10, noise=0.1)
 y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
 
-c = ['#1f77b4' if y_ == 0 else '#ff7f0e' for y_ in y]  # colours for each class
-plt.axis('off')
+c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
+plt.axis("off")
 plt.scatter(X[:, 0], X[:, 1], c=c)
 plt.show()
 
@@ -70,8 +69,9 @@ dev = qml.device("default.qubit", wires=n_qubits)
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
-    qml.templates.BasicEntanglingLayers(weights, wires=range(n_qubits))
+    qml.templates.BasicEntanglerLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
+
 
 ###############################################################################
 # Interfacing with Keras
@@ -95,7 +95,7 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
 # ``(n_layers, n_qubits)`` which are passed to
-# :func:`~pennylane.templates.layers.BasicEntanglingLayers`.
+# :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
 #
 # With ``weight_shapes`` defined, it is easy to then convert the QNode:
 
@@ -140,7 +140,7 @@ model = tf.keras.models.Sequential([clayer_1, qlayer, clayer_2])
 # and the mean absolute error loss function:
 
 opt = tf.keras.optimizers.SGD(learning_rate=0.2)
-model.compile(opt, loss='mae', metrics=['accuracy'])
+model.compile(opt, loss="mae", metrics=["accuracy"])
 
 ###############################################################################
 # Note that there are more advanced combinations of optimizer and loss function, but here we are
@@ -201,6 +201,6 @@ model = tf.keras.Model(inputs=inputs, outputs=outputs)
 # As a final step, let's train the model to check if it's working:
 
 opt = tf.keras.optimizers.SGD(learning_rate=0.2)
-model.compile(opt, loss='mae', metrics=['accuracy'])
+model.compile(opt, loss="mae", metrics=["accuracy"])
 
 model.fit(X, y_hot, epochs=1, batch_size=5, validation_split=0.25, verbose=2)
