@@ -157,8 +157,9 @@ y_hot = torch.tensor(y_hot)
 batch_size = 5
 batches = 200 // batch_size
 
-data_loader = torch.utils.data.DataLoader(list(zip(X, y_hot)), batch_size=5,
-                                          shuffle=True, drop_last=True)
+data_loader = torch.utils.data.DataLoader(
+    list(zip(X, y_hot)), batch_size=5, shuffle=True, drop_last=True
+)
 
 epochs = 6
 
@@ -207,6 +208,7 @@ for epoch in range(epochs):
 # This model can also be constructed by creating a new class that inherits from the
 # ``torch.nn`` `Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`__ and
 # overriding the ``forward()`` method:
+
 
 class HybridModel(torch.nn.Module):
     def __init__(self):
