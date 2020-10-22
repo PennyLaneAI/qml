@@ -204,7 +204,7 @@ model = tf.keras.Model(inputs=inputs, outputs=outputs)
 opt = tf.keras.optimizers.SGD(learning_rate=0.2)
 model.compile(opt, loss="mae", metrics=["accuracy"])
 
-model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
+fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
 ###############################################################################
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
