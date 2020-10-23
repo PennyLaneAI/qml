@@ -205,7 +205,7 @@ div.highlight {
 
 div.section {
   padding-top: 40px;
-  margin-top: -40px;
+  margin: -40px -5px 0px -5px;
 }
 
 a.internal em {

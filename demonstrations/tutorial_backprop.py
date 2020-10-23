@@ -178,10 +178,10 @@ print(circuit(params))
 
 import timeit
 
-repeat = 3
-number = 10
-times = timeit.repeat("circuit(params)", globals=globals(), number=number, repeat=repeat)
-forward_time = min(times) / number
+reps = 3
+num = 10
+times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
+forward_time = min(times) / num
 
 print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
@@ -193,8 +193,8 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 # create the gradient function
 grad_fn = qml.grad(circuit)
 
-times = timeit.repeat("grad_fn(params)", globals=globals(), number=number, repeat=repeat)
-backward_time = min(times) / number
+times = timeit.repeat("grad_fn(params)", globals=globals(), number=num, repeat=reps)
+backward_time = min(times) / num
 
 print(f"Gradient computation (best of {repeat}): {backward_time} sec per loop")
 
@@ -275,12 +275,10 @@ print(circuit(params))
 
 import timeit
 
-repeat = 3
-number = 10
-times = timeit.repeat(
-    "circuit(params)", globals=globals(), number=number, repeat=repeat
-)
-forward_time = min(times) / number
+reps = 3
+num = 10
+times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
+forward_time = min(times) / num
 print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 
 
@@ -292,10 +290,8 @@ print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
 with tf.GradientTape(persistent=True) as tape:
     res = circuit(params)
 
-times = timeit.repeat(
-    "tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat
-)
-backward_time = min(times) / number
+times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
+backward_time = min(times) / num
 print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
 
 ##############################################################################
@@ -328,8 +324,8 @@ def circuit(params):
 # trainable parameters) to 20. Each layer will contain :math:`3N` parameters, where
 # :math:`N` is the number of wires (in this case, we have :math:`N=4`).
 
-repeat = 2
-number = 3
+reps = 2
+num = 3
 
 forward_shift = []
 gradient_shift = []
@@ -348,16 +344,12 @@ for depth in range(0, 21):
     qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
 
     # parameter-shift
-    t = timeit.repeat(
-        "qnode_shift(params)", globals=globals(), number=number, repeat=repeat
-    )
-    forward_shift.append([num_params, min(t) / number])
+    t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
+    forward_shift.append([num_params, min(t) / num])
 
     # backprop
-    t = timeit.repeat(
-        "qnode_backprop(params)", globals=globals(), number=number, repeat=repeat
-    )
-    forward_backprop.append([num_params, min(t) / number])
+    t = timeit.repeat("qnode_backprop(params)", globals=globals(), number=num, repeat=reps)
+    forward_backprop.append([num_params, min(t) / num])
 
     if num_params == 0:
         continue
@@ -372,19 +364,15 @@ for depth in range(0, 21):
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_shift(params)
 
-    t = timeit.repeat(
-        "tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat
-    )
-    gradient_shift.append([num_params, min(t) / number])
+    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
+    gradient_shift.append([num_params, min(t) / num])
 
     # backprop
     with tf.GradientTape(persistent=True) as tape:
         res = qnode_backprop(params)
 
-    t = timeit.repeat(
-        "tape.gradient(res, params)", globals=globals(), number=number, repeat=repeat
-    )
-    gradient_backprop.append([num_params, min(t) / number])
+    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
+    gradient_backprop.append([num_params, min(t) / num])
 
 gradient_shift = np.array(gradient_shift).T
 gradient_backprop = np.array(gradient_backprop).T
