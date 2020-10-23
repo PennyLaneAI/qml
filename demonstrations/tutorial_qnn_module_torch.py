@@ -201,12 +201,12 @@ print(f"Accuracy: {accuracy * 100}%")
 #
 # Suppose we want to make a hybrid model consisting of:
 #
-# 1. A 4-neuron fully connected classical layer
-# 2. A 2-qubit quantum layer connected to the first two neurons of the previous classical layer
-# 3. A 2-qubit quantum layer connected to the second two neurons of the previous classical layer
-# 4. A 2-neuron fully connected classical layer which takes a 4-dimensional input from the
+# 1. a 4-neuron fully connected classical layer
+# 2. a 2-qubit quantum layer connected to the first two neurons of the previous classical layer
+# 3. a 2-qubit quantum layer connected to the second two neurons of the previous classical layer
+# 4. a 2-neuron fully connected classical layer which takes a 4-dimensional input from the
 #    combination of the previous quantum layers
-# 5. A softmax activation to convert to a probability vector
+# 5. a softmax activation to convert to a probability vector
 #
 # A diagram of the model can be seen in the figure below.
 #
