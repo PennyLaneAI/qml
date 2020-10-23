@@ -183,7 +183,7 @@ num = 10
 times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
 forward_time = min(times) / num
 
-print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
+print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 
 ##############################################################################
@@ -196,7 +196,7 @@ grad_fn = qml.grad(circuit)
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=num, repeat=reps)
 backward_time = min(times) / num
 
-print(f"Gradient computation (best of {repeat}): {backward_time} sec per loop")
+print(f"Gradient computation (best of {reps}): {backward_time} sec per loop")
 
 
 ##############################################################################
@@ -279,7 +279,7 @@ reps = 3
 num = 10
 times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
 forward_time = min(times) / num
-print(f"Forward pass (best of {repeat}): {forward_time} sec per loop")
+print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 
 ##############################################################################
@@ -292,7 +292,7 @@ with tf.GradientTape(persistent=True) as tape:
 
 times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
 backward_time = min(times) / num
-print(f"Backward pass (best of {repeat}): {backward_time} sec per loop")
+print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 
 ##############################################################################
 # Unlike with the parameter-shift rule, the time taken to perform the backwards pass appears
