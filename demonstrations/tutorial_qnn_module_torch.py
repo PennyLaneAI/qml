@@ -169,10 +169,10 @@ for epoch in range(epochs):
 
     running_loss = 0
 
-    for x, y in data_loader:
+    for xs, ys in data_loader:
         opt.zero_grad()
 
-        loss_evaluated = loss(model(x), y)
+        loss_evaluated = loss(model(xs), ys)
         loss_evaluated.backward()
 
         opt.step()
@@ -181,6 +181,13 @@ for epoch in range(epochs):
 
     avg_loss = running_loss / batches
     print("Average loss over epoch {}: {:.4f}".format(epoch + 1, avg_loss))
+
+y_pred = model(X)
+predictions = torch.argmax(y_pred, axis=1).detach().numpy()
+
+correct = [1 if p == p_true else 0 for p, p_true in zip(predictions, y)]
+accuracy = sum(correct) / len(correct)
+print(f"Accuracy: {accuracy * 100}%")
 
 ###############################################################################
 # Creating non-sequential models
@@ -241,10 +248,10 @@ for epoch in range(epochs):
 
     running_loss = 0
 
-    for x, y in data_loader:
+    for xs, ys in data_loader:
         opt.zero_grad()
 
-        loss_evaluated = loss(model(x), y)
+        loss_evaluated = loss(model(xs), ys)
         loss_evaluated.backward()
 
         opt.step()
@@ -253,6 +260,13 @@ for epoch in range(epochs):
 
     avg_loss = running_loss / batches
     print("Average loss over epoch {}: {:.4f}".format(epoch + 1, avg_loss))
+
+y_pred = model(X)
+predictions = torch.argmax(y_pred, axis=1).detach().numpy()
+
+correct = [1 if p == p_true else 0 for p, p_true in zip(predictions, y)]
+accuracy = sum(correct) / len(correct)
+print(f"Accuracy: {accuracy * 100}%")
 
 ###############################################################################
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
