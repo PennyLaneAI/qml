@@ -1617,8 +1617,7 @@ target_params = matrix_params[0] + matrix_params[1]
 print("Target parameters \tLearned parameters")
 for x in range(len(target_params)):
     print(f"{target_params[x]}\t\t\t{qgrnn_params[x]}")
-print()
-print(f"Non-Existing Edge Parameters: {zero_weights}")
+print(f"\nNon-Existing Edge Parameters: {zero_weights}")
 
 
 ######################################################################
