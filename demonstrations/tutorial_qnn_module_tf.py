@@ -72,13 +72,11 @@ import pennylane as qml
 n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
-
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
     qml.templates.BasicEntanglerLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
-
 
 ###############################################################################
 # Interfacing with Keras
@@ -117,10 +115,10 @@ qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 #
 # Let's create a basic three-layered hybrid model consisting of:
 #
-# 1. A 2-neuron fully connected classical layer
-# 2. Our 2-qubit QNode converted into a layer
-# 3. Another 2-neuron fully connected classical layer
-# 4. A softmax activation to convert to a probability vector
+# 1. a 2-neuron fully connected classical layer
+# 2. our 2-qubit QNode converted into a layer
+# 3. another 2-neuron fully connected classical layer
+# 4. a softmax activation to convert to a probability vector
 #
 # A diagram of the model can be seen in the figure below.
 #
@@ -136,8 +134,6 @@ clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
 model = tf.keras.models.Sequential([clayer_1, qlayer, clayer_2])
 
 ###############################################################################
-# Constructing hybrid models is easy!
-#
 # Training the model
 # ------------------
 #
