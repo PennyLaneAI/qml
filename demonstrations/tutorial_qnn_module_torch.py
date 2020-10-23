@@ -44,10 +44,10 @@ model = torch.nn.Sequential(*layers)
 
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_moons
-import tensorflow as tf
 
 X, y = make_moons(n_samples=200, noise=0.1)
-y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
+y_ = torch.unsqueeze(torch.tensor(y), 1)  # used for one-hot encoded labels
+y_hot = torch.scatter(torch.zeros((200, 2)), 1, y_, 1)
 
 c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
 plt.axis("off")
