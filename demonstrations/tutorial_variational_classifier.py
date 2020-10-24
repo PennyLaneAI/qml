@@ -12,6 +12,12 @@ Variational classifier
         classify new data samples.
     :property="og:image": https://pennylane.ai/qml/_images/classifier_output_59_0.png
 
+.. related::
+
+   tutorial_data_reuploading_classifier Data-reuploading classifier
+   tutorial_multiclass_classification Multiclass margin classifier
+   tutorial_ensemble_multi_qpu Ensemble classification
+
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
 data to classify new data samples. The architecture is inspired by

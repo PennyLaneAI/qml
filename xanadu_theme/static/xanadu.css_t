@@ -179,8 +179,8 @@ tt {
 }
 
 code, pre {
-  line-height: 23px;
-  margin: 20px 0;
+  line-height: 23px !important;
+  margin: 20px 0 !important;
   word-wrap: normal;
   background-color: #fff;
 }
@@ -793,6 +793,75 @@ border-radius: 7px;
   color: {{ theme_download_button }};
 }
 
+
+/* Related tutorials */
+/*-------------------------------------------------- */
+
+
+
+#related-tutorials {
+    display: none;
+}
+
+
+#related-tutorials ul > li > ul > li > ul {
+    margin-top: -7px;
+    margin-left: 20px;
+    margin-bottom: -15px;
+    font-size: smaller;
+}
+
+#related-tutorials ul > li > ul > li > ul > li {
+    margin-bottom: -15px;
+}
+
+#related-tutorials a:hover {
+  text-decoration: none;
+}
+
+#related-tutorials {
+  font-size: 15px;
+  width: 300px;
+}
+
+#related-tutorials ul {
+  margin: 0 0 10px 0;
+  list-style-type: none;
+}
+
+#related-tutorials a {
+  font-family: Roboto,Noto Sans,"Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+  /*color: #444;*/
+  color: #606060;
+  text-decoration: none;
+}
+
+#related-tutorials p {
+  font-size: 95%;
+}
+
+#related-tutorials ul {
+  list-style-type: none;
+  padding: 0!important;
+}
+
+#related-tutorials li {
+  list-style-type: none;
+  padding-bottom: 10px;
+}
+
+
+#related-tutorials ul li a {
+display: block;
+padding: 7px;
+border-radius: 7px;
+}
+
+#related-tutorials ul li a:hover {
+  color: {{ theme_download_button }};
+}
+
+
 /* Next and previous links
 -------------------------------------------------- */
 
@@ -1165,7 +1234,6 @@ div.seealso {
   background-color: #ffc;
   border: 1px solid #ff6;
 }
-
 
 .admonition.see {
     font-style: italic;

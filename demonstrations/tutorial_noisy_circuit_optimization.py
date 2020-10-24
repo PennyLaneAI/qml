@@ -10,6 +10,10 @@ Optimizing noisy circuits with Cirq
     :align: center
     :width: 90%
 
+.. related::
+
+   pytorch_noise PyTorch and noisy devices
+
 Until we have fault-tolerant quantum computers, 
 we will have to learn to live with noise. There are lots of exciting 
 ideas and algorithms in quantum computing and quantum machine learning, 

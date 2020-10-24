@@ -7,6 +7,9 @@ Quantum Chemistry with PennyLane
         to tackle quantum chemistry problems.
     :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
 
+.. related::
+   tutorial_vqe Variational quantum eigensolver
+
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
 the approximations used to find the many-electron wave function of polyatomic systems.
 Electronic structure methods rely on the Born-Oppenheimer approximation [#kohanoff2006]_

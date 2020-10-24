@@ -11,6 +11,10 @@ VQE with parallel QPUs on Rigetti Forest
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
+
 Using a VQE setup, we task two devices from the
 `PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate

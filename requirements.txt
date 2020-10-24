@@ -1,7 +1,7 @@
 --find-links https://download.pytorch.org/whl/torch_stable.html
 appdirs
 autograd
-numpy
+numpy<1.19,~=1.16
 networkx==2.4
 nlopt
 pygments-github-lexers
