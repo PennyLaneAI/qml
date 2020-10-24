@@ -333,7 +333,6 @@ params = np.random.normal(0, 1, (2, 2))
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)
-    print("Step {} / {}".format(i + 1, steps))
 
 print("Optimal Parameters: {}".format(params))
 
@@ -371,16 +370,11 @@ plt.show()
 # :math:`|6\rangle \ = \ |0110\rangle` and
 # :math:`|10\rangle \ = \ |1010\rangle` have the highest probabilities of
 # being measured, just as expected!
-
-
-pos = nx.spring_layout(graph)
-
-plt.figure(figsize=(9, 4))
-plt.subplot(121)
-nx.draw(graph, pos, node_color=["r", "b", "r", "b"])
-plt.subplot(122)
-nx.draw(graph, pos, node_color=["b", "r", "r", "b"])
-plt.show()
+#
+# .. figure:: ../demonstrations/qaoa_module/graph.png
+#     :align: center
+#     :width: 90%
+#
 
 ######################################################################
 # Customizing QAOA
@@ -388,7 +382,7 @@ plt.show()
 #
 # QAOA is not one-size-fits-all when it comes to solving optimization problems. In many cases,
 # cost and mixer Hamiltonians will be very specific to one scenario, and not necessarily
-# fit within the structure of the pre-defined problems in the ``qml.qaoa`` submodule. Luckily,
+# fit within the structure of the pre-defined problems in the :func:`~.qaoa` submodule. Luckily,
 # one of the core principles behind the entire PennyLane library is customizability, and this principle hold true for
 # QAOA submodule as well!
 #
@@ -434,7 +428,6 @@ params = np.random.normal(0, 1, (2, 2))
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)
-    print("Step {} / {}".format(i + 1, steps))
 
 print("Optimal Parameters: {}".format(params))
 
@@ -472,4 +465,8 @@ plt.show()
 # - Experiment with different optimizers and different devices. Which ones work the best?
 # - Play around with some of the other built-in cost and mixer Hamiltonians.
 # - Try making your own custom constraining terms. Is QAOA properly amplifying some bitstrings over others?
+#
+# .. figure:: ../demonstrations/qaoa_module/qaoa_circuit.png
+#     :align: center
+#     :width: 90%
 #
