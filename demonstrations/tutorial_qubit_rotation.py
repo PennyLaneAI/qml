@@ -9,6 +9,12 @@ Basic tutorial: qubit rotation
         of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
     :property="og:image": https://pennylane.ai/qml/_images/bloch.png
 
+.. related::
+
+   tutorial_plugins_hybrid Plugins and Hybrid computation
+   tutorial_gaussian_transformation Gaussian transformation
+   tutorial_state_preparation Training a quantum circuit with PyTorch
+
 To see how PennyLane allows the easy construction and optimization of quantum functions, let's
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
 example.

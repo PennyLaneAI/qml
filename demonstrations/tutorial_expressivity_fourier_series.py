@@ -6,6 +6,10 @@ Quantum models as Fourier series
     :property="og:description": The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.
     :property="og:image": https://pennylane.ai/qml/_images/scheme.png
 
+.. related::
+
+   tutorial_data_reuploading_classifier Data-reuploading classifier
+
 """
 
 

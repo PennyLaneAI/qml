@@ -39,9 +39,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - gallery-v11-{{ .Branch }}-{{ .Revision }}
-            - gallery-v11-{{ .Branch }}-
-            - gallery-v11-
+            - gallery-v12-{{ .Branch }}-{{ .Revision }}
+            - gallery-v12-{{ .Branch }}-
+            - gallery-v12-
 
       - run:
           name: Build tutorials
@@ -57,7 +57,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v11-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v12-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:

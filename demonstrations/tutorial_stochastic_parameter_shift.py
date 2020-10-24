@@ -6,6 +6,12 @@ The Stochastic Parameter-Shift Rule
     :property="og:description": Differentiate any qubit gate with the stochastic parameter-shift rule.
     :property="og:image": https://pennylane.ai/qml/_images/stochastic_parameter_shift_thumbnail.png
 
+.. related::
+
+   parameter_shift Parameter shift rules
+   tutorial_backprop Quantum gradients with backprop
+   tutorial_doubly_stochastic Doubly stochastic gradient descent
+
 We demonstrate how the stochastic parameter-shift rule, discovered by Banchi and Crooks [#banchi2020]_,
 can be used to differentiate arbitrary qubit gates, generalizing the original
 :doc:`parameter-shift rule </glossary/parameter_shift>`, which applies only for gates of a particular
