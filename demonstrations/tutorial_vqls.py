@@ -286,7 +286,8 @@ def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
     # First Hadamard gate applied to the ancillary qubit.
     qml.Hadamard(wires=ancilla_idx)
 
-    # For estimating the imaginary part of the coefficient "mu", we must add a "-i" phase gate.
+    # For estimating the imaginary part of the coefficient "mu", we must add a "-i"
+    # phase gate.
     if part == "Im" or part == "im":
         qml.PhaseShift(-np.pi / 2, wires=ancilla_idx)
 
@@ -358,7 +359,7 @@ def psi_norm(weights):
 
 
 def cost_loc(weights):
-    """Local version of the cost function, which tends to zero when A |x> is proportional to |b>."""
+    """Local version of the cost function. Tends to zero when A|x> is proportional to |b>."""
     mu_sum = 0.0
 
     for l in range(0, len(c)):
