@@ -6,6 +6,10 @@ Turning quantum nodes into Keras Layers
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
     :property="og:image": https://pennylane.ai/qml/_images/Keras_logo.png
 
+.. related::
+
+   tutorial_qnn_module_torch Turning quantum nodes into Torch Layers
+
 Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
 elementary *layers* and can be trained using a high-level API. For example, the following code
 defines a two-layer network that could be used for binary classification:
@@ -156,6 +160,11 @@ y_hot = y_hot.astype("float32")
 fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
 ###############################################################################
+# How did we do? The model looks to have successfully trained and the accuracy on both the
+# training and validation datasets is reasonably high. In practice, we would aim to push the
+# accuracy higher by thinking carefully about the model design and the choice of hyperparameters
+# such as the learning rate.
+#
 # Creating non-sequential models
 # ------------------------------
 #

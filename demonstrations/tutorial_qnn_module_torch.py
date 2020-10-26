@@ -6,6 +6,10 @@ Turning quantum nodes into Torch Layers
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Torch
     :property="og:image": https://pennylane.ai/qml/_images/PyTorch_icon.png
 
+.. related::
+
+   tutorial_qnn_module_tf Turning quantum nodes into Keras Layers
+
 Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 `nn module <https://pytorch.org/docs/stable/nn.html>`__. Models are constructed from elementary
 *layers* and can be trained using the PyTorch API. For example, the following code defines a
@@ -190,6 +194,10 @@ accuracy = sum(correct) / len(correct)
 print(f"Accuracy: {accuracy * 100}%")
 
 ###############################################################################
+# How did we do? The model looks to have successfully trained and the accuracy is reasonably
+# high. In practice, we would aim to push the accuracy higher by thinking carefully about the
+# model design and the choice of hyperparameters such as the learning rate.
+#
 # Creating non-sequential models
 # ------------------------------
 #
