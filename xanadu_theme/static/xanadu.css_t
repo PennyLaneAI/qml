@@ -49,7 +49,7 @@ body {
   padding: 20px 0px 100px 0px;
   margin-left: auto;
   background-color: #fff;
-  max-width: 910px;
+  max-width: 914px;
   /*float: left;*/
   width: 100%;
   /*min-height: calc(100vh - 90px);*/
