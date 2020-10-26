@@ -200,12 +200,12 @@ def accuracy(labels, hard_predictions):
 def load_and_process_data():
     data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
-    print("First X sample (original)  :", X[0])
+    print("First X sample, original  :", X[0])
 
     # normalize each input
     normalization = torch.sqrt(torch.sum(X ** 2, dim=1))
     X_norm = X / normalization.reshape(len(X), 1)
-    print("First X sample (normalized):", X_norm[0])
+    print("First X sample, normalized:", X_norm[0])
 
     Y = torch.tensor(data[:, -1])
     return X, Y
@@ -245,7 +245,9 @@ def training(features, Y):
         Variable(0.1 * torch.randn(num_layers, num_qubits, 3), requires_grad=True)
         for i in range(num_classes)
     ]
-    all_bias = [Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)]
+    all_bias = [
+        Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)
+    ]
     optimizer = optim.Adam(all_weights + all_bias, lr=lr_adam)
     params = (all_weights, all_bias)
     print("Num params: ", 3 * num_layers * num_qubits * 3 + 3)
@@ -259,7 +261,9 @@ def training(features, Y):
         Y_train_batch = Y_train[batch_index]
 
         optimizer.zero_grad()
-        curr_cost = multiclass_svm_loss(q_circuits, params, feat_vecs_train_batch, Y_train_batch)
+        curr_cost = multiclass_svm_loss(
+            q_circuits, params, feat_vecs_train_batch, Y_train_batch
+        )
         curr_cost.backward()
         optimizer.step()
 

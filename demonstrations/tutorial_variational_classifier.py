@@ -245,7 +245,11 @@ for it in range(25):
     predictions = [np.sign(variational_classifier(var, x=x)) for x in X]
     acc = accuracy(Y, predictions)
 
-    print("Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.7f} ".format(it + 1, cost(var, X, Y), acc))
+    print(
+        "Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.7f} ".format(
+            it + 1, cost(var, X, Y), acc
+        )
+    )
 
 
 ##############################################################################
@@ -282,7 +286,8 @@ def get_angles(x):
     beta0 = 2 * np.arcsin(np.sqrt(x[1] ** 2) / np.sqrt(x[0] ** 2 + x[1] ** 2 + 1e-12))
     beta1 = 2 * np.arcsin(np.sqrt(x[3] ** 2) / np.sqrt(x[2] ** 2 + x[3] ** 2 + 1e-12))
     beta2 = 2 * np.arcsin(
-        np.sqrt(x[2] ** 2 + x[3] ** 2) / np.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3] ** 2)
+        np.sqrt(x[2] ** 2 + x[3] ** 2)
+        / np.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3] ** 2)
     )
 
     return np.array([beta2, -beta1 / 2, beta1 / 2, -beta0 / 2, beta0 / 2])
@@ -424,15 +429,21 @@ plt.show()
 plt.figure()
 dim1 = 0
 dim2 = 1
-plt.scatter(X_norm[:, dim1][Y == 1], X_norm[:, dim2][Y == 1], c="b", marker="o", edgecolors="k")
-plt.scatter(X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="r", marker="o", edgecolors="k")
+plt.scatter(
+    X_norm[:, dim1][Y == 1], X_norm[:, dim2][Y == 1], c="b", marker="o", edgecolors="k"
+)
+plt.scatter(
+    X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
+)
 plt.title("Padded and normalised data (dims {} and {})".format(dim1, dim2))
 plt.show()
 
 plt.figure()
 dim1 = 0
 dim2 = 3
-plt.scatter(features[:, dim1][Y == 1], features[:, dim2][Y == 1], c="b", marker="o", edgecolors="k")
+plt.scatter(
+    features[:, dim1][Y == 1], features[:, dim2][Y == 1], c="b", marker="o", edgecolors="k"
+)
 plt.scatter(
     features[:, dim1][Y == -1], features[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
 )
@@ -521,8 +532,12 @@ predictions_grid = [variational_classifier(var, angles=f) for f in features_grid
 Z = np.reshape(predictions_grid, xx.shape)
 
 # plot decision regions
-cnt = plt.contourf(xx, yy, Z, levels=np.arange(-1, 1.1, 0.1), cmap=cm, alpha=0.8, extend="both")
-plt.contour(xx, yy, Z, levels=[0.0], colors=("black",), linestyles=("--",), linewidths=(0.8,))
+cnt = plt.contourf(
+    xx, yy, Z, levels=np.arange(-1, 1.1, 0.1), cmap=cm, alpha=0.8, extend="both"
+)
+plt.contour(
+    xx, yy, Z, levels=[0.0], colors=("black",), linestyles=("--",), linewidths=(0.8,)
+)
 plt.colorbar(cnt, ticks=[-1, 0, 1])
 
 # plot data
