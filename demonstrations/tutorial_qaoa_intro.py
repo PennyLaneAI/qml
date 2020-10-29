@@ -161,7 +161,7 @@ print(circuit.draw())
 
 ######################################################################
 #
-# We have learnt how time evolution can be used to create circuits from Hamiltonians,
+# We have learned how time evolution can be used to create circuits from Hamiltonians,
 # and how these can be layered to create longer circuits. We are now ready to
 # explore QAOA.
 #
