@@ -209,7 +209,9 @@ data_transforms = {
 
 data_dir = "../_data/hymenoptera_data"
 image_datasets = {
-    x if x == "train" else "validation": datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
+    x if x == "train" else "validation": datasets.ImageFolder(
+        os.path.join(data_dir, x), data_transforms[x]
+    )
     for x in ["train", "val"]
 }
 dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "validation"]}
@@ -436,7 +438,9 @@ optimizer_hybrid = optim.Adam(model_hybrid.fc.parameters(), lr=step)
 # every 10 epochs.
 
 
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler)
+exp_lr_scheduler = lr_scheduler.StepLR(
+    optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler
+)
 
 ##############################################################################
 # What follows is a training function that will be called later.
@@ -534,7 +538,9 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
     # Print final results
     model.load_state_dict(best_model_wts)
     time_elapsed = time.time() - since
-    print("Training completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60))
+    print(
+        "Training completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60)
+    )
     print("Best test loss: {:.4f} | Best test accuracy: {:.4f}".format(best_loss, best_acc))
     return model
 

@@ -6,6 +6,9 @@ Intro to QAOA
     :property="og:description": Learn how to implement QAOA with PennyLane
     :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
 
+.. related::
+
+   tutorial_qaoa_maxcut QAOA for MaxCut
 The Quantum Approximate Optimization Algorithm (QAOA) is a widely-studied
 method for solving combinatorial optimization problems on NISQ devices.
 The applications of QAOA are broad and far-reaching, and the performance
@@ -161,7 +164,7 @@ print(circuit.draw())
 
 ######################################################################
 #
-# We have learnt how time evolution can be used to create circuits from Hamiltonians,
+# We have learned how time evolution can be used to create circuits from Hamiltonians,
 # and how these can be layered to create longer circuits. We are now ready to
 # explore QAOA.
 #
@@ -179,7 +182,7 @@ print(circuit.draw())
 # 1. Define a *cost Hamiltonian* :math:`H_C` such that its ground state
 #    encodes the solution to the optimization problem.
 #
-# 2. Define a *mixer Hamiltonian* :math:`H_C`.
+# 2. Define a *mixer Hamiltonian* :math:`H_M`.
 #
 # 3. Construct the circuits :math:`e^{-i \gamma H_C}` and :math:`e^{-i\alpha H_M}`. We call
 #    these the *cost* and *mixer layers*, respectively.
