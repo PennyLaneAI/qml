@@ -137,9 +137,14 @@ for i in range(num_samples):
     gradient = grad(params, random_gate_sequence=gate_sequence, num_qubits=num_qubits)
     grad_vals.append(gradient[-1])
 
-print("Variance of the gradients for {} random circuits: {}".format(num_samples, np.var(grad_vals)))
-print("Mean of the gradients for {} random circuits: {}".format(num_samples, np.mean(grad_vals)))
-
+print("Variance of the gradients for {} random circuits: {}".format(
+    num_samples, np.var(grad_vals)
+    )
+)
+print("Mean of the gradients for {} random circuits: {}".format(
+    num_samples, np.mean(grad_vals)
+    )
+)
 
 ##############################################################################
 # Evaluate the gradient for more qubits
@@ -162,7 +167,9 @@ for num_qubits in qubits:
         random_gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
 
         params = np.random.uniform(0, np.pi, size=num_qubits)
-        gradient = grad(params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits)
+        gradient = grad(
+            params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits
+        )
         grad_vals.append(gradient[-1])
     variances.append(np.var(grad_vals))
 
