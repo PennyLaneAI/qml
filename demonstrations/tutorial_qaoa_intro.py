@@ -6,6 +6,9 @@ Intro to QAOA
     :property="og:description": Learn how to implement QAOA with PennyLane
     :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
 
+.. related::
+
+   tutorial_qaoa_maxcut QAOA for MaxCut
 The Quantum Approximate Optimization Algorithm (QAOA) is a widely-studied
 method for solving combinatorial optimization problems on NISQ devices.
 The applications of QAOA are broad and far-reaching, and the performance
