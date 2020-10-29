@@ -328,7 +328,7 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 
 
 optimizer = qml.GradientDescentOptimizer()
-steps = 40
+steps = 70
 params = np.random.normal(0, 1, (2, 2))
 
 for i in range(steps):
@@ -404,7 +404,7 @@ reward_h = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
 # We then weigh and add the constraining term
 # to the original minimum vertex cover Hamiltonian:
 
-new_cost_h = cost_h + 0.75*reward_h
+new_cost_h = cost_h + reward_h
 
 ######################################################################
 #
