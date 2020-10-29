@@ -179,7 +179,7 @@ print(circuit.draw())
 # 1. Define a *cost Hamiltonian* :math:`H_C` such that its ground state
 #    encodes the solution to the optimization problem.
 #
-# 2. Define a *mixer Hamiltonian* :math:`H_C`.
+# 2. Define a *mixer Hamiltonian* :math:`H_M`.
 #
 # 3. Construct the circuits :math:`e^{-i \gamma H_C}` and :math:`e^{-i\alpha H_M}`. We call
 #    these the *cost* and *mixer layers*, respectively.
