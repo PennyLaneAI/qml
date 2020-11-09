@@ -81,7 +81,7 @@ Community
     function and convert it to quantum data. Later it shows how to create
     qml.qnn.KerasLayer from qnode and train it and also check model performance.
 
-:html:`</div></div><div style='clear:both'>`
+:html:`</div></div><br><div style='clear:both'>`
 :html:`<div class="card-deck">`
 
 .. community-card::
@@ -109,7 +109,7 @@ Community
     and corresponding Fahrenheit. Objective is to train a neural network to
     predict Fahrenheit value given Deg Centigrade value.
 
-:html:`</div></div><div style='clear:both'>`
+:html:`</div></div><br><div style='clear:both'>`
 :html:`<div class="card-deck">`
 
 .. community-card::
