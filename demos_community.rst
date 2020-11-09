@@ -73,7 +73,7 @@ Community
 .. community-card::
     :title: Iris Classification using Angle Embedding and qml.qnn.KerasLayer
     :author: Hemant Gahankari
-    :date: 09/10/2020
+    :date: 09/11/2020
     :code: https://colab.research.google.com/drive/13PvS2D8mxBvlNw6_5EapUU2ePKdf_K53#scrollTo=1fJWDX5LxfvB
     :color: heavy-rain-gradient
 
