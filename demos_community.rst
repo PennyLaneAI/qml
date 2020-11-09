@@ -81,6 +81,9 @@ Community
     function and convert it to quantum data. Later it shows how to create
     qml.qnn.KerasLayer from qnode and train it and also check model performance.
 
+:html:`</div></div><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
 .. community-card::
     :title: Iris Classification using Amplitude Embedding and qml.qnn.KerasLayer
     :author: Hemant Gahankari
@@ -105,6 +108,9 @@ Community
     it. The data set consists of a temperature readings in Degree Centigrade
     and corresponding Fahrenheit. Objective is to train a neural network to
     predict Fahrenheit value given Deg Centigrade value.
+
+:html:`</div></div><div style='clear:both'>`
+:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Iris Classification using Qnode and Keras Optimizer and Loss function
