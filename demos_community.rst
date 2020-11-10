@@ -120,9 +120,9 @@ Community
     :color: heavy-rain-gradient
 
     This example is created to explain how to create a quantum function and
-    train a quantum function using keras optimizer directly. i.e. not using
-    Keras Layer. Objective is to train a quantum function to predict classes of
-    Iris dataset.
+    train a quantum function using Keras optimizer directly, i.e., not using
+    a Keras layer. The objective is to train a quantum function to predict classes of
+    the Iris dataset.
 
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
