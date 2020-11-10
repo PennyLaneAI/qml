@@ -79,9 +79,10 @@ quantum machine learning paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
 
-* When complete, create a gallery link to your demo, by adding the
-  following to `demonstrations.rst`:
-
+* When complete, create a gallery link to your demo. This can be done by adding the
+  snippet below to `demos_basic.rst` for introductory demos, or `demos_research.rst`
+  for more advanced topics, such as those based on research papers. 
+  
   ```rest
   .. customgalleryitem::
       :tooltip: An extended description of the demo
@@ -90,7 +91,10 @@ quantum machine learning paper/result.
   ```
 
   You should also add a link to your demo to the table of contents, by adding to the
-  end of the `.. toctree::`.
+  end of the `.. toctree::` in the appropriate file.
+
+  If you're unsure which file to put your demo in, choose the one you think is  best,
+  and we will work together to sort it during the review process.
 
 * Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
 
