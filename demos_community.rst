@@ -79,7 +79,7 @@ Community
 
     This example is created to explain how to pass classical data into the quantum
     function and convert it to quantum data. Later it shows how to create
-    qml.qnn.KerasLayer from qnode and train it and also check model performance.
+    a qml.qnn.KerasLayer from a QNode and train it and also check model performance.
 
 :html:`</div></div><br><div style='clear:both'>`
 :html:`<div class="card-deck">`
@@ -132,4 +132,3 @@ Community
 .. toctree::
     :maxdepth: 2
     :hidden:
-
