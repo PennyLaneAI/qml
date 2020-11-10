@@ -104,10 +104,10 @@ Community
     :color: heavy-rain-gradient
 
     This example is created to explain how to create a Hybrid Neural Network
-    (Mix of Classical and Quantum Layer) and train it and get predictions from
-    it. The data set consists of a temperature readings in Degree Centigrade
-    and corresponding Fahrenheit. Objective is to train a neural network to
-    predict Fahrenheit value given Deg Centigrade value.
+    (mix of classical and quantum layers) and train it and get predictions from
+    it. The data set consists of temperature readings in degrees Centigrade
+    and corresponding Fahrenheit. The objective is to train a neural network to
+    predict Fahrenheit values given Centigrade values.
 
 :html:`</div></div><br><div style='clear:both'>`
 :html:`<div class="card-deck">`
