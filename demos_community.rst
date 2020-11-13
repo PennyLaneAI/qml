@@ -70,6 +70,61 @@ Community
     show how to characterize the loss landscape with it. We show how the Hessian can be used to
     escape flat regions of the loss landscape.
 
+.. community-card::
+    :title: Angle embedding in Iris classification with PennyLane's KerasLayer
+    :author: Hemant Gahankari
+    :date: 09/11/2020
+    :code: https://colab.research.google.com/drive/13PvS2D8mxBvlNw6_5EapUU2ePKdf_K53#scrollTo=1fJWDX5LxfvB
+    :color: heavy-rain-gradient
+
+    Using angle embedding from PennyLane, this demonstration aims to explain
+    how to pass classical data into the quantum function and convert it to
+    quantum data. It also shows how to create a PennyLane KerasLayer from a
+    QNode, train it and check the performance of the model.
+
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
+.. community-card::
+    :title: Amplitude embedding in Iris classification with PennyLane's KerasLayer
+    :author: Hemant Gahankari
+    :date: 09/11/2020
+    :code: https://colab.research.google.com/drive/12ls_GkSD2t0hr3Mx9-qzVvSWxR3-N0WI#scrollTo=4PQTkXpv52vZ
+    :color: heavy-rain-gradient
+
+    Using amplitude embedding from PennyLane, this demonstration aims to explain
+    how to pass classical data into the quantum function and convert it to quantum
+    data. It also shows how to create a PennyLane KerasLayer from a QNode, train it
+    and check the performance of the model.
+
+.. community-card::
+    :title: Linear regression using angle embedding and a single qubit
+    :author: Hemant Gahankari
+    :date: 09/11/2020
+    :code: https://colab.research.google.com/drive/1ABVtBjwcGNNIfmiwEXRdFdZ47K1vZ978?usp=sharing
+    :color: heavy-rain-gradient
+
+    In this example, we create a hybrid neural network (mix of classical and
+    quantum layers), train it and get predictions from it. The data set
+    consists of temperature readings in degrees Centigrade and corresponding
+    Fahrenheit. The objective is to train a neural network that predicts
+    Fahrenheit values given Centigrade values.
+
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
+.. community-card::
+    :title: Using a Keras optimizer for Iris classification with a QNode and loss function
+    :author: Hemant Gahankari
+    :date: 09/11/2020
+    :code: https://colab.research.google.com/drive/17Qri3jUBpjjkhmO6ZZZNXwm511svSVPw?usp=sharing
+    :color: heavy-rain-gradient
+
+    Using PennyLane, we explain how to create a quantum function and train a
+    quantum function using a Keras optimizer directly, i.e., not using a Keras
+    layer. The objective is to train a quantum function to predict classes of
+    the Iris dataset.
+
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
 
