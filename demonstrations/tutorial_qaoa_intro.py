@@ -466,8 +466,8 @@ plt.show()
 
 ######################################################################
 #
-# Just as we expected, the :math:`|6\rangle` state is now favoured
-# over :math:`|10\rangle`!
+# Just as we expected, the :math:`|10\rangle` state is now favoured
+# over :math:`|6\rangle`!
 #
 
 ######################################################################
