@@ -338,12 +338,10 @@ params = [[0.5, 0.5], [0.5, 0.5]]
 ######################################################################
 #
 # Notice that we set each of the initial parameters to :math:`0.5`. For demonstration purposes,
-# we chose initial parameters that we know work fairly well, and don't get stuck in any local minima.
-#
+# we chose initial parameters that work fairly well and don't get stuck in any local minima.
 # The choice of initial parameters for a variational circuit is usually a difficult problem,
-# so we won't linger on it too much in this tutorial, but it is important to note that
-# finding an initial set of parameters that work well for a few toy problems often yields good results
-# for more complex instances of the algorithm as well.
+# potentially requiring repeated initialization of a circuit until good performance is observed. 
+
 #
 # Now, we can optimize the circuit:
 #
