@@ -1,3 +1,4 @@
+
 .. raw:: html
 
     <style>
@@ -21,6 +22,14 @@ Demos
         <!-- Section: Features v.1 -->
             <p class="lead grey-text text-center mx-auto mb-5">
             Take a deeper dive into quantum machine learning by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.</p>
+
+	    <div class="toggle dropdown admonition border rounded">
+	        <p class="admonition-title">New to PennyLane and quantum machine learning?</p>
+                <p> <a href="https://pennylane.ai/install.html" target="_blank" > Install </a> PennyLane, then start by training a quantum circuit to
+	        <a href="../demos/tutorial_qubit_rotation" target="_blank"> rotate a qubit </a>, or
+	        <a href="../demos/tutorial_gaussian_transformation" target="_blank"> tune a beamsplitter</a>!
+		</p>
+	    </div>
 
         <section class="my-5">
             <div class="row justify-content-center" id="main-cards">

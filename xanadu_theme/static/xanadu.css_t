@@ -1143,6 +1143,15 @@ div.topic.contents > ul > li {
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.admonition.dropdown {
+ /* margin: 20px 0;*/
+  padding: 20px;
+  background-color: #fff6ea;
+  /*border: 1px solid #eee;*/
+  border-left-width: 0px;
+  border-radius: 3px;
+}
+
 .admonition.danger,
 .admonition.error {
   border-left-color: #d9534f;
