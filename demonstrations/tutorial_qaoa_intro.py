@@ -73,7 +73,7 @@ which is a unitary defined as:"""
 #     :align: center
 #     :width: 70%
 #
-# In PennyLane, this is implemented using the :func:`~.templates.ApproxTimeEvolution` template.
+# In PennyLane, this is implemented using the :func:`~.pennylane.templates.ApproxTimeEvolution` template.
 # For example, let's say we have the following Hamiltonian:
 
 import pennylane as qml
@@ -124,7 +124,7 @@ print(circuit.draw())
 #     :width: 100%
 #
 #
-# Circuit repetition is implemented in PennyLane using the :func:`~.layer` function. This method
+# Circuit repetition is implemented in PennyLane using the :func:`~.pennylane.layer` function. This method
 # allows us to take a function containing either quantum operations, a template, or even a single
 # quantum gate, and repeatedly apply it to a set of wires.
 #
@@ -151,7 +151,7 @@ print(circuit.draw())
 
 ######################################################################
 #
-# We simply pass this function into the :func:`~.layer` function:
+# We simply pass this function into the :func:`~.pennylane.layer` function:
 #
 
 @qml.qnode(dev)
@@ -279,9 +279,9 @@ print("Mixer Hamiltonian", mixer_h)
 #     :align: center
 #     :width: 90%
 #
-# While it is possible to use :func:`~.templates.ApproxTimeEvolution`, the QAOA module allows you to
-# build the cost and mixer layers directly using the functions :func:`~.qaoa.cost_layer` and
-# :func:`~.qaoa.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
+# While it is possible to use :func:`~.pennylane.templates.ApproxTimeEvolution`, the QAOA module allows you to
+# build the cost and mixer layers directly using the functions :func:`~.pennylane.qaoa.cost_layer` and
+# :func:`~.pennylane.qaoa.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
 
 
 def qaoa_layer(gamma, alpha):
@@ -307,12 +307,12 @@ def circuit(params, **kwargs):
 
 ######################################################################
 #
-# Note that :func:`~.layer` allows us to pass variational parameters
+# Note that :func:`~.pennylane.layer` allows us to pass variational parameters
 # ``params[0]`` and ``params[1]`` into each layer of the circuit. That's it! The last
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
 # The cost function is the expectation value of :math:`H_C`, which we want to minimize. The
-# function :func:`~.VQECost` is designed for this purpose: it returns the
+# function :func:`~.pennylane.VQECost` is designed for this purpose: it returns the
 # expectation value of an input Hamiltonian with respect to the circuit's output state.
 # We also define the device on which the simulation is
 # performed. We use the PennyLane-Qulacs plugin to
@@ -326,7 +326,7 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 ######################################################################
 #
 # Finally, we optimize the cost function using the built-in
-# :func:`~.GradientDescentOptimizer`. We perform optimization for seventy steps and initialize the
+# :func:`~.pennylane.GradientDescentOptimizer`. We perform optimization for seventy steps and initialize the
 # parameters:
 
 
@@ -351,7 +351,8 @@ params = [[0.5, 0.5], [0.5, 0.5]]
 for i in range(steps):
     params = optimizer.step(cost_function, params)
 
-print("Optimal Parameters: {}".format(params))
+print("Optimal Parameters")
+print(params)
 
 
 ######################################################################
@@ -399,7 +400,7 @@ plt.show()
 #
 # QAOA is not one-size-fits-all when it comes to solving optimization problems. In many cases,
 # cost and mixer Hamiltonians will be very specific to one scenario, and not necessarily
-# fit within the structure of the pre-defined problems in the :func:`~.qaoa` submodule. Luckily,
+# fit within the structure of the pre-defined problems in the :func:`~.pennylane.qaoa` submodule. Luckily,
 # one of the core principles behind the entire PennyLane library is customizability, and this principle hold true for
 # QAOA submodule as well!
 #
@@ -410,7 +411,8 @@ plt.show()
 # *but also colour the first and third vertices* :math:`1`. A constraint of this form will
 # favour :math:`|10\rangle`, making it the only true ground state.
 #
-# It is easy to introduce constraints of this form in PennyLane. We can use the :func:`~.qaoa.edge_driver` cost
+# It is easy to introduce constraints of this form in PennyLane.
+# We can use the :func:`~.pennylane.qaoa.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
@@ -446,7 +448,9 @@ params = [[0.5, 0.5], [0.5, 0.5]]
 for i in range(steps):
     params = optimizer.step(cost_function, params)
 
-print("Optimal Parameters: {}".format(params))
+print("Optimal Parameters")
+print(params)
+
 
 ######################################################################
 #
