@@ -341,7 +341,6 @@ params = [[0.5, 0.5], [0.5, 0.5]]
 # we chose initial parameters that work fairly well and don't get stuck in any local minima.
 # The choice of initial parameters for a variational circuit is usually a difficult problem,
 # potentially requiring repeated initialization of a circuit until good performance is observed. 
-
 #
 # Now, we can optimize the circuit:
 #
