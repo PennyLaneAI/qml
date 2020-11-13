@@ -243,7 +243,7 @@ import networkx as nx
 edges = [(0, 1), (1, 2), (2, 0), (2, 3)]
 graph = nx.Graph(edges)
 
-nx.draw(graph)
+nx.draw(graph, with_labels=True)
 plt.show()
 
 
@@ -326,13 +326,27 @@ cost_function = qml.VQECost(circuit, cost_h, dev)
 ######################################################################
 #
 # Finally, we optimize the cost function using the built-in
-# :func:`~.GradientDescentOptimizer`. We perform optimization for forty steps and initialize the
-# parameters randomly from a normal distribution:
+# :func:`~.GradientDescentOptimizer`. We perform optimization for seventy steps and initialize the
+# parameters:
 
 
 optimizer = qml.GradientDescentOptimizer()
 steps = 70
-params = np.random.normal(0, 1, (2, 2))
+params = [[0.5, 0.5], [0.5, 0.5]]
+
+
+######################################################################
+#
+# Notice that we set each of the initial parameters to :math:`0.5`. For demonstration purposes,
+# we chose initial parameters that we know work fairly well, and don't get stuck in any local minima.
+#
+# The choice of initial parameters for a variational circuit is usually a difficult problem,
+# so we won't linger on it too much in this tutorial, but it is important to note that
+# finding an initial set of parameters that work well for a few toy problems often yields good results
+# for more complex instances of the algorithm as well.
+#
+# Now, we can optimize the circuit:
+#
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)
@@ -393,21 +407,21 @@ plt.show()
 # and :math:`|10\rangle = |1010\rangle`. What if we add a constraint
 # that made one of these solutions "better" than the other? Let's imagine that we are interested in
 # solutions that minimize the original cost function,
-# *but also have their first and last vertices coloured with* :math:`0`. A constraint of this form will
-# favour :math:`|6\rangle`, making it the only ground state.
+# *but also colour the first and third vertices* :math:`1`. A constraint of this form will
+# favour :math:`|10\rangle`, making it the only true ground state.
 #
 # It is easy to introduce constraints of this form in PennyLane. We can use the :func:`~.qaoa.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
-reward_h = qaoa.edge_driver(nx.Graph([(0, 3)]), ['00'])
+reward_h = qaoa.edge_driver(nx.Graph([(0, 2)]), ['11'])
 
 ######################################################################
 #
 # We then weigh and add the constraining term
 # to the original minimum vertex cover Hamiltonian:
 
-new_cost_h = cost_h + reward_h
+new_cost_h = cost_h + 2 * reward_h
 
 ######################################################################
 #
@@ -427,7 +441,7 @@ def circuit(params, **kwargs):
 
 cost_function = qml.VQECost(circuit, new_cost_h, dev)
 
-params = np.random.normal(0, 1, (2, 2))
+params = [[0.5, 0.5], [0.5, 0.5]]
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)
