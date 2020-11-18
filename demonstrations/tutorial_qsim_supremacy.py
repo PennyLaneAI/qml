@@ -1,19 +1,40 @@
 """
-Using qsim for supremacy
-========================
+Quantum supremacy using qsim
+============================
 
 In the paper `Quantum supremacy using a programmable superconducting processor
-<https://www.nature.com/articles/s41586-019-1666-5>`_ Google showed that their
-quantum computer could complete a task that would take a classical computer
-thousands of years. For their simulation benchmarks they used a simulator called
-qsim.
+<https://www.nature.com/articles/s41586-019-1666-5>`__ Google showed that
+their quantum computer could complete a task that would take a classical
+computer thousands of years. For their simulation benchmarks they used a
+simulator called qsim, which we will also use here provided via our
+PennyLane-Cirq plugin.
 
-In this demonstarion, we will walk you through how their benchmarks and provide
-an example of what their simulations looked like. We will be using PennyLane
-along with the PennyLane-Cirq plugin and the qsim-device, running via the Cirq
-backend.
+To construct a task that could be run on the Sycamore chip and compared
+to similar simulations, a pseudo-random circuit was constructed by
+alternating single-qubit and two-qubit gates in a specific, semi-random
+pattern. The circuit output was then sampled a number of times,
+producing a set of bitstrings corresponing to the measured state of the
+circuit. The probability distribution from which these bitstrings were
+sampled becomes more and more difficult to simulate classically the more
+qubits there are and the deeper the circuit is, and can thus provide a
+comparable measure against the outputs of the physical quantum chip.
+
+In this demonstarion, we will walk you through how their benchmarks were
+constructed and run, and provide an example of what their simulations
+looked like. We will be using PennyLane along with the PennyLane-Cirq
+plugin and the qsim-device, running via the Cirq backend.
 
 """
+
+
+######################################################################
+# Implementing the circuit
+# ------------------------
+#
+# As always, we begin by importing the necessary modules. We will use
+# PennyLane, along with some PennyLane-Cirq specific operation, as well as
+# Cirq.
+#
 
 import pennylane as qml
 from pennylane_cirq import ops
@@ -23,13 +44,17 @@ import numpy as np
 
 
 ######################################################################
-# To start we need to define the qubit grid that we will use for mimics Google's
-# Sycamore chip, although we will only use 12 qubits instead of the 54 that the
-# actual chip has. The reason for this is simply because of performance
-# constraints.
+# To start we need to define the qubit grid that we will use for mimics
+# Google's Sycamore chip, although we will only use 12 qubits instead of
+# the 54 that the actual chip has. The reason for this is simply because
+# of performance constraints.
 #
-# We define the 12 qubits in a rectangular grid, and label the corresponding
-# wires in a way that makes it easier to reference the specific qubits later.
+# We define the 12 qubits in a rectangular grid, and label the
+# corresponding wires in a way that makes it easier to reference the
+# specific qubits later. Feel free to play around with different grids and
+# number of qubits. Just keep in mind that the grid needs to stay
+# connected. You could, for example, remove the final row (last four
+# qubits in the list) to simulate an 8 qubit system.
 #
 
 qubits = sorted([
@@ -60,14 +85,24 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 # for the cross entropy benchmarking in
 # `Google's supremacy experiment <https://www.nature.com/articles/s41586-019-1666-5>`__
 #
+# We also need to define the number of shots per circuit instance to be
+# used. This corresponds to the number of times that the circuit is
+# sampled. This will be used later when calculating the cross-entropy
+# benchmark fidelity. The more shots, the more accurate the results will
+# be. We will use 500.000 shots; the same number of samples that are used
+# in the supremacy paper, but feel free to change this to whichever value
+# you wish (depending on your own hardware restrictions).
+#
 
-dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=1)
+shots = 500000
+dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
 
 
 ######################################################################
-# Several gates that are not natively supported in PennyLane are needed.
-# Some of them are made available through the Cirq plugin, since they
-# already are implemented in Cirq, and thus are supported by qsim. To
+# The next step would be to prepare the gates that will be used in the
+# circuit. Several gates that are not natively supported in PennyLane are
+# needed. Some of them are made available through the Cirq plugin, since
+# they already are implemented in Cirq, and thus are supported by qsim. To
 # simplify the circuit definition, we define the remaining gates before
 # the circuit is created.
 #
@@ -80,10 +115,10 @@ dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=1)
 # .. math::
 #
 #    \frac{1}{\sqrt{2}}
-#    \begin{matrix}
+#    \begin{bmatrix}
 #       1 & \sqrt{i}  \\
 #       \sqrt{-i} & 1 \\
-#    \end{matrix}
+#    \end{bmatrix}
 #
 
 sqrtXgate = lambda wires: qml.RX(np.pi / 2, wires=wires)
@@ -103,30 +138,30 @@ single_qubit_gates = [sqrtXgate, sqrtYgate, sqrtWgate]
 #
 # .. math::
 #
-#    \begin{matrix}
+#    \begin{bmatrix}
 #       1 & 0 & 0 & 0 \\
 #       0 & 0 & i & 0 \\
 #       0 & i & 0 & 0 \\
 #       0 & 0 & 0 & 1
-#    \end{matrix}
+#    \end{bmatrix}
 #
 # as well as the CPhase gate
 #
 # .. math::
 #
-#    \begin{matrix}
+#    \begin{bmatrix}
 #       1 & 0 & 0 & 0 \\
 #       0 & 1 & 0 & 0 \\
 #       0 & 0 & 1 & 0 \\
 #       0 & 0 & 0 & e^{-i\phi}
-#    \end{matrix}
+#    \end{bmatrix}
 #
-# These two gates have been made accesible via the Cirq plugin.
+# These two gates have already been made accesible via the Cirq plugin.
 #
 
 
 ######################################################################
-# Here comes a bit of a tricky part. The way the paper decides which
+# Here comes one of the tricky parts. The way the paper decides which
 # qubits the two-qubit gates should be applied to depends on how they are
 # connected to each other. In an alternating pattern, each pair of
 # neighbouring qubits gets labeled with a letter A-D, where A and B
@@ -135,7 +170,11 @@ single_qubit_gates = [sqrtXgate, sqrtYgate, sqrtWgate]
 #
 # The logic below iterates through all connections and returns a
 # dictionary ``d`` with list of tuples containing two neighbouring qubits
-# with the key as their connection label.
+# with the key as their connection label. We will use this dictionary
+# inside the circuit to iterate through the different qubit pairs and
+# apply the two two-qubit gates that we just defined above. The way we
+# iterate through the dictionary will depend on a gate sequence defined in
+# the next section.
 #
 
 from itertools import combinations
@@ -156,18 +195,19 @@ for i, j in combinations(qubits, 2):
 
 
 ######################################################################
-# At this point we can define a gate sequence, which is the order in which
-# qubit-pairs the two-qubit gates are applied to. E.g. ``["A", "B"]``
-# would mean that the two-qubit gates are first applied to all qubits
-# connected with label A, and then, during the next full cycle, the
-# two-qubit gates are applied to all qubits connected with label B. This
-# would then correspond to a 2-cycle run.
+# At this point we can define the gate sequence, which is the order in
+# which qubit-pairs the two-qubit gates are applied to. For example,
+# ``["A", "B"]`` would mean that the two-qubit gates are first applied to
+# all qubits connected with label A, and then, during the next full cycle,
+# the two-qubit gates are applied to all qubits connected with label B.
+# This would then correspond to a 2-cycle run (or a circuit with a depth
+# of 2).
 #
 # While we can define any patterns we'd like, the two gate sequences below
 # are the ones that are used in the supremacy paper. The shorter one is
 # used for their classically verifiable benchmarking, while the slightly
 # longer sequence is much harder to simulate classically and is used for
-# estimating the cross-entroby fidelity in what they call the supremacy
+# estimating the cross-entropy fidelity in what they call the supremacy
 # regime. We will use the shorter gate sequence for the following
 # demonstration, although feel free to play around with other combinations
 # if you wish.
@@ -180,40 +220,35 @@ gate_sequence = np.resize(["A", "B", "C", "D"], m)
 
 
 ######################################################################
+# Finally, we can define the circuit itself and create a QNode that we
+# will use for circuit evaluation with the qsim device.
+#
 # Each circuit-loop consists of alternating layers of single-qubit gates
-# and two-qubit gates, referred to as a full cycle.
+# and two-qubit gates, referred to as a full cycle. The single-qubit gates
+# are randomly selected and applied to each qubit in the circuit, while
+# the two-qubit gates are applied to the qubits connected by A, B, C or D
+# as defined above. The circuit finally ends with a half-cycle, consisting
+# of only a layer of single-qubit gates. Note that the last half-cycle is
+# only applied once after the gate sequence is completed.
 #
-# The single-qubit gates are randomly selected and applied to each qubit
-# in the circuit, while the two-qubit gates are applied to the qubits
-# connected by A, B, C or D as defined above. Before and after each two
-# qubit gate sequence (consisting of an iSWAP and a CPhase gate) RZ gates
-# are applied to the participating qubits. The circuit finally ends with a
-# half-cycle, consisting of only a layer of single-qubit gates.
-#
-# We define the circuit, naming it ``lossless_circuit`` since we'll
-# attempt adding noise to it later, and decorate it with the QNode
-# decorator, binding it to the qsim simulator device.
+# We define the circuit, letting it return the state probabilities, and
+# decorate it with the QNode decorator, binding it to the qsim simulator
+# device. Later, we will also extract samples directly from the device
+# without needing to add it as a return statement in the circuit.
 #
 
 @qml.qnode(dev)
-def lossless_circuit(seed=42):
+def circuit(seed=42):
     np.random.seed(seed)
+
     # m full cycle - single-qubit gates & two-qubit gate
     for gs in gate_sequence:
         for w in range(wires):  # TODO: avoid same gate twice on a qubit
             np.random.choice(single_qubit_gates)(wires=w)
 
         for qb_1, qb_2 in d[gs]:
-            r = 40*np.pi * (2*np.random.random(4) - np.random.random(4))
-
-            qml.RZ(r[0], wires=qb_1)
-            qml.RZ(r[1], wires=qb_2)
-
             ops.ISWAP(wires=(qb_1, qb_2))
             ops.CPhase(-np.pi/6, wires=(qb_1, qb_2))
-
-            qml.RZ(r[2], wires=qb_1)
-            qml.RZ(r[3], wires=qb_2)
 
     # one half-cycle - single-qubit gates only
     for w in range(wires):
@@ -223,6 +258,9 @@ def lossless_circuit(seed=42):
 
 
 ######################################################################
+# The cross-entropy benchmark fidelity
+# ------------------------------------
+#
 # The benchmark that is used in the paper, and the one that we will use in
 # this demo, is called the linear cross-entropy benchmarking fidelity of
 # the circuit. It's defined as
@@ -231,226 +269,66 @@ def lossless_circuit(seed=42):
 #
 #    2^{n}\left<P(x_i)\right>_i - 1
 #
-# where :math:``n`` is the number of qubits, :math:``P(x)i)`` is the
-# probability of bitstring :math:``x_i`` computed for the ideal quantum
+# where :math:`n` is the number of qubits, :math:`P(x)i)` is the
+# probability of bitstring :math:`x_i` computed for the ideal quantum
 # circuit, and the average is over the observed bitstrings.
 #
 
-def fidelity(number_of_samples, probs, p=None):
-    sampled_probs = np.random.choice(probs, p=p, size=number_of_samples, replace=True)
+def fidelity_xeb(samples, probs):
+    sampled_probs = []
+    for sam in samples:
+        bitstring = "".join(sam.astype(str))
+        bitstring_idx = int(bitstring, 2)
 
-    return 2**wires * np.mean(sampled_probs) - 1
+        sampled_probs.append(probs[bitstring_idx])
+
+    return 2**samples.shape[1] * np.mean(sampled_probs) - 1
 
 
 ######################################################################
 # For an ideal circuit, i.e. one without any noise, the output of this
 # function should be close to 1, while if any errors have occurred in the
-# circuit, the value will be closer to 0. The former would correspond to a
-# an exponential probability distribution, while the former would
-# correspond to a normal distribution.
+# circuit, the value will be closer to 0. The former would correspond to
+# sampling from a an exponential probability distribution, while the
+# latter would correspond to sampling from a normal distribution.
+#
+# We set a random seed and use it to calculated the probability for all
+# the possible 12 qubit states. We can then sample from the device by
+# calling ``dev.generate_samples`` and similarly, sample random bitstrings
+# from a normal distribution by generating all basis states, and their
+# corresponding bitstrings, and sampling directly from them using NumPy.
 #
 
-probs = lossless_circuit()
+seed=np.random.randint(0, 42424242)
+# seed=42
 
-# not setting the sampling probabilities `p` would correspond to sampling from a normal distribution
-f_normal = fidelity(1000, probs)
-print(f"Normal distribution:     {f_normal:2f}")
+probs = circuit(seed=seed)
 
-# while sampling from the circuits probability distribution would correspond to an exponential one
-f_circuit = fidelity(1000, probs, p=probs)
-print(f"Exponential distribution: {f_circuit:2f}")
+# the theoretical value should be 2^wires * 2 / (2^wires + 1) - 1
+print(f"Theoretical:              {2**wires*(2/(2**wires+1)) - 1:.7f}")
 
+# while sampling from the circuit's probability distribution would
+# correspond to an exponential one and should give a fidelity close to 1
+samples = dev.generate_samples()
+f_circuit = fidelity_xeb(samples, probs)
+print(f"Exponential distribution: {f_circuit:.7f}")
 
-######################################################################
-# We want to use a lossy circuit for this demo, to be able to compare the
-# ideal probabilities with the ones where errors have occured with certain
-# probabilities. To be able to do this, we must separate the random seeds
-# for the randomized gate application and the error probability. Luckily,
-# we can define separate random states for these two cases, and set a
-# random seed for gates. This is crucial, since we want to apply the same
-# gates each time we run the circuit, while still being able to randomize
-# errors.
-#
+# sampling from a normal distribution should give a fidelity close to 0
+basis_states = dev.generate_basis_states(wires)
+samples = np.array([basis_states[i] for i in np.random.randint(0, len(basis_states), size=shots)])
+f_normal = fidelity_xeb(samples, probs)
+print(f"Normal distribution:      {f_normal:.7f}")
 
-gate_random_state = np.random.RandomState()
-error_random_state = np.random.RandomState()
+f_circuit = []
+print(f"Theoretical:              {2**wires*(2/(2**wires+1)) - 1:.7f}")
 
-probability_samples = 100000000
-gate_seed = np.random.randint(0, 42424242)
+num_of_evaluations = 10
+for i in range(num_of_evaluations):
+    seed=np.random.randint(0, 42424242)
 
+    probs = circuit(seed=seed)
+    samples = dev.generate_samples()
 
-######################################################################
-# Next, we define the lossy circuit, and simply name it ``circuit``. We
-# also define an ``error`` template that simply applies either a bitflip
-# (``PauliX`` gate) or a phaseflip (``PauliZ`` gate) on each wire with a
-# certain probability.
-#
-# We then apply the error template after each random single qubit gate as
-# well as after each two qubit gate, as well as at the end of the circuit,
-# corresponding to measurement errors. Here, ``s_prob``, ``t_prob`` and
-# ``m_prob`` correspond to single-qubit gate errors, two-qubit gate errors
-# and measurement/readout errors respectively.
-#
-
-@qml.template
-def error(error_probability, wires):
-    for w in wires:
-        if error_random_state.random() < error_probability:
-            np.random.choice([
-                qml.PauliX(wires=w),
-                qml.PauliZ(wires=w),
-            ])
-
-@qml.qnode(dev)
-def circuit(r, phi, gate_seed=42, error_seed=42, s_prob=0, t_prob=0, m_prob=0):
-    # get the same gates each time (but change errors)
-    gate_random_state.seed(gate_seed)
-    error_random_state.seed(error_seed)
-
-    # m full cycle - single-qubit gates & two-qubit gate
-    for gs in gate_sequence:
-        for w in range(wires):  # TODO: avoid same gate twice on a qubit
-            gate_random_state.choice(single_qubit_gates)(wires=w)
-        error(s_prob, wires=range(wires))  # apply random single-qubit error
-
-        for qb_1, qb_2 in d[gs]:
-            qml.RZ(r[0], wires=qb_1)
-            qml.RZ(r[1], wires=qb_2)
-
-            ops.ISWAP(wires=(qb_1, qb_2))
-            error(t_prob, wires=(qb_1, qb_2))  # apply random two-qubit error
-
-            ops.CPhase(phi, wires=(qb_1, qb_2))
-            error(t_prob, wires=(qb_1, qb_2))  # apply random two-qubit error
-
-            qml.RZ(r[2], wires=qb_1)
-            qml.RZ(r[3], wires=qb_2)
-
-    # one half-cycle - single-qubit gates only
-    for w in range(wires):
-        gate_random_state.choice(single_qubit_gates)(wires=w)
-    error(s_prob, wires=range(wires))  # apply random single-qubit error
-
-    error(m_prob, wires=range(wires))  # apply random measurement error
-
-    return qml.probs(wires=range(wires))
-
-
-######################################################################
-# *a bit unsure about the next step; work in progress*
-#
-# To find the parameters for the ``CPhase`` gate and the ``RZ`` gates that
-# we will use in the circuit, we need to figure out which values provide a
-# cross-entropy fidelity close to 1 for the pure circuit. Since this is a
-# bit stochastic, we optimize the circuit using the NLopt library to find
-# the optimal parameters to be used in the circuit.
-#
-
-import nlopt
-
-wires = 4
-steps = 1000
-
-print(f"seed: {gate_seed}\n")
-
-opt_algorithm = nlopt.LN_BOBYQA  # gradient-free optimizer
-
-opt = nlopt.opt(opt_algorithm, wires+1)
-
-min_cost = 100
-num_evals = 0
-def cost(params, grad=[]):
-    global min_cost
-    global num_evals
-    global best_params
-
-    phi = params[0]
-    r = params[1:]
-
-    probs_ideal = circuit(r, phi, gate_seed=gate_seed)
-
-    fide = fidelity(probability_samples, probs=probs_ideal, p=probs_ideal)
-
-    cost_val = np.abs(1 - fide)
-
-    if cost_val < min_cost:
-        min_cost = cost_val
-        best_params = params.copy()
-
-    num_evals += 1
-    print(f"\revals: {num_evals:3d}    cost: {min_cost:.7f}", end="")
-
-    return float(cost_val)
-
-opt.set_min_objective(cost)
-
-opt.set_lower_bounds(np.append(-np.pi, -40*np.pi * np.ones(wires)))
-opt.set_upper_bounds(np.append(np.pi, 40*np.pi * np.ones(wires)))
-
-opt.set_maxeval(steps)
-
-params = np.pi * (2*np.random.random(wires+1) - np.random.random(wires+1))
-
-try:
-    best_params = opt.optimize(params)
-except:
-    pass
-print(f"\noptimal parameters: {best_params}")
-
-
-######################################################################
-# Let's print the parameters along with the optimized cross-entropy
-# fidelity.
-#
-
-phi = best_params[0]
-r = best_params[1:]
-print(f"r = {r}, phi = {phi}")
-
-probs_ideal = circuit(r, phi, gate_seed=gate_seed)
-
-print(f"ideal fidelity: {fidelity(probability_samples, probs=probs_ideal, p=probs_ideal)}")
-
-
-######################################################################
-# As we can see, the fidelity is now fairly close to 1, which is what we
-# want. We now save these parameters, along with the gate seed defined
-# earlier, so that we can use this exact circuit for the simulations
-# below.
-#
-
-
-######################################################################
-# Finally, we can calculate the fidelity for the circuits using different
-# probabilities for errors to occur. The values are taken directly from
-# the supremacy paper, and inserted into the circuits to calculate the
-# ideal and the observed (i.e. with errors) probabilities. This is done
-# several times, and the mean fidelity is then printed.
-#
-
-# Average error            Isolated        Simultaneous
-#
-# Single-qubit (e1)        0.15%           0.16%
-# Two-qubit (e2)           0.36%           0.62%
-# Two-qubit, cycle (e2c)   0.65%           0.93%
-# Readout (er)             3.10%           3.80%
-
-e1 = 0.0016
-e2 = 0.0062
-e2c = 0.0093
-er = 0.038
-
-fidelity_samples = 100
-
-fidelities = []
-for i in range(fidelity_samples):
-    seed = np.random.randint(0, 42424242)
-
-    probs_ideal = circuit(r, phi, gate_seed=gate_seed, error_seed=seed)
-    probs_observed = circuit(r, phi, gate_seed=gate_seed, error_seed=seed, s_prob=e1, t_prob=e2, m_prob=er)
-
-    f_xeb = fidelity(probability_samples, probs=probs_observed, p=probs_ideal)
-    fidelities.append(f_xeb)
-
-    id_fide = fidelity(probability_samples, probs=probs_ideal, p=probs_ideal)
-    print(f"\r{i+1} / {fidelity_samples}    fidelity = {np.mean(fidelities):4f}    ideal fidelity: {id_fide:.7f}", end="")
+    f_circuit.append(fidelity_xeb(samples, probs))
+    print(f"\r{i+1:4d} / {num_of_evaluations}               {np.mean(f_circuit):.7f}", end="")
+print(f"\rObserved:                 {np.mean(f_circuit):.7f}")
