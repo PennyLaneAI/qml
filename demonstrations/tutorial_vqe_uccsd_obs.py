@@ -144,7 +144,7 @@ print(S2)
 # Implementing VQE with the UCCSD ansatz
 # --------------------------------------
 #
-# PennyLane contains the :class:`~.pennylane.VQECost` class to implement the VQE algorithm.
+# PennyLane contains the :class:`~.pennylane.ExpvalCost` class to implement the VQE algorithm.
 # We begin by defining the device, in this case a qubit simulator:
 
 dev = qml.device("default.qubit", wires=qubits)
@@ -244,17 +244,17 @@ print(hf_state)
 ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
 
 ##############################################################################
-# Next, we use the PennyLane class :class:`~.pennylane.VQECost` to define the cost function.
+# Next, we use the PennyLane class :class:`~.pennylane.ExpvalCost` to define the cost function.
 # This requires specifying the circuit, target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
-cost_fn = qml.VQECost(ansatz, H, dev)
+cost_fn = qml.ExpvalCost(ansatz, H, dev)
 
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
 
-S2_exp_value = qml.VQECost(ansatz, S2, dev)
+S2_exp_value = qml.ExpvalCost(ansatz, S2, dev)
 
 ##############################################################################
 # The total spin :math:`S` of the trial state can be obtained from the
@@ -343,8 +343,8 @@ hf_state = qchem.hf_state(electrons, qubits)
 
 ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
 
-cost_fn = qml.VQECost(ansatz, H, dev)
-S2_exp_value = qml.VQECost(ansatz, S2, dev)
+cost_fn = qml.ExpvalCost(ansatz, H, dev)
+S2_exp_value = qml.ExpvalCost(ansatz, S2, dev)
 
 ##############################################################################
 # Then, we generate the new set of initial parameters, and proceed with the VQE algorithm to
