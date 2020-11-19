@@ -8,7 +8,7 @@ Quantum volume
         compute it for a quantum processor.
     :property="og:image": https://pennylane.ai/qml/_images/bloch.png
 
-Twice per year, a list called the TOP500 [[#top500]_] releases a list of the 500
+Twice per year, a list called the TOP500 [#top500]_ releases a list of the 500
 most powerful super computing systems in the world. However, like many things,
 supercomputers come in all shapes and sizes. Some use 4-core processors, while
 some use up to 128-core processors. The speed of processors will differ, and
@@ -19,7 +19,7 @@ benchmarking standards that can give us a more holistic view of their
 performance.
 
 To that end, the TOP500 uses something called the LINPACK Benchmark
-[[#linpack]_] to rank the supercomputers. The benchmarking task is to solve a
+[#linpack]_ to rank the supercomputers. The benchmarking task is to solve a
 dense system of linear equations, and the metric of interest is the rate at
 which the machine performs floating-point operations. A single number certainly
 cannot tell the whole story, but it can still give us insight into the quality
@@ -45,7 +45,7 @@ ion trap?
     Which of these qubit hardware graphs is the best?
 
 To compare across all these facets, researchers have proposed a metric called
-"quantum volume" [[#cross]_]. Roughly, the quantum volume tells you about the
+"quantum volume" [#cross]_. Roughly, the quantum volume tells you about the
 effective number of qubits a processor has, by way of determining the largest 
 number of qubits on which it can reliably run circuits of a prescribed type.
 
@@ -75,7 +75,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # our metric of success.
 #
 # In general, to set up a benchmark for a quantum computer, we need a couple
-# things [[#robin]_]:
+# things [#robin]_:
 #
 #  1. A family of circuits with a well-defined structure, and variable size
 #  2. A set of rules detailing how the circuits can be compiled
@@ -101,7 +101,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 #     ..
 #
 #     A schematic of the random circuit structure used in the quantum volume protocol.
-#     Image source: [[#cross]_].
+#     Image source: [#cross]_.
 #
 # Specifically, the circuits consist of :math:`d` sequential layers acting on
 # :math:`d` qubits. Each layer consists of two parts: a random permutation of
@@ -116,7 +116,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # allowed to do essentially anything we'd like to the circuits in order to
 # improve them. This includes optimization, hardware-aware considerations such
 # as qubit placement and routing, and even resynthesis by finding unitaries that
-# are close to the target, but easier to implement on the hardware [[#cross]_].
+# are close to the target, but easier to implement on the hardware [#cross]_.
 #
 # Both the circuit structure and the compilation highlight how quantum volume
 # quantifies more than just the number of qubits, or the circuit depth. The
@@ -135,7 +135,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 #
 # The problem used for quantum volume is called the *heavy output generation
 # problem*. It has roots in the proposals for demonstrating quantum advantage
-# [[#aaronson]_]. Many such proposals make use of the properties of various
+# [#aaronson]_. Many such proposals make use of the properties of various
 # random quantum circuit families, as the distribution of the measurement
 # outcomes may not be easy to sample from using classical techniques.
 #
@@ -180,7 +180,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #     behind the heavy output generation problem, as the above leaves out a lot
 #     of the finer points. In particular, it doesn't discuss what heavy output
 #     probability we should *expect* to see on average. This can be calculated
-#     as follows [[#aaronson]_, [#cmu]_].
+#     as follows [#aaronson]_, [#cmu]_.
 #
 #     Suppose that our random square circuits scramble things up enough so that
 #     the effective operation looks like a Haar-random unitary :math:`U`.  In
@@ -242,15 +242,15 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #
 # The maximum achieved quantum volume has been doubling at an increasing rate In
 # late 2020, the most recent achievements have been :math:`\log_2 V_Q = 6` on
-# IBM's 27-qubit superconducting device `ibmq_montreal` [[#qv64]_], and
+# IBM's 27-qubit superconducting device `ibmq_montreal` [#qv64]_, and
 # :math:`\log_2 V_Q = 7` on a Honeywell trapped-ion qubit processor
-# [[#honeywell]_]. A device with an expected quantum volume of :math:`\log_2 V_Q
-# = 32` has also been announced by IonQ [[#ionq]_], though benchmarking results
+# [#honeywell]_. A device with an expected quantum volume of :math:`\log_2 V_Q
+# = 32` has also been announced by IonQ [#ionq]_, though benchmarking results
 # have not yet been published.
 #
 # .. note::
 #
-#    In many sources, the quantum volume of processors is reported is as
+#    In many sources, the quantum volume of processors is reported as
 #    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as has been the
 #    convention in this demo. As such, IonQs processor has the potential for a
 #    quantum volume of :math:`2^{32} > 4000000`. Here we use the :math:`\log`
@@ -496,7 +496,7 @@ for qubit in range(num_qubits):
 # Now it's time to create our device. Since this is just a toy model, we'll
 # specify 1000 shots. As a final point, since we are allowed to do as much
 # optimization as we like, we'll also put the transpiler to work. We'll specify
-# some high-quality qubit placement and routing techniques [[#sabre]_] in order
+# some high-quality qubit placement and routing techniques [#sabre]_ in order
 # to fit the circuits on the hardware graph in the best way possible.
 
 dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
@@ -580,11 +580,11 @@ print(f"Device mean probabilities: {probs_mean_noisy}")
 # So we see that for the ideal probabilities, we're well over 2/3. In fact,
 # we're closing in on 0.85, which is the expected value as mentioned in the box
 # above. For the device probabilities, however, we see that already by the
-# 4-qubit case, we've fallen below the threshold, so the highest volume this
-# processor can have is :math:`\log_2 V_Q = 3`. But isn't enough to just see the
-# *mean* of the heavy output probabilities be greater than 2/3. Since we're
-# dealing with randomness, we also want to be confident that these results were
-# not just a fluke!
+# 4-qubit case, we're very close to the threshold. Since it's below the
+# threshold at :math:`m=5`, the highest volume this processor can have is
+# :math:`\log_2 V_Q = 4`. But isn't enough to just see the *mean* of the heavy
+# output probabilities be greater than 2/3. Since we're dealing with randomness,
+# we also want to be confident that these results were not just a fluke!
 #
 # To be confident, we want not only our mean to be above 2/3, but also that we are
 # still above 2/3 within 2 standard deviations of the mean. This is referred to as a
@@ -658,7 +658,7 @@ plt.tight_layout()
 # Quantum volume provides a useful metric for comparing the quality of different
 # quantum computers. However, as with any benchmark, it is not without limitations.
 # To that end, a more general *volumetric benchmark* framework was proposed, which
-# includes not only square circuits, but also rectangular circuits [[#robin]_].
+# includes not only square circuits, but also rectangular circuits [#robin]_.
 #
 #
 #
