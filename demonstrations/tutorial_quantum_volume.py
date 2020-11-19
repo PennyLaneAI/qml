@@ -173,7 +173,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # whether or not the mean of these probabilities is over 2/3 with high
 # confidence.
 #
-# .. note:: 
+# .. note::
 #     :class: dropdown
 #
 #     *This box is optional*, but provides some of the intuition of the math
@@ -249,7 +249,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # have not yet been published.
 #
 # .. note::
-#  
+#
 #    In many sources, the quantum volume of processors is reported is as
 #    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as has been the
 #    convention in this demo. As such, IonQs processor has the potential for a
@@ -268,9 +268,8 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #
 # Equipped with our definition of quantum volume, it's time to actually try and
 # compute it ourselves. We'll use the `PennyLane-Qiskit
-# <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to compute the
-# volume of one of the IBM processors, since their properties are easily
-# accessible through this interface.
+# <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to determine the
+# volume of a noisy toy device.
 #
 # Loosely, the protocol for quantum volume consists of three steps:
 #
@@ -302,28 +301,30 @@ import numpy as np
 # First we write a function that randomly permutes qubits. We'll do this by
 # using numpy to generate a permutation, and then apply it with SWAP gates.
 
-
+# For reproducibility
+np.random.seed(42)
 rng = np.random.default_rng()
+
 
 def permute_qubits(num_qubits):
     # A random permutation
     perm_order = list(rng.permutation(num_qubits))
 
     working_order = list(range(num_qubits))
-    
+
     # We will permute by iterating through the permutation and swapping
     # things back to their proper place.
     for idx_here in range(num_qubits):
-            if working_order[idx_here] != perm_order[idx_here]:
+        if working_order[idx_here] != perm_order[idx_here]:
             # Where do we need to send the qubit at this location?
-                idx_there = working_order.index(perm_order[idx_here])
-                qml.SWAP(wires=[idx_here, idx_there])
+            idx_there = working_order.index(perm_order[idx_here])
+            qml.SWAP(wires=[idx_here, idx_there])
 
-                # Update the working order to account for the SWAP
-                working_order[idx_here], working_order[idx_there] = (
-                    working_order[idx_there],
-                    working_order[idx_here],
-                )
+            # Update the working order to account for the SWAP
+            working_order[idx_here], working_order[idx_there] = (
+                working_order[idx_there],
+                working_order[idx_here],
+            )
 
 
 ##############################################################################
@@ -336,6 +337,7 @@ def permute_qubits(num_qubits):
 # essentially equivalent up to a global phase).
 
 from strawberryfields.utils import random_interferometer
+
 
 def apply_random_su4_layer(num_qubits):
     for qubit_idx in range(0, num_qubits, 2):
@@ -433,30 +435,19 @@ print(f"Heavy outputs are {heavy_outputs}")
 # Step 2: run the circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# First things first, let's set up our hardware device. We'll use a simulated
-# version of the 5-qubit IBM Ourense as a example - the reported quantum volume
-# according to IBM is 8, so we endeavour to reproduce that here. This means that
-# we should be able to run our square circuits on up to :math:`\log_2 V_Q =3`
-# qubits.
-#
-
+# First things first, let's set up a hardware device. We'll make a 5-qubit
+# processor with the qubits all in a row, then add a little bit of noise.
+# Let's take a look at the arrangement of the qubits on the processor by
+# plotting its hardware graph.
 
 import networkx as nx
-from qiskit.providers.aer import noise
 
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense");
-
-##############################################################################
-#
-# First, we can take a look at the arrangement of the qubits on the processor
-# by plotting its hardware graph.
-
-ourense_hardware_graph = nx.Graph(dev_ourense.backend.configuration().coupling_map)
+coupling_map = [[0, 1], [1, 0], [1, 2], [2, 1], [2, 3], [3, 2], [3, 4], [4, 3]]
 
 nx.draw_networkx(
-    ourense_hardware_graph,
+    nx.Graph(coupling_map),
     node_color="cyan",
-    labels={x: x for x in range(dev_ourense.num_wires)},
+    labels={x: x for x in range(num_qubits)},
 )
 
 ##############################################################################
@@ -464,25 +455,51 @@ nx.draw_networkx(
 # This hardware graph is not fully connected, so the compiler will have to make
 # some adjustments when non-connected qubits need to interact.
 #
-# To actually perform the simulations, we'll need to access a copy of the
-# Ourense noise model. Again, we won't be running on Ourense directly - rather
-# we'll set up a local device to simulate its behaviour.
-#
+# The next thing we need is a noise model. We'll set up a toy one that assumes
+# a little bit of depolarizing error on the single-qubit and two-qubit gates,
+# as well as some measurement readout error.
+from qiskit.providers.aer import noise
 
-noise_model = noise.NoiseModel.from_backend(dev_ourense.backend.properties())
+noise_model = noise.NoiseModel()
 
-dev_noisy = qml.device(
-    "qiskit.aer", wires=dev_ourense.num_wires, shots=1000, noise_model=noise_model
-)
+# Add some noise to single qubit gates
+for qubit in range(num_qubits):
+    # Slightly depolarize u1 and u3 instructions
+    u1_error = np.abs(rng.normal(1e-3, 5e-4))
+    noise_model.add_quantum_error(noise.depolarizing_error(u1_error, 1), "u1", [qubit])
+
+    u3_error = np.abs(rng.normal(1e-3, 5e-4))
+    noise_model.add_quantum_error(noise.depolarizing_error(u3_error, 1), "u3", [qubit])
+
+    # For variety, add probability of a bit flip error on u2 gates
+    prob_bit_flip = np.abs(rng.normal(0.05, 1e-3))
+    noise_model.add_quantum_error(
+        noise.pauli_error([("X", prob_bit_flip), ("I", 1 - prob_bit_flip)]), "u2", [qubit]
+    )
+
+# Add some error to the CNOT gates between 0 and the other qubits; roughly 1e-2
+for qubit in range(1, num_qubits):
+    cnot_error = np.abs(rng.normal(1e-2, 5e-3))
+    noise_model.add_quantum_error(noise.depolarizing_error(cnot_error, 2), "cx", [0, qubit])
+
+# Finally, add a touch of measurement readout error; a couple percent for each
+for qubit in range(num_qubits):
+    meas_error_1if0 = np.abs(rng.normal(2.5e-2, 1e-2))
+    meas_error_0if1 = np.abs(rng.normal(2.5e-2, 1e-2))
+    readout_error = noise.ReadoutError(
+        [[1 - meas_error_1if0, meas_error_1if0], [meas_error_0if1, 1 - meas_error_0if1]]
+    )
+    noise_model.add_readout_error(readout_error, [qubit])
 
 ##############################################################################
 #
-# As a final point, since we are allowed to do as much optimization as we like,
-# let's put the transpiler to work. We'll specify some high-quality qubit
-# placement and routing techniques [[#sabre]_] in order to fit the circuits on
-# the hardware graph in the best way possible.
+# Now it's time to create our device. Since this is just a toy model, we'll
+# specify 1000 shots. As a final point, since we are allowed to do as much
+# optimization as we like, we'll also put the transpiler to work. We'll specify
+# some high-quality qubit placement and routing techniques [[#sabre]_] in order
+# to fit the circuits on the hardware graph in the best way possible.
 
-coupling_map = dev_ourense.backend.configuration().to_dict()["coupling_map"]
+dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
 
 dev_noisy.set_transpile_args(
     **{
@@ -496,7 +513,7 @@ dev_noisy.set_transpile_args(
 
 ##############################################################################
 #
-# Now, let's run the protocol. We'll start with the smallest circuits on 2
+# It's time to run the protocol. We'll start with the smallest circuits on 2
 # qubits, and make our way up to 5. At each :math:`m`, we'll look at 200 randomly
 # generated circuits.
 #
@@ -621,23 +638,26 @@ for m in range(min_m - 2, max_m + 1 - 2):
         label="2σ",
     )
 
-fig.suptitle("Heavy output distributions for Ourense", fontsize=18)
+fig.suptitle("Heavy output distributions for star graph QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
 
 ##############################################################################
 #
 # We see that this is true for for :math:`m=2`, and :math:`m=3`. Thus, we find
-# that the quantum volume of Ourense is presicely as expected: :math:`\log_2 V_Q
-# = 3`.
+# that the quantum volume of this processor is :math:`\log_2 V_Q = 3`.
 #
+# Try playing around with the code yourself - are there any parameters you can
+# change to improve the volume with this same noise model? What happens if we
+# don't specify a high level of optimization and transpilation? Furthermore, how
+# do the results change with a more complex noise model from an actual device?
 #
 # Concluding thoughts
 # -------------------
 #
 # Quantum volume provides a useful metric for comparing the quality of different
 # quantum computers. However, as with any benchmark, it is not without limitations.
-# To that end, a more general *volumetric benchmark* framework was proposed, which 
+# To that end, a more general *volumetric benchmark* framework was proposed, which
 # includes not only square circuits, but also rectangular circuits [[#robin]_].
 #
 #
@@ -674,11 +694,11 @@ plt.tight_layout()
 #
 # .. [#cmu]
 #
-#    O'Donnell, R. CMU course: Quantum Computation and Quantum Information 2018. 
+#    O'Donnell, R. CMU course: Quantum Computation and Quantum Information 2018.
 #    `Lecture 25 <https://www.cs.cmu.edu/~odonnell/quantum18/lecture25.pdf>`__
 #
 # .. [#qv64]
-# 
+#
 #    Jurcevic et al. Demonstration of quantum volume 64 on a superconducting quantum computing system.
 #    `arXiv 2008.08571 quant-ph <https://arxiv.org/abs/2008.08571>`__
 #
@@ -686,7 +706,7 @@ plt.tight_layout()
 #
 #    `<https://www.honeywell.com/en-us/newsroom/news/2020/09/achieving-quantum-volume-128-on-the-honeywell-quantum-computer>`__
 #
-# .. [#ionq] 
+# .. [#ionq]
 #
 #    `<https://www.prnewswire.com/news-releases/ionq-unveils-worlds-most-powerful-quantum-computer-301143782.html>`__
 #
