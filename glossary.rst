@@ -286,7 +286,7 @@ Key Concepts
         The parameter-shift rule is a recipe for how to estimate gradients of quantum circuits.
         See also :doc:`quantum gradient </glossary/quantum_gradient>`.
 
-    :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_maxcut>`
+    :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_intro>`
         A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating parameterized components. 
 
     Quantum Boltzmann Machine
