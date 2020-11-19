@@ -52,8 +52,14 @@ photonic quantum computing.
     :tooltip: Compare the parameter-shift rule with backpropagation.
     :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
-    :tags: tensorflow autograd:html:`</div></div><div style='clear:both'>`
+    :tags: tensorflow autograd 
 
+.. customgalleryitem::
+   :tooltip: Learn how to compute the quantum volume of a quantum processor.
+   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
+   :description: :doc:`demos/tutorial_quantum_volume`
+   :tags: autograd
+       
 :html:`</div></div><div style='clear:both'>`
 
 Applications
@@ -143,6 +149,7 @@ hardware.
     demos/tutorial_gaussian_transformation
     demos/tutorial_plugins_hybrid
     demos/tutorial_backprop
+    demos/tutorial_quantum_volume
     demos/tutorial_quantum_chemistry
     demos/tutorial_vqe
     demos/tutorial_variational_classifier
