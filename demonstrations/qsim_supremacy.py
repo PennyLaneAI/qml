@@ -348,6 +348,16 @@ samples = np.array([basis_states[i] for i in np.random.randint(0, len(basis_stat
 f_normal = fidelity_xeb(samples, probs)
 print("Normal distribution:", f"{f_normal:.7f}".rjust(15))
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Circuit's distribution:    1.0016549
+#    Normal distribution:      -0.0008768
+#
 
 ######################################################################
 # We can also calculate the theoretical result obtained from the equation
@@ -361,6 +371,15 @@ theoretical_value = 2 * N / (N + 1) - 1
 
 print("Theoretical:", f"{theoretical_value:.7f}\n".rjust(24))
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Theoretical:               0.9995118
+#
 
 ######################################################################
 # The values above might seem a bit arbitrary. To show that the fidelity
@@ -383,7 +402,7 @@ print("Theoretical:", f"{theoretical_value:.7f}\n".rjust(24))
 print("Theoretical:", f"{2**wires*(2/(2**wires+1)) - 1:.7f}".rjust(24))
 
 f_circuit = []
-num_of_evaluations = 10
+num_of_evaluations = 100
 for i in range(num_of_evaluations):
     seed=np.random.randint(0, 42424242)
 
@@ -394,6 +413,16 @@ for i in range(num_of_evaluations):
     print(f"\r{i + 1:4d} / {num_of_evaluations:4d}{' ':17}{np.mean(f_circuit):.7f}", end="")
 print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Theoretical:                0.9995118
+#     Observed:                   0.9999512
+#
 
 ######################################################################
 # Quantum supremacy

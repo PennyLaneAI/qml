@@ -32,4 +32,3 @@ torchvision==0.7.0+cpu
 dask[delayed]==2.10.1
 sklearn
 matplotlib
-qsimcirq
