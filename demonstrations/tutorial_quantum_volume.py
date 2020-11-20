@@ -8,33 +8,35 @@ Quantum volume
         compute it for a quantum processor.
     :property="og:image": https://pennylane.ai/qml/_images/bloch.png
 
-Twice per year, a list called the TOP500 [#top500]_ releases a list of the 500
-most powerful super computing systems in the world. However, like many things,
-supercomputers come in all shapes and sizes. Some use 4-core processors, while
-some use up to 128-core processors. The speed of processors will differ, and
-they may be connected in different ways. Furthermore the systems may have
-different amounts of memory, and run different operating systems. In order to
-make a fair comparison among so many different types of machines, we need
-benchmarking standards that can give us a more holistic view of their
-performance.
+Twice per year, a project called the TOP500 [#top500]_ releases a list of the
+500 most powerful supercomputing systems in the world. However, like many
+things, supercomputers come in all shapes and sizes. `Some
+<https://en.wikipedia.org/wiki/Fugaku_(supercomputer)>`_ use 48-core processors,
+while `others <https://en.wikipedia.org/wiki/Sunway_TaihuLight>`_ use processors
+with up to 260 cores. The speed of processors will differ, and they may be
+connected in different ways. Furthermore the systems may have different amounts
+of memory, and run different operating systems. In order to make a fair
+comparison among so many different types of machines, we need benchmarking
+standards that can give us a more holistic view of their performance.
 
-To that end, the TOP500 uses something called the LINPACK Benchmark
-[#linpack]_ to rank the supercomputers. The benchmarking task is to solve a
-dense system of linear equations, and the metric of interest is the rate at
-which the machine performs floating-point operations. A single number certainly
-cannot tell the whole story, but it can still give us insight into the quality
-of the machines, and provides a standard so we can compare them.
+To that end, the TOP500 rankings are based on something called the LINPACK
+Benchmark [#linpack]_. The supercomputers are tasked with solving a dense system
+of linear equations, and the metric of interest is the rate at which they
+perform floating-point operations (FLOPS). Today's top machines reach speeds
+well into the regime of hundreds of peta FLOPs. While a single number certainly
+cannot tell the whole story, it still gives us insight into the quality of
+the machines, and provides a standard so we can compare them.
 
 A similar problem is emerging with quantum computers. Present-day devices have a
-number of limitations. Machines have only modest numbers of qubits, and they
-have fairly high error rates. Not all qubits on a chip may be connected, so it
-may not be possible to perform operations on arbitrary pairs of qubits.  How can
-we compare two quantum computers in a way that is fair? Is a machine with 20
-noisy qubits better than one with 5 very high-quality qubits? Is a machine with
-5 fully-connected qubits better than one with 20 qubits with comparable error
-rate, but arranged in a square lattice?  Furthermore, how can we make
-comparisons between different types of qubits, such as superconducting versus
-ion trap?
+number of limitations. Machines have only modest numbers of qubits, with fairly
+high error rates. Typically the qubits on a chip are not all connected to each
+other, so it may not be possible to perform operations on arbitrary pairs of
+them. How can we compare quantum computers in a way that is fair? Is a machine
+with 20 noisy qubits better than one with 5 very high-quality qubits? Is a
+machine with 8 fully-connected qubits better than one with 16 qubits of
+comparable error rate, but arranged in a square lattice?  Furthermore, how can
+we make comparisons between different types of qubits, such as superconducting
+versus ion trap?
 
 .. figure:: ../demonstrations/quantum_volume/qubit_graph_variety.svg
     :align: center
@@ -46,15 +48,15 @@ ion trap?
 
 To compare across all these facets, researchers have proposed a metric called
 "quantum volume" [#cross]_. Roughly, the quantum volume tells you about the
-effective number of qubits a processor has, by way of determining the largest 
-number of qubits on which it can reliably run circuits of a prescribed type.
+effective number of qubits a processor has by determining the largest number of
+qubits on which it can reliably run circuits of a prescribed type.
 
 You can think of it loosely like the quantum analogue of the LINPACK
 Benchmark. Different quantum computers are tasked with solving the same problem,
 and the success will be a function of many properties: error rates, qubit
 connectivity, even the quality of the software stack. Like LINPACK, a single
-number won't tell us everything about a quantum computer, but it does provide a
-well-defined framework for comparing them.
+number won't tell us everything about a quantum computer, but it does establish
+a framework for comparing them.
 
 After working through this tutorial, you'll be able to define quantum volume,
 explain the problem on which it's based, and run the protocol to compute it!
@@ -67,15 +69,11 @@ explain the problem on which it's based, and run the protocol to compute it!
 # Designing a benchmark for quantum computers
 # -------------------------------------------
 #
-# As alluded to in the previous section, there are many different aspects that
-# contribute to the successful execution of a quantum computation. Qubits may
-# have different connectivity, different error rates, and even different
-# software frameworks may play a role, such as compilers.  Therefore, we must be
-# very explicit about delineating what exactly we are benchmarking, and what is
-# our metric of success.
-#
-# In general, to set up a benchmark for a quantum computer, we need a couple
-# things [#robin]_:
+# As alluded to above, there are many different properties of a quantum computer
+# that contribute to the successful execution of a computation. Therefore, we
+# must be very explicit about what exactly we are benchmarking, and what is our
+# metric of success. In general, to set up a benchmark for a quantum computer
+# we need a couple things [#robin]_:
 #
 #  1. A family of circuits with a well-defined structure, and variable size
 #  2. A set of rules detailing how the circuits can be compiled
@@ -91,8 +89,8 @@ explain the problem on which it's based, and run the protocol to compute it!
 # ~~~~~~~~~~~~
 #
 # If you've ever read about quantum volume before, you may have heard that it relates
-# to the largest *square* circuit that a quantum processor can run reliably. The family of
-# circuits that are used are random circuits with a very particular form:
+# to the largest *square* circuit that a quantum processor can run reliably. This benchmark 
+# uses *random* circuits with a very particular form:
 #
 # .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
 #     :align: center
@@ -118,13 +116,14 @@ explain the problem on which it's based, and run the protocol to compute it!
 # as qubit placement and routing, and even resynthesis by finding unitaries that
 # are close to the target, but easier to implement on the hardware [#cross]_.
 #
-# Both the circuit structure and the compilation highlight how quantum volume
-# quantifies more than just the number of qubits, or the circuit depth. The
-# qubit connectivity contributes through the layers of permutations, as a very
-# well-connected processor will be able to implement these in fewer steps than a
-# less-connected one. Even the quality of the software and the compiler plays a
-# role here - higher-quality compilers will produce circuits that fit better
-# on the target devices, and will thus produce higher quality results.
+# Both the circuit structure and the compilation highlight how quantum volume is
+# about more than just the number of qubits a quantum computer has. The error
+# rates will affect the achievable depth, and the qubit connectivity contributes
+# through the layers of permutations, as a very well-connected processor will be
+# able to implement these in fewer steps than a less-connected one. Even the
+# quality of the software and the compiler plays a role here - higher-quality
+# compilers will produce circuits that fit better on the target devices, and
+# will thus produce higher quality results.
 #
 # The metrics
 # ~~~~~~~~~~~
@@ -585,68 +584,6 @@ print(f"Device mean probabilities: {probs_mean_noisy}")
 # :math:`\log_2 V_Q = 4`. But isn't enough to just see the *mean* of the heavy
 # output probabilities be greater than 2/3. Since we're dealing with randomness,
 # we also want to be confident that these results were not just a fluke!
-#
-# To be confident, we want not only our mean to be above 2/3, but also that we are
-# still above 2/3 within 2 standard deviations of the mean. This is referred to as a
-# 97.5% confidence interval (since roughly 97.5% of a normal distribution sits within
-# :math:`2\sigma` of the mean.)
-#
-# At this point, we're going to do some statistical sorcery and make some
-# assumptions about our distributions. Whether or not a circuit is successful is
-# a binary outcome. When we sample many circuits, it is almost like we are
-# sampling from a *binomial distribution*, where the outcome probability is
-# equivalent to the heavy output probability. In the limit of a large number of
-# samples (in this case circuits), a binomial distribution starts to look pretty
-# normal. If we make this approximation, we can compute the standard deviation
-# and use it to make our confidence interval. With the normal approximation,
-# the standard deviation can be computed as
-#
-# .. math::
-#
-#    \sigma = \sqrt{\frac{p_h(1 - p_h)}{N}}
-#
-# where :math:`p_h` is our heavy output probability, and :math:`N` is the number
-# of circuits.
-#
-
-stds_ideal = np.sqrt(probs_mean_ideal * (1 - probs_mean_ideal) / num_trials)
-stds_noisy = np.sqrt(probs_mean_noisy * (1 - probs_mean_noisy) / num_trials)
-
-##############################################################################
-#
-# Now that we have our standard deviations, we're ready to plot - let's see
-# if our means are at least :math:`2\sigma` away from the threshold!
-#
-
-import matplotlib.pyplot as plt
-
-
-fig, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(9, 6))
-ax = ax.ravel()
-
-for m in range(min_m - 2, max_m + 1 - 2):
-    ax[m].hist(probs_noisy[m, :])
-    ax[m].set_title(f"m = {m + min_m}", fontsize=16)
-    ax[m].set_xlabel("Heavy output probability", fontsize=14)
-    ax[m].set_ylabel("Occurences", fontsize=14)
-    ax[m].axvline(x=2.0 / 3, color="black", label="2/3")
-    ax[m].axvline(x=probs_mean_noisy[m], color="red", label="Mean")
-    ax[m].axvline(
-        x=(probs_mean_noisy[m] - 2 * stds_noisy[m]),
-        color="red",
-        linestyle="dashed",
-        label="2σ",
-    )
-
-fig.suptitle("Heavy output distributions for star graph QPU", fontsize=18)
-plt.legend(fontsize=14)
-plt.tight_layout()
-
-##############################################################################
-#
-# We see that this is true for for :math:`m=2`, and :math:`m=3`. Thus, we find
-# that the quantum volume of this processor is :math:`\log_2 V_Q = 3`.
-#
 # Try playing around with the code yourself - are there any parameters you can
 # change to improve the volume with this same noise model? What happens if we
 # don't specify a high level of optimization and transpilation? Furthermore, how
