@@ -85,6 +85,12 @@ hardware.
     :tags: autograd
 
 .. customgalleryitem::
+    :tooltip: Learn how to implement QAOA workflows with PennyLane
+    :figure: demonstrations/qaoa_module/qaoa_layer.png
+    :description: :doc:`demos/tutorial_qaoa_intro`
+    :tags: autograd beginner
+
+.. customgalleryitem::
     :tooltip: Perform QAOA for MaxCut.
     :figure: demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
     :description: :doc:`demos/tutorial_qaoa_maxcut`
@@ -131,7 +137,7 @@ hardware.
     :figure: demonstrations/vqe_uccsd_obs/thumbnail_spectra_h2.png
     :description: :doc:`demos/tutorial_vqe_uccsd_obs`
     :tags: chemistry
-
+    
 .. customgalleryitem::
     :tooltip: Learn how to create hybrid ML models using Keras
     :figure: _static/Keras_logo.png
@@ -165,5 +171,6 @@ hardware.
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_vqe_parallel
     demos/tutorial_ensemble_multi_qpu
+    demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
