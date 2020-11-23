@@ -588,6 +588,69 @@ print(f"Device mean probabilities: {probs_mean_noisy}")
 # :math:`\log_2 V_Q = 4`. But isn't enough to just see the *mean* of the heavy
 # output probabilities be greater than 2/3. Since we're dealing with randomness,
 # we also want to be confident that these results were not just a fluke!
+#
+# To be confident, we want not only our mean to be above 2/3, but also that we are
+# still above 2/3 within 2 standard deviations of the mean. This is referred to as a
+# 97.5% confidence interval (since roughly 97.5% of a normal distribution sits within
+# :math:`2\sigma` of the mean.)
+#
+# At this point, we're going to do some statistical sorcery and make some
+# assumptions about our distributions. Whether or not a circuit is successful is
+# a binary outcome. When we sample many circuits, it is almost like we are
+# sampling from a *binomial distribution*, where the outcome probability is
+# equivalent to the heavy output probability. In the limit of a large number of
+# samples (in this case circuits), a binomial distribution starts to look pretty
+# normal. If we make this approximation, we can compute the standard deviation
+# and use it to make our confidence interval. With the normal approximation,
+# the standard deviation can be computed as
+#
+# .. math::
+#
+#    \sigma = \sqrt{\frac{p_h(1 - p_h)}{N}}
+#
+# where :math:`p_h` is our heavy output probability, and :math:`N` is the number
+# of circuits.
+#
+
+stds_ideal = np.sqrt(probs_mean_ideal * (1 - probs_mean_ideal) / num_trials)
+stds_noisy = np.sqrt(probs_mean_noisy * (1 - probs_mean_noisy) / num_trials)
+
+##############################################################################
+#
+# Now that we have our standard deviations, we're ready to plot - let's see
+# if our means are at least :math:`2\sigma` away from the threshold!
+#
+
+import matplotlib.pyplot as plt
+
+
+fig, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(9, 6))
+ax = ax.ravel()
+
+for m in range(min_m - 2, max_m + 1 - 2):
+    ax[m].hist(probs_noisy[m, :])
+    ax[m].set_title(f"m = {m + min_m}", fontsize=16)
+    ax[m].set_xlabel("Heavy output probability", fontsize=14)
+    ax[m].set_ylabel("Occurences", fontsize=14)
+    ax[m].axvline(x=2.0 / 3, color="black", label="2/3")
+    ax[m].axvline(x=probs_mean_noisy[m], color="red", label="Mean")
+    ax[m].axvline(
+        x=(probs_mean_noisy[m] - 2 * stds_noisy[m]),
+        color="red",
+        linestyle="dashed",
+        label="2σ",
+    )
+
+fig.suptitle("Heavy output distributions for star graph QPU", fontsize=18)
+plt.legend(fontsize=14)
+plt.tight_layout()
+
+##############################################################################
+#
+# We see that this is true for for :math:`m=2`, and :math:`m=3`. Thus, we find
+# that the quantum volume of this processor is :math:`\log_2 V_Q = 3`.
+#
+
 # Try playing around with the code yourself - are there any parameters you can
 # change to improve the volume with this same noise model? What happens if we
 # don't specify a high level of optimization and transpilation? Furthermore, how
