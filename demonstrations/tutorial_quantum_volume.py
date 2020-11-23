@@ -17,7 +17,8 @@ with up to 260 cores. The speed of processors will differ, and they may be
 connected in different ways. Furthermore the systems may have different amounts
 of memory, and run different operating systems. In order to make a fair
 comparison among so many different types of machines, we need benchmarking
-standards that can give us a more holistic view of their performance.
+standards that can give us a more holistic view of their performance than just,
+for example, counting the number of processors.
 
 To that end, the TOP500 rankings are based on something called the LINPACK
 Benchmark [#linpack]_. The supercomputers are tasked with solving a dense system
@@ -27,16 +28,17 @@ well into the regime of hundreds of peta FLOPs. While a single number certainly
 cannot tell the whole story, it still gives us insight into the quality of
 the machines, and provides a standard so we can compare them.
 
-A similar problem is emerging with quantum computers. Present-day devices have a
-number of limitations. Machines have only modest numbers of qubits, with fairly
-high error rates. Typically the qubits on a chip are not all connected to each
-other, so it may not be possible to perform operations on arbitrary pairs of
-them. How can we compare quantum computers in a way that is fair? Is a machine
-with 20 noisy qubits better than one with 5 very high-quality qubits? Is a
-machine with 8 fully-connected qubits better than one with 16 qubits of
-comparable error rate, but arranged in a square lattice?  Furthermore, how can
-we make comparisons between different types of qubits, such as superconducting
-versus ion trap?
+A similar problem is emerging with quantum computers. Just as it's not enough to
+judge the quality of a regular computer solely on the number of processors, we
+can't judge quantum computers on the number of qubits alone. Present-day devices
+have a number of limitations, an important one being the fairly high gate error
+rates. Typically the qubits on a chip are not all connected to each other, so it
+may not be possible to perform operations on arbitrary pairs of
+them. Considering this, can we tell if a machine with 20 noisy qubits is better
+than one with 5 very high-quality qubits? Or if a machine with 8 fully-connected is
+qubits better than one with 16 qubits of comparable error rate, but arranged in
+a square lattice?  Furthermore, how can we make comparisons between different
+types of qubits, such as superconducting versus ion trap?
 
 .. figure:: ../demonstrations/quantum_volume/qubit_graph_variety.svg
     :align: center
@@ -129,39 +131,40 @@ explain the problem on which it's based, and run the protocol to compute it!
 # ~~~~~~~~~~~
 #
 # Now that we have our circuits, we have to define the quantities that are going
-# to tell us about how well we're able to run them. For that, we're first going
-# to need a problem to solve.
+# to tell us about how well we're able to run them. For that, we need a problem
+# to solve.
 #
-# The problem used for quantum volume is called the *heavy output generation
-# problem*. It has roots in the proposals for demonstrating quantum advantage
-# [#aaronson]_. Many such proposals make use of the properties of various
-# random quantum circuit families, as the distribution of the measurement
-# outcomes may not be easy to sample from using classical techniques.
+# The problem used for computing quantum volume is called the *heavy output
+# generation problem*. It has roots in the proposals for demonstrating quantum
+# advantage [#aaronson]_. Many such proposals make use of the properties of
+# various random quantum circuit families, as the distribution of the
+# measurement outcomes may not be easy to sample from using classical
+# techniques.
 #
-# One such case that is theorized to be hard to sample from, is the distribution
-# of *heavy* bit strings. Heavy bit strings are those whose outcome
-# probabilities are above the median of the distribution.  As an example,
-# suppose we run a two-qubit circuit, and find that the measurement
-# probabilities for the output states are as follows:
+# A distribution that is theorized to be hard to sample from is the distribution
+# of *heavy* output bit strings. Heavy bit strings are those whose outcome
+# probabilities are above the median of the distribution. For example, suppose
+# we run a two-qubit circuit, and find that the measurement probabilities for
+# the output states are as follows:
 
 measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 
 ##############################################################################
 #
-# The median of this probability distribution is 0.208. This means that the
-# heavy bit strings are '00', and '10', because these are the only two
-# probabilities above the median. If we were to run this circuit, the
-# probability of obtaining either of the heavy outputs is 0.792, and so we expect
-# that we will see one of these two most of the time.
+# The median of this probability distribution is 0.208, and the heavy bit
+# strings are '00', and '10', because these are the two probabilities above the
+# median. If we were to run this circuit, the probability of obtaining one of
+# the heavy outputs is 0.792, and so we expect that we will see one of these two
+# most of the time.
 #
-# For a given family of circuits, each one is going to have its own heavy output
-# probability. If our quantum computer is of high quality, then we should expect
-# to see heavy outputs quite often across all the circuits. On the other hand,
-# if it's of poor quality and everything is depolarized, we will end up with
-# output probabilities that are roughly all the same, as depolarization will reduce
-# the probabilities to the uniform distribution.
+# Each circuit in a circuit family has its own heavy output probability. If our
+# quantum computer is of high quality, then we should expect to see heavy
+# outputs quite often across all the circuits. On the other hand, if it's of
+# poor quality and everything is depolarized, we will end up with output
+# probabilities that are roughly all the same, as depolarization will reduce the
+# probabilities to the uniform distribution.
 #
-# The heavy output generation problem quantifies this - for our random family of
+# The heavy output generation problem quantifies this - for our family of random
 # circuits, do we obtain heavy outputs at least 2/3 of the time on average?
 # Furthermore, do we obtain this with high confidence?
 #
@@ -169,7 +172,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # criteria for our benchmarks, for step 3, the metric of success for each
 # circuit is how often we obtain heavy outputs when we run the circuit and take
 # a measurement. For step 4, the metric of success for the whole family is
-# whether or not the mean of these probabilities is over 2/3 with high
+# whether or not the mean of these probabilities is greater than 2/3 with high
 # confidence.
 #
 # .. note::
@@ -182,9 +185,9 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #     as follows [#aaronson]_, [#cmu]_.
 #
 #     Suppose that our random square circuits scramble things up enough so that
-#     the effective operation looks like a Haar-random unitary :math:`U`.  In
-#     our circuits, we are applying :math:`U` to the all-zero ket, and so the
-#     measurement outcome probabilities will be the modulus squared of the
+#     the effective operation looks like a Haar-random unitary :math:`U`. Since
+#     in the circuits we are applying :math:`U` to the all-zero ket, the
+#     measurement outcome probabilities will be the moduli squared of the
 #     entries in the first column of :math:`U`.
 #
 #     Now if :math:`U` is Haar-random, we can say something about the form of these
@@ -192,14 +195,15 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #     imaginary parts are normally distributed with mean 0 and variance :math:`1/2^m`,
 #     where :math:`m` is the number of qubits. When we take the mod square of such
 #     numbers, we obtain an *exponential* distribution, such that the measurement
-#     outcome probabilities are distributed like  :math:`Pr(p) \sim e^{-p}.`
+#     outcome probabilities are distributed like  :math:`Pr(p) \sim 2^m e^{-2^m p}.` 
+#     (This is also known as the *Porter-Thomas distribution*.)
 #
 #     We can integrate this distribution to find that the median sits at
 #     :math:`\ln 2`.  We can further compute the expectation value of obtaining
 #     something above the medium by integrating the distribution :math:`p
 #     e^{-p}` from :math:`\ln 2` to infinity, to obtain :math:`(1 + \ln
-#     2)/2`. This is thus the expected heavy output probability. Numerically, it
-#     is around 0.85, and we will actually observe this later on!
+#     2)/2`. This is the expected heavy output probability! Numerically it
+#     is around 0.85, and in fact we will observe this later on.
 #
 #
 # The benchmark
