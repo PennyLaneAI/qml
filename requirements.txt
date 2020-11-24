@@ -12,7 +12,7 @@ pillow==6.2.0
 pip==20.1
 pyscf==1.7.3
 git+https://github.com/PennyLaneAI/pennylane.git
-git+https://github.com/PennyLaneAI/pennylane.git@pin_down_pyscf_scipy_qchem#subdirectory=qchem
+git+https://github.com/PennyLaneAI/pennylane.git#subdirectory=qchem
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/rigetti/pennylane-forest.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
