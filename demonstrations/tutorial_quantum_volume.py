@@ -641,7 +641,7 @@ for m in range(min_m - 2, max_m + 1 - 2):
         label="2σ",
     )
 
-fig.suptitle("Heavy output distributions for star graph QPU", fontsize=18)
+fig.suptitle("Heavy output distributions for line graph QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
 
@@ -650,7 +650,7 @@ plt.tight_layout()
 # We see that this is true for for :math:`m=2`, and :math:`m=3`. Thus, we find
 # that the quantum volume of this processor is :math:`\log_2 V_Q = 3`.
 #
-
+#
 # Try playing around with the code yourself - are there any parameters you can
 # change to improve the volume with this same noise model? What happens if we
 # don't specify a high level of optimization and transpilation? Furthermore, how
