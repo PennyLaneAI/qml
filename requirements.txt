@@ -20,7 +20,6 @@ git+https://github.com/PennyLaneAI/pennylane-qiskit.git
 qulacs
 git+https://github.com/PennyLaneAI/pennylane-qulacs.git
 pyquil==2.21
-scipy==1.5
 sphinx==1.8.5
 sphinx-sitemap
 sphinx_gallery==0.7
