@@ -415,7 +415,7 @@ def state_evolve(hamiltonian, qubits, time):
 
 
 ######################################################################
-# We don't actually generate time-evolved quantum data quite yet,
+# We won't actually generate time-evolved quantum data quite yet,
 # but we now have all the pieces required for its preparation.
 #
 
