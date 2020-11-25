@@ -4,7 +4,6 @@ autograd
 numpy<1.19,~=1.16
 networkx==2.4
 nlopt
-pygments-github-lexers
 semantic_version==2.6
 strawberryfields==0.15
 sympy==1.6.2
