@@ -399,30 +399,30 @@ print(
 #
 # .. [#cao2019]
 #
-#     Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     Y. Cao, J. Romero, *et al.*, "Quantum chemistry in the age of quantum computing".
 #     `Chem. Rev. 2019, 119, 19, 10856-10915.
 #     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
 # .. [#kandala2017]
 #
-#     A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
-#     Eigensolver for Small Molecules and Quantum Magnets". `arXiv:1704.05018
+#     A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient variational quantum
+#     eigensolver for small molecules and quantum magnets". `arXiv:1704.05018
 #     <https://arxiv.org/abs/1704.05018>`_
 #
 # .. [#romero2017]
 #
-#     J. Romero, R. Babbush, *et al.*,"Strategies for quantum computing molecular
+#     J. Romero, R. Babbush, *et al.*, "Strategies for quantum computing molecular
 #     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #     <https://arxiv.org/abs/1701.02691>`_
 #
 # .. [#jensenbook]
 #
-#     F. Jensen. "Introduction to Computational Chemistry".
+#     F. Jensen. "Introduction to computational chemistry".
 #     (John Wiley & Sons, 2016).
 #
 # .. [#fetterbook]
 #
-#     A. Fetter, J. D. Walecka, "Quantum Theory of many-particle systems".
+#     A. Fetter, J. D. Walecka, "Quantum theory of many-particle systems".
 #     Courier Corporation, 2012.
 #
 # .. [#suzuki1985]
