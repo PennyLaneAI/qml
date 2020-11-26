@@ -9,23 +9,21 @@ Quantum volume
     :property="og:image": https://pennylane.ai/qml/_images/bloch.png
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
-500 most powerful supercomputing systems in the world. However, like many
-things, supercomputers come in all shapes and sizes. `Some
+500 most powerful supercomputing systems in the world. However, there is a large
+amount of variation in how supercomputers are built. `Some
 <https://en.wikipedia.org/wiki/Fugaku_(supercomputer)>`_ use 48-core processors,
 while `others <https://en.wikipedia.org/wiki/Sunway_TaihuLight>`_ use processors
 with up to 260 cores. The speed of processors will differ, and they may be
-connected in different ways. Furthermore the systems can have different amounts
-of memory, and run different operating systems. In order to make a fair
-comparison among so many different types of machines, we need benchmarking
-standards that can give us a more holistic view of their performance.
-
-To that end, the TOP500 rankings are based on something called the LINPACK
-Benchmark [#linpack]_. The supercomputers are tasked with solving a dense system
-of linear equations, and the metric of interest is the rate at which they
-perform floating-point operations (FLOPS). Today's top machines reach speeds
-well into the regime of hundreds of peta FLOPs. While a single number certainly
-cannot tell the whole story, it still gives us insight into the quality of
-the machines, and provides a standard so we can compare them.
+connected in different ways. We can't rank them by simply counting the number of
+processors. In order to make a fair comparison, we need benchmarking standards
+that give us a holistic view of their performance. To that end, the TOP500
+rankings are based on something called the LINPACK benchmark [#linpack]_. The
+task of the supercomputers is to solve a dense system of linear equations, and
+the metric of interest is the rate at which they perform floating-point
+operations (FLOPS). Today's top machines reach speeds well into the regime of
+hundreds of peta FLOPs! While a single number certainly cannot tell the whole
+story, it still gives us insight into the quality of the machines, and provides
+a standard so we can compare them.
 
 A similar problem is emerging with quantum computers: we
 can't judge quantum computers on the number of qubits alone. Present-day devices
@@ -42,16 +40,13 @@ types of qubits?
     :align: center
     :width: 50%
 
-    .. 
-
     Which of these qubit hardware graphs is the best?
 
 To compare across all these facets, researchers have proposed a metric called
-"quantum volume" [#cross]_. Roughly, the quantum volume tells you about the
-effective number of qubits a processor has by determining the largest number of
-qubits on which it can reliably run circuits of a prescribed type.
-
-You can think of it loosely like the quantum analogue of the LINPACK
+"quantum volume" [#cross]_. Roughly, the quantum volume is a measure of the
+effective number of qubits a processor has. It is calculated by determining the
+largest number of qubits on which it can reliably run circuits of a prescribed
+type. You can think of it loosely as a quantum analogue of the LINPACK
 benchmark. Different quantum computers are tasked with solving the same problem,
 and the success will be a function of many properties: error rates, qubit
 connectivity, even the quality of the software stack. A single
@@ -72,15 +67,14 @@ explain the problem on which it's based, and run the protocol to compute it!
 # There are many different properties of a quantum computer
 # that contribute to the successful execution of a computation. Therefore, we
 # must be very explicit about what exactly we are benchmarking, and what is our
-# metric of success. In general, to set up a benchmark for a quantum computer
-# we need a couple things [#robin]_:
+# measure of success. In general, to set up a benchmark for a quantum computer
+# we need to decide on a number of things [#robin]_:
 #
-#  1. A family of circuits with a well-defined structure, and variable size
+#  1. A family of circuits with a well-defined structure and variable size
 #  2. A set of rules detailing how the circuits can be compiled
-#  3. A metric of success for individual circuits
-#  4. A metric of success for the family of circuits
-#  5. (Optional) An experimental design specifying how the circuits are to be run,
-#     for example, indicating the number of shots.
+#  3. A measure of success for individual circuits
+#  4. A measure of success for the family of circuits
+#  5. (Optional) An experimental design specifying how the circuits are to be run
 #
 # We'll work through this list in order to see how the protocol for computing
 # quantum volume fits within this framework.
@@ -90,7 +84,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 #
 # Quantum volume relates
 # to the largest *square* circuit that a quantum processor can run reliably. This benchmark 
-# uses *random* circuits with a very particular form:
+# uses *random* square circuits with a very particular form:
 #
 # .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
 #     :align: center
@@ -107,32 +101,30 @@ explain the problem on which it's based, and run the protocol to compute it!
 # pairs of qubits. (When the number of qubits is odd, the bottom-most qubit is
 # idle while the SU(4) operations run on the pairs. However, it will still be
 # incorporated by way of the permutations.) These circuits satisfy the criteria
-# in step 1 --- they have well-defined structure, and it is clear how they can be
+# in item 1 --- they have well-defined structure, and it is clear how they can be
 # scaled to different sizes.
 #
-# As for the compilation rules of step 2, to compute quantum volume we're
+# As for the compilation rules of item 2, to compute quantum volume we're
 # allowed to do essentially anything we'd like to the circuits in order to
 # improve them. This includes optimization, hardware-aware considerations such
 # as qubit placement and routing, and even resynthesis by finding unitaries that
 # are close to the target, but easier to implement on the hardware [#cross]_.
 #
 # Both the circuit structure and the compilation highlight how quantum volume is
-# about more than just the number of qubits. The error
-# rates will affect the achievable depth, and the qubit connectivity contributes
-# through the layers of permutations because a very well-connected processor will be
-# able to implement these in fewer steps than a less-connected one. Even the
-# quality of the software and the compiler plays a role here: higher-quality
-# compilers will produce circuits that fit better on the target devices, and
-# will thus produce higher quality results.
+# about more than just the number of qubits. The error rates will affect the
+# achievable depth, and the qubit connectivity contributes through the layers of
+# permutations because a very well-connected processor will be able to implement
+# these in fewer steps than a less-connected one. Even the quality of the
+# software and the compiler plays a role here: higher-quality compilers will
+# produce circuits that fit better on the target devices, and will thus produce
+# higher quality results.
 #
-# The metrics
-# ~~~~~~~~~~~
+# The measures of success
+# ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Now that we have our circuits, we have to define the quantities that are going
-# to tell us how well we're able to run them. For that, we need a problem
-# to solve.
-#
-# The problem used for computing quantum volume is called the *heavy output
+# Now that we have our circuits, we have to define the quantities that will
+# indicate how well we're able to run them. For that, we need a problem
+# to solve. The problem used for computing quantum volume is called the *heavy output
 # generation problem*. It has roots in the proposals for demonstrating quantum
 # advantage [#aaronson]_. Many such proposals make use of the properties of
 # various random quantum circuit families, as the distribution of the
@@ -149,8 +141,8 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 
 ##############################################################################
 #
-# The median of this probability distribution is 0.208, and the heavy bit
-# strings are '00', and '10', because these are the two probabilities above the
+# The median of this probability distribution is 0.208. The heavy bit
+# strings are '00' and '10', because these are the two probabilities above the
 # median. If we were to run this circuit, the probability of obtaining one of
 # the heavy outputs is 0.792, and so we expect that we will see one of these two
 # most of the time.
@@ -158,78 +150,72 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # Each circuit in a circuit family has its own heavy output probability. If our
 # quantum computer is of high quality, then we should expect to see heavy
 # outputs quite often across all the circuits. On the other hand, if it's of
-# poor quality and everything is depolarized, we will end up with output
-# probabilities that are roughly all the same, as depolarization will reduce the
+# poor quality and everything is totally decohered, we will end up with output
+# probabilities that are roughly all the same, as decoherence will reduce the
 # probabilities to the uniform distribution.
 #
 # The heavy output generation problem quantifies this --- for our family of random
 # circuits, do we obtain heavy outputs at least 2/3 of the time on average?
 # Furthermore, do we obtain this with high confidence?
 #
-# This is the basis for the metric of quantum volume. Looking back at the
-# criteria for our benchmarks, for step 3, the metric of success for each
-# circuit is how often we obtain heavy outputs when we run the circuit and take
-# a measurement. For step 4, the metric of success for the whole family is
-# whether or not the mean of these probabilities is greater than 2/3 with high
-# confidence.
+# This is the basis for quantum volume. Looking back at the criteria for our
+# benchmarks, for item 3, the measure of success for each circuit is how often
+# we obtain heavy outputs when we run the circuit and take a measurement. For
+# item 4, the measure of success for the whole family is whether or not the mean
+# of these probabilities is greater than 2/3 with high confidence.
 #
-# .. note::
-#     :class: dropdown
+# On a related note, it is important to determine what heavy output probability
+# we should *expect* to see on average. The intuition for how this can be
+# calculated is as follows [#aaronson]_, [#cmu]_.
 #
-#     *This box is optional*, but provides some of the intuition of the math
-#     behind the heavy output generation problem, as the above leaves out a lot
-#     of the finer points. In particular, it doesn't discuss what heavy output
-#     probability we should *expect* to see on average. This can be calculated
-#     as follows [#aaronson]_, [#cmu]_.
+# Suppose that our random square circuits scramble things up enough so that
+# the effective operation looks like a Haar-random unitary :math:`U`. Since
+# in the circuits we are applying :math:`U` to the all-zero ket, the
+# measurement outcome probabilities will be the moduli squared of the
+# entries in the first column of :math:`U`.
 #
-#     Suppose that our random square circuits scramble things up enough so that
-#     the effective operation looks like a Haar-random unitary :math:`U`. Since
-#     in the circuits we are applying :math:`U` to the all-zero ket, the
-#     measurement outcome probabilities will be the moduli squared of the
-#     entries in the first column of :math:`U`.
+# Now if :math:`U` is Haar-random, we can say something about the form of these
+# entries. In particular, they are complex numbers for which both the real and
+# imaginary parts are normally distributed with mean 0 and variance :math:`1/2^m`,
+# where :math:`m` is the number of qubits. When we take the mod square of such
+# numbers, we obtain an *exponential* distribution, such that the measurement
+# outcome probabilities are distributed like  :math:`Pr(p) \sim 2^m e^{-2^m p}.` 
+# (This is also known as the *Porter-Thomas distribution*.)
 #
-#     Now if :math:`U` is Haar-random, we can say something about the form of these
-#     entries. In particular, they are complex numbers for which both the real and
-#     imaginary parts are normally distributed with mean 0 and variance :math:`1/2^m`,
-#     where :math:`m` is the number of qubits. When we take the mod square of such
-#     numbers, we obtain an *exponential* distribution, such that the measurement
-#     outcome probabilities are distributed like  :math:`Pr(p) \sim 2^m e^{-2^m p}.` 
-#     (This is also known as the *Porter-Thomas distribution*.)
-#
-#     We can integrate this distribution to find that the median sits at
-#     :math:`\ln 2`.  We can further compute the expectation value of obtaining
-#     something above the medium by integrating the distribution :math:`p
-#     e^{-p}` from :math:`\ln 2` to infinity, to obtain :math:`(1 + \ln
-#     2)/2`. This is the expected heavy output probability! Numerically it
-#     is around 0.85, and in fact we will observe this later on.
+# We can integrate this distribution to find that the median sits at :math:`\ln 2`.
+# We can further compute the expectation value of obtaining something above
+# the medium by integrating the distribution :math:`pe^{-p}` from :math:`\ln 2`
+# to infinity, to obtain :math:`(1 + \ln 2)/2`. This is the expected heavy
+# output probability! Numerically it is around 0.85, and in fact we will observe
+# this later on.
 #
 #
 # The benchmark
 # ~~~~~~~~~~~~~
 #
-# Now that we have our circuits and our success metrics, we're ready to
+# Now that we have our circuits and our measures of success, we're ready to
 # define the quantum volume.
 #
 #
 # .. admonition:: Definition
 #     :class: defn
 #
-#     The quantum volume of an :math:`n`-qubit processor is defined as
+#     The quantum volume :math:`V_Q` of an :math:`n`-qubit processor is defined as
 #
 #     .. math::
 #         \log_2(V_Q) = \min (m, d(m))
 #
 #     where :math:`m` is a number of qubits, and :math:`d(m)` is the largest
-#     :math:`m` for which we can reliably sample heavy outputs with probability
-#     greater than 2/3.
+#     square circuit for which we can reliably sample heavy outputs with
+#     probability greater than 2/3.
 #
-# As an example, if we have a 20-qubit device, and find that we get heavy
-# outputs reliably for up to depth-4 circuits on 4 qubits, then the quantum
-# volume is :math:`\log_2 V_Q = 4`. Quantum volume is incremental, as shown
-# below --- we gradually work our way up to larger circuits, until we find
-# something we can't do.  Very loosely, quantum volume is like an effective
-# number of qubits. Even if we have those 20 qubits, only 4 of them work well
-# enough together to sample from distributions that would be considered hard
+# As an example, if we have a 20-qubit device and find that we get heavy outputs
+# reliably for up to depth-4 circuits on 4 qubits, then the quantum volume is
+# :math:`\log_2 V_Q = 4`. Quantum volume is incremental, as shown below --- we
+# gradually work our way up to larger circuits, until we find something we can't
+# do.  Very loosely, quantum volume is like an effective number of qubits. Even
+# if we have those 20 qubits, only groups of up to 4 of them work well enough
+# together to sample from distributions that would be considered hard.
 #
 # .. figure:: ../demonstrations/quantum_volume/qv_square_circuits.svg
 #     :align: center
@@ -252,7 +238,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # .. note::
 #
 #    In many sources, the quantum volume of processors is reported as
-#    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as has been the
+#    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as is the
 #    convention in this demo. As such, IonQs processor has the potential for a
 #    quantum volume of :math:`2^{32} > 4000000`. Here we use the :math:`\log`
 #    because it is more straightforward to understand that they have 32
@@ -573,31 +559,34 @@ for m in range(min_m, max_m + 1):
 probs_mean_ideal = np.mean(probs_ideal, axis=1)
 probs_mean_noisy = np.mean(probs_noisy, axis=1)
 
-print(f"Ideal mean probabilities: {probs_mean_ideal}")
-print(f"Device mean probabilities: {probs_mean_noisy}")
+print(f"Ideal mean probabilities:")
+for idx, prob in enumerate(probs_mean_ideal):
+    print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
+    
+print(f"\nDevice mean probabilities:")
+for idx, prob in enumerate(probs_mean_noisy):
+    print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
 
 ##############################################################################
 #
-# So we see that for the ideal probabilities, we're well over 2/3. In fact,
-# we're closing in on 0.85, which is the expected value as mentioned in the box
-# above. For the device probabilities, however, we see that already by the
-# 4-qubit case, we're very close to the threshold. Since it's below the
-# threshold at :math:`m=5`, the highest volume this processor can have is
-# :math:`\log_2 V_Q = 4`. But isn't enough to just see the *mean* of the heavy
-# output probabilities be greater than 2/3. Since we're dealing with randomness,
-# we also want to be confident that these results were not just a fluke!
-#
-# To be confident, we want not only our mean to be above 2/3, but also that we are
-# still above 2/3 within 2 standard deviations of the mean. This is referred to as a
-# 97.5% confidence interval (since roughly 97.5% of a normal distribution sits within
-# :math:`2\sigma` of the mean.)
+# We see that the ideal probabilities are well over 2/3. In fact, we're quite
+# close to the expected value of :math:`(1 + \ln 2)/2 \approx 0.85`.  For the
+# device probabilities, however, we see that already by the 4-qubit case we're
+# below the threshold. This means that the highest volume this processor can
+# have is :math:`\log_2 V_Q = 3`. But isn't enough that just the mean of the
+# heavy output probabilities is greater than 2/3. Since we're dealing with
+# randomness, we also want to be confident that these results were not just a
+# fluke! To be confident, we also want to be above 2/3 within 2 standard
+# deviations of the mean. This is referred to as a 97.5% confidence interval
+# (since roughly 97.5% of a normal distribution sits within :math:`2\sigma` of
+# the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
 # assumptions about our distributions. Whether or not a circuit is successful is
 # a binary outcome. When we sample many circuits, it is almost like we are
 # sampling from a *binomial distribution*, where the outcome probability is
 # equivalent to the heavy output probability. In the limit of a large number of
-# samples (in this case circuits), a binomial distribution starts to look pretty
+# samples (in this case 200 circuits), a binomial distribution starts to look pretty
 # normal. If we make this approximation, we can compute the standard deviation
 # and use it to make our confidence interval. With the normal approximation,
 # the standard deviation can be computed as
@@ -642,6 +631,16 @@ for m in range(min_m - 2, max_m + 1 - 2):
 fig.suptitle("Heavy output distributions for line graph QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
+
+##############################################################################
+#
+# In addition to the plot, we should check this numerically.
+#
+
+two_sigma_below = probs_mean_noisy - 2 * stds_noisy
+
+for idx, prob in enumerate(two_sigma_below):
+    print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
 
 ##############################################################################
 #
