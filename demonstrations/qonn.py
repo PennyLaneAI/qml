@@ -191,6 +191,7 @@ def cost(var, data_input, labels):
 # .. figure:: ../demonstrations/qonn/cnot.png
 #     :width: 30%
 #     :align: center
+#
 # |
 #
 # We need to choose the inputs ``X`` and the corresponding labels ``Y``. They are
