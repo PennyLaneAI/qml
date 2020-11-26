@@ -28,5 +28,5 @@ toml==0.10.2
 torch==1.7.0+cpu
 torchvision==0.8.1+cpu
 dask[delayed]==2.10.1
-sklearn==0.23.2
+scikit-learn==0.23.2
 matplotlib==3.3.3
