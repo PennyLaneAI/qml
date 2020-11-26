@@ -17,6 +17,8 @@ pennylane-sf==0.12
 git+https://github.com/rigetti/pennylane-forest.git
 pennylane-cirq==0.12
 pennylane-qiskit==0.12
+qulacs
+pennylane-qulacs==0.12
 pyquil==2.21
 scipy==1.4.1
 sphinx==1.8.5

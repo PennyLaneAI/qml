@@ -131,7 +131,7 @@ qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
 # To simulate a neutral-atom quantum computation, we can use the
 # ``"cirq.pasqal"`` device, available via the
 # `PennyLane-Cirq plugin <https://pennylane-cirq.readthedocs.io>`_.
-# We will need to provide this device with the ``ThreeDQubit``s we created
+# We will need to provide this device with the ``ThreeDQubit`` object that we created
 # above. We also need to instantiate the device with a fixed control radius.
 
 import pennylane as qml

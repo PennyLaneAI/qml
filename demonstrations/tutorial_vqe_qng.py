@@ -5,7 +5,7 @@ Accelerating VQEs with quantum natural gradient
 *Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu)*
 
 .. meta::
-    :property="og:description": Accelerating variational quantum eigensolvers 
+    :property="og:description": Accelerating variational quantum eigensolvers
         using quantum natural gradients in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/qng_example.png
 
@@ -13,15 +13,15 @@ Accelerating VQEs with quantum natural gradient
 
    tutorial_vqe Variational quantum eigensolver
    tutorial_quantum_natural_gradient Quantum natural gradient
-    
-This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_ 
-to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_. 
-We will implement two small examples: estimating the ground state energy of (1) a single-qubit VQE 
-problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule. 
-    
-Before going through this tutorial, we recommend that readers refer to the 
+
+This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
+to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
+We will implement two small examples: estimating the ground state energy of (1) a single-qubit VQE
+problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule.
+
+Before going through this tutorial, we recommend that readers refer to the
 :doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
-:doc:`VQE tutorial </demos/tutorial_vqe>` for overviews 
+:doc:`VQE tutorial </demos/tutorial_vqe>` for overviews
 of quantum natural gradient and the variational quantum eigensolver algorithm, respectively.
 Let's get started!
 
@@ -55,7 +55,7 @@ def circuit(params, wires=0):
 
 
 ##############################################################################
-# We then define our cost function using the ``VQECost`` class, which supports the computation of
+# We then define our cost function using the ``ExpvalCost`` class, which supports the computation of
 # block-diagonal or diagonal approximations to the Fubini-Study metric tensor :ref:`[1]`. This tensor is a
 # crucial component for optimizing with quantum natural gradients.
 
@@ -63,7 +63,7 @@ coeffs = [1, 1]
 obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
-cost_fn = qml.VQECost(circuit, H, dev)
+cost_fn = qml.ExpvalCost(circuit, H, dev)
 
 ##############################################################################
 # To analyze the performance of quantum natural gradient on VQE calculations,
@@ -293,11 +293,11 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 
 
 ##############################################################################
-# Note that the qubit register has been initialized to |1100⟩, which encodes for
+# Note that the qubit register has been initialized to :math:`|1100\rangle`, which encodes for
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
-# Again, we define the cost function using the ``VQECost`` class.
+# Again, we define the cost function using the ``ExpvalCost`` class.
 
-cost = qml.VQECost(ansatz, hamiltonian, dev)
+cost = qml.ExpvalCost(ansatz, hamiltonian, dev)
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
