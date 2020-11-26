@@ -55,7 +55,7 @@ def circuit(params, wires=0):
 
 
 ##############################################################################
-# We then define our cost function using the ``VQECost`` class, which supports the computation of
+# We then define our cost function using the ``ExpvalCost`` class, which supports the computation of
 # block-diagonal or diagonal approximations to the Fubini-Study metric tensor :ref:`[1]`. This tensor is a
 # crucial component for optimizing with quantum natural gradients.
 
@@ -63,7 +63,7 @@ coeffs = [1, 1]
 obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
-cost_fn = qml.VQECost(circuit, H, dev)
+cost_fn = qml.ExpvalCost(circuit, H, dev)
 
 ##############################################################################
 # To analyze the performance of quantum natural gradient on VQE calculations,
@@ -295,9 +295,9 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 ##############################################################################
 # Note that the qubit register has been initialized to :math:`|1100\rangle`, which encodes for
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
-# Again, we define the cost function using the ``VQECost`` class.
+# Again, we define the cost function using the ``ExpvalCost`` class.
 
-cost = qml.VQECost(ansatz, hamiltonian, dev)
+cost = qml.ExpvalCost(ansatz, hamiltonian, dev)
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
