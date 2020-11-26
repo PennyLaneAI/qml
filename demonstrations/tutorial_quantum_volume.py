@@ -4,8 +4,8 @@ Quantum volume
 ==============
 
 .. meta::
-    :property="og:description": Learn about the metric of quantum volume, and how to 
-        compute it for a quantum processor.
+    :property="og:description": Learn about quantum volume, and how to 
+        compute it.
     :property="og:image": https://pennylane.ai/qml/_images/bloch.png
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
@@ -14,11 +14,10 @@ things, supercomputers come in all shapes and sizes. `Some
 <https://en.wikipedia.org/wiki/Fugaku_(supercomputer)>`_ use 48-core processors,
 while `others <https://en.wikipedia.org/wiki/Sunway_TaihuLight>`_ use processors
 with up to 260 cores. The speed of processors will differ, and they may be
-connected in different ways. Furthermore the systems may have different amounts
+connected in different ways. Furthermore the systems can have different amounts
 of memory, and run different operating systems. In order to make a fair
 comparison among so many different types of machines, we need benchmarking
-standards that can give us a more holistic view of their performance than just,
-for example, counting the number of processors.
+standards that can give us a more holistic view of their performance.
 
 To that end, the TOP500 rankings are based on something called the LINPACK
 Benchmark [#linpack]_. The supercomputers are tasked with solving a dense system
@@ -28,17 +27,16 @@ well into the regime of hundreds of peta FLOPs. While a single number certainly
 cannot tell the whole story, it still gives us insight into the quality of
 the machines, and provides a standard so we can compare them.
 
-A similar problem is emerging with quantum computers. Just as it's not enough to
-judge the quality of a regular computer solely on the number of processors, we
+A similar problem is emerging with quantum computers: we
 can't judge quantum computers on the number of qubits alone. Present-day devices
 have a number of limitations, an important one being the fairly high gate error
 rates. Typically the qubits on a chip are not all connected to each other, so it
 may not be possible to perform operations on arbitrary pairs of
 them. Considering this, can we tell if a machine with 20 noisy qubits is better
-than one with 5 very high-quality qubits? Or if a machine with 8 fully-connected is
-qubits better than one with 16 qubits of comparable error rate, but arranged in
+than one with 5 very high-quality qubits? Or if a machine with 8 fully-connected
+qubits is better than one with 16 qubits of comparable error rate, but arranged in
 a square lattice?  Furthermore, how can we make comparisons between different
-types of qubits, such as superconducting versus ion trap?
+types of qubits?
 
 .. figure:: ../demonstrations/quantum_volume/qubit_graph_variety.svg
     :align: center
@@ -54,9 +52,9 @@ effective number of qubits a processor has by determining the largest number of
 qubits on which it can reliably run circuits of a prescribed type.
 
 You can think of it loosely like the quantum analogue of the LINPACK
-Benchmark. Different quantum computers are tasked with solving the same problem,
+benchmark. Different quantum computers are tasked with solving the same problem,
 and the success will be a function of many properties: error rates, qubit
-connectivity, even the quality of the software stack. Like LINPACK, a single
+connectivity, even the quality of the software stack. A single
 number won't tell us everything about a quantum computer, but it does establish
 a framework for comparing them.
 
@@ -71,7 +69,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # Designing a benchmark for quantum computers
 # -------------------------------------------
 #
-# As alluded to above, there are many different properties of a quantum computer
+# There are many different properties of a quantum computer
 # that contribute to the successful execution of a computation. Therefore, we
 # must be very explicit about what exactly we are benchmarking, and what is our
 # metric of success. In general, to set up a benchmark for a quantum computer
@@ -81,8 +79,8 @@ explain the problem on which it's based, and run the protocol to compute it!
 #  2. A set of rules detailing how the circuits can be compiled
 #  3. A metric of success for individual circuits
 #  4. A metric of success for the family of circuits
-#  5. (Optional) An experimental design specifying how the circuits are to be run
-#     (for example, indicating the number of shots).
+#  5. (Optional) An experimental design specifying how the circuits are to be run,
+#     for example, indicating the number of shots.
 #
 # We'll work through this list in order to see how the protocol for computing
 # quantum volume fits within this framework.
@@ -90,7 +88,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # The circuits
 # ~~~~~~~~~~~~
 #
-# If you've ever read about quantum volume before, you may have heard that it relates
+# Quantum volume relates
 # to the largest *square* circuit that a quantum processor can run reliably. This benchmark 
 # uses *random* circuits with a very particular form:
 #
@@ -109,7 +107,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # pairs of qubits. (When the number of qubits is odd, the bottom-most qubit is
 # idle while the SU(4) operations run on the pairs. However, it will still be
 # incorporated by way of the permutations.) These circuits satisfy the criteria
-# in step 1 - they have well-defined structure, and it is clear how they can be
+# in step 1 --- they have well-defined structure, and it is clear how they can be
 # scaled to different sizes.
 #
 # As for the compilation rules of step 2, to compute quantum volume we're
@@ -119,11 +117,11 @@ explain the problem on which it's based, and run the protocol to compute it!
 # are close to the target, but easier to implement on the hardware [#cross]_.
 #
 # Both the circuit structure and the compilation highlight how quantum volume is
-# about more than just the number of qubits a quantum computer has. The error
+# about more than just the number of qubits. The error
 # rates will affect the achievable depth, and the qubit connectivity contributes
-# through the layers of permutations, as a very well-connected processor will be
+# through the layers of permutations because a very well-connected processor will be
 # able to implement these in fewer steps than a less-connected one. Even the
-# quality of the software and the compiler plays a role here - higher-quality
+# quality of the software and the compiler plays a role here: higher-quality
 # compilers will produce circuits that fit better on the target devices, and
 # will thus produce higher quality results.
 #
@@ -131,17 +129,17 @@ explain the problem on which it's based, and run the protocol to compute it!
 # ~~~~~~~~~~~
 #
 # Now that we have our circuits, we have to define the quantities that are going
-# to tell us about how well we're able to run them. For that, we need a problem
+# to tell us how well we're able to run them. For that, we need a problem
 # to solve.
 #
 # The problem used for computing quantum volume is called the *heavy output
 # generation problem*. It has roots in the proposals for demonstrating quantum
 # advantage [#aaronson]_. Many such proposals make use of the properties of
 # various random quantum circuit families, as the distribution of the
-# measurement outcomes may not be easy to sample from using classical
+# measurement outcomes may not be easy to sample using classical
 # techniques.
 #
-# A distribution that is theorized to be hard to sample from is the distribution
+# A distribution that is theorized to fulfill this property is the distribution
 # of *heavy* output bit strings. Heavy bit strings are those whose outcome
 # probabilities are above the median of the distribution. For example, suppose
 # we run a two-qubit circuit, and find that the measurement probabilities for
@@ -164,7 +162,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # probabilities that are roughly all the same, as depolarization will reduce the
 # probabilities to the uniform distribution.
 #
-# The heavy output generation problem quantifies this - for our family of random
+# The heavy output generation problem quantifies this --- for our family of random
 # circuits, do we obtain heavy outputs at least 2/3 of the time on average?
 # Furthermore, do we obtain this with high confidence?
 #
@@ -227,8 +225,8 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #
 # As an example, if we have a 20-qubit device, and find that we get heavy
 # outputs reliably for up to depth-4 circuits on 4 qubits, then the quantum
-# volume is :math:`\log_2 V_Q = 4`. Quantum volume is incrementally, as shown
-# below - we gradually work our way up to larger circuits, until we find
+# volume is :math:`\log_2 V_Q = 4`. Quantum volume is incremental, as shown
+# below --- we gradually work our way up to larger circuits, until we find
 # something we can't do.  Very loosely, quantum volume is like an effective
 # number of qubits. Even if we have those 20 qubits, only 4 of them work well
 # enough together to sample from distributions that would be considered hard
@@ -243,7 +241,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #     circuits are the largest ones it can run successfully.
 #
 #
-# The maximum achieved quantum volume has been doubling at an increasing rate In
+# The maximum achieved quantum volume has been doubling at an increasing rate. In
 # late 2020, the most recent achievements have been :math:`\log_2 V_Q = 6` on
 # IBM's 27-qubit superconducting device `ibmq_montreal` [#qv64]_, and
 # :math:`\log_2 V_Q = 7` on a Honeywell trapped-ion qubit processor
@@ -281,7 +279,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # 2. Run those circuits on both a simulator, and on a noisy hardware device
 #
 # 3. Perform a statistical analysis of the results to determine what size
-#    circuits the device can run "reliably"
+#    circuits the device can run reliably
 #
 #
 # The largest reliable size will become the :math:`m` in the expression for
@@ -351,7 +349,7 @@ def apply_random_su4_layer(num_qubits):
 
 ##############################################################################
 #
-# Next, let's write a layering method to put the two together - this is just
+# Next, let's write a layering method to put the two together --- this is just
 # for convenience and to highlight the fact that these two methods together
 # make up one layer of the circuit depth.
 #
@@ -372,7 +370,7 @@ def qv_circuit_layer(num_qubits):
 num_qubits = 5
 dev_ideal = qml.device("default.qubit", analytic=True, wires=num_qubits)
 
-m = 3
+m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
     for qubit in range(num_qubits):
@@ -383,15 +381,15 @@ print(tape.draw())
 
 ##############################################################################
 #
-# The first thing to note is how that the last two qubits are never used in the
+# The first thing to note is that the last two qubits are never used in the
 # operations, since the quantum volume circuits are square. Another important
-# point is that this circuit depth with 3 layers actually has depth much greater
+# point is that this circuit with 3 layers actually has depth much greater
 # than 3, since each layer is both SWAPs and SU(4) operations, both of which are
 # further decomposed into elementary gates when run on the actual processor.
 #
 # One last thing we'll need before running our circuits is the machinery to
 # determine the heavy outputs. This is quite an interesting aspect of the
-# protocol - we're required to solve the program classically in order to get
+# protocol --- we're required to solve the program classically in order to get
 # the results, so it will only be possible to calculate quantum volume for
 # processors up to a certain point before they become too large.
 #
@@ -404,7 +402,7 @@ def heavy_output_set(m, probs):
 
     median_prob = np.median(sorted_probs)
 
-    # Heavy outputs are the bit strings ones above the median
+    # Heavy outputs are the bit strings above the median
     heavy_outputs = [
         format(x, f"#0{m+2}b")[2:] for x in list(probs_ascending_order[2 ** (m - 1) :])
     ]
@@ -567,7 +565,7 @@ for m in range(min_m, max_m + 1):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Having run our experiments, we can now get to the heart of the quantum volume
-# protocol - what *is* the largest square circuit that our processor can run?
+# protocol: what *is* the largest square circuit that our processor can run?
 #
 # Let's first check out the means, and see how much higher they are than 2/3.
 
@@ -651,7 +649,7 @@ plt.tight_layout()
 # that the quantum volume of this processor is :math:`\log_2 V_Q = 3`.
 #
 #
-# Try playing around with the code yourself - are there any parameters you can
+# Try playing around with the code yourself: are there any parameters you can
 # change to improve the volume with this same noise model? What happens if we
 # don't specify a high level of optimization and transpilation? Furthermore, how
 # do the results change with a more complex noise model from an actual device?
