@@ -276,22 +276,22 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Recall that the structure of the circuits above is alternating layers of
-# permutations, and random SU(4) operations on pairs of qubits.  Let's get
-# ourselves set up to generate such circuits in PennyLane.
+# permutations, and random SU(4) operations on pairs of qubits.  Let's implement
+# the generation of such circuits in PennyLane.
 #
-
-import pennylane as qml
-import numpy as np
-
 ###############################################################################
 #
 # First we write a function that randomly permutes qubits. We'll do this by
 # using numpy to generate a permutation, and then apply it with SWAP gates.
 
+import numpy as np
+
 # For reproducibility
 np.random.seed(42)
+# Object for random number generation from numpy
 rng = np.random.default_rng()
 
+import pennylane as qml
 
 def permute_qubits(num_qubits):
     # A random permutation
@@ -324,7 +324,6 @@ def permute_qubits(num_qubits):
 # essentially equivalent up to a global phase).
 
 from strawberryfields.utils import random_interferometer
-
 
 def apply_random_su4_layer(num_qubits):
     for qubit_idx in range(0, num_qubits, 2):
@@ -369,13 +368,13 @@ print(tape.draw())
 #
 # The first thing to note is that the last two qubits are never used in the
 # operations, since the quantum volume circuits are square. Another important
-# point is that this circuit with 3 layers actually has depth much greater
-# than 3, since each layer is both SWAPs and SU(4) operations, both of which are
-# further decomposed into elementary gates when run on the actual processor.
+# point is that this circuit with 3 layers actually has depth much greater than
+# 3, since each layer has both SWAPs and SU(4) operations that are further
+# decomposed into elementary gates when run on the actual processor.
 #
 # One last thing we'll need before running our circuits is the machinery to
 # determine the heavy outputs. This is quite an interesting aspect of the
-# protocol --- we're required to solve the program classically in order to get
+# protocol --- we're required to solve the problem classically in order to get
 # the results, so it will only be possible to calculate quantum volume for
 # processors up to a certain point before they become too large.
 #
@@ -413,7 +412,7 @@ output_probs = tape.execute(dev_ideal).reshape(
 )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
-print(f"Probability of a heavy output is {prob_heavy_output}")
+print(f"Probability of a heavy output is {prob_heavy_output:.6f}")
 print(f"Heavy outputs are {heavy_outputs}")
 
 
