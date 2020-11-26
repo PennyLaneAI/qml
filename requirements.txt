@@ -1,7 +1,7 @@
 --find-links https://download.pytorch.org/whl/torch_stable.html
 appdirs
 autograd
-numpy<1.19,~=1.16
+numpy==1.18.5
 networkx==2.4
 nlopt
 semantic_version==2.6
