@@ -16,34 +16,34 @@ Quantum supremacy using qsim
 
 In the paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__, the
-Google AI Quantum team showed that the Sycamore quantum processor could
+Google AI Quantum team and collaborators showed that the Sycamore quantum processor could
 complete a task that would take a classical computer potentially thousands
-of years. They faced their quantum chip off against JEWEL --- one of the
-worlds most powerful supercomputers --- using a classical simulator called
+of years. They faced their quantum chip off against JEWEL—one of the
+world's most powerful supercomputers—using a classical statevector simulator called
 `qsim <https://github.com/quantumlib/qsim>`__. The main idea behind this
 showdown was to prove that a quantum device could solve a specific task
-that no classical methods would be able to in a reasonable amount of time.
+that no classical method could do in a reasonable amount of time.
 
-To devise a task that could be run on both the Sycamore chip and simulated
-classically, a pseudo-random quantum circuit was constructed by alternating
+For the face-off, a pseudo-random quantum circuit was constructed by alternating
 single-qubit and two-qubit gates in a specific, semi-random pattern. This
-provided a way of building a random unitary transformation that was also
-compatible with the Sycamore hardware. The circuit output could then be
-sampled a number of times, producing a set of bitstrings corresponding to
-the measurements of the circuit. The more qubits there are, and the deeper
-the circuit is, the more difficult it becomes to simulate and sample this
-probability distribution classically. By comparing run-times for the
-classical simulations along with the outputs of the physical quantum chip
-for smaller circuits, and then extrapolating classical run-times for larger
-circuits, this was used to announce that quantum supremacy had been
-achieved. [#Arute2019]_
+procedure gives a random unitary transformation which is 
+compatible with the Sycamore hardware. The circuit output is
+measured many times, producing a set of sampled bitstrings. 
+The more qubits there are, and the deeper the circuit is, the more difficult 
+it becomes to simulate and sample this
+bitstring distribution classically. By comparing run-times for the
+classical simulations and the Sycamore chip
+on smaller circuits, and then extrapolating classical run-times for larger
+circuits, the team concluded that simulating larger circuits on Sycamore
+was intractable classically—i.e., the Sycamore chips had demonstrated
+quantum supremacy.
 
 In this demonstration, we will walk you through how their circuits and
 benchmarks were constructed and run, and provide an example of what their
 simulations looked like. We will be using PennyLane along with the
 aformentioned ``qsim`` simulator running via our `PennyLane-Cirq plugin
 <https://pennylane-cirq.readthedocs.io/en/latest/>`__. To use the
-``qsim`` device you also need to install ``qsimcirq``, which is the python
+``qsim`` device you also need to install ``qsimcirq``, which is the Python
 module interfacing the ``qsim`` simulator with Cirq.
 """
 
@@ -67,9 +67,8 @@ import numpy as np
 ######################################################################
 # To start, we need to define the qubit grid that we will use for mimicking
 # Google's Sycamore chip, although we will only use 12 qubits instead of
-# the 54 that the actual chip has. The reason for this is simply
-# performance constraints, since we want you to be able to run this demo
-# without having access to a super-computer.
+# the 54 that the actual chip has. This is so that you can run 
+# this demo without having access to a supercomputer!
 #
 # We define the 12 qubits in a rectangular grid, setting the coordinates for
 # each qubit following the paper's suplementary dataset [#Martinis2020]_. We also create
@@ -103,18 +102,14 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 
 ######################################################################
 # Now let's create the ``qsim`` device, available via the Cirq plugin, making
-# use of the ``wires`` and ``qubits`` keywords that we defined above. ``qsim``
-# is a full Schrödinger state-vector simulator that was used for the cross
-# entropy benchmarking in Google's supremacy experiment [#Arute2019]_.
-#
-# First, we need to define the number of shots per circuit instance to
-# be used --- where the number of 'shots' simply corresponds to the number
+# use of the ``wires`` and ``qubits`` keywords that we defined above.
+# First, we need to define the number of 'shots' per circuit instance to
+# be used—where the number of shots simply corresponds to the number
 # of times that the circuit is sampled. This will also be needed later when
 # calculating the cross-entropy benchmark fidelity. The more shots, the
-# more accurate the results will be. 500,000 shots will be used her; the same
-# number of samples that are used in the supremacy paper, but feel free to
-# change this to whichever value you wish (depending on your own hardware
-# restrictions).
+# more accurate the results will be. 500,000 shots will be used here, the same
+# number of samples used in the supremacy paper, but feel free to
+# change this (depending on your own computational restrictions).
 #
 
 shots = 500000
@@ -122,16 +117,13 @@ dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
 
 
 ######################################################################
-# The next step would be to prepare the gates that will be used. Several
-# gates that are not natively supported in PennyLane are needed. Some of
-# them are made available through the Cirq plugin, since they are already
-# implemented in Cirq, and thus are supported by ``qsim``. To simplify the
-# circuit definition, we define the remaining gates before the circuit is
-# created.
+# The next step would be to prepare the necessary gates. Some of these
+# gates are not natively supported in PennyLane, but are accessible 
+# through the Cirq plugin. We can define the remaining gates by hand.
 #
 # For the single-qubit gates we need the :math:`\sqrt{X}` gate, which can
 # be written as :math:`RX(\pi/2)`, the :math:`\sqrt{Y}` gate which can be
-# written as :math:`RY(\pi/2)`, as well as the :math:`\sqrt{W}`, where
+# written as :math:`RY(\pi/2)`, as well as the :math:`\sqrt{W}` gate, where
 # :math:`W = \frac{X + Y}{2}`, which is easiest to define by its unitary
 # matrix
 #
@@ -177,9 +169,9 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 #       0 & 1 & 0 & 0 \\
 #       0 & 0 & 1 & 0 \\
 #       0 & 0 & 0 & e^{-i\phi}
-#    \end{bmatrix}.
+#    \end{bmatrix},
 #
-# These two gates are accessible via the Cirq plugin.
+# both accessible via the Cirq plugin.
 #
 
 
@@ -187,14 +179,14 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 # Assembling the circuit
 # ----------------------
 #
-# Here comes one of the tricky parts. To decide which qubits that the
+# Here comes one of the tricky parts. To decide which qubits the
 # two-qubit gates should be applied to, we have to look at how they are
 # connected to each other. In an alternating pattern, each pair of
 # neighbouring qubits gets labeled with a letter A-D, where A and B
-# correspond to all horizontally neighbouring qubits (on a row), and C and
-# D to the vertically neighbouring qubits (on a column). This is depicted
+# correspond to all horizontally neighbouring qubits (in a row), and C and
+# D to the vertically neighbouring qubits (in a column). This is depicted
 # in the figure below, where you can also see how the single-qubit gates
-# are applied as well as the cycles, each consisting of a layer of
+# are applied, as well as the cycles, each consisting of a layer of
 # single-qubit gates and a pair of two-qubit gates. Note that each coloured
 # two-qubit gate represented in the image is implemented as the two
 # consecutive gates iSWAP and CPhase in this demo.
@@ -246,7 +238,7 @@ for i, j in combinations(qubits, 2):
 # longer sequence, which is much harder to simulate classically, is used
 # for estimating the cross-entropy fidelity in what they call the "supremacy
 # regime". We will use the shorter gate sequence for the following
-# demonstration, although feel free to play around with other combinations.
+# demonstration; feel free to play around with other combinations.
 #
 
 m = 14  # number of cycles
@@ -261,9 +253,9 @@ gate_sequence = np.resize(["A", "B", "C", "D"], m)
 #
 # The single-qubit gates are randomly selected and applied to each qubit in
 # the circuit, while avoiding the same gate being applied to the same wire
-# twice in a row. We do this by creating the following function. It
-# generates a list with indices for the order in which the single qubit
-# gates should be applied. We can then simply use this list from within the
+# twice in a row. We do this by creating a helper function that
+# specifies the order in which the single-qubit
+# gates should be applied. We can use this list within the
 # circuit to know which gate to apply when.
 #
 
@@ -291,8 +283,8 @@ def generate_single_qubit_gate_list():
 # C, or D as defined above. The circuit finally ends with a half-cycle,
 # consisting of only a layer of single-qubit gates.
 #
-# We need both the probabilities of the circuit as well as being able to
-# sample from it, as we will see in the next section. To do this, we add a
+# From the QNode, we need both the probabilities of the measurement results, as well raw samples. 
+# To facilitate this, we add a
 # keyword argument to our circuit allowing us to switch between the two
 # returns. We sample from the Pauli-Z observable on all wires, which will
 # give us the eigenvalues :math:`\pm 1` of the observable, corresponding to
@@ -327,7 +319,7 @@ def circuit(seed=42, return_probs=False):
 # The cross-entropy benchmarking fidelity
 # ---------------------------------------
 #
-# The performance metric that is used in the paper, and the one that we
+# The performance metric that is used in the supremacy experiment, and the one that we
 # will use in this demo, is called the linear cross-entropy benchmarking
 # fidelity. It's defined as
 #
@@ -342,9 +334,8 @@ def circuit(seed=42, return_probs=False):
 # The idea behind using this fidelity is that it will be close to 1 for
 # samples obtained from random quantum circuits, such as the one we defined
 # above, and close to zero for a normal probability distribution, that can
-# be effectively sampled from classically. Let us briefly calculate the
-# expected theoretical value for the fidelity based on the number of qubits
-# in the circuit. Sampling a bitstring from a random quantum circuit would
+# be effectively sampled from classically. 
+# Sampling a bitstring from a random quantum circuit would
 # follow the Porter-Thomas distribution [#Boixo2018]_, given by
 #
 # .. math::
@@ -367,7 +358,7 @@ def circuit(seed=42, return_probs=False):
 #
 # We implement this fidelity as the function below, where ``samples`` is a
 # list sampled bitstrings, and ``probs`` is a list with corresponding
-# sampling probabilities for the same noise-less circuit.
+# sampling probabilities for the same noiseless circuit.
 #
 
 def fidelity_xeb(samples, probs):
@@ -419,7 +410,7 @@ for i in random_integers:
 f_normal = fidelity_xeb(bitstring_samples, probs)
 
 ######################################################################
-# Finally, let us print the two different values. Sampling from the
+# Finally, let's compare the two different values. Sampling from the
 # circuit's probability distribution should give a fidelity close to 1,
 # while sampling from a normal distribution should give a fidelity
 # close to 0.
@@ -476,7 +467,7 @@ print("Theoretical:", f"{theoretical_value:.7f}\n".rjust(24))
 # and then calculate the mean fidelity of all the runs. The more
 # evaluations we do, the closer to the theoretical value we should get.
 #
-# In the supremacy paper, they typically calculate each of their
+# In the supremacy experiment, they typically calculate each of their
 # presented fidelities over ten circuit instances, which only differ
 # in the choices of single-qubit gates. In this demo, we use even more
 # instances to demonstrate a value closer to the theoretically obtained
@@ -537,7 +528,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 # constructed above, should be able to sample from such a distribution
 # without much overhead. Thus, by showing that a quantum device can produce
 # a high enough fidelity value for a large enough circuit, quantum
-# supremacy can be claimed. This is exactly what Google's supremacy paper
+# supremacy can be claimed. This is exactly what Google's supremacy experiment
 # has done.
 #
 # There's still one issue that hasn't been touched on yet: the addition of
@@ -545,7 +536,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 # cross-entropy benchmark fidelity, getting it closer to 0. The larger the
 # circuit, the more noise there will be, and thus the lower the fidelity.
 # By calculating the specific single-qubit, two-qubit, and readout errors
-# of the Sycamore chip, using them to simulate a noisy circuit, the Google
+# of the Sycamore chip, and using them to simulate a noisy circuit, the Google
 # AI quantum team was able to compare the run-times with the output from
 # their actual hardware device. This way, they managed to show that a
 # significant speedup could be gained from using a quantum computer, and
