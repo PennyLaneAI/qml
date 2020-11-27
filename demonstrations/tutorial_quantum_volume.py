@@ -154,40 +154,36 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # probabilities that are roughly all the same, as decoherence will reduce the
 # probabilities to the uniform distribution.
 #
-# The heavy output generation problem quantifies this --- for our family of random
-# circuits, do we obtain heavy outputs at least 2/3 of the time on average?
-# Furthermore, do we obtain this with high confidence?
-#
-# This is the basis for quantum volume. Looking back at the criteria for our
-# benchmarks, for item 3, the measure of success for each circuit is how often
-# we obtain heavy outputs when we run the circuit and take a measurement. For
-# item 4, the measure of success for the whole family is whether or not the mean
-# of these probabilities is greater than 2/3 with high confidence.
+# The heavy output generation problem quantifies this --- for our family of
+# random circuits, do we obtain heavy outputs at least 2/3 of the time on
+# average?  Furthermore, do we obtain this with high confidence? This is the
+# basis for quantum volume. Looking back at the criteria for our benchmarks, for
+# item 3, the measure of success for each circuit is how often we obtain heavy
+# outputs when we run the circuit and take a measurement. For item 4, the
+# measure of success for the whole family is whether or not the mean of these
+# probabilities is greater than 2/3 with high confidence.
 #
 # On a related note, it is important to determine what heavy output probability
 # we should *expect* to see on average. The intuition for how this can be
-# calculated is as follows [#aaronson]_, [#cmu]_.
-#
-# Suppose that our random square circuits scramble things up enough so that
-# the effective operation looks like a Haar-random unitary :math:`U`. Since
-# in the circuits we are applying :math:`U` to the all-zero ket, the
-# measurement outcome probabilities will be the moduli squared of the
-# entries in the first column of :math:`U`.
+# calculated as follows [#aaronson]_, [#cmu]_.  Suppose that our random
+# square circuits scramble things up enough so that the effective operation
+# looks like a Haar-random unitary :math:`U`. Since in the circuits we are
+# applying :math:`U` to the all-zero ket, the measurement outcome probabilities
+# will be the moduli squared of the entries in the first column of :math:`U`.
 #
 # Now if :math:`U` is Haar-random, we can say something about the form of these
 # entries. In particular, they are complex numbers for which both the real and
-# imaginary parts are normally distributed with mean 0 and variance :math:`1/2^m`,
-# where :math:`m` is the number of qubits. When we take the mod square of such
-# numbers, we obtain an *exponential* distribution, such that the measurement
-# outcome probabilities are distributed like  :math:`Pr(p) \sim 2^m e^{-2^m p}.` 
-# (This is also known as the *Porter-Thomas distribution*.)
-#
-# We can integrate this distribution to find that the median sits at :math:`\ln 2`.
-# We can further compute the expectation value of obtaining something above
-# the medium by integrating the distribution :math:`pe^{-p}` from :math:`\ln 2`
-# to infinity, to obtain :math:`(1 + \ln 2)/2`. This is the expected heavy
-# output probability! Numerically it is around 0.85, and in fact we will observe
-# this later on.
+# imaginary parts are normally distributed with mean 0 and variance
+# :math:`1/2^m`, where :math:`m` is the number of qubits. When we take the mod
+# square of such numbers, we obtain an *exponential* distribution, such that the
+# measurement outcome probabilities are distributed like :math:`\hbox{Pr}(p)
+# \sim 2^m e^{-2^m p}.` (This is also known as the *Porter-Thomas
+# distribution*.) We can integrate this distribution to find that the median
+# sits at :math:`\ln 2`.  We can further compute the expectation value of
+# obtaining something greater than the median by integrating the distribution
+# from :math:`\ln 2` to infinity, to obtain :math:`(1 + \ln 2)/2`. This is the
+# expected heavy output probability! Numerically it is around 0.85, and in fact
+# we will observe this later on.
 #
 #
 # The benchmark
@@ -200,22 +196,23 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # .. admonition:: Definition
 #     :class: defn
 #
-#     The quantum volume :math:`V_Q` of an :math:`n`-qubit processor is defined as
+#     The quantum volume :math:`V_Q` of an :math:`n`-qubit processor is defined as [#cross]_
 #
 #     .. math::
-#         \log_2(V_Q) = \min (m, d(m))
+#         \log_2(V_Q) = \hbox{argmax}_m \min (m, d(m))
 #
-#     where :math:`m` is a number of qubits, and :math:`d(m)` is the largest
-#     square circuit for which we can reliably sample heavy outputs with
-#     probability greater than 2/3.
+#     where :math:`m` is a number of qubits, and :math:`d(m)` is the number of
+#     qubits in the largest square circuits for which we can reliably sample
+#     heavy outputs with probability greater than 2/3.
 #
-# As an example, if we have a 20-qubit device and find that we get heavy outputs
-# reliably for up to depth-4 circuits on 4 qubits, then the quantum volume is
-# :math:`\log_2 V_Q = 4`. Quantum volume is incremental, as shown below --- we
-# gradually work our way up to larger circuits, until we find something we can't
-# do.  Very loosely, quantum volume is like an effective number of qubits. Even
-# if we have those 20 qubits, only groups of up to 4 of them work well enough
-# together to sample from distributions that would be considered hard.
+# To see this more concretely, suppose we have a 20-qubit device and find that
+# we get heavy outputs reliably for up to depth-4 circuits on any set of 4
+# qubits, then the quantum volume is :math:`\log_2 V_Q = 4`. Quantum volume is
+# incremental, as shown below --- we gradually work our way up to larger
+# circuits, until we find something we can't do.  Very loosely, quantum volume
+# is like an effective number of qubits. Even if we have those 20 qubits, only
+# groups of up to 4 of them work well enough together to sample from
+# distributions that would be considered hard.
 #
 # .. figure:: ../demonstrations/quantum_volume/qv_square_circuits.svg
 #     :align: center
@@ -242,8 +239,8 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 #    convention in this demo. As such, IonQs processor has the potential for a
 #    quantum volume of :math:`2^{32} > 4000000`. Here we use the :math:`\log`
 #    because it is more straightforward to understand that they have 32
-#    high-quality, well-connected qubits than to understand at first glance the
-#    meaning of the volume itself.
+#    high-quality, well-connected qubits than to extract this at first glance from the
+#    explicit value of the volume.
 #
 
 
@@ -252,8 +249,8 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # Computing the quantum volume
 # ----------------------------
 #
-# Equipped with our definition of quantum volume, it's time to actually try and
-# compute it ourselves. We'll use the `PennyLane-Qiskit
+# Equipped with our definition of quantum volume, it's time to compute it
+# ourselves!. We'll use the `PennyLane-Qiskit
 # <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to compute the
 # volume of one of the IBM processors, since their properties are easily
 # accessible through this interface.
@@ -277,20 +274,18 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Recall that the structure of the circuits above is alternating layers of
-# permutations, and random SU(4) operations on pairs of qubits.  Let's implement
+# permutations and random SU(4) operations on pairs of qubits.  Let's implement
 # the generation of such circuits in PennyLane.
 #
 # First we write a function that randomly permutes qubits. We'll do this by
 # using numpy to generate a permutation, and then apply it with SWAP gates.
 
 import numpy as np
-
-# For reproducibility
-np.random.seed(42)
-# Object for random number generation from numpy
-rng = np.random.default_rng()
-
 import pennylane as qml
+
+# Object for random number generation from numpy
+np.random.seed(42)
+rng = np.random.default_rng()
 
 def permute_qubits(num_qubits):
     # A random permutation
@@ -373,11 +368,19 @@ print(tape.draw())
 #
 # One last thing we'll need before running our circuits is the machinery to
 # determine the heavy outputs. This is quite an interesting aspect of the
-# protocol --- we're required to solve the problem classically in order to get
-# the results, so it will only be possible to calculate quantum volume for
-# processors up to a certain point before they become too large.
+# protocol --- we're required to compute the heavy outputs classically in order
+# to get the results! As a consequence, it will only be possible to calculate
+# quantum volume for processors up to a certain point before they become too
+# large. That said, classical simulators are always improving, and can simulate
+# circuits with numbers of qubits well into the double digits (though they may
+# need a supercomputer to do so). Furthermore, the designers of the proposal
+# don't expect this to be an issue until gate error rates decrease below
+# :math:`\approx 10^{-4}`, after which we may need to adjust the protocol to not
+# require classical simulation, or even consider new volume metrics [#cross]_.
 #
-
+# The heavy outputs can be retrieved from a classically-obtained probability
+# distribution as follows:
+#
 
 def heavy_output_set(m, probs):
     # Sort the probabilities
@@ -399,16 +402,15 @@ def heavy_output_set(m, probs):
 
 ##############################################################################
 #
-# Just as an example, let's compute the heavy outputs and probability for
-# our circuit above.
+# As an example, let's compute the heavy outputs and probability for our circuit
+# above.
 #
 
+# Adds a measurement of first m qubits to the previous circuit
 with tape:
     qml.probs(wires=range(m))
 
-output_probs = tape.execute(dev_ideal).reshape(
-    2 ** m,
-)
+output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print(f"Probability of a heavy output is {prob_heavy_output:.6f}")
@@ -420,11 +422,11 @@ print(f"Heavy outputs are {heavy_outputs}")
 # Step 2: run the circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# First things first, let's set up our hardware device. We'll use a simulated
-# version of the 5-qubit IBM Ourense as a example - the reported quantum volume
-# according to IBM is :math:`V_Q=8`, so we endeavour to reproduce that
-# here. This means that we should be able to run our square circuits on up to
-# :math:`\log_2 V_Q =3` qubits.
+# Now it's time to run the protocol. First, let's set up our hardware
+# device. We'll use a simulated version of the 5-qubit IBM Ourense as a example
+# - the reported quantum volume according to IBM is :math:`V_Q=8`, so we
+# endeavour to reproduce that here. This means that we should be able to run our
+# square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
 
 import networkx as nx
@@ -447,8 +449,8 @@ nx.draw_networkx(
 
 ##############################################################################
 #
-# This hardware graph is not fully connected, so the compiler will have to make
-# some adjustments when non-connected qubits need to interact.
+# This hardware graph is not fully connected, so the quantum compiler will have
+# to make some adjustments when non-connected qubits need to interact.
 #
 # To actually perform the simulations, we'll need to access a copy of the
 # Ourense noise model. Again, we won't be running on Ourense directly - rather
@@ -464,9 +466,9 @@ dev_noisy = qml.device(
 ##############################################################################
 #
 # As a final point, since we are allowed to do as much optimization as we like,
-# let's put the transpiler to work. The transpiler will perform a number of
+# let's put the compiler to work. The compiler will perform a number of
 # optimizations on our circuit to simplify it. We'll also specify some
-# high-quality qubit placement and routing techniques [[#sabre]_] in order to
+# high-quality qubit placement and routing techniques [#sabre]_ in order to
 # fit the circuits on the hardware graph in the best way possible.
 
 coupling_map = dev_ourense.backend.configuration().to_dict()["coupling_map"]
@@ -506,17 +508,16 @@ for m in range(min_m, max_m + 1):
             qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
             qml.probs(wires=range(m))
 
-        output_probs = tape.execute(dev_ideal).reshape(
-            2 ** m,
-        )
+        output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
         # Execute circuit on the noisy device
         tape.execute(dev_noisy)
+
+        # Get the output bit strings; flip ordering of qubits to match PennyLane
         counts = dev_noisy._current_job.result().get_counts()
         reordered_counts = {x[::-1]: counts[x] for x in counts.keys()}
 
-        # Need to flip ordering of the bit strings to match PennyLane
         device_heavy_outputs = np.sum(
             [
                 reordered_counts[x] if x[:m] in heavy_outputs else 0
@@ -535,9 +536,8 @@ for m in range(min_m, max_m + 1):
 #
 # Having run our experiments, we can now get to the heart of the quantum volume
 # protocol: what *is* the largest square circuit that our processor can run?
-#
 # Let's first check out the means, and see how much higher they are than 2/3.
-
+#
 
 probs_mean_ideal = np.mean(probs_ideal, axis=1)
 probs_mean_noisy = np.mean(probs_noisy, axis=1)
@@ -578,7 +578,7 @@ for idx, prob in enumerate(probs_mean_noisy):
 #
 #    \sigma = \sqrt{\frac{p_h(1 - p_h)}{N}}
 #
-# where :math:`p_h` is our heavy output probability, and :math:`N` is the number
+# where :math:`p_h` is the heavy output probability, and :math:`N` is the number
 # of circuits.
 #
 
@@ -587,8 +587,8 @@ stds_noisy = np.sqrt(probs_mean_noisy * (1 - probs_mean_noisy) / num_trials)
 
 ##############################################################################
 #
-# Now that we have our standard deviations, we're ready to plot - let's see
-# if our means are at least :math:`2\sigma` away from the threshold!
+# Now that we have our standard deviations, let's see if our means are at least
+# :math:`2\sigma` away from the threshold!
 #
 
 import matplotlib.pyplot as plt
@@ -631,22 +631,48 @@ for idx, prob in enumerate(two_sigma_below):
 # that the quantum volume of Ourense is :math:`\log_2 V_Q = 3`, or :math:`V_Q =
 # 8`, as expected.
 #
-# Try playing around with the code yourself: are there any parameters you can
-# change to improve the volume with this same noise model? What happens if we
-# don't specify a high level of optimization and transpilation? Furthermore, how
-# do the results change with a more complex noise model from an actual device?
-#
+# This framework and code will allow you to calculate the quantum of many
+# different processors. Try it yourself! What happens if we don't specify a
+# large amount of compiler optimization? How does the volume compare across
+# different hardware devices? You can even build your own device configurations
+# and noise models to explore the extent to which different factors affect the
+# volume.
+#g
 # Concluding thoughts
 # -------------------
 #
-# Quantum volume provides a useful metric for comparing the quality of different
-# quantum computers. However, as with any benchmark, it is not without limitations.
-# To that end, a more general *volumetric benchmark* framework was proposed, which
-# includes not only square circuits, but also rectangular circuits [#robin]_.
+# Quantum volume is a metric used for comparing the quality of different quantum
+# computers. By determining the largest square random circuits a processor can
+# run reliably, it provides a measure of the effective number of qubits a
+# processor has. Furthermore, it goes beyond just gauging quality by a number of
+# qubits --- it incorporates many different aspects of a device such as its
+# compiler, qubit connectivity, and gate error rates.
+#
+# However, as with any benchmark, it is not without limitations. A key one we
+# already discussed is that the heavy output generation problem requires us to
+# simulate circuits classically in addition to running them on a device. While
+# this is perhaps not an issue now, it will surely become one in the future. The
+# number of qubits continues to increase and error rates are getting lower,
+# both of which imply that our square circuits will be growing in both width and
+# depth as time goes on. Eventually they will reach a point where they are no
+# longer classical simulable and we will have to design new benchmarks.
+#
+# Another limitation is that the protocol only looks at one type of circuit,
+# i.e., square circuits. It might be the case that a processor has very few
+# qubits, but also very low error rates. For example, what if a processor with 5
+# qubits can run circuits with up to 20 layers? Quantum volume would limit us to
+# :math:`\log_2 V_Q = 5` and the high quality of those qubits is not reflected
+# in this.  To that end, a more general *volumetric benchmark* framework was
+# proposed that includes not only square circuits, but also rectangular circuits
+# [#robin]_. Investigating very deep circuits on few qubits (and very shallow
+# circuits on many qubits) will give us a broader overview of a processor's
+# quality. Furthermore, the flexibility of the framework of [#robin]_ will
+# surely inspire us to create new types of benchmarks. Having a variety of
+# benchmarks calculated in different ways is beneficial and gives us a broader
+# view of the performance of quantum computers.
 #
 #
-#
-# .. _vqe_references:
+# .. _quantum_volume_references:
 #
 # References
 # ----------
