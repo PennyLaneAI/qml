@@ -14,7 +14,7 @@ Quantum natural gradient
 
    tutorial_backprop Quantum gradients with backprop
    tutorial_vqe_qng Accelerating VQE with QNG
-   
+
 
 This example demonstrates the quantum natural gradient optimization technique
 for variational quantum circuits, originally proposed in

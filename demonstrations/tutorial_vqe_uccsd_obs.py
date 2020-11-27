@@ -3,8 +3,7 @@ VQE in different spin sectors
 =============================
 
 .. meta::
-    :property="og:description": Find the lowest-energy states of a Hamiltonian in different
-    spin sectors
+    :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 Quantum computers offer a promising avenue to perform first-principles simulations of the
@@ -29,7 +28,8 @@ The lowest-lying excited states, with energy :math:`E^*=-0.478453` Ha and total 
 .. figure:: /demonstrations/vqe_uccsd_obs/energy_spectra_h2_sto3g.png
     :width: 75%
     :align: center
-|    
+
+|
 
 Similarly, in the framework of VQE, if the quantum computer can be programmed to prepare many-body
 states in a specific sector of the total-spin projection :math:`S_z`, the variational optimization
@@ -51,7 +51,7 @@ can be put together to run VQE simulations to find the lowest-energy states of t
 :math:`\mathrm{H}_2` molecule in different sectors of the total spin :math:`S`.
 We also specify how to use the unitary coupled cluster ansatz, restricted to single
 and double excitations (UCCSD), as the variational circuit for the algorithm. These functionalities
-can be combined to estimate the energies of the ground and the lowest-lying excited states of the 
+can be combined to estimate the energies of the ground and the lowest-lying excited states of the
 hydrogen molecule.
 
 Let's get started! ⚛️
@@ -129,7 +129,7 @@ print(S2)
 ##############################################################################
 # The :func:`~.pennylane_qchem.qchem.spin2` function uses
 # :func:`~.pennylane_qchem.qchem._spin2_matrix_elements` and
-# :func:`~.pennylane_qchem.qchem.observable` to compute the 
+# :func:`~.pennylane_qchem.qchem.observable` to compute the
 # matrix elements in the equation above and to build the many-body observable,
 # respectively.
 #
@@ -399,34 +399,34 @@ print(
 #
 # .. [#cao2019]
 #
-#     Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     Y. Cao, J. Romero, *et al.*, "Quantum chemistry in the age of quantum computing".
 #     `Chem. Rev. 2019, 119, 19, 10856-10915.
 #     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
 # .. [#kandala2017]
 #
-#     A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient Variational Quantum
-#     Eigensolver for Small Molecules and Quantum Magnets". `arXiv:1704.05018
+#     A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient variational quantum
+#     eigensolver for small molecules and quantum magnets". `arXiv:1704.05018
 #     <https://arxiv.org/abs/1704.05018>`_
 #
 # .. [#romero2017]
 #
-#     J. Romero, R. Babbush, *et al.*,"Strategies for quantum computing molecular
+#     J. Romero, R. Babbush, *et al.*, "Strategies for quantum computing molecular
 #     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #     <https://arxiv.org/abs/1701.02691>`_
 #
 # .. [#jensenbook]
 #
-#     F. Jensen. "Introduction to Computational Chemistry".
+#     F. Jensen. "Introduction to computational chemistry".
 #     (John Wiley & Sons, 2016).
 #
 # .. [#fetterbook]
 #
-#     A. Fetter, J. D. Walecka, "Quantum Theory of many-particle systems".
+#     A. Fetter, J. D. Walecka, "Quantum theory of many-particle systems".
 #     Courier Corporation, 2012.
 #
 # .. [#suzuki1985]
-# 
+#
 #     M. Suzuki. "Decomposition formulas of exponential operators and Lie exponentials
 #     with some applications to quantum mechanics and statistical physics".
 #     `Journal of Mathematical Physics 26, 601 (1985).
