@@ -171,15 +171,15 @@ params = np.load("vqe_parallel/RY_params.npy")
 
 ##############################################################################
 # Finally, the energies as functions of rotation angle can be given using
-# :class:`~.pennylane.VQECost`.
+# :class:`~.pennylane.ExpvalCost`.
 
-energies = [qml.VQECost(circuit, h, devs) for h in hamiltonians]
+energies = [qml.ExpvalCost(circuit, h, devs) for h in hamiltonians]
 
 ##############################################################################
 # Calculating the potential energy surface
 # ----------------------------------------
 #
-# :class:`~.pennylane.VQECost` returns a :class:`~.pennylane.QNodeCollection` which can be
+# :class:`~.pennylane.ExpvalCost` returns a :class:`~.pennylane.QNodeCollection` which can be
 # evaluated using the input parameters to the ansatz circuit. The
 # :class:`~.pennylane.QNodeCollection` can be evaluated asynchronously by passing the keyword
 # argument ``parallel=True``. When ``parallel=False`` (the default behaviour), the QNodes are
