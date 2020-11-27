@@ -18,8 +18,8 @@ In the paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__, the
 Google AI Quantum team showed that the Sycamore quantum processor could
 complete a task that would take a classical computer potentially thousands
-of years. They faced their quantum chip off against JEWEL -- one of the
-worlds most powerful supercomputers -- using a classical simulator called
+of years. They faced their quantum chip off against JEWEL --- one of the
+worlds most powerful supercomputers --- using a classical simulator called
 `qsim <https://github.com/quantumlib/qsim>`__. The main idea behind this
 showdown was to prove that a quantum device could solve a specific task
 that no classical methods would be able to in a reasonable amount of time.
@@ -108,7 +108,7 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 # entropy benchmarking in Google's supremacy experiment [#Arute2019]_.
 #
 # First, we need to define the number of shots per circuit instance to
-# be used -- where the number of 'shots' simply corresponds to the number
+# be used --- where the number of 'shots' simply corresponds to the number
 # of times that the circuit is sampled. This will also be needed later when
 # calculating the cross-entropy benchmark fidelity. The more shots, the
 # more accurate the results will be. 500,000 shots will be used her; the same
@@ -295,7 +295,7 @@ def generate_single_qubit_gate_list():
 # sample from it, as we will see in the next section. To do this, we add a
 # keyword argument to our circuit allowing us to switch between the two
 # returns. We sample from the Pauli-Z observable on all wires, which will
-# give us the eigenvalues :math:`\pm 1`of the observable, corresponding to
+# give us the eigenvalues :math:`\pm 1` of the observable, corresponding to
 # the states :math:`\left|0\right>` and :math:`\left|1\right>`.
 #
 
