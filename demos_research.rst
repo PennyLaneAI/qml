@@ -124,8 +124,8 @@ plateaus in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Construct a supremacy circuit with qsim.
-    :figure: demonstrations/qsim_supremacy/qsim.png
+    :tooltip: Quantum supremacy with qsim.
+    :figure: demonstrations/qsim_supremacy/sycamore.png
     :description: :doc:`demos/qsim_supremacy`
     :tags: cirq qsim
 
