@@ -41,10 +41,10 @@ achieved. [#Arute2019]_
 In this demonstration, we will walk you through how their circuits and
 benchmarks were constructed and run, and provide an example of what their
 simulations looked like. We will be using PennyLane along with the
-aformentioned qsim simulator running via our `PennyLane-Cirq plugin
+aformentioned ``qsim`` simulator running via our `PennyLane-Cirq plugin
 <https://pennylane-cirq.readthedocs.io/en/latest/>`__. To use the
-qsim-device you also need to install ``qsimcirq``, which is the python
-module interfacing the qsim simulator with Cirq.
+``qsim`` device you also need to install ``qsimcirq``, which is the python
+module interfacing the ``qsim`` simulator with Cirq.
 """
 
 
@@ -102,18 +102,19 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 
 
 ######################################################################
-# Now let's create the qsim-device, available via the Cirq plugin, making
-# use of the ``wires`` and ``qubits`` keywords that we defined above. qsim
+# Now let's create the ``qsim`` device, available via the Cirq plugin, making
+# use of the ``wires`` and ``qubits`` keywords that we defined above. ``qsim``
 # is a full Schrödinger state-vector simulator that was used for the cross
 # entropy benchmarking in Google's supremacy experiment [#Arute2019]_.
 #
-# First, we need to define the number of shots to be used per circuit
-# instance. This corresponds to the number of times that the circuit is
-# sampled. This will also be needed later when calculating the cross-entropy
-# benchmark fidelity. The more shots, the more accurate the results will
-# be. We will use 500,000 shots; the same number of samples that are used
-# in the supremacy paper, but feel free to change this to whichever value
-# you wish (depending on your own hardware restrictions).
+# First, we need to define the number of shots per circuit instance to
+# be used -- where the number of 'shots' simply corresponds to the number
+# of times that the circuit is sampled. This will also be needed later when
+# calculating the cross-entropy benchmark fidelity. The more shots, the
+# more accurate the results will be. 500,000 shots will be used her; the same
+# number of samples that are used in the supremacy paper, but feel free to
+# change this to whichever value you wish (depending on your own hardware
+# restrictions).
 #
 
 shots = 500000
@@ -124,7 +125,7 @@ dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
 # The next step would be to prepare the gates that will be used. Several
 # gates that are not natively supported in PennyLane are needed. Some of
 # them are made available through the Cirq plugin, since they are already
-# implemented in Cirq, and thus are supported by qsim. To simplify the
+# implemented in Cirq, and thus are supported by ``qsim``. To simplify the
 # circuit definition, we define the remaining gates before the circuit is
 # created.
 #
@@ -256,7 +257,7 @@ gate_sequence = np.resize(["A", "B", "C", "D"], m)
 
 ######################################################################
 # Finally, we can define the circuit itself and create a QNode that we will
-# use for circuit evaluation with the qsim device.
+# use for circuit evaluation with the ``qsim`` device.
 #
 # The single-qubit gates are randomly selected and applied to each qubit in
 # the circuit, while avoiding the same gate being applied to the same wire
