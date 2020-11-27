@@ -613,7 +613,7 @@ for m in range(min_m - 2, max_m + 1 - 2):
         label="2σ",
     )
 
-fig.suptitle("Heavy output distributions for Ourense QPU", fontsize=18)
+fig.suptitle("Heavy output distributions for (simulated) Ourense QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
 
