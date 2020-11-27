@@ -125,10 +125,22 @@ Community
     layer. The objective is to train a quantum function to predict classes of
     the Iris dataset.
 
+.. community-card::
+    :title: Trainable Quantum Convolution
+    :author: Denny Mattern, Darya Martyniuk, Fabian Bergmann, and Henri Willems
+    :date: 26/11/2020
+    :code: https://github.com/PlanQK/TrainableQuantumConvolution
+    :color: heavy-rain-gradient
+
+    We implement a trainable version of Quanvolutional Neural Networks using parametrized
+    <code>RandomCircuits</code>. Parameters are optimized using standard gradient descent. Our code is based on
+    the <a href="https://pennylane.ai/qml/demos/tutorial_quanvolution.html">Quanvolutional Neural
+    Networks</a> demo by Andrea Mari. This demo results from our research as part of the <a
+    href="https://www.planqk.de">PlanQK consortium</a>.
+
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
-
-:html:`<div class="card hidden-card"></div></div>`
+   :html:`<div class="card hidden-card"></div></div>`
 
 .. toctree::
     :maxdepth: 2
