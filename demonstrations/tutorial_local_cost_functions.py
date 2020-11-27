@@ -10,7 +10,7 @@ Alleviating barren plateaus with local cost functions
 .. related::
 
    tutorial_barren_plateaus Barren plateaus in QNNs
-    
+
 Barren Plateaus
 ---------------
 
@@ -34,19 +34,19 @@ plateaus for shallow circuits.
 .. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
    :align: center
    :width: 50%
-   
+
    Taken from Cerezo et al. [#Cerezo2020]_.
-   
+
 Many variational quantum algorithms are constructed to use global cost functions.
-Information from the entire measurement is used to analyze the result of the 
-circuit, and a cost function is calculated from this to quantify the circuit's 
-performance. A local cost function only considers information from a few qubits, 
+Information from the entire measurement is used to analyze the result of the
+circuit, and a cost function is calculated from this to quantify the circuit's
+performance. A local cost function only considers information from a few qubits,
 and attempts to analyze the behavior of the entire circuit from this limited scope.
 
 
-Cerezo et al. also handily prove that these local cost functions are bounded by the 
+Cerezo et al. also handily prove that these local cost functions are bounded by the
 global ones, i.e., if a global cost function is formulated in the manner described
-by Cerezo et al., then the value of its corresponding local cost function will always be 
+by Cerezo et al., then the value of its corresponding local cost function will always be
 less than or equal to the value of the global cost function.
 
 In this notebook, we investigate the effect of barren plateaus in
@@ -86,7 +86,7 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 # and a rotation along Y, repeated across all the qubits.
 #
 # We will also define our cost functions here. Since we are trying to
-# learn the identity gate, a natural cost function is 1 minus the probability of measuring the 
+# learn the identity gate, a natural cost function is 1 minus the probability of measuring the
 # zero state, denoted here as :math:`1 - p_{|0\rangle}`.
 #
 # .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right)  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
@@ -95,18 +95,18 @@ dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
 #
 # .. math:: C_{G} = \langle  \psi(\theta) | \left(I - |00 \ldots 0\rangle \langle 00 \ldots 0|\right) | \psi(\theta) \rangle  = 1-p_{|00 \ldots 0\rangle}
 #
-# and for the local cost function, we will sum the individual contributions from each qubit: 
+# and for the local cost function, we will sum the individual contributions from each qubit:
 #
 # .. math:: C_L = \langle \psi(\theta) | \left(I - \frac{1}{n} \sum_j |0\rangle \langle 0|_j\right)|\psi(\theta)\rangle = 1 - \sum_j p_{|0\rangle_j}.
 #
 # It might be clear to some readers now why this function can perform better.
-# By formatting our local cost function in this way, we have essentially divided 
-# the problem up into multiple single-qubit terms, and summed all 
+# By formatting our local cost function in this way, we have essentially divided
+# the problem up into multiple single-qubit terms, and summed all
 # the results up.
 #
 # To implement this, we will define a separate QNode for the local cost
 # function and the global cost function.
-# 
+#
 #
 
 
@@ -119,7 +119,7 @@ def global_cost_simple(rotations):
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
-        qml.RY(rotations[1][i], wires=i) 
+        qml.RY(rotations[1][i], wires=i)
     return [qml.probs(wires=i) for i in range(wires)]
 
 global_circuit = qml.QNode(global_cost_simple, dev)
@@ -159,9 +159,9 @@ print(local_circuit.draw())
 
 ######################################################################
 # With this simple example, we can visualize the cost function, and see
-# the barren plateau effect graphically. Although there are :math:`2n` (where :math:`n` is the 
-# number of qubits) parameters, in order to plot the cost landscape 
-# we must constrain ourselves. We will consider the case where all X rotations 
+# the barren plateau effect graphically. Although there are :math:`2n` (where :math:`n` is the
+# number of qubits) parameters, in order to plot the cost landscape
+# we must constrain ourselves. We will consider the case where all X rotations
 # have the same value, and all the Y rotations have the same value.
 #
 # Firstly, we look at the global cost function. When plotting the cost
@@ -173,18 +173,18 @@ print(local_circuit.draw())
 def generate_surface(cost_function):
     Z = []
     Z_assembler = []
-    
+
     X = np.arange(-np.pi, np.pi, 0.25)
     Y = np.arange(-np.pi, np.pi, 0.25)
     X, Y = np.meshgrid(X, Y)
-    
+
     for x in X[0, :]:
         for y in Y[:, 0]:
             rotations = [[x for i in range(wires)], [y for i in range(wires)]]
             Z_assembler.append(cost_function(rotations))
         Z.append(Z_assembler)
         Z_assembler = []
-    
+
     Z = np.asarray(Z)
     return Z
 
@@ -220,16 +220,16 @@ plot_surface(local_surface)
 # trainability? Let us try training both the local and global cost
 # functions.
 # To simplify this model, let's modify our cost function from
-# 
+#
 # .. math:: C_{L} = 1-\sum p_{|0\rangle},
 #
 # where we sum the marginal probabilities of each qubit, to
-# 
+#
 # .. math:: C_{L} = 1-p_{|0\rangle},
-# 
-# where we only consider the probability of a single qubit to be in the 0 state. 
-#  
-# While we're at it, let us make our ansatz a little more like one we would encounter while 
+#
+# where we only consider the probability of a single qubit to be in the 0 state.
+#
+# While we're at it, let us make our ansatz a little more like one we would encounter while
 # trying to solve a VQE problem, and add entanglement.
 
 def global_cost_simple(rotations):
@@ -241,9 +241,9 @@ def global_cost_simple(rotations):
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
-        qml.RY(rotations[1][i], wires=i) 
+        qml.RY(rotations[1][i], wires=i)
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
-    return qml.probs(wires=[0]) 
+    return qml.probs(wires=[0])
 
 global_circuit = qml.QNode(global_cost_simple, dev)
 
@@ -277,7 +277,7 @@ plot_surface(local_surface)
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
-rotations = [[3] * len(range(wires)), [0] * len(range(wires))]
+rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))])
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_global = rotations
@@ -295,10 +295,10 @@ print(global_circuit.draw())
 ######################################################################
 # After 100 steps, the cost function is still exactly 1. Clearly we are in
 # an "untrainable" area. Now, let us limit ourselves to the local cost
-# function and see how it performs. 
+# function and see how it performs.
 #
 
-rotations = [[3.0 for i in range(wires)], [0 for i in range(wires)]]
+rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]])
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_local = rotations
@@ -412,7 +412,7 @@ print(tunable_circuit.draw())
 # function using random starting positions and count how many times we run
 # into a barren plateau.
 #
-# Let's use a number of qubits we are more likely to use in a real variational 
+# Let's use a number of qubits we are more likely to use in a real variational
 # circuit: n=10. We will say that after
 # 400 steps, any run with a cost function of less than 0.9 (chosen
 # arbitrarily) will probably be trainable given more time. Any run with a
@@ -508,15 +508,15 @@ for runs in range(samples):
 # and most even trained in less time. While these examples are simple,
 # this local-vs-global cost behaviour has been shown to extend to more
 # complex problems.
-    
-    
+
+
 ##############################################################################
 # References
 # ----------
 #
 # .. [#Cerezo2020]
-#    
-#   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P. (2020). 
-#   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks. 
+#
+#   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P. (2020).
+#   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks.
 #   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
-#     
+#
