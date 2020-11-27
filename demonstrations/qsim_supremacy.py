@@ -38,10 +38,6 @@ circuits, the team concluded that simulating larger circuits on Sycamore
 was intractable classically—i.e., the Sycamore chips had demonstrated
 quantum supremacy.
 
-In this demonstration, we will walk you through how their circuits and
-benchmarks were constructed and run, and provide an example of what their
-simulations looked like. We will be using PennyLane along with the
-
 In this demonstration, we will walk you through how their random quantum
 circuits were constructed, how the performance was measured via
 cross-entropy benchmarks, and provide reusable examples of their classical
@@ -112,8 +108,8 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 # be used—where the number of shots simply corresponds to the number
 # of times that the circuit is sampled. This will also be needed later when
 # calculating the cross-entropy benchmark fidelity. The more shots, the
-# more accurate the results will be. 500,000 shots will be used here, the same
-# number of samples used in the supremacy paper, but feel free to
+# more accurate the results will be. 500,000 shots will be used here—the same
+# number of samples used in the supremacy paper—but feel free to
 # change this (depending on your own computational restrictions).
 #
 
@@ -202,14 +198,6 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 #
 #     **Image taken from Arute, F., Arya, K., Babbush, R. et al.** [#Arute2019]_
 #
-# The logic below iterates through all connections and returns a dictionary
-# ``gate_order`` with lists of tuples as keys. Each tuple contains two
-# neighbouring qubits with the key as their connection label. We will use
-# this dictionary inside the circuit to iterate through the different qubit
-# pairs and apply the two two-qubit gates that we just defined above. The
-# way we iterate through the dictionary will depend on a gate sequence
-# defined in the next section.
-
 # The logic below iterates through all connections and returns a
 # dictionary, ``gate_order``, where the keys are the connection labels
 # between different qubits and the values are lists of all neighbouring
@@ -289,18 +277,18 @@ def generate_single_qubit_gate_list():
 
 
 ######################################################################
-# The two-qubit gates are applied to the qubits connected by A, B,
-# C, or D as defined above. The circuit finally ends with a half-cycle,
-# consisting of only a layer of single-qubit gates.
-#
 # Finally, we can define the circuit itself and create a QNode that we will
-# use for circuit evaluation with the ``qsim`` device. From the QNode, we
-# need both the probabilities of the measurement results, as well raw
-# samples. To facilitate this, we add a keyword argument to our circuit
-# allowing us to switch between the two returns. We sample from the Pauli-Z
-# observable on all wires, which will give us the eigenvalues :math:`\pm 1`
-# of the observable, corresponding to the states :math:`\left|0\right>` and
-# :math:`\left|1\right>`.
+# use for circuit evaluation with the ``qsim`` device. The two-qubit gates
+# are applied to the qubits connected by A, B, C, or D as defined above.
+# The circuit ends with a half-cycle, consisting of only a layer of
+# single-qubit gates.
+#
+# From the QNode, we also need both the probabilities of the measurement
+# results, as well raw samples. To facilitate this, we add a keyword
+# argument to our circuit allowing us to switch between the two returns. We
+# sample from the Pauli-Z observable on all wires, which will give us the
+# eigenvalues :math:`\pm 1` of the observable, corresponding to the states
+# :math:`\left|0\right>` and :math:`\left|1\right>`.
 #
 
 @qml.qnode(dev)
