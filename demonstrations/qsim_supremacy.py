@@ -291,12 +291,11 @@ def generate_single_qubit_gate_list():
 # consisting of only a layer of single-qubit gates.
 #
 # We need both the probabilities of the circuit as well as being able to
-# sample from it, as we will see in the `next section <The cross-entropy
-# benchmark fidelity>`__. To do this, we add a keyword argument to our
-# circuit allowing us to switch between the two returns. We sample from the
-# Pauli-Z observable on all wires, which will give us the eigenvalues
-# :math:`\pm 1`of the observable, corresponding to the states
-# :math:`\left|0\right>` and :math:`\left|1\right>`.
+# sample from it, as we will see in the next section. To do this, we add a
+# keyword argument to our circuit allowing us to switch between the two
+# returns. We sample from the Pauli-Z observable on all wires, which will
+# give us the eigenvalues :math:`\pm 1`of the observable, corresponding to
+# the states :math:`\left|0\right>` and :math:`\left|1\right>`.
 #
 
 @qml.qnode(dev)
