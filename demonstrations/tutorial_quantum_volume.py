@@ -40,6 +40,8 @@ types of qubits?
     :align: center
     :width: 50%
 
+    ..
+
     Which of these qubit hardware graphs is the best?
 
 To compare across all these facets, researchers have proposed a metric called
@@ -637,7 +639,7 @@ for idx, prob in enumerate(two_sigma_below):
 # different hardware devices? You can even build your own device configurations
 # and noise models to explore the extent to which different factors affect the
 # volume.
-#g
+#
 # Concluding thoughts
 # -------------------
 #
