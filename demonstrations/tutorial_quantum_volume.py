@@ -252,11 +252,12 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # Computing the quantum volume
 # ----------------------------
 #
-#
 # Equipped with our definition of quantum volume, it's time to actually try and
 # compute it ourselves. We'll use the `PennyLane-Qiskit
-# <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to determine the
-# volume of a noisy toy device.
+# <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to compute the
+# volume of one of the IBM processors, since their properties are easily
+# accessible through this interface.
+#
 #
 # Loosely, the protocol for quantum volume consists of three steps:
 #
@@ -278,8 +279,6 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # Recall that the structure of the circuits above is alternating layers of
 # permutations, and random SU(4) operations on pairs of qubits.  Let's implement
 # the generation of such circuits in PennyLane.
-#
-###############################################################################
 #
 # First we write a function that randomly permutes qubits. We'll do this by
 # using numpy to generate a permutation, and then apply it with SWAP gates.
@@ -421,19 +420,29 @@ print(f"Heavy outputs are {heavy_outputs}")
 # Step 2: run the circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# First things first, let's set up a hardware device. We'll make a 5-qubit
-# processor with the qubits all in a row, then add a little bit of noise.
-# Let's take a look at the arrangement of the qubits on the processor by
-# plotting its hardware graph.
+# First things first, let's set up our hardware device. We'll use a simulated
+# version of the 5-qubit IBM Ourense as a example - the reported quantum volume
+# according to IBM is :math:`V_Q=8`, so we endeavour to reproduce that
+# here. This means that we should be able to run our square circuits on up to
+# :math:`\log_2 V_Q =3` qubits.
+#
 
 import networkx as nx
+from qiskit.providers.aer import noise
 
-coupling_map = [[0, 1], [1, 0], [1, 2], [2, 1], [2, 3], [3, 2], [3, 4], [4, 3]]
+dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense");
+
+##############################################################################
+#
+# First, we can take a look at the arrangement of the qubits on the processor
+# by plotting its hardware graph.
+
+ourense_hardware_graph = nx.Graph(dev_ourense.backend.configuration().coupling_map)
 
 nx.draw_networkx(
-    nx.Graph(coupling_map),
+    ourense_hardware_graph,
     node_color="cyan",
-    labels={x: x for x in range(num_qubits)},
+    labels={x: x for x in range(dev_ourense.num_wires)},
 )
 
 ##############################################################################
@@ -441,51 +450,26 @@ nx.draw_networkx(
 # This hardware graph is not fully connected, so the compiler will have to make
 # some adjustments when non-connected qubits need to interact.
 #
-# The next thing we need is a noise model. We'll set up a toy one that assumes
-# a little bit of depolarizing error on the single-qubit and two-qubit gates,
-# as well as some measurement readout error.
-from qiskit.providers.aer import noise
+# To actually perform the simulations, we'll need to access a copy of the
+# Ourense noise model. Again, we won't be running on Ourense directly - rather
+# we'll set up a local device to simulate its behaviour.
+#
 
-noise_model = noise.NoiseModel()
+noise_model = noise.NoiseModel.from_backend(dev_ourense.backend.properties())
 
-# Add some noise to single qubit gates
-for qubit in range(num_qubits):
-    # Slightly depolarize u1 and u3 instructions
-    u1_error = np.abs(rng.normal(1e-3, 5e-4))
-    noise_model.add_quantum_error(noise.depolarizing_error(u1_error, 1), "u1", [qubit])
-
-    u3_error = np.abs(rng.normal(1e-3, 5e-4))
-    noise_model.add_quantum_error(noise.depolarizing_error(u3_error, 1), "u3", [qubit])
-
-    # For variety, add probability of a bit flip error on u2 gates
-    prob_bit_flip = np.abs(rng.normal(0.05, 1e-3))
-    noise_model.add_quantum_error(
-        noise.pauli_error([("X", prob_bit_flip), ("I", 1 - prob_bit_flip)]), "u2", [qubit]
-    )
-
-# Add some error to the CNOT gates between 0 and the other qubits; roughly 1e-2
-for qubit in range(1, num_qubits):
-    cnot_error = np.abs(rng.normal(1e-2, 5e-3))
-    noise_model.add_quantum_error(noise.depolarizing_error(cnot_error, 2), "cx", [0, qubit])
-
-# Finally, add a touch of measurement readout error; a couple percent for each
-for qubit in range(num_qubits):
-    meas_error_1if0 = np.abs(rng.normal(2.5e-2, 1e-2))
-    meas_error_0if1 = np.abs(rng.normal(2.5e-2, 1e-2))
-    readout_error = noise.ReadoutError(
-        [[1 - meas_error_1if0, meas_error_1if0], [meas_error_0if1, 1 - meas_error_0if1]]
-    )
-    noise_model.add_readout_error(readout_error, [qubit])
+dev_noisy = qml.device(
+    "qiskit.aer", wires=dev_ourense.num_wires, shots=1000, noise_model=noise_model
+)
 
 ##############################################################################
 #
-# Now it's time to create our device. Since this is just a toy model, we'll
-# specify 1000 shots. As a final point, since we are allowed to do as much
-# optimization as we like, we'll also put the transpiler to work. We'll specify
-# some high-quality qubit placement and routing techniques [#sabre]_ in order
-# to fit the circuits on the hardware graph in the best way possible.
+# As a final point, since we are allowed to do as much optimization as we like,
+# let's put the transpiler to work. The transpiler will perform a number of
+# optimizations on our circuit to simplify it. We'll also specify some
+# high-quality qubit placement and routing techniques [[#sabre]_] in order to
+# fit the circuits on the hardware graph in the best way possible.
 
-dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
+coupling_map = dev_ourense.backend.configuration().to_dict()["coupling_map"]
 
 dev_noisy.set_transpile_args(
     **{
@@ -499,7 +483,7 @@ dev_noisy.set_transpile_args(
 
 ##############################################################################
 #
-# It's time to run the protocol. We'll start with the smallest circuits on 2
+# Now, let's run the protocol. We'll start with the smallest circuits on 2
 # qubits, and make our way up to 5. At each :math:`m`, we'll look at 200 randomly
 # generated circuits.
 #
@@ -570,15 +554,15 @@ for idx, prob in enumerate(probs_mean_noisy):
 #
 # We see that the ideal probabilities are well over 2/3. In fact, we're quite
 # close to the expected value of :math:`(1 + \ln 2)/2 \approx 0.85`.  For the
-# device probabilities, however, we see that already by the 4-qubit case we're
-# below the threshold. This means that the highest volume this processor can
-# have is :math:`\log_2 V_Q = 3`. But isn't enough that just the mean of the
-# heavy output probabilities is greater than 2/3. Since we're dealing with
-# randomness, we also want to be confident that these results were not just a
-# fluke! To be confident, we also want to be above 2/3 within 2 standard
-# deviations of the mean. This is referred to as a 97.5% confidence interval
-# (since roughly 97.5% of a normal distribution sits within :math:`2\sigma` of
-# the mean.)
+# device probabilities, however, we see that while we're above the threshold up
+# to the 4-qubit case we're below the threshold for 5 qubits. This means that
+# the highest volume this processor can have is :math:`\log_2 V_Q = 4`. But
+# isn't enough that just the mean of the heavy output probabilities is greater
+# than 2/3. Since we're dealing with randomness, we also want to be confident
+# that these results were not just a fluke! To be confident, we also want to be
+# above 2/3 within 2 standard deviations of the mean. This is referred to as a
+# 97.5% confidence interval (since roughly 97.5% of a normal distribution sits
+# within :math:`2\sigma` of the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
 # assumptions about our distributions. Whether or not a circuit is successful is
@@ -644,8 +628,8 @@ for idx, prob in enumerate(two_sigma_below):
 ##############################################################################
 #
 # We see that this is true for for :math:`m=2`, and :math:`m=3`. Thus, we find
-# that the quantum volume of this processor is :math:`\log_2 V_Q = 3`.
-#
+# that the quantum volume of Ourense is :math:`\log_2 V_Q = 3`, or :math:`V_Q =
+# 8`, as expected.
 #
 # Try playing around with the code yourself: are there any parameters you can
 # change to improve the volume with this same noise model? What happens if we
