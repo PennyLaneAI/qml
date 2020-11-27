@@ -26,10 +26,10 @@ that no classical method could do in a reasonable amount of time.
 
 For the face-off, a pseudo-random quantum circuit was constructed by alternating
 single-qubit and two-qubit gates in a specific, semi-random pattern. This
-procedure gives a random unitary transformation which is 
+procedure gives a random unitary transformation which is
 compatible with the Sycamore hardware. The circuit output is
-measured many times, producing a set of sampled bitstrings. 
-The more qubits there are, and the deeper the circuit is, the more difficult 
+measured many times, producing a set of sampled bitstrings.
+The more qubits there are, and the deeper the circuit is, the more difficult
 it becomes to simulate and sample this
 bitstring distribution classically. By comparing run-times for the
 classical simulations and the Sycamore chip
@@ -41,10 +41,15 @@ quantum supremacy.
 In this demonstration, we will walk you through how their circuits and
 benchmarks were constructed and run, and provide an example of what their
 simulations looked like. We will be using PennyLane along with the
-aformentioned ``qsim`` simulator running via our `PennyLane-Cirq plugin
-<https://pennylane-cirq.readthedocs.io/en/latest/>`__. To use the
-``qsim`` device you also need to install ``qsimcirq``, which is the Python
-module interfacing the ``qsim`` simulator with Cirq.
+
+In this demonstration, we will walk you through how their random quantum
+circuits were constructed, how the performance was measured via
+cross-entropy benchmarks, and provide reusable examples of their classical
+simulations. We will be using PennyLane along with the aformentioned
+``qsim`` simulator running via our `PennyLane-Cirq plugin
+<https://pennylane-cirq.readthedocs.io/en/latest/>`__. To use the ``qsim``
+device you also need to install ``qsimcirq``, which is the Python module
+interfacing the ``qsim`` simulator with Cirq.
 """
 
 
@@ -67,7 +72,7 @@ import numpy as np
 ######################################################################
 # To start, we need to define the qubit grid that we will use for mimicking
 # Google's Sycamore chip, although we will only use 12 qubits instead of
-# the 54 that the actual chip has. This is so that you can run 
+# the 54 that the actual chip has. This is so that you can run
 # this demo without having access to a supercomputer!
 #
 # We define the 12 qubits in a rectangular grid, setting the coordinates for
@@ -118,14 +123,14 @@ dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
 
 ######################################################################
 # The next step would be to prepare the necessary gates. Some of these
-# gates are not natively supported in PennyLane, but are accessible 
+# gates are not natively supported in PennyLane, but are accessible
 # through the Cirq plugin. We can define the remaining gates by hand.
 #
-# For the single-qubit gates we need the :math:`\sqrt{X}` gate, which can
-# be written as :math:`RX(\pi/2)`, the :math:`\sqrt{Y}` gate which can be
-# written as :math:`RY(\pi/2)`, as well as the :math:`\sqrt{W}` gate, where
-# :math:`W = \frac{X + Y}{2}`, which is easiest to define by its unitary
-# matrix
+# For the single-qubit gates we need the :math:`\sqrt{X}` and
+# :math:`\sqrt{Y}` gates, which can be written as :math:`RX(\pi/2)` and
+# :math:`RY(\pi/2)` respectively, as well as the :math:`\sqrt{W}` gate,
+# where :math:`W = \frac{X + Y}{2}`. The latter is easiest defined by its
+# unitary matrix
 #
 # .. math::
 #
@@ -204,6 +209,14 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 # pairs and apply the two two-qubit gates that we just defined above. The
 # way we iterate through the dictionary will depend on a gate sequence
 # defined in the next section.
+
+# The logic below iterates through all connections and returns a
+# dictionary, ``gate_order``, where the keys are the connection labels
+# between different qubits and the values are lists of all neighbouring
+# qubit pairs. We will use this dictionary inside the circuit to iterate
+# through the different pairs and apply the two two-qubit gates that we
+# just defined above. The way we iterate through the dictionary will depend
+# on a gate sequence defined in the next section.
 #
 
 from itertools import combinations
@@ -248,9 +261,6 @@ gate_sequence = np.resize(["A", "B", "C", "D"], m)
 
 
 ######################################################################
-# Finally, we can define the circuit itself and create a QNode that we will
-# use for circuit evaluation with the ``qsim`` device.
-#
 # The single-qubit gates are randomly selected and applied to each qubit in
 # the circuit, while avoiding the same gate being applied to the same wire
 # twice in a row. We do this by creating a helper function that
@@ -283,12 +293,14 @@ def generate_single_qubit_gate_list():
 # C, or D as defined above. The circuit finally ends with a half-cycle,
 # consisting of only a layer of single-qubit gates.
 #
-# From the QNode, we need both the probabilities of the measurement results, as well raw samples. 
-# To facilitate this, we add a
-# keyword argument to our circuit allowing us to switch between the two
-# returns. We sample from the Pauli-Z observable on all wires, which will
-# give us the eigenvalues :math:`\pm 1` of the observable, corresponding to
-# the states :math:`\left|0\right>` and :math:`\left|1\right>`.
+# Finally, we can define the circuit itself and create a QNode that we will
+# use for circuit evaluation with the ``qsim`` device. From the QNode, we
+# need both the probabilities of the measurement results, as well raw
+# samples. To facilitate this, we add a keyword argument to our circuit
+# allowing us to switch between the two returns. We sample from the Pauli-Z
+# observable on all wires, which will give us the eigenvalues :math:`\pm 1`
+# of the observable, corresponding to the states :math:`\left|0\right>` and
+# :math:`\left|1\right>`.
 #
 
 @qml.qnode(dev)
@@ -333,8 +345,8 @@ def circuit(seed=42, return_probs=False):
 #
 # The idea behind using this fidelity is that it will be close to 1 for
 # samples obtained from random quantum circuits, such as the one we defined
-# above, and close to zero for a normal probability distribution, that can
-# be effectively sampled from classically. 
+# above, and close to zero for a uniform probability distribution, that can
+# be effectively sampled from classically.
 # Sampling a bitstring from a random quantum circuit would
 # follow the Porter-Thomas distribution [#Boixo2018]_, given by
 #
@@ -383,22 +395,21 @@ def fidelity_xeb(samples, probs):
 seed = np.random.randint(0, 42424242)
 probs = circuit(seed=seed, return_probs=True)
 
-samples = circuit(seed=seed).T
+# transpose the samples to get the shape `(shots, wires)`
+circuit_samples = circuit(seed=seed).T
 
-# take the eigenvalues and transform -1 to 1 and 1 to 0,
-# and then join each sample together to form a bitstring
-# (-(array([-1, 1] - 1) / 2 = array([1, 0])))
+# take the eigenvalues and transform -1 to 1 and 1 to 0
 bitstring_samples = []
-for sam in samples:
-    new_sam = -(sam - 1) // 2
-    bitstring_samples.append("".join(str(bs) for bs in new_sam))
+for sam in circuit_samples:
+    bitstring_sample = -(sam - 1) // 2
+    bitstring_samples.append("".join(str(bs) for bs in bitstring_sample))
 
 f_circuit = fidelity_xeb(bitstring_samples, probs)
 
 ######################################################################
-# Similarly, we can sample random bitstrings from a normal distribution by
-# generating all basis states, along with their corresponding bitstrings,
-# and sample directly from them using NumPy.
+# Similarly, we can sample random bitstrings from a uniform probability
+# distribution by generating all basis states, along with their
+# corresponding bitstrings, and sample directly from them using NumPy.
 #
 
 basis_states = dev.generate_basis_states(wires)
@@ -407,12 +418,12 @@ bitstring_samples = []
 for i in random_integers:
     bitstring_samples.append("".join(str(bs) for bs in basis_states[i]))
 
-f_normal = fidelity_xeb(bitstring_samples, probs)
+f_uniform = fidelity_xeb(bitstring_samples, probs)
 
 ######################################################################
 # Finally, let's compare the two different values. Sampling from the
 # circuit's probability distribution should give a fidelity close to 1,
-# while sampling from a normal distribution should give a fidelity
+# while sampling from a uniform distribution should give a fidelity
 # close to 0.
 #
 # .. note::
@@ -425,7 +436,7 @@ f_normal = fidelity_xeb(bitstring_samples, probs)
 #     lie in the 0-to-1 interval.
 #
 print("Circuit's distribution:", f"{f_circuit:.7f}".rjust(12))
-print("Normal distribution:", f"{f_normal:.7f}".rjust(15))
+print("Uniform distribution:", f"{f_uniform:.7f}".rjust(14))
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -435,37 +446,16 @@ print("Normal distribution:", f"{f_normal:.7f}".rjust(15))
 #  .. code-block:: none
 #
 #     Circuit's distribution:    1.0398803
-#     Normal distribution:       0.0013487
-#
-
-######################################################################
-# We can also calculate the theoretical result obtained from the equation
-# above and compare it to the value obtained from sampling from the
-# circuit. If we've done everything correctly, these two values should be
-# very close to each other.
-#
-
-N = 2 ** wires
-theoretical_value = 2 * N / (N + 1) - 1
-
-print("Theoretical:", f"{theoretical_value:.7f}\n".rjust(24))
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#     Theoretical:               0.9995118
+#     Uniform distribution:      0.0013487
 #
 
 ######################################################################
 # To show that the fidelity from the circuit sampling actually tends
-# towards the theoretical value we can run several different random
-# circuits, calculate their respective cross-entropy benchmark fidelities
-# and then calculate the mean fidelity of all the runs. The more
-# evaluations we do, the closer to the theoretical value we should get.
+# towards the theoretical value calculated above we can run several
+# different random circuits, calculate their respective cross-entropy
+# benchmark fidelities and then calculate the mean fidelity of all the
+# runs. The more evaluations we do, the closer to the theoretical value we
+# should get.
 #
 # In the supremacy experiment, they typically calculate each of their
 # presented fidelities over ten circuit instances, which only differ
@@ -483,12 +473,15 @@ print("Theoretical:", f"{theoretical_value:.7f}\n".rjust(24))
 #    value (which will be lower for fewer qubits).
 #
 
+N = 2 ** wires
+theoretical_value = 2 * N / (N + 1) - 1
+
 print("Theoretical:", f"{theoretical_value:.7f}".rjust(24))
 
 f_circuit = []
 num_of_evaluations = 100
 for i in range(num_of_evaluations):
-    seed=np.random.randint(0, 42424242)
+    seed = np.random.randint(0, 42424242)
 
     probs = circuit(seed=seed, return_probs=True)
     samples = circuit(seed=seed).T
