@@ -327,9 +327,9 @@ def circuit(seed=42, return_probs=False):
 # The cross-entropy benchmarking fidelity
 # ---------------------------------------
 #
-# The benchmark that is used in the paper, and the one that we will use in
-# this demo, is called the linear cross-entropy benchmarking fidelity.
-# It's defined as
+# The performance metric that is used in the paper, and the one that we
+# will use in this demo, is called the linear cross-entropy benchmarking
+# fidelity. It's defined as
 #
 # .. math::
 #
