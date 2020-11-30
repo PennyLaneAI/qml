@@ -14,6 +14,10 @@ Quantum supremacy using qsim
     tutorial_quantum_metrology Variationally optimizing measurement protocols
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
+.. figure:: ../demonstrations/qsim_supremacy/qc.png
+    :align: right
+    :height: 300pt
+
 In the paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__, the
 Google AI Quantum team and collaborators showed that the Sycamore quantum processor could
