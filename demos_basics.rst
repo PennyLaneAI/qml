@@ -53,12 +53,6 @@ photonic quantum computing.
     :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
     :tags: tensorflow autograd 
-
-.. customgalleryitem::
-   :tooltip: Learn how to compute the quantum volume of a quantum processor.
-   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
-   :description: :doc:`demos/tutorial_quantum_volume`
-   :tags: characterization qiskit
        
 :html:`</div></div><div style='clear:both'>`
 
@@ -156,6 +150,12 @@ hardware.
     :description: :doc:`demos/tutorial_qnn_module_torch`
     :tags: pytorch
 
+.. customgalleryitem::
+   :tooltip: Learn how to compute the quantum volume of a quantum processor.
+   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
+   :description: :doc:`demos/tutorial_quantum_volume`
+   :tags: characterization qiskit
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -167,7 +167,6 @@ hardware.
     demos/tutorial_gaussian_transformation
     demos/tutorial_plugins_hybrid
     demos/tutorial_backprop
-    demos/tutorial_quantum_volume
     demos/tutorial_quantum_chemistry
     demos/tutorial_vqe
     demos/tutorial_variational_classifier
@@ -181,3 +180,4 @@ hardware.
     demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
+    demos/tutorial_quantum_volume
