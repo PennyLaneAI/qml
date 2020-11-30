@@ -115,7 +115,7 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 # First, we need to define the number of 'shots' per circuit instance to
 # be used---where the number of shots simply corresponds to the number
 # of times that the circuit is sampled. This will also be needed later when
-# calculating the cross-entropy benchmark fidelity. The more shots, the
+# calculating the cross-entropy benchmarking fidelity. The more shots, the
 # more accurate the results will be. 500,000 shots will be used here---the same
 # number of samples used in the supremacy paper---but feel free to
 # change this (depending on your own computational restrictions).
@@ -365,7 +365,7 @@ def circuit(seed=42, return_probs=False):
 #    F_{XEB} = 2^{n}\left<P(x_i)\right> - 1 = \frac{2N}{N+1} - 1.
 #
 # We implement this fidelity as the function below, where ``samples`` is a
-# list sampled bitstrings, and ``probs`` is a list with corresponding
+# list of sampled bitstrings, and ``probs`` is a list with corresponding
 # sampling probabilities for the same noiseless circuit.
 #
 
@@ -383,16 +383,17 @@ def fidelity_xeb(samples, probs):
 
 ######################################################################
 # We set a random seed and use it to calculate the probability for all the
-# possible bitstrings. Using the same seed it is then possible to sample
-# from the same circuit. Before calculating the cross-entropy benchmarking
-# fidelity, the Pauli-Z samples need to be converted into their correponding
-# bitstrings, since we need computational basis samples.
+# possible bitstrings. It is then possible to sample from exactly the same
+# circuit by using the same seed. Before calculating the cross-entropy
+# benchmarking fidelity, the Pauli-Z samples need to be converted into
+# their correponding bitstrings, since we need the samples to be in the
+# computational basis.
 #
 
 seed = np.random.randint(0, 42424242)
 probs = circuit(seed=seed, return_probs=True)
 
-# transpose the samples to get the shape `(shots, wires)`
+# transpose the samples to get the shape (shots, wires)
 circuit_samples = circuit(seed=seed).T
 
 # take the eigenvalues and transform -1 to 1 and 1 to 0
@@ -450,7 +451,7 @@ print("Uniform distribution:", f"{f_uniform:.7f}".rjust(14))
 # To show that the fidelity from the circuit sampling actually tends
 # towards the theoretical value calculated above we can run several
 # different random circuits, calculate their respective cross-entropy
-# benchmark fidelities and then calculate the mean fidelity of all the
+# benchmarking fidelities and then calculate the mean fidelity of all the
 # runs. The more evaluations we do, the closer to the theoretical value we
 # should get.
 #
@@ -513,7 +514,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 # this experiment is used to demonstrate quantum supremacy.
 #
 # Much is due to the Porter-Thompson probability distribution that the
-# random quantum circuits follow, which are hard to simulate classically.
+# random quantum circuits follow, which is hard to simulate classically.
 # On the other hand, a quantum device, running a circuit as the one
 # constructed above, should be able to sample from such a distribution
 # without much overhead. Thus, by showing that a quantum device can produce
@@ -523,7 +524,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 # There's still one issue that hasn't been touched on yet: the addition of
 # noise in quantum hardware. Simply put, this noise will lower the
-# cross-entropy benchmark fidelity---the larger the
+# cross-entropy benchmarking fidelity---the larger the
 # circuit, the more noise there will be, and thus the lower the fidelity, with the
 # fidelity approaching 0 as the noise increases.
 # By calculating the specific single-qubit, two-qubit, and readout errors
@@ -539,7 +540,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #     recommended (along with the suplementary information [#Arute2019sup]_ if you want
 #     to dive deeper into the math and physics of the experiment). The blog
 #     post in [#Sohaib2019]_, along with the accompanying GitHub repo, also provides
-#     a nice introduction to the cross-entropy benchmark fidelity, and
+#     a nice introduction to the cross-entropy benchmarking fidelity, and
 #     includes calculations highlighting the effects of added noise models.
 #
 
