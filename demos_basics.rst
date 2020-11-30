@@ -58,7 +58,7 @@ photonic quantum computing.
    :tooltip: Learn how to compute the quantum volume of a quantum processor.
    :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
    :description: :doc:`demos/tutorial_quantum_volume`
-   :tags: autograd
+   :tags: characterization qiskit
        
 :html:`</div></div><div style='clear:both'>`
 
