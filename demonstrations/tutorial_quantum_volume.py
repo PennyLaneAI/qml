@@ -144,18 +144,26 @@ explain the problem on which it's based, and run the protocol to compute it!
 # we run a two-qubit circuit, and find that the measurement probabilities for
 # the output states are as follows:
 
-import numpy as np
 measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
-prob_array = np.fromiter(measurement_probs.values(), dtype=np.float)
-np.median(prob_array)
 
 ##############################################################################
 #
-# The median of this probability distribution is 0.208. The heavy bit
-# strings are '00' and '10', because these are the two probabilities above the
-# median. If we were to run this circuit, the probability of obtaining one of
-# the heavy outputs is 0.792, and so we expect that we will see one of these two
-# most of the time.
+# The median of this probability distribution is:
+
+import numpy as np
+prob_array = np.fromiter(measurement_probs.values(), dtype=np.float)
+print(f"Median = {np.median(prob_array):.3f}")
+
+##############################################################################
+#
+# This means that tnhe heavy bit strings are '00' and '10', because these are
+# the two probabilities above the median. If we were to run this circuit, the
+# probability of obtaining one of the heavy outputs is:
+
+heavy_output_prob = np.sum(prob_array[prob_array > np.median(prob_array)])
+print(f"Heavy output probability = {heavy_output_prob}")
+
+##############################################################################
 #
 # Each circuit in a circuit family has its own heavy output probability. If our
 # quantum computer is of high quality, then we should expect to see heavy
@@ -396,19 +404,22 @@ print(tape.draw())
 #
 
 def heavy_output_set(m, probs):
-    # Sort the probabilities
+    # Compute heavy outputs of an m-qubit circuit with measurement outcome
+    # probabilities given by probs. probs is an array with the probabilities
+    # ordered as '000', '001', ... '111'.
+
+    # Sort the probabilities so that those above the median are in the second half
     probs_ascending_order = np.argsort(probs)
     sorted_probs = probs[probs_ascending_order]
 
-    median_prob = np.median(sorted_probs)
-
     # Heavy outputs are the bit strings above the median
     heavy_outputs = [
+        # Convert integer indices to m-bit binary strings
         format(x, f"#0{m+2}b")[2:] for x in list(probs_ascending_order[2 ** (m - 1) :])
     ]
 
     # Probability of a heavy output
-    prob_heavy_output = np.sum(sorted_probs[np.where(sorted_probs > median_prob)])
+    prob_heavy_output = np.sum(sorted_probs[2 ** (m - 1) :])
 
     return heavy_outputs, prob_heavy_output
 
@@ -423,10 +434,17 @@ def heavy_output_set(m, probs):
 with tape:
     qml.probs(wires=range(m))
 
+# Run the circuit, compute heavy outputs, and print results
 output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
-print(f"Probability of a heavy output is {prob_heavy_output:.6f}")
+print("State\tProbability")
+for idx, prob in enumerate(output_probs):
+    bit_string = format(idx, f"#05b")[2:]
+    print(f"{bit_string}\t{prob:.4f}")
+
+print(f"\nMedian is {np.median(output_probs):.4f}")
+print(f"Probability of a heavy output is {prob_heavy_output:.4f}")
 print(f"Heavy outputs are {heavy_outputs}")
 
 
@@ -442,15 +460,15 @@ print(f"Heavy outputs are {heavy_outputs}")
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
 
-import networkx as nx
-from qiskit.providers.aer import noise
-
 dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense");
 
 ##############################################################################
 #
 # First, we can take a look at the arrangement of the qubits on the processor
 # by plotting its hardware graph.
+
+import matplotlib.pyplot as plt
+import networkx as nx
 
 ourense_hardware_graph = nx.Graph(dev_ourense.backend.configuration().coupling_map)
 
@@ -469,6 +487,8 @@ nx.draw_networkx(
 # Ourense noise model. Again, we won't be running on Ourense directly - rather
 # we'll set up a local device to simulate its behaviour.
 #
+
+from qiskit.providers.aer import noise
 
 noise_model = noise.NoiseModel.from_backend(dev_ourense.backend.properties())
 
@@ -603,9 +623,6 @@ stds_noisy = np.sqrt(probs_mean_noisy * (1 - probs_mean_noisy) / num_trials)
 # Now that we have our standard deviations, let's see if our means are at least
 # :math:`2\sigma` away from the threshold!
 #
-
-import matplotlib.pyplot as plt
-
 
 fig, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(9, 6))
 ax = ax.ravel()
