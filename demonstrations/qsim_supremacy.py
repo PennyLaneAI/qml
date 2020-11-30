@@ -41,11 +41,15 @@ quantum supremacy.
 In this demonstration, we will walk you through how their random quantum
 circuits were constructed, how the performance was measured via
 cross-entropy benchmarks, and provide reusable examples of their classical
-simulations. We will be using PennyLane along with the aformentioned
-``qsim`` simulator running via our `PennyLane-Cirq plugin
-<https://pennylane-cirq.readthedocs.io/en/latest/>`__. To use the ``qsim``
-device you also need to install ``qsimcirq``, which is the Python module
-interfacing the ``qsim`` simulator with Cirq.
+simulations.
+
+.. note::
+
+    We will be using PennyLane along with the aformentioned
+    ``qsim`` simulator running via our `PennyLane-Cirq plugin
+    <https://pennylane-cirq.readthedocs.io/en/latest/>`__. To use the ``qsim``
+    device you also need to install ``qsimcirq``, which is the Python module
+    interfacing the ``qsim`` simulator with Cirq.
 """
 
 
@@ -244,14 +248,14 @@ for i, j in combinations(qubits, 2):
 
 m = 14  # number of cycles
 
-# gate_sequence = np.resize(["A", "B", "C", "D", "C", "D", "A", "B"], m)
+gate_sequence_longer = np.resize(["A", "B", "C", "D", "C", "D", "A", "B"], m)
 gate_sequence = np.resize(["A", "B", "C", "D"], m)
 
 
 ######################################################################
 # The single-qubit gates are randomly selected and applied to each qubit in
 # the circuit, while avoiding the same gate being applied to the same wire
-# twice in a row. We do this by creating a helper function that
+# twice in a row. We do this by creating a helper function ``generate_single_qubit_gate_list()`` that
 # specifies the order in which the single-qubit
 # gates should be applied. We can use this list within the
 # circuit to know which gate to apply when.
@@ -259,7 +263,7 @@ gate_sequence = np.resize(["A", "B", "C", "D"], m)
 
 def generate_single_qubit_gate_list():
     # create the first list by randomly selecting indices
-    # from `single_qubit_gates`
+    # from single_qubit_gates
     g = [list(np.random.choice(range(len(single_qubit_gates)), size=wires))]
 
     for cycle in range(len(gate_sequence)):
@@ -283,8 +287,8 @@ def generate_single_qubit_gate_list():
 # The circuit ends with a half-cycle, consisting of only a layer of
 # single-qubit gates.
 #
-# From the QNode, we also need both the probabilities of the measurement
-# results, as well raw samples. To facilitate this, we add a keyword
+# From the QNode, we need both the probabilities of the measurement
+# results, as well as raw samples. To facilitate this, we add a keyword
 # argument to our circuit allowing us to switch between the two returns. We
 # sample from the Pauli-Z observable on all wires, which will give us the
 # eigenvalues :math:`\pm 1` of the observable, corresponding to the states
@@ -333,7 +337,7 @@ def circuit(seed=42, return_probs=False):
 #
 # The idea behind using this fidelity is that it will be close to 1 for
 # samples obtained from random quantum circuits, such as the one we defined
-# above, and close to zero for a uniform probability distribution, that can
+# above, and close to zero for a uniform probability distribution, which can
 # be effectively sampled from classically.
 # Sampling a bitstring from a random quantum circuit would
 # follow the Porter-Thomas distribution [#Boixo2018]_, given by
@@ -514,8 +518,9 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 # There's still one issue that hasn't been touched on yet: the addition of
 # noise in quantum hardware. Simply put, this noise will lower the
-# cross-entropy benchmark fidelity, getting it closer to 0. The larger the
-# circuit, the more noise there will be, and thus the lower the fidelity.
+# cross-entropy benchmark fidelity---the larger the
+# circuit, the more noise there will be, and thus the lower the fidelity, with the
+# fidelity approaching 0 as the noise increases.
 # By calculating the specific single-qubit, two-qubit, and readout errors
 # of the Sycamore chip, and using them to simulate a noisy circuit, the Google
 # AI quantum team was able to compare the run-times with the output from
