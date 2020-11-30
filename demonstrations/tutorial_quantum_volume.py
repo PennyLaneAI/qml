@@ -156,7 +156,7 @@ print(f"Median = {np.median(prob_array):.3f}")
 
 ##############################################################################
 #
-# This means that tnhe heavy bit strings are '00' and '10', because these are
+# This means that the heavy bit strings are '00' and '10', because these are
 # the two probabilities above the median. If we were to run this circuit, the
 # probability of obtaining one of the heavy outputs is:
 
@@ -254,7 +254,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #
 #    In many sources, the quantum volume of processors is reported as
 #    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as is the
-#    convention in this demo. As such, IonQs processor has the potential for a
+#    convention in this demo. As such, IonQ's processor has the potential for a
 #    quantum volume of :math:`2^{32} > 4000000`. Here we use the :math:`\log`
 #    because it is more straightforward to understand that they have 32
 #    high-quality, well-connected qubits than to extract this at first glance from the
@@ -460,7 +460,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
 
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense");
+dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense")
 
 ##############################################################################
 #
