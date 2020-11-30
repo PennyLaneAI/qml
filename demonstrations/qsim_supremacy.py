@@ -18,8 +18,8 @@ In the paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__, the
 Google AI Quantum team and collaborators showed that the Sycamore quantum processor could
 complete a task that would take a classical computer potentially thousands
-of years. They faced their quantum chip off against JEWEL—one of the
-world's most powerful supercomputers—using a classical statevector simulator called
+of years. They faced their quantum chip off against JEWEL---one of the
+world's most powerful supercomputers---using a classical statevector simulator called
 `qsim <https://github.com/quantumlib/qsim>`__. The main idea behind this
 showdown was to prove that a quantum device could solve a specific task
 that no classical method could do in a reasonable amount of time.
@@ -35,7 +35,7 @@ bitstring distribution classically. By comparing run-times for the
 classical simulations and the Sycamore chip
 on smaller circuits, and then extrapolating classical run-times for larger
 circuits, the team concluded that simulating larger circuits on Sycamore
-was intractable classically—i.e., the Sycamore chips had demonstrated
+was intractable classically---i.e., the Sycamore chips had demonstrated
 quantum supremacy.
 
 In this demonstration, we will walk you through how their random quantum
@@ -109,11 +109,11 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 # Now let's create the ``qsim`` device, available via the Cirq plugin, making
 # use of the ``wires`` and ``qubits`` keywords that we defined above.
 # First, we need to define the number of 'shots' per circuit instance to
-# be used—where the number of shots simply corresponds to the number
+# be used---where the number of shots simply corresponds to the number
 # of times that the circuit is sampled. This will also be needed later when
 # calculating the cross-entropy benchmark fidelity. The more shots, the
-# more accurate the results will be. 500,000 shots will be used here—the same
-# number of samples used in the supremacy paper—but feel free to
+# more accurate the results will be. 500,000 shots will be used here---the same
+# number of samples used in the supremacy paper---but feel free to
 # change this (depending on your own computational restrictions).
 #
 
