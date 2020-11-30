@@ -635,7 +635,7 @@ for m in range(min_m - 2, max_m + 1 - 2):
     ax[m].hist(probs_noisy[m, :])
     ax[m].set_title(f"m = {m + min_m}", fontsize=16)
     ax[m].set_xlabel("Heavy output probability", fontsize=14)
-    ax[m].set_ylabel("Occurences", fontsize=14)
+    ax[m].set_ylabel("Occurrences", fontsize=14)
     ax[m].axvline(x=2.0 / 3, color="black", label="2/3")
     ax[m].axvline(x=probs_mean_noisy[m], color="red", label="Mean")
     ax[m].axvline(
