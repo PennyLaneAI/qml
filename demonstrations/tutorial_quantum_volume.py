@@ -454,7 +454,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now it's time to run the protocol. First, let's set up our hardware
-# device. We'll use a simulated version of the 5-qubit IBM Ourense as a example
+# device. We'll use a simulated version of the 5-qubit IBM Ourense as an example
 # - the reported quantum volume according to IBM is :math:`V_Q=8`, so we
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
@@ -484,7 +484,7 @@ nx.draw_networkx(
 # to make some adjustments when non-connected qubits need to interact.
 #
 # To actually perform the simulations, we'll need to access a copy of the
-# Ourense noise model. Again, we won't be running on Ourense directly - rather
+# Ourense noise model. Again, we won't be running on Ourense directly ---
 # we'll set up a local device to simulate its behaviour.
 #
 
@@ -500,9 +500,9 @@ dev_noisy = qml.device(
 #
 # As a final point, since we are allowed to do as much optimization as we like,
 # let's put the compiler to work. The compiler will perform a number of
-# optimizations on our circuit to simplify it. We'll also specify some
-# high-quality qubit placement and routing techniques [#sabre]_ in order to
-# fit the circuits on the hardware graph in the best way possible.
+# optimizations to simplify our circuit. We'll also specify some high-quality
+# qubit placement and routing techniques [#sabre]_ in order to fit the circuits
+# on the hardware graph in the best way possible.
 
 coupling_map = dev_ourense.backend.configuration().to_dict()["coupling_map"]
 
@@ -518,7 +518,7 @@ dev_noisy.set_transpile_args(
 
 ##############################################################################
 #
-# Now, let's run the protocol. We'll start with the smallest circuits on 2
+# Let's run the protocol. We'll start with the smallest circuits on 2
 # qubits, and make our way up to 5. At each :math:`m`, we'll look at 200 randomly
 # generated circuits.
 #
@@ -569,7 +569,7 @@ for m in range(min_m, max_m + 1):
 #
 # Having run our experiments, we can now get to the heart of the quantum volume
 # protocol: what *is* the largest square circuit that our processor can run?
-# Let's first check out the means, and see how much higher they are than 2/3.
+# Let's first check out the means and see how much higher they are than 2/3.
 #
 
 probs_mean_ideal = np.mean(probs_ideal, axis=1)
@@ -585,10 +585,10 @@ for idx, prob in enumerate(probs_mean_noisy):
 
 ##############################################################################
 #
-# We see that the ideal probabilities are well over 2/3. In fact, we're quite
+# We see that the ideal probabilities are well over 2/3. In fact, they're quite
 # close to the expected value of :math:`(1 + \ln 2)/2 \approx 0.85`.  For the
-# device probabilities, however, we see that while we're above the threshold up
-# to the 3-qubit case, we're below the threshold for 4 and 5 qubits. This means
+# device probabilities, however, we see that while they're above the threshold up
+# to the 3-qubit case, they're below the threshold for 4 and 5 qubits. This means
 # that the highest volume this processor can have is :math:`\log_2 V_Q = 3`. But
 # it isn't enough that just the mean of the heavy output probabilities is
 # greater than 2/3. Since we're dealing with randomness, we also want to be
@@ -598,21 +598,22 @@ for idx, prob in enumerate(probs_mean_noisy):
 # distribution sits within :math:`2\sigma` of the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
-# assumptions about our distributions. Whether or not a circuit is successful is
-# a binary outcome. When we sample many circuits, it is almost like we are
-# sampling from a *binomial distribution*, where the outcome probability is
+# assumptions about our distributions. Whether or not a circuit is successful
+# (in the sense that it produces heavy outputs more the 2/3 of the time) is a
+# binary outcome. When we sample many circuits, it is almost like we are
+# sampling from a *binomial distribution* where the outcome probability is
 # equivalent to the heavy output probability. In the limit of a large number of
-# samples (in this case 200 circuits), a binomial distribution starts to look pretty
-# normal. If we make this approximation, we can compute the standard deviation
-# and use it to make our confidence interval. With the normal approximation,
-# the standard deviation can be computed as
+# samples (in this case 200 circuits), a binomial distribution starts to look
+# pretty normal. If we make this approximation, we can compute the standard
+# deviation and use it to make our confidence interval. With the normal
+# approximation, the standard deviation is
 #
 # .. math::
 #
-#    \sigma = \sqrt{\frac{p_h(1 - p_h)}{N}}
+#    \sigma = \sqrt{\frac{p_h(1 - p_h)}{N}},
 #
-# where :math:`p_h` is the heavy output probability, and :math:`N` is the number
-# of circuits.
+# where :math:`p_h` is the average heavy output probability, and :math:`N` is
+# the number of circuits.
 #
 
 stds_ideal = np.sqrt(probs_mean_ideal * (1 - probs_mean_ideal) / num_trials)
@@ -661,7 +662,7 @@ for idx, prob in enumerate(two_sigma_below):
 # that the quantum volume of Ourense is :math:`\log_2 V_Q = 3`, or :math:`V_Q =
 # 8`, as expected.
 #
-# This framework and code will allow you to calculate the quantum of many
+# This framework and code will allow you to calculate the quantum volume of many
 # different processors. Try it yourself! What happens if we don't specify a
 # large amount of compiler optimization? How does the volume compare across
 # different hardware devices? You can even build your own device configurations
@@ -678,7 +679,7 @@ for idx, prob in enumerate(two_sigma_below):
 # qubits --- it incorporates many different aspects of a device such as its
 # compiler, qubit connectivity, and gate error rates.
 #
-# However, as with any benchmark, it is not without limitations. A key one we
+# However, as with any benchmark, it is not without limitations. A key one
 # already discussed is that the heavy output generation problem requires us to
 # simulate circuits classically in addition to running them on a device. While
 # this is perhaps not an issue now, it will surely become one in the future. The
