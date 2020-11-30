@@ -23,7 +23,7 @@ a holistic view of their performance. To that end, the TOP500 rankings are based
 on something called the LINPACK benchmark [#linpack]_. The task of the
 supercomputers is to solve a dense system of linear equations, and the metric of
 interest is the rate at which they the metric of interest is the rate at which
-they `perform floating-point operations (FLOPS)
+they perform `floating-point operations (FLOPS)
 <https://en.wikipedia.org/wiki/FLOPS>`__. Today's top machines reach speeds well
 into the regime of hundreds of peta FLOPs! While a single number certainly
 cannot tell the whole story, it still gives us insight into the quality of the
@@ -588,14 +588,14 @@ for idx, prob in enumerate(probs_mean_noisy):
 # We see that the ideal probabilities are well over 2/3. In fact, we're quite
 # close to the expected value of :math:`(1 + \ln 2)/2 \approx 0.85`.  For the
 # device probabilities, however, we see that while we're above the threshold up
-# to the 4-qubit case, we're below the threshold for 5 qubits. This means that
-# the highest volume this processor can have is :math:`\log_2 V_Q = 4`. But it
-# isn't enough that just the mean of the heavy output probabilities is greater
-# than 2/3. Since we're dealing with randomness, we also want to be confident
-# that these results were not just a fluke! To be confident, we also want to be
-# above 2/3 within 2 standard deviations of the mean. This is referred to as a
-# 97.5% confidence interval (since roughly 97.5% of a normal distribution sits
-# within :math:`2\sigma` of the mean.)
+# to the 3-qubit case, we're below the threshold for 4 and 5 qubits. This means
+# that the highest volume this processor can have is :math:`\log_2 V_Q = 3`. But
+# it isn't enough that just the mean of the heavy output probabilities is
+# greater than 2/3. Since we're dealing with randomness, we also want to be
+# confident that these results were not just a fluke! To be confident, we also
+# want to be above 2/3 within 2 standard deviations of the mean. This is
+# referred to as a 97.5% confidence interval (since roughly 97.5% of a normal
+# distribution sits within :math:`2\sigma` of the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
 # assumptions about our distributions. Whether or not a circuit is successful is
