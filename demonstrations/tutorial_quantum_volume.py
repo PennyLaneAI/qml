@@ -192,16 +192,19 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # Now if :math:`U` is Haar-random, we can say something about the form of these
 # entries. In particular, they are complex numbers for which both the real and
 # imaginary parts are normally distributed with mean 0 and variance
-# :math:`1/2^m`, where :math:`m` is the number of qubits. When we take the mod
-# square of such numbers, we obtain an *exponential* distribution, such that the
-# measurement outcome probabilities are distributed like :math:`\hbox{Pr}(p)
-# \sim 2^m e^{-2^m p}.` (This is also known as the *Porter-Thomas
-# distribution*.) We can integrate this distribution to find that the median
-# sits at :math:`\ln 2`.  We can further compute the expectation value of
-# obtaining something greater than the median by integrating the distribution
-# from :math:`\ln 2` to infinity, to obtain :math:`(1 + \ln 2)/2`. This is the
-# expected heavy output probability! Numerically it is around 0.85, and in fact
-# we will observe this later on.
+# :math:`1/2^m`, where :math:`m` is the number of qubits. Taking the modulus
+# squared of such numbers and making a histogram of them yields a distribution
+# of probabilities with the form :math:`\hbox{Pr}(p) \sim 2^m e^{-2^m p}.` This
+# is also known as the *Porter-Thomas distribution*.
+#
+# By looking at the form of the underlying probability distribution, the
+# exponential distribution :math:`\hbox{Pr}(x) = e^{-x}`, we can calculate some
+# properties of the heavy output probabilities. First, we can integrate the exponential
+# distribution to find that the median sits at :math:`\ln 2`.  We can further
+# compute the expectation value of obtaining something greater than the median
+# by integrating :math:`x e^{-x}` from :math:`\ln 2` to :math:`\infty` to obtain
+# :math:`(1 + \ln 2)/2`. This is the expected heavy output probability!
+# Numerically it is around 0.85, and in fact we will observe this later on in our results.
 #
 #
 # The benchmark
