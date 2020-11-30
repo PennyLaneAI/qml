@@ -379,9 +379,10 @@ def fidelity_xeb(samples, probs):
 
 ######################################################################
 # We set a random seed and use it to calculate the probability for all the
-# possible bitstrings. We can then sample from the same circuit, transform
-# the Pauli-Z eigenvalue samples into their correponding bitstrings, and
-# use them to calulate the cross-entropy benchmarking fidelity.
+# possible bitstrings. Using the same seed it is then possible to sample
+# from the same circuit. Before calculating the cross-entropy benchmarking
+# fidelity, the Pauli-Z samples need to be converted into their correponding
+# bitstrings, since we need computational basis samples.
 #
 
 seed = np.random.randint(0, 42424242)
