@@ -90,6 +90,9 @@ warnings.filterwarnings(
     "ignore", category=UserWarning, message=r"Matplotlib is currently using agg"
 )
 warnings.filterwarnings(
+    "ignore", category=UserWarning, message=r"Timestamps in IBMQ backend"
+)
+warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
     message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+",
