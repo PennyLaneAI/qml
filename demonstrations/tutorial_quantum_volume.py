@@ -10,27 +10,31 @@ Quantum volume
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
-amount of variation in how supercomputers are built. `Some
+amount of variation in how supercomputers are built. They may run different
+operating systems and have varying amounts of memory. `Some
 <https://en.wikipedia.org/wiki/Fugaku_(supercomputer)>`_ use 48-core processors,
 while `others <https://en.wikipedia.org/wiki/Sunway_TaihuLight>`_ use processors
 with up to 260 cores. The speed of processors will differ, and they may be
 connected in different ways. We can't rank them by simply counting the number of
-processors. In order to make a fair comparison, we need benchmarking standards
-that give us a holistic view of their performance. To that end, the TOP500
-rankings are based on something called the LINPACK benchmark [#linpack]_. The
-task of the supercomputers is to solve a dense system of linear equations, and
-the metric of interest is the rate at which they perform floating-point
-operations (FLOPS). Today's top machines reach speeds well into the regime of
-hundreds of peta FLOPs! While a single number certainly cannot tell the whole
-story, it still gives us insight into the quality of the machines, and provides
-a standard so we can compare them.
+processors!
 
-A similar problem is emerging with quantum computers: we
-can't judge quantum computers on the number of qubits alone. Present-day devices
-have a number of limitations, an important one being the fairly high gate error
-rates. Typically the qubits on a chip are not all connected to each other, so it
-may not be possible to perform operations on arbitrary pairs of
-them. Considering this, can we tell if a machine with 20 noisy qubits is better
+In order to make a fair comparison, we need benchmarking standards that give us
+a holistic view of their performance. To that end, the TOP500 rankings are based
+on something called the LINPACK benchmark [#linpack]_. The task of the
+supercomputers is to solve a dense system of linear equations, and the metric of
+interest is the rate at which they perform floating-point operations
+(FLOPS). Today's top machines reach speeds well into the regime of hundreds of
+peta FLOPs! While a single number certainly cannot tell the whole story, it
+still gives us insight into the quality of the machines, and provides a standard
+so we can compare them.
+
+A similar problem is emerging with quantum computers: we can't judge quantum
+computers on the number of qubits alone. Present-day devices have a number of
+limitations, an important one being the fairly high gate error rates. Typically
+the qubits on a chip are not all connected to each other, so it may not be
+possible to perform operations on arbitrary pairs of them.
+
+Considering this, can we tell if a machine with 20 noisy qubits is better
 than one with 5 very high-quality qubits? Or if a machine with 8 fully-connected
 qubits is better than one with 16 qubits of comparable error rate, but arranged in
 a square lattice?  Furthermore, how can we make comparisons between different
