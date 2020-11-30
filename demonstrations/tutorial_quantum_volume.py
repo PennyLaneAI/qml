@@ -76,11 +76,11 @@ explain the problem on which it's based, and run the protocol to compute it!
 # measure of success. In general, to set up a benchmark for a quantum computer
 # we need to decide on a number of things [#robin]_:
 #
-#  1. A family of circuits with a well-defined structure and variable size
-#  2. A set of rules detailing how the circuits can be compiled
-#  3. A measure of success for individual circuits
-#  4. A measure of success for the family of circuits
-#  5. (Optional) An experimental design specifying how the circuits are to be run
+# 1. A family of circuits with a well-defined structure and variable size
+# 2. A set of rules detailing how the circuits can be compiled
+# 3. A measure of success for individual circuits
+# 4. A measure of success for the family of circuits
+# 5. (Optional) An experimental design specifying how the circuits are to be run
 #
 # We'll work through this list in order to see how the protocol for computing
 # quantum volume fits within this framework.
@@ -143,7 +143,10 @@ explain the problem on which it's based, and run the protocol to compute it!
 # we run a two-qubit circuit, and find that the measurement probabilities for
 # the output states are as follows:
 
+import numpy as np
 measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
+prob_array = np.fromiter(measurement_probs.values(), dtype=np.float)
+np.median(prob_array)
 
 ##############################################################################
 #
@@ -259,7 +262,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # ourselves!. We'll use the `PennyLane-Qiskit
 # <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to compute the
 # volume of one of the IBM processors, since their properties are easily
-# accessible through this interface.
+# accessible through this plugin.
 #
 #
 # Loosely, the protocol for quantum volume consists of three steps:
@@ -305,6 +308,7 @@ def permute_qubits(num_qubits):
         if working_order[idx_here] != perm_order[idx_here]:
             # Where do we need to send the qubit at this location?
             idx_there = working_order.index(perm_order[idx_here])
+
             qml.SWAP(wires=[idx_here, idx_there])
 
             # Update the working order to account for the SWAP
@@ -318,7 +322,7 @@ def permute_qubits(num_qubits):
 #
 # Next, we need to apply SU(4) gates to pairs of qubits. PennyLane doesn't have
 # built-in functionality to generate these random matrices, however its cousin
-# `StrawberryFields <https://strawberryfields.ai/>`_ does! We will use the
+# `Strawberry Fields <https://strawberryfields.ai/>`_ does! We will use the
 # ``random_interferometer`` method, which can generate unitary matrices uniformly
 # at random. (This function actually generates elements of U(4), but they are
 # essentially equivalent up to a global phase).
@@ -377,7 +381,9 @@ print(tape.draw())
 # protocol --- we're required to compute the heavy outputs classically in order
 # to get the results! As a consequence, it will only be possible to calculate
 # quantum volume for processors up to a certain point before they become too
-# large. That said, classical simulators are always improving, and can simulate
+# large.
+#
+# That said, classical simulators are always improving, and can simulate
 # circuits with numbers of qubits well into the double digits (though they may
 # need a supercomputer to do so). Furthermore, the designers of the proposal
 # don't expect this to be an issue until gate error rates decrease below
