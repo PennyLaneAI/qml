@@ -363,10 +363,19 @@ def qv_circuit_layer(num_qubits):
 
 ##############################################################################
 #
-# Let's take a look! We'll set up an ideal device with 5 qubits, and
-# generate a circuit with 3 qubits. To help with the visualization, we'll also apply
-# an RZ gate to each qubit at the beginning to make sure all 5 qubits are there, and
-# in order.
+# Let's take a look! We'll set up an ideal device with 5 qubits, and generate a
+# circuit with 3 qubits. In this demo, we'll use the shiny new `QuantumTape
+# <https://pennylane.readthedocs.io/en/latest/code/qml_tape.html>`__ functionality
+# of PennyLane.
+#
+# Tape mode is very versatile --- a quantum tape is not immediately tied to a
+# device, which will be convenient later when we need to run the same random
+# circuit on two devices independently. Wires in a tape can also be labeled by
+# characters or strings. A side effect of these features is that the number of
+# wires and their ordering is not implicit as it would be with a QNode. For the
+# purpose of printing an example circuit, we'll first apply an RZ gate with an
+# angle of 0 to each qubit one at a time. This is to ensure that in the
+# visualization all 5 qubits are present and in numerical order.
 
 num_qubits = 5
 dev_ideal = qml.device("default.qubit", analytic=True, wires=num_qubits)
