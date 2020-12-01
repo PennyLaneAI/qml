@@ -467,7 +467,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 # Now it's time to run the protocol. First, let's set up our hardware
 # device. We'll use a simulated version of the 5-qubit IBM Ourense as an example
-# - the reported quantum volume according to IBM is :math:`V_Q=8`, so we
+# --- the reported quantum volume according to IBM is :math:`V_Q=8`, so we
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
