@@ -124,7 +124,7 @@ plateaus in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Quantum supremacy with qsim.
+    :tooltip: Beyond classical computing with qsim.
     :figure: demonstrations/qsim_supremacy/sycamore.png
     :description: :doc:`demos/qsim_supremacy`
     :tags: cirq qsim

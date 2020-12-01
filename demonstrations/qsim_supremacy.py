@@ -2,11 +2,11 @@
 
 .. _quantum_neural_net:
 
-Quantum supremacy using qsim
-============================
+Beyond classical computing with qsim
+====================================
 
 .. meta::
-    :property="og:description": Discover quantum supremacy using Google's qsim simulator, and recreate their benchmarks and circuits.
+    :property="og:description": Use Google's qsim simulator to go beyond classical computing, and recreate their benchmarks and circuits.
     :property="og:image": https://pennylane.ai/qml/_images/sycamore.png
 
 .. related::
