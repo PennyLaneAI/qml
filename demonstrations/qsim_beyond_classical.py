@@ -14,7 +14,7 @@ Beyond classical computing with qsim
     tutorial_quantum_metrology Variationally optimizing measurement protocols
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-.. figure:: ../demonstrations/qsim_supremacy/qc.png
+.. figure:: ../demonstrations/qsim_beyond_classical/qc.png
     :align: right
     :height: 300pt
 
@@ -200,7 +200,7 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 # two-qubit gate represented in the image is implemented as the two
 # consecutive gates iSWAP and CPhase in this demo.
 #
-# .. figure:: ../demonstrations/qsim_supremacy/supremacy_circuit.png
+# .. figure:: ../demonstrations/qsim_beyond_classical/supremacy_circuit.png
 #     :align: center
 #     :width: 90%
 #
