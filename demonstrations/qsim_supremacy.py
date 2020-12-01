@@ -6,7 +6,7 @@ Beyond classical computing with qsim
 ====================================
 
 .. meta::
-    :property="og:description": Use Google's qsim simulator to go beyond classical computing, and recreate their benchmarks and circuits.
+    :property="og:description": Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.
     :property="og:image": https://pennylane.ai/qml/_images/sycamore.png
 
 .. related::
@@ -351,7 +351,7 @@ def circuit(seed=42, return_probs=False):
 #
 # where :math:`N = 2^n` is the number of possible bitstrings [#Boixo2018]_.
 # This distribution is approximated well by the Porter-Thomas distribution,
-# given by :math:`Pr(p) = Ne^{-Np}`; a characteristic of chaotic quantum
+# given by :math:`Pr(p) = Ne^{-Np}`, a characteristic property of chaotic quantum
 # systems. From this we can then calculate the expectation value
 # :math:`\left<P(x_i)\right>` as follows:
 #
