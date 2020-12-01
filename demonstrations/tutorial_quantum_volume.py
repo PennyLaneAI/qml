@@ -22,10 +22,9 @@ In order to make a fair comparison, we need benchmarking standards that give us
 a holistic view of their performance. To that end, the TOP500 rankings are based
 on something called the LINPACK benchmark [#linpack]_. The task of the
 supercomputers is to solve a dense system of linear equations, and the metric of
-interest is the rate at which they the metric of interest is the rate at which
-they perform `floating-point operations (FLOPS)
+interest is the rate at which they perform `floating-point operations (FLOPS)
 <https://en.wikipedia.org/wiki/FLOPS>`__. Today's top machines reach speeds well
-into the regime of hundreds of peta FLOPs! While a single number certainly
+into the regime of hundreds of petaFLOPS! While a single number certainly
 cannot tell the whole story, it still gives us insight into the quality of the
 machines, and provides a standard so we can compare them.
 
