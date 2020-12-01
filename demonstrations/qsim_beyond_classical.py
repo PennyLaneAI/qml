@@ -2,11 +2,11 @@
 
 .. _quantum_neural_net:
 
-Quantum supremacy using qsim
-============================
+Beyond classical computing with qsim
+====================================
 
 .. meta::
-    :property="og:description": Discover quantum supremacy using Google's qsim simulator, and recreate their benchmarks and circuits.
+    :property="og:description": Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.
     :property="og:image": https://pennylane.ai/qml/_images/sycamore.png
 
 .. related::
@@ -14,7 +14,7 @@ Quantum supremacy using qsim
     tutorial_quantum_metrology Variationally optimizing measurement protocols
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-.. figure:: ../demonstrations/qsim_supremacy/qc.png
+.. figure:: ../demonstrations/qsim_beyond_classical/qc.png
     :align: right
     :height: 300pt
 
@@ -200,7 +200,7 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 # two-qubit gate represented in the image is implemented as the two
 # consecutive gates iSWAP and CPhase in this demo.
 #
-# .. figure:: ../demonstrations/qsim_supremacy/supremacy_circuit.png
+# .. figure:: ../demonstrations/qsim_beyond_classical/supremacy_circuit.png
 #     :align: center
 #     :width: 90%
 #
@@ -341,17 +341,18 @@ def circuit(seed=42, return_probs=False):
 #
 # The idea behind using this fidelity is that it will be close to 1 for
 # samples obtained from random quantum circuits, such as the one we defined
-# above, and close to zero for a uniform probability distribution, which can
-# be effectively sampled from classically.
-# Sampling a bitstring from a random quantum circuit would
-# follow the Porter-Thomas distribution [#Boixo2018]_, given by
+# above, and close to zero for a uniform probability distribution, which
+# can be effectively sampled from classically. Sampling a bitstring from a
+# random quantum circuit would follow the distribution
 #
 # .. math::
 #
 #    Pr(p) = (N - 1)(1- p)^{N-2},
 #
-# where :math:`N = 2^n` is the number of possible bitstrings.
-# From this we can then calculate the expectation value
+# where :math:`N = 2^n` is the number of possible bitstrings [#Boixo2018]_.
+# This distribution is approximated well by the Porter-Thomas distribution,
+# given by :math:`Pr(p) = Ne^{-Np}`, a characteristic property of chaotic quantum
+# systems. From this we can then calculate the expectation value
 # :math:`\left<P(x_i)\right>` as follows:
 #
 # .. math::
