@@ -341,17 +341,18 @@ def circuit(seed=42, return_probs=False):
 #
 # The idea behind using this fidelity is that it will be close to 1 for
 # samples obtained from random quantum circuits, such as the one we defined
-# above, and close to zero for a uniform probability distribution, which can
-# be effectively sampled from classically.
-# Sampling a bitstring from a random quantum circuit would
-# follow the Porter-Thomas distribution [#Boixo2018]_, given by
+# above, and close to zero for a uniform probability distribution, which
+# can be effectively sampled from classically. Sampling a bitstring from a
+# random quantum circuit would follow the distribution
 #
 # .. math::
 #
 #    Pr(p) = (N - 1)(1- p)^{N-2},
 #
-# where :math:`N = 2^n` is the number of possible bitstrings.
-# From this we can then calculate the expectation value
+# where :math:`N = 2^n` is the number of possible bitstrings [#Boixo2018]_.
+# This distribution is approximated well by the Porter-Thomas distribution,
+# given by :math:`Pr(p) = Ne^{-Np}`; a characteristic of chaotic quantum
+# systems. From this we can then calculate the expectation value
 # :math:`\left<P(x_i)\right>` as follows:
 #
 # .. math::
