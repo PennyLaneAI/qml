@@ -63,7 +63,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/quanvolution/zoom.png
     :description: :doc:`demos/tutorial_quanvolution`
     :tags: tensorflow
-    
+
 .. customgalleryitem::
     :tooltip: Variational Quantum Linear Solver.
     :figure: demonstrations/vqls/vqls_zoom.png
@@ -74,7 +74,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Coherent implementation of a variational quantum linear solver.
     :figure: demonstrations/coherent_vqls/cvqls_zoom.png
     :description: :doc:`demos/tutorial_coherent_vqls`
-    :tags: autograd    
+    :tags: autograd
 
 .. customgalleryitem::
     :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset.
@@ -105,7 +105,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
-    
+
 .. customgalleryitem::
     :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
@@ -122,6 +122,12 @@ optimizer, the variational quantum thermalizer, or the issue of barren
 plateaus in quantum neural networks.
 
 :html:`<div class="gallery-grid row">`
+
+.. customgalleryitem::
+    :tooltip: Quantum supremacy with qsim.
+    :figure: demonstrations/qsim_supremacy/sycamore.png
+    :description: :doc:`demos/qsim_supremacy`
+    :tags: cirq qsim
 
 .. customgalleryitem::
     :tooltip: Faster optimization convergence using quantum natural gradient.
@@ -206,3 +212,4 @@ plateaus in quantum neural networks.
     demos/qgrnn
     demos/qonn
     demos/tutorial_expressivity_fourier_series
+    demos/qsim_supremacy
