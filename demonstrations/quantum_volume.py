@@ -144,7 +144,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # A distribution that is theorized to fulfill this property is the distribution
 # of *heavy* output bit strings. Heavy bit strings are those whose outcome
 # probabilities are above the median of the distribution. For example, suppose
-# we run a two-qubit circuit, and find that the measurement probabilities for
+# we run a two-qubit circuit and find that the measurement probabilities for
 # the output states are as follows:
 
 measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
@@ -199,14 +199,14 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # random circuits, do we obtain heavy outputs at least 2/3 of the time on
 # average?  Furthermore, do we obtain this with high confidence? This is the
 # basis for quantum volume. Looking back at the criteria for our benchmarks, for
-# item 3, the measure of success for each circuit is how often we obtain heavy
-# outputs when we run the circuit and take a measurement. For item 4, the
+# item 3 the measure of success for each circuit is how often we obtain heavy
+# outputs when we run the circuit and take a measurement. For item 4 the
 # measure of success for the whole family is whether or not the mean of these
 # probabilities is greater than 2/3 with high confidence.
 #
 # On a related note, it is important to determine what heavy output probability
 # we should *expect* to see on average. The intuition for how this can be
-# calculated as follows [#aaronson]_, [#cmu]_.  Suppose that our random
+# calculated is as follows [#aaronson]_, [#cmu]_.  Suppose that our random
 # square circuits scramble things up enough so that the effective operation
 # looks like a Haar-random unitary :math:`U`. Since in the circuits we are
 # applying :math:`U` to the all-zero ket, the measurement outcome probabilities
@@ -245,7 +245,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #     .. math::
 #         \log_2(V_Q) = \hbox{argmax}_m \min (m, d(m))
 #
-#     where :math:`m` is a number of qubits, and :math:`d(m)` is the number of
+#     where :math:`m \leq n` is a number of qubits, and :math:`d(m)` is the number of
 #     qubits in the largest square circuits for which we can reliably sample
 #     heavy outputs with probability greater than 2/3.
 #
@@ -269,7 +269,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #
 #
 # The maximum achieved quantum volume has been doubling at an increasing rate. In
-# late 2020, the most recent achievements have been :math:`\log_2 V_Q = 6` on
+# late 2020, the most recent announcements have been :math:`\log_2 V_Q = 6` on
 # IBM's 27-qubit superconducting device `ibmq_montreal` [#qv64]_, and
 # :math:`\log_2 V_Q = 7` on a Honeywell trapped-ion qubit processor
 # [#honeywell]_. A device with an expected quantum volume of :math:`\log_2 V_Q
@@ -294,7 +294,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # ----------------------------
 #
 # Equipped with our definition of quantum volume, it's time to compute it
-# ourselves!. We'll use the `PennyLane-Qiskit
+# ourselves! We'll use the `PennyLane-Qiskit
 # <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to compute the
 # volume of one of the IBM processors, since their properties are easily
 # accessible through this plugin.
@@ -470,10 +470,10 @@ print(tape.draw())
 #
 # That said, classical simulators are always improving, and can simulate
 # circuits with numbers of qubits well into the double digits (though they may
-# need a supercomputer to do so). Furthermore, the designers of the proposal
+# need a supercomputer to do so). Furthermore, the designers of the protocol
 # don't expect this to be an issue until gate error rates decrease below
-# :math:`\approx 10^{-4}`, after which we may need to adjust the protocol to not
-# require classical simulation, or even consider new volume metrics [#cross]_.
+# :math:`\approx 10^{-4}`, after which we may need to make adjustments to remove
+# the classical simulation, or even consider new volume metrics [#cross]_.
 #
 # The heavy outputs can be retrieved from a classically-obtained probability
 # distribution as follows:
@@ -711,16 +711,17 @@ for idx, prob in enumerate(probs_mean_noisy):
 ##############################################################################
 #
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
-# close to the expected value of :math:`(1 + \ln 2)/2 \approx 0.85`.  For the
-# device probabilities, however, we see that while they're above the threshold
-# up to the 4-qubit case, they're below the threshold for 5 qubits. This means
-# that the highest possible volume this processor can have is :math:`\log_2 V_Q
-# = 4`. But it isn't enough that just the mean of the heavy output probabilities
-# is greater than 2/3. Since we're dealing with randomness, we also want to be
-# confident that these results were not just a fluke! To be confident, we also
-# want to be above 2/3 within 2 standard deviations of the mean. This is
-# referred to as a 97.5% confidence interval (since roughly 97.5% of a normal
-# distribution sits within :math:`2\sigma` of the mean.)
+# close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from above
+# is :math:`\approx 0.85`.  For the device probabilities, however, we see that
+# while they're above the threshold up to the 4-qubit case, they're below the
+# threshold for 5 qubits. This means that the highest possible volume this
+# processor can have is :math:`\log_2 V_Q = 4`. But it isn't enough that just
+# the mean of the heavy output probabilities is greater than 2/3. Since we're
+# dealing with randomness, we also want to ensure these results were
+# not just a fluke! To be confident, we also want to be above 2/3 within 2
+# standard deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5% confidence
+# interval (since roughly 97.5% of a normal distribution sits within
+# :math:`2\sigma` of the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
 # assumptions about our distributions. Whether or not a circuit is successful
@@ -781,7 +782,7 @@ plt.tight_layout()
 
 ##############################################################################
 #
-# In addition to the plot, we should check this numerically.
+# Let's verify this numerically:
 #
 
 two_sigma_below = probs_mean_noisy - 2 * stds_noisy
