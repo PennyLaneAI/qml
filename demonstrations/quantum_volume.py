@@ -34,14 +34,14 @@ machines, and provides a standard so we can compare them.
 
 A similar problem is emerging with quantum computers: we can't judge quantum
 computers on the number of qubits alone. Present-day devices have a number of
-limitations, an important one being the fairly high gate error rates. Typically
+limitations, an important one being gate error rates. Typically
 the qubits on a chip are not all connected to each other, so it may not be
 possible to perform operations on arbitrary pairs of them.
 
 Considering this, can we tell if a machine with 20 noisy qubits is better
 than one with 5 very high-quality qubits? Or if a machine with 8 fully-connected
 qubits is better than one with 16 qubits of comparable error rate, but arranged in
-a square lattice?  Furthermore, how can we make comparisons between different
+a square lattice?  How can we make comparisons between different
 types of qubits?
 
 .. figure:: ../demonstrations/quantum_volume/qubit_graph_variety.svg
@@ -192,7 +192,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # quantum computer is of high quality, then we should expect to see heavy
 # outputs quite often across all the circuits. On the other hand, if it's of
 # poor quality and everything is totally decohered, we will end up with output
-# probabilities that are roughly all the same, as decoherence will reduce the
+# probabilities that are roughly all the same, as noise will reduce the
 # probabilities to the uniform distribution.
 #
 # The heavy output generation problem quantifies this --- for our family of
@@ -216,7 +216,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # entries. In particular, they are complex numbers for which both the real and
 # imaginary parts are normally distributed with mean 0 and variance
 # :math:`1/2^m`, where :math:`m` is the number of qubits. Taking the modulus
-# squared of such numbers and making a histogram of them yields a distribution
+# squared of such numbers and making a histogram yields a distribution
 # of probabilities with the form :math:`\hbox{Pr}(p) \sim 2^m e^{-2^m p}.` This
 # is also known as the *Porter-Thomas distribution*.
 #
@@ -227,7 +227,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # compute the expectation value of obtaining something greater than the median
 # by integrating :math:`x e^{-x}` from :math:`\ln 2` to :math:`\infty` to obtain
 # :math:`(1 + \ln 2)/2`. This is the expected heavy output probability!
-# Numerically it is around 0.85, and in fact we will observe this later on in our results.
+# Numerically it is around 0.85, as we will observe later in our results.
 #
 #
 # The benchmark
@@ -304,7 +304,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #
 # 1. Construct random square circuits of increasing size
 #
-# 2. Run those circuits on both a simulator, and on a noisy hardware device
+# 2. Run those circuits on both a simulator and on a noisy hardware device
 #
 # 3. Perform a statistical analysis of the results to determine what size
 #    circuits the device can run reliably
@@ -357,8 +357,8 @@ def permute_qubits(num_qubits):
 # built-in functionality to generate these random matrices, however its cousin
 # `Strawberry Fields <https://strawberryfields.ai/>`_ does! We will use the
 # ``random_interferometer`` method, which can generate unitary matrices uniformly
-# at random. (This function actually generates elements of U(4), but they are
-# essentially equivalent up to a global phase).
+# at random. This function actually generates elements of U(4), but they are
+# essentially equivalent up to a global phase.
 
 from strawberryfields.utils import random_interferometer
 
@@ -481,7 +481,7 @@ print(tape.draw())
 
 def heavy_output_set(m, probs):
     # Compute heavy outputs of an m-qubit circuit with measurement outcome
-    # probabilities given by probs. probs is an array with the probabilities
+    # probabilities given by probs, which is an array with the probabilities
     # ordered as '000', '001', ... '111'.
 
     # Sort the probabilities so that those above the median are in the second half
@@ -506,7 +506,7 @@ def heavy_output_set(m, probs):
 # above.
 #
 
-# Adds a measurement of first m qubits to the previous circuit
+# Adds a measurement of the first m qubits to the previous circuit
 with tape:
     qml.probs(wires=range(m))
 
@@ -730,7 +730,7 @@ for idx, prob in enumerate(probs_mean_noisy):
 # sampling from a *binomial distribution* where the outcome probability is
 # equivalent to the heavy output probability. In the limit of a large number of
 # samples (in this case 200 circuits), a binomial distribution starts to look
-# pretty normal. If we make this approximation, we can compute the standard
+# like a normal distribution. If we make this approximation, we can compute the standard
 # deviation and use it to make our confidence interval. With the normal
 # approximation, the standard deviation is
 #
