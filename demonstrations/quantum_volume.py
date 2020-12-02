@@ -155,6 +155,16 @@ prob_array = np.fromiter(measurement_probs.values(), dtype=np.float)
 print(f"Median = {np.median(prob_array):.3f}")
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Median = 0.208
+#
+
+##############################################################################
 #
 # This means that the heavy bit strings are '00' and '10', because these are
 # the two probabilities above the median. If we were to run this circuit, the
@@ -162,6 +172,16 @@ print(f"Median = {np.median(prob_array):.3f}")
 
 heavy_output_prob = np.sum(prob_array[prob_array > np.median(prob_array)])
 print(f"Heavy output probability = {heavy_output_prob}")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Heavy output probability = 0.792
+#
 
 ##############################################################################
 #
@@ -301,11 +321,9 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # First we write a function that randomly permutes qubits. We'll do this by
 # using numpy to generate a permutation, and then apply it with SWAP gates.
 
-import numpy as np
 import pennylane as qml
 
 # Object for random number generation from numpy
-np.random.seed(42)
 rng = np.random.default_rng()
 
 def permute_qubits(num_qubits):
@@ -389,6 +407,49 @@ with qml.tape.QuantumTape() as tape:
 
 print(tape.draw())
 
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      0: ──RZ(0)──╭SWAP─────────╭U0──╭SWAP─────────╭U1──╭SWAP─────────╭U2──┤
+#      1: ──RZ(0)──│──────╭SWAP──╰U0──│──────╭SWAP──╰U1──╰SWAP──╭SWAP──╰U2──┤
+#      2: ──RZ(0)──╰SWAP──╰SWAP───────╰SWAP──╰SWAP──────────────╰SWAP───────┤
+#      3: ──RZ(0)───────────────────────────────────────────────────────────┤
+#      4: ──RZ(0)───────────────────────────────────────────────────────────┤
+#
+#     U0 =
+#     [[ 0.23648826-0.48221431j  0.06829648+0.04447898j  0.51150074-0.09529866j
+#        0.55205719-0.35974699j]
+#      [-0.11148167+0.69780321j -0.24943828+0.08410701j  0.46705929-0.43192981j
+#        0.16220654-0.01817602j]
+#      [-0.22351926-0.25918352j  0.24364996-0.05375623j -0.09259829-0.53810588j
+#        0.27267708+0.66941977j]
+#      [ 0.11519953-0.28596729j -0.90164923-0.22099186j -0.09627758-0.13105595j
+#       -0.0200152 +0.12766128j]]
+#     U1 =
+#     [[-0.00652005+0.16599032j -0.38044393-0.5954188j   0.49652764+0.41565941j
+#       -0.14846753-0.17829336j]
+#      [ 0.1008949 -0.32699801j -0.60782417+0.22744342j -0.42585985+0.44949037j
+#        0.25305368-0.11948816j]
+#      [ 0.35672811-0.40539746j  0.11371627-0.0396587j  -0.15415622+0.10998916j
+#       -0.81118943+0.00192614j]
+#      [-0.71422372-0.23147279j -0.19070434-0.16936877j -0.20046089-0.34819971j
+#       -0.22692204-0.39790662j]]
+#     U2 =
+#     [[ 0.53866604-0.14563203j  0.41784651+0.133705j    0.46968112+0.4236837j
+#       -0.29764071+0.08636703j]
+#      [ 0.23974751-0.53599287j -0.4397095 -0.08700824j -0.26629394+0.46130558j
+#        0.34298872+0.23013329j]
+#      [-0.02375096-0.35120586j  0.66325047+0.3462403j  -0.48924549-0.13515535j
+#        0.23801793-0.04501287j]
+#      [ 0.05770807-0.46542787j -0.21630296-0.00647223j -0.18694337-0.15362467j
+#       -0.63814185-0.51715031j]]
+#
+
 ##############################################################################
 #
 # The first thing to note is that the last two qubits are never used in the
@@ -461,6 +522,27 @@ print(f"Heavy outputs are {heavy_outputs}")
 
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     State     Probability
+#     000       0.0247
+#     001       0.1719
+#     010       0.1566
+#     011       0.2632
+#     100       0.0116
+#     101       0.0374
+#     110       0.1342
+#     111       0.2004
+#
+#     Median is 0.1454
+#     Probability of a heavy output is 0.7921
+#     Heavy outputs are ['010', '001', '111', '011']
+
+##############################################################################
 #
 # Step 2: run the circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -489,6 +571,14 @@ nx.draw_networkx(
     node_color="cyan",
     labels={x: x for x in range(dev_ourense.num_wires)},
 )
+
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/quantum_volume/ourense.svg
+#     :align: center
+#     :width: 75%
+#
 
 ##############################################################################
 #
@@ -596,14 +686,34 @@ for idx, prob in enumerate(probs_mean_noisy):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Ideal mean probabilities:
+#     m = 2: 0.799703 above threshold.
+#     m = 3: 0.849827 above threshold.
+#     m = 4: 0.841110 above threshold.
+#     m = 5: 0.854336 above threshold.
+#
+#     Device mean probabilities:
+#     m = 2: 0.763625 above threshold.
+#     m = 3: 0.777210 above threshold.
+#     m = 4: 0.688160 above threshold.
+#     m = 5: 0.660235 below threshold.
+#
+
+##############################################################################
 #
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
 # close to the expected value of :math:`(1 + \ln 2)/2 \approx 0.85`.  For the
-# device probabilities, however, we see that while they're above the threshold up
-# to the 3-qubit case, they're below the threshold for 4 and 5 qubits. This means
-# that the highest volume this processor can have is :math:`\log_2 V_Q = 3`. But
-# it isn't enough that just the mean of the heavy output probabilities is
-# greater than 2/3. Since we're dealing with randomness, we also want to be
+# device probabilities, however, we see that while they're above the threshold
+# up to the 4-qubit case, they're below the threshold for 5 qubits. This means
+# that the highest possible volume this processor can have is :math:`\log_2 V_Q
+# = 4`. But it isn't enough that just the mean of the heavy output probabilities
+# is greater than 2/3. Since we're dealing with randomness, we also want to be
 # confident that these results were not just a fluke! To be confident, we also
 # want to be above 2/3 within 2 standard deviations of the mean. This is
 # referred to as a 97.5% confidence interval (since roughly 97.5% of a normal
@@ -660,6 +770,14 @@ plt.tight_layout()
 
 ##############################################################################
 #
+# .. figure:: ../demonstrations/quantum_volume/ourense_heavy_output_distributions.svg
+#     :align: center
+#     :width: 90%
+#
+
+
+##############################################################################
+#
 # In addition to the plot, we should check this numerically.
 #
 
@@ -669,10 +787,23 @@ for idx, prob in enumerate(two_sigma_below):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
 #
-# We see that this is true for for :math:`m=2`, and :math:`m=3`. Thus, we find
-# that the quantum volume of Ourense is :math:`\log_2 V_Q = 3`, or :math:`V_Q =
-# 8`, as expected.
+#  Out:
+#
+#  .. code-block:: none
+#
+#     m = 2: 0.703541 above threshold.
+#     m = 3: 0.718362 above threshold.
+#     m = 4: 0.622647 below threshold.
+#     m = 5: 0.593254 below threshold.
+#
+
+##############################################################################
+#
+# We see that we are :math:`2\sigma` above the threshold only for :math:`m=2`,
+# and :math:`m=3`. Thus, we find that the quantum volume of our simulated Ourense is
+# :math:`\log_2 V_Q = 3`, or :math:`V_Q = 8`, as expected.
 #
 # This framework and code will allow you to calculate the quantum volume of many
 # different processors. Try it yourself! What happens if we don't specify a

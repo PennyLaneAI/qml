@@ -195,7 +195,7 @@ such as benchmarking and characterizing quantum processors.
 .. customgalleryitem::
    :tooltip: Learn how to compute the quantum volume of a quantum processor.
    :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
-   :description: :doc:`demos/tutorial_quantum_volume`
+   :description: :doc:`demos/quantum_volume`
    :tags: characterization qiskit
 
 :html:`</div></div><div style='clear:both'>`
@@ -229,4 +229,4 @@ such as benchmarking and characterizing quantum processors.
     demos/qonn
     demos/tutorial_expressivity_fourier_series
     demos/qsim_supremacy
-    demos/tutorial_quantum_volume
+    demos/quantum_volume
