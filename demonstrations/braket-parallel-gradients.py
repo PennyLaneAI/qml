@@ -25,6 +25,7 @@ use for solving a scaled-up graph problem with QAOA.
     :align: center
     :scale: 75%
     :alt: PennyLane can leverage Braket for parallelized gradient calculations
+    :target: javascript:void(0);
 
 Why is training circuits so expensive?
 --------------------------------------
@@ -45,6 +46,7 @@ result is a huge number of device executions for each optimization step.
     :align: center
     :scale: 75%
     :alt: Calculating the gradient requires multiple circuit executions
+    :target: javascript:void(0);
 
 In the standard ``default.qubit`` device, gradients are calculated in PennyLane through
 sequential device executions—in other words, all these circuits have to wait in the same queue
@@ -57,7 +59,7 @@ hardware devices that are highly parallelized**.
 Fortunately, the PennyLane-Braket plugin provides a solution for scalable quantum circuit training
 by giving access to the remote Amazon Braket simulator known as
 `SV1 <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__.
-The SV1 simulator is a high-performance state vector simulator that is
+SV1 is a high-performance state vector simulator that is
 designed with parallel execution in mind. Together with PennyLane, we can use SV1 to run in
 parallel all the circuits needed to compute a gradient!
 
@@ -74,14 +76,15 @@ along with specification of the corresponding ARN.
 .. note::
 
     To access remote services on Amazon Braket, you must first create an account on AWS and also
-    follow the `setup instructions <https://github.com/aws/amazon-braket-sdk-python>`__ for
-    accessing Braket from Python.
+    follow the `setup instructions
+    <https://github.com/aws/amazon-braket-sdk-python#prerequisites>`__ for accessing Braket from
+    Python.
 
 Let's load the SV1 remote simulator in PennyLane with 25 qubits. We must specify both the ARN and
-the address of the `S3 bucket <https://aws.amazon.com/s3/>`__ for results to be stored:
+the address of the `S3 bucket <https://aws.amazon.com/s3/>`__ where results are to be stored:
 """
 
-my_bucket = f"amazon-braket-Your-Bucket-Name"  # the name of the bucket
+my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
@@ -114,7 +117,7 @@ dev_local = qml.device("default.qubit", wires=wires)
 # Benchmarking circuit evaluation
 # -------------------------------
 #
-# We will now compare the execution time for the remote Braket device and ``default.qubit``. Our
+# We will now compare the execution time for the remote Braket SV1 device and ``default.qubit``. Our
 # first step is to create a simple circuit:
 
 
@@ -132,6 +135,7 @@ def circuit(params):
 #     :align: center
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
 #
 # In this circuit, each of the 25 qubits has a controllable rotation. A final block of two-qubit
 # CNOT gates is added to entangle the qubits. Overall, this circuit has 25 trainable parameters.
@@ -188,7 +192,7 @@ print("Execution time on local device (seconds):", t_1_local - t_0_local)
 # remote device will also depend on factors such as your distance to AWS servers.
 #
 # .. note::
-#     Given these timings, why would anyone want to ``default.qubit``? You should consider
+#     Given these timings, why would anyone want to use ``default.qubit``? You should consider
 #     using local devices when your circuit has few qubits. In this regime, the latency
 #     times of communicating the circuit to a remote server dominate over simulation times,
 #     allowing local simulators to be faster.
@@ -260,13 +264,14 @@ print("Gradient calculation time on local device (seconds):", t_1_local_grad - t
 #
 # Here, let's be ambitious and try to solve the maximum cut problem on a twenty-node graph! In
 # maximum cut, the objective is to partition the graph's nodes into two groups so that the
-# greatest number of edges are shared between the groups. This problem is NP-hard, so we expect
-# it to be tough as we increase the number of graph nodes.
+# greatest number of edges are shared between the groups (see the diagram below). This problem is
+# NP-hard, so we expect it to be tough as we increase the number of graph nodes.
 #
 # .. figure:: ../_static/max-cut.png
 #     :align: center
 #     :scale: 100%
 #     :alt: The maximum cut problem
+#     :target: javascript:void(0);
 #
 # Let's first set the graph:
 
@@ -285,9 +290,10 @@ nx.draw(g, with_labels=True, pos=positions)
 # .. figure:: ../_static/20_node_graph.png
 #     :align: center
 #     :scale: 100%
+#     :target: javascript:void(0);
 #
 # We will use the remote SV1 device to help us optimize our QAOA circuit as quickly as possible.
-# First, the device is reloaded for 20 qubits
+# First, the device is loaded again for 20 qubits
 
 dev = qml.device(
     "braket.aws.qubit",
@@ -305,7 +311,7 @@ dev = qml.device(
 #
 # .. warning::
 #     Increasing the maximum number of parallel executions can result in a greater rate of
-#     spending on simulation fees on AWS. The value must also be set bearing in mind your
+#     spending on simulation fees on Amazon Braket. The value must also be set bearing in mind your
 #     service
 #     `quota <https://docs.aws.amazon.com/braket/latest/developerguide/braket-quotas.html>`__.
 #
@@ -501,7 +507,7 @@ print("Parameters saved to params.npy")
 # calculations. If this problem were run on ``default.qubit`` without parallelization,
 # we would expect for training to take much longer.
 #
-# The results of this optimization can be loaded by saving the parameters
+# The results of this optimization can be investigated by saving the parameters
 # :download:`here </demonstrations/braket/params.npy>` to your working directory. See if you can
 # analyze the performance of this optimized circuit following a similar strategy to the
-# :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a clique?
+# :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a large graph cut?
