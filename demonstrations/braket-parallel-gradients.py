@@ -341,9 +341,10 @@ optimizer = qml.AdagradOptimizer(stepsize=0.1)
 ##############################################################################
 # We're now set up to train the circuit!
 #
-# .. note::
-#     The time to complete each iteration will depend on factors such as your distance to AWS
-#     servers.
+# .. warning::
+#     The following lines are computationally intensive. Remember that running it will result in
+#     simulation fees charged to your AWS account. We recommend monitoring your usage on the AWS
+#     dashboard.
 
 import time
 
