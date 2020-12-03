@@ -181,3 +181,4 @@ hardware.
     demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
+    demos/braket-parallel-gradients
