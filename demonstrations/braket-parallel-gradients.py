@@ -255,7 +255,7 @@ print("Gradient calculation time on local device (seconds):", t_1_local_grad - t
 # The quantum approximate optimization algorithm (QAOA) is a candidate algorithm for near-term
 # quantum hardware that can find approximate solutions to combinatorial optimization
 # problems such as graph-based problems. We have seen in the main
-# :doc:`QAOA tutorial<demos/tutorial_qaoa_intro>` how QAOA successfully solves the minimum vertex
+# :doc:`QAOA tutorial<tutorial_qaoa_intro>` how QAOA successfully solves the minimum vertex
 # cover problem on a four-node graph.
 #
 # Here, let's be ambitious and try to solve the maximum cut problem on a twenty-node graph! In
@@ -310,7 +310,7 @@ dev = qml.device(
 #     `quota <https://docs.aws.amazon.com/braket/latest/developerguide/braket-quotas.html>`__.
 #
 # The QAOA problem can then be set up following the standard pattern, as discussed in detail in
-# the :doc:`QAOA tutorial<demos/tutorial_qaoa_intro>`.
+# the :doc:`QAOA tutorial<tutorial_qaoa_intro>`.
 
 cost_h, mixer_h = qml.qaoa.maxcut(g)
 cost_h = cost_h + qml.Hamiltonian([edges / 2], [qml.Identity(0)])
@@ -504,4 +504,4 @@ print("Parameters saved to params.npy")
 # The results of this optimization can be loaded by saving the parameters
 # :download:`here </demonstrations/braket/params.npy>` to your working directory. See if you can
 # analyze the performance of this optimized circuit following a similar strategy to the
-# :doc:`QAOA tutorial<demos/tutorial_qaoa_intro>`. Did we find a clique?
+# :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a clique?
