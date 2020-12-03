@@ -14,7 +14,7 @@ plugin can be installed using
 
     pip install amazon-braket-pennylane-plugin
 
-A central feature of the Amazon Braket remote simulator is that it can execute multiple circuits
+A central feature of Amazon Braket is that its simulator can execute multiple circuits
 in Parallel. This capability can be harnessed in PennyLane during circuit training,
 which requires lots of variations of a circuit to be executed. Hence, the PennyLane-Braket plugin
 provides a method for scalable optimization of large circuits with many parameters. This tutorial
@@ -57,14 +57,14 @@ short—**the future of training quantum circuits relies on high-performance rem
 hardware devices that are highly parallelized**.
 
 Fortunately, the PennyLane-Braket plugin provides a solution for scalable quantum circuit training
-by giving access to the remote Amazon Braket simulator known as
+by giving access to the Amazon Braket simulator known as
 `SV1 <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__.
 SV1 is a high-performance state vector simulator that is
 designed with parallel execution in mind. Together with PennyLane, we can use SV1 to run in
 parallel all the circuits needed to compute a gradient!
 
-Accessing remote devices on Amazon Braket
------------------------------------------
+Accessing devices on Amazon Braket
+----------------------------------
 
 The remote simulator and quantum hardware devices available on Amazon Braket can be found
 `here <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__. Each
@@ -80,7 +80,7 @@ along with specification of the corresponding ARN.
     <https://github.com/aws/amazon-braket-sdk-python#prerequisites>`__ for accessing Braket from
     Python.
 
-Let's load the SV1 remote simulator in PennyLane with 25 qubits. We must specify both the ARN and
+Let's load the SV1 simulator in PennyLane with 25 qubits. We must specify both the ARN and
 the address of the `S3 bucket <https://aws.amazon.com/s3/>`__ where results are to be stored:
 """
 
@@ -503,10 +503,10 @@ print("Parameters saved to params.npy")
 #     Cost at step 30: -9.492033508244045
 #     Parameters saved to params.npy
 #
-# This example shows us that a 20-qubit QAOA problem can be trained in a reasonable timeframe by
-# using the parallelized capabilities of the Amazon Braket SV1 device to speed up gradient
-# calculations. If this problem were run on ``default.qubit`` without parallelization,
-# we would expect for training to take much longer.
+# This example shows us that a 20-qubit QAOA problem can be trained within around 1-2 minutes per
+# iteration by using parallel executions on the Amazon Braket SV1 device to speed up gradient
+# calculations. If this problem were run on ``default.qubit`` without parallelization, we would
+# expect for training to take much longer.
 #
 # The results of this optimization can be investigated by saving the parameters
 # :download:`here </demonstrations/braket/params.npy>` to your working directory. See if you can
