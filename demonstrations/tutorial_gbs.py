@@ -242,7 +242,7 @@ for i in measure_states:
 # 
 # As any algorithm that could calculate (or even approximate) the hafnian could also calculate the
 # permanent---a `#P-hard problem <https://en.wikipedia.org/wiki/%E2%99%AFP>`__---it follows that calculating or approximating the hafnian must also
-# be a classically hard problem.
+# be a classically hard problem. This lies behind the classical hardness of GBS.
 #
 # In this demo, we will use the same squeezing parameter, :math:`z=r`, for
 # all input states; this allows us to simplify this equation. To start with, the hafnian expression
