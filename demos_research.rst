@@ -124,12 +124,6 @@ plateaus in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Beyond classical computing with qsim.
-    :figure: demonstrations/qsim_beyond_classical/sycamore.png
-    :description: :doc:`demos/qsim_beyond_classical`
-    :tags: cirq qsim
-
-.. customgalleryitem::
     :tooltip: Faster optimization convergence using quantum natural gradient.
     :figure: demonstrations/quantum_natural_gradient/qng_optimization.png
     :description: :doc:`demos/tutorial_quantum_natural_gradient`
@@ -191,6 +185,12 @@ Quantum computing
 
 Explore the applications of PennyLane to more general quantum computing tasks
 such as benchmarking and characterizing quantum processors.
+
+.. customgalleryitem::
+    :tooltip: Beyond classical computing with qsim.
+    :figure: demonstrations/qsim_beyond_classical/sycamore.png
+    :description: :doc:`demos/qsim_beyond_classical`
+    :tags: cirq qsim
 
 .. customgalleryitem::
    :tooltip: Learn how to compute the quantum volume of a quantum processor.
