@@ -332,7 +332,16 @@ print(probs[2, 0, 0, 0])
 
 ######################################################################
 # The PennyLane simulation results agree (with almost negligible numerical error) to the
-# expected result from the Gaussian boson sampling equation!
+# expected result from the Gaussian boson sampling equation! 
+#
+# This demo provides an entry-level walkthrough to the ideas behind GBS, 
+# providing you with the basic code needed for exploring the ideas behind
+# the photonic quantum advantage paper. Try changing the number of modes, 
+# the number of injected squeezed states, or the cutoff dimension, and 
+# see how each of these affect the classical computation time. If you're 
+# interested in learning more about GBS, or about photonic quantum
+# computing in general, the 
+# `Strawberry Fields website <https://strawberryfields.ai/>`__ is a great resource.
 #
 # References
 # ----------
