@@ -29,6 +29,21 @@ using a superconducting processor, the new experiment, published in the paper
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
 
+
+.. image:: /demonstrations/tutorial_gbs_expt2.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
+
+
+|
+
+
+.. image:: /demonstrations/tutorial_gbs_expt1.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
+
 Background theory
 -----------------
 
@@ -120,7 +135,7 @@ beamsplitters (:class:`~pennylane.Beamsplitter`) and single-mode phase shifters
 (:class:`~pennylane.PhaseShift`)
 [#reck1994]_, allowing for a straightforward translation into a CV quantum circuit.
 
-.. image:: /demonstrations/tutorial_gbs_circuit.svg
+.. image:: /demonstrations/tutorial_gbs_circuit2.png
     :align: center
     :width: 70%
     :target: javascript:void(0);
