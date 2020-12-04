@@ -198,6 +198,12 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/quantum_volume`
    :tags: characterization qiskit
 
+.. customgalleryitem::
+   :tooltip: Construct and simulate a Gaussian Boson Sampler.
+   :figure: demonstrations/tutorial_gbs_thumbnail.png
+   :description: :doc:`demos/tutorial_gbs`
+   :tags: photonics strawberryfields
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -230,3 +236,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
     demos/quantum_volume
+    demos/tutorial_gbs
