@@ -24,7 +24,7 @@ plugin can be installed using
     pip install amazon-braket-pennylane-plugin
 
 A central feature of Amazon Braket is that its simulator can execute multiple circuits
-in Parallel. This capability can be harnessed in PennyLane during circuit training,
+in parallel. This capability can be harnessed in PennyLane during circuit training,
 which requires lots of variations of a circuit to be executed. Hence, the PennyLane-Braket plugin
 provides a method for scalable optimization of large circuits with many parameters. This tutorial
 will explain the importance of this feature, allow you to benchmark it yourself, and explore its
@@ -40,8 +40,8 @@ Why is training circuits so expensive?
 --------------------------------------
 
 Quantum-classical hybrid optimization of quantum circuits is the workhorse algorithm of near-term
-quantum computing. It is not only fundamental for training variational quantum circuits but also
-more broadly for applications like quantum chemistry and quantum machine learning. Today’s most
+quantum computing. It is not only fundamental for training variational quantum circuits, but also
+more broadly for applications like quantum chemistry and quantum machine learning. Today's most
 powerful optimization algorithms rely on the efficient computation of gradients—which tell us how
 to adapt parameters a little bit at a time to improve the algorithm.
 
@@ -106,12 +106,12 @@ import pennylane as qml
 from pennylane import numpy as np
 
 qml.enable_tape()  # Unlocks the latest features in PennyLane
-wires = 25
+n_wires = 25
 
 dev_remote = qml.device(
     "braket.aws.qubit",
     device_arn=device_arn,
-    wires=wires,
+    wires=n_wires,
     s3_destination_folder=s3_folder,
     parallel=True,
 )
@@ -120,7 +120,7 @@ dev_remote = qml.device(
 # Note the ``parallel=True`` argument. This setting allows us to unlock the power of parallel
 # execution on SV1 for gradient calculations. We'll also load ``default.qubit`` for comparison.
 
-dev_local = qml.device("default.qubit", wires=wires)
+dev_local = qml.device("default.qubit", wires=n_wires)
 
 ##############################################################################
 # Benchmarking circuit evaluation
@@ -131,11 +131,11 @@ dev_local = qml.device("default.qubit", wires=wires)
 
 
 def circuit(params):
-    for i in range(wires):
+    for i in range(n_wires):
         qml.RX(params[i], wires=i)
-    for i in range(wires):
-        qml.CNOT(wires=[i, (i + 1) % wires])
-    return qml.expval(qml.PauliZ(wires - 1))
+    for i in range(n_wires):
+        qml.CNOT(wires=[i, (i + 1) % n_wires])
+    return qml.expval(qml.PauliZ(n_wires - 1))
 
 
 ##############################################################################
@@ -171,7 +171,7 @@ qnode_local = qml.QNode(circuit, dev_local)
 
 import time
 
-params = np.random.random(wires)
+params = np.random.random(n_wires)
 
 t_0_remote = time.time()
 qnode_remote(params)
@@ -272,8 +272,8 @@ print("Gradient calculation time on local device (seconds):", t_1_local_grad - t
 # cover problem on a four-node graph.
 #
 # Here, let's be ambitious and try to solve the maximum cut problem on a twenty-node graph! In
-# maximum cut, the objective is to partition the graph's nodes into two groups so that the
-# greatest number of edges are shared between the groups (see the diagram below). This problem is
+# maximum cut, the objective is to partition the graph's nodes into two groups so that the number
+# of edges crossed or 'cut' by the partition is maximized (see the diagram below). This problem is
 # NP-hard, so we expect it to be tough as we increase the number of graph nodes.
 #
 # .. figure:: ../_static/max-cut.png
@@ -286,7 +286,7 @@ print("Gradient calculation time on local device (seconds):", t_1_local_grad - t
 
 import networkx as nx
 
-nodes = wires = 20
+nodes = n_wires = 20
 edges = 60
 seed = 1967
 
@@ -307,7 +307,7 @@ nx.draw(g, with_labels=True, pos=positions)
 dev = qml.device(
     "braket.aws.qubit",
     device_arn=device_arn,
-    wires=wires,
+    wires=n_wires,
     s3_destination_folder=s3_folder,
     parallel=True,
     max_parallel=40,
@@ -338,7 +338,7 @@ def qaoa_layer(gamma, alpha):
 
 
 def circuit(params, **kwargs):
-    for i in range(wires):  # Prepare an equal superposition over all qubits
+    for i in range(n_wires):  # Prepare an equal superposition over all qubits
         qml.Hadamard(wires=i)
 
     qml.layer(qaoa_layer, n_layers, params[0], params[1])
