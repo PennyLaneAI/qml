@@ -2,8 +2,8 @@ r"""
 .. role:: html(raw)
    :format: html
 
-Gaussian boson sampling and the Hafnian
-=======================================
+Photonic quantum advantage with GBS
+===================================
 
 .. meta::
     :property="og:description": Construct and simulate a Gaussian Boson Sampler
@@ -158,18 +158,20 @@ print(U)
 # are Gaussian, and all the required operators transform Gaussian states to other Gaussian
 # states.
 
+n_wires = 4
 cutoff = 10
-dev = qml.device("strawberryfields.gaussian", wires=4, cutoff_dim=cutoff)
+
+dev = qml.device("strawberryfields.gaussian", wires=n_wires, cutoff_dim=cutoff)
 
 @qml.qnode(dev)
 def gbs_circuit():
     # prepare the input squeezed states
-    for i in range(4):
+    for i in range(n_wires):
         qml.Squeezing(1.0, 0.0, wires=i)
 
     # linear interferometer
-    qml.Interferometer(U, wires=range(4))
-    return qml.probs(wires=range(4))
+    qml.Interferometer(U, wires=range(n_wires))
+    return qml.probs(wires=range(n_wires))
 
 
 ######################################################################
@@ -184,11 +186,16 @@ def gbs_circuit():
 #    decomposes the unitary matrix representing the linear interferometer into single mode
 #    rotation gates :class:`~pennylane.PhaseShift`, and two-mode beamsplitters
 #    :class:`~pennylane.Beamsplitter`. After applying the interferometer, we will denote the
-#    output state by :math:`\ket{\psi'}`.#
+#    output state by :math:`\ket{\psi'}`.
 #
-# Executing the QNode:
+# 3. Since Gaussian Boson Sampling is simulated in an infinite-dimensional Hilbert space,
+#    we need to set an upper-limit on the maximum number of photons we can detect. This is the
+#    ``cutoff`` value we defined above---we will only be considering detection events
+#    with 9 photons or less per mode.
+#
+# Executing the QNode, and extracting the probability distribution:
 
-probs = gbs_circuit().reshape([10] * 4)
+probs = gbs_circuit().reshape([cutoff] * n_wires)
 print(probs.shape)
 
 ######################################################################
