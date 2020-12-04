@@ -193,12 +193,6 @@ such as benchmarking and characterizing quantum processors.
     :tags: cirq qsim
 
 .. customgalleryitem::
-   :tooltip: Learn how to compute the quantum volume of a quantum processor.
-   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
-   :description: :doc:`demos/quantum_volume`
-   :tags: characterization qiskit
-
-.. customgalleryitem::
    :tooltip: Construct and simulate a Gaussian Boson Sampler.
    :figure: demonstrations/tutorial_gbs_thumbnail.png
    :description: :doc:`demos/tutorial_gbs`
