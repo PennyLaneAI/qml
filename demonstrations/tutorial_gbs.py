@@ -18,7 +18,6 @@ Quantum advantage with Gaussian Boson Sampling
     
 On the journey to large-scale fault-tolerant quantum computers, one of the first major 
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of 
-
 any classical algorithm. The Google Quantum team was the first to claim this achievement, 
 announced in their paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_. Now a team led 
@@ -31,9 +30,7 @@ using a superconducting processor, the new experiment, published in the paper
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
 This tutorial will walk you through the basic elements of GBS, motivate why it is
-
 classically challenging, and show you how to explore GBS using PennyLane and the photonic 
-
 quantum devices accessible via the 
 `PennyLane-Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`__. If you are 
 interested in possible applications of GBS, or want to access programmable GBS hardware
@@ -103,13 +100,10 @@ Coding a GBS algorithm
 ----------------------
 
 The researchers in [#Zhong2020]_ experimentally demonstrate a GBS device by preparing 50 
-
 squeezed states and injecting them into a 100-mode interferometer. In this demo, 
 in order to keep things classically simulable, we will stick to a much simpler setting 
-
 consisting of 4 squeezed states injected into a 4-mode interferometer. At a high level, 
 an interferometer on :math:`N` modes can be represented using an :math:`N\times N` unitary
-
 matrix :math:`U`. When decomposed into a quantum optical circuit, the interferometer will 
 be made up of beamsplitters and phase shifters.
 
@@ -176,9 +170,7 @@ def gbs_circuit():
 #    the vacuum state).
 #
 # 2. Next we apply the linear interferometer to all four wires using
-
 #    :class:`~pennylane.Interferometer` and the unitary matrix ``U``. This operator
-
 #    decomposes the unitary matrix representing the linear interferometer into single-mode
 #    rotation gates (:class:`~pennylane.PhaseShift`), and two-mode beamsplitters
 #    (:class:`~pennylane.Beamsplitter`). After applying the interferometer, we will denote the
@@ -199,7 +191,6 @@ print(probs.shape)
 # We want to explore this output probability data. For
 # example, element ``[1,2,0,1]`` represents the probability of 
 # detecting 1 photon on wire
-
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
 #
 # .. math:: \text{prob}(1,2,0,1) = \left|\braketD{1,2,0,1}{\psi'}\right|^2.
@@ -228,7 +219,6 @@ for i in measure_states:
 # 
 # i.e., the sampled single-photon probability distribution is proportional to the **hafnian** of a
 # submatrix of :math:`U(\bigoplus_i\tanh(r_i))U^T`.
-
 # 
 # .. note::
 # 
@@ -237,10 +227,8 @@ for i in measure_states:
 #     .. math:: \text{Haf}(A) = \frac{1}{n!2^n}\sum_{\sigma=S_{2N}}\prod_{i=1}^N A_{\sigma(2i-1)\sigma(2i)},
 # 
 #     where :math:`S_{2N}` is the set of all perfect matching permutations of :math:`2N` elements. In graph theory, the
-
 #     hafnian calculates the number of perfect `matchings
 #     <https://en.wikipedia.org/wiki/Matching_(graph_theory)>`_ in a graph with
-
 #     adjacency matrix :math:`A`.
 # 
 #     Compare this to the permanent, which calculates the number of perfect matchings on a *bipartite*
@@ -258,7 +246,6 @@ for i in measure_states:
 #
 # In this demo, we will use the same squeezing parameter, :math:`z=r`, for
 # all input states; this allows us to simplify this equation. To start with, the hafnian expression
-
 # simply becomes :math:`\text{Haf}[(UU^T\tanh(r))]_{st}`, removing the need for the tensor sum.
 #
 # Thus, we have
@@ -269,7 +256,6 @@ for i in measure_states:
 #     \frac{\left|\text{Haf}[(UU^T\tanh(r))]_{st}\right|^2}{n_1!n_2!\cdots n_N!\cosh^N(r)}.
 #
 # Now that we have the theoretical formulas, as well as the probabilities from our simulated GBS QNode, we can compare the two and see whether they agree.
-
 #
 # In order to calculate the probability of different GBS events classically, we need a
 # method for calculating the hafnian. 
