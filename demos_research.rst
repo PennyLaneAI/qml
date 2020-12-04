@@ -185,6 +185,22 @@ plateaus in quantum neural networks.
 
 :html:`</div></div><div style='clear:both'>`
 
+
+Quantum computing
+-----------------
+
+Explore the applications of PennyLane to more general quantum computing tasks
+such as benchmarking and characterizing quantum processors.
+
+.. customgalleryitem::
+   :tooltip: Learn how to compute the quantum volume of a quantum processor.
+   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
+   :description: :doc:`demos/quantum_volume`
+   :tags: characterization qiskit
+
+:html:`</div></div><div style='clear:both'>`
+
+
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -213,3 +229,4 @@ plateaus in quantum neural networks.
     demos/qonn
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
+    demos/quantum_volume

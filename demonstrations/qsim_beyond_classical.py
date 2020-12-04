@@ -13,6 +13,7 @@ Beyond classical computing with qsim
 
     tutorial_quantum_metrology Variationally optimizing measurement protocols
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
+    quantum_volume Quantum volume
 
 .. figure:: ../demonstrations/qsim_beyond_classical/qc.png
     :align: right

@@ -52,8 +52,8 @@ photonic quantum computing.
     :tooltip: Compare the parameter-shift rule with backpropagation.
     :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
-    :tags: tensorflow autograd:html:`</div></div><div style='clear:both'>`
-
+    :tags: tensorflow autograd 
+       
 :html:`</div></div><div style='clear:both'>`
 
 Applications
@@ -149,6 +149,7 @@ hardware.
     :figure: _static/PyTorch_icon.png
     :description: :doc:`demos/tutorial_qnn_module_torch`
     :tags: pytorch
+
 
 :html:`</div></div><div style='clear:both'>`
 
