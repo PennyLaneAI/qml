@@ -28,11 +28,52 @@ using a superconducting processor, the new experiment, published in the paper
 [[#Zhong2020]_] leverages the quantum properties of light to tackle a task called 
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
+This tutorial will walk you through the basic elements of GBS, motivate why simulating it is
+classically challenging, and show how you can explore GBS using PennyLane and the photonic 
+quantum devices accessible via the 
+`PennyLane-Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`__.
 
-Background theory
+The origin of GBS
 -----------------
 
-Introduced by Aaronson and Arkhipov [#aaronson2013]_, boson sampling presented a slight
+Let's first explain the name. `boson <https://en.wikipedia.org/wiki/Boson>` refers to bosonic 
+matter, which, along with fermions, makes up one of the two elementary classes of particles. 
+The most prevalent bosonic system in our everyday lives is light, which is made of particles 
+called photons. Another famous example, though much harder to find, is the Higgs boson. 
+The distinguishing characteristic of bosons is that they follow "Bose-Einstein statistics", 
+which very loosely means that the particles like to bunch together (contrast this to fermionic 
+matter like electrons, which must follow the Pauli Exclusion Principle and keep apart). 
+
+This property can be observed in simple interference experiments such as the 
+`Hong-Ou Mandel setup <https://en.wikipedia.org/wiki/Hong%E2%80%93Ou%E2%80%93Mandel_effect>`__.
+If two single photons are interfered on a balanced beamsplitter, they will both emerge at 
+the same output port---there is zero probability that they will emerge at separate outputs. 
+This is a simple but notable quantum property of light; if electrons were brought 
+together in a similar experiement, they would always appear at separate output ports.
+
+Gaussian Boson Sampling is, in fact, a member of a larger family of "Boson Sampling" algorithms, 
+stemming back to the initial proposal of Aaronson and Arkhipov [#aaronson2013]_ in 2013. 
+Boson Sampling is quantum interferometry writ large. Aaronson and Arkhipov's original proposal 
+was to inject many single photons into distinct input ports of a large interferometer, then 
+measure which output ports they appear at. The natural interference properties of bosons
+means that photons will appear at the output ports in very unique and specific ways. Boson 
+Sampling was not proposed with any kind of practical real-world use-case in mind. Like
+the random circuit sampling, it's just a quantum system being its best self. With sufficient
+size and quality, it is strongly believed to be hard for a classical computer to simulate this efficiently. 
+
+Finally, the "Gaussian" in GBS refers to the fact that we vary the initial Boson Sampling 
+proposal slightly: instead of injecting single photons---which are hard to jointly create in the 
+size and quality needed to demonstrate Boson Sampling conclusively---we instead use states of 
+light that is experimentally less demanding. These states of light are called "Gaussian" states, 
+because they bear strong connections to the 
+`Gaussian (or Normal) distribution <https://en.wikipedia.org/wiki/Normal_distribution>`__ 
+from statistics. In [[#Zhong2020]_], they use a particular Gaussian state called a 
+`squeezed state <https://en.wikipedia.org/wiki/Squeezed_states_of_light>`__.
+
+
+
+
+, boson sampling presented a slight
 deviation from the general approach in quantum computation. Rather than presenting a theoretical
 model of universal quantum computation (i.e., a framework that enables quantum simulation of any
 arbitrary Hamiltonian [#nielsen2010]_), boson sampling-based devices are instead an example
