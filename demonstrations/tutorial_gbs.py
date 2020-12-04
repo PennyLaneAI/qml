@@ -6,21 +6,17 @@ Photonic quantum advantage with GBS
 ===================================
 
 .. meta::
-    :property="og:description": Construct and simulate a Gaussian Boson Sampler
+    :property="og:description": Using states of light carry out tasks beyond the reach of classical computers.
     :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
 
 .. related::
 
-    quantum_neural_net Function fitting with a photonic QNN
+    tutorial_gaussian_transformation Gaussian transformation
+    qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
+    
 
-    "If you need to wait exponential time for [your single photon sources to emit simultaneously],
-    then there would seem to be no advantage over classical computation.  This is the reason why so
-    far, boson sampling has only been demonstrated with 3-4 photons. When faced with these problems,
-    until recently, all we could do was shrug our shoulders." - `Scott Aaronson
-    <https://www.scottaaronson.com/blog/?p=1579>`_
 
-In this demonstration, we will walk through the application of the Gaussian boson sampling.
 
 Background theory
 -----------------
@@ -322,11 +318,17 @@ print(probs[2, 0, 0, 0])
 # References
 # ----------
 #
-# .. [#nielsen2010]
+# .. [#hamilton2017]
 #
-#     M.A. Nielsen and I.L. Chuang. Quantum Computation and Quantum Information. Cambridge
-#     University Press, 2010. ISBN 9780511992773. URL:
-#     https://books.google.ca/books?id=JRz3jgEACAAJ.
+#     Craig S. Hamilton, Regina Kruse, Linda Sansoni, Sonja Barkhofen, Christine Silberhorn,
+#     and Igor Jex. Gaussian boson sampling. Physical Review Letters, 119:170501, Oct 2017.
+#     arXiv:1612.01199, doi:10.1103/PhysRevLett.119.170501.
+#
+# .. [#lund2014]
+#
+#     A. P. Lund, A. Laing, S. Rahimi-Keshari, T. Rudolph, J. L. O’Brien, and T. C. Ralph.
+#     Boson sampling from a gaussian state. Physical Review Letters, 113:100502, Sep 2014.
+#     doi:10.1103/PhysRevLett.113.100502.
 #
 # .. [#aaronson2013]
 #
@@ -338,18 +340,6 @@ print(probs[2, 0, 0, 0])
 #     Max Tillmann, Borivoje Dakić, René Heilmann, Stefan Nolte, Alexander Szameit, and Philip
 #     Walther. Experimental boson sampling. Nature Photonics, 7(7):540–544, May 2013.
 #     doi:10.1038/nphoton.2013.102.
-#
-# .. [#lund2014]
-#
-#     A. P. Lund, A. Laing, S. Rahimi-Keshari, T. Rudolph, J. L. O’Brien, and T. C. Ralph.
-#     Boson sampling from a gaussian state. Physical Review Letters, 113:100502, Sep 2014.
-#     doi:10.1103/PhysRevLett.113.100502.
-#
-# .. [#hamilton2017]
-#
-#     Craig S. Hamilton, Regina Kruse, Linda Sansoni, Sonja Barkhofen, Christine Silberhorn,
-#     and Igor Jex. Gaussian boson sampling. Physical Review Letters, 119:170501, Oct 2017.
-#     arXiv:1612.01199, doi:10.1103/PhysRevLett.119.170501.
 #
 # .. [#reck1994]
 #
