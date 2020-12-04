@@ -246,7 +246,7 @@ for i in measure_states:
 #
 # In this demo, we will use the same squeezing parameter, :math:`z=r`, for
 # all input states; this allows us to simplify this equation. To start with, the hafnian expression
-# simply becomes :math:`\text{Haf}[(UU^T\tanh(r))]_{st}`, removing the need for the tensor sum.
+# simply becomes :math:`\text{Haf}[(UU^T\tanh(r))]_{st}`, removing the need for the direct sum.
 #
 # Thus, we have
 #
