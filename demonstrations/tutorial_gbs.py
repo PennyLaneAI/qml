@@ -33,6 +33,17 @@ classically challenging, and show how you can explore GBS using PennyLane and th
 quantum devices accessible via the 
 `PennyLane-Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`__.
 
+.. image:: /demonstrations/tutorial_gbs_expt2.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
+
+
+.. image:: /demonstrations/tutorial_gbs_expt1.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
+
 The origin of GBS
 -----------------
 
@@ -161,7 +172,7 @@ beamsplitters (:class:`~pennylane.Beamsplitter`) and single-mode phase shifters
 (:class:`~pennylane.PhaseShift`)
 [#reck1994]_, allowing for a straightforward translation into a CV quantum circuit.
 
-.. image:: /demonstrations/tutorial_gbs_circuit.svg
+.. image:: /demonstrations/tutorial_gbs_circuit2.png
     :align: center
     :width: 70%
     :target: javascript:void(0);

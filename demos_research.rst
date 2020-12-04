@@ -200,7 +200,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. customgalleryitem::
    :tooltip: Construct and simulate a Gaussian Boson Sampler.
-   :figure: demonstrations/tutorial_gbs_circuit.png
+   :figure: demonstrations/tutorial_gbs_thumbnail.png
    :description: :doc:`demos/tutorial_gbs`
    :tags: photonics strawberryfields
 
