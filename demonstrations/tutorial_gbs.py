@@ -25,12 +25,12 @@ In this demonstration, we will walk through the application of the Gaussian boso
 Background theory
 -----------------
 
-Introduced by Aaronson and Arkhipov [aaronson2013]_, boson sampling presented a slight
+Introduced by Aaronson and Arkhipov [#aaronson2013]_, boson sampling presented a slight
 deviation from the general approach in quantum computation. Rather than presenting a theoretical
 model of universal quantum computation (i.e., a framework that enables quantum simulation of any
-arbitrary Hamiltonian [nielsen2010]_), boson sampling-based devices are instead an example
+arbitrary Hamiltonian [#nielsen2010]_), boson sampling-based devices are instead an example
 of an **intermediate quantum computer**, designed to experimentally implement a computation that
-is thought to be intractable classically [tillmann2013]_.
+is thought to be intractable classically [#tillmann2013]_.
 
 Boson sampling proposes the following `quantum linear optics
 <https://en.wikipedia.org/wiki/Linear_optical_quantum_computing>`_ scheme. An array of single-photon
@@ -49,8 +49,8 @@ modes in the apparatus increases, the average time required until every photon s
 simultaneous photon increases exponentially.
 
 In order to simulate a deterministic single-photon source array, several variations on boson
-sampling have been proposed; the most well-known being scattershot boson sampling [lund2014]_.
-However, a recent boson sampling variation by Hamilton et al. [hamilton2017]_ mitigates the
+sampling have been proposed; the most well-known being scattershot boson sampling [#lund2014]_.
+However, a recent boson sampling variation by Hamilton et al. [#hamilton2017]_ mitigates the
 need for single photon Fock states altogether, by showing that incident Gaussian states
 --- in this case, single mode squeezed states --- can produce problems in the same computational
 complexity class as boson sampling. Even more significantly, this negates the scalability
@@ -70,7 +70,7 @@ sampling:
 Without loss of generality, we can absorb the squeezing phase parameter :math:`\phi` into the
 interferometer, and set :math:`\phi=0` for convenience.
 
-Using phase space methods, Hamilton et al. [hamilton2017]_ showed that the probability of
+Using phase space methods, Hamilton et al. [#hamilton2017]_ showed that the probability of
 measuring a Fock state containing only 0 or 1 photons per mode is given by
 
 .. math::
@@ -111,7 +111,7 @@ Circuit construction and simulation
 In quantum linear optics, the multimode linear interferometer is commonly decomposed into two-mode
 beamsplitters (:class:`~pennylane.Beamsplitter`) and single-mode phase shifters
 (:class:`~pennylane.PhaseShift`)
-[reck1994]_, allowing for a straightforward translation into a CV quantum circuit.
+[#reck1994]_, allowing for a straightforward translation into a CV quantum circuit.
 
 .. image:: /demonstrations/tutorial_gbs_circuit.svg
     :align: center
@@ -126,7 +126,7 @@ In the above, the single mode squeeze states all apply identical squeezing :math
 parameters of the beamsplitters and the rotation gates determine the unitary :math:`U`, and finally
 the detectors perform Fock state measurements on the output modes. As with boson sampling, for
 :math:`N` input modes, we must have a minimum of :math:`N+1` columns in the beamsplitter array
-[clements2016]_.
+[#clements2016]_.
 
 Simulating this circuit using PennyLane is easy; we can simply read off the gates from left
 to right, and convert it into a QNode.
@@ -321,42 +321,42 @@ print(probs[2, 0, 0, 0])
 # References
 # ----------
 #
-# .. [nielsen2010]
+# .. [#nielsen2010]
 #
 #     M.A. Nielsen and I.L. Chuang. Quantum Computation and Quantum Information. Cambridge
 #     University Press, 2010. ISBN 9780511992773. URL:
 #     https://books.google.ca/books?id=JRz3jgEACAAJ.
 #
-# .. [aaronson2013]
+# .. [#aaronson2013]
 #
 #     Scott Aaronson and Alex Arkhipov. The computational complexity of linear optics. Theory of
 #     Computing, 9(1):143–252, 2013. doi:10.4086/toc.2013.v009a004.
 #
-# .. [tillmann2013]
+# .. [#tillmann2013]
 #
 #     Max Tillmann, Borivoje Dakić, René Heilmann, Stefan Nolte, Alexander Szameit, and Philip
 #     Walther. Experimental boson sampling. Nature Photonics, 7(7):540–544, May 2013.
 #     doi:10.1038/nphoton.2013.102.
 #
-# .. [lund2014]
+# .. [#lund2014]
 #
 #     A. P. Lund, A. Laing, S. Rahimi-Keshari, T. Rudolph, J. L. O’Brien, and T. C. Ralph.
 #     Boson sampling from a gaussian state. Physical Review Letters, 113:100502, Sep 2014.
 #     doi:10.1103/PhysRevLett.113.100502.
 #
-# .. [hamilton2017]
+# .. [#hamilton2017]
 #
 #     Craig S. Hamilton, Regina Kruse, Linda Sansoni, Sonja Barkhofen, Christine Silberhorn,
 #     and Igor Jex. Gaussian boson sampling. Physical Review Letters, 119:170501, Oct 2017.
 #     arXiv:1612.01199, doi:10.1103/PhysRevLett.119.170501.
 #
-# .. [reck1994]
+# .. [#reck1994]
 #
 #     Michael Reck, Anton Zeilinger, Herbert J. Bernstein, and Philip Bertani. Experimental
 #     realization of any discrete unitary operator. Physical Review Letters, 73(1):58–61, Jul 1994.
 #     doi:10.1103/physrevlett.73.58.
 #
-# .. [clements2016]
+# .. [#clements2016]
 #
 #     William R Clements, Peter C Humphreys, Benjamin J Metcalf, W Steven Kolthammer, and
 #     Ian A Walsmley. Optimal design for universal multiport interferometers. Optica,
