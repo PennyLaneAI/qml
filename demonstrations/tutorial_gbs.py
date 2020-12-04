@@ -80,15 +80,16 @@ Finally, the "Gaussian" in GBS refers to the fact that we modify the original Bo
 proposal slightly: instead of injecting single photons---which are hard to jointly create in the 
 size and quality needed to demonstrate Boson Sampling conclusively---we instead use states of 
 light that are experimentally less demanding (though still challenging!). 
-These states of light are called "Gaussian" states, 
+These states of light are called Gaussian states, 
 because they bear strong connections to the 
 `Gaussian (or Normal) distribution <https://en.wikipedia.org/wiki/Normal_distribution>`__ 
-from statistics. In [[#Zhong2020]_], they use a particular Gaussian state called a 
-`squeezed state <https://en.wikipedia.org/wiki/Squeezed_states_of_light>`__ for the inputs.
+from statistics. In practice, we use a particular Gaussian state called a 
+`squeezed state <https://en.wikipedia.org/wiki/Squeezed_states_of_light>`__ for the inputs,
+since these are the most non-classical of Gaussian states.
 
 .. note:: While computationally hard to simulate, Boson Sampling devices, on their own, 
           are not capable of universal quantum computing. However, in combination with other 
-          components, GBS forms the key building blocks for a 
+          components, GBS forms the key building block for a 
           universal device [[#Bourassa2020]_].
 
 
@@ -101,7 +102,7 @@ in order to keep things classically simulatable, we will stick to a much simpler
 consisting of 4 squeezed states injected into a 4-mode interferometer. At a high level, 
 an interferometer on :math:`N` modes can be represented using a :math:`N\times N` unitary
 matrix :math:`U`. When decomposed into a quantum optical circuit, the interferometer will 
-be made up of two-mode beamsplitters (:class:`~pennylane.Beamsplitter`) and single-mode phase shifters (:class:`~pennylane.PhaseShift`).
+be made up of beamsplitters and phase shifters.
 
 .. image:: /demonstrations/tutorial_gbs_circuit2.png
     :align: center
@@ -137,7 +138,7 @@ print(U)
 ######################################################################
 # We can now use this to construct the circuit. 
 # First, we must create our device. For the simulation, we can use the Strawberry Fields 
-# Gaussian backend. This backend is perfectly suited for simulation of Gaussian boson sampling, 
+# Gaussian backend. This backend is perfectly suited for simulation of GBS, 
 # as the initial states are Gaussian, and all gates transform Gaussian states to other 
 # Gaussian states.
 
@@ -160,19 +161,20 @@ def gbs_circuit():
 ######################################################################
 # A couple of things to note in this particular example:
 #
-# 1. To prepare the input single mode squeezed vacuum state :math:`\ket{z}` where :math:`z = 1`, we
-#    apply a squeezing gate :class:`~pennylane.Squeezing` to each of the wires (initially in
+# 1. To prepare the input single mode squeezed vacuum state :math:`\ket{re^{e\phi}}`,
+#    where :math:`r = 1` and :math:`\phi=0`, we
+#    apply a squeezing gate (:class:`~pennylane.Squeezing`) to each of the wires (initially in
 #    the vacuum state).
 #
 # 2. Next we apply the linear interferometer to all four wires, using
 #    :class:`~pennylane.Interferometer`, and the unitary matrix ``U``. This operator
-#    decomposes the unitary matrix representing the linear interferometer into single mode
-#    rotation gates :class:`~pennylane.PhaseShift`, and two-mode beamsplitters
-#    :class:`~pennylane.Beamsplitter`. After applying the interferometer, we will denote the
+#    decomposes the unitary matrix representing the linear interferometer into single-mode
+#    rotation gates (:class:`~pennylane.PhaseShift`), and two-mode beamsplitters
+#    (:class:`~pennylane.Beamsplitter`). After applying the interferometer, we will denote the
 #    output state by :math:`\ket{\psi'}`.
 #
-# 3. Gaussian Boson Sampling takes place physically in an infinite-dimensional Hilbert space,
-#    which is not practical for simulation. We need to set an upper-limit on the maximum 
+# 3. GBS takes place physically in an infinite-dimensional Hilbert space,
+#    which is not practical for simulation. We need to set an upper limit on the maximum 
 #    number of photons we can detect. This is the
 #    ``cutoff`` value we defined above---we will only be considering detection events
 #    with 9 photons or less per mode.
@@ -183,14 +185,14 @@ probs = gbs_circuit().reshape([cutoff] * n_wires)
 print(probs.shape)
 
 ######################################################################
-# We now want to examine this output probability data. For
+# We want to explore this output probability data. For
 # example, element ``[1,2,0,1]`` represents the probability of 
 # detectiing 1 photon on wire
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
 #
 # .. math:: \text{prob}(1,2,0,1) = \left|\braketD{1,2,0,1}{\psi'}\right|^2.
 #
-# Lets extract and view the probabilities of measuring various Fock states.
+# Let's extract and view the probabilities of measuring various Fock states.
 
 # Fock states to measure at output
 measure_states = [(0,0,0,0), (1,1,0,0), (0,1,0,1), (1,1,1,1), (2,0,0,0)]
@@ -205,21 +207,22 @@ for i in measure_states:
 # --------------------
 # 
 # Hamilton et al. [[#hamilton2017]_] showed that the probability of
-# measuring a Fock state containing only 0 or 1 photons per mode is given by
+# measuring a final state containing only 0 or 1 photons per mode is given by
 # 
 # .. math::
 # 
 #     \left|\left\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\right\rangle\right|^2 =
 #     \frac{\left|\text{Haf}[(U(\bigoplus_i\tanh(r_i))U^T)]_{st}\right|^2}{\prod_{i=1}^N \cosh(r_i)}
 # 
-# i.e., the sampled single photon probability distribution is proportional to the **hafnian** of a
-# submatrix of :math:`U(\bigoplus_i\tanh(r_i))U^T`, dependent upon the output covariance matrix.
+# i.e., the sampled single-photon probability distribution is proportional to the **hafnian** of a
+# submatrix of :math:`U(\bigoplus_i\tanh(r_i))U^T`, dependent upon the covariance matrix
+# representing the Gaussian input state.
 # 
 # .. note::
 # 
 #     The hafnian of a matrix is defined by
 # 
-#     .. math:: \text{Haf}(A) = \frac{1}{n!2^n}\sum_{\sigma=S_{2N}}\prod_{i=1}^N A_{\sigma(2i-1)\sigma(2i)}
+#     .. math:: \text{Haf}(A) = \frac{1}{n!2^n}\sum_{\sigma=S_{2N}}\prod_{i=1}^N A_{\sigma(2i-1)\sigma(2i)},
 # 
 #     where :math:`S_{2N}` is the set of all permutations of :math:`2N` elements. In graph theory, the
 #     hafnian calculates the number of perfect `matchings
@@ -227,20 +230,20 @@ for i in measure_states:
 #     adjacency matrix :math:`A`.
 # 
 #     Compare this to the permanent, which calculates the number of perfect matchings on a *bipartite*
-#     graph - the hafnian turns out to be a generalization of the permanent, with the relationship
+#     graph. The hafnian turns out to be a generalization of the permanent, with the relationship
 # 
 #     .. math::
 # 
 #         \text{Per(A)} = \text{Haf}\left(\left[\begin{matrix}
 #             0&A\\ A^T&0
-#         \end{matrix}\right]\right)
+#         \end{matrix}\right]\right).
 # 
 # As any algorithm that could calculate (or even approximate) the hafnian could also calculate the
-# permanent - a #P-hard problem - it follows that calculating or approximating the hafnian must also
+# permanent---a `#P-hard problem <https://en.wikipedia.org/wiki/%E2%99%AFP>`__---it follows that calculating or approximating the hafnian must also
 # be a classically hard problem.
 #
-# In this particular example, we will use the same squeezing parameter, :math:`z=r`, for
-# all input states - this allows us to simplify this equation. To start with, the hafnian expression
+# In this demo, we will use the same squeezing parameter, :math:`z=r`, for
+# all input states; this allows us to simplify this equations. To start with, the hafnian expression
 # simply becomes :math:`\text{Haf}[(UU^T\tanh(r))]_{st}`, removing the need for the tensor sum.
 #
 # Thus, we have
@@ -250,9 +253,7 @@ for i in measure_states:
 #     \left|\left\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\right\rangle\right|^2 =
 #     \frac{\left|\text{Haf}[(UU^T\tanh(r))]_{st}\right|^2}{n_1!n_2!\cdots n_N!\cosh^N(r)}.
 #
-# Now that we have the interferometer unitary transformation :math:`U`, as well as the 'experimental'
-# results, let's compare the two, and see if the Gaussian boson sampling result in the case of equally
-# squeezed input modes, agrees with the PennyLane simulation probabilities.
+# Now that we have the theoretical formulas, as well as the probabilities from our simulated GBS QNode, we can compare the two, and see whether they agree.
 #
 # In order to calculate the probability of different GBS events classically, we need a
 # method for calculating the hafnian. 
@@ -269,7 +270,7 @@ from thewalrus import hafnian as haf
 B = (np.dot(U, U.T) * np.tanh(1))
 
 ######################################################################
-# In Gaussian boson sampling, we determine the submatrix by taking the
+# In GBS, we determine the submatrix by taking the
 # rows and columns corresponding to the measured Fock state. For example, to calculate the submatrix
 # in the case of the output measurement :math:`\left|{1,1,0,0}\right\rangle`,
 # we have
@@ -277,8 +278,12 @@ B = (np.dot(U, U.T) * np.tanh(1))
 print(B[:, [0, 1]][[0, 1]])
 
 ######################################################################
-# Comparing to the simulation
-# ----------------------------
+# i.e., we consider only the rows and columns where a photon was detected, which gives us
+# the submatrix corresponding to indices :math:`0` and :math:`1`.
+
+######################################################################
+# Comparing to simulation
+# -----------------------
 #
 # Now that we have a method for calculating the hafnian, let's compare the output to that provided by
 # the PennyLane QNode.
