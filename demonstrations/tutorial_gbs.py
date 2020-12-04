@@ -139,7 +139,6 @@ np.random.seed(42)
 
 # import PennyLane
 import pennylane as qml
-from strawberryfields.ops import *
 
 ######################################################################
 # First, we must define the unitary matrix we would like to embed in the circuit.
@@ -281,7 +280,6 @@ print(B[:, [0, 1]][[0, 1]])
 # This corresponds to the hafnian of an *empty* matrix, which is simply 1:
 
 print(1 / np.cosh(1) ** 4)
-
 print(probs[0, 0, 0, 0])
 
 ######################################################################
@@ -289,7 +287,6 @@ print(probs[0, 0, 0, 0])
 
 B = (np.dot(U, U.T) * np.tanh(1))[:, [0, 1]][[0, 1]]
 print(np.abs(haf(B)) ** 2 / np.cosh(1) ** 4)
-
 print(probs[1, 1, 0, 0])
 
 ######################################################################
@@ -297,7 +294,6 @@ print(probs[1, 1, 0, 0])
 
 B = (np.dot(U, U.T) * np.tanh(1))[:, [1, 3]][[1, 3]]
 print(np.abs(haf(B)) ** 2 / np.cosh(1) ** 4)
-
 print(probs[0, 1, 0, 1])
 
 ######################################################################
@@ -307,7 +303,6 @@ print(probs[0, 1, 0, 1])
 
 B = (np.dot(U, U.T) * np.tanh(1))
 print(np.abs(haf(B)) ** 2 / np.cosh(1) ** 4)
-
 print(probs[1, 1, 1, 1])
 
 ######################################################################
@@ -318,7 +313,6 @@ print(probs[1, 1, 1, 1])
 
 B = (np.dot(U, U.T) * np.tanh(1))[:, [0, 0]][[0, 0]]
 print(np.abs(haf(B)) ** 2 / (2 * np.cosh(1) ** 4))
-
 print(probs[2, 0, 0, 0])
 
 ######################################################################
