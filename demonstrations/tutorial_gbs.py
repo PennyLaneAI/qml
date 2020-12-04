@@ -21,13 +21,13 @@ milestones is to demonstrate a quantum device carrying out tasks that are beyond
 
 any classical algorithm. The Google Quantum team was the first to claim this achievement, 
 announced in their paper `Quantum supremacy using a programmable superconducting
-processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [[#Arute2019]_]. Now a team led 
+processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_. Now a team led 
 by Chao-Yang Lu and Jian-Wei Pan has performed a similar feat using quantum photonics. While 
 Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>` 
 using a superconducting processor, the new experiment, published in the paper 
 `Quantum computational advantage using photons 
 <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__ 
-[[#Zhong2020]_] leverages the quantum properties of light to tackle a task called 
+[#Zhong2020]_ leverages the quantum properties of light to tackle a task called 
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
 This tutorial will walk you through the basic elements of GBS, motivate why it is
@@ -69,9 +69,9 @@ the same output port---there is zero probability that they will emerge at separa
 This is a simple but notable quantum property of light; if electrons were brought 
 together in a similar experiement, they would always appear at separate output ports.
 
-Gaussian Boson Sampling [[#hamilton2017]_] is, in fact, a member of a larger family of 
+Gaussian Boson Sampling [#hamilton2017]_ is, in fact, a member of a larger family of 
 "Boson Sampling" algorithms, 
-stemming back to the initial proposal of Aaronson and Arkhipov [[#aaronson2013]_] in 2013. 
+stemming back to the initial proposal of Aaronson and Arkhipov [#aaronson2013]_ in 2013. 
 Boson Sampling is quantum interferometry writ large. Aaronson and Arkhipov's original proposal 
 was to inject many single photons into distinct input ports of a large interferometer, then 
 measure which output ports they appear at. The natural interference properties of bosons
@@ -96,13 +96,13 @@ since these are arguably the most non-classical of Gaussian states.
           are not capable of universal quantum computing. However, in combination with other 
           components, GBS is a key building block for a 
 
-          universal device [[#Bourassa2020]_].
+          universal device [#Bourassa2020]_.
 
 
 Coding a GBS algorithm
 ----------------------
 
-The researchers in [[#Zhong2020]_] experimentally demonstrate a GBS device by preparing 50 
+The researchers in [#Zhong2020]_ experimentally demonstrate a GBS device by preparing 50 
 
 squeezed states and injecting them into a 100-mode interferometer. In this demo, 
 in order to keep things classically simulable, we will stick to a much simpler setting 
@@ -218,7 +218,7 @@ for i in measure_states:
 # The GBS Distribution
 # --------------------
 # 
-# Hamilton et al. [[#hamilton2017]_] showed that the probability of
+# Hamilton et al. [#hamilton2017]_ showed that the probability of
 # measuring a final state containing only 0 or 1 photons per mode is given by
 # 
 # .. math::
