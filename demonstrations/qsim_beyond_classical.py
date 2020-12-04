@@ -1,6 +1,6 @@
 """
 
-.. _quantum_neural_net:
+.. _qsim_beyond_classical:
 
 Beyond classical computing with qsim
 ====================================

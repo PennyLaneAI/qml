@@ -2,8 +2,8 @@ r"""
 .. role:: html(raw)
    :format: html
 
-Photonic quantum advantage with GBS
-===================================
+Photonic quantum advantage with Gaussian Boson Sampling
+=======================================================
 
 .. meta::
     :property="og:description": Using states of light carry out tasks beyond the reach of classical computers.
@@ -15,7 +15,18 @@ Photonic quantum advantage with GBS
     qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
     
-
+On the journey to large-scale fault-tolerant quantum computers, one of the first major 
+milestones is to demonstrate a quantum device carrying out tasks which are beyond the reach of 
+any classical algorithm. The Google Quantum team was the first to claim this achievement, 
+announced in their paper `Quantum supremacy using a programmable superconducting
+processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [[#Arute2019]_]. Now a team led 
+by Chao-Yang Lu and Jian-Wei Pan has performed a similar feat using quantum photonics. While 
+Google's experiment performed the task of :ref:`random circuit sampling <qsim_beyond_classical>` 
+using a superconducting processor, the new experiment, published in the paper 
+`Quantum computational advantage using photons 
+<https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__ 
+[[#Zhong2020]_] leverages the quantum properties of light to tackle a task called 
+`Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
 
 Background theory
@@ -317,6 +328,16 @@ print(probs[2, 0, 0, 0])
 #
 # References
 # ----------
+#
+# .. [#Arute2019]
+#
+#     Arute, F., Arya, K., Babbush, R. et al. "Quantum supremacy using a programmable
+#     superconducting processor"
+#     `Nature 574, 505-510 (2019) <https://doi.org/10.1038/s41586-019-1666-5>`__.
+#
+# .. [#Zhong2020]
+#
+#     Zhong, H.-S., Wang, H., Deng, Y.-H. et al. (2020). Quantum computational advantage using photons. Science, 10.1126/science.abe8770.
 #
 # .. [#hamilton2017]
 #
