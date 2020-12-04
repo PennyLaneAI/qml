@@ -128,7 +128,7 @@ np.random.seed(42)
 import pennylane as qml
 
 ######################################################################
-# First, we must define the unitary matrix we would like to embed in the circuit.
+# We must define the unitary matrix we would like to embed in the circuit.
 # We will use SciPy to generate a Haar-random unitary:
 
 from scipy.stats import unitary_group
@@ -138,8 +138,8 @@ U = unitary_group.rvs(4)
 print(U)
 
 ######################################################################
-# We can now use this to construct the circuit. 
-# First, we must create our device. For the simulation, we can use the Strawberry Fields 
+# We can now use this to construct the circuit, choosing a compatible
+# device. For the simulation, we can use the Strawberry Fields 
 # Gaussian backend. This backend is perfectly suited for simulation of GBS, 
 # as the initial states are Gaussian, and all gates transform Gaussian states to other 
 # Gaussian states.
@@ -171,15 +171,15 @@ def gbs_circuit():
 # 2. Next we apply the linear interferometer to all four wires using
 #    :class:`~pennylane.Interferometer` and the unitary matrix ``U``. This operator
 #    decomposes the unitary matrix representing the linear interferometer into single-mode
-#    rotation gates (:class:`~pennylane.PhaseShift`), and two-mode beamsplitters
+#    rotation gates (:class:`~pennylane.PhaseShift`) and two-mode beamsplitters
 #    (:class:`~pennylane.Beamsplitter`). After applying the interferometer, we will denote the
 #    output state by :math:`\ket{\psi'}`.
 #
 # 3. GBS takes place physically in an infinite-dimensional Hilbert space,
 #    which is not practical for simulation. We need to set an upper limit on the maximum 
 #    number of photons we can detect. This is the
-#    ``cutoff`` value we defined above---we will only be considering detection events
-#    with 9 photons or less per mode.
+#    ``cutoff`` value we defined above; we will only be considering detection events
+#    containing 0 to 9 photons per mode.
 #
 # We can now execute the QNode, and extract the resulting probability distribution:
 
@@ -187,8 +187,7 @@ probs = gbs_circuit().reshape([cutoff] * n_wires)
 print(probs.shape)
 
 ######################################################################
-# We want to explore this output probability data. For
-# example, element ``[1,2,0,1]`` represents the probability of 
+# For example, element ``[1,2,0,1]`` represents the probability of 
 # detecting 1 photon on wire
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
 #
@@ -231,7 +230,9 @@ for i in measure_states:
 #     adjacency matrix :math:`A`.
 # 
 #     Compare this to the permanent, which calculates the number of perfect matchings on a *bipartite*
-#     graph. The hafnian turns out to be a generalization of the permanent, with the relationship
+#     graph. Notably, the permanent appears in vanilla Boson Sampling in a similar way
+#     that the hafnian appears in GBS.
+#     The hafnian turns out to be a generalization of the permanent, with the relationship
 # 
 #     .. math::
 # 
