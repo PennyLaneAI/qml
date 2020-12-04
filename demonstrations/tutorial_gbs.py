@@ -92,7 +92,6 @@ since these are arguably the most non-classical of Gaussian states.
 .. note:: While computationally hard to simulate, Boson Sampling devices, on their own, 
           are not capable of universal quantum computing. However, in combination with other 
           components, GBS is a key building block for a 
-
           universal device [#Bourassa2020]_.
 
 
