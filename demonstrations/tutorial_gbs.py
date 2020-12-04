@@ -7,7 +7,7 @@ Quantum advantage with Gaussian Boson Sampling
 
 .. meta::
     :property="og:description": Using states of light carry out tasks beyond the reach of classical computers.
-    :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_images/tutorial_gbs_expt2.png
 
 .. related::
 
@@ -21,7 +21,7 @@ any classical algorithm. The Google Quantum team was the first to claim this ach
 announced in their paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [[#Arute2019]_]. Now a team led 
 by Chao-Yang Lu and Jian-Wei Pan has performed a similar feat using quantum photonics. While 
-Google's experiment performed the task of :ref:`random circuit sampling <qsim_beyond_classical>` 
+Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>` 
 using a superconducting processor, the new experiment, published in the paper 
 `Quantum computational advantage using photons 
 <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__ 
@@ -361,4 +361,3 @@ print(probs[2, 0, 0, 0])
 #     Bourassa, J. E., Alexander, R. N., Vasmer, et al. (2020). Blueprint for a scalable 
 #     photonic fault-tolerant quantum computer. arXiv preprint arXiv:2010.02905.
 #
-
