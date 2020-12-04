@@ -6,7 +6,8 @@ Quantum advantage with Gaussian Boson Sampling
 ==============================================
 
 .. meta::
-    :property="og:description": Using states of light carry out tasks beyond the reach of classical computers.
+    :property="og:description": Using light to perform tasks beyond the reach of classical computers.
+
     :property="og:image": https://pennylane.ai/qml/_images/tutorial_gbs_expt2.png
 
 .. related::
@@ -16,7 +17,8 @@ Quantum advantage with Gaussian Boson Sampling
     qonn Optimizing a quantum optical neural network
     
 On the journey to large-scale fault-tolerant quantum computers, one of the first major 
-milestones is to demonstrate a quantum device carrying out tasks which are beyond the reach of 
+milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of 
+
 any classical algorithm. The Google Quantum team was the first to claim this achievement, 
 announced in their paper `Quantum supremacy using a programmable superconducting
 processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [[#Arute2019]_]. Now a team led 
@@ -28,8 +30,10 @@ using a superconducting processor, the new experiment, published in the paper
 [[#Zhong2020]_] leverages the quantum properties of light to tackle a task called 
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
-This tutorial will walk you through the basic elements of GBS, motivate why simulating it is
-classically challenging, and show how you can explore GBS using PennyLane and the photonic 
+This tutorial will walk you through the basic elements of GBS, motivate why it is
+
+classically challenging, and show you how to explore GBS using PennyLane and the photonic 
+
 quantum devices accessible via the 
 `PennyLane-Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`__. If you are 
 interested in possible applications of GBS, or want to access programmable GBS hardware
@@ -85,22 +89,27 @@ because they bear strong connections to the
 `Gaussian (or Normal) distribution <https://en.wikipedia.org/wiki/Normal_distribution>`__ 
 from statistics. In practice, we use a particular Gaussian state called a 
 `squeezed state <https://en.wikipedia.org/wiki/Squeezed_states_of_light>`__ for the inputs,
-since these are the most non-classical of Gaussian states.
+since these are arguably the most non-classical of Gaussian states.
+
 
 .. note:: While computationally hard to simulate, Boson Sampling devices, on their own, 
           are not capable of universal quantum computing. However, in combination with other 
-          components, GBS forms the key building block for a 
+          components, GBS is a key building block for a 
+
           universal device [[#Bourassa2020]_].
 
 
 Coding a GBS algorithm
 ----------------------
 
-In [[#Zhong2020]_], they experimentally demonstrate a GBS device by preparing 50 
+The researchers in [[#Zhong2020]_] experimentally demonstrate a GBS device by preparing 50 
+
 squeezed states and injecting them into a 100-mode interferometer. In this demo, 
-in order to keep things classically simulatable, we will stick to a much simpler setting 
+in order to keep things classically simulable, we will stick to a much simpler setting 
+
 consisting of 4 squeezed states injected into a 4-mode interferometer. At a high level, 
-an interferometer on :math:`N` modes can be represented using a :math:`N\times N` unitary
+an interferometer on :math:`N` modes can be represented using an :math:`N\times N` unitary
+
 matrix :math:`U`. When decomposed into a quantum optical circuit, the interferometer will 
 be made up of beamsplitters and phase shifters.
 
@@ -166,8 +175,10 @@ def gbs_circuit():
 #    apply a squeezing gate (:class:`~pennylane.Squeezing`) to each of the wires (initially in
 #    the vacuum state).
 #
-# 2. Next we apply the linear interferometer to all four wires, using
-#    :class:`~pennylane.Interferometer`, and the unitary matrix ``U``. This operator
+# 2. Next we apply the linear interferometer to all four wires using
+
+#    :class:`~pennylane.Interferometer` and the unitary matrix ``U``. This operator
+
 #    decomposes the unitary matrix representing the linear interferometer into single-mode
 #    rotation gates (:class:`~pennylane.PhaseShift`), and two-mode beamsplitters
 #    (:class:`~pennylane.Beamsplitter`). After applying the interferometer, we will denote the
@@ -187,7 +198,8 @@ print(probs.shape)
 ######################################################################
 # We want to explore this output probability data. For
 # example, element ``[1,2,0,1]`` represents the probability of 
-# detectiing 1 photon on wire
+# detecting 1 photon on wire
+
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
 #
 # .. math:: \text{prob}(1,2,0,1) = \left|\braketD{1,2,0,1}{\psi'}\right|^2.
@@ -215,8 +227,8 @@ for i in measure_states:
 #     \frac{\left|\text{Haf}[(U(\bigoplus_i\tanh(r_i))U^T)]_{st}\right|^2}{\prod_{i=1}^N \cosh(r_i)}
 # 
 # i.e., the sampled single-photon probability distribution is proportional to the **hafnian** of a
-# submatrix of :math:`U(\bigoplus_i\tanh(r_i))U^T`, dependent upon the covariance matrix
-# representing the Gaussian input state.
+# submatrix of :math:`U(\bigoplus_i\tanh(r_i))U^T`.
+
 # 
 # .. note::
 # 
@@ -224,9 +236,11 @@ for i in measure_states:
 # 
 #     .. math:: \text{Haf}(A) = \frac{1}{n!2^n}\sum_{\sigma=S_{2N}}\prod_{i=1}^N A_{\sigma(2i-1)\sigma(2i)},
 # 
-#     where :math:`S_{2N}` is the set of all permutations of :math:`2N` elements. In graph theory, the
+#     where :math:`S_{2N}` is the set of all perfect matching permutations of :math:`2N` elements. In graph theory, the
+
 #     hafnian calculates the number of perfect `matchings
-#     <https://en.wikipedia.org/wiki/Matching_(graph_theory)>`_ in an **arbitrary graph** with
+#     <https://en.wikipedia.org/wiki/Matching_(graph_theory)>`_ in a graph with
+
 #     adjacency matrix :math:`A`.
 # 
 #     Compare this to the permanent, which calculates the number of perfect matchings on a *bipartite*
@@ -243,7 +257,8 @@ for i in measure_states:
 # be a classically hard problem.
 #
 # In this demo, we will use the same squeezing parameter, :math:`z=r`, for
-# all input states; this allows us to simplify this equations. To start with, the hafnian expression
+# all input states; this allows us to simplify this equation. To start with, the hafnian expression
+
 # simply becomes :math:`\text{Haf}[(UU^T\tanh(r))]_{st}`, removing the need for the tensor sum.
 #
 # Thus, we have
@@ -253,7 +268,8 @@ for i in measure_states:
 #     \left|\left\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\right\rangle\right|^2 =
 #     \frac{\left|\text{Haf}[(UU^T\tanh(r))]_{st}\right|^2}{n_1!n_2!\cdots n_N!\cosh^N(r)}.
 #
-# Now that we have the theoretical formulas, as well as the probabilities from our simulated GBS QNode, we can compare the two, and see whether they agree.
+# Now that we have the theoretical formulas, as well as the probabilities from our simulated GBS QNode, we can compare the two and see whether they agree.
+
 #
 # In order to calculate the probability of different GBS events classically, we need a
 # method for calculating the hafnian. 
