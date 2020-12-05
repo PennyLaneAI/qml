@@ -63,7 +63,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/quanvolution/zoom.png
     :description: :doc:`demos/tutorial_quanvolution`
     :tags: tensorflow
-    
+
 .. customgalleryitem::
     :tooltip: Variational Quantum Linear Solver.
     :figure: demonstrations/vqls/vqls_zoom.png
@@ -74,7 +74,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Coherent implementation of a variational quantum linear solver.
     :figure: demonstrations/coherent_vqls/cvqls_zoom.png
     :description: :doc:`demos/tutorial_coherent_vqls`
-    :tags: autograd    
+    :tags: autograd
 
 .. customgalleryitem::
     :tooltip: Implement a multiclass variational classifier using PyTorch, PennyLane, and the iris dataset.
@@ -105,7 +105,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
-    
+
 .. customgalleryitem::
     :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
@@ -179,6 +179,28 @@ plateaus in quantum neural networks.
 
 :html:`</div></div><div style='clear:both'>`
 
+
+Quantum computing
+-----------------
+
+Explore the applications of PennyLane to more general quantum computing tasks
+such as benchmarking and characterizing quantum processors.
+
+.. customgalleryitem::
+    :tooltip: Beyond classical computing with qsim.
+    :figure: demonstrations/qsim_beyond_classical/sycamore.png
+    :description: :doc:`demos/qsim_beyond_classical`
+    :tags: cirq qsim
+
+.. customgalleryitem::
+   :tooltip: Construct and simulate a Gaussian Boson Sampler.
+   :figure: demonstrations/tutorial_gbs_thumbnail.png
+   :description: :doc:`demos/tutorial_gbs`
+   :tags: photonics strawberryfields
+
+:html:`</div></div><div style='clear:both'>`
+
+
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -206,3 +228,6 @@ plateaus in quantum neural networks.
     demos/qgrnn
     demos/qonn
     demos/tutorial_expressivity_fourier_series
+    demos/qsim_beyond_classical
+    demos/quantum_volume
+    demos/tutorial_gbs
