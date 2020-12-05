@@ -226,9 +226,9 @@ for i in measure_states:
 #
 #     The hafnian of a matrix is defined by
 #
-#     .. math:: \text{Haf}(A) = \sum_{\sigma \in S_{2N}}\prod_{i=1}^N A_{\sigma(2i-1)\sigma(2i)},
+#     .. math:: \text{Haf}(A) = \sum_{\sigma \in \text{PMP}_{2N}}\prod_{i=1}^N A_{\sigma(2i-1)\sigma(2i)},
 #
-#     where :math:`S_{2N}` is the set of all perfect matching permutations of :math:`2N` elements. In graph theory, the
+#     where :math:`\text{PMP}_{2N}` is the set of all perfect matching permutations of :math:`2N` elements. In graph theory, the
 #     hafnian calculates the number of perfect `matchings
 #     <https://en.wikipedia.org/wiki/Matching_(graph_theory)>`_ in a graph with
 #     adjacency matrix :math:`A`.
