@@ -124,12 +124,6 @@ plateaus in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
-    :tooltip: Beyond classical computing with qsim.
-    :figure: demonstrations/qsim_beyond_classical/sycamore.png
-    :description: :doc:`demos/qsim_beyond_classical`
-    :tags: cirq qsim
-
-.. customgalleryitem::
     :tooltip: Faster optimization convergence using quantum natural gradient.
     :figure: demonstrations/quantum_natural_gradient/qng_optimization.png
     :description: :doc:`demos/tutorial_quantum_natural_gradient`
@@ -185,6 +179,28 @@ plateaus in quantum neural networks.
 
 :html:`</div></div><div style='clear:both'>`
 
+
+Quantum computing
+-----------------
+
+Explore the applications of PennyLane to more general quantum computing tasks
+such as benchmarking and characterizing quantum processors.
+
+.. customgalleryitem::
+    :tooltip: Beyond classical computing with qsim.
+    :figure: demonstrations/qsim_beyond_classical/sycamore.png
+    :description: :doc:`demos/qsim_beyond_classical`
+    :tags: cirq qsim
+
+.. customgalleryitem::
+   :tooltip: Construct and simulate a Gaussian Boson Sampler.
+   :figure: demonstrations/tutorial_gbs_thumbnail.png
+   :description: :doc:`demos/tutorial_gbs`
+   :tags: photonics strawberryfields
+
+:html:`</div></div><div style='clear:both'>`
+
+
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -213,3 +229,5 @@ plateaus in quantum neural networks.
     demos/qonn
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
+    demos/quantum_volume
+    demos/tutorial_gbs
