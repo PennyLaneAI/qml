@@ -12,7 +12,7 @@ Computing gradients in parallel with Amazon Braket
     tutorial_vqe_parallel Evaluate the potential energy surface of H2 with parallel QPUs
 
 PennyLane integrates with `Amazon Braket <https://aws.amazon.com/braket/>`__ to enable quantum
-machine learning and optimization on high-performance remote simulators and quantum processing
+machine learning and optimization on high-performance simulators and quantum processing
 units (QPUs) through a range of `providers <https://aws.amazon.com/braket/hardware-providers/>`__.
 
 In PennyLane, Amazon Braket is accessed through the
@@ -23,7 +23,7 @@ plugin can be installed using
 
     pip install amazon-braket-pennylane-plugin
 
-A central feature of Amazon Braket is that its simulator can execute multiple circuits
+A central feature of Amazon Braket is that its remote simulator can execute multiple circuits
 in parallel. This capability can be harnessed in PennyLane during circuit training,
 which requires lots of variations of a circuit to be executed. Hence, the PennyLane-Braket plugin
 provides a method for scalable optimization of large circuits with many parameters. This tutorial
@@ -123,6 +123,9 @@ dev_remote = qml.device(
 dev_local = qml.device("default.qubit", wires=n_wires)
 
 ##############################################################################
+# Note that a local Braket device ``braket.local.qubit`` is also available. See the
+# `documentation <https://amazon-braket-pennylane-plugin-python.readthedocs.io>`__ for more details.
+#
 # Benchmarking circuit evaluation
 # -------------------------------
 #
@@ -310,12 +313,12 @@ dev = qml.device(
     wires=n_wires,
     s3_destination_folder=s3_folder,
     parallel=True,
-    max_parallel=40,
+    max_parallel=20,
     poll_timeout_seconds=30,
 )
 
 ##############################################################################
-# Note the specification of ``max_parallel=40``. This means that up to ``40`` circuits will be
+# Note the specification of ``max_parallel=20``. This means that up to ``20`` circuits will be
 # executed in parallel on SV1 (the default value is ``10``).
 #
 # .. warning::
@@ -328,7 +331,6 @@ dev = qml.device(
 # the :doc:`QAOA tutorial<tutorial_qaoa_intro>`.
 
 cost_h, mixer_h = qml.qaoa.maxcut(g)
-cost_h = cost_h + qml.Hamiltonian([edges / 2], [qml.Identity(0)])
 n_layers = 2
 
 
@@ -348,7 +350,9 @@ cost_function = qml.ExpvalCost(circuit, cost_h, dev, optimize=True)
 optimizer = qml.AdagradOptimizer(stepsize=0.1)
 
 ##############################################################################
-# We're now set up to train the circuit!
+# We're now set up to train the circuit! Note, if you are training this circuit yourself, you may
+# want to increase the number of iterations in the optimization loop and also investigate changing
+# the number of QAOA layers.
 #
 # .. warning::
 #     The following lines are computationally intensive. Remember that running it will result in
@@ -359,7 +363,7 @@ import time
 
 np.random.seed(1967)
 params = 0.01 * np.random.uniform(size=[2, n_layers])
-iterations = 30
+iterations = 10
 
 for i in range(iterations):
     t0 = time.time()
@@ -373,7 +377,6 @@ for i in range(iterations):
     else:
         print(f"Cost at step {i}:", cost_before)
 
-    print("----------------------------------------------")
     print(f"Completed iteration {i + 1}")
     print(f"Time to complete iteration: {t1 - t0} seconds")
 
@@ -389,128 +392,38 @@ print("Parameters saved to params.npy")
 #
 #  .. code-block:: none
 #
-#     Initial cost: 0.014297659040095268
-#     ----------------------------------------------
-#     Completed iteration 1
-#     Time to complete iteration: 63.39044307900076 seconds
-#     Cost at step 1: 2.8459282313672807
-#     ----------------------------------------------
-#     Completed iteration 2
-#     Time to complete iteration: 63.58402075000049 seconds
-#     Cost at step 2: 0.012737699936959238
-#     ----------------------------------------------
-#     Completed iteration 3
-#     Time to complete iteration: 63.990285107998716 seconds
-#     Cost at step 3: 0.000836846399183608
-#     ----------------------------------------------
-#     Completed iteration 4
-#     Time to complete iteration: 67.2918808200011 seconds
-#     Cost at step 4: -0.002158646044720085
-#     ----------------------------------------------
-#     Completed iteration 5
-#     Time to complete iteration: 63.04679181599931 seconds
-#     Cost at step 5: -0.012058444012211175
-#     ----------------------------------------------
-#     Completed iteration 6
-#     Time to complete iteration: 65.0637985909998 seconds
-#     Cost at step 6: -0.0637097126129031
-#     ----------------------------------------------
-#     Completed iteration 7
-#     Time to complete iteration: 68.77382928400039 seconds
-#     Cost at step 7: -0.32522304705382693
-#     ----------------------------------------------
-#     Completed iteration 8
-#     Time to complete iteration: 64.11835629199959 seconds
-#     Cost at step 8: -1.4110303319771835
-#     ----------------------------------------------
-#     Completed iteration 9
-#     Time to complete iteration: 63.46840504300053 seconds
-#     Cost at step 9: -3.871539656168175
-#     ----------------------------------------------
-#     Completed iteration 10
-#     Time to complete iteration: 62.60511550100091 seconds
-#     Cost at step 10: -6.054248744387342
-#     ----------------------------------------------
-#     Completed iteration 11
-#     Time to complete iteration: 63.309116153001014 seconds
-#     Cost at step 11: -6.999471198173209
-#     ----------------------------------------------
-#     Completed iteration 12
-#     Time to complete iteration: 63.393460999001036 seconds
-#     Cost at step 12: -7.411425766975379
-#     ----------------------------------------------
-#     Completed iteration 13
-#     Time to complete iteration: 63.335060223000255 seconds
-#     Cost at step 13: -7.67034923221981
-#     ----------------------------------------------
-#     Completed iteration 14
-#     Time to complete iteration: 60.62144135000017 seconds
-#     Cost at step 14: -7.893530730751327
-#     ----------------------------------------------
-#     Completed iteration 15
-#     Time to complete iteration: 61.422398073000295 seconds
-#     Cost at step 15: -8.11848197411851
-#     ----------------------------------------------
-#     Completed iteration 16
-#     Time to complete iteration: 65.89559789499981 seconds
-#     Cost at step 16: -8.35429067698969
-#     ----------------------------------------------
-#     Completed iteration 17
-#     Time to complete iteration: 64.06827740299923 seconds
-#     Cost at step 17: -8.596594085415477
-#     ----------------------------------------------
-#     Completed iteration 18
-#     Time to complete iteration: 61.12303119799981 seconds
-#     Cost at step 18: -8.832368276651332
-#     ----------------------------------------------
-#     Completed iteration 19
-#     Time to complete iteration: 64.6255340939988 seconds
-#     Cost at step 19: -9.043629677360917
-#     ----------------------------------------------
-#     Completed iteration 20
-#     Time to complete iteration: 61.8558455880011 seconds
-#     Cost at step 20: -9.213663732533174
-#     ----------------------------------------------
-#     Completed iteration 21
-#     Time to complete iteration: 64.9965052819989 seconds
-#     Cost at step 21: -9.334474719884758
-#     ----------------------------------------------
-#     Completed iteration 22
-#     Time to complete iteration: 62.273182810000435 seconds
-#     Cost at step 22: -9.409991169684407
-#     ----------------------------------------------
-#     Completed iteration 23
-#     Time to complete iteration: 64.10957817500093 seconds
-#     Cost at step 23: -9.452060650251452
-#     ----------------------------------------------
-#     Completed iteration 24
-#     Time to complete iteration: 64.19466979000026 seconds
-#     Cost at step 24: -9.473469809098832
-#     ----------------------------------------------
-#     Completed iteration 25
-#     Time to complete iteration: 64.16464572800032 seconds
-#     Cost at step 25: -9.483700288478586
-#     ----------------------------------------------
-#     Completed iteration 26
-#     Time to complete iteration: 63.894581133999964 seconds
-#     Cost at step 26: -9.488398771679048
-#     ----------------------------------------------
-#     Completed iteration 27
-#     Time to complete iteration: 63.317793481999615 seconds
-#     Cost at step 27: -9.490507105884868
-#     ----------------------------------------------
-#     Completed iteration 28
-#     Time to complete iteration: 63.84673080999892 seconds
-#     Cost at step 28: -9.491441272863154
-#     ----------------------------------------------
-#     Completed iteration 29
-#     Time to complete iteration: 63.57664666900018 seconds
-#     Cost at step 29: -9.491852670484572
-#     ----------------------------------------------
-#     Completed iteration 30
-#     Time to complete iteration: 63.12685334999878 seconds
-#     Cost at step 30: -9.492033508244045
-#     Parameters saved to params.npy
+#    Initial cost: -29.98570234095951
+#    Completed iteration 1
+#    Time to complete iteration: 93.96246099472046 seconds
+#    Cost at step 1: -27.154071768632154
+#    Completed iteration 2
+#    Time to complete iteration: 84.80994844436646 seconds
+#    Cost at step 2: -29.98726230006233
+#    Completed iteration 3
+#    Time to complete iteration: 83.13504934310913 seconds
+#    Cost at step 3: -29.999163153600062
+#    Completed iteration 4
+#    Time to complete iteration: 85.61391234397888 seconds
+#    Cost at step 4: -30.002158646044307
+#    Completed iteration 5
+#    Time to complete iteration: 86.70688223838806 seconds
+#    Cost at step 5: -30.012058444011906
+#    Completed iteration 6
+#    Time to complete iteration: 83.26341080665588 seconds
+#    Cost at step 6: -30.063709712612443
+#    Completed iteration 7
+#    Time to complete iteration: 85.25566911697388 seconds
+#    Cost at step 7: -30.32522304705352
+#    Completed iteration 8
+#    Time to complete iteration: 83.55433392524719 seconds
+#    Cost at step 8: -31.411030331978186
+#    Completed iteration 9
+#    Time to complete iteration: 84.08745908737183 seconds
+#    Cost at step 9: -33.87153965616938
+#    Completed iteration 10
+#    Time to complete iteration: 87.4032838344574 seconds
+#    Cost at step 10: -36.05424874438809
+#    Parameters saved to params.npy
 #
 # This example shows us that a 20-qubit QAOA problem can be trained within around 1-2 minutes per
 # iteration by using parallel executions on the Amazon Braket SV1 device to speed up gradient
