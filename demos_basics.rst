@@ -150,6 +150,11 @@ hardware.
     :description: :doc:`demos/tutorial_qnn_module_torch`
     :tags: pytorch
 
+.. customgalleryitem::
+    :tooltip: Parallelize gradient calculations with Amazon Braket
+    :figure: _static/pl-braket.png
+    :description: :doc:`demos/braket-parallel-gradients`
+    :tags: braket
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -175,3 +180,4 @@ hardware.
     demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
+    demos/braket-parallel-gradients
