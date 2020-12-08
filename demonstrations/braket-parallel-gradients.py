@@ -167,7 +167,7 @@ qnode_local = qml.QNode(circuit, dev_local)
 #     same circuit to different devices.
 #
 # .. warning::
-#     Running the contents of this notebook will result in simulation fees charged to your
+#     Running the contents of this tutorial will result in simulation fees charged to your
 #     AWS account. We recommend monitoring your usage on the AWS dashboard.
 #
 # Let's now compare the execution time between the two devices:
