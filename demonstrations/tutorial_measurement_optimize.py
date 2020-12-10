@@ -9,7 +9,33 @@ Measurement optimization
 .. related::
 
    tutorial_vqe Variational quantum eigensolver
-   tutorial_quantum_chemsitry Quantum chemistry with PennyLane
+   tutorial_quantum_chemistry Quantum chemistry with PennyLane
+   tutorial_qaoa_intro Intro to QAOA
+
+The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
+near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
+algorithm that sparked the variational circuit craze of the last 5 years, and holds the greatest
+promise for showcasing a quantum advantage on near-term quantum hardware. It has also inspired
+other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algorithm (QAOA)
+</demos/tutorial_qaoa_intro>`.
+
+To scale VQE beyond the regime of classical computation, however, we need to use it to solve for the
+ground state of excessively larger and larger molecules. A side effect is that the number of
+measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
+especially when quantum hardware access is limited and expensive.
+
+To mitigate this 'measurement problem', a plethora of recent research dropped over the course
+of 2019 and 2020, exploring potential strategies to minimize the number of measurements required.
+In fact, by grouping qubit-wise commuting terms of the Hamiltonian, we can significantly reduce the
+number of measurements needed---in some cases, reducing the number of measurements by up to
+90%(!).
+
+In this demonstration, we revisit VQE, see first-hand how the required number of measurements scales
+as molecule size increases, and finally use these measurement optimization strategies
+to minimize the number of measurements we need to make.
+
+It all begins with VQE
+----------------------
 
 The study of :doc:`variational quantum algorithms </glossary/variational_circuit>` was spearheaded
 by the introduction of the :doc:`variational quantum eigensolver <tutorial_vqe>` (VQE) algorithm in
@@ -119,7 +145,7 @@ print("Number of quantum evaluations:", dev.num_executions)
 # in their representation, but the number of terms in the Hamiltonian scales like
 # :math:`\mathcal{O}(N^4)`! 😱😱😱
 #
-# .. figure:: /demonstrations/measurement_optimization/n4.png
+# .. figure:: /demonstrations/measurement_optimize/n4.png
 #     :width: 70%
 #     :align: center
 
