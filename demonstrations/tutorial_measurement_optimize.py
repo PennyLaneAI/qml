@@ -149,6 +149,15 @@ print("Number of quantum evaluations:", dev.num_executions)
 #     :width: 70%
 #     :align: center
 
+
+##############################################################################
+# Grouping qubit-wise commuting terms
+# -----------------------------------
+
+##############################################################################
+# Beyond VQE
+# ----------
+
 ##############################################################################
 # References
 # ----------
@@ -159,3 +168,27 @@ print("Number of quantum evaluations:", dev.num_executions)
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
+# .. [yen2020]
+#
+#     Tzu-Ching Yen, Vladyslav Verteletskyi, and Artur F. Izmaylov. "Measuring all compatible
+#     operators in one series of single-qubit measurements using unitary transformations." `Journal of
+#     Chemical Theory and Computation 16.4 (2020): 2400-2409.
+#     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.0c00008>`__
+#
+# .. [verteletskyi2020]
+#
+#     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
+#     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
+#     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
+#
+# .. [izmaylov2019]
+#
+#    Artur F. Izmaylov, et al. "Unitary partitioning approach to the measurement problem in the
+#    variational quantum eigensolver method." `Journal of Chemical Theory and Computation 16.1 (2019):
+#    190-195. <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.9b00791>`__
+#
+# .. [gokhale2020]
+#
+#    Pranav Gokhale, et al. "Minimizing state preparations in variational quantum eigensolver by
+#    partitioning into commuting families." `arXiv preprint arXiv:1907.13623 (2019).
+#    <https://arxiv.org/abs/1907.13623>`__
