@@ -92,8 +92,9 @@ The measurement problem
 
 For small molecules, VQE scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final qubit-representation Hamiltonian
-has 15 terms that need to be measured. Lets generate this Hamiltonian using PennyLane
-QChem to verify this.
+has 15 terms that need to be measured. Lets generate this Hamiltonian from the electronic
+structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
+QChem to verify the number of terms.
 """
 
 import functools
@@ -105,10 +106,7 @@ H, num_qubits = qml.qchem.molecular_hamiltonian("h2", "h2.xyz")
 print("Required number of qubits:", num_qubits)
 print(H)
 
-##############################################################################
-# (the ``h2.xyz`` file describes the electronic structure of :math:`\text{H}_2`,
-# and can be downloaded here: :download:`h2.xyz </demonstrations/h2.xyz>`).
-#
+###############################################################################
 # Here, we can see that the Hamiltonian involves 15 terms, so we expect to compute 15 expectation values
 # on hardware. Let's generate the cost function to check this.
 
@@ -140,14 +138,37 @@ print("Cost function value:", cost(params))
 print("Number of quantum evaluations:", dev.num_executions)
 
 ##############################################################################
-# However, as the size of our molecule increases, we run into a problem; larger molecules
-# result in Hamiltonians that not only require a larger number of qubits :math:`N`
-# in their representation, but the number of terms in the Hamiltonian scales like
+# How about a larger molecule? Lets try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
+
+H, num_qubits = qml.qchem.molecular_hamiltonian("h2o", "h2o.xyz")
+
+print("Required number of qubits:", num_qubits)
+print("Number of Hamiltonian terms/required measurements:", len(H.ops))
+
+print("\n", H)
+
+
+##############################################################################
+# Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
+# resulted in 2050 measurements that must be made!
+#
+# We can see that as the size of our molecule increases, we run into a problem; larger molecules
+# result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
+# representation, but the number of terms in the Hamiltonian scales like
 # :math:`\mathcal{O}(N^4)`! 😱😱😱
+#
+# We can mitigate this somewhat by choosing smaller `basis sets
+# <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`__ to represent the electronic structure
+# wavefunction, however this comes with an accuracy cost, and doesn't reduce the number of
+# measurements significantly enough to allow us to scale to classically intractable problems.
 #
 # .. figure:: /demonstrations/measurement_optimize/n4.png
 #     :width: 70%
 #     :align: center
+#
+#     The number of qubit Hamiltonian terms required to represent various molecules in the specified
+#     basis sets (adapted from `Minimizing State Preparations for VQE by Gokhale et al.
+#     <https://pranavgokhale.com/static/Minimizing_State_Preparations_for_VQE.pdf>`__)
 
 
 ##############################################################################
