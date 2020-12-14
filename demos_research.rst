@@ -186,6 +186,8 @@ Quantum computing
 Explore the applications of PennyLane to more general quantum computing tasks
 such as benchmarking and characterizing quantum processors.
 
+:html:`<div class="gallery-grid row">`
+
 .. customgalleryitem::
     :tooltip: Beyond classical computing with qsim.
     :figure: demonstrations/qsim_beyond_classical/sycamore.png
