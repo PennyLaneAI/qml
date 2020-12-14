@@ -63,15 +63,26 @@ optimization problem can be translated into  finding a :math:`\theta*` such that
 This is exactly the problem that we'd consider when optimizing quantum
 functions!
 
+.. figure:: ../demonstrations/spsa/spsa_opt.png
+    :align: center
+    :width: 60%
+
+    ..
+
+    A schematic of the search paths used by gradient descent with
+    parameter-shift and SPSA in a low-noise setting.
+    Image source: [#spall_overview]_.
+
 Just like with gradient-based methods, we'd start with a :math:`\hat{\theta}_{0}`
 initial parameter vector. After :math:`k` iterations, the :math:`k+1.` parameter iterates
 can be obtained as
 
 .. math:: \hat{\theta}_{k+1} = \hat{\theta}_{k} - a_{k}\hat{g}_{k}(\hat{\theta}_{k})
 
-where :math:`\hat{g}_{k}` is the estimate of the gradient `g(u) = \frac{ \partial
-L}{\partial \theta}:math:` at the iterate :math:`\hat{\theta}_{k}` based on prior
-measurements of the cost function and :math:`a_{k}` is a numeric coefficient.
+where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(u) = \frac{
+\partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}` based on
+prior measurements of the cost function and :math:`a_{k}` is a numeric
+coefficient.
 
 As previously mentioned, SPSA further takes into account the noisiness of the
 result obtained when measuring function :math:`L`. Therefore, let's consider the
@@ -96,5 +107,7 @@ distribution is used.
 # References
 # ----------
 #
-# 1. James C. Spall, "An Overview of the Simultaneous Perturbation Method for Efficient Optimization."
+# .. [#spall_overview]
+#
+#    1. James C. Spall, "An Overview of the Simultaneous Perturbation Method for Efficient Optimization."
 #    `<https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF>`__, 1998
