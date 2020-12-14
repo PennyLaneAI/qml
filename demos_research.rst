@@ -186,6 +186,8 @@ Quantum computing
 Explore the applications of PennyLane to more general quantum computing tasks
 such as benchmarking and characterizing quantum processors.
 
+:html:`<div class="gallery-grid row">`
+
 .. customgalleryitem::
     :tooltip: Beyond classical computing with qsim.
     :figure: demonstrations/qsim_beyond_classical/sycamore.png
@@ -197,6 +199,12 @@ such as benchmarking and characterizing quantum processors.
    :figure: demonstrations/tutorial_gbs_thumbnail.png
    :description: :doc:`demos/tutorial_gbs`
    :tags: photonics strawberryfields
+
+.. customgalleryitem::
+   :tooltip: Learn how to compute the quantum volume of a quantum processor.
+   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
+   :description: :doc:`demos/quantum_volume`
+   :tags: characterization qiskit
 
 :html:`</div></div><div style='clear:both'>`
 
