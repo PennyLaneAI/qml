@@ -198,6 +198,12 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/tutorial_gbs`
    :tags: photonics strawberryfields
 
+.. customgalleryitem::
+   :tooltip: Learn how to compute the quantum volume of a quantum processor.
+   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
+   :description: :doc:`demos/quantum_volume`
+   :tags: characterization qiskit
+
 :html:`</div></div><div style='clear:both'>`
 
 

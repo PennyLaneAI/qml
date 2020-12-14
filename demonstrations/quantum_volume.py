@@ -6,7 +6,7 @@ Quantum volume
 .. meta::
     :property="og:description": Learn about quantum volume, and how to 
         compute it.
-    :property="og:image": https://pennylane.ai/qml/_images/bloch.png
+    :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
 
 .. related::
 
