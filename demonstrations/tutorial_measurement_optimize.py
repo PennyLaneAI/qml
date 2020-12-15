@@ -101,6 +101,9 @@ import functools
 from pennylane import numpy as np
 import pennylane as qml
 
+qml.enable_tape()
+np.random.seed(42)
+
 H, num_qubits = qml.qchem.molecular_hamiltonian("h2", "h2.xyz")
 
 print("Required number of qubits:", num_qubits)
@@ -172,8 +175,297 @@ print("\n", H)
 
 
 ##############################################################################
-# Grouping qubit-wise commuting terms
-# -----------------------------------
+# Simultaneously measuring terms
+# ------------------------------
+#
+# One of the assumptions we made above was that every term in the Hamiltonian must be measured independently.
+# However, this might not be the case. From the Heisenburg uncertainty relationship for two
+# observables :math:`\hat{A}` and :math:`\hat{B}`, we know that
+#
+# .. math:: \sigma_A^2 \sigma_B^2 \geq \frac{1}{2}\left|\left\langle [\hat{A}, \hat{B}] \right\rangle\right|,
+#
+# where
+#
+# .. math:: [\hat{A}, \hat{B}] = \hat{A}\hat{B}-\hat{B}\hat{A}
+#
+# is the commutator, and :math:`\sigma^2` the variance of measuring the expectation value of an
+# observable. Therefore,
+#
+# - If the two observables :math:`\hat{A}` and :math:`\hat{B}` do not commute (:math:`[\hat{A},
+#   \hat{B}] \neq 0`), then :math:`\sigma_A^2
+#   \sigma_B^2 > 0` and we cannot simultaneously measure the expectation values of the two
+#   observables.
+#
+# - If :math:`\hat{A}` and :math:`\hat{B}` **do** commute (:math:`[\hat{A},
+#   \hat{B}] = 0`), then :math:`\sigma_A^2
+#   \sigma_B^2 = 0` and we can **simultaneously measure** the expectation value of both observables
+#   on the same state.
+#
+# .. note::
+#
+#     To explore why, lets assume that there is a a complete, orthonormal eigenbasis :math:`|\psi_n\rangle`
+#     that *simultaneously diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
+#
+#     .. math::
+#
+#         \hat{A} |\psi_n\rangle &= \lambda_{A,n} |\psi_n\rangle,\\
+#         \hat{B} |\psi_n\rangle &= \lambda_{B,n} |\psi_n\rangle.
+#
+#     where :math:`\lambda_{A,n}` and :math:`\lambda_{B,n}` are the corresponding eigenvalues.
+#     If we pre-multiply the first equation by :math:`\hat{A}`, and the second by :math:`\hat{B}`:
+#
+#     .. math::
+#
+#         \hat{B}\hat{A} |\psi_n\rangle &= \lambda_{A,n} \hat{B} |\psi_n\rangle = \lambda_{A,n} \lambda_{B,n} |\psi_n\rangle,\\
+#         \hat{A}\hat{B} |\psi_n\rangle &= \lambda_{B,n} \hat{A} |\psi_n\rangle = \lambda_{A,n} \lambda_{B,n} |\psi_n\rangle.
+#
+#     Subtracting these two equations,
+#
+#     .. math:: (\hat{A}\hat{B} - \hat{B}\hat{A}) |\psi_n\rangle = [\hat{A}, \hat{B}]|\psi_n\rangle = 0.
+#
+#     Our assumption that :math:`|\psi_n\rangle` simultaneously diagonalizes both :math:`\hat{A}` and
+#     :math:`\hat{B}` only holds true if the two observables commute.
+#
+# So far, this seems awfully theoretical. What does this mean in practice?
+#
+# In the realm of variational circuits, we typically want to compute expectation values of an
+# observable on a given state :math:`|\psi\rangle`. If we have two commuting observables, we also know that
+# they share a simultaneous eigenbasis:
+#
+# .. math::
+#
+#     \hat{A} &= \sum_n \lambda_{A, n} |\psi_n\rangle\langle \psi_n|\\
+#     \hat{B} &= \sum_n \lambda_{B, n} |\psi_n\rangle\langle \psi_n|.
+#
+# Substituting this into the expression for the expectation values:
+#
+# .. math::
+#
+#     \langle\hat{A}\rangle &= \langle \psi | \hat{A} | \psi \rangle = \sum_n \lambda_{A,n} |\langle \psi_n|\psi\rangle|^2,\\
+#     \langle\hat{B}\rangle &= \langle \psi | \hat{B} | \psi \rangle = \sum_n \lambda_{B,n} |\langle \psi_n|\psi\rangle|^2.
+#
+# So, assuming we know the eigenvalues of the commuting observables in advance, if we perform a
+# measurement in their shared eigenbasis, we only need to perform a **single measurement** of the
+# probabilities in order to recover both expectation values!
+#
+# Fantastic! But, can we use this to reduce the number of measurements we need to perform in VQE?
+# To do so, we need to be able to answer two simple sounding questions:
+#
+# 1. How do we determine which terms of the cost Hamiltonian are commuting?
+#
+# 2. How do we rotate the circuit into the shared eigenbasis prior to measurement?
+#
+# The answers to these questions aren't necessarily easy nor straightforward. Thankfully, there are
+# some recent techniques we can harness to address both!
+#
+# .. figure:: /demonstrations/measurement_optimize/grouping.png
+#     :width: 90%
+#     :align: center
+
+##############################################################################
+# Qubit-wise commuting Pauli terms
+# --------------------------------
+#
+# Back when we summarized VQE, we saw that each term of the Hamiltonian is generally represented
+# as a tensor product of Pauli terms:
+#
+# .. math:: h_i = \prod_{n=0}^{N} \sigma_n.
+#
+# Luckily, this allows us to take a bit of a shortcut. Rather than consider **full commutativity**,
+# we can consider a subset known as **qubit-wise commutativity** (QWC).
+#
+# To start with, let's consider single Pauli operators. We know that the Pauli operators
+# commute with themselves as well as the identity, but they do *not* commute with
+# each other:
+#
+# .. math::
+#
+#     [\sigma_i, I] = 0, ~~~ [\sigma_i, \sigma_i] = 0, ~~~ [\sigma_i, \sigma_j] = k \sigma_j \delta_{ij}.
+#
+# Now consider two tensor products of Pauli terms, for example :math:`X\otimes Y \otimes I` and
+# :math:`X\otimes I \otimes Z`. We say that these two terms are qubit-wise commuting, since, if
+# we compare each subsystem in the tensor product,
+#
+# .. math::
+#
+#     &X\otimes Y \otimes I\\
+#     &X\otimes I \otimes Z,
+#
+# we see that every one commutes:
+#
+# .. math:: [X, X] = 0, ~~~ [Y, I] = 0, ~~~ [I, Z] = 0.
+#
+# As a consequence, both terms must commute:
+#
+# .. math:: [X\otimes Y \otimes I, X\otimes I \otimes Z] = 0.
+#
+# .. note::
+#
+#     Note that qubit-wise commutativity is a **sufficient** but not **necessary** condition
+#     for full commutativity. For example, the two Pauli terms :math:`Z\otimes Z` and
+#     :math:`X\otimes X` are not qubit-wise commuting, but do commute (have a go verifying this!).
+#
+# Once we have identified a commuting pair of Pauli terms, it is easy to see the rotations
+# required to simultaneously diagonalize the two terms into the Pauli Z basis:
+#
+# .. rst-class:: docstable
+#
+#     +------------------+-----------------------------------+
+#     |    Observable    | Change of basis gate    :math:`U` |
+#     +==================+===================================+
+#     | :math:`X`        | :math:`H`                         |
+#     +------------------+-----------------------------------+
+#     | :math:`Y`        | :math:`H S^{-1}=HSZ`              |
+#     +------------------+-----------------------------------+
+#     | :math:`Z`        | :math:`I`                         |
+#     +------------------+-----------------------------------+
+#     | :math:`I`        | :math:`I`                         |
+#     +------------------+-----------------------------------+
+#
+# Therefore:
+#
+# * To rotate the first wire into the :math:`X` basis, apply the Hadamard gate
+# * To rotate the second wire into the :math:`Y` basis, apply the :math:`H S^{-1}` gates
+# * To rotate the third wire into the :math:`Z` basis, no gate needs to be applied.
+#
+# Let's use PennyLane to verify this.
+
+
+obs = [
+    qml.PauliX(0) @ qml.PauliY(1),
+    qml.PauliX(0) @ qml.PauliZ(2)
+]
+
+
+##############################################################################
+# First, lets naively use two separate circuit evaluations to measure
+# the two QWC terms.
+
+
+dev = qml.device("default.qubit", wires=3)
+
+@qml.qnode(dev)
+def circuit1(weights):
+    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    return qml.expval(obs[0])
+
+
+@qml.qnode(dev)
+def circuit2(weights):
+    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    return qml.expval(obs[1])
+
+
+weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=3)
+
+print("Expectation value of XYI = ", circuit1(weights))
+print("Expectation value of XIZ = ", circuit2(weights))
+
+##############################################################################
+# Now, lets use our QWC approach to reduce this down to a *single* measurement
+# of the probabilities in the shared eigenbasis of both QWC observables:
+
+@qml.qnode(dev)
+def circuit_qwc(weights):
+    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+
+    # rotate wire 0 into the shared eigenbasis
+    qml.Hadamard(wires=0)
+
+    # rotate wire 1 into the shared eigenbasis
+    qml.S(wires=1).inv()
+    qml.Hadamard(wires=1)
+
+    # wire 2 does not require a rotation
+
+    # measure probabilities in the computational basis
+    return qml.probs(wires=range(3))
+
+
+rotated_probs = circuit_qwc(weights)
+print(rotated_probs)
+
+
+##############################################################################
+# To recover the *expectation values* of the two QWC observables from the probabilities,
+# recall that we need one final piece of information; their eigenvalues.
+# The Pauli operators have eigenvalues of :math:`(1, -1)`, while the identity
+# operator has eigenvalues :math:`(1, 1)`; we can make use of ``np.kron`` to quickly
+# generate the probabilities of the full Pauli terms.
+
+eigenvalues_XYI = np.kron(np.kron([1, -1], [1, -1]), [1, 1])
+eigenvalues_XIZ = np.kron(np.kron([1, -1], [1, 1]), [1, -1])
+
+# Taking the linear combination of the eigenvalues and the probabilities
+print("Expectation value of XYI = ", np.dot(eigenvalues_XYI, rotated_probs))
+print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
+
+
+##############################################################################
+# Compare this to the result when we used two circuit evaluations. We have successfully used a
+# single circuit evaluation to recover both expectation values!
+#
+# Luckily, PennyLane automatically performs this QWC under-the-hood. We simply
+# return the two QWC Pauli terms from the QNode:
+
+@qml.qnode(dev)
+def circuit(weights):
+    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    return [
+        qml.expval(qml.PauliX(0) @ qml.PauliY(1)),
+        qml.expval(qml.PauliX(0) @ qml.PauliZ(2))
+    ]
+
+
+print(circuit(weights))
+
+
+##############################################################################
+# Behind the scenes, PennyLane is making use of our built-in
+# :mod:`pennylane.grouping` module, which contains functions for diagonalizing
+# QWC terms:
+
+rotations, new_obs = qml.grouping.diagonalize_qwc_pauli_words(obs)
+
+print(rotations)
+print(new_obs)
+
+
+##############################################################################
+# Check out the :mod:`pennylane.grouping` documentation for more details on its
+# provided functionality and how it works!
+#
+# What happens, though, if we (without thinking!) ask a QNode to simultaneously
+# measure two observables that *aren't* qubit-wise commuting? For example,
+# lets consider :math:`X\otimes Y` and :math:`Z\otimes Z`:
+#
+# .. code-block:: python
+#
+#     @qml.qnode(dev)
+#     def circuit(weights):
+#         qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+#         return [
+#             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
+#             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+#         ]
+#
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     pennylane.qnodes.base.QuantumFunctionError: Only observables that are qubit-wise commuting
+#     Pauli words can be returned on the same wire
+#
+# The QNode has detected that the two observables are not qubit-wise commuting, and
+# has raised an error. So how do we programmatically group a set of observables
+# into qubit-wise commuting partitions?
+
+
+##############################################################################
+# Grouping QWC terms
+# ------------------
 
 ##############################################################################
 # Beyond VQE
