@@ -30,6 +30,10 @@ In fact, by grouping qubit-wise commuting terms of the Hamiltonian, we can signi
 number of measurements needed---in some cases, reducing the number of measurements by up to
 90%(!).
 
+.. figure:: /demonstrations/measurement_optimize/grouping.png
+    :width: 90%
+    :align: center
+
 In this demonstration, we revisit VQE, see first-hand how the required number of measurements scales
 as molecule size increases, and finally use these measurement optimization strategies
 to minimize the number of measurements we need to make.
@@ -257,10 +261,6 @@ print("\n", H)
 #
 # The answers to these questions aren't necessarily easy nor straightforward. Thankfully, there are
 # some recent techniques we can harness to address both!
-#
-# .. figure:: /demonstrations/measurement_optimize/grouping.png
-#     :width: 90%
-#     :align: center
 
 ##############################################################################
 # Qubit-wise commuting Pauli terms
