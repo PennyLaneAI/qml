@@ -110,8 +110,8 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Automatic Differentiation of Quantum Circuits
     :author: Nathan Killoran (Xanadu)
 
-    Dive into the world of quantum gradients. Learn how to apply the parameter shift
-    rules, and how partial derivatives of quantum circuits can be computed
+    Dive into the world of quantum gradients. Learn how to apply the parameter-shift
+    rule, and how derivatives of quantum circuits can be computed
     automatically in software.
 
 .. youtube:: YtepXvx5zdI
