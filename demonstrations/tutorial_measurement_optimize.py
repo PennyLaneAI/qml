@@ -305,28 +305,48 @@ print("\n", H)
 #     for full commutativity. For example, the two Pauli terms :math:`Z\otimes Z` and
 #     :math:`X\otimes X` are not qubit-wise commuting, but do commute (have a go verifying this!).
 #
-# Once we have identified a commuting pair of Pauli terms, it is easy to see the rotations
-# required to simultaneously diagonalize the two terms into the Pauli Z basis:
+# Once we have identified a qubit-wise commuting pair of Pauli terms, it is also straightforward to
+# find the gates to rotate the circuit into the shared eigenbasis. To do so, we simply rotate
+# each wire one-by-one depending on the Pauli operator we are measuring on that wire:
+#
+# .. raw:: html
+#
+#     <style>
+#         .docstable {
+#             max-width: 300px;
+#         }
+#         .docstable tr.row-even th, .docstable tr.row-even td {
+#             text-align: center;
+#         }
+#         .docstable tr.row-odd th, .docstable tr.row-odd td {
+#             text-align: center;
+#         }
+#     </style>
+#     <div class="d-flex justify-content-center">
 #
 # .. rst-class:: docstable
 #
-#     +------------------+-----------------------------------+
-#     |    Observable    | Change of basis gate    :math:`U` |
-#     +==================+===================================+
-#     | :math:`X`        | :math:`H`                         |
-#     +------------------+-----------------------------------+
-#     | :math:`Y`        | :math:`H S^{-1}=HSZ`              |
-#     +------------------+-----------------------------------+
-#     | :math:`Z`        | :math:`I`                         |
-#     +------------------+-----------------------------------+
-#     | :math:`I`        | :math:`I`                         |
-#     +------------------+-----------------------------------+
+#     +------------------+-----------------------+
+#     |    Observable    | Rotation gate         |
+#     +==================+=======================+
+#     | :math:`X`        | :math:`H`             |
+#     +------------------+-----------------------+
+#     | :math:`Y`        | :math:`H S^{-1}=HSZ`  |
+#     +------------------+-----------------------+
+#     | :math:`Z`        | :math:`I`             |
+#     +------------------+-----------------------+
+#     | :math:`I`        | :math:`I`             |
+#     +------------------+-----------------------+
 #
-# Therefore:
+# .. raw:: html
 #
-# * To rotate the first wire into the :math:`X` basis, apply the Hadamard gate
-# * To rotate the second wire into the :math:`Y` basis, apply the :math:`H S^{-1}` gates
-# * To rotate the third wire into the :math:`Z` basis, no gate needs to be applied.
+#     </div>
+#
+# Therefore, in this particular example:
+#
+# * Wire 0: we are measuring in the :math:`X` basis, apply the Hadamard gate
+# * Wire 1: we are measuring in the :math:`Y` basis, apply the :math:`H S^{-1}` gates
+# * Wire 2: we are measuring in the :math:`Z` basis, no gate needs to be applied.
 #
 # Let's use PennyLane to verify this.
 
@@ -387,9 +407,13 @@ print(rotated_probs)
 
 
 ##############################################################################
+# We have now calculated the probabilities of the variational circuit rotated into
+# the shared eigenbasis; :math:`|\langle \psi_n |\psi\rangle|^2`.
 # To recover the *expectation values* of the two QWC observables from the probabilities,
-# recall that we need one final piece of information; their eigenvalues.
-# The Pauli operators have eigenvalues of :math:`(1, -1)`, while the identity
+# recall that we need one final piece of information; their eigenvalues :math:`\lambda_{A, n}`
+# and :math:`\lambda_{B, n}`.
+#
+# We know that the Pauli operators have eigenvalues :math:`(1, -1)`, while the identity
 # operator has eigenvalues :math:`(1, 1)`; we can make use of ``np.kron`` to quickly
 # generate the probabilities of the full Pauli terms.
 
