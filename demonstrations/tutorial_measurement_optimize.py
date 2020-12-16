@@ -4,7 +4,7 @@ Measurement optimization
 
 .. meta::
     :property="og:description": Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_rosalin_002.png
+    :property="og:image": https://pennylane.ai/qml/_images/grouping.png
 
 .. related::
 
@@ -24,11 +24,11 @@ ground state of excessively larger and larger molecules. A side effect is that t
 measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
 especially when quantum hardware access is limited and expensive.
 
-To mitigate this 'measurement problem', a plethora of recent research dropped over the course
-of 2019 and 2020, exploring potential strategies to minimize the number of measurements required.
-In fact, by grouping qubit-wise commuting terms of the Hamiltonian, we can significantly reduce the
-number of measurements needed---in some cases, reducing the number of measurements by up to
-90%(!).
+To mitigate this 'measurement problem', a plethora of recent research dropped over the course of
+2019 and 2020 [#yen2020]_ [#verteletskyi2020]_ [#izmaylov2019]_ [#gokhale2020]_, exploring potential
+strategies to minimize the number of measurements required. In fact, by grouping qubit-wise
+commuting terms of the Hamiltonian, we can significantly reduce the number of measurements
+needed---in some cases, reducing the number of measurements by up to 90%(!).
 
 .. figure:: /demonstrations/measurement_optimize/grouping.png
     :width: 90%
@@ -38,8 +38,8 @@ In this demonstration, we revisit VQE, see first-hand how the required number of
 as molecule size increases, and finally use these measurement optimization strategies
 to minimize the number of measurements we need to make.
 
-It all begins with VQE
-----------------------
+Revisiting VQE
+--------------
 
 The study of :doc:`variational quantum algorithms </glossary/variational_circuit>` was spearheaded
 by the introduction of the :doc:`variational quantum eigensolver <tutorial_vqe>` (VQE) algorithm in
@@ -179,55 +179,64 @@ print("\n", H)
 
 
 ##############################################################################
-# Simultaneously measuring terms
-# ------------------------------
+# Simultaneously measuring observables
+# ------------------------------------
 #
 # One of the assumptions we made above was that every term in the Hamiltonian must be measured independently.
-# However, this might not be the case. From the Heisenburg uncertainty relationship for two
+# However, this might not be the case. From the `Heisenburg uncertainty relationship
+# <https://en.wikipedia.org/wiki/Uncertainty_principle>`__ for two
 # observables :math:`\hat{A}` and :math:`\hat{B}`, we know that
 #
 # .. math:: \sigma_A^2 \sigma_B^2 \geq \frac{1}{2}\left|\left\langle [\hat{A}, \hat{B}] \right\rangle\right|,
 #
-# where
+# where :math:`\sigma^2` the variance of measuring the expectation value of an
+# observable, and
 #
 # .. math:: [\hat{A}, \hat{B}] = \hat{A}\hat{B}-\hat{B}\hat{A}
 #
-# is the commutator, and :math:`\sigma^2` the variance of measuring the expectation value of an
-# observable. Therefore,
+# is the commutator. Therefore,
 #
 # - If the two observables :math:`\hat{A}` and :math:`\hat{B}` do not commute (:math:`[\hat{A},
 #   \hat{B}] \neq 0`), then :math:`\sigma_A^2
 #   \sigma_B^2 > 0` and we cannot simultaneously measure the expectation values of the two
 #   observables.
 #
+# ..
+#
 # - If :math:`\hat{A}` and :math:`\hat{B}` **do** commute (:math:`[\hat{A},
 #   \hat{B}] = 0`), then :math:`\sigma_A^2
-#   \sigma_B^2 = 0` and we can **simultaneously measure** the expectation value of both observables
-#   on the same state.
+#   \sigma_B^2 \geq 0` and there exists a measurement basis where we can **simultaneously measure** the
+#   expectation value of both observables on the same state.
 #
-# .. note::
+# .. admonition:: Aside: commutativity and shared eigenbases
+#     :class: aside
 #
-#     To explore why, lets assume that there is a a complete, orthonormal eigenbasis :math:`|\psi_n\rangle`
-#     that *simultaneously diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
+#     To explore why commutativity and simultaneous measurement are related, lets assume that there
+#     is a a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
+#     diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
 #
 #     .. math::
 #
-#         \hat{A} |\psi_n\rangle &= \lambda_{A,n} |\psi_n\rangle,\\
-#         \hat{B} |\psi_n\rangle &= \lambda_{B,n} |\psi_n\rangle.
+#         ① ~~ \hat{A} |\phi_n\rangle &= \lambda_{A,n} |\phi_n\rangle,\\
+#         ② ~~ \hat{B} |\phi_n\rangle &= \lambda_{B,n} |\phi_n\rangle.
 #
 #     where :math:`\lambda_{A,n}` and :math:`\lambda_{B,n}` are the corresponding eigenvalues.
-#     If we pre-multiply the first equation by :math:`\hat{A}`, and the second by :math:`\hat{B}`:
+#     If we pre-multiply the first equation by :math:`\hat{B}`, and the second by :math:`\hat{A}`
+#     (denoted in blue):
 #
 #     .. math::
 #
-#         \hat{B}\hat{A} |\psi_n\rangle &= \lambda_{A,n} \hat{B} |\psi_n\rangle = \lambda_{A,n} \lambda_{B,n} |\psi_n\rangle,\\
-#         \hat{A}\hat{B} |\psi_n\rangle &= \lambda_{B,n} \hat{A} |\psi_n\rangle = \lambda_{A,n} \lambda_{B,n} |\psi_n\rangle.
+#         \color{blue}{\hat{B}}\hat{A} |\phi_n\rangle &= \lambda_{A,n} \color{blue}{\hat{B}}
+#           |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle,\\
+#         \color{blue}{\hat{A}}\hat{B} |\phi_n\rangle &= \lambda_{B,n} \color{blue}{\hat{A}}
+#           |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle.
 #
-#     Subtracting these two equations,
+#     We can see that assuming a simultaneous eigenbasis requires that
+#     :math:`\hat{A}\hat{B}|\phi_n\rangle = \hat{B}\hat{A}|\phi_n\rangle`. Or, rearranging,
 #
-#     .. math:: (\hat{A}\hat{B} - \hat{B}\hat{A}) |\psi_n\rangle = [\hat{A}, \hat{B}]|\psi_n\rangle = 0.
+#     .. math:: (\hat{A}\hat{B} - \hat{B}\hat{A}) |\phi_n\rangle = [\hat{A}, \hat{B}]|\phi_n\rangle = 0.
 #
-#     Our assumption that :math:`|\psi_n\rangle` simultaneously diagonalizes both :math:`\hat{A}` and
+#     Our assumption that :math:`|\phi_n\rangle` simultaneously diagonalizes both :math:`\hat{A}` and
 #     :math:`\hat{B}` only holds true if the two observables commute.
 #
 # So far, this seems awfully theoretical. What does this mean in practice?
@@ -238,19 +247,23 @@ print("\n", H)
 #
 # .. math::
 #
-#     \hat{A} &= \sum_n \lambda_{A, n} |\psi_n\rangle\langle \psi_n|\\
-#     \hat{B} &= \sum_n \lambda_{B, n} |\psi_n\rangle\langle \psi_n|.
+#     \hat{A} &= \sum_n \lambda_{A, n} |\phi_n\rangle\langle \phi_n|\\
+#     \hat{B} &= \sum_n \lambda_{B, n} |\phi_n\rangle\langle \phi_n|.
 #
 # Substituting this into the expression for the expectation values:
 #
 # .. math::
 #
-#     \langle\hat{A}\rangle &= \langle \psi | \hat{A} | \psi \rangle = \sum_n \lambda_{A,n} |\langle \psi_n|\psi\rangle|^2,\\
-#     \langle\hat{B}\rangle &= \langle \psi | \hat{B} | \psi \rangle = \sum_n \lambda_{B,n} |\langle \psi_n|\psi\rangle|^2.
+#     \langle\hat{A}\rangle &= \langle \psi | \hat{A} | \psi \rangle = \langle \psi | \left( \sum_n
+#         \lambda_{A, n} |\phi_n\rangle\langle \phi_n| \right) | \psi \rangle = \sum_n \lambda_{A,n}
+#         |\langle \phi_n|\psi\rangle|^2,\\
+#     \langle\hat{B}\rangle &= \langle \psi | \hat{B} | \psi \rangle = \langle \psi | \left( \sum_n
+#         \lambda_{B, n} |\phi_n\rangle\langle \phi_n| \right) | \psi \rangle = \sum_n \lambda_{B,n}
+#         |\langle \phi_n|\psi\rangle|^2.
 #
 # So, assuming we know the eigenvalues of the commuting observables in advance, if we perform a
 # measurement in their shared eigenbasis, we only need to perform a **single measurement** of the
-# probabilities in order to recover both expectation values!
+# probabilities :math:`|\langle \phi_n|\psi\rangle|^2` in order to recover both expectation values! 😍
 #
 # Fantastic! But, can we use this to reduce the number of measurements we need to perform in VQE?
 # To do so, we need to be able to answer two simple sounding questions:
@@ -260,7 +273,7 @@ print("\n", H)
 # 2. How do we rotate the circuit into the shared eigenbasis prior to measurement?
 #
 # The answers to these questions aren't necessarily easy nor straightforward. Thankfully, there are
-# some recent techniques we can harness to address both!
+# some recent techniques we can harness to address both.
 
 ##############################################################################
 # Qubit-wise commuting Pauli terms
@@ -280,29 +293,27 @@ print("\n", H)
 #
 # .. math::
 #
-#     [\sigma_i, I] = 0, ~~~ [\sigma_i, \sigma_i] = 0, ~~~ [\sigma_i, \sigma_j] = k \sigma_j \delta_{ij}.
+#     [\sigma_i, I] = 0, ~~~ [\sigma_i, \sigma_i] = 0, ~~~ [\sigma_i, \sigma_j] = c \sigma_k \delta_{ij}.
 #
 # Now consider two tensor products of Pauli terms, for example :math:`X\otimes Y \otimes I` and
 # :math:`X\otimes I \otimes Z`. We say that these two terms are qubit-wise commuting, since, if
-# we compare each subsystem in the tensor product,
+# we compare each subsystem in the tensor product, we see that every one commutes:
 #
 # .. math::
 #
-#     &X\otimes Y \otimes I\\
-#     &X\otimes I \otimes Z,
-#
-# we see that every one commutes:
-#
-# .. math:: [X, X] = 0, ~~~ [Y, I] = 0, ~~~ [I, Z] = 0.
+#     \begin{array}{ | *1c | *1c | *1c | *1c | *1c |}
+#       X &\otimes &Y &\otimes &I\\
+#       X &\otimes &I &\otimes &Z
+#     \end{array} ~~~~ \Rightarrow ~~~~ [X, X] = 0, ~~~ [Y, I] = 0, ~~~ [I, Z] = 0.
 #
 # As a consequence, both terms must commute:
 #
 # .. math:: [X\otimes Y \otimes I, X\otimes I \otimes Z] = 0.
 #
-# .. note::
+# .. important::
 #
-#     Note that qubit-wise commutativity is a **sufficient** but not **necessary** condition
-#     for full commutativity. For example, the two Pauli terms :math:`Z\otimes Z` and
+#     Qubit-wise commutativity is a **sufficient** but not **necessary** condition
+#     for full commutativity. For example, the two Pauli terms :math:`Y\otimes Y` and
 #     :math:`X\otimes X` are not qubit-wise commuting, but do commute (have a go verifying this!).
 #
 # Once we have identified a qubit-wise commuting pair of Pauli terms, it is also straightforward to
@@ -344,9 +355,9 @@ print("\n", H)
 #
 # Therefore, in this particular example:
 #
-# * Wire 0: we are measuring in the :math:`X` basis, apply the Hadamard gate
-# * Wire 1: we are measuring in the :math:`Y` basis, apply the :math:`H S^{-1}` gates
-# * Wire 2: we are measuring in the :math:`Z` basis, no gate needs to be applied.
+# * Wire 0: we are measuring both terms in the :math:`X` basis, apply the Hadamard gate
+# * Wire 1: we are measuring both terms in the :math:`Y` basis, apply the :math:`H S^{-1}` gates
+# * Wire 2: we are measuring both terms in the :math:`Z` basis, no gate needs to be applied.
 #
 # Let's use PennyLane to verify this.
 
@@ -407,11 +418,10 @@ print(rotated_probs)
 
 
 ##############################################################################
-# We have now calculated the probabilities of the variational circuit rotated into
-# the shared eigenbasis; :math:`|\langle \psi_n |\psi\rangle|^2`.
-# To recover the *expectation values* of the two QWC observables from the probabilities,
-# recall that we need one final piece of information; their eigenvalues :math:`\lambda_{A, n}`
-# and :math:`\lambda_{B, n}`.
+# We're not quite there yet; we have only calculated the probabilities of the variational circuit
+# rotated into the shared eigenbasis; :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
+# *expectation values* of the two QWC observables from the probabilities, recall that we need one
+# final piece of information; their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
 #
 # We know that the Pauli operators have eigenvalues :math:`(1, -1)`, while the identity
 # operator has eigenvalues :math:`(1, 1)`; we can make use of ``np.kron`` to quickly
@@ -446,8 +456,8 @@ print(circuit(weights))
 
 ##############################################################################
 # Behind the scenes, PennyLane is making use of our built-in
-# :mod:`pennylane.grouping` module, which contains functions for diagonalizing
-# QWC terms:
+# :mod:`qml.grouping <pennylane.grouping>` module, which contains functions for diagonalizing QWC
+# terms:
 
 rotations, new_obs = qml.grouping.diagonalize_qwc_pauli_words(obs)
 
@@ -456,12 +466,12 @@ print(new_obs)
 
 
 ##############################################################################
-# Check out the :mod:`pennylane.grouping` documentation for more details on its
-# provided functionality and how it works!
+# Check out the :mod:`qml.grouping <pennylane.grouping>` documentation for more details on its
+# provided functionality and how it works.
 #
-# What happens, though, if we (without thinking!) ask a QNode to simultaneously
-# measure two observables that *aren't* qubit-wise commuting? For example,
-# lets consider :math:`X\otimes Y` and :math:`Z\otimes Z`:
+# What happens, though, if we (in a moment of reckless abandonment!) ask a QNode to simultaneously
+# measure two observables that *aren't* qubit-wise commuting? For example, lets consider
+# :math:`X\otimes Y` and :math:`Z\otimes Z`:
 #
 # .. code-block:: python
 #
@@ -483,13 +493,60 @@ print(new_obs)
 #     Pauli words can be returned on the same wire
 #
 # The QNode has detected that the two observables are not qubit-wise commuting, and
-# has raised an error. So how do we programmatically group a set of observables
-# into qubit-wise commuting partitions?
-
+# has raised an error.
+#
+# So, a strategy begins to take shape: given a Hamiltonian containing a large number of Pauli terms,
+# can we somehow partition the terms into **fewest** number of QWC groups, to minimize the measurements
+# we need to take?
 
 ##############################################################################
 # Grouping QWC terms
 # ------------------
+#
+# Say we have the following Hamiltonian defined over four qubits:
+#
+# .. math:: H = Z_0 + Z_0 Z_1 + Z_0 Z_1 Z_2 + Z_0 Z_1 Z_2 Z_3 + X_2 X_3 + Y_0 X_2 X_3 + Y_0 Y_1 X_2 X_3,
+#
+# where we are using the shorthand :math:`P_0 P_2 = P\otimes I \otimes P \otimes I` for brevity.
+# If we go through and work out which Pauli terms are qubit-wise commuting, we can represent
+# this in a neat way using a graph:
+#
+# .. figure:: /demonstrations/measurement_optimize/graph1.png
+#     :width: 70%
+#     :align: center
+#
+# In the above graph, every node represents an individual Pauli term of the Hamiltonian, with
+# edges connecting terms that are qubit-wise commuting. Groups of qubit-wise commuting terms are
+# represented as **complete subgraphs**. Straight away, we can make an observation:
+# there is no unique solution for partitioning the Hamiltonian into groups of qubit-wise commuting
+# terms! In fact, there are several solutions:
+#
+# .. figure:: /demonstrations/measurement_optimize/graph2.png
+#     :width: 90%
+#     :align: center
+#
+# Of course, of the potential solutions above, there is one that is more optimal than the others;
+# on the bottom left, we have partitioned the graph into *two* complete subgraphs, as opposed to the
+# other solutions that require three complete subgraphs. If we were to go with this solution,
+# we would be able to measure the expectation value of the Hamiltonian using two circuit evaluations.
+#
+# This problem---finding the minimum number of complete subgraphs of a graph---is actually quite well
+# known in graph theory, where it is referred to as the `minimum clique cover problem
+# <https://en.wikipedia.org/wiki/Clique_cover>`__ (with 'clique' being another term for a complete subgraph).
+#
+# Unfortunately, that's where our good fortune ends---the minimum clique cover is known to
+# be `NP-hard <https://en.wikipedia.org/wiki/NP-hardness>`__, meaning there is no known (classical)
+# solution to finding the optimum/minimum clique cover in polynomial time.
+#
+# Thankfully, there is a silver lining---we know of polynomial-time algorithms for finding
+# *approximate* solutions to the minimum clique cover problem. These heuristic approaches, while
+# not guaranteed to find the optimum solution, scale quadratically with the number of nodes in the
+# graph/terms in the Hamiltonian [#yen2020]_, so work reasonably well in practice.
+#
+# .. figure:: /demonstrations/measurement_optimize/graph3.png
+#     :width: 100%
+#     :align: center
+#
 
 ##############################################################################
 # Beyond VQE
@@ -505,26 +562,26 @@ print(new_obs)
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
-# .. [yen2020]
+# .. [#yen2020]
 #
 #     Tzu-Ching Yen, Vladyslav Verteletskyi, and Artur F. Izmaylov. "Measuring all compatible
 #     operators in one series of single-qubit measurements using unitary transformations." `Journal of
 #     Chemical Theory and Computation 16.4 (2020): 2400-2409.
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.0c00008>`__
 #
-# .. [verteletskyi2020]
+# .. [#verteletskyi2020]
 #
 #     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
 #     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
 #
-# .. [izmaylov2019]
+# .. [#izmaylov2019]
 #
 #    Artur F. Izmaylov, et al. "Unitary partitioning approach to the measurement problem in the
 #    variational quantum eigensolver method." `Journal of Chemical Theory and Computation 16.1 (2019):
 #    190-195. <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.9b00791>`__
 #
-# .. [gokhale2020]
+# .. [#gokhale2020]
 #
 #    Pranav Gokhale, et al. "Minimizing state preparations in variational quantum eigensolver by
 #    partitioning into commuting families." `arXiv preprint arXiv:1907.13623 (2019).
