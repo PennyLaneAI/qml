@@ -177,6 +177,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_vqe_qng`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
+    :figure: demonstrations/measurement_optimize/grouping.png
+    :description: :doc:`demos/tutorial_measurement_optimize`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -224,6 +230,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
+    demos/tutorial_measurement_optimize
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier
