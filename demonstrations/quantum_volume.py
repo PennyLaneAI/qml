@@ -6,7 +6,7 @@ Quantum volume
 .. meta::
     :property="og:description": Learn about quantum volume, and how to 
         compute it.
-    :property="og:image": https://pennylane.ai/qml/_images/bloch.png
+    :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
 
 .. related::
 
@@ -296,7 +296,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # Equipped with our definition of quantum volume, it's time to compute it
 # ourselves! We'll use the `PennyLane-Qiskit
 # <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ plugin to compute the
-# volume of one of the IBM processors, since their properties are easily
+# volume of a simulated version of one of the IBM processors, since their properties are easily
 # accessible through this plugin.
 #
 #
