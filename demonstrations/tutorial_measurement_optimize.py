@@ -538,14 +538,43 @@ print(new_obs)
 # be `NP-hard <https://en.wikipedia.org/wiki/NP-hardness>`__, meaning there is no known (classical)
 # solution to finding the optimum/minimum clique cover in polynomial time.
 #
-# Thankfully, there is a silver lining---we know of polynomial-time algorithms for finding
+# Thankfully, there is a silver lining: we know of polynomial-time algorithms for finding
 # *approximate* solutions to the minimum clique cover problem. These heuristic approaches, while
 # not guaranteed to find the optimum solution, scale quadratically with the number of nodes in the
 # graph/terms in the Hamiltonian [#yen2020]_, so work reasonably well in practice.
 #
+# Many of these heuristic approaches have roots in another graph problem known as `graph
+# colouring <https://en.wikipedia.org/wiki/Graph_coloring>`__; the assignment of colours to
+# the graph's vertices such that no adjacent vertices have the same colour. How is this related
+# to the minimum clique cover problem, though? If we take our QWC graph above, and generate the
+# `complement graph <https://en.wikipedia.org/wiki/Complement_graph>`__ by drawing edges
+# between all *non*-adjacent nodes,
+#
 # .. figure:: /demonstrations/measurement_optimize/graph3.png
 #     :width: 100%
 #     :align: center
+#
+# we see that solving the minimum clique cover problem on the QWC graph is equivalent to solving the
+# graph colouring problem on the complement graph using the minimum possible number of colours.
+# While there are various different heuristic algorithms, a common one is `greedy colouring
+# <https://en.wikipedia.org/wiki/Graph_coloring#Greedy_coloring>`__; in fact, the open-source graph
+# package `NetworkX even provides a function for greedy colouring
+# <https://networkx.org/documentation/stable//reference/algorithms/generated/networkx.algorithms.coloring.greedy_color.html#networkx.algorithms.coloring.greedy_color>`__,
+# ``nx.greedy_color``.
+#
+# So, we now have a strategy for minimizing the number of measurements we need to perform
+# for our VQE problem:
+#
+# 1. Determine which terms of the Hamiltonian are qubit-wise commuting, and use
+#    this to construct a graph representing the QWC relationship.
+#
+# 2. Construct the complement QWC graph.
+#
+# 3. Use a graph colouring heuristic algorithm to determine a graph colouring
+#    with a minimum number of colours. Each coloured vertex set corresponds to a
+#    qubit-wise commuting group of Hamiltonian terms.
+#
+# 4. Generate the shared basis rotations for each QWC 
 #
 
 ##############################################################################
