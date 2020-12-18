@@ -148,15 +148,16 @@ Community
     :code: https://github.com/roberth2018/Quantum-Machine-Learning/blob/main/Quantum_Machine_Learning_Model_Predictor_for_Continuous_Variable_.ipynb
     :color: heavy-rain-gradient
     
-    According to this paper: "Predicting toxicity by quantum machine learning" 
-    (Teppei Suzuki, Michio Katouda 2020) is possible to predict continuous variables like 
-    continuous-variable quantum neural network model described in Killoran et al. (2018), 
-    using 2 qbits per feature applying encodings, variational circuits and some lineal 
-    transformations on expected values in order to predict values close to real target. 
-    I uploaded the following example from https://pennylane.ai/qml/demos/quantum_neural_net 
-    using PennyLane libraries, a short dataset which consists on 1 dimensional feature and 1 
-    output, so that the processing does not take too much time, the algorithm showed reliable 
-    results.
+    According to the paper "Predicting toxicity by quantum machine learning" 
+    (Teppei Suzuki, Michio Katouda 2020), it is possible to predict continuous variables—like 
+    those in the continuous-variable quantum neural network model described in Killoran et al. 
+    (2018)—using 2 qubits per feature. This is done by applying encodings, variational circuits, 
+    and some linear transformations on expectation values in order to predict values close to 
+    the real target. 
+    Based on an <a href="https://pennylane.ai/qml/demos/quantum_neural_net">example</a> 
+    from PennyLane, and using a small dataset which consists of a one-dimensional feature 
+    and one output (so that the processing does not take too much time), the algorithm showed 
+    reliable results.
 
 .. community-card::
     :title: A Quantum-Enhanced LSTM Layer
