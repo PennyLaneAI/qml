@@ -60,7 +60,7 @@ molecular Hamiltonian is computed:
 
 where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators :math:`\sigma_n`:
 
-.. math:: h_i = \prod_{n=0}^{N} \sigma_n.
+.. math:: h_i = \bigotimes_{n=0}^{N-1} \sigma_n.
 
 The cost function of the VQE is then simply the expectation value of this Hamiltonian on the state obtained after running
 the variational quantum circuit:
@@ -281,7 +281,7 @@ print("\n", H)
 # Back when we summarized the VQE algorithm, we saw that each term of the Hamiltonian is generally represented
 # as a tensor product of Pauli terms:
 #
-# .. math:: h_i = \prod_{n=0}^{N} \sigma_n.
+# .. math:: h_i = \bigotimes_{n=0}^{N-1} \sigma_n.
 #
 # Luckily, this allows us to take a bit of a shortcut. Rather than consider **full commutativity**,
 # we can consider a slightly less strict condition known as **qubit-wise commutativity** (QWC).
@@ -496,7 +496,7 @@ print(new_obs)
 # has raised an error.
 #
 # So, a strategy begins to take shape: given a Hamiltonian containing a large number of Pauli terms,
-# can we somehow partition the terms into **fewest** number of QWC groups, to minimize the measurements
+# can we somehow partition the terms into **fewest** number of QWC groups to minimize the number of measurements
 # we need to take?
 
 ##############################################################################
@@ -714,7 +714,7 @@ groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf'
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2052 required measurements/circuit evaluations to 523 (just over *two thousand*
+# We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*
 # down to *five hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.
