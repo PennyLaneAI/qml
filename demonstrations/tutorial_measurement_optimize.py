@@ -418,12 +418,13 @@ print(rotated_probs)
 
 ##############################################################################
 # We're not quite there yet; we have only calculated the probabilities of the variational circuit
-# rotated into the shared eigenbasis; :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
+# rotated into the shared eigenbasis---the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
 # *expectation values* of the two QWC observables from the probabilities, recall that we need one
-# final piece of information; their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
+# final piece of information: their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
 #
-# We know that the Pauli operators have eigenvalues :math:`(1, -1)`, while the identity
-# operator has eigenvalues :math:`(1, 1)`; we can make use of ``np.kron`` to quickly
+# We know that the single-qubit Pauli operators each have eigenvalues :math:`(1, -1)`, while the identity
+# operator has eigenvalues :math:`(1, 1)`. We can make use of ``np.kron`` to quickly
+
 # generate the probabilities of the full Pauli terms.
 
 eigenvalues_XYI = np.kron(np.kron([1, -1], [1, -1]), [1, 1])
@@ -438,7 +439,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 # Compare this to the result when we used two circuit evaluations. We have successfully used a
 # single circuit evaluation to recover both expectation values!
 #
-# Luckily, PennyLane automatically performs this QWC under-the-hood. We simply
+# Luckily, PennyLane automatically performs this QWC grouping under-the-hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
 @qml.qnode(dev)
@@ -468,8 +469,8 @@ print(new_obs)
 # Check out the :mod:`qml.grouping <pennylane.grouping>` documentation for more details on its
 # provided functionality and how it works.
 #
-# What happens, though, if we (in a moment of reckless abandonment!) ask a QNode to simultaneously
-# measure two observables that *aren't* qubit-wise commuting? For example, lets consider
+# What happens, though, if we (in a moment of reckless abandon!) ask a QNode to simultaneously
+# measure two observables that *aren't* qubit-wise commuting? For example, let's consider
 # :math:`X\otimes Y` and :math:`Z\otimes Z`:
 #
 # .. code-block:: python
@@ -524,7 +525,7 @@ print(new_obs)
 #     :width: 90%
 #     :align: center
 #
-# Of course, of the potential solutions above, there is one that is more optimal than the others;
+# Of course, of the potential solutions above, there is one that is more optimal than the others ---
 # on the bottom left, we have partitioned the graph into *two* complete subgraphs, as opposed to the
 # other solutions that require three complete subgraphs. If we were to go with this solution,
 # we would be able to measure the expectation value of the Hamiltonian using two circuit evaluations.
@@ -533,7 +534,7 @@ print(new_obs)
 # known in graph theory, where it is referred to as the `minimum clique cover problem
 # <https://en.wikipedia.org/wiki/Clique_cover>`__ (with 'clique' being another term for a complete subgraph).
 #
-# Unfortunately, that's where our good fortune ends---the minimum clique cover is known to
+# Unfortunately, that's where our good fortune ends---the minimum clique cover problem is known to
 # be `NP-hard <https://en.wikipedia.org/wiki/NP-hardness>`__, meaning there is no known (classical)
 # solution to finding the optimum/minimum clique cover in polynomial time.
 #
@@ -729,7 +730,7 @@ print("Number of required measurements after optimization:", len(groups))
 # number of groups required.
 #
 # Finally, it is worth pointing out that, as the field of variational quantum algorithms
-# grows, this problem of measurement optimization no longer just applies to VQE (the algorithm
+# grows, this problem of measurement optimization no longer just applies to the VQE algorithm (the algorithm
 # it was born from). Instead, there are a multitude of algorithms that could benefit from
 # these measurement optimization techniques (QAOA being a prime example).
 #
