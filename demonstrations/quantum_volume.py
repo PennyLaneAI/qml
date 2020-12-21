@@ -273,7 +273,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # IBM's 27-qubit superconducting device `ibmq_montreal` [#qv64]_, and
 # :math:`\log_2 V_Q = 7` on a Honeywell trapped-ion qubit processor
 # [#honeywell]_. A device with an expected quantum volume of :math:`\log_2 V_Q
-# = 32` has also been announced by IonQ [#ionq]_, though benchmarking results
+# = 22` has also been announced by IonQ [#ionq]_, though benchmarking results
 # have not yet been published.
 #
 # .. note::
@@ -281,8 +281,8 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #    In many sources, the quantum volume of processors is reported as
 #    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as is the
 #    convention in this demo. As such, IonQ's processor has the potential for a
-#    quantum volume of :math:`2^{32} > 4000000`. Here we use the :math:`\log`
-#    because it is more straightforward to understand that they have 32
+#    quantum volume of :math:`2^{22} > 4000000`. Here we use the :math:`\log`
+#    because it is more straightforward to understand that they have 22
 #    high-quality, well-connected qubits than to extract this at first glance from the
 #    explicit value of the volume.
 #
