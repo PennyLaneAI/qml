@@ -34,9 +34,11 @@ measurements needed---in some cases, reducing the number of measurements by up t
     :width: 90%
     :align: center
 
-In this demonstration, we revisit the VQE algorithm, see first-hand how the required number of measurements scales
-as molecule size increases, and finally use these measurement optimization strategies
-to minimize the number of measurements we need to make.
+In this demonstration, we revisit the VQE algorithm, see first-hand how the required number of
+measurements scales as molecule size increases, and finally use these measurement optimization
+strategies to minimize the number of measurements we need to make. These techniques are valuable
+beyond just VQE---allowing you to add measurement optimization to your toolkit of techniques to
+perform variational algorithms more efficiently.
 
 Revisiting VQE
 --------------
@@ -156,7 +158,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in 2050 measurements that must be made!
+# resulted in double the number of qubits required and 2050 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -207,36 +209,33 @@ print("\n", H)
 #   \sigma_B^2 \geq 0` and there exists a measurement basis where we can **simultaneously measure** the
 #   expectation value of both observables on the same state.
 #
-# .. admonition:: Aside: commutativity and shared eigenbases
-#     :class: aside
+# To explore why commutativity and simultaneous measurement are related, let's assume that there
+# is a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
+# diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
 #
-#     To explore why commutativity and simultaneous measurement are related, let's assume that there
-#     is a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
-#     diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
+# .. math::
 #
-#     .. math::
+#     ① ~~ \hat{A} |\phi_n\rangle &= \lambda_{A,n} |\phi_n\rangle,\\
+#     ② ~~ \hat{B} |\phi_n\rangle &= \lambda_{B,n} |\phi_n\rangle.
 #
-#         ① ~~ \hat{A} |\phi_n\rangle &= \lambda_{A,n} |\phi_n\rangle,\\
-#         ② ~~ \hat{B} |\phi_n\rangle &= \lambda_{B,n} |\phi_n\rangle.
+# where :math:`\lambda_{A,n}` and :math:`\lambda_{B,n}` are the corresponding eigenvalues.
+# If we pre-multiply the first equation by :math:`\hat{B}`, and the second by :math:`\hat{A}`
+# (both denoted in blue):
 #
-#     where :math:`\lambda_{A,n}` and :math:`\lambda_{B,n}` are the corresponding eigenvalues.
-#     If we pre-multiply the first equation by :math:`\hat{B}`, and the second by :math:`\hat{A}`
-#     (both denoted in blue):
+# .. math::
 #
-#     .. math::
+#     \color{blue}{\hat{B}}\hat{A} |\phi_n\rangle &= \lambda_{A,n} \color{blue}{\hat{B}}
+#       |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle,\\
+#     \color{blue}{\hat{A}}\hat{B} |\phi_n\rangle &= \lambda_{B,n} \color{blue}{\hat{A}}
+#       |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle.
 #
-#         \color{blue}{\hat{B}}\hat{A} |\phi_n\rangle &= \lambda_{A,n} \color{blue}{\hat{B}}
-#           |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle,\\
-#         \color{blue}{\hat{A}}\hat{B} |\phi_n\rangle &= \lambda_{B,n} \color{blue}{\hat{A}}
-#           |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle.
+# We can see that assuming a simultaneous eigenbasis requires that
+# :math:`\hat{A}\hat{B}|\phi_n\rangle = \hat{B}\hat{A}|\phi_n\rangle`. Or, rearranging,
 #
-#     We can see that assuming a simultaneous eigenbasis requires that
-#     :math:`\hat{A}\hat{B}|\phi_n\rangle = \hat{B}\hat{A}|\phi_n\rangle`. Or, rearranging,
+# .. math:: (\hat{A}\hat{B} - \hat{B}\hat{A}) |\phi_n\rangle = [\hat{A}, \hat{B}]|\phi_n\rangle = 0.
 #
-#     .. math:: (\hat{A}\hat{B} - \hat{B}\hat{A}) |\phi_n\rangle = [\hat{A}, \hat{B}]|\phi_n\rangle = 0.
-#
-#     Our assumption that :math:`|\phi_n\rangle` simultaneously diagonalizes both :math:`\hat{A}` and
-#     :math:`\hat{B}` only holds true if the two observables commute.
+# Our assumption that :math:`|\phi_n\rangle` simultaneously diagonalizes both :math:`\hat{A}` and
+# :math:`\hat{B}` only holds true if the two observables commute.
 #
 # So far, this seems awfully theoretical. What does this mean in practice?
 #
@@ -283,8 +282,9 @@ print("\n", H)
 #
 # .. math:: h_i = \bigotimes_{n=0}^{N-1} \sigma_n.
 #
-# Luckily, this allows us to take a bit of a shortcut. Rather than consider **full commutativity**,
-# we can consider a slightly less strict condition known as **qubit-wise commutativity** (QWC).
+# Luckily, this tensor product structure allows us to take a bit of a shortcut. Rather than consider
+# **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
+# commutativity** (QWC).
 #
 # To start with, let's consider single-qubit Pauli operators. We know that the Pauli operators
 # commute with themselves as well as the identity, but they do *not* commute with
@@ -424,7 +424,6 @@ print(rotated_probs)
 #
 # We know that the single-qubit Pauli operators each have eigenvalues :math:`(1, -1)`, while the identity
 # operator has eigenvalues :math:`(1, 1)`. We can make use of ``np.kron`` to quickly
-
 # generate the probabilities of the full Pauli terms.
 
 eigenvalues_XYI = np.kron(np.kron([1, -1], [1, -1]), [1, 1])
