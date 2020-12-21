@@ -25,10 +25,10 @@ measurements we need to make on the quantum hardware also grows polynomially---a
 especially when quantum hardware access is limited and expensive.
 
 To mitigate this 'measurement problem', a plethora of recent research dropped over the course of
-2019 and 2020 [#yen2020]_ [#verteletskyi2020]_ [#izmaylov2019]_ [#gokhale2020]_, exploring potential
-strategies to minimize the number of measurements required. In fact, by grouping qubit-wise
-commuting terms of the Hamiltonian, we can significantly reduce the number of measurements
-needed---in some cases, reducing the number of measurements by up to 90%(!).
+2019 and 2020 [#yen2020]_ [#izmaylov2019]_ [#huggins2019]_ [#verteletskyi2020]_ [#gokhale2020]_,
+exploring potential strategies to minimize the number of measurements required. In fact, by grouping
+qubit-wise commuting terms of the Hamiltonian, we can significantly reduce the number of
+measurements needed---in some cases, reducing the number of measurements by up to 90%(!).
 
 .. figure:: /demonstrations/measurement_optimize/grouping.png
     :width: 90%
@@ -562,6 +562,72 @@ print(new_obs)
 # <https://networkx.org/documentation/stable//reference/algorithms/generated/networkx.algorithms.coloring.greedy_color.html#networkx.algorithms.coloring.greedy_color>`__,
 # ``nx.greedy_color``.
 #
+# Let's give this a go, using NetworkX to solve the minimum clique problem for observable grouping.
+# First, we'll need to generate the QWC graph (with each node corresponding to a Hamiltonian
+# term, and edges indicating two terms that are QWC).
+
+import networkx as nx
+
+terms = [
+    qml.PauliZ(0),
+    qml.PauliZ(0) @ qml.PauliZ(1),
+    qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2),
+    qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3),
+    qml.PauliX(2) @ qml.PauliX(3),
+    qml.PauliY(0) @ qml.PauliX(2) @ qml.PauliX(3),
+    qml.PauliY(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
+]
+
+G = nx.Graph()
+
+# add the terms to the graph
+G.add_nodes_from(terms)
+
+# add QWC edges
+G.add_edges_from([
+    [terms[0], terms[1]],  # Z0, Z0 Z1
+    [terms[0], terms[2]],  # Z0, Z0 Z1 Z2
+    [terms[0], terms[3]],  # Z0, Z0 Z1 Z2 Z3
+    [terms[1], terms[2]],  # Z0 Z1, Z0 Z1 Z2
+    [terms[2], terms[3]],  # Z0 Z1 Z2, Z0 Z1 Z2 Z3
+    [terms[1], terms[3]],  # Z0 Z1, Z0 Z1 Z2 Z3
+    [terms[0], terms[4]],  # Z0, X2 X3
+    [terms[1], terms[4]],  # Z0 Z1, X2 X3
+    [terms[4], terms[5]],  # X2 X3, Y0 X2 X3
+    [terms[4], terms[6]],  # X2 X3, Y0 Y1 X2 X3
+    [terms[5], terms[6]],  # Y0 X2 X3, Y0 Y1 X2 X3
+])
+
+
+nx.draw(G)
+
+##############################################################################
+# We can now generate the complement graph (compare this to our handdrawn
+# version above!):
+
+C = nx.complement(G)
+nx.draw(C)
+
+##############################################################################
+# Now that we have the complement graph, we can perform a greedy coloring to
+# determine the minimum number of QWC groups:
+
+groups = nx.coloring.greedy_color(C, strategy="largest_first")
+num_groups = len(set(groups.values()))
+
+print("Minimum number of QWC groupings found:", num_groups)
+
+for i in range(num_groups):
+    print(f"\nGroup {i}:")
+
+    for term, group_id in groups.items():
+        if group_id == i:
+            print(term)
+
+##############################################################################
+# Putting it all together
+# -----------------------
+#
 # So, we now have a strategy for minimizing the number of measurements we need to perform
 # for our VQE problem:
 #
@@ -574,12 +640,100 @@ print(new_obs)
 #    with a minimum number of colours. Each coloured vertex set corresponds to a
 #    qubit-wise commuting group of Hamiltonian terms.
 #
-# 4. Generate the shared basis rotations for each QWC 
+# 4. Generate and evaluate the circuit ansatz (with additional rotations) per
+#    QWC grouping, extracting probability distributions.
 #
+# 5. Finally, post-process the probability distributions with the observable eigenvalues
+#    to recover the Hamiltonian expectation value.
+#
+# Luckily, the PennyLane ``grouping`` module makes this relatively easy. Lets walk through
+# the entire process using the provided grouping functions.
+#
+# Steps 1-3 (finding and grouping QWC terms in the Hamiltonian) can be done via the
+# :func:`qml.grouping.group_observables <pennylane.grouping.group_observables>` function:
+
+obs_groupings = qml.grouping.group_observables(terms, grouping_type='qwc', method='rlf')
+
+
+##############################################################################
+# The ``grouping_type`` argument allows us to choose how the commuting terms
+# are determined (more on that later!) whereas ``method`` determines the colouring
+# heuristic.
+#
+# If we want to see what the required rotations and measurements are, we can use the
+# :func:`qml.grouping.diagonalize_qwc_groupings <pennylane.grouping.diagonalize_qwc_groupings>`
+# function:
+
+rotations, measurements = qml.grouping.diagonalize_qwc_groupings(obs_groupings)
+
+##############################################################################
+# However, this isn't strictly necessary---recall previously that the QNode
+# has the capability to *automatically* measure qubit-wise commuting observables!
+
+dev = qml.device("default.qubit", wires=4)
+
+@qml.qnode(dev)
+def circuit(weights, group=None, **kwargs):
+    qml.templates.StronglyEntanglingLayers(weights, wires=range(4))
+    return [qml.expval(o) for o in group]
+
+weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=4)
+result = [circuit(weights, group=g) for g in obs_groupings]
+
+print("Term expectation values:")
+for group, expvals in enumerate(result):
+    print(f"Group {group} expectation values:", expvals)
+
+print("<H> = ", np.sum(np.hstack(result)))
+
+
+##############################################################################
+# Finally, we don't need to go through this process manually every time; if our cost function can be
+# written in the form of an expectation value of a Hamiltonian (as is the case for most VQE and QAOA
+# problems), we can use the :class:`qml.ExpvalCost <pennylane.ExpvalCost>` function
+# to generate our cost function with the number of measurement automatically
+# optimized:
+
+H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
+cost_fn = qml.ExpvalCost(qml.templates.StronglyEntanglingLayers, H, dev, optimize=True)
+print(cost_fn(weights))
 
 ##############################################################################
 # Beyond VQE
 # ----------
+#
+# Wait, hang on. We dived so deeply into measurement grouping and optimization, we forgot to check
+# how this effects the number of measurements required to perform VQE on :math:`\text{H}_2 \text{O}`!
+# Let's use our new-found knowledge to see what happens.
+
+H, num_qubits = qml.qchem.molecular_hamiltonian("h2o", "h2o.xyz")
+print("Number of Hamiltonian terms/required measurements:", len(H.ops))
+
+# grouping
+groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf')
+print("Number of required measurements after optimization:", len(groups))
+
+##############################################################################
+# We went from 2052 required measurements/circuit evaluations to 523 (just over *two thousand*
+# down to *five hundred* 😱😱😱). But this is just the beginning of the optimization.
+# While finding qubit-wise commutating terms is relatively straightforward, with a little
+# extra computation we can push this number down even further. Recent work has explored
+# the savings that can be made by considering *full* commutativity [#yen2020]_, unitary
+# partitioning [#izmaylov2019]_, and Fermionic basis rotation grouping [#huggins2019]_.
+# Work has also been performed to reduce the classical overhead associated with measurement
+# optimization, allowing the classical measurement grouping to be performed in linear time
+# [#gokhale2020]. For example, recall that qubit-wise commutativity is only a subset of
+# full commutativity; if we consider full commutativity instead, we can further reduce the
+# number of groups required.
+#
+# Finally, it is worth pointing out that, as the field of variational quantum algorithms
+# grows, this problem of measurement optimization no longer just applies to VQE (the algorithm
+# it was born from). Instead, there are a multitude of algorithms that could benefit from
+# these measurement optimization techniques (QAOA being a prime example).
+#
+# So the next time you are working on a variational quantum algorithm and the number
+# of measurements required begins to explode---stop, take a deep breath 😤, and consider grouping
+# and optimizing your measurements.
 
 ##############################################################################
 # References
@@ -598,20 +752,27 @@ print(new_obs)
 #     Chemical Theory and Computation 16.4 (2020): 2400-2409.
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.0c00008>`__
 #
+# .. [#izmaylov2019]
+#
+#    Artur F. Izmaylov, *et al.* "Unitary partitioning approach to the measurement problem in the
+#    variational quantum eigensolver method." `Journal of Chemical Theory and Computation 16.1 (2019):
+#    190-195. <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.9b00791>`__
+#
+# .. [#huggins2019]
+#
+#     William J. Huggins, *et al.* "Efficient and noise resilient measurements for quantum chemistry
+#     on near-term quantum computers." `arXiv preprint arXiv:1907.13117 (2019).
+#     <https://arxiv.org/abs/1907.13117>`__
+#
+# .. [#gokhale2020]
+#
+#    Pranav Gokhale, *et al.* "Minimizing state preparations in variational quantum eigensolver by
+#    partitioning into commuting families." `arXiv preprint arXiv:1907.13623 (2019).
+#    <https://arxiv.org/abs/1907.13623>`__
+#
 # .. [#verteletskyi2020]
 #
 #     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
 #     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
-#
-# .. [#izmaylov2019]
-#
-#    Artur F. Izmaylov, et al. "Unitary partitioning approach to the measurement problem in the
-#    variational quantum eigensolver method." `Journal of Chemical Theory and Computation 16.1 (2019):
-#    190-195. <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.9b00791>`__
-#
-# .. [#gokhale2020]
-#
-#    Pranav Gokhale, et al. "Minimizing state preparations in variational quantum eigensolver by
-#    partitioning into commuting families." `arXiv preprint arXiv:1907.13623 (2019).
-#    <https://arxiv.org/abs/1907.13623>`__
+
