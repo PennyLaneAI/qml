@@ -179,7 +179,7 @@ plateaus in quantum neural networks.
 
 .. customgalleryitem::
     :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :figure: demonstrations/measurement_optimize/thumbnail.png
+    :figure: demonstrations/measurement_optimize/meas_optimize_thumbnail.png
     :description: :doc:`demos/tutorial_measurement_optimize`
     :tags: chemistry
 
