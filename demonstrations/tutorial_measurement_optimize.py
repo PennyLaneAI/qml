@@ -715,14 +715,17 @@ print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
 # We went from 2052 required measurements/circuit evaluations to 523 (just over *two thousand*
-# down to *five hundred* 😱😱😱). But this is just the beginning of the optimization.
+# down to *five hundred* 😱😱😱).
+#
+# As impressive as this is, however, this is just the beginning of the optimization.
+#
 # While finding qubit-wise commutating terms is relatively straightforward, with a little
 # extra computation we can push this number down even further. Recent work has explored
 # the savings that can be made by considering *full* commutativity [#yen2020]_, unitary
 # partitioning [#izmaylov2019]_, and Fermionic basis rotation grouping [#huggins2019]_.
 # Work has also been performed to reduce the classical overhead associated with measurement
 # optimization, allowing the classical measurement grouping to be performed in linear time
-# [#gokhale2020]. For example, recall that qubit-wise commutativity is only a subset of
+# [#gokhale2020]_. For example, recall that qubit-wise commutativity is only a subset of
 # full commutativity; if we consider full commutativity instead, we can further reduce the
 # number of groups required.
 #
