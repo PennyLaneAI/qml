@@ -20,21 +20,21 @@ other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algo
 </demos/tutorial_qaoa_intro>`.
 
 To scale VQE beyond the regime of classical computation, however, we need to use it to solve for the
-ground state of excessively larger and larger molecules. A side effect is that the number of
+ground state of increasingly larger molecules. A side effect is that the number of
 measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
 especially when quantum hardware access is limited and expensive.
 
 To mitigate this 'measurement problem', a plethora of recent research dropped over the course of
-2019 and 2020 [#yen2020]_ [#izmaylov2019]_ [#huggins2019]_ [#verteletskyi2020]_ [#gokhale2020]_,
+2019 and 2020 [#yen2020]_ [#izmaylov2019]_ [#huggins2019]_ [#gokhale2020]_ [#verteletskyi2020]_ ,
 exploring potential strategies to minimize the number of measurements required. In fact, by grouping
-qubit-wise commuting terms of the Hamiltonian, we can significantly reduce the number of
-measurements needed---in some cases, reducing the number of measurements by up to 90%(!).
+commuting terms of the Hamiltonian, we can significantly reduce the number of
+measurements needed---in some cases, reducing the number of measurements by up to 90%!
 
 .. figure:: /demonstrations/measurement_optimize/grouping.png
     :width: 90%
     :align: center
 
-In this demonstration, we revisit VQE, see first-hand how the required number of measurements scales
+In this demonstration, we revisit the VQE algorithm, see first-hand how the required number of measurements scales
 as molecule size increases, and finally use these measurement optimization strategies
 to minimize the number of measurements we need to make.
 
@@ -49,32 +49,31 @@ quantum computers. Since then, the field of variational quantum algorithms has e
 significantly, with larger and more complex models being proposed (such as
 :doc:`quantum neural networks </demos/quantum_neural_net>`, :doc:`QGANs </demos/tutorial_QGAN>`, and
 :doc:`variational classifiers </demos/tutorial_variational_classifier>`). However, quantum chemistry
-remains one of the flagship uses-cases for variational quantum algorithms, and VQE the standard-bearer.
+remains one of the flagship use-cases for variational quantum algorithms, and VQE the standard-bearer.
 
-The appeal of VQE lies almost within its simplicity. A circuit ansatz :math:`U(\theta)` is chosen
+Part of the appeal of VQE lies within its simplicity. A circuit ansatz :math:`U(\theta)` is chosen
 (typically the Unitary Coupled-Cluster Singles and Doubles
 (:func:`~pennylane.templates.subroutines.UCCSD`) ansatz), and the qubit representation of the
 molecular Hamiltonian is computed:
 
 .. math:: H = \sum_i c_i h_i,
 
-where :math:`h_i` are the terms of the Hamiltonian written as a product of Pauli operators :math:`\sigma_n`:
+where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators :math:`\sigma_n`:
 
 .. math:: h_i = \prod_{n=0}^{N} \sigma_n.
 
-The cost function of VQE is then simply the expectation value of this Hamiltonian after
+The cost function of the VQE is then simply the expectation value of this Hamiltonian on the state obtained after running
 the variational quantum circuit:
 
 .. math:: \text{cost}(\theta) = \langle 0 | U(\theta)^\dagger H U(\theta) | 0 \rangle.
 
-By using a classical optimizer to *minimize* this quantity, we will be able to estimate
+By using a classical optimizer to *minimize* this quantity, we can estimate
 the ground state energy of the Hamiltonian :math:`H`:
 
 .. math:: H U(\theta_{min}) |0\rangle = E_{min} U(\theta_{min}) |0\rangle.
 
 In practice, when we are using quantum hardware to compute these expectation values we expand out
-the summation, resulting in separate expectation values that need to be calculated for each term in
-the Hamiltonian:
+the Hamiltonian as its summation, resulting in separate expectation values that need to be calculated for each term:
 
 .. math::
 
@@ -84,7 +83,7 @@ the Hamiltonian:
 .. note::
 
     How do we compute the qubit representation of the molecular Hamiltonian? This is a more
-    complicated story, that involves applying a self-consistent field method (such as Hartree-Fock),
+    complicated story that involves applying a self-consistent field method (such as Hartree-Fock),
     and then performing a fermionic-to-qubit mapping such as the Jordan-Wigner or Bravyi-Kitaev
     transformations.
 
@@ -94,9 +93,9 @@ the Hamiltonian:
 The measurement problem
 -----------------------
 
-For small molecules, VQE scales and performs exceedingly well. For example, for the
-Hydrogen molecule :math:`\text{H}_2`, the final qubit-representation Hamiltonian
-has 15 terms that need to be measured. Lets generate this Hamiltonian from the electronic
+For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
+Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
+has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
 structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
 QChem to verify the number of terms.
 """
@@ -159,14 +158,14 @@ print("\n", H)
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
 # resulted in 2050 measurements that must be made!
 #
-# We can see that as the size of our molecule increases, we run into a problem; larger molecules
+# We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
 # representation, but the number of terms in the Hamiltonian scales like
 # :math:`\mathcal{O}(N^4)`! 😱😱😱
 #
 # We can mitigate this somewhat by choosing smaller `basis sets
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`__ to represent the electronic structure
-# wavefunction, however this comes with an accuracy cost, and doesn't reduce the number of
+# wavefunction, however this would be done at the cost of solution accuracy, and doesn't reduce the number of
 # measurements significantly enough to allow us to scale to classically intractable problems.
 #
 # .. figure:: /demonstrations/measurement_optimize/n4.png
@@ -189,8 +188,8 @@ print("\n", H)
 #
 # .. math:: \sigma_A^2 \sigma_B^2 \geq \frac{1}{2}\left|\left\langle [\hat{A}, \hat{B}] \right\rangle\right|,
 #
-# where :math:`\sigma^2` the variance of measuring the expectation value of an
-# observable, and
+# where :math:`\sigma^2_A` and :math:`\sigma^2_B` are the variances of measuring the expectation value of the
+# associated observables, and
 #
 # .. math:: [\hat{A}, \hat{B}] = \hat{A}\hat{B}-\hat{B}\hat{A}
 #
@@ -211,8 +210,8 @@ print("\n", H)
 # .. admonition:: Aside: commutativity and shared eigenbases
 #     :class: aside
 #
-#     To explore why commutativity and simultaneous measurement are related, lets assume that there
-#     is a a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
+#     To explore why commutativity and simultaneous measurement are related, let's assume that there
+#     is a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
 #     diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
 #
 #     .. math::
@@ -222,7 +221,7 @@ print("\n", H)
 #
 #     where :math:`\lambda_{A,n}` and :math:`\lambda_{B,n}` are the corresponding eigenvalues.
 #     If we pre-multiply the first equation by :math:`\hat{B}`, and the second by :math:`\hat{A}`
-#     (denoted in blue):
+#     (both denoted in blue):
 #
 #     .. math::
 #
@@ -242,12 +241,12 @@ print("\n", H)
 # So far, this seems awfully theoretical. What does this mean in practice?
 #
 # In the realm of variational circuits, we typically want to compute expectation values of an
-# observable on a given state :math:`|\psi\rangle`. If we have two commuting observables, we also know that
+# observable on a given state :math:`|\psi\rangle`. If we have two commuting observables, we now know that
 # they share a simultaneous eigenbasis:
 #
 # .. math::
 #
-#     \hat{A} &= \sum_n \lambda_{A, n} |\phi_n\rangle\langle \phi_n|\\
+#     \hat{A} &= \sum_n \lambda_{A, n} |\phi_n\rangle\langle \phi_n|,\\
 #     \hat{B} &= \sum_n \lambda_{B, n} |\phi_n\rangle\langle \phi_n|.
 #
 # Substituting this into the expression for the expectation values:
@@ -262,11 +261,11 @@ print("\n", H)
 #         |\langle \phi_n|\psi\rangle|^2.
 #
 # So, assuming we know the eigenvalues of the commuting observables in advance, if we perform a
-# measurement in their shared eigenbasis, we only need to perform a **single measurement** of the
+# measurement in their shared eigenbasis (the :math:`|\phi_n\rangle`), we only need to perform a **single measurement** of the
 # probabilities :math:`|\langle \phi_n|\psi\rangle|^2` in order to recover both expectation values! 😍
 #
-# Fantastic! But, can we use this to reduce the number of measurements we need to perform in VQE?
-# To do so, we need to be able to answer two simple sounding questions:
+# Fantastic! But, can we use this to reduce the number of measurements we need to perform in the VQE algorithm?
+# To do so, we must find the answer to two questions:
 #
 # 1. How do we determine which terms of the cost Hamiltonian are commuting?
 #
@@ -279,15 +278,15 @@ print("\n", H)
 # Qubit-wise commuting Pauli terms
 # --------------------------------
 #
-# Back when we summarized VQE, we saw that each term of the Hamiltonian is generally represented
+# Back when we summarized the VQE algorithm, we saw that each term of the Hamiltonian is generally represented
 # as a tensor product of Pauli terms:
 #
 # .. math:: h_i = \prod_{n=0}^{N} \sigma_n.
 #
 # Luckily, this allows us to take a bit of a shortcut. Rather than consider **full commutativity**,
-# we can consider a subset known as **qubit-wise commutativity** (QWC).
+# we can consider a slightly less strict condition known as **qubit-wise commutativity** (QWC).
 #
-# To start with, let's consider single Pauli operators. We know that the Pauli operators
+# To start with, let's consider single-qubit Pauli operators. We know that the Pauli operators
 # commute with themselves as well as the identity, but they do *not* commute with
 # each other:
 #
@@ -318,7 +317,7 @@ print("\n", H)
 #
 # Once we have identified a qubit-wise commuting pair of Pauli terms, it is also straightforward to
 # find the gates to rotate the circuit into the shared eigenbasis. To do so, we simply rotate
-# each wire one-by-one depending on the Pauli operator we are measuring on that wire:
+# each qubit one-by-one depending on the Pauli operator we are measuring on that wire:
 #
 # .. raw:: html
 #
@@ -357,7 +356,7 @@ print("\n", H)
 #
 # * Wire 0: we are measuring both terms in the :math:`X` basis, apply the Hadamard gate
 # * Wire 1: we are measuring both terms in the :math:`Y` basis, apply the :math:`H S^{-1}` gates
-# * Wire 2: we are measuring both terms in the :math:`Z` basis, no gate needs to be applied.
+# * Wire 2: we are measuring both terms in the :math:`Z` basis (the computational basis), no gate needs to be applied.
 #
 # Let's use PennyLane to verify this.
 
@@ -369,7 +368,7 @@ obs = [
 
 
 ##############################################################################
-# First, lets naively use two separate circuit evaluations to measure
+# First, let's naively use two separate circuit evaluations to measure
 # the two QWC terms.
 
 
@@ -778,4 +777,3 @@ print("Number of required measurements after optimization:", len(groups))
 #     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
 #     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
-
