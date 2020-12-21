@@ -154,7 +154,7 @@ Community
     (2018)—using 2 qubits per feature. This is done by applying encodings, variational circuits, 
     and some linear transformations on expectation values in order to predict values close to 
     the real target. 
-    Based on an <a href="https://pennylane.ai/qml/demos/quantum_neural_net">example</a> 
+    Based on an <a href="https://pennylane.ai/qml/demos/quantum_neural_net.html">example</a> 
     from PennyLane, and using a small dataset which consists of a one-dimensional feature 
     and one output (so that the processing does not take too much time), the algorithm showed 
     reliable results.
@@ -182,4 +182,3 @@ Community
 .. toctree::
     :maxdepth: 2
     :hidden:
-
