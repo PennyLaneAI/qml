@@ -293,7 +293,7 @@ Key Concepts
         Quantum analog of a classical `Boltzmann machine <https://en.wikipedia.org/wiki/Boltzmann_machine>`_, in which nodes are 
         replaced by spins or qubits. An energy-based quantum machine learning model.
 
-    Quantum Convolutional Neural Network
+    :doc:`Quantum Convolutional Neural Network </glossary/qcnn>`
         A quantum neural network that mirrors the structure of a `convolutional
 	neural network
 	<https://en.wikipedia.org/wiki/Convolutional_neural_network>`_. 
@@ -357,6 +357,7 @@ Key Concepts
     /glossary/circuit_ansatz
     /glossary/hybrid_computation
     /glossary/parameter_shift
+    /glossary/qcnn
     /glossary/quantum_embedding
     /glossary/quantum_gradient
     /glossary/quantum_neural_network
