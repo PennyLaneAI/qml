@@ -55,7 +55,7 @@ Community
      - title
      - author
      - date
-   All remaining options (code, paper, color) are *optional*.
+   All remaining options (code, paper, blog, color) are *optional*.
    All fields, including the description can contain arbitrary HTML.
 
 .. community-card::
@@ -138,11 +138,47 @@ Community
     Networks</a> demo by Andrea Mari. This demo results from our research as part of the <a
     href="https://www.planqk.de">PlanQK consortium</a>.
 
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
+.. community-card::
+    :title: Quantum Machine Learning Model Predictor for Continuous Variables
+    :author: Roberth Saénz Pérez Alvarado
+    :date: 16/12/2020
+    :code: https://github.com/roberth2018/Quantum-Machine-Learning/blob/main/Quantum_Machine_Learning_Model_Predictor_for_Continuous_Variable_.ipynb
+    :color: heavy-rain-gradient
+    
+    According to the paper "Predicting toxicity by quantum machine learning" 
+    (Teppei Suzuki, Michio Katouda 2020), it is possible to predict continuous variables—like 
+    those in the continuous-variable quantum neural network model described in Killoran et al. 
+    (2018)—using 2 qubits per feature. This is done by applying encodings, variational circuits, 
+    and some linear transformations on expectation values in order to predict values close to 
+    the real target. 
+    Based on an <a href="https://pennylane.ai/qml/demos/quantum_neural_net.html">example</a> 
+    from PennyLane, and using a small dataset which consists of a one-dimensional feature 
+    and one output (so that the processing does not take too much time), the algorithm showed 
+    reliable results.
+
+.. community-card::
+    :title: A Quantum-Enhanced LSTM Layer
+    :author: Riccardo Di Sipio
+    :date: 18/12/2020
+    :code: https://github.com/rdisipio/qlstm/blob/main/POS_tagging.ipynb
+    :blog: https://towardsdatascience.com/a-quantum-enhanced-lstm-layer-38a8c135dbfa
+    :color: heavy-rain-gradient
+
+    In Natural Language Processing, documents are usually presented as sequences of words. 
+    One of the most successful techniques to manipulate this kind of data is the Recurrent 
+    Neural Network architecture, and in particular a variant called Long Short-Term Memory 
+    (LSTM). Using the PennyLane library and its PyTorch interface, one can easily define a 
+    LSTM network where Variational Quantum Circuits (VQCs) replace linear operations. An 
+    application to Part-of-Speech tagging is presented in this tutorial.
+
+
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
    :html:`<div class="card hidden-card"></div></div>`
-
+   
 .. toctree::
     :maxdepth: 2
     :hidden:
-
