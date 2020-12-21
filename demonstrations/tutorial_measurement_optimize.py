@@ -60,9 +60,10 @@ molecular Hamiltonian is computed:
 
 .. math:: H = \sum_i c_i h_i,
 
-where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators :math:`\sigma_n`:
+where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators
+:math:`P_n \in {\sigma_x, \sigma_y, \sigma_z}`:
 
-.. math:: h_i = \bigotimes_{n=0}^{N-1} \sigma_n.
+.. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 
 The cost function of the VQE is then simply the expectation value of this Hamiltonian on the state obtained after running
 the variational quantum circuit:
@@ -280,7 +281,7 @@ print("\n", H)
 # Back when we summarized the VQE algorithm, we saw that each term of the Hamiltonian is generally represented
 # as a tensor product of Pauli terms:
 #
-# .. math:: h_i = \bigotimes_{n=0}^{N-1} \sigma_n.
+# .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 #
 # Luckily, this tensor product structure allows us to take a bit of a shortcut. Rather than consider
 # **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
@@ -336,17 +337,17 @@ print("\n", H)
 #
 # .. rst-class:: docstable
 #
-#     +------------------+-----------------------+
-#     |    Observable    | Rotation gate         |
-#     +==================+=======================+
-#     | :math:`X`        | :math:`H`             |
-#     +------------------+-----------------------+
-#     | :math:`Y`        | :math:`H S^{-1}=HSZ`  |
-#     +------------------+-----------------------+
-#     | :math:`Z`        | :math:`I`             |
-#     +------------------+-----------------------+
-#     | :math:`I`        | :math:`I`             |
-#     +------------------+-----------------------+
+#     +------------------+-------------------------------+
+#     |    Observable    | Rotation gate                 |
+#     +==================+===============================+
+#     | :math:`X`        | :math:`RY(-\pi/2) = H`        |
+#     +------------------+-------------------------------+
+#     | :math:`Y`        | :math:`RX(\pi/2)=HS^{-1}=HSZ` |
+#     +------------------+-------------------------------+
+#     | :math:`Z`        | :math:`I`                     |
+#     +------------------+-------------------------------+
+#     | :math:`I`        | :math:`I`                     |
+#     +------------------+-------------------------------+
 #
 # .. raw:: html
 #
@@ -355,7 +356,7 @@ print("\n", H)
 # Therefore, in this particular example:
 #
 # * Wire 0: we are measuring both terms in the :math:`X` basis, apply the Hadamard gate
-# * Wire 1: we are measuring both terms in the :math:`Y` basis, apply the :math:`H S^{-1}` gates
+# * Wire 1: we are measuring both terms in the :math:`Y` basis, apply a :math:`RX(\pi/2)` gate
 # * Wire 2: we are measuring both terms in the :math:`Z` basis (the computational basis), no gate needs to be applied.
 #
 # Let's use PennyLane to verify this.
@@ -403,8 +404,7 @@ def circuit_qwc(weights):
     qml.Hadamard(wires=0)
 
     # rotate wire 1 into the shared eigenbasis
-    qml.S(wires=1).inv()
-    qml.Hadamard(wires=1)
+    qml.RX(np.pi / 2, wires=1)
 
     # wire 2 does not require a rotation
 
@@ -465,8 +465,9 @@ print(new_obs)
 
 
 ##############################################################################
-# Check out the :mod:`qml.grouping <pennylane.grouping>` documentation for more details on its
-# provided functionality and how it works.
+# Here, the first line corresponds to the basis rotations that were discussed above, written in
+# terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.grouping <pennylane.grouping>`
+# documentation for more details on its provided functionality and how it works.
 #
 # What happens, though, if we (in a moment of reckless abandon!) ask a QNode to simultaneously
 # measure two observables that *aren't* qubit-wise commuting? For example, let's consider
