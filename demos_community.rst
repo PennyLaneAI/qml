@@ -20,6 +20,9 @@ Community
     .jumbotron {
         box-shadow: none!important;
     }
+    .community.active {
+        box-shadow: 0 2px 5px 0 rgba(204, 204, 204, 0.97),0 2px 15px 2px rgba(43, 187, 173, 0.6) !important;
+    }
     </style>
 
 
@@ -186,12 +189,19 @@ Community
 .. raw:: html
 
     <script type="text/javascript">
-      var divId;
-
-      $(window).scroll(function(){
+        var divId;
+        var doScroll = true;
         divId = $(location).attr('hash');
-         $('html, body').animate({
-          scrollTop: $(divId).offset().top - 54
-        }, 0);
-      });
+
+        $(window).one('load', function() {
+            if (divId && doScroll) {
+                $(divId).addClass("active");
+                $(window).scroll(function(){
+                    $('html, body').animate({
+                        scrollTop: $(divId).offset().top - 60
+                    }, 0);
+                });
+            }
+            doScroll = false;
+        });
     </script>

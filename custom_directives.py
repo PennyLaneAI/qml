@@ -186,8 +186,7 @@ class YoutubeItemDirective(Directive):
 COMMUNITY_CARD_TEMPLATE = """
 .. raw:: html
 
-    <div class="community"></div>
-    <div class="card plugin-card" id={id}>
+    <div class="card plugin-card community" id={id}>
         <h4 class="card-header {color} lighten-4">{title}</h4>
         <div class="card-body">
             <h6>{author}</h6>
