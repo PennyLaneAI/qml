@@ -94,7 +94,7 @@ Using :math:`y`, the estimated gradient at each iteration step is expressed as
     - y(\hat{\theta}_{k} -c_{k}\Delta_{k})}{2c_{k}\Delta_{ki}}
 
 where :math:`c_{k}` is a positive number and :math:`\Delta_{k} = (\Delta_{k_1},
-\Delta_{k_2}, ..., \Delta_{k_p})^{T}` is the perturbation vector.  The
+\Delta_{k_2}, ..., \Delta_{k_p})^{T}` is the perturbation vector. The
 stochasticity of the technique comes from the fact that for each iteration step
 :math:`k` the components of the :math:`\Delta_{k}` perturbation vector are randomly
 generated using a zero-mean distribution. In most cases, the Bernoulli
