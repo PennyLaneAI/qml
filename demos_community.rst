@@ -190,18 +190,14 @@ Community
 
     <script type="text/javascript">
         var divId;
-        var doScroll = true;
         divId = $(location).attr('hash');
 
-        $(window).one('load', function() {
-            if (divId && doScroll) {
+        $(window).on('load', function() {
+            if (divId) {
                 $(divId).addClass("active");
-                $(window).scroll(function(){
-                    $('html, body').animate({
-                        scrollTop: $(divId).offset().top - 60
-                    }, 0);
-                });
+                setTimeout(function(){
+                    $('html, body').animate({scrollTop: $(divId).offset().top - 60}, 0);
+                }, 500);
             }
-            doScroll = false;
         });
     </script>
