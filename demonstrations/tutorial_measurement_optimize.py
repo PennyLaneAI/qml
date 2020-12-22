@@ -61,12 +61,13 @@ molecular Hamiltonian is computed:
 .. math:: H = \sum_i c_i h_i,
 
 where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators
-:math:`P_n \in {\sigma_x, \sigma_y, \sigma_z}`:
+acting on wire :math:`n`, :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}`:
 
 .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 
-The cost function of the VQE is then simply the expectation value of this Hamiltonian on the state obtained after running
-the variational quantum circuit:
+(This product of Pauli terms is often referred to as a 'Pauli word' in the literature.) The cost
+function of the VQE is then simply the expectation value of this Hamiltonian on the state obtained
+after running the variational quantum circuit:
 
 .. math:: \text{cost}(\theta) = \langle 0 | U(\theta)^\dagger H U(\theta) | 0 \rangle.
 
@@ -424,7 +425,8 @@ print(rotated_probs)
 #
 # We know that the single-qubit Pauli operators each have eigenvalues :math:`(1, -1)`, while the identity
 # operator has eigenvalues :math:`(1, 1)`. We can make use of ``np.kron`` to quickly
-# generate the probabilities of the full Pauli terms.
+# generate the probabilities of the full Pauli terms, making sure that the order
+# of the eigenvalues in the Kronecker product corresponds to the tensor product.
 
 eigenvalues_XYI = np.kron(np.kron([1, -1], [1, -1]), [1, 1])
 eigenvalues_XIZ = np.kron(np.kron([1, -1], [1, 1]), [1, -1])
@@ -503,7 +505,8 @@ print(new_obs)
 # Grouping QWC terms
 # ------------------
 #
-# Say we have the following Hamiltonian defined over four qubits:
+# A nice example is provided in [#verteletskyi2020]_ showing how we might tackle this. Say we have
+# the following Hamiltonian defined over four qubits:
 #
 # .. math:: H = Z_0 + Z_0 Z_1 + Z_0 Z_1 Z_2 + Z_0 Z_1 Z_2 Z_3 + X_2 X_3 + Y_0 X_2 X_3 + Y_0 Y_1 X_2 X_3,
 #
@@ -585,44 +588,87 @@ G.add_nodes_from(terms)
 
 # add QWC edges
 G.add_edges_from([
-    [terms[0], terms[1]],  # Z0, Z0 Z1
-    [terms[0], terms[2]],  # Z0, Z0 Z1 Z2
-    [terms[0], terms[3]],  # Z0, Z0 Z1 Z2 Z3
-    [terms[1], terms[2]],  # Z0 Z1, Z0 Z1 Z2
-    [terms[2], terms[3]],  # Z0 Z1 Z2, Z0 Z1 Z2 Z3
-    [terms[1], terms[3]],  # Z0 Z1, Z0 Z1 Z2 Z3
-    [terms[0], terms[4]],  # Z0, X2 X3
-    [terms[1], terms[4]],  # Z0 Z1, X2 X3
-    [terms[4], terms[5]],  # X2 X3, Y0 X2 X3
-    [terms[4], terms[6]],  # X2 X3, Y0 Y1 X2 X3
-    [terms[5], terms[6]],  # Y0 X2 X3, Y0 Y1 X2 X3
+    [terms[0], terms[1]],  # Z0 <--> Z0 Z1
+    [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
+    [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
+    [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
+    [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
+    [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
+    [terms[0], terms[4]],  # Z0 <--> X2 X3
+    [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
+    [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
+    [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
+    [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
 ])
 
 
-nx.draw(G)
+def format_pauli_word(term):
+    """Convenience function that nicely formats a PennyLane
+    tensor observable as a Pauli word"""
+    if isinstance(term, qml.operation.Tensor):
+        return " ".join([f"{t.name[-1]}{t.wires.tolist()[0]}" for t in term.obs])
+
+    return f"{term.name[-1]}{term.wires.tolist()[0]}"
+
+
+nx.draw(
+    G,
+    labels={node: format_pauli_word(node) for node in terms},
+    with_labels=True,
+    node_size=500,
+    font_size=8,
+    node_color="#9eded1",
+    edge_color="#c1c1c1"
+)
 
 ##############################################################################
 # We can now generate the complement graph (compare this to our handdrawn
 # version above!):
 
 C = nx.complement(G)
-nx.draw(C)
+coords = nx.spring_layout(C)
+
+nx.draw(
+    C,
+    coords,
+    labels={node: format_pauli_word(node) for node in terms},
+    with_labels=True,
+    node_size=500,
+    font_size=8,
+    node_color="#9eded1",
+    edge_color="#c1c1c1"
+)
+
 
 ##############################################################################
 # Now that we have the complement graph, we can perform a greedy coloring to
 # determine the minimum number of QWC groups:
 
 groups = nx.coloring.greedy_color(C, strategy="largest_first")
-num_groups = len(set(groups.values()))
 
+# plot the complement graph with the greedy colouring
+nx.draw(
+    C,
+    coords,
+    labels={node: format_pauli_word(node) for node in terms},
+    with_labels=True,
+    node_size=500,
+    font_size=8,
+    node_color=[("#9eded1", "#aad4f0")[groups[node]] for node in C],
+    edge_color="#c1c1c1"
+)
+
+
+num_groups = len(set(groups.values()))
 print("Minimum number of QWC groupings found:", num_groups)
+
 
 for i in range(num_groups):
     print(f"\nGroup {i}:")
 
     for term, group_id in groups.items():
         if group_id == i:
-            print(term)
+            print(format_pauli_word(term))
 
 ##############################################################################
 # Putting it all together
@@ -684,6 +730,8 @@ print("Term expectation values:")
 for group, expvals in enumerate(result):
     print(f"Group {group} expectation values:", expvals)
 
+# Since all the coefficients of the Hamiltonian are unity,
+# we can simply sum the expectation values.
 print("<H> = ", np.sum(np.hstack(result)))
 
 
