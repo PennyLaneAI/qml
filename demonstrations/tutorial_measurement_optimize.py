@@ -148,7 +148,7 @@ print("Cost function value:", cost(params))
 print("Number of quantum evaluations:", dev.num_executions)
 
 ##############################################################################
-# How about a larger molecule? Lets try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
+# How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
 
 H, num_qubits = qml.qchem.molecular_hamiltonian("h2o", "h2o.xyz")
 
@@ -186,7 +186,7 @@ print("\n", H)
 # ------------------------------------
 #
 # One of the assumptions we made above was that every term in the Hamiltonian must be measured independently.
-# However, this might not be the case. From the `Heisenburg uncertainty relationship
+# However, this might not be the case. From the `Heisenberg uncertainty relationship
 # <https://en.wikipedia.org/wiki/Uncertainty_principle>`__ for two
 # observables :math:`\hat{A}` and :math:`\hat{B}`, we know that
 #
@@ -394,7 +394,7 @@ print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
 
 ##############################################################################
-# Now, lets use our QWC approach to reduce this down to a *single* measurement
+# Now, let's use our QWC approach to reduce this down to a *single* measurement
 # of the probabilities in the shared eigenbasis of both QWC observables:
 
 @qml.qnode(dev)
@@ -693,7 +693,7 @@ for i in range(num_groups):
 # 5. Finally, post-process the probability distributions with the observable eigenvalues
 #    to recover the Hamiltonian expectation value.
 #
-# Luckily, the PennyLane ``grouping`` module makes this relatively easy. Lets walk through
+# Luckily, the PennyLane ``grouping`` module makes this relatively easy. Let's walk through
 # the entire process using the provided grouping functions.
 #
 # Steps 1-3 (finding and grouping QWC terms in the Hamiltonian) can be done via the
@@ -752,7 +752,7 @@ print(cost_fn(weights))
 # ----------
 #
 # Wait, hang on. We dived so deeply into measurement grouping and optimization, we forgot to check
-# how this effects the number of measurements required to perform VQE on :math:`\text{H}_2 \text{O}`!
+# how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
 H, num_qubits = qml.qchem.molecular_hamiltonian("h2o", "h2o.xyz")
