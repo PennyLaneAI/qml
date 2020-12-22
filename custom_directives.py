@@ -186,7 +186,8 @@ class YoutubeItemDirective(Directive):
 COMMUNITY_CARD_TEMPLATE = """
 .. raw:: html
 
-    <div class="card plugin-card">
+    <div class="community"></div>
+    <div class="card plugin-card" id={id}>
         <h4 class="card-header {color} lighten-4">{title}</h4>
         <div class="card-body">
             <h6>{author}</h6>
@@ -272,7 +273,8 @@ class CommunityCardDirective(Directive):
             paper_footer=paper_footer,
             code_footer=code_footer,
             blog_footer=blog_footer,
-            color=color
+            color=color,
+            id=self.options["date"].replace("/", "-") + "-" + self.options["author"].split(" ")[-1].lower()
         )
 
         thumbnail = StringList(card_rst.split('\n'))

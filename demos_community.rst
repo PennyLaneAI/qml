@@ -182,3 +182,16 @@ Community
 .. toctree::
     :maxdepth: 2
     :hidden:
+
+.. raw:: html
+
+    <script type="text/javascript">
+      var divId;
+
+      $(window).scroll(function(){
+        divId = $(location).attr('hash');
+         $('html, body').animate({
+          scrollTop: $(divId).offset().top - 54
+        }, 0);
+      });
+    </script>
