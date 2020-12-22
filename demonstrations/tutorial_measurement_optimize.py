@@ -402,7 +402,7 @@ def circuit_qwc(weights):
     qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
 
     # rotate wire 0 into the shared eigenbasis
-    qml.Hadamard(wires=0)
+    qml.RY(-np.pi / 2, wires=0)
 
     # rotate wire 1 into the shared eigenbasis
     qml.RX(np.pi / 2, wires=1)
@@ -570,6 +570,7 @@ print(new_obs)
 # term, and edges indicating two terms that are QWC).
 
 import networkx as nx
+from matplotlib import pyplot as plt
 
 terms = [
     qml.PauliZ(0),
@@ -606,11 +607,11 @@ def format_pauli_word(term):
     """Convenience function that nicely formats a PennyLane
     tensor observable as a Pauli word"""
     if isinstance(term, qml.operation.Tensor):
-        return " ".join([f"{t.name[-1]}{t.wires.tolist()[0]}" for t in term.obs])
+        return " ".join([format_pauli_word(t) for t in term.obs])
 
     return f"{term.name[-1]}{term.wires.tolist()[0]}"
 
-
+plt.margins(x=0.1)
 nx.draw(
     G,
     labels={node: format_pauli_word(node) for node in terms},
