@@ -322,7 +322,6 @@ for k in range(steps):
 #
 # We'll start by loading up the :math:`H_2` Hamiltonian and taking a look.
 #
-#
 
 
 from pennylane import qchem
@@ -402,29 +401,35 @@ dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000)
 # Cost function for VQE
 cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
 
-# Initialise the optimizer - optimal step size was found through a grid search
+# Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.3)
 
-max_iterations = 50
-
+# Initialize parameters and compute initial energy
 np.random.seed(0)
 params = np.random.normal(0, np.pi, (num_qubits, 3))
 
 prev_energy = cost(params)
 
-ideal_device_executions = [0]
-ideal_energies = [prev_energy]
+# Now reset the device so that the number of executions is counted
+# only from the start of the gradient descent
+dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000)
+cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
+
+h2_grad_device_executions = [0]
+h2_grad_energies = [prev_energy]
+
+max_iterations = 20
 
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
 
-    if n % 20 == 0:
+    if n % 5 == 0:
         print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
 
     prev_energy = energy
 
-    ideal_device_executions.append(dev_noisy.num_executions)
-    ideal_energies.append(prev_energy)
+    h2_grad_device_executions.append(dev_noisy.num_executions)
+    h2_grad_energies.append(prev_energy)
 
 true_energy = -1.136189454088
 
@@ -439,24 +444,54 @@ print(f'Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 0,  Energy = -0.81404640 Ha
-#     Iteration = 20,  Energy = -1.12448497 Ha
-#     Iteration = 40,  Energy = -1.12524655 Ha
-#     Iteration = 60,  Energy = -1.13218111 Ha
-#     Iteration = 80,  Energy = -1.13741000 Ha
+#     Iteration = 0,  Energy = -0.82027687 Ha
+#     Iteration = 5,  Energy = -1.12618597 Ha
+#     Iteration = 10,  Energy = -1.12984872 Ha
+#     Iteration = 15,  Energy = -1.13688411 Ha
 #
-#     Final value of the ground-state energy = -1.12277187 Ha
-#     Accuracy with respect to the FCI energy: 0.01341758 Ha
+#     Final estimated value of the ground-state energy = -1.13877010 Ha
+#     Accuracy with respect to the true energy: 0.00258065 Ha
 
 ##############################################################################
 #
-# Note that the total number of device executions is as expected. Gradients need
-# to be computed for each of the 4 qubit rotations with 3 parameters. The
-# gradient of each parameter requires 2 evaluations, and this must be done over
-# all 15 terms. Factoring in the number of iteration steps (100), we expect the
-# total number of device executions
+# Let's plot how our optimizer fares over time.
+
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+plt.scatter(h2_grad_device_executions, h2_grad_energies, label='Gradient descent')
+
+plt.xticks(fontsize=13)
+plt.yticks(fontsize=13)
+plt.xlabel("Device executions", fontsize=14)
+plt.ylabel("Energy (Ha)", fontsize=14)
+plt.grid()
+
+plt.axhline(y=true_energy, color='black', linestyle='dashed', label="True energy")
+
+plt.legend(fontsize=14)
+
+plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots.svg
+#     :align: center
+#     :width: 90%
 #
 
+##############################################################################
+#
+# We can see that as the optimization progresses, we approach the true value.
+# However, due to shot noise, the optimizer will never quite converge, and
+# bounces around the optimum after a certain point.
+#
+# Of interest now are the number of device executions. Gradients need
+# to be computed for each of the 4 qubit rotations with 3 parameters. The
+# gradient of each parameter requires 2 evaluations, and this must be done over
+# all 15 terms. Factoring in the number of iteration steps (20), we expect the
+# total number of device executions
+#
 est_dev_execs = params.size * len(h.terms[0]) * 2 * max_iterations
 print("Estimated device executions = {est_dev_execs}")
 
@@ -467,7 +502,7 @@ print("Estimated device executions = {est_dev_execs}")
 #
 #  .. code-block:: none
 #
-#     Estimated device executions = 36000
+#     Estimated device executions = 7200
 
 
 ##############################################################################
