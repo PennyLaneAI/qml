@@ -152,11 +152,9 @@ import pennylane as qml
 import numpy as np
 
 num_wires = 4
-num_layers = 3
+num_layers = 5
 
-dev_sampler = qml.device(
-    "qiskit.aer", wires=num_wires, shots=1000
-)
+dev_sampler = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We seed so that we can simulate the same circuit every time.
@@ -188,8 +186,15 @@ def cost(params):
 # imported, we can initialize parts of the optimization such as the number of
 # iterations, a collection to store the cost values and a callback function.
 #
-# This callback function is used to record the value of the cost function at
-# each iteration step (and for our convenience to print values every 10 steps).
+# Once the optimization has concluded, we save the number of device executions
+# required for completion (will be an interesting quantity later!).
+
+# This callback function is used to:
+#
+# 1. Record the value of the cost function at each iteration step
+# 2. Print values every 10 steps as a convenience
+# 3. Store the number of device executions required for completion (will be an
+#    interesting quantity later!).
 from noisyopt import minimizeSPSA
 
 niter_spsa = 200
@@ -200,6 +205,9 @@ device_execs_spsa = []
 def callback_fn(xk):
     cost_val = cost(xk)
     cost_store_spsa.append(cost_val)
+
+    # We've evaluated the cost function, let's make up for that
+    dev_sampler._num_executions -= 1
     device_execs_spsa.append(dev_sampler.num_executions)
     if len(cost_store_spsa) % 10 == 0:
         print(cost_val)
@@ -223,7 +231,7 @@ def callback_fn(xk):
 # Our cost function does not take a seed as a keyword argument (which would be
 # the default behaviour for ``minimizeSPSA``), so we set ``paired=False``.
 #
-res = minimizeSPSA(cost, x0=init_params, niter=niter_spsa, paired=False, c=0.6, a=1.8, callback=callback_fn)
+res = minimizeSPSA(cost, x0=init_params, niter=niter_spsa, paired=False, c = 0.15, a = 0.2, callback=callback_fn)
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -232,32 +240,26 @@ res = minimizeSPSA(cost, x0=init_params, niter=niter_spsa, paired=False, c=0.6, 
 #
 #  .. code-block:: none
 #
-#     -0.496
-#     -0.676
-#     -0.864
-#     -0.922
-#     -0.924
+#     0.368
+#     0.066
+#     -0.098
+#     -0.398
+#     -0.498
+#     -0.78
+#     -0.88
+#     -0.916
+#     -0.968
+#     -0.968
+#     -0.966
+#     -0.97
 #     -0.978
-#     -0.974
-#     -0.992
-#     -0.982
-#     -0.98
-#     -0.992
-#     -0.984
-#     -0.996
-#     -0.998
-#     -0.992
-#     -0.99
-#     -0.992
-#     -1.0
-#     -0.99
 #     -0.994
-
-##############################################################################
-#
-# Once the optimization has concluded, we save the number of device executions
-# required for completion (will be an interesting quantity later!).
-device_execs_spsa = dev_sampler.num_executions
+#     -0.988
+#     -0.982
+#     -0.99
+#     -0.996
+#     -0.988
+#     -0.992
 
 ##############################################################################
 #
@@ -266,8 +268,9 @@ device_execs_spsa = dev_sampler.num_executions
 # fast convergence.
 #
 # Note that we also reset the number of executions of the device
-opt = qml.GradientDescentOptimizer(stepsize=1.1)
+opt = qml.GradientDescentOptimizer(stepsize=0.3)
 
+# Reset the number of executions of the device
 dev_sampler._num_executions = 0
 
 device_execs_grad = []
@@ -289,26 +292,74 @@ for k in range(steps):
 #
 #  .. code-block:: none
 #
-#     0.976
-#     0.918
-#     0.66
-#     0.166
-#     -0.542
-#     -0.946
+#     0.9
+#     0.714
+#     0.266
+#     -0.39
+#     -0.842
+#     -0.976
+#     -0.988
+#     -0.994
 #     -0.998
+#     -0.992
 #     -0.99
+#     -0.998
+#     -0.998
+#     -1.0
+#     -0.996
+#     -0.998
+#     -0.998
 #     -1.0
 #     -0.996
 #     -1.0
-#     -1.0
-#     -0.998
-#     -1.0
-#     -1.0
-#     -0.998
-#     -1.0
-#     -0.998
-#     -0.996
-#     -0.998
+
+##############################################################################
+# SPSA and gradient descent comparison
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# At this point, nothing else remains as to check which of these approaches did
+# better!
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(device_execs_grad, cost_store_grad, label="Gradient descent")
+plt.plot(device_execs_spsa, cost_store_spsa, label="SPSA")
+
+plt.xlabel('Number of device exeuctions', fontsize=14)
+plt.ylabel('Cost function value', fontsize=14)
+plt.grid()
+
+plt.legend(fontsize=14)
+plt.show()
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/spsa/first_comparison.png
+#     :align: center
+#     :width: 75%
+#
+# It seems that SPSA performs great and it does with a significant saving when
+# compared to gradient descent!
+#
+# Let's take a deeper dive to see how much better it is actually.
+#
+grad_desc_exec_min = device_execs_grad[np.argmin(cost_store_grad)]
+spsa_exec_min = device_execs_spsa[np.argmin(cost_store_spsa)]
+print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Device execution ratio: 5.42948717948718.
+#
+# This means that SPSA can potentially find the minimum of a cost function by
+# using 5 times fewer device executions than gradient descent! That's a huge
+# saving.
 
 ##############################################################################
 # SPSA and the variational quantum eigensolver
