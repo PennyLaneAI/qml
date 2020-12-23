@@ -311,6 +311,166 @@ for k in range(steps):
 #     -0.998
 
 ##############################################################################
+# SPSA and the variational quantum eigensolver
+# --------------------------------------------
+#
+# Now that we've explored the theoretical underpinnings of SPSA, let's use it
+# to explore a real chemical system, that of the hydrogen molecule :math:`H_2`.
+# This molecule was studied previously in the `introductory variational quantum
+# eigensolver (VQE) demo </demos/tutorial_vqe>`_, and so we will reuse some of
+# that machinery here to set up the problem.
+#
+# We'll start by loading up the :math:`H_2` Hamiltonian and taking a look.
+#
+#
+
+
+from pennylane import qchem
+
+geometry = 'h2.xyz'
+charge = 0
+multiplicity = 1
+basis_set = 'sto-3g'
+name = 'h2'
+
+h2_ham, num_qubits = qchem.molecular_hamiltonian(
+    name,
+    geometry,
+    charge=charge,
+    mult=multiplicity,
+    basis=basis_set,
+    active_electrons=2,
+    active_orbitals=2,
+    mapping='jordan_wigner'
+)
+
+print(f'Number of qubits = {num_qubits}')
+print(f'Hamiltonian is \n {h2_ham}')
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Number of qubits = 4
+#     Hamiltonian is
+#      (-0.04207897647782276) [I0]
+#     + (0.17771287465139946) [Z0]
+#     + (0.1777128746513994) [Z1]
+#     + (-0.24274280513140462) [Z2]
+#     + (-0.24274280513140462) [Z3]
+#     + (0.17059738328801052) [Z0 Z1]
+#     + (0.04475014401535161) [Y0 X1 X2 Y3]
+#     + (-0.04475014401535161) [Y0 Y1 X2 X3]
+#     + (-0.04475014401535161) [X0 X1 Y2 Y3]
+#     + (0.04475014401535161) [X0 Y1 Y2 X3]
+#     + (0.12293305056183798) [Z0 Z2]
+#     + (0.1676831945771896) [Z0 Z3]
+#     + (0.1676831945771896) [Z1 Z2]
+#     + (0.12293305056183798) [Z1 Z3]
+#     + (0.17627640804319591) [Z2 Z3]
+
+
+##############################################################################
+#
+# This Hamiltonian uses 4 qubits and contains 15 terms. The ground state energy
+# of :math:`H_2` is :math:`-1.136189454088` Hartree. As per the original demo, this
+# ground state energy can be found through the VQE procedure using the following
+# variational ansatz:
+#
+
+def circuit(params, wires):
+    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    for i in wires:
+        qml.Rot(*params[i], wires=i)
+    qml.CNOT(wires=[2, 3])
+    qml.CNOT(wires=[2, 0])
+    qml.CNOT(wires=[3, 1])
+
+##############################################################################
+#
+# Let's first approach this problem using gradient descent. We'll set up a
+# fresh device and run the VQE with a cost function that computes the expectation
+# value of each Hamiltonian term after running the ansatz circuit. We'll also set
+# the maximum number of gradient descent iterations to 50.
+
+# Reset the noisy device
+dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000)
+
+# Cost function for VQE
+cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
+
+# Initialise the optimizer - optimal step size was found through a grid search
+opt = qml.GradientDescentOptimizer(stepsize=2.3)
+
+max_iterations = 50
+
+np.random.seed(0)
+params = np.random.normal(0, np.pi, (num_qubits, 3))
+
+prev_energy = cost(params)
+
+ideal_device_executions = [0]
+ideal_energies = [prev_energy]
+
+for n in range(max_iterations):
+    params, energy = opt.step_and_cost(cost, params)
+
+    if n % 20 == 0:
+        print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
+
+    prev_energy = energy
+
+    ideal_device_executions.append(dev_noisy.num_executions)
+    ideal_energies.append(prev_energy)
+
+true_energy = -1.136189454088
+
+print()
+print(f'Final estimated value of the ground-state energy = {energy:.8f} Ha')
+print(f'Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha')
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Iteration = 0,  Energy = -0.81404640 Ha
+#     Iteration = 20,  Energy = -1.12448497 Ha
+#     Iteration = 40,  Energy = -1.12524655 Ha
+#     Iteration = 60,  Energy = -1.13218111 Ha
+#     Iteration = 80,  Energy = -1.13741000 Ha
+#
+#     Final value of the ground-state energy = -1.12277187 Ha
+#     Accuracy with respect to the FCI energy: 0.01341758 Ha
+
+##############################################################################
+#
+# Note that the total number of device executions is as expected. Gradients need
+# to be computed for each of the 4 qubit rotations with 3 parameters. The
+# gradient of each parameter requires 2 evaluations, and this must be done over
+# all 15 terms. Factoring in the number of iteration steps (100), we expect the
+# total number of device executions
+#
+
+est_dev_execs = params.size * len(h.terms[0]) * 2 * max_iterations
+print("Estimated device executions = {est_dev_execs}")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Estimated device executions = 36000
+
+
+##############################################################################
 # References
 # ----------
 #
