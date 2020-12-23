@@ -119,13 +119,21 @@ optimization!
 Optimization on a sampling device
 ---------------------------------
 
+.. important::
+
+    In order to run this demo locally, you'll need to install the `noisyopt
+    <https://github.com/andim/noisyopt>`_ library. This library contains a
+    straightforward implementation of SPSA that can be used in the same way as
+    the optimizers available in `SciPy's minimize method
+    <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html>`_.
+
 First, let's consider a simple quantum circuit on a sampling device. For this,
 we'll be using a device from the `PennyLane-Qiskit plugin
 <https://pennylaneqiskit.readthedocs.io/en/latest/>`_ that samples quantum
 circuits to get measurement outcomes and later post-processes these outcomes to
 compute statistics like expectation values.
 
-.. note:
+.. note::
 
     Just with other PennyLane devices, the number of samples taken for a device
     execution can be specified using the ``shots`` keyword argument of the
