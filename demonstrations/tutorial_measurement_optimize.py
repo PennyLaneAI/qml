@@ -65,7 +65,7 @@ acting on wire :math:`n`, :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}`:
 
 .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 
-(This product of Pauli terms is often referred to as a 'Pauli word' in the literature.) The cost
+(The :math:`h_i` product of Pauli terms is often referred to as a 'Pauli word' in the literature.) The cost
 function of the VQE is then simply the expectation value of this Hamiltonian on the state obtained
 after running the variational quantum circuit:
 
