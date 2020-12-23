@@ -3,6 +3,9 @@ r""".. _spsa:
 Optimization using SPSA
 =======================
 
+Background
+----------
+
 PennyLane allows computing quantum gradients using  parameter-shift rules.
 
 For quantum circuits that have multiple free parameters, using the
@@ -81,8 +84,7 @@ can be obtained as
 
 where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(u) = \frac{
 \partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}` based on
-prior measurements of the cost function and :math:`a_{k}` is a numeric
-coefficient.
+prior measurements of the cost function and :math:`a_{k}` is a positive number.
 
 As previously mentioned, SPSA further takes into account the noisiness of the
 result obtained when measuring function :math:`L`. Therefore, let's consider the
@@ -100,8 +102,191 @@ stochasticity of the technique comes from the fact that for each iteration step
 generated using a zero-mean distribution. In most cases, the Bernoulli
 distribution is used.
 
-"""
+Now that we have explored how SPSA works, let's see how it performs in an
+optimization!
 
+Optimization on a sampling device
+---------------------------------
+
+First, let's consider a simple quantum circuit on a sampling device. For this,
+we'll be using a device from the `PennyLane-Qiskit plugin
+<https://pennylaneqiskit.readthedocs.io/en/latest/>`_ that samples quantum
+circuits to get measurement outcomes and later post-processes these outcomes to
+compute statistics like expectation values.
+
+.. note:
+
+    Just with other PennyLane devices, the number of samples taken for a device
+    execution can be specified using the ``shots`` keyword argument of the
+    device.
+
+Once we have a device selected, we just need a couple of other ingredients to
+put together the pieces for an example optimization:
+
+* a template ``StronglyEntanglingLayers``,
+* an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i`, where :math:`N` stands
+  for the number of qubits,
+* initial parameters: conveniently generated using ``qml.init.strong_ent_layers_normal``.
+
+"""
+import pennylane as qml
+import numpy as np
+
+num_wires = 4
+num_layers = 3
+
+dev_sampler = qml.device(
+    "qiskit.aer", wires=num_wires, shots=1000
+)
+
+##############################################################################
+# We seed so that we can simulate the same circuit every time.
+np.random.seed(50)
+
+all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
+
+@qml.qnode(dev_sampler)
+def circuit(params):
+    qml.templates.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
+    return qml.expval(all_pauliz_tensor_prod)
+
+##############################################################################
+# After this, we'll initialize the parameters in a tricky way. We are
+# flattening our parameters, which will be very convenient later on when using
+# the SPSA optimizer. Just keep in mind that this is done for compatibility.
+flat_shape = num_layers * num_wires * 3
+init_params = qml.init.strong_ent_layers_normal(n_wires=num_wires, n_layers=num_layers).reshape(flat_shape)
+
+def cost(params):
+    return circuit(params.reshape(num_layers, num_wires, 3))
+
+
+##############################################################################
+# Once we have defined each piece of the optimization, there's only one
+# remaining component required for the optimization: the *SPSA optimizer*.
+#
+# We'll use the SPSA optimizer provided by the ``noisyopt`` package. Once
+# imported, we can initialize parts of the optimization such as the number of
+# iterations, a collection to store the cost values and a callback function.
+#
+# This callback function is used to record the value of the cost function at
+# each iteration step (and for our convenience to print values every 10 steps).
+from noisyopt import minimizeSPSA
+
+niter_spsa = 200
+
+cost_store_spsa = []
+
+def callback_fn(xk):
+    cost_val = cost(xk)
+    cost_store_spsa.append(cost_val)
+    if len(cost_store_spsa) % 10 == 0:
+        print(cost_val)
+
+##############################################################################
+# Choosing the hyperparameters
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# ``noisyopt`` allows specifying the initial value of two hyperparameters for
+# SPSA: the :math:`c` and :math:`a` coefficients.
+#
+# With stochastic approximation, specifying such hyperparameters significantly
+# influences the convergence of the optimization for a given problem. Although
+# there is no universal recipe for selecting these values (as they are greatly
+# dependent on the specific problem), [#spall_implementation]_ includes
+# guidelines for the selection.
+#
+# In our case, the initial values for :math:`c` and :math:`a` were selected as
+# a result of a grid search.
+#
+# Our cost function does not take a seed as a keyword argument (which would be
+# the default behaviour for ``minimizeSPSA``), so we set ``paired=False``.
+#
+res = minimizeSPSA(cost, x0=init_params, niter=niter_spsa, paired=False, c=0.6, a=1.8, callback=callback_fn)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     0.11
+#     -0.076
+#     -0.68
+#     -0.924
+#     -0.952
+#     -0.994
+#     -0.996
+#     -0.998
+#     -0.998
+#     -0.994
+#     -0.994
+#     -1.0
+#     -0.99
+#     -0.998
+#     -0.994
+#     -1.0
+#     -1.0
+#     -0.998
+#     -0.998
+#     -1.0
+
+##############################################################################
+#
+# Once the optimization has concluded, we save the number of device executions
+# required for completion (will be an interesting quantity later!).
+device_execs_spsa = dev_sampler.num_executions
+
+##############################################################################
+#
+# At this point, we perform the same optimization using gradient descent. We
+# set the step size according to a favourable value found after grid search.
+#
+# Note that we also reset the number of executions of the device
+opt = qml.GradientDescentOptimizer(stepsize=1.1)
+
+dev_sampler._num_executions = 0
+
+device_execs_grad = []
+cost_store_grad = []
+
+steps = 20
+params = init_params
+
+for k in range(steps):
+    params, val = opt.step_and_cost(cost, params)
+    device_execs_grad.append(dev_sampler.num_executions)
+    cost_store_grad.append(val)
+    print(val)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     0.982
+#     0.922
+#     0.736
+#     0.186
+#     -0.48
+#     -0.93
+#     -0.996
+#     -0.994
+#     -1.0
+#     -0.994
+#     -1.0
+#     -0.996
+#     -0.998
+#     -0.992
+#     -1.0
+#     -1.0
+#     -0.996
+#     -0.996
+#     -1.0
+#     -0.998
 
 ##############################################################################
 # References
@@ -111,3 +296,10 @@ distribution is used.
 #
 #    1. James C. Spall, "An Overview of the Simultaneous Perturbation Method for Efficient Optimization."
 #    `<https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF>`__, 1998
+#
+# .. [#spall_implementation]
+#
+#    2. J. C. Spall, "Implementation of the simultaneous perturbation algorithm
+#    for stochastic optimization," in IEEE Transactions on Aerospace and
+#    Electronic Systems, vol. 34, no. 3, pp. 817-823, July 1998, doi:
+#    10.1109/7.705889.
