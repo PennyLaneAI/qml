@@ -453,27 +453,21 @@ def circuit(params, wires):
 # Reset the noisy device
 dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000)
 
-# Cost function for VQE
-cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
-
 # Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.3)
+max_iterations = 20
+
+# Cost function for VQE
+cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
 
 # Initialize parameters and compute initial energy
 np.random.seed(0)
 params = np.random.normal(0, np.pi, (num_qubits, 3))
 
-prev_energy = cost(params)
-
-# Now reset the device so that the number of executions is counted
-# only from the start of the gradient descent
-dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000)
-cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
-
 h2_grad_device_executions = [0]
-h2_grad_energies = [prev_energy]
+h2_grad_energies = [cost(params)]
 
-max_iterations = 20
+dev_noisy._num_executions = 0
 
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
@@ -481,10 +475,8 @@ for n in range(max_iterations):
     if n % 5 == 0:
         print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
 
-    prev_energy = energy
-
     h2_grad_device_executions.append(dev_noisy.num_executions)
-    h2_grad_energies.append(prev_energy)
+    h2_grad_energies.append(energy)
 
 true_energy = -1.136189454088
 
@@ -567,6 +559,132 @@ print("Expected device executions = {max_dev_execs}")
 # not do so in cases where there is no dependence on the parameters. For example,
 # no gradients need to be computed for the Hamiltonian term that is simply `I`,
 # and there may be shortcuts for other Pauli terms as well.
+
+
+##############################################################################
+# Gradient descent on simulated hardware
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Our next step will be to run the same VQE simulation on our simulated version
+# of the Ourense hardware. The entire process and cost function remain the 
+# same; we'll simply swap out the device.
+#
+
+from qiskit import IBMQ
+from qiskit.providers.aer import noise
+
+# Note: do not run the simulation on this device, as it will send it to a real hardware
+dev_ourense = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_ourense")
+noise_model = noise.NoiseModel.from_backend(dev_ourense.backend.properties())
+dev_noisy = qml.device("qiskit.aer", wires=dev_ourense.num_wires, shots=1000, noise_model=noise_model)
+
+# Initialise the optimizer - optimal step size was found through a grid search
+opt = qml.GradientDescentOptimizer(stepsize=2.3)
+cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
+
+max_iterations = 20
+
+np.random.seed(0)
+params = np.random.normal(0, np.pi, (num_qubits, 3))
+
+h2_grad_device_executions_ourense = [0]
+h2_grad_energies_ourense = [cost(params)]
+
+dev_noisy._num_executions = 0
+
+for n in range(max_iterations):
+    params, energy = opt.step_and_cost(cost, params)
+
+    if n % 5 == 0:
+        print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
+
+    h2_grad_device_executions_ourense.append(dev_noisy.num_executions)
+    h2_grad_energies_ourense.append(energy)
+
+true_energy = -1.136189454088
+
+print()
+print(f'Final estimated value of the ground-state energy = {energy:.8f} Ha')
+print(f'Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha')
+
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Iteration = 0,  Energy = -0.76161843 Ha
+#     Iteration = 5,  Energy = -1.07059468 Ha
+#     Iteration = 10,  Energy = -1.06971668 Ha
+#     Iteration = 15,  Energy = -1.05871466 Ha
+#
+#     Final estimated value of the ground-state energy = -1.07337971 Ha
+#     Accuracy with respect to the true energy: 0.06280975 Ha
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(h2_grad_device_executions, h2_grad_energies, label='Gradient descent')
+plt.scatter(
+    h2_grad_device_executions_ourense,
+    h2_grad_energies_ourense,
+    label='Gradient descent, Ourense sim.'
+)
+
+plt.xticks(fontsize=13)
+plt.yticks(fontsize=13)
+plt.xlabel("Device executions", fontsize=14)
+plt.ylabel("Energy (Ha)", fontsize=14)
+plt.grid()
+
+plt.axhline(y=true_energy, color='black', linestyle='dashed', label="True energy")
+
+plt.legend(fontsize=14)
+
+plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots_ourense.svg
+#     :align: center
+#     :width: 90%
+#
+# We see a similar trend, however on the noisy hardware, the energy never quite
+# reaches its true value, no matter how many iterations are used. In order to 
+# reach the true value, we would have to incorporate error mitigation techniques.
+#
+
+##############################################################################
+#
+# VQE with SPSA
+# ~~~~~~~~~~~~~
+# 
+# Finally, we will perform the same experiment using SPSA instead of the VQE.
+# SPSA should use only 2 device executions per term in the expectation value.
+#
+
+np.random.seed(0)
+params = np.random.normal(0, np.pi, (num_qubits, 3))
+
+niter_spsa = 200
+
+h2_spsa_device_executions = [x * 2 * 15 for x in range(niter_spsa + 1)]
+h2_spsa_energies = [cost(params)]
+
+dev_noisy._num_executions = 0
+
+def callback_fn(xk):
+    h2_spsa_energies.append(cost(xk))
+    
+res = minimizeSPSA(
+    cost, x0=params, niter=niter_spsa, paired=False, c = 0.1, a = 0.628, callback=callback_fn
+)
+
+print()
+print(f'Final estimated value of the ground-state energy = {energy:.8f} Ha')
+print(f'Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha')
+
 
 ##############################################################################
 # References
