@@ -492,7 +492,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 # all 15 terms. Factoring in the number of iteration steps (20), we expect the
 # total number of device executions
 #
-est_dev_execs = params.size * len(h.terms[0]) * 2 * max_iterations
+est_dev_execs = params.size * len(h2_ham.terms[0]) * 2 * max_iterations
 print("Estimated device executions = {est_dev_execs}")
 
 ##############################################################################
