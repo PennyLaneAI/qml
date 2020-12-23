@@ -379,6 +379,10 @@ print(f'Hamiltonian is \n {h2_ham}')
 # ground state energy can be found through the VQE procedure using the following
 # variational ansatz:
 #
+# .. figure:: ../demonstrations/spsa/h2_ansatz.svg
+#     :align: center
+#     :width: 50%
+
 
 def circuit(params, wires):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
