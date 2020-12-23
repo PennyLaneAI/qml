@@ -496,8 +496,8 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 # all 15 terms. Factoring in the number of iteration steps (20), we expect the
 # total number of device executions
 #
-est_dev_execs = params.size * len(h2_ham.terms[0]) * 2 * max_iterations
-print("Estimated device executions = {est_dev_execs}")
+max_dev_execs = params.size * len(h2_ham.terms[0]) * 2 * max_iterations
+print("Expected device executions = {max_dev_execs}")
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -506,8 +506,16 @@ print("Estimated device executions = {est_dev_execs}")
 #
 #  .. code-block:: none
 #
-#     Estimated device executions = 7200
+#     Expected device executions = 7200
 
+
+##############################################################################
+#
+# Note from the plot that the total number of executions is actually less than
+# this. This is because PennyLane is clever about taking the gradient, and will
+# not do so in cases where there is no dependence on the parameters. For example,
+# no gradients need to be computed for the Hamiltonian term that is simply `I`,
+# and there may be shortcuts for other Pauli terms as well.
 
 ##############################################################################
 # References
