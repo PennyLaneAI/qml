@@ -176,10 +176,12 @@ from noisyopt import minimizeSPSA
 niter_spsa = 200
 
 cost_store_spsa = []
+device_execs_spsa = []
 
 def callback_fn(xk):
     cost_val = cost(xk)
     cost_store_spsa.append(cost_val)
+    device_execs_spsa.append(dev_sampler.num_executions)
     if len(cost_store_spsa) % 10 == 0:
         print(cost_val)
 
@@ -197,7 +199,7 @@ def callback_fn(xk):
 # guidelines for the selection.
 #
 # In our case, the initial values for :math:`c` and :math:`a` were selected as
-# a result of a grid search.
+# a result of a grid search to ensure a fast convergence.
 #
 # Our cost function does not take a seed as a keyword argument (which would be
 # the default behaviour for ``minimizeSPSA``), so we set ``paired=False``.
@@ -211,26 +213,26 @@ res = minimizeSPSA(cost, x0=init_params, niter=niter_spsa, paired=False, c=0.6, 
 #
 #  .. code-block:: none
 #
-#     0.11
-#     -0.076
-#     -0.68
+#     -0.496
+#     -0.676
+#     -0.864
+#     -0.922
 #     -0.924
-#     -0.952
-#     -0.994
+#     -0.978
+#     -0.974
+#     -0.992
+#     -0.982
+#     -0.98
+#     -0.992
+#     -0.984
 #     -0.996
 #     -0.998
-#     -0.998
-#     -0.994
-#     -0.994
+#     -0.992
+#     -0.99
+#     -0.992
 #     -1.0
 #     -0.99
-#     -0.998
 #     -0.994
-#     -1.0
-#     -1.0
-#     -0.998
-#     -0.998
-#     -1.0
 
 ##############################################################################
 #
@@ -241,7 +243,8 @@ device_execs_spsa = dev_sampler.num_executions
 ##############################################################################
 #
 # At this point, we perform the same optimization using gradient descent. We
-# set the step size according to a favourable value found after grid search.
+# set the step size according to a favourable value found after grid search for
+# fast convergence.
 #
 # Note that we also reset the number of executions of the device
 opt = qml.GradientDescentOptimizer(stepsize=1.1)
@@ -267,25 +270,25 @@ for k in range(steps):
 #
 #  .. code-block:: none
 #
-#     0.982
-#     0.922
-#     0.736
-#     0.186
-#     -0.48
-#     -0.93
-#     -0.996
-#     -0.994
-#     -1.0
-#     -0.994
-#     -1.0
-#     -0.996
+#     0.976
+#     0.918
+#     0.66
+#     0.166
+#     -0.542
+#     -0.946
 #     -0.998
-#     -0.992
-#     -1.0
+#     -0.99
 #     -1.0
 #     -0.996
-#     -0.996
 #     -1.0
+#     -1.0
+#     -0.998
+#     -1.0
+#     -1.0
+#     -0.998
+#     -1.0
+#     -0.998
+#     -0.996
 #     -0.998
 
 ##############################################################################
@@ -294,7 +297,8 @@ for k in range(steps):
 #
 # .. [#spall_overview]
 #
-#    1. James C. Spall, "An Overview of the Simultaneous Perturbation Method for Efficient Optimization."
+#    1. James C. Spall, "An Overview of the Simultaneous Perturbation Method
+#    for Efficient Optimization."
 #    `<https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF>`__, 1998
 #
 # .. [#spall_implementation]
