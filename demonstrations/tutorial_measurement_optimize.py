@@ -60,7 +60,7 @@ molecular Hamiltonian is computed:
 
 .. math:: H = \sum_i c_i h_i,
 
-where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators
+where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators or the identity
 acting on wire :math:`n`, :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}`:
 
 .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
@@ -288,7 +288,7 @@ print("\n", H)
 # **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
 # commutativity** (QWC).
 #
-# To start with, let's consider single-qubit Pauli operators. We know that the Pauli operators
+# To start with, let's consider single-qubit Pauli operators with the identity. We know that the Pauli operators
 # commute with themselves as well as the identity, but they do *not* commute with
 # each other:
 #
@@ -425,7 +425,7 @@ print(rotated_probs)
 #
 # We know that the single-qubit Pauli operators each have eigenvalues :math:`(1, -1)`, while the identity
 # operator has eigenvalues :math:`(1, 1)`. We can make use of ``np.kron`` to quickly
-# generate the probabilities of the full Pauli terms, making sure that the order
+# generate the eigenvalues of the full Pauli terms, making sure that the order
 # of the eigenvalues in the Kronecker product corresponds to the tensor product.
 
 eigenvalues_XYI = np.kron(np.kron([1, -1], [1, -1]), [1, 1])
@@ -705,7 +705,7 @@ obs_groupings = qml.grouping.group_observables(terms, grouping_type='qwc', metho
 ##############################################################################
 # The ``grouping_type`` argument allows us to choose how the commuting terms
 # are determined (more on that later!) whereas ``method`` determines the colouring
-# heuristic.
+# heuristic (in this case, ``"rlf"`` refers to Recursive Largest First, a variant of largest first colouring heuristic).
 #
 # If we want to see what the required rotations and measurements are, we can use the
 # :func:`qml.grouping.diagonalize_qwc_groupings <pennylane.grouping.diagonalize_qwc_groupings>`
