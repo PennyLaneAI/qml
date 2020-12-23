@@ -498,7 +498,8 @@ print(new_obs)
 # has raised an error.
 #
 # So, a strategy begins to take shape: given a Hamiltonian containing a large number of Pauli terms,
-# can we somehow partition the terms into **fewest** number of QWC groups to minimize the number of measurements
+# there is a high likelihood of there being a significant number of terms that qubit-wise commute. Can
+# we somehow partition the terms into **fewest** number of QWC groups to minimize the number of measurements
 # we need to take?
 
 ##############################################################################
