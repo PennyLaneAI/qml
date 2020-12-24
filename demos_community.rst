@@ -126,7 +126,7 @@ Community
     the Iris dataset.
 
 .. community-card::
-    :title: Trainable Quantum Convolution
+    :title: Trainable Quanvolutional Neural Networks
     :author: Denny Mattern, Darya Martyniuk, Fabian Bergmann, and Henri Willems
     :date: 26/11/2020
     :code: https://github.com/PlanQK/TrainableQuantumConvolution
