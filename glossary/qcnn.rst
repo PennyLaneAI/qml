@@ -61,6 +61,6 @@ counterparts.
 
 .. note::
 
-   Note: quantum convolutional neural networks are different from
+   Quantum convolutional neural networks as presented here are different from
    *quanvolutional* neural networks. See the :doc:`demo about quanvolutional
    networks </demos/tutorial_quanvolution>` to learn more!
