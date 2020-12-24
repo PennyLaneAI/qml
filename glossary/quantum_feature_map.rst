@@ -28,11 +28,12 @@ is a function that acts as :math:`\phi : \cal{X} \rightarrow \cal{F}` where :mat
     A feature map can transform data into a space where it is easier to process.
 
 In general :math:`\cal{F}` is just a vector space.  A *quantum feature map*
-:math:`\phi : \cal{X} \rightarrow \cal{F}` is a feature map where the vector space
-:math:`\cal{F}` is a Hilbert space. The map transforms :math:`x \rightarrow
-|\phi(x)\rangle` by way of a unitary transformation :math:`U_{\phi}(x)`. Quantum
-feature maps are like state preparation circuits that can encode classical data
-into quantum states that are then used in quantum machine learning algorithms.
+:math:`\phi : \cal{X} \rightarrow \cal{F}` is a feature map where the vector
+space :math:`\cal{F}` is a Hilbert space. The map transforms :math:`x
+\rightarrow |\phi(x)\rangle` by way of a unitary transformation
+:math:`U_{\phi}(x)`, which is typically a :doc:`variational circuit
+</glossary/variational_circuit>` whose parameters depend on the input
+data.
 
 .. figure:: ../_static/concepts/quantum_feature_map.svg
     :align: center
@@ -40,8 +41,8 @@ into quantum states that are then used in quantum machine learning algorithms.
     :target: javascript:void(0);
 
 
-For some more detailed examples of quantum feature maps, see the entry for `quantum embeddings
-</glossary/quantum_embeddings/>`_, and the key reference by `Schuld &
+For some more detailed examples of quantum feature maps, see the entry for
+:doc:`quantum embeddings </glossary/quantum_embedding>`, and the key reference by `Schuld &
 Killoran (2018) <https://arxiv.org/abs/1803.07128>`_.
 
 
