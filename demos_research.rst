@@ -179,7 +179,7 @@ plateaus in quantum neural networks.
 
 .. customgalleryitem::
     :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
-    :figure: demonstrations/spsa/spsa_opt.png
+    :figure: demonstrations/spsa/spsa_thumbnail.png
     :description: :doc:`demos/tutorial_spsa`
     :tags: qiskit
 
