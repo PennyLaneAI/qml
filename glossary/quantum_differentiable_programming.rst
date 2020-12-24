@@ -3,5 +3,5 @@
 
 .. _glossary_quantum_differentiable_programming:
 
-Quantum differentiable programming
+Quantum Differentiable Programming
 ==================================

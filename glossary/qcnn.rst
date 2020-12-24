@@ -3,7 +3,7 @@
 
 .. _glossary_qcnn:
 
-Quantum convolutional neural networks
+Quantum Convolutional Neural Networks
 =====================================
 
 In classical machine learning, `convolutional neural networks

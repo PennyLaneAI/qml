@@ -3,7 +3,7 @@
 
 .. _glossary_quantum_feature_map:
 
-Quantum feature map
+Quantum Feature Map
 ===================
 
 In classical machine learning, many methods rely on re-expressing data in a

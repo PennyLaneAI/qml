@@ -3,6 +3,6 @@
 
 .. _glossary_qbm:
 
-Quantum Boltzmann machine
+Quantum Boltzmann Machine
 =========================
 
