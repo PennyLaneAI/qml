@@ -5,3 +5,44 @@
 
 Quantum feature map
 ===================
+
+In classical machine learning, many methods rely on re-expressing data in a
+different space that may be easier to work with, or has some convenient
+properties. A common example is `support vector machines
+<https://en.wikipedia.org/wiki/Support_vector_machine>`_, which classify data
+using a linear hyperplane. A linear hyperplane is fantastic when the data is
+already linearly separable in the original space, however this is unlikely to be
+true for many data sets. To work around this it may be possible to transform
+the data into a new space where it is linear, by way of a *feature map*.
+
+More formally, let :math:`\cal{X}` be a set of input data. A feature map :math:`\phi`
+is a function that acts as :math:`\phi : \cal{X} \rightarrow \cal{F}` where :math:`\cal{F}` is the
+*feature space*. The outputs of the map on the individual data points,
+:math:`\phi(x)` for all :math:`x \in \cal{X}`, are called *feature vectors*.
+
+.. figure:: ../_static/concepts/feature_map_svm.svg
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
+
+    A feature map can transform data into a space where it is easier to process.
+
+In general :math:`\cal{F}` is just a vector space.  A *quantum feature map*
+:math:`\phi : \cal{X} \rightarrow \cal{F}` is a feature map where the vector space
+:math:`\cal{F}` is a Hilbert space. The map transforms :math:`x \rightarrow
+|\phi(x)\rangle` by way of a unitary transformation :math:`U_{\phi}(x)`. Quantum
+feature maps are like state preparation circuits that can encode classical data
+into quantum states that are then used in quantum machine learning algorithms.
+
+.. figure:: ../_static/concepts/quantum_feature_map.svg
+    :align: center
+    :width: 70%
+    :target: javascript:void(0);
+
+
+For some more detailed examples of quantum feature maps, see the entry for `quantum embeddings
+</glossary/quantum_embeddings/>`_, and the key reference by `Schuld &
+Killoran (2018) <https://arxiv.org/abs/1803.07128>`_.
+
+
+.. see-also:: https://arxiv.org/abs/1803.07128
