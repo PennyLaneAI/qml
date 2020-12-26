@@ -60,7 +60,7 @@ feature_size = 4
 batch_size = 10
 lr_adam = 0.01
 train_split = 0.75
-num_qubits = 2
+num_qubits = int(np.log2(feature_size))+np.mod(feature_size,2)
 num_layers = 6
 total_iterations = 100
 
@@ -76,9 +76,10 @@ dev = qml.device("default.qubit", wires=num_qubits)
 # entangling/CNOT gates
 
 def layer(W):
-    qml.Rot(W[0, 0], W[0, 1], W[0, 2], wires=0)
-    qml.Rot(W[1, 0], W[1, 1], W[1, 2], wires=1)
-    qml.CNOT(wires=[0, 1])
+    for i in range(num_qubits):
+        qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+    for j in range(int(num_qubits/2)):
+        qml.CNOT(wires=[j*2, j*2+1])
 
 
 #################################################################################
@@ -90,14 +91,21 @@ def layer(W):
 # Data is embedded in each circuit using amplitude embedding:
 
 def circuit(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, [0, 1], pad=0.0, normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, range(0,num_qubits), pad=(2**num_qubits-feature_size), normalize=True)
     for W in weights:
         layer(W)
-    return qml.expval(qml.PauliZ(0))
 
-qnode1 = qml.QNode(circuit, dev).to_torch()
-qnode2 = qml.QNode(circuit, dev).to_torch()
-qnode3 = qml.QNode(circuit, dev).to_torch()
+    even_wirelist = [i for i in range(num_qubits) if i%2 == 0]
+    PZ = qml.PauliZ(0)
+    for wi in even_wirelist[1:]:
+        PZ = PZ@qml.PauliZ(wi)
+    if(num_qubits%2!=0):
+        PZ = PZ@qml.PauliZ(num_qubits-1)
+    return qml.expval(PZ)
+
+qnodes = []
+for iq in range(num_classes):
+    qnodes.append(qml.QNode(circuit, dev).to_torch())
 
 
 #################################################################################
@@ -171,7 +179,7 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
 def classify(q_circuits, all_params, feature_vecs, labels):
     predicted_labels = []
     for i, feature_vec in enumerate(feature_vecs):
-        scores = [0, 0, 0]
+        scores = np.zeros(num_classes)
         for c in range(num_classes):
             score = variational_classifier(
                 q_circuits[c], (all_params[0][c], all_params[1][c]), feature_vec
@@ -199,7 +207,7 @@ def accuracy(labels, hard_predictions):
 
 def load_and_process_data():
     data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
-    X = torch.tensor(data[:, 0:feature_size])
+    X = torch.tensor(data[:, 1:feature_size+1])
     print("First X sample, original  :", X[0])
 
     # normalize each input
@@ -238,7 +246,7 @@ def training(features, Y):
     num_data = Y.shape[0]
     feat_vecs_train, feat_vecs_test, Y_train, Y_test = split_data(features, Y)
     num_train = Y_train.shape[0]
-    q_circuits = [qnode1, qnode2, qnode3]
+    q_circuits = qnodes
 
     # Initialize the parameters
     all_weights = [
