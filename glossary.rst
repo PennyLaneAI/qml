@@ -120,18 +120,6 @@ Key Concepts
                 }
             },
 
-
-            {
-                "@type": "Question", 
-                "name" : "What is a quantum Boltzmann machine?",
-                "acceptedAnswer" :
-                {
-                    "@type": "Answer",
-                    "text": "The quantum analog of a classical Boltzmann machine, in which nodes are 
-                    replaced by spins or qubits. It is an energy-based quantum machine learning model."
-                }
-            },
-
             {
                 "@type": "Question", 
                 "name" : "What is a quantum convolutional neural network?",
@@ -280,10 +268,6 @@ Key Concepts
     :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_intro>`
         A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating parameterized components. 
 
-    :doc:`Quantum Boltzmann Machine </glossary/qbm>`
-        Quantum analog of a classical `Boltzmann machine <https://en.wikipedia.org/wiki/Boltzmann_machine>`_, in which nodes are 
-        replaced by spins or qubits. An energy-based quantum machine learning model.
-
     :doc:`Quantum Convolutional Neural Network </glossary/qcnn>`
         A quantum neural network that mirrors the structure of a `convolutional
 	neural network
@@ -344,7 +328,6 @@ Key Concepts
     /glossary/differentiable_quantum_programming
     /glossary/hybrid_computation
     /glossary/parameter_shift
-    /glossary/qbm
     /glossary/qcnn
     /glossary/quantum_embedding
     /glossary/quantum_feature_map
