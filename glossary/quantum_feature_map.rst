@@ -6,19 +6,20 @@
 Quantum Feature Map
 ===================
 
-In classical machine learning, many methods rely on re-expressing data in a
-different space that may be easier to work with, or has some convenient
-properties. A common example is `support vector machines
+Many classical machine learning methods re-express their input data in a
+different space to make it easier to work with, or because the new space may
+have some convenient properties. A common example is `support vector machines
 <https://en.wikipedia.org/wiki/Support_vector_machine>`_, which classify data
-using a linear hyperplane. A linear hyperplane is fantastic when the data is
+using a linear hyperplane. A linear hyperplane works well when the data is
 already linearly separable in the original space, however this is unlikely to be
-true for many data sets. To work around this it may be possible to transform
-the data into a new space where it is linear, by way of a *feature map*.
+true for many data sets. To work around this it may be possible to transform the
+data into a new space where it is linear by way of a *feature map*.
 
-More formally, let :math:`\cal{X}` be a set of input data. A feature map :math:`\phi`
-is a function that acts as :math:`\phi : \cal{X} \rightarrow \cal{F}` where :math:`\cal{F}` is the
-*feature space*. The outputs of the map on the individual data points,
-:math:`\phi(x)` for all :math:`x \in \cal{X}`, are called *feature vectors*.
+More formally, let :math:`\cal{X}` be a set of input data. A feature map
+:math:`\phi` is a function that acts as :math:`\phi : \cal{X} \rightarrow
+\cal{F}` where :math:`\cal{F}` is the feature space. The outputs of the map on
+the individual data points, :math:`\phi(x)` for all :math:`x \in \cal{X}`, are
+called feature vectors.
 
 .. figure:: ../_static/concepts/feature_map_svm.svg
     :align: center
@@ -27,13 +28,13 @@ is a function that acts as :math:`\phi : \cal{X} \rightarrow \cal{F}` where :mat
 
     A feature map can transform data into a space where it is easier to process.
 
-In general :math:`\cal{F}` is just a vector space.  A *quantum feature map*
+In general :math:`\cal{F}` is just a vector space --- a *quantum feature map*
 :math:`\phi : \cal{X} \rightarrow \cal{F}` is a feature map where the vector
-space :math:`\cal{F}` is a Hilbert space. The map transforms :math:`x
-\rightarrow |\phi(x)\rangle` by way of a unitary transformation
-:math:`U_{\phi}(x)`, which is typically a :doc:`variational circuit
-</glossary/variational_circuit>` whose parameters depend on the input
-data.
+space :math:`\cal{F}` is a Hilbert space and the feature vectors are quantum
+states. The map transforms :math:`x \rightarrow |\phi(x)\rangle` by way of a
+unitary transformation :math:`U_{\phi}(x)`, which is typically a
+:doc:`variational circuit </glossary/variational_circuit>` whose parameters
+depend on the input data.
 
 .. figure:: ../_static/concepts/quantum_feature_map.svg
     :align: center
