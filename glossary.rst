@@ -78,16 +78,6 @@ Key Concepts
 
             {
                 "@type": "Question", 
-                "name" : "What is automatic differentiation?",
-                "acceptedAnswer" :
-                {
-                    "@type": "Answer",
-                    "text": "The process of automatically computing derivatives of the steps of computer programs."
-                }
-            },
-
-            {
-                "@type": "Question", 
                 "name" : "What are barren plateaus?",
                 "acceptedAnswer" :
                 {
@@ -267,9 +257,6 @@ Key Concepts
 
 .. glossary::
 
-    :doc:`Automatic Differentiation </glossary/automatic_differentiation>`
-        Automatically computing derivatives of the steps of computer programs.
-
     :doc:`Barren Plateaus </demos/tutorial_local_cost_functions>`
         Areas in the cost landscape where the gradient of a parameterized circuit disappears. The mortal enemy of many a variational algorithm, 
         the variance of the gradient at these points is also close to zero in all directions. 
@@ -279,6 +266,10 @@ Key Concepts
         specific subsystems. The architecture defines which algorithms a variational circuit can implement by
         fixing the trainable parameters. A circuit ansatz is analogous to the architecture of a neural network.
 
+    :doc:`Differentiable Quantum Programming </glossary/differentiable_quantum_programming>`
+        The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
+        :doc:`quantum gradient </glossary/quantum_gradient>`.
+	
     :doc:`Hybrid Computation </glossary/hybrid_computation>`
         A computation that includes classical *and* quantum subroutines, executed on different devices.
 
@@ -299,10 +290,6 @@ Key Concepts
 	<https://en.wikipedia.org/wiki/Convolutional_neural_network>`_. 
 	Characterized by alternating convolutional layers, and pooling layers which
 	are effected by performing quantum measurements.
-
-    :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
-        The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
-        :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Quantum Embedding </glossary/quantum_embedding>`
         Representation of classical data as a quantum state.
@@ -353,13 +340,12 @@ Key Concepts
     :maxdepth: 2
     :hidden:
 
-    /glossary/automatic_differentiation
     /glossary/circuit_ansatz
+    /glossary/differentiable_quantum_programming
     /glossary/hybrid_computation
     /glossary/parameter_shift
     /glossary/qbm
     /glossary/qcnn
-    /glossary/quantum_differentiable_programming
     /glossary/quantum_embedding
     /glossary/quantum_feature_map
     /glossary/quantum_gradient
