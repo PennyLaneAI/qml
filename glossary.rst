@@ -100,6 +100,16 @@ Key Concepts
             },
 
             {
+                "@type": "Question",
+                "name" : "What is differentiable quantum programming?",
+                "acceptedAnswer" :
+                {
+                    "@type": "Answer",
+                    "text": "The paradigm of making quantum algorithms differentiable, and thereby trainable."
+                }
+            },
+
+            {
                 "@type": "Question", 
                 "name" : "What is hybrid computation?",
                 "acceptedAnswer" :
@@ -129,16 +139,6 @@ Key Concepts
 		    "text" : "A quantum neural network that mirrors the structure of a convolutional
 		              neural network. Characterized by alternating convolutional layers, and
 			      pooling layers which are effected by performing quantum measurements."
-                }
-            },
-
-             {
-                "@type": "Question", 
-                "name" : "What is quantum differentiable programming?",
-                "acceptedAnswer" :
-                {
-                    "@type": "Answer",
-                    "text": "The paradigm of making quantum algorithms differentiable, and thereby trainable."
                 }
             },
 
