@@ -22,7 +22,8 @@ Automatic differentiation
 
 Derivatives and gradients are ubiquitous throughout science and engineering.
 In recent years, automatic differentiation has become a key feature in many numerical software libraries,
-in particular for machine learning (e.g., Theano_, Autograd_, Tensorflow_, or Pytorch_).
+in particular for machine learning (e.g., Theano_, Autograd_, Tensorflow_,
+Pytorch_, or Jax_).
 
 :html:`<br>`
 
@@ -69,13 +70,11 @@ For example, in PennyLane parameterized quantum operations carry information
 about their parameters and their domains, and specify a "recipe" that details
 how to automatically compute gradients. Many operations make use of
 :doc:`parameter-shift rules </glossary/parameter_shift>` for this purpose (see,
-for example, the arbitrary unitary rotation `qml.Rot
-<https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Rot.html>`_ which
-uses parameter-shift rules to compute the derivative with respect to each of its
+for example, the arbitrary unitary rotation :class:`~.pennylane.Rot` which uses
+parameter-shift rules to compute the derivative with respect to each of its
 three parameters). In this way, the gradient of arbitrary sequences of
-parameterized gates can be computed (if the parameter is used more than once,
-the product rule for derivatives can be applied). Once evaluated the gradients
-can be fed forward into subsequent parts of a larger hybrid computation.
+parameterized gates can be computed. Once evaluated the gradients can be fed
+forward into subsequent parts of a larger hybrid computation.
 
 :html:`<br>`
 
@@ -90,3 +89,4 @@ can be fed forward into subsequent parts of a larger hybrid computation.
 .. _Autograd: https://github.com/HIPS/autograd
 .. _Tensorflow: http://tensorflow.org/
 .. _Pytorch: https://pytorch.org/
+.. _Jax: https://github.com/google/jax
