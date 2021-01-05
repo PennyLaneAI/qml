@@ -15,19 +15,16 @@ may consist of a mixture of classical and quantum components.
     :target: javascript:void(0);
 
 In PennyLane, these units of quantum computations are represented using an
-object called a *quantum node*, or ``QNode``. A quantum node consists of a quantum
-function (such as a :doc:`variational circuit </glossary/variational_circuit>`),
-and a device on which it executes.
+object called a *quantum node*, or :func:`~.pennylane.QNode`. A quantum node
+consists of a quantum function (such as a :doc:`variational circuit
+</glossary/variational_circuit>`), and a device on which it executes.
 
 .. figure:: ../_static/concepts/qnode.svg
     :align: center
     :width: 80%
     :target: javascript:void(0);
 
-
-.. seealso::
+.. note::
 
     In PennyLane, quantum nodes can be constructed by using either the
-    ``qnode`` `decorator
-    <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qnode.html>`_,
-    or the ``QNode`` `constructor <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.QNode.html>`_.
+    :func:`~.pennylane.qnode` decorator, or the :func:`~.pennylane.QNode` constructor.
