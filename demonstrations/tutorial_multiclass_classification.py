@@ -60,7 +60,7 @@ feature_size = 4
 batch_size = 10
 lr_adam = 0.01
 train_split = 0.75
-num_qubits = int(np.log2(feature_size))+np.mod(feature_size,2)
+num_qubits = int(np.ceil(np.log2(feature_size)))
 num_layers = 6
 total_iterations = 100
 
