@@ -43,8 +43,5 @@ depend on the input data.
 
 
 For some more detailed examples of quantum feature maps, see the entry for
-:doc:`quantum embeddings </glossary/quantum_embedding>`, and the key reference by `Schuld &
-Killoran (2018) <https://arxiv.org/abs/1803.07128>`_.
-
-
-.. see-also:: https://arxiv.org/abs/1803.07128
+:doc:`quantum embeddings </glossary/quantum_embedding>`, and the key references `Schuld &
+Killoran (2018) <https://arxiv.org/abs/1803.07128>`_, and `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`_.
