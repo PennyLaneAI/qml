@@ -95,12 +95,12 @@ def circuit(weights, feat=None):
     for W in weights:
         layer(W)
 
-    even_wirelist = [i for i in range(num_qubits) if i%2 == 0]
+    even_wirelist = [i for i in range(num_qubits) if i % 2 == 0]
     PZ = qml.PauliZ(0)
     for wi in even_wirelist[1:]:
-        PZ = PZ@qml.PauliZ(wi)
-    if(num_qubits%2!=0):
-        PZ = PZ@qml.PauliZ(num_qubits-1)
+        PZ = PZ @ qml.PauliZ(wi)
+    if num_qubits % 2 != 0:
+        PZ = PZ @ qml.PauliZ(num_qubits - 1)
     return qml.expval(PZ)
 
 qnodes = []
