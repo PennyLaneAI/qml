@@ -78,8 +78,8 @@ dev = qml.device("default.qubit", wires=num_qubits)
 def layer(W):
     for i in range(num_qubits):
         qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
-    for j in range(int(num_qubits/2)):
-        qml.CNOT(wires=[j*2, j*2+1])
+    for j in range(int(num_qubits - 1)):
+        qml.CNOT(wires=[j, j + 1])
 
 
 #################################################################################
