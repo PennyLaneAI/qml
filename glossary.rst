@@ -134,7 +134,7 @@ Key Concepts
 
             {
                 "@type": "Question",
-                "name" : "What is differentiable quantum programming?",
+                "name" : "What is quantum differentiable programming?",
                 "acceptedAnswer" :
                 {
                     "@type": "Answer",
@@ -254,10 +254,6 @@ Key Concepts
         specific subsystems. The architecture defines which algorithms a variational circuit can implement by
         fixing the trainable parameters. A circuit ansatz is analogous to the architecture of a neural network.
 
-    :doc:`Differentiable Quantum Programming </glossary/differentiable_quantum_programming>`
-        The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
-        :doc:`quantum gradient </glossary/quantum_gradient>`.
-	
     :doc:`Hybrid Computation </glossary/hybrid_computation>`
         A computation that includes classical *and* quantum subroutines, executed on different devices.
 
@@ -274,6 +270,10 @@ Key Concepts
 	<https://en.wikipedia.org/wiki/Convolutional_neural_network>`_. 
 	Characterized by alternating convolutional layers, and pooling layers which
 	are effected by performing quantum measurements.
+
+   :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
+        The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
+        :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Quantum Embedding </glossary/quantum_embedding>`
         Representation of classical data as a quantum state.
@@ -325,10 +325,10 @@ Key Concepts
     :hidden:
 
     /glossary/circuit_ansatz
-    /glossary/differentiable_quantum_programming
     /glossary/hybrid_computation
     /glossary/parameter_shift
     /glossary/qcnn
+    /glossary/quantum_differentiable_programming
     /glossary/quantum_embedding
     /glossary/quantum_feature_map
     /glossary/quantum_gradient

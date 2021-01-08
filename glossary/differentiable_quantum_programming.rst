@@ -1,9 +1,9 @@
 .. role:: html(raw)
    :format: html
 
-.. _glossary_differentiable_quantum_programming:
+.. _glossary_quantum_differentiable_programming:
 
-Differentiable Quantum Programming
+Quantum Differentiable Programming
 ==================================
 
 `Differentiable programming
@@ -13,7 +13,7 @@ programming that uses `automatic differentiation
 derivatives of functions with respect to program inputs. In quantum computing,
 one can automatically compute the derivatives of :doc:`variational circuits
 </glossary/variational_circuit>` with respect to their input
-parameters. Differentiable quantum programming is a paradigm that leverages this
+parameters. Quantum differentiable programming is a paradigm that leverages this
 to make quantum algorithms differentiable, and thereby trainable.
 
 
