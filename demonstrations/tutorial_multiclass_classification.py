@@ -91,7 +91,7 @@ def layer(W):
 # Data is embedded in each circuit using amplitude embedding:
 
 def circuit(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, range(0,num_qubits), pad=(2**num_qubits-feature_size), normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, range(0,num_qubits), pad=0.0, normalize=True)
     for W in weights:
         layer(W)
 
