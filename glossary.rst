@@ -271,7 +271,7 @@ Key Concepts
 	Characterized by alternating convolutional layers, and pooling layers which
 	are effected by performing quantum measurements.
 
-   :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
+    :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
         The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
         :doc:`quantum gradient </glossary/quantum_gradient>`.
 
