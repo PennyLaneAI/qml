@@ -4,8 +4,8 @@ Noisy circuits
 ==============
 
 .. meta::
-    :property="og:description": Learn how to simulate nosiy quantum circuits
-    :property="og:image":
+    :property="og:description": Learn how to simulate noisy quantum circuits
+    :property="og:image": https://pennylane.ai/qml/_images/N-Nisq.png
 
 .. related::
 
