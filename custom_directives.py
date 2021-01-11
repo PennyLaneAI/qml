@@ -199,6 +199,7 @@ COMMUNITY_CARD_TEMPLATE = """
                 </div>
                 <div class="col-lg-4">
                     {paper_footer}
+                    {blog_footer}
                     {code_footer}
                 </div>
             </div>
@@ -208,6 +209,11 @@ COMMUNITY_CARD_TEMPLATE = """
 
 PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
                 <i class="fas fa-book"></i> Paper
+            </a>
+"""
+
+BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+                <i class="fas fa-newspaper"></i> Blog
             </a>
 """
 
@@ -226,6 +232,7 @@ class CommunityCardDirective(Directive):
         'title': directives.unchanged,
         'author': directives.unchanged,
         'paper': directives.unchanged,
+        'blog': directives.unchanged,
         'code': directives.unchanged,
         'date': directives.unchanged,
         'color': directives.unchanged,
@@ -240,6 +247,7 @@ class CommunityCardDirective(Directive):
         color = self.options.get("color", "heavy-rain-gradient")
         code_footer = ""
         paper_footer = ""
+        blog_footer = ""
 
         paper_url = self.options.get("paper", None)
 
@@ -250,6 +258,11 @@ class CommunityCardDirective(Directive):
 
         if code_url is not None:
             code_footer = CODE_FOOTER.format(code=code_url)
+            
+        blog_url = self.options.get("blog", None)
+
+        if blog_url is not None:
+            blog_footer = BLOG_FOOTER.format(blog=blog_url)
 
         card_rst = COMMUNITY_CARD_TEMPLATE.format(
             title=self.options["title"],
@@ -258,6 +271,7 @@ class CommunityCardDirective(Directive):
             date=self.options["date"],
             paper_footer=paper_footer,
             code_footer=code_footer,
+            blog_footer=blog_footer,
             color=color
         )
 
