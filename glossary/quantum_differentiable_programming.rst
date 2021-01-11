@@ -81,8 +81,7 @@ symbolically differentiate arbitrary functions that are encompassed by
 them. However the scope of this method can be limited since it requires
 "hand-written" support for new functions. Further, symbolic differentiation suffers from
 the same drawbacks we might recall from high school; sometimes, the pathway towards
-an analytic solution may be intensely convoluted, or potentially an analytic solution may
-not exist!
+an analytic solution may be intensely convoluted.
 
 
 Numerical differentiation
