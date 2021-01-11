@@ -179,7 +179,7 @@ gradients are only computed in the branch where the criteria is satisfied.
    The method of computing the gradient shown in the animation is a type of
    "forward-mode" autodifferentiation, since the values of the gradient are
    computed in the same direction of the computation. In forward-mode, the
-   complexity of autodifferenting a function :math:`f : R^m \rightarrow R`
+   complexity of autodifferentiating a function :math:`f : R^m \rightarrow R`
    scales with the number of parameters of the function, :math:`m`. There are
    also "backwards", or "reverse-mode" methods, a famous one being the
    `backpropagation <https://en.wikipedia.org/wiki/Backpropagation>`_ used for
