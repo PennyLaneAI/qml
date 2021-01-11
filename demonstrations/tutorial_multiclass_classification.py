@@ -81,7 +81,7 @@ def layer(W):
     for j in range(num_qubits - 1):
         qml.CNOT(wires=[j, j + 1])
     if num_qubits >=2:
-        # Apply additional CNOT to complete the ring pattern
+        # Apply additional CNOT to entangle the last with the first qubit
         qml.CNOT(wires=[num_qubits - 1, 0])    
 
 
