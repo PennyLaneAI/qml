@@ -25,7 +25,7 @@ but the fundamental structure of the program doesn't change.
 
 In contrast, more recent approaches use a "define-by-run" scheme, in which there
 is no underlying assumption to how the model is structured. The models are
-composed of parameterized function blocks, and the structure is dynamic - it may
+composed of parameterized function blocks, and the structure is dynamic---it may
 change depending on the input data, yet still remains trainable and
 differentiable.  A critical aspect of this is that it holds true even in the
 presence of classical control flow such as for loops and if statements. These
@@ -79,7 +79,10 @@ as well as derivatives of common functions (e.g., trigonometric functions). This
 is a very powerful tool because once the set of rules is implemented, we can
 symbolically differentiate arbitrary functions that are encompassed by
 them. However the scope of this method can be limited since it requires
-"hand-written" support for new functions.
+"hand-written" support for new functions. Further, symbolic differentiation suffers from
+the same drawbacks we might recall from high school; sometimes, the pathway towards
+an analytic solution may be intensely convoluted, or potentially an analytic solution may
+not exist!
 
 
 Numerical differentiation
