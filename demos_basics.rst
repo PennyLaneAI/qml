@@ -186,5 +186,5 @@ hardware.
     demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
-    demos/tutorial_noisy_circuits.py
+    demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
