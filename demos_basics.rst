@@ -52,7 +52,13 @@ photonic quantum computing.
     :tooltip: Compare the parameter-shift rule with backpropagation.
     :figure: demonstrations/tutorial_backprop_thumbnail.png
     :description: :doc:`demos/tutorial_backprop`
-    :tags: tensorflow autograd 
+    :tags: tensorflow autograd
+
+.. customgalleryitem::
+    :tooltip: Simulate noisy quantum computations.
+    :figure: demonstrations/tutorial_noisy_circuits/N-Nisq.png
+    :description: :doc:`demos/tutorial_noisy_circuits`
+    :tags: beginner
        
 :html:`</div></div><div style='clear:both'>`
 
@@ -175,3 +181,4 @@ hardware.
     demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
+    demos/tutorial_noisy_circuits.py
