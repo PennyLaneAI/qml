@@ -115,8 +115,7 @@ Automatic differentiation
 If you write an algorithm to compute some function :math:`f(x, y)` (which may
 include mathematical expressions, but also control flow statements like
 :code:`if`, :code:`for`, etc.), then automatic differentiation provides an
-algorithm for :math:`\nabla f(x, y)` with the same degree of complexity as the
-original function.
+algorithm for computing :math:`\nabla f(x, y)`.
 
 Automatic differentiation is a numerical approach, but what distinguishes it
 from methods like finite differences is that it is an *exact* method of
@@ -177,12 +176,17 @@ gradients are only computed in the branch where the criteria is satisfied.
 
 .. note::
 
-   The method of computing the gradient shown in the animation is known as a
-   "forward" method, since the values of the gradient are computed in the same
-   direction of the computation. There are also "backwards" methods, a famous
-   one being the `backpropagation
-   <https://en.wikipedia.org/wiki/Backpropagation>`_ used for training neural
-   networks.
+   The method of computing the gradient shown in the animation is a type of
+   "forward-mode" autodifferentiation, since the values of the gradient are
+   computed in the same direction of the computation. In forward-mode, the
+   complexity of autodifferenting a function :math:`f : R^m \rightarrow R`
+   scales with the number of parameters of the function, :math:`m`. There are
+   also "backwards", or "reverse-mode" methods, a famous one being the
+   `backpropagation <https://en.wikipedia.org/wiki/Backpropagation>`_ used for
+   training neural networks. In reverse-mode autodifferentiation, the gradient
+   can be computed with the same degree of complexity as the original function,
+   regardless of the number of parameters (albeit with some additional memory
+   overhead).
 
 
 Automatic differentiation of quantum computations
@@ -205,12 +209,12 @@ gradients.
 :html:`<br>`
 
 Many quantum operations make use of :doc:`parameter-shift rules
-</glossary/parameter_shift>` for this purpose. Parameter-shift rules bear some
-resemblance to the finite difference method presented above. They involve
-expressing the gradient of a function as some combination of that function at
-two different points. However, unlike in the finite difference methods, those
-two points are not infinitesimally close together, but rather quite far
-apart. For example,
+</glossary/parameter_shift>` for this purpose. Parameter-shift rules are an
+example of forward-mode autodifferentiation, and bear some resemblance to the
+finite difference method presented above. They involve expressing the gradient
+of a function as some combination of that function at two different
+points. However, unlike in the finite difference methods, those two points are
+not infinitesimally close together, but rather quite far apart. For example,
 
 .. math::
 
