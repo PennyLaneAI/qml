@@ -40,8 +40,8 @@ bitstring distribution classically. By comparing run-times for the
 classical simulations and the Sycamore chip
 on smaller circuits, and then extrapolating classical run-times for larger
 circuits, the team concluded that simulating larger circuits on Sycamore
-was intractable classically---i.e., the Sycamore chips had demonstrated
-quantum supremacy.
+was intractable classically---i.e., the Sycamore chips had demonstrated 
+what is called "quantum supremacy".
 
 In this demonstration, we will walk you through how their random quantum
 circuits were constructed, how the performance was measured via
@@ -59,8 +59,8 @@ simulations.
 
 
 ######################################################################
-# Preparing for supremacy
-# -----------------------
+# Preparations
+# ------------
 #
 # As always, we begin by importing the necessary modules. We will use
 # PennyLane, along with some PennyLane-Cirq specific operations, as well as
@@ -118,7 +118,7 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 # of times that the circuit is sampled. This will also be needed later when
 # calculating the cross-entropy benchmarking fidelity. The more shots, the
 # more accurate the results will be. 500,000 shots will be used here---the same
-# number of samples used in the supremacy paper---but feel free to
+# number of samples used in the paper---but feel free to
 # change this (depending on your own computational restrictions).
 #
 
@@ -243,7 +243,7 @@ for i, j in combinations(qubits, 2):
 # 2).
 #
 # While we can define any patterns we'd like, the two gate sequences below
-# are the ones that are used in the supremacy paper. The shorter one is
+# are the ones that are used in the paper. The shorter one is
 # used for their classically verifiable benchmarking. The slightly
 # longer sequence, which is much harder to simulate classically, is used
 # for estimating the cross-entropy fidelity in what they call the "supremacy
@@ -328,7 +328,7 @@ def circuit(seed=42, return_probs=False):
 # The cross-entropy benchmarking fidelity
 # ---------------------------------------
 #
-# The performance metric that is used in the supremacy experiment, and the one that we
+# The performance metric that is used in the experiment, and the one that we
 # will use in this demo, is called the linear cross-entropy benchmarking
 # fidelity. It's defined as
 #
@@ -457,7 +457,7 @@ print("Uniform distribution:", f"{f_uniform:.7f}".rjust(14))
 # runs. The more evaluations we do, the closer to the theoretical value we
 # should get.
 #
-# In the supremacy experiment, they typically calculate each of their
+# In the experiment, they typically calculate each of their
 # presented fidelities over ten circuit instances, which only differ
 # in the choices of single-qubit gates. In this demo, we use even more
 # instances to demonstrate a value closer to the theoretically obtained
@@ -507,21 +507,21 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 
 ######################################################################
-# Quantum supremacy
-# -----------------
+# Classical hardness
+# ------------------
 #
 # Why are we calculating this specific fidelity, and what does it actually
 # mean if we get a cross-entropy benchmarking fidelity close to 1? This is
 # an important question, containing one of the main arguments behind why
-# this experiment is used to demonstrate quantum supremacy.
+# this experiment is used to demonstrate "quantum supremacy".
 #
 # Much is due to the Porter-Thompson probability distribution that the
 # random quantum circuits follow, which is hard to simulate classically.
 # On the other hand, a quantum device, running a circuit as the one
 # constructed above, should be able to sample from such a distribution
 # without much overhead. Thus, by showing that a quantum device can produce
-# a high enough fidelity value for a large enough circuit, quantum
-# supremacy can be claimed. This is exactly what Google's supremacy experiment
+# a high enough fidelity value for a large enough circuit, "quantum
+# supremacy" can be claimed. This is exactly what Google's experiment
 # has done.
 #
 # There's still one issue that hasn't been touched on yet: the addition of
@@ -534,7 +534,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 # AI quantum team was able to compare the run-times with the output from
 # their actual hardware device. This way, they managed to show that a
 # significant speedup could be gained from using a quantum computer, and
-# thus proclaimed quantum supremacy (see Fig. 4 in [#Arute2019]_).
+# thus proclaimed "quantum supremacy" (see Fig. 4 in [#Arute2019]_).
 #
 # .. note::
 #
