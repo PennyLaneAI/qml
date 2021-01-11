@@ -64,7 +64,7 @@ print(f"QNode output = {circuit():.4f}")
 ######################################################################
 # The device stores the output state as a density matrix. In this case, since we haven't
 # introduced any noise, the density matrix is equal to the rank-one
-# projector :math:`|\psi\rangle\langle\psi|, where :math:`|\psi\rangle=\frac{1}{\sqrt{
+# projector :math:`|\psi\rangle\langle\psi|`, where :math:`|\psi\rangle=\frac{1}{\sqrt{
 # 2}}(|00\rangle + |11\rangle)`.
 
 print(np.real(dev.state))
