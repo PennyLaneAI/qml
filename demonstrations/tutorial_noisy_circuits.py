@@ -102,7 +102,7 @@ print(f"Output state is = \n{np.real(dev.state)}")
 #
 # More generally, the action of a quantum channel can be interpreted as applying the
 # transformation
-# :math:`(1/p_i)K_i\rho K_i^\dagger` with probability :math:`p_i = \text{Tr}[K_i \rho K_{i}^{
+# :math:`\frac{1}{p_i}K_i\rho K_i^\dagger` with probability :math:`p_i = \text{Tr}[K_i \rho K_{i}^{
 # \dagger}]`. Quantum
 # channels therefore represent a probability distribution over different possible
 # transformations on a quantum state. For
@@ -144,6 +144,7 @@ for p in ps:
 
 print(f"Output state for bit flip probability {p} is = \n{np.real(dev.state)}")
 
+######################################################################
 # Besides the bit flip channel, PennyLane supports several other noisy channels that are commonly
 # used to describe experimental imperfections: :class:`~.pennylane.PhaseFlip`,
 # :class:`~.pennylane.AmplitudeDamping`, :class:`~.pennylane.GeneralizedAmplitudeDamping`,
@@ -224,10 +225,8 @@ for p in ps:
 #
 ev = 0.7781  # observed expectation value
 
-
 def sigmoid(x):
     return 1/(1+np.exp(-x))
-
 
 @qml.qnode(dev)
 def damping_circuit(x):
