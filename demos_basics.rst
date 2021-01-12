@@ -56,7 +56,7 @@ photonic quantum computing.
 
 .. customgalleryitem::
     :tooltip: Simulate noisy quantum computations.
-    :figure: demonstrations/tutorial_noisy_circuits/N-Nisq.png
+    :figure: demonstrations/noisy_circuits/N-Nisq.png
     :description: :doc:`demos/tutorial_noisy_circuits`
     :tags: beginner
        
