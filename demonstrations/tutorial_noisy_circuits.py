@@ -39,21 +39,21 @@ We're putting the N in NISQ.
 # instead of :math:`\phi`.
 # Incoherent noise is more problematic: it originates from a
 # quantum computer becoming entangled with the environment, resulting in
-# mixed states as outputs, which are essentially a probability distribution
+# mixed states --- probability distributions
 # over different pure states. Incoherent thus noise leads to
 # outputs that are always random, regardless of what basis we measure in.
 #
 # Mixed states are described by `density matrices
 # <https://en.wikipedia.org/wiki/Density_matrices>`__.
 # A density matrix is a more general method of describing quantum states that elegantly
-# encompasses a distribution over pure states (a mixed state) in a single mathematical object.
+# encodes a distribution over pure states (a mixed state) in a single mathematical object.
 # Mixed states are the most general description of a quantum state, of which pure
 # states are a special case.
 #
 # Compared to pure states that
 # are described as vectors, a different method is needed for simulating mixed-state quantum
 # computations. This is the purpose of PennyLane's ``default.mixed`` device, which provides native
-# support for mixed states and for simulating all types of noise. Let's use ``default.mixed`` to
+# support for mixed states and for simulating noisy computations. Let's use ``default.mixed`` to
 # simulate a simple circuit for preparing the
 # Bell state :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle)`. We ask the QNode to
 # return the expectation value of :math:`Z_0\otimes Z_1`:
@@ -63,21 +63,20 @@ from pennylane import numpy as np
 
 qml.enable_tape()
 dev = qml.device('default.mixed', wires=2)
-ZZ = qml.PauliZ(0) @ qml.PauliZ(1)
 
 
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(wires=0)
     qml.CNOT(wires=[0, 1])
-    return qml.expval(ZZ)
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
 
 print(f"QNode output = {circuit():.4f}")
 
 ######################################################################
-# The device stores the output state as a density matrix. In this case, since we haven't
-# introduced any noise, the density matrix is equal to :math:`|\psi\rangle\langle\psi|`,
+# The device stores the output state as a density matrix. In this case, the density matrix is
+# equal to :math:`|\psi\rangle\langle\psi|`,
 # where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
 
 
@@ -85,8 +84,9 @@ print(f"Output state is = {np.real(dev.state)}")
 
 ######################################################################
 # Just as mixed states are represented by density matrices, incoherent noise is modelled by
-# quantum channels, which are linear, completely positive, and trace-preserving (`CPTP
-# <https://www.quantiki.org/wiki/channel-cp-map>`__) maps. A convenient strategy for representing
+# quantum channels. Mathematically, a quantum channel is are linear, completely positive,
+# and trace-preserving (`CPTP
+# <https://www.quantiki.org/wiki/channel-cp-map>`__) map. A convenient strategy for representing
 # quantum channels is to employ Kraus operators :math:`\{K_i\}` satisfying the condition
 # :math:`\sum_i K_{i}^{\dagger} K_i = I`. From an initial state :math:`\rho`, the output
 # state after the action of a channel :math:`E` is:
@@ -97,21 +97,23 @@ print(f"Output state is = {np.real(dev.state)}")
 #
 # Like pure states, which are special cases of mixed states, unitary
 # transformations are special cases of a quantum channels. They have a single Kraus operator,
-# the unitary :math:`U`, and they transform a state
+# the unitary :math:`U`, and they transform a state as
 # :math:`U\rho U^\dagger`.
 #
 # More generally, the action of a quantum channel can be interpreted as applying the
 # transformation
-# :math:`K_i` with probability :math:`p_i = \text{Tr}[K_i \rho K_{i}^{\dagger}]`. Quantum
-# channels represent a probability distribution over different possible
+# :math:`(1/p_i)K_i\rho K_i^\dagger` with probability :math:`p_i = \text{Tr}[K_i \rho K_{i}^{
+# \dagger}]`. Quantum
+# channels therefore represent a probability distribution over different possible
 # transformations on a quantum state. For
 # example, consider the bit flip channel. It describes a transformation that flips the state of
-# a qubit (applies an X gate) with probability :math:`p`. Its Kraus operators are
+# a qubit (applies an X gate) with probability :math:`p` and leaves it unchanged wit probability
+# :math:`1-p`. Its Kraus operators are
 #
 # .. math::
 #
-#     K_0 = \sqrt{1-p}\begin{pmatrix}1 & 0\\ 0 & 1\end{pmatrix}, \quad
-#     K_1 = \sqrt{p}\begin{pmatrix}0 & 1\\ 1 & 0\end{pmatrix}.
+#     K_0 &= \sqrt{1-p}\begin{pmatrix}1 & 0\\ 0 & 1\end{pmatrix} \\
+#     K_1 &= \sqrt{p}\begin{pmatrix}0 & 1\\ 1 & 0\end{pmatrix}.
 #
 # This channel can be implemented in PennyLane using the :class:`qml.BitFlip <pennylane.BitFlip>`
 # operation.
@@ -136,8 +138,8 @@ for p in ps:
 print(f"Output state = \n{np.real(dev.state)}")
 ######################################################################
 # The circuit behaves quite differently in the presence of noise! This will be familiar to anyone
-# that has run an algorithm on quantum hardware. It also motivates why error mitigation and error
-# correction are so important.
+# that has run an algorithm on quantum hardware. It is also a quick motivation for why error
+# mitigation and error correction are so important.
 #
 # Besides the bit flip channel, PennyLane supports several other noisy channels that are commonly
 # used to describe experimental imperfections: :class:`~.pennylane.PhaseFlip`,
@@ -176,7 +178,7 @@ for p in ps:
     print(f"QNode output = {depolarizing_circuit(p):.4f}")
 
 ######################################################################
-# As you would expect, the output is further the desired value as the amount of
+# As before, the output deviates from the desired value as the amount of
 # noise increases.
 # Modelling the noise that occurs in real experiments requires careful consideration.
 # PennyLane
@@ -190,17 +192,20 @@ for p in ps:
 # The ability to compute gradients of any operation is an essential ingredient of `differentiable
 # quantum programming, :doc:`/glossary/quantum_differentiable_programming`.
 # In PennyLane, it is possible to
-# compute gradients of noisy channels and optimize them inside variational circuits. Analytical
-# gradients exist for channels whose Kraus operators are proportional to unitary
+# compute gradients of noisy channels and optimize them inside variational circuits.
+# PennyLane supports analytical
+# gradients for channels whose Kraus operators are proportional to unitary
 # matrices [#johannes]_. In other cases, gradients are evaluated using finite differences.
 #
-# To illustrate this property, we'll consider an elementary example. We'll aim to train the noise
+# To illustrate this property, we'll consider an elementary example. We aim to train the noise
 # parameters of a circuit in order to reproduce an observed expectation value. So suppose that we
 # run the circuit to prepare a Bell state
 # on a hardware device and observe that the expectation value of :math:`Z_0\otimes Z_1` is
-# not equal to 1, as would occur with an ideal device. In the experiment, it is known that the
-# major source of noise is amplitude damping, as would happen for example due to photon loss.
-# This process projects a state to :math:`|0\rangle` with probability :math:`p`. It is
+# not equal to 1---as would occur with an ideal device---but instead has value 0.7781. In the
+# experiment, it is known that the
+# major source of noise is amplitude damping, for example as a result of photon loss.
+# Amplitude damping projects a state to :math:`|0\rangle` with probability :math:`p` and
+# otherwise leaves it unchanged. It is
 # described by the Kraus operators
 #
 # .. math::
@@ -210,7 +215,7 @@ for p in ps:
 #
 # What damping parameter explains the experimental outcome? We can answer this question
 # by optimizing the channel parameters to reproduce the experimental
-# observation! Since the parameter :math:`p` is a probability, we use a sigmoid function to
+# observation! 💪 Since the parameter :math:`p` is a probability, we use a sigmoid function to
 # ensure that the trainable parameters give rise to a valid channel parameter, i.e., a number
 # between 0 and 1.
 #
@@ -260,7 +265,7 @@ print(f"Optimized noise parameter = {p:.4f}")
 # Developing quantum algorithms that leverage the power of NISQ devices requires serious
 # consideration of the effects of noise. With PennyLane, you have access to tools that can
 # help you design, simulate, and optimize noisy quantum circuits. We look forward to seeing what
-# the quantum community can achieve with them! 🚀
+# the quantum community can achieve with them! 🚀 🎉 😸
 #
 # References
 # ----------
