@@ -78,16 +78,6 @@ Key Concepts
 
             {
                 "@type": "Question", 
-                "name" : "What is automatic differentiation?",
-                "acceptedAnswer" :
-                {
-                    "@type": "Answer",
-                    "text": "The process of automatically computing derivatives of the steps of computer programs."
-                }
-            },
-
-            {
-                "@type": "Question", 
                 "name" : "What are barren plateaus?",
                 "acceptedAnswer" :
                 {
@@ -130,18 +120,6 @@ Key Concepts
                 }
             },
 
-
-            {
-                "@type": "Question", 
-                "name" : "What is a quantum Boltzmann machine?",
-                "acceptedAnswer" :
-                {
-                    "@type": "Answer",
-                    "text": "The quantum analog of a classical Boltzmann machine, in which nodes are 
-                    replaced by spins or qubits. It is an energy-based quantum machine learning model."
-                }
-            },
-
             {
                 "@type": "Question", 
                 "name" : "What is a quantum convolutional neural network?",
@@ -154,8 +132,8 @@ Key Concepts
                 }
             },
 
-             {
-                "@type": "Question", 
+            {
+                "@type": "Question",
                 "name" : "What is quantum differentiable programming?",
                 "acceptedAnswer" :
                 {
@@ -267,9 +245,6 @@ Key Concepts
 
 .. glossary::
 
-    :doc:`Automatic Differentiation </glossary/automatic_differentiation>`
-        Automatically computing derivatives of the steps of computer programs.
-
     :doc:`Barren Plateaus </demos/tutorial_local_cost_functions>`
         Areas in the cost landscape where the gradient of a parameterized circuit disappears. The mortal enemy of many a variational algorithm, 
         the variance of the gradient at these points is also close to zero in all directions. 
@@ -289,25 +264,21 @@ Key Concepts
     :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_intro>`
         A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating parameterized components. 
 
-    Quantum Boltzmann Machine
-        Quantum analog of a classical `Boltzmann machine <https://en.wikipedia.org/wiki/Boltzmann_machine>`_, in which nodes are 
-        replaced by spins or qubits. An energy-based quantum machine learning model.
-
-    Quantum Convolutional Neural Network
+    :doc:`Quantum Convolutional Neural Network </glossary/qcnn>`
         A quantum neural network that mirrors the structure of a `convolutional
 	neural network
 	<https://en.wikipedia.org/wiki/Convolutional_neural_network>`_. 
 	Characterized by alternating convolutional layers, and pooling layers which
 	are effected by performing quantum measurements.
 
-    Quantum Differentiable Programming
+    :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
         The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
         :doc:`quantum gradient </glossary/quantum_gradient>`.
 
     :doc:`Quantum Embedding </glossary/quantum_embedding>`
         Representation of classical data as a quantum state.
 
-    Quantum Feature Map
+    :doc:`Quantum Feature Map </glossary/quantum_feature_map>`
         The mathematical map that embeds classical data into a quantum state. Usually executed by a variational
         quantum circuit whose parameters depend on the input data. See also
         :doc:`Quantum Embedding </glossary/quantum_embedding>`.
@@ -325,7 +296,7 @@ Key Concepts
         A term with many different meanings, usually referring to a generalization of artificial neural 
         networks to quantum information processing. Also increasingly used to refer to :doc:`variational circuits </glossary/variational_circuit>` in the context of quantum machine learning.
         
-    Quantum Node
+    :doc:`Quantum Node </glossary/quantum_node>`
         A quantum computation executed as part of a larger :doc:`hybrid computation </glossary/hybrid_computation>`.
 
     :doc:`Quanvolutional Neural Network </demos/tutorial_quanvolution>`
@@ -353,11 +324,14 @@ Key Concepts
     :maxdepth: 2
     :hidden:
 
-    /glossary/automatic_differentiation
     /glossary/circuit_ansatz
     /glossary/hybrid_computation
     /glossary/parameter_shift
+    /glossary/qcnn
+    /glossary/quantum_differentiable_programming
     /glossary/quantum_embedding
+    /glossary/quantum_feature_map
     /glossary/quantum_gradient
     /glossary/quantum_neural_network
+    /glossary/quantum_node
     /glossary/variational_circuit
