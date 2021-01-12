@@ -135,12 +135,15 @@ ps = [0.001, 0.01, 0.1, 0.2]
 for p in ps:
     print(f"QNode output for bit flip probability {p} is = {bitflip_circuit(p):.4f}")
 
-print(f"Output state for bit flip probability {p} is = \n{np.real(dev.state)}")
+
 ######################################################################
 # The circuit behaves quite differently in the presence of noise! This will be familiar to anyone
 # that has run an algorithm on quantum hardware. It is also a quick motivation for why error
-# mitigation and error correction are so important.
-#
+# mitigation and error correction are so important. We can also look under the hood to see the
+# output state of the circuit for the largest noise parameter
+
+print(f"Output state for bit flip probability {p} is = \n{np.real(dev.state)}")
+
 # Besides the bit flip channel, PennyLane supports several other noisy channels that are commonly
 # used to describe experimental imperfections: :class:`~.pennylane.PhaseFlip`,
 # :class:`~.pennylane.AmplitudeDamping`, :class:`~.pennylane.GeneralizedAmplitudeDamping`,
@@ -201,7 +204,7 @@ for p in ps:
 # parameters of a circuit in order to reproduce an observed expectation value. So suppose that we
 # run the circuit to prepare a Bell state
 # on a hardware device and observe that the expectation value of :math:`Z_0\otimes Z_1` is
-# not equal to 1---as would occur with an ideal device---but instead has value 0.7781. In the
+# not equal to 1, as would occur with an ideal device, but instead has value 0.7781. In the
 # experiment, it is known that the
 # major source of noise is amplitude damping, for example as a result of photon loss.
 # Amplitude damping projects a state to :math:`|0\rangle` with probability :math:`p` and
