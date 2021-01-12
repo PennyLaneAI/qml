@@ -80,7 +80,7 @@ print(f"QNode output = {circuit():.4f}")
 # where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
 
 
-print(f"Output state is = {np.real(dev.state)}")
+print(f"Output state is = \n{np.real(dev.state)}")
 
 ######################################################################
 # Just as mixed states are represented by density matrices, incoherent noise is modelled by
@@ -128,14 +128,14 @@ def bitflip_circuit(p):
     qml.CNOT(wires=[0, 1])
     qml.BitFlip(p, wires=0)
     qml.BitFlip(p, wires=1)
-    return qml.expval(ZZ)
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
 
 ps = [0.001, 0.01, 0.1, 0.2]
 for p in ps:
-    print(f"QNode output = {bitflip_circuit(p):.4f}")
+    print(f"QNode output for bit flip probability {p} is = {bitflip_circuit(p):.4f}")
 
-print(f"Output state = \n{np.real(dev.state)}")
+print(f"Output state for bit flip probability {p} is = \n{np.real(dev.state)}")
 ######################################################################
 # The circuit behaves quite differently in the presence of noise! This will be familiar to anyone
 # that has run an algorithm on quantum hardware. It is also a quick motivation for why error
@@ -170,12 +170,12 @@ def depolarizing_circuit(p):
     qml.CNOT(wires=[0, 1])
     qml.DepolarizingChannel(p, wires=0)
     qml.DepolarizingChannel(p, wires=1)
-    return qml.expval(ZZ)
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
 
 ps = [0.001, 0.01, 0.1, 0.2]
 for p in ps:
-    print(f"QNode output = {depolarizing_circuit(p):.4f}")
+    print(f"QNode output for depolarizing probability {p} is = {depolarizing_circuit(p):.4f}")
 
 ######################################################################
 # As before, the output deviates from the desired value as the amount of
@@ -232,7 +232,7 @@ def damping_circuit(x):
     qml.CNOT(wires=[0, 1])
     qml.AmplitudeDamping(sigmoid(x), wires=0)  # p = sigmoid(x)
     qml.AmplitudeDamping(sigmoid(x), wires=1)
-    return qml.expval(ZZ)
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
 ######################################################################
 # We optimize the circuit with respect to a simple cost function that attains its minimum when
@@ -255,9 +255,9 @@ for i in range(steps):
     x = opt.step(cost, x)
 
 p = sigmoid(x)
-print(f"QNode output = {damping_circuit(x):.4f}")
-print(f"Observed expectation value = {ev}")
-print(f"Optimized noise parameter = {p:.4f}")
+print(f"QNode output after optimization = {damping_circuit(x):.4f}")
+print(f"Experimental expectation value = {ev}")
+print(f"Optimized noise parameter p = {p:.4f}")
 
 ######################################################################
 # Voilà! We've trained the noisy channel to reproduce the experimental observation. 😎
