@@ -60,6 +60,8 @@ feature_size = 4
 batch_size = 10
 lr_adam = 0.01
 train_split = 0.75
+# The number of the needed qubits is calculated based on the number of features
+# since the data should be encoded into the circuit
 num_qubits = int(np.ceil(np.log2(feature_size)))
 num_layers = 6
 total_iterations = 100
@@ -75,14 +77,15 @@ dev = qml.device("default.qubit", wires=num_qubits)
 # circuits. It consists of rotation gates for each qubit, followed by
 # entangling/CNOT gates
 
+
 def layer(W):
     for i in range(num_qubits):
         qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
     for j in range(num_qubits - 1):
         qml.CNOT(wires=[j, j + 1])
-    if num_qubits >=2:
+    if num_qubits >= 2:
         # Apply additional CNOT to entangle the last with the first qubit
-        qml.CNOT(wires=[num_qubits - 1, 0])    
+        qml.CNOT(wires=[num_qubits - 1, 0])
 
 
 #################################################################################
@@ -90,21 +93,25 @@ def layer(W):
 # multiclass classifier as multiple one-vs-all classifiers, we will use 3 QNodes,
 # each representing one such classifier. That is, ``circuit1`` classifies if a
 # sample belongs to class 1 or not, and so on. The circuit architecture for all
-# 3 nodes are the same. We use the PyTorch interface for the QNodes.
+# nodes are the same. We use the PyTorch interface for the QNodes.
 # Data is embedded in each circuit using amplitude embedding:
+
 
 def circuit(weights, feat=None):
     qml.templates.embeddings.AmplitudeEmbedding(feat, range(num_qubits), pad=0.0, normalize=True)
     for W in weights:
         layer(W)
 
+    # Measuring only the even nodes
     even_wirelist = [i for i in range(num_qubits) if i % 2 == 0]
     PZ = qml.PauliZ(0)
     for wi in even_wirelist[1:]:
         PZ = PZ @ qml.PauliZ(wi)
+    # If the number of qubits is odd, measure also the last qubit.
     if num_qubits % 2 != 0:
         PZ = PZ @ qml.PauliZ(num_qubits - 1)
     return qml.expval(PZ)
+
 
 qnodes = []
 for iq in range(num_classes):
@@ -115,6 +122,7 @@ for iq in range(num_classes):
 # The variational quantum circuit is parametrized by the weights. We use a
 # classical bias term that is applied after processing the quantum circuit's
 # output. Both variational circuit weights and classical bias term are optimized.
+
 
 def variational_classifier(q_circuit, params, feat):
     weights = params[0]
@@ -142,6 +150,7 @@ def variational_classifier(q_circuit, params, feat):
 #
 # where :math:`\Delta` denotes the margin. The margin parameter is chosen as a hyperparameter.
 # For more information, see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__.
+
 
 def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
     loss = 0
@@ -179,6 +188,7 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
 # compute the score given to it by classifier :math:`i`, which quantifies how likely it is that
 # this sample belongs to class :math:`i`. For each sample, return the class with the highest score.
 
+
 def classify(q_circuits, all_params, feature_vecs, labels):
     predicted_labels = []
     for i, feature_vec in enumerate(feature_vecs):
@@ -191,6 +201,7 @@ def classify(q_circuits, all_params, feature_vecs, labels):
         pred_class = np.argmax(scores)
         predicted_labels.append(pred_class)
     return predicted_labels
+
 
 def accuracy(labels, hard_predictions):
     loss = 0
@@ -208,6 +219,7 @@ def accuracy(labels, hard_predictions):
 # Now we load in the iris dataset and normalize the features so that the sum of the feature
 # elements squared is 1 (:math:`\ell_2` norm is 1).
 
+
 def load_and_process_data():
     data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
@@ -220,6 +232,7 @@ def load_and_process_data():
 
     Y = torch.tensor(data[:, -1])
     return X, Y
+
 
 # Create a train and test split. Use a seed for reproducability
 def split_data(feature_vecs, Y):
@@ -245,6 +258,7 @@ def split_data(feature_vecs, Y):
 # optimization step is based on this. Total training time with the default parameters
 # is roughly 15 minutes.
 
+
 def training(features, Y):
     num_data = Y.shape[0]
     feat_vecs_train, feat_vecs_test, Y_train, Y_test = split_data(features, Y)
@@ -256,9 +270,7 @@ def training(features, Y):
         Variable(0.1 * torch.randn(num_layers, num_qubits, 3), requires_grad=True)
         for i in range(num_classes)
     ]
-    all_bias = [
-        Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)
-    ]
+    all_bias = [Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)]
     optimizer = optim.Adam(all_weights + all_bias, lr=lr_adam)
     params = (all_weights, all_bias)
     print("Num params: ", 3 * num_layers * num_qubits * 3 + 3)
@@ -272,9 +284,7 @@ def training(features, Y):
         Y_train_batch = Y_train[batch_index]
 
         optimizer.zero_grad()
-        curr_cost = multiclass_svm_loss(
-            q_circuits, params, feat_vecs_train_batch, Y_train_batch
-        )
+        curr_cost = multiclass_svm_loss(q_circuits, params, feat_vecs_train_batch, Y_train_batch)
         curr_cost.backward()
         optimizer.step()
 
