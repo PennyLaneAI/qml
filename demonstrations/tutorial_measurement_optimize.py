@@ -14,7 +14,7 @@ Measurement optimization
 
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
-algorithm that sparked the variational circuit craze of the last 5 years, and holds the greatest
+algorithm that sparked the variational circuit craze of the last 5 years, and holds great
 promise for showcasing a quantum advantage on near-term quantum hardware. It has also inspired
 other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algorithm (QAOA)
 </demos/tutorial_qaoa_intro>`.
@@ -37,7 +37,7 @@ measurements needed---in some cases, reducing the number of measurements by up t
 In this demonstration, we revisit the VQE algorithm, see first-hand how the required number of
 measurements scales as molecule size increases, and finally use these measurement optimization
 strategies to minimize the number of measurements we need to make. These techniques are valuable
-beyond just VQE---allowing you to add measurement optimization to your toolkit of techniques to
+beyond just VQE, allowing you to add measurement optimization to your toolkit of techniques to
 perform variational algorithms more efficiently.
 
 Revisiting VQE
@@ -160,7 +160,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in double the number of qubits required and 2050 measurements that must be made!
+# resulted in over triple the number of qubits required and 2050 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -268,7 +268,7 @@ print("\n", H)
 # Fantastic! But, can we use this to reduce the number of measurements we need to perform in the VQE algorithm?
 # To do so, we must find the answer to two questions:
 #
-# 1. How do we determine which terms of the cost Hamiltonian are commuting?
+# 1. How do we determine which terms of the cost Hamiltonian commute?
 #
 # 2. How do we rotate the circuit into the shared eigenbasis prior to measurement?
 #
@@ -280,7 +280,7 @@ print("\n", H)
 # --------------------------------
 #
 # Back when we summarized the VQE algorithm, we saw that each term of the Hamiltonian is generally represented
-# as a tensor product of Pauli terms:
+# as a tensor product of Pauli operators:
 #
 # .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 #
@@ -288,7 +288,7 @@ print("\n", H)
 # **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
 # commutativity** (QWC).
 #
-# To start with, let's consider single-qubit Pauli operators with the identity. We know that the Pauli operators
+# To start with, let's consider single-qubit Pauli operators and the identity. We know that the Pauli operators
 # commute with themselves as well as the identity, but they do *not* commute with
 # each other:
 #
@@ -440,7 +440,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 # Compare this to the result when we used two circuit evaluations. We have successfully used a
 # single circuit evaluation to recover both expectation values!
 #
-# Luckily, PennyLane automatically performs this QWC grouping under-the-hood. We simply
+# Luckily, PennyLane automatically performs this QWC grouping under the hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
 @qml.qnode(dev)
@@ -684,7 +684,7 @@ for i in range(num_groups):
 #
 # 2. Construct the complement QWC graph.
 #
-# 3. Use a graph colouring heuristic algorithm to determine a graph colouring
+# 3. Use a graph colouring heuristic algorithm to determine a graph colouring for the complement graph
 #    with a minimum number of colours. Each coloured vertex set corresponds to a
 #    qubit-wise commuting group of Hamiltonian terms.
 #
@@ -752,7 +752,7 @@ print(cost_fn(weights))
 # Beyond VQE
 # ----------
 #
-# Wait, hang on. We dived so deeply into measurement grouping and optimization, we forgot to check
+# Wait, hang on. We dove so deeply into measurement grouping and optimization, we forgot to check
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
