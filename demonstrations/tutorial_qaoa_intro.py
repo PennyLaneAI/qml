@@ -313,7 +313,7 @@ def circuit(params, **kwargs):
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
 # The cost function is the expectation value of :math:`H_C`, which we want to minimize. The
-# function :func:`~.pennylane.VQECost` is designed for this purpose: it returns the
+# function :func:`~.pennylane.ExpvalCost` is designed for this purpose: it returns the
 # expectation value of an input Hamiltonian with respect to the circuit's output state.
 # We also define the device on which the simulation is
 # performed. We use the PennyLane-Qulacs plugin to
@@ -321,7 +321,7 @@ def circuit(params, **kwargs):
 #
 
 dev = qml.device("qulacs.simulator", wires=wires)
-cost_function = qml.VQECost(circuit, cost_h, dev)
+cost_function = qml.ExpvalCost(circuit, cost_h, dev)
 
 
 ######################################################################
@@ -442,7 +442,7 @@ def circuit(params, **kwargs):
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
-cost_function = qml.VQECost(circuit, new_cost_h, dev)
+cost_function = qml.ExpvalCost(circuit, new_cost_h, dev)
 
 params = [[0.5, 0.5], [0.5, 0.5]]
 
