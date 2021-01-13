@@ -20,7 +20,7 @@ other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algo
 </demos/tutorial_qaoa_intro>`.
 
 To scale VQE beyond the regime of classical computation, however, we need to solve for the
-ground state of increasingly larger molecules. A side effect is that the number of
+ground state of increasingly larger molecules. A consequence is that the number of
 measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
 especially when quantum hardware access is limited and expensive.
 
