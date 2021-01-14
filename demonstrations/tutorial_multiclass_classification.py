@@ -101,15 +101,7 @@ def circuit(weights, feat=None):
     for W in weights:
         layer(W)
 
-    # Measuring only the even nodes
-    even_wirelist = [i for i in range(num_qubits) if i % 2 == 0]
-    PZ = qml.PauliZ(0)
-    for wi in even_wirelist[1:]:
-        PZ = PZ @ qml.PauliZ(wi)
-    # If the number of qubits is odd, measure also the last qubit.
-    if num_qubits % 2 != 0:
-        PZ = PZ @ qml.PauliZ(num_qubits - 1)
-    return qml.expval(PZ)
+    return qml.expval(qml.PauliZ(0))
 
 
 qnodes = []
