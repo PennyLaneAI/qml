@@ -120,8 +120,8 @@ train_images = train_images / 255
 test_images = test_images / 255
 
 # Add extra dimension for convolution channels
-train_images = train_images[..., tf.newaxis]
-test_images = test_images[..., tf.newaxis]
+train_images = np.array(train_images[..., tf.newaxis], requires_grad=False)
+test_images = np.array(test_images[..., tf.newaxis], requires_grad=False)
 
 
 ##############################################################################
@@ -146,7 +146,7 @@ dev = qml.device("default.qubit", wires=4)
 rand_params = np.random.uniform(high=2 * np.pi, size=(n_layers, 4))
 
 @qml.qnode(dev)
-def circuit(phi=None):
+def circuit(phi):
     # Encoding of 4 classical input values
     for j in range(4):
         qml.RY(np.pi * phi[j], wires=j)
