@@ -90,13 +90,13 @@ print(f"Output state is = \n{np.real(dev.state)}")
 # <https://en.wikipedia.org/wiki/Quantum_operation#Kraus_operators>`__
 # :math:`\{K_i\}` satisfying the condition
 # :math:`\sum_i K_{i}^{\dagger} K_i = I`. For an initial state :math:`\rho`, the output
-# state after the action of a channel :math:`E` is:
+# state after the action of a channel :math:`\Phi` is:
 #
 # .. math::
 #
-#     E(\rho) = \sum_i K_i \rho K_{i}^{\dagger}.
+#     \Phi(\rho) = \sum_i K_i \rho K_{i}^{\dagger}.
 #
-# Like pure states, which are special cases of mixed states, unitary
+# Like pure states are special cases of mixed states, unitary
 # transformations are special cases of a quantum channels. They have a single Kraus operator,
 # the unitary :math:`U`, and they transform a state as
 # :math:`U\rho U^\dagger`.
