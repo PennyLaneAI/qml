@@ -213,7 +213,7 @@ def target_function(x):
 # Let's have a look at it.
 # 
 
-x = np.linspace(-6, 6, 70)
+x = np.linspace(-6, 6, 70, requires_grad=False)
 target_y = np.array([target_function(x_) for x_ in x])
 
 plt.plot(x, target_y, c='black')
@@ -283,7 +283,7 @@ def W(theta):
 
     
 @qml.qnode(dev)
-def serial_quantum_model(weights, x=None):
+def serial_quantum_model(weights, x):
     
     for theta in weights[:-1]:
         W(theta)
@@ -303,8 +303,8 @@ def serial_quantum_model(weights, x=None):
 r = 1 # number of times the encoding gets repeated (here equal to the number of layers)
 weights = 2 * np.pi * np.random.random(size=(r+1, 3)) # some random initial weights
 
-x = np.linspace(-6, 6, 70)
-random_quantum_model_y = [serial_quantum_model(weights, x=x_) for x_ in x]
+x = np.linspace(-6, 6, 70, requires_grad=False)
+random_quantum_model_y = [serial_quantum_model(weights, x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
 plt.ylim(-1,1)
@@ -347,7 +347,7 @@ print(serial_quantum_model.draw())
 # 
 
 def cost(weights, x, y):
-    predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
+    predictions = [serial_quantum_model(weights, x_) for x_ in x]
     return square_loss(y, predictions)
 
 max_steps = 50
@@ -363,10 +363,9 @@ for step in range(max_steps):
     y_batch = target_y[batch_index]
 
     # Update the weights by one optimizer step
-    weights = opt.step(lambda w: cost(w, x_batch, y_batch), weights)
+    weights, c = opt.step_and_cost(lambda w: cost(w, x_batch, y_batch), weights)
 
     # Save, and possibly print, the current cost
-    c = cost(weights, x, target_y)
     cst.append(c)
     if (step + 1) % 10 == 0:
         print("Cost at step {0:3}: {1}".format(step + 1, c))
@@ -378,7 +377,7 @@ for step in range(max_steps):
 # compare them with the ground truth.
 # 
 
-predictions = [serial_quantum_model(weights, x=x_) for x_ in x]
+predictions = [serial_quantum_model(weights, x_) for x_ in x]
 
 plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, facecolor='white', edgecolor='black')
@@ -518,7 +517,7 @@ def W(theta):
 
     
 @qml.qnode(dev)
-def parallel_quantum_model(weights, x=None):
+def parallel_quantum_model(weights, x):
     
     W(weights[0])
     S(x)        
@@ -534,8 +533,8 @@ def parallel_quantum_model(weights, x=None):
 trainable_block_layers = 3
 weights = 2 * np.pi * np.random.random(size=(2, trainable_block_layers, r, 3))
 
-x = np.linspace(-6, 6, 70)
-random_quantum_model_y = [parallel_quantum_model(weights, x=x_) for x_ in x]
+x = np.linspace(-6, 6, 70, requires_grad=False)
+random_quantum_model_y = [parallel_quantum_model(weights, x_) for x_ in x]
 
 plt.plot(x, random_quantum_model_y, c='blue')
 plt.ylim(-1,1)
@@ -557,7 +556,7 @@ plt.show();
 # 
 
 def cost(weights, x, y):
-    predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
+    predictions = [parallel_quantum_model(weights, x_) for x_ in x]
     return square_loss(y, predictions)
 
 max_steps = 50
@@ -573,10 +572,9 @@ for step in range(max_steps):
     y_batch = target_y[batch_index]
 
     # update the weights by one optimizer step
-    weights = opt.step(lambda w: cost(w, x_batch, y_batch), weights)
+    weights, c = opt.step_and_cost(lambda w: cost(w, x_batch, y_batch), weights)
     
     # save, and possibly print, the current cost
-    c = cost(weights, x, target_y)
     cst.append(c)
     if (step + 1) % 10 == 0:
         print("Cost at step {0:3}: {1}".format(step + 1, c))
@@ -586,7 +584,7 @@ for step in range(max_steps):
 # 
 
 
-predictions = [parallel_quantum_model(weights, x=x_) for x_ in x]
+predictions = [parallel_quantum_model(weights, x_) for x_ in x]
 
 plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, facecolor='white', edgecolor='black')
@@ -676,7 +674,7 @@ def W(theta):
 
     
 @qml.qnode(dev)
-def quantum_model(weights, x=None):
+def quantum_model(weights, x):
     
     W(weights[0])
     S(x)
@@ -712,7 +710,7 @@ for i in range(n_samples):
     weights = random_weights()
 
     def f(x):
-        return np.array([quantum_model(weights, x=x_) for x_ in x])
+        return np.array([quantum_model(weights, x_) for x_ in x])
 
     coeffs_sample = fourier_coefficients(f, n_coeffs)
     coeffs.append(coeffs_sample)
@@ -796,7 +794,7 @@ def W(theta):
         qml.Squeezing(theta[2], theta[3], wires=0)
 
 @qml.qnode(dev_cv)
-def quantum_model(weights, x=None):
+def quantum_model(weights, x):
     W(weights[0])
     S(x)
     W(weights[1])
