@@ -280,11 +280,9 @@ X = np.array([[0, 1], [1, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
 def Generator(theta1, theta2, theta3):
-    # the inputs will show up as Pennylane Variable objects, with theta1 being
-    # wrapped in a np.ndarray; we have to extract their numerical values
-    G = theta1.item().val * np.kron(X, I) - \
-        theta2.val * np.kron(Z, X) + \
-        theta3.val * np.kron(I, X)
+    G = theta1.item() * np.kron(X, I) - \
+        theta2 * np.kron(Z, X) + \
+        theta3 * np.kron(I, X)
     return G
 
 # A simple example circuit that contains the cross-resonance gate
