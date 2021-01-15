@@ -392,8 +392,7 @@ opt = qml.GradientDescentOptimizer(eta)
 
 cost_history = []
 for it in range(steps):
-    w = opt.step(cost_loc, w)
-    cost = cost_loc(w)
+    w, cost = opt.step_and_cost(cost_loc, w)
     print("Step {:3d}       Cost_L = {:9.7f}".format(it, cost))
     cost_history.append(cost)
 
