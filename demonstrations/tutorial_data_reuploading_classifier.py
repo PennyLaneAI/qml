@@ -208,7 +208,7 @@ def circle(samples, center=[0.0, 0.0], radius=np.sqrt(2 / np.pi)):
             y = 1
         Xvals.append(x)
         yvals.append(y)
-    return np.array(Xvals), np.array(yvals)
+    return np.array(Xvals, requires_grad=False), np.array(yvals, requires_grad=False)
 
 
 def plot_data(x, y, fig=None, ax=None):
@@ -262,7 +262,7 @@ dev = qml.device("default.qubit", wires=1)
 
 
 @qml.qnode(dev)
-def qcircuit(params, x=None, y=None):
+def qcircuit(params, x, y):
     """A variational quantum circuit representing the Universal classifier.
 
     Args:
