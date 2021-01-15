@@ -183,7 +183,7 @@ def quanv(image):
         for k in range(0, 28, 2):
             # Process a squared 2x2 region of the image with a quantum circuit
             q_results = circuit(
-                phi=[
+                [
                     image[j, k, 0],
                     image[j, k + 1, 0],
                     image[j + 1, k, 0],
