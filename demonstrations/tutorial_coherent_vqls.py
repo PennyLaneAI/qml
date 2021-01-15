@@ -413,8 +413,7 @@ w = q_delta * np.random.randn(n_qubits)
 
 cost_history = []
 for it in range(steps):
-    w = opt.step(cost, w)
-    _cost = cost(w)
+    w, _cost = opt.step_and_cost(cost, w)
     print("Step {:3d}       Cost = {:9.7f}".format(it, _cost))
     cost_history.append(_cost)
 
