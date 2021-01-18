@@ -96,8 +96,9 @@ print(f"Output state is = \n{np.real(dev.state)}")
 #
 #     \Phi(\rho) = \sum_i K_i \rho K_{i}^{\dagger}.
 #
-# Like pure states are special cases of mixed states, unitary
-# transformations are special cases of a quantum channels. They have a single Kraus operator,
+# Just like pure states are special cases of mixed states, unitary
+# transformations are special cases of quantum channels. Unitary transformations are represnted
+# by a single Kraus operator,
 # the unitary :math:`U`, and they transform a state as
 # :math:`U\rho U^\dagger`.
 #
@@ -228,7 +229,7 @@ for p in ps:
 # ensure that the trainable parameters give rise to a valid channel parameter, i.e., a number
 # between 0 and 1.
 #
-ev = 0.7781  # observed expectation value
+ev = np.tensor([0.7781], requires_grad=False)  # observed expectation value
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
@@ -246,8 +247,8 @@ def damping_circuit(x):
 # the output of the QNode is equal to the experimental value:
 
 
-def cost(x):
-    return (damping_circuit(x) - ev)**2
+def cost(x, target):
+    return (damping_circuit(x) - target[0])**2
 
 ######################################################################
 # All that remains is to optimize the parameter. We use a straightforward gradient descent
@@ -255,18 +256,17 @@ def cost(x):
 
 
 opt = qml.GradientDescentOptimizer(stepsize=10)
-steps = 30
+steps = 35
 x = 0.0
 
 for i in range(steps):
-    x, cost_val = opt.step_and_cost(cost, x)
+    (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
     if i % 5 == 0 or i == steps - 1:
         print(f"Step: {i}    Cost: {cost_val}")
 
-p = sigmoid(x)
 print(f"QNode output after optimization = {damping_circuit(x):.4f}")
-print(f"Experimental expectation value = {ev}")
-print(f"Optimized noise parameter p = {p:.4f}")
+print(f"Experimental expectation value = {ev[0]}")
+print(f"Optimized noise parameter p = {sigmoid(x):.4f}")
 
 ######################################################################
 # Voilà! We've trained the noisy channel to reproduce the experimental observation. 😎
