@@ -12,6 +12,7 @@ Measurement optimization
    tutorial_quantum_chemistry Quantum chemistry with PennyLane
    tutorial_qaoa_intro Intro to QAOA
 
+*Author: PennyLane dev team. Posted: 18 Jan 2021. Last updated: 18 Jan 2021.*
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
 algorithm that sparked the variational circuit craze of the last 5 years, and holds great
