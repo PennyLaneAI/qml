@@ -147,9 +147,8 @@ dev = qml.device('default.qubit', wires=qubits)
 ##############################################################################
 # In the circuit, we apply single-qubit rotations, followed by CNOT gates:
 
-
 def circuit(params, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=wires)
     for i in wires:
         qml.Rot(*params[i], wires=i)
     qml.CNOT(wires=[2, 3])
@@ -191,9 +190,9 @@ print(params)
 max_iterations = 200
 conv_tol = 1e-06
 
-prev_energy = cost_fn(params)
+
 for n in range(max_iterations):
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
@@ -202,8 +201,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print('Final convergence parameter = {:.8f} Ha'.format(conv))
