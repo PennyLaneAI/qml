@@ -295,7 +295,7 @@ def cost(params, x, y, state_labels=None):
     loss = 0.0
     dm_labels = [density_matrix(s) for s in state_labels]
     for i in range(len(x)):
-        f = qcircuit(params, x=x[i], y=dm_labels[y[i]])
+        f = qcircuit(params, x[i], dm_labels[y[i]])
         loss = loss + (1 - f) ** 2
     return loss / len(x)
 
@@ -324,7 +324,7 @@ def test(params, x, y, state_labels=None):
     predicted = []
 
     for i in range(len(x)):
-        fidel_function = lambda y: qcircuit(params, x=x[i], y=y)
+        fidel_function = lambda y: qcircuit(params, x[i], y)
         fidelities = [fidel_function(dm) for dm in dm_labels]
         best_fidel = np.argmax(fidelities)
 
