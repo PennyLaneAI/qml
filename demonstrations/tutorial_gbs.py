@@ -132,7 +132,7 @@ np.random.seed(42)
 
 # import PennyLane
 import pennylane as qml
-qml.enable_tape()
+
 ######################################################################
 # We must define the unitary matrix we would like to embed in the circuit.
 # We will use SciPy to generate a Haar-random unitary:
