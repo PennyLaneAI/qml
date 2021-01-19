@@ -13,6 +13,8 @@ A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
    tutorial_vqt Variational quantum thermalizer
 
+*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+
 The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
