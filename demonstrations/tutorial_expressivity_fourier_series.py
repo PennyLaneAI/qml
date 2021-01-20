@@ -10,6 +10,8 @@ Quantum models as Fourier series
 
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
+*Author: PennyLane dev team. Last updated: 15 Jan 2021.*
+
 """
 
 

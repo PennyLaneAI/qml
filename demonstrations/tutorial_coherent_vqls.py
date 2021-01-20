@@ -3,7 +3,6 @@ r"""
 
 Coherent Variational Quantum Linear Solver
 ==========================================
-*Author: Andrea Mari*
 
 .. meta::
     :property="og:description": This demonstration extends the variational quantum
@@ -13,6 +12,8 @@ Coherent Variational Quantum Linear Solver
 .. related::
 
    tutorial_vqls Variational quantum linear solver
+
+*Author: Andrea Mari. Last updated: 15 Jan 2021.*
 
 In this tutorial we propose and implement an algorithm that we call
 *coherent variational quantum linear solver* (CVQLS).

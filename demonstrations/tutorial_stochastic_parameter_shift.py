@@ -12,6 +12,8 @@ The Stochastic Parameter-Shift Rule
    tutorial_backprop Quantum gradients with backprop
    tutorial_doubly_stochastic Doubly stochastic gradient descent
 
+*Author: PennyLane dev team. Last updated: 15 Jan 2021.*
+
 We demonstrate how the stochastic parameter-shift rule, discovered by Banchi and Crooks [#banchi2020]_,
 can be used to differentiate arbitrary qubit gates, generalizing the original
 :doc:`parameter-shift rule </glossary/parameter_shift>`, which applies only for gates of a particular

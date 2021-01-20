@@ -11,6 +11,8 @@ Quantum gradients with backpropagation
 
    tutorial_quantum_natural_gradient Quantum natural gradient
 
+*Author: PennyLane dev team. Last updated: 15 Jan 2021.*
+
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
 trained using the :doc:`parameter-shift rule </glossary/parameter_shift>` to compute quantum
 gradients. Indeed, the parameter-shift rule is ideally suited to hardware devices, as it does

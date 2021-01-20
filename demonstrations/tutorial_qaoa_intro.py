@@ -19,7 +19,7 @@ of the algorithm is of great interest to the quantum computing research communit
     :align: center
     :width: 90%
 
-*Author: Jack Ceroni. Posted: 18 Nov 2020.*
+*Author: Jack Ceroni. Posted: 18 Nov 2020. Last updated: 11 Jan 2021.*
 
 The goal of this tutorial is to introduce the basic concepts of QAOA and
 to guide you through PennyLane's built-in QAOA
