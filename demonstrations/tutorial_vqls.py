@@ -3,7 +3,6 @@ r"""
 
 Variational Quantum Linear Solver
 ====================================
-*Author: Andrea Mari*
 
 .. meta::
     :property="og:description": Implementing the variational
@@ -13,7 +12,8 @@ Variational Quantum Linear Solver
 .. related::
 
     tutorial_coherent_vqls Coherent VQLS
-    
+
+*Author: Andrea Mari. Last updated: 20 Jan 2021.*
 
 In this tutorial we implement a quantum algorithm known as the *variational quantum linear
 solver* (VQLS), originally introduced in
