@@ -2,8 +2,6 @@ r"""
 Accelerating VQEs with quantum natural gradient
 ===============================================
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu)*
-
 .. meta::
     :property="og:description": Accelerating variational quantum eigensolvers
         using quantum natural gradients in PennyLane.
@@ -13,6 +11,8 @@ Accelerating VQEs with quantum natural gradient
 
    tutorial_vqe Variational quantum eigensolver
    tutorial_quantum_natural_gradient Quantum natural gradient
+
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 21 Jan 2021.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
