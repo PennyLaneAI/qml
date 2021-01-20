@@ -91,20 +91,18 @@ step_size = 0.01
 opt = qml.GradientDescentOptimizer(stepsize=step_size)
 
 params = init_params
-prev_energy = cost_fn(params)
 
 gd_param_history = [params]
-gd_cost_history = [prev_energy]
+gd_cost_history = []
 
 for n in range(max_iterations):
 
     # Take step
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     gd_param_history.append(params)
+    gd_cost_history.append(prev_energy)
 
-    # Compute energy
     energy = cost_fn(params)
-    gd_cost_history.append(energy)
 
     # Calculate difference between new and old energies
     conv = np.abs(energy - prev_energy)
@@ -117,8 +115,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print("Final value of the energy = {:.8f} Ha".format(energy))
@@ -130,20 +126,19 @@ print("Number of iterations = ", n)
 opt = qml.QNGOptimizer(stepsize=step_size, diag_approx=False)
 
 params = init_params
-prev_energy = cost_fn(params)
 
 qngd_param_history = [params]
-qngd_cost_history = [prev_energy]
+qngd_cost_history = []
 
 for n in range(max_iterations):
 
     # Take step
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     qngd_param_history.append(params)
+    qngd_cost_history.append(prev_energy)
 
     # Compute energy
     energy = cost_fn(params)
-    qngd_cost_history.append(energy)
 
     # Calculate difference between new and old energies
     conv = np.abs(energy - prev_energy)
@@ -156,8 +151,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print("Final value of the energy = {:.8f} Ha".format(energy))
@@ -322,11 +315,13 @@ conv_tol = 1e-06
 opt = qml.GradientDescentOptimizer(step_size)
 
 params = init_params
-prev_energy = cost(params)
-gd_cost = [prev_energy]
+
+gd_cost = []
 
 for n in range(max_iterations):
-    params = opt.step(cost, params)
+    params, prev_energy = opt.step_and_cost(cost, params)
+    gd_cost.append(prev_energy)
+
     energy = cost(params)
     conv = np.abs(energy - prev_energy)
 
@@ -338,8 +333,6 @@ for n in range(max_iterations):
     if conv <= conv_tol:
         break
 
-    gd_cost.append(energy)
-    prev_energy = energy
 
 print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))
@@ -360,10 +353,12 @@ opt = qml.QNGOptimizer(step_size, lam=0.001, diag_approx=False)
 
 params = init_params
 prev_energy = cost(params)
-qngd_cost = [prev_energy]
+qngd_cost = []
 
 for n in range(max_iterations):
-    params = opt.step(cost, params)
+    params, prev_energy = opt.step_and_cost(cost, params)
+    qngd_cost.append(prev_energy)
+
     energy = cost(params)
     conv = np.abs(energy - prev_energy)
 
@@ -375,8 +370,6 @@ for n in range(max_iterations):
     if conv <= conv_tol:
         break
 
-    qngd_cost.append(energy)
-    prev_energy = energy
 
 print("\nFinal convergence parameter = {:.8f} Ha".format(conv))
 print("Number of iterations = ", n)

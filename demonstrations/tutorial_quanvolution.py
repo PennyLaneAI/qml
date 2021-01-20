@@ -9,7 +9,7 @@ Quanvolutional Neural Networks
         to classify MNIST images.
     :property="og:image": https://pennylane.ai/qml/_images/circuit.png
 
-*Author: Andrea Mari*
+*Author: Andrea Mari. Last updated: 15 Jan 2021.*
 
 In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
