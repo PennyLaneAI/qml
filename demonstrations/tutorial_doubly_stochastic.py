@@ -13,6 +13,8 @@ Doubly stochastic gradient descent
    tutorial_quantum_natural_gradient Quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
+*Author: PennyLane dev team. Posted: 16 Oct 2019.*
+
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
 it is shown that quantum gradient descent, where a finite number of measurement samples
@@ -138,7 +140,7 @@ dev_stochastic = qml.device("default.qubit", wires=num_wires, analytic=False)
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
 # the expectation value of the matrix :math:`H`:
 
-H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]])
+H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]], requires_grad=False)
 
 
 def circuit(params):
@@ -287,7 +289,7 @@ terms = np.array(
         -np.kron(X, X),
         5 * np.kron(Y, Y),
         2 * np.kron(Z, X),
-    ]
+    ], requires_grad=False
 )
 
 
