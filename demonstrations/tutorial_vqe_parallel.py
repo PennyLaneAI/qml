@@ -15,6 +15,8 @@ calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
    tutorial_vqe Variational quantum eigensolver
 
+*Author: PennyLane dev team. Last updated: 6 Aug 2020.*
+
 Using a VQE setup, we task two devices from the
 `PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate

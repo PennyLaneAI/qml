@@ -13,7 +13,7 @@ Doubly stochastic gradient descent
    tutorial_quantum_natural_gradient Quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: PennyLane dev team. Posted: 16 Oct 2019.*
+*Author: PennyLane dev team. Posted: 16 Oct 2019. Last updated: 20 Jan 2021.*
 
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,

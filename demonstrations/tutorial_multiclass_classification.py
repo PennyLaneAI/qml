@@ -14,6 +14,7 @@ Multiclass margin classifier
    tutorial_variational_classifier Variational quantum classifier
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
+*Author: PennyLane dev team. Posted: 9 Apr 2020. Last updated: 15 Jan 2021.*
 
 In this tutorial, we show how to use the PyTorch interface for PennyLane
 to implement a multiclass variational classifier. We consider the iris database

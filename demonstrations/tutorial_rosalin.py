@@ -14,7 +14,7 @@ Frugal shot optimization with Rosalin
    tutorial_doubly_stochastic Doubly stochastic gradient descent
    tutorial_rotoselect Quantum circuit structure learning
 
-*Author: PennyLane dev team. Posted: 19 May 2020.*
+*Author: PennyLane dev team. Posted: 19 May 2020. Last updated: 20 Jan 2021.*
 
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from

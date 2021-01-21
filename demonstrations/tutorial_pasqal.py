@@ -7,6 +7,8 @@ Quantum computation with neutral atoms
         qubits within interesting three-dimensional configurations.
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
+*Author: PennyLane dev team. Posted: 13 Oct 2020. Last updated: 26 Nov 2020.*
+
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
 quantum devices have some basic similarities to ion traps. Ion-trap devices make use of atoms

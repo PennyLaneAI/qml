@@ -10,6 +10,8 @@ Turning quantum nodes into Keras Layers
 
    tutorial_qnn_module_torch Turning quantum nodes into Torch Layers
 
+*Author: PennyLane dev team. Posted: 2 Nov 2020.*
+
 Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
 elementary *layers* and can be trained using a high-level API. For example, the following code
 defines a two-layer network that could be used for binary classification:

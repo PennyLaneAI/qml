@@ -17,6 +17,8 @@ Function fitting with a photonic quantum neural network
    pytorch_noise PyTorch and noisy devices
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
+*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+
 In this example we show how a variational circuit can be used to learn a
 fit for a one-dimensional function when being trained with noisy samples
 from that function.
@@ -71,7 +73,7 @@ def layer(v):
 
 
 @qml.qnode(dev)
-def quantum_neural_net(var, x=None):
+def quantum_neural_net(var, x):
     # Encode input x into quantum state
     qml.Displacement(x, 0.0, wires=0)
 
@@ -107,7 +109,7 @@ def square_loss(labels, predictions):
 
 
 def cost(var, features, labels):
-    preds = [quantum_neural_net(var, x=x) for x in features]
+    preds = [quantum_neural_net(var, x) for x in features]
     return square_loss(labels, preds)
 
 
@@ -120,8 +122,8 @@ def cost(var, features, labels):
 # download="sine.txt" target="_blank">download the file here</a>`).
 
 data = np.loadtxt("sine.txt")
-X = data[:, 0]
-Y = data[:, 1]
+X = np.array(data[:, 0], requires_grad=False)
+Y = np.array(data[:, 1], requires_grad=False)
 
 ##############################################################################
 # Before training a model, let's examine the data.
@@ -170,8 +172,8 @@ opt = AdamOptimizer(0.01, beta1=0.9, beta2=0.999)
 
 var = var_init
 for it in range(500):
-    var = opt.step(lambda v: cost(v, X, Y), var)
-    print("Iter: {:5d} | Cost: {:0.7f} ".format(it + 1, cost(var, X, Y)))
+    var, _cost = opt.step_and_cost(lambda v: cost(v, X, Y), var)
+    print("Iter: {:5d} | Cost: {:0.7f} ".format(it + 1, _cost))
 
 
 ##############################################################################
@@ -687,7 +689,7 @@ for it in range(500):
 # in the range :math:`[-1,1]`:
 
 x_pred = np.linspace(-1, 1, 50)
-predictions = [quantum_neural_net(var, x=x_) for x_ in x_pred]
+predictions = [quantum_neural_net(var, x_) for x_ in x_pred]
 
 ##############################################################################
 # and plot the shape of the function that the model has “learned” from
@@ -725,7 +727,7 @@ plt.figure()
 x_pred = np.linspace(-2, 2, 50)
 for i in range(7):
     rnd_var = variance * np.random.randn(num_layers, 7)
-    predictions = [quantum_neural_net(rnd_var, x=x_) for x_ in x_pred]
+    predictions = [quantum_neural_net(rnd_var, x_) for x_ in x_pred]
     plt.plot(x_pred, predictions, color="black")
 plt.xlabel("x")
 plt.ylabel("f(x)")

@@ -16,7 +16,7 @@ Quantum circuit structure learning
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: PennyLane dev team. Posted: 16 Oct 2019.*
+*Author: PennyLane dev team. Posted: 16 Oct 2019. Last updated: 20 Jan 2021.*
 
 """
 ##############################################################################
