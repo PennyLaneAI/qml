@@ -7,7 +7,7 @@ Quantum computation with neutral atoms
         qubits within interesting three-dimensional configurations.
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
-*Author: PennyLane dev team. Posted: 13 Oct 2020. Last updated: 26 Nov 2020.*
+*Author: PennyLane dev team. Posted: 13 Oct 2020. Last updated: 21 Jan 2021.*
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
@@ -43,6 +43,16 @@ the points on the tower will represent two-qubit gates, with the final output of
 variational circuit coming at the very peak of the tower.
 
 Let's get to it!
+
+.. note::
+
+   To run this demo locally, you will need to install `Cirq
+   <https://quantumai.google/cirq>`_, (version >= 0.9.1), and the
+   `PennyLane-cirq plugin <https://pennylane-cirq.readthedocs.io/en/latest/>`_
+   (version >= 0.13). You will also need to download a copy of the data, which
+   is available `here
+   <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/pasqal/Eiffel_tower_data.dat>`_.
+
 """
 
 ##############################################################################
@@ -50,10 +60,8 @@ Let's get to it!
 # -------------------------
 #
 # Our first step will be to load and visualize the data for the Eiffel tower
-# configuration, which was generously provided by the team at Pasqal. The
-# data can be found
-# `here <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/pasqal/Eiffel_tower_data.dat>`_
-# (if running locally, the line below should be updated with the local
+# configuration, which was generously provided by the team at Pasqal.
+# (If running locally, the line below should be updated with the local
 # path where you have saved the downloaded data).
 
 import numpy as np
@@ -137,6 +145,7 @@ qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
 # above. We also need to instantiate the device with a fixed control radius.
 
 import pennylane as qml
+
 num_wires = len(qubits)
 control_radius = 32.4
 dev = qml.device("cirq.pasqal", control_radius=control_radius,
