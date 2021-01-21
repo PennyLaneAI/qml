@@ -12,15 +12,17 @@ Optimizing a quantum optical neural network
 
    quantum_neural_net Function fitting with a photonic QNN
 
-This tutorial is based on a paper from `Steinbrecher et al. (2019)
+*Author: PennyLane dev team. Last updated: 20 Jan 2021.*
+
+This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
 Network (QONN) based on Fock states. Similar to the continuous-variable :doc:`quantum neural network
-</demos/quantum_neural_net>` (CV QNN) model described by `Killoran et al. (2018)
+</demos/quantum_neural_net>` (CV QNN) model described by `Killoran et al. (2018)
 <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__, the QONN
 attempts to apply neural networks and deep learning theory to the quantum case, using quantum data
 as well as a quantum hardware-based architecture.
 
-We will focus on constructing a QONN as described in Steinbrecher et al. and training it to work as
+We will focus on constructing a QONN as described in Steinbrecher et al. and training it to work as
 a basic CNOT gate using a "dual-rail" state encoding. This tutorial also provides a working example
 of how to use third-party optimization libraries with PennyLane; in this case, `NLopt
 <https://nlopt.readthedocs.io/en/latest/>`__ will be used.
@@ -42,7 +44,7 @@ of how to use third-party optimization libraries with PennyLane; in this case, `
 #
 # The QONN is an optical architecture consisting of layers of linear
 # unitaries, using the encoding described in `Reck et
-# al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__, and Kerr
+# al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__, and Kerr
 # non-linearities applied on all involved optical modes. This setup can be
 # constructed using arrays of beamsplitters and programmable phase shifts
 # along with some form of Kerr non-linear material.
@@ -105,9 +107,9 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 # Create a layer function which defines one layer of the QONN, consisting of a linear
 # `interferometer
 # <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.Interferometer.html>`__
-# (i.e., an array of beamsplitters and phase shifts) and a non-linear Kerr interaction layer. Both
+# (i.e., an array of beamsplitters and phase shifts) and a non-linear Kerr interaction layer. Both
 # the interferometer and the non-linear layer are applied to all modes. The triangular mesh scheme,
-# described in `Reck et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is chosen here
+# described in `Reck et al. (1994) <https://dx.doi.org/10.1103/PhysRevLett.73.58>`__ is chosen here
 # due to its use in the paper from Steinbrecher et al., although any other interferometer scheme
 # should work equally well. Some might even be slightly faster than the one we use here.
 #
@@ -224,7 +226,7 @@ Y = np.array([[1, 0, 1, 0],
 # same total number of photons as the output, since we want to use
 # the dual-rail encoding. Also, since the QONN will
 # act upon the states as a unitary operator, there must be a bijection
-# between the inputs and the outputs, i.e., two different inputs must have
+# between the inputs and the outputs, i.e., two different inputs must have
 # two different outputs, and vice versa.
 #
 
