@@ -11,7 +11,7 @@ Variationally optimizing measurement protocols
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Johannes Jakob Meyer*
+*Author: Johannes Jakob Meyer. Posted: 18 June 2020.*
 
 In this tutorial we use the variational quantum algorithm from
 Ref. [#meyer2020]_ to optimize a quantum
@@ -27,10 +27,10 @@ most impressive examples of a successful application of quantum metrology is gra
 like `LIGO <https://en.wikipedia.org/wiki/LIGO>`_ that harness non-classical light to increase the sensitivity
 to passing gravitational waves.
 
-A quantum metrological experiment, which we call a *protocol*, can be modeled in the following way.
+A quantum metrological experiment, which we call a *protocol*, can be modelled in the following way.
 As a first step, a quantum state :math:`\rho_0` is prepared. This state then undergoes a possibly noisy quantum
 evolution that depends on a vector of parameters :math:`\boldsymbol{\phi}` we are interested in—we say the quantum
-evolution *encodes* the parameters. The values :math:`\boldsymbol{\phi}` can for example be a set of phases that are 
+evolution *encodes* the parameters. The values :math:`\boldsymbol{\phi}` can for example be a set of phases that are
 picked up in an interferometer. As we use the quantum state to *probe* the encoding evolution, we will call it the *probe state*.
 
 After the parameters are encoded, we have a new state :math:`\rho(\boldsymbol{\phi})` which we then need to measure.
@@ -44,15 +44,15 @@ Measuring those operators gives us the output probabilities
 As the last step of our protocol, we have to estimate the parameters :math:`\boldsymbol{\phi}` from these probabilities,
 e.g., through `maximum likelihood estimation <https://en.wikipedia.org/wiki/Maximum_likelihood_estimation>`_.
 Intuitively, we will get the best precision in doing so if the probe state is most "susceptible" to the
-encoding evolution and the corresponding measurement can distinguish the states for different values of :math:`\boldsymbol{\phi}` well. 
+encoding evolution and the corresponding measurement can distinguish the states for different values of :math:`\boldsymbol{\phi}` well.
 
 The variational algorithm
 -------------------------
 
-We now introduce a variational algorithm to optimize such a sensing protocol. As a first step, we parametrize 
+We now introduce a variational algorithm to optimize such a sensing protocol. As a first step, we parametrize
 both the probe state :math:`\rho_0 = \rho_0(\boldsymbol{\theta})` and the POVM :math:`\Pi_l = \Pi_l(\boldsymbol{\mu})`
 using suitable quantum circuits with parameters :math:`\boldsymbol{\theta}` and :math:`\boldsymbol{\mu}` respectively.
-The parameters should now be adjusted in a way that improves the sensing protocol, and to quantify this, we need a 
+The parameters should now be adjusted in a way that improves the sensing protocol, and to quantify this, we need a
 suitable *cost function*.
 
 Luckily, there exists a mathematical tool to quantify the best achievable estimation precision, the *Cramér-Rao bound*.
@@ -67,7 +67,7 @@ with respect to the entries of :math:`\boldsymbol{\phi}`. It is defined as
 .. math:: [I_{\boldsymbol{\phi}}]_{jk} := \sum_l \frac{(\partial_j p_l)(\partial_k p_l)}{p_l},
 
 where we used :math:`\partial_j` as a shorthand notation for :math:`\frac{\partial}{\partial \phi_j}`. The Cramér-Rao
-bound has the very powerful property that it can always be saturated in the limit of many samples! This means we are 
+bound has the very powerful property that it can always be saturated in the limit of many samples! This means we are
 guaranteed that we can construct a "best estimator" for the vector of parameters.
 
 This in turn means that the right hand side of the Cramér-Rao bound would make for a great cost function. There is only
@@ -96,14 +96,14 @@ a parameter-independent noise channel :math:`\mathcal{N}`.
 Ramsey spectroscopy
 -------------------
 
-In this demonstration, we will study Ramsey spectroscopy, a widely used technique for quantum metrology with atoms and ions. 
-The encoded parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions 
+In this demonstration, we will study Ramsey spectroscopy, a widely used technique for quantum metrology with atoms and ions.
+The encoded parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions
 modeled as two-level systems with an external driving force. We represent the noise in the parameter encoding using a phase damping
-channel (also known as dephasing channel) with damping constant :math:`\gamma`. 
+channel (also known as dephasing channel) with damping constant :math:`\gamma`.
 We consider a pure probe state on three qubits and a projective measurement, where
 the computational basis is parametrized by local unitaries.
 
-The above method is actually not limited to the estimation of the parameters :math:`\boldsymbol{\phi}`, but 
+The above method is actually not limited to the estimation of the parameters :math:`\boldsymbol{\phi}`, but
 can also be used to optimize estimators for functions of those parameters! To add this interesting aspect
 to the tutorial, we will seek an optimal protocol for the estimation of the *Fourier amplitudes* of the phases:
 
@@ -151,8 +151,8 @@ def encoding(phi, gamma):
 ##############################################################################
 # We now choose a parametrization for both the probe state and the POVM.
 # To be able to parametrize all possible probe states and all local measurements,
-# we make use of the 
-# `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_ 
+# we make use of the
+# `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_
 # template from PennyLane.
 @qml.template
 def ansatz(weights):
@@ -196,8 +196,8 @@ print(experiment.draw(show_variable_names=True))
 #
 # Now, let's turn to the cost function itself. The most important ingredient
 # is the Classical Fisher Information Matrix, which we compute using a separate
-# function that uses the explicit `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_ 
-# to enable differentiation. 
+# function that uses the explicit `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_
+# to enable differentiation.
 def CFIM(weights, phi, gamma):
     p = experiment(weights, phi, gamma=gamma)
     dp = []
@@ -235,7 +235,7 @@ def cost(weights, phi, gamma, J, W, epsilon=1e-10):
 
 
 ##############################################################################
-# To compute the Jacobian, we make use of `sympy <https://docs.sympy.org/latest/index.html>`_. 
+# To compute the Jacobian, we make use of `sympy <https://docs.sympy.org/latest/index.html>`_.
 # The two independent Fourier amplitudes are computed using the `discrete Fourier transform matrix <https://en.wikipedia.org/wiki/DFT_matrix>`_
 # :math:`\Omega_{jk} = \frac{\omega^{jk}}{\sqrt{N}}` with :math:`\omega = \exp(-i \frac{2\pi}{N})`.
 import sympy
@@ -262,7 +262,7 @@ jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 #
 # We can now turn to the optimization of the protocol. We will fix the dephasing
 # constant at :math:`\gamma=0.2` and the ground truth of the sensing parameters at
-# :math:`\boldsymbol{\phi} = (1.1, 0.7, -0.6)` and use an equal weighting of the 
+# :math:`\boldsymbol{\phi} = (1.1, 0.7, -0.6)` and use an equal weighting of the
 # two Fourier amplitudes, corresponding to :math:`W = \mathbb{I}_2`.
 gamma = 0.2
 phi = np.array([1.1, 0.7, -0.6])
@@ -272,7 +272,7 @@ W = np.eye(2)
 ##############################################################################
 # We are now ready to perform the optimization. We will initialize the weights
 # at random. Then we make use of the `Adagrad <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_
-# optimizer. Adaptive gradient descent methods are advantageous as the optimization 
+# optimizer. Adaptive gradient descent methods are advantageous as the optimization
 # of quantum sensing protocols is very sensitive to the step size.
 def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
     return cost(weights, phi, gamma, J, W)
@@ -288,11 +288,11 @@ opt = qml.AdagradOptimizer(stepsize=0.1)
 
 print("Initialization: Cost = {:6.4f}".format(opt_cost(weights)))
 for i in range(20):
-    weights = opt.step(opt_cost, weights)
+    weights, cost_ = opt.step_and_cost(opt_cost, weights)
 
     if (i + 1) % 5 == 0:
         print(
-            "Iteration {:>4}: Cost = {:6.4f}".format(i + 1, opt_cost(weights))
+            "Iteration {:>4}: Cost = {:6.4f}".format(i + 1, cost_)
         )
 
 ##############################################################################
