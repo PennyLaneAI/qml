@@ -178,7 +178,7 @@ Community
 :html:`<div class="card-deck">`
 
 .. community-card::
-    :title: Quantum-Enhanced Transformer
+    :title: A Quantum-Enhanced Transformer
     :author: Riccardo Di Sipio
     :date: 20/01/2021
     :code: https://github.com/rdisipio/qtransformer
