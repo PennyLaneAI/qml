@@ -15,7 +15,7 @@ calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 6 Aug 2020.*
+*Author: PennyLane dev team. Last updated: 22 Jan 2021.*
 
 Using a VQE setup, we task two devices from the
 `PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
@@ -30,6 +30,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pennylane import numpy as np
 import pennylane as qml
 from pennylane import qchem
 
@@ -154,7 +155,7 @@ devs = dev1 + dev2
 
 
 def circuit(param, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=[0, 1, 2, 3])
     qml.RY(param, wires=2)
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
