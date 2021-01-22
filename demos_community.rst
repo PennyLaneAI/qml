@@ -187,16 +187,9 @@ Community
 
     The Transformer neural network architecture revolutionized the analysis of
     text. Here we show an example of a Transformer with quantum-enhanced
-    multi-headed attention. In the quantumized version, dense layers are
+    multi-headed attention. In the quantum-enhanced version, dense layers are
     replaced by simple Variational Quantum Circuits. An implementation based on
-    PennyLane and TensorFlow-2.x illustrates the basic concept.  In Natural
-    Language Processing, documents are usually presented as sequences of words.
-    One of the most successful techniques to manipulate this kind of data is the
-    Recurrent Neural Network architecture, and in particular a variant called
-    Long Short-Term Memory (LSTM). Using the PennyLane library and its PyTorch
-    interface, one can easily define a LSTM network where Variational Quantum
-    Circuits (VQCs) replace linear operations. An application to Part-of-Speech
-    tagging is presented in this tutorial.
+    PennyLane and TensorFlow-2.x illustrates the basic concept.
 
 :html:`<div class="card hidden-card"></div></div>`
 
