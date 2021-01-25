@@ -188,7 +188,8 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 import numpy as np
 
 import pennylane as qml
-from pennylane import expval, var
+
+qml.enable_tape()
 
 dev = qml.device("default.qubit", wires=3)
 
@@ -277,7 +278,7 @@ def layer0_subcircuit(params):
 @qml.qnode(dev)
 def layer0_diag(params):
     layer0_subcircuit(params)
-    return var(qml.PauliZ(0)), var(qml.PauliZ(1))
+    return qml.var(qml.PauliZ(0)), qml.var(qml.PauliZ(1))
 
 
 # calculate the diagonal terms
@@ -293,14 +294,14 @@ g0[1, 1] = varK1 / 4
 @qml.qnode(dev)
 def layer0_off_diag_single(params):
     layer0_subcircuit(params)
-    return expval(qml.PauliZ(0)), expval(qml.PauliZ(1))
+    return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1))
 
 
 @qml.qnode(dev)
 def layer0_off_diag_double(params):
     layer0_subcircuit(params)
     ZZ = np.kron(np.diag([1, -1]), np.diag([1, -1]))
-    return expval(qml.Hermitian(ZZ, wires=[0, 1]))
+    return qml.expval(qml.Hermitian(ZZ, wires=[0, 1]))
 
 
 # calculate the off-diagonal terms
@@ -354,7 +355,7 @@ def layer1_subcircuit(params):
 @qml.qnode(dev)
 def layer1_diag(params):
     layer1_subcircuit(params)
-    return var(qml.PauliY(1)), var(qml.PauliX(2))
+    return qml.var(qml.PauliY(1)), qml.var(qml.PauliX(2))
 
 
 ##############################################################################
@@ -373,7 +374,7 @@ g1[1, 1] = varK1 / 4
 @qml.qnode(dev)
 def layer1_off_diag_single(params):
     layer1_subcircuit(params)
-    return expval(qml.PauliY(1)), expval(qml.PauliX(2))
+    return qml.expval(qml.PauliY(1)), qml.expval(qml.PauliX(2))
 
 
 @qml.qnode(dev)
@@ -382,7 +383,7 @@ def layer1_off_diag_double(params):
     X = np.array([[0, 1], [1, 0]])
     Y = np.array([[0, -1j], [1j, 0]])
     YX = np.kron(Y, X)
-    return expval(qml.Hermitian(YX, wires=[1, 2]))
+    return qml.expval(qml.Hermitian(YX, wires=[1, 2]))
 
 
 # calculate the off-diagonal terms
@@ -403,10 +404,10 @@ print(np.round(g, 8))
 
 
 ##############################################################################
-# PennyLane QNodes contain a built-in method for computing the Fubini-Study metric
-# tensor, :meth:`~.pennylane.QNode.metric_tensor`, which
+# PennyLane contains a built-in function for computing the Fubini-Study metric
+# tensor, :func:`~.pennylane.metric_tensor`, which
 # we can use to verify this result:
-print(np.round(circuit.metric_tensor([params]), 8))
+print(np.round(qml.metric_tensor(circuit)(params), 8))
 
 ##############################################################################
 # As opposed to our manual computation, which required 6 different quantum
@@ -420,9 +421,13 @@ print(np.round(circuit.metric_tensor([params]), 8))
 # and :math:`L` parametrized layers, a total of :math:`2d+L` quantum evaluations
 # are required per optimization step.
 #
-# Note that the :meth:`~.pennylane.QNode.metric_tensor` method also supports computing the diagonal
+# Note that the :func:`~.pennylane.metric_tensor` function also supports computing the diagonal
 # approximation to the metric tensor:
-print(circuit.metric_tensor([params], diag_approx=True))
+print(qml.metric_tensor(circuit, diag_approx=True)(params))
+
+##############################################################################
+# Furthermore, the returned metric tensor is **full differentiable**; include it
+# in your cost function, and train or optimize its value!
 
 ##############################################################################
 # Quantum natural gradient optimization

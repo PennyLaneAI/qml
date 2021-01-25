@@ -36,6 +36,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
 
+qml.enable_tape()
+
 ##############################################################################
 # For this simple example, we consider the following single-qubit Hamiltonian: :math:`\sigma_x + \sigma_z`.
 #
