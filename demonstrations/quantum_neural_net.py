@@ -173,7 +173,7 @@ opt = AdamOptimizer(0.01, beta1=0.9, beta2=0.999)
 var = var_init
 for it in range(500):
     var, _cost = opt.step_and_cost(lambda v: cost(v, X, Y), var)
-    print("Iter: {:5d} | Cost: {:0.7f} ".format(it + 1, _cost))
+    print("Iter: {:5d} | Cost: {:0.7f} ".format(it, _cost))
 
 
 ##############################################################################
@@ -183,6 +183,7 @@ for it in range(500):
 #
 #  .. code-block:: none
 #
+#    Iter:     0 | Cost: 0.3006065
 #    Iter:     1 | Cost: 0.2689702
 #    Iter:     2 | Cost: 0.2472125
 #    Iter:     3 | Cost: 0.2300139
@@ -250,7 +251,7 @@ for it in range(500):
 #    Iter:    65 | Cost: 0.0983111
 #    Iter:    66 | Cost: 0.0972679
 #    Iter:    67 | Cost: 0.0962278
-#    Iter:    68 | Cost: 0.0951897
+#    Iter:    68 | Cost: 0.0951896
 #    Iter:    69 | Cost: 0.0941534
 #    Iter:    70 | Cost: 0.0931195
 #    Iter:    71 | Cost: 0.0920891
@@ -682,7 +683,6 @@ for it in range(500):
 #    Iter:   497 | Cost: 0.0119405
 #    Iter:   498 | Cost: 0.0119349
 #    Iter:   499 | Cost: 0.0119293
-#    Iter:   500 | Cost: 0.0119238
 #
 #
 # Finally, we collect the predictions of the trained model for 50 values
