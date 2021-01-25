@@ -112,6 +112,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
 
+.. customgalleryitem::
+    :tooltip: Meta-learning technique for variational quantum algorithms.
+    :figure: demonstrations/learning2learn/l2l_thumbnail.png
+    :description: :doc:`demos/tutorial_learning2learn`
+    :tags: tensorflow
+
 :html:`</div></div><div style='clear:both'>`
 
 Optimization
@@ -246,3 +252,4 @@ such as benchmarking and characterizing quantum processors.
     demos/qsim_beyond_classical
     demos/quantum_volume
     demos/tutorial_gbs
+    demos/tutorial_learning2learn

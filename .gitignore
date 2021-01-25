@@ -1,10 +1,11 @@
 _build
 __pycache__
 tutorial
-_static/thumbs/*
+_static/thumbs/
 .idea
 demos/*
 demonstrations/pyscf/*
 demonstrations/structure.xyz
 _data/*
 backreferences
+.DS_Store
