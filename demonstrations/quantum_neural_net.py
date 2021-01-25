@@ -17,7 +17,7 @@ Function fitting with a photonic quantum neural network
    pytorch_noise PyTorch and noisy devices
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 25 Jan 2021.*
 
 In this example we show how a variational circuit can be used to learn a
 fit for a one-dimensional function when being trained with noisy samples
