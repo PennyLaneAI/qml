@@ -15,7 +15,7 @@ Quantum natural gradient
    tutorial_backprop Quantum gradients with backprop
    tutorial_vqe_qng Accelerating VQE with QNG
 
-*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 25 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 25 Jan 2021.*
 
 This example demonstrates the quantum natural gradient optimization technique
 for variational quantum circuits, originally proposed in
