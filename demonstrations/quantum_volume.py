@@ -12,7 +12,7 @@ Quantum volume
 
     qsim_beyond_classical Beyond classical computing with qsim
 
-*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 24 Jan 2021.*
+*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 25 Jan 2021.*
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
@@ -375,10 +375,7 @@ def qv_circuit_layer(num_qubits):
 # circuit with 3 qubits. In this demo, we'll work explicitly with `quantum tapes
 # <https://pennylane.readthedocs.io/en/latest/code/qml_tape.html>`__ since they
 # are not immediately tied to a device. This will be convenient later when we
-# need to run the same random circuit on two devices independently. (For the
-# purpose of printing an example circuit, we'll first apply an RZ gate with an
-# angle of 0 to each qubit one at a time. This is to ensure that in the
-# visualization all 5 qubits are present.)
+# need to run the same random circuit on two devices independently.
 
 num_qubits = 5
 dev_ideal = qml.device("default.qubit", analytic=True, wires=num_qubits)
@@ -386,11 +383,9 @@ dev_ideal = qml.device("default.qubit", analytic=True, wires=num_qubits)
 m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
-    for qubit in range(num_qubits):
-        qml.RZ(0, wires=qubit)
     qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
 
-print(tape.draw(wire_order=dev_ideal.wires))
+print(tape.draw(wire_order=dev_ideal.wires, show_all_wires=True))
 
 
 ##############################################################################
@@ -400,11 +395,11 @@ print(tape.draw(wire_order=dev_ideal.wires))
 #
 #  .. code-block:: none
 #
-#      0: ──RZ(0)──╭SWAP─────────╭U0──╭SWAP─────────╭U1──╭SWAP──╭U2──┤
-#      1: ──RZ(0)──│──────╭SWAP──╰U0──│──────╭SWAP──╰U1──╰SWAP──╰U2──┤
-#      2: ──RZ(0)──╰SWAP──╰SWAP───────╰SWAP──╰SWAP───────────────────┤
-#      3: ──RZ(0)────────────────────────────────────────────────────┤
-#      4: ──RZ(0)────────────────────────────────────────────────────┤
+#      0: ────╭SWAP─────────╭U0──╭SWAP─────────╭U1──╭SWAP──╭U2──┤
+#      1: ────│──────╭SWAP──╰U0──│──────╭SWAP──╰U1──╰SWAP──╰U2──┤
+#      2: ────╰SWAP──╰SWAP───────╰SWAP──╰SWAP───────────────────┤
+#      3: ──────────────────────────────────────────────────────┤
+#      4: ──────────────────────────────────────────────────────┤
 #
 #     U0 =
 #     [[-0.17514647+0.00759447j  0.11975927+0.16007614j -0.41793925+0.49643728j
