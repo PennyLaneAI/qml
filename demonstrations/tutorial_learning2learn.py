@@ -72,8 +72,7 @@ of a Hamiltonian :math:`H` with respect to the parametrized state
 
 .. figure:: ../demonstrations/learning2learn/HybridLSTM.png
     :align: center
-    :width: 90%
-
+    :width: 100%
 
     Given parameters :math:`\boldsymbol{\theta}_{t-1}` of the variational quantum circuit,
     the cost function :math:`y_{t-1}`, and the hidden state of the
