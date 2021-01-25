@@ -50,11 +50,11 @@ how to:
 # To start, we import PennyLane, NumPy, and PyTorch for the optimization:
 
 import pennylane as qml
-import numpy as np
+from pennylane import numpy as np
 import torch
 from torch.autograd import Variable
 np.random.seed(42)
-
+qml.enable_tape()
 # we generate a three-dimensional random vector by sampling
 # each entry from a standard normal distribution
 v = np.random.normal(0, 1, 3)
@@ -63,10 +63,13 @@ v = np.random.normal(0, 1, 3)
 purity = 0.66
 
 # create a random Bloch vector with the specified purity
-bloch_v = np.sqrt(2 * purity - 1) * v / np.sqrt(np.sum(v ** 2))
+bloch_v = Variable(
+    torch.tensor(np.sqrt(2 * purity - 1) * v / np.sqrt(np.sum(v ** 2))),
+    requires_grad=False
+)
 
 # array of Pauli matrices (will be useful later)
-Paulis = np.zeros((3, 2, 2), dtype=complex)
+Paulis = np.zeros((3, 2, 2), dtype=complex, requires_grad=False)
 Paulis[0] = [[0, 1], [1, 0]]
 Paulis[1] = [[0, -1j], [1j, 0]]
 Paulis[2] = [[1, 0], [0, -1]]
@@ -124,7 +127,7 @@ dev = qml.device("default.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="torch")
-def circuit(params, A=None):
+def circuit(params, A):
 
     # repeatedly apply each layer in the circuit
     for j in range(nr_layers):
@@ -149,7 +152,7 @@ def circuit(params, A=None):
 def cost_fn(params):
     cost = 0
     for k in range(3):
-        cost += torch.abs(circuit(params, A=Paulis[k]) - bloch_v[k])
+        cost += torch.abs(circuit(params, Paulis[k]) - bloch_v[k])
 
     return cost
 
@@ -185,7 +188,7 @@ for n in range(steps):
 # calculate the Bloch vector of the output state
 output_bloch_v = np.zeros(3)
 for l in range(3):
-    output_bloch_v[l] = circuit(best_params, A=Paulis[l])
+    output_bloch_v[l] = circuit(best_params, Paulis[l])
 
 # print results
 print("Target Bloch vector = ", bloch_v)
