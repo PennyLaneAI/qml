@@ -609,8 +609,7 @@ qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
 # Defines the new QNode
 qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev)
 
-
-# This is a LONG simulation.  If you just want to test out, try fewer steps
+# This is a LONG simulation.  If you just want to test that the code runs, try fewer steps
 # steps = 10
 steps = 300
 
@@ -979,7 +978,7 @@ print(f"\nNon-Existing Edge Parameters: {weights_noedge}")
 #       -1.43                   -1.313891802560241
 #       1.18                    0.9811173767093699
 #       -0.93                   -1.0579331212003404
-#       
+#
 #       Non-Existing Edge Parameters: [tensor(0.03795849, requires_grad=True), tensor(-0.00229918, requires_grad=True)]
 #
 
