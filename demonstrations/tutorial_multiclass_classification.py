@@ -111,7 +111,8 @@ def circuit(weights, feat=None):
 
 qnodes = []
 for iq in range(num_classes):
-    qnodes.append(qml.QNode(circuit, dev).to_torch())
+    qnode = qml.QNode(circuit, dev, interface="torch")
+    qnodes.append(qnode)
 
 
 #################################################################################
