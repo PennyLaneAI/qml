@@ -322,14 +322,14 @@ params = init_params
 for i in range(steps):
     # update the circuit parameters
     # we can optimize both in the same training loop
-    params = opt.step(cost, params)
-    noisy_circuit_params = opt.step(noisy_cost, noisy_circuit_params)
+    params, _cost = opt.step_and_cost(cost, params)
+    noisy_circuit_params, _cost_noisy = opt.step_and_cost(noisy_cost, noisy_circuit_params)
 
-    if (i + 1) % 5 == 0:
-        print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}"
-              .format(i + 1, 
-                      cost(params), 
-                      noisy_cost(noisy_circuit_params)))
+    if i % 5 == 0:
+        print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}".format(i, _cost, _cost_noisy))
+
+final_cost, final_noisy_cost = cost(params), noisy_cost(noisy_circuit_params)
+print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}".format(steps, final_cost, final_noisy_cost))
 
 print("\nOptimized rotation angles (noise-free case):")
 print("({: .7f}, {: .7f})".format(*params))
