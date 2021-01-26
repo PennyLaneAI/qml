@@ -191,7 +191,25 @@ Community
     replaced by simple Variational Quantum Circuits. An implementation based on
     PennyLane and TensorFlow-2.x illustrates the basic concept.
 
-:html:`<div class="card hidden-card"></div></div>`
+.. community-card::
+    :title: Layerwise learning for quantum neural networks
+    :author: Felipe Oyarce Andrade
+    :date: 26/01/2021
+    :code: https://nbviewer.jupyter.org/github/felipeoyarce/layerwise-learning/blob/master/layerwise_learning/Layerwise%20learning%20-%20Image%20Classification.ipynb
+    :paper: https://arxiv.org/abs/2006.14904
+    :color: heavy-rain-gradient
+
+    In this project we’ve implemented a strategy presented by <a
+    href="https://arxiv.org/abs/2006.14904" target="_blank">Skolik et al., 2020</a> for
+    effectively training quantum neural networks. In layerwise learning the
+    strategy is to gradually increase the number of parameters by adding a few
+    layers and training them while freezing the parameters of previous layers
+    already trained.  An easy way for understanding this technique is to think
+    that we’re dividing the problem into smaller circuits to successfully avoid
+    falling into Barren Plateaus. We provide a proof-of-concept
+    implementation of this technique in Pennylane’s Pytorch interface for binary
+    classification in the MNIST dataset.
+
 
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
