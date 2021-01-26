@@ -195,7 +195,7 @@ Community
     :title: Layerwise learning for quantum neural networks
     :author: Felipe Oyarce Andrade
     :date: 26/01/2021
-    :code: https://nbviewer.jupyter.org/github/felipeoyarce/layerwise-learning/blob/master/layerwise_learning/Layerwise%20learning%20-%20Image%20Classification.ipynb
+    :code: https://github.com/felipeoyarce/layerwise-learning
     :color: heavy-rain-gradient
 
     In this project we’ve implemented a strategy presented by <a
