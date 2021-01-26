@@ -174,6 +174,24 @@ Community
     LSTM network where Variational Quantum Circuits (VQCs) replace linear operations. An 
     application to Part-of-Speech tagging is presented in this tutorial.
 
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
+.. community-card::
+    :title: A Quantum-Enhanced Transformer
+    :author: Riccardo Di Sipio
+    :date: 20/01/2021
+    :code: https://github.com/rdisipio/qtransformer
+    :blog: https://towardsdatascience.com/toward-a-quantum-transformer-a51566ed42c2
+    :color: heavy-rain-gradient
+
+    The Transformer neural network architecture revolutionized the analysis of
+    text. Here we show an example of a Transformer with quantum-enhanced
+    multi-headed attention. In the quantum-enhanced version, dense layers are
+    replaced by simple Variational Quantum Circuits. An implementation based on
+    PennyLane and TensorFlow-2.x illustrates the basic concept.
+
+:html:`<div class="card hidden-card"></div></div>`
 
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
