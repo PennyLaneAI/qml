@@ -10,6 +10,8 @@ Intro to QAOA
 
    tutorial_qaoa_maxcut QAOA for MaxCut
 
+*Author: Jack Ceroni. Posted: 18 Nov 2020. Last updated: 11 Jan 2021.*
+
 The Quantum Approximate Optimization Algorithm (QAOA) is a widely-studied
 method for solving combinatorial optimization problems on NISQ devices.
 The applications of QAOA are broad and far-reaching, and the performance
@@ -18,8 +20,6 @@ of the algorithm is of great interest to the quantum computing research communit
 .. figure:: ../demonstrations/qaoa_module/qaoa_circuit.png
     :align: center
     :width: 90%
-
-*Author: Jack Ceroni. Posted: 18 Nov 2020. Last updated: 11 Jan 2021.*
 
 The goal of this tutorial is to introduce the basic concepts of QAOA and
 to guide you through PennyLane's built-in QAOA
