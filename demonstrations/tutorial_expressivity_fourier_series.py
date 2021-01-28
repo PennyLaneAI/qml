@@ -365,9 +365,10 @@ for step in range(max_steps):
     y_batch = target_y[batch_index]
 
     # Update the weights by one optimizer step
-    weights, c = opt.step_and_cost(lambda w: cost(w, x_batch, y_batch), weights)
+    weights = opt.step(lambda w: cost(w, x_batch, y_batch), weights)
 
     # Save, and possibly print, the current cost
+    c = cost(weights, x, target_y)
     cst.append(c)
     if (step + 1) % 10 == 0:
         print("Cost at step {0:3}: {1}".format(step + 1, c))
@@ -574,9 +575,10 @@ for step in range(max_steps):
     y_batch = target_y[batch_index]
 
     # update the weights by one optimizer step
-    weights, c = opt.step_and_cost(lambda w: cost(w, x_batch, y_batch), weights)
+    weights = opt.step(lambda w: cost(w, x_batch, y_batch), weights)
     
     # save, and possibly print, the current cost
+    c = cost(weights, x, target_y)
     cst.append(c)
     if (step + 1) % 10 == 0:
         print("Cost at step {0:3}: {1}".format(step + 1, c))
