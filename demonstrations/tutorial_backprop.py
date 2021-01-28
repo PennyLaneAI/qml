@@ -247,14 +247,14 @@ print(2 * forward_time * params.size)
 # (simulator or hardware), ``"backprop"`` will only work for specific simulator devices that are
 # designed to support backpropagation.
 #
-# One such device is :class:`default.qubit.tf <pennylane.devices.default_qubit_tf.DefaultQubitTF>`.
-# This device is a pure state-vector simulator like ``default.qubit``; however, unlike
-# ``default.qubit``, is written using TensorFlow rather than NumPy. As a result, it supports
-# classical backpropagation when using the TensorFlow interface.
+# One such device is :class:`default.qubit <pennylane.devices.DefaultQubit>`. It
+# has backends written using both TensorFlow and Autograd, so when used with the
+# TensorFlow and Autograd interfaces respectively, supports backpropagation.
+# In this demo, we will use the TensorFlow interface.
 
 import tensorflow as tf
 
-dev = qml.device("default.qubit.tf", wires=4)
+dev = qml.device("default.qubit", wires=4)
 
 ##############################################################################
 # When defining the QNode, we specify ``diff_method="backprop"`` to ensure that
@@ -312,8 +312,7 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 # rule, and ``default.qubit.tf`` for backpropagation. For convenience, we'll use the TensorFlow
 # interface when creating both QNodes.
 
-dev_shift = qml.device("default.qubit", wires=4)
-dev_backprop = qml.device("default.qubit.tf", wires=4)
+dev = qml.device("default.qubit", wires=4)
 
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
@@ -342,8 +341,8 @@ for depth in range(0, 21):
     # forward pass timing
     # ===================
 
-    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
+    qnode_shift = qml.QNode(circuit, dev, interface="tf", diff_method="parameter-shift")
+    qnode_backprop = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
@@ -359,8 +358,8 @@ for depth in range(0, 21):
     # Gradient timing
     # ===============
 
-    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
+    qnode_shift = qml.QNode(circuit, dev, interface="tf", diff_method="parameter-shift")
+    qnode_backprop = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
 
     # parameter-shift
     with tf.GradientTape(persistent=True) as tape:
