@@ -147,7 +147,7 @@ analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=True)
 # returning a collection of QNodes, each one evaluating the expectation value
 # of each Hamiltonian.
 
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
+qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
 
 
 ##############################################################################
@@ -541,13 +541,13 @@ class Rosalin:
 
 
 rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
+qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample", diff_method="parameter-shift")
 
 ##############################################################################
 # Let's also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
-cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev))
+cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev, diff_method="parameter-shift"))
 
 ##############################################################################
 # Creating the optimizer and beginning the optimization:
