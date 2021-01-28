@@ -33,7 +33,7 @@ The first step is to import the required libraries and packages:
 """
 
 import matplotlib.pyplot as plt
-import numpy as np
+from pennylane import numpy as np
 import pennylane as qml
 
 ##############################################################################
@@ -272,10 +272,10 @@ print("Number of qubits = ", qubits)
 # gates (RZ-RY-RZ).
 
 dev = qml.device("default.qubit", wires=qubits)
-
+hf_state = np.array([1, 1, 0, 0], requires_grad=False)
 
 def ansatz(params, wires=[0, 1, 2, 3]):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    qml.BasisState(hf_state, wires=wires)
     for i in wires:
         qml.RZ(params[3 * i], wires=i)
         qml.RY(params[3 * i + 1], wires=i)
@@ -290,7 +290,7 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function using the ``ExpvalCost`` class.
 
-cost = qml.ExpvalCost(ansatz, hamiltonian, dev)
+cost = qml.ExpvalCost(ansatz, hamiltonian, dev, diff_method="parameter-shift")
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
