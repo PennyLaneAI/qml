@@ -9,7 +9,7 @@ Quantum transfer learning
         classifier using transfer learning.
     :property="og:image": https://pennylane.ai/qml/_images/transfer_images.png
 
-*Author: PennyLane dev team. Last updated: 26 Oct 2020.*
+*Author: PennyLane dev team. Last updated: 28 Jan 2021.*
 
 In this tutorial we apply a machine learning method, known as *transfer learning*, to an
 image classifier based on a hybrid classical-quantum network.
@@ -136,6 +136,9 @@ from torchvision import datasets, transforms
 import pennylane as qml
 from pennylane import numpy as np
 
+torch.manual_seed(42)
+np.random_seed(42)
+
 # Plotting
 import matplotlib.pyplot as plt
 
@@ -159,7 +162,6 @@ num_epochs = 1              # Number of training epochs
 q_depth = 6                 # Depth of the quantum circuit (number of variational layers)
 gamma_lr_scheduler = 0.1    # Learning rate reduction applied every 10 epochs.
 q_delta = 0.01              # Initial spread of random quantum weights
-rng_seed = 3                # Seed for random number generator
 start_time = time.time()    # Start of the computation timer
 
 ##############################################################################
@@ -250,10 +252,6 @@ out = torchvision.utils.make_grid(inputs)
 
 imshow(out, title=[class_names[x] for x in classes])
 
-# In order to get reproducible results, we set a manual seed for the
-# random number generator and re-initialize the dataloaders.
-
-torch.manual_seed(rng_seed)
 dataloaders = {
     x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True)
     for x in ["train", "validation"]
