@@ -111,7 +111,7 @@ import numpy as np
 import pennylane as qml
 
 # set the random seed
-np.random.seed(3)
+np.random.seed(4)
 
 coeffs = [2, 4, -1, 5, 2]
 
@@ -605,6 +605,7 @@ plt.plot(shots_adam, cost_adam, "g", label="Adam")
 plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
+plt.xlim(0, 300000)
 plt.show()
 
 ##############################################################################
