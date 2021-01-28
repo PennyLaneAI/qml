@@ -541,13 +541,13 @@ class Rosalin:
 
 
 rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample", diff_method="parameter-shift")
+qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
 
 ##############################################################################
 # Let's also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
-cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev, diff_method="parameter-shift"))
+cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev))
 
 ##############################################################################
 # Creating the optimizer and beginning the optimization:
@@ -581,7 +581,10 @@ params = init_params
 opt = qml.AdamOptimizer(0.07)
 
 non_analytic_dev.shots = adam_shots_per_eval
-cost = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev))
+cost = qml.dot(
+  coeffs,
+  qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
+)
 
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]
