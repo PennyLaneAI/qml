@@ -132,7 +132,7 @@ import torch
 from torch.nn.functional import relu
 
 from sklearn.svm import SVC
-from sklearn.datasets import make_blobs
+from sklearn.datasets import load_iris()
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -150,7 +150,11 @@ np.random.seed(42)
 # The second step is to make an artificial toy data set.
 #
 
-X, y = make_blobs(n_samples=150, n_features=3, centers=2, cluster_std=2)
+X, y = load_iris(return_X_y=True)
+
+# turn into 2 classes
+X = X[:100]
+y = y[:100]
 
 # scaling the inputs is important since the embedding we use is periodic
 scaler = StandardScaler().fit(X)
@@ -547,7 +551,7 @@ model_evals_nn(
 #
 #    b) the number of parameters grows as the square root with the training data, or ``n_params = np.sqrt(M)``. 
 #
-# Note that compared to the example above with 112 training samples and 18 parameters, a) overestimates the number of evaluations, while b) 
+# Note that compared to the example above with 75 training samples and 18 parameters, a) overestimates the number of evaluations, while b) 
 # underestimates it.
 #
 
