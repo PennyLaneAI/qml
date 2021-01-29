@@ -94,9 +94,9 @@ the toolbox of quantum machine learning.
 # More precisely, we can replace variational training with kernel-based training if the optimisation
 # problem can be written as minimising a cost of the form
 # 
-# .. math:: f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
+# .. math::  \min_f  \lambda \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
 #
-# which is a regularised empirical risk of training data samples:math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
+# which is a regularised empirical risk of training data samples :math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
 #
 # If the loss function in training is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__, the kernel method
@@ -455,22 +455,22 @@ dev_var.num_executions
 # That is a lot more than the kernel method took!
 #
 # Let’s try to understand this value. In each optimisation step, the variational
-# circuit needs to compute the partial derivative of all :math:`K`
+# circuit needs to compute the partial derivative of all
 # trainable parameters for each sample in a batch. Using `parameter-shift
 # rules <https://pennylane.ai/qml/glossary/parameter_shift.html>`__ we require roughly 2 circuit
 # evaluations per partial derivative. Prediction uses only one circuit
 # evaluation per sample.
 #
-# Besides some implementation details we get roughly:
+# This would result in:
 #
 
 
-def circuit_evals_variational(n_data, n_params, n_steps, evals_per_derivative, split,  batch_size):
+def circuit_evals_variational(n_data, n_params, n_steps, evals_per_derivative, split, batch_size):
     """
     Compute how many circuit evaluations are needed for variational training and prediction.
     """
 
-    M = int(np.ceil(0.75 * n_data))
+    M = int(np.ceil(split * n_data))
     Mpred = n_data - M
 
     n_training = n_params * n_steps * batch_size * evals_per_derivative
@@ -490,17 +490,20 @@ circuit_evals_variational(
 
 
 ######################################################################
+# The estimate is a bit higher because it does not account for some optimizations
+# that PennyLane performs under the hood.
+#
 # It is important to note that while they are trained in a similar manner, 
 # the number of variational circuit evaluations differs from the number of 
 # neural network model evaluations in classical machine learning, which would be given by:
 #
 
-def model_evals_nn(n_data, n_params, n_steps, split,  batch_size):
+def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
     """
     Compute how many model evaluations are needed for neural network training and prediction.
     """
 
-    M = int(np.ceil(0.75 * n_data))
+    M = int(np.ceil(split * n_data))
     Mpred = n_data - M
 
     n_training = n_steps * batch_size
