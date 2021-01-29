@@ -91,7 +91,6 @@ the toolbox of quantum machine learning.
 # measurement of common variational circuits, and only depends on the
 # embedding.
 #
-
 #
 # More precisely, we can replace variational training with kernel-based training if the optimisation
 # problem can be written as minimising a cost of the form
@@ -152,7 +151,7 @@ np.random.seed(42)
 # The second step is to make an artificial toy data set.
 #
 
-X, y = make_blobs(n_samples=150, n_features=3, centers=2, cluster_std=1.5)
+X, y = make_blobs(n_samples=150, n_features=3, centers=2, cluster_std=2)
 
 # scaling the inputs is important since the embedding we use is periodic
 scaler = StandardScaler().fit(X)
