@@ -37,7 +37,7 @@ A secondary goal of the demo is to estimate the number of circuit evaluations ne
 both approaches. For the example used here, kernel-based training requires fewer (and shorter) 
 quantum circuit evaluations. 
 
-In more general, we will see that the comparison with variational training depends on how many parameters the variational 
+More generally, we will see that the comparison with variational training depends how the number of variational parameters 
 ansatz requires as the data size grows. If variational circuits turn out to be similar to neural nets and grow linearly in size 
 with the data, kernel-based training is much more efficient. 
 If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
