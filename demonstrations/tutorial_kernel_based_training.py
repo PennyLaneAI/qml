@@ -96,7 +96,8 @@ the toolbox of quantum machine learning.
 # 
 # .. math::  \min_f  \lambda \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
 #
-# which is a regularised empirical risk of training data samples :math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
+# which is a regularised empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M}`, 
+# regularisation strength :math:`\lambda \in \mathbb{R}`, and loss function :math:`L`.
 #
 # If the loss function in training is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__, the kernel method
@@ -520,7 +521,7 @@ def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
 # ``model_evals_nn``. 
 #
 # For the same example as used here, a neural network would therefore 
-# have much fewer model evaluations thank both variational and kernel-based training:
+# have much fewer model evaluations than both variational and kernel-based training:
 #
 
 model_evals_nn(
