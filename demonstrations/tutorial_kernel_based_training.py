@@ -316,7 +316,7 @@ def circuit_evals_kernel(n_data, split):
     return n_training + n_prediction
 
 
-circuit_evals_kernel(n_data=len(X), split=len(X_train) / len(X_test))
+circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_test)))
 
 
 ######################################################################
@@ -506,7 +506,7 @@ circuit_evals_variational(
     n_params=len(trained_params.flatten()),
     n_steps=steps,
     shift_terms=2,
-    split=len(X_train) / len(X_test),
+    split=len(X_train) /(len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -549,7 +549,7 @@ model_evals_nn(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
     n_steps=steps,
-    split=len(X_train) / len(X_test),
+    split=len(X_train) /(len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
    
