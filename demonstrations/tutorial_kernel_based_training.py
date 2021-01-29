@@ -433,7 +433,7 @@ def quantum_model_predict(X_pred, trained_params, trained_bias):
 
 n_layers = 1
 batch_size = 20
-steps = 80
+steps = 100
 trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
 
 pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
