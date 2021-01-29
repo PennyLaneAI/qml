@@ -41,7 +41,7 @@ More generally, we will see that the comparison with variational training depend
 scales with the amount of data. If variational circuits turn out to be similar to neural networks and grow linearly in size 
 with the data, kernel-based training is much more efficient. 
 If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
-evaluations, although never quite competing with classical neural networks. 
+evaluations, although it will never be competitive with classical neural networks. 
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
