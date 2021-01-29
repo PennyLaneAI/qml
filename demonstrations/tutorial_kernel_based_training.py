@@ -32,18 +32,22 @@ quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
 A secondary goal of the demo is to estimate the number of circuit evaluations needed in
-both approaches. We will see that while kernel-based training famously scales much worse than 
-neural networks, the comparison with variational training depends on how many parameters the variational 
+both approaches. For the example used here, kernel-based training requires fewer (and shorter) 
+quantum circuit evaluations. 
+
+In more general, we will see that the comparison with variational training depends on how many parameters the variational 
 ansatz requires as the data size grows. If variational circuits turn out to be similar to neural nets and grow linearly in size 
 with the data, kernel-based training is much more efficient. 
 If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
-evaluations. 
+evaluations, although never quite competing with classical neural networks. 
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
        :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
-       
+
+Either way, kernel-based training has many great properties and is therefore a valuable addition to 
+the toolbox of quantum machine learning.
 """
 
 ######################################################################
@@ -61,22 +65,23 @@ evaluations.
 # and :math:`\mathcal{M}` is an arbitrary observable. This model includes variational 
 # quantum machine learning models, since the observable can
 # effectively be implemented by a simple measurement that is preceded by a
-# variational circuit. 
+# variational circuit: 
+#
 #
 # .. figure:: ../demonstrations/kernel_based_training/quantum_model.png 
 #       :align: center
 #       :scale: 30%
 #       :alt: quantum-model
 #
-# If the circuit is trainable, the measurement becomes
-# trainable. For example, applying a circuit :math:`B(\theta)` and then
-# measuring the PauliZ observable :math:`\sigma^0_z` of the first qubit
-# implements the effective measurement observable
+#
+# For example, applying a circuit :math:`B(\theta)` and then
+# measuring the Pauli-Z observable :math:`\sigma^0_z` of the first qubit
+# implements the trainable measurement 
 # :math:`\mathcal{M}(\theta) = B^{\dagger}(\theta) \sigma^0_z B(\theta)`.
 #
 # The main practical consequence of approaching quantum machine learning with a 
-# kernel approach is that instead of training $f$ variationally,
-# we can often train a classical kernel method with a kernel executed on a
+# kernel approach is that instead of training :math:`f` variationally,
+# we can often train an equivalent classical kernel method with a kernel executed on a
 # quantum device. This “quantum kernel"
 # is given by the mutual overlap of two data-encoding quantum states,
 #
@@ -86,13 +91,13 @@ evaluations.
 # measurement of common variational circuits, and only depends on the
 # embedding.
 #
-# .. note::
-#
-#    More precisely, we can replace variational training with kernel-based training if the optimisation
-#    problem can be written as minimising a cost of the form
 
-#    .. math:: f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m),
- 
+#
+# More precisely, we can replace variational training with kernel-based training if the optimisation
+# problem can be written as minimising a cost of the form
+# 
+# .. math:: f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
+#
 #    which is a regularised empirical risk of training data samples:math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
 #
 # If the loss function in training is the `hinge
@@ -105,9 +110,9 @@ evaluations.
 # .. warning::
 #
 #    Theory predicts that kernel-based training will always find better or equally good
-#    models :math:`f_{\rm trained}` for the optimisation problem stated above. However, to show this here we would have
-#    to either regularise the variational training by a term :math:`\mathrm{tr}\{\mathcal{M^2\}`, or switch off
-#    regularisation in the classical SVM, which denies the SVM a lot of its strength. The kernel-based and the variational 
+#    models for the optimisation problem stated above. However, to show this here we would have
+#    to either regularise the variational training by the trace of the squared observable, or switch off
+#    regularisation in the classical SVM, which denies it a lot of its strength. The kernel-based and the variational 
 #    training in this demonstration therefore optimize slightly different cost
 #    functions, and it is out of our scope to establish whether one training method finds a better minimum than
 #    the other.
