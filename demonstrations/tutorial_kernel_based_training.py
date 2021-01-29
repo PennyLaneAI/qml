@@ -29,7 +29,7 @@ and has been systematically summarised in the overview `Schuld (2021) <https://a
 As an example of kernel-based training we use a combination of PennyLane
 and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
 learning library to use a support vector machine with 
-a "quantum kernel". We then compare this strategy with a variational
+a *quantum kernel*. We then compare this strategy with a variational
 quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
