@@ -48,8 +48,14 @@ evaluations, although it will never be competitive with classical neural network
        :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
 
-Either way, kernel-based training has many great properties and is therefore a valuable addition to 
-the toolbox of quantum machine learning.
+After working through this demo, the reader should:
+
+* be able to use a support vector machine with a quantum kernel computed with PennyLane, and
+
+* understand the scaling of quantum circuit evaluations required in kernel-based versus 
+  variational training.  
+
+
 """
 
 ######################################################################
@@ -76,10 +82,10 @@ the toolbox of quantum machine learning.
 #       :alt: quantum-model
 #
 #
-# For example, applying a circuit :math:`B(\theta)` and then
+# For example, applying a circuit :math:`G(\theta)` and then
 # measuring the Pauli-Z observable :math:`\sigma^0_z` of the first qubit
 # implements the trainable measurement 
-# :math:`\mathcal{M}(\theta) = B^{\dagger}(\theta) \sigma^0_z B(\theta)`.
+# :math:`\mathcal{M}(\theta) = G^{\dagger}(\theta) \sigma^0_z G(\theta)`.
 #
 # The main practical consequence of approaching quantum machine learning with a 
 # kernel approach is that instead of training :math:`f` variationally,
@@ -93,14 +99,6 @@ the toolbox of quantum machine learning.
 # measurement of common variational circuits, and only depends on the
 # embedding.
 #
-# More precisely, we can replace variational training with kernel-based training if the optimisation
-# problem can be written as minimizing a cost of the form
-# 
-# .. math::  \min_f  \lambda \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
-#
-# which is a regularised empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M}`, 
-# regularisation strength :math:`\lambda \in \mathbb{R}`, and loss function :math:`L`.
-#
 # If the loss function in training is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__, the kernel method
 # corresponds to a standard `support vector
@@ -108,10 +106,19 @@ the toolbox of quantum machine learning.
 # in the sense of a maximum-margin classifier. Other convex loss functions
 # lead to more general variations of support vector machines.
 #
-# .. warning::
+# .. note::
+#
+#    More precisely, we can replace variational with kernel-based 
+#    training if the optimisation
+#    problem can be written as minimizing a cost of the form
+# 
+#    .. math::  \min_f  \lambda \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
+#
+#    which is a regularized empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M}`, 
+#    regularisation strength :math:`\lambda \in \mathbb{R}`, and loss function :math:`L`.
 #
 #    Theory predicts that kernel-based training will always find better or equally good
-#    models for the optimisation problem stated above. However, to show this here we would have
+#    minima of this risk. However, to show this here we would have
 #    to either regularise the variational training by the trace of the squared observable, or switch off
 #    regularisation in the classical SVM, which denies it a lot of its strength. The kernel-based and the variational 
 #    training in this demonstration therefore optimize slightly different cost
@@ -124,6 +131,10 @@ the toolbox of quantum machine learning.
 # Kernel-based training
 # =====================
 #
+# First, we will turn to kernel-based training of quantum models. 
+# As stated above, an example implementation is a standard support vector 
+# machine with a kernel computed by a quantum circuit.
+# 
 
 
 ######################################################################
@@ -150,7 +161,7 @@ np.random.seed(42)
 
 
 ######################################################################
-# The second step is to make an artificial toy data set.
+# The second step is to make a toy data set.
 #
 
 X, y = load_iris(return_X_y=True)
@@ -177,13 +188,14 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled)
 #
 
 n_qubits = len(X_train[0])
+n_qubits
 
 
 ######################################################################
 # To implement the kernel we could prepare the two states
-# :math:`| \phi(x)\rangle`, :math:`| \phi(x')\rangle` on different qubits
+# :math:`| \phi(x)\rangle`, :math:`| \phi(x')\rangle` on different sets of qubits
 # with amplitude embedding routines :math:`S(x), S(x')` and measure their
-# overlap with a small routine called a SWAP test.
+# overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 #
 # However, we need only half the number of qubits if we prepare
 # :math:`| \phi(x)\rangle` and then apply the inverse embedding
@@ -207,8 +219,8 @@ n_qubits = len(X_train[0])
 #    observables = [qml.PauliZ(i) for i in range(n_qubits)]
 #    projector = Tensor(*observables)
 #
-# Altogether, we use the following quantum node as a “quantum kernel
-# evaluator”:
+# Altogether, we use the following quantum node as a *quantum kernel
+# evaluator*:
 #
 
 dev_kernel = qml.device("default.qubit", wires=n_qubits)
@@ -226,8 +238,8 @@ def kernel(x1, x2):
 
 
 ######################################################################
-# A good sanity check is whether measuring the distance between one and
-# the same data point returns 1:
+# A good sanity check is whether evaluating the kernel of a data point and 
+# itself returns 1:
 #
 
 kernel(X_train[0], X_train[0])
@@ -236,7 +248,8 @@ kernel(X_train[0], X_train[0])
 ######################################################################
 # The way an SVM with a custom kernel is implemented in scikit-learn
 # requires us to pass a function that computes a matrix of kernel
-# evaluations for samples in two different datasets A, B.
+# evaluations for samples in two different datasets A, B. If A=B, 
+# this is the `Gram matrix <https://en.wikipedia.org/wiki/Gramian_matrix>`__.
 #
 
 
@@ -244,7 +257,6 @@ def kernel_matrix(A, B):
     """
     Compute the matrix whose entries are the kernel
     evaluated on pairwise data from sets A and B.
-    If A=B, this is the Gram matrix.
     """
     return np.array([[kernel(a, b) for b in B] for a in A])
 
@@ -265,6 +277,8 @@ accuracy_score(predictions, y_test)
 
 
 ######################################################################
+# The SVM predicted all test points correctly.
+#
 # How many times was the quantum device evaluated?
 #
 
@@ -293,7 +307,7 @@ def circuit_evals_kernel(n_data, split):
     Compute how many circuit evaluations one needs for kernel-based training and prediction.
     """
 
-    M = int(np.ceil(0.75 * n_data))
+    M = int(np.ceil(split * n_data))
     Mpred = n_data - M
 
     n_training = M * M
@@ -315,11 +329,11 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) / len(X_test))
 # Using the variational principle of training, we can propose an *ansatz*
 # for the (circuit before the) measurement and train it directly. By
 # increasing the number of layers of the ansatz, its expressivity
-# increases. Depending on the ansatz, we can express any measurement, or
-# only search through a subspace of all measurements for the best
+# increases. Depending on the ansatz, we may only
+# search through a subspace of all measurements for the best
 # candidate.
 #
-# Remember from above, the variational training does not optimise
+# Remember from above, the variational training does not optimize
 # *exactly* the same cost as the SVM, but we try to match them as closely
 # as possible. For this we use a bias term in the quantum model, and train
 # on the hinge loss.
@@ -448,6 +462,11 @@ plt.show()
 
 
 ######################################################################
+# The variational circuit has a slightly lower 
+# accuracy than the SVM - but this depends very much on the training settings 
+# we used. Different random parameter initialisations may indeed get 
+# perfect test accuracy.
+#
 # How often was the device executed?
 #
 
@@ -457,7 +476,7 @@ dev_var.num_executions
 ######################################################################
 # That is a lot more than the kernel method took!
 #
-# Let’s try to understand this value. In each optimisation step, the variational
+# Let’s try to understand this value. In each optimization step, the variational
 # circuit needs to compute the partial derivative of all
 # trainable parameters for each sample in a batch. Using `parameter-shift
 # rules <https://pennylane.ai/qml/glossary/parameter_shift.html>`__ we require roughly 2 circuit
@@ -468,7 +487,7 @@ dev_var.num_executions
 #
 
 
-def circuit_evals_variational(n_data, n_params, n_steps, evals_per_derivative, split, batch_size):
+def circuit_evals_variational(n_data, n_params, n_steps, shift_terms, split, batch_size):
     """
     Compute how many circuit evaluations are needed for variational training and prediction.
     """
@@ -476,7 +495,7 @@ def circuit_evals_variational(n_data, n_params, n_steps, evals_per_derivative, s
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
 
-    n_training = n_params * n_steps * batch_size * evals_per_derivative
+    n_training = n_params * n_steps * batch_size * shift_terms
     n_prediction = Mpred
 
     return n_training + n_prediction
@@ -486,7 +505,7 @@ circuit_evals_variational(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
     n_steps=steps,
-    evals_per_derivative=2,
+    shift_terms=2,
     split=len(X_train) / len(X_test),
     batch_size=batch_size,
 )
@@ -518,12 +537,12 @@ def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
 # In each step of neural network training, due to the power of automatic differentiation, 
 # the backpropagation algorithm can compute a 
 # gradient for all parameters in (more-or-less) a single run. 
-# For all we know at this stage, the no-cloning principle prevents variational circuits to use these tricks, 
-# which leads to ``n_training`` in ``circuit_evals_variational`` depend on the number of parameters, but not in 
+# For all we know at this stage, the no-cloning principle prevents variational circuits from using these tricks, 
+# which leads to ``n_training`` in ``circuit_evals_variational`` depending on the number of parameters, but not in 
 # ``model_evals_nn``. 
 #
 # For the same example as used here, a neural network would therefore 
-# have much fewer model evaluations than both variational and kernel-based training:
+# have far fewer model evaluations than both variational and kernel-based training:
 #
 
 model_evals_nn(
@@ -553,9 +572,9 @@ model_evals_nn(
 #    samples. But we do not know yet whether variational circuits really need that many parameters as well.
 #    We will therefore use two cases for comparison: 
 #
-#    a) the number of parameters grows linearly with the training data, or ``n_params = M``, 
+#    2a) the number of parameters grows linearly with the training data, or ``n_params = M``, 
 #
-#    b) the number of parameters grows as the square root with the training data, or ``n_params = np.sqrt(M)``. 
+#    2b) the number of parameters grows as the square root with the training data, or ``n_params = np.sqrt(M)``. 
 #
 # Note that compared to the example above with 75 training samples and 24 parameters, a) overestimates the number of evaluations, while b) 
 # underestimates it.
@@ -571,15 +590,16 @@ variational_training2 = []
 kernelbased_training = []
 nn_training = []
 x_axis = range(0, 2000, 100)
+
 for M in x_axis:
 
     var1 = circuit_evals_variational(
-        n_data=M, n_params=M, n_steps=M,  evals_per_derivative=2, split=0.75, batch_size=1
+        n_data=M, n_params=M, n_steps=M,  shift_terms=2, split=0.75, batch_size=1
     )
     variational_training1.append(var1)
 
     var2 = circuit_evals_variational(
-        n_data=M, n_params=round(np.sqrt(M)), n_steps=M,  evals_per_derivative=2, split=0.75, batch_size=1
+        n_data=M, n_params=round(np.sqrt(M)), n_steps=M,  shift_terms=2, split=0.75, batch_size=1
     )
     variational_training2.append(var2)
     
@@ -605,14 +625,15 @@ plt.show()
 
 
 ######################################################################
-# Under the assumptions made, the relation between kernel-based 
-# and variational quantum machine learning depends on how many parameters the latter need: 
+# This is the plot we saw at the beginning. Under the assumptions made, 
+# one can see that the relation between kernel-based 
+# and variational quantum machine learning depends on how many parameters the latter needs: 
 # If variational circuits turn out to be as parameter-hungry as neural networks,
 # kernel-based training will consistently outperform it. 
-# However, if we find ways to train variational circuits with few parameters,
+# However, if we find ways to train variational circuits with fewer parameters,
 # they can use this as a means to catch up with the good scaling neural networks draw from backpropagation.   
 #
-# What we learn from this demo is that unless your variational circuit has much fewer 
+# What we learn from this demo is that unless your variational circuit has many fewer 
 # parameters than training data, kernel methods could be a much faster alternative!
 #
 # Finally, it is important to note that fault-tolerant quantum computers may change the picture significantly. 
