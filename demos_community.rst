@@ -59,6 +59,24 @@ Community
    All fields, including the description can contain arbitrary HTML.
 
 .. community-card::
+    :title: Layerwise learning for quantum neural networks
+    :author: Felipe Oyarce Andrade
+    :date: 26/01/2021
+    :code: https://github.com/felipeoyarce/layerwise-learning
+    :color: heavy-rain-gradient
+
+    In this project we’ve implemented a strategy presented by <a
+    href="https://arxiv.org/abs/2006.14904" target="_blank">Skolik et al., 2020</a> for
+    effectively training quantum neural networks. In layerwise learning the
+    strategy is to gradually increase the number of parameters by adding a few
+    layers and training them while freezing the parameters of previous layers
+    already trained.  An easy way for understanding this technique is to think
+    that we’re dividing the problem into smaller circuits to successfully avoid
+    falling into Barren Plateaus. We provide a proof-of-concept
+    implementation of this technique in Pennylane’s Pytorch interface for binary
+    classification in the MNIST dataset.
+
+.. community-card::
     :title: A Quantum-Enhanced Transformer
     :author: Riccardo Di Sipio
     :date: 20/01/2021
@@ -71,6 +89,9 @@ Community
     multi-headed attention. In the quantum-enhanced version, dense layers are
     replaced by simple Variational Quantum Circuits. An implementation based on
     PennyLane and TensorFlow-2.x illustrates the basic concept.
+
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
 
 .. community-card::
     :title: A Quantum-Enhanced LSTM Layer
@@ -87,9 +108,6 @@ Community
     and its PyTorch interface, one can easily define a LSTM network where
     Variational Quantum Circuits (VQCs) replace linear operations. An
     application to Part-of-Speech tagging is presented in this tutorial.
-
-:html:`</div></div><br><div style='clear:both'>`
-:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Quantum Machine Learning Model Predictor for Continuous Variables
@@ -110,6 +128,9 @@ Community
     one-dimensional feature and one output (so that the processing does not take
     too much time), the algorithm showed reliable results.
 
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
 .. community-card::
     :title: Trainable Quanvolutional Neural Networks
     :author: Denny Mattern, Darya Martyniuk, Fabian Bergmann, and Henri Willems
@@ -124,9 +145,6 @@ Community
     Neural Networks</a> demo by Andrea Mari. This demo results from our research
     as part of the <a href="https://www.planqk.de">PlanQK consortium</a>.
 
-:html:`</div></div><br><div style='clear:both'>`
-:html:`<div class="card-deck">`
-
 .. community-card::
     :title: Using a Keras optimizer for Iris classification with a QNode and loss function
     :author: Hemant Gahankari
@@ -138,6 +156,9 @@ Community
     quantum function using a Keras optimizer directly, i.e., not using a Keras
     layer. The objective is to train a quantum function to predict classes of
     the Iris dataset.
+
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Linear regression using angle embedding and a single qubit
@@ -152,8 +173,6 @@ Community
     Fahrenheit. The objective is to train a neural network that predicts
     Fahrenheit values given Centigrade values.
 
-:html:`</div></div><br><div style='clear:both'>`
-:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Amplitude embedding in Iris classification with PennyLane's KerasLayer
@@ -167,6 +186,9 @@ Community
     data. It also shows how to create a PennyLane KerasLayer from a QNode, train it
     and check the performance of the model.
 
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
 .. community-card::
     :title: Angle embedding in Iris classification with PennyLane's KerasLayer
     :author: Hemant Gahankari
@@ -179,8 +201,6 @@ Community
     quantum data. It also shows how to create a PennyLane KerasLayer from a
     QNode, train it and check the performance of the model.
 
-:html:`</div></div><br><div style='clear:both'>`
-:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Characterizing the loss landscape of variational quantum circuits
@@ -194,24 +214,6 @@ Community
     function of VQCs and show how to characterize the loss landscape with it. We
     show how the Hessian can be used to escape flat regions of the loss
     landscape.
-
-.. community-card::
-    :title: Layerwise learning for quantum neural networks
-    :author: Felipe Oyarce Andrade
-    :date: 26/01/2021
-    :code: https://github.com/felipeoyarce/layerwise-learning
-    :color: heavy-rain-gradient
-
-    In this project we’ve implemented a strategy presented by <a
-    href="https://arxiv.org/abs/2006.14904" target="_blank">Skolik et al., 2020</a> for
-    effectively training quantum neural networks. In layerwise learning the
-    strategy is to gradually increase the number of parameters by adding a few
-    layers and training them while freezing the parameters of previous layers
-    already trained.  An easy way for understanding this technique is to think
-    that we’re dividing the problem into smaller circuits to successfully avoid
-    falling into Barren Plateaus. We provide a proof-of-concept
-    implementation of this technique in Pennylane’s Pytorch interface for binary
-    classification in the MNIST dataset.
 
 
 .. If the final card deck only has a single card, we insert a 'hidden card'
