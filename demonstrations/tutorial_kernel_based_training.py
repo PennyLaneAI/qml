@@ -1,5 +1,5 @@
 """
-.. _kernel_based:
+.. _kernel_based_training:
 
 .. role:: html(raw)
    :format: html
@@ -7,46 +7,41 @@
 Kernel-based training with scikit-learn
 =======================================
 
-"""
+.. meta:: 
+    :property=“og:description”: Kernel-based training with scikit-learn. 
+    :property=“og:image”: https://pennylane.ai/qml/_images/kernel_based_scaling.png
 
+.. related::
 
-######################################################################
-# .. meta:: 
-#    :property=“og:description”: Kernel-based training with scikit-learn. 
-#    :property=“og:image”: https://pennylane.ai/qml/_images/kernel_based_scaling.png
-#
-# .. related::
-#
-#     tutorial_variational_classifier Variational classifier
+    tutorial_variational_classifier Variational classifier
     
-# This demonstration illustrates how one can train quantum machine
-# learning models with a kernel-based approach instead of the usual
-# `variational
-# approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__.
-# The theoretical background has been established in many papers in the literature 
-# such as `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__, 
-# `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, 
-# `Liu (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
-# and has been summarised in the overview Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
-#
-# As an example of kernel-based training we use a combination of PennyLane
-# and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
-# learning library to show how a support vector machine can be combined
-# with a quantum kernel. We then compare this strategy with a variational
-# quantum circuit trained via stochastic gradient descent and using
-# PyTorch.
-#
-# The goal of the demo is to estimate the circuit evaluations needed in
-# both approaches. We will see that while kernel-based training has a much
-# worse scaling for big data sets, in the small-data regime of near-term
-# quantum computing it is much more efficient than variational training,
-# but becomes prohibitive for bigger datasets.
-#
-# .. figure::  ../demonstrations/kernel_based_training/scaling.png 
-#     :scale: 65%
-#     :alt: scaling
-#
+This demonstration illustrates how one can train quantum machine
+learning models with a kernel-based approach instead of the usual
+`variational
+approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__.
+The theoretical background has been established in many papers in the literature 
+such as `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__, 
+`Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, 
+`Liu (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
+and has been summarised in the overview Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
 
+As an example of kernel-based training we use a combination of PennyLane
+and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
+learning library to show how a support vector machine can be combined
+with a quantum kernel. We then compare this strategy with a variational
+quantum circuit trained via stochastic gradient descent and using
+PyTorch.
+
+The goal of the demo is to estimate the circuit evaluations needed in
+both approaches. We will see that while kernel-based training has a much
+worse scaling for big data sets, in the small-data regime of near-term
+quantum computing it is much more efficient than variational training,
+but becomes prohibitive for bigger datasets.
+
+.. figure::  ../demonstrations/kernel_based_training/scaling.png 
+    :scale: 65%
+    :alt: scaling
+"""
 
 ######################################################################
 # Background
