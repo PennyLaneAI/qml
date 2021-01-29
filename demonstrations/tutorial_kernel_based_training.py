@@ -32,13 +32,12 @@ quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
 The goal of the demo is to estimate the circuit evaluations needed in
-both approaches. We will see that while kernel-based training has a much
-worse overall scaling, in the small-data regime of near-term
-quantum computing it is considerably more efficient than variational training. 
+both approaches. We will see that while kernel-based training famously scales much worse than 
+neural networks, is has a better scaling than variational circuits!  
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
-       :scale: 60%
+       :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
        
 """
@@ -446,7 +445,7 @@ dev_var.num_executions
 #
 
 
-def circuit_evals_variational(n_data, n_params, evals_per_derivative, split, n_steps, batch_size):
+def circuit_evals_variational(n_data, n_params, n_steps, evals_per_derivative, split,  batch_size):
     """
     Compute how many circuit evaluations are needed for variational training.
     """
@@ -454,7 +453,7 @@ def circuit_evals_variational(n_data, n_params, evals_per_derivative, split, n_s
     M = int(np.ceil(0.75 * n_data))
     Mpred = n_data - M
 
-    n_training = n_params * steps * batch_size * evals_per_derivative
+    n_training = n_params * n_steps * batch_size * evals_per_derivative
     n_prediction = Mpred
 
     return n_training + n_prediction
@@ -463,59 +462,138 @@ def circuit_evals_variational(n_data, n_params, evals_per_derivative, split, n_s
 circuit_evals_variational(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
+    n_steps=steps,
     evals_per_derivative=2,
     split=len(X_train) / len(X_test),
-    n_steps=steps,
     batch_size=batch_size,
 )
 
 
 ######################################################################
-# Which method scales better?
-# ==========================
+# It is important to note that while they are trained in a similar manner, 
+# the number of variational circuit evaluations differs from the number of 
+# neural network model evaluations in classical machine learning, which would be given by:
+#
+
+def model_evals_nn(n_data, n_params, n_steps, split,  batch_size):
+    """
+    Compute how many model evaluations are needed for neural network training.
+    """
+
+    M = int(np.ceil(0.75 * n_data))
+    Mpred = n_data - M
+
+    n_training = n_steps * batch_size
+    n_prediction = Mpred
+
+    return n_training + n_prediction
+    
+######################################################################
+# In each step of neural network training and due to the power of automatic differentiation, 
+# the backpropagation algorithm can compute a 
+# gradient for all parameters in (more-or-less) a single run. 
+# For all we know as of now, the no-cloning principle prevents variational circuits to use these tricks, 
+# which leads to `n_training` in `circuit_evals_variational` depend on the number of parameters, but not in 
+# `model_evals_nn`. 
+#
+# For the same example as used here, a neural network would therefore 
+# have much fewer model evaluations:
+#
+
+model_evals_nn(
+    n_data=len(X),
+    n_params=len(trained_params.flatten()),
+    n_steps=steps,
+    split=len(X_train) / len(X_test),
+    batch_size=batch_size,
+)
+   
+
+######################################################################
+# Which method scales best?
+# =========================
 #
 
 
 ######################################################################
-# In this small example, the kernel-based training trumps variational
+# In the example above, kernel-based training trumps variational
 # training in the number of circuit evaluations. But how does the overall scaling
-# look like? Let us make the assumption that the number of steps and the
-# number of parameters in variational circuit training grows linearly with
-# the size of the data set, and choose sensible defaults for all other
-# setting. This is what we get:
+# look like? 
+#
+# Of course, the answer to this question depends on how the variational model 
+# is set up, and we need to make a few assumptions: 
+#
+# 1. Even if we use single-batch stochastic gradient descent, in which every training step uses 
+#    exactly one training sample, we would want to see every training sample at least once on average. 
+#    Therefore, the **number of steps should scale linearly with the number of training data**. 
+#
+# 2. Modern neural networks often have many more parameters than training
+#    samples. But we do not know yet whether variational circuits really need that many parameters as well.
+#    We will therefore use two cases for comparison: 
+#
+#         a) the number of parameters grows linearly with the training data, or `n_params = M`, 
+#
+#         b) the number of parameters grows as the square root with the training data, or `n_params = np.sqrt(M)` 
+#
+# Note that compared to the example above with 112 training samples and 18 parameters, a) overestimates the scaling, while b) 
+# underestimates it.
 #
 
-variational_training = []
+
+######################################################################
+# This is how the three methods compare:
+#
+
+variational_training1 = []
+variational_training2 = []
 kernelbased_training = []
-x_axis = range(0, 10000, 100)
+nn_training = []
+x_axis = range(0, 2000, 100)
 for M in x_axis:
 
-    var = circuit_evals_variational(
-        n_data=M, n_params=M, evals_per_derivative=2, split=0.75, n_steps=M, batch_size=20
+    var1 = circuit_evals_variational(
+        n_data=M, n_params=M, n_steps=M,  evals_per_derivative=2, split=0.75, batch_size=1
     )
-    variational_training.append(var)
+    variational_training1.append(var1)
 
+    var2 = circuit_evals_variational(
+        n_data=M, n_params=round(np.sqrt(M)), n_steps=M,  evals_per_derivative=2, split=0.75, batch_size=1
+    )
+    variational_training2.append(var2)
+    
     kernel = circuit_evals_kernel(n_data=M, split=0.75)
     kernelbased_training.append(kernel)
+    
+    nn = model_evals_nn(
+        n_data=M, n_params=M, n_steps=M, split=0.75, batch_size=1
+    )
+    nn_training.append(nn)
 
 
-plt.plot(x_axis, variational_training, label="variational QML")
-plt.plot(x_axis, kernelbased_training, label="kernel-based QML")
+plt.plot(x_axis, nn_training, linestyle='--', label="neural net")
+plt.plot(x_axis, variational_training1, label="var. circuit (linear param scaling)")
+plt.plot(x_axis, variational_training2, label="var. circuit (srqt param scaling)")
+plt.plot(x_axis, kernelbased_training, label="(quantum) kernel")
 plt.xlabel("size of data set")
-plt.ylabel("number of circuit evaluations")
+plt.ylabel("number of evaluations")
 plt.legend()
+plt.tight_layout()
 plt.show()
 
 
+
 ######################################################################
-# Under the assumptions made, we can see that for data sets up to about
-# :math:`4000` samples, kernel-based training uses *fewer* circuit
-# evaluations to variational training. Only then the quadratic scaling of
-# kernel methods takes over.
+# Under the assumptions made, the relation between kernel-based 
+# and variational quantum machine learning depends on how many parameters the latter need: 
+# If variational circuits turn out to be as parameter-hungry as neural networks,
+# kernel-based training will consistently outperform it. 
+# However, if we find ways to train variational circuits with few parameters,
+# they can catch up with the good scaling neural networks get from backpropagation.   
 #
+# However, fault-tolerant quantum computers may change the picture significantly. 
 # As mentioned in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__, 
 # early results from the quantum machine learning literature show that
-# larger fault-tolerant quantum computers enable us in principle to reduce
-# the quadratic scaling to linear scaling, which may make kernel methods a
+# larger quantum computers enable us in principle to reduce
+# the quadratic scaling of kernel methods to linear scaling, which may make kernel methods a
 # serious alternative to neural networks for big data processing one day.
 #
