@@ -94,7 +94,7 @@ the toolbox of quantum machine learning.
 # embedding.
 #
 # More precisely, we can replace variational training with kernel-based training if the optimisation
-# problem can be written as minimising a cost of the form
+# problem can be written as minimizing a cost of the form
 # 
 # .. math::  \min_f  \lambda \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
 #
