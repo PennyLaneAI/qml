@@ -10,6 +10,8 @@ Turning quantum nodes into Torch Layers
 
    tutorial_qnn_module_tf Turning quantum nodes into Keras Layers
 
+*Author: PennyLane dev team. Posted: 2 Nov 2020.*
+
 Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 `nn module <https://pytorch.org/docs/stable/nn.html>`__. Models are constructed from elementary
 *layers* and can be trained using the PyTorch API. For example, the following code defines a

@@ -9,6 +9,8 @@ Quantum transfer learning
         classifier using transfer learning.
     :property="og:image": https://pennylane.ai/qml/_images/transfer_images.png
 
+*Author: PennyLane dev team. Last updated: 26 Oct 2020.*
+
 In this tutorial we apply a machine learning method, known as *transfer learning*, to an
 image classifier based on a hybrid classical-quantum network.
 

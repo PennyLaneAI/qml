@@ -6,13 +6,15 @@ Optimizing noisy circuits with Cirq
     :property="og:description": Learn how noise can affect the optimization and training of quantum computations.
     :property="og:image": https://pennylane.ai/qml/_images/noisy_circuit_optimization_thumbnail.png
 
-.. figure:: ../demonstrations/noisy_circuit_optimization/noisy_qubit.png
-    :align: center
-    :width: 90%
-
 .. related::
 
    pytorch_noise PyTorch and noisy devices
+
+*Author: PennyLane dev team. Posted: 1 June 2020.  Last updated: 26 Jan 2021.*
+
+.. figure:: ../demonstrations/noisy_circuit_optimization/noisy_qubit.png
+    :align: center
+    :width: 90%
 
 Until we have fault-tolerant quantum computers, 
 we will have to learn to live with noise. There are lots of exciting 
@@ -324,10 +326,10 @@ for i in range(steps):
     noisy_circuit_params = opt.step(noisy_cost, noisy_circuit_params)
 
     if (i + 1) % 5 == 0:
-        print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}"
-              .format(i + 1, 
-                      cost(params), 
-                      noisy_cost(noisy_circuit_params)))
+        print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}".
+              format(i + 1,
+                     cost(params),
+                     noisy_cost(noisy_circuit_params)))
 
 print("\nOptimized rotation angles (noise-free case):")
 print("({: .7f}, {: .7f})".format(*params))

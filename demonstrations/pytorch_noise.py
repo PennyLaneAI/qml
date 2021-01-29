@@ -13,6 +13,8 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
+*Author: PennyLane dev team. Last updated: 1 Mar 2020.*
+
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
 We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm`` device, to

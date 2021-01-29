@@ -15,6 +15,8 @@ Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
    tutorial_state_preparation Training a quantum circuit with PyTorch
 
+*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+
 To see how PennyLane allows the easy construction and optimization of quantum functions, let's
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
 example.

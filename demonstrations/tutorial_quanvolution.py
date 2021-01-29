@@ -9,7 +9,7 @@ Quanvolutional Neural Networks
         to classify MNIST images.
     :property="og:image": https://pennylane.ai/qml/_images/circuit.png
 
-*Author: Andrea Mari*
+*Author: Andrea Mari. Last updated: 15 Jan 2021.*
 
 In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
@@ -120,8 +120,8 @@ train_images = train_images / 255
 test_images = test_images / 255
 
 # Add extra dimension for convolution channels
-train_images = train_images[..., tf.newaxis]
-test_images = test_images[..., tf.newaxis]
+train_images = np.array(train_images[..., tf.newaxis], requires_grad=False)
+test_images = np.array(test_images[..., tf.newaxis], requires_grad=False)
 
 
 ##############################################################################
@@ -146,7 +146,7 @@ dev = qml.device("default.qubit", wires=4)
 rand_params = np.random.uniform(high=2 * np.pi, size=(n_layers, 4))
 
 @qml.qnode(dev)
-def circuit(phi=None):
+def circuit(phi):
     # Encoding of 4 classical input values
     for j in range(4):
         qml.RY(np.pi * phi[j], wires=j)
@@ -183,7 +183,7 @@ def quanv(image):
         for k in range(0, 28, 2):
             # Process a squared 2x2 region of the image with a quantum circuit
             q_results = circuit(
-                phi=[
+                [
                     image[j, k, 0],
                     image[j, k + 1, 0],
                     image[j + 1, k, 0],

@@ -10,12 +10,16 @@ Turning quantum nodes into Keras Layers
 
    tutorial_qnn_module_torch Turning quantum nodes into Torch Layers
 
+*Author: PennyLane dev team. Posted: 2 Nov 2020.*
+
 Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
 elementary *layers* and can be trained using a high-level API. For example, the following code
 defines a two-layer network that could be used for binary classification:
 """
 
 import tensorflow as tf
+
+tf.keras.backend.set_floatx('float64')
 
 layer_1 = tf.keras.layers.Dense(2)
 layer_2 = tf.keras.layers.Dense(2, activation="softmax")
@@ -155,8 +159,6 @@ model.compile(opt, loss="mae", metrics=["accuracy"])
 #
 # The model is now ready to be trained!
 
-X = X.astype("float32")
-y_hot = y_hot.astype("float32")
 fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
 ###############################################################################

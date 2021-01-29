@@ -18,6 +18,8 @@ Variational classifier
    tutorial_multiclass_classification Multiclass margin classifier
    tutorial_ensemble_multi_qpu Ensemble classification
 
+*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
 data to classify new data samples. The architecture is inspired by
@@ -112,7 +114,7 @@ def statepreparation(x):
 
 
 @qml.qnode(dev)
-def circuit(weights, x=None):
+def circuit(weights, x):
 
     statepreparation(x)
 
@@ -135,10 +137,10 @@ def circuit(weights, x=None):
 # variables for easy use in the quantum node.
 
 
-def variational_classifier(var, x=None):
+def variational_classifier(var, x):
     weights = var[0]
     bias = var[1]
-    return circuit(weights, x=x) + bias
+    return circuit(weights, x) + bias
 
 
 ##############################################################################
@@ -181,7 +183,7 @@ def accuracy(labels, predictions):
 
 
 def cost(var, X, Y):
-    predictions = [variational_classifier(var, x=x) for x in X]
+    predictions = [variational_classifier(var, x) for x in X]
     return square_loss(Y, predictions)
 
 
@@ -199,8 +201,8 @@ def cost(var, X, Y):
 #     should be placed in the subfolder ``variational_classifer/data``.
 
 data = np.loadtxt("variational_classifier/data/parity.txt")
-X = data[:, :-1]
-Y = data[:, -1]
+X = np.array(data[:, :-1], requires_grad=False)
+Y = np.array(data[:, -1], requires_grad=False)
 Y = Y * 2 - np.ones(len(Y))  # shift label from {0, 1} to {-1, 1}
 
 for i in range(5):
@@ -242,7 +244,7 @@ for it in range(25):
     var = opt.step(lambda v: cost(v, X_batch, Y_batch), var)
 
     # Compute accuracy
-    predictions = [np.sign(variational_classifier(var, x=x)) for x in X]
+    predictions = [np.sign(variational_classifier(var, x)) for x in X]
     acc = accuracy(Y, predictions)
 
     print(
@@ -312,19 +314,19 @@ def statepreparation(a):
 ##############################################################################
 # Let’s test if this routine actually works.
 
-x = np.array([0.53896774, 0.79503606, 0.27826503, 0.0])
+x = np.array([0.53896774, 0.79503606, 0.27826503, 0.0], requires_grad=False)
 ang = get_angles(x)
 
 
 @qml.qnode(dev)
-def test(angles=None):
+def test(angles):
 
     statepreparation(angles)
 
     return qml.expval(qml.PauliZ(0))
 
 
-test(angles=ang)
+test(ang)
 
 print("x               : ", x)
 print("angles          : ", ang)
@@ -354,7 +356,7 @@ def layer(W):
 
 
 @qml.qnode(dev)
-def circuit(weights, angles=None):
+def circuit(weights, angles):
     statepreparation(angles)
 
     for W in weights:
@@ -363,14 +365,14 @@ def circuit(weights, angles=None):
     return qml.expval(qml.PauliZ(0))
 
 
-def variational_classifier(var, angles=None):
+def variational_classifier(var, angles):
     weights = var[0]
     bias = var[1]
-    return circuit(weights, angles=angles) + bias
+    return circuit(weights, angles) + bias
 
 
 def cost(weights, features, labels):
-    predictions = [variational_classifier(weights, angles=f) for f in features]
+    predictions = [variational_classifier(weights, f) for f in features]
     return square_loss(labels, predictions)
 
 
@@ -496,8 +498,8 @@ for it in range(60):
     var = opt.step(lambda v: cost(v, feats_train_batch, Y_train_batch), var)
 
     # Compute predictions on train and validation set
-    predictions_train = [np.sign(variational_classifier(var, angles=f)) for f in feats_train]
-    predictions_val = [np.sign(variational_classifier(var, angles=f)) for f in feats_val]
+    predictions_train = [np.sign(variational_classifier(var, f)) for f in feats_train]
+    predictions_val = [np.sign(variational_classifier(var, f)) for f in feats_val]
 
     # Compute accuracy on train and validation set
     acc_train = accuracy(Y_train, predictions_train)
@@ -528,7 +530,7 @@ X_grid = (X_grid.T / normalization).T  # normalize each input
 features_grid = np.array(
     [get_angles(x) for x in X_grid]
 )  # angles for state preparation are new features
-predictions_grid = [variational_classifier(var, angles=f) for f in features_grid]
+predictions_grid = [variational_classifier(var, f) for f in features_grid]
 Z = np.reshape(predictions_grid, xx.shape)
 
 # plot decision regions
