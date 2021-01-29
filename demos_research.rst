@@ -115,7 +115,8 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. customgalleryitem::
     :tooltip: Kernel-based training with scikit-learn
     :figure: demonstrations/kernel_based_training/scaling.png
-    :description: :doc:`demos/kernel_based_training`
+    :description: :doc:`demos/tutorial_kernel_based_training`
+    :tags: pytorch sklearn kernels
 
 :html:`</div></div><div style='clear:both'>`
 

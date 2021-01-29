@@ -6,16 +6,23 @@ Kernel-based training with scikit-learn
 
 
 ######################################################################
-# .. meta:: :property=“og:description”: Kernel-based training with
-# scikit-learn. :property=“og:image”:
-# https://pennylane.ai/qml/_images/kernel_based_scaling.png
+# .. meta:: 
+#    :property=“og:description”: Kernel-based training with scikit-learn. 
+#    :property=“og:image”: https://pennylane.ai/qml/_images/kernel_based_scaling.png
 #
+# .. related::
+#
+#     tutorial_variational_classifier Variational classifier
+    
 # This demonstration illustrates how one can train quantum machine
 # learning models with a kernel-based approach instead of the usual
 # `variational
 # approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__.
-# The theoretical background is explained in `Schuld
-# (2021) <https://arxiv.org/abs/2101.11020>`__.
+# The theoretical background has been established in many papers in the literature 
+# such as `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__, 
+# `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, 
+# `Liu (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
+# and has been summarised in the overview Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
 #
 # As an example of kernel-based training we use a combination of PennyLane
 # and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
@@ -30,8 +37,9 @@ Kernel-based training with scikit-learn
 # quantum computing it is much more efficient than variational training,
 # but becomes prohibitive for bigger datasets.
 #
-# .. figure:: ../demonstrations/kernel_based_training/scaling.png :scale: 65%
-# :alt: scaling
+# .. figure::  ../demonstrations/kernel_based_training/scaling.png 
+#     :scale: 65%
+#     :alt: scaling
 #
 
 
@@ -39,13 +47,14 @@ Kernel-based training with scikit-learn
 # Background
 # ==========
 #
-# The paper states that instead of training a quantum machine learning
+# The main practical consequence of approaching quantum machine learning with a 
+# kernel approach is that instead of training a quantum machine learning
 # model of the form
 #
 # .. math:: f(x) = \langle \phi(x) | \mathcal{M} | \phi(x)\rangle
 #
 # we can often train a classical kernel method with a kernel executed on a
-# quantum device and get the same or better results. The “quantum” kernel
+# quantum device. The “quantum” kernel
 # is given by the mutual overlap of two data-encoding quantum states,
 #
 # .. math::  \kappa(x, x') = | \langle \phi(x') | \phi(x)\rangle|^2.
@@ -58,24 +67,23 @@ Kernel-based training with scikit-learn
 # quantum circuit. If the circuit is trainable, the measurement becomes
 # trainable. For example, applying a circuit :math:`B(\theta)` and then
 # measuring the PauliZ observable :math:`\sigma^0_z` of the first qubit
-# implements the measurement
+# implements the effective measurement observable
 # :math:`\mathcal{M}(\theta) = B^{\dagger}(\theta) \sigma^0_z B(\theta)`.
 #
-# .. figure:: ../demonstrations/kernel_based_training/quantum_model.png :scale: 65%
-# :alt: quantum-model
+# .. figure:: ../demonstrations/kernel_based_training/quantum_model.png 
+#      :scale: 65%
+#      :alt: quantum-model
 #
-# Kernel-based training therefore “by-passes” the variational part and
+# Kernel-based training therefore by-passes the variational part and
 # measurement of common variational circuits, and only depends on the
 # embedding.
 #
 # .. note::
 #
-# ::
-#
 #    More precisely, we can replace variational training with kernel-based training if the optimisation
 #    problem can be written as minimising a cost of the form
-#    $$ f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), $$
-#    which is a regularised empirical risk of training data samples $(x^m, y^m)_{m=1\dots M}$ and loss function $L$.
+#    .. math:: f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
+#    which is a regularised empirical risk of training data samples :math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
 #
 # If the loss function in training is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__ the kernel method
@@ -86,15 +94,13 @@ Kernel-based training with scikit-learn
 #
 # .. note::
 #
-# ::
-#
 #    Theory predicts that kernel-based training will always find better or equally good
-#    models $f_{\rm trained}$ for the optimisation problem stated above. However, to show this here we would have
-#    to either regularise the variational training by a term $\mathrm{tr}\{\mathcal{M^2\}$, or switch off
-#    regularisation in the classical SVM, which defies the strengths of SVMs in the first place.
+#    models :math:`f_{\rm trained}` for the optimisation problem stated above. However, to show this here we would have
+#    to either regularise the variational training by a term :math:`\mathrm{tr}\{\mathcal{M^2\}`, or switch off
+#    regularisation in the classical SVM, which denies the SVM a lot of its strength.
 #
-#    The kernel-based and variational training in this demo therefore optimise slightly different cost
-#    functions, and it is out of its scope to establish whether one training method finds better minimum than
+#    The kernel-based and variational training in this demonstration therefore optimize slightly different cost
+#    functions, and it is out of our scope to establish whether one training method finds better minimum than
 #    the other.
 #
 
@@ -163,8 +169,9 @@ n_qubits = len(X_train[0])
 # using :math:`x'` on the same qubits. We then measure the projector onto
 # the initial state :math:`|0\rangle \langle 0|`.
 #
-# .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png :scale:
-# 65% :alt: circuit
+# .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png 
+#     :scale: 65% 
+#     :alt: circuit
 #
 # To verify that this gives us the kernel:
 #
@@ -228,8 +235,6 @@ def kernel_matrix(A, B):
 svm = SVC(kernel=kernel_matrix)
 svm.fit(X_train, y_train)
 
-dev_kernel.num_executions
-
 
 ######################################################################
 # Let’s compute the accuracy on the test set.
@@ -250,7 +255,7 @@ dev_kernel.num_executions
 # This number can be derived as follows: For :math:`M` training samples,
 # the SVM must construct the :math:`M \times M` dimensional kernel gram
 # matrix for training. To classify :math:`M_{\rm pred}` new samples, the
-# SVM needs to evaluate the kernel :math:`M_{\rm pred}M` times to get the
+# SVM needs to evaluate the kernel at most :math:`M_{\rm pred}M` times to get the
 # pairwise distances between training vectors and test samples.
 #
 # Overall, the number of kernel evaluations of the above script should
@@ -433,13 +438,13 @@ dev_var.num_executions
 # evaluations per partial derivative. Prediction uses only one circuit
 # evaluation per sample.
 #
-# We get:
+# We roughly get:
 #
 
 
 def circuit_evals_variational(n_data, n_params, evals_per_derivative, split, n_steps, batch_size):
     """
-    Compute how many circuit evaluations one needs for variational training.
+    Compute how many circuit evaluations are needed for variational training.
     """
 
     M = int(np.ceil(0.75 * n_data))
@@ -462,15 +467,15 @@ circuit_evals_variational(
 
 
 ######################################################################
-# Which method costs less circuit evaluations?
-# ============================================
+# Which method sales better?
+# ==========================
 #
 
 
 ######################################################################
 # In this small example, the kernel-based training trumps variational
-# training in the number of evaluations. But how does the larger scaling
-# look like? Let us assume a scaling where the number of steps and the
+# training in the number of circuit evaluations. But how does the overall scaling
+# look like? Let us make the assumption that the number of steps and the
 # number of parameters in variational circuit training grows linearly with
 # the size of the data set, and choose sensible defaults for all other
 # setting. This is what we get:
@@ -499,13 +504,14 @@ plt.show()
 
 
 ######################################################################
-# With these settings, we can see that for data sets up to about
+# Under the assumptions made, we can see that for data sets up to about
 # :math:`4000` samples, kernel-based training uses *fewer* circuit
 # evaluations to variational training. Only then the quadratic scaling of
 # kernel methods takes over.
 #
-# As mentioned in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__,
-# larger fault-tolerant quantum computers enable us in princple to reduce
+# As mentioned in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__, 
+# early results from the quantum machine learning literature show that
+# larger fault-tolerant quantum computers enable us in principle to reduce
 # the quadratic scaling to linear scaling, which may make kernel methods a
 # serious alternative to neural networks for big data processing one day.
 #
