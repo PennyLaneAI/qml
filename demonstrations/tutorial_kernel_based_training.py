@@ -15,6 +15,8 @@ Kernel-based training with scikit-learn
 
     tutorial_variational_classifier Variational classifier
     
+*Author: PennyLane dev team. Posted: XX Feb 2021. Last updated: XX Feb 2021.*
+
 This demonstration illustrates how one can train quantum machine
 learning models with a kernel-based approach instead of the usual
 `variational
