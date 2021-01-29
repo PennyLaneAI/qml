@@ -84,7 +84,7 @@ the toolbox of quantum machine learning.
 # The main practical consequence of approaching quantum machine learning with a 
 # kernel approach is that instead of training :math:`f` variationally,
 # we can often train an equivalent classical kernel method with a kernel executed on a
-# quantum device. This “quantum kernel"
+# quantum device. This *quantum kernel*
 # is given by the mutual overlap of two data-encoding quantum states,
 #
 # .. math::  \kappa(x, x') = | \langle \phi(x') | \phi(x)\rangle|^2.
