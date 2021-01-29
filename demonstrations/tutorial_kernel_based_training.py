@@ -1,4 +1,9 @@
 """
+.. _kernel_based:
+
+.. role:: html(raw)
+   :format: html
+
 Kernel-based training with scikit-learn
 =======================================
 
