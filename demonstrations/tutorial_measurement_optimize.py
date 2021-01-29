@@ -765,6 +765,8 @@ print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
+qml.disable_tape()
+
 ##############################################################################
 # We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*
 # down to *five hundred* 😱😱😱).
