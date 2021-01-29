@@ -39,8 +39,10 @@ quantum computing it is much more efficient than variational training,
 but becomes prohibitive for bigger datasets.
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
-    :scale: 20%
-    :alt: Scaling of kernel-based vs variational learning
+       :align: center
+       :scale: 20%
+       :alt: Scaling of kernel-based vs. variational learning
+       
 """
 
 ######################################################################
@@ -71,8 +73,9 @@ but becomes prohibitive for bigger datasets.
 # :math:`\mathcal{M}(\theta) = B^{\dagger}(\theta) \sigma^0_z B(\theta)`.
 #
 # .. figure:: ../demonstrations/kernel_based_training/quantum_model.png 
-#      :scale: 20%
-#      :alt: quantum-model
+#       :align: center
+#       :scale: 20%
+#       :alt: quantum-model
 #
 # Kernel-based training therefore by-passes the variational part and
 # measurement of common variational circuits, and only depends on the
@@ -170,8 +173,9 @@ n_qubits = len(X_train[0])
 # the initial state :math:`|0\rangle \langle 0|`.
 #
 # .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png 
-#     :scale: 100% 
-#     :alt: Kernel circuit
+#       :align: center
+#       :scale: 100% 
+#       :alt: Kernel circuit
 #
 # To verify that this gives us the kernel:
 #
