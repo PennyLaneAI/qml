@@ -369,7 +369,7 @@ def quantum_model_train(n_layers, steps, batch_size):
     """
     Train the quantum model defined above.
     """
-    params = np.random.random((2, n_qubits, 3))
+    params = np.random.random((n_layers, n_qubits, 3))
     params_torch = torch.tensor(params, requires_grad=True)
     bias_torch = torch.tensor(0.0)
 
@@ -431,7 +431,7 @@ def quantum_model_predict(X_pred, trained_params, trained_bias):
 # test set.
 #
 
-n_layers = 1
+n_layers = 2
 batch_size = 20
 steps = 100
 trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
@@ -551,7 +551,7 @@ model_evals_nn(
 #
 #    b) the number of parameters grows as the square root with the training data, or ``n_params = np.sqrt(M)``. 
 #
-# Note that compared to the example above with 75 training samples and 18 parameters, a) overestimates the number of evaluations, while b) 
+# Note that compared to the example above with 75 training samples and 24 parameters, a) overestimates the number of evaluations, while b) 
 # underestimates it.
 #
 
