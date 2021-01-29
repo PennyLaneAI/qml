@@ -91,13 +91,12 @@ the toolbox of quantum machine learning.
 # measurement of common variational circuits, and only depends on the
 # embedding.
 #
-#
 # More precisely, we can replace variational training with kernel-based training if the optimisation
 # problem can be written as minimising a cost of the form
 # 
 # .. math:: f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
 #
-#    which is a regularised empirical risk of training data samples:math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
+# which is a regularised empirical risk of training data samples:math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
 #
 # If the loss function in training is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__, the kernel method
@@ -325,7 +324,7 @@ dev_var = qml.device("default.qubit", wires=n_qubits)
 @qml.qnode(dev_var, interface="torch", diff_method="parameter-shift")
 def quantum_model(x, params):
     """
-    A variational circuit approximation of the quantum model.
+    A variational quantum model.
     """
     # embedding
     AngleEmbedding(x, wires=range(n_qubits))
@@ -449,14 +448,16 @@ dev_var.num_executions
 
 
 ######################################################################
-# Let’s do another calculation: In each optimisation step, the variational
+# That is a lot more than the kernel method took!
+#
+# Let’s try to understand this value. In each optimisation step, the variational
 # circuit needs to compute the partial derivative of all :math:`K`
 # trainable parameters for each sample in a batch. Using `parameter-shift
 # rules <https://pennylane.ai/qml/glossary/parameter_shift.html>`__ we require roughly 2 circuit
 # evaluations per partial derivative. Prediction uses only one circuit
 # evaluation per sample.
 #
-# We roughly get:
+# Besides some implementation details we get roughly:
 #
 
 
@@ -504,7 +505,7 @@ def model_evals_nn(n_data, n_params, n_steps, split,  batch_size):
     return n_training + n_prediction
     
 ######################################################################
-# In each step of neural network training, due to the power of automatic differentiation 
+# In each step of neural network training, due to the power of automatic differentiation, 
 # the backpropagation algorithm can compute a 
 # gradient for all parameters in (more-or-less) a single run. 
 # For all we know at this stage, the no-cloning principle prevents variational circuits to use these tricks, 
@@ -512,7 +513,7 @@ def model_evals_nn(n_data, n_params, n_steps, split,  batch_size):
 # ``model_evals_nn``. 
 #
 # For the same example as used here, a neural network would therefore 
-# have much fewer model evaluations:
+# have much fewer model evaluations thank both variational and kernel-based training:
 #
 
 model_evals_nn(
@@ -531,10 +532,6 @@ model_evals_nn(
 
 
 ######################################################################
-# In the example above, kernel-based training trumps variational
-# training in the number of circuit evaluations. But how does the overall scaling
-# look like? 
-#
 # Of course, the answer to this question depends on how the variational model 
 # is set up, and we need to make a few assumptions: 
 #
@@ -603,7 +600,7 @@ plt.show()
 # If variational circuits turn out to be as parameter-hungry as neural networks,
 # kernel-based training will consistently outperform it. 
 # However, if we find ways to train variational circuits with few parameters,
-# they can catch up with the good scaling neural networks draw from backpropagation.   
+# they can use this as a means to catch up with the good scaling neural networks draw from backpropagation.   
 #
 # However, fault-tolerant quantum computers may change the picture significantly. 
 # As mentioned in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__, 
