@@ -31,12 +31,13 @@ a "quantum kernel". We then compare this strategy with a variational
 quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
-A secondary goal of the demo is to estimate the circuit evaluations needed in
+A secondary goal of the demo is to estimate the number of circuit evaluations needed in
 both approaches. We will see that while kernel-based training famously scales much worse than 
-neural networks, comparing it with variational training depends on how many parameters the variational 
-ansatz requires as the data size grows. If variational circuit scale like neural networks and require 
-many parameters, kernel-based training is a lot more efficient. Only if variational circuits can work with relatively 
-few parameters compared to the training set size, it can outperform the square scaling of kernel-based training.  
+neural networks, the comparison with variational training depends on how many parameters the variational 
+ansatz requires as the data size grows. If variational circuits turn out to be similar to neural nets and grow linearly in size 
+with the data, kernel-based training is much more efficient. 
+If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
+evaluations. 
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
