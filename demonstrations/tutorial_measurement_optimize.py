@@ -110,7 +110,6 @@ import functools
 from pennylane import numpy as np
 import pennylane as qml
 
-qml.enable_tape()
 np.random.seed(42)
 
 H, num_qubits = qml.qchem.molecular_hamiltonian("h2", "h2.xyz")

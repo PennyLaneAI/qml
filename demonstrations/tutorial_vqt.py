@@ -10,7 +10,7 @@ The Variational Quantum Thermalizer
 
     tutorial_vqe Variational quantum eigensolver
     
-*Author: Jack Ceroni. Posted: 7 July 2020. Last updated: 21 Aug 2020.*
+*Author: Jack Ceroni. Posted: 7 July 2020. Last updated: 28 Jan 2021.*
 
 This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the 
 `Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know 
@@ -117,6 +117,7 @@ import networkx as nx
 import seaborn
 import itertools
 
+np.random.seed(42)
 ######################################################################
 # The Heisenberg Hamiltonian is defined as
 #
