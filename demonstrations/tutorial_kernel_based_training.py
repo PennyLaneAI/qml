@@ -38,7 +38,7 @@ both approaches. For the example used here, kernel-based training requires fewer
 quantum circuit evaluations. 
 
 More generally, we will see that the comparison with variational training depends how the number of variational parameters 
-ansatz requires as the data size grows. If variational circuits turn out to be similar to neural nets and grow linearly in size 
+scales with the amount of data. If variational circuits turn out to be similar to neural networks and grow linearly in size 
 with the data, kernel-based training is much more efficient. 
 If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
 evaluations, although never quite competing with classical neural networks. 
