@@ -56,7 +56,7 @@ the toolbox of quantum machine learning.
 # Background
 # ==========
 #
-# Let us consider a "quantum model" of the form
+# Let us consider a *quantum model* of the form
 #
 # .. math:: f(x) = \langle \phi(x) | \mathcal{M} | \phi(x)\rangle,
 #
