@@ -610,10 +610,13 @@ plt.show()
 # However, if we find ways to train variational circuits with few parameters,
 # they can use this as a means to catch up with the good scaling neural networks draw from backpropagation.   
 #
-# However, fault-tolerant quantum computers may change the picture significantly. 
+# What we learn from this demo is that unless your variational circuit has much fewer 
+# parameters than training data, kernel methods could be a much faster alternative!
+#
+# Finally, it is important to note that fault-tolerant quantum computers may change the picture significantly. 
 # As mentioned in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__, 
 # early results from the quantum machine learning literature show that
 # larger quantum computers enable us in principle to reduce
 # the quadratic scaling of kernel methods to linear scaling, which may make kernel methods a
-# serious alternative to neural networks (and of course variational circuits) for big data processing one day.
+# serious alternative to even neural networks for big data processing one day.
 #
