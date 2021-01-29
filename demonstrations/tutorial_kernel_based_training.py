@@ -134,12 +134,14 @@ from pennylane.operation import Tensor
 
 import matplotlib.pyplot as plt
 
+np.random.seed(42)
+
 
 ######################################################################
 # The second step is to make an artificial toy data set.
 #
 
-X, y = make_blobs(n_samples=150, n_features=3, centers=2)
+X, y = make_blobs(n_samples=150, n_features=3, centers=2, cluster_std=0.7)
 
 # scaling the inputs is important since the embedding we use is periodic
 scaler = StandardScaler().fit(X)
@@ -175,7 +177,7 @@ n_qubits = len(X_train[0])
 # .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png 
 #       :align: center
 #       :scale: 100% 
-#       :alt: Kernel circuit
+#       :alt: Kernel evaluation circuit
 #
 # To verify that this gives us the kernel:
 #
