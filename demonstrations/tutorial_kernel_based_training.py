@@ -20,27 +20,25 @@ learning models with a kernel-based approach instead of the usual
 `variational
 approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__.
 The theoretical background has been established in many papers in the literature 
-such as `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__, 
-`Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, 
-`Liu (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
-and has been summarised in the overview Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
+such as `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__,
+`Liu et al. (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
+and has been summarised in the overview `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
 
 As an example of kernel-based training we use a combination of PennyLane
 and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
-learning library to show how a support vector machine can be combined
-with a quantum kernel. We then compare this strategy with a variational
-quantum circuit trained via stochastic gradient descent and using
+learning library to combine a support vector machine with 
+a "quantum kernel". We then compare this strategy with a variational
+quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
 The goal of the demo is to estimate the circuit evaluations needed in
 both approaches. We will see that while kernel-based training has a much
-worse scaling for big data sets, in the small-data regime of near-term
-quantum computing it is much more efficient than variational training,
-but becomes prohibitive for bigger datasets.
+worse overall scaling, in the small-data regime of near-term
+quantum computing it is considerably more efficient than variational training. 
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
-       :scale: 20%
+       :scale: 60%
        :alt: Scaling of kernel-based vs. variational learning
        
 """
@@ -56,12 +54,12 @@ but becomes prohibitive for bigger datasets.
 # .. math:: f(x) = \langle \phi(x) | \mathcal{M} | \phi(x)\rangle
 #
 # we can often train a classical kernel method with a kernel executed on a
-# quantum device. The “quantum” kernel
+# quantum device. This “quantum kernel"
 # is given by the mutual overlap of two data-encoding quantum states,
 #
 # .. math::  \kappa(x, x') = | \langle \phi(x') | \phi(x)\rangle|^2.
 #
-# Here, :math:`| \phi(x)\rangle` is a data-encoding quantum state prepared
+# Here, :math:`| \phi(x)\rangle` is prepared
 # by a fixed `embedding
 # circuit <https://pennylane.readthedocs.io/en/stable/introduction/templates.html#intro-ref-temp-emb>`__,
 # and :math:`\mathcal{M}` an arbitrary observable. The observable can
@@ -85,8 +83,8 @@ but becomes prohibitive for bigger datasets.
 #
 #    More precisely, we can replace variational training with kernel-based training if the optimisation
 #    problem can be written as minimising a cost of the form
-#    .. math:: f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
-#    which is a regularised empirical risk of training data samples :math:`(x^m, y^m)_{m=1\dots M}` and loss function :math:`L`.
+#    $$f_{\rm trained} = \min_f  \lambda \mathrm{tr}\{\mathcal{M^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m),$$ 
+#    which is a regularised empirical risk of training data samples $(x^m, y^m)_{m=1\dots M}$ and loss function $L$.
 #
 # If the loss function in training is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__ the kernel method
@@ -95,11 +93,11 @@ but becomes prohibitive for bigger datasets.
 # in the sense of a maximum-margin classifier. Other convex loss functions
 # lead to more general variations of support vector machines.
 #
-# .. note::
+# .. warning::
 #
 #    Theory predicts that kernel-based training will always find better or equally good
-#    models :math:`f_{\rm trained}` for the optimisation problem stated above. However, to show this here we would have
-#    to either regularise the variational training by a term :math:`\mathrm{tr}\{\mathcal{M^2\}`, or switch off
+#    models $f_{\rm trained}$ for the optimisation problem stated above. However, to show this here we would have
+#    to either regularise the variational training by a term $\mathrm{tr}\{\mathcal{M^2\}$, or switch off
 #    regularisation in the classical SVM, which denies the SVM a lot of its strength.
 #
 #    The kernel-based and variational training in this demonstration therefore optimize slightly different cost
@@ -239,7 +237,7 @@ def kernel_matrix(A, B):
 #
 
 svm = SVC(kernel=kernel_matrix)
-svm.fit(X_train, y_train)
+svm.fit(X_train, y_train);
 
 
 ######################################################################
@@ -274,7 +272,7 @@ def circuit_evals_kernel(n_data, split):
     Compute how many circuit evaluations one needs for kernel-based training.
     """
 
-    M = np.ceil(0.75 * n_data)
+    M = int(np.ceil(0.75 * n_data))
     Mpred = n_data - M
 
     n_training = M * M
@@ -336,7 +334,7 @@ def hinge_loss(predictions, targets):
     """
     all_ones = torch.ones_like(targets)
     hinge_loss = all_ones - predictions * targets
-    # trick: since the max function may not be diffable,
+    # trick: since the max function is not diffable,
     # use the mathematically equivalent relu instead
     hinge_loss = relu(hinge_loss)
     return hinge_loss
@@ -473,7 +471,7 @@ circuit_evals_variational(
 
 
 ######################################################################
-# Which method sales better?
+# Which method scales better?
 # ==========================
 #
 
