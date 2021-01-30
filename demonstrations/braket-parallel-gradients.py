@@ -108,7 +108,6 @@ device_arn = "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
 import pennylane as qml
 from pennylane import numpy as np
 
-qml.enable_tape()  # Unlocks the latest features in PennyLane
 n_wires = 25
 
 dev_remote = qml.device(

@@ -110,7 +110,6 @@ import functools
 from pennylane import numpy as np
 import pennylane as qml
 
-qml.enable_tape()
 np.random.seed(42)
 
 H, num_qubits = qml.qchem.molecular_hamiltonian("h2", "h2.xyz")
@@ -764,6 +763,8 @@ print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 # grouping
 groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
+
+qml.disable_tape()
 
 ##############################################################################
 # We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*

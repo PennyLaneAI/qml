@@ -11,7 +11,7 @@ Variationally optimizing measurement protocols
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Johannes Jakob Meyer. Posted: 18 June 2020. Last updated: 20 Jan 2021.*
+*Author: Johannes Jakob Meyer. Posted: 18 June 2020. Last updated: 28 Jan 2021.*
 
 In this tutorial we use the variational quantum algorithm from
 Ref. [#meyer2020]_ to optimize a quantum
@@ -185,11 +185,11 @@ def experiment(weights, phi, gamma=0.0):
 
 # Make a dry run to be able to draw
 experiment(
-    np.zeros(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
+    np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
     np.zeros(3),
     gamma=0.2,
 )
-print(experiment.draw(show_variable_names=True))
+print(experiment.draw())
 
 
 ##############################################################################

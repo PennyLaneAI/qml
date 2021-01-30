@@ -10,7 +10,7 @@ Alleviating barren plateaus with local cost functions
 
    tutorial_barren_plateaus Barren plateaus in QNNs
 
-*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 27 Nov 2020.*
+*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 28 Jan 2021.*
 
 Barren Plateaus
 ---------------
@@ -64,6 +64,7 @@ from pennylane import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
+np.random.seed(42)
 
 ######################################################################
 # Visualizing the problem
