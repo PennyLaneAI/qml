@@ -5,16 +5,16 @@ The Variational Quantum Thermalizer
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail.png
-    
+
 .. related::
 
     tutorial_vqe Variational quantum eigensolver
-    
+
 *Author: Jack Ceroni. Posted: 7 July 2020. Last updated: 28 Jan 2021.*
 
-This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the 
-`Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know 
-:doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` (VQE) to systems with non-zero temperatures. 
+This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the
+`Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know
+:doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` (VQE) to systems with non-zero temperatures.
 
 """
 
@@ -58,7 +58,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 #     :align: center
 #
 #     Inputted parameters create an initial density matrix and a parametrized
-#     ansatz, which are used to calculate the expectation value of the Hamiltonian 
+#     ansatz, which are used to calculate the expectation value of the Hamiltonian
 #     with respect to a new mixed state.
 #
 # Arguably, the most important part of a variational circuit is its cost
@@ -87,7 +87,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # .. figure:: ../demonstrations/vqt/vqt.png
 #     :width: 80%
 #     :align: center
-#     
+#
 #     A high-level representation of how the VQT works.
 #
 # All together, the outlined processes give us a general protocol to
@@ -263,9 +263,9 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
     for i in range(0, depth):
         single_rotation(rotation_params[i], range(nr_qubits))
         qml.broadcast(
-            unitary=qml.CRX, 
-            pattern="ring", 
-            wires=range(nr_qubits), 
+            unitary=qml.CRX,
+            pattern="ring",
+            wires=range(nr_qubits),
             parameters=coupling_params[i]
         )
 
@@ -513,8 +513,8 @@ def create_target(qubit, beta, ham, graph):
 
 
 target_density_matrix = create_target(
-    nr_qubits, beta, 
-    create_hamiltonian_matrix, 
+    nr_qubits, beta,
+    create_hamiltonian_matrix,
     interaction_graph
     )
 
