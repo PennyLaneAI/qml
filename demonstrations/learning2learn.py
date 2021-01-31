@@ -34,7 +34,7 @@ which leverage quantum circuits with fixed shape but with tunable
 parameters to solve a desired target task. The idea is similar to
 classical neural networks, where the weights of the network are
 optimized during training to perform best in regression or
-classification tasks. Similarly, once the shape of variational quantum
+classification tasks. Similarly, once the shape of the variational quantum
 circuit is chosen — something that is very difficult and sensitive to
 the particular task at hand — its tunable parameters are optimized
 iteratively by minimizing a cost (or loss) function, which measures how
@@ -44,7 +44,7 @@ thorough overview on VQAs).
 A major challenge for VQAs relates to the optimization of tunable
 parameters, which was shown to be a very hard task to perform (a
 possible challenge is posed by the so called *barren plateaus*). In
-particular, parameters initialization plays a key role in this scenario,
+particular, parameter initialization plays a key role in this scenario,
 since initializing the parameters in the proximity of an optimal
 solution leads to faster convergence and better results with respect to
 random initialization, which could bring the model in a region in
@@ -74,17 +74,17 @@ of a Hamiltonian :math:`H` with respect to the parametrized state
     :align: center
     :width: 100%
 
-    Given parameters :math:`\boldsymbol{\theta}_{t-1}` of the variational quantum circuit,
-    the cost function :math:`y_{t-1}`, and the hidden state of the
-    classical network :math:`\boldsymbol{h}_{t-1}` at the previous time step, the
-    classical computer (the Recurrent Neural Network) proposes a new
-    guess for the parameters :math:`\boldsymbol{\theta}_t`, which are
-    then fed into the quantum computer (the QAOA circuit) to evaluate the
-    cost function :math:`y_t`. By repeating this cycle a few times, and
-    by training the weights of the recurrent neural network to minimize
-    the loss function :math:`y_t`, a good initialization heuristic is
-    found for the parameters :math:`\boldsymbol{\theta}` of the variational
-    quantum circuit.
+Given parameters :math:`\boldsymbol{\theta}_{t-1}` of the variational quantum circuit,
+the cost function :math:`y_{t-1}`, and the hidden state of the
+classical network :math:`\boldsymbol{h}_{t-1}` at the previous time step, the
+classical computer (the Recurrent Neural Network) proposes a new
+guess for the parameters :math:`\boldsymbol{\theta}_t`, which are
+then fed into the quantum computer (the QAOA circuit) to evaluate the
+cost function :math:`y_t`. By repeating this cycle a few times, and
+by training the weights of the recurrent neural network to minimize
+the loss function :math:`y_t`, a good initialization heuristic is
+found for the parameters :math:`\boldsymbol{\theta}` of the variational
+quantum circuit.
 
 At a given iteration, the RNN receives as input the previous cost
 function :math:`y_t` evaluated on the quantum computer, where
@@ -205,6 +205,13 @@ print(
 nx.draw(graphs[0])
 
 ######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_Graph0.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
+
+######################################################################
 # Variational Quantum Circuit: QAOA
 # ---------------------------------
 #
@@ -285,6 +292,16 @@ x = tf.Variable([[0.5], [0.5]], dtype=tf.float32)
 # Evaluate th QAOA instance just created with some angles.
 cost(x)
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      <tf.Tensor: shape=(1,), dtype=float64, numpy=array([-3.19326796])>
+#
+
 
 ######################################################################
 # Now we optimize the parameters to reduce the cost function ``cost``. We
@@ -316,6 +333,34 @@ for _ in range(step):
     print(f"Step {_+1} - Loss = {loss}")
 
 print(f"\nFinal cost function: {cost(x).numpy()}\nOptimized angles: {x.numpy()}")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Step 1 - Loss = [-3.19326796]
+#      Step 2 - Loss = [-3.82155533]
+#      Step 3 - Loss = [-4.64066003]
+#      Step 4 - Loss = [-5.35547035]
+#      Step 5 - Loss = [-5.68578276]
+#      Step 6 - Loss = [-5.65524931]
+#      Step 7 - Loss = [-5.60867761]
+#      Step 8 - Loss = [-5.70526933]
+#      Step 9 - Loss = [-5.90673464]
+#      Step 10 - Loss = [-6.13248962]
+#      Step 11 - Loss = [-6.32379863]
+#      Step 12 - Loss = [-6.47240742]
+#      Step 13 - Loss = [-6.61170083]
+#      Step 14 - Loss = [-6.77039115]
+#      Step 15 - Loss = [-6.93776967]
+#
+#      Final cost function: [-7.07072686]
+#      Optimized angles: [[0.53574044]
+#       [1.2945652 ]]
+#
 
 
 ######################################################################
@@ -554,6 +599,45 @@ for epoch in range(epochs):
             print(f" > Graph {i+1}/{len(graph_cost_list)} - Loss: {loss[0][0]}")
     print(f" >> Mean Loss during epoch: {np.mean(total_loss)}")
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Epoch 1
+#       > Graph 1/20 - Loss: -1.6641689538955688
+#       > Graph 6/20 - Loss: -1.4186843633651733
+#       > Graph 11/20 - Loss: -1.3757232427597046
+#       > Graph 16/20 - Loss: -1.294339656829834
+#       >> Mean Loss during epoch: -1.7352586269378663
+#      Epoch 2
+#       > Graph 1/20 - Loss: -2.119091749191284
+#       > Graph 6/20 - Loss: -1.4789190292358398
+#       > Graph 11/20 - Loss: -1.3779840469360352
+#       > Graph 16/20 - Loss: -1.2963457107543945
+#       >> Mean Loss during epoch: -1.8252217948436738
+#      Epoch 3
+#       > Graph 1/20 - Loss: -2.1322619915008545
+#       > Graph 6/20 - Loss: -1.459418535232544
+#       > Graph 11/20 - Loss: -1.390620470046997
+#       > Graph 16/20 - Loss: -1.3165746927261353
+#       >> Mean Loss during epoch: -1.8328069806098939
+#      Epoch 4
+#       > Graph 1/20 - Loss: -2.1432175636291504
+#       > Graph 6/20 - Loss: -1.476362943649292
+#       > Graph 11/20 - Loss: -1.3938289880752563
+#       > Graph 16/20 - Loss: -1.3140206336975098
+#       >> Mean Loss during epoch: -1.8369774043560028
+#      Epoch 5
+#       > Graph 1/20 - Loss: -2.1429405212402344
+#       > Graph 6/20 - Loss: -1.477513074874878
+#       > Graph 11/20 - Loss: -1.3909202814102173
+#       > Graph 16/20 - Loss: -1.315887689590454
+#       >> Mean Loss during epoch: -1.8371947884559632
+#
+
 
 ######################################################################
 # As you can see, the Loss for each graph keeps decreasing across epochs,
@@ -575,6 +659,13 @@ new_graph = nx.gnp_random_graph(7, p=3 / 7)
 new_cost = qaoa_from_graph(new_graph)
 
 nx.draw(new_graph)
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_Graph1.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 
 ######################################################################
@@ -617,7 +708,14 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
-ax.set_xticks([0, 5, 10, 15, 20])
+ax.set_xticks([0, 5, 10, 15, 20]);
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 
 ######################################################################
@@ -657,6 +755,33 @@ for _ in range(step):
 
 print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()}")
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Step 1 - Loss = [-4.1700805]
+#      Step 2 - Loss = [-4.67503588]
+#      Step 3 - Loss = [-5.09949909]
+#      Step 4 - Loss = [-5.40388533]
+#      Step 5 - Loss = [-5.59529203]
+#      Step 6 - Loss = [-5.70495197]
+#      Step 7 - Loss = [-5.7642561]
+#      Step 8 - Loss = [-5.79533198]
+#      Step 9 - Loss = [-5.81138752]
+#      Step 10 - Loss = [-5.81966529]
+#      Step 11 - Loss = [-5.82396722]
+#      Step 12 - Loss = [-5.82624537]
+#      Step 13 - Loss = [-5.82749126]
+#      Step 14 - Loss = [-5.82820626]
+#      Step 15 - Loss = [-5.82864379]
+#      Final cost function: [-5.78429065]
+#      Optimized angles: [[0.53574044]
+#       [1.2945652 ]]
+#
+
 fig, ax = plt.subplots()
 
 plt.plot(sdg_losses, color="orange", lw=3, label="SGD")
@@ -667,7 +792,14 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20])
+ax.set_xticks([0, 5, 10, 15, 20]);
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 
 ######################################################################
@@ -726,6 +858,12 @@ plt.ylabel(r"$\gamma$", fontsize=12)
 plt.title("Loss Landscape", fontsize=12)
 plt.show()
 
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossLandscape.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # Generalization performances
@@ -785,6 +923,30 @@ for epoch in range(epochs):
             print(f" > Graph {i+1}/{len(gs_cost_list)} - Loss: {loss}")
     print(f" >> Mean Loss during epoch: {np.mean(total_loss)}")
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Epoch 1
+#       > Graph 1/15 - Loss: [[-2.3892174]]
+#       > Graph 6/15 - Loss: [[-2.1072261]]
+#       > Graph 11/15 - Loss: [[-1.957976]]
+#       >> Mean Loss during epoch: -2.0667606353759767
+#      Epoch 2
+#       > Graph 1/15 - Loss: [[-2.3797882]]
+#       > Graph 6/15 - Loss: [[-2.2293403]]
+#       > Graph 11/15 - Loss: [[-1.9649515]]
+#       >> Mean Loss during epoch: -2.117209537823995
+#      Epoch 3
+#       > Graph 1/15 - Loss: [[-2.3686786]]
+#       > Graph 6/15 - Loss: [[-2.2524612]]
+#       > Graph 11/15 - Loss: [[-1.9757932]]
+#       >> Mean Loss during epoch: -2.1220582803090413
+#
+
 
 ######################################################################
 # Let’s check if this hybrid model eventually learned a good heuristic to
@@ -800,6 +962,13 @@ new_graph = nx.gnp_random_graph(10, p=3 / 7)
 new_cost = qaoa_from_graph(new_graph)
 
 nx.draw(new_graph)
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_Graph10.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 
 ######################################################################
@@ -832,13 +1001,20 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20])
+ax.set_xticks([0, 5, 10, 15, 20]);
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 
 ######################################################################
 # Again, we can confirm that the custom optimizer based on the LSTM quickly reaches a good
 # value of the loss function, and also achieve good generalization performances, since
-# it is able to initialzie parameters also for graphs not present in the training set.
+# it is able to initialize parameters also for graphs not present in the training set.
 #
 # .. note::
 #       To get the optimized weights of the LSTM use: ``optimized_weights = cell.get_weights()``.
