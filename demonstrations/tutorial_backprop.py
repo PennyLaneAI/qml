@@ -164,9 +164,9 @@ def circuit(params):
 
 
 ##############################################################################
-# Note that we specify that the QNode is **immutable**. This is more restrictive
-# than a standard mutable QNode (the quantum circuit cannot change/differ between
-# executions); however, it reduces processing overhead.
+# Note that we specify that the QNode is **immutable**. This is more restrictive than a standard
+# mutable QNode (the quantum circuit structure cannot change/differ between executions); however, it
+# reduces processing overhead.
 
 
 # initialize circuit parameters
@@ -341,8 +341,8 @@ for depth in range(0, 21):
     # forward pass timing
     # ===================
 
-    qnode_shift = qml.QNode(circuit, dev, interface="tf", diff_method="parameter-shift")
-    qnode_backprop = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
+    qnode_shift = qml.QNode(circuit, dev, interface="tf", diff_method="parameter-shift", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev, interface="tf", diff_method="backprop", mutable=False)
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
@@ -358,8 +358,8 @@ for depth in range(0, 21):
     # Gradient timing
     # ===============
 
-    qnode_shift = qml.QNode(circuit, dev, interface="tf", diff_method="parameter-shift")
-    qnode_backprop = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
+    qnode_shift = qml.QNode(circuit, dev, interface="tf", diff_method="parameter-shift", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev, interface="tf", diff_method="backprop", mutable=False)
 
     # parameter-shift
     with tf.GradientTape(persistent=True) as tape:
