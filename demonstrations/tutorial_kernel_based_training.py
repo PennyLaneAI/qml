@@ -464,7 +464,7 @@ plt.show()
 ######################################################################
 # The variational circuit has a slightly lower 
 # accuracy than the SVM - but this depends very much on the training settings 
-# we used. Different random parameter initialisations may indeed get 
+# we used. Different random parameter initialisations, more layers or more steps may indeed get 
 # perfect test accuracy.
 #
 # How often was the device executed?
