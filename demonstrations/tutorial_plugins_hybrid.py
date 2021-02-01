@@ -163,8 +163,8 @@ dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=2)
 # running on Strawberry Fields.
 
 
-@qml.qnode(dev_fock)
-def photon_redirection(params, diff_method="finite-diff"):
+@qml.qnode(dev_fock, diff_method="finite-diff")
+def photon_redirection(params):
     qml.FockState(1, wires=0)
     qml.Beamsplitter(params[0], params[1], wires=[0, 1])
     return qml.expval(qml.NumberOperator(1))
@@ -268,7 +268,7 @@ def qubit_rotation(phi1, phi2):
     return qml.expval(qml.PauliZ(0))
 
 
-@qml.qnode(dev_fock)
+@qml.qnode(dev_fock, diff_method="finite-diff")
 def photon_redirection(params):
     """The photon redirection QNode"""
     qml.FockState(1, wires=0)
