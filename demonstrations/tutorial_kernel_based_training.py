@@ -24,24 +24,25 @@ approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__.
 The theoretical background for kernel methods has been established in many papers
 such as `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__,
 `Liu et al. (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
-and has been systematically summarised in the overview `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
+and has been systematically summarized in the overview `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
 
 As an example of kernel-based training, we use a combination of PennyLane
-and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
+and the `scikit-learn <https://scikit-learn.org/>`__ machine
 learning library to use a support vector machine with 
 a *quantum kernel*. We then compare this strategy with a variational
 quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
 A secondary goal of the demo is to estimate the number of circuit evaluations needed in
-both approaches. For the example used here, kernel-based training requires fewer (and shorter) 
+both approaches. For the example used here, kernel-based training requires fewer and shorter 
 quantum circuit evaluations. 
 
 More generally, we will see that the comparison with variational training depends how the number of variational parameters 
 scales with the amount of data. If variational circuits turn out to be similar to neural networks and grow linearly in size 
-with the data, kernel-based training is much more efficient. 
+with the data, kernel-based training is more efficient. 
 If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
-evaluations, although it will never be competitive with classical neural networks. 
+evaluations, although it will never be competitive with classical neural networks. This will lead us to
+the following final plot:
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
@@ -95,11 +96,11 @@ After working through this demo, the reader should:
 #
 # .. math::  \kappa(x, x') = | \langle \phi(x') | \phi(x)\rangle|^2.
 #
-# Kernel-based training therefore by-passes the variational part and
+# Kernel-based training therefore bypasses the variational part and
 # measurement of common variational circuits, and only depends on the
 # embedding.
 #
-# If the loss function in training is the `hinge
+# If the loss function :math:`L` is the `hinge
 # loss <https://en.wikipedia.org/wiki/Hinge_loss>`__, the kernel method
 # corresponds to a standard `support vector
 # machine <https://en.wikipedia.org/wiki/Support-vector_machine>`__ (SVM)
@@ -120,7 +121,7 @@ After working through this demo, the reader should:
 #    Theory predicts that kernel-based training will always find better or equally good
 #    minima of this risk. However, to show this here we would have
 #    to either regularise the variational training by the trace of the squared observable, or switch off
-#    regularisation in the classical SVM, which denies it a lot of its strength. The kernel-based and the variational 
+#    regularisation in the classical SVM, which removes a lot of its strength. The kernel-based and the variational 
 #    training in this demonstration therefore optimize slightly different cost
 #    functions, and it is out of our scope to establish whether one training method finds a better minimum than
 #    the other.
@@ -161,12 +162,17 @@ np.random.seed(42)
 
 
 ######################################################################
-# The second step is to make a toy data set.
+# The second step is to define a data set. Since the performance  
+# of the models is not the focus of this demo, we can just use 
+# the first two classes of the famous *Iris dataset*. Dating back to 
+# `1936 <https://en.wikipedia.org/wiki/Iris_flower_data_set>`__, 
+# the set consists of 100 samples of four features each, 
+# and gives rise to a very simple classification problem.
 #
 
-X, y = load_iris(return_X_y=True)
+X, y = load_iris(return_X_y=True) 
 
-# turn into 2 classes
+# pick inputs and labels from the first two classes only
 X = X[:100]
 y = y[:100]
 
@@ -182,9 +188,9 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled)
 
 
 ######################################################################
-# We will use the `amplitude embedding
+# We use the `amplitude embedding
 # template <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.embeddings.AmplitudeEmbedding.html>`__
-# which needs as many qubits as there are features.
+# which needs as many qubits as there are features:
 #
 
 n_qubits = len(X_train[0])
@@ -229,9 +235,7 @@ observables = [qml.PauliZ(i) for i in range(n_qubits)]
 
 @qml.qnode(dev_kernel)
 def kernel(x1, x2):
-    """
-    The quantum kernel.
-    """
+    """The quantum kernel."""
     AngleEmbedding(x1, wires=range(n_qubits))
     qml.inv(AngleEmbedding(x2, wires=range(n_qubits)))
     return qml.expval(Tensor(*observables))
@@ -254,10 +258,9 @@ kernel(X_train[0], X_train[0])
 
 
 def kernel_matrix(A, B):
-    """
-    Compute the matrix whose entries are the kernel
-    evaluated on pairwise data from sets A and B.
-    """
+    """Compute the matrix whose entries are the kernel
+       evaluated on pairwise data from sets A and B."""
+       
     return np.array([[kernel(a, b) for b in B] for a in A])
 
 
@@ -290,22 +293,21 @@ dev_kernel.num_executions
 # the SVM must construct the :math:`M \times M` dimensional kernel gram
 # matrix for training. To classify :math:`M_{\rm pred}` new samples, the
 # SVM needs to evaluate the kernel at most :math:`M_{\rm pred}M` times to get the
-# pairwise distances between training vectors and test samples.
+# pairwise distances between training vectors and test samples. 
 #
 # .. note:: 
 #    
 #     Depending on the implementation of the SVM, only :math:`S \leq M_{\rm pred}`
 #     *support vectors* are needed. 
 #
-# Overall, the number of kernel evaluations of the above script should
-# therefore roughly amount to at most:
+# Let us formulate this as a function, which can be used at the end of the demo 
+# to construct the scaling plot shown in the introduction. 
 #
 
 
 def circuit_evals_kernel(n_data, split):
-    """
-    Compute how many circuit evaluations one needs for kernel-based training and prediction.
-    """
+    """Compute how many circuit evaluations one needs for kernel-based 
+       training and prediction."""
 
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
@@ -316,8 +318,18 @@ def circuit_evals_kernel(n_data, split):
     return n_training + n_prediction
 
 
+######################################################################
+# With :math:`M = 75` and :math:`M_{\rm pred} = 25`, the number of kernel evaluations 
+# can therefore be estimated as:
+#
+
 circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_test)))
 
+
+######################################################################
+# The single additional evaluation stems from the fact that we tested our 
+# kernel above.
+#
 
 ######################################################################
 # A similar example using variational training
@@ -336,7 +348,12 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 # Remember from above, the variational training does not optimize
 # *exactly* the same cost as the SVM, but we try to match them as closely
 # as possible. For this we use a bias term in the quantum model, and train
-# on the hinge loss.
+# on the hinge loss. 
+# 
+# We also explicitely use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift.html>`__
+# differentiation method in the quantum node, since this is a method which works on hardware as well. 
+# While ``diff_method='backprop'`` or ``diff_method='adjoint'`` would reduce the number of 
+# circuit evaluations significantly, they are using tricks that are only suited for simulators.
 #
 
 dev_var = qml.device("default.qubit", wires=n_qubits)
@@ -344,9 +361,8 @@ dev_var = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev_var, interface="torch", diff_method="parameter-shift")
 def quantum_model(x, params):
-    """
-    A variational quantum model.
-    """
+    """A variational quantum model."""
+    
     # embedding
     AngleEmbedding(x, wires=range(n_qubits))
 
@@ -356,36 +372,37 @@ def quantum_model(x, params):
 
 
 def quantum_model_plus_bias(x, params, bias):
-    """
-    Adding a bias.
-    """
+    """Adding a bias."""
+    
     return quantum_model(x, params) + bias
 
 
 def hinge_loss(predictions, targets):
-    """
-    Implements the hinge loss.
-    """
+    """Implements the hinge loss."""
+    
     all_ones = torch.ones_like(targets)
     hinge_loss = all_ones - predictions * targets
-    # trick: since the max function is not diffable,
+    # trick: since the max(0,x) function is not differentiable,
     # use the mathematically equivalent relu instead
     hinge_loss = relu(hinge_loss)
     return hinge_loss
 
 
 ######################################################################
-# We now summarise the usual training and prediction steps into two
-# functions that we can later call at will. Most of the work is to
-# convert between numpy and torch, which we need for the differentiable
-# ``relu`` function used in the hinge loss.
+# We now summarize the usual training and prediction steps into two
+# functions similar to scikit-learn's ``fit()`` and ``predict()``. While 
+# it feels cumbersome compared to the one-liner used to train the kernel method,
+# PennyLane - like other differentiable programming libraries - provides a lot more 
+# control over the particulars of training. 
+# 
+# In our case, most of the work is to convert between numpy and torch, 
+# which we need for the differentiable ``relu`` function used in the hinge loss. 
 #
 
 
 def quantum_model_train(n_layers, steps, batch_size):
-    """
-    Train the quantum model defined above.
-    """
+    """Train the quantum model defined above."""
+    
     params = np.random.random((n_layers, n_qubits, 3))
     params_torch = torch.tensor(params, requires_grad=True)
     bias_torch = torch.tensor(0.0)
@@ -425,9 +442,8 @@ def quantum_model_train(n_layers, steps, batch_size):
 
 
 def quantum_model_predict(X_pred, trained_params, trained_bias):
-    """
-    Predict using the quantum model defined above.
-    """
+    """Predict using the quantum model defined above."""
+    
     p = []
     for x in X_pred:
 
@@ -478,19 +494,18 @@ dev_var.num_executions
 #
 # Let’s try to understand this value. In each optimization step, the variational
 # circuit needs to compute the partial derivative of all
-# trainable parameters for each sample in a batch. Using `parameter-shift
-# rules <https://pennylane.ai/qml/glossary/parameter_shift.html>`__ we require roughly 2 circuit
+# trainable parameters for each sample in a batch. Using parameter-shift
+# rules, we require roughly 2 circuit
 # evaluations per partial derivative. Prediction uses only one circuit
 # evaluation per sample.
 #
-# This would result in:
+# We can formulate this as another function that will be used in the scaling plot below.
 #
 
 
 def circuit_evals_variational(n_data, n_params, n_steps, shift_terms, split, batch_size):
-    """
-    Compute how many circuit evaluations are needed for variational training and prediction.
-    """
+    """Compute how many circuit evaluations are needed for 
+       variational training and prediction."""
 
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
@@ -500,6 +515,10 @@ def circuit_evals_variational(n_data, n_params, n_steps, shift_terms, split, bat
 
     return n_training + n_prediction
 
+
+######################################################################
+# This estimates the circuit evaluations in variational training as:
+#
 
 circuit_evals_variational(
     n_data=len(X),
@@ -521,9 +540,8 @@ circuit_evals_variational(
 #
 
 def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
-    """
-    Compute how many model evaluations are needed for neural network training and prediction.
-    """
+    """Compute how many model evaluations are needed for neural 
+       network training and prediction."""
 
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
@@ -534,9 +552,9 @@ def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
     return n_training + n_prediction
     
 ######################################################################
-# In each step of neural network training, due to the power of automatic differentiation, 
+# In each step of neural network training, and due to the clever implementations of automatic differentiation, 
 # the backpropagation algorithm can compute a 
-# gradient for all parameters in (more-or-less) a single run. 
+# gradient for all parameters in (more-or-less) a single run.  
 # For all we know at this stage, the no-cloning principle prevents variational circuits from using these tricks, 
 # which leads to ``n_training`` in ``circuit_evals_variational`` depending on the number of parameters, but not in 
 # ``model_evals_nn``. 
@@ -574,7 +592,7 @@ model_evals_nn(
 #
 #    2a) the number of parameters grows linearly with the training data, or ``n_params = M``, 
 #
-#    2b) the number of parameters grows as the square root with the training data, or ``n_params = np.sqrt(M)``. 
+#    2b) the number of parameters saturates at some point, which we model by ``n_params = np.sqrt(M)``. 
 #
 # Note that compared to the example above with 75 training samples and 24 parameters, a) overestimates the number of evaluations, while b) 
 # underestimates it.
