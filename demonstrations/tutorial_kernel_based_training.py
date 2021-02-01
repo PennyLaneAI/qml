@@ -218,12 +218,7 @@ n_qubits
 # .. math::  \langle 0 |S(x') S(x)^{\dagger} |0\rangle \langle 0| S(x')^{\dagger} S(x)  | 0\rangle  = | \langle \phi(x') | \phi(x)\rangle|^2 = \kappa(x, x').
 #
 # Note that a projector :math:`|0 \rangle \langle 0|` can be constructed
-# as follows in PennyLane:
-#
-# .. code:: python
-#
-#    observables = [qml.PauliZ(i) for i in range(n_qubits)]
-#    projector = Tensor(*observables)
+# using the ``qml.Hermitian` observable in PennyLane.
 #
 # Altogether, we use the following quantum node as a *quantum kernel
 # evaluator*:
@@ -231,14 +226,15 @@ n_qubits
 
 dev_kernel = qml.device("default.qubit", wires=n_qubits)
 
-observables = [qml.PauliZ(i) for i in range(n_qubits)]
+projector = np.zeros((2**n_qubits, 2**n_qubits))
+projector[0, 0] = 1
 
 @qml.qnode(dev_kernel)
 def kernel(x1, x2):
     """The quantum kernel."""
     AngleEmbedding(x1, wires=range(n_qubits))
     qml.inv(AngleEmbedding(x2, wires=range(n_qubits)))
-    return qml.expval(Tensor(*observables))
+    return qml.expval(qml.Hermitian(projector, wires=range(n_qubits)))
 
 
 ######################################################################
