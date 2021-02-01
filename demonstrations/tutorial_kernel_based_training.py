@@ -218,7 +218,7 @@ n_qubits
 # .. math::  \langle 0 |S(x') S(x)^{\dagger} |0\rangle \langle 0| S(x')^{\dagger} S(x)  | 0\rangle  = | \langle \phi(x') | \phi(x)\rangle|^2 = \kappa(x, x').
 #
 # Note that a projector :math:`|0 \rangle \langle 0|` can be constructed
-# using the ``qml.Hermitian` observable in PennyLane.
+# using the ``qml.Hermitian`` observable in PennyLane.
 #
 # Altogether, we use the following quantum node as a *quantum kernel
 # evaluator*:
@@ -323,8 +323,8 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 
 
 ######################################################################
-# The single additional evaluation stems from the fact that we tested our 
-# kernel above.
+# The single additional evaluation can be attributed to evaluating the kernel once above 
+# as a sanity check.
 #
 
 ######################################################################
@@ -644,7 +644,7 @@ plt.show()
 # If variational circuits turn out to be as parameter-hungry as neural networks,
 # kernel-based training will consistently outperform it. 
 # However, if we find ways to train variational circuits with fewer parameters,
-# they can use this as a means to match the excellent scaling that makes neural networks 
+# variational methods could in principle still match the excellent scaling that makes neural networks 
 # so appealing.   
 #
 # The practical take-away from this demo is that unless your variational circuit has significantly fewer 
