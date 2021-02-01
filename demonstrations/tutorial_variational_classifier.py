@@ -330,7 +330,7 @@ test(ang)
 
 print("x               : ", x)
 print("angles          : ", ang)
-print("amplitude vector: ", np.real(dev._state))
+print("amplitude vector: ", np.real(dev.state))
 
 
 ##############################################################################
