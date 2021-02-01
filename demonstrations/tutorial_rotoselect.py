@@ -131,8 +131,6 @@ n_wires = 2
 
 dev = qml.device("default.qubit", analytic=True, wires=2)
 
-qml.enable_tape()
-
 ##############################################################################
 # Creating a fixed quantum circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

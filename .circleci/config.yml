@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v23-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v23-{{ .Branch }}-
-            - pip-v23-
+            - pip-v23d-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v23d-{{ .Branch }}-
+            - pip-v23d-
 
       - run:
           name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v23-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v23d-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
@@ -172,9 +172,9 @@ jobs:
             aws s3 cp _build/html/implementations.html s3://pennylane.ai-prod/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstrations.html
             aws s3 cp _build/html/beginner.html s3://pennylane.ai-prod/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstrations.html
 
-      # - run:
-      #     name: Invalidate CloudFront
-      #     command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+      - run:
+          name: Invalidate CloudFront
+          command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
   version: 2
