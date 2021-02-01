@@ -164,7 +164,7 @@ dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=2)
 
 
 @qml.qnode(dev_fock)
-def photon_redirection(params):
+def photon_redirection(params, diff_method="finite-diff"):
     qml.FockState(1, wires=0)
     qml.Beamsplitter(params[0], params[1], wires=[0, 1])
     return qml.expval(qml.NumberOperator(1))
