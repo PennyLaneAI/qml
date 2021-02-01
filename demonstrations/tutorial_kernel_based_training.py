@@ -471,13 +471,15 @@ print("accuracy on test set:", accuracy_score(pred_test, y_test))
 
 plt.plot(loss_history)
 plt.ylim((0, 1))
+plt.xlabel("size of data set")
+plt.ylabel("number of evaluations")
 plt.show()
 
 
 ######################################################################
 # The variational circuit has a slightly lower 
 # accuracy than the SVM - but this depends very much on the training settings 
-# we used. Different random parameter initialisations, more layers or more steps may indeed get 
+# we used. Different random parameter initializations, more layers or more steps may indeed get 
 # perfect test accuracy.
 #
 # How often was the device executed?
@@ -642,7 +644,7 @@ plt.show()
 ######################################################################
 # This is the plot we saw at the beginning. 
 # With current hardware-compatible training methods, whether kernel-based training 
-# requires more of fewer quantum circuit evaluations 
+# requires more or fewer quantum circuit evaluations 
 # than variational training depends on how many parameters the latter needs. 
 # If variational circuits turn out to be as parameter-hungry as neural networks,
 # kernel-based training will consistently outperform them for machine learning tasks. However,
