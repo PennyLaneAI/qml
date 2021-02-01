@@ -450,6 +450,7 @@ plot_data(X_test, y_test, fig, axes[2])
 axes[0].set_title("Predictions with random weights")
 axes[1].set_title("Predictions after training")
 axes[2].set_title("True test data")
+plt.tight_layout()
 plt.show()
 
 
