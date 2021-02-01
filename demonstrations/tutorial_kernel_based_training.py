@@ -61,7 +61,7 @@ After working through this demo, the reader should:
 
 ######################################################################
 # Background
-# ==========
+# ----------
 #
 # Let us consider a *quantum model* of the form
 #
@@ -130,7 +130,7 @@ After working through this demo, the reader should:
 
 ######################################################################
 # Kernel-based training
-# =====================
+# ---------------------
 #
 # First, we will turn to kernel-based training of quantum models. 
 # As stated above, an example implementation is a standard support vector 
@@ -329,7 +329,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 
 ######################################################################
 # A similar example using variational training
-# ============================================
+# --------------------------------------------
 #
 
 
@@ -569,7 +569,7 @@ model_evals_nn(
 
 ######################################################################
 # Which method scales best?
-# =========================
+# -------------------------
 #
 
 
