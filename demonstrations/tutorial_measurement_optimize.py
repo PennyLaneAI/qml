@@ -764,6 +764,8 @@ print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
+qml.disable_tape()
+
 ##############################################################################
 # We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*
 # down to *five hundred* 😱😱😱).
@@ -780,10 +782,10 @@ print("Number of required measurements after optimization:", len(groups))
 # full commutativity; if we consider full commutativity instead, we can further reduce the
 # number of groups required.
 #
-# Finally, it is worth pointing out that, as the field of variational quantum algorithms
-# grows, this problem of measurement optimization no longer just applies to the VQE algorithm (the algorithm
-# it was born from). Instead, there are a multitude of algorithms that could benefit from
-# these measurement optimization techniques (QAOA being a prime example).
+# Finally, it is worth pointing out that, as the field of variational quantum algorithms grows, this
+# problem of measurement optimization no longer just applies to the VQE algorithm (the algorithm it
+# was born from). Instead, there are a multitude of algorithms that could benefit from these
+# measurement optimization techniques (QAOA being a prime example).
 #
 # So the next time you are working on a variational quantum algorithm and the number
 # of measurements required begins to explode---stop, take a deep breath 😤, and consider grouping
