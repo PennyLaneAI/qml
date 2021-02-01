@@ -15,7 +15,7 @@ Plugins and Hybrid computation
    tutorial_qubit_rotation Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
 
-*Author: PennyLane dev team.*
+*Author: PennyLane dev team. Last updated: 1 Feb 2021.*
 
 This tutorial introduces the notion of hybrid computation by combining several PennyLane
 plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
@@ -59,7 +59,7 @@ Breaking this down, step-by-step:
    wire (wire 1) is prepared in the vacuum state. The former state is non-Gaussian,
    necessitating the use of the ``'strawberryfields.fock'`` backend device.
 
-3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta`and :math:`\phi`.
+3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta` and :math:`\phi`.
    Here, we have the convention that the beamsplitter transmission amplitude is :math:`t=\cos\theta`,
    and the reflection amplitude is
    :math:`r=e^{i\phi}\sin\theta`. See :doc:`introduction/operations` for a full list of operation conventions.
