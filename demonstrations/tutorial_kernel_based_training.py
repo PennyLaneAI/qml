@@ -33,21 +33,23 @@ a *quantum kernel*. We then compare this strategy with a variational
 quantum circuit trained via stochastic gradient descent using
 PyTorch.
 
-A secondary goal of the demo is to estimate the number of circuit evaluations needed in
-both approaches. For the example used here, kernel-based training requires fewer and shorter 
-quantum circuit evaluations. 
+A secondary goal of the demo is to compare the number of circuit evaluations needed in
+both approaches. For the example used here, kernel-based training requires only a fraction of the 
+quantum circuit evaluations that we need for variational circuit training. In addition, each single 
+evaluation runs a much shorter circuit.    
 
-More generally, we will see that the comparison with variational training depends how the number of variational parameters 
-scales with the amount of data. If variational circuits turn out to be similar to neural networks and grow linearly in size 
-with the data, kernel-based training is more efficient. 
-If instead the number of parameters plateaus with growing data sizes, variational training would require fewer circuit 
-evaluations, although it will never be competitive with classical neural networks. This will lead us to
-the following final plot:
+More generally, we will derive the following plot based on current quantum hardware-compatible training 
+strategies:
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
        :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
+
+One can see that if the parameters of the variational circuit grow linearly with the number of data samples, kernel 
+methods will structurally outperform variational training. However, if the number of variational parameters plateaus in a
+square-root-type growth behaviour, 
+variational circuits become almost as efficient in model evaluations as neural networks.
 
 After working through this demo, the reader should:
 
@@ -82,7 +84,7 @@ After working through this demo, the reader should:
 #       :scale: 15%
 #       :alt: quantum-model
 #
-#
+# |
 # 
 # For example, applying a circuit :math:`G(\theta)` and then
 # measuring the Pauli-Z observable :math:`\sigma^0_z` of the first qubit
@@ -211,7 +213,7 @@ n_qubits
 #
 # .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png 
 #       :align: center
-#       :scale: 100% 
+#       :scale: 80% 
 #       :alt: Kernel evaluation circuit
 #
 # To verify that this gives us the kernel:
@@ -580,7 +582,7 @@ model_evals_nn(
 #
 # 1. Even if we use single-batch stochastic gradient descent, in which every training step uses 
 #    exactly one training sample, we would want to see every training sample at least once on average. 
-#    Therefore, the number of steps should scale linearly with the number of training data. 
+#    Therefore, the number of steps should scale at least linearly with the number of training data. 
 #
 # 2. Modern neural networks often have many more parameters than training
 #    samples. But we do not know yet whether variational circuits really need that many parameters as well.
@@ -639,22 +641,23 @@ plt.show()
 
 
 ######################################################################
-# This is the plot we saw at the beginning. Whether kernel-based training 
+# This is the plot we saw at the beginning. 
+# With current hardware-compatible training methods, whether kernel-based training 
 # requires more of fewer quantum circuit evaluations 
-# than variational training depends on how many parameters the latter needs: 
+# than variational training depends on how many parameters the latter needs. 
 # If variational circuits turn out to be as parameter-hungry as neural networks,
-# kernel-based training will consistently outperform it. 
-# However, if we find ways to train variational circuits with fewer parameters,
-# variational methods could in principle still match the excellent scaling that makes neural networks 
-# so appealing.   
+# kernel-based training will consistently outperform them for machine learning tasks. However,
+# if variational learning only turns out to require few parameters (or if more efficient training methods are found),
+# variational circuits could in principle match the linear scaling of neural networks trained with backpropagation. 
 #
 # The practical take-away from this demo is that unless your variational circuit has significantly fewer 
 # parameters than training data, kernel methods could be a much faster alternative!
 #
-# Finally, it is important to note that fault-tolerant quantum computers may change the picture significantly. 
+# Finally, it is important to note that fault-tolerant quantum computers may change the picture significantly - 
+# for both quantum and classical machine learning. 
 # As mentioned in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__, 
 # early results from the quantum machine learning literature show that
-# larger quantum computers enable us in principle to reduce
-# the quadratic scaling of kernel methods to linear scaling, which may make kernel methods a
-# serious alternative to even neural networks for big data processing one day.
+# larger quantum computers will most likely enable us to reduce
+# the quadratic scaling of kernel methods to linear scaling, which may make classical as well as quantum kernel methods a
+# serious alternative to neural networks for big data processing one day.
 #
