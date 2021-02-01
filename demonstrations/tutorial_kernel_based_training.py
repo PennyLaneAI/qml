@@ -79,10 +79,11 @@ After working through this demo, the reader should:
 #
 # .. figure:: ../demonstrations/kernel_based_training/quantum_model.png 
 #       :align: center
-#       :scale: 25%
+#       :scale: 15%
 #       :alt: quantum-model
 #
 #
+# 
 # For example, applying a circuit :math:`G(\theta)` and then
 # measuring the Pauli-Z observable :math:`\sigma^0_z` of the first qubit
 # implements the trainable measurement 
