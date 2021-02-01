@@ -22,7 +22,7 @@ learning models with a kernel-based approach instead of the usual
 `variational
 approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__.
 The theoretical background for kernel methods has been established in many papers
-such as `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__,
+such as `Schuld and Killoran (2018) <https://arxiv.org/abs/1803.07128>`__, `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__,
 `Liu et al. (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
 and has been systematically summarized in the overview `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
 
@@ -31,25 +31,26 @@ and the `scikit-learn <https://scikit-learn.org/>`__ machine
 learning library to use a support vector machine with 
 a *quantum kernel*. We then compare this strategy with a variational
 quantum circuit trained via stochastic gradient descent using
-PyTorch.
+`PyTorch <https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html>`__.
 
 A secondary goal of the demo is to compare the number of circuit evaluations needed in
-both approaches. For the example used here, kernel-based training requires only a fraction of the 
-quantum circuit evaluations that we need for variational circuit training. In addition, each single 
+both approaches. For the example used here, kernel-based training requires only a fraction of the number of 
+quantum circuit evaluations in variational circuit training, while each 
 evaluation runs a much shorter circuit.    
 
-More generally, we will derive the following plot based on current quantum hardware-compatible training 
-strategies:
+More generally, we will see that the relative efficiency of kernel-based methods compared to variational circuits 
+depends on the number of parameters used in the variational model: 
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
        :align: center
        :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
 
-One can see that if the parameters of the variational circuit grow linearly with the number of data samples, kernel 
-methods will structurally outperform variational training. However, if the number of variational parameters plateaus in a
-square-root-type growth behaviour, 
-variational circuits become almost as efficient in model evaluations as neural networks.
+If the number of variational parameters remains small (i.e. there is a square-root-like scaling with the number 
+of data samples), variational circuits are almost as efficient as neural networks, and require much fewer circuit evaluations 
+than the famous quadratic scaling of kernel methods. However, with current hardware-compatible training strategies, 
+kernel methods can still be better than variational circuits that require a number of parameters of the 
+order of the training set size. 
 
 After working through this demo, the reader should:
 
@@ -81,7 +82,7 @@ After working through this demo, the reader should:
 #
 # .. figure:: ../demonstrations/kernel_based_training/quantum_model.png 
 #       :align: center
-#       :scale: 15%
+#       :scale: 20%
 #       :alt: quantum-model
 #
 # |
@@ -116,7 +117,7 @@ After working through this demo, the reader should:
 #    training if the optimisation
 #    problem can be written as minimizing a cost of the form
 # 
-#    .. math::  \min_f  \lambda \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
+#    .. math::  \min_f  \lambda\;  \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m), 
 #
 #    which is a regularized empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M}`, 
 #    regularisation strength :math:`\lambda \in \mathbb{R}`, and loss function :math:`L`.
