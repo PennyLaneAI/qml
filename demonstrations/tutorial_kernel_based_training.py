@@ -26,7 +26,7 @@ such as `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__, `Schuld a
 `Liu et al. (2020) <https://arxiv.org/abs/2010.02174>`__, `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938.pdf>`__,
 and has been systematically summarised in the overview `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__ which we follow here.
 
-As an example of kernel-based training we use a combination of PennyLane
+As an example of kernel-based training, we use a combination of PennyLane
 and the powerful `scikit-learn <https://scikit-learn.org/>`__ machine
 learning library to use a support vector machine with 
 a *quantum kernel*. We then compare this strategy with a variational
