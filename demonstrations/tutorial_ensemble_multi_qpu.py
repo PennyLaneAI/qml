@@ -28,7 +28,7 @@ Let's begin by importing the prerequisite libraries:
 """
 
 from collections import Counter
-
+ 
 import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
