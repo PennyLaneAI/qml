@@ -164,9 +164,9 @@ np.random.seed(42)
 ######################################################################
 # The second step is to define a data set. Since the performance  
 # of the models is not the focus of this demo, we can just use 
-# the first two classes of the famous *Iris dataset*. Dating back to 
-# `1936 <https://en.wikipedia.org/wiki/Iris_flower_data_set>`__, 
-# the set consists of 100 samples of four features each, 
+# the first two classes of the famous `Iris dataset <https://en.wikipedia.org/wiki/Iris_flower_data_set>`__. 
+# Dating back to as far as 1936, 
+# this toy data set consists of 100 samples of four features each, 
 # and gives rise to a very simple classification problem.
 #
 
@@ -256,12 +256,12 @@ kernel(X_train[0], X_train[0])
 def kernel_matrix(A, B):
     """Compute the matrix whose entries are the kernel
        evaluated on pairwise data from sets A and B."""
-       
     return np.array([[kernel(a, b) for b in B] for a in A])
 
 
 ######################################################################
-# Training the SVM is a breeze in scikit-learn:
+# Training the SVM is a breeze in scikit-learn, which is designed 
+# as a high-level machine learning library:
 #
 
 svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
@@ -349,7 +349,8 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 # We also explicitely use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift.html>`__
 # differentiation method in the quantum node, since this is a method which works on hardware as well. 
 # While ``diff_method='backprop'`` or ``diff_method='adjoint'`` would reduce the number of 
-# circuit evaluations significantly, they are using tricks that are only suited for simulators.
+# circuit evaluations significantly, they are based on tricks that are only suited for simulators, 
+# and can therefore not scale to more than a few dozen qubits.
 #
 
 dev_var = qml.device("default.qubit", wires=n_qubits)
@@ -369,13 +370,11 @@ def quantum_model(x, params):
 
 def quantum_model_plus_bias(x, params, bias):
     """Adding a bias."""
-    
     return quantum_model(x, params) + bias
 
 
 def hinge_loss(predictions, targets):
     """Implements the hinge loss."""
-    
     all_ones = torch.ones_like(targets)
     hinge_loss = all_ones - predictions * targets
     # trick: since the max(0,x) function is not differentiable,
@@ -588,7 +587,7 @@ model_evals_nn(
 #
 #    2a) the number of parameters grows linearly with the training data, or ``n_params = M``, 
 #
-#    2b) the number of parameters saturates at some point, which we model by ``n_params = np.sqrt(M)``. 
+#    2b) the number of parameters saturates at some point, which we model by setting ``n_params = np.sqrt(M)``. 
 #
 # Note that compared to the example above with 75 training samples and 24 parameters, a) overestimates the number of evaluations, while b) 
 # underestimates it.
@@ -639,15 +638,16 @@ plt.show()
 
 
 ######################################################################
-# This is the plot we saw at the beginning. Under the assumptions made, 
-# one can see that the relation between kernel-based 
-# and variational quantum machine learning depends on how many parameters the latter needs: 
+# This is the plot we saw at the beginning. Whether kernel-based training 
+# requires more of fewer quantum circuit evaluations 
+# than variational training depends on how many parameters the latter needs: 
 # If variational circuits turn out to be as parameter-hungry as neural networks,
 # kernel-based training will consistently outperform it. 
 # However, if we find ways to train variational circuits with fewer parameters,
-# they can use this as a means to catch up with the good scaling neural networks draw from backpropagation.   
+# they can use this as a means to match the excellent scaling that makes neural networks 
+# so appealing.   
 #
-# What we learn from this demo is that unless your variational circuit has many fewer 
+# The practical take-away from this demo is that unless your variational circuit has significantly fewer 
 # parameters than training data, kernel methods could be a much faster alternative!
 #
 # Finally, it is important to note that fault-tolerant quantum computers may change the picture significantly. 
