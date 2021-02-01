@@ -351,7 +351,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 # We also explicitly use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift.html>`__
 # differentiation method in the quantum node, since this is a method which works on hardware as well. 
 # While ``diff_method='backprop'`` or ``diff_method='adjoint'`` would reduce the number of 
-# circuit evaluations significantly, they are based on tricks that are only suited for simulators, 
+# circuit evaluations significantly, they are based on tricks that are only suitable for simulators, 
 # and can therefore not scale to more than a few dozen qubits.
 #
 
