@@ -50,7 +50,7 @@ than the famous quadratic scaling of kernel methods. However, with current hardw
 kernel methods can still be better than variational circuits that require a number of parameters of the 
 order of the training set size. 
 
-After working through this demo, the reader should:
+After working through this demo, you will:
 
 * be able to use a support vector machine with a quantum kernel computed with PennyLane, and
 
