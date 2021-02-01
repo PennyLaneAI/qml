@@ -141,7 +141,7 @@ After working through this demo, you will:
 
 
 ######################################################################
-# First, let’s import all sorts of useful methods:
+# We begin by importing all sorts of useful methods:
 #
 
 import numpy as np
