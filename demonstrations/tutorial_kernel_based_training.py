@@ -348,7 +348,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 # as possible. For this we use a bias term in the quantum model, and train
 # on the hinge loss. 
 # 
-# We also explicitely use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift.html>`__
+# We also explicitly use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift.html>`__
 # differentiation method in the quantum node, since this is a method which works on hardware as well. 
 # While ``diff_method='backprop'`` or ``diff_method='adjoint'`` would reduce the number of 
 # circuit evaluations significantly, they are based on tricks that are only suited for simulators, 
