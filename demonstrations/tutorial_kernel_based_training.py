@@ -35,10 +35,10 @@ quantum circuit trained via stochastic gradient descent using
 
 A secondary goal of the demo is to compare the number of circuit evaluations needed in
 both approaches. For the example used here, kernel-based training requires only a fraction of the number of 
-quantum circuit evaluations in variational circuit training, while each 
-evaluation runs a much shorter circuit.    
+quantum circuit evaluations from variational circuit training, while each 
+evaluation also runs a much shorter circuit.    
 
-More generally, we will see that the relative efficiency of kernel-based methods compared to variational circuits 
+More generally, we will see that the relative efficiency of kernel-based methods
 depends on the number of parameters used in the variational model: 
 
 .. figure::  ../demonstrations/kernel_based_training/scaling.png 
@@ -47,10 +47,10 @@ depends on the number of parameters used in the variational model:
        :alt: Scaling of kernel-based vs. variational learning
 
 If the number of variational parameters remains small (i.e. there is a square-root-like scaling with the number 
-of data samples), variational circuits are almost as efficient as neural networks, and require much fewer circuit evaluations 
-than the famous quadratic scaling of kernel methods. However, with current hardware-compatible training strategies, 
+of data samples, see green line), variational circuits are almost as efficient as neural networks (blue line), and require much fewer circuit evaluations 
+than the famous quadratic scaling of kernel methods (red line). However, with current hardware-compatible training strategies, 
 kernel methods can still be better than variational circuits that require a number of parameters of the 
-order of the training set size. 
+order of the training set size (orange line). 
 
 After working through this demo, the reader should:
 
