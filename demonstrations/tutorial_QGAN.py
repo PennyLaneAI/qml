@@ -9,6 +9,8 @@ Quantum Generative Adversarial Networks with Cirq + TensorFlow
         Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.
     :property="og:image": https://pennylane.ai/qml/_images/qgan3.png
 
+*Author: PennyLane dev team. Last updated: 15 Jan 2021.*
+
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
 (2018) <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.121.040502>`__,
@@ -57,7 +59,7 @@ dev = qml.device('cirq.simulator', wires=3)
 # ---------------------------
 #
 # In classical GANs, the starting point is to draw samples either from
-# some “real data” distribution, or from the generator, and feed them to
+# some "real data" distribution, or from the generator, and feed them to
 # the discriminator. In this QGAN example, we will use a quantum circuit
 # to generate the real data.
 #
@@ -181,7 +183,7 @@ def gen_cost(gen_weights):
 # Training the QGAN
 # -----------------
 #
-# We initialize the fixed angles of the “real data” circuit, as well as
+# We initialize the fixed angles of the "real data" circuit, as well as
 # the initial parameters for both generator and discriminator. These are
 # chosen so that the generator initially prepares a state on wire 0 that
 # is very close to the :math:`\left| 1 \right\rangle` state.
