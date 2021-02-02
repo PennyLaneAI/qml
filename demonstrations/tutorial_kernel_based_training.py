@@ -59,7 +59,7 @@ If the number of variational parameters remains small, e.g., there is a square-r
 of data samples (green line), variational circuits are almost as efficient as neural networks (blue line), 
 and require much fewer circuit evaluations 
 than the quadratic scaling of kernel methods (red line). 
-However with current hardware-compatible training strategies, 
+However, with current hardware-compatible training strategies, 
 kernel methods scale much better than variational circuits that require a number of parameters of the 
 order of the training set size (orange line). 
 
@@ -217,10 +217,9 @@ n_qubits
 
 
 ######################################################################
-# To implement the kernel we could prepare the two states :math:`| \phi(x)\rangle`, :math:`| \phi(x')\rangle` 
-# on different sets of qubits
-# with angle-embedding routines :math:`S(x), S(x')`, and measure their
-# overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
+# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle` 
+# on different sets of qubits with angle-embedding routines :math:`S(x), S(x')`, 
+# and measure their overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 #
 # However, we need only half the number of qubits if we prepare
 # :math:`| \phi(x)\rangle` and then apply the inverse embedding
