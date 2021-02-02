@@ -3,7 +3,6 @@ r"""
 
 Barren plateaus in quantum neural networks
 ==========================================
-*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com)*
 
 .. meta::
    :property="og:description": Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane.
@@ -13,6 +12,8 @@ Barren plateaus in quantum neural networks
 .. related::
 
    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
+
+*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com). Last updated: 26 Oct 2020.*
 
 In classical optimization, it is suggested that saddle
 points, not local minima, provide a fundamental impediment

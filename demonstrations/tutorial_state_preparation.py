@@ -16,6 +16,8 @@ Training a quantum circuit with PyTorch
    pytorch_noise PyTorch and noisy devices 
    tutorial_isingmodel_PyTorch 3-qubit Ising model in PyTorch
 
+*Author: PennyLane dev team. Last updated: 25 Jan 2021.*
+
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
 how to:
@@ -51,7 +53,6 @@ import pennylane as qml
 import numpy as np
 import torch
 from torch.autograd import Variable
-
 np.random.seed(42)
 
 # we generate a three-dimensional random vector by sampling
@@ -62,13 +63,16 @@ v = np.random.normal(0, 1, 3)
 purity = 0.66
 
 # create a random Bloch vector with the specified purity
-bloch_v = np.sqrt(2 * purity - 1) * v / np.sqrt(np.sum(v ** 2))
+bloch_v = Variable(
+    torch.tensor(np.sqrt(2 * purity - 1) * v / np.sqrt(np.sum(v ** 2))),
+    requires_grad=False
+)
 
 # array of Pauli matrices (will be useful later)
-Paulis = np.zeros((3, 2, 2), dtype=complex)
-Paulis[0] = [[0, 1], [1, 0]]
-Paulis[1] = [[0, -1j], [1j, 0]]
-Paulis[2] = [[1, 0], [0, -1]]
+Paulis = Variable(torch.zeros([3, 2, 2], dtype=torch.complex128), requires_grad=False)
+Paulis[0] = torch.tensor([[0, 1], [1, 0]])
+Paulis[1] = torch.tensor([[0, -1j], [1j, 0]])
+Paulis[2] = torch.tensor([[1, 0], [0, -1]])
 
 ##############################################################################
 # Unitary operations map pure states to pure states. So how can we prepare
@@ -123,7 +127,7 @@ dev = qml.device("default.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="torch")
-def circuit(params, A=None):
+def circuit(params, A):
 
     # repeatedly apply each layer in the circuit
     for j in range(nr_layers):
@@ -148,7 +152,7 @@ def circuit(params, A=None):
 def cost_fn(params):
     cost = 0
     for k in range(3):
-        cost += torch.abs(circuit(params, A=Paulis[k]) - bloch_v[k])
+        cost += torch.abs(circuit(params, Paulis[k]) - bloch_v[k])
 
     return cost
 
@@ -184,8 +188,8 @@ for n in range(steps):
 # calculate the Bloch vector of the output state
 output_bloch_v = np.zeros(3)
 for l in range(3):
-    output_bloch_v[l] = circuit(best_params, A=Paulis[l])
+    output_bloch_v[l] = circuit(best_params, Paulis[l])
 
 # print results
-print("Target Bloch vector = ", bloch_v)
+print("Target Bloch vector = ", bloch_v.numpy())
 print("Output Bloch vector = ", output_bloch_v)
