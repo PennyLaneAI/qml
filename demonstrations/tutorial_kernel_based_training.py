@@ -26,18 +26,18 @@ of which is the `support vector machine (SVM) <https://en.wikipedia.org/wiki/Sup
 `Havlicek et al. (2018) <https://arxiv.org/abs/1804.11326>`__,
 `Liu et al. (2020) <https://arxiv.org/abs/2010.02174>`__, 
 `Huang et al. (2020) <https://arxiv.org/pdf/2011.01938>`__,
-and the systematic summary in `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__). 
+and, for a systematic summary which we will follow here, 
+`Schuld (2021) <https://arxiv.org/abs/2101.11020>`__). 
+
 The link between quantum models and kernel methods has important practical implications: 
 we can replace the common `variational approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__ 
 to quantum machine learning with a classical kernel method where the kernel - a small building block 
 of the overall algorithm - is computed by a quantum device. In many situations there are 
-guarantees that we get better or at least equally good results (e.g., `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__). 
+guarantees that we get better or at least equally good results. 
 
 This demonstration explores how kernel-based training compares with 
 `variational training <https://pennylane.ai/qml/demos/tutorial_variational_classifier.html>`__ in terms of the number of quantum 
-circuits that have to be evaluated during training and prediction. 
-This is a serious `bottleneck in near-term quantum computing <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`__.
-For this we train a quantum machine
+circuits that have to be evaluated. For this we train a quantum machine
 learning model with a kernel-based approach using a combination of PennyLane
 and the `scikit-learn <https://scikit-learn.org/>`__ machine
 learning library. We compare this strategy with a variational
@@ -45,7 +45,7 @@ quantum circuit trained via stochastic gradient descent using
 `PyTorch <https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html>`__.
 
 We will see that in a typical small-scale example, kernel-based training requires only a fraction of the number of 
-quantum circuit evaluations in variational circuit training, while each 
+quantum circuit evaluations used by variational circuit training, while each 
 evaluation runs a much shorter circuit.  
 In general, the relative efficiency of kernel-based methods compared to variational circuits 
 depends on the number of parameters used in the variational model. 
@@ -56,15 +56,15 @@ depends on the number of parameters used in the variational model.
        :alt: Scaling of kernel-based vs. variational learning
 
 If the number of variational parameters remains small, e.g., there is a square-root-like scaling with the number 
-of data samples as for the green line, variational circuits are almost as efficient as neural networks shown in blue, 
+of data samples (green line), variational circuits are almost as efficient as neural networks (blue line), 
 and require much fewer circuit evaluations 
-than the quadratic scaling of kernel methods represented by the red line. 
-But with current hardware-compatible training strategies, 
-kernel methods can still be better than variational circuits that require a number of parameters of the 
+than the quadratic scaling of kernel methods (red line). 
+However with current hardware-compatible training strategies, 
+kernel methods scale much better than variational circuits that require a number of parameters of the 
 order of the training set size (orange line). 
 
 In conclusion, **for quantum machine learning applications with many parameters, kernel-based training can be a great 
-alternative to variational quantum models**.
+alternative to the variational approach to quantum machine learning**.
 
 After working through this demo, you will:
 
@@ -217,9 +217,9 @@ n_qubits
 
 
 ######################################################################
-# To implement the kernel we could prepare the two states
-# :math:`| \phi(x)\rangle`, :math:`| \phi(x')\rangle` on different sets of qubits
-# with angle-embedding routines :math:`S(x), S(x')` and measure their
+# To implement the kernel we could prepare the two states :math:`| \phi(x)\rangle`, :math:`| \phi(x')\rangle` 
+# on different sets of qubits
+# with angle-embedding routines :math:`S(x), S(x')`, and measure their
 # overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 #
 # However, we need only half the number of qubits if we prepare
