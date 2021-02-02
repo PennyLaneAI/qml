@@ -217,8 +217,8 @@ n_qubits
 
 
 ######################################################################
-# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle` 
-# on different sets of qubits with angle-embedding routines :math:`S(x), S(x')`, 
+# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle`
+# on different sets of qubits with angle-embedding routines :math:`S(x), S(x')`,
 # and measure their overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 #
 # However, we need only half the number of qubits if we prepare
@@ -233,14 +233,14 @@ n_qubits
 #
 # To verify that this gives us the kernel:
 #
-# .. math::  
-#     
+# .. math::
+#
 #      \begin{align*}
 #          \langle 0..0 |S(x') S(x)^{\dagger} \mathcal{M} S(x')^{\dagger} S(x)  | 0..0\rangle &= \langle 0..0 |S(x') S(x)^{\dagger} |0..0\rangle \langle 0..0| S(x')^{\dagger} S(x)  | 0..0\rangle  \\
 #          &= |\langle 0..0| S(x')^{\dagger} S(x)  | 0..0\rangle |^2\\
 #          &= | \langle \phi(x') | \phi(x)\rangle|^2 \\
 #          &= \kappa(x, x').
-#	\end{align*}	
+#      \end{align*}
 #
 # Note that a projector :math:`|0..0 \rangle \langle 0..0|` can be constructed
 # using the ``qml.Hermitian`` observable in PennyLane.
