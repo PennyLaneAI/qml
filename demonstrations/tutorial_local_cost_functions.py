@@ -1,7 +1,6 @@
 """
 Alleviating barren plateaus with local cost functions
 =====================================================
-*Author: Thomas Storwick (tstorwick@gmail.com)*
 
 .. meta::
     :property="og:description": Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.
@@ -10,6 +9,8 @@ Alleviating barren plateaus with local cost functions
 .. related::
 
    tutorial_barren_plateaus Barren plateaus in QNNs
+
+*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 28 Jan 2021.*
 
 Barren Plateaus
 ---------------
@@ -63,6 +64,7 @@ from pennylane import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
+np.random.seed(42)
 
 ######################################################################
 # Visualizing the problem

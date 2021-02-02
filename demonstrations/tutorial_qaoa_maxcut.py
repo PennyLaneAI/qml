@@ -11,6 +11,8 @@ QAOA for MaxCut
 .. related::
    tutorial_qaoa_intro Intro to QAOA
 
+*Author: PennyLane dev team. Last updated: 28 Jan 2021.*
+
 """
 ##############################################################################
 # In this tutorial we implement the quantum approximate optimization algorithm (QAOA) for the MaxCut
@@ -141,6 +143,7 @@ QAOA for MaxCut
 import pennylane as qml
 from pennylane import numpy as np
 
+np.random.seed(42)
 
 ##############################################################################
 # Operators

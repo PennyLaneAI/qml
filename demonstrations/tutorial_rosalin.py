@@ -14,6 +14,8 @@ Frugal shot optimization with Rosalin
    tutorial_doubly_stochastic Doubly stochastic gradient descent
    tutorial_rotoselect Quantum circuit structure learning
 
+*Author: PennyLane dev team. Posted: 19 May 2020. Last updated: 20 Jan 2021.*
+
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
 Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy
@@ -109,7 +111,7 @@ import numpy as np
 import pennylane as qml
 
 # set the random seed
-np.random.seed(2)
+np.random.seed(4)
 
 coeffs = [2, 4, -1, 5, 2]
 
@@ -145,7 +147,7 @@ analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=True)
 # returning a collection of QNodes, each one evaluating the expectation value
 # of each Hamiltonian.
 
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
+qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
 
 
 ##############################################################################
@@ -224,8 +226,8 @@ cost_wrs = []
 shots_wrs = []
 
 for i in range(100):
-    params = opt.step(cost, params)
-    cost_wrs.append(cost(params))
+    params, _cost = opt.step_and_cost(cost, params)
+    cost_wrs.append(_cost)
     shots_wrs.append(total_shots*i)
     print("Step {}: cost = {} shots used = {}".format(i, cost_wrs[-1], shots_wrs[-1]))
 
@@ -246,8 +248,8 @@ cost_adam = []
 shots_adam = []
 
 for i in range(100):
-    params = opt.step(cost, params)
-    cost_adam.append(cost(params))
+    params, _cost = opt.step_and_cost(cost, params)
+    cost_adam.append(_cost)
     shots_adam.append(total_shots*i)
     print("Step {}: cost = {} shots used = {}".format(i, cost_adam[-1], shots_adam[-1]))
 
@@ -470,7 +472,7 @@ class Rosalin:
         return g, s
 
     def step(self, params):
-        """Perform a single step of the Rosalin optimizater."""
+        """Perform a single step of the Rosalin optimizer."""
         # keep track of the number of shots run
         self.shots_used += int(2 * np.sum(self.s))
 
@@ -579,7 +581,10 @@ params = init_params
 opt = qml.AdamOptimizer(0.07)
 
 non_analytic_dev.shots = adam_shots_per_eval
-cost = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev))
+cost = qml.dot(
+  coeffs,
+  qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
+)
 
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]
@@ -600,6 +605,7 @@ plt.plot(shots_adam, cost_adam, "g", label="Adam")
 plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
+plt.xlim(0, 300000)
 plt.show()
 
 ##############################################################################

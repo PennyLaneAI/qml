@@ -15,6 +15,8 @@ Beyond classical computing with qsim
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
     quantum_volume Quantum volume
 
+*Author: PennyLane dev team. Posted: 30 Nov 2020.*
+
 .. figure:: ../demonstrations/qsim_beyond_classical/qc.png
     :align: right
     :height: 300pt
@@ -40,7 +42,7 @@ bitstring distribution classically. By comparing run-times for the
 classical simulations and the Sycamore chip
 on smaller circuits, and then extrapolating classical run-times for larger
 circuits, the team concluded that simulating larger circuits on Sycamore
-was intractable classically---i.e., the Sycamore chips had demonstrated 
+was intractable classically---i.e., the Sycamore chips had demonstrated
 what is called "quantum supremacy".
 
 In this demonstration, we will walk you through how their random quantum
