@@ -15,7 +15,7 @@ Plugins and Hybrid computation
    tutorial_qubit_rotation Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
 
-*Author: PennyLane dev team.*
+*Author: PennyLane dev team. Last updated: 1 Feb 2021.*
 
 This tutorial introduces the notion of hybrid computation by combining several PennyLane
 plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
@@ -59,7 +59,7 @@ Breaking this down, step-by-step:
    wire (wire 1) is prepared in the vacuum state. The former state is non-Gaussian,
    necessitating the use of the ``'strawberryfields.fock'`` backend device.
 
-3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta`and :math:`\phi`.
+3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta` and :math:`\phi`.
    Here, we have the convention that the beamsplitter transmission amplitude is :math:`t=\cos\theta`,
    and the reflection amplitude is
    :math:`r=e^{i\phi}\sin\theta`. See :doc:`introduction/operations` for a full list of operation conventions.
@@ -163,7 +163,7 @@ dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=2)
 # running on Strawberry Fields.
 
 
-@qml.qnode(dev_fock)
+@qml.qnode(dev_fock, diff_method="parameter-shift")
 def photon_redirection(params):
     qml.FockState(1, wires=0)
     qml.Beamsplitter(params[0], params[1], wires=[0, 1])
@@ -268,7 +268,7 @@ def qubit_rotation(phi1, phi2):
     return qml.expval(qml.PauliZ(0))
 
 
-@qml.qnode(dev_fock)
+@qml.qnode(dev_fock, diff_method="parameter-shift")
 def photon_redirection(params):
     """The photon redirection QNode"""
     qml.FockState(1, wires=0)

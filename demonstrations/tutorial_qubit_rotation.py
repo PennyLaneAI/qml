@@ -186,8 +186,8 @@ def circuit(params):
 # For a Python function to also be a valid quantum function, there are some
 # important restrictions:
 #
-# * **Quantum functions must only contain quantum operations, one operation per
-#   line, in the order in which they are to be applied.**
+# * **Quantum functions must contain quantum operations, one operation per line,
+#   in the order in which they are to be applied.**
 #
 #   In addition, we must always specify the subsystem the operation applies to,
 #   by passing the ``wires`` argument; this may be a list or an integer, depending
@@ -202,8 +202,6 @@ def circuit(params):
 #
 #   For a full list of observables, see :doc:`the documentation <introduction/operations>`.
 #   The documentation also provides details on supported :doc:`measurement return types <introduction/measurements>`.
-#
-# * **Quantum functions must not contain any classical processing of circuit parameters.**
 #
 # .. note::
 #
