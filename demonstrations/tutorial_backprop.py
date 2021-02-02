@@ -194,6 +194,7 @@ print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 # create the gradient function
 grad_fn = qml.grad(circuit)
+circuit.qtape = None
 
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=num, repeat=reps)
 backward_time = min(times) / num
