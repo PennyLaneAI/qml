@@ -15,6 +15,7 @@
 import os
 import sys
 import warnings
+import numpy as np
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -95,7 +96,12 @@ warnings.filterwarnings(
 warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
-    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+",
+    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
+)
+warnings.filterwarnings(
+    "ignore",
+    category=np.VisibleDeprecationWarning,
+    message=r"Creating an ndarray from ragged"
 )
 
 # Add any paths that contain templates here, relative to this directory.
