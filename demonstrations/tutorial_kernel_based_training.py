@@ -31,8 +31,8 @@ and, for a systematic summary which we will follow here,
 
 The link between quantum models and kernel methods has important practical implications: 
 we can replace the common `variational approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__ 
-to quantum machine learning with a classical kernel method where the kernel - a small building block 
-of the overall algorithm - is computed by a quantum device. In many situations there are 
+to quantum machine learning with a classical kernel method where the kernel—a small building block 
+of the overall algorithm—is computed by a quantum device. In many situations there are 
 guarantees that we get better or at least equally good results. 
 
 This demonstration explores how kernel-based training compares with 
