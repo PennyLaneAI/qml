@@ -13,8 +13,8 @@ Learning to Learn with Quantum NN via Classical NN
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
 
-In this tutorial we recreate the architecture proposed by Verdon et
-al. in the paper *Learning to learn with quantum neural networks via
+In this demo we recreate the architecture proposed by Verdon et
+al. in *Learning to learn with quantum neural networks via
 classical neural networks* [#l2l]_, using **PennyLane** and **TensorFlow**.
 In this paper, classical recurrent neural networks are used to assist
 the optimization of variational quantum algorithms.
@@ -22,18 +22,18 @@ the optimization of variational quantum algorithms.
 We will start with a brief theoretical overview explaining the problem
 and the setup used to solve it. After that, we will deep dive into the
 code to build a fully functioning model, ready to be further developed
-or customized for your own needs. Without further ado, let’s start!
+or customized for your own needs. Without further ado, let’s begin!
 
 
 Problem: Optimization of Variational Quantum Algorithms (VQAs)
 ------------------------------------------------------------------
 
 Recently, a big effort by the quantum computing community has been
-devoted to the study of variational quantum algorithms (VQAs, for short)
-which leverage quantum circuits with fixed shape but with tunable
-parameters to solve a desired target task. The idea is similar to
+devoted to the study of variational quantum algorithms (VQAs)
+which leverage quantum circuits with fixed shape and tunable
+parameters to solve a desired task. The idea is similar to
 classical neural networks, where the weights of the network are
-optimized during training to perform best in regression or
+optimized during training to improve performance in regression or
 classification tasks. Similarly, once the shape of the variational quantum
 circuit is chosen — something that is very difficult and sensitive to
 the particular task at hand — its tunable parameters are optimized
@@ -47,19 +47,18 @@ possible challenge is posed by the so called *barren plateaus*). In
 particular, parameter initialization plays a key role in this scenario,
 since initializing the parameters in the proximity of an optimal
 solution leads to faster convergence and better results with respect to
-random initialization, which could bring the model in a region in
-parameter space far from any good solution. Thus, a good initialization
+random initialization. Thus, a good initialization
 strategy is crucial to promote the convergence of local optimizers to
-local extrema and to select reasonably good local minima. Here, by local
+local extrema and to select reasonably good local minima. By local
 optimizer, we mean a procedure that moves from one solution to another
 by small (local) changes in parameter space. These are opposed to global
-search methods, which take into account the whole (or at least a large
-section) parameter space to propose a new solution.
+search methods, which take into account large sections of
+parameter space to propose a new solution.
 
 One such strategy could come from the classical machine learning
 literature.
 
-Solution: (Classical) Recurrent Neural Networks
+Solution: Classical Recurrent Neural Networks
 ------------------------------------------------------------------
 
 By building on results from *meta-learning* literature in Classical ML,
@@ -77,7 +76,7 @@ of a Hamiltonian :math:`H` with respect to the parametrized state
 Given parameters :math:`\boldsymbol{\theta}_{t-1}` of the variational quantum circuit,
 the cost function :math:`y_{t-1}`, and the hidden state of the
 classical network :math:`\boldsymbol{h}_{t-1}` at the previous time step, the
-classical computer (the Recurrent Neural Network) proposes a new
+recurrent neural network proposes a new
 guess for the parameters :math:`\boldsymbol{\theta}_t`, which are
 then fed into the quantum computer (the QAOA circuit) to evaluate the
 cost function :math:`y_t`. By repeating this cycle a few times, and
@@ -95,7 +94,7 @@ information stored in its internal hidden state from the previous time
 step :math:`\boldsymbol{h}_t`. The RNN itself has trainable parameters :math:`\phi`,
 and hence it applies the parametrized mapping:
 
-.. math::  \boldsymbol{h}_{t+1}, \boldsymbol{\theta}_{t+1} = \text{RNN}_{\phi}(\boldsymbol{h}_{t}, \boldsymbol{\theta}_{t}, y_{t})
+.. math::  \boldsymbol{h}_{t+1}, \boldsymbol{\theta}_{t+1} = \text{RNN}_{\phi}(\boldsymbol{h}_{t}, \boldsymbol{\theta}_{t}, y_{t}),
 
 which generates a new suggestion for the variational parameters as well
 as a new internal state. Upon training the weights :math:`\phi`, the RNN
@@ -107,12 +106,12 @@ VQAs in focus: QAOA for MaxCut
 
 There are multiple VQAs for which this hybrid training routine could
 be used, some of them directly analyzed in [#l2l]_. In the
-following, we will only focus on one of such examples, that is the use
-of the QAOA (Quantum Approximate Optimization Algorithm) for solving
+following, we focus on one such example, the
+Quantum Approximate Optimization Algorithm (QAOA) for solving
 the MaxCut problem for graphs. Thus, referring to the picture above,
 the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
-Hamiltonian :math:`H` of the MaxCut problem of some graphs.
+Hamiltonian :math:`H` of the MaxCut problem.
 If you wish to refresh your memories, check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
@@ -145,8 +144,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-# Set the seed for reproducibility of results
-# These seeds affect all random functions in this tutorial
+# Fix the seed for reproducibility, which affect all random functions in this demo
 random.seed(42)
 np.random.seed(42)
 tf.random.set_seed(42)
@@ -156,15 +154,15 @@ tf.random.set_seed(42)
 # Generation of training data: graphs
 # -----------------------------------
 #
-# As for any Machine Learning project, the first step is to gather (or in
-# our case create) a good dataset, which will be used to train the model
+# As for any machine learning project, the first step is to gather or
+# create a good dataset that will be used to train the model
 # and test its performances. In our case, we are analyzing the MaxCut
 # problem, which deals with the problem of finding a good binary partition
-# of nodes in a *graph*, such that the number of edges *cut* by such
+# of nodes in a graph, such that the number of edges *cut* by such
 # separation is maximized. For this reason, we start by generating some
 # random graphs :math:`G_{n,p}` where:
 #
-# * :math:`n` is the number of nodes in the graphs,
+# * :math:`n` is the number of nodes in each graph,
 # * :math:`p` is the probability of having an edge between two nodes.
 #
 
@@ -226,8 +224,8 @@ def qaoa_from_graph(graph, n_layers=1):
     """Creates a cost function by encoding a Hamiltonian that solves the MaxCut problem using QAOA.
 
     This function uses nested functions for the creation of the quantum circuit. When called,
-    it instantiates the QAOA circuit for the input graph and outputs a QAOA cost function.
-    Such function, given some parameters, evaluates the MaxCut cost function for the given graph.
+    it instantiates the QAOA circuit for the input graph and outputs a QAOA cost function 
+    that evaluates the MaxCut cost function for the given graph.
 
     Args:
         graph (networkx.classes.graph.Graph): a graph generated with Networkx
@@ -278,7 +276,7 @@ def qaoa_from_graph(graph, n_layers=1):
 
 
 ######################################################################
-# Before moving on, let’s see how to use these functions.
+# Before continuing, let’s see how to use these functions.
 #
 
 # Create an instance of a QAOA circuit given a graph.
@@ -306,7 +304,7 @@ cost(x)
 ######################################################################
 # Now we optimize the parameters to reduce the cost function ``cost``. We
 # can do this using ``tf.GradientTape()``, which works directly thanks to
-# PennyLane’s seamless integration with TensorFlow when using the
+# PennyLane’s integration with TensorFlow when using the
 # ``default.qubit.tf`` device.
 #
 # .. note::
@@ -375,11 +373,11 @@ print(f"\nFinal cost function: {cost(x).numpy()}\nOptimized angles: {x.numpy()}"
 # ------------------------------
 #
 # So far, we have defined the machinery which lets us build the QAOA
-# algorithm for solving the MaxCut problem of a graph.
+# algorithm for solving the MaxCut problem.
 # Now we wish to implement the Recurrent Neural Network architecture
 # explained previously. In particular, as proposed in the original
-# paper, we will build a custom model of an LSTM (Long-Short Term
-# Memory) network, capable of handling the hybrid data passing between
+# paper, we will build a custom model of an Long-Short Term
+# Memory (LSTM) network, capable of handling the hybrid data passing between
 # classical and quantum procedures. For this task, we will use ``Keras``
 # and ``TensorFlow``.
 #
@@ -387,17 +385,17 @@ print(f"\nFinal cost function: {cost(x).numpy()}\nOptimized angles: {x.numpy()}"
 
 ######################################################################
 # First of all, let’s define the elemental building block of the model,
-# that is an LSTM cell (see `TensorFlow
+# an LSTM cell (see `TensorFlow
 # documentation <https://www.tensorflow.org/api_docs/python/tf/keras/layers/LSTMCell>`__
 # for further details).
 #
 
 # Number of layers in QAOA ansatz. The higher the better in terms of performance,
-# but it also gets more computationally hard. For simplicity, we will stick to the single layer case.
+# but it also gets more computationally expensive. For simplicity, we will stick to the single layer case.
 n_layers = 1
 
 # Define a single LSTM cell. The cell has two units per layer
-# since each layer in the QAOA ansatz make use of two angles (parameters).
+# since each layer in the QAOA ansatz makes use of two parameters.
 cell = tf.keras.layers.LSTMCell(2 * n_layers)
 
 
@@ -413,11 +411,11 @@ graph_cost_list = [qaoa_from_graph(g) for g in graphs]
 
 ######################################################################
 # At this stage, we seek to reproduce the recurrent behavior depicted in
-# the picture above, outlining the functioning of RNN as a black-box
+# the picture above, outlining the functioning of an RNN as a black-box
 # optimizer. We do so by defining two functions:
 #
 # * ``rnn_iteration``: accounts for the computations happening on a single time step in the figure,
-#                      that is it performs the calculation inside the CPU and evaluates the quantum circuit on the QPU to obtain
+#                      that is, it performs the calculation inside the CPU and evaluates the quantum circuit on the QPU to obtain
 #                      the loss function for the current parameters.
 #
 # * ``recurrent_loop``: as the name suggests, it accounts for the creation of the recurrent loop
@@ -429,7 +427,7 @@ graph_cost_list = [qaoa_from_graph(g) for g in graphs]
 def rnn_iteration(inputs, graph_cost, n_layers=1):
     """Perform a single time step in the computational graph of the custom RNN.
 
-    The function takes as inputs, the outputs from a previous time step and a graph cost function,
+    The function takes as inputs the outputs from a previous time step and a graph cost function,
     and then goes through the Keras' LSTM cell. Its output is used to evaluate the QAOA MaxCut cost function.
 
     Args:
@@ -506,14 +504,14 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # The cost function
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# A key part in the ``recurrent_loop`` function, is given by the
+# A key part in the ``recurrent_loop`` function is given by the
 # definition of the variable ``loss``. In order to drive the learning
 # procedure of the weights in the LSTM cell, a cost function is needed.
 # While in the original paper the authors suggest to use a measure called
 # *observed improvement*, for simplicity here we use an easier cost
 # function :math:`\cal{L}(\phi)` defined as:
 #
-# .. math:: \cal{L}(\phi) = {\bf w} \cdot {\bf y}_t(\phi)
+# .. math:: \cal{L}(\phi) = {\bf w} \cdot {\bf y}_t(\phi),
 #
 # where :math:`{\bf y}_t(\phi) = (y_1, \cdots, y_5)` contains the
 # Hamiltonian cost functions from all iterations, and :math:`{\bf w}` are
@@ -578,7 +576,7 @@ def train_step(graph_cost):
 # .. note::
 #     For a QAOA ansatz using one single layer, and for a training set of
 #     20 graphs, each epoch takes approximately ~1m to run on a standard
-#     laptop. Be careful when using bigger dataset or training for larger
+#     laptop. Be careful when using bigger datasets or training for larger
 #     epochs.
 #
 
@@ -810,11 +808,11 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # Gradient Descent). Thus, as the authors suggest, the (trained) RNN can
 # be used for few iterations at the start of the training procedure to
 # initialize the parameters of the quantum circuit close to an optimal
-# solution. Then, a standard optimizer like the SGD, can be used to
+# solution. Then, a standard optimizer like the SGD can be used to
 # fine-tune the proposed parameters and reach even better solutions.
 # While on this small scale example the benefits of using an LSTM to
 # initialize parameters may seem modest, on more complicated instances
-# and problems it can make a big difference, since, on random
+# and problems it can make a big difference, since on random
 # initialization of the parameters, standard local optimizer may
 # encounter problems finding a good minimization direction (for further
 # details, see [#l2l]_, [#vqas]_).
