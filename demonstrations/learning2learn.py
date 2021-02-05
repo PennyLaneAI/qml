@@ -19,8 +19,8 @@ classical neural networks* [#l2l]_, using **PennyLane** and **TensorFlow**.
 In this paper, classical recurrent neural networks are used to assist
 the optimization of variational quantum algorithms.
 
-We will start with a brief theoretical overview explaining the problem
-and the setup used to solve it. After that, we will deep dive into the
+We start with a brief theoretical overview explaining the problem
+and the setup used to solve it. After that, we deep dive into the
 code to build a fully functioning model, ready to be further developed
 or customized for your own needs. Without further ado, let’s begin!
 
@@ -42,8 +42,7 @@ good the quantum algorithm is performing (see [#vqas]_ for a
 thorough overview on VQAs).
 
 A major challenge for VQAs relates to the optimization of tunable
-parameters, which was shown to be a very hard task to perform (a
-possible challenge is posed by the so called *barren plateaus*). In
+parameters, which was shown to be a very hard task to perform [#barren]_,[#vqas]_. In
 particular, parameter initialization plays a key role in this scenario,
 since initializing the parameters in the proximity of an optimal
 solution leads to faster convergence and better results with respect to
@@ -67,7 +66,7 @@ as a black-box controller to optimize the tunable parameters of
 variational quantum algorithms, as shown in the figure below. The cost
 function used is the expectation value :math:`\langle H \rangle_{\boldsymbol{\theta}} = \langle \psi_{\boldsymbol{\theta}} | H | \psi_{\boldsymbol{\theta}}\rangle`
 of a Hamiltonian :math:`H` with respect to the parametrized state
-:math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state.
+:math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle`.
 
 .. figure:: ../demonstrations/learning2learn/HybridLSTM.png
     :align: center
@@ -78,7 +77,7 @@ the cost function :math:`y_{t-1}`, and the hidden state of the
 classical network :math:`\boldsymbol{h}_{t-1}` at the previous time step, the
 recurrent neural network proposes a new
 guess for the parameters :math:`\boldsymbol{\theta}_t`, which are
-then fed into the quantum computer (the QAOA circuit) to evaluate the
+then fed into the quantum computer to evaluate the
 cost function :math:`y_t`. By repeating this cycle a few times, and
 by training the weights of the recurrent neural network to minimize
 the loss function :math:`y_t`, a good initialization heuristic is
@@ -108,7 +107,7 @@ There are multiple VQAs for which this hybrid training routine could
 be used, some of them directly analyzed in [#l2l]_. In the
 following, we focus on one such example, the
 Quantum Approximate Optimization Algorithm (QAOA) for solving
-the MaxCut problem for graphs. Thus, referring to the picture above,
+the MaxCut problem for graphs [#maxcutwiki]_. Thus, referring to the picture above,
 the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
@@ -224,7 +223,7 @@ def qaoa_from_graph(graph, n_layers=1):
     """Creates a cost function by encoding a Hamiltonian that solves the MaxCut problem using QAOA.
 
     This function uses nested functions for the creation of the quantum circuit. When called,
-    it instantiates the QAOA circuit for the input graph and outputs a QAOA cost function 
+    it instantiates the QAOA circuit for the input graph and outputs a QAOA cost function
     that evaluates the MaxCut cost function for the given graph.
 
     Args:
@@ -1200,4 +1199,17 @@ for t, s in zip(pred, ["Step 1", "Step 2", "Step 3", "Loss"]):
 #       Cerezo M., Arrasmith A., Babbush R., Benjamin S. C., Endo S.,
 #       Fujii K., McClean J. R., Mitarai K., Yuan X., Cincio L. and Coles P.
 #       J. "Variational Quantum Algorithms", `arXiv:2012.09265 <https://arxiv.org/abs/2012.09265>`__ (2020).
+#
+# .. [#barren]
+#
+#       McClean J.R., Boixo S., Smelyanskiy V.N. et al.
+#       Barren plateaus in quantum neural network training landscapes.
+#       `Nat Commun 9, 4812 <https://www.nature.com/articles/s41467-018-07090-4>`__ (2018).
+#
+# .. [#maxcutwiki]
+#
+#       MaxCut problem: https://en.wikipedia.org/wiki/Maximum_cut.
+#
+#
+#
 #
