@@ -13,6 +13,8 @@ A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
    tutorial_vqt Variational quantum thermalizer
 
+*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+
 The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
@@ -147,9 +149,8 @@ dev = qml.device('default.qubit', wires=qubits)
 ##############################################################################
 # In the circuit, we apply single-qubit rotations, followed by CNOT gates:
 
-
 def circuit(params, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=wires)
     for i in wires:
         qml.Rot(*params[i], wires=i)
     qml.CNOT(wires=[2, 3])
@@ -191,9 +192,9 @@ print(params)
 max_iterations = 200
 conv_tol = 1e-06
 
-prev_energy = cost_fn(params)
+
 for n in range(max_iterations):
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
@@ -202,8 +203,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print('Final convergence parameter = {:.8f} Ha'.format(conv))

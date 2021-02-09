@@ -14,6 +14,7 @@ Multiclass margin classifier
    tutorial_variational_classifier Variational quantum classifier
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
+*Author: PennyLane dev team. Posted: 9 Apr 2020. Last updated: 28 Jan 2021.*
 
 In this tutorial, we show how to use the PyTorch interface for PennyLane
 to implement a multiclass variational classifier. We consider the iris database
@@ -53,6 +54,9 @@ import torch
 import numpy as np
 from torch.autograd import Variable
 import torch.optim as optim
+
+np.random.seed(0)
+torch.manual_seed(0)
 
 num_classes = 3
 margin = 0.15
@@ -110,7 +114,8 @@ def circuit(weights, feat=None):
 
 qnodes = []
 for iq in range(num_classes):
-    qnodes.append(qml.QNode(circuit, dev).to_torch())
+    qnode = qml.QNode(circuit, dev, interface="torch")
+    qnodes.append(qnode)
 
 
 #################################################################################
@@ -229,9 +234,8 @@ def load_and_process_data():
     return X, Y
 
 
-# Create a train and test split. Use a seed for reproducability
+# Create a train and test split.
 def split_data(feature_vecs, Y):
-    np.random.seed(0)
     num_data = len(Y)
     num_train = int(train_split * num_data)
     index = np.random.permutation(range(num_data))

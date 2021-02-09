@@ -3,7 +3,6 @@ r"""
 
 Coherent Variational Quantum Linear Solver
 ==========================================
-*Author: Andrea Mari*
 
 .. meta::
     :property="og:description": This demonstration extends the variational quantum
@@ -13,6 +12,8 @@ Coherent Variational Quantum Linear Solver
 .. related::
 
    tutorial_vqls Variational quantum linear solver
+
+*Author: Andrea Mari. Last updated: 15 Jan 2021.*
 
 In this tutorial we propose and implement an algorithm that we call
 *coherent variational quantum linear solver* (CVQLS).
@@ -413,8 +414,7 @@ w = q_delta * np.random.randn(n_qubits)
 
 cost_history = []
 for it in range(steps):
-    w = opt.step(cost, w)
-    _cost = cost(w)
+    w, _cost = opt.step_and_cost(cost, w)
     print("Step {:3d}       Cost = {:9.7f}".format(it, _cost))
     cost_history.append(_cost)
 

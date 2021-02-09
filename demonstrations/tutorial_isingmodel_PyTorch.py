@@ -14,6 +14,8 @@ r"""
    tutorial_state_preparation Training a quantum circuit with PyTorch
    pytorch_noise PyTorch and noisy devices
 
+*Author: PennyLane dev team. Last updated: 26 Oct 2020.*
+
 The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__
 can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__
 and `Boltzmann machines <https://en.wikipedia.org/wiki/Boltzmann_machine>`__

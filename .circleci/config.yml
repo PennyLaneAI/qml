@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v20-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v20-{{ .Branch }}-
-            - pip-v20-
+            - pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v22f-{{ .Branch }}-
+            - pip-v22f-
 
       - run:
           name: Install dependencies
@@ -35,13 +35,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v20-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v12-{{ .Branch }}-{{ .Revision }}
-            - gallery-v12-{{ .Branch }}-
-            - gallery-v12-
+            - gallery-v14-{{ .Branch }}-{{ .Revision }}
+            - gallery-v14-{{ .Branch }}-
+            - gallery-v14-
 
       - run:
           name: Build tutorials
@@ -57,7 +57,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v12-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v14-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
@@ -172,9 +172,9 @@ jobs:
             aws s3 cp _build/html/implementations.html s3://pennylane.ai-prod/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstrations.html
             aws s3 cp _build/html/beginner.html s3://pennylane.ai-prod/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstrations.html
 
-      # - run:
-      #     name: Invalidate CloudFront
-      #     command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+      - run:
+          name: Invalidate CloudFront
+          command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
   version: 2
