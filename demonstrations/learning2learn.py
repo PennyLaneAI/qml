@@ -767,7 +767,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # .. [#barren]
 #
 #       McClean J.R., Boixo S., Smelyanskiy V.N. et al.
-#       Barren plateaus in quantum neural network training landscapes.
+#       "Barren plateaus in quantum neural network training landscapes",
 #       `Nat Commun 9, 4812 <https://www.nature.com/articles/s41467-018-07090-4>`__ (2018).
 #
 # .. [#maxcutwiki]
