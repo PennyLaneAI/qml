@@ -47,7 +47,7 @@ We're putting the N in NISQ.
 # Mixed states are described by `density matrices
 # <https://en.wikipedia.org/wiki/Density_matrices>`__.
 # They provide a more general method of describing quantum states that elegantly
-# encodes a distribution over pure states (a mixed state) in a single mathematical object.
+# encodes a distribution over pure states in a single mathematical object.
 # Mixed states are the most general description of a quantum state, of which pure
 # states are a special case.
 #
@@ -60,7 +60,6 @@ We're putting the N in NISQ.
 import pennylane as qml
 from pennylane import numpy as np
 
-qml.enable_tape()
 dev = qml.device('default.mixed', wires=2)
 
 
@@ -97,7 +96,7 @@ print(f"Output state is = \n{np.real(dev.state)}")
 #     \Phi(\rho) = \sum_i K_i \rho K_{i}^{\dagger}.
 #
 # Just like pure states are special cases of mixed states, unitary
-# transformations are special cases of quantum channels. Unitary transformations are represnted
+# transformations are special cases of quantum channels. Unitary transformations are represented
 # by a single Kraus operator,
 # the unitary :math:`U`, and they transform a state as
 # :math:`U\rho U^\dagger`.
@@ -121,6 +120,7 @@ print(f"Output state is = \n{np.real(dev.state)}")
 #
 # This channel can be implemented in PennyLane using the :class:`qml.BitFlip <pennylane.BitFlip>`
 # operation.
+#
 # Let's see what happens when we simulate this type of noise acting on
 # both qubits in the circuit. We'll evaluate the QNode for different bit flip probabilities.
 #
