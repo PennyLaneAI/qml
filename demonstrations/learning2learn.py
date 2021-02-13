@@ -121,7 +121,7 @@ If you wish to refresh your memories, check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
 .. note::
-   Running the whole tutorial requires approx. ~13m.
+   Running the tutorial (excluding the Appendix) requires approx. ~13m.  
 
 """
 
@@ -784,8 +784,8 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # In this appendix you can find further details about the Learning to Learn approach
 # introduced in this tutorial.
 #
-# **Generalization performances**
-# 
+# Generalization performances
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # A very interesting feature of this model, is that it can be
 # straightforwardly applied to graphs having different number of nodes. In
