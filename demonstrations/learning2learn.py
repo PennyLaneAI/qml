@@ -107,9 +107,7 @@ the quantum circuit, but instead we let the RNN figure out how to do that.
 In this sense, we are learning (training the RNN) how to learn (how to optimize a variational quantum circuit).
 
 
-
-VQAs in focus: QAOA for MaxCut
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**VQAs in focus: QAOA for MaxCut**
 
 There are multiple VQAs for which this hybrid training routine could
 be used, some of them directly analyzed in [#l2l]_. In the
@@ -123,13 +121,13 @@ If you wish to refresh your memories, check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
 .. note::
-   Running the whole tutorial requires approx. ~15m.
+   Running the whole tutorial requires approx. ~13m.
 
 """
 
 ######################################################################
-# Importing the required packages
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# **Importing the required packages**
+#
 #
 # During this tutorial, we will use
 # **PennyLane** for executing quantum circuits and for integrating
@@ -388,8 +386,8 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 
 
 ######################################################################
-# The cost function
-# ~~~~~~~~~~~~~~~~~~~~~~
+# **The cost function**
+#
 #
 # A key part in the ``recurrent_loop`` function is given by the
 # definition of the variable ``loss``. In order to drive the learning
@@ -418,8 +416,8 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 
 
 ######################################################################
-# Training
-# ~~~~~~~~~~~~~~~~~~~~~~
+# **Training**
+#
 #
 # Now all the cards are on the table and we just need to prepare a
 # training routine and then run it!
@@ -569,8 +567,8 @@ lstm_losses = [new_cost(tf.reshape(guess, shape=(2, n_layers))) for guess in gue
 
 
 ######################################################################
-# Plot of the loss function
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# **Plot of the loss function**
+#
 #
 # We can plot these losses to see how well the RNN propose new guesses for
 # the parameters.
@@ -595,8 +593,8 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 
 
 ######################################################################
-# Comparison with standard Stochastic Gradient Descent (SGD)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# **Comparison with standard Stochastic Gradient Descent (SGD)**
+#
 #
 # That’s remarkable! The RNN learned to propose new parameters such that
 # the MaxCut cost is minimized very rapidly: in just few iterations the
@@ -715,8 +713,8 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # graphs having a generic number of nodes (see "Generalization Performances"
 # in the Appendix).
 #
-# What’s next?
-# ~~~~~~~~~~~~~~~~~~~~~~
+# **What’s next?**
+#
 #
 # But the story does not end here. There are multiple ways this work could
 # be improved. Here are a few:
@@ -786,8 +784,8 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # In this appendix you can find further details about the Learning to Learn approach
 # introduced in this tutorial.
 #
-# Generalization performances
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# **Generalization performances**
+# 
 #
 # A very interesting feature of this model, is that it can be
 # straightforwardly applied to graphs having different number of nodes. In
