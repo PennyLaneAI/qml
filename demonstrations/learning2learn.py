@@ -1,6 +1,6 @@
 r"""
-Learning to Learn with Quantum NN via Classical NN
-==================================================
+Learning to learn with quantum neural networks
+==============================================
 *Author: Stefano Mangini (mangini.stfn@gmail.com)*
 
 .. meta::
@@ -13,10 +13,10 @@ Learning to Learn with Quantum NN via Classical NN
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
 
-In this demo we recreate the architecture proposed by Verdon et
-al. in *Learning to learn with quantum neural networks via
+In this demo we recreate the architecture proposed
+in *Learning to learn with quantum neural networks via
 classical neural networks* [#l2l]_, using **PennyLane** and **TensorFlow**.
-In this paper, classical recurrent neural networks are used to assist
+We use classical recurrent neural networks to assist
 the optimization of variational quantum algorithms.
 
 We start with a brief theoretical overview explaining the problem
@@ -25,16 +25,15 @@ code to build a fully functioning model, ready to be further developed
 or customized for your own needs. Without further ado, let’s begin!
 
 
-Problem: Optimization of Variational Quantum Algorithms (VQAs)
-------------------------------------------------------------------
+Problem: Optimization of Variational Quantum Algorithms
+-------------------------------------------------------
 
 Recently, a big effort by the quantum computing community has been
 devoted to the study of variational quantum algorithms (VQAs)
 which leverage quantum circuits with fixed shape and tunable
-parameters to solve a desired task. The idea is similar to
+parameters. The idea is similar to
 classical neural networks, where the weights of the network are
-optimized during training to improve performance in regression or
-classification tasks. Similarly, once the shape of the variational quantum
+optimized during training. Similarly, once the shape of the variational quantum
 circuit is chosen — something that is very difficult and sensitive to
 the particular task at hand — its tunable parameters are optimized
 iteratively by minimizing a cost (or loss) function, which measures how
@@ -42,11 +41,10 @@ good the quantum algorithm is performing (see [#vqas]_ for a
 thorough overview on VQAs).
 
 A major challenge for VQAs relates to the optimization of tunable
-parameters, which was shown to be a very hard task to perform [#barren]_, [#vqas]_ . In
-particular, parameter initialization plays a key role in this scenario,
+parameters, which was shown to be a very hard task [#barren]_, [#vqas]_ . 
+Parameter initialization plays a key role in this scenario,
 since initializing the parameters in the proximity of an optimal
-solution leads to faster convergence and better results with respect to
-random initialization. Thus, a good initialization
+solution leads to faster convergence and better results. Thus, a good initialization
 strategy is crucial to promote the convergence of local optimizers to
 local extrema and to select reasonably good local minima. By local
 optimizer, we mean a procedure that moves from one solution to another
@@ -60,9 +58,9 @@ literature.
 Solution: Classical Recurrent Neural Networks
 ------------------------------------------------------------------
 
-By building on results from *meta-learning* literature in Classical ML,
+By building on results from the *meta-learning* literature in machine learning,
 authors in [#l2l]_ propose to use a Recurrent Neural Network (RNN)
-as a black-box controller to optimize the tunable parameters of
+as a black-box controller to optimize the parameters of
 variational quantum algorithms, as shown in the figure below. The cost
 function used is the expectation value :math:`\langle H \rangle_{\boldsymbol{\theta}} = \langle \psi_{\boldsymbol{\theta}} | H | \psi_{\boldsymbol{\theta}}\rangle`
 of a Hamiltonian :math:`H` with respect to the parametrized state
@@ -113,11 +111,11 @@ There are multiple VQAs for which this hybrid training routine could
 be used, some of them directly analyzed in [#l2l]_. In the
 following, we focus on one such example, the
 Quantum Approximate Optimization Algorithm (QAOA) for solving
-the MaxCut problem for graphs [#maxcutwiki]_. Thus, referring to the picture above,
+the MaxCut problem [#maxcutwiki]_. Thus, referring to the picture above,
 the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
-If you wish to refresh your memories, check out this great tutorial on
+Check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
 .. note::
@@ -149,7 +147,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-# Fix the seed for reproducibility, which affect all random functions in this demo
+# Fix the seed for reproducibility, which affects all random functions in this demo
 random.seed(42)
 np.random.seed(42)
 tf.random.set_seed(42)
@@ -159,12 +157,12 @@ tf.random.set_seed(42)
 # Generation of training data: graphs
 # -----------------------------------
 #
-# As for any machine learning project, the first step is to gather or
+# The first step is to gather or
 # create a good dataset that will be used to train the model
-# and test its performances. In our case, we are analyzing the MaxCut
-# problem, which deals with the problem of finding a good binary partition
-# of nodes in a graph, such that the number of edges *cut* by such
-# separation is maximized. For this reason, we start by generating some
+# and test its performance. In our case, we are analyzing MaxCut,
+# which deals with the problem of finding a good binary partition
+# of nodes in a graph such that the number of edges *cut* by such a
+# separation is maximized. We start by generating some
 # random graphs :math:`G_{n,p}` where:
 #
 # * :math:`n` is the number of nodes in each graph,
@@ -281,8 +279,8 @@ cost(x)
 # So far, we have defined the machinery which lets us build the QAOA
 # algorithm for solving the MaxCut problem.
 # Now we wish to implement the Recurrent Neural Network architecture
-# explained previously. In particular, as proposed in the original
-# paper, we will build a custom model of an Long-Short Term
+# explained previously. As proposed in the original
+# paper, we will build a custom model of a Long-Short Term
 # Memory (LSTM) network, capable of handling the hybrid data passing between
 # classical and quantum procedures. For this task, we will use ``Keras``
 # and ``TensorFlow``.
@@ -374,7 +372,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
     out3 = rnn_iteration(out2, graph_cost)
     out4 = rnn_iteration(out3, graph_cost)
 
-    # This cost function takes into account the cost from all iteration, but using different weights.
+    # This cost function takes into account the cost from all iterations, but using different weights.
     loss = tf.keras.layers.average(
         [0.1 * out0[0], 0.2 * out1[0], 0.3 * out2[0], 0.4 * out3[0], 0.5 * out4[0]]
     )
@@ -680,9 +678,9 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # *Hurray!* 🎉🎉
 #
 # As is it clear from the picture, the RNN reaches a better minimum in
-# fewer (but comparable) iterations than the standard SGD (Stochastic
-# Gradient Descent). Thus, as the authors suggest, the (trained) RNN can
-# be used for few iterations at the start of the training procedure to
+# fewer iterations than the standard SGD. 
+Thus, as the authors suggest, the trained RNN can
+# be used for a few iterations at the start of the training procedure to
 # initialize the parameters of the quantum circuit close to an optimal
 # solution. Then, a standard optimizer like the SGD can be used to
 # fine-tune the proposed parameters and reach even better solutions.
@@ -699,17 +697,17 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # Final remarks
 # -----------------
 #
-# In this tutorial we saw how to use a recurrent neural network, an LSTM
-# in particular, as a black-box optimizer to initialize the parameters in
-# a variational quantum circuit close to an optimal solution. In order to
-# do that, we connected MaxCut QAOA quantum circuits built in PennyLane
+# In this demo we saw how to use a recurrent neural network
+# as a black-box optimizer to initialize the parameters in
+# a variational quantum circuit close to an optimal solution. 
+# We connected MaxCut QAOA quantum circuits in PennyLane
 # with an LSTM built with TensorFlow, and we used a custom hybrid training
 # routine to optimize the whole network.
 #
 # Such architecture proved itself to be a good candidate for the
 # initialization problem of Variational Quantum Algorithms, since it
 # reaches good optimal solutions in very few iterations. Besides, the
-# architecture is quite general, since the same machinery can be used for
+# architecture is quite general since the same machinery can be used for
 # graphs having a generic number of nodes (see "Generalization Performances"
 # in the Appendix).
 #
@@ -732,7 +730,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 #    ``rnn_iteration`` and ``recurrent_loop`` to actual ``Keras Layers``
 #    and ``Models``. This way, by compiling the model before the training
 #    takes place, ``TensorFlow`` can create the computational graph of the
-#    model and train more efficiently. If you’re interested, you can find
+#    model and train more efficiently. You can find
 #    some ideas below to start working on it.
 #
 # If you're interested, in the Appendix below you can find some more details
