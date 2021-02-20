@@ -1,7 +1,6 @@
 r"""
 Learning to learn with quantum neural networks
 ==============================================
-*Author: Stefano Mangini (mangini.stfn@gmail.com)*
 
 .. meta::
     :property="og:description": Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.
@@ -11,6 +10,8 @@ Learning to learn with quantum neural networks
 
    tutorial_qaoa_intro QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
+
+*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: XX Feb 2021. Last updated: XX Feb 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -41,7 +42,7 @@ good the quantum algorithm is performing (see [#vqas]_ for a
 thorough overview on VQAs).
 
 A major challenge for VQAs relates to the optimization of tunable
-parameters, which was shown to be a very hard task [#barren]_, [#vqas]_ . 
+parameters, which was shown to be a very hard task [#barren]_, [#vqas]_ .
 Parameter initialization plays a key role in this scenario,
 since initializing the parameters in the proximity of an optimal
 solution leads to faster convergence and better results. Thus, a good initialization
@@ -119,7 +120,7 @@ Check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
 .. note::
-   Running the tutorial (excluding the Appendix) requires approx. ~13m.  
+   Running the tutorial (excluding the Appendix) requires approx. ~13m.
 
 """
 
@@ -212,12 +213,12 @@ nx.draw(graphs[0])
 
 
 def qaoa_from_graph(graph, n_layers=1):
-    """Creates a cost function by encoding a Hamiltonian that solves the MaxCut problem using QAOA."""
+    """Uses QAOA to create a cost Hamiltonian for the MaxCut problem."""
 
     # Number of qubits (wires) equal to the number of nodes in the graph
     wires = range(len(graph.nodes))
 
-    # Define the structure of the cost and mixer subcircuits specifically for the MaxCut problem
+    # Define the structure of the cost and mixer subcircuits for the MaxCut problem
     cost_h, mixer_h = qaoa.maxcut(graph)
 
     # Defines a layer of the QAOA ansatz from the cost and mixer Hamiltonians
@@ -233,7 +234,7 @@ def qaoa_from_graph(graph, n_layers=1):
 
     # Evaluates the cost Hamiltonian
     def hamiltonian(params, **kwargs):
-        """Evaluate the MaxCut cost of the QAOA, given the angles for the circuit and the specified graph."""
+        """Evaluate the cost Hamiltonian, given the angles and the graph."""
 
         # We set the default.qubit.tf device for seamless integration with TensorFlow
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
@@ -254,8 +255,8 @@ def qaoa_from_graph(graph, n_layers=1):
 cost = qaoa_from_graph(graph=graphs[0], n_layers=1)
 
 # Define some paramenters
-# Since we use only one layer in QAOA, params have the shape 1 x 2, in the form [[alpha, gamma]].
-# If not specificed, TensorFlow converts Python floating point numbers to tf.float32.
+# Since we use only one layer in QAOA, params have the shape 1 x 2,
+# in the form [[alpha, gamma]].
 x = tf.Variable([[0.5], [0.5]], dtype=tf.float32)
 
 # Evaluate th QAOA instance just created with some angles.
@@ -295,7 +296,8 @@ cost(x)
 #
 
 # Number of layers in QAOA ansatz. The higher the better in terms of performance,
-# but it also gets more computationally expensive. For simplicity, we stick to the single layer case.
+# but it also gets more computationally expensive.
+# For simplicity, we stick to the single layer case.
 n_layers = 1
 
 # Define a single LSTM cell. The cell has two units per layer
@@ -318,20 +320,21 @@ graph_cost_list = [qaoa_from_graph(g) for g in graphs]
 # the picture above, outlining the functioning of an RNN as a black-box
 # optimizer. We do so by defining two functions:
 #
-# * ``rnn_iteration``: accounts for the computations happening on a single time step in the figure,
-#                      that is, it performs the calculation inside the CPU and evaluates the quantum circuit on the QPU to obtain
-#                      the loss function for the current parameters.
+# * ``rnn_iteration``: accounts for the computations happening on a single time step in the figure.
+#   It performs the calculation inside the CPU and evaluates the quantum circuit on the QPU to obtain
+#   the loss function for the current parameters.
 #
 # * ``recurrent_loop``: as the name suggests, it accounts for the creation of the recurrent loop
-#                       of the model. In particular, it makes consecutive calls to the ``rnn_iteration`` function,
-#                       where the outputs of a previous call are fed as inputs of the next call.
+#   of the model. In particular, it makes consecutive calls to the ``rnn_iteration`` function,
+#   where the outputs of a previous call are fed as inputs of the next call.
 #
 
 
 def rnn_iteration(inputs, graph_cost, n_layers=1):
     """Perform a single time step in the computational graph of the custom RNN."""
 
-    # Unpack the input list containing the previous cost, parameters, and hidden states (denoted as 'h' and 'c').
+    # Unpack the input list containing the previous cost, parameters,
+    # and hidden states (denoted as 'h' and 'c').
     prev_cost = inputs[0]
     prev_params = inputs[1]
     prev_h = inputs[2]
@@ -340,7 +343,8 @@ def rnn_iteration(inputs, graph_cost, n_layers=1):
     # Concatenate the previous parameters and previous cost to create new input
     new_input = tf.keras.layers.concatenate([prev_cost, prev_params])
 
-    # Call the LSTM cell, which outputs new values for the parameters along with new internal states h and c
+    # Call the LSTM cell, which outputs new values for the parameters along
+    # with new internal states h and c
     new_params, [new_h, new_c] = cell(new_input, states=[prev_h, prev_c])
 
     # Reshape the parameters to correctly match those expected by PennyLane
@@ -364,15 +368,17 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
     initial_h = tf.zeros(shape=(1, 2 * n_layers))
     initial_c = tf.zeros(shape=(1, 2 * n_layers))
 
-    # We perform five consecutive calls to 'rnn_iteration', thus creating the recurrent loop.
-    # More iterations lead to better results, at the cost of more computationally intensive simulations.
+    # We perform five consecutive calls to 'rnn_iteration', thus creating the
+    # recurrent loop. More iterations lead to better results, at the cost of
+    # more computationally intensive simulations.
     out0 = rnn_iteration([initial_cost, initial_params, initial_h, initial_c], graph_cost)
     out1 = rnn_iteration(out0, graph_cost)
     out2 = rnn_iteration(out1, graph_cost)
     out3 = rnn_iteration(out2, graph_cost)
     out4 = rnn_iteration(out3, graph_cost)
 
-    # This cost function takes into account the cost from all iterations, but using different weights.
+    # This cost function takes into account the cost from all iterations,
+    # but using different weights.
     loss = tf.keras.layers.average(
         [0.1 * out0[0], 0.2 * out1[0], 0.3 * out2[0], 0.4 * out3[0], 0.5 * out4[0]]
     )
@@ -399,7 +405,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # where :math:`{\bf y}_t(\phi) = (y_1, \cdots, y_5)` contains the
 # Hamiltonian cost functions from all iterations, and :math:`{\bf w}` are
 # just some coefficients weighting the different steps in the recurrent
-# loop. In this case, we used :math:`{\bf w}=(0.1, 0.2, 0.3, 0.4, 0.5)`,
+# loop. In this case, we used :math:`{\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5)`,
 # to give more importance to the last steps rather than the initial steps.
 # Intuitively in this way the RNN is more free (low coefficient) to
 # explore a larger portion of parameter space during the first steps of
@@ -448,10 +454,8 @@ def train_step(graph_cost):
 # multiple times (epochs).
 #
 # .. note::
-#     For a QAOA ansatz using one single layer, and for a training set of
-#     20 graphs, each epoch takes approximately ~1m to run on a standard
-#     laptop. Be careful when using bigger datasets or training for larger
-#     epochs.
+#     Be careful when using bigger datasets or training for larger
+#     epochs, this may take a while to execute.
 #
 
 # Select an optimizer
@@ -588,16 +592,22 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 #     :width: 70%
 #     :target: javascript:void(0);
 #
+# That’s remarkable! The RNN learned to propose new parameters such that
+# the MaxCut cost is minimized very rapidly: in just few iterations the
+# loss reaches a minimum. Actually, it takes just a single step for the LSTM
+# to find a very good minimum. In fact, due to the recurrent loop, the loss
+# in each time step is directly dependent on the previous ones, with the first
+# iteration thus having lot of influence on the loss funtion defined above.
+# Changing the loss function, for example giving less importance to initial
+# steps and just focusing on the last one, leads to different optimization
+# behaviours, but with same final results.
+#
 
 
 ######################################################################
 # **Comparison with standard Stochastic Gradient Descent (SGD)**
 #
-#
-# That’s remarkable! The RNN learned to propose new parameters such that
-# the MaxCut cost is minimized very rapidly: in just few iterations the
-# loss reaches a minimum — actually, just after one single step, the LSTM
-# finds a very good minimum. But how well does this method compare with
+# How well does this method compare with
 # standard optimization techniques, for example, leveraging Stochastic
 # Gradient Descent (SGD) to optimize the parameters in the QAOA?
 #
@@ -678,8 +688,8 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # *Hurray!* 🎉🎉
 #
 # As is it clear from the picture, the RNN reaches a better minimum in
-# fewer iterations than the standard SGD. 
-Thus, as the authors suggest, the trained RNN can
+# fewer iterations than the standard SGD.
+# Thus, as the authors suggest, the trained RNN can
 # be used for a few iterations at the start of the training procedure to
 # initialize the parameters of the quantum circuit close to an optimal
 # solution. Then, a standard optimizer like the SGD can be used to
@@ -699,7 +709,7 @@ Thus, as the authors suggest, the trained RNN can
 #
 # In this demo we saw how to use a recurrent neural network
 # as a black-box optimizer to initialize the parameters in
-# a variational quantum circuit close to an optimal solution. 
+# a variational quantum circuit close to an optimal solution.
 # We connected MaxCut QAOA quantum circuits in PennyLane
 # with an LSTM built with TensorFlow, and we used a custom hybrid training
 # routine to optimize the whole network.
@@ -813,7 +823,6 @@ gs_cost_list = [qaoa_from_graph(g) for g in gs]
 
 # Shuffle the dataset
 import random
-
 random.shuffle(gs_cost_list)
 
 
@@ -1092,7 +1101,7 @@ for t, s in zip(pred, ["Step 1", "Step 2", "Step 3", "Loss"]):
 #     order to actually train the RNN network for multiple graphs, the above
 #     training routine must be modified. Otherwise, you could find a way to
 #     define the model to accept as input a whole dataset of graphs, and not
-#     just single one. Still, this might prove particularly hard, since
+#     just a single one. Still, this might prove particularly hard, since
 #     TensorFlow deals with tensors, and is not able to directly manage
 #     other data structures, like graphs or functions taking graphs as
 #     input, like ``qoao_from_graph``.
