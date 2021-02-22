@@ -192,7 +192,7 @@ plateaus in quantum neural networks.
 .. customgalleryitem::
     :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
     :figure: demonstrations/spsa/spsa_thumbnail.png
-    :description: :doc:`demos/tutorial_spsa`
+    :description: :doc:`demos/spsa`
     :tags: qiskit
 
 
@@ -244,6 +244,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
     demos/tutorial_measurement_optimize
+    demos/spsa
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier
