@@ -31,10 +31,10 @@ positive and a negative shift in the parameter values.
 
 As there would be two circuit evaluation for each free parameter, the number of
 overall quantum circuit executions for computing a quantum gradient scales
-linearly with the number of free parameters, i.e., :math:`O(k)` with :math:`k` being
+linearly with the number of free parameters, i.e., :math:`O(p)` with :math:`p` being
 the number of free parameters. This scaling can be very costly for optimization
 tasks with many free parameters. For the overall optimization this scaling means
-we need :math:`O(kn)` quantum circuit evaluations, where :math:`n` is the number of
+we need :math:`O(pn)` quantum circuit evaluations, where :math:`n` is the number of
 optimization steps taken.
 
 There are, however, certain optimization techniques that are gradient-free and
