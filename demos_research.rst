@@ -184,16 +184,17 @@ plateaus in quantum neural networks.
     :tags: chemistry
 
 .. customgalleryitem::
+    :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
+    :figure: demonstrations/measurement_optimize/meas_optimize_thumbnail.png
+    :description: :doc:`demos/tutorial_measurement_optimize`
+    :tags: chemistry
+
+.. customgalleryitem::
     :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
     :figure: demonstrations/spsa/spsa_thumbnail.png
     :description: :doc:`demos/tutorial_spsa`
     :tags: qiskit
 
-..customgalleryitem::
-    :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :figure: demonstrations/measurement_optimize/meas_optimize_thumbnail.png
-    :description: :doc:`demos/tutorial_measurement_optimize`
-    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
