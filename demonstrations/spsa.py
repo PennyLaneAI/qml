@@ -646,8 +646,8 @@ plt.figure(figsize=(10, 6))
 
 plt.scatter(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
 plt.scatter(
-    h2_grad_device_executions_ourense,
-    h2_grad_energies_ourense,
+    h2_grad_device_executions_melbourne,
+    h2_grad_energies_melbourne,
     label="Gradient descent, Melbourne sim.",
 )
 
@@ -684,21 +684,19 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 
 params = np.random.normal(0, np.pi, (num_qubits, 3))
 
-niter_spsa = 200
-
-h2_spsa_device_executions = [0]
-h2_spsa_energies = [cost(params)]
+h2_spsa_device_executions_melbourne = [0]
+h2_spsa_energies_melbourne = [cost(params)]
 
 dev_noisy._num_executions = 0
 
 def callback_fn(xk):
     cost_val = cost(xk)
-    h2_spsa_energies.append(cost_val)
+    h2_spsa_energies_melbourne.append(cost_val)
 
     # We've evaluated the cost function, let's make up for that
     dev_noisy._num_executions -= 1
-    h2_spsa_device_executions.append(dev_noisy.num_executions)
-    if len(h2_spsa_energies) % 10 == 0:
+    h2_spsa_device_executions_melbourne.append(dev_noisy.num_executions)
+    if len(h2_spsa_energies_melbourne) % 10 == 0:
         print(cost_val)
 
 res = minimizeSPSA(
@@ -714,7 +712,7 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 plt.figure(figsize=(10, 6))
 
 plt.plot(h2_grad_device_executions_melbourne, h2_grad_energies_melbourne, label="Gradient descent")
-plt.plot(h2_spsa_device_executions, h2_spsa_energies, label="SPSA")
+plt.plot(h2_spsa_device_executions_melbourne, h2_spsa_energies_melbourne, label="SPSA")
 
 plt.xlabel("Number of device executions", fontsize=14)
 plt.ylabel("Cost function value", fontsize=14)
