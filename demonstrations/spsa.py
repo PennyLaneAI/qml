@@ -482,7 +482,6 @@ max_iterations = 20
 cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
 
 # Initialize parameters and compute initial energy
-np.random.seed(0)
 params = np.random.normal(0, np.pi, (num_qubits, 3))
 
 h2_grad_device_executions = [0]
@@ -592,7 +591,7 @@ print("Expected device executions = {max_dev_execs}")
 from qiskit import IBMQ
 from qiskit.providers.aer import noise
 
-# Note: do not run the simulation on this device, as it will send it to a real hardware
+# Note: do not run the simulation on this device, as it will send it to real hardware!
 dev_melbourne = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne")
 noise_model = noise.NoiseModel.from_backend(dev_melbourne.backend.properties())
 dev_noisy = qml.device(
@@ -605,7 +604,6 @@ cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
 
 max_iterations = 20
 
-np.random.seed(0)
 params = np.random.normal(0, np.pi, (num_qubits, 3))
 
 h2_grad_device_executions_melbourne = [0]
@@ -684,20 +682,24 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 # SPSA should use only 2 device executions per term in the expectation value.
 #
 
-np.random.seed(0)
 params = np.random.normal(0, np.pi, (num_qubits, 3))
 
 niter_spsa = 200
 
-h2_spsa_device_executions = [x * 2 * 15 for x in range(niter_spsa + 1)]
+h2_spsa_device_executions = [0]
 h2_spsa_energies = [cost(params)]
 
 dev_noisy._num_executions = 0
 
-
 def callback_fn(xk):
-    h2_spsa_energies.append(cost(xk))
+    cost_val = cost(xk)
+    h2_spsa_energies.append(cost_val)
 
+    # We've evaluated the cost function, let's make up for that
+    dev_noisy._num_executions -= 1
+    h2_spsa_device_executions.append(dev_noisy.num_executions)
+    if len(h2_spsa_energies) % 10 == 0:
+        print(cost_val)
 
 res = minimizeSPSA(
     cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=0.628, callback=callback_fn
