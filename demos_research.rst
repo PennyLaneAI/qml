@@ -111,6 +111,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
+    
+.. customgalleryitem::
+    :tooltip: Kernel-based training with scikit-learn.
+    :figure: demonstrations/kernel_based_training/scaling.png
+    :description: :doc:`demos/tutorial_kernel_based_training`
+    :tags: pytorch sklearn kernels
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -183,6 +189,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_spsa`
     :tags: qiskit
 
+..customgalleryitem::
+    :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
+    :figure: demonstrations/measurement_optimize/meas_optimize_thumbnail.png
+    :description: :doc:`demos/tutorial_measurement_optimize`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -230,6 +242,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
+    demos/tutorial_measurement_optimize
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier

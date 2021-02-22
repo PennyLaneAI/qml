@@ -3,7 +3,6 @@ r"""
 
 Variational Quantum Linear Solver
 ====================================
-*Author: Andrea Mari*
 
 .. meta::
     :property="og:description": Implementing the variational
@@ -13,7 +12,8 @@ Variational Quantum Linear Solver
 .. related::
 
     tutorial_coherent_vqls Coherent VQLS
-    
+
+*Author: Andrea Mari. Last updated: 20 Jan 2021.*
 
 In this tutorial we implement a quantum algorithm known as the *variational quantum linear
 solver* (VQLS), originally introduced in
@@ -392,8 +392,7 @@ opt = qml.GradientDescentOptimizer(eta)
 
 cost_history = []
 for it in range(steps):
-    w = opt.step(cost_loc, w)
-    cost = cost_loc(w)
+    w, cost = opt.step_and_cost(cost_loc, w)
     print("Step {:3d}       Cost_L = {:9.7f}".format(it, cost))
     cost_history.append(cost)
 

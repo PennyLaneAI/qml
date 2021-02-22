@@ -13,6 +13,8 @@ Gaussian transformation
    quantum_neural_net Function fitting with a photonic quantum neural network
    qonn Optimizing a quantum optical neural network
 
+*Author: PennyLane dev team. Last updated: 16 Oct 2020.*
+
 This tutorial demonstrates the basic working principles of PennyLane for
 continuous-variable (CV) photonic devices. For more details about photonic
 quantum computing, the

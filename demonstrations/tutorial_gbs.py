@@ -16,6 +16,8 @@ Quantum advantage with Gaussian Boson Sampling
     qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
 
+*Author: PennyLane dev team. Posted: 4 Dec 2020. Last updated: 4 Dec 2020.*
+
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
 any classical algorithm. The Google Quantum team was the first to claim this achievement,
