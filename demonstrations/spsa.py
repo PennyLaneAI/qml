@@ -188,7 +188,6 @@ init_params = qml.init.strong_ent_layers_normal(
 def cost(params):
     return circuit(params.reshape(num_layers, num_wires, 3))
 
-
 ##############################################################################
 # Once we have defined each piece of the optimization, there's only one
 # remaining component required for the optimization: the *SPSA optimizer*.
@@ -208,9 +207,10 @@ from noisyopt import minimizeSPSA
 
 niter_spsa = 200
 
-cost_store_spsa = []
-device_execs_spsa = []
-
+# Evaluate the initial cost
+cost_store_spsa = [cost(init_params)]
+device_execs_spsa = [0]
+dev_sampler._num_executions = 0
 
 def callback_fn(xk):
     cost_val = cost(xk)
@@ -219,8 +219,10 @@ def callback_fn(xk):
     # We've evaluated the cost function, let's make up for that
     dev_sampler._num_executions -= 1
     device_execs_spsa.append(dev_sampler.num_executions)
-    if len(cost_store_spsa) % 10 == 0:
-        print(cost_val)
+
+    iteration_num = len(cost_store_spsa)
+    if iteration_num % 10 == 0:
+        print(f"Iteration = {iteration_num}, Cost = {cost_val}")
 
 
 ##############################################################################
@@ -246,7 +248,7 @@ def callback_fn(xk):
 #
 res = minimizeSPSA(
     cost,
-    x0=init_params,
+    x0=init_params.copy(),
     niter=niter_spsa,
     paired=False,
     c=0.15,
@@ -261,26 +263,27 @@ res = minimizeSPSA(
 #
 #  .. code-block:: none
 #
-#     0.368
-#     0.066
-#     -0.098
-#     -0.398
-#     -0.498
-#     -0.78
-#     -0.88
-#     -0.916
-#     -0.968
-#     -0.968
-#     -0.966
-#     -0.97
-#     -0.978
-#     -0.994
-#     -0.988
-#     -0.982
-#     -0.99
-#     -0.996
-#     -0.988
-#     -0.992
+#     Iteration = 10, Cost = 0.05
+#     Iteration = 20, Cost = -0.702
+#     Iteration = 30, Cost = -0.87
+#     Iteration = 40, Cost = -0.942
+#     Iteration = 50, Cost = -0.936
+#     Iteration = 60, Cost = -0.93
+#     Iteration = 70, Cost = -0.93
+#     Iteration = 80, Cost = -0.946
+#     Iteration = 90, Cost = -0.938
+#     Iteration = 100, Cost = -0.96
+#     Iteration = 110, Cost = -0.972
+#     Iteration = 120, Cost = -0.964
+#     Iteration = 130, Cost = -0.97
+#     Iteration = 140, Cost = -0.958
+#     Iteration = 150, Cost = -0.956
+#     Iteration = 160, Cost = -0.966
+#     Iteration = 170, Cost = -0.956
+#     Iteration = 180, Cost = -0.966
+#     Iteration = 190, Cost = -0.96
+#     Iteration = 200, Cost = -0.956
+
 
 ##############################################################################
 #
@@ -288,22 +291,28 @@ res = minimizeSPSA(
 # size according to a favourable value found after grid search for fast
 # convergence. Note that we also reset the number of executions of the device
 
+
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
+
+
+steps = 20
+params = init_params.copy()
+
+device_execs_grad = [0]
+cost_store_grad = []
 
 # Reset the number of executions of the device
 dev_sampler._num_executions = 0
-
-device_execs_grad = []
-cost_store_grad = []
-
-steps = 20
-params = init_params
 
 for k in range(steps):
     params, val = opt.step_and_cost(cost, params)
     device_execs_grad.append(dev_sampler.num_executions)
     cost_store_grad.append(val)
-    print(val)
+    print(f"Iteration = {k}, Cost = {val}")
+
+# Step and cost gives us the cost at the previous step, so to find the cost
+# at the final parameter values we have to compute it manually
+cost_store_grad.append(cost(params))
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -312,26 +321,28 @@ for k in range(steps):
 #
 #  .. code-block:: none
 #
-#     0.9
-#     0.714
-#     0.266
-#     -0.39
-#     -0.842
-#     -0.976
-#     -0.988
-#     -0.994
-#     -0.998
-#     -0.992
-#     -0.99
-#     -0.998
-#     -0.998
-#     -1.0
-#     -0.996
-#     -0.998
-#     -0.998
-#     -1.0
-#     -0.996
-#     -1.0
+#     Iteration = 0, Cost = 0.922
+#     Iteration = 1, Cost = 0.712
+#     Iteration = 2, Cost = 0.284
+#     Iteration = 3, Cost = -0.356
+#     Iteration = 4, Cost = -0.832
+#     Iteration = 5, Cost = -0.958
+#     Iteration = 6, Cost = -0.986
+#     Iteration = 7, Cost = -0.996
+#     Iteration = 8, Cost = -0.998
+#     Iteration = 9, Cost = -0.994
+#     Iteration = 10, Cost = -0.998
+#     Iteration = 11, Cost = -0.998
+#     Iteration = 12, Cost = -0.994
+#     Iteration = 13, Cost = -1.0
+#     Iteration = 14, Cost = -1.0
+#     Iteration = 15, Cost = -0.996
+#     Iteration = 16, Cost = -1.0
+#     Iteration = 17, Cost = -1.0
+#     Iteration = 18, Cost = -1.0
+#     Iteration = 19, Cost = -1.0
+#
+
 
 ##############################################################################
 # SPSA and gradient descent comparison
@@ -350,6 +361,7 @@ plt.xlabel("Number of device exeuctions", fontsize=14)
 plt.ylabel("Cost function value", fontsize=14)
 plt.grid()
 
+plt.title("Gradient descent vs. SPSA for simple optimization", fontsize=16)
 plt.legend(fontsize=14)
 plt.show()
 
@@ -375,10 +387,10 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 #
 #  .. code-block:: none
 #
-#     Device execution ratio: 5.42948717948718.
+#     Device execution ratio: 4.443502824858757.
 #
 # This means that SPSA can potentially find the minimum of a cost function by
-# using over 5 times fewer device executions than gradient descent! That's a huge
+# using over 4 times fewer device executions than gradient descent! That's a huge
 # saving, especially in cases such as running on actual quantum hardware.
 
 ##############################################################################
@@ -466,37 +478,39 @@ def circuit(params, wires):
 
 ##############################################################################
 #
-# Let's first approach this problem using gradient descent. We'll set up a
-# fresh device and run the VQE with a cost function that computes the expectation
-# value of each Hamiltonian term after running the ansatz circuit. We'll also set
-# the maximum number of gradient descent iterations to 50.
-
-# Reset the noisy device
-dev_noisy = qml.device("qiskit.aer", wires=num_qubits, shots=1000)
+# Let's first approach this problem using gradient descent. We'll run the VQE
+# with a cost function that computes the expectation value of each Hamiltonian
+# term after running the ansatz circuit. We'll also set the maximum number of
+# gradient descent iterations to 20.
 
 # Initialize the optimizer - optimal step size was found through a grid search
-opt = qml.GradientDescentOptimizer(stepsize=2.3)
+opt = qml.GradientDescentOptimizer(stepsize=2.2)
 max_iterations = 20
 
 # Cost function for VQE
-cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
+cost = qml.ExpvalCost(circuit, h2_ham, dev_sampler)
 
 # Initialize parameters and compute initial energy
-params = np.random.normal(0, np.pi, (num_qubits, 3))
+np.random.seed(0)
+init_params = np.random.normal(0, np.pi, (num_qubits, 3))
+params = init_params.copy()
 
 h2_grad_device_executions = [0]
-h2_grad_energies = [cost(params)]
+h2_grad_energies = []
 
-dev_noisy._num_executions = 0
+dev_sampler._num_executions = 0
 
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
 
     if n % 5 == 0:
-        print("Iteration = {:},  Energy = {:.8f} Ha".format(n, energy))
+        print(f"Iteration = {n},  Energy = {energy:.8f} Ha")
 
-    h2_grad_device_executions.append(dev_noisy.num_executions)
+    h2_grad_device_executions.append(dev_sampler.num_executions)
     h2_grad_energies.append(energy)
+
+# Append the final cost
+h2_grad_energies.append(cost(params))
 
 true_energy = -1.136189454088
 
@@ -511,13 +525,14 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 0,  Energy = -0.82027687 Ha
-#     Iteration = 5,  Energy = -1.12618597 Ha
-#     Iteration = 10,  Energy = -1.12984872 Ha
-#     Iteration = 15,  Energy = -1.13688411 Ha
+#     Iteration = 0,  Energy = -0.78908527 Ha
+#     Iteration = 5,  Energy = -1.13343723 Ha
+#     Iteration = 10,  Energy = -1.13377477 Ha
+#     Iteration = 15,  Energy = -1.13528927 Ha
 #
-#     Final estimated value of the ground-state energy = -1.13877010 Ha
-#     Accuracy with respect to the true energy: 0.00258065 Ha
+#     Final estimated value of the ground-state energy = -1.13716030 Ha
+#     Accuracy with respect to the true energy: 0.00097084 Ha
+#
 
 ##############################################################################
 #
@@ -526,7 +541,7 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(10, 6))
-plt.scatter(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
+plt.plot(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
 
 plt.xticks(fontsize=13)
 plt.yticks(fontsize=13)
@@ -542,7 +557,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots.svg
+# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots.png
 #     :align: center
 #     :width: 90%
 #
@@ -591,36 +606,32 @@ print("Expected device executions = {max_dev_execs}")
 from qiskit import IBMQ
 from qiskit.providers.aer import noise
 
-# Note: do not run the simulation on this device, as it will send it to real hardware!
+# Note: do not run the simulation on this device, as it will send it to a real hardware
 dev_melbourne = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne")
 noise_model = noise.NoiseModel.from_backend(dev_melbourne.backend.properties())
 dev_noisy = qml.device(
     "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
 )
 
-# Initialise the optimizer - optimal step size was found through a grid search
-opt = qml.GradientDescentOptimizer(stepsize=2.3)
+# Initialize the optimizer - optimal step size was found through a grid search
+opt = qml.GradientDescentOptimizer(stepsize=2.2)
 cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
 
-max_iterations = 20
-
-params = np.random.normal(0, np.pi, (num_qubits, 3))
+params = init_params.copy()
 
 h2_grad_device_executions_melbourne = [0]
-h2_grad_energies_melbourne = [cost(params)]
-
-dev_noisy._num_executions = 0
+h2_grad_energies_melbourne = []
 
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
 
     if n % 5 == 0:
-        print("Iteration = {:},  Energy = {:.8f} Ha".format(n, energy))
+        print(f"Iteration = {n},  Energy = {energy:.8f} Ha")
 
     h2_grad_device_executions_melbourne.append(dev_noisy.num_executions)
     h2_grad_energies_melbourne.append(energy)
 
-true_energy = -1.136189454088
+h2_grad_energies_melbourne.append(cost(params))
 
 print()
 print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
@@ -634,13 +645,14 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 0,  Energy = -0.76161843 Ha
-#     Iteration = 5,  Energy = -1.07059468 Ha
-#     Iteration = 10,  Energy = -1.06971668 Ha
-#     Iteration = 15,  Energy = -1.05871466 Ha
+#     Iteration = 0,  Energy = -0.64558093 Ha
+#     Iteration = 5,  Energy = -0.91560201 Ha
+#     Iteration = 10,  Energy = -0.91521736 Ha
+#     Iteration = 15,  Energy = -0.94718215 Ha
 #
-#     Final estimated value of the ground-state energy = -1.07337971 Ha
-#     Accuracy with respect to the true energy: 0.06280975 Ha
+#     Final estimated value of the ground-state energy = -0.92246975 Ha
+#     Accuracy with respect to the true energy: 0.21371970 Ha
+#
 
 plt.figure(figsize=(10, 6))
 
@@ -665,7 +677,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots_ourense.svg
+# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots_melbourne.png
 #     :align: center
 #     :width: 90%
 #
@@ -680,9 +692,10 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 #
 # Finally, we will perform the same experiment using SPSA instead of the VQE.
 # SPSA should use only 2 device executions per term in the expectation value.
-#
+# Since there are 15 terms, and 200 iterations, we expect about 6000 total
+# device executions.
 
-params = np.random.normal(0, np.pi, (num_qubits, 3))
+params = init_params.copy()
 
 h2_spsa_device_executions_melbourne = [0]
 h2_spsa_energies_melbourne = [cost(params)]
@@ -693,11 +706,14 @@ def callback_fn(xk):
     cost_val = cost(xk)
     h2_spsa_energies_melbourne.append(cost_val)
 
-    # We've evaluated the cost function, let's make up for that
-    dev_noisy._num_executions -= 1
+    # For this case, every term in the Hamiltonian counts towards evaluating the
+    # cost function, so to take this into account we need to subtract the number of terms
+    dev_noisy._num_executions -= len(h2_ham.terms[0])
     h2_spsa_device_executions_melbourne.append(dev_noisy.num_executions)
-    if len(h2_spsa_energies_melbourne) % 10 == 0:
-        print(cost_val)
+
+    iteration_num = len(h2_spsa_energies_melbourne)
+    if iteration_num % 10 == 0:
+        print(f"Iteration = {iteration_num},  Energy = {cost_val:.8f} Ha")
 
 res = minimizeSPSA(
     cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=0.628, callback=callback_fn
@@ -707,19 +723,58 @@ print()
 print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
 print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha")
 
-# Plotting everything together
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#     Iteration = 10,  Energy = -0.78357757 Ha
+#     Iteration = 20,  Energy = -0.85604232 Ha
+#     Iteration = 30,  Energy = -0.85851494 Ha
+#     Iteration = 40,  Energy = -0.86833597 Ha
+#     Iteration = 50,  Energy = -0.89858990 Ha
+#     Iteration = 60,  Energy = -0.88772609 Ha
+#     Iteration = 70,  Energy = -0.91540951 Ha
+#     Iteration = 80,  Energy = -0.90762197 Ha
+#     Iteration = 90,  Energy = -0.90554857 Ha
+#     Iteration = 100,  Energy = -0.91468788 Ha
+#     Iteration = 110,  Energy = -0.91738441 Ha
+#     Iteration = 120,  Energy = -0.90231997 Ha
+#     Iteration = 130,  Energy = -0.93222606 Ha
+#     Iteration = 140,  Energy = -0.89859428 Ha
+#     Iteration = 150,  Energy = -0.89072312 Ha
+#     Iteration = 160,  Energy = -0.90815284 Ha
+#     Iteration = 170,  Energy = -0.91610890 Ha
+#     Iteration = 180,  Energy = -0.90716012 Ha
+#     Iteration = 190,  Energy = -0.90993119 Ha
+#     Iteration = 200,  Energy = -0.91030733 Ha
+#
+#     Final estimated value of the ground-state energy = -0.92246975 Ha
+#     Accuracy with respect to the true energy: 0.21371970 Ha
+#
 
 plt.figure(figsize=(10, 6))
 
-plt.plot(h2_grad_device_executions_melbourne, h2_grad_energies_melbourne, label="Gradient descent")
-plt.plot(h2_spsa_device_executions_melbourne, h2_spsa_energies_melbourne, label="SPSA")
+plt.plot(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
+plt.plot(h2_grad_device_executions_melbourne, h2_grad_energies_melbourne, label="Gradient descent, Melbourne sim.")
+plt.plot(h2_spsa_device_executions_melbourne, h2_spsa_energies_melbourne, label="SPSA, Melbourne sim.")
 
+plt.title("H2 energy from the VQE using gradient descent, gradient vs. SPSA", fontsize=16)
 plt.xlabel("Number of device executions", fontsize=14)
 plt.ylabel("Cost function value", fontsize=14)
 plt.grid()
 
 plt.legend(fontsize=14)
 plt.show()
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_spsa.png
+#     :align: center
+#     :width: 90%
+#
 
 ##############################################################################
 # Conclusions
