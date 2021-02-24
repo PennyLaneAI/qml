@@ -482,6 +482,16 @@ def circuit(params, wires):
 # with a cost function that computes the expectation value of each Hamiltonian
 # term after running the ansatz circuit. We'll also set the maximum number of
 # gradient descent iterations to 20.
+#
+# To set the hyperparameters, we refer back to the `intro VQE demo
+# </demos/tutorial_vqe>`_, which specifies a random seed to choose variational
+# parameters that will converge well. It is common to have to run the VQE
+# multiple times, with different sets of initial parameters, in order to ensure
+# convergence. If you try out the code yourself, you'll find that there is a
+# local minimum around :math:`-0.47` Hartree that the gradient descent optimizer
+# might get stuck in. The initial parameters used below are known to converge to
+# the true minimum. Furthermore, a grid search was performed to find the step
+# size which yielded the most accurate result, with the fewest iterations.
 
 # Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
