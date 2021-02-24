@@ -462,8 +462,8 @@ def swap_test(control, register1, register2):
 # Before creating the full QGRNN and the cost function, we
 # define a few more fixed values. Among these is a "guessed"
 # interaction graph, which we set to be a
-# `complete graph <https://en.wikipedia.org/wiki/Complete_graph>`__.
-#  This choice is motivated by the fact that any target interaction graph will be a subgraph
+# `complete graph <https://en.wikipedia.org/wiki/Complete_graph>`__. This choice is
+# motivated by the fact that any target interaction graph will be a subgraph
 # of this initial guess. Part of the idea behind the QGRNN is that
 # we don’t know the interaction graph, and it has to be learned. In this case, the graph
 # is learned *automatically* as the target parameters are optimized. The
@@ -545,7 +545,6 @@ max_time = 0.1  # The maximum value of time that can be used for quantum data
 #
 rng = np.random.default_rng(seed=42)
 
-
 def cost_function(weight_params, bias_params):
 
     # Randomly samples times at which the QGRNN runs
@@ -570,8 +569,6 @@ qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
 # Defines the new QNode
 qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev)
 
-# This is a LONG simulation.  If you just want to test that the code runs, try fewer steps
-# steps = 10
 steps = 300
 
 optimizer = qml.AdamOptimizer(stepsize=0.5)
