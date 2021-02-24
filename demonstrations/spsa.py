@@ -575,8 +575,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 ##############################################################################
 #
 # We can see that as the optimization progresses, we approach the true value.
-# However, due to shot noise, the optimizer will never quite converge, and
-# bounces around the optimum after a certain point.
+# However, due to shot noise it bounces around the optimum.
 #
 # Of interest now are the number of device executions. Gradients need
 # to be computed for each of the 4 qubit rotations with 3 parameters. The
@@ -702,8 +701,8 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 #
 # Finally, we will perform the same experiment using SPSA instead of the VQE.
 # SPSA should use only 2 device executions per term in the expectation value.
-# Since there are 15 terms, and 200 iterations, we expect about 6000 total
-# device executions.
+# Since there are 15 terms, and 200 iterations, we expect 6000 total device
+# executions.
 
 params = init_params.copy()
 
@@ -726,7 +725,8 @@ def callback_fn(xk):
         print(f"Iteration = {iteration_num},  Energy = {cost_val:.8f} Ha")
 
 res = minimizeSPSA(
-    cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=0.628, callback=callback_fn
+    # Hyperparameters chosen based on grid search
+    cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=1.5, callback=callback_fn
 )
 
 print()
@@ -785,22 +785,33 @@ plt.show()
 #     :align: center
 #     :width: 90%
 #
+# We observe here that the SPSA optimizer again converges in fewer device
+# executions than the gradient descent optimizer. It takes SPSA roughly half the
+# number of device executions, however due to the (simulated) hardware noise,
+# the obtained energies are higher than the true energy, and the output still
+# bounces around (of course in SPSA this is expected due to the inherently
+# stochastic nature of the algorithm),
+#
+#
 
 ##############################################################################
 # Conclusions
 # -----------
-# SPSA is a useful optimization technique that may be particularly beneficial on near-term
-# quantum hardware. It uses significantly fewer iterations to achieve comparable result quality
-# as gradient-based methods, giving it the potential to save significant time
-# and resources.
+#
+# SPSA is a useful optimization technique that may be particularly beneficial on
+# near-term quantum hardware. It uses significantly fewer iterations to achieve
+# comparable result quality as gradient-based methods, giving it the potential
+# to save significant time and resources.
 #
 # There are also extensions to SPSA that could be interesting to explore in this
 # context. One in particular is that adaptive selection of the hyperparameters
-# :math:`c` and :math:`a`. While here we have kept them constant, there are techniques
-# to vary these over time [add citation / details].
+# :math:`c` and :math:`a`. While here we have chosen parameters that perform
+# well based on a grid search, there are more sophisticated techniques for both
+# their initial selection, and for varying them over the course of the optimization
+# procedure to improve convergence time [add citation / details].
 #
-# Furthermore, SPSA can also be used to compute the *Hessian* matrix [#spall_hessian]_.
-# [add more details about this].
+# Furthermore, SPSA can also be used to compute the *Hessian* matrix
+# [#spall_hessian]_.  [add more details about this].
 #
 #
 
