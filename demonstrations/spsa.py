@@ -263,26 +263,27 @@ res = minimizeSPSA(
 #
 #  .. code-block:: none
 #
-#     Iteration = 10, Cost = 0.05
-#     Iteration = 20, Cost = -0.702
-#     Iteration = 30, Cost = -0.87
-#     Iteration = 40, Cost = -0.942
-#     Iteration = 50, Cost = -0.936
-#     Iteration = 60, Cost = -0.93
-#     Iteration = 70, Cost = -0.93
-#     Iteration = 80, Cost = -0.946
-#     Iteration = 90, Cost = -0.938
-#     Iteration = 100, Cost = -0.96
-#     Iteration = 110, Cost = -0.972
+#     Iteration = 10, Cost = 0.09
+#     Iteration = 20, Cost = -0.638
+#     Iteration = 30, Cost = -0.842
+#     Iteration = 40, Cost = -0.926
+#     Iteration = 50, Cost = -0.938
+#     Iteration = 60, Cost = -0.94
+#     Iteration = 70, Cost = -0.962
+#     Iteration = 80, Cost = -0.938
+#     Iteration = 90, Cost = -0.946
+#     Iteration = 100, Cost = -0.966
+#     Iteration = 110, Cost = -0.954
 #     Iteration = 120, Cost = -0.964
-#     Iteration = 130, Cost = -0.97
+#     Iteration = 130, Cost = -0.952
 #     Iteration = 140, Cost = -0.958
-#     Iteration = 150, Cost = -0.956
-#     Iteration = 160, Cost = -0.966
-#     Iteration = 170, Cost = -0.956
-#     Iteration = 180, Cost = -0.966
-#     Iteration = 190, Cost = -0.96
-#     Iteration = 200, Cost = -0.956
+#     Iteration = 150, Cost = -0.968
+#     Iteration = 160, Cost = -0.948
+#     Iteration = 170, Cost = -0.974
+#     Iteration = 180, Cost = -0.962
+#     Iteration = 190, Cost = -0.988
+#     Iteration = 200, Cost = -0.964
+
 
 
 ##############################################################################
@@ -321,26 +322,26 @@ cost_store_grad.append(cost(params))
 #
 #  .. code-block:: none
 #
-#     Iteration = 0, Cost = 0.922
-#     Iteration = 1, Cost = 0.712
+#     Iteration = 0, Cost = 0.904
+#     Iteration = 1, Cost = 0.758
 #     Iteration = 2, Cost = 0.284
-#     Iteration = 3, Cost = -0.356
-#     Iteration = 4, Cost = -0.832
-#     Iteration = 5, Cost = -0.958
-#     Iteration = 6, Cost = -0.986
-#     Iteration = 7, Cost = -0.996
-#     Iteration = 8, Cost = -0.998
+#     Iteration = 3, Cost = -0.416
+#     Iteration = 4, Cost = -0.836
+#     Iteration = 5, Cost = -0.964
+#     Iteration = 6, Cost = -0.992
+#     Iteration = 7, Cost = -0.994
+#     Iteration = 8, Cost = -0.992
 #     Iteration = 9, Cost = -0.994
 #     Iteration = 10, Cost = -0.998
-#     Iteration = 11, Cost = -0.998
+#     Iteration = 11, Cost = -0.992
 #     Iteration = 12, Cost = -0.994
 #     Iteration = 13, Cost = -1.0
-#     Iteration = 14, Cost = -1.0
+#     Iteration = 14, Cost = -0.996
 #     Iteration = 15, Cost = -0.996
-#     Iteration = 16, Cost = -1.0
-#     Iteration = 17, Cost = -1.0
-#     Iteration = 18, Cost = -1.0
-#     Iteration = 19, Cost = -1.0
+#     Iteration = 16, Cost = -0.998
+#     Iteration = 17, Cost = -0.996
+#     Iteration = 18, Cost = -0.996
+#     Iteration = 19, Cost = -0.996
 #
 
 
@@ -357,7 +358,7 @@ plt.figure(figsize=(10, 6))
 plt.plot(device_execs_grad, cost_store_grad, label="Gradient descent")
 plt.plot(device_execs_spsa, cost_store_spsa, label="SPSA")
 
-plt.xlabel("Number of device exeuctions", fontsize=14)
+plt.xlabel("Number of device executions", fontsize=14)
 plt.ylabel("Cost function value", fontsize=14)
 plt.grid()
 
@@ -387,7 +388,7 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 #
 #  .. code-block:: none
 #
-#     Device execution ratio: 4.443502824858757.
+#     Device execution ratio: 4.161375661375661
 #
 # This means that SPSA can potentially find the minimum of a cost function by
 # using over 4 times fewer device executions than gradient descent! That's a huge
@@ -535,13 +536,13 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 0,  Energy = -0.78908527 Ha
-#     Iteration = 5,  Energy = -1.13343723 Ha
-#     Iteration = 10,  Energy = -1.13377477 Ha
-#     Iteration = 15,  Energy = -1.13528927 Ha
-#
-#     Final estimated value of the ground-state energy = -1.13716030 Ha
-#     Accuracy with respect to the true energy: 0.00097084 Ha
+#     Iteration = 0,  Energy = -0.80509768 Ha
+#     Iteration = 5,  Energy = -1.12506107 Ha
+#     Iteration = 10,  Energy = -1.13597945 Ha
+#     Iteration = 15,  Energy = -1.13459302 Ha
+#     
+#     Final estimated value of the ground-state energy = -1.13259650 Ha
+#     Accuracy with respect to the true energy: 0.00359295 Ha
 #
 
 ##############################################################################
@@ -654,13 +655,13 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 0,  Energy = -0.64558093 Ha
-#     Iteration = 5,  Energy = -0.91560201 Ha
-#     Iteration = 10,  Energy = -0.91521736 Ha
-#     Iteration = 15,  Energy = -0.94718215 Ha
+#     Iteration = 0,  Energy = -0.63437409 Ha
+#     Iteration = 5,  Energy = -0.89866763 Ha
+#     Iteration = 10,  Energy = -0.90846615 Ha
+#     Iteration = 15,  Energy = -0.90582867 Ha
 #
-#     Final estimated value of the ground-state energy = -0.92246975 Ha
-#     Accuracy with respect to the true energy: 0.21371970 Ha
+#     Final estimated value of the ground-state energy = -0.93208561 Ha
+#     Accuracy with respect to the true energy: 0.20410384 Ha
 #
 
 plt.figure(figsize=(10, 6))
@@ -740,30 +741,30 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 10,  Energy = -0.78357757 Ha
-#     Iteration = 20,  Energy = -0.85604232 Ha
-#     Iteration = 30,  Energy = -0.85851494 Ha
-#     Iteration = 40,  Energy = -0.86833597 Ha
-#     Iteration = 50,  Energy = -0.89858990 Ha
-#     Iteration = 60,  Energy = -0.88772609 Ha
-#     Iteration = 70,  Energy = -0.91540951 Ha
-#     Iteration = 80,  Energy = -0.90762197 Ha
-#     Iteration = 90,  Energy = -0.90554857 Ha
-#     Iteration = 100,  Energy = -0.91468788 Ha
-#     Iteration = 110,  Energy = -0.91738441 Ha
-#     Iteration = 120,  Energy = -0.90231997 Ha
-#     Iteration = 130,  Energy = -0.93222606 Ha
-#     Iteration = 140,  Energy = -0.89859428 Ha
-#     Iteration = 150,  Energy = -0.89072312 Ha
-#     Iteration = 160,  Energy = -0.90815284 Ha
-#     Iteration = 170,  Energy = -0.91610890 Ha
-#     Iteration = 180,  Energy = -0.90716012 Ha
-#     Iteration = 190,  Energy = -0.90993119 Ha
-#     Iteration = 200,  Energy = -0.91030733 Ha
-#
-#     Final estimated value of the ground-state energy = -0.92246975 Ha
-#     Accuracy with respect to the true energy: 0.21371970 Ha
-#
+#     Iteration = 10,  Energy = -0.81263091 Ha
+#     Iteration = 20,  Energy = -0.87451933 Ha
+#     Iteration = 30,  Energy = -0.91126159 Ha
+#     Iteration = 40,  Energy = -0.92543558 Ha
+#     Iteration = 50,  Energy = -0.91074332 Ha
+#     Iteration = 60,  Energy = -0.88884624 Ha
+#     Iteration = 70,  Energy = -0.89771656 Ha
+#     Iteration = 80,  Energy = -0.88451027 Ha
+#     Iteration = 90,  Energy = -0.90159613 Ha
+#     Iteration = 100,  Energy = -0.87074395 Ha
+#     Iteration = 110,  Energy = -0.88314750 Ha
+#     Iteration = 120,  Energy = -0.90602021 Ha
+#     Iteration = 130,  Energy = -0.91128931 Ha
+#     Iteration = 140,  Energy = -0.92292835 Ha
+#     Iteration = 150,  Energy = -0.92499790 Ha
+#     Iteration = 160,  Energy = -0.91601173 Ha
+#     Iteration = 170,  Energy = -0.89362510 Ha
+#     Iteration = 180,  Energy = -0.92450527 Ha
+#     Iteration = 190,  Energy = -0.89094628 Ha
+#     Iteration = 200,  Energy = -0.88564296 Ha
+#     
+#     Final estimated value of the ground-state energy = -0.93208561 Ha
+#     Accuracy with respect to the true energy: 0.20410384 Ha
+#     
 
 plt.figure(figsize=(10, 6))
 
@@ -771,9 +772,9 @@ plt.plot(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
 plt.plot(h2_grad_device_executions_melbourne, h2_grad_energies_melbourne, label="Gradient descent, Melbourne sim.")
 plt.plot(h2_spsa_device_executions_melbourne, h2_spsa_energies_melbourne, label="SPSA, Melbourne sim.")
 
-plt.title("H2 energy from the VQE using gradient descent, gradient vs. SPSA", fontsize=16)
+plt.title("H2 energy from the VQE using gradient descent vs. SPSA", fontsize=16)
 plt.xlabel("Number of device executions", fontsize=14)
-plt.ylabel("Cost function value", fontsize=14)
+plt.ylabel("Energy (Ha)", fontsize=14)
 plt.grid()
 
 plt.legend(fontsize=14)
@@ -786,11 +787,10 @@ plt.show()
 #     :width: 90%
 #
 # We observe here that the SPSA optimizer again converges in fewer device
-# executions than the gradient descent optimizer. It takes SPSA roughly half the
-# number of device executions, however due to the (simulated) hardware noise,
-# the obtained energies are higher than the true energy, and the output still
-# bounces around (of course in SPSA this is expected due to the inherently
-# stochastic nature of the algorithm),
+# executions than the gradient descent optimizer. However due to the (simulated)
+# hardware noise, the obtained energies are higher than the true energy, and the
+# output still bounces around (of course in SPSA this is expected due to the
+# inherently stochastic nature of the algorithm),
 #
 #
 
