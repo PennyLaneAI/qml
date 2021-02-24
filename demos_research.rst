@@ -91,7 +91,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. customgalleryitem::
     :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics.
     :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
-    :description: :doc:`demos/qgrnn`
+    :description: :doc:`demos/tutorial_qgrnn`
     :tags: autograd
 
 .. customgalleryitem::
