@@ -575,7 +575,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 # total number of device executions
 #
 max_dev_execs = params.size * len(h2_ham.terms[0]) * 2 * max_iterations
-print("Expected device executions = {max_dev_execs}")
+print(f"Expected device executions = {max_dev_execs}")
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
