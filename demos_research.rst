@@ -246,7 +246,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_multiclass_classification
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_pasqal
-    demos/qgrnn
+    demos/tutorial_qgrnn
     demos/qonn
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
