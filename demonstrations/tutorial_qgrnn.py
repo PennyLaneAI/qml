@@ -6,7 +6,7 @@ The Quantum Graph Recurrent Neural Network
     :property="og:description": Using a quantum graph recurrent neural network to learn quantum dynamics.
     :property="og:image": https://pennylane.ai/qml/_images/qgrnn_thumbnail.png
 
-*Author: Jack Ceroni. Posted: 27 July 2020. Last updated: 26 Oct 2020.*
+*Author: Jack Ceroni. Posted: 27 July 2020. Last updated: 25 March 2021.*
 
 """
 
@@ -656,16 +656,18 @@ for ii, edge in enumerate(new_ising_graph.edges):
 # Then, we print all of the weights:
 #
 
-print("Target parameters \tLearned parameters")
-print("\t Weights:")
+print("Target parameters     Learned parameters")
+print("Weights")
+print("-" * 41)
 for ii_target, ii_learned in zip(target_weights, weights_edge):
-    print(f"{ii_target}\t\t\t{ii_learned}")
+    print(f"{ii_target : <20}|{ii_learned : >20}")
 
-print("\t Bias:")
+print("\nBias")
+print("-"*41)
 for ii_target, ii_learned in zip(target_bias, bias):
-    print(f"{ii_target}\t\t\t{ii_learned}")
+    print(f"{ii_target : <20}|{ii_learned : >20}")
 
-print(f"\nNon-Existing Edge Parameters: {weights_noedge}")
+print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge]}")
 
 ######################################################################
 # The weights of edges :math:`(1, 3)` and :math:`(2, 0)`
