@@ -228,11 +228,6 @@ ising_graph = nx.cycle_graph(qubit_number)
 print(f"Edges: {ising_graph.edges}")
 nx.draw(ising_graph)
 
-#######################################################################
-# .. figure:: ../demonstrations/qgrnn/graph1.png
-#      :width: 70%
-#      :align: center
-#
 
 
 ######################################################################
@@ -264,8 +259,8 @@ target_bias = [-1.44, -1.43, 1.18, -0.93]
 # In theory, these parameters can
 # be any value we want, provided they are reasonably small enough that the QGRNN can reach them
 # in a tractable number of optimization steps.
-# In `matrix_params`, the first list represents the :math:`ZZ` interaction parameters and
-# the second list represents the single-qubit `Z` parameters.
+# In ``matrix_params``, the first list represents the :math:`ZZ` interaction parameters and
+# the second list represents the single-qubit :math:`Z` parameters.
 #
 # Finally,
 # we use this information to generate the matrix form of the
@@ -308,11 +303,6 @@ plt.matshow(ham_matrix, cmap="hot")
 plt.show()
 
 
-######################################################################
-# .. figure:: ../demonstrations/qgrnn/ising_hamiltonian.png
-#      :width: 50%
-#      :align: center
-#
 
 
 ######################################################################
@@ -621,11 +611,6 @@ plt.subplots_adjust(wspace=0.3, hspace=0.3)
 plt.show()
 
 
-######################################################################
-# .. figure:: ../demonstrations/qgrnn/hamiltonian_comparison.png
-#      :width: 100%
-#      :align: center
-#
 
 
 ######################################################################
