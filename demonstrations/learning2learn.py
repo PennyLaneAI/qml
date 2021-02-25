@@ -11,7 +11,7 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: XX Feb 2021. Last updated: XX Feb 2021.*
+*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 2 March 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -102,7 +102,7 @@ quantum circuit.
 
 Thus, by training on a dataset of graphs, the RNN can subsequently be used to
 provide suggestions for starting points on new graphs! We are not directly optimizing the variational parameters of
-the quantum circuit, but instead we let the RNN figure out how to do that.
+the quantum circuit, but instead, we let the RNN figure out how to do that.
 In this sense, we are learning (training the RNN) how to learn (how to optimize a variational quantum circuit).
 
 
@@ -206,7 +206,7 @@ nx.draw(graphs[0])
 # ---------------------------------
 #
 # Now that we have a dataset, we move on by creating the QAOA quantum
-# circuits using PennyLane’s built-in sub packages. In particular, using
+# circuits using PennyLane’s built-in sub-packages. In particular, using
 # PennyLane’s ``qaoa`` module, we will able to create fully functioning
 # quantum circuits for the MaxCut problem, with very few lines of code.
 #
@@ -254,7 +254,6 @@ def qaoa_from_graph(graph, n_layers=1):
 # Create an instance of a QAOA circuit given a graph.
 cost = qaoa_from_graph(graph=graphs[0], n_layers=1)
 
-# Define some paramenters
 # Since we use only one layer in QAOA, params have the shape 1 x 2,
 # in the form [[alpha, gamma]].
 x = tf.Variable([[0.5], [0.5]], dtype=tf.float32)
@@ -295,13 +294,14 @@ cost(x)
 # for further details).
 #
 
-# Number of layers in QAOA ansatz. The higher the better in terms of performance,
-# but it also gets more computationally expensive.
-# For simplicity, we stick to the single layer case.
+# Set the number of layers in the QAOA ansatz.
+# The higher the better in terms of performance, but it also gets more
+# computationally expensive. For simplicity, we stick to the single layer case.
 n_layers = 1
 
-# Define a single LSTM cell. The cell has two units per layer
-# since each layer in the QAOA ansatz makes use of two parameters.
+# Define a single LSTM cell.
+# The cell has two units per layer since each layer in the QAOA ansatz
+# makes use of two parameters.
 cell = tf.keras.layers.LSTMCell(2 * n_layers)
 
 
@@ -396,7 +396,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # A key part in the ``recurrent_loop`` function is given by the
 # definition of the variable ``loss``. In order to drive the learning
 # procedure of the weights in the LSTM cell, a cost function is needed.
-# While in the original paper the authors suggest to use a measure called
+# While in the original paper the authors suggest using a measure called
 # *observed improvement*, for simplicity here we use an easier cost
 # function :math:`\cal{L}(\phi)` defined as:
 #
@@ -572,7 +572,7 @@ lstm_losses = [new_cost(tf.reshape(guess, shape=(2, n_layers))) for guess in gue
 # **Plot of the loss function**
 #
 #
-# We can plot these losses to see how well the RNN propose new guesses for
+# We can plot these losses to see how well the RNN proposes new guesses for
 # the parameters.
 #
 
@@ -593,14 +593,14 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 #     :target: javascript:void(0);
 #
 # That’s remarkable! The RNN learned to propose new parameters such that
-# the MaxCut cost is minimized very rapidly: in just few iterations the
+# the MaxCut cost is minimized very rapidly: in just a few iterations the
 # loss reaches a minimum. Actually, it takes just a single step for the LSTM
 # to find a very good minimum. In fact, due to the recurrent loop, the loss
 # in each time step is directly dependent on the previous ones, with the first
-# iteration thus having lot of influence on the loss funtion defined above.
+# iteration thus having a lot of influence on the loss function defined above.
 # Changing the loss function, for example giving less importance to initial
 # steps and just focusing on the last one, leads to different optimization
-# behaviours, but with same final results.
+# behaviors, but with the same final results.
 #
 
 
@@ -687,7 +687,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 ######################################################################
 # *Hurray!* 🎉🎉
 #
-# As is it clear from the picture, the RNN reaches a better minimum in
+# As is clear from the picture, the RNN reaches a better minimum in
 # fewer iterations than the standard SGD.
 # Thus, as the authors suggest, the trained RNN can
 # be used for a few iterations at the start of the training procedure to
@@ -696,7 +696,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # fine-tune the proposed parameters and reach even better solutions.
 # While on this small scale example the benefits of using an LSTM to
 # initialize parameters may seem modest, on more complicated instances
-# and problems it can make a big difference, since on random
+# and problems it can make a big difference, since, on random
 # initialization of the parameters, standard local optimizer may
 # encounter problems finding a good minimization direction (for further
 # details, see [#l2l]_, [#vqas]_).
@@ -707,7 +707,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # Final remarks
 # -----------------
 #
-# In this demo we saw how to use a recurrent neural network
+# In this demo, we saw how to use a recurrent neural network
 # as a black-box optimizer to initialize the parameters in
 # a variational quantum circuit close to an optimal solution.
 # We connected MaxCut QAOA quantum circuits in PennyLane
@@ -796,7 +796,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # A very interesting feature of this model, is that it can be
-# straightforwardly applied to graphs having different number of nodes. In
+# straightforwardly applied to graphs having a different number of nodes. In
 # fact, until now our analysis focused only on graphs with the same number
 # of nodes for ease of explanation, and there is no actual restriction in
 # this respect. The same machinery works fine for any graph, since the
@@ -812,7 +812,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 # graphs having either 7, 8 and 9 nodes).
 #
 
-cell2 = tf.keras.layers.LSTMCell(2 * n_layers)
+cell = tf.keras.layers.LSTMCell(2 * n_layers)
 
 g7 = generate_graphs(5, 7, 3 / 7)
 g8 = generate_graphs(5, 8, 3 / 7)
@@ -827,8 +827,8 @@ random.shuffle(gs_cost_list)
 
 
 ######################################################################
-# So far, we created an equally balanced dataset that contains graphs with
-# different number of nodes. We now use this dataset to train the LSTM.
+# So far, we have created an equally balanced dataset that contains graphs with
+# a different number of nodes. We now use this dataset to train the LSTM.
 #
 
 # Select an optimizer
