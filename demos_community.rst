@@ -49,14 +49,37 @@ Community
 
 .. For two cards per row, create a new card deck every two cards.
 
-:html:`<div class="card-deck">`
-
 .. Community card required options:
      - title
      - author
      - date
    All remaining options (code, paper, blog, color) are *optional*.
    All fields, including the description can contain arbitrary HTML.
+
+:html:`<div class="card-deck">`
+
+:html:`<div class="card hidden-card"></div></div>`
+
+.. community-card::
+    :title: Variational Quantum Circuits for Deep Reinforcement Learning
+    :author: Samuel Yen-Chi Chen
+    :date: 03/03/2021
+    :code: https://github.com/ycchen1989/Var-QuantumCircuits-DeepRL
+    :paper: https://ieeexplore.ieee.org/abstract/document/9144562
+    :color: heavy-rain-gradient
+
+    This work explores variational quantum circuits for deep reinforcement learning.
+    Specifically, we reshape classical deep reinforcement learning algorithms like
+    experience replay and target network into a representation of variational quantum
+    circuits. Moreover, we use a quantum information encoding scheme to reduce the number of
+    model parameters compared to classical neural networks. To the best of our knowledge,
+    this work is the first proof-of-principle demonstration of variational quantum circuits
+    to approximate the deep Q-value function for decision-making and policy-selection
+    reinforcement learning with experience replay and target network. Besides, our
+    variational quantum circuits can be deployed in many near-term NISQ machines.
+
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Layerwise learning for quantum neural networks
