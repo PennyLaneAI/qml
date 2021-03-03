@@ -215,6 +215,25 @@ Community
     show how the Hessian can be used to escape flat regions of the loss
     landscape.
 
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
+.. community-card::
+    :title: Feature maps for kernel-based quantum classifiers
+    :author: Semyon Sinchenko
+    :date: 03/03/2021
+    :code: https://github.com/SemyonSinchenko/PennylaneQuantumFeatureMaps
+    :paper: https://arxiv.org/abs/2006.14904
+    :color: heavy-rain-gradient
+
+    In this tutorial we implement a few examples of feature maps for kernel based quantum
+    machine learning. We'll see how quantum feature maps could make linear unseparable data
+    separable after applying a kernel and measuring an observable. We will
+    <a href="https://arxiv.org/abs/1906.10467" target="_blank">follow an article</a>
+    and also implement all the kernel-functions with PennyLane.
+
+:html:`</div></div><br><div style='clear:both'>`
+
 
 .. If the final card deck only has a single card, we insert a 'hidden card'
    so that the card does not become full-width.
