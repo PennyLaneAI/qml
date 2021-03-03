@@ -49,14 +49,14 @@ Community
 
 .. For two cards per row, create a new card deck every two cards.
 
+:html:`<div class="card-deck">`
+
 .. Community card required options:
      - title
      - author
      - date
    All remaining options (code, paper, blog, color) are *optional*.
    All fields, including the description can contain arbitrary HTML.
-
-:html:`<div class="card-deck">`
 
 .. community-card::
     :title: Variational Quantum Circuits for Deep Reinforcement Learning
