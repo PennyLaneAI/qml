@@ -58,8 +58,6 @@ Community
 
 :html:`<div class="card-deck">`
 
-:html:`<div class="card hidden-card"></div></div>`
-
 .. community-card::
     :title: Variational Quantum Circuits for Deep Reinforcement Learning
     :author: Samuel Yen-Chi Chen
@@ -77,6 +75,8 @@ Community
     to approximate the deep Q-value function for decision-making and policy-selection
     reinforcement learning with experience replay and target network. Besides, our
     variational quantum circuits can be deployed in many near-term NISQ machines.
+
+:html:`<div class="card hidden-card"></div></div>`
 
 :html:`</div></div><br><div style='clear:both'>`
 :html:`<div class="card-deck">`
