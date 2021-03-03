@@ -74,7 +74,10 @@ Community
     show that the QCNN Self-attention model did learn meaningful representations. An additional
     Connectionist Temporal Classification (CTC) loss on character recognition is also provided for
     continuous speech recognition.
+:html:`<div class="card hidden-card"></div></div>`
 
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
 .. community-card::
     :title: Layerwise learning for quantum neural networks
     :author: Felipe Oyarce Andrade
