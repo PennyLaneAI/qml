@@ -57,8 +57,8 @@ Community
     :title: {{ card1["title"] }}
     :author: {{ card1["author"] }}
     :date: {{ card1["date"] }}
-    {% if "code" in card1 -%}:code: {{ card1["code"] }}{% endif -%}
-    {% if "blog" in card1 -%}:blog: {{ card1["bog"] }}{% endif -%}
+    {% if "code" in card1 -%}:code: {{ card1["code"] + "\n    " }}{% endif -%}
+    {% if "blog" in card1 -%}:blog: {{ card1["blog"] + "\n    " }}{% endif -%}
     {% if "paper" in card1 -%}:paper: {{ card1["paper"] }}{% endif %}
 
     {{ card1["description"] | replace("\n", " ") }}
@@ -69,8 +69,8 @@ Community
     :title: {{ card2["title"] }}
     :author: {{ card2["author"] }}
     :date: {{ card2["date"] }}
-    {% if "code" in card2 -%}:code: {{ card2["code"] }}{% endif -%}
-    {% if "blog" in card2 -%}:blog: {{ card2["bog"] }}{% endif -%}
+    {% if "code" in card2 -%}:code: {{ card2["code"] + "\n    " }}{% endif -%}
+    {% if "blog" in card2 -%}:blog: {{ card2["blog"] + "\n    " }}{% endif -%}
     {% if "paper" in card2 -%}:paper: {{ card2["paper"] }}{% endif %}
 
     {{ card2["description"] | replace("\n", " ") }}
