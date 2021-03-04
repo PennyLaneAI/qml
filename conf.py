@@ -16,6 +16,8 @@ import os
 import sys
 import warnings
 import numpy as np
+from jinja2 import FileSystemLoader, Environment
+import yaml
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -194,6 +196,25 @@ html_sidebars = {"**": ["logo-text.html", "searchbox.html", "localtoc.html"]}
 # Output file base name for HTML help builder.
 htmlhelp_basename = "QMLdoc"
 
+# -- Compile community demos -------------------------------------------------
+
+with open("demos_community.yaml", "r") as f:
+    card_data = yaml.safe_load(f)
+
+left_cards = card_data[::2]
+right_cards = card_data[1::2]
+
+if len(left_cards) > len(right_cards):
+    right_cards.append({})
+
+card_pairs = list(zip(left_cards, right_cards))
+
+loader = FileSystemLoader(".")
+env = Environment(loader=loader)
+template = env.get_template("demos_community.rst_t")
+
+with open("demos_community.rst", 'w') as f:
+    f.write(template.render(card_pairs=card_pairs))
 
 # -- Options for intersphinx extension ---------------------------------------
 
