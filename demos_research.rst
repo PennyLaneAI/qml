@@ -118,6 +118,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_kernel_based_training`
     :tags: pytorch sklearn kernels
 
+.. customgalleryitem::
+    :tooltip: Meta-learning technique for variational quantum algorithms.
+    :figure: demonstrations/learning2learn/l2l_thumbnail.png
+    :description: :doc:`demos/learning2learn`
+    :tags: tensorflow
+
 :html:`</div></div><div style='clear:both'>`
 
 Optimization
@@ -252,3 +258,4 @@ such as benchmarking and characterizing quantum processors.
     demos/qsim_beyond_classical
     demos/quantum_volume
     demos/tutorial_gbs
+    demos/learning2learn
