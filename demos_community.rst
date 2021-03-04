@@ -75,6 +75,11 @@ Community
     Connectionist Temporal Classification (CTC) loss on character recognition is also provided for
     continuous speech recognition.
 
+:html:`<div class="card hidden-card"></div></div>`
+
+:html:`</div></div><br><div style='clear:both'>`
+:html:`<div class="card-deck">`
+
 .. community-card::
     :title: Layerwise learning for quantum neural networks
     :author: Felipe Oyarce Andrade
@@ -91,12 +96,7 @@ Community
     that we’re dividing the problem into smaller circuits to successfully avoid
     falling into Barren Plateaus. We provide a proof-of-concept
     implementation of this technique in Pennylane’s Pytorch interface for binary
-    classification in the MNIST dataset.    
-
-:html:`<div class="card hidden-card"></div></div>`
-
-:html:`</div></div><br><div style='clear:both'>`
-:html:`<div class="card-deck">`
+    classification in the MNIST dataset.
 
 .. community-card::
     :title: A Quantum-Enhanced Transformer
