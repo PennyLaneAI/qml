@@ -22,14 +22,12 @@
   paper: https://arxiv.org/abs/2010.13309
   color: heavy-rain-gradient
   description: |
-    We provide a hybrid model training with larger-scale acoustic features 3000 to 10000 with
-    quantum convolution neural networks (QCNN) with Random layer, which still provide insightful
-    convolution features without the encoding time cost from the CPU simulation and on the request
-    queueing time from QPU. We further provide classical activation mapping, a neural saliency
-    analysis, on the well-trained neural models (QCNN Self-Attention vs. CNN Self-Attention) to
-    show that the QCNN Self-attention model did learn meaningful representations. An additional
-    Connectionist Temporal Classification (CTC) loss on character recognition is also provided for
-    continuous speech recognition.
+    We train a hybrid quantum convolution neural network (QCNN) on acoustic data with up to 10,000
+    features. This model uses layers of random quantum gates to efficiently encode convolutional
+    features. We perform a neural saliency analysis to provide a classical activation mapping to
+    compare classical and quantum models, illustrating that the QCNN self-attention model did learn
+    meaningful representations. An additional connectionist temporal classification (CTC) loss on
+    character recognition is also provided for continuous speech recognition.
 
 - title: Layerwise learning for quantum neural networks
   author: Felipe Oyarce Andrade
