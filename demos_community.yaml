@@ -1,3 +1,19 @@
+- title: QCNN for Speech Commands Recognition
+  author: C.-H. Huck Yang
+  date: 02/03/2021
+  code: https://github.com/huckiyang/QuantumSpeech-QCNN
+  paper: https://arxiv.org/abs/2010.13309
+  color: heavy-rain-gradient
+  description: |
+    We provide a hybrid model training with larger-scale acoustic features 3000 to 10000 with
+    quantum convolution neural networks (QCNN) with Random layer, which still provide insightful
+    convolution features without the encoding time cost from the CPU simulation and on the request
+    queueing time from QPU. We further provide classical activation mapping, a neural saliency
+    analysis, on the well-trained neural models (QCNN Self-Attention vs. CNN Self-Attention) to
+    show that the QCNN Self-attention model did learn meaningful representations. An additional
+    Connectionist Temporal Classification (CTC) loss on character recognition is also provided for
+    continuous speech recognition.
+
 - title: Layerwise learning for quantum neural networks
   author: Felipe Oyarce Andrade
   date: 26/01/2021
