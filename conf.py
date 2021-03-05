@@ -211,7 +211,7 @@ card_pairs = list(zip(left_cards, right_cards))
 
 loader = FileSystemLoader(".")
 env = Environment(loader=loader)
-template = env.get_template("demos_community.rst_t")
+template = env.get_template("demos_community.rst.template")
 
 with open("demos_community.rst", 'w') as f:
     f.write(template.render(card_pairs=card_pairs))
