@@ -46,9 +46,6 @@ Community
     <hr>
     <br>
 
-
-.. For two cards per row, create a new card deck every two cards.
-
 {% for card1, card2 in card_pairs %}
 
 :html:`<div class="card-deck">`
@@ -82,10 +79,6 @@ Community
 :html:`</div></div><br><div style='clear:both'>`
 
 {% endfor %}
-
-.. If the final card deck only has a single card, we insert a 'hidden card'
-   so that the card does not become full-width.
-   :html:`<div class="card hidden-card"></div></div>`
 
 .. toctree::
     :maxdepth: 2
