@@ -20,6 +20,9 @@ Community
     .jumbotron {
         box-shadow: none!important;
     }
+    .community.active {
+        box-shadow: 0 2px 5px 0 rgba(204, 204, 204, 0.97),0 2px 15px 2px rgba(43, 187, 173, 0.6) !important;
+    }
     </style>
 
 
@@ -223,3 +226,19 @@ Community
 .. toctree::
     :maxdepth: 2
     :hidden:
+
+.. raw:: html
+
+    <script type="text/javascript">
+        var divId;
+        divId = $(location).attr('hash');
+
+        $(window).on('load', function() {
+            if (divId) {
+                $(divId).addClass("active");
+                setTimeout(function(){
+                    $('html, body').animate({scrollTop: $(divId).offset().top - 60}, 0);
+                }, 500);
+            }
+        });
+    </script>
