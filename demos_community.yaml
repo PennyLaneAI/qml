@@ -2,7 +2,7 @@
   author: Semyon Sinchenko
   date: 03/03/2021
   code: https://github.com/SemyonSinchenko/PennylaneQuantumFeatureMaps
-  paper: https://arxiv.org/abs/2006.14904
+  paper: https://arxiv.org/abs/1906.10467
   color: heavy-rain-gradient
   description: |
     In this tutorial we implement a few examples of feature maps for kernel based quantum
