@@ -2,14 +2,13 @@
   author: Semyon Sinchenko
   date: 03/03/2021
   code: https://github.com/SemyonSinchenko/PennylaneQuantumFeatureMaps
-  paper: https://arxiv.org/abs/1906.10467
   color: heavy-rain-gradient
   description: |
     In this tutorial we implement a few examples of feature maps for kernel based quantum
     machine learning. We'll see how quantum feature maps could make linear unseparable data
     separable after applying a kernel and measuring an observable. We will
     <a href="https://arxiv.org/abs/1906.10467" target="_blank">follow an article</a>
-    and also implement all the kernel-functions with PennyLane.
+    and also implement all the kernel functions with PennyLane.
 
 - title: Variational Quantum Circuits for Deep Reinforcement Learning
   author: Samuel Yen-Chi Chen
