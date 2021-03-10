@@ -101,9 +101,12 @@ name = 'h2'
 # (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
 # number of qubits needed to represent it:
 
+symbols, coordinates = qchem.read_structure(geometry)
+
 h, qubits = qchem.molecular_hamiltonian(
+    symbols,
+    coordinates,
     name,
-    geometry,
     charge=charge,
     mult=multiplicity,
     basis=basis_set,
