@@ -82,7 +82,13 @@ replace relevant parts with your own information).
 
     **affiliation**
     Quantum University
-
+    
+    **Twitter** (optional)
+    @adalovelace1821
+    
+    **Image** (optional)
+    https://upload.wikimedia.org/wikipedia/commons/a/a4/Ada_Lovelace_portrait.jpg
+    
     --------------------------------------------------------------------------------
 
     #### Demo information
