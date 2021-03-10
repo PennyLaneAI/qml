@@ -16,10 +16,11 @@ many of its transformations are also useful for QML, and can be used directly wi
 # In this tutorial, we will highlight some ways to use JAX transformations with Pennylane
 #
 # If this is your first time reading Pennylane code, we recommend going through
-# the basic tutorial (ADD LINK) first. It's all in vanilla NumPy, so you should be able to 
-# easily transfer what you learn to JA when you come back.
+# the basic tutorial (ADD LINK TO https://pennylane.ai/qml/demos/tutorial_qubit_rotation.html)
+# first. It's all in vanilla NumPy, so you should be able to 
+# easily transfer what you learn to JAX when you come back.
 #
-# With that said, we begin by importing PennyLane and the JAX-provided version of NumPy, and
+# With that said, we begin by importing PennyLane, JAX and the JAX-provided version of NumPy and
 # set up a 2-wire qubit device for computations. We'll be using the ``default.qubit.jax`` device
 # for this tutorial.
 
@@ -84,22 +85,22 @@ print(f"Tuned cost: {circuit(param)}")
 # parameters and making some cost function go down, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
 # QML is most useful for learning quantum systems like finding chemical ground states
-# or learning to sample thermal energy states. (ADD LINKS)
+# or learning to sample thermal energy states. (LINK TO https://pennylane.ai/qml/demos/tutorial_vqt.html)
 
 ##############################################################################
 # Batching and Evolutionary Strategies. 
 # -------------------------------------
 #
-# We just showed how one can use gradient methods to learn a parameter value, 
+# We just showed how we can use gradient methods to learn a parameter value, 
 # but on real QC hardware, calculating gradients can be really expensive and noisy.
 # Another approach is to use evolutionary strategies (ES) to learn these parameters.
 # Here, we will be using the jax.vmap transform to make running batches of circuits much easier.
 
-# Vectorize the circuit to execute batches in parallel.
+# Create a vectorized circuit to execute batches in parallel.
 vcircuit = jax.vmap(circuit)
 
 ##############################################################################
-# Now, we call call the circuit with multiple parameters at once and get back 
+# Now, we call call the vcircuit with multiple parameters at once and get back 
 # batch of expectations.
 
 print(f"Batched result: {vcircuit(jnp.array([1.234, 0.333, -0.971]))}")
@@ -115,7 +116,7 @@ print(f"Batched result: {vcircuit(jnp.array([1.234, 0.333, -0.971]))}")
 # https://jax.readthedocs.io/en/latest/jax.random.html
 key = jax.random.PRNGKey(0)
 
-# Generate our first set of samples
+# Generate our first set of samples.
 params = jax.random.normal(key, (100,))
 
 mean = jnp.average(params)
@@ -124,6 +125,7 @@ print(f"Initial cost: {circuit(mean)}")
 
 
 for _ in range(200):
+    # In this line, we run all 100 circuits in parallel.
     costs = vcircuit(params)
     weights = jnp.exp(-costs) # Use exp(-x) here since the costs could be negative.
 
