@@ -84,10 +84,10 @@ replace relevant parts with your own information).
     Quantum University
     
     **Twitter** (optional)
-    @adalovelace1821
+    @adalovelace1815
     
     **Image** (optional)
-    https://upload.wikimedia.org/wikipedia/commons/a/a4/Ada_Lovelace_portrait.jpg
+    https://upload.wikimedia.org/wikipedia/commons/8/8b/Babbage_Difference_Engine.jpg
     
     --------------------------------------------------------------------------------
 
