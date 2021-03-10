@@ -19,7 +19,7 @@ Your affiliation, if applicable; e.g. University, research institute, company.
 Your Twitter username, if interested; helps us advertise your demo while linking directly back to you.
 
 **Image** (optional)
-Suggested image to use when advertising your demo on Twitter; can be provided by link or by copy/pasting directly in GitHub.
+Suggested image to use when advertising your demo on Twitter; can be provided via hyperlink or by copy/pasting directly in GitHub.
 
 --------------------------------------------------------------------------------
 
