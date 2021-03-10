@@ -9,14 +9,14 @@ Using JAX with Pennylane
 
 JAX is an incredibly powerful deep learning library that has been gaining traction in
 the deep learning community. While JAX was originally designed for classical ML,
-many of its transformations are also useful for QML, and can be used directly with Pennylane.
+many of its transformations are also useful for quantum machine learning (QML), and can be used directly with Pennylane.
 """
 
 ##############################################################################
 # In this tutorial, we will highlight some ways to use JAX transformations with Pennylane
 #
 # If this is your first time reading Pennylane code, we recommend going through
-# the basic tutorial (ADD LINK TO https://pennylane.ai/qml/demos/tutorial_qubit_rotation.html)
+# the :doc:`basic tutorial </demos/tutorial_qubit_rotation>`
 # first. It's all in vanilla NumPy, so you should be able to 
 # easily transfer what you learn to JAX when you come back.
 #
@@ -179,4 +179,3 @@ key2 = jax.random.PRNGKey(1)
 print(f"key1: {circuit(key1, jnp.pi/2)}")
 print(f"key1: {circuit(key1, jnp.pi/2)}")
 print(f"key2: {circuit(key2, jnp.pi/2)}")
-
