@@ -79,7 +79,7 @@ np.random.seed(42)
 # how many qubits we train on will effect our results.
 
 wires = 6
-dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
+dev = qml.device("default.qubit", wires=wires, shots=10000)
 
 
 ######################################################################
@@ -331,11 +331,11 @@ cost_global(params_local)
 # The answer is that we have trained the global cost a *little bit*, but
 # not enough to see a change with only 10000 shots. To see the effect,
 # we'll need to increase the number of shots to an unreasonable amount.
-# Instead making the backend analytic gives us the exact
-# representation.
+# Instead making the backend analytic, by setting shots to ``None``, gives
+# us the exact representation.
 #
 
-dev.analytic = True
+dev.shots = None
 global_circuit = qml.QNode(global_cost_simple, dev)
 print(
     "Current cost: "
@@ -369,7 +369,7 @@ def tunable_cost_simple(rotations):
 def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
 
-dev.analytic = False
+dev.shots = 10000
 tunable_circuit = qml.QNode(tunable_cost_simple, dev)
 locality = 2
 params_tunable = params_local
@@ -430,7 +430,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
+dev = qml.device("default.qubit", wires=wires, shots=10000)
 global_circuit = qml.QNode(global_cost_simple, dev)
 
 for runs in range(samples):
@@ -464,7 +464,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("default.qubit", wires=wires, shots=10000, analytic=False)
+dev = qml.device("default.qubit", wires=wires, shots=10000)
 tunable_circuit = qml.QNode(tunable_cost_simple, dev)
 
 for runs in range(samples):

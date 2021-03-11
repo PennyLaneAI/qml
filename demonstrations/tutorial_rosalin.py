@@ -137,10 +137,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=False)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=1000)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=True)
+analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
 # We use :func:`~.pennylane.map` to map our ansatz over our list of observables,
@@ -540,7 +540,7 @@ class Rosalin:
 # must be able to generate single-shot samples from our device.
 
 
-rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
+rosalin_device = qml.device("default.qubit", wires=num_wires, shots=1000)
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
 
 ##############################################################################
