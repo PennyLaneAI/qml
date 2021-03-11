@@ -331,7 +331,7 @@ cost_global(params_local)
 # The answer is that we have trained the global cost a *little bit*, but
 # not enough to see a change with only 10000 shots. To see the effect,
 # we'll need to increase the number of shots to an unreasonable amount.
-# Instead making the backend analytic, by setting shots to ``None``, gives
+# Instead, making the backend analytic by setting shots to ``None``, gives
 # us the exact representation.
 #
 
