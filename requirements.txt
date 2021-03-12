@@ -1,7 +1,7 @@
 --find-links https://download.pytorch.org/whl/torch_stable.html
 appdirs==1.4.4
 autograd==1.3
-numpy==1.19
+numpy==1.18.5
 networkx==2.4
 nlopt==2.6.2
 semantic_version==2.6
@@ -19,7 +19,6 @@ pennylane-qiskit==0.14.0
 qulacs==0.1.10.1
 pennylane-qulacs==0.14.0
 pyquil==2.21
-qutip==4.5.2
 scikit-learn==0.23.2
 sphinx==1.8.5
 sphinx-sitemap
@@ -32,3 +31,5 @@ torchvision==0.8.1+cpu
 dask[delayed]==2.10.1
 scikit-learn==0.23.2
 matplotlib==3.3.3
+Jinja2==2.11.3
+pyyaml==5.4.1

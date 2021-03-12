@@ -111,10 +111,9 @@ PennyLane (:class:`~.pennylane.Rot`) is expressed as
                         \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
                         \omega)/2} \cos(\theta/2) \end{pmatrix}
 
-The *Haar measure* tells us about how we need to weight these parameters in
-order to sample unitaries uniformly at random.  The mathematical form of the
-Haar measure can get quite hairy, especially as we increase the dimension of 
-the system. 
+The *Haar measure* tells us about how to sample these parameters in order to
+sample unitaries uniformly at random.  The mathematical form of the Haar measure
+can get quite hairy, especially as we increase the dimension of the system.
 
 The Haar measure is defined for the unitary group :math:`U(d)` for every
 dimension :math:`d`.  In general. a :math:`d`-dimensional unitary requires at
@@ -142,8 +141,8 @@ the `qutip <"http://qutip.org/">`__ library to plot them on the Bloch sphere.
 
 import pennylane as qml
 import numpy as np
-from qutip import Bloch
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 # set the random seed
 np.random.seed(42)
@@ -157,7 +156,7 @@ def not_a_haar_random_unitary():
     qml.Rot(phi, theta, omega, wires=0)
     return qml.state()
 
-num_samples = 2000
+num_samples = 2021
 
 not_haar_samples = [not_a_haar_random_unitary() for _ in range(num_samples)]
 
@@ -182,13 +181,15 @@ not_haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in not_haar_
 ######################################################################
 # With this, we can now plot these points on the Bloch sphere:
 
-b = Bloch()
-b.add_points(
-    [not_haar_bloch_vectors[:,0], not_haar_bloch_vectors[:,1], not_haar_bloch_vectors[:, 2]]
-)
-b.sphere_alpha = 0.05
-b.point_color = ['#e29d9e']
-b.show()
+fig = plt.figure(figsize=(6, 6))
+ax = fig.add_subplot(111, projection='3d')
+ax.grid(False)
+ax.set_axis_off()
+ax.scatter(
+    not_haar_bloch_vectors[:,0], not_haar_bloch_vectors[:,1], not_haar_bloch_vectors[:, 2], 
+    c='#e29d9e', alpha=0.3)
+plt.tight_layout()
+plt.show()
 
 ######################################################################
 # You can see from this plot that even though our parameters were sampled from a
@@ -229,13 +230,15 @@ def haar_random_unitary():
 haar_samples = [haar_random_unitary() for _ in range(num_samples)]
 haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in haar_samples])
 
-# Plot everything
-b = Bloch()
-b.add_points([haar_bloch_vectors[:,0], haar_bloch_vectors[:,1], haar_bloch_vectors[:, 2]])
-b.sphere_alpha = 0.05
-b.point_color = ['#e29d9e']
-b.show()
-
+fig = plt.figure(figsize=(6, 6))
+ax = fig.add_subplot(111, projection='3d')
+ax.set_axis_off()
+ax.grid(False)
+ax.scatter(
+    haar_bloch_vectors[:,0], haar_bloch_vectors[:,1], haar_bloch_vectors[:, 2], 
+    c='#e29d9e', alpha=0.3)
+plt.tight_layout()
+plt.show()
 ######################################################################
 # We see that when we use the correct measure, our qubit states are now
 # much-better distributed over the sphere.
