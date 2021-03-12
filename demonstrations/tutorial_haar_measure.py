@@ -170,7 +170,8 @@ Y = np.array([[0, -1j], [1j, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
 def convert_to_bloch_vector(rho):
-    # Used the mixed state simulator so we had density matrix for this part!
+    """Convert a density matrix to a Bloch vector."""
+    # Used the mixed state simulator so we could have the density matrix for this part!
     ax = np.trace(np.dot(rho, X)).real
     ay = np.trace(np.dot(rho, Y)).real
     az = np.trace(np.dot(rho, Z)).real
@@ -181,15 +182,18 @@ not_haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in not_haar_
 ######################################################################
 # With this, we can now plot these points on the Bloch sphere:
 
-fig = plt.figure(figsize=(6, 6))
-ax = fig.add_subplot(111, projection='3d')
-ax.grid(False)
-ax.set_axis_off()
-ax.scatter(
-    not_haar_bloch_vectors[:,0], not_haar_bloch_vectors[:,1], not_haar_bloch_vectors[:, 2], 
-    c='#e29d9e', alpha=0.3)
-plt.tight_layout()
-plt.show()
+def plot_bloch_sphere(bloch_vectors):
+    """ Helper function to plot vectors on a sphere."""
+    fig = plt.figure(figsize=(6, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.grid(False)
+    ax.set_axis_off()
+    ax.scatter(
+        bloch_vectors[:,0], bloch_vectors[:,1], bloch_vectors[:, 2], c='#e29d9e', alpha=0.3
+    )
+    plt.show()
+
+plot_bloch_sphere(not_haar_bloch_vectors)
 
 ######################################################################
 # You can see from this plot that even though our parameters were sampled from a
@@ -230,15 +234,8 @@ def haar_random_unitary():
 haar_samples = [haar_random_unitary() for _ in range(num_samples)]
 haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in haar_samples])
 
-fig = plt.figure(figsize=(6, 6))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_axis_off()
-ax.grid(False)
-ax.scatter(
-    haar_bloch_vectors[:,0], haar_bloch_vectors[:,1], haar_bloch_vectors[:, 2], 
-    c='#e29d9e', alpha=0.3)
-plt.tight_layout()
-plt.show()
+plot_bloch_sphere(haar_bloch_vectors)
+
 ######################################################################
 # We see that when we use the correct measure, our qubit states are now
 # much-better distributed over the sphere.
@@ -340,5 +337,8 @@ plt.show()
 #     transformations" `Phys. Rev. A 97 022328 <"https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328">`__
 #     (2018). (`arXiv <"https://arxiv.org/abs/1708.00735">`__)
 #
+# .. [#Mezzadri2006]
 #
+#     F. Mezzadri. "How to generate random matrices from the classical compact groups"
+#     (`arXiv <"https://arxiv.org/abs/math-ph/0609050">`__). 
 
