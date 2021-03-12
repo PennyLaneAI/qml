@@ -247,19 +247,59 @@ plt.show()
 ######################################################################
 # Show me more math!
 # ~~~~~~~~~~~~~~~~~~
+#
 # While we can easily visualize the single-qubit case, this is no longer
-# possible when we increase the number of qubits. However, it is still
-# possible to obtain a mathematical expression for the Haar measure in
-# arbitrary dimensions.
+# possible when we increase the number of qubits. Regardless, we can still
+# obtain a mathematical expression for the Haar measure in arbitrary
+# dimensions. In what follows, we will leave qubits behind and explore the many
+# parameterizations of the :math:`N`-dimensional special unitary group.  This
+# group, written as :math:`SU(N)`, is the continuous group consisting of
+# all :math:`N \times N` unitary operations with determinant 1.
 #
-# There are multiple ways to parameterize a :math:`d`-dimensional unitary 
-# operation. 
+# Instead of qubits, we are going to shift to the world of *qumodes*. Our
+# unitaries will be expressed as interferometers made up of beamsplitters (2- or
+# 3-parameter operations), and phase shifts (1-parameter operations). These
+# unitaries can still be considered as multi-qubit operations in the cases where
+# :math:`N=2^n` for some number :math:`n` qubits, but they will have to be
+# translated from the continuous-variable operations into qubit operations. In
+# PennyLane, this can be done by feeding the unitaries to the
+# :class:`~.pennylane.QubitUnitary` operation directly. Alternatively, one can
+# use *quantum compilation* to express the operations as a sequence of
+# elementary gates such as Pauli rotations and CNOTs.
+#
+# .. tip::
 # 
-# In this section:
+#    If you haven't had many opportunities to work in terms of qumodes, check out
+#    [insert resource here] for a nice introduction to the topic.
 #
-# * derivations/expressions for Haar measure of arbitrary
-#   :math:`SU(n)` case (recursive triangular decomposition [#deGuise2018]_)
-# * multi-qubit case.
+# There are multiple ways to parameterize a :math:`N`-dimensional unitary 
+# operation. We saw already above that for :math:`N=2`, we can write
+#
+# .. math::
+#
+#    U(\phi, \theta, \omega) = \begin{pmatrix} e^{-i(\phi + \omega)/2}
+#                        \cos(\theta/2) & -e^{i(\phi - \omega)/2} \sin(\theta/2)
+#                        \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
+#                        \omega)/2} \cos(\theta/2) \end{pmatrix}
+#
+# This operation can be decomposes into beamsplitters and phase shifts 
+# as follows:
+#
+# .. math::
+#
+#    U(\phi, \theta, \omega) =
+#        \begin{pmatrix}
+#          e^{i\phi/2} & 0 \\ 0 & e^{-i\phi/2}
+#        \end{pmatrix}
+#        \begin{pmatrix}
+#          \cos(\theta/2) & -\sin(\theta/2) \\ \sin(\theta/2) & \cos(\theta/2)
+#        \end{pmatrix}
+#       \begin{pmatrix}
+#          e^{i\omega/2} & 0 \\ 0 & e^{-i\omega/2}
+#        \end{pmatrix}
+#
+# [TODO: Verify signs and angles since the decomposition was pulled from the paper].
+#
 
 ######################################################################
 # Fun facts
