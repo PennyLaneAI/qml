@@ -91,7 +91,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. customgalleryitem::
     :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics.
     :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
-    :description: :doc:`demos/qgrnn`
+    :description: :doc:`demos/tutorial_qgrnn`
     :tags: autograd
 
 .. customgalleryitem::
@@ -117,6 +117,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/kernel_based_training/scaling.png
     :description: :doc:`demos/tutorial_kernel_based_training`
     :tags: pytorch sklearn kernels
+
+.. customgalleryitem::
+    :tooltip: Meta-learning technique for variational quantum algorithms.
+    :figure: demonstrations/learning2learn/l2l_thumbnail.png
+    :description: :doc:`demos/learning2learn`
+    :tags: tensorflow
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -246,9 +252,10 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_multiclass_classification
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_pasqal
-    demos/qgrnn
+    demos/tutorial_qgrnn
     demos/qonn
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
     demos/quantum_volume
     demos/tutorial_gbs
+    demos/learning2learn
