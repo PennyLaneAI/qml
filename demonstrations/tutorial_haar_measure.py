@@ -309,6 +309,61 @@ plot_bloch_sphere(haar_bloch_vectors)
 # * [Maybe] Entries of Haar-random unitaries look like complex numbers :math:`a+bi`
 #   where :math:`a, b` are normally distributed with mean 0 and variance related to the
 #   dimension of the unitary (something I came across during quantum volume demo)
+#
+#
+# Haar-random matrices from the :math:`QR` decomposition
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Suppose that you are working with a system that is large enough that it would
+# be very cumbersome to sample and keep track of the distributions of so many
+# parameters.  There is a much quicker way to generate Haar-random unitaries by
+# taking a (slightly modified) QR decomposition of complex-valued matrices.
+# This algorithm is detailed in [#Mezzadri2006]_, and consists of the following
+# steps:
+#
+# 1. Generate an :math:`N \times N` matrix with normally-distributed complex numbers
+# 2. Compute the QR decomposition :math:`Z = QR`.
+# 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii})`
+# 4. Compute :math:`Q^\prime = Q \Lambda`, which will be Haar-random.
+#
+#
+
+from numpy.linalg import qr
+
+def qr_haar(N):
+    """Generate a Haar-random matrix using the QR decomposition."""
+    # Step 1
+    A, B = np.random.normal(size=(N, N)), np.random.normal(size=(N, N))
+    Z = A + 1j * B
+
+    # Step 2
+    Q, R = qr(Z)
+
+    # Step 3
+    Lambda = np.diag([R[i, i] / np.abs(R[i, i]) for i in range(N)])
+
+    # Step 4
+    return np.dot(Q, Lambda)
+
+
+######################################################################
+# Let's check that this method actually generates Haar-random unitaries
+# by trying it out for :math:`N=2` and plotting on the Bloch sphere.
+#
+
+@qml.qnode(dev)
+def qr_haar_random_unitary():
+    qml.QubitUnitary(qr_haar(2), wires=0)
+    return qml.state()
+
+qr_haar_samples = [qr_haar_random_unitary() for _ in range(num_samples)]
+qr_haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in qr_haar_samples])
+plot_bloch_sphere(qr_haar_bloch_vectors)
+
+######################################################################
+# As expected, we find our qubit states are distributed uniformly over the sphere.
+# 
+#
 
 ######################################################################
 # Conclusion
