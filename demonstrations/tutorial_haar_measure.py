@@ -17,29 +17,29 @@ Understanding the Haar Measure
 
 *Author: PennyLane dev team. Posted: 4 March 2021. Last updated: 4 March 2021.*
 
-If you've ever dug into the literature about random circuits, variational ansatz
-structure, or anything related to the structure and properties of unitary
-operations, you've likely come across a statement like the following: "Assume
-that :math:`U` is sampled uniformly at random from the Haar measure".  In this
-demo, we're going to unravel this cryptic statement and take an in-depth look at
-what it means. You'll gain an understanding of the general concept of *measure*,
-the Haar measure and its special properties, and you'll learn how to sample from
-it using the tools available in PennyLane and other open-source quantum
-computing frameworks. By the end of this demo, you'll be able to include that
-important statement in your own work with confidence!
+If you've ever dug into the literature about random quantum circuits,
+variational ansatz structure, or anything related to the structure and
+properties of unitary operations, you've likely come across a statement like the
+following: "Assume that :math:`U` is sampled uniformly at random from the Haar
+measure".  In this demo, we're going to unravel this cryptic statement and take
+an in-depth look at what it means. You'll gain an understanding of the general
+concept of *measure*, the Haar measure and its special properties, and you'll
+learn how to sample from it using the tools available in PennyLane and other
+scientific computing frameworks. By the end of this demo, you'll be able to
+include that important statement in your own work with confidence!
 
 Measure
 -------
 
 `Measure theory <"https://en.wikipedia.org/wiki/Measure_(mathematics)">`__ is a
-branch of mathematics that studies things that are measurable --- think length, area, or
-volume, but the generalized idea across mathematical spaces and multiple
-dimensions. Loosely speaking, the measure tells you about how "stuff" is
-distributed and concentrated in a mathematical set, or space. An intuitive way
-to understand measure is to think about a sphere. An arbitrary point on a sphere
-can be parameterized by three numbers --- depending on what you're doing, you
-may use Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to
-use spherical co-ordinates :math:`(r, \phi, \theta)`.
+branch of mathematics that studies things that are measurable --- think length,
+area, or volume, but generalized to mathematical spaces and even higher
+dimensions. Loosely, the measure tells you about how "stuff" is distributed and
+concentrated in a mathematical set or space. An intuitive way to understand
+measure is to think about a sphere. An arbitrary point on a sphere can be
+parameterized by three numbers --- depending on what you're doing, you may use
+Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to use
+spherical co-ordinates :math:`(\rho, \phi, \theta)`.
 
 .. image:: /demonstrations/haar_measure/spherical_coords.png
     :align: center
@@ -49,23 +49,24 @@ use spherical co-ordinates :math:`(r, \phi, \theta)`.
     be smaller or larger depending on its position on the sphere.
 
 
-Suppose you wanted to compute the volume of this sphere. Just like you can
-compute the area under the curve of a function by integrating over its
-parameters, you can compute the volume of a sphere by integrating over :math:`r,
-\phi`, and :math:`\theta`. Your first thought when taking an integral might be
-to just sandwich a function between a :math:`\int` and a :math:`dx`. Let's see
-what happens if we do that with the spherical coordinates:
+Suppose you wanted to compute the volume of a sphere with radius :math:`r`. Just
+like you can compute the area under the curve of a function by integrating over
+its parameters, you can compute the volume of a sphere by integrating over
+:math:`\rho, \phi`, and :math:`\theta`. Your first thought when taking an integral
+might be to just sandwich a function between a :math:`\int` and a :math:`dx`,
+where :math:`x` is some parameter your function depends on. Let's see what
+happens if we do that with the spherical coordinates:
 
 .. math::
 
-    V = \int_0^{r} \int_0^{2\pi} \int_0^{\pi} dr d\phi d\theta = 2\pi^2 r
+    V = \int_0^{r} \int_0^{2\pi} \int_0^{\pi} d\rho d\phi d\theta = 2\pi^2 r
 
 Now, we know that the volume of a sphere of radius :math:`r` is
 :math:`\frac{4}{3}\pi r^3`, so what we got from this integral is clearly wrong!
-Taking the integral naively doesn't like this doesn't take into account the
-structure of the sphere with respect to its parameters. For example, consider
-two small, infinitesimal elements of volume with the same difference in
-:math:`\theta`, but at different parts of the sphere:
+Taking the integral naively like this doesn't take into account the structure of
+the sphere with respect to its parameters. For example, consider two small,
+infinitesimal elements of volume with the same difference in :math:`\theta`, but
+at different parts of the sphere:
 
 .. image:: /demonstrations/haar_measure/spherical_int_dtheta.png
     :align: center
@@ -74,16 +75,16 @@ two small, infinitesimal elements of volume with the same difference in
 Even though the :math:`d\theta` themselves are the same, there is way more
 "stuff" near the equator of the sphere than there is near the poles. We are
 going to need to take that into account when computing the integral. The same
-holds true if we consider a :math:`dr`.  The contribution to volume of parts of
-the sphere with a large :math:`r` is far more than for a small :math:`r` --- we should
-expect the contribution to be proportional to :math:`r^2`, given that
+holds true if we consider a :math:`d\rho`.  The contribution to volume of parts of
+the sphere with a large :math:`\rho` is far more than for a small :math:`\rho` --- we should
+expect the contribution to be proportional to :math:`\rho^2`, given that
 the surface area of a sphere of radius :math:`r` is :math:`4\pi r^2`.
 
 .. image:: /demonstrations/haar_measure/spherical_int_dr.png
     :align: center
     :width: 90%
 
-On the other hand, for a fixed :math:`r` and :math:`\theta`, the length of the
+On the other hand, for a fixed :math:`\rho` and :math:`\theta`, the length of the
 :math:`d\phi` is the same all around the circle. If we did the math and put all these
 things together, we would find that the actual expression for the integral
 should look like this:
@@ -91,9 +92,9 @@ should look like this:
 
 .. math::
 
-    V = \int_0^r \int_0^{2\pi} \int_0^{\pi} r^2 \sin \theta dr d\phi d\theta = \frac{4}{3}\pi r^3
+    V = \int_0^r \int_0^{2\pi} \int_0^{\pi} \rho^2 \sin \theta d\rho d\phi d\theta = \frac{4}{3}\pi r^3
 
-These extra terms that we had to add to the integral, :math:`r^2 \sin \theta`,
+These extra terms that we had to add to the integral, :math:`\rho^2 \sin \theta`,
 constitute the *measure*. The measure weights portions of the sphere differently
 depending on where they are in the space.
 
@@ -115,8 +116,8 @@ the most general single-qubit rotation implemented in PennyLane
 The *Haar measure* tells us about how to sample these parameters in order to
 sample unitaries uniformly at random from the unitary group :math:`U(N)`. This
 measure, often denoted by :math:`\mu_N`, is what sits inside integrals over the
-unitary group and tells us how the parameters are weighted. For example, for
-some function :math:`f` that acts on elements of :math:`U(N)`, we write the
+unitary group and ensures things are properly weighted. For example, suppose
+ :math:`f` is a function that acts on elements of :math:`U(N)`. We can write the
 integral of :math:`f` with respect to the Haar measure like so:
 
 .. math::
@@ -131,28 +132,27 @@ dimensions.  In general, a :math:`N`-dimensional unitary requires at least
 we'll start with the case of a single qubit :math:`(N=2)`, then show how things
 generalize.
 
-Example: single-qubit system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Single-qubit Haar measure
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Haar measure allows us to sample uniformly at random. One useful consequence
-of this is that it provides a method to sample quantum *states* uniformly at
-random from the Hilbert space.  We can simply generate Haar-random unitaries,
-and apply them to a fixed basis state such as :math:`\vert 0\rangle`.
+The Haar measure allows us to sample single-qubit unitaries uniformly at
+random. One useful consequence of this is that it provides a method to sample
+quantum *states* uniformly at random from the Hilbert space.  We can simply
+generate Haar-random unitaries, and apply them to a fixed basis state such as
+:math:`\vert 0\rangle`.
 
 Keeping with the idea of spheres, let's try this out and investigate what
 happens to a single-qubit state on the Bloch sphere when we apply Haar-random
 unitaries. But first, let's suppose that we sample parameters for our unitaries
 from the uniform distribution of each parameter - the angles :math:`\omega,
 \phi`, and :math:`\theta` are all sampled from uniformly from the range
-:math:`[0, 2\pi)`. We will use PennyLane to compute these states, and then use
-the `qutip <"http://qutip.org/">`__ library to plot them on the Bloch sphere.
+:math:`[0, 2\pi)`.
 
 """
 
 import pennylane as qml
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 # set the random seed
 np.random.seed(42)
@@ -162,6 +162,7 @@ dev = qml.device('default.mixed', wires=1)
 
 @qml.qnode(dev)
 def not_a_haar_random_unitary():
+    # Sample all parameters uniformly 
     phi, theta, omega = 2 * np.pi * np.random.uniform(size=3)
     qml.Rot(phi, theta, omega, wires=0)
     return qml.state()
@@ -179,9 +180,9 @@ X = np.array([[0, 1], [1, 0]])
 Y = np.array([[0, -1j], [1j, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
+# Used the mixed state simulator so we could have the density matrix for this part!
 def convert_to_bloch_vector(rho):
     """Convert a density matrix to a Bloch vector."""
-    # Used the mixed state simulator so we could have the density matrix for this part!
     ax = np.trace(np.dot(rho, X)).real
     ay = np.trace(np.dot(rho, Y)).real
     az = np.trace(np.dot(rho, Z)).real
@@ -190,7 +191,7 @@ def convert_to_bloch_vector(rho):
 not_haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in not_haar_samples])
 
 ######################################################################
-# With this, we can now plot these points on the Bloch sphere:
+# With this done, let's find out where our random states ended up:
 
 def plot_bloch_sphere(bloch_vectors):
     """ Helper function to plot vectors on a sphere."""
@@ -208,8 +209,9 @@ plot_bloch_sphere(not_haar_bloch_vectors)
 ######################################################################
 # You can see from this plot that even though our parameters were sampled from a
 # uniform distribution, there is some noticeable concentration around the poles
-# of the sphere. To fix this, we will need to sample from the proper Haar
-# measure, and weight the different parameters appropriately.
+# of the sphere. So even though the input parameters were uniform, the output is
+# very much *not* unifrom. To fix this, we will need to sample from the proper
+# Haar measure, and weight the different parameters appropriately.
 #
 # For a single qubit, the Haar measure looks much like the case of a sphere,
 # minus the radial component (intuitively, all qubit state vectors have length
@@ -274,12 +276,12 @@ plot_bloch_sphere(haar_bloch_vectors)
 # unitaries will be expressed as interferometers made up of beamsplitters (2- or
 # 3-parameter operations), and phase shifts (1-parameter operations). These
 # unitaries can still be considered as multi-qubit operations in the cases where
-# :math:`N=2^n` where :math:`n` is the number of qubits, but they will have to be
-# translated from the continuous-variable operations into qubit operations. In
-# PennyLane, this can be done by feeding the unitaries to the
-# :class:`~.pennylane.QubitUnitary` operation directly. Alternatively, one can
-# use *quantum compilation* to express the operations as a sequence of
-# elementary gates such as Pauli rotations and CNOTs.
+# :math:`N` is a power of 2, but they will have to be translated from the
+# continuous-variable operations into qubit operations. In PennyLane, this can
+# be done by feeding the unitaries to the :class:`~.pennylane.QubitUnitary`
+# operation directly. Alternatively, one can use *quantum compilation* to
+# express the operations as a sequence of elementary gates such as Pauli
+# rotations and CNOTs.
 #
 # .. tip::
 #
@@ -296,7 +298,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #                        \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
 #                        \omega)/2} \cos(\theta/2) \end{pmatrix}
 #
-# This operation can be decomposes into beamsplitters and phase shifts
+# This operation can be decomposed into beamsplitters and phase shifts
 # as follows:
 #
 # .. math::
@@ -314,17 +316,16 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # [TODO: Verify signs and angles since the decomposition was pulled from the paper].
 #
-# The middle operation is a beamsplitter; the other two operations are phase shifts.
-# We saw above that for :math:`N=2`, :math:`d\mu_2 = \sin\theta d\theta  d\omega d\phi`.
-# Note that the contribution of the parameter in beamsplitter contributes to the measure
-# in a different way than that of the two phase shifters.
-#
-# As mentioned above, for larger values of :math:`N` there are multiple ways to
-# decompose the unitary. Such decompositions rewrite elements in :math:`SU(N)`
-# acting on :math:`N` modes as a sequence of operations acting only on 2 modes,
-# :math:`SU(2)`, and single-mode phase shifts.  Shown below are three examples
-# [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_ (images taken from
-# [#deGuise2018]_):
+# The middle operation is a beamsplitter; the other two operations are phase
+# shifts.  We saw in the previous section that for :math:`N=2`, :math:`d\mu_2 =
+# \sin\theta d\theta d\omega d\phi` -- note how the contribution of the
+# parameter in beamsplitter contributes to the measure in a different way than
+# that of the two phase shifts. As mentioned above, for larger values of
+# :math:`N` there are multiple ways to decompose the unitary. Such
+# decompositions rewrite elements in :math:`SU(N)` acting on :math:`N` modes as
+# a sequence of operations acting only on 2 modes, :math:`SU(2)`, and
+# single-mode phase shifts.  Shown below are three examples [#deGuise2018]_,
+# [#Clements2016]_, [#Reck1994]_ (images taken from [#deGuise2018]_):
 #
 # .. image:: /demonstrations/haar_measure/sun_decomp.svg
 #    :align: center
@@ -341,9 +342,11 @@ plot_bloch_sphere(haar_bloch_vectors)
 # pairs of modes with 2 parameters, similar to the 3-parameter ones but with
 # :math:`\omega = \phi`.
 #
-# The first decomposition however has a particularly convenient form that leads
-# to a recursive definition of the Haar measure. The decomposition is formulated 
-# such that an :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
+# Although the decompositions can all produce the same set of operations, their
+# structure and parametrization may have consequences in practice.  The first [#deGuise2018]_
+#  has a particularly convenient form that leads to a recursive definition
+# of the Haar measure. The decomposition is formulated such that an
+# :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
 # transformation between two :math:`SU(N-1)` transformations, like so:
 #
 # .. image:: /demonstrations/haar_measure/sun.svg
@@ -369,7 +372,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # .. image:: /demonstrations/haar_measure/su3_haar.svg
 #    :align: center
-#    :width: 70%
+#    :width: 80%
 #
 # For :math:`SU(4)` and upwards, the form changes slightly, but still follows
 # the pattern of two copies of :math:`d\mu_{N-1}` with a middle term in between.
@@ -381,7 +384,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # .. image:: /demonstrations/haar_measure/su4_haar.svg
 #    :align: center
-#    :width: 95%
+#    :width: 100%
 #
 # Putting everything together, we have that
 #
@@ -390,17 +393,18 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    d\mu_N = d\mu_{N-1}^\prime \cdot \sin \theta_{N-1} \sin^{2(N-2)}\left(\frac{1}{2}\theta_{N-1}\right) \cdot  d\mu_{N-1}
 #
 # where :math:`d\mu^{\prime}` is a reduced copy of the measure depending on only
-# a subset of the parameters.
+# a subset of the parameters. This is thus a convenient, systematic way to construct
+# the :math:`N`-dimensional Haar measure.
 #
 # Haar-random matrices from the :math:`QR` decomposition
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Suppose that you are working with a system that is large enough that it would
-# be very cumbersome to sample and keep track of the distributions of so many
-# parameters.  There is a much quicker way to generate Haar-random unitaries by
-# taking a (slightly modified) QR decomposition of complex-valued matrices.
-# This algorithm is detailed in [#Mezzadri2006]_, and consists of the following
-# steps:
+# Nice-looking math aside, sometimes you just need to generate a large number of
+# high-dimension Haar-random matrices. It would be very cumbersome to sample and
+# keep track of the distributions of so many parameters.  There is a much
+# quicker way to perform the sampling by taking a (slightly modified)
+# QR decomposition of complex-valued matrices.  This algorithm is detailed in
+# [#Mezzadri2006]_, and consists of the following steps:
 #
 # 1. Generate an :math:`N \times N` matrix with normally-distributed complex numbers
 # 2. Compute the QR decomposition :math:`Z = QR`.
@@ -442,22 +446,64 @@ qr_haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in qr_haar_sa
 plot_bloch_sphere(qr_haar_bloch_vectors)
 
 ######################################################################
-# As expected, we find our qubit states are distributed uniformly over the sphere.
-#
-#
+# As expected, we find our qubit states are distributed uniformly over the
+# sphere.  This particular method is what's implemented in packages like
+# ``scipy``'s `unitary_group
+# <"https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.unitary_group.html">`__
+# function. It is very convenient for numerics, but to implement the results on a quantum device
+# would require running it through one of the decompositions above to obtain
+# the sequence of elementary operations.
 
 
 ######################################################################
 # Fun facts
 # ---------
 #
-# In this section:
+# We've now learned what the Haar measure is, and both an analytical and numerical means
+# of sampling unitaries uniformly at random. The Haar measure also has many interesting
+# properties that play a role in quantum computing.
 #
-# * Left- and right-invariance
-# * Levy's lemma and concentration of measure
-# * [Maybe] Entries of Haar-random unitaries look like complex numbers :math:`a+bi`
-#   where :math:`a, b` are normally distributed with mean 0 and variance related to the
-#   dimension of the unitary (something I came across during quantum volume demo)
+# Invariance of the Haar measure
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Earlier, we showed that the Haar measure is used when integrating functions over 
+# the unitary group:
+#
+# .. math::
+#
+#    \int_{V \in U(N)} f(V) d\mu_N(V).
+#
+# One interesting feature of the Haar measure is that it is both left and right *invariant* 
+# under unitary transformations. That is,
+#
+# .. math::
+#
+#    \int_{V \in U(N)} f(\color{red}{W}V) d\mu_N(V) =  \int_{V \in U(N)} f(V\color{red}{W}) d\mu_N(V) =  \int_{V \in U(N)} f(V) d\mu_N(V).
+#
+# This holds true for *any* other :math:`N\times N` unitary :math:`W`!
+#
+# Structure of Haar-random matrix elements
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Entries of Haar-random unitaries look like complex numbers :math:`a+bi`
+# where :math:`a, b` are normally distributed with mean 0 and variance related to the
+# dimension of the unitary (something I came across during quantum volume demo)
+#
+# Not-so-fun facts
+# ----------------
+#
+# There are also some less-than-ideal properties
+#
+#
+# Concentration of measure
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Levy's lemma
+#
+# Haar measure and barren plateaus
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#
 #
 
 ######################################################################
@@ -469,14 +515,12 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # all possible unitary operations, you'll want to do so with respect
 # to the Haar measure.
 #
-# There are a couple important aspects of this that we have yet to touch upon,
-# however.  Is it *efficient* to sample from the Haar measure? Do we *need* to
-# always sample from the full Haar measure? The answer to both of these
-# questions is "no", but it is "no" in a very interesting way. Depending on the
-# task at hand, you may not actually need to sample from the full Haar measure,
-# but can take a shortcut using something called a *unitary design*. In an
-# upcoming demo, we will explore the amazing world of unitary designs and their
-# applications!
+# There is one important aspect of this that we have yet to touch upon,
+# however. Do we *need* to always sample from the full Haar measure? The answer
+# to this question is "no" in a very interesting way. Depending on the task at
+# hand, you may be able to take a shortcut using something called a *unitary
+# design*. In an upcoming demo, we will explore the amazing world of unitary
+# designs and their applications!
 #
 # References
 # ----------
@@ -489,16 +533,19 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # .. [#Clements2016]
 #
-#     W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S.Kolthammer, and I. A. Walmsley, “Optimal design for univer-sal multiport interferometers,” \
+#     W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S.Kolthammer, and I. A. Walmsley, “Optimal design for universal multiport interferometers,” \
 #     `Optica 3, 1460–1465 <"https://www.osapublishing.org/optica/fulltext.cfm?uri=optica-3-12-1460&id=355743">`__ (2016).
-#     (`arXiv <"https://arxiv.org/abs/1603.08788">`__).
+#     (`arXiv <"https://arxiv.org/abs/1603.08788">`__)
 #
 # .. [#Reck1994]
 #
-#    TODO: citation data
+#    M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani, “Experimental
+#    realization of any discrete unitary operator,” `Phys. Rev. Lett.73, 58–61
+#    <"https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.73.58">`__
+#    (1994).
 #
 # .. [#Mezzadri2006]
 #
 #     F. Mezzadri. "How to generate random matrices from the classical compact groups"
-#     (`arXiv <"https://arxiv.org/abs/math-ph/0609050">`__). 
+#     (`arXiv <"https://arxiv.org/abs/math-ph/0609050">`__)
 
