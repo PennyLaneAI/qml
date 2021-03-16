@@ -397,6 +397,9 @@ plot_bloch_sphere(haar_bloch_vectors)
 # a subset of the parameters. This is thus a convenient, systematic way to construct
 # the :math:`N`-dimensional Haar measure. [TODO: fix notation to include parameter indices]
 #
+# As a final note, even though unitaries can be parametrzied in different ways, the underlying
+# Haar measure is *unique*.
+# 
 # Haar-random matrices from the :math:`QR` decomposition
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -459,7 +462,10 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Now, it's clear that this method works, but it is also important to
 # understand *why* it works.  Step 1 is fairly straightforward - the base of our
 # samples is a matrix full of complex values chosen from a typical
-# distribution. The second step is also clear - the outcome of a generic
+# distribution. This isn't enough by itself, since unitary matrices also
+# have constraints -- their rows and columns must be orthonormal.
+#
+# These are constraints are where step 2 comes in - the outcome of a generic
 # QR decomposition are an *orthonormal* matrix :math:`Q`, and upper
 # triangular matrix :math:`R`. Since our original matrix was complex-valued, we end
 # up with a :math:`Q` that is in fact already unitary. But why not stop there? Why 
@@ -490,8 +496,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 
 ######################################################################
-# Fun facts
-# ---------
+# Fun (and not-so-fun) facts
+# --------------------------
 #
 # We've now learned what the Haar measure is, and both an analytical and numerical means
 # of sampling unitaries uniformly at random. The Haar measure also has many interesting
@@ -514,18 +520,36 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #    \int_{V \in U(N)} f(\color{red}{W}V) d\mu_N(V) =  \int_{V \in U(N)} f(V\color{red}{W}) d\mu_N(V) =  \int_{V \in U(N)} f(V) d\mu_N(V).
 #
-# This holds true for *any* other :math:`N\times N` unitary :math:`W`!
+# This holds true for *any* other :math:`N\times N` unitary :math:`W`! A
+# consequence of such invariance is that if :math:`V` is Haar-random, then so is
+# :math:`V^T,` :math:`V^\dagger,`, and any product of another unitary matrix and
+# :math:`V` (where the product may be taken on either side).
 #
-# Not-so-fun facts
-# ----------------
-#
-# There are also some less-than-ideal properties
-#
+# Another consequence of this invariance has to do with the structure of the entries
+# themselves: they must all come from the same distribution. This is because the
+# measure remains invariant under permutations, since they are unitary --
+# the whole thing still has to be Haar random no matter how the entries are ordered,
+# so all distributions must be the same.  The specific distribution is complex
+# numbers :math:`a+bi` where both :math:`a` and :math:`b` has mean 0 and variance
+# :math:`1/N` [#Meckes2014]_ (so, much like Ginibre ensemble we used in the QR decomposition
+# above, but with a different variance and constraints due to orthonormality). 
 #
 # Concentration of measure
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Levy's lemma
+# So far we've seen the Haar measure used to produce uniformly random quantum
+# states on the surface of the Bloch sphere. The way the points are evenly
+# spread out in space might suggests that the results of evaluating functions
+# over these states will also nicely spread out. However, an unfortunate
+# (although interesting) property of the Haar measure is that it suffers from
+# the phenomenon of `concentration of measure
+# <https://en.wikipedia.org/wiki/Concentration_of_measure>`__.
+# 
+# Integrals over the Haar measure as shown above can be used to calculate
+# expectation values of functions over the unitary group. Concentration of measure
+# results show that the probability of a particular unitary's function evolution 
+# deviates from the mean by a certain amount decreases exponentially by the amount
+# of deviation. 
 #
 # Haar measure and barren plateaus
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -575,4 +599,9 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #     F. Mezzadri. "How to generate random matrices from the classical compact groups"
 #     (`arXiv <https://arxiv.org/abs/math-ph/0609050>`__)
-
+#
+# .. [#Meckes2014]
+#
+#     E. Meckes. `The Random Matrix Theory of the Classical Compact Groups  
+#     <https://case.edu/artsci/math/esmeckes/Haar_book.pdf>`__.
+#
