@@ -31,7 +31,7 @@ include that important statement in your own work with confidence!
 Measure
 -------
 
-`Measure theory <"https://en.wikipedia.org/wiki/Measure_(mathematics)">`__ is a
+`Measure theory <https://en.wikipedia.org/wiki/Measure_(mathematics)>`__ is a
 branch of mathematics that studies things that are measurable --- think length,
 area, or volume, but generalized to mathematical spaces and even higher
 dimensions. Loosely, the measure tells you about how "stuff" is distributed and
@@ -48,6 +48,7 @@ spherical co-ordinates :math:`(\rho, \phi, \theta)`.
     The size of an elementary volume element with fixed angular difference may
     be smaller or larger depending on its position on the sphere.
 
+[TODO: simple graphic of spherical coordinates (?)]
 
 Suppose you wanted to compute the volume of a sphere with radius :math:`r`. Just
 like you can compute the area under the curve of a function by integrating over
@@ -117,7 +118,7 @@ The *Haar measure* tells us about how to sample these parameters in order to
 sample unitaries uniformly at random from the unitary group :math:`U(N)`. This
 measure, often denoted by :math:`\mu_N`, is what sits inside integrals over the
 unitary group and ensures things are properly weighted. For example, suppose
- :math:`f` is a function that acts on elements of :math:`U(N)`. We can write the
+:math:`f` is a function that acts on elements of :math:`U(N)`. We can write the
 integral of :math:`f` with respect to the Haar measure like so:
 
 .. math::
@@ -222,7 +223,7 @@ plot_bloch_sphere(not_haar_bloch_vectors)
 # uniformly at random in this context, we must sample from the distribution
 # :math:`\hbox{Pr}(\theta) = \sin \theta`. We can accomplish this by setting up
 # a custom probability distribution with 
-# `rv_continuous <"https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_continuous.html#scipy.stats.rv_continuous">`__
+# `rv_continuous <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_continuous.html#scipy.stats.rv_continuous>`__
 # in ``scipy``.
 
 from scipy.stats import rv_continuous
@@ -268,7 +269,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # obtain a mathematical expression for the Haar measure in arbitrary
 # dimensions. In what follows, we will leave qubits behind and explore the many
 # parameterizations of the :math:`N`-dimensional `special unitary group
-# <"https://en.wikipedia.org/wiki/Special_unitary_group">`__. This group,
+# <https://en.wikipedia.org/wiki/Special_unitary_group>`__. This group,
 # written as :math:`SU(N)`, is the continuous group consisting of all :math:`N
 # \times N` unitary operations with determinant 1.
 #
@@ -283,7 +284,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # express the operations as a sequence of elementary gates such as Pauli
 # rotations and CNOTs.
 #
-# .. tip::
+# .. admonition:: Tip
 #
 #    If you haven't had many opportunities to work in terms of qumodes, check out
 #    [insert resource here] for a nice introduction to the topic.
@@ -344,7 +345,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # Although the decompositions can all produce the same set of operations, their
 # structure and parametrization may have consequences in practice.  The first [#deGuise2018]_
-#  has a particularly convenient form that leads to a recursive definition
+# has a particularly convenient form that leads to a recursive definition
 # of the Haar measure. The decomposition is formulated such that an
 # :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
 # transformation between two :math:`SU(N-1)` transformations, like so:
@@ -366,9 +367,9 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    :width: 25%
 #
 # Moving on up, we can write elements of :math:`SU(3)` as a sequence of three
-# :math:`SU(2)` transformations. The Haar measure then consists of two copies of
-# :math:`d\mu_2`, with an extra term in between to take into account the middle
-# transformation.
+# :math:`SU(2)` transformations. The Haar measure :math:`d\mu_3` then consists
+# of two copies of :math:`d\mu_2`, with an extra term in between to take into
+# account the middle transformation.
 #
 # .. image:: /demonstrations/haar_measure/su3_haar.svg
 #    :align: center
@@ -394,21 +395,24 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # where :math:`d\mu^{\prime}` is a reduced copy of the measure depending on only
 # a subset of the parameters. This is thus a convenient, systematic way to construct
-# the :math:`N`-dimensional Haar measure.
+# the :math:`N`-dimensional Haar measure. [TODO: fix notation to include parameter indices]
 #
 # Haar-random matrices from the :math:`QR` decomposition
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Nice-looking math aside, sometimes you just need to generate a large number of
-# high-dimension Haar-random matrices. It would be very cumbersome to sample and
-# keep track of the distributions of so many parameters.  There is a much
+# high-dimensional Haar-random matrices. It would be very cumbersome to sample
+# and keep track of the distributions of so many parameters.  There is a much
 # quicker way to perform the sampling by taking a (slightly modified)
-# QR decomposition of complex-valued matrices.  This algorithm is detailed in
-# [#Mezzadri2006]_, and consists of the following steps:
+# `QR decomposition <https://en.wikipedia.org/wiki/QR_decomposition>`__ of
+# complex-valued matrices.  This algorithm is detailed in [#Mezzadri2006]_, and
+# consists of the following steps:
 #
-# 1. Generate an :math:`N \times N` matrix with normally-distributed complex numbers
-# 2. Compute the QR decomposition :math:`Z = QR`.
-# 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii})`
+# 1. Generate an :math:`N \times N` matrix with complex numbers :math:`a+bi` where
+#    both :math:`a` and :math:`b` are normally distributed with mean 0 and variance 1
+#    (this is sampling from the distribution known as the *Ginibre ensemble*)  
+# 2. Compute a QR decomposition :math:`Z = QR`.
+# 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)`
 # 4. Compute :math:`Q^\prime = Q \Lambda`, which will be Haar-random.
 #
 #
@@ -449,11 +453,41 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # As expected, we find our qubit states are distributed uniformly over the
 # sphere.  This particular method is what's implemented in packages like
 # ``scipy``'s `unitary_group
-# <"https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.unitary_group.html">`__
-# function. It is very convenient for numerics, but to implement the results on a quantum device
-# would require running it through one of the decompositions above to obtain
-# the sequence of elementary operations.
-
+# <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.unitary_group.html>`__
+# function. 
+#
+# Now, it's clear that this method works, but it is also important to
+# understand *why* it works.  Step 1 is fairly straightforward - the base of our
+# samples is a matrix full of complex values chosen from a typical
+# distribution. The second step is also clear - the outcome of a generic
+# QR decomposition are an *orthonormal* matrix :math:`Q`, and upper
+# triangular matrix :math:`R`. Since our original matrix was complex-valued, we end
+# up with a :math:`Q` that is in fact already unitary. But why not stop there? Why 
+# do we then perform steps 3 and 4?
+#
+# Steps 3 and 4 are needed because, while the QR decomposition yields a unitary,
+# it is not a unitary that is properly Haar-random. In [#Mezzadri2006]_, it is
+# explained that a uniform distribution over unitary matrices should also yield
+# a uniform distribution over the *eigenvalues* of those matrices, i.e., every
+# eigenvalue should be equally likely. Just using the QR decomposition out of
+# the box produces an *uneven* distribution of eigenvalues of the unitaries!
+#
+# This discrepancy stems from the fact that the QR decomposition is not unique. 
+# We can take any unitary diagonal matrix :math:`\Lambda`, and reexpress the decomposition
+# as :math:`QR = Q\Lambda \Lambda^\dagger R = Q^\prime R^\prime`. Step 3 removes this
+# redundancy by fixing a :math:`\Lambda` that depends on :math:`R`, leading to a unique
+# value of :math:`Q^\prime = Q \Lambda`, and a uniform distribution of eigenvalues.
+# 
+# .. admonition:: Try it!
+#
+#    Use the ``qr_haar`` function above to generate random unitaries and construct
+#    a distribution of their eigenvalues. Then, comment out the lines for steps 3 and
+#    4 and do the same - you'll find that the distribution is no longer uniform.
+#    Check out the reference [#Mezzadri2006]_ for additional details and examples.
+#
+#
+#
+#
 
 ######################################################################
 # Fun facts
@@ -481,13 +515,6 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #    \int_{V \in U(N)} f(\color{red}{W}V) d\mu_N(V) =  \int_{V \in U(N)} f(V\color{red}{W}) d\mu_N(V) =  \int_{V \in U(N)} f(V) d\mu_N(V).
 #
 # This holds true for *any* other :math:`N\times N` unitary :math:`W`!
-#
-# Structure of Haar-random matrix elements
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Entries of Haar-random unitaries look like complex numbers :math:`a+bi`
-# where :math:`a, b` are normally distributed with mean 0 and variance related to the
-# dimension of the unitary (something I came across during quantum volume demo)
 #
 # Not-so-fun facts
 # ----------------
@@ -528,24 +555,24 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # .. [#deGuise2018]
 #
 #     H. de Guise, O. Di Matteo, L. L. Sánchez-Soto. "Simple factorization of unitary
-#     transformations" `Phys. Rev. A 97 022328 <"https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328">`__
-#     (2018). (`arXiv <"https://arxiv.org/abs/1708.00735">`__)
+#     transformations" `Phys. Rev. A 97 022328 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328>`__
+#     (2018). (`arXiv <https://arxiv.org/abs/1708.00735>`__)
 #
 # .. [#Clements2016]
 #
 #     W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S.Kolthammer, and I. A. Walmsley, “Optimal design for universal multiport interferometers,” \
-#     `Optica 3, 1460–1465 <"https://www.osapublishing.org/optica/fulltext.cfm?uri=optica-3-12-1460&id=355743">`__ (2016).
-#     (`arXiv <"https://arxiv.org/abs/1603.08788">`__)
+#     `Optica 3, 1460–1465 <https://www.osapublishing.org/optica/fulltext.cfm?uri=optica-3-12-1460&id=355743>`__ (2016).
+#     (`arXiv <https://arxiv.org/abs/1603.08788>`__)
 #
 # .. [#Reck1994]
 #
 #    M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani, “Experimental
 #    realization of any discrete unitary operator,” `Phys. Rev. Lett.73, 58–61
-#    <"https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.73.58">`__
+#    <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.73.58>`__
 #    (1994).
 #
 # .. [#Mezzadri2006]
 #
 #     F. Mezzadri. "How to generate random matrices from the classical compact groups"
-#     (`arXiv <"https://arxiv.org/abs/math-ph/0609050">`__)
+#     (`arXiv <https://arxiv.org/abs/math-ph/0609050>`__)
 
