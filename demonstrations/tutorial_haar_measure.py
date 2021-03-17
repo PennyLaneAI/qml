@@ -28,6 +28,13 @@ learn how to sample from it using the tools available in PennyLane and other
 scientific computing frameworks. By the end of this demo, you'll be able to
 include that important statement in your own work with confidence!
 
+.. note::
+
+   To get the most out of this demo, it is helpful if you are familiar with
+   integration of multi-dimensional functions, the Bloch sphere, and the
+   conceptual idea behind factorizations and different parametrizations of
+   unitary matrices. [TODO: add some links]
+
 Measure
 -------
 
@@ -211,7 +218,7 @@ plot_bloch_sphere(not_haar_bloch_vectors)
 # You can see from this plot that even though our parameters were sampled from a
 # uniform distribution, there is some noticeable concentration around the poles
 # of the sphere. So even though the input parameters were uniform, the output is
-# very much *not* unifrom. To fix this, we will need to sample from the proper
+# very much *not* uniform. To fix this, we will need to sample from the proper
 # Haar measure, and weight the different parameters appropriately.
 #
 # For a single qubit, the Haar measure looks much like the case of a sphere,
@@ -268,7 +275,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # possible when we increase the number of qubits. Regardless, we can still
 # obtain a mathematical expression for the Haar measure in arbitrary
 # dimensions. In what follows, we will leave qubits behind and explore the many
-# parameterizations of the :math:`N`-dimensional `special unitary group
+# parametrizations of the :math:`N`-dimensional `special unitary group
 # <https://en.wikipedia.org/wiki/Special_unitary_group>`__. This group,
 # written as :math:`SU(N)`, is the continuous group consisting of all :math:`N
 # \times N` unitary operations with determinant 1.
@@ -350,9 +357,11 @@ plot_bloch_sphere(haar_bloch_vectors)
 # :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
 # transformation between two :math:`SU(N-1)` transformations, like so:
 #
-# .. image:: /demonstrations/haar_measure/sun.svg
+# .. figure:: /demonstrations/haar_measure/sun.svg
 #    :align: center
 #    :width: 70%
+#
+#    |
 #
 # The Haar measure can then be constructed recursively as a product of 3 terms. The
 # first term depends on the parameters in the first :math:`SU(N-1)` transformation.
@@ -362,18 +371,22 @@ plot_bloch_sphere(haar_bloch_vectors)
 # :math:`SU(2)` is the "base case" of the recursion - we simply have the Haar measure
 # as expressed above.
 #
-# .. image:: /demonstrations/haar_measure/su2_haar.svg
+# .. figure:: /demonstrations/haar_measure/su2_haar.svg
 #    :align: center
 #    :width: 25%
+#
+#    |
 #
 # Moving on up, we can write elements of :math:`SU(3)` as a sequence of three
 # :math:`SU(2)` transformations. The Haar measure :math:`d\mu_3` then consists
 # of two copies of :math:`d\mu_2`, with an extra term in between to take into
 # account the middle transformation.
 #
-# .. image:: /demonstrations/haar_measure/su3_haar.svg
+# .. figure:: /demonstrations/haar_measure/su3_haar.svg
 #    :align: center
 #    :width: 80%
+#
+#    |
 #
 # For :math:`SU(4)` and upwards, the form changes slightly, but still follows
 # the pattern of two copies of :math:`d\mu_{N-1}` with a middle term in between.
@@ -387,6 +400,8 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    :align: center
 #    :width: 100%
 #
+#    |
+#
 # Putting everything together, we have that
 #
 # .. math::
@@ -397,7 +412,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # a subset of the parameters. This is thus a convenient, systematic way to construct
 # the :math:`N`-dimensional Haar measure. [TODO: fix notation to include parameter indices]
 #
-# As a final note, even though unitaries can be parametrzied in different ways, the underlying
+# As a final note, even though unitaries can be parametrized in different ways, the underlying
 # Haar measure is *unique*.
 # 
 # Haar-random matrices from the :math:`QR` decomposition
@@ -479,7 +494,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # the box produces an *uneven* distribution of eigenvalues of the unitaries!
 #
 # This discrepancy stems from the fact that the QR decomposition is not unique. 
-# We can take any unitary diagonal matrix :math:`\Lambda`, and reexpress the decomposition
+# We can take any unitary diagonal matrix :math:`\Lambda`, and re-express the decomposition
 # as :math:`QR = Q\Lambda \Lambda^\dagger R = Q^\prime R^\prime`. Step 3 removes this
 # redundancy by fixing a :math:`\Lambda` that depends on :math:`R`, leading to a unique
 # value of :math:`Q^\prime = Q \Lambda`, and a uniform distribution of eigenvalues.
@@ -554,6 +569,43 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Haar measure and barren plateaus
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
+# Suppose you are venturing out to solve a new problem using an algorithm such
+# as the :doc:`variational quantum eigensolver </demos/tutorial_vqe>`. A
+# critical component of such methods is the choice of :doc:`variational ansatz
+# </glossary/circuit_ansatz>`. Having now learned a bit about the properties of
+# the Haar measure, you may think it would make sense to use this for the
+# parametrization. The initial parameter selection will give you a state in the
+# Hilbert space uniformly at random. Then, since this ansatz spans the entire
+# Hilbert space, you're guaranteed to be able to represent the target state with
+# your ansatz, and it should be able to find it with no issue... right?
+#
+# Unfortunately, while such an ansatz is extremely *expressive* (i.e., it is
+# capable of representing any possible state), these ansatze actually suffer the
+# most from the barren plateau problem [#McClean2018]_, [#Holmes2021]_.
+# :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the
+# space of a parametrized circuit where both the gradient and its variance
+# rapidly approach 0, leading your optimizer to get stuck in a local minimum.
+# This was explored recently in the work of [#Holmes2021]_, wherein closeness to
+# the Haar measure was actually used as a metric for expressivity. The closer
+# things are to the Haar measure, the more expressive they are, but they are
+# also more prone to exhibiting barren plateaus.
+#
+# 
+# .. figure:: /demonstrations/haar_measure/holmes-costlandscapes.png
+#    :align: center
+#    :width: 50%
+#
+#    Image source: [#Holmes2021]_. A highly expressive ansatz that can access
+#    much of the space of possible unitaries (i.e., an ansatz capable of
+#    producing unitaries in something close to a Haar-random manner) is very
+#    likely to have flat cost landscapes and suffer from the barren plateau
+#    problem.
+#    
+# It was shown in [#McClean2018]_ that this is a consequence of the
+# concentration of measure phenomenon described above. The values of gradients
+# and variances can be computed for classes of circuits on average by
+# integrating with respect to the Haar measure, and it is shown that these
+# values decrease exponentially in the number of qubits.
 #
 #
 
@@ -603,5 +655,22 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # .. [#Meckes2014]
 #
 #     E. Meckes. `The Random Matrix Theory of the Classical Compact Groups  
-#     <https://case.edu/artsci/math/esmeckes/Haar_book.pdf>`__.
+#     <https://case.edu/artsci/math/esmeckes/Haar_book.pdf>`_
+#
+#
+# .. [#McClean2018]
+#
+#     McClean, J. R., Boixo, S., Smelyanskiy, V. N., Babbush, R., & Neven,
+#     H. (2018). Barren plateaus in quantum neural network training
+#     landscapes. `Nature Communications, 9(1),
+#     <http://dx.doi.org/10.1038/s41467-018-07090-4>`__.
+#     `(arXiv) <https://arxiv.org/abs/1803.11173>`__
+#
+# 
+# .. [#Holmes2021]
+#
+#     Holmes, Z., Sharma, K., Cerezo, M., & Coles, P. J. (2021). Connecting ansatz
+#     expressibility to gradient magnitudes and barren plateaus. `(arXiv) 
+#     <https://arxiv.org/abs/2101.02138>`__.
+#
 #
