@@ -712,8 +712,17 @@ h2_spsa_energies_melbourne = [cost(params)]
 
 dev_noisy._num_executions = 0
 
+num_qubits = 4
+num_params = 3
+params = params.reshape(num_qubits * num_params)
+
+# Wrapping the cost function to be compatible with noisyopt which assumes a
+# flat array of parameters
+def wrapped_cost(params):
+    return cost(params.reshape(num_qubits, num_params))
+
 def callback_fn(xk):
-    cost_val = cost(xk)
+    cost_val = wrapped_cost(xk)
     h2_spsa_energies_melbourne.append(cost_val)
 
     # For this case, every term in the Hamiltonian counts towards evaluating the
@@ -727,7 +736,7 @@ def callback_fn(xk):
 
 res = minimizeSPSA(
     # Hyperparameters chosen based on grid search
-    cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=1.5, callback=callback_fn
+    wrapped_cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=1.5, callback=callback_fn
 )
 
 print()
