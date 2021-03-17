@@ -217,8 +217,10 @@ plot_bloch_sphere(not_haar_bloch_vectors)
 ######################################################################
 # You can see from this plot that even though our parameters were sampled from a
 # uniform distribution, there is some noticeable concentration around the poles
-# of the sphere. So even though the input parameters were uniform, the output is
-# very much *not* uniform. To fix this, we will need to sample from the proper
+# of the sphere. Despite the input parameters being uniform, the output is very
+# much *not* uniform. Just like the regular sphere, the measure is larger near
+# the equator, and if we just sample uniformly, we won't end up populating that
+# area as much. To take that into account we will need to sample from the proper
 # Haar measure, and weight the different parameters appropriately.
 #
 # For a single qubit, the Haar measure looks much like the case of a sphere,
@@ -420,11 +422,13 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # Nice-looking math aside, sometimes you just need to generate a large number of
 # high-dimensional Haar-random matrices. It would be very cumbersome to sample
-# and keep track of the distributions of so many parameters.  There is a much
-# quicker way to perform the sampling by taking a (slightly modified)
-# `QR decomposition <https://en.wikipedia.org/wiki/QR_decomposition>`__ of
-# complex-valued matrices.  This algorithm is detailed in [#Mezzadri2006]_, and
-# consists of the following steps:
+# and keep track of the distributions of so many parameters; furthermore, the
+# measure above requires you to parametrize your operations in a fixed way.
+# There is a much quicker way to perform the sampling by taking a (slightly
+# modified) `QR decomposition
+# <https://en.wikipedia.org/wiki/QR_decomposition>`__ of complex-valued
+# matrices.  This algorithm is detailed in [#Mezzadri2006]_, and consists of the
+# following steps:
 #
 # 1. Generate an :math:`N \times N` matrix with complex numbers :math:`a+bi` where
 #    both :math:`a` and :math:`b` are normally distributed with mean 0 and variance 1
@@ -552,19 +556,46 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Concentration of measure
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# So far we've seen the Haar measure used to produce uniformly random quantum
-# states on the surface of the Bloch sphere. The way the points are evenly
-# spread out in space might suggests that the results of evaluating functions
-# over these states will also nicely spread out. However, an unfortunate
-# (although interesting) property of the Haar measure is that it suffers from
-# the phenomenon of `concentration of measure
-# <https://en.wikipedia.org/wiki/Concentration_of_measure>`__.
+# An unfortunate (although interesting) property of the Haar measure is that it
+# suffers from the phenomenon of `concentration of measure
+# <https://en.wikipedia.org/wiki/Concentration_of_measure>`__. Most of the "stuff"
+# in the space concentrates around a certain area, and this gets worse as the 
+# size of the system increases.
+#
+# You can see the beginnings of by looking at the sphere. For the 3-dimensional
+# sphere, we saw how there is a concentration of "stuff" around the
+# equator. This becomes increasingly prominent for `higher-dimensional spheres
+# <https://en.wikipedia.org/wiki/N-sphere>`__. Suppose we have the sphere
+# :math:`S^{2n-1}`, and some function :math:`f` that maps points on that sphere
+# to real numbers. Sample a point :math:`x` on that sphere from the uniform
+# measure, and compute the value of :math:`f(x)`. How close do you think the
+# result will be to the mean value of the function, :math:`E[f]`, over the entire
+# sphere?
+#
+# A result called *Levy's lemma* bounds the probability of a randomly selected
+# :math:`x` result that deviates from :math:`E[f]` by an amount :math:`\epsilon`:
+#
+# .. math::
 # 
-# Integrals over the Haar measure as shown above can be used to calculate
-# expectation values of functions over the unitary group. Concentration of measure
-# results show that the probability of a particular unitary's function evolution 
-# deviates from the mean by a certain amount decreases exponentially by the amount
-# of deviation. 
+#    \hbox{Pr}(|f(x) - E[f]| \ge \epsilon) \leq 2 \exp\left[-\frac{n\epsilon^2}{9\pi^3 \eta^2}\right]
+#
+# A constraint on the function :math:`f` is that it must be `Lipschitz
+# continuous <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__, where
+# :math:`\eta` is the *Lipschitz constant* of the function. Clearly the larger
+# the deviation :math:`\epsilon`, the less likely you would be to encounter that
+# value at random. Furthermore, increasing the dimension :math:`n` also makes
+# the deviation exponentially less likely.
+#
+# Now, this result seems unrelated to quantum states -- it concerns higher-
+# dimensional spheres. However, recall that a quantum state vector is a complex
+# vector whose squared values sum to 1, just like a spheres. If you "unroll"
+# a quantum state vector of dimension :math:`2^n` by stacking its real and
+# complex parts, you end with a space isomorphic to that of a sphere of
+# dimension X [TODO: verify dimensions in this whole section]. Given that
+# measure concentrates on sphere, and quantum states can be trivially made to
+# look like spheres, functions on random quantum states will also demonstrate
+# concentration! This is bad news because it means that the more qubits you have
+# the more the random states will look the same.  [TODO: rephrase]
 #
 # Haar measure and barren plateaus
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -601,11 +632,14 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #    likely to have flat cost landscapes and suffer from the barren plateau
 #    problem.
 #    
-# It was shown in [#McClean2018]_ that this is a consequence of the
-# concentration of measure phenomenon described above. The values of gradients
-# and variances can be computed for classes of circuits on average by
-# integrating with respect to the Haar measure, and it is shown that these
-# values decrease exponentially in the number of qubits.
+# It turns out that the types of ansatze know as *hardware efficient ansatze*
+# also suffer from this problem if they are "random enough" (this notion will be
+# formalized in a future demo). It was shown in [#McClean2018]_ that this is a
+# consequence of the concentration of measure phenomenon described above. The
+# values of gradients and variances can be computed for classes of circuits on
+# average by integrating with respect to the Haar measure, and it is shown that
+# these values decrease exponentially in the number of qubits, and that huge
+# swaths of the cost landscape are simply flat.
 #
 #
 
@@ -618,12 +652,15 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # all possible unitary operations, you'll want to do so with respect
 # to the Haar measure.
 #
-# There is one important aspect of this that we have yet to touch upon,
-# however. Do we *need* to always sample from the full Haar measure? The answer
-# to this question is "no" in a very interesting way. Depending on the task at
-# hand, you may be able to take a shortcut using something called a *unitary
-# design*. In an upcoming demo, we will explore the amazing world of unitary
-# designs and their applications!
+# There are two important aspects of this that we have yet to touch upon,
+# however. The first is whether it is efficient to sample from the Haar measure
+# --- given that the number of parameters to keep track of is exponential in the
+# number of qubits, certainly not. But a more interesting question is do we
+# *need* to always sample from the full Haar measure?  The answer to this is
+# "no" in a very interesting way. Depending on the task at hand, you may be able
+# to take a shortcut using something called a *unitary design*. In an upcoming
+# demo, we will explore the amazing world of unitary designs and their
+# applications!
 #
 # References
 # ----------
