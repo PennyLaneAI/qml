@@ -111,11 +111,11 @@ the function, compared to a standard gradient-based optimizer.
    :align: center 
    :width: 60%
 
-    ..
+   ..
 
-    A schematic of the search paths used by gradient descent with
-    parameter-shift and SPSA in a low-noise setting.
-    Image source: [#spall_overview]_.
+   A schematic of the search paths used by gradient descent with
+   parameter-shift and SPSA in a low-noise setting.
+   Image source: [#spall_overview]_
 
 
 
@@ -784,7 +784,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/spsa/h2_vqe_noisy_spsa.png
 #     :align: center
-#     :width: 90%
+#     :width: 70%
 #
 # We observe here that the SPSA optimizer again converges in fewer device
 # executions than the gradient descent optimizer. However due to the (simulated)
