@@ -100,7 +100,7 @@ Demos
                     </a>
                 </li>
                 <li>
-                    <a href="demos/qgrnn.html">
+                    <a href="demos/tutorial_qgrnn.html">
                         <div class="card">
                           <img class="card-img-top img-fluid" src="_static/thumbs/qgrnn_thumbnail.png" alt="Card image cap">
                           <div class="card-body">
