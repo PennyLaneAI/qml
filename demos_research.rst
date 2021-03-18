@@ -224,6 +224,12 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/quantum_volume`
    :tags: characterization qiskit
 
+.. customgalleryitem::
+   :tooltip: Learn how to sample quantum states uniformly at random
+   :figure: demonstrations/haar_measure/spherical_int_dtheta.png
+   :description: :doc:`demos/tutorial_haar_measure`
+   :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -257,5 +263,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
     demos/quantum_volume
+    demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
