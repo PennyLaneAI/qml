@@ -13,6 +13,7 @@ Understanding the Haar Measure
 
     quantum_volume Quantum volume
     qsim_beyond_classical Beyond classical computing with qsim
+    tutorial_barren_plateaus Barren plateaus
 
 
 *Author: PennyLane dev team. Posted: 4 March 2021. Last updated: 4 March 2021.*
@@ -24,16 +25,18 @@ following: "Assume that :math:`U` is sampled uniformly at random from the Haar
 measure".  In this demo, we're going to unravel this cryptic statement and take
 an in-depth look at what it means. You'll gain an understanding of the general
 concept of *measure*, the Haar measure and its special properties, and you'll
-learn how to sample from it using the tools available in PennyLane and other
+learn how to sample from it using tools available in PennyLane and other
 scientific computing frameworks. By the end of this demo, you'll be able to
 include that important statement in your own work with confidence!
 
 .. note::
 
    To get the most out of this demo, it is helpful if you are familiar with
-   integration of multi-dimensional functions, the Bloch sphere, and the
-   conceptual idea behind factorizations and different parametrizations of
-   unitary matrices. [TODO: add some links]
+   `integration of multi-dimensional functions
+   <https://en.wikipedia.org/wiki/Multiple_integral>`__, the `Bloch sphere
+   <https://en.wikipedia.org/wiki/Bloch_sphere>`__, and the conceptual idea
+   behind `decompositions and different parametrizations of unitary matrices
+   <https://strawberryfields.readthedocs.io/en/stable/code/api/strawberryfields.ops.Interferometer.html>`__.
 
 Measure
 -------
@@ -44,7 +47,7 @@ area, or volume, but generalized to mathematical spaces and even higher
 dimensions. Loosely, the measure tells you about how "stuff" is distributed and
 concentrated in a mathematical set or space. An intuitive way to understand
 measure is to think about a sphere. An arbitrary point on a sphere can be
-parameterized by three numbers --- depending on what you're doing, you may use
+parametrized by three numbers --- depending on what you're doing, you may use
 Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to use
 spherical co-ordinates :math:`(\rho, \phi, \theta)`.
 
@@ -73,34 +76,36 @@ Now, we know that the volume of a sphere of radius :math:`r` is
 :math:`\frac{4}{3}\pi r^3`, so what we got from this integral is clearly wrong!
 Taking the integral naively like this doesn't take into account the structure of
 the sphere with respect to its parameters. For example, consider two small,
-infinitesimal elements of volume with the same difference in :math:`\theta`, but
-at different parts of the sphere:
+infinitesimal elements of area with the same difference in :math:`\theta` and :math:`\phi`, but
+at different values of :math:`\theta`:
 
 .. image:: /demonstrations/haar_measure/spherical_int_dtheta.png
     :align: center
     :width: 50%
 
-Even though the :math:`d\theta` themselves are the same, there is way more
-"stuff" near the equator of the sphere than there is near the poles. We are
-going to need to take that into account when computing the integral. The same
-holds true if we consider a :math:`d\rho`.  The contribution to volume of parts of
-the sphere with a large :math:`\rho` is far more than for a small :math:`\rho` --- we should
-expect the contribution to be proportional to :math:`\rho^2`, given that
-the surface area of a sphere of radius :math:`r` is :math:`4\pi r^2`.
+Even though the differences :math:`d\theta` and :math:`d\theta` themselves are
+the same, there is way more "stuff" near the equator of the sphere than there is
+near the poles. We are going to need to take that into account when computing
+the integral. The same holds true if we consider :math:`\rho`.  The
+contribution to volume of parts of the sphere with a large :math:`\rho` is far
+more than for a small :math:`\rho` --- we should expect the contribution to be
+proportional to :math:`\rho^2`, given that the surface area of a sphere of
+radius :math:`r` is :math:`4\pi r^2`.
 
 .. image:: /demonstrations/haar_measure/spherical_int_dr.png
     :align: center
     :width: 90%
 
-On the other hand, for a fixed :math:`\rho` and :math:`\theta`, the length of the
-:math:`d\phi` is the same all around the circle. If we did the math and put all these
-things together, we would find that the actual expression for the integral
-should look like this:
+On the other hand, for a fixed :math:`\rho` and :math:`\theta`, the length of
+the :math:`d\phi` is the same all around the circle. If put all these facts
+together, we find that the actual expression for the integral should look like
+this:
 
 
 .. math::
 
-    V = \int_0^r \int_0^{2\pi} \int_0^{\pi} \rho^2 \sin \theta d\rho d\phi d\theta = \frac{4}{3}\pi r^3
+    V = \int_0^r \int_0^{2\pi} \int_0^{\pi} \rho^2 \sin \theta d\rho d\phi
+    d\theta = \frac{4}{3}\pi r^3
 
 These extra terms that we had to add to the integral, :math:`\rho^2 \sin \theta`,
 constitute the *measure*. The measure weights portions of the sphere differently
@@ -109,34 +114,36 @@ depending on where they are in the space.
 The Haar measure
 ----------------
 
-Like points on a sphere, unitary
-matrices can be expressed in terms of a fixed set of parameters. For example,
-the most general single-qubit rotation implemented in PennyLane
-(:class:`~.pennylane.Rot`) is expressed as
+Unitary matrices, like points on a sphere, can be expressed in terms of a fixed
+set of coordinates, or parameters. For example, the most general single-qubit rotation
+implemented in PennyLane (:class:`~.pennylane.Rot`) is expressed in terms of three
+parameters like so,
 
 .. math::
 
     U(\phi, \theta, \omega) = \begin{pmatrix} e^{-i(\phi + \omega)/2}
                         \cos(\theta/2) & -e^{i(\phi - \omega)/2} \sin(\theta/2)
                         \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
-                        \omega)/2} \cos(\theta/2). \end{pmatrix}
+                        \omega)/2} \cos(\theta/2) \end{pmatrix}.
 
-The *Haar measure* tells us about how to sample these parameters in order to
-sample unitaries uniformly at random from the unitary group :math:`U(N)`. This
-measure, often denoted by :math:`\mu_N`, is what sits inside integrals over the
-unitary group and ensures things are properly weighted. For example, suppose
-:math:`f` is a function that acts on elements of :math:`U(N)`. We can write the
-integral of :math:`f` with respect to the Haar measure like so:
+The *Haar measure* tells us about how to properly weight these parameters if we
+integrate a function over the unitary group. Furthermore, it informs us how to
+sample values for these parameters in order to sample unitaries uniformly at
+random. For an :math:`N`-dimensional system, the Haar measure, often denoted by
+:math:`\mu_N`, is what sits inside integrals over the unitary group :math:`U(N)`
+and ensures things are properly weighted. For example, suppose :math:`f` is a
+function that acts on elements of :math:`U(N)`. We can write the integral of
+:math:`f` with respect to the Haar measure like so:
 
 .. math::
 
     \int_{V \in U(N)} f(V) d\mu_N(V).
 
-The :math:`d\mu_N` itself can be broken down into components depending on each of
-the parameters individually.  As such, while the Haar measure can be defined for
-every dimension :math:`N`, the mathematical form can get quite hairy for larger
-dimensions.  In general, a :math:`N`-dimensional unitary requires at least
-:math:`N^2 - 1` parameters, which is a lot of stuff to keep track of! Therefore
+The :math:`d\mu_N` itself can be broken down into components depending on each
+of the parameters individually.  As such, while the Haar measure can be defined
+for every dimension :math:`N`, the mathematical form gets quite hairy for
+larger dimensions.  In general, an :math:`N`-dimensional unitary requires at
+least :math:`N^2 - 1` parameters, which is a lot to keep track of! Therefore
 we'll start with the case of a single qubit :math:`(N=2)`, then show how things
 generalize.
 
@@ -149,12 +156,12 @@ quantum *states* uniformly at random from the Hilbert space.  We can simply
 generate Haar-random unitaries, and apply them to a fixed basis state such as
 :math:`\vert 0\rangle`.
 
-Keeping with the idea of spheres, let's try this out and investigate what
-happens to a single-qubit state on the Bloch sphere when we apply Haar-random
-unitaries. But first, let's suppose that we sample parameters for our unitaries
-from the uniform distribution of each parameter - the angles :math:`\omega,
-\phi`, and :math:`\theta` are all sampled from uniformly from the range
-:math:`[0, 2\pi)`.
+Keeping with the idea of spheres, we can generate single-qubit states uniformly
+at random and plot them on the Bloch sphere. But first, let's emphasize the
+importance of the Haar measure by doing things *wrong*. Suppose we sample
+parameters for our unitaries from the uniform distribution, i.e., the angles
+:math:`\omega, \phi`, and :math:`\theta` are sampled uniformly at random from
+the range :math:`[0, 2\pi)`.
 
 """
 
@@ -199,7 +206,7 @@ def convert_to_bloch_vector(rho):
 not_haar_bloch_vectors = np.array([convert_to_bloch_vector(s) for s in not_haar_samples])
 
 ######################################################################
-# With this done, let's find out where our random states ended up:
+# With this done, let's find out where our "uniformly random" states ended up:
 
 def plot_bloch_sphere(bloch_vectors):
     """ Helper function to plot vectors on a sphere."""
@@ -286,19 +293,21 @@ plot_bloch_sphere(haar_bloch_vectors)
 # unitaries will be expressed as interferometers made up of beamsplitters (2- or
 # 3-parameter operations), and phase shifts (1-parameter operations). These
 # unitaries can still be considered as multi-qubit operations in the cases where
-# :math:`N` is a power of 2, but they will have to be translated from the
-# continuous-variable operations into qubit operations. In PennyLane, this can
+# :math:`N` is a power of 2, but they must be translated from
+# continuous-variable operations into qubit operations. (In PennyLane, this can
 # be done by feeding the unitaries to the :class:`~.pennylane.QubitUnitary`
 # operation directly. Alternatively, one can use *quantum compilation* to
 # express the operations as a sequence of elementary gates such as Pauli
-# rotations and CNOTs.
+# rotations and CNOTs.)
 #
 # .. admonition:: Tip
 #
-#    If you haven't had many opportunities to work in terms of qumodes, check out
-#    [insert resource here] for a nice introduction to the topic.
+#    If you haven't had many opportunities to work in terms of qumodes, the
+#    `Strawberry Fields documentation
+#    <https://strawberryfields.ai/photonics/concepts/photonics.html>`__ is a
+#    good starting point.
 #
-# There are multiple ways to parameterize a :math:`N`-dimensional unitary
+# There are multiple ways to parametrize an :math:`N`-dimensional unitary
 # operation. We saw already above that for :math:`N=2`, we can write
 #
 # .. math::
@@ -306,7 +315,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    U(\phi, \theta, \omega) = \begin{pmatrix} e^{-i(\phi + \omega)/2}
 #                        \cos(\theta/2) & -e^{i(\phi - \omega)/2} \sin(\theta/2)
 #                        \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
-#                        \omega)/2} \cos(\theta/2) \end{pmatrix}
+#                        \omega)/2} \cos(\theta/2) \end{pmatrix}.
 #
 # This operation can be decomposed into beamsplitters and phase shifts
 # as follows:
@@ -315,27 +324,25 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 #    U(\phi, \theta, \omega) =
 #        \begin{pmatrix}
-#          e^{i\phi/2} & 0 \\ 0 & e^{-i\phi/2}
+#          e^{-i\omega/2} & 0 \\ 0 & e^{i\omega/2}
 #        \end{pmatrix}
 #        \begin{pmatrix}
 #          \cos(\theta/2) & -\sin(\theta/2) \\ \sin(\theta/2) & \cos(\theta/2)
 #        \end{pmatrix}
 #       \begin{pmatrix}
-#          e^{i\omega/2} & 0 \\ 0 & e^{-i\omega/2}
+#          e^{-i\phi/2} & 0 \\ 0 & e^{i\phi/2}
 #        \end{pmatrix}
 #
-# [TODO: Verify signs and angles since the decomposition was pulled from the paper].
-#
 # The middle operation is a beamsplitter; the other two operations are phase
-# shifts.  We saw in the previous section that for :math:`N=2`, :math:`d\mu_2 =
-# \sin\theta d\theta d\omega d\phi` -- note how the contribution of the
-# parameter in beamsplitter contributes to the measure in a different way than
-# that of the two phase shifts. As mentioned above, for larger values of
-# :math:`N` there are multiple ways to decompose the unitary. Such
-# decompositions rewrite elements in :math:`SU(N)` acting on :math:`N` modes as
-# a sequence of operations acting only on 2 modes, :math:`SU(2)`, and
-# single-mode phase shifts.  Shown below are three examples [#deGuise2018]_,
-# [#Clements2016]_, [#Reck1994]_ (images taken from [#deGuise2018]_):
+# shifts.  We saw earlier that for :math:`N=2`, :math:`d\mu_2 = \sin\theta
+# d\theta d\omega d\phi` -- note how the parameter in the beamsplitter
+# contributes to the measure in a different way than those of the phase
+# shifts. As mentioned above, for larger values of :math:`N` there are multiple
+# ways to decompose the unitary. Such decompositions rewrite elements in
+# :math:`SU(N)` acting on :math:`N` modes as a sequence of operations acting
+# only on 2 modes, :math:`SU(2)`, and single-mode phase shifts.  Shown below are
+# three examples [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_ (images taken
+# from [#deGuise2018]_):
 #
 # .. image:: /demonstrations/haar_measure/sun_decomp.svg
 #    :align: center
@@ -343,19 +350,18 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # [TODO: hand-draw graphics]
 #
-# In these graphics, every wire is a different mode. Every box represents on
+# In these graphics, every wire is a different mode. Every box represents an
 # operation on one or more modes, and the number in the box indicates the number
-# of parameters of that operation.  The boxes containing a ``1`` are simply
-# phase shifts on individual modes. The blocks containing a ``3`` are
-# :math:`SU(2)` transform with 3 parameters, such as the :math:`U(\phi, \theta,
-# \omega)` above. Those containing a ``2`` are :math:`SU(2)` are transforms on
-# pairs of modes with 2 parameters, similar to the 3-parameter ones but with
-# :math:`\omega = \phi`.
+# of parameters.  The boxes containing a ``1`` are simply phase shifts on
+# individual modes. The blocks containing a ``3`` are :math:`SU(2)` transforms
+# with 3 parameters, such as the :math:`U(\phi, \theta, \omega)` above. Those
+# containing a ``2`` are :math:`SU(2)` transforms on pairs of modes with 2
+# parameters, similar to the 3-parameter ones but with :math:`\omega = \phi`.
 #
-# Although the decompositions can all produce the same set of operations, their
+# Although the decompositions all produce the same set of operations, their
 # structure and parametrization may have consequences in practice.  The first [#deGuise2018]_
 # has a particularly convenient form that leads to a recursive definition
-# of the Haar measure. The decomposition is formulated such that an
+# of the Haar measure. The decomposition is formulated recursively such that an
 # :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
 # transformation between two :math:`SU(N-1)` transformations, like so:
 #
@@ -365,10 +371,11 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 #    |
 #
-# The Haar measure can then be constructed recursively as a product of 3 terms. The
-# first term depends on the parameters in the first :math:`SU(N-1)` transformation.
-# The second term depends on the parameters in the lone :math:`SU(2)` transformation.
-# The third term depends on the parameters in the other  :math:`SU(N-1)` transformation. 
+# The Haar measure is then constructed recursively as a product of 3
+# terms. The first term depends on the parameters in the first :math:`SU(N-1)`
+# transformation; the second depends on the parameters in the lone :math:`SU(2)`
+# transformation; and the third term depends on the parameters in the other
+# :math:`SU(N-1)` transformation.
 #
 # :math:`SU(2)` is the "base case" of the recursion - we simply have the Haar measure
 # as expressed above.
@@ -391,14 +398,15 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    |
 #
 # For :math:`SU(4)` and upwards, the form changes slightly, but still follows
-# the pattern of two copies of :math:`d\mu_{N-1}` with a middle term in between.
+# the pattern of two copies of :math:`d\mu_{N-1}` with a term in between.
 # For larger systems, however, the recursive composition allows for some of the
-# :math:`SU(2)` transformations on the lower modes to be grouped. We can take advantage
-# of this and aggregate some of the parameters, which leads to one copy of :math:`d\mu_{N-1}`
-# containing only a portion of the full set of terms (as detailed in [#deGuise2018]_, this is
-# called a *coset measure*).
+# :math:`SU(2)` transformations on the lower modes to be grouped. We can take
+# advantage of this and aggregate some of the parameters, which leads to one
+# copy of :math:`d\mu_{N-1}`, which we'll denote as :math:`d\mu_{N-1}^\prime`,
+# containing only a portion of the full set of terms (as detailed in
+# [#deGuise2018]_, this is called a *coset measure*).
 #
-# .. image:: /demonstrations/haar_measure/su4_haar.svg
+# .. figure:: /demonstrations/haar_measure/su4_haar.svg
 #    :align: center
 #    :width: 100%
 #
@@ -408,15 +416,17 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # .. math::
 #
-#    d\mu_N = d\mu_{N-1}^\prime \cdot \sin \theta_{N-1} \sin^{2(N-2)}\left(\frac{1}{2}\theta_{N-1}\right) \cdot  d\mu_{N-1}
+#    d\mu_N = d\mu_{N-1}^\prime \times \sin \theta_{N-1}
+#    \sin^{2(N-2)}\left(\frac{\theta_{N-1}}{2}\right) d\theta_{N-1} d\omega_{N-1} \times d\mu_{N-1}
 #
-# where :math:`d\mu^{\prime}` is a reduced copy of the measure depending on only
-# a subset of the parameters. This is thus a convenient, systematic way to construct
-# the :math:`N`-dimensional Haar measure. [TODO: fix notation to include parameter indices]
+# The middle portion depends on the value of :math:`N`, and the parameters
+# :math:`\theta_{N-1}` and :math:`\omega_{N-1}` contained in the :math:`N-1` 'th
+# :math:`SU(N)` transformation. This is thus a convenient, systematic way to
+# construct the :math:`N`-dimensional Haar measure for the unitary group. As a
+# final note, even though unitaries can be parametrized in different ways, the
+# underlying Haar measure is *unique*. This is a consequence of it being an
+# invariant measure, as will be shown later.
 #
-# As a final note, even though unitaries can be parametrized in different ways, the underlying
-# Haar measure is *unique*.
-# 
 # Haar-random matrices from the :math:`QR` decomposition
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -432,7 +442,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # 1. Generate an :math:`N \times N` matrix with complex numbers :math:`a+bi` where
 #    both :math:`a` and :math:`b` are normally distributed with mean 0 and variance 1
-#    (this is sampling from the distribution known as the *Ginibre ensemble*)  
+#    (this is sampling from the distribution known as the *Ginibre ensemble*)
 # 2. Compute a QR decomposition :math:`Z = QR`.
 # 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)`
 # 4. Compute :math:`Q^\prime = Q \Lambda`, which will be Haar-random.
@@ -456,7 +466,6 @@ def qr_haar(N):
     # Step 4
     return np.dot(Q, Lambda)
 
-
 ######################################################################
 # Let's check that this method actually generates Haar-random unitaries
 # by trying it out for :math:`N=2` and plotting on the Bloch sphere.
@@ -476,14 +485,13 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # sphere.  This particular method is what's implemented in packages like
 # ``scipy``'s `unitary_group
 # <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.unitary_group.html>`__
-# function. 
+# function.
 #
 # Now, it's clear that this method works, but it is also important to
 # understand *why* it works.  Step 1 is fairly straightforward - the base of our
 # samples is a matrix full of complex values chosen from a typical
 # distribution. This isn't enough by itself, since unitary matrices also
 # have constraints -- their rows and columns must be orthonormal.
-#
 # These are constraints are where step 2 comes in - the outcome of a generic
 # QR decomposition are an *orthonormal* matrix :math:`Q`, and upper
 # triangular matrix :math:`R`. Since our original matrix was complex-valued, we end
@@ -496,7 +504,6 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # a uniform distribution over the *eigenvalues* of those matrices, i.e., every
 # eigenvalue should be equally likely. Just using the QR decomposition out of
 # the box produces an *uneven* distribution of eigenvalues of the unitaries!
-#
 # This discrepancy stems from the fact that the QR decomposition is not unique.
 # We can take any unitary diagonal matrix :math:`\Lambda`, and re-express the decomposition
 # as :math:`QR = Q\Lambda \Lambda^\dagger R = Q^\prime R^\prime`. Step 3 removes this
@@ -508,7 +515,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #    Use the ``qr_haar`` function above to generate random unitaries and construct
 #    a distribution of their eigenvalues. Then, comment out the lines for steps 3 and
 #    4 and do the same - you'll find that the distribution is no longer uniform.
-#    Check out the reference [#Mezzadri2006]_ for additional details and examples.
+#    Check out reference [#Mezzadri2006]_ for additional details and examples.
 #
 #
 #
@@ -518,9 +525,10 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Fun (and not-so-fun) facts
 # --------------------------
 #
-# We've now learned what the Haar measure is, and both an analytical and numerical means
-# of sampling unitaries uniformly at random. The Haar measure also has many interesting
-# properties that play a role in quantum computing.
+# We've now learned what the Haar measure is, and both an analytical and
+# numerical means of sampling quantum states and unitary operations uniformly at
+# random. The Haar measure also has many neat properties that play a role in
+# quantum computing.
 #
 # Invariance of the Haar measure
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -532,7 +540,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #    \int_{V \in U(N)} f(V) d\mu_N(V).
 #
-# One interesting feature of the Haar measure is that it is both left and right *invariant*
+# One feature of the Haar measure is that it is both left and right *invariant*
 # under unitary transformations. That is,
 #
 # .. math::
@@ -575,8 +583,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # A result called `Levy's lemma
 # <https://en.wikipedia.org/wiki/Concentration_of_measure#Concentration_on_the_sphere>`__
-# [#Gerken2013]_, [#Hayden2006]_ bounds the probability that :math:`f(x)` for a
-# randomly selected :math:`x` result deviates from :math:`E[f]` by some amount
+# [#Gerken2013]_, [#Hayden2006]_ bounds the probability that :math:`f(x)` for an
+# :math:`x` select uniformly at random deviates from :math:`E[f]` by some amount
 # :math:`\epsilon`:
 #
 # .. math::
@@ -602,11 +610,11 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # states will also demonstrate concentration.
 #
 # This is bad news! To do useful things in quantum computing, we need a lot of
-# qubits. But the more qubits we have, the more random states will look the same
-# (specifically, random states will concentrate around the maximally entangled
-# state [#Hayden2006]_). This has important consequences for near-term
-# algorithms (as detailed in the next section), and any algorithm that involves
-# sampling quantum states and operations uniformly at random.
+# qubits. But the more qubits we have, the more our randomly sampled states will
+# look the same (specifically, random states will concentrate around the
+# maximally entangled state [#Hayden2006]_). This has important consequences for
+# near-term algorithms (as detailed in the next section), and any algorithm that
+# involves uniform sampling of quantum states and operations.
 #
 # Haar measure and barren plateaus
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -624,8 +632,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Unfortunately, while such an ansatz is extremely *expressive* (i.e., it is
 # capable of representing any possible state), these ansatze actually suffer the
 # most from the barren plateau problem [#McClean2018]_, [#Holmes2021]_.
-# :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the
-# space of a parametrized circuit where both the gradient and its variance
+# :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the cost
+# landscape of a parametrized circuit where both the gradient and its variance
 # rapidly approach 0, leading the optimizer to get stuck in a local minimum.
 # This was explored recently in the work of [#Holmes2021]_, wherein closeness to
 # the Haar measure was actually used as a metric for expressivity. The closer
@@ -649,8 +657,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # consequence of the concentration of measure phenomenon described above. The
 # values of gradients and variances can be computed for classes of circuits on
 # average by integrating with respect to the Haar measure, and it is shown that
-# these values decrease exponentially in the number of qubits, and that huge
-# swaths of the cost landscape are simply flat.
+# these values decrease exponentially in the number of qubits, and thus huge
+# swaths of the cost landscape are simply and fundamentally flat.
 #
 #
 
@@ -678,7 +686,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # .. [#deGuise2018]
 #
-#     H. de Guise, O. Di Matteo L. L. Sánchez-Soto. (2018) "Simple factorization
+#     H. de Guise, O. Di Matteo, and L. L. Sánchez-Soto. (2018) "Simple factorization
 #     of unitary transformations", `Phys. Rev. A 97 022328
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328>`__.
 #     (`arXiv <https://arxiv.org/abs/1708.00735>`__)
@@ -709,13 +717,14 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # .. [#Gerken2013]
 #
-#     M. Gerken (2013) "Measure concentration: Levy's Lemma" (`lecture notes
-#     <http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560?`__).
+#     M. Gerken (2013) "Measure concentration: Levy's Lemma"
+#     (`lecture notes <http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560?>`__).
 #
 # .. [#Hayden2006]
 #
-#     P. Hayden, D. W. Leung, and A. Winter (2006) "Aspects of generic entanglement", 
-#     `Comm. Math. Phys. Vol. 265, No. 1, pp. 95-117 <https://link.springer.com/article/10.1007%2Fs00220-006-1535-6>`__.
+#     P. Hayden, D. W. Leung, and A. Winter (2006) "Aspects of generic
+#     entanglement", `Comm. Math. Phys. Vol. 265, No. 1, pp. 95-117
+#     <https://link.springer.com/article/10.1007%2Fs00220-006-1535-6>`__.
 #     (`arXiv <https://arxiv.org/abs/quant-ph/0407049>`__)
 #
 # .. [#McClean2018]
