@@ -37,16 +37,16 @@ tasks with many free parameters. For the overall optimization this scaling means
 we need :math:`O(pn)` quantum circuit evaluations, where :math:`n` is the number of
 optimization steps taken.
 
-There are, however, certain optimization techniques that are gradient-free and
-hence offer an alternative approach for computing the gradients of quantum circuits.
-One such technique is called the Simultaneous Perturbation Stochastic
-Approximation (SPSA) algorithm. SPSA is an optimization method that involves *approximating* the
+Fortunately, there are certain optimization techniques that offer an
+alternative to computing the gradients of quantum circuits. One such technique
+is called the Simultaneous Perturbation Stochastic Approximation (SPSA)
+algorithm. SPSA is an optimization method that involves *approximating* the
 gradient of the cost function at each iteration step. This technique requires
 only two quantum circuit executions per iteration step, regardless of the
 number of free parameters. Therefore the overall number of circuit executions
-would be :math:`O(n')` where :math:`n'` is the number of optimization steps taken when
-using SPSA. This technique is also considered robust against noise, making it
-a great optimization method in the NISQ era.
+would be :math:`O(n')` where :math:`n'` is the number of optimization steps
+taken when using SPSA. This technique is also considered robust against noise,
+making it a great optimization method in the NISQ era.
 
 In this demo, you'll learn how the SPSA algorithm works, and how to apply it in
 PennyLane to compute gradients of quantum circuits. You'll also see it in action
