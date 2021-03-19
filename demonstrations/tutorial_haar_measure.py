@@ -652,9 +652,6 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # these values decrease exponentially in the number of qubits, and thus huge
 # swaths of the cost landscape are simply and fundamentally flat.
 #
-#
-
-######################################################################
 # Conclusion
 # ----------
 #
