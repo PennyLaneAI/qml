@@ -13,7 +13,7 @@ Optimization using SPSA
    tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
 
-*Author: PennyLane dev team. Posted: 15 Mar 2021. Last updated: 15 Mar 2021.*
+*Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 19 Mar 2021.*
 
 Background
 ----------
