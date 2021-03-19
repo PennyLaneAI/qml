@@ -710,7 +710,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # .. [#Gerken2013]
 #
 #     M. Gerken (2013) "Measure concentration: Levy's Lemma"
-#     (`lecture notes <http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560?>`__).
+#     (`lecture notes <http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560>`__).
+
 #
 # .. [#Hayden2006]
 #
