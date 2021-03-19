@@ -42,14 +42,14 @@ Measure
 -------
 
 `Measure theory <https://en.wikipedia.org/wiki/Measure_(mathematics)>`__ is a
-branch of mathematics that studies things that are measurable --- think length,
+branch of mathematics that studies things that are measurable---think length,
 area, or volume, but generalized to mathematical spaces and even higher
 dimensions. Loosely, the measure tells you about how "stuff" is distributed and
 concentrated in a mathematical set or space. An intuitive way to understand
 measure is to think about a sphere. An arbitrary point on a sphere can be
-parametrized by three numbers --- depending on what you're doing, you may use
+parametrized by three numbers---depending on what you're doing, you may use
 Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to use
-spherical co-ordinates :math:`(\rho, \phi, \theta)`.
+spherical coordinates :math:`(\rho, \phi, \theta)`.
 
 .. image:: /demonstrations/haar_measure/spherical_coords.png
     :align: center
@@ -88,7 +88,7 @@ the same, there is way more "stuff" near the equator of the sphere than there is
 near the poles. We are going to need to take that into account when computing
 the integral. The same holds true if we consider :math:`\rho`.  The
 contribution to volume of parts of the sphere with a large :math:`\rho` is far
-more than for a small :math:`\rho` --- we should expect the contribution to be
+more than for a small :math:`\rho`---we should expect the contribution to be
 proportional to :math:`\rho^2`, given that the surface area of a sphere of
 radius :math:`r` is :math:`4\pi r^2`.
 
@@ -272,11 +272,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # .. math::
 #
 #    d\mu_2 = \sin \theta d\theta \cdot d\omega \cdot d\phi.
-#
-#
-
-
-######################################################################
+# 
 # Show me more math!
 # ~~~~~~~~~~~~~~~~~~
 #
@@ -335,7 +331,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # The middle operation is a beamsplitter; the other two operations are phase
 # shifts.  We saw earlier that for :math:`N=2`, :math:`d\mu_2 = \sin\theta
-# d\theta d\omega d\phi` -- note how the parameter in the beamsplitter
+# d\theta d\omega d\phi`---note how the parameter in the beamsplitter
 # contributes to the measure in a different way than those of the phase
 # shifts. As mentioned above, for larger values of :math:`N` there are multiple
 # ways to decompose the unitary. Such decompositions rewrite elements in
@@ -377,7 +373,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # transformation; and the third term depends on the parameters in the other
 # :math:`SU(N-1)` transformation.
 #
-# :math:`SU(2)` is the "base case" of the recursion - we simply have the Haar measure
+# :math:`SU(2)` is the "base case" of the recursion---we simply have the Haar measure
 # as expressed above.
 #
 # .. figure:: /demonstrations/haar_measure/su2_haar.svg
@@ -420,7 +416,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    \sin^{2(N-2)}\left(\frac{\theta_{N-1}}{2}\right) d\theta_{N-1} d\omega_{N-1} \times d\mu_{N-1}
 #
 # The middle portion depends on the value of :math:`N`, and the parameters
-# :math:`\theta_{N-1}` and :math:`\omega_{N-1}` contained in the :math:`N-1` 'th
+# :math:`\theta_{N-1}` and :math:`\omega_{N-1}` contained in the :math:`(N-1)`'th
 # :math:`SU(N)` transformation. This is thus a convenient, systematic way to
 # construct the :math:`N`-dimensional Haar measure for the unitary group. As a
 # final note, even though unitaries can be parametrized in different ways, the
@@ -442,9 +438,9 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # 1. Generate an :math:`N \times N` matrix with complex numbers :math:`a+bi` where
 #    both :math:`a` and :math:`b` are normally distributed with mean 0 and variance 1
-#    (this is sampling from the distribution known as the *Ginibre ensemble*)
+#    (this is sampling from the distribution known as the *Ginibre ensemble*).
 # 2. Compute a QR decomposition :math:`Z = QR`.
-# 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)`
+# 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)`.
 # 4. Compute :math:`Q^\prime = Q \Lambda`, which will be Haar-random.
 #
 #
@@ -488,12 +484,12 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # function.
 #
 # Now, it's clear that this method works, but it is also important to
-# understand *why* it works.  Step 1 is fairly straightforward - the base of our
+# understand *why* it works.  Step 1 is fairly straightforward---the base of our
 # samples is a matrix full of complex values chosen from a typical
 # distribution. This isn't enough by itself, since unitary matrices also
-# have constraints -- their rows and columns must be orthonormal.
-# These are constraints are where step 2 comes in - the outcome of a generic
-# QR decomposition are an *orthonormal* matrix :math:`Q`, and upper
+# have constraints---their rows and columns must be orthonormal.
+# These constraints are where step 2 comes in---the outcome of a generic
+# QR decomposition consits of an *orthonormal* matrix :math:`Q`, and and upper
 # triangular matrix :math:`R`. Since our original matrix was complex-valued, we end
 # up with a :math:`Q` that is in fact already unitary. But why not stop there? Why
 # do we then perform steps 3 and 4?
@@ -514,12 +510,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #    Use the ``qr_haar`` function above to generate random unitaries and construct
 #    a distribution of their eigenvalues. Then, comment out the lines for steps 3 and
-#    4 and do the same - you'll find that the distribution is no longer uniform.
+#    4 and do the same---you'll find that the distribution is no longer uniform.
 #    Check out reference [#Mezzadri2006]_ for additional details and examples.
-#
-#
-#
-#
 
 ######################################################################
 # Fun (and not-so-fun) facts
@@ -549,12 +541,12 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # This holds true for *any* other :math:`N\times N` unitary :math:`W`! A
 # consequence of such invariance is that if :math:`V` is Haar-random, then so is
-# :math:`V^T,` :math:`V^\dagger,`, and any product of another unitary matrix and
+# :math:`V^T,` :math:`V^\dagger,` and any product of another unitary matrix and
 # :math:`V` (where the product may be taken on either side).
 #
 # Another consequence of this invariance has to do with the structure of the entries
 # themselves: they must all come from the same distribution. This is because the
-# measure remains invariant under permutations, since they are unitary --
+# measure remains invariant under permutations, since permutations are unitary---
 # the whole thing still has to be Haar random no matter how the entries are ordered,
 # so all distributions must be the same.  The specific distribution is complex
 # numbers :math:`a+bi` where both :math:`a` and :math:`b` has mean 0 and variance
@@ -599,7 +591,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # increasing the dimension :math:`N` also makes the deviation exponentially less
 # likely.
 #
-# Now, this result seems unrelated to quantum states -- it concerns higher-
+# Now, this result seems unrelated to quantum states---it concerns higher-
 # dimensional spheres. However, recall that a quantum state vector is a complex
 # vector whose squared values sum to 1, similar to vectors on a sphere. If you
 # "unroll" a quantum state vector of dimension :math:`N = 2^n` by stacking its
@@ -626,11 +618,11 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # the Haar measure, you may think it would make sense to use this for the
 # parametrization. The initial parameter selection will give you a state in the
 # Hilbert space uniformly at random. Then, since this ansatz spans the entire
-# Hilbert space, you're guaranteed to be able to represent the target state with
-# your ansatz, and it should be able to find it with no issue... right?
+# Hilbert space, you're guaranteed to be able to represent the target ground state with
+# your ansatz, and it should be able to find it with no issue ... right?
 #
 # Unfortunately, while such an ansatz is extremely *expressive* (i.e., it is
-# capable of representing any possible state), these ansatze actually suffer the
+# capable of representing any possible state), these ansaetze actually suffer the
 # most from the barren plateau problem [#McClean2018]_, [#Holmes2021]_.
 # :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the cost
 # landscape of a parametrized circuit where both the gradient and its variance
@@ -651,7 +643,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #    likely to have flat cost landscapes and suffer from the barren plateau
 #    problem.
 #
-# It turns out that the types of ansatze know as *hardware efficient ansatze*
+# It turns out that the types of ansaetze know as *hardware-efficient ansaetze*
 # also suffer from this problem if they are "random enough" (this notion will be
 # formalized in a future demo). It was shown in [#McClean2018]_ that this is a
 # consequence of the concentration of measure phenomenon described above. The
@@ -666,14 +658,14 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Conclusion
 # ----------
 #
-# The Haar measure plays an important role in quantum computing - anywhere
+# The Haar measure plays an important role in quantum computing---anywhere
 # you might be dealing with sampling random circuits, or averaging over
 # all possible unitary operations, you'll want to do so with respect
 # to the Haar measure.
 #
 # There are two important aspects of this that we have yet to touch upon,
-# however. The first is whether it is efficient to sample from the Haar measure
-# --- given that the number of parameters to keep track of is exponential in the
+# however. The first is whether it is efficient to sample from the Haar measure---given 
+# that the number of parameters to keep track of is exponential in the
 # number of qubits, certainly not. But a more interesting question is do we
 # *need* to always sample from the full Haar measure?  The answer to this is
 # "no" in a very interesting way. Depending on the task at hand, you may be able
