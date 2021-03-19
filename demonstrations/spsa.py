@@ -736,7 +736,7 @@ def callback_fn(xk):
 
 res = minimizeSPSA(
     # Hyperparameters chosen based on grid search
-    wrapped_cost, x0=params, niter=niter_spsa, paired=False, c=0.1, a=1.5, callback=callback_fn
+    wrapped_cost, x0=params, niter=niter_spsa, paired=False, c=0.3, a=1.5, callback=callback_fn
 )
 
 print()
