@@ -48,7 +48,7 @@ would be :math:`O(n')` where :math:`n'` is the number of optimization steps take
 using SPSA. This technique is also considered robust against noise, making it
 a great optimization method in the NISQ era.
 
-In this demo, you'll learn how the SPSA algorithm works, and how to apply it in 
+In this demo, you'll learn how the SPSA algorithm works, and how to apply it in
 PennyLane to compute gradients of quantum circuits. You'll also see it in action
 using noisy quantum data!
 
@@ -83,7 +83,7 @@ where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(u) = \frac{
 \partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}` based on
 prior measurements of the cost function, and :math:`a_{k}` is a positive number.
 
-As previously mentioned, SPSA is robust to any noise that may occur 
+As previously mentioned, SPSA is robust to any noise that may occur
 when measuring the function :math:`L`. Therefore, let's consider the
 function :math:`y(\theta)=L(\theta) + \varepsilon`, where :math:`\varepsilon`
 is some perturbation of the output. In SPSA, the estimated gradient at each iteration step is expressed as
@@ -103,12 +103,12 @@ It is this perturbation that makes SPSA robust to noise --- since every
 parameter is already being shifted, additional shifts due to noise are less
 likely to hinder the optimization process. In a sense, noise gets "absorbed"
 into the already-stochastic process. This is highlighted in the figure below,
-which portrays an example the type of path SPSA takes through the space of 
+which portrays an example the type of path SPSA takes through the space of
 the function, compared to a standard gradient-based optimizer.
 
 
-.. figure:: ../demonstrations/spsa/spsa_opt.png 
-   :align: center 
+.. figure:: ../demonstrations/spsa/spsa_opt.png
+   :align: center
    :width: 60%
 
    ..
@@ -242,6 +242,10 @@ def callback_fn(xk):
 # guidelines for the selection. In our case, the initial values for :math:`c`
 # and :math:`a` were selected as a result of a grid search to ensure a fast
 # convergence.
+#
+# We further note that apart from :math:`c` and :math:`a`, there are further
+# coefficients that are initialized in the noisyopt package using the
+# previously mentioned guidelines.
 #
 # Our cost function does not take a seed as a keyword argument (which would be
 # the default behaviour for ``minimizeSPSA``), so we set ``paired=False``.
@@ -540,7 +544,7 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #     Iteration = 5,  Energy = -1.12506107 Ha
 #     Iteration = 10,  Energy = -1.13597945 Ha
 #     Iteration = 15,  Energy = -1.13459302 Ha
-#     
+#
 #     Final estimated value of the ground-state energy = -1.13259650 Ha
 #     Accuracy with respect to the true energy: 0.00359295 Ha
 #
@@ -770,10 +774,10 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #     Iteration = 180,  Energy = -0.92450527 Ha
 #     Iteration = 190,  Energy = -0.89094628 Ha
 #     Iteration = 200,  Energy = -0.88564296 Ha
-#     
+#
 #     Final estimated value of the ground-state energy = -0.93208561 Ha
 #     Accuracy with respect to the true energy: 0.20410384 Ha
-#     
+#
 
 plt.figure(figsize=(10, 6))
 
@@ -804,23 +808,21 @@ plt.show()
 #
 
 ##############################################################################
-# Conclusions
-# -----------
+# Conclusion
+# ----------
 #
 # SPSA is a useful optimization technique that may be particularly beneficial on
 # near-term quantum hardware. It uses significantly fewer iterations to achieve
 # comparable result quality as gradient-based methods, giving it the potential
-# to save significant time and resources.
+# to save significant time and resources. It can be a good alternative to
+# gradient-based methods when the optimization problem involves executing
+# quantum circuits with many free parameters.
 #
-# There are also extensions to SPSA that could be interesting to explore in this
-# context. One in particular is that adaptive selection of the hyperparameters
-# :math:`c` and :math:`a`. While here we have chosen parameters that perform
-# well based on a grid search, there are more sophisticated techniques for both
-# their initial selection, and for varying them over the course of the optimization
-# procedure to improve convergence time [add citation / details].
-#
-# Furthermore, SPSA can also be used to compute the *Hessian* matrix
-# [#spall_hessian]_.  [add more details about this].
+# There are also extensions to SPSA that could be interesting to explore in
+# this context. One in particular uses an adaptive technique to approximate the
+# *Hessian* matrix during optimization to effectively increase the convergence
+# rate of SPSA. [#spall_overview]_ The proposed technique can also be applied
+# in cases where there is a direct access to the gradient of the cost function.
 #
 #
 
