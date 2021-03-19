@@ -19,9 +19,9 @@ Background
 ----------
 
 In PennyLane. quantum gradients are commonly computed using parameter-shift rules.  For
-quantum circuits that have multiple free parameters, using the parameter-shift
+quantum circuits that have multiple free parameters, using these parameter-shift
 rules to compute quantum gradients involves computing the partial derivatives of
-the quantum function with respect to each free parameter. These partial
+the quantum function with respect to every free parameter. These partial
 derivatives are then used to apply the product rule when computing the quantum
 gradient see (`parameter-shift rules
 <https://pennylane.ai/qml/glossary/parameter_shift.html>`_). For qubit
@@ -68,13 +68,13 @@ Similar to gradient-based approaches such as gradient descent, SPSA is an
 iterative optimization algorithm. Let's consider a differentiable cost function
 :math:`L(\theta)` where :math:`\theta` is a :math:`p`-dimensional vector and
 where the optimization problem can be translated into finding a :math:`\theta^*`
-at which :math:`\frac{\partial L}{\partial u} = 0`.  It is assumed that
+at which :math:`\frac{\partial L}{\partial \theta} = 0`.  It is assumed that
 measurements of :math:`L(\theta)` are available at various values of
 :math:`\theta` --- this is exactly the problem that we'd consider when optimizing
 quantum functions!
 
 Just like with gradient-based methods, SPSA starts with an initial parameter
-vector :math:`\hat{\theta}_{0}`. After :math:`k` iterations, the :math:`k+1`'th
+vector :math:`\hat{\theta}_{0}`. After :math:`k` iterations, the :math:`k+1`th
 parameter iterates can be obtained as
 
 .. math:: \hat{\theta}_{k+1} = \hat{\theta}_{k} - a_{k}\hat{g}_{k}(\hat{\theta}_{k}),
@@ -103,7 +103,7 @@ It is this perturbation that makes SPSA robust to noise --- since every
 parameter is already being shifted, additional shifts due to noise are less
 likely to hinder the optimization process. In a sense, noise gets "absorbed"
 into the already-stochastic process. This is highlighted in the figure below,
-which portrays an example the type of path SPSA takes through the space of
+which portrays an example of the type of path SPSA takes through the space of
 the function, compared to a standard gradient-based optimizer.
 
 
@@ -127,10 +127,10 @@ Optimization on a sampling device
 
 .. important::
 
-    In order to run this demo locally, you'll need to install the `noisyopt
+    To run this demo locally, you'll need to install the `noisyopt
     <https://github.com/andim/noisyopt>`_ library. This library contains a
-    straightforward implementation of SPSA that can be used in the same way as
-    the optimizers available in `SciPy's minimize method
+    straightforward implementation of SPSA that can be used in the same way as the
+    optimizers available in `SciPy's minimize method
     <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html>`_.
 
 First, let's consider a simple quantum circuit on a sampling device. For this,
@@ -145,13 +145,13 @@ compute statistics like expectation values.
     execution can be specified using the ``shots`` keyword argument of the
     device.
 
-Once we have a device selected, we just need a couple of other ingredients to
-put together the pieces for an example optimization:
+Once we have a device selected, we just need a couple of other ingredients for
+the pieces of an example optimization to come together:
 
-* a template :func:`~.pennylane.templates.layers.StronglyEntanglingLayers`,
+* a template: :func:`~.pennylane.templates.layers.StronglyEntanglingLayers`,
+* initial parameters: conveniently generated using :func:`~.pennylane.init.strong_ent_layers_normal`,
 * an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i`, where :math:`N` stands
-  for the number of qubits,
-* initial parameters: conveniently generated using :func:`~.pennylane.init.strong_ent_layers_normal`.
+  for the number of qubits.
 
 """
 import pennylane as qml
@@ -176,9 +176,10 @@ def circuit(params):
 
 
 ##############################################################################
-# After this, we'll initialize the parameters in a tricky way. We are
-# flattening our parameters, which will be very convenient later on when using
-# the SPSA optimizer. Just keep in mind that this is done for compatibility.
+# After this, we'll initialize the parameters in a way that is compatible with
+# the ``noisyopt`` package. We are flattening our parameters, which will be very
+# convenient later on when using the SPSA optimizer. Just keep in mind that
+# this is done for compatibility.
 flat_shape = num_layers * num_wires * 3
 init_params = qml.init.strong_ent_layers_normal(
     n_wires=num_wires, n_layers=num_layers
@@ -195,14 +196,8 @@ def cost(params):
 # imported, we can initialize parts of the optimization such as the number of
 # iterations, a collection to store the cost values and a callback function.
 # Once the optimization has concluded, we save the number of device executions
-# required for completion (will be an interesting quantity later!).
-
-# This callback function is used to:
-#
-# 1. Record the value of the cost function at each iteration step
-# 2. Print values every 10 steps as a convenience
-# 3. Store the number of device executions required for completion (will be an
-#    interesting quantity later!).
+# required for completion using the callback function. This will be an
+# interesting quantity!
 from noisyopt import minimizeSPSA
 
 niter_spsa = 200
@@ -229,11 +224,12 @@ def callback_fn(xk):
 # Choosing the hyperparameters
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# The ``noisyopt`` package allows for specification of the initial value of two
+# The ``noisyopt`` package allows choosing the initial value of two
 # hyperparameters for SPSA: the :math:`c` and :math:`a` coefficients. Recall
 # from above that the :math:`c` values control the amount of random shift when
 # evaluating the cost function, while the :math:`a` is analogous to a learning
-# rate and affects the degree to which the parameters change at each update step.
+# rate and affects the degree to which the parameters change at each update
+# step.
 #
 # With stochastic approximation, specifying such hyperparameters significantly
 # influences the convergence of the optimization for a given problem. Although
@@ -292,9 +288,9 @@ res = minimizeSPSA(
 
 ##############################################################################
 #
-# Now lets perform the same optimization using gradient descent. We set the step
-# size according to a favourable value found after grid search for fast
-# convergence. Note that we also reset the number of executions of the device
+# Now let's perform the same optimization using gradient descent. We set the
+# step size according to a favourable value found after grid search for fast
+# convergence. Note that we also reset the number of executions of the device.
 
 
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
@@ -315,8 +311,8 @@ for k in range(steps):
     cost_store_grad.append(val)
     print(f"Iteration = {k}, Cost = {val}")
 
-# Step and cost gives us the cost at the previous step, so to find the cost
-# at the final parameter values we have to compute it manually
+# The step_and_cost function gives us the cost at the previous step, so to find
+# the cost at the final parameter values we have to compute it manually
 cost_store_grad.append(cost(params))
 
 ##############################################################################
@@ -353,7 +349,7 @@ cost_store_grad.append(cost(params))
 # SPSA and gradient descent comparison
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# At this point, nothing else remains but to check which of these approaches did
+# At this point, nothing else remains, but to check which of these approaches did
 # better!
 import matplotlib.pyplot as plt
 
@@ -491,12 +487,13 @@ def circuit(params, wires):
 # To set the hyperparameters, we refer back to the `intro VQE demo
 # </demos/tutorial_vqe>`_, which specifies a random seed to choose variational
 # parameters that will converge well. It is common to have to run the VQE
-# multiple times, with different sets of initial parameters, in order to ensure
+# multiple times, with different sets of initial parameters, to ensure
 # convergence. If you try out the code yourself, you'll find that there is a
-# local minimum around :math:`-0.47` Hartree that the gradient descent optimizer
-# might get stuck in. The initial parameters used below are known to converge to
-# the true minimum. Furthermore, a grid search was performed to find the step
-# size which yielded the most accurate result, with the fewest iterations.
+# local minimum around :math:`-0.47` Hartree that the gradient descent
+# optimizer might get stuck in. The initial parameters used below are known to
+# converge to the true minimum. Furthermore, a grid search was performed to
+# find the step size which yielded the most accurate result, with the fewest
+# iterations.
 
 # Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
@@ -820,10 +817,11 @@ plt.show()
 # quantum circuits with many free parameters.
 #
 # There are also extensions to SPSA that could be interesting to explore in
-# this context. One in particular uses an adaptive technique to approximate the
-# *Hessian* matrix during optimization to effectively increase the convergence
-# rate of SPSA. [#spall_overview]_ The proposed technique can also be applied
-# in cases where there is a direct access to the gradient of the cost function.
+# this context. One, in particular, uses an adaptive technique to approximate
+# the *Hessian* matrix during optimization to effectively increase the
+# convergence rate of SPSA. [#spall_overview]_ The proposed technique can also
+# be applied in cases where there is direct access to the gradient of the cost
+# function.
 #
 #
 
