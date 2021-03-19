@@ -436,8 +436,8 @@ plot_bloch_sphere(haar_bloch_vectors)
 # matrices.  This algorithm is detailed in [#Mezzadri2006]_, and consists of the
 # following steps:
 #
-# 1. Generate an :math:`N \times N` matrix with complex numbers :math:`a+bi` where
-#    both :math:`a` and :math:`b` are normally distributed with mean 0 and variance 1
+# 1. Generate an :math:`N \times N` matrix :math:`Z` with complex numbers :math:`a+bi`
+#    where both :math:`a` and :math:`b` are normally distributed with mean 0 and variance 1
 #    (this is sampling from the distribution known as the *Ginibre ensemble*).
 # 2. Compute a QR decomposition :math:`Z = QR`.
 # 3. Compute the diagonal matrix :math:`\Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)`.
