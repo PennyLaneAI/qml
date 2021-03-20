@@ -12,7 +12,7 @@ Quantum volume
 
     qsim_beyond_classical Beyond classical computing with qsim
 
-*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 25 Jan 2021.*
+*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 20 Mar 2021.*
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
