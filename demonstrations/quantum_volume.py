@@ -688,16 +688,14 @@ for idx, prob in enumerate(probs_mean_noisy):
 ##############################################################################
 #
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
-# close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from above
-# is :math:`\approx 0.85`.  For the device probabilities, however, we see that
-# while they're above the threshold up to the 4-qubit case, they're below the
-# threshold for 5 qubits. This means that the highest possible volume this
-# processor can have is :math:`\log_2 V_Q = 4`. But it isn't enough that just
-# the mean of the heavy output probabilities is greater than 2/3. Since we're
-# dealing with randomness, we also want to ensure these results were
-# not just a fluke! To be confident, we also want to be above 2/3 within 2
-# standard deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5% confidence
-# interval (since roughly 97.5% of a normal distribution sits within
+# close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from
+# above is :math:`\approx 0.85`.  For this experiment, we see that the device
+# probabilities are also above the threshold.  But it isn't enough that just the
+# mean of the heavy output probabilities is greater than 2/3. Since we're
+# dealing with randomness, we also want to ensure these results were not just a
+# fluke! To be confident, we also want to be above 2/3 within 2 standard
+# deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5%
+# confidence interval (since roughly 97.5% of a normal distribution sits within
 # :math:`2\sigma` of the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
