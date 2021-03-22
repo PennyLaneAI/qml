@@ -52,7 +52,7 @@ vector and can be visualized as a point in the so-called Bloch sphere.
 Instead of just being a 0 (up) or 1 (down), it can exist in a
 superposition with say 30% chance of being in the :math:`|0 \rangle` and
 70% chance of being in the :math:`|1 \rangle` state. This is represented
-by a state vector :math:`|\psi \rangle = 0.3|0 \rangle + 0.7|1 \rangle` -
+by a state vector :math:`|\psi \rangle = \sqrt{0.3}|0 \rangle + \sqrt{0.7}|1 \rangle` -
 the probability "amplitude" of the quantum state. In general we can take
 a vector :math:`(\alpha, \beta)` to represent the probabilities of a qubit
 being in a particular state and visualize it on the Bloch sphere as an
