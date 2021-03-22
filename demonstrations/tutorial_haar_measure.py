@@ -242,12 +242,12 @@ def plot_bloch_sphere(bloch_vectors):
 
     ax.view_init(30, 45)
 
-    ax.text(0, 0, 1.7, r"|0", color="black", fontsize=16)
-    ax.text(0, 0, -1.9, r"|1", color="black", fontsize=16)
-    ax.text(1.9, 0, 0, r"|+", color="black", fontsize=16)
-    ax.text(-1.7, 0, 0, r"|-", color="black", fontsize=16)
-    ax.text(0, 1.7, 0, r"|i+", color="black", fontsize=16)
-    ax.text(0,-1.9, 0, r"i-", color="black", fontsize=16)
+    ax.text(0, 0, 1.7, r"|0⟩", color="black", fontsize=16)
+    ax.text(0, 0, -1.9, r"|1⟩", color="black", fontsize=16)
+    ax.text(1.9, 0, 0, r"|+⟩", color="black", fontsize=16)
+    ax.text(-1.7, 0, 0, r"|–⟩", color="black", fontsize=16)
+    ax.text(0, 1.7, 0, r"|i+⟩", color="black", fontsize=16)
+    ax.text(0,-1.9, 0, r"|i-⟩", color="black", fontsize=16)
 
     ax.scatter(
         bloch_vectors[:,0], bloch_vectors[:,1], bloch_vectors[:, 2], c='#e29d9e', alpha=0.3
