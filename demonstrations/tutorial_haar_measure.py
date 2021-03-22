@@ -52,13 +52,6 @@ parametrized by three numbers---depending on what you're doing, you may use
 Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to use
 spherical coordinates :math:`(\rho, \phi, \theta)`.
 
-.. image:: /demonstrations/haar_measure/spherical_coords.png
-    :align: center
-    :width: 90%
-
-    The size of an elementary volume element with fixed angular difference may
-    be smaller or larger depending on its position on the sphere.
-
 Suppose you wanted to compute the volume of a solid sphere with radius
 :math:`r`.  This can be done by integrating over the three coordinates
 :math:`\rho, \phi`, and :math:`\theta`. Your first thought here may be to simply
