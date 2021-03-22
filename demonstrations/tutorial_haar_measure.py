@@ -61,39 +61,43 @@ spherical coordinates :math:`(\rho, \phi, \theta)`.
 
 [TODO: simple graphic of spherical coordinates (?)]
 
-Suppose you wanted to compute the volume of a sphere with radius :math:`r`. Just
-like you can compute the area under the curve of a function by integrating over
-its parameters, you can compute the volume of a sphere by integrating over
-:math:`\rho, \phi`, and :math:`\theta`. Your first thought when taking an integral
-might be to just sandwich a function between a :math:`\int` and a :math:`dx`,
-where :math:`x` is some parameter your function depends on. Let's see what
-happens if we do that with the spherical coordinates:
+Suppose you wanted to compute the volume of a solid sphere with radius
+:math:`r`.  This can be done by integrating over the three coordinates
+:math:`\rho, \phi`, and :math:`\theta`. Your first thought here may be to simply
+integrate each parameter over its full range, like so:
 
 .. math::
 
     V = \int_0^{r} \int_0^{2\pi} \int_0^{\pi} d\rho d\phi d\theta = 2\pi^2 r
 
-Now, we know that the volume of a sphere of radius :math:`r` is
+But, we know that the volume of a sphere of radius :math:`r` is
 :math:`\frac{4}{3}\pi r^3`, so what we got from this integral is clearly wrong!
 Taking the integral naively like this doesn't take into account the structure of
-the sphere with respect to its parameters. For example, consider two small,
-infinitesimal elements of area with the same difference in :math:`\theta` and :math:`\phi`, but
-at different values of :math:`\theta`:
+the sphere with respect to the parameters. For example, consider
+two small, infinitesimal elements of area with the same difference in
+:math:`\theta` and :math:`\phi`, but at different values of :math:`\theta`:
 
-.. image:: /demonstrations/haar_measure/spherical_int_dtheta.png
+.. figure:: /demonstrations/haar_measure/spherical_int_dtheta.png
     :align: center
     :width: 50%
 
-Even though the differences :math:`d\theta` and :math:`d\theta` themselves are
-the same, there is way more "stuff" near the equator of the sphere than there is
-near the poles. We are going to need to take that into account when computing
-the integral. The same holds true if we consider :math:`\rho`.  The
-contribution to volume of parts of the sphere with a large :math:`\rho` is far
-more than for a small :math:`\rho`---we should expect the contribution to be
-proportional to :math:`\rho^2`, given that the surface area of a sphere of
-radius :math:`r` is :math:`4\pi r^2`.
+    |
 
-.. image:: /demonstrations/haar_measure/spherical_int_dr.png
+Even though the differences :math:`d\theta` and :math:`d\phi` themselves are the
+same, there is way more "stuff" near the equator of the sphere than there is
+near the poles. We must take into account the value of :math:`\theta` when
+computing the integral! Specifically, we multiply by the function
+:math:`\sin\theta`---the properties of the :math:`\sin` function mean that the
+most weight will occur around the equator where :math:`\theta=\pi/2`, and the
+least weight near the poles where :math:`\theta=0` and :math:`\theta=\pi`.
+
+Similar care must be taken for :math:`\rho`.  The contribution to volume of
+parts of the sphere with a large :math:`\rho` is far more than for a small
+:math:`\rho`---we should expect the contribution to be proportional to
+:math:`\rho^2`, given that the surface area of a sphere of radius :math:`r` is
+:math:`4\pi r^2`.
+
+.. figure:: /demonstrations/haar_measure/spherical_int_dr.png
     :align: center
     :width: 90%
 
