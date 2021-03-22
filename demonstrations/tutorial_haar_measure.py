@@ -542,7 +542,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # distribution. This isn't enough by itself, since unitary matrices also
 # have constraints---their rows and columns must be orthonormal.
 # These constraints are where step 2 comes in---the outcome of a generic
-# QR decomposition consits of an *orthonormal* matrix :math:`Q`, and and upper
+# QR decomposition consists of an *orthonormal* matrix :math:`Q`, and and upper
 # triangular matrix :math:`R`. Since our original matrix was complex-valued, we end
 # up with a :math:`Q` that is in fact already unitary. But why not stop there? Why
 # do we then perform steps 3 and 4?
