@@ -392,7 +392,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # .. image:: /demonstrations/haar_measure/sun_decomp.svg
 #    :align: center
-#    :width: 90%
+#    :width: 95%
 #
 # [TODO: hand-draw graphics]
 #
@@ -413,7 +413,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # .. figure:: /demonstrations/haar_measure/sun.svg
 #    :align: center
-#    :width: 70%
+#    :width: 80%
 #
 #    |
 #
@@ -687,7 +687,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # involves uniform sampling of quantum states and operations.
 #
 # Haar measure and barren plateaus
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 #
 # Suppose you are venturing out to solve a new problem using an algorithm such
 # as the :doc:`variational quantum eigensolver </demos/tutorial_vqe>`. A
