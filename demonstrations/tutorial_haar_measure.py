@@ -179,8 +179,10 @@ unitaries, and apply them to a fixed basis state such as :math:`\vert 0\rangle`.
 We'll see how this works in good time. First, we'll take a look at what happens
 when we ignore the measure and do things *wrong*. Suppose we sample quantum
 states by applying unitaries obtained by the parametrization above, but sample
-the angles :math:`\omega, \phi`, and :math:`\theta` from the uniform
-distribution between :math:`[0, 2\pi)`.
+the angles :math:`\omega, \phi`, and :math:`\theta` from the flat uniform
+distribution between :math:`[0, 2\pi)` (fun fact: there is a measure implicit in
+this kind of sampling too! It just has a constant value, because each point is
+equally likely to be sampled).
 
 """
 
@@ -198,7 +200,7 @@ dev = qml.device('default.mixed', wires=1)
 
 @qml.qnode(dev)
 def not_a_haar_random_unitary():
-    # Sample all parameters uniformly 
+    # Sample all parameters from their flat uniform distribution
     phi, theta, omega = 2 * np.pi * np.random.uniform(size=3)
     qml.Rot(phi, theta, omega, wires=0)
     return qml.state()
