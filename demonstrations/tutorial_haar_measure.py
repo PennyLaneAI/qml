@@ -271,8 +271,8 @@ plot_bloch_sphere(not_haar_bloch_vectors)
 # Haar measure, and weight the different parameters appropriately.
 #
 # For a single qubit, the Haar measure looks much like the case of a sphere,
-# minus the radial component (intuitively, all qubit state vectors have length
-# 1, so it makes sense that this wouldn't play a role here). The parameter that
+# minus the radial component. Intuitively, all qubit state vectors have length
+# 1, so it makes sense that this wouldn't play a role here. The parameter that
 # we will have to weight differently is :math:`\theta`, and in fact the
 # adjustment in measure is identical to that we had to do with the polar axis of
 # the sphere, i.e., :math:`\sin \theta`. In order to sample the :math:`\theta`
@@ -319,22 +319,33 @@ plot_bloch_sphere(haar_bloch_vectors)
 # While we can easily visualize the single-qubit case, this is no longer
 # possible when we increase the number of qubits. Regardless, we can still
 # obtain a mathematical expression for the Haar measure in arbitrary
-# dimensions. In what follows, we will leave qubits behind and explore the many
-# parametrizations of the :math:`N`-dimensional `special unitary group
-# <https://en.wikipedia.org/wiki/Special_unitary_group>`__. This group,
-# written as :math:`SU(N)`, is the continuous group consisting of all :math:`N
-# \times N` unitary operations with determinant 1.
+# dimensions. In the previous section, we expressed the Haar measure in terms of
+# a set of parameters that can be used to specify the unitary group
+# :math:`U(2)`. Such a parametrization is not unique, and in fact there are
+# multiple ways to *factorize*, or decompose an :math:`N`-dimensional unitary
+# operation into a set of parameters.
 #
-# Instead of qubits, we are going to shift to the world of *qumodes*. Our
-# unitaries will be expressed as interferometers made up of beamsplitters (2- or
-# 3-parameter operations), and phase shifts (1-parameter operations). These
-# unitaries can still be considered as multi-qubit operations in the cases where
-# :math:`N` is a power of 2, but they must be translated from
-# continuous-variable operations into qubit operations. (In PennyLane, this can
-# be done by feeding the unitaries to the :class:`~.pennylane.QubitUnitary`
-# operation directly. Alternatively, one can use *quantum compilation* to
-# express the operations as a sequence of elementary gates such as Pauli
-# rotations and CNOTs.)
+# Many of these parametrizations come to us from the study of photonics.  Here,
+# arbitrary operations are broken down into elementary operations involving only
+# a few parameters which correspond directly to parameters of the physical
+# apparatus used to implement them (beamsplitters and phase shifts). Rather than
+# qubits, such operations act on modes, or *qumodes*. They are expressed as
+# elements of the :math:`N`-dimensional `special unitary group
+# <https://en.wikipedia.org/wiki/Special_unitary_group>`__. This group, written
+# as :math:`SU(N)`, is the continuous group consisting of all :math:`N \times N`
+# unitary operations with determinant 1 (essentially like :math:`U(N)`, minus
+# a potential global phase).
+#
+#
+# .. note::
+#
+#     Elements of :math:`SU(N)` and :math:`U(N)` can still be considered as
+#     multi-qubit operations in the cases where :math:`N` is a power of 2, but
+#     they must be translated from continuous-variable operations into qubit
+#     operations. (In PennyLane, this can be done by feeding the unitaries to
+#     the :class:`~.pennylane.QubitUnitary` operation directly. Alternatively,
+#     one can use *quantum compilation* to express the operations as a sequence
+#     of elementary gates such as Pauli rotations and CNOTs.)
 #
 # .. admonition:: Tip
 #
@@ -343,8 +354,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #    <https://strawberryfields.ai/photonics/concepts/photonics.html>`__ is a
 #    good starting point.
 #
-# There are multiple ways to parametrize an :math:`N`-dimensional unitary
-# operation. We saw already above that for :math:`N=2`, we can write
+# For example, we saw already above that for :math:`N=2`, we can write
 #
 # .. math::
 #
@@ -353,8 +363,8 @@ plot_bloch_sphere(haar_bloch_vectors)
 #                        \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
 #                        \omega)/2} \cos(\theta/2) \end{pmatrix}.
 #
-# This operation can be decomposed into beamsplitters and phase shifts
-# as follows:
+#
+# This unitary can be factorized as follows: 
 #
 # .. math::
 #
@@ -435,12 +445,26 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # For :math:`SU(4)` and upwards, the form changes slightly, but still follows
 # the pattern of two copies of :math:`d\mu_{N-1}` with a term in between.
+#
+# .. figure:: /demonstrations/haar_measure/su4_premerge.svg
+#    :align: center
+#    :width: 90%
+#
+#    |
+#
 # For larger systems, however, the recursive composition allows for some of the
 # :math:`SU(2)` transformations on the lower modes to be grouped. We can take
-# advantage of this and aggregate some of the parameters, which leads to one
-# copy of :math:`d\mu_{N-1}`, which we'll denote as :math:`d\mu_{N-1}^\prime`,
-# containing only a portion of the full set of terms (as detailed in
-# [#deGuise2018]_, this is called a *coset measure*).
+# advantage of this and aggregate some of the parameters:
+#
+# .. figure:: /demonstrations/haar_measure/su4_triangle_merge.svg
+#    :align: center
+#    :width: 100%
+#
+#    |
+#
+# This leads to one copy of :math:`d\mu_{N-1}`, which we'll denote as
+# :math:`d\mu_{N-1}^\prime`, containing only a portion of the full set of terms
+# (as detailed in [#deGuise2018]_, this is called a *coset measure*).
 #
 # .. figure:: /demonstrations/haar_measure/su4_haar.svg
 #    :align: center
