@@ -112,13 +112,21 @@ this:
     V = \int_0^r \int_0^{2\pi} \int_0^{\pi} \rho^2 \sin \theta d\rho d\phi
     d\theta = \frac{4}{3}\pi r^3
 
-These extra terms that we had to add to the integral, :math:`\rho^2 \sin \theta`,
-constitute the *measure*. The measure weights portions of the sphere differently
-depending on where they are in the space.
+These extra terms that we had to add to the integral, :math:`\rho^2 \sin
+\theta`, constitute the *measure*. The measure weights portions of the sphere
+differently depending on where they are in the space. While we need to know the
+measure to properly integrate over the sphere, knowledge of the measure also
+gives us the means to perform another important task, that of sampling points in
+the space uniformly at random. We can't simply sample each parameter from the
+uniform distribution over its domain---as we experienced already, this doesn't
+take into account how the sphere is spread out over space. The measure describes
+the distribution of each parameter and gives a recipe for sampling them in order
+to obtain something properly uniform.
 
 The Haar measure
 ----------------
 
+Operations in quantum computing are described by unitary matrices.
 Unitary matrices, like points on a sphere, can be expressed in terms of a fixed
 set of coordinates, or parameters. For example, the most general single-qubit rotation
 implemented in PennyLane (:class:`~.pennylane.Rot`) is expressed in terms of three
@@ -131,42 +139,48 @@ parameters like so,
                         \\ e^{-i(\phi - \omega)/2} \sin(\theta/2) & e^{i(\phi +
                         \omega)/2} \cos(\theta/2) \end{pmatrix}.
 
-The *Haar measure* tells us about how to properly weight these parameters if we
-integrate a function over the unitary group. Furthermore, it informs us how to
-sample values for these parameters in order to sample unitaries uniformly at
-random. For an :math:`N`-dimensional system, the Haar measure, often denoted by
-:math:`\mu_N`, is what sits inside integrals over the unitary group :math:`U(N)`
-and ensures things are properly weighted. For example, suppose :math:`f` is a
-function that acts on elements of :math:`U(N)`. We can write the integral of
-:math:`f` with respect to the Haar measure like so:
+For every dimension :math:`N`, the unitary matrices of size :math:`N \times N`
+constitute the *unitary group* :math:`U(N)`. We can perform operations on
+elements of this group, such as apply functions to them, integrate over them, or
+sample uniformly over them, just as we can do to points on a sphere. When we do
+such tasks with respect to the sphere, we had to add the measure in order to
+properly weight the different regions of space. The *Haar measure* provides the
+analogous terms we need for working with the unitary group.
+
+For an :math:`N`-dimensional system, the Haar measure, often denoted by
+:math:`\mu_N`, tells us how to weight the elements of :math:`U(N)`. For
+example, suppose :math:`f` is a function that acts on elements of :math:`U(N)`,
+and we would like to take its integral over the group. We must write this
+integral with respect to the Haar measure, like so:
 
 .. math::
 
     \int_{V \in U(N)} f(V) d\mu_N(V).
 
-The :math:`d\mu_N` itself can be broken down into components depending on each
-of the parameters individually.  As such, while the Haar measure can be defined
-for every dimension :math:`N`, the mathematical form gets quite hairy for
-larger dimensions.  In general, an :math:`N`-dimensional unitary requires at
-least :math:`N^2 - 1` parameters, which is a lot to keep track of! Therefore
-we'll start with the case of a single qubit :math:`(N=2)`, then show how things
-generalize.
+As with the measure term of the sphere, :math:`d\mu_N` itself can be broken down
+into components depending on individual parameters.  While the Haar
+measure can be defined for every dimension :math:`N`, the mathematical form gets
+quite hairy for larger dimensions---in general, an :math:`N`-dimensional unitary
+requires at least :math:`N^2 - 1` parameters, which is a lot to keep track of!
+Therefore we'll start with the case of a single qubit :math:`(N=2)`, then show
+how things generalize.
 
 Single-qubit Haar measure
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Haar measure allows us to sample single-qubit unitaries uniformly at
-random. One useful consequence of this is that it provides a method to sample
-quantum *states* uniformly at random from the Hilbert space.  We can simply
-generate Haar-random unitaries, and apply them to a fixed basis state such as
-:math:`\vert 0\rangle`.
+The single-qubit case provides a particularly nice entry point because we can
+continue our comparison to spheres by visualizing single-qubit states on the
+Bloch sphere. As expressed above, the measure provides a recipe for sampling
+elements of the unitary group in a properly uniform manner, given the structure
+of the group. One useful consequence of this is that it provides a method to
+sample quantum *states* uniformly at random---we simply generate Haar-random
+unitaries, and apply them to a fixed basis state such as :math:`\vert 0\rangle`.
 
-Keeping with the idea of spheres, we can generate single-qubit states uniformly
-at random and plot them on the Bloch sphere. But first, let's emphasize the
-importance of the Haar measure by doing things *wrong*. Suppose we sample
-parameters for our unitaries from the uniform distribution, i.e., the angles
-:math:`\omega, \phi`, and :math:`\theta` are sampled uniformly at random from
-the range :math:`[0, 2\pi)`.
+We'll see how this works in good time. First, we'll take a look at what happens
+when we ignore the measure and do things *wrong*. Suppose we sample quantum
+states by applying unitaries obtained by the parametrization above, but sample
+the angles :math:`\omega, \phi`, and :math:`\theta` from the uniform
+distribution between :math:`[0, 2\pi)`.
 
 """
 
@@ -247,7 +261,7 @@ plot_bloch_sphere(not_haar_bloch_vectors)
 
 ######################################################################
 # You can see from this plot that even though our parameters were sampled from a
-# uniform distribution, there is some noticeable concentration around the poles
+# uniform distribution, there is a noticeable amount of clustering around the poles
 # of the sphere. Despite the input parameters being uniform, the output is very
 # much *not* uniform. Just like the regular sphere, the measure is larger near
 # the equator, and if we just sample uniformly, we won't end up populating that
