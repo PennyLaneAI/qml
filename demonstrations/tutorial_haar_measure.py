@@ -97,15 +97,10 @@ parts of the sphere with a large :math:`\rho` is far more than for a small
 :math:`\rho^2`, given that the surface area of a sphere of radius :math:`r` is
 :math:`4\pi r^2`.
 
-.. figure:: /demonstrations/haar_measure/spherical_int_dr.png
-    :align: center
-    :width: 90%
-
 On the other hand, for a fixed :math:`\rho` and :math:`\theta`, the length of
 the :math:`d\phi` is the same all around the circle. If put all these facts
 together, we find that the actual expression for the integral should look like
 this:
-
 
 .. math::
 
