@@ -301,7 +301,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 
 ######################################################################
 # We see that when we use the correct measure, our qubit states are now
-# much-better distributed over the sphere. Putting this information together,
+# much better distributed over the sphere. Putting this information together,
 # we can now write the explicit form for the single-qubit Haar measure:
 #
 # .. math::
