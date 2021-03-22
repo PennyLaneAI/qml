@@ -136,7 +136,7 @@ For every dimension :math:`N`, the unitary matrices of size :math:`N \times N`
 constitute the *unitary group* :math:`U(N)`. We can perform operations on
 elements of this group, such as apply functions to them, integrate over them, or
 sample uniformly over them, just as we can do to points on a sphere. When we do
-such tasks with respect to the sphere, we had to add the measure in order to
+such tasks with respect to the sphere, we have to add the measure in order to
 properly weight the different regions of space. The *Haar measure* provides the
 analogous terms we need for working with the unitary group.
 
