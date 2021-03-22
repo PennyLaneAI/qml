@@ -59,8 +59,6 @@ spherical coordinates :math:`(\rho, \phi, \theta)`.
     The size of an elementary volume element with fixed angular difference may
     be smaller or larger depending on its position on the sphere.
 
-[TODO: simple graphic of spherical coordinates (?)]
-
 Suppose you wanted to compute the volume of a solid sphere with radius
 :math:`r`.  This can be done by integrating over the three coordinates
 :math:`\rho, \phi`, and :math:`\theta`. Your first thought here may be to simply
@@ -184,8 +182,6 @@ equally likely to be sampled).
 import pennylane as qml
 import numpy as np
 import matplotlib.pyplot as plt
-
-#plt.rcParams.update({"text.usetex" : True})
 
 # set the random seed
 np.random.seed(42)
@@ -385,11 +381,10 @@ plot_bloch_sphere(haar_bloch_vectors)
 # three examples [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_ (images taken
 # from [#deGuise2018]_):
 #
-# .. image:: /demonstrations/haar_measure/sun_decomp.svg
+# .. figure:: /demonstrations/haar_measure/sun_decomp.svg
 #    :align: center
 #    :width: 95%
 #
-# [TODO: hand-draw graphics]
 #
 # In these graphics, every wire is a different mode. Every box represents an
 # operation on one or more modes, and the number in the box indicates the number
