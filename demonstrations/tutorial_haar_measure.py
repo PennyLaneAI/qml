@@ -34,9 +34,10 @@ include that important statement in your own work with confidence!
    To get the most out of this demo, it is helpful if you are familiar with
    `integration of multi-dimensional functions
    <https://en.wikipedia.org/wiki/Multiple_integral>`__, the `Bloch sphere
-   <https://en.wikipedia.org/wiki/Bloch_sphere>`__, and the conceptual idea
-   behind `decompositions and different parametrizations of unitary matrices
-   <https://strawberryfields.readthedocs.io/en/stable/code/api/strawberryfields.ops.Interferometer.html>`__.
+   <https://en.wikipedia.org/wiki/Bloch_sphere>`__, and the conceptual ideas
+   behind `decompositions
+   <https://en.wikipedia.org/wiki/Matrix_decomposition>`__ and factorizations of
+   unitary matrices (see, e.g., 4.5.1 and 4.5.2 of [#NandC2000]_).
 
 Measure
 -------
@@ -680,7 +681,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # to the Haar measure.
 #
 # There are two important aspects of this that we have yet to touch upon,
-# however. The first is whether it is efficient to sample from the Haar measure---given 
+# however. The first is whether it is efficient to sample from the Haar measure---given
 # that the number of parameters to keep track of is exponential in the
 # number of qubits, certainly not. But a more interesting question is do we
 # *need* to always sample from the full Haar measure?  The answer to this is
@@ -691,6 +692,11 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # References
 # ----------
+#
+# .. [#NandC2000]
+#
+#     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
+#     Cambridge University Press.
 #
 # .. [#deGuise2018]
 #
@@ -727,7 +733,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #     M. Gerken (2013) "Measure concentration: Levy's Lemma"
 #     (`lecture notes <http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560>`__).
-
+#
 #
 # .. [#Hayden2006]
 #
