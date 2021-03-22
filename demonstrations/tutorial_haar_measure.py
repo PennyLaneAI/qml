@@ -596,8 +596,8 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #    \int_{V \in U(N)} f(V) d\mu_N(V).
 #
-# One feature of the Haar measure is that it is both left and right *invariant*
-# under unitary transformations. That is,
+# One of the defining features of the Haar measure is that it is both left and
+# right *invariant* under unitary transformations. That is,
 #
 # .. math::
 #
@@ -626,12 +626,25 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # "stuff" in the space concentrates around a certain area, and this gets worse
 # as the size of the system increases. You can see the beginnings of by looking
 # at the sphere. For the 3-dimensional sphere, we saw graphically how there is
-# concentration around the equator. This becomes increasingly prominent for
-# `higher-dimensional spheres <https://en.wikipedia.org/wiki/N-sphere>`__.
+# concentration around the equator, and how the measure takes that into account
+# with the additional factor of :math:`\sin \theta`. This property becomes
+# increasingly prominent for `higher-dimensional spheres
+# <https://en.wikipedia.org/wiki/N-sphere>`__.
+#
+# .. important::
+#
+#    The concentration described here is not referring to what we witnessed
+#    earlier on, when we sampled quantum states (points on the Bloch sphere)
+#    incorrectly and found that they clustered around the poles. However, that
+#    is not unrelated. Concentration of measure refers to where the measure
+#    itself is concentrated, and which parts of the space should be more heavily
+#    weighted. For the case of the sphere, it is the equatorial area, and when
+#    we didn't sample properly and take that concentration into account, we
+#    obtained an uneven distribution.
 #
 # Let's consider an :math:`N`-dimensional unit sphere. Points on the sphere, or
-# vectors in this space, are parametrized by :math:`N-1` real coordinates.  Now
-# suppose we have some function :math:`f` that maps points on that sphere to
+# vectors in this space, are parametrized by :math:`N-1` real coordinates.
+# Suppose we have some function :math:`f` that maps points on that sphere to
 # real numbers. Sample a point :math:`x` on that sphere from the uniform
 # measure, and compute the value of :math:`f(x)`. How close do you think the
 # result will be to the mean value of the function, :math:`E[f]`, over the
@@ -639,13 +652,14 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # A result called `Levy's lemma
 # <https://en.wikipedia.org/wiki/Concentration_of_measure#Concentration_on_the_sphere>`__
-# [#Gerken2013]_, [#Hayden2006]_ bounds the probability that :math:`f(x)` for an
-# :math:`x` select uniformly at random deviates from :math:`E[f]` by some amount
-# :math:`\epsilon`:
+# [#Gerken2013]_, [#Hayden2006]_ expresses how likely it is that :math:`f(x)` is a specific
+# distance away from the mean. It states that, for an :math:`x` selected
+# uniformly at random, the probability that :math:`f(x)` deviates from
+# :math:`E[f]` by some amount :math:`\epsilon` is bounded by:
 #
 # .. math::
 #
-#    \hbox{Pr}(|f(x) - E[f]| \ge \epsilon) \leq 2 \exp\left[-\frac{N\epsilon^2}{9\pi^3 \eta^2}\right]
+#    \hbox{Pr}(|f(x) - E[f]| \ge \epsilon) \leq 2 \exp\left[-\frac{N\epsilon^2}{9\pi^3 \eta^2}\right].
 #
 # A constraint on the function :math:`f` is that it must be `Lipschitz
 # continuous <https://en.wikipedia.org/wiki/Lipschitz_continuity>`__, where
@@ -680,17 +694,20 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # critical component of such methods is the choice of :doc:`variational ansatz
 # </glossary/circuit_ansatz>`. Having now learned a bit about the properties of
 # the Haar measure, you may think it would make sense to use this for the
-# parametrization. The initial parameter selection will give you a state in the
-# Hilbert space uniformly at random. Then, since this ansatz spans the entire
-# Hilbert space, you're guaranteed to be able to represent the target ground state with
-# your ansatz, and it should be able to find it with no issue ... right?
+# parametrization. Variational ansaetze are, after all, parametrized quantum
+# circuits, so why not choose an ansatz that corresponds directly to a
+# parametrization for Haar-random unitaries?  The initial parameter selection
+# will give you a state in the Hilbert space uniformly at random. Then, since
+# this ansatz spans the entire Hilbert space, you're guaranteed to be able to
+# represent the target ground state with your ansatz, and it should be able to
+# find it with no issue ... right?
 #
 # Unfortunately, while such an ansatz is extremely *expressive* (i.e., it is
-# capable of representing any possible state), these ansaetze actually suffer the
-# most from the barren plateau problem [#McClean2018]_, [#Holmes2021]_.
-# :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the cost
-# landscape of a parametrized circuit where both the gradient and its variance
-# rapidly approach 0, leading the optimizer to get stuck in a local minimum.
+# capable of representing any possible state), these ansaetze actually suffer
+# the most from the barren plateau problem [#McClean2018]_, [#Holmes2021]_.
+# :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the
+# cost landscape of a parametrized circuit where both the gradient and its
+# variance approach 0, leading the optimizer to get stuck in a local minimum.
 # This was explored recently in the work of [#Holmes2021]_, wherein closeness to
 # the Haar measure was actually used as a metric for expressivity. The closer
 # things are to the Haar measure, the more expressive they are, but they are
