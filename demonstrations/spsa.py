@@ -148,7 +148,7 @@ compute statistics like expectation values.
 Once we have a device selected, we just need a couple of other ingredients for
 the pieces of an example optimization to come together:
 
-* a template: :func:`~.pennylane.templates.layers.StronglyEntanglingLayers`,
+* a circuit ansatz: :func:`~.pennylane.templates.layers.StronglyEntanglingLayers`,
 * initial parameters: conveniently generated using :func:`~.pennylane.init.strong_ent_layers_normal`,
 * an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i`, where :math:`N` stands
   for the number of qubits.
