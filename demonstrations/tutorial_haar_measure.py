@@ -392,7 +392,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
 # transformation between two :math:`SU(N-1)` transformations, like so:
 #
-#  |
+# |
 #
 # .. figure:: /demonstrations/haar_measure/sun.svg
 #    :align: center
