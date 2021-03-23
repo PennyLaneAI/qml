@@ -107,7 +107,6 @@ into the already-stochastic process. This is highlighted in the figure below,
 which portrays an example of the type of path SPSA takes through the space of
 the function, compared to a standard gradient-based optimizer.
 
-
 .. figure:: ../demonstrations/spsa/spsa_opt.png
    :align: center
    :width: 60%
@@ -117,8 +116,6 @@ the function, compared to a standard gradient-based optimizer.
    A schematic of the search paths used by gradient descent with
    parameter-shift and SPSA in a low-noise setting.
    Image source: [#spall_overview]_
-
-
 
 Now that we have explored how SPSA works, let's see how it performs in practice!
 
@@ -168,12 +165,10 @@ np.random.seed(50)
 
 all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
 
-
 @qml.qnode(dev_sampler)
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
     return qml.expval(all_pauliz_tensor_prod)
-
 
 ##############################################################################
 # After this, we'll initialize the parameters in a way that is compatible with
@@ -184,7 +179,6 @@ flat_shape = num_layers * num_wires * 3
 init_params = qml.init.strong_ent_layers_normal(
     n_wires=num_wires, n_layers=num_layers
 ).reshape(flat_shape)
-
 
 def cost(params):
     return circuit(params.reshape(num_layers, num_wires, 3))
@@ -218,7 +212,6 @@ def callback_fn(xk):
     iteration_num = len(cost_store_spsa)
     if iteration_num % 10 == 0:
         print(f"Iteration = {iteration_num}, Cost = {cost_val}")
-
 
 ##############################################################################
 # Choosing the hyperparameters
@@ -283,17 +276,13 @@ res = minimizeSPSA(
 #     Iteration = 190, Cost = -0.988
 #     Iteration = 200, Cost = -0.964
 
-
-
 ##############################################################################
 #
 # Now let's perform the same optimization using gradient descent. We set the
 # step size according to a favourable value found after grid search for fast
 # convergence. Note that we also reset the number of executions of the device.
 
-
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
-
 
 steps = 20
 params = init_params.copy()
@@ -342,7 +331,6 @@ cost_store_grad.append(cost(params))
 #     Iteration = 18, Cost = -0.996
 #     Iteration = 19, Cost = -0.996
 #
-
 
 ##############################################################################
 # SPSA and gradient descent comparison
@@ -406,7 +394,6 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 # We'll start by loading up the :math:`H_2` Hamiltonian and taking a look.
 #
 
-
 from pennylane import qchem
 
 geometry = "h2.xyz"
@@ -454,7 +441,6 @@ print(f"Hamiltonian is \n {h2_ham}")
 #     + (0.12293305056183798) [Z1 Z3]
 #     + (0.17627640804319591) [Z2 Z3]
 
-
 ##############################################################################
 #
 # This Hamiltonian uses 4 qubits and contains 15 terms. The ground state energy
@@ -466,7 +452,6 @@ print(f"Hamiltonian is \n {h2_ham}")
 #     :align: center
 #     :width: 40%
 
-
 def circuit(params, wires):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
     for i in wires:
@@ -474,7 +459,6 @@ def circuit(params, wires):
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[3, 1])
-
 
 ##############################################################################
 #
@@ -596,7 +580,6 @@ print(f"Expected device executions = {max_dev_execs}")
 #
 #     Expected device executions = 7200
 
-
 ##############################################################################
 #
 # Note from the plot that the total number of executions is actually less than
@@ -647,7 +630,6 @@ h2_grad_energies_melbourne.append(cost(params))
 print()
 print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
 print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha")
-
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
