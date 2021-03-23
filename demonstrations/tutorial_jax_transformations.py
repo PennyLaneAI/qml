@@ -21,7 +21,7 @@ many of its transformations are also useful for quantum machine learning (QML), 
 # easily transfer what you learn to JAX when you come back.
 #
 # With that said, we begin by importing PennyLane, JAX and the JAX-provided version of NumPy and
-# set up a 2-wire qubit device for computations. We'll be using the ``default.qubit.jax`` device
+# set up a 2-wire qubit device for computations. We'll be using the ``default.qubit`` device
 # for this tutorial.
 
 import jax
@@ -33,7 +33,6 @@ dev = qml.device("default.qubit", wires=2, analytic=True)
 ##############################################################################
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
 # then evaluates the expectation value of the Pauli Z operator on the first wire.
-# This 
 
 
 @qml.qnode(dev, interface="jax")
@@ -54,7 +53,7 @@ print(f"circuit(jnp.pi / 2): {circuit(jnp.pi / 2)}")
 
 ##############################################################################
 # Notice that the output of the circuit is a JAX ``DeviceArray``.
-# In fact, when we use the ``default.qubit.jax`` device, the entire computation 
+# In fact, when we use the ``default.qubit`` device, the entire computation 
 # is done in JAX, so we can use all of the JAX tools out of the box!
 #
 # Let's start with a simple one. The code we wrote above is entirely differentiable, so
@@ -78,10 +77,10 @@ print(f"Tuned param: {param}")
 print(f"Tuned cost: {circuit(param)}")
 
 #############################################################################
-# And that's QML in a nutshell! If you've ever done classical machine learning before,
+# And that's QML in a nutshell! If you've done classical machine learning before,
 # the above training loop should feel very familiar to you. The only difference is
 # that we used a quantum computer (or rather, a simulation of one) as part of our
-# cost calculation. In the end, almost all QML problems involve tuning some
+# model and cost calculation. In the end, almost all QML problems involve tuning some
 # parameters and making some cost function go down, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
 # QML is most useful for learning quantum systems like finding chemical ground states
@@ -100,7 +99,7 @@ print(f"Tuned cost: {circuit(param)}")
 vcircuit = jax.vmap(circuit)
 
 ##############################################################################
-# Now, we call call the vcircuit with multiple parameters at once and get back a
+# Now, we call the vcircuit with multiple parameters at once and get back a
 # batch of expectations.
 
 print(f"Batched result: {vcircuit(jnp.array([1.234, 0.333, -0.971]))}")
@@ -109,7 +108,7 @@ print(f"Batched result: {vcircuit(jnp.array([1.234, 0.333, -0.971]))}")
 # Let's now setup our ES training loop. The idea is pretty simple. First, we
 # calculate the expected values of each of our parameters. The cost values
 # then determine the "weight" of that example. The lower the cost, the larger the weight.
-# These batches are then used to generate a new set of samples. 
+# These batches are then used to generate a new set of parameters. 
 
 # Needed to do randomness with JAX.
 # For more info on how JAX handles randomness, see
@@ -146,8 +145,9 @@ print(f"Final cost: {circuit(mean)}")
 #
 # JAX is built on top of XLA,  an incredibly powerful numerics library that can 
 # cross compile computation to different hardware including CPUs, GPUs, etc.
-# Compiling your JAX programs generally make them significantly more performant, 
-# so you'll likely want to do it if you're running several thousand optimization loops.
+# Compiling your JAX programs generally make them significantly faster at the cost of 
+# compilation overhead during the first execution.
+# You'll likely want to do it if you're running several thousand optimization loops.
 # 
 # Compiling your circuit with JAX is easy, just add the jax.jit decorator!
 
@@ -171,12 +171,15 @@ print(circuit(0.123)) # Much faster every time after!
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
 #
-# To set the random number generating key, you'll have to pass the jax.random.PRNGKey
-# when constructing the device. Because of this, if you want to use jax.jit with randomness,
-# the device construction will have to happen within that jitted method.
+# We recommend reading up 
 # 
 # Note: This example only applies if you are using jax.jit. Otherwise, we automatically 
 # seed and reset the random number generator for you on each call.
+#
+# To set the random number generating key, you'll have to pass the jax.random.PRNGKey
+# when constructing the device. Because of this, if you want to use jax.jit with randomness,
+# the device construction will have to happen within that jitted method.
+
 
 
 # Let's create our circuit with randomness and a jitting.
