@@ -182,7 +182,7 @@ print(circuit(0.123)) # Much faster every time after!
 
 
 
-# Let's create our circuit with randomness and a jitting.
+# Let's create our circuit with randomness and compile it with jax.jit.
 @jax.jit
 def circuit(key, param):
     # Notice how the device construction now happens within the jitted method.
