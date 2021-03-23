@@ -9,7 +9,8 @@ Using JAX with Pennylane
 
 JAX is an incredibly powerful deep learning library that has been gaining traction in
 the deep learning community. While JAX was originally designed for classical ML,
-many of its transformations are also useful for quantum machine learning (QML), and can be used directly with Pennylane.
+many of its transformations are also useful for quantum machine learning (QML), 
+and can be used directly with Pennylane.
 """
 
 ##############################################################################
@@ -28,7 +29,7 @@ import jax
 import jax.numpy as jnp
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=2, analytic=True)
+dev = qml.device("default.qubit", wires=2, shots=None)
 
 ##############################################################################
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
@@ -159,8 +160,8 @@ def circuit(param):
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0))
 
-print(circuit(0.123)) # Compile overhead the first time time method is executed.
-print(circuit(0.123)) # Much faster every time after!
+print("First run:", circuit(0.123)) # Compile overhead the first time time method is executed.
+print("Second run:", circuit(0.123)) # Much faster every time after!
 
 ##############################################################################
 # Shots and Sampling with JAX.
