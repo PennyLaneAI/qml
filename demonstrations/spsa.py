@@ -15,6 +15,20 @@ Optimization using SPSA
 
 *Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 19 Mar 2021.*
 
+In this tutorial, we investigate using a gradient-free optimizer called
+Simultaneous Perturbation Stochastic Approximation (SPSA) to optimize quantum
+circuits. SPSA is a technique that involves approximating the gradient of a
+quantum circuit without having to compute it.
+
+This demonstration shows how the SPSA optimizer performs:
+
+1. A simple task on a sampling device,
+2. The variational quantum eigensolver on a simulated hardware device.
+
+Throughout the demo, we show results obtained with SPSA and with gradient
+descent and also compare the number of device executions required to complete
+each optimization.
+
 Background
 ----------
 
@@ -779,10 +793,11 @@ plt.show()
 #     :width: 70%
 #
 # We observe here that the SPSA optimizer again converges in fewer device
-# executions than the gradient descent optimizer. However due to the (simulated)
-# hardware noise, the obtained energies are higher than the true energy, and the
-# output still bounces around (of course in SPSA this is expected due to the
-# inherently stochastic nature of the algorithm),
+# executions than the gradient descent optimizer. 🎉
+#
+# Due to the (simulated) hardware noise, however, the obtained energies are
+# higher than the true energy, and the output still bounces around (in SPSA
+# this is expected due to the inherently stochastic nature of the algorithm).
 #
 #
 
