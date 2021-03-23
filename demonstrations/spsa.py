@@ -226,7 +226,7 @@ def callback_fn(xk):
 # The ``noisyopt`` package allows us to choose the initial value of two
 # hyperparameters for SPSA: the :math:`c` and :math:`a` coefficients. Recall
 # from above that the :math:`c` values control the amount of random shift when
-# evaluating the cost function, while the :math:`a` is analogous to a learning
+# evaluating the cost function, while the :math:`a` coefficients are analogous to a learning
 # rate and affects the degree to which the parameters change at each update
 # step.
 #
