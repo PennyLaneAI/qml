@@ -83,10 +83,11 @@ where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(u) = \frac{
 \partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}` based on
 prior measurements of the cost function, and :math:`a_{k}` is a positive number.
 
-As previously mentioned, SPSA is robust to any noise that may occur
-when measuring the function :math:`L`. Therefore, let's consider the
-function :math:`y(\theta)=L(\theta) + \varepsilon`, where :math:`\varepsilon`
-is some perturbation of the output. In SPSA, the estimated gradient at each iteration step is expressed as
+One of the advantages of SPSA is that it is robust to any noise that may occur
+when measuring the function :math:`L`. Therefore, let's consider the function
+:math:`y(\theta)=L(\theta) + \varepsilon`, where :math:`\varepsilon` is some
+perturbation of the output. In SPSA, the estimated gradient at each iteration
+step is expressed as
 
 .. math:: \hat{g}_{ki} (\hat{\theta}_{k}) = \frac{y(\hat{\theta}_{k} +c_{k}\Delta_{k})
     - y(\hat{\theta}_{k} -c_{k}\Delta_{k})}{2c_{k}\Delta_{ki}},
