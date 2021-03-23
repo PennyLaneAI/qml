@@ -18,7 +18,7 @@ Optimization using SPSA
 Background
 ----------
 
-In PennyLane, quantum gradients are commonly computed using parameter-shift rules.  For
+In PennyLane, quantum gradients on hardware are commonly computed using parameter-shift rules.  For
 quantum circuits that have multiple free parameters, using these parameter-shift
 rules to compute quantum gradients involves computing the partial derivatives of
 the quantum function with respect to every free parameter. These partial
