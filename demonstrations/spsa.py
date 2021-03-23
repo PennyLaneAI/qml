@@ -186,9 +186,9 @@ def circuit(params):
 
 ##############################################################################
 # After this, we'll initialize the parameters in a way that is compatible with
-# the ``noisyopt`` package. We are flattening our parameters, which will be very
-# convenient later on when using the SPSA optimizer. Just keep in mind that
-# this is done for compatibility.
+# the ``noisyopt`` package. The ``noisyopt`` package requires the trainable parameters
+# be a flattened array. As a result, our cost function must accept a flat array of parameters
+# to be optimized.
 flat_shape = num_layers * num_wires * 3
 init_params = qml.init.strong_ent_layers_normal(
     n_wires=num_wires, n_layers=num_layers
