@@ -59,7 +59,7 @@ integrate each parameter over its full range, like so:
 
 .. math::
 
-    V = \int_0^{r} \int_0^{2\pi} \int_0^{\pi} d\rho d\phi d\theta = 2\pi^2 r
+    V = \int_0^{r} \int_0^{2\pi} \int_0^{\pi} d\rho~ d\phi~ d\theta = 2\pi^2 r
 
 But, we know that the volume of a sphere of radius :math:`r` is
 :math:`\frac{4}{3}\pi r^3`, so what we got from this integral is clearly wrong!
@@ -95,7 +95,7 @@ this:
 
 .. math::
 
-    V = \int_0^r \int_0^{2\pi} \int_0^{\pi} \rho^2 \sin \theta d\rho d\phi
+    V = \int_0^r \int_0^{2\pi} \int_0^{\pi} \rho^2 \sin \theta~ d\rho~ d\phi~
     d\theta = \frac{4}{3}\pi r^3
 
 These extra terms that we had to add to the integral, :math:`\rho^2 \sin
@@ -370,10 +370,9 @@ plot_bloch_sphere(haar_bloch_vectors)
 # ways to decompose the unitary. Such decompositions rewrite elements in
 # :math:`SU(N)` acting on :math:`N` modes as a sequence of operations acting
 # only on 2 modes, :math:`SU(2)`, and single-mode phase shifts.  Shown below are
-# three examples [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_ (images taken
-# from [#deGuise2018]_):
+# three examples [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_:
 #
-# .. figure:: /demonstrations/haar_measure/sun_decomp.svg
+# .. figure:: /demonstrations/haar_measure/unitaries.png
 #    :align: center
 #    :width: 95%
 #
@@ -393,11 +392,13 @@ plot_bloch_sphere(haar_bloch_vectors)
 # :math:`SU(N)` operation can be implemented by sandwiching an :math:`SU(2)`
 # transformation between two :math:`SU(N-1)` transformations, like so:
 #
+#  |
+#
 # .. figure:: /demonstrations/haar_measure/sun.svg
 #    :align: center
 #    :width: 80%
 #
-#    |
+# |
 #
 # The Haar measure is then constructed recursively as a product of 3
 # terms. The first term depends on the parameters in the first :math:`SU(N-1)`
@@ -408,51 +409,61 @@ plot_bloch_sphere(haar_bloch_vectors)
 # :math:`SU(2)` is the "base case" of the recursion---we simply have the Haar measure
 # as expressed above.
 #
+# |
+#
 # .. figure:: /demonstrations/haar_measure/su2_haar.svg
 #    :align: center
 #    :width: 25%
 #
-#    |
+# |
 #
 # Moving on up, we can write elements of :math:`SU(3)` as a sequence of three
 # :math:`SU(2)` transformations. The Haar measure :math:`d\mu_3` then consists
 # of two copies of :math:`d\mu_2`, with an extra term in between to take into
 # account the middle transformation.
 #
+# |
+#
 # .. figure:: /demonstrations/haar_measure/su3_haar.svg
 #    :align: center
 #    :width: 80%
 #
-#    |
+# |
 #
 # For :math:`SU(4)` and upwards, the form changes slightly, but still follows
 # the pattern of two copies of :math:`d\mu_{N-1}` with a term in between.
+#
+# |
 #
 # .. figure:: /demonstrations/haar_measure/su4_premerge.svg
 #    :align: center
 #    :width: 90%
 #
-#    |
+# |
 #
 # For larger systems, however, the recursive composition allows for some of the
 # :math:`SU(2)` transformations on the lower modes to be grouped. We can take
 # advantage of this and aggregate some of the parameters:
 #
+# |
+#
 # .. figure:: /demonstrations/haar_measure/su4_triangle_merge.svg
 #    :align: center
 #    :width: 100%
 #
-#    |
+# |
 #
 # This leads to one copy of :math:`d\mu_{N-1}`, which we'll denote as
 # :math:`d\mu_{N-1}^\prime`, containing only a portion of the full set of terms
 # (as detailed in [#deGuise2018]_, this is called a *coset measure*).
 #
+# |
+#
 # .. figure:: /demonstrations/haar_measure/su4_haar.svg
 #    :align: center
 #    :width: 100%
 #
-#    |
+# |
 #
 # Putting everything together, we have that
 #
@@ -669,7 +680,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # involves uniform sampling of quantum states and operations.
 #
 # Haar measure and barren plateaus
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Suppose you are venturing out to solve a new problem using an algorithm such
 # as the :doc:`variational quantum eigensolver </demos/tutorial_vqe>`. A
