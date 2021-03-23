@@ -28,7 +28,7 @@ import jax
 import jax.numpy as jnp
 import pennylane as qml
 
-dev = qml.device("default.qubit.jax", wires=2, analytic=True)
+dev = qml.device("default.qubit", wires=2, analytic=True)
 
 ##############################################################################
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
@@ -57,7 +57,7 @@ print(f"circuit(jnp.pi / 2): {circuit(jnp.pi / 2)}")
 # In fact, when we use the ``default.qubit.jax`` device, the entire computation 
 # is done in JAX, so we can use all of the JAX tools out of the box!
 #
-# Let's start with a simple one. The code we wrote above is entirely continuous, so
+# Let's start with a simple one. The code we wrote above is entirely differentiable, so
 # let's calculate its gradient.
 
 grad_circuit = jax.grad(circuit)
@@ -100,7 +100,7 @@ print(f"Tuned cost: {circuit(param)}")
 vcircuit = jax.vmap(circuit)
 
 ##############################################################################
-# Now, we call call the vcircuit with multiple parameters at once and get back 
+# Now, we call call the vcircuit with multiple parameters at once and get back a
 # batch of expectations.
 
 print(f"Batched result: {vcircuit(jnp.array([1.234, 0.333, -0.971]))}")
@@ -140,12 +140,34 @@ print(f"Final value: {mean}")
 print(f"Final cost: {circuit(mean)}")
 
 
+#############################################################################
+# Jitting, compiling circuit execution
+# ------------------------------------
+#
+# JAX is built on top of XLA,  an incredibly powerful numerics library that can 
+# cross compile computation to different hardware including CPUs, GPUs, etc.
+# Compiling your JAX programs generally make them significantly more performant, 
+# so you'll likely want to do it if you're running several thousand optimization loops.
+# 
+# Compiling your circuit with JAX is easy, just add the jax.jit decorator!
+
+@jax.jit # The decorator can be directly applied to a Qnode.
+@qml.qnode(dev, interface="jax")
+def circuit(param):
+    # These two gates represent our QML model. 
+    qml.RX(param, wires=0)
+    qml.CNOT(wires=[0, 1])
+    return qml.expval(qml.PauliZ(0))
+
+print(circuit(0.123)) # Compile overhead the first time time method is executed.
+print(circuit(0.123)) # Much faster every time after!
+
 ##############################################################################
-# Jit, Shots and Sampling with JAX.
+# Shots and Sampling with JAX.
 # ----------------------------
 # 
 # JAX was designed to have experiments be as repeatable as possible. Because of this,
-# JAX requires us to seed all randomly generated values (as you saw above in the above
+# JAX requires us to seed all randomly generated values (as you saw in the above
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
 #
