@@ -536,31 +536,34 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 # SPSA should use only 2 device executions per term in the expectation value.
 # Since there are 15 terms, and 200 iterations, we expect 6000 total device
 # executions.
+dev_noisy_spsa = qml.device(
+    "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
+)
+cost_spsa = qml.ExpvalCost(circuit, h2_ham, dev_noisy_spsa)
 
-params = init_params.copy()
-
-h2_spsa_device_executions_melbourne = [0]
-h2_spsa_energies_melbourne = [cost(params)]
-
-dev_noisy._num_executions = 0
+# Wrapping the cost function and flattening the parameters to be compatible
+# with noisyopt which assumes a flat array of input parameters
+def wrapped_cost(params):
+    return cost_spsa(params.reshape(num_qubits, num_params))
 
 num_qubits = 4
 num_params = 3
+
+params = init_params.copy()
 params = params.reshape(num_qubits * num_params)
 
-# Wrapping the cost function to be compatible with noisyopt which assumes a
-# flat array of parameters
-def wrapped_cost(params):
-    return cost(params.reshape(num_qubits, num_params))
+h2_spsa_device_executions_melbourne = [0]
+h2_spsa_energies_melbourne = [wrapped_cost(params)]
 
 def callback_fn(xk):
     cost_val = wrapped_cost(xk)
     h2_spsa_energies_melbourne.append(cost_val)
 
+    # TODO: update comment if verified
     # For this case, every term in the Hamiltonian counts towards evaluating the
     # cost function, so to take this into account we need to subtract the number of terms
-    dev_noisy._num_executions -= len(h2_ham.terms[0])
-    h2_spsa_device_executions_melbourne.append(dev_noisy.num_executions)
+    num_executions = dev_noisy_spsa.num_executions/2
+    h2_spsa_device_executions_melbourne.append(num_executions)
 
     iteration_num = len(h2_spsa_energies_melbourne)
     if iteration_num % 10 == 0:
