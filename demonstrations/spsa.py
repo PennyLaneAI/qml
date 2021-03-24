@@ -483,15 +483,15 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #  Out:
 #
 #  .. code-block:: none
+#     Iteration = 0,  Energy = -0.66345346 Ha
+#     Iteration = 5,  Energy = -0.99124272 Ha
+#     Iteration = 10,  Energy = -1.00105536 Ha
+#     Iteration = 15,  Energy = -0.99592924 Ha
 #
-#     Iteration = 0,  Energy = -0.63437409 Ha
-#     Iteration = 5,  Energy = -0.89866763 Ha
-#     Iteration = 10,  Energy = -0.90846615 Ha
-#     Iteration = 15,  Energy = -0.90582867 Ha
+#     Final estimated value of the ground-state energy = -0.98134253 Ha
+#     Accuracy with respect to the true energy: 0.15484692 Ha
 #
-#     Final estimated value of the ground-state energy = -0.93208561 Ha
-#     Accuracy with respect to the true energy: 0.20410384 Ha
-#
+
 
 plt.figure(figsize=(10, 6))
 
@@ -603,8 +603,17 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 
 plt.figure(figsize=(10, 6))
 
-plt.plot(h2_grad_device_executions_melbourne, h2_grad_energies_melbourne, label="Gradient descent, Melbourne sim.")
-plt.plot(h2_spsa_device_executions_melbourne, h2_spsa_energies_melbourne, label="SPSA, Melbourne sim.")
+plt.plot(
+    h2_grad_device_executions_melbourne,
+    h2_grad_energies_melbourne,
+    label="Gradient descent, Melbourne sim."
+)
+
+plt.plot(
+    h2_spsa_device_executions_melbourne,
+    h2_spsa_energies_melbourne,
+    label="SPSA, Melbourne sim."
+)
 
 plt.title("H2 energy from the VQE using gradient descent vs. SPSA", fontsize=16)
 plt.xlabel("Number of device executions", fontsize=14)
