@@ -483,6 +483,7 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #  Out:
 #
 #  .. code-block:: none
+#
 #     Iteration = 0,  Energy = -0.66345346 Ha
 #     Iteration = 5,  Energy = -0.99124272 Ha
 #     Iteration = 10,  Energy = -1.00105536 Ha
@@ -576,29 +577,29 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 10,  Energy = -0.81263091 Ha
-#     Iteration = 20,  Energy = -0.87451933 Ha
-#     Iteration = 30,  Energy = -0.91126159 Ha
-#     Iteration = 40,  Energy = -0.92543558 Ha
-#     Iteration = 50,  Energy = -0.91074332 Ha
-#     Iteration = 60,  Energy = -0.88884624 Ha
-#     Iteration = 70,  Energy = -0.89771656 Ha
-#     Iteration = 80,  Energy = -0.88451027 Ha
-#     Iteration = 90,  Energy = -0.90159613 Ha
-#     Iteration = 100,  Energy = -0.87074395 Ha
-#     Iteration = 110,  Energy = -0.88314750 Ha
-#     Iteration = 120,  Energy = -0.90602021 Ha
-#     Iteration = 130,  Energy = -0.91128931 Ha
-#     Iteration = 140,  Energy = -0.92292835 Ha
-#     Iteration = 150,  Energy = -0.92499790 Ha
-#     Iteration = 160,  Energy = -0.91601173 Ha
-#     Iteration = 170,  Energy = -0.89362510 Ha
-#     Iteration = 180,  Energy = -0.92450527 Ha
-#     Iteration = 190,  Energy = -0.89094628 Ha
-#     Iteration = 200,  Energy = -0.88564296 Ha
+#     Iteration = 10,  Energy = -0.93065488 Ha
+#     Iteration = 20,  Energy = -0.97890496 Ha
+#     Iteration = 30,  Energy = -0.96639933 Ha
+#     Iteration = 40,  Energy = -0.96915750 Ha
+#     Iteration = 50,  Energy = -0.96290227 Ha
+#     Iteration = 60,  Energy = -0.98274165 Ha
+#     Iteration = 70,  Energy = -0.98002812 Ha
+#     Iteration = 80,  Energy = -0.98027459 Ha
+#     Iteration = 90,  Energy = -0.99295116 Ha
+#     Iteration = 100,  Energy = -0.96745352 Ha
+#     Iteration = 110,  Energy = -0.96522842 Ha
+#     Iteration = 120,  Energy = -0.98482781 Ha
+#     Iteration = 130,  Energy = -0.98701641 Ha
+#     Iteration = 140,  Energy = -0.97656477 Ha
+#     Iteration = 150,  Energy = -0.98735587 Ha
+#     Iteration = 160,  Energy = -0.98969587 Ha
+#     Iteration = 170,  Energy = -0.96972110 Ha
+#     Iteration = 180,  Energy = -0.98354804 Ha
+#     Iteration = 190,  Energy = -0.96640637 Ha
+#     Iteration = 200,  Energy = -0.98526135 Ha
 #
-#     Final estimated value of the ground-state energy = -0.93208561 Ha
-#     Accuracy with respect to the true energy: 0.20410384 Ha
+#     Final estimated value of the ground-state energy = -0.98134253 Ha
+#     Accuracy with respect to the true energy: 0.15484692 Ha
 #
 
 plt.figure(figsize=(10, 6))
