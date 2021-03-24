@@ -404,9 +404,7 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 # to optimize a real chemical system, that of the hydrogen molecule :math:`H_2`.
 # This molecule was studied previously in the `introductory variational quantum
 # eigensolver (VQE) demo </demos/tutorial_vqe>`_, and so we will reuse some of
-# that machinery here to set up the problem.
-#
-# We'll start by loading up the :math:`H_2` Hamiltonian and taking a look.
+# that machinery below to set up the problem.
 #
 
 from pennylane import qchem
@@ -416,17 +414,7 @@ name = "h2"
 
 h2_ham, num_qubits = qchem.molecular_hamiltonian(name, geometry)
 
-##############################################################################
-#
-# This Hamiltonian uses 4 qubits and contains 15 terms. The ground state energy
-# of :math:`H_2` is :math:`-1.136189454088` Hartree. As per the original demo, this
-# ground state energy can be found through the VQE procedure using the following
-# variational ansatz:
-#
-# .. figure:: ../demonstrations/spsa/h2_ansatz.svg
-#     :align: center
-#     :width: 40%
-
+# Variational ansatz for H_2 - see Intro VQE demo for more details 
 def circuit(params, wires):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
     for i in wires:
@@ -437,145 +425,19 @@ def circuit(params, wires):
 
 ##############################################################################
 #
-# Let's first approach this problem using gradient descent. We'll run the VQE
-# with a cost function that computes the expectation value of each Hamiltonian
-# term after running the ansatz circuit. We'll also set the maximum number of
-# gradient descent iterations to 20.
+# The :math:`H_2` Hamiltonian uses 4 qubits, contains 15 terms, and has a ground
+# state energy of :math:`-1.136189454088` Hartree.
 #
-# To set the hyperparameters, we refer back to the `intro VQE demo
-# </demos/tutorial_vqe>`_, which specifies a random seed to choose variational
-# parameters that will converge well. It is common to have to run the VQE
-# multiple times, with different sets of initial parameters, to ensure
-# convergence. If you try out the code yourself, you'll find that there is a
-# local minimum around :math:`-0.47` Hartree that the gradient descent
-# optimizer might get stuck in. The initial parameters used below are known to
-# converge to the true minimum. Furthermore, a grid search was performed to
-# find the step size which yielded the most accurate result, with the fewest
-# iterations.
-
-# Initialize the optimizer - optimal step size was found through a grid search
-opt = qml.GradientDescentOptimizer(stepsize=2.2)
-max_iterations = 20
-
-# Cost function for VQE
-cost = qml.ExpvalCost(circuit, h2_ham, dev_sampler)
-
-# Initialize parameters and compute initial energy
-np.random.seed(0)
-init_params = np.random.normal(0, np.pi, (num_qubits, 3))
-params = init_params.copy()
-
-h2_grad_device_executions = [0]
-h2_grad_energies = []
-
-dev_sampler._num_executions = 0
-
-for n in range(max_iterations):
-    params, energy = opt.step_and_cost(cost, params)
-
-    if n % 5 == 0:
-        print(f"Iteration = {n},  Energy = {energy:.8f} Ha")
-
-    h2_grad_device_executions.append(dev_sampler.num_executions)
-    h2_grad_energies.append(energy)
-
-# Append the final cost
-h2_grad_energies.append(cost(params))
-
-true_energy = -1.136189454088
-
-print()
-print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
-print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha")
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#     Iteration = 0,  Energy = -0.80509768 Ha
-#     Iteration = 5,  Energy = -1.12506107 Ha
-#     Iteration = 10,  Energy = -1.13597945 Ha
-#     Iteration = 15,  Energy = -1.13459302 Ha
-#
-#     Final estimated value of the ground-state energy = -1.13259650 Ha
-#     Accuracy with respect to the true energy: 0.00359295 Ha
-#
-
-##############################################################################
-#
-# Let's plot how our optimizer fares over time.
-
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(10, 6))
-plt.plot(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
-
-plt.xticks(fontsize=13)
-plt.yticks(fontsize=13)
-plt.xlabel("Device executions", fontsize=14)
-plt.ylabel("Energy (Ha)", fontsize=14)
-plt.grid()
-
-plt.axhline(y=true_energy, color="black", linestyle="dashed", label="True energy")
-
-plt.legend(fontsize=14)
-
-plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
-
-##############################################################################
-#
-# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots.png
-#     :align: center
-#     :width: 90%
-#
-
-##############################################################################
-#
-# We can see that as the optimization progresses, we approach the true value.
-# However, due to shot noise it bounces around the optimum.
-#
-# Of interest now are the number of device executions. Gradients need
-# to be computed for each of the 4 qubit rotations with 3 parameters. The
-# gradient of each parameter requires 2 evaluations, and this must be done over
-# all 15 terms. Factoring in the number of iteration steps (20), we estimate the
-# total number of device executions as follows:
-#
-max_dev_execs = params.size * len(h2_ham.terms[0]) * 2 * max_iterations
-print(f"Expected device executions = {max_dev_execs}")
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#     Expected device executions = 7200
-
-##############################################################################
-#
-# Note from the plot that the total number of executions is actually less than
-# this. This is because PennyLane is clever about taking the gradient, and will
-# not do so in cases where there is no dependence on the parameters. For example,
-# no gradients need to be computed for the Hamiltonian term that is simply `I`,
-# and there may be shortcuts for other Pauli terms as well.
-#
-# Gradient descent on simulated hardware
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# Our next step will be to run the same VQE simulation on a simulated version
-# of the Melbourne hardware. The entire process and cost function remain the
-# same; we'll simply swap out the device.
+# Since SPSA is robust to noise, let's see how it fares compared to gradient
+# descent when run on noisy hardware. For this, we will set up and use a simulated
+# version of IBM Q's Melbourne hardware.
 #
 
 from qiskit import IBMQ
 from qiskit.providers.aer import noise
 
 # Note: you will need to be authenticated to IBMQ to run the following code.
-# Do not run the simulation on this device, as it will send it to a real hardware
+# Do not run the simulation on this device, as it will send it to real hardware
 dev_melbourne = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne")
 noise_model = noise.NoiseModel.from_backend(dev_melbourne.backend.properties())
 dev_noisy = qml.device(
@@ -586,11 +448,18 @@ dev_noisy = qml.device(
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
 cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
 
+# This random seed was used in the original VQE demo and is known to allow the
+# algorithm to converge to the global minimum.
+np.random.seed(0)
+init_params = np.random.normal(0, np.pi, (num_qubits, 3))
 params = init_params.copy()
 
 h2_grad_device_executions_melbourne = [0]
 h2_grad_energies_melbourne = []
 
+max_iterations = 20
+
+# Run the gradient descent algorithm
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
 
@@ -601,6 +470,8 @@ for n in range(max_iterations):
     h2_grad_energies_melbourne.append(energy)
 
 h2_grad_energies_melbourne.append(cost(params))
+
+true_energy = -1.136189454088
 
 print()
 print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
@@ -624,7 +495,6 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 
 plt.figure(figsize=(10, 6))
 
-plt.scatter(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
 plt.scatter(
     h2_grad_device_executions_melbourne,
     h2_grad_energies_melbourne,
@@ -649,16 +519,14 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 #     :align: center
 #     :width: 90%
 #
-# We see a similar trend, however on the noisy hardware, the energy never quite
-# reaches its true value, no matter how many iterations are used. In order to
-# reach the true value, we would have to incorporate error mitigation techniques.
+# On noisy hardware, the energy never quite reaches its true value, no matter
+# how many iterations are used. In order to reach the true value, we would have
+# to incorporate error mitigation techniques.
 #
-
-##############################################################################
 # VQE with SPSA
 # ^^^^^^^^^^^^^
 #
-# Finally, we will perform the same experiment using SPSA instead of the VQE.
+# Now let's perform the same experiment using SPSA instead of the VQE.
 # SPSA should use only 2 device executions per term in the expectation value.
 # Since there are 15 terms, and 200 iterations, we expect 6000 total device
 # executions.
@@ -735,7 +603,6 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 
 plt.figure(figsize=(10, 6))
 
-plt.plot(h2_grad_device_executions, h2_grad_energies, label="Gradient descent")
 plt.plot(h2_grad_device_executions_melbourne, h2_grad_energies_melbourne, label="Gradient descent, Melbourne sim.")
 plt.plot(h2_spsa_device_executions_melbourne, h2_spsa_energies_melbourne, label="SPSA, Melbourne sim.")
 
