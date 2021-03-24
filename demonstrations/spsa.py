@@ -241,13 +241,13 @@ def callback_fn(xk):
 #
 # With stochastic approximation, specifying such hyperparameters significantly
 # influences the convergence of the optimization for a given problem. Although
-# there is no universal recipe for selecting these values (as they are greatly
-# dependent on the specific problem), [#spall_implementation]_ includes
+# there is no universal recipe for selecting these values (as they depend
+# strongly on the specific problem), [#spall_implementation]_ includes
 # guidelines for the selection. In our case, the initial values for :math:`c`
 # and :math:`a` were selected as a result of a grid search to ensure a fast
-# convergence.
-# We further note that apart from :math:`c` and :math:`a`, there are further
-# coefficients that are initialized in the ``noisyopt`` package using the
+# convergence.  We further note that apart from :math:`c` and :math:`a`, there
+# are further coefficients that are initialized in the ``noisyopt`` package
+# using the
 # previously mentioned guidelines.
 #
 # Our cost function does not take a seed as a keyword argument (which would be
