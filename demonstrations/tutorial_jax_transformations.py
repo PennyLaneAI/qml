@@ -29,7 +29,7 @@ import jax
 import jax.numpy as jnp
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=2, shots=None)
+dev = qml.device("default.qubit", wires=2, analytic=True)
 
 ##############################################################################
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
