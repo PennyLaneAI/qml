@@ -43,11 +43,11 @@ derivative computation will involve two quantum circuit evaluations with a
 positive and a negative shift in the parameter values.
 
 As there are two circuit evaluations for each free parameter, the number of
-overall quantum circuit executions for computing a quantum gradient scales
-linearly with the number of free parameters, i.e., :math:`O(p)` with :math:`p` being
-the number of free parameters. This scaling can be very costly for optimization
-tasks with many free parameters. For the overall optimization this scaling means
-we need :math:`O(pn)` quantum circuit evaluations, where :math:`n` is the number of
+overall quantum circuit executions for computing a quantum gradient is
+:math:`O(p)` as it scales linearly with the number of free parameters
+:math:`p`. This scaling can be very costly for optimization tasks with many
+free parameters.  For the overall optimization this scaling means we need
+:math:`O(pn)` quantum circuit evaluations, where :math:`n` is the number of
 optimization steps taken.
 
 Fortunately, there are certain optimization techniques that offer an
