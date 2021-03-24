@@ -172,7 +172,7 @@ import numpy as np
 num_wires = 4
 num_layers = 5
 
-dev_sampler = qml.device("qiskit.aer", wires=num_wires, shots=1000)
+dev_sampler_spsa = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We seed so that we can simulate the same circuit every time.
@@ -180,7 +180,6 @@ np.random.seed(50)
 
 all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
 
-@qml.qnode(dev_sampler)
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
     return qml.expval(all_pauliz_tensor_prod)
@@ -193,10 +192,13 @@ def circuit(params):
 flat_shape = num_layers * num_wires * 3
 init_params = qml.init.strong_ent_layers_normal(
     n_wires=num_wires, n_layers=num_layers
-).reshape(flat_shape)
+)
+init_params_spsa = init_params.reshape(flat_shape)
 
-def cost(params):
-    return circuit(params.reshape(num_layers, num_wires, 3))
+qnode_spsa = qml.QNode(circuit, dev_sampler_spsa)
+
+def cost_spsa(params):
+    return qnode_spsa(params.reshape(num_layers, num_wires, 3))
 
 ##############################################################################
 # Once we have defined each piece of the optimization, there's only one
@@ -212,17 +214,16 @@ from noisyopt import minimizeSPSA
 niter_spsa = 200
 
 # Evaluate the initial cost
-cost_store_spsa = [cost(init_params)]
+cost_store_spsa = [cost(init_params_spsa)]
 device_execs_spsa = [0]
-dev_sampler._num_executions = 0
 
 def callback_fn(xk):
     cost_val = cost(xk)
     cost_store_spsa.append(cost_val)
 
     # We've evaluated the cost function, let's make up for that
-    dev_sampler._num_executions -= 1
-    device_execs_spsa.append(dev_sampler.num_executions)
+    num_executions = dev_sampler_spsa.num_executions/2
+    device_execs_spsa.append(num_executions)
 
     iteration_num = len(cost_store_spsa)
     if iteration_num % 10 == 0:
@@ -255,7 +256,7 @@ def callback_fn(xk):
 #
 res = minimizeSPSA(
     cost,
-    x0=init_params.copy(),
+    x0=init_params_spsa.copy(),
     niter=niter_spsa,
     paired=False,
     c=0.15,
@@ -299,24 +300,28 @@ res = minimizeSPSA(
 
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
 
+# Create a device, qnode and cost function specific to gradient descent
+dev_sampler_gd = qml.device("qiskit.aer", wires=num_wires, shots=1000)
+qnode_gd = qml.QNode(circuit, dev_sampler_gd)
+
+def cost_gd(params):
+    return qnode_gd(params)
+
 steps = 20
 params = init_params.copy()
 
 device_execs_grad = [0]
 cost_store_grad = []
 
-# Reset the number of executions of the device
-dev_sampler._num_executions = 0
-
 for k in range(steps):
-    params, val = opt.step_and_cost(cost, params)
-    device_execs_grad.append(dev_sampler.num_executions)
+    params, val = opt.step_and_cost(cost_gd, params)
+    device_execs_grad.append(dev_sampler_gd.num_executions)
     cost_store_grad.append(val)
     print(f"Iteration = {k}, Cost = {val}")
 
 # The step_and_cost function gives us the cost at the previous step, so to find
 # the cost at the final parameter values we have to compute it manually
-cost_store_grad.append(cost(params))
+cost_store_grad.append(cost_gd(params))
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
