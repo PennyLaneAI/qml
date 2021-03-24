@@ -412,21 +412,9 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 from pennylane import qchem
 
 geometry = "h2.xyz"
-charge = 0
-multiplicity = 1
-basis_set = "sto-3g"
 name = "h2"
 
-h2_ham, num_qubits = qchem.molecular_hamiltonian(
-    name,
-    geometry,
-    charge=charge,
-    mult=multiplicity,
-    basis=basis_set,
-    active_electrons=2,
-    active_orbitals=2,
-    mapping="jordan_wigner",
-)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(name, geometry)
 
 ##############################################################################
 #
