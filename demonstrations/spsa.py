@@ -70,12 +70,13 @@ Simultaneous perturbation stochastic approximation (SPSA)
 
 SPSA is a general method for minimizing differentiable multivariate functions.
 It is particularly useful for functions for which evaluating the gradient is not
-possible, or too resource intensive. SPSA provides a stochastic method for approximating the gradient of a
-multivariate differentiable cost function. To accomplish this the cost function
-is evaluated twice using perturbed parameter vectors: every component of the
-original parameter vector is simultaneously shifted with a randomly generated
-value. This is in contrast to finite-differences methods where for each
-evaluation only one component of the parameter vector is shifted at a time.
+possible, or too resource intensive. SPSA provides a stochastic method for
+approximating the gradient of a multivariate differentiable cost function. To
+accomplish this the cost function is evaluated twice using perturbed parameter
+vectors: every component of the original parameter vector is simultaneously
+shifted with a randomly generated value. This is in contrast to
+finite-differences methods where for each evaluation only one component of the
+parameter vector is shifted at a time.
 
 Similar to gradient-based approaches such as gradient descent, SPSA is an
 iterative optimization algorithm. Let's consider a differentiable cost function
@@ -92,9 +93,10 @@ parameter iterates can be obtained as
 
 .. math:: \hat{\theta}_{k+1} = \hat{\theta}_{k} - a_{k}\hat{g}_{k}(\hat{\theta}_{k}),
 
-where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(u) = \frac{
-\partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}` based on
-prior measurements of the cost function, and :math:`a_{k}` is a positive number.
+where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(\theta) =
+\frac{ \partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}`
+based on prior measurements of the cost function, and :math:`a_{k}` is a
+positive number. [#spall_overview]_
 
 One of the advantages of SPSA is that it is robust to any noise that may occur
 when measuring the function :math:`L`. Therefore, let's consider the function
