@@ -227,7 +227,7 @@ def callback_fn(xk):
 
     iteration_num = len(cost_store_spsa)
     if iteration_num % 10 == 0:
-        print(f"Iteration = {iteration_num}, Cost = {cost_val}")
+        print(f"Iteration = {iteration_num}, Number of device executions = {num_executions}, Cost = {cost_val}")
 
 ##############################################################################
 # Choosing the hyperparameters
@@ -317,7 +317,7 @@ for k in range(steps):
     params, val = opt.step_and_cost(cost_gd, params)
     device_execs_grad.append(dev_sampler_gd.num_executions)
     cost_store_grad.append(val)
-    print(f"Iteration = {k}, Cost = {val}")
+    print(f"Iteration = {k}, Number of device executions = {dev_sampler_gd.num_executions}, Cost = {val}")
 
 # The step_and_cost function gives us the cost at the previous step, so to find
 # the cost at the final parameter values we have to compute it manually
@@ -467,12 +467,11 @@ max_iterations = 20
 # Run the gradient descent algorithm
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
-
-    if n % 5 == 0:
-        print(f"Iteration = {n},  Energy = {energy:.8f} Ha")
-
     h2_grad_device_executions_melbourne.append(dev_noisy.num_executions)
     h2_grad_energies_melbourne.append(energy)
+
+    if n % 5 == 0:
+        print(f"Iteration = {n}, Number of device executions = {dev_noisy.num_executions},  Energy = {energy:.8f} Ha")
 
 h2_grad_energies_melbourne.append(cost(params))
 
@@ -567,7 +566,7 @@ def callback_fn(xk):
 
     iteration_num = len(h2_spsa_energies_melbourne)
     if iteration_num % 10 == 0:
-        print(f"Iteration = {iteration_num},  Energy = {cost_val:.8f} Ha")
+        print(f"Iteration = {iteration_num}, Number of device executions = {num_executions},  Energy = {cost_val:.8f} Ha")
 
 res = minimizeSPSA(
     # Hyperparameters chosen based on grid search
