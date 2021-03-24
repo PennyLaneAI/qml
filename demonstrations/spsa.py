@@ -247,7 +247,7 @@ def callback_fn(xk):
 # and :math:`a` were selected as a result of a grid search to ensure a fast
 # convergence.
 # We further note that apart from :math:`c` and :math:`a`, there are further
-# coefficients that are initialized in the noisyopt package using the
+# coefficients that are initialized in the ``noisyopt`` package using the
 # previously mentioned guidelines.
 #
 # Our cost function does not take a seed as a keyword argument (which would be
