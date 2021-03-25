@@ -178,9 +178,7 @@ dev_sampler_spsa = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 # We seed so that we can simulate the same circuit every time.
 np.random.seed(50)
 
-all_pauliz_tensor_prod = qml.operation.Tensor(
-    *[qml.PauliZ(i) for i in range(num_wires)]
-)
+all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
 
 
 def circuit(params):
