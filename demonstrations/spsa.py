@@ -153,7 +153,7 @@ compute statistics like expectation values.
 
 .. note::
 
-    Just with other PennyLane devices, the number of samples taken for a device
+    Just as with other PennyLane devices, the number of samples taken for a device
     execution can be specified using the ``shots`` keyword argument of the
     device.
 
