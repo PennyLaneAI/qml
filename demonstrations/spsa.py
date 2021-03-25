@@ -214,15 +214,15 @@ from noisyopt import minimizeSPSA
 niter_spsa = 200
 
 # Evaluate the initial cost
-cost_store_spsa = [cost(init_params_spsa)]
+cost_store_spsa = [cost_spsa(init_params_spsa)]
 device_execs_spsa = [0]
 
 def callback_fn(xk):
-    cost_val = cost(xk)
+    cost_val = cost_spsa(xk)
     cost_store_spsa.append(cost_val)
 
     # We've evaluated the cost function, let's make up for that
-    num_executions = dev_sampler_spsa.num_executions/2
+    num_executions = int(dev_sampler_spsa.num_executions/2)
     device_execs_spsa.append(num_executions)
 
     iteration_num = len(cost_store_spsa)
@@ -255,7 +255,7 @@ def callback_fn(xk):
 # the default behaviour for ``minimizeSPSA``), so we set ``paired=False``.
 #
 res = minimizeSPSA(
-    cost,
+    cost_spsa,
     x0=init_params_spsa.copy(),
     niter=niter_spsa,
     paired=False,
@@ -271,26 +271,26 @@ res = minimizeSPSA(
 #
 #  .. code-block:: none
 #
-#     Iteration = 10, Cost = 0.09
-#     Iteration = 20, Cost = -0.638
-#     Iteration = 30, Cost = -0.842
-#     Iteration = 40, Cost = -0.926
-#     Iteration = 50, Cost = -0.938
-#     Iteration = 60, Cost = -0.94
-#     Iteration = 70, Cost = -0.962
-#     Iteration = 80, Cost = -0.938
-#     Iteration = 90, Cost = -0.946
-#     Iteration = 100, Cost = -0.966
-#     Iteration = 110, Cost = -0.954
-#     Iteration = 120, Cost = -0.964
-#     Iteration = 130, Cost = -0.952
-#     Iteration = 140, Cost = -0.958
-#     Iteration = 150, Cost = -0.968
-#     Iteration = 160, Cost = -0.948
-#     Iteration = 170, Cost = -0.974
-#     Iteration = 180, Cost = -0.962
-#     Iteration = 190, Cost = -0.988
-#     Iteration = 200, Cost = -0.964
+#     Iteration = 10, Number of device executions = 14, Cost = 0.09
+#     Iteration = 20, Number of device executions = 29, Cost = -0.638
+#     Iteration = 30, Number of device executions = 44, Cost = -0.842
+#     Iteration = 40, Number of device executions = 59, Cost = -0.926
+#     Iteration = 50, Number of device executions = 74, Cost = -0.938
+#     Iteration = 60, Number of device executions = 89, Cost = -0.94
+#     Iteration = 70, Number of device executions = 104, Cost = -0.962
+#     Iteration = 80, Number of device executions = 119, Cost = -0.938
+#     Iteration = 90, Number of device executions = 134, Cost = -0.946
+#     Iteration = 100, Number of device executions = 149, Cost = -0.966
+#     Iteration = 110, Number of device executions = 164, Cost = -0.954
+#     Iteration = 120, Number of device executions = 179, Cost = -0.964
+#     Iteration = 130, Number of device executions = 194, Cost = -0.952
+#     Iteration = 140, Number of device executions = 209, Cost = -0.958
+#     Iteration = 150, Number of device executions = 224, Cost = -0.968
+#     Iteration = 160, Number of device executions = 239, Cost = -0.948
+#     Iteration = 170, Number of device executions = 254, Cost = -0.974
+#     Iteration = 180, Number of device executions = 269, Cost = -0.962
+#     Iteration = 190, Number of device executions = 284, Cost = -0.988
+#     Iteration = 200, Number of device executions = 299, Cost = -0.964
 
 ##############################################################################
 #
@@ -548,8 +548,7 @@ def wrapped_cost(params):
 num_qubits = 4
 num_params = 3
 
-params = init_params.copy()
-params = params.reshape(num_qubits * num_params)
+params = init_params.copy().reshape(num_qubits * num_params)
 
 h2_spsa_device_executions_melbourne = [0]
 h2_spsa_energies_melbourne = [wrapped_cost(params)]
@@ -561,7 +560,7 @@ def callback_fn(xk):
     # TODO: update comment if verified
     # For this case, every term in the Hamiltonian counts towards evaluating the
     # cost function, so to take this into account we need to subtract the number of terms
-    num_executions = dev_noisy_spsa.num_executions/2
+    num_executions = int(dev_noisy_spsa.num_executions/2)
     h2_spsa_device_executions_melbourne.append(num_executions)
 
     iteration_num = len(h2_spsa_energies_melbourne)
