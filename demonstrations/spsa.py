@@ -96,7 +96,7 @@ parameter iterates can be obtained as
 where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(\theta) =
 \frac{ \partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}`
 based on prior measurements of the cost function, and :math:`a_{k}` is a
-positive number. [#spall_overview]_
+positive number [#spall_overview]_.
 
 One of the advantages of SPSA is that it is robust to any noise that may occur
 when measuring the function :math:`L`. Therefore, let's consider the function
