@@ -206,7 +206,7 @@ def cost_spsa(params):
 
 ##############################################################################
 # Once we have defined each piece of the optimization, there's only one
-# remaining component required for the optimization: the *SPSA optimizer*.
+# remaining component required: the *SPSA optimizer*.
 # We'll use the SPSA optimizer provided by the ``noisyopt`` package. Once
 # imported, we can initialize parts of the optimization such as the number of
 # iterations, a collection to store the cost values, and a callback function.
