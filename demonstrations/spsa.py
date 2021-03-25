@@ -16,7 +16,7 @@ Optimization using SPSA
 *Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 19 Mar 2021.*
 
 In this tutorial, we investigate using a gradient-free optimizer called
-Simultaneous Perturbation Stochastic Approximation (SPSA) to optimize quantum
+the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
 circuits. SPSA is a technique that involves approximating the gradient of a
 quantum circuit without having to compute it.
 
