@@ -525,7 +525,7 @@ print(
 
 plt.figure(figsize=(10, 6))
 
-plt.scatter(
+plt.plot(
     h2_grad_device_executions_melbourne,
     h2_grad_energies_melbourne,
     label="Gradient descent, Melbourne sim.",
