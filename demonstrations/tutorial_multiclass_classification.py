@@ -98,10 +98,11 @@ def layer(W):
 # sample belongs to class 1 or not, and so on. The circuit architecture for all
 # nodes are the same. We use the PyTorch interface for the QNodes.
 # Data is embedded in each circuit using amplitude embedding.
+#
 # .. note::
 #     For demonstration purposes we are using a very simple circuit here. 
 #     You may find that other choices, for example more 
-#     elaborate measurements, increase  the power of the classifier.      
+#     elaborate measurements, increase the power of the classifier.      
 
 
 def circuit(weights, feat=None):
