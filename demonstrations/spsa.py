@@ -330,26 +330,26 @@ cost_store_grad.append(cost_gd(params))
 #
 #  .. code-block:: none
 #
-#     Iteration = 0, Cost = 0.904
-#     Iteration = 1, Cost = 0.758
-#     Iteration = 2, Cost = 0.284
-#     Iteration = 3, Cost = -0.416
-#     Iteration = 4, Cost = -0.836
-#     Iteration = 5, Cost = -0.964
-#     Iteration = 6, Cost = -0.992
-#     Iteration = 7, Cost = -0.994
-#     Iteration = 8, Cost = -0.992
-#     Iteration = 9, Cost = -0.994
-#     Iteration = 10, Cost = -0.998
-#     Iteration = 11, Cost = -0.992
-#     Iteration = 12, Cost = -0.994
-#     Iteration = 13, Cost = -1.0
-#     Iteration = 14, Cost = -0.996
-#     Iteration = 15, Cost = -0.996
-#     Iteration = 16, Cost = -0.998
-#     Iteration = 17, Cost = -0.996
-#     Iteration = 18, Cost = -0.996
-#     Iteration = 19, Cost = -0.996
+#     Iteration = 0, Number of device executions = 121, Cost = 0.904
+#     Iteration = 1, Number of device executions = 242, Cost = 0.758
+#     Iteration = 2, Number of device executions = 363, Cost = 0.284
+#     Iteration = 3, Number of device executions = 484, Cost = -0.416
+#     Iteration = 4, Number of device executions = 605, Cost = -0.836
+#     Iteration = 5, Number of device executions = 726, Cost = -0.964
+#     Iteration = 6, Number of device executions = 847, Cost = -0.992
+#     Iteration = 7, Number of device executions = 968, Cost = -0.994
+#     Iteration = 8, Number of device executions = 1089, Cost = -0.992
+#     Iteration = 9, Number of device executions = 1210, Cost = -0.994
+#     Iteration = 10, Number of device executions = 1331, Cost = -0.998
+#     Iteration = 11, Number of device executions = 1452, Cost = -0.992
+#     Iteration = 12, Number of device executions = 1573, Cost = -0.994
+#     Iteration = 13, Number of device executions = 1694, Cost = -1.0
+#     Iteration = 14, Number of device executions = 1815, Cost = -0.996
+#     Iteration = 15, Number of device executions = 1936, Cost = -0.996
+#     Iteration = 16, Number of device executions = 2057, Cost = -0.998
+#     Iteration = 17, Number of device executions = 2178, Cost = -0.996
+#     Iteration = 18, Number of device executions = 2299, Cost = -0.996
+#     Iteration = 19, Number of device executions = 2420, Cost = -0.996
 #
 
 ##############################################################################
@@ -488,10 +488,10 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 0,  Energy = -0.66345346 Ha
-#     Iteration = 5,  Energy = -0.99124272 Ha
-#     Iteration = 10,  Energy = -1.00105536 Ha
-#     Iteration = 15,  Energy = -0.99592924 Ha
+#     Iteration = 0, Number of device executions = 333,  Energy = -0.66345346 Ha
+#     Iteration = 5, Number of device executions = 1998,  Energy = -0.99124272 Ha
+#     Iteration = 10, Number of device executions = 3663,  Energy = -1.00105536 Ha
+#     Iteration = 15, Number of device executions = 5328,  Energy = -0.99592924 Ha
 #
 #     Final estimated value of the ground-state energy = -0.98134253 Ha
 #     Accuracy with respect to the true energy: 0.15484692 Ha
@@ -583,26 +583,26 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 #
 #  .. code-block:: none
 #
-#     Iteration = 10,  Energy = -0.93065488 Ha
-#     Iteration = 20,  Energy = -0.97890496 Ha
-#     Iteration = 30,  Energy = -0.96639933 Ha
-#     Iteration = 40,  Energy = -0.96915750 Ha
-#     Iteration = 50,  Energy = -0.96290227 Ha
-#     Iteration = 60,  Energy = -0.98274165 Ha
-#     Iteration = 70,  Energy = -0.98002812 Ha
-#     Iteration = 80,  Energy = -0.98027459 Ha
-#     Iteration = 90,  Energy = -0.99295116 Ha
-#     Iteration = 100,  Energy = -0.96745352 Ha
-#     Iteration = 110,  Energy = -0.96522842 Ha
-#     Iteration = 120,  Energy = -0.98482781 Ha
-#     Iteration = 130,  Energy = -0.98701641 Ha
-#     Iteration = 140,  Energy = -0.97656477 Ha
-#     Iteration = 150,  Energy = -0.98735587 Ha
-#     Iteration = 160,  Energy = -0.98969587 Ha
-#     Iteration = 170,  Energy = -0.96972110 Ha
-#     Iteration = 180,  Energy = -0.98354804 Ha
-#     Iteration = 190,  Energy = -0.96640637 Ha
-#     Iteration = 200,  Energy = -0.98526135 Ha
+#     Iteration = 10, Number of device executions = 210,  Energy = -0.93065488 Ha
+#     Iteration = 20, Number of device executions = 435,  Energy = -0.97890496 Ha
+#     Iteration = 30, Number of device executions = 660,  Energy = -0.96639933 Ha
+#     Iteration = 40, Number of device executions = 885,  Energy = -0.96915750 Ha
+#     Iteration = 50, Number of device executions = 1110,  Energy = -0.96290227 Ha
+#     Iteration = 60, Number of device executions = 1335,  Energy = -0.98274165 Ha
+#     Iteration = 70, Number of device executions = 1560,  Energy = -0.98002812 Ha
+#     Iteration = 80, Number of device executions = 1785,  Energy = -0.98027459 Ha
+#     Iteration = 90, Number of device executions = 2010,  Energy = -0.99295116 Ha
+#     Iteration = 100, Number of device executions = 2235,  Energy = -0.96745352 Ha
+#     Iteration = 110, Number of device executions = 2460,  Energy = -0.96522842 Ha
+#     Iteration = 120, Number of device executions = 2685,  Energy = -0.98482781 Ha
+#     Iteration = 130, Number of device executions = 2910,  Energy = -0.98701641 Ha
+#     Iteration = 140, Number of device executions = 3135,  Energy = -0.97656477 Ha
+#     Iteration = 150, Number of device executions = 3360,  Energy = -0.98735587 Ha
+#     Iteration = 160, Number of device executions = 3585,  Energy = -0.98969587 Ha
+#     Iteration = 170, Number of device executions = 3810,  Energy = -0.96972110 Ha
+#     Iteration = 180, Number of device executions = 4035,  Energy = -0.98354804 Ha
+#     Iteration = 190, Number of device executions = 4260,  Energy = -0.96640637 Ha
+#     Iteration = 200, Number of device executions = 4485,  Energy = -0.98526135 Ha
 #
 #     Final estimated value of the ground-state energy = -0.98134253 Ha
 #     Accuracy with respect to the true energy: 0.15484692 Ha
