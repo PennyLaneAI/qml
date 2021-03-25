@@ -306,7 +306,7 @@ res = minimizeSPSA(
 #
 # Now let's perform the same optimization using gradient descent. We set the
 # step size according to a favourable value found after grid search for fast
-# convergence. Note that we also reset the number of executions of the device.
+# convergence. Note that we also create a new device in order to reset the execution count to 0. 
 
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
 
