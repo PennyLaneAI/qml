@@ -247,7 +247,7 @@ def callback_fn(xk):
 # hyperparameters for SPSA: the :math:`c` and :math:`a` coefficients. Recall
 # from above that the :math:`c` values control the amount of random shift when
 # evaluating the cost function, while the :math:`a` coefficients are analogous to a learning
-# rate and affects the degree to which the parameters change at each update
+# rate and affect the degree to which the parameters change at each update
 # step.
 #
 # With stochastic approximation, specifying such hyperparameters significantly
