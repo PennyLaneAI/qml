@@ -372,7 +372,7 @@ cost_store_grad.append(cost_gd(params))
 # SPSA and gradient descent comparison
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# At this point, nothing else remains, but to check which of these approaches did
+# At this point, nothing else remains but to check which of these approaches did
 # better!
 import matplotlib.pyplot as plt
 
