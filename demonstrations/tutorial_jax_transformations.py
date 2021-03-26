@@ -3,23 +3,33 @@ Using JAX with PennyLane
 ========================
 
 .. meta::
-    :property="og:description": Learn how to use JAX with Pennylane.
+    :property="og:description": Learn how to use JAX with PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_images/jax.png
+
+.. related::
+
+    tutorial_qubit_rotation Basic Qubit Rotation Tutorial
+    tutorial_vqt Variation Quantum Thermalizer
 
 *Author: PennyLane dev team. Posted: XX Mar 2021. Last updated: XX Mar 2021.*
 
-JAX is an incredibly powerful deep learning library that has been gaining traction in
-the deep learning community. While JAX was originally designed for classical machine learning (ML),
-many of its transformations are also useful for quantum machine learning (QML), 
-and can be used directly with Pennylane.
+JAX is an incredibly powerful scientific computing library that has been gaining traction in
+both the physics and deep learning community. While JAX was originally designed for 
+classical machine learning (ML), many of its transformations are also useful 
+for quantum machine learning (QML), and can be used directly with PennyLane.
 """
-
 ##############################################################################
-# JAX is a relatively new and very useful deep learning library from Google, and its
-# main selling point are its function transformations. Writing functions 
-# In this tutorial, we'll go over the many JAX transfromations and show how you can
+# .. figure:: ../demonstrations/jax_logo/jax.png
+#     :width: 50%
+#     :align: center
+#
+# JAX's main selling point is its function transformations, and nearly all of 
+# them can be used in quantum computing contexts.
+# 
+# In this tutorial, we'll go over the many JAX transformations and show how you can
 # use them to build and optimize quantum circuits. We'll show examples of how to 
-# do gradient descent with ``jax.grad``, run quantum circits in parallel
-# using ``jax.vmap``, compile and optimize simualtions with ``jax.jit``
+# do gradient descent with ``jax.grad``, run quantum circuits in parallel
+# using ``jax.vmap``, compile and optimize simulations with ``jax.jit``
 # and control and seed the random nature of quantum computer simulations
 # with ``jax.random``. By the end of this tutorial you should feel just as comfortable
 # transforming quantum computing programs with JAX as you do transforming your 
@@ -56,7 +66,8 @@ def circuit(param):
     qml.CNOT(wires=[0, 1])
 
     # The expval here will be the "cost function" we try to minimize.
-    # Usually, this would be defined by the problem we want to solve.
+    # Usually, this would be defined by the problem we want to solve,
+    # but for this example we'll just use a single PauliZ.
     return qml.expval(qml.PauliZ(0))
 
 
@@ -72,8 +83,7 @@ print(f"Result: {repr(circuit(0.123))}")
 # Let's start with a simple one. The code we wrote above is entirely differentiable, so
 # let's calculate its gradient.
 
-print()
-print("Gradien Descent")
+print("\nGradien Descent")
 print("---------------")
 grad_circuit = jax.grad(circuit)
 print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2):0.3f}")
@@ -112,10 +122,7 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
 # to make running batches of circuits much easier.
 
-print()
-print()
-
-print("Batching and Evolutionary Strategies")
+print("\n\nBatching and Evolutionary Strategies")
 print("------------------------------------")
 
 # Create a vectorized version of our original circuit.
@@ -148,9 +155,11 @@ print(f"Initial cost: {circuit(mean):0.3f}")
 for _ in range(200):
     # In this line, we run all 100 circuits in parallel.
     costs = vcircuit(params)
-    weights = jnp.exp(-costs) # Use exp(-x) here since the costs could be negative.
 
+    # Use exp(-x) here since the costs could be negative.
+    weights = jnp.exp(-costs) 
     mean = jnp.average(params, weights=weights)
+
     # The variance should decrease as we converge to a solution.
     var = var * 0.97
     # Split the JAX key.
@@ -163,12 +172,12 @@ print(f"Final cost: {circuit(mean):0.3f}")
 
 #############################################################################
 # How to use jax.jit: Compiling Circuit Execution
-# -------------------------------------------
+# -----------------------------------------------
 #
 # JAX is built on top of XLA, an incredibly powerful numerics library that can 
 # cross compile computations to different hardware, including CPUs, GPUs, etc.
 # When compiling an XLA program, the compiler will do several rounds of optimization
-# passes to enhance the performace of the computation. Because of this compilation overhead,
+# passes to enhance the performance of the computation. Because of this compilation overhead,
 # you'll generally find the first time calling the function to be slow, but all subsequent
 # calls are much, much faster. You'll likely want to do it if you're running
 # the same circuit over and over but with different parameters.
@@ -176,10 +185,7 @@ print(f"Final cost: {circuit(mean):0.3f}")
 # To compile your quantum simulation to XLA, you can use the ``jax.jit`` 
 # `transfrom. <https://jax.readthedocs.io/en/latest/jax.html?highlight=jit#jax.jit>`__
 
-print()
-print() 
-
-print("Jit Example")
+print("\n\nJit Example")
 print("-----------")
 
 # Compiling your circuit with JAX is very easy, just add the jax.jit decorator!
@@ -226,12 +232,8 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # when constructing the device. Because of this, if you want to use ``jax.jit`` with randomness,
 # the device construction will have to happen within that jitted method.
 
-print()
-print()
-
-print("Randomness")
+print("\n\nRandomness")
 print("----------")
-
 
 # Let's create our circuit with randomness and compile it with jax.jit.
 @jax.jit
@@ -259,7 +261,7 @@ print(f"key1: {circuit(key1, jnp.pi/2)}")
 print(f"key2: {circuit(key2, jnp.pi/2)}")
 
 ################################################
-# Closing Remarks.
+# Closing Remarks
 # ----------------
 # By now, using JAX with PennyLane should feel very natural. They 
 # extend each other very nicely; JAX with it's power transforms, and PennyLane 
