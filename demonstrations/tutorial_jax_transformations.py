@@ -1,5 +1,5 @@
 r"""
-Using JAX with Pennylane
+Using JAX with PennyLane
 ========================
 
 .. meta::
@@ -8,7 +8,8 @@ Using JAX with Pennylane
 *Author: PennyLane dev team. Posted: XX Mar 2021. Last updated: XX Mar 2021.*
 
 JAX is an incredibly powerful deep learning library that has been gaining traction in
-the deep learning community. While JAX was originally designed for classical ML,
+the deep learning community. While JAX was originally designed for classical machine learning (ML),
+
 many of its transformations are also useful for quantum machine learning (QML), 
 and can be used directly with Pennylane.
 """
@@ -16,24 +17,28 @@ and can be used directly with Pennylane.
 ##############################################################################
 # In this tutorial, we will highlight some ways to use JAX transformations with Pennylane
 #
-# If this is your first time reading Pennylane code, we recommend going through
+# If this is your first time reading PennyLane code, we recommend going through
+
 # the :doc:`basic tutorial </demos/tutorial_qubit_rotation>`
 # first. It's all in vanilla NumPy, so you should be able to 
 # easily transfer what you learn to JAX when you come back.
 #
 # With that said, we begin by importing PennyLane, JAX and the JAX-provided version of NumPy and
-# set up a 2-wire qubit device for computations. We'll be using the ``default.qubit`` device
-# for this tutorial.
+# set up a two-qubit device for computations. We'll be using the ``default.qubit`` device
+
+# for the first part of this tutorial.
+
 
 import jax
 import jax.numpy as jnp
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=2, analytic=True)
+dev = qml.device("default.qubit", wires=2)
+
 
 ##############################################################################
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
-# then evaluates the expectation value of the Pauli Z operator on the first wire.
+# then evaluates the expectation value of the Pauli-Z operator on the first wire.
 
 
 @qml.qnode(dev, interface="jax")
@@ -64,15 +69,15 @@ grad_circuit = jax.grad(circuit)
 print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2)}")
 
 ##############################################################################
-# We can then use this grad_circuit function to optimize the parameter value.
-
+# We can then use this grad_circuit function to optimize the parameter value
+via gradient descent.
 param = 0.123 # Some initial value. 
 
 print(f"Initial param: {param}")
 print(f"Initial cost: {circuit(param)}")
 
 for _ in range(100): # Run for 100 steps.
-    param -= grad_circuit(param) # Gradient decent param.
+    param -= grad_circuit(param) # Gradient-descent update.
 
 print(f"Tuned param: {param}")
 print(f"Tuned cost: {circuit(param)}")
@@ -85,28 +90,31 @@ print(f"Tuned cost: {circuit(param)}")
 # parameters and making some cost function go down, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
 # QML is most useful for learning quantum systems like finding chemical ground states
-# or learning to sample thermal energy states. (LINK TO https://pennylane.ai/qml/demos/tutorial_vqt.html)
+# or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
+
 
 ##############################################################################
-# Batching and Evolutionary Strategies. 
+# Batching and Evolutionary Strategies
+
 # -------------------------------------
 #
 # We just showed how we can use gradient methods to learn a parameter value, 
 # but on real QC hardware, calculating gradients can be really expensive and noisy.
 # Another approach is to use evolutionary strategies (ES) to learn these parameters.
-# Here, we will be using the jax.vmap transform to make running batches of circuits much easier.
+# Here, we will be using the ``jax.vmap`` transform to make running batches of circuits much easier.
 
 # Create a vectorized circuit to execute batches in parallel.
 vcircuit = jax.vmap(circuit)
 
 ##############################################################################
-# Now, we call the vcircuit with multiple parameters at once and get back a
+# Now, we call the ``vcircuit`` with multiple parameters at once and get back a
+
 # batch of expectations.
 
 print(f"Batched result: {vcircuit(jnp.array([1.234, 0.333, -0.971]))}")
 
 ##############################################################################
-# Let's now setup our ES training loop. The idea is pretty simple. First, we
+# Let's now set up our ES training loop. The idea is pretty simple. First, we
 # calculate the expected values of each of our parameters. The cost values
 # then determine the "weight" of that example. The lower the cost, the larger the weight.
 # These batches are then used to generate a new set of parameters. 
@@ -122,7 +130,6 @@ params = jax.random.normal(key, (100,))
 mean = jnp.average(params)
 print(f"Initial value: {mean}")
 print(f"Initial cost: {circuit(mean)}")
-
 
 for _ in range(200):
     # In this line, we run all 100 circuits in parallel.
@@ -145,8 +152,10 @@ print(f"Final cost: {circuit(mean)}")
 # ------------------------------------
 #
 # JAX is built on top of XLA,  an incredibly powerful numerics library that can 
-# cross compile computation to different hardware including CPUs, GPUs, etc.
-# Compiling your JAX programs generally make them significantly faster at the cost of 
+# cross compile computations to different hardware, including CPUs, GPUs, etc.
+
+# Compiling your JAX programs generally makes them significantly faster at the cost of 
+
 # compilation overhead during the first execution.
 # You'll likely want to do it if you're running several thousand optimization loops.
 # 
@@ -164,7 +173,8 @@ print("First run:", circuit(0.123)) # Compile overhead the first time time metho
 print("Second run:", circuit(0.123)) # Much faster every time after!
 
 ##############################################################################
-# Shots and Sampling with JAX.
+# Shots and Sampling with JAX
+
 # ----------------------------
 # 
 # JAX was designed to have experiments be as repeatable as possible. Because of this,
@@ -174,11 +184,14 @@ print("Second run:", circuit(0.123)) # Much faster every time after!
 #
 # We recommend reading up 
 # 
-# Note: This example only applies if you are using jax.jit. Otherwise, we automatically 
+# Note: This example only applies if you are using ``jax.jit``. Otherwise, we automatically 
+
 # seed and reset the random number generator for you on each call.
 #
-# To set the random number generating key, you'll have to pass the jax.random.PRNGKey
-# when constructing the device. Because of this, if you want to use jax.jit with randomness,
+# To set the random number generating key, you'll have to pass the ``jax.random.PRNGKey``
+
+# when constructing the device. Because of this, if you want to use ``jax.jit`` with randomness,
+
 # the device construction will have to happen within that jitted method.
 
 
