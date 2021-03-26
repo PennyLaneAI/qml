@@ -82,7 +82,7 @@ print(f"Result: {repr(circuit(0.123))}")
 #
 # Let's start with a transformation example. The code we wrote above is entirely 
 # differentiable, so let's calculate its gradient with ``jax.grad``.
-print("\nGradien Descent")
+print("\nGradient Descent")
 print("---------------")
 
 # We use jax.grad here to transform our circuit method into once
@@ -180,7 +180,7 @@ print(f"Final cost: {circuit(mean):0.3f}")
 #
 # JAX is built on top of `XLA <https://www.tensorflow.org/xla>`__, a powerful 
 # numerics library that can optimize and cross compile computations to different hardware, 
-# including CPUs, GPUs, etc. JAX can compile it's compitation to XLA via the ``jax.jit`` 
+# including CPUs, GPUs, etc. JAX can compile it's computation to XLA via the ``jax.jit`` 
 # `transform. <https://jax.readthedocs.io/en/latest/jax.html?highlight=jit#jax.jit>`__
 # 
 # When compiling an XLA program, the compiler will do several rounds of optimization
@@ -228,7 +228,7 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
 #
-# To learn more about how jax handles randomness, visit their
+# To learn more about how JAX handles randomness, visit their
 # `documentation site. <https://jax.readthedocs.io/en/latest/jax.random.html>`__
 #
 # Note: This example only applies if you are using ``jax.jit``. Otherwise, PennyLane 
@@ -272,7 +272,7 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 # By now, using JAX with PennyLane should feel very natural. They 
 # extend each other very nicely; JAX with it's power transforms, and PennyLane 
 # with its easy access to quantum computers. We're still in early days of 
-# developement, but we hope to continue to grow our ecosystem around JAX,
+# development, but we hope to continue to grow our ecosystem around JAX,
 # and by extension, JAX into quantum computing and quantum machine learning.
 #
 # The future looks bright for this field, and we're excited to see what you build!
