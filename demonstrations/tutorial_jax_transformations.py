@@ -80,13 +80,17 @@ print(f"Result: {repr(circuit(0.123))}")
 # In fact, when we use the ``default.qubit`` device, the entire computation 
 # is done in JAX, so we can use all of the JAX tools out of the box!
 #
-# Let's start with a simple one. The code we wrote above is entirely differentiable, so
-# let's calculate its gradient.
-
+# Let's start with a transformation example. The code we wrote above is entirely 
+# differentiable, so let's calculate its gradient with ``jax.grad``.
 print("\nGradien Descent")
 print("---------------")
+
+# We use jax.grad here to transform our circuit method into once
+# that calcuates the gradient of the parameter relative to the output.
 grad_circuit = jax.grad(circuit)
 print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2):0.3f}")
+
+
 
 # We can then use this grad_circuit function to optimize the parameter value
 # via gradient descent.
@@ -174,22 +178,24 @@ print(f"Final cost: {circuit(mean):0.3f}")
 # How to use jax.jit: Compiling Circuit Execution
 # -----------------------------------------------
 #
-# JAX is built on top of XLA, an incredibly powerful numerics library that can 
-# cross compile computations to different hardware, including CPUs, GPUs, etc.
+# JAX is built on top of `XLA <https://www.tensorflow.org/xla>`__, a powerful 
+# numerics library that can optimize and cross compile computations to different hardware, 
+# including CPUs, GPUs, etc. JAX can compile it's compitation to XLA via the ``jax.jit`` 
+# `transform. <https://jax.readthedocs.io/en/latest/jax.html?highlight=jit#jax.jit>`__
+# 
 # When compiling an XLA program, the compiler will do several rounds of optimization
 # passes to enhance the performance of the computation. Because of this compilation overhead,
 # you'll generally find the first time calling the function to be slow, but all subsequent
 # calls are much, much faster. You'll likely want to do it if you're running
 # the same circuit over and over but with different parameters.
 # 
-# To compile your quantum simulation to XLA, you can use the ``jax.jit`` 
-# `transfrom. <https://jax.readthedocs.io/en/latest/jax.html?highlight=jit#jax.jit>`__
+# To compile your quantum simulation to XLA, you can use the
 
 print("\n\nJit Example")
 print("-----------")
 
 # Compiling your circuit with JAX is very easy, just add the jax.jit decorator!
-@jax.jit # The decorator can be directly applied to a Qnode.
+@jax.jit # The decorator can be directly applied to a QNode.
 @qml.qnode(dev, interface="jax")
 def circuit(param):
     qml.RX(param, wires=0)
