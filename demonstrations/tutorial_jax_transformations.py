@@ -41,7 +41,7 @@ import jax
 import jax.numpy as jnp
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=2)\
+dev = qml.device("default.qubit", wires=2)
 
 ##############################################################################
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
@@ -75,7 +75,7 @@ print()
 print("Gradien Descent")
 print("---------------")
 grad_circuit = jax.grad(circuit)
-print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2)}")
+print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2):0.3f}")
 
 # We can then use this grad_circuit function to optimize the parameter value
 # via gradient descent.
@@ -103,7 +103,6 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 
 ##############################################################################
 # Batching and Evolutionary Strategies
-
 # -------------------------------------
 #
 # We just showed how we can use gradient methods to learn a parameter value, 
@@ -134,7 +133,7 @@ print(f"Batched result: {batched_results}")
 
 # Needed to do randomness with JAX.
 # For more info on how JAX handles randomness, see
-# https://jax.readthedocs.io/en/latest/jax.random.html
+# `the documentation <https://jax.readthedocs.io/en/latest/jax.random.html>`__
 key = jax.random.PRNGKey(0)
 
 # Generate our first set of samples.
@@ -171,7 +170,7 @@ print(f"Final cost: {circuit(mean):0.3f}")
 # you'll generally find the first time calling the function to be slow, but all subsequent
 # calls are much, much faster. You'll likely want to do it if you're running
 # the same circuit over and over but with different parameters.
-# 
+
 print()
 print() 
 
@@ -210,14 +209,9 @@ print(f"Second run time: {second_time:0.5f} seconds")
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
 #
-# To learn more about how jax handles randomness, visit their documentation site.
-
-
-print()
-print()
-
-print("Randomness")
-print("----------")
+# To learn more about how jax handles randomness, visit their
+# `documentation site. <https://jax.readthedocs.io/en/latest/jax.random.html>`__
+#
 # Note: This example only applies if you are using ``jax.jit``. Otherwise, we automatically 
 # seed and reset the random number generator for you on each call.
 #
@@ -225,12 +219,18 @@ print("----------")
 # when constructing the device. Because of this, if you want to use ``jax.jit`` with randomness,
 # the device construction will have to happen within that jitted method.
 
+print()
+print()
+
+print("Randomness")
+print("----------")
 
 
 # Let's create our circuit with randomness and compile it with jax.jit.
 @jax.jit
 def circuit(key, param):
     # Notice how the device construction now happens within the jitted method.
+    # Also note the added '.jax' to the device path.
     dev = qml.device("default.qubit.jax", wires=2, shots=10, prng_key=key)
 
     # Now we can create our qnode within the circuit function.
