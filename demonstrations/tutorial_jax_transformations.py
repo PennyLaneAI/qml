@@ -58,7 +58,6 @@ dev = qml.device("default.qubit", wires=2)
 # Let's start with a simple example circuit, which generates a two-qubit entangled state,
 # then evaluates the expectation value of the Pauli-Z operator on the first wire.
 
-
 @qml.qnode(dev, interface="jax")
 def circuit(param):
     # These two gates represent our QML model. 
@@ -69,7 +68,6 @@ def circuit(param):
     # Usually, this would be defined by the problem we want to solve,
     # but for this example we'll just use a single PauliZ.
     return qml.expval(qml.PauliZ(0))
-
 
 ##############################################################################
 # We can now execute the circuit just like any other python function.
@@ -89,8 +87,6 @@ print("---------------")
 # that calcuates the gradient of the parameter relative to the output.
 grad_circuit = jax.grad(circuit)
 print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2):0.3f}")
-
-
 
 # We can then use this grad_circuit function to optimize the parameter value
 # via gradient descent.
@@ -201,7 +197,6 @@ def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0))
-
 
 import time
 # Compile overhead the first time time method is executed.
