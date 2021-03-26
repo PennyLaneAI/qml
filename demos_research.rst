@@ -107,7 +107,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Making a quantum machine learning model using neutral atoms.
+    :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
@@ -195,6 +195,13 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_measurement_optimize`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
+    :figure: demonstrations/spsa/spsa_thumbnail.png
+    :description: :doc:`demos/spsa`
+    :tags: qiskit
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -249,6 +256,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
     demos/tutorial_measurement_optimize
+    demos/spsa
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier
