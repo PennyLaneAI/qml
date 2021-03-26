@@ -18,8 +18,9 @@ and can be used directly with Pennylane.
 # main selling point are its function transformations. Writing functions 
 # In this tutorial, we'll go over the many JAX transfromations and show how you can
 # use them to build and optimize quantum circuits. We'll show examples of how to 
-# do gradient descent with ``jax.jit``, run quantum circits in parallel
-# using ``jax.vmap``, and control and seed the random nature of quantum computers 
+# do gradient descent with ``jax.grad``, run quantum circits in parallel
+# using ``jax.vmap``, compile and optimize simualtions with ``jax.jit``
+# and control and seed the random nature of quantum computer simulations
 # with ``jax.random``. By the end of this tutorial you should feel just as comfortable
 # transforming quantum computing programs with JAX as you do transforming your 
 # neural network code.
@@ -108,7 +109,8 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # We just showed how we can use gradient methods to learn a parameter value, 
 # but on real QC hardware, calculating gradients can be really expensive and noisy.
 # Another approach is to use evolutionary strategies (ES) to learn these parameters.
-# Here, we will be using the ``jax.vmap`` transform to make running batches of circuits much easier.
+# Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
+# to make running batches of circuits much easier.
 
 print()
 print()
@@ -170,6 +172,9 @@ print(f"Final cost: {circuit(mean):0.3f}")
 # you'll generally find the first time calling the function to be slow, but all subsequent
 # calls are much, much faster. You'll likely want to do it if you're running
 # the same circuit over and over but with different parameters.
+# 
+# To compile your quantum simulation to XLA, you can use the ``jax.jit`` 
+# `transfrom. <https://jax.readthedocs.io/en/latest/jax.html?highlight=jit#jax.jit>`__
 
 print()
 print() 
@@ -189,16 +194,18 @@ def circuit(param):
 import time
 # Compile overhead the first time time method is executed.
 start = time.time()
-circuit(0.123)
+# JAX runs async, so .block_until_ready() blocks until the computation
+# is finished.
+circuit(0.123).block_until_ready()
 first_time = time.time() - start
 
 # Much faster every time after!
 start = time.time()
-circuit(0.123)
+circuit(0.123).block_until_ready()
 second_time = time.time() - start
 
-print(f"First run time: {first_time:0.5f} seconds")
-print(f"Second run time: {second_time:0.5f} seconds")
+print(f"First run time: {first_time:0.4f} seconds")
+print(f"Second run time: {second_time:0.4f} seconds")
 
 ##############################################################################
 # Shots and Sampling with JAX
@@ -212,8 +219,8 @@ print(f"Second run time: {second_time:0.5f} seconds")
 # To learn more about how jax handles randomness, visit their
 # `documentation site. <https://jax.readthedocs.io/en/latest/jax.random.html>`__
 #
-# Note: This example only applies if you are using ``jax.jit``. Otherwise, we automatically 
-# seed and reset the random number generator for you on each call.
+# Note: This example only applies if you are using ``jax.jit``. Otherwise, PennyLane 
+# automatically seeds and resets the random-number-generator for you on each call.
 #
 # To set the random number generating key, you'll have to pass the ``jax.random.PRNGKey``
 # when constructing the device. Because of this, if you want to use ``jax.jit`` with randomness,
