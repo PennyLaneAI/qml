@@ -557,9 +557,7 @@ def callback_fn(xk):
     cost_val = wrapped_cost(xk)
     h2_spsa_energies_melbourne.append(cost_val)
 
-    # TODO: update comment if verified
-    # For this case, every term in the Hamiltonian counts towards evaluating the
-    # cost function, so to take this into account we need to subtract the number of terms
+    # We have evaluated every term twice, so we need to make up for this
     num_executions = int(dev_noisy_spsa.num_executions/2)
     h2_spsa_device_executions_melbourne.append(num_executions)
 
