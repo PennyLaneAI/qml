@@ -16,7 +16,7 @@ Optimization using SPSA
 *Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 19 Mar 2021.*
 
 In this tutorial, we investigate using a gradient-free optimizer called
-Simultaneous Perturbation Stochastic Approximation (SPSA) to optimize quantum
+the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
 circuits. SPSA is a technique that involves approximating the gradient of a
 quantum circuit without having to compute it.
 
@@ -96,7 +96,7 @@ parameter iterates can be obtained as
 where :math:`\hat{g}_{k}` is the estimate of the gradient :math:`g(\theta) =
 \frac{ \partial L}{\partial \theta}` at the iterate :math:`\hat{\theta}_{k}`
 based on prior measurements of the cost function, and :math:`a_{k}` is a
-positive number. [#spall_overview]_
+positive number [#spall_overview]_.
 
 One of the advantages of SPSA is that it is robust to any noise that may occur
 when measuring the function :math:`L`. Therefore, let's consider the function
@@ -153,7 +153,7 @@ compute statistics like expectation values.
 
 .. note::
 
-    Just with other PennyLane devices, the number of samples taken for a device
+    Just as with other PennyLane devices, the number of samples taken for a device
     execution can be specified using the ``shots`` keyword argument of the
     device.
 
@@ -180,9 +180,11 @@ np.random.seed(50)
 
 all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
 
+
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
     return qml.expval(all_pauliz_tensor_prod)
+
 
 ##############################################################################
 # After this, we'll initialize the parameters in a way that is compatible with
@@ -197,12 +199,14 @@ init_params_spsa = init_params.reshape(flat_shape)
 
 qnode_spsa = qml.QNode(circuit, dev_sampler_spsa)
 
+
 def cost_spsa(params):
     return qnode_spsa(params.reshape(num_layers, num_wires, 3))
 
+
 ##############################################################################
 # Once we have defined each piece of the optimization, there's only one
-# remaining component required for the optimization: the *SPSA optimizer*.
+# remaining component required: the *SPSA optimizer*.
 # We'll use the SPSA optimizer provided by the ``noisyopt`` package. Once
 # imported, we can initialize parts of the optimization such as the number of
 # iterations, a collection to store the cost values, and a callback function.
@@ -217,17 +221,23 @@ niter_spsa = 200
 cost_store_spsa = [cost_spsa(init_params_spsa)]
 device_execs_spsa = [0]
 
+
 def callback_fn(xk):
     cost_val = cost_spsa(xk)
     cost_store_spsa.append(cost_val)
 
     # We've evaluated the cost function, let's make up for that
-    num_executions = int(dev_sampler_spsa.num_executions/2)
+    num_executions = int(dev_sampler_spsa.num_executions / 2)
     device_execs_spsa.append(num_executions)
 
     iteration_num = len(cost_store_spsa)
     if iteration_num % 10 == 0:
-        print(f"Iteration = {iteration_num}, Number of device executions = {num_executions}, Cost = {cost_val}")
+        print(
+            f"Iteration = {iteration_num}, "
+            f"Number of device executions = {num_executions}, "
+            f"Cost = {cost_val}"
+        )
+
 
 ##############################################################################
 # Choosing the hyperparameters
@@ -237,7 +247,7 @@ def callback_fn(xk):
 # hyperparameters for SPSA: the :math:`c` and :math:`a` coefficients. Recall
 # from above that the :math:`c` values control the amount of random shift when
 # evaluating the cost function, while the :math:`a` coefficients are analogous to a learning
-# rate and affects the degree to which the parameters change at each update
+# rate and affect the degree to which the parameters change at each update
 # step.
 #
 # With stochastic approximation, specifying such hyperparameters significantly
@@ -296,7 +306,7 @@ res = minimizeSPSA(
 #
 # Now let's perform the same optimization using gradient descent. We set the
 # step size according to a favourable value found after grid search for fast
-# convergence. Note that we also reset the number of executions of the device.
+# convergence. Note that we also create a new device in order to reset the execution count to 0. 
 
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
 
@@ -304,8 +314,10 @@ opt = qml.GradientDescentOptimizer(stepsize=0.3)
 dev_sampler_gd = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 qnode_gd = qml.QNode(circuit, dev_sampler_gd)
 
+
 def cost_gd(params):
     return qnode_gd(params)
+
 
 steps = 20
 params = init_params.copy()
@@ -317,7 +329,11 @@ for k in range(steps):
     params, val = opt.step_and_cost(cost_gd, params)
     device_execs_grad.append(dev_sampler_gd.num_executions)
     cost_store_grad.append(val)
-    print(f"Iteration = {k}, Number of device executions = {dev_sampler_gd.num_executions}, Cost = {val}")
+    print(
+        f"Iteration = {k}, "
+        f"Number of device executions = {dev_sampler_gd.num_executions}, "
+        f"Cost = {val}"
+    )
 
 # The step_and_cost function gives us the cost at the previous step, so to find
 # the cost at the final parameter values we have to compute it manually
@@ -356,7 +372,7 @@ cost_store_grad.append(cost_gd(params))
 # SPSA and gradient descent comparison
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# At this point, nothing else remains, but to check which of these approaches did
+# At this point, nothing else remains but to check which of these approaches did
 # better!
 import matplotlib.pyplot as plt
 
@@ -419,7 +435,7 @@ name = "h2"
 
 h2_ham, num_qubits = qchem.molecular_hamiltonian(name, geometry)
 
-# Variational ansatz for H_2 - see Intro VQE demo for more details 
+# Variational ansatz for H_2 - see Intro VQE demo for more details
 def circuit(params, wires):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
     for i in wires:
@@ -427,6 +443,7 @@ def circuit(params, wires):
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[3, 1])
+
 
 ##############################################################################
 #
@@ -443,7 +460,9 @@ from qiskit.providers.aer import noise
 
 # Note: you will need to be authenticated to IBMQ to run the following code.
 # Do not run the simulation on this device, as it will send it to real hardware
-dev_melbourne = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne")
+dev_melbourne = qml.device(
+    "qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne"
+)
 noise_model = noise.NoiseModel.from_backend(dev_melbourne.backend.properties())
 dev_noisy = qml.device(
     "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
@@ -471,7 +490,11 @@ for n in range(max_iterations):
     h2_grad_energies_melbourne.append(energy)
 
     if n % 5 == 0:
-        print(f"Iteration = {n}, Number of device executions = {dev_noisy.num_executions},  Energy = {energy:.8f} Ha")
+        print(
+            f"Iteration = {n}, "
+            f"Number of device executions = {dev_noisy.num_executions},  "
+            f"Energy = {energy:.8f} Ha"
+        )
 
 h2_grad_energies_melbourne.append(cost(params))
 
@@ -479,7 +502,9 @@ true_energy = -1.136189454088
 
 print()
 print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
-print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha")
+print(
+    f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha"
+)
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -500,7 +525,7 @@ print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):
 
 plt.figure(figsize=(10, 6))
 
-plt.scatter(
+plt.plot(
     h2_grad_device_executions_melbourne,
     h2_grad_energies_melbourne,
     label="Gradient descent, Melbourne sim.",
@@ -545,6 +570,7 @@ cost_spsa = qml.ExpvalCost(circuit, h2_ham, dev_noisy_spsa)
 def wrapped_cost(params):
     return cost_spsa(params.reshape(num_qubits, num_params))
 
+
 num_qubits = 4
 num_params = 3
 
@@ -553,26 +579,40 @@ params = init_params.copy().reshape(num_qubits * num_params)
 h2_spsa_device_executions_melbourne = [0]
 h2_spsa_energies_melbourne = [wrapped_cost(params)]
 
+
 def callback_fn(xk):
     cost_val = wrapped_cost(xk)
     h2_spsa_energies_melbourne.append(cost_val)
 
     # We have evaluated every term twice, so we need to make up for this
-    num_executions = int(dev_noisy_spsa.num_executions/2)
+    num_executions = int(dev_noisy_spsa.num_executions / 2)
     h2_spsa_device_executions_melbourne.append(num_executions)
 
     iteration_num = len(h2_spsa_energies_melbourne)
     if iteration_num % 10 == 0:
-        print(f"Iteration = {iteration_num}, Number of device executions = {num_executions},  Energy = {cost_val:.8f} Ha")
+        print(
+            f"Iteration = {iteration_num}, "
+            f"Number of device executions = {num_executions},  "
+            f"Energy = {cost_val:.8f} Ha"
+        )
+
 
 res = minimizeSPSA(
     # Hyperparameters chosen based on grid search
-    wrapped_cost, x0=params, niter=niter_spsa, paired=False, c=0.3, a=1.5, callback=callback_fn
+    wrapped_cost,
+    x0=params,
+    niter=niter_spsa,
+    paired=False,
+    c=0.3,
+    a=1.5,
+    callback=callback_fn,
 )
 
 print()
 print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
-print(f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha")
+print(
+    f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha"
+)
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -611,13 +651,13 @@ plt.figure(figsize=(10, 6))
 plt.plot(
     h2_grad_device_executions_melbourne,
     h2_grad_energies_melbourne,
-    label="Gradient descent, Melbourne sim."
+    label="Gradient descent, Melbourne sim.",
 )
 
 plt.plot(
     h2_spsa_device_executions_melbourne,
     h2_spsa_energies_melbourne,
-    label="SPSA, Melbourne sim."
+    label="SPSA, Melbourne sim.",
 )
 
 plt.title("H2 energy from the VQE using gradient descent vs. SPSA", fontsize=16)
@@ -632,7 +672,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/spsa/h2_vqe_noisy_spsa.png
 #     :align: center
-#     :width: 70%
+#     :width: 90%
 #
 # We observe here that the SPSA optimizer again converges in fewer device
 # executions than the gradient descent optimizer. 🎉
