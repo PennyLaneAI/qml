@@ -190,29 +190,40 @@ print(f"Final cost: {circuit(mean):0.3f}")
 print("\n\nJit Example")
 print("-----------")
 
-# Compiling your circuit with JAX is very easy, just add the jax.jit decorator!
-@jax.jit # The decorator can be directly applied to a QNode.
 @qml.qnode(dev, interface="jax")
 def circuit(param):
     qml.RX(param, wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(0))
 
+# Compiling your circuit with JAX is very easy, just add jax.jit!
+jit_circuit = jax.jit(circuit)
+
 import time
-# Compile overhead the first time time method is executed.
+# No jit.
 start = time.time()
 # JAX runs async, so .block_until_ready() blocks until the computation
 # is finished.
 circuit(0.123).block_until_ready()
+no_jit_time = time.time() - start
+
+# First call with jit.
+start = time.time()
+jit_circuit(0.123).block_until_ready()
 first_time = time.time() - start
 
-# Much faster every time after!
+# Second call with jit.
 start = time.time()
-circuit(0.123).block_until_ready()
+jit_circuit(0.123).block_until_ready()
 second_time = time.time() - start
 
+
+print(f"No jit time: {no_jit_time:0.4f} seconds")
+# Compilation overhead will make the first call slower than without jit...
 print(f"First run time: {first_time:0.4f} seconds")
+# ... but the second run time is >100x faster than the first!
 print(f"Second run time: {second_time:0.4f} seconds")
+
 
 ##############################################################################
 # Shots and Sampling with JAX
