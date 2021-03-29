@@ -206,7 +206,7 @@ import time
 # No jit.
 start = time.time()
 # JAX runs async, so .block_until_ready() blocks until the computation
-# is finished.
+# is actually finished. You'll only need to use this if you're doing benchmarking.
 circuit(0.123).block_until_ready()
 no_jit_time = time.time() - start
 
@@ -227,6 +227,9 @@ print(f"First run time: {first_time:0.4f} seconds")
 # ... but the second run time is >100x faster than the first!
 print(f"Second run time: {second_time:0.4f} seconds")
 
+
+# You can see that for the cost of some compilation overhead, we can
+# greatly increase our performance of our simulation by orders of magnitude. 
 
 ##############################################################################
 # Shots and Sampling with JAX
