@@ -81,8 +81,7 @@ print("\nGradient Descent")
 print("---------------")
 
 # We use jax.grad here to transform our circuit method into one
-
-# that calcuates the gradient of the parameter relative to the input.
+# that calcuates the gradient of the output relative to the input.
 
 grad_circuit = jax.grad(circuit)
 print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2):0.3f}")
@@ -117,7 +116,8 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 #
 # We just showed how we can use gradient methods to learn a parameter value, 
 # but on real QC hardware, calculating gradients can be really expensive and noisy.
-# Another approach is to use evolutionary strategies (ES) to learn these parameters.
+# Another approach is to use `evolutionary strategies <https://arxiv.org/abs/2012.00101>`__
+# (ES) to learn these parameters.
 # Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
 # to make running batches of circuits much easier.
 
@@ -143,7 +143,6 @@ print(f"Batched result: {batched_results}")
 # Needed to do randomness with JAX.
 # For more info on how JAX handles randomness, see
 # `the documentation (https://jax.readthedocs.io/en/latest/jax.random.html)
-
 key = jax.random.PRNGKey(0)
 
 # Generate our first set of samples.
@@ -161,8 +160,9 @@ for _ in range(200):
     weights = jnp.exp(-costs) 
     mean = jnp.average(params, weights=weights)
 
-    # The variance should decrease as we converge to a solution.
+    # We decrease the variance as we converge to a solution.
     var = var * 0.97
+
     # Split the JAX key.
     key, split = jax.random.split(key)
     params = jax.random.normal(split, (100,)) * var + mean
@@ -174,6 +174,9 @@ print(f"Final cost: {circuit(mean):0.3f}")
 #############################################################################
 # How to use jax.jit: Compiling Circuit Execution
 # -----------------------------------------------
+# .. figure:: ../demonstrations/jax_logo/jaxjit.png
+#     :width: 50%
+#     :align: center
 #
 # JAX is built on top of `XLA <https://www.tensorflow.org/xla>`__, a powerful 
 # numerics library that can optimize and cross compile computations to different hardware, 
@@ -185,8 +188,7 @@ print(f"Final cost: {circuit(mean):0.3f}")
 # you'll generally find the first time calling the function to be slow, but all subsequent
 # calls are much, much faster. You'll likely want to do it if you're running
 # the same circuit over and over but with different parameters.
-# 
-# To compile your quantum simulation to XLA, you can use the
+
 
 print("\n\nJit Example")
 print("-----------")
@@ -231,7 +233,6 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # ----------------------------
 # 
 # JAX was designed to enable experiments to be as repeatable as possible. Because of this,
-
 # JAX requires us to seed all randomly generated values (as you saw in the above
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
@@ -282,5 +283,4 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 # with its easy access to quantum computers. We're still in early days of 
 # development, but we hope to continue to grow our ecosystem around JAX,
 # and by extension, grow JAX into quantum computing and quantum machine learning.
-
 # The future looks bright for this field, and we're excited to see what you build!
