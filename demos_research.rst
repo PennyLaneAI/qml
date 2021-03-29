@@ -107,7 +107,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Making a quantum machine learning model using neutral atoms.
+    :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
@@ -195,6 +195,13 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_measurement_optimize`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
+    :figure: demonstrations/spsa/spsa_thumbnail.png
+    :description: :doc:`demos/spsa`
+    :tags: qiskit
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -224,6 +231,12 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/quantum_volume`
    :tags: characterization qiskit
 
+.. customgalleryitem::
+   :tooltip: Learn how to sample quantum states uniformly at random
+   :figure: demonstrations/haar_measure/spherical_int_dtheta.png
+   :description: :doc:`demos/tutorial_haar_measure`
+   :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -243,6 +256,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
     demos/tutorial_measurement_optimize
+    demos/spsa
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier
@@ -257,5 +271,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
     demos/quantum_volume
+    demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
