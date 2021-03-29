@@ -14,7 +14,8 @@ Using JAX with PennyLane
 *Author: PennyLane dev team. Posted: XX Mar 2021. Last updated: XX Mar 2021.*
 
 JAX is an incredibly powerful scientific computing library that has been gaining traction in
-both the physics and deep learning community. While JAX was originally designed for 
+both the physics and deep learning communities. While JAX was originally designed for 
+
 classical machine learning (ML), many of its transformations are also useful 
 for quantum machine learning (QML), and can be used directly with PennyLane.
 """
@@ -23,24 +24,25 @@ for quantum machine learning (QML), and can be used directly with PennyLane.
 #     :width: 50%
 #     :align: center
 #
-# JAX's main selling point is its function transformations, and nearly all of 
-# them can be used in quantum computing contexts.
-# 
-# In this tutorial, we'll go over the many JAX transformations and show how you can
+# In this tutorial, we'll go over a number of JAX transformations and show how you can
+
 # use them to build and optimize quantum circuits. We'll show examples of how to 
 # do gradient descent with ``jax.grad``, run quantum circuits in parallel
-# using ``jax.vmap``, compile and optimize simulations with ``jax.jit``
+# using ``jax.vmap``, compile and optimize simulations with ``jax.jit``,
+
 # and control and seed the random nature of quantum computer simulations
 # with ``jax.random``. By the end of this tutorial you should feel just as comfortable
 # transforming quantum computing programs with JAX as you do transforming your 
-# neural network code.
+# neural networks.
+
 #
 # If this is your first time reading PennyLane code, we recommend going through
 # the :doc:`basic tutorial </demos/tutorial_qubit_rotation>`
 # first. It's all in vanilla NumPy, so you should be able to 
 # easily transfer what you learn to JAX when you come back.
 #
-# With that said, we begin by importing PennyLane, JAX and the JAX-provided version of NumPy and
+# With that said, we begin by importing PennyLane, JAX, and the JAX-provided version of NumPy and
+
 # set up a two-qubit device for computations. We'll be using the ``default.qubit`` device
 # for the first part of this tutorial.
 
@@ -55,7 +57,8 @@ import pennylane as qml
 dev = qml.device("default.qubit", wires=2)
 
 ##############################################################################
-# Let's start with a simple example circuit, which generates a two-qubit entangled state,
+# Let's start with a simple example circuit that generates a two-qubit entangled state,
+
 # then evaluates the expectation value of the Pauli-Z operator on the first wire.
 
 @qml.qnode(dev, interface="jax")
@@ -78,12 +81,14 @@ print(f"Result: {repr(circuit(0.123))}")
 # In fact, when we use the ``default.qubit`` device, the entire computation 
 # is done in JAX, so we can use all of the JAX tools out of the box!
 #
-# Let's start with a transformation example. The code we wrote above is entirely 
+# Now let's move on to an example of a transformation. The code we wrote above is entirely 
+
 # differentiable, so let's calculate its gradient with ``jax.grad``.
 print("\nGradient Descent")
 print("---------------")
 
-# We use jax.grad here to transform our circuit method into once
+# We use jax.grad here to transform our circuit method into one
+
 # that calcuates the gradient of the parameter relative to the output.
 grad_circuit = jax.grad(circuit)
 print(f"grad_circuit(jnp.pi / 2): {grad_circuit(jnp.pi / 2):0.3f}")
@@ -106,9 +111,11 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # the above training loop should feel very familiar to you. The only difference is
 # that we used a quantum computer (or rather, a simulation of one) as part of our
 # model and cost calculation. In the end, almost all QML problems involve tuning some
-# parameters and making some cost function go down, just like classical ML.
+# parameters and minimizing some cost function, just like classical ML.
+
 # While classical ML focuses on learning classical systems like language or vision,
-# QML is most useful for learning quantum systems like finding chemical ground states
+# QML is most useful for learning about quantum systems, for example finding chemical ground states
+
 # or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
 
 
@@ -130,7 +137,8 @@ vcircuit = jax.vmap(circuit)
 
 # Now, we call the ``vcircuit`` with multiple parameters at once and get back a
 # batch of expectations.
-batch_params = jnp.array([1.02, .123, -0.571])
+batch_params = jnp.array([1.02, 0.123, -0.571])
+
 batched_results = vcircuit(batch_params)
 print(f"Batched result: {batched_results}")
 
@@ -142,7 +150,8 @@ print(f"Batched result: {batched_results}")
 
 # Needed to do randomness with JAX.
 # For more info on how JAX handles randomness, see
-# `the documentation <https://jax.readthedocs.io/en/latest/jax.random.html>`__
+# `the documentation (https://jax.readthedocs.io/en/latest/jax.random.html)
+
 key = jax.random.PRNGKey(0)
 
 # Generate our first set of samples.
@@ -218,7 +227,8 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # Shots and Sampling with JAX
 # ----------------------------
 # 
-# JAX was designed to have experiments be as repeatable as possible. Because of this,
+# JAX was designed to enable experiments to be as repeatable as possible. Because of this,
+
 # JAX requires us to seed all randomly generated values (as you saw in the above
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
@@ -265,9 +275,10 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 # Closing Remarks
 # ----------------
 # By now, using JAX with PennyLane should feel very natural. They 
-# extend each other very nicely; JAX with it's power transforms, and PennyLane 
+# complement each other very nicely; JAX with it's power transforms, and PennyLane 
+
 # with its easy access to quantum computers. We're still in early days of 
 # development, but we hope to continue to grow our ecosystem around JAX,
-# and by extension, JAX into quantum computing and quantum machine learning.
-#
+# and by extension, grow JAX into quantum computing and quantum machine learning.
+
 # The future looks bright for this field, and we're excited to see what you build!
