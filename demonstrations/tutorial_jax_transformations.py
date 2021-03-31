@@ -203,6 +203,7 @@ def circuit(param):
 jit_circuit = jax.jit(circuit)
 
 import time
+
 # No jit.
 start = time.time()
 # JAX runs async, so .block_until_ready() blocks until the computation
