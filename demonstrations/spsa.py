@@ -124,7 +124,7 @@ the function, compared to a standard gradient-based optimizer.
 
 .. figure:: ../demonstrations/spsa/spsa_mntn.png
    :align: center
-   :width: 40%
+   :width: 60%
 
    ..
 
