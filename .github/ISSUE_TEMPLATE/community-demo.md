@@ -15,6 +15,12 @@ Your full name (or username).
 **Affiliation** (optional)
 Your affiliation, if applicable; e.g. University, research institute, company.
 
+**Twitter** (optional)
+Your Twitter username, if interested; helps us advertise your demo while linking directly back to you.
+
+**Image** (optional)
+Suggested image to use when advertising your demo on Twitter; can be provided via hyperlink or by copy/pasting directly in GitHub.
+
 --------------------------------------------------------------------------------
 
 #### Demo information
