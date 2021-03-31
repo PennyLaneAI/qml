@@ -6,7 +6,7 @@ Optimization using SPSA
 .. meta::
     :property="og:description": Use the simultaneous perturbation stochastic
         approximation algorithm to optimize variational circuits in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
+    :property="og:image": https://pennylane.ai/qml/_images/spsa_mntn.png
 
 .. related::
 
@@ -122,7 +122,7 @@ into the already-stochastic process. This is highlighted in the figure below,
 which portrays an example of the type of path SPSA takes through the space of
 the function, compared to a standard gradient-based optimizer.
 
-.. figure:: ../demonstrations/spsa/spsa_opt.png
+.. figure:: ../demonstrations/spsa/spsa_mntn.png
    :align: center
    :width: 60%
 
