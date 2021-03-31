@@ -6,7 +6,7 @@ Optimization using SPSA
 .. meta::
     :property="og:description": Use the simultaneous perturbation stochastic
         approximation algorithm to optimize variational circuits in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
+    :property="og:image": https://pennylane.ai/qml/_images/spsa_mntn.png
 
 .. related::
 
@@ -53,7 +53,7 @@ optimization steps taken.
 Fortunately, there are certain optimization techniques that offer an
 alternative to computing the gradients of quantum circuits. One such technique
 is called the Simultaneous Perturbation Stochastic Approximation (SPSA)
-algorithm. [#spall_overview]_ SPSA is an optimization method that involves
+algorithm [#spall_overview]_. SPSA is an optimization method that involves
 *approximating* the gradient of the cost function at each iteration step. This
 technique requires only two quantum circuit executions per iteration step,
 regardless of the number of free parameters. Therefore the overall number of
@@ -84,7 +84,7 @@ iterative optimization algorithm. Let's consider a differentiable cost function
 where the optimization problem can be translated into finding a :math:`\theta^*`
 at which :math:`\frac{\partial L}{\partial \theta} = 0`.  It is assumed that
 measurements of :math:`L(\theta)` are available at various values of
-:math:`\theta` --- this is exactly the problem that we'd consider when optimizing
+:math:`\theta`---this is exactly the problem that we'd consider when optimizing
 quantum functions!
 
 Just like with gradient-based methods, SPSA starts with an initial parameter
@@ -122,15 +122,14 @@ into the already-stochastic process. This is highlighted in the figure below,
 which portrays an example of the type of path SPSA takes through the space of
 the function, compared to a standard gradient-based optimizer.
 
-.. figure:: ../demonstrations/spsa/spsa_opt.png
+.. figure:: ../demonstrations/spsa/spsa_mntn.png
    :align: center
    :width: 60%
 
    ..
 
    A schematic of the search paths used by gradient descent with
-   parameter-shift and SPSA in a low-noise setting.
-   Image source: [#spall_overview]_
+   parameter-shift and SPSA.
 
 Now that we have explored how SPSA works, let's see how it performs in practice!
 
