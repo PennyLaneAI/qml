@@ -124,13 +124,12 @@ the function, compared to a standard gradient-based optimizer.
 
 .. figure:: ../demonstrations/spsa/spsa_mntn.png
    :align: center
-   :width: 60%
+   :width: 40%
 
    ..
 
    A schematic of the search paths used by gradient descent with
-   parameter-shift and SPSA in a low-noise setting.
-   Image source: [#spall_overview]_
+   parameter-shift and SPSA.
 
 Now that we have explored how SPSA works, let's see how it performs in practice!
 
