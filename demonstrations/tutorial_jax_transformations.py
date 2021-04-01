@@ -115,7 +115,8 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # -------------------------------------
 #
 # We just showed how we can use gradient methods to learn a parameter value, 
-# but on real QC hardware, calculating gradients can be really expensive and noisy.
+# but on real quantum computing hardware, calculating gradients can be really expensive and noisy.
+
 # Another approach is to use `evolutionary strategies <https://arxiv.org/abs/2012.00101>`__
 # (ES) to learn these parameters.
 # Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
@@ -239,7 +240,8 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # JAX was designed to enable experiments to be as repeatable as possible. Because of this,
 # JAX requires us to seed all randomly generated values (as you saw in the above
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
-# so if we want our JAX to mimic a real QC, we'll have to handle randomness ourselves.
+# so if we want our JAX to mimic a real device, we'll have to handle randomness ourselves.
+
 #
 # To learn more about how JAX handles randomness, visit their
 # `documentation site. <https://jax.readthedocs.io/en/latest/jax.random.html>`__
