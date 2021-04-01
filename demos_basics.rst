@@ -158,9 +158,9 @@ hardware.
 
 .. customgalleryitem::
     :tooltip: Learn how to use JAX with PennyLane.
-    :figure: _static/jax_logo.png
-    :description: :doc:`demons/tutorial_jax_transformations`
-    :tags: jax
+    :figure: demonstrations/jax_logo/jax.png
+    :description: :doc:`demos/tutorial_jax_transformations`
+    :tags: beginner
 
 .. customgalleryitem::
     :tooltip: Parallelize gradient calculations with Amazon Braket
