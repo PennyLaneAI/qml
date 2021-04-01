@@ -114,6 +114,10 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # Batching and Evolutionary Strategies
 # -------------------------------------
 #
+# .. figure:: ../demonstrations/jax_logo/jaxvamp.png
+#     :width: 50%
+#     :align: center
+#
 # We just showed how we can use gradient methods to learn a parameter value, 
 # but on real quantum computing hardware, calculating gradients can be really expensive and noisy.
 
