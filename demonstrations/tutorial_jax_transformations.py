@@ -11,7 +11,7 @@ Using JAX with PennyLane
     tutorial_qubit_rotation Basic Qubit Rotation Tutorial
     tutorial_vqt Variation Quantum Thermalizer
 
-*Author: PennyLane dev team. Posted: XX Mar 2021. Last updated: XX Mar 2021.*
+*Author: PennyLane dev team. Posted: XX Apr 2021. Last updated: XX Apr 2021.*
 
 JAX is an incredibly powerful scientific computing library that has been gaining traction in
 both the physics and deep learning communities. While JAX was originally designed for 
@@ -37,7 +37,7 @@ for quantum machine learning (QML), and can be used directly with PennyLane.
 # first. It's all in vanilla NumPy, so you should be able to 
 # easily transfer what you learn to JAX when you come back.
 #
-# With that said, we begin by importing PennyLane, JAX, and the JAX-provided version of NumPy and
+# With that said, we begin by importing PennyLane, JAX,  the JAX-provided version of NumPy and
 # set up a two-qubit device for computations. We'll be using the ``default.qubit`` device
 # for the first part of this tutorial.
 
@@ -106,8 +106,8 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # model and cost calculation. In the end, almost all QML problems involve tuning some
 # parameters and minimizing some cost function, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
-# QML is most useful for learning about quantum systems, for example finding chemical ground states
-# or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
+# QML is most useful for learning about quantum systems. For exampleL finding chemical 
+# ground states or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
 
 
 ##############################################################################
@@ -120,7 +120,6 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 #
 # We just showed how we can use gradient methods to learn a parameter value, 
 # but on real quantum computing hardware, calculating gradients can be really expensive and noisy.
-#
 # Another approach is to use `evolutionary strategies <https://arxiv.org/abs/2012.00101>`__
 # (ES) to learn these parameters.
 # Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
@@ -170,7 +169,7 @@ for _ in range(200):
     # We decrease the variance as we converge to a solution.
     var = var * 0.97
 
-    # Split the JAX key.
+    # Split the PRNGKey to generate a new set of random samples.
     key, split = jax.random.split(key)
     params = jax.random.normal(split, (100,)) * var + mean
 
@@ -194,7 +193,8 @@ print(f"Final cost: {circuit(mean):0.3f}")
 # passes to enhance the performance of the computation. Because of this compilation overhead,
 # you'll generally find the first time calling the function to be slow, but all subsequent
 # calls are much, much faster. You'll likely want to do it if you're running
-# the same circuit over and over but with different parameters.
+# the same circuit over and over but with different parameters, like you would find in almost
+# all variational quantum algorithms.
 
 
 print("\n\nJit Example")
