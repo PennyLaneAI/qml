@@ -158,7 +158,7 @@ hardware.
 
 .. customgalleryitem::
     :tooltip: Learn how to use JAX with PennyLane.
-    :figure: _static/jax_logo.png
+    :figure: demonstrations/jax_logo/jax.png
     :description: :doc:`demos/tutorial_jax_transformations`
     :tags: jax
 
