@@ -114,17 +114,18 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # Batching and Evolutionary Strategies
 # -------------------------------------
 #
-# .. figure:: ../demonstrations/jax_logo/jaxvamp.png
+# .. figure:: ../demonstrations/jax_logo/jaxvmap.png
 #     :width: 50%
 #     :align: center
 #
 # We just showed how we can use gradient methods to learn a parameter value, 
 # but on real quantum computing hardware, calculating gradients can be really expensive and noisy.
-
+#
 # Another approach is to use `evolutionary strategies <https://arxiv.org/abs/2012.00101>`__
 # (ES) to learn these parameters.
 # Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
-# to make running batches of circuits much easier.
+# to make running batches of circuits much easier. Vmap essentially transforms a single quantum computer into
+# multiple running in parallel!
 
 print("\n\nBatching and Evolutionary Strategies")
 print("------------------------------------")
@@ -134,6 +135,7 @@ vcircuit = jax.vmap(circuit)
 
 # Now, we call the ``vcircuit`` with multiple parameters at once and get back a
 # batch of expectations.
+# This examples runs 3 quantum circuits in parallel.
 batch_params = jnp.array([1.02, 0.123, -0.571])
 
 batched_results = vcircuit(batch_params)
@@ -146,8 +148,8 @@ print(f"Batched result: {batched_results}")
 # These batches are then used to generate a new set of parameters. 
 
 # Needed to do randomness with JAX.
-# For more info on how JAX handles randomness, see
-# `the documentation (https://jax.readthedocs.io/en/latest/jax.random.html)
+# For more info on how JAX handles randomness, see the documentation.
+# https://jax.readthedocs.io/en/latest/jax.random.html
 key = jax.random.PRNGKey(0)
 
 # Generate our first set of samples.
@@ -245,7 +247,6 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # JAX requires us to seed all randomly generated values (as you saw in the above
 # batching example). Sadly, the universe doesn't allow us to seed real quantum computers,
 # so if we want our JAX to mimic a real device, we'll have to handle randomness ourselves.
-
 #
 # To learn more about how JAX handles randomness, visit their
 # `documentation site. <https://jax.readthedocs.io/en/latest/jax.random.html>`__
