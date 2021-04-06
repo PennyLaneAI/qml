@@ -82,7 +82,13 @@ replace relevant parts with your own information).
 
     **affiliation**
     Quantum University
-
+    
+    **Twitter** (optional)
+    @adalovelace1815
+    
+    **Image** (optional)
+    https://upload.wikimedia.org/wikipedia/commons/8/8b/Babbage_Difference_Engine.jpg
+    
     --------------------------------------------------------------------------------
 
     #### Demo information
