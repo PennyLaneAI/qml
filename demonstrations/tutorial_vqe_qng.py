@@ -260,7 +260,8 @@ plt.show()
 name = "h2"
 geo_file = "h2.xyz"
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(name, geo_file)
+symbols, coordinates = qml.qchem.read_structure(geo_file)
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name=name)
 
 print("Number of qubits = ", qubits)
 
