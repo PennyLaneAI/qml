@@ -51,7 +51,8 @@ from pennylane import qchem
 # In this example, we construct the electronic Hamiltonian of one of the most unique
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms. The
 # equilibrium geometry of water is read from the file :download:`h2o.xyz </demonstrations/h2o.xyz>`
-# and stored in lists respectively containing the symbol and the Cartesian coordinates of each
+#  which retrieves the symbol and the Cartesian coordinates of each
+
 # atomic species:
 
 symbols, coordinates = qchem.read_structure('h2o.xyz')
