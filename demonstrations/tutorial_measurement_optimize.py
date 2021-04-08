@@ -115,7 +115,7 @@ import pennylane as qml
 np.random.seed(42)
 
 symbols, coordinates = qml.qchem.read_structure("h2.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2")
+H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 
 print("Required number of qubits:", num_qubits)
 print(H)
@@ -155,7 +155,7 @@ print("Number of quantum evaluations:", dev.num_executions)
 # How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
 
 symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2o")
+H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 
 print("Required number of qubits:", num_qubits)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
@@ -762,7 +762,7 @@ print(cost_fn(weights))
 # Let's use our new-found knowledge to see what happens.
 
 symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2o")
+H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
