@@ -430,10 +430,9 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 from pennylane import qchem
 
 geometry = "h2.xyz"
-name = "h2"
 
 symbols, coordinates = qchem.read_structure(geometry)
-h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates, name=name)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates, name="h2")
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
 def circuit(params, wires):
