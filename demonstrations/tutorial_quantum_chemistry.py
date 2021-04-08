@@ -10,7 +10,7 @@ Quantum Chemistry with PennyLane
 .. related::
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 26 Oct 2020*
+*Author: PennyLane dev team. Last updated: 8 Apr 2021*
 
 In quantum chemistry and materials science, the term *electronic structure methods* encompasses
 the approximations used to find the many-electron wave function of polyatomic systems.
@@ -51,9 +51,7 @@ from pennylane import qchem
 # In this example, we construct the electronic Hamiltonian of one of the most unique
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms. The
 # equilibrium geometry of water is read from the file :download:`h2o.xyz </demonstrations/h2o.xyz>`
-#  which retrieves the symbol and the Cartesian coordinates of each
-
-# atomic species:
+#  which retrieves the symbol and the Cartesian coordinates of each atomic species:
 
 symbols, coordinates = qchem.read_structure('h2o.xyz')
 print("The total number of atoms is: {}".format(len(symbols)))
@@ -264,7 +262,6 @@ print(qubit_hamiltonian)
 # function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above. It takes as input the atomic symbols and nuclear
 # coordinates, which can be read directly from the geometry file.
-
 #
 # An example usage is shown below:
 
