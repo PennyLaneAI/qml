@@ -254,8 +254,11 @@ plt.show()
 # (2) Hydrogen VQE Example
 # ------------------------
 #
-# To construct our system Hamiltonian, we call the function
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# To construct our system Hamiltonian, we first read the molecular geomerty from
+# the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
+# :func:`~.pennylane_qchem.qchem.read_structure` function (See more details in the
+# :doc:`tutorial_quantum_chemistry` tutorial). Then, the molecular Hamiltonian is
+# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
 
 name = "h2"
 geo_file = "h2.xyz"
