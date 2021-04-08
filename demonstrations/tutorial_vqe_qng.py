@@ -260,11 +260,10 @@ plt.show()
 # :doc:`tutorial_quantum_chemistry` tutorial). Then, the molecular Hamiltonian is
 # built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
-name = "h2"
 geo_file = "h2.xyz"
 
 symbols, coordinates = qml.qchem.read_structure(geo_file)
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name=name)
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2")
 
 print("Number of qubits = ", qubits)
 
