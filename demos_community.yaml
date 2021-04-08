@@ -1,3 +1,14 @@
+- title: Meta-Variational Quantum Eigensolver
+  author: Nahum Sá
+  date: 03/27/2021
+  code: https://github.com/nahumsa/pennylane-notebooks/blob/main/Meta-VQE%20Pennylane.ipynb
+  color: heavy-rain-gradient
+  description: |
+    In this tutorial I follow the <a href="https://arxiv.org/abs/2009.13545" target="_blank">Meta-VQE paper</a>. 
+    The Meta-VQE algorithm is a variational quantum algorithm that is suited for NISQ devices 
+    and encodes parameters of a Hamiltonian into a variational ansatz. We can obtain good 
+    estimations of the ground state of the Hamiltonian by changing only those encoded parameters.
+
 - title: Feature maps for kernel-based quantum classifiers
   author: Semyon Sinchenko
   date: 03/03/2021
