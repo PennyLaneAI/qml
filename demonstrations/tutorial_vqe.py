@@ -98,8 +98,9 @@ name = 'h2'
 # The charge, multiplicity, and basis set can also be specified as keyword arguments. Finally,
 # the number of active electrons and active orbitals may be indicated, as well as the
 # fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
-# (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
-# number of qubits needed to represent it:
+# (``bravyi_kitaev``). The atomic symbols and their nuclear coordinates can be read directly
+# from the geometry file. The outputs of the function are the qubit Hamiltonian of the molecule
+# and the number of qubits needed to represent it:
 
 symbols, coordinates = qchem.read_structure(geometry)
 
