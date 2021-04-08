@@ -263,8 +263,8 @@ print(qubit_hamiltonian)
 # Finally, the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function is used to automate the construction of the electronic Hamiltonian using
 # the functions described above. It takes as input the atomic symbols and nuclear
-
 # coordinates, which can be read directly from the geometry file.
+
 #
 # An example usage is shown below:
 
