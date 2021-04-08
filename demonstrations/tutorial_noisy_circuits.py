@@ -257,7 +257,7 @@ def cost(x, target):
 
 opt = qml.GradientDescentOptimizer(stepsize=10)
 steps = 35
-x = 0.0
+x = np.tensor([0.0], requires_grad=True)
 
 for i in range(steps):
     (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
@@ -266,7 +266,7 @@ for i in range(steps):
 
 print(f"QNode output after optimization = {damping_circuit(x):.4f}")
 print(f"Experimental expectation value = {ev[0]}")
-print(f"Optimized noise parameter p = {sigmoid(x):.4f}")
+print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 
 ######################################################################
 # Voilà! We've trained the noisy channel to reproduce the experimental observation. 😎
