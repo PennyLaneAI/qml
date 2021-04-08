@@ -103,7 +103,8 @@ For small molecules, the VQE algorithm scales and performs exceedingly well. For
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
 has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
 structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
-QChem to verify the number of terms.
+QChem to verify the number of terms. In this tutorial, we use the :func:`~.pennylane_qchem.qchem.read_structure`
+function to read the geometry of the molecule from a external file.
 """
 
 import functools
@@ -112,7 +113,8 @@ import pennylane as qml
 
 np.random.seed(42)
 
-H, num_qubits = qml.qchem.molecular_hamiltonian("h2", "h2.xyz")
+symbols, coordinates = qml.qchem.read_structure("h2.xyz")
+H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2")
 
 print("Required number of qubits:", num_qubits)
 print(H)
@@ -151,7 +153,8 @@ print("Number of quantum evaluations:", dev.num_executions)
 ##############################################################################
 # How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
 
-H, num_qubits = qml.qchem.molecular_hamiltonian("h2o", "h2o.xyz")
+symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
+H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2o")
 
 print("Required number of qubits:", num_qubits)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
@@ -757,7 +760,8 @@ print(cost_fn(weights))
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
-H, num_qubits = qml.qchem.molecular_hamiltonian("h2o", "h2o.xyz")
+symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
+H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, name="h2o")
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
