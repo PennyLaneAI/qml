@@ -258,7 +258,7 @@ plt.show()
 # the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
 # :func:`~.pennylane_qchem.qchem.read_structure` function (See more details in the
 # :doc:`tutorial_quantum_chemistry` tutorial). Then, the molecular Hamiltonian is
-# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
 name = "h2"
 geo_file = "h2.xyz"
