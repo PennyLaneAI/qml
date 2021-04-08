@@ -82,7 +82,8 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 hamiltonians = []
 
 for separation, file in data.items():
-    h = qchem.molecular_hamiltonian(name=str(separation), geo_file=file)[0]
+	symbols, coordinates = qchem.read_structure(file)
+    h = qchem.molecular_hamiltonian(symbols, coordinates, name=str(separation))[0]
     hamiltonians.append(h)
 
 ##############################################################################
