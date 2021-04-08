@@ -432,7 +432,8 @@ from pennylane import qchem
 geometry = "h2.xyz"
 name = "h2"
 
-h2_ham, num_qubits = qchem.molecular_hamiltonian(name, geometry)
+symbols, coordinates = qchem.read_structure(geometry)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates, name=name)
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
 def circuit(params, wires):
