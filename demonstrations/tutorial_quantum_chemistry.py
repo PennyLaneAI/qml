@@ -51,12 +51,13 @@ from pennylane import qchem
 # In this example, we construct the electronic Hamiltonian of one of the most unique
 # molecules: water. We begin by reading the positions of the oxygen and hydrogen atoms. The
 # equilibrium geometry of water is read from the file :download:`h2o.xyz </demonstrations/h2o.xyz>`
-# and stored in a list containing the symbol and the Cartesian coordinates of each atomic
-# species:
+# and stored in lists respectively containing the symbol and the Cartesian coordinates of each
+# atomic species:
 
-geometry = qchem.read_structure('h2o.xyz')
-print("The total number of atoms is: {}".format(len(geometry)))
-print(geometry)
+symbols, coordinates = qchem.read_structure('h2o.xyz')
+print("The total number of atoms is: {}".format(len(symbols)))
+print(symbols)
+print(coordinates)
 
 ##############################################################################
 # .. note::
@@ -150,8 +151,8 @@ basis_set = 'sto-3g'
 # but the same results can be obtained using ``'psi4'``.
 
 hf_file = qchem.meanfield(
-    name,
-    geometry,
+    symbols,
+    coordinates,
     charge=charge,
     mult=multiplicity,
     basis=basis_set,
@@ -260,13 +261,16 @@ print(qubit_hamiltonian)
 ##############################################################################
 # Finally, the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function is used to automate the construction of the electronic Hamiltonian using
-# the functions described above.
+# the functions described above. It takes as input the atomic symbols and their nuclear
+# coordinates, which can be read directly from the geometry file.
 #
 # An example usage is shown below:
 
+symbols, coordinates = qchem.read_structure('h2o.xyz')
+
 H, qubits = qchem.molecular_hamiltonian(
-    name,
-    'h2o.xyz',
+    symbols,
+    coordinates,
     charge=charge,
     mult=multiplicity,
     basis=basis_set,
