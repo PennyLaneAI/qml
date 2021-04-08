@@ -12,7 +12,7 @@ VQE with parallel QPUs on Rigetti Forest
 
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 22 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
