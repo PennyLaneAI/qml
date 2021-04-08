@@ -80,8 +80,8 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
 # We do this by first reading the molecular geometry from the external file using the
 # :func:`~.pennylane_qchem.qchem.read_structure` function and passing the atomic symbols
-# and coordinates to the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function to build
-# the Hamiltonian.
+# and coordinates to :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+
 
 hamiltonians = []
 
