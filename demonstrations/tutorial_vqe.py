@@ -89,12 +89,6 @@ basis_set = 'sto-3g'
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
 # single line by calling the function :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
-# The first input to the function is a string denoting the name of the molecule, which
-# will determine the name given to the saved files that are produced during the calculations:
-
-name = 'h2'
-
-##############################################################################
 # The charge, multiplicity, and basis set can also be specified as keyword arguments. Finally,
 # the number of active electrons and active orbitals may be indicated, as well as the
 # fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
@@ -107,7 +101,6 @@ symbols, coordinates = qchem.read_structure(geometry)
 h, qubits = qchem.molecular_hamiltonian(
     symbols,
     coordinates,
-    name,
     charge=charge,
     mult=multiplicity,
     basis=basis_set,
