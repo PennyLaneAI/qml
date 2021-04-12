@@ -106,7 +106,7 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # model and cost calculation. In the end, almost all QML problems involve tuning some
 # parameters and minimizing some cost function, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
-# QML is most useful for learning about quantum systems. For exampleL finding chemical 
+# QML is most useful for learning about quantum systems. For example, finding chemical 
 # ground states or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
 
 
