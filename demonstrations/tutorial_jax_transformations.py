@@ -9,7 +9,8 @@ Using JAX with PennyLane
 .. related::
 
     tutorial_qubit_rotation Basic Qubit Rotation Tutorial
-    tutorial_vqt Variation Quantum Thermalizer
+    tutorial_vqe Variational Quantum Eigensolver
+    tutorial_vqt Variational Quantum Thermalizer
 
 *Author: PennyLane dev team. Posted: 12 Apr 2021. Last updated: 12 Apr 2021.*
 
