@@ -125,7 +125,7 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # Another approach is to use `evolutionary strategies <https://arxiv.org/abs/2012.00101>`__
 # (ES) to learn these parameters.
 # Here, we will be using the ``jax.vmap`` `transform <https://jax.readthedocs.io/en/latest/jax.html#jax.vmap>`__
-# to make running batches of circuits much easier. Vmap essentially transforms a single quantum computer into
+# to make running batches of circuits much easier. ``vmap`` essentially transforms a single quantum computer into
 # multiple running in parallel!
 
 print("\n\nBatching and Evolutionary Strategies")
