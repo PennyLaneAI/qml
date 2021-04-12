@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v23f-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v23f-{{ .Branch }}-
-            - pip-v23f-
+            - pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v22f-{{ .Branch }}-
+            - pip-v22f-
 
       - run:
           name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v23f-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
