@@ -187,7 +187,7 @@ print(f"Final cost: {circuit(mean):0.3f}")
 #
 # JAX is built on top of `XLA <https://www.tensorflow.org/xla>`__, a powerful 
 # numerics library that can optimize and cross compile computations to different hardware, 
-# including CPUs, GPUs, etc. JAX can compile it's computation to XLA via the ``jax.jit`` 
+# including CPUs, GPUs, etc. JAX can compile its computation to XLA via the ``jax.jit`` 
 # `transform. <https://jax.readthedocs.io/en/latest/jax.html?highlight=jit#jax.jit>`__
 # 
 # When compiling an XLA program, the compiler will do several rounds of optimization
@@ -252,8 +252,9 @@ print(f"Second run time: {second_time:0.4f} seconds")
 # To learn more about how JAX handles randomness, visit their
 # `documentation site. <https://jax.readthedocs.io/en/latest/jax.random.html>`__
 #
-# Note: This example only applies if you are using ``jax.jit``. Otherwise, PennyLane 
-# automatically seeds and resets the random-number-generator for you on each call.
+# .. note:: 
+#     This example only applies if you are using ``jax.jit``. Otherwise, PennyLane 
+#     automatically seeds and resets the random-number-generator for you on each call.
 #
 # To set the random number generating key, you'll have to pass the ``jax.random.PRNGKey``
 # when constructing the device. Because of this, if you want to use ``jax.jit`` with randomness,
