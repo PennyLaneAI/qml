@@ -157,6 +157,12 @@ hardware.
     :tags: pytorch
 
 .. customgalleryitem::
+    :tooltip: Learn how to use JAX with PennyLane.
+    :figure: demonstrations/jax_logo/jax.png
+    :description: :doc:`demos/tutorial_jax_transformations`
+    :tags: beginner
+
+.. customgalleryitem::
     :tooltip: Parallelize gradient calculations with Amazon Braket
     :figure: _static/pl-braket.png
     :description: :doc:`demos/braket-parallel-gradients`
@@ -186,5 +192,6 @@ hardware.
     demos/tutorial_qaoa_intro
     demos/tutorial_qnn_module_tf
     demos/tutorial_qnn_module_torch
+    demos/tutorial_jax_transformations
     demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
