@@ -30,7 +30,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt --use-deprecated=legacy-resolver
 
       - save_cache:
           paths:
