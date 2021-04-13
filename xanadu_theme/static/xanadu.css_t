@@ -1813,11 +1813,11 @@ span.eqno {
 
 @media (max-width: 976px) {
   .top-nav-collapse .nav-item:hover:after, .top-nav-collapse .nav-item.active:after {
-      border-bottom: 0px;
+      border-bottom: 0px !important;
   }
 
   .nav-item:hover:after, .nav-item.active:after {
-      border-bottom: 0px;
+      border-bottom: 0px !important;
   }
 }
 
