@@ -1811,6 +1811,16 @@ span.eqno {
 
 }
 
+@media (max-width: 976px) {
+  .top-nav-collapse .nav-item:hover:after, .top-nav-collapse .nav-item.active:after {
+      border-bottom: 0px;
+  }
+
+  .nav-item:hover:after, .nav-item.active:after {
+      border-bottom: 0px;
+  }
+}
+
 /* Account for when the left column is closed then page is expanded.
 -------------------------------------------------- */
 
