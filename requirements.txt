@@ -20,6 +20,7 @@ qulacs==0.1.10.1
 git+https://github.com/PennyLaneAI/pennylane-qulacs.git
 pyquil==2.21
 scikit-learn==0.23.2
+docutils==0.16
 sphinx==1.8.5
 sphinx-sitemap
 sphinx_gallery==0.7
