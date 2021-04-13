@@ -113,8 +113,8 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
-# ``(n_layers, n_qubits)``, which is passed to
-# :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
+# ``(n_layers, n_qubits)``. These weights determine the angles for blocks of rotation gates in the
+# circuit.
 #
 # Now that ``weight_shapes`` is defined, it is easy to then convert the QNode:
 
