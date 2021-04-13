@@ -86,7 +86,10 @@ dev = qml.device("default.qubit", wires=n_qubits)
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
-    qml.templates.BasicEntanglerLayers(weights, wires=range(n_qubits))
+    for weights_layer in weights:
+        qml.RX(weights_layer[0], wires=0)
+        qml.RX(weights_layer[1], wires=1)
+        qml.CNOT(wires=[0, 1])
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 
 ###############################################################################
