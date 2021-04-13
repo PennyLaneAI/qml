@@ -91,8 +91,8 @@ print(coordinates)
 # others [#jensenbook]_.
 #
 # Before launching the HF calculation using the function
-# :func:`~.pennylane_qchem.qchem.meanfield`, we need to specify a string to label the
-# molecule and its geometry. In this example we choose ``'water'`` as the string. Furthermore,
+# :func:`~.pennylane_qchem.qchem.meanfield`, we can specify a string to label the
+# molecule. In this example we choose ``'water'``. Furthermore,
 # the net charge of the molecule may be specified to simulate positively or negatively
 # charged molecules. For this example, we choose a neutral system
 
@@ -152,6 +152,7 @@ basis_set = 'sto-3g'
 hf_file = qchem.meanfield(
     symbols,
     coordinates,
+    name=name,
     charge=charge,
     mult=multiplicity,
     basis=basis_set,
