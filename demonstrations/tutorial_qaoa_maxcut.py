@@ -11,7 +11,7 @@ QAOA for MaxCut
 .. related::
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: PennyLane dev team. Last updated: 28 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 13 April 2021.*
 
 """
 ##############################################################################
