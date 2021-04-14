@@ -25,6 +25,11 @@ algorithms, by both:
 * Frugally adapting the number of shots used per parameter update, and
 * Performing a weighted sampling of operators from the cost Hamiltonian.
 
+.. note::
+
+    The Rosalin optimizer is available in PennyLane via the
+    :class:`~.pennylane.ShotAdaptiveOptimizer`.
+
 Background
 ----------
 
