@@ -85,7 +85,11 @@ dev = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev)
 def qnode(inputs, weights):
-    qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
+    # Embedding
+    qml.RX(inputs[0], wires=0)
+    qml.RX(inputs[1], wires=1)
+
+    # Layers
     for weights_layer in weights:
         qml.RX(weights_layer[0], wires=0)
         qml.RX(weights_layer[1], wires=1)
