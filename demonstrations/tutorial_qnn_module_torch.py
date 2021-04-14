@@ -10,7 +10,7 @@ Turning quantum nodes into Torch Layers
 
    tutorial_qnn_module_tf Turning quantum nodes into Keras Layers
 
-*Author: PennyLane dev team. Posted: 2 Nov 2020. Last updated: 28 Jan 2021.*
+*Author: PennyLane dev team. Posted: 2 Nov 2020. Last updated: 14 Apr 2021.*
 
 Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 `nn module <https://pytorch.org/docs/stable/nn.html>`__. Models are constructed from elementary
@@ -85,8 +85,15 @@ dev = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev)
 def qnode(inputs, weights):
-    qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
-    qml.templates.BasicEntanglerLayers(weights, wires=range(n_qubits))
+    # Embedding
+    qml.RX(inputs[0], wires=0)
+    qml.RX(inputs[1], wires=1)
+
+    # Layers
+    for weights_layer in weights:
+        qml.RX(weights_layer[0], wires=0)
+        qml.RX(weights_layer[1], wires=1)
+        qml.CNOT(wires=[0, 1])
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 
 ###############################################################################
@@ -110,8 +117,8 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
-# ``(n_layers, n_qubits)``, which is passed to
-# :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
+# ``(n_layers, n_qubits)``. These weights determine the angles for blocks of rotation gates in the
+# circuit.
 #
 # Now that ``weight_shapes`` is defined, it is easy to then convert the QNode:
 
