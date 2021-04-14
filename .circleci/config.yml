@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v22f-{{ .Branch }}-
-            - pip-v22f-
+            - pip-v23a-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v23a-{{ .Branch }}-
+            - pip-v23a-
 
       - run:
           name: Install dependencies
@@ -35,13 +35,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v23a-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v14-{{ .Branch }}-{{ .Revision }}
-            - gallery-v14-{{ .Branch }}-
-            - gallery-v14-
+            - gallery-v23a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v23a-{{ .Branch }}-
+            - gallery-v23a-
 
       - run:
           name: Build tutorials
@@ -57,7 +57,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v14-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v23a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
