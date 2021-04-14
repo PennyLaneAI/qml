@@ -10,7 +10,7 @@ Alleviating barren plateaus with local cost functions
 
    tutorial_barren_plateaus Barren plateaus in QNNs
 
-*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 28 Jan 2021.*
+*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 13 April 2021.*
 
 Barren Plateaus
 ---------------
