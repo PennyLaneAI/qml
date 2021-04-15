@@ -10,7 +10,7 @@ VQE in different spin sectors
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
 
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical

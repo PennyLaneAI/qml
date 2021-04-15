@@ -133,8 +133,8 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
-dev_analytic = qml.device("default.qubit", wires=num_wires, analytic=True)
-dev_stochastic = qml.device("default.qubit", wires=num_wires, analytic=False)
+dev_analytic = qml.device("default.qubit", wires=num_wires, shots=None)
+dev_stochastic = qml.device("default.qubit", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure

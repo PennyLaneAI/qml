@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v23a-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v23a-{{ .Branch }}-
-            - pip-v23a-
+            - pip-v24a-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v24a-{{ .Branch }}-
+            - pip-v24a-
 
       - run:
           name: Install dependencies
@@ -30,18 +30,18 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt
 
       - save_cache:
           paths:
             - venv
-          key: pip-v23a-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v24a-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v23a-{{ .Branch }}-{{ .Revision }}
-            - gallery-v23a-{{ .Branch }}-
-            - gallery-v23a-
+            - gallery-v24a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v24a-{{ .Branch }}-
+            - gallery-v24a-
 
       - run:
           name: Build tutorials
@@ -57,7 +57,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v23a-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v24a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
@@ -101,7 +101,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt
 
       - run:
           name: Build tutorials
