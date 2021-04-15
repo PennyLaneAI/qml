@@ -537,9 +537,8 @@ print(f"Heavy outputs are {heavy_outputs}")
 # .. note::
 #
 #    In the time since the original release of this demo, the Ourense device is
-#    no longer available on the IBM Q. However, we leave the original results
-#    for expository purposes, and note that the methods are applicable in
-#    general.
+#    no longer available from IBM Q. However, we leave the original results for
+#    expository purposes, and note that the methods are applicable in general.
 #
 dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense")
 

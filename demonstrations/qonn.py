@@ -320,7 +320,7 @@ def cost_wrapper(var, grad=[]):
 
     if grad.size > 0:
         # Get the gradient for `var` (idx 0) by first "unflattening" it
-        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)[0]
+        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)
         grad[:] = var_grad.flatten()
     cost_val = cost(var.reshape((num_layers, num_variables_per_layer)), X, Y)
 
@@ -332,7 +332,7 @@ def cost_wrapper(var, grad=[]):
 
 # Choose an algorithm
 opt_algorithm = nlopt.LD_LBFGS  # Gradient-based
-# opt_algorithm = nlopt.LN_BOBYQA  # Gradient-free
+#opt_algorithm = nlopt.LN_BOBYQA  # Gradient-free
 
 opt = nlopt.opt(opt_algorithm, num_layers*num_variables_per_layer)
 
