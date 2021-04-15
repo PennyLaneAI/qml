@@ -12,7 +12,7 @@ Optimizing a quantum optical neural network
 
    quantum_neural_net Function fitting with a photonic QNN
 
-*Author: PennyLane dev team. Last updated: 20 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 15 Apr 2021.*
 
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
