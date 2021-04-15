@@ -13,7 +13,7 @@ Optimization using SPSA
    tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
 
-*Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 19 Mar 2021.*
+*Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 8 Apr 2021.*
 
 In this tutorial, we investigate using a gradient-free optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
@@ -430,9 +430,9 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 from pennylane import qchem
 
 geometry = "h2.xyz"
-name = "h2"
 
-h2_ham, num_qubits = qchem.molecular_hamiltonian(name, geometry)
+symbols, coordinates = qchem.read_structure(geometry)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
 def circuit(params, wires):
