@@ -319,7 +319,7 @@ def cost_wrapper(var, grad=[]):
     evals += 1
 
     if grad.size > 0:
-        # Get the gradient for `var` (idx 0) by first "unflattening" it
+        # Get the gradient for `var` by first "unflattening" it
         var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)
         grad[:] = var_grad.flatten()
     cost_val = cost(var.reshape((num_layers, num_variables_per_layer)), X, Y)
