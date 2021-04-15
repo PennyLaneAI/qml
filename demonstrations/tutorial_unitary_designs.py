@@ -7,7 +7,7 @@ Unitary Designs
 .. meta::
     :property="og:description": Learn about designs and their uses in quantum computing.
 
-    :property="og:image": https://pennylane.ai/qml/_images/spherical_int_dtheta.png
+    :property="og:image": https://pennylane.ai/qml/_images/fano.png
 
 .. related::
 
@@ -91,7 +91,8 @@ The formal definition of a :math:`t`-design is as follows:
 
         \frac{1}{|X|} \sum_{x \in X} p_t(x) = \int_{\mathcal{S}(R^d)} p_t (u) d\mu(u)
 
-    where :math:`d\mu` is the uniform, normalized spherical measure.
+    holds for all possible :math:`p_t`, where :math:`d\mu` is the uniform,
+    normalized spherical measure.
 
 
 Now, this is a fairly abstract picture. Let's consider a sphere that we can
@@ -119,28 +120,75 @@ Complex projective designs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There was nothing quantum in the above description of spherical designs--it's
-time now to see where that comes in.
+time now to start bringing this aspect in. There is quite a nice progression we
+can follow to build up some intuition about what unitary designs are, and what
+they should do. The most pressing matter though is that so far, spherical
+designs have dealt only with real numbers, and surely we will need to include
+complex values, given that unitary matrices have complex entries.
 
-.. math::
+*Complex projective designs* lie conceptually in-between spherical and unitary
+designs. Rather than considering :math:`d`-dimensional vectors on the unit
+sphere of :math:`\mathcal{S}(R^d)`, we will shift to complex-valued unit
+vectors on the sphere :math:`\mathcal{S}(C^d)`. Complex projective designs are
+defined similarly to spherical designs, in that they can be used to compute
+average values of polynomials of homogenous degree :math:`t` in *both* the real
+and complex variables (so :math:`2d` variables total).
 
-    \int_{V \in U(N)} f(V) d\mu_N(V).
+.. admonition:: Definition     
+    :class: defn
 
-As with the measure term of the sphere, :math:`d\mu_N` itself can be broken down
-into components depending on individual parameters.  While the Haar
-measure can be defined for every dimension :math:`N`, the mathematical form gets
-quite hairy for larger dimensions---in general, an :math:`N`-dimensional unitary
-requires at least :math:`N^2 - 1` parameters, which is a lot to keep track of!
-Therefore we'll start with the case of a single qubit :math:`(N=2)`, then show
-how things generalize.
+    Let :math:`p_{t,t}: \mathcal{S}(C^d)\rightarrow C` be a polynomial with
+    homogenous degree :math:`t` in :math:`d` variables, and degree :math:`t` in
+    the complex conjugates of those variables. A complex projective :math:`t`-design is a
+    subset :math:`X = \{x: x \in \mathcal{S}(C^d)\}` is a spherical
+    :math:`t`-design if
+
+    .. math::
+
+        \frac{1}{|X|} \sum_{x \in X} p_{t,t}(x) = \int_{\mathcal{S}(C^d)}
+        p_{t,t} (u) d\mu(u)
+
+    holds for all possible :math:`p_{t,t}`.
+
+An interesting fact about complex projective designs is that, if you "unroll"
+the real and complex parts into real-valued vectors of length :math:`2d`, you have yourself
+a regular spherical design! This works in the other direction, too---spherical :math:`t`-designs
+can be transformed into :math:`t/2`-designs over :math:`\mathcal{S}(C^{d/2})`.
 
 Unitary designs
 ^^^^^^^^^^^^^^^
+
+We've seen now how both spherical and complex projective designs are defined as
+representative sets of points in the space that you can use as "short cuts" to
+evaluate the average of polynomials up to a given degree :math:`t`. A *unitary
+design* in the abstract takes this one step further---it considers polynomials that
+are functions of entries of the unitary matrices.
+
+.. admonition:: Definition     
+    :class: defn
+
+    Let :math:`P_{t,t}(U)` be a polynomial with homogenous degree :math:`t` in
+    :math:`d` variables in the entries of a unitary matrix :math:`U`, and degree
+    :math:`t` in the complex conjugates of those entries. A unitary
+    :math:`t`-design is a set of :math:`K` unitaries :math:`\{U_k\}` such that
+
+    .. math::
+
+        \frac{1}{K} \sum_{k=1}^{K} P_{t,t}(U_k) = \int_{\mathcal{U}(d)}
+        P_{t,t} (U) d\mu(U)
+
+    holds for all possible :math:`P_{t,t}`, and where :math:`d\mu` is the
+    uniform *Haar measure*.
+
 
 Unitary :math:`t`-designs and you
 ---------------------------------
 
 Unitary :math:`t`-designs are not as easy to visualize as the spherical designs
-above; and in general they are hard to construct. That said
+above; and in general they are hard to construct. That said, there are some well
+known results for how to construct, unitary 1-, 2-, and even unitary 3-designs
+using some objects that will be quite familiar. But first, now that we know what
+they are, it's time to see why they are useful.
 
 What can we do with them?
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -169,12 +217,19 @@ to do is compute the average fidelity of....
 
 where :math:`d\mu` is the Haar measure.
 
+Now, note what would happen if we were to fix a dimension :math:`d` and expand
+out the contents of the integral for a single :math:`U`. We see that :math:`U`
+is applied twice, and the same for :math:`U^\dagger`. This is just matrix
+multiplication, and it will produce a matrix in which the entries are
+polynomials with degree 2 in both the entries of :math:`U`, and
+:math:`U^\dagger`!  This is incredible - it means we can perform the experiment
+using only a limited subset of quantum states, but obtain the correct
+result. The question then becomes, what is the representative set of unitaries?
+
 Design design
 ^^^^^^^^^^^^^
 
-
-
-Does they actually work?
+Do they actually work?
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's find out! In what follows, we'll construct the single-qubit Clifford group, 
@@ -300,18 +355,4 @@ plt.axvline(np.mean(fidelities) - np.std(fidelities), color="red", linestyle="da
 #     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
 #     Cambridge University Press.
 #
-# .. [#deGuise2018]
-#
-#     H. de Guise, O. Di Matteo, and L. L. Sánchez-Soto. (2018) "Simple factorization
-#     of unitary transformations", `Phys. Rev. A 97 022328
-#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328>`__.
-#     (`arXiv <https://arxiv.org/abs/1708.00735>`__)
-#
-# .. [#Clements2016]
-#
-#     W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S. Kolthammer, and
-#     I. A. Walmsley (2016) “Optimal design for universal multiport
-#     interferometers”, \ `Optica 3, 1460–1465
-#     <https://www.osapublishing.org/optica/fulltext.cfm?uri=optica-3-12-1460&id=355743>`__.
-#     (`arXiv <https://arxiv.org/abs/1603.08788>`__)
-#
+
