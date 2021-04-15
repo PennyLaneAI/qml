@@ -11,7 +11,7 @@ QAOA for MaxCut
 .. related::
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: PennyLane dev team. Last updated: 28 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 13 April 2021.*
 
 """
 ##############################################################################
@@ -192,7 +192,7 @@ def comp_basis_measurement(wires):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("default.qubit", wires=n_wires, shots=None)
+dev = qml.device("default.qubit", wires=n_wires, shots=1)
 
 ##############################################################################
 # We also require a quantum node which will apply the operators according to the
@@ -204,7 +204,7 @@ dev = qml.device("default.qubit", wires=n_wires, shots=None)
 # (repeated applications of :math:`U_BU_C`) using the keyword ``n_layers``.
 
 pauli_z = [[1, 0], [0, -1]]
-pauli_z_2 = np.kron(pauli_z, pauli_z)
+pauli_z_2 = np.kron(pauli_z, pauli_z, requires_grad=False)
 
 
 @qml.qnode(dev)
