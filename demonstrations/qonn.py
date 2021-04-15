@@ -332,7 +332,7 @@ def cost_wrapper(var, grad=[]):
 
 # Choose an algorithm
 opt_algorithm = nlopt.LD_LBFGS  # Gradient-based
-#opt_algorithm = nlopt.LN_BOBYQA  # Gradient-free
+# opt_algorithm = nlopt.LN_BOBYQA  # Gradient-free
 
 opt = nlopt.opt(opt_algorithm, num_layers*num_variables_per_layer)
 
