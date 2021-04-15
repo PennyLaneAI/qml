@@ -129,7 +129,7 @@ from pennylane import numpy as np
 
 n_wires = 2
 
-dev = qml.device("default.qubit", analytic=True, wires=2)
+dev = qml.device("default.qubit", shots=1000, wires=2)
 
 ##############################################################################
 # Creating a fixed quantum circuit

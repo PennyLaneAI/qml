@@ -4,7 +4,7 @@ Quantum volume
 ==============
 
 .. meta::
-    :property="og:description": Learn about quantum volume, and how to 
+    :property="og:description": Learn about quantum volume, and how to
         compute it.
     :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
 
@@ -95,7 +95,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # ~~~~~~~~~~~~
 #
 # Quantum volume relates
-# to the largest *square* circuit that a quantum processor can run reliably. This benchmark 
+# to the largest *square* circuit that a quantum processor can run reliably. This benchmark
 # uses *random* square circuits with a very particular form:
 #
 # .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
@@ -666,7 +666,7 @@ probs_mean_noisy = np.mean(probs_noisy, axis=1)
 print(f"Ideal mean probabilities:")
 for idx, prob in enumerate(probs_mean_ideal):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
-    
+
 print(f"\nDevice mean probabilities:")
 for idx, prob in enumerate(probs_mean_noisy):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
