@@ -11,9 +11,11 @@ Understanding the Haar Measure
 
 .. related::
 
+    tutorial_unitary_designs Unitary designs
     quantum_volume Quantum volume
     qsim_beyond_classical Beyond classical computing with qsim
     tutorial_barren_plateaus Barren plateaus
+
 
 
 *Author: PennyLane dev team. Posted: 22 March 2021. Last updated: 22 March 2021.*
