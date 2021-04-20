@@ -10,7 +10,7 @@ VQE in different spin sectors
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
 
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical
@@ -93,7 +93,9 @@ geometry = "h2.xyz"
 # representation is built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function.
 
-H, qubits = qchem.molecular_hamiltonian(name, geometry, mapping="jordan_wigner")
+symbols, coordinates = qchem.read_structure(geometry)
+
+H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mapping="jordan_wigner")
 
 print("Number of qubits = ", qubits)
 print("Hamiltonian is ", H)

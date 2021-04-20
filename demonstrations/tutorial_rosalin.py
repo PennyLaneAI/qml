@@ -14,7 +14,7 @@ Frugal shot optimization with Rosalin
    tutorial_doubly_stochastic Doubly stochastic gradient descent
    tutorial_rotoselect Quantum circuit structure learning
 
-*Author: PennyLane dev team. Posted: 19 May 2020. Last updated: 20 Jan 2021.*
+*Author: PennyLane dev team. Posted: 19 May 2020. Last updated: 13 April 2021.*
 
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
@@ -24,6 +24,11 @@ algorithms, by both:
 
 * Frugally adapting the number of shots used per parameter update, and
 * Performing a weighted sampling of operators from the cost Hamiltonian.
+
+.. note::
+
+    The Rosalin optimizer is available in PennyLane via the
+    :class:`~.pennylane.ShotAdaptiveOptimizer`.
 
 Background
 ----------
@@ -137,10 +142,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=False)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=True)
+analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
 # We use :func:`~.pennylane.map` to map our ansatz over our list of observables,
@@ -197,12 +202,10 @@ def cost(params):
     result = 0
 
     for h, c, p, s in zip(qnodes, coeffs, prob_shots, shots_per_term):
-        # set the number of shots
-        h.device.shots = s
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * h(params)
+        result += c * h(params, shots=int(s))
 
     return result
 
@@ -236,7 +239,7 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
-non_analytic_dev.shots = total_shots / len(coeffs)
+non_analytic_dev.shots = int(total_shots / len(coeffs))
 
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
 cost = qml.dot(coeffs, qnodes)
@@ -440,12 +443,9 @@ class Rosalin:
             if s == 0:
                 continue
 
-            # set the QNode device shots
-            h.device.shots = s
-
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = h(params)
+            res = h(params, shots=int(s))
 
             if s == 1:
                 res = np.array([res])
@@ -540,7 +540,7 @@ class Rosalin:
 # must be able to generate single-shot samples from our device.
 
 
-rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
+rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
 
 ##############################################################################
