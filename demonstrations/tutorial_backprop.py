@@ -249,7 +249,7 @@ print(2 * forward_time * params.size)
 # designed to support backpropagation.
 #
 # One such device is :class:`default.qubit <pennylane.devices.DefaultQubit>`. It
-# has backends written using both TensorFlow, JAX, and Autograd, so when used with the
+# has backends written using TensorFlow, JAX, and Autograd, so when used with the
 # TensorFlow, JAX, and Autograd interfaces respectively, supports backpropagation.
 # In this demo, we will use the default Autograd interface.
 
@@ -258,7 +258,7 @@ dev = qml.device("default.qubit", wires=4)
 ##############################################################################
 # When defining the QNode, we specify ``diff_method="backprop"`` to ensure that
 # we are using backpropagation mode. Note that this is the *default differentiation
-# mode* for the ``default.qubit``.
+# mode* for the ``default.qubit`` device.
 
 
 @qml.qnode(dev, diff_method="backprop")
