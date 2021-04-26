@@ -34,15 +34,16 @@ An illustration of potential energy surface of H-H bond dissociation for hydroge
 Potential Energy Surfaces: Hills to die and be reborn for molecules
 ---------------------------------------------------------------------
 
-Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical reaction or any transformation occurs. But what is it? The concept originates with the idea that "nuclies are heavier than electron" aka Born-Oppenheimer approximation and that we can solve for the electronic wavefunction with nucleis clamped to their respective positions. This results in separation of nuclear and electronic parts of the Schrodinger equation and we only solve the electronic part:  $  H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle  $
-        
+Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical reaction or any transformation occurs. But what is it? The concept originates with the idea that "nuclies are heavier than electron" aka Born-Oppenheimer approximation and that we can solve for the electronic wavefunction with nucleis clamped to their respective positions. This results in separation of nuclear and electronic parts of the Schrodinger equation and we only solve the electronic part 
+
+.. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle   
 From here arises the concept of electronic energy of the molecule, a quantum mechanical system, as a function of interatomic coordinates and angles, and potential energy surface is a n-dimensional plot of E with the respective degrees of freedom. It gives us a visual tool to undertstand chemical reactions where stable molecules are the local minimas in the valleys and transition states the *hill peaks* to climb.
 
 This is to say that we solve the electronic Schrodinger equation for a given fixed positions of nucleis, and then we move nucleis in incremental step. The obtained set of energies are then plotted against nuclear positions.
 
 We will begin by showing how this works for a simple diatomic molecule such as H2.  H$_2$ is the simplest of the molecules and the formation (or breaking) of the H-H bond is the simplest of all reactions. 
 
-H${_2}$ $\rightarrow$ H $+$ H  
+.. math:: H_2 \rightarrow H + H  
 
 In terms of quantum computing terms, this is a 4 qubit problem if considered in a minimal basis set i.e. 2 electron in 4 spin orbitals. And as discussed in the previous tutorial, the states involved are |1100> (also the Hartree-Fock ground state), |1010>, |0101> and |0011>, these are the only states out of 2^4 (=16) states that matter for this problem and are obtained by single and double particle-hole excitation out of the HF state. Below we show how to set upthe problem to generate a PES for such a reaction. 
 
