@@ -168,6 +168,12 @@ hardware.
     :description: :doc:`demos/braket-parallel-gradients`
     :tags: braket
 
+.. customgalleryitem::
+    :tooltip: Study chemical reactions using VQE.
+    :figure: demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
+    :description: :doc:`demos/tutorial_vqe_bond_dissociation`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -195,3 +201,4 @@ hardware.
     demos/tutorial_jax_transformations
     demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
+    demos/tutorial_vqe_bond_dissociation

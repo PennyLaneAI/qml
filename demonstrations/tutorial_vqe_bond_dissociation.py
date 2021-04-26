@@ -66,25 +66,25 @@ import time
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
 # and the spin multiplicity of the electronic configuration. To construct the potential energy surface,
-# we need to vary the geometry. So, we keep one H atom fixed at origin and vary the x-coordinate of the other 
+# we need to vary the geometry. So, we keep one H atom fixed at origin and vary the x-coordinate of the other
 # H atom such that the bond distance varies from 1.0 to 4.0 Bohrs in steps of 0.25 Bohrs.
 
 charge = 0
 multiplicity = 1
-basis_set = 'sto-3g'
+basis_set = "sto-3g"
 
 electrons = 2
 
-active_electrons=2
-active_orbitals=2
+active_electrons = 2
+active_orbitals = 2
 
 vqe_energy = []
 
 # set up a loop to change internuclear distance
-for r_HH in np.arange(0.5, 4.0, 0.1) :
-    
+for r_HH in np.arange(0.5, 4.0, 0.1):
+
     symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH]))
-    
+
     # Do a meanfield calculation -> Define a fermionic Hamiltonian -> turn into a qubit Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
@@ -92,28 +92,26 @@ for r_HH in np.arange(0.5, 4.0, 0.1) :
         charge=charge,
         mult=multiplicity,
         basis=basis_set,
-        package='pyscf',
+        package="pyscf",
         active_electrons=active_electrons,
         active_orbitals=active_orbitals,
-        mapping='jordan_wigner'
+        mapping="jordan_wigner",
     )
 
+    print("Number of qubits = ", qubits)
+    print("Hamiltonian is ", H)
 
-    print('Number of qubits = ', qubits)
-    print('Hamiltonian is ', H)
-
-##############################################################################
-# Now to build the circuit for a general molecular system. We begin by preparing the 
-# qubit version of HF state, :math:`|1100\rangle. 
-# We then identify and add all possible single and double excitations. In this case, there is only one 
-# double excitationi(:math:`|0011\rangle) and two single excitations(:math:`|0110\rangle and :math:`|1001\rangle))
+    ##############################################################################
+    # Now to build the circuit for a general molecular system. We begin by preparing the
+    # qubit version of HF state, :math:`|1100\rangle.
+    # We then identify and add all possible single and double excitations. In this case, there is only one
+    # double excitationi(:math:`|0011\rangle) and two single excitations(:math:`|0110\rangle and :math:`|1001\rangle))
 
     # get all the singles and doubles excitations
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
     print("Single excitations", singles)
     print("Double excitations", doubles)
-
 
     # define the circuit
     def circuit(params, wires):
@@ -126,34 +124,33 @@ for r_HH in np.arange(0.5, 4.0, 0.1) :
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-
-##############################################################################
-# From here on, we can use optimizers in PennyLane 
-#
-# PennyLane contains the :class:`~.ExpvalCost` class, specifically
-# that we use to obtain the cost function central to the idea of variational optimization 
-# of parameters in VQE algorithm. We define the device which is a classical qubit simulator,
-# a cost function which calculates the expectation value of Hamiltonian operator for the
-# given trial wavefunction and also the gradient descent optimizer that will be used to optimize
-# the gate parameters:
+    ##############################################################################
+    # From here on, we can use optimizers in PennyLane
+    #
+    # PennyLane contains the :class:`~.ExpvalCost` class, specifically
+    # that we use to obtain the cost function central to the idea of variational optimization
+    # of parameters in VQE algorithm. We define the device which is a classical qubit simulator,
+    # a cost function which calculates the expectation value of Hamiltonian operator for the
+    # given trial wavefunction and also the gradient descent optimizer that will be used to optimize
+    # the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
-    
-##############################################################################
-# A related question is what are gate parameters that we seek to optimize?
-# These could be thought of as rotation variables in the gates used which
-# can then be translated into determinant coefficients in the wavefunction expansion. 
+
+    ##############################################################################
+    # A related question is what are gate parameters that we seek to optimize?
+    # These could be thought of as rotation variables in the gates used which
+    # can then be translated into determinant coefficients in the wavefunction expansion.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
     dcircuit(params)
 
-##############################################################################
-# We then define the VQE optimization iteration and the convergence criteria :math:`\sim 10^{
-# -6}`
+    ##############################################################################
+    # We then define the VQE optimization iteration and the convergence criteria :math:`\sim 10^{
+    # -6}`
     prev_energy = 0.0
 
     for n in range(40):
@@ -164,17 +161,17 @@ for r_HH in np.arange(0.5, 4.0, 0.1) :
 
         t2 = time.time()
 
-        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2-t1))
-        
-        # define your convergence criteria, we choose modest value of 1E-6 Ha 
-        if (np.abs(energy - prev_energy) < 1E-6 ):
+        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
+
+        # define your convergence criteria, we choose modest value of 1E-6 Ha
+        if np.abs(energy - prev_energy) < 1e-6:
             break
-        
+
         prev_energy = energy
-        
+
     print("At bond distance \n", r_HH)
     print("The VQE energy is", energy)
-    
+
     vqe_energy.append(energy)
 
 ##############################################################################
@@ -188,10 +185,11 @@ r = np.arange(0.5, 4.0, 0.1)
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
-ax.plot (r, vqe_energy, label ="VQE(S+D)")
+ax.plot(r, vqe_energy, label="VQE(S+D)")
 
-ax.set(xlabel='Distance (H-H, in Angstrom)', ylabel='Total energy',
-       title='PES for H$_2$ dissociation')
+ax.set(
+    xlabel="Distance (H-H, in Angstrom)", ylabel="Total energy", title="PES for H$_2$ dissociation"
+)
 ax.grid()
 ax.legend()
 
@@ -200,8 +198,8 @@ plt.show()
 
 
 ##############################################################################
-#  This was a simple 1D PES for Hydrogen molecule. It gives an estimate of H-H bond distance to be ~ 1.4 Bohrs 
-#  H-H bond dissociation energy (the difference in energy at equilibrium and energy at dissociation limit) 
+#  This was a simple 1D PES for Hydrogen molecule. It gives an estimate of H-H bond distance to be ~ 1.4 Bohrs
+#  H-H bond dissociation energy (the difference in energy at equilibrium and energy at dissociation limit)
 #  around 0.194 Hartrees (121.8 Kcal/mol). Can these estimates be improved? Yes, by using bigger basis sets and
 #  extrapolating to the complete basis set (CBS) limit.
 #
