@@ -94,11 +94,11 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     print("Number of qubits = ", qubits)
     print("Hamiltonian is ", H)
 
-##############################################################################
-# Now to build the circuit for a general molecular system. We begin by preparing the
-# qubit version of HF state, :math:`|1100\rangle`.
-# We then identify and add all possible single and double excitations. In this case, there is only one
-# double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` and :math:`|1001\rangle`)
+    ##############################################################################
+    # Now to build the circuit for a general molecular system. We begin by preparing the
+    # qubit version of HF state, :math:`|1100\rangle`.
+    # We then identify and add all possible single and double excitations. In this case, there is only one
+    # double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` and :math:`|1001\rangle`)
 
     # get all the singles and doubles excitations
 
@@ -117,32 +117,32 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-##############################################################################
-# From here on, we can use optimizers in PennyLane.
-# PennyLane contains the :class:`~.ExpvalCost` class, specifically
-# that we use to obtain the cost function central to the idea of variational optimization
-# of parameters in VQE algorithm. We define the device which is a classical qubit simulator,
-# a cost function which calculates the expectation value of Hamiltonian operator for the
-# given trial wavefunction and also the gradient descent optimizer that will be used to optimize
-# the gate parameters:
+    ##############################################################################
+    # From here on, we can use optimizers in PennyLane.
+    # PennyLane contains the :class:`~.ExpvalCost` class, specifically
+    # that we use to obtain the cost function central to the idea of variational optimization
+    # of parameters in VQE algorithm. We define the device which is a classical qubit simulator,
+    # a cost function which calculates the expectation value of Hamiltonian operator for the
+    # given trial wavefunction and also the gradient descent optimizer that will be used to optimize
+    # the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-##############################################################################
-# A related question is what are gate parameters that we seek to optimize?
-# These could be thought of as rotation variables in the gates used which
-# can then be translated into determinant coefficients in the wavefunction expansion.
+    ##############################################################################
+    # A related question is what are gate parameters that we seek to optimize?
+    # These could be thought of as rotation variables in the gates used which
+    # can then be translated into determinant coefficients in the wavefunction expansion.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
     dcircuit(params)
 
-##############################################################################
-# We then define the VQE optimization iteration and the convergence criteria :math:`\sim 10^{
-# -6}`
+    ##############################################################################
+    # We then define the VQE optimization iteration and the convergence criteria :math:`\sim 10^{
+    # -6}`
     prev_energy = 0.0
 
     for n in range(40):
@@ -198,47 +198,48 @@ plt.show()
 #
 
 
-
-
 ##############################################################################
 # Hydrogen Exchange Reaction
 # -----------------------------
 #
 # We will try to construct the PES for a simple hydrogen exchange reaction
-# .. math:: H_2 + H \rightarrow H + H_2  
+# .. math:: H_2 + H \rightarrow H + H_2
 #
-# This reaction has a barrier though, transition state, which it has to cross 
-# for the exchange of H atom to be complete. In a minimal basis like STO-3G, 
-# this system consists 3 electron in 6 spin molecular orbitals. This means it is 
+# This reaction has a barrier though, transition state, which it has to cross
+# for the exchange of H atom to be complete. In a minimal basis like STO-3G,
+# this system consists 3 electron in 6 spin molecular orbitals. This means it is
 # a 6 qubit problem and the ground state (HF state) is given by |111000>
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
 #   :align: center
-# 
+#
 #  Again, we need to define the molecular parameters
 
 # Molecular parameters
 
-name = 'h3'
-basis_set = 'sto-3g'
+name = "h3"
+basis_set = "sto-3g"
 
 electrons = 3
 charge = 0
-spin =1
-multiplicity=2
+spin = 1
+multiplicity = 2
 
-active_electrons=3
-active_orbitals=3
+active_electrons = 3
+active_orbitals = 3
 
 ##############################################################################
 # Then we setup the PES loop, incrementing the H(1)-H(2) distance from 1.0 to 3.0 Bohrs in steps of 0.1 Bohr
 
 vqe_energy = []
 
-for r_HH in np.arange(1.0, 3.0, 0.1) :
+for r_HH in np.arange(1.0, 3.0, 0.1):
 
-    symbols, coordinates = (["H", "H","H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH, 0.0, 0.0, 4.0]))
+    symbols, coordinates = (
+        ["H", "H", "H"],
+        np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH, 0.0, 0.0, 4.0]),
+    )
 
     # Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(
@@ -247,10 +248,10 @@ for r_HH in np.arange(1.0, 3.0, 0.1) :
         charge=charge,
         mult=multiplicity,
         basis=basis_set,
-        package='pyscf',
+        package="pyscf",
         active_electrons=active_electrons,
         active_orbitals=active_orbitals,
-        mapping='jordan_wigner'
+        mapping="jordan_wigner",
     )
 
     # get all the singles and doubles excitations
@@ -264,28 +265,27 @@ for r_HH in np.arange(1.0, 3.0, 0.1) :
         qml.PauliX(1)
         qml.PauliX(2)
         # All possible double excitations
-        for i in range(0,len(doubles)):
+        for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
 
         # All single excitations too
-        for j in range(0,len(singles)):
-            qml.SingleExcitation(params[j+len(doubles)], wires=singles[j])
+        for j in range(0, len(singles)):
+            qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
-#   Now we define the device and initialize the gate parameters.
+    #   Now we define the device and initialize the gate parameters.
     dev = qml.device("default.qubit", wires=qubits)
 
     cost_fn = qml.ExpvalCost(circuit, H, dev)
 
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    
     # total length of parameters is generally the total no. of determinants considered
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-##############################################################################
-# The we evaluate the costfunction and use the gradient descent algorithm in an iterative optimization 
-# of the gate parameters.  
+    ##############################################################################
+    # The we evaluate the costfunction and use the gradient descent algorithm in an iterative optimization
+    # of the gate parameters.
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
@@ -301,34 +301,37 @@ for r_HH in np.arange(1.0, 3.0, 0.1) :
 
         t2 = time.time()
 
-        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2-t1))
-        
-        if (np.abs(energy - prev_energy) < 10E-6 ):
+        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
+
+        if np.abs(energy - prev_energy) < 10e-6:
             break
-        
+
         prev_energy = energy
-        
-##############################################################################
-#  Finally at each point of the 1D PES, we could print the total VQE energy        
-        
+
+    ##############################################################################
+    #  Finally at each point of the 1D PES, we could print the total VQE energy
+
     print("At bond distance \n", r_HH)
     print("The VQE energy is", energy)
-    
+
     vqe_energy.append(energy)
 
-#  
+#
 ##############################################################################
 #
-# Then we could plot the energy as a function of H-H distance which is also the reaction coordinate 
+# Then we could plot the energy as a function of H-H distance which is also the reaction coordinate
 # and thus, we have the 1D PES or the potential energy curve for this reaction.
 
 r = np.arange(1.0, 3.0, 0.1)
 
 fig, ax = plt.subplots()
-ax.plot (r, vqe_energy, label = 'VQE(S+D)')
+ax.plot(r, vqe_energy, label="VQE(S+D)")
 
-ax.set(xlabel='Distance (H-H, in Bohr)', ylabel='Total energy (in Hartree)',
-       title='PES for H-H + H -> H + H-H reaction')
+ax.set(
+    xlabel="Distance (H-H, in Bohr)",
+    ylabel="Total energy (in Hartree)",
+    title="PES for H-H + H -> H + H-H reaction",
+)
 ax.grid()
 
 ax.legend()
@@ -337,34 +340,33 @@ plt.show()
 #
 #
 ##############################################################################
-# Activation energy barrier and Reaction Rate 
+# Activation energy barrier and Reaction Rate
 # --------------------------------------------
-# As we can see in the potential energy surface above, we basically are interested 
-# in getting right the energy of the reactants(minima 1), products (minima 2) and 
-# the transition state (maxima). 
-# The plot below compares the performance many methods at the same time 
-# - VQE(S+D) basically reproduces the classical quantum chemistry methods CCSD and CISD results. 
-# Another VQE based optimzation but restricted to a DOCI like ansatz is added too. 
-# DOCI stands for Doubly occupied CI i.e. only pure pair excitations are allowed 
-# but we have also kept all single excitations.  As we see, DOCI is not an ideal method 
+# As we can see in the potential energy surface above, we basically are interested
+# in getting right the energy of the reactants(minima 1), products (minima 2) and
+# the transition state (maxima).
+# The plot below compares the performance many methods at the same time
+# - VQE(S+D) basically reproduces the classical quantum chemistry methods CCSD and CISD results.
+# Another VQE based optimzation but restricted to a DOCI like ansatz is added too.
+# DOCI stands for Doubly occupied CI i.e. only pure pair excitations are allowed
+# but we have also kept all single excitations.  As we see, DOCI is not an ideal method
 # for this problem but could become a good starting point for some more difficult problems.
 #
-# The activation energy barrier is defined as the difference between the 
-# energy of the reactant complex 
-# and the energy of the 
-# transition state ( H --- H --- H). 
-# .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant} 
-# In this case, VQE(S+D) reproduces the exact theoretical results in the 
-# minimal basis. The activation energy barrier is given by 
+# The activation energy barrier is defined as the difference between the
+# energy of the reactant complex
+# and the energy of the
+# transition state ( H --- H --- H).
+# .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
+# In this case, VQE(S+D) reproduces the exact theoretical results in the
+# minimal basis. The activation energy barrier is given by
 # .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
-# Though this is the best theoretical estimate in this small basis, 
+# Though this is the best theoretical estimate in this small basis,
 # this is not the *best* theoretical estimate. We would need to do this calculation
-# in larger basis, triple and quadruple zeta basis or higher, to reach basis set 
+# in larger basis, triple and quadruple zeta basis or higher, to reach basis set
 # convergence and this would significantly increase the number of qubits required.
-# The reaction rate (k) has an exponential dependence on the activation energy barrier: 
-# .. math:: k = Ae^{-{E_{Activation Barrier}}/RT} 
+# The reaction rate (k) has an exponential dependence on the activation energy barrier:
+# .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}
 #
-
 
 
 ##############################################################################
@@ -373,7 +375,6 @@ plt.show()
 #     :align: center
 #
 #
-
 
 
 ##############################################################################
