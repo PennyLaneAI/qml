@@ -203,6 +203,7 @@ plt.show()
 # -----------------------------
 #
 # We will try to construct the PES for a simple hydrogen exchange reaction
+#
 # .. math:: H_2 + H \rightarrow H + H_2
 #
 # This reaction has a barrier though, transition state, which it has to cross
@@ -214,7 +215,7 @@ plt.show()
 #   :width: 50%
 #   :align: center
 #
-#  Again, we need to define the molecular parameters
+# Again, we need to define the molecular parameters
 
 # Molecular parameters
 
@@ -356,15 +357,20 @@ plt.show()
 # energy of the reactant complex
 # and the energy of the
 # transition state ( H --- H --- H).
+#
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
+#
 # In this case, VQE(S+D) reproduces the exact theoretical results in the
 # minimal basis. The activation energy barrier is given by
+#
 # .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
+#
 # Though this is the best theoretical estimate in this small basis,
 # this is not the *best* theoretical estimate. We would need to do this calculation
 # in larger basis, triple and quadruple zeta basis or higher, to reach basis set
 # convergence and this would significantly increase the number of qubits required.
 # The reaction rate (k) has an exponential dependence on the activation energy barrier:
+#
 # .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}
 #
 
