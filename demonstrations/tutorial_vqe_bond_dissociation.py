@@ -54,7 +54,6 @@ import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
-from IPython.display import display, Math, Latex, Image
 import time
 
 ##############################################################################
