@@ -139,7 +139,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     dcircuit(params)
 
 ##############################################################################
-# We then begin the VQE iteration to obtain optimal gate parameters.
+# We then begin the VQE iteration to optimize gate parameters.
 # The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
 # which could be made stricter.
 
