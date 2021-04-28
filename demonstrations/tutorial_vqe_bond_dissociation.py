@@ -346,12 +346,17 @@ plt.show()
 # As we can see in the potential energy surface above, we basically are interested
 # in getting right the energy of the reactants(minima 1), products (minima 2) and
 # the transition state (maxima).
-# The plot below compares the performance many methods at the same time
-# - VQE(S+D) basically reproduces the classical quantum chemistry methods CCSD and CISD results.
-# Another VQE based optimzation but restricted to a DOCI like ansatz is added too.
+# The plot below compares the performance of many methods with each other
+# - VQE(S+D) basically reproduces the classical quantum chemistry methods,
+# CCSD and CISD.
+# Another VQE based optimzation but restricted to a simpler ansatz is added too.
 # DOCI stands for Doubly occupied CI i.e. only pure pair excitations are allowed
-# but we have also kept all single excitations.  As we see, DOCI is not an ideal method
+# but we have also kept all single excitations.  As we see, VQE(DOCI) does not
+# get the energetics of reactants, products and transition states accurately
+# and hence is not an ideal method
 # for this problem but could become a good starting point for some more difficult problems.
+# In a future tutorial, we would show how to build a range of trial wavefunction ansatz
+# using tools in Pennylane qml.DoubleExcitation and qml.SingleExcitation.
 #
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
@@ -360,7 +365,7 @@ plt.show()
 #
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
 #
-# In this case, VQE(S+D) reproduces the exact theoretical results in the
+# In this case, VQE(S+D) reproduces the exact theoretical result in the
 # minimal basis. The activation energy barrier is given by
 #
 # .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
@@ -369,10 +374,14 @@ plt.show()
 # this is not the *best* theoretical estimate. We would need to do this calculation
 # in larger basis, triple and quadruple zeta basis or higher, to reach basis set
 # convergence and this would significantly increase the number of qubits required.
+# This is a current limitation that would go away with increasing number of logical qubits
+# that become available in future quantum computers.
+#
 # The reaction rate (k) has an exponential dependence on the activation energy barrier:
 #
 # .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}
 #
+# So, in principle, if we know the constant (A) we could calculate the rate of the reaction.
 
 
 ##############################################################################
@@ -381,12 +390,183 @@ plt.show()
 #     :align: center
 #
 #
+#
+#
+#
+#
+
+##############################################################################
+# A symmetric insertion of :math:`H_2` with :math:`Be` atom: a model multireference problem
+# -------------------------------------------------------------------------------------------
+#
+#
+# A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to give :math:`BeH_2`
+# is considered to be a multireference problem. It needs two different
+# HF Slater determinants to qualitatively describe the full potential energy suface
+# for the transformation. This is to say that a Slater Determinant is a good HF reference 
+# for one half of the PES while another determinant is good reference for rest of PES.
+# This, by definition, is a *multi-reference* problem.
+# Here, we construct the potential energy surface for this reaction and see how
+# classical and quantum computing approaches built on single HF reference perform.
+# Once we have solved the mean-field problem, we obtain the molecular orbitals
+# (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal configurations
+# :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
+#
+#
+# .. figure:: /demonstrations/vqe_bond_dissociation/beh2_movie.gif
+#     :width: 50%
+#     :align: center
+#
+#
+# To figure out the reaction coordinate or the set of geometries the trajectory of 
+# approach of :math:`H_2` to Beryllium atom, we refer to the work by 
+# Coe et al. [#coe2012]_
+# We fix beryllium atom at the origin and the coordinates for hydrogen atoms are give by, in Bohr, 
+# the coordinates x, y and x, −y where y = 2.54 − 0.46x and x ∈ [1, 5].
+# The generation of PES then is straightforward as was done for previous examples here. 
+# For the sake of saving computational cost, we try a smaller active space of a total of
+# 6 spin MOs with core electrons frozen.
+
+# Molecular parameters
+name = 'beh2'
+basis_set = 'sto-3g'
+
+electrons = 6
+charge = 0
+spin =1
+multiplicity=1
+
+active_electrons=4
+# choosing a smaller active space - 6 spin MOs
+active_orbitals= 3
+vqe_energy = []
+
+
+name = "beh2"
+
+for reac_coord in np.arange(1.0, 5.0, 0.25) :
+
+
+    x = reac_coord
+    y = np.subtract(2.54, np.multiply(0.46, x))
+
+    symbols, coordinates = (["Be", "H","H"], np.array([0.0, 0.0, 0.0, x, y, 0.0, x, -y, 0.0]))
+
+    H, qubits = qchem.molecular_hamiltonian(
+        symbols,
+        coordinates,
+        charge=charge,
+        mult=multiplicity,
+        basis=basis_set,
+        package='pyscf',
+        active_electrons=active_electrons,
+        active_orbitals=active_orbitals,
+        mapping='jordan_wigner'
+    )
+
+    # get all the singles and doubles excitations
+
+    singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
+    print("Single excitations", singles)
+    print("Double excitations", doubles)
+
+
+    def circuit(params, wires):
+        qml.PauliX(0)
+        qml.PauliX(1)
+        qml.PauliX(2)
+        qml.PauliX(3)
+        # All possible double excitations
+        for i in range(0,len(doubles)):
+            qml.DoubleExcitation(params[i], wires=doubles[i])
+
+        # All possible single excitations
+
+        for j in range(0,len(singles)):
+            qml.SingleExcitation(params[j+len(doubles)], wires=singles[j])
+
+    dev = qml.device("default.qubit", wires=qubits)
+
+    cost_fn = qml.ExpvalCost(circuit, H, dev)
+
+    opt = qml.GradientDescentOptimizer(stepsize=0.4)
+
+
+    # total length of parameters is generally the total no. of determinants considered
+    len_params = len(singles) + len(doubles)
+    params = np.zeros(len_params)
+
+
+    # compute the gradients
+
+    dcircuit = qml.grad(cost_fn, argnum=0)
+
+    dcircuit(params)
+
+    prev_energy = 0.0
+
+    for n in range(40):
+
+        t1 = time.time()
+
+        params, energy = opt.step_and_cost(cost_fn, params)
+
+        t2 = time.time()
+
+        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2-t1))
+
+        if (np.abs(energy - prev_energy) < 10E-6 ):
+            break
+
+        prev_energy = energy
+
+
+
+    print("At bond distance \n", reac_coord)
+    print("The VQE energy is", energy)
+
+    vqe_energy.append(energy)
+
+
+# PES 
+
+r = np.arange(1.0, 5.0, 0.25)
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.plot (r, vqe_energy, c = 'red', label ='VQE(S+D)')
+
+ax.set(xlabel='Reaction Coordinate (in Bohr)', ylabel='Total energy',
+       title='PES for H2 insertion in Be reaction')
+ax.grid()
+ax.legend()
+
+plt.show()
+
+
+
+
 
 
 ##############################################################################
+# ----------
+#
+# Below is a comparison with other classical quantum chemistry aproaches such 
+# as CASCI, CCSD and CISD. we can see VQE(S+D) does really well for both sides 
+# of PES, left and right of the transition state. While single reference approaches
+# such as CISD and CCSD suffer in the latter half of PES. We should note though that
+# this behavior of CI and CC methods could be corrected if we chose the right Slater 
+# determinant at each point of PES, the choice of which as we see varies with 
+# geometry.
 #
 #
-##############################################################################
+# .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
+#     :width: 50%
+#     :align: center
+#
+#
+#
 # .. _vqe_references:
 #
 # References
@@ -398,8 +578,10 @@ plt.show()
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
-# .. [#yudong2019]
+# .. [#coe2012]
 #
-#     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
-#     `Chem. Rev. 2019, 119, 19, 10856-10915.
-#     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#     Jeremy P. Coe  and Daniel J. Taylor and Martin J. Paterson, "Calculations of potential 
+#     energy surfaces using Monte Carlo configuration interaction". `Journal of Chemical 
+#     Physics 137, 194111 (2012).
+#     <https://doi.org/10.1063/1.4767052>`__
+#
