@@ -18,28 +18,29 @@ Chemical reaction is another name for transformation of molecules - breaking and
 
 Quantum computing aims to revolutionalize this exploration of chemical reactions. We could possibly build the exact energy landscapes and thus unearth the most feasible routes for any general chemical reaction. This could enable us to find new routes for a chemical reaction to occur (i.e reaction mechanism), develop and design new catalysts and create molecules and materials with tailored properties.
 
-In a previous tutorial, we looked at how a hybrid quantum-classical algorithm, Variational Quantum Eigensolver (VQE), [#peruzzo2014]_ is used to compute molecular energies which are the expectation value of the molecular Hamiltonian. Here, we show how VQE can be used as a tool to construct potential energy surfaces(PES) for any general molecular transformation and how this lends way to the calculation of important quantities such as activation energy barrier, reaction energy and reaction rates. As illustrative examples, we use VQE and other tools implemented in Pennylane library to study a simple diatomic bond dissociation and reactions involving exchange of hydrogen atoms. Let's get started! ⚛️
+In a previous tutorial, we looked at how a hybrid quantum-classical algorithm, Variational Quantum Eigensolver (VQE), [#peruzzo2014]_ is used to compute molecular energies which are the expectation value of the molecular Hamiltonian. Here, we show how VQE can be used as a tool to construct potential energy surfaces(PES) for any general molecular transformation and how this lends the way to the calculation of important quantities such as activation energy barrier, reaction energy and reaction rates. As illustrative examples, we use VQE and other tools implemented in Pennylane library to study a simple diatomic bond dissociation and reactions involving exchange of hydrogen atoms. Let's get started! 
 
-
-An illustration of potential energy surface of H-H bond dissociation for hydrogen molecule. On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking at this curve, we could estimate the H-H equilibrium bond distance and the energy required to break the H-H bond.   
 
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
    :width: 50%
    :align: center
 
 
+An illustration of potential energy surface of H-H bond dissociation for hydrogen molecule. On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking at this curve, we could estimate the H-H equilibrium bond distance and the energy required to break the H-H bond.   
+
+
 ##############################################################################
 
 
-Potential Energy Surfaces: Hills to die and be reborn for molecules
+Potential Energy Surfaces: Hills to die and be reborn 
 ---------------------------------------------------------------------
 
-Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical reaction or any transformation occurs. But what is it? The concept originates with the idea that "nuclies are heavier than electron" aka Born-Oppenheimer approximation and that we can solve for the electronic wavefunction with nucleis clamped to their respective positions. This results in separation of nuclear and electronic parts of the Schrodinger equation and we only solve the electronic part 
+Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical reaction or a general molecular transformation occurs. But what is it? The concept originates with the idea that "nuclies are heavier than electron" aka Born-Oppenheimer approximation and that we can solve for the electronic wavefunction with nucleis clamped to their respective positions. This results in separation of nuclear and electronic parts of the Schrodinger equation and we only solve the electronic part 
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle   
-From here arises the concept of electronic energy of the molecule, a quantum mechanical system, as a function of interatomic coordinates and angles, and potential energy surface is a n-dimensional plot of E with the respective degrees of freedom. It gives us a visual tool to undertstand chemical reactions where stable molecules are the local minimas in the valleys and transition states the *hill peaks* to climb.
+From here arises the concept of electronic energy of the molecule, a quantum mechanical system, as a function of interatomic coordinates and angles, and potential energy surface is a n-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a visual tool to undertstand chemical reactions where stable molecules are the local minimas in the valleys and transition states the *hill peaks* to climb.
 
-This is to say that we solve the electronic Schrodinger equation for a given fixed positions of nucleis, and then we move nucleis in incremental step. The obtained set of energies are then plotted against nuclear positions.
+To summarize, we solve the electronic Schrodinger equation for a given fixed positions of nucleis, and then we move nucleis in incremental step. The obtained set of energies are then plotted against nuclear positions.
 
 We will begin by showing how this works for a simple diatomic molecule such as H2.  H$_2$ is the simplest of the molecules and the formation (or breaking) of the H-H bond is the simplest of all reactions. 
 
@@ -113,7 +114,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         qml.PauliX(1)
         # Add double excitation
         qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
-        # Add single excitations too
+        # Add single excitations 
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
@@ -121,9 +122,10 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     # From here on, we can use optimizers in PennyLane.
     # PennyLane contains the :class:`~.ExpvalCost` class, specifically
     # that we use to obtain the cost function central to the idea of variational optimization
-    # of parameters in VQE algorithm. We define the device which is a classical qubit simulator,
+    # of parameters in VQE algorithm. We define the device which is a classical qubit
+    # simulator here,
     # a cost function which calculates the expectation value of Hamiltonian operator for the
-    # given trial wavefunction and also the gradient descent optimizer that will be used to optimize
+    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
     # the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
@@ -133,7 +135,8 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     ##############################################################################
     # A related question is what are gate parameters that we seek to optimize?
     # These could be thought of as rotation variables in the gates used which
-    # can then be translated into determinant coefficients in the wavefunction expansion.
+    # can then be translated into determinant coefficients in the expansion
+    # of the exact wavefunction.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
@@ -141,8 +144,8 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     dcircuit(params)
 
     ##############################################################################
-    # We then define the VQE optimization iteration and the convergence criteria :math:`\sim 10^{
-    # -6}`
+    # We then define the VQE optimization iteration and the energy- based convergence 
+    #criteria :math:`\sim 10^{-6}`
     prev_energy = 0.0
 
     for n in range(40):
@@ -190,10 +193,13 @@ plt.show()
 
 
 ##############################################################################
-# This was a simple 1D PES for Hydrogen molecule. It gives an estimate of H-H bond distance to be ~ 1.4 Bohrs
-# H-H bond dissociation energy (the difference in energy at equilibrium and energy at dissociation limit)
-# around 0.194 Hartrees (121.8 Kcal/mol). Can these estimates be improved? Yes, by using bigger basis sets and
-# extrapolating to the complete basis set (CBS) limit.
+# This is a simple PES (or more appropriately PEC, potential energy curve) for 
+# dissociation of Hydrogen molecule. It gives an estimate of H-H bond distance 
+# to be ~ 1.4 Bohrs and the H-H bond dissociation energy (the difference in energy 
+# at equilibrium and energy at dissociation limit)
+# as 0.194 Hartrees (121.8 Kcal/mol). Could these estimates be improved? Yes, 
+# by using bigger basis sets or using explicitly correlated methods(f12) and
+# extrapolating to the complete basis set (CBS) limit. [#Motta2020] 
 # Now let's move on to something slightly more complicated.
 #
 
@@ -343,20 +349,20 @@ plt.show()
 ##############################################################################
 # Activation energy barrier and Reaction Rate
 # --------------------------------------------
-# As we can see in the potential energy surface above, we basically are interested
-# in getting right the energy of the reactants(minima 1), products (minima 2) and
-# the transition state (maxima).
-# The plot below compares the performance of many methods with each other
-# - VQE(S+D) basically reproduces the classical quantum chemistry methods,
-# CCSD and CISD.
-# Another VQE based optimzation but restricted to a simpler ansatz is added too.
-# DOCI stands for Doubly occupied CI i.e. only pure pair excitations are allowed
+# In the potential energy surface above, we would like to have 
+# a good estimate of the energies of the reactants(minima 1), products (minima 2) and
+# the transition state (maxima). VQE(S+D) reproduces the exact result in this small
+# basis. The plot below compares the performance of many methods with each other
+# VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with 
+# the quantum chemistry methods, CCSD and CISD.
+# Another VQE based optimization but restricted to a simpler ansatz is added too.
+# DOCI stands for Doubly occupied CI where only pure pair excitations are allowed
 # but we have also kept all single excitations.  As we see, VQE(DOCI) does not
 # get the energetics of reactants, products and transition states accurately
 # and hence is not an ideal method
 # for this problem but could become a good starting point for some more difficult problems.
 # In a future tutorial, we would show how to build a range of trial wavefunction ansatz
-# using tools in Pennylane qml.DoubleExcitation and qml.SingleExcitation.
+# using tools in Pennylane used here such as ~qml.DoubleExcitation and qml.SingleExcitation.
 #
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
@@ -375,7 +381,7 @@ plt.show()
 # in larger basis, triple and quadruple zeta basis or higher, to reach basis set
 # convergence and this would significantly increase the number of qubits required.
 # This is a current limitation that would go away with increasing number of logical qubits
-# that become available in future quantum computers.
+# that would hopefully become available in future quantum computers.
 #
 # The reaction rate (k) has an exponential dependence on the activation energy barrier:
 #
@@ -400,12 +406,12 @@ plt.show()
 # -------------------------------------------------------------------------------------------
 #
 #
-# A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to give :math:`BeH_2`
-# is considered to be a multireference problem. It needs two different
+# A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
+# constitutes a multireference problem. It needs two different
 # HF Slater determinants to qualitatively describe the full potential energy suface
-# for the transformation. This is to say that a Slater Determinant is a good HF reference 
+# for the transformation. This is to say that one Slater Determinant is a good HF reference 
 # for one half of the PES while another determinant is good reference for rest of PES.
-# This, by definition, is a *multi-reference* problem.
+# 
 # Here, we construct the potential energy surface for this reaction and see how
 # classical and quantum computing approaches built on single HF reference perform.
 # Once we have solved the mean-field problem, we obtain the molecular orbitals
@@ -422,8 +428,8 @@ plt.show()
 # approach of :math:`H_2` to Beryllium atom, we refer to the work by 
 # Coe et al. [#coe2012]_
 # We fix beryllium atom at the origin and the coordinates for hydrogen atoms are give by, in Bohr, 
-# the coordinates x, y and x, −y where y = 2.54 − 0.46x and x ∈ [1, 5].
-# The generation of PES then is straightforward as was done for previous examples here. 
+# the coordinates x, y and x, −y where y = 2.54 − 0.46x and x ∈ [1, 4].
+# The generation of PES then is straightforward and follows from our previous examples. 
 # For the sake of saving computational cost, we try a smaller active space of a total of
 # 6 spin MOs with core electrons frozen.
 
@@ -444,7 +450,7 @@ vqe_energy = []
 
 name = "beh2"
 
-for reac_coord in np.arange(1.0, 5.0, 0.25) :
+for reac_coord in np.arange(1.0, 4.0, 0.25) :
 
 
     x = reac_coord
@@ -530,7 +536,7 @@ for reac_coord in np.arange(1.0, 5.0, 0.25) :
 
 # PES 
 
-r = np.arange(1.0, 5.0, 0.25)
+r = np.arange(1.0, 4.0, 0.25)
 
 import matplotlib.pyplot as plt
 
@@ -567,7 +573,7 @@ plt.show()
 #
 #
 #
-# .. _vqe_references:
+# .. _references:
 #
 # References
 # ----------
@@ -585,3 +591,13 @@ plt.show()
 #     Physics 137, 194111 (2012).
 #     <https://doi.org/10.1063/1.4767052>`__
 #
+# .. [#JMOL]
+#
+#    `Jmol: an open-source Java viewer for chemical structures in 3D. <http://www.jmol.org/>`__
+#
+# .. [#Motta2020]
+#
+#    Mario Motta, Tanvi Gujarati, and Julia Rice, `"A Tale of Colliding Electrons: Boosting the 
+#    Accuracy of Chemical Simulations on Quantum Computers" (2020).
+#    <https://medium.com/qiskit/a-tale-of-colliding-electrons-boosting-the-accuracy-of-chemical
+#    -simulations-on-quantum-computers-50a4b4ee5c64>`__
