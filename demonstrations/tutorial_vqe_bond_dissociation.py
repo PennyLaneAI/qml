@@ -86,10 +86,6 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         charge=charge,
         mult=multiplicity,
         basis=basis_set,
-        package="pyscf",
-        active_electrons=active_electrons,
-        active_orbitals=active_orbitals,
-        mapping="jordan_wigner",
     )
 
     print("Number of qubits = ", qubits)
@@ -183,7 +179,8 @@ fig, ax = plt.subplots()
 ax.plot(r, vqe_energy, label="VQE(S+D)")
 
 ax.set(
-    xlabel="Distance (H-H, in Angstrom)", ylabel="Total energy", title="PES for H$_2$ dissociation"
+    xlabel="H-H distance (in Bohr)", ylabel="Total energy (in Hartree)", 
+    title="PES for H$_2$ dissociation"
 )
 ax.grid()
 ax.legend()
@@ -255,17 +252,13 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         charge=charge,
         mult=multiplicity,
         basis=basis_set,
-        package="pyscf",
         active_electrons=active_electrons,
         active_orbitals=active_orbitals,
-        mapping="jordan_wigner",
     )
 
     # get all the singles and doubles excitations
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
-    print("Single excitations", singles)
-    print("Double excitations", doubles)
 
     def circuit(params, wires):
         qml.PauliX(0)
@@ -464,18 +457,13 @@ for reac_coord in np.arange(1.0, 4.0, 0.25) :
         charge=charge,
         mult=multiplicity,
         basis=basis_set,
-        package='pyscf',
         active_electrons=active_electrons,
         active_orbitals=active_orbitals,
-        mapping='jordan_wigner'
     )
 
     # get all the singles and doubles excitations
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
-    print("Single excitations", singles)
-    print("Double excitations", doubles)
-
 
     def circuit(params, wires):
         qml.PauliX(0)
@@ -498,7 +486,7 @@ for reac_coord in np.arange(1.0, 4.0, 0.25) :
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
 
-    # total length of parameters is generally the total no. of determinants considered
+    # total length of parameters is the total no. of determinants considered
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
@@ -543,8 +531,8 @@ import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
 ax.plot (r, vqe_energy, c = 'red', label ='VQE(S+D)')
 
-ax.set(xlabel='Reaction Coordinate (in Bohr)', ylabel='Total energy',
-       title='PES for H2 insertion in Be reaction')
+ax.set(xlabel='Reaction Coordinate (x, in Bohr)', ylabel='Total energy (in Hartree)',
+       title='PES for H2 insertion in Be')
 ax.grid()
 ax.legend()
 
