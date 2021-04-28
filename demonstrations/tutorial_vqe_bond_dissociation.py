@@ -407,7 +407,7 @@ plt.show()
 #
 #
 # A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
-# constitutes a multireference problem. It needs two different
+# constitutes a multireference problem. [#purvis1983]_ It needs two different
 # HF Slater determinants to qualitatively describe the full potential energy suface
 # for the transformation. This is to say that one Slater Determinant is a good HF reference 
 # for one half of the PES while another determinant is good reference for rest of PES.
@@ -583,6 +583,14 @@ plt.show()
 #     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+# .. [#purvis1983]
+#      
+#    George D. Purvis III, Ron Shepard, Franklin B. Brown and  Rodney J. Bartlett,
+#    "C2V Insertion pathway for BeH2: A test problem for the coupled‐cluster single 
+#    and double excitation model". `International Journal of Quantum Chemistry,
+#    23, 835 (1983).
+#    <https://onlinelibrary.wiley.com/doi/abs/10.1002/qua.560230307>`__
 #
 # .. [#coe2012]
 #
