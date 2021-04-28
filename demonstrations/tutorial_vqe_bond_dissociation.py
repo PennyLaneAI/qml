@@ -46,7 +46,7 @@ We will begin by showing how this works for a simple diatomic molecule such as H
 
 .. math:: H_2 \rightarrow H + H  
 
-In terms of quantum computing terms, this is a 4 qubit problem if considered in a minimal basis set i.e. 2 electron in 4 spin orbitals. And as discussed in the previous tutorial, the states involved are |1100> (also the Hartree-Fock ground state), |1010>, |0101> and |0011>, these are the only states out of 2^4 (=16) states that matter for this problem and are obtained by single and double particle-hole excitation out of the HF state. Below we show how to set up the problem to generate the PES for such a reaction. 
+In terms of quantum computing terms, this is a 4 qubit problem if considered in a minimal basis set i.e. 2 electron in 4 spin orbitals. And as discussed in the previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle` and singly excited determinants :math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited determinant :math:`|0011\rangle`. These are the only states out of 2^4 (=16) possible states that matter for this problem and are obtained by single and double particle-hole excitations out of the HF state. Below we show how to set up the problem to generate the PES for such a reaction. 
 
 The first step is to import the required libraries and packages:
 """
@@ -60,8 +60,8 @@ import time
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
 # and the spin multiplicity of the electronic configuration. To construct the potential energy surface,
-# we need to vary the geometry. So, we keep one H atom fixed at origin and vary the x-coordinate of the other
-# H atom such that the bond distance varies from 1.0 to 4.0 Bohrs in steps of 0.25 Bohrs.
+# we need to vary the geometry. So, we keep an H atom fixed at origin and vary the x-coordinate of the other
+# H atom such that the bond distance varies from 1.0 to 4.0 Bohrs in steps of 0.25 Bohr.
 
 charge = 0
 multiplicity = 1
@@ -167,9 +167,8 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     vqe_energy.append(energy)
 
 ##############################################################################
-# Once we have the Energy as a function of H-H bond distance, we could the plot it
+# Once we have the Energy as a function of H-H bond distance, we plot it.
 
-# Plot the Potential energy surface
 # Energy as a function of internuclear distance
 
 r = np.arange(0.5, 4.0, 0.1)
@@ -192,7 +191,8 @@ plt.show()
 
 ##############################################################################
 # This is a simple PES (or more appropriately PEC, potential energy curve) for 
-# dissociation of Hydrogen molecule. It gives an estimate of H-H bond distance 
+# the dissociation of hydrogen molecule into two hydrogen atoms. It gives an 
+# estimate of H-H bond distance 
 # to be ~ 1.4 Bohrs and the H-H bond dissociation energy (the difference in energy 
 # at equilibrium and energy at dissociation limit)
 # as 0.194 Hartrees (121.8 Kcal/mol). Could these estimates be improved? Yes, 
@@ -210,7 +210,7 @@ plt.show()
 #
 # .. math:: H_2 + H \rightarrow H + H_2
 #
-# This reaction has a barrier though, transition state, which it has to cross
+# This reaction has a barrier though, the transition state, which it has to cross
 # for the exchange of H atom to be complete. In a minimal basis like STO-3G,
 # this system consists 3 electron in 6 spin molecular orbitals. This means it is
 # a 6 qubit problem and the ground state (HF state) is given by |111000>
@@ -320,7 +320,8 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 #
 ##############################################################################
 #
-# Then we could plot the energy as a function of H-H distance which is also the reaction coordinate
+# Then we plot the energy as a function of H-H distance of atoms 1 and 2 which 
+# is also the reaction coordinate
 # and thus, we have the potential energy curve for this reaction.
 
 r = np.arange(1.0, 3.0, 0.1)
@@ -343,10 +344,10 @@ plt.show()
 ##############################################################################
 # Activation energy barrier and Reaction Rate
 # --------------------------------------------
-# In the potential energy surface above, we would like to have 
+# From the potential energy surface above, we would like our method to provide  
 # a good estimate of the energies of the reactants(minima 1), products (minima 2) and
 # the transition state (maxima). VQE(S+D) reproduces the exact result in this small
-# basis. The plot below compares the performance of many methods with each other
+# basis (STO-3G). The plot below compares the performance of many methods with each other
 # VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with 
 # the quantum chemistry methods, CCSD and CISD.
 # Another VQE based optimization but restricted to a simpler ansatz is added too.
@@ -396,7 +397,7 @@ plt.show()
 #
 
 ##############################################################################
-# A symmetric insertion of :math:`H_2` with :math:`Be` atom: a model multireference problem
+# A model multireference problem: :math:`Be + H_{2} \rightarrow BeH_{2}`
 # -------------------------------------------------------------------------------------------
 #
 #
