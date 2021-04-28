@@ -1,5 +1,5 @@
 r"""
-Modeling bond dissociations and chemical reactions using VQE
+Modeling chemical reactions using VQE
 =======================
 
 .. meta::
@@ -46,7 +46,7 @@ We will begin by showing how this works for a simple diatomic molecule such as H
 
 .. math:: H_2 \rightarrow H + H  
 
-In terms of quantum computing terms, this is a 4 qubit problem if considered in a minimal basis set i.e. 2 electron in 4 spin orbitals. And as discussed in the previous tutorial, the states involved are |1100> (also the Hartree-Fock ground state), |1010>, |0101> and |0011>, these are the only states out of 2^4 (=16) states that matter for this problem and are obtained by single and double particle-hole excitation out of the HF state. Below we show how to set upthe problem to generate a PES for such a reaction. 
+In terms of quantum computing terms, this is a 4 qubit problem if considered in a minimal basis set i.e. 2 electron in 4 spin orbitals. And as discussed in the previous tutorial, the states involved are |1100> (also the Hartree-Fock ground state), |1010>, |0101> and |0011>, these are the only states out of 2^4 (=16) states that matter for this problem and are obtained by single and double particle-hole excitation out of the HF state. Below we show how to set up the problem to generate the PES for such a reaction. 
 
 The first step is to import the required libraries and packages:
 """
@@ -91,14 +91,13 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     print("Number of qubits = ", qubits)
     print("Hamiltonian is ", H)
 
-    ##############################################################################
-    # Now to build the circuit for a general molecular system. We begin by preparing the
-    # qubit version of HF state, :math:`|1100\rangle`.
-    # We then identify and add all possible single and double excitations. In this case, there is only one
-    # double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` and :math:`|1001\rangle`)
+##############################################################################
+# Now to build the circuit for a general molecular system. We begin by preparing the
+# qubit version of HF state, :math:`|1100\rangle`.
+# We then identify and add all possible single and double excitations. In this case, there is only one
+# double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` and :math:`|1001\rangle`)
 
     # get all the singles and doubles excitations
-
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
     print("Single excitations", singles)
     print("Double excitations", doubles)
@@ -114,34 +113,36 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-    ##############################################################################
-    # From here on, we can use optimizers in PennyLane.
-    # PennyLane contains the :class:`~.ExpvalCost` class, specifically
-    # that we use to obtain the cost function central to the idea of variational optimization
-    # of parameters in VQE algorithm. We define the device which is a classical qubit
-    # simulator here,
-    # a cost function which calculates the expectation value of Hamiltonian operator for the
-    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
-    # the gate parameters:
+##############################################################################
+# From here on, we can use optimizers in PennyLane.
+# PennyLane contains the :class:`~.ExpvalCost` class, specifically
+# that we use to obtain the cost function central to the idea of variational optimization
+# of parameters in VQE algorithm. We define the device which is a classical qubit
+# simulator here,
+# a cost function which calculates the expectation value of Hamiltonian operator for the
+# given trial wavefunction and also the gradient descent optimizer that is used to optimize
+# the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    ##############################################################################
-    # A related question is what are gate parameters that we seek to optimize?
-    # These could be thought of as rotation variables in the gates used which
-    # can then be translated into determinant coefficients in the expansion
-    # of the exact wavefunction.
+##############################################################################
+# A related question is what are gate parameters that we seek to optimize?
+# These could be thought of as rotation variables in the gates used which
+# can then be translated into determinant coefficients in the expansion
+# of the exact wavefunction.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
     dcircuit(params)
 
-    ##############################################################################
-    # We then define the VQE optimization iteration and the energy- based convergence 
-    #criteria :math:`\sim 10^{-6}`
+##############################################################################
+# We then begin the VQE iteration to obtain optimal gate parameters.
+# The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
+# which could be made stricter.
+
     prev_energy = 0.0
 
     for n in range(40):
