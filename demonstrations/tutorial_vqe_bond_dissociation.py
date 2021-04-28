@@ -199,7 +199,7 @@ plt.show()
 # at equilibrium and energy at dissociation limit)
 # as 0.194 Hartrees (121.8 Kcal/mol). Could these estimates be improved? Yes, 
 # by using bigger basis sets or using explicitly correlated methods(f12) and
-# extrapolating to the complete basis set (CBS) limit. [#Motta2020] 
+# extrapolating to the complete basis set (CBS) limit. [#motta2020]_ 
 # Now let's move on to something slightly more complicated.
 #
 
@@ -327,7 +327,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 ##############################################################################
 #
 # Then we could plot the energy as a function of H-H distance which is also the reaction coordinate
-# and thus, we have the 1D PES or the potential energy curve for this reaction.
+# and thus, we have the potential energy curve for this reaction.
 
 r = np.arange(1.0, 3.0, 0.1)
 
@@ -362,7 +362,7 @@ plt.show()
 # and hence is not an ideal method
 # for this problem but could become a good starting point for some more difficult problems.
 # In a future tutorial, we would show how to build a range of trial wavefunction ansatz
-# using tools in Pennylane used here such as ~qml.DoubleExcitation and qml.SingleExcitation.
+# using tools in Pennylane used here such as qml.DoubleExcitation and qml.SingleExcitation.
 #
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
@@ -424,11 +424,11 @@ plt.show()
 #     :align: center
 #
 #
-# To figure out the reaction coordinate or the set of geometries the trajectory of 
+# To figure out the reaction coordinate or the trajectory of 
 # approach of :math:`H_2` to Beryllium atom, we refer to the work by 
 # Coe et al. [#coe2012]_
-# We fix beryllium atom at the origin and the coordinates for hydrogen atoms are give by, in Bohr, 
-# the coordinates x, y and x, −y where y = 2.54 − 0.46x and x ∈ [1, 4].
+# We fix the Beryllium atom at the origin and the coordinates for hydrogen atoms are give by, in Bohr, 
+# the coordinates (x, y, 0) and (x, −y, 0) where y = 2.54 − 0.46x and x ∈ [1, 4].
 # The generation of PES then is straightforward and follows from our previous examples. 
 # For the sake of saving computational cost, we try a smaller active space of a total of
 # 6 spin MOs with core electrons frozen.
@@ -595,7 +595,7 @@ plt.show()
 #
 #    `Jmol: an open-source Java viewer for chemical structures in 3D. <http://www.jmol.org/>`__
 #
-# .. [#Motta2020]
+# .. [#motta2020]
 #
 #    Mario Motta, Tanvi Gujarati, and Julia Rice, `"A Tale of Colliding Electrons: Boosting the 
 #    Accuracy of Chemical Simulations on Quantum Computers" (2020).
