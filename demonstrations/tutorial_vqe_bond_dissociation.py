@@ -129,11 +129,11 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
 ##############################################################################
 # Now we need to build the circuit for a general molecular system. We begin by preparing the
-# qubit version of HF state, :math:`|1100\rangle`.
-# We then identify and add all possible single and double excitations. In this case, there is only
-# one double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle`
-# and :math:`|1001\rangle`)
+# qubit version of HF state, :math:`|1100\rangle`. We then identify and add all possible 
+# single and double excitations. 
 
+    
+    
     # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
     print("Single excitations", singles)
