@@ -12,13 +12,15 @@ Modeling chemical reactions using VQE
    tutorial_vqe
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 25 Apr 2021.*
+*Author: PennyLane dev team. Last updated: 29 Apr 2021.*
 
 The term chemical reaction is another name for the transformation of molecules -- breaking and 
-forming of bonds -- and their associated energy cost. The energy cost determines the feasibility 
-of a particular transformation amongst many different alternate possibilities. The field of 
-computational chemistry has several theoretical methods for modelling chemical reactions. In this 
-tutorial, you will learn how to use PennyLane to simulate chemical reactions. 
+forming of bonds -- and this transformation comes with an energy cost. The energy cost determines 
+the feasibility of a particular transformation amongst many different alternate possibilities. 
+Computational chemistry offers several theoretical methods for determining this energy cost
+precisely and a window to predicting the thermodynamic and kinetics aspects of any 
+chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate chemical 
+reactions. 
 
 In a previous tutorial on :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
 we looked at how it can be used to compute molecular energies. [#peruzzo2014]_ 
@@ -48,21 +50,22 @@ Potential Energy Surfaces: Hills to die and be reborn
 
 Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical 
 reaction or a general molecular transformation occurs. But what is it? The concept originates
-with the idea that "nuclies are heavier than electron" aka Born-Oppenheimer approximation and 
-that we can solve for the electronic wavefunction with nucleis clamped to their respective 
-positions. This results in separation of nuclear and electronic parts of the Schrodinger 
-equation and we only solve the electronic part 
+with the fact that the nuclies are a lot heavier than electron, better known as the 
+Born-Oppenheimer approximation, and that we can solve for the electronic wavefunction with 
+nucleis clamped to their respective positions. This results in separation of nuclear and 
+electronic parts of the Schrodinger equation and we then only solve the electronic part of
+the problem
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle   
 
-From here arises the concept of electronic energy of the molecule, a quantum mechanical system, 
-as a function of interatomic coordinates and angles, and potential energy surface is a 
+Thus arises the concept of electronic energy of the molecule, a quantum mechanical system, 
+as a function of interatomic coordinates and angles. Potential energy surface is a 
 n-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
-visual tool to undertstand chemical reactions where stable molecules are the local minimas in 
+visual tool to understand chemical reactions where stable molecules are the local minimas in 
 the valleys and transition states the *hill peaks* to climb.
 
 To summarize, we solve the electronic Schrodinger equation for a given fixed positions of nucleis,
-and then we move nucleis in incremental step. The obtained set of energies are then plotted 
+and then we move nucleis in incremental steps. The obtained set of energies are then plotted 
 against nuclear positions.
 
 We will begin by showing how this works for a simple diatomic molecule such as H2.  H$_2$ is the 
@@ -123,11 +126,12 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     print("Number of qubits = ", qubits)
     print("Hamiltonian is ", H)
 
-    ##############################################################################
-    # Now to build the circuit for a general molecular system. We begin by preparing the
-    # qubit version of HF state, :math:`|1100\rangle`.
-    # We then identify and add all possible single and double excitations. In this case, there is only
-    # one double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` and :math:`|1001\rangle`)
+##############################################################################
+# Now to build the circuit for a general molecular system. We begin by preparing the
+# qubit version of HF state, :math:`|1100\rangle`.
+# We then identify and add all possible single and double excitations. In this case, there is only
+# one double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` 
+# and :math:`|1001\rangle`)
 
     # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
@@ -145,35 +149,35 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-    ##############################################################################
-    # From here on, we can use optimizers in PennyLane.
-    # PennyLane contains the :class:`~.ExpvalCost` class, specifically
-    # that we use to obtain the cost function central to the idea of variational optimization
-    # of parameters in VQE algorithm. We define the device which is a classical qubit
-    # simulator here,
-    # a cost function which calculates the expectation value of Hamiltonian operator for the
-    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
-    # the gate parameters:
+##############################################################################
+# From here on, we can use optimizers in PennyLane.
+# PennyLane contains the :class:`~.ExpvalCost` class, specifically
+# that we use to obtain the cost function central to the idea of variational optimization
+# of parameters in VQE algorithm. We define the device which is a classical qubit
+# simulator here,
+# a cost function which calculates the expectation value of Hamiltonian operator for the
+# given trial wavefunction and also the gradient descent optimizer that is used to optimize
+# the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    ##############################################################################
-    # A related question is what are gate parameters that we seek to optimize?
-    # These could be thought of as rotation variables in the gates used which
-    # can then be translated into determinant coefficients in the expansion
-    # of the exact wavefunction.
+##############################################################################
+# A related question is what are gate parameters that we seek to optimize?
+# These could be thought of as rotation variables in the gates used which
+# can then be converted into determinant coefficients in the expansion
+# of the exact wavefunction.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
     dcircuit(params)
 
-    ##############################################################################
-    # We then begin the VQE iteration to optimize gate parameters.
-    # The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
-    # which could be made stricter.
+##############################################################################
+# We then begin the VQE iteration to optimize gate parameters.
+# The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
+# which could be made stricter.
 
     prev_energy = 0.0
 
@@ -317,9 +321,9 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-    ##############################################################################
-    # The we evaluate the costfunction and use the gradient descent algorithm in an iterative
-    # optimization of the gate parameters.
+##############################################################################
+# Then we evaluate the costfunction and use the gradient descent algorithm in an iterative
+# optimization of the gate parameters.
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
@@ -342,8 +346,8 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 
         prev_energy = energy
 
-    ##############################################################################
-    #  Finally at each point of the 1D PES, we could print the total VQE energy
+##############################################################################
+# Finally at each point of the 1D PES, we could print the total VQE energy
 
     print("At bond distance \n", r_HH)
     print("The VQE energy is", energy)
