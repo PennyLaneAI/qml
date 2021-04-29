@@ -1,6 +1,6 @@
 r"""
 Modeling chemical reactions using VQE
-=======================
+==============================
 
 .. meta::
     :property="og:description": Construct Potential energy surface for a simple bond dissociation and general chemical     reactions  using the variational quantum eigensolver algorithm in PennyLane.
