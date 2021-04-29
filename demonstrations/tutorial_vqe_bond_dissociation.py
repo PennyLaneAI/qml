@@ -68,9 +68,9 @@ To summarize, we solve the electronic Schrodinger equation for a given fixed pos
 and then we move nucleis in incremental steps. The obtained set of energies are then plotted 
 against nuclear positions.
 
-We will begin by showing how this works for a simple diatomic molecule such as H2.  H$_2$ is the 
-simplest of the molecules and the formation (or breaking) of the H-H bond is the simplest of all 
-reactions. 
+We will begin by showing how this works for a simple diatomic molecule such as :math:`H_2`. 
+:math:`H_2` is the simplest of the molecules and the formation (or breaking) of the :math:`H-H`
+bond is the simplest of all reactions. 
 
 .. math:: H_2 \rightarrow H + H  
 
@@ -94,8 +94,8 @@ import time
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
 # and the spin multiplicity of the electronic configuration. To construct the potential energy
-# surface, we need to vary the geometry. So, we keep an H atom fixed at origin and vary the
-# x-coordinate of the other H atom such that the bond distance varies from 1.0 to 4.0 Bohrs in
+# surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
+# x-coordinate of the other :math:`H` atom such that the bond distance varies from 1.0 to 4.0 Bohrs in
 # steps of 0.25 Bohr.
 
 charge = 0
@@ -203,13 +203,11 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     vqe_energy.append(energy)
 
 ##############################################################################
-# Once we have the Energy as a function of H-H bond distance, we plot it.
+# We have the calculated the molecular energy as a function of H-H bond distance, let us plot it.
 
 # Energy as a function of internuclear distance
 
 r = np.arange(0.5, 4.0, 0.1)
-
-import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
 ax.plot(r, vqe_energy, label="VQE(S+D)")
@@ -222,18 +220,17 @@ ax.set(
 ax.grid()
 ax.legend()
 
-# fig.savefig("test.png")
 plt.show()
 
 
 ##############################################################################
 # This is a simple PES (or more appropriately PEC, potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms. It gives an
-# estimate of H-H bond distance
-# to be ~ 1.4 Bohrs and the H-H bond dissociation energy (the difference in energy
-# at equilibrium and energy at dissociation limit)
-# as 0.194 Hartrees (121.8 Kcal/mol). Could these estimates be improved? Yes,
-# by using bigger basis sets or using explicitly correlated methods(f12) and
+# estimate of :math:`H-H` bond distance
+# to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy 
+# (the difference in energy at equilibrium and energy at dissociation limit)
+# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Could these estimates be improved? 
+# Yes, by using bigger basis sets or using explicitly correlated methods(F12) and
 # extrapolating to the complete basis set (CBS) limit. [#motta2020]_
 # Now let's move on to something slightly more complicated.
 #
@@ -248,15 +245,15 @@ plt.show()
 # .. math:: H_2 + H \rightarrow H + H_2
 #
 # This reaction has a barrier though, the transition state, which it has to cross
-# for the exchange of H atom to be complete. In a minimal basis like STO-3G,
-# this system consists 3 electron in 6 spin molecular orbitals. This means it is
+# for the exchange of :math:`H` atom to be complete. In a minimal basis like STO-3G,
+# this system consists of 3 electrons in 6 spin molecular orbitals. This means it is
 # a 6 qubit problem and the ground state (HF state) is given by |111000>
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
 #   :align: center
 #
-# Again, we need to define the molecular parameters
+# Again, we need to define the molecular parameters.
 
 # Molecular parameters
 
@@ -347,7 +344,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         prev_energy = energy
 
 ##############################################################################
-# Finally at each point of the 1D PES, we could print the total VQE energy
+# Finally at each point of the PEC, we could print the total VQE energy
 
     print("At bond distance \n", r_HH)
     print("The VQE energy is", energy)
@@ -381,9 +378,12 @@ plt.show()
 ##############################################################################
 # Activation energy barrier and Reaction Rate
 # --------------------------------------------
-# From the potential energy surface above, we would like our method to provide
+# The utility of potential energy surfaces as above lie in estimating the 
+# geometric configurations of key reactants, intermediates, transition states
+# and products, and the energy costs such as reaction energy and activation energy barriers.
+# To be specific about the above PEC, we would like our method to provide
 # a good estimate of the energies of the reactants(minima 1), products (minima 2) and
-# the transition state (maxima). VQE(S+D) reproduces the exact result in this small
+# the transition state (maxima). VQE(S+D) reproduces the exact result in the small
 # basis (STO-3G). The plot below compares the performance of many methods with each other
 # VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with
 # the quantum chemistry methods, CCSD and CISD.
@@ -399,7 +399,7 @@ plt.show()
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
 # and the energy of the
-# transition state ( H --- H --- H).
+# transition state (:math:`H --- H --- H`).
 #
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
 #
@@ -460,7 +460,8 @@ plt.show()
 # approach of :math:`H_2` to Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
 # We fix the Beryllium atom at the origin and the coordinates for hydrogen atoms are give by,
-# in Bohr, the coordinates (x, y, 0) and (x, −y, 0) where y = 2.54 − 0.46x and x ∈ [1, 4].
+# in Bohr, the coordinates :math:`(x, y, 0)` and :math:`(x, −y, 0)` where :math:`y = 2.54 − 0.46x`
+# and :math:`x \in [1, 4]`.
 # The generation of PES then is straightforward and follows from our previous examples.
 # For the sake of saving computational cost, we try a smaller active space of a total of
 # 6 spin MOs with core electrons frozen.
@@ -558,8 +559,6 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
 # PES
 
 r = np.arange(1.0, 4.0, 0.25)
-
-import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
 ax.plot(r, vqe_energy, c="red", label="VQE(S+D)")
