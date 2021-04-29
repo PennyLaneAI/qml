@@ -1,6 +1,6 @@
 r"""
 Modeling chemical reactions using VQE
-=======================
+==============================
 
 .. meta::
     :property="og:description": Construct Potential energy surface for a simple bond dissociation and general chemical     reactions  using the variational quantum eigensolver algorithm in PennyLane.
@@ -14,11 +14,11 @@ Modeling chemical reactions using VQE
 
 *Author: PennyLane dev team. Last updated: 25 Apr 2021.*
 
-Chemical reaction is another name for transformation of molecules - breaking and forming of bonds - accompanied with energy cost. This energy cost determines the feasibility of a particular transformation amongst many different alternate possibilities. Wouldn't it be nice to use theoretical tools to model chemical reactions? This is indeed the case and the field of quantum chemistry has several methods to do that. In this tutorial, we will learn how Pennylane could be used to do exactly the same albeit on a quantum computer or a classical simulator. 
+The term chemical reaction is another name for the transformation of molecules -- breaking and forming of bonds -- and their associated energy cost. The energy cost determines the feasibility of a particular transformation amongst many different alternate possibilities. The field of computational chemistry has several theoretical methods for modelling chemical reactions. In this tutorial, you will learn how to use PennyLane to simulate chemical reactions. 
 
 Quantum computing aims to revolutionalize this exploration of chemical reactions. We could possibly build the exact energy landscapes and thus unearth the most feasible routes for any general chemical reaction. This could enable us to find new routes for a chemical reaction to occur (i.e reaction mechanism), develop and design new catalysts and create molecules and materials with tailored properties.
 
-In a previous tutorial, we looked at how a hybrid quantum-classical algorithm, Variational Quantum Eigensolver (VQE), [#peruzzo2014]_ is used to compute molecular energies which are the expectation value of the molecular Hamiltonian. Here, we show how VQE can be used as a tool to construct potential energy surfaces(PES) for any general molecular transformation and how this lends the way to the calculation of important quantities such as activation energy barrier, reaction energy and reaction rates. As illustrative examples, we use VQE and other tools implemented in Pennylane library to study a simple diatomic bond dissociation and reactions involving exchange of hydrogen atoms. Let's get started! 
+In a previous tutorial, we looked at how the variational quantum eigensolver (VQE), [#peruzzo2014]_ can be used to compute molecular energies. Here, we show how VQE can be used to construct potential energy surfaces (PESs) for any general molecular transformation. This lends the way to the calculation of important quantities such as activation energy barriers, reaction energies, and reaction rates. As illustrative examples, we use tools implemented in PennyLane to study diatomic bond dissociation and reactions involving the exchange of hydrogen atoms. Let's get started! 
 
 
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
@@ -26,7 +26,7 @@ In a previous tutorial, we looked at how a hybrid quantum-classical algorithm, V
    :align: center
 
 
-An illustration of potential energy surface of H-H bond dissociation for hydrogen molecule. On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking at this curve, we could estimate the H-H equilibrium bond distance and the energy required to break the H-H bond.   
+An illustration of the potential energy surface of bond dissociation for the hydrogen molecule. On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking at this curve we can estimate the H-H equilibrium bond distance and the energy required to break the H-H bond.   
 
 
 ##############################################################################
