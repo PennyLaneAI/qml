@@ -37,9 +37,9 @@ the exchange of hydrogen atoms. Let's get started!
    :align: center
    
    An illustration of the potential energy surface of bond dissociation for the hydrogen molecule. 
-   On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking 
-   at this curve we can estimate the H-H equilibrium bond distance and the energy required to 
-   break the H-H bond.   
+   On the :math:`y`-axis is the total molecular energy and :math:`x`-axis is the internuclear bond
+   distance. By looking at this curve, we can estimate the :math:`H-H` bond length and the energy 
+   required to break the :math:`H-H` bond.   
 
 
 ##############################################################################
@@ -60,7 +60,7 @@ the problem
 
 Thus arises the concept of electronic energy of the molecule, a quantum mechanical system, 
 as a function of interatomic coordinates and angles. Potential energy surface is a 
-n-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
+:math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
 visual tool to understand chemical reactions where stable molecules are the local minimas in 
 the valleys and transition states the *hill peaks* to climb.
 
@@ -74,13 +74,14 @@ bond is the simplest of all reactions.
 
 .. math:: H_2 \rightarrow H + H  
 
-In terms of quantum computing terms, this is a 4 qubit problem if considered in a minimal basis set 
-i.e. 2 electron in 4 spin orbitals. And as discussed in the previous tutorial, the states involved 
-are the Hartree-Fock (HF) ground state, :math:`|1100\rangle` and singly excited determinants 
-:math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited determinant :math:`|0011\rangle`. 
-These are the only states out of 2^4 (=16) possible states that matter for this problem and 
-are obtained by single and double particle-hole excitations out of the HF state. Below we show how 
-to set up the problem to generate the PES for such a reaction. 
+In terms of quantum computing terms, this is a :math:`4` qubit problem if considered in a minimal 
+basis set (STO-3G) i.e. :math:`2` electrons in :math:`4` spin orbitals. And as discussed in the 
+previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`
+and singly excited determinants :math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited 
+determinant :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
+states that matter for this problem and are obtained by single and double particle-hole excitations
+out of the HF state. Below we show how to set up the problem to generate the PES for such a 
+reaction. 
 
 The first step is to import the required libraries and packages:
 """
@@ -95,8 +96,8 @@ import time
 # The second step is to specify the geometry and charge of the molecule,
 # and the spin multiplicity of the electronic configuration. To construct the potential energy
 # surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
-# x-coordinate of the other :math:`H` atom such that the bond distance varies from 1.0 to 4.0 Bohrs in
-# steps of 0.25 Bohr.
+# :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
+# :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
 
 charge = 0
 multiplicity = 1
@@ -127,10 +128,10 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     print("Hamiltonian is ", H)
 
 ##############################################################################
-# Now to build the circuit for a general molecular system. We begin by preparing the
+# Now we need to build the circuit for a general molecular system. We begin by preparing the
 # qubit version of HF state, :math:`|1100\rangle`.
 # We then identify and add all possible single and double excitations. In this case, there is only
-# one double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle` 
+# one double excitation(:math:`|0011\rangle`) and two single excitations(:math:`|0110\rangle`
 # and :math:`|1001\rangle`)
 
     # get all the singles and doubles excitations
@@ -151,7 +152,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
 ##############################################################################
 # From here on, we can use optimizers in PennyLane.
-# PennyLane contains the :class:`~.ExpvalCost` class, specifically
+# PennyLane contains the :class:`~.ExpvalCost` class,
 # that we use to obtain the cost function central to the idea of variational optimization
 # of parameters in VQE algorithm. We define the device which is a classical qubit
 # simulator here,
@@ -227,9 +228,9 @@ plt.show()
 # This is a simple PES (or more appropriately PEC, potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms. It gives an
 # estimate of :math:`H-H` bond distance
-# to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy 
+# to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # (the difference in energy at equilibrium and energy at dissociation limit)
-# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Could these estimates be improved? 
+# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Could these estimates be improved?
 # Yes, by using bigger basis sets or using explicitly correlated methods(F12) and
 # extrapolating to the complete basis set (CBS) limit. [#motta2020]_
 # Now let's move on to something slightly more complicated.
@@ -246,8 +247,9 @@ plt.show()
 #
 # This reaction has a barrier though, the transition state, which it has to cross
 # for the exchange of :math:`H` atom to be complete. In a minimal basis like STO-3G,
-# this system consists of 3 electrons in 6 spin molecular orbitals. This means it is
-# a 6 qubit problem and the ground state (HF state) is given by |111000>
+# this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
+# This means it is a :math:`6` qubit problem and the ground state (HF state) in
+# occupation number representation is :math:`|111000\rangle`.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
@@ -269,8 +271,8 @@ active_electrons = 3
 active_orbitals = 3
 
 ##############################################################################
-# Then we setup the PES loop, incrementing the H(1)-H(2) distance from 1.0 to 3.0 Bohrs
-# in steps of 0.1 Bohr.
+# Then we setup the PES loop, incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
+# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr.
 
 vqe_energy = []
 
@@ -296,6 +298,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
+        # Prepare the HF state |111000> by flipping the qubits 0, 1 and 2
         qml.PauliX(0)
         qml.PauliX(1)
         qml.PauliX(2)
@@ -354,9 +357,9 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 #
 ##############################################################################
 #
-# Then we plot the energy as a function of H-H distance of atoms 1 and 2 which
-# is also the reaction coordinate
-# and thus, we have the potential energy curve for this reaction.
+# Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`
+# which is also the reaction coordinate and thus, we have the potential energy curve for
+# this reaction.
 
 r = np.arange(1.0, 3.0, 0.1)
 
@@ -378,12 +381,12 @@ plt.show()
 ##############################################################################
 # Activation energy barrier and Reaction Rate
 # --------------------------------------------
-# The utility of potential energy surfaces as above lie in estimating the 
+# The utility of potential energy surfaces as above lie in estimating the
 # geometric configurations of key reactants, intermediates, transition states
 # and products, and the energy costs such as reaction energy and activation energy barriers.
 # To be specific about the above PEC, we would like our method to provide
-# a good estimate of the energies of the reactants(minima 1), products (minima 2) and
-# the transition state (maxima). VQE(S+D) reproduces the exact result in the small
+# a good estimate of the energies of the reactants(minima :math:`1`), products (minima :math:`2`)
+# and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
 # basis (STO-3G). The plot below compares the performance of many methods with each other
 # VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with
 # the quantum chemistry methods, CCSD and CISD.
@@ -399,7 +402,7 @@ plt.show()
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
 # and the energy of the
-# transition state (:math:`H --- H --- H`).
+# transition state (:math:`H--H--H`).
 #
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
 #
@@ -464,7 +467,7 @@ plt.show()
 # and :math:`x \in [1, 4]`.
 # The generation of PES then is straightforward and follows from our previous examples.
 # For the sake of saving computational cost, we try a smaller active space of a total of
-# 6 spin MOs with core electrons frozen.
+# :math:`6` spin MOs with core electrons frozen.
 
 # Molecular parameters
 name = "beh2"
@@ -504,6 +507,7 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
+        # Prepare the HF state |111100> by flipping the qubits 0, 1, 2 and 3
         qml.PauliX(0)
         qml.PauliX(1)
         qml.PauliX(2)
