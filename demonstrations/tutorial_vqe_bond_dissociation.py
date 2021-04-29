@@ -26,7 +26,7 @@ In a previous tutorial, we looked at how the variational quantum eigensolver (VQ
    :align: center
 
 
-An illustration of potential energy surface of H-H bond dissociation for hydrogen molecule. On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking at this curve, we could estimate the H-H equilibrium bond distance and the energy required to break the H-H bond.   
+An illustration of the potential energy surface of bond dissociation for the hydrogen molecule. On the y-axis is the total molecular energy and x-axis is the H-H bond distance. By looking at this curve we can estimate the H-H equilibrium bond distance and the energy required to break the H-H bond.   
 
 
 ##############################################################################
