@@ -127,13 +127,11 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     print("Number of qubits = ", qubits)
     print("Hamiltonian is ", H)
 
-##############################################################################
-# Now we need to build the circuit for a general molecular system. We begin by preparing the
-# qubit version of HF state, :math:`|1100\rangle`. We then identify and add all possible 
-# single and double excitations. 
+    ##############################################################################
+    # Now we need to build the circuit for a general molecular system. We begin by preparing the
+    # qubit version of HF state, :math:`|1100\rangle`. We then identify and add all possible
+    # single and double excitations.
 
-    
-    
     # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
     print("Single excitations", singles)
@@ -150,35 +148,35 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-##############################################################################
-# From here on, we can use optimizers in PennyLane.
-# PennyLane contains the :class:`~.ExpvalCost` class,
-# that we use to obtain the cost function central to the idea of variational optimization
-# of parameters in VQE algorithm. We define the device which is a classical qubit
-# simulator here,
-# a cost function which calculates the expectation value of Hamiltonian operator for the
-# given trial wavefunction and also the gradient descent optimizer that is used to optimize
-# the gate parameters:
+    ##############################################################################
+    # From here on, we can use optimizers in PennyLane.
+    # PennyLane contains the :class:`~.ExpvalCost` class,
+    # that we use to obtain the cost function central to the idea of variational optimization
+    # of parameters in VQE algorithm. We define the device which is a classical qubit
+    # simulator here,
+    # a cost function which calculates the expectation value of Hamiltonian operator for the
+    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
+    # the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-##############################################################################
-# A related question is what are gate parameters that we seek to optimize?
-# These could be thought of as rotation variables in the gates used which
-# can then be converted into determinant coefficients in the expansion
-# of the exact wavefunction.
+    ##############################################################################
+    # A related question is what are gate parameters that we seek to optimize?
+    # These could be thought of as rotation variables in the gates used which
+    # can then be converted into determinant coefficients in the expansion
+    # of the exact wavefunction.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
     dcircuit(params)
 
-##############################################################################
-# We then begin the VQE iteration to optimize gate parameters.
-# The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
-# which could be made stricter.
+    ##############################################################################
+    # We then begin the VQE iteration to optimize gate parameters.
+    # The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
+    # which could be made stricter.
 
     prev_energy = 0.0
 
@@ -321,9 +319,9 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-##############################################################################
-# Then we evaluate the costfunction and use the gradient descent algorithm in an iterative
-# optimization of the gate parameters.
+    ##############################################################################
+    # Then we evaluate the costfunction and use the gradient descent algorithm in an iterative
+    # optimization of the gate parameters.
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
@@ -346,8 +344,8 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 
         prev_energy = energy
 
-##############################################################################
-# Finally at each point of the PEC, we could print the total VQE energy
+    ##############################################################################
+    # Finally at each point of the PEC, we could print the total VQE energy
 
     print("At bond distance \n", r_HH)
     print("The VQE energy is", energy)
