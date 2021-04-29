@@ -14,7 +14,7 @@ Modeling chemical reactions using VQE
 
 *Author: PennyLane dev team. Last updated: 25 Apr 2021.*
 
-Chemical reaction is another name for transformation of molecules - breaking and forming of bonds - accompanied with energy cost. This energy cost determines the feasibility of a particular transformation amongst many different alternate possibilities. Wouldn't it be nice to use theoretical tools to model chemical reactions? This is indeed the case and the field of quantum chemistry has several methods to do that. In this tutorial, we will learn how Pennylane could be used to do exactly the same albeit on a quantum computer or a classical simulator. 
+The term chemical reaction is another name for the transformation of molecules -- breaking and forming of bonds -- and their associated energy cost. The energy cost determines the feasibility of a particular transformation amongst many different alternate possibilities. The field of computational chemistry has several theoretical methods for modelling chemical reactions. In this tutorial, you will learn how to use PennyLane to simulate chemical reactions. 
 
 Quantum computing aims to revolutionalize this exploration of chemical reactions. We could possibly build the exact energy landscapes and thus unearth the most feasible routes for any general chemical reaction. This could enable us to find new routes for a chemical reaction to occur (i.e reaction mechanism), develop and design new catalysts and create molecules and materials with tailored properties.
 
