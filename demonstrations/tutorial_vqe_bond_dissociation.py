@@ -258,7 +258,6 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     )
 
     # get all the singles and doubles excitations
-
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
@@ -464,7 +463,6 @@ for reac_coord in np.arange(1.0, 4.0, 0.25) :
     )
 
     # get all the singles and doubles excitations
-
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
