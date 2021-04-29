@@ -11,7 +11,6 @@ Modeling chemical reactions using VQE
 
    tutorial_vqe
    tutorial_vqe_parallel VQE with parallel QPUs
-   tutorial_vqe_qng Accelerating VQE with the QNG
 
 *Author: PennyLane dev team. Last updated: 25 Apr 2021.*
 
