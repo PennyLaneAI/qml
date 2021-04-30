@@ -192,7 +192,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
 
-        # define your convergence criteria, we choose modest value of 1E-6 Ha
+        # define your convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
             break
 
