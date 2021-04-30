@@ -241,7 +241,7 @@ plt.show()
 # Hydrogen Exchange Reaction
 # -----------------------------
 #
-# We will try to construct the PES for a simple hydrogen exchange reaction
+# We construct the PES for a simple hydrogen exchange reaction
 #
 # .. math:: H_2 + H \rightarrow H + H_2
 #
