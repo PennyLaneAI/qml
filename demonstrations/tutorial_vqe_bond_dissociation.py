@@ -364,7 +364,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 r = np.arange(1.0, 3.0, 0.1)
 
 fig, ax = plt.subplots()
-ax.plot(r, vqe_energy, label="VQE(S+D)")
+ax.plot(r, vqe_energy)
 
 ax.set(
     xlabel="Distance (H-H, in Bohr)",
