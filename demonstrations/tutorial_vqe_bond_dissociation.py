@@ -95,8 +95,7 @@ import matplotlib.pyplot as plt
 import time
 
 ##############################################################################
-# The second step is to specify the geometry and charge of the molecule,
-# and the spin multiplicity of the electronic configuration. To construct the potential energy
+# To construct the potential energy
 # surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
 # :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
 # :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
