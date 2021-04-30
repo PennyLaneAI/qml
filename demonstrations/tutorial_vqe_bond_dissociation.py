@@ -388,7 +388,7 @@ plt.show()
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
 # and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
 # basis (STO-3G). The plot below compares the performance of different methods.
-# VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with
+# The PEC obtained from the quantum algorithm overlaps with
 # the quantum chemistry methods, CCSD and CISD.
 # Another VQE based optimization but restricted to a simpler ansatz is added too.
 # DOCI stands for Doubly occupied CI where only pure pair excitations are allowed
