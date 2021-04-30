@@ -462,7 +462,7 @@ plt.show()
 #
 #
 # To figure out the reaction coordinate or the trajectory of
-# approach of :math:`H_2` to Beryllium atom, we refer to the work by
+# approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
 # We fix the Beryllium atom at the origin and the coordinates for hydrogen atoms are give by,
 # in Bohr, the coordinates :math:`(x, y, 0)` and :math:`(x, −y, 0)` where :math:`y = 2.54 − 0.46x`
