@@ -379,7 +379,7 @@ plt.show()
 #
 #
 ##############################################################################
-# Activation energy barrier and Reaction Rate
+# Activation energy barriers and reaction rates
 # --------------------------------------------
 # The utility of potential energy surfaces as above lie in estimating the
 # geometric configurations of key reactants, intermediates, transition states
