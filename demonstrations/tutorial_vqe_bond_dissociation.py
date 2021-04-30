@@ -76,8 +76,8 @@ of all reactions.
 
 .. math:: H_2 \rightarrow H + H  
 
-In terms of quantum computing terms, this is a :math:`4` qubit problem if considered in a minimal 
-basis set (STO-3G) i.e. :math:`2` electrons in :math:`4` spin orbitals. And as discussed in the 
+Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` spin-orbitals. 
+When mapped to a qubit representation, we have a total of four qubits. As discussed in the 
 previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`
 and singly excited determinants :math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited 
 determinant :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
