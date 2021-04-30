@@ -320,9 +320,9 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-    ##############################################################################
-    # Then we evaluate the costfunction and use the gradient descent algorithm in an iterative
-    # optimization of the gate parameters.
+##############################################################################
+# We evaluate the cost function and use the gradient descent algorithm in an iterative
+# optimization of the gate parameters.
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
