@@ -58,8 +58,9 @@ the problem
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
-Thus arises the concept of electronic energy of the molecule, a quantum mechanical system, 
-as a function of interatomic coordinates and angles. Potential energy surface is a 
+Thus arises the concept of the electronic energy of the molecule
+as a function of interatomic coordinates and angles. The potential energy surface of a 
+molecule is a 
 :math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
 visual tool to understand chemical reactions where stable molecules are the local minimas in 
 the valleys and transition states the *hill peaks* to climb.
