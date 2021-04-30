@@ -56,30 +56,32 @@ nucleis clamped to their respective positions. This results in separation of nuc
 electronic parts of the Schrodinger equation and we then only solve the electronic part of
 the problem.
 
-.. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle   
+.. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
-Thus arises the concept of electronic energy of the molecule, a quantum mechanical system, 
-as a function of interatomic coordinates and angles. Potential energy surface is a 
+Thus arises the concept of the electronic energy of the molecule
+as a function of interatomic coordinates and angles. The potential energy surface of a 
+molecule is a 
 :math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
 visual tool to understand chemical reactions where stable molecules are the local minimas in 
 the valleys and transition states the *hill peaks* to climb.
 
-To summarize, we solve the electronic Schrodinger equation for a given fixed positions of nucleis,
-and then we move nucleis in incremental steps. The obtained set of energies are then plotted 
+To summarize, to build the potential energy surface, we solve the electronic Schrodinger
+equation for a given fixed position of the nuclei, and subsequently move the nuclei in incremental steps
+to obtain the energy at other configurations of the nuclei. The obtained set of energies are then plotted 
 against nuclear positions.
 
-We will begin by showing how this works for a simple diatomic molecule such as :math:`H_2`. 
-:math:`H_2` is the simplest of the molecules and the formation (or breaking) of the :math:`H-H`
-bond is the simplest of all reactions. 
+We begin with the simplest of molecule: :math:`H_2`. 
+The formation (or breaking) of the :math:`H-H` bond is also the simplest
+of all reactions. 
 
 .. math:: H_2 \rightarrow H + H  
 
-In terms of quantum computing terms, this is a :math:`4` qubit problem if considered in a minimal 
-basis set (STO-3G) i.e. :math:`2` electrons in :math:`4` spin orbitals. The states involved are the 
-Hartree-Fock (HF) ground state, :math:`|1100\rangle`
-and singly excited determinants :math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited 
-determinant :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
-states that matter for this problem and are obtained by single and double particle-hole excitations
+Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` spin-orbitals. 
+When mapped to a qubit representation, we have a total of four qubits. As discussed in the 
+previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`,
+the singly-excited states :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited 
+state :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
+states that matter for this problem and are obtained by single and double excitations
 out of the HF state. Below we show how to set up the problem to generate the PES for such a 
 reaction. 
 
@@ -94,10 +96,11 @@ import time
 
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
-# and the spin multiplicity of the electronic configuration. To construct the potential energy
-# surface, we need to vary the distance between the hydrogen atoms. So, we keep an :math:`H` atom
-# fixed at origin and change the :math:`x`-coordinate of the other :math:`H` atom such that the 
-# bond distance varies from :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
+# and the spin multiplicity of the electronic configuration. 
+# To construct the potential energy
+# surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
+# :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
+# :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
 
 charge = 0
 multiplicity = 1
@@ -129,7 +132,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
     ##############################################################################
     # Now we need to build the circuit for a general molecular system. We begin by preparing the
-    # qubit version of HF state, :math:`|1100\rangle`. We then identify and add all possible
+    # qubit version of the HF state, :math:`|1100\rangle`. We then identify and add all possible
     # single and double excitations.
 
     # get all the singles and doubles excitations
@@ -187,7 +190,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
 
-        # define your convergence criteria, we choose modest value of 1E-6 Ha
+        # define your convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
             break
 
@@ -220,15 +223,15 @@ plt.show()
 
 
 ##############################################################################
-# This is a simple PES (or more appropriately PEC, potential energy curve) for
+# This is a simple PES (or more appropriately a PEC, potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms. It gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # (the difference in energy at equilibrium and energy at dissociation limit)
-# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Could these estimates be improved?
-# Yes, by using bigger basis sets or using explicitly correlated methods(F12) and
+# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). These estimates can be improved
+# by using bigger basis sets or explicitly correlated methods (F12) and
 # extrapolating to the complete basis set (CBS) limit. [#motta2020]_
-# Now let's move on to something slightly more complicated.
+# Now let's move on to a more interesting chemical reaction.
 #
 
 
@@ -236,12 +239,12 @@ plt.show()
 # Hydrogen Exchange Reaction
 # -----------------------------
 #
-# We will try to construct the PES for a simple hydrogen exchange reaction
+# We construct the PES for a simple hydrogen exchange reaction
 #
 # .. math:: H_2 + H \rightarrow H + H_2
 #
-# This reaction has a barrier though, the transition state, which it has to cross
-# for the exchange of :math:`H` atom to be complete. In a minimal basis like STO-3G,
+# This reaction has a barrier, the transition state, that it has to cross
+# for the exchange of an :math:`H` atom to be complete. In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
 # This means it is a :math:`6` qubit problem and the ground state (HF state) in
 # occupation number representation is :math:`|111000\rangle`.
@@ -297,10 +300,10 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         qml.PauliX(0)
         qml.PauliX(1)
         qml.PauliX(2)
-        # All possible double excitations
+        # All double excitations
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
-        # All single excitations too
+        # All single excitations
         for j in range(0, len(singles)):
             qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
@@ -313,9 +316,9 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-    ##############################################################################
-    # Then we evaluate the costfunction and use the gradient descent algorithm in an iterative
-    # optimization of the gate parameters.
+##############################################################################
+# We evaluate the cost function and use the gradient descent algorithm in an iterative
+# optimization of the gate parameters.
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
@@ -352,7 +355,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 r = np.arange(1.0, 3.0, 0.1)
 
 fig, ax = plt.subplots()
-ax.plot(r, vqe_energy, label="VQE(S+D)")
+ax.plot(r, vqe_energy)
 
 ax.set(
     xlabel="Distance (H-H, in Bohr)",
@@ -366,15 +369,15 @@ plt.show()
 #
 ##############################################################################
 # Activation energy barriers and reaction rates
-# ----------------------------------------------
-# The utility of potential energy surfaces as above lie in estimating the
+# --------------------------------------------
+# The utility of potential energy surfaces lies in estimating the
 # geometric configurations of key reactants, intermediates, transition states
-# and products, and the energy costs such as reaction energy and activation energy barriers.
-# To be specific about the above PEC, we would like our method (VQE)
-# to provide a good estimate of the energies of the reactants(minima :math:`1`), products 
-# (minima :math:`2`) and the transition state (maxima). VQE(S+D) reproduces the exact result in 
-# the small basis (STO-3G). The plot below compares the performance of many methods with each other
-# VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with
+# and products, as well as the reaction energies and activation energy barriers.
+# To be specific about the above PEC, we would like our method to provide
+# a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
+# and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
+# basis (STO-3G). The plot below compares the performance of different methods.
+# The PEC obtained from the quantum algorithm overlaps with
 # the quantum chemistry methods, CCSD and CISD.
 #
 # The activation energy barrier is defined as the difference between the
@@ -440,14 +443,14 @@ plt.show()
 #
 #
 # To figure out the reaction coordinate or the trajectory of
-# approach of :math:`H_2` to Beryllium atom, we refer to the work by
+# approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
-# We fix the Beryllium atom at the origin and the coordinates for hydrogen atoms are give by,
-# in Bohr, the coordinates :math:`(x, y, 0)` and :math:`(x, −y, 0)` where :math:`y = 2.54 − 0.46x`
-# and :math:`x \in [1, 4]`.
-# The generation of PES then is straightforward and follows from our previous examples.
-# For the sake of saving computational cost, we try a smaller active space of a total of
-# :math:`6` spin MOs with core electrons frozen.
+# We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms are given by
+#  :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
+# and :math:`x \in [1, 4]`. All distances are in Bohr.
+# The generation of the PES is straightforward and follows from our previous examples.
+# For the sake of saving computational cost, we try a smaller active space with a total of
+# :math:`6` spin-orbitals with core electrons frozen.
 
 # Molecular parameters
 name = "beh2"
@@ -459,7 +462,7 @@ spin = 1
 multiplicity = 1
 
 active_electrons = 4
-# choosing a smaller active space - 6 spin MOs
+# choosing a smaller active space of 6 spin-orbitals
 active_orbitals = 3
 vqe_energy = []
 
