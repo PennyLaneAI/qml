@@ -78,9 +78,9 @@ of all reactions.
 
 Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` spin-orbitals. 
 When mapped to a qubit representation, we have a total of four qubits. As discussed in the 
-previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`
-and singly excited determinants :math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited 
-determinant :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
+previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`,
+the singly-excited states :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited 
+state :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
 states that matter for this problem and are obtained by single and double particle-hole excitations
 out of the HF state. Below we show how to set up the problem to generate the PES for such a 
 reaction. 
