@@ -100,21 +100,20 @@ import time
 # To construct the potential energy
 # surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
 # :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
-# :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
+# :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
 
 charge = 0
 multiplicity = 1
 basis_set = "sto-3g"
 
 electrons = 2
-
 active_electrons = 2
 active_orbitals = 2
 
 vqe_energy = []
 
 # set up a loop to change internuclear distance
-for r_HH in np.arange(0.5, 4.0, 0.1):
+for r_HH in np.arange(0.5, 5.0, 0.1):
 
     symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH]))
 
@@ -122,9 +121,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
         coordinates,
-        charge=charge,
-        mult=multiplicity,
-        basis=basis_set,
+        basis=basis_set
     )
 
     print("Number of qubits = ", qubits)
@@ -151,15 +148,15 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-    ##############################################################################
-    # From here on, we can use optimizers in PennyLane.
-    # PennyLane contains the :class:`~.ExpvalCost` class,
-    # that we use to obtain the cost function central to the idea of variational optimization
-    # of parameters in VQE algorithm. We define the device which is a classical qubit
-    # simulator here,
-    # a cost function which calculates the expectation value of Hamiltonian operator for the
-    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
-    # the gate parameters:
+##############################################################################
+# From here on, we can use optimizers in PennyLane.
+# PennyLane contains the :class:`~.ExpvalCost` class,
+# that we use to obtain the cost function central to the idea of variational optimization
+# of parameters in VQE algorithm. We define the device which is a classical qubit
+# simulator here,
+# a cost function which calculates the expectation value of Hamiltonian operator for the
+# given trial wavefunction and also the gradient descent optimizer that is used to optimize
+# the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
@@ -206,7 +203,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
 # Energy as a function of internuclear distance
 
-r = np.arange(0.5, 4.0, 0.1)
+r = np.arange(0.5, 5.0, 0.1)
 
 fig, ax = plt.subplots()
 ax.plot(r, vqe_energy, label="VQE(S+D)")
