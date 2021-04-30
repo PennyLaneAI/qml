@@ -65,8 +65,9 @@ molecule is a
 visual tool to understand chemical reactions where stable molecules are the local minimas in 
 the valleys and transition states the *hill peaks* to climb.
 
-To summarize, we solve the electronic Schrodinger equation for a given fixed positions of nucleis,
-and then we move nucleis in incremental steps. The obtained set of energies are then plotted 
+To summarize, to build the potential energy surface, we solve the electronic Schrodinger
+equation for a given fixed position of the nuclei, and subsequently move the nuclei in incremental steps
+to obtain the energy at other configurations of the nuclei. The obtained set of energies are then plotted 
 against nuclear positions.
 
 We will begin by showing how this works for a simple diatomic molecule such as :math:`H_2`. 
