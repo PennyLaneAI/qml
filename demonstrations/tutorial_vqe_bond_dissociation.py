@@ -305,7 +305,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
 
-        # All single excitations too
+        # All single excitations
         for j in range(0, len(singles)):
             qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
