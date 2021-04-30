@@ -466,9 +466,9 @@ plt.show()
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms are given by
 #  :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
-# The generation of PES then is straightforward and follows from our previous examples.
-# For the sake of saving computational cost, we try a smaller active space of a total of
-# :math:`6` spin MOs with core electrons frozen.
+# The generation of the PES is straightforward and follows from our previous examples.
+# For the sake of saving computational cost, we try a smaller active space with a total of
+# :math:`6` spin-orbitals with core electrons frozen.
 
 # Molecular parameters
 name = "beh2"
