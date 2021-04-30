@@ -301,7 +301,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         qml.PauliX(0)
         qml.PauliX(1)
         qml.PauliX(2)
-        # All possible double excitations
+        # All double excitations
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
 
