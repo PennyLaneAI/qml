@@ -48,13 +48,13 @@ the exchange of hydrogen atoms. Let's get started!
 Potential Energy Surfaces: Hills to die and be reborn 
 ---------------------------------------------------------------------
 
-Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical 
-reaction or a general molecular transformation occurs. But what is it? The concept originates
-with the fact that the nuclies are much  heavier than electrons, better known as the 
-Born-Oppenheimer approximation, and that we can solve for the electronic wavefunction with 
-nucleis clamped to their respective positions. This results in the separation of nuclear and 
+Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical
+reaction occurs. The concept originates with the fact that the nuclei are a lot heavier than electrons,
+which allows us to treat the nuclei as point particles. This is known as the
+Born-Oppenheimer approximation. We can then solve for the electronic wavefunction with
+nucleis clamped to their respective positions. This results in separation of nuclear and
 electronic parts of the Schrodinger equation and we then only solve the electronic part of
-the problem
+the problem.
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle   
 
@@ -75,8 +75,8 @@ bond is the simplest of all reactions.
 .. math:: H_2 \rightarrow H + H  
 
 In terms of quantum computing terms, this is a :math:`4` qubit problem if considered in a minimal 
-basis set (STO-3G) i.e. :math:`2` electrons in :math:`4` spin orbitals. And as discussed in the 
-previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`
+basis set (STO-3G) i.e. :math:`2` electrons in :math:`4` spin orbitals. The states involved are the 
+Hartree-Fock (HF) ground state, :math:`|1100\rangle`
 and singly excited determinants :math:`|0110\rangle`, :math:`|1001\rangle` and doubly excited 
 determinant :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
 states that matter for this problem and are obtained by single and double particle-hole excitations
@@ -95,9 +95,9 @@ import time
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
 # and the spin multiplicity of the electronic configuration. To construct the potential energy
-# surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
-# :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
-# :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
+# surface, we need to vary the distance between the hydrogen atoms. So, we keep an :math:`H` atom
+# fixed at origin and change the :math:`x`-coordinate of the other :math:`H` atom such that the 
+# bond distance varies from :math:`1.0` to :math:`4.0` Bohrs in steps of :math:`0.25` Bohr.
 
 charge = 0
 multiplicity = 1
@@ -171,7 +171,6 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
-    dcircuit(params)
 
     ##############################################################################
     # We then begin the VQE iteration to optimize gate parameters.
@@ -183,9 +182,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
     for n in range(40):
 
         t1 = time.time()
-
         params, energy = opt.step_and_cost(cost_fn, params)
-
         t2 = time.time()
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
@@ -303,16 +300,13 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         # All possible double excitations
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
-
         # All single excitations too
         for j in range(0, len(singles)):
             qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
     #   Now we define the device and initialize the gate parameters.
     dev = qml.device("default.qubit", wires=qubits)
-
     cost_fn = qml.ExpvalCost(circuit, H, dev)
-
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
     # total length of parameters is generally the total no. of determinants considered
@@ -325,16 +319,12 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
-    dcircuit(params)
-
     prev_energy = 0.0
 
     for n in range(40):
 
         t1 = time.time()
-
         params, energy = opt.step_and_cost(cost_fn, params)
-
         t2 = time.time()
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
@@ -370,32 +360,22 @@ ax.set(
     title="PES for H-H + H -> H + H-H reaction",
 )
 ax.grid()
-
 ax.legend()
-
 plt.show()
 #
 #
 ##############################################################################
-# Activation energy barrier and Reaction Rate
-# --------------------------------------------
+# Activation energy barriers and reaction rates
+# ----------------------------------------------
 # The utility of potential energy surfaces as above lie in estimating the
 # geometric configurations of key reactants, intermediates, transition states
 # and products, and the energy costs such as reaction energy and activation energy barriers.
-# To be specific about the above PEC, we would like our method to provide
-# a good estimate of the energies of the reactants(minima :math:`1`), products (minima :math:`2`)
-# and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
-# basis (STO-3G). The plot below compares the performance of many methods with each other
+# To be specific about the above PEC, we would like our method (VQE)
+# to provide a good estimate of the energies of the reactants(minima :math:`1`), products 
+# (minima :math:`2`) and the transition state (maxima). VQE(S+D) reproduces the exact result in 
+# the small basis (STO-3G). The plot below compares the performance of many methods with each other
 # VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with
 # the quantum chemistry methods, CCSD and CISD.
-# Another VQE based optimization but restricted to a simpler ansatz is added too.
-# DOCI stands for Doubly occupied CI where only pure pair excitations are allowed
-# but we have also kept all single excitations.  As we see, VQE(DOCI) does not
-# get the energetics of reactants, products and transition states accurately
-# and hence is not an ideal method
-# for this problem but could become a good starting point for some more difficult problems.
-# In a future tutorial, we would show how to build a range of trial wavefunction ansatz
-# using tools in Pennylane used here such as qml.DoubleExcitation and qml.SingleExcitation.
 #
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
@@ -522,9 +502,7 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
             qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
     dev = qml.device("default.qubit", wires=qubits)
-
     cost_fn = qml.ExpvalCost(circuit, H, dev)
-
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
     # total length of parameters is the total no. of determinants considered
@@ -534,8 +512,6 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
     # compute the gradients
 
     dcircuit = qml.grad(cost_fn, argnum=0)
-
-    dcircuit(params)
 
     prev_energy = 0.0
 
