@@ -50,9 +50,9 @@ Potential Energy Surfaces: Hills to die and be reborn
 
 Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical 
 reaction or a general molecular transformation occurs. But what is it? The concept originates
-with the fact that the nuclies are a lot heavier than electron, better known as the 
+with the fact that the nuclies are much  heavier than electrons, better known as the 
 Born-Oppenheimer approximation, and that we can solve for the electronic wavefunction with 
-nucleis clamped to their respective positions. This results in separation of nuclear and 
+nucleis clamped to their respective positions. This results in the separation of nuclear and 
 electronic parts of the Schrodinger equation and we then only solve the electronic part of
 the problem
 
@@ -416,11 +416,13 @@ plt.show()
 # This is a current limitation that would go away with increasing number of logical qubits
 # that would hopefully become available in future quantum computers.
 #
-# The reaction rate (k) has an exponential dependence on the activation energy barrier:
+# The reaction rate constant (k) has an exponential dependence on the activation energy barrier:
 #
 # .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}
 #
-# So, in principle, if we know the constant (A) we could calculate the rate of the reaction.
+# So, in principle, if we know the constant (A) we could calculate the rate of the reaction
+# which depends on the rate constant, the concentration of the reactants and the order of the
+# reaction.
 
 
 ##############################################################################
