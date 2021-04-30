@@ -480,7 +480,7 @@ spin = 1
 multiplicity = 1
 
 active_electrons = 4
-# choosing a smaller active space - 6 spin MOs
+# choosing a smaller active space of 6 spin-orbitals
 active_orbitals = 3
 vqe_energy = []
 
