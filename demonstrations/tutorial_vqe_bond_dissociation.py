@@ -131,7 +131,7 @@ for r_HH in np.arange(0.5, 4.0, 0.1):
 
     ##############################################################################
     # Now we need to build the circuit for a general molecular system. We begin by preparing the
-    # qubit version of HF state, :math:`|1100\rangle`. We then identify and add all possible
+    # qubit version of the HF state, :math:`|1100\rangle`. We then identify and add all possible
     # single and double excitations.
 
     # get all the singles and doubles excitations
