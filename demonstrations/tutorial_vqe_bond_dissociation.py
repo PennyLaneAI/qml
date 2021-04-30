@@ -225,7 +225,7 @@ plt.show()
 
 
 ##############################################################################
-# This is a simple PES (or more appropriately PEC, potential energy curve) for
+# This is a simple PES (or more appropriately a PEC, potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms. It gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
