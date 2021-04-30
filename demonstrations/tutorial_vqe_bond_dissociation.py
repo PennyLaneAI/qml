@@ -56,7 +56,7 @@ nucleis clamped to their respective positions. This results in the separation of
 electronic parts of the Schrodinger equation and we then only solve the electronic part of
 the problem
 
-.. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle   
+.. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
 Thus arises the concept of electronic energy of the molecule, a quantum mechanical system, 
 as a function of interatomic coordinates and angles. Potential energy surface is a 
