@@ -70,9 +70,9 @@ equation for a given fixed position of the nuclei, and subsequently move the nuc
 to obtain the energy at other configurations of the nuclei. The obtained set of energies are then plotted 
 against nuclear positions.
 
-We will begin by showing how this works for a simple diatomic molecule such as :math:`H_2`. 
-:math:`H_2` is the simplest of the molecules and the formation (or breaking) of the :math:`H-H`
-bond is the simplest of all reactions. 
+We begin with the simplest of molecule: :math:`H_2`. 
+The formation (or breaking) of the :math:`H-H` bond is also the simplest
+of all reactions. 
 
 .. math:: H_2 \rightarrow H + H  
 
