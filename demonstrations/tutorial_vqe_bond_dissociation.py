@@ -244,8 +244,8 @@ plt.show()
 #
 # .. math:: H_2 + H \rightarrow H + H_2
 #
-# This reaction has a barrier though, the transition state, which it has to cross
-# for the exchange of :math:`H` atom to be complete. In a minimal basis like STO-3G,
+# This reaction has a barrier, the transition state, that it has to cross
+# for the exchange of an :math:`H` atom to be complete. In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
 # This means it is a :math:`6` qubit problem and the ground state (HF state) in
 # occupation number representation is :math:`|111000\rangle`.
