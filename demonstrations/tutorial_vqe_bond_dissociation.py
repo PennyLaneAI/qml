@@ -381,9 +381,9 @@ plt.show()
 ##############################################################################
 # Activation energy barriers and reaction rates
 # --------------------------------------------
-# The utility of potential energy surfaces as above lie in estimating the
+# The utility of potential energy surfaces lies in estimating the
 # geometric configurations of key reactants, intermediates, transition states
-# and products, and the energy costs such as reaction energy and activation energy barriers.
+# and products, as well as the reaction energies and activation energy barriers.
 # To be specific about the above PEC, we would like our method to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
 # and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
