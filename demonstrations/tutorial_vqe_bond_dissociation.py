@@ -230,10 +230,10 @@ plt.show()
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # (the difference in energy at equilibrium and energy at dissociation limit)
-# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Could these estimates be improved?
-# Yes, by using bigger basis sets or using explicitly correlated methods(F12) and
+# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). These estimates can be improved
+# by using bigger basis sets or explicitly correlated methods (F12) and
 # extrapolating to the complete basis set (CBS) limit. [#motta2020]_
-# Now let's move on to something slightly more complicated.
+# Now let's move on to a more interesting chemical reaction.
 #
 
 
