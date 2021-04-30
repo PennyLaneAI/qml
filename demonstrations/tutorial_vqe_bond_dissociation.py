@@ -385,7 +385,7 @@ plt.show()
 # geometric configurations of key reactants, intermediates, transition states
 # and products, and the energy costs such as reaction energy and activation energy barriers.
 # To be specific about the above PEC, we would like our method to provide
-# a good estimate of the energies of the reactants(minima :math:`1`), products (minima :math:`2`)
+# a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
 # and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
 # basis (STO-3G). The plot below compares the performance of many methods with each other
 # VQE(S+D), our chosen ansatz reminiscent of UCCSD approach, overlaps with
