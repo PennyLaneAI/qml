@@ -8,8 +8,8 @@ Kernel-based training of quantum models with scikit-learn
 =========================================================
 
 .. meta:: 
-    :property=“og:description”: Train a quantum machine learning model based on the idea of quantum kernels. 
-    :property=“og:image”: https://pennylane.ai/qml/_images/kernel_based_scaling.png
+    :property="og:description": Train a quantum machine learning model based on the idea of quantum kernels. 
+    :property="og:image": https://pennylane.ai/qml/_images/kernel_based_scaling.png
 
 .. related::
 
