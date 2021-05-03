@@ -96,7 +96,7 @@ import time
 
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
-# and the spin multiplicity of the electronic configuration. 
+# and the spin multiplicity of the electronic configuration.
 # To construct the potential energy
 # surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
 # :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
@@ -118,11 +118,7 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
     symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH]))
 
     # Do a meanfield calculation -> Define a fermionic Hamiltonian -> turn into a qubit Hamiltonian
-    H, qubits = qchem.molecular_hamiltonian(
-        symbols,
-        coordinates,
-        basis=basis_set
-    )
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
 
     print("Number of qubits = ", qubits)
     print("Hamiltonian is ", H)
@@ -148,15 +144,15 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-##############################################################################
-# From here on, we can use optimizers in PennyLane.
-# PennyLane contains the :class:`~.ExpvalCost` class,
-# that we use to obtain the cost function central to the idea of variational optimization
-# of parameters in VQE algorithm. We define the device which is a classical qubit
-# simulator here,
-# a cost function which calculates the expectation value of Hamiltonian operator for the
-# given trial wavefunction and also the gradient descent optimizer that is used to optimize
-# the gate parameters:
+    ##############################################################################
+    # From here on, we can use optimizers in PennyLane.
+    # PennyLane contains the :class:`~.ExpvalCost` class,
+    # that we use to obtain the cost function central to the idea of variational optimization
+    # of parameters in VQE algorithm. We define the device which is a classical qubit
+    # simulator here,
+    # a cost function which calculates the expectation value of Hamiltonian operator for the
+    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
+    # the gate parameters:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
@@ -313,9 +309,9 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-##############################################################################
-# We evaluate the cost function and use the gradient descent algorithm in an iterative
-# optimization of the gate parameters.
+    ##############################################################################
+    # We evaluate the cost function and use the gradient descent algorithm in an iterative
+    # optimization of the gate parameters.
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
@@ -420,7 +416,10 @@ plt.show()
 # A model multireference problem: :math:`Be + H_{2} \rightarrow BeH_{2}`
 # -------------------------------------------------------------------------------------------
 #
-#
+# In our previous examples, the Hartree-Fock state was a good approximation to the ground state
+# among all points in the potential energy surface. Hence, we refer to them as single reference
+# problems. However, there exist situations where more than one different reference states are
+# required across the potential energy surface. These are called multi-reference problems.
 # A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
 # constitutes a multireference problem. [#purvis1983]_ It needs two different
 # HF Slater determinants to qualitatively describe the full potential energy suface
