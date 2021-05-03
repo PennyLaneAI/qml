@@ -10,7 +10,7 @@ sympy==1.6.2
 pillow==7.1.0
 pip==20.1
 pyscf==1.7.2
-pennylane==0.15.0
+pennylane==0.15.1
 pennylane-qchem==0.15.0
 pennylane-sf==0.15.0
 pennylane-forest==0.15.0
