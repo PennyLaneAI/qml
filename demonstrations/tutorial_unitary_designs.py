@@ -120,7 +120,7 @@ Complex projective designs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There was nothing quantum in the above description of spherical designs--it's
-time now to start bringing this aspect in. There is quite a nice progression we
+time now to see how things fit together. There is quite a nice progression we
 can follow to build up some intuition about what unitary designs are, and what
 they should do. The most pressing matter though is that so far, spherical
 designs have dealt only with real numbers, and surely we will need to include
@@ -154,6 +154,14 @@ An interesting fact about complex projective designs is that, if you "unroll"
 the real and complex parts into real-valued vectors of length :math:`2d`, you have yourself
 a regular spherical design! This works in the other direction, too---spherical :math:`t`-designs
 can be transformed into :math:`t/2`-designs over :math:`\mathcal{S}(C^{d/2})`.
+
+.. admonition:: Fun fact
+
+    If you've ever studied the characterization of quantum systems, you may have come across
+    some special sets of measurements called mutually unbiased bases (MUBs), or symmetric,
+    informationally complete positive operator valued measurements (SIC-POVMs). Both
+    these objects are examples of complex projective 2-designs! [cite]
+
 
 Unitary designs
 ^^^^^^^^^^^^^^^
@@ -195,36 +203,56 @@ What can we do with them?
 
 A key application of unitary designs is in the benchmarking of quantum
 operations. We won't cover this topic in detail here---characterizing quantum
-systems is an exciting and active area of research. One important task is to
-determine how well an operation performs *on average* over the full set of
-quantum states.
+systems is an exciting and active area of research. Suppose we have a noisy
+quantum channel :math:`\Lambda` that we expect should perform something close to
+the unitary operation :math:`V`.  What can we say about the performance of this
+channel? 
 
-Suppose we have a quantum channel :math:`\Lambda` and we wish to gauge its
-quality. A simple way of doing this would be to compute, for example, the
-fidelity of the operation when performed on a state chosen uniformly at random.
-We can select a state uniformly at random using the Haar measure; however, this
-only tells about how well it works on that particular quantum state. A better
-measure of success would be to calculate an average fidelity over *all* possible
-states. But surely this is impossible, as there are an infinite number of
-quantum states!
-
-This operation is known as *twirling* a quantum channel. More formally, what we are looking
-to do is compute the average fidelity of....
+One thing we can do is compute the *fidelity*. Consider the state :math:`|0\rangle`. 
+Applying the unitary operation :math:`V` gives of course :math:`V|0\rangle`.
+Applying the channel :math:`\Lambda` gives us something a little different; we 
+have to consider the state as a density matrix. But either way, the action of
+:math:`\Lambda` on our starting state is :math:`\Lambda(|0\rangle \langle 0|)`.
+If :math:`\Lambda` was perfect, then :math:`\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle 0|V^\dagger`.
+Then, we could compute the fidelity as
 
 .. math::
 
-   \rho = \int U^\dagger \Lambda(U \rho U^\dagger) U d\mu
+    F(\Lambda, V) = \langle 0 | V^\dagger \Lambda(|0\rangle \langle 0|) V|0\rangle = 1.
 
-where :math:`d\mu` is the Haar measure.
+But that's the perfect case--in reality, :math:`\Lambda` is not going to
+implement :math:`V` perfectly. Furthermore, all we've computed so far is the
+fidelity when the initial state is :math:`|0\rangle`. What if the initial state
+is something different? What is the fidelity *on average*?
 
-Now, note what would happen if we were to fix a dimension :math:`d` and expand
-out the contents of the integral for a single :math:`U`. We see that :math:`U`
-is applied twice, and the same for :math:`U^\dagger`. This is just matrix
-multiplication, and it will produce a matrix in which the entries are
-polynomials with degree 2 in both the entries of :math:`U`, and
-:math:`U^\dagger`!  This is incredible - it means we can perform the experiment
-using only a limited subset of quantum states, but obtain the correct
-result. The question then becomes, what is the representative set of unitaries?
+To compute an average fidelity, we must do so with respect to the full set
+of Haar-random states. We usually generate random states by applying a
+Haar-random unitary :math:`U` to :math:`|0\rangle`. Thus to compute the average
+fidelity over all such :math:`U`, we must evaluate
+
+.. math::
+
+    \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
+
+This is known as *twirling* the channel :math:`\Lambda`. As expressed above, computing this
+average fidelity would be a nightmare--we'd have to compute the fidelity with
+respect to an infinite number of states! 
+
+However, consider the expression in the integral above. We have an inner product
+involving two instances of :math:`U`, and two instances of
+:math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
+both the elements of :math:`U` and its complex conjugates--this is exactly the
+same situation as above when we defined unitary 2-designs! This means that if we
+can find a set of :math:`K` unitaries that form a 2-design, we can compute the
+average fidelity using only a finite set of initial states:
+
+.. math::
+
+    \frac{1}{K} \sum_{j=1}^K \langle 0 | U_j^\dagger V^\dagger \Lambda(U_j |0\rangle \langle 0|
+    U_j^\dagger) V^\dagger U_j |0\rangle = \int_{\mathcal{U}} d\mu(U) \langle 0
+    | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle
+
+This is incredible! But a question remains: what is the representative set of unitaries?
 
 Design design
 ^^^^^^^^^^^^^
