@@ -411,6 +411,30 @@ plt.show()
 #
 # .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
 #
+# # Now we will calculate the activation energy from the above PES.
+# The activation energy is the difference in energy of the reactant complex (minima)
+# and the energy of the transition state
+
+vqe_energy_equil = min(vqe_energy)
+
+vqe_energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
+# Between the two minimas, we have the TS which is a local maxima
+
+bond_length_index_1 = vqe_energy.index(vqe_energy_equil)
+bond_length_index_2 = vqe_energy.index(vqe_energy_equil_2)
+
+vqe_energy_between = vqe_energy[bond_length_index_2:bond_length_index_1]
+
+# TS is the maxima between local minimas
+vqe_energy_ts = max(vqe_energy_between)
+
+activation_energy = np.subtract(vqe_energy_ts, vqe_energy_equil)
+activation_energy_kcal = np.multiply(activation_energy, 627.5)
+
+print("The activation energy is {} Hartrees or {} kcal/mol".format(
+    activation_energy, activation_energy_kcal))
+
+##############################################################################
 # Though this is the best theoretical estimate in this small basis,
 # this is not the *best* theoretical estimate. We would need to do this calculation
 # in larger basis, triple and quadruple zeta basis or higher, to reach basis set
@@ -468,7 +492,7 @@ plt.show()
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms are given by
-#  :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
+# :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
 # The generation of the PES is straightforward and follows from our previous examples.
 # For the sake of saving computational cost, we try a smaller active space with a total of
