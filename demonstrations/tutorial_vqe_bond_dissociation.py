@@ -221,7 +221,33 @@ plt.show()
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # (the difference in energy at equilibrium and energy at dissociation limit)
-# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). These estimates can be improved
+# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Let us see how to do this.
+# In a diatomic molecule, the PEC as a function of internuclear distance tells us the bond length:
+# the distance between the two atoms when the energy is at a minimum and the system is in
+# equilibrium.
+# While the bond dissociation energy is amount of energy required to dissociate a bond.
+# In other words, the difference in energy of the system at equilibrium (minima) and the energy
+# of the system at the dissociation limit (farthest right of the curve)
+
+vqe_energy_equil = min(vqe_energy)
+vqe_energy_disoc = vqe_energy[-1]
+
+bond_dissociation_energy = np.subtract(vqe_energy_disoc, vqe_energy_equil)
+bond_dissociation_energy_kcal = np.multiply(bond_dissociation_energy, 627.5)
+
+bond_length_index = vqe_energy.index(vqe_energy_equil)
+bond_length = r[bond_length_index]
+
+print("The H-H bond length is {} Bohrs".format(bond_length))
+print(
+    "The H-H bond dissociation energy is {} Hartrees or {} kcal/mol".format(
+        bond_dissociation_energy, bond_dissociation_energy_kcal
+    )
+)
+
+
+##############################################################################
+# These estimates can be improved
 # by using bigger basis sets or explicitly correlated methods (F12) and
 # extrapolating to the complete basis set (CBS) limit. [#motta2020]_
 # Now let's move on to a more interesting chemical reaction.
