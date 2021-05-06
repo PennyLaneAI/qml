@@ -395,9 +395,7 @@ plt.show()
 # To be specific about the above PEC, we would like our method to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
 # and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
-# basis (STO-3G). The plot below compares the performance of different methods.
-# The PEC obtained from the quantum algorithm overlaps with
-# the quantum chemistry methods, CCSD and CISD.
+# basis (STO-3G).
 #
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
@@ -413,7 +411,7 @@ plt.show()
 #
 # # Now we will calculate the activation energy from the above PES.
 # The activation energy is the difference in energy of the reactant complex (minima)
-# and the energy of the transition state
+# and the energy of the transition state (TS)
 
 vqe_energy_equil = min(vqe_energy)
 
@@ -423,16 +421,26 @@ vqe_energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
 bond_length_index_1 = vqe_energy.index(vqe_energy_equil)
 bond_length_index_2 = vqe_energy.index(vqe_energy_equil_2)
 
-vqe_energy_between = vqe_energy[bond_length_index_2:bond_length_index_1]
+print(bond_length_index_1)
+print(bond_length_index_2)
 
-# TS is the maxima between local minimas
-vqe_energy_ts = max(vqe_energy_between)
+index_1 = min(bond_length_index_1, bond_length_index_2)
+index_2 = max(bond_length_index_1, bond_length_index_2)
+
+print(index_1)
+print(index_2)
+
+vqe_energy_ts = max(vqe_energy[index_1:index_2])
+print(vqe_energy_between)
 
 activation_energy = np.subtract(vqe_energy_ts, vqe_energy_equil)
 activation_energy_kcal = np.multiply(activation_energy, 627.5)
 
-print("The activation energy is {} Hartrees or {} kcal/mol".format(
-    activation_energy, activation_energy_kcal))
+print(
+    "The activation energy is {} Hartrees or {} kcal/mol".format(
+        activation_energy, activation_energy_kcal
+    )
+)
 
 ##############################################################################
 # Though this is the best theoretical estimate in this small basis,
@@ -449,7 +457,11 @@ print("The activation energy is {} Hartrees or {} kcal/mol".format(
 # So, in principle, if we know the constant (A) we could calculate the rate of the reaction
 # which depends on the rate constant, the concentration of the reactants and the order of the
 # reaction.
-
+# In general, we desire our method to predict these energy costs
+# and the geometries of the key intermediates.
+# The plot below compares the performance of different methods.
+# The PEC obtained from the quantum algorithm (VQE) overlaps with
+# the quantum chemistry methods, CCSD and CISD.
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
@@ -467,19 +479,19 @@ print("The activation energy is {} Hartrees or {} kcal/mol".format(
 # -------------------------------------------------------------------------------------------
 #
 # In our previous examples, the Hartree-Fock state was a good approximation to the ground state
-# among all points in the potential energy surface. Hence, we refer to them as single reference
+# for all points on the potential energy surface. Hence, we refer to them as single reference
 # problems. However, there exist situations where more than one different reference states are
 # required across the potential energy surface. These are called multi-reference problems.
 # A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
 # constitutes a multireference problem. [#purvis1983]_ It needs two different
-# HF Slater determinants to qualitatively describe the full potential energy suface
+# Hartree-Fock Slater determinants to qualitatively describe the full potential energy suface
 # for the transformation. This is to say that one Slater Determinant is a good HF reference
-# for one half of the PES while another determinant is good reference for rest of PES.
+# for one half of the PES while another determinant is good reference for the rest of PES.
 #
 # Here, we construct the potential energy surface for this reaction and see how
 # classical and quantum computing approaches built on single HF reference perform.
-# Once we have solved the mean-field problem, we obtain the molecular orbitals
-# (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal configurations
+# Once we have solved the mean-field HF equations, we obtain the molecular orbitals
+# (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal states
 # :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
 #
 #
@@ -488,11 +500,11 @@ print("The activation energy is {} Hartrees or {} kcal/mol".format(
 #     :align: center
 #
 #
-# To figure out the reaction coordinate or the trajectory of
+# To figure out the reaction coordinate for the
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
-# We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms are given by
-# :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
+# We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
+# are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
 # The generation of the PES is straightforward and follows from our previous examples.
 # For the sake of saving computational cost, we try a smaller active space with a total of
