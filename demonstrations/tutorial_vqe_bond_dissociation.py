@@ -238,9 +238,9 @@ bond_dissociation_energy_kcal = np.multiply(bond_dissociation_energy, 627.5)
 bond_length_index = vqe_energy.index(vqe_energy_equil)
 bond_length = r[bond_length_index]
 
-print("The H-H bond length is {} Bohrs".format(bond_length))
+print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
 print(
-    "The H-H bond dissociation energy is {} Hartrees or {} kcal/mol".format(
+        "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
         bond_dissociation_energy, bond_dissociation_energy_kcal
     )
 )
@@ -400,7 +400,7 @@ plt.show()
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
 # and the energy of the
-# transition state (:math:`H--H--H`).
+# transition state (TS).
 #
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
 #
@@ -409,9 +409,7 @@ plt.show()
 #
 # .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
 #
-# # Now we will calculate the activation energy from the above PES.
-# The activation energy is the difference in energy of the reactant complex (minima)
-# and the energy of the transition state (TS)
+# Below we show how to calculate the activation energy from the above PES.
 
 vqe_energy_equil = min(vqe_energy)
 
@@ -431,13 +429,12 @@ print(index_1)
 print(index_2)
 
 vqe_energy_ts = max(vqe_energy[index_1:index_2])
-print(vqe_energy_between)
 
 activation_energy = np.subtract(vqe_energy_ts, vqe_energy_equil)
 activation_energy_kcal = np.multiply(activation_energy, 627.5)
 
 print(
-    "The activation energy is {} Hartrees or {} kcal/mol".format(
+        "The activation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
         activation_energy, activation_energy_kcal
     )
 )
