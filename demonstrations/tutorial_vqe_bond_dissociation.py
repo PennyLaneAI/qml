@@ -240,7 +240,7 @@ bond_length = r[bond_length_index]
 
 print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
 print(
-        "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
+    "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
         bond_dissociation_energy, bond_dissociation_energy_kcal
     )
 )
@@ -414,27 +414,23 @@ plt.show()
 vqe_energy_equil = min(vqe_energy)
 
 vqe_energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
-# Between the two minimas, we have the TS which is a local maxima
 
+# Between the two minimas, we have the TS which is a local maxima
 bond_length_index_1 = vqe_energy.index(vqe_energy_equil)
 bond_length_index_2 = vqe_energy.index(vqe_energy_equil_2)
 
-print(bond_length_index_1)
-print(bond_length_index_2)
 
 index_1 = min(bond_length_index_1, bond_length_index_2)
 index_2 = max(bond_length_index_1, bond_length_index_2)
 
-print(index_1)
-print(index_2)
-
+# Transition State energy
 vqe_energy_ts = max(vqe_energy[index_1:index_2])
 
 activation_energy = np.subtract(vqe_energy_ts, vqe_energy_equil)
 activation_energy_kcal = np.multiply(activation_energy, 627.5)
 
 print(
-        "The activation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
+    "The activation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
         activation_energy, activation_energy_kcal
     )
 )
@@ -454,7 +450,7 @@ print(
 # So, in principle, if we know the constant (A) we could calculate the rate of the reaction
 # which depends on the rate constant, the concentration of the reactants and the order of the
 # reaction.
-# In general, we desire our method to predict these energy costs
+# In general, we desire our method to very accurately predict these energy costs
 # and the geometries of the key intermediates.
 # The plot below compares the performance of different methods.
 # The PEC obtained from the quantum algorithm (VQE) overlaps with
