@@ -391,7 +391,7 @@ plt.show()
 # Activation energy barriers and reaction rates
 # --------------------------------------------
 # The utility of potential energy surfaces lies in estimating the
-# geometric configurations of key reactants, intermediates, 
+# geometric configurations of key reactants, intermediates,
 # `transition state (TS) <https://en.wikipedia.org/wiki/Transition_state>`
 # and products, as well as the reaction energies and activation energy barriers.
 # To be specific about the above PEC, we would like our method to provide
@@ -445,7 +445,8 @@ print(
 # This is a current limitation that would go away with increasing number of logical qubits
 # that would hopefully become available in future quantum computers.
 #
-# The reaction rate constant (k) has an exponential dependence on the activation energy barrier:
+# The reaction rate constant (k) has an exponential dependence on the activation energy barrier
+# as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
 #
 # .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}
 #
