@@ -368,7 +368,8 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 ##############################################################################
 #
 # Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`
-# which is also the reaction coordinate and thus, we have the potential energy curve for
+# which is also the `reaction coordinate <https://en.wikipedia.org/wiki/Reaction_coordinate>`_
+# and thus, we have the potential energy curve for
 # this reaction.
 
 r = np.arange(1.0, 3.0, 0.1)
@@ -390,7 +391,8 @@ plt.show()
 # Activation energy barriers and reaction rates
 # --------------------------------------------
 # The utility of potential energy surfaces lies in estimating the
-# geometric configurations of key reactants, intermediates, transition states
+# geometric configurations of key reactants, intermediates, 
+# `transition state (TS) <https://en.wikipedia.org/wiki/Transition_state>`
 # and products, as well as the reaction energies and activation energy barriers.
 # To be specific about the above PEC, we would like our method to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
@@ -400,7 +402,7 @@ plt.show()
 # The activation energy barrier is defined as the difference between the
 # energy of the reactant complex
 # and the energy of the
-# transition state (TS).
+# transition state.
 #
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
 #
