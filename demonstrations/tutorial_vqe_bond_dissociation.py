@@ -453,7 +453,7 @@ print(
 # So, in principle, if we know the constant (A) we could calculate the rate of the reaction
 # which depends on the rate constant, the concentration of the reactants and the order of the
 # reaction.
-# In general, we desire our method to very accurately predict these energy costs
+# In general, we desire our method to very accurately predict these energy differences
 # and the geometries of the key intermediates.
 # The plot below compares the performance of different methods.
 # The PEC obtained from the quantum algorithm (VQE) overlaps with
@@ -615,18 +615,21 @@ plt.show()
 # ----------
 #
 # Below is a comparison with other classical quantum chemistry aproaches such
-# as CASCI, CCSD and CISD. we can see VQE(S+D) does really well for both sides
+# as CASCI, CCSD and CISD. we can see VQE(S+D) does really well across the
 # of PES, left and right of the transition state. While single reference approaches
-# such as CISD and CCSD suffer in the latter half of PES. We should note though that
-# this behavior of CI and CC methods could be corrected if we chose the right Slater
-# determinant at each point of PES, the choice of which as we see varies with
-# geometry.
+# such as CISD and CCSD suffer in the latter half of PES.
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
 #     :width: 50%
 #     :align: center
 #
+#
+# To summarize, we looked at three different chemical reactions and constructed
+# their potential energy curves. We calculated important energy
+# costs, bond dissociation energy and activation energy, and bond lengths of specific
+# bonds. We also saw how quantum computing algorithms such as VQE provide high quality
+# results that match or supersede conventional quantum chemistry methods.
 #
 #
 # .. _references:
