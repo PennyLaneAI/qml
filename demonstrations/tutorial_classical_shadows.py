@@ -24,10 +24,11 @@ number of measurements needed to completely characterize an unknown quantum stat
 
 A solution to this problem is to use the classical shadow approximation.
 In this procedure
-1. A quantum state $\rho$ is prepared.
-2. A randomly selected unitary $U$ is applied
+
+1. A quantum state :math:`\rho` is prepared.
+2. A randomly selected unitary :math:`N` is applied
 3. A computational basis measurement is performed.
-4. The process is repeated $N$ times.
+4. The process is repeated :math:`N` times.
 
 The classical shadow is then constructed as a list of measurement outcomes and chosen unitaries.
 
@@ -47,13 +48,15 @@ def classical_shadow(circuit_template, params, num_shadows: int) -> np.ndarray:
     # each shadow is one shot, so we set this parameter in the qml.device
     device_shadow = qml.device('default.qubit', wires=nqubits, shots=1)
     # sample random unitaries uniformly, where 0 = I and 1,2,3 = X,Y,Z
-    randints = np.random.randint(0, 4, size=(number_of_shadows, nqubits))
+    randints = np.random.randint(1, 4, size=(number_of_shadows, nqubits))
     unitaries = []
     for ns in range(num_shadows):
         # for each shadow, add a random Clifford observable at each location
         unitaries.extend(unitary_ensemble[int(randints[ns, i])](i) for i in range(nqubits))
-    # use the QNodeCollections through qml.map to calculate multiple observables for the same circuit
-    samples = qml.map(circuit_template, observables=unitaries, device=device_shadow, measure='sample')(params)
+    # use the QNodeCollections through qml.map to calculate multiple observables
+    # for the same circuit
+    samples = qml.map(circuit_template, observables=unitaries,
+                      device=device_shadow, measure='sample')(params)
     # reshape from dim 1 vector to matrix, each row now corresponds to a shadow
     samples = samples.reshape((number_of_shadows, nqubits))
     # combine the computational basis outcomes and the sampled unitaries
@@ -82,8 +85,9 @@ def estimate_shadow_obervable(shadows, observable):
 
     return sum_product / cnt_match
 
-
-# Simple example of classical shadow computation for qubits
+##############################################################################
+# Here, we show a simple example of how the observable :math:`X_0' can be estimated with
+#classical whadows.
 
 nqubits = 1
 theta = np.random.randn(nqubits, )
@@ -103,7 +107,8 @@ def circuit(params, wires, **kwargs):
 
 
 # Estimate Tr{X_0 rho}
-exact_observable = qml.map(circuit, observables=[qml.PauliX(0)], device=device_exact, measure='expval')(theta)
+exact_observable = qml.map(circuit, observables=[qml.PauliX(0)],
+                           device=device_exact, measure='expval')(theta)
 print(f"Exact value: {exact_observable[0]}")
 shadows = classical_shadow(circuit, theta, number_of_shadows)
 # The observable X_0 is passed as [(1,0), ] something like X_0 Y_1 would be  [(1,0),(2,1)]
@@ -111,19 +116,24 @@ shadows = classical_shadow(circuit, theta, number_of_shadows)
 shadow_observable = estimate_shadow_obervable(shadows, [(1, 0), ])
 print(f"Shadow value: {shadow_observable}")
 
-# Multi-qubit application of classical shadow
+##############################################################################
+# Next, we consider the multi-qubit observable :math:`X_0 X_1`.
+
 
 nqubits = 2
 theta = np.random.randn(nqubits, )
 device_exact = qml.device('default.qubit', wires=nqubits)
-number_of_shadows = 1000
+number_of_shadows = 3000
 
-exact_observable = qml.map(circuit, observables=[qml.PauliX(0) @ qml.PauliX(1)], device=device_exact, measure='expval')(
+exact_observable = qml.map(circuit, observables=[qml.PauliX(0) @ qml.PauliX(1)],
+                           device=device_exact, measure='expval')(
     theta)
 print(f"Exact value: {exact_observable[0]}")
 shadows = classical_shadow(circuit, theta, number_of_shadows)
 shadow_observable = estimate_shadow_obervable(shadows, [(1, 0), (1, 1)])
 print(f"Shadow value: {shadow_observable}")
 
-# Application of classical shadow/ performance comparison
-# TODO: what is a good application?
+##############################################################################
+# Comparison of standard observable estimators and classical shadows.
+
+#TODO: what is a good application?
