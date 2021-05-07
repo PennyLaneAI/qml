@@ -48,13 +48,15 @@ the exchange of hydrogen atoms. Let's get started!
 Potential Energy Surfaces: Hills to die and be reborn 
 ---------------------------------------------------------------------
 
-Potential energy surfaces (PES) are, in simple words, energy landscapes on which any chemical
-reaction occurs. The concept originates with the fact that the nuclei are a lot heavier than electrons,
-which allows us to treat the nuclei as point particles. This is known as the
-Born-Oppenheimer approximation. We can then solve for the electronic wavefunction with
+`Potential energy surfaces (PES) <https://en.wikipedia.org/wiki/Potential_energy_surface>`_
+are, in simple words, energy landscapes on which any chemical
+reaction occurs. The concept originates with the fact that the nuclei are much heavier than 
+electrons and thus move much slowly allowing us to decouple their motion. This is known as the
+`Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation>`_. 
+We can then solve for the electronic wavefunction with
 nucleis clamped to their respective positions. This results in separation of nuclear and
-electronic parts of the Schrodinger equation and we then only solve the electronic part of
-the problem.
+electronic parts of the Schrodinger equation and we then only solve the electronic Schrodinger
+equation.
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
@@ -66,9 +68,9 @@ visual tool to understand chemical reactions where stable molecules are the loca
 the valleys and transition states the *hill peaks* to climb.
 
 To summarize, to build the potential energy surface, we solve the electronic Schrodinger
-equation for a given fixed position of the nuclei, and subsequently move the nuclei in incremental steps
-to obtain the energy at other configurations of the nuclei. The obtained set of energies are then plotted 
-against nuclear positions.
+equation for a set of positions of the nuclei, and subsequently move the nuclei in incremental steps
+to obtain the energy at other configurations of the nuclei. The obtained set of energies are then 
+plotted against nuclear positions.
 
 We begin with the simplest of molecule: :math:`H_2`. 
 The formation (or breaking) of the :math:`H-H` bond is also the simplest
@@ -76,12 +78,12 @@ of all reactions.
 
 .. math:: H_2 \rightarrow H + H  
 
-Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` spin-orbitals. 
-When mapped to a qubit representation, we have a total of four qubits. As discussed in the 
-previous tutorial, the states involved are the Hartree-Fock (HF) ground state, :math:`|1100\rangle`,
-the singly-excited states :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited 
-state :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` possible 
-states that matter for this problem and are obtained by single and double excitations
+Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` 
+spin-orbitals. When mapped to a qubit representation, we have a total of four qubits. 
+As discussed in the previous tutorial, the states involved are the Hartree-Fock (HF) ground state, 
+:math:`|1100\rangle`, the singly-excited states :math:`|0110\rangle`, :math:`|1001\rangle`, and the 
+doubly-excited state :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` 
+possible states that matter for this problem and are obtained by single and double excitations
 out of the HF state. Below we show how to set up the problem to generate the PES for such a 
 reaction. 
 
@@ -95,9 +97,11 @@ import matplotlib.pyplot as plt
 
 ##############################################################################
 # We begin by specifying molecular information such as charge of the molecule,
-# spin multiplicity of the electronic configuration and the basis set. A key thing is
-# to specify the number of active electrons and active orbitals. This will
-# define the number of qubits required and the qubit states that need to be considered.
+# spin multiplicity of the electronic configuration and the basis set. A key step is
+# to specify the number of active electrons (which is equal to the number of electrons
+# explicitly considered)
+# and active orbitals. This
+# defines the number of qubits required and the qubit states that need to be considered.
 
 charge = 0
 multiplicity = 1
@@ -108,10 +112,12 @@ active_electrons = 2
 active_orbitals = 2
 
 ##############################################################################
-# To construct the potential energy
-# surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
+# To construct the potential energy surface, we need to vary the geometry. So, we keep 
+# an :math:`H` atom fixed at origin and vary the
 # :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
 # :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
+# This covers the range of internuclear distance in which the H-H bond is formed 
+# and also, when it is considered broken as the atoms move away from each other.
 # Now we set up a loop that incremetally changes the internuclear distance and for each
 # such point, we do a mean-field (HF) calculation, generate a fermionic Hamiltonian
 # which is then mapped to a qubit Hamiltonian. All the later steps are done using the
@@ -534,7 +540,8 @@ for reac_coord in np.arange(1.0, 4.0, 0.1):
 
     prev_energy = 0.0
 
-    for n in range(40):
+    # Begin VQE iteration. The max number of iterations is set to 150
+    for n in range(150):
 
         params, energy = opt.step_and_cost(cost_fn, params)
         print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
