@@ -58,7 +58,7 @@ the problem.
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
-Thus arises the concept of the electronic energy of the molecule
+Thus arises the concept of the electronic energy of the molecule, :math:`E(R)`, 
 as a function of interatomic coordinates and angles. The potential energy surface of a 
 molecule is a 
 :math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
@@ -110,28 +110,42 @@ electrons = 2
 active_electrons = 2
 active_orbitals = 2
 
-vqe_energy = []
+##############################################################################
+# Now we set up a loop that incremetally changes the internuclear distance and for each
+# such point, we do a mean-field (HF) calculation, generate a fermionic Hamiltonian
+# which is then mapped to a qubit Hamiltonian. This is done using
+# :class:`~molecular_hamiltonian` class.
+# Now we build the VQE circuit, by first
+# preparing the qubit version of the HF state and then adding all single excitation and
+# double excitation gates which use the Givens rotations. This approach is similar to
+# the Unitary Coupled Cluster (UCCSD) approach often used.
+# We use a classical qubit simulator and define
+# a cost function which calculates the expectation value of Hamiltonian operator for the
+# given trial wavefunction (which is the ground state energy of the molecule) using
+# :class:`~.ExpvalCost` class.
+# For the problems dicussed here, we use gradient descent optimizer to optimize
+# the gate parameters.
+# How do we initialize the parameters? The strategy here is to initialize them to zero,
+# i.e. start from the HF state as the approximation to the exact state.
+# The second loop is the variational optimization using VQE algorithm,
+# where energy for the trial wavefunction is calculated
+# and then used to get a better estimate of gate parameters and improve the trial wavefunction.
+# This process is repeated till convergence.
 
+vqe_energy = []
 # set up a loop to change internuclear distance
 for r_HH in np.arange(0.5, 5.0, 0.1):
 
     symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH]))
 
-    # Do a meanfield calculation -> Define a fermionic Hamiltonian -> turn into a qubit Hamiltonian
+    # Obtain the qubit Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
 
     print("Number of qubits = ", qubits)
     print("Hamiltonian is ", H)
 
-    ##############################################################################
-    # Now we need to build the circuit for a general molecular system. We begin by preparing the
-    # qubit version of the HF state, :math:`|1100\rangle`. We then identify and add all possible
-    # single and double excitations.
-
     # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
-    print("Single excitations", singles)
-    print("Double excitations", doubles)
 
     # define the circuit
     def circuit(params, wires):
@@ -144,34 +158,17 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
         qml.SingleExcitation(params[1], wires=[0, 2])
         qml.SingleExcitation(params[2], wires=[1, 3])
 
-    ##############################################################################
-    # From here on, we can use optimizers in PennyLane.
-    # PennyLane contains the :class:`~.ExpvalCost` class,
-    # that we use to obtain the cost function central to the idea of variational optimization
-    # of parameters in VQE algorithm. We define the device which is a classical qubit
-    # simulator here,
-    # a cost function which calculates the expectation value of Hamiltonian operator for the
-    # given trial wavefunction and also the gradient descent optimizer that is used to optimize
-    # the gate parameters:
-
+    # define the device, cost function and optimizer
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
-
-    ##############################################################################
-    # A related question is what are gate parameters that we seek to optimize?
-    # These could be thought of as rotation variables in the gates used which
-    # can then be converted into determinant coefficients in the expansion
-    # of the exact wavefunction.
 
     # define and initialize the gate parameters
     params = np.zeros(3)
     dcircuit = qml.grad(cost_fn, argnum=0)
 
     ##############################################################################
-    # We then begin the VQE iteration to optimize gate parameters.
-    # The energy-based convergence criteria is chosen to be :math:`\sim 1E^{-6}`
-    # which could be made stricter.
+    # Begin the VQE iteration to optimize gate parameters.
 
     prev_energy = 0.0
 
@@ -183,7 +180,7 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
 
-        # define your convergence criteria
+        # define the convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
             break
 
@@ -198,11 +195,10 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
 # We have the calculated the molecular energy as a function of H-H bond distance, let us plot it.
 
 # Energy as a function of internuclear distance
-
 r = np.arange(0.5, 5.0, 0.1)
 
 fig, ax = plt.subplots()
-ax.plot(r, vqe_energy, label="VQE(S+D)")
+ax.plot(r, vqe_energy, label="VQE")
 
 ax.set(
     xlabel="H-H distance (in Bohr)",
@@ -272,7 +268,6 @@ print(
 #   :width: 50%
 #   :align: center
 #
-# Again, we need to define the molecular parameters.
 
 # Molecular parameters
 
@@ -351,7 +346,7 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
 
-        if np.abs(energy - prev_energy) < 10e-6:
+        if np.abs(energy - prev_energy) < 1e-6:
             break
 
         prev_energy = energy
@@ -391,10 +386,11 @@ plt.show()
 # Activation energy barriers and reaction rates
 # --------------------------------------------
 # The utility of potential energy surfaces lies in estimating the
+# energu differences (reaction energies and activation energy barriers) and the
 # geometric configurations of key reactants, intermediates,
-# `transition state (TS) <https://en.wikipedia.org/wiki/Transition_state>`
-# and products, as well as the reaction energies and activation energy barriers.
-# To be specific about the above PEC, we would like our method to provide
+# `transition state (TS) <https://en.wikipedia.org/wiki/Transition_state>`_
+# and products.
+# In general, we would like our method to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
 # and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
 # basis (STO-3G).
@@ -406,8 +402,7 @@ plt.show()
 #
 # .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
 #
-# In this case, VQE(S+D) reproduces the exact theoretical result in the
-# minimal basis. The activation energy barrier is given by
+# In this case, the activation energy barrier is
 #
 # .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
 #
@@ -574,14 +569,12 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
     for n in range(40):
 
         t1 = time.time()
-
         params, energy = opt.step_and_cost(cost_fn, params)
-
         t2 = time.time()
 
         print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
 
-        if np.abs(energy - prev_energy) < 10e-6:
+        if np.abs(energy - prev_energy) < 1e-6:
             break
 
         prev_energy = energy
@@ -597,7 +590,7 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
 r = np.arange(1.0, 4.0, 0.25)
 
 fig, ax = plt.subplots()
-ax.plot(r, vqe_energy, c="red", label="VQE(S+D)")
+ax.plot(r, vqe_energy, c="red", label="VQE")
 
 ax.set(
     xlabel="Reaction Coordinate (x, in Bohr)",
