@@ -94,12 +94,10 @@ from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
 ##############################################################################
-# The second step is to specify the geometry and charge of the molecule,
-# and the spin multiplicity of the electronic configuration.
-# To construct the potential energy
-# surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
-# :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
-# :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
+# We begin by specifying molecular information such as charge of the molecule,
+# spin multiplicity of the electronic configuration and the basis set. A key thing is
+# to specify the number of active electrons and active orbitals. This will
+# define the number of qubits required and the qubit states that need to be considered.
 
 charge = 0
 multiplicity = 1
@@ -110,10 +108,14 @@ active_electrons = 2
 active_orbitals = 2
 
 ##############################################################################
+# To construct the potential energy
+# surface, we need to vary the geometry. So, we keep an :math:`H` atom fixed at origin and vary the
+# :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
+# :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
 # Now we set up a loop that incremetally changes the internuclear distance and for each
 # such point, we do a mean-field (HF) calculation, generate a fermionic Hamiltonian
-# which is then mapped to a qubit Hamiltonian. This is done using
-# :class:`~molecular_hamiltonian` class.
+# which is then mapped to a qubit Hamiltonian. All the later steps are done using the
+# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 # Now we build the VQE circuit, by first
 # preparing the qubit version of the HF state and then adding all single excitation and
 # double excitation gates which use the Givens rotations. This approach is similar to
@@ -133,9 +135,9 @@ active_orbitals = 2
 
 vqe_energy = []
 # set up a loop to change internuclear distance
-for r_HH in np.arange(0.5, 5.0, 0.1):
+for r in np.arange(0.5, 5.0, 0.1):
 
-    symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH]))
+    symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r]))
 
     # Obtain the qubit Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
@@ -182,7 +184,7 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
 
         prev_energy = energy
 
-    print("At bond distance \n", r_HH)
+    print("At bond distance \n", r)
     print("The VQE energy is", energy)
 
     vqe_energy.append(energy)
@@ -258,7 +260,8 @@ print(
 # for the exchange of an :math:`H` atom to be complete. In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
 # This means it is a :math:`6` qubit problem and the ground state (HF state) in
-# occupation number representation is :math:`|111000\rangle`.
+# occupation number representation is :math:`|111000\rangle`. As there is an unpaired
+# electron, the spin multiplicity is two.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
@@ -284,14 +287,13 @@ active_orbitals = 3
 
 vqe_energy = []
 
-for r_HH in np.arange(1.0, 3.0, 0.1):
+for r in np.arange(1.0, 3.0, 0.1):
 
     symbols, coordinates = (
         ["H", "H", "H"],
-        np.array([0.0, 0.0, 0.0, 0.0, 0.0, r_HH, 0.0, 0.0, 4.0]),
+        np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0]),
     )
 
-    # Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
         coordinates,
@@ -302,34 +304,23 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
         active_orbitals=active_orbitals,
     )
 
-    # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
-        # Prepare the HF state |111000> by flipping the qubits 0, 1 and 2
         qml.PauliX(0)
         qml.PauliX(1)
         qml.PauliX(2)
-        # All double excitations
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
-        # All single excitations
         for j in range(0, len(singles)):
             qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
-    #   Now we define the device and initialize the gate parameters.
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    # total length of parameters is generally the total no. of determinants considered
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
-
-    ##############################################################################
-    # We evaluate the cost function and use the gradient descent algorithm in an iterative
-    # optimization of the gate parameters.
-
     dcircuit = qml.grad(cost_fn, argnum=0)
 
     prev_energy = 0.0
@@ -343,12 +334,6 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
             break
 
         prev_energy = energy
-
-    ##############################################################################
-    # Finally at each point of the PEC, we could print the total VQE energy
-
-    print("At bond distance \n", r_HH)
-    print("The VQE energy is", energy)
 
     vqe_energy.append(energy)
 
@@ -445,7 +430,7 @@ print(
 # and the geometries of the key intermediates.
 # The plot below compares the performance of different methods.
 # The PEC obtained from the quantum algorithm (VQE) overlaps with
-# the quantum chemistry methods, CCSD and CISD.
+# the popular quantum chemistry methods, CCSD and CISD.
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
@@ -491,7 +476,7 @@ print(
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
 # The generation of the PES is straightforward and follows from our previous examples.
-# For the sake of saving computational cost, we try a smaller active space with a total of
+# We use an active space with a total of
 # :math:`8` spin-orbitals with core electrons frozen.
 
 # Molecular parameters
@@ -505,12 +490,11 @@ multiplicity = 1
 
 active_electrons = 4
 active_orbitals = 4
+
+
 vqe_energy = []
 
-
-name = "beh2"
-
-for reac_coord in np.arange(1.0, 4.0, 0.25):
+for reac_coord in np.arange(1.0, 4.0, 0.1):
 
     x = reac_coord
     y = np.subtract(2.54, np.multiply(0.46, x))
@@ -527,21 +511,15 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
         active_orbitals=active_orbitals,
     )
 
-    # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
-        # Prepare the HF state |111100> by flipping the qubits 0, 1, 2 and 3
         qml.PauliX(0)
         qml.PauliX(1)
         qml.PauliX(2)
         qml.PauliX(3)
-        # All possible double excitations
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
-
-        # All possible single excitations
-
         for j in range(0, len(singles)):
             qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
@@ -549,11 +527,8 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    # total length of parameters is the total no. of determinants considered
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
-
-    # compute the gradients
 
     dcircuit = qml.grad(cost_fn, argnum=0)
 
@@ -569,15 +544,11 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
 
         prev_energy = energy
 
-    print("At bond distance \n", reac_coord)
-    print("The VQE energy is", energy)
-
     vqe_energy.append(energy)
 
 
 # PES
-
-r = np.arange(1.0, 4.0, 0.25)
+r = np.arange(1.0, 4.0, 0.1)
 
 fig, ax = plt.subplots()
 ax.plot(r, vqe_energy, c="red", label="VQE")
@@ -596,10 +567,9 @@ plt.show()
 ##############################################################################
 # ----------
 #
-# Below is a comparison with other classical quantum chemistry aproaches such
-# as CASCI, CCSD and CISD. we can see VQE(S+D) does really well across the
-# of PES, left and right of the transition state. While single reference approaches
-# such as CISD and CCSD suffer in the latter half of PES.
+# In the PES above, we see a sharp maximum which is actually the result of a
+# sudden switch in the underlying Hartree-Fock reference. VQE performs well for
+# the range of PES considered and reproduces the Full CI result.
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
