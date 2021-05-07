@@ -3,7 +3,7 @@ Modeling chemical reactions using VQE
 ==============================
 
 .. meta::
-    :property="og:description": Construct Potential energy surface for chemical reactions using 
+    :property="og:description": Construct potential energy surface for chemical reactions using 
     the variational quantum eigensolver algorithm in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
@@ -504,7 +504,7 @@ print(
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
 # The generation of the PES is straightforward and follows from our previous examples.
 # For the sake of saving computational cost, we try a smaller active space with a total of
-# :math:`6` spin-orbitals with core electrons frozen.
+# :math:`8` spin-orbitals with core electrons frozen.
 
 # Molecular parameters
 name = "beh2"
@@ -516,8 +516,7 @@ spin = 1
 multiplicity = 1
 
 active_electrons = 4
-# choosing a smaller active space of 6 spin-orbitals
-active_orbitals = 3
+active_orbitals = 4
 vqe_energy = []
 
 
