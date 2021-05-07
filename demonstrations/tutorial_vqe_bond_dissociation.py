@@ -92,7 +92,6 @@ import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 ##############################################################################
 # The second step is to specify the geometry and charge of the molecule,
@@ -174,11 +173,8 @@ for r_HH in np.arange(0.5, 5.0, 0.1):
 
     for n in range(40):
 
-        t1 = time.time()
         params, energy = opt.step_and_cost(cost_fn, params)
-        t2 = time.time()
-
-        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
+        print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
 
         # define the convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
@@ -340,11 +336,8 @@ for r_HH in np.arange(1.0, 3.0, 0.1):
 
     for n in range(40):
 
-        t1 = time.time()
         params, energy = opt.step_and_cost(cost_fn, params)
-        t2 = time.time()
-
-        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
+        print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
 
         if np.abs(energy - prev_energy) < 1e-6:
             break
@@ -392,7 +385,7 @@ plt.show()
 # and products.
 # In general, we would like our method to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
-# and the transition state (maxima). VQE(S+D) reproduces the exact result in the small
+# and the transition state (maxima). VQE reproduces the exact result in the small
 # basis (STO-3G).
 #
 # The activation energy barrier is defined as the difference between the
@@ -568,11 +561,8 @@ for reac_coord in np.arange(1.0, 4.0, 0.25):
 
     for n in range(40):
 
-        t1 = time.time()
         params, energy = opt.step_and_cost(cost_fn, params)
-        t2 = time.time()
-
-        print("Iteration = {:},  E = {:.8f} Ha, t = {:.2f} S".format(n, energy, t2 - t1))
+        print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
 
         if np.abs(energy - prev_energy) < 1e-6:
             break
