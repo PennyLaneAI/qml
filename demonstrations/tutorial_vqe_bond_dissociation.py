@@ -112,16 +112,19 @@ active_electrons = 2
 active_orbitals = 2
 
 ##############################################################################
-# To construct the potential energy surface, we need to vary the geometry. So, we keep 
+# To construct the potential energy surface, we need to vary the geometry. We keep
 # an :math:`H` atom fixed at origin and vary the
 # :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
 # :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
-# This covers the range of internuclear distance in which the H-H bond is formed 
+# This covers the range of internuclear distance in which the H-H bond is formed
+# (equilibrium bond length)
 # and also, when it is considered broken as the atoms move away from each other.
 # Now we set up a loop that incremetally changes the internuclear distance and for each
 # such point, we do a mean-field (HF) calculation, generate a fermionic Hamiltonian
 # which is then mapped to a qubit Hamiltonian. All the later steps are done using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+#
+#
 # Now we build the VQE circuit, by first
 # preparing the qubit version of the HF state and then adding all single excitation and
 # double excitation gates which use the Givens rotations. This approach is similar to
@@ -131,8 +134,7 @@ active_orbitals = 2
 # given trial wavefunction (which is the ground state energy of the molecule) using
 # :class:`~.ExpvalCost` class.
 # For the problems dicussed here, we use gradient descent optimizer to optimize
-# the gate parameters.
-# How do we initialize the parameters? The strategy here is to initialize them to zero,
+# the gate parameters. We initialize the parameters to zero,
 # i.e. start from the HF state as the approximation to the exact state.
 # The second loop is the variational optimization using VQE algorithm,
 # where energy for the trial wavefunction is calculated
@@ -217,17 +219,19 @@ plt.show()
 
 ##############################################################################
 # This is a simple PES (or more appropriately a PEC, potential energy curve) for
-# the dissociation of hydrogen molecule into two hydrogen atoms. It gives an
-# estimate of :math:`H-H` bond distance
-# to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
-# (the difference in energy at equilibrium and energy at dissociation limit)
-# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol). Let us see how to do this.
+# the dissociation of hydrogen molecule into two hydrogen atoms.
 # In a diatomic molecule, the PEC as a function of internuclear distance tells us the bond length:
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium.
 # While the bond dissociation energy is amount of energy required to dissociate a bond.
 # In other words, the difference in energy of the system at equilibrium (minima) and the energy
 # of the system at the dissociation limit (farthest right of the curve)
+# Below we show how our VQE circuit gives an
+# estimate of :math:`H-H` bond distance
+# to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
+# (the difference in energy at equilibrium and energy at dissociation limit)
+# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol).
+
 
 vqe_energy_equil = min(vqe_energy)
 vqe_energy_disoc = vqe_energy[-1]
@@ -275,7 +279,6 @@ print(
 #
 
 # Molecular parameters
-
 name = "h3"
 basis_set = "sto-3g"
 
@@ -362,7 +365,6 @@ ax.set(
     title="PES for H-H + H -> H + H-H reaction",
 )
 ax.grid()
-ax.legend()
 plt.show()
 #
 #
@@ -436,7 +438,8 @@ print(
 # and the geometries of the key intermediates.
 # The plot below compares the performance of different methods.
 # The PEC obtained from the quantum algorithm (VQE) overlaps with
-# the popular quantum chemistry methods, CCSD and CISD.
+# the popular quantum chemistry methods, `CCSD <https://en.wikipedia.org/wiki/Coupled_cluster>`_
+# and `CISD <https://en.wikipedia.org/wiki/Configuration_interaction>`_.
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
@@ -483,7 +486,9 @@ print(
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
 # The generation of the PES is straightforward and follows from our previous examples.
 # We use an active space with a total of
-# :math:`8` spin-orbitals with core electrons frozen.
+# :math:`6` spin-orbitals with core electrons frozen for the sake of computational cost.
+# The actual number of active orbitals should be :math:`12` here if we include all the
+# unoccupied orbitals.
 
 # Molecular parameters
 name = "beh2"
@@ -495,7 +500,7 @@ spin = 1
 multiplicity = 1
 
 active_electrons = 4
-active_orbitals = 4
+active_orbitals = 3
 
 
 vqe_energy = []
@@ -576,7 +581,9 @@ plt.show()
 #
 # In the PES above, we see a sharp maximum which is actually the result of a
 # sudden switch in the underlying Hartree-Fock reference. VQE performs well for
-# the range of PES considered and reproduces the Full CI result.
+# the range of PES considered. It reproduces the Full CI result shown below
+# if we increase the active orbitals to include all the unoccupied orbitals i.e. 12 spin
+# orbitals in total.
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
@@ -588,7 +595,7 @@ plt.show()
 # their potential energy curves. We calculated important energy
 # costs, bond dissociation energy and activation energy, and bond lengths of specific
 # bonds. We also saw how quantum computing algorithms such as VQE provide high quality
-# results that match or supersede conventional quantum chemistry methods.
+# results that match conventional quantum chemistry methods.
 #
 #
 # .. _references:
