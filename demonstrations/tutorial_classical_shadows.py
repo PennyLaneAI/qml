@@ -1,6 +1,37 @@
-# Metadata
+r"""
+Classical Shadows
+=================
+.. meta::
+    :property="og:description": Learn how to efficiently make predictions about an unkown 
+        quantum state using the classical shadow approximation. 
+    :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
 
-# Introduction to classical shadows
+.. related::
+
+*Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
+Posted: 7 May 2021. Last updated: 7 May 2021.*
+
+This tutorial is based on the classical shadow approximation and applications discussed
+in `this paper <https://arxiv.org/pdf/2002.08953.pdf>`_.
+
+How do you efficiently characterize an unknown quantum state?
+This task is formally known as quantum state tomography and simply requires many repetitions
+of preparing and measuring a quantum state.
+The number of distinct bases in which measurements are needed grows exponentially with the Hilbert
+space of the quantum state.
+This scaling presents a challenge in quantum computing because it is intractable to perform the
+number of measurements needed to completely characterize an unknown quantum state.
+
+A solution to this problem is to use the classical shadow approximation.
+In this procedure
+1. A quantum state $\rho$ is prepared.
+2. A randomly selected unitary $U$ is applied
+3. A computational basis measurement is performed.
+4. The process is repeated $N$ times.
+
+The classical shadow is then constructed as a list of measurement outcomes and chosen unitaries.
+
+"""
 
 # Outline for Classical shadow algorithm.
 import pennylane as qml
