@@ -1,12 +1,11 @@
 r"""
-.. _multiclass_margin_classifier:
+.. _quantum_analytic_descent:
 
-Multiclass margin classifier
+Quantum analytic descent
 ============================
 
 .. meta::
-    :property="og:description": Using PyTorch to implement a multiclass
-        quantum variational classifier on MNIST data.
+    :property="og:description": Implementing the Quantum analytic descent algorithm for VQE.
     :property="og:image": https://pennylane.ai/qml/_images/margin_2.png
 
 .. related::
@@ -14,7 +13,7 @@ Multiclass margin classifier
    tutorial_variational_classifier Variational quantum classifier
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
-*Author: PennyLane dev team. Posted: 9 Apr 2020. Last updated: 28 Jan 2021.*
+*Author: David Wierichs, Elies Gil-Fuster (Xanadu Residents) Posted: 8 May 2021. Last updated: 8 May 2021.*
 
 In this tutorial, we show how to use the PyTorch interface for PennyLane
 to implement a multiclass variational classifier. We consider the iris database
@@ -35,300 +34,308 @@ on an individual variational circuit, whose architecture is inspired by
 |
 
 
-Initial Setup
-~~~~~~~~~~~~~
+What is VQE?
+~~~~~~~~~~~~
 
-We import PennyLane, the PennyLane-provided version of NumPy,
-relevant torch modules, and define the constants that will
-be used in this tutorial.
+One of the prominent examples of Quantum Machine Learning (QML) algorithms is the so-called Variational Quantum Eigensolver (VQE).
+The origin of VQE is in trying to find the ground state energy of molecules or the eigenstates of a given Hamiltonian.
+Devoid of context, though, VQE is nothing but another instance of unsupervised learning for which we use a quantum device.
+Here the goal is to find a configuration of parameters that minimizes a cost function; no data set, no labels.
 
-Our feature size is 4, and we will use amplitude embedding.
-This means that each possible amplitude (in the computational basis) will
-correspond to a single feature. With 2 qubits (wires), there are
-4 possible states, and as such, we can encode a feature vector
-of size 4.
+Several practical demonstrations have pointed out how near-term quantum devices may be well-suited platforms for VQE and VQE*-ish* algorithms.
+
+VQEs give rise to trigonometric cost functions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In a few words, what we have in mind when we talk about VQEs is a quantum circuit.
+Typically, this $n$-qubit quantum circuit is initialized in the :math:`|0\rangle^{\otimes n}` state (in an abuse of notation, we name it simply :math:`|0\rangle` in the rest of the demo).
+The body of the circuit is populated with a *variational form* :math:`V(\theta)` -- a fixed architecture of quantum gates parametrized by an array of real-numbers :math:`\theta\in\mathbb{R}^m`.
+After the variational form, the circuit ends with a measurement of an observable :math:`\mathcal{M}`, which is also fixed at the start.
+
+With these, the common choice of cost function :math:`E(\theta)` is
+
+.. math:: C(\theta) = |\langle0|V^\dagger(\theta)\mathcal{M}V(\theta)|0\rangle|^2,
+
+or, in short
+
+.. math:: C(\theta) = \operatorname{tr}[\rho(\theta)\mathcal{M}],
+
+where :math:`\rho(\theta)=V(\theta)|0\rangle\!\langle0|V^\dagger(\theta)` is the density matrix of the quantum state after applying the variational form on the initial state.
+
+It can be seen that if the variational form is composed only of Pauli gates, then the cost function is a sum of multilinear trigonometric terms in each of the parameters.
+That's a scary sequence of words!
+What that means is, that if we look at :math:`C` but we focus on one of the parameter values only, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
+
+That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\theta_1, \ldots, \hat\theta_i, \ldots, \theta_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`C(\theta)` as
+
+.. math:: C(\theta) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
+
+Let's look at a toy example to illustrate this!
 """
 
 import pennylane as qml
-import torch
-import numpy as np
-from torch.autograd import Variable
-import torch.optim as optim
+from pennylane import numpy as np
+import matplotlib.pyplot as plt
 
 np.random.seed(0)
-torch.manual_seed(0)
 
-num_classes = 3
-margin = 0.15
-feature_size = 4
-batch_size = 10
-lr_adam = 0.01
-train_split = 0.75
-# the number of the required qubits is calculated from the number of features
-num_qubits = int(np.ceil(np.log2(feature_size)))
-num_layers = 6
-total_iterations = 100
+dev = qml.device("default.qubit", wires=2)
 
-dev = qml.device("default.qubit", wires=num_qubits)
+def circuit(parameters, wires=2):
+    qml.RX(parameters[0], wires=0)
+    qml.RX(parameters[1], wires=1)
+    return qml.expval(qml.PauliZ(0)@qml.PauliZ(1))
+
+parameters = np.array([3.3, .5])
+
+print(circuit([parameters]))
+
+theta_func = np.linspace(0,2*np.pi,50)
+C1 = [circuit(np.array([theta, .5])) for theta in theta_func]
+C2 = [circuit(np.array([3.3, theta])) for theta in theta_func]
+
+plt.plot(theta_func, C1);
+plt.plot(theta_func, C2);
+
+X, Y = np.meshgrid(theta_func, theta_func)
+Z = np.zeros_like(X)
+for i, t1 in enumerate(theta_func):
+    for j, t2 in enumerate(theta_func):
+        Z[i,j] = cost(np.array([t1, t2]))
+fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
+surf = ax.plot_surface(X, Y, Z)
+
+print("The choice of parameters",theta_func[int(np.argmin(Z)/len(Z))],theta_func[np.argmin(Z)%len(Z)],"yields an energy of",np.min(Z))
 
 
 #################################################################################
-# Quantum Circuit
-# ~~~~~~~~~~~~~~~
+# Of course this is an overly simplified example, but the key take-home message so far is: *the parameter landscape is a multilinear combination of trigonometric functions*.
+# What is a good thing about trigonometric functions?
+# That's right!
+# We have studied them since high-school and know how to find their minima!
 #
-# We first create the layer that will be repeated in our variational quantum
-# circuits. It consists of rotation gates for each qubit, followed by
-# entangling/CNOT gates
-
-
-def layer(W):
-    for i in range(num_qubits):
-        qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
-    for j in range(num_qubits - 1):
-        qml.CNOT(wires=[j, j + 1])
-    if num_qubits >= 2:
-        # Apply additional CNOT to entangle the last with the first qubit
-        qml.CNOT(wires=[num_qubits - 1, 0])
-
-
-#################################################################################
-# We now define the quantum nodes that will be used. As we are implementing our
-# multiclass classifier as multiple one-vs-all classifiers, we will use 3 QNodes,
-# each representing one such classifier. That is, ``circuit1`` classifies if a
-# sample belongs to class 1 or not, and so on. The circuit architecture for all
-# nodes are the same. We use the PyTorch interface for the QNodes.
-# Data is embedded in each circuit using amplitude embedding.
+# In our overly simplified example we had to query a quantum computer for every point on the surface.
+# Could we have spared some computational resources?
+# Well, since we know the ultimate shape the landscape is supposed to have, we should in principle be able to construct it only from a few points (much the same way two points already uniquely specify a line, or three non-aligned points specify a circle, there should be a certain fixed number of points that completely specify the loss landscape).
+# 
+# LINK TO PAPER AND INTUITION FOR HOW MANY POINTS EXACTLY WE NEED?
 #
-# .. note::
-#     For demonstration purposes we are using a very simple circuit here. 
-#     You may find that other choices, for example more 
-#     elaborate measurements, increase the power of the classifier.      
+# Quantum Analytic Descent
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Although in principle we should be able to reconstruct the cost function over the entire parameter space, in practice we are interested in mostly what is happening in the vecinity of a given reference point.
+# This makes *all* the difference!
+# If we wanted to reconstruct the entire landscape, we would need to estimate around :math:`3^m` independent parameters, which would require about that many points!
+# If, on the contrary, we are satisfied with an approximation that is cheaper to construct (polynomial in :math:`m` instead of exponential), we can borrow a page from Taylor's book!
+#
+# As explained in the paper, an approximation via trigonometric series up to second order is already a sound candidate!
+# In particular, we want to approximate
+#
+# .. math:: E(\theta) := \operatorname{tr}[\mathcal{M}\Phi(\theta)\rho_0]
+#
+# in the vecinity of a reference point :math:`\theta_0`.
+# Here :math:`\rho_0` is the density matrix of the initial state, and :math:`\Phi(\theta)` is the quantum channel that implements the variational form.
+# We then have: 
+# 
+# .. math:: \hat{E}(\theta_0+\theta) & := A(\theta) E^{(A)} + \sum_{i=1}^m[B_i(\theta)E_i^{(B)} + C_i(\theta) E_i^{(C)}] + \sum_{j>i}^m[D_{ij}(\theta) E_{ij}^{(D)}].
+# 
+# We have introduced a number of :math:`E`'s, we build each of these by sampling some points in the landscape with a quantum computer.
+# DAVID ALREADY WROTE THE FORMULAS, RIGHT?
+# Important is we only need to estimate :math:`2m^2 - 2m +1` many parameters, and thus a comparable amount of points.
+# 
+# The underlying idea we are trying to exploit here is the following.
+# If we can model the cost around the reference point good enough, we will be able to find a rough estimate of where the global minimum *of the model* is.
+# Granted, our model represents the true landscape less accurately the further we go from the reference point, BUT even then, the global minimum *of the model* will bring us much closer to the global minimum *of the true cost* than a random walk.
+# Maybe by now it's already clear what the complete strategy is, but just in case: of course, once we have found the global minimum of the model, we could then use that as our new reference point, build a new model around it and find the global minimum of that new model.
+# This provides an iterative strategy which will take us to a good enough solution much faster (in number of steps) than for example regular SGD.
+#
+# How to build the classical model using a quantum computer
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# In order to construct the model landscape, we evaluate the original cost function on the quantum computer at specific shifted positions in parameter space.
+# (If you are familiar with the parameter shift rule for analytic quantum gradient computations, you might recognize some of the following computations.)
+# We combine the function evaluations according to Eqs. (B1) and the following in [1][QAG paper].
+# 
+# ..math:: 
+#
+#   E^{(A)} = E(\boldsymbol{\theta})\\
+#   E^{(B)}_k = E(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k)-E(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k)\\
+#   E^{(C)}_k = E(\boldsymbol{\theta}+\pi\boldsymbol{v}_k)\\
+#   E^{(D)}_{kl} = E(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l) + E(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l) - E(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l) - E(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l)
+# 
+# Let us create a function that will take care of evaluating :math:`E` at all these shifted parameter points and combines the results to obtain the above coefficients: 
+#
+# `QAG paper <https://arxiv.org/pdf/2008.13774.pdf>`_
 
+try:
+    from pennylane import numpy as np
+except ModuleNotFoundError:
+    !pip install pennylane
+    from pennylane import numpy as np
 
-def circuit(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, range(num_qubits), pad=0.0, normalize=True)
-    for W in weights:
-        layer(W)
+def get_data_for_model(fun, params, *args):
+    """Computes the coefficients for the classical model landscape, E_A, E_B, E_C, and E_D."""
+    num_params = len(params)
+    E_A = fun(params, *args)
 
-    return qml.expval(qml.PauliZ(0))
+    E_B = np.zeros(num_params)
+    E_C = np.zeros(num_params)
+    E_D = np.zeros((num_params, num_params))
 
+    shifts = np.eye(num_params) * 0.5 * np.pi
+    for k in range(num_params):
+        E_B[k] = fun(params + shifts[k], *args) - fun(params - shifts[k], *args)
+        E_C[k] = fun(params + 2 * shifts[k], *args)
+        for l in range(k+1, num_params):
+            E_D_tmp = [
+                fun(params + shifts[k] + shifts[l], *args),
+                fun(params - shifts[k] - shifts[l], *args),
+                -fun(params + shifts[k] - shifts[l], *args),
+                -fun(params - shifts[k] + shifts[l], *args),  
+            ]
+            E_D[k,l] = sum(E_D_tmp)
 
-qnodes = []
-for iq in range(num_classes):
-    qnode = qml.QNode(circuit, dev, interface="torch")
-    qnodes.append(qnode)
+    return E_A, E_B, E_C, E_D
 
 
 #################################################################################
-# The variational quantum circuit is parametrized by the weights. We use a
-# classical bias term that is applied after processing the quantum circuit's
-# output. Both variational circuit weights and classical bias term are optimized.
+# Next, we want to construct our classical model that locally represents the original cost function.
+# For this we use the coefficients computed by `get_data_for_model` and the definition in Eq. (A13, B1) and following equations respectively.
+# There are 4 trigonometric functions to be combined:
+# 
+# ..math::
+#
+#   A(\boldsymbol{\theta}) = \prod_m \frac{1+\cos(\theta_m)}{2} = \prod_m \cos\left(\frac{\theta_m}{2}\right)^2\\
+#   B_k(\boldsymbol{\theta}) = \frac{\sin(\theta_k)}{2}\prod_{m\neq k} \frac{1+\cos(\theta_m)}{2} = \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{m\neq k} \cos\left(\frac{\theta_m}{2}\right)^2\\
+#   C_k(\boldsymbol{\theta}) = \frac{1-\cos(\theta_k)}{2}\prod_{m\neq k} \frac{1+\cos(\theta_m)}{2} = \sin\left(\frac{\theta_k}{2}\right)^2\prod_{m\neq k} \cos\left(\frac{\theta_m}{2}\right)^2\\
+#   D_{kl}(\boldsymbol{\theta}) = \frac{\sin(\theta_k)}{2}\frac{\sin(\theta_l)}{2}\prod_{m\neq k,l} \frac{1+\cos(\theta_m)}{2} = \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\cos\left(\frac{\theta_l}{2}\right)\sin\left(\frac{\theta_l}{2}\right)\prod_{m\neq k} \cos\left(\frac{\theta_m}{2}\right)^2
+#
+#
+# While the latter formulation of these functions seems quite long, it shows us a nice relation between the four sets of trigonometric polynomials :math:`A`, :math:`B`, :math:`C`, and :math:`D`:
+#
+# ..math::
+#
+#   B_k(\boldsymbol{\theta}) = \tan\left(\frac{\theta_k}{2}\right)A(\boldsymbol{\theta})\\
+#   C_k(\boldsymbol{\theta}) = \tan\left(\frac{\theta_k}{2}\right)^2 A(\boldsymbol{\theta})\\
+#   D_{kl}(\boldsymbol{\theta}) = \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)A(\boldsymbol{\theta})\\
+#
+#
+# Using these, we can compute the classical surrogate model :math:`\tilde{E}(\boldsymbol{\theta})`:
+#
+# ..math::
+#
+#   \tilde{E}(\boldsymbol{\theta}) = A(\theta) E^{(A)} + \sum_k B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k + \sum_{k<l} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
+#   \phantom{\tilde{E}(\boldsymbol{\theta})}=A(\boldsymbol{\theta})\left[E^{(A)}+\sum_k \tan\left(\frac{\theta_k}{2}\right)E^{(B)}_k + \tan\left(\frac{\theta_k}{2}\right)^2 E^{(C)}_k + \sum_{k<l} \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)E^{(D)}_{kl}\right]
+#     
 
 
-def variational_classifier(q_circuit, params, feat):
-    weights = params[0]
-    bias = params[1]
-    return q_circuit(weights, feat=feat) + bias
+def model_cost(params, E_A, E_B, E_C, E_D):
+    A = np.prod(0.5 * (1+np.cos(params)))
+    B_over_A = np.tan(0.5 * params)
+    C_over_A = B_over_A**2
+    D_over_A = np.outer(B_over_A, B_over_A)
+    terms_without_A = [
+        E_A,
+        np.dot(E_B, B_over_A),
+        np.dot(E_C, C_over_A),
+        np.trace(E_D @ D_over_A),                 
+    ]
+    cost = A * np.sum(terms_without_A)
+
+    return cost
+
+
+#################################################################################
+# Note that the signature of this function does not include the function parameters `*args` any longer, because they were fixed when we obtained the coefficients $E^{(A)}$ etc.
+# In addition, the parameter input to `model_cost` is _relative_ to the parameters at which Quantum Analytic Gradient descent is positioned currently.
+# Let's try to use the classical energy function:
+
+
+dev = qml.device('default.qubit', wires=2, shots=None)
+@qml.qnode(dev)
+def circuit(params):
+    qml.RY(params[0], wires=[0])
+    qml.CNOT(wires=[0,1])
+    qml.RY(params[1], wires=[0])
+    # qml.CNOT(wires=[0,1])
+    return qml.expval(qml.PauliZ(0)@qml.PauliX(1))
+  
+num_params = 2
+
+params = np.random.random(num_params) * 2 * np.pi - np.pi
+print(f"Random parameters (params): {params}")
+coeffs = get_data_for_model(circuit, params)
+print(f"Coefficients at params:", 
+      f" E_A = {coeffs[0]}",
+      f" E_B = {coeffs[1]}",
+      f" E_C = {coeffs[2]}",
+      f" E_D = {coeffs[3]}",
+      sep='\n')
+
+original = circuit(params)
+model = model_cost(params-params, *coeffs)
+print(f"The cost function at params:", f"  Model:    {model}", f"  Original: {original}", sep='\n')
+
+new_params = params + 0.1 * np.random.random(num_params)
+print(f"New random parameters close to params: {new_params}")
+original = circuit(new_params)
+model = model_cost(new_params-params, *coeffs)
+print(f"The cost function at new_params:", f"  Model:    {model}", f"  Original: {original}", sep='\n')
 
 
 ##############################################################################
-# Loss Function
-# ~~~~~~~~~~~~~
-#
-# Implementing multiclass classifiers as a number of one-vs-all classifiers
-# generally evokes using the margin loss. The output of the :math:`i` th classifier, :math:`c_i`
-# on input :math:`x` is interpreted as a score, :math:`s_i` between [-1,1].
-# More concretely, we have:
-#
-# .. math::  s_i = c_i(x; \theta)
-#
-# The multiclass margin loss attempts to ensure that the score for the correct
-# class is higher than that of incorrect classes by some margin. For a sample :math:`(x,y)`
-# where :math:`y` denotes the class label, we can analytically express the mutliclass
-# loss on this sample as:
-#
-# .. math::  L(x,y) = \sum_{j \ne y}{\max{\left(0, s_j - s_y + \Delta)\right)}}
-#
-# where :math:`\Delta` denotes the margin. The margin parameter is chosen as a hyperparameter.
-# For more information, see `Multiclass Linear SVM <http://cs231n.github.io/linear-classify/>`__.
-
-
-def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
-    loss = 0
-    num_samples = len(true_labels)
-    for i, feature_vec in enumerate(feature_vecs):
-        # Compute the score given to this sample by the classifier corresponding to the
-        # true label. So for a true label of 1, get the score computed by classifer 1,
-        # which distinguishes between "class 1" or "not class 1".
-        s_true = variational_classifier(
-            q_circuits[int(true_labels[i])],
-            (all_params[0][int(true_labels[i])], all_params[1][int(true_labels[i])]),
-            feature_vec,
-        )
-        s_true = s_true.float()
-        li = 0
-
-        # Get the scores computed for this sample by the other classifiers
-        for j in range(num_classes):
-            if j != int(true_labels[i]):
-                s_j = variational_classifier(
-                    q_circuits[j], (all_params[0][j], all_params[1][j]), feature_vec
-                )
-                s_j = s_j.float()
-                li += torch.max(torch.zeros(1).float(), s_j - s_true + margin)
-        loss += li
-
-    return loss / num_samples
-
-
-##########################################################################################
-# Classification Function
-# ~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Next, we use the learned models to classify our samples. For a given sample,
-# compute the score given to it by classifier :math:`i`, which quantifies how likely it is that
-# this sample belongs to class :math:`i`. For each sample, return the class with the highest score.
-
-
-def classify(q_circuits, all_params, feature_vecs, labels):
-    predicted_labels = []
-    for i, feature_vec in enumerate(feature_vecs):
-        scores = np.zeros(num_classes)
-        for c in range(num_classes):
-            score = variational_classifier(
-                q_circuits[c], (all_params[0][c], all_params[1][c]), feature_vec
-            )
-            scores[c] = float(score)
-        pred_class = np.argmax(scores)
-        predicted_labels.append(pred_class)
-    return predicted_labels
-
-
-def accuracy(labels, hard_predictions):
-    loss = 0
-    for l, p in zip(labels, hard_predictions):
-        if torch.abs(l - p) < 1e-5:
-            loss = loss + 1
-    loss = loss / labels.shape[0]
-    return loss
-
-
-#################################################################################
-# Data Loading and Processing
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Now we load in the iris dataset and normalize the features so that the sum of the feature
-# elements squared is 1 (:math:`\ell_2` norm is 1).
-
-
-def load_and_process_data():
-    data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
-    X = torch.tensor(data[:, 0:feature_size])
-    print("First X sample, original  :", X[0])
-
-    # normalize each input
-    normalization = torch.sqrt(torch.sum(X ** 2, dim=1))
-    X_norm = X / normalization.reshape(len(X), 1)
-    print("First X sample, normalized:", X_norm[0])
-
-    Y = torch.tensor(data[:, -1])
-    return X, Y
-
-
-# Create a train and test split.
-def split_data(feature_vecs, Y):
-    num_data = len(Y)
-    num_train = int(train_split * num_data)
-    index = np.random.permutation(range(num_data))
-    feat_vecs_train = feature_vecs[index[:num_train]]
-    Y_train = Y[index[:num_train]]
-    feat_vecs_test = feature_vecs[index[num_train:]]
-    Y_test = Y[index[num_train:]]
-    return feat_vecs_train, feat_vecs_test, Y_train, Y_test
-
-
-#################################################################################
-# Training Procedure
-# ~~~~~~~~~~~~~~~~~~
-#
-# In the training procedure, we begin by first initializing randomly the parameters
-# we wish to learn (variational circuit weights and classical bias). As these are
-# the variables we wish to optimize, we set the ``requires_grad`` flag to ``True``. We use
-# minibatch training---the average loss for a batch of samples is computed, and the
-# optimization step is based on this. Total training time with the default parameters
-# is roughly 15 minutes.
-
-
-def training(features, Y):
-    num_data = Y.shape[0]
-    feat_vecs_train, feat_vecs_test, Y_train, Y_test = split_data(features, Y)
-    num_train = Y_train.shape[0]
-    q_circuits = qnodes
-
-    # Initialize the parameters
-    all_weights = [
-        Variable(0.1 * torch.randn(num_layers, num_qubits, 3), requires_grad=True)
-        for i in range(num_classes)
-    ]
-    all_bias = [Variable(0.1 * torch.ones(1), requires_grad=True) for i in range(num_classes)]
-    optimizer = optim.Adam(all_weights + all_bias, lr=lr_adam)
-    params = (all_weights, all_bias)
-    print("Num params: ", 3 * num_layers * num_qubits * 3 + 3)
-
-    costs, train_acc, test_acc = [], [], []
-
-    # train the variational classifier
-    for it in range(total_iterations):
-        batch_index = np.random.randint(0, num_train, (batch_size,))
-        feat_vecs_train_batch = feat_vecs_train[batch_index]
-        Y_train_batch = Y_train[batch_index]
-
-        optimizer.zero_grad()
-        curr_cost = multiclass_svm_loss(q_circuits, params, feat_vecs_train_batch, Y_train_batch)
-        curr_cost.backward()
-        optimizer.step()
-
-        # Compute predictions on train and validation set
-        predictions_train = classify(q_circuits, params, feat_vecs_train, Y_train)
-        predictions_test = classify(q_circuits, params, feat_vecs_test, Y_test)
-        acc_train = accuracy(Y_train, predictions_train)
-        acc_test = accuracy(Y_test, predictions_test)
-
-        print(
-            "Iter: {:5d} | Cost: {:0.7f} | Acc train: {:0.7f} | Acc test: {:0.7f} "
-            "".format(it + 1, curr_cost.item(), acc_train, acc_test)
-        )
-
-        costs.append(curr_cost.item())
-        train_acc.append(acc_train)
-        test_acc.append(acc_test)
-
-    return costs, train_acc, test_acc
-
-
-# We now run our training algorithm and plot the results. Note that
-# for plotting, the matplotlib library is required
-
-features, Y = load_and_process_data()
-costs, train_acc, test_acc = training(features, Y)
+# We may even take a look at the model and the original cost function as landscapes:
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
-fig, ax1 = plt.subplots()
-iters = np.arange(0, total_iterations, 1)
-colors = ["tab:red", "tab:blue"]
-ax1.set_xlabel("Iteration", fontsize=17)
-ax1.set_ylabel("Cost", fontsize=17, color=colors[0])
-ax1.plot(iters, costs, color=colors[0], linewidth=4)
-ax1.tick_params(axis="y", labelsize=14, labelcolor=colors[0])
+# Define some shift values for the plotting grid, maximal shift is larger 
+#  than typical parameter updates in optimizations.
+shift_radius = np.pi/4
+x_rel = np.linspace(-shift_radius, shift_radius, 20)
+y_rel = np.linspace(-shift_radius, shift_radius, 20)
+X, Y = np.meshgrid(x_rel+params[0], y_rel+params[1])
 
-ax2 = ax1.twinx()
-ax2.set_ylabel("Test Acc.", fontsize=17, color=colors[1])
-ax2.plot(iters, test_acc, color=colors[1], linewidth=4)
+Z_model = np.zeros_like(X)
+Z_orig = np.zeros_like(X)
+for i, x in enumerate(x_rel):
+    for j, y in enumerate(y_rel):
+        Z_model[i,j] = model_cost(np.array([x, y]), *coeffs)
+        Z_orig[i,j] = circuit(params+np.array([x, y]))
 
-ax2.tick_params(axis="x", labelsize=14)
-ax2.tick_params(axis="y", labelsize=14, labelcolor=colors[1])
+fig, ax = plt.subplots(2, 1, subplot_kw={"projection": "3d"}, figsize=(9, 12))
+surf = ax[0].plot_surface(X, Y, Z_model, label="Model energy", alpha=0.7)
+surf._facecolors2d = surf._facecolors3d
+surf._edgecolors2d = surf._edgecolors3d
+surf = ax[0].plot_surface(X, Y, Z_orig, label="Original energy", alpha=0.7)
+surf._facecolors2d = surf._facecolors3d
+surf._edgecolors2d = surf._edgecolors3d
+ax[0].plot([params[0]]*2, [params[1]]*2, [np.min(Z_orig), np.max(Z_orig)], color='k')
+surf = ax[1].plot_surface(X, Y, Z_orig-Z_model, label="Deviation", alpha=0.7)
+surf._facecolors2d = surf._facecolors3d
+surf._edgecolors2d = surf._edgecolors3d
+ax[0].legend()
+ax[1].legend()
 
-plt.grid(False)
-plt.tight_layout()
-plt.show()
+###################################################################
+# This looks great, we have constructed a purely classical surrogate model that locally has a small deviation from the original cost function.
+# The error becomes bigger for large distances from the parameter position at which we constructed the model, but those distances are rather big compared to typical update steps in the optimization procedure.
+#
+# Let us now apply an optimization to the model cost function:
+
+
+# Create the optimizer instance, we here choose ADAM.
+opt = qml.AdamOptimizer(0.05)
+# Recall that the parameters of the model are relative coordinates. Correspondingly, we initialize at 0, not at params.
+trained_params = np.zeros_like(params)
+print(f"Original energy at the minimum of the model: {coeffs[0]}")
+# Map the function to be only depending on the parameters
+mapped_model = lambda par: model_cost(par, *coeffs)
+# Run the optimizer for 100 epochs
+for i in range(100):
+    trained_params = opt.step(mapped_model, trained_params)
+    if (i+1)%10==0:
+        cost = mapped_model(trained_params)
+        print(f"Epoch {i+1:4d}: {cost} at (relative) parameters {trained_params}")
+
+trained_cost_orig = circuit(params+trained_params)
+print(f"Original energy at the minimum of the model: {trained_cost_orig}")
