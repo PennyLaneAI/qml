@@ -463,7 +463,7 @@ print(
 # A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
 # constitutes a multireference problem. [#purvis1983]_ It needs two different
 # Hartree-Fock Slater determinants to qualitatively describe the full potential energy suface
-# for the transformation. This is to say that one Slater Determinant is a good HF reference
+# for the transformation. This is to say that one Slater determinant is a good reference
 # for one half of the PES while another determinant is good reference for the rest of PES.
 #
 # Here, we construct the potential energy surface for this reaction and see how
