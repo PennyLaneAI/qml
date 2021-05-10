@@ -198,7 +198,7 @@ for r in np.arange(0.5, 5.0, 0.1):
     vqe_energy.append(energy)
 
 ##############################################################################
-# We have the calculated the molecular energy as a function of H-H bond distance, let us plot it.
+# We have calculated the molecular energy as a function of H-H bond distance; let us plot it.
 
 # Energy as a function of internuclear distance
 r = np.arange(0.5, 5.0, 0.1)
