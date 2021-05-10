@@ -372,10 +372,10 @@ plt.show()
 ##############################################################################
 # Activation energy barriers and reaction rates
 # --------------------------------------------
-# The utility of potential energy surfaces lies in estimating the
-# energu differences (reaction energies and activation energy barriers) and the
+# The utility of potential energy surfaces lies in estimating
+# reaction energies and activation energy barriers, as well as the
 # geometric configurations of key reactants, intermediates,
-# `transition state (TS) <https://en.wikipedia.org/wiki/Transition_state>`_
+# `transition states <https://en.wikipedia.org/wiki/Transition_state>`_
 # and products.
 # In general, we would like our method to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
