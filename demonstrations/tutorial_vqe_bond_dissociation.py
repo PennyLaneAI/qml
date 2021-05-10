@@ -350,7 +350,7 @@ for r in np.arange(1.0, 3.0, 0.1):
 #
 ##############################################################################
 #
-# Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`
+# Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`,
 # which is also the `reaction coordinate <https://en.wikipedia.org/wiki/Reaction_coordinate>`_
 # and thus, we have the potential energy curve for
 # this reaction.
