@@ -270,7 +270,7 @@ print(
 # This reaction has a barrier, the transition state, that it has to cross
 # for the exchange of an :math:`H` atom to be complete. In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
-# This means it is a :math:`6` qubit problem and the ground state (HF state) in
+# This means it is a :math:`6` qubit problem and the Hartree-Fock state in
 # occupation number representation is :math:`|111000\rangle`. As there is an unpaired
 # electron, the spin multiplicity is two.
 #
