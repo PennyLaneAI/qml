@@ -265,7 +265,7 @@ print(
 #
 # We construct the PES for a simple hydrogen exchange reaction
 #
-# .. math:: H_2 + H \rightarrow H + H_2
+# .. math:: H_2 + H \rightarrow H + H_2.
 #
 # This reaction has a barrier, the transition state, that it has to cross
 # for the exchange of an :math:`H` atom to be complete. In a minimal basis like STO-3G,
