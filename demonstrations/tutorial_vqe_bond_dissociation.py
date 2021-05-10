@@ -121,7 +121,7 @@ active_orbitals = 2
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 #
 #
-# We build the VQE circuit, by first
+# We build the VQE circuit by first
 # preparing the qubit version of the HF state and then adding all single excitation and
 # double excitation gates which use the Givens rotations. This approach is similar to
 # the Unitary Coupled Cluster (UCCSD) approach often used.
@@ -465,97 +465,18 @@ print(
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
-# The generation of the PES is straightforward and follows from our previous examples.
-# We use an active space with a total of
-# :math:`6` spin-orbitals with core electrons frozen for the sake of computational cost.
-# The actual number of active orbitals should be :math:`12` here if we include all the
+# The number of active orbitals should be :math:`2X6=12` here if we include all the
 # unoccupied orbitals.
-
-# Molecular parameters
-basis_set = "sto-3g"
-
-active_electrons = 4
-active_orbitals = 3
-
-symbols = ["Be", "H", "H"]
-
-vqe_energy = []
-
-for reac_coord in np.arange(1.0, 4.0, 0.1):
-
-    x = reac_coord
-    y = np.subtract(2.54, np.multiply(0.46, x))
-
-    coordinates = np.array([0.0, 0.0, 0.0, x, y, 0.0, x, -y, 0.0])
-
-    H, qubits = qchem.molecular_hamiltonian(
-        symbols,
-        coordinates,
-        basis=basis_set,
-        active_electrons=active_electrons,
-        active_orbitals=active_orbitals,
-    )
-
-    singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
-
-    def circuit(params, wires):
-        qml.PauliX(0)
-        qml.PauliX(1)
-        qml.PauliX(2)
-        qml.PauliX(3)
-        for i in range(0, len(doubles)):
-            qml.DoubleExcitation(params[i], wires=doubles[i])
-        for j in range(0, len(singles)):
-            qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
-
-    dev = qml.device("default.qubit", wires=qubits)
-    cost_fn = qml.ExpvalCost(circuit, H, dev)
-    opt = qml.GradientDescentOptimizer(stepsize=0.4)
-
-    len_params = len(singles) + len(doubles)
-    params = np.zeros(len_params)
-
-    prev_energy = 0.0
-
-    # Begin VQE iteration. The max number of iterations is set to 150
-    for n in range(150):
-
-        params, energy = opt.step_and_cost(cost_fn, params)
-        print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
-
-        if np.abs(energy - prev_energy) < 1e-6:
-            break
-
-        prev_energy = energy
-
-    vqe_energy.append(energy)
-
-
-# PES
-r = np.arange(1.0, 4.0, 0.1)
-
-fig, ax = plt.subplots()
-ax.plot(r, vqe_energy, c="red", label="VQE")
-
-ax.set(
-    xlabel="Reaction Coordinate (x, in Bohr)",
-    ylabel="Total energy (in Hartree)",
-    title="PES for H2 insertion in Be",
-)
-ax.grid()
-ax.legend()
-
-plt.show()
-
-
-##############################################################################
-# ----------
+# Now, it's your turn to generate the potential energy surface. It follows from our
+# previous examples and you need to travel along the specified reaction coordinate.
 #
-# In the PES above, we see a sharp maximum which is actually the result of a
-# sudden switch in the underlying Hartree-Fock reference. VQE performs well for
-# the range of PES considered. It reproduces the Full CI result shown below
-# if we increase the active orbitals to include all the unoccupied orbitals i.e. 12 spin
-# orbitals in total.
+#
+# Below is the PES you would generate. We have the HF and FCI curves plotted for
+# comparison. We see a sharp maximum which is
+# actually the result of a sudden switch in the underlying Hartree-Fock reference.
+# VQE performs well for the range of PES considered. You would notice that our VQE circuit
+# reproduces the Full CI result shown below if we increase the active orbitals to include
+# all the unoccupied orbitals i.e. 12 spin orbitals in total.
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
