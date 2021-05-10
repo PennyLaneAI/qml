@@ -15,8 +15,8 @@ Modeling chemical reactions using VQE
 *Author: PennyLane dev team. Last updated: 29 Apr 2021.*
 
 The term chemical reaction is another name for the transformation of molecules -- breaking and 
-forming of bonds -- and this transformation comes with an energy cost. The energy cost determines 
-the feasibility of a particular transformation amongst many different alternate possibilities. 
+forming of bonds. Such transformations involve energy costs that determine 
+the feasibility of a particular transformation amongst many different possibilities. 
 Computational chemistry offers several theoretical methods for determining this energy cost
 precisely and a window to predicting the thermodynamic and kinetics aspects of any 
 chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate chemical 
