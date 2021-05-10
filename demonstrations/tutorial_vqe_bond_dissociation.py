@@ -99,12 +99,8 @@ from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
 ##############################################################################
-# We begin by specifying molecular information such as charge of the molecule,
-# spin multiplicity of the electronic configuration and the basis set. A key step is
-# to specify the number of active electrons (which is equal to the number of electrons
-# explicitly considered)
-# and active orbitals. This
-# defines the number of qubits required and the qubit states that need to be considered.
+# We begin by specifying the basis set and the number of active electrons and active orbitals.
+# All electrons and all orbitals are considered in this case.
 
 basis_set = "sto-3g"
 
@@ -125,7 +121,7 @@ active_orbitals = 2
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 #
 #
-# Now we build the VQE circuit, by first
+# We build the VQE circuit, by first
 # preparing the qubit version of the HF state and then adding all single excitation and
 # double excitation gates which use the Givens rotations. This approach is similar to
 # the Unitary Coupled Cluster (UCCSD) approach often used.
@@ -141,11 +137,12 @@ active_orbitals = 2
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
 # This process is repeated till convergence.
 
+symbols = ["H", "H"]
 vqe_energy = []
 # set up a loop to change internuclear distance
 for r in np.arange(0.5, 5.0, 0.1):
 
-    symbols, coordinates = (["H", "H"], np.array([0.0, 0.0, 0.0, 0.0, 0.0, r]))
+    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
@@ -174,7 +171,6 @@ for r in np.arange(0.5, 5.0, 0.1):
 
     # define and initialize the gate parameters
     params = np.zeros(3)
-    dcircuit = qml.grad(cost_fn, argnum=0)
 
     ##############################################################################
     # Begin the VQE iteration to optimize gate parameters.
@@ -220,27 +216,26 @@ plt.show()
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately a potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms.
-# In a diatomic molecule, the potential energy curve as a function of internuclear distance tells 
+# In a diatomic molecule, the potential energy curve as a function of internuclear distance tells
 # us the bond length:
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium.
 # The bond dissociation energy is the amount of energy required to dissociate a bond.
 # In other words, the difference in energy of the system at equilibrium (minima) and the energy
-# of the system at the dissociation limit, where the atoms are far apart and 
+# of the system at the dissociation limit, where the atoms are far apart and
 # the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
-# (the difference in energy at equilibrium and energy at dissociation limit)
 # as :math:`0.202` Hartrees (:math:`126.79` Kcal/mol).
 
-vqe_energy_equil = min(vqe_energy)
-vqe_energy_disoc = vqe_energy[-1]
+energy_equil = min(vqe_energy)
+energy_dissoc = vqe_energy[-1]
 
-bond_dissociation_energy = np.subtract(vqe_energy_disoc, vqe_energy_equil)
-bond_dissociation_energy_kcal = np.multiply(bond_dissociation_energy, 627.5)
+bond_dissociation_energy = energy_dissoc - energy_equil
+bond_dissociation_energy_kcal = bond_dissociation_energy * 627.5
 
-bond_length_index = vqe_energy.index(vqe_energy_equil)
+bond_length_index = vqe_energy.index(energy_equil)
 bond_length = r[bond_length_index]
 
 print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
@@ -253,8 +248,7 @@ print(
 
 ##############################################################################
 # These estimates can be improved
-# by using bigger basis sets or explicitly correlated methods (F12) and
-# extrapolating to the complete basis set (CBS) limit. [#motta2020]_
+# by using bigger basis sets and extrapolating to the complete basis set limit. [#motta2020]_
 # Now let's move on to a more interesting chemical reaction.
 #
 
@@ -280,7 +274,6 @@ print(
 #
 
 # Molecular parameters
-name = "h3"
 basis_set = "sto-3g"
 
 multiplicity = 2
@@ -292,14 +285,12 @@ active_orbitals = 3
 # Then we setup the PES loop, incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
 # to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr.
 
+symbols = ["H", "H", "H"]
 vqe_energy = []
 
 for r in np.arange(1.0, 3.0, 0.1):
 
-    symbols, coordinates = (
-        ["H", "H", "H"],
-        np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0]),
-    )
+    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
@@ -307,7 +298,7 @@ for r in np.arange(1.0, 3.0, 0.1):
         mult=multiplicity,
         basis=basis_set,
         active_electrons=active_electrons,
-        active_orbitals=active_orbitals
+        active_orbitals=active_orbitals,
     )
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
@@ -327,7 +318,6 @@ for r in np.arange(1.0, 3.0, 0.1):
 
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
-    dcircuit = qml.grad(cost_fn, argnum=0)
 
     prev_energy = 0.0
 
@@ -391,22 +381,22 @@ plt.show()
 #
 # Below we show how to calculate the activation energy from the above PES.
 
-vqe_energy_equil = min(vqe_energy)
+energy_equil = min(vqe_energy)
 
-vqe_energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
+energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
 
 # Between the two minimas, we have the TS which is a local maxima
-bond_length_index_1 = vqe_energy.index(vqe_energy_equil)
-bond_length_index_2 = vqe_energy.index(vqe_energy_equil_2)
+bond_length_index_1 = vqe_energy.index(energy_equil)
+bond_length_index_2 = vqe_energy.index(energy_equil_2)
 
 index_1 = min(bond_length_index_1, bond_length_index_2)
 index_2 = max(bond_length_index_1, bond_length_index_2)
 
 # Transition State energy
-vqe_energy_ts = max(vqe_energy[index_1:index_2])
+energy_ts = max(vqe_energy[index_1:index_2])
 
-activation_energy = np.subtract(vqe_energy_ts, vqe_energy_equil)
-activation_energy_kcal = np.multiply(activation_energy, 627.5)
+activation_energy = energy_ts - energy_equil
+activation_energy_kcal = activation_energy * 627.5
 
 print(
     "The activation energy is {:.6f} Hartrees or {:.2f} Kcal/mol".format(
@@ -441,11 +431,6 @@ print(
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
 #     :width: 50%
 #     :align: center
-#
-#
-#
-#
-#
 #
 
 ##############################################################################
@@ -487,12 +472,12 @@ print(
 # unoccupied orbitals.
 
 # Molecular parameters
-name = "beh2"
 basis_set = "sto-3g"
 
 active_electrons = 4
 active_orbitals = 3
 
+symbols = ["Be", "H", "H"]
 
 vqe_energy = []
 
@@ -501,14 +486,14 @@ for reac_coord in np.arange(1.0, 4.0, 0.1):
     x = reac_coord
     y = np.subtract(2.54, np.multiply(0.46, x))
 
-    symbols, coordinates = (["Be", "H", "H"], np.array([0.0, 0.0, 0.0, x, y, 0.0, x, -y, 0.0]))
+    coordinates = np.array([0.0, 0.0, 0.0, x, y, 0.0, x, -y, 0.0])
 
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
         coordinates,
         basis=basis_set,
         active_electrons=active_electrons,
-        active_orbitals=active_orbitals
+        active_orbitals=active_orbitals,
     )
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
@@ -529,8 +514,6 @@ for reac_coord in np.arange(1.0, 4.0, 0.1):
 
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
-
-    dcircuit = qml.grad(cost_fn, argnum=0)
 
     prev_energy = 0.0
 
