@@ -68,8 +68,8 @@ visual tool to understand chemical reactions where stable molecules are the loca
 and transition states are the hill peaks to climb.
 
 To summarize, to build the potential energy surface, we solve the electronic Schrödinger
-equation for a set of positions of the nuclei, and subsequently move the nuclei in incremental steps
-to obtain the energy at other configurations of the nuclei. The obtained set of energies are then 
+equation for a set of positions of the nuclei, and subsequently move them in incremental steps
+to obtain the energy at other configurations. The obtained set of energies are then 
 plotted against nuclear positions.
 
 We begin with the simplest of molecule: :math:`H_2`. 
