@@ -89,7 +89,9 @@ import networkx as nx
 # `maximum clique (MaxClique) problem <https://en.wikipedia.org/wiki/Clique_problem>`__: finding the
 # largest complete subgraph of some graph :math:`G`. For example, the following graph's maximum clique is coloured in red:
 #
-# IMAGE HERE
+# .. figure:: ../demonstrations/falqon/max_clique.png
+#     :align: center
+#     :width: 90%
 #
 # In this demonstration, we attempt to find the maximum cliques (there are two) of the following graph:
 #
@@ -298,3 +300,21 @@ plt.bar(range(2**len(dev.wires)), probs)
 # Clearly, the bitstring occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle`.
 # This is precisely the triangle in our graph, which is clearly the maximum clique.
 # FALQON has solved the MaxClique problem!
+#
+
+######################################################################
+# Benchmarking FALQON
+# -------------------
+#
+# To conclude this demonstration, we will benchmark FALQON.
+
+######################################################################
+# Bonus: Seeding QAOA with FALQON (Bird Seed)
+# -------------------------------------------
+#
+# QAOA and FALQON have many similarities, most notably, their circuit structure. Both involve alternating layers
+# of time-evolution operators corresponding to a cost and a mixer/driver Hamiltonian. As it turns out, this
+# will allow us to combine FALQON and QAOA to make something even more powerful!
+#
+#
+#
