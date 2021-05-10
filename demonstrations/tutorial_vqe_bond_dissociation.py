@@ -209,7 +209,7 @@ ax.plot(r, vqe_energy, label="VQE")
 ax.set(
     xlabel="H-H distance (in Bohr)",
     ylabel="Total energy (in Hartree)",
-    title="PES for H$_2$ dissociation",
+    title="Potential energy surface for H$_2$ dissociation",
 )
 ax.grid()
 ax.legend()
