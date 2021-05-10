@@ -33,7 +33,7 @@ the exchange of hydrogen atoms. Let's get started!
 
 
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
-   :width: 50%
+   :width: 90%
    :align: center
    
    An illustration of the potential energy surface of bond dissociation for the hydrogen molecule. 
@@ -262,7 +262,10 @@ print(
 # .. math:: H_2 + H \rightarrow H + H_2.
 #
 # This reaction has a barrier, the transition state, that it has to cross
-# for the exchange of an :math:`H` atom to be complete. In a minimal basis like STO-3G,
+# for the exchange of an :math:`H` atom to be complete. In this case, the transition state 
+# corresponds to a linear arrangement of the atoms where one H-H bond is being broken
+# and the other H-H bond is formed.
+# In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
 # This means it is a :math:`6` qubit problem and the Hartree-Fock state in
 # occupation number representation is :math:`|111000\rangle`. As there is an unpaired
@@ -363,7 +366,7 @@ plt.show()
 # geometric configurations of key reactants, intermediates,
 # `transition states <https://en.wikipedia.org/wiki/Transition_state>`_
 # and products.
-# In general, we would like our method to provide
+# In general, we would like our method (VQE) to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`),
 # and the transition state (maxima). VQE reproduces the exact result in the small
 # basis (STO-3G).
@@ -429,7 +432,7 @@ print(
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
-#     :width: 50%
+#     :width: 90%
 #     :align: center
 #
 
@@ -455,7 +458,7 @@ print(
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/beh2_movie.gif
-#     :width: 50%
+#     :width: 70%
 #     :align: center
 #
 #
@@ -471,16 +474,18 @@ print(
 # previous examples and you need to travel along the specified reaction coordinate.
 #
 #
-# Below is the PES you would generate. We have the HF and FCI curves plotted for
+# Below is the PES you would be able to generate. We have the HF and FCI curves plotted for
 # comparison. We see a sharp maximum which is
 # actually the result of a sudden switch in the underlying Hartree-Fock reference.
-# VQE performs well for the range of PES considered. You would notice that our VQE circuit
+# The performance of VQE depends on the active space chosen. As a simple excercise, try increasing 
+# the number of active orbitals and see how the performance of our VQE circuit changes.
+# You would notice that our VQE circuit
 # reproduces the Full CI result shown below if we increase the active orbitals to include
 # all the unoccupied orbitals i.e. 12 spin orbitals in total.
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
-#     :width: 50%
+#     :width: 90%
 #     :align: center
 #
 #
