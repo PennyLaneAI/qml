@@ -79,13 +79,16 @@ of all reactions.
 .. math:: H_2 \rightarrow H + H.
 
 Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` 
-spin-orbitals. When mapped to a qubit representation, we have a total of four qubits. 
-As discussed in the previous tutorial, the states involved are the Hartree-Fock (HF) ground state, 
-:math:`|1100\rangle`, the singly-excited states :math:`|0110\rangle`, :math:`|1001\rangle`, and the 
-doubly-excited state :math:`|0011\rangle`. These are the only states out of :math:`2^4 (=16)` 
-possible states that matter for this problem and are obtained by single and double excitations
-out of the HF state. Below we show how to set up the problem to generate the PES for such a 
-reaction. 
+spin-orbitals. When mapped to a qubit representation, we need a total of four qubits to represent it 
+and the Hartree-Fock (HF) ground state is  represented as :math:`|1100\rangle` where two
+energetically lowest orbitals are occupied and rest two are unccupied. To form the complete basis of
+states, we consider excitations out of the HF state that conserve the spin, and in the case where 
+there are two electrons in this system, single and double excitations suffice. The singly-excited 
+states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state is 
+:math:`|0011\rangle`. The exact wavefunction (also known as full configuration interaction or FCI) 
+is a linear expansion in terms of these states where 
+the expansion coefficients would change as the reaction proceeds and the  system moves figuratively 
+on the potential energy surface. Below we show how to to generate the PES for such a reaction. 
 
 The first step is to import the required libraries and packages:
 """
@@ -103,11 +106,8 @@ import matplotlib.pyplot as plt
 # and active orbitals. This
 # defines the number of qubits required and the qubit states that need to be considered.
 
-charge = 0
-multiplicity = 1
 basis_set = "sto-3g"
 
-electrons = 2
 active_electrons = 2
 active_orbitals = 2
 
@@ -119,7 +119,7 @@ active_orbitals = 2
 # This covers the range of internuclear distance in which the H-H bond is formed
 # (equilibrium bond length)
 # and also the distance when the bond is broken, which occurs when the atoms
-are far away from each other.
+# are far away from each other.
 # Now we set up a loop that incrementally changes the internuclear distance and for each
 # such point we generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
@@ -220,19 +220,19 @@ plt.show()
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately a potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms.
-# In a diatomic molecule, the potential energy curve as a function of internuclear distance tells us the bond length:
+# In a diatomic molecule, the potential energy curve as a function of internuclear distance tells 
+# us the bond length:
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium.
 # The bond dissociation energy is the amount of energy required to dissociate a bond.
 # In other words, the difference in energy of the system at equilibrium (minima) and the energy
 # of the system at the dissociation limit, where the atoms are far apart and 
-the total energy plateaus to a constant: the sum of each atom's individual energy.
+# the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # (the difference in energy at equilibrium and energy at dissociation limit)
-# as :math:`0.194` Hartrees (:math:`121.8` Kcal/mol).
-
+# as :math:`0.202` Hartrees (:math:`126.79` Kcal/mol).
 
 vqe_energy_equil = min(vqe_energy)
 vqe_energy_disoc = vqe_energy[-1]
@@ -245,7 +245,7 @@ bond_length = r[bond_length_index]
 
 print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
 print(
-    "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
+    "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} Kcal/mol".format(
         bond_dissociation_energy, bond_dissociation_energy_kcal
     )
 )
@@ -283,9 +283,6 @@ print(
 name = "h3"
 basis_set = "sto-3g"
 
-electrons = 3
-charge = 0
-spin = 1
 multiplicity = 2
 
 active_electrons = 3
@@ -307,11 +304,10 @@ for r in np.arange(1.0, 3.0, 0.1):
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
         coordinates,
-        charge=charge,
         mult=multiplicity,
         basis=basis_set,
         active_electrons=active_electrons,
-        active_orbitals=active_orbitals,
+        active_orbitals=active_orbitals
     )
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
@@ -413,7 +409,7 @@ activation_energy = np.subtract(vqe_energy_ts, vqe_energy_equil)
 activation_energy_kcal = np.multiply(activation_energy, 627.5)
 
 print(
-    "The activation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
+    "The activation energy is {:.6f} Hartrees or {:.2f} Kcal/mol".format(
         activation_energy, activation_energy_kcal
     )
 )
@@ -494,11 +490,6 @@ print(
 name = "beh2"
 basis_set = "sto-3g"
 
-electrons = 6
-charge = 0
-spin = 1
-multiplicity = 1
-
 active_electrons = 4
 active_orbitals = 3
 
@@ -515,11 +506,9 @@ for reac_coord in np.arange(1.0, 4.0, 0.1):
     H, qubits = qchem.molecular_hamiltonian(
         symbols,
         coordinates,
-        charge=charge,
-        mult=multiplicity,
         basis=basis_set,
         active_electrons=active_electrons,
-        active_orbitals=active_orbitals,
+        active_orbitals=active_orbitals
     )
 
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
