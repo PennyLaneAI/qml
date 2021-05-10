@@ -430,7 +430,7 @@ print(
 # The reaction rate constant (k) has an exponential dependence on the activation energy barrier
 # as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
 #
-# .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}
+# .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}.
 #
 # So, in principle, if we know the constant (A) we could calculate the rate of the reaction
 # which depends on the rate constant, the concentration of the reactants and the order of the
