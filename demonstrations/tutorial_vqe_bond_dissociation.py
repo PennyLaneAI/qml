@@ -37,7 +37,7 @@ the exchange of hydrogen atoms. Let's get started!
    :align: center
    
    An illustration of the potential energy surface of bond dissociation for the hydrogen molecule. 
-   On the :math:`y`-axis is the total molecular energy and :math:`x`-axis is the internuclear bond
+   On the :math:`y`-axis is the total energy and :math:`x`-axis is the internuclear bond
    distance. By looking at this curve, we can estimate the :math:`H-H` bond length and the energy 
    required to break the :math:`H-H` bond.   
 
