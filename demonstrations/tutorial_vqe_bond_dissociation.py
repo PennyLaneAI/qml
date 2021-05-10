@@ -76,7 +76,7 @@ We begin with the simplest of molecules: :math:`H_2`.
 The formation (or breaking) of the :math:`H-H` bond is also the simplest
 of all reactions. 
 
-.. math:: H_2 \rightarrow H + H  
+.. math:: H_2 \rightarrow H + H.
 
 Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` 
 spin-orbitals. When mapped to a qubit representation, we have a total of four qubits. 
