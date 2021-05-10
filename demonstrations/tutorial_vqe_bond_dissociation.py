@@ -118,7 +118,8 @@ active_orbitals = 2
 # :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
 # This covers the range of internuclear distance in which the H-H bond is formed
 # (equilibrium bond length)
-# and also, when it is considered broken as the atoms move away from each other.
+# and also the distance when the bond is broken, which occurs when the atoms
+are far away from each other.
 # Now we set up a loop that incremetally changes the internuclear distance and for each
 # such point, we do a mean-field (HF) calculation, generate a fermionic Hamiltonian
 # which is then mapped to a qubit Hamiltonian. All the later steps are done using the
