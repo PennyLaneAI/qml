@@ -225,7 +225,8 @@ plt.show()
 # equilibrium.
 # The bond dissociation energy is the amount of energy required to dissociate a bond.
 # In other words, the difference in energy of the system at equilibrium (minima) and the energy
-# of the system at the dissociation limit (farthest right of the curve)
+# of the system at the dissociation limit, where the atoms are far apart and 
+the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
