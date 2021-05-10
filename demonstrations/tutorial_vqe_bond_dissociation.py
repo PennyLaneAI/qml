@@ -593,10 +593,10 @@ plt.show()
 #
 #
 # To summarize, we looked at three different chemical reactions and constructed
-# their potential energy curves. We calculated important energy
-# costs, bond dissociation energy and activation energy, and bond lengths of specific
-# bonds. We also saw how quantum computing algorithms such as VQE provide high quality
-# results that match conventional quantum chemistry methods.
+# their potential energy curves. We calculated the bond dissociation energy,
+# activation energy, and bond length for the specific situation.
+# We also saw how quantum computing algorithms such as VQE can in principle
+# provide results that match conventional quantum chemistry methods for these systems.
 #
 #
 # .. _references:
