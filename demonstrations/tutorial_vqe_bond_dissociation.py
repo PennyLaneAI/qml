@@ -403,7 +403,6 @@ vqe_energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
 bond_length_index_1 = vqe_energy.index(vqe_energy_equil)
 bond_length_index_2 = vqe_energy.index(vqe_energy_equil_2)
 
-
 index_1 = min(bond_length_index_1, bond_length_index_2)
 index_2 = max(bond_length_index_1, bond_length_index_2)
 
