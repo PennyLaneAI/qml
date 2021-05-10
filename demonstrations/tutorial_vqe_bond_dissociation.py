@@ -54,7 +54,7 @@ reaction occurs. The concept originates from the fact that nuclei are much heavi
 electrons and thus move much slowly, allowing us to decouple their motion. This is known as the
 `Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation>`_. 
 We can then solve for the electronic wavefunction with
-nucleis clamped to their respective positions. This results in separation of nuclear and
+the nuclei clamped to their respective positions. This results in separation of nuclear and
 electronic parts of the Schrodinger equation and we then only solve the electronic Schrodinger
 equation.
 
