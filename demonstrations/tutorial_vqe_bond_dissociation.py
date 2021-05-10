@@ -458,7 +458,7 @@ print(
 #
 # In our previous examples, the Hartree-Fock state was a good approximation to the ground state
 # for all points on the potential energy surface. Hence, we refer to them as single reference
-# problems. However, there exist situations where more than one different reference states are
+# problems. However, there exist situations where more than one reference state is
 # required across the potential energy surface. These are called multi-reference problems.
 # A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
 # constitutes a multireference problem. [#purvis1983]_ It needs two different
