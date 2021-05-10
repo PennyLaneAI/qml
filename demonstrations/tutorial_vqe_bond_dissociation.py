@@ -220,7 +220,7 @@ plt.show()
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately a potential energy curve) for
 # the dissociation of hydrogen molecule into two hydrogen atoms.
-# In a diatomic molecule, the PEC as a function of internuclear distance tells us the bond length:
+# In a diatomic molecule, the potential energy curve as a function of internuclear distance tells us the bond length:
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium.
 # While the bond dissociation energy is amount of energy required to dissociate a bond.
