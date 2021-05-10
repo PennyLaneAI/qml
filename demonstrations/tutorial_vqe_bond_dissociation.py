@@ -61,7 +61,7 @@ equation:
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
 Thus arises the concept of the electronic energy of the molecule, :math:`E(R)`, 
-as a function of interatomic coordinates and angles. The potential energy surface of a 
+as a function of interatomic coordinates. The potential energy surface of a 
 molecule is a 
 :math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
 visual tool to understand chemical reactions where stable molecules are the local minimas in 
