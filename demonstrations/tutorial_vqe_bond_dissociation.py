@@ -55,8 +55,8 @@ electrons and thus move much slowly, allowing us to decouple their motion. This 
 `Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation>`_. 
 We can then solve for the electronic wavefunction with
 the nuclei clamped to their respective positions. This results in separation of nuclear and
-electronic parts of the Schrodinger equation and we then only solve the electronic Schrodinger
-equation.
+electronic parts of the Schrödinger equation and we then only solve the electronic
+equation:
 
 .. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
 
