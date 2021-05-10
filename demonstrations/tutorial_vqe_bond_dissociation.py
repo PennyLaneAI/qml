@@ -120,9 +120,8 @@ active_orbitals = 2
 # (equilibrium bond length)
 # and also the distance when the bond is broken, which occurs when the atoms
 are far away from each other.
-# Now we set up a loop that incremetally changes the internuclear distance and for each
-# such point, we do a mean-field (HF) calculation, generate a fermionic Hamiltonian
-# which is then mapped to a qubit Hamiltonian. All the later steps are done using the
+# Now we set up a loop that incrementally changes the internuclear distance and for each
+# such point we generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 #
 #
