@@ -378,7 +378,7 @@ plt.show()
 # `transition states <https://en.wikipedia.org/wiki/Transition_state>`_
 # and products.
 # In general, we would like our method to provide
-# a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`)
+# a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`),
 # and the transition state (maxima). VQE reproduces the exact result in the small
 # basis (STO-3G).
 #
