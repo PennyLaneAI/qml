@@ -223,7 +223,7 @@ plt.show()
 # In a diatomic molecule, the potential energy curve as a function of internuclear distance tells us the bond length:
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium.
-# While the bond dissociation energy is amount of energy required to dissociate a bond.
+# The bond dissociation energy is the amount of energy required to dissociate a bond.
 # In other words, the difference in energy of the system at equilibrium (minima) and the energy
 # of the system at the dissociation limit (farthest right of the curve)
 # Below we show how our VQE circuit gives an
