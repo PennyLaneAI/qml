@@ -3,7 +3,7 @@ Modeling chemical reactions using VQE
 ==============================
 
 .. meta::
-    :property="og:description": Construct potential energy surface for chemical reactions using 
+    :property="og:description": Construct potential energy surfaces for chemical reactions using 
     the variational quantum eigensolver algorithm in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
