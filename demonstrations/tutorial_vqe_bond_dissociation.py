@@ -112,7 +112,7 @@ active_electrons = 2
 active_orbitals = 2
 
 ##############################################################################
-# To construct the potential energy surface, we need to vary the geometry. We keep
+# To construct the potential energy surface, we need to vary the geometry of the molecule. We keep
 # an :math:`H` atom fixed at origin and vary the
 # :math:`x`-coordinate of the other :math:`H` atom such that the bond distance varies from
 # :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
