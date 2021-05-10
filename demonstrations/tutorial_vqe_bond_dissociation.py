@@ -72,7 +72,7 @@ equation for a set of positions of the nuclei, and subsequently move them in inc
 to obtain the energy at other configurations. The obtained set of energies are then 
 plotted against nuclear positions.
 
-We begin with the simplest of molecule: :math:`H_2`. 
+We begin with the simplest of molecules: :math:`H_2`. 
 The formation (or breaking) of the :math:`H-H` bond is also the simplest
 of all reactions. 
 
