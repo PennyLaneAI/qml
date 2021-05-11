@@ -262,7 +262,7 @@ print(
 # .. math:: H_2 + H \rightarrow H + H_2.
 #
 # This reaction has a barrier, the transition state, that it has to cross
-# for the exchange of an :math:`H` atom to be complete. In this case, the transition state 
+# for the exchange of an :math:`H` atom to be complete. In this case, the transition state
 # corresponds to a linear arrangement of the atoms where one H-H bond is being broken
 # and the other H-H bond is formed.
 # In a minimal basis like STO-3G,
@@ -352,7 +352,6 @@ ax.plot(r, vqe_energy)
 ax.set(
     xlabel="Distance (H-H, in Bohr)",
     ylabel="Total energy (in Hartree)",
-    title="PES for H-H + H -> H + H-H reaction",
 )
 ax.grid()
 plt.show()
@@ -368,19 +367,19 @@ plt.show()
 # and products.
 # In general, we would like our method (VQE) to provide
 # a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`),
-# and the transition state (maxima). VQE reproduces the exact result in the small
+# and the transition state (maxima). VQE reproduces the exact result (FCI) in the small
 # basis (STO-3G).
 #
-# The activation energy barrier is defined as the difference between the
+# The activation energy barrier (:math:`E_{a}`) is defined as the difference between the
 # energy of the reactant complex
 # and the energy of the
 # transition state.
 #
-# .. math:: E_{Activation Barrier} = E_{TS} - E_{Reactant}
+# .. math:: E_{a} = E_{TS} - E_{Reactant}
 #
 # In this case, the activation energy barrier is
 #
-# .. math:: E_{Activation Barrier} = 0.0274 Ha = 17.24 Kcal/mol
+# .. math:: E_{a} = 0.0274 Ha = 17.24 Kcal/mol
 #
 # Below we show how to calculate the activation energy from the above PES.
 
@@ -418,17 +417,17 @@ print(
 # The reaction rate constant (k) has an exponential dependence on the activation energy barrier
 # as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
 #
-# .. math:: k = Ae^{-{E_{Activation Barrier}}/RT}.
+# .. math:: k = Ae^{-{E_{a}}/RT}.
 #
 # So, in principle, if we know the constant (A) we could calculate the rate of the reaction,
 # which depends on the rate constant, the concentration of the reactants and the order of the
 # reaction.
 # In general, we desire our method to very accurately predict these energy differences
 # and the geometries of the key intermediates.
-# The plot below compares the performance of different methods.
+# The plot below compares the performance of VQE with other quantum chemistry methods such as
+# Hartree-Fock and Full CI.
 # The PEC obtained from the quantum algorithm (VQE) overlaps with
-# the popular quantum chemistry methods, `CCSD <https://en.wikipedia.org/wiki/Coupled_cluster>`_
-# and `CISD <https://en.wikipedia.org/wiki/Configuration_interaction>`_.
+# the `FCI <https://en.wikipedia.org/wiki/Configuration_interaction>`_ result.
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
@@ -468,16 +467,17 @@ print(
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
-# The number of active orbitals should be :math:`2X6=12` here if we include all the
-# unoccupied orbitals.
 # Now, it's your turn to generate the potential energy surface. It follows from our
-# previous examples and you need to travel along the specified reaction coordinate.
+# previous examples and you just need to traverse along the specified reaction coordinate
+# and obtain converged VQE energies.
 #
 #
 # Below is the PES you would be able to generate. We have the HF and FCI curves plotted for
 # comparison. We see a sharp maximum which is
 # actually the result of a sudden switch in the underlying Hartree-Fock reference.
-# The performance of VQE depends on the active space chosen. As a simple excercise, try increasing 
+# The performance of VQE depends on the active space chosen. For reference, we have plotted
+# the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
+# which is equal to :math`6` spin orbitals. As a simple excercise, try increasing
 # the number of active orbitals and see how the performance of our VQE circuit changes.
 # You would notice that our VQE circuit
 # reproduces the Full CI result shown below if we increase the active orbitals to include
@@ -491,7 +491,7 @@ print(
 #
 # To summarize, we looked at three different chemical reactions and constructed
 # their potential energy curves. We calculated the bond dissociation energy,
-# activation energy, and bond length for the specific situation.
+# activation energy, and bond length for the relevant situations.
 # We also saw how quantum computing algorithms such as VQE can in principle
 # provide results that match conventional quantum chemistry methods for these systems.
 #
