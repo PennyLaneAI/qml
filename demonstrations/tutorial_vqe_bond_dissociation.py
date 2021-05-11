@@ -112,7 +112,7 @@ active_orbitals = 2
 # an :math:`H` atom fixed at the origin and vary the
 # :math:`x`-coordinate of the other atom such that the bond distance changes from
 # :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
-# This covers the range of internuclear distance in which the H-H bond is formed
+# This covers the range of internuclear distance in which the :math:`H-H` bond is formed
 # (equilibrium bond length)
 # and also the distance when the bond is broken, which occurs when the atoms
 # are far away from each other.
@@ -286,7 +286,8 @@ active_orbitals = 3
 
 ##############################################################################
 # Then we setup the PES loop, incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
-# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr.
+# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use Pennylane
+# :class:`~.BasisState` class to construct the HF state in this case.
 
 symbols = ["H", "H", "H"]
 vqe_energy = []
@@ -307,9 +308,7 @@ for r in np.arange(1.0, 3.0, 0.1):
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
-        qml.PauliX(0)
-        qml.PauliX(1)
-        qml.PauliX(2)
+        qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=(0, 1, 2, 3, 4, 5))
         for i in range(0, len(doubles)):
             qml.DoubleExcitation(params[i], wires=doubles[i])
         for j in range(0, len(singles)):
@@ -467,8 +466,8 @@ print(
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
-# Now, it's your turn to generate the potential energy surface. It follows from our
-# previous examples and you just need to traverse along the specified reaction coordinate
+# Now, it's your turn to generate the potential energy surface. You could follow from our
+# previous examples. All you need to do is to traverse along the specified reaction coordinate
 # and obtain converged VQE energies.
 #
 #
@@ -477,7 +476,7 @@ print(
 # actually the result of a sudden switch in the underlying Hartree-Fock reference.
 # The performance of VQE depends on the active space chosen. For reference, we have plotted
 # the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
-# which is equal to :math`6` spin orbitals. As a simple excercise, try increasing
+# which is equal to :math:`6` spin orbitals. As a simple exercise, try increasing
 # the number of active orbitals and see how the performance of our VQE circuit changes.
 # You would notice that our VQE circuit
 # reproduces the Full CI result shown below if we increase the active orbitals to include
