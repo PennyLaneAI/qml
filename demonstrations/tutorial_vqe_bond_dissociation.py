@@ -194,7 +194,8 @@ for r in np.arange(0.5, 5.0, 0.1):
     vqe_energy.append(energy)
 
 ##############################################################################
-# We have calculated the molecular energy as a function of H-H bond distance; let us plot it.
+# We have calculated the molecular energy as a function of :math:`H-H` bond distance;
+# let us plot it.
 
 # Energy as a function of internuclear distance
 r = np.arange(0.5, 5.0, 0.1)
@@ -263,8 +264,8 @@ print(
 #
 # This reaction has a barrier, the transition state, that it has to cross
 # for the exchange of an :math:`H` atom to be complete. In this case, the transition state
-# corresponds to a linear arrangement of the atoms where one H-H bond is being broken
-# and the other H-H bond is formed.
+# corresponds to a particular linear arrangement of the atoms where one :math:`H-H` bond is
+# partially broken and the other :math:`H-H` bond is partially formed.
 # In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
 # This means it is a :math:`6` qubit problem and the Hartree-Fock state in
