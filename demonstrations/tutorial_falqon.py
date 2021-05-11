@@ -374,7 +374,7 @@ cost_fn = qml.ExpvalCost(qaoa_circuit, cost_h, dev)
 delta_t = 0.02
 
 print("Running FALQON")
-res, res_energy = max_clique_falqon(new_graph, depth-1, 0.0, delta_t)
+res, res_energy = max_clique_falqon(new_graph, depth-1, 0.0, delta_t, dev)
 print("------------------------")
 
 params = np.array([[delta_t for k in res], [delta_t * k for k in res]])
@@ -390,7 +390,7 @@ optimizer = qml.GradientDescentOptimizer()
 
 for s in range(steps):
     params, cost = optimizer.step_and_cost(cost_fn, params)
-    print("Step {}, Cost = {}".format(s, cost))
+    print("Step {}, Cost = {}".format(s + 1, cost))
 
 ######################################################################
 # To conclude, we can check how well FALQON/QAOA solved the optimization problem. We
