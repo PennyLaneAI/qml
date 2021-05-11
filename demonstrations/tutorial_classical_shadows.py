@@ -87,7 +87,7 @@ def estimate_shadow_obervable(shadows, observable):
 
 ##############################################################################
 # Here, we show a simple example of how the observable :math:`X_0' can be estimated with
-#classical whadows.
+# classical whadows.
 
 nqubits = 1
 theta = np.random.randn(nqubits, )
@@ -135,5 +135,86 @@ print(f"Shadow value: {shadow_observable}")
 
 ##############################################################################
 # Comparison of standard observable estimators and classical shadows.
+
+
+##############################################################################
+# State Reconstruction using Classical Shadow
+# ###########################################
+
+def snapshot_state(b_list, obs_list):
+    """
+    Reconstruct a state approximation from a single snapshot in a shadow.
+
+    **Details:**
+
+    Implements Eq. (S44) from https://arxiv.org/pdf/2002.08953.pdf
+
+    Args:
+        b_list (array): classical outcomes for a single sample
+        obs_list (array): ids for the pauli observable used for each measurement
+    """
+    
+    num_qubits = len(b_list)
+    
+    paulis = [
+        qml.Identity(0).matrix,
+        qml.PauliX(0).matrix,
+        qml.PauliY(0).matrix,
+        qml.PauliZ(0).matrix
+    ]
+
+    zero_state = np.array([[1,0],[0,0]])
+    one_state = np.array([[0,0],[0,1]])
+    
+    rho_snapshot = [1]
+    for i in range(num_qubits):
+        state = zero_state if b_list[i] == 1 else one_state
+        U = paulis[obs_list[i]]
+        
+        local_rho = 3 * (U.conj().T @ state @ U) - paulis[0]
+        
+        rho_snapshot = np.kron(rho_snapshot, local_rho)
+    
+    return rho_snapshot
+
+def shadow_state(shadow):
+    """
+    Reconstruct a state approximation as an average over all snapshots in the shadow.
+    """
+
+    num_shadows = shadow.shape[0]
+    num_qubits = int(shadow.shape[1]/2)
+    
+    b_lists = shadow[:,0:num_qubits]
+    obs_lists = shadow[:,num_qubits:2*num_qubits]
+    
+    # state approximated from snapshot average
+    shadow_rho = np.zeros((2**num_qubits, 2**num_qubits))
+    for i in range(num_shadows):
+        snapshot = snapshot_state(b_lists[i], obs_lists[i])
+        shadow_rho = shadow_rho + snapshot
+    
+    return shadow_rho/num_shadows
+
+
+##############################################################################
+# Example: |+> state is approximated as maximally mixed state
+
+nqubits = 1
+theta = [np.pi/4]
+number_of_shadows = 500
+
+def one_qubit_RY(params, wires, **kwargs):
+    qml.RY(params[0], wires=wires[0])
+
+shadow = classical_shadow(one_qubit_RY, theta, number_of_shadows)
+
+state_reconstruction = shadow_state(shadow)
+
+print("state reconstruction")
+
+print(state_reconstruction)
+
+
 
 #TODO: what is a good application?
