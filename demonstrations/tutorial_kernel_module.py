@@ -96,6 +96,8 @@ embedded quantum states
 
 .. math::
    k(\boldsymbol{x}, \boldsymbol{y}) = | \langle\psi(\boldsymbol{x})|\psi(\boldsymbol{y})\rangle|^2.
+
+This demonstration is based on Ref. [1].
 """
 
 # A toy problem
@@ -382,7 +384,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # would not be able to detect small improvements.
 
 # We can, however, resort to a more specialized measure, the
-# *kernel-target alignment* [1]. The kernel-target alignment compares the
+# *kernel-target alignment* [2]. The kernel-target alignment compares the
 # similarity predicted by the quantum kernel to the actual labels of the
 # training data. It is based on *kernel alignment*, a similiarity measure
 # between two kernels with given kernel matrices :math:`K_1` and
@@ -424,7 +426,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # the kernel you chose reproduces the actual similarities of the data. It
 # does have one drawback, however: having a high kernel-target alignment
 # is only a necessary but not a sufficient condition for a good
-# performance of the kernel [1]. This means having good alignment is
+# performance of the kernel [2]. This means having good alignment is
 # guaranteed to good performance, but optimal alignment will not always
 # bring optimal training accuracy.
 
@@ -510,6 +512,10 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 # References
 # ~~~~~~~~~~
 
-# [1] Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian. “An overview of
+# [1] Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks, 
+# Paul K. Faehrmann, and Johannes Jakob Meyer. “Training Quantum Embedding Kernels on Near-Term 
+# Quantum Computers.” `*arXiv:2105.02276* <https://arxiv.org/abs/2105.02276>` (2021)
+
+# [2] Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian. “An overview of
 # kernel alignment and its applications.” *Artificial Intelligence Review*
 # 43.2 (2015): 179-192.
