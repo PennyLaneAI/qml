@@ -14,12 +14,14 @@
 # drawing a line and assigning different labels to the regions on opposing
 # sides of the line:
 
+#.. figure:: ../demonstrations/kernel_module/linear_classification.png
+#    :align: center
+#    :width: 40%
+
 # We can mathematically formalize this by assigning the label :math:`y`
 # via
 
 # .. math::
-
-
 #    y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \boldsymbol{x}\rangle + b).
 
 # The vector :math:`\boldsymbol{w}` points perpendicular to the line and
@@ -37,12 +39,14 @@
 # classification there, we could actually realise non-linear
 # classification in our original space!
 
+#.. figure:: ../demonstrations/kernel_module/embedding_nonlinear_classification.png
+#    :align: center
+#    :width: 40%
+
 # If we go back to the expression for our prediction and include the
 # embedding, we get
 
 # .. math::
-
-
 #    y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \phi(\boldsymbol{x})\rangle + b).
 
 # We will forgo one tiny step, but it can be shown that for the purposes
@@ -52,8 +56,6 @@
 # this into the formula yields
 
 # .. math::
-
-
 #    y(\boldsymbol{x}) = \operatorname{sgn}\left(\sum_i \alpha_i \langle \phi(\boldsymbol{x}_i), \phi(\boldsymbol{x})\rangle + b\right).
 
 # This rewriting might not seem useful at first, but notice the above
@@ -61,8 +63,6 @@
 # space:
 
 # .. math::
-
-
 #    k(\boldsymbol{x}, \boldsymbol{y}) = \langle \phi(\boldsymbol{x}), \phi(\boldsymbol{y})\rangle.
 
 # We call this function the *kernel*. The clue now is that we can often
@@ -71,8 +71,6 @@
 # example the following embedding and the associated kernel:
 
 # .. math::
-
-
 #    \phi((x_1, x_2)) = (x_1^2, \sqrt{2} x_1 x_2, x_2^2) \qquad
 #    k(\boldsymbol{x}, \boldsymbol{y}) = x_1^2 y_1^2 + 2 x_1 x_2 y_1 y_2 + x_2^2 y_2^2 = \langle \boldsymbol{x}, \boldsymbol{y} \rangle^2
 
@@ -91,16 +89,12 @@
 # datapoint :math:`\boldsymbol{x}` onto the state
 
 # .. math::
-
-
 #    |\psi(\boldsymbol{x})\rangle = U(\boldsymbol{x}) |0 \rangle.
 
 # The kernel value is then given by the *overlap* of the associated
 # embedded quantum states
 
 # .. math::
-
-
 #    k(\boldsymbol{x}, \boldsymbol{y}) = | \langle\psi(\boldsymbol{x})|\psi(\boldsymbol{y})\rangle|^2.
 
 # A toy problem
@@ -312,8 +306,6 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # :math:`K_2`:
 
 # .. math::
-
-
 #    \operatorname{KA}(K_1, K_2) = \frac{\operatorname{Tr}(K_1 K_2)}{\sqrt{\operatorname{Tr}(K_1^2)\operatorname{Tr}(K_2^2)}}
 
 # Seen from a more theoretical side, this is nothing else than the cosine
@@ -329,8 +321,6 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # product of the respective labels as the kernel function
 
 # .. math::
-
-
 #    k_{\boldsymbol{y}}(\boldsymbol{x}_i, \boldsymbol{x}_j) = y_i y_j
 
 # The assigned kernel is thus :math:`+1` if both datapoints lie in the
@@ -341,8 +331,6 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # quantum kernel and :math:`\boldsymbol{y}\boldsymbol{y}^T`:
 
 # .. math::
-
-
 #        \operatorname{KTA}_{\boldsymbol{y}}(K) 
 #        = \frac{\operatorname{Tr}(K \boldsymbol{y}\boldsymbol{y}^T)}{\sqrt{\operatorname{Tr}(K^2)\operatorname{Tr}((\boldsymbol{y}\boldsymbol{y}^T)^2)}} 
 #        = \frac{\boldsymbol{y}^T K \boldsymbol{y}}{\sqrt{\operatorname{Tr}(K^2)} N}
