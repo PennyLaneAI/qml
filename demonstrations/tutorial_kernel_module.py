@@ -1,101 +1,102 @@
-# Quantum Embedding Kernels with PennyLane’s kernels module
-# =========================================================
+r"""Quantum Embedding Kernels with PennyLane’s kernels module
+=========================================================
 
-# *Authors: Peter-Jan Derks, Paul Fährmann, Elies Gil-Fuster, Tom
-# Hubregtsen, Johannes Jakob Meyer and David Wierichs* *On Feb 26th 2021*
+*Authors: Peter-Jan Derks, Paul Fährmann, Elies Gil-Fuster, Tom
+Hubregtsen, Johannes Jakob Meyer and David Wierichs* *On Feb 26th 2021*
 
-# Kernel methods are one of the cornerstones of classical machine
-# learning. To understand what a kernel method does let’s first revisit
-# one of the simplest methods to assign binary labels to datapoints:
-# linear classification.
+Kernel methods are one of the cornerstones of classical machine
+learning. To understand what a kernel method does let’s first revisit
+one of the simplest methods to assign binary labels to datapoints:
+linear classification.
 
-# Imagine we want to discern two different classes of points that lie in
-# different corners of the plane. A linear classifier corresponds to
-# drawing a line and assigning different labels to the regions on opposing
-# sides of the line:
+Imagine we want to discern two different classes of points that lie in
+different corners of the plane. A linear classifier corresponds to
+drawing a line and assigning different labels to the regions on opposing
+sides of the line:
 
-#.. figure:: ../demonstrations/kernel_module/linear_classification.png
-#    :align: center
-#    :width: 40%
+.. figure:: ../demonstrations/kernel_module/linear_classification.png
+   :align: center
+   :width: 40%
 
-# We can mathematically formalize this by assigning the label :math:`y`
-# via
+We can mathematically formalize this by assigning the label :math:`y`
+via
 
-# .. math::
-#    y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \boldsymbol{x}\rangle + b).
+.. math::
+   y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \boldsymbol{x}\rangle + b).
 
-# The vector :math:`\boldsymbol{w}` points perpendicular to the line and
-# thus determine its slope. The independent term :math:`b` specificies the
-# position on the plane. In this form, linear classification can also be
-# extended to higher dimensional vectors :math:`\boldsymbol{x}`, where a
-# line does not divide the entire space into two regions anymore. Instead
-# one needs a *hyperplane*. It is immediately clear that this method is
-# not very powerful, as datasets that are not separable by a hyperplane
-# can’t be treated.
+The vector :math:`\boldsymbol{w}` points perpendicular to the line and
+thus determine its slope. The independent term :math:`b` specificies the
+position on the plane. In this form, linear classification can also be
+extended to higher dimensional vectors :math:`\boldsymbol{x}`, where a
+line does not divide the entire space into two regions anymore. Instead
+one needs a *hyperplane*. It is immediately clear that this method is
+not very powerful, as datasets that are not separable by a hyperplane
+can’t be treated.
 
-# We can actually sneak around this limitation by performing a neat trick:
-# if we define some map :math:`\phi(\boldsymbol{x})` that *embeds* our
-# datapoints into a larger *feature space* and then perform linear
-# classification there, we could actually realise non-linear
-# classification in our original space!
+We can actually sneak around this limitation by performing a neat trick:
+if we define some map :math:`\phi(\boldsymbol{x})` that *embeds* our
+datapoints into a larger *feature space* and then perform linear
+classification there, we could actually realise non-linear
+classification in our original space!
 
-#.. figure:: ../demonstrations/kernel_module/embedding_nonlinear_classification.png
-#    :align: center
-#    :width: 40%
+.. figure:: ../demonstrations/kernel_module/embedding_nonlinear_classification.png
+   :align: center
+   :width: 40%
 
-# If we go back to the expression for our prediction and include the
-# embedding, we get
+If we go back to the expression for our prediction and include the
+embedding, we get
 
-# .. math::
-#    y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \phi(\boldsymbol{x})\rangle + b).
+.. math::
+   y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \phi(\boldsymbol{x})\rangle + b).
 
-# We will forgo one tiny step, but it can be shown that for the purposes
-# of optimal classification, we can choose the vector defining the
-# decision boundary as a linear combination of the embedded datapoints
-# :math:`\boldsymbol{w} = \sum_i \alpha_i \phi(\boldsymbol{x}_i)`. Putting
-# this into the formula yields
+We will forgo one tiny step, but it can be shown that for the purposes
+of optimal classification, we can choose the vector defining the
+decision boundary as a linear combination of the embedded datapoints
+:math:`\boldsymbol{w} = \sum_i \alpha_i \phi(\boldsymbol{x}_i)`. Putting
+this into the formula yields
 
-# .. math::
-#    y(\boldsymbol{x}) = \operatorname{sgn}\left(\sum_i \alpha_i \langle \phi(\boldsymbol{x}_i), \phi(\boldsymbol{x})\rangle + b\right).
+.. math::
+   y(\boldsymbol{x}) = \operatorname{sgn}\left(\sum_i \alpha_i \langle \phi(\boldsymbol{x}_i), \phi(\boldsymbol{x})\rangle + b\right).
 
-# This rewriting might not seem useful at first, but notice the above
-# formula only contains inner products between vectors in the embedding
-# space:
+This rewriting might not seem useful at first, but notice the above
+formula only contains inner products between vectors in the embedding
+space:
 
-# .. math::
-#    k(\boldsymbol{x}, \boldsymbol{y}) = \langle \phi(\boldsymbol{x}), \phi(\boldsymbol{y})\rangle.
+.. math::
+   k(\boldsymbol{x}, \boldsymbol{y}) = \langle \phi(\boldsymbol{x}), \phi(\boldsymbol{y})\rangle.
 
-# We call this function the *kernel*. The clue now is that we can often
-# find an explicit formula for the kernel :math:`k` that makes it
-# superfluous to actually perform the embedding :math:`\phi`. Consider for
-# example the following embedding and the associated kernel:
+We call this function the *kernel*. The clue now is that we can often
+find an explicit formula for the kernel :math:`k` that makes it
+superfluous to actually perform the embedding :math:`\phi`. Consider for
+example the following embedding and the associated kernel:
 
-# .. math::
-#    \phi((x_1, x_2)) = (x_1^2, \sqrt{2} x_1 x_2, x_2^2) \qquad
-#    k(\boldsymbol{x}, \boldsymbol{y}) = x_1^2 y_1^2 + 2 x_1 x_2 y_1 y_2 + x_2^2 y_2^2 = \langle \boldsymbol{x}, \boldsymbol{y} \rangle^2
+.. math::
+   \phi((x_1, x_2)) = (x_1^2, \sqrt{2} x_1 x_2, x_2^2) \qquad
+   k(\boldsymbol{x}, \boldsymbol{y}) = x_1^2 y_1^2 + 2 x_1 x_2 y_1 y_2 + x_2^2 y_2^2 = \langle \boldsymbol{x}, \boldsymbol{y} \rangle^2
 
-# This means by just replacing the regular scalar product in our linear
-# classification with the map :math:`k`, we can actually express much more
-# intricate decision boundaries!
+This means by just replacing the regular scalar product in our linear
+classification with the map :math:`k`, we can actually express much more
+intricate decision boundaries!
 
-# This is very important, because in many interesting cases the embedding
-# will be much more costlier to compute than the kernel.
+This is very important, because in many interesting cases the embedding
+will be much more costlier to compute than the kernel.
 
-# In this demonstration, we will explore one particular kind of kernel
-# that can be realized on near-term quantum computers, namely *Quantum
-# Embedding Kernels (QEKs)*. These are kernels that arise from embedding
-# data into the space of quantum states. We formalize this by considering
-# a parameterised quantum circuit :math:`U(\boldsymbol{x})` that embeds
-# datapoint :math:`\boldsymbol{x}` onto the state
+In this demonstration, we will explore one particular kind of kernel
+that can be realized on near-term quantum computers, namely *Quantum
+Embedding Kernels (QEKs)*. These are kernels that arise from embedding
+data into the space of quantum states. We formalize this by considering
+a parameterised quantum circuit :math:`U(\boldsymbol{x})` that embeds
+datapoint :math:`\boldsymbol{x}` onto the state
 
-# .. math::
-#    |\psi(\boldsymbol{x})\rangle = U(\boldsymbol{x}) |0 \rangle.
+.. math::
+   |\psi(\boldsymbol{x})\rangle = U(\boldsymbol{x}) |0 \rangle.
 
-# The kernel value is then given by the *overlap* of the associated
-# embedded quantum states
+The kernel value is then given by the *overlap* of the associated
+embedded quantum states
 
-# .. math::
-#    k(\boldsymbol{x}, \boldsymbol{y}) = | \langle\psi(\boldsymbol{x})|\psi(\boldsymbol{y})\rangle|^2.
+.. math::
+   k(\boldsymbol{x}, \boldsymbol{y}) = | \langle\psi(\boldsymbol{x})|\psi(\boldsymbol{y})\rangle|^2.
+"""
 
 # A toy problem
 # -------------
