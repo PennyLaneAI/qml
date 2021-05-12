@@ -5,9 +5,11 @@ Quantum transfer learning
 =========================
 
 .. meta::
-    :property="og:description": In this demonstration, transfer learning is applied
-        to a hybrid quantum-classical image classifier using PyTorch and PennyLane.
+    :property="og:description": Combine PyTorch and PennyLane to train a hybrid quantum-classical image
+        classifier using transfer learning.
     :property="og:image": https://pennylane.ai/qml/_images/transfer_images.png
+
+*Author: PennyLane dev team. Last updated: 28 Jan 2021.*
 
 In this tutorial we apply a machine learning method, known as *transfer learning*, to an
 image classifier based on a hybrid classical-quantum network.
@@ -134,6 +136,9 @@ from torchvision import datasets, transforms
 import pennylane as qml
 from pennylane import numpy as np
 
+torch.manual_seed(42)
+np.random.seed(42)
+
 # Plotting
 import matplotlib.pyplot as plt
 
@@ -157,7 +162,6 @@ num_epochs = 1              # Number of training epochs
 q_depth = 6                 # Depth of the quantum circuit (number of variational layers)
 gamma_lr_scheduler = 0.1    # Learning rate reduction applied every 10 epochs.
 q_delta = 0.01              # Initial spread of random quantum weights
-rng_seed = 3                # Seed for random number generator
 start_time = time.time()    # Start of the computation timer
 
 ##############################################################################
@@ -209,7 +213,9 @@ data_transforms = {
 
 data_dir = "../_data/hymenoptera_data"
 image_datasets = {
-    x if x == "train" else "validation": datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
+    x if x == "train" else "validation": datasets.ImageFolder(
+        os.path.join(data_dir, x), data_transforms[x]
+    )
     for x in ["train", "val"]
 }
 dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "validation"]}
@@ -246,10 +252,6 @@ out = torchvision.utils.make_grid(inputs)
 
 imshow(out, title=[class_names[x] for x in classes])
 
-# In order to get reproducible results, we set a manual seed for the
-# random number generator and re-initialize the dataloaders.
-
-torch.manual_seed(rng_seed)
 dataloaders = {
     x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True)
     for x in ["train", "validation"]
@@ -436,7 +438,9 @@ optimizer_hybrid = optim.Adam(model_hybrid.fc.parameters(), lr=step)
 # every 10 epochs.
 
 
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler)
+exp_lr_scheduler = lr_scheduler.StepLR(
+    optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler
+)
 
 ##############################################################################
 # What follows is a training function that will be called later.
@@ -534,7 +538,9 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
     # Print final results
     model.load_state_dict(best_model_wts)
     time_elapsed = time.time() - since
-    print("Training completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60))
+    print(
+        "Training completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60)
+    )
     print("Best test loss: {:.4f} | Best test accuracy: {:.4f}".format(best_loss, best_acc))
     return model
 

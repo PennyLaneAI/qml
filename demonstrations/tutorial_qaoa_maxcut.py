@@ -5,8 +5,13 @@ QAOA for MaxCut
 ===============
 
 .. meta::
-    :property="og:description": Perform the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.
+    :property="og:description": Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.
     :property="og:image": https://pennylane.ai/qml/_images/qaoa_maxcut_partition.png
+
+.. related::
+   tutorial_qaoa_intro Intro to QAOA
+
+*Author: PennyLane dev team. Last updated: 13 April 2021.*
 
 """
 ##############################################################################
@@ -138,6 +143,7 @@ QAOA for MaxCut
 import pennylane as qml
 from pennylane import numpy as np
 
+np.random.seed(42)
 
 ##############################################################################
 # Operators
@@ -186,7 +192,7 @@ def comp_basis_measurement(wires):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("default.qubit", wires=n_wires, analytic=True, shots=1)
+dev = qml.device("default.qubit", wires=n_wires, shots=1)
 
 ##############################################################################
 # We also require a quantum node which will apply the operators according to the
@@ -198,7 +204,7 @@ dev = qml.device("default.qubit", wires=n_wires, analytic=True, shots=1)
 # (repeated applications of :math:`U_BU_C`) using the keyword ``n_layers``.
 
 pauli_z = [[1, 0], [0, -1]]
-pauli_z_2 = np.kron(pauli_z, pauli_z)
+pauli_z_2 = np.kron(pauli_z, pauli_z, requires_grad=False)
 
 
 @qml.qnode(dev)
@@ -236,7 +242,7 @@ def qaoa_maxcut(n_layers=1):
     print("\np={:d}".format(n_layers))
 
     # initialize the parameters near zero
-    init_params = 0.01 * np.random.rand(2, 2)
+    init_params = 0.01 * np.random.rand(2, n_layers)
 
     # minimize the negative of the objective function
     def objective(params):

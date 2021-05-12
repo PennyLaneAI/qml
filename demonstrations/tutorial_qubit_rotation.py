@@ -9,6 +9,14 @@ Basic tutorial: qubit rotation
         of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
     :property="og:image": https://pennylane.ai/qml/_images/bloch.png
 
+.. related::
+
+   tutorial_plugins_hybrid Plugins and Hybrid computation
+   tutorial_gaussian_transformation Gaussian transformation
+   tutorial_state_preparation Training a quantum circuit with PyTorch
+
+*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+
 To see how PennyLane allows the easy construction and optimization of quantum functions, let's
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
 example.
@@ -109,7 +117,7 @@ from pennylane import numpy as np
 # .. admonition:: Definition
 #     :class: defn
 #
-#     Any computational object that can apply quantum operations, and return an measurement value
+#     Any computational object that can apply quantum operations and return a measurement value
 #     is called a quantum **device**.
 #
 #     In PennyLane, a device could be a hardware device (such as the IBM QX4, via the
@@ -178,8 +186,8 @@ def circuit(params):
 # For a Python function to also be a valid quantum function, there are some
 # important restrictions:
 #
-# * **Quantum functions must only contain quantum operations, one operation per
-#   line, in the order in which they are to be applied.**
+# * **Quantum functions must contain quantum operations, one operation per line,
+#   in the order in which they are to be applied.**
 #
 #   In addition, we must always specify the subsystem the operation applies to,
 #   by passing the ``wires`` argument; this may be a list or an integer, depending
@@ -194,8 +202,6 @@ def circuit(params):
 #
 #   For a full list of observables, see :doc:`the documentation <introduction/operations>`.
 #   The documentation also provides details on supported :doc:`measurement return types <introduction/measurements>`.
-#
-# * **Quantum functions must not contain any classical processing of circuit parameters.**
 #
 # .. note::
 #

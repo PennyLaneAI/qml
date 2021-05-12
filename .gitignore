@@ -8,3 +8,5 @@ demonstrations/pyscf/*
 demonstrations/structure.xyz
 _data/*
 backreferences
+.DS_Store
+demos_community.rst

@@ -9,6 +9,8 @@ Quantum Generative Adversarial Networks with Cirq + TensorFlow
         Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.
     :property="og:image": https://pennylane.ai/qml/_images/qgan3.png
 
+*Author: PennyLane dev team. Last updated: 15 Jan 2021.*
+
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
 (2018) <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.121.040502>`__,
@@ -34,7 +36,7 @@ training signal for the generator to improve its fake generated data.
 
 ##############################################################################
 # Using Cirq + TensorFlow
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------
 # PennyLane allows us to mix and match quantum devices and classical machine
 # learning software. For this demo, we will link together
 # Google's `Cirq <https://cirq.readthedocs.io/en/stable/>`_ and `TensorFlow <https://www.tensorflow.org/>`_ libraries.
@@ -54,10 +56,10 @@ dev = qml.device('cirq.simulator', wires=3)
 
 ##############################################################################
 # Generator and Discriminator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------
 #
 # In classical GANs, the starting point is to draw samples either from
-# some “real data” distribution, or from the generator, and feed them to
+# some "real data" distribution, or from the generator, and feed them to
 # the discriminator. In this QGAN example, we will use a quantum circuit
 # to generate the real data.
 #
@@ -129,7 +131,7 @@ def gen_disc_circuit(gen_weights, disc_weights):
 
 ##############################################################################
 # QGAN cost functions
-# ~~~~~~~~~~~~~~~~~~~
+# -------------------
 #
 # There are two cost functions of interest, corresponding to the two
 # stages of QGAN training. These cost functions are built from two pieces:
@@ -142,8 +144,17 @@ def gen_disc_circuit(gen_weights, disc_weights):
 # correctly classifying real data, while minimizing the probability of
 # mistakenly classifying fake data.
 #
+# .. math:: 
+# 
+#     Cost_D = \mathrm{Pr}(real|\mathrm{fake}) - \mathrm{Pr}(real|\mathrm{real})
+#
 # The generator is trained to maximize the probability that the
 # discriminator accepts fake data as real.
+#
+# .. math:: 
+# 
+#     Cost_G = - \mathrm{Pr}(real|\mathrm{fake})
+#
 
 def prob_real_true(disc_weights):
     true_disc_output = real_disc_circuit(phi, theta, omega, disc_weights)
@@ -170,9 +181,9 @@ def gen_cost(gen_weights):
 
 ##############################################################################
 # Training the QGAN
-# ~~~~~~~~~~~~~~~~~
+# -----------------
 #
-# We initialize the fixed angles of the “real data” circuit, as well as
+# We initialize the fixed angles of the "real data" circuit, as well as
 # the initial parameters for both generator and discriminator. These are
 # chosen so that the generator initially prepares a state on wire 0 that
 # is very close to the :math:`\left| 1 \right\rangle` state.

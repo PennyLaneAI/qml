@@ -1,13 +1,20 @@
 r"""
 .. _data_reuploading_classifier:
 
-Data-reuploading classifer
-==========================
-*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com)*
+Data-reuploading classifier
+===========================
 
 .. meta::
    :property="og:description": Implement a single-qubit universal quantum classifier using PennyLane.
    :property="og:image": https://pennylane.ai/qml/_images/universal_dnn1.png
+
+.. related::
+
+   tutorial_variational_classifier Variational quantum classifier
+   tutorial_multiclass_classification Multiclass margin classifier
+   tutorial_expressivity_fourier_series Quantum models as Fourier series
+
+*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com). Last updated: 19 Jan 2021.*
 
 A single-qubit quantum circuit which can implement arbitrary unitary
 operations can be used as a universal classifier much like a single
@@ -30,7 +37,7 @@ single-qubit variational quantum circuit to achieve this goal. The data
 is generated as a set of random points in a plane :math:`(x_1, x_2)` and
 labeled as 1 (blue) or 0 (red) depending on whether they lie inside or
 outside a circle. The goal is to train a quantum circuit to predict the
-label (red or blue) given an input point’s coordinate.
+label (red or blue) given an input point's coordinate.
 
 .. figure:: ../demonstrations/data_reuploading/universal_circles.png
    :scale: 65%
@@ -45,7 +52,7 @@ vector and can be visualized as a point in the so-called Bloch sphere.
 Instead of just being a 0 (up) or 1 (down), it can exist in a
 superposition with say 30% chance of being in the :math:`|0 \rangle` and
 70% chance of being in the :math:`|1 \rangle` state. This is represented
-by a state vector :math:`|\psi \rangle = 0.3|0 \rangle + 0.7|1 \rangle` -
+by a state vector :math:`|\psi \rangle = \sqrt{0.3}|0 \rangle + \sqrt{0.7}|1 \rangle` -
 the probability "amplitude" of the quantum state. In general we can take
 a vector :math:`(\alpha, \beta)` to represent the probabilities of a qubit
 being in a particular state and visualize it on the Bloch sphere as an
@@ -108,7 +115,7 @@ which can be encoded as fixed vectors (Blue = :math:`[1, 0]`, Red =
 after transforming our input state through alternate applications of
 data layer and weights.
 
-We can use the idea of the “collapse” of our quantum state into
+We can use the idea of the "collapse" of our quantum state into
 one or other class. This happens when we measure the quantum state which
 leads to its projection as either the state 0 or 1. We can compute the
 fidelity (or closeness) of the output state to the class label making
@@ -140,7 +147,7 @@ the circuit and how noise might affect it. Or, we can use some
 gradient-free method such as L-BFGS (Liu, Dong C., and Nocedal, J., 1989)
 to evaluate the gradient and find the optimal weights where we can
 treat the quantum circuit as a black-box and the gradients are computed
-numerically using a fixed number of function evalutaions and iterations.
+numerically using a fixed number of function evaluations and iterations.
 The L-BFGS method can be used with the PyTorch interface for Pennylane.
 
 Multiple qubits, entanglement and Deep Neural Networks
@@ -153,7 +160,7 @@ Deep Neural Networks.
 
 Pérez-Salinas et al. (2019) make a connection to Deep Neural Networks by
 describing that in their approach the
-“layers” :math:`L_i(\vec \theta_i, \vec x )` are analogous to the size
+"layers" :math:`L_i(\vec \theta_i, \vec x )` are analogous to the size
 of the intermediate hidden layer of a neural network. And the concept of
 deep (multiple layers of the neural network) relates to the number
 of qubits. So, multiple qubits with entanglement between them could
@@ -202,7 +209,7 @@ def circle(samples, center=[0.0, 0.0], radius=np.sqrt(2 / np.pi)):
             y = 1
         Xvals.append(x)
         yvals.append(y)
-    return np.array(Xvals), np.array(yvals)
+    return np.array(Xvals, requires_grad=False), np.array(yvals, requires_grad=False)
 
 
 def plot_data(x, y, fig=None, ax=None):
@@ -256,7 +263,7 @@ dev = qml.device("default.qubit", wires=1)
 
 
 @qml.qnode(dev)
-def qcircuit(params, x=None, y=None):
+def qcircuit(params, x, y):
     """A variational quantum circuit representing the Universal classifier.
 
     Args:
@@ -289,7 +296,7 @@ def cost(params, x, y, state_labels=None):
     loss = 0.0
     dm_labels = [density_matrix(s) for s in state_labels]
     for i in range(len(x)):
-        f = qcircuit(params, x=x[i], y=dm_labels[y[i]])
+        f = qcircuit(params, x[i], dm_labels[y[i]])
         loss = loss + (1 - f) ** 2
     return loss / len(x)
 
@@ -318,7 +325,7 @@ def test(params, x, y, state_labels=None):
     predicted = []
 
     for i in range(len(x)):
-        fidel_function = lambda y: qcircuit(params, x=x[i], y=y)
+        fidel_function = lambda y: qcircuit(params, x[i], y)
         fidelities = [fidel_function(dm) for dm in dm_labels]
         best_fidel = np.argmax(fidelities)
 
@@ -443,14 +450,15 @@ plot_data(X_test, y_test, fig, axes[2])
 axes[0].set_title("Predictions with random weights")
 axes[1].set_title("Predictions after training")
 axes[2].set_title("True test data")
+plt.tight_layout()
 plt.show()
 
 
 ##############################################################################
 # References
 # ----------
-# [1] Pérez-Salinas, Adrián, et al. “Data re-uploading for a universal
-# quantum classifier.” arXiv preprint arXiv:1907.02085 (2019).
+# [1] Pérez-Salinas, Adrián, et al. "Data re-uploading for a universal
+# quantum classifier." arXiv preprint arXiv:1907.02085 (2019).
 #
 # [2] Kingma, Diederik P., and Ba, J. "Adam: A method for stochastic
 # optimization." arXiv preprint arXiv:1412.6980 (2014).

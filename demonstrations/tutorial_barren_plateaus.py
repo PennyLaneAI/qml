@@ -3,11 +3,17 @@ r"""
 
 Barren plateaus in quantum neural networks
 ==========================================
-*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com)*
 
 .. meta::
-   :property="og:description": In this tutorial, we will show how randomized quantum circuits face the problem of barren plateaus using PennyLane. We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.
+   :property="og:description": Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane.
+       We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.
    :property="og:image": https://pennylane.ai/qml/_images/surface.png
+
+.. related::
+
+   tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
+
+*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com). Last updated: 26 Oct 2020.*
 
 In classical optimization, it is suggested that saddle
 points, not local minima, provide a fundamental impediment
@@ -132,9 +138,14 @@ for i in range(num_samples):
     gradient = grad(params, random_gate_sequence=gate_sequence, num_qubits=num_qubits)
     grad_vals.append(gradient[-1])
 
-print("Variance of the gradients for {} random circuits: {}".format(num_samples, np.var(grad_vals)))
-print("Mean of the gradients for {} random circuits: {}".format(num_samples, np.mean(grad_vals)))
-
+print("Variance of the gradients for {} random circuits: {}".format(
+    num_samples, np.var(grad_vals)
+    )
+)
+print("Mean of the gradients for {} random circuits: {}".format(
+    num_samples, np.mean(grad_vals)
+    )
+)
 
 ##############################################################################
 # Evaluate the gradient for more qubits
@@ -157,7 +168,9 @@ for num_qubits in qubits:
         random_gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
 
         params = np.random.uniform(0, np.pi, size=num_qubits)
-        gradient = grad(params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits)
+        gradient = grad(
+            params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits
+        )
         grad_vals.append(gradient[-1])
     variances.append(np.var(grad_vals))
 

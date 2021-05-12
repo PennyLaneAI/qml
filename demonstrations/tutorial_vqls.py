@@ -3,12 +3,17 @@ r"""
 
 Variational Quantum Linear Solver
 ====================================
-*Author: Andrea Mari*
 
 .. meta::
-    :property="og:description": In this demonstration we implement the variational
+    :property="og:description": Implementing the variational
         quantum linear solver to solve a system of linear equation with a quantum device.
     :property="og:image": https://pennylane.ai/qml/_images/vqls_zoom.png
+
+.. related::
+
+    tutorial_coherent_vqls Coherent VQLS
+
+*Author: Andrea Mari. Last updated: 20 Jan 2021.*
 
 In this tutorial we implement a quantum algorithm known as the *variational quantum linear
 solver* (VQLS), originally introduced in
@@ -281,7 +286,8 @@ def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
     # First Hadamard gate applied to the ancillary qubit.
     qml.Hadamard(wires=ancilla_idx)
 
-    # For estimating the imaginary part of the coefficient "mu", we must add a "-i" phase gate.
+    # For estimating the imaginary part of the coefficient "mu", we must add a "-i"
+    # phase gate.
     if part == "Im" or part == "im":
         qml.PhaseShift(-np.pi / 2, wires=ancilla_idx)
 
@@ -353,7 +359,7 @@ def psi_norm(weights):
 
 
 def cost_loc(weights):
-    """Local version of the cost function, which tends to zero when A |x> is proportional to |b>."""
+    """Local version of the cost function. Tends to zero when A|x> is proportional to |b>."""
     mu_sum = 0.0
 
     for l in range(0, len(c)):
@@ -386,8 +392,7 @@ opt = qml.GradientDescentOptimizer(eta)
 
 cost_history = []
 for it in range(steps):
-    w = opt.step(cost_loc, w)
-    cost = cost_loc(w)
+    w, cost = opt.step_and_cost(cost_loc, w)
     print("Step {:3d}       Cost_L = {:9.7f}".format(it, cost))
     cost_history.append(cost)
 

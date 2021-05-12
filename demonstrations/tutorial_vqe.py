@@ -7,7 +7,15 @@ A brief overview of VQE
         variational quantum eigensolver algorithm in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
-The Variational Quantum Eigensolver (VQE) :ref:`[1, 2]<vqe_references>` is a flagship algorithm for
+.. related::
+
+   tutorial_vqe_parallel VQE with parallel QPUs
+   tutorial_vqe_qng Accelerating VQE with the QNG
+   tutorial_vqt Variational quantum thermalizer
+
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+
+The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
 prepare a wave function ansatz of the molecule and estimate the expectation value of its electronic
@@ -33,6 +41,7 @@ The first step is to import the required libraries and packages:
 """
 
 import pennylane as qml
+from pennylane import qchem
 from pennylane import numpy as np
 
 ##############################################################################
@@ -79,31 +88,28 @@ basis_set = 'sto-3g'
 ##############################################################################
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.generate_hamiltonian`. The first input to
-# the function is a string denoting the name of the molecule, which will determine the name given
-# to the saved files that are produced during the calculations:
-
-name = 'h2'
-
-##############################################################################
-# The geometry, charge, multiplicity, and basis set must also be specified as input. Finally,
-# the number of active electrons and active orbitals have to be indicated, as well as the
+# single line by calling the function :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# The charge, multiplicity, and basis set can also be specified as keyword arguments. Finally,
+# the number of active electrons and active orbitals may be indicated, as well as the
 # fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
-# (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
-# number of qubits needed to represent it:
+# (``bravyi_kitaev``). The atomic symbols and their nuclear coordinates can be read directly
+# from the geometry file. The outputs of the function are the qubit Hamiltonian of the molecule
+# and the number of qubits needed to represent it:
 
-h, nr_qubits = qml.qchem.generate_hamiltonian(
-    name,
-    geometry,
-    charge,
-    multiplicity,
-    basis_set,
-    n_active_electrons=2,
-    n_active_orbitals=2,
+symbols, coordinates = qchem.read_structure(geometry)
+
+h, qubits = qchem.molecular_hamiltonian(
+    symbols,
+    coordinates,
+    charge=charge,
+    mult=multiplicity,
+    basis=basis_set,
+    active_electrons=2,
+    active_orbitals=2,
     mapping='jordan_wigner'
 )
 
-print('Number of qubits = ', nr_qubits)
+print('Number of qubits = ', qubits)
 print('Hamiltonian is ', h)
 
 ##############################################################################
@@ -113,11 +119,11 @@ print('Hamiltonian is ', h)
 # Implementing the VQE algorithm
 # ------------------------------
 #
-# PennyLane contains the :class:`~.VQECost` class, specifically
+# PennyLane contains the :class:`~.ExpvalCost` class, specifically
 # built to implement the VQE algorithm. We begin by defining the device, in this case a simple
 # qubit simulator:
 
-dev = qml.device('default.qubit', wires=nr_qubits)
+dev = qml.device('default.qubit', wires=qubits)
 
 ##############################################################################
 # In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
@@ -140,9 +146,8 @@ dev = qml.device('default.qubit', wires=nr_qubits)
 ##############################################################################
 # In the circuit, we apply single-qubit rotations, followed by CNOT gates:
 
-
 def circuit(params, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=wires)
     for i in wires:
         qml.Rot(*params[i], wires=i)
     qml.CNOT(wires=[2, 3])
@@ -156,13 +161,13 @@ def circuit(params, wires):
 #     Hartree-Fock state of the hydrogen molecule described with a `minimal basis
 #     <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__.
 #
-# The cost function for optimizing the circuit can be created using the :class:`~.VQECost`
+# The cost function for optimizing the circuit can be created using the :class:`~.ExpvalCost`
 # class, which is tailored for VQE optimization. It requires specifying the
 # circuit, target Hamiltonian, and the device, and returns a cost function that can
 # be evaluated with the circuit parameters:
 
 
-cost_fn = qml.VQECost(circuit, h, dev)
+cost_fn = qml.ExpvalCost(circuit, h, dev)
 
 
 ##############################################################################
@@ -172,7 +177,7 @@ cost_fn = qml.VQECost(circuit, h, dev)
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 np.random.seed(0)
-params = np.random.normal(0, np.pi, (nr_qubits, 3))
+params = np.random.normal(0, np.pi, (qubits, 3))
 
 print(params)
 
@@ -184,26 +189,25 @@ print(params)
 max_iterations = 200
 conv_tol = 1e-06
 
-prev_energy = cost_fn(params)
+
 for n in range(max_iterations):
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
     if n % 20 == 0:
-        print('Iteration = {:},  Ground-state energy = {:.8f} Ha,  Convergence parameter = {'
-              ':.8f} Ha'.format(n, energy, conv))
+        print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
 
     if conv <= conv_tol:
         break
 
-    prev_energy = energy
-
 print()
 print('Final convergence parameter = {:.8f} Ha'.format(conv))
 print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
-print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.
-        format(np.abs(energy - (-1.136189454088)), np.abs(energy - (-1.136189454088))*627.503))
+print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.format(
+    np.abs(energy - (-1.136189454088)), np.abs(energy - (-1.136189454088))*627.503
+    )
+)
 print()
 print('Final circuit parameters = \n', params)
 
@@ -222,10 +226,14 @@ print('Final circuit parameters = \n', params)
 # References
 # ----------
 #
-# 1. Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
-#    quantum processor". `Nature Communications 5, 4213 (2014).
-#    <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+# .. [#peruzzo2014]
 #
-# 2. Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
-#    `Chem. Rev. 2019, 119, 19, 10856-10915.
-#    <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+#     quantum processor". `Nature Communications 5, 4213 (2014).
+#     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+# .. [#yudong2019]
+#
+#     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     `Chem. Rev. 2019, 119, 19, 10856-10915.
+#     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__

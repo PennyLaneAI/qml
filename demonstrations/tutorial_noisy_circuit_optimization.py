@@ -6,6 +6,12 @@ Optimizing noisy circuits with Cirq
     :property="og:description": Learn how noise can affect the optimization and training of quantum computations.
     :property="og:image": https://pennylane.ai/qml/_images/noisy_circuit_optimization_thumbnail.png
 
+.. related::
+
+   pytorch_noise PyTorch and noisy devices
+
+*Author: PennyLane dev team. Posted: 1 June 2020.  Last updated: 26 Jan 2021.*
+
 .. figure:: ../demonstrations/noisy_circuit_optimization/noisy_qubit.png
     :align: center
     :width: 90%
@@ -320,10 +326,10 @@ for i in range(steps):
     noisy_circuit_params = opt.step(noisy_cost, noisy_circuit_params)
 
     if (i + 1) % 5 == 0:
-        print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}"
-              .format(i + 1, 
-                      cost(params), 
-                      noisy_cost(noisy_circuit_params)))
+        print("Step {:5d}. Cost: {: .7f}; Noisy Cost: {: .7f}".
+              format(i + 1,
+                     cost(params),
+                     noisy_cost(noisy_circuit_params)))
 
 print("\nOptimized rotation angles (noise-free case):")
 print("({: .7f}, {: .7f})".format(*params))
@@ -469,7 +475,7 @@ plt.show()
 # of the noisy channel! 
 #
 # In this example, the influence of the channel is to 
-# attenuate the maximal amplitude that the qubit state can acheive 
+# attenuate the maximal amplitude that the qubit state can achieve 
 # (:math:`\approx 0.4`). But even though the qubit's amplitude is attenuated,
 # the gradient computed by the parameter-shift rule still "points in the
 # right direction". 

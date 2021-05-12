@@ -4,9 +4,15 @@ VQE with parallel QPUs on Rigetti Forest
 ========================================
 
 .. meta::
-    :property="og:description": This demonstration showcases how parallel QPUs can
+    :property="og:description": Using parallel QPUs to
         speed up the calculation of the potential energy surface of molecular Hamiltonian.
     :property="og:image": https://pennylane.ai/qml/_images/vqe_diagram.png
+
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
+
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
@@ -24,6 +30,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pennylane import numpy as np
 import pennylane as qml
 from pennylane import qchem
 
@@ -45,7 +52,7 @@ from pennylane import qchem
 # the bond length between the hydrogen atoms.
 #
 # Each inter-atomic distance results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.generate_hamiltonian` function of the
+# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function of the
 # :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
 # :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
@@ -71,18 +78,16 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 
 ##############################################################################
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
+# We do this by first reading the molecular geometry from the external file using the
+# :func:`~.pennylane_qchem.qchem.read_structure` function and passing the atomic symbols
+# and coordinates to :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+
 
 hamiltonians = []
 
 for separation, file in data.items():
-    h, nr_qubits = qchem.generate_hamiltonian(
-        mol_name=str(separation),
-        mol_geo_file=file,
-        mol_charge=0,
-        multiplicity=1,
-        basis_set="sto-3g",
-    )
-
+    symbols, coordinates = qchem.read_structure(file)
+    h = qchem.molecular_hamiltonian(symbols, coordinates, name=str(separation))[0]
     hamiltonians.append(h)
 
 ##############################################################################
@@ -155,7 +160,7 @@ devs = dev1 + dev2
 
 
 def circuit(param, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=[0, 1, 2, 3])
     qml.RY(param, wires=2)
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
@@ -174,15 +179,15 @@ params = np.load("vqe_parallel/RY_params.npy")
 
 ##############################################################################
 # Finally, the energies as functions of rotation angle can be given using
-# :class:`~.pennylane.VQECost`.
+# :class:`~.pennylane.ExpvalCost`.
 
-energies = [qml.VQECost(circuit, h, devs) for h in hamiltonians]
+energies = [qml.ExpvalCost(circuit, h, devs) for h in hamiltonians]
 
 ##############################################################################
 # Calculating the potential energy surface
 # ----------------------------------------
 #
-# :class:`~.pennylane.VQECost` returns a :class:`~.pennylane.QNodeCollection` which can be
+# :class:`~.pennylane.ExpvalCost` returns a :class:`~.pennylane.QNodeCollection` which can be
 # evaluated using the input parameters to the ansatz circuit. The
 # :class:`~.pennylane.QNodeCollection` can be evaluated asynchronously by passing the keyword
 # argument ``parallel=True``. When ``parallel=False`` (the default behaviour), the QNodes are

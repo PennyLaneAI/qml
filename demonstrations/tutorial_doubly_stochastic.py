@@ -3,10 +3,17 @@ Doubly stochastic gradient descent
 ==================================
 
 .. meta::
-    :property="og:description": In this demonstration, doubly stochastic gradient
-        descent is used to minimize a Hamiltonian via an adapative shot optimization
-        stratgy.
+    :property="og:description": Minimize a Hamiltonian via an adaptive shot optimization
+        strategy with doubly stochastic gradient descent.
     :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
+
+.. related::
+
+   tutorial_backprop Quantum gradients with backprop
+   tutorial_quantum_natural_gradient Quantum natural gradient
+   tutorial_rosalin Frugal shot optimization with Rosalin
+
+*Author: PennyLane dev team. Posted: 16 Oct 2019. Last updated: 20 Jan 2021.*
 
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
@@ -126,14 +133,14 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
-dev_analytic = qml.device("default.qubit", wires=num_wires, analytic=True)
-dev_stochastic = qml.device("default.qubit", wires=num_wires, analytic=False)
+dev_analytic = qml.device("default.qubit", wires=num_wires, shots=None)
+dev_stochastic = qml.device("default.qubit", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
 # the expectation value of the matrix :math:`H`:
 
-H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]])
+H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]], requires_grad=False)
 
 
 def circuit(params):
@@ -217,8 +224,13 @@ plt.show()
 # evaluate the analytic quantum device:
 
 print("Vanilla gradient descent min energy = ", qnode_analytic(params_GD))
-print("Stochastic gradient descent (shots=100) min energy = ", qnode_analytic(params_SGD100))
-print("Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(params_SGD1))
+print(
+    "Stochastic gradient descent (shots=100) min energy = ",
+    qnode_analytic(params_SGD100),
+)
+print(
+    "Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(params_SGD1)
+)
 
 
 ##############################################################################
@@ -271,7 +283,13 @@ Y = np.array([[0, -1j], [1j, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
 terms = np.array(
-    [2 * np.kron(I, X), 4 * np.kron(I, Z), -np.kron(X, X), 5 * np.kron(Y, Y), 2 * np.kron(Z, X)]
+    [
+        2 * np.kron(I, X),
+        4 * np.kron(I, Z),
+        -np.kron(X, X),
+        5 * np.kron(Y, Y),
+        2 * np.kron(Z, X),
+    ], requires_grad=False
 )
 
 

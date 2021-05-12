@@ -15,6 +15,9 @@
 import os
 import sys
 import warnings
+import numpy as np
+from jinja2 import FileSystemLoader, Environment
+import yaml
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -90,9 +93,17 @@ warnings.filterwarnings(
     "ignore", category=UserWarning, message=r"Matplotlib is currently using agg"
 )
 warnings.filterwarnings(
+    "ignore", category=UserWarning, message=r"Timestamps in IBMQ backend"
+)
+warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
-    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+",
+    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
+)
+warnings.filterwarnings(
+    "ignore",
+    category=np.VisibleDeprecationWarning,
+    message=r"Creating an ndarray from ragged"
 )
 
 # Add any paths that contain templates here, relative to this directory.
@@ -185,15 +196,36 @@ html_sidebars = {"**": ["logo-text.html", "searchbox.html", "localtoc.html"]}
 # Output file base name for HTML help builder.
 htmlhelp_basename = "QMLdoc"
 
+# -- Compile community demos -------------------------------------------------
+
+with open("demos_community.yaml", "r") as f:
+    card_data = yaml.safe_load(f)
+
+left_cards = card_data[::2]
+right_cards = card_data[1::2]
+
+if len(left_cards) > len(right_cards):
+    right_cards.append({})
+
+card_pairs = list(zip(left_cards, right_cards))
+
+loader = FileSystemLoader(".")
+env = Environment(loader=loader)
+template = env.get_template("demos_community.rst.template")
+
+with open("demos_community.rst", 'w') as f:
+    f.write(template.render(card_pairs=card_pairs))
 
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://pennylane.readthedocs.io/en/stable/": None}
 
-from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective
+from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective
 
 def setup(app):
     app.add_directive("customgalleryitem", CustomGalleryItemDirective)
     app.add_directive("youtube", YoutubeItemDirective)
+    app.add_directive("community-card", CommunityCardDirective)
+    app.add_directive("related", RelatedDirective)
     app.add_stylesheet("xanadu_gallery.css")

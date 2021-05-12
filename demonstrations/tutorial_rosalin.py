@@ -3,8 +3,18 @@ Frugal shot optimization with Rosalin
 =====================================
 
 .. meta::
-    :property="og:description": The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the number of times a quantum computer is accessed.
+    :property="og:description": The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the
+         number of times a quantum computer is accessed.
     :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_rosalin_002.png
+
+.. related::
+
+   tutorial_vqe Variational quantum eigensolver
+   tutorial_quantum_natural_gradient Quantum natural gradient
+   tutorial_doubly_stochastic Doubly stochastic gradient descent
+   tutorial_rotoselect Quantum circuit structure learning
+
+*Author: PennyLane dev team. Posted: 19 May 2020. Last updated: 13 April 2021.*
 
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
@@ -14,6 +24,11 @@ algorithms, by both:
 
 * Frugally adapting the number of shots used per parameter update, and
 * Performing a weighted sampling of operators from the cost Hamiltonian.
+
+.. note::
+
+    The Rosalin optimizer is available in PennyLane via the
+    :class:`~.pennylane.ShotAdaptiveOptimizer`.
 
 Background
 ----------
@@ -95,13 +110,13 @@ To see this strategy in action, consider the Hamiltonian
 
 We can solve for the ground state energy using the variational quantum eigensolver (VQE) algorithm.
 
-First, lets import NumPy and PennyLane, and define our Hamiltonian.
+First, let's import NumPy and PennyLane, and define our Hamiltonian.
 """
 import numpy as np
 import pennylane as qml
 
 # set the random seed
-np.random.seed(2)
+np.random.seed(4)
 
 coeffs = [2, 4, -1, 5, 2]
 
@@ -127,17 +142,17 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=False)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, analytic=True)
+analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
 # We use :func:`~.pennylane.map` to map our ansatz over our list of observables,
 # returning a collection of QNodes, each one evaluating the expectation value
 # of each Hamiltonian.
 
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
+qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
 
 
 ##############################################################################
@@ -149,7 +164,7 @@ prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
 print(prob_shots)
 
 ##############################################################################
-# We can now use SciPy to create our multinormial distributed random variable
+# We can now use SciPy to create our multinomial distributed random variable
 # :math:`S`, using the number of trials (total shot number) and probability values:
 
 from scipy.stats import multinomial
@@ -187,12 +202,10 @@ def cost(params):
     result = 0
 
     for h, c, p, s in zip(qnodes, coeffs, prob_shots, shots_per_term):
-        # set the number of shots
-        h.device.shots = s
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * h(params)
+        result += c * h(params, shots=int(s))
 
     return result
 
@@ -216,8 +229,8 @@ cost_wrs = []
 shots_wrs = []
 
 for i in range(100):
-    params = opt.step(cost, params)
-    cost_wrs.append(cost(params))
+    params, _cost = opt.step_and_cost(cost, params)
+    cost_wrs.append(_cost)
     shots_wrs.append(total_shots*i)
     print("Step {}: cost = {} shots used = {}".format(i, cost_wrs[-1], shots_wrs[-1]))
 
@@ -226,7 +239,7 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
-non_analytic_dev.shots = total_shots / len(coeffs)
+non_analytic_dev.shots = int(total_shots / len(coeffs))
 
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
 cost = qml.dot(coeffs, qnodes)
@@ -238,8 +251,8 @@ cost_adam = []
 shots_adam = []
 
 for i in range(100):
-    params = opt.step(cost, params)
-    cost_adam.append(cost(params))
+    params, _cost = opt.step_and_cost(cost, params)
+    cost_adam.append(_cost)
     shots_adam.append(total_shots*i)
     print("Step {}: cost = {} shots used = {}".format(i, cost_adam[-1], shots_adam[-1]))
 
@@ -260,7 +273,7 @@ plt.show()
 ##############################################################################
 # We can see that weighted random sampling performs just as well as the uniform
 # deterministic sampling. However, weighted random sampling begins to show a
-# non-negligable improvement over deterministic sampling for large Hamiltonians
+# non-negligible improvement over deterministic sampling for large Hamiltonians
 # with highly non-uniform coefficients. For example, see Fig (3) and (4) of
 # Arrasmith et al. [#arrasmith2020]_, comparing weighted random sampling VQE optimization
 # for both :math:`\text{H}_2` and :math:`\text{LiH}` molecules.
@@ -430,12 +443,9 @@ class Rosalin:
             if s == 0:
                 continue
 
-            # set the QNode device shots
-            h.device.shots = s
-
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = h(params)
+            res = h(params, shots=int(s))
 
             if s == 1:
                 res = np.array([res])
@@ -462,7 +472,7 @@ class Rosalin:
         return g, s
 
     def step(self, params):
-        """Perform a single step of the Rosalin optimizater."""
+        """Perform a single step of the Rosalin optimizer."""
         # keep track of the number of shots run
         self.shots_used += int(2 * np.sum(self.s))
 
@@ -530,7 +540,7 @@ class Rosalin:
 # must be able to generate single-shot samples from our device.
 
 
-rosalin_device = qml.device("default.qubit", wires=num_wires, analytic=False)
+rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
 qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
 
 ##############################################################################
@@ -553,7 +563,7 @@ for i in range(60):
     params = opt.step(params)
     cost_rosalin.append(cost_analytic(params))
     shots_rosalin.append(opt.shots_used)
-    print("Step {}: cost = {} shots_used = {}".format(i, cost_rosalin[-1], shots_rosalin[-1]))
+    print(f"Step {i}: cost = {cost_rosalin[-1]}, shots_used = {shots_rosalin[-1]}")
 
 
 ##############################################################################
@@ -571,7 +581,10 @@ params = init_params
 opt = qml.AdamOptimizer(0.07)
 
 non_analytic_dev.shots = adam_shots_per_eval
-cost = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev))
+cost = qml.dot(
+  coeffs,
+  qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
+)
 
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]
@@ -592,6 +605,7 @@ plt.plot(shots_adam, cost_adam, "g", label="Adam")
 plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
+plt.xlim(0, 300000)
 plt.show()
 
 ##############################################################################
@@ -602,7 +616,7 @@ plt.show()
 # While beyond the scope of this demonstration, the Rosalin optimizer can be
 # modified in various other ways; for instance, by incorporating *weighted hybrid
 # sampling* (which distributes some shots deterministically, with the remainder
-# done randomly), or by adapating the variant iCANS2 optimizer. Download
+# done randomly), or by adapting the variant iCANS2 optimizer. Download
 # this demonstration from the sidebar 👉 and give it a go! ⚛️
 
 

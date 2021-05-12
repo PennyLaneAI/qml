@@ -5,8 +5,15 @@ Gaussian transformation
 =======================
 
 .. meta::
-    :property="og:description": Use quantum machine learning to tune a beamsplitter.
+    :property="og:description": Use quantum machine learning techniques to tune a beamsplitter.
     :property="og:image": https://pennylane.ai/qml/_images/gauss-circuit.png
+
+.. related:: 
+   tutorial_plugins_hybrid Plugins and Hybrid computation
+   quantum_neural_net Function fitting with a photonic quantum neural network
+   qonn Optimizing a quantum optical neural network
+
+*Author: PennyLane dev team. Last updated: 16 Oct 2020.*
 
 This tutorial demonstrates the basic working principles of PennyLane for
 continuous-variable (CV) photonic devices. For more details about photonic
