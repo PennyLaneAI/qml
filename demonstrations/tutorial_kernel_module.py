@@ -111,54 +111,83 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 np.random.seed(2658)
-
 # And we proceed right away to create the ``DoubleCake`` dataset.
 
+
 class DoubleCake:
-    def _make_circular_data(self): 
+    def _make_circular_data(self):
         """Generate datapoints arranged in an even circle."""
         center_indices = np.array(range(0, self.num_sectors))
-        sector_angle = 2*np.pi / self.num_sectors
+        sector_angle = 2 * np.pi / self.num_sectors
         angles = (center_indices + 0.5) * sector_angle
         x = 0.7 * np.cos(angles)
         y = 0.7 * np.sin(angles)
-        labels = 2 * np.remainder(np.floor_divide(angles, sector_angle), 2)- 1 
-        
+        labels = 2 * np.remainder(np.floor_divide(angles, sector_angle), 2) - 1
+
         return x, y, labels
 
     def __init__(self, num_sectors):
         self.num_sectors = num_sectors
-        
+
         x1, y1, labels1 = self._make_circular_data()
         x2, y2, labels2 = self._make_circular_data()
 
         # x and y coordinates of the datapoints
-        self.x = np.hstack([x1, .5 * x2])
-        self.y = np.hstack([y1, .5 * y2])
-        
+        self.x = np.hstack([x1, 0.5 * x2])
+        self.y = np.hstack([y1, 0.5 * y2])
+
         # Canonical form of dataset
         self.X = np.vstack([self.x, self.y]).T
-        
+
         self.labels = np.hstack([labels1, -1 * labels2])
-        
+
         # Canonical form of labels
         self.Y = self.labels.astype(int)
 
     def plot(self, ax, show_sectors=False):
-        ax.scatter(self.x, self.y, c=self.labels, cmap=mpl.colors.ListedColormap(['#FF0000', '#0000FF']), s=25, marker='s')
-        sector_angle = 360/self.num_sectors
-        
+        ax.scatter(
+            self.x,
+            self.y,
+            c=self.labels,
+            cmap=mpl.colors.ListedColormap(["#FF0000", "#0000FF"]),
+            s=25,
+            marker="s",
+        )
+        sector_angle = 360 / self.num_sectors
+
         if show_sectors:
             for i in range(self.num_sectors):
-                color = ['#FF0000', '#0000FF'][(i % 2)]
-                other_color = ['#FF0000', '#0000FF'][((i + 1) % 2)]
-                ax.add_artist(mpl.patches.Wedge((0, 0), 1, i * sector_angle, (i+1)*sector_angle, lw=0, color=color, alpha=0.1, width=.5))
-                ax.add_artist(mpl.patches.Wedge((0, 0), .5, i * sector_angle, (i+1)*sector_angle, lw=0, color=other_color, alpha=0.1))
+                color = ["#FF0000", "#0000FF"][(i % 2)]
+                other_color = ["#FF0000", "#0000FF"][((i + 1) % 2)]
+                ax.add_artist(
+                    mpl.patches.Wedge(
+                        (0, 0),
+                        1,
+                        i * sector_angle,
+                        (i + 1) * sector_angle,
+                        lw=0,
+                        color=color,
+                        alpha=0.1,
+                        width=0.5,
+                    )
+                )
+                ax.add_artist(
+                    mpl.patches.Wedge(
+                        (0, 0),
+                        0.5,
+                        i * sector_angle,
+                        (i + 1) * sector_angle,
+                        lw=0,
+                        color=other_color,
+                        alpha=0.1,
+                    )
+                )
                 ax.set_xlim(-1, 1)
 
         ax.set_ylim(-1, 1)
         ax.set_aspect("equal")
         ax.axis("off")
+
 
 # Let’s now have a look at our dataset. In our example, we will work with
 # 6 sectors:
@@ -177,6 +206,7 @@ dataset.plot(plt.gca(), show_sectors=True)
 # state. We will use a structure where a single layer is repeated multiple
 # times:
 
+
 def layer(x, params, wires, i0=0, inc=1):
     """Building block of the embedding Ansatz"""
     i = i0
@@ -185,17 +215,20 @@ def layer(x, params, wires, i0=0, inc=1):
         qml.RZ(x[i % len(x)], wires=[wire])
         i += inc
         qml.RY(params[0, j], wires=[wire])
-        
+
     qml.broadcast(unitary=qml.CRZ, pattern="ring", wires=wires, parameters=params[1])
+
 
 @qml.template
 def ansatz(x, params, wires):
     """The embedding Ansatz"""
     for j, layer_params in enumerate(params):
         layer(x, layer_params, wires, i0=j * len(wires))
-        
+
+
 def random_params(num_wires, num_layers):
-    return np.random.uniform(0, 2*np.pi, (num_layers, 2, num_wires))
+    return np.random.uniform(0, 2 * np.pi, (num_layers, 2, num_wires))
+
 
 # We are now in a place where we can create the embedding. Together with
 # the Ansatz we only need a device to run the quantum circuit on. For the
@@ -204,31 +237,54 @@ def random_params(num_wires, num_layers):
 
 dev = qml.device("default.qubit", wires=5)
 wires = list(range(5))
-# compute the kernel matrix
-k = qml.kernels.EmbeddingKernel(lambda x, params: ansatz(x, params, wires), dev)
 
-# And this was all of the magic! The ``EmbeddingKernel`` class took care
-# of providing us with a circuit that calculates the overlap. Before
-# focusing on the kernel values we have to provide values for the
+# Let us now define the quantum circuit that realizes the kernel. We will compute the overlap
+# of the quantum states by first applying the embedding of the first datapoint and then the inverse
+# of the embedding of the second datapoint.
+
+
+def kernel_circuit(x1, x2, params):
+    ansatz(x1, params, wires=wires)
+    qml.inv(ansatz(x1, params, wires=wires))
+
+    return qml.probs(wires=wires)
+
+
+# The kernel function itself is now obtained by measuring the probability of observing the all-zero
+# state at the end of the kernel circuit:
+
+
+def kernel(x1, x2, params):
+    return kernel_circuit(x1, x2, params)[0]
+
+
+# Before focusing on the kernel values we have to provide values for the
 # variational parameters. At this point we fix the number of layers in the
 # Ansatz circuit to :math:`6`.
-    
+
 init_params = random_params(5, 6)
 
 # Now we can have a look at the kernel value between the first and the
 # second datapoint:
 
-print("The kernel value between the first and second datapoint is {:.3f}".format(k(dataset.X[0], dataset.X[1], init_params)))
+print(
+    "The kernel value between the first and second datapoint is {:.3f}".format(
+        kernel(dataset.X[0], dataset.X[1], init_params)
+    )
+)
 
 # The mutual kernel values between all elements of the dataset form the
-# *kernel matrix*. We can inspect it via the ``square_kernel_matrix``
-# method:
+# *kernel matrix*. We can inspect it via the ``qml.kernels.square_kernel_matrix``
+# method. The option ``assume_normalized_kernel=True`` ensures that we do not calculate the entries
+# between the same datapoints, as we know them to be 1 for our noiseless simulation.
 
-K_init = k.square_kernel_matrix(dataset.X, init_params)
+K_init = qml.kernels.square_kernel_matrix(
+    dataset.X, lambda x1, x2: kernel(x1, x2, init_params), assume_normalized_kernel=True
+)
 
 with np.printoptions(precision=3, suppress=True):
     print(K_init)
-    
+
 
 # Using the Quantum Embedding Kernel for predictions
 # --------------------------------------------------
@@ -251,33 +307,59 @@ from sklearn.svm import SVC
 # Ansatz. What it does is solving a different optimization task for the
 # :math:`\alpha` and :math:`b` vectors we introduced above.
 
-svm = SVC(kernel=lambda X1, X2: k.kernel_matrix(X1, X2, init_params)).fit(dataset.X, dataset.Y)
+# To construct the SVM, we need to supply it with a function that takes two sets
+# of datapoints and returns the associated kernel matrix. We can make use of the
+# function ``qml.kernels.kernel_matrix`` to simplify this. It expects the kernel
+# to not have variational parameters, which is why we supply them via a lambda function.
 
-# To see how well our classifier performs we will measure what percentage
-# it classifies correctly.
+svm = SVC(
+    kernel=lambda X1, X2: qml.kernels.kernel_matrix(
+        X1,
+        X2,
+        lambda x1, x2: kernel(x1, x2, init_params),
+    )
+).fit(dataset.X, dataset.Y)
+
+# To see how well our classifier performs we will measure which percentage
+# of the dataset it classifies correctly.
+
 
 def accuracy(classifier, X, Y_target):
     return 1 - np.count_nonzero(classifier.predict(X) - Y_target) / len(Y_target)
 
-print("The accuracy of a kernel with random parameters is {:.3f}".format(accuracy(svm, dataset.X, dataset.Y)))
-    
+
+print(
+    "The accuracy of a kernel with random parameters is {:.3f}".format(
+        accuracy(svm, dataset.X, dataset.Y)
+    )
+)
+
 # We are also interested in seeing how the decision boundaries in this
 # classification look like. This could help us spotting overfitting issues
 # visually in more complex data sets. To this end we will introduce a
 # second helper method.
+
 
 def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
     _xx, _yy = np.meshgrid(np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints))
 
     _zz = np.zeros_like(_xx)
     for idx in np.ndindex(*_xx.shape):
-        _zz[idx] = classifier.predict(np.array([_xx[idx], _yy[idx]])[np.newaxis,:])
+        _zz[idx] = classifier.predict(np.array([_xx[idx], _yy[idx]])[np.newaxis, :])
 
-    plot_data = {'_xx' : _xx, '_yy' : _yy, '_zz' : _zz}
-    ax.contourf(_xx, _yy, _zz, cmap=mpl.colors.ListedColormap(['#FF0000', '#0000FF']), alpha=.2, levels=[-1, 0,  1])            
+    plot_data = {"_xx": _xx, "_yy": _yy, "_zz": _zz}
+    ax.contourf(
+        _xx,
+        _yy,
+        _zz,
+        cmap=mpl.colors.ListedColormap(["#FF0000", "#0000FF"]),
+        alpha=0.2,
+        levels=[-1, 0, 1],
+    )
     dataset.plot(ax)
-    
+
     return plot_data
+
 
 # With that done, let’s have a look at the decision boundaries for our
 # initial classifier:
@@ -332,8 +414,8 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # quantum kernel and :math:`\boldsymbol{y}\boldsymbol{y}^T`:
 
 # .. math::
-#        \operatorname{KTA}_{\boldsymbol{y}}(K) 
-#        = \frac{\operatorname{Tr}(K \boldsymbol{y}\boldsymbol{y}^T)}{\sqrt{\operatorname{Tr}(K^2)\operatorname{Tr}((\boldsymbol{y}\boldsymbol{y}^T)^2)}} 
+#        \operatorname{KTA}_{\boldsymbol{y}}(K)
+#        = \frac{\operatorname{Tr}(K \boldsymbol{y}\boldsymbol{y}^T)}{\sqrt{\operatorname{Tr}(K^2)\operatorname{Tr}((\boldsymbol{y}\boldsymbol{y}^T)^2)}}
 #        = \frac{\boldsymbol{y}^T K \boldsymbol{y}}{\sqrt{\operatorname{Tr}(K^2)} N}
 
 # where :math:`N` is the number of elements in :math:`\boldsymbol{y}`.
@@ -350,10 +432,13 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # ``EmbeddingKernel`` class allows you to easily evaluate the kernel
 # target alignment:
 
-print("The kernel-target-alignment for our dataset with random parameters is {:.3f}".format(
-    k.target_alignment(dataset.X, dataset.Y, init_params))
+print(
+    "The kernel-target-alignment for our dataset with random parameters is {:.3f}".format(
+        qml.kernels.kernel_target_alignment(
+            dataset.X, dataset.Y, lambda x1, x2: kernel(x1, x2, init_params)
+        )
+    )
 )
-    
 
 # Now let’s code up an optimization loop and improve this!
 
@@ -370,22 +455,43 @@ opt = qml.GradientDescentOptimizer(2.5)
 
 for i in range(500):
     subset = np.random.choice(list(range(len(dataset.X))), 4)
-    params = opt.step(lambda _params: -k.target_alignment(dataset.X[subset], dataset.Y[subset], _params), params)
-    
-    if (i+1) % 50 == 0:
-        print("Step {} - Alignment = {:.3f}".format(i+1, k.target_alignment(dataset.X, dataset.Y, params)))
-    
+    params = opt.step(
+        lambda _params: -qml.kernels.kernel_target_alignment(
+            dataset.X[subset], dataset.Y[subset], lambda x1, x2: kernel(x1, x2, _params)
+        ),
+        params,
+    )
+
+    if (i + 1) % 50 == 0:
+        print(
+            "Step {} - Alignment = {:.3f}".format(
+                i + 1,
+                qml.kernels.kernel_target_alignment(
+                    dataset.X, dataset.Y, lambda x1, x2: kernel(x1, x2, params)
+                ),
+            )
+        )
 
 # We want to assess the impact of training the parameters of the quantum
 # kernel. Thus, let’s build a second support vector classifier with the
 # trained kernel:
 
-svm_trained = SVC(kernel=lambda X1, X2: k.kernel_matrix(X1, X2, params)).fit(dataset.X, dataset.Y)
+svm_trained = SVC(
+    kernel=lambda X1, X2: qml.kernels.kernel_matrix(
+        X1,
+        X2,
+        lambda x1, x2: kernel(x1, x2, params),
+    )
+).fit(dataset.X, dataset.Y)
 
 # We expect to see an accuracy improvement vs. the SVM with random
 # parameters:
 
-print("The accuracy of a kernel with trained parameters is {:.3f}".format(accuracy(svm_trained, dataset.X, dataset.Y)))    
+print(
+    "The accuracy of a kernel with trained parameters is {:.3f}".format(
+        accuracy(svm_trained, dataset.X, dataset.Y)
+    )
+)
 
 # Very well! We now achieved perfect classification!
 
