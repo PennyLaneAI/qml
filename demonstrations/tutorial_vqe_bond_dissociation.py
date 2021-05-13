@@ -373,7 +373,7 @@ plt.show()
 #
 # .. math:: E_{a} = E_{TS} - E_{Reactant}
 #
-# In this case, the activation energy barrier is
+# In the case of the hydrogen exchange reaction, the activation energy barrier is
 #
 # .. math:: E_{a} = 0.0274 Ha = 17.24 Kcal/mol
 #
