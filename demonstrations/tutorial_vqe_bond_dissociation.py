@@ -135,7 +135,7 @@ active_orbitals = 2
 # The second loop is the variational optimization using VQE algorithm,
 # where energy for the trial wavefunction is calculated
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
-# This process is repeated until convergence.
+# This process is repeated until energy convergence (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
 
 symbols = ["H", "H"]
 vqe_energy = []
