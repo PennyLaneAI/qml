@@ -287,8 +287,8 @@ active_orbitals = 3
 
 ##############################################################################
 # Then we setup the PES loop, incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
-# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use Pennylane
-# :class:`~.BasisState` class to construct the HF state in this case.
+# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use PennyLane's
+# :class:`~.BasisState` operation to construct the HF state in this case.
 
 symbols = ["H", "H", "H"]
 vqe_energy = []
