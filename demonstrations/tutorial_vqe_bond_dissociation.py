@@ -12,7 +12,7 @@ Modelling chemical reactions using VQE
    tutorial_vqe
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 29 Apr 2021.*
+*Author: PennyLane dev team. Posted: 13 May 2021. Last updated: 13 May 2021.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- breaking and 
 forming of bonds. Such transformations involve energy costs that determine 
