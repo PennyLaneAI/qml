@@ -129,7 +129,7 @@ active_orbitals = 2
 # a cost function which calculates the expectation value of Hamiltonian operator for the
 # given trial wavefunction (which is the ground state energy of the molecule) using
 # :class:`~.ExpvalCost`.
-# For the problems dicussed here, we use gradient descent optimizer to optimize
+# For the problems discussed here, we use gradient descent to optimize
 # the gate parameters. We initialize the parameters to zero,
 # i.e. start from the HF state as the approximation to the exact state.
 # The second loop is the variational optimization using VQE algorithm,
