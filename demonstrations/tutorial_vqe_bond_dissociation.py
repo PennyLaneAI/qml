@@ -82,8 +82,8 @@ Using a minimal basis set (STO-3G), this system can be described by :math:`2` el
 spin-orbitals. When mapped to a qubit representation, we need a total of four qubits to represent it 
 and the Hartree-Fock (HF) ground state is  represented as :math:`|1100\rangle` where two
 energetically lowest orbitals are occupied and rest two are unccupied. To form the complete basis of
-states, we consider excitations out of the HF state that conserve the spin, and in the case where 
-there are two electrons in this system, single and double excitations suffice. The singly-excited 
+states, we consider excitations of the HF state that conserve the spin. In this case, where 
+there are two electrons, single and double excitations suffice. The singly-excited 
 states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state is 
 :math:`|0011\rangle`. The exact wavefunction (also known as full configuration interaction or FCI) 
 is a linear expansion in terms of these states where 
