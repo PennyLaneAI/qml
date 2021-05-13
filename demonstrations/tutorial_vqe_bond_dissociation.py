@@ -25,7 +25,7 @@ reactions.
 In a previous tutorial on :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
 we looked at how it can be used to compute molecular energies. [#peruzzo2014]_ 
 Here, we show how VQE can be used to construct potential energy surfaces (PESs) for any general 
-molecular transformation. This lends the way to the calculation of important quantities such as
+molecular transformation. This paves the way for the calculation of important quantities such as
 activation energy barriers, reaction energies, and reaction rates. As illustrative examples, we
 use tools implemented in PennyLane to study diatomic bond dissociation and reactions involving 
 the exchange of hydrogen atoms. Let's get started! 
