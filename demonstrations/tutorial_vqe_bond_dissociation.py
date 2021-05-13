@@ -410,7 +410,7 @@ print(
 # This is a current limitation that would go away with increasing number of logical qubits
 # that would hopefully become available in future quantum computers.
 #
-# The reaction rate constant (k) has an exponential dependence on the activation energy barrier
+# The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy barrier
 # as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
 #
 # .. math:: k = Ae^{-{E_{a}}/RT}.
