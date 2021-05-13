@@ -128,7 +128,7 @@ active_orbitals = 2
 # We use a classical qubit simulator and define
 # a cost function which calculates the expectation value of Hamiltonian operator for the
 # given trial wavefunction (which is the ground state energy of the molecule) using
-# :class:`~.ExpvalCost` class.
+# :class:`~.ExpvalCost`.
 # For the problems dicussed here, we use gradient descent optimizer to optimize
 # the gate parameters. We initialize the parameters to zero,
 # i.e. start from the HF state as the approximation to the exact state.
