@@ -14,7 +14,7 @@ Modelling chemical reactions using VQE
 
 *Author: PennyLane dev team. Last updated: 29 Apr 2021.*
 
-The term chemical reaction is another name for the transformation of molecules -- breaking and 
+The term "chemical reaction" is another name for the transformation of molecules -- breaking and 
 forming of bonds. Such transformations involve energy costs that determine 
 the feasibility of a particular transformation amongst many different possibilities. 
 Computational chemistry offers several theoretical methods for precisely determining this energy
