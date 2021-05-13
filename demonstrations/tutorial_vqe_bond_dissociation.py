@@ -419,7 +419,7 @@ print(
 #
 # .. math:: k = Ae^{-{E_{a}}/RT}.
 #
-# So, in principle, if we know the constant (A) we could calculate the rate of the reaction,
+# So, in principle, if we know the constant (:math:`A`) we could calculate the rate of the reaction,
 # which depends on the rate constant, the concentration of the reactants and the order of the
 # reaction.
 # In general, we desire our method to very accurately predict these energy differences
