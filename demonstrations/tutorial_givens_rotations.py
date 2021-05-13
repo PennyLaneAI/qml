@@ -26,8 +26,8 @@ Sophie decided that Lego really could be called the most ingenious toy in the wo
 
 In this tutorial, you will learn about the Lego of quantum circuits for quantum chemistry: Givens
 rotations. These are building blocks that can be used to construct any kind of
-particle-conserving circuit. They can also be rearranged to construct new circuits. What more
-could one ask of a quantum gate? You will also learn how to use these gates to build arbitrary
+particle-conserving circuit. They can also be rearranged to construct new circuits.
+You will also learn how to use these gates to build arbitrary
 states of a fixed number of particles.
 
 Particle-conserving unitaries
@@ -221,7 +221,140 @@ states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] !=
 print(states)
 
 ##############################################################################
-# Besides these
+# Besides these specific Givens rotations, there are other versions that have been
+# reported in the literature and used to construct circuits for quantum chemistry. For instance,
+# Ref.~[] considers a different sign convention for single-excitation gates,
+#
+# .. :math:
+#     G(\theta)=\begin{pmatrix}
+#     1 & 0 & 0 & 0\\
+#     0 & \cos (\theta/2) & \sin (\theta/2) & 0\\
+#     0 & -\sin(\theta/2) & \cos(\theta/2) & 0\\
+#     0 & 0 & 0 & 1
+#     \end{pmatrix},
+#
+# and Ref.~[] introduces the particle-conserving gates listed below, which are all Givens rotations
+#
+# .. :math:
+#      U_1(\theta, phi) &= \begin{pmatrix}
+#      1 & 0 & 0 & 0\\
+#      0 & \cos (\theta) & e^{i\phi}\sin (\theta) & 0\\
+#      0 & e^{-1\phi}\sin(\theta) & -\cos(\theta) & 0\\
+#      0 & 0 & 0 & 1
+#      \end{pmatrix}\\
+#
+#      U_2(\theta) &= \begin{pmatrix}
+#      1 & 0 & 0 & 0\\
+#      0 & \cos (2\theta) & -i\sin (2\theta) & 0\\
+#      0 & -i\sin(2\theta) & \cos(2\theta) & 0\\
+#      0 & 0 & 0 & 1
+#      \end{pmatrix}.
+#
+# The important point is that Givens rotations are a powerful abstraction for understanding
+# quantum circuits for quantum chemistry. Instead of thinking of single-qubit gates as the
+# building-blocks, we can select two-dimensional subspaces spanned by states with an equal number
+# of particles, and use rotations in that subspace to construct the circuits.
+#
+# Controlled excitation gates
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# If we are to think of Givens rotations as analogous to single-qubit gates, then we can think
+# of controlled Givens rotations as analogous to two-qubit gates. It is a well-known fact that
+# single-qubit gates and CNOT gates are universal for quantum computing: they can be used to
+# implement any conceivable quantum computation. In these constructions, the ability to control
+# operations based on the states of other qubits is essential, so it's natural to consider also
+# controlled Givens rotations. The simplest of these are controlled single-excitation gates,
+# which are three-qubit gates that perform the mapping
+#
+# .. :math:
+#   CG(\theta) |101\rangle = \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle
+#   CG(\theta) |110\rangle = \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
+#
+# while leaving all other basis states unchanged. Notice that this gate only excites a particle
+# from the second to third qubit if the first (control) qubit is in state :math:`\ket{1}`. This
+# is a useful property because, as its name suggests, it provides us with better control over the
+# transformations we want to apply. Suppose we wan to prepare the state
+#
+# .. :math:
+#   |psi\rangle = \frac{1}{2}(\ket{110000} + \ket{001100} + \ket{000011} + \ket{100100}).
+#
+# Some inspection is sufficient to see that the states :math:`\ket{001100},\ket{000011}` differ
+# by a double excitation from a reference state :math:`\ket{110000}`, while the state
+# :math:`\ket{100100}` differs by a single excitation. So it is tempting to think that applying
+# two double-excitation gates and a single-excitation gate can be used to prepare this state.
+# This won't work! Applying the single-excitation gate on qbuits two and four will also lead to a
+# contribution for the state :math:`|011000\rangle` through a coupling with :math:`\ket{001100}`.
+# Let's check that this is indeed the case:
+
+dev = qml.device('default.qubit', wires=6)
+
+@qml.qnode(dev)
+def circuit3(x, y, z):
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
+    qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
+    qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
+    qml.SingleExcitation(z, wires=[1, 3])
+
+    return qml.state()
+
+x = -2 * np.arcsin(np.sqrt(1/4))
+y = -2 * np.arcsin(np.sqrt(1/3))
+z = -2 * np.arcsin(np.sqrt(1/2))
+
+output = circuit3(x, y, z)
+states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
+print(states)
+
+##############################################################################
+# To address this problem, we can instead apply the single-excitation gate controlled on the
+# state of the first qubit. This ensures that there is no coupling with the state :math:`\ket{
+# 001100}` since here the first qubit is in state :math:`|0\rangle`. Let's implement the circuit
+# above, this time controlling on the state of the first qubit and verify that we can prepare the
+# desired state:
+
+
+##############################################################################
+# It was proven in Ref.~[] that controlled single-excitation gates are universal for
+# particle-conserving unitaries. In this case the single-excitation gates perform arbitrary
+# unitary transformations on the subspace spanned by :math:`\ket{01}, \ket{01}`. With enough
+# ingenuity, you can use these operations to construct any kind of circuit for quantum chemistry
+# applications. This result cements the understanding that Givens rotations are the fundamental
+# building blocks of quantum circuits for quantum chemistry.
+#
+# State preparation
+# -----------------
+#
+# We can now bring all these pieces together and implement a circuit capable of preparing
+# any four-qubit state of two particles with real coefficients. The main idea is that we can
+# build it one basis state at a time by applying a suitable excitation gate, which may need to be
+# controlled. Starting from the reference state :math:`\ket{1100}`, we can create a superposition
+# with the state :math:`\ket{1010}` by applying a single-excitation gate on qubits 2 and 3.
+# Similarly, we can create a superposition with the state :math:`\ket{1001}` with a single
+# excitation between qubits 2 and 4. This leaves us with a state of the form
+#
+# .. :math:
+#   |\psi\rangle = a \ket{1100} + b \ket{1010} + c \ket{1001}.
+#
+# We can now perform excitations from qubit 1 to qubits 3 and 4, but these will have to be
+# controlled on the state of qubit 2. Finally, applying a double-excitation gate on all qubits
+# can create a superposition of the form
+#
+#  .. :math:
+#   |\psi\rangle = c_1 \ket{1100} + c_2 \ket{1010} + c_3 \ket{1001} + c_4 \ket{0110} + c_5 \ket{
+#   0101} + c_6 \ket{0011},
+#
+# which is our intended outcome. We can use this strategy to create an equal superposition over
+# all two-particle states on four qubits.
+
+
+
+##############################################################################
+# When it comes to quantum circuits for quantum chemistry, there is a zoo of different
+# architectures that have been proposed. Ultimately, the goal of this tutorial is to provide you
+# with the conceptual and software tools to not only implement any of these existing circuits,
+# but also to design your own. It's not only fun to play with toys; it's also fun to make them.
+#
+#
 #
 #
 #
