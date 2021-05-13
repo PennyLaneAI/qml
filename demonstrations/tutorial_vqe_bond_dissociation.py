@@ -19,18 +19,17 @@ forming of bonds. Such transformations involve energy costs that determine
 the feasibility of a particular transformation amongst many different possibilities. 
 Computational chemistry offers several theoretical methods for precisely determining this energy
 cost. It also opens a windows into predicting the thermodynamic and kinetics aspects of any 
-chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate chemical 
-reactions. 
+chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate any general 
+chemical reaction and calculate important energy based reaction parameters. 
 
 In a previous tutorial on :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
 we looked at how it can be used to compute molecular energies. [#peruzzo2014]_ 
 Here, we show how VQE can be used to construct potential energy surfaces (PESs) for any general 
-molecular transformation. This paves the way for the calculation of important quantities such as
-activation energy barriers, reaction energies, and reaction rates. As illustrative examples, we
-use tools implemented in PennyLane to study diatomic bond dissociation and reactions involving 
-the exchange of hydrogen atoms. Let's get started! 
-
-
+molecular transformation. This paves the way
+for the calculation of important quantities such as activation energy barriers, reaction energies,
+and reaction rates. As illustrative examples, we use tools implemented in PennyLane to study diatomic
+bond dissociation and reactions involving the exchange of hydrogen atoms. Our first example would be
+to write the code to generate plot depicting the dissociation of the :math:`H_2` molecule shown below. 
 
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
    :width: 90%
