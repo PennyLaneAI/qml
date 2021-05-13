@@ -15,13 +15,7 @@ Feedback-Based Quantum Optimization (FALQON)
 
 -----------------------------
 
-Note: Before reading this tutorial, we strongly recommend that you check out the
-`Intro to QAOA tutorial <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__, as many of the same ideas
-carry over, and will be assumed throughout this demonstration.
-
------------------------------
-
-While the `Quantum Approximate Optimization Algorithm (QAOA) <https://arxiv.org/pdf/1411.4028.pdf>`__
+While the `Quantum Approximate Optimization Algorithm (QAOA) <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 is one of the best-known processes for solving combinatorial optimization problems with quantum computers,
 it has drawbacks. Since QAOA relies on optimization over a parameter space,
 convergence isn't guaranteed, and the optimization procedure can become "stuck" in local minima.
