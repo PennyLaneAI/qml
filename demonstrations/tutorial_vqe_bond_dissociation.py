@@ -74,7 +74,7 @@ plotted against nuclear positions.
 
 We begin with the simplest of molecules: :math:`H_2`. 
 The formation (or breaking) of the :math:`H-H` bond is also the simplest
-of all reactions. 
+of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
