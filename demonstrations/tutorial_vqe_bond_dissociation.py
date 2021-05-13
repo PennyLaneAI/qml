@@ -1,5 +1,5 @@
 r"""
-Modeling chemical reactions using VQE
+Modelling chemical reactions using VQE
 ==============================
 
 .. meta::
