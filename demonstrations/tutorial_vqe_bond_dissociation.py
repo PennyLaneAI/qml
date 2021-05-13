@@ -49,8 +49,8 @@ Potential Energy Surfaces: Hills to die and be reborn
 ---------------------------------------------------------------------
 
 `Potential energy surfaces (PES) <https://en.wikipedia.org/wiki/Potential_energy_surface>`_
-are, in simple words, energy landscapes on which any chemical
-reaction occurs. The concept originates from the fact that nuclei are much heavier than 
+are, in simple words, energy landscapes on which chemical
+reactions occur. The concept originates from the fact that nuclei are much heavier than 
 electrons and thus move much slowly, allowing us to decouple their motion. This is known as the
 `Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation>`_. 
 We can then solve for the electronic wavefunction with
