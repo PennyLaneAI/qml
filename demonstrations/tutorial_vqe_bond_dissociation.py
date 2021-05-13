@@ -335,8 +335,6 @@ for r in np.arange(1.0, 3.0, 0.1):
         prev_energy = energy
 
     vqe_energy.append(energy)
-
-#
 ##############################################################################
 #
 # Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`,
