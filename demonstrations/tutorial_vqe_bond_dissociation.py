@@ -100,6 +100,7 @@ import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
+from tabulate import tabulate
 
 ##############################################################################
 # We begin by specifying the basis set and the number of active electrons and active orbitals.
@@ -184,10 +185,14 @@ for r in r_range:
 
         prev_energy = energy
 
-    print("At bond distance \n", r)
-    print("The VQE energy is", energy)
-
     vqe_energy.append(energy)
+
+# tabulate 
+list_of_tuples = list(zip(r_range, vqe_energy))
+# create header
+head = ["H-H distance(in Bohr)", "Energy(in Ha)"]
+# display table
+print(tabulate(list_of_tuples, headers=head, tablefmt="fancy_grid"))
 
 ##############################################################################
 # We have calculated the molecular energy as a function of :math:`H-H` bond distance;
@@ -252,13 +257,13 @@ print(
 # Hydrogen Exchange Reaction
 # -----------------------------
 #
-# We construct the PES for a simple hydrogen exchange reaction
+# After studying diatomic bond dissociation, we move to a simple hydrogen exchange reaction
 #
 # .. math:: H_2 + H \rightarrow H + H_2.
 #
 # This reaction has a barrier, the transition state, that it has to cross
 # for the exchange of an :math:`H` atom to be complete. In this case, the transition state
-# corresponds to a particular linear arrangement of the atoms where one :math:`H-H` bond is
+# corresponds to a specific linear arrangement of the atoms where one :math:`H-H` bond is
 # partially broken and the other :math:`H-H` bond is partially formed.
 # The molecular movie is an illustration of the reaction trajectory --- how the distance between
 # the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
