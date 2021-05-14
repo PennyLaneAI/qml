@@ -417,15 +417,16 @@ print(
 #
 # .. math:: k = Ae^{-{E_{a}}/RT}.
 #
-# So, in principle, if we know the constant (:math:`A`) we could calculate the rate of the reaction,
-# which depends on the rate constant, the concentration of the reactants and the order of the
-# reaction.
+# So, in principle, if we know the constant (:math:`A`) we could calculate the rate constant
+# and the rate of the reaction.
 # In general, we desire our method to very accurately predict these energy differences
 # and the geometries of the key intermediates.
 # The plot below compares the performance of VQE with other quantum chemistry methods such as
 # Hartree-Fock and Full CI.
 # The PEC obtained from the quantum algorithm (VQE) overlaps with
-# the `FCI <https://en.wikipedia.org/wiki/Configuration_interaction>`_ result.
+# the `FCI <https://en.wikipedia.org/wiki/Configuration_interaction>`_ result. This is a 
+# validation of the accuracy of the energy estimates through our VQE circuit --- we exactly
+# reproduce the absolute energies of the reactants, transition state and product.
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
