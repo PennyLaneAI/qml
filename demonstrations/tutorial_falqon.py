@@ -445,3 +445,8 @@ plt.show()
 # This corresponds to nodes :math:`0`, :math:`1`, and :math:`2` of the graph, which is
 # the maximum clique! We have successfully combined FALQON and QAOA to solve a combinatorial
 # optimization problem 🎉.
+#
+# References
+# ----------
+#
+# Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M. (2021). Feedback-based quantum optimization. arXiv preprint arXiv:2103.08619.
