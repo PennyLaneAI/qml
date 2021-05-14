@@ -86,7 +86,8 @@ lowest-energy orbitals are occupied, and the remaining two are unoccupied. To fo
 basis of states, we consider excitations of the HF state that conserve the spin. In this case, where 
 there are two electrons, single and double excitations suffice. The singly-excited 
 states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state is 
-:math:`|0011\rangle`. The exact wavefunction (also known as full configuration interaction or FCI) 
+:math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
+<https://en.wikipedia.org/wiki/Configuration_interaction>`_ or FCI) 
 is a linear expansion in terms of these states where 
 the expansion coefficients would change as the reaction proceeds and the  system moves around 
 (figuratively) on the potential energy surface. 
@@ -174,9 +175,7 @@ for r in np.arange(0.5, 5.0, 0.1):
     # define and initialize the gate parameters
     params = np.zeros(3)
 
-    ##############################################################################
     # Begin the VQE iteration to optimize gate parameters.
-
     prev_energy = 0.0
 
     for n in range(40):
@@ -230,7 +229,7 @@ plt.show()
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
-# as :math:`0.202` Hartrees (:math:`126.79` Kcal/mol).
+# as :math:`0.202` Hartrees (:math:`126.79` kcal/mol).
 
 energy_equil = min(vqe_energy)
 energy_dissoc = vqe_energy[-1]
@@ -243,7 +242,7 @@ bond_length = r[bond_length_index]
 
 print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
 print(
-    "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} Kcal/mol".format(
+    "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
         bond_dissociation_energy, bond_dissociation_energy_kcal
     )
 )
@@ -268,16 +267,20 @@ print(
 # for the exchange of an :math:`H` atom to be complete. In this case, the transition state
 # corresponds to a particular linear arrangement of the atoms where one :math:`H-H` bond is
 # partially broken and the other :math:`H-H` bond is partially formed.
-# In a minimal basis like STO-3G,
-# this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
-# This means it is a :math:`6` qubit problem and the Hartree-Fock state in
-# occupation number representation is :math:`|111000\rangle`. As there is an unpaired
-# electron, the spin multiplicity is two.
+# The molecular movie is an illustration of the reaction trajectory --- how the distance between
+# the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
+# :math:`H(1)` and :math:`H(2)` is broken and another one between :math:`H(2)` and :math:`H(3)`
+# is formed.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
 #   :align: center
 #
+# In a minimal basis like STO-3G,
+# this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
+# This means it is a :math:`6` qubit problem and the Hartree-Fock state
+# is :math:`|111000\rangle`. As there is an unpaired
+# electron, the spin multiplicity is two.
 
 # Molecular parameters
 basis_set = "sto-3g"
@@ -288,9 +291,9 @@ active_electrons = 3
 active_orbitals = 3
 
 ##############################################################################
-# Then we setup the PES loop, incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
+# We setup the PES loop incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
 # to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use PennyLane's
-# :class:`~.BasisState` operation to construct the HF state in this case.
+# :class:`~.BasisState` operation to construct the HF state.
 
 symbols = ["H", "H", "H"]
 vqe_energy = []
@@ -342,7 +345,9 @@ for r in np.arange(1.0, 3.0, 0.1):
 # Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`,
 # which is also the `reaction coordinate <https://en.wikipedia.org/wiki/Reaction_coordinate>`_,
 # and thus we have the potential energy curve for
-# this reaction.
+# this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
+# of reactants and products respectively while the transition state is represented by the 
+# local maxima.  
 
 r = np.arange(1.0, 3.0, 0.1)
 
@@ -357,7 +362,7 @@ ax.grid()
 plt.show()
 ##############################################################################
 # Activation energy barriers and reaction rates
-# --------------------------------------------
+# ***************************************************
 # The utility of potential energy surfaces lies in estimating
 # reaction energies and activation energy barriers, as well as the
 # geometric configurations of key reactants, intermediates,
@@ -377,7 +382,7 @@ plt.show()
 #
 # In the case of the hydrogen exchange reaction, the activation energy barrier is
 #
-# .. math:: E_{a} = 0.0274 Ha = 17.24 Kcal/mol
+# :math:`E_{a} = 0.0274` Ha :math:`= 17.24` kcal/mol
 #
 # Below we show how to calculate the activation energy from the above PES.
 
@@ -423,16 +428,16 @@ print(
 # and the geometries of the key intermediates.
 # The plot below compares the performance of VQE with other quantum chemistry methods such as
 # Hartree-Fock and Full CI.
-# The PEC obtained from the quantum algorithm (VQE) overlaps with
-# the `FCI <https://en.wikipedia.org/wiki/Configuration_interaction>`_ result. This is a 
-# validation of the accuracy of the energy estimates through our VQE circuit --- we exactly
-# reproduce the absolute energies of the reactants, transition state and product.
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_comparison.png
 #     :width: 90%
 #     :align: center
 #
+# The PEC obtained from the quantum algorithm (VQE) overlaps with
+# the FCI result. This is a
+# validation of the accuracy of the energy estimates through our VQE circuit --- we exactly
+# reproduce the absolute energies of the reactants, transition state and product.
 
 ##############################################################################
 # A model multireference problem: :math:`Be + H_{2} \rightarrow BeH_{2}`
