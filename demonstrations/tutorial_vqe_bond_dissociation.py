@@ -8,11 +8,9 @@ Modelling chemical reactions using VQE
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
 .. related::
+   tutorial_vqe Variational Quantum Eigensolver
 
-   tutorial_vqe
-   tutorial_vqe_parallel VQE with parallel QPUs
-
-*Author: PennyLane dev team. Posted: 13 May 2021. Last updated: 13 May 2021.*
+*Author: PennyLane dev team. Posted: 14 May 2021. Last updated: 14 May 2021.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- breaking and 
 forming of bonds. Such transformations involve energy costs that determine 
@@ -44,7 +42,7 @@ to write the code to generate plot depicting the dissociation of the :math:`H_2`
 ##############################################################################
 
 
-Potential Energy Surfaces: Hills to die and be reborn 
+Potential Energy Surfaces 
 ---------------------------------------------------------------------
 
 `Potential energy surfaces (PES) <https://en.wikipedia.org/wiki/Potential_energy_surface>`_
@@ -77,17 +75,22 @@ of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
-Using a minimal basis set (STO-3G), this system can be described by :math:`2` electrons in :math:`4` 
-spin-orbitals. When mapped to a qubit representation, we need a total of four qubits to represent it 
-and the Hartree-Fock (HF) ground state is  represented as :math:`|1100\rangle` where two
-energetically lowest orbitals are occupied and rest two are unccupied. To form the complete basis of
-states, we consider excitations of the HF state that conserve the spin. In this case, where 
+Using a minimal `basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ 
+(`STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_), 
+this system can be described by :math:`2` electrons in :math:`4` 
+spin-orbitals. When mapped to a qubit representation, we need a total of four qubits to represent
+it. 
+The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
+ground state is  represented as :math:`|1100\rangle`, where the two
+lowest-energy orbitals are occupied, and the remaining two are unoccupied. To form the complete 
+basis of states, we consider excitations of the HF state that conserve the spin. In this case, where 
 there are two electrons, single and double excitations suffice. The singly-excited 
 states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state is 
 :math:`|0011\rangle`. The exact wavefunction (also known as full configuration interaction or FCI) 
 is a linear expansion in terms of these states where 
-the expansion coefficients would change as the reaction proceeds and the  system moves around (figuratively) 
-on the potential energy surface. Below we show how to to generate the PES for such a reaction. 
+the expansion coefficients would change as the reaction proceeds and the  system moves around 
+(figuratively) on the potential energy surface. 
+Below we show how to to generate the PES for such a reaction. 
 
 The first step is to import the required libraries and packages:
 """
