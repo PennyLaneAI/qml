@@ -275,7 +275,7 @@ res_beta, res_energies = max_clique_falqon(graph, n, beta_1, delta_t, dev)
 
 plt.plot(range(n+1)[1:], res_energies)
 plt.xlabel("Iteration")
-plt.ylable("Cost Function Value")
+plt.ylabel("Cost Function Value")
 plt.show()
 
 ######################################################################
