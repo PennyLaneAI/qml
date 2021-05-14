@@ -143,18 +143,13 @@ active_orbitals = 2
 symbols = ["H", "H"]
 vqe_energy = []
 # set up a loop to change internuclear distance
-for r in np.arange(0.5, 5.0, 0.1):
+r_range = np.arange(0.5, 5.0, 0.1)
+for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
-
-    print("Number of qubits = ", qubits)
-    print("Hamiltonian is ", H)
-
-    # get all the singles and doubles excitations
-    singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     # define the circuit
     def circuit(params, wires):
@@ -178,7 +173,7 @@ for r in np.arange(0.5, 5.0, 0.1):
     # Begin the VQE iteration to optimize gate parameters.
     prev_energy = 0.0
 
-    for n in range(40):
+    for n in range(50):
 
         params, energy = opt.step_and_cost(cost_fn, params)
         print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
@@ -199,10 +194,8 @@ for r in np.arange(0.5, 5.0, 0.1):
 # let us plot it.
 
 # Energy as a function of internuclear distance
-r = np.arange(0.5, 5.0, 0.1)
-
 fig, ax = plt.subplots()
-ax.plot(r, vqe_energy, label="VQE")
+ax.plot(r_range, vqe_energy, label="VQE")
 
 ax.set(
     xlabel="H-H distance (in Bohr)",
@@ -238,7 +231,7 @@ bond_dissociation_energy = energy_dissoc - energy_equil
 bond_dissociation_energy_kcal = bond_dissociation_energy * 627.5
 
 bond_length_index = vqe_energy.index(energy_equil)
-bond_length = r[bond_length_index]
+bond_length = r_range[bond_length_index]
 
 print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
 print(
@@ -293,12 +286,15 @@ active_orbitals = 3
 ##############################################################################
 # We setup the PES loop incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
 # to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use PennyLane's
-# :class:`~.BasisState` operation to construct the HF state.
+# :class:`~.BasisState` operation to construct the HF state and :class:`excitations`
+# to obtain the list of allowed single and double excitations out of the HF state.
+# This is used to build the VQE circuit.
 
 symbols = ["H", "H", "H"]
 vqe_energy = []
 
-for r in np.arange(1.0, 3.0, 0.1):
+r_range = np.arange(1.0, 3.0, 0.1)
+for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
@@ -311,6 +307,7 @@ for r in np.arange(1.0, 3.0, 0.1):
         active_orbitals=active_orbitals,
     )
 
+    # get all the singles and doubles excitations
     singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
 
     def circuit(params, wires):
@@ -346,13 +343,12 @@ for r in np.arange(1.0, 3.0, 0.1):
 # which is also the `reaction coordinate <https://en.wikipedia.org/wiki/Reaction_coordinate>`_,
 # and thus we have the potential energy curve for
 # this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
-# of reactants and products respectively while the transition state is represented by the 
-# local maxima.  
+# of reactants and products respectively while the transition state is represented by the
+# local maxima.
 
-r = np.arange(1.0, 3.0, 0.1)
-
+# plot the PES
 fig, ax = plt.subplots()
-ax.plot(r, vqe_energy)
+ax.plot(r_range, vqe_energy)
 
 ax.set(
     xlabel="Distance (H-H, in Bohr)",
