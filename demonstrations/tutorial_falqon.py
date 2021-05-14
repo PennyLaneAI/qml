@@ -449,4 +449,4 @@ plt.show()
 # References
 # ----------
 #
-# Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M. (2021). Feedback-based quantum optimization. arXiv preprint arXiv:2103.08619.
+# Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M. (2021). Feedback-based quantum optimization. arXiv preprint `arXiv:2103.08619 <https://arxiv.org/abs/2103.08619>`__.
