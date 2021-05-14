@@ -272,6 +272,8 @@ res_beta, res_energies = max_clique_falqon(graph, n, beta_1, delta_t, dev)
 #
 
 plt.plot(range(n+1)[1:], res_energies)
+plt.xlabel("Iteration")
+plt.ylable("Cost Function Value")
 plt.show()
 
 ######################################################################
@@ -302,10 +304,36 @@ plt.show()
 # Benchmarking FALQON
 # -------------------
 #
-# We will benchmark FALQON!
+# Now that we have seen how FALQON works, it is worth noting how well FALQON performs according to a set of benchmarking
+# criteria. Let's see how FALQON performs on a batch of graphs! We generate graphs randomly using the
+# `Erdos-Renyi model <https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model>`__, where we start with
+# the complete graph on :math:`n` vertices and then keep each edge with probability :math:`p`. We then find the maximum cliques on
+# these graphs, classically, using the `Bron-Kerbosch algorithm <https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm>`__.
+# To benchmark FALQON, we compute two figures of merit: (a) :math:`r_A`, the relative error in the estimated minimum energy:
+#
+# .. math:: r_A = \frac{\langle H_C\rangle - \langle H_C\rangle_\text{min}}{|\langle H_C\rangle_\text{min}|}
+#
+# and (b) :math:`\phi`, the squared overlap with the (possibly degenerate) ground states for the cost Hamiltonian:
+#
+# .. math:: \phi = \sum_K |\langle \psi| \psi_K\rangle|^2
+#
+# where :math:`|\psi\rangle` is the prepared state, and each :math:`|\psi_K\rangle` is a ground state of the cost Hamiltonian.
+#
+# Running FALQON for all these graphs is
+# expensive, so we will only show the final results for these figures of merit (along with the values of :math:`\beta`) as a function of layer:
+#
+# .. figure:: ../demonstrations/falqon/bench.png
+#     :align: center
+#     :width: 60%
+#
+# Note that, due to computational constraints, we have average over only :math:`3` random graphs per node size, for size :math:`n = 6, 7, 8`,
+# with probability :math:`p = 0.1` of keeping an edge. We run FALQON for :math:`15` steps, with :math:`\Delta t = 0.01`. As expected, the relative error
+# decreases with layers, and also improves with graph size. Although :math:`r_A = 0.9` is a large relative error, we expect further improvement
+# with layers and graph size. The ground state overlap :math:`\phi` increases with layer, indicating improved overlap with the true maximum clique(s).
+# Note that :math:`\phi` lies above :math:`1` due to large degeneracy in largest cliques for small, sparse (:math:`p=0.1`) graphs.
 
 ######################################################################
-# Seeding QAOA with FALQON (Bird Seed 🦅)
+# Bonus: Seeding QAOA with FALQON (Bird Seed 🦅)
 # ---------------------------------------
 #
 # .. figure:: ../demonstrations/falqon/bird_seed.png
@@ -369,7 +397,6 @@ delta_t = 0.02
 
 print("Running FALQON")
 res, res_energy = max_clique_falqon(new_graph, depth-1, 0.0, delta_t, dev)
-print("------------------------")
 
 params = np.array([[delta_t for k in res], [delta_t * k for k in res]])
 
