@@ -1,10 +1,10 @@
 r"""
 Feedback-Based Quantum Optimization (FALQON)
-=========================
+============================================
 
 .. meta::
-    :property="og:description": Solve combinatorial problems with no classical optimizer
-    :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
+    :property="og:description": Solve combinatorial problems without a classical optimizer
+    :property="og:image": https://pennylane.ai/qml/_images/falqon_thumbnail.png
 
 .. related::
 
@@ -339,7 +339,7 @@ plt.show()
 
 ######################################################################
 # Bonus: Seeding QAOA with FALQON (Bird Seed 🦅)
-# ---------------------------------------
+# ----------------------------------------------
 #
 # .. figure:: ../demonstrations/falqon/bird_seed.png
 #     :align: center
