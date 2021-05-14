@@ -258,7 +258,8 @@ print(
 # Hydrogen Exchange Reaction
 # -----------------------------
 #
-# After studying diatomic bond dissociation, we move to a simple hydrogen exchange reaction
+# After studying a simple diatomic bond dissociation, we move to a slightly more complicated
+# case: a hydrogen exchange reaction.
 #
 # .. math:: H_2 + H \rightarrow H + H_2.
 #
@@ -266,10 +267,10 @@ print(
 # for the exchange of an :math:`H` atom to be complete. In this case, the transition state
 # corresponds to a specific linear arrangement of the atoms where one :math:`H-H` bond is
 # partially broken and the other :math:`H-H` bond is partially formed.
-# The molecular movie is an illustration of the reaction trajectory --- how the distance between
-# the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
+# The molecular movie (below) is an illustration of the reaction trajectory --- how the distance
+# between the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
 # :math:`H(1)` and :math:`H(2)` is broken and another one between :math:`H(2)` and :math:`H(3)`
-# is formed.
+# is formed. This path along which the reaction happens is also known as reaction coordinate.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
@@ -332,7 +333,7 @@ for r in r_range:
 
     prev_energy = 0.0
 
-    for n in range(40):
+    for n in range(60):
 
         params, energy = opt.step_and_cost(cost_fn, params)
         #print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
