@@ -100,6 +100,7 @@ import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
+import tabulate
 from tabulate import tabulate
 
 ##############################################################################
