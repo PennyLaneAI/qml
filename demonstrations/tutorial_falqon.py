@@ -27,7 +27,7 @@ convergence isn't guaranteed, and the optimization procedure can become "stuck" 
 In this demo, we'll be implementing the FALQON algorithm: a feedback-based algorithm
 for quantum optimization, introduced by `Magann, Rudinger, Grace & Sarovar (2021) <https://arxiv.org/pdf/2103.08619.pdf>`__.
 It is similar in spirit to QAOA, but instead uses iterative feedback steps rather than a global optimization
-over parameters. We will show how to implement FALQON in PennyLane
+over parameters, therefore avoiding the issue of local minima. We will show how to implement FALQON in PennyLane
 and test its performance on the MaxClique problem in graph theory!
 
 Theory
@@ -79,7 +79,7 @@ import networkx as nx
 
 ######################################################################
 # FALQON is an algorithm for combinatorial optimization. Therefore, we must select some kind of combinatorial problem
-# to solve, using FALQON. In this demonstration, we will be solving the
+# to solve. In this demonstration, we will be solving the
 # `maximum clique (MaxClique) problem <https://en.wikipedia.org/wiki/Clique_problem>`__: finding the
 # largest complete subgraph of some graph :math:`G`. For example, the following graph's maximum clique is coloured in red:
 #
@@ -100,7 +100,7 @@ nx.draw(graph, with_labels=True)
 # .. math:: H_c = 3 \sum_{(i, j) \in E(\bar{G})} (Z_i Z_j - Z_i - Z_j) + \displaystyle\sum_{i \in V(G)} Z_i
 #
 # where each qubit is a node in the graph, and the states :math:`|0\rangle` and :math:`|1\rangle` represent if the vertex
-# has been "marked" as part of the clique, as is the case for most standard QAOA encoding schemes.
+# has been "marked" as part of the clique, as is the case for `most standard QAOA encoding schemes <https://arxiv.org/abs/1709.03489>`__.
 #
 # In addition to defining :math:`H_c`, we also require a driver Hamiltonian :math:`H_d`, which does not commute with :math:`H_c`, and
 # is able to "mix up" our system sufficiently so that it may be driven towards the ground state (similar to the mixer Hamiltonian in QAOA).
@@ -174,11 +174,13 @@ print(build_commutator(graph))
 #           e^{-iH_c \Delta t}, \quad U_D(\beta_k) = e^{-i\beta_k H_d \Delta t}
 #
 # where :math:`\Delta t` is a small step in time, and :math:`\beta_k = \beta(k\Delta t)`.
-# We can now easily define a layer of the FALQON circuit, which is of the form :math:`U_d(\beta_k) U_c`:
+# We can now easily define a layer of the FALQON circuit, which is of the form :math:`U_d(\beta_k) U_c`. Note that we can
+# use the :class:`~.pennylane.templates.ApproxTimeEvolution` template to perform a single layer of Trotterized
+# time-evolution:
 
 def falqon_layer(beta_k, cost_h, driver_h, delta_t):
-    qaoa.cost_layer(delta_t, cost_h)
-    qaoa.mixer_layer(delta_t * beta_k, driver_h)
+    qml.templates.ApproxTimeEvolution(cost_h, delta_t, 1)
+    qml.templates.ApproxTimeEvolution(driver_h, delta_t * beta_k, 1)
 
 ######################################################################
 # We then define a method which returns a FALQON ansatz corresponding to a particular cost Hamiltonian, driver
@@ -224,7 +226,7 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
 #
 # .. figure:: ../demonstrations/falqon/falqon.png
 #     :align: center
-#     :width: 90%
+#     :width: 80%
 #
 # Implementing this recursive process isn't too difficult, we simply make use of the methods defined above:
 
@@ -292,6 +294,8 @@ def prob_circuit():
 
 probs = prob_circuit()
 plt.bar(range(2**len(dev.wires)), probs)
+plt.xlabel("Bitstring")
+plt.ylabel("Measurement Probability")
 plt.show()
 
 ######################################################################
@@ -320,14 +324,15 @@ plt.show()
 # where :math:`|\psi\rangle` is the prepared state, and each :math:`|\psi_K\rangle` is a ground state of the cost Hamiltonian.
 #
 # Running FALQON for all these graphs is
-# expensive, so we will only show the final results for these figures of merit (along with the values of :math:`\beta`) as a function of layer:
+# expensive, so we will only show the final results for these figures of merit (along with the values of :math:`\beta`) as a function of layer.
+# Note that, due to computational constraints, we have average over only :math:`3` random graphs per node size, for size :math:`n = 6, 7, 8`,
+# with probability :math:`p = 0.1` of keeping an edge. We run FALQON for :math:`15` steps, with :math:`\Delta t = 0.01`:
 #
 # .. figure:: ../demonstrations/falqon/bench.png
 #     :align: center
 #     :width: 60%
 #
-# Note that, due to computational constraints, we have average over only :math:`3` random graphs per node size, for size :math:`n = 6, 7, 8`,
-# with probability :math:`p = 0.1` of keeping an edge. We run FALQON for :math:`15` steps, with :math:`\Delta t = 0.01`. As expected, the relative error
+# As expected, the relative error
 # decreases with layers, and also improves with graph size. Although :math:`r_A = 0.9` is a large relative error, we expect further improvement
 # with layers and graph size. The ground state overlap :math:`\phi` increases with layer, indicating improved overlap with the true maximum clique(s).
 # Note that :math:`\phi` lies above :math:`1` due to large degeneracy in largest cliques for small, sparse (:math:`p=0.1`) graphs.
@@ -340,9 +345,15 @@ plt.show()
 #     :align: center
 #     :width: 90%
 #
-# QAOA and FALQON have many similarities, most notably, their circuit structure. Both involve alternating layers
-# of time-evolution operators corresponding to a cost and a mixer/driver Hamiltonian. As it turns out, this
-# will allow us to combine FALQON and QAOA to make an optimization process that is even more powerful!
+# Both FALQON and QAOA have unique benefits and drawbacks.
+# While FALQON requires no classical optimization and is guaranteed to decrease the cost function
+# with each iteration, its circuit depth grows linearly with the number of iterations. On the other hand, QAOA
+# has a fixed circuit depth, but does require classical optimization, and is therefore subject to all of the drawbacks that
+# come with probing a cost landscape for the ground state.
+#
+# Despite having unique issues, QAOA and FALQON have many similarities, most notably, their circuit structure. Both involve alternating layers
+# # of time-evolution operators corresponding to a cost and a mixer/driver Hamiltonian. This suggests to us that we may be able
+# to combine FALQON and QAOA to yield a new optimization algorithm that leverages the benefits of both algorithms!
 #
 # Suppose we want to run a QAOA circuit of depth :math:`p`. Our ansatz will be of the form:
 #
@@ -425,6 +436,8 @@ def prob_circuit():
 
 probs = prob_circuit()
 plt.bar(range(2**len(dev.wires)), probs)
+plt.xlabel("Bitstring")
+plt.ylabel("Measurement Probability")
 plt.show()
 
 ######################################################################
