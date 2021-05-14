@@ -177,22 +177,23 @@ for r in r_range:
     for n in range(50):
 
         params, energy = opt.step_and_cost(cost_fn, params)
-        print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
+        #print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
 
         # define the convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
             break
 
         prev_energy = energy
-
+    
+    print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
     vqe_energy.append(energy)
 
 # tabulate 
-list_of_tuples = list(zip(r_range, vqe_energy))
+list_dist_energy = list(zip(r_range, vqe_energy))
 # create header
 head = ["H-H distance(in Bohr)", "Energy(in Ha)"]
 # display table
-print(tabulate(list_of_tuples, headers=head, tablefmt="fancy_grid"))
+print(tabulate(list_dist_energy, headers=head, tablefmt="fancy_grid"))
 
 ##############################################################################
 # We have calculated the molecular energy as a function of :math:`H-H` bond distance;
@@ -334,14 +335,22 @@ for r in r_range:
     for n in range(40):
 
         params, energy = opt.step_and_cost(cost_fn, params)
-        print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
+        #print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
 
         if np.abs(energy - prev_energy) < 1e-6:
             break
 
         prev_energy = energy
 
+    print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
     vqe_energy.append(energy)
+
+# tabulate 
+list_dist_energy = list(zip(r_range, vqe_energy))
+# create header
+head = ["H(1)-H(2) distance(in Bohr)", "Energy(in Ha)"]
+# display table
+print(tabulate(list_dist_energy, headers=head, tablefmt="fancy_grid"))
 ##############################################################################
 #
 # Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`,
