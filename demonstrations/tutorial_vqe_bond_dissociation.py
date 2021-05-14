@@ -193,7 +193,7 @@ list_dist_energy = list(zip(r_range, vqe_energy))
 # Converting list into pandas Dataframe.
 df = pd.DataFrame(list_dist_energy, columns=["H-H distance (in Bohr)", "Energy (in Ha)"])
 # display table
-print(df.to_markdown(index=False))
+print(df)
 
 ##############################################################################
 # We have calculated the molecular energy as a function of :math:`H-H` bond distance;
@@ -351,7 +351,7 @@ list_dist_energy = list(zip(r_range, vqe_energy))
 # Converting list into pandas Dataframe
 df = pd.DataFrame(list_dist_energy, columns=["H(1)-H(2) distance (in Bohr)", "Energy (in Ha)"])
 # display table
-print(df.to_markdown(index=False))
+print(df)
 
 ##############################################################################
 #
@@ -394,7 +394,7 @@ plt.show()
 #
 # In the case of the hydrogen exchange reaction, the activation energy barrier is
 #
-# :math:`E_{a} = 0.0274` Ha :math:`= 17.24` kcal/mol
+#                   :math:`E_{a} = 0.0274` Ha :math:`= 17.24` kcal/mol
 #
 # Below we show how to calculate the activation energy from the above PES.
 
