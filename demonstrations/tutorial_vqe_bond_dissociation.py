@@ -1,6 +1,6 @@
 r"""
-Modelling chemical reactions using VQE
-==============================
+Modelling chemical reactions on a quantum computer
+====================================================
 
 .. meta::
     :property="og:description": Construct potential energy surfaces for chemical reactions using 
@@ -29,6 +29,7 @@ and reaction rates. As illustrative examples, we use tools implemented in PennyL
 bond dissociation and reactions involving the exchange of hydrogen atoms. Our first example would be
 to write the code to generate plot depicting the dissociation of the :math:`H_2` molecule shown below. 
 
+.. _label: h2_pes
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
    :width: 90%
    :align: center
@@ -68,9 +69,9 @@ to obtain the energy at other configurations. The obtained set of energies are t
 plotted against nuclear positions. To really understand the steps involved in making such a
 plot, let us do it.
 
-##############################################################################
+##########################################################
 Bond dissociation in Hydrogen molecule 
----------------------------------------------------------------------
+---------------------------------------------------------
 
 We begin with the simplest of molecules: :math:`H_2`. 
 The formation (or breaking) of the :math:`H-H` bond is also the simplest
@@ -78,9 +79,12 @@ of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
+We cast this problem in the language of quantum chemistry and then in terms of
+quantum circuits on a quantum computer as was also discussed in the tutorial 
+:doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>`.
 Using a minimal `basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ 
 (`STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_), 
-this system can be described by :math:`2` electrons in :math:`4` 
+this molecular system can be described by :math:`2` electrons in :math:`4` 
 spin-orbitals. When mapped to a qubit representation, we need a total of four qubits to represent
 it. 
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
@@ -92,7 +96,7 @@ states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited st
 :math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
 <https://en.wikipedia.org/wiki/Configuration_interaction>`_ or FCI) 
 is a linear expansion in terms of these states where 
-the expansion coefficients would change as the reaction proceeds and the  system moves around 
+the expansion coefficients would change as the reaction proceeds and the system moves around 
 (figuratively) on the potential energy surface. 
 Below we show how to to generate the PES for such a reaction. 
 
@@ -106,13 +110,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 ##############################################################################
-# We begin by specifying the basis set and the number of active electrons and active orbitals.
+# We begin by specifying the basis set and the atomic symbols of the constituent atoms..
 # All electrons and all orbitals are considered in this case.
 
 basis_set = "sto-3g"
-
-active_electrons = 2
-active_orbitals = 2
+symbols = ["H", "H"]
 
 ##############################################################################
 # To construct the potential energy surface, we need to vary the geometry of the molecule. We keep
@@ -129,8 +131,8 @@ active_orbitals = 2
 # such point we generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 # At each point, we solve the electronic Schrödinger equation by first solving the
-# Hartree-Fock approximation and generating the molecular orbitals (MOs). We solve the
-# electron correlation part of the problem using quantum computers. To do this, we build the
+# Hartree-Fock approximation and generating the molecular orbitals (MOs). For a more accurate
+# estimation of the molecular wavefunction and energy, we build the
 # VQE circuit by first preparing the qubit version of the HF state and then adding all single
 # excitation and double excitation gates which use the `Givens rotations
 # <https://en.wikipedia.org/wiki/Givens_rotation>`_. This approach is similar to
@@ -148,8 +150,11 @@ active_orbitals = 2
 # where energy for the trial wavefunction is calculated
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
 # This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
+# Once we have the converged VQE energy estimate at the specified internuclear distance, we
+# increment the distance and the whole process of HF calculation, building quantum circuits and
+# iterative VQE optimization of gate parameters is repeated. After we have covered the grid of
+# internuclear distances, we tabulate the results.
 
-symbols = ["H", "H"]
 vqe_energy = []
 # set up a loop to change internuclear distance
 r_range = np.arange(0.5, 5.0, 0.1)
@@ -224,7 +229,11 @@ plt.show()
 
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately, a potential energy curve) for
-# the dissociation of a hydrogen molecule into two hydrogen atoms.
+# the dissociation of a hydrogen molecule into two hydrogen atoms. Exactly the same as shown in
+# the illustrated image :ref:`h2_pes` at the beginning. Let us now understand the utility of such a
+# plot.
+#
+#
 # In a diatomic molecule, the potential energy curve as a function of internuclear distance tells
 # us the bond length---
 # the distance between the two atoms when the energy is at a minimum and the system is in
@@ -289,6 +298,8 @@ print(
 # This means it is a :math:`6` qubit problem and the Hartree-Fock state
 # is :math:`|111000\rangle`. As there is an unpaired
 # electron, the spin multiplicity is two.
+# We also specify the number of active electrons and active orbitals. Like in
+# previous case, all electrons and orbitals are considered.
 
 # Molecular parameters
 basis_set = "sto-3g"
@@ -298,6 +309,8 @@ multiplicity = 2
 active_electrons = 3
 active_orbitals = 3
 
+symbols = ["H", "H", "H"]
+
 ##############################################################################
 # We setup the PES loop incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
 # to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use PennyLane's
@@ -305,7 +318,6 @@ active_orbitals = 3
 # to obtain the list of allowed single and double excitations out of the HF state.
 # This is used to build the VQE circuit.
 
-symbols = ["H", "H", "H"]
 vqe_energy = []
 
 r_range = np.arange(1.0, 3.0, 0.1)
