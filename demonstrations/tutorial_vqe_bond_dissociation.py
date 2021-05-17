@@ -40,8 +40,6 @@ to write the code to generate plot depicting the dissociation of the :math:`H_2`
 
 
 ##############################################################################
-
-
 Potential Energy Surfaces 
 ---------------------------------------------------------------------
 
@@ -67,7 +65,12 @@ and transition states are the peaks.
 To summarize, to build the potential energy surface, we solve the electronic Schrödinger
 equation for a set of positions of the nuclei, and subsequently move them in incremental steps
 to obtain the energy at other configurations. The obtained set of energies are then 
-plotted against nuclear positions.
+plotted against nuclear positions. To really understand the steps involved in making such a
+plot, let us do it.
+
+##############################################################################
+Bond dissociation in Hydrogen molecule 
+---------------------------------------------------------------------
 
 We begin with the simplest of molecules: :math:`H_2`. 
 The formation (or breaking) of the :math:`H-H` bond is also the simplest
@@ -120,15 +123,20 @@ active_orbitals = 2
 # (equilibrium bond length)
 # and also the distance when the bond is broken, which occurs when the atoms
 # are far away from each other.
+#
+#
 # Now we set up a loop that incrementally changes the internuclear distance and for each
 # such point we generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# At each point, we solve the electronic Schrödinger equation by first solving the
+# Hartree-Fock approximation and generating the molecular orbitals (MOs). We solve the
+# electron correlation part of the problem using quantum computers. To do this, we build the
+# VQE circuit by first preparing the qubit version of the HF state and then adding all single
+# excitation and double excitation gates which use the `Givens rotations
+# <https://en.wikipedia.org/wiki/Givens_rotation>`_. This approach is similar to
+# the `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ often used.
 #
 #
-# We build the VQE circuit by first
-# preparing the qubit version of the HF state and then adding all single excitation and
-# double excitation gates which use the Givens rotations. This approach is similar to
-# the Unitary Coupled Cluster (UCCSD) approach often used.
 # We use a classical qubit simulator and define
 # a cost function which calculates the expectation value of Hamiltonian operator for the
 # given trial wavefunction (which is the ground state energy of the molecule) using
@@ -139,7 +147,7 @@ active_orbitals = 2
 # The second loop is the variational optimization using VQE algorithm,
 # where energy for the trial wavefunction is calculated
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
-# This process is repeated until energy convergence (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
+# This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
 
 symbols = ["H", "H"]
 vqe_energy = []
