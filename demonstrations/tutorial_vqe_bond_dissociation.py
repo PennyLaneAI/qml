@@ -286,7 +286,7 @@ print(
 # The molecular movie (below) is an illustration of the reaction trajectory --- how the distance
 # between the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
 # :math:`H(1)` and :math:`H(2)` is broken and another one between :math:`H(2)` and :math:`H(3)`
-# is formed. This path along which the reaction happens is also known as the `reaction coordinate
+# is formed. This path along which the reaction proceeds is also known as the `reaction coordinate
 # <https://en.wikipedia.org/wiki/Reaction_coordinate>`_.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
