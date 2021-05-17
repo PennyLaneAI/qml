@@ -24,7 +24,7 @@ it has drawbacks: convergence isn't guaranteed, as the optimization procedure ca
     :align: center
     :width: 70%
 
-In this demo, we'll be implementing the FALQON algorithm: a feedback-based algorithm
+This demo implements the FALQON algorithm: a feedback-based algorithm
 for quantum optimization, introduced in `this paper <https://arxiv.org/pdf/2103.08619.pdf>`__.
 It is similar in spirit to QAOA, but instead uses iterative feedback steps rather than a global optimization
 over parameters. We will show how to implement FALQON in PennyLane and test its performance on the MaxClique
@@ -43,18 +43,18 @@ field of inquiry which studies how a quantum system can be driven from one state
 The choice of :math:`\beta(t)` allows us to decide which state we
 want a system governed by such a Hamiltonian to evolve towards.
 
-The time-dependent Schrodinger equation tells us that the dynamics of the system are given by:
+The time-dependent Schrödinger equation tells us that the dynamics of the system are given by:
 
 .. math:: i \frac{d}{dt} |\psi(t)\rangle = (H_c + \beta(t) H_d) |\psi(t)\rangle,
 
-where we set :math:`\hbar = 1`. Now suppose our objective is to drive the system
+where we set :math:`\hbar = 1`. Now suppose the objective is to drive the system
 to the state :math:`|\psi\rangle`: the ground state of :math:`H_c`. Phrased differently, we would like to minimize
 the expectation value :math:`\langle H_c\rangle`. Therefore, a reasonable goal is to construct the system such that
 the expectation decreases with time:
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = \frac{d}{dt} \langle \psi(t)|H_c|\psi(t)\rangle = i \beta(t)\langle [H_d, H_c] \rangle_t \leq 0,
 
-where the product rule and Schrodinger's equation are used to derive the above formula. Recall that the control
+where the product rule and Schrödinger's equation are used to derive the above formula. Recall that the control
 experiment depends on the choice of :math:`\beta(t)`. Thus,
 if we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
 
@@ -87,25 +87,24 @@ for some small time-step :math:`\Delta t`. Thus, we will have:
 
 where :math:`n = T/\Delta t` and :math:`\beta_k = \beta(k\Delta t)`.
 
-For each layer of the time-evolution, we need to know the value :math:`\beta_k`. However,
-:math:`\beta_k` is dependent on the state of the system at some time, as
-we have defined:
+For each layer of the time-evolution, the value :math:`\beta_k` is required. However,
+:math:`\beta_k` is dependent on the state of the system at some time, as defined above:
 
 .. math:: \beta(t) = - \langle \psi(t) | i [H_d, H_c] | \psi(t) \rangle.
 
-Therefore, our strategy is to use the value of :math:`A(t) := i\langle [H_d, H_c] \rangle_t` obtained by evaluating the
+In this context, :math:`A(t) := i\langle [H_d, H_c] \rangle_t` is obtained by evaluating the
 circuit for the previous time-step:
 
 .. math:: \beta_{k+1} = -A_k = -A(k\Delta t).
 
 This leads to the FALQON algorithm as a recursive process (in other words, it feeds back into itself).
-On step :math:`k`, we perform the following three substeps:
+On step :math:`k`, perform the following three substeps:
 
 1. Prepare the state :math:`|\psi_k\rangle = U_d(\beta_k) U_c \cdots U_d(\beta_1) U_c|\psi_0\rangle`.
 2. Measure the expectation value :math:`A_k = \langle i[H_c, H_d]\rangle_k`.
 3. Set :math:`\beta_{k+1} = -A_k`.
 
-We repeat for all :math:`k` from :math:`1` to :math:`n`. At the final step, we can evaluate :math:`\langle H_c \rangle`.
+Repeat for all :math:`k` from :math:`1` to :math:`n`. At the final step, evaluate :math:`\langle H_c \rangle`.
 
 .. figure:: ../demonstrations/falqon/falqon.png
      :align: center
@@ -327,7 +326,7 @@ plt.show()
 # Benchmarking FALQON
 # -------------------
 #
-# Now that we have seen how FALQON works, it is worth noting how well FALQON performs according to a set of benchmarking
+# After seeing how FALQON works, it is worth noting how well FALQON performs according to a set of benchmarking
 # criteria. Let's see how FALQON performs on a batch of graphs! We generate graphs randomly using the
 # `Erdos-Renyi model <https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model>`__, where we start with
 # the complete graph on :math:`n` vertices and then keep each edge with probability :math:`p`. We then find the maximum
@@ -344,19 +343,19 @@ plt.show()
 # where :math:`|\psi\rangle` is the prepared state, and each :math:`|\psi_K\rangle` is a ground state of the cost
 # Hamiltonian.
 #
-# Running FALQON for all these graphs is
-# expensive, so we will only show the final results for these figures of merit (along with the values of :math:`\beta`)
-# as a function of layer. Due to computational constraints, we have averaged over :math:`3` random graphs per node
-# size, for size :math:`n = 6, 7, 8`, with probability :math:`p = 0.1` of keeping an edge. We run FALQON for
-# :math:`15` steps, with :math:`\Delta t = 0.01`:
+# Below the final results for the figures of merit are plotted (along with the values of :math:`\beta`),
+# with the number of FALQON layers on the horizontal axis. Due to computational constraints, we have averaged over :math:`5` random graphs per node
+# size, for sizes :math:`n = 6, 7, 8, 9`, with probability :math:`p = 0.1` of keeping an edge. Running FALQON for
+# :math:`40` steps, with :math:`\Delta t = 0.01`, produces:
 #
 # .. figure:: ../demonstrations/falqon/bench.png
 #     :align: center
 #     :width: 60%
 #
-# As expected, the relative error
-# decreases with the number of layers, and also improves with graph size.
-# We expect further improvement with layers and graph size. The ground state overlap :math:`\phi` increases with layer,
+# The relative error decreases with the number of layers and graph size, except for $n = 9$ where the step size has become too large.
+# The rate of decrease slows, however, a feature we expect to be generally true when trying to solve hard problems using a method like
+# FALQON which is guaranteed to improve with time. No one said anything about the rate of improvement!
+# The ground state overlap :math:`\phi` increases with layer,
 # indicating improved overlap with the true maximum clique(s). Note that :math:`\phi` lies above :math:`1` due to large
 # degeneracy in largest cliques for small, sparse (:math:`p=0.1`) graphs.
 
@@ -370,7 +369,8 @@ plt.show()
 #
 # Both FALQON and QAOA have unique benefits and drawbacks.
 # While FALQON requires no classical optimization and is guaranteed to decrease the cost function
-# with each iteration, its circuit depth grows linearly with the number of iterations. On the other hand, QAOA
+# with each iteration, its circuit depth grows linearly with the number of iterations. The benchmarking data also shows
+# how the reduction in cost slows with layer, and the additional burden of correctly tuning the time step. On the other hand, QAOA
 # has a fixed circuit depth, but does require classical optimization, and is therefore subject to all of the drawbacks
 # that come with probing a cost landscape for the ground state.
 #
