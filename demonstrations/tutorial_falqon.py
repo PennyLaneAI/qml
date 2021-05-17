@@ -18,9 +18,9 @@ Feedback-Based Quantum Optimization (FALQON)
 While the
 `Quantum Approximate Optimization Algorithm (QAOA) <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 is one of the best-known processes for solving combinatorial optimization problems with quantum computers,
-it has drawbacks: convergence isn't guaranteed, and the optimization procedure can become "stuck" in local minima.
+it has drawbacks: convergence isn't guaranteed, as the optimization procedure can become "stuck" in local minima.
 
-.. figure:: ../demonstrations/falqon/global_min.png
+.. figure:: ../demonstrations/falqon/global_min_graph.png
     :align: center
     :width: 70%
 
@@ -40,21 +40,21 @@ the system from an initial state into the ground state of :math:`H_c`. FALQON fa
 Consider a quantum system governed by a Hamiltonian of the form :math:`H = H_c + \beta(t) H_d`. These kinds of
 Hamiltonians appear often in the theory of `quantum control <https://quantiki.org/wiki/quantum-control-theory>`__: a
 field of inquiry which studies how a quantum system can be driven from one state to another.
-In the context of quantum control, the choice of :math:`\beta(t)` allows us to decide which state we
+The choice of :math:`\beta(t)` allows us to decide which state we
 want a system governed by such a Hamiltonian to evolve towards.
 
 The time-dependent Schrodinger equation tells us that the dynamics of the system are given by:
 
 .. math:: i \frac{d}{dt} |\psi(t)\rangle = (H_c + \beta(t) H_d) |\psi(t)\rangle,
 
-where we set :math:`\hbar = 1`. Now suppose that the objective of the quantum control experiment is to drive the system
+where we set :math:`\hbar = 1`. Now suppose our objective is to drive the system
 to the state :math:`|\psi\rangle`: the ground state of :math:`H_c`. Phrased differently, we would like to minimize
-the expectation value :math:`\langle H_c\rangle`. Therefore, a reasonable goal is to construct our system such that
+the expectation value :math:`\langle H_c\rangle`. Therefore, a reasonable goal is to construct the system such that
 the expectation decreases with time:
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = \frac{d}{dt} \langle \psi(t)|H_c|\psi(t)\rangle = i \beta(t)\langle [H_d, H_c] \rangle_t \leq 0,
 
-where we used the product rule and Schrodinger's equation to derive the above formula. Recall that our control
+where the product rule and Schrodinger's equation are used to derive the above formula. Recall that the control
 experiment depends on the choice of :math:`\beta(t)`. Thus,
 if we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
 
@@ -66,8 +66,51 @@ then :math:`\langle H_c \rangle` is guaranteed to strictly decrease, as desired!
 Using `techniques from control theory <https://arxiv.org/pdf/1304.3997.pdf>`__, it is possible to rigorously show
 this choice of :math:`\beta(t)` will eventually drive the system into the ground state of :math:`H_c`. Thus, if we
 evolve some initial state :math:`|\psi_0\rangle` under the time-evolution operator corresponding to :math:`H`, given
-by :math:`U(t) = e^{-iHt}`, we will arrive at the ground state of :math:`H_c`. This is exactly the procedure used
-by FALQON."""
+by:
+
+.. math:: U(T) = \mathcal{T} \exp \Big[ -i \displaystyle\int_{0}^{T} H(t) \ dt \Big]
+
+where :math:`\mathcal{T}` is the `time-ordering operator <https://en.wikipedia.org/wiki/Path-ordering#Time_ordering>`__,
+we will arrive at the ground state of :math:`H_c`. This is exactly the procedure used by FALQON.
+
+In general, implementing a time-evolution unitary of the form :math:`U(T)` in a quantum circuit is
+difficult, so we use a
+`Trotter-Suzuki decomposition <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki%E2%80%93Trotter_expansion>`__
+to perform approximate time-evolution. We know that:
+
+.. math:: \displaystyle\int_{0}^{T} H(t) \ dt \approx \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t
+
+for some small time-step :math:`\Delta t`. Thus, we will have:
+
+.. math:: U(T) \approx \mathcal{T} \exp \Big[ -i \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t \Big] \approx
+            e^{-i\beta_n H_d \Delta t} e^{-iH_c \Delta t} \cdots e^{-i\beta_1 H_d \Delta t} e^{-iH_c \Delta t} = U_d(\beta_n) U_c \cdots U_d(\beta_1) U_c
+
+where :math:`n = T/\Delta t` and :math:`\beta_k = \beta(k\Delta t)`.
+
+For each layer of the time-evolution, we need to know the value :math:`\beta_k`. However,
+:math:`\beta_k` is dependent on the state of the system at some time, as
+we have defined:
+
+.. math:: \beta(t) = - \langle \psi(t) | i [H_d, H_c] | \psi(t) \rangle.
+
+Therefore, our strategy is to use the value of :math:`A(t) := i\langle [H_d, H_c] \rangle_t` obtained by evaluating the
+circuit for the previous time-step:
+
+.. math:: \beta_{k+1} = -A_k = -A(k\Delta t).
+
+This leads to the FALQON algorithm as a recursive process (in other words, it feeds back into itself).
+On step :math:`k`, we perform the following three substeps:
+
+1. Prepare the state :math:`|\psi_k\rangle = U_d(\beta_k) U_c \cdots U_d(\beta_1) U_c|\psi_0\rangle`.
+2. Measure the expectation value :math:`A_k = \langle i[H_c, H_d]\rangle_k`.
+3. Set :math:`\beta_{k+1} = -A_k`.
+
+We repeat for all :math:`k` from :math:`1` to :math:`n`. At the final step, we can evaluate :math:`\langle H_c \rangle`.
+
+.. figure:: ../demonstrations/falqon/falqon.png
+     :align: center
+     :width: 80%
+"""
 
 ######################################################################
 # Simulating FALQON with PennyLane
@@ -91,7 +134,7 @@ import networkx as nx
 #     :align: center
 #     :width: 90%
 #
-# In this demonstration, we attempt to find the maximum clique of the following graph:
+# We attempt to find the maximum clique of the following graph:
 #
 
 edges = [(0, 1), (1, 2), (2, 0), (2, 3), (1, 4)]
@@ -171,18 +214,9 @@ print("MaxClique Commutator")
 print(build_commutator(graph))
 
 ######################################################################
-# We now build the actual FALQON algorithm. Our goal is to evolve some initial state under the Hamiltonian :math:`H`,
-# with our chosen :math:`\beta(t)`. In general, implementing a time-evolution unitary of the form
-# :math:`U(t) = e^{-iHt}` in a quantum circuit is difficult, so we use a Trotter-Suzuki decomposition to perform
-# approximate time-evolution:
-#
-# .. math:: U(t) \approx U_d(\beta_n) U_c U_d(\beta_{n-1}) U_c\cdots U_d(\beta_1) U_c, \quad U_c =
-#           e^{-iH_c \Delta t}, \quad U_D(\beta_k) = e^{-i\beta_k H_d \Delta t},
-#
-# where :math:`\Delta t` is a small step in time, and :math:`\beta_k = \beta(k\Delta t)`.
-# We can now easily define a layer of the FALQON circuit, which is of the form :math:`U_d(\beta_k) U_c`. Note
-# that we can use the :class:`~.pennylane.templates.ApproxTimeEvolution` template to perform a single layer
-# of Trotterized time-evolution:
+# We can now build the FALQON algorithm. Our goal is to evolve some initial state under the Hamiltonian :math:`H`,
+# with our chosen :math:`\beta(t)`. We first define one layer of our Trotterized time-evolution, which is of
+# the form :math:`U_d(\beta_k) U_c`. Note that we can use the :class:`~.pennylane.templates.ApproxTimeEvolution` template:
 
 def falqon_layer(beta_k, cost_h, driver_h, delta_t):
     qml.templates.ApproxTimeEvolution(cost_h, delta_t, 1)
@@ -190,7 +224,7 @@ def falqon_layer(beta_k, cost_h, driver_h, delta_t):
 
 ######################################################################
 # We then define a method which returns a FALQON ansatz corresponding to a particular cost Hamiltonian, driver
-# Hamiltonian, and :math:`\Delta t`. This involves repeating the FALQON layer multiple times. The
+# Hamiltonian, and :math:`\Delta t`. This involves repeating the "FALQON layer" defined above multiple times. The
 # initial state of our circuit is an even superposition:
 
 def build_maxclique_ansatz(cost_h, driver_h, delta_t):
@@ -210,41 +244,17 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
     return ansatz
 
 ######################################################################
-# Finally, before we put everything together and run the circuit, there is still one issue that must be addressed.
-# Namely, for each layer, we need to know the value :math:`\beta_k`. However,
-# it is the case that :math:`\beta_k` is dependent on the state of the system at some time, as
-# we have defined:
-#
-# .. math:: \beta(t) = - \langle \psi(t) | i [H_d, H_c] | \psi(t) \rangle.
-#
-# Our strategy is to use the value of :math:`A(t) := i\langle [H_d, H_c] \rangle_t` obtained by evaluating the
-# circuit for the previous time-step:
-#
-# .. math:: \beta_{k+1} = -A_k = -A(k\Delta t).
-#
-# This leads to the FALQON algorithm as a recursive process (in other words, it feeds back into itself).
-# On step :math:`k`, we perform the following three substeps:
-#
-# 1. Prepare the state :math:`|\psi_k\rangle = U_d(\beta_k) U_c \cdots U_d(\beta_1) U_c|\psi_0\rangle`.
-# 2. Measure the expectation value :math:`A_k = \langle i[H_c, H_d]\rangle_k`.
-# 3. Set :math:`\beta_{k+1} = -A_k`.
-#
-# We repeat for all :math:`k` from :math:`1` to :math:`n`. At the final step, we can evaluate
-# :math:`\langle H_c \rangle`.
-#
-# .. figure:: ../demonstrations/falqon/falqon.png
-#     :align: center
-#     :width: 80%
-#
-# Implementing this recursive process can be done using the methods defined above:
+# Finally, we implement the recursive process, where FALQON is able to determine the values
+# of :math:`\beta_k`, feeding back into itself as the number of layers increases. This is
+# straightforward using the methods defined above:
 
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     hamiltonian = build_commutator(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
     ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t) # Builds the FALQON ansatz
 
-    beta = [beta_1]
-    energies = []
+    beta = [beta_1] # Records each value of beta_k
+    energies = [] # Records the value of the cost function at each step
 
     for i in range(n):
         # Creates a function which can evaluate the expectation value of the commutator
