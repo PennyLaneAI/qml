@@ -29,18 +29,16 @@ and reaction rates. As illustrative examples, we use tools implemented in PennyL
 bond dissociation and reactions involving the exchange of hydrogen atoms. Our first example would be
 to write the code to generate plot depicting the dissociation of the :math:`H_2` molecule shown below. 
 
-.. _label: h2_pes
+.. _label_h2_pes:
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
    :width: 90%
    :align: center
    
-   An illustration of the potential energy surface of bond dissociation for the hydrogen molecule. 
-   On the :math:`y`-axis is the total energy and :math:`x`-axis is the internuclear bond
-   distance. By looking at this curve, we can estimate the :math:`H-H` bond length and the energy 
-   required to break the bond.   
+   Potential energy surface depicting single bond dissociation in hydrogen molecule.
 
 
 ##############################################################################
+
 Potential Energy Surfaces 
 ---------------------------------------------------------------------
 
@@ -70,6 +68,7 @@ plotted against nuclear positions. To really understand the steps involved in ma
 plot, let us do it.
 
 ##########################################################
+
 Bond dissociation in Hydrogen molecule 
 ---------------------------------------------------------
 
@@ -230,8 +229,8 @@ plt.show()
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately, a potential energy curve) for
 # the dissociation of a hydrogen molecule into two hydrogen atoms. Exactly the same as shown in
-# the illustrated image :ref:`h2_pes` at the beginning. Let us now understand the utility of such a
-# plot.
+# the illustrated image of :ref:`label_h2_pes`. Let us now understand the utility
+# of such a plot.
 #
 #
 # In a diatomic molecule such as :math:`H_2`, the potential energy curve as a function of
@@ -287,7 +286,8 @@ print(
 # The molecular movie (below) is an illustration of the reaction trajectory --- how the distance
 # between the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
 # :math:`H(1)` and :math:`H(2)` is broken and another one between :math:`H(2)` and :math:`H(3)`
-# is formed. This path along which the reaction happens is also known as the reaction coordinate.
+# is formed. This path along which the reaction happens is also known as the `reaction coordinate
+# <https://en.wikipedia.org/wiki/Reaction_coordinate>`_.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
@@ -380,7 +380,6 @@ print(df)
 ##############################################################################
 #
 # Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`,
-# which is also the `reaction coordinate <https://en.wikipedia.org/wiki/Reaction_coordinate>`_,
 # and thus we have the potential energy curve for
 # this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
 # of reactants and products respectively while the transition state is represented by the
@@ -416,9 +415,7 @@ plt.show()
 # .. math:: E_{a} = E_{TS} - E_{Reactant}
 #
 # In the case of the hydrogen exchange reaction, the activation energy barrier is
-#
 #                   :math:`E_{a} = 0.0274` Ha :math:`= 17.24` kcal/mol
-#
 # Below we show how to calculate the activation energy from the above PES.
 
 energy_equil = min(vqe_energy)
@@ -447,17 +444,17 @@ print(
 ##############################################################################
 # Though this is the best theoretical estimate in this small basis,
 # this is not the *best* theoretical estimate. We would need to do this calculation
-# in larger basis, triple and quadruple zeta basis or higher, to reach basis set
+# in larger basis to reach basis set
 # convergence and this would significantly increase the number of qubits required.
 #
-# The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy barrier
-# as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
+# The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy 
+# barrier as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
 #
 # .. math:: k = Ae^{-{E_{a}}/RT}.
 #
 # So, in principle, if we know the constant (:math:`A`) we could calculate the rate constant
 # and the rate of the reaction.
-# In general, we desire our method to very accurately predict these energy differences
+# In general, we desire our method to accurately predict these energy differences
 # and the geometries of the key intermediates.
 # The plot below compares the performance of VQE with other quantum chemistry methods such as
 # Hartree-Fock and Full CI.
