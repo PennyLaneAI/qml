@@ -9,7 +9,7 @@ Optimization of molecular geometries
 .. related::
    tutorial_vqe Variational Quantum Eigensolver
    
-*Author: PennyLane dev team. Last updated: 12 May 2021.*
+*Author: PennyLane dev team. Last updated: 17 May 2021.*
 
 Predicting the most stable arrangement of the atoms that conform a molecule is one of the most
 important tasks in computational chemistry. This corresponds to an optimization problem where the
@@ -149,23 +149,128 @@ def H(x):
 ##############################################################################
 # The variational quantum circuit
 # -------------------------------
+#
 # Now, we need to define the quantum circuit to prepare the electronic ground-state
 # :math:`\vert \Psi(\theta)\rangle` of the :math:`\mathrm{H}_3^+` molecule. Representing
 # the wave function of this molecule requires six qubits to encode the occupation number
-# of the molecular spin-orbitals that can be populated by the two electrons in the
-# molecule. In order to capture the effects of electronic correlations, the :math:`N`-qubit
-# system should be prepared in a superposition of the Hartree-Fock state
-# :math:`\vert 110000 \rangle` with other doubly- and singly-excited configurations
-# e.g., :math:`\vert 000011 \rangle`, :math:`\vert 011000 \rangle`, etc. This can be
-# done using the particle-conserving single- and double-excitation gates [[#qchemcircuits]_] 
-# implemented in the form of Givens rotation in PennyLane. More details on how to
-# use the excitation gates to build quantum circuits for quantum chemistry applications
-# see the tutorial doc:`tutorial_excitation_gates`.
+# of the active spin-orbitals which can be populated by the two electrons in the
+# molecule. In order to capture the effects of electronic correlations [#referenceHERE]_,
+# we need to prepare the :math:`N`-qubit in a superposition of the Hartree-Fock state
+# :math:`\vert 110000 \rangle` with other states that differ by a double- or
+# single-excitation with respect to the HF state. For example, the state
+# :math:`\vert 000011 \rangle` is obtained by exciting two particles from qubits  0, 1 to
+# 4, 5. Similarly, the state encodes a double excitation of the reference HF state
+# where the state :math:`\vert 011000 \rangle` corresponds to a single excitation 
+# from qubit 0 to 2. This can be done using the particle-conserving single- and
+# double-excitation gates [#qchemcircuits]_ implemented in the form of Givens rotations
+# in PennyLane. For more details see the tutorial doc:`tutorial_givens_rotations`.
+#
+# Here, we use an adaptive algorithm [#geo_opt_paper]_ to select the excitation
+# operation included in the variational quantum circuit. The algorithm, which is
+# described in more details in the tutorial doc:`tutorial_adaptive_algorithm`,
+# proceeds as follows:
+# 
+# #. Generate the lists with the indices of the qubits involved in all single- and
+#    double-excitations using the func:`~.pennylane_qchem.qchem.excitation` function.
+#    For example, the indices of the singly-excited state :math:`\vert 011000 \rangle`
+#    are given by the list ``[0, 2]``. Similarly, the indices of the doubly-excited
+#    state :math:`\vert 000011 \rangle` are ``[0, 1, 4, 5]``. 
+#
+# #. Construct the circuit using all double-excitation gates. Compute the gradient
+#    of the expectation value
+#    :math:`\langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle` with respect
+#    to each double-excitation gate and retain only those with non-zero gradient.
+#
+# #. Include the selected double-excitation gates and repeat the process for the
+#    single-excitation gates.
+#
+# #. Build the final variational quantum circuit by including the selected excitation
+#    operations.
+#
+# For the :math:`\mathrm{H}_3^+` molecule in a minimal basis set we have a total of eight 
+# excitation operations. After applying the adaptive algorithm the final quantum
+# circuit contains two double-excitations acting on the qubits ``[0, 1, 2, 3]`` and
+# ``[0, 1, 4, 5]`` as it is shown in the figure below.
+# |
+#
+# .. figure:: /demonstrations/mol_geo_opt/fig_circuit.png
+#     :width: 50%
+#     :align: center
+#
+# |
+#
+# The quantum circuit above is implemented by the ``circuit`` function
+
+def ansatz(params, wires):
+    hf_state = np.array([1, 1, 0, 0, 0, 0])
+    qml.BasisState(hf_state, wires=wires)
+    qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
+    qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
+
+##############################################################################
+# The ``DoubleExcitation`` operations acting on the HF state allow us to prepare
+# the trial state
+#
+# .. math::
+#
+#     \vert\Psi(\theta_1, \theta_2)\rangle = 
+#     \mathrm{cos}(\theta_1)\mathrm{cos}(\theta_2)\vert110000\rangle - 
+#     \mathrm{cos}(\theta_1)\mathrm{sin}(\theta_2)\vert000011\rangle -
+#     \mathrm{sin}(\theta_1)\vert001100\rangle,
+#
+# where :math:`\theta_1` and :math:`\theta_2` are the circuit parameters that need to be
+# optimized to find the electronic ground state of the trihydrogen cation.
+#
+##############################################################################
+# The cost function and the nuclear gradients
+# -------------------------------------------
+# 
+# The next step is to define the cost function
+# :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle` to
+# evaluate the expectation value of the *parametrized* Hamiltonian :math:`H(x)` in the
+# trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the device to compute
+# the expectation value. In this example, we use PennyLane's qubit simulator:
+
+dev = qml.device("default.qubit", wires=6)
+
+##############################################################################
+# Next, we use the PennyLane class :class:`~.pennylane.ExpvalCost` to define the 
+# ``cost`` function :math:`g(\theta, x)` which depends on both the circuit and the
+# Hamiltonian parameters.
+
+def cost(params, x):
+    return qml.ExpvalCost(circuit, H(x), dev)(params)
+
+##############################################################################
+# This function returns the expectation value of the Hamiltonian ``H(x)`` computed
+# in the trial state prepared by the ``circuit`` function for a given set of the
+# circuit parameters ``params`` and the nuclear coordinates ``x``.
+#
+# In order to minimize our cost function :math:`g(\theta, x)` using a gradient-based
+# method we have to compute the gradients with respect to the circuit parameters
+# :math:`\theta` *and* also with respect to the nuclear coordinates :math:`x`
+# (the nuclear gradients). The circuit gradients are computed analytically using
+# the automatic differentiation algorithm available in PennyLane. On the other hand,
+# the nuclear gradients are computed as,
+#
+# .. math::
+#
+#     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
+#
+# To that aim, we use the func:`~.pennylane.finite_diff` function to compute the gradient of
+# the electronic Hamiltonian using a central-difference approximation. Then we use the
+# PennyLane class :class:`~.pennylane.ExpvalCost` to evaluate the expectation value of
+# the derivatives :math:`\frac{\partial H(x)}{\partial x_i}` in order to compute the nuclear
+# gradients. This is implemented by the function ``grad_x``:
+
+def grad_x(x, params):
+    grad_h = qml.finite_diff(H)(x)
+    grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
+    return np.array(grad)
+
+#
 #
 # 
-#  
-#
-#
 # References
 # ----------
 #
