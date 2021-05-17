@@ -234,12 +234,12 @@ plt.show()
 # plot.
 #
 #
-# In a diatomic molecule, the potential energy curve as a function of internuclear distance tells
-# us the bond length---
+# In a diatomic molecule such as :math:`H_2`, the potential energy curve as a function of
+# internuclear distance tells us the bond length ---
 # the distance between the two atoms when the energy is at a minimum and the system is in
-# equilibrium.
+# equilibrium --- and the bond dissociation energy.
 # The bond dissociation energy is the amount of energy required to dissociate a bond.
-# In other words, the difference in energy of the system at equilibrium (minima) and the energy
+# i.e. the difference in energy of the system at equilibrium (minima) and the energy
 # of the system at the dissociation limit, where the atoms are far apart and
 # the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
@@ -287,7 +287,7 @@ print(
 # The molecular movie (below) is an illustration of the reaction trajectory --- how the distance
 # between the hydrogen atoms labelled :math:`1`, :math:`2` and :math:`3` changes as the bond between
 # :math:`H(1)` and :math:`H(2)` is broken and another one between :math:`H(2)` and :math:`H(3)`
-# is formed. This path along which the reaction happens is also known as reaction coordinate.
+# is formed. This path along which the reaction happens is also known as the reaction coordinate.
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
@@ -295,11 +295,12 @@ print(
 #
 # In a minimal basis like STO-3G,
 # this system consists of :math:`3` electrons in :math:`6` spin molecular orbitals.
-# This means it is a :math:`6` qubit problem and the Hartree-Fock state
+# This translates into a :math:`6` qubit problem and the Hartree-Fock state
 # is :math:`|111000\rangle`. As there is an unpaired
-# electron, the spin multiplicity is two.
-# We also specify the number of active electrons and active orbitals. Like in
-# previous case, all electrons and orbitals are considered.
+# electron, the spin multiplicity is two and needs to be specified.
+# As in previous case, all electrons and all orbitals are considered
+# but we specify the number of active electrons and active orbitals.
+
 
 # Molecular parameters
 basis_set = "sto-3g"
@@ -313,10 +314,13 @@ symbols = ["H", "H", "H"]
 
 ##############################################################################
 # We setup the PES loop incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
-# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr. We use PennyLane's
+# to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr.
+# We use PennyLane's
 # :class:`~.BasisState` operation to construct the HF state and :class:`excitations`
 # to obtain the list of allowed single and double excitations out of the HF state.
-# This is used to build the VQE circuit.
+# The way we build the VQE circuit for this system is generic and can be used to
+# build circuits for any molecular system. We then repeat the calculations over the
+# whole range of PES and print the converged energies of the whole system at each step.
 
 vqe_energy = []
 
@@ -381,6 +385,10 @@ print(df)
 # this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
 # of reactants and products respectively while the transition state is represented by the
 # local maxima.
+# In general, we would like our method (VQE) to provide
+# a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`),
+# and the transition state (maxima). We shall compare the VQE results later and find that it
+# reproduces the exact energies (FCI) in the chosen basis (STO-3G) throughout the PES.
 
 # plot the PES
 fig, ax = plt.subplots()
@@ -397,14 +405,9 @@ plt.show()
 # ***************************************************
 # The utility of potential energy surfaces lies in estimating
 # reaction energies and activation energy barriers, as well as the
-# geometric configurations of key reactants, intermediates,
+# geometric configurations of key reactants,
 # `transition states <https://en.wikipedia.org/wiki/Transition_state>`_
 # and products.
-# In general, we would like our method (VQE) to provide
-# a good estimate of the energies of the reactants (minima :math:`1`), products (minima :math:`2`),
-# and the transition state (maxima). VQE reproduces the exact result (FCI) in the small
-# basis (STO-3G).
-#
 # The activation energy barrier (:math:`E_{a}`) is defined as the difference between the
 # energy of the reactant complex
 # and the energy of the
@@ -446,8 +449,6 @@ print(
 # this is not the *best* theoretical estimate. We would need to do this calculation
 # in larger basis, triple and quadruple zeta basis or higher, to reach basis set
 # convergence and this would significantly increase the number of qubits required.
-# This is a current limitation that would go away with increasing number of logical qubits
-# that would hopefully become available in future quantum computers.
 #
 # The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy barrier
 # as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
@@ -485,7 +486,8 @@ print(
 # for the transformation. This is to say that one Slater determinant is a good reference
 # for one half of the PES while another determinant is good reference for the rest of PES.
 #
-# Here, we construct the potential energy surface for this reaction and see how
+# We set this last section as a challenge problem for the reader. We would like to
+# generate the potential energy surface for this reaction and see how
 # classical and quantum computing approaches built on single HF reference perform.
 # Once we have solved the mean-field HF equations, we obtain the molecular orbitals
 # (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal states
@@ -503,12 +505,12 @@ print(
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
-# Now, it's your turn to generate the potential energy surface. You could follow from our
+# Now, it's your turn to generate the potential energy surface. You could follow our
 # previous examples. All you need to do is to traverse along the specified reaction coordinate
 # and obtain converged VQE energies.
 #
 #
-# Below is the PES you would be able to generate. We have the HF and FCI curves plotted for
+# Below is the PES plot you would be able to generate. We have the HF and FCI curves plotted for
 # comparison. We see a sharp maximum which is
 # actually the result of a sudden switch in the underlying Hartree-Fock reference.
 # The performance of VQE depends on the active space chosen. For reference, we have plotted
