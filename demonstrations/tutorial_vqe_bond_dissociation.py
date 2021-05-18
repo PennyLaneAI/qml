@@ -305,8 +305,7 @@ print(
 # This translates into a :math:`6` qubit problem and the Hartree-Fock state
 # is :math:`|111000\rangle`. As there is an unpaired
 # electron, the spin multiplicity is two and needs to be specified.
-# As in previous case, all electrons and all orbitals are considered
-# but we specify the number of active electrons and active orbitals.
+# As in previous case, all electrons and all orbitals are considered.
 
 
 # Molecular parameters
@@ -384,7 +383,6 @@ for r in r_range:
     params_old = params
     pes_point = pes_point + 1
 
-
     print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
     vqe_energy.append(energy)
 
@@ -398,11 +396,11 @@ print(df)
 ##############################################################################
 #
 # Did you notice a trick we use to speed up the convergence of VQE energy? The converged
-# gate parameters for a particular point on PES are used as the initial guess for the next 
+# gate parameters for a particular point on PES are used as the initial guess for the next
 # point. With a better guess, the VQE iterations converge relatively quickly and we save some
 # time.
-# 
-# After tabulating our results, we plot the energy as a function of distance between atoms 
+#
+# After tabulating our results, we plot the energy as a function of distance between atoms
 # :math:`1` and :math:`2`, and thus we have the potential energy curve for
 # this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
 # of reactants and products respectively while the transition state is represented by the
@@ -470,7 +468,7 @@ print(
 # in larger basis to reach basis set
 # convergence and this would significantly increase the number of qubits required.
 #
-# The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy 
+# The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy
 # barrier as shown in the `Arrhenius equation <https://en.wikipedia.org/wiki/Arrhenius_equation>`_:
 #
 # .. math:: k = Ae^{-{E_{a}}/RT}.
@@ -500,24 +498,23 @@ print(
 # for all points on the potential energy surface. Hence, we refer to them as single reference
 # problems. However, there exist situations where more than one reference state is
 # required across the potential energy surface. These are called multi-reference problems.
-# A symmetric approach (:math:`C_{2v}`) of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
-# constitutes a multireference problem. [#purvis1983]_ It needs two different
-# Hartree-Fock Slater determinants to qualitatively describe the full potential energy suface
-# for the transformation. This is to say that one Slater determinant is a good reference
-# for one half of the PES while another determinant is good reference for the rest of PES.
-#
-# We set this last section as a challenge problem for the reader. We would like to
-# generate the potential energy surface for this reaction and see how
-# classical and quantum computing approaches built on single HF reference perform.
-# Once we have solved the mean-field HF equations, we obtain the molecular orbitals
-# (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal states
-# :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
+# A symmetric approach of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
+# (see the animation of reaction trajectory below)
+# constitutes a multireference problem. [#purvis1983]_
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/beh2_movie.gif
 #     :width: 70%
 #     :align: center
 #
+# Let us first understand the problem in more detail. Once we have solved the mean-field HF
+# equations, we obtain the molecular orbitals
+# (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal states
+# :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
+# These are the two different
+# reference states needed to qualitatively describe the full potential energy surface
+# for this reaction. This is to say that one state is a good reference
+# for one half of the PES while another is good reference for the rest of PES.
 #
 # To figure out the reaction coordinate for the
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
@@ -525,9 +522,14 @@ print(
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
 # and :math:`x \in [1, 4]`. All distances are in Bohr.
-# Now, it's your turn to generate the potential energy surface. You could follow our
+#
+#
+# We set this last section as a challenge problem for the reader. We would like you to
+# generate the potential energy surface for this reaction and compare how
+# approaches built on single HF reference perform.
+# You could follow our
 # previous examples. All you need to do is to traverse along the specified reaction coordinate
-# and obtain converged VQE energies.
+# and obtain the converged VQE energies.
 #
 #
 # Below is the PES plot you would be able to generate. We have the HF and FCI curves plotted for
@@ -537,9 +539,9 @@ print(
 # the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
 # which is equal to :math:`6` spin orbitals. As a simple exercise, try increasing
 # the number of active orbitals and see how the performance of our VQE circuit changes.
-# You would notice that our VQE circuit
-# reproduces the Full CI result shown below if we increase the active orbitals to include
-# all the unoccupied orbitals i.e. 12 spin orbitals in total.
+# Does our VQE circuit
+# reproduce the Full CI result shown below if we increase the active orbitals to include
+# all the unoccupied orbitals i.e. 12 spin orbitals in total?
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
@@ -547,7 +549,7 @@ print(
 #     :align: center
 #
 #
-# To summarize, we looked at three different chemical reactions and constructed
+# To summarize, we looked at three different chemical reactions and construct
 # their potential energy curves. We calculated the bond dissociation energy,
 # activation energy, and bond length for the relevant situations.
 # We also saw how quantum computing algorithms such as VQE can in principle
