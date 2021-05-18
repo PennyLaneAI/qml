@@ -163,7 +163,7 @@ symbols = ["H", "H"]
 
 vqe_energy = []
 # set up a loop to change internuclear distance
-r_range = np.arange(0.5, 5.0, 0.1)
+r_range = np.arange(0.5, 5.0, 0.1).round(1)
 for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
@@ -332,7 +332,7 @@ symbols = ["H", "H", "H"]
 vqe_energy = []
 pes_point = 0
 
-r_range = np.arange(1.0, 3.0, 0.1)
+r_range = np.arange(1.0, 3.0, 0.1).round(1)
 for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
