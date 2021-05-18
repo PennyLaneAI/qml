@@ -47,7 +47,7 @@ Hamiltonians appear often in the theory of `quantum control <https://quantiki.or
 field of inquiry which studies how a quantum system can be driven from one state to another.
 Suppose we have cleverly encoded the solution to an optimization problem into the ground state of the cost Hamiltonian 
 :math:`H_c`, which we denote by :math:`|\psi\rangle`.
-The choice of :math:`\beta(t)` corresponds to a strategy for driving the system, using the driving Hamiltonian :math:`H_d, into this state.
+The choice of :math:`\beta(t)` corresponds to a strategy for driving the system into this state using the driving Hamiltonian :math:`H_d`.
 Equivalently, we would like to find the state that minimizes the expectation value :math:`\langle H_c\rangle`.
 Therefore, a reasonable goal is to construct the system such that
 the expectation decreases with time:
