@@ -62,14 +62,16 @@ Thus arises the concept of the electronic energy of the molecule, :math:`E(R)`,
 as a function of interatomic coordinates. The potential energy surface of a 
 molecule is a 
 :math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
-visual tool to understand chemical reactions where stable molecules are the local minima 
-and transition states are the peaks.
+visual tool to understand chemical reactions by locating stable molecules (reactants and products)
+as the local minima and transition states as peaks and marking the possible routes of a plausible
+transformation.
 
 To summarize, to build the potential energy surface, we solve the electronic Schrödinger
-equation for a set of positions of the nuclei, and subsequently move them in incremental steps
-to obtain the energy at other configurations. The obtained set of energies are then 
-plotted against nuclear positions. To really understand the steps involved in making such a
-plot, let us do it.
+equation for fixed positions of the nuclei, and subsequently move them in incremental steps
+while solving the Schrödinger equation at each such configuration. 
+The obtained set of energies thus correspond to a grid of nuclear positions and the plot 
+:math:`E(R)` vs :math:`R` is the potential energy surface. 
+To really understand the steps involved in making such a plot, let us go deeper.
 
 ##########################################################
 
