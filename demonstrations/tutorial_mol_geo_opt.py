@@ -189,8 +189,8 @@ def H(x):
 #
 # For the :math:`\mathrm{H}_3^+` molecule in a minimal basis set we have a total of eight 
 # excitation operations. After applying the adaptive algorithm the final quantum
-# circuit contains two double-excitations acting on the qubits ``[0, 1, 2, 3]`` and
-# ``[0, 1, 4, 5]`` as it is shown in the figure below.
+# circuit contains two double-excitation operations that act on the qubits ``[0, 1, 2, 3]``
+# and ``[0, 1, 4, 5]``. The circuit is shown in the figure below.
 # |
 #
 # .. figure:: /demonstrations/mol_geo_opt/fig_circuit.png
