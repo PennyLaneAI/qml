@@ -343,7 +343,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # .. math:: r_A = \frac{\langle H_C\rangle - \langle H_C\rangle_\text{min}}{|\langle H_C\rangle_\text{min}|},
 #
 # and (b) :math:`\phi`, the squared overlap with the ground states for the cost Hamiltonian, normalized by the ground-state degeneracy,
-# i.e., the number of largest cliques :math:`K:
+# i.e., the number of largest cliques :math:`K`:
 #
 # .. math:: \phi = \frac{1}{K}\sum_{1\leq k \leq K} |\langle \psi| \psi_k\rangle|^2,
 #
