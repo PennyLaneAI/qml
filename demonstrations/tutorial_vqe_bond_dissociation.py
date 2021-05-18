@@ -9,6 +9,7 @@ Modelling chemical reactions on a quantum computer
 
 .. related::
    tutorial_vqe Variational Quantum Eigensolver
+   tutorial_quantum_chemistry Quantum Chemistry with PennyLane
 
 *Author: PennyLane dev team. Posted: 14 May 2021. Last updated: 14 May 2021.*
 
