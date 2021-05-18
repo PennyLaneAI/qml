@@ -45,21 +45,17 @@ the system from an initial state into the ground state of :math:`H_c`. FALQON fa
 Consider a quantum system governed by a Hamiltonian of the form :math:`H = H_c + \beta(t) H_d`. These kinds of
 Hamiltonians appear often in the theory of `quantum control <https://quantiki.org/wiki/quantum-control-theory>`__, a
 field of inquiry which studies how a quantum system can be driven from one state to another.
-The choice of :math:`\beta(t)` corresponds to a strategy for driving the system into the minimum of the cost Hamiltonian.
-
-The time-dependent Schrödinger equation tells us that the dynamics of the system are given by
-
-.. math:: i \frac{d}{dt} |\psi(t)\rangle = (H_c + \beta(t) H_d) |\psi(t)\rangle,
-
-where we set :math:`\hbar = 1`. Now suppose the objective is to drive the system
-to the ground state of :math:`H_c`, which we denote by :math:`|\psi\rangle`. Phrased differently, we would like to minimize
-the expectation value :math:`\langle H_c\rangle`. Therefore, a reasonable goal is to construct the system such that
+Suppose we have cleverly encoded the solution to an optimization problem into the ground state of the cost Hamiltonian 
+:math:`H_c`, which we denote by :math:`|\psi\rangle`.
+The choice of :math:`\beta(t)` corresponds to a strategy for driving the system, using the driving Hamiltonian :math:`H_d, into this state.
+Equivalently, we would like to find the state that minimizes the expectation value :math:`\langle H_c\rangle`.
+Therefore, a reasonable goal is to construct the system such that
 the expectation decreases with time:
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = \frac{d}{dt} \langle \psi(t)|H_c|\psi(t)\rangle = i \beta(t)\langle [H_d, H_c] \rangle_t \leq 0,
 
-where the product rule and Schrödinger's equation are used to derive the above formula. Recall that the control
-experiment depends on the choice of :math:`\beta(t)`. Thus,
+using the product rule and Schrödinger's equation.
+Recall that the control experiment depends on the choice of :math:`\beta(t)`. Thus,
 if we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
