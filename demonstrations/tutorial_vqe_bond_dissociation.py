@@ -71,7 +71,7 @@ equation for fixed positions of the nuclei, and subsequently move them in increm
 while solving the Schrödinger equation at each such configuration. 
 The obtained set of energies thus correspond to a grid of nuclear positions and the plot 
 :math:`E(R)` vs :math:`R` is the potential energy surface. 
-To really understand the steps involved in making such a plot, let us go deeper.
+To really understand the steps involved in making such a plot, let us dive straight into it.
 
 ##########################################################
 
@@ -84,8 +84,9 @@ of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
-We cast this problem in the language of quantum chemistry and then in terms of
-quantum circuits on a quantum computer as was also discussed in the tutorial 
+We now cast this problem in the language of `quantum chemistry 
+<https://en.wikipedia.org/wiki/Quantum_chemistry>`_ and then in terms of
+quantum circuits on a quantum computer as is discussed in the tutorial 
 :doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>`.
 Using a minimal `basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ 
 (`STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_), 
@@ -95,10 +96,10 @@ it.
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
 ground state is  represented as :math:`|1100\rangle`, where the two
 lowest-energy orbitals are occupied, and the remaining two are unoccupied. To form the complete 
-basis of states, we consider excitations of the HF state that conserve the spin. In this case, where 
-there are two electrons, single and double excitations suffice. The singly-excited 
-states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state is 
-:math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
+basis of states, we consider excitations out of the HF state that conserve the spin. 
+In this case, where there are two electrons, single and double excitations suffice. The 
+singly-excited states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state 
+is :math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
 <https://en.wikipedia.org/wiki/Configuration_interaction>`_ or FCI) 
 is a linear expansion in terms of these states where 
 the expansion coefficients would change as the reaction proceeds and the system moves around 
@@ -115,7 +116,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 ##############################################################################
-# We begin by specifying the basis set and the atomic symbols of the constituent atoms..
+# We then specify the basis set and the atomic symbols of the constituent atoms.
 # All electrons and all orbitals are considered in this case.
 
 basis_set = "sto-3g"
@@ -155,9 +156,9 @@ symbols = ["H", "H"]
 # where energy for the trial wavefunction is calculated
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
 # This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
-# Once we have the converged VQE energy estimate at the specified internuclear distance, we
-# increment the distance and the whole process of HF calculation, building quantum circuits and
-# iterative VQE optimization of gate parameters is repeated. After we have covered the grid of
+# Once we have the converged VQE energy at the specified internuclear distance, we
+# increment the distance and the whole cycle of HF calculation, building quantum circuits and
+# the iterative VQE optimization of gate parameters is repeated. After we have covered the grid of
 # internuclear distances, we tabulate the results.
 
 vqe_energy = []
@@ -329,6 +330,7 @@ symbols = ["H", "H", "H"]
 # whole range of PES and print the converged energies of the whole system at each step.
 
 vqe_energy = []
+pes_point = 0
 
 r_range = np.arange(1.0, 3.0, 0.1)
 for r in r_range:
@@ -361,6 +363,11 @@ for r in r_range:
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
+    # if this is not the first point on PES, initialize with converged parameters
+    # from previous point
+    if pes_point > 1:
+        params = params_old
+
     prev_energy = 0.0
 
     for n in range(60):
@@ -372,6 +379,11 @@ for r in r_range:
             break
 
         prev_energy = energy
+
+    # store the converged parameters
+    params_old = params
+    pes_point = pes_point + 1
+
 
     print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
     vqe_energy.append(energy)
