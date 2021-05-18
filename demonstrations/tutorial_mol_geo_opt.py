@@ -205,7 +205,7 @@ def H(x):
 # The quantum circuit above is implemented by the ``circuit`` function
 
 
-def ansatz(params, wires):
+def circuit(params, wires):
     hf_state = np.array([1, 1, 0, 0, 0, 0])
     qml.BasisState(hf_state, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
