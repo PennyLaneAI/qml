@@ -42,7 +42,7 @@ To solve combinatorial optimization problems using a quantum computer, a typical
 the solution to the problem as the ground state of *cost Hamiltonian* :math:`H_c`, and then use some procedure to drive
 the system from an initial state into the ground state of :math:`H_c`. FALQON falls under this broad scheme.
 
-Consider a quantum system governed by a Hamiltonian of the form :math:`H = H_c + \beta(t) H_d`. These kinds of
+Consider a quantum system governed by a Hamiltonian of the form :math:`H=H_c+\beta(t)H_d`. These kinds of
 Hamiltonians appear often in the theory of `quantum control <https://quantiki.org/wiki/quantum-control-theory>`__, a
 field of inquiry which studies how a quantum system can be driven from one state to another.
 Suppose we have cleverly encoded the solution to an optimization problem into the ground state of the cost Hamiltonian 
@@ -105,7 +105,7 @@ On step :math:`k`, perform the following three substeps:
 3. Set :math:`\beta_{k+1} = -A_k`.
 
 Repeat for all :math:`k` from :math:`1` to :math:`n`, where :math:`n` is a hyperparameter we
-are at liberty to choose. More layers results in a better optimum, but takes longer to run. At the final step, evaluate :math:`\langle H_c \rangle`.
+are at liberty to choose. More layers results in a better approximation to the ground state, but takes longer to run. At the final step, evaluate :math:`\langle H_c \rangle`.
 
 .. figure:: ../demonstrations/falqon/falqon.png
      :align: center
@@ -149,7 +149,7 @@ nx.draw(graph, with_labels=True, node_color="#e377c2")
 # where each qubit is a node in the graph, and the states :math:`|0\rangle` and :math:`|1\rangle`
 # represent whether the vertex has been "marked" as part of the clique, as is the case for `most standard QAOA encoding
 # schemes <https://arxiv.org/abs/1709.03489>`__.
-# Note that :math:`\bar{G}` is the complement of the graph (swap edges and non-edges), used so that non-edges are expensive.
+# Note that :math:`\bar{G}` is the complement of the graph (swap edges and non-edges), so that we penalize non-edges in our subgraph.
 #
 # In addition to defining :math:`H_c`, we also require a driver Hamiltonian :math:`H_d`, which does not commute
 # with :math:`H_c`. The driver Hamiltonian's role is similar to that of the mixer Hamiltonian in QAOA.
@@ -216,7 +216,7 @@ print(comm_h(graph))
 
 ######################################################################
 # We can now build the FALQON algorithm. Our goal is to evolve some initial state under the Hamiltonian :math:`H`,
-# with our chosen :math:`\beta(t)`. We first define one layer of our Trotterized time evolution, which is of
+# with our chosen :math:`\beta(t)`. We first define one layer of the Trotterized time evolution, which is of
 # the form :math:`U_d(\beta_k) U_c`. Note that we can use the :class:`~.pennylane.templates.ApproxTimeEvolution` template:
 
 def falqon_layer(beta_k, cost_h, driver_h, delta_t):
@@ -337,20 +337,14 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # `Erdos-Renyi model <https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model>`__, where we start with
 # the complete graph on :math:`n` vertices and then keep each edge with probability :math:`p`. We then find the maximum
 # cliques on these graphs using the
-# `Bron-Kerbosch algorithm <https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm>`__. To benchmark FALQON, we
-# compute two figures of merit: (a) :math:`r_A`, the relative error in the estimated minimum energy:
+# `Bron-Kerbosch algorithm <https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm>`__. To benchmark FALQON,
+# the relative error in the estimated minimum energy
 #
 # .. math:: r_A = \frac{\langle H_C\rangle - \langle H_C\rangle_\text{min}}{|\langle H_C\rangle_\text{min}|},
 #
-# and (b) :math:`\phi`, the squared overlap with the ground states for the cost Hamiltonian, normalized by the ground-state degeneracy,
-# i.e., the number of largest cliques :math:`K`:
+# makes a good figure of merit.
 #
-# .. math:: \phi = \frac{1}{K}\sum_{1\leq k \leq K} |\langle \psi| \psi_k\rangle|^2,
-#
-# where :math:`|\psi\rangle` is the prepared state, and each :math:`|\psi_k\rangle` is a ground state of the cost
-# Hamiltonian.
-#
-# Below the final results for the figures of merit are plotted (along with the values of :math:`\beta`),
+# Final results for this figure of merit, along with :math:`\beta`, are plotted below,
 # with the number of FALQON layers on the horizontal axis. Due to computational constraints, we have averaged over :math:`5` random graphs per node
 # size, for sizes :math:`n = 6, 7, 8, 9`, with probability :math:`p = 0.1` of keeping an edge. Running FALQON for
 # :math:`40` steps, with :math:`\Delta t = 0.01`, produces:
@@ -359,12 +353,10 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #     :align: center
 #     :width: 60%
 #
-# The relative error decreases with the number of layers and graph size, except for :math:`n = 9` where the step size has become too large.
-# The rate of decrease slows, however, a feature we expect to be generally true when trying to solve hard problems using a method like
-# FALQON which is guaranteed to improve with time. No one said anything about the rate of improvement!
-# The ground state overlap :math:`\phi` increases with layer,
-# indicating improved overlap with the true maximum clique(s). Note that :math:`\phi` lies above :math:`1` due to large
-# degeneracy in largest cliques for small, sparse (:math:`p=0.1`) graphs.
+# The relative error decreases with the number of layers and graph size, except for :math:`n = 9` where the step size has become too large
+# and the Trotter-Suzuki decomposition breaks down.
+# The rate of decrease also slows. Even though the algorithm will converge to the ground state,
+# no one said anything about how quickly it gets there!
 
 ######################################################################
 # Seeding QAOA with FALQON (Bird Seed 🦅)
