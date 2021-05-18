@@ -1,4 +1,4 @@
-r"""
+"""
 Feedback-Based Quantum Optimization (FALQON)
 ============================================
 
@@ -359,7 +359,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #     :align: center
 #     :width: 60%
 #
-# The relative error decreases with the number of layers and graph size, except for $n = 9$ where the step size has become too large.
+# The relative error decreases with the number of layers and graph size, except for :math:`n = 9` where the step size has become too large.
 # The rate of decrease slows, however, a feature we expect to be generally true when trying to solve hard problems using a method like
 # FALQON which is guaranteed to improve with time. No one said anything about the rate of improvement!
 # The ground state overlap :math:`\phi` increases with layer,
