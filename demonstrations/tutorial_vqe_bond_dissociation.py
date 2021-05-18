@@ -397,8 +397,13 @@ print(df)
 
 ##############################################################################
 #
-# Then we plot the energy as a function of distance between atoms :math:`1` and :math:`2`,
-# and thus we have the potential energy curve for
+# Did you notice a trick we use to speed up the convergence of VQE energy? The converged
+# gate parameters for a particular point on PES are used as the initial guess for the next 
+# point. With a better guess, the VQE iterations converge relatively quickly and we save some
+# time.
+# 
+# After tabulating our results, we plot the energy as a function of distance between atoms 
+# :math:`1` and :math:`2`, and thus we have the potential energy curve for
 # this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
 # of reactants and products respectively while the transition state is represented by the
 # local maxima.
@@ -433,7 +438,7 @@ plt.show()
 # .. math:: E_{a} = E_{TS} - E_{Reactant}
 #
 # In the case of the hydrogen exchange reaction, the activation energy barrier is
-#                   :math:`E_{a} = 0.0274` Ha :math:`= 17.24` kcal/mol
+#                   :math:`E_{a} = 0.0275` Ha :math:`= 17.26` kcal/mol
 # Below we show how to calculate the activation energy from the above PES.
 
 energy_equil = min(vqe_energy)
