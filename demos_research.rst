@@ -238,7 +238,7 @@ such as benchmarking and characterizing quantum processors.
    :tags: quantumcomputing
 
 .. customgalleryitem::
-   :tooltip: Learn how to sample quantum states uniformly at random
+   :tooltip: Explore the amazing applications of unitary t-designs.
    :figure: demonstrations/unitary_designs/fano.png
    :description: :doc:`demos/tutorial_unitary_designs`
    :tags: quantumcomputing
