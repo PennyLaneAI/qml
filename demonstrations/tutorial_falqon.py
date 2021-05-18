@@ -346,11 +346,12 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #
 # .. math:: r_A = \frac{\langle H_C\rangle - \langle H_C\rangle_\text{min}}{|\langle H_C\rangle_\text{min}|},
 #
-# and (b) :math:`\phi`, the squared overlap with the (possibly degenerate) ground states for the cost Hamiltonian:
+# and (b) :math:`\phi`, the squared overlap with the ground states for the cost Hamiltonian, normalized by the ground-state degeneracy,
+# i.e., the number of largest cliques $K$:
 #
-# .. math:: \phi = \sum_K |\langle \psi| \psi_K\rangle|^2,
+# .. math:: \phi = \frac{1}{K}\sum_{1\leq k \leq K} |\langle \psi| \psi_k\rangle|^2,
 #
-# where :math:`|\psi\rangle` is the prepared state, and each :math:`|\psi_K\rangle` is a ground state of the cost
+# where :math:`|\psi\rangle` is the prepared state, and each :math:`|\psi_k\rangle` is a ground state of the cost
 # Hamiltonian.
 #
 # Below the final results for the figures of merit are plotted (along with the values of :math:`\beta`),
