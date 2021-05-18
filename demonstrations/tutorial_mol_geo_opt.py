@@ -39,7 +39,8 @@ gradients and the Hessian of the energy at each optimization step while searchin
 minimum along the potential energy surface :math:`E(x)`. As a consequence, using accurate
 wave function methods to solve the molecule's electronic structure at each step is computationally
 intractable even for medium-size molecules. Instead, `density functional theory
- <https://en.wikipedia.org/wiki/Density_functional_theory>`_ methods [#dft_book]_ are used to obtain approximated geometries.
+ <https://en.wikipedia.org/wiki/Density_functional_theory>`_ methods [#dft_book]_ are
+used to obtain approximated geometries.
 
 Variational quantum algorithms for quantum chemistry applications use quantum computer to prepare
 the electronic wave function of a molecule and to measure the expectation value of the Hamiltonian
@@ -48,7 +49,8 @@ energy [#mcardle2020]_. The problem of finding the equilibrium geometry of a mol
 recast in terms of a more general variational quantum algorithm where the target electronic 
 Hamiltonian :math:`H(x)` is a *parametrized* observable that depends on the nuclear
 coordinates :math:`x`. This implies that the objective function, defined by the expectation value
-of the Hamiltonian :math:`H(x)` computed in the trial state :math:`\vert \Psi(\theta) \rangle` prepared by a parametrized quantum circuit :math:`U(\theta)`, depends on both the circuit and the 
+of the Hamiltonian :math:`H(x)` computed in the trial state :math:`\vert \Psi(\theta) \rangle`
+prepared by a parametrized quantum circuit :math:`U(\theta)`, depends on both the circuit and the 
 Hamiltonian parameters. Furthermore, the cost function can be minimized using a *joint* 
 optimization scheme where the analytical gradients of the cost function with respect to circuit
 and Hamiltonian parameters are computed simultaneously at each optimization step.
@@ -94,19 +96,17 @@ from pennylane import numpy as np
 from functools import partial
 
 ##############################################################################
-# The second step is to specify the molecule for which we want to find the equilibrium 
+# The second step is to specify the molecule for which we want to find the equilibrium
 # geometry. In this example, we want to optimize the geometry of the trihydrogen cation
 # (:math:`\mathrm{H}_3^+`) consisted of three hydrogen atoms as shown in the figure above.
 # This is done by providing a list with the symbols of the atomic species and a 1D array
 # with the initial set of nuclear coordinates.
 
 symbols = ["H", "H", "H"]
-x = np.array([0.028, 0.054, 0.0,
-              0.986, 1.610, 0.0,
-              1.855, 0.002, 0.0])
+x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 
 ##############################################################################
-# Note that the size of the array ``x`` with the nuclear coordinates is ``3*len(symbols)``. 
+# Note that the size of the array ``x`` with the nuclear coordinates is ``3*len(symbols)``.
 # The :func:`~.pennylane_qchem.qchem.read_structure` function can also be used to read
 # the molecular structure from a external file using the `XYZ format
 # <https://en.wikipedia.org/wiki/XYZ_file_format>`_XYZ format or any other format
@@ -119,7 +119,7 @@ x = np.array([0.028, 0.054, 0.0,
 #
 # .. math::
 #
-#     H(x) = \sum_{pq} h_{pq}(x)c_p^\dagger c_q + 
+#     H(x) = \sum_{pq} h_{pq}(x)c_p^\dagger c_q +
 #     \frac{1}{2}\sum_{pqrs} h_{pqrs}(x) c_p^\dagger c_q^\dagger c_r c_s.
 #
 # In the equation above the indices of the summation run over the basis of
@@ -127,7 +127,7 @@ x = np.array([0.028, 0.054, 0.0,
 # respectively the electron creation and annihilation operators, and :math:`h_{pq}(x)`
 # and $h_{pqrs}(x)$ are the one- and two-electron integrals carrying the dependence on
 # the nuclear coordinates [#yamaguchi_book]_. The Jordan-Wigner transformation [#seeley2012]_
-# is typically used to decompose the fermionic Hamiltonian into a linear combination of Pauli 
+# is typically used to decompose the fermionic Hamiltonian into a linear combination of Pauli
 # operators,
 #
 # .. math::
@@ -135,7 +135,7 @@ x = np.array([0.028, 0.054, 0.0,
 #     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^j,
 #
 # whose expectation value can be evaluated using a quantum computer. $h_j(x)$ are the
-# expansion coefficients inheriting the dependence on the coordinates $x$, 
+# expansion coefficients inheriting the dependence on the coordinates $x$,
 # the operators $\sigma_i$ represents the Pauli group $\{I, X, Y, Z\}$ and $N$ is the
 # number of qubits.
 #
@@ -143,8 +143,10 @@ x = np.array([0.028, 0.054, 0.0,
 # of the trihydrogen cation, described in a minimal basis set, using the
 # func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
+
 def H(x):
     return qml.qchem.molecular_hamiltonian(symbols, x, charge=1, mapping="jordan_wigner")[0]
+
 
 ##############################################################################
 # The variational quantum circuit
@@ -160,7 +162,7 @@ def H(x):
 # single-excitation with respect to the HF state. For example, the state
 # :math:`\vert 000011 \rangle` is obtained by exciting two particles from qubits  0, 1 to
 # 4, 5. Similarly, the state encodes a double excitation of the reference HF state
-# where the state :math:`\vert 011000 \rangle` corresponds to a single excitation 
+# where the state :math:`\vert 011000 \rangle` corresponds to a single excitation
 # from qubit 0 to 2. This can be done using the particle-conserving single- and
 # double-excitation gates [#qchemcircuits]_ implemented in the form of Givens rotations
 # in PennyLane. For more details see the tutorial doc:`tutorial_givens_rotations`.
@@ -169,12 +171,12 @@ def H(x):
 # operation included in the variational quantum circuit. The algorithm, which is
 # described in more details in the tutorial doc:`tutorial_adaptive_algorithm`,
 # proceeds as follows:
-# 
+#
 # #. Generate the lists with the indices of the qubits involved in all single- and
 #    double-excitations using the func:`~.pennylane_qchem.qchem.excitation` function.
 #    For example, the indices of the singly-excited state :math:`\vert 011000 \rangle`
 #    are given by the list ``[0, 2]``. Similarly, the indices of the doubly-excited
-#    state :math:`\vert 000011 \rangle` are ``[0, 1, 4, 5]``. 
+#    state :math:`\vert 000011 \rangle` are ``[0, 1, 4, 5]``.
 #
 # #. Construct the circuit using all double-excitation gates. Compute the gradient
 #    of the expectation value
@@ -187,10 +189,11 @@ def H(x):
 # #. Build the final variational quantum circuit by including the selected excitation
 #    operations.
 #
-# For the :math:`\mathrm{H}_3^+` molecule in a minimal basis set we have a total of eight 
+# For the :math:`\mathrm{H}_3^+` molecule in a minimal basis set we have a total of eight
 # excitation operations. After applying the adaptive algorithm the final quantum
 # circuit contains two double-excitation operations that act on the qubits ``[0, 1, 2, 3]``
 # and ``[0, 1, 4, 5]``. The circuit is shown in the figure below.
+#
 # |
 #
 # .. figure:: /demonstrations/mol_geo_opt/fig_circuit.png
@@ -201,11 +204,13 @@ def H(x):
 #
 # The quantum circuit above is implemented by the ``circuit`` function
 
+
 def ansatz(params, wires):
     hf_state = np.array([1, 1, 0, 0, 0, 0])
     qml.BasisState(hf_state, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
+
 
 ##############################################################################
 # The ``DoubleExcitation`` operations acting on the HF state allow us to prepare
@@ -213,8 +218,8 @@ def ansatz(params, wires):
 #
 # .. math::
 #
-#     \vert\Psi(\theta_1, \theta_2)\rangle = 
-#     \mathrm{cos}(\theta_1)\mathrm{cos}(\theta_2)\vert110000\rangle - 
+#     \vert\Psi(\theta_1, \theta_2)\rangle =
+#     \mathrm{cos}(\theta_1)\mathrm{cos}(\theta_2)\vert110000\rangle -
 #     \mathrm{cos}(\theta_1)\mathrm{sin}(\theta_2)\vert000011\rangle -
 #     \mathrm{sin}(\theta_1)\vert001100\rangle,
 #
@@ -224,7 +229,7 @@ def ansatz(params, wires):
 ##############################################################################
 # The cost function and the nuclear gradients
 # -------------------------------------------
-# 
+#
 # The next step is to define the cost function
 # :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle` to
 # evaluate the expectation value of the *parametrized* Hamiltonian :math:`H(x)` in the
@@ -234,12 +239,14 @@ def ansatz(params, wires):
 dev = qml.device("default.qubit", wires=6)
 
 ##############################################################################
-# Next, we use the PennyLane class :class:`~.pennylane.ExpvalCost` to define the 
+# Next, we use the PennyLane class :class:`~.pennylane.ExpvalCost` to define the
 # ``cost`` function :math:`g(\theta, x)` which depends on both the circuit and the
 # Hamiltonian parameters.
 
+
 def cost(params, x):
     return qml.ExpvalCost(circuit, H(x), dev)(params)
+
 
 ##############################################################################
 # This function returns the expectation value of the parametrized Hamiltonian ``H(x)``
@@ -263,15 +270,17 @@ def cost(params, x):
 # the gradient components :math:`\frac{\partial H(x)}{\partial x_i}. This is implemented by
 # the function ``grad_x``:
 
+
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
     grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
     return np.array(grad)
 
+
 ##############################################################################
 # Optimization of the molecular geometry
 # --------------------------------------
-# 
+#
 # Now we proceed to minimize our cost function to find the ground state energy and the
 # equilibrium geometry of the :math:`\mathrm{H}_3^+` molecule. The circuit parameters and
 # the nuclear coordinates will be jointly optimized at each optimization step. We note
@@ -296,7 +305,7 @@ theta = [0.0, 0.0]
 # by the ``circuit`` function is the Hartree-Fock (HF) state. The initial set of nuclear
 # coordinates :math:`x`, defined at the beginning of the tutorial, was computed
 # classically within the HF approximation using the GAMESS program [#ref_gamess]_.
-#    
+#
 # We carry out the optimization over a maximum of 100 steps. The circuit parameters and
 # the nuclear coordinates should be optimized until the maximum component of the
 # nuclear gradient :math:`\nabla_x g(\theta,x)` is less than or equal to
@@ -312,28 +321,31 @@ bond_length = []
 bohr_angs = 0.529177210903
 
 for n in range(100):
-   
+
     theta = opt_theta.step(partial(cost, x=x), theta)
 
     grad_fn = partial(grad_x, params=theta)
     x = opt_x.step(partial(cost, params=theta), x, grad_fn=grad_fn)
 
     energy.append(cost(theta, x))
-    bond_length.append(np.linalg.norm(x[0:3] - x[3:6])*bohr_angs)
+    bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
 
-    print('Iteration = {:},  Energy = {:.8f} Ha,  bond length = {:.4f} A'.
-        format(n, energy[-1], bond_length[-1]))
+    print(
+        "Iteration = {:},  Energy = {:.8f} Ha,  bond length = {:.4f} A".format(
+            n, energy[-1], bond_length[-1]
+        )
+    )
 
     if np.max(grad_fn(x)) <= 1e-04:
         break
 
-print('\n' 'Final value of the ground-state energy = {:.8f} Ha'.format(energy[-1]))
-print('\n' 'Ground-state equilibrium geometry')
-print('%s %4s %8s %8s' %("symbol", "x", "y", "z" ))
+print("\n" "Final value of the ground-state energy = {:.8f} Ha".format(energy[-1]))
+print("\n" "Ground-state equilibrium geometry")
+print("%s %4s %8s %8s" % ("symbol", "x", "y", "z"))
 for i, atom in enumerate(symbols):
-    print('  {:}    {:.4f}   {:.4f}   {:.4f}'.format(atom, x[3*i], x[3*i+1], x[3*i+2]))
+    print("  {:}    {:.4f}   {:.4f}   {:.4f}".format(atom, x[3 * i], x[3 * i + 1], x[3 * i + 2]))
 
-# 
+##############################################################################
 # References
 # ----------
 #
@@ -354,7 +366,7 @@ for i, atom in enumerate(symbols):
 #
 # .. [#mcardle2020]
 #
-#     S. McArdle, S. Endo, A. Aspuru-Guzik, S.C. Benjamin, X. Yuan, "Quantum computational 
+#     S. McArdle, S. Endo, A. Aspuru-Guzik, S.C. Benjamin, X. Yuan, "Quantum computational
 #     chemistry". `Rev. Mod. Phys. 92, 015003  (2020).
 #     <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.92.015003>`__
 #
@@ -374,7 +386,7 @@ for i, atom in enumerate(symbols):
 # .. [#qchemcircuits]
 #
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
-#     "Universal quantum circuits for quantum chemistry". 
+#     "Universal quantum circuits for quantum chemistry".
 #     arXiv preprint
 #
 # .. [#ref_gamess]
