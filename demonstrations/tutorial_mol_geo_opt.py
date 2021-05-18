@@ -38,8 +38,8 @@ typically rely on the Newton-Raphson method [#jensenbook]_ requiring access to t
 gradients and the Hessian of the energy at each optimization step while searching for the global
 minimum along the potential energy surface :math:`E(x)`. As a consequence, using accurate
 wave function methods to solve the molecule's electronic structure at each step is computationally
-intractable even for medium-size molecules. Instead, density functional theory methods
-[#dft_book_ are used to obtain approximated geometries.
+intractable even for medium-size molecules. Instead, `density functional theory
+ <https://en.wikipedia.org/wiki/Density_functional_theory>`_ methods [#dft_book]_ are used to obtain approximated geometries.
 
 Variational quantum algorithms for quantum chemistry applications use quantum computer to prepare
 the electronic wave function of a molecule and to measure the expectation value of the Hamiltonian
@@ -154,7 +154,7 @@ def H(x):
 # :math:`\vert \Psi(\theta)\rangle` of the :math:`\mathrm{H}_3^+` molecule. Representing
 # the wave function of this molecule requires six qubits to encode the occupation number
 # of the active spin-orbitals which can be populated by the two electrons in the
-# molecule. In order to capture the effects of electronic correlations [#referenceHERE]_,
+# molecule. In order to capture the effects of electronic correlations [#kohanoff2006]_,
 # we need to prepare the :math:`N`-qubit in a superposition of the Hartree-Fock state
 # :math:`\vert 110000 \rangle` with other states that differ by a double- or
 # single-excitation with respect to the HF state. For example, the state
@@ -165,7 +165,7 @@ def H(x):
 # double-excitation gates [#qchemcircuits]_ implemented in the form of Givens rotations
 # in PennyLane. For more details see the tutorial doc:`tutorial_givens_rotations`.
 #
-# Here, we use an adaptive algorithm [#geo_opt_paper]_ to select the excitation
+# Here, we use an adaptive algorithm to select the excitation
 # operation included in the variational quantum circuit. The algorithm, which is
 # described in more details in the tutorial doc:`tutorial_adaptive_algorithm`,
 # proceeds as follows:
@@ -242,43 +242,115 @@ def cost(params, x):
     return qml.ExpvalCost(circuit, H(x), dev)(params)
 
 ##############################################################################
-# This function returns the expectation value of the Hamiltonian ``H(x)`` computed
-# in the trial state prepared by the ``circuit`` function for a given set of the
+# This function returns the expectation value of the parametrized Hamiltonian ``H(x)``
+# computed in the state prepared by the ``circuit`` function for a given set of the
 # circuit parameters ``params`` and the nuclear coordinates ``x``.
 #
-# In order to minimize our cost function :math:`g(\theta, x)` using a gradient-based
-# method we have to compute the gradients with respect to the circuit parameters
-# :math:`\theta` *and* also with respect to the nuclear coordinates :math:`x`
-# (the nuclear gradients). The circuit gradients are computed analytically using
-# the automatic differentiation algorithm available in PennyLane. On the other hand,
-# the nuclear gradients are computed as,
+# In order to to minimize the cost function :math:`g(\theta, x)` using a gradient-based
+# method we have to compute the gradients with respect to the both the circuit parameters
+# :math:`\theta` *and* the nuclear coordinates :math:`x` (nuclear gradients). The circuit
+# gradients are computed analytically using the automatic differentiation techniques available
+# in PennyLane. On the other hand, the nuclear gradients are evaluated by taking the
+# expectation value of the gradient of the electronic Hamiltonian,
 #
 # .. math::
 #
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
-# To that aim, we use the func:`~.pennylane.finite_diff` function to compute the gradient of
-# the electronic Hamiltonian using a central-difference approximation. Then we use the
-# PennyLane class :class:`~.pennylane.ExpvalCost` to evaluate the expectation value of
-# the derivatives :math:`\frac{\partial H(x)}{\partial x_i}` in order to compute the nuclear
-# gradients. This is implemented by the function ``grad_x``:
+# We use the func:`~.pennylane.finite_diff` function to compute the gradient of
+# the Hamiltonian using a central-difference approximation and the PennyLane class
+# :class:`~.pennylane.ExpvalCost` to evaluate the expectation value of
+# the gradient components :math:`\frac{\partial H(x)}{\partial x_i}. This is implemented by
+# the function ``grad_x``:
 
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
     grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
     return np.array(grad)
 
+##############################################################################
+# Optimization of the molecular geometry
+# --------------------------------------
+# 
+# Now we proceed to minimize our cost function to find the ground state energy and the
+# equilibrium geometry of the :math:`\mathrm{H}_3^+` molecule. The circuit parameters and
+# the nuclear coordinates will be jointly optimized at each optimization step. We note
+# that this approach does not require a nested VQE optimization of the circuit parameters
+# for each set of the nuclear coordinates.
 #
+# We start by defining the classical optimizers:
+
+opt_theta = qml.GradientDescentOptimizer(stepsize=0.4)
+opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
+
+##############################################################################
+# In this example, we are using a simple gradient-descent optimizer to update
+# the circuit and the Hamiltonian parameters during the iterative optimization.
+# Next, we initialize the circuit parameters :math:`\theta`
+
+theta = [0.0, 0.0]
+
+##############################################################################
+# Setting the angles :math:`\theta_1` and :math:`\theta_2` to zero implies that
+# the initial electronic state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`prepared
+# by the ``circuit`` function is the Hartree-Fock (HF) state. The initial set of nuclear
+# coordinates :math:`x`, defined at the beginning of the tutorial, was computed
+# classically within the HF approximation using the GAMESS program [#ref_gamess]_.
+#    
+# We carry out the optimization over a maximum of 100 steps. The circuit parameters and
+# the nuclear coordinates should be optimized until the maximum component of the
+# nuclear gradient :math:`\nabla_x g(\theta,x)` is less than or equal to
+# :math:`10^{-5}` Hartree/Bohr. Typically, this is the convergence criterion used for
+# optimizing molecular geometries in quantum chemistry simulations.
 #
+# Finally, we use the lists ``energy`` and ``bond_length`` to keep track the
+# value of the cost function :math:`g(\theta,x)` and the H-H bond length :math:`d`
+# (in Angstroms) of trihydrogen cation through the iterative procedure.
+
+energy = []
+bond_length = []
+bohr_angs = 0.529177210903
+
+for n in range(100):
+   
+    theta = opt_theta.step(partial(cost, x=x), theta)
+
+    grad_fn = partial(grad_x, params=theta)
+    x = opt_x.step(partial(cost, params=theta), x, grad_fn=grad_fn)
+
+    energy.append(cost(theta, x))
+    bond_length.append(np.linalg.norm(x[0:3] - x[3:6])*bohr_angs)
+
+    print('Iteration = {:},  Energy = {:.8f} Ha,  bond length = {:.4f} A'.
+        format(n, energy[-1], bond_length[-1]))
+
+    if np.max(grad_fn(x)) <= 1e-04:
+        break
+
+print('\n' 'Final value of the ground-state energy = {:.8f} Ha'.format(energy[-1]))
+print('\n' 'Ground-state equilibrium geometry')
+print('%s %4s %8s %8s' %("symbol", "x", "y", "z" ))
+for i, atom in enumerate(symbols):
+    print('  {:}    {:.4f}   {:.4f}   {:.4f}'.format(atom, x[3*i], x[3*i+1], x[3*i+2]))
+
 # 
 # References
 # ----------
 #
-# .. [#peruzzo2014]
+# .. [#kohanoff2006]
 #
-#     A. Peruzzo, J. McClean *et al.*, "A variational eigenvalue solver on a photonic
-#     quantum processor". `Nature Communications 5, 4213 (2014).
-#     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#     Jorge Kohanoff. "Electronic structure calculations for solids and molecules: theory and
+#     computational methods". (Cambridge University Press, 2006).
+#
+# .. [#jensenbook]
+#
+#     F. Jensen. "Introduction to computational chemistry".
+#     (John Wiley & Sons, 2016).
+#
+# .. [#dft_book]
+#
+#     W. Koch, M.C. Holthausen. "A Chemist's Guide to Density Functional Theory".
+#     (John Wiley & Sons, 2015).
 #
 # .. [#mcardle2020]
 #
@@ -286,43 +358,28 @@ def grad_x(x, params):
 #     chemistry". `Rev. Mod. Phys. 92, 015003  (2020).
 #     <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.92.015003>`__
 #
-# .. [#cao2019]
+# .. [#yamaguchi_book]
 #
-#     Y. Cao, J. Romero, *et al.*, "Quantum chemistry in the age of quantum computing".
-#     `Chem. Rev. 2019, 119, 19, 10856-10915.
-#     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#     Y. Yamaguchi, H.F. Schaefer. "A New Dimension to Quantum Chemistry: Analytic Derivative
+#     Methods in *Ab Initio* Molecular Electronic Structure Theory".
+#     (Oxford University Press, USA, 1994).
 #
-# .. [#kandala2017]
+# .. [#seeley2012]
 #
-#     A. Kandala, A. Mezzacapo *et al.*, "Hardware-efficient variational quantum
-#     eigensolver for small molecules and quantum magnets". `arXiv:1704.05018
-#     <https://arxiv.org/abs/1704.05018>`_
+#     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
+#     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109
+#     (2012).
+#     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
 #
-# .. [#romero2017]
+# .. [#qchemcircuits]
 #
-#     J. Romero, R. Babbush, *et al.*, "Strategies for quantum computing molecular
-#     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
-#     <https://arxiv.org/abs/1701.02691>`_
+#     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
+#     "Universal quantum circuits for quantum chemistry". 
+#     arXiv preprint
 #
-# .. [#jensenbook]
+# .. [#ref_gamess]
 #
-#     F. Jensen. "Introduction to computational chemistry".
-#     (John Wiley & Sons, 2016).
-#
-# .. [#fetterbook]
-#
-#     A. Fetter, J. D. Walecka, "Quantum theory of many-particle systems".
-#     Courier Corporation, 2012.
-#
-# .. [#suzuki1985]
-#
-#     M. Suzuki. "Decomposition formulas of exponential operators and Lie exponentials
-#     with some applications to quantum mechanics and statistical physics".
-#     `Journal of Mathematical Physics 26, 601 (1985).
-#     <https://aip.scitation.org/doi/abs/10.1063/1.526596>`_
-#
-# .. [#barkoutsos2018]
-#
-#     P. Kl. Barkoutsos, J. F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
-#     calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
-#     `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
+#     M.W. Schmidt, K.K. Baldridge, J.A. Boatz, S.T. Elbert, M.S. Gordon, J.H. Jensen,
+#     S. Koseki, N. Matsunaga, K.A. Nguyen, S.Su, *et al.* "General atomic and molecular
+#     electronic structure system". `Journal of Computational Chemistry 14, 1347 (1993)
+#     <https://onlinelibrary.wiley.com/doi/10.1002/jcc.540141112>`__
