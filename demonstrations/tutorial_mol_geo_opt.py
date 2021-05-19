@@ -39,7 +39,7 @@ gradients and the Hessian of the energy at each optimization step while searchin
 minimum along the potential energy surface :math:`E(x)`. As a consequence, using accurate
 wave function methods to solve the molecule's electronic structure at each step is computationally
 intractable even for medium-size molecules. Instead, `density functional theory
- <https://en.wikipedia.org/wiki/Density_functional_theory>`_ methods [#dft_book]_ are
+<https://en.wikipedia.org/wiki/Density_functional_theory>`_ methods [#dft_book]_ are
 used to obtain approximated geometries.
 
 Variational quantum algorithms for quantum chemistry applications use quantum computer to prepare
@@ -126,7 +126,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 # In the equation above the indices of the summation run over the basis of
 # Hartree-Fock molecular orbitals, the operators :math:`c^\dagger` and :math:`c` are
 # respectively the electron creation and annihilation operators, and :math:`h_{pq}(x)`
-# and $h_{pqrs}(x)$ are the one- and two-electron integrals carrying the dependence on
+# and :math:`h_{pqrs}(x)` are the one- and two-electron integrals carrying the dependence on
 # the nuclear coordinates [#yamaguchi_book]_. The Jordan-Wigner transformation [#seeley2012]_
 # is typically used to decompose the fermionic Hamiltonian into a linear combination of Pauli
 # operators,
@@ -135,10 +135,10 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #
 #     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^j,
 #
-# whose expectation value can be evaluated using a quantum computer. $h_j(x)$ are the
-# expansion coefficients inheriting the dependence on the coordinates $x$,
-# the operators $\sigma_i$ represents the Pauli group $\{I, X, Y, Z\}$ and $N$ is the
-# number of qubits.
+# whose expectation value can be evaluated using a quantum computer. :math:`h_j(x)` are the
+# expansion coefficients inheriting the dependence on the coordinates :math:`x`,
+# the operators :math:`\sigma_i` represents the Pauli group :math:`\{I, X, Y, Z\}` and
+# :math:`N` is the number of qubits.
 #
 # We define the function ``H(x)`` to construct the parametrized qubit Hamiltonian
 # of the trihydrogen cation, described in a minimal basis set, using the
@@ -260,10 +260,10 @@ def cost(params, x):
 #
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
-# We use the func:`~.pennylane.finite_diff` function to compute the gradient of
+# We use the :func:`~.pennylane.finite_diff` function to compute the gradient of
 # the Hamiltonian using a central-difference approximation and the PennyLane class
 # :class:`~.pennylane.ExpvalCost` to evaluate the expectation value of
-# the gradient components :math:`\frac{\partial H(x)}{\partial x_i}. This is implemented by
+# the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
 
 def grad_x(x, params):
