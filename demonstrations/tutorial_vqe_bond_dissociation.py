@@ -253,12 +253,17 @@ plt.show()
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # as :math:`0.202` Hartrees (:math:`126.79` kcal/mol).
 
+# Energy at equilibrium bond length (minima)
 energy_equil = min(vqe_energy)
+
+# Energy at dissociation (Consider the farthest point on PES)
 energy_dissoc = vqe_energy[-1]
 
+# Dissociation energy
 bond_dissociation_energy = energy_dissoc - energy_equil
 bond_dissociation_energy_kcal = bond_dissociation_energy * 627.5
 
+# H-H bond length is the bond distance at equilibrium geometry
 bond_length_index = vqe_energy.index(energy_equil)
 bond_length = r_range[bond_length_index]
 
@@ -439,20 +444,22 @@ plt.show()
 #                   :math:`E_{a} = 0.0275` Ha :math:`= 17.26` kcal/mol
 # Below we show how to calculate the activation energy from the above PES.
 
+# Energy of the reactants and products - two minimas on the PES
 energy_equil = min(vqe_energy)
-
 energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
 
 # Between the two minimas, we have the TS which is a local maxima
 bond_length_index_1 = vqe_energy.index(energy_equil)
 bond_length_index_2 = vqe_energy.index(energy_equil_2)
 
+# Reaction coordinate at the two minimas
 index_1 = min(bond_length_index_1, bond_length_index_2)
 index_2 = max(bond_length_index_1, bond_length_index_2)
 
-# Transition State energy
+# Transition state energy
 energy_ts = max(vqe_energy[index_1:index_2])
 
+# Activation energy 
 activation_energy = energy_ts - energy_equil
 activation_energy_kcal = activation_energy * 627.5
 
@@ -526,7 +533,7 @@ print(
 #
 # We set this last section as a challenge problem for the reader. We would like you to
 # generate the potential energy surface for this reaction and compare how
-# approaches built on single HF reference perform.
+# the performance of VQE compares with Full CI results.
 # You could follow our
 # previous examples. All you need to do is to traverse along the specified reaction coordinate
 # and obtain the converged VQE energies.
