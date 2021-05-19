@@ -162,6 +162,7 @@ symbols = ["H", "H"]
 # internuclear distances, we tabulate the results.
 
 vqe_energy = []
+pes_point = 0
 # set up a loop to change internuclear distance
 r_range = np.arange(0.5, 5.0, 0.1).round(1)
 for r in r_range:
@@ -189,6 +190,11 @@ for r in r_range:
 
     # define and initialize the gate parameters
     params = np.zeros(3)
+    
+    # if this is not the first point on PES, initialize with converged parameters
+    # from previous point
+    if pes_point > 1:
+        params = params_old
 
     # Begin the VQE iteration to optimize gate parameters
     prev_energy = 0.0
@@ -204,6 +210,10 @@ for r in r_range:
 
         prev_energy = energy
 
+    # store the converged parameters
+    params_old = params
+    pes_point = pes_point + 1
+    
     print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
     vqe_energy.append(energy)
 
@@ -255,7 +265,7 @@ plt.show()
 # Energy at equilibrium bond length (minima)
 energy_equil = min(vqe_energy)
 
-# Energy at dissociation limit (the point on PES where the atoms are farthest apart)
+# Energy at dissociation limit (the point on PES where the atoms are far apart)
 energy_dissoc = vqe_energy[-1]
 
 # Bond dissociation energy
@@ -278,7 +288,8 @@ print(
 # These estimates can be improved
 # by using bigger basis sets and extrapolating to the complete basis set limit [#motta2020]_.
 # We must also note that our results are subject to gridsize of the span of interatomic
-# distances considered. The finer the gridsize, the better the estimates. 
+# distances considered. The finer the gridsize, the better the estimate of bond length and
+# dissociation energy. 
 # Now let's move on to a more interesting chemical reaction.
 #
 
@@ -401,7 +412,7 @@ print(df)
 ##############################################################################
 # .. note::
 #
-#     Did you notice a trick we use to speed up the convergence of VQE energy? The converged
+#     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
 #     gate parameters for a particular point on PES are used as the initial guess for the next
 #     geometry. With a better guess, the VQE iterations converge relatively quickly and we save 
 #     considerable time.
@@ -528,7 +539,7 @@ print(
 # These are the two different
 # reference states needed to qualitatively describe the full potential energy surface
 # for this reaction. Prior studies have suggested that one of these states is a good reference
-# for one half of the PES while another is good reference for the rest of PES.[#purvis1983]_
+# for one half of the PES while another is good reference for the rest of PES. [#purvis1983]_
 #
 # To figure out the reaction coordinate for the
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
