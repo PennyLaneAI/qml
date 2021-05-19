@@ -11,7 +11,7 @@ Modelling chemical reactions on a quantum computer
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_quantum_chemistry Quantum Chemistry with PennyLane
 
-*Author: PennyLane dev team. Posted: 14 May 2021. Last updated: 14 May 2021.*
+*Author: PennyLane dev team. Posted: 19 May 2021. Last updated: 19 May 2021.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- breaking and 
 forming of bonds. Such transformations involve energy costs that determine 
@@ -190,7 +190,7 @@ for r in r_range:
     # define and initialize the gate parameters
     params = np.zeros(3)
 
-    # Begin the VQE iteration to optimize gate parameters.
+    # Begin the VQE iteration to optimize gate parameters
     prev_energy = 0.0
 
     for n in range(50):
@@ -209,7 +209,6 @@ for r in r_range:
 
 # tabulate
 list_dist_energy = list(zip(r_range, vqe_energy))
-# Converting list into pandas Dataframe.
 df = pd.DataFrame(list_dist_energy, columns=["H-H distance (in Bohr)", "Energy (in Ha)"])
 # display table
 print(df)
@@ -259,7 +258,7 @@ energy_equil = min(vqe_energy)
 # Energy at dissociation (Consider the farthest point on PES)
 energy_dissoc = vqe_energy[-1]
 
-# Dissociation energy
+# Bond dissociation energy
 bond_dissociation_energy = energy_dissoc - energy_equil
 bond_dissociation_energy_kcal = bond_dissociation_energy * 627.5
 
@@ -501,8 +500,12 @@ print(
 # A model multireference problem: :math:`Be + H_{2} \rightarrow BeH_{2}`
 # -------------------------------------------------------------------------------------------
 #
-# In our previous examples, the Hartree-Fock state was a good approximation to the ground state
-# for all points on the potential energy surface. Hence, we refer to them as single reference
+# In our previous examples, the Hartree-Fock state was a good approximation to the exact
+# ground state for all points on the potential energy surface. 
+#
+# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle ~ 1 
+#
+# Hence, we refer to them as single reference
 # problems. However, there exist situations where more than one reference state is
 # required across the potential energy surface. These are called multi-reference problems.
 # A symmetric approach of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
@@ -539,9 +542,9 @@ print(
 # and obtain the converged VQE energies.
 #
 #
-# Below is the PES plot you would be able to generate. We have the HF and FCI curves plotted for
-# comparison. We see a sharp maximum which is
-# actually the result of a sudden switch in the underlying Hartree-Fock reference.
+# Below is the PES plot you would be able to generate. We have provided the HF and FCI curves for
+# comparison. A sharp maximum could be seen in these curves which is
+# due to a sudden switch in the underlying Hartree-Fock reference.
 # The performance of VQE depends on the active space chosen. For reference, we have plotted
 # the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
 # which is equal to :math:`6` spin orbitals. As a simple exercise, try increasing
