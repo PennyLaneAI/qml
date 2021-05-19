@@ -17,7 +17,6 @@ Understanding the Haar Measure
     tutorial_barren_plateaus Barren plateaus
 
 
-
 *Author: PennyLane dev team. Posted: 22 March 2021. Last updated: 22 March 2021.*
 
 If you've ever dug into the literature about random quantum circuits,
