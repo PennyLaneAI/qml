@@ -8,8 +8,8 @@ Modelling chemical reactions on a quantum computer
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
 .. related::
-   tutorial_vqe Variational Quantum Eigensolver
    tutorial_quantum_chemistry Quantum Chemistry with PennyLane
+   tutorial_vqe Variational Quantum Eigensolver
 
 *Author: PennyLane dev team. Posted: 19 May 2021. Last updated: 19 May 2021.*
 
@@ -86,8 +86,8 @@ of all reactions:
 
 We now cast this problem in the language of `quantum chemistry 
 <https://en.wikipedia.org/wiki/Quantum_chemistry>`_ and then in terms of
-quantum circuits on a quantum computer as is discussed in the tutorial 
-:doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>`.
+quantum circuits. For an introductory discussion, please take a look at 
+:doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>` tutorial.
 Using a minimal `basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ 
 (`STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_), 
 this molecular system can be described by :math:`2` electrons in :math:`4` 
@@ -244,7 +244,7 @@ plt.show()
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium --- and the bond dissociation energy.
 # The bond dissociation energy is the amount of energy required to dissociate a bond.
-# i.e. the difference in energy of the system at equilibrium (minima) and the energy
+# It is calculated as the difference in energy of the system at equilibrium (minima) and the energy
 # of the system at the dissociation limit, where the atoms are far apart and
 # the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
@@ -255,7 +255,7 @@ plt.show()
 # Energy at equilibrium bond length (minima)
 energy_equil = min(vqe_energy)
 
-# Energy at dissociation (Consider the farthest point on PES)
+# Energy at dissociation limit (the point on PES where the atoms are farthest apart)
 energy_dissoc = vqe_energy[-1]
 
 # Bond dissociation energy
@@ -277,9 +277,10 @@ print(
 ##############################################################################
 # These estimates can be improved
 # by using bigger basis sets and extrapolating to the complete basis set limit [#motta2020]_.
+# We must also note that our results are subject to gridsize of the span of interatomic
+# distances considered. The finer the gridsize, the better the estimates. 
 # Now let's move on to a more interesting chemical reaction.
 #
-
 
 ##############################################################################
 # Hydrogen Exchange Reaction
@@ -398,11 +399,12 @@ df = pd.DataFrame(list_dist_energy, columns=["H(1)-H(2) distance (in Bohr)", "En
 print(df)
 
 ##############################################################################
+# .. note::
 #
-# Did you notice a trick we use to speed up the convergence of VQE energy? The converged
-# gate parameters for a particular point on PES are used as the initial guess for the next
-# point. With a better guess, the VQE iterations converge relatively quickly and we save some
-# time.
+#     Did you notice a trick we use to speed up the convergence of VQE energy? The converged
+#     gate parameters for a particular point on PES are used as the initial guess for the next
+#     geometry. With a better guess, the VQE iterations converge relatively quickly and we save 
+#     considerable time.
 #
 # After tabulating our results, we plot the energy as a function of distance between atoms
 # :math:`1` and :math:`2`, and thus we have the potential energy curve for
@@ -497,20 +499,22 @@ print(
 # reproduce the absolute energies of the reactants, transition state and product.
 
 ##############################################################################
-# A model multireference problem: :math:`Be + H_{2} \rightarrow BeH_{2}`
+# A model multi-reference problem: :math:`Be + H_{2} \rightarrow BeH_{2}`
 # -------------------------------------------------------------------------------------------
 #
 # In our previous examples, the Hartree-Fock state was a good approximation to the exact
 # ground state for all points on the potential energy surface. 
 #
-# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle ~ 1 
+# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle \simeq 1 
 #
-# Hence, we refer to them as single reference
-# problems. However, there exist situations where more than one reference state is
-# required across the potential energy surface. These are called multi-reference problems.
+# Hence, we refer to them as single-reference
+# problems. However, there exist situations where the above condition does not hold and 
+# states other than HF state become considerably important and are 
+# required for accuracy across the potential energy surface. 
+# These are called multi-reference problems.
 # A symmetric approach of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
 # (see the animation of reaction trajectory below)
-# constitutes a multireference problem. [#purvis1983]_
+# constitutes a multi-reference problem. [#purvis1983]_
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/beh2_movie.gif
@@ -523,8 +527,8 @@ print(
 # :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
 # These are the two different
 # reference states needed to qualitatively describe the full potential energy surface
-# for this reaction. This is to say that one state is a good reference
-# for one half of the PES while another is good reference for the rest of PES.
+# for this reaction. Prior studies have suggested that one of these states is a good reference
+# for one half of the PES while another is good reference for the rest of PES.[#purvis1983]_
 #
 # To figure out the reaction coordinate for the
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
@@ -536,20 +540,21 @@ print(
 #
 # We set this last section as a challenge problem for the reader. We would like you to
 # generate the potential energy surface for this reaction and compare how
-# the performance of VQE compares with Full CI results.
-# You could follow our
-# previous examples. All you need to do is to traverse along the specified reaction coordinate
-# and obtain the converged VQE energies.
+# the performance of VQE with Full CI results.
+# You could follow our previous examples. All you need to do is to traverse along the 
+# specified reaction coordinate and obtain the converged VQE energies.
 #
 #
 # Below is the PES plot you would be able to generate. We have provided the HF and FCI curves for
 # comparison. A sharp maximum could be seen in these curves which is
-# due to a sudden switch in the underlying Hartree-Fock reference.
-# The performance of VQE depends on the active space chosen. For reference, we have plotted
+# due to a sudden switch in the underlying Hartree-Fock reference at the specific reaction
+# coordinate.
+# The performance of VQE depends on the active space chosen i.e. the number of electrons and
+# orbitals that are being considered. For reference, we have included
 # the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
 # which is equal to :math:`6` spin orbitals. As a simple exercise, try increasing
 # the number of active orbitals and see how the performance of our VQE circuit changes.
-# Does our VQE circuit
+# Does your VQE circuit
 # reproduce the Full CI result shown below if we increase the active orbitals to include
 # all the unoccupied orbitals i.e. 12 spin orbitals in total?
 #
