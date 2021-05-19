@@ -109,8 +109,9 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 # Note that the size of the array ``x`` with the nuclear coordinates is ``3*len(symbols)``.
 # The :func:`~.pennylane_qchem.qchem.read_structure` function can also be used to read
 # the molecular structure from a external file using the `XYZ format
-# <https://en.wikipedia.org/wiki/XYZ_file_format>`_XYZ format or any other format
-# recognized by Open Babel. For more details see the tutorial :doc:`tutorial_quantum_chemistry`.
+# <https://en.wikipedia.org/wiki/XYZ_file_format>`_ XYZ format or any other format
+# recognized by Open Babel.
+# For more details see the tutorial :doc:`tutorial_quantum_chemistry`.
 
 ##############################################################################
 # Next, we need to build the parametrized Hamiltonian :math:`H(x)`. For a molecule, this
@@ -141,7 +142,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #
 # We define the function ``H(x)`` to construct the parametrized qubit Hamiltonian
 # of the trihydrogen cation, described in a minimal basis set, using the
-# func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
 
 def H(x):
@@ -165,11 +166,11 @@ def H(x):
 # where the state :math:`\vert 011000 \rangle` corresponds to a single excitation
 # from qubit 0 to 2. This can be done using the particle-conserving single- and
 # double-excitation gates [#qchemcircuits]_ implemented in the form of Givens rotations
-# in PennyLane. For more details see the tutorial doc:`tutorial_givens_rotations`.
+# in PennyLane. For more details see the tutorial :doc:`tutorial_givens_rotations`.
 #
 # Here, we use an adaptive algorithm to select the excitation
 # operation included in the variational quantum circuit. The algorithm, which is
-# described in more details in the tutorial doc:`tutorial_adaptive_algorithm`,
+# described in more details in the tutorial :doc:`tutorial_adaptive_algorithm`,
 # proceeds as follows:
 #
 # #. Generate the lists with the indices of the qubits involved in all single- and
@@ -204,13 +205,11 @@ def H(x):
 #
 # The quantum circuit above is implemented by the ``circuit`` function
 
-
 def circuit(params, wires):
     hf_state = np.array([1, 1, 0, 0, 0, 0])
     qml.BasisState(hf_state, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
-
 
 ##############################################################################
 # The ``DoubleExcitation`` operations acting on the HF state allow us to prepare
@@ -226,7 +225,6 @@ def circuit(params, wires):
 # where :math:`\theta_1` and :math:`\theta_2` are the circuit parameters that need to be
 # optimized to find the electronic ground state of the trihydrogen cation.
 #
-##############################################################################
 # The cost function and the nuclear gradients
 # -------------------------------------------
 #
@@ -243,10 +241,8 @@ dev = qml.device("default.qubit", wires=6)
 # ``cost`` function :math:`g(\theta, x)` which depends on both the circuit and the
 # Hamiltonian parameters.
 
-
 def cost(params, x):
     return qml.ExpvalCost(circuit, H(x), dev)(params)
-
 
 ##############################################################################
 # This function returns the expectation value of the parametrized Hamiltonian ``H(x)``
@@ -270,12 +266,10 @@ def cost(params, x):
 # the gradient components :math:`\frac{\partial H(x)}{\partial x_i}. This is implemented by
 # the function ``grad_x``:
 
-
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
     grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
     return np.array(grad)
-
 
 ##############################################################################
 # Optimization of the molecular geometry
