@@ -190,7 +190,7 @@ for r in r_range:
 
     # define and initialize the gate parameters
     params = np.zeros(3)
-    
+
     # if this is not the first point on PES, initialize with converged parameters
     # from previous point
     if pes_point > 1:
@@ -213,7 +213,7 @@ for r in r_range:
     # store the converged parameters
     params_old = params
     pes_point = pes_point + 1
-    
+
     print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
     vqe_energy.append(energy)
 
@@ -289,7 +289,7 @@ print(
 # by using bigger basis sets and extrapolating to the complete basis set limit [#motta2020]_.
 # We must also note that our results are subject to gridsize of the span of interatomic
 # distances considered. The finer the gridsize, the better the estimate of bond length and
-# dissociation energy. 
+# dissociation energy.
 # Now let's move on to a more interesting chemical reaction.
 #
 
@@ -414,7 +414,7 @@ print(df)
 #
 #     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
 #     gate parameters for a particular point on PES are used as the initial guess for the next
-#     geometry. With a better guess, the VQE iterations converge relatively quickly and we save 
+#     geometry. With a better guess, the VQE iterations converge relatively quickly and we save
 #     considerable time.
 #
 # After tabulating our results, we plot the energy as a function of distance between atoms
@@ -471,7 +471,7 @@ index_2 = max(bond_length_index_1, bond_length_index_2)
 # Transition state energy
 energy_ts = max(vqe_energy[index_1:index_2])
 
-# Activation energy 
+# Activation energy
 activation_energy = energy_ts - energy_equil
 activation_energy_kcal = activation_energy * 627.5
 
@@ -514,14 +514,14 @@ print(
 # -------------------------------------------------------------------------------------------
 #
 # In our previous examples, the Hartree-Fock state was a good approximation to the exact
-# ground state for all points on the potential energy surface. 
+# ground state for all points on the potential energy surface.
 #
-# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle \simeq 1 
+# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle \simeq 1
 #
 # Hence, we refer to them as single-reference
-# problems. However, there exist situations where the above condition does not hold and 
-# states other than HF state become considerably important and are 
-# required for accuracy across the potential energy surface. 
+# problems. However, there exist situations where the above condition does not hold and
+# states other than HF state become considerably important and are
+# required for accuracy across the potential energy surface.
 # These are called multi-reference problems.
 # A symmetric approach of :math:`H_2` to :math:`Be` atom to form :math:`BeH_2`
 # (see the animation of reaction trajectory below)
@@ -538,9 +538,8 @@ print(
 # :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
 # These are the two different
 # reference states needed to qualitatively describe the full potential energy surface
-# for this reaction. Prior studies have suggested that one of these states is a good reference
+# for this reaction. Prior studies have found that one of these states is a good reference
 # for one half of the PES while another is good reference for the rest of PES. [#purvis1983]_
-#
 # To figure out the reaction coordinate for the
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
@@ -552,8 +551,9 @@ print(
 # We set this last section as a challenge problem for the reader. We would like you to
 # generate the potential energy surface for this reaction and compare how
 # the performance of VQE with Full CI results.
-# You could follow our previous examples. All you need to do is to traverse along the 
-# specified reaction coordinate and obtain the converged VQE energies.
+# All you need to do is to traverse along the
+# specified reaction coordinate, generate molecular geometries and obtain the converged 
+# VQE energies. The code is similar and follows from our previous examples.
 #
 #
 # Below is the PES plot you would be able to generate. We have provided the HF and FCI curves for
