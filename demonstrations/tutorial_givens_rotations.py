@@ -22,9 +22,9 @@ with an intriguing question: “Why is Lego the most ingenious toy in the world?
 this curious message, she decides to reflect on the question. As told by the book's narrator,
 she arrives at a conclusion:
 
-“*The best thing about them was that with Lego she could construct any kind of object. And then
+*The best thing about them was that with Lego she could construct any kind of object. And then
 she could separate the blocks and construct something new. What more could one ask of a toy?
-Sophie decided that Lego really could be called the most ingenious toy in the world.*”
+Sophie decided that Lego really could be called the most ingenious toy in the world.*
 
 In this tutorial, you will learn about the building blocks of quantum circuits for quantum
 chemistry: Givens rotations. These are operations that can be used to construct any kind of
@@ -48,10 +48,12 @@ The state of electrons in a molecule can then be described by specifying how the
 orbitals are occupied. The `Jordan-Wigner representation
 <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`_  provides a
 convenient way to do this: we associate a qubit with each spin orbital and
-use its states to represent occupied (:math:`|1\rangle`) or unoccupied (
-:math:`|0\rangle`) spin orbitals. An :math:`n`-qubit state with Hamming weight :math:`k`, i.e.,
+use its states to represent occupied :math:`|1\rangle` or unoccupied
+:math:`|0\rangle` spin orbitals.
+
+An :math:`n`-qubit state with Hamming weight :math:`k`, i.e.,
 with :math:`k` qubits in state :math:`|1\rangle`, represents a state of :math:`k` electrons in
-:math:`n` spin orbitals. For example :math:`|1010\rangle` is a state of two electrons in two spin
+:math:`n` spin orbitals. For example :math:`|1010\rangle` is a state of two electrons in two
 spin orbitals. More generally, superpositions over all basis states with a fixed
 number of particles are valid states of the electrons in a molecule. These are states such as
 
@@ -60,27 +62,28 @@ number of particles are valid states of the electrons in a molecule. These are s
     |\psi\rangle = c_1|1100\rangle + c_2|1010\rangle + c_3|1001\rangle + c_4|0110\rangle +
     c_5|0101\rangle + c_6|0011\rangle,
 
-for some coefficients :math:`c_1,\ldots, c_6`. Because the number of electrons is
-fixed, any transformation must conserve the number particles. We refer to these as
-particle-conserving unitaries. When designing quantum circuits and algorithms for quantum
-chemistry, it is desirable to employ only particle-conserving gates that guarantee that the
-states of the system remain valid. This raises the questions: what are the simplest
-particle-conserving unitaries? Like Legos, can they be used to construct any quantum circuit for
-quantum chemistry?
+for some coefficients :math:`c_i`.
 
 .. figure:: ../demonstrations/givens_rotations/orbitals+states.png
     :align: center
     :width: 70%
 
-    A system with six spin orbitals and three electrons. Qubit states can be used to represent
-    different electronic configurations.
+    This figure shows a system with six spin orbitals and three electrons.
+
+Because the number of electrons in a molecule is
+fixed, any transformation must conserve the number of particles. We refer to these as
+*particle-conserving unitaries*. When designing quantum circuits and algorithms for quantum
+chemistry, it is desirable to employ only particle-conserving gates that guarantee that the
+states of the system remain valid. This raises the questions: what are the simplest
+particle-conserving unitaries? Like Legos, how can they be used to construct any quantum circuit for
+quantum chemistry applications?
 
 Givens rotations
 ----------------
 
 Consider single-qubit gates. In their most general form, they perform the transformation
 
-.. :math:
+.. math::
 
     U|0\rangle &= a |0\rangle + b |1\rangle,\\
     U|1\rangle &= c |1\rangle + d |0\rangle,
@@ -89,7 +92,7 @@ where :math:`|a|^2+|b|^2=|c|^2+|d|^2=1` and :math:`ab^* + cd^*=0`. This gate is
 particle-conserving only if :math:`b=d=0`, which means that the only single-qubit gates that
 preserve particle number are diagonal gates of the form
 
-.. :math:
+.. math::
 
     \begin{pmatrix}
     e^{i\theta} & 0\\
@@ -107,7 +110,7 @@ unitaries can only apply a phase to the states
 :math:`|00\rangle, |11\rangle`, but we can now consider transformations that couple the remaining
 states :math:`|01\rangle,|10\rangle`. These are gates of the form
 
-.. :math:
+.. math::
 
     U|01\rangle &= a |01\rangle + b |10\rangle\\
     U|10\rangle &= c |10\rangle + d |01\rangle.
@@ -120,7 +123,7 @@ by specifying in which of two possible orbitals the single particle is located. 
 difference compared to single-qubit gates is that any values of the unitary's parameters :math:`a,
 b,c,d` give rise to a valid particle-conserving unitary. Take for instance the two-qubit gate
 
-.. :math:
+.. math::
 
     G(\theta)=\begin{pmatrix}
     1 & 0 & 0 & 0\\
@@ -179,7 +182,7 @@ print(circuit(x, y))
 # Mathematically, this gate can be represented by a unitary :math:`G^{(2)}(\theta)` that performs
 # the mapping
 #
-# .. :math:
+# .. math::
 #
 #   G^{(2)}|0011\rangle &= \cos (\theta/2)|0011\rangle + \sin (\theta/2)|1100\rangle\\
 #   G^{(2)}|1100\rangle &= \cos (\theta/2)|1100\rangle - \sin (\theta/2)|0011\rangle,
@@ -244,7 +247,7 @@ print(states)
 # reported in the literature and used to construct circuits for quantum chemistry. For instance,
 # Ref. [#anselmetti]_ considers a different sign convention for single-excitation gates,
 #
-# .. :math:
+# .. math::
 #     G(\theta)=\begin{pmatrix}
 #     1 & 0 & 0 & 0\\
 #     0 & \cos (\theta/2) & \sin (\theta/2) & 0\\
@@ -255,7 +258,7 @@ print(states)
 # and Ref. [#barkoutsos]_ introduces the particle-conserving gates listed below, which are all
 # Givens rotations
 #
-# .. :math:
+# .. math::
 #      U_1(\theta, phi) &= \begin{pmatrix}
 #      1 & 0 & 0 & 0\\
 #      0 & \cos (\theta) & e^{i\phi}\sin (\theta) & 0\\
@@ -286,7 +289,7 @@ print(states)
 # essential, so it's natural to study controlled Givens rotations. The simplest of these are
 # controlled single-excitation gates, which are three-qubit gates that perform the mapping
 #
-# .. :math:
+# .. math::
 #   CG(\theta) |101\rangle = \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle
 #   CG(\theta) |110\rangle = \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
 #
@@ -295,7 +298,7 @@ print(states)
 # is a useful property: as the name suggests, this provides us with better control over the
 # transformations we want to apply. Suppose we aim to prepare the state
 #
-# .. :math:
+# .. math::
 #   |psi\rangle = \frac{1}{2}(\ket{110000} + \ket{001100} + \ket{000011} + \ket{100100}).
 #
 # Some inspection is sufficient to see that the states :math:`\ket{001100}` and :math`\ket{000011}`
@@ -383,14 +386,14 @@ def circuit4(x, y, z):
 # Similarly, create a superposition with the state :math:`\ket{1001}` with a single
 # excitation between qubits 2 and 4. This leaves us with a state of the form
 #
-# .. :math:
+# .. math::
 #   |\psi\rangle = a \ket{1100} + b \ket{1010} + c \ket{1001}.
 #
 # We can now perform two single excitations from qubit 1 to qubits 3 and 4. These will have
 # to be controlled on the state of qubit 2. Finally, applying a double-excitation gate on all qubits
 # can create a superposition of the form
 #
-#  .. :math:
+#  .. math::
 #   |\psi\rangle = c_1 \ket{1100} + c_2 \ket{1010} + c_3 \ket{1001} + c_4 \ket{0110} + c_5 \ket{
 #   0101} + c_6 \ket{0011},
 #
