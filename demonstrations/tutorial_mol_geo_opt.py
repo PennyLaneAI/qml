@@ -27,7 +27,7 @@ corresponds to what is known as *molecular geometry optimization* and the optimi
 coordinates determine the *equilibrium geometry* of the molecule. For example, the figure below
 illustrates these concepts for the
 `trihydrogen cation <https://en.wikipedia.org/wiki/Trihydrogen_cation>`_. Its equilibrium
-geometry in the electronic ground-state corresponds to the global minimum in the PES
+geometry in the electronic ground-state corresponds to the energy minimum in the PES
 where the three hydrogen atoms are located at the vertices of an equilateral
 triangle whose side length is the optimized H-H bond length :math:`d`.
 
