@@ -170,7 +170,7 @@ hardware.
 
 .. customgalleryitem::
     :tooltip: Givens rotations
-    :figure: demonstrations/givens_rotations/Givens_rotation.png
+    :figure: demonstrations/givens_rotations/Givens_rotations.png
     :description: :doc:`demos/tutorial_givens_rotations`
     :tags: chemistry
 
