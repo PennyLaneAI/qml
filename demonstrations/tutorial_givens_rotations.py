@@ -4,13 +4,14 @@ Givens rotations for quantum chemistry
 ======================================
 
 .. meta::
-    :property="og:description": Discover the building blocks of particle-conserving unitaries for
+    :property="og:description": Discover the building blocks of quantum circuits for
         quantum chemistry
 
-    :property="og:image":
+    :property="og:image": https://pennylane.ai/qml/_images/Givens_rotations.png
 
 .. related::
-
+    tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_vqe A brief ofverview of VQE
 
 
 *Author: PennyLane dev team. Posted:  2021. Last updated: *
@@ -67,6 +68,13 @@ states of the system remain valid. This raises the questions: what are the simpl
 particle-conserving unitaries? Like Legos, can they be used to construct any quantum circuit for
 quantum chemistry?
 
+.. figure:: ../demonstrations/givens_rotations/orbitals+states.png
+    :align: center
+    :width: 70%
+
+    A system with six spin orbitals and three electrons. Qubit states can be used to represent
+    different electronic configurations.
+
 Givens rotations
 ----------------
 
@@ -121,6 +129,13 @@ b,c,d` give rise to a valid particle-conserving unitary. Take for instance the t
     0 & 0 & 0 & 1
     \end{pmatrix}.
 
+
+.. figure:: ../demonstrations/givens_rotations/Givens_rotaions1.png
+    :align: center
+    :width: 70%
+
+    A Givens rotation can be used to couple states that differ by a single excitation.
+
 This is an example of a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_: a
 rotation in a two-dimensional subspace of a larger Hilbert space. In this case, we are performing a
 Givens rotation in the four-dimensional space of two-qubit states. This gate is more
@@ -173,6 +188,14 @@ print(circuit(x, y))
 # :func:`~.pennylane.ops.DoubleExcitation` operation. We can also consider analogous Givens
 # rotations in the other two-dimensional subspaces of states that differ by a double excitation,
 # for example :math:`|1010\rangle` and :math:`|0101\rangle`.
+#
+#
+# .. figure:: ../demonstrations/givens_rotations/Givens_rotaions2.png
+#     :align: center
+#     :width: 70%
+#
+#     A Givens rotation can also be used to couple states that differ by a double excitation.
+#
 #
 # In the context of quantum chemistry, it is common to consider excitations on a fixed reference
 # state, typically the `Hartree-Fock state
@@ -346,6 +369,14 @@ def circuit4(x, y, z):
 # four-qubit states of two particles with real coefficients. The main idea is that we can
 # perform the construction one basis state at a time by applying a suitable excitation gate,
 # which may need to be controlled.
+#
+#
+# .. figure:: ../demonstrations/givens_rotations/circuit.png
+#     :align: center
+#     :width: 70%
+#
+#     A circuit for preparing four-qubit states with two particles.
+#
 #
 # Starting from the reference state :math:`\ket{1100}`, create a superposition
 # with the state :math:`\ket{1010}` by applying a single-excitation gate on qubits 2 and 3.
