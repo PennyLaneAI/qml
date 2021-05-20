@@ -169,7 +169,7 @@ hardware.
     :tags: braket
 
 .. customgalleryitem::
-    :tooltip: Givens rotations
+    :tooltip: Discover the building blocks of quantum circuits for quantum chemistry
     :figure: demonstrations/givens_rotations/Givens_rotations.png
     :description: :doc:`demos/tutorial_givens_rotations`
     :tags: chemistry

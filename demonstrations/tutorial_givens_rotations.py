@@ -11,7 +11,7 @@ Givens rotations for quantum chemistry
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
-    tutorial_vqe A brief ofverview of VQE
+    tutorial_vqe A brief overview of VQE
 
 
 *Author: PennyLane dev team. Posted:  2021. Last updated: *
