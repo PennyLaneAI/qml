@@ -168,6 +168,12 @@ hardware.
     :description: :doc:`demos/braket-parallel-gradients`
     :tags: braket
 
+.. customgalleryitem::
+    :tooltip: Givens rotations
+    :figure: demonstrations/givens_rotations/Givens_rotation.png
+    :description: :doc:`demos/tutorial_givens_rotations`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
