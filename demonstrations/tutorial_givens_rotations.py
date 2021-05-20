@@ -66,9 +66,9 @@ for some coefficients :math:`c_i`.
 
 .. figure:: ../demonstrations/givens_rotations/orbitals+states.png
     :align: center
-    :width: 70%
+    :width: 60%
 
-    This figure shows a system with six spin orbitals and three electrons.
+    This figure shows states of a system with six spin orbitals and three electrons.
 
 Because the number of electrons in a molecule is
 fixed, any transformation must conserve the number of particles. We refer to these as
@@ -94,7 +94,7 @@ preserve particle number are diagonal gates of the form
 
 .. math::
 
-    \begin{pmatrix}
+    U = \begin{pmatrix}
     e^{i\theta} & 0\\
     0 & e^{i\phi}
     \end{pmatrix}.
@@ -103,24 +103,22 @@ On their own. these gates are not very interesting. They can only be used to cha
 relative phases of states in a superposition; they cannot be used to create and control such
 superpositions. So let's take a look at two-qubit gates.
 
-We can divide basis states depending on
+Basis states of two qubits can be categorized depending on
 their number of particles. We have :math:`|00\rangle` with zero particles, :math:`|01\rangle,
-|10\rangle` with one particle, and :math:`|11\rangle` with two particles. Particle-conserving
-unitaries can only apply a phase to the states
-:math:`|00\rangle, |11\rangle`, but we can now consider transformations that couple the remaining
-states :math:`|01\rangle,|10\rangle`. These are gates of the form
+|10\rangle` with one particle, and :math:`|11\rangle` with two particles. Here we can now consider
+transformations that couple the states :math:`|01\rangle,|10\rangle`. These are gates of the form
 
 .. math::
 
     U|01\rangle &= a |01\rangle + b |10\rangle\\
     U|10\rangle &= c |10\rangle + d |01\rangle.
 
-This should be familiar: it has the same form as a single-qubit gate, where the states
-:math:`|01\rangle, |10\rangle` respectively take the place of :math:`|0\rangle, |1\rangle`. This
-correspondence has a name: the `dual-rail qubit
-<https://en.wikipedia.org/wiki/Optical_cluster_state>`, where a two-level system is constructed
-by specifying in which of two possible orbitals the single particle is located. The
-difference compared to single-qubit gates is that any values of the unitary's parameters :math:`a,
+This should be familiar: the unitary has the same form as a single-qubit gate, except that the
+states :math:`|01\rangle, |10\rangle` respectively take the place of :math:`|0\rangle,
+|1\rangle`. This correspondence has a name: the `dual-rail qubit
+<https://en.wikipedia.org/wiki/Optical_cluster_state>`_, where a two-level system is constructed
+by specifying in which of two possible systems a single particle is located. The
+difference compared to single-qubit gates is that any values of the parameters :math:`a,
 b,c,d` give rise to a valid particle-conserving unitary. Take for instance the two-qubit gate
 
 .. math::
@@ -133,25 +131,28 @@ b,c,d` give rise to a valid particle-conserving unitary. Take for instance the t
     \end{pmatrix}.
 
 
-.. figure:: ../demonstrations/givens_rotations/Givens_rotaions1.png
+This is an example of a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_: a
+rotation in a two-dimensional subspace of a larger Hilbert space. In this case, we are performing a
+Givens rotation in a two-dimensional subspace of the four-dimensional space of two-qubit states.
+This gate allows us to create superpositions by exchanging the particle
+between the two qubits. Such transformations can be interpreted as an *single excitation*,
+where we view the exchange from :math:`|10\rangle` to :math:`|10\rangle` as exciting the electron
+from the first to the second qubit.
+
+.. figure:: ../demonstrations/givens_rotations/Givens_rotations1.png
     :align: center
-    :width: 70%
+    :width: 60%
 
     A Givens rotation can be used to couple states that differ by a single excitation.
 
-This is an example of a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_: a
-rotation in a two-dimensional subspace of a larger Hilbert space. In this case, we are performing a
-Givens rotation in the four-dimensional space of two-qubit states. This gate is more
-interesting: it allows us to create superpositions by exchanging the particle between
-the two qubits. Such transformations can be interpreted as an *single excitation*,
-where we view the exchange from :math:`|10\rangle` to :math:`|10\rangle` as exciting the electron
-from the first to the second qubit. This gate is implemented in PennyLane as the
-:func:`~.pennylane.ops.SingleExcitation` operation. We can use it to prepare an equal
-superposition of three-qubit states with a single particle:
+This gate is implemented in PennyLane as the :func:`~.pennylane.SingleExcitation` operation.
+We can use it to prepare an equal superposition of three-qubit states with a single particle
+:math:`\frac{`}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`:
 """
 
 import pennylane as qml
 import numpy as np
+
 dev = qml.device('default.qubit', wires=3)
 
 
@@ -160,12 +161,11 @@ def circuit(x, y):
     qml.BasisState(np.array([1, 0, 0]), wires=[0, 1, 2])
     qml.SingleExcitation(x, wires=[0, 1])
     qml.SingleExcitation(y, wires=[0, 2])
-
     return qml.state()
 
 
-x = -2 * np.arccos(np.sqrt(2/3))
-y = -np.pi/2
+x = -2 * np.arcsin(np.sqrt(1/3))
+y = -2 * np.arcsin(np.sqrt(1/2))
 print(circuit(x, y))
 
 ##############################################################################
@@ -173,9 +173,8 @@ print(circuit(x, y))
 # representation, so entry 1 is :math:`|001\rangle`, entry 2 is :math:`|010\rangle`, and entry 4 is
 # :math:`|100\rangle`, meaning we indeed prepare the desired state.
 #
-# We can also study *double excitations* involving the transfer of two particles. These
-# are four-qubit transformations where particles are excited from two initial qubits to another
-# pair of qubits. For example, consider a Givens rotation in the subspace spanned by the states
+# We can also study *double excitations* involving the transfer of two particles. For example,
+# consider a Givens rotation in the subspace spanned by the states
 # :math:`|1100\rangle` and :math:`|0011\rangle`. These
 # states differ by a double excitation since we can map :math:`|1100\rangle` to
 # :math:`|0011\rangle` by exciting the particles form the first two qubits to the last two.
@@ -188,14 +187,12 @@ print(circuit(x, y))
 #   G^{(2)}|1100\rangle &= \cos (\theta/2)|1100\rangle - \sin (\theta/2)|0011\rangle,
 #
 # while leaving all other basis states unchanged. This gate is implemented in PennyLane as the
-# :func:`~.pennylane.ops.DoubleExcitation` operation. We can also consider analogous Givens
-# rotations in the other two-dimensional subspaces of states that differ by a double excitation,
-# for example :math:`|1010\rangle` and :math:`|0101\rangle`.
+# :func:`~.pennylane.DoubleExcitation` operation.
 #
 #
-# .. figure:: ../demonstrations/givens_rotations/Givens_rotaions2.png
+# .. figure:: ../demonstrations/givens_rotations/Givens_rotations2.png
 #     :align: center
-#     :width: 70%
+#     :width: 60%
 #
 #     A Givens rotation can also be used to couple states that differ by a double excitation.
 #
@@ -204,7 +201,7 @@ print(circuit(x, y))
 # state, typically the `Hartree-Fock state
 # <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_, and include only the excitations
 # that preserve the spin orientation of the electron. PennyLane allows you to obtain all such
-# excitations using the function :func:`~.pennylane_qchem.qchem.excitations`. Let's use it to
+# excitations using the function :func:`~.pennylane_qchem.qchem.excitations`. Let's employ it to
 # build a circuit that includes all single and double excitations acting on a reference state of
 # three particles in six qubits. We apply a random rotation for each gate:
 
@@ -229,15 +226,14 @@ def circuit2(x, y):
     return qml.state()
 
 
-x = np.random.normal(0, 0.1, len(singles))
-y = np.random.normal(0, 0.1, len(doubles))
+x = np.random.normal(0, 1, len(singles))
+y = np.random.normal(0, 1, len(doubles))
 
 output = circuit2(x, y)
 
 ##############################################################################
 # We can check which basis states appear in the resulting superposition to confirm that they
 # involve only states with three particles.
-#
 
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
 print(states)
@@ -277,37 +273,38 @@ print(states)
 # quantum circuits for quantum chemistry. Instead of thinking of single-qubit gates and CNOTs as the
 # building-blocks of quantum circuits, we can select two-dimensional subspaces spanned by states
 # with an equal number of particles, and use Givens rotations in that subspace to construct the
-# circuits.
+# circuits. 🧠
 #
 # Controlled excitation gates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# If Givens rotations as analogous to single-qubit gates, then controlled Givens rotations are
-# analogous to two-qubit gates. Single-qubit gates and CNOT gates are universal for quantum
-# computing: they can be used to implement any conceivable quantum computation. In these
-# constructions, the ability to control operations based on the states of other qubits is
-# essential, so it's natural to study controlled Givens rotations. The simplest of these are
-# controlled single-excitation gates, which are three-qubit gates that perform the mapping
+# Single-qubit gates and CNOT gates are universal for quantum
+# computing: they can be used to implement any conceivable quantum computation. If Givens
+# rotations are analogous to single-qubit gates, then *controlled* Givens rotations are
+# analogous to two-qubit gates. In universality constructions, the ability to control operations
+# based on the states of other qubits is essential, so also for this reason it's natural to study
+# controlled Givens rotations. The simplest of these are controlled single-excitation gates,
+# which are three-qubit gates that perform the mapping
 #
 # .. math::
-#   CG(\theta) |101\rangle = \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle
+#   CG(\theta) |101\rangle = \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle\\
 #   CG(\theta) |110\rangle = \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
 #
 # while leaving all other basis states unchanged. This gate only excites a particle
 # from the second to third qubit if the first (control) qubit is in state :math:`\ket{1}`. This
-# is a useful property: as the name suggests, this provides us with better control over the
+# is a useful property: as the name suggests, it provides us with better control over the
 # transformations we want to apply. Suppose we aim to prepare the state
 #
 # .. math::
-#   |psi\rangle = \frac{1}{2}(\ket{110000} + \ket{001100} + \ket{000011} + \ket{100100}).
+#   |\psi\rangle = \frac{1}{2}(\ket{110000} + \ket{001100} + \ket{000011} + \ket{100100}).
 #
-# Some inspection is sufficient to see that the states :math:`\ket{001100}` and :math`\ket{000011}`
-# differ by a double excitation from the reference state :math:`\ket{110000}`, while the state
-# :math:`\ket{100100}` differs by a single excitation. It is tempting to think that applying
+# Some inspection is enough to see that the states :math:`\ket{001100}` and :math:`\ket{000011}`
+# differ by a double excitation from the reference state :math:`\ket{110000}`. Meanwhile, the state
+# :math:`\ket{100100}` differs by a single excitation. It is thus tempting to think that applying
 # two double-excitation gates and a single-excitation gate can be used to prepare the target state.
-# It won't work! Applying the single-excitation gate on qubits two and four will also lead to a
-# contribution for the state :math:`|011000\rangle` through a coupling with :math:`\ket{001100}`.
-# Let's check that this is the case:
+# It won't work! Applying the single-excitation gate on qubits 2 and 4 will also lead to an
+# undesired contribution for the state :math:`|011000\rangle` through a coupling with
+# :math:`\ket{001100}`. Let's check that this is the case:
 
 dev = qml.device('default.qubit', wires=6)
 
@@ -331,19 +328,20 @@ states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] !=
 print(states)
 
 ##############################################################################
-# To address this problem, we can instead apply the single-excitation gate *controlled* on the
+# Indeed, we have a non-zero coefficient for :math:`|011000\rangle`. To address this problem,
+# we can instead apply the single-excitation gate controlled on the
 # state of the first qubit. This ensures that there is no coupling with the state :math:`\ket{
 # 001100}` since here the first qubit is in state :math:`|0\rangle`. Let's implement the circuit
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
-# desired state, for which we use the :func:`~.pennylane.ctrl` transform:
+# desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
 
-# define a function for the single excitation gate
+# define a callable function for the single excitation gate
 def op(param, wires):
     qml.SingleExcitation(param, wires=wires)
 
 
-# perform a transform using qml.ctrl
+# perform a transform on this callable function using qml.ctrl
 ctrl_single0 = qml.ctrl(op, control=0)
 
 dev = qml.device('default.qubit', wires=4)
@@ -359,9 +357,13 @@ def circuit4(x, y, z):
     return qml.state()
 
 
+output = circuit4(x, y, z)
+states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
+print(states)
+print(output)
+
 ##############################################################################
-# It was proven in Ref. [#arrazola]_ that controlled single-excitation gates, performing arbitrary
-# unitary transformations on the subspace spanned by :math:`\ket{01}, \ket{01}`, are universal for
+# It was proven in Ref. [#arrazola]_ that controlled single-excitation gates are universal for
 # particle-conserving unitaries. With enough ingenuity, you can use these operations to construct
 # any kind of circuit for quantum chemistry applications. What more could you ask from a gate?
 #
@@ -381,9 +383,9 @@ def circuit4(x, y, z):
 #     A circuit for preparing four-qubit states with two particles.
 #
 #
-# Starting from the reference state :math:`\ket{1100}`, create a superposition
+# Starting from the reference state :math:`\ket{1100}`, we create a superposition
 # with the state :math:`\ket{1010}` by applying a single-excitation gate on qubits 2 and 3.
-# Similarly, create a superposition with the state :math:`\ket{1001}` with a single
+# Similarly, we create a superposition with the state :math:`\ket{1001}` with a single
 # excitation between qubits 2 and 4. This leaves us with a state of the form
 #
 # .. math::
@@ -394,12 +396,11 @@ def circuit4(x, y, z):
 # can create a superposition of the form
 #
 #  .. math::
-#   |\psi\rangle = c_1 \ket{1100} + c_2 \ket{1010} + c_3 \ket{1001} + c_4 \ket{0110} + c_5 \ket{
-#   0101} + c_6 \ket{0011},
+#   |\psi\rangle = c_1 \ket{1100} + c_2 \ket{1010} + c_3 \ket{1001} + c_4 \ket{0110} + c_5 \ket{0101} + c_6 \ket{0011},
 #
 # which is our intended outcome. Let's use this strategy to create an equal superposition over
 # all two-particle states on four qubits. We follow the same strategy as before, setting the angle
-# of the :math:`i`-th Givens rotation as :math:`-2 \arcsin(`1/\sqrt{n-i}`, where :math:`n` is the
+# of the :math:`i`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-i})`, where :math:`n` is the
 # number of basis states in the superposition.
 
 ctrl_single1 = qml.ctrl(op, control=1)
@@ -420,17 +421,22 @@ n = 6
 params = np.array([-2 * np.arcsin(1/np.sqrt(n-i)) for i in range(n-1)])
 
 output = state_preparation(params)
-output[np.abs(output) < 1e-6] = 0
+# sets very small coefficients to zero
+output[np.abs(output) < 1e-10] = 0
 print(output)
 
 
 ##############################################################################
-# When it comes to quantum circuits for quantum chemistry, there is a wide variety of different
+# Success! This is the equal superposition we wanted to prepare. 🚀
+#
+# When it comes to quantum circuits for quantum chemistry, there is a wide variety of
 # architectures that have been proposed. Researchers in the field are faced with the apparent
-# choice of selecting one of these circuits to conduct their computations and benchmark new
-# algorithms. Ultimately, the aim of this tutorial is to provide you
-# with the conceptual and software tools to implement any of these proposed circuits,
-# but *also to design your own*. It's not only fun to play with toys; it's also fun to make them.
+# choice of making a selection among these circuits to conduct their computations and benchmark new
+# algorithms. Like a kid in a toy store, it is challenging to pick just one.
+#
+# Ultimately, the aim of this tutorial is to provide you with the conceptual and software tools
+# to implement any of these proposed circuits, but *also to design your own*. It's not only fun
+# to play with toys; it's also fun to build new ones.
 #
 #
 # References
