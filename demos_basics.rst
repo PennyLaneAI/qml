@@ -201,3 +201,4 @@ hardware.
     demos/tutorial_jax_transformations
     demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
+    demos/tutorial_givens_rotations
