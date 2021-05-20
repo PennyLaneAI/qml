@@ -139,7 +139,7 @@ between the two qubits. Such transformations can be interpreted as an *single ex
 where we view the exchange from :math:`|10\rangle` to :math:`|10\rangle` as exciting the electron
 from the first to the second qubit.
 
-.. figure:: ../demonstrations/givens_rotations/Givens_rotations1.png
+.. figure:: ../demonstrations/givens_rotations/Givens_rotations_1.png
     :align: center
     :width: 60%
 
@@ -147,7 +147,7 @@ from the first to the second qubit.
 
 This gate is implemented in PennyLane as the :func:`~.pennylane.SingleExcitation` operation.
 We can use it to prepare an equal superposition of three-qubit states with a single particle
-:math:`\frac{`}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`:
+:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`:
 """
 
 import pennylane as qml
@@ -190,7 +190,7 @@ print(circuit(x, y))
 # :func:`~.pennylane.DoubleExcitation` operation.
 #
 #
-# .. figure:: ../demonstrations/givens_rotations/Givens_rotations2.png
+# .. figure:: ../demonstrations/givens_rotations/Givens_rotations_2.png
 #     :align: center
 #     :width: 60%
 #
@@ -255,10 +255,10 @@ print(states)
 # Givens rotations
 #
 # .. math::
-#      U_1(\theta, phi) &= \begin{pmatrix}
+#      U_1(\theta, \phi) &= \begin{pmatrix}
 #      1 & 0 & 0 & 0\\
 #      0 & \cos (\theta) & e^{i\phi}\sin (\theta) & 0\\
-#      0 & e^{-1\phi}\sin(\theta) & -\cos(\theta) & 0\\
+#      0 & e^{-i\phi}\sin(\theta) & -\cos(\theta) & 0\\
 #      0 & 0 & 0 & 1
 #      \end{pmatrix},\\
 #
@@ -271,9 +271,9 @@ print(states)
 #
 # Givens rotations are a powerful abstraction for understanding
 # quantum circuits for quantum chemistry. Instead of thinking of single-qubit gates and CNOTs as the
-# building-blocks of quantum circuits, we can select two-dimensional subspaces spanned by states
-# with an equal number of particles, and use Givens rotations in that subspace to construct the
-# circuits. 🧠
+# building-blocks of quantum circuits, we can be more clever and select two-dimensional subspaces
+# spanned by states with an equal number of particles, and use Givens rotations in that subspace
+# to construct the circuits. 🧠
 #
 # Controlled excitation gates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -344,8 +344,6 @@ def op(param, wires):
 # perform a transform on this callable function using qml.ctrl
 ctrl_single0 = qml.ctrl(op, control=0)
 
-dev = qml.device('default.qubit', wires=4)
-
 
 @qml.qnode(dev)
 def circuit4(x, y, z):
@@ -360,7 +358,6 @@ def circuit4(x, y, z):
 output = circuit4(x, y, z)
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
 print(states)
-print(output)
 
 ##############################################################################
 # It was proven in Ref. [#arrazola]_ that controlled single-excitation gates are universal for
@@ -423,7 +420,9 @@ params = np.array([-2 * np.arcsin(1/np.sqrt(n-i)) for i in range(n-1)])
 output = state_preparation(params)
 # sets very small coefficients to zero
 output[np.abs(output) < 1e-10] = 0
-print(output)
+states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
+print(states)
+print("Output = ", output)
 
 
 ##############################################################################
@@ -435,8 +434,8 @@ print(output)
 # algorithms. Like a kid in a toy store, it is challenging to pick just one.
 #
 # Ultimately, the aim of this tutorial is to provide you with the conceptual and software tools
-# to implement any of these proposed circuits, but *also to design your own*. It's not only fun
-# to play with toys; it's also fun to build new ones.
+# to implement any of these proposed circuits, and *also to design your own*. It's not only fun
+# to play with toys; it's also fun to build them.
 #
 #
 # References
