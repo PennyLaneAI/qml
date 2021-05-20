@@ -82,9 +82,8 @@ The quantum algorithm will be described as follows:
 #. Define the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert
    \Psi(\theta) \rangle`.
 
-#. Set the initial values for the circuit parameters :math:`\theta` and the
-   nuclear coordinates :math:`x` and solve the optimization problem
-   :math:`E = \min_{\{\theta, x\}} g(\theta, x)`
+#. Initialize the circuit and the Hamiltonian parameters and minimize the cost function
+   :math:`g(\theta, x)`
 
 Let's get started! ⚛️
 
@@ -100,17 +99,18 @@ from functools import partial
 import matplotlib.pyplot as plt
 
 ##############################################################################
-# The second step is to specify the molecule for which we want to find the equilibrium
+# Now, we specify the molecule for which we want to find the equilibrium
 # geometry. In this example, we want to optimize the geometry of the trihydrogen cation
-# (:math:`\mathrm{H}_3^+`) consisted of three hydrogen atoms as shown in the figure above.
-# This is done by providing a list with the symbols of the atomic species and a 1D array
-# with the initial set of nuclear coordinates.
+# (:math:`\mathrm{H}_3^+`) consisted of three hydrogen atoms (see figure above).
+# This is done by providing a list with the symbols of the atomic species and a
+# 1D array with the initial set of nuclear coordinates in
+# `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
 
 symbols = ["H", "H", "H"]
 x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 
 ##############################################################################
-# Note that the size of the array ``x`` with the nuclear coordinates is ``3*len(symbols)``.
+# The size of the array ``x`` with the nuclear coordinates is ``3*len(symbols)``.
 # The :func:`~.pennylane_qchem.qchem.read_structure` function can also be used to read
 # the molecular structure from a external file using the `XYZ format
 # <https://en.wikipedia.org/wiki/XYZ_file_format>`_ XYZ format or any other format
@@ -118,16 +118,16 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 # For more details see the tutorial :doc:`tutorial_quantum_chemistry`.
 
 ##############################################################################
-# Next, we need to build the parametrized Hamiltonian :math:`H(x)`. For a molecule, this
-# is the second-quantized electronic Hamiltonian for a given set of the nuclear coordinates
-# :math:`x`:
+# Next, we need to build the parametrized Hamiltonian :math:`H(x)`. For a molecule,
+# this is the second-quantized electronic Hamiltonian for a given set of the
+# nuclear coordinates :math:`x`:
 #
 # .. math::
 #
 #     H(x) = \sum_{pq} h_{pq}(x)c_p^\dagger c_q +
 #     \frac{1}{2}\sum_{pqrs} h_{pqrs}(x) c_p^\dagger c_q^\dagger c_r c_s.
 #
-# In the equation above the indices of the summation run over the basis of
+# In the equation above the indices :math:`p, q, r, s` run over the basis of
 # Hartree-Fock molecular orbitals, the operators :math:`c^\dagger` and :math:`c` are
 # respectively the electron creation and annihilation operators, and :math:`h_{pq}(x)`
 # and :math:`h_{pqrs}(x)` are the one- and two-electron integrals carrying the dependence on
@@ -139,82 +139,87 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #
 #     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^j,
 #
-# whose expectation value can be evaluated using a quantum computer. :math:`h_j(x)` are the
-# expansion coefficients inheriting the dependence on the coordinates :math:`x`,
+# whose expectation value can be evaluated using a quantum computer. The expansion
+# coefficients :math:`h_j(x)` inherit the dependence on the coordinates :math:`x`,
 # the operators :math:`\sigma_i` represents the Pauli group :math:`\{I, X, Y, Z\}` and
-# :math:`N` is the number of qubits.
+# :math:`N` is the number of qubits required to represent the electronic wave function
+# as we will discuss in the next section.
 #
-# We define the function ``H(x)`` to construct the parametrized qubit Hamiltonian
-# of the trihydrogen cation, described in a minimal basis set, using the
+# We define the function ``H(x)`` to build the parametrized qubit Hamiltonian
+# of the trihydrogen cation, described with a minimal basis set, using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
 def H(x):
     return qml.qchem.molecular_hamiltonian(symbols, x, charge=1, mapping="jordan_wigner")[0]
 
 ##############################################################################
+# Note that we have used the keyword argument ``charge`` to specify the net charge
+# of the molecule. The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function
+# allows us the user to define other keyword arguments to generate the Hamiltonian
+# of more complicated systems.
+#
 # The variational quantum circuit
 # -------------------------------
 #
 # Now, we need to define the quantum circuit to prepare the electronic ground-state
 # :math:`\vert \Psi(\theta)\rangle` of the :math:`\mathrm{H}_3^+` molecule. Representing
 # the wave function of this molecule requires six qubits to encode the occupation number
-# of the active spin-orbitals which can be populated by the two electrons in the
-# molecule. In order to capture the effects of electronic correlations [#kohanoff2006]_,
-# we need to prepare the :math:`N`-qubit in a superposition of the Hartree-Fock state
+# of the molecular spin-orbitals which can be populated by the two electrons in the
+# molecule. To capture the effects of electronic correlations [#kohanoff2006]_,
+# we need to prepare the :math:`N`-qubit in a superposition of the Hartree-Fock (HF) state
 # :math:`\vert 110000 \rangle` with other states that differ by a double- or
 # single-excitation with respect to the HF state. For example, the state
-# :math:`\vert 000011 \rangle` is obtained by exciting two particles from qubits  0, 1 to
-# 4, 5. Similarly, the state encodes a double excitation of the reference HF state
-# where the state :math:`\vert 011000 \rangle` corresponds to a single excitation
-# from qubit 0 to 2. This can be done using the particle-conserving single- and
-# double-excitation gates [#qchemcircuits]_ implemented in the form of Givens rotations
-# in PennyLane. For more details see the tutorial :doc:`tutorial_givens_rotations`.
+# :math:`\vert 000011 \rangle` is obtained by exciting two particles from qubits 0, 1 to
+# 4, 5. Similarly, the state :math:`\vert 011000 \rangle` corresponds to a single excitation
+# from qubit 0 to 2. This can be done using the single-excitation and
+# double-excitation gates :math:`G` and :math:`G^{(2)}` [#qchemcircuits]_ implemented
+# in the form of Givens rotations in PennyLane. For more details see the tutorial
+# :doc:`tutorial_givens_rotations`.
 #
-# Here, we use an adaptive algorithm to select the excitation
-# operation included in the variational quantum circuit. The algorithm, which is
+# In addition, here we use an adaptive algorithm to select the excitation
+# operations included in the variational quantum circuit. The algorithm, which is
 # described in more details in the tutorial :doc:`tutorial_adaptive_algorithm`,
 # proceeds as follows:
 #
-# #. Generate the lists with the indices of the qubits involved in all single- and
-#    double-excitations using the func:`~.pennylane_qchem.qchem.excitation` function.
+# #. Generate the indices of the qubits involved in all single- and
+#    double-excitations using the :func:`~.pennylane_qchem.qchem.excitation` function.
 #    For example, the indices of the singly-excited state :math:`\vert 011000 \rangle`
 #    are given by the list ``[0, 2]``. Similarly, the indices of the doubly-excited
 #    state :math:`\vert 000011 \rangle` are ``[0, 1, 4, 5]``.
 #
 # #. Construct the circuit using all double-excitation gates. Compute the gradient
-#    of the expectation value
-#    :math:`\langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle` with respect
-#    to each double-excitation gate and retain only those with non-zero gradient.
+#    of the cost function :math:`g(\theta, x)` with respect to each double-excitation
+#    gate and retain only those with non-zero gradient.
 #
 # #. Include the selected double-excitation gates and repeat the process for the
 #    single-excitation gates.
 #
-# #. Build the final variational quantum circuit by including the selected excitation
-#    operations.
+# #. Build the final variational quantum circuit by including the selected gates.
 #
 # For the :math:`\mathrm{H}_3^+` molecule in a minimal basis set we have a total of eight
-# excitation operations. After applying the adaptive algorithm the final quantum
-# circuit contains two double-excitation operations that act on the qubits ``[0, 1, 2, 3]``
-# and ``[0, 1, 4, 5]``. The circuit is shown in the figure below.
+# excitations of the HF reference state. After applying the adaptive algorithm the final
+# quantum circuit contains only two double-excitation operations that act on the qubits
+# ``[0, 1, 2, 3]`` and ``[0, 1, 4, 5]``. The circuit is shown in the figure below.
 #
 # |
 #
 # .. figure:: /demonstrations/mol_geo_opt/fig_circuit.png
-#     :width: 50%
+#     :width: 70%
 #     :align: center
 #
 # |
 #
-# The quantum circuit above is implemented by the ``circuit`` function
+# This quantum circuit is implemented by the ``circuit`` function below
+
+hf = qml.qchem.hf_state(electrons=2, orbitals=6)
 
 def circuit(params, wires):
-    hf_state = np.array([1, 1, 0, 0, 0, 0])
-    qml.BasisState(hf_state, wires=wires)
+    qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
 
 ##############################################################################
-# The ``DoubleExcitation`` operations acting on the HF state allow us to prepare
+# The ``DoubleExcitation`` operations acting on the HF state prepare
 # the trial state
 #
 # .. math::
@@ -225,16 +230,17 @@ def circuit(params, wires):
 #     \mathrm{sin}(\theta_1)\vert001100\rangle,
 #
 # where :math:`\theta_1` and :math:`\theta_2` are the circuit parameters that need to be
-# optimized to find the electronic ground state of the trihydrogen cation.
+# optimized to find the ground-state equilibrium geometry of the molecule.
 #
 # The cost function and the nuclear gradients
 # -------------------------------------------
 #
 # The next step is to define the cost function
-# :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle` to
-# evaluate the expectation value of the *parametrized* Hamiltonian :math:`H(x)` in the
-# trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the device to compute
-# the expectation value. In this example, we use PennyLane's qubit simulator:
+# :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle`. It
+# evaluates the expectation value of the *parametrized* Hamiltonian :math:`H(x)` in the
+# trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the quantum device used
+# to compute the expectation value. In this example, we use the ``default.qubit``
+# simulator of PennyLane:
 
 dev = qml.device("default.qubit", wires=6)
 
@@ -251,39 +257,37 @@ def cost(params, x):
 # computed in the state prepared by the ``circuit`` function for a given set of the
 # circuit parameters ``params`` and the nuclear coordinates ``x``.
 #
-# In order to to minimize the cost function :math:`g(\theta, x)` using a gradient-based
-# method we have to compute the gradients with respect to the both the circuit parameters
-# :math:`\theta` *and* the nuclear coordinates :math:`x` (nuclear gradients). The circuit
-# gradients are computed analytically using the automatic differentiation techniques available
-# in PennyLane. On the other hand, the nuclear gradients are evaluated by taking the
-# expectation value of the gradient of the electronic Hamiltonian,
+# In order to minimize the cost function :math:`g(\theta, x)` we use a gradient-based
+# method. To that aim, we have to compute the gradients with respect to the both the
+# circuit parameters :math:`\theta` *and* the nuclear coordinates :math:`x` (nuclear gradients).
+# The circuit gradients are computed analytically using the automatic differentiation
+# techniques available in PennyLane. On the other hand, the nuclear gradients are evaluated
+# by taking the expectation value of the gradient of the electronic Hamiltonian,
 #
 # .. math::
 #
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
 # We use the :func:`~.pennylane.finite_diff` function to compute the gradient of
-# the Hamiltonian using a central-difference approximation and the PennyLane class
-# :class:`~.pennylane.ExpvalCost` to evaluate the expectation value of
+# the Hamiltonian using a central-difference approximation. Then, the PennyLane class
+# :class:`~.pennylane.ExpvalCost` is used to evaluate the expectation value of
 # the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
-
 
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
     grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
     return np.array(grad)
 
-
 ##############################################################################
 # Optimization of the molecular geometry
 # --------------------------------------
 #
 # Now we proceed to minimize our cost function to find the ground state energy and the
-# equilibrium geometry of the :math:`\mathrm{H}_3^+` molecule. The circuit parameters and
-# the nuclear coordinates will be jointly optimized at each optimization step. We note
-# that this approach does not require a nested VQE optimization of the circuit parameters
-# for each set of the nuclear coordinates.
+# equilibrium geometry of the :math:`\mathrm{H}_3^+` molecule. As a reminder, 
+# the circuit parameters and the nuclear coordinates will be jointly optimized at
+# each optimization step. Note that this approach does not require a nested VQE
+# optimizations of the circuit parameters for each set of the nuclear coordinates.
 #
 # We start by defining the classical optimizers:
 
@@ -299,18 +303,22 @@ theta = [0.0, 0.0]
 
 ##############################################################################
 # Setting the angles :math:`\theta_1` and :math:`\theta_2` to zero implies that
-# the initial electronic state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`prepared
-# by the ``circuit`` function is the Hartree-Fock (HF) state. The initial set of nuclear
+# the initial electronic state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
+# is approximated to the Hartree-Fock (HF) state. The initial set of nuclear
 # coordinates :math:`x`, defined at the beginning of the tutorial, was computed
 # classically within the HF approximation using the GAMESS program [#ref_gamess]_.
+# This is a natural choice for the starting geometry that we are aiming to correct
+# due to the electronic correlation effects included in the trial state
+# :math:`\vert\Psi(\theta)\rangle`.
 #
-# We carry out the optimization over a maximum of 100 steps. The circuit parameters and
-# the nuclear coordinates should be optimized until the maximum component of the
-# nuclear gradient :math:`\nabla_x g(\theta,x)` is less than or equal to
-# :math:`10^{-5}` Hartree/Bohr. Typically, this is the convergence criterion used for
-# optimizing molecular geometries in quantum chemistry simulations.
+# We carry out the optimization over a maximum of 100 steps. In this example
+# The circuit parameters and the nuclear coordinates are optimized until the
+# maximum component of the nuclear gradient :math:`\nabla_x g(\theta,x)` is
+# less than or equal to :math:`10^{-5}` Hartree/Bohr. Typically, this is the
+# convergence criterion used for optimizing molecular geometries in
+# quantum chemistry simulations.
 #
-# Finally, we use the lists ``energy`` and ``bond_length`` to keep track the
+# Finally, we use the lists ``energy`` and ``bond_length`` to keep track of the
 # value of the cost function :math:`g(\theta,x)` and the H-H bond length :math:`d`
 # (in Angstroms) of trihydrogen cation through the iterative procedure.
 
@@ -335,7 +343,7 @@ for n in range(100):
             )
         )
 
-    if np.max(grad_fn(x)) <= 1e-04:
+    if np.max(grad_fn(x)) <= 1e-05:
         break
 
 print("\n" "Final value of the ground-state energy = {:.8f} Ha".format(energy[-1]))
@@ -345,7 +353,7 @@ for i, atom in enumerate(symbols):
     print("  {:}    {:.4f}   {:.4f}   {:.4f}".format(atom, x[3 * i], x[3 * i + 1], x[3 * i + 2]))
 
 ##############################################################################
-# Now, we plot the values of the ground state energy of the molecule, relative
+# Next, we plot the values of the ground state energy of the molecule, relative
 # to the exact value computed with the full configuration interaction (FCI) method,
 # and the of H-H bond lengths as the circuit parameters and the nuclear coordinates are
 # optimized by the variational quantum algorithm.
@@ -383,18 +391,18 @@ plt.subplots_adjust(wspace=0.3)
 plt.show()
 
 ##############################################################################
+# |
 # Notice that despite the fact that the ground-state energy is already converged
 # within chemical accuracy (:math:`0.001` Ha) after the fourth iteration, more
 # optimization steps are required to find the equilibrium bond length of the
 # molecule.
 #
-# The animated figure below uses stored snapshots of the atomic structure of the
+# The animated figure below shows snapshots of the atomic structure of the
 # trihydrogen cation as the quantum algorithm was searching for the equilibrium
 # geometry. For visualization purposes, the initial nuclear coordinates were
 # generated by perturbing the HF geometry. Note that the quantum algorithm
 # is able to find the correct optimized geometry of the :math:`\mathrm{H}_3^+`
-# molecule that corresponds to an equilateral triangle with the H atoms
-# located at the vertices.
+# molecule where the three H atoms are located at the vertices of an equilateral triangle.
 #
 # |
 #
@@ -404,6 +412,13 @@ plt.show()
 #
 # |
 #
+# To summarize, this tutorial shows that the scope of variational quantum algorithms can be
+# extended to perform quantum simulations of molecules involving both the electronic and
+# the nuclear degrees of freedom. The joint optimization scheme described here
+# is a generalization of the usual VQE algorithm where only the electronic
+# state is parametrized. By using the adaptive algorithm it is possible to reduce the
+# number of excitation gates in the quantum circuit to apply this algorithm to molecules
+# of increasing complexity [#geo_opt_paper]_.
 #
 # References
 # ----------
@@ -454,3 +469,9 @@ plt.show()
 #     S. Koseki, N. Matsunaga, K.A. Nguyen, S.Su, *et al.* "General atomic and molecular
 #     electronic structure system". `Journal of Computational Chemistry 14, 1347 (1993)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/jcc.540141112>`__
+#
+# .. [#geo_opt_paper]
+#
+#     A. Delgado, J.M. Arrazola, S. Jahangiri, Z. Niu, J. Izaac, C. Roberts, N. Killoran.
+#     "Variational quantum algorithm for molecular geometry optimization".
+#     arXiv preprint
