@@ -176,7 +176,6 @@ for r in r_range:
     def circuit(params, wires):
         # Prepare the HF state |1100> by flipping the qubits 0 and 1
         qml.BasisState(hf, wires=wires )
-        qml.PauliX(1)
         # Add double excitation
         qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
         # Add single excitations
