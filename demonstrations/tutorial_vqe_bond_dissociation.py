@@ -69,7 +69,7 @@ transformation.
 To summarize, to build the potential energy surface, we solve the electronic Schrödinger
 equation for fixed positions of the nuclei, and subsequently move them in incremental steps
 while solving the Schrödinger equation at each such configuration. 
-The obtained set of energies thus correspond to a grid of nuclear positions and the plot 
+The obtained set of energies corresponds to a grid of nuclear positions and the plot 
 :math:`E(R)` vs :math:`R` is the potential energy surface. 
 To really understand the steps involved in making such a plot, let us dive straight into it.
 
