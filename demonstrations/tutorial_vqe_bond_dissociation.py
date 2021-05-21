@@ -502,7 +502,7 @@ print(
 #     :width: 90%
 #     :align: center
 #
-# The PEC obtained from the quantum algorithm (VQE) overlaps with
+# The PES obtained from the quantum algorithm (VQE) overlaps with
 # the FCI result. This is a
 # validation of the accuracy of the energy estimates through our VQE circuit --- we exactly
 # reproduce the absolute energies of the reactants, transition state and product.
