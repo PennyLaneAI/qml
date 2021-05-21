@@ -51,19 +51,19 @@ In practice, `density functional theory <https://en.wikipedia.org/wiki/ensity_fu
 On the other hand, variational quantum algorithms for quantum chemistry simulations use a
 quantum computer to prepare the electronic wave function of a molecule and to measure the
 expectation value of the Hamiltonian while a classical optimizer adjusts the circuit parameters
-to minimize the total energy [#mcardle2020]_. In this tutorial we learn how to recast the
+to minimize the total energy [#mcardle2020]_. In this tutorial you will learn how to recast the
 problem of finding the equilibrium geometry of a molecule in terms of a more general
-variational quantum algorithm. In this case, we consider explicitly that the target
+variational quantum algorithm. In this case, by considering explicitly that the target
 electronic Hamiltonian :math:`H(x)` is a *parametrized* observable that depends on
 the nuclear coordinates :math:`x`. This implies that the objective function, defined
 by the expectation value of the Hamiltonian :math:`H(x)` computed in the trial state
 :math:`\vert \Psi(\theta) \rangle` prepared by a quantum circuit, depends on both the
-circuit and the Hamiltonian parameters. In addition, we minimize the generalized cost
-function using a *joint* optimization scheme where the gradients of the cost function
-with respect to circuit parameters and nuclear coordinates are simultaneously computed
-at each optimization step. Interestingly, this approach does not require nested electronic
-structure calculations for each set of nuclear coordinates, as occurs in the analogous
-classical algorithms. Once the optimization is finalized, the circuit parameters
+circuit and the Hamiltonian parameters. In addition, we show that the generalized cost
+function can be minimized using a *joint* optimization scheme where the gradients of
+the cost function with respect to circuit and Hamiltonian parameters are simultaneously
+computed at each optimization step. Interestingly, this approach does not require nested
+electronic structure calculations for each set of nuclear coordinates, as occurs in the
+analogous classical algorithms. Once the optimization is finalized, the circuit parameters
 determine the energy of the electronic state, and the nuclear coordinates the
 equilibrium geometry of the molecule in this electronic state.
 
