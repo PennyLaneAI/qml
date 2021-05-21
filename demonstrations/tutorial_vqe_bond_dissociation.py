@@ -422,7 +422,7 @@ print(df)
 # local maximum.
 # In general, we would like our method (VQE) to provide
 # a good estimate of the energies of the reactants (minimum :math:`1`), products (minimum :math:`2`),
-# and the transition state (maxima). We shall compare the VQE results later and find that it
+# and the transition state (maximum). We shall revisit the VQE results later and find that it
 # reproduces the exact energies (FCI) in the chosen basis (STO-3G) throughout the PES.
 
 # plot the PES
