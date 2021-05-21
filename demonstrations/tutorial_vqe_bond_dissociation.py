@@ -548,7 +548,7 @@ print(
 #
 # We set this last section as a challenge problem for the reader. We would like you to
 # generate the potential energy surface for this reaction and compare how
-# the performance of VQE with Full CI results.
+# the performance of VQE with FCI results.
 # All you need to do is to traverse along the
 # specified reaction coordinate, generate molecular geometries and obtain the converged 
 # VQE energies. The code is similar and follows from our previous examples.
