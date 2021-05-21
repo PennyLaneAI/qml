@@ -84,9 +84,9 @@ of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
-We now cast this problem in the language of `quantum chemistry 
-<https://en.wikipedia.org/wiki/Quantum_chemistry>`_ and then in terms of
-quantum circuits. For an introductory discussion, please take a look at 
+We first cast this problem in the language of `quantum chemistry 
+<https://en.wikipedia.org/wiki/Quantum_chemistry>`_, and then in terms of
+quantum circuits. For an introductory discussion, please take a look at the 
 :doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>` tutorial.
 Using a minimal `basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ 
 (`STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_), 
