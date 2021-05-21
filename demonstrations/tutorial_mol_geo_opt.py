@@ -380,7 +380,7 @@ d_fci = 0.986
 ax2 = fig.add_subplot(122)
 ax2.plot(range(n+1), bond_length, 'go-', ls='dashed')
 ax2.plot(range(n+1), np.full(n+1, d_fci), color='red')
-ax2.set_ylim([0.968,0.99])
+ax2.set_ylim([0.965,0.99])
 ax2.set_xlabel("Optimization step", fontsize=13)
 ax2.set_ylabel("H-H bond length ($\AA$)", fontsize=13)
 ax2.text(5, 0.9865, r'Equilibrium bond length', fontsize=13)
