@@ -201,6 +201,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/spsa`
     :tags: qiskit
 
+.. customgalleryitem::
+    :tooltip: Build trigonometric local models of your cost function.
+    :figure: demonstrations/barren_plateaus/surface.png
+    :description: :doc:`demos/tutorial_quantum_analytic_descent`
+    :tags: optimization model vqe
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -274,3 +280,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
+    demos/tutorial_quantum_analytic_descent
