@@ -361,7 +361,7 @@ for r in r_range:
    electrons = 3
    orbitals = 6
    singles, doubles = qchem.excitations(electrons, orbitals)
-
+hf = qml.qchem.hf_state(electrons, orbitals)
     def circuit(params, wires):
         qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=(0, 1, 2, 3, 4, 5))
         for i in range(0, len(doubles)):
