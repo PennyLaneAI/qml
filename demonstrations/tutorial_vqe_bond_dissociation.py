@@ -96,7 +96,7 @@ it.
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
 ground state is  represented as :math:`|1100\rangle`, where the two
 lowest-energy orbitals are occupied, and the remaining two are unoccupied. To form the complete 
-basis of states, we consider excitations out of the HF state that conserve the spin. 
+basis of states, we consider excitations of the HF state that conserve the spin. 
 In this case, where there are two electrons, single and double excitations suffice. The 
 singly-excited states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state 
 is :math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
