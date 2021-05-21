@@ -454,7 +454,7 @@ plt.show()
 #                   :math:`E_{a} = 0.0275` Ha :math:`= 17.26` kcal/mol
 # Below we show how to calculate the activation energy from the above PES.
 
-# Energy of the reactants and products - two minimas on the PES
+# Energy of the reactants and products - two minima on the PES
 energy_equil = min(vqe_energy)
 energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
 
