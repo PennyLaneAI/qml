@@ -133,10 +133,11 @@ symbols = ["H", "H"]
 #
 #
 # Now we set up a loop that incrementally changes the internuclear distance.
-# For each point we generate a molecular Hamiltonian using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
-# At each point, we solve the electronic Schrödinger equation by first solving the
-# Hartree-Fock approximation and generating the molecular orbitals (MOs). For a more accurate
+# At each value of :math:`H-H` bond distance, we run a VQE calculation to compute the total 
+# electronic energy of the molecule. 
+# We generate a molecular Hamiltonian using the
+# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function by solving Hartree-Fock equations
+# and generating the molecular orbitals (MOs). For a more accurate
 # estimation of the molecular wavefunction and energy, we build the
 # VQE circuit by first preparing the qubit version of the HF state and then adding all single-
 #  and double-excitation gates which use `Givens rotations
@@ -289,6 +290,13 @@ print(
 # distances considered. The finer the grid size, the better the estimate of bond length and
 # dissociation energy.
 #
+# .. note::
+#
+#     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
+#     gate parameters for a particular point on the PES are used as the initial guess for the VQE 
+#     calculation at the adjacent geometry. With a better guess, the VQE iterations converge 
+#     relatively quickly and we save considerable time.
+#
 
 ##############################################################################
 # Hydrogen Exchange Reaction
@@ -349,20 +357,17 @@ for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
-    H, qubits = qchem.molecular_hamiltonian(
-        symbols,
-        coordinates,
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates,
         mult=multiplicity,
-        basis=basis_set,
-        active_electrons=active_electrons,
-        active_orbitals=active_orbitals,
+        basis=basis_set
     )
-
+    
     # get all the singles and doubles excitations
-   electrons = 3
-   orbitals = 6
-   singles, doubles = qchem.excitations(electrons, orbitals)
-hf = qml.qchem.hf_state(electrons, orbitals)
+    electrons = 3
+    orbitals = 6
+    singles, doubles = qchem.excitations(electrons, orbitals)
+
+    hf = qml.qchem.hf_state(electrons, orbitals)
     def circuit(params, wires):
         qml.BasisState(hf, wires=wires)
         for i in range(0, len(doubles)):
@@ -408,12 +413,6 @@ df = pd.DataFrame(list_dist_energy, columns=["H(1)-H(2) distance (in Bohr)", "En
 print(df)
 
 ##############################################################################
-# .. note::
-#
-#     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
-#     gate parameters for a particular point on the PES are used as the initial guess for the next
-#     geometry. With a better guess, the VQE iterations converge relatively quickly and we save
-#     considerable time.
 #
 # After tabulating our results, we plot the energy as a function of distance between atoms
 # :math:`1` and :math:`2`, and thus we have the potential energy curve for
