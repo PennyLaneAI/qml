@@ -146,7 +146,7 @@ symbols = ["H", "H"]
 #
 #
 # We use a classical qubit simulator and define
-# a cost function which calculates the expectation value of Hamiltonian operator for the
+# a cost function which calculates the expectation value of the Hamiltonian operator for the
 # given trial wavefunction (which is the ground state energy of the molecule) using
 # :class:`~.ExpvalCost`.
 # For the problems discussed here, we use gradient descent to optimize
