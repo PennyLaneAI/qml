@@ -230,7 +230,7 @@ fig, ax = plt.subplots()
 ax.plot(r_range, vqe_energy, label="VQE")
 
 ax.set(
-    xlabel="H-H distance (in Bohr)",
+    xlabel="H-H distance (Bohr)",
     ylabel="Total energy (in Hartree)",
     title="Potential energy surface for H$_2$ dissociation",
 )
