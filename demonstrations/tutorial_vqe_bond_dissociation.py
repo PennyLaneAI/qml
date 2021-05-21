@@ -482,7 +482,7 @@ print(
 ##############################################################################
 # Though this is the best theoretical estimate in this small basis,
 # this is not the *best* theoretical estimate. We would need to do this calculation
-# in larger basis to reach basis set
+# in a larger basis to reach basis set
 # convergence and this would significantly increase the number of qubits required.
 #
 # The reaction rate constant (:math:`k`) has an exponential dependence on the activation energy
