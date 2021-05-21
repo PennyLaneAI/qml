@@ -131,7 +131,7 @@ symbols = ["H", "H"]
 # are far away from each other.
 #
 #
-# Now we set up a loop that incrementally changes the internuclear distance and for each
+# Now we set up a loop that incrementally changes the internuclear distance.
 # such point we generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 # At each point, we solve the electronic Schrödinger equation by first solving the
