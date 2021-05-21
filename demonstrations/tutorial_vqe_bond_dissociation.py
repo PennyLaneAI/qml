@@ -18,9 +18,8 @@ the feasibility of a particular reaction path amongst many different possibiliti
 Computational chemistry offers several theoretical methods for precisely determining this energy
 cost. It also opens a window into predicting the thermodynamic and kinetic aspects of any 
 chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate a 
-chemical reaction by constructing the corresponding potential energy surface (a theoretical 
-construct and a visual aid to understanding how the reaction proceeds), and estimating the 
-relevant energy costs. 
+chemical reaction by following along the reaction path on the potential energy surface and 
+estimating the relevant energy costs. 
 
 In a previous tutorial on the :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
 we looked at how it can be used to compute molecular energies [#peruzzo2014]_.
@@ -93,8 +92,10 @@ spin molecular orbitals. When mapped to a qubit representation, we need a total 
 the electronic wave function.
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
 state is  represented as :math:`|1100\rangle`, where the two
-lowest-energy orbitals are occupied, and the remaining two are unoccupied. To form the complete 
-basis of states, we consider excitations of the HF state that conserve the spin. 
+lowest-energy orbitals are occupied, and the remaining two are unoccupied. 
+In order to consider the electron correlation missing in the mean-field (HF) approximation,
+we form the complete basis of many-body or multi-qubit states. To do that, we consider excitations
+of the HF state that conserve the total-spin projection :math:`S_z`. 
 In this case, where there are two electrons, single and double excitations suffice. The 
 singly-excited states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state 
 is :math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
