@@ -359,7 +359,9 @@ for r in r_range:
     )
 
     # get all the singles and doubles excitations
-    singles, doubles = qchem.excitations(active_electrons, active_orbitals * 2)
+   electrons = 3
+   orbitals = 6
+   singles, doubles = qchem.excitations(electrons, orbitals)
 
     def circuit(params, wires):
         qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=(0, 1, 2, 3, 4, 5))
