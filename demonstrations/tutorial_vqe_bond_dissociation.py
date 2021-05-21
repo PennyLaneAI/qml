@@ -29,7 +29,7 @@ Here, we show how VQE can be used to construct potential energy surfaces (PESs) 
 molecular transformation. This paves the way
 for the calculation of important quantities such as activation energy barriers, reaction energies,
 and reaction rates. As illustrative examples, we use tools implemented in PennyLane to study diatomic
-bond dissociation and reactions involving the exchange of hydrogen atoms. Our first example would be
+bond dissociation and reactions involving the exchange of hydrogen atoms. Our first example will show how
 to write the code to generate the plot depicting the dissociation of the :math:`H_2` molecule shown
 below. 
 
