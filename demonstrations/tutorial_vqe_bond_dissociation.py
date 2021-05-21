@@ -71,7 +71,7 @@ equation for fixed positions of the nuclei, and subsequently move them in increm
 while solving the Schrödinger equation at each such configuration. 
 The obtained set of energies corresponds to a grid of nuclear positions and the plot 
 :math:`E(R)` vs :math:`R` is the potential energy surface. 
-To really understand the steps involved in making such a plot, let us dive straight into it.
+To really understand the steps involved in making such a plot, let us dive straight in.
 
 ##########################################################
 
