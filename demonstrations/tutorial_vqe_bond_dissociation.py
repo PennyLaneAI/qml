@@ -290,7 +290,6 @@ print(
 # We must also note that our results are subject to the grid size of the span of interatomic
 # distances considered. The finer the grid size, the better the estimate of bond length and
 # dissociation energy.
-# Now let's move on to a more interesting chemical reaction.
 #
 
 ##############################################################################
