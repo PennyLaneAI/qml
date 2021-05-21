@@ -287,7 +287,7 @@ print(
 ##############################################################################
 # These estimates can be improved
 # by using bigger basis sets and extrapolating to the complete basis set limit [#motta2020]_.
-# We must also note that our results are subject to gridsize of the span of interatomic
+# We must also note that our results are subject to the grid size of the span of interatomic
 # distances considered. The finer the gridsize, the better the estimate of bond length and
 # dissociation energy.
 # Now let's move on to a more interesting chemical reaction.
