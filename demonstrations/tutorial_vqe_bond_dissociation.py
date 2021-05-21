@@ -172,6 +172,7 @@ for r in r_range:
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
 
     # define the circuit
+    hf = qml.qchem.hf_state(electrons=2, orbitals=4)
     def circuit(params, wires):
         # Prepare the HF state |1100> by flipping the qubits 0 and 1
         qml.PauliX(0)
