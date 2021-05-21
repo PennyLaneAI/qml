@@ -19,8 +19,8 @@ the feasibility of a particular transformation amongst many different possibilit
 Computational chemistry offers several theoretical methods for precisely determining this energy
 cost. It also opens a window into predicting the thermodynamic and kinetic aspects of any 
 chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate any general 
-chemical reaction by constructing the corresponding potential energy surface -- a theoretical 
-construct and a visual aid to understanding how the reaction proceeds, and estimating the 
+chemical reaction by constructing the corresponding potential energy surface (a theoretical 
+construct and a visual aid to understanding how the reaction proceeds), and estimating the 
 relevant energy costs. 
 
 In a previous tutorial on :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
