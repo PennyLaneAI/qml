@@ -75,7 +75,7 @@ To really understand the steps involved in making such a plot, let us dive strai
 
 ##########################################################
 
-Bond dissociation in Hydrogen molecule 
+Bond dissociation in a Hydrogen molecule 
 ---------------------------------------------------------
 
 We begin with the simplest of molecules: :math:`H_2`. 
