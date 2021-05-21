@@ -139,8 +139,8 @@ symbols = ["H", "H"]
 # At each point, we solve the electronic Schrödinger equation by first solving the
 # Hartree-Fock approximation and generating the molecular orbitals (MOs). For a more accurate
 # estimation of the molecular wavefunction and energy, we build the
-# VQE circuit by first preparing the qubit version of the HF state and then adding all single
-# excitation and double excitation gates which use the `Givens rotations
+# VQE circuit by first preparing the qubit version of the HF state and then adding all single-
+#  and double-excitation gates which use `Givens rotations
 # <https://en.wikipedia.org/wiki/Givens_rotation>`_. This approach is similar to
 # the `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ often used.
 #
