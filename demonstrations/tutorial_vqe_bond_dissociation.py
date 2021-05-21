@@ -262,7 +262,7 @@ plt.show()
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
 # as :math:`0.202` Hartrees (:math:`126.79` kcal/mol).
 
-# Energy at equilibrium bond length (minima)
+# Energy at equilibrium bond length (minimum)
 energy_equil = min(vqe_energy)
 
 # Energy at dissociation limit (the point on PES where the atoms are far apart)
