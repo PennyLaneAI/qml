@@ -155,7 +155,6 @@ symbols = ["H", "H"]
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
 # This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
 # Once we have the converged VQE energy at the specified internuclear distance, we move on to the next point of the PES and repeat the entire process using the previously optimized circuit parameters to define the initial state of the VQE calculation.
-# increment the distance and the whole cycle of HF calculation, building quantum circuits and
 # the iterative VQE optimization of gate parameters is repeated. After we have covered the grid of
 # internuclear distances, we tabulate the results.
 
