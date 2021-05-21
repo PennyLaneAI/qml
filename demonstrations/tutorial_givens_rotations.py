@@ -26,6 +26,12 @@ she arrives at a conclusion:
 she could separate the blocks and construct something new. What more could one ask of a toy?
 Sophie decided that Lego really could be called the most ingenious toy in the world.*
 
+.. figure:: ../demonstrations/givens_rotations/lego-circuit.svg
+    :align: center
+    :width: 60%
+
+    States of a system with six spin orbitals and three electrons.
+
 In this tutorial, you will learn about the building blocks of quantum circuits for quantum
 chemistry: Givens rotations. These are operations that can be used to construct any kind of
 particle-conserving circuit. We discuss single and double excitation gates, which are particular
