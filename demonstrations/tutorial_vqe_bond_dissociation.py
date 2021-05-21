@@ -204,7 +204,6 @@ for r in r_range:
     for n in range(50):
 
         params, energy = opt.step_and_cost(cost_fn, params)
-        # print("Iteration = {:},  E = {:.8f} Ha ".format(n, energy))
 
         # define the convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
