@@ -57,7 +57,7 @@ construct a quantum control process such that the energy expectation :math:`\lan
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = \frac{d}{dt} \langle \psi(t)|H_c|\psi(t)\rangle = i \beta(t)\langle [H_d, H_c] \rangle_t \leq 0,
 
 where the product rule and
-`the Schrodinger equation <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-dependent_equation>`__ are used to derive the above formula.
+`the Schrödinger equation <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-dependent_equation>`__ are used to derive the above formula.
 If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
@@ -316,7 +316,7 @@ plt.show()
 ######################################################################
 # The bitstring occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle`.
 # This corresponds to nodes :math:`0`, :math:`1`, and :math:`2`, which is precisely the maximum clique.
-# FALQON has solved the MaxClique problem!
+# FALQON has solved the MaxClique problem 🤩.
 #
 
 graph = nx.Graph(edges)
@@ -364,9 +364,9 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # Both FALQON and QAOA have unique benefits and drawbacks.
 # While FALQON requires no classical optimization and is guaranteed to decrease the cost function
 # with each iteration, its circuit depth grows linearly with the number of iterations. The benchmarking data also shows
-# how the reduction in cost slows with layer, and the additional burden of correctly tuning the time step. On the other hand, QAOA
-# has a fixed circuit depth, but does require classical optimization, and is therefore subject to all of the drawbacks
-# that come with probing a cost landscape for a set of optimal parameters.
+# how the reduction in cost slows with the number of layers, and the additional burden of correctly tuning the time step.
+# On the other hand, QAOA has a fixed circuit depth, but does require classical optimization, and is therefore subject
+# to all of the drawbacks that come with probing a cost landscape for a set of optimal parameters.
 #
 # QAOA and FALQON also have many similarities, most notably, their circuit structure. Both
 # involve alternating layers of time evolution operators corresponding to a cost and a mixer/driver Hamiltonian.
