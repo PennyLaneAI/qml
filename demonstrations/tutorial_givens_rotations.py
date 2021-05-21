@@ -169,7 +169,7 @@ excitation gates with parameters :math:`\theta, \phi` yields the state
     \cos(\theta/2)\sin(\phi/2)|001\rangle.
 
 Since the amplitude of :math:`|010\rangle` must be :math:`1/\sqrt{3}`, we conclude that
-:math:`-\sin(\theta)=1/\sqrt{3}`. This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
+:math:`-\sin(\theta/2)=1/\sqrt{3}`. This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
 therefore :math:`-\sin(\phi/2)=1/\sqrt{2}`. Thus, to prepare an equal superposition state we
 choose the angles of rotation to be
 
@@ -177,9 +177,6 @@ choose the angles of rotation to be
 
     \theta &= - 2 \arcsin(1/\sqrt{3})\\
     \phi &= - 2 \arcsin(1/\sqrt{2}).
-
-This is a general strategy that we also use in upcoming examples.
-
 """
 
 import pennylane as qml
