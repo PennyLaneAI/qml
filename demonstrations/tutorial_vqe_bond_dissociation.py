@@ -252,7 +252,7 @@ plt.show()
 # the distance between the two atoms that minimizes the total electronic energy
 # --- and the bond dissociation energy.
 # The bond dissociation energy is calculated as the difference in energy of the system at equilibrium (minimum) and the energy
-# of the system at the dissociation limit, where the atoms are far apart and
+# of the system where the atoms are far apart and
 # the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
