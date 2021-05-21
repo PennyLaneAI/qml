@@ -66,7 +66,7 @@ for some coefficients :math:`c_i`.
 
 .. figure:: ../demonstrations/givens_rotations/orbitals+states.png
     :align: center
-    :width: 45%
+    :width: 35%
 
     This figure shows states of a system with six spin orbitals and three electrons.
 
@@ -141,7 +141,7 @@ from the first to the second qubit.
 
 .. figure:: ../demonstrations/givens_rotations/Givens_rotations_1.png
     :align: center
-    :width: 45%
+    :width: 35%
 
     A Givens rotation can be used to couple states that differ by a single excitation.
 
