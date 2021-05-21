@@ -89,7 +89,7 @@ quantum circuits. For an introductory discussion, please take a look at the
 :doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>` tutorial.
 Using a minimal `basis set <<https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_ 
 this molecular system can be described by :math:`2` electrons in :math:`4` 
-spin-orbitals. When mapped to a qubit representation, we need a total of four qubits to represent
+spin molecular orbitals. When mapped to a qubit representation, we need a total of four qubits to represent
 the electronic wave function.
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
 ground state is  represented as :math:`|1100\rangle`, where the two
