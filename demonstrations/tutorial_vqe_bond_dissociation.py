@@ -245,7 +245,7 @@ plt.show()
 
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately, a potential energy curve) for
-# the dissociation of a hydrogen molecule into two hydrogen atoms. Exactly the same as shown in
+# the dissociation of a hydrogen molecule into two hydrogen atoms. Note that it is exactly the same as shown in
 # the illustrated image of :ref:`label_h2_pes` Let us now understand the utility
 # of such a plot.
 #
