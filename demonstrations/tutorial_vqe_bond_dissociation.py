@@ -149,7 +149,7 @@ symbols = ["H", "H"]
 # :class:`~.ExpvalCost`.
 # For the problems discussed here, we use gradient descent to optimize
 # the gate parameters. We initialize the parameters to zero,
-# i.e., start from the HF state as the approximation to the exact state.
+# i.e., start from the HF state as the approximation to the exact ground state.
 # The second loop is the variational optimization using VQE algorithm,
 # where energy for the trial wavefunction is calculated
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
