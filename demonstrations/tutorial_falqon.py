@@ -335,12 +335,12 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # `Bron-Kerbosch algorithm <https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm>`__. To benchmark FALQON,
 # the relative error in the estimated minimum energy
 #
-# .. math:: r_A = \frac{\langle H_C\rangle - \langle H_C\rangle_\text{min}}{|\langle H_C\rangle_\text{min}|},
+# .. math:: r_A = \frac{\langle H_C\rangle - \langle H_C\rangle_\text{min}}{|\langle H_C\rangle_\text{min}|}
 #
 # makes a good figure of merit.
 #
 # Final results for :math:`r_A`, along with :math:`\beta`, are plotted below,
-# with the number of FALQON layers on the horizontal axis. Due to computational constraints, we have averaged over :math:`5` random graphs per node
+# with the number of FALQON layers on the horizontal axis. We have averaged over :math:`50` random graphs per node
 # size, for sizes :math:`n = 6, 7, 8, 9`, with probability :math:`p = 0.1` of keeping an edge. Running FALQON for
 # :math:`40` steps, with :math:`\Delta t = 0.01`, produces:
 #
@@ -348,7 +348,9 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #     :align: center
 #     :width: 60%
 #
-# The relative error decreases with the number of layers and graph size, except for :math:`n = 9` where the step size has become too large
+# The relative error decreases with the number of layers (as we expect from the construction) and graph size (suggesting the errors grows
+# more slowly than the minimum energy).
+# The exception is :math:`n = 9`, where the step size has become too large
 # and the Trotter-Suzuki decomposition breaks down.
 # The rate of decrease also slows down. Even though the algorithm will converge to the ground state, it won't always get
 # there in few time steps!
