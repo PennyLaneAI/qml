@@ -68,7 +68,7 @@ for some coefficients :math:`c_i`.
     :align: center
     :width: 50%
 
-    This figure shows states of a system with six spin orbitals and three electrons.
+    States of a system with six spin orbitals and three electrons.
 
 Because the number of electrons in a molecule is
 fixed, any transformation must conserve the number of particles. We refer to these as
