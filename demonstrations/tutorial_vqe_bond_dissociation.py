@@ -253,7 +253,7 @@ plt.show()
 # --- and the bond dissociation energy.
 # The bond dissociation energy is calculated as the difference in energy of the system at equilibrium (minimum) and the energy
 # of the system where the atoms are far apart and
-# the total energy plateaus to a constant: the sum of each atom's individual energy.
+# the total energy plateaus to the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
