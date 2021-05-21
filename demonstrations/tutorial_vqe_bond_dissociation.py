@@ -537,7 +537,7 @@ print(
 # These are the two different
 # reference states needed to qualitatively describe the full potential energy surface
 # for this reaction. Prior studies have found that one of these states is a good reference
-# for one half of the PES while another is good reference for the rest of PES. [#purvis1983]_
+# for one half of the PES while another is good reference for the rest of PES [#purvis1983]_.
 # To figure out the reaction coordinate for the
 # approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
 # Coe et al. [#coe2012]_
