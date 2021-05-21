@@ -200,11 +200,19 @@ def circuit(x, y):
 x = -2 * np.arcsin(np.sqrt(1/3))
 y = -2 * np.arcsin(np.sqrt(1/2))
 print(circuit(x, y))
+tensor_state = circuit(x, y)
 
 ##############################################################################
 # The components of the output state are ordered according to their binary
 # representation, so entry 1 is :math:`|001\rangle`, entry 2 is :math:`|010\rangle`, and entry 4 is
-# :math:`|100\rangle`, meaning we indeed prepare the desired state.
+# :math:`|100\rangle`, meaning we indeed prepare the desired state. We can check this by
+# reshaping the output state
+
+tensor_state = circuit(x, y).reshape(2, 2, 2)
+print("Amplitude of state |001> = ", tensor_state[0, 0, 1])
+print("Amplitude of state |010> = ", tensor_state[0, 1, 0])
+print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
+
 #
 # We can also study **double excitations** involving the transfer of two particles. For example,
 # consider a Givens rotation in the subspace spanned by the states
@@ -243,7 +251,6 @@ nr_qubits = 6
 singles, doubles = qml.qchem.excitations(3, 6)
 print(f"Single excitations = {singles}")
 print(f"Double excitations = {doubles}")
-
 
 ##############################################################################
 # Now we continue to build the circuit:
