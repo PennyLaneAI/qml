@@ -112,7 +112,7 @@ superpositions. So let's take a look at two-qubit gates.
 Basis states of two qubits can be categorized depending on
 their number of particles.
 
- We have:
+We have:
  
 - :math:`|00\rangle` with zero particles,
 - :math:`|01\rangle,|10\rangle` with one particle, and
