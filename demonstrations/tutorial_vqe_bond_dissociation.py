@@ -3,8 +3,7 @@ Modelling chemical reactions on a quantum computer
 ====================================================
 
 .. meta::
-    :property="og:description": Construct potential energy surfaces for chemical reactions using 
-    the variational quantum eigensolver algorithm in PennyLane.
+    :property="og:description": Construct potential energy surfaces for chemical reactions
     :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
 
 .. related::
