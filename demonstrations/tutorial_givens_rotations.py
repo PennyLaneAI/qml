@@ -66,7 +66,7 @@ for some coefficients :math:`c_i`.
 
 .. figure:: ../demonstrations/givens_rotations/orbitals+states.png
     :align: center
-    :width: 60%
+    :width: 45%
 
     This figure shows states of a system with six spin orbitals and three electrons.
 
@@ -141,7 +141,7 @@ from the first to the second qubit.
 
 .. figure:: ../demonstrations/givens_rotations/Givens_rotations_1.png
     :align: center
-    :width: 60%
+    :width: 45%
 
     A Givens rotation can be used to couple states that differ by a single excitation.
 
@@ -455,7 +455,8 @@ print("Output = ", output)
 #
 # .. [#arrazola]
 #
-#   J. M. Arrazola, et al., "Universal quantum circuits for quantum chemistry", arXiv: , (2021)
+#   J. M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran, "Universal
+#   quantum circuits for quantum chemistry", arXiv:2021:1234, (2021)
 #
 #
 
