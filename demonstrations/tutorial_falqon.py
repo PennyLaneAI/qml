@@ -11,7 +11,7 @@ Feedback-Based Quantum Optimization (FALQON)
    tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut
 
-*Authors: David Wakeham and Jack Ceroni. Posted: XXX. Last updated: XXX.*
+*Authors: David Wakeham and Jack Ceroni. Posted: 21 May 2021. Last updated: 21 May 2021.*
 
 -----------------------------
 
