@@ -250,7 +250,7 @@ plt.show()
 # In a diatomic molecule such as :math:`H_2`, the potential energy curve as a function of
 # internuclear distance tells us the equilibrium bond length ---
 # the distance between the two atoms that minimizes the total electronic energy
-# equilibrium --- and the bond dissociation energy.
+# --- and the bond dissociation energy.
 # The bond dissociation energy is calculated as the difference in energy of the system at equilibrium (minimum) and the energy
 # of the system at the dissociation limit, where the atoms are far apart and
 # the total energy plateaus to a constant: the sum of each atom's individual energy.
