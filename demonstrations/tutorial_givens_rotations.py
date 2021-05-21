@@ -170,7 +170,7 @@ excitation gates with parameters :math:`\theta, \phi` yields the state
 
 Since the amplitude of :math:`|010\rangle` must be :math:`1/\sqrt{3}`, we conclude that
 :math:`-\sin(\theta)=1/\sqrt{3}`. This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
-therefore :math:`-\sin(\phi/2)=1/\sqrt{2}`. Thus, the prepare an equal superposition state we
+therefore :math:`-\sin(\phi/2)=1/\sqrt{2}`. Thus, to prepare an equal superposition state we
 choose the angles of rotation to be
 
 .. math::
@@ -429,7 +429,7 @@ print(states)
 #
 # which is our intended outcome. Let's use this strategy to create an equal superposition over
 # all two-particle states on four qubits. We follow the same strategy as before, setting the angle
-# of the :math:`i`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-i})`, where :math:`n` is the
+# of the :math:`k`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-k})`, where :math:`n` is the
 # number of basis states in the superposition.
 
 dev = qml.device('default.qubit', wires=4)
