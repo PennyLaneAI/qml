@@ -14,7 +14,7 @@ Givens rotations for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: PennyLane dev team. Posted:  2021. Last updated: *
+*Author: PennyLane dev team. Posted: June 1, 2021. Last updated: June 1, 2021
 
 In the book `“Sophie’s world” <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
@@ -66,7 +66,7 @@ for some coefficients :math:`c_i`.
 
 .. figure:: ../demonstrations/givens_rotations/orbitals+states.png
     :align: center
-    :width: 35%
+    :width: 50%
 
     This figure shows states of a system with six spin orbitals and three electrons.
 
@@ -192,7 +192,7 @@ print(circuit(x, y))
 #
 # .. figure:: ../demonstrations/givens_rotations/Givens_rotations_2.png
 #     :align: center
-#     :width: 60%
+#     :width: 35%
 #
 #     A Givens rotation can also be used to couple states that differ by a double excitation.
 #
@@ -392,10 +392,10 @@ print(states)
 # to be controlled on the state of qubit 2. Finally, applying a double-excitation gate on all qubits
 # can create a superposition of the form
 #
-#  .. math::
+# .. math::
 #
-#     |\psi\rangle = c_1|1100\rangle + c_2|1010\rangle + c_3|1001\rangle + c_4|0110\rangle +
-#     c_5|0101\rangle + c_6|0011\rangle,
+#   |\psi\rangle = c_1|1100\rangle + c_2|1010\rangle + c_3|1001\rangle + c_4|0110\rangle +
+#   c_5|0101\rangle + c_6|0011\rangle,
 #
 # which is our intended outcome. Let's use this strategy to create an equal superposition over
 # all two-particle states on four qubits. We follow the same strategy as before, setting the angle
@@ -403,6 +403,8 @@ print(states)
 # number of basis states in the superposition.
 
 ctrl_single1 = qml.ctrl(op, control=1)
+
+dev = qml.device('default.qubit', wires=4)
 
 
 @qml.qnode(dev)
@@ -422,13 +424,13 @@ params = np.array([-2 * np.arcsin(1/np.sqrt(n-i)) for i in range(n-1)])
 output = state_preparation(params)
 # sets very small coefficients to zero
 output[np.abs(output) < 1e-10] = 0
-states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
-print(states)
-print("Output = ", output)
+states = [np.binary_repr(i, width=4) for i in range(len(output)) if output[i] != 0]
+print("Basis states = ", states)
+print("Output state =", output)
 
 
 ##############################################################################
-# Success! This is the equal superposition we wanted to prepare. 🚀
+# Success! This is the equal superposition state we wanted to prepare. 🚀
 #
 # When it comes to quantum circuits for quantum chemistry, there is a wide variety of
 # architectures that have been proposed. Researchers in the field are faced with the apparent
