@@ -353,7 +353,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # The exception is :math:`n = 9`, where the step size has become too large
 # and the Trotter-Suzuki decomposition breaks down.
 # The rate of decrease also slows down. Even though the algorithm will converge to the ground state, it won't always get
-# there in few time steps!
+# there in a few time steps!
 
 ######################################################################
 # Seeding QAOA with FALQON (Bird Seed 🦅)
