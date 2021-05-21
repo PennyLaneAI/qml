@@ -350,8 +350,8 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #
 # The relative error decreases with the number of layers and graph size, except for :math:`n = 9` where the step size has become too large
 # and the Trotter-Suzuki decomposition breaks down.
-# The rate of decrease also slows down. Even though the algorithm will converge to the ground state,
-# no one said anything about how quickly it gets there!
+# The rate of decrease also slows down. Even though the algorithm will converge to the ground state, it won't always get
+# there in few time steps!
 
 ######################################################################
 # Seeding QAOA with FALQON (Bird Seed 🦅)
