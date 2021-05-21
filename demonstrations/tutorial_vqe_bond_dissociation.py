@@ -512,9 +512,9 @@ print(
 # -------------------------------------------------------------------------------------------
 #
 # In our previous examples, the Hartree-Fock state was a good approximation to the exact
-# ground state for all points on the potential energy surface.
+# ground state for all points on the potential energy surface:
 #
-# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle \simeq 1
+# .. math:: \langle \Psi_{HF}| \Psi_{exact}\rangle \simeq 1.
 #
 # Hence, we refer to them as single-reference
 # problems. However, there exist situations where the above condition does not hold and
