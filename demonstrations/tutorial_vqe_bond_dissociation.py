@@ -13,7 +13,7 @@ Modelling chemical reactions on a quantum computer
 *Author: PennyLane dev team. Posted: 19 May 2021. Last updated: 19 May 2021.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
-forming of bonds. Such transformations involve energy costs that determine 
+forming of bonds. Such transformations are characterized by an energy cost that determine 
 the feasibility of a particular transformation amongst many different possibilities. 
 Computational chemistry offers several theoretical methods for precisely determining this energy
 cost. It also opens a window into predicting the thermodynamic and kinetic aspects of any 
