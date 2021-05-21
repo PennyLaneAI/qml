@@ -60,7 +60,7 @@ equation:
 
 Thus arises the concept of the electronic energy of the molecule, :math:`E(R)`, 
 as a function of interatomic coordinates (:math:`R`). The potential energy surface of a 
-molecule is a 
+molecule is an 
 :math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
 visual tool to understand chemical reactions by locating stable molecules (reactants and products)
 as the local minima and transition states as peaks and marking the possible routes of a plausible
