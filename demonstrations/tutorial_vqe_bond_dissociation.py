@@ -133,16 +133,15 @@ symbols = ["H", "H"]
 #
 #
 # Now we set up a loop that incrementally changes the internuclear distance.
-# At each value of :math:`H-H` bond distance, we run a VQE calculation to compute the total 
-# electronic energy of the molecule. 
+# At each value of :math:`H-H` bond distance, we run a VQE calculation to compute the total
+# electronic energy of the molecule.
 # We generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function by solving Hartree-Fock equations
-# and generating the molecular orbitals (MOs). For a more accurate
-# estimation of the molecular wavefunction and energy, we build the
-# VQE circuit by first preparing the qubit version of the HF state and then adding all single-
-#  and double-excitation gates which use `Givens rotations
-# <https://en.wikipedia.org/wiki/Givens_rotation>`_. This is similar to the often-used
-#  `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ approach.
+# and generating the molecular orbitals (MOs). To prepare the VQE ansatz we first initialize
+# the qubit register to the HF state. Then, single and double-excitation gates, implemented in the
+# form of Givens rotations <https://en.wikipedia.org/wiki/Givens_rotation>_, is applied to the qubits
+# 0, 1, 2, 3 to prepare the FCI ground state of the molecule.This is similar to the often-used
+# `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ approach.
 #
 #
 # We use a classical qubit simulator and define
@@ -156,8 +155,9 @@ symbols = ["H", "H"]
 # where energy for the trial wavefunction is calculated
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
 # This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
-# Once we have the converged VQE energy at the specified internuclear distance, we move on to the next point of the PES and repeat the entire process using the previously optimized circuit parameters to define the initial state of the VQE calculation.
-# After we have covered the grid of
+# Once we have the converged VQE energy at the specified internuclear distance, we move on to the
+# next point of the PES and repeat the entire process using the previously optimized circuit parameters
+# to define the initial state of the VQE calculation. After we have covered the grid of
 # internuclear distances, we tabulate the results.
 
 vqe_energy = []
@@ -175,9 +175,10 @@ for r in r_range:
 
     # define the circuit
     hf = qml.qchem.hf_state(electrons=2, orbitals=4)
+
     def circuit(params, wires):
-        # Prepare the HF state |1100> by flipping the qubits 0 and 1
-        qml.BasisState(hf, wires=wires )
+        # Prepare the HF state: |1100>
+        qml.BasisState(hf, wires=wires)
         # Add double excitation
         qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
         # Add single excitations
@@ -192,7 +193,7 @@ for r in r_range:
     # define and initialize the gate parameters
     params = np.zeros(3)
 
-    # if this is not the first point on PES, initialize with converged parameters
+    # if this is not the first geometry point on PES, initialize with converged parameters
     # from previous point
     if pes_point > 1:
         params = params_old
@@ -244,8 +245,8 @@ plt.show()
 
 ##############################################################################
 # This is a simple potential energy surface (or more appropriately, a potential energy curve) for
-# the dissociation of a hydrogen molecule into two hydrogen atoms. Note that it is exactly the same as shown in
-# the illustrated image of :ref:`label_h2_pes` Let us now understand the utility
+# the dissociation of a hydrogen molecule into two hydrogen atoms. Note that it is exactly the same
+# as shown in the illustrated image of :ref:`label_h2_pes` Let us now understand the utility
 # of such a plot.
 #
 #
@@ -253,7 +254,8 @@ plt.show()
 # internuclear distance tells us the equilibrium bond length ---
 # the distance between the two atoms that minimizes the total electronic energy
 # --- and the bond dissociation energy.
-# The bond dissociation energy is calculated as the difference in energy of the system at equilibrium (minimum) and the energy
+# The bond dissociation energy is calculated as the difference in energy of the system at
+# equilibrium (minimum) and the energy
 # of the system where the atoms are far apart and
 # the total energy plateaus to the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
@@ -293,8 +295,8 @@ print(
 # .. note::
 #
 #     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
-#     gate parameters for a particular point on the PES are used as the initial guess for the VQE 
-#     calculation at the adjacent geometry. With a better guess, the VQE iterations converge 
+#     gate parameters for a particular geometry on the PES are used as the initial guess for the VQE
+#     calculation at the adjacent geometry. With a better guess, the VQE iterations converge
 #     relatively quickly and we save considerable time.
 #
 
@@ -334,9 +336,6 @@ basis_set = "sto-3g"
 
 multiplicity = 2
 
-active_electrons = 3
-active_orbitals = 3
-
 symbols = ["H", "H", "H"]
 
 ##############################################################################
@@ -357,17 +356,17 @@ for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates,
-        mult=multiplicity,
-        basis=basis_set
+    H, qubits = qchem.molecular_hamiltonian(
+        symbols, coordinates, mult=multiplicity, basis=basis_set
     )
-    
+
     # get all the singles and doubles excitations
     electrons = 3
     orbitals = 6
     singles, doubles = qchem.excitations(electrons, orbitals)
 
     hf = qml.qchem.hf_state(electrons, orbitals)
+
     def circuit(params, wires):
         qml.BasisState(hf, wires=wires)
         for i in range(0, len(doubles)):
@@ -382,7 +381,7 @@ for r in r_range:
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
 
-    # if this is not the first point on PES, initialize with converged parameters
+    # if this is not the first geometry point on PES, initialize with converged parameters
     # from previous point
     if pes_point > 1:
         params = params_old
@@ -549,7 +548,7 @@ print(
 # generate the potential energy surface for this reaction and compare how
 # the performance of VQE with FCI results.
 # All you need to do is to traverse along the
-# specified reaction coordinate, generate molecular geometries and obtain the converged 
+# specified reaction coordinate, generate molecular geometries and obtain the converged
 # VQE energies. The code is similar and follows from our previous examples.
 #
 #
