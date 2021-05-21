@@ -393,7 +393,9 @@ print(states)
 # can create a superposition of the form
 #
 #  .. math::
-#   |\psi\rangle = c_1 \ket{1100} + c_2 \ket{1010} + c_3 \ket{1001} + c_4 \ket{0110} + c_5 \ket{0101} + c_6 \ket{0011},
+#
+#     |\psi\rangle = c_1|1100\rangle + c_2|1010\rangle + c_3|1001\rangle + c_4|0110\rangle +
+#     c_5|0101\rangle + c_6|0011\rangle,
 #
 # which is our intended outcome. Let's use this strategy to create an equal superposition over
 # all two-particle states on four qubits. We follow the same strategy as before, setting the angle
