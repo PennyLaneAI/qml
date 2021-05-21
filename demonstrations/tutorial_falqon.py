@@ -41,7 +41,7 @@ Theory
 
 To solve a combinatorial optimization problem with a quantum computer, a typical strategy is to encode
 the solution to the problem as the ground state of a *cost Hamiltonian* :math:`H_c`. Then, we use some procedure to drive
-an initial state into the ground state of :math:`H_c`, therefore solving the problem.
+an initial state into the ground state of :math:`H_c`.
 FALQON falls under this broad scheme.
 
 Consider a quantum system governed by a Hamiltonian of the form :math:`H = H_c + \beta(t) H_d`. These kinds of
@@ -127,7 +127,7 @@ import networkx as nx
 #     :align: center
 #     :width: 90%
 #
-# We attempt to find the maximum clique of the following graph:
+# We attempt to find the maximum clique of the graph below:
 #
 
 edges = [(0, 1), (1, 2), (2, 0), (2, 3), (1, 4)]
@@ -147,7 +147,7 @@ nx.draw(graph, with_labels=True, node_color="#e377c2")
 #
 # In addition to defining :math:`H_c`, we also require a driver Hamiltonian :math:`H_d` which does not commute
 # with :math:`H_c`. The driver Hamiltonian's role is similar to that of the mixer Hamiltonian in QAOA.
-# To keep things simple, we choose a sum over Pauli X operations on each qubit:
+# To keep things simple, we choose a sum over Pauli :math:`X` operations on each qubit:
 #
 # .. math:: H_d = \displaystyle\sum_{i \in V(G)} X_i.
 #
@@ -270,7 +270,7 @@ def max_clique_falqon(graph, n, beta_1, delta_t, dev):
 # for each step.
 #
 # We can now run FALQON for our MaxClique problem! It is important that we choose :math:`\Delta t` small enough
-# such that the approximate time-evolution is close enough to the real time-evolution, otherwise we the expectation
+# such that the approximate time evolution is close enough to the real time evolution, otherwise we the expectation
 # value of :math:`H_c` may not strictly decrease. For this demonstration, we set :math:`\Delta t = 0.03`,
 # :math:`n = 40`, and :math:`\beta_1 = 0`. These are comparable to the hyperparameters chosen in the original paper.
 
@@ -295,7 +295,7 @@ plt.show()
 # The expectation value decreases!
 #
 # To get a better understanding of the performance of the FALQON algorithm,
-# we can create a graph showing the probability of measuring each possible bitstring. We define the
+# we can create a graph showing the probability of measuring each possible bit string. We define the
 # following circuit, feeding in the optimal values of :math:`\beta_k`:
 
 @qml.qnode(dev)
@@ -309,12 +309,12 @@ def prob_circuit():
 
 probs = prob_circuit()
 plt.bar(range(2**len(dev.wires)), probs)
-plt.xlabel("Bitstring")
+plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
 plt.show()
 
 ######################################################################
-# The bitstring occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle`.
+# The bit string occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle`.
 # This corresponds to nodes :math:`0`, :math:`1`, and :math:`2`, which is precisely the maximum clique.
 # FALQON has solved the MaxClique problem 🤩.
 #
@@ -372,10 +372,10 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #
 # QAOA and FALQON also have many similarities, most notably, their circuit structure. Both
 # involve alternating layers of time evolution operators corresponding to a cost and a mixer/driver Hamiltonian.
-# The authors of the FALQON paper therefore suggest combining FALQON and QAOA to yield a new optimization algorithm that
+# The FALQON paper raises the idea of combining FALQON and QAOA to yield a new optimization algorithm that
 # leverages the benefits of both. In this final section of the tutorial, we will implement this procedure in PennyLane.
 #
-# Suppose we want to run a QAOA circuit of depth :math:`p`. Our ansatz will be of the form:
+# Suppose we want to run a QAOA circuit of depth :math:`p`. Our ansatz will be of the form
 #
 # .. math:: U_{\text{QAOA}} = e^{-i \alpha_p H_m} e^{-i \gamma_p H_c} \cdots e^{-i \alpha_1 H_m} e^{-i \gamma_1 H_c},
 #
@@ -427,7 +427,6 @@ cost_fn = qml.ExpvalCost(qaoa_circuit, cost_h, dev)
 
 delta_t = 0.02
 
-print("Running FALQON")
 res, res_energy = max_clique_falqon(new_graph, depth-1, 0.0, delta_t, dev)
 
 params = np.array([[delta_t for k in res], [delta_t * k for k in res]])
@@ -436,7 +435,6 @@ params = np.array([[delta_t for k in res], [delta_t * k for k in res]])
 # Finally, we run our QAOA optimization procedure. We set the number of QAOA executions to :math:`40`:
 #
 
-print("Running QAOA")
 steps = 40
 
 optimizer = qml.GradientDescentOptimizer()
@@ -447,7 +445,7 @@ for s in range(steps):
 
 ######################################################################
 # To conclude, we can check how well FALQON/QAOA solved the optimization problem. We
-# define a circuit which outputs the probabilities of measuring each bitstring, and
+# define a circuit which outputs the probabilities of measuring each bit string, and
 # create a bar graph:
 
 @qml.qnode(dev)
@@ -457,7 +455,7 @@ def prob_circuit():
 
 probs = prob_circuit()
 plt.bar(range(2**len(dev.wires)), probs)
-plt.xlabel("Bitstring")
+plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
 plt.show()
 
