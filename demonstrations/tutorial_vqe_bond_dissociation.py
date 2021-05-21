@@ -560,7 +560,7 @@ print(
 # comparison. A sharp maximum could be seen in these curves which is
 # due to a sudden switch in the underlying Hartree-Fock reference at the specific reaction
 # coordinate.
-# The performance of VQE depends on the active space chosen i.e. the number of electrons and
+# The performance of VQE depends on the active space chosen, i.e., the number of electrons and
 # orbitals that are being considered. For reference, we have included
 # the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
 # which is equal to :math:`6` spin orbitals. As a simple exercise, try increasing
