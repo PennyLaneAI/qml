@@ -539,7 +539,7 @@ print(
 # for this reaction. Prior studies have found that one of these states is a good reference
 # for one half of the PES while another is good reference for the rest of PES [#purvis1983]_.
 # To figure out the reaction coordinate for the
-# approach of the :math:`H_2` molecule to the Beryllium atom, we refer to the work by
+# approach of the :math:`H_2` molecule to the :math:`Be` atom, we refer to the work by
 # Coe et al. [#coe2012]_
 # We fix the Beryllium atom at the origin and the coordinates for the hydrogen atoms
 # are given by :math:`(x, y, 0)` and :math:`(x, −y, 0)`, where :math:`y = 2.54 − 0.46x`
