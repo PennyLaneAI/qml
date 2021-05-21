@@ -254,8 +254,7 @@ plt.show()
 # internuclear distance tells us the bond length ---
 # the distance between the two atoms when the energy is at a minimum and the system is in
 # equilibrium --- and the bond dissociation energy.
-# The bond dissociation energy is the amount of energy required to dissociate a bond.
-# It is calculated as the difference in energy of the system at equilibrium (minima) and the energy
+# The bond dissociation energy is calculated as the difference in energy of the system at equilibrium (minimum) and the energy
 # of the system at the dissociation limit, where the atoms are far apart and
 # the total energy plateaus to a constant: the sum of each atom's individual energy.
 # Below we show how our VQE circuit gives an
