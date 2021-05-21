@@ -141,8 +141,8 @@ symbols = ["H", "H"]
 # estimation of the molecular wavefunction and energy, we build the
 # VQE circuit by first preparing the qubit version of the HF state and then adding all single-
 #  and double-excitation gates which use `Givens rotations
-# <https://en.wikipedia.org/wiki/Givens_rotation>`_. This approach is similar to
-# the `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ often used.
+# <https://en.wikipedia.org/wiki/Givens_rotation>`_. This is similar to the often-used
+#  `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ approach.
 #
 #
 # We use a classical qubit simulator and define
