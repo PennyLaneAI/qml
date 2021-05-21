@@ -51,11 +51,11 @@ convenient way to do this: we associate a qubit with each spin orbital and
 use its states to represent occupied :math:`|1\rangle` or unoccupied
 :math:`|0\rangle` spin orbitals.
 
-An :math:`n`-qubit state with Hamming weight :math:`k`, i.e.,
-with :math:`k` qubits in state :math:`|1\rangle`, represents a state of :math:`k` electrons in
-:math:`n` spin orbitals. For example :math:`|1010\rangle` is a state of two electrons in two
-spin orbitals. More generally, superpositions over all basis states with a fixed
-number of particles are valid states of the electrons in a molecule. These are states such as
+An :math:`n`-qubit state with `Hamming weight < https://en.wikipedia.org/wiki/Hamming_weight>`_
+:math:`k`, i.e., with :math:`k` qubits in state :math:`|1\rangle`, represents a state of
+:math:`k` electrons in :math:`n` spin orbitals. For example :math:`|1010\rangle` is a state of
+two electrons in two spin orbitals. More generally, superpositions over all basis states with a
+fixed number of particles are valid states of the electrons in a molecule. These are states such as
 
 .. math::
 
@@ -72,7 +72,7 @@ for some coefficients :math:`c_i`.
 
 Because the number of electrons in a molecule is
 fixed, any transformation must conserve the number of particles. We refer to these as
-*particle-conserving unitaries*. When designing quantum circuits and algorithms for quantum
+**particle-conserving unitaries**. When designing quantum circuits and algorithms for quantum
 chemistry, it is desirable to employ only particle-conserving gates that guarantee that the
 states of the system remain valid. This raises the questions: what are the simplest
 particle-conserving unitaries? Like Legos, how can they be used to construct any quantum circuit for
@@ -104,9 +104,15 @@ relative phases of states in a superposition; they cannot be used to create and 
 superpositions. So let's take a look at two-qubit gates.
 
 Basis states of two qubits can be categorized depending on
-their number of particles. We have :math:`|00\rangle` with zero particles, :math:`|01\rangle,
-|10\rangle` with one particle, and :math:`|11\rangle` with two particles. Here we can now consider
-transformations that couple the states :math:`|01\rangle,|10\rangle`. These are gates of the form
+their number of particles.
+
+ We have:
+    - :math:`|00\rangle` with zero particles,
+    - :math:`|01\rangle,|10\rangle` with one particle, and
+    - :math:`|11\rangle` with two particles.
+
+We can now consider transformations that couple the states :math:`|01\rangle,|10\rangle`. These
+are gates of the form
 
 .. math::
 
@@ -135,7 +141,7 @@ This is an example of a `Givens rotation <https://en.wikipedia.org/wiki/Givens_r
 rotation in a two-dimensional subspace of a larger Hilbert space. In this case, we are performing a
 Givens rotation in a two-dimensional subspace of the four-dimensional space of two-qubit states.
 This gate allows us to create superpositions by exchanging the particle
-between the two qubits. Such transformations can be interpreted as an *single excitation*,
+between the two qubits. Such transformations can be interpreted as a **single excitation**,
 where we view the exchange from :math:`|10\rangle` to :math:`|01\rangle` as exciting the electron
 from the first to the second qubit.
 
@@ -147,7 +153,26 @@ from the first to the second qubit.
 
 This gate is implemented in PennyLane as the :func:`~.pennylane.SingleExcitation` operation.
 We can use it to prepare an equal superposition of three-qubit states with a single particle
-:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`:
+:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`. Applying two single
+excitation gates with parameters :math:`\theta, \phi` yields the state
+
+.. math::
+
+    |\psi\rangle = \cos(\theta/2)\cos(\phi/2)|100\rangle - \sin(\theta/2)|010\rangle -
+    \cos(\theta/2)sin(\phi/2)|001\rangle.
+
+Since the amplitude of :math:`|010\rangle` must be :math:`1/\sqrt{3}`, we conclude that
+:math:`-\sin(\theta)=1/\sqrt{3}`. This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
+therefore :math:`-sin(\phi/2)=1/\sqrt{2}`. Thus, the prepare an equal superposition state we
+choose the angles of rotation to be
+
+.. math::
+
+    \theta &= - 2 \arcsin(1/\sqrt{3})\\
+    \phi &= - 2 \arcsin(1/\sqrt{2}).
+
+This is a general strategy that we also use in upcoming examples.
+
 """
 
 import pennylane as qml
@@ -155,15 +180,17 @@ import numpy as np
 
 dev = qml.device('default.qubit', wires=3)
 
-
 @qml.qnode(dev)
 def circuit(x, y):
+    # preares the reference state |100>
     qml.BasisState(np.array([1, 0, 0]), wires=[0, 1, 2])
+    # applies the single excitations
     qml.SingleExcitation(x, wires=[0, 1])
     qml.SingleExcitation(y, wires=[0, 2])
     return qml.state()
 
 
+#
 x = -2 * np.arcsin(np.sqrt(1/3))
 y = -2 * np.arcsin(np.sqrt(1/2))
 print(circuit(x, y))
@@ -173,7 +200,7 @@ print(circuit(x, y))
 # representation, so entry 1 is :math:`|001\rangle`, entry 2 is :math:`|010\rangle`, and entry 4 is
 # :math:`|100\rangle`, meaning we indeed prepare the desired state.
 #
-# We can also study *double excitations* involving the transfer of two particles. For example,
+# We can also study **double excitations** involving the transfer of two particles. For example,
 # consider a Givens rotation in the subspace spanned by the states
 # :math:`|1100\rangle` and :math:`|0011\rangle`. These
 # states differ by a double excitation since we can map :math:`|1100\rangle` to
@@ -198,12 +225,11 @@ print(circuit(x, y))
 #
 #
 # In the context of quantum chemistry, it is common to consider excitations on a fixed reference
-# state, typically the `Hartree-Fock state
-# <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_, and include only the excitations
-# that preserve the spin orientation of the electron. PennyLane allows you to obtain all such
-# excitations using the function :func:`~.pennylane_qchem.qchem.excitations`. Let's employ it to
-# build a circuit that includes all single and double excitations acting on a reference state of
-# three particles in six qubits. We apply a random rotation for each gate:
+# state and include only the excitations that preserve the spin orientation of the electron.
+# PennyLane allows you to obtain all such excitations using the function
+# :func:`~.pennylane_qchem.qchem.excitations`. Let's employ it to build a circuit that includes
+# all single and double excitations acting on a reference state of three particles in six qubits.
+# We apply a random rotation for each gate:
 
 nr_particles = 3
 nr_qubits = 6
@@ -212,20 +238,25 @@ singles, doubles = qml.qchem.excitations(3, 6)
 print(f"Single excitations = {singles}")
 print(f"Double excitations = {doubles}")
 
-dev2 = qml.device('default.qubit', wires=6)
 
+##############################################################################
+# Now we continue to build the circuit:
+
+dev2 = qml.device('default.qubit', wires=6)
 
 @qml.qnode(dev2)
 def circuit2(x, y):
+    # prepares reference state
     qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=[0, 1, 2, 3, 4, 5])
+    # apply all single excitations
     for i, s in enumerate(singles):
         qml.SingleExcitation(x[i], wires=s)
+    # apply all double excitations
     for j, d in enumerate(doubles):
         qml.DoubleExcitation(y[j], wires=d)
-
     return qml.state()
 
-
+# random angles of rotation
 x = np.random.normal(0, 1, len(singles))
 y = np.random.normal(0, 1, len(doubles))
 
@@ -235,6 +266,7 @@ output = circuit2(x, y)
 # We can check which basis states appear in the resulting superposition to confirm that they
 # involve only states with three particles.
 
+# constructs binary representation of states with non-zero amplitude
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
 print(states)
 
@@ -280,15 +312,15 @@ print(states)
 #
 # Single-qubit gates and CNOT gates are universal for quantum
 # computing: they can be used to implement any conceivable quantum computation. If Givens
-# rotations are analogous to single-qubit gates, then *controlled* Givens rotations are
+# rotations are analogous to single-qubit gates, then **controlled** Givens rotations are
 # analogous to two-qubit gates. In universality constructions, the ability to control operations
 # based on the states of other qubits is essential, so also for this reason it's natural to study
 # controlled Givens rotations. The simplest of these are controlled single-excitation gates,
 # which are three-qubit gates that perform the mapping
 #
 # .. math::
-#   CG(\theta) |101\rangle = \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle\\
-#   CG(\theta) |110\rangle = \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
+#   CG(\theta) |101\rangle &= \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle\\
+#   CG(\theta) |110\rangle &= \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
 #
 # while leaving all other basis states unchanged. This gate only excites a particle
 # from the second to third qubit if the first (control) qubit is in state :math:`\ket{1}`. This
@@ -308,16 +340,13 @@ print(states)
 
 dev = qml.device('default.qubit', wires=6)
 
-
 @qml.qnode(dev)
 def circuit3(x, y, z):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
     qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
     qml.SingleExcitation(z, wires=[1, 3])
-
     return qml.state()
-
 
 x = -2 * np.arcsin(np.sqrt(1/4))
 y = -2 * np.arcsin(np.sqrt(1/3))
@@ -335,25 +364,14 @@ print(states)
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
-
-# define a callable function for the single excitation gate
-def op(param, wires):
-    qml.SingleExcitation(param, wires=wires)
-
-
-# perform a transform on this callable function using qml.ctrl
-ctrl_single0 = qml.ctrl(op, control=0)
-
-
 @qml.qnode(dev)
 def circuit4(x, y, z):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
     qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
-    ctrl_single0(z, wires=[1, 3])
-
+    # single excitation controlled on qubit 0
+    qml.ctrl(qml.SingleExcitation, control=0)(z, wires=[1, 3])
     return qml.state()
-
 
 output = circuit4(x, y, z)
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
@@ -402,21 +420,18 @@ print(states)
 # of the :math:`i`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-i})`, where :math:`n` is the
 # number of basis states in the superposition.
 
-ctrl_single1 = qml.ctrl(op, control=1)
-
 dev = qml.device('default.qubit', wires=4)
-
 
 @qml.qnode(dev)
 def state_preparation(params):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
     qml.SingleExcitation(params[0], wires=[1, 2])
     qml.SingleExcitation(params[1], wires=[1, 3])
-    ctrl_single1(params[2], wires=[0, 2])
-    ctrl_single1(params[3], wires=[0, 3])
+    # single excitations controlled on qubit 1
+    qml.ctrl(qml.SingleExcitation, control=1)(params[2], wires=[0, 2])
+    qml.ctrl(qml.SingleExcitation, control=1)(params[3], wires=[0, 3])
     qml.DoubleExcitation(params[4], wires=[0, 1, 2, 3])
     return qml.state()
-
 
 n = 6
 params = np.array([-2 * np.arcsin(1/np.sqrt(n-i)) for i in range(n-1)])
@@ -428,7 +443,6 @@ states = [np.binary_repr(i, width=4) for i in range(len(output)) if output[i] !=
 print("Basis states = ", states)
 print("Output state =", output)
 
-
 ##############################################################################
 # Success! This is the equal superposition state we wanted to prepare. 🚀
 #
@@ -438,7 +452,7 @@ print("Output state =", output)
 # algorithms. Like a kid in a toy store, it is challenging to pick just one.
 #
 # Ultimately, the aim of this tutorial is to provide you with the conceptual and software tools
-# to implement any of these proposed circuits, and *also to design your own*. It's not only fun
+# to implement any of these proposed circuits, and **also to design your own**. It's not only fun
 # to play with toys; it's also fun to build them.
 #
 #
