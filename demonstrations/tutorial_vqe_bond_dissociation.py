@@ -320,7 +320,7 @@ print(
 # This translates into a :math:`6` qubit problem and the Hartree-Fock state
 # is :math:`|111000\rangle`. As there is an unpaired
 # electron, the spin multiplicity is two and needs to be specified.
-# As in previous case, all electrons and all orbitals are considered.
+# As in the previous case, all electrons and all orbitals are considered.
 
 
 # Molecular parameters
