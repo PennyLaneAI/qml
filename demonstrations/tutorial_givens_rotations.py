@@ -16,9 +16,9 @@ Givens rotations for quantum chemistry
 
 *Author: PennyLane dev team. Posted: June 1, 2021. Last updated: June 1, 2021*
 
-In the book `"Sophie’s world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
+In the book `"Sophie's world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
-with an intriguing question: “Why is Lego the most ingenious toy in the world?” At first baffled by
+with an intriguing question: "Why is Lego the most ingenious toy in the world?" At first baffled by
 this curious message, she decides to reflect on the question. As told by the book's narrator,
 she arrives at a conclusion:
 
@@ -43,8 +43,7 @@ learn how to use these gates to build arbitrary states of a fixed number of part
 Particle-conserving unitaries
 -----------------------------
 
-Arguably the central problem in quantum chemistry is understanding the electronic structure of
-molecules. Quantum computers tackle this problem by using systems of qubits to
+Understanding the electronic structure of molecules is arguably the central problem in quantum chemistry. Quantum computers tackle this problem by using systems of qubits to
 represent the quantum states of the electrons. One method is to consider a
 collection of `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_, which
 capture the three-dimensional region of space occupied by the electrons. Each orbital can be
@@ -58,7 +57,7 @@ convenient way to do this: we associate a qubit with each spin orbital and
 use its states to represent occupied :math:`|1\rangle` or unoccupied
 :math:`|0\rangle` spin orbitals.
 
-An :math:`n`-qubit state with `Hamming weight < https://en.wikipedia.org/wiki/Hamming_weight>`_
+An :math:`n`-qubit state with `Hamming weight <https://en.wikipedia.org/wiki/Hamming_weight>`_
 :math:`k`, i.e., with :math:`k` qubits in state :math:`|1\rangle`, represents a state of
 :math:`k` electrons in :math:`n` spin orbitals. For example :math:`|1010\rangle` is a state of
 two electrons in two spin orbitals. More generally, superpositions over all basis states with a
@@ -114,9 +113,10 @@ Basis states of two qubits can be categorized depending on
 their number of particles.
 
  We have:
-    - :math:`|00\rangle` with zero particles,
-    - :math:`|01\rangle,|10\rangle` with one particle, and
-    - :math:`|11\rangle` with two particles.
+ 
+- :math:`|00\rangle` with zero particles,
+- :math:`|01\rangle,|10\rangle` with one particle, and
+- :math:`|11\rangle` with two particles.
 
 We can now consider transformations that couple the states :math:`|01\rangle,|10\rangle`. These
 are gates of the form
@@ -158,7 +158,7 @@ from the first to the second qubit.
 
     A Givens rotation can be used to couple states that differ by a single excitation.
 
-This gate is implemented in PennyLane as the :func:`~.pennylane.SingleExcitation` operation.
+This gate is implemented in PennyLane as the :class:`~.pennylane.SingleExcitation` operation.
 We can use it to prepare an equal superposition of three-qubit states with a single particle
 :math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`. Applying two single
 excitation gates with parameters :math:`\theta, \phi` yields the state
@@ -166,11 +166,11 @@ excitation gates with parameters :math:`\theta, \phi` yields the state
 .. math::
 
     |\psi\rangle = \cos(\theta/2)\cos(\phi/2)|100\rangle - \sin(\theta/2)|010\rangle -
-    \cos(\theta/2)sin(\phi/2)|001\rangle.
+    \cos(\theta/2)\sin(\phi/2)|001\rangle.
 
 Since the amplitude of :math:`|010\rangle` must be :math:`1/\sqrt{3}`, we conclude that
 :math:`-\sin(\theta)=1/\sqrt{3}`. This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
-therefore :math:`-sin(\phi/2)=1/\sqrt{2}`. Thus, the prepare an equal superposition state we
+therefore :math:`-\sin(\phi/2)=1/\sqrt{2}`. Thus, the prepare an equal superposition state we
 choose the angles of rotation to be
 
 .. math::
@@ -189,15 +189,13 @@ dev = qml.device('default.qubit', wires=3)
 
 @qml.qnode(dev)
 def circuit(x, y):
-    # preares the reference state |100>
+    # prepares the reference state |100>
     qml.BasisState(np.array([1, 0, 0]), wires=[0, 1, 2])
     # applies the single excitations
     qml.SingleExcitation(x, wires=[0, 1])
     qml.SingleExcitation(y, wires=[0, 2])
     return qml.state()
 
-
-#
 x = -2 * np.arcsin(np.sqrt(1/3))
 y = -2 * np.arcsin(np.sqrt(1/2))
 print(circuit(x, y))
@@ -214,7 +212,7 @@ print("Amplitude of state |001> = ", tensor_state[0, 0, 1])
 print("Amplitude of state |010> = ", tensor_state[0, 1, 0])
 print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 
-#
+##############################################################################
 # We can also study **double excitations** involving the transfer of two particles. For example,
 # consider a Givens rotation in the subspace spanned by the states
 # :math:`|1100\rangle` and :math:`|0011\rangle`. These
@@ -229,7 +227,7 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 #   G^{(2)}|1100\rangle &= \cos (\theta/2)|1100\rangle - \sin (\theta/2)|0011\rangle,
 #
 # while leaving all other basis states unchanged. This gate is implemented in PennyLane as the
-# :func:`~.pennylane.DoubleExcitation` operation.
+# :class:`~.pennylane.DoubleExcitation` operation.
 #
 #
 # .. figure:: ../demonstrations/givens_rotations/Givens_rotations_2.png
@@ -328,7 +326,7 @@ print(states)
 # computing: they can be used to implement any conceivable quantum computation. If Givens
 # rotations are analogous to single-qubit gates, then **controlled** Givens rotations are
 # analogous to two-qubit gates. In universality constructions, the ability to control operations
-# based on the states of other qubits is essential, so also for this reason it's natural to study
+# based on the states of other qubits is essential, so for this reason it's natural to study
 # controlled Givens rotations. The simplest of these are controlled single-excitation gates,
 # which are three-qubit gates that perform the mapping
 #
@@ -460,8 +458,8 @@ print("Output state =", output)
 ##############################################################################
 # Success! This is the equal superposition state we wanted to prepare. 🚀
 #
-# When it comes to quantum circuits for quantum chemistry, there is a wide variety of
-# architectures that have been proposed. Researchers in the field are faced with the apparent
+# When it comes to quantum circuits for quantum chemistry, a wide variety of
+# architectures have been proposed. Researchers in the field are faced with the apparent
 # choice of making a selection among these circuits to conduct their computations and benchmark new
 # algorithms. Like a kid in a toy store, it is challenging to pick just one.
 #
