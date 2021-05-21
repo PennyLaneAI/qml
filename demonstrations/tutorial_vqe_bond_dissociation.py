@@ -411,7 +411,7 @@ print(df)
 # .. note::
 #
 #     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
-#     gate parameters for a particular point on PES are used as the initial guess for the next
+#     gate parameters for a particular point on the PES are used as the initial guess for the next
 #     geometry. With a better guess, the VQE iterations converge relatively quickly and we save
 #     considerable time.
 #
