@@ -101,8 +101,8 @@ In this case, where there are two electrons, single and double excitations suffi
 singly-excited states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state 
 is :math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
 <https://en.wikipedia.org/wiki/Configuration_interaction>`_ or FCI) 
-is a linear expansion in terms of these states where 
-the expansion coefficients would change as the reaction proceeds and the system moves around 
+is a linear combination of these states where 
+the coefficients change as the reaction proceeds and the system moves around 
 (figuratively) on the potential energy surface. 
 Below we show how to to generate the PES for such a reaction. 
 
