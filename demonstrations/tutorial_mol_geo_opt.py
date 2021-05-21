@@ -82,13 +82,13 @@ The quantum algorithm will be described as follows:
 #. Define the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert
    \Psi(\theta) \rangle`.
 
-#. Initialize the circuit and the Hamiltonian parameters and minimize the cost function
-   :math:`g(\theta, x)`
+#. Initialize the variational parameters :math:`\theta` and :math:`x` and minimize
+   the cost function :math:`g(\theta, x)`
 
 Let's get started! ⚛️
 
-Building the parametrized electronic Hamiltonian :math:`H(x)`
--------------------------------------------------------------
+Building the parametrized electronic Hamiltonian
+------------------------------------------------
 
 The first step is to import the required libraries and packages:
 """
