@@ -560,7 +560,7 @@ print(
 # coordinate.
 # The performance of VQE depends on the active space chosen, i.e., the number of electrons and
 # orbitals that are being considered. For reference, we have included
-# the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals
+# the VQE results when the number of active orbitals is constrained to :math:`3` spatial orbitals,
 # which is equal to :math:`6` spin orbitals. As a simple exercise, try increasing
 # the number of active orbitals and see how the performance of our VQE circuit changes.
 # Does your VQE circuit
