@@ -14,9 +14,9 @@ Givens rotations for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: PennyLane dev team. Posted: June 1, 2021. Last updated: June 1, 2021
+*Author: PennyLane dev team. Posted: June 1, 2021. Last updated: June 1, 2021*
 
-In the book `“Sophie’s world” <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
+In the book `"Sophie’s world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
 with an intriguing question: “Why is Lego the most ingenious toy in the world?” At first baffled by
 this curious message, she decides to reflect on the question. As told by the book's narrator,
@@ -99,7 +99,7 @@ preserve particle number are diagonal gates of the form
     0 & e^{i\phi}
     \end{pmatrix}.
 
-On their own. these gates are not very interesting. They can only be used to change the
+On their own, these gates are not very interesting. They can only be used to change the
 relative phases of states in a superposition; they cannot be used to create and control such
 superpositions. So let's take a look at two-qubit gates.
 
@@ -136,7 +136,7 @@ rotation in a two-dimensional subspace of a larger Hilbert space. In this case, 
 Givens rotation in a two-dimensional subspace of the four-dimensional space of two-qubit states.
 This gate allows us to create superpositions by exchanging the particle
 between the two qubits. Such transformations can be interpreted as an *single excitation*,
-where we view the exchange from :math:`|10\rangle` to :math:`|10\rangle` as exciting the electron
+where we view the exchange from :math:`|10\rangle` to :math:`|01\rangle` as exciting the electron
 from the first to the second qubit.
 
 .. figure:: ../demonstrations/givens_rotations/Givens_rotations_1.png
@@ -177,7 +177,7 @@ print(circuit(x, y))
 # consider a Givens rotation in the subspace spanned by the states
 # :math:`|1100\rangle` and :math:`|0011\rangle`. These
 # states differ by a double excitation since we can map :math:`|1100\rangle` to
-# :math:`|0011\rangle` by exciting the particles form the first two qubits to the last two.
+# :math:`|0011\rangle` by exciting the particles from the first two qubits to the last two.
 # Mathematically, this gate can be represented by a unitary :math:`G^{(2)}(\theta)` that performs
 # the mapping
 #
@@ -260,7 +260,7 @@ print(states)
 #      0 & \cos (\theta) & e^{i\phi}\sin (\theta) & 0\\
 #      0 & e^{-i\phi}\sin(\theta) & -\cos(\theta) & 0\\
 #      0 & 0 & 0 & 1
-#      \end{pmatrix},\\
+#      \end{pmatrix},\\[12pt]
 #
 #      U_2(\theta) &= \begin{pmatrix}
 #      1 & 0 & 0 & 0\\
@@ -463,4 +463,3 @@ print("Output state =", output)
 #   quantum circuits for quantum chemistry", arXiv:2021:1234, (2021)
 #
 #
-
