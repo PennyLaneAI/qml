@@ -17,7 +17,7 @@ The term "chemical reaction" is another name for the transformation of molecules
 forming of bonds. Such transformations involve energy costs that determine 
 the feasibility of a particular transformation amongst many different possibilities. 
 Computational chemistry offers several theoretical methods for precisely determining this energy
-cost. It also opens a windows into predicting the thermodynamic and kinetics aspects of any 
+cost. It also opens a window into predicting the thermodynamic and kinetic aspects of any 
 chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate any general 
 chemical reaction by constructing the corresponding potential energy surface -- a theoretical 
 construct and a visual aid to understanding how the reaction proceeds, and estimating the 
