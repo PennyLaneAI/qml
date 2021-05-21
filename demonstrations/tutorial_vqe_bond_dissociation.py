@@ -417,7 +417,7 @@ print(df)
 #
 # After tabulating our results, we plot the energy as a function of distance between atoms
 # :math:`1` and :math:`2`, and thus we have the potential energy curve for
-# this reaction. The minimas in the curve represent the VQE estimate of the energy and geometry
+# this reaction. The minima in the curve represent the VQE estimate of the energy and geometry
 # of reactants and products respectively while the transition state is represented by the
 # local maxima.
 # In general, we would like our method (VQE) to provide
