@@ -564,8 +564,8 @@ print(
 # which is equal to :math:`6` spin orbitals. As an additional exercise, try increasing
 # the number of active orbitals and see how the performance of our VQE circuit changes.
 # Does your VQE circuit
-# reproduce the Full CI result shown below if we increase the active orbitals to include
-# all the unoccupied orbitals i.e. 12 spin orbitals in total?
+# reproduce the FCI result shown below if we increase the active orbitals to include
+# all the unoccupied orbitals, i.e., 12 spin orbitals in total?
 #
 #
 # .. figure:: /demonstrations/vqe_bond_dissociation/H2_Be.png
