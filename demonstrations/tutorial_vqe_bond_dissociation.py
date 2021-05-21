@@ -24,7 +24,7 @@ relevant energy costs.
 
 In a previous tutorial on the :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
 we looked at how it can be used to compute molecular energies [#peruzzo2014]_.
-Here, we show how VQE can be used to construct potential energy surfaces (PESs) for any general 
+Here, we use VQE to construct potential energy surfaces (PESs) for any general 
 molecular transformation. This paves the way
 for the calculation of important quantities such as activation energy barriers, reaction energies,
 and reaction rates. As illustrative examples, we use tools implemented in PennyLane to study diatomic
