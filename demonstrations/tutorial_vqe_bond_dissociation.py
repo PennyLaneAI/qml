@@ -93,7 +93,7 @@ the electronic wave function.
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
 state is  represented as :math:`|1100\rangle`, where the two
 lowest-energy orbitals are occupied, and the remaining two are unoccupied. 
-In order to consider the electron correlation missing in the mean-field (HF) approximation,
+In order to consider the electron correlation missing in the HF approximation,
 we form the complete basis of many-body or multi-qubit states. To do that, we consider excitations
 of the HF state that conserve the total-spin projection :math:`S_z`. 
 In this case, where there are two electrons, single and double excitations suffice. The 
@@ -166,6 +166,19 @@ symbols = ["H", "H"]
 vqe_energy = []
 pes_point = 0
 
+# define the circuit
+hf = qml.qchem.hf_state(electrons=2, orbitals=4)
+
+def circuit(params, wires):
+    # Prepare the HF state: |1100>
+    qml.BasisState(hf, wires=wires)
+    # Add double excitation
+    qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
+    # Add single excitations
+    qml.SingleExcitation(params[1], wires=[0, 2])
+    qml.SingleExcitation(params[2], wires=[1, 3])
+
+
 # set up a loop to change internuclear distance
 r_range = np.arange(0.5, 5.0, 0.1).round(1)
 
@@ -176,17 +189,6 @@ for r in r_range:
     # Obtain the qubit Hamiltonian 
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
-    # define the circuit
-    hf = qml.qchem.hf_state(electrons=2, orbitals=4)
-
-    def circuit(params, wires):
-        # Prepare the HF state: |1100>
-        qml.BasisState(hf, wires=wires)
-        # Add double excitation
-        qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
-        # Add single excitations
-        qml.SingleExcitation(params[1], wires=[0, 2])
-        qml.SingleExcitation(params[2], wires=[1, 3])
 
     # define the device, cost function and optimizer
     dev = qml.device("default.qubit", wires=qubits)
@@ -352,26 +354,29 @@ basis_set = "sto-3g"
 vqe_energy = []
 pes_point = 0
 
+# define circuit
+
+# get all the singles and doubles excitations
+electrons = 3
+orbitals = 6
+singles, doubles = qchem.excitations(electrons, orbitals)
+
+hf = qml.qchem.hf_state(electrons, orbitals)
+
+def circuit(params, wires):
+    qml.BasisState(hf, wires=wires)
+    for i in range(0, len(doubles)):
+        qml.DoubleExcitation(params[i], wires=doubles[i])
+    for j in range(0, len(singles)):
+        qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
+
+# loop to change reaction coordinate
 r_range = np.arange(1.0, 3.0, 0.1).round(1)
 for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
-
-    # get all the singles and doubles excitations
-    electrons = 3
-    orbitals = 6
-    singles, doubles = qchem.excitations(electrons, orbitals)
-
-    hf = qml.qchem.hf_state(electrons, orbitals)
-
-    def circuit(params, wires):
-        qml.BasisState(hf, wires=wires)
-        for i in range(0, len(doubles)):
-            qml.DoubleExcitation(params[i], wires=doubles[i])
-        for j in range(0, len(singles)):
-            qml.SingleExcitation(params[j + len(doubles)], wires=singles[j])
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
@@ -525,7 +530,7 @@ print(
 #     :width: 70%
 #     :align: center
 #
-# Let us first understand the problem in more detail. Once we have solved the mean-field HF
+# Let us first understand the problem in more detail. Once we have solved the HF
 # equations, we obtain the molecular orbitals
 # (:math:`1a,2a,3a,1b ...`) which are then occupied to obtain two principal states
 # :math:`1a^{2} 2a^{2} 3a^{2}` and :math:`1a^{2} 2a^{2} 1b^{2}`.
