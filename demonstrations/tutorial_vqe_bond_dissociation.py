@@ -86,7 +86,7 @@ We first cast this problem in the language of `quantum chemistry
 <https://en.wikipedia.org/wiki/Quantum_chemistry>`_, and then in terms of
 quantum circuits. For an introductory discussion, please take a look at the 
 :doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>` tutorial.
-Using a minimal `basis set <<https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_ 
+Using a minimal `basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 this molecular system can be described by :math:`2` electrons in :math:`4` 
 spin molecular orbitals. When mapped to a qubit representation, we need a total of four qubits to represent
 the electronic wave function.
@@ -138,7 +138,10 @@ symbols = ["H", "H"]
 # We generate a molecular Hamiltonian using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function by solving Hartree-Fock equations
 # and generating the molecular orbitals (MOs). To prepare the VQE ansatz we first initialize
-# the qubit register to the HF state. Then, single and double-excitation gates, implemented in the
+# the qubit register to the HF state. 
+# We use PennyLane's
+# :class:`~.hf_state` and :class:`~.BasisState` operation to construct the HF state.
+# Then, single and double-excitation gates, implemented in the
 # form of Givens rotations <https://en.wikipedia.org/wiki/Givens_rotation>_, is applied to the qubits
 # 0, 1, 2, 3 to prepare the FCI ground state of the molecule.This is similar to the often-used
 # `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ approach.
@@ -170,8 +173,8 @@ for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
-    # Obtain the qubit Hamiltonian
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, basis=basis_set)
+    # Obtain the qubit Hamiltonian 
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
     # define the circuit
     hf = qml.qchem.hf_state(electrons=2, orbitals=4)
@@ -332,18 +335,16 @@ print(
 
 
 # Molecular parameters
-basis_set = "sto-3g"
-
-multiplicity = 2
 
 symbols = ["H", "H", "H"]
+multiplicity = 2
+basis_set = "sto-3g"
+
 
 ##############################################################################
 # We setup the PES loop incrementing the :math:`H(1)-H(2)` distance from :math:`1.0`
 # to :math:`3.0` Bohrs in steps of :math:`0.1` Bohr.
-# We use PennyLane's
-# :class:`~.BasisState` operation to construct the HF state and :class:`excitations`
-# to obtain the list of allowed single and double excitations out of the HF state.
+# We use to obtain the list of allowed single and double excitations out of the HF state.
 # The way we build the VQE circuit for this system is generic and can be used to
 # build circuits for any molecular system. We then repeat the calculations over the
 # whole range of PES and print the converged energies of the whole system at each step.
@@ -356,9 +357,7 @@ for r in r_range:
 
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
-    H, qubits = qchem.molecular_hamiltonian(
-        symbols, coordinates, mult=multiplicity, basis=basis_set
-    )
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
 
     # get all the singles and doubles excitations
     electrons = 3
@@ -448,9 +447,7 @@ plt.show()
 #
 # .. math:: E_{a} = E_{TS} - E_{Reactant}
 #
-# In the case of the hydrogen exchange reaction, the activation energy barrier is
-#                   :math:`E_{a} = 0.0275` Ha :math:`= 17.26` kcal/mol
-# Below we show how to calculate the activation energy from the above PES.
+# We show how to calculate the activation energy of the hydrogen exchange reaction.
 
 # Energy of the reactants and products - two minima on the PES
 energy_equil = min(vqe_energy)
