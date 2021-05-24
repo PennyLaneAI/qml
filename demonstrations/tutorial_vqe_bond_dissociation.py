@@ -149,10 +149,11 @@ symbols = ["H", "H"]
 #
 # We use a classical qubit simulator and define
 # a cost function which calculates the expectation value of the Hamiltonian operator for the
-# given trial wavefunction (which is the ground state energy of the molecule) using
-# :class:`~.ExpvalCost`.
-# For the problems discussed here, we use gradient descent to optimize
-# the gate parameters. We initialize the parameters to zero,
+# given trial wavefunction ansatz (:math:`{E} = \langle \Psi_{trial}|{H}|\Psi_{trial}\rangle`) 
+# using :class:`~.ExpvalCost`. The ansatz or equivalently the VQE circuit depends on the 
+# gate parameters and we seek to find parameters that minimize the energy. 
+# In this and subsequent problems, we use gradient 
+# descent algorithm for optimization. We initialize the parameters to zero,
 # i.e., start from the HF state as the approximation to the exact ground state.
 # The second loop is the variational optimization using VQE algorithm,
 # where energy for the trial wavefunction is calculated
@@ -266,7 +267,7 @@ plt.show()
 # Below we show how our VQE circuit gives an
 # estimate of :math:`H-H` bond distance
 # to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
-# as :math:`0.202` Hartrees (:math:`126.79` kcal/mol).
+# as :math:`0.202` Hartrees (:math:`126.8` kcal/mol).
 
 # Energy at equilibrium bond length (minimum)
 energy_equil = min(vqe_energy)
