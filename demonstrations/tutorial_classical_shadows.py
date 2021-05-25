@@ -56,11 +56,7 @@ import pennylane.numpy as np
 
 
 def classical_shadow(circuit_template, params, num_shadows: int) -> np.ndarray:
-    # create a dict so we can quickly call qml.Observables from integers.
-    unitary_ensemble = {0: lambda n: qml.Identity(n),
-                        1: lambda n: qml.PauliX(n),
-                        2: lambda n: qml.PauliY(n),
-                        3: lambda n: qml.PauliZ(n)}
+    unitary_ensemble = [qml.Identity, qml.PauliX, qml.PauliY, qml.PauliZ]
     # each shadow is one shot, so we set this parameter in the qml.device
     device_shadow = qml.device('default.qubit', wires=nqubits, shots=1)
     # sample random unitaries uniformly, where 0 = I and 1,2,3 = X,Y,Z
