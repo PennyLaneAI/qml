@@ -16,6 +16,8 @@ Quantum circuit structure learning
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
+*Author: PennyLane dev team. Posted: 16 Oct 2019. Last updated: 20 Jan 2021.*
+
 """
 ##############################################################################
 # This example shows how to learn a good selection of rotation
@@ -127,7 +129,7 @@ from pennylane import numpy as np
 
 n_wires = 2
 
-dev = qml.device("default.qubit", analytic=True, wires=2)
+dev = qml.device("default.qubit", shots=1000, wires=2)
 
 ##############################################################################
 # Creating a fixed quantum circuit
@@ -326,20 +328,20 @@ def ansatz_rsel(params, generators):
 
 
 @qml.qnode(dev)
-def circuit_rsel(params, generators=None):  # generators will be passed as a keyword arg
+def circuit_rsel(params, generators):
     ansatz_rsel(params, generators)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliY(1))
 
 
 @qml.qnode(dev)
-def circuit_rsel2(params, generators=None):  # generators will be passed as a keyword arg
+def circuit_rsel2(params, generators):
     ansatz_rsel(params, generators)
     return qml.expval(qml.PauliX(0))
 
 
 def cost_rsel(params, generators):
-    Z_1, Y_2 = circuit_rsel(params, generators=generators)
-    X_1 = circuit_rsel2(params, generators=generators)
+    Z_1, Y_2 = circuit_rsel(params, generators)
+    X_1 = circuit_rsel2(params, generators)
     return 0.5 * Y_2 + 0.8 * Z_1 - 0.2 * X_1
 
 
@@ -395,13 +397,13 @@ def rotoselect_cycle(cost, params, generators):
 
 costs_rsel = []
 params_rsel = init_params.copy()
-init_generators = ["X", "Y"]
+init_generators = np.array(["X", "Y"], requires_grad=False)
 generators = init_generators
 for _ in range(n_steps):
     costs_rsel.append(cost_rsel(params_rsel, generators))
     params_rsel, generators = rotoselect_cycle(cost_rsel, params_rsel, generators)
 
-print("Optimal generators are: {}".format(generators))
+print("Optimal generators are: {}".format(generators.tolist()))
 
 # plot cost function vs. steps comparison
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 3))
@@ -442,7 +444,7 @@ X = np.linspace(-4.0, 4.0, 40)
 Y = np.linspace(-4.0, 4.0, 40)
 xx, yy = np.meshgrid(X, Y)
 # plot cost for fixed optimal generators
-Z = np.array([[cost_rsel([x, y], generators=generators) for x in X] for y in Y]).reshape(
+Z = np.array([[cost_rsel([x, y], generators) for x in X] for y in Y]).reshape(
     len(Y), len(X)
 )
 surf = ax.plot_surface(xx, yy, Z, cmap=cm.coolwarm, antialiased=False)

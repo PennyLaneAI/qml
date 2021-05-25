@@ -98,6 +98,42 @@ Sit back and explore quantum machine learning and quantum programming with our c
     strategies of automatic differentiation, and how to integrate quantum circuits with
     machine learning frameworks such as PyTorch and Tensorflow using open-source software.
 
+.. youtube:: YBHzT5V1SzU
+    :title: Quantum Deep Learning
+    :author: Nathan Killoran (Xanadu)
+
+    Explore the relationships between deep learning, differentiable
+    programming, and quantum computing. Learn how quantum circuits can be
+    trained just like neural networks!
+
+.. youtube:: McgBeSVIGus
+    :title: Automatic Differentiation of Quantum Circuits
+    :author: Nathan Killoran (Xanadu)
+
+    Dive into the world of quantum gradients. Learn how to apply the parameter-shift
+    rule, and how derivatives of quantum circuits can be computed
+    automatically in software.
+
+.. youtube:: YtepXvx5zdI
+    :title: Variational Quantum Algorithms
+    :author: Nathan Killoran (Xanadu)
+
+    Take a trip to the variational algorithm zoo! Gain a new appreciation
+    for the techniques and challenges involved in implementing methods like the
+    VQE, QAOA, and quantum GANs.
+
+.. youtube:: t9ytqPTij7k
+    :title: Hybrid Quantum-Classical Machine Learning
+    :author: Nathan Killoran (Xanadu)
+
+    Connect the quantum and classical worlds to build trainable hybrid machine
+    learning models! See how quantum computing and your favourite machine
+    learning libraries can be combined to augment classical techniques.
+    
+    
+
+
+    
 .. raw:: html
 
     </div><div style='clear:both'>

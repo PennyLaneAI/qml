@@ -2,8 +2,6 @@ r"""
 Accelerating VQEs with quantum natural gradient
 ===============================================
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu)*
-
 .. meta::
     :property="og:description": Accelerating variational quantum eigensolvers
         using quantum natural gradients in PennyLane.
@@ -13,6 +11,8 @@ Accelerating VQEs with quantum natural gradient
 
    tutorial_vqe Variational quantum eigensolver
    tutorial_quantum_natural_gradient Quantum natural gradient
+
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 8 Apr 2021.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
@@ -33,7 +33,7 @@ The first step is to import the required libraries and packages:
 """
 
 import matplotlib.pyplot as plt
-import numpy as np
+from pennylane import numpy as np
 import pennylane as qml
 
 ##############################################################################
@@ -91,20 +91,18 @@ step_size = 0.01
 opt = qml.GradientDescentOptimizer(stepsize=step_size)
 
 params = init_params
-prev_energy = cost_fn(params)
 
 gd_param_history = [params]
-gd_cost_history = [prev_energy]
+gd_cost_history = []
 
 for n in range(max_iterations):
 
     # Take step
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     gd_param_history.append(params)
+    gd_cost_history.append(prev_energy)
 
-    # Compute energy
     energy = cost_fn(params)
-    gd_cost_history.append(energy)
 
     # Calculate difference between new and old energies
     conv = np.abs(energy - prev_energy)
@@ -117,8 +115,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print("Final value of the energy = {:.8f} Ha".format(energy))
@@ -130,20 +126,19 @@ print("Number of iterations = ", n)
 opt = qml.QNGOptimizer(stepsize=step_size, diag_approx=False)
 
 params = init_params
-prev_energy = cost_fn(params)
 
 qngd_param_history = [params]
-qngd_cost_history = [prev_energy]
+qngd_cost_history = []
 
 for n in range(max_iterations):
 
     # Take step
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     qngd_param_history.append(params)
+    qngd_cost_history.append(prev_energy)
 
     # Compute energy
     energy = cost_fn(params)
-    qngd_cost_history.append(energy)
 
     # Calculate difference between new and old energies
     conv = np.abs(energy - prev_energy)
@@ -156,8 +151,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print("Final value of the energy = {:.8f} Ha".format(energy))
@@ -261,13 +254,16 @@ plt.show()
 # (2) Hydrogen VQE Example
 # ------------------------
 #
-# To construct our system Hamiltonian, we call the function
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# To construct our system Hamiltonian, we first read the molecular geometry from
+# the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
+# :func:`~.pennylane_qchem.qchem.read_structure` function (see more details in the
+# :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
+# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
-name = "h2"
 geo_file = "h2.xyz"
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(name, geo_file)
+symbols, coordinates = qml.qchem.read_structure(geo_file)
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 
 print("Number of qubits = ", qubits)
 
@@ -279,10 +275,10 @@ print("Number of qubits = ", qubits)
 # gates (RZ-RY-RZ).
 
 dev = qml.device("default.qubit", wires=qubits)
-
+hf_state = np.array([1, 1, 0, 0], requires_grad=False)
 
 def ansatz(params, wires=[0, 1, 2, 3]):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    qml.BasisState(hf_state, wires=wires)
     for i in wires:
         qml.RZ(params[3 * i], wires=i)
         qml.RY(params[3 * i + 1], wires=i)
@@ -297,7 +293,7 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function using the ``ExpvalCost`` class.
 
-cost = qml.ExpvalCost(ansatz, hamiltonian, dev)
+cost = qml.ExpvalCost(ansatz, hamiltonian, dev, diff_method="parameter-shift")
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
@@ -322,11 +318,13 @@ conv_tol = 1e-06
 opt = qml.GradientDescentOptimizer(step_size)
 
 params = init_params
-prev_energy = cost(params)
-gd_cost = [prev_energy]
+
+gd_cost = []
 
 for n in range(max_iterations):
-    params = opt.step(cost, params)
+    params, prev_energy = opt.step_and_cost(cost, params)
+    gd_cost.append(prev_energy)
+
     energy = cost(params)
     conv = np.abs(energy - prev_energy)
 
@@ -338,8 +336,6 @@ for n in range(max_iterations):
     if conv <= conv_tol:
         break
 
-    gd_cost.append(energy)
-    prev_energy = energy
 
 print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))
@@ -360,10 +356,12 @@ opt = qml.QNGOptimizer(step_size, lam=0.001, diag_approx=False)
 
 params = init_params
 prev_energy = cost(params)
-qngd_cost = [prev_energy]
+qngd_cost = []
 
 for n in range(max_iterations):
-    params = opt.step(cost, params)
+    params, prev_energy = opt.step_and_cost(cost, params)
+    qngd_cost.append(prev_energy)
+
     energy = cost(params)
     conv = np.abs(energy - prev_energy)
 
@@ -375,8 +373,6 @@ for n in range(max_iterations):
     if conv <= conv_tol:
         break
 
-    qngd_cost.append(energy)
-    prev_energy = energy
 
 print("\nFinal convergence parameter = {:.8f} Ha".format(conv))
 print("Number of iterations = ", n)

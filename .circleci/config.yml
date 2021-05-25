@@ -20,28 +20,29 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v20-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v20-{{ .Branch }}-
-            - pip-v20-
+            - pip-v24c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v24c-{{ .Branch }}-
+            - pip-v24c-
 
       - run:
           name: Install dependencies
           command: |
+            sudo apt install pandoc -qq
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt
 
       - save_cache:
           paths:
             - venv
-          key: pip-v20-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v24c-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v12-{{ .Branch }}-{{ .Revision }}
-            - gallery-v12-{{ .Branch }}-
-            - gallery-v12-
+            - gallery-v24a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v24a-{{ .Branch }}-
+            - gallery-v24a-
 
       - run:
           name: Build tutorials
@@ -57,7 +58,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v12-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v24a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
@@ -101,7 +102,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt
 
       - run:
           name: Build tutorials
@@ -172,9 +173,9 @@ jobs:
             aws s3 cp _build/html/implementations.html s3://pennylane.ai-prod/qml/implementations.html --website-redirect https://pennylane.ai/qml/demonstrations.html
             aws s3 cp _build/html/beginner.html s3://pennylane.ai-prod/qml/beginner.html --website-redirect https://pennylane.ai/qml/demonstrations.html
 
-      # - run:
-      #     name: Invalidate CloudFront
-      #     command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+      - run:
+          name: Invalidate CloudFront
+          command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
 
 workflows:
   version: 2

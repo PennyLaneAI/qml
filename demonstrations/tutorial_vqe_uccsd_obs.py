@@ -6,6 +6,12 @@ VQE in different spin sectors
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
+.. related::
+   tutorial_vqe Variational Quantum Eigensolver
+   tutorial_vqe_parallel VQE with parallel QPUs
+
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+
 Quantum computers offer a promising avenue to perform first-principles simulations of the
 electronic structure of molecules and materials that are currently intractable using classical
 high-performance computers. In particular, the Variational Quantum Eigensolver (VQE) algorithm
@@ -87,7 +93,9 @@ geometry = "h2.xyz"
 # representation is built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function.
 
-H, qubits = qchem.molecular_hamiltonian(name, geometry, mapping="jordan_wigner")
+symbols, coordinates = qchem.read_structure(geometry)
+
+H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mapping="jordan_wigner")
 
 print("Number of qubits = ", qubits)
 print("Hamiltonian is ", H)
@@ -287,9 +295,9 @@ print(params)
 
 max_iterations = 100
 conv_tol = 1e-06
-prev_energy = cost_fn(params)
+
 for n in range(max_iterations):
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
@@ -300,8 +308,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))
@@ -355,9 +361,9 @@ params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 
 max_iterations = 100
 conv_tol = 1e-06
-prev_energy = cost_fn(params)
+
 for n in range(max_iterations):
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
@@ -368,8 +374,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print("Final convergence parameter = {:.8f} Ha".format(conv))

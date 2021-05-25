@@ -11,6 +11,9 @@ Computing gradients in parallel with Amazon Braket
     tutorial_qaoa_intro Learn how to implement QAOA workflows with PennyLane
     tutorial_vqe_parallel Evaluate the potential energy surface of H2 with parallel QPUs
 
+
+*Author: PennyLane dev team. Posted: 8 Dec 2020.*
+
 PennyLane integrates with `Amazon Braket <https://aws.amazon.com/braket/>`__ to enable quantum
 machine learning and optimization on high-performance simulators and quantum processing
 units (QPUs) through a range of `providers <https://aws.amazon.com/braket/hardware-providers/>`__.
@@ -105,7 +108,6 @@ device_arn = "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
 import pennylane as qml
 from pennylane import numpy as np
 
-qml.enable_tape()  # Unlocks the latest features in PennyLane
 n_wires = 25
 
 dev_remote = qml.device(

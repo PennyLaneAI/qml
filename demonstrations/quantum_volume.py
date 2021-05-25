@@ -4,13 +4,15 @@ Quantum volume
 ==============
 
 .. meta::
-    :property="og:description": Learn about quantum volume, and how to 
+    :property="og:description": Learn about quantum volume, and how to
         compute it.
     :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
 
 .. related::
 
     qsim_beyond_classical Beyond classical computing with qsim
+
+*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 15 Apr 2021.*
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
@@ -93,7 +95,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # ~~~~~~~~~~~~
 #
 # Quantum volume relates
-# to the largest *square* circuit that a quantum processor can run reliably. This benchmark 
+# to the largest *square* circuit that a quantum processor can run reliably. This benchmark
 # uses *random* square circuits with a very particular form:
 #
 # .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
@@ -322,7 +324,8 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # the generation of such circuits in PennyLane.
 #
 # First we write a function that randomly permutes qubits. We'll do this by
-# using numpy to generate a permutation, and then apply it with SWAP gates.
+# using numpy to generate a permutation, and then apply it with the built-in
+# :func:`~.pennylane.templates.subroutines.Permute` subroutine.
 
 import pennylane as qml
 
@@ -332,23 +335,7 @@ rng = np.random.default_rng()
 def permute_qubits(num_qubits):
     # A random permutation
     perm_order = list(rng.permutation(num_qubits))
-
-    working_order = list(range(num_qubits))
-
-    # We will permute by iterating through the permutation and swapping
-    # things back to their proper place.
-    for idx_here in range(num_qubits):
-        if working_order[idx_here] != perm_order[idx_here]:
-            # Where do we need to send the qubit at this location?
-            idx_there = working_order.index(perm_order[idx_here])
-
-            qml.SWAP(wires=[idx_here, idx_there])
-
-            # Update the working order to account for the SWAP
-            working_order[idx_here], working_order[idx_there] = (
-                working_order[idx_there],
-                working_order[idx_here],
-            )
+    qml.templates.Permute(perm_order, wires=list(range(num_qubits)))
 
 
 ##############################################################################
@@ -385,30 +372,20 @@ def qv_circuit_layer(num_qubits):
 ##############################################################################
 #
 # Let's take a look! We'll set up an ideal device with 5 qubits, and generate a
-# circuit with 3 qubits. In this demo, we'll use the shiny new `QuantumTape
-# <https://pennylane.readthedocs.io/en/latest/code/qml_tape.html>`__ functionality
-# of PennyLane.
-#
-# Tape mode is very versatile --- a quantum tape is not immediately tied to a
-# device, which will be convenient later when we need to run the same random
-# circuit on two devices independently. Wires in a tape can also be labeled by
-# characters or strings. A side effect of these features is that the number of
-# wires and their ordering is not implicit as it would be with a QNode. For the
-# purpose of printing an example circuit, we'll first apply an RZ gate with an
-# angle of 0 to each qubit one at a time. This is to ensure that in the
-# visualization all 5 qubits are present and in numerical order.
+# circuit with 3 qubits. In this demo, we'll work explicitly with `quantum tapes
+# <https://pennylane.readthedocs.io/en/latest/code/qml_tape.html>`__ since they
+# are not immediately tied to a device. This will be convenient later when we
+# need to run the same random circuit on two devices independently.
 
 num_qubits = 5
-dev_ideal = qml.device("default.qubit", analytic=True, wires=num_qubits)
+dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
-    for qubit in range(num_qubits):
-        qml.RZ(0, wires=qubit)
     qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
 
-print(tape.draw())
+print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
 
 
 ##############################################################################
@@ -418,40 +395,40 @@ print(tape.draw())
 #
 #  .. code-block:: none
 #
-#      0: ──RZ(0)──╭SWAP─────────╭U0──╭SWAP─────────╭U1──╭SWAP─────────╭U2──┤
-#      1: ──RZ(0)──│──────╭SWAP──╰U0──│──────╭SWAP──╰U1──╰SWAP──╭SWAP──╰U2──┤
-#      2: ──RZ(0)──╰SWAP──╰SWAP───────╰SWAP──╰SWAP──────────────╰SWAP───────┤
-#      3: ──RZ(0)───────────────────────────────────────────────────────────┤
-#      4: ──RZ(0)───────────────────────────────────────────────────────────┤
+#      0: ────╭SWAP─────────╭U0──╭SWAP─────────╭U1──╭SWAP──╭U2──┤
+#      1: ────│──────╭SWAP──╰U0──│──────╭SWAP──╰U1──╰SWAP──╰U2──┤
+#      2: ────╰SWAP──╰SWAP───────╰SWAP──╰SWAP───────────────────┤
+#      3: ──────────────────────────────────────────────────────┤
+#      4: ──────────────────────────────────────────────────────┤
 #
 #     U0 =
-#     [[ 0.23648826-0.48221431j  0.06829648+0.04447898j  0.51150074-0.09529866j
-#        0.55205719-0.35974699j]
-#      [-0.11148167+0.69780321j -0.24943828+0.08410701j  0.46705929-0.43192981j
-#        0.16220654-0.01817602j]
-#      [-0.22351926-0.25918352j  0.24364996-0.05375623j -0.09259829-0.53810588j
-#        0.27267708+0.66941977j]
-#      [ 0.11519953-0.28596729j -0.90164923-0.22099186j -0.09627758-0.13105595j
-#       -0.0200152 +0.12766128j]]
+#     [[-0.17514647+0.00759447j  0.11975927+0.16007614j -0.41793925+0.49643728j
+#        0.62304058-0.34640531j]
+#      [-0.73367896-0.58079555j -0.11348577+0.00751965j -0.02640159-0.15592112j
+#       -0.19507153-0.21998821j]
+#      [ 0.02988983+0.09364586j -0.74053162+0.55032455j  0.31350059-0.01305651j
+#        0.16283233-0.11885036j]
+#      [-0.13103809-0.25850305j  0.18298996+0.2497364j   0.34879438+0.57771772j
+#       -0.02385446+0.60346274j]]
 #     U1 =
-#     [[-0.00652005+0.16599032j -0.38044393-0.5954188j   0.49652764+0.41565941j
-#       -0.14846753-0.17829336j]
-#      [ 0.1008949 -0.32699801j -0.60782417+0.22744342j -0.42585985+0.44949037j
-#        0.25305368-0.11948816j]
-#      [ 0.35672811-0.40539746j  0.11371627-0.0396587j  -0.15415622+0.10998916j
-#       -0.81118943+0.00192614j]
-#      [-0.71422372-0.23147279j -0.19070434-0.16936877j -0.20046089-0.34819971j
-#       -0.22692204-0.39790662j]]
-#     U2 =
-#     [[ 0.53866604-0.14563203j  0.41784651+0.133705j    0.46968112+0.4236837j
-#       -0.29764071+0.08636703j]
-#      [ 0.23974751-0.53599287j -0.4397095 -0.08700824j -0.26629394+0.46130558j
-#        0.34298872+0.23013329j]
-#      [-0.02375096-0.35120586j  0.66325047+0.3462403j  -0.48924549-0.13515535j
-#        0.23801793-0.04501287j]
-#      [ 0.05770807-0.46542787j -0.21630296-0.00647223j -0.18694337-0.15362467j
-#       -0.63814185-0.51715031j]]
-#
+#     [[ 0.14296171+0.28087257j -0.5985737 -0.27489922j -0.43838149+0.10344812j
+#        0.04022491+0.51216658j]
+#      [-0.21538853+0.02728431j -0.24776721-0.57146257j  0.60975755+0.36241573j
+#        0.21787038-0.11953391j]
+#      [-0.24405375+0.05780278j -0.11688629-0.17397518j -0.51628349-0.11381455j
+#        0.44143429-0.64714776j]
+#      [-0.750841  -0.47630904j -0.28666068+0.22820556j -0.09459735+0.07429451j
+#       -0.17243398+0.17582253j]]
+#    U2 =
+#    [[-0.63733359+1.91519046e-01j -0.49615702+9.79920998e-05j
+#       0.06949634+4.54968771e-01j  0.21112196-2.33571716e-01j]
+#     [ 0.4774216 +5.19692450e-02j -0.2741782 -3.71778068e-01j
+#       0.09817361+6.01972062e-01j -0.39517581+1.66741872e-01j]
+#     [ 0.14401687-1.53582182e-01j  0.51636466-1.58216631e-01j
+#       0.43804144+3.62586089e-01j  0.4473567 -3.74872915e-01j]
+#     [ 0.51670588+1.23210608e-01j -0.48982566-9.40288988e-02j
+#      -0.19210465-2.36457367e-01j  0.53202679-3.05278186e-01j]]
+
 
 ##############################################################################
 #
@@ -511,7 +488,7 @@ with tape:
     qml.probs(wires=range(m))
 
 # Run the circuit, compute heavy outputs, and print results
-output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
+output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print("State\tProbability")
@@ -531,19 +508,20 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 #  .. code-block:: none
 #
-#     State     Probability
-#     000       0.0247
-#     001       0.1719
-#     010       0.1566
-#     011       0.2632
-#     100       0.0116
-#     101       0.0374
-#     110       0.1342
-#     111       0.2004
+#     State      Probability
+#     000        0.0157
+#     001        0.0200
+#     010        0.0026
+#     011        0.2765
+#     100        0.0175
+#     101        0.4266
+#     110        0.0045
+#     111        0.2365
 #
-#     Median is 0.1454
-#     Probability of a heavy output is 0.7921
-#     Heavy outputs are ['010', '001', '111', '011']
+#     Median is 0.0188
+#     Probability of a heavy output is 0.9596
+#     Heavy outputs are ['001', '111', '011', '101']
+#
 
 ##############################################################################
 #
@@ -556,7 +534,12 @@ print(f"Heavy outputs are {heavy_outputs}")
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
-
+# .. note::
+#
+#    In the time since the original release of this demo, the Ourense device is
+#    no longer available from IBM Q. However, we leave the original results for
+#    expository purposes, and note that the methods are applicable in general.
+#
 dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense")
 
 ##############################################################################
@@ -646,11 +629,11 @@ for m in range(min_m, max_m + 1):
             qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
             qml.probs(wires=range(m))
 
-        output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
+        output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
         # Execute circuit on the noisy device
-        tape.execute(dev_noisy)
+        tape.expand().execute(dev_noisy)
 
         # Get the output bit strings; flip ordering of qubits to match PennyLane
         counts = dev_noisy._current_job.result().get_counts()
@@ -683,7 +666,7 @@ probs_mean_noisy = np.mean(probs_noisy, axis=1)
 print(f"Ideal mean probabilities:")
 for idx, prob in enumerate(probs_mean_ideal):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
-    
+
 print(f"\nDevice mean probabilities:")
 for idx, prob in enumerate(probs_mean_noisy):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
@@ -696,31 +679,28 @@ for idx, prob in enumerate(probs_mean_noisy):
 #  .. code-block:: none
 #
 #     Ideal mean probabilities:
-#     m = 2: 0.799703 above threshold.
-#     m = 3: 0.849827 above threshold.
-#     m = 4: 0.841110 above threshold.
-#     m = 5: 0.854336 above threshold.
+#     m = 2: 0.797979 above threshold.
+#     m = 3: 0.844052 above threshold.
+#     m = 4: 0.841203 above threshold.
+#     m = 5: 0.856904 above threshold.
 #
 #     Device mean probabilities:
-#     m = 2: 0.763625 above threshold.
-#     m = 3: 0.777210 above threshold.
-#     m = 4: 0.688160 above threshold.
-#     m = 5: 0.660235 below threshold.
-#
+#     m = 2: 0.773760 above threshold.
+#     m = 3: 0.794875 above threshold.
+#     m = 4: 0.722860 above threshold.
+#     m = 5: 0.692935 above threshold.
 
 ##############################################################################
 #
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
-# close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from above
-# is :math:`\approx 0.85`.  For the device probabilities, however, we see that
-# while they're above the threshold up to the 4-qubit case, they're below the
-# threshold for 5 qubits. This means that the highest possible volume this
-# processor can have is :math:`\log_2 V_Q = 4`. But it isn't enough that just
-# the mean of the heavy output probabilities is greater than 2/3. Since we're
-# dealing with randomness, we also want to ensure these results were
-# not just a fluke! To be confident, we also want to be above 2/3 within 2
-# standard deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5% confidence
-# interval (since roughly 97.5% of a normal distribution sits within
+# close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from
+# above is :math:`\approx 0.85`.  For this experiment, we see that the device
+# probabilities are also above the threshold.  But it isn't enough that just the
+# mean of the heavy output probabilities is greater than 2/3. Since we're
+# dealing with randomness, we also want to ensure these results were not just a
+# fluke! To be confident, we also want to be above 2/3 within 2 standard
+# deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5%
+# confidence interval (since roughly 97.5% of a normal distribution sits within
 # :math:`2\sigma` of the mean.)
 #
 # At this point, we're going to do some statistical sorcery and make some
@@ -797,10 +777,10 @@ for idx, prob in enumerate(two_sigma_below):
 #
 #  .. code-block:: none
 #
-#     m = 2: 0.703541 above threshold.
-#     m = 3: 0.718362 above threshold.
-#     m = 4: 0.622647 below threshold.
-#     m = 5: 0.593254 below threshold.
+#     m = 2: 0.714590 above threshold.
+#     m = 3: 0.737770 above threshold.
+#     m = 4: 0.659562 below threshold.
+#     m = 5: 0.627701 below threshold.
 #
 
 ##############################################################################

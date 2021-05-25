@@ -11,6 +11,8 @@ Quantum gradients with backpropagation
 
    tutorial_quantum_natural_gradient Quantum natural gradient
 
+*Author: PennyLane dev team. Last updated: 31 Jan 2021.*
+
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
 trained using the :doc:`parameter-shift rule </glossary/parameter_shift>` to compute quantum
 gradients. Indeed, the parameter-shift rule is ideally suited to hardware devices, as it does
@@ -21,7 +23,7 @@ When working with simulators, however, we *do* have access to the internal (clas
 computations being performed. This allows us to take advantage of other methods of computing the
 gradient, such as backpropagation, which may be advantageous in certain regimes. In this tutorial,
 we will compare and contrast the parameter-shift rule against backpropagation, using
-the PennyLane :class:`default.qubit.tf <pennylane.devices.default_qubit_tf.DefaultQubitTF>`
+the PennyLane :class:`default.qubit <pennylane.devices.default_qubit>`
 device.
 
 The parameter-shift rule
@@ -52,8 +54,8 @@ quantum circuit, but with shifted parameter values (hence the name, parameter-sh
 
 Let's have a go implementing the parameter-shift rule manually in PennyLane.
 """
-import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 
 # set the random seed
 np.random.seed(42)
@@ -162,9 +164,9 @@ def circuit(params):
 
 
 ##############################################################################
-# Note that we specify that the QNode is **immutable**. This is more restrictive
-# than a standard mutable QNode (the quantum circuit cannot change/differ between
-# executions); however, it reduces processing overhead.
+# Note that we specify that the QNode is **immutable**. This is more restrictive than a standard
+# mutable QNode (the quantum circuit structure cannot change/differ between executions); however, it
+# reduces processing overhead.
 
 
 # initialize circuit parameters
@@ -192,6 +194,7 @@ print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 # create the gradient function
 grad_fn = qml.grad(circuit)
+circuit.qtape = None
 
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=num, repeat=reps)
 backward_time = min(times) / num
@@ -212,16 +215,16 @@ print(2 * forward_time * params.size)
 # ---------------
 #
 # An alternative to the parameter-shift rule for computing gradients is
-# `reverse-mode autodifferentiation <https://en.wikipedia.org/wiki/Reverse_accumulation>`__. 
-# Unlike the parameter-shift method, which requires :math:`2p` circuit evaluations for 
-# :math:`p` parameters, reverse-mode requires only a *single* forward pass of the 
+# `reverse-mode autodifferentiation <https://en.wikipedia.org/wiki/Reverse_accumulation>`__.
+# Unlike the parameter-shift method, which requires :math:`2p` circuit evaluations for
+# :math:`p` parameters, reverse-mode requires only a *single* forward pass of the
 # differentiable function to compute
-# the gradient of all variables, at the expense of increased memory usage. 
-# During the forward pass, the results of all intermediate subexpressions are stored; 
+# the gradient of all variables, at the expense of increased memory usage.
+# During the forward pass, the results of all intermediate subexpressions are stored;
 # the computation is then traversed *in reverse*, with the gradient computed by repeatedly
-# applying the chain rule. 
-# In most classical machine learning settings (where we are training scalar loss functions 
-# consisting of a large number of parameters), 
+# applying the chain rule.
+# In most classical machine learning settings (where we are training scalar loss functions
+# consisting of a large number of parameters),
 # reverse-mode autodifferentiation is the
 # preferred method of autodifferentiation---the reduction in computational time enables larger and
 # more complex models to be successfully trained. The backpropagation algorithm is a particular
@@ -229,7 +232,7 @@ print(2 * forward_time * params.size)
 # explosion we see today.
 #
 # In quantum machine learning, however, the inability to store and utilize the results of
-# *intermediate* quantum operations on hardware remains a barrier to using backprop; 
+# *intermediate* quantum operations on hardware remains a barrier to using backprop;
 # while reverse-mode
 # autodifferentiation works fine for small quantum simulations, only the
 # parameter-shift rule can be used to compute gradients on quantum hardware directly. Nevertheless,
@@ -245,29 +248,27 @@ print(2 * forward_time * params.size)
 # (simulator or hardware), ``"backprop"`` will only work for specific simulator devices that are
 # designed to support backpropagation.
 #
-# One such device is :class:`default.qubit.tf <pennylane.devices.default_qubit_tf.DefaultQubitTF>`.
-# This device is a pure state-vector simulator like ``default.qubit``; however, unlike
-# ``default.qubit``, is written using TensorFlow rather than NumPy. As a result, it supports
-# classical backpropagation when using the TensorFlow interface.
+# One such device is :class:`default.qubit <pennylane.devices.DefaultQubit>`. It
+# has backends written using TensorFlow, JAX, and Autograd, so when used with the
+# TensorFlow, JAX, and Autograd interfaces respectively, supports backpropagation.
+# In this demo, we will use the default Autograd interface.
 
-import tensorflow as tf
-
-dev = qml.device("default.qubit.tf", wires=4)
+dev = qml.device("default.qubit", wires=4)
 
 ##############################################################################
 # When defining the QNode, we specify ``diff_method="backprop"`` to ensure that
-# we are using backpropagation mode. Note that this will be the *default differentiation
-# mode* for the ``default.qubit.tf`` device when ``interface="tf"``.
+# we are using backpropagation mode. Note that this is the *default differentiation
+# mode* for the ``default.qubit`` device.
 
 
-@qml.qnode(dev, diff_method="backprop", interface="tf")
+@qml.qnode(dev, diff_method="backprop")
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 # initialize circuit parameters
 params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
-params = tf.Variable(params)
+params = np.array(params, requires_grad=True)
 print(circuit(params))
 
 ##############################################################################
@@ -284,13 +285,10 @@ print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 ##############################################################################
 # Comparing this to the forward pass from ``default.qubit``, we note that there is some potential
-# overhead from using TensorFlow. We can now time how long it takes to perform a
+# overhead from using backpropagation. We can now time how long it takes to perform a
 # gradient computation via backpropagation:
 
-with tf.GradientTape(persistent=True) as tape:
-    res = circuit(params)
-
-times = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
+times = timeit.repeat("qml.grad(circuit)(params)", globals=globals(), number=num, repeat=reps)
 backward_time = min(times) / num
 print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 
@@ -305,13 +303,8 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 # Let's compare the two differentiation approaches as the number of trainable parameters
 # in the variational circuit increases, by timing both the forward pass and the gradient
 # computation as the number of layers is allowed to increase.
-#
-# We'll create two devices; one using ``default.qubit`` for the parameter-shift
-# rule, and ``default.qubit.tf`` for backpropagation. For convenience, we'll use the TensorFlow
-# interface when creating both QNodes.
 
-dev_shift = qml.device("default.qubit", wires=4)
-dev_backprop = qml.device("default.qubit.tf", wires=4)
+dev = qml.device("default.qubit", wires=4)
 
 def circuit(params):
     qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
@@ -335,13 +328,13 @@ gradient_backprop = []
 for depth in range(0, 21):
     params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=depth)
     num_params = params.size
-    params = tf.Variable(params)
+    params = np.array(params, requires_grad=True)
 
     # forward pass timing
     # ===================
 
-    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
+    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop", mutable=False)
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
@@ -357,21 +350,15 @@ for depth in range(0, 21):
     # Gradient timing
     # ===============
 
-    qnode_shift = qml.QNode(circuit, dev_shift, interface="tf", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev_backprop, interface="tf")
+    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift", mutable=False)
+    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop", mutable=False)
 
     # parameter-shift
-    with tf.GradientTape(persistent=True) as tape:
-        res = qnode_shift(params)
-
-    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
+    t = timeit.repeat("qml.grad(qnode_shift)(params)", globals=globals(), number=num, repeat=reps)
     gradient_shift.append([num_params, min(t) / num])
 
     # backprop
-    with tf.GradientTape(persistent=True) as tape:
-        res = qnode_backprop(params)
-
-    t = timeit.repeat("tape.gradient(res, params)", globals=globals(), number=num, repeat=reps)
+    t = timeit.repeat("qml.grad(qnode_backprop)(params)", globals=globals(), number=num, repeat=reps)
     gradient_backprop.append([num_params, min(t) / num])
 
 gradient_shift = np.array(gradient_shift).T
@@ -442,4 +429,4 @@ plt.show()
 #     <br>
 #
 # We can now see clearly that there is constant overhead for backpropagation with
-# ``default.qubit.tf``, but the parameter-shift rule scales as :math:`\sim 2p`.
+# ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p`.

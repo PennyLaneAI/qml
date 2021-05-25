@@ -15,6 +15,9 @@
 import os
 import sys
 import warnings
+import numpy as np
+from jinja2 import FileSystemLoader, Environment
+import yaml
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -66,6 +69,7 @@ sphinx_gallery_conf = {
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
     "filename_pattern": r"tutorial",
+    "pypandoc": True,
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
         "# This cell is added by sphinx-gallery\n"
@@ -95,7 +99,12 @@ warnings.filterwarnings(
 warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
-    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+",
+    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
+)
+warnings.filterwarnings(
+    "ignore",
+    category=np.VisibleDeprecationWarning,
+    message=r"Creating an ndarray from ragged"
 )
 
 # Add any paths that contain templates here, relative to this directory.
@@ -188,6 +197,25 @@ html_sidebars = {"**": ["logo-text.html", "searchbox.html", "localtoc.html"]}
 # Output file base name for HTML help builder.
 htmlhelp_basename = "QMLdoc"
 
+# -- Compile community demos -------------------------------------------------
+
+with open("demos_community.yaml", "r") as f:
+    card_data = yaml.safe_load(f)
+
+left_cards = card_data[::2]
+right_cards = card_data[1::2]
+
+if len(left_cards) > len(right_cards):
+    right_cards.append({})
+
+card_pairs = list(zip(left_cards, right_cards))
+
+loader = FileSystemLoader(".")
+env = Environment(loader=loader)
+template = env.get_template("demos_community.rst.template")
+
+with open("demos_community.rst", 'w') as f:
+    f.write(template.render(card_pairs=card_pairs))
 
 # -- Options for intersphinx extension ---------------------------------------
 

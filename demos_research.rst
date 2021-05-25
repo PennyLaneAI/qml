@@ -91,7 +91,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. customgalleryitem::
     :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics.
     :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
-    :description: :doc:`demos/qgrnn`
+    :description: :doc:`demos/tutorial_qgrnn`
     :tags: autograd
 
 .. customgalleryitem::
@@ -111,6 +111,18 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
+    
+.. customgalleryitem::
+    :tooltip: Kernel-based training with scikit-learn.
+    :figure: demonstrations/kernel_based_training/scaling.png
+    :description: :doc:`demos/tutorial_kernel_based_training`
+    :tags: pytorch sklearn kernels
+
+.. customgalleryitem::
+    :tooltip: Meta-learning technique for variational quantum algorithms.
+    :figure: demonstrations/learning2learn/l2l_thumbnail.png
+    :description: :doc:`demos/learning2learn`
+    :tags: tensorflow
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -177,6 +189,25 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_vqe_qng`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
+    :figure: demonstrations/measurement_optimize/meas_optimize_thumbnail.png
+    :description: :doc:`demos/tutorial_measurement_optimize`
+    :tags: chemistry
+
+.. customgalleryitem::
+    :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
+    :figure: demonstrations/spsa/spsa_mntn.png
+    :description: :doc:`demos/spsa`
+    :tags: qiskit
+
+.. customgalleryitem::
+    :tooltip: Solve combinatorial problems without a classical optimizer.
+    :figure: demonstrations/falqon/falqon_thumbnail.png
+    :description: :doc:`demos/tutorial_falqon`
+    :tags: autograd
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -206,6 +237,12 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/quantum_volume`
    :tags: characterization qiskit
 
+.. customgalleryitem::
+   :tooltip: Learn how to sample quantum states uniformly at random
+   :figure: demonstrations/haar_measure/spherical_int_dtheta.png
+   :description: :doc:`demos/tutorial_haar_measure`
+   :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -224,6 +261,8 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_quantum_metrology
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
+    demos/tutorial_measurement_optimize
+    demos/spsa
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier
@@ -233,9 +272,11 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_multiclass_classification
     demos/tutorial_stochastic_parameter_shift
     demos/tutorial_pasqal
-    demos/qgrnn
+    demos/tutorial_qgrnn
     demos/qonn
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
     demos/quantum_volume
+    demos/tutorial_haar_measure
     demos/tutorial_gbs
+    demos/learning2learn

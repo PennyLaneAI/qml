@@ -8,12 +8,14 @@ VQE with parallel QPUs on Rigetti Forest
         speed up the calculation of the potential energy surface of molecular Hamiltonian.
     :property="og:image": https://pennylane.ai/qml/_images/vqe_diagram.png
 
-This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
-calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
-
 .. related::
 
    tutorial_vqe Variational quantum eigensolver
+
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+
+This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
+calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
 Using a VQE setup, we task two devices from the
 `PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
@@ -28,6 +30,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pennylane import numpy as np
 import pennylane as qml
 from pennylane import qchem
 
@@ -75,11 +78,16 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 
 ##############################################################################
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
+# We do this by first reading the molecular geometry from the external file using the
+# :func:`~.pennylane_qchem.qchem.read_structure` function and passing the atomic symbols
+# and coordinates to :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+
 
 hamiltonians = []
 
 for separation, file in data.items():
-    h = qchem.molecular_hamiltonian(name=str(separation), geo_file=file)[0]
+    symbols, coordinates = qchem.read_structure(file)
+    h = qchem.molecular_hamiltonian(symbols, coordinates, name=str(separation))[0]
     hamiltonians.append(h)
 
 ##############################################################################
@@ -152,7 +160,7 @@ devs = dev1 + dev2
 
 
 def circuit(param, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=[0, 1, 2, 3])
     qml.RY(param, wires=2)
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])

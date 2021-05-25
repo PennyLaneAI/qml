@@ -13,6 +13,8 @@ A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
    tutorial_vqt Variational quantum thermalizer
 
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+
 The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm for
 quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
@@ -87,21 +89,18 @@ basis_set = 'sto-3g'
 # At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
 # calculations need to be performed. With PennyLane, these can all be done in a
 # single line by calling the function :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
-# The first input to the function is a string denoting the name of the molecule, which
-# will determine the name given to the saved files that are produced during the calculations:
-
-name = 'h2'
-
-##############################################################################
 # The charge, multiplicity, and basis set can also be specified as keyword arguments. Finally,
 # the number of active electrons and active orbitals may be indicated, as well as the
 # fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
-# (``bravyi_kitaev``). The outputs of the function are the qubit Hamiltonian of the molecule and the
-# number of qubits needed to represent it:
+# (``bravyi_kitaev``). The atomic symbols and their nuclear coordinates can be read directly
+# from the geometry file. The outputs of the function are the qubit Hamiltonian of the molecule
+# and the number of qubits needed to represent it:
+
+symbols, coordinates = qchem.read_structure(geometry)
 
 h, qubits = qchem.molecular_hamiltonian(
-    name,
-    geometry,
+    symbols,
+    coordinates,
     charge=charge,
     mult=multiplicity,
     basis=basis_set,
@@ -147,9 +146,8 @@ dev = qml.device('default.qubit', wires=qubits)
 ##############################################################################
 # In the circuit, we apply single-qubit rotations, followed by CNOT gates:
 
-
 def circuit(params, wires):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=wires)
     for i in wires:
         qml.Rot(*params[i], wires=i)
     qml.CNOT(wires=[2, 3])
@@ -191,9 +189,9 @@ print(params)
 max_iterations = 200
 conv_tol = 1e-06
 
-prev_energy = cost_fn(params)
+
 for n in range(max_iterations):
-    params = opt.step(cost_fn, params)
+    params, prev_energy = opt.step_and_cost(cost_fn, params)
     energy = cost_fn(params)
     conv = np.abs(energy - prev_energy)
 
@@ -202,8 +200,6 @@ for n in range(max_iterations):
 
     if conv <= conv_tol:
         break
-
-    prev_energy = energy
 
 print()
 print('Final convergence parameter = {:.8f} Ha'.format(conv))
