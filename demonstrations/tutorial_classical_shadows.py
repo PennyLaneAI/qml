@@ -11,32 +11,48 @@ Classical Shadows
 *Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
 Posted: 7 May 2021. Last updated: 7 May 2021.*
 
-This tutorial is based on the classical shadow approximation and applications discussed
-in `this paper <https://arxiv.org/pdf/2002.08953.pdf>`_.
+Estimating properties of unknown quantum states is a key objective of quantum
+information science and technology.
+For example, one might want to check whether an apparatus prepares a particular target state,
+or verify that an unknown system can prepare entangled states.
+In principle, any unknown quantum state can be fully characterized by performing `quantum state
+tomography <http://research.physics.illinois.edu/QI/Photonics/tomography-files/tomo_chapter_2004.pdf>`_
+However this procedure requires one to acquire accurate expectation values for a set of observables
+which grows exponentially with the number of qubits.
+A potential workaround for these scaling conderns is provided by classical shadow approximation
+introduced in `Predicting many properties of a quantum system from very few measurements
+<https://arxiv.org/pdf/2002.08953.pdf>`_ [Huang2020]_.
 
-How do you efficiently characterize an unknown quantum state?
-This task is formally known as quantum state tomography and simply requires many repetitions
-of preparing and measuring a quantum state.
-The number of distinct bases in which measurements are needed grows exponentially with the Hilbert
-space of the quantum state.
-This scaling presents a challenge in quantum computing because it is intractable to perform the
-number of measurements needed to completely characterize an unknown quantum state.
+The classical shadow approximation is an efficient protocol for constructing a *classical shadow*
+representation of an unknown quantum state.
+The classical shadow can then be used to estimate
+quantum state fidelity, Hamilton eigenvalues, two-point correlators, and many other properties.
 
-A solution to this problem is to use the classical shadow approximation.
-In this procedure
+.. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
+    :align: center
+    :width: 80%
 
-1. A quantum state :math:`\rho` is prepared.
-2. A randomly selected unitary :math:`N` is applied
-3. A computational basis measurement is performed.
-4. The process is repeated :math:`N` times.
+    (Image from Huang et al. [Huang2020]_.)
 
-The classical shadow is then constructed as a list of measurement outcomes and chosen unitaries.
-
+In this demo, we will show how to construct classical shadows and use them to approximate
+properties of quantum states.
+To begin, we first need to import ``pennylane`` and ``numpy``
 """
 
-# Outline for Classical shadow algorithm.
 import pennylane as qml
 import pennylane.numpy as np
+
+##############################################################################
+#
+# A classical shadow consists of an integer number `N` *snapshots* which are constructed
+# via the following proce
+#
+# 1. A quantum state :math:`\rho` is prepared.
+# 2. A randomly selected unitary :math:`U` is applied
+# 3. A computational basis measurement is performed.
+# 4. The process is repeated :math:`N` times.
+#
+# The classical shadow is then constructed as a list of measurement outcomes and chosen unitaries.
 
 
 def classical_shadow(circuit_template, params, num_shadows: int) -> np.ndarray:
@@ -62,6 +78,9 @@ def classical_shadow(circuit_template, params, num_shadows: int) -> np.ndarray:
     # combine the computational basis outcomes and the sampled unitaries
     return np.concatenate([samples, randints], axis=1)
 
+##############################################################################
+#
+# Any pauli observable can estimated by using the ``estimate_shadow_observable`` method
 
 def estimate_shadow_obervable(shadows, observable):
     # https://github.com/momohuang/predicting-quantum-properties
@@ -115,6 +134,7 @@ shadows = classical_shadow(circuit, theta, number_of_shadows)
 # TODO: Generalize the mapping from Pauli strings to tuples
 shadow_observable = estimate_shadow_obervable(shadows, [(1, 0), ])
 print(f"Shadow value: {shadow_observable}")
+shadows
 
 ##############################################################################
 # Next, we consider the multi-qubit observable :math:`X_0 X_1`.
@@ -132,6 +152,8 @@ print(f"Exact value: {exact_observable[0]}")
 shadows = classical_shadow(circuit, theta, number_of_shadows)
 shadow_observable = estimate_shadow_obervable(shadows, [(1, 0), (1, 1)])
 print(f"Shadow value: {shadow_observable}")
+
+exact_observable
 
 ##############################################################################
 # Comparison of standard observable estimators and classical shadows.
@@ -218,3 +240,9 @@ print(state_reconstruction)
 
 
 #TODO: what is a good application?
+
+##############################################################################
+# .. [Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
+#             "Predicting many properties of a quantum system from very few measurements."
+#             Nature Physics 16.10 (2020): 1050-1057.
+
