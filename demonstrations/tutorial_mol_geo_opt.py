@@ -20,7 +20,7 @@ Essentially, this is an optimization problem where the total energy of the molec
 minimized with respect to the positions of the atomic nuclei.
 
 In the framework of the `Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/
-Born%E2%80%93Oppenheimer_approximation>`_ [#kohanoff2006]_ the total electronic energy of the 
+Born%E2%80%93Oppenheimer_approximation>`_ [#kohanoff2006]_, the total electronic energy of the 
 molecule :math:`E(x)` depends on the nuclear coordinates :math:`x` which defines
 the potential energy surface (PES). Solving the stationary problem :math:`\nabla_x E(x) = 0` 
 corresponds to what is known as *molecular geometry optimization* and the optimized nuclear
