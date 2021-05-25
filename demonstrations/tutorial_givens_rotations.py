@@ -74,7 +74,8 @@ for some coefficients :math:`c_i`.
     :align: center
     :width: 50%
 
-    States of a system with six spin orbitals and three electrons.
+    States of a system with six spin orbitals and three electrons. Orbitals are for illustration;
+    they correspond to carbon dioxide, which has more electrons and orbitals.
 
 Because the number of electrons in a molecule is
 fixed, any transformation must conserve the number of particles. We refer to these as
@@ -196,7 +197,6 @@ def circuit(x, y):
 x = -2 * np.arcsin(np.sqrt(1/3))
 y = -2 * np.arcsin(np.sqrt(1/2))
 print(circuit(x, y))
-tensor_state = circuit(x, y)
 
 ##############################################################################
 # The components of the output state are ordered according to their binary
@@ -332,9 +332,9 @@ print(states)
 #   CG(\theta) |110\rangle &= \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
 #
 # while leaving all other basis states unchanged. This gate only excites a particle
-# from the second to third qubit if the first (control) qubit is in state :math:`\ket{1}`. This
-# is a useful property: as the name suggests, it provides us with better control over the
-# transformations we want to apply. Suppose we aim to prepare the state
+# from the second to third qubit, and vice versa, if the first (control) qubit is in state
+# :math:`\ket{1}`. This is a useful property: as the name suggests, it provides us with better
+# control over the transformations we want to apply. Suppose we aim to prepare the state
 #
 # .. math::
 #   |\psi\rangle = \frac{1}{2}(\ket{110000} + \ket{001100} + \ket{000011} + \ket{100100}).
@@ -424,7 +424,7 @@ print(states)
 #   |\psi\rangle = c_1|1100\rangle + c_2|1010\rangle + c_3|1001\rangle + c_4|0110\rangle +
 #   c_5|0101\rangle + c_6|0011\rangle,
 #
-# which is our intended outcome. Let's use this strategy to create an equal superposition over
+# which is our intended outcome. Let's use this approach to create an equal superposition over
 # all two-particle states on four qubits. We follow the same strategy as before, setting the angle
 # of the :math:`k`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-k})`, where :math:`n` is the
 # number of basis states in the superposition.
