@@ -10,7 +10,7 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Quantum Chemistry with PennyLane
    tutorial_vqe Variational Quantum Eigensolver
 
-*Author: PennyLane dev team. Posted: 19 May 2021. Last updated: 19 May 2021.*
+*Author: PennyLane dev team. Posted: 25 May 2021. Last updated: 25 May 2021.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. Such transformations are characterized by an energy cost that determine 
@@ -88,8 +88,8 @@ quantum circuits. For an introductory discussion, please take a look at the
 :doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>` tutorial.
 Using a minimal `basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 this molecular system can be described by :math:`2` electrons in :math:`4` 
-spin molecular orbitals. When mapped to a qubit representation, we need a total of four qubits to represent
-the electronic wave function.
+spin molecular orbitals. When mapped to a qubit representation, we need a total of four qubits 
+to represent the electronic wave function.
 The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
 state is  represented as :math:`|1100\rangle`, where the two
 lowest-energy orbitals are occupied, and the remaining two are unoccupied. 
@@ -125,7 +125,8 @@ symbols = ["H", "H"]
 # To construct the potential energy surface, we need to vary the geometry of the molecule. We keep
 # an :math:`H` atom fixed at the origin and vary the
 # :math:`x`-coordinate of the other atom such that the bond distance changes from
-# :math:`0.5` to :math:`5.0` Bohrs in steps of :math:`0.1` Bohr.
+# :math:`0.5` to :math:`5.0` `Bohrs <https://en.wikipedia.org/wiki/Bohr_radius>`_ in steps of 
+# :math:`0.1` Bohr.
 # This covers the range of internuclear distance in which the :math:`H-H` bond is formed
 # (equilibrium bond length)
 # and also the distance when the bond is broken, which occurs when the atoms
@@ -142,7 +143,7 @@ symbols = ["H", "H"]
 # We use PennyLane's
 # :class:`~.hf_state` and :class:`~.BasisState` operation to construct the HF state.
 # Then, single and double-excitation gates, implemented in the
-# form of Givens rotations <https://en.wikipedia.org/wiki/Givens_rotation>_, is applied to the qubits
+# form of `Givens rotations <https://en.wikipedia.org/wiki/Givens_rotation>`_, is applied to the qubits
 # 0, 1, 2, 3 to prepare the FCI ground state of the molecule.This is similar to the often-used
 # `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ approach.
 #
@@ -160,8 +161,8 @@ symbols = ["H", "H"]
 # and then used to get a better estimate of gate parameters and improve the trial wavefunction.
 # This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
 # Once we have the converged VQE energy at the specified internuclear distance, we move on to the
-# next point of the PES and repeat the entire process using the previously optimized circuit parameters
-# to define the initial state of the VQE calculation. After we have covered the grid of
+# next point of the PES and repeat the entire process using the previously optimized circuit 
+# parameters to define the initial state of the VQE calculation. After we have covered the grid of
 # internuclear distances, we tabulate the results.
 
 vqe_energy = []
@@ -226,7 +227,7 @@ for r in r_range:
 
 # tabulate
 list_dist_energy = list(zip(r_range, vqe_energy))
-df = pd.DataFrame(list_dist_energy, columns=["H-H distance (in Bohr)", "Energy (in Ha)"])
+df = pd.DataFrame(list_dist_energy, columns=["H-H distance (Bohr)", "Energy (Hartree)"])
 # display table
 print(df)
 
@@ -236,7 +237,7 @@ print(df)
 
 # Energy as a function of internuclear distance
 fig, ax = plt.subplots()
-ax.plot(r_range, vqe_energy, label="VQE")
+ax.plot(r_range, vqe_energy)
 
 ax.set(
     xlabel="H-H distance (Bohr)",
@@ -381,7 +382,7 @@ for r in r_range:
 
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
-    opt = qml.GradientDescentOptimizer(stepsize=0.4)
+    opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
     len_params = len(singles) + len(doubles)
     params = np.zeros(len_params)
@@ -412,7 +413,7 @@ for r in r_range:
 # tabulate
 list_dist_energy = list(zip(r_range, vqe_energy))
 # Converting list into pandas Dataframe
-df = pd.DataFrame(list_dist_energy, columns=["H(1)-H(2) distance (in Bohr)", "Energy (in Ha)"])
+df = pd.DataFrame(list_dist_energy, columns=["H(1)-H(2) distance (Bohr)", "Energy (Hartree)"])
 # display table
 print(df)
 
@@ -433,8 +434,8 @@ fig, ax = plt.subplots()
 ax.plot(r_range, vqe_energy)
 
 ax.set(
-    xlabel="Distance (H-H, in Bohr)",
-    ylabel="Total energy (in Hartree)",
+    xlabel="H(1)-H(2) distance (Bohr)",
+    ylabel="Total energy (Hartree)",
 )
 ax.grid()
 plt.show()
