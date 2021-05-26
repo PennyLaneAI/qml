@@ -45,6 +45,9 @@ In this demo, we will work in three separate files:
 * ``./notebook_classical_shadows.ipynb`` - jupyter notebook for demoing classical shadows.
 
 For clarity, this demo will specify the file in each respective code block.
+
+
+
 First create the ``./classical_shadows.py`` file and import the following libraries.
 """
 
@@ -54,6 +57,8 @@ import pennylane.numpy as np
 from typing import List
 
 ##############################################################################
+# Constructing a Classical Shadow
+# ###########################################
 #
 # A classical shadow consists of an integer number `N` *snapshots* which are constructed
 # via the following proce
@@ -215,6 +220,8 @@ def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_siz
 # The output of the tests should look something like this:
 
 ##############################################################################
+# Estimating Pauli Observables with Classical Shadows
+# ###################################################
 #
 # Any pauli observable can estimated by using the ``estimate_shadow_observable`` method.
 
@@ -384,7 +391,6 @@ exact_observable
 ##############################################################################
 # Comparison of standard observable estimators and classical shadows.
 
-
 ##############################################################################
 # State Reconstruction using Classical Shadow
 # ###########################################
@@ -463,7 +469,7 @@ def test_shadow_state_reconstruction(circuit_1_observable, circuit_1_state, shad
     state_shadow = shadow_state_reconstruction(shadow)
     dev_exact = qml.device('default.qubit', wires=num_qubits)
     circuit_template.device = dev_exact
-    state_exact = circuit_template_state(params, observable=[qml.state()])
+    state_exact = circuit_template_state(params, wires=dev_exact.wires, observable=[qml.state()])
     state_exact = np.outer(state_exact, state_exact.conj())
 
     print(operator_2_norm(state_shadow - state_exact))
