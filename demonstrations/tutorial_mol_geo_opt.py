@@ -11,21 +11,22 @@ Optimization of molecular geometries
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: PennyLane dev team. Last updated: 25 May 2021.*
+*Author: PennyLane dev team. Posted: 25 May 2021. Last updated: 25 May 2021.*
 
-Predicting the most stable arrangement of the atoms in a molecule is one of the most
-important tasks in quantum chemistry to simulate most properties of a 
+Predicting the most stable arrangement of the atoms in a molecule is an
+important task in quantum chemistry, and is needed to simulate many properties of a 
 molecule. Essentially, this is an optimization problem where the total energy of the
 molecule is minimized with respect to the positions of the atomic nuclei.
 
 In the framework of the `Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born-Oppenheimer_approximation>`_, the total electronic energy of the 
 molecule :math:`E(x)` depends on the nuclear coordinates :math:`x`, which define
-the potential energy surface (PES). Solving the stationary problem :math:`\nabla_x E(x) = 0` 
+the potential energy surface. Solving the stationary problem :math:`\nabla_x E(x) = 0` 
 corresponds to **molecular geometry optimization** and the optimized nuclear
 coordinates determine the **equilibrium geometry** of the molecule. The figure below
 illustrates these concepts for the
 `trihydrogen cation <https://en.wikipedia.org/wiki/Trihydrogen_cation>`_. Its equilibrium
-geometry in the electronic ground state corresponds to the minimum energy of the PES. At this minimum, the three hydrogen atoms are located at the vertices of an equilateral
+geometry in the electronic ground state corresponds to the minimum energy of the potential energy surface. 
+At this minimum, the three hydrogen atoms are located at the vertices of an equilateral
 triangle whose side length is the optimized H-H bond length :math:`d`.
 
 |
@@ -36,8 +37,8 @@ triangle whose side length is the optimized H-H bond length :math:`d`.
 
 |
 
-In this tutorial you will learn how to recast the problem of finding the equilibrium
-geometry of a molecule in terms of a more general variational quantum algorithm. The
+In this tutorial, you will learn how to recast the problem of finding the equilibrium
+geometry of a molecule in terms of a general variational quantum algorithm. The
 central idea is to consider explicitly that the target electronic Hamiltonian :math:`H(x)`
 is a **parametrized** observable that depends on the nuclear coordinates :math:`x`. This
 implies that the objective function, defined by the expectation value of the Hamiltonian
@@ -48,22 +49,22 @@ The quantum algorithm in a nutshell
 -----------------------------------
 
 Let's describe briefly the variational quantum algorithm that we are going to implement
-to find the equilibrium geometry of a molecule. The goal is to find the global minimum of 
+The goal of the variational algorithm is to find the global minimum of 
 the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle`
-with respect to the parameters :math:`\theta` of the circuit preparing the trial state and the
+with respect to the circuit parameters :math:`\theta` and the
 nuclear coordinates :math:`x` entering the electronic Hamiltonian of the molecule. To that aim,
 we use a gradient-descent method and follow a **joint** optimization scheme where the gradients of 
 the cost function with respect to circuit and Hamiltonian parameters are simultaneously computed 
-at each optimization step. This approach does not require nested optimization of the state 
-parameters for each set of nuclear coordinates as it occurs in classical algorithms for
-molecular geometry optimization where the energy minimum is searched along the potential energy 
+at each step. This approach does not require nested optimization of the state 
+parameters for each set of nuclear coordinates, as occurs in classical algorithms for
+molecular geometry optimization, where the energy minimum is searched along the potential energy 
 surface of the electronic state [#jensenbook]_.
 
-Along this tutorial we demonstrate how to use PennyLane functionalities to implement
+In this tutorial we demonstrate how to use PennyLane to implement
 a quantum optimization of molecular geometries. The algorithm consists of the following steps:
 
 #. Build the parametrized electronic Hamiltonian :math:`H(x)` of the molecule
-   for which we want to find the equilibrium geometry
+   for which we want to find the equilibrium geometry.
 
 #. Design the variational quantum circuit to prepare the electronic trial state of the
    molecule :math:`\vert \Psi(\theta) \rangle`.
@@ -109,10 +110,10 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #
 # .. math::
 #
-#     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^j.
+#     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^(j).
 #
 # The expansion coefficients :math:`h_j(x)` carry the dependence on the coordinates :math:`x`,
-# the operators :math:`\sigma_i` represents the Pauli group :math:`\{I, X, Y, Z\}` and
+# the operators :math:`\sigma_i` represents the Pauli group :math:`\{I, X, Y, Z\}`, and
 # :math:`N` is the number of qubits required to represent the electronic wave function.
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
@@ -165,7 +166,7 @@ def H(x):
 # For the :math:`\mathrm{H}_3^+` molecule in a minimal basis set we have a total of eight
 # excitations of the reference state. After applying the adaptive algorithm the final
 # quantum circuit contains only two double-excitation operations that act on the qubits
-# ``[0, 1, 2, 3]`` and ``[0, 1, 4, 5]``. The circuit is shown in the figure below.
+# ``[0, 1, 2, 3]`` and ``[0, 1, 4, 5]``. The circuit is illustrated in the figure below.
 #
 # |
 #
@@ -176,14 +177,14 @@ def H(x):
 # |
 #
 # This quantum circuit is implemented below. We use the 
-# the :func:`~.pennylane_qchem.qchem.hf_state` function to generate the
+# :func:`~.pennylane_qchem.qchem.hf_state` function to generate the
 # occupation-number vector representing the Hartree-Fock state 
 
 hf = qml.qchem.hf_state(electrons=2, orbitals=6)
 print(hf)
 
 ##############################################################################
-# The ``hf`` array is used by the ``BasisState`` operation to initialized the qubit register.
+# The ``hf`` array is used by the ``BasisState`` operation to initialize the qubit register.
 # Then, the ``DoubleExcitation`` operations are applied
 
 def circuit(params, wires):
@@ -227,7 +228,7 @@ def cost(params, x):
 ##############################################################################
 #
 # We minimize the cost function :math:`g(\theta, x)` using a gradient-based
-# method. To that aim, we have to compute the gradients with respect to both the
+# method, and compute the gradients with respect to both the
 # circuit parameters :math:`\theta` **and** the nuclear coordinates :math:`x`.
 # The circuit gradients are computed analytically using the automatic differentiation
 # techniques available in PennyLane. On the other hand, the nuclear gradients are evaluated
@@ -255,8 +256,8 @@ def grad_x(x, params):
 # Finally, we proceed to minimize our cost function to find the ground state equilibrium
 # geometry of the :math:`\mathrm{H}_3^+` molecule. As a reminder, 
 # the circuit parameters and the nuclear coordinates will be jointly optimized at
-# each optimization step. This approach does not require a nested VQE
-# optimizations of the circuit parameters for each set of the nuclear coordinates.
+# each optimization step. This approach does not require nested VQE
+# optimization of the circuit parameters for each set of nuclear coordinates.
 #
 # We start by defining the classical optimizers:
 
@@ -266,13 +267,13 @@ opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 ##############################################################################
 # Next, we initialize the circuit parameters :math:`\theta`. The angles
 # :math:`\theta_1` and :math:`\theta_2` are set to zero to approximate the
-# the initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
+# initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
 # as the Hartree-Fock state.
 
 theta = [0.0, 0.0]
 
 ##############################################################################
-# On the other hand, the initial set of nuclear coordinates :math:`x`, defined at
+# The initial set of nuclear coordinates :math:`x`, defined at
 # the beginning of the tutorial, was computed classically within the Hartree-Fock
 # approximation using the GAMESS program [#ref_gamess]_. This is a natural choice
 # for the starting geometry that we are aiming to improve due to the electronic
@@ -313,17 +314,15 @@ for n in range(100):
     if np.max(grad_fn(x)) <= 1e-05:
         break
 
-print("\n" "Final value of the ground-state energy = {:.8f} Ha".format(energy[-1]))
+print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
 print("\n" "Ground-state equilibrium geometry")
 print("%s %4s %8s %8s" % ("symbol", "x", "y", "z"))
 for i, atom in enumerate(symbols):
     print(f"  {atom}    {x[3 * i]:.4f}   {x[3 * i + 1]:.4f}   {x[3 * i + 2]:.4f}")
 
 ##############################################################################
-# Next, we plot the values of the ground state energy of the molecule, relative
-# to the exact value computed with the full configuration interaction (FCI) method,
-# and the of H-H bond lengths as the circuit parameters and the nuclear coordinates are
-# optimized by the variational quantum algorithm.
+# Next, we plot the values of the ground state energy of the molecule 
+# and the H-H bond lengths as a function of optimization step.
 
 fig = plt.figure()
 fig.set_figheight(5)
@@ -360,14 +359,14 @@ plt.show()
 ##############################################################################
 # |
 # Notice that despite the fact that the ground-state energy is already converged
-# within chemical accuracy (:math:`0.001` Ha) after the fourth iteration, more
+# within chemical accuracy (:math:`0.0016` Ha) after the fourth iteration, more
 # optimization steps are required to find the equilibrium bond length of the
 # molecule.
 #
 # The figure below animates snapshots of the atomic structure of the
 # trihydrogen cation as the quantum algorithm was searching for the equilibrium
 # geometry. For visualization purposes, the initial nuclear coordinates were
-# generated by perturbing the HF geometry. Note that the quantum algorithm
+# generated by perturbing the HF geometry. The quantum algorithm
 # is able to find the correct equilibrium geometry of the :math:`\mathrm{H}_3^+`
 # molecule where the three H atoms are located at the vertices of an equilateral triangle.
 #
