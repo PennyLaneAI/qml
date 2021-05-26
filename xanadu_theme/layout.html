@@ -263,7 +263,7 @@
 
           // Check if the footer is visible
           if (footerPosition.top < windowHeight && footerPosition.bottom >= 0) {
-              // We want the height of the TOC to be the window height minus how much of the footer is visible.
+              // We want the height of the TOC to be the height of the main content minus how much of the footer is visible.
               tocContainer.style.height = 'calc(92vh - 45px - ' + (windowHeight - footerPosition.top) + 'px)'
           } else {
             // When the user scrolls back to the top of the page after scrolling to the bottom of the page,
