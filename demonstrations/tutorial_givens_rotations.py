@@ -161,8 +161,9 @@ from the first to the second qubit.
 
 This gate is implemented in PennyLane as the :class:`~.pennylane.SingleExcitation` operation.
 We can use it to prepare an equal superposition of three-qubit states with a single particle
-:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`. Applying two single
-excitation gates with parameters :math:`\theta, \phi` yields the state
+:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`. We apply two single
+excitation gates with parameters :math:`\theta, \phi` to the initial state :math:`|100\rangle`.
+The excitation gates act on qubits 0,1 and 0,2 respectively. This yields the state
 
 .. math::
 
@@ -176,8 +177,10 @@ choose the angles of rotation to be
 
 .. math::
 
-    \theta &= - 2 \arcsin(1/\sqrt{3})\\
+    \theta &= - 2 \arcsin(1/\sqrt{3}),\\
     \phi &= - 2 \arcsin(1/\sqrt{2}).
+
+This can be implemented in PennyLane as follows:
 """
 
 import pennylane as qml
@@ -201,7 +204,7 @@ print(circuit(x, y))
 ##############################################################################
 # The components of the output state are ordered according to their binary
 # representation, so entry 1 is :math:`|001\rangle`, entry 2 is :math:`|010\rangle`, and entry 4 is
-# :math:`|100\rangle`, meaning we indeed prepare the desired state. We can check this by
+# :math:`|100\rangle`, meaning we indeed prepared the desired state. We can check this by
 # reshaping the output state
 
 tensor_state = circuit(x, y).reshape(2, 2, 2)
@@ -236,6 +239,9 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 #
 # In the context of quantum chemistry, it is common to consider excitations on a fixed reference
 # state and include only the excitations that preserve the spin orientation of the electron.
+# For a system with :math:`n` qubits and :math:`k` particles, this reference state is typically
+# chosen as the state with the first :math:`k` qubits in state :math:`|1\rangle, and the remainder
+# in state :math:`|0\rangle`.
 # PennyLane allows you to obtain all such excitations using the function
 # :func:`~.pennylane_qchem.qchem.excitations`. Let's employ it to build a circuit that includes
 # all single and double excitations acting on a reference state of three particles in six qubits.
@@ -328,7 +334,7 @@ print(states)
 # which are three-qubit gates that perform the mapping
 #
 # .. math::
-#   CG(\theta) |101\rangle &= \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle\\
+#   CG(\theta) |101\rangle &= \cos (\theta/2)|101\rangle + \sin (\theta/2)|110\rangle,\\
 #   CG(\theta) |110\rangle &= \cos (\theta/2)|110\rangle - \sin (\theta/2)|101\rangle,
 #
 # while leaving all other basis states unchanged. This gate only excites a particle
@@ -343,7 +349,7 @@ print(states)
 # differ by a double excitation from the reference state :math:`\ket{110000}`. Meanwhile, the state
 # :math:`\ket{100100}` differs by a single excitation. It is thus tempting to think that applying
 # two double-excitation gates and a single-excitation gate can be used to prepare the target state.
-# It won't work! Applying the single-excitation gate on qubits 2 and 4 will also lead to an
+# It won't work! Applying the single-excitation gate on qubits 1 and 3 will also lead to an
 # undesired contribution for the state :math:`|011000\rangle` through a coupling with
 # :math:`\ket{001100}`. Let's check that this is the case:
 
@@ -408,15 +414,15 @@ print(states)
 #
 #
 # Starting from the reference state :math:`\ket{1100}`, we create a superposition
-# with the state :math:`\ket{1010}` by applying a single-excitation gate on qubits 2 and 3.
+# with the state :math:`\ket{1010}` by applying a single-excitation gate on qubits 1 and 2.
 # Similarly, we create a superposition with the state :math:`\ket{1001}` with a single
-# excitation between qubits 2 and 4. This leaves us with a state of the form
+# excitation between qubits 1 and 3. This leaves us with a state of the form
 #
 # .. math::
 #   |\psi\rangle = a \ket{1100} + b \ket{1010} + c \ket{1001}.
 #
-# We can now perform two single excitations from qubit 1 to qubits 3 and 4. These will have
-# to be controlled on the state of qubit 2. Finally, applying a double-excitation gate on all qubits
+# We can now perform two single excitations from qubit 0 to qubits 2 and 3. These will have
+# to be controlled on the state of qubit 1. Finally, applying a double-excitation gate on all qubits
 # can create a superposition of the form
 #
 # .. math::
