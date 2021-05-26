@@ -44,8 +44,8 @@ implies that the objective function, defined by the expectation value of the Ham
 computed in the trial state prepared by a quantum computer, depends on both the quantum
 circuit and the Hamiltonian parameters.
 
-The variational quantum algorithm in a nutshell
------------------------------------------------
+The quantum algorithm in a nutshell
+-----------------------------------
 
 Let's describe briefly the variational quantum algorithm that we are going to implement
 to find the equilibrium geometry of a molecule. The goal is to find the global minimum of 
