@@ -168,11 +168,6 @@ hardware.
     :description: :doc:`demos/braket-parallel-gradients`
     :tags: braket
 
-.. customgalleryitem::
-    :tooltip: Optimizing the geometry of molecules
-    :figure: demonstrations/mol_geo_opt/fig_pes.png
-    :description: :doc:`demos/tutorial_mol_geo_opt`
-    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -201,4 +196,3 @@ hardware.
     demos/tutorial_jax_transformations
     demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
-    demos/tutorial_mol_geo_opt
