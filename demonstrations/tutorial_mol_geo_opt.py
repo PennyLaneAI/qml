@@ -48,7 +48,6 @@ circuit and the Hamiltonian parameters.
 The quantum algorithm in a nutshell
 -----------------------------------
 
-Let's describe briefly the variational quantum algorithm that we are going to implement
 The goal of the variational algorithm is to find the global minimum of 
 the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle`
 with respect to the circuit parameters :math:`\theta` and the
