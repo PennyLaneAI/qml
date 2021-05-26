@@ -73,31 +73,37 @@ a quantum optimization of molecular geometries. The algorithm consists of the fo
 
 #. Initialize the variational parameters :math:`\theta` and :math:`x`. Perform a joint
    optimization of the circuit and Hamiltonian parameters to minimize the cost function 
-   :math:`g(\theta, x)`
+   :math:`g(\theta, x)`. The gradient with respect to the circuit parameters can be obtained
+   using a variety of established methods, which are natively supported in PennyLane. The
+   gradients with respect to the nuclear coordinates can be computed using the formula
+
+   .. math::
+
+       \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 
 Once the optimization is finalized, the circuit parameters determine the energy of the
-electronic state, and the nuclear coordinates the equilibrium geometry of the molecule in
-this state.
+electronic state, and the nuclear coordinates determine the equilibrium geometry of the
+molecule in this state.
 
 Let's get started! ⚛️
 
 Building the parametrized electronic Hamiltonian
 ------------------------------------------------
 
-The first step is to import the required libraries and packages:
+In this example, we want to optimize the geometry of the trihydrogen cation
+(:math:`\mathrm{H}_3^+`) where two electrons are shared between three
+hydrogen atoms (see figure above). This is done by providing a list with the symbols
+of the atomic species and a one-dimensional array with the initial set of nuclear coordinates
+in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
+
 """
 
-import pennylane as qml
-from pennylane import numpy as np
-from functools import partial
-import matplotlib.pyplot as plt
+# import pennylane as qml
+# from pennylane import numpy as np
+# from functools import partial
+# import matplotlib.pyplot as plt
 
-##############################################################################
-# In this example, we want to optimize the geometry of the trihydrogen cation
-# (:math:`\mathrm{H}_3^+`) where two electrons are shared between three
-# hydrogen atoms (see figure above). This is done by providing a list with the symbols
-# of the atomic species and a one-dimensional array with the initial set of nuclear coordinates
-# in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
+import numpy as np
 
 symbols = ["H", "H", "H"]
 x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
@@ -118,6 +124,8 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
 # of the trihydrogen cation, described with a minimal basis set, using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+
+import pennylane as qml
 
 def H(x):
     return qml.qchem.molecular_hamiltonian(symbols, x, charge=1)[0]
@@ -142,10 +150,8 @@ def H(x):
 # in the form of Givens rotations in PennyLane. For more details see the tutorial
 # :doc:`tutorial_givens_rotations`.
 #
-# In addition, here we use an adaptive algorithm to select the excitation
-# operations included in the variational quantum circuit. The algorithm, which is
-# described in more details in the tutorial :doc:`tutorial_adaptive_algorithm`,
-# proceeds as follows:
+# In addition, here we use an adaptive algorithm [#grimsley]_ to select the excitation
+# operations included in the variational quantum circuit. The algorithm proceeds as follows:
 #
 # #. Generate the indices of the qubits involved in all single- and
 #    double-excitations.
@@ -294,6 +300,8 @@ bond_length = []
 # Factor to convert from Bohrs to Angstroms
 bohr_angs = 0.529177210903
 
+from functools import partial
+
 for n in range(100):
 
     # Optimize the circuit parameters
@@ -307,7 +315,7 @@ for n in range(100):
     bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
 
     if n % 2 == 0:
-        print(f"Iteration = {n},  Energy = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
+        print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
     # Check maximum component of the nuclear gradient
     if np.max(grad_fn(x)) <= 1e-05:
@@ -322,6 +330,8 @@ for i, atom in enumerate(symbols):
 ##############################################################################
 # Next, we plot the values of the ground state energy of the molecule 
 # and the H-H bond lengths as a function of optimization step.
+
+import matplotlib.pyplot as plt
 
 fig = plt.figure()
 fig.set_figheight(5)
@@ -381,9 +391,10 @@ plt.show()
 # extended to perform quantum simulations of molecules involving both the electronic and
 # the nuclear degrees of freedom. The joint optimization scheme described here
 # is a generalization of the usual VQE algorithm where only the electronic
-# state is parametrized. By using the adaptive algorithm it is possible to reduce the
-# number of excitation gates in the quantum circuit to apply this algorithm to molecules
-# of increasing complexity [#geo_opt_paper]_.
+# state is parametrized. In general, the variational quantum algorithm presented here
+# could be also applied to simulate other molecular properties involving
+#, for example, light-matter interaction operators which depends on both an external
+# electric field and the nuclear coordinates.
 #
 # References
 # ----------
@@ -418,8 +429,8 @@ plt.show()
 #     electronic structure system". `Journal of Computational Chemistry 14, 1347 (1993)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/jcc.540141112>`__
 #
-# .. [#geo_opt_paper]
+# .. [##grimsley]
 #
-#     A. Delgado, J.M. Arrazola, S. Jahangiri, Z. Niu, J. Izaac, C. Roberts, N. Killoran.
-#     "Variational quantum algorithm for molecular geometry optimization".
-#     arXiv preprint
+#     H.R. Grimsley, S.E. Economou, E. Barnes, N.J. Mayhall.
+#     "An adaptive variational algorithm for exact molecular simulations on a quantum computer".
+#     `Nature Communications, 10 (2019) <https://www.nature.com/articles/s41467-019-10988-2>`__
