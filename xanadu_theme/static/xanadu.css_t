@@ -699,14 +699,14 @@ td {
 
 .comment-container {
   width: 300px;
-  top: 75px;
+  top: 119px;
   max-width: 300px;
   right: calc(50% - 820px);
   position: fixed;
   transition-property: opacity;
   transition-duration: 1s;
   opacity: 0.5;
-  height: 92vh;
+  height: 85vh;
 }
 
 .comment-container:hover {

@@ -244,7 +244,7 @@
         });
         $(".document > .section").removeClass("section");
         var tocContainer = document.querySelector('.comment-container');
-        tocContainer.style.height = '92vh';
+        tocContainer.style.height = '85vh';
         $(".nano").nanoScroller();
     </script>
     <!-- lightslider -->
@@ -264,11 +264,11 @@
           // Check if the footer is visible
           if (footerPosition.top < windowHeight && footerPosition.bottom >= 0) {
               // We want the height of the TOC to be the height of the main content minus how much of the footer is visible.
-              tocContainer.style.height = 'calc(92vh - 45px - ' + (windowHeight - footerPosition.top) + 'px)'
+              tocContainer.style.height = 'calc(85vh - 45px - ' + (windowHeight - footerPosition.top) + 'px)'
           } else {
             // When the user scrolls back to the top of the page after scrolling to the bottom of the page,
             // We want to reset the TOC container back to it's original height
-            if (tocContainer.style.height !== '92vh') tocContainer.style.height = '92vh';
+            if (tocContainer.style.height !== '85vh') tocContainer.style.height = '85vh';
           }
       });
       $(document).ready(function () {
