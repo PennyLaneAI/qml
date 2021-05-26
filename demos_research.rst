@@ -203,7 +203,7 @@ plateaus in quantum neural networks.
 
 .. customgalleryitem::
     :tooltip: Optimizing the geometry of molecules
-    :figure: demonstrations/mol_geo_opt/fig_pes.png
+    :figure: demonstrations/mol_geo_opt/fig_thumbnail.png
     :description: :doc:`demos/tutorial_mol_geo_opt`
     :tags: chemistry
 
