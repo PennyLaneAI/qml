@@ -202,11 +202,16 @@ plateaus in quantum neural networks.
     :tags: qiskit
 
 .. customgalleryitem::
-    :tooltip: Optimizing the geometry of molecules
+    :tooltip: Solve combinatorial problems without a classical optimizer.
+    :figure: demonstrations/falqon/falqon_thumbnail.png
+    :description: :doc:`demos/tutorial_falqon`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Optimizing the geometry of molecules.
     :figure: demonstrations/mol_geo_opt/fig_thumbnail.png
     :description: :doc:`demos/tutorial_mol_geo_opt`
     :tags: chemistry
-
 
 :html:`</div></div><div style='clear:both'>`
 
