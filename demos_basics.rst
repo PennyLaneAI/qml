@@ -168,7 +168,6 @@ hardware.
     :description: :doc:`demos/braket-parallel-gradients`
     :tags: braket
 
-
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
