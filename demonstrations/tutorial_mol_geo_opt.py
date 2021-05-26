@@ -52,7 +52,7 @@ Let's describe briefly the variational quantum algorithm that we are going to im
 The goal of the variational algorithm is to find the global minimum of 
 the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle`
 with respect to the circuit parameters :math:`\theta` and the
-nuclear coordinates :math:`x` entering the electronic Hamiltonian of the molecule. To that aim,
+nuclear coordinates :math:`x` entering the electronic Hamiltonian of the molecule. To that end,
 we use a gradient-descent method and follow a **joint** optimization scheme where the gradients of 
 the cost function with respect to circuit and Hamiltonian parameters are simultaneously computed 
 at each step. This approach does not require nested optimization of the state 
