@@ -7,7 +7,7 @@ Quantum analytic descent
 
 .. meta::
     :property="og:description": Implement the Quantum analytic descent algorithm for VQE.
-    :property="og:image": https://pennylane.ai/qml/_images/margin_2.png
+    :property="og:image": https://pennylane.ai/qml/_images/flowchart.png
 
 .. related::
 
@@ -24,7 +24,7 @@ SUMMARY
 
 |
 
-.. figure:: ../demonstrations/multiclass_classification/margin_2.png
+.. figure:: ../demonstrations/quantum_analytic_descent/xkcd_plot.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -109,10 +109,10 @@ X, Y = np.meshgrid(theta_func, theta_func);
 Z = np.array([[circuit([t1, t2]) for t2 in theta_func] for t1 in theta_func]);
 
 # Show the energy landscape on the grid.
-fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(9,9));
+fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(9, 4));
 surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7, color='#209494');
-ax.plot([parameters[1]]*num_samples, theta_func, C1, label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
-ax.plot(theta_func, [parameters[0]]*num_samples, C2, label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
+line1 = ax.plot([parameters[1]]*num_samples, theta_func, C1, label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
+line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2, label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
 
 ###############################################################################
 # Of course this is an overly simplified example, but the key take-home message so far is: *the parameter landscape is a multilinear combination of trigonometric functions*.
@@ -152,12 +152,17 @@ ax.plot(theta_func, [parameters[0]]*num_samples, C2, label="$E(\\theta_1^{(0)}, 
 # And hereby, the complete strategy:
 #
 # #. Set an initial reference point :math:`\theta_0`.
-# #. Build the model :math:`\hat{E}(\theta)\approx \E(\theta_0+\theta)` at this point.
+# #. Build the model :math:`\hat{E}(\theta)\approx E(\theta_0+\theta)` at this point.
 # #. Find the global minimum :math:`\theta_\text{min}` of the model.
 # #. Set :math:`\theta_\text{min}` as the new reference point :math:`\theta_0`, go back to step 2.
 # #. After convergence or a fixed number of iterations, output the last global minimum :math:`\theta_\text{opt}=\theta_\text{min}`.
 #
 # This provides an iterative strategy which will take us to a good enough solution much faster (in number of iterations) than for example regular stochastic gradient descent (SGD).
+#
+# .. figure:: ../demonstrations/quantum_analytic_descent/flowchart.png
+#    :align: center
+#    :width: 80%
+#    :target: javascript:void(0)
 #
 # Computing the model
 # -------------------
@@ -326,11 +331,12 @@ from mpl_toolkits.mplot3d import Axes3D
 from itertools import chain
 
 # We actually make the plotting a function because we will reuse it below.
-def plot_cost_and_model(fun, model, shift_radius=5*np.pi/8, num_points=20):
+def plot_cost_and_model(fun, model, parameters, shift_radius=5*np.pi/8, num_points=20):
     """
     Args:
         fun (callable): Original cost function.
         model (callable): Model cost function.
+        parameters (array[float]): Parameters at which the model was built.
         shift_radius (float): Maximal shift value for each parameter.
         num_points (int): Number of points to create grid.
     """
@@ -355,7 +361,7 @@ def plot_cost_and_model(fun, model, shift_radius=5*np.pi/8, num_points=20):
     # Display landscapes incl. sampled points and deviation.
     # Transparency parameter for landscapes.
     alpha = 0.6
-    fig, ax = plt.subplots(2, 1, subplot_kw={"projection": "3d"}, figsize=(9, 12));
+    fig, ax = plt.subplots(1, 2, subplot_kw={"projection": "3d"}, figsize=(9, 4));
     green = '#209494'
     orange = '#ED7D31'
     surf = ax[0].plot_surface(X, Y, Z_original, label="Original energy", color=green, alpha=alpha);
@@ -365,7 +371,7 @@ def plot_cost_and_model(fun, model, shift_radius=5*np.pi/8, num_points=20):
     surf._facecolors2d = surf._facecolor3d
     surf._edgecolors2d = surf._edgecolor3d
     for sample in samples:
-        ax[0].scatter(*sample, marker='d', color='orange');
+        ax[0].scatter(*sample, marker='d', color='r');
         ax[0].plot([sample[0]]*2, [sample[1]]*2, [np.min(Z_original), sample[2]], color='k')
     surf = ax[1].plot_surface(X, Y, Z_original-Z_model, label="Deviation", color=green, alpha=alpha);
     surf._facecolors2d = surf._facecolor3d
@@ -375,7 +381,7 @@ def plot_cost_and_model(fun, model, shift_radius=5*np.pi/8, num_points=20):
 
 # Define a mapped model that has the model coefficients fixed.
 mapped_model = lambda parameters: model_cost(parameters, *coeffs)
-plot_cost_and_model(circuit, mapped_model)
+plot_cost_and_model(circuit, mapped_model, parameters)
 
 ###############################################################################
 # We are now in a position from where we can implement the loop between steps 2. and 4. of our strategy.
@@ -394,17 +400,24 @@ plot_cost_and_model(circuit, mapped_model)
 # This means our function is bounded and takes values in the range :math:`[-1,1]`, so that the global minimum should be around :math:`-1` if our circuit is expressive enough.
 # Let's try it and apply the full optimization:
 
+import copy
 # Set the number of iterations of steps 2 to 4
 N_iter_outer = 3
 # Set the number of iterations for the model optimization in step 3.
 N_iter_inner = 50
 # Let's get some fresh random parameters.
 parameters = np.random.random(2) * 2 * np.pi
+# Store the coefficients for the model and parameter positions.
+past_coeffs = []
+past_parameters = []
 for iter_outer in range(N_iter_outer):
     # Model building phase of outer iteration - step 2.
     coeffs = get_model_data(circuit, parameters)
     # Map the function to be only depending on the parameters, not the coefficients.
     mapped_model = lambda par: model_cost(par, *coeffs)
+    # Store the coefficients and parameters.
+    past_coeffs.append(copy.deepcopy(coeffs))
+    past_parameters.append(parameters.copy())
 
     # Let's see at which cost we start off
     if iter_outer==0:
@@ -424,8 +437,6 @@ for iter_outer in range(N_iter_outer):
             E_model = mapped_model(relative_parameters)
             print(f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)} at relative parameters {np.round(relative_parameters, 4)}")
 
-    # Show the model and the original cost function locally.
-    plot_cost_and_model(circuit, mapped_model)
     # Store the relative parameters that minimize the model by adding the shift - step 4.
     parameters += relative_parameters
     # Let's check what the original cost at the updated parameters is.
@@ -433,8 +444,28 @@ for iter_outer in range(N_iter_outer):
     print(f"True energy at the minimum of the model: {E_original}")
     print(f"New reference parameters: {np.round(parameters, 4)}\n")
 
+###############################################################################
+# This looks great! Quantum Analytic Descent found the minimum.
+# Let us take a look at the intermediate models it built:
+
+mapped_model = lambda par: model_cost(par, *past_coeffs[0])
+plot_cost_and_model(circuit, mapped_model, past_parameters[0])
 
 ###############################################################################
+# Step 1: We again see the cost function around our starting point and the model we already inspected above.
+
+mapped_model = lambda par: model_cost(par, *past_coeffs[1])
+plot_cost_and_model(circuit, mapped_model, past_parameters[1])
+
+###############################################################################
+# Step 2: Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range.
+
+mapped_model = lambda par: model_cost(par, *past_coeffs[2])
+plot_cost_and_model(circuit, mapped_model, past_parameters[2])
+
+###############################################################################
+# Step 3: Both, the model and the original cost function show a minimum close to our parameter position, Quantum Analytic Descent converged.
+#
 # Quantum Analytic Descent in PennyLane
 # -------------------------------------
 #
