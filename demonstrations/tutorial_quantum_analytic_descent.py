@@ -13,7 +13,6 @@ Quantum analytic descent
 
    tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum Natural Gradient (QNG)
-   tutorial_vqe_qng Accelerating VQE with the QNG
    tutorial_rotoselect Leveraging trigonometry with Rotoselect
    tutorial_stochastic_parameter_shift Obtaining gradients stochastically
 
@@ -109,7 +108,7 @@ X, Y = np.meshgrid(theta_func, theta_func);
 Z = np.array([[circuit([t1, t2]) for t2 in theta_func] for t1 in theta_func]);
 
 # Show the energy landscape on the grid.
-fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(9, 4));
+fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(4, 4));
 surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7, color='#209494');
 line1 = ax.plot([parameters[1]]*num_samples, theta_func, C1, label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
 line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2, label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
