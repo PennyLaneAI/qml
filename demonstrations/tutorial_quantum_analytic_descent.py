@@ -110,7 +110,7 @@ Z = np.array([[circuit([t1, t2]) for t2 in theta_func] for t1 in theta_func]);
 
 # Show the energy landscape on the grid.
 fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(9,9));
-surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7);
+surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7, color='#209494');
 ax.plot([parameters[1]]*num_samples, theta_func, C1, label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
 ax.plot(theta_func, [parameters[0]]*num_samples, C2, label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
 
@@ -322,11 +322,11 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # It is noteworthy that this deviation is an order of magnitude smaller than the cost function even for the rather large radius we chose to display.
 # This already hints at the value of the model.
 
-import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from itertools import chain
 
 # We actually make the plotting a function because we will reuse it below.
-def plot_cost_and_model(fun, model, shift_radius=np.pi/4, num_points=20):
+def plot_cost_and_model(fun, model, shift_radius=5*np.pi/8, num_points=20):
     """
     Args:
         fun (callable): Original cost function.
@@ -334,25 +334,40 @@ def plot_cost_and_model(fun, model, shift_radius=np.pi/4, num_points=20):
         shift_radius (float): Maximal shift value for each parameter.
         num_points (int): Number of points to create grid.
     """
-    shifts = np.linspace(-shift_radius, shift_radius, num_points)
-    X, Y = np.meshgrid(shifts+parameters[0], shifts+parameters[1])
+    coords = np.linspace(-shift_radius, shift_radius, num_points)
+    X, Y = np.meshgrid(coords+parameters[0], coords+parameters[1])
     # Compute the original cost function and the model on the grid.
     Z_original = np.array(
-            [[fun(parameters+np.array([t1, t2])) for t2 in shifts] for t1 in shifts]
+            [[fun(parameters+np.array([t1, t2])) for t2 in coords] for t1 in coords]
             )
     Z_model = np.array(
-            [[model(np.array([t1, t2])) for t2 in shifts] for t1 in shifts]
+            [[model(np.array([t1, t2])) for t2 in coords] for t1 in coords]
             )
-    # Display landscapes and deviation.
+    # Prepare sampled points for plotting.
+    shifts = [-np.pi/2, 0, np.pi/2]
+    samples = chain.from_iterable(
+        [
+            [
+                [parameters[0]+s2, parameters[1]+s1, fun(parameters+np.array([s1, s2]))]
+            for s2 in shifts]
+        for s1 in shifts]
+    )
+    # Display landscapes incl. sampled points and deviation.
+    # Transparency parameter for landscapes.
+    alpha = 0.6
     fig, ax = plt.subplots(2, 1, subplot_kw={"projection": "3d"}, figsize=(9, 12));
-    surf = ax[0].plot_surface(X, Y, Z_model, label="Model energy", alpha=0.7);
+    green = '#209494'
+    orange = '#ED7D31'
+    surf = ax[0].plot_surface(X, Y, Z_original, label="Original energy", color=green, alpha=alpha);
     surf._facecolors2d = surf._facecolor3d
     surf._edgecolors2d = surf._edgecolor3d
-    surf = ax[0].plot_surface(X, Y, Z_original, label="Original energy", alpha=0.7);
+    surf = ax[0].plot_surface(X, Y, Z_model, label="Model energy", color=orange, alpha=alpha);
     surf._facecolors2d = surf._facecolor3d
     surf._edgecolors2d = surf._edgecolor3d
-    ax[0].plot([parameters[0]]*2, [parameters[1]]*2, [np.min(Z_original), np.max(Z_original)], color='k');
-    surf = ax[1].plot_surface(X, Y, Z_original-Z_model, label="Deviation", alpha=0.7);
+    for sample in samples:
+        ax[0].scatter(*sample, marker='d', color='orange');
+        ax[0].plot([sample[0]]*2, [sample[1]]*2, [np.min(Z_original), sample[2]], color='k')
+    surf = ax[1].plot_surface(X, Y, Z_original-Z_model, label="Deviation", color=green, alpha=alpha);
     surf._facecolors2d = surf._facecolor3d
     surf._edgecolors2d = surf._edgecolor3d
     ax[0].legend();
