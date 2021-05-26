@@ -698,16 +698,15 @@ td {
 }
 
 .comment-container {
-  /*margin: 24px auto;*/
   width: 300px;
-  top: 119px;
+  top: 75px;
   max-width: 300px;
   right: calc(50% - 820px);
   position: fixed;
   transition-property: opacity;
   transition-duration: 1s;
   opacity: 0.5;
-  height: calc(100% - 119px);
+  height: 92vh;
 }
 
 .comment-container:hover {
