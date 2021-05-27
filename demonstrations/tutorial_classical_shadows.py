@@ -26,7 +26,7 @@ introduced in `Predicting many properties of a quantum system from very few meas
 The classical shadow approximation is an efficient protocol for constructing a *classical shadow*
 representation of an unknown quantum state.
 The classical shadow can then be used to estimate
-quantum state fidelity, Hamilton eigenvalues, two-point correlators, and many other properties.
+quantum state fidelity, Hamiltonian observables, two-point correlators, and many other properties.
 
 .. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
     :align: center
@@ -43,7 +43,7 @@ and demo it in a jupyter notebook. In this demo, we will work in three separate 
 * ``./test_classical_shadows.py`` - test code for ``./classical_shadows.py``.
 * ``./notebook_classical_shadows.ipynb`` - jupyter notebook for demoing classical shadows.
 
-For clarity, this demo will specify the file in each respective code block.
+For clarity, this demo will specify the file in at the top of respective code block.
 
 
 
@@ -56,11 +56,74 @@ import pennylane.numpy as np
 from typing import List
 
 
-##############################################################################
+#####################################################################
 # Constructing a Classical Shadow
-# ###########################################
+############################################
 #
-# A classical shadow consists of an integer number `N` *snapshots* which are constructed
+# Classical shadow estimation relies on the fact that for a particular choice of circuit measurements,
+# we can store an efficient representation of the state that can be used to
+# predict linear functions of observables. Depending on what type of measurements we choose,
+# we have an informational theoretical bound that controls the precision of our estimator.
+#
+# Let us consider a :math:`n`-qubit quantum state :math:`\rho` and apply a random unitary
+# :math:`U` to the state:
+#
+# .. math::
+#
+#     \rho \to U \rho U^\dagger
+#
+# If we measure in the computational basis, we obtain a bitstring of outcomes :math:`|b\rangle = |0011\ldots10\rangle`.
+# If the unitaries :math:`U` are chosen at random from a particular ensemble, then we can store the reverse operation
+# :math:`U^\dagger |b\rangle\langle b| U` efficiently in classical memory. Moreover, we can view
+# the average over these snapshots of the state as a measurement channel:
+#
+# .. math::
+#
+#      \mathbb{E}\left[U^\dagger |b\rangle\langle b| U\right] = \mathcal{M}(\rho)
+#
+# If the ensemble of unitaries defines a tomographically complete set of measurements,
+# we can invert the channel and reconstruct the state:
+#
+# .. math::
+#
+#      \rho = \mathbb{E}\left[\mathcal{M}^{-1}\left(U^\dagger |b\rangle\langle b| U \right)\right]
+#
+# Note that this inverted channel is not physical, i.e., it is not completely postive and trace preserving (CPTP).
+# But this is of no concern to us, since all we care about is efficiently applying this inverse channel
+# as a post-processing step to reconstruct the state.
+#
+# If we apply the procedure outlined above :math:`N` times, then the set of inverted snapshots
+# is what we call the *classical shadow*
+#
+# .. math::
+#
+#      S(\rho,N) = \left\{\hat{\rho}_1= \mathcal{M}^{-1}\left(U_1^\dagger |b_1\rangle\langle b_1| U_1 \right)
+#      ,\ldots, \hat{\rho}_N= \mathcal{M}^{-1}\left(U_N^\dagger |b_N\rangle\langle b_N| U_N \right)
+#      \right\}
+#
+# By definition, we can now estimate **any** observable as
+#
+# .. math::
+#
+#      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}
+#
+# In fact, the authors prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
+# :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` of to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`
+# The shadow norm :math:`||O_i||^2_{\text{shadow}}` again depends on the unitary ensemble that is chosen.
+#
+# In [Huang2020]_, two different ensembles are considered:
+#
+# 1. Random :math:`n`-qubit Clifford circuits.
+# 2. Tensor products of random single-qubit Clifford circuits.
+#
+# Although ensemble 1. leads to the most powerful estimators, it comes with serious practical limitations
+# since :math:`n^2 / \log(n)` entangling gates are required to sample the Clifford circuit.
+# For the purposes of this demo, we therefore choose ensemble 2., which is a more NISQ friendly approach.
+#
+# When is it a good idea to calculate a classical shadow instead of direct measurement?
+#
+#
+# To summarize, a classical shadow consists of an integer number `N` *snapshots* which are constructed
 # via the following process:
 #
 # 1. A quantum state :math:`\rho` is prepared.
@@ -70,6 +133,7 @@ from typing import List
 #
 # The classical shadow is then constructed as a list of measurement outcomes and chosen
 # unitaries.
+#
 
 # ./classical_shadows.py
 
