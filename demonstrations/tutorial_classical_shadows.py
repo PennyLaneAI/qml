@@ -392,8 +392,58 @@ exact_observable
 # Comparison of standard observable estimators and classical shadows.
 
 ##############################################################################
-# State Reconstruction using Classical Shadow
-# ###########################################
+# State Reconstruction using Classical Shadows
+# ############################################
+#
+# The original quantum state :math:`\rho` can be approximated from a classical
+# shadow obtained from :math:`\rho`.
+# To achieve this, we first view the measurement operation :math:`\mathcal{M}(\rho)`
+# as a quantum channel,
+#
+# .. math::
+#
+#     \mathcal{M}(\rho)=\mathbb{E}\left[U^{\dagger}|\hat{b}\rangle\langle\hat{b}|U\right].
+#
+# Here, :math:`|\hat{b}\rangle` is a classical bit string encoded as a computational basis
+# state and :math:`U^{\dagger}` is the inverse unitary that rotates the classical state
+# :math:`|\hat{b}\rangle\langle\hat{b}|` into the appropriate basis.
+# The expectation :math:`\mathbb{E}[\cdot]` simply describes the average over many measurements.
+# Hence, the measurement channel is understood as the average of a set of quantum states
+# projected onto their respective measurement bases.
+# Since the classical shadow contains information regarding the unitary `U` and the classical
+# values :math:`\hat{b}`, we can simply invert the measurement channel to obtain an expression
+# for the original quantum state,
+#
+# .. math::
+#
+#     \rho = \mathbb{E}\left[\mathcal{M}^{-1}(U^{\dagger}|\hat{b}\rangle\langle\hat{b}|U)\right]
+#
+# Inverting the measurment channel may seem formidable at first, however, Huang et al. [Huang2020]_ 
+# show that it is simply a depolarizing channel,
+# :math:`\mathcal{M}(\rho) = \mathcal{D}_{\frac{1}{2^n+1}}(\rho)` where for an :math:`n`-qubit state
+# :math:`\rho,
+#
+# .. math::
+#
+#     \mathcal{D}_{p}(\rho) = p\rho + (1-p)\frac{\text{Tr}[\rho]}{2^n}\mathbb{I}.
+#
+# Then, with some algebra, the inverse measurement channel :math:`\mathcal{M}^{-1}(\rho)` can easily
+# be verified to be,
+#
+# .. math::
+#
+#     \mathcal{M}^{-1}(\rho) = \mathcal{D}^{-1}_{\frac{1}{2^n+1}}(\rho)=(2^n+1)\rho - \mathbb{I}.
+#
+# Applying this formalism to local pauli observables, we end up with a rather convenient expression,
+#
+# .. math::
+#
+#     \rho=\mathbb{E}[\hat{\rho}], \quad \text{where} \quad
+#     \hat{\rho} = \bigotimes_{j=1}^n(3U^{\dagger}_j|\hat{b}_j\rangle\langle\hat{b}_j|U_j-\mathbb{I}).
+#
+# Here :math:`\hat{\rho}` is a snapshot state reconstructed from a single sample in the
+# classical shadow, and :math:`\rho` is the average over all snapshot states :math:`\hat{\rho}` in the
+# shadow.
 
 # ./classical_shadows.py
 def snapshot_state(b_list, obs_list):
