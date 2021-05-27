@@ -58,7 +58,7 @@ from typing import List
 
 #####################################################################
 # Constructing a Classical Shadow
-############################################
+# ###############################
 #
 # Classical shadow estimation relies on the fact that for a particular choice of circuit measurements,
 # we can store an efficient representation of the state that can be used to
