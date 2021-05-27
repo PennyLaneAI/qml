@@ -292,7 +292,7 @@ from functools import partial
 # store the values of the cost function
 energy = []
 
-# store the values of the H-H bond length
+# store the values of the bond length
 bond_length = []
 
 # Factor to convert from Bohrs to Angstroms
@@ -325,7 +325,7 @@ for i, atom in enumerate(symbols):
 
 ##############################################################################
 # Next, we plot the values of the ground state energy of the molecule 
-# and the H-H bond lengths as a function of optimization step.
+# and the bond length as a function of the optimization step.
 
 import matplotlib.pyplot as plt
 
@@ -353,7 +353,7 @@ ax2.plot(range(n+1), bond_length, 'go-', ls='dashed')
 ax2.plot(range(n+1), np.full(n+1, d_fci), color='red')
 ax2.set_ylim([0.965,0.99])
 ax2.set_xlabel("Optimization step", fontsize=13)
-ax2.set_ylabel("H-H bond length ($\AA$)", fontsize=13)
+ax2.set_ylabel("bond length ($\AA$)", fontsize=13)
 ax2.text(5, 0.9865, r'Equilibrium bond length', fontsize=13)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
