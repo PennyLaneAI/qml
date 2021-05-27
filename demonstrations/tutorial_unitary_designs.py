@@ -38,8 +38,13 @@ contained in exactly one line. This object, called the `Fano plane
 structure called a *combinatorial design*. Designs are sets of objects and
 associated groups, or blocks, of those objects that satisfy certain
 symmetries. They are found throughout the mathematical literature and have been
-studied for hundreds of years in a huge variety of contexts, from error
-correcting codes to agriculture. So---what about quantum computing?
+studied for hundreds of years in a huge variety of contexts, from `error
+correcting codes
+<http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.5465>`__, to `card
+games <https://homepages.warwick.ac.uk/staff/D.Maclagan/papers/set.pdf>`__, and
+even to `agriculture
+<http://www-groups.mcs.st-and.ac.uk/~rab/histLShand.pdf>`__. So---what about
+quantum computing?
 
 Designs are actually quite prevalent in quantum computing. It's highly likely
 that you've unknowingly come across one before. At the end of the Haar measure
@@ -75,13 +80,14 @@ but that would be a lot of parameters to keep track of. In fact, it might even
 be overkill. If a polynomial has terms with the same degree of at most :math:`t`, you can
 compute the average value over the sphere using only a representative set of
 points rather than integrating over the entire sphere! That representative set of
-points is called a :math:`t`-design, which is defined formally as follows:
+points is called a :math:`t`-design, which is defined formally as follows [#Handbook]_,
+[#Delsarte]_:
 
 .. admonition:: Definition
     :class: defn
 
     Let :math:`p_t: \mathcal{S}(R^d)\rightarrow R` be a polynomial in :math:`d`
-    variables, with all monomial terms homogeneous in degree at most :math:`t`. A
+    variables, with all terms homogeneous in degree at most :math:`t`. A
     set :math:`X = \{x: x \in \mathcal{S}(R^d)\}` is a spherical :math:`t`-design if
 
     .. math::
@@ -94,14 +100,15 @@ points is called a :math:`t`-design, which is defined formally as follows:
 
 Now, this is a pretty abstract picture, so let's consider the 3-dimensional
 sphere. What this definition tells us is that if we want to take the average of
-a polynomial where all terms have the same degree 2 in the coordinates of the
+a polynomial where all terms have at most degree 2 in the coordinates of the
 sphere, we can do so with a representative set of points called a 2-design,
-rather than the whole sphere.  Similarly, if all terms of the polynomial have
-degree 3, we would need a 3-design. But what are these representative sets of
-points?
+rather than the whole sphere.  Similarly, if all terms of the polynomial have at
+most degree 3, we would need a 3-design. But what are these representative sets
+of points? Surely, we'd want to have a set of points that are evenly spaced, and
+provide sufficient "coverage" of the whole sphere.
 
 For the case of a sphere, the points that comprise the design look like some
-familiar solids:
+familiar solids [#Handbook]_, [#sph4design]_
 
 .. figure:: /demonstrations/unitary_designs/shapes.svg
    :align: center
@@ -110,7 +117,11 @@ familiar solids:
 |
 
 Clearly, as :math:`t` increases, the shapes of the designs become increasingly
-more sphere-like, which makes intuitive sense.
+sphere-like, which makes intuitive sense.  Spherical designs exist for all
+:math:`t` and dimension :math:`d` [#Handbook]_. They are not always unique
+either, and may have varying numbers of points (as can be seen
+above). Furthermore, a spherical :math:`t`-design is also a :math:`k`-design for
+all :math:`k < t` as well!
 
 
 Complex projective designs
@@ -134,10 +145,11 @@ complex variables (so :math:`2d` variables total).
 .. admonition:: Definition
     :class: defn
 
-    Let :math:`p_{t,t}: \mathcal{S}(C^d)\rightarrow C` be a polynomial with
-    homogeneous degree :math:`t` in :math:`d` variables, and degree :math:`t` in
-    the complex conjugates of those variables. A subset :math:`X = \{x: x \in
-    \mathcal{S}(C^d)\}` is a complex projective :math:`t`-design if
+    Let :math:`p_{t,t}: \mathcal{S}(C^d)\rightarrow C` be a polynomial with all
+    terms homogeneous in degree at most :math:`t` in :math:`d` variables, and
+    degree :math:`t` in the complex conjugates of those variables. A subset
+    :math:`X = \{x: x \in \mathcal{S}(C^d)\}` is a complex projective
+    :math:`t`-design if
 
     .. math::
 
@@ -149,14 +161,14 @@ complex variables (so :math:`2d` variables total).
 An interesting fact about complex projective designs is that if you "unroll"
 the real and complex parts into real-valued vectors of length :math:`2d`, you have yourself
 a regular spherical design! This works in the other direction, too---spherical :math:`t`-designs
-can be transformed into :math:`t/2`-designs over :math:`\mathcal{S}(C^{d/2})`.
+can be transformed into :math:`t/2`-designs over :math:`\mathcal{S}(C^{d/2})` [#Ambainis]_.
 
 .. admonition:: Fun fact
 
     If you've ever studied the characterization of quantum systems, you may have come across
     some special sets of measurements called mutually unbiased bases (MUBs), or symmetric,
     informationally complete positive operator valued measurements (SIC-POVMs). Both
-    these objects are examples of complex projective 2-designs! [cite]
+    these objects are examples of complex projective 2-designs! [#Klappenecker]_
 
 
 Unitary designs
@@ -166,12 +178,12 @@ We've seen now how both spherical and complex projective designs are defined as
 representative sets of points in the space that you can use as "short cuts" to
 evaluate the average of polynomials up to a given degree :math:`t`. A *unitary
 design* in the abstract takes this one step further---it considers polynomials that
-are functions of entries of the unitary matrices.
+are functions of entries of the unitary matrices [#Dankert]_, [#Gross]_.
 
 .. admonition:: Definition
     :class: defn
 
-    Let :math:`P_{t,t}(U)` be a polynomial with homogeneous degree :math:`t` in
+    Let :math:`P_{t,t}(U)` be a polynomial with homogeneous degree at most :math:`t` in
     :math:`d` variables in the entries of a unitary matrix :math:`U`, and degree
     :math:`t` in the complex conjugates of those entries. A unitary
     :math:`t`-design is a set of :math:`K` unitaries :math:`\{U_k\}` such that
@@ -187,7 +199,15 @@ are functions of entries of the unitary matrices.
 We can "unroll" unitary designs as well to create complex projective designs and
 spherical designs. For each unitary matrix in the set, vectorize it by stacking its
 columns on top of each other. You then have a set of vectors which form a complex
-projective design in :math:`S(C^{d^2})`!
+projective design in :math:`S(C^{d^2})` [#Gross]_ - [VERIFY]
+
+Some bounds have been computed on the number of unitaries needed for
+:math:`t`. For example, the lower bound for a 2-design in dimension :math:`d` is
+:math:`d^4 - 2d^2 + 2` [#Gross]_, [#Roy]_. A surprising result about unitary
+designs is that they exist for all possible combinations of :math:`t` and
+:math:`d` 🤯 [#Roy]_. However, actually finding them (and in particular, finding
+ones with the minimal size), is a challenging problem.
+
 
 
 Unitary :math:`t`-designs in action
@@ -204,13 +224,13 @@ Average fidelity
 
 A key application of unitary designs is benchmarking quantum operations. Let's
 explore a simple example: suppose we have a noisy quantum channel
-:math:`\Lambda` that hope will perform something close to the unitary operation
+:math:`\Lambda` that we hope will perform something close to the unitary operation
 :math:`V`.  What can we say about the performance of this channel?
 
 One metric of interest is the *fidelity* of the channel. Consider the state
 :math:`|0\rangle`.  Applying the unitary operation :math:`V` gives
 :math:`V|0\rangle`.  Applying the channel :math:`\Lambda` gives us something a
-little different, as we have to consider the state as a density matrix. The
+little different. Since it's noisy, we must consider the state as a density matrix. The
 action of :math:`\Lambda` on our starting state is :math:`\Lambda(|0\rangle
 \langle 0|)`.  If :math:`\Lambda` was perfect, then :math:`\Lambda(|0\rangle
 \langle 0|) = V|0\rangle \langle 0|V^\dagger`, and the fidelity is
@@ -257,10 +277,13 @@ Design design
 ^^^^^^^^^^^^^
 
 A beautiful result in quantum computing is that some special groups of matrices
-you may already be familiar with are unitary 2-designs. More specifically: the
-Pauli group forms a unitary 1-design, and the Clifford group forms a unitary
-3-design. By the definition of designs, this means that the Clifford group is
-also a 1- and 2-design.
+you may already be familiar with are unitary designs. More specifically
+
+- the Pauli group forms a unitary 1-design, and 
+- the Clifford group forms a unitary 3-design. 
+
+By the definition of designs, this means that the Clifford group is also a 1-
+and 2-design.
 
 The :math:`n`-qubit Pauli group, :math:`\mathcal{P}(n)` is the set of all tensor
 products of Pauli operations :math:`X`, :math:`Y`, :math:`Z`, and :math:`I`. The
@@ -270,14 +293,15 @@ send Paulis to Paulis when acting under conjugation (up to a phase), i.e.,
 
 .. math::
 
-   C P C^\dagger = \pm P^\prime, \quad \forall P, P^\prime \in \mathcal{P}(n), C \in \mathcal{C}(n)
+   C P C^\dagger = \pm P^\prime, \quad \forall P, P^\prime \in \mathcal{P}(n), C \in \mathcal{C}(n).
 
 The Pauli and Clifford groups both have some profoundly interesting
-properties. The Clifford group itself is *massive*, as it has elements to
-perform a one-to-one mapping from Paulis to Paulis. [TODO: elaborate a bit here]
+properties and countless uses across quantum information science, from 
+quantum circuit design to error correcting codes.
 
-The single-qubit Clifford group is built from just two operations. One is the
-Hadamard. We know that :math:`H` sends
+Let's go beyond the definition and actually construct it. The Clifford group for
+a single qubit is built from just two operations. One is the Hadamard. We know
+that :math:`H` sends
 
 .. math::
 
@@ -326,14 +350,17 @@ single_qubit_cliffords = [
 #    for the single-qubit case.  Using just :math:`H`, :math:`S`, and CNOT (on
 #    every possible qubit or pair of qubits), you can generate the
 #    :math:`n`-qubit group. Be careful though--the size of the group increases
-#    exponentially. The 2-qubit group alone has 11520 elements! The size can be
-#    worked out in a manner analogous to that we used above in the single qubit
-#    case: by looking at the combinatorics of the possible ways the gates can
-#    map Paulis with only :math:`X` and :math:`Z` to other Paulis.
+#    exponentially. The 2-qubit group alone has 11520 elements! (Exercise:
+#    compare this to the lower bound mentioned above for the size of a unitary
+#    design.) The size can be worked out in a manner analogous to that we used
+#    above in the single qubit case: by looking at the combinatorics of the
+#    possible ways the gates can map Paulis with only :math:`X` and :math:`Z` to
+#    other Paulis.
 #
 # An experiment
 # ^^^^^^^^^^^^^
-# The whole idea of unitary designs may sound too good to be true. In this
+# The whole idea of unitary designs may sound too good to be true--can we
+# *really* compute the exact average fidelity using just 24 operations?. In this
 # section, we'll put them to the test and compute the average fidelity of a
 # noisy operation in two ways: once with experiments using a large but finite
 # amount of Haar-random unitaries, and then again with only the Clifford group.
@@ -363,9 +390,9 @@ def ideal_experiment():
 
 ######################################################################
 # Next, we apply some noise. We will do so by making use of a relatively new
-# feature in PennyLane called *quantum function transforms*.  Quantum function
-# transforms work by changing the underlying, low level tape objects which queue
-# the quantum operations.
+# feature in PennyLane called *quantum function transforms*.  Such transforms
+# work by changing the underlying, low-level quantum tapes which queue the
+# quantum operations.
 #
 # First, we define a sequence of noisy operations:
 
@@ -378,7 +405,7 @@ def noisy_operations(damp_factor, depo_factor, flip_prob):
 ######################################################################
 # Next, we create a transform that applies this noise to any quantum
 # function *after* the original operations, but before the measurements.
-# We use the convenient `@qml.qfunc_transform` decorator:
+# We use the convenient :func:`~.pennylane.transforms.qfunc_transform` decorator:
 
 @qml.qfunc_transform
 def apply_noise(tape, damp_factor, depo_factor, flip_prob):
@@ -518,7 +545,7 @@ def conjugate_with_clifford(tape, clifford_string):
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as
-# `conjugate_with_unitary` from above. Only the input type has changed, since
+# ``conjugate_with_unitary`` from above. Only the input type has changed, since
 # the application of Cliffords here is specified by their string representation.
 #
 # It's now time to run the experiments:
@@ -547,32 +574,60 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 
 ######################################################################
 # Incredible! We were able to compute the average fidelity using only 24
-# experiments rather than 50000! It is also interesting to note the distribution
-# of fidelities is much less spread out than that of the fully Haar-random case.
+# experiments. Consider the resources that would be saved if you were actually
+# implementing this in a lab!
 
-plt.hist(fidelities, bins=20)
-plt.xlabel("Fidelity", fontsize=12)
-plt.ylabel("Num. occurrences", fontsize=12)
-plt.axvline(np.mean(fidelities), color="red")
-plt.axvline(np.mean(fidelities) + np.std(fidelities), color="red", linestyle="dashed")
-plt.axvline(np.mean(fidelities) - np.std(fidelities), color="red", linestyle="dashed")
-plt.tight_layout()
-plt.show()
 
 ######################################################################
 # Conclusion
 # ----------
 # In this demo, we've barely scratched the surface of designs and their applications
-# in quantum computing. [TODO: finish conclusion]
+# in quantum computing. While benchmarking is a key application area, there are many others
+# [ADD MORE]
 #
 # References
 # ----------
 #
-# [TODO: add citations]
+# .. [#Handbook]
 #
-# .. [#NandC2000]
+#     C. J. Colbourn and J. H. Dinitz (2006) *Handbook of Combinatorial Designs, Second Edition*.
+#     Chapman & Hall/CRC.
 #
-#     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
-#     Cambridge University Press.
+# .. [#Delsarte]
 #
-
+#    P. Delsarte, J.M. Goethals, J.J. Seidel (1977) *Spherical Codes and Designs*. Geometriae
+#    Dedicata 6 363-388.
+#
+# .. [#sph4design]
+#
+#    R. H. Hardin and N. J. A. Sloane (1992) *New spherical 4-designs*. Discrete Mathematics,
+#    106-107 (255-264). `https://doi.org/10.1016/0012-365X(92)90552-Q <https://doi.org/10.1016/0012-365X(92)90552-Q>`__.
+#
+# .. [#Ambainis]
+#
+#    A. Ambainis and J. Emerson (2007) *Quantum t-designs: t-wise independence
+#    in the quantum world.* Twenty-Second Annual IEEE Conference on
+#    Computational Complexity 129-140.
+#
+# .. [#Klappenecker]
+#
+#    A. Klappenecker and M. Roetteler (2005) *Mutually unbiased bases, spherical
+#    designs, and frames.* Proceedings of SPIE Vol. 5914.
+#
+# .. [#Dankert]
+#
+#    C. Dankert, R. Cleve, J. Emerson, and E. Levine (2009) *Exact and
+#    Approximate Unitary 2-Designs: Constructions and Applications.* Phys. Rev. A 80, 012304.
+#    `(arXiv) <https://arxiv.org/abs/quant-ph/0606161>`__.
+#
+# .. [#Gross]
+#
+#    D. Gross, K. Audenaert, and J. Eisert (2007) *Evenly distributed unitaries:
+#    on the structure of unitary designs*. J. Math. Phys. 48, 052104.
+#    `(arXiv) <https://arxiv.org/abs/quant-ph/0611002>`__.
+#
+# .. [#Roy]
+#
+#    A. Roy and A. J. Scott (2009) *Unitary designs and codes*. Des. Codes Cryptogr. 53 13-31.
+#    `(arXiv) <https://arxiv.org/abs/0809.3813>`__.
+#
