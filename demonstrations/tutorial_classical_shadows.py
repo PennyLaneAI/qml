@@ -515,12 +515,12 @@ exact_observable
 #
 #     \mathcal{D}_{p}(\rho) = p\rho + (1-p)\frac{\text{Tr}[\rho]}{2^n}\mathbb{I}.
 #
-# Then, with some algebra, the inverse measurement channel :math:`\mathcal{M}^{-1}(\rho)` can easily
+# Then, with some algebra, the inverse measurement channel :math:`\mathcal{M}^{-1}(A)` can easily
 # be verified to be,
 #
 # .. math::
 #
-#     \mathcal{M}^{-1}(\rho) = \mathcal{D}^{-1}_{\frac{1}{2^n+1}}(\rho)=(2^n+1)\rho - \mathbb{I}.
+#     \mathcal{M}^{-1}(A) = \mathcal{D}^{-1}_{\frac{1}{2^n+1}}(A)=(2^n+1)A - \mathbb{I}.
 #
 # Applying this formalism to local pauli observables, we end up with a rather convenient expression,
 #
@@ -607,43 +607,116 @@ def shadow_state_reconstruction(shadow):
 
 
 ##############################################################################
-# Test shadow state reconstruction
+# Now, we will test the ``shadow_state_reconstruction`` function.
+# First we will write a unit test named ``test_shadow_state_reconstruction_unit``.
+# As input, this test will take a classical shadow and matrix representing the
+# expected state reconstruction.
+# This test function will be used to verify three key features of ``shadow_state_reconstruction``.
+#
+# 1. The application of local unitary :math:`U` used to reconstruct a single qubit snapshot.
+# 2. The tensor product structure for multi-qubit reconstructions.
+# 3. The averaging over multiple snapshots.
 
 # ./test_classical_shadows.py
-@pytest.mark.parametrize("circuit_1_observable, circuit_1_state, shadow_size",
-                         [[2, 2, 1000], [2, 2, 5000]], indirect=['circuit_1_observable',
-                                                                 'circuit_1_state'])
-def test_shadow_state_reconstruction(circuit_1_observable, circuit_1_state, shadow_size):
+
+# 1. Verify that each possible qubit snapshot reconstructs the correct
+# snapshot state.
+qubit_snapshot_test_cases = [
+    (np.array([[1,0]]), np.array([[0.5,1.5],[1.5,0.5]])),
+    (np.array([[-1,0]]), np.array([[0.5,-1.5],[-1.5,0.5]])),
+    (np.array([[1,1]]), np.array([[0.5,-1.5j],[1.5j,0.5]])),
+    (np.array([[-1,1]]), np.array([[0.5,1.5j],[-1.5j,0.5]])),
+    (np.array([[1,2]]), np.array([[2,0],[0,-1]])),
+    (np.array([[-1,2]]), np.array([[-1,0],[0,2]]))
+]
+
+# 2. Verify that two-qubit states are tensored together correctly.
+two_qubit_snapshot_test_cases = [
+    (np.array([[1,1,2,2]]), np.array([[2,0,0,0],[0,-1,0,0],[0,0,-1,0],[0,0,0,1]])),
+    (np.array([[1,-1,2,2]]), np.array([[-1,0,0,0],[0,2,0,0],[0,0,-1,0],[0,0,0,1]])),
+]
+
+# 3. Verify that the snapshots in each shadow are averaged together.
+qubit_shadow_test_cases = [
+    (np.array([[1,0],[-1,0],[1,2]]), np.array([[1,0],[0,0]])),
+    (np.array([[1,0],[1,2],[-1,2],[1,1],[-1,1]]), np.array([[0.5,0.5],[0.5,0.5]])),
+    (np.array([[1,0],[-1,0],[1,1],[-1,1],[1,2],[-1,2]]), np.array([[0.5,0],[0,0.5]]))
+]
+
+@pytest.mark.parametrize(
+    "shadow,reconstructed_state_match",
+    qubit_snapshot_test_cases + two_qubit_snapshot_test_cases + qubit_shadow_test_cases
+)
+def test_shadow_state_reconstruction_unit(shadow, reconstructed_state_match):
+    reconstructed_state = shadow_state_reconstruction(shadow)
+
+    # reconstructed shadow states are trace-one
+    assert np.isclose(np.trace(reconstructed_state), 1, atol=1e-7)
+    assert reconstructed_state.all() == reconstructed_state_match.all()
+
+
+##############################################################################
+# At this point, we've verified that ``shadow_state_reconstruction`` behaves
+# as expected.
+# The next step is to test its integration with the ``calculate_classical_shadow``
+# function.
+# To do this, we will write the ``test_shadow_state_reconstruction_integration``
+# function which makes use of the test fixtures ``circuit_1_observable`` and
+# ``circuit_1_state`` to setup devices for out tests.
+
+# ./test_classical_shadows.py
+@pytest.mark.parametrize(
+    "circuit_1_observable, circuit_1_state, params, shadow_size",
+    [[2, 2, [0,0], 1000], [3, 3, [np.pi/4,np.pi/3,np.pi/2], 1000]],
+    indirect=['circuit_1_observable','circuit_1_state']
+)
+def test_shadow_state_reconstruction_integration(circuit_1_observable, circuit_1_state, params, shadow_size):
     """Test reconstructing the state from the shadow for a circuit with a single layer"""
     circuit_template, param_shape, num_qubits = circuit_1_observable
     circuit_template_state, _, _ = circuit_1_state
-    params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
+
+    # calculating shadow and reconstructing state
     shadow = calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
+    shadow_state = shadow_state_reconstruction(shadow)
 
-    state_shadow = shadow_state_reconstruction(shadow)
+    # calculating exact quantum state
     dev_exact = qml.device('default.qubit', wires=num_qubits)
-    circuit_template.device = dev_exact
-    state_exact = circuit_template_state(params, wires=dev_exact.wires,
-                                         observable=[qml.state()])
-    state_exact = np.outer(state_exact, state_exact.conj())
+    exact_state_ket = circuit_template_state(
+        params, wires=dev_exact.wires, observable=[qml.state()]
+    )
+    exact_state = np.outer(exact_state_ket, exact_state_ket.conj())
 
-    print(operator_2_norm(state_shadow - state_exact))
-
+    # verifying the reconstructed shadow state has trace-one
+    assert np.isclose(np.trace(shadow_state), 1, atol=1e-7)
+    # verifying that the shadow state roughly approximates the exact state
+    assert np.isclose(shadow_state.all(), exact_state.all(), atol=0.1)
 
 ##############################################################################
 # Example: |+> state is approximated as maximally mixed state
 
 # ./notebook_classical_shadows.ipynb
-nqubits = 1
+nqubits = 2
 theta = [np.pi / 4]
-number_of_shadows = 500
+number_of_shadows = 2000
 
 
-def one_qubit_RY(params, wires, **kwargs):
-    qml.RY(params[0], wires=wires)
+# def one_qubit_RY(params, wires, **kwargs):
+#     qml.RY(params[0], wires=wires)
+
+dev = qml.device('default.qubit', wires=2, shots=1)
+@qml.qnode(device=dev)
+def bell_state_circuit(params, wires, **kwargs):
+    observables = kwargs.pop('observable')
+    qml.Hadamard(0)
+    qml.CNOT(wires=[0,1])
+
+    return [qml.expval(o) for o in observables]
 
 
-shadow = calculate_classical_shadow(one_qubit_RY, theta, number_of_shadows, nqubits)
+shadow = calculate_classical_shadow(bell_state_circuit, theta, number_of_shadows, nqubits)
+
+print("yoyoyoy")
+print(shadow)
 
 state_reconstruction = shadow_state_reconstruction(shadow)
 
@@ -651,7 +724,9 @@ print("state reconstruction")
 
 print(state_reconstruction)
 
-# TODO: what is a good application?
+
+
+
 
 ##############################################################################
 # .. [Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
