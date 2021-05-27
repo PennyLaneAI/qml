@@ -480,7 +480,7 @@ exact_observable
 # Comparison of standard observable estimators and classical shadows.
 
 ##############################################################################
-# State Reconstruction using Classical Shadows
+# State Reconstruction from a Classical Shadow
 # ############################################
 #
 # The original quantum state :math:`\rho` can be approximated from a classical
@@ -532,63 +532,78 @@ exact_observable
 # Here :math:`\hat{\rho}` is a snapshot state reconstructed from a single sample in the
 # classical shadow, and :math:`\rho` is the average over all snapshot states :math:`\hat{\rho}` in the
 # shadow.
+#
+# To implement the state reconstruction of :math:`\rho` in PennyLane, we develop two function
+# ``snapshot_state`` and ``shadow_state_reconstruction``.
+# To begin, we define the ``snapshot_state`` function that applies the above expression
+# for :math:`\hat{\rho}`.
+# Now, add the following code to the ``./classical_shadows.py`` file.
 
 # ./classical_shadows.py
 def snapshot_state(b_list, obs_list):
     """
-    Reconstruct a state approximation from a single snapshot in a shadow.
+    Reconstruct a state from a single snapshot in a shadow.
+
     **Details:**
     Implements Eq. (S44) from https://arxiv.org/pdf/2002.08953.pdf
+    
     Args:
-        b_list (array): classical outcomes for a single sample
-        obs_list (array): ids for the pauli observable used for each measurement
+        b_list (array): The list of classical outcomes for the snapshot.
+        obs_list (array): Indices for the applied pauli measurement
     """
-
     num_qubits = len(b_list)
 
-    paulis = [
-        qml.Hadamard(0).matrix,
-
-        qml.Hadamard(0).matrix @ np.array([[1, 0],
-                                           [0, -1j]], dtype=np.complex),
-        qml.Identity(0).matrix
-    ]
-
+    # computational basis states
     zero_state = np.array([[1, 0], [0, 0]])
     one_state = np.array([[0, 0], [0, 1]])
 
+    # local qubit unitaries
+    phase_z = np.array([[1, 0],[0, -1j]], dtype=np.complex)
+    hadamard = qml.Hadamard(0).matrix
+    identity = qml.Identity(0).matrix
+
+    # rotations from computational basis to x,y,z respectively
+    unitaries = [hadamard, hadamard @ phase_z, identity]
+
+    # reconstructing the snapshot state from local pauli measurements
     rho_snapshot = [1]
     for i in range(num_qubits):
         state = zero_state if b_list[i] == 1 else one_state
-        U = paulis[int(obs_list[i])]
-
-        local_rho = 3 * (U.conj().T @ state @ U) - np.eye(2, 2)
-
+        U = unitaries[int(obs_list[i])]
+        
+        # applying Eq. (S44)
+        local_rho = 3 * (U.conj().T @ state @ U) - identity
         rho_snapshot = np.kron(rho_snapshot, local_rho)
 
     return rho_snapshot
 
 
 ##############################################################################
-# Example: |+> state is approximated as maximally mixed state
+# Next, we will write the ``shadow_state_reconstruction`` method to construct a
+# shadow state approximation for :math:`\rho`.
 
 # ./classical_shadows.py
 def shadow_state_reconstruction(shadow):
     """
     Reconstruct a state approximation as an average over all snapshots in the shadow.
-    """
 
-    num_shadows = shadow.shape[0]
+    Args:
+        shadow (array): a shadow matrix obtained from `calculate_classical_shadow`.
+    """
+    num_snapshots = shadow.shape[0]
     num_qubits = shadow.shape[1] // 2
 
+    # classical values
     b_lists = shadow[:, 0:num_qubits]
+    # pauli observable ids
     obs_lists = shadow[:, num_qubits:2 * num_qubits]
-    # state approximated from snapshot average
+    
+    # Averaging over snapshot states.
     shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=np.complex)
-    for i in range(num_shadows):
+    for i in range(num_snapshots):
         shadow_rho += snapshot_state(b_lists[i], obs_lists[i])
 
-    return shadow_rho / num_shadows
+    return shadow_rho / num_snapshots
 
 
 ##############################################################################
