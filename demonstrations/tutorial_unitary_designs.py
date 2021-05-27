@@ -355,49 +355,76 @@ dev = qml.device("default.mixed", wires=1)
 # First, let's set up a noisy quantum channel. To keep things simple, we'll
 # assume that the channel consists of applying :class:`~.pennylane.SX`, the
 # square-root of :math:`X` gate, followed by a small amount of a few different
-# types of noise.
+# types of noise. First, we write a function to represent our ideal experiment:
+
+def ideal_experiment():
+    qml.SX(wires=0)
+    return qml.state()
+
+######################################################################
+# Next, we apply some noise. We will do so by making use of a relatively new
+# feature in PennyLane called *quantum function transforms*.  Quantum function
+# transforms work by changing the underlying, low level tape objects which queue
+# the quantum operations.
+#
+# First, we define a sequence of noisy operations:
+
+def noisy_operations(damp_factor, depo_factor, flip_prob):
+    qml.AmplitudeDamping(damp_factor, wires=0)
+    qml.DepolarizingChannel(depo_factor, wires=0)
+    qml.BitFlip(flip_prob, wires=0)
+
+
+######################################################################
+# Next, we create a transform that applies this noise to any quantum
+# function *after* the original operations, but before the measurements.
+# We use the convenient `@qml.qfunc_transform` decorator:
+
+@qml.qfunc_transform
+def apply_noise(tape, damp_factor, depo_factor, flip_prob):
+    # Apply the original operations
+    for op in tape.operations:
+        op.queue()
+
+    # Apply the noisy sequence
+    noisy_operations(damp_factor, depo_factor, flip_prob)
+
+    # Apply the original measurements
+    for op in tape.measurements:
+        op.queue()
+
+######################################################################
+# We can now apply this transformation to create noisy version of our ideal
+# quantum function:
 
 # The strengths of various types of noise
 damp_factor = 0.02
 depo_factor = 0.02
 flip_prob = 0.01
 
-# The sequence of noisy operations
-def noisy_operation_sequence(damp_factor, depo_factor, flip_prob):
-    qml.AmplitudeDamping(damp_factor, wires=0)
-    qml.DepolarizingChannel(depo_factor, wires=0)
-    qml.BitFlip(flip_prob, wires=0)
-
-
-@qml.qnode(dev)
-def noisy_experiment(state_prep_unitary):
-    # Prepare the state
-    qml.QubitUnitary(state_prep_unitary, wires=0)
-
-    # Apply the operation, followed by the noisy channel
-    qml.SX(wires=0)
-    noisy_operation_sequence(damp_factor, depo_factor, flip_prob)
-
-    # Rotate back to the computational basis
-    qml.QubitUnitary(state_prep_unitary.conj().T, wires=0)
-
-    return qml.state()
-
+noisy_experiment = apply_noise(damp_factor, depo_factor, flip_prob)(ideal_experiment)
 
 ######################################################################
-# Now in order to perform a comparison, we're going to also need to be able to
-# compute the true output value of the state, as well as the `fidelity
-# <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`__ compared
-# to the ideal operation.
+# The final part of the experiment involves applying a random unitary matrix
+# before all the operations, and its inverse right before the measurements.  We
+# can write another transform here to streamline this process:
 
-@qml.qnode(dev)
-def ideal_experiment(state_prep_unitary):
-    qml.QubitUnitary(state_prep_unitary, wires=0)
-    qml.SX(wires=0)
-    qml.QubitUnitary(state_prep_unitary.conj().T, wires=0)
+@qml.qfunc_transform
+def conjugate_with_unitary(tape, matrix):
+    qml.QubitUnitary(matrix, wires=0)
 
-    return qml.state()
+    for op in tape.operations:
+        op.queue()
 
+    qml.QubitUnitary(matrix.conj().T, wires=0)
+
+    for op in tape.measurements:
+        op.queue()
+
+######################################################################
+# Finally, in order to perform a comparison, we need a function to compute the
+# `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`__
+# compared to the ideal operation.
 
 def fidelity(state_1, state_2):
     # state_1 and state_2 are single-qubit density matrices.
@@ -419,10 +446,20 @@ for _ in range(n_samples):
     # Select a Haar-random unitary
     x = unitary_group.rvs(2)
 
-    # Run the two experiments
-    state_1 = ideal_experiment(x)
-    state_2 = noisy_experiment(x)
-    fidelities.append(fidelity(state_1, state_2))
+    # Apply transform to construct the ideal and noisy quantum functions
+    conjugated_ideal_experiment = conjugate_with_unitary(x)(ideal_experiment)
+    conjugated_noisy_experiment = conjugate_with_unitary(x)(noisy_experiment)
+
+    # Use the functions to create QNodes
+    ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
+    noisy_qnode = qml.QNode(conjugated_noisy_experiment, dev)
+
+    # Execute the QNodes
+    ideal_state = ideal_qnode()[0]
+    noisy_state = noisy_qnode()[0]
+
+    # Compute the fidelity
+    fidelities.append(fidelity(ideal_state, noisy_state))
 
 ######################################################################
 # Let's take a look at the results---we compute the mean and variance of the
@@ -445,12 +482,11 @@ plt.show()
 
 ######################################################################
 # Now let's repeat the same experiment, but using only Clifford group
-# elements. To perform these experiments, we will make use of the quantum
-# transform capabilities of PennyLane. We'll start with a transform that
-# applies a Clifford operation based on its string representation.
+# elements. To perform these experiments, we again will use transforms.  We'll
+# write a quantum function that performs a Clifford operation based on
+# its string representation.
 
-@qml.single_tape_transform
-def apply_single_clifford(tape, clifford_string, inverse=False):
+def apply_single_clifford(clifford_string, inverse=False):
     for gate in clifford_string:
         if gate == 'H':
             qml.Hadamard(wires=0)
@@ -468,54 +504,38 @@ def apply_single_clifford(tape, clifford_string, inverse=False):
 # experiment; i.e., apply the Clifford, then the operations, followed by the
 # inverse of the Clifford. We use another transform for this:
 
-@qml.single_tape_transform
-def conjugate_with_clifford(tape, clifford):
-    apply_single_clifford(tape, clifford, inverse=False)
+@qml.qfunc_transform
+def conjugate_with_clifford(tape, clifford_string):
+    apply_single_clifford(clifford_string, inverse=False)
 
     for op in tape.operations:
         op.queue()
 
-    apply_single_clifford(tape, clifford, inverse=True)
+    apply_single_clifford(clifford_string, inverse=True)
 
     for op in tape.measurements:
         op.queue()
 
 ######################################################################
-# Now let's run the experiments. For both the noisy and ideal experiments,
-# we create a list of tapes, one for each Clifford. We then execute all
-# the tapes on the device, and compute the fidelity.
+# You may have noticed this transform has exactly the same form as
+# `conjugate_with_unitary` from above. Only the input type has changed, since
+# the application of Cliffords here is specified by their string representation.
+#
+# It's now time to run the experiments:
 
-# Note: This whole section is a good place for a QNode transform since
-# it's a list of tapes, and we are doing something with the execution results.
-ideal_tapes = []
-noisy_tapes = []
-
-for clifford in single_qubit_cliffords:
-    # Set up the ideal tape
-    with qml.tape.QuantumTape() as tape:
-        qml.SX(wires=0)
-        qml.state()
-
-    twirled_tape = conjugate_with_clifford(tape, clifford)
-    ideal_tapes.append(twirled_tape)
-
-    # Set up the noisy tape
-    with qml.tape.QuantumTape() as tape:
-        qml.SX(wires=0)
-        noisy_operation_sequence(damp_factor, depo_factor, flip_prob)
-        qml.state()
-
-    twirled_tape = conjugate_with_clifford(tape, clifford)
-    noisy_tapes.append(twirled_tape)
-
-# Execute all the tapes on the device
-ideal_results = [tape.execute(dev) for tape in ideal_tapes]
-noisy_results = [tape.execute(dev) for tape in noisy_tapes]
-
-# Use the results to compute the fidelities
 fidelities = []
-for state_1, state_2 in zip(ideal_results, noisy_results):
-    fidelities.append(fidelity(state_1[0], state_2[0]))
+
+for clifford_string in single_qubit_cliffords:
+    conjugated_ideal_experiment = conjugate_with_clifford(clifford_string)(ideal_experiment)
+    conjugated_noisy_experiment = conjugate_with_clifford(clifford_string)(noisy_experiment)
+
+    ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
+    noisy_qnode = qml.QNode(conjugated_noisy_experiment, dev)
+
+    ideal_state = ideal_qnode()[0]
+    noisy_state = noisy_qnode()[0]
+
+    fidelities.append(fidelity(ideal_state, noisy_state))
 
 ######################################################################
 # Let's see how our results compare to the earlier simulation:
