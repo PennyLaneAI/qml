@@ -87,7 +87,7 @@ It can be seen that if the variational form is composed only of Pauli gates, the
 That's a scary sequence of words!
 What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus on one of the parameter values only, say :math:`\boldsymbol{\theta}_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\boldsymbol{\theta}_i)`, and :math:`\cos(\boldsymbol{\theta}_i)` assuming Pauli rotation gates in the circuit.
 
-That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\boldsymbol{\theta}_1, \ldots, \hat\boldsymbol{\theta}_i, \ldots, \boldsymbol{\theta}_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
+That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\hat{\theta}}_i, \ldots, \boldsymbol{\theta}_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\boldsymbol{\theta}_i) + c_i\cos(\boldsymbol{\theta}_i).
 
@@ -139,8 +139,10 @@ Z = np.array([[circuit([t1, t2]) for t2 in theta_func] for t1 in theta_func]);
 # Show the energy landscape on the grid.
 fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(4, 4));
 surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7, color='#209494');
-line1 = ax.plot([parameters[1]]*num_samples, theta_func, C1, label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
-line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2, label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
+line1 = ax.plot([parameters[1]]*num_samples, theta_func, C1,
+        label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
+line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
+        label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
 
 ###############################################################################
 # Of course this is an overly simplified example, but the key take-home message so far is: *the parameter landscape is a multilinear combination of trigonometric functions*.
@@ -392,7 +394,8 @@ def plot_cost_and_model(fun, model, parameters, shift_radius=5*np.pi/8, num_poin
     fig, ax = plt.subplots(1, 2, subplot_kw={"projection": "3d"}, figsize=(9, 4));
     green = '#209494'
     orange = '#ED7D31'
-    surf = ax[0].plot_surface(X, Y, Z_original, label="Original energy", color=green, alpha=alpha);
+    surf = ax[0].plot_surface(X, Y, Z_original, label="Original energy",
+            color=green, alpha=alpha);
     surf._facecolors2d = surf._facecolor3d
     surf._edgecolors2d = surf._edgecolor3d
     surf = ax[0].plot_surface(X, Y, Z_model, label="Model energy", color=orange, alpha=alpha);
@@ -401,7 +404,8 @@ def plot_cost_and_model(fun, model, parameters, shift_radius=5*np.pi/8, num_poin
     for sample in samples:
         ax[0].scatter(*sample, marker='d', color='r');
         ax[0].plot([sample[0]]*2, [sample[1]]*2, [np.min(Z_original), sample[2]], color='k')
-    surf = ax[1].plot_surface(X, Y, Z_original-Z_model, label="Deviation", color=green, alpha=alpha);
+    surf = ax[1].plot_surface(X, Y, Z_original-Z_model, label="Deviation",
+            color=green, alpha=alpha);
     surf._facecolors2d = surf._facecolor3d
     surf._edgecolors2d = surf._edgecolor3d
     ax[0].legend();
@@ -463,7 +467,8 @@ for iter_outer in range(N_iter_outer):
         relative_parameters = opt.step(mapped_model, relative_parameters)
         if (iter_inner+1)%50==0:
             E_model = mapped_model(relative_parameters)
-            print(f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)} at relative parameters {np.round(relative_parameters, 4)}")
+            print(f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)}",
+                " at relative parameters {np.round(relative_parameters, 4)}")
 
     # Store the relative parameters that minimize the model by adding the shift - step 4.
     parameters += relative_parameters
@@ -493,6 +498,17 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
 # Step 3: Both, the model and the original cost function show a minimum close to our parameter position, Quantum Analytic Descent converged.
+#
+# If we pay close attention to the values printed during the optimization, we can identify a curious phenomenon.
+# At the last epoch within each iteration, sometimes the *model cost* goes beyond :math:`-1`.
+# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` *(nostalgic* emoticon *time >:@)!!*
+# Yes, but careful!
+# We said the *true cost* values are bounded, yet, that does not mean the ones of the *model* are!
+# Notice also how this only happens at the first stages of analytic descent.
+# Bringing together a few chords we have touched so far: once we fix a reference value, the further we go from it, the less accurate our model is.
+# So, if we start far off from the true minimum, it can be the case that our model overshoots how steep the landscape is and then the model minimum deeps lower than that of the true cost.We see how values exiting the allowed range does not have any negative effect in the overall optimization.
+# Once we have found the model global minimum, we use the corresponding parameters as our new reference ones.
+# This includes, at the first step, computing the true cost at those parameters, which we print under "Original energy at the minimum of the model" at the end of each iteration.
 #
 # In this demo we've seen how to implement the Quantum Analytic Descent algorithm
 # using PennyLane for a toy-example of a Variational Quantum Eigensolver.
