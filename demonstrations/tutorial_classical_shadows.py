@@ -19,14 +19,14 @@ In principle, any unknown quantum state can be fully characterized by performing
 tomography <http://research.physics.illinois.edu/QI/Photonics/tomography-files/tomo_chapter_2004.pdf>`_
 However this procedure requires one to acquire accurate expectation values for a set of observables
 which grows exponentially with the number of qubits.
-A potential workaround for these scaling conderns is provided by classical shadow approximation
+A potential workaround for these scaling concerns is provided by the classical shadow approximation
 introduced in `Predicting many properties of a quantum system from very few measurements
 <https://arxiv.org/pdf/2002.08953.pdf>`_ [Huang2020]_.
 
 The classical shadow approximation is an efficient protocol for constructing a *classical shadow*
 representation of an unknown quantum state.
 The classical shadow can then be used to estimate
-quantum state fidelity, Hamilton eigenvalues, two-point correlators, and many other properties.
+quantum state fidelity, Hamiltonian observables, two-point correlators, and many other properties.
 
 .. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
     :align: center
@@ -36,15 +36,14 @@ quantum state fidelity, Hamilton eigenvalues, two-point correlators, and many ot
 
 In this demo, we will show how to construct classical shadows and use them to approximate
 properties of quantum states.
-To do this, we will take a test oriented approach where we develop source code, test it, and
-demo it in a jupyter notebook.
-In this demo, we will work in three separate files:
+To do this, we will take a test oriented approach where we develop source code, test it,
+and demo it in a jupyter notebook. In this demo, we will work in three separate files:
 
 * ``./classical_shadows.py`` - source code for the classical shadow approximation.
 * ``./test_classical_shadows.py`` - test code for ``./classical_shadows.py``.
 * ``./notebook_classical_shadows.ipynb`` - jupyter notebook for demoing classical shadows.
 
-For clarity, this demo will specify the file in each respective code block.
+For clarity, this demo will specify the file in at the top of respective code block.
 
 
 
@@ -56,25 +55,93 @@ import pennylane as qml
 import pennylane.numpy as np
 from typing import List
 
-##############################################################################
+
+#####################################################################
 # Constructing a Classical Shadow
-# ###########################################
+############################################
 #
-# A classical shadow consists of an integer number `N` *snapshots* which are constructed
-# via the following proce
+# Classical shadow estimation relies on the fact that for a particular choice of circuit measurements,
+# we can store an efficient representation of the state that can be used to
+# predict linear functions of observables. Depending on what type of measurements we choose,
+# we have an informational theoretical bound that controls the precision of our estimator.
+#
+# Let us consider a :math:`n`-qubit quantum state :math:`\rho` and apply a random unitary
+# :math:`U` to the state:
+#
+# .. math::
+#
+#     \rho \to U \rho U^\dagger
+#
+# If we measure in the computational basis, we obtain a bitstring of outcomes :math:`|b\rangle = |0011\ldots10\rangle`.
+# If the unitaries :math:`U` are chosen at random from a particular ensemble, then we can store the reverse operation
+# :math:`U^\dagger |b\rangle\langle b| U` efficiently in classical memory. Moreover, we can view
+# the average over these snapshots of the state as a measurement channel:
+#
+# .. math::
+#
+#      \mathbb{E}\left[U^\dagger |b\rangle\langle b| U\right] = \mathcal{M}(\rho)
+#
+# If the ensemble of unitaries defines a tomographically complete set of measurements,
+# we can invert the channel and reconstruct the state:
+#
+# .. math::
+#
+#      \rho = \mathbb{E}\left[\mathcal{M}^{-1}\left(U^\dagger |b\rangle\langle b| U \right)\right]
+#
+# Note that this inverted channel is not physical, i.e., it is not completely postive and trace preserving (CPTP).
+# But this is of no concern to us, since all we care about is efficiently applying this inverse channel
+# as a post-processing step to reconstruct the state.
+#
+# If we apply the procedure outlined above :math:`N` times, then the set of inverted snapshots
+# is what we call the *classical shadow*
+#
+# .. math::
+#
+#      S(\rho,N) = \left\{\hat{\rho}_1= \mathcal{M}^{-1}\left(U_1^\dagger |b_1\rangle\langle b_1| U_1 \right)
+#      ,\ldots, \hat{\rho}_N= \mathcal{M}^{-1}\left(U_N^\dagger |b_N\rangle\langle b_N| U_N \right)
+#      \right\}
+#
+# By definition, we can now estimate **any** observable as
+#
+# .. math::
+#
+#      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}
+#
+# In fact, the authors prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
+# :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` of to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`
+# The shadow norm :math:`||O_i||^2_{\text{shadow}}` again depends on the unitary ensemble that is chosen.
+#
+# In [Huang2020]_, two different ensembles are considered:
+#
+# 1. Random :math:`n`-qubit Clifford circuits.
+# 2. Tensor products of random single-qubit Clifford circuits.
+#
+# Although ensemble 1. leads to the most powerful estimators, it comes with serious practical limitations
+# since :math:`n^2 / \log(n)` entangling gates are required to sample the Clifford circuit.
+# For the purposes of this demo, we therefore choose ensemble 2., which is a more NISQ friendly approach.
+#
+# When is it a good idea to calculate a classical shadow instead of direct measurement?
+#
+#
+# To summarize, a classical shadow consists of an integer number `N` *snapshots* which are constructed
+# via the following process:
 #
 # 1. A quantum state :math:`\rho` is prepared.
 # 2. A randomly selected unitary :math:`U` is applied
 # 3. A computational basis measurement is performed.
 # 4. The process is repeated :math:`N` times.
 #
-# The classical shadow is then constructed as a list of measurement outcomes and chosen unitaries.
+# The classical shadow is then constructed as a list of measurement outcomes and chosen
+# unitaries.
+#
 
 # ./classical_shadows.py
 
-def calculate_classical_shadow(circuit_template, params, shadow_size: int, num_qubits: int) -> np.ndarray:
+def calculate_classical_shadow(circuit_template, params, shadow_size: int,
+                               num_qubits: int) -> np.ndarray:
     """
-    Given a circuit, creates a collection of snapshots U^\\dag|b><b| U with the stabilizer description.
+    Given a circuit, creates a collection of snapshots U^\\dag|b><b| U with the stabilizer
+    description.
     
     Args:
         circuit_template: A Pennylane QNode.
@@ -83,7 +150,8 @@ def calculate_classical_shadow(circuit_template, params, shadow_size: int, num_q
         num_qubits: The number of qubits in the circuit.
 
     Returns:
-        Numpy array containing the outcomes (0, 1) in the first `num_qubits` columns and the sampled Pauli's
+        Numpy array containing the outcomes (0, 1) in the first `num_qubits` columns and
+        the sampled Pauli's
         (0,1,2=x,y,z) in the final `num_qubits` columns.
     """
 
@@ -99,6 +167,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size: int, num_q
     # combine the computational basis outcomes and the sampled unitaries
     return np.concatenate([outcomes, unitary_ids], axis=1)
 
+
 ##############################################################################
 # To test the ``calculate_classical_shadow`` function first create a file called
 # ``test_classical_shadows.py`` and import the following libraries.
@@ -110,13 +179,15 @@ import pennylane as qml
 import pennylane.numpy as np
 import time
 
+
 ##############################################################################
 #
 # Furthermore, we'll need to import the functions from the source code::
 #
 #     # ./test_classical_shadows.py
 #
-#     from classical_shadows import calculate_classical_shadow, estimate_shadow_obervable, shadow_state_reconstruction, operator_2_norm, shadow_bound
+#     from classical_shadows import calculate_classical_shadow, estimate_shadow_obervable,
+#     shadow_state_reconstruction, operator_2_norm, shadow_bound
 #
 # Now we're ready to start writing tests.
 
@@ -185,10 +256,10 @@ def test_calculate_classical_shadow_circuit_1(circuit_1_observable, shadow_size=
     """Test calculating the shadow for a simple circuit with a single layer"""
     circuit_template, param_shape, num_qubits = circuit_1_observable
     params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
-    outcomes = calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
+    outcomes = calculate_classical_shadow(circuit_template, params, shadow_size,
+                                          num_qubits)
 
     print(shadow)
-
 
     assert all(o in [1.0, -1.0] for o in np.unique(outcomes[:, :num_qubits]))
 
@@ -201,10 +272,11 @@ def test_calculate_classical_shadow_circuit_2(circuit_2_observable, shadow_size=
     params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
     shadow = calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
 
-
     assert all(o in [1.0, -1.0] for o in np.unique(shadow[:, :num_qubits]))
 
-@pytest.mark.parametrize("circuit_1_observable, shadow_size", [[2, 10], [2, 100], [2, 1000], [2, 10000]],
+
+@pytest.mark.parametrize("circuit_1_observable, shadow_size",
+                         [[2, 10], [2, 100], [2, 1000], [2, 10000]],
                          indirect=['circuit_1_observable'])
 def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_size):
     """Performance test calculating the shadow for a circuit with multiple layers"""
@@ -214,6 +286,7 @@ def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_siz
     calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
     delta_time = time.time() - start
     print(f'Elapsed time for {shadow_size} shadows = {delta_time}')
+
 
 ##############################################################################
 # To run the tests, simply use the command ``$ pytest ./test_classical_shadows.py``.
@@ -228,12 +301,14 @@ def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_siz
 # ./classical_shadows.py
 def estimate_shadow_obervable(shadows, observable) -> float:
     """
-    Calculate the estimator E[O] = sum_i Tr{rho_i O} where rho_i is a snapshot in the shadow.
+    Calculate the estimator E[O] = sum_i Tr{rho_i O} where rho_i is a snapshot in the
+    shadow.
     
     Args:
-        shadows: Numpy array containing the outcomes (0, 1) in the first `num_qubits` columns and the sampled Pauli's
-        (0,1,2=x,y,z) in the final `num_qubits` columns.
-        observable: Single PennyLane observable consisitng of single Pauli operators e.g. qml.PauliX(0) @ qml.PauliY(1)
+        shadows: Numpy array containing the outcomes (0, 1) in the first `num_qubits`
+        columns and the sampled Pauli's (0,1,2=x,y,z) in the final `num_qubits` columns.
+        observable: Single PennyLane observable consisitng of single Pauli operators e.g.
+        qml.PauliX(0) @ qml.PauliY(1)
     
     Returns:
         Scalar corresponding to the estimate of the observable.
@@ -242,7 +317,8 @@ def estimate_shadow_obervable(shadows, observable) -> float:
     if isinstance(observable, (qml.PauliX, qml.PauliY, qml.PauliZ)):
         observable_as_list = [(map_name_to_int[observable.name], observable.wires[0])]
     else:
-        observable_as_list = [(map_name_to_int[o.name], o.wires[0]) for o in observable.obs]
+        observable_as_list = [(map_name_to_int[o.name], o.wires[0]) for o in
+                              observable.obs]
 
     num_qubits = shadows.shape[1] // 2
     sum_product, cnt_match = 0, 0
@@ -252,7 +328,8 @@ def estimate_shadow_obervable(shadows, observable) -> float:
         product = 1
         # loop over all the paulis that we care about
         for pauli_XYZ, position in observable_as_list:
-            # if the pauli in our shadow does not match, we break and go to the next shadow
+            # if the pauli in our shadow does not match, we break and go to the next
+            # shadow
             if pauli_XYZ != single_measurement[position + num_qubits]:
                 not_match = 1
                 break
@@ -284,7 +361,9 @@ def shadow_bound(M: int, error: float, max_k: int, observables: List[np.ndarray]
     Calculate the shadow bound for the pauli measurement scheme.
     """
     shadow_norm = lambda op: np.linalg.norm(op, ord=np.inf) ** 2
-    return int(np.ceil(np.log(M) * 4 ** max_k * max(shadow_norm(o) for o in observables) / error ** 2))
+    return int(np.ceil(
+        np.log(M) * 4 ** max_k * max(shadow_norm(o) for o in observables) / error ** 2))
+
 
 ##############################################################################
 # Testing ``estimate_shadow_observable``
@@ -292,7 +371,8 @@ def shadow_bound(M: int, error: float, max_k: int, observables: List[np.ndarray]
 # ./test_classical_shadows.py
 
 # TODO: create a fixture for the shadow so we only have run it once
-@pytest.mark.parametrize("circuit_1_observable, shadow_size", [[2, 10], [2, 100], [2, 1000], [2, 10000]],
+@pytest.mark.parametrize("circuit_1_observable, shadow_size",
+                         [[2, 10], [2, 100], [2, 1000], [2, 10000]],
                          indirect=['circuit_1_observable'])
 def test_estimate_shadow_observable_single(circuit_1_observable, shadow_size):
     """Test calculating an observable with the shadow for a circuit with a single layer"""
@@ -309,18 +389,22 @@ def test_estimate_shadow_observable_single(circuit_1_observable, shadow_size):
     expval_exact = circuit_template(params, wires=dev_exact.wires, observable=observable)
     print(f"Shadow : {expval_shadow} - Exact {expval_exact}")
 
+
 @pytest.mark.parametrize("circuit_2_observable", [8], indirect=['circuit_2_observable'])
 def test_estimate_shadow_observable_shadow_bound(circuit_2_observable):
-    """Test calculating multiple observables with the shadowsize shadow_size given by the bound in the paper"""
+    """Test calculating multiple observables with the shadowsize shadow_size given by the
+     bound in the paper"""
     circuit_template, param_shape, num_qubits = circuit_2_observable
     params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
     list_of_observables = [qml.PauliX(0) @ qml.PauliZ(2) @ qml.PauliY(4),
                            qml.PauliY(1) @ qml.PauliZ(2),
                            qml.PauliX(0),
                            qml.PauliY(3) @ qml.PauliZ(4) @ qml.PauliY(num_qubits - 1)]
-    # Calculate how many shadows we need to get an error of 1e-1 for this set of observables
+    # Calculate how many shadows we need to get an error of 1e-1 for this set of
+    # observables
     shadow_size = shadow_bound(M=len(list_of_observables), max_k=3,
-                               error=1e-1, observables=[o.matrix for o in list_of_observables])
+                               error=1e-1,
+                               observables=[o.matrix for o in list_of_observables])
 
     shadow = calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
 
@@ -328,9 +412,12 @@ def test_estimate_shadow_observable_shadow_bound(circuit_2_observable):
     dev_exact = qml.device('default.qubit', wires=num_qubits)
     # change the simulator to be the exact one.
     circuit_template.device = dev_exact
-    expval_exact = sum(circuit_template(params, wires=dev_exact.wires, observable=[o, ]) for o in list_of_observables)
+    expval_exact = sum(
+        circuit_template(params, wires=dev_exact.wires, observable=[o, ]) for o in
+        list_of_observables)
     print(f"Shadow : {expval_shadow} - Exact {expval_exact}")
-    # from the theoretical bound we know that the variance of this estimator must be within 1e-1
+    # from the theoretical bound we know that the variance of this estimator must be
+    # within 1e-1
     assert np.isclose(expval_shadow, expval_exact, atol=1e-1)
 
 
@@ -387,6 +474,7 @@ shadow_observable = estimate_shadow_obervable(shadows, qml.PauliX(0) @ qml.Pauli
 print(f"Shadow value: {shadow_observable}")
 
 exact_observable
+
 
 ##############################################################################
 # Comparison of standard observable estimators and classical shadows.
@@ -502,13 +590,14 @@ def shadow_state_reconstruction(shadow):
 
     return shadow_rho / num_shadows
 
+
 ##############################################################################
 # Test shadow state reconstruction
 
 # ./test_classical_shadows.py
 @pytest.mark.parametrize("circuit_1_observable, circuit_1_state, shadow_size",
                          [[2, 2, 1000], [2, 2, 5000]], indirect=['circuit_1_observable',
-                                                                                 'circuit_1_state'])
+                                                                 'circuit_1_state'])
 def test_shadow_state_reconstruction(circuit_1_observable, circuit_1_state, shadow_size):
     """Test reconstructing the state from the shadow for a circuit with a single layer"""
     circuit_template, param_shape, num_qubits = circuit_1_observable
@@ -519,7 +608,8 @@ def test_shadow_state_reconstruction(circuit_1_observable, circuit_1_state, shad
     state_shadow = shadow_state_reconstruction(shadow)
     dev_exact = qml.device('default.qubit', wires=num_qubits)
     circuit_template.device = dev_exact
-    state_exact = circuit_template_state(params, wires=dev_exact.wires, observable=[qml.state()])
+    state_exact = circuit_template_state(params, wires=dev_exact.wires,
+                                         observable=[qml.state()])
     state_exact = np.outer(state_exact, state_exact.conj())
 
     print(operator_2_norm(state_shadow - state_exact))
@@ -530,11 +620,13 @@ def test_shadow_state_reconstruction(circuit_1_observable, circuit_1_state, shad
 
 # ./notebook_classical_shadows.ipynb
 nqubits = 1
-theta = [np.pi/4]
+theta = [np.pi / 4]
 number_of_shadows = 500
+
 
 def one_qubit_RY(params, wires, **kwargs):
     qml.RY(params[0], wires=wires)
+
 
 shadow = calculate_classical_shadow(one_qubit_RY, theta, number_of_shadows, nqubits)
 
@@ -544,12 +636,9 @@ print("state reconstruction")
 
 print(state_reconstruction)
 
-
-
-#TODO: what is a good application?
+# TODO: what is a good application?
 
 ##############################################################################
 # .. [Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
 #             "Predicting many properties of a quantum system from very few measurements."
 #             Nature Physics 16.10 (2020): 1050-1057.
-
