@@ -11,7 +11,7 @@ Optimization of molecular geometries
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: PennyLane dev team. Posted: 25 May 2021. Last updated: 25 May 2021.*
+*Author: PennyLane dev team. Posted: 27 May 2021. Last updated: 27 May 2021.*
 
 Predicting the most stable arrangement of the atoms in a molecule is an
 important task in quantum chemistry, and is needed to simulate many properties of a 
@@ -92,10 +92,11 @@ Building the parametrized electronic Hamiltonian
 ------------------------------------------------
 
 In this example, we want to optimize the geometry of the trihydrogen cation
-(:math:`\mathrm{H}_3^+`) where two electrons are shared between three
-hydrogen atoms (see figure above). This is done by providing a list with the symbols
-of the atomic species and a one-dimensional array with the initial set of nuclear coordinates
-in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
+(:math:`\mathrm{H}_3^+`), described in a minimal basis set, where two electrons are shared
+between three hydrogen atoms (see figure above). The molecule is specified providing a list
+with the symbols of the atomic species and a one-dimensional array with the initial
+set of nuclear coordinates in `atomic units
+<https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
 
 """
 
@@ -118,7 +119,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 # :math:`N` is the number of qubits required to represent the electronic wave function.
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
-# of the trihydrogen cation, described with a minimal basis set, using the
+# of the trihydrogen cation using the
 # :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
@@ -146,7 +147,7 @@ def H(x):
 # in the form of Givens rotations in PennyLane. For more details see the tutorial
 # :doc:`tutorial_givens_rotations`.
 #
-# In addition, here we use an adaptive algorithm [#grimsley]_ to select the excitation
+# In addition, we use an adaptive algorithm [#grimsley]_ to select the excitation
 # operations included in the variational quantum circuit. The algorithm proceeds as follows:
 #
 # #. Generate the indices of the qubits involved in all single- and
@@ -287,6 +288,8 @@ theta = [0.0, 0.0]
 # convergence criterion used for optimizing molecular geometries in
 # quantum chemistry simulations.
 
+from functools import partial
+
 # store the values of the cost function
 energy = []
 
@@ -295,8 +298,6 @@ bond_length = []
 
 # Factor to convert from Bohrs to Angstroms
 bohr_angs = 0.529177210903
-
-from functools import partial
 
 for n in range(100):
 
@@ -311,7 +312,7 @@ for n in range(100):
     bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
 
     if n % 2 == 0:
-        print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
+        print(f"Step = {n},  E = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
     # Check maximum component of the nuclear gradient
     if np.max(grad_fn(x)) <= 1e-05:
@@ -383,16 +384,14 @@ plt.show()
 #
 # |
 #
-# To summarize, we've shown how the scope of variational quantum algorithms can be
+# To summarize, we have shown how the scope of variational quantum algorithms can be
 # extended to perform quantum simulations of molecules involving both the electronic and
 # the nuclear degrees of freedom. The joint optimization scheme described here
 # is a generalization of the usual VQE algorithm where only the electronic
-# state is parametrized.
-#
-# Extending the applicability of variational quantum algorithms to target parametrized
-# Hamiltonians could be important to simulate other molecular properties. For example, the
-# operators describing the optical properties of molecules depend not only on the nuclear
-# coordinates but also on the electric field of the external radiation.
+# state is parametrized. Extending the applicability of the variational quantum algorithms to
+# target parametrized Hamiltonians could be also relevant to simulate the optical properties of
+# molecules where the fermionic observables depend also on the electric field of the
+# incoming radiation [#pulay]_.
 #
 # References
 # ----------
@@ -427,8 +426,15 @@ plt.show()
 #     electronic structure system". `Journal of Computational Chemistry 14, 1347 (1993)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/jcc.540141112>`__
 #
-# .. [##grimsley]
+# .. [#grimsley]
 #
 #     H.R. Grimsley, S.E. Economou, E. Barnes, N.J. Mayhall.
 #     "An adaptive variational algorithm for exact molecular simulations on a quantum computer".
 #     `Nature Communications, 10 (2019) <https://www.nature.com/articles/s41467-019-10988-2>`__
+#
+# .. [#pulay]
+#
+#     P. Pulay.
+#     "Analytical derivative methods in quantum chemistry".
+#     `Advances in Chemical Sciences (1987)
+#     <https://onlinelibrary.wiley.com/doi/10.1002/9780470142943.ch4>`__
