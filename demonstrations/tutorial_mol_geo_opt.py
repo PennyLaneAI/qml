@@ -13,18 +13,19 @@ Optimization of molecular geometries
    
 *Author: PennyLane dev team. Posted: 27 May 2021. Last updated: 27 May 2021.*
 
-Predicting the most stable arrangement of the atoms in a molecule is an
-important task in quantum chemistry, and is needed to simulate many properties of a 
-molecule. Essentially, this is an optimization problem where the total energy of the
-molecule is minimized with respect to the positions of the atomic nuclei.
+Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
+in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
+molecule is minimized with respect to the positions of the atomic nuclei. The molecular
+geometry obtained from this calculation is in fact the starting point for many simulations of
+molecular properties. If the geometry is inaccurate, then any calculations that rely on it may
+also be inaccurate.
 
-In the framework of the `Born-Oppenheimer approximation
-<https://en.wikipedia.org/wiki/Born-Oppenheimer_approximation>`_, the total electronic energy of the 
-molecule :math:`E(x)` depends on the nuclear coordinates :math:`x`, which define
-the potential energy surface. Solving the stationary problem :math:`\nabla_x E(x) = 0` 
-corresponds to **molecular geometry optimization** and the optimized nuclear
-coordinates determine the **equilibrium geometry** of the molecule. The figure below
-illustrates these concepts for the
+Since the nuclei are much heavier than the electrons, we can treat them as point particles
+clamped to their positions. Under this assumption, the total energy of the molecule :math:`E(x)`
+depends on the nuclear coordinates :math:`x`, which define the potential energy surface.
+Solving the stationary problem :math:`\nabla_x E(x) = 0` corresponds to molecular geometry
+optimization and the optimized nuclear coordinates determine the equilibrium geometry of the
+molecule. The figure below illustrates these concepts for the
 `trihydrogen cation <https://en.wikipedia.org/wiki/Trihydrogen_cation>`_. Its equilibrium
 geometry in the electronic ground state corresponds to the minimum energy of the potential
 energy surface. At this minimum, the three hydrogen atoms are located at the vertices of an
