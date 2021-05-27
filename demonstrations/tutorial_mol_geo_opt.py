@@ -147,7 +147,7 @@ def H(x):
 # in the form of Givens rotations in PennyLane. For more details see the tutorial
 # :doc:`tutorial_givens_rotations`.
 #
-# In addition, we use an adaptive algorithm [#grimsley]_ to select the excitation
+# In addition, we use an adaptive algorithm [#geo_opt_paper, #grimsley]_ to select the excitation
 # operations included in the variational quantum circuit. The algorithm proceeds as follows:
 #
 # #. Generate the indices of the qubits involved in all single- and
@@ -425,6 +425,12 @@ plt.show()
 #     S. Koseki, N. Matsunaga, K.A. Nguyen, S.Su, *et al.* "General atomic and molecular
 #     electronic structure system". `Journal of Computational Chemistry 14, 1347 (1993)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/jcc.540141112>`__
+#
+# .. [#geo_opt_paper]
+#
+#     A. Delgado, J.M. Arrazola, S. Jahangiri, Z. Niu, J. Izaac, C. Roberts, N. Killoran.
+#     "Variational quantum algorithm for molecular geometry optimization".
+#     arXiv preprint (2021)
 #
 # .. [#grimsley]
 #
