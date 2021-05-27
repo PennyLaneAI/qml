@@ -57,17 +57,17 @@ we use a gradient-descent method and follow a **joint** optimization scheme wher
 the cost function with respect to circuit and Hamiltonian parameters are simultaneously computed 
 at each step. This approach does not require nested optimization of the state 
 parameters for each set of nuclear coordinates, as occurs in classical algorithms for
-molecular geometry optimization, where the energy minimum is searched along the potential energy 
+molecular geometry optimization, where the energy minimum is searched for along the potential energy 
 surface of the electronic state [#jensenbook]_.
 
 In this tutorial we demonstrate how to use PennyLane to implement
-a quantum optimization of molecular geometries. The algorithm consists of the following steps:
+quantum optimization of molecular geometries. The algorithm consists of the following steps:
 
 #. Build the parametrized electronic Hamiltonian :math:`H(x)` of the molecule
    for which we want to find the equilibrium geometry.
 
 #. Design the variational quantum circuit to prepare the electronic trial state of the
-   molecule :math:`\vert \Psi(\theta) \rangle`.
+   molecule, :math:`\vert \Psi(\theta) \rangle`.
 
 #. Define the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert
    \Psi(\theta) \rangle`.
@@ -93,7 +93,7 @@ Building the parametrized electronic Hamiltonian
 
 In this example, we want to optimize the geometry of the trihydrogen cation
 (:math:`\mathrm{H}_3^+`), described in a minimal basis set, where two electrons are shared
-between three hydrogen atoms (see figure above). The molecule is specified providing a list
+between three hydrogen atoms (see figure above). The molecule is specified by providing a list
 with the symbols of the atomic species and a one-dimensional array with the initial
 set of nuclear coordinates in `atomic units
 <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
@@ -115,7 +115,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^{(j)}.
 #
 # The expansion coefficients :math:`h_j(x)` carry the dependence on the coordinates :math:`x`,
-# the operators :math:`\sigma_i` represents the Pauli group :math:`\{I, X, Y, Z\}`, and
+# the operators :math:`\sigma_i` represent the Pauli group :math:`\{I, X, Y, Z\}`, and
 # :math:`N` is the number of qubits required to represent the electronic wave function.
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
