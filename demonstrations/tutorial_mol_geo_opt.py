@@ -136,14 +136,13 @@ def H(x):
 # to prepare the electronic ground-state :math:`\vert \Psi(\theta)\rangle` of the 
 # :math:`\mathrm{H}_3^+` molecule.
 #
-# Six qubits are required to encode the occupation number of the molecular spin-orbitals
-# which can be populated by the two electrons in the molecule. To capture the effects of
-# electronic correlations [#kohanoff2006]_, we need to prepare the :math:`N`-qubit system
-# in a superposition of the Hartree-Fock state :math:`\vert 110000 \rangle` with other
-# states that differ by a double- or single-excitation. For example, the state
-# :math:`\vert 000011 \rangle` is obtained by exciting two particles from qubits 0, 1 to
-# 4, 5. Similarly, the state :math:`\vert 011000 \rangle` corresponds to a single excitation
-# from qubit 0 to 2. This can be done using the single-excitation and
+# Six qubits are required to encode the occupation number of the molecular spin-orbitals.
+# To capture the effects of electronic correlations [#kohanoff2006]_, we need to prepare
+# the :math:`N`-qubit system in a superposition of the Hartree-Fock state
+# :math:`\vert 110000 \rangle` with other states that differ by a double- or single-excitation.
+# For example, the state :math:`\vert 000011 \rangle` is obtained by exciting two particles
+# from qubits 0, 1 to 4, 5. Similarly, the state :math:`\vert 011000 \rangle` corresponds to a
+# single excitation from qubit 0 to 2. This can be done using the single-excitation and
 # double-excitation gates :math:`G` and :math:`G^{(2)}` [#qchemcircuits]_ implemented
 # in the form of Givens rotations in PennyLane. For more details see the tutorial
 # :doc:`tutorial_givens_rotations`.
