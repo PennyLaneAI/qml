@@ -29,7 +29,7 @@ molecule. The figure below illustrates these concepts for the
 `trihydrogen cation <https://en.wikipedia.org/wiki/Trihydrogen_cation>`_. Its equilibrium
 geometry in the electronic ground state corresponds to the minimum energy of the potential
 energy surface. At this minimum, the three hydrogen atoms are located at the vertices of an
-equilateral triangle whose side length is the optimized H-H bond length :math:`d`.
+equilateral triangle whose side length is the optimized bond length :math:`d`.
 
 |
 
@@ -64,8 +64,7 @@ surface of the electronic state [#jensenbook]_.
 In this tutorial we demonstrate how to use PennyLane to implement
 quantum optimization of molecular geometries. The algorithm consists of the following steps:
 
-#. Build the parametrized electronic Hamiltonian :math:`H(x)` of the molecule
-   for which we want to find the equilibrium geometry.
+#. Build the parametrized electronic Hamiltonian :math:`H(x)` of the molecule.
 
 #. Design the variational quantum circuit to prepare the electronic trial state of the
    molecule, :math:`\vert \Psi(\theta) \rangle`.
@@ -93,11 +92,11 @@ Building the parametrized electronic Hamiltonian
 ------------------------------------------------
 
 In this example, we want to optimize the geometry of the trihydrogen cation
-(:math:`\mathrm{H}_3^+`), described in a minimal basis set, where two electrons are shared
+:math:`\mathrm{H}_3^+`, described in a minimal basis set, where two electrons are shared
 between three hydrogen atoms (see figure above). The molecule is specified by providing a list
 with the symbols of the atomic species and a one-dimensional array with the initial
 set of nuclear coordinates in `atomic units
-<https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr radii).
+<https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ .
 
 """
 
@@ -179,7 +178,7 @@ def H(x):
 #
 # |
 #
-# This quantum circuit is implemented below. We use the 
+# To implement this quantum circuit, we use the 
 # :func:`~.pennylane_qchem.qchem.hf_state` function to generate the
 # occupation-number vector representing the Hartree-Fock state 
 
@@ -216,7 +215,7 @@ def circuit(params, wires):
 # evaluates the expectation value of the parametrized Hamiltonian :math:`H(x)` in the
 # trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the quantum device used
 # to compute the expectation value. In this example, we use the ``default.qubit``
-# simulator of PennyLane:
+# simulator:
 
 dev = qml.device("default.qubit", wires=6)
 
@@ -232,9 +231,9 @@ def cost(params, x):
 #
 # We minimize the cost function :math:`g(\theta, x)` using a gradient-based
 # method, and compute the gradients with respect to both the
-# circuit parameters :math:`\theta` **and** the nuclear coordinates :math:`x`.
+# circuit parameters :math:`\theta` and the nuclear coordinates :math:`x`.
 # The circuit gradients are computed analytically using the automatic differentiation
-# techniques available in PennyLane. On the other hand, the nuclear gradients are evaluated
+# techniques available in PennyLane. The nuclear gradients are evaluated
 # by taking the expectation value of the gradient of the electronic Hamiltonian,
 #
 # .. math::
@@ -269,9 +268,9 @@ opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 
 ##############################################################################
 # Next, we initialize the circuit parameters :math:`\theta`. The angles
-# :math:`\theta_1` and :math:`\theta_2` are set to zero to approximate the
+# :math:`\theta_1` and :math:`\theta_2` are set to zero so that the
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
-# as the Hartree-Fock state.
+# is the Hartree-Fock state.
 
 theta = [0.0, 0.0]
 
@@ -312,7 +311,7 @@ for n in range(100):
     energy.append(cost(theta, x))
     bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
 
-    if n % 2 == 0:
+    if n % 4 == 0:
         print(f"Step = {n},  E = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
     # Check maximum component of the nuclear gradient
