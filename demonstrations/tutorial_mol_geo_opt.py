@@ -18,16 +18,17 @@ important task in quantum chemistry, and is needed to simulate many properties o
 molecule. Essentially, this is an optimization problem where the total energy of the
 molecule is minimized with respect to the positions of the atomic nuclei.
 
-In the framework of the `Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born-Oppenheimer_approximation>`_, the total electronic energy of the 
+In the framework of the `Born-Oppenheimer approximation
+<https://en.wikipedia.org/wiki/Born-Oppenheimer_approximation>`_, the total electronic energy of the 
 molecule :math:`E(x)` depends on the nuclear coordinates :math:`x`, which define
 the potential energy surface. Solving the stationary problem :math:`\nabla_x E(x) = 0` 
 corresponds to **molecular geometry optimization** and the optimized nuclear
 coordinates determine the **equilibrium geometry** of the molecule. The figure below
 illustrates these concepts for the
 `trihydrogen cation <https://en.wikipedia.org/wiki/Trihydrogen_cation>`_. Its equilibrium
-geometry in the electronic ground state corresponds to the minimum energy of the potential energy surface. 
-At this minimum, the three hydrogen atoms are located at the vertices of an equilateral
-triangle whose side length is the optimized H-H bond length :math:`d`.
+geometry in the electronic ground state corresponds to the minimum energy of the potential
+energy surface. At this minimum, the three hydrogen atoms are located at the vertices of an
+equilateral triangle whose side length is the optimized H-H bond length :math:`d`.
 
 |
 
@@ -98,11 +99,6 @@ in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_ (Bohr ra
 
 """
 
-# import pennylane as qml
-# from pennylane import numpy as np
-# from functools import partial
-# import matplotlib.pyplot as plt
-
 import numpy as np
 
 symbols = ["H", "H", "H"]
@@ -115,7 +111,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #
 # .. math::
 #
-#     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^(j).
+#     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^{(j)}.
 #
 # The expansion coefficients :math:`h_j(x)` carry the dependence on the coordinates :math:`x`,
 # the operators :math:`\sigma_i` represents the Pauli group :math:`\{I, X, Y, Z\}`, and
@@ -189,8 +185,8 @@ hf = qml.qchem.hf_state(electrons=2, orbitals=6)
 print(hf)
 
 ##############################################################################
-# The ``hf`` array is used by the ``BasisState`` operation to initialize the qubit register.
-# Then, the ``DoubleExcitation`` operations are applied
+# The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
+# the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
 
 def circuit(params, wires):
     qml.BasisState(hf, wires=wires)
@@ -391,10 +387,12 @@ plt.show()
 # extended to perform quantum simulations of molecules involving both the electronic and
 # the nuclear degrees of freedom. The joint optimization scheme described here
 # is a generalization of the usual VQE algorithm where only the electronic
-# state is parametrized. In general, the variational quantum algorithm presented here
-# could be also applied to simulate other molecular properties involving
-#, for example, light-matter interaction operators which depends on both an external
-# electric field and the nuclear coordinates.
+# state is parametrized.
+#
+# Extending the applicability of variational quantum algorithms to target parametrized
+# Hamiltonians could be important to simulate other molecular properties. For example, the
+# operators describing the optical properties of molecules depend not only on the nuclear
+# coordinates but also on the electric field of the external radiation.
 #
 # References
 # ----------
