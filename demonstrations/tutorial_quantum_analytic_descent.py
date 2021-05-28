@@ -1,3 +1,4 @@
+
 r"""
 
 .. _quantum_analytic_descent:
