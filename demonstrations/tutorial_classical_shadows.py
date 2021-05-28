@@ -245,46 +245,18 @@ def test_calculate_classical_shadow_circuit_1(circuit_1_observable, shadow_size=
 # ############################################
 #
 # To verify that the classical shadow approximates the exact state that we want to estimate,
-# We tomographically reconstruct the original quantum state :math:`\rho` from a classical
-# shadow obtained from :math:`\rho`.
-# To achieve this, we first view the measurement operation :math:`\mathcal{M}(\rho)`
-# as a quantum channel,
-#
-# .. math::
-#
-#     \mathcal{M}(\rho)=\mathbb{E}\left[U^{\dagger}|\hat{b}\rangle\langle\hat{b}|U\right].
-#
-# Here, :math:`|\hat{b}\rangle` is a classical bit string encoded as a computational basis
-# state and :math:`U^{\dagger}` is the inverse unitary that rotates the classical state
-# :math:`|\hat{b}\rangle\langle\hat{b}|` into the appropriate basis.
-# The expectation :math:`\mathbb{E}[\cdot]` simply describes the average over many measurements.
-# Hence, the measurement channel is understood as the average of a set of quantum states
-# projected onto their respective measurement bases.
-# Since the classical shadow contains information regarding the unitary `U` and the classical
-# values :math:`\hat{b}`, we can simply invert the measurement channel to obtain an expression
-# for the original quantum state,
+# we tomographically reconstruct the original quantum state :math:`\rho` from a classical
+# shadow obtained from :math:`\rho`. Remember that we can approximate the :math:`\rho` by averaging
+# over the snapshots and applying the inverse measurement channel
 #
 # .. math::
 #
 #     \rho = \mathbb{E}\left[\mathcal{M}^{-1}(U^{\dagger}|\hat{b}\rangle\langle\hat{b}|U)\right]
 #
+# The expectation :math:`\mathbb{E}[\cdot]` simply describes the average over the measurements
+# :math:`|b\rangle` and the sampled unitaries.
 # Inverting the measurment channel may seem formidable at first, however, Huang et al. [Huang2020]_
-# show that it is simply a depolarizing channel,
-# :math:`\mathcal{M}(\rho) = \mathcal{D}_{\frac{1}{2^n+1}}(\rho)` where for an :math:`n`-qubit state
-# :math:`\rho,
-#
-# .. math::
-#
-#     \mathcal{D}_{p}(\rho) = p\rho + (1-p)\frac{\text{Tr}[\rho]}{2^n}\mathbb{I}.
-#
-# Then, with some algebra, the inverse measurement channel :math:`\mathcal{M}^{-1}(A)` can easily
-# be verified to be,
-#
-# .. math::
-#
-#     \mathcal{M}^{-1}(A) = \mathcal{D}^{-1}_{\frac{1}{2^n+1}}(A)=(2^n+1)A - \mathbb{I}.
-#
-# Applying this formalism to local pauli observables, we end up with a rather convenient expression,
+# show that for Pauli measurements we end up with a rather convenient expression,
 #
 # .. math::
 #
@@ -302,6 +274,7 @@ def test_calculate_classical_shadow_circuit_1(circuit_1_observable, shadow_size=
 # Now, add the following code to the ``./classical_shadows.py`` file.
 
 # ./classical_shadows.py
+
 def snapshot_state(b_list, obs_list):
     """
     Reconstruct a state from a single snapshot in a shadow.
