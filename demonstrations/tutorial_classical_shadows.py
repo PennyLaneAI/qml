@@ -25,8 +25,8 @@ introduced in `Predicting many properties of a quantum system from very few meas
 
 The classical shadow approximation is an efficient protocol for constructing a *classical shadow*
 representation of an unknown quantum state.
-The classical shadow can then be used to estimate
-quantum state fidelity, Hamiltonian observables, two-point correlators, and many other properties.
+The classical shadow can be used to estimate properties such as
+quantum state fidelity, Hamiltonian observables, and two-point correlators.
 
 .. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
     :align: center
@@ -34,16 +34,17 @@ quantum state fidelity, Hamiltonian observables, two-point correlators, and many
 
     (Image from Huang et al. [Huang2020]_.)
 
-In this demo, we will show how to construct classical shadows and use them to approximate
-properties of quantum states.
-To do this, we will take a test oriented approach where we develop source code, test it,
-and demo it in a jupyter notebook. In this demo, we will work in three separate files:
+In this demo, we will use PennyLane to construct classical shadows and use them to reconstruct
+quantum states and estimate observables.
+We will use a test oriented approach where we develop a ``classical_shadows.py`` library complete
+with testts and Jupyter noebook examples.
+In this demo, we will work in three separate files:
 
 * ``./classical_shadows.py`` - source code for the classical shadow approximation.
 * ``./test_classical_shadows.py`` - test code for ``./classical_shadows.py``.
 * ``./notebook_classical_shadows.ipynb`` - jupyter notebook for demoing classical shadows.
 
-For clarity, this demo will specify the file in at the top of respective code block.
+For clarity, this demo will specify the file at the top of each code block.
 """
 
 #####################################################################
@@ -142,9 +143,10 @@ from typing import List
 # Then, create the following function, which takes as input a ``circuit_template`` with ``params``
 # and returns a shadow of size ``shadow_size`` on ``num_qubits`` qubits.
 
-def calculate_classical_shadow(circuit_template, params, shadow_size: int,
-                               num_qubits: int) -> np.ndarray:
-    r"""
+def calculate_classical_shadow(
+    circuit_template, params, shadow_size: int,num_qubits: int
+) -> np.ndarray:
+    """
     Given a circuit, creates a collection of snapshots U^dag|b><b| U with the stabilizer
     description.
 
@@ -159,9 +161,8 @@ def calculate_classical_shadow(circuit_template, params, shadow_size: int,
         the sampled Pauli's
         (0,1,2=x,y,z) in the final `num_qubits` columns.
     """
-
     unitary_ensemble = [qml.PauliX, qml.PauliY, qml.PauliZ]
-    # sample random pauli unitaries uniformly, where 1,2,3 = X,Y,Z
+    # sample random pauli unitaries uniformly, where 0,1,2 = X,Y,Z
     unitary_ids = np.random.randint(0, 3, size=(shadow_size, num_qubits))
     outcomes = np.zeros((shadow_size, num_qubits))
     for ns in range(shadow_size):
@@ -235,10 +236,54 @@ def test_calculate_classical_shadow_circuit_1(circuit_1_observable, shadow_size=
     assert all(o in [1.0, -1.0] for o in np.unique(outcomes[:, :num_qubits]))
     assert all(o in list(range(3)) for o in np.unique(outcomes[:, num_qubits:]))
 
+@pytest.fixture
+def circuit_2_observable(request):
+    """Circuit with multiple layers requiring nqubits*3 parameters"""
+    num_qubits = request.param
+    dev = qml.device('default.qubit', wires=num_qubits, shots=1)
+
+    @qml.qnode(device=dev)
+    def circuit(params, wires, **kwargs):
+        observables = kwargs.pop('observable')
+        for w in dev.wires:
+            qml.Hadamard(wires=w)
+            qml.RY(params[w, 0], wires=w)
+        for layer in range(2):
+            for w in dev.wires:
+                qml.RX(params[w, layer + 1], wires=w)
+        return [qml.expval(o) for o in observables]
+
+    param_shape = (None, 3)
+    return circuit, param_shape, num_qubits
+
+
+# construct circuit 1 with a different number of qubits.
+@pytest.mark.parametrize("circuit_2_observable", [1, 2, 3, 4], indirect=True)
+def test_calculate_classical_shadow_circuit_2(circuit_2_observable, shadow_size=10):
+    """Test calculating the shadow for a circuit with multiple layers"""
+    circuit_template, param_shape, num_qubits = circuit_2_observable
+    params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
+    shadow = calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
+
+    assert all(o in [1.0, -1.0] for o in np.unique(shadow[:, :num_qubits]))
+
 #########################################
 # If we now run ``pytest test_classical_shadows.py``, we see that the test passes,
 #
 # Spoof pytest output
+
+
+@pytest.mark.parametrize("circuit_1_observable, shadow_size",
+                         [[2, 10], [2, 100], [2, 1000], [2, 10000]],
+                         indirect=['circuit_1_observable'])
+def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_size):
+    """Performance test calculating the shadow for a circuit with multiple layers"""
+    circuit_template, param_shape, num_qubits = circuit_1_observable
+    params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
+    start = time.time()
+    calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
+    delta_time = time.time() - start
+    print(f'Elapsed time for {shadow_size} shadows = {delta_time}')
 
 ##############################################################################
 # State Reconstruction from a Classical Shadow
@@ -340,7 +385,6 @@ def shadow_state_reconstruction(shadow):
 
     return shadow_rho / num_snapshots
 
-
 ##############################################################################
 # Now, we will test the ``shadow_state_reconstruction`` function.
 # First we will write a unit test named ``test_shadow_state_reconstruction_unit``.
@@ -400,6 +444,25 @@ def test_shadow_state_reconstruction_unit(shadow, reconstructed_state_match):
 # ``circuit_1_state`` to setup devices for out tests.
 
 # ./test_classical_shadows.py
+
+# test fixture that obtains the state vector for the preparation circuit.
+# We'll use this as the target state for reconstruction.
+@pytest.fixture
+def circuit_1_state(request):
+    """Circuit with single layer requiring nqubits parameters"""
+    num_qubits = request.param
+    dev = qml.device('default.qubit', wires=num_qubits)
+
+    @qml.qnode(device=dev)
+    def circuit(params, wires, **kwargs):
+        for w in dev.wires:
+            qml.Hadamard(wires=w)
+            qml.RY(params[w], wires=w)
+        return qml.state()
+
+    param_shape = (None,)
+    return circuit, param_shape, num_qubits
+
 @pytest.mark.parametrize(
     "circuit_1_observable, circuit_1_state, params, shadow_size",
     [[2, 2, [0,0], 1000], [3, 3, [np.pi/4,np.pi/3,np.pi/2], 1000]],
@@ -488,8 +551,7 @@ def operator_2_norm(R):
     """
     return np.sqrt(np.trace(R.conjugate().transpose() @ R))
 
-##############################################################################
-
+# calculating trace-distance between ideal bell state and shadow reconstruction
 operator_2_norm(bell_state - shadow_state)
 
 ##############################################################################
@@ -517,71 +579,6 @@ plt.show()
 ##############################################################################
 # As expected, when the number of snapshots increases, the state reconstruction
 # becomes closer to the ideal state.
-
-@pytest.fixture
-def circuit_1_state(request):
-    """Circuit with single layer requiring nqubits parameters"""
-    num_qubits = request.param
-    dev = qml.device('default.qubit', wires=num_qubits)
-
-    @qml.qnode(device=dev)
-    def circuit(params, wires, **kwargs):
-        for w in dev.wires:
-            qml.Hadamard(wires=w)
-            qml.RY(params[w], wires=w)
-        return qml.state()
-
-    param_shape = (None,)
-    return circuit, param_shape, num_qubits
-
-
-@pytest.fixture
-def circuit_2_observable(request):
-    """Circuit with multiple layers requiring nqubits*3 parameters"""
-    num_qubits = request.param
-    dev = qml.device('default.qubit', wires=num_qubits, shots=1)
-
-    @qml.qnode(device=dev)
-    def circuit(params, wires, **kwargs):
-        observables = kwargs.pop('observable')
-        for w in dev.wires:
-            qml.Hadamard(wires=w)
-            qml.RY(params[w, 0], wires=w)
-        for layer in range(2):
-            for w in dev.wires:
-                qml.RX(params[w, layer + 1], wires=w)
-        return [qml.expval(o) for o in observables]
-
-    param_shape = (None, 3)
-    return circuit, param_shape, num_qubits
-
-
-# TODO: Do both circuit_1 and circuit_2 in the same test.
-# construct circuit 1 with a different number of qubits.
-
-
-# construct circuit 1 with a different number of qubits.
-@pytest.mark.parametrize("circuit_2_observable", [1, 2, 3, 4], indirect=True)
-def test_calculate_classical_shadow_circuit_2(circuit_2_observable, shadow_size=10):
-    """Test calculating the shadow for a circuit with multiple layers"""
-    circuit_template, param_shape, num_qubits = circuit_2_observable
-    params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
-    shadow = calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
-
-    assert all(o in [1.0, -1.0] for o in np.unique(shadow[:, :num_qubits]))
-
-
-@pytest.mark.parametrize("circuit_1_observable, shadow_size",
-                         [[2, 10], [2, 100], [2, 1000], [2, 10000]],
-                         indirect=['circuit_1_observable'])
-def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_size):
-    """Performance test calculating the shadow for a circuit with multiple layers"""
-    circuit_template, param_shape, num_qubits = circuit_1_observable
-    params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
-    start = time.time()
-    calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
-    delta_time = time.time() - start
-    print(f'Elapsed time for {shadow_size} shadows = {delta_time}')
 
 
 ##############################################################################
