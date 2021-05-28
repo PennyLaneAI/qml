@@ -70,7 +70,7 @@ from typing import List
 #
 # .. math::
 #
-#     \rho \to U \rho U^\dagger
+#     \rho \to U \rho U^\dagger.
 #
 # If we measure in the computational basis, we obtain a bitstring of outcomes :math:`|b\rangle = |0011\ldots10\rangle`.
 # If the unitaries :math:`U` are chosen at random from a particular ensemble, then we can store the reverse operation
@@ -79,14 +79,14 @@ from typing import List
 #
 # .. math::
 #
-#      \mathbb{E}\left[U^\dagger |b\rangle\langle b| U\right] = \mathcal{M}(\rho)
+#      \mathbb{E}\left[U^\dagger |b\rangle\langle b| U\right] = \mathcal{M}(\rho).
 #
 # If the ensemble of unitaries defines a tomographically complete set of measurements,
 # we can invert the channel and reconstruct the state:
 #
 # .. math::
 #
-#      \rho = \mathbb{E}\left[\mathcal{M}^{-1}\left(U^\dagger |b\rangle\langle b| U \right)\right]
+#      \rho = \mathbb{E}\left[\mathcal{M}^{-1}\left(U^\dagger |b\rangle\langle b| U \right)\right].
 #
 # Note that this inverted channel is not physical, i.e., it is not completely postive and trace preserving (CPTP).
 # But this is of no concern to us, since all we care about is efficiently applying this inverse channel
@@ -99,13 +99,13 @@ from typing import List
 #
 #      S(\rho,N) = \left\{\hat{\rho}_1= \mathcal{M}^{-1}\left(U_1^\dagger |b_1\rangle\langle b_1| U_1 \right)
 #      ,\ldots, \hat{\rho}_N= \mathcal{M}^{-1}\left(U_N^\dagger |b_N\rangle\langle b_N| U_N \right)
-#      \right\}
+#      \right\}.
 #
 # By definition, we can now estimate **any** observable as
 #
 # .. math::
 #
-#      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}
+#      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}.
 #
 # In fact, the authors prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
 # :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` of to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`
@@ -120,8 +120,18 @@ from typing import List
 # since :math:`n^2 / \log(n)` entangling gates are required to sample the Clifford circuit.
 # For the purposes of this demo, we therefore choose ensemble 2., which is a more NISQ friendly approach.
 #
-# When is it a good idea to calculate a classical shadow instead of direct measurement?
+# This ensemble comes with a significant drawback: The shadow norm :math:`||O_i||^2_{\text{shadow}}`
+# becomes dependent on the locality :math:`k` of the observables that we want to estimate
 #
+# .. math::
+#
+#      ||O_i||^2_{\text{shadow}} \leq 4^k ||O_i||_\infty^2.
+#
+# This is a serious limitation. Say that we want to estimate the single Pauli observable
+# :math:`\langle X_1 \otimes X_2 \ldots \otimes X_n \rangle`. Estimating this from repeated measurements
+# would require :math:`1/\epsilon^2` samples, whereas we would need an exponentially large shadow due to :math:`k=n`.
+# Therefore, classical shadows based on Pauli measurements offer only an advantage when we have to measure a large number
+# of non-commuting observables with modest locality reduced locality.
 #
 # To summarize, a classical shadow consists of an integer number `N` *snapshots* which are constructed
 # via the following process:
