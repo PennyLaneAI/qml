@@ -169,8 +169,8 @@ hardware.
     :tags: braket
 
 .. customgalleryitem::
-    :tooltip: Approximate quantum states with classical shadows
-    :figure: _static/pl-braket.png
+    :tooltip: Approximate quantum states with classical shadows.
+    :figure: demonstrations/classical_shadows/atom_shadow.png
     :description: :doc:`demos/tutorial_classical_shadows`
     :tags: classical-shadows
 
