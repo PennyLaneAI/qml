@@ -2,9 +2,9 @@ r"""
 Classical Shadows
 =================
 .. meta::
-    :property="og:description": Learn how to efficiently make predictions about an unknown
-        quantum state using the classical shadow approximation. 
-    :property="og:image": https://pennylane.ai/qml/_images/qaoa_layer.png
+    :property="og:description": Learn how to construct classical shadows
+        and use them to estimate observables.
+    :property="og:image": https://pennylane.ai/qml/_images/atom_shadow.png
 
 .. related::
 
