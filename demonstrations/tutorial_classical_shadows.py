@@ -141,11 +141,13 @@ from typing import List
 
 
 ##############################################################################
-# Then, create the following function, which takes as input a ``circuit_template`` with ``params``
-# and returns a shadow of size ``shadow_size`` on ``num_qubits`` qubits.
+# Then, add the ``calculate_classical_shadow`` method below.
+# This function obtains a classical shadow for the state prepared by the
+# ``circuit_template``.
+# The classical shadow is simply a matrix where each row is a distinct snapshot.
 
 def calculate_classical_shadow(
-    circuit_template, params, shadow_size: int,num_qubits: int
+    circuit_template, params, shadow_size: int, num_qubits: int
 ) -> np.ndarray:
     """
     Given a circuit, creates a collection of snapshots U^dag|b><b| U with the stabilizer
@@ -184,8 +186,6 @@ def calculate_classical_shadow(
 import pytest
 import pennylane as qml
 import pennylane.numpy as np
-import time
-
 
 ##############################################################################
 # Furthermore, we'll need to import the functions from the source code::
@@ -221,7 +221,7 @@ def circuit_1_observable(request):
     return circuit, param_shape, num_qubits
 
 
-#########################################
+##############################################################################
 # Using this fixture, we can write a test to verify that the output of ``calculate_classical_shadows``
 # is correct. We expect the outcomes to be :math:`(+1,-1)` on each qubit, corresponding to the computational
 # basis states :math:`|0\rangle, |1\rangle`. Furthermore, we expect the applied Pauli measurements
@@ -274,23 +274,80 @@ def test_calculate_classical_shadow_circuit_2(circuit_2_observable, shadow_size=
     assert all(o in [1.0, -1.0] for o in np.unique(shadow[:, :num_qubits]))
 
 
-#########################################
+##############################################################################
 # If we now run ``pytest test_classical_shadows.py``, we see that the test passes,
 #
 # Spoof pytest output
+#
+# Finally, we'll show how to apply the ``calculate_classical_shadow`` function.
+# First, launch a Jupyter notebook server and create a notebook called
+# ``notebook_classical_shadows.ipynb``.
 
+# ./notebook_classical_shadows.ipynb
+import pennylane as qml
+import pennylane.numpy as np
+import matplotlib.pyplot as plt
+import time
 
-@pytest.mark.parametrize("circuit_1_observable, shadow_size",
-                         [[2, 10], [2, 100], [2, 1000], [2, 10000]],
-                         indirect=['circuit_1_observable'])
-def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_size):
-    """Performance test calculating the shadow for a circuit with multiple layers"""
-    circuit_template, param_shape, num_qubits = circuit_1_observable
-    params = np.random.randn(*[s if (s != None) else num_qubits for s in param_shape])
+##############################################################################
+# Furthermore, we'll want to add the ``calculate_classical_shadow`` method.
+# .. ::python
+#
+#     # ./notebook_classical_shadows.ipynb
+#     from classical_shadows import calculate_classical_shadow
+#
+# Now we'll check the performance of ``calculate_classical_shadow``.
+# First, we'll create a two-qubit device and circuit that applies an
+# ``RY`` rotation to each qubit.
+
+# ./notebook_classical_shadows.ipynb
+num_qubits = 2
+
+# setting up a two-qubit circuit
+dev = qml.device('default.qubit', wires=num_qubits, shots=1)
+
+@qml.qnode(device=dev)
+def local_qubit_rotation_circuit(params, wires, **kwargs):
+    observables = kwargs.pop('observable')
+    for w in dev.wires:
+        qml.RY(params[w], wires=w)
+
+    return [qml.expval(o) for o in observables]
+
+# arrays in which to collect data
+elapsed_times = []
+shadows = []
+
+# collecting shadows and elapsed times
+params = np.random.randn(2)
+for num_snapshots in [10,100,1000,10000]:
     start = time.time()
-    calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits)
-    delta_time = time.time() - start
-    print(f'Elapsed time for {shadow_size} shadows = {delta_time}')
+    shadow = calculate_classical_shadow(
+        local_qubit_rotation_circuit, params, num_snapshots, num_qubits
+    )
+    elapsed_times.append(time.time() - start)
+    shadows.append(shadows)
+
+# printing out smallest shadow as an example
+shadows[0]
+
+##############################################################################
+# Observe that the shadow is simply a matrix.
+# For two qubits, the first two columns describe the outcome for the pauli observable
+# while the second two columns index the pauli observable for each qubit.
+# We now plot the computation times taken to acquire the shadows as the number of
+# snapshots increases.
+
+# ./notebook_classical_shadows.ipynb
+plt.plot([10,100,1000,10000], elapsed_times)
+plt.title("Time taken to obtain a classical shadow from a 2-qubit state")
+plt.xlabel("Number of Snapshots in Shadow")
+plt.ylabel("Elapsed Time")
+plt.show()
+
+##############################################################################
+# As one might expect, the computation time increases linearly with the number
+# of snapshots.
 
 ##############################################################################
 # State Reconstruction from a Classical Shadow
@@ -319,13 +376,32 @@ def test_calculate_classical_shadow_performance(circuit_1_observable, shadow_siz
 # classical shadow, and :math:`\rho` is the average over all snapshot states :math:`\hat{\rho}` in the
 # shadow.
 #
-# To implement the state reconstruction of :math:`\rho` in PennyLane, we develop two function
-# ``snapshot_state`` and ``shadow_state_reconstruction``.
-# To begin, we define the ``snapshot_state`` function that applies the above expression
-# for :math:`\hat{\rho}`.
-# Now, add the following code to the ``./classical_shadows.py`` file.
+# To implement the state reconstruction of :math:`\rho` in PennyLane, we develop the
+# ``shadow_state_reconstruction`` function.
+# Add the following code to the ``./classical_shadows.py`` file.
 
 # ./classical_shadows.py
+def shadow_state_reconstruction(shadow):
+    """
+    Reconstruct a state approximation as an average over all snapshots in the shadow.
+
+    Args:
+        shadow (array): a shadow matrix obtained from `calculate_classical_shadow`.
+    """
+    num_snapshots = shadow.shape[0]
+    num_qubits = shadow.shape[1] // 2
+
+    # classical values
+    b_lists = shadow[:, 0:num_qubits]
+    # pauli observable ids
+    obs_lists = shadow[:, num_qubits:2 * num_qubits]
+
+    # Averaging over snapshot states.
+    shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=np.complex)
+    for i in range(num_snapshots):
+        shadow_rho += snapshot_state(b_lists[i], obs_lists[i])
+
+    return shadow_rho / num_snapshots
 
 def snapshot_state(b_list, obs_list):
     """
@@ -366,36 +442,15 @@ def snapshot_state(b_list, obs_list):
 
 
 ##############################################################################
-# Next, we will write the ``shadow_state_reconstruction`` method to construct a
-# shadow state approximation for :math:`\rho`.
-
-# ./classical_shadows.py
-def shadow_state_reconstruction(shadow):
-    """
-    Reconstruct a state approximation as an average over all snapshots in the shadow.
-
-    Args:
-        shadow (array): a shadow matrix obtained from `calculate_classical_shadow`.
-    """
-    num_snapshots = shadow.shape[0]
-    num_qubits = shadow.shape[1] // 2
-
-    # classical values
-    b_lists = shadow[:, 0:num_qubits]
-    # pauli observable ids
-    obs_lists = shadow[:, num_qubits:2 * num_qubits]
-
-    # Averaging over snapshot states.
-    shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=np.complex)
-    for i in range(num_snapshots):
-        shadow_rho += snapshot_state(b_lists[i], obs_lists[i])
-
-    return shadow_rho / num_snapshots
-
-
-##############################################################################
 # Now, we will test the ``shadow_state_reconstruction`` function.
-# First we will write a unit test named ``test_shadow_state_reconstruction_unit``.
+# The first thing to do is import the fucntion into the test file:
+#
+# .. ::python
+#
+#     # ./test_classical_shadows.py
+#     from classical_shadows import shadow_state_reconstructio
+#
+# Then, we will write a unit test named ``test_shadow_state_reconstruction_unit``.
 # As input, this test will take a classical shadow and matrix representing the
 # expected state reconstruction.
 # This test function will be used to verify three key features of ``shadow_state_reconstruction``.
@@ -403,11 +458,12 @@ def shadow_state_reconstruction(shadow):
 # 1. The application of local unitary :math:`U` used to reconstruct a single qubit snapshot.
 # 2. The tensor product structure for multi-qubit reconstructions.
 # 3. The averaging over multiple snapshots.
+#
+# The code for this test test is exemplified below.
 
 # ./test_classical_shadows.py
 
-# 1. Verify that each possible qubit snapshot reconstructs the correct
-# snapshot state.
+# 1. Verify qubit snapshot state reconstruction.
 qubit_snapshot_test_cases = [
     (np.array([[1, 0]]), np.array([[0.5, 1.5], [1.5, 0.5]])),
     (np.array([[-1, 0]]), np.array([[0.5, -1.5], [-1.5, 0.5]])),
@@ -434,7 +490,6 @@ qubit_shadow_test_cases = [
      np.array([[0.5, 0], [0, 0.5]]))
 ]
 
-
 @pytest.mark.parametrize(
     "shadow,reconstructed_state_match",
     qubit_snapshot_test_cases + two_qubit_snapshot_test_cases + qubit_shadow_test_cases
@@ -445,7 +500,6 @@ def test_shadow_state_reconstruction_unit(shadow, reconstructed_state_match):
     # reconstructed shadow states are trace-one
     assert np.isclose(np.trace(reconstructed_state), 1, atol=1e-7)
     assert reconstructed_state.all() == reconstructed_state_match.all()
-
 
 ##############################################################################
 # At this point, we've verified that ``shadow_state_reconstruction`` behaves
@@ -481,8 +535,9 @@ def circuit_1_state(request):
     [[2, 2, [0, 0], 1000], [3, 3, [np.pi / 4, np.pi / 3, np.pi / 2], 1000]],
     indirect=['circuit_1_observable', 'circuit_1_state']
 )
-def test_shadow_state_reconstruction_integration(circuit_1_observable, circuit_1_state,
-                                                 params, shadow_size):
+def test_shadow_state_reconstruction_integration(
+    circuit_1_observable, circuit_1_state, params, shadow_size
+):
     """Test reconstructing the state from the shadow for a circuit with a single layer"""
     circuit_template, param_shape, num_qubits = circuit_1_observable
     circuit_template_state, _, _ = circuit_1_state
@@ -503,6 +558,11 @@ def test_shadow_state_reconstruction_integration(circuit_1_observable, circuit_1
     # verifying that the shadow state roughly approximates the exact state
     assert np.isclose(shadow_state.all(), exact_state.all(), atol=0.1)
 
+##############################################################################
+# To run the tests, simply use the command ``$ pytest ./test_classical_shadows.py``.
+# The output of the tests should look something like this:
+
+# TODO test output
 
 ##############################################################################
 # Example: Reconstructing a Bell State
@@ -516,7 +576,6 @@ num_qubits = 2
 
 dev = qml.device('default.qubit', wires=num_qubits, shots=1)
 
-
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword warg.
 @qml.qnode(device=dev)
@@ -527,7 +586,6 @@ def bell_state_circuit(params, wires, **kwargs):
     qml.CNOT(wires=[0, 1])
 
     return [qml.expval(o) for o in observables]
-
 
 ##############################################################################
 # Then, we'll construct a classical shadow consisting of 1000 snapshots.
@@ -557,21 +615,18 @@ bell_state = np.array([
     [0.5, 0, 0, 0.5]
 ])
 
-
 ##############################################################################
 # To measure the closeness we can use the operator norm.
+# We'll add this utility method to the notebook for convenience.
 
-# ./classical_shadows.py
+# ./notebook_classical_shadows.ippy
 def operator_2_norm(R):
     """
     Calculate the operator two norm.
     """
     return np.sqrt(np.trace(R.conjugate().transpose() @ R))
 
-# calculating trace-distance between ideal bell state and shadow reconstruction
-
-##############################################################################
-
+#Calculating the distance between ideal and shadow states.
 operator_2_norm(bell_state - shadow_state)
 
 ##############################################################################
@@ -579,8 +634,6 @@ operator_2_norm(bell_state - shadow_state)
 # number of snapshots.
 
 # ./notebook_classical_shadows.ipynb
-import matplotlib.pyplot as plt
-
 trace_distances = []
 snapshots_range = range(100, 10000, 1000)
 for num_snapshots in snapshots_range:
@@ -597,15 +650,9 @@ plt.xlabel("Number of Snapshots")
 plt.ylabel("Trace Distance")
 plt.show()
 
-
 ##############################################################################
 # As expected, when the number of snapshots increases, the state reconstruction
 # becomes closer to the ideal state.
-
-
-##############################################################################
-# To run the tests, simply use the command ``$ pytest ./test_classical_shadows.py``.
-# The output of the tests should look something like this:
 
 ##############################################################################
 # Estimating Pauli Observables with Classical Shadows
