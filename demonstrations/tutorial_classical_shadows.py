@@ -99,7 +99,7 @@ For clarity, this demo will specify the file at the top of each code block.
 #      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}.
 #
 # In fact, the authors prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
-# :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` of to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`
+# :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` of to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`.
 # The shadow norm :math:`||O_i||^2_{\text{shadow}}` again depends on the unitary ensemble that is chosen.
 #
 # In [Huang2020]_, two different ensembles are considered:
