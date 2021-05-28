@@ -611,20 +611,47 @@ plt.show()
 # Estimating Pauli Observables with Classical Shadows
 # ###################################################
 #
-# Any pauli observable can estimated by using the ``estimate_shadow_observable`` method.
+# We have confirmed that our code produces classical shadows that can be used to reconstruct
+# the state. However, the goal of classical shadows is not to perform full tomography, which takes
+# an exponential amount of resources. Instead, we want to use the shadows to efficiently
+# calculate linear functions of a quantum state. To do this, we write a create a function
+# ``estimate_shadow_observable`` that takes in the previously constructed shadow
+# :math:`S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_1,\ldots,\hat{\rho}_N]`, and
+# estimates any observable via a median of means estimation. This makes the estimator
+# more robust to outliers and is required to formally proof the aforementioned theoretical
+# bound. This procedure is simple: Split up the shadow into :math:`K` equally sized chunks
+# and estimate the mean for each of these chunks.
+#
+# .. math::
+#
+#      \langle O_{(k)}\rangle &= \text{Tr}\{O \hat{\rho}_{(k)}\}\\
+#      \hat{\rho}_{(k)} &= \frac{1}{ \lfloor N/K \rfloor } \sum_{i=(k-1)\lfloor N/K \rfloor + 1}^{k \lfloor N/K \rfloor } \hat{\rho}_i
+#
+# The median of means estimator is then simply the median of this set
+#
+# .. math::
+#
+#       \langle O\rangle &= \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}\\
+#
+#
+#
+#
+# To make everything compatible with PennyLane, we want to accept PennyLane observables as
+# input.
 
 # ./classical_shadows.py
 def estimate_shadow_obervable(shadows, observable, k=10) -> float:
     """
-    Calculate the estimator E[O] = sum_i Tr{rho_i O} where rho_i is a snapshot in the
-    shadow.
+    Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k snapshots
+    in the shadow.
     
     Args:
-        shadows: Numpy array containing the outcomes (0, 1) in the first `num_qubits`
+        shadows: Numpy array containing the outcomes (0, 1) in the first `num_qubits`.
         columns and the sampled Pauli's (0,1,2=x,y,z) in the final `num_qubits` columns.
         observable: Single PennyLane observable consisitng of single Pauli operators e.g.
-        qml.PauliX(0) @ qml.PauliY(1)
-    
+        qml.PauliX(0) @ qml.PauliY(1).
+        k: number of chunks in the median of means estimator.
+
     Returns:
         Scalar corresponding to the estimate of the observable.
     """
