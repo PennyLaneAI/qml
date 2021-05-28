@@ -692,40 +692,87 @@ def test_shadow_state_reconstruction_integration(circuit_1_observable, circuit_1
     assert np.isclose(shadow_state.all(), exact_state.all(), atol=0.1)
 
 ##############################################################################
-# Example: |+> state is approximated as maximally mixed state
+# Example: Reconstructing a Bell State
+# ************************************
+#
+# First, we construct a single-shot, ``'default.qubit'`` device and
+# define the ``bell_state_circuit`` qnode to construct and measure a Bell state.
 
 # ./notebook_classical_shadows.ipynb
-nqubits = 2
-theta = [np.pi / 4]
-number_of_shadows = 2000
+num_qubits = 2
 
+dev = qml.device('default.qubit', wires=num_qubits, shots=1)
 
-# def one_qubit_RY(params, wires, **kwargs):
-#     qml.RY(params[0], wires=wires)
-
-dev = qml.device('default.qubit', wires=2, shots=1)
+# circuit to create a Bell state and measure it in
+# the bases specified by the 'observable' keyword warg.
 @qml.qnode(device=dev)
 def bell_state_circuit(params, wires, **kwargs):
     observables = kwargs.pop('observable')
+    
     qml.Hadamard(0)
     qml.CNOT(wires=[0,1])
 
     return [qml.expval(o) for o in observables]
 
+##############################################################################
+# Then, we'll construct a classical shadow consisting of 1000 snapshots.
 
-shadow = calculate_classical_shadow(bell_state_circuit, theta, number_of_shadows, nqubits)
+# ./notebook_classical_shadows.ipynb
+num_snapshots = 1000
+params = []
 
-print("yoyoyoy")
-print(shadow)
-
-state_reconstruction = shadow_state_reconstruction(shadow)
-
-print("state reconstruction")
-
-print(state_reconstruction)
+shadow = calculate_classical_shadow(bell_state_circuit, params, num_snapshots, num_qubits)
+shadow
 
 
+##############################################################################
+# The bell state is then reconstructed with ``shadow_state_reconstruction``.
 
+# ./notebook_classical_shadows.ipynb
+shadow_state = shadow_state_reconstruction(shadow)
+shadow_state
+
+##############################################################################
+# Note the resemblance to the exact Bell state density matrix.
+
+# ./notebook_classical_shadows.ipynb
+bell_state = np.array([
+   [0.5, 0, 0, 0.5],
+   [  0, 0, 0,   0],
+   [  0, 0, 0,   0],
+   [0.5, 0, 0, 0.5]
+])
+
+##############################################################################
+# To measure the closeness we can use the operator norm. 
+
+operator_2_norm(bell_state - shadow_state)
+
+##############################################################################
+# Finally, we see how the approximation improves as we increase the
+# number of snapshots.
+
+# ./notebook_classical_shadows.ipynb
+import matplotlib.pyplot as plt
+
+trace_distances = []
+snapshots_range = range(100,10000,1000) 
+for num_snapshots in snapshots_range:
+    shadow = calculate_classical_shadow(bell_state_circuit, params, num_snapshots, num_qubits)
+    shadow_state = shadow_state_reconstruction(shadow)
+
+    tr_distance = np.real(operator_2_norm(bell_state - shadow_state))
+    trace_distances.append(tr_distance)
+
+plt.plot(snapshots_range, trace_distances)
+plt.title("Trace Distance between Ideal and Shadow Bell States")
+plt.xlabel("Number of Snapshots")
+plt.ylabel("Trace Distance")
+plt.show()
+
+##############################################################################
+# As expected, when the number of snapshots increases, the state reconstruction
+# becomes closer to the ideal state.
 
 
 ##############################################################################
