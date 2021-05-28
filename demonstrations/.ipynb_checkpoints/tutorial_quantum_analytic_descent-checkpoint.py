@@ -506,6 +506,30 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 #
 # If we pay close attention to the values printed during the optimization, we can identify a curious phenomenon.
 # At the last epoch within each iteration, sometimes the *model cost* goes beyond :math:`-1`.
+# Could we visualize this behavior more clearly, please?
+
+plt.plot(range(N_iter_outer*N_iter_inner), true_log, color="#209494", label="true");
+for i in range(N_iter_outer):
+    if(not i):
+        plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner),
+                 model_log[i*N_iter_inner:(i+1)*N_iter_inner],
+                 color="#ED7D31", label="model");
+    else:
+        plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner),
+                 model_log[i*N_iter_inner:(i+1)*N_iter_inner],
+                 color="#ED7D31");
+plt.xlabel("epochs")
+plt.ylabel("cost")
+plt.legend()
+
+###############################################################################
+# Each of the orange lines corresponde to minimizing on the model from a
+# different reference point.
+# We can now more easily appreciate the phenomenon we just described:
+# indeed towards the end of each ``outer" optimization step, the model cost
+# can be seen to be appreciably lower than the true cost.
+# Once the true cost itself approaches the absolute minimum, this means the
+# model cost can overstep the allowed range.
 # *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` *(nostalgic* emoticon *time >:@)!!*
 # Yes, but careful!
 # We said the *true cost* values are bounded, yet, that does not mean the ones of the *model* are!
@@ -524,7 +548,9 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 # only access it via very costly quantum computations.
 # Instead, a few runs on the quantum device allowed us to construct a classical
 # model on which we performed classical (cheap) optimization.
-# Don't forget to fasten your seat belts on your way home, it was a pleasure
+# 
+# And that was it! Thanks for coming to our show.
+# Don't forget to fasten your seat belts on your way home! it was a pleasure
 # having you here today.
 #
 # References
