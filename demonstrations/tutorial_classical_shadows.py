@@ -577,7 +577,7 @@ def test_shadow_state_reconstruction_integration(
 #     platform darwin -- Python 3.7.4, pytest-6.2.4, py-1.10.0, pluggy-0.13.0
 #     rootdir: /path/to/working/directory
 #     plugins: arraydiff-0.3, remotedata-0.3.2, doctestplus-0.4.0, openfiles-0.4.0
-#     collected 21 items                                                                                                                         
+#     collected 21 items
 #
 #     test_classical_shadows.py .....................                          [100%]
 #
@@ -778,23 +778,33 @@ def estimate_shadow_obervable(shadows, observable, k=10) -> float:
 
 
 ##############################################################################
-# Not sure where these utility methods actually belong in the demo.
+# Next, we can define a function that calculates the number of samples
+# required to get an error :math:`\epsilon` on our estimator for a given set of observables.
 
-
-def shadow_bound(M: int, error: float, max_k: int, observables: List[np.ndarray]):
+# ./classical_shadows.py
+def shadow_bound(error: float, max_k: int, observables: List[np.ndarray])->int:
     """
     Calculate the shadow bound for the pauli measurement scheme.
+
+    Args:
+        error: The error on the estimator.
+        max_k: The maximum locality of all the observables.
+        observables: List of matrices corresponding to the observables we intend to
+        measure
+
+    Returns:
+        An integer that gives the number of samples required to satisfy the shadow bound.
     """
+    M = len(observables)
     shadow_norm = lambda op: np.linalg.norm(op, ord=np.inf) ** 2
     return int(np.ceil(
-        np.log(M) * 4 ** max_k * max(shadow_norm(o) for o in observables) / error ** 2))
+        np.log(M) * (4 ** max_k) * max(shadow_norm(o) for o in observables) / error ** 2))
 
 
 ##############################################################################
-# Testing ``estimate_shadow_observable``
-
-# ./test_classical_shadows.py
-
+# We first test ``estimate_shadow_observable`` by estimating :math:`X_1 X_2` on the circuit
+# This test makes sure that given the expected input, the estimator returns a value in
+# :math:`[-1, 1]`.
 # TODO: create a fixture for the shadow so we only have run it once
 @pytest.mark.parametrize("circuit_1_observable, shadow_size",
                          [[2, 10], [2, 100], [2, 1000], [2, 10000]],
@@ -808,12 +818,17 @@ def test_estimate_shadow_observable_single(circuit_1_observable, shadow_size):
     observable = [qml.PauliX(0) @ qml.PauliX(1)]
     expval_shadow = estimate_shadow_obervable(shadow, observable[0])
     assert -1.0 <= expval_shadow <= 1.0
-    dev_exact = qml.device('default.qubit', wires=num_qubits)
-    # change the simulator to be the exact one.
-    circuit_template.device = dev_exact
-    expval_exact = circuit_template(params, wires=dev_exact.wires, observable=observable)
-    print(f"Shadow : {expval_shadow} - Exact {expval_exact}")
 
+##############################################################################
+# Spoof test output
+#
+# Next, we want to make sure that our code verifies the bound. To do this, we pick a
+# set of :math:`M` observables and calculate with ``shadow_bound`` how many samples we
+# need to get an estimator at most error :math:`\epsilon`. The test then calculates the
+# exact expectation value and asserts if the classical shadow estimate is within :math:`\epsilon` of
+# that value.
+
+# ./test_classical_shadows.py
 
 @pytest.mark.parametrize("circuit_2_observable", [8], indirect=['circuit_2_observable'])
 def test_estimate_shadow_observable_shadow_bound(circuit_2_observable):
@@ -827,7 +842,7 @@ def test_estimate_shadow_observable_shadow_bound(circuit_2_observable):
                            qml.PauliY(3) @ qml.PauliZ(4) @ qml.PauliY(num_qubits - 1)]
     # Calculate how many shadows we need to get an error of 1e-1 for this set of
     # observables
-    shadow_size = shadow_bound(M=len(list_of_observables), max_k=3,
+    shadow_size = shadow_bound(max_k=3,
                                error=1e-1,
                                observables=[o.matrix for o in list_of_observables])
 
@@ -847,9 +862,58 @@ def test_estimate_shadow_observable_shadow_bound(circuit_2_observable):
 
 
 ##############################################################################
-# To demonstrate estimation with classical shadows, we'll use
-# the simple example of estimating the observable :math:`X_0' with
-# classical shadows.
+# Spoof test output.
+
+##############################################################################
+# Example: Estimating a simple set of observables
+# *************************************************
+# Here, we give an example for estimating multiple observables on a 10 qubit circuit.
+
+# ./notebook_classical_shadows.ipynb
+
+num_qubits = 10
+dev = qml.device('default.qubit', wires=num_qubits, shots=1)
+
+@qml.qnode(device=dev)
+def circuit(params, **kwargs):
+    observables = kwargs.pop('observable')
+    for w in range(num_qubits):
+        qml.Hadamard(wires=w)
+        qml.RY(params[w], wires=w)
+    for w in dev.wires[:-1]:
+        qml.CNOT(wires=[w,w+1])
+    for w in dev.wires:
+        qml.RZ(params[w+num_qubits], wires=w)
+    return [qml.expval(o) for o in observables]
+
+params = np.random.randn(2* num_qubits)
+list_of_observables = [qml.PauliX(i) @ qml.PauliX(i+1) for i in range(num_qubits-1)]
+# Calculate how many shadows we need to get an error of 1e-1 for this set of
+# observables
+shadow_size_bound = shadow_bound(max_k=2, error=1e-1,
+                               observables=[o.matrix for o in list_of_observables])
+print(shadow_size_bound)
+shadow_size_grid = [10, 100, 1000, 5000, 10000]
+estimates = []
+for shadow_size in shadow_size_grid:
+    print(shadow_size)
+    shadow = calculate_classical_shadow(circuit, params, shadow_size, num_qubits)
+
+    estimates.append(sum(estimate_shadow_obervable(shadow, o) for o in list_of_observables))
+dev_exact = qml.device('default.qubit', wires=num_qubits)
+# change the simulator to be the exact one.
+circuit.device = dev_exact
+expval_exact = sum(
+    circuit(params, wires=dev_exact.wires, observable=[o, ]) for o in
+    list_of_observables)
+
+plt.plot(shadow_size_grid, [np.abs(e - expval_exact) for e in estimates])
+plt.scatter([shadow_size_bound], [1e-1], marker='*')
+plt.show()
+
+
+#############################################
+# Old stuff
 
 # ./notebook_classical_shadows.ipynb
 nqubits = 1
