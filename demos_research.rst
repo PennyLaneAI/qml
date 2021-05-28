@@ -203,7 +203,7 @@ plateaus in quantum neural networks.
 
 .. customgalleryitem::
     :tooltip: Build trigonometric local models of your cost function.
-    :figure: demonstrations/quantum_analytic_descent/xkcd_plot.png
+    :figure: demonstrations/quantum_analytic_descent/xkcd.png
     :description: :doc:`demos/tutorial_quantum_analytic_descent`
     :tags: optimization model vqe
 

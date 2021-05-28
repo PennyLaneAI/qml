@@ -1,4 +1,3 @@
-
 r"""
 
 .. _quantum_analytic_descent:
@@ -18,15 +17,15 @@ Quantum analytic descent
    tutorial_stochastic_parameter_shift Obtaining gradients stochastically
 
 
-*Authors: David Wierichs, Elies Gil-Fuster (Xanadu Residents) Posted: ?? May 2021. Last updated: ?? May 2021.*
+*Authors: Elies Gil-Fuster, David Wierichs (Xanadu Residents) Posted: ?? May 2021. Last updated: ?? May 2021.*
 
-One of the main problems of Many-Body Physics is that of finding the ground 
+One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
-The Variational Quantum Eigensolver (VQE) algorithm combines a smart circuit 
-design with a gradient based optimization to solve the ground state energy 
+The Variational Quantum Eigensolver (VQE) algorithm combines a smart circuit
+design with a gradient based optimization to solve the ground state energy
 problem.
-One issue for such an approach is, though, that the optimization landscape is 
-non-convex, so reaching a good enough local minimum easily requires hundreds or 
+One issue for such an approach is, though, that the optimization landscape is
+non-convex, so reaching a good enough local minimum easily requires hundreds or
 thousands of update steps.
 
 At the same time, though, we do have a good understanding of the local shape
@@ -38,7 +37,7 @@ Indeed, this approach avoids using the quantum computer to estimate the gradient
 at every single optimization step.
 Instead, we can use the quantum device to estimate the cost values at a few
 points close to the reference one.
-With the cost values at these points, we can build a classical model which 
+With the cost values at these points, we can build a classical model which
 approximates the landscape locally, and then perform the optimization routine
 solely on a classical device.
 
@@ -50,7 +49,7 @@ So: sit down, relax, and enjoy your optimization!
 
 |
 
-.. figure:: ../demonstrations/quantum_analytic_descent/xkcd_plot.png
+.. figure:: ../demonstrations/quantum_analytic_descent/xkcd.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -86,16 +85,13 @@ where :math:`\rho(\boldsymbol{\theta})=V(\boldsymbol{\theta})|0\rangle\!\langle0
 
 It can be seen that if the variational form is composed only of Pauli gates, then the cost function is a sum of multilinear trigonometric terms in each of the parameters.
 That's a scary sequence of words!
-What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus on one of the parameter values only, say :math:`\boldsymbol{\theta}_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\boldsymbol{\theta}_i)`, and :math:`\cos(\boldsymbol{\theta}_i)` assuming Pauli rotation gates in the circuit.
+What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus on one of the parameter values only, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)` assuming Pauli rotation gates in the circuit.
 
-<<<<<<< HEAD
-That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\boldsymbol{\theta}_1, \ldots, \hat\boldsymbol{\theta}_i, \ldots, \boldsymbol{\theta}_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
-=======
-That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\hat{\theta}}_i, \ldots, \boldsymbol{\theta}_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
->>>>>>> f8c12b141c927ebe5d553cd54c8856bf96c11cd4
+That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\theta_1, \ldots, \thetaheta}}_i, \ldots, \theta_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
 
-.. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\boldsymbol{\theta}_i) + c_i\cos(\boldsymbol{\theta}_i).
+.. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
+All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
 Let's look at a toy example to illustrate this!
 """
 
@@ -131,11 +127,12 @@ C1 = [circuit(np.array([theta, .5])) for theta in theta_func]
 C2 = [circuit(np.array([3.3, theta])) for theta in theta_func]
 
 # Show the sweeps.
-plt.plot(theta_func, C1, label="$E(\\vartheta, \\theta_2^{(0)})$", color='r');
-plt.plot(theta_func, C2, label="$E(\\theta_1^{(0)}, \\vartheta)$", color='orange');
-plt.xlabel("$\\vartheta$");
-plt.ylabel("$E$");
-plt.legend();
+fig, ax = plt.subplots(1, 1, figsize=(4, 3));
+ax.plot(theta_func, C1, label="$E(\\vartheta, \\theta_2^{(0)})$", color='r');
+ax.plot(theta_func, C2, label="$E(\\theta_1^{(0)}, \\vartheta)$", color='orange');
+ax.set_xlabel("$\\vartheta$");
+ax.set_ylabel("$E$");
+ax.legend();
 
 # Create a 2D grid and evaluate the energy on the grid points.
 X, Y = np.meshgrid(theta_func, theta_func);
@@ -170,13 +167,13 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # As explained in the paper, an approximation via trigonometric series up to second order is already a sound candidate!
 # In particular, we want to approximate
 #
-# .. math:: E(\boldsymbol{\theta}) := \operatorname{tr}[\mathcal{M}\Phi(\boldsymbol{\theta})\rho_0]
+# .. math:: E(\boldsymbol{\theta}) := \operatorname{tr}\left[\mathcal{M}\Phi(\boldsymbol{\theta})\rho_0\right]
 #
 # in the vicinity of a reference point :math:`\boldsymbol{\theta}_0`.
 # Here :math:`\rho_0` is the density matrix of the initial state, and :math:`\Phi(\boldsymbol{\theta})` is the quantum channel that implements the variational form.
 # We then have:
 #
-# .. math:: \hat{E}(\boldsymbol{\theta}_0+\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}] + \sum_{l>k}^m[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}].
+# .. math:: \hat{E}(\boldsymbol{\theta}_0+\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{l>k}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
 #
 # We have introduced a number of :math:`E`\ 's, in order to build each of these we need to sample some points in the landscape with a quantum computer.
 # Before eyeing the formulas for each of them, though, it is important we now only need to estimate :math:`2m^2+m+1` points (as we will see in the model formulas further below).
@@ -193,6 +190,7 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # #. After convergence or a fixed number of iterations, output the last global minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_\text{min}`.
 #
 # This provides an iterative strategy which will take us to a good enough solution much faster (in number of iterations) than for example regular stochastic gradient descent (SGD).
+# The procedure of Quantum Analytic Descent is shown in this flowchart:
 #
 # .. figure:: ../demonstrations/quantum_analytic_descent/flowchart.png
 #    :align: center
@@ -209,9 +207,9 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # .. math::
 #
 #   E^{(A)} &= E(\boldsymbol{\theta})\\
-#   E^{(B)}_k &= E(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k)-E(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k)\\
-#   E^{(C)}_k &= E(\boldsymbol{\theta}+\pi\boldsymbol{v}_k)\\
-#   E^{(D)}_{kl} &= E(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l) + E(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l) - E(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l) - E(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l)
+#   E^{(B)}_k &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k\right)-E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k\right)\\
+#   E^{(C)}_k &= E\left(\boldsymbol{\theta}+\pi\boldsymbol{v}_k\right)\\
+#   E^{(D)}_{kl} &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right) + E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right)
 #
 # Let us create a function that will take care of evaluating :math:`E` at all these shifted parameter points and combines the results to obtain the above coefficients:
 
@@ -289,7 +287,7 @@ print(f"Coefficients at params:",
 #
 # .. math::
 #
-#   \tilde{E}(\boldsymbol{\theta}) &= A(\theta) E^{(A)} + \sum_k B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k + \sum_{l>k} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
+#   \tilde{E}(\boldsymbol{\theta}) &= A(\theta) E^{(A)} + \sum_k \left[B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k\right] + \sum_{l>k} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
 #   \phantom{\tilde{E}(\boldsymbol{\theta})}&=A(\boldsymbol{\theta})\left[E^{(A)}+\sum_k \tan\left(\frac{\theta_k}{2}\right)E^{(B)}_k + \tan\left(\frac{\theta_k}{2}\right)^2 E^{(C)}_k + \sum_{l>k} \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)E^{(D)}_{kl}\right]
 #
 # Let's implement this model:
@@ -478,7 +476,7 @@ for iter_outer in range(N_iter_outer):
         if (iter_inner+1)%50==0:
             E_model = mapped_model(relative_parameters)
             print(f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)}",
-                " at relative parameters {np.round(relative_parameters, 4)}")
+                f" at relative parameters {np.round(relative_parameters, 4)}")
 
     # Store the relative parameters that minimize the model by adding the shift - step 4.
     parameters += relative_parameters
@@ -496,7 +494,7 @@ mapped_model = lambda par: model_cost(par, *past_coeffs[0])
 plot_cost_and_model(circuit, mapped_model, past_parameters[0])
 
 ###############################################################################
-# Step 1: We again see the cost function around our starting point and the model we already inspected above.
+# Step 1: We see the cost function around our (new) starting point and the model similar to the inpection above.
 
 mapped_model = lambda par: model_cost(par, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
@@ -508,35 +506,34 @@ mapped_model = lambda par: model_cost(par, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
-# Step 3: Both, the model and the original cost function show a minimum close to our parameter position, Quantum Analytic Descent converged.
+# Step 3: Both, the model and the original cost function now show a minimum close to our parameter position, Quantum Analytic Descent converged.
+# Note how the large deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area,
+# in which the deviation plateaus at zero.
 #
 # If we pay close attention to the values printed during the optimization, we can identify a curious phenomenon.
 # At the last epoch within each iteration, sometimes the *model cost* goes beyond :math:`-1`.
 # Could we visualize this behavior more clearly, please?
 
-with plt.xkcd():
-    plt.plot(range(N_iter_outer*N_iter_inner+1), circuit_log, color="#209494", label="true");
-    for i in range(N_iter_outer):
-        if (not i):
-            plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner+1), model_logs[i],
-                     ls='--', color="#ED7D31", label="model");
-        else:
-            plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner+1), model_logs[i],
-                     ls='--', color="#ED7D31");
-    plt.xlabel("epochs")
-    plt.ylabel("cost")
-    leg = plt.legend()
-    plt.savefig('demonstrations/quantum_analytic_descent/xkcd.png', dpi=300)
+fig, ax = plt.subplots(1, 1, figsize=(6,4))
+ax.plot(range(N_iter_outer*N_iter_inner+1), circuit_log, color="#209494", label="True");
+for i in range(N_iter_outer):
+    line, = ax.plot(range(i*N_iter_inner,(i+1)*N_iter_inner+1), model_logs[i],
+             ls='--', color="#ED7D31")
+    if i==0:
+        line.set_label('Model')
+ax.set_xlabel("epochs")
+ax.set_ylabel("cost")
+leg = ax.legend()
 
 ###############################################################################
 # Each of the orange lines corresponde to minimizing on the model from a
 # different reference point.
 # We can now more easily appreciate the phenomenon we just described:
-# indeed towards the end of each ``outer" optimization step, the model cost
+# indeed towards the end of each "outer" optimization step, the model cost
 # can be seen to be appreciably lower than the true cost.
 # Once the true cost itself approaches the absolute minimum, this means the
 # model cost can overstep the allowed range.
-# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` *(nostalgic* emoticon *time >:@)!!*
+# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` *(nostalgic* emoticon *time >:@)!*
 # Yes, but careful!
 # We said the *true cost* values are bounded, yet, that does not mean the ones of the *model* are!
 # Notice also how this only happens at the first stages of analytic descent.
@@ -554,7 +551,7 @@ with plt.xkcd():
 # only access it via very costly quantum computations.
 # Instead, a few runs on the quantum device allowed us to construct a classical
 # model on which we performed classical (cheap) optimization.
-# 
+#
 # And that was it! Thanks for coming to our show.
 # Don't forget to fasten your seat belts on your way home! it was a pleasure
 # having you here today.
