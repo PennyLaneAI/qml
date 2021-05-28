@@ -140,11 +140,13 @@ import pennylane.numpy as np
 from typing import List
 
 ##############################################################################
-# Then, create the following function, which takes as input a ``circuit_template`` with ``params``
-# and returns a shadow of size ``shadow_size`` on ``num_qubits`` qubits.
+# Then, add the ``calculate_classical_shadow`` method below.
+# This function obtains a classical shadow for the state prepared by the
+# ``circuit_template``.
+# The classical shadow is simply a matrix where each row is a distinct snapshot.
 
 def calculate_classical_shadow(
-    circuit_template, params, shadow_size: int,num_qubits: int
+    circuit_template, params, shadow_size: int, num_qubits: int
 ) -> np.ndarray:
     """
     Given a circuit, creates a collection of snapshots U^dag|b><b| U with the stabilizer
