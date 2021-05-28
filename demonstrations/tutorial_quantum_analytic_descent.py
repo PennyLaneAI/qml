@@ -447,6 +447,8 @@ parameters = np.random.random(2) * 2 * np.pi
 # Store the coefficients for the model and parameter positions.
 past_coeffs = []
 past_parameters = []
+circuit_log = [circuit(parameters)]
+model_logs = []
 for iter_outer in range(N_iter_outer):
     # Model building phase of outer iteration - step 2.
     coeffs = get_model_data(circuit, parameters)
@@ -465,11 +467,14 @@ for iter_outer in range(N_iter_outer):
     # Recall that the parameters of the model are relative coordinates.
     # Correspondingly, we initialize at 0, not at parameters.
     relative_parameters = np.zeros_like(parameters)
+    model_log = [mapped_model(relative_parameters)]
     # Some pretty-printing
     print(f"-Step {iter_outer+1}-")
     # Run the optimizer for N_iter_inner epochs - step 3.
     for iter_inner in range(N_iter_inner):
         relative_parameters = opt.step(mapped_model, relative_parameters)
+        circuit_log.append(circuit(parameters+relative_parameters))
+        model_log.append(mapped_model(relative_parameters))
         if (iter_inner+1)%50==0:
             E_model = mapped_model(relative_parameters)
             print(f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)}",
@@ -481,6 +486,7 @@ for iter_outer in range(N_iter_outer):
     E_original = circuit(parameters)
     print(f"True energy at the minimum of the model: {E_original}")
     print(f"New reference parameters: {np.round(parameters, 4)}\n")
+    model_logs.append(model_log)
 
 ###############################################################################
 # This looks great! Quantum Analytic Descent found the minimum.
@@ -508,19 +514,19 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 # At the last epoch within each iteration, sometimes the *model cost* goes beyond :math:`-1`.
 # Could we visualize this behavior more clearly, please?
 
-plt.plot(range(N_iter_outer*N_iter_inner), true_log, color="#209494", label="true");
-for i in range(N_iter_outer):
-    if(not i):
-        plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner),
-                 model_log[i*N_iter_inner:(i+1)*N_iter_inner],
-                 color="#ED7D31", label="model");
-    else:
-        plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner),
-                 model_log[i*N_iter_inner:(i+1)*N_iter_inner],
-                 color="#ED7D31");
-plt.xlabel("epochs")
-plt.ylabel("cost")
-plt.legend()
+with plt.xkcd():
+    plt.plot(range(N_iter_outer*N_iter_inner+1), circuit_log, color="#209494", label="true");
+    for i in range(N_iter_outer):
+        if (not i):
+            plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner+1), model_logs[i],
+                     ls='--', color="#ED7D31", label="model");
+        else:
+            plt.plot(range(i*N_iter_inner,(i+1)*N_iter_inner+1), model_logs[i],
+                     ls='--', color="#ED7D31");
+    plt.xlabel("epochs")
+    plt.ylabel("cost")
+    leg = plt.legend()
+    plt.savefig('demonstrations/quantum_analytic_descent/xkcd.png', dpi=300)
 
 ###############################################################################
 # Each of the orange lines corresponde to minimizing on the model from a
