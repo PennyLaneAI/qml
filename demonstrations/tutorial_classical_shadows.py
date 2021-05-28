@@ -680,17 +680,26 @@ plt.show()
 #
 #       \langle O\rangle &= \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}\\
 #
+# Assume now that :math:`O=\bigotimes_j^n P_j`, where :math:`P_j \in \{I, X, Y, Z\}`.
+# To efficiently calculate this estimator, we look at a single snapshot outcome and plug in the inverse measurement channel:
 #
+# .. math::
 #
-#
-# To make everything compatible with PennyLane, we want to accept PennyLane observables as
-# input.
+#       \text{Tr}\{O\hat{\rho}_i\} &= \text{Tr}\{\bigotimes_{j=1}^n P_j (3U^{\dagger}_j|\hat{b}_j\rangle\langle\hat{b}_j|U_j-\mathbb{I})\}\\
+#           &= \prod_j^n \text{Tr}\{ 3 P_j U^{\dagger}_j|\hat{b}_j\rangle\langle\hat{b}_j|U_j\}\\
+# Due to the orthogonality of the Pauli operators, this evaluates to :math:`\pm 3` if :math:`P_j` the
+# corresponding measurement basis :math:`U_j` and is 0 otherwise. Hence if a single :math:`U_j` in the snapshot
+# does not match the one # in :math:`O`, the whole product evaluates to zero. As a result, calculating the mean estimator
+# can be reduced to counting the number of exact matches in the shadow with the observable, and multiplying with the appropriate
+# sign.
 
 # ./classical_shadows.py
+
 def estimate_shadow_obervable(shadows, observable, k=10) -> float:
     """
-    Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k snapshots
-    in the shadow.
+    Adapted from https://github.com/momohuang/predicting-quantum-properties
+    Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k
+    snapshots in the shadow.
     
     Args:
         shadows: Numpy array containing the outcomes (0, 1) in the first `num_qubits`.
