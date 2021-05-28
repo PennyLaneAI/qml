@@ -16,7 +16,7 @@ information science and technology.
 For example, one might want to check whether an apparatus prepares a particular target state,
 or verify that an unknown system can prepare entangled states.
 In principle, any unknown quantum state can be fully characterized by performing `quantum state
-tomography <http://research.physics.illinois.edu/QI/Photonics/tomography-files/tomo_chapter_2004.pdf>`_
+tomography <http://research.physics.illinois.edu/QI/Photonics/tomography-files/tomo_chapter_2004.pdf>`_.
 However this procedure requires one to acquire accurate expectation values for a set of observables
 which grows exponentially with the number of qubits.
 A potential workaround for these scaling concerns is provided by the classical shadow approximation
@@ -54,7 +54,7 @@ For clarity, this demo will specify the file at the top of each code block.
 # Classical shadow estimation relies on the fact that for a particular choice of circuit measurements,
 # we can store an efficient representation of the state that can be used to
 # predict linear functions of observables. Depending on what type of measurements we choose,
-# we have an informational theoretical bound that controls the precision of our estimator.
+# we have an information-theoretic bound that controls the precision of our estimator.
 #
 # Let us consider a :math:`n`-qubit quantum state :math:`\rho` and apply a random unitary
 # :math:`U` to the state:
@@ -81,7 +81,7 @@ For clarity, this demo will specify the file at the top of each code block.
 #
 # Note that this inverted channel is not physical, i.e., it is not completely postive and trace preserving (CPTP).
 # But this is of no concern to us, since all we care about is efficiently applying this inverse channel
-# as a post-processing step to reconstruct the state.
+# as a post-processing step to calculate some function of the state.
 #
 # If we apply the procedure outlined above :math:`N` times, then the set of inverted snapshots
 # is what we call the *classical shadow*
@@ -98,11 +98,11 @@ For clarity, this demo will specify the file at the top of each code block.
 #
 #      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}.
 #
-# In fact, the authors prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
+# In fact, the authors of [Huang2020]_ prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
 # :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` of to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`.
 # The shadow norm :math:`||O_i||^2_{\text{shadow}}` again depends on the unitary ensemble that is chosen.
 #
-# In [Huang2020]_, two different ensembles are considered:
+# Two different ensembles are considered:
 #
 # 1. Random :math:`n`-qubit Clifford circuits.
 # 2. Tensor products of random single-qubit Clifford circuits.
@@ -120,19 +120,12 @@ For clarity, this demo will specify the file at the top of each code block.
 #
 # This is a serious limitation. Say that we want to estimate the single Pauli observable
 # :math:`\langle X_1 \otimes X_2 \otimes \ldots \otimes X_n \rangle`. Estimating this from repeated measurements
-# would require :math:`1/\epsilon^2` samples, whereas we would need an exponentially large shadow due to :math:`k=n`.
+# would require :math:`1/\epsilon^2` samples, whereas we would need an exponentially large shadow due to the :math:`4^n` appearing in the bound.
 # Therefore, classical shadows based on Pauli measurements offer only an advantage when we have to measure a large number
-# of non-commuting observables with modest locality reduced locality.
+# of non-commuting observables with modest locality.
 #
 # To perform classical shadow estimation, we require a couple of functions.
-# Creating a shadow of size :math:`N` requires the following steps:
-#
-# 1. A quantum state :math:`\rho` is prepared.
-# 2. A randomly selected unitary :math:`U` is applied
-# 3. A computational basis measurement is performed.
-# 4. The process is repeated :math:`N` times.
-#
-# First create the ``./classical_shadows.py`` file and import the following libraries.
+# We will write the core functions in ``./classical_shadows.py`` file and import the following libraries:
 
 # ./classical_shadows.py
 import pennylane as qml
@@ -142,10 +135,16 @@ from typing import List
 np.random.seed(666)
 
 ##############################################################################
-# Then, add the ``calculate_classical_shadow`` method below.
+# Creating a shadow of size :math:`N` requires the following steps:
+#
+# 1. A quantum state :math:`\rho` is prepared.
+# 2. A randomly selected unitary :math:`U` is applied
+# 3. A computational basis measurement is performed.
+# 4. The process is repeated :math:`N` times.
+# With this in mind, add the ``calculate_classical_shadow`` function below.
 # This function obtains a classical shadow for the state prepared by the
-# ``circuit_template``.
-# The classical shadow is simply a matrix where each row is a distinct snapshot.
+# ``circuit_template``, where the classical shadow is simply represented by
+# a matrix where each row is a distinct snapshot.
 
 
 def calculate_classical_shadow(
@@ -180,7 +179,7 @@ def calculate_classical_shadow(
 
 ##############################################################################
 # To test the ``calculate_classical_shadow`` function first create a file called
-# ``test_classical_shadows.py`` and import the following libraries.
+# ``test_classical_shadows.py`` and import the following libraries:
 
 # ./test_classical_shadows.py
 
@@ -190,7 +189,7 @@ import pennylane.numpy as np
 
 np.random.seed(666)
 ##############################################################################
-# `pytest <https://docs.pytest.org/en/6.2.x/>`_ is a code testing framework that makes
+# The package `pytest <https://docs.pytest.org/en/6.2.x/>`_ is a code testing framework that makes
 # it easy to test complex code bases. This is ideal of you are working on a project with
 # a lot of moving parts that will be developed over a longer period of time. By
 # implementing automated testing, developers can make sure that their codebase is
@@ -206,7 +205,7 @@ np.random.seed(666)
 #
 #     from classical_shadows import calculate_classical_shadow
 #
-# Now we're ready to start writing tests. Note that ``calculate_classical_shadow`` only
+# Now we are ready to start writing tests. Note that ``calculate_classical_shadow`` only
 # works if we make sure that ``circuit_template`` returns only a shot. To this end, we create
 # a PyTest fixture for a circuit that can be reused across multiple tests. This speeds up
 # testing since we do not have to recreate the circuits multiple time across many different
@@ -309,7 +308,7 @@ def test_calculate_classical_shadow_circuit_2(circuit_2_observable, shadow_size=
 #     =============================== 8 passed in 5.43s =============================
 #
 # Finally, we will show how to apply the ``calculate_classical_shadow`` function.
-# First, launch a Jupyter notebook server and create a notebook called
+# Launch a Jupyter notebook server and create a notebook called
 # ``notebook_classical_shadows.ipynb``.
 
 # ./notebook_classical_shadows.ipynb
@@ -360,7 +359,7 @@ for num_snapshots in [10, 100, 1000, 10000]:
     elapsed_times.append(time.time() - start)
     shadows.append(shadow)
 
-# printing out smallest shadow as an example
+# printing out the smallest shadow as an example
 shadows[0]
 
 ##############################################################################
@@ -608,11 +607,11 @@ def test_shadow_state_reconstruction_integration(
 #     platform darwin -- Python 3.7.4, pytest-6.2.4, py-1.10.0, pluggy-0.13.0
 #     rootdir: /path/to/working/directory
 #     plugins: arraydiff-0.3, remotedata-0.3.2, doctestplus-0.4.0, openfiles-0.4.0
-#     collected 26 items
+#     collected 21 items
 #
 #     test_classical_shadows.py ........                                       [100%]
 #
-#     =================== 26 passed, 1 warning in 237.25s (0:03:57) ==================
+#     =================== 21 passed, 1 warning in 237.25s (0:03:57) ==================
 #
 # Example: Reconstructing a Bell State
 # ************************************
@@ -725,26 +724,27 @@ plt.show()
 # bound. Also, the bound has a failure probability :math:`\delta`, and by choosing :math:`K` to be
 # suitably large, we can exponentially surpress this failure probability.
 # The procedure is simple: split up the shadow into :math:`K` equally sized chunks
-# and estimate the mean for each of these chunks.
+# and estimate the mean for each of these chunks,
 #
 # .. math::
 #
 #      \langle O_{(k)}\rangle &= \text{Tr}\{O \hat{\rho}_{(k)}\}\\
-#      \hat{\rho}_{(k)} &= \frac{1}{ \lfloor N/K \rfloor } \sum_{i=(k-1)\lfloor N/K \rfloor + 1}^{k \lfloor N/K \rfloor } \hat{\rho}_i
+#      \hat{\rho}_{(k)} &= \frac{1}{ \lfloor N/K \rfloor } \sum_{i=(k-1)\lfloor N/K \rfloor + 1}^{k \lfloor N/K \rfloor } \hat{\rho}_i.
 #
 # The median of means estimator is then simply the median of this set
 #
 # .. math::
 #
-#       \langle O\rangle &= \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}\\
+#       \langle O\rangle &= \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}.
 #
 # Assume now that :math:`O=\bigotimes_j^n P_j`, where :math:`P_j \in \{I, X, Y, Z\}`.
-# To efficiently calculate this estimator, we look at a single snapshot outcome and plug in the inverse measurement channel:
+# To efficiently calculate the estimator for :math:`O`, we look at a single snapshot outcome and plug in the inverse measurement channel:
 #
 # .. math::
 #
 #    \text{Tr}\{O\hat{\rho}_i\} &= \text{Tr}\{\bigotimes_{j=1}^n P_j (3U^{\dagger}_j|\hat{b}_j\rangle\langle\hat{b}_j|U_j-\mathbb{I})\}\\
-#     &= \prod_j^n \text{Tr}\{ 3 P_j U^{\dagger}_j|\hat{b}_j\rangle\langle\hat{b}_j|U_j\}\\
+#     &= \prod_j^n \text{Tr}\{ 3 P_j U^{\dagger}_j|\hat{b}_j\rangle\langle\hat{b}_j|U_j\}.
+#
 # Due to the orthogonality of the Pauli operators, this evaluates to :math:`\pm 3` if :math:`P_j` the
 # corresponding measurement basis :math:`U_j` and is 0 otherwise. Hence if a single :math:`U_j` in the snapshot
 # does not match the one in :math:`O`, the whole product evaluates to zero. As a result, calculating the mean estimator
@@ -913,6 +913,19 @@ def test_estimate_shadow_observable_shadow_bound(circuit_2_observable):
 ##############################################################################
 # If we again run ``$ pytest ./test_classical_shadows.py``, the output of the tests
 # is
+# .. code-block::
+#
+#     $ pytest test_classical_shadows.py
+#     ============================= test session starts =============================
+#     platform darwin -- Python 3.7.4, pytest-6.2.4, py-1.10.0, pluggy-0.13.0
+#     rootdir: /path/to/working/directory
+#     plugins: arraydiff-0.3, remotedata-0.3.2, doctestplus-0.4.0, openfiles-0.4.0
+#     collected 26 items
+#
+#     test_classical_shadows.py ........                                       [100%]
+#
+#     =================== 26 passed, 1 warning in 237.25s (0:03:57) ==================
+
 
 ##############################################################################
 # This confirms that our code is doing what we expect. Ideally, we want to add more
