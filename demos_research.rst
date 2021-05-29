@@ -201,6 +201,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/spsa`
     :tags: qiskit
 
+.. customgalleryitem::
+    :tooltip: Solve combinatorial problems without a classical optimizer.
+    :figure: demonstrations/falqon/falqon_thumbnail.png
+    :description: :doc:`demos/tutorial_falqon`
+    :tags: autograd
+
 
 :html:`</div></div><div style='clear:both'>`
 
