@@ -87,7 +87,7 @@ It can be seen that if the variational form is composed only of Pauli gates, the
 That's a scary sequence of words!
 What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus on one of the parameter values only, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)` assuming Pauli rotation gates in the circuit.
 
-That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\theta_1, \ldots, \thetaheta}}_i, \ldots, \theta_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
+That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\theta_1, \ldots, \hat{\theta}_i, \ldots, \theta_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
