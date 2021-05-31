@@ -187,10 +187,14 @@ COMMUNITY_CARD_TEMPLATE = """
 .. raw:: html
 
     <div class="card plugin-card">
-        <h4 class="card-header {color} lighten-4">{title}</h4>
+        <div class="card-header {color} lighten-4">
+            <h4 class="card-header__text">{title}</h4>
+        </div>
         <div class="card-body">
-            <h6>{author}</h6>
-            <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+            <div>
+                <h6>{author}</h6>
+                <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+            </div>
             <div class="row d-flex align-items-center">
                 <div class="col-lg-8">
                     <p class="card-text">
@@ -258,7 +262,7 @@ class CommunityCardDirective(Directive):
 
         if code_url is not None:
             code_footer = CODE_FOOTER.format(code=code_url)
-            
+
         blog_url = self.options.get("blog", None)
 
         if blog_url is not None:
