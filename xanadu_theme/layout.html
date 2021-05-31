@@ -243,8 +243,8 @@
           }
         });
         $(".document > .section").removeClass("section");
-        $(".comment-container .nano-content").css("height", $("#content").height());
-        $(".comment-container").css("height", $("#content").height());
+        var tocContainer = document.querySelector('.comment-container');
+        tocContainer.style.height = '85vh';
         $(".nano").nanoScroller();
     </script>
     <!-- lightslider -->
@@ -256,11 +256,20 @@
     </script>
     <script type="text/javascript">
       $(window).scroll(function(){
-        var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
-        if (scrollBottom < 342) {
-          $('.comment-container').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
-          $('.comment-container .nano-content').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
-        }
+          var windowHeight = window.innerHeight;
+          var footer = document.querySelector('.page-footer');
+          var footerPosition = footer.getBoundingClientRect();
+          var tocContainer = document.querySelector('.comment-container');
+
+          // Check if the footer is visible
+          if (footerPosition.top < windowHeight && footerPosition.bottom >= 0) {
+              // We want the height of the TOC to be the height of the main content minus how much of the footer is visible.
+              tocContainer.style.height = 'calc(85vh - 45px - ' + (windowHeight - footerPosition.top) + 'px)'
+          } else {
+            // When the user scrolls back to the top of the page after scrolling to the bottom of the page,
+            // We want to reset the TOC container back to it's original height
+            if (tocContainer.style.height !== '85vh') tocContainer.style.height = '85vh';
+          }
       });
       $(document).ready(function () {
           $(".css-transitions-only-after-page-load").each(function (index, element) {

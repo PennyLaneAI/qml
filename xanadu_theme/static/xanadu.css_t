@@ -698,7 +698,6 @@ td {
 }
 
 .comment-container {
-  /*margin: 24px auto;*/
   width: 300px;
   top: 119px;
   max-width: 300px;
@@ -707,7 +706,7 @@ td {
   transition-property: opacity;
   transition-duration: 1s;
   opacity: 0.5;
-  height: calc(100% - 119px);
+  height: 85vh;
 }
 
 .comment-container:hover {
