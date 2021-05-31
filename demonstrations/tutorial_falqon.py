@@ -58,7 +58,7 @@ construct a quantum control process such that the energy expectation :math:`\lan
 
 where the product rule and
 `the Schrödinger equation <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-dependent_equation>`__ are used to derive the above formula.
-If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
+If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t,` so that
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
 
@@ -70,7 +70,7 @@ evolve some initial state :math:`|\psi_0\rangle` under the time evolution operat
 .. math:: U(T) = \mathcal{T} \exp \Big[ -i \displaystyle\int_{0}^{T} H(t) \ dt \Big] \approx \mathcal{T} \exp \Big[ -i \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t \Big],
 
 where :math:`\mathcal{T}` is the `time-ordering operator <https://en.wikipedia.org/wiki/Path-ordering#Time_ordering>`__ and :math:`\Delta t` is some small time step,
-we will arrive at the ground state of :math:`H_c`, for a large enough value of :math:`T`. This is exactly the procedure used by FALQON.
+we will arrive at the ground state of :math:`H_c,` for a large enough value of :math:`T`. This is exactly the procedure used by FALQON.
 In general, implementing a time evolution unitary in a quantum circuit is
 difficult, so we use a
 `Trotter-Suzuki decomposition <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki%E2%80%93Trotter_expansion>`__
