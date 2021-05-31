@@ -186,42 +186,46 @@ class YoutubeItemDirective(Directive):
 COMMUNITY_CARD_TEMPLATE = """
 .. raw:: html
 
-    <div class="card plugin-card">
-        <div class="card-header {color} lighten-4">
-            <h4 class="card-header__text">{title}</h4>
-        </div>
-        <div class="card-body">
-            <div>
-                <h6>{author}</h6>
-                <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+    <div class="col-lg-6">
+        <div class="card plugin-card">
+            <div class="card-header {color} lighten-4">
+                <h4 class="card-header__text">{title}</h4>
             </div>
-            <div class="row d-flex align-items-center">
-                <div class="col-lg-8">
-                    <p class="card-text">
-                        {description}
-                    </p>
+            <div class="card-body">
+                <div>
+                    <h6>{author}</h6>
+                    <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
                 </div>
-                <div class="col-lg-4">
-                    {paper_footer}
-                    {blog_footer}
-                    {code_footer}
+                <div class="row">
+                    <div class="col-lg-8">
+                        <p class="plugin-card__description">
+                            {description}
+                        </p>
+                    </div>
+                    <div class="col-lg-4 d-flex">
+                        <div class="plugin-card__buttons">
+                            {paper_footer}
+                            {blog_footer}
+                            {code_footer}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 """
 
-PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width:90%;">
                 <i class="fas fa-book"></i> Paper
             </a>
 """
 
-BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width:90%;">
                 <i class="fas fa-newspaper"></i> Blog
             </a>
 """
 
-CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="box-shadow: unset; border-radius:5px; width:90%;">
+CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width:90%;">
                 <i class="fas fa-code-branch"></i></i> Code
             </a>
 """

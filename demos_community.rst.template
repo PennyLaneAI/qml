@@ -48,7 +48,7 @@ Community
 
 {% for card1, card2 in card_pairs %}
 
-:html:`<div class="card-deck">`
+:html:`<div class="row">`
 
 .. community-card::
     :title: {{ card1["title"] }}
