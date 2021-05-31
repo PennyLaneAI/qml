@@ -88,7 +88,7 @@ That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` dependi
 
 All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
 Another technique using this structure of :math:`E(\boldsymbol{\theta})` is the
-`Rotosolve algorithm <link rotosolve paper>`__ for which there also is `a demo <link rotosolve demo>`.
+Rotosolve algorithm [#Rotosolve]_ for which there also is `a demo <link rotosolve demo>`.
 
 Let's look at a toy example to illustrate this structure.
 """
@@ -571,3 +571,9 @@ leg = ax.legend()
 #
 #     Balint Koczor, Simon Benjamin. "Quantum Analytic Descent".
 #     `arXiv preprint arXiv:2008.13774 <https://arxiv.org/abs/2008.13774>`__.
+#
+# .. [#Rotosolve]
+#
+#     Mateusz Ostaszewski, Edward Grant, Marcello Benedetti.
+#     "Structure optimization for parameterized quantum circuits".
+#     `arXiv preprint arXiv:1905.09692 <https://arxiv.org/abs/1905.09692>`__.
