@@ -17,23 +17,25 @@ Quantum analytic descent
    tutorial_stochastic_parameter_shift Obtaining gradients stochastically
 
 
-*Authors: Elies Gil-Fuster, David Wierichs (Xanadu Residents) Posted: ?? May 2021. Last updated: ?? May 2021.*
+*Authors: Elies Gil-Fuster, David Wierichs. Posted: ?? May 2021.*
 
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
-The Variational Quantum Eigensolver (VQE) algorithm combines a smart circuit
-design with a gradient based optimization to solve the ground state energy
-problem.
+The Variational Quantum Eigensolver (VQE) combines a smart circuit
+design with a gradient-based optimization to solve this task
+(take a look at the `overview demo <link vqe overview demo>`__ for more details).
+Several practical demonstrations have pointed out how near-term quantum
+devices may be well-suited platforms for VQE and other variational quantum algorithms.
 One issue for such an approach is, though, that the optimization landscape is
-non-convex, so reaching a good enough local minimum easily requires hundreds or
+non-convex, so reaching a good enough local minimum quickly requires hundreds or
 thousands of update steps.
 
 At the same time, though, we do have a good understanding of the local shape
 of the cost landscape around any reference point.
-Cashing in on this, the Quantum Analytic Descent algorithm proposes using a
-local approximation to the landscape where gradient based optimisation is much
+Cashing in on this, the Quantum Analytic Descent algorithm constructs a
+local approximation to the landscape where gradient-based optimisation is much
 cheaper.
-Indeed, this approach avoids using the quantum computer to estimate the gradient
+This approach avoids using the quantum computer to estimate the gradient
 at every single optimization step.
 Instead, we can use the quantum device to estimate the cost values at a few
 points close to the reference one.
@@ -43,8 +45,8 @@ solely on a classical device.
 
 Here we demonstrate how to implement Quantum Analytic Descent on a quantum
 computer using PennyLane.
-Next to the code snippets we provide with the theory required to understand
-what is going on at the different steps, too.
+Inbetween we will look at the constructed model and the optimization steps
+carried out by the algorithm.
 So: sit down, relax, and enjoy your optimization!
 
 |
@@ -55,15 +57,6 @@ So: sit down, relax, and enjoy your optimization!
     :target: javascript:void(0)
 
 
-What is VQE?
-------------
-
-One of the prominent examples of Quantum Machine Learning (QML) algorithms is the so-called Variational Quantum Eigensolver (VQE).
-The origin of VQE is in trying to find the ground state energy of molecules or the eigenstates of a given Hamiltonian.
-Devoid of context, though, VQE is nothing but another instance of unsupervised learning for which we use a quantum device.
-Here the goal is to find a configuration of parameters that minimizes a cost function; no data set, no labels.
-
-Several practical demonstrations have pointed out how near-term quantum devices may be well-suited platforms for VQE and other variational quantum algorithms.
 
 VQEs give rise to trigonometric cost functions
 ----------------------------------------------
@@ -75,7 +68,7 @@ After the variational form, the circuit ends with a measurement of an observable
 
 With these, the common choice of cost function :math:`E(\boldsymbol{\theta})` is
 
-.. math:: E(\boldsymbol{\theta}) = |\langle0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle|^2,
+.. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle,
 
 or, in short
 
@@ -83,16 +76,21 @@ or, in short
 
 where :math:`\rho(\boldsymbol{\theta})=V(\boldsymbol{\theta})|0\rangle\!\langle0|V^\dagger(\boldsymbol{\theta})` is the density matrix of the quantum state after applying the variational form on the initial state.
 
-It can be seen that if the variational form is composed only of Pauli gates, then the cost function is a sum of multilinear trigonometric terms in each of the parameters.
+It can be seen that if the gates in the variational form which take the parameters :math:`\theta` 
+are restricted to be Pauli rotations, then the cost function is a sum of multilinear
+trigonometric terms in each of the parameters.
 That's a scary sequence of words!
-What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus on one of the parameter values only, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)` assuming Pauli rotation gates in the circuit.
+What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus on one of the parameter values only, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three terms: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
 
 That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters but one (which we could write for instance as :math:`a_i = a_i(\theta_1, \ldots, \hat{\theta}_i, \ldots, \theta_m)`, but we don't do it everywhere for the sake of notation ease), we can write :math:`E(\boldsymbol{\theta})` as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
 All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
-Let's look at a toy example to illustrate this!
+Another technique using this structure of :math:`E(\boldsymbol{\theta})` is the
+`Rotosolve algorithm <link rotosolve paper>`__ for which there also is `a demo <link rotosolve demo>`.
+
+Let's look at a toy example to illustrate this structure.
 """
 
 import pennylane as qml
@@ -133,10 +131,13 @@ ax.plot(theta_func, C2, label="$E(\\theta_1^{(0)}, \\vartheta)$", color='orange'
 ax.set_xlabel("$\\vartheta$");
 ax.set_ylabel("$E$");
 ax.legend();
+plt.tight_layout();
 
 # Create a 2D grid and evaluate the energy on the grid points.
+# We cut out a part of the landscape to increase clarity.
 X, Y = np.meshgrid(theta_func, theta_func);
-Z = np.array([[circuit([t1, t2]) for t2 in theta_func] for t1 in theta_func]);
+Z = np.array([[circuit([t1, t2]) if (2*np.pi-t1)**2+t2**2>2 else None
+    for t2 in theta_func] for t1 in theta_func]);
 
 # Show the energy landscape on the grid.
 fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(4, 4));
@@ -145,12 +146,15 @@ line1 = ax.plot([parameters[1]]*num_samples, theta_func, C1,
         label="$E(\\theta_1, \\theta_2^{(0)})$", color='r', zorder=100);
 line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
         label="$E(\\theta_1^{(0)}, \\theta_2)$", color='orange', zorder=100);
+plt.tight_layout();
 
 ###############################################################################
-# Of course this is an overly simplified example, but the key take-home message so far is: *the parameter landscape is a multilinear combination of trigonometric functions*.
+# Of course this is an overly simplified example, but the key take-home message so far is:
+# *if the variational parameters feed into Pauli rotations, the energy landscape is a 
+# multilinear combination of trigonometric functions*.
 # What is a good thing about trigonometric functions?
 # That's right!
-# We have studied them since high-school and know how to find their minima!
+# We have studied them since high-school and know how to find their minima.
 #
 # In our overly simplified example we had to query a quantum computer for every point on the surface.
 # Could we have spared some computational resources?
@@ -160,17 +164,16 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # ------------------------
 #
 # Although in principle we should be able to reconstruct the cost function over the entire parameter space, in practice we are mostly interested in what is happening in the vicinity of a given reference point.
-# This makes *all* the difference!
-# If we wanted to reconstruct the entire landscape, we would need to estimate around :math:`3^m` independent parameters, which would require the same number of function evaluations!
-# If, on the contrary, we are satisfied with an approximation that is cheaper to construct (polynomial in :math:`m` instead of exponential), we can borrow a page from Taylor's book!
+# This makes *all* the difference.
+# If we wanted to reconstruct the entire landscape, we would need to estimate around :math:`3^m` independent parameters, which would require the same number of function evaluations.
+# If, on the contrary, we are satisfied with an approximation that is cheaper to construct (polynomial in :math:`m` instead of exponential), we can borrow a page from Taylor's book.
 #
-# As explained in the paper, an approximation via trigonometric series up to second order is already a sound candidate!
+# As explained in the paper, an approximation via trigonometric series up to second order is already a sound candidate.
 # In particular, we want to approximate
 #
-# .. math:: E(\boldsymbol{\theta}) := \operatorname{tr}\left[\mathcal{M}\Phi(\boldsymbol{\theta})\rho_0\right]
+# .. math:: E(\boldsymbol{\theta}) := \operatorname{tr}\left[\mathcal{M}V(\boldsymbol{\theta})|0\rangle\!\langle 0| V(\boldsymbol{\theta})^\dagger\right]
 #
 # in the vicinity of a reference point :math:`\boldsymbol{\theta}_0`.
-# Here :math:`\rho_0` is the density matrix of the initial state, and :math:`\Phi(\boldsymbol{\theta})` is the quantum channel that implements the variational form.
 # We then have:
 #
 # .. math:: \hat{E}(\boldsymbol{\theta}_0+\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{l>k}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
@@ -353,12 +356,6 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 ###############################################################################
 # Let's try to visualize how sensible our approximate model is.
 # We let our toy model to be 2-dimensional so we could make the following 3D-plot.
-# Here, in orange we see the true landscape, and in blue the approximate model.
-# The vertical rod marks the reference point, from where we computed the trigonometric expansion.
-#
-# In the second plot, we see the difference between model and true landscape.
-# It is noteworthy that this deviation is an order of magnitude smaller than the cost function even for the rather large radius we chose to display.
-# This already hints at the value of the model.
 
 from mpl_toolkits.mplot3d import Axes3D
 from itertools import chain
@@ -419,7 +416,14 @@ mapped_model = lambda parameters: model_cost(parameters, *coeffs)
 plot_cost_and_model(circuit, mapped_model, parameters)
 
 ###############################################################################
-# We are now in a position from where we can implement the loop between steps 2. and 4. of our strategy.
+# Here, in orange we see the true landscape, and in blue the approximate model.
+# The vertical rod marks the reference point, from where we computed the trigonometric expansion.
+#
+# In the second plot, we see the difference between model and true landscape.
+# It is noteworthy that this deviation is an order of magnitude smaller than the cost function even for the rather large radius we chose to display.
+# This already hints at the value of the model.
+#
+# We are now in a position from where we can implement the loop between Steps 2 and 4 of our strategy.
 # Indeed, for a relatively small number of iterations we should already find a low enough value.
 # If we look back at the circuit we defined, we notice that we are measuring the observable
 #
@@ -494,19 +498,19 @@ mapped_model = lambda par: model_cost(par, *past_coeffs[0])
 plot_cost_and_model(circuit, mapped_model, past_parameters[0])
 
 ###############################################################################
-# Step 1: We see the cost function around our (new) starting point and the model similar to the inpection above.
+# **Iteration 1:** We see the cost function around our (new) starting point and the model similar to the inpection above.
 
 mapped_model = lambda par: model_cost(par, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
 
 ###############################################################################
-# Step 2: Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range.
+# **Iteration 2:** Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range.
 
 mapped_model = lambda par: model_cost(par, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
-# Step 3: Both, the model and the original cost function now show a minimum close to our parameter position, Quantum Analytic Descent converged.
+# **Iteration 3:** Both, the model and the original cost function now show a minimum close to our parameter position, Quantum Analytic Descent converged.
 # Note how the large deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area,
 # in which the deviation plateaus at zero.
 #
@@ -526,21 +530,25 @@ ax.set_ylabel("cost")
 leg = ax.legend()
 
 ###############################################################################
-# Each of the orange lines corresponde to minimizing on the model from a
+# Each of the orange lines corresponds to minimizing the model constructed at a
 # different reference point.
 # We can now more easily appreciate the phenomenon we just described:
-# indeed towards the end of each "outer" optimization step, the model cost
-# can be seen to be appreciably lower than the true cost.
+# towards the end of each "outer" optimization step, the model cost
+# can be seen to be significantly lower than the true cost.
 # Once the true cost itself approaches the absolute minimum, this means the
 # model cost can overstep the allowed range.
 # *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` *(nostalgic* emoticon *time >:@)!*
 # Yes, but careful!
 # We said the *true cost* values are bounded, yet, that does not mean the ones of the *model* are!
 # Notice also how this only happens at the first stages of analytic descent.
-# Bringing together a few chords we have touched so far: once we fix a reference value, the further we go from it, the less accurate our model is.
-# So, if we start far off from the true minimum, it can be the case that our model overshoots how steep the landscape is and then the model minimum deeps lower than that of the true cost. We see how values exiting the allowed range does not have any negative effect in the overall optimization.
+#
+# Bringing together a few chords we have touched so far: once we fix a reference value, the further we go from it, the less accurate our model becomes.
+# Thus, if we start far off from the true minimum, it can happen that our model exaggerates how steep the landscape is and then the model minimum lies lower than that of the true cost.
+# We see how values exiting the allowed range of the true cost function does not have an
+# impact on the overall optimization.
+#
 # Once we have found the model global minimum, we use the corresponding parameters as our new reference ones.
-# This includes, at the first step, computing the true cost at those parameters, which we print under "Original energy at the minimum of the model" at the end of each iteration.
+# This includes, at the first step, computing the true cost at those parameters, which we print as the "original energy at the minimum of the model" at the end of each iteration.
 #
 # In this demo we've seen how to implement the Quantum Analytic Descent algorithm
 # using PennyLane for a toy-example of a Variational Quantum Eigensolver.
