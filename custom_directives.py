@@ -201,7 +201,9 @@ COMMUNITY_CARD_TEMPLATE = """
                         <p class="plugin-card__description">
                             {description}
                         </p>
-                        <a class="mt-auto" href="google.com">Read More</a>
+                        <div class="mt-auto">
+                            <a class="d-none" href="google.com">Read More</a>
+                        </div>
                     </div>
                     <div class="col-lg-4 d-flex">
                         <div class="plugin-card__buttons">
