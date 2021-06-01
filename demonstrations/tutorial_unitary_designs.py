@@ -568,19 +568,16 @@ plt.show()
 # fidelities.
 #
 # Now let's repeat the procedure using only Clifford group elements. First, we
-# write a quantum function that performs a Clifford operation based on its
-# string representation.
+# write a quantum function that performs a Clifford operation (or its inverse)
+# based on its string representation.
 
 def apply_single_clifford(clifford_string, inverse=False):
     for gate in clifford_string:
         if gate == 'H':
             qml.Hadamard(wires=0)
         else:
-            # We must manually apply the inverse as it is not yet supported on default.mixed
-            if inverse:
-                qml.PhaseShift(np.pi/2, wires=0)
-            else:
-                qml.PhaseShift(-np.pi/2, wires=0)
+            sign = -1 if inverse else 1
+            qml.PhaseShift(sign * np.pi/2, wires=0)
 
 ######################################################################
 # Next, we need a transform that applies a Clifford in the context of the full
