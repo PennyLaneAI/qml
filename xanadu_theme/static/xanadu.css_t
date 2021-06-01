@@ -2142,11 +2142,24 @@ footer.page-footer .footer-copyright {
 }
 
 .plugin-card__description {
-    height: 120px;
-    overflow: scroll;
+    height: 115px;
+    overflow: hidden;
     font-size: .9rem;
     font-weight: 400;
     color: #747373;
+    margin-bottom: .5rem;
+    position: relative;
+}
+
+.plugin-card__description:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -15px;
+    right: -15px;
+    pointer-events: none;
+    box-shadow: inset 0px -40px 25px -30px white;
 }
 
 .weird-blue-gradient {

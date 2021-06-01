@@ -192,15 +192,16 @@ COMMUNITY_CARD_TEMPLATE = """
                 <h4 class="card-header__text">{title}</h4>
             </div>
             <div class="card-body">
-                <div>
-                    <h6>{author}</h6>
-                    <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8">
+                <div class="row h-100">
+                    <div class="col-lg-8 h-100 d-flex flex-column">
+                        <div>
+                            <h6>{author}</h6>
+                            <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+                        </div>
                         <p class="plugin-card__description">
                             {description}
                         </p>
+                        <a class="mt-auto" href="google.com">Read More</a>
                     </div>
                     <div class="col-lg-4 d-flex">
                         <div class="plugin-card__buttons">
@@ -215,17 +216,17 @@ COMMUNITY_CARD_TEMPLATE = """
     </div>
 """
 
-PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width:90%;">
+PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width: 100%;">
                 <i class="fas fa-book"></i> Paper
             </a>
 """
 
-BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width:90%;">
+BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width: 100%;">
                 <i class="fas fa-newspaper"></i> Blog
             </a>
 """
 
-CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width:90%;">
+CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width: 100%;">
                 <i class="fas fa-code-branch"></i></i> Code
             </a>
 """
