@@ -32,20 +32,20 @@ Take a close look at the following mathematical object:
 
 There are many things we can say about it: it consists of seven points and seven
 lines (the circle counts as a line!); each line contains three points, and each
-point is contained in three lines. Furthermore, any pair of points occur together
-in exactly one line. This object, called the `Fano plane
+point is contained in three lines. Furthermore, any pair of points occur
+together in exactly one line. This object, called the `Fano plane
 <https://en.wikipedia.org/wiki/Fano_plane>`__, is an instance of a mathematical
 structure called a `projective plane
 <https://en.wikipedia.org/wiki/Projective_plane>`__, which is just one example
 of a `combinatorial design
 <https://en.wikipedia.org/wiki/Combinatorial_design>`__. Designs are sets of
-objects, and groups of those objects, that satisfy certain balance properties and
-symmetries. They have been studied for hundreds of years in a huge variety of
-contexts [#Handbook]_, from `error correcting codes
+objects, and groups of those objects, that satisfy certain balance properties
+and symmetries. They have been studied for hundreds of years in a huge variety
+of contexts [#Handbook]_, from `error correcting codes
 <http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.5465>`__, to `card
 games <https://homepages.warwick.ac.uk/staff/D.Maclagan/papers/set.pdf>`__, and
 even `agriculture
-<http://www-groups.mcs.st-and.ac.uk/~rab/histLShand.pdf>`__. So---what about
+<http://www-groups.mcs.st-and.ac.uk/~rab/histLShand.pdf>`__. So, what about
 quantum computing?
 
 Designs are actually quite prevalent in quantum computing. You've almost
@@ -70,20 +70,16 @@ From spheres to unitary :math:`t`-designs
 Spherical designs
 ^^^^^^^^^^^^^^^^^
 
-In the `Haar measure demo <demos/tutorial_haar_measure>`__ we began the
-discussion by providing some intuition based on the sphere. We take a similar
-approach here and discuss spherical :math:`t`-designs before discussing unitary
-designs.
-
-Suppose we have a polynomial in :math:`d` variables, and we would like to
-compute its average over the surface of a real, :math:`d`-dimensional unit sphere,
-:math:`S(R^d)`. One can do so by integrating that function over the sphere
-(using the proper measure!), but that would be a lot of parameters to keep track
-of. In fact, it might even be overkill---if the terms in the polynomial have the
-same degree of at most :math:`t`, you can compute the average over the sphere
-using only a small set of points rather than integrating over the entire sphere!
-That set of points is called a spherical :math:`t`-design. More formally [#Handbook]_,
-[#Delsarte]_:
+Before diving into unitary designs, let's start by looking at spheres for some
+intuition.  Suppose we have a polynomial in :math:`d` variables, and we would
+like to compute its average over the surface of a real, :math:`d`-dimensional
+unit sphere, :math:`S(R^d)`. One can do so by integrating that function over the
+sphere (using the proper measure!), but that would be a lot of parameters to
+keep track of. In fact, it might even be overkill---if the terms in the
+polynomial have the same degree of at most :math:`t`, you can compute the
+average over the sphere using only a small set of points rather than integrating
+over the entire sphere!  That set of points is called a spherical
+:math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
 
 .. admonition:: Definition
     :class: defn
@@ -162,7 +158,7 @@ variable.
     holds for all possible :math:`p_{t,t}`.
 
 Complex projective designs are sometimes called :math:`(t, t)`-designs.  They
-are also directly connected to spherical designs--spherical :math:`t`-designs
+are also directly connected to spherical designs---spherical :math:`t`-designs
 can be transformed into :math:`t/2`-designs over :math:`\mathcal{S}(C^{d/2})`
 [#Ambainis]_.
 
@@ -267,13 +263,13 @@ over all such :math:`U`, we must evaluate
     \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
 
 This is known as *twirling* the channel :math:`\Lambda`. Computing the average
-fidelity in this way would be a nightmare--we'd have to compute the fidelity
+fidelity in this way would be a nightmare---we'd have to compute the fidelity
 with respect to an infinite number of states!
 
 However, consider the expression in the integral above. We have an inner product
 involving two instances of :math:`U`, and two instances of
 :math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
-both the elements of :math:`U` and its complex conjugates--this matches exactly
+both the elements of :math:`U` and its complex conjugates---this matches exactly
 the definition of a unitary 2-design! This means that if we can find a set of
 :math:`K` unitaries that form a 2-design, we can compute the average fidelity
 using only a finite set of initial states:
@@ -351,21 +347,20 @@ single_qubit_cliffords = [
 ]
 
 ######################################################################
-# .. admonition:: Fun fact
 #
-#    Despite its size, the multi-qubit Clifford can also be specified by only a
-#    small set of generators. In fact, it is only one more gate than is needed
-#    for the single-qubit case.  Together, :math:`H`, :math:`S`, and CNOT (on
-#    every possible qubit or pair of qubits), generate the :math:`n`-qubit
-#    group. Be careful though--the size of the group increases
-#    exponentially. The 2-qubit group alone has 11520 elements! The size can be
-#    worked out in a manner analogous to that we used above in the single qubit
-#    case: by looking at the combinatorics of the possible ways the gates can
-#    map Paulis with only :math:`X` and :math:`Z` to other Paulis.
+# While we will not investigate it here, the multi-qubit Clifford can also be
+# specified by only a small set of generators. In fact, it is only one more gate
+# than is needed for the single-qubit case.  Together, :math:`H`, :math:`S`, and
+# CNOT (on every possible qubit or pair of qubits), generate the :math:`n`-qubit
+# group. Be careful though--the size of the group increases exponentially. The
+# 2-qubit group alone has 11520 elements! The size can be worked out in a manner
+# analogous to that we used above in the single qubit case: by looking at the
+# combinatorics of the possible ways the gates can map Paulis with only
+# :math:`X` and :math:`Z` to other Paulis.
 #
 # An experiment
 # ^^^^^^^^^^^^^
-# The whole idea of unitary designs may sound too good to be true--can we
+# The whole idea of unitary designs may sound too good to be true. Can we
 # *really* compute the exact average fidelity using just 24 operations? In this
 # section, we'll put them to the test: we'll compute the average fidelity of an
 # operation first with experiments using a large but finite amount of Haar-random
