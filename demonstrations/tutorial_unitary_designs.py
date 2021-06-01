@@ -13,7 +13,7 @@ Unitary Designs
 
     tutorial_haar_measure Understanding the Haar measure
 
-*Author: PennyLane dev team. Posted: XX May 2021. Last updated: XX May 2021.*
+*Author: PennyLane dev team. Posted: XX June 2021. Last updated: XX June 2021.*
 
 
 .. note::
@@ -649,7 +649,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # interest, as there ways to construct them that are more efficient than those
 # of exact designs [#Dankert]_. In particular, it has been shown that
 # approximate complex projective 4-designs have applications to the state
-# distinction problem [#Ambainis]_.
+# discrimination problem [#Ambainis]_.
 #
 # Furthermore, unitary designs are not the only designs that you'll encounter
 # in quantum computing. The familiar Hadamard gate is just a 2-dimensional
