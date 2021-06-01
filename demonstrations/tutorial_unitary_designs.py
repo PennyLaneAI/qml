@@ -75,11 +75,18 @@ intuition.  Suppose we have a polynomial in :math:`d` variables, and we would
 like to compute its average over the surface of a real, :math:`d`-dimensional
 unit sphere, :math:`S(R^d)`. One can do so by integrating that function over the
 sphere (using the proper measure), but that would be a lot of parameters to
-keep track of. In fact, it might even be overkill---if the terms in the
-polynomial have the same degree of at most :math:`t`, you can compute the
-average over the sphere using only a small set of points rather than integrating
-over the entire sphere.  That set of points is called a spherical
-:math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
+keep track of. 
+
+One could alternatively approximate the average by sampling thousands of points
+uniformly at random on the sphere, evaluating the function at those points, and
+computing their average value. That will always work, and it will get us close,
+but it will not be exact.
+
+In fact, both of those approaches may be overkill in some special cases---if the
+terms in the polynomial have the same degree of at most :math:`t`, you can
+compute the average **exactly** over the sphere using only a small set of points
+rather than integrating over the entire sphere.  That set of points is called a
+spherical :math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
 
 .. admonition:: Definition
     :class: defn
@@ -103,8 +110,7 @@ sphere. This definition tells us that if we want to take the average of a
 polynomial over a sphere where all terms have the same degree of at most 2, we
 can average using a small, representative set of points called a 2-design,
 rather than the whole sphere. Similarly, if all terms of the polynomial have the
-same degree of at most 3, we could use a 3-design. In all cases, we can compute
-this average **exactly**.
+same degree of at most 3, we could use a 3-design. 
 
 But what are these representative sets of points?  Since we are using these
 points as a stand-in for averaging over the whole sphere, we'd want the points
@@ -144,10 +150,7 @@ We can compute the average value of :math:`f` by integrating over a unit sphere:
 the result is :math:`4/15 \approx 0.26667`. However, this integral is
 non-trivial to evaluate by hand; the most straightforward way is to convert to
 polar coordinates, and even then, it involves integrating functions with 4th and
-5th powers of trigonometric functions. One could alternatively approximate the
-average by sampling thousands of points uniformly at random on the sphere,
-evaluating the function at those points, and computing their average value. That
-will get us close, but it will not be exact.
+5th powers of trigonometric functions.
 
 Instead, this is a case where we can leverage the fact that all terms in the
 polynomial have degree 4, and compute the average exactly using only a subset of
