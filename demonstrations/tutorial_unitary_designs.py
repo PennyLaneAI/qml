@@ -70,7 +70,7 @@ From spheres to unitary :math:`t`-designs
 Spherical designs
 ^^^^^^^^^^^^^^^^^
 
-Before diving into unitary designs, let's start by looking at spheres for some
+Before diving into unitary designs, let's look at the sphere for some
 intuition.  Suppose we have a polynomial in :math:`d` variables, and we would
 like to compute its average over the surface of a real, :math:`d`-dimensional
 unit sphere, :math:`S(R^d)`. One can do so by integrating that function over the
@@ -93,21 +93,24 @@ over the entire sphere.  That set of points is called a spherical
         \frac{1}{|X|} \sum_{x \in X} p_t(x) = \int_{\mathcal{S}(R^d)} p_t (u) d\mu(u)
 
     holds for all possible :math:`p_t`, where :math:`d\mu` is the uniform,
-    normalized spherical measure.
+    normalized spherical measure. A spherical :math:`t`-design is also a
+    :math:`k`-design for all :math:`k < t`.
 
 
-Now, this is a pretty abstract picture, so let's consider the 3-dimensional
-sphere. What this definition tells us is that if we want to take the average of
-a polynomial over a sphere where all terms have at most degree 2, we can do so
-with a small, representative set of points called a 2-design, rather than the
-whole sphere. Similarly, if all terms of the polynomial have at most degree 3,
-we could use a 3-design. In all cases, we can compute this average
-*exactly*. But what are these representative sets of points?  Surely, we'd want
-to have a set of points that are distributed so as to provide sufficient
-"coverage" of the whole sphere.
 
-In the 3-dimensional case, the points that comprise :math:`t`-designs are some
-familiar solids [#Handbook]_, [#sph4design]_
+Now this is a pretty abstract picture, so let's consider the 3-dimensional
+sphere. This definition tells us that if we want to take the average of a
+polynomial over a sphere where all terms have the same degree of at most 2, we
+can average using a small, representative set of points called a 2-design,
+rather than the whole sphere. Similarly, if all terms of the polynomial have the
+same degree of at most 3, we could use a 3-design. In all cases, we can compute
+this average **exactly**.
+
+But what are these representative sets of points?  Since we are using these
+points as a stand-in for averaging over the whole sphere, we'd want the points
+in the set to be distributed in a way that provides sufficient "coverage". In
+the 3-dimensional case, :math:`t`-designs take the form of some familiar solids
+[#Handbook]_, [#sph4design]_:
 
 .. figure:: /demonstrations/unitary_designs/shapes.svg
    :align: center
@@ -119,11 +122,16 @@ familiar solids [#Handbook]_, [#sph4design]_
 
 We see from these illustrations that spherical designs are sets of
 *evenly-spaced points* on the surface of a sphere. As :math:`t` increases, the
-configurations become increasingly sphere-like.
-Spherical designs exist for all :math:`t` and dimension :math:`d`
-[#Handbook]_. They are not always unique, and may have varying numbers of points
-(as can be seen above). Furthermore, a spherical :math:`t`-design is a
-:math:`k`-design for all :math:`k < t` as well.
+configurations become increasingly sphere-like. Looking at this in a different
+way, the more complex a function becomes as its degree increases, the closer the
+:math:`t`-design must be to a sphere; we need to evaluate the function at more
+points in order to gain sufficient information when a function is varying more
+quickly due to a higher degree. In 3 dimensions, a function with degree 2 can
+be approximated with something as simple as a tetrahedron, despite the fact that
+it doesn't look spherical at all, while more complex functions require more
+points and thus more complex configurations for the design.  Spherical designs
+exist for all :math:`t` and dimension :math:`d` [#Handbook]_. They are not
+always unique, and may have varying numbers of points (as can be seen above).
 
 To show that this really works, let's look at an explicit example. Consider the
 following polynomial in 3 variables:
@@ -132,21 +140,20 @@ following polynomial in 3 variables:
 
    f(x, y, z) = x^4 - 4 x^3 y + y^2 z^2
 
-We can compute the average value of this function over a unit sphere to
-be :math:`4/15 \approx 0.267`. However, this integral is non-trivial to
-evaluate by hand; the most straightforward way would be to convert to polar
-coordinates, and even then, we'd be integrating functions with 4th and 5th
-powers of trigonometric functions.
-
-One could consider computing an approximate value of this average by sampling
-thousands of points uniformly at random on the sphere, evaluating the function,
-and computing the average value. That will get us close, but it will not be exact. 
+We can compute the average value of :math:`f` by integrating over a unit sphere:
+the result is :math:`4/15 \approx 0.26667`. However, this integral is
+non-trivial to evaluate by hand; the most straightforward way is to convert to
+polar coordinates, and even then, it involves integrating functions with 4th and
+5th powers of trigonometric functions. One could alternatively approximate the
+average by sampling thousands of points uniformly at random on the sphere,
+evaluating the function at those points, and computing their average value. That
+will get us close, but it will not be exact.
 
 Instead, this is a case where we can leverage the fact that all terms in the
 polynomial have degree 4, and compute the average exactly using only a subset of
-points that form a 4-design. We choose a dodecahedron; while this is actually a
-5 design, it also forms a 4-design, and is a more familiar shape and easier to
-work with than the 4-design depicted above.
+points that form a 4-design. We choose a dodecahedron for convenience; while
+this is actually a 5 design, it also forms a 4-design, and is a more familiar
+shape than the 4-design depicted above.
 
 First, we define the set of points that comprise a dodecahedron:
 
@@ -188,10 +195,10 @@ dodeca_average = np.mean([f(*point) for point in dodecahedron])
 print(dodeca_average)
 
 ######################################################################
-# This is exactly the value we expect. To further emphasize the nature of
-# spherical designs, let's try this using only a 3-design, the cube.
+# This is exactly the value we expect. What happens if we try to do this using
+# only a 3-design, the cube?
 
-# The first 8 points of the dodecahedron are the cube
+# The first 8 points of the dodecahedron are a cube
 cube = dodecahedron[:8]
 
 cube_average = np.mean([f(*point) for point in cube])
@@ -206,8 +213,8 @@ print(cube_average)
 # Unitary designs
 # ^^^^^^^^^^^^^^^
 # 
-# We've seen now how spherical are sets of evenly-spaced points in the space
-# that you can use as "short cuts" to evaluate the average of a polynomial up to
+# We've demonstrated how spherical are sets of evenly-spaced points on a sphere
+# that you can use as short cuts to evaluate the average of a polynomial up to
 # a given degree :math:`t`. However, there was nothing quantum about this; there
 # weren't even any complex numbers involved. A *unitary design* extends this
 # concept from evenly-distributed points to evenly-distributed unitaries.  More
@@ -231,11 +238,10 @@ print(cube_average)
 #     holds for all possible :math:`P_{t,t}`, and where :math:`d\mu` is the
 #     uniform *Haar measure*.
 # 
-# We must stress that expression is **exact**. Like the points on a sphere that
-# comprise a spherical design, the unitaries in a unitary design are a
-# representative set of points that are "evenly spaced" across the unitary
-# group. With just a subset of the full unitary group, we can evaluate complex
-# expressions that would be otherwise intractable.
+# We stress again that this expression is **exact**. The unitaries in a unitary
+# design are a representative set of points that are "evenly spaced" across the
+# unitary group. With just a subset of the full unitary group, we can evaluate
+# complex expressions that would be otherwise intractable.
 # 
 # A surprising result about unitary designs is that they exist for all possible
 # combinations of :math:`t` and :math:`d` [#Roy]_. There are some known lower
@@ -268,8 +274,7 @@ print(cube_average)
 #
 # While in general unitary designs are hard to construct, there are well known
 # results for unitary 1-, 2-, and 3-designs based on familiar objects in quantum
-# computing. Before we see what those are, let's explore why such designs are
-# useful.
+# computing. Before we see what those are, let's explore an important use case.
 #
 # Average fidelity
 # ^^^^^^^^^^^^^^^^
@@ -324,8 +329,8 @@ print(cube_average)
 #
 # This is great, but a question remains: what is the representative set of unitaries?
 #
-# Design design
-# ^^^^^^^^^^^^^
+# The Clifford group
+# ^^^^^^^^^^^^^^^^^^
 #
 # A beautiful result in quantum computing is that some special groups you may
 # already be familiar with are unitary designs:
@@ -374,8 +379,12 @@ print(cube_average)
 # act on :math:`X` and :math:`Z`.  For a particular Clifford, there are 6 possible
 # ways it can transform :math:`X`, namely :math:`\pm X, \pm Y`, or :math:`\pm Z`.  Once
 # that is determined, there are four remaining options for the transformation of
-# :math:`Z`, leading to 24 elements total. Expressed in string form, they are:
-# 
+# :math:`Z`, leading to 24 elements total.
+#
+# It takes some work, but you can take combinations of :math:`H` and :math:`S`
+# and evaluate their action on :math:`X` and :math:`Z` (or look at their matrix
+# representations) until you find all 24 unique elements. The results of
+# this endeavour are expressed below as strings:
 
 single_qubit_cliffords = [
  '',
@@ -388,12 +397,19 @@ single_qubit_cliffords = [
 ]
 
 ######################################################################
+# To see for yourself how this set of unitaries is evenly distributed, try
+# applying each of the Cliffords to the initial state :math:`|0\rangle`, and
+# plot the resulting states on the Bloch sphere. You'll find they are
+# symmetric and evenly spaced; in fact, they are all eigenstates of :math:`X`,
+# :math:`Y`, and :math:`Z`. Furthermore, under the full group action, the result
+# is balanced in the sense that each eigenstate is obtained the same number of
+# times.
 #
-# While we will not investigate it here, the multi-qubit Clifford can also be
-# specified by only a small set of generators. In fact, it is only one more gate
-# than is needed for the single-qubit case.  Together, :math:`H`, :math:`S`, and
+# While we do not explore it here, the multi-qubit Clifford can also be
+# specified by only a small set of generators (in fact, only one more
+# than is needed for the single-qubit case). Together, :math:`H`, :math:`S`, and
 # CNOT (on every possible qubit or pair of qubits), generate the :math:`n`-qubit
-# group. Be careful though--the size of the group increases exponentially. The
+# group. Be careful though---the size of the group increases exponentially. The
 # 2-qubit group alone has 11520 elements! The size can be worked out in a manner
 # analogous to that we used above in the single qubit case: by looking at the
 # combinatorics of the possible ways the gates can map Paulis with only
