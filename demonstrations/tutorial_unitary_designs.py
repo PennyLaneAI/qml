@@ -31,7 +31,7 @@ Take a close look at the following mathematical object:
 |
 
 There are many things we can say about it: it consists of seven points and seven
-lines (the circle counts as a line!); each line contains three points, and each
+lines (the circle counts as a line); each line contains three points, and each
 point is contained in three lines. Furthermore, any pair of points occur
 together in exactly one line. This object, called the `Fano plane
 <https://en.wikipedia.org/wiki/Fano_plane>`__, is an instance of a mathematical
@@ -49,7 +49,7 @@ even `agriculture
 quantum computing?
 
 Designs are actually quite prevalent in quantum computing. You've almost
-certainly come across one before, though you may not have realized it! At the
+certainly come across one before, though you may not have realized it. At the
 end of the Haar measure demo, we asked a very important question: "do we always
 *need* to sample from the full Haar measure?". The answer to this is "no", and
 the reasoning lies in the study of *unitary designs*.
@@ -74,11 +74,11 @@ Before diving into unitary designs, let's start by looking at spheres for some
 intuition.  Suppose we have a polynomial in :math:`d` variables, and we would
 like to compute its average over the surface of a real, :math:`d`-dimensional
 unit sphere, :math:`S(R^d)`. One can do so by integrating that function over the
-sphere (using the proper measure!), but that would be a lot of parameters to
+sphere (using the proper measure), but that would be a lot of parameters to
 keep track of. In fact, it might even be overkill---if the terms in the
 polynomial have the same degree of at most :math:`t`, you can compute the
 average over the sphere using only a small set of points rather than integrating
-over the entire sphere!  That set of points is called a spherical
+over the entire sphere.  That set of points is called a spherical
 :math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
 
 .. admonition:: Definition
@@ -101,9 +101,10 @@ sphere. What this definition tells us is that if we want to take the average of
 a polynomial over a sphere where all terms have at most degree 2, we can do so
 with a small, representative set of points called a 2-design, rather than the
 whole sphere. Similarly, if all terms of the polynomial have at most degree 3,
-we could use a 3-design. But what are these representative sets of points?
-Surely, we'd want to have a set of points that are distributed so as to provide
-sufficient "coverage" of the whole sphere.
+we could use a 3-design. In all cases, we can compute this average
+*exactly*. But what are these representative sets of points?  Surely, we'd want
+to have a set of points that are distributed so as to provide sufficient
+"coverage" of the whole sphere.
 
 In the 3-dimensional case, the points that comprise :math:`t`-designs are some
 familiar solids [#Handbook]_, [#sph4design]_
@@ -122,219 +123,259 @@ configurations become increasingly sphere-like.
 Spherical designs exist for all :math:`t` and dimension :math:`d`
 [#Handbook]_. They are not always unique, and may have varying numbers of points
 (as can be seen above). Furthermore, a spherical :math:`t`-design is a
-:math:`k`-design for all :math:`k < t` as well!
+:math:`k`-design for all :math:`k < t` as well.
 
-
-Complex projective designs
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You may have noticed that there is nothing quantum about spherical
-designs. However, we can build on the idea to provide more intuition about what
-unitary designs are, and what they should do. The most pressing matter is that
-so far we have dealt only with real numbers. We will need to include
-complex values, given that unitary matrices have complex entries.
-
-*Complex projective designs* lie conceptually between spherical and unitary
-designs. Rather than considering real-valued points, or vectors, on the unit
-sphere of :math:`\mathcal{S}(R^d)`, we consider complex-valued unit vectors on
-the sphere :math:`\mathcal{S}(C^d)`. Complex projective designs can be used to
-compute average values of polynomials in both the real and complex versions of a
-variable.
-
-.. admonition:: Definition
-    :class: defn
-
-    Let :math:`p_{t,t}: \mathcal{S}(C^d)\rightarrow C` be a polynomial with all
-    terms homogeneous in degree at most :math:`t` in :math:`d` variables, and
-    degree :math:`t` in the complex conjugates of those variables. A set
-    :math:`X = \{x: x \in \mathcal{S}(C^d)\}` is a complex projective
-    :math:`t`-design if
-
-    .. math::
-
-        \frac{1}{|X|} \sum_{x \in X} p_{t,t}(x) = \int_{\mathcal{S}(C^d)}
-        p_{t,t} (u) d\mu(u)
-
-    holds for all possible :math:`p_{t,t}`.
-
-Complex projective designs are sometimes called :math:`(t, t)`-designs.  They
-are also directly connected to spherical designs---spherical :math:`t`-designs
-can be transformed into :math:`t/2`-designs over :math:`\mathcal{S}(C^{d/2})`
-[#Ambainis]_.
-
-.. admonition:: Fun fact
-
-    If you've ever studied the characterization of quantum systems, you may have come across
-    some special sets of measurements called mutually unbiased bases (MUBs), or symmetric,
-    informationally complete positive operator valued measurements (SIC-POVMs). Both
-    of these sets of vectors are complex projective 2-designs! [#Klappenecker]_
-
-
-Unitary designs
-^^^^^^^^^^^^^^^
-
-We've seen how both spherical and complex projective designs are sets of evenly distributed
-points in the space that you can use as "short cuts" to evaluate the average of
-a polynomial up to a given degree :math:`t`. A *unitary design* takes this one
-step further---it considers polynomials that are functions of entries of unitary
-matrices [#Dankert]_, [#Gross]_.
-
-.. admonition:: Definition
-    :class: defn
-
-    Let :math:`P_{t,t}(U)` be a polynomial with homogeneous degree at most :math:`t` in
-    :math:`d` variables in the entries of a unitary matrix :math:`U`, and degree
-    :math:`t` in the complex conjugates of those entries. A unitary
-    :math:`t`-design is a set of :math:`K` unitaries :math:`\{U_k\}` such that
-
-    .. math::
-
-        \frac{1}{K} \sum_{k=1}^{K} P_{t,t}(U_k) = \int_{\mathcal{U}(d)}
-        P_{t,t} (U) d\mu(U)
-
-    holds for all possible :math:`P_{t,t}`, and where :math:`d\mu` is the
-    uniform *Haar measure*.
-
-We must stress that expression is **exact**. Like the points on a sphere that
-comprise a spherical design, the unitaries in a unitary design are a
-representative set of points that are "evenly spaced" across the unitary
-group. With just a subset of the full unitary group, we can evaluate complex
-expressions that would be otherwise intractable.
-
-A surprising result about unitary designs is that they exist for all possible
-combinations of :math:`t` and :math:`d` [#Roy]_. There are some known lower
-bounds for the number of unitaries required; for example, a 2-design in
-dimension has minimum size :math:`d` is :math:`d^4 - 2d^2 + 2` [#Gross]_,
-[#Roy]_.  However, actually finding the sets (and in particular, finding ones
-with minimal size), is a challenging problem [#Bannai]_, though very recently
-some constructions have been put forward [#Nakata]_.
-
-
-.. admonition:: Fun fact
-
-    Applying the elements of a unitary design to a fixed pure state produces
-    a set of vectors that form a complex projective design [#DankertThesis]_!
-
-Unitary :math:`t`-designs in action
------------------------------------
-
-Unitary designs come into play in applications that require randomization, or
-sampling of random unitaries---essentially, they can be used as a stand-in for
-the Haar measure. The way in which the unitaries are used in the application may
-place restrictions on the value of :math:`t` that is required; arguably the most
-common is the unitary 2-design.
-
-While in general unitary designs are hard to construct, there are well known
-results for unitary 1-, 2-, and 3-designs based on familiar objects in quantum
-computing. Before we see what those are, let's explore why such designs are
-useful.
-
-Average fidelity
-^^^^^^^^^^^^^^^^
-A key application of unitary 2-designs is benchmarking quantum
-operations. Suppose we have a noisy quantum channel :math:`\Lambda` that should
-perform something close to the unitary operation :math:`V`.  What can we say
-about the performance of this channel?
-
-One metric of interest is the *fidelity*. Consider the state :math:`|0\rangle`.
-In an ideal case, applying :math:`V` gives :math:`V|0\rangle`.  But applying the
-channel :math:`\Lambda` gives us something a little different. Since it's noisy,
-we must consider the state as a density matrix. The action of :math:`\Lambda` on
-our starting state is :math:`\Lambda(|0\rangle \langle 0|)`.  If :math:`\Lambda`
-was perfect, then :math:`\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle
-0|V^\dagger`, and the fidelity is
+To show that this really works, let's look at an explicit example. Consider the
+following polynomial in 3 variables:
 
 .. math::
 
-    F(\Lambda, V) = \langle 0 | V^\dagger \cdot \Lambda(|0\rangle \langle 0|) \cdot V|0\rangle = 1.
+   f(x, y, z) = x^4 - 4 x^3 y + y^2 z^2
 
-In reality, :math:`\Lambda` is not going to implement :math:`V` perfectly, and
-:math:`F < 1`. More importantly though, all we've computed so far is the fidelity when
-the initial state is :math:`|0\rangle`. What if the initial state is something
-different? What is the fidelity *on average*?
+We can compute the average value of this function over a unit sphere to
+be :math:`4/15 \approx 0.267`. However, this integral is non-trivial to
+evaluate by hand; the most straightforward way would be to convert to polar
+coordinates, and even then, we'd be integrating functions with 4th and 5th
+powers of trigonometric functions.
 
-To compute an average fidelity, we must do so with respect to the full set
-of Haar-random states. We usually generate random states by applying a
-Haar-random unitary :math:`U` to :math:`|0\rangle`. Thus to compute the average
-over all such :math:`U`, we must evaluate
+One could consider computing an approximate value of this average by sampling
+thousands of points uniformly at random on the sphere, evaluating the function,
+and computing the average value. That will get us close, but it will not be exact. 
 
-.. math::
+Instead, this is a case where we can leverage the fact that all terms in the
+polynomial have degree 4, and compute the average exactly using only a subset of
+points that form a 4-design. We choose a dodecahedron; while this is actually a
+5 design, it also forms a 4-design, and is a more familiar shape and easier to
+work with than the 4-design depicted above.
 
-    \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
-
-This is known as *twirling* the channel :math:`\Lambda`. Computing the average
-fidelity in this way would be a nightmare---we'd have to compute the fidelity
-with respect to an infinite number of states!
-
-However, consider the expression in the integral above. We have an inner product
-involving two instances of :math:`U`, and two instances of
-:math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
-both the elements of :math:`U` and its complex conjugates---this matches exactly
-the definition of a unitary 2-design! This means that if we can find a set of
-:math:`K` unitaries that form a 2-design, we can compute the average fidelity
-using only a finite set of initial states:
-
-.. math::
-
-    \frac{1}{K} \sum_{j=1}^K \langle 0 | U_j^\dagger V^\dagger \Lambda(U_j |0\rangle \langle 0|
-    U_j^\dagger) V^\dagger U_j |0\rangle = \int_{\mathcal{U}} d\mu(U) \langle 0
-    | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle
-
-This is great! But a question remains: what is the representative set of unitaries?
-
-Design design
-^^^^^^^^^^^^^
-
-A beautiful result in quantum computing is that some special groups you may
-already be familiar with are unitary designs:
-
-- the Pauli group forms a unitary 1-design, and 
-- the Clifford group forms a unitary 3-design. 
-
-By the definition of designs, this means the Clifford group is also a 1-
-and 2-design.
-
-The :math:`n`-qubit Pauli group, :math:`\mathcal{P}(n)`, is the set of all tensor
-products of Pauli operations :math:`X`, :math:`Y`, :math:`Z`, and :math:`I`. The
-:math:`n`-qubit Clifford group, :math:`\mathcal{C}(n)`, is the *normalizer* of the
-Pauli group. In simpler terms, the Clifford group is the set of operations that
-send Paulis to Paulis when acting under conjugation (up to a phase), i.e.,
-
-.. math::
-
-   C P C^\dagger = \pm P^\prime, \quad \forall P, P^\prime \in \mathcal{P}(n), \quad C \in \mathcal{C}(n).
-
-The Clifford group has some profoundly interesting properties and countless uses
-across quantum computing, from circuit compilation to error correcting
-codes. For a single qubit, the group is built from just two operations. One is
-the Hadamard:
-
-.. math::
-
-   H X H^\dagger = Z, \quad H Y H^\dagger = -Y, \quad H Z H^\dagger = X.
-
-This clearly maps Paulis to Paulis. The other is the phase gate :math:`S`:
-
-.. math::
-
-   S X S^\dagger = Y, \quad S Y S^\dagger = -X, \quad S Z S^\dagger = Z.
-
-If both :math:`H` and :math:`S` map Paulis to Paulis, then products of them
-do so as well (in group theory terms, the single-qubit Clifford group is
-generated by :math:`H` and :math:`S`).  For example, consider the action of
-:math:`HS`:
-
-.. math::
-
-   (HS) X (HS)^\dagger = -Y, \quad (HS) Y (HS)^\dagger = -Z, \quad (HS) Z (HS)^\dagger = X.
-
-Since :math:`Y = iXZ`, it is enough to specify Clifford operations by how they
-act on :math:`X` and :math:`Z`.  For a particular Clifford, there are 6 possible
-ways it can transform :math:`X`, namely :math:`\pm X, \pm Y`, or :math:`\pm Z`.  Once
-that is determined, there are four remaining options for the transformation of
-:math:`Z`, leading to 24 elements total. Expressed in string form, they are:
+First, we define the set of points that comprise a dodecahedron:
 
 """
+
+import numpy as np
+
+# The golden ratio
+g = (1 + np.sqrt(5)) / 2
+
+# A dodecahedron has 20 points
+dodecahedron = np.array([
+    # 8 of them form a cube within the sphere
+    [1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1],
+    [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1],
+
+    # 4 of them form a rectangle within the y-z plane
+    [0, g, 1/g], [0, g, -1/g], [0, -g, 1/g], [0, -g, -1/g],
+
+    # 4 of them form a rectangle within the x-z plane
+    [1/g, 0, g], [1/g, 0, -g], [-1/g, 0, g], [-1/g, 0, -g],
+
+    # 4 of them form a rectangle within the x-y plane
+    [g, 1/g, 0],[g, -1/g, 0], [-g, 1/g, 0], [-g, -1/g, 0],
+])
+
+# Normalize the points so they all fit in the unit sphere
+dodecahedron = np.array(
+   [point / np.linalg.norm(point) for point in dodecahedron]
+)
+
+######################################################################
+# Let's define our function and compute the average over the dodecahedron:
+
+def f(x, y, z):
+    return (x ** 4) - 4 * (x ** 3) * y +  y ** 2 * z ** 2
+
+dodeca_average = np.mean([f(*point) for point in dodecahedron])
+print(dodeca_average)
+
+######################################################################
+# This is exactly the value we expect. To further emphasize the nature of
+# spherical designs, let's try this using only a 3-design, the cube.
+
+# The first 8 points of the dodecahedron are the cube
+cube = dodecahedron[:8]
+
+cube_average = np.mean([f(*point) for point in cube])
+print(cube_average)
+
+
+######################################################################
+# This clearly differs from the true value. We need a design with :math:`t=4`
+# or better in order to compute this average, and when such a design is
+# available, we may save significant computational time.
+# 
+# Unitary designs
+# ^^^^^^^^^^^^^^^
+# 
+# We've seen now how spherical are sets of evenly-spaced points in the space
+# that you can use as "short cuts" to evaluate the average of a polynomial up to
+# a given degree :math:`t`. However, there was nothing quantum about this; there
+# weren't even any complex numbers involved. A *unitary design* extends this
+# concept from evenly-distributed points to evenly-distributed unitaries.  More
+# formally, instead of averaging polynomials over spheres, we consider
+# polynomials that are functions of the entries of unitary matrices [#Dankert]_,
+# [#Gross]_.
+# 
+# .. admonition:: Definition
+#     :class: defn
+# 
+#     Let :math:`P_{t,t}(U)` be a polynomial with homogeneous degree at most :math:`t` in
+#     :math:`d` variables in the entries of a unitary matrix :math:`U`, and degree
+#     :math:`t` in the complex conjugates of those entries. A unitary
+#     :math:`t`-design is a set of :math:`K` unitaries :math:`\{U_k\}` such that
+# 
+#     .. math::
+# 
+#         \frac{1}{K} \sum_{k=1}^{K} P_{t,t}(U_k) = \int_{\mathcal{U}(d)}
+#         P_{t,t} (U) d\mu(U)
+# 
+#     holds for all possible :math:`P_{t,t}`, and where :math:`d\mu` is the
+#     uniform *Haar measure*.
+# 
+# We must stress that expression is **exact**. Like the points on a sphere that
+# comprise a spherical design, the unitaries in a unitary design are a
+# representative set of points that are "evenly spaced" across the unitary
+# group. With just a subset of the full unitary group, we can evaluate complex
+# expressions that would be otherwise intractable.
+# 
+# A surprising result about unitary designs is that they exist for all possible
+# combinations of :math:`t` and :math:`d` [#Roy]_. There are some known lower
+# bounds for the number of unitaries required; for example, a 2-design in
+# dimension has minimum size :math:`d` is :math:`d^4 - 2d^2 + 2` [#Gross]_,
+# [#Roy]_.  However, actually finding the sets (and in particular, finding ones
+# with minimal size), is a challenging problem [#Bannai]_, though very recently
+# some constructions have been put forward [#Nakata]_.
+#
+#
+# .. admonition:: Fun fact
+#
+#     Applying the elements of a unitary design to a fixed pure state produces a
+#     set of vectors that form a *complex projective design* [#DankertThesis]_.
+#     These are much like spherical designs that live in a complex vector
+#     space. If you've ever studied the characterization of quantum systems, you
+#     may have come across some special sets of measurements called mutually
+#     unbiased bases (MUBs), or symmetric, informationally complete positive
+#     operator valued measurements (SIC-POVMs). Both of these sets of vectors
+#     are complex projective 2-designs [#Klappenecker]_.
+#
+# Unitary :math:`t`-designs in action
+# -----------------------------------
+#
+# Unitary designs come into play in applications that require randomization, or
+# sampling of random unitaries---essentially, they can be used as a stand-in for
+# the Haar measure. The way in which the unitaries are used in the application may
+# place restrictions on the value of :math:`t` that is required; arguably the most
+# common is the unitary 2-design.
+#
+# While in general unitary designs are hard to construct, there are well known
+# results for unitary 1-, 2-, and 3-designs based on familiar objects in quantum
+# computing. Before we see what those are, let's explore why such designs are
+# useful.
+#
+# Average fidelity
+# ^^^^^^^^^^^^^^^^
+# A key application of unitary 2-designs is benchmarking quantum
+# operations. Suppose we have a noisy quantum channel :math:`\Lambda` that should
+# perform something close to the unitary operation :math:`V`.  What can we say
+# about the performance of this channel?
+#
+# One metric of interest is the *fidelity*. Consider the state :math:`|0\rangle`.
+# In an ideal case, applying :math:`V` gives :math:`V|0\rangle`.  But applying the
+# channel :math:`\Lambda` gives us something a little different. Since it's noisy,
+# we must consider the state as a density matrix. The action of :math:`\Lambda` on
+# our starting state is :math:`\Lambda(|0\rangle \langle 0|)`.  If :math:`\Lambda`
+# was perfect, then :math:`\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle
+# 0|V^\dagger`, and the fidelity is
+#
+# .. math::
+# 
+#     F(\Lambda, V) = \langle 0 | V^\dagger \cdot \Lambda(|0\rangle \langle 0|) \cdot V|0\rangle = 1.
+#
+# In reality, :math:`\Lambda` is not going to implement :math:`V` perfectly, and
+# :math:`F < 1`. More importantly though, all we've computed so far is the fidelity when
+# the initial state is :math:`|0\rangle`. What if the initial state is something
+# different? What is the fidelity *on average*?
+# 
+# To compute an average fidelity, we must do so with respect to the full set
+# of Haar-random states. We usually generate random states by applying a
+# Haar-random unitary :math:`U` to :math:`|0\rangle`. Thus to compute the average
+# over all such :math:`U`, we must evaluate
+# 
+# .. math::
+# 
+#     \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
+# 
+# This is known as *twirling* the channel :math:`\Lambda`. Computing the average
+# fidelity in this way would be a nightmare---we'd have to compute the fidelity
+# with respect to an infinite number of states!
+# 
+# However, consider the expression in the integral above. We have an inner product
+# involving two instances of :math:`U`, and two instances of
+# :math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
+# both the elements of :math:`U` and its complex conjugates---this matches exactly
+# the definition of a unitary 2-design. This means that if we can find a set of
+# :math:`K` unitaries that form a 2-design, we can compute the average fidelity
+# using only a finite set of initial states:
+#
+# .. math::
+# 
+#     \frac{1}{K} \sum_{j=1}^K \langle 0 | U_j^\dagger V^\dagger \Lambda(U_j |0\rangle \langle 0|
+#     U_j^\dagger) V^\dagger U_j |0\rangle = \int_{\mathcal{U}} d\mu(U) \langle 0
+#     | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle
+#
+# This is great, but a question remains: what is the representative set of unitaries?
+#
+# Design design
+# ^^^^^^^^^^^^^
+#
+# A beautiful result in quantum computing is that some special groups you may
+# already be familiar with are unitary designs:
+#
+# - the Pauli group forms a unitary 1-design, and 
+# - the Clifford group forms a unitary 3-design. 
+#
+# By the definition of designs, this means the Clifford group is also a 1-
+# and 2-design.
+#
+# The :math:`n`-qubit Pauli group, :math:`\mathcal{P}(n)`, is the set of all tensor
+# products of Pauli operations :math:`X`, :math:`Y`, :math:`Z`, and :math:`I`. The
+# :math:`n`-qubit Clifford group, :math:`\mathcal{C}(n)`, is the *normalizer* of the
+# Pauli group. In simpler terms, the Clifford group is the set of operations that
+# send Paulis to Paulis when acting under conjugation (up to a phase), i.e.,
+#
+# .. math::
+#
+#    C P C^\dagger = \pm P^\prime, \quad \forall P, P^\prime \in \mathcal{P}(n), \quad C \in \mathcal{C}(n).
+#
+# The Clifford group has some profoundly interesting properties and countless uses
+# across quantum computing, from circuit compilation to error correcting
+# codes. For a single qubit, the group is built from just two operations. One is
+# the Hadamard:
+#
+# .. math::
+#
+#    H X H^\dagger = Z, \quad H Y H^\dagger = -Y, \quad H Z H^\dagger = X.
+#
+# This clearly maps Paulis to Paulis (up to a phase). The other is the phase gate :math:`S`:
+#
+# .. math::
+#
+#    S X S^\dagger = Y, \quad S Y S^\dagger = -X, \quad S Z S^\dagger = Z.
+#
+# If both :math:`H` and :math:`S` map Paulis to Paulis, then products of them
+# do so as well (in group theory terms, the single-qubit Clifford group is
+# generated by :math:`H` and :math:`S`).  For example, consider the action of
+# :math:`HS`:
+#
+# .. math::
+#
+#    (HS) X (HS)^\dagger = -Y, \quad (HS) Y (HS)^\dagger = -Z, \quad (HS) Z (HS)^\dagger = X.
+#
+# Since :math:`Y = iXZ`, it is enough to specify Clifford operations by how they
+# act on :math:`X` and :math:`Z`.  For a particular Clifford, there are 6 possible
+# ways it can transform :math:`X`, namely :math:`\pm X, \pm Y`, or :math:`\pm Z`.  Once
+# that is determined, there are four remaining options for the transformation of
+# :math:`Z`, leading to 24 elements total. Expressed in string form, they are:
+# 
 
 single_qubit_cliffords = [
  '',
@@ -367,10 +408,9 @@ single_qubit_cliffords = [
 # unitaries, and then again with only the Clifford group.
 
 import pennylane as qml
-import numpy as np
 import matplotlib.pyplot as plt
 
-# Scipy allows us to sample Haar-random unitaries directly!
+# Scipy allows us to sample Haar-random unitaries directly
 from scipy.stats import unitary_group
 
 # set the random seed
@@ -570,7 +610,7 @@ print(f"Haar-random mean fidelity = {fid_mean}")
 print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 
 ######################################################################
-# Incredible! 🤯 🤯 🤯 We were able to compute the average fidelity using only
+# Incredible 🤯 🤯 🤯 We were able to compute the average fidelity using only
 # 24 experiments. Furthermore, the mean fidelity obtained from the Clifford
 # experiments is *exact*; even with 50000 Haar-random experiments, we see
 # deviations on the order of :math:`10^{-4}`. Consider the resources that would
