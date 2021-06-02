@@ -427,7 +427,6 @@ single_qubit_cliffords = [
 # unitaries, and then again with only the Clifford group.
 
 import pennylane as qml
-import matplotlib.pyplot as plt
 
 # Scipy allows us to sample Haar-random unitaries directly
 from scipy.stats import unitary_group
@@ -545,28 +544,10 @@ for _ in range(n_samples):
     # Compute the fidelity
     fidelities.append(fidelity(ideal_state, noisy_state))
 
-######################################################################
-# We compute the mean and variance of the fidelities, and also plot a histogram.
-
 fid_mean = np.mean(fidelities)
-fid_std = np.std(fidelities)
-
-print(f"Mean fidelity      = {fid_mean}")
-print(f"Std. dev. fidelity = {fid_std}")
-
-plt.hist(fidelities, bins=20)
-plt.xlabel("Fidelity", fontsize=12)
-plt.ylabel("Num. occurrences", fontsize=12)
-plt.axvline(np.mean(fidelities), color="red")
-plt.axvline(np.mean(fidelities) + np.std(fidelities), color="red", linestyle="dashed")
-plt.axvline(np.mean(fidelities) - np.std(fidelities), color="red", linestyle="dashed")
-plt.tight_layout()
-plt.show()
+print(f"Mean fidelity = {fid_mean}")
 
 ######################################################################
-# We see that these experiments yielded quite a broad distribution of
-# fidelities.
-#
 # Now let's repeat the procedure using only Clifford group elements. First, we
 # write a quantum function that performs a Clifford operation (or its inverse)
 # based on its string representation.
@@ -580,9 +561,9 @@ def apply_single_clifford(clifford_string, inverse=False):
             qml.PhaseShift(sign * np.pi/2, wires=0)
 
 ######################################################################
-# Next, we need a transform that applies a Clifford in the context of the full
-# experiment; i.e., apply the Clifford, then the operations, followed by the
-# inverse of the Clifford. We'll write another transform:
+# Next, we write a transform that applies a Clifford in the context of the full
+# experiment, i.e., apply the Clifford, then the operations, followed by the
+# inverse of the Clifford.
 
 @qml.qfunc_transform
 def conjugate_with_clifford(tape, clifford_string):
