@@ -108,6 +108,11 @@ Community
                 if (textIsOverflowing) {
                     var readMoreLink = $card.find('.plugin-card__read-more-link')[0];
                     $(readMoreLink).removeClass('d-none');
+
+                    $(readMoreLink).on('click', function(e) {
+                        e.preventDefault();
+                        console.log('YO');
+                    });
                 }
             });
         });

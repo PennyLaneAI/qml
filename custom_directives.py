@@ -187,7 +187,7 @@ COMMUNITY_CARD_TEMPLATE = """
 .. raw:: html
 
     <div class="col-lg-6">
-        <div class="card plugin-card">
+        <div class="card plugin-card" id={id}>
             <div class="card-header {color} lighten-4">
                 <h4 class="card-header__text">{title}</h4>
             </div>
@@ -202,7 +202,7 @@ COMMUNITY_CARD_TEMPLATE = """
                             {description}
                         </p>
                         <div class="mt-auto">
-                            <a class="plugin-card__read-more-link d-none" href="google.com">Read More</a>
+                            <a class="plugin-card__read-more-link text-primary d-none" data-toggle="modal" data-target="#{id}-modal">Read More</a>
                         </div>
                     </div>
                     <div class="col-lg-4 d-flex">
@@ -216,19 +216,40 @@ COMMUNITY_CARD_TEMPLATE = """
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="{id}-modal" tabindex="-1" role="dialog" aria-labelledby="{id}-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0">{title}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {description}
+                </div>
+                <div class="modal-footer">
+                    {paper_footer}
+                    {blog_footer}
+                    {code_footer}
+                </div>
+            </div>
+        </div>
+    </div>
 """
 
-PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width: 100%;">
+PAPER_FOOTER = """<a href="{paper}" class="btn btn-info plugin-card__paper-btn">
                 <i class="fas fa-book"></i> Paper
             </a>
 """
 
-BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width: 100%;">
+BLOG_FOOTER = """<a href="{blog}" class="btn btn-info plugin-card__blog-btn">
                 <i class="fas fa-newspaper"></i> Blog
             </a>
 """
 
-CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="margin: 0 0 .375rem 0; max-height:45px; box-shadow: unset; border-radius:5px; width: 100%;">
+CODE_FOOTER = """<a href="{code}" class="btn btn-default plugin-card__code-btn">
                 <i class="fas fa-code-branch"></i></i> Code
             </a>
 """
@@ -275,6 +296,19 @@ class CommunityCardDirective(Directive):
         if blog_url is not None:
             blog_footer = BLOG_FOOTER.format(blog=blog_url)
 
+        def remove_accents(raw_text):
+            """Removes common accent characters."""
+
+            raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
+            raw_text = re.sub(u"[èéêë]", 'e', raw_text)
+            raw_text = re.sub(u"[ìíîï]", 'i', raw_text)
+            raw_text = re.sub(u"[òóôõö]", 'o', raw_text)
+            raw_text = re.sub(u"[ùúûü]", 'u', raw_text)
+            raw_text = re.sub(u"[ýÿ]", 'y', raw_text)
+            raw_text = re.sub(u"[ß]", 'ss', raw_text)
+            raw_text = re.sub(u"[ñ]", 'n', raw_text)
+            return raw_text
+
         card_rst = COMMUNITY_CARD_TEMPLATE.format(
             title=self.options["title"],
             author=self.options["author"],
@@ -283,7 +317,8 @@ class CommunityCardDirective(Directive):
             paper_footer=paper_footer,
             code_footer=code_footer,
             blog_footer=blog_footer,
-            color=color
+            color=color,
+            id=remove_accents(self.options["author"].split(" ")[-1].lower()) + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
         )
 
         thumbnail = StringList(card_rst.split('\n'))
