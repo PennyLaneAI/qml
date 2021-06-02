@@ -264,9 +264,6 @@ class CommunityCardDirective(Directive):
         if blog_url is not None:
             blog_footer = BLOG_FOOTER.format(blog=blog_url)
 
-        title_iterable = self.options["title"].split(" ")
-        title_first_letters = "".join(list(map(lambda word: word[0], title_iterable))).lower()
-
         card_rst = COMMUNITY_CARD_TEMPLATE.format(
             title=self.options["title"],
             author=self.options["author"],
@@ -276,7 +273,7 @@ class CommunityCardDirective(Directive):
             code_footer=code_footer,
             blog_footer=blog_footer,
             color=color,
-            id=title_first_letters + "-" + self.options["author"].split(" ")[-1].lower()
+            id=self.options["author"].split(" ")[0].lower() + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
         )
 
         thumbnail = StringList(card_rst.split('\n'))
