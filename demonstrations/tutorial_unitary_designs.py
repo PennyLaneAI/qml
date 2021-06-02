@@ -135,7 +135,7 @@ points in order to gain sufficient information when a function is varying more
 quickly due to a higher degree. In 3 dimensions, a function with degree 2 can
 be approximated with something as simple as a tetrahedron, despite the fact that
 it doesn't look spherical at all, while more complex functions require more
-points and thus more complex configurations for the design.  Spherical designs
+points and thus more intricate configurations for the design.  Spherical designs
 exist for all :math:`t` and dimension :math:`d` [#Handbook]_. They are not
 always unique, and may have varying numbers of points (as can be seen above).
 
@@ -408,7 +408,7 @@ single_qubit_cliffords = [
 # is balanced in the sense that each eigenstate is obtained the same number of
 # times.
 #
-# While we do not explore it here, the multi-qubit Clifford can also be
+# The multi-qubit Clifford can also be
 # specified by only a small set of generators (in fact, only one more
 # than is needed for the single-qubit case). Together, :math:`H`, :math:`S`, and
 # CNOT (on every possible qubit or pair of qubits), generate the :math:`n`-qubit
