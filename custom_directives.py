@@ -264,6 +264,19 @@ class CommunityCardDirective(Directive):
         if blog_url is not None:
             blog_footer = BLOG_FOOTER.format(blog=blog_url)
 
+        def remove_accents(raw_text):
+            """Removes common accent characters."""
+
+            raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
+            raw_text = re.sub(u"[èéêë]", 'e', raw_text)
+            raw_text = re.sub(u"[ìíîï]", 'i', raw_text)
+            raw_text = re.sub(u"[òóôõö]", 'o', raw_text)
+            raw_text = re.sub(u"[ùúûü]", 'u', raw_text)
+            raw_text = re.sub(u"[ýÿ]", 'y', raw_text)
+            raw_text = re.sub(u"[ß]", 'ss', raw_text)
+            raw_text = re.sub(u"[ñ]", 'n', raw_text)
+            return raw_text
+
         card_rst = COMMUNITY_CARD_TEMPLATE.format(
             title=self.options["title"],
             author=self.options["author"],
@@ -273,7 +286,7 @@ class CommunityCardDirective(Directive):
             code_footer=code_footer,
             blog_footer=blog_footer,
             color=color,
-            id=self.options["author"].split(" ")[0].lower() + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
+            id=remove_accents(self.options["author"].split(" ")[-1].lower()) + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
         )
 
         thumbnail = StringList(card_rst.split('\n'))
