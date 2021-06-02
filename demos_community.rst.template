@@ -113,14 +113,6 @@ Community
                 $('html, body').animate({ scrollTop: $(cardID).offset().top - headerHeight }, scrollSpeed);
             }
 
-            // When a user hovers over a new card, we need to remove the active class from the previously active card
-            $('.plugin-card').on('mouseenter', function(e) {
-                if ($(e.currentTarget).hasClass('active')) { return }
-                $('.plugin-card').each(function(index, card) {
-                    if ($(card).hasClass('active')) { $(card).removeClass('active'); }
-                });
-            });
-
             // When a URL is changed with a new hash, we want to scroll to the new card and add the active class to it
             $(window).on('hashchange', function(e) {
                 var newCardID = e.originalEvent.newURL.indexOf('#') >= 0 ? e.originalEvent.newURL.substring(e.originalEvent.newURL.indexOf('#')) : null;
