@@ -73,7 +73,7 @@ Spherical designs
 Before diving into unitary designs, let's look at the sphere for some
 intuition.  Suppose we have a polynomial in :math:`d` variables, and we would
 like to compute its average over the surface of a real, :math:`d`-dimensional
-unit sphere, :math:`S(R^d)`. One can do so by integrating that function over the
+unit sphere, :math:`S(R^d)`. We can do so by integrating that function over the
 sphere (using the proper measure), but that would be a lot of parameters to
 keep track of. 
 
@@ -108,7 +108,7 @@ spherical :math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
 Now this is a pretty abstract picture, so let's consider the 3-dimensional
 sphere. This definition tells us that if we want to take the average of a
 polynomial over a sphere where all terms have the same degree of at most 2, we
-can average using a small, representative set of points called a 2-design,
+can do so using a small, representative set of points called a 2-design,
 rather than the whole sphere. Similarly, if all terms of the polynomial have the
 same degree of at most 3, we could use a 3-design. 
 
@@ -187,7 +187,7 @@ dodecahedron = np.array(
 )
 
 ######################################################################
-# Let's define our function and compute the average over the dodecahedron:
+# Now we define our function and compute the average over the dodecahedron:
 
 def f(x, y, z):
     return (x ** 4) - 4 * (x ** 3) * y +  y ** 2 * z ** 2
@@ -214,14 +214,14 @@ print(cube_average)
 # Unitary designs
 # ^^^^^^^^^^^^^^^
 # 
-# We've learned now that spherical are sets of evenly-spaced points, and saw how
-# they can be used as a short cut to evaluate the average of a polynomial up to
-# a given degree :math:`t`. However, there was nothing quantum about this; there
-# weren't even any complex numbers involved. A *unitary design* extends this
-# concept from evenly-distributed points to evenly-distributed unitaries.  More
-# formally, instead of averaging polynomials over spheres, we consider
-# polynomials that are functions of the entries of unitary matrices [#Dankert]_,
-# [#Gross]_.
+# We've learned now that spherical designs are sets of evenly-spaced points, and
+# saw how they can be used as a short cut to evaluate the average of a
+# polynomial up to a given degree :math:`t`. However, there was nothing quantum
+# about this; there weren't even any complex numbers involved. A *unitary
+# design* extends this concept from evenly-distributed points to
+# evenly-distributed unitaries.  More formally, instead of averaging polynomials
+# over spheres, we consider polynomials that are functions of the entries of
+# unitary matrices [#Dankert]_, [#Gross]_.
 # 
 # .. admonition:: Definition
 #     :class: defn
@@ -241,13 +241,13 @@ print(cube_average)
 # 
 # We stress again that this expression is **exact**. The unitaries in a unitary
 # design are a representative set of points that are "evenly spaced" across the
-# unitary group. With just a subset of the full unitary group, we can evaluate
-# complex expressions that would be otherwise intractable.
+# unitary group. With just a subset of the full group, we can evaluate complex
+# expressions that would be otherwise intractable.
 # 
 # A surprising result about unitary designs is that they exist for all possible
 # combinations of :math:`t` and :math:`d` [#Roy]_. There are some known lower
 # bounds for the number of unitaries required; for example, a 2-design in
-# dimension has minimum size :math:`d` is :math:`d^4 - 2d^2 + 2` [#Gross]_,
+# dimension :math:`d` has at least :math:`d^4 - 2d^2 + 2` elements [#Gross]_,
 # [#Roy]_.  However, actually finding the sets (and in particular, finding ones
 # with minimal size), is a challenging problem [#Bannai]_, though very recently
 # some constructions have been put forward [#Nakata]_.
@@ -257,7 +257,7 @@ print(cube_average)
 #
 #     Applying the elements of a unitary design to a fixed pure state produces a
 #     set of vectors that form a *complex projective design* [#DankertThesis]_.
-#     These are much like spherical designs that live in a complex vector
+#     These are much like spherical designs, but they live in a complex vector
 #     space. If you've ever studied the characterization of quantum systems, you
 #     may have come across some special sets of measurements called mutually
 #     unbiased bases (MUBs), or symmetric, informationally complete positive
@@ -291,7 +291,7 @@ print(cube_average)
 # about the performance of this channel?
 #
 # One metric of interest is the *fidelity*. Consider the state :math:`|0\rangle`.
-# In an ideal case, applying :math:`V` gives :math:`V|0\rangle`.  But applying the
+# In an ideal case, we apply :math:`V` and obtain :math:`V|0\rangle`.  But applying the
 # channel :math:`\Lambda` gives us something a little different. Since it's noisy,
 # we must consider the state as a density matrix. The action of :math:`\Lambda` on
 # our starting state is :math:`\Lambda(|0\rangle \langle 0|)`.  If :math:`\Lambda`
@@ -310,7 +310,7 @@ print(cube_average)
 # To compute an average fidelity, we must do so with respect to the full set
 # of Haar-random states. We usually generate random states by applying a
 # Haar-random unitary :math:`U` to :math:`|0\rangle`. Thus to compute the average
-# over all such :math:`U`, we must evaluate
+# over all such :math:`U` we must evaluate
 # 
 # .. math::
 # 
@@ -352,7 +352,7 @@ print(cube_average)
 # products of Pauli operations :math:`X`, :math:`Y`, :math:`Z`, and :math:`I`. The
 # :math:`n`-qubit Clifford group, :math:`\mathcal{C}(n)`, is the *normalizer* of the
 # Pauli group. In simpler terms, the Clifford group is the set of operations that
-# send Paulis to Paulis when acting under conjugation (up to a phase), i.e.,
+# send Paulis to Paulis (up to a phase) under conjugation i.e.,
 #
 # .. math::
 #
@@ -374,7 +374,7 @@ print(cube_average)
 #    S X S^\dagger = Y, \quad S Y S^\dagger = -X, \quad S Z S^\dagger = Z.
 #
 # If both :math:`H` and :math:`S` map Paulis to Paulis, then products of them do
-# so as well. In group theory terms, the single-qubit Clifford group is
+# as well. In group theory terms, the single-qubit Clifford group is
 # generated by :math:`H` and :math:`S`.  For example, consider the action of
 # :math:`HS`:
 #
@@ -412,7 +412,7 @@ single_qubit_cliffords = [
 # is balanced in the sense that each eigenstate is obtained the same number of
 # times.
 #
-# The multi-qubit Clifford can also be
+# The multi-qubit Clifford group can also be
 # specified by only a small set of generators (in fact, only one more
 # than is needed for the single-qubit case). Together, :math:`H`, :math:`S`, and
 # CNOT (on every possible qubit or pair of qubits) generate the :math:`n`-qubit
@@ -426,7 +426,7 @@ single_qubit_cliffords = [
 # ^^^^^^^^^^^^^
 # The whole idea of unitary designs may sound too good to be true. Can we
 # *really* compute the exact average fidelity using just 24 operations? In this
-# section, we'll put them to the test: we'll compute the average fidelity of an
+# section, we put them to the test: we'll compute the average fidelity of an
 # operation first with experiments using a large but finite amount of Haar-random
 # unitaries, and then again with only the Clifford group.
 
@@ -453,7 +453,7 @@ def ideal_experiment():
 
 ######################################################################
 # Next, we apply some noise. We do so by making use of a relatively new feature
-# in PennyLane called *quantum function transforms*. Such transforms work by
+# in PennyLane called `quantum function transforms <https://pennylane.readthedocs.io/en/latest/code/qml_transforms.html>`__. Such transforms work by
 # modifying the underlying, low-level quantum tapes which queue the quantum
 # operations. Suppose the noisy channel is composed of the following:
 
@@ -482,7 +482,7 @@ def apply_noise(tape, damp_factor, depo_factor, flip_prob):
         op.queue()
 
 ######################################################################
-# We can now apply this transformation to create a noisy version of our ideal
+# We can now apply this transform to create a noisy version of our ideal
 # quantum function:
 
 # The strengths of various types of noise
@@ -613,7 +613,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 ######################################################################
 # Incredible 🤯 🤯 🤯 We were able to compute the average fidelity using only
 # 24 experiments. Furthermore, the mean fidelity obtained from the Clifford
-# experiments is *exact*; even with 50000 Haar-random experiments, we see
+# experiments is **exact**; even with 50000 Haar-random experiments, we see
 # deviations on the order of :math:`10^{-4}`. Consider the resources that would
 # be saved if you were actually implementing this in a lab! It's not hard to see
 # why the Clifford group plays such an important role in characterization
