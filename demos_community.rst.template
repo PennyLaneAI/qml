@@ -114,7 +114,8 @@ Community
             }
 
             // When a user hovers over a new card, we need to remove the active class from the previously active card
-            $('.plugin-card').on('mouseenter', function() {
+            $('.plugin-card').on('mouseenter', function(e) {
+                if ($(e.currentTarget).hasClass('active')) { return }
                 $('.plugin-card').each(function(index, card) {
                     if ($(card).hasClass('active')) { $(card).removeClass('active'); }
                 });
