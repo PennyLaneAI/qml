@@ -23,7 +23,7 @@ One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
 The Variational Quantum Eigensolver (VQE) combines a smart circuit
 design with a gradient-based optimization to solve this task
-(take a look at the `overview demo <https://pennylane.readthedocs.io/en/demos/tutorial_vqe.html>`_ for more details).
+(take a look at the `overview demo <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ for more details).
 Several practical demonstrations have pointed out how near-term quantum
 devices may be well-suited platforms for VQE and other variational quantum algorithms.
 One issue for such an approach is, though, that the optimization landscape is
@@ -88,7 +88,7 @@ That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` dependi
 
 All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
 Another technique using this structure of :math:`E(\boldsymbol{\theta})` are the
-Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect.html>`.
+Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect.html>`__.
 
 Let's look at a toy example to illustrate this structure.
 """
@@ -136,8 +136,15 @@ plt.tight_layout();
 # Create a 2D grid and evaluate the energy on the grid points.
 # We cut out a part of the landscape to increase clarity.
 X, Y = np.meshgrid(theta_func, theta_func);
-Z = np.array([[circuit([t1, t2]) if (2*np.pi-t1)**2+t2**2>2 else None
-    for t2 in theta_func] for t1 in theta_func]);
+Z = np.zeros_like(X)
+for i, t1 in enumerate(theta_func):
+    for j, t2 in enumerate(theta_func):
+        if (2*np.pi-t2)**2+t1**2>4:
+            Z[i,j] = circuit([t1, t2])
+        else:
+            X[i,j] = np.nan
+            Y[i,j] = np.nan
+            Z[i,j] = np.nan
 
 # Show the energy landscape on the grid.
 fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(4, 4));
