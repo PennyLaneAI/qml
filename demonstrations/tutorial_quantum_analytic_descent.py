@@ -23,7 +23,7 @@ One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
 The Variational Quantum Eigensolver (VQE) combines a smart circuit
 design with a gradient-based optimization to solve this task
-(take a look at the `overview demo <link vqe overview demo>`__ for more details).
+(take a look at the `overview demo <https://pennylane.readthedocs.io/en/demos/tutorial_vqe.html>`_ for more details).
 Several practical demonstrations have pointed out how near-term quantum
 devices may be well-suited platforms for VQE and other variational quantum algorithms.
 One issue for such an approach is, though, that the optimization landscape is
@@ -87,8 +87,8 @@ That is, for some coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` dependi
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
 All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
-Another technique using this structure of :math:`E(\boldsymbol{\theta})` is the
-Rotosolve algorithm [#Rotosolve]_ for which there also is `a demo <link rotosolve demo>`.
+Another technique using this structure of :math:`E(\boldsymbol{\theta})` are the
+Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect.html>`.
 
 Let's look at a toy example to illustrate this structure.
 """
@@ -290,7 +290,7 @@ print(f"Coefficients at params:",
 #
 # .. math::
 #
-#   \tilde{E}(\boldsymbol{\theta}) &= A(\theta) E^{(A)} + \sum_k \left[B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k\right] + \sum_{l>k} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
+#   \tilde{E}(\boldsymbol{\theta}) &= A(\boldsymbol{\theta}) E^{(A)} + \sum_k \left[B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k\right] + \sum_{l>k} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
 #   \phantom{\tilde{E}(\boldsymbol{\theta})}&=A(\boldsymbol{\theta})\left[E^{(A)}+\sum_k \tan\left(\frac{\theta_k}{2}\right)E^{(B)}_k + \tan\left(\frac{\theta_k}{2}\right)^2 E^{(C)}_k + \sum_{l>k} \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)E^{(D)}_{kl}\right]
 #
 # Let's implement this model:
