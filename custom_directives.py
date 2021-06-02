@@ -202,7 +202,7 @@ COMMUNITY_CARD_TEMPLATE = """
                             {description}
                         </p>
                         <div class="mt-auto">
-                            <a class="d-none" href="google.com">Read More</a>
+                            <a class="plugin-card__read-more-link d-none" href="google.com">Read More</a>
                         </div>
                     </div>
                     <div class="col-lg-4 d-flex">

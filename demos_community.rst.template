@@ -95,3 +95,20 @@ Community
 .. toctree::
     :maxdepth: 2
     :hidden:
+
+.. raw:: html
+
+    <script type="text/javascript">
+        $(window).on('load', function() {
+            $('.plugin-card').each(function(index, card) {
+                var $card = $(card);
+                var description = $card.find('p.plugin-card__description')[0];
+                var textIsOverflowing = description.clientHeight < description.scrollHeight;
+
+                if (textIsOverflowing) {
+                    var readMoreLink = $card.find('.plugin-card__read-more-link')[0];
+                    $(readMoreLink).removeClass('d-none');
+                }
+            });
+        });
+    </script>
