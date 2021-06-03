@@ -2186,10 +2186,13 @@ footer.page-footer .footer-copyright {
     width: 100%;
 }
 
-.modal-footer .plugin-card__paper-btn,
-.modal-footer .plugin-card__blog-btn,
 .modal-footer .plugin-card__code-btn {
-  margin: 0;
+    margin: 0;
+}
+
+.modal-footer .plugin-card__paper-btn,
+.modal-footer .plugin-card__blog-btn {
+    margin: 0 .25rem 0 0;
 }
 
 .weird-blue-gradient {
