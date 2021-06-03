@@ -716,7 +716,7 @@ plt.show()
 # We have confirmed that our code produces classical shadows that can be used to reconstruct
 # the state. However, the goal of classical shadows is not to perform full tomography, which takes
 # an exponential amount of resources. Instead, we want to use the shadows to efficiently
-# calculate linear functions of a quantum state. To do this, we write a create a function
+# calculate linear functions of a quantum state. To do this, we write a function
 # ``estimate_shadow_observable`` that takes in the previously constructed shadow
 # :math:`S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_1,\ldots,\hat{\rho}_N]`, and
 # estimates any observable via a median of means estimation. This makes the estimator
