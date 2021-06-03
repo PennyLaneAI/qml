@@ -1012,6 +1012,6 @@ plt.show()
 # As expected, the bound is satisfied and the accuracy increases.
 
 ##############################################################################
-# .. [Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
+# .. [#Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
 #             "Predicting many properties of a quantum system from very few measurements."
 #             Nature Physics 16.10 (2020): 1050-1057.
