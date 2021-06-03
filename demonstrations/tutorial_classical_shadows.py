@@ -21,7 +21,7 @@ However this procedure requires one to acquire accurate expectation values for a
 which grows exponentially with the number of qubits.
 A potential workaround for these scaling concerns is provided by the classical shadow approximation
 introduced in `Predicting many properties of a quantum system from very few measurements
-<https://arxiv.org/pdf/2002.08953.pdf>`_ [Huang2020]_.
+<https://arxiv.org/pdf/2002.08953.pdf>`_ [[#Huang2020]_].
 
 The classical shadow approximation is an efficient protocol for constructing a *classical shadow*
 representation of an unknown quantum state.
@@ -32,7 +32,7 @@ quantum state fidelity, Hamiltonian observables, and two-point correlators.
     :align: center
     :width: 80%
 
-    (Image from Huang et al. [Huang2020]_.)
+    (Image from Huang et al. [[#Huang2020]_].)
 
 In this demo, we will use PennyLane to construct classical shadows and use them to reconstruct
 quantum states and estimate observables.
@@ -98,7 +98,7 @@ For clarity, this demo will specify the file at the top of each code block.
 #
 #      \langle O \rangle = \sum_i \text{Tr}{\hat{\rho}_i O}.
 #
-# In fact, the authors of [Huang2020]_ prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
+# In fact, the authors of [[#Huang2020]_] prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
 # :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` to additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`.
 # The shadow norm :math:`||O_i||^2_{\text{shadow}}` again depends on the unitary ensemble that is chosen.
 #
@@ -395,7 +395,8 @@ plt.show()
 #
 # The expectation :math:`\mathbb{E}[\cdot]` simply describes the average over the measurements
 # :math:`|b\rangle` and the sampled unitaries.
-# Inverting the measurment channel may seem formidable at first, however, Huang et al. [Huang2020]_
+# Inverting the measurment channel may seem formidable at first, however, Huang et al.
+# [[#Huang2020]_]
 # show that for Pauli measurements we end up with a rather convenient expression,
 #
 # .. math::
