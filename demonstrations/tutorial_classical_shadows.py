@@ -720,7 +720,7 @@ plt.show()
 # ``estimate_shadow_observable`` that takes in the previously constructed shadow
 # :math:`S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_1,\ldots,\hat{\rho}_N]`, and
 # estimates any observable via a median of means estimation. This makes the estimator
-# more robust to outliers and is required to formally proof the aforementioned theoretical
+# more robust to outliers and is required to formally prove the aforementioned theoretical
 # bound. Also, the bound has a failure probability :math:`\delta`, and by choosing :math:`K` to be
 # suitably large, we can exponentially surpress this failure probability.
 # The procedure is simple: split up the shadow into :math:`K` equally sized chunks
