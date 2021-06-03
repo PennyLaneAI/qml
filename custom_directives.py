@@ -192,8 +192,8 @@ COMMUNITY_CARD_TEMPLATE = """
                 <h4 class="card-header__text">{title}</h4>
             </div>
             <div class="card-body">
-                <div class="row h-100">
-                    <div class="col-lg-8 h-100 d-flex flex-column">
+                <div class="row">
+                    <div class="col-lg-8 d-flex flex-column">
                         <div>
                             <h6>{author}</h6>
                             <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
@@ -201,8 +201,8 @@ COMMUNITY_CARD_TEMPLATE = """
                         <p class="plugin-card__description">
                             {description}
                         </p>
-                        <div class="mt-auto">
-                            <a class="plugin-card__read-more-link text-primary d-none" data-toggle="modal" data-target="#{id}-modal">Read More</a>
+                        <div class="mt-auto plugin-card__read-more-wrapper">
+                            <a class="plugin-card__read-more text-primary d-none" data-toggle="modal" data-target="#{id}-modal">Read More</a>
                         </div>
                     </div>
                     <div class="col-lg-4 d-flex">

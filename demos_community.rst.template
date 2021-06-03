@@ -106,12 +106,14 @@ Community
                 var textIsOverflowing = description.clientHeight < description.scrollHeight;
 
                 if (textIsOverflowing) {
-                    var readMoreLink = $card.find('.plugin-card__read-more-link')[0];
+                    var readMoreLink = $card.find('.plugin-card__read-more')[0];
                     $(readMoreLink).removeClass('d-none');
 
                     $(readMoreLink).on('click', function(e) {
                         e.preventDefault();
                     });
+                } else {
+                    $(description).addClass('plugin-card__description--no-overflow');
                 }
             });
         });

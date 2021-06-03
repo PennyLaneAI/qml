@@ -1812,6 +1812,16 @@ span.eqno {
   }
 }
 
+@media (max-width: 991.98px) {
+    .card.plugin-card .row, .plugin-card__description {
+        height: auto !important;
+    }
+
+    .plugin-card__description:after, .plugin-card__read-more-wrapper {
+        display: none !important;
+    }
+}
+
 /* Account for when the left column is closed then page is expanded.
 -------------------------------------------------- */
 
@@ -2122,6 +2132,10 @@ footer.page-footer .footer-copyright {
     display: flex;
 }
 
+.plugin-card .row {
+    height: 100%;
+}
+
 .card-header__text {
     margin-top: auto;
     margin-bottom: auto;
@@ -2160,6 +2174,10 @@ footer.page-footer .footer-copyright {
     right: -15px;
     pointer-events: none;
     box-shadow: inset 0px -40px 25px -30px white;
+}
+
+.plugin-card__description--no-overflow:after {
+    display: none;
 }
 
 .plugin-card__buttons .plugin-card__paper-btn,
