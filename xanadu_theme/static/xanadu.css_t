@@ -2121,6 +2121,10 @@ footer.page-footer .footer-copyright {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .05), 0 2px 25px 2px rgba(0, 0, 0, .15) !important;
 }
 
+.plugin-card.active {
+    box-shadow: 0 2px 5px 0 rgba(204, 204, 204, 0.97),0 2px 15px 2px rgba(43, 187, 173, 0.6) !important;
+}
+
 .plugin-card img {
     max-width: 60%;
 }

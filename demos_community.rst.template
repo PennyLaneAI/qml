@@ -105,7 +105,37 @@ Community
 .. raw:: html
 
     <script type="text/javascript">
+        // This is added to stop the page from jumping when a card hash is present in the URL
+        if ( window.location.hash ) { scroll(0, 70); }
+
         $(window).on('load', function() {
+            var headerHeight = 70;
+            var scrollSpeed = 500;
+
+            // On page load, if there is a card hash and the card exists, we will scroll to the top of the card
+            var cardID = window.location.hash;
+            if (cardID && $(cardID).length) {
+                $(cardID).addClass('active');
+                $('html, body').animate({ scrollTop: $(cardID).offset().top - headerHeight }, scrollSpeed);
+            }
+
+            // When a URL is changed with a new hash, we want to scroll to the new card and add the active class to it
+            $(window).on('hashchange', function(e) {
+                var newCardID = e.originalEvent.newURL.indexOf('#') >= 0 ? e.originalEvent.newURL.substring(e.originalEvent.newURL.indexOf('#')) : null;
+                var oldCardID = e.originalEvent.oldURL.indexOf('#') >= 0 ? e.originalEvent.oldURL.substring(e.originalEvent.oldURL.indexOf('#')) : null;
+                var newCard = $(newCardID);
+                var oldCard = $(oldCardID);
+
+                if (oldCardID && oldCard.length) { oldCard.removeClass('active'); }
+
+                if (newCardID && newCard.length) {
+                    newCard.addClass('active');
+                    $('html, body').animate({ scrollTop: newCard.offset().top - headerHeight }, scrollSpeed);
+                }
+
+                return false;
+            });
+
             var handleCardDescriptionOverflow = function(isWindowResizing) {
                 $('.plugin-card').each(function(index, card) {
                     var $card = $(card);
@@ -123,10 +153,10 @@ Community
                 });
             }
 
-            handleCardDescriptionOverflow()
+            handleCardDescriptionOverflow();
 
             $(window).on('resize', function() {
-                if (window.innerWidth > 991) { handleCardDescriptionOverflow(true) }
+                if (window.innerWidth > 991) { handleCardDescriptionOverflow(true); }
             });
         });
     </script>
