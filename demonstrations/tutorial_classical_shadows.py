@@ -404,7 +404,7 @@ plt.show()
 # :math:`S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_1,\ldots,\hat{\rho}_N]`, and
 # estimates any observable via a median of means estimation. This makes the estimator
 # more robust to outliers and is required to formally prove the aforementioned theoretical
-# bound. Also, the bound has a failure probability :math:`\delta`, and by choosing :math:`K` to be
+# bound. Also, the bound has a failure probability :math:`\delta`, and by choosing the number of splits :math:`K` to be
 # suitably large, we can exponentially surpress this failure probability.
 # The procedure is simple: split up the shadow into :math:`K` equally sized chunks
 # and estimate the mean for each of these chunks,
@@ -555,13 +555,14 @@ shadow_size_bound
 # To see how the estimate improves, we consider different shadow sizes, up to :math:`10^4`
 # snapshots.
 
-shadow_size_grid = [10, 100, 1000, 5000, 10000]
+shadow_size_grid = sorted([100, 1000, 5000, 10000] + [shadow_size_bound])
 estimates = []
 for shadow_size in shadow_size_grid:
     shadow = calculate_classical_shadow(circuit, params, shadow_size, num_qubits)
 
     estimates.append(
-        sum(estimate_shadow_obervable(shadow, o, k=shadow_size // 10) for o in list_of_observables)
+        sum(estimate_shadow_obervable(shadow, o, k=int(2*np.log(2*len(list_of_observables)/0.01))
+                                      ) for o in list_of_observables)
     )
 
 ##############################################################################
@@ -587,6 +588,7 @@ expval_exact = sum(
 # bound.
 
 plt.plot(shadow_size_grid, [np.abs(e - expval_exact) for e in estimates])
+plt.plot(shadow_size_grid, [1e-1 for _ in shadow_size_grid], linestyle="--", color='gray')
 plt.scatter([shadow_size_bound], [1e-1], marker="*")
 plt.show()
 
