@@ -833,7 +833,7 @@ def shadow_bound(error: float, max_k: int, observables: List[np.ndarray]) -> int
 
 
 ##############################################################################
-# We first test ``estimate_shadow_observable`` by estimating :math:`X_1 X_2` on the circuit
+# We first test ``estimate_shadow_observable`` by estimating :math:`X_1 X_2` on the circuit.
 # This test makes sure that given the expected input, the estimator returns a value in
 # :math:`[-1, 1]`.
 
