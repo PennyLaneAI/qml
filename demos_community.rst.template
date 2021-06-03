@@ -48,7 +48,9 @@ Community
 
 {% for card1, card2 in card_pairs %}
 
-:html:`<div class="row">`
+.. raw:: html
+
+    <div class="row">
 
 .. community-card::
     :title: {{ card1["title"] }}
@@ -85,15 +87,19 @@ Community
     {{ card2["description"] | replace("\n", " ") }}
 
 {% else %}
-:html:`<div class="card hidden-card"></div></div>`
+.. raw:: html
+
+    <div class="card hidden-card"></div></div>
 {% endif %}
 
-:html:`</div></div><div>`
+.. raw:: html
+
+    </div>
 
 {% endfor %}
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 4
     :hidden:
 
 .. raw:: html
