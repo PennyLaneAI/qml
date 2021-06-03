@@ -729,14 +729,15 @@ plt.show()
 #
 # .. math::
 #
-#      \langle O_{(k)}\rangle &= \text{Tr}\{O \hat{\rho}_{(k)}\}\\
-#      \hat{\rho}_{(k)} &= \frac{1}{ \lfloor N/K \rfloor } \sum_{i=(k-1)\lfloor N/K \rfloor + 1}^{k \lfloor N/K \rfloor } \hat{\rho}_i.
+#      \langle O_{(k)}\rangle = \text{Tr}\{O \hat{\rho}_{(k)}\} \quad
+#      \text{and} \quad \hat{\rho}_{(k)} = \frac{1}{ \lfloor N/K \rfloor }
+#      \sum_{i=(k-1)\lfloor N/K \rfloor + 1}^{k \lfloor N/K \rfloor } \hat{\rho}_i.
 #
 # The median of means estimator is then simply the median of this set
 #
 # .. math::
 #
-#       \langle O\rangle &= \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}.
+#       \langle O\rangle = \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}.
 #
 # Assume now that :math:`O=\bigotimes_j^n P_j`, where :math:`P_j \in \{I, X, Y, Z\}`.
 # To efficiently calculate the estimator for :math:`O`, we look at a single snapshot outcome and plug in the inverse measurement channel:
