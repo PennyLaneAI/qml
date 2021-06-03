@@ -88,7 +88,7 @@ Community
 :html:`<div class="card hidden-card"></div></div>`
 {% endif %}
 
-:html:`</div></div><br><div style='clear:both'>`
+:html:`</div></div><div>`
 
 {% endfor %}
 
@@ -111,7 +111,6 @@ Community
 
                     $(readMoreLink).on('click', function(e) {
                         e.preventDefault();
-                        console.log('YO');
                     });
                 }
             });
