@@ -141,6 +141,7 @@ np.random.seed(666)
 # 2. A randomly selected unitary :math:`U` is applied
 # 3. A computational basis measurement is performed.
 # 4. The process is repeated :math:`N` times.
+
 # With this in mind, add the ``calculate_classical_shadow`` function below.
 # This function obtains a classical shadow for the state prepared by the
 # ``circuit_template``, where the classical shadow is simply represented by
