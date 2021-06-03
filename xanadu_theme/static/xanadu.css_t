@@ -2156,7 +2156,7 @@ footer.page-footer .footer-copyright {
 }
 
 .plugin-card__description {
-    height: 115px;
+    height: 110px;
     overflow: hidden;
     font-size: .9rem;
     font-weight: 400;
@@ -2173,7 +2173,7 @@ footer.page-footer .footer-copyright {
     left: -15px;
     right: -15px;
     pointer-events: none;
-    box-shadow: inset 0px -40px 25px -30px white;
+    box-shadow: inset 0px -40px 25px -15px white;
 }
 
 .plugin-card__description--no-overflow:after {

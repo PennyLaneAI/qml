@@ -100,21 +100,27 @@ Community
 
     <script type="text/javascript">
         $(window).on('load', function() {
-            $('.plugin-card').each(function(index, card) {
-                var $card = $(card);
-                var description = $card.find('p.plugin-card__description')[0];
-                var textIsOverflowing = description.clientHeight < description.scrollHeight;
-
-                if (textIsOverflowing) {
+            var handleCardDescriptionOverflow = function(isWindowResizing) {
+                $('.plugin-card').each(function(index, card) {
+                    var $card = $(card);
+                    var description = $card.find('p.plugin-card__description')[0];
                     var readMoreLink = $card.find('.plugin-card__read-more')[0];
-                    $(readMoreLink).removeClass('d-none');
+                    var descriptionIsOverflowing = description.clientHeight < description.scrollHeight;
 
-                    $(readMoreLink).on('click', function(e) {
-                        e.preventDefault();
-                    });
-                } else {
-                    $(description).addClass('plugin-card__description--no-overflow');
-                }
+                    if (descriptionIsOverflowing) {
+                        $(readMoreLink).removeClass('d-none');
+                        if (isWindowResizing && $(description).hasClass('plugin-card__description--no-overflow')) { $(description).removeClass('plugin-card__description--no-overflow'); }
+                    } else {
+                        $(description).addClass('plugin-card__description--no-overflow');
+                        if (isWindowResizing) $(readMoreLink).addClass('d-none');
+                    }
+                });
+            }
+
+            handleCardDescriptionOverflow()
+
+            $(window).on('resize', function() {
+                if (window.innerWidth > 991) { handleCardDescriptionOverflow(true) }
             });
         });
     </script>
