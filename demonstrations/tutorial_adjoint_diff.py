@@ -395,7 +395,7 @@ for i_layers in n_layers:
 
     # set up the parameters
     param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=i_layers)
-    params = rng.standard_normal(param_shape)
+    params = np.array(rng.standard_normal(param_shape))
     params.requires_grad = True
     n_params.append(params.size)
 
