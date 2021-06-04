@@ -28,20 +28,17 @@ Several practical demonstrations have pointed out how near-term quantum
 devices may be well-suited platforms for VQE and other variational quantum algorithms.
 One issue for such an approach is, though, that the optimization landscape is
 non-convex, so reaching a good enough local minimum quickly requires hundreds or
-thousands of update steps.
+Using near-term devices for VQE becomes a non-convex optimization problem, which requires computing gradients at hundreds or thousands of update steps.
+Computing gradients on a quantum computer carries the caveat of inefficiency when it comes to circuits with many parameters.
 
 At the same time, though, we do have a good understanding of the local shape
 of the cost landscape around any reference point.
-Cashing in on this, the Quantum Analytic Descent algorithm constructs a
-local approximation to the landscape where gradient-based optimisation is much
+Cashing in on this, the authors of the `Quantum Analytic Descent paper <https://arxiv.org/pdf/2008.13774.pdf>`_ propose and algorithm to construct a
+classical model to approximate the landscape, so that the gradients can be calculated on a classical computer, which is much
 cheaper.
-This approach avoids using the quantum computer to estimate the gradient
-at every single optimization step.
-Instead, we can use the quantum device to estimate the cost values at a few
-points close to the reference one.
-With the cost values at these points, we can build a classical model which
-approximates the landscape locally, and then perform the optimization routine
-solely on a classical device.
+In order to build the classical model, we need to use the quantum device to estimate the cost values on (a) a reference point :math:`\theta_0` and (b) a number of points in the vicinity of the reference one (more on that later).
+With the cost values at these points, we can build the classical model which
+approximates the landscape.
 
 Here we demonstrate how to implement Quantum Analytic Descent on a quantum
 computer using PennyLane.
@@ -66,7 +63,7 @@ Typically, this :math:`n`-qubit quantum circuit is initialized in the :math:`|0\
 The body of the circuit is populated with a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-numbers :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
 After the variational form, the circuit ends with a measurement of an observable :math:`\mathcal{M}`, which is also fixed at the start.
 
-With these, the common choice of cost function :math:`E(\boldsymbol{\theta})` is
+With these, our goal is to minimize the cost function :math:`E(\boldsymbol{\theta})`:
 
 .. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle,
 
@@ -74,7 +71,7 @@ or, in short
 
 .. math:: E(\boldsymbol{\theta}) = \operatorname{tr}[\rho(\boldsymbol{\theta})\mathcal{M}],
 
-where :math:`\rho(\boldsymbol{\theta})=V(\boldsymbol{\theta})|0\rangle\!\langle0|V^\dagger(\boldsymbol{\theta})` is the density matrix of the quantum state after applying the variational form on the initial state.
+where :math:`\rho(\boldsymbol{\theta})=V(\boldsymbol{\theta})|0\rangle\!\langle0|V^\dagger(\boldsymbol{\theta})` is the density matrix of the quantum state after applying the variational form on :math:`|0\rangle`.
 
 It can be seen that if the gates in the variational form which take the parameters :math:`\theta` 
 are restricted to be Pauli rotations, then the cost function is a sum of multilinear
@@ -126,8 +123,9 @@ C2 = [circuit(np.array([3.3, theta])) for theta in theta_func]
 
 # Show the sweeps.
 fig, ax = plt.subplots(1, 1, figsize=(4, 3));
-ax.plot(theta_func, C1, label="$E(\\vartheta, \\theta_2^{(0)})$", color='r');
-ax.plot(theta_func, C2, label="$E(\\theta_1^{(0)}, \\vartheta)$", color='orange');
+ax.plot(theta_func, C1, label="$E(\\theta, 0.5)$", color='r');
+ax.plot(theta_func, C2, label="$E(3.3
+, \\vartheta)$", color='orange');
 ax.set_xlabel("$\\vartheta$");
 ax.set_ylabel("$E$");
 ax.legend();
@@ -161,25 +159,32 @@ plt.tight_layout();
 # multilinear combination of trigonometric functions*.
 # What is a good thing about trigonometric functions?
 # That's right!
-# We have studied them since high-school and know how to find their minima.
+# We have studied them since high-school and know how their graphs look!
 #
 # In our overly simplified example we had to query a quantum computer for every point on the surface.
+# Querying the quantum computer in this example means calling the ``circuit`` function.
 # Could we have spared some computational resources?
 # Well, since we know the ultimate shape the landscape is supposed to have, we should in principle be able to construct it only from a few points (much the same way two points already uniquely specify a line, or three non-aligned points specify a circle, there should be a certain fixed number of points that completely specify the loss landscape).
 #
 # Quantum Analytic Descent
 # ------------------------
 #
-# Although in principle we should be able to reconstruct the cost function over the entire parameter space, in practice we are mostly interested in what is happening in the vicinity of a given reference point.
+# One could aim at reconstructing the cost function over the entire parameter space.
+# In practice, that would be *very* expensive in number of required quantum circuit evaluations, so the cure would be roughly as bad as the sickness.
+# What can we do, then?
+# Well, the authors of QAD claim that building a model that is only accurate in the region close to a given reference point is already good enough!
 # This makes *all* the difference.
-# If we wanted to reconstruct the entire landscape, we would need to estimate around :math:`3^m` independent parameters, which would require the same number of function evaluations.
+# If we wanted to reconstruct the entire landscape, we would need to estimate around :math:`3^m` independent parameters, which would require a comparable amount of circuit evaluations.
 # If, on the contrary, we are satisfied with an approximation that is cheaper to construct (polynomial in :math:`m` instead of exponential), we can borrow a page from Taylor's book.
 #
-# As explained in the paper, an approximation via trigonometric series up to second order is already a sound candidate.
+# In the paper, the authors state that a trigonometric series up to second order is already a sound model candidate.
+# Similar to Taylor's expansion, this requires we find the cost value at the reference point and compute the first and second order derivatives.
+# Here, we will use parameter-shift rules (SHOULD WE CITE ANOTHER DEMO/PAPER?) for the derivatives.
 # In particular, we want to approximate
 #
 # .. math:: E(\boldsymbol{\theta}) := \operatorname{tr}\left[\mathcal{M}V(\boldsymbol{\theta})|0\rangle\!\langle 0| V(\boldsymbol{\theta})^\dagger\right]
 #
+# START OF MAJOR RECONSTRUCTION, PLEASE KEEP OFF
 # in the vicinity of a reference point :math:`\boldsymbol{\theta}_0`.
 # We then have:
 #
@@ -299,6 +304,7 @@ print(f"Coefficients at params:",
 #
 #   \tilde{E}(\boldsymbol{\theta}) &= A(\boldsymbol{\theta}) E^{(A)} + \sum_k \left[B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k\right] + \sum_{l>k} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
 #   \phantom{\tilde{E}(\boldsymbol{\theta})}&=A(\boldsymbol{\theta})\left[E^{(A)}+\sum_k \tan\left(\frac{\theta_k}{2}\right)E^{(B)}_k + \tan\left(\frac{\theta_k}{2}\right)^2 E^{(C)}_k + \sum_{l>k} \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)E^{(D)}_{kl}\right]
+# END OF THE MAJOR RECONSTRUCTION, YOU MAY PROCEED
 #
 # Let's implement this model:
 
