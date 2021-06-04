@@ -48,7 +48,9 @@ Community
 
 {% for card1, card2 in card_pairs %}
 
-:html:`<div class="card-deck">`
+.. raw:: html
+
+    <div class="row">
 
 .. community-card::
     :title: {{ card1["title"] }}
@@ -85,15 +87,19 @@ Community
     {{ card2["description"] | replace("\n", " ") }}
 
 {% else %}
-:html:`<div class="card hidden-card"></div></div>`
+.. raw:: html
+
+    <div class="card hidden-card"></div></div>
 {% endif %}
 
-:html:`</div></div><br><div style='clear:both'>`
+.. raw:: html
+
+    </div>
 
 {% endfor %}
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 4
     :hidden:
 
 .. raw:: html
@@ -128,6 +134,29 @@ Community
                 }
 
                 return false;
+            });
+
+            var handleCardDescriptionOverflow = function(isWindowResizing) {
+                $('.plugin-card').each(function(index, card) {
+                    var $card = $(card);
+                    var description = $card.find('p.plugin-card__description')[0];
+                    var readMoreLink = $card.find('.plugin-card__read-more')[0];
+                    var descriptionIsOverflowing = description.clientHeight < description.scrollHeight;
+
+                    if (descriptionIsOverflowing) {
+                        $(readMoreLink).removeClass('d-none');
+                        if (isWindowResizing && $(description).hasClass('plugin-card__description--no-overflow')) { $(description).removeClass('plugin-card__description--no-overflow'); }
+                    } else {
+                        $(description).addClass('plugin-card__description--no-overflow');
+                        if (isWindowResizing) $(readMoreLink).addClass('d-none');
+                    }
+                });
+            }
+
+            handleCardDescriptionOverflow();
+
+            $(window).on('resize', function() {
+                if (window.innerWidth > 991) { handleCardDescriptionOverflow(true); }
             });
         });
     </script>
