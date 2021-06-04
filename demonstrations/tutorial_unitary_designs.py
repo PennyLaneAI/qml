@@ -215,7 +215,7 @@ print(cube_average)
 # ^^^^^^^^^^^^^^^
 # 
 # We've learned now that spherical designs are sets of evenly-spaced points, and
-# saw how they can be used as a short cut to evaluate the average of a
+# saw how they can be used as a shortcut to evaluate the average of a
 # polynomial up to a given degree :math:`t`. However, there was nothing quantum
 # about this; there weren't even any complex numbers involved. A *unitary
 # design* extends this concept from evenly-distributed points to
