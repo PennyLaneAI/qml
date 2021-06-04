@@ -166,8 +166,8 @@ plt.tight_layout();
 # Could we have spared some computational resources?
 # Well, since we know the ultimate shape the landscape is supposed to have, we should in principle be able to construct it only from a few points (much the same way two points already uniquely specify a line, or three non-aligned points specify a circle, there should be a certain fixed number of points that completely specify the loss landscape).
 #
-# Quantum Analytic Descent
-# ------------------------
+# Computing a classical model
+# ---------------------------
 #
 # One could aim at reconstructing the cost function over the entire parameter space.
 # In practice, that would be *very* expensive in number of required quantum circuit evaluations, so the cure would be roughly as bad as the sickness.
@@ -176,22 +176,86 @@ plt.tight_layout();
 # This makes *all* the difference.
 # If we wanted to reconstruct the entire landscape, we would need to estimate around :math:`3^m` independent parameters, which would require a comparable amount of circuit evaluations.
 # If, on the contrary, we are satisfied with an approximation that is cheaper to construct (polynomial in :math:`m` instead of exponential), we can borrow a page from Taylor's book.
+# In the paper, the authors state that a *trigonometric expansion* up to second order is already a sound model candidate.
 #
-# In the paper, the authors state that a trigonometric series up to second order is already a sound model candidate.
-# Similar to Taylor's expansion, this requires we find the cost value at the reference point and compute the first and second order derivatives.
-# Here, we will use parameter-shift rules (SHOULD WE CITE ANOTHER DEMO/PAPER?) for the derivatives.
-# In particular, we want to approximate
+# In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of the functions in some basis, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
+# The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
+# In Calculus I we learnt a Taylor series in one variable :math:`x` uses the integer powers of the variable :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`.
+# Conversely, a trigonometric expansion uses a different base, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\}`, which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}`.
+# For higher-dimensional variables we have to take products of the trigonometric functions of each coordinate.
+# Yet, since we only want to expand up to second order, the series will not get too much out of hand.
+# We can group the terms we will have to deal with by orders.
+# 
+# #. The :math:`0`th order term (the constant in a Taylor series) is :math:`A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2.
+# #. The :math:`1`st order term (would be :math:`x_k` for each component :math:`k`) is :math:`B_k(\boldsymbol{\theta}) = \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
+# #. We distinguish the :math:`2`nd order terms in two groups, the squares (:math:`x_k^2` for each component :math:`k`), and the non-squares (:math:`x_kx_l` for each pair of *different* components :math:`(k,l)`):
+#    #. For the square :math:`2`nd order terms we use the letter :math:`C` and, for every component :math:`k`, they look like :math:`C_k(\boldsymbol{\theta}) &= \sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
+#    #. The non-square :math:`2`nd order terms depend on two indices, referring to each pair of different components :math;`(k,l)` and they have the form :math:`E^{(D)}_{kl} &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right) + E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right)`.
+#
+# You may have noticed all of those terms have quite some parts in common.
+# Indeed, we can rewrite the longer ones in a shorter way which is a bit more decent to look at:
+#
+# .. math::
+#
+#   B_k(\boldsymbol{\theta}) &= \tan\left(\frac{\theta_k}{2}\right)A(\boldsymbol{\theta})\\
+#   C_k(\boldsymbol{\theta}) &= \tan\left(\frac{\theta_k}{2}\right)^2 A(\boldsymbol{\theta})\\
+#   D_{kl}(\boldsymbol{\theta}) &= \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)A(\boldsymbol{\theta})
+#
+# And with that we know what type of terms we should expect to encounter in our local classical model.
+# They look somewhat ugly at first, but if you stare at them long enough, with a bit of luck you will see they make some sense given their trigonometric nature.
+# In any case: we know the classical model we want to construct is a linear combination of the functions :math:`\{A(\boldsymbol{theta}),B_k(\boldsymbol{theta}), C_k(\boldsymbol{theta}), D_{kl}(\boldsymbol{theta})\}` for every pair of different variable components :math:`(\theta_k,\theta_l)`.
+#
+# When it comes to the coefficients of the linear combination, we need to compute the derivatives of the function we are approximating with respect to each variable :math:`\partial E(\boldsymbol{theta})/\partial \theta_k`, :math:`\partial^2 E(\boldsymbol{theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{theta})/\partial \theta_k\partial\theta_l` just as in a Taylor expansion.
+# We can name the different derivatives (including the :math:`0`th order derivative, i.e. the function itself) accordingly to how we named the terms in the series:
+#
+# .. math::
+#
+#   E^{(A)} &= E(\boldsymbol{\theta}) \\
+#   E^{(B)}_k &= \frac{\partial E(\boldsymbol{\theta})}{\partial\theta_k} \\
+#   E^{(C)}_k &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k^2} \\
+#   E^{(D)}_{kl} &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k\partial\theta_l}
+#
+# In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done with a parameter-shift rule (SHOULD WE CITE ANOTHER DEMO/PAPER?).
+# (DO WE WANT THE FOLLOWING LINES?)
+# Under the hood, what PennyLane will compute is
+#
+# .. math::
+#
+#   E^{(A)} &= E(\boldsymbol{\theta})\\
+#   E^{(B)}_k &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k\right)-E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k\right)\\
+#   E^{(C)}_k &= E\left(\boldsymbol{\theta}+\pi\boldsymbol{v}_k\right)\\
+#   E^{(D)}_{kl} &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right) + E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right)
+#
+# which is an analytical expression for the gradient based on the finite differences method.
+# 
+# Now, recall the true cost function, for which we want to build a local classical model:
 #
 # .. math:: E(\boldsymbol{\theta}) := \operatorname{tr}\left[\mathcal{M}V(\boldsymbol{\theta})|0\rangle\!\langle 0| V(\boldsymbol{\theta})^\dagger\right]
 #
-# START OF MAJOR RECONSTRUCTION, PLEASE KEEP OFF
-# in the vicinity of a reference point :math:`\boldsymbol{\theta}_0`.
-# We then have:
+# which should be accurate in the vicinity of a reference point :math:`\boldsymbol{\theta}_0`.
+# Bringing all the ingredients we mentioned together, we have the following gorgeous trigonometric expansion up to second order:
 #
 # .. math:: \hat{E}(\boldsymbol{\theta}_0+\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{l>k}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
 #
-# We have introduced a number of :math:`E`\ 's, in order to build each of these we need to sample some points in the landscape with a quantum computer.
-# Before eyeing the formulas for each of them, though, it is important we now only need to estimate :math:`2m^2+m+1` points (as we will see in the model formulas further below).
+# Let us now take a few moments to breath deeply and admire the entirety of it.
+# On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k`, and :math:`D_{kl}` functions, which we said would play the role of the monomials :math:`1`, :math:`x_k`, :math:`x_k^2`, and :math:`x_kx_l` in a regular Taylor expansion.
+# At the same time, on the other hand we have the real-valued coefficients :math:`E_{(k(l))}^{(A/B/C/D)}`, which multiply the previous functions and are nothing but the gradients in the corresponding input components.
+#
+# Now we can also appreciate how many parameters our model needs.
+# For an :math:`m`-dimensional input variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
+#
+# #. We have :math:`1` :math:`E^{(A)}`.
+# #. We have :math:`m` many :math:`E^{(B)}`'s, one for each component.
+# #. We have :math:`m` many :math:`E^{(C)}`'s, also one for each component.
+# #. We have :math:`(m-1)m/2` many :math:`E^{(D)}`'s, because we only need to check every pair once.
+#
+# So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters.
+# In practice, not every parameter needs the same amount of circuit evaluations, though!
+# If we look at the formulae for each of the :math:`E`'s from above, we can see that we need :math:`1\times1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1` circuit evaluations.
+# This is already much better than the :math:`3^m` we would need if we naively tried to approximate the cost landscape exactly, without chopping after second order.
+#
+# Quantum Analytic Descent
+# ------------------------
 #
 # The underlying idea we are trying to exploit here is the following:
 # If we can model the cost around the reference point well enough, we will be able to find a rough estimate of where the global minimum of the landscape is.
@@ -212,20 +276,7 @@ plt.tight_layout();
 #    :width: 80%
 #    :target: javascript:void(0)
 #
-# Computing the model
-# -------------------
-# In order to construct the model landscape, we still need to compute all those :math:`E^{(A/B/C/D)}`\ 's from the previous equation.
-# In order to do so, we evaluate the original cost function on the quantum computer at specific shifted positions in parameter space.
-# (If you are familiar with the parameter shift rule for analytic quantum gradient computations, you might recognize some of the following computations.)
-# We combine the function evaluations according to Eqs. (B1) and the following in [#QAG]_ and obtain
-#
-# .. math::
-#
-#   E^{(A)} &= E(\boldsymbol{\theta})\\
-#   E^{(B)}_k &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k\right)-E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k\right)\\
-#   E^{(C)}_k &= E\left(\boldsymbol{\theta}+\pi\boldsymbol{v}_k\right)\\
-#   E^{(D)}_{kl} &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right) + E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right)
-#
+# (I LEFT THIS CODE BLOCK AS IT WAS, BUT IT DOESN'T BELONG HERE.)
 # Let us create a function that will take care of evaluating :math:`E` at all these shifted parameter points and combines the results to obtain the above coefficients:
 
 from pennylane import numpy as np
@@ -264,6 +315,7 @@ def get_model_data(fun, params, *args):
     return E_A, E_B, E_C, E_D
 
 ###############################################################################
+# (I LEFT THIS CODE BLOCK AS IT WAS, BUT IT DOESN'T BELONG HERE.)
 # Let's test our brand-new function at a random parameter position!
 
 parameters = np.random.random(2) * 2 * np.pi
@@ -277,35 +329,7 @@ print(f"Coefficients at params:",
       sep='\n')
 
 ###############################################################################
-# As we can see, only the upper right triangular part of :math:`E^{(D)}` -- in this case a single entry -- was computed.
-#
-# Next, we want to construct our classical model that locally represents the original cost function.
-# For this we use the coefficients computed by ``get_model_data`` and the definition in Eq. (A13, B1) and the following equations in [#QAG]_ respectively.
-# There are 4 trigonometric functions to be combined:
-#
-# .. math::
-#
-#   A(\boldsymbol{\theta}) &= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2\\
-#   B_k(\boldsymbol{\theta}) &= \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2\\
-#   C_k(\boldsymbol{\theta}) &= \sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2\\
-#   D_{kl}(\boldsymbol{\theta}) &= \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\cos\left(\frac{\theta_l}{2}\right)\sin\left(\frac{\theta_l}{2}\right)\prod_{k\neq i\neq l} \cos\left(\frac{\theta_i}{2}\right)^2
-#
-# While this expression for these functions seems quite long, it shows us a nice relation between the four sets of trigonometric polynomials :math:`A`, :math:`B`, :math:`C`, and :math:`D`:
-#
-# .. math::
-#
-#   B_k(\boldsymbol{\theta}) &= \tan\left(\frac{\theta_k}{2}\right)A(\boldsymbol{\theta})\\
-#   C_k(\boldsymbol{\theta}) &= \tan\left(\frac{\theta_k}{2}\right)^2 A(\boldsymbol{\theta})\\
-#   D_{kl}(\boldsymbol{\theta}) &= \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)A(\boldsymbol{\theta})
-#
-# Using these, we can compute the classical surrogate model :math:`\tilde{E}(\boldsymbol{\theta})`:
-#
-# .. math::
-#
-#   \tilde{E}(\boldsymbol{\theta}) &= A(\boldsymbol{\theta}) E^{(A)} + \sum_k \left[B_k(\boldsymbol{\theta}) E^{(B)}_k + C_k(\boldsymbol{\theta}) E^{(C)}_k\right] + \sum_{l>k} D_{kl}(\boldsymbol{\theta}) E^{(D)}_{kl}\\
-#   \phantom{\tilde{E}(\boldsymbol{\theta})}&=A(\boldsymbol{\theta})\left[E^{(A)}+\sum_k \tan\left(\frac{\theta_k}{2}\right)E^{(B)}_k + \tan\left(\frac{\theta_k}{2}\right)^2 E^{(C)}_k + \sum_{l>k} \tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)E^{(D)}_{kl}\right]
-# END OF THE MAJOR RECONSTRUCTION, YOU MAY PROCEED
-#
+# (I LEFT THIS CODE BLOCK AS IT WAS, BUT IT DOESN'T BELONG HERE.)
 # Let's implement this model:
 
 def model_cost(params, E_A, E_B, E_C, E_D):
