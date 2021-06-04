@@ -124,9 +124,8 @@ C2 = [circuit(np.array([3.3, theta])) for theta in theta_func]
 # Show the sweeps.
 fig, ax = plt.subplots(1, 1, figsize=(4, 3));
 ax.plot(theta_func, C1, label="$E(\\theta, 0.5)$", color='r');
-ax.plot(theta_func, C2, label="$E(3.3
-, \\vartheta)$", color='orange');
-ax.set_xlabel("$\\vartheta$");
+ax.plot(theta_func, C2, label="$E(3.3, \\theta)$", color='orange');
+ax.set_xlabel("$\\theta$");
 ax.set_ylabel("$E$");
 ax.legend();
 plt.tight_layout();
@@ -186,11 +185,11 @@ plt.tight_layout();
 # Yet, since we only want to expand up to second order, the series will not get too much out of hand.
 # We can group the terms we will have to deal with by orders.
 # 
-# #. The :math:`0`th order term (the constant in a Taylor series) is :math:`A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2.
-# #. The :math:`1`st order term (would be :math:`x_k` for each component :math:`k`) is :math:`B_k(\boldsymbol{\theta}) = \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
-# #. We distinguish the :math:`2`nd order terms in two groups, the squares (:math:`x_k^2` for each component :math:`k`), and the non-squares (:math:`x_kx_l` for each pair of *different* components :math:`(k,l)`):
-#    #. For the square :math:`2`nd order terms we use the letter :math:`C` and, for every component :math:`k`, they look like :math:`C_k(\boldsymbol{\theta}) &= \sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
-#    #. The non-square :math:`2`nd order terms depend on two indices, referring to each pair of different components :math;`(k,l)` and they have the form :math:`E^{(D)}_{kl} &= E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right) + E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right)`.
+# #. The :math:`0^{\text{th}}` order term (the constant in a Taylor series) is :math:`A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2`.
+# #. The :math:`1^{\text{st}}` order term (would be :math:`x_k` for each component :math:`k`) is :math:`B_k(\boldsymbol{\theta}) = \cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
+# #. We distinguish the :math:`2^{\text{nd}}` order terms in two groups, the squares (:math:`x_k^2` for each component :math:`k`), and the non-squares (:math:`x_kx_l` for each pair of *different* components :math:`(k,l)`):
+#     #. For the square :math:`2^{\text{nd}}` order terms we use the letter :math:`C` and, for every component :math:`k`, they look like :math:`C_k(\boldsymbol{\theta}) = \sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
+#     #. The non-square :math:`2^{\text{nd}}` order terms depend on two indices, referring to each pair of different components :math:`(k,l)` and they have the form :math:`E^{(D)}_{kl} = E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right) + E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}+\frac{\pi}{2}\boldsymbol{v}_k-\frac{\pi}{2}\boldsymbol{v}_l\right) - E\left(\boldsymbol{\theta}-\frac{\pi}{2}\boldsymbol{v}_k+\frac{\pi}{2}\boldsymbol{v}_l\right)`.
 #
 # You may have noticed all of those terms have quite some parts in common.
 # Indeed, we can rewrite the longer ones in a shorter way which is a bit more decent to look at:
@@ -203,9 +202,9 @@ plt.tight_layout();
 #
 # And with that we know what type of terms we should expect to encounter in our local classical model.
 # They look somewhat ugly at first, but if you stare at them long enough, with a bit of luck you will see they make some sense given their trigonometric nature.
-# In any case: we know the classical model we want to construct is a linear combination of the functions :math:`\{A(\boldsymbol{theta}),B_k(\boldsymbol{theta}), C_k(\boldsymbol{theta}), D_{kl}(\boldsymbol{theta})\}` for every pair of different variable components :math:`(\theta_k,\theta_l)`.
+# In any case: we know the classical model we want to construct is a linear combination of the functions :math:`\{A(\boldsymbol{\theta}),B_k(\boldsymbol{\theta}), C_k(\boldsymbol{\theta}), D_{kl}(\boldsymbol{\theta})\}` for every pair of different variable components :math:`(\theta_k,\theta_l)`.
 #
-# When it comes to the coefficients of the linear combination, we need to compute the derivatives of the function we are approximating with respect to each variable :math:`\partial E(\boldsymbol{theta})/\partial \theta_k`, :math:`\partial^2 E(\boldsymbol{theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{theta})/\partial \theta_k\partial\theta_l` just as in a Taylor expansion.
+# When it comes to the coefficients of the linear combination, we need to compute the derivatives of the function we are approximating with respect to each variable :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k`, :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l` just as in a Taylor expansion.
 # We can name the different derivatives (including the :math:`0`th order derivative, i.e. the function itself) accordingly to how we named the terms in the series:
 #
 # .. math::
@@ -244,14 +243,14 @@ plt.tight_layout();
 # Now we can also appreciate how many parameters our model needs.
 # For an :math:`m`-dimensional input variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
 #
-# #. We have :math:`1` :math:`E^{(A)}`.
+# #. We have one :math:`E^{(A)}`.
 # #. We have :math:`m` many :math:`E^{(B)}`'s, one for each component.
 # #. We have :math:`m` many :math:`E^{(C)}`'s, also one for each component.
 # #. We have :math:`(m-1)m/2` many :math:`E^{(D)}`'s, because we only need to check every pair once.
 #
 # So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters.
 # In practice, not every parameter needs the same amount of circuit evaluations, though!
-# If we look at the formulae for each of the :math:`E`'s from above, we can see that we need :math:`1\times1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1` circuit evaluations.
+# If we look at the formulae for each of the :math:`E`'s from above, we can see that we need :math:`1\times1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1`.
 # This is already much better than the :math:`3^m` we would need if we naively tried to approximate the cost landscape exactly, without chopping after second order.
 #
 # Quantum Analytic Descent
