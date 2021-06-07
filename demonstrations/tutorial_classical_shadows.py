@@ -103,7 +103,7 @@ observables.
 # Two different ensembles are considered for selecting the random unitaries :math:`U`:
 #
 # 1. Random :math:`n`-qubit Clifford circuits.
-# 2. Tensor products of random single-qubit Clifford circuits.
+# 2. Tensor products of random single-qubit Pauli operators.
 #
 # Although ensemble 1 leads to the most powerful estimators, it comes with serious practical limitations
 # since :math:`n^2 / \log(n)` entangling gates are required to sample the Clifford circuit. The snapshots of both ensembles
@@ -150,9 +150,7 @@ np.random.seed(666)
 # a matrix where each row is a distinct snapshot.
 
 
-def calculate_classical_shadow(
-    circuit_template, params, shadow_size: int, num_qubits: int
-) -> np.ndarray:
+def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits):
     """
     Given a circuit, creates a collection of snapshots U^dag|b><b| U with the stabilizer
     description.
@@ -465,7 +463,7 @@ plt.show()
 # sign.
 
 
-def estimate_shadow_obervable(shadows, observable, k=10) -> float:
+def estimate_shadow_obervable(shadows, observable, k=10):
     """
     Adapted from https://github.com/momohuang/predicting-quantum-properties
     Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k
@@ -526,7 +524,7 @@ def estimate_shadow_obervable(shadows, observable, k=10) -> float:
 
 
 def shadow_bound(
-    error: float, observables: List[np.ndarray], failure_rate: float = 0.01
+    error, observables, failure_rate = 0.01
 ):
     """
     Calculate the shadow bound for the Pauli measurement scheme.
@@ -588,7 +586,7 @@ list_of_observables = [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubi
 
 ##############################################################################
 # With the ``shadow_bound`` function, we calculate how many shadows we need to get
-# an error of 1e-1 for this set of observables
+# an error of :math:`10^{-1}` for this set of observables
 
 shadow_size_bound, k = shadow_bound(
     error=1e-1, observables=[o.matrix for o in list_of_observables]
@@ -608,7 +606,7 @@ for shadow_size in shadow_size_grid:
     estimates.append(
         sum(
             estimate_shadow_obervable(
-                shadow, o, k = 2 * np.log(2 * len(list_of_observables) / 0.01)
+                shadow, o, k = int(np.ceil(2 * np.log(2 * len(list_of_observables) / 0.01)))
             )
             for o in list_of_observables
         )
@@ -621,13 +619,7 @@ dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit.device = dev_exact
 expval_exact = sum(
-    circuit(
-        params,
-        wires=dev_exact.wires,
-        observable=[
-            o,
-        ],
-    )
+    circuit(params, wires=dev_exact.wires, observable=[o,])
     for o in list_of_observables
 )
 
