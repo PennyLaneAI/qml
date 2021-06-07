@@ -258,7 +258,7 @@ projector[0, 0] = 1
 def kernel(x1, x2):
     """The quantum kernel."""
     AngleEmbedding(x1, wires=range(n_qubits))
-    qml.inv(AngleEmbedding(x2, wires=range(n_qubits)))
+    qml.adjoint(AngleEmbedding)(x2, wires=range(n_qubits))
     return qml.expval(qml.Hermitian(projector, wires=range(n_qubits)))
 
 
