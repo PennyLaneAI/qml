@@ -18,7 +18,7 @@ Unitary Designs
 
 .. note::
 
-   This demo is intended to be a sequel to the `demo about the Haar measure
+   This demo is intended to be a sequel to the :doc:`demo about the Haar measure
    </demos/tutorial_haar_measure>`__. If you are not familiar with the Haar measure,
    we recommend going through that demo first before exploring this one.
 
