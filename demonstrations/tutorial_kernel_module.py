@@ -240,7 +240,7 @@ def random_params(num_wires, num_layers):
 # purposes of this tutorial we will use PennyLane’s ``default.qubit``
 # device with 5 wires.
 
-dev = qml.device("default.qubit", wires=5)
+dev = qml.device("default.qubit", wires=5, analytic=True)
 wires = list(range(5))
 
 ##############################################################################
@@ -251,7 +251,7 @@ wires = list(range(5))
 @qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
-    qml.adjoint(ansatz(x1, params, wires=wires))
+    qml.adjoint(ansatz(x2, params, wires=wires))
 
     return qml.probs(wires=wires)
 
