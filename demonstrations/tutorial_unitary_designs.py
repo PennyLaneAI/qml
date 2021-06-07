@@ -614,7 +614,6 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # Incredible 🤯 🤯 🤯 We were able to compute the average fidelity using only
 # 24 experiments. Furthermore, the mean fidelity obtained from the Clifford
 # experiments is **exact**; even with 50000 Haar-random experiments, we see
-# deviations on the order of :math:`10^{-4}`. Consider the resources that would
 # deviations starting a few decimal places in. Consider the resources that would
 # be saved if you were actually implementing this in a lab! It's not hard to see
 # why the Clifford group plays such an important role in characterization
