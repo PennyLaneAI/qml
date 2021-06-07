@@ -5,7 +5,7 @@ numpy==1.18.5
 networkx==2.5.1
 nlopt==2.6.2
 semantic_version==2.6
-strawberryfields==0.15
+strawberryfields==0.18
 sympy==1.6.2
 pillow==7.1.0
 pip==20.1
