@@ -251,7 +251,7 @@ wires = list(range(5))
 @qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
-    qml.inv(ansatz(x1, params, wires=wires))
+    qml.adjoint(ansatz(x1, params, wires=wires))
 
     return qml.probs(wires=wires)
 
