@@ -238,9 +238,9 @@ def random_params(num_wires, num_layers):
 # We are now in a place where we can create the embedding. Together with
 # the Ansatz we only need a device to run the quantum circuit on. For the
 # purposes of this tutorial we will use PennyLane’s ``default.qubit``
-# device with 5 wires.
+# device with 5 wires in analytic mode.
 
-dev = qml.device("default.qubit", wires=5, analytic=True)
+dev = qml.device("default.qubit", wires=5, shots=None)
 wires = list(range(5))
 
 ##############################################################################
@@ -446,7 +446,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 
 print(
     "The kernel-target-alignment for our dataset with random parameters is {:.3f}".format(
-        qml.kernels.kernel_target_alignment(
+        qml.kernels.target_alignment(
             dataset.X, dataset.Y, lambda x1, x2: kernel(x1, x2, init_params)
         )
     )
@@ -469,7 +469,7 @@ opt = qml.GradientDescentOptimizer(2.5)
 for i in range(500):
     subset = np.random.choice(list(range(len(dataset.X))), 4)
     params = opt.step(
-        lambda _params: -qml.kernels.kernel_target_alignment(
+        lambda _params: -qml.kernels.target_alignment(
             dataset.X[subset], dataset.Y[subset], lambda x1, x2: kernel(x1, x2, _params)
         ),
         params,
@@ -479,7 +479,7 @@ for i in range(500):
         print(
             "Step {} - Alignment = {:.3f}".format(
                 i + 1,
-                qml.kernels.kernel_target_alignment(
+                qml.kernels.target_alignment(
                     dataset.X, dataset.Y, lambda x1, x2: kernel(x1, x2, params)
                 ),
             )
