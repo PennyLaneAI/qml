@@ -248,18 +248,16 @@ wires = list(range(5))
 # of the quantum states by first applying the embedding of the first datapoint and then the inverse
 # of the embedding of the second datapoint.
 
-
+@qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
     qml.inv(ansatz(x1, params, wires=wires))
 
     return qml.probs(wires=wires)
 
-
 ##############################################################################
 # The kernel function itself is now obtained by measuring the probability of observing the all-zero
 # state at the end of the kernel circuit:
-
 
 def kernel(x1, x2, params):
     return kernel_circuit(x1, x2, params)[0]
