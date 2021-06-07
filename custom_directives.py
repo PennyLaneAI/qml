@@ -186,18 +186,50 @@ class YoutubeItemDirective(Directive):
 COMMUNITY_CARD_TEMPLATE = """
 .. raw:: html
 
-    <div class="card plugin-card">
-        <h4 class="card-header {color} lighten-4">{title}</h4>
-        <div class="card-body">
-            <h6>{author}</h6>
-            <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
-            <div class="row d-flex align-items-center">
-                <div class="col-lg-8">
-                    <p class="card-text">
-                        {description}
-                    </p>
+    <div class="col-lg-6 mb-4">
+        <div class="card plugin-card" id={id}>
+            <div class="card-header {color} lighten-4">
+                <h4 class="card-header__text">{title}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8 d-flex flex-column">
+                        <div>
+                            <h6>{author}</h6>
+                            <p class="font-small"><i class="far fa-clock pr-1"></i>{date}</p>
+                        </div>
+                        <p class="plugin-card__description">
+                            {description}
+                        </p>
+                        <div class="mt-auto plugin-card__read-more-wrapper">
+                            <a class="plugin-card__read-more text-primary d-none" data-toggle="modal" data-target="#{id}-modal">Read More</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 d-flex">
+                        <div class="plugin-card__buttons">
+                            {paper_footer}
+                            {blog_footer}
+                            {code_footer}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-4">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="{id}-modal" tabindex="-1" role="dialog" aria-labelledby="{id}-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0">{title}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {description}
+                </div>
+                <div class="modal-footer">
                     {paper_footer}
                     {blog_footer}
                     {code_footer}
@@ -207,17 +239,17 @@ COMMUNITY_CARD_TEMPLATE = """
     </div>
 """
 
-PAPER_FOOTER = """<a href="{paper}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+PAPER_FOOTER = """<a href="{paper}" class="btn btn-info plugin-card__paper-btn">
                 <i class="fas fa-book"></i> Paper
             </a>
 """
 
-BLOG_FOOTER = """<a href="{blog}" class="btn btn-info" style="box-shadow: unset; border-radius:5px; width:90%;">
+BLOG_FOOTER = """<a href="{blog}" class="btn btn-info plugin-card__blog-btn">
                 <i class="fas fa-newspaper"></i> Blog
             </a>
 """
 
-CODE_FOOTER = """<a href="{code}" class="btn btn-default" style="box-shadow: unset; border-radius:5px; width:90%;">
+CODE_FOOTER = """<a href="{code}" class="btn btn-default plugin-card__code-btn">
                 <i class="fas fa-code-branch"></i></i> Code
             </a>
 """
@@ -258,11 +290,24 @@ class CommunityCardDirective(Directive):
 
         if code_url is not None:
             code_footer = CODE_FOOTER.format(code=code_url)
-            
+
         blog_url = self.options.get("blog", None)
 
         if blog_url is not None:
             blog_footer = BLOG_FOOTER.format(blog=blog_url)
+
+        def remove_accents(raw_text):
+            """Removes common accent characters."""
+
+            raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
+            raw_text = re.sub(u"[èéêë]", 'e', raw_text)
+            raw_text = re.sub(u"[ìíîï]", 'i', raw_text)
+            raw_text = re.sub(u"[òóôõö]", 'o', raw_text)
+            raw_text = re.sub(u"[ùúûü]", 'u', raw_text)
+            raw_text = re.sub(u"[ýÿ]", 'y', raw_text)
+            raw_text = re.sub(u"[ß]", 'ss', raw_text)
+            raw_text = re.sub(u"[ñ]", 'n', raw_text)
+            return raw_text
 
         card_rst = COMMUNITY_CARD_TEMPLATE.format(
             title=self.options["title"],
@@ -272,7 +317,8 @@ class CommunityCardDirective(Directive):
             paper_footer=paper_footer,
             code_footer=code_footer,
             blog_footer=blog_footer,
-            color=color
+            color=color,
+            id=remove_accents(self.options["author"].split(" ")[-1].lower()) + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
         )
 
         thumbnail = StringList(card_rst.split('\n'))
