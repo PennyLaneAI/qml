@@ -13,7 +13,7 @@ Unitary Designs
 
     tutorial_haar_measure Understanding the Haar measure
 
-*Author: PennyLane dev team. Posted: XX June 2021. Last updated: XX June 2021.*
+*Author: PennyLane dev team. Posted: 7 June 2021. Last updated: 7 June 2021.*
 
 
 .. note::
