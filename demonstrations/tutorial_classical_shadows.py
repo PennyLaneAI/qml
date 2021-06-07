@@ -195,7 +195,7 @@ dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
 
 @qml.qnode(device=dev)
-def local_qubit_rotation_circuit(params, wires, **kwargs):
+def local_qubit_rotation_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
     for w in dev.wires:
         qml.RY(params[w], wires=w)
@@ -345,7 +345,7 @@ dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword argument.
 @qml.qnode(device=dev)
-def bell_state_circuit(params, wires, **kwargs):
+def bell_state_circuit(**kwargs):
     observables = kwargs.pop("observable")
 
     qml.Hadamard(0)
@@ -407,8 +407,12 @@ for i in range(number_of_runs):
         shadow_state = shadow_state_reconstruction(shadow)
 
         tr_distance = np.real(operator_2_norm(bell_state - shadow_state))
-        trace_distances[i,j] = tr_distance
-plt.errorbar(snapshots_range, np.mean(trace_distances,axis=0), yerr=np.std(trace_distances, axis=0))
+        trace_distances[i, j] = tr_distance
+plt.errorbar(
+    snapshots_range,
+    np.mean(trace_distances, axis=0),
+    yerr=np.std(trace_distances, axis=0),
+)
 plt.title("Trace Distance between Ideal and Shadow Bell States")
 plt.xlabel("Number of Snapshots")
 plt.ylabel("Trace Distance")
@@ -491,7 +495,7 @@ def estimate_shadow_obervable(shadows, observable, k=10):
     shadow_size = shadows.shape[0]
     sum_product, cnt_match = 0, 0
     means = []
-    for i in range(0, shadow_size, int(shadow_size // k)):
+    for i in range(0, shadow_size, shadow_size // k):
 
         # loop over the shadows:
         for single_measurement in shadows[i : i + shadow_size // k]:
@@ -523,9 +527,7 @@ def estimate_shadow_obervable(shadows, observable, k=10):
 # required to get an error :math:`\epsilon` on our estimator for a given set of observables.
 
 
-def shadow_bound(
-    error, observables, failure_rate = 0.01
-):
+def shadow_bound(error, observables, failure_rate=0.01):
     """
     Calculate the shadow bound for the Pauli measurement scheme.
 
@@ -606,7 +608,9 @@ for shadow_size in shadow_size_grid:
     estimates.append(
         sum(
             estimate_shadow_obervable(
-                shadow, o, k = int(np.ceil(2 * np.log(2 * len(list_of_observables) / 0.01)))
+                shadow,
+                o,
+                k=int(np.ceil(2 * np.log(2 * len(list_of_observables) / 0.01))),
             )
             for o in list_of_observables
         )
@@ -619,7 +623,13 @@ dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit.device = dev_exact
 expval_exact = sum(
-    circuit(params, wires=dev_exact.wires, observable=[o,])
+    circuit(
+        params,
+        wires=dev_exact.wires,
+        observable=[
+            o,
+        ],
+    )
     for o in list_of_observables
 )
 
@@ -645,4 +655,3 @@ plt.show()
 # .. [#Gottesman1997] Gottesman,  Daniel
 #             "Stabilizer Codes and Quantum Error Correction."
 #             https://arxiv.org/abs/quant-ph/9705052
-
