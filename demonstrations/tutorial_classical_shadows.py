@@ -176,7 +176,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
     for ns in range(shadow_size):
         # for each shadow, add a random Pauli observable at each location
         obs = [unitary_ensemble[int(unitary_ids[ns, i])](i) for i in range(num_qubits)]
-        outcomes[ns, :] = circuit_template(params, wires=num_qubits, observable=obs)
+        outcomes[ns, :] = circuit_template(params, observable=obs)
 
     # combine the computational basis outcomes and the sampled unitaries
     return np.concatenate([outcomes, unitary_ids], axis=1)
@@ -345,7 +345,7 @@ dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword argument.
 @qml.qnode(device=dev)
-def bell_state_circuit(**kwargs):
+def bell_state_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
 
     qml.Hadamard(0)
@@ -397,7 +397,7 @@ operator_2_norm(bell_state - shadow_state)
 # we can add errorbars to the plot.
 number_of_runs = 10
 snapshots_range = [100, 1000, 6000]
-trace_distances = np.zeros((number_of_runs, len(snapshots_range)))
+distances = np.zeros((number_of_runs, len(snapshots_range)))
 # run the estimation multiple times so that we can include error bars
 for i in range(number_of_runs):
     for j, num_snapshots in enumerate(snapshots_range):
@@ -406,16 +406,15 @@ for i in range(number_of_runs):
         )
         shadow_state = shadow_state_reconstruction(shadow)
 
-        tr_distance = np.real(operator_2_norm(bell_state - shadow_state))
-        trace_distances[i, j] = tr_distance
+        distances[i, j] = np.real(operator_2_norm(bell_state - shadow_state))
 plt.errorbar(
     snapshots_range,
-    np.mean(trace_distances, axis=0),
-    yerr=np.std(trace_distances, axis=0),
+    np.mean(distances, axis=0),
+    yerr=np.std(distances, axis=0),
 )
-plt.title("Trace Distance between Ideal and Shadow Bell States")
+plt.title("Distance between Ideal and Shadow Bell States")
 plt.xlabel("Number of Snapshots")
-plt.ylabel("Trace Distance")
+plt.ylabel("Distance")
 plt.show()
 
 
@@ -493,32 +492,38 @@ def estimate_shadow_obervable(shadows, observable, k=10):
 
     num_qubits = shadows.shape[1] // 2
     shadow_size = shadows.shape[0]
-    sum_product, cnt_match = 0, 0
     means = []
     for i in range(0, shadow_size, shadow_size // k):
-
+        sum_product, cnt_match = 0, 0
         # loop over the shadows:
         for single_measurement in shadows[i : i + shadow_size // k]:
             not_match = 0
             product = 1
-            # loop over all the Paulis that we care about
+
+            # loop over all the observables
             for pauli_XYZ, position in observable_as_list:
-                # if the Pauli in our shadow does not match, we break and go to the next
-                # shadow
+
+                # if the Pauli on a single site does does not match the one in the observable,
+                # we break and go to the next shadow
                 if pauli_XYZ != single_measurement[position + num_qubits]:
                     not_match = 1
                     break
+
+                # add the correct sign
                 product *= single_measurement[position]
-            # do not record the shadow
+
+            # do not record the shadow if we do not have a match
             if not_match == 1:
                 continue
 
             sum_product += product
             cnt_match += 1
+
         if cnt_match == 0:
             means.append(0)
         else:
             means.append(sum_product / cnt_match)
+
     return np.median(means)
 
 
@@ -596,8 +601,8 @@ shadow_size_bound, k = shadow_bound(
 shadow_size_bound
 
 ##############################################################################
-# To see how the estimate improves, we consider different shadow sizes, up to :math:`10^4`
-# snapshots. We set :math:`K = 2 \log (2 M/\delta)`, which is optimal for the number of samples
+# To see how the estimate improves, we consider different shadow sizes, up to the value specified by the bound.
+# We set :math:`K = 2 \log (2 M/\delta)`, which is optimal for the number of samples
 # given by `shadow_bound`.
 
 shadow_size_grid = sorted([500, 1000, 5000, 10000] + [shadow_size_bound])
@@ -623,12 +628,7 @@ dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit.device = dev_exact
 expval_exact = sum(
-    circuit(
-        params,
-        wires=dev_exact.wires,
-        observable=[
-            o,
-        ],
+    circuit(params, wires=dev_exact.wires,  observable=[   o,        ],
     )
     for o in list_of_observables
 )
@@ -636,17 +636,25 @@ expval_exact = sum(
 ##############################################################################
 # If we plot the obtained estimates, we should see the error decrease as the number of
 # snapshots increases (up to statistical fluctuations). Also, we plot the value of the
-# bound.
+# bound with a dashed line.
 
 plt.plot(shadow_size_grid, [np.abs(e - expval_exact) for e in estimates])
-plt.plot(
-    shadow_size_grid, [1e-1 for _ in shadow_size_grid], linestyle="--", color="gray"
-)
+plt.plot(shadow_size_grid, [1e-1 for _ in shadow_size_grid], linestyle="--", color="gray")
 plt.scatter([shadow_size_bound], [1e-1], marker="*")
+plt.xlabel(r'$N$')
+plt.ylabel(r'$\langle O \rangle$')
 plt.show()
 
 ##############################################################################
-# As expected, the bound is satisfied and the accuracy increases.
+# As expected, the bound is satisfied and the accuracy increases, up to statistical fluctuations.
+#
+# To conclude, we have shown that classical shadows can be used to reconstruct quantum states and
+# estimate expectation values of observables. This is but the top of the iceberg of what is possible
+# with this technique. In the original work [[#Huang2020]_], the authors estimate fidelities,
+# calculate entanglement witnesses even find a way to approximate the Von Neumann entropy.
+# These applications are beyond the scope of this demo.
+# However, they illustrate the potential power of classical shadows
+# for the characterization of quantum systems.
 
 ##############################################################################
 # .. [#Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
