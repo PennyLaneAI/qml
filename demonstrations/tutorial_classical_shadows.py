@@ -494,15 +494,21 @@ def estimate_shadow_obervable(shadow, observable, k=10):
     b_lists, obs_lists = shadow
     means = []
 
+    # loop over the splits of the shadow:
     for i in range(0, shadow_size, shadow_size // k):
-        # loop over the shadow:
+
+        # assign the splits temporarily
         b_lists_k, obs_lists_k = (
             b_lists[i : i + shadow_size // k],
             obs_lists[i : i + shadow_size // k],
         )
+
+        # find the exact matches for the observable of interest at the specified locations
         indices = np.all(obs_lists_k[:, target_locs] == target_obs, axis=1)
 
+        # catch the edge case that there is no match in the split
         if sum(indices) > 0:
+            # take the product and sum
             product = np.prod(b_lists_k[indices][:, target_locs], axis=1)
             means.append(np.sum(product) / sum(indices))
         else:
@@ -623,7 +629,7 @@ expval_exact = sum(
     )
     for o in list_of_observables
 )
-print(expval_exact)
+
 ##############################################################################
 # If we plot the obtained estimates, we should see the error decrease as the number of
 # snapshots increases (up to statistical fluctuations). Also, we plot the value of the
@@ -635,7 +641,7 @@ plt.plot(
 )
 plt.scatter([shadow_size_bound], [1e-1], marker="*")
 plt.xlabel(r"$N$")
-plt.ylabel(r"$\langle O \rangle$")
+plt.ylabel(r"$\abs{\langle O \rangle_{exact} - \langle O \rangle_{shadow}}$")
 plt.show()
 
 ##############################################################################
