@@ -129,7 +129,6 @@ import pennylane as qml
 import pennylane.numpy as np
 import matplotlib.pyplot as plt
 import time
-from typing import List
 
 np.random.seed(666)
 
@@ -156,16 +155,16 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
     description.
 
     Args:
-        circuit_template: A Pennylane QNode.
-        params: Circuit parameters.
-        shadow_size: The number of snapshots in the shadow.
-        num_qubits: The number of qubits in the circuit.
+        circuit_template (function): A Pennylane QNode.
+        params (array): Circuit parameters.
+        shadow_size (int): The number of snapshots in the shadow.
+        num_qubits (int): The number of qubits in the circuit.
 
     Returns:
         Tuple of two numpy arrays. The first array contains measurement outcomes (-1, 1)
         while the second array contains the index for the sampled Pauli's (0,1,2=x,y,z).
         Each row of the arrays corresponds to a distinct snapshot or sample while each
-        column corresponds to a different qubit.xz
+        column corresponds to a different qubit.
     """
     unitary_ensemble = [qml.PauliX, qml.PauliY, qml.PauliZ]
 
@@ -277,6 +276,9 @@ def shadow_state_reconstruction(shadow):
 
     Args:
         shadow (tuple): A shadow tuple obtained from `calculate_classical_shadow`.
+
+    Returns:
+        Numpy array with the reconstructed quantum state.
     """
     num_snapshots, num_qubits = shadow[0].shape
 
@@ -295,12 +297,14 @@ def snapshot_state(b_list, obs_list):
     """
     Reconstruct a state from a single snapshot in a shadow.
 
-    **Details:**
     Implements Eq. (S44) from https://arxiv.org/pdf/2002.08953.pdf
 
     Args:
         b_list (array): The list of classical outcomes for the snapshot.
-        obs_list (array): Indices for the applied Pauli measurement
+        obs_list (array): Indices for the applied Pauli measurement.
+
+    Returns:
+        Numpy array with the reconstructed snapshot.
     """
     num_qubits = len(b_list)
 
@@ -377,6 +381,12 @@ bell_state = np.array([[0.5, 0, 0, 0.5], [0, 0, 0, 0], [0, 0, 0, 0], [0.5, 0, 0,
 def operator_2_norm(R):
     """
     Calculate the operator two norm.
+
+    Args:
+        R (array): The operator whose norm we want to calculate.
+
+    Returns:
+        Scalar corresponding to the norm.
     """
     return np.sqrt(np.trace(R.conjugate().transpose() @ R))
 
@@ -464,13 +474,13 @@ def estimate_shadow_obervable(shadow, observable, k=10):
     """
     Adapted from https://github.com/momohuang/predicting-quantum-properties
     Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k
-    snapshots in the shadow.
+    snapshots in the shadow. Use median of means to improve ameliorate the effects of outliers.
 
     Args:
         shadow (tuple): A shadow tuple obtained from `calculate_classical_shadow`.
-        observable: Single PennyLane observable consisting of single Pauli operators e.g.
+        observable (qml.Observable): Single PennyLane observable consisting of single Pauli operators e.g.
         qml.PauliX(0) @ qml.PauliY(1).
-        k: number of chunks in the median of means estimator.
+        k (int): number of splits in the median of means estimator.
 
     Returns:
         Scalar corresponding to the estimate of the observable.
@@ -523,11 +533,13 @@ def shadow_bound(error, observables, failure_rate=0.01):
     """
     Calculate the shadow bound for the Pauli measurement scheme.
 
+    Implements Eq. (S13) from https://arxiv.org/pdf/2002.08953.pdf
+
     Args:
-        error: The error on the estimator.
-        observables: List of matrices corresponding to the observables we intend to
-        measure
-        failure_rate: Rate of failure for the bound.
+        error (float): The error on the estimator.
+        observables (list) : List of matrices corresponding to the observables we intend to
+        measure.
+        failure_rate (float): Rate of failure for the bound.
 
     Returns:
         An integer that gives the number of samples required to satisfy the shadow bound.
