@@ -162,9 +162,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
         num_qubits: The number of qubits in the circuit.
 
     Returns:
-        Numpy array containing the outcomes (0, 1) in the first `num_qubits` columns and
-        the sampled Pauli's
-        (0,1,2=x,y,z) in the final `num_qubits` columns.
+        Tuple of two numpy array containing the outcomes (-1, 1) and the sampled Pauli's (0,1,2=x,y,z).
     """
     unitary_ensemble = [qml.PauliX, qml.PauliY, qml.PauliZ]
 
@@ -179,7 +177,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
         outcomes[ns, :] = circuit_template(params, observable=obs)
 
     # combine the computational basis outcomes and the sampled unitaries
-    return np.concatenate([outcomes, unitary_ids], axis=1)
+    return (outcomes, unitary_ids)
 
 
 ##############################################################################
@@ -275,15 +273,12 @@ def shadow_state_reconstruction(shadow):
     Reconstruct a state approximation as an average over all snapshots in the shadow.
 
     Args:
-        shadow (array): a shadow matrix obtained from `calculate_classical_shadow`.
+        shadow (tuple): A shadow tuple obtained from `calculate_classical_shadow`.
     """
-    num_snapshots = shadow.shape[0]
-    num_qubits = shadow.shape[1] // 2
+    num_snapshots, num_qubits = shadow[0].shape
 
     # classical values
-    b_lists = shadow[:, 0:num_qubits]
-    # Pauli observable ids
-    obs_lists = shadow[:, num_qubits : 2 * num_qubits]
+    b_lists, obs_lists = shadow
 
     # Averaging over snapshot states.
     shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=complex)
@@ -395,6 +390,7 @@ operator_2_norm(bell_state - shadow_state)
 # Finally, we see how the approximation improves as we increase the
 # number of snapshots. We run the esimator 10 times for each :math:`N` so that
 # we can add errorbars to the plot.
+
 number_of_runs = 10
 snapshots_range = [100, 1000, 6000]
 distances = np.zeros((number_of_runs, len(snapshots_range)))
@@ -466,15 +462,14 @@ plt.show()
 # sign.
 
 
-def estimate_shadow_obervable(shadows, observable, k=10):
+def estimate_shadow_obervable(shadow, observable, k=10):
     """
     Adapted from https://github.com/momohuang/predicting-quantum-properties
     Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k
     snapshots in the shadow.
 
     Args:
-        shadows: Numpy array containing the outcomes (0, 1) in the first `num_qubits`.
-        columns and the sampled Pauli's (0,1,2=x,y,z) in the final `num_qubits` columns.
+        shadow (tuple): A shadow tuple obtained from `calculate_classical_shadow`.
         observable: Single PennyLane observable consisting of single Pauli operators e.g.
         qml.PauliX(0) @ qml.PauliY(1).
         k: number of chunks in the median of means estimator.
@@ -482,47 +477,36 @@ def estimate_shadow_obervable(shadows, observable, k=10):
     Returns:
         Scalar corresponding to the estimate of the observable.
     """
+    shadow_size, num_qubits = shadow[0].shape
+
+    # convert Pennylane observables to indices
     map_name_to_int = {"PauliX": 0, "PauliY": 1, "PauliZ": 2}
     if isinstance(observable, (qml.PauliX, qml.PauliY, qml.PauliZ)):
-        observable_as_list = [(map_name_to_int[observable.name], observable.wires[0])]
+        target_obs, target_locs = np.array(
+            [map_name_to_int[observable.name]]
+        ), np.array([observable.wires[0]])
     else:
-        observable_as_list = [
-            (map_name_to_int[o.name], o.wires[0]) for o in observable.obs
-        ]
+        target_obs, target_locs = np.array(
+            [map_name_to_int[o.name] for o in observable.obs]
+        ), np.array([o.wires[0] for o in observable.obs])
 
-    num_qubits = shadows.shape[1] // 2
-    shadow_size = shadows.shape[0]
+    # classical values
+    b_lists, obs_lists = shadow
     means = []
+
     for i in range(0, shadow_size, shadow_size // k):
-        sum_product, cnt_match = 0, 0
-        # loop over the shadows:
-        for single_measurement in shadows[i : i + shadow_size // k]:
-            not_match = 0
-            product = 1
+        # loop over the shadow:
+        b_lists_k, obs_lists_k = (
+            b_lists[i : i + shadow_size // k],
+            obs_lists[i : i + shadow_size // k],
+        )
+        indices = np.all(obs_lists_k[:, target_locs] == target_obs, axis=1)
 
-            # loop over all the observables
-            for pauli_XYZ, position in observable_as_list:
-
-                # if the Pauli on a single site does does not match the one in the observable,
-                # we break and go to the next shadow
-                if pauli_XYZ != single_measurement[position + num_qubits]:
-                    not_match = 1
-                    break
-
-                # add the correct sign
-                product *= single_measurement[position]
-
-            # do not record the shadow if we do not have a match
-            if not_match == 1:
-                continue
-
-            sum_product += product
-            cnt_match += 1
-
-        if cnt_match == 0:
-            means.append(0)
+        if sum(indices) > 0:
+            product = np.prod(b_lists_k[indices][:, target_locs], axis=1)
+            means.append(np.sum(product) / sum(indices))
         else:
-            means.append(sum_product / cnt_match)
+            means.append(0)
 
     return np.median(means)
 
@@ -605,7 +589,8 @@ shadow_size_bound
 # We set :math:`K = 2 \log (2 M/\delta)`, which is optimal for the number of samples
 # given by `shadow_bound`.
 
-shadow_size_grid = sorted([500, 1000, 5000, 10000] + [shadow_size_bound])
+
+shadow_size_grid = sorted([500, 1000, 2500, 5000, 7500, 10000] + [shadow_size_bound])
 estimates = []
 for shadow_size in shadow_size_grid:
     shadow = calculate_classical_shadow(circuit, params, shadow_size, num_qubits)
@@ -620,6 +605,7 @@ for shadow_size in shadow_size_grid:
             for o in list_of_observables
         )
     )
+    print([e for e in estimates])
 
 ##############################################################################
 # Then, we calculate the ground truth by changing the device backend
@@ -628,21 +614,28 @@ dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit.device = dev_exact
 expval_exact = sum(
-    circuit(params, wires=dev_exact.wires,  observable=[   o,        ],
+    circuit(
+        params,
+        wires=dev_exact.wires,
+        observable=[
+            o,
+        ],
     )
     for o in list_of_observables
 )
-
+print(expval_exact)
 ##############################################################################
 # If we plot the obtained estimates, we should see the error decrease as the number of
 # snapshots increases (up to statistical fluctuations). Also, we plot the value of the
 # bound with a dashed line.
 
 plt.plot(shadow_size_grid, [np.abs(e - expval_exact) for e in estimates])
-plt.plot(shadow_size_grid, [1e-1 for _ in shadow_size_grid], linestyle="--", color="gray")
+plt.plot(
+    shadow_size_grid, [1e-1 for _ in shadow_size_grid], linestyle="--", color="gray"
+)
 plt.scatter([shadow_size_bound], [1e-1], marker="*")
-plt.xlabel(r'$N$')
-plt.ylabel(r'$\langle O \rangle$')
+plt.xlabel(r"$N$")
+plt.ylabel(r"$\langle O \rangle$")
 plt.show()
 
 ##############################################################################
