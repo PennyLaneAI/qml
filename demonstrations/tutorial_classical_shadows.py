@@ -20,8 +20,8 @@ information science and technology.
 For example, one might want to check whether an apparatus prepares a particular target state,
 or verify that an unknown system is entangled.
 In principle, any unknown quantum state can be fully characterized by `quantum state
-tomography <http://research.physics.illinois.edu/QI/Photonics/tomography-files/tomo_chapter_2004.pdf>`_.
-However this procedure requires accurate expectation values for a set of observables
+tomography <https://arxiv.org/pdf/quant-ph/0302028.pdf>`_ [[#Mauro2003]_].
+However, this procedure requires accurate expectation values for a set of observables
 whose size grows exponentially with the number of qubits.
 A potential workaround for these scaling concerns is provided by the classical shadow approximation
 introduced in `Predicting many properties of a quantum system from very few measurements
@@ -662,9 +662,12 @@ plt.show()
 # for the characterization of quantum systems.
 
 ##############################################################################
+# .. [#Mauro2003] G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi
+#             "Quantum Tomography"
+#             Advances in Imaging and Electron Physics, 128 (2003): 205-308,
 # .. [#Huang2020] Huang, Hsin-Yuan, Richard Kueng, and John Preskill.
 #             "Predicting many properties of a quantum system from very few measurements."
 #             Nature Physics 16.10 (2020): 1050-1057.
-# .. [#Gottesman1997] Gottesman,  Daniel
+# .. [#Gottesman1997] Gottesman, Daniel
 #             "Stabilizer Codes and Quantum Error Correction."
-#             https://arxiv.org/abs/quant-ph/9705052
+#             Ph.D. thesis, Caltech, eprint quantph/9705052
