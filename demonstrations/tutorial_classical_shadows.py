@@ -13,7 +13,7 @@ Classical Shadows
     tutorial_quantum_metrology Variationally optimizing measurement protocols
 
 *Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
-Posted: 4 June 2021. Last updated: 4 June 2021.*
+Posted: 8 June 2021. Last updated: 8 June 2021.*
 
 Estimating properties of unknown quantum states is a key objective of quantum
 information science and technology.
@@ -39,7 +39,7 @@ quantum state fidelity, expectation values of Hamiltonians, and two-point correl
     (Image from Huang et al. [[#Huang2020]_].)
 
 In this demo, we use PennyLane to obtain classical shadows of a quantum state represented by
-a quantum circuit, and use them reconstruct the state and estimate expectation values of
+a quantum circuit, and use them to reconstruct the state and estimate expectation values of
 observables.
 """
 
@@ -47,7 +47,7 @@ observables.
 # Constructing a Classical Shadow
 # ###############################
 #
-# Classical shadow estimation relies on the fact that for a particular choice of circuit measurement,
+# Classical shadow estimation relies on the fact that for a particular measurement choice,
 # we can efficiently store snapshots of the state that contain enough information to accurately
 # predict linear functions of observables. Depending on what type of measurements we choose,
 # we have an information-theoretic bound that controls the precision of our estimator.
@@ -162,7 +162,10 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
         num_qubits: The number of qubits in the circuit.
 
     Returns:
-        Tuple of two numpy array containing the outcomes (-1, 1) and the sampled Pauli's (0,1,2=x,y,z).
+        Tuple of two numpy arrays. The first array contains measurement outcomes (-1, 1)
+        while the second array contains the index for the sampled Pauli's (0,1,2=x,y,z).
+        Each row of the arrays corresponds to a distinct snapshot or sample while each
+        column corresponds to a different qubit.xz
     """
     unitary_ensemble = [qml.PauliX, qml.PauliY, qml.PauliZ]
 
@@ -191,7 +194,6 @@ num_qubits = 2
 # setting up a two-qubit circuit
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
-
 @qml.qnode(device=dev)
 def local_qubit_rotation_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
@@ -199,7 +201,6 @@ def local_qubit_rotation_circuit(params, **kwargs):
         qml.RY(params[w], wires=w)
 
     return [qml.expval(o) for o in observables]
-
 
 # arrays in which to collect data
 elapsed_times = []
@@ -219,9 +220,10 @@ for num_snapshots in [10, 100, 1000, 10000]:
 shadows[0]
 
 ##############################################################################
-# Observe that the shadow is simply a matrix.
-# For two qubits, the first two columns describe the outcome for the Pauli observable
-# while the second two columns index the Pauli observable for each qubit.
+# Observe that the shadow simply consists of two matrices.
+# Each qubit corresponds to a different column. The first matrix describes
+# outcome of the measurement
+# while the second matrix indexes the measurement applied to each qubit.
 # We now plot the computation times taken to acquire the shadows as the number of
 # snapshots increases.
 
@@ -235,6 +237,8 @@ plt.show()
 ##############################################################################
 # As one might expect, the computation time increases linearly with the number
 # of snapshots.
+# This linear scaling is useful for predicting the length of time required to
+# obtain a sufficient number of snapshots for observable estimation.
 
 ##############################################################################
 # State Reconstruction from a Classical Shadow
@@ -266,7 +270,6 @@ plt.show()
 #
 # To implement the state reconstruction of :math:`\rho` in PennyLane, we develop the
 # ``shadow_state_reconstruction`` function.
-
 
 def shadow_state_reconstruction(shadow):
     """
@@ -325,7 +328,6 @@ def snapshot_state(b_list, obs_list):
 
     return rho_snapshot
 
-
 ##############################################################################
 # Example: Reconstructing a Bell State
 # ************************************
@@ -335,7 +337,6 @@ def snapshot_state(b_list, obs_list):
 num_qubits = 2
 
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
-
 
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword argument.
@@ -347,7 +348,6 @@ def bell_state_circuit(params, **kwargs):
     qml.CNOT(wires=[0, 1])
 
     return [qml.expval(o) for o in observables]
-
 
 ##############################################################################
 # Then, construct a classical shadow consisting of 1000 snapshots.
@@ -371,17 +371,14 @@ print(np.round(shadow_state, decimals=6))
 
 bell_state = np.array([[0.5, 0, 0, 0.5], [0, 0, 0, 0], [0, 0, 0, 0], [0.5, 0, 0, 0.5]])
 
-
 ##############################################################################
 # To measure the closeness we can use the operator norm.
-
 
 def operator_2_norm(R):
     """
     Calculate the operator two norm.
     """
     return np.sqrt(np.trace(R.conjugate().transpose() @ R))
-
 
 # Calculating the distance between ideal and shadow states.
 operator_2_norm(bell_state - shadow_state)
@@ -394,6 +391,7 @@ operator_2_norm(bell_state - shadow_state)
 number_of_runs = 10
 snapshots_range = [100, 1000, 6000]
 distances = np.zeros((number_of_runs, len(snapshots_range)))
+
 # run the estimation multiple times so that we can include error bars
 for i in range(number_of_runs):
     for j, num_snapshots in enumerate(snapshots_range):
@@ -403,6 +401,7 @@ for i in range(number_of_runs):
         shadow_state = shadow_state_reconstruction(shadow)
 
         distances[i, j] = np.real(operator_2_norm(bell_state - shadow_state))
+
 plt.errorbar(
     snapshots_range,
     np.mean(distances, axis=0),
@@ -412,7 +411,6 @@ plt.title("Distance between Ideal and Shadow Bell States")
 plt.xlabel("Number of Snapshots")
 plt.ylabel("Distance")
 plt.show()
-
 
 ##############################################################################
 # As expected, when the number of snapshots increases, the state reconstruction
@@ -516,7 +514,6 @@ def estimate_shadow_obervable(shadow, observable, k=10):
 
     return np.median(means)
 
-
 ##############################################################################
 # Next, we can define a function that calculates the number of samples
 # required to get an error :math:`\epsilon` on our estimator for a given set of observables.
@@ -546,7 +543,6 @@ def shadow_bound(error, observables, failure_rate=0.01):
     N = 34 * max(shadow_norm(o) for o in observables) / error ** 2
     return int(np.ceil(N * K)), K
 
-
 ##############################################################################
 # Example: Estimating a simple set of observables
 # *************************************************
@@ -555,7 +551,6 @@ def shadow_bound(error, observables, failure_rate=0.01):
 
 num_qubits = 10
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
-
 
 @qml.qnode(device=dev)
 def circuit(params, **kwargs):
@@ -568,7 +563,6 @@ def circuit(params, **kwargs):
     for w in dev.wires:
         qml.RZ(params[w + num_qubits], wires=w)
     return [qml.expval(o) for o in observables]
-
 
 params = np.random.randn(2 * num_qubits)
 
@@ -641,7 +635,7 @@ plt.plot(
 )
 plt.scatter([shadow_size_bound], [1e-1], marker="*")
 plt.xlabel(r"$N$")
-plt.ylabel(r"$\abs{\langle O \rangle_{exact} - \langle O \rangle_{shadow}}$")
+plt.ylabel(r"$|\langle O \rangle_{exact} - \langle O \rangle_{shadow}|$")
 plt.show()
 
 ##############################################################################
