@@ -1812,6 +1812,16 @@ span.eqno {
   }
 }
 
+@media (max-width: 991.98px) {
+    .card.plugin-card .row, .plugin-card__description {
+        height: auto !important;
+    }
+
+    .plugin-card__description:after, .plugin-card__read-more-wrapper {
+        display: none !important;
+    }
+}
+
 /* Account for when the left column is closed then page is expanded.
 -------------------------------------------------- */
 
@@ -2100,11 +2110,10 @@ footer.page-footer .footer-copyright {
 
 
 .plugin-card {
-    position: relative;
-    background-image: none;
     z-index: 1;
     transition-duration: 0.4s;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.05) !important;
+    height: 100%;
 }
 
 .plugin-card:hover {
@@ -2122,9 +2131,18 @@ footer.page-footer .footer-copyright {
 
 .plugin-card .card-header {
     margin-top: 0px;
-    padding-top: 20px;
     border-radius: 10px 10px 0 0;
-    min-height: 81px;
+    min-height: 85px;
+    display: flex;
+}
+
+.plugin-card .row {
+    height: 100%;
+}
+
+.card-header__text {
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .plugin-card .plugin-logo {
@@ -2133,6 +2151,70 @@ footer.page-footer .footer-copyright {
     right: 20px;
     position: absolute;
     top: 14px;
+}
+
+.plugin-card__buttons {
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 100%;
+}
+
+.plugin-card__description {
+    height: 110px;
+    overflow: hidden;
+    font-size: .9rem;
+    font-weight: 400;
+    color: #747373;
+    margin-bottom: .75rem;
+    position: relative;
+}
+
+.plugin-card__description:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -15px;
+    right: -15px;
+    pointer-events: none;
+    box-shadow: inset 0px -40px 25px -15px white;
+}
+
+.plugin-card__description--no-overflow:after {
+    display: none;
+}
+
+.plugin-card__buttons .plugin-card__paper-btn,
+.plugin-card__buttons .plugin-card__blog-btn,
+.plugin-card__buttons .plugin-card__code-btn,
+.modal-footer .plugin-card__paper-btn,
+.modal-footer .plugin-card__blog-btn,
+.modal-footer .plugin-card__code-btn,
+.plugin-card__buttons .plugin-card__paper-btn:hover,
+.plugin-card__buttons .plugin-card__blog-btn:hover,
+.plugin-card__buttons .plugin-card__code-btn:hover,
+.modal-footer .plugin-card__paper-btn:hover,
+.modal-footer .plugin-card__blog-btn:hover,
+.modal-footer .plugin-card__code-btn:hover {
+    box-shadow: unset;
+    border-radius: 5px;
+}
+
+.plugin-card__buttons .plugin-card__paper-btn,
+.plugin-card__buttons .plugin-card__blog-btn,
+.plugin-card__buttons .plugin-card__code-btn {
+    margin: 0 0 0.375rem 0;
+    max-height: 45px;
+    width: 100%;
+}
+
+.modal-footer .plugin-card__code-btn {
+    margin: 0;
+}
+
+.modal-footer .plugin-card__paper-btn,
+.modal-footer .plugin-card__blog-btn {
+    margin: 0 .25rem 0 0;
 }
 
 .weird-blue-gradient {
