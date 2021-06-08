@@ -58,7 +58,7 @@ construct a quantum control process such that the energy expectation :math:`\lan
 
 where the product rule and
 `the Schrödinger equation <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-dependent_equation>`__ are used to derive the above formula.
-If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
+If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t,` so that
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
 
