@@ -140,7 +140,7 @@ np.random.seed(666)
 # Each snapshot is obtained with the following procedure:
 #
 # 1. The quantum state :math:`\rho` is prepared with a circuit.
-# 2. A unitary :math:`U` is randomly selected from the ensemlbe and applied to :math:`\rho`.
+# 2. A unitary :math:`U` is randomly selected from the ensemble and applied to :math:`\rho`.
 # 3. A computational basis measurement is performed.
 # 4. The snapshot is recorded as the bit string and the index of the randomly selected unitary :math:`U`.
 #
@@ -228,7 +228,7 @@ shadows[0]
 # snapshots increases.
 
 plt.plot([10, 100, 1000, 10000], elapsed_times)
-plt.title("Time taken to obtain a classical shadow from a 2-qubit state")
+plt.title("Time taken to obtain a classical shadow from a two-qubit state")
 plt.xlabel("Number of Snapshots in Shadow")
 plt.ylabel("Elapsed Time")
 plt.show()
@@ -255,7 +255,7 @@ plt.show()
 #
 # The expectation :math:`\mathbb{E}[\cdot]` describes the average over the measurement outcomes
 # :math:`|b\rangle` and the sampled unitaries.
-# Inverting the measurment channel may seem formidable at first, however, Huang et al.
+# Inverting the measurement channel may seem formidable at first, however, Huang et al.
 # [[#Huang2020]_]
 # show that for Pauli measurements we end up with a rather convenient expression,
 #
@@ -399,7 +399,7 @@ operator_2_norm(bell_state - shadow_state)
 
 ##############################################################################
 # Finally, we see how the approximation improves as we increase the
-# number of snapshots. We run the esimator 10 times for each :math:`N` so that
+# number of snapshots. We run the estimator 10 times for each :math:`N` so that
 # we can add errorbars to the plot.
 
 number_of_runs = 10
@@ -458,7 +458,7 @@ plt.show()
 #       \langle O\rangle = \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}.
 #
 # Note that that the shadow bound has a failure probability :math:`\delta`. By choosing the number of splits :math:`K` to be
-# suitably large, we can exponentially surpress this failure probability.
+# suitably large, we can exponentially suppress this failure probability.
 # Assume now that :math:`O=\bigotimes_j^n P_j`, where :math:`P_j \in \{I, X, Y, Z\}`.
 # To efficiently calculate the estimator for :math:`O`, we look at a single snapshot outcome and plug in the inverse measurement channel:
 #
