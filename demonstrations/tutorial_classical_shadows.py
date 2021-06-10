@@ -85,7 +85,7 @@ observables.
 #      ,\ldots, \hat{\rho}_N= \mathcal{M}^{-1}\left(U_N^\dagger |b_N\rangle\langle b_N| U_N \right)
 #      \right\}.
 #
-# Note that the inverted channel is not physical, i.e., it is not completely postive and trace preserving (CPTP).
+# The inverted channel is not physical, i.e., it is not completely postive and trace preserving (CPTP).
 # However, this is of no concern to us, since all we care about is efficiently applying this inverse channel to the
 # observed snapshots as a post-processing step.
 #
