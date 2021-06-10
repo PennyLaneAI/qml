@@ -546,7 +546,7 @@ def shadow_bound(error, observables, failure_rate=0.01):
     Args:
         error (float): The error on the estimator.
         observables (list) : List of matrices corresponding to the observables we intend to
-        measure.
+            measure.
         failure_rate (float): Rate of failure for the bound to hold.
 
     Returns:
