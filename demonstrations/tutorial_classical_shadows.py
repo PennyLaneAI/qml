@@ -62,7 +62,7 @@ observables.
 # Next, we measure in the computational basis and obtain a bit string of outcomes :math:`|b\rangle = |0011\ldots10\rangle`.
 # If the unitaries :math:`U` are chosen at random from a particular ensemble, then we can store the reverse operation
 # :math:`U^\dagger |b\rangle\langle b| U` efficiently in classical memory.
-# We call this a *snapshot* :math:`\hat{\rho}_j = U^\dagger |b\rangle\langle b| U` of the state.
+# We call this a *snapshot* of the state.
 # Moreover, we can view the average over these snapshots as a measurement channel:
 #
 # .. math::
