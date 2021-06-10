@@ -705,4 +705,4 @@ plt.show()
 #             Nature Physics 16.10 (2020): 1050-1057.
 # .. [#Gottesman1997] Gottesman, Daniel,
 #             `"Stabilizer Codes and Quantum Error Correction", <https://arxiv.org/abs/quant-ph/9705052>`_
-#             Ph.D. thesis, Caltech, eprint quantph/9705052
+#             Ph.D. thesis, Caltech, eprint quantph/9705052.
