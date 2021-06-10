@@ -89,7 +89,7 @@ observables.
 # However, this is of no concern to us, since all we care about is efficiently applying this inverse channel to the
 # observed snapshots as a post-processing step.
 #
-# Since the shadow approximates the :math:`rho`, we can now estimate **any** observable with the empirical mean:
+# Since the shadow approximates :math:`\rho`, we can now estimate **any** observable with the empirical mean:
 #
 # .. math::
 #
