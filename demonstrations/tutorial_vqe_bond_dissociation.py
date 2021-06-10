@@ -13,23 +13,16 @@ Modelling chemical reactions on a quantum computer
 *Author: PennyLane dev team. Posted: 25 May 2021. Last updated: 25 May 2021.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
-forming of bonds. Such transformations are characterized by an energy cost that determine 
-the feasibility of a particular reaction path amongst many different possibilities. 
-Computational chemistry offers several theoretical methods for precisely determining this energy
-cost. It also opens a window into predicting the thermodynamic and kinetic aspects of any 
-chemical reaction. In this tutorial, you will learn how to use PennyLane to simulate a 
-chemical reaction by following along the reaction path on the potential energy surface and 
-estimating the relevant energy costs. 
+forming of bonds. Each reaction is characterized by an energy cost that determines
+the likelihood that the reaction occurs. These energy landscapes are the key to understanding,
+at the deepest possible level, how chemical reactions occur.
 
-In a previous tutorial on the :doc:`Variational Quantum Eigensolver (VQE) </demos/tutorial_vqe>`, 
-we looked at how it can be used to compute molecular energies [#peruzzo2014]_.
-Here, we use VQE to construct potential energy surfaces (PESs) for any general 
-molecular transformation. This allows us to show how quantum computers could be used
-for the calculation of important quantities such as activation energy barriers, reaction energies,
-and reaction rates. As illustrative examples, we use tools implemented in PennyLane to study diatomic
-bond dissociation and reactions involving the exchange of hydrogen atoms. Our first example will show how
-to write the code to generate the plot depicting the dissociation of the :math:`H_2` molecule shown
-below. 
+In this tutorial, you will learn how to use PennyLane to simulate
+chemical reactions by constructing potential energy surfaces for general
+molecular transformations. In the process, you will learn how quantum computers can be used
+to calculate activation energy barriers, reaction energies, and reaction rates. As illustrative
+examples, we use tools implemented in PennyLane to study diatomic bond dissociation and reactions
+involving the exchange of hydrogen atoms.
 
 .. _label_h2_pes:
 .. figure:: /demonstrations/vqe_bond_dissociation/h2_pes_pictorial.png
@@ -45,31 +38,29 @@ Potential Energy Surfaces
 ---------------------------------------------------------------------
 
 `Potential energy surfaces (PES) <https://en.wikipedia.org/wiki/Potential_energy_surface>`_
-are, in simple words, energy landscapes on which chemical
-reactions occur. The concept originates from the fact that nuclei are much heavier than 
-electrons and thus move more slowly, allowing us to decouple their motion. This is known as the
-`Born-Oppenheimer approximation <https://en.wikipedia.org/wiki/Born–Oppenheimer_approximation>`_. 
-We can then solve for the electronic wavefunction with
-the nuclei clamped to their respective positions. This results in separation of nuclear and
-electronic parts of the Schrödinger equation so we need only solve the electronic
-equation:
+are energy landscapes describing the equilibrium energy of molecules for different positions of
+its constituent atoms. The concept originates from the fact that nuclei are much heavier than
+electrons and thus move more slowly, allowing us to decouple their motion. We can then solve for
+the electronic wavefunction with the nuclei clamped to their respective positions. This results
+in a separation of the nuclear and electronic parts of the Schrödinger equation, meaning we only
+need to solve the electronic equation:
 
-.. math:: H_{el}|\Psi \rangle =  E_{el}|\Psi\rangle.
+.. math:: H(R)|\Psi \rangle =  E|\Psi\rangle.
 
-Thus arises the concept of the electronic energy of the molecule, :math:`E(R)`, 
-as a function of interatomic coordinates (:math:`R`). The potential energy surface of a 
-molecule is an 
-:math:`n`-dimensional plot of the energy with the respect to the degrees of freedom. It gives us a 
-visual tool to understand chemical reactions by associating stable molecules (reactants and products)
-with local minima, transition states with peaks, and identifying the possible routes of a plausible
-transformation.
+Thus arises the concept of the electronic energy of a molecule, :math:`E(R)`,
+as a function of nuclear coordinates :math:`R`. The energy :math:`E(R)` is the expectation value
+of the Hamiltonian :math:`H(R)`: :math:`E(R)=\langle \Psi_0|H(R)|\Psi_0\rangle` taken over the
+ground state :math:`|\Psi_0(R)`. The potential energy surface is
+precisely this function :math:`E(R)`, connecting energies to configurations of the molecule. It
+gives us a visual tool to understand chemical reactions by associating
+stable molecules (reactants and products) with local minima, transition states with peaks,
+and by identifying the possible routes for a chemical reaction to occur.
 
-To summarize, to build the potential energy surface, we solve the electronic Schrödinger
+To build the potential energy surface, we solve the electronic Schrödinger
 equation for fixed positions of the nuclei, and subsequently move them in incremental steps
-while solving the Schrödinger equation at each such configuration. 
-The obtained set of energies corresponds to a grid of nuclear positions and the plot 
-:math:`E(R)` vs. :math:`R` is the potential energy surface. 
-To really understand the steps involved in making such a plot, let us dive straight in.
+while solving the Schrödinger equation at each configuration.
+The obtained set of energies corresponds to a grid of nuclear positions and the plot of
+:math:`E(R)` gives rise to the potential energy surface. Time to construct them!
 
 ##########################################################
 
@@ -82,230 +73,154 @@ of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
-We first cast this problem in the language of `quantum chemistry 
-<https://en.wikipedia.org/wiki/Quantum_chemistry>`_, and then in terms of
-quantum circuits. For an introductory discussion, please take a look at the 
-:doc:`Quantum Chemistry with PennyLane </demos/tutorial_quantum_chemistry>` tutorial.
-Using a minimal `basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
-this molecular system can be described by :math:`2` electrons in :math:`4` 
-spin molecular orbitals. When mapped to a qubit representation, we need a total of four qubits 
-to represent the electronic wave function.
-The `Hartree-Fock (HF) <http://vergil.chemistry.gatech.edu/notes/hf-intro/node7.html>`_ 
-state is  represented as :math:`|1100\rangle`, where the two
-lowest-energy orbitals are occupied, and the remaining two are unoccupied. 
-In order to consider the electron correlation missing in the HF approximation,
-we form the complete basis of many-body or multi-qubit states. To do that, we consider excitations
-of the HF state that conserve the total-spin projection :math:`S_z`. 
-In this case, where there are two electrons, single and double excitations suffice. The 
-singly-excited states are :math:`|0110\rangle`, :math:`|1001\rangle`, and the doubly-excited state 
-is :math:`|0011\rangle`. The exact wavefunction (also known as full `configuration interaction
-<https://en.wikipedia.org/wiki/Configuration_interaction>`_ or FCI) 
-is a linear combination of these states where 
-the coefficients change as the reaction proceeds and the system moves around 
-(figuratively) on the potential energy surface. 
-Below we show how to to generate the PES for such a reaction. 
+Using a minimal `basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_,
+this molecular system can be described by two electrons in four
+spin-orbitals. When mapped to a qubit representation, we need a total of four qubits.
+The `Hartree-Fock (HF) state is represented as :math:`|1100\rangle`, where the two
+lowest-energy orbitals are occupied, and the remaining two are unoccupied.
 
-The first step is to import the required libraries and packages:
+We design a quantum circuit consisting of :class:`~.pennylane.SingleExcitation` and
+:class:`~.pennylane.DoubleExcitation` gates applied to the Hartree-Fock state. This circuit
+will be optimized to prepare ground states for different configurations of the molecule.
 """
 
 import pennylane as qml
 from pennylane import qchem
-from pennylane import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 
-##############################################################################
-# We then specify the basis set and the atomic symbols of the constituent atoms.
-# All electrons and all orbitals are considered in this case.
-
-basis_set = "sto-3g"
-symbols = ["H", "H"]
-
-##############################################################################
-# To construct the potential energy surface, we need to vary the geometry of the molecule. We keep
-# an :math:`H` atom fixed at the origin and vary the
-# :math:`x`-coordinate of the other atom such that the bond distance changes from
-# :math:`0.5` to :math:`5.0` `Bohrs <https://en.wikipedia.org/wiki/Bohr_radius>`_ in steps of 
-# :math:`0.1` Bohr.
-# This covers the range of internuclear distance in which the :math:`H-H` bond is formed
-# (equilibrium bond length)
-# and also the distance when the bond is broken, which occurs when the atoms
-# are far away from each other.
-#
-#
-# Now we set up a loop that incrementally changes the internuclear distance.
-# At each value of :math:`H-H` bond distance, we run a VQE calculation to compute the total
-# electronic energy of the molecule.
-# We generate a molecular Hamiltonian using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function by solving Hartree-Fock equations
-# and generating the molecular orbitals (MOs). To prepare the VQE ansatz we first initialize
-# the qubit register to the HF state. 
-# We use PennyLane's
-# :class:`~.hf_state` and :class:`~.BasisState` operation to construct the HF state.
-# Then, single and double-excitation gates, implemented in the
-# form of `Givens rotations <https://en.wikipedia.org/wiki/Givens_rotation>`_, is applied to the qubits
-# 0, 1, 2, 3 to prepare the FCI ground state of the molecule.This is similar to the often-used
-# `Unitary Coupled Cluster (UCCSD) <https://youtu.be/sYJ5Ib-8k_8>`_ approach.
-#
-#
-# We use a classical qubit simulator and define
-# a cost function which calculates the expectation value of the Hamiltonian operator for the
-# given trial wavefunction ansatz (:math:`{E} = \langle \Psi_{trial}|{H}|\Psi_{trial}\rangle`) 
-# using :class:`~.ExpvalCost`. The ansatz or equivalently the VQE circuit depends on the 
-# gate parameters and we seek to find parameters that minimize the energy. 
-# In this and subsequent problems, we use gradient 
-# descent algorithm for optimization. We initialize the parameters to zero,
-# i.e., start from the HF state as the approximation to the exact ground state.
-# The second loop is the variational optimization using VQE algorithm,
-# where energy for the trial wavefunction is calculated
-# and then used to get a better estimate of gate parameters and improve the trial wavefunction.
-# This process is repeated until the energy converges (:math:`E_{n} - E_{n-1} < 10^{-6}` Hartree).
-# Once we have the converged VQE energy at the specified internuclear distance, we move on to the
-# next point of the PES and repeat the entire process using the previously optimized circuit 
-# parameters to define the initial state of the VQE calculation. After we have covered the grid of
-# internuclear distances, we tabulate the results.
-
-vqe_energy = []
-pes_point = 0
-
-# define the circuit
+# Hartree-Fock state
 hf = qml.qchem.hf_state(electrons=2, orbitals=4)
 
 def circuit(params, wires):
     # Prepare the HF state: |1100>
     qml.BasisState(hf, wires=wires)
-    # Add double excitation
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
-    # Add single excitations
     qml.SingleExcitation(params[1], wires=[0, 2])
     qml.SingleExcitation(params[2], wires=[1, 3])
 
 
-# set up a loop to change internuclear distance
-r_range = np.arange(0.5, 5.0, 0.1).round(1)
+##############################################################################
+# To construct the potential energy surface, we vary the geometry of the molecule. We keep
+# an :math:`H` atom fixed at the origin and vary only the
+# :math:`x`-coordinate of the other atom. The potential energy
+# surface is then a one-dimensional function depending only on the bond length, i.e., the separation
+# between the atoms. For each value of the bond length, we construct the corresponding
+# Hamiltonian, optimize the circuit using gradient descent, and obtain the ground-state energy,
+# allowing us to build the potential energy surface. We vary the bond length in the range
+# :math:`0.5` to :math:`5.0` `Bohrs <https://en.wikipedia.org/wiki/Bohr_radius>`_ in steps of
+# :math:`0.1` Bohr. This covers the point where the :math:`H-H` bond is formed
+# (equilibrium bond length) and the point where the bond is broken, which occurs when the atoms
+# are far away from each other.
+
+# atomic symbols defining the molecule
+symbols = ['H', 'H']
+
+# list to store energies
+energies = []
+
+# set up a loop to change bond length
+r_range = np.arange(0.5, 5.0, 0.1)
+
+# keeps track of which bond length we are at
+pes_point = 0
+
+##############################################################################
+# We build the Hamiltonian using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# function, and use standard Pennylane techniques to optimize the circuit. To speed up the
+# simulation, it is helpful to start from the optimized parameter of previous points.#
 
 for r in r_range:
-
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian 
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
-
-    # define the device, cost function and optimizer
+    # define the device, cost function, and optimizer
     dev = qml.device("default.qubit", wires=qubits)
     cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    # define and initialize the gate parameters
+    # initialize the gate parameters
     params = np.zeros(3)
 
-    # if this is not the first geometry point on PES, initialize with converged parameters
-    # from previous point
+    # initialize with converged parameters from previous point
     if pes_point > 1:
         params = params_old
 
-    # Begin the VQE iteration to optimize gate parameters
     prev_energy = 0.0
-
     for n in range(50):
-
+        # perform optimization step
         params, energy = opt.step_and_cost(cost_fn, params)
 
-        # define the convergence criteria
         if np.abs(energy - prev_energy) < 1e-6:
             break
-
         prev_energy = energy
 
     # store the converged parameters
     params_old = params
     pes_point = pes_point + 1
 
-    print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
-    vqe_energy.append(energy)
+    energies.append(energy)
 
-# tabulate
-list_dist_energy = list(zip(r_range, vqe_energy))
-df = pd.DataFrame(list_dist_energy, columns=["H-H distance (Bohr)", "Energy (Hartree)"])
-# display table
-print(df)
 
 ##############################################################################
-# We have calculated the molecular energy as a function of :math:`H-H` bond distance;
-# let us plot it.
+# Let's plot the results
+
+import matplotlib.pyplot as plt
 
 # Energy as a function of internuclear distance
 fig, ax = plt.subplots()
-ax.plot(r_range, vqe_energy)
+ax.plot(r_range, energies)
 
 ax.set(
-    xlabel="H-H distance (Bohr)",
+    xlabel="Bond length (Bohr)",
     ylabel="Total energy (Hartree)",
     title="Potential energy surface for H$_2$ dissociation",
 )
 ax.grid()
-ax.legend()
-
 plt.show()
 
 
 ##############################################################################
-# This is a simple potential energy surface (or more appropriately, a potential energy curve) for
-# the dissociation of a hydrogen molecule into two hydrogen atoms. Note that it is exactly the same
-# as shown in the illustrated image of :ref:`label_h2_pes` Let us now understand the utility
-# of such a plot.
+# This is the potential energy surface for the dissociation of a hydrogen molecule into
+# two hydrogen atoms! Let's understand its usefulness.
 #
+# In a diatomic molecule such as :math:`H_2`, the potential energy surface can be used to obtain
+# the equilibrium bond length --- the distance between the two atoms that minimizes the total
+# electronic energy. This is simply the minimum of the curve. We can also obtain the bond
+# dissociation energy: the difference in energy of the system at
+# equilibrium and where the atoms are far apart. At sufficiently large separations, the atoms no
+# longer form a molecule, which is therefore dissociated.
 #
-# In a diatomic molecule such as :math:`H_2`, the potential energy curve as a function of
-# internuclear distance tells us the equilibrium bond length ---
-# the distance between the two atoms that minimizes the total electronic energy
-# --- and the bond dissociation energy.
-# The bond dissociation energy is calculated as the difference in energy of the system at
-# equilibrium (minimum) and the energy
-# of the system where the atoms are far apart and
-# the total energy plateaus to the sum of each atom's individual energy.
-# Below we show how our VQE circuit gives an
-# estimate of :math:`H-H` bond distance
-# to be :math:`\sim 1.4` Bohrs and the :math:`H-H` bond dissociation energy
-# as :math:`0.202` Hartrees (:math:`126.8` kcal/mol).
+# We can use our results to compute the equilibrium bond length and the bond dissociation energy:
 
-# Energy at equilibrium bond length (minimum)
-energy_equil = min(vqe_energy)
+# equilibrium energy
+e_eq = min(energies)
+# energy at dissociation
+e_dis = energies[-1]
 
-# Energy at dissociation limit (the point on PES where the atoms are far apart)
-energy_dissoc = vqe_energy[-1]
+# Bond dissociation energy is their difference
+bond_energy = e_dis - e_eq
 
-# Bond dissociation energy
-bond_dissociation_energy = energy_dissoc - energy_equil
-bond_dissociation_energy_kcal = bond_dissociation_energy * 627.5
-
-# H-H bond length is the bond distance at equilibrium geometry
-bond_length_index = vqe_energy.index(energy_equil)
+# Equilibrium bond length
+bond_length_index = energies.index(e_eq)
 bond_length = r_range[bond_length_index]
 
-print("The H-H bond length is {:.1f} Bohrs".format(bond_length))
-print(
-    "The H-H bond dissociation energy is {:.6f} Hartrees or {:.2f} kcal/mol".format(
-        bond_dissociation_energy, bond_dissociation_energy_kcal
-    )
-)
+print(f"The equilibrium bond length is {bond_length:.1f} Bohrs")
+print(f"The H-H bond dissociation energy is {bond_energy:.6f} Hartrees")
 
 
 ##############################################################################
 # These estimates can be improved
 # by using bigger basis sets and extrapolating to the complete basis set limit [#motta2020]_.
 # We must also note that our results are subject to the grid size of the span of interatomic
-# distances considered. The finer the grid size, the better the estimate of bond length and
-# dissociation energy.
+# distances considered. The finer the grid size, the better the estimates.
 #
 # .. note::
 #
-#     Did you notice a trick we used to speed up the convergence of VQE energy? The converged
+#     Did you notice a trick we used to speed up the calculations? The converged
 #     gate parameters for a particular geometry on the PES are used as the initial guess for the VQE
 #     calculation at the adjacent geometry. With a better guess, the VQE iterations converge
 #     relatively quickly and we save considerable time.
-#
 
 ##############################################################################
 # Hydrogen Exchange Reaction
@@ -353,7 +268,7 @@ basis_set = "sto-3g"
 # build circuits for any molecular system. We then repeat the calculations over the
 # whole range of PES and print the converged energies of the whole system at each step.
 
-vqe_energy = []
+energies = []
 pes_point = 0
 
 # define circuit
@@ -408,10 +323,10 @@ for r in r_range:
     pes_point = pes_point + 1
 
     print("At r = {:.1f} Bohrs, number of VQE Iterations required is {:}".format(r, n))
-    vqe_energy.append(energy)
+    energies.append(energy)
 
 # tabulate
-list_dist_energy = list(zip(r_range, vqe_energy))
+list_dist_energy = list(zip(r_range, energies))
 # Converting list into pandas Dataframe
 df = pd.DataFrame(list_dist_energy, columns=["H(1)-H(2) distance (Bohr)", "Energy (Hartree)"])
 # display table
@@ -431,7 +346,7 @@ print(df)
 
 # plot the PES
 fig, ax = plt.subplots()
-ax.plot(r_range, vqe_energy)
+ax.plot(r_range, energies)
 
 ax.set(
     xlabel="H(1)-H(2) distance (Bohr)",
@@ -457,19 +372,19 @@ plt.show()
 # We show how to calculate the activation energy of the hydrogen exchange reaction.
 
 # Energy of the reactants and products - two minima on the PES
-energy_equil = min(vqe_energy)
-energy_equil_2 = min([x for x in vqe_energy if x != min(vqe_energy)])
+energy_equil = min(energies)
+energy_equil_2 = min([x for x in energies if x != min(energies)])
 
 # Between the two minimas, we have the TS which is a local maxima
-bond_length_index_1 = vqe_energy.index(energy_equil)
-bond_length_index_2 = vqe_energy.index(energy_equil_2)
+bond_length_index_1 = energies.index(energy_equil)
+bond_length_index_2 = energies.index(energy_equil_2)
 
 # Reaction coordinate at the two minimas
 index_1 = min(bond_length_index_1, bond_length_index_2)
 index_2 = max(bond_length_index_1, bond_length_index_2)
 
 # Transition state energy
-energy_ts = max(vqe_energy[index_1:index_2])
+energy_ts = max(energies[index_1:index_2])
 
 # Activation energy
 activation_energy = energy_ts - energy_equil
