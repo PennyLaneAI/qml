@@ -481,7 +481,7 @@ def estimate_shadow_obervable(shadow, observable, k=10):
     """
     Adapted from https://github.com/momohuang/predicting-quantum-properties
     Calculate the estimator E[O] = median(Tr{rho_{(k)} O}) where rho_(k)) is set of k
-    snapshots in the shadow. Use median of means to improve ameliorate the effects of outliers.
+    snapshots in the shadow. Use median of means to ameliorate the effects of outliers.
 
     Args:
         shadow (tuple): A shadow tuple obtained from `calculate_classical_shadow`.
