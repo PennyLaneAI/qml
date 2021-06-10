@@ -154,7 +154,7 @@ np.random.seed(666)
 def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits):
     """
     Given a circuit, creates a collection of snapshots consisting of a bit string
-     and the index of a unitary operation.
+    and the index of a unitary operation.
 
     Args:
         circuit_template (function): A Pennylane QNode.
