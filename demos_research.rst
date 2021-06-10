@@ -247,7 +247,7 @@ such as benchmarking and characterizing quantum processors.
     :tooltip: Approximate quantum states with classical shadows.
     :figure: demonstrations/classical_shadows/atom_shadow.png
     :description: :doc:`demos/tutorial_classical_shadows`
-    :tags: classical-shadows
+    :tags: quantumcomputing characterization
 
 :html:`</div></div><div style='clear:both'>`
 
