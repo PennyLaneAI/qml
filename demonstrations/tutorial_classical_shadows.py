@@ -113,7 +113,7 @@ observables.
 # For the purposes of this demo we focus on ensemble 2, which is a more NISQ-friendly approach.
 #
 # This ensemble comes with a significant drawback: The shadow norm :math:`||O_i||^2_{\text{shadow}}`
-# becomes dependent on the locality :math:`k` of the observables that we want to estimate
+# becomes dependent on the locality :math:`k` of the observables that we want to estimate:
 #
 # .. math::
 #
