@@ -486,7 +486,7 @@ def estimate_shadow_obervable(shadow, observable, k=10):
     Args:
         shadow (tuple): A shadow tuple obtained from `calculate_classical_shadow`.
         observable (qml.Observable): Single PennyLane observable consisting of single Pauli
-        operators e.g. qml.PauliX(0) @ qml.PauliY(1).
+            operators e.g. qml.PauliX(0) @ qml.PauliY(1).
         k (int): number of splits in the median of means estimator.
 
     Returns:
