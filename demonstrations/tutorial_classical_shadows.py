@@ -119,7 +119,7 @@ observables.
 #
 #      ||O_i||^2_{\text{shadow}} \leq 4^k ||O_i||_\infty^2.
 #
-# This is a serious limitation. Say that we want to estimate the single expectation value of a Pauli observable
+# Say that we want to estimate the single expectation value of a Pauli observable
 # :math:`\langle X_1 \otimes X_2 \otimes \ldots \otimes X_n \rangle`. Estimating this from repeated measurements
 # would require :math:`1/\epsilon^2` samples, whereas we would need an exponentially large shadow due to the :math:`4^n` appearing in the bound.
 # Therefore, classical shadows based on Pauli measurements only offer an advantage when we have to measure a large number
