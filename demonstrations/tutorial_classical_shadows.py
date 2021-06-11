@@ -191,7 +191,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
 
 num_qubits = 2
 
-# setting up a two-qubit device. Setting shots = 1 ensures that we only get a single measurement
+# set up a two-qubit device with shots = 1 to ensure that we only get a single measurement
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
 # simple circuit to prepare rho
@@ -219,8 +219,8 @@ for num_snapshots in [10, 100, 1000, 10000]:
     shadows.append(shadow)
 
 # printing out the smallest shadow as an example
-shadows[0][0]
-shadows[0][1]
+print(shadows[0][0])
+print(shadows[0][1])
 
 ##############################################################################
 # Observe that the shadow simply consists of two matrices.
@@ -276,7 +276,8 @@ plt.show()
 
 def snapshot_state(b_list, obs_list):
     """
-    Reconstruct a state from a single snapshot in a shadow.
+    Helper function for `shadow_state_reconstruction` that reconstructs
+     a state from a single snapshot in a shadow.
 
     Implements Eq. (S44) from https://arxiv.org/pdf/2002.08953.pdf
 
@@ -597,9 +598,11 @@ params = np.random.randn(2 * num_qubits)
 #
 #   O = \sum_i^{n-1} X_i X_{i+1} + Y_i Y_{i+1} + Z_i Z_{i+1}.
 
-list_of_observables = [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)] + \
-                      [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)] + \
-                      [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
+list_of_observables = (
+    [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
+    + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
+    + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
+)
 
 ##############################################################################
 # With the ``shadow_bound`` function, we calculate how many shadows we need to
@@ -637,14 +640,7 @@ for error in epsilon_grid:
 
     # estimate all the observables in O
     estimates.append(
-        list(
-            estimate_shadow_obervable(
-                shadow,
-                o,
-                k=k,
-            )
-            for o in list_of_observables
-        )
+        [estimate_shadow_obervable(shadow, o, k=k) for o in list_of_observables]
     )
 
 ##############################################################################
@@ -653,7 +649,7 @@ for error in epsilon_grid:
 dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit.device = dev_exact
-expval_exact = list(
+expval_exact = [
     circuit(
         params,
         wires=dev_exact.wires,
@@ -662,11 +658,12 @@ expval_exact = list(
         ],
     )
     for o in list_of_observables
-)
+]
 
 ##############################################################################
 # Finally, we plot the errors :math:`|\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}|`,
 # for all individual terms in O, and we should see that these are always smaller than :math:`\epsilon`.
+
 for j, error in enumerate(epsilon_grid):
     plt.scatter(
         [shadow_sizes[j] for _ in estimates[j]],
@@ -686,6 +683,8 @@ plt.ylabel(r"$|\langle O_i \rangle_{exact} - \langle O_i \rangle_{shadow}|$")
 plt.legend()
 plt.show()
 ##############################################################################
+# The points in the plot indicate the individual errors for all :math`O_i` at a given shadow size. The dashed line
+# represents the error threshold that these points must stay under to satisfy the bound.
 # As expected, the bound is satisfied for all :math:`O_i` and the errors decrease with the size of
 # the shadow.
 #
