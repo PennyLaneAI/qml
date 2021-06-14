@@ -300,7 +300,7 @@ def snapshot_state(b_list, obs_list):
     hadamard = qml.Hadamard(0).matrix
     identity = qml.Identity(0).matrix
 
-    # undo the rotations that were added implicitly added to the circuit for the Pauli measurements
+    # undo the rotations that were added implicitly to the circuit for the Pauli measurements
     unitaries = [hadamard, hadamard @ phase_z, identity]
 
     # reconstructing the snapshot state from local Pauli measurements
