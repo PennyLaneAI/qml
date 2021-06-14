@@ -639,9 +639,7 @@ for error in epsilon_grid:
     shadow = calculate_classical_shadow(circuit, params, shadow_size_bound, num_qubits)
 
     # estimate all the observables in O
-    estimates.append(
-        [estimate_shadow_obervable(shadow, o, k=k) for o in list_of_observables]
-    )
+    estimates.append([estimate_shadow_obervable(shadow, o, k=k) for o in list_of_observables])
 
 ##############################################################################
 # Then, we calculate the ground truth by changing the device backend.
@@ -649,16 +647,7 @@ for error in epsilon_grid:
 dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit.device = dev_exact
-expval_exact = [
-    circuit(
-        params,
-        wires=dev_exact.wires,
-        observable=[
-            o,
-        ],
-    )
-    for o in list_of_observables
-]
+expval_exact = [circuit(params, wires=dev_exact.wires, observable=[o]) for o in list_of_observables]
 
 ##############################################################################
 # Finally, we plot the errors :math:`|\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}|`,
