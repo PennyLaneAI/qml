@@ -21,7 +21,7 @@ or discover other variational quantum optimization algorithms under `Optimizatio
 
 Quantum machine learning
 ------------------------
-Delve into the plethora of exciting research made by the scientific community in
+Delve into the latest exciting research and cutting-edge ideas in
 quantum machine learning. Implement and run a vast array of different QML
 applications on your own computer—using simulators from Xanadu,
 IBM, Google, Rigetti, and many more—or on real hardware devices.
@@ -200,6 +200,12 @@ plateaus in quantum neural networks.
     :figure: demonstrations/spsa/spsa_mntn.png
     :description: :doc:`demos/spsa`
     :tags: qiskit
+
+.. customgalleryitem::
+    :tooltip: Solve combinatorial problems without a classical optimizer.
+    :figure: demonstrations/falqon/falqon_thumbnail.png
+    :description: :doc:`demos/tutorial_falqon`
+    :tags: autograd
 
 
 :html:`</div></div><div style='clear:both'>`
