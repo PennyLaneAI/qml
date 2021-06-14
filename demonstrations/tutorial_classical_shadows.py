@@ -13,7 +13,7 @@ Classical Shadows
     tutorial_quantum_metrology Variationally optimizing measurement protocols
 
 *Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
-Posted: 8 June 2021. Last updated: 8 June 2021.*
+Posted: 14 June 2021. Last updated: 14 June 2021.*
 
 Estimating properties of unknown quantum states is a key objective of quantum
 information science and technology.
@@ -95,7 +95,7 @@ observables.
 #
 #      \langle O \rangle = \frac{1}{N}\sum_i \text{Tr}{\hat{\rho}_i O}.
 #
-# Note that the classical shadow is independent of the observables we want to estimate, :math:`S(\rho,N)` contains
+# Note that the classical shadow is independent of the observables we want to estimate, as :math:`S(\rho,N)` contains
 # only information about the state!
 #
 # Furthermore, the authors of [#Huang2020]_ prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
