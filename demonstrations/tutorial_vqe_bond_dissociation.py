@@ -66,7 +66,7 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
     :width: 75%
     :align: center
 
-    Potential energy surface for a diatomic molecule
+    Illustration of a potential energy surface for a diatomic molecule
 
 ##########################################################
 
