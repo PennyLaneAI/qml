@@ -368,7 +368,8 @@ params = []
 shadow = calculate_classical_shadow(
     bell_state_circuit, params, num_snapshots, num_qubits
 )
-shadow
+print(shadow[0])
+print(shadow[1])
 
 ##############################################################################
 # To reconstruct the Bell state we use ``shadow_state_reconstruction``.
@@ -614,7 +615,7 @@ list_of_observables = (
 # for all :math:`1\leq i \leq M`.
 
 shadow_size_bound, k = shadow_bound(
-    error=1e-1, observables=[o.matrix for o in list_of_observables]
+    error=2e-1, observables=[o.matrix for o in list_of_observables]
 )
 shadow_size_bound
 
