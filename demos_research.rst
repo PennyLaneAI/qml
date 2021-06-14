@@ -237,6 +237,12 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/tutorial_haar_measure`
    :tags: quantumcomputing
 
+.. customgalleryitem::
+   :tooltip: Explore the amazing applications of unitary t-designs.
+   :figure: demonstrations/unitary_designs/fano.png
+   :description: :doc:`demos/tutorial_unitary_designs`
+   :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -274,3 +280,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
+    demos/tutorial_unitary_designs
