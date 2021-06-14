@@ -168,7 +168,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
         Each row of the arrays corresponds to a distinct snapshot or sample while each
         column corresponds to a different qubit.
     """
-    # applying the single qubit clifford circuit is equivalent to measuring a pauli
+    # applying the single-qubit Clifford circuit is equivalent to measuring a Pauli
     unitary_ensemble = [qml.PauliX, qml.PauliY, qml.PauliZ]
 
     # sample random Pauli measurements uniformly, where 0,1,2 = X,Y,Z
@@ -300,7 +300,7 @@ def snapshot_state(b_list, obs_list):
     hadamard = qml.Hadamard(0).matrix
     identity = qml.Identity(0).matrix
 
-    # undo the rotations that were added implicitely added to the circuit for the pauli measurements
+    # undo the rotations that were added implicitly added to the circuit for the Pauli measurements
     unitaries = [hadamard, hadamard @ phase_z, identity]
 
     # reconstructing the snapshot state from local Pauli measurements
