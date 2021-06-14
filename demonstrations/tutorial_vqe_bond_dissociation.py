@@ -17,6 +17,12 @@ forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that the reaction occurs. These energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
 
+.. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
+    :width: 50%
+    :align: center
+
+    An example chemical reaction
+
 In this tutorial, you will learn how to use PennyLane to simulate chemical reactions by
 constructing potential energy surfaces for molecular transformations. In the process, you will
 learn how quantum computers can be used to calculate equilibrium bond lengths, activation energy
@@ -24,10 +30,6 @@ barriers, and reaction rates. As illustrative
 examples, we use tools implemented in PennyLane to study diatomic bond dissociation and reactions
 involving the exchange of hydrogen atoms.
 
-
- .. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
-   :width: 50%
-   :align: center
 
 
 ##############################################################################
@@ -60,9 +62,11 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
 :math:`E(R)` gives rise to the potential energy surface.
 
 
- .. figure:: /demonstrations/vqe_bond_dissociation/pes.png
-   :width: 60%
-   :align: center
+.. figure:: /demonstrations/vqe_bond_dissociation/pes.png
+    :width: 75%
+    :align: center
+
+    Potential energy surface for a diatomic molecule
 
 ##########################################################
 
