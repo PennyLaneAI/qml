@@ -104,11 +104,13 @@ observables.
 # Two different ensembles can be considered for selecting the random unitaries :math:`U`:
 #
 # 1. Random :math:`n`-qubit Clifford circuits.
-# 2. Tensor products of random single-qubit Pauli operators.
+# 2. Tensor products of random single-qubit Clifford circuits.
 #
 # Although ensemble 1 leads to the most powerful estimators, it comes with serious practical limitations
 # since :math:`n^2 / \log(n)` entangling gates are required to sample the Clifford circuit. The snapshots of both ensembles
 # can be stored efficiently using the `stabilizer formalism <https://arxiv.org/abs/quant-ph/9705052>`_ [#Gottesman1997]_.
+# Single-qubit Clifford circuits rotate the measurement basis to one of the Pauli eigenbases, so ensemble 2
+# is equivalent to measuring single shots of single-qubit Pauli observables on all qubits.
 # For the purposes of this demo we focus on ensemble 2, which is a more NISQ-friendly approach.
 #
 # This ensemble comes with a significant drawback: the shadow norm :math:`||O_i||^2_{\text{shadow}}`
@@ -166,9 +168,10 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
         Each row of the arrays corresponds to a distinct snapshot or sample while each
         column corresponds to a different qubit.
     """
+    # applying the single qubit clifford circuit is equivalent to measuring a pauli
     unitary_ensemble = [qml.PauliX, qml.PauliY, qml.PauliZ]
 
-    # sample random Pauli unitaries uniformly, where 0,1,2 = X,Y,Z
+    # sample random Pauli measurements uniformly, where 0,1,2 = X,Y,Z
     unitary_ids = np.random.randint(0, 3, size=(shadow_size, num_qubits))
     outcomes = np.zeros((shadow_size, num_qubits))
 
@@ -297,7 +300,7 @@ def snapshot_state(b_list, obs_list):
     hadamard = qml.Hadamard(0).matrix
     identity = qml.Identity(0).matrix
 
-    # rotations from computational basis to x,y,z respectively
+    # undo the rotations that were added implicitely added to the circuit for the pauli measurements
     unitaries = [hadamard, hadamard @ phase_z, identity]
 
     # reconstructing the snapshot state from local Pauli measurements
