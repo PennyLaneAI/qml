@@ -4,13 +4,13 @@ Modelling chemical reactions on a quantum computer
 
 .. meta::
     :property="og:description": Construct potential energy surfaces for chemical reactions
-    :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
+    :property="og:image": https://pennylane.ai/qml/_images/reaction.png
 
 .. related::
    tutorial_quantum_chemistry Quantum Chemistry with PennyLane
    tutorial_vqe Variational Quantum Eigensolver
 
-*Author: PennyLane dev team. Posted: 25 May 2021. Last updated: 25 May 2021.*
+*Author: PennyLane dev team. Posted: . Last updated: .*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
@@ -25,7 +25,9 @@ examples, we use tools implemented in PennyLane to study diatomic bond dissociat
 involving the exchange of hydrogen atoms.
 
 
-ADD FIGURE WITH EXPLOSION IN BEAKER
+ .. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
+   :width: 50%
+   :align: center
 
 
 ##############################################################################
@@ -58,7 +60,9 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
 :math:`E(R)` gives rise to the potential energy surface.
 
 
-ADD FIGURE WITH POTENTIAL ENERGY SURFACE
+ .. figure:: /demonstrations/vqe_bond_dissociation/pes.png
+   :width: 60%
+   :align: center
 
 ##########################################################
 
