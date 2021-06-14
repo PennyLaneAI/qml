@@ -142,8 +142,7 @@ np.random.seed(666)
 # 1. The quantum state :math:`\rho` is prepared with a circuit.
 # 2. A unitary :math:`U` is randomly selected from the ensemble and applied to :math:`\rho`.
 # 3. A computational basis measurement is performed.
-# 4. The snapshot is recorded as the observed eigen value :math:`1,-1` for :math:`|0\rangle,|1\rangle`, respectively,
-# and the index of the randomly selected unitary :math:`U`.
+# 4. The snapshot is recorded as the observed eigen value :math:`1,-1` for :math:`|0\rangle,|1\rangle`, respectively, and the index of the randomly selected unitary :math:`U`.
 #
 # To obtain a classical shadow using PennyLane, we add the ``calculate_classical_shadow``
 # function below.
@@ -662,7 +661,7 @@ expval_exact = [
 
 ##############################################################################
 # Finally, we plot the errors :math:`|\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}|`,
-# for all individual terms in O, and we should see that these are always smaller than :math:`\epsilon`.
+# for all individual terms in :math:`O`. We expect that these errors are always smaller than :math:`\epsilon`.
 
 for j, error in enumerate(epsilon_grid):
     plt.scatter(
@@ -683,7 +682,7 @@ plt.ylabel(r"$|\langle O_i \rangle_{exact} - \langle O_i \rangle_{shadow}|$")
 plt.legend()
 plt.show()
 ##############################################################################
-# The points in the plot indicate the individual errors for all :math`O_i` at a given shadow size. The dashed line
+# The points in the plot indicate the individual errors for all :math:`O_i` at a given shadow size. The dashed line
 # represents the error threshold that these points must stay under to satisfy the bound.
 # As expected, the bound is satisfied for all :math:`O_i` and the errors decrease with the size of
 # the shadow.
