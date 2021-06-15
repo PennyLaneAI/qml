@@ -10,7 +10,7 @@ Building molecular Hamiltonians with PennyLane
 .. related::
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 11 June 2021*
+*Author: PennyLane dev team. Last updated: 15 June 2021*
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
