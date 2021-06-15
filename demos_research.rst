@@ -292,8 +292,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
-<<<<<<< HEAD
-=======
     demos/tutorial_unitary_designs
->>>>>>> origin/dev
     demos/tutorial_classical_shadows
