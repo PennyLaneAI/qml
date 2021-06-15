@@ -32,7 +32,7 @@ the nuclei of the molecule can be treated as point particles whose coordinates
 are fixed [#BornOpp1927]_. In this approximation, both the total energy and
 the electronic Hamiltonian depends parametrically on the nuclear coordinates.
 
-In this tutorial, we demonstrate how to use PennyLane's functionalities to build a
+In this tutorial, you will learn how to use PennyLane's functionalities to build a
 representation of the electronic Hamiltonian :math:`H_e` that can be used to perform
 **quantum** simulations of molecules [#yudong2019]_. First, we show how to define
 the structure of the molecule in terms of the symbols and the coordinates of
