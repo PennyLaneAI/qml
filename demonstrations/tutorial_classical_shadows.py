@@ -14,7 +14,7 @@ Classical Shadows
 
 .. image:: ../demonstrations/classical_shadows/atom_shadow.png
     :align: center
-    :width: 30%
+    :width: 75%
 
 *Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
 Posted: 14 June 2021. Last updated: 14 June 2021.*
