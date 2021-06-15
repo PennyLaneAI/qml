@@ -39,11 +39,10 @@ Potential Energy Surfaces
 
 `Potential energy surfaces (PES) <https://en.wikipedia.org/wiki/Potential_energy_surface>`_
 describe the equilibrium energy of molecules for different positions of
-its atoms. The concept originates from the fact that nuclei are much heavier than
-electrons and thus move more slowly, allowing us to decouple their motion. We can then solve for
-the electronic wavefunction with the nuclei clamped to their respective positions. This leads
-to a separation of the nuclear and electronic parts of the Schrödinger equation, meaning we only
-need to solve the electronic equation:
+its atoms. The concept originates from the fact that the electrons are much lighter than protons
+and neutrons, so they will adjust instantaneously to the new positions of the nuclei. This leads
+to a separation of the nuclear and electronic parts of the Schrödinger equation, meaning we only need
+to solve the electronic equation:
 
 .. math:: H(R)|\Psi \rangle =  E|\Psi\rangle.
 
@@ -152,7 +151,7 @@ for r in r_range:
     params = np.zeros(3)
 
     # initialize with converged parameters from previous point
-    if pes_point > 1:
+    if pes_point > 0:
         params = params_old
 
     prev_energy = 0.0
@@ -194,8 +193,8 @@ plt.show()
 # illustrated in the beginning. In a diatomic molecule such as :math:`H_2`, it
 # can be used to obtain the equilibrium bond length --- the distance between the two atoms that
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
-# obtain the bond dissociation energy, which is the difference in the energy of the system at
-# equilibrium and the energy when the atoms are far apart. At sufficiently large separations,
+# obtain the bond dissociation energy, which is the difference in the energy of the system when
+# the atoms are far apart and the energy at equilibrium. At sufficiently large separations,
 # the atoms no longer form a molecule, which is therefore dissociated.
 #
 # Let's use our results to compute the equilibrium bond length and the bond dissociation energy:
@@ -226,8 +225,8 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 #
 #     Did you notice a trick we used to speed up the calculations? The converged
 #     gate parameters for a particular geometry on the PES are used as the initial guess for the
-#     calculation at the adjacent geometry. With a better guess, the iterations converge
-#     relatively quickly and we save considerable time.
+#     calculation at the adjacent geometry. With a better guess, the algorithm converges
+#     faster and we save considerable time.
 
 ##############################################################################
 # Hydrogen Exchange Reaction
@@ -272,7 +271,7 @@ from pennylane.templates import AllSinglesDoubles
 energies = []
 pes_point = 0
 
-# get all the singles and doubles excitations, amd Hartree-Fock state
+# get all the singles and doubles excitations, and Hartree-Fock state
 electrons = 3
 orbitals = 6
 singles, doubles = qchem.excitations(electrons, orbitals)
@@ -296,7 +295,7 @@ for r in r_range:
 
     params = np.zeros(len(singles) + len(doubles))
 
-    if pes_point > 1:
+    if pes_point > 0:
         params = params_old
 
     prev_energy = 0.0
