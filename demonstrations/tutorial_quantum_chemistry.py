@@ -320,7 +320,7 @@ print(H)
 #
 #     M. Born, J.R. Oppenheimer, "Quantum Theory of the Molecules".
 #     `Annalen der Physik 84, 457-484 (1927)
-#     <https://onlinelibrary.wiley.com/doi/abs/10.1002/andp.19273892002>`_.
+#     <https://onlinelibrary.wiley.com/doi/abs/10.1002/andp.19273892002>`_
 #
 # .. [#fetterbook]
 #
@@ -342,4 +342,4 @@ print(H)
 #
 #     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
-#     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
+#     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`_
