@@ -14,14 +14,14 @@ Modelling chemical reactions on a quantum computer
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
-the likelihood that the reaction occurs. These energy landscapes formed by these barriers are the
+the likelihood that the reaction occurs. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
 
 .. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
     :width: 50%
     :align: center
 
-    An example chemical reaction
+    An example chemical reaction.
 
 In this tutorial, you will learn how to use PennyLane to simulate chemical reactions by
 constructing potential energy surfaces for molecular transformations. In the process, you will
@@ -50,14 +50,14 @@ need to solve the electronic equation:
 From this perspective arises the concept of the electronic energy of a molecule, :math:`E(R)`,
 as a function of nuclear coordinates :math:`R`. The energy :math:`E(R)` is the expectation value
 of the molecular Hamiltonian, :math:`E(R)=\langle \Psi_0|H(R)|\Psi_0\rangle`, taken
-over the ground state :math:`|\Psi_0(R)`. The potential energy surface is
+over the ground state :math:`|\Psi_0(R)\rangle`. The potential energy surface is
 precisely this function :math:`E(R)`, which connects energies to different geometries of the
 molecule. It gives us a visual tool to understand chemical reactions by associating
 stable molecules (reactants and products) with local minima, transition states with peaks,
 and by identifying the possible routes for a chemical reaction to occur.
 
 To build the potential energy surface, we compute the energy for fixed positions of the nuclei,
-and subsequently move the nuclei in incremental steps, computing the new energies at each point.
+and subsequently adjust the positions of the nuclei in incremental steps, computing the energies at each new configuration.
 The obtained set of energies corresponds to a grid of nuclear positions and the plot of
 :math:`E(R)` gives rise to the potential energy surface.
 
@@ -66,7 +66,7 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
     :width: 75%
     :align: center
 
-    Illustration of a potential energy surface for a diatomic molecule
+    Illustration of a potential energy surface for a diatomic molecule.
 
 ##########################################################
 
@@ -82,7 +82,7 @@ of all reactions:
 Using a minimal `basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_,
 this molecular system can be described by two electrons in four
 spin-orbitals. When mapped to a qubit representation, we need a total of four qubits.
-The `Hartree-Fock (HF) state is represented as :math:`|1100\rangle`, where the two
+The *Hartree-Fock (HF) state* is represented as :math:`|1100\rangle`, where the two
 lowest-energy orbitals are occupied, and the remaining two are unoccupied.
 
 We design a quantum circuit consisting of :class:`~.pennylane.SingleExcitation` and
@@ -111,10 +111,10 @@ def circuit(params, wires):
 # coordinate of the other atom in a single direction. The potential energy
 # surface is then a one-dimensional function depending only on the bond length, i.e., the separation
 # between the atoms. For each value of the bond length, we construct the corresponding
-# Hamiltonian, optimize the circuit using gradient descent to obtain the ground-state energy.
+# Hamiltonian, then optimize the circuit using gradient descent to obtain the ground-state energy.
 # We vary the bond length in the range
 # :math:`0.5` to :math:`5.0` `Bohrs <https://en.wikipedia.org/wiki/Bohr_radius>`_ in steps of
-# :math:`0.1` Bohr. This covers the point where the :math:`H-H` bond is formed,
+# :math:`0.25` Bohr. This covers the point where the :math:`H-H` bond is formed,
 # the equilibrium bond length, and the point where the bond is broken, which occurs when the atoms
 # are far away from each other.
 
@@ -193,8 +193,8 @@ plt.show()
 # two hydrogen atoms. In a diatomic molecule such as :math:`H_2`, it
 # can be used to obtain the equilibrium bond length --- the distance between the two atoms that
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
-# obtain the bond dissociation energy: the difference in the energy of the system at
-# equilibrium and the energy when the atoms are far apart --- at sufficiently large separations,
+# obtain the bond dissociation energy, which is the difference in the energy of the system at
+# equilibrium and the energy when the atoms are far apart. At sufficiently large separations,
 # the atoms no longer form a molecule, which is therefore dissociated.
 #
 # Let's use our results to compute the equilibrium bond length and the bond dissociation energy:
@@ -242,7 +242,7 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 # for the exchange of an atom to be complete. In this case, the transition state
 # corresponds to a specific linear arrangement of the atoms where one :math:`H-H` bond is
 # partially broken and the other :math:`H-H` bond is partially formed.
-# The molecular movie ⚛️🎥 below is an illustration of the reaction trajectory --- how the distance
+# The molecular movie ⚛️🎥 below is an illustration of the reaction trajectory. It depicts how the distance
 # between the hydrogen atoms changes as one bond is broken and another one is formed.
 # The path along which the reaction proceeds is known as the `reaction coordinate
 # <https://en.wikipedia.org/wiki/Reaction_coordinate>`_.
@@ -252,7 +252,7 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 #   :align: center
 #
 # In a minimal basis like STO-3G, this system consists of three electrons in six spin
-# molecular orbitals. This translates into a six-qubit problem, and the Hartree-Fock state
+# molecular orbitals. This translates into a six-qubit problem, for which the Hartree-Fock state
 # is :math:`|111000\rangle`. As there is an unpaired
 # electron, the spin multiplicity is equal to two and needs to be specified, since it differs
 # from the default value of one.
@@ -349,7 +349,7 @@ e_eq2 = min([x for x in energies if x != e_eq1])
 idx1 = energies.index(e_eq1)
 idx2 = energies.index(e_eq2)
 
-# Transition state is local maxima between reactant and products
+# Transition state is local maximum between reactant and products
 idx_min = min(idx1, idx2)
 idx_max = max(idx1, idx2)
 
