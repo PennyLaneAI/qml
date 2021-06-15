@@ -12,6 +12,10 @@ Classical Shadows
     quantum_volume Quantum volume
     tutorial_quantum_metrology Variationally optimizing measurement protocols
 
+.. image:: ../demonstrations/classical_shadows/atom_shadow.png
+    :align: center
+    :width: 30%
+
 *Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
 Posted: 14 June 2021. Last updated: 14 June 2021.*
 
