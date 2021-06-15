@@ -57,7 +57,6 @@ consisting of one oxygen and two hydrogen atoms.
 
 The structure of a molecule is defined by the symbols and the nuclear coordinates of
 its constituent atoms. It can be specified using different `chemical file formats
-
 <https://en.wikipedia.org/wiki/Chemical_file_format>`_. Within PennyLane, the molecular
 structure is defined by providing a list with the atomic symbols and a one-dimensional
 array with the nuclear coordinates in
@@ -86,7 +85,6 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # ----------------------------------
 # The molecule's electronic Hamiltonian is commonly represented using the
 # second-quantization [#fetterbook]_ formalism, which we will explore in more detail in the
-
 # next section. To that aim, a basis of **single-particle** states needs to be chosen.
 # In quantum chemistry these states are the
 # `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_
@@ -103,7 +101,6 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # We can call the function :func:`~.pennylane_qchem.qchem.meanfield` to solve
 # the Hartree-Fock calculation using either the quantum chemistry package `PySCF
 # <https://sunqm.github.io/pyscf/>`_, or `Psi4 <http://www.psicode.org/>`_. Here
-
 # we use PySCF, which is the default option. We can also label the molecule using
 # the ``name`` keyword argument,
 
@@ -111,7 +108,6 @@ hf_file = qchem.meanfield(symbols, coordinates, name="water")
 
 ##############################################################################
 # Once the calculation is completed, the string variable ``hf_file`` returned by the
-
 # function stores the absolute path to the hdf5-formatted file ``water`` with the
 # Hartree-Fock electronic structure of the water molecule.
 
