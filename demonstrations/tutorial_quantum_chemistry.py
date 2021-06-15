@@ -20,7 +20,7 @@ of the total energy of the molecule [#jensenbook]_.
 
 Accurate molecular properties can be computed from the wave function describing the
 interacting electrons in a molecule [#kohanoff2006]_. The **electronic** wave function
-:math:`\Psi(r)` satisfies the `Schr\"odinger equation
+:math:`\Psi(r)` satisfies the `Schrödinger equation
 <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation>`_
 
 .. math::
@@ -56,7 +56,8 @@ consisting of one oxygen and two hydrogen atoms.
     :align: center
 
 The structure of a molecule is defined by the symbols and the nuclear coordinates of
-the atoms and it can be specified using different `chemical file formats
+its constituent atoms. It can be specified using different `chemical file formats
+
 <https://en.wikipedia.org/wiki/Chemical_file_format>`_. Within PennyLane, the molecular
 structure is defined by providing a list with the atomic symbols and a one-dimensional
 array with the nuclear coordinates in
@@ -68,7 +69,8 @@ symbols = ["H", "O", "H"]
 coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
 
 ##############################################################################
-# The :func:`~.pennylane_qchem.qchem.read_structure` can also be used to read the
+# The :func:`~.pennylane_qchem.qchem.read_structure` function can also be used to read the
+
 # molecular geometry from a external file.
 
 from pennylane import qchem
@@ -83,7 +85,8 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # Solving the Hartree-Fock equations
 # ----------------------------------
 # The molecule's electronic Hamiltonian is commonly represented using the
-# second-quantization [#fetterbook]_ formalism as it is shown with more details in the
+# second-quantization [#fetterbook]_ formalism, which we will explore in more detail in the
+
 # next section. To that aim, a basis of **single-particle** states needs to be chosen.
 # In quantum chemistry these states are the
 # `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_
@@ -98,15 +101,17 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # the molecular orbitals we need to build the second-quantized Hamiltonian.
 #
 # We can call the function :func:`~.pennylane_qchem.qchem.meanfield` to solve
-# the Hartree-Fock calculation using either the quantum chemistry packages `PySCF
-# <https://sunqm.github.io/pyscf/>`_ or `Psi4 <http://www.psicode.org/>`_. In this case
+# the Hartree-Fock calculation using either the quantum chemistry package `PySCF
+# <https://sunqm.github.io/pyscf/>`_, or `Psi4 <http://www.psicode.org/>`_. Here
+
 # we use PySCF, which is the default option. We can also label the molecule using
 # the ``name`` keyword argument,
 
 hf_file = qchem.meanfield(symbols, coordinates, name="water")
 
 ##############################################################################
-# Once the calculation is completed,the string variable ``hf_file`` returned by the
+# Once the calculation is completed, the string variable ``hf_file`` returned by the
+
 # function stores the absolute path to the hdf5-formatted file ``water`` with the
 # Hartree-Fock electronic structure of the water molecule.
 
