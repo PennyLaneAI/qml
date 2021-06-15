@@ -12,15 +12,13 @@ Building molecular Hamiltonians with PennyLane
 
 *Author: PennyLane dev team. Last updated: 11 June 2021*
 
-The ultimate goal of computational quantum chemistry is to unravel the intriguing
+The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
-this goal is two-fold challenging: first, numerical accuracy plays a major role
-in quantum chemistry simulations since the characteristic energies of chemical
-phenomena are typically a tiny fraction of the molecule's total energy,
-and, second, the complexity of classical algorithms to compute the molecular wave function
-scales exponentially with the system size [#jensenbook]_.
+this goal is challenging since the characteristic energies associated with
+these effects (e.g., electronic correlation energy) are typically a tiny fraction
+of the total energy of the molecule [#jensenbook]_.
 
-Accurate molecular properties can be computed from the wave function describing the
+Very accurate molecular properties can be computed from the wave function describing the
 interacting electrons in a molecule [#kohanoff2006]_. The **electronic** wave function
 :math:`\Psi(r)` satisfies the `Schrodinger equation
 <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation>`_
@@ -29,26 +27,22 @@ interacting electrons in a molecule [#kohanoff2006]_. The **electronic** wave fu
     H_e \Psi(r) = E \Psi(r),
 
 where :math:`H_e` and :math:`E` denote the electronic Hamiltonian and the
-total energy of the molecule, respectively. Quite often, the nuclei in the molecule
-are treated as point particles whose coordinates are fixed while we solve the electronic
-structure of the molecule [#BornOpp1927]_. In this approximation, the electronic
-Hamiltonian :math:`H_e` depends parametrically on the nuclear coordinates.
+total energy of the molecule, respectively. When solving the latter equation,
+the nuclei of the molecule can be treated as point particles whose coordinates
+are fixed [#BornOpp1927]_. In this approximation, both the total energy and
+the electronic Hamiltonian depends parametrically on the nuclear coordinates.
 
-Quantum computers offer a promising avenue for major breakthroughs in quantum chemistry
-[#yudong2019, #troyer2016]_. The first step to simulate a chemical system using
-quantum algorithms is to build a representation of the molecular Hamiltonian :math:`H_e`
-whose expectation value can be measured using a quantum device.
-
-In this tutorial, we demonstrate how to use PennyLane's functionalities to build the
-electronic Hamiltonian of a molecule that can be use to perform quantum simulations.
-First, we show how to define the structure of the molecule in terms of the symbols
-and the nuclear coordinates of its atoms. We describe how to solve the `Hartree-Fock
+In this tutorial, we demonstrate how to use PennyLane's functionalities to build a
+representation of the electronic Hamiltonian :math:`H_e` that can be used to perform
+**quantum** simulations of molecules [#yudong2019]_. First, we show how to define
+the structure of the molecule in terms of the symbols and the coordinates of
+the atoms. Next, we describe how to solve the `Hartree-Fock
 equations <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_ for the target
-molecule by interfacing with classical quantum chemistry packages. Furthermore, we
+molecule by interfacing with classical quantum chemistry packages. Then, we
 show how to decompose the fermionic Hamiltonian into a set of Pauli operators
-whose expectation values can be measured in a quantum device to compute the total energy
+whose expectation values can be measured in a quantum computer to estimate the total energy
 of the molecule. Finally, we discuss some advanced features that can be used to simulate
-more complicated molecules.
+more complicated systems.
 
 Let's get started!
 
