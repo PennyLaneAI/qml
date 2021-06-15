@@ -111,7 +111,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
-    
+
 .. customgalleryitem::
     :tooltip: Kernel-based training with scikit-learn.
     :figure: demonstrations/kernel_based_training/scaling.png
@@ -244,15 +244,12 @@ such as benchmarking and characterizing quantum processors.
    :tags: quantumcomputing
 
 .. customgalleryitem::
-<<<<<<< HEAD
-=======
    :tooltip: Explore the amazing applications of unitary t-designs.
    :figure: demonstrations/unitary_designs/fano.png
    :description: :doc:`demos/tutorial_unitary_designs`
    :tags: quantumcomputing
 
 .. customgalleryitem::
->>>>>>> origin/dev
     :tooltip: Approximate quantum states with classical shadows.
     :figure: demonstrations/classical_shadows/atom_shadow.png
     :description: :doc:`demos/tutorial_classical_shadows`
