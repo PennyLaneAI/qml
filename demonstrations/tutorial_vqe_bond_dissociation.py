@@ -190,7 +190,8 @@ plt.show()
 
 ##############################################################################
 # This is the potential energy surface for the dissociation of a hydrogen molecule into
-# two hydrogen atoms. In a diatomic molecule such as :math:`H_2`, it
+# two hydrogen atoms. It is a numerical calculation of the same type of plot that was
+# illustrated in the beginning. In a diatomic molecule such as :math:`H_2`, it
 # can be used to obtain the equilibrium bond length --- the distance between the two atoms that
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
 # obtain the bond dissociation energy, which is the difference in the energy of the system at
@@ -259,8 +260,6 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 
 symbols = ["H", "H", "H"]
 multiplicity = 2
-basis_set = "sto-3g"
-
 
 ##############################################################################
 # To build a potential energy surface for the hydrogen exchange, we fix the positions of the
@@ -335,8 +334,10 @@ plt.show()
 # Activation energy barriers and reaction rates
 # ---------------------------------------------
 #
-# The activation energy barrier (:math:`E_{a}`) is defined as the difference between the
-# energy of the reactants and the energy of the transition state.
+# The potential energy surfaces we computed so far can be leveraged for other important tasks,
+# such as computing activation energy barriers and reaction rates. The activation energy barrier (
+# :math:`E_{a}`) is defined as the difference between the energy of the reactants and the energy
+# of the transition state.
 #
 # .. math:: E_{a} = E_{TS} - E_{R}.
 #
@@ -366,14 +367,53 @@ print(f"The activation energy is {activation_energy:.6f} Hartrees")
 # barrier, as shown in the `Arrhenius equation
 # <https://en.wikipedia.org/wiki/Arrhenius_equation>`_ (Arrr! 🏴‍☠️):
 #
-# .. math:: k = Ae^{-{E_{a}}/RT},
+# .. math:: k = Ae^{-{E_{a}}/k_BT},
 #
-# where :math:`R` is the universal gas constant, :math:`T` is the temperature, and :math:`A` is a
+# where :math:`k_B` is the Boltzmann constant, :math:`T` is the temperature, and :math:`A` is a
 # pre-exponential factor that can be determined empirically for each reaction. The rate at which
 # a chemical reaction occurs therefore depends exponentially on the activation energy,
 # which can be determined by constructing the potential energy surface. Crucially, reaction rates
 # depend exponentially on the results of this calculation. It is a good reminder of the importance
 # of performing highly-accurate calculations in quantum chemistry!
+#
+# For example, let's calculate the ratio of reaction rates when the temperature is doubled. We have
+#
+# .. math:: \frac{k_2}{k_1}=\frac{Ae^{-{E_{a}}/k_B(2T)}}{Ae^{-{E_{a}}/k_BT}}=e^{E_a/2k_B T}.
+#
+# We choose :math:`T=300` Kelvin, which is essentially room temperature. This makes doubling the
+# temperature roughly equivalent to the temperature inside a pizza oven.  We have
+
+# convert to joules
+activation_energy *= 4.36e-18
+# Boltzmann constant in Joules/Kelvin
+k_B = 1.38e-23
+# Temperature
+T = 300
+
+ratio = np.exp(activation_energy / (2 * k_B * T))
+
+print(f"Ratio of reaction rates is {ratio:.0f}")
+
+##############################################################################
+# Doubling the temperature can increase the rate by a factor of almost two million! For a similar
+# reason, changing the activation energy can lead to drastic changes in the reaction rates,
+# which means we have to be careful to compute it very accurately.
+#
+# Conclusion
+# ----------
+# We can learn how atoms combine to form different molecules by performing experiments; this is
+# the approach many of us learn as children by playing with chemistry sets. However, a deeper
+# quantitative understanding of chemical reactions can be achieved by performing theoretical
+# simulations of the mechanisms for forming and breaking bonds. This tutorial described how
+# simple chemical reactions can be simulated using quantum algorithms that reconstruct
+# potential energy surfaces, allowing us to identify reactants and products as minima of the
+# energy, and transition states as local maxima. These results can then be used to calculate
+# activation energies and reaction rates. The goal (and challenge!) for quantum computing is to
+# improve both hardware and algorithms to reach the regime where existing methods fall short of
+# providing accurate simulations in sufficiently short time scales. If successful, this quest will
+# allow us to understand the properties of quantum systems in ways that have so far been out of
+# reach.
+#
 #
 #
 # .. _references:
