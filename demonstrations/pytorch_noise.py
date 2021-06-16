@@ -173,15 +173,32 @@ print(cost(phi, theta, 400))
 #
 # As PyTorch natively supports GPU-accelerated classical processing, and Forest provides
 # quantum hardware access in the form of QPUs, with very little modification, we can run
-# the above code as a hybrid GPU-QPU optimization (note that to run the
-# following script on a QPU, you will need to be using a service that allows
-# access to the Rigetti hardware):
+# the above code as a hybrid GPU-QPU optimization.
+#
+# Note that to run the following script, you will need to access to Rigetti's
+# QPU. To connect to a QPU, we'll use Amazon Braket. For a dedicated
+# demonstration on using Amazon Braket, see our tutorial on [Computing
+# gradients in parallel with Amazon
+# Braket](https://pennylane.ai/qml/demos/braket-parallel-gradients.html).
 
 import pennylane as qml
 import torch
 from torch.autograd import Variable
 
+my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
+my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
+s3_folder = (my_bucket, my_prefix)
 
+device_arn = "arn:aws:braket:::device/qpu/rigetti/Aspen-9"
+
+qpu = qml.device(
+    "braket.aws.qubit",
+    device_arn=device_arn,
+    wires=32,
+    s3_destination_folder=s3_folder,
+)
+
+# Note: swap dev to qpu here to use the QPU
 @qml.qnode(dev, interface="torch")
 def circuit(phi, theta):
     qml.RX(theta, wires=0)
