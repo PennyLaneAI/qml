@@ -11,7 +11,7 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 2 March 2021.*
+*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 16 Jun 2021.*
 
 
 In this demo we recreate the architecture proposed
