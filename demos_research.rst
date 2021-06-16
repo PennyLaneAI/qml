@@ -111,7 +111,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
-    
+
 .. customgalleryitem::
     :tooltip: Kernel-based training with scikit-learn.
     :figure: demonstrations/kernel_based_training/scaling.png
