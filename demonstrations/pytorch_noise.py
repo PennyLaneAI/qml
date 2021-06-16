@@ -176,7 +176,7 @@ print(cost(phi, theta, 400))
 # the above code as a hybrid GPU-QPU optimization.
 #
 # Note that to run the following script, you will need access to Rigetti's QPU.
-# To connect to a QPU, we'll use Amazon Braket. For a dedicated demonstration
+# To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
 # on using Amazon Braket, see our tutorial on [Computing gradients in parallel
 # with Amazon
 # Braket](https://pennylane.ai/qml/demos/braket-parallel-gradients.html).
