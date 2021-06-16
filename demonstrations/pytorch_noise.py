@@ -171,9 +171,9 @@ print(cost(phi, theta, 400))
 # Hybrid GPU-QPU optimization
 # ---------------------------
 #
-# As PyTorch natively supports GPU-accelerated classical processing, and Forest provides
-# quantum hardware access in the form of QPUs, with very little modification, we can run
-# the above code as a hybrid GPU-QPU optimization.
+# As PyTorch natively supports GPU-accelerated classical processing, and Amazon
+# Braket provides quantum hardware access in the form of QPUs, with very little
+# modification, we can run the above code as a hybrid GPU-QPU optimization.
 #
 # Note that to run the following script, you will need access to Rigetti's QPU.
 # To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
