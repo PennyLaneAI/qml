@@ -674,7 +674,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20])
+ax.set_xticks([0, 5, 10, 15, 20]);
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
@@ -920,6 +920,7 @@ guesses = [start_zeros, guess_0, guess_1, guess_2, guess_3, guess_4]
 lstm_losses = [new_cost(tf.reshape(guess, shape=(2, n_layers))) for guess in guesses]
 
 fig, ax = plt.subplots()
+
 plt.plot(lstm_losses, color="blue", lw=3, ls="-.", label="LSTM")
 
 plt.grid(ls="--", lw=2, alpha=0.25)
@@ -981,7 +982,6 @@ plt.xlabel(r"$\alpha$", fontsize=12)
 plt.ylabel(r"$\gamma$", fontsize=12)
 plt.title("Loss Landscape", fontsize=12)
 plt.show()
-
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossLandscape.png
