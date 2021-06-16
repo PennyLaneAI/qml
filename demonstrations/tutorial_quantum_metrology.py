@@ -134,7 +134,7 @@ from pennylane import numpy as np
 # We will choose the ``cirq.mixedsimulator`` device from the
 # `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_
 # plugin for this tutorial.
-dev = qml.device("cirq.mixedsimulator", wires=3)
+dev = qml.device("cirq.mixedsimulator", wires=3, shots=1000)
 
 ##############################################################################
 # Next, we model the parameter encoding. The phase shifts are recreated using
