@@ -13,7 +13,7 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: PennyLane dev team. Last updated: 1 Mar 2020.*
+*Author: PennyLane dev team. Last updated: 16 Jun 2020.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
@@ -173,14 +173,13 @@ print(cost(phi, theta, 400))
 #
 # As PyTorch natively supports GPU-accelerated classical processing, and Forest provides
 # quantum hardware access in the form of QPUs, with very little modification, we can run
-# the above code as a hybrid GPU-QPU optimization (note that to run the following
-# script, you will need to be using Rigetti's QCS service):
+# the above code as a hybrid GPU-QPU optimization (note that to run the
+# following script on a QPU, you will need to be using a service that allows
+# access to the Rigetti hardware):
 
 import pennylane as qml
 import torch
 from torch.autograd import Variable
-
-qpu = qml.device("forest.qpu", device="Aspen-1-2Q-B")
 
 
 @qml.qnode(dev, interface="torch")
