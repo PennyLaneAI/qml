@@ -173,9 +173,7 @@ print("Qubit Hamiltonian")
 print(H)
 
 ##############################################################################
-# Additionally, the hamiltonian ``H`` is already a PennyLane observable.
-#
-# If you have built your electronic Hamiltonian independently using
+# Additionally, if you have built your electronic Hamiltonian independently using
 # `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools, it can
 # be readily converted to a PennyLane observable using the
 # :func:`~.pennylane_qchem.qchem.convert_observable` function.
