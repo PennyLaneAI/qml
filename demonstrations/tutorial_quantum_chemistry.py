@@ -108,6 +108,8 @@ hf_file = qchem.meanfield(symbols, coordinates)
 ##############################################################################
 # This function creates a local file that will later be used to compute the Hamiltonian.
 #
+# .. _hamiltonian:
+#
 # Building the Hamiltonian
 # ------------------------
 # In the second quantization formalism, the electronic wave function of the molecule
@@ -269,6 +271,9 @@ print("Hamiltonian of the water molecule")
 print(H)
 
 ##############################################################################
+# In this case, since we have truncated the basis of molecular orbitals, the resulting
+# observable is an approximation of the Hamiltonian build in the section :ref:`hamiltonian`.
+#
 # You have completed the tutorial! Now, select your favorite molecule and build its electronic
 # Hamiltonian.
 #
