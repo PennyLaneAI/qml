@@ -69,7 +69,8 @@ coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5
 
 ##############################################################################
 # The :func:`~.pennylane_qchem.qchem.read_structure` function can also be used to read the
-# molecular geometry from a external file.
+# molecular geometry from an external file.
+
 
 from pennylane import qchem
 
@@ -159,10 +160,11 @@ print("Qubit Hamiltonian of the water molecule")
 print(qubit_hamiltonian)
 
 ##############################################################################
-# Quite often it is convenient to use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# It is often convenient to use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function which encapsulates all the steps explained above. It simplifies the process of building
 # the electronic Hamiltonian to a single line of code. We just need to input the
-# symbols and the nuclear coordinates of the molecule as it is shown below:
+# symbols and the nuclear coordinates of the molecule, as shown below:
+
 
 H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of qubits: {:}".format(qubits))
