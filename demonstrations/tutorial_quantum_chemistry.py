@@ -83,7 +83,8 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # Solving the Hartree-Fock equations
 # ----------------------------------
 # The molecule's electronic Hamiltonian is commonly represented using the
-# second-quantization [#fetterbook]_ formalism, which we will explore in more detail in the
+# `second-quantization <https://en.wikipedia.org/wiki/Second_quantization>`_formalism,
+# which we will explore in more detail in the
 # next section. To that aim, a basis of **single-particle** states needs to be chosen.
 # In quantum chemistry these states are the
 # `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_
@@ -106,7 +107,7 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 hf_file = qchem.meanfield(symbols, coordinates)
 
 ##############################################################################
-# This function creates a local file that will later be used to compute the Hamiltonian. 
+# This function creates a local file that will later be used to compute the Hamiltonian.
 #
 # Building the Hamiltonian
 # ------------------------
@@ -157,7 +158,7 @@ print("Qubit Hamiltonian of the water molecule")
 print(qubit_hamiltonian)
 
 ##############################################################################
-# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` encapsulates 
+# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` encapsulates
 # all the steps explained above which simplifies the process of building the
 # electronic Hamiltonian to a single line of code. We just need to input the
 # symbols and the nuclear coordinates of the molecule as it is shown
@@ -216,10 +217,9 @@ basis_set = "sto-3g"
 ##############################################################################
 # PennyLane also allows us to define an *active space* to perform quantum
 # simulations with a reduced number of qubits.
-
 #
 # Accounting for electronic correlations in the molecule requires us to
-# go beyond the Hartree-Fock approximation [#kohanoff2006]. In the exact limit,
+# go beyond the Hartree-Fock approximation. In the exact limit,
 # the electronic wave function is expanded as a linear combination
 # of all possible Slater determinants obtained by exciting the electrons
 # from the occupied to the unoccupied Hartree-Fock orbitals. This approach,
@@ -262,11 +262,9 @@ print("List of core orbitals: {:}".format(core))
 print("List of active orbitals: {:}".format(active))
 print("Number of qubits: {:}".format(2 * len(active)))
 
-
 ##############################################################################
 # Finally, we use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function to
 # build the resulting Hamiltonian of the water molecule:
-
 
 H, qubits = qchem.molecular_hamiltonian(
     symbols,
@@ -280,7 +278,6 @@ H, qubits = qchem.molecular_hamiltonian(
 
 print("Number of qubits required to perform quantum simulations: {:}".format(qubits))
 print("Hamiltonian of the water molecule")
-
 print(H)
 
 ##############################################################################
@@ -293,15 +290,6 @@ print(H)
 # References
 # ----------
 #
-# .. [#jensenbook]
-#
-#     Frank Jensen. "Introduction to Computational Chemistry". (John Wiley & Sons, 2016).
-#
-# .. [#kohanoff2006]
-#
-#     Jorge Kohanoff. "Electronic structure calculations for solids and molecules: theory and
-#     computational methods". (Cambridge University Press, 2006).
-#
 # .. [#yudong2019]
 #
 #     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
@@ -313,11 +301,6 @@ print(H)
 #     M. Born, J.R. Oppenheimer, "Quantum Theory of the Molecules".
 #     `Annalen der Physik 84, 457-484 (1927)
 #     <https://onlinelibrary.wiley.com/doi/abs/10.1002/andp.19273892002>`_
-#
-# .. [#fetterbook]
-#
-#     A. Fetter, J. D. Walecka, "Quantum theory of many-particle systems".
-#     Courier Corporation, 2012.
 #
 # .. [#pople1977]
 #
