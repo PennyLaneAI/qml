@@ -272,7 +272,8 @@ print(H)
 
 ##############################################################################
 # In this case, since we have truncated the basis of molecular orbitals, the resulting
-# observable is an approximation of the Hamiltonian build in the section :ref:`hamiltonian`.
+# observable is an approximation of the previously generated Hamiltonian in the
+# section :ref:`hamiltonian`.
 #
 # You have completed the tutorial! Now, select your favorite molecule and build its electronic
 # Hamiltonian.
