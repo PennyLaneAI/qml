@@ -10,7 +10,7 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe Variational Quantum Eigensolver
 
-*Author: PennyLane dev team. Posted: . Last updated: .*
+*Author: PennyLane dev team. Posted: . Last updated: 17 June 2021*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
@@ -31,14 +31,11 @@ examples, we use tools implemented in PennyLane to study diatomic bond dissociat
 involving the exchange of hydrogen atoms.
 
 
-
-##############################################################################
-
 Potential Energy Surfaces 
 ---------------------------------------------------------------------
 
 `Potential energy surfaces (PES) <https://en.wikipedia.org/wiki/Potential_energy_surface>`_
-describe the equilibrium energy of molecules for different positions of
+describe the energy of molecules for different positions of
 its atoms. The concept originates from the fact that the electrons are much lighter than protons
 and neutrons, so they will adjust instantaneously to the new positions of the nuclei. This leads
 to a separation of the nuclear and electronic parts of the Schrödinger equation, meaning we only need
@@ -67,12 +64,11 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
 
     Illustration of a potential energy surface for a diatomic molecule.
 
-##########################################################
-
 Bond dissociation in a Hydrogen molecule 
 ----------------------------------------
 
-We begin with the simplest of molecules: :math:`H_2`. 
+We now construct a potential energy surface and use it to compute equilibrium bond lengths and
+the bond dissociation energy. We begin with the simplest of molecules: :math:`H_2`.
 The formation or breaking of the :math:`H-H` bond is also the most
 elementary of all reactions:
 
@@ -327,7 +323,8 @@ plt.show()
 
 ##############################################################################
 # The two minima in the curve represent the energy of the reactants and products. The
-# transition state is represented by the local maximum.
+# transition state is represented by the local maximum. These are the configurations illustrated in
+# the animation above.
 
 ##############################################################################
 # Activation energy barriers and reaction rates
@@ -406,8 +403,8 @@ print(f"Ratio of reaction rates is {ratio:.0f}")
 # potential energy surfaces, allowing us to identify reactants and products as minima of the
 # energy, and transition states as local maxima. These results can then be used to calculate
 # activation energies and reaction rates. The goal (and challenge!) for quantum computing is to
-# improve both hardware and algorithms to reach the regime where existing methods fall short of
-# providing accurate simulations in sufficiently short time scales. If successful, this quest will
+# improve both hardware and algorithms to reach the regime where providing accurate simulations
+# becomes intractable for existing methods. If successful, this quest will
 # allow us to understand the properties of quantum systems in ways that have so far been out of
 # reach.
 #
