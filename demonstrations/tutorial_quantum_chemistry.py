@@ -145,7 +145,7 @@ hf_file = qchem.meanfield(symbols, coordinates)
 # into a linear combination of the tensor product of Pauli operators
 #
 # .. math::
-#     \sum_j C_j \otimes_i \sigma_i^{(j)},
+#     H = \sum_j C_j \otimes_i \sigma_i^{(j)},
 #
 # where :math:`C_j` is a scalar coefficient and :math:`\sigma_i` represents an
 # element of the Pauli group :math:`\{ I, X, Y, Z \}`.
