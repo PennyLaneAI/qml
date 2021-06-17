@@ -37,7 +37,8 @@ following dependencies:
       pip install pennylane-forest
 
 * `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_, in order
-  to access the QPU as a PennyLane device. This can be installed via pip:
+  to access the Rigetti QPU as a PennyLane device. This can be installed via
+  pip:
 
   .. code-block:: bash
 
