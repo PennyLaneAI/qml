@@ -83,16 +83,15 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # Solving the Hartree-Fock equations
 # ----------------------------------
 # The molecule's electronic Hamiltonian is commonly represented using the
-# `second-quantization <https://en.wikipedia.org/wiki/Second_quantization>`_formalism,
+# `second-quantization <https://en.wikipedia.org/wiki/Second_quantization>`_ formalism,
 # which we will explore in more detail in the
 # next section. To that aim, a basis of **single-particle** states needs to be chosen.
 # In quantum chemistry these states are the
 # `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_
 # which describe the wave function of a single electron in the molecule.
 #
-# Molecular orbitals are typically represented as a `linear combination of **atomic orbitals**
-# <https://en.wikipedia.org/wiki/Linear_combination_of_atomic_orbitals>`_. The expansion coefficients
-# in the atomic basis are calculated using the
+# Molecular orbitals are typically represented as a linear combination of **atomic orbitals**.
+# The expansion coefficients in the atomic basis are calculated using the
 # `Hartree-Fock (HF) method <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_.
 # In the HF approximation, each electron in the molecule is treated as an **independent**
 # particle that moves under the influence of the Coulomb potential due to the nuclei, and a mean
@@ -158,11 +157,10 @@ print("Qubit Hamiltonian of the water molecule")
 print(qubit_hamiltonian)
 
 ##############################################################################
-# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` encapsulates
-# all the steps explained above which simplifies the process of building the
-# electronic Hamiltonian to a single line of code. We just need to input the
-# symbols and the nuclear coordinates of the molecule as it is shown
-# below:
+# Quite often it is convenient to use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# function which encapsulates all the steps explained above. It simplifies the process of building
+# the electronic Hamiltonian to a single line of code. We just need to input the
+# symbols and the nuclear coordinates of the molecule as it is shown below:
 
 H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of qubits: {:}".format(qubits))
@@ -177,7 +175,7 @@ print(H)
 #
 # Advanced features
 # -----------------
-# The :func:`~.pennylane_qchem.qchem.meanfield` allows us to define additional keyword
+# The :func:`~.pennylane_qchem.qchem.meanfield` function allows us to define additional keyword
 # arguments to solve the Hartree-Fock equations of more complicated systems.
 # The net charge of the molecule may be specified to simulate positively or negatively
 # charged molecules. For a neutral system we choose
@@ -185,12 +183,14 @@ print(H)
 charge = 0
 
 ##############################################################################
-# We can also specify the `spin multiplicity. For the water molecule, which contains ten
-# electrons, the `Slater determinant <https://en.wikipedia.org/wiki/Slater_determinant>`_
-# resulting from occupying the five lowest-energy orbitals with two *paired* electrons per
-# orbital has spin **multiplicity** one. Alternatively, if we define an occupation where
-# the first four orbitals are doubly occupied and the next two are singly occupied by *unpaired*
-# electrons, the HF state will have **multiplicity** three.
+# We can also specify the
+# `spin multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_. For the
+# water molecule, which contains ten electrons, the `Slater determinant
+# <https://en.wikipedia.org/wiki/Slater_determinant>`_ resulting from occupying the five
+# lowest-energy orbitals with two *paired* electrons per orbital has spin multiplicity one.
+# Alternatively, if we define an occupation where the first four orbitals are doubly occupied
+# and the next two are singly occupied by *unpaired* electrons, the HF state will have
+# multiplicity three.
 #
 # |
 #
@@ -215,27 +215,16 @@ multiplicity = 1
 basis_set = "sto-3g"
 
 ##############################################################################
-# PennyLane also allows us to define an *active space* to perform quantum
-# simulations with a reduced number of qubits.
-#
-# Accounting for electronic correlations in the molecule requires us to
-# go beyond the Hartree-Fock approximation. In the exact limit,
-# the electronic wave function is expanded as a linear combination
-# of all possible Slater determinants obtained by exciting the electrons
-# from the occupied to the unoccupied Hartree-Fock orbitals. This approach,
-# referred to as the full configuration interaction method, becomes quickly
-# intractable as the number of configurations scales combinatorially with the
-# number of electrons and orbitals.
-#
-# This expansion can be truncated by classifying the molecular orbitals as
-# core, active, and external orbitals:
+# PennyLane also allows us to define an active space [#truhlar2018]_ to perform quantum
+# simulations with a reduced number of qubits. This is done by classifying the molecular
+# orbitals as core, active, and external orbitals:
 #
 # * Core orbitals are always occupied by two electrons.
 # * Active orbitals can be occupied by zero, one, or two electrons.
 # * The external orbitals are never occupied.
 #
-# Within this approximation, a certain number of *active electrons* are allowed to
-# populate a finite set of *active orbitals*.
+# Within this approximation, a certain number of **active electrons** are allowed to
+# populate a finite set of **active orbitals**.
 #
 # .. figure:: ../demonstrations/quantum_chemistry/sketch_active_space.png
 #     :width: 40%
@@ -317,3 +306,10 @@ print(H)
 #     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
 #     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`_
+#
+# .. [#truhlar2018]
+#
+#     J.J. Bao, S.S. Dong, L. Gagliardi, D.G. Truhlar. "Automatic Selection of an
+#     Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT".
+#     `Journal of Chemical Theory and Computation 14, 2017 (2018). 
+#     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032>`_
