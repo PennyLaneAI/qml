@@ -395,9 +395,9 @@ def fidelity_xeb(samples, probs):
 #
 # .. note::
 #
-#     Every time the previously defined circuit is run without any intermediate
-#     measurements, using the ``qsim`` device, a warning will be printed. More
-#     information about this warning can be found in the `Measurement sampling
+#     Every time the previously defined circuit is run using the ``qsim`` device, ``qsimcirq``
+#     will print a warning message because the circuit has no intermediate measurements.
+#     More information about this warning can be found in the `Measurement sampling
 #     section of the qsimcirq guide <https://quantumai.google/qsim/tutorials/qsimcirq#measurement_sampling>`__.
 #
 
