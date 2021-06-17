@@ -7,14 +7,14 @@ Modelling chemical reactions on a quantum computer
     :property="og:image": https://pennylane.ai/qml/_images/reaction.png
 
 .. related::
-   tutorial_quantum_chemistry Quantum Chemistry with PennyLane
+   tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe Variational Quantum Eigensolver
 
 *Author: PennyLane dev team. Posted: . Last updated: .*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
-the likelihood that the reaction occurs. The energy landscapes formed by these barriers are the
+the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
 
 .. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
@@ -49,7 +49,7 @@ to solve the electronic equation:
 From this perspective arises the concept of the electronic energy of a molecule, :math:`E(R)`,
 as a function of nuclear coordinates :math:`R`. The energy :math:`E(R)` is the expectation value
 of the molecular Hamiltonian, :math:`E(R)=\langle \Psi_0|H(R)|\Psi_0\rangle`, taken
-over the ground state :math:`|\Psi_0(R)\rangle`. The potential energy surface is
+with respect to the ground state :math:`|\Psi_0(R)\rangle`. The potential energy surface is
 precisely this function :math:`E(R)`, which connects energies to different geometries of the
 molecule. It gives us a visual tool to understand chemical reactions by associating
 stable molecules (reactants and products) with local minima, transition states with peaks,
@@ -73,8 +73,8 @@ Bond dissociation in a Hydrogen molecule
 ----------------------------------------
 
 We begin with the simplest of molecules: :math:`H_2`. 
-The formation or breaking of the :math:`H-H` bond is also the simplest
-of all reactions:
+The formation or breaking of the :math:`H-H` bond is also the most
+elementary of all reactions:
 
 .. math:: H_2 \rightarrow H + H.
 
@@ -195,7 +195,7 @@ plt.show()
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
 # obtain the bond dissociation energy, which is the difference in the energy of the system when
 # the atoms are far apart and the energy at equilibrium. At sufficiently large separations,
-# the atoms no longer form a molecule, which is therefore dissociated.
+# the atoms no longer form a molecule, and the system is called "dissociated". 
 #
 # Let's use our results to compute the equilibrium bond length and the bond dissociation energy:
 
@@ -349,7 +349,7 @@ e_eq2 = min([x for x in energies if x != e_eq1])
 idx1 = energies.index(e_eq1)
 idx2 = energies.index(e_eq2)
 
-# Transition state is local maximum between reactant and products
+# Transition state is the local maximum between reactant and products
 idx_min = min(idx1, idx2)
 idx_max = max(idx1, idx2)
 
@@ -369,10 +369,8 @@ print(f"The activation energy is {activation_energy:.6f} Hartrees")
 # .. math:: k = Ae^{-{E_{a}}/k_BT},
 #
 # where :math:`k_B` is the Boltzmann constant, :math:`T` is the temperature, and :math:`A` is a
-# pre-exponential factor that can be determined empirically for each reaction. The rate at which
-# a chemical reaction occurs therefore depends exponentially on the activation energy,
-# which can be determined by constructing the potential energy surface. Crucially, reaction rates
-# depend exponentially on the results of this calculation. It is a good reminder of the importance
+# pre-exponential factor that can be determined empirically for each reaction. Crucially, the rate at which
+# a chemical reaction occurs depends exponentially on the activation energy computed from the PES --- this is a good reminder of the importance
 # of performing highly-accurate calculations in quantum chemistry!
 #
 # For example, let's calculate the ratio of reaction rates when the temperature is doubled. We have
