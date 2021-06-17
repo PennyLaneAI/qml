@@ -187,9 +187,8 @@ print(cost(phi, theta, 400))
 #
 # Note that to run the following script, you will need access to Rigetti's QPU.
 # To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
-# on using Amazon Braket, see our tutorial on [Computing gradients in parallel
-# with Amazon
-# Braket](https://pennylane.ai/qml/demos/braket-parallel-gradients.html).
+# on using Amazon Braket, see our tutorial on
+# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_
 
 import pennylane as qml
 import torch
