@@ -248,7 +248,6 @@ basis_set = "sto-3g"
 # For the water molecule in a minimal basis set we have a total of ten electrons
 # and seven molecular orbitals. In this example we define an symmetric active space with
 # four electrons and four active orbitals using
-
 # the :func:`~.pennylane_qchem.qchem.active_space` function:
 
 electrons = 10
