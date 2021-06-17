@@ -34,6 +34,13 @@ following dependencies:
 
       pip install pennylane-forest
 
+* `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_, in order
+  to access the QPU as a PennyLane device. This can be installed via pip:
+
+  .. code-block:: bash
+
+      pip install amazon-braket-pennylane-plugin
+
 * `PyTorch <https://pytorch.org/get-started/locally/>`_, in order to access the PyTorch
   QNode interface. Follow the link for instructions on the best way to install PyTorch
   for your system.
@@ -63,7 +70,8 @@ dev = qml.device("forest.qvm", device="2q", noisy=True)
 
 ##############################################################################
 # Here, we create a noisy two-qubit system, simulated via the QVM. If we wish, we could
-# also build the model on a physical device, such as the ``Aspen-1`` QPU.
+# also build the model on a physical device, such as the ``Aspen-1`` QPU which
+# can be accessed through Amazon Braket (more details on that will follow).
 
 
 ##############################################################################
