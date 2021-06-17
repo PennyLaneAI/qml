@@ -393,6 +393,13 @@ def fidelity_xeb(samples, probs):
 # their correponding bitstrings, since we need the samples to be in the
 # computational basis.
 #
+# .. note::
+#
+#     Every time the previously defined circuit is run without any intermediate
+#     measurements, using the ``qsim`` device, a warning will be printed. More
+#     information about this warning can be found in the `Measurement sampling
+#     section of the qsimcirq guide <https://quantumai.google/qsim/tutorials/qsimcirq#measurement_sampling>`__.
+#
 
 seed = np.random.randint(0, 42424242)
 probs = circuit(seed=seed, return_probs=True)
