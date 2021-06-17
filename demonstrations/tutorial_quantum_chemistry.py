@@ -167,14 +167,15 @@ print(qubit_hamiltonian)
 # the electronic Hamiltonian to a single line of code. We just need to input the
 # symbols and the nuclear coordinates of the molecule, as shown below:
 
-
 H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of qubits: {:}".format(qubits))
 print("Qubit Hamiltonian")
 print(H)
 
 ##############################################################################
-# Additionally, if you have built your electronic Hamiltonian independently using
+# Additionally, the hamiltonian ``H`` is already a PennyLane observable.
+#
+# If you have built your electronic Hamiltonian independently using
 # `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools, it can
 # be readily converted to a PennyLane observable using the
 # :func:`~.pennylane_qchem.qchem.convert_observable` function.
