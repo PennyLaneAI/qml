@@ -4,7 +4,8 @@ Building molecular Hamiltonians
 
 
 .. meta::
-    :property="og:description": Learn how to build the electronic Hamiltonian of molecules.
+    :property="og:description": Learn how to build electronic Hamiltonians of molecules.
+
     :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
 
 .. related::
@@ -30,7 +31,8 @@ where :math:`H_e` and :math:`E` denote the electronic Hamiltonian and the
 total energy of the molecule, respectively. When solving the latter equation,
 the nuclei of the molecule can be treated as point particles whose coordinates
 are fixed [#BornOpp1927]_. In this approximation, both the total energy and
-the electronic Hamiltonian depends parametrically on the nuclear coordinates.
+the electronic Hamiltonian depend parametrically on the nuclear coordinates.
+
 
 In this tutorial, you will learn how to use PennyLane to build a
 representation of the electronic Hamiltonian :math:`H_e` that can be used to perform
@@ -143,7 +145,7 @@ hf_file = qchem.meanfield(symbols, coordinates)
 # into a linear combination of the tensor product of Pauli operators
 #
 # .. math::
-#     \sum_j C_j \prod_i \sigma_i^{(j)},
+#     \sum_j C_j \otimes_i \sigma_i^{(j)},
 #
 # where :math:`C_j` is a scalar coefficient and :math:`\sigma_i` represents an
 # element of the Pauli group :math:`\{ I, X, Y, Z \}`.
@@ -151,7 +153,7 @@ hf_file = qchem.meanfield(symbols, coordinates)
 # This fermionic-to-qubit transformation is done using
 # the :func:`~.pennylane_qchem.qchem.decompose` function, which
 # uses `OpenFermion <https://github.com/quantumlib/OpenFermion>`_
-# functionalities to compute the electron integrals using the previously generated
+# to compute the electron integrals using the previously generated
 # results of the mean field calculation. Then, it builds the fermionic Hamiltonian and
 # maps it to the qubit representation.
 
@@ -209,7 +211,7 @@ charge = 0
 multiplicity = 1
 
 ##############################################################################
-# As it was mentioned above, molecular orbitals are represented as linear combination
+# As mentioned above, molecular orbitals are represented as a linear combination
 # of atomic orbitals which are typically modeled as `Gaussian-type orbitals
 # <https://en.wikipedia.org/wiki/Gaussian_orbital>`_. We can specify different types
 # of `Gaussian atomic basis <https://www.basissetexchange.org/>`_. In this example we
@@ -279,7 +281,6 @@ print(H)
 #
 # You have completed the tutorial! Now, select your favorite molecule and build its electronic
 # Hamiltonian.
-#
 # To see how simple it is to implement the VQE algorithm to compute the ground-state energy of
 # your molecule using PennyLane, take a look at the tutorial :doc:`tutorial_vqe`.
 #
