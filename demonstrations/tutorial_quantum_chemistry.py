@@ -215,7 +215,8 @@ basis_set = "sto-3g"
 
 ##############################################################################
 # PennyLane also allows us to define an *active space* to perform quantum
-# simulations with a reduced number of qubits. But, what is an active space?
+# simulations with a reduced number of qubits.
+
 #
 # Accounting for electronic correlations in the molecule requires us to
 # go beyond the Hartree-Fock approximation [#kohanoff2006]. In the exact limit,
