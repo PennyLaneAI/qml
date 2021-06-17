@@ -180,8 +180,8 @@ print(circuit(params))
 
 import timeit
 
-reps = 3
-num = 10
+reps = 5
+num = 20
 times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
 forward_time = min(times) / num
 
@@ -276,8 +276,8 @@ print(circuit(params))
 
 import timeit
 
-reps = 3
-num = 10
+reps = 5
+num = 20
 times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
 forward_time = min(times) / num
 print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
