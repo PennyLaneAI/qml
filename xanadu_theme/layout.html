@@ -214,8 +214,9 @@
                         $galleryItems.each(function(index, item) {
                             var $item = $(item);
                             var tooltipText = $item.attr("tooltip").toLowerCase();
+                            var categoryText = $item.attr("data-category").toLowerCase();
                             var descriptionText = $item.find("span.doc").text().toLowerCase();
-                            var itemText = tooltipText + ' ' + descriptionText;
+                            var itemText = categoryText + ' ' + tooltipText + ' ' + descriptionText;
 
                             if (!itemText.includes(searchQuery)) {
                                 $item.css("display", "none");
