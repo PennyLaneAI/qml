@@ -67,39 +67,26 @@ So: sit down, relax, and enjoy your optimization!
 VQEs give rise to trigonometric cost functions
 ----------------------------------------------
 
-In a few words, what we have in mind when we talk about VQEs is a quantum circuit.
-Typically, this :math:`n`-qubit quantum circuit is initialized in the :math:`|0\rangle^{\otimes n}`
-state (in an abuse of notation, we name it simply :math:`|0\rangle` in the rest of the demo).
-The body of the circuit is populated with a *variational form* :math:`V(\boldsymbol{\theta})`
--- a fixed architecture of quantum gates parametrized by an array of real-numbers
-:math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
+When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which is typically initialized in the base state :math:`|0\rangle`.
+The body of the circuit is populated with a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
 After the variational form, the circuit ends with the measurement of an observable
 :math:`\mathcal{M}`, which is also fixed at the start and encodes the problem
 we try to solve.
 
-Our goal now is to minimize the cost function
+The idea in VQE is to fix a variational form such that the expected value of the measurement relates to the energy of an interesting Hamiltonian:
 
 .. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle,
 
-or, in short
+then, what we want is to find the lowest possible energy the system can attain.
+This corresponds to running an optimization program to find the :mat:`\boldsymbol{\theta}` that minimizes the cost -- in this case the energy.
 
-.. math:: E(\boldsymbol{\theta}) = \operatorname{tr}[\rho(\boldsymbol{\theta})\mathcal{M}],
 
-where :math:`\rho(\boldsymbol{\theta})=V(\boldsymbol{\theta})|0\rangle\!\langle0|V^\dagger(\boldsymbol{\theta})`
-is the density matrix of the quantum state after applying the variational form to :math:`|0\rangle`.
-
-It can be seen that if the gates in the variational form which take the parameters :math:`\boldsymbol{\theta}`
-are restricted to be Pauli rotations, then the cost function is a sum of multilinear
-trigonometric terms in each of the parameters.
+If the gates in the variational form are restricted to be Pauli rotations, then the cost function is a sum of *multilinear trigonometric terms* in each of the parameters.
 That's a scary sequence of words!
-What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the
-parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination
-of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
+What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
 
-That is, for some (real) coefficients :math:`a_i`, :math:`b_i`, and :math:`c_i` depending on all parameters
-but :math:`\theta_i` (which we could write for instance as
-:math:`a_i = a_i(\theta_1, \ldots, \hat{\theta}_i, \ldots, \theta_m)`, but we don't for the sake of notation ease)
-we can write the cost function as
+That is, there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` functions of all parameters but :math:`\theta_i` (:math:`a_i = a_i(\theta_1, \ldots, \hat{\theta}_i, \ldots, \theta_m)`)
+such that the cost can be written as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
@@ -131,8 +118,7 @@ parameters = np.array([3.3, .5])
 # Evaluate the circuit for these parameters.
 print(f"At the parameters {np.round(parameters, 4)} the energy is {circuit(parameters)}")
 ###############################################################################
-# It is this simple in PennyLane to obtain the energy of the given state
-# for a specific Hamiltonian!
+# It is this simple in PennyLane to obtain the energy of the given state for a specific Hamiltonian!
 # Let us now look at how the energy value depends on each of the two parameters alone:
 
 # Create 1D sweeps through parameter space with the other parameter fixed.
@@ -174,43 +160,72 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 
 ###############################################################################
 # Of course this is an overly simplified example, but the key take-home message so far is:
-# *if the variational parameters feed into Pauli rotations, the energy landscape is a
-# multilinear combination of trigonometric functions*.
+# *if the variational parameters feed into Pauli rotations, the energy landscape is a multilinear combination of trigonometric functions*.
 # What is a good thing about trigonometric functions?
 # That's right!
 # We have studied them since high-school and know how their graphs look!
+
+# .. note::
 #
-# In our overly simplified example we had to query a quantum computer for every point on the surface.
-# Querying the quantum computer in this example means calling the ``circuit`` function.
-# Could we have spared some computational resources?
-# Well, since we know the ultimate shape the landscape is supposed to have, we should
-# in principle be able to construct it only from fixed number of points: the same way
-# two points already uniquely specify a line, or three non-aligned points specify a circle,
-# the number of points that completely determine the cost landscape should only depend on the
-# number of parameters.
+#     In order to plot the surface for this example we had to query a quantum computer (call the ``circuit`` function) for every point inside the range.
+#     In real life, querying a quantum computer is very expensive, so could we have spared some computational resources?
+#     Well, since we know the ultimate shape the landscape is supposed to have, we should in principle be able to construct it from a fixed number of points:
+#     the same way two points specify a straight line, or three non-aligned points specify a circle.
+#     In particular, the number of points that completely determine the cost landscape should in depend mainly on the total number of parameters.
 #
 # Computing a classical model
 # ---------------------------
 #
-# As we just learned, one could aim at reconstructing the cost function over the entire parameter space.
-# In practice, that would be *very* expensive in number of required quantum circuit evaluations:
-# If we wanted to reconstruct the entire landscape, we would need to estimate :math:`3^m` independent parameters, which would require the same amount of cost function evaluations.
-# In short: the cure would be roughly as bad as the sickness.
+# Knowing how the cost looks when restricted to only one parameter, nothing keeps us in theory from constructing a perfect classical model.
+# We know what the cost looks like, the only thing we need to do is write down a general multilinear trigonometric polynomial and figure out what value its coefficients should take.
+# Simple, right?
+# Well, for :math:`m` parameters, there would be :math:`3^m` coefficients to estimate, which gives us the everdreaded exponential scaling.
+# So yes, although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
 # What can we do, then?
-# Well, the authors of QAD claim that building a model that is only accurate in a region close to a given reference point is already good enough for optimization!
+# The authors of QAD propose building an imperfect model.
 # This makes *all* the difference.
-# If we are satisfied with such an approximation which in return is cheaper to construct (polynomial in :math:`m` instead of exponential), we can borrow a page from Taylor's book.
-# In the paper, the authors state that a *trigonometric expansion* up to second order is already a sound model candidate. Let's recap such expansions.
+# In the paper they use a classical model that is accurate only in a region close to a given reference point, and that delivers good optimization!
+#
+# Before jumping in on the specifics of the classical model they use, we are already in a good position to review the general strategy.
+# Using an approximate classical model has one feature and one bug.
+# The feature: it is cheap to construct.
+# The bug: well, it's only approximate, so we cannot rely on it fully.
+# And one extra feature (you didn't see that coming, did you?): if the reference point about which we build the classical model is a true local minimum, then it will be a local minimum of the classical model too.
+# And that is the key!
+# What we do is: given a reference point, use the classical model to find a point that's closer to the true minimum, and then use that point as reference for a new model!
+# This is what is called Quantum Analytic Descent (QAD), and its pseudo-algorithm would look something like:
+#
+# #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
+# #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
+# #. Find the global minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
+# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to step 2.
+# #. After convergence or a fixed number of models built, output the last global minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
+#
+# Now we delve into the amazing world of function series expansions!
 #
 # Function expansions
 # ^^^^^^^^^^^^^^^^^^^
 #
-# In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of some basis functions, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
-# The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
-# In Calculus I we learnt a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`.
-# A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\}`, which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}`.
-# For higher-dimensional variables we have to take products of the basis functions of each coordinate, i.e. of monomials or trigonometric monomials respectively.
-# While this leads to a large number of terms (remember the full function has exponentially many, which we will find in the series eventually), the series will not get too much out of hand since we only want to expand up to second order.
+# What do we usually do when we want to approximate something in a region near to a reference point?
+# Correct!
+# We use a Taylor expansion!
+# But what if we told you there is a better option for the case at hand?
+# In the QAD paper, the authors state that a *trigonometric expansion* up to second order is already a sound model candidate. Let's recap such expansions.
+#
+# .. note::
+#     In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of some basis functions, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
+#     The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
+#     In Calculus I we learnt a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`:
+#
+#     ..math:: f_\text{Taylor}(x) = \sum c_n(x-x_0)^n.
+#
+#     A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\}`, which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}`:
+#
+#     ..math:: f_\text{Trig}(x) = \sum a_n \cos(n(x-x_0))+ b_n \sin(n(x-x_0)).
+#
+#     For higher-dimensional variables we have to take products of the basis functions of each coordinate, i.e. of monomials or trigonometric monomials respectively.
+#     This does lead to an exponentially increasing number of terms, but if we chop the series soon enough it will not get too much out of hand.
+#     The proposal here is to only go up to second order terms, so we are safe.
 #
 # Adapting the function basis
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -228,7 +243,7 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # is the *only* term contributing to this term.
 # For the :math:`0^{\text{th}}` order, however, not only the :math:`0^{\text{th}}` monomial :math:`1`, but also :math:`\cos(x)` contribute.
 # In order to separate the orders again, we therefore recombine these two basis functions into two new ones:
-# :math:`\frac{\cos(x)+1)}{2}` contributes to the :math:`0^{\text{th}}` order but :math:`\cos(x)-1` does not.
+# :math:`\frac{\cos(x)+1}{2}` contributes to the :math:`0^{\text{th}}` order but :math:`\cos(x)-1` does not.
 # You might raise the concern that both contribute to the :math:`2^{\text{nd}}` order but for the grouping we just care about the
 # *leading* order.
 # We rewrite the new basis functions as
@@ -324,8 +339,8 @@ print(f"Coefficients at params:",
       sep="\n")
 
 ###############################################################################
-# Composing the expansion
-# ^^^^^^^^^^^^^^^^^^^^^^^
+# The classical model (finally!)
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Bringing all of the above ingredients together, we have the following gorgeous trigonometric expansion up to second order:
 #
@@ -406,13 +421,15 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # #. We have :math:`m` many :math:`E^{(C)}`'s, also one for each component.
 # #. We have :math:`(m-1)m/2` many :math:`E^{(D)}`'s, because we only need to check every pair once.
 #
-# So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters.
-# In practice, not every parameter needs the same amount of circuit evaluations, though!
-# Without going into detail on the parameter-shift rule for the gradient and Hessian, we remark that we need :math:`1\times 1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1`.
-# This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
+# So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters, which is indeed polynomially many.
 #
-# Now this should be enough of theory, let's *take a look* at the model that results from our trigonometric expansion. We'll use the coefficients
-# and the ``model_cost`` function from above.
+# ..note::
+#     In practice, not every parameter needs the same amount of circuit evaluations, though!
+#     Without going into detail on the parameter-shift rule for the gradient and Hessian, we remark that we need :math:`1\times 1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1`.
+#     This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
+#
+# Now this should be enough of theory, let's *take a look* at the model that results from our trigonometric expansion.
+# We'll use the coefficients and the ``model_cost`` function from above.
 
 from mpl_toolkits.mplot3d import Axes3D
 from itertools import chain
