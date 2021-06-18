@@ -195,6 +195,33 @@
                 $(".tags input").on("change", function() {
                   toggle_filters();
                 });
+
+                $("#tutorialDemoSearchInput").on("keyup", function(e) {
+                    e.preventDefault();
+                    var searchQuery = e.target.value.toLowerCase();
+
+                    if (!searchQuery.length) {
+                        $('.gallery-grid .sphx-glr-thumbcontainer').each(function(index, item) { $(item).css("display", "block"); });
+                        return;
+                    }
+
+                    if (searchQuery.length >= 3) {
+                        $(".gallery-grid .sphx-glr-thumbcontainer").each(function(index, item) {
+                            var $item = $(item);
+                            var tooltipText = $item.attr("tooltip").toLowerCase();
+                            var descriptionText = $item.find("span.doc").text().toLowerCase();
+                            var itemText = tooltipText + ' ' + descriptionText;
+
+                            if (!itemText.includes(searchQuery)) {
+                                $item.css("display", "none");
+                            }
+
+                            if (itemText.includes(searchQuery) && $item.css("display") === "none") {
+                                $item.css("display", "block");
+                            }
+                        });
+                    }
+                });
               </script>
             {% elif pagename == "videos" %}
             {% else %}
