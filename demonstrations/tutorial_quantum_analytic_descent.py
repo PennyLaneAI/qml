@@ -78,7 +78,7 @@ The idea in VQE is to fix a variational form such that the expected value of the
 .. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle,
 
 then, what we want is to find the lowest possible energy the system can attain.
-This corresponds to running an optimization program to find the :mat:`\boldsymbol{\theta}` that minimizes the cost -- in this case the energy.
+This corresponds to running an optimization program to find the :math:`\boldsymbol{\theta}` that minimizes the cost -- in this case the energy.
 
 
 If the gates in the variational form are restricted to be Pauli rotations, then the cost function is a sum of *multilinear trigonometric terms* in each of the parameters.
@@ -164,7 +164,7 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # What is a good thing about trigonometric functions?
 # That's right!
 # We have studied them since high-school and know how their graphs look!
-
+#
 # .. note::
 #
 #     In order to plot the surface for this example we had to query a quantum computer (call the ``circuit`` function) for every point inside the range.
@@ -217,11 +217,11 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 #     The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
 #     In Calculus I we learnt a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`:
 #
-#     ..math:: f_\text{Taylor}(x) = \sum c_n(x-x_0)^n.
+#     .. math:: f_\text{Taylor}(x) = \sum c_n(x-x_0)^n.
 #
 #     A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\}`, which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}`:
 #
-#     ..math:: f_\text{Trig}(x) = \sum a_n \cos(n(x-x_0))+ b_n \sin(n(x-x_0)).
+#     .. math:: f_\text{Trig}(x) = \sum a_n \cos(n(x-x_0))+ b_n \sin(n(x-x_0)).
 #
 #     For higher-dimensional variables we have to take products of the basis functions of each coordinate, i.e. of monomials or trigonometric monomials respectively.
 #     This does lead to an exponentially increasing number of terms, but if we chop the series soon enough it will not get too much out of hand.
