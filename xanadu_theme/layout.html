@@ -183,6 +183,7 @@
                   $(".filters label:not([for="+  val  +"])").removeClass("active");
 
                   if (val != "all"){
+                    $("#tutorialDemoSearchInput").val('');
                     $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").css("display", "none")
                     $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").css("display", "block")
                   } else {
@@ -199,14 +200,18 @@
                 $("#tutorialDemoSearchInput").on("keyup", function(e) {
                     e.preventDefault();
                     var searchQuery = e.target.value.toLowerCase();
+                    var $galleryItems = $(".gallery-grid .sphx-glr-thumbcontainer");
+                    var filterVal = $(".tags input[type='radio']:checked").val();
 
-                    if (!searchQuery.length) {
-                        $('.gallery-grid .sphx-glr-thumbcontainer').each(function(index, item) { $(item).css("display", "block"); });
-                        return;
+                    if (filterVal !== "all") {
+                        $(".filters label[for='all']").addClass("active");
+                        $(".filters label:not([for='all'])").removeClass("active");
                     }
 
-                    if (searchQuery.length >= 3) {
-                        $(".gallery-grid .sphx-glr-thumbcontainer").each(function(index, item) {
+                    if (!searchQuery.length) {
+                        $galleryItems.each(function(index, item) { $(item).css("display", "block"); });
+                    } else {
+                        $galleryItems.each(function(index, item) {
                             var $item = $(item);
                             var tooltipText = $item.attr("tooltip").toLowerCase();
                             var descriptionText = $item.find("span.doc").text().toLowerCase();
