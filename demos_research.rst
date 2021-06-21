@@ -244,12 +244,6 @@ such as benchmarking and characterizing quantum processors.
    :tags: quantumcomputing
 
 .. customgalleryitem::
-   :tooltip: Explore the amazing applications of unitary t-designs.
-   :figure: demonstrations/unitary_designs/fano.png
-   :description: :doc:`demos/tutorial_unitary_designs`
-   :tags: quantumcomputing
-
-.. customgalleryitem::
     :tooltip: Approximate quantum states with classical shadows.
     :figure: demonstrations/classical_shadows/atom_shadow.png
     :description: :doc:`demos/tutorial_classical_shadows`
@@ -292,5 +286,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
-    demos/tutorial_unitary_designs
     demos/tutorial_classical_shadows
