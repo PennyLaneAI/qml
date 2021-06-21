@@ -203,6 +203,7 @@
 
                     if (val !== "all") {
                         if (searchQuery.length) {
+                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
                             $(".gallery-grid .sphx-glr-thumbcontainer").each(function(index, item) {
                                 var $item = $(item);
                                 if (!$item.hasClass('d-none') && !$item.attr('data-category').includes(val)) {
