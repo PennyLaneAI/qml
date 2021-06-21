@@ -276,7 +276,7 @@ print(circuit(params))
 
 import timeit
 
-reps = 5
+reps = 10
 num = 20
 times = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
 forward_time = min(times) / num
