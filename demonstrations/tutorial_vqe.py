@@ -44,13 +44,13 @@ array with the nuclear coordinates in
 """
 import numpy as np
 
-symbols = ['H', 'H']
+symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 ##############################################################################
 # The molecular structure can also be imported from a external file using
 # the :func:`~.pennylane_qchem.qchem.read_structure` function.
-# 
+#
 # Now we can build the electronic Hamiltonian of the hydrogen molecule using the
 # :func:`molecular_hamiltonian` function. The outputs of the function are the qubit
 # Hamiltonian and the number of qubits needed to represent it:
@@ -58,8 +58,8 @@ coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 import pennylane as qml
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
-print('Number of qubits = ', qubits)
-print('Hamiltonian is ', H)
+print("Number of qubits = ", qubits)
+print("Hamiltonian is ", H)
 
 ##############################################################################
 # In this example, we use a `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`
@@ -80,7 +80,7 @@ print('Hamiltonian is ', H)
 # ------------------------------
 # We begin by defining the device, in this case PennyLane’s standard qubit simulator:
 
-dev = qml.device('default.qubit', wires=qubits)
+dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we need to define the quantum circuit that prepares the trial state to be
@@ -91,12 +91,12 @@ dev = qml.device('default.qubit', wires=qubits)
 #
 # .. math::
 #     \vert \Psi(\theta) \rangle = cos(\theta/2)|1100\rangle -\sin(\theta/2)|0011\rangle),
-# 
+#
 # where :math:`\theta` is the variational parameters. The first term :math:`|1100\rangle`
 # represents the `Hartree-Fock (HF) state <>`_ where the two electrons in the molecule
 # occupy the lowest-energy orbitals. The second term :math:`|0011\rangle` encodes a double
 # excitation of the HF state where the particles are excited from qubits 0, 1 to 2, 3.
-# 
+#
 # The quantum circuit to prepare the trial state :math:`\vert \Psi(\theta) \rangle` is
 # shown in the figure below.
 #
@@ -115,14 +115,14 @@ dev = qml.device('default.qubit', wires=qubits)
 # Implementing the circuit above is straightforward. First, we use :func:`hf_state` function
 # to generate the vector representing the Hartree-Fock state.
 
-electrons = 2 
+electrons = 2
 hf = qml.qchem.hf_state(electrons, qubits)
 print(hf)
 
 ##############################################################################
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operation is applied
-# to create a superposition of the Hartree-Fock and the doubly-excited states. 
+# to create a superposition of the Hartree-Fock and the doubly-excited states.
 
 def circuit(param, wires):
     qml.BasisState(hf, wires=wires)
@@ -161,10 +161,10 @@ theta = 0.0
 # -6}`.
 
 # store the values of the cost function
-energy = []
+energy = [cost_fn(theta)]
 
 # store the values of the circuit parameter
-angle = []
+angle = [theta]
 
 max_iterations = 100
 conv_tol = 1e-06
@@ -172,11 +172,8 @@ conv_tol = 1e-06
 for n in range(max_iterations):
     theta, prev_energy = opt.step_and_cost(cost_fn, theta)
 
-    angle.append(theta)
     energy.append(cost_fn(theta))
-
-    # energy = cost_fn(params)
-    # conv = np.abs(energy - prev_energy)
+    angle.append(theta)
 
     conv = np.abs(energy[-1] - prev_energy)
 
@@ -191,12 +188,8 @@ print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
 print(f"Optimal value of the circuit parameter = {angle[-1]:.4f}")
 
 ##############################################################################
-# Success! 🎉🎉🎉 The ground-state energy of the hydrogen molecule has been estimated with chemical
-# accuracy (< 1 kcal/mol) with respect to the exact value of -1.136189454088 Hartree (Ha) obtained
-# from a full configuration-interaction (FCI) calculation. This is because, for the optimized
-# values of the single-qubit rotation angles, the state prepared by the VQE ansatz is precisely
-# the FCI ground-state of the :math:`H_2` molecule :math:`|H_2\rangle_{gs} = 0.99 |1100\rangle - 0.10
-# |0011\rangle`.
+# Next, we plot the values of the ground state energy of the molecule
+# and the circuit parameters :math:`\theta` as a function of the optimization step.
 
 import matplotlib.pyplot as plt
 
@@ -207,20 +200,20 @@ fig.set_figwidth(12)
 # Add energy plot on column 1
 E_fci = -1.136189454088
 ax1 = fig.add_subplot(121)
-ax1.plot(range(n+2), energy, 'go-', ls='dashed')
-ax1.plot(range(n+2), np.full(n+2, E_fci), color='red')
+ax1.plot(range(n + 2), energy, "go-", ls="dashed")
+ax1.plot(range(n + 2), np.full(n + 2, E_fci), color="red")
 ax1.set_xlabel("Optimization step", fontsize=13)
 ax1.set_ylabel("Energy (Hartree)", fontsize=13)
-ax1.text(0.5, -1.1176, r'$E_{HF}$', fontsize=15)
-ax1.text(0, -1.1357, r'$E_{FCI}$', fontsize=15)
+ax1.text(0.5, -1.1176, r"$E_{HF}$", fontsize=15)
+ax1.text(0, -1.1357, r"$E_{FCI}$", fontsize=15)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 # Add angle plot on column 2
 ax2 = fig.add_subplot(122)
-ax2.plot(range(n+2), angle, 'go-', ls='dashed')
+ax2.plot(range(n + 2), angle, "go-", ls="dashed")
 ax2.set_xlabel("Optimization step", fontsize=13)
-ax2.set_ylabel('$\\theta$', fontsize=13)
+ax2.set_ylabel("$\\theta$", fontsize=13)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
@@ -228,7 +221,23 @@ plt.subplots_adjust(wspace=0.3)
 plt.show()
 
 ##############################################################################
-# What other molecules would you like to study using PennyLane?
+# The VQE algorithm converges after thirteen iterations. The optimized value of the
+# circuit parameter :math:`\theta^* = 0.2089` defines the state
+#
+# .. math::
+#     `\vert \Psi(\theta^*) \rangle = 0.994553 \vert 1100 \rangle
+#                                   - 0.104236 \vert 0011 \rangle`,
+#
+# which is precisely the ground state of the :math:`\mathrm{H}_2` molecule in a
+# minimal basis set.
+#
+# We have used the VQE algorithm to correct the Hartree-Fock
+# energy of the hydrogen molecule by including the effects of the
+# `electronic correlations <<https://en.wikipedia.org/wiki/Electronic_correlation>`_.
+# This was done using a simple circuit to account for the double excitation
+# term :math:`\vert 0011 \rangle` in the trial state. The final value of the
+# VQE energy can be used to estimate the *electronic correlation energy*
+# :math:`E_\mathrm{corr} = E_\mathrm{VQE} - E_\mathrm{HF} = -0.01883 Ha`.
 #
 # .. _vqe_references:
 #
