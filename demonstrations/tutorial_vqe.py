@@ -37,102 +37,68 @@ the hydrogen molecule. Let's get started! ⚛️
 Building the electronic Hamiltonian
 -----------------------------------
 
-The first step is to import the required libraries and packages:
+The first step is to specify the molecule we want to simulate. This can be done
+by providing a list with the atomic symbols and a one-dimensional
+array with the nuclear coordinates in
+`atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
+import numpy as np
+
+symbols = ['H', 'H']
+coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
+
+##############################################################################
+# The molecular structure can also be imported from a external file using
+# the :func:`~.pennylane_qchem.qchem.read_structure` function.
+# 
+# Now we can build the electronic Hamiltonian of the hydrogen molecule using the
+# :func:`molecular_hamiltonian` function. The outputs of the function are the qubit
+# Hamiltonian and the number of qubits needed to represent it:
 
 import pennylane as qml
-from pennylane import qchem
-from pennylane import numpy as np
 
-##############################################################################
-# The second step is to specify the molecule whose properties we aim to calculate.
-# This is done by providing three pieces of information: the geometry and charge of the molecule,
-# and the spin multiplicity of the electronic configuration.
-#
-# The geometry of a molecule is given by the three-dimensional coordinates and symbols of all
-# its atomic species. There are several databases such as `the NIST Chemistry
-# WebBook <https://webbook.nist.gov/chemistry/name-ser/>`_, `ChemSpider <http://www.chemspider.com/>`_
-# and `SMART-SNS <http://smart.sns.it/molecules/>`_ that provide
-# geometrical data for a large number of molecules. Here, we make use of a locally saved file in
-# ``.xyz`` format that contains the geometry of the hydrogen molecule, and specify its name for
-# later use:
-
-geometry = 'h2.xyz'
-
-##############################################################################
-# Alternatively, you can download the file here: :download:`h2.xyz </demonstrations/h2.xyz>`.
-#
-# The charge determines the number of electrons that have been added or removed compared to the
-# neutral molecule. In this example, as is the case in many quantum chemistry simulations,
-# we will consider a neutral molecule:
-
-charge = 0
-
-##############################################################################
-# It is also important to define how the electrons occupy the molecular orbitals to be optimized
-# within the `Hartree-Fock approximation <https://en.wikipedia.org/wiki/Hartree-Fock_method>`__.
-# This is captured by the `multiplicity <https://en.wikipedia.org/wiki/Multiplicity_(chemistry)>`_
-# parameter, which is related to the number of unpaired electrons in the Hartree-Fock state. For
-# the neutral hydrogen molecule, the multiplicity is one:
-
-multiplicity = 1
-
-##############################################################################
-# Finally, we need to specify the `basis set <https://en.wikipedia.org/wiki/Basis_set_(
-# chemistry)>`_ used to approximate atomic orbitals. This is typically achieved by using a linear
-# combination of Gaussian functions. In this example, we will use the minimal basis STO-3g where a
-# set of 3 Gaussian functions are contracted to represent an atomic Slater-type orbital (STO):
-
-basis_set = 'sto-3g'
-
-##############################################################################
-# At this stage, to compute the molecule's Hamiltonian in the Pauli basis, several
-# calculations need to be performed. With PennyLane, these can all be done in a
-# single line by calling the function :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
-# The charge, multiplicity, and basis set can also be specified as keyword arguments. Finally,
-# the number of active electrons and active orbitals may be indicated, as well as the
-# fermionic-to-qubit mapping, which can be either Jordan-Wigner (``jordan_wigner``) or Bravyi-Kitaev
-# (``bravyi_kitaev``). The atomic symbols and their nuclear coordinates can be read directly
-# from the geometry file. The outputs of the function are the qubit Hamiltonian of the molecule
-# and the number of qubits needed to represent it:
-
-symbols, coordinates = qchem.read_structure(geometry)
-
-h, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    charge=charge,
-    mult=multiplicity,
-    basis=basis_set,
-    active_electrons=2,
-    active_orbitals=2,
-    mapping='jordan_wigner'
-)
-
+H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 print('Number of qubits = ', qubits)
-print('Hamiltonian is ', h)
+print('Hamiltonian is ', H)
 
 ##############################################################################
+# In this example, we use a `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`
+# to represent the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`.
+# For the :math:`\mathrm{H}_2` molecule, we have a total of four spin orbitals which requires
+# four qubits to perform the quantum simulations. Furthermore, we use the Jordan-Wigner
+# transformation [#seeley2012]_ to perform the fermionic-to-qubit mapping of the
+# electronic Hamiltonian.
+#
+# For more details on how to use the :func:`molecular_hamiltonian`
+# function to build the Hamiltonian of more complicated systems, see the
+# tutorial :doc:`tutorial_quantum_chemistry`.
+#
 # That's it! From here on, we can use PennyLane as usual, employing its entire stack of
 # algorithms and optimizers.
 #
 # Implementing the VQE algorithm
 # ------------------------------
-#
-# PennyLane contains the :class:`~.ExpvalCost` class, specifically
-# built to implement the VQE algorithm. We begin by defining the device, in this case a simple
-# qubit simulator:
+# We begin by defining the device, in this case PennyLane’s standard qubit simulator:
 
 dev = qml.device('default.qubit', wires=qubits)
 
 ##############################################################################
-# In VQE, the goal is to train a quantum circuit to prepare the ground state of the input
-# Hamiltonian. This requires a clever choice of circuit, which should be complex enough to
-# prepare the ground state, but also sufficiently easy to optimize. In this example, we employ a
-# variational circuit that is capable of preparing the normalized states of the form
-# :math:`\alpha|1100\rangle + \beta|0011\rangle` which encode the ground state wave function of
-# the hydrogen molecule described with a minimal basis set. The circuit consists of single-qubit
-# rotations on all wires, followed by three entangling CNOT gates, as shown in the figure below:
+# Next, we need to define the quantum circuit that prepares the trial state to be
+# optimized by the VQE algorithm. Here, we use the qubit states :math:`\vert 0 \rangle`,
+# :math:`\vert 1 \rangle` to encode the occupation number of the molecular spin-orbitals.
+# For the :math:`\mathrm{H}_2` molecule in a minimal basis set, the *ansatz* for the
+# ground state is given by the entangled state,
+#
+# .. math::
+#     \vert \Psi(\theta) \rangle = cos(\theta/2)|1100\rangle -\sin(\theta/2)|0011\rangle),
+# 
+# where :math:`\theta` is the variational parameters. The first term :math:`|1100\rangle`
+# represents the `Hartree-Fock (HF) state <>`_ where the two electrons in the molecule
+# occupy the lowest-energy orbitals. The second term :math:`|0011\rangle` encodes a double
+# excitation of the HF state where the particles are excited from qubits 0, 1 to 2, 3.
+# 
+# The quantum circuit to prepare the trial state :math:`\vert \Psi(\theta) \rangle` is
+# shown in the figure below.
 #
 # |
 #
@@ -142,74 +108,87 @@ dev = qml.device('default.qubit', wires=qubits)
 #
 # |
 #
+# The double-excitation gate :math:`G^{(2)}` is implemented in PennyLane as a Givens
+# rotations that act on the subspace of four qubits. For more details on the excitation
+# operations available in PennyLane see the tutorial :doc:`tutorial_givens_rotations`.
+#
+# Implementing the circuit above is straightforward. First, we use :func:`hf_state` function
+# to generate the vector representing the Hartree-Fock state.
+
+electrons = 2 
+hf = qml.qchem.hf_state(electrons, qubits)
+print(hf)
 
 ##############################################################################
-# In the circuit, we apply single-qubit rotations, followed by CNOT gates:
+# The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
+# the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operation is applied
+# to create a superposition of the Hartree-Fock and the doubly-excited states. 
 
-def circuit(params, wires):
-    qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=wires)
-    for i in wires:
-        qml.Rot(*params[i], wires=i)
-    qml.CNOT(wires=[2, 3])
-    qml.CNOT(wires=[2, 0])
-    qml.CNOT(wires=[3, 1])
+def circuit(param, wires):
+    qml.BasisState(hf, wires=wires)
+    qml.DoubleExcitation(param, wires=[0, 1, 2, 3])
 
 ##############################################################################
-# .. note::
-#
-#     The qubit register has been initialized to :math:`|1100\rangle` which encodes the
-#     Hartree-Fock state of the hydrogen molecule described with a `minimal basis
-#     <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`__.
-#
-# The cost function for optimizing the circuit can be created using the :class:`~.ExpvalCost`
-# class, which is tailored for VQE optimization. It requires specifying the
+# The next step is to create the cost function which is the expectation value
+# of the molecular Hamiltonian computed in the trial state prepared by the
+# ``circuit`` function. We do this using the :class:`~.ExpvalCost`
+# class tailored for VQE optimization. It requires specifying the
 # circuit, target Hamiltonian, and the device, and returns a cost function that can
 # be evaluated with the circuit parameters:
 
-
-cost_fn = qml.ExpvalCost(circuit, h, dev)
-
+cost_fn = qml.ExpvalCost(circuit, H, dev)
 
 ##############################################################################
-# Wrapping up, we fix an optimizer and randomly initialize circuit parameters. For reliable
-# results, we fix the seed of the random number generator, since in practice it may be necessary
-# to re-initialize the circuit several times before convergence occurs.
+# Now we can proceed to minimize the cost function to find the ground state of
+# the :math:`\mathrm{H}_2` molecule.
+
+# First, we need to define the classical optimizer. PennyLane offers different
+# built-in optimizers including the quantum natural gradient
+# method which can speed up VQE simulations. For example, see the tutorial
+# :tutorial:`tutorial_vqe_qng`. Here we use a basic gradient-descent optimizer.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
-np.random.seed(0)
-params = np.random.normal(0, np.pi, (qubits, 3))
-
-print(params)
 
 ##############################################################################
-# We carry out the optimization over a maximum of 200 steps, aiming to reach a convergence
-# tolerance (difference in cost function for subsequent optimization steps) of :math:`\sim 10^{
+# Next, we initialize the circuit parameter :math:`\theta` to zero so we start
+# from the Hartree-Fock state.
+
+theta = 0.0
+
+##############################################################################
+# We carry out the optimization over a maximum of 100 steps aiming to reach a
+# convergence tolerance for the value of the cost function of :math:`\sim 10^{
 # -6}`.
 
-max_iterations = 200
+# store the values of the cost function
+energy = []
+
+# store the values of the circuit parameter
+angle = []
+
+max_iterations = 100
 conv_tol = 1e-06
 
-
 for n in range(max_iterations):
-    params, prev_energy = opt.step_and_cost(cost_fn, params)
-    energy = cost_fn(params)
-    conv = np.abs(energy - prev_energy)
+    theta, prev_energy = opt.step_and_cost(cost_fn, theta)
 
-    if n % 20 == 0:
-        print('Iteration = {:},  Energy = {:.8f} Ha'.format(n, energy))
+    angle.append(theta)
+    energy.append(cost_fn(theta))
+
+    # energy = cost_fn(params)
+    # conv = np.abs(energy - prev_energy)
+
+    conv = np.abs(energy[-1] - prev_energy)
+
+    if n % 2 == 0:
+        print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
 
     if conv <= conv_tol:
         break
 
 print()
-print('Final convergence parameter = {:.8f} Ha'.format(conv))
-print('Final value of the ground-state energy = {:.8f} Ha'.format(energy))
-print('Accuracy with respect to the FCI energy: {:.8f} Ha ({:.8f} kcal/mol)'.format(
-    np.abs(energy - (-1.136189454088)), np.abs(energy - (-1.136189454088))*627.503
-    )
-)
-print()
-print('Final circuit parameters = \n', params)
+print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
+print(f"Optimal value of the circuit parameter = {angle[-1]:.4f}")
 
 ##############################################################################
 # Success! 🎉🎉🎉 The ground-state energy of the hydrogen molecule has been estimated with chemical
@@ -218,7 +197,37 @@ print('Final circuit parameters = \n', params)
 # values of the single-qubit rotation angles, the state prepared by the VQE ansatz is precisely
 # the FCI ground-state of the :math:`H_2` molecule :math:`|H_2\rangle_{gs} = 0.99 |1100\rangle - 0.10
 # |0011\rangle`.
-#
+
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+fig.set_figheight(5)
+fig.set_figwidth(12)
+
+# Add energy plot on column 1
+E_fci = -1.136189454088
+ax1 = fig.add_subplot(121)
+ax1.plot(range(n+2), energy, 'go-', ls='dashed')
+ax1.plot(range(n+2), np.full(n+2, E_fci), color='red')
+ax1.set_xlabel("Optimization step", fontsize=13)
+ax1.set_ylabel("Energy (Hartree)", fontsize=13)
+ax1.text(0.5, -1.1176, r'$E_{HF}$', fontsize=15)
+ax1.text(0, -1.1357, r'$E_{FCI}$', fontsize=15)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+
+# Add angle plot on column 2
+ax2 = fig.add_subplot(122)
+ax2.plot(range(n+2), angle, 'go-', ls='dashed')
+ax2.set_xlabel("Optimization step", fontsize=13)
+ax2.set_ylabel('$\\theta$', fontsize=13)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+
+plt.subplots_adjust(wspace=0.3)
+plt.show()
+
+##############################################################################
 # What other molecules would you like to study using PennyLane?
 #
 # .. _vqe_references:
