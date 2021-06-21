@@ -21,7 +21,7 @@ or discover other variational quantum optimization algorithms under `Optimizatio
 
 Quantum machine learning
 ------------------------
-Delve into the plethora of exciting research made by the scientific community in
+Delve into the latest exciting research and cutting-edge ideas in
 quantum machine learning. Implement and run a vast array of different QML
 applications on your own computer—using simulators from Xanadu,
 IBM, Google, Rigetti, and many more—or on real hardware devices.
@@ -111,7 +111,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
-    
+
 .. customgalleryitem::
     :tooltip: Kernel-based training with scikit-learn.
     :figure: demonstrations/kernel_based_training/scaling.png
@@ -243,6 +243,18 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/tutorial_haar_measure`
    :tags: quantumcomputing
 
+.. customgalleryitem::
+   :tooltip: Explore the amazing applications of unitary t-designs.
+   :figure: demonstrations/unitary_designs/fano.png
+   :description: :doc:`demos/tutorial_unitary_designs`
+   :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Approximate quantum states with classical shadows.
+    :figure: demonstrations/classical_shadows/atom_shadow.png
+    :description: :doc:`demos/tutorial_classical_shadows`
+    :tags: quantumcomputing characterization
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -280,3 +292,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
+    demos/tutorial_unitary_designs
+    demos/tutorial_classical_shadows
