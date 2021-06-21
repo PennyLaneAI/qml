@@ -177,7 +177,7 @@
                 }
               </style>
               <script type="text/javascript">
-                function searchGalleryItems($galleryItems) {
+                function searchGalleryItems($galleryItems, searchQuery) {
                     $galleryItems.each(function(index, item) {
                         var $item = $(item);
                         var tooltipText = $item.attr("tooltip").toLowerCase();
@@ -215,7 +215,7 @@
                         }
                     } else {
                         if (searchQuery.length) {
-                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"));
+                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
                         } else {
                             $(".gallery-grid .sphx-glr-thumbcontainer").removeClass('d-none')
                         }
@@ -238,7 +238,7 @@
                             if ($(item).hasClass('d-none')) { $(item).removeClass('d-none'); }
                         });
                     } else {
-                        searchGalleryItems($galleryItems);
+                        searchGalleryItems($galleryItems, searchQuery);
                     }
 
                     toggle_filters();
