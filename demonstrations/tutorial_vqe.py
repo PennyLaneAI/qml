@@ -68,9 +68,7 @@ print("Hamiltonian is ", H)
 ##############################################################################
 # The outputs of the function are the Hamiltonian represented as 
 # a linear combination of Pauli operators and the number of qubits
-# required for the quantum simulations. In this example, we rely on
-# the default values of other keyword arguments that can be specified
-# in the :func:`molecular_hamiltonian` function. We use a
+# required for the quantum simulations. In this example, we use a
 # `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 # to represent the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_.
 # In this approximation, we have a four spin orbitals which defines the
