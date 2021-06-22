@@ -30,12 +30,10 @@ optimization step.
 
 In this tutorial you will learn how to implement the VQE algorithm in a few lines of code.
 Without loss of generality, we apply the algorithm to find the ground state of the hydrogen
-molecule (:math:`\mathrm{H}_2`).
-
-The tutorial proceeds as follows: first, we build the molecular Hamiltonian in a single
-line of code. We continue by defining the quantum circuit to prepare the trial states
-of the molecule. Then, we show how to define the cost function using the
-:class:`~.ExpvalCost` class. Finally, we define the classical optimizer, initialize the
+molecule (:math:`\mathrm{H}_2`). First, we build the molecular Hamiltonian using a minimal
+basis set approximation. We continue by defining the quantum circuit preparing the trial
+state of the molecule. Then, we define the cost function to evaluate the expectation value
+of the qubit Hamiltonian. Finally, we define the classical optimizer, initialize the
 circuit parameters and run the VQE algorithm using a PennyLane simulator.
 
 Let's get started!
@@ -68,7 +66,7 @@ print("Number of qubits = ", qubits)
 print("Hamiltonian is ", H)
 
 ##############################################################################
-# In this example, we use a `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`
+# In this example, we use a `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 # to represent the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`.
 # For the :math:`\mathrm{H}_2` molecule, we have a total of four spin orbitals which requires
 # four qubits to perform the quantum simulations. Furthermore, we use the Jordan-Wigner
@@ -99,9 +97,11 @@ dev = qml.device("default.qubit", wires=qubits)
 #     \vert \Psi(\theta) \rangle = cos(\theta/2)|1100\rangle -\sin(\theta/2)|0011\rangle),
 #
 # where :math:`\theta` is the variational parameters. The first term :math:`|1100\rangle`
-# represents the `Hartree-Fock (HF) state <>`_ where the two electrons in the molecule
-# occupy the lowest-energy orbitals. The second term :math:`|0011\rangle` encodes a double
-# excitation of the HF state where the particles are excited from qubits 0, 1 to 2, 3.
+# represents the `Hartree-Fock (HF) state
+# <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_ where the two electrons in
+# the molecule occupy the lowest-energy orbitals. The second term :math:`|0011\rangle`
+# encodes a double excitation of the HF state where the particles are excited from qubits
+# 0, 1 to 2, 3.
 #
 # The quantum circuit to prepare the trial state :math:`\vert \Psi(\theta) \rangle` is
 # shown in the figure below.
@@ -145,9 +145,9 @@ def circuit(param, wires):
 cost_fn = qml.ExpvalCost(circuit, H, dev)
 
 ##############################################################################
-# Now we can proceed to minimize the cost function to find the ground state of
+# Now we proceed to minimize the cost function to find the ground state of
 # the :math:`\mathrm{H}_2` molecule.
-
+#
 # First, we need to define the classical optimizer. PennyLane offers different
 # built-in optimizers including the quantum natural gradient
 # method which can speed up VQE simulations. For example, see the tutorial
@@ -194,8 +194,8 @@ print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
 print(f"Optimal value of the circuit parameter = {angle[-1]:.4f}")
 
 ##############################################################################
-# Next, we plot the values of the ground state energy of the molecule
-# and the circuit parameters :math:`\theta` as a function of the optimization step.
+# We plot the values of the ground state energy of the molecule
+# and the gate parameter :math:`\theta` as a function of the optimization step.
 
 import matplotlib.pyplot as plt
 
@@ -223,16 +223,16 @@ ax2.set_ylabel('Gate parameter $\\theta$', fontsize=13)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
-plt.subplots_adjust(wspace=0.3)
+plt.subplots_adjust(wspace=0.3, bottom=0.2)
 plt.show()
 
 ##############################################################################
-# The VQE algorithm converges after thirteen iterations. The optimized value of the
-# circuit parameter :math:`\theta^* = 0.2089` defines the state
+# The VQE algorithm converges after thirteen iterations. The optimal value of the
+# circuit parameter :math:`\theta^* = 0.208` defines the state
 #
 # .. math::
-#     `\vert \Psi(\theta^*) \rangle = 0.994553 \vert 1100 \rangle
-#                                   - 0.104236 \vert 0011 \rangle`,
+#     \vert \Psi(\theta^*) \rangle = 0.994 ~ \vert 1100 \rangle
+#                                  - 0.104 ~ \vert 0011 \rangle,
 #
 # which is precisely the ground state of the :math:`\mathrm{H}_2` molecule in a
 # minimal basis set.
@@ -261,3 +261,9 @@ plt.show()
 #     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
 #     `Chem. Rev. 2019, 119, 19, 10856-10915.
 #     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
+#
+# .. [#seeley2012]
+#
+#     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
+#     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
+#     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
