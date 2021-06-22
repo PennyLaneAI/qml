@@ -63,14 +63,12 @@ If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t,` so that
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
 
 then :math:`\langle H_c \rangle` is guaranteed to strictly decrease, as desired!
-Using `techniques from control theory <https://arxiv.org/pdf/1304.3997.pdf>`__, it is possible to rigorously show that
-this choice of :math:`\beta(t)` will eventually drive the system into the ground state of :math:`H_c`. Thus, if we
-evolve some initial state :math:`|\psi_0\rangle` under the time evolution operator :math:`U` corresponding to :math:`H`,
+Thus, if we evolve some initial state :math:`|\psi_0\rangle` under the time evolution operator :math:`U` corresponding to :math:`H`,
 
 .. math:: U(T) = \mathcal{T} \exp \Big[ -i \displaystyle\int_{0}^{T} H(t) \ dt \Big] \approx \mathcal{T} \exp \Big[ -i \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t \Big],
 
 where :math:`\mathcal{T}` is the `time-ordering operator <https://en.wikipedia.org/wiki/Path-ordering#Time_ordering>`__ and :math:`\Delta t` is some small time step,
-we will arrive at the ground state of :math:`H_c,` for a large enough value of :math:`T`. This is exactly the procedure used by FALQON.
+then the energy expectation will strictly decrease, for a large enough value of :math:`T`. This is exactly the procedure used by FALQON to minimize :math:`\langle H_c \rangle`.
 In general, implementing a time evolution unitary in a quantum circuit is
 difficult, so we use a
 `Trotter-Suzuki decomposition <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki%E2%80%93Trotter_expansion>`__
