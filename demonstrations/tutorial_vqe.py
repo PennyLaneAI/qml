@@ -13,26 +13,32 @@ A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
    tutorial_vqt Variational quantum thermalizer
 
-*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+*Author: PennyLane dev team. Last updated: 22 June 2021.*
 
-The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm for
-quantum chemistry using near-term quantum computers. VQE is an application of the `Ritz variational
-principle <https://en.wikipedia.org/wiki/Ritz_method>`_  where a quantum computer is used to
-prepare a wave function ansatz of the molecule and estimate the expectation value of its electronic
-Hamiltonian while a classical optimizer is used to adjust the quantum circuit parameters in order
-to find the molecule's ground state energy.
+The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship algorithm
+for quantum chemistry using near-term quantum computers. VQE is an application of the
+`Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_ where a quantum
+computer is trained to prepare the ground state of a given molecule.
 
-For example, if we use a minimal basis, the ground state wave function of the hydrogen molecule
-:math:`\vert \Psi \rangle = \alpha \vert 1100 \rangle + \beta \vert 0011 \rangle` consists of only
-the Hartree-Fock component and a doubly-excited configuration where the two electrons occupy the
-highest-energy molecular orbitals. If we use a quantum computer to prepare the four-qubit
-entangled state :math:`\vert \Psi \rangle`, the ultimate goal of the VQE algorithm
-is to find the values of :math:`\alpha` and :math:`\beta` that minimize the expectation value of
-the electronic Hamiltonian.
+The inputs to the VQE algorithms are: the qubit Hamiltonian of the molecule, the
+parametrized quantum circuit preparing the electronic state of the molecule, and the
+cost function to evaluate the expectation value of the target Hamiltonian in the
+trial state. The ground state energy is obtained performing an iterative minimization
+of the cost function. The optimization problem is solved by a classical optimizer
+which uses a quantum computer to evaluate the cost function and its gradient at each
+optimization step.
 
-The PennyLane library allows users to implement the full VQE algorithm using only a few
-lines of code. In this tutorial, we guide you through a calculation of the ground-state energy of
-the hydrogen molecule. Let's get started! ⚛️
+In this tutorial you will learn how to implement the VQE algorithm in a few lines of code.
+Without loss of generality, we apply the algorithm to find the ground state of the hydrogen
+molecule (:math:`\mathrm{H}_2`).
+
+The tutorial proceeds as follows: first, we build the molecular Hamiltonian in a single
+line of code. We continue by defining the quantum circuit to prepare the trial states
+of the molecule. Then, we show how to define the cost function using the
+:class:`~.ExpvalCost` class. Finally, we define the classical optimizer, initialize the
+circuit parameters and run the VQE algorithm using a PennyLane simulator.
+
+Let's get started!
 
 Building the electronic Hamiltonian
 -----------------------------------
@@ -213,7 +219,7 @@ plt.yticks(fontsize=12)
 ax2 = fig.add_subplot(122)
 ax2.plot(range(n + 2), angle, "go-", ls="dashed")
 ax2.set_xlabel("Optimization step", fontsize=13)
-ax2.set_ylabel("$\\theta$", fontsize=13)
+ax2.set_ylabel('Gate parameter $\\theta$', fontsize=13)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
@@ -235,7 +241,7 @@ plt.show()
 # energy of the hydrogen molecule by including the effects of the
 # `electronic correlations <<https://en.wikipedia.org/wiki/Electronic_correlation>`_.
 # This was done using a simple circuit to account for the double excitation
-# term :math:`\vert 0011 \rangle` in the trial state. The final value of the
+# :math:`\vert 0011 \rangle` in the trial state. The final value of the
 # VQE energy can be used to estimate the *electronic correlation energy*
 # :math:`E_\mathrm{corr} = E_\mathrm{VQE} - E_\mathrm{HF} = -0.01883 Ha`.
 #
