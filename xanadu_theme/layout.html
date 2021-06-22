@@ -211,14 +211,14 @@
                                 }
                             });
                         } else {
-                            $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").addClass('d-none')
-                            $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").removeClass('d-none')
+                            $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").addClass('d-none');
+                            $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").removeClass('d-none');
                         }
                     } else {
                         if (searchQuery.length) {
                             searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
                         } else {
-                            $(".gallery-grid .sphx-glr-thumbcontainer").removeClass('d-none')
+                            $(".gallery-grid .sphx-glr-thumbcontainer").removeClass('d-none');
                         }
                     }
                 }
