@@ -243,7 +243,6 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/tutorial_haar_measure`
    :tags: quantumcomputing
 
-.. customgalleryitem::
     :tooltip: Approximate quantum states with classical shadows.
     :figure: demonstrations/classical_shadows/atom_shadow.png
     :description: :doc:`demos/tutorial_classical_shadows`
