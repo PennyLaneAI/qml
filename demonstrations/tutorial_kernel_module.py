@@ -464,7 +464,7 @@ print(
 # *maximize* it in the process.
 
 params = init_params
-opt = qml.GradientDescentOptimizer(2.5)
+opt = qml.GradientDescentOptimizer(0.5)
 
 for i in range(500):
     subset = np.random.choice(list(range(len(dataset.X))), 4)
@@ -529,7 +529,7 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 #
 # [1] Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks, 
 # Paul K. Faehrmann, and Johannes Jakob Meyer. “Training Quantum Embedding Kernels on Near-Term 
-# Quantum Computers.” *`arXiv:2105.02276 <https://arxiv.org/abs/2105.02276>`* (2021)
+# Quantum Computers.” `arXiv:2105.02276 <https://arxiv.org/abs/2105.02276>`_ (2021)
 #
 # [2] Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian. “An overview of
 # kernel alignment and its applications.” *Artificial Intelligence Review*
