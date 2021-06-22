@@ -112,10 +112,11 @@ from pennylane import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-np.random.seed(2658)
+np.random.seed(1359)
 
 ##############################################################################
 # And we proceed right away to create the ``DoubleCake`` dataset.
+
 
 class DoubleCake:
     def _make_circular_data(self):
@@ -248,6 +249,7 @@ wires = list(range(5))
 # of the quantum states by first applying the embedding of the first datapoint and then the inverse
 # of the embedding of the second datapoint.
 
+
 @qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
@@ -255,12 +257,15 @@ def kernel_circuit(x1, x2, params):
 
     return qml.probs(wires=wires)
 
+
 ##############################################################################
 # The kernel function itself is now obtained by measuring the probability of observing the all-zero
 # state at the end of the kernel circuit:
 
+
 def kernel(x1, x2, params):
     return kernel_circuit(x1, x2, params)[0]
+
 
 ##############################################################################
 # Before focusing on the kernel values we have to provide values for the
@@ -447,7 +452,10 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 print(
     "The kernel-target-alignment for our dataset with random parameters is {:.3f}".format(
         qml.kernels.target_alignment(
-            dataset.X, dataset.Y, lambda x1, x2: kernel(x1, x2, init_params)
+            dataset.X,
+            dataset.Y,
+            lambda x1, x2: kernel(x1, x2, init_params),
+            assume_normalized_kernel=True,
         )
     )
 )
@@ -464,13 +472,16 @@ print(
 # *maximize* it in the process.
 
 params = init_params
-opt = qml.GradientDescentOptimizer(0.5)
+opt = qml.GradientDescentOptimizer(0.2)
 
 for i in range(500):
     subset = np.random.choice(list(range(len(dataset.X))), 4)
     params = opt.step(
         lambda _params: -qml.kernels.target_alignment(
-            dataset.X[subset], dataset.Y[subset], lambda x1, x2: kernel(x1, x2, _params)
+            dataset.X[subset],
+            dataset.Y[subset],
+            lambda x1, x2: kernel(x1, x2, _params),
+            assume_normalized_kernel=True,
         ),
         params,
     )
@@ -480,7 +491,10 @@ for i in range(500):
             "Step {} - Alignment = {:.3f}".format(
                 i + 1,
                 qml.kernels.target_alignment(
-                    dataset.X, dataset.Y, lambda x1, x2: kernel(x1, x2, params)
+                    dataset.X,
+                    dataset.Y,
+                    lambda x1, x2: kernel(x1, x2, params),
+                    assume_normalized_kernel=True,
                 ),
             )
         )
@@ -527,8 +541,8 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 # References
 # ~~~~~~~~~~
 #
-# [1] Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks, 
-# Paul K. Faehrmann, and Johannes Jakob Meyer. “Training Quantum Embedding Kernels on Near-Term 
+# [1] Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks,
+# Paul K. Faehrmann, and Johannes Jakob Meyer. “Training Quantum Embedding Kernels on Near-Term
 # Quantum Computers.” `arXiv:2105.02276 <https://arxiv.org/abs/2105.02276>`_ (2021)
 #
 # [2] Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian. “An overview of
