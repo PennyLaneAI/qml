@@ -95,7 +95,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # entangled state,
 #
 # .. math::
-#     \vert \Psi(\theta) \rangle = cos(\theta/2)~|1100\rangle -\sin(\theta/2)~|0011\rangle),
+#     \vert \Psi(\theta) \rangle = \cos(\theta/2)~|1100\rangle -\sin(\theta/2)~|0011\rangle,
 #
 # where :math:`\theta` is the variational parameter. The first term :math:`|1100\rangle`
 # represents the `Hartree-Fock (HF) state
@@ -216,8 +216,8 @@ ax1.plot(range(n + 2), energy, "go-", ls="dashed")
 ax1.plot(range(n + 2), np.full(n + 2, E_fci), color="red")
 ax1.set_xlabel("Optimization step", fontsize=13)
 ax1.set_ylabel("Energy (Hartree)", fontsize=13)
-ax1.text(0.5, -1.1176, r"$E_{HF}$", fontsize=15)
-ax1.text(0, -1.1357, r"$E_{FCI}$", fontsize=15)
+ax1.text(0.5, -1.1176, r"$E_\mathrm{HF}$", fontsize=15)
+ax1.text(0, -1.1357, r"$E_\mathrm{FCI}$", fontsize=15)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
@@ -248,7 +248,7 @@ plt.show()
 # This was done using a simple circuit to prepare the correlated state of
 # the molecule by including a double excitation of the Hartree-Fock reference state.
 # The final value of the VQE energy can be used to estimate the *electronic correlation energy*
-# :math:`E_\mathrm{corr} = E_\mathrm{VQE} - E_\mathrm{HF} = -0.01883 Ha` which is tiny
+# :math:`E_\mathrm{corr} = (E_\mathrm{VQE} - E_\mathrm{HF}) = -0.019` Ha which is tiny
 # fraction of the total energy of the molecule.
 #
 # .. _vqe_references:
