@@ -219,7 +219,7 @@ plt.yticks(fontsize=12)
 ax2 = fig.add_subplot(122)
 ax2.plot(range(n + 2), angle, "go-", ls="dashed")
 ax2.set_xlabel("Optimization step", fontsize=13)
-ax2.set_ylabel('Gate parameter $\\theta$', fontsize=13)
+ax2.set_ylabel("Gate parameter $\\theta$", fontsize=13)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
