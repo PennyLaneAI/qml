@@ -100,6 +100,9 @@ Let's look at a toy example to illustrate this structure of the cost function.
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
+import warnings
+
+warnings.filterwarnings("ignore")
 
 np.random.seed(0)
 
@@ -111,10 +114,11 @@ dev = qml.device("default.qubit", wires=2)
 def circuit(parameters):
     qml.RX(parameters[0], wires=0)
     qml.RX(parameters[1], wires=1)
-    return qml.expval(qml.PauliZ(0)@qml.PauliZ(1))
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+
 
 # Fix a parameter position.
-parameters = np.array([3.3, .5])
+parameters = np.array([3.3, 0.5])
 # Evaluate the circuit for these parameters.
 print(f"At the parameters {np.round(parameters, 4)} the energy is {circuit(parameters)}")
 ###############################################################################
@@ -123,40 +127,50 @@ print(f"At the parameters {np.round(parameters, 4)} the energy is {circuit(param
 
 # Create 1D sweeps through parameter space with the other parameter fixed.
 num_samples = 50
-theta_func = np.linspace(0, 2*np.pi, num_samples)
-C1 = [circuit(np.array([theta, .5])) for theta in theta_func]
+theta_func = np.linspace(0, 2 * np.pi, num_samples)
+C1 = [circuit(np.array([theta, 0.5])) for theta in theta_func]
 C2 = [circuit(np.array([3.3, theta])) for theta in theta_func]
 
 # Show the sweeps.
-fig, ax = plt.subplots(1, 1, figsize=(4, 3));
-ax.plot(theta_func, C1, label="$E(\\theta, 0.5)$", color="r");
-ax.plot(theta_func, C2, label="$E(3.3, \\theta)$", color="orange");
-ax.set_xlabel("$\\theta$");
-ax.set_ylabel("$E$");
-ax.legend();
-plt.tight_layout();
+fig, ax = plt.subplots(1, 1, figsize=(4, 3))
+ax.plot(theta_func, C1, label="$E(\\theta, 0.5)$", color="r")
+ax.plot(theta_func, C2, label="$E(3.3, \\theta)$", color="orange")
+ax.set_xlabel("$\\theta$")
+ax.set_ylabel("$E$")
+ax.legend()
+plt.tight_layout()
 
 # Create a 2D grid and evaluate the energy on the grid points.
 # We cut out a part of the landscape to increase clarity.
-X, Y = np.meshgrid(theta_func, theta_func);
+X, Y = np.meshgrid(theta_func, theta_func)
 Z = np.zeros_like(X)
 for i, t1 in enumerate(theta_func):
     for j, t2 in enumerate(theta_func):
         # Cut out the viewer-facing corner
-        if (2*np.pi-t2)**2+t1**2>4:
-            Z[i,j] = circuit([t1, t2])
+        if (2 * np.pi - t2) ** 2 + t1 ** 2 > 4:
+            Z[i, j] = circuit([t1, t2])
         else:
-            X[i,j] = np.nan
-            Y[i,j] = np.nan
-            Z[i,j] = np.nan
+            X[i, j] = Y[i, j] = Z[i, j] = np.nan
 
 # Show the energy landscape on the grid.
-fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(4, 4));
-surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7, color="#209494");
-line1 = ax.plot([parameters[1]]*num_samples, theta_func, C1,
-        label="$E(\\theta_1, \\theta_2^{(0)})$", color="r", zorder=100);
-line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
-        label="$E(\\theta_1^{(0)}, \\theta_2)$", color="orange", zorder=100);
+fig, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"}, figsize=(4, 4))
+surf = ax.plot_surface(X, Y, Z, label="$E(\\theta_1, \\theta_2)$", alpha=0.7, color="#209494")
+line1 = ax.plot(
+    [parameters[1]] * num_samples,
+    theta_func,
+    C1,
+    label="$E(\\theta_1, \\theta_2^{(0)})$",
+    color="r",
+    zorder=100,
+)
+line2 = ax.plot(
+    theta_func,
+    [parameters[0]] * num_samples,
+    C2,
+    label="$E(\\theta_1^{(0)}, \\theta_2)$",
+    color="orange",
+    zorder=100,
+)
 
 ###############################################################################
 # Of course this is an overly simplified example, but the key take-home message so far is:
@@ -173,18 +187,8 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 #     the same way two points specify a straight line, or three non-aligned points specify a circle.
 #     In particular, the number of points that completely determine the cost landscape should in depend mainly on the total number of parameters.
 #
-# Computing a classical model
-# ---------------------------
-#
-# Knowing how the cost looks when restricted to only one parameter, nothing keeps us in theory from constructing a perfect classical model.
-# We know what the cost looks like, the only thing we need to do is write down a general multilinear trigonometric polynomial and figure out what value its coefficients should take.
-# Simple, right?
-# Well, for :math:`m` parameters, there would be :math:`3^m` coefficients to estimate, which gives us the everdreaded exponential scaling.
-# So yes, although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
-# What can we do, then?
-# The authors of QAD propose building an imperfect model.
-# This makes *all* the difference.
-# In the paper they use a classical model that is accurate only in a region close to a given reference point, and that delivers good optimization!
+# The QAD strategy
+# ----------------
 #
 # Before jumping in on the specifics of the classical model they use, we are already in a good position to review the general strategy.
 # Using an approximate classical model has one feature and one bug.
@@ -197,11 +201,24 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 #
 # #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
 # #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
-# #. Find the global minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
-# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to step 2.
-# #. After convergence or a fixed number of models built, output the last global minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
+# #. Find the minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
+# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
+# #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
 #
 # Now we delve into the amazing world of function series expansions!
+#
+# Computing a classical model
+# ---------------------------
+#
+# Knowing how the cost looks when restricted to only one parameter, nothing keeps us in theory from constructing a perfect classical model.
+# We know what the cost looks like, the only thing we need to do is write down a general multilinear trigonometric polynomial and figure out what value its coefficients should take.
+# Simple, right?
+# Well, for :math:`m` parameters, there would be :math:`3^m` coefficients to estimate, which gives us the everdreaded exponential scaling.
+# So yes, although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
+# What can we do, then?
+# The authors of QAD propose building an imperfect model.
+# This makes *all* the difference.
+# In the paper they use a classical model that is accurate only in a region close to a given reference point, and that delivers good optimization!
 #
 # Function expansions
 # ^^^^^^^^^^^^^^^^^^^
@@ -237,28 +254,37 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 # .. math:: \frac{\mathrm{d}^r}{\mathrm{d}x^r}a_s x^s\Bigg|_{x=0} = a_s\delta_{rs},
 #
 # where we used the Kronecker delta :math:`\delta_{rs}` which is zero unless :math:`r=s`.
-# This is not the case for trigonometric monomials! Let's look at those that appear in the cost function: :math:`1`, :math:`\sin(x)` and :math:`\cos(x)`.
-# As :math:`\sin(x)` and its second derivative :math:`-\sin(x)` vanish at the origin but the first derivative :math:`\cos(x)` does not,
-# it contributes to the first order term. Indeed, the first derivative of the other two monomials vanishes at zero and so :math:`\sin(x)`
-# is the *only* term contributing to this term.
-# For the :math:`0^{\text{th}}` order, however, not only the :math:`0^{\text{th}}` monomial :math:`1`, but also :math:`\cos(x)` contribute.
-# In order to separate the orders again, we therefore recombine these two basis functions into two new ones:
-# :math:`\frac{\cos(x)+1}{2}` contributes to the :math:`0^{\text{th}}` order but :math:`\cos(x)-1` does not.
-# You might raise the concern that both contribute to the :math:`2^{\text{nd}}` order but for the grouping we just care about the
-# *leading* order.
-# We rewrite the new basis functions as
+# This is not the case for trigonometric monomial, where all terms -- except for the constant part --
+# have infinitely many non-zero derivatives. We therefore instead care about the *leading* order
+# of the trigonometric polynomials and simply will be careful not to assume the neat separation
+# of orders in :math:`x` that we have for standard monomials. The note below contains the technical
+# details on separating the leading orders up to the second.
 #
-# .. math::
+# .. note::
+#     Let's look at the trigonometric monomials that appear in the cost function: :math:`1`,
+#     :math:`\sin(x)` and :math:`\cos(x)`. As :math:`\sin(x)` and its second derivative :math:`-\sin(x)`
+#     vanish at the origin but the first derivative :math:`\cos(x)` does not,
+#     it contributes to the leading first order term. Indeed, the first derivative of the other
+#     two monomials vanishes at zero and so :math:`\sin(x)` is the *only* term contributing to this order.
+#     For the :math:`0^{\text{th}}` order, however, not only the :math:`0^{\text{th}}` monomial :math:`1`,
+#     but also :math:`\cos(x)` contributes.
+#     In order to separate the leading orders again, we therefore recombine these two basis functions into two new ones:
+#     :math:`\frac{\cos(x)+1}{2}` contributes to the :math:`0^{\text{th}}` order but :math:`\cos(x)-1` does not.
+#     You might raise the concern that both contribute to the :math:`2^{\text{nd}}` order but for the grouping we just care about the
+#     *leading* order.
+#     We rewrite the new basis functions as
 #
-#   \frac{1+\cos(x)}{2} &= \cos\left(\frac{x}{2}\right)^2\\
-#   \sin(x) &= 2\sin\left(\frac{x}{2}\right)\cos\left(\frac{x}{2}\right)\\
-#   1-\cos(x)&= 2\sin\left(\frac{x}{2}\right)^2
+#     .. math::
 #
-# so that we can read off the (leading) order of the monomial from its exponent of :math:`\sin\left(\frac{x}{2}\right)`.
-# The prefactors are chosen such that the leading order coefficient is :math:`1`.
+#       \frac{1+\cos(x)}{2} &= \cos\left(\frac{x}{2}\right)^2\\
+#       \sin(x) &= 2\sin\left(\frac{x}{2}\right)\cos\left(\frac{x}{2}\right)\\
+#       1-\cos(x)&= 2\sin\left(\frac{x}{2}\right)^2
 #
-# Expanding in the adapted basis
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#     so that we can read off the (leading) order of the monomial from its exponent of :math:`\sin\left(\frac{x}{2}\right)`.
+#     In case they seem arbitrary to you, the prefactors here are chosen such that the leading order coefficient is :math:`1`.
+#
+# Expanding in adapted trigonometric polynomials
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Now we can group the terms we will have to deal with in the multi-parameter model by their order.
 #
@@ -278,14 +304,22 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 #   D_{kl}(\boldsymbol{\theta}) &= 4\tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)A(\boldsymbol{\theta})
 #
 # And with that we know what type of terms we should expect to encounter in our local classical model:
-# The classical model we want to construct is a linear combination of the functions :math:`\{A(\boldsymbol{\theta}),B_k(\boldsymbol{\theta}), C_k(\boldsymbol{\theta}), D_{kl}(\boldsymbol{\theta})\}` for every pair of different variable components :math:`(\theta_k,\theta_l)`.
+# The classical model we want to construct is a linear combination of the functions
+# :math:`\{A(\boldsymbol{\theta})`, :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
+# for each parameter and :math:`D_{kl}(\boldsymbol{\theta})\}` for every pair of different variables :math:`(\theta_k,\theta_l)`.
 #
 # Computing the expansion coefficients
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# As each of the terms in the linear combination has its own unique leading order it contributes to, we need to compute the derivatives of the function we are approximating to obtain the coefficients of the linear combination.
-# As the terms we include in the expansion have leading orders :math:`0`, :math:`1` and :math:`2`, these derivatives are :math:`E(\boldsymbol{\theta})`, :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k`, :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l` just as in a (second order) Taylor expansion.
-# However, as the trigonometric polynomials contain multiple orders in :math:`\boldsymbol{\theta}`, and both :math:`A(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})` contribute to the second order, we have to account for this in the coefficient of :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k^2`.
+# As each of the terms in the linear combination has its own unique leading order it contributes to, we need to compute
+# the derivatives of the function we are approximating to obtain the coefficients of the linear combination -- just like
+# we would for a Taylor expansion.
+# As the terms we include in the expansion have leading orders :math:`0`, :math:`1` and :math:`2`, these derivatives are
+# :math:`E(\boldsymbol{\theta})`, :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k`,
+# :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l`.
+# However, as the trigonometric polynomials contain multiple orders in :math:`\boldsymbol{\theta}`, and both
+# :math:`A(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})` contribute to the second order, we have to account
+# for this in the coefficient of :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k^2`.
 # We can name the different coefficients (including the function value itself) accordingly to how we named the terms in the series:
 #
 # .. math::
@@ -295,23 +329,17 @@ line2 = ax.plot(theta_func, [parameters[0]]*num_samples, C2,
 #   E^{(C)}_k &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k^2}\Bigg|_{\boldsymbol{\theta}=0} + \frac{1}{2}E(\boldsymbol{\theta})\Bigg|_{\boldsymbol{\theta}=0}\\
 #   E^{(D)}_{kl} &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k\partial\theta_l}\Bigg|_{\boldsymbol{\theta}=0}
 #
-# In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_
-# and by iterating the rule, we also obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
-# Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
+# .. note::
+#     In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
+#     with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_
+#     and by iterating the rule, we also obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
+#     Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
 
 from pennylane import numpy as np
 
+
 def get_model_data(fun, params):
-    """Computes the coefficients for the classical model, E^(A), E^(B), E^(C), and E^(D).
-    Args:
-        fun (callable): Cost function.
-        params (array[float]): Parameter position theta_0 at which to build the model.
-    Returns:
-        E_A (float): Coefficients E^(A)
-        E_B (array[float]): Coefficients E^(B)
-        E_C (array[float]): Coefficients E^(C)
-        E_D (array[float]): Coefficients E^(D) (upper right triangular entries)
-    """
+    """Computes the coefficients for the classical model, E^(A), E^(B), E^(C), and E^(D)."""
     num_params = len(params)
     E_A = fun(params)
     # E_B contains the gradient.
@@ -325,18 +353,21 @@ def get_model_data(fun, params):
 
     return E_A, E_B, E_C, E_D
 
+
 ###############################################################################
 # Let's test our brand-new function for the circuit from above, at a random parameter position:
 
 parameters = np.random.random(2) * 2 * np.pi
 print(f"Random parameters (params): {parameters}")
 coeffs = get_model_data(circuit, parameters)
-print(f"Coefficients at params:",
-      f" E_A = {coeffs[0]}",
-      f" E_B = {coeffs[1]}",
-      f" E_C = {coeffs[2]}",
-      f" E_D = {coeffs[3]}",
-      sep="\n")
+print(
+    f"Coefficients at params:",
+    f" E_A = {coeffs[0]}",
+    f" E_B = {coeffs[1]}",
+    f" E_C = {coeffs[2]}",
+    f" E_D = {coeffs[3]}",
+    sep="\n",
+)
 
 ###############################################################################
 # The classical model (finally!)
@@ -351,22 +382,13 @@ print(f"Coefficients at params:",
 # On the other hand we have the real-valued coefficients :math:`E^{(A/B/C/D)}` for the previous functions which are nothing but the derivatives in the corresponding input components.
 # Combining them yields the trigonometric expansion, which we implement with another function:
 
+
 def model_cost(params, E_A, E_B, E_C, E_D):
-    """Compute the model cost for relative parameters and given function data.
-    Args:
-        params (array[float]): Relative parameters at which to evaluate the model.
-        E_A (float): Coefficients E^(A) in the model.
-        E_B (array[float]): Coefficients E^(B) in the model.
-        E_C (array[float]): Coefficients E^(C) in the model.
-        E_D (array[float]): Coefficients E^(D) in the model.
-            The lower left triangular part and diagonal must be 0.
-    Returns:
-        cost (float): The model cost at the relative parameters.
-    """
-    A = np.prod(np.cos(0.5 * params)**2)
+    """Compute the model cost for relative parameters and given model data."""
+    A = np.prod(np.cos(0.5 * params) ** 2)
     # For the other terms we only compute the prefactor relative to A
     B_over_A = 2 * np.tan(0.5 * params)
-    C_over_A = B_over_A**2 / 2
+    C_over_A = B_over_A ** 2 / 2
     D_over_A = np.outer(B_over_A, B_over_A)
     all_terms_over_A = [
         E_A,
@@ -378,13 +400,17 @@ def model_cost(params, E_A, E_B, E_C, E_D):
 
     return cost
 
+
 # Compute the circuit at parameters (This value is also stored in E_A=coeffs[0])
 E_original = circuit(parameters)
 # Compute the model at parameters by plugging in relative parameters 0.
 E_model = model_cost(np.zeros_like(parameters), *coeffs)
-print(f"The cost function at parameters:",
-      f"  Model:    {E_model}",
-      f"  Original: {E_original}", sep="\n")
+print(
+    f"The cost function at parameters:",
+    f"  Model:    {E_model}",
+    f"  Original: {E_original}",
+    sep="\n",
+)
 # Check that coeffs[0] indeed is the original energy and that the model is correct at 0.
 print(f"E_A and E_original are the same: {coeffs[0]==E_original}")
 print(f"E_model and E_original are the same: {E_model==E_original}")
@@ -394,7 +420,8 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # position :math:`\boldsymbol{\theta}_0` at which we constructed it (again note how the
 # input parameters of the model are *relative* to the reference point
 # such that :math:`\hat{E}(0)=E(\boldsymbol{\theta}_0)` is satisfied).
-# When we move away from :math:`\boldsymbol{\theta}_0`, the model starts to deviate:
+# When we move away from :math:`\boldsymbol{\theta}_0`, the model starts to deviate,
+# as it is an *approximation* after all:
 
 # Obtain a random shift away from parameters
 shift = 0.1 * np.random.random(2)
@@ -403,27 +430,29 @@ new_parameters = parameters + shift
 # Compute the cost function and the model at the shifted position.
 E_original = circuit(new_parameters)
 E_model = model_cost(shift, *coeffs)
-print(f"The cost function at parameters:",
-      f"  Model:    {E_model}",
-      f"  Original: {E_original}", sep="\n")
+print(
+    f"The cost function at parameters:",
+    f"  Model:    {E_model}",
+    f"  Original: {E_original}",
+    sep="\n",
+)
 print(f"E_model and E_original are the same: {E_model==E_original}")
 
 ###############################################################################
 #
-# Counting parameters and evaluations
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# .. note::
+#     **Counting parameters and evaluations**
 #
-# Now we can also summarize how many parameters our model has.
-# For an :math:`m`-dimensional input variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
+#     Now we can also summarize how many parameters our model has.
+#     For an :math:`m`-dimensional input variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
 #
-# #. We have one :math:`E^{(A)}`.
-# #. We have :math:`m` many :math:`E^{(B)}`'s, one for each component.
-# #. We have :math:`m` many :math:`E^{(C)}`'s, also one for each component.
-# #. We have :math:`(m-1)m/2` many :math:`E^{(D)}`'s, because we only need to check every pair once.
+#     #. We have one :math:`E^{(A)}`.
+#     #. We have :math:`m` many :math:`E^{(B)}`'s, one for each component.
+#     #. We have :math:`m` many :math:`E^{(C)}`'s, also one for each component.
+#     #. We have :math:`(m-1)m/2` many :math:`E^{(D)}`'s, because we only need to check every pair once.
 #
-# So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters, which is indeed polynomially many.
+#     So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters, which is indeed polynomially many.
 #
-# ..note::
 #     In practice, not every parameter needs the same amount of circuit evaluations, though!
 #     Without going into detail on the parameter-shift rule for the gradient and Hessian, we remark that we need :math:`1\times 1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1`.
 #     This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
@@ -435,87 +464,75 @@ from mpl_toolkits.mplot3d import Axes3D
 from itertools import chain
 
 # We actually make the plotting a function because we will reuse it below.
-def plot_cost_and_model(fun, model, parameters, shift_radius=5*np.pi/8, num_points=20):
-    """
-    Args:
-        fun (callable): Original cost function.
-        model (callable): Model cost function.
-        parameters (array[float]): Parameters at which the model was built.
-        shift_radius (float): Maximal shift value for each parameter.
-        num_points (int): Number of points to create grid.
-    """
+def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_points=20):
+    """Plot a function and a model of the function as well as its deviation."""
+
     coords = np.linspace(-shift_radius, shift_radius, num_points)
-    X, Y = np.meshgrid(coords+parameters[0], coords+parameters[1])
+    X, Y = np.meshgrid(coords + params[0], coords + params[1])
     # Compute the original cost function and the model on the grid.
-    Z_original = np.array(
-            [[fun(parameters+np.array([t1, t2])) for t2 in coords] for t1 in coords]
-            )
-    Z_model = np.array(
-            [[model(np.array([t1, t2])) for t2 in coords] for t1 in coords]
-            )
+    Z_original = np.array([[fun(params + np.array([t1, t2])) for t2 in coords] for t1 in coords])
+    Z_model = np.array([[model(np.array([t1, t2])) for t2 in coords] for t1 in coords])
     # Prepare sampled points for plotting.
-    shifts = [-np.pi/2, 0, np.pi/2]
+    shifts = [-np.pi / 2, 0, np.pi / 2]
     samples = chain.from_iterable(
         [
-            [
-                [parameters[0]+s2, parameters[1]+s1, fun(parameters+np.array([s1, s2]))]
-            for s2 in shifts]
-        for s1 in shifts]
+            [[params[0] + s2, params[1] + s1, fun(params + np.array([s1, s2]))] for s2 in shifts]
+            for s1 in shifts
+        ]
     )
     # Display landscapes incl. sampled points and deviation.
     # Transparency parameter for landscapes.
     alpha = 0.6
-    fig, ax = plt.subplots(1, 2, subplot_kw={"projection": "3d"}, figsize=(9, 4));
+    fig, (ax0, ax1, ax2) = plt.subplots(1, 3, subplot_kw={"projection": "3d"}, figsize=(10, 4))
     green = "#209494"
     orange = "#ED7D31"
-    surf = ax[0].plot_surface(X, Y, Z_original, label="Original energy",
-            color=green, alpha=alpha);
-    surf._facecolors2d = surf._facecolor3d
-    surf._edgecolors2d = surf._edgecolor3d
-    surf = ax[0].plot_surface(X, Y, Z_model, label="Model energy", color=orange, alpha=alpha);
-    surf._facecolors2d = surf._facecolor3d
-    surf._edgecolors2d = surf._edgecolor3d
+    red = "xkcd:brick red"
+    surf = ax0.plot_surface(X, Y, Z_original, color=green, alpha=alpha)
+    ax0.set_title("Original energy and samples")
     for sample in samples:
-        ax[0].scatter(*sample, marker="d", color="r");
-        ax[0].plot([sample[0]]*2, [sample[1]]*2, [np.min(Z_original), sample[2]], color="k")
-    surf = ax[1].plot_surface(X, Y, Z_original-Z_model, label="Deviation",
-            color=green, alpha=alpha);
-    surf._facecolors2d = surf._facecolor3d
-    surf._edgecolors2d = surf._edgecolor3d
-    ax[0].legend();
-    ax[1].legend();
+        ax0.plot([sample[0]] * 2, [sample[1]] * 2, [np.min(Z_original), sample[2]], color="k")
+    ax1.plot_surface(X, Y, Z_model, color=orange, alpha=alpha)
+    ax1.set_title("Model energy")
+    ax2.plot_surface(X, Y, Z_original - Z_model, color=red, alpha=alpha)
+    ax2.set_title("Deviation")
+    plt.tight_layout(pad=2, w_pad=2.5)
+
 
 # Define a mapped model that has the model coefficients fixed.
-mapped_model = lambda parameters: model_cost(parameters, *coeffs)
+mapped_model = lambda params: model_cost(params, *coeffs)
 plot_cost_and_model(circuit, mapped_model, parameters)
 
 ###############################################################################
-# Here, in orange we see the true landscape, and in blue the approximate model.
-# The vertical rods with red markers indicate the points at which the cost function
+# In the first two plots, we see the true landscape in green, and the approximate model in orange.
+# The vertical rods indicate the points at which the cost function
 # was evaluated in order to obtain the model coefficients (we skip the additional
 # evaluations for :math:`E^{(C)}`, though, for clarity of the plot).
-#
-# In the second plot, we see the difference between model and true landscape.
+# In the third plot, we see the difference between model and true landscape.
 # Around the reference point this difference is very small and changes very slowly,
 # only growing significantly for large simultaneous perturbations in both
-# parameters. This already hints at the value of the model.
+# parameters. This already hints at the value of the model for local optimization.
 #
 # Quantum Analytic Descent
 # ------------------------
 #
 # The underlying idea we are trying to exploit now for the optimization in VQEs is the following:
-# If we can model the cost around the reference point well enough, we will be able to find a rough estimate of where the global minimum of the landscape is.
-# Granted, our model represents the true landscape less accurately the further we go away from the reference point :math:`\boldsymbol{\theta}_0`, but nonetheless the global minimum *of the model* will bring us much closer to the global minimum *of the true cost* than a random walk.
-# And hereby, the complete strategy:
+# If we can model the cost around the reference point well enough, we will be able to find a rough
+# estimate of where the minimum of the landscape is.
+# Granted, our model represents the true landscape less accurately the further we go away from the
+# reference point :math:`\boldsymbol{\theta}_0`, but nonetheless the minimum *of the model*
+# will bring us much closer to the minimum *of the true cost* than a random walk.
+# And hereby, we recap the complete strategy from above:
 #
 # #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
 # #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
-# #. Find the global minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
-# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to step 2.
-# #. After convergence or a fixed number of models built, output the last global minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
+# #. Find the minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
+# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
+# #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
 #
-# This provides an iterative strategy which will take us to a good enough solution much faster (in number of iterations) than for example regular stochastic gradient descent (SGD).
-# The procedure of Quantum Analytic Descent is also shown in this flowchart:
+# This provides an iterative strategy which will take us to a good enough solution much faster
+# (in number of iterations) than for example regular stochastic gradient descent (SGD).
+# The procedure of Quantum Analytic Descent is also shown in the following flowchart. Note that the minimization
+# of the model in Step 3 is carried out via an inner optimization loop.
 #
 # .. figure:: ../demonstrations/quantum_analytic_descent/flowchart.png
 #    :align: center
@@ -539,12 +556,11 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # Let's try it and apply the full optimization strategy:
 
 import copy
-# Set the number of iterations of steps 2 to 4
+
+# Set the number of iterations of Steps 2 to 4
 N_iter_outer = 3
-# Set the number of iterations for the model optimization in step 3.
+# Set the number of iterations for the model optimization in Step 3.
 N_iter_inner = 50
-# Let's get some fresh random parameters.
-parameters = np.random.random(2) * 2 * np.pi
 # Prepare storage of the coefficients for the model and the parameter positions.
 past_coeffs = []
 past_parameters = []
@@ -557,13 +573,13 @@ for iter_outer in range(N_iter_outer):
     past_coeffs.append(copy.deepcopy(coeffs))
     past_parameters.append(parameters.copy())
     # Map the model to be only depending on the parameters, not the coefficients.
-    mapped_model = lambda par: model_cost(par, *coeffs)
+    mapped_model = lambda params: model_cost(params, *coeffs)
 
     # Let's see at which cost we start off (stored in E_A)
-    if iter_outer==0:
+    if iter_outer == 0:
         print(f"True energy at initial parameters: {np.round(coeffs[0], decimals=4)}\n")
 
-    # Create the optimizer instance for step 3, we here choose ADAM.
+    # Create the optimizer instance for Step 3, we here choose ADAM.
     opt = qml.AdamOptimizer(0.05)
     # Recall that the parameters of the model are relative coordinates.
     # Correspondingly, we initialize at 0, not at parameters.
@@ -572,19 +588,21 @@ for iter_outer in range(N_iter_outer):
     model_log = [mapped_model(relative_parameters)]
     # Some pretty-printing
     print(f"-Iteration {iter_outer+1}-")
-    # Run the optimizer for N_iter_inner epochs - step 3.
+    # Run the optimizer for N_iter_inner epochs - Step 3.
     for iter_inner in range(N_iter_inner):
         # Optimizer step
         relative_parameters = opt.step(mapped_model, relative_parameters)
         # Logging
-        circuit_log.append(circuit(parameters+relative_parameters))
+        circuit_log.append(circuit(parameters + relative_parameters))
         model_log.append(mapped_model(relative_parameters))
-        if (iter_inner+1)%50==0:
+        if (iter_inner + 1) % 50 == 0:
             E_model = mapped_model(relative_parameters)
-            print(f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)}",
-                f" at relative parameters {np.round(relative_parameters, 4)}")
+            print(
+                f"Epoch {iter_inner+1:4d}: Model cost = {np.round(E_model, 4)}",
+                f" at relative parameters {np.round(relative_parameters, 4)}",
+            )
 
-    # Store the relative parameters that minimize the model by adding the shift - step 4.
+    # Store the relative parameters that minimize the model by adding the shift - Step 4.
     parameters += relative_parameters
     # Let's check what the original cost at the updated parameters is.
     E_original = circuit(parameters)
@@ -598,21 +616,21 @@ for iter_outer in range(N_iter_outer):
 # Inspecting the models
 # ^^^^^^^^^^^^^^^^^^^^^
 #
-# Let us take a look at the intermediate models it built:
+# Let us take a look at the intermediate models QAD built:
 
-mapped_model = lambda par: model_cost(par, *past_coeffs[0])
+mapped_model = lambda params: model_cost(params, *past_coeffs[0])
 plot_cost_and_model(circuit, mapped_model, past_parameters[0])
 
 ###############################################################################
-# **Iteration 1:** We see the cost function around our (fresh) starting point and the model similar to the inspection above.
+# **Iteration 1:** We see the cost function around our starting point and the model similar to the inspection above.
 
-mapped_model = lambda par: model_cost(par, *past_coeffs[1])
+mapped_model = lambda params: model_cost(params, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
 
 ###############################################################################
 # **Iteration 2:** Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range.
 
-mapped_model = lambda par: model_cost(par, *past_coeffs[2])
+mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
@@ -627,14 +645,15 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 # At the last epochs within some iterations, the *model cost* goes beyond :math:`-1`.
 # Could we visualize this behavior more clearly, please?
 
-fig, ax = plt.subplots(1, 1, figsize=(6,4))
-ax.plot(range(N_iter_outer*N_iter_inner+1), circuit_log, color="#209494", label="True");
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+ax.plot(range(N_iter_outer * N_iter_inner + 1), circuit_log, color="#209494", label="True")
 for i in range(N_iter_outer):
-    line, = ax.plot(range(i*N_iter_inner,(i+1)*N_iter_inner+1), model_logs[i],
-             ls="--", color="#ED7D31")
-    if i==0:
+    (line,) = ax.plot(
+        range(i * N_iter_inner, (i + 1) * N_iter_inner + 1), model_logs[i], ls="--", color="#ED7D31"
+    )
+    if i == 0:
         line.set_label("Model")
-ax.plot([0, N_iter_outer*N_iter_inner], [-1.0, -1.0], lw=0.6, color="0.6", label="Solution")
+ax.plot([0, N_iter_outer * N_iter_inner], [-1.0, -1.0], lw=0.6, color="0.6", label="Solution")
 ax.set_xlabel("epochs")
 ax.set_ylabel("cost")
 leg = ax.legend()
