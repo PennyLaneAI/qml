@@ -1185,13 +1185,13 @@ div.topic.contents > ul > li {
 
 .admonition.note,
 .admonition.hint {
-  border-left-color: #31708f;
-  background-color: #dae1f0;
+  border-left-color: #19b37b;
+  background-color: #becfc5;
 }
 
 .admonition.note .admonition-title,
 .admonition.hint .admonition-title {
-  color: #31708f;
+  color: #209494;
 }
 
 .admonition-todo {

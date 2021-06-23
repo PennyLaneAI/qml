@@ -458,7 +458,7 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #     This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
 #
 # Now this should be enough of theory, let's *take a look* at the model that results from our trigonometric expansion.
-# We'll use the coefficients and the ``model_cost`` function from above.
+# We'll use the coefficients and the ``model_cost`` function from above and sample a new random parameter position.
 
 from mpl_toolkits.mplot3d import Axes3D
 from itertools import chain
@@ -498,6 +498,8 @@ def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_poin
     plt.tight_layout(pad=2, w_pad=2.5)
 
 
+# Get some fresh random parameters
+parameters = np.random.random(2) * 2 * np.pi
 # Define a mapped model that has the model coefficients fixed.
 mapped_model = lambda params: model_cost(params, *coeffs)
 plot_cost_and_model(circuit, mapped_model, parameters)
@@ -622,21 +624,21 @@ mapped_model = lambda params: model_cost(params, *past_coeffs[0])
 plot_cost_and_model(circuit, mapped_model, past_parameters[0])
 
 ###############################################################################
-# **Iteration 1:** We see the cost function around our starting point and the model similar to the inspection above.
+# **Iteration 1:** We see the cost function and the model around our starting point. This is the same as the plot before.
 
 mapped_model = lambda params: model_cost(params, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
 
 ###############################################################################
-# **Iteration 2:** Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range.
+# **Iteration 2:** Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range -- we're getting closer.
 
 mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
 # **Iteration 3:** Both, the model and the original cost function now show a minimum close to our parameter position, Quantum Analytic Descent converged.
-# Note how the large deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area,
-# in which the deviation plateaus at zero.
+# Note how the larger deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area,
+# in which both, the original energy and the model, form a convex bowl and the deviation plateaus at zero.
 #
 # Optimization behaviour
 # ^^^^^^^^^^^^^^^^^^^^^^
@@ -657,6 +659,7 @@ ax.plot([0, N_iter_outer * N_iter_inner], [-1.0, -1.0], lw=0.6, color="0.6", lab
 ax.set_xlabel("epochs")
 ax.set_ylabel("cost")
 leg = ax.legend()
+plt.show()
 
 ###############################################################################
 # Each of the orange lines corresponds to minimizing the model constructed at a
