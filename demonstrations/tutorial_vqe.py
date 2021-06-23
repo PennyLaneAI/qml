@@ -164,7 +164,7 @@ theta = 0.0
 
 ##############################################################################
 # We carry out the optimization over a maximum of 100 steps aiming to reach a
-# convergence tolerance of :math:`\sim 10^{-6}` for the value of the cost function.
+# convergence tolerance of :math:`10^{-6}` for the value of the cost function.
 
 # store the values of the cost function
 energy = [cost_fn(theta)]
