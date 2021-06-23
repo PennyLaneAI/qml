@@ -659,7 +659,6 @@ ax.plot([0, N_iter_outer * N_iter_inner], [-1.0, -1.0], lw=0.6, color="0.6", lab
 ax.set_xlabel("epochs")
 ax.set_ylabel("cost")
 leg = ax.legend()
-plt.show()
 
 ###############################################################################
 # Each of the orange lines corresponds to minimizing the model constructed at a
