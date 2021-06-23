@@ -18,23 +18,23 @@ A brief overview of VQE
 
 The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship
 algorithm for quantum chemistry using near-term quantum computers. VQE is an application of the
-`Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_ where a quantum
+`Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_, where a quantum
 computer is trained to prepare the ground state of a given molecule.
 
-The inputs to the VQE algorithms are the molecular Hamiltonian, the
-parametrized circuit preparing the quantum state of the molecule, and the
+The inputs to the VQE algorithm are a molecular Hamiltonian, a
+parametrized circuit preparing the quantum state of the molecule, and a
 cost function to evaluate the expectation value of the Hamiltonian in the
 trial state. The ground state of the target Hamiltonian is obtained by performing
-an iterative minimization of the cost function. The optimization problem is solved
-by a classical optimizer which uses a quantum computer to evaluate the cost function
+an iterative minimization of the cost function. Optimization is carried out
+by a classical optimizer which leverages a quantum computer to evaluate the cost function
 and calculate its gradient at each optimization step.
 
 In this tutorial you will learn how to implement the VQE algorithm in a few lines of code.
-Without loss of generality, we apply the algorithm to find the ground state of the hydrogen
+As an illustrative example, we apply the algorithm to find the ground state of the hydrogen
 molecule (:math:`\mathrm{H}_2`). First, we build the molecular Hamiltonian using a minimal
-basis set approximation. Next, we define the quantum circuit preparing the trial
-state of the molecule and the cost function to evaluate the expectation value
-of the Hamiltonian. Finally, we define the classical optimizer, initialize the
+basis set approximation. Next, we design the quantum circuit preparing the trial
+state of the molecule, and the cost function to evaluate the expectation value
+of the Hamiltonian. Finally, we select a classical optimizer, initialize the
 circuit parameters and run the VQE algorithm using a PennyLane simulator.
 
 Let's get started!
@@ -53,7 +53,7 @@ symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 ##############################################################################
-# The molecular structure can also be imported from a external file using
+# The molecular structure can also be imported from an external file using
 # the :func:`~.pennylane_qchem.qchem.read_structure` function.
 #
 # Now, we can build the electronic Hamiltonian of the hydrogen molecule
@@ -66,12 +66,12 @@ print("Number of qubits = ", qubits)
 print("Hamiltonian is ", H)
 
 ##############################################################################
-# The outputs of the function are the Hamiltonian represented as 
-# a linear combination of Pauli operators and the number of qubits
-# required for the quantum simulations. In this example, we use a
+# The outputs of the function are the Hamiltonian, represented as 
+# a linear combination of Pauli operators, and the number of qubits
+# required for the quantum simulations. For this example, we use a
 # `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 # to represent the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_.
-# In this approximation, we have a four spin orbitals which defines the
+# In this approximation, we have a four spin orbitals, which defines the
 # number of qubits. Furthermore, we use the Jordan-Wigner
 # transformation [#seeley2012]_ to perform the fermionic-to-qubit mapping of
 # the Hamiltonian.
@@ -90,9 +90,9 @@ dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we need to define the quantum circuit that prepares the trial state of the
-# molecule. In the Jordan-Wigner [#seeley2012]_ encoding the
+# molecule. In the Jordan-Wigner [#seeley2012]_ encoding, the
 # *ansatz* for the ground state of the :math:`\mathrm{H}_2` molecule is given by the
-# entangled state,
+# entangled state
 #
 # .. math::
 #     \vert \Psi(\theta) \rangle = \cos(\theta/2)~|1100\rangle -\sin(\theta/2)~|0011\rangle,
@@ -105,7 +105,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # qubits 0, 1 to 2, 3.
 #
 # The quantum circuit to prepare the trial state :math:`\vert \Psi(\theta) \rangle` is
-# shown in the figure below.
+# schematically illustrated in the figure below.
 #
 # |
 #
@@ -123,7 +123,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # quantum circuits for quantum chemistry applications see the
 # tutorial :doc:`tutorial_givens_rotations`.
 #
-# Implementing the circuit above using PennyLane is straightforward. First, we use
+# Implementing the circuit above using PennyLane is straightforward. First, we use the 
 # :func:`hf_state` function to generate the vector representing the Hartree-Fock state.
 
 electrons = 2
@@ -141,8 +141,8 @@ def circuit(param, wires):
 
 ##############################################################################
 # The next step is to define the cost function to compute the expectation value
-# of the molecular Hamiltonian in the trial state prepared by the ``circuit``
-# function. We do this using the :class:`~.ExpvalCost`
+# of the molecular Hamiltonian in the trial state prepared by the circuit.
+# We do this using the :class:`~.ExpvalCost`
 # class tailored for VQE optimization. It requires specifying the
 # circuit, target Hamiltonian, and the device, and returns a cost function that can
 # be evaluated with the gate parameter :math:`\theta`:
@@ -151,12 +151,9 @@ cost_fn = qml.ExpvalCost(circuit, H, dev)
 
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of
-# the :math:`\mathrm{H}_2` molecule.
-#
-# To that aim we need to define the classical optimizer. PennyLane offers different
+# the :math:`\mathrm{H}_2` molecule. To start, we need to define the classical optimizer. PennyLane offers different
 # built-in optimizers including the quantum natural gradient
-# method which can speed up VQE simulations. For example,
-# see the tutorial :tutorial:`tutorial_vqe_qng`. Here we use a basic
+# method which can speed up VQE simulations. Here we use a basic
 # gradient-descent optimizer.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
@@ -169,8 +166,7 @@ theta = 0.0
 
 ##############################################################################
 # We carry out the optimization over a maximum of 100 steps aiming to reach a
-# convergence tolerance for the value of the cost function of :math:`\sim 10^{
-# -6}`.
+# convergence tolerance of :math:`\sim 10^{-6}` for the value of the cost function.
 
 # store the values of the cost function
 energy = [cost_fn(theta)]
