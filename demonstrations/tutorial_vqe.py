@@ -243,10 +243,10 @@ plt.show()
 # minimal basis set approximation.
 #
 # We have used the VQE algorithm to correct the Hartree-Fock energy of the
-# hydrogen molecule due to the effects of the
+# hydrogen molecule by accounting for the effects of the
 # `electronic correlations <https://en.wikipedia.org/wiki/Electronic_correlation>`_.
-# This was done using a simple circuit to prepare the correlated state of
-# the molecule by including a double excitation of the Hartree-Fock reference state.
+# We used a simple circuit to prepare a correlated state of the molecule
+# by including a double excitation of the Hartree-Fock reference state.
 # The final value of the VQE energy can be used to estimate the *electronic correlation energy*
 # :math:`E_\mathrm{corr} = (E_\mathrm{VQE} - E_\mathrm{HF}) = -0.019` Ha which is tiny
 # fraction of the total energy of the molecule.
