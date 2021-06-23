@@ -155,7 +155,7 @@ cost_fn = qml.ExpvalCost(circuit, H, dev)
 #
 # To that aim we need to define the classical optimizer. PennyLane offers different
 # built-in optimizers including the quantum natural gradient
-# method which can speed up VQE simulations for larger systems. For example,
+# method which can speed up VQE simulations. For example,
 # see the tutorial :tutorial:`tutorial_vqe_qng`. Here we use a basic
 # gradient-descent optimizer.
 
