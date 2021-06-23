@@ -141,7 +141,7 @@ def circuit(param, wires):
 # The next step is to define the cost function to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :class:`~.ExpvalCost`
-# class tailored for VQE optimization. It requires specifying the
+# class, which is tailored for VQE optimization. It requires specifying the
 # circuit, target Hamiltonian, and the device, and returns a cost function that can
 # be evaluated with the gate parameter :math:`\theta`:
 
