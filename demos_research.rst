@@ -202,16 +202,16 @@ plateaus in quantum neural networks.
     :tags: qiskit
 
 .. customgalleryitem::
-    :tooltip: Build trigonometric local models of your cost function.
-    :figure: demonstrations/quantum_analytic_descent/xkcd.png
-    :description: :doc:`demos/tutorial_quantum_analytic_descent`
-    :tags: optimization model vqe
-
-.. customgalleryitem::
     :tooltip: Solve combinatorial problems without a classical optimizer.
     :figure: demonstrations/falqon/falqon_thumbnail.png
     :description: :doc:`demos/tutorial_falqon`
     :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Build trigonometric local models of your cost function.
+    :figure: demonstrations/quantum_analytic_descent/xkcd.png
+    :description: :doc:`demos/tutorial_quantum_analytic_descent`
+    :tags: optimization model vqe
 
 
 :html:`</div></div><div style='clear:both'>`
