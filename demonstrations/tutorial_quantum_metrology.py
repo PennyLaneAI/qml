@@ -11,7 +11,7 @@ Variationally optimizing measurement protocols
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Johannes Jakob Meyer. Posted: 18 June 2020. Last updated: 28 Jan 2021.*
+*Author: Johannes Jakob Meyer. Posted: 18 June 2020. Last updated: 16 Jun 2021.*
 
 In this tutorial we use the variational quantum algorithm from
 Ref. [#meyer2020]_ to optimize a quantum
@@ -134,7 +134,7 @@ from pennylane import numpy as np
 # We will choose the ``cirq.mixedsimulator`` device from the
 # `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_
 # plugin for this tutorial.
-dev = qml.device("cirq.mixedsimulator", wires=3)
+dev = qml.device("cirq.mixedsimulator", wires=3, shots=1000)
 
 ##############################################################################
 # Next, we model the parameter encoding. The phase shifts are recreated using
