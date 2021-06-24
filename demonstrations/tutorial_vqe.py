@@ -16,8 +16,8 @@ A brief overview of VQE
 
 *Author: PennyLane dev team. Last updated: 24 June 2021.*
 
-The Variational Quantum Eigensolver (VQE) [#peruzzo2014]_, [#yudong2019]_ is a flagship
-algorithm for quantum chemistry using near-term quantum computers. VQE is an application of the
+The Variational Quantum Eigensolver (VQE) is a flagship
+algorithm for quantum chemistry using near-term quantum computers [#peruzzo2014]_. It is an application of the
 `Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_, where a quantum
 computer is trained to prepare the ground state of a given molecule.
 
@@ -30,12 +30,12 @@ by a classical optimizer which leverages a quantum computer to evaluate the cost
 and calculate its gradient at each optimization step.
 
 In this tutorial you will learn how to implement the VQE algorithm in a few lines of code.
-As an illustrative example, we apply the algorithm to find the ground state of the hydrogen
-molecule (:math:`\mathrm{H}_2`). First, we build the molecular Hamiltonian using a minimal
+As an illustrative example, we use it to find the ground state of the hydrogen
+molecule, :math:`\mathrm{H}_2`. First, we build the molecular Hamiltonian using a minimal
 basis set approximation. Next, we design the quantum circuit preparing the trial
 state of the molecule, and the cost function to evaluate the expectation value
 of the Hamiltonian. Finally, we select a classical optimizer, initialize the
-circuit parameters and run the VQE algorithm using a PennyLane simulator.
+circuit parameters, and run the VQE algorithm using a PennyLane simulator.
 
 Let's get started!
 
@@ -71,7 +71,7 @@ print("The Hamiltonian is ", H)
 # required for the quantum simulations. For this example, we use a
 # `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 # to represent the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_.
-# In this approximation, we have a four spin orbitals, which defines the
+# In this approximation, we have four spin orbitals, which defines the
 # number of qubits. Furthermore, we use the Jordan-Wigner
 # transformation [#seeley2012]_ to perform the fermionic-to-qubit mapping of
 # the Hamiltonian.
@@ -113,7 +113,7 @@ dev = qml.device("default.qubit", wires=qubits)
 #
 # |
 #
-# In this figure the gate :math:`G^{(2)}` corresponds to the
+# In this figure, the gate :math:`G^{(2)}` corresponds to the
 # :class:`~.pennylane.DoubleExcitation` operation, implemented in PennyLane
 # as a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_, which couples
 # the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle`.
@@ -142,7 +142,7 @@ def circuit(param, wires):
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :class:`~.ExpvalCost`
 # class, which is tailored for VQE optimization. It requires specifying the
-# circuit, target Hamiltonian, and the device, and returns a cost function that can
+# circuit, target Hamiltonian, and the device, then returning a cost function that can
 # be evaluated with the gate parameter :math:`\theta`:
 
 cost_fn = qml.ExpvalCost(circuit, H, dev)
@@ -151,13 +151,13 @@ cost_fn = qml.ExpvalCost(circuit, H, dev)
 # Now we proceed to minimize the cost function to find the ground state of
 # the :math:`\mathrm{H}_2` molecule. To start, we need to define the classical optimizer.
 # PennyLane offers different built-in
-# `optimizers <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_ 
+# `optimizers <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_ .
 # Here we use a basic gradient-descent optimizer.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
 ##############################################################################
-# We initialize the circuit parameter :math:`\theta` to zero so we start
+# We initialize the circuit parameter :math:`\theta` to zero, meaning that we start
 # from the Hartree-Fock state.
 
 theta = 0.0
