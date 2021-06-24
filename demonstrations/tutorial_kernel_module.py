@@ -1,8 +1,17 @@
-r"""Quantum Embedding Kernels with PennyLane’s kernels module
-=========================================================
+r"""Quantum Embedding Kernels with the kernels module
+=====================================================
+
+.. meta::
+    :property="og:description": Kernels and alignment training with Pennylane.
+    :property="og:image": https://pennylane.ai/qml/_images/QEK_thumbnail.png
+
+.. related::
+
+    tutorial_kernel_based_training Kernel-based training with scikit-learn
+    tutorial_data_reuploading_classifier Classification with data reuploading
 
 *Authors: Peter-Jan Derks, Paul Fährmann, Elies Gil-Fuster, Tom
-Hubregtsen, Johannes Jakob Meyer and David Wierichs* *On Feb 26th 2021*
+Hubregtsen, Johannes Jakob Meyer and David Wierichs. Posted: 24 June 2021*
 
 Kernel methods are one of the cornerstones of classical machine
 learning. To understand what a kernel method does, let’s first revisit
@@ -97,7 +106,7 @@ embedded quantum states
 .. math::
    k(\boldsymbol{x}_i, \boldsymbol{x}_j) = | \langle\psi(\boldsymbol{x}_i)|\psi(\boldsymbol{x}_j)\rangle|^2.
 
-This demo is based on Ref. [1] and we will show the functionalities
+This demo is based on Ref. [#Training_QEKs]_ and we will show the functionalities
 of the PennyLane ``kernels`` module implemented alongside with it.
 """
 
@@ -386,7 +395,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # would not be able to detect small improvements.
 #
 # We can, however, resort to a more specialized measure, the
-# *kernel-target alignment* [2]. The kernel-target alignment compares the
+# *kernel-target alignment* [#Alignment]_. The kernel-target alignment compares the
 # similarity predicted by the quantum kernel to the actual labels of the
 # training data. It is based on *kernel alignment*, a similiarity measure
 # between two kernels with given kernel matrices :math:`K_1` and
@@ -432,7 +441,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # the kernel you chose reproduces the actual similarities of the data. It
 # does have one drawback, however: having a high kernel-target alignment
 # is only a necessary but not a sufficient condition for a good
-# performance of the kernel [2]. This means having good alignment is
+# performance of the kernel [#Alignment]_. This means having good alignment is
 # guaranteed for good performance, but optimal alignment will not always
 # bring optimal training accuracy with it.
 #
@@ -557,12 +566,17 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 # is not expected to suffer from bad generalisation.
 #
 # References
-# ~~~~~~~~~~
+# ----------
 #
-# [1] Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks,
-# Paul K. Faehrmann, and Johannes Jakob Meyer. “Training Quantum Embedding Kernels on Near-Term
-# Quantum Computers.” `arXiv:2105.02276 <https://arxiv.org/abs/2105.02276>`_ (2021)
+# .. [#Training_QEKs]
 #
-# [2] Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian. “An overview of
-# kernel alignment and its applications.” *Artificial Intelligence Review*
-# 43.2 (2015): 179-192.
+#     Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks,
+#     Paul K. Faehrmann, and Johannes Jakob Meyer.
+#     “Training Quantum Embedding Kernels on Near-Term Quantum Computers.”
+#     `arXiv:2105.02276 <https://arxiv.org/abs/2105.02276>`__, 2021.
+#
+# .. [#Alignment]
+#
+#     Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian.
+#     “An overview of kernel alignment and its applications.”
+#     `Artificial Intelligence Review 43.2: 179-192 <https://link.springer.com/article/10.1007/s10462-012-9369-4>`__, 2015.
