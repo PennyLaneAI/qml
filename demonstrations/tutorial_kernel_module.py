@@ -130,6 +130,7 @@ np.random.seed(1359)
 # plotting method and you may skip ahead if you are not interested in the
 # class itself.
 
+
 class DoubleCake:
     def _make_circular_data(self):
         """Generate datapoints arranged in an even circle."""
@@ -225,6 +226,7 @@ dataset.plot(plt.gca(), show_sectors=True)
 # and with variational parameters that determine :math:`U` in addition to
 # the datapoint :math:`\boldsymbol{x}`.
 
+
 def layer(x, params, wires, i0=0, inc=1):
     """Building block of the embedding Ansatz"""
     i = i0
@@ -243,11 +245,14 @@ def ansatz(x, params, wires):
     for j, layer_params in enumerate(params):
         layer(x, layer_params, wires, i0=j * len(wires))
 
+
 adjoint_ansatz = qml.adjoint(ansatz)
+
 
 def random_params(num_wires, num_layers):
     """Generate random variational parameters in the shape for the ansatz."""
     return np.random.uniform(0, 2 * np.pi, (num_layers, 2, num_wires))
+
 
 ##############################################################################
 # Together with the Ansatz we only need a device to run the quantum circuit on.
@@ -263,6 +268,7 @@ wires = dev.wires.tolist()
 # datapoint and then the adjoint of the embedding of the second datapoint. We
 # finally extract the probabilities of observing each basis state.
 
+
 @qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
@@ -270,13 +276,16 @@ def kernel_circuit(x1, x2, params):
 
     return qml.probs(wires=wires)
 
+
 ##############################################################################
 # The kernel function itself is now obtained by looking at the probability
 # of observing the all-zero state at the end of the kernel circuit -- because
 # of the ordering in `qml.probs`, this is the first entry:
 
+
 def kernel(x1, x2, params):
     return kernel_circuit(x1, x2, params)[0]
+
 
 ##############################################################################
 # Before focusing on the kernel values we have to provide values for the
@@ -295,13 +304,15 @@ print(f"The kernel value between the first and second datapoint is {kernel_value
 ##############################################################################
 # The mutual kernel values between all elements of the dataset form the
 # *kernel matrix*. We can inspect it via the ``qml.kernels.square_kernel_matrix``
-# method. The option ``assume_normalized_kernel=True`` ensures that we do not 
+# method. The option ``assume_normalized_kernel=True`` ensures that we do not
 # calculate the entries between the same datapoints, as we know them to be 1
 # for our noiseless simulation. To include the variational parameters, we
 # construct a ``lambda`` function that fixes them to the values we sampled above.
 
 init_kernel = lambda x1, x2: kernel(x1, x2, init_params)
-K_init = qml.kernels.square_kernel_matrix(dataset.X, init_kernel, assume_normalized_kernel=True)
+K_init = qml.kernels.square_kernel_matrix(
+    dataset.X, init_kernel, assume_normalized_kernel=True
+)
 
 with np.printoptions(precision=3, suppress=True):
     print(K_init)
@@ -331,13 +342,14 @@ from sklearn.svm import SVC
 #     Ansatz. What it does is solving a different optimization task for the
 #     :math:`\alpha` and :math:`b` vectors we introduced in the beginning.
 
-svm = SVC(
-    kernel=lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, init_kernel)
-).fit(dataset.X, dataset.Y)
+svm = SVC(kernel=lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, init_kernel)).fit(
+    dataset.X, dataset.Y
+)
 
 ##############################################################################
 # To see how well our classifier performs we will measure which percentage
 # of the dataset it classifies correctly.
+
 
 def accuracy(classifier, X, Y_target):
     return 1 - np.count_nonzero(classifier.predict(X) - Y_target) / len(Y_target)
@@ -352,8 +364,11 @@ print(f"The accuracy of the kernel with random parameters is {accuracy_init:.3f}
 # visually in more complex data sets. To this end we will introduce a
 # second helper method.
 
+
 def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
-    _xx, _yy = np.meshgrid(np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints))
+    _xx, _yy = np.meshgrid(
+        np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints)
+    )
 
     _zz = np.zeros_like(_xx)
     for idx in np.ndindex(*_xx.shape):
@@ -371,6 +386,7 @@ def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
     dataset.plot(ax)
 
     return plot_data
+
 
 ##############################################################################
 # With that done, let’s have a look at the decision boundaries for our
@@ -450,12 +466,14 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # target alignment:
 
 kta_init = qml.kernels.target_alignment(
-            dataset.X,
-            dataset.Y,
-            init_kernel,
-            assume_normalized_kernel=True,
-        )
-print(f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}")
+    dataset.X,
+    dataset.Y,
+    init_kernel,
+    assume_normalized_kernel=True,
+)
+print(
+    f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}"
+)
 
 ##############################################################################
 # Now let’s code up an optimization loop and improve the kernel-target alignment!
@@ -473,6 +491,7 @@ print(f"The kernel-target alignment for our dataset and random parameters is {kt
 #     Currently, the function ``qml.kernels.target_alignment`` is not
 #     differentiable yet, making it unfit for gradient descent optimization.
 #     We therefore first define a differentiable version of this function.
+
 
 def target_alignment(
     X,
@@ -502,6 +521,7 @@ def target_alignment(
     inner_product = inner_product / norm
 
     return inner_product
+
 
 params = init_params
 opt = qml.GradientDescentOptimizer(0.2)
