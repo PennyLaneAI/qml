@@ -204,8 +204,10 @@ fig = plt.figure()
 fig.set_figheight(5)
 fig.set_figwidth(12)
 
-# Add energy plot on column 1
+# Full configuration interaction (FCI) Energy computed classically
 E_fci = -1.136189454088
+
+# Add energy plot on column 1
 ax1 = fig.add_subplot(121)
 ax1.plot(range(n + 2), energy, "go-", ls="dashed")
 ax1.plot(range(n + 2), np.full(n + 2, E_fci), color="red")
