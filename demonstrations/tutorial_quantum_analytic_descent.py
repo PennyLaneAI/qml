@@ -215,6 +215,7 @@ line2 = ax.plot(
 # In the QAD paper, the authors state that a *trigonometric expansion* up to second order is already a sound model candidate. Let's recap such expansions.
 #
 # .. admonition:: Taylor expansion vs. Trigonometric expansion
+#
 #     In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of some basis functions, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
 #     The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
 #     In Calculus I we learnt a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`:
