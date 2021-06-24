@@ -21,9 +21,8 @@ Quantum analytic descent
 
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
-The Variational Quantum Eigensolver (VQE) combines smart circuit
-design with a gradient-based optimization to solve this task
-(take a look at the `VQE overview demo <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ for an introduction).
+`The Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ combines smart circuit
+design with a gradient-based optimization to solve this task.
 Several practical demonstrations have shown how near-term quantum
 devices may be suitable for VQE and other variational quantum algorithms.
 One issue for such an approach, though, is that the optimization landscape is
@@ -37,21 +36,15 @@ of the cost landscape around any reference point.
 Cashing in on this, the authors of the
 Quantum Analytic Descent paper [#QAD]_
 propose an algorithm that constructs a classical model which approximates the
-landscape, so that the gradients can be calculated on a classical computer
-for the next optimization steps, which is much cheaper.
-After this purely classical phase, a new model is built at the next reference
-point.
-
+landscape, so that the gradients can be calculated on a classical computer, which is much cheaper.
 In order to build the classical model, we need to use the quantum device to
 evaluate the cost function on (a) a reference point :math:`\boldsymbol{\theta}_0`
-and (b) a number of points shifted away from :math:`\boldsymbol{\theta}_0`
-(more on that later).
+and (b) a number of points shifted away from :math:`\boldsymbol{\theta}_0`.
 With the cost values at these points, we can build the classical model that
 approximates the landscape.
 
-Here we demonstrate how to implement Quantum Analytic Descent on a quantum
-computer using PennyLane.
-Inbetween we will look at the constructed model and the optimization steps
+In this demo, you will learn how to implement Quantum Analytic Descent using PennyLane.
+In addition, you will look under the hood of the constructed models and the optimization steps
 carried out by the algorithm.
 So: sit down, relax, and enjoy your optimization!
 
@@ -61,6 +54,7 @@ So: sit down, relax, and enjoy your optimization!
     :align: center
     :width: 50%
     :target: javascript:void(0)
+    Optimization progress with Quantum Analytic Descent.
 
 
 
@@ -85,8 +79,7 @@ If the gates in the variational form are restricted to be Pauli rotations, then 
 That's a scary sequence of words!
 What it means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
 
-That is, there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` functions of all parameters but :math:`\theta_i` (:math:`a_i = a_i(\theta_1, \ldots, \hat{\theta}_i, \ldots, \theta_m)`)
-such that the cost can be written as
+That is, for each parameter :math:`\theta_i` there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` such that the cost can be written as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
@@ -116,20 +109,19 @@ def circuit(parameters):
     qml.RX(parameters[1], wires=1)
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
-
-# Fix a parameter position.
-parameters = np.array([3.3, 0.5])
-# Evaluate the circuit for these parameters.
-print(f"At the parameters {np.round(parameters, 4)} the energy is {circuit(parameters)}")
 ###############################################################################
-# It is this simple in PennyLane to obtain the energy of the given state for a specific Hamiltonian!
-# Let us now look at how the energy value depends on each of the two parameters alone:
+# Let us now look at how the energy value depends on each of the two parameters alone.
+# For that, we just fix one parameter and show the cost when varying the other one:
 
 # Create 1D sweeps through parameter space with the other parameter fixed.
 num_samples = 50
+
+# Fix a parameter position.
+parameters = np.array([3.3, 0.5])
+
 theta_func = np.linspace(0, 2 * np.pi, num_samples)
-C1 = [circuit(np.array([theta, 0.5])) for theta in theta_func]
-C2 = [circuit(np.array([3.3, theta])) for theta in theta_func]
+C1 = [circuit(np.array([theta, parameters[1]])) for theta in theta_func]
+C2 = [circuit(np.array([parameters[0], theta])) for theta in theta_func]
 
 # Show the sweeps.
 fig, ax = plt.subplots(1, 1, figsize=(4, 3))
@@ -179,25 +171,19 @@ line2 = ax.plot(
 # That's right!
 # We have studied them since high school and know how their graphs look!
 #
-# .. note::
-#
-#     In order to plot the surface for this example we had to query a quantum computer (call the ``circuit`` function) for every point inside the range.
-#     In real life, querying a quantum computer is very expensive, so could we have spared some computational resources?
-#     Well, since we know the ultimate shape the landscape is supposed to have, we should in principle be able to construct it from a fixed number of points:
-#     the same way two points specify a straight line, or three non-aligned points specify a circle.
-#     In particular, the number of points that completely determine the cost landscape should in depend mainly on the total number of parameters.
-#
 # The QAD strategy
 # ----------------
 #
-# Before jumping in on the specifics of the classical model they use, we are already in a good position to review the general strategy.
+# By now we know how the energy landscape looks for a small example.
+# Scaling this up to more parameters would quickly become unfeasible because we need to query a quantum computer for every combination of parameter values.
+# The secret ingredient of this sauce is that we only need to build an approximate classical model.
 # Using an approximate classical model has one feature and one bug.
 # The feature: it is cheap to construct.
 # The bug: well, it's only approximate, so we cannot rely on it fully.
 # And one extra feature (you didn't see that coming, did you?): if the reference point about which we build the classical model is a true local minimum, then it will be a local minimum of the classical model too.
 # And that is the key!
 # Given a reference point, we use the classical model to find a point that's closer to the true minimum, and then use that point as reference for a new model!
-# This is what is called Quantum Analytic Descent (QAD), and its pseudo-algorithm would look something like:
+# This is what is called Quantum Analytic Descent (QAD), and if you are fine not knowing yet what all the symbols mean, here's its pseudo-algorithm:
 #
 # #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
 # #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
@@ -205,12 +191,10 @@ line2 = ax.plot(
 # #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
 # #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
 #
-# Now we delve into the amazing world of function series expansions!
-#
 # Computing a classical model
 # ---------------------------
 #
-# Knowing how the cost looks when restricted to only one parameter, nothing keeps us in theory from constructing a perfect classical model.
+# Knowing how the cost looks when restricted to only one parameter (see the plot above), nothing keeps us in theory from constructing a perfect classical model.
 # The only thing we need to do is write down a general multilinear trigonometric polynomial and determine its coefficients.
 # Simple, right?
 # Well, for :math:`m` parameters, there would be :math:`3^m` coefficients to estimate, which gives us the ever-dreaded exponential scaling.
@@ -229,7 +213,7 @@ line2 = ax.plot(
 # But what if we told you there is a better option for the case at hand?
 # In the QAD paper, the authors state that a *trigonometric expansion* up to second order is already a sound model candidate. Let's recap such expansions.
 #
-# .. note::
+# .. admonition:: Taylor expansion vs. Trigonometric expansion
 #     In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of some basis functions, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
 #     The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
 #     In Calculus I we learnt a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`:
@@ -303,7 +287,7 @@ line2 = ax.plot(
 #   C_k(\boldsymbol{\theta}) &= 2\tan\left(\frac{\theta_k}{2}\right)^2 A(\boldsymbol{\theta})\\
 #   D_{kl}(\boldsymbol{\theta}) &= 4\tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)A(\boldsymbol{\theta})
 #
-# And with that we know what type of terms we should expect to encounter in our local classical model:
+# With that, we know what type of terms we should expect to encounter in our local classical model:
 # the model we want to construct is a linear combination of the functions
 # :math:`A(\boldsymbol{\theta})`, :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
 # for each parameter, and :math:`D_{kl}(\boldsymbol{\theta})` for every pair of different variables :math:`(\theta_k,\theta_l)`.
@@ -311,9 +295,7 @@ line2 = ax.plot(
 # Computing the expansion coefficients
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# As each of the terms in the linear combination has its own unique leading order it contributes to, we need to compute
-# the derivatives of the function we are approximating to obtain the coefficients of the linear combination -- just like
-# we would for a Taylor expansion.
+# We can now use the derivatives of the function we are approximating to obtain the coefficients of the linear combination.
 # As the terms we include in the expansion have leading orders :math:`0`, :math:`1` and :math:`2`, these derivatives are
 # :math:`E(\boldsymbol{\theta})`, :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k`,
 # :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l`.
@@ -329,24 +311,26 @@ line2 = ax.plot(
 #   E^{(C)}_k &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k^2}\Bigg|_{\boldsymbol{\theta}=0} + \frac{1}{2}E(\boldsymbol{\theta})\Bigg|_{\boldsymbol{\theta}=0}\\
 #   E^{(D)}_{kl} &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k\partial\theta_l}\Bigg|_{\boldsymbol{\theta}=0}
 #
-# .. note::
-#     In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
-#     with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_
-#     and by iterating the rule, we also obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
-#     Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
-
-from pennylane import numpy as np
-
+# In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
+# with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_.
+# By iterating the rule, we can obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
+# Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
 
 def get_model_data(fun, params):
     """Computes the coefficients for the classical model, E^(A), E^(B), E^(C), and E^(D)."""
     num_params = len(params)
+    
+    # E_A contains the energy at the reference point
     E_A = fun(params)
+    
     # E_B contains the gradient.
     E_B = qml.grad(fun)(params)
+    
     hessian = qml.jacobian(qml.grad(fun))(params)
+    
     # E_C contains the slightly adapted diagonal of the Hessian.
     E_C = np.diag(hessian) + E_A / 2
+    
     # E_D contains the off-diagonal parts of the Hessian.
     # We store each pair (k, l) only once, namely the upper triangle.
     E_D = np.triu(hessian, 1)
@@ -386,16 +370,19 @@ print(
 def model_cost(params, E_A, E_B, E_C, E_D):
     """Compute the model cost for relative parameters and given model data."""
     A = np.prod(np.cos(0.5 * params) ** 2)
+    
     # For the other terms we only compute the prefactor relative to A
     B_over_A = 2 * np.tan(0.5 * params)
     C_over_A = B_over_A ** 2 / 2
     D_over_A = np.outer(B_over_A, B_over_A)
+    
     all_terms_over_A = [
         E_A,
         np.dot(E_B, B_over_A),
         np.dot(E_C, C_over_A),
         np.dot(B_over_A, E_D @ B_over_A),
     ]
+    
     cost = A * np.sum(all_terms_over_A)
 
     return cost
@@ -500,12 +487,13 @@ def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_poin
 
 # Get some fresh random parameters
 parameters = np.random.random(2) * 2 * np.pi
+
 # Define a mapped model that has the model coefficients fixed.
 mapped_model = lambda params: model_cost(params, *coeffs)
 plot_cost_and_model(circuit, mapped_model, parameters)
 
 ###############################################################################
-# In the first two plots, we see the true landscape in green, and the approximate model in orange.
+# In the first two plots, we see the true landscape, and the approximate model.
 # The vertical rods indicate the points at which the cost function
 # was evaluated in order to obtain the model coefficients (we skip the additional
 # evaluations for :math:`E^{(C)}`, though, for clarity of the plot).
@@ -522,7 +510,7 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # estimate of where the minimum of the landscape is.
 # Granted, our model represents the true landscape less accurately the further we go away from the
 # reference point :math:`\boldsymbol{\theta}_0`, but nonetheless the minimum *of the model*
-# will bring us much closer to the minimum *of the true cost* than a random walk.
+# will bring us much closer to the minimum *of the true cost* than a random choice.
 # Recall the complete strategy from above:
 #
 # #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
@@ -559,42 +547,36 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 
 import copy
 
-# Set the number of iterations of Steps 2 to 4
+# Set the number of iterations of Steps 2, 3, and 4
 N_iter_outer = 3
-# Set the number of iterations for the model optimization in Step 3.
 N_iter_inner = 50
-# Prepare storage of the coefficients for the model and the parameter positions.
+
 past_coeffs = []
 past_parameters = []
 circuit_log = [circuit(parameters)]
 model_logs = []
+
 for iter_outer in range(N_iter_outer):
     # Model building phase of outer iteration - step 2.
     coeffs = get_model_data(circuit, parameters)
-    # Store the coefficients and parameters.
     past_coeffs.append(copy.deepcopy(coeffs))
     past_parameters.append(parameters.copy())
     # Map the model to be only depending on the parameters, not the coefficients.
     mapped_model = lambda params: model_cost(params, *coeffs)
 
-    # Let's see at which cost we start off (stored in E_A)
     if iter_outer == 0:
         print(f"True energy at initial parameters: {np.round(coeffs[0], decimals=4)}\n")
 
-    # Create the optimizer instance for Step 3, we here choose ADAM.
     opt = qml.AdamOptimizer(0.05)
     # Recall that the parameters of the model are relative coordinates.
     # Correspondingly, we initialize at 0, not at parameters.
     relative_parameters = np.zeros_like(parameters)
-    # Store starting cost of model
     model_log = [mapped_model(relative_parameters)]
-    # Some pretty-printing
     print(f"-Iteration {iter_outer+1}-")
+    
     # Run the optimizer for N_iter_inner epochs - Step 3.
     for iter_inner in range(N_iter_inner):
-        # Optimizer step
         relative_parameters = opt.step(mapped_model, relative_parameters)
-        # Logging
         circuit_log.append(circuit(parameters + relative_parameters))
         model_log.append(mapped_model(relative_parameters))
         if (iter_inner + 1) % 50 == 0:
@@ -606,7 +588,6 @@ for iter_outer in range(N_iter_outer):
 
     # Store the relative parameters that minimize the model by adding the shift - Step 4.
     parameters += relative_parameters
-    # Let's check what the original cost at the updated parameters is.
     E_original = circuit(parameters)
     print(f"True energy at the minimum of the model: {E_original}")
     print(f"New reference parameters: {np.round(parameters, 4)}\n")
@@ -668,9 +649,9 @@ leg = ax.legend()
 # can be seen to be significantly lower than the true cost.
 # Once the true cost itself approaches the absolute minimum, this means the
 # model cost can overstep the allowed range.
-# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` *(nostalgic* emoticon *time >:@)!*
+# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` >:@ *
 # Yes, but careful!
-# We said the *true cost* values are bounded, yet, that does not mean the ones of the *model* are!
+# While the *true cost* values are bounded, that does not mean the ones of the *model* are!
 # Notice also how this only happens at the first stages of analytic descent.
 #
 # Bringing together a few chords we have touched so far: once we fix a reference value, the further we go from it, the less accurate our model becomes.
