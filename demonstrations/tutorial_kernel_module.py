@@ -310,9 +310,7 @@ print(f"The kernel value between the first and second datapoint is {kernel_value
 # construct a ``lambda`` function that fixes them to the values we sampled above.
 
 init_kernel = lambda x1, x2: kernel(x1, x2, init_params)
-K_init = qml.kernels.square_kernel_matrix(
-    dataset.X, init_kernel, assume_normalized_kernel=True
-)
+K_init = qml.kernels.square_kernel_matrix(dataset.X, init_kernel, assume_normalized_kernel=True)
 
 with np.printoptions(precision=3, suppress=True):
     print(K_init)
@@ -366,9 +364,7 @@ print(f"The accuracy of the kernel with random parameters is {accuracy_init:.3f}
 
 
 def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
-    _xx, _yy = np.meshgrid(
-        np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints)
-    )
+    _xx, _yy = np.meshgrid(np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints))
 
     _zz = np.zeros_like(_xx)
     for idx in np.ndindex(*_xx.shape):
@@ -471,9 +467,7 @@ kta_init = qml.kernels.target_alignment(
     init_kernel,
     assume_normalized_kernel=True,
 )
-print(
-    f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}"
-)
+print(f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}")
 
 ##############################################################################
 # Now let’s code up an optimization loop and improve the kernel-target alignment!
