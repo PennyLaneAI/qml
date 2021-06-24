@@ -63,7 +63,7 @@ import pennylane as qml
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of qubits = ", qubits)
-print("Hamiltonian is ", H)
+print("The Hamiltonian is ", H)
 
 ##############################################################################
 # The outputs of the function are the Hamiltonian, represented as 
@@ -239,16 +239,16 @@ plt.show()
 # In this tutorial, we have implemented the VQE algorithm to find the ground state
 # of the hydrogen molecule. We used a simple circuit to prepare quantum states of
 # the molecule beyond the Hartree-Fock approximation. The ground-state energy
-# was obtained by minimizing the cost function evaluating the expectation value of
-# the molecular Hamiltonian in the trial state. 
+# was obtained by minimizing a cost function defined as the expectation value of the
+# molecular Hamiltonian in the trial state. 
 #
 # The VQE algorithm can be used to simulate other chemical phenomena.
-# The tutorial :doc:`tutorial_vqe_bond_dissociation` applies VQE to explore the
+# In the tutorial :doc:`tutorial_vqe_bond_dissociation` we use VQE to explore the
 # potential energy surface of molecules to simulate chemical reactions.
 # Another interesting application is to probe the lowest-lying states of molecules
 # in specific sectors of the Hilbert space. For example, see the tutorial
-# :doc:`tutorial_vqe_uccsd_obs`. Furthermore, the VQE algorithm can be generalized
-# to find the equilibrium geometry of a molecule as it is demonstrated in the
+# :doc:`tutorial_vqe_uccsd_obs`. Furthermore, the algorithm presented here can be
+# generalized to find the equilibrium geometry of a molecule as it is demonstrated in the
 # tutorial :doc:`tutorial_mol_geo_opt`.
 #
 # .. _vqe_references:
