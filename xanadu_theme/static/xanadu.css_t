@@ -1186,7 +1186,7 @@ div.topic.contents > ul > li {
 .admonition.note,
 .admonition.hint {
   border-left-color: #19b37b;
-  background-color: #ebf2ee;
+  background-color: #f2f9f5;
 }
 
 .admonition.note .admonition-title,
