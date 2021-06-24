@@ -110,6 +110,7 @@ def circuit(parameters):
     qml.RX(parameters[1], wires=1)
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
+
 ###############################################################################
 # Let us now look at how the energy value depends on each of the two parameters alone.
 # For that, we just fix one parameter and show the cost when varying the other one:
@@ -272,12 +273,27 @@ line2 = ax.plot(
 # Expanding in adapted trigonometric polynomials
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Now we can group the terms in the multi-parameter model by their order.
+# Now we can group the terms in the multi-parameter model by their order, and compare them to the analogue terms in a Taylor series:
 #
-# #. The :math:`0^{\text{th}}` order term (the constant in a Taylor series) is :math:`A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2`.
-# #. The :math:`1^{\text{st}}` order terms (would be :math:`x_k` for Taylor for each component :math:`k`) are :math:`B_k(\boldsymbol{\theta}) = 2\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
-# #. The :math:`2^{\text{nd}}` order terms with respect to a single parameter (:math:`x_k^2` for Taylor for each component :math:`k`) are :math:`C_k(\boldsymbol{\theta}) = 2\sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
-# #. The :math:`2^{\text{nd}}` order terms with respect to mixed parameters (:math:`x_k x_l` for Taylor for each pair of *different* indices :math:`(k, l)`) are :math:`D_{kl}(\boldsymbol{\theta}) = 4\sin\left(\frac{\theta_k}{2}\right)\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_l}{2}\right)\cos\left(\frac{\theta_l}{2}\right)\prod_{i\neq k,l} \cos\left(\frac{\theta_i}{2}\right)^2`.
+# .. list-table::
+#    :widths: 10 70 20
+#    :header-rows: 1
+#
+#    * - Order
+#      - Trigonometric monomial
+#      - Taylor monomial
+#    * - 0
+#      - :math:`A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2`
+#      - :math:`1`
+#    * - 1
+#      - :math:`B_k(\boldsymbol{\theta}) = 2\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`
+#      - :math:`x_k`
+#    * - 2
+#      - :math:`C_k(\boldsymbol{\theta}) = 2\sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`
+#      - :math:`x_k^2`
+#    * - 2
+#      - :math:`D_{kl}(\boldsymbol{\theta}) = 4\sin\left(\frac{\theta_k}{2}\right)\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_l}{2}\right)\cos\left(\frac{\theta_l}{2}\right)\prod_{i\neq k,l} \cos\left(\frac{\theta_i}{2}\right)^2`
+#      - :math:`x_kx_l`
 #
 # Those are really large terms as compared to a Taylor series!
 # However, you may have noticed all of those terms have large parts in common.
@@ -318,21 +334,22 @@ line2 = ax.plot(
 # By iterating the rule, we can obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
 # Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
 
+
 def get_model_data(fun, params):
     """Computes the coefficients for the classical model, E^(A), E^(B), E^(C), and E^(D)."""
     num_params = len(params)
-    
+
     # E_A contains the energy at the reference point
     E_A = fun(params)
-    
+
     # E_B contains the gradient.
     E_B = qml.grad(fun)(params)
-    
+
     hessian = qml.jacobian(qml.grad(fun))(params)
-    
+
     # E_C contains the slightly adapted diagonal of the Hessian.
     E_C = np.diag(hessian) + E_A / 2
-    
+
     # E_D contains the off-diagonal parts of the Hessian.
     # We store each pair (k, l) only once, namely the upper triangle.
     E_D = np.triu(hessian, 1)
@@ -372,19 +389,19 @@ print(
 def model_cost(params, E_A, E_B, E_C, E_D):
     """Compute the model cost for relative parameters and given model data."""
     A = np.prod(np.cos(0.5 * params) ** 2)
-    
+
     # For the other terms we only compute the prefactor relative to A
     B_over_A = 2 * np.tan(0.5 * params)
     C_over_A = B_over_A ** 2 / 2
     D_over_A = np.outer(B_over_A, B_over_A)
-    
+
     all_terms_over_A = [
         E_A,
         np.dot(E_B, B_over_A),
         np.dot(E_C, C_over_A),
         np.dot(B_over_A, E_D @ B_over_A),
     ]
-    
+
     cost = A * np.sum(all_terms_over_A)
 
     return cost
@@ -463,11 +480,16 @@ def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_poin
     Z_model = np.array([[model(np.array([t1, t2])) for t2 in coords] for t1 in coords])
     # Prepare sampled points for plotting.
     shifts = [-np.pi / 2, 0, np.pi / 2]
-    samples = chain.from_iterable(
-        [
-            [[params[0] + s2, params[1] + s1, fun(params + np.array([s1, s2]))] for s2 in shifts]
-            for s1 in shifts
-        ]
+    samples = list(
+        chain.from_iterable(
+            [
+                [
+                    [params[0] + s2, params[1] + s1, fun(params + np.array([s1, s2]))]
+                    for s2 in shifts
+                ]
+                for s1 in shifts
+            ]
+        )
     )
     # Display landscapes incl. sampled points and deviation.
     # Transparency parameter for landscapes.
@@ -479,7 +501,10 @@ def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_poin
     surf = ax0.plot_surface(X, Y, Z_original, color=green, alpha=alpha)
     ax0.set_title("Original energy and samples")
     for sample in samples:
-        ax0.plot([sample[0]] * 2, [sample[1]] * 2, [np.min(Z_original), sample[2]], color="k")
+        ax0.plot([sample[0]] * 2, [sample[1]] * 2, [np.min(Z_original) - 0.2, sample[2]], color="k")
+    for ax, z in zip((ax0, ax1), (fun(params), model(0 * params))):
+        ax.plot([params[0]] * 2, [params[1]] * 2, [np.min(Z_original) - 0.2, z], color="k")
+        ax.scatter([params[0]], [params[1]], [z], color="k", marker="o")
     ax1.plot_surface(X, Y, Z_model, color=orange, alpha=alpha)
     ax1.set_title("Model energy")
     ax2.plot_surface(X, Y, Z_original - Z_model, color=red, alpha=alpha)
@@ -487,8 +512,9 @@ def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_poin
     plt.tight_layout(pad=2, w_pad=2.5)
 
 
-# Get some fresh random parameters
+# Get some fresh random parameters and the model coefficients
 parameters = np.random.random(2) * 2 * np.pi
+coeffs = get_model_data(circuit, parameters)
 
 # Define a mapped model that has the model coefficients fixed.
 mapped_model = lambda params: model_cost(params, *coeffs)
@@ -496,11 +522,14 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 
 ###############################################################################
 # In the first two plots, we see the true landscape, and the approximate model.
-# The vertical rods indicate the points at which the cost function
+# The vertical rods indicate the points at which the original cost function
 # was evaluated in order to obtain the model coefficients (we skip the additional
 # evaluations for :math:`E^{(C)}`, though, for clarity of the plot).
-# In the third plot, we see the difference between model and true landscape.
-# Around the reference point this difference is very small and changes very slowly,
+# The rod with the bead on top indicates the reference point around which the model
+# is built and at which it coincides with the original cost function up to second
+# order. This is underlined in the third plot, where we see the difference between
+# model and true landscape.
+# Around the reference point the difference is very small and changes very slowly,
 # only growing significantly for large simultaneous perturbations in both
 # parameters. This already hints at the value of the model for local optimization.
 #
@@ -521,7 +550,7 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
 # #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
 #
-# This provides an iterative strategy which will take us to a good enough solution 
+# This provides an iterative strategy which will take us to a good enough solution
 # in fewer iterations than, for example, regular stochastic gradient descent (SGD).
 # The procedure of Quantum Analytic Descent is also shown in the following flowchart. Note that the minimization
 # of the model in Step 3 is carried out via an inner optimization loop.
@@ -575,7 +604,7 @@ for iter_outer in range(N_iter_outer):
     relative_parameters = np.zeros_like(parameters)
     model_log = [mapped_model(relative_parameters)]
     print(f"-Iteration {iter_outer+1}-")
-    
+
     # Run the optimizer for N_iter_inner epochs - Step 3.
     for iter_inner in range(N_iter_inner):
         relative_parameters = opt.step(mapped_model, relative_parameters)
@@ -651,7 +680,7 @@ leg = ax.legend()
 # can be seen to be significantly lower than the true cost.
 # Once the true cost itself approaches the absolute minimum, this means the
 # model cost can overstep the allowed range.
-# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` >:@ *
+# *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` >:@
 # Yes, but careful!
 # While the *true cost* values are bounded, that does not mean the ones of the *model* are!
 # Notice also how this only happens at the first stages of analytic descent.
