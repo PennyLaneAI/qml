@@ -5,7 +5,7 @@ r"""Quantum Embedding Kernels with PennyLane’s kernels module
 Hubregtsen, Johannes Jakob Meyer and David Wierichs* *On Feb 26th 2021*
 
 Kernel methods are one of the cornerstones of classical machine
-learning. To understand what a kernel method does let’s first revisit
+learning. To understand what a kernel method does, let’s first revisit
 one of the simplest methods to assign binary labels to datapoints:
 linear classification.
 
@@ -63,7 +63,7 @@ formula only contains inner products between vectors in the embedding
 space:
 
 .. math::
-   k(\boldsymbol{x}, \boldsymbol{y}) = \langle \phi(\boldsymbol{x}), \phi(\boldsymbol{y})\rangle.
+   k(\boldsymbol{x}_i, \boldsymbol{x}_j) = \langle \phi(\boldsymbol{x}_i), \phi(\boldsymbol{x}_j)\rangle.
 
 We call this function the *kernel*. The clue now is that we can often
 find an explicit formula for the kernel :math:`k` that makes it
@@ -78,15 +78,15 @@ This means by just replacing the regular scalar product in our linear
 classification with the map :math:`k`, we can actually express much more
 intricate decision boundaries!
 
-This is very important, because in many interesting cases the embedding
-will be much more costlier to compute than the kernel.
+This is very important, because in many interesting cases the embedding :math:`\phi`
+will be much more costlier to compute than the kernel :math:`k`.
 
-In this demonstration, we will explore one particular kind of kernel
+In this demo, we will explore one particular kind of kernel
 that can be realized on near-term quantum computers, namely *Quantum
 Embedding Kernels (QEKs)*. These are kernels that arise from embedding
 data into the space of quantum states. We formalize this by considering
-a parameterised quantum circuit :math:`U(\boldsymbol{x})` that embeds
-datapoint :math:`\boldsymbol{x}` onto the state
+a parameterised quantum circuit :math:`U(\boldsymbol{x})` that maps
+a datapoint :math:`\boldsymbol{x}` to the state
 
 .. math::
    |\psi(\boldsymbol{x})\rangle = U(\boldsymbol{x}) |0 \rangle.
@@ -95,17 +95,18 @@ The kernel value is then given by the *overlap* of the associated
 embedded quantum states
 
 .. math::
-   k(\boldsymbol{x}, \boldsymbol{y}) = | \langle\psi(\boldsymbol{x})|\psi(\boldsymbol{y})\rangle|^2.
+   k(\boldsymbol{x}_i, \boldsymbol{x}_j) = | \langle\psi(\boldsymbol{x}_i)|\psi(\boldsymbol{x}_j)\rangle|^2.
 
-This demonstration is based on Ref. [1].
+This demo is based on Ref. [1] and we will show the functionalities
+of the PennyLane ``kernels`` module implemented alongside with it.
 """
 
 ##############################################################################
 # A toy problem
 # -------------
-# In this demonstration, we will treat a toy problem that showcases the
-# inner workings of our approach. We of course need to start with some
-# imports:
+# In this demo, we will treat a toy problem that showcases the
+# inner workings of our approach and the available functionalities
+# in PennyLane. We of course need to start with some imports:
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -115,8 +116,10 @@ import matplotlib.pyplot as plt
 np.random.seed(1359)
 
 ##############################################################################
-# And we proceed right away to create the ``DoubleCake`` dataset.
-
+# And we proceed right away to create a dataset to work with, the
+# ``DoubleCake`` dataset. We define it as a class with a convenience
+# plotting method and you may skip ahead if you are not interested in the
+# class itself.
 
 class DoubleCake:
     def _make_circular_data(self):
@@ -197,7 +200,7 @@ class DoubleCake:
 # Let’s now have a look at our dataset. In our example, we will work with
 # 6 sectors:
 
-dataset = DoubleCake(6)
+dataset = DoubleCake(3)
 
 dataset.plot(plt.gca(), show_sectors=True)
 
@@ -208,9 +211,10 @@ dataset.plot(plt.gca(), show_sectors=True)
 # implementation of Quantum Embedding Kernels. The first ingredient we
 # need for this is an *Ansatz* that represents the unitary
 # :math:`U(\boldsymbol{x})` we use for embedding the data into a quantum
-# state. We will use a structure where a single layer is repeated multiple
-# times:
-
+# state as well as its adjoint :math:`U(\boldsymbol{x})^\dagger`.
+# We will use a structure where a single layer is repeated multiple times
+# and with variational parameters that determine :math:`U` in addition to
+# the datapoint :math:`\boldsymbol{x}`.
 
 def layer(x, params, wires, i0=0, inc=1):
     """Building block of the embedding Ansatz"""
@@ -230,73 +234,68 @@ def ansatz(x, params, wires):
     for j, layer_params in enumerate(params):
         layer(x, layer_params, wires, i0=j * len(wires))
 
+adjoint_ansatz = qml.adjoint(ansatz)
 
 def random_params(num_wires, num_layers):
+    """Generate random variational parameters in the shape for the ansatz."""
     return np.random.uniform(0, 2 * np.pi, (num_layers, 2, num_wires))
 
-
 ##############################################################################
-# We are now in a place where we can create the embedding. Together with
-# the Ansatz we only need a device to run the quantum circuit on. For the
-# purposes of this tutorial we will use PennyLane’s ``default.qubit``
+# Together with the Ansatz we only need a device to run the quantum circuit on.
+# For the purposes of this tutorial we will use PennyLane’s ``default.qubit``
 # device with 5 wires in analytic mode.
 
 dev = qml.device("default.qubit", wires=5, shots=None)
-wires = list(range(5))
+wires = dev.wires.tolist()
 
 ##############################################################################
-# Let us now define the quantum circuit that realizes the kernel. We will compute the overlap
-# of the quantum states by first applying the embedding of the first datapoint and then the inverse
-# of the embedding of the second datapoint.
-
+# Let us now define the quantum circuit that realizes the kernel. We will compute
+# the overlap of the quantum states by first applying the embedding of the first
+# datapoint and then the adjoint of the embedding of the second datapoint. We
+# finally extract the probabilities of observing each basis state.
 
 @qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
-    qml.adjoint(ansatz(x2, params, wires=wires))
+    adjoint_ansatz(x2, params, wires=wires)
 
     return qml.probs(wires=wires)
 
-
 ##############################################################################
-# The kernel function itself is now obtained by measuring the probability of observing the all-zero
-# state at the end of the kernel circuit:
-
+# The kernel function itself is now obtained by looking at the probability
+# of observing the all-zero state at the end of the kernel circuit -- because
+# of the ordering in `qml.probs`, this is the first entry:
 
 def kernel(x1, x2, params):
     return kernel_circuit(x1, x2, params)[0]
-
 
 ##############################################################################
 # Before focusing on the kernel values we have to provide values for the
 # variational parameters. At this point we fix the number of layers in the
 # Ansatz circuit to :math:`6`.
 
-init_params = random_params(5, 6)
+init_params = random_params(num_wires=5, num_layers=6)
 
 ##############################################################################
 # Now we can have a look at the kernel value between the first and the
 # second datapoint:
 
-print(
-    "The kernel value between the first and second datapoint is {:.3f}".format(
-        kernel(dataset.X[0], dataset.X[1], init_params)
-    )
-)
+kernel_value = kernel(dataset.X[0], dataset.X[1], init_params)
+print(f"The kernel value between the first and second datapoint is {kernel_value:.3f}")
 
 ##############################################################################
 # The mutual kernel values between all elements of the dataset form the
 # *kernel matrix*. We can inspect it via the ``qml.kernels.square_kernel_matrix``
-# method. The option ``assume_normalized_kernel=True`` ensures that we do not calculate the entries
-# between the same datapoints, as we know them to be 1 for our noiseless simulation.
+# method. The option ``assume_normalized_kernel=True`` ensures that we do not 
+# calculate the entries between the same datapoints, as we know them to be 1
+# for our noiseless simulation. To include the variational parameters, we
+# construct a ``lambda`` function that fixes them to the values we sampled above.
 
-K_init = qml.kernels.square_kernel_matrix(
-    dataset.X, lambda x1, x2: kernel(x1, x2, init_params), assume_normalized_kernel=True
-)
+init_kernel = lambda x1, x2: kernel(x1, x2, init_params)
+K_init = qml.kernels.square_kernel_matrix(dataset.X, init_kernel, assume_normalized_kernel=True)
 
 with np.printoptions(precision=3, suppress=True):
     print(K_init)
-
 
 ##############################################################################
 # Using the Quantum Embedding Kernel for predictions
@@ -309,51 +308,40 @@ with np.printoptions(precision=3, suppress=True):
 from sklearn.svm import SVC
 
 ##############################################################################
-# The ``SVC`` class expects a function that maps two sets of datapoints to
-# the corresponding kernel matrix. This is provided by the
-# ``kernel_matrix`` property of the ``EmbeddingKernel`` class, so we only
-# need to use a lambda construction to include our parameters. Once we
-# have this, we can let scikit adjust the SVM from our Quantum Embedding
+# To construct the SVM, we need to supply ``sklearn.svm.SVC`` with a function
+# that takes two sets of datapoints and returns the associated kernel matrix.
+# We can make use of the function ``qml.kernels.kernel_matrix`` that provides
+# this functionality. It expects the kernel to not have additional parameters
+# besides the datapoints, which is why we again supply the variational
+# parameters via the ``lambda`` function from above.
+# Once we have this, we can let scikit adjust the SVM from our Quantum Embedding
 # Kernel.
 #
-# Note this step does not modify the free parameters in our circuit
-# Ansatz. What it does is solving a different optimization task for the
-# :math:`\alpha` and :math:`b` vectors we introduced above.
-#
-# To construct the SVM, we need to supply it with a function that takes two sets
-# of datapoints and returns the associated kernel matrix. We can make use of the
-# function ``qml.kernels.kernel_matrix`` to simplify this. It expects the kernel
-# to not have variational parameters, which is why we supply them via a lambda function.
+# .. note::
+#     this step does *not* modify the variational parameters in our circuit
+#     Ansatz. What it does is solving a different optimization task for the
+#     :math:`\alpha` and :math:`b` vectors we introduced in the beginning.
 
 svm = SVC(
-    kernel=lambda X1, X2: qml.kernels.kernel_matrix(
-        X1,
-        X2,
-        lambda x1, x2: kernel(x1, x2, init_params),
-    )
+    kernel=lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, init_kernel)
 ).fit(dataset.X, dataset.Y)
 
 ##############################################################################
 # To see how well our classifier performs we will measure which percentage
 # of the dataset it classifies correctly.
 
-
 def accuracy(classifier, X, Y_target):
     return 1 - np.count_nonzero(classifier.predict(X) - Y_target) / len(Y_target)
 
 
-print(
-    "The accuracy of a kernel with random parameters is {:.3f}".format(
-        accuracy(svm, dataset.X, dataset.Y)
-    )
-)
+accuracy_init = accuracy(svm, dataset.X, dataset.Y)
+print(f"The accuracy of the kernel with random parameters is {accuracy_init:.3f}")
 
 ##############################################################################
-# We are also interested in seeing how the decision boundaries in this
+# We are also interested in seeing what the decision boundaries in this
 # classification look like. This could help us spotting overfitting issues
 # visually in more complex data sets. To this end we will introduce a
 # second helper method.
-
 
 def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
     _xx, _yy = np.meshgrid(np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints))
@@ -375,7 +363,6 @@ def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
 
     return plot_data
 
-
 ##############################################################################
 # With that done, let’s have a look at the decision boundaries for our
 # initial classifier:
@@ -386,8 +373,8 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # We see the outer points in the dataset can be correctly classified, but
 # we still struggle with the inner circle. But remember we have a circuit
 # with many free parameters! It is reasonable to believe we can give
-# values to those parameters which improve the overall accuracy of our
-# SVC.
+# values to those variational parameters which improve the overall accuracy
+# of our SVC.
 #
 # Training the Quantum Embedding Kernel
 # -------------------------------------
@@ -408,26 +395,29 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # .. math::
 #    \operatorname{KA}(K_1, K_2) = \frac{\operatorname{Tr}(K_1 K_2)}{\sqrt{\operatorname{Tr}(K_1^2)\operatorname{Tr}(K_2^2)}}
 #
-# Seen from a more theoretical side, this is nothing else than the cosine
-# of the angle between the kernel matrices :math:`K_1` and :math:`K_2`
-# seen as vectors in the space of matrices with the Hilbert-Schmidt- (or
-# Frobenius-) scalar product
-# :math:`\langle A, B \rangle = \operatorname{Tr}(A^T B)`. This reinforces
-# the geometric picture of how this measure relates to objects being
-# aligned in a vector space.
+# .. note::
+#     Seen from a more theoretical side, :math:`\operatorname{KA}`
+#     is nothing else than the cosine of the angle between the kernel
+#     matrices :math:`K_1` and :math:`K_2` if we see them as vectors
+#     in the space of matrices with the Hilbert-Schmidt (or
+#     Frobenius) scalar product
+#     :math:`\langle A, B \rangle = \operatorname{Tr}(A^T B)`. This
+#     reinforces the geometric picture of how this measure relates
+#     to objects, namely two kernels, being aligned in a vector space.
 #
-# The training data enters the picture by defining a kernel that expresses
-# the labelling in the vector :math:`\boldsymbol{y}` by assigning the
-# product of the respective labels as the kernel function
+# The training data enters the picture by defining an *ideal* kernel
+# function that expresses the original labelling in the vector
+# :math:`\boldsymbol{y}` by assigning to two datapoints the product
+# of the corresponding labels:
 #
 # .. math::
 #    k_{\boldsymbol{y}}(\boldsymbol{x}_i, \boldsymbol{x}_j) = y_i y_j
 #
 # The assigned kernel is thus :math:`+1` if both datapoints lie in the
-# same class and :math:`-1` otherwise. The kernel matrix for this new
-# kernel is simply given by the outer product
-# :math:`\boldsymbol{y}\boldsymbol{y}^T`. The kernel-target alignment is
-# then defined as the alignment of the kernel matrix generated by the
+# same class and :math:`-1` otherwise and its kernel matrix is simply
+# given by the outer product :math:`\boldsymbol{y}\boldsymbol{y}^T`.
+# The kernel-target alignment is then defined as the kernel alignment
+# of the kernel matrix :math:`K` generated by the
 # quantum kernel and :math:`\boldsymbol{y}\boldsymbol{y}^T`:
 #
 # .. math::
@@ -435,69 +425,100 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 #        = \frac{\operatorname{Tr}(K \boldsymbol{y}\boldsymbol{y}^T)}{\sqrt{\operatorname{Tr}(K^2)\operatorname{Tr}((\boldsymbol{y}\boldsymbol{y}^T)^2)}}
 #        = \frac{\boldsymbol{y}^T K \boldsymbol{y}}{\sqrt{\operatorname{Tr}(K^2)} N}
 #
-# where :math:`N` is the number of elements in :math:`\boldsymbol{y}`.
+# where :math:`N` is the number of elements in :math:`\boldsymbol{y}`,
+# that is the number of datapoints in the dataset.
 #
 # In summary, the kernel-target alignment effectively captures how well
 # the kernel you chose reproduces the actual similarities of the data. It
 # does have one drawback, however: having a high kernel-target alignment
 # is only a necessary but not a sufficient condition for a good
 # performance of the kernel [2]. This means having good alignment is
-# guaranteed to good performance, but optimal alignment will not always
-# bring optimal training accuracy.
+# guaranteed for good performance, but optimal alignment will not always
+# bring optimal training accuracy with it.
 #
 # Let’s now come back to the actual implementation. PennyLane’s
-# ``EmbeddingKernel`` class allows you to easily evaluate the kernel
+# ``kernel`` module allows you to easily evaluate the kernel
 # target alignment:
 
-print(
-    "The kernel-target-alignment for our dataset with random parameters is {:.3f}".format(
-        qml.kernels.target_alignment(
+kta_init = qml.kernels.target_alignment(
             dataset.X,
             dataset.Y,
-            lambda x1, x2: kernel(x1, x2, init_params),
+            init_kernel,
             assume_normalized_kernel=True,
         )
-    )
-)
+print(f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}")
 
 ##############################################################################
-# Now let’s code up an optimization loop and improve this!
+# Now let’s code up an optimization loop and improve the kernel-target alignment!
 #
 # We will make use of regular gradient descent optimization. To speed up
-# the optimization we will not use the entire training set but rather
+# the optimization we will not use the entire training set to compute
+# :math:`\operatorname{KTA}` but rather
 # sample smaller subsets of the data at each step, we choose :math:`4`
 # datapoints at random. Remember that PennyLane’s inbuilt optimizer works
 # to *minimize* the cost function that is given to it, which is why we
 # have to multiply the kernel target alignment by :math:`-1` to actually
 # *maximize* it in the process.
+#
+# .. note::
+#     Currently, the function ``qml.kernels.target_alignment`` is not
+#     differentiable yet, making it unfit for gradient descent optimization.
+#     We therefore first define a differentiable version of this function.
+
+def target_alignment(
+    X,
+    Y,
+    kernel,
+    assume_normalized_kernel=False,
+    rescale_class_labels=True,
+):
+    """Kernel-target alignment between kernel and labels."""
+
+    K = qml.kernels.square_kernel_matrix(
+        X,
+        kernel,
+        assume_normalized_kernel=assume_normalized_kernel,
+    )
+
+    if rescale_class_labels:
+        nplus = np.count_nonzero(np.array(Y) == 1)
+        nminus = len(Y) - nplus
+        _Y = np.array([y / nplus if y == 1 else y / nminus for y in Y])
+    else:
+        _Y = np.array(Y)
+
+    T = np.outer(_Y, _Y)
+    inner_product = np.sum(K * T)
+    norm = np.sqrt(np.sum(K * K) * np.sum(T * T))
+    inner_product = inner_product / norm
+
+    return inner_product
 
 params = init_params
 opt = qml.GradientDescentOptimizer(0.2)
 
 for i in range(500):
+    # Choose subset of datapoints to compute the KTA on.
     subset = np.random.choice(list(range(len(dataset.X))), 4)
-    params = opt.step(
-        lambda _params: -qml.kernels.target_alignment(
-            dataset.X[subset],
-            dataset.Y[subset],
-            lambda x1, x2: kernel(x1, x2, _params),
-            assume_normalized_kernel=True,
-        ),
-        params,
+    # Define the cost function for optimization
+    cost = lambda _params: -target_alignment(
+        dataset.X[subset],
+        dataset.Y[subset],
+        lambda x1, x2: kernel(x1, x2, _params),
+        assume_normalized_kernel=True,
     )
+    # Optimization step
+    params = opt.step(cost, params)
 
+    # Report the alignment on the full dataset every 50 steps.
     if (i + 1) % 50 == 0:
-        print(
-            "Step {} - Alignment = {:.3f}".format(
-                i + 1,
-                qml.kernels.target_alignment(
-                    dataset.X,
-                    dataset.Y,
-                    lambda x1, x2: kernel(x1, x2, params),
-                    assume_normalized_kernel=True,
-                ),
-            )
+        current_alignment = target_alignment(
+            dataset.X,
+            dataset.Y,
+            lambda x1, x2: kernel(x1, x2, params),
+            assume_normalized_kernel=True,
         )
+        print(f"Step {i+1} - Alignment = {current_alignment:.3f}")
 
 ##############################################################################
 # We want to assess the impact of training the parameters of the quantum
@@ -516,11 +537,8 @@ svm_trained = SVC(
 # We expect to see an accuracy improvement vs. the SVM with random
 # parameters:
 
-print(
-    "The accuracy of a kernel with trained parameters is {:.3f}".format(
-        accuracy(svm_trained, dataset.X, dataset.Y)
-    )
-)
+accuracy_trained = accuracy(svm_trained, dataset.X, dataset.Y)
+print(f"The accuracy of a kernel with trained parameters is {accuracy_trained:.3f}")
 
 ##############################################################################
 # Very well! We now achieved perfect classification!
@@ -533,9 +551,9 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 
 ##############################################################################
 # Indeed, we see that now not only every data instance falls within the
-# correct class, but also that there are no strong artifacts that make us
+# correct class, but also that there are no strong artifacts that would make us
 # distrust the model. In this sense, our approach benefits from both: On
-# the one hand it can adjust itself to the dataset, and on the other hand
+# one hand it can adjust itself to the dataset, and on the other hand
 # is not expected to suffer from bad generalisation.
 #
 # References
