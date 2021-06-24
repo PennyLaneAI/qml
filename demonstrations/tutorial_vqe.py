@@ -247,7 +247,7 @@ plt.show()
 # potential energy surface of molecules to simulate chemical reactions.
 # Another interesting application is to probe the lowest-lying states of molecules
 # in specific sectors of the Hilbert space. For example, see the tutorial
-# :doc:`tutorial_vqe_uccsd_obs`. Furthermore, the algorithm presented here can be
+# :doc:`tutorial_vqe_spin_sectors`. Furthermore, the algorithm presented here can be
 # generalized to find the equilibrium geometry of a molecule as it is demonstrated in the
 # tutorial :doc:`tutorial_mol_geo_opt`.
 #
