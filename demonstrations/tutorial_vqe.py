@@ -12,12 +12,13 @@ A brief overview of VQE
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe_parallel VQE with parallel QPUs
    tutorial_vqe_qng Accelerating VQE with the QNG
+   tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
 *Author: PennyLane dev team. Last updated: 24 June 2021.*
 
-The Variational Quantum Eigensolver (VQE) is a flagship
-algorithm for quantum chemistry using near-term quantum computers [#peruzzo2014]_. It is an application of the
+The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
+using near-term quantum computers [#peruzzo2014]_. It is an application of the
 `Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_, where a quantum
 computer is trained to prepare the ground state of a given molecule.
 
@@ -236,7 +237,9 @@ plt.show()
 # which is precisely the ground state of the :math:`\mathrm{H}_2` molecule in a
 # minimal basis set approximation.
 #
-# In this tutorial, we have implemented the VQE algorithm to find the ground state
+# Conclusion
+# ----------
+## In this tutorial, we have implemented the VQE algorithm to find the ground state
 # of the hydrogen molecule. We used a simple circuit to prepare quantum states of
 # the molecule beyond the Hartree-Fock approximation. The ground-state energy
 # was obtained by minimizing a cost function defined as the expectation value of the
@@ -261,12 +264,6 @@ plt.show()
 #     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
-#
-# .. [#yudong2019]
-#
-#     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
-#     `Chem. Rev. 2019, 119, 19, 10856-10915.
-#     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
 # .. [#seeley2012]
 #
