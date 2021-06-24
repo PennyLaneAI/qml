@@ -460,7 +460,10 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #     So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters, which is indeed polynomially many.
 #
 #     In practice, not every parameter needs the same amount of circuit evaluations, though!
-#     Without going into detail on the parameter-shift rule for the gradient and Hessian, we remark that we need :math:`1\times 1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1`.
+#     Without going into detail on the parameter-shift rule for the gradient and Hessian,
+#     we remark that we need :math:`1` circuit evaluation for :math:`E^{(A)}`, :math:`2\times m` and :math:`m` 
+#     evaluations for :math:`E^{(B)}` and :math:`E^{(C)}`, respectively, and :math:`4\times (m-1)m/2` many for
+#     :math:`E^{(D)}` which amounts to a total of :math:`2m^2+m+1`.
 #     This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
 #
 # Now this should be enough theory, so let's visualize the model that results from our trigonometric expansion.
