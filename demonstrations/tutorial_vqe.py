@@ -243,7 +243,7 @@ plt.show()
 # molecular Hamiltonian in the trial state. 
 #
 # The VQE algorithm can be used to simulate other chemical phenomena.
-# In the tutorial :doc:`tutorial_vqe_bond_dissociation` we use VQE to explore the
+# In the tutorial :doc:`tutorial_vqe_bond_dissociation`, we use VQE to explore the
 # potential energy surface of molecules to simulate chemical reactions.
 # Another interesting application is to probe the lowest-lying states of molecules
 # in specific sectors of the Hilbert space. For example, see the tutorial
