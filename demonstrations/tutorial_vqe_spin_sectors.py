@@ -10,24 +10,18 @@ VQE in different spin sectors
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+*Author: PennyLane dev team. Last updated: 25 June 2021.*
 
-Quantum computers offer a promising avenue to perform first-principles simulations of the
-electronic structure of molecules and materials that are currently intractable using classical
-high-performance computers. In particular, the Variational Quantum Eigensolver (VQE) algorithm
-[#peruzzo2014]_, [#cao2019]_ has proven to be a valuable quantum-classical
-approach to find the lowest-energy eigenstate of the electronic Hamiltonian by using Noisy
-Intermediate-Scale Quantum (NISQ) devices [#kandala2017]_.
+The Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_, [#cao2019]_ has proven
+to be a valuable approach to find the lowest-energy eigenstate of the electronic Hamiltonian
+of a molecule using a quantum computer [#kandala2017]_.
 
-In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_, the
-electronic Hamiltonian matrix is block diagonal in the total spin projection quantum number
-:math:`S_z`. This allows us to compute the energy spectrum of the Hamiltonian in a given sector of
-:math:`S_z`. For example, the figure below shows the energy spectra of the hydrogen molecule
-calculated in different sectors of the total-spin projection. The ground state with
-energy :math:`E_\mathrm{gs}=-1.136189` Ha has total spin :math:`S=0` and spin
-projection :math:`S_z=0`.
-The lowest-lying excited states, with energy :math:`E^*=-0.478453` Ha and total spin
-:math:`S=1`, show a three-fold spin degeneracy related to the values of :math:`S_z=-1, 0, 1`.
+In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_,
+the eigenstates of the molecular Hamiltonian can be computed in a specific sector of the total
+spin-projection quantum number :math:`S_z`. This is illustrated in the figure below for the energy
+spectra of the hydrogen molecule. In this case, the ground state coresponds to a singlet state
+while the lowest-lying excited states, with total spin :math:`S=1`, form a triplet
+related to the spin components :math:`S_z=-1, 0, 1`.
 
 |
 
@@ -37,30 +31,16 @@ The lowest-lying excited states, with energy :math:`E^*=-0.478453` Ha and total 
 
 |
 
-Similarly, in the framework of VQE, if the quantum computer can be programmed to prepare many-body
-states in a specific sector of the total-spin projection :math:`S_z`, the variational optimization
-algorithm will allow us to estimate the energy of the lowest-energy state in this spin sector.
-More specifically, if we run a VQE simulation for the :math:`\mathrm{H}_2` molecule in the
-subspace of states with :math:`S_z=0`, we will find the ground-state energy of the molecule. If the
-VQE simulation is performed in the subspace with :math:`S_z=1`, the optimized state will be in
-practice an excited state of the molecule, as shown in the figure above.
+In this tutorial you will learn how run VQE simulations to find the lowest-energy states
+of a molecular Hamiltonian in different sectors of the spin quantum numbers.
+For the sake of simplicity, we chose the :math:`\mathrm{H}_2` molecule even though the
+same methodology can be applied to simulate more complicated molecules. First, we build
+the electronic Hamiltonian and the total-spin operators for which we want to compute expectation
+values. Next, we specify how to build the variational circuits to prepare the trial states
+in different spin sectors. Finally, we run the VQE algorithm to find the the ground and the
+lowest-lying excited states of the hydrogen molecule.
 
-At the core of the VQE algorithm is the variational quantum circuit that is optimized to prepare
-the desired quantum states. The choice of the circuit is crucial for the success of the algorithm.
-The unitary coupled cluster ansatz [#romero2017]_ is a powerful quantum circuit
-that is believed to outperform the classical coupled cluster method
-[#jensenbook]_, traditionally referred to as the gold standard of quantum
-chemistry.
-
-We demonstrate how different functionalities implemented in PennyLane
-can be put together to run VQE simulations to find the lowest-energy states of the
-:math:`\mathrm{H}_2` molecule in different sectors of the total spin :math:`S`.
-We also specify how to use the unitary coupled cluster ansatz, restricted to single
-and double excitations (UCCSD), as the variational circuit for the algorithm. These functionalities
-can be combined to estimate the energies of the ground and the lowest-lying excited states of the
-hydrogen molecule.
-
-Let's get started! ⚛️
+Let's get started!
 
 Building the Hamiltonian and the total spin observable :math:`\hat{S}^2`
 ------------------------------------------------------------------------
