@@ -54,6 +54,7 @@ So: sit down, relax, and enjoy your optimization!
     :align: center
     :width: 50%
     :target: javascript:void(0)
+    
     Optimization progress with Quantum Analytic Descent.
 
 
