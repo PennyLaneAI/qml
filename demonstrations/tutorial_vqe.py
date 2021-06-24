@@ -204,7 +204,7 @@ fig = plt.figure()
 fig.set_figheight(5)
 fig.set_figwidth(12)
 
-# Full configuration interaction (FCI) Energy computed classically
+# Full configuration interaction (FCI) energy computed classically
 E_fci = -1.136189454088
 
 # Add energy plot on column 1
