@@ -33,7 +33,7 @@ related to the spin components :math:`S_z=-1, 0, 1`.
 
 In this tutorial you will learn how run VQE simulations to find the lowest-energy states
 of a molecular Hamiltonian in different sectors of the spin quantum numbers.
-For the sake of simplicity, we chose the :math:`\mathrm{H}_2` molecule even though the
+For the sake of simplicity, we chose the :math:`\mathrm{H}_2` molecule but the
 same methodology can be applied to simulate more complicated molecules. First, we build
 the electronic Hamiltonian and the total-spin operators for which we want to compute expectation
 values. Next, we specify how to build the variational circuits to prepare the trial states
@@ -42,96 +42,66 @@ lowest-lying excited states of the hydrogen molecule.
 
 Let's get started!
 
-Building the Hamiltonian and the total spin observable :math:`\hat{S}^2`
-------------------------------------------------------------------------
-
-The first step is to import the required libraries and packages:
+Building the Hamiltonian and the spin operator :math:`\hat{S}_z`
+----------------------------------------------------------------
+First, we need to specify the structure of the molecule. This is done by providing a list
+with the symbols of the constituent atoms and a one-dimensional array with the corresponding
+nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
 
-import pennylane as qml
-from pennylane import numpy as np
-from pennylane import qchem
-from pennylane.templates.subroutines import UCCSD
-from functools import partial
+import numpy as np
+
+symbols = ["H", "H"]
+coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 ##############################################################################
-# The second step is to specify the molecule whose properties we aim to calculate.
-# This is done by providing the name and the geometry of the molecule.
-
-name = "h2"
-geometry = "h2.xyz"
-
-##############################################################################
-# The geometry of the molecule can be given in any format recognized by Open Babel.
-# Here, we used a locally saved file in
-# `xyz format <https://en.wikipedia.org/wiki/XYZ_file_format>`_ specifying the
-# three-dimensional coordinates and symbols of the atomic species.
+# The molecular structure can also be imported from an external file using
+# the :func:`~.pennylane_qchem.qchem.read_structure` function.
 #
-# In this example, we use a minimal `basis set
+# Now, we can build the electronic Hamiltonian. Here, we use a minimal `basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ to model the hydrogen molecule.
 # In this approximation, the qubit Hamiltonian of the molecule in the Jordan-Wigner
 # representation is built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
 # function.
 
-symbols, coordinates = qchem.read_structure(geometry)
+import pennylane as qml
 
-H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mapping="jordan_wigner")
+H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 
 print("Number of qubits = ", qubits)
-print("Hamiltonian is ", H)
+print("The Hamiltonian is ", H)
 
 ##############################################################################
+# The outputs of the function are the Hamiltonian and the number of qubits
+# required for the quantum simulations. For the :math:`\mathrm{H}_2` molecule in a minimal
+# basis, we have four molecular **spin**-orbitals which defines the number of qubits.
+#
 # The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function allows us to define
-# an additional set of keyword arguments to provide the user with ample flexibility
-# to generate the Hamiltonian of more complicated systems. For more details take a look
-# at the tutorial :doc:`tutorial_quantum_chemistry`.
-
-##############################################################################
-# We also want to build the total spin operator :math:`\hat{S}^2`,
+# additional keyword arguments to simulate more complicated molecules. For more details
+# take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
+#
+# We also want to build the total spin-projection operator :math:`\hat{S}_z`,
 #
 # .. math::
 #
-#     \hat{S}^2 = \frac{3}{4} N_e + \sum_{\alpha, \beta, \gamma, \delta}
-#     \langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2
-#     \vert \gamma, \delta \rangle ~ \hat{c}_\alpha^\dagger \hat{c}_\beta^\dagger
-#     \hat{c}_\gamma \hat{c}_\delta.
+#     \hat{S}_z = \sum_\alpha s_{z_\alpha} \hat{n}_\alpha.
 #
-# In the equation above, :math:`N_e` is the number of active electrons,
-# :math:`\hat{c}` and :math:`\hat{c}^\dagger` are respectively the electron annihilation and
-# creation operators, and
-# :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
-# is the matrix element of the two-particle spin operator
-# :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of Hartree-Fock *spin* orbitals
-# [#fetterbook]_. The :math:`\mathrm{H}_2` molecule has two electrons that populate,
-# within the minimal basis set approximation, four *spin* orbitals. As a reminder, the
-# variable ``qubits`` output by the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
-# above stores the number of spin orbitals included the basis.
-#
-# In order to build the spin operator :math:`\hat{S}^2` we call the
-# :func:`~.pennylane_qchem.qchem.spin2` function.
+# In the equation above the index :math:`\alpha` runs over the basis of spin-orbitals,
+# :math:`\hat{n}_\alpha` is the particle number operator whose
+# eigenvalues :math:`0` or :math:`1` gives the occupation of the orbitals, and
+# :math:`s_{z_\alpha} = \pm 1/2` denotes the spin-projection quantum number
+# of the single-particle state :math:`\vert \alpha \rangle`.
+# 
+# We can use the :func:`~.pennylane_qchem.qchem.spin_z` function to build the
+# :math:`\hat{S}_z` observable. 
 
-electrons = 2
-S2 = qchem.spin2(electrons, qubits, mapping="jordan_wigner")
-print(S2)
+Sz = qml.qchem.spin_z(qubits)
+print(Sz)
 
 ##############################################################################
-# The :func:`~.pennylane_qchem.qchem.spin2` function uses
-# :func:`~.pennylane_qchem.qchem._spin2_matrix_elements` and
-# :func:`~.pennylane_qchem.qchem.observable` to compute the
-# matrix elements in the equation above and to build the many-body observable,
-# respectively.
-#
-# .. note::
-#
-#     The :func:`~.pennylane_qchem.qchem.observable` function can be used to build any
-#     many-body observable as long as we have access to the matrix elements of the
-#     one- and/or two-particle operators in the basis of single-particle states.
-
-
-##############################################################################
-# Implementing VQE with the UCCSD ansatz
-# --------------------------------------
-#
+# Defining the quantum circuit
+# ----------------------------
+# 
 # PennyLane contains the :class:`~.pennylane.ExpvalCost` class to implement the VQE algorithm.
 # We begin by defining the device, in this case a qubit simulator:
 
