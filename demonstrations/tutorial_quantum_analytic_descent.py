@@ -17,22 +17,22 @@ Quantum analytic descent
    tutorial_stochastic_parameter_shift Obtaining gradients stochastically
 
 
-*Authors: Elies Gil-Fuster, David Wierichs. Posted: ?? May 2021.*
+*Authors: Elies Gil-Fuster, David Wierichs (Xanadu residents). Posted: ?? May 2021.*
 
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
-The Variational Quantum Eigensolver (VQE) combines a smart circuit
+The Variational Quantum Eigensolver (VQE) combines smart circuit
 design with a gradient-based optimization to solve this task
 (take a look at the `VQE overview demo <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ for an introduction).
-Several practical demonstrations have pointed out how near-term quantum
-devices may be well-suited platforms for VQE and other variational quantum algorithms.
-One issue for such an approach is, though, that the optimization landscape is
+Several practical demonstrations have shown how near-term quantum
+devices may be suitable for VQE and other variational quantum algorithms.
+One issue for such an approach, though, is that the optimization landscape is
 non-convex, so reaching a good enough local minimum quickly requires hundreds or
 thousands of update steps. This is problematic because computing gradients of the
 cost function on a quantum computer is inefficient when it comes to circuits
 with many parameters.
 
-At the same time, we do have a good understanding of the *local* shape
+At the same time, we have a good understanding of the *local* shape
 of the cost landscape around any reference point.
 Cashing in on this, the authors of the
 Quantum Analytic Descent paper [#QAD]_
@@ -67,23 +67,23 @@ So: sit down, relax, and enjoy your optimization!
 VQEs give rise to trigonometric cost functions
 ----------------------------------------------
 
-When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which is typically initialized in the base state :math:`|0\rangle`.
-The body of the circuit is populated with a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
-After the variational form, the circuit ends with the measurement of an observable
-:math:`\mathcal{M}`, which is also fixed at the start and encodes the problem
+When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which are typically initialized in the base state :math:`|0\rangle`.
+The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
+After the variational form, the circuit ends with the measurement of a chosen observable
+:math:`\mathcal{M}`, based on the problem
 we try to solve.
 
 The idea in VQE is to fix a variational form such that the expected value of the measurement relates to the energy of an interesting Hamiltonian:
 
-.. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle,
+.. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle.
 
-then, what we want is to find the lowest possible energy the system can attain.
-This corresponds to running an optimization program to find the :math:`\boldsymbol{\theta}` that minimizes the cost -- in this case the energy.
+We want to find the lowest possible energy the system can attain;
+this corresponds to running an optimization program to find the :math:`\boldsymbol{\theta}` that minimizes the function above.
 
 
 If the gates in the variational form are restricted to be Pauli rotations, then the cost function is a sum of *multilinear trigonometric terms* in each of the parameters.
 That's a scary sequence of words!
-What that means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
+What it means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
 
 That is, there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` functions of all parameters but :math:`\theta_i` (:math:`a_i = a_i(\theta_1, \ldots, \hat{\theta}_i, \ldots, \theta_m)`)
 such that the cost can be written as
@@ -177,7 +177,7 @@ line2 = ax.plot(
 # *if the variational parameters feed into Pauli rotations, the energy landscape is a multilinear combination of trigonometric functions*.
 # What is a good thing about trigonometric functions?
 # That's right!
-# We have studied them since high-school and know how their graphs look!
+# We have studied them since high school and know how their graphs look!
 #
 # .. note::
 #
@@ -196,7 +196,7 @@ line2 = ax.plot(
 # The bug: well, it's only approximate, so we cannot rely on it fully.
 # And one extra feature (you didn't see that coming, did you?): if the reference point about which we build the classical model is a true local minimum, then it will be a local minimum of the classical model too.
 # And that is the key!
-# What we do is: given a reference point, use the classical model to find a point that's closer to the true minimum, and then use that point as reference for a new model!
+# Given a reference point, we use the classical model to find a point that's closer to the true minimum, and then use that point as reference for a new model!
 # This is what is called Quantum Analytic Descent (QAD), and its pseudo-algorithm would look something like:
 #
 # #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
@@ -211,14 +211,14 @@ line2 = ax.plot(
 # ---------------------------
 #
 # Knowing how the cost looks when restricted to only one parameter, nothing keeps us in theory from constructing a perfect classical model.
-# We know what the cost looks like, the only thing we need to do is write down a general multilinear trigonometric polynomial and figure out what value its coefficients should take.
+# The only thing we need to do is write down a general multilinear trigonometric polynomial and determine its coefficients.
 # Simple, right?
-# Well, for :math:`m` parameters, there would be :math:`3^m` coefficients to estimate, which gives us the everdreaded exponential scaling.
-# So yes, although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
+# Well, for :math:`m` parameters, there would be :math:`3^m` coefficients to estimate, which gives us the ever-dreaded exponential scaling.
+# Although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
 # What can we do, then?
 # The authors of QAD propose building an imperfect model.
-# This makes *all* the difference.
-# In the paper they use a classical model that is accurate only in a region close to a given reference point, and that delivers good optimization!
+# This makes *all* the difference---they use a classical model that is accurate only in
+# a region close to a given reference point, and that delivers good results for the optimization!
 #
 # Function expansions
 # ^^^^^^^^^^^^^^^^^^^
@@ -286,7 +286,7 @@ line2 = ax.plot(
 # Expanding in adapted trigonometric polynomials
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Now we can group the terms we will have to deal with in the multi-parameter model by their order.
+# Now we can group the terms in the multi-parameter model by their order.
 #
 # #. The :math:`0^{\text{th}}` order term (the constant in a Taylor series) is :math:`A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2`.
 # #. The :math:`1^{\text{st}}` order terms (would be :math:`x_k` for Taylor for each component :math:`k`) are :math:`B_k(\boldsymbol{\theta}) = 2\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2`.
@@ -304,9 +304,9 @@ line2 = ax.plot(
 #   D_{kl}(\boldsymbol{\theta}) &= 4\tan\left(\frac{\theta_k}{2}\right)\tan\left(\frac{\theta_l}{2}\right)A(\boldsymbol{\theta})
 #
 # And with that we know what type of terms we should expect to encounter in our local classical model:
-# The classical model we want to construct is a linear combination of the functions
-# :math:`\{A(\boldsymbol{\theta})`, :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
-# for each parameter and :math:`D_{kl}(\boldsymbol{\theta})\}` for every pair of different variables :math:`(\theta_k,\theta_l)`.
+# the model we want to construct is a linear combination of the functions
+# :math:`A(\boldsymbol{\theta})`, :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
+# for each parameter, and :math:`D_{kl}(\boldsymbol{\theta})` for every pair of different variables :math:`(\theta_k,\theta_l)`.
 #
 # Computing the expansion coefficients
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -317,8 +317,8 @@ line2 = ax.plot(
 # As the terms we include in the expansion have leading orders :math:`0`, :math:`1` and :math:`2`, these derivatives are
 # :math:`E(\boldsymbol{\theta})`, :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k`,
 # :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l`.
-# However, as the trigonometric polynomials contain multiple orders in :math:`\boldsymbol{\theta}`, and both
-# :math:`A(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})` contribute to the second order, we have to account
+# However, the trigonometric polynomials may contain multiple orders in :math:`\boldsymbol{\theta}`. For example, both
+# :math:`A(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})` contribute to the second order, so we have to account
 # for this in the coefficient of :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k^2`.
 # We can name the different coefficients (including the function value itself) accordingly to how we named the terms in the series:
 #
@@ -416,7 +416,7 @@ print(f"E_A and E_original are the same: {coeffs[0]==E_original}")
 print(f"E_model and E_original are the same: {E_model==E_original}")
 
 ###############################################################################
-# As we can see, the model works fine and reproduces the correct energy at the parameter
+# As we can see, the model reproduces the correct energy at the parameter
 # position :math:`\boldsymbol{\theta}_0` at which we constructed it (again note how the
 # input parameters of the model are *relative* to the reference point
 # such that :math:`\hat{E}(0)=E(\boldsymbol{\theta}_0)` is satisfied).
@@ -443,7 +443,7 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # .. note::
 #     **Counting parameters and evaluations**
 #
-#     Now we can also summarize how many parameters our model has.
+#     How many parameters does our model have?
 #     For an :math:`m`-dimensional input variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
 #
 #     #. We have one :math:`E^{(A)}`.
@@ -457,7 +457,7 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #     Without going into detail on the parameter-shift rule for the gradient and Hessian, we remark that we need :math:`1\times 1 + 2\times m + 1\times m + 4\times (m-1)m/2` many circuit evaluations, which amounts to a total of :math:`2m^2+m+1`.
 #     This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
 #
-# Now this should be enough of theory, let's *take a look* at the model that results from our trigonometric expansion.
+# Now this should be enough theory, so let's visualize the model that results from our trigonometric expansion.
 # We'll use the coefficients and the ``model_cost`` function from above and sample a new random parameter position.
 
 from mpl_toolkits.mplot3d import Axes3D
@@ -517,13 +517,13 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # Quantum Analytic Descent
 # ------------------------
 #
-# The underlying idea we are trying to exploit now for the optimization in VQEs is the following:
-# If we can model the cost around the reference point well enough, we will be able to find a rough
+# The underlying idea we will now try to exploit for optimization in VQEs is the following:
+# if we can model the cost around the reference point well enough, we will be able to find a rough
 # estimate of where the minimum of the landscape is.
 # Granted, our model represents the true landscape less accurately the further we go away from the
 # reference point :math:`\boldsymbol{\theta}_0`, but nonetheless the minimum *of the model*
 # will bring us much closer to the minimum *of the true cost* than a random walk.
-# And hereby, we recap the complete strategy from above:
+# Recall the complete strategy from above:
 #
 # #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
 # #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
@@ -531,8 +531,8 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
 # #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
 #
-# This provides an iterative strategy which will take us to a good enough solution much faster
-# (in number of iterations) than for example regular stochastic gradient descent (SGD).
+# This provides an iterative strategy which will take us to a good enough solution 
+# in fewer iterations than, for example, regular stochastic gradient descent (SGD).
 # The procedure of Quantum Analytic Descent is also shown in the following flowchart. Note that the minimization
 # of the model in Step 3 is carried out via an inner optimization loop.
 #
@@ -636,9 +636,9 @@ mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
-# **Iteration 3:** Both, the model and the original cost function now show a minimum close to our parameter position, Quantum Analytic Descent converged.
-# Note how the larger deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area,
-# in which both, the original energy and the model, form a convex bowl and the deviation plateaus at zero.
+# **Iteration 3:** Both the model and the original cost function now show a minimum close to our parameter position--- Quantum Analytic Descent converged.
+# Note how the larger deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area
+# in which both the original energy and the model form a convex bowl and the deviation plateaus at zero.
 #
 # Optimization behaviour
 # ^^^^^^^^^^^^^^^^^^^^^^
