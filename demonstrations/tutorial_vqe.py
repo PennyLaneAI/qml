@@ -239,7 +239,7 @@ plt.show()
 #
 # Conclusion
 # ----------
-## In this tutorial, we have implemented the VQE algorithm to find the ground state
+# In this tutorial, we have implemented the VQE algorithm to find the ground state
 # of the hydrogen molecule. We used a simple circuit to prepare quantum states of
 # the molecule beyond the Hartree-Fock approximation. The ground-state energy
 # was obtained by minimizing a cost function defined as the expectation value of the
