@@ -177,23 +177,72 @@
                 }
               </style>
               <script type="text/javascript">
-                function toggle_filters() {
-                  var val = $(".tags input[type='radio']:checked").val();
-                  $(".filters label[for="+  val  +"]").addClass("active");
-                  $(".filters label:not([for="+  val  +"])").removeClass("active");
+                function searchGalleryItems($galleryItems, searchQuery) {
+                    $galleryItems.each(function(index, item) {
+                        var $item = $(item);
+                        var tooltipText = $item.attr("tooltip").toLowerCase();
+                        var categoryText = $item.attr("data-category").toLowerCase();
+                        var descriptionText = $item.find("span.doc").text().toLowerCase();
+                        var itemText = categoryText + ' ' + tooltipText + ' ' + descriptionText;
 
-                  if (val != "all"){
-                    $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").css("display", "none")
-                    $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").css("display", "block")
-                  } else {
-                    $(".gallery-grid .sphx-glr-thumbcontainer").css("display", "block")
-                  }
+                        if (!itemText.includes(searchQuery)) {
+                            $item.addClass('d-none');
+                        }
+
+                        if (itemText.includes(searchQuery) && $item.hasClass('d-none')) {
+                            $item.removeClass('d-none');
+                        }
+                    });
+                }
+
+                function toggle_filters() {
+                    var val = $(".tags input[type='radio']:checked").val();
+                    var searchQuery = $("#tutorialDemoSearchInput").val();
+                    $(".filters label[for="+  val  +"]").addClass("active");
+                    $(".filters label:not([for="+  val  +"])").removeClass("active");
+
+                    if (val !== "all") {
+                        if (searchQuery.length) {
+                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
+                            $(".gallery-grid .sphx-glr-thumbcontainer").each(function(index, item) {
+                                var $item = $(item);
+                                if (!$item.hasClass('d-none') && !$item.attr('data-category').includes(val)) {
+                                    $item.addClass('d-none');
+                                }
+                            });
+                        } else {
+                            $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").addClass('d-none');
+                            $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").removeClass('d-none');
+                        }
+                    } else {
+                        if (searchQuery.length) {
+                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
+                        } else {
+                            $(".gallery-grid .sphx-glr-thumbcontainer").removeClass('d-none');
+                        }
+                    }
                 }
 
                 toggle_filters();
 
                 $(".tags input").on("change", function() {
-                  toggle_filters();
+                    toggle_filters();
+                });
+
+                $("#tutorialDemoSearchInput").on("keyup", function(e) {
+                    e.preventDefault();
+                    var searchQuery = e.target.value.toLowerCase();
+                    var $galleryItems = $(".gallery-grid .sphx-glr-thumbcontainer");
+
+                    if (!searchQuery.length) {
+                        $galleryItems.each(function(index, item) {
+                            if ($(item).hasClass('d-none')) { $(item).removeClass('d-none'); }
+                        });
+                    } else {
+                        searchGalleryItems($galleryItems, searchQuery);
+                    }
+
+                    toggle_filters();
                 });
               </script>
             {% elif pagename == "videos" %}
