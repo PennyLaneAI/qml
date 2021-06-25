@@ -1,5 +1,5 @@
-r"""Quantum Embedding Kernels with the kernels module
-=====================================================
+r"""Training and evaluating quantum kernels
+===========================================
 
 .. meta::
     :property="og:description": Kernels and alignment training with Pennylane.
@@ -58,7 +58,7 @@ embedding, we get
 .. math::
    y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \phi(\boldsymbol{x})\rangle + b).
 
-We will forgo one tiny step, but it can be shown that for the purposes
+We will forgo one tiny step, but it can be shown that for the purpose
 of optimal classification, we can choose the vector defining the
 decision boundary as a linear combination of the embedded datapoints
 :math:`\boldsymbol{w} = \sum_i \alpha_i \phi(\boldsymbol{x}_i)`. Putting
@@ -81,8 +81,8 @@ superfluous to actually perform the (potentially expensive) embedding
 associated kernel:
 
 .. math::
-   \phi((x_1, x_2)) = (x_1^2, \sqrt{2} x_1 x_2, x_2^2) \qquad
-   k(\boldsymbol{x}, \boldsymbol{y}) = x_1^2 y_1^2 + 2 x_1 x_2 y_1 y_2 + x_2^2 y_2^2 = \langle \boldsymbol{x}, \boldsymbol{y} \rangle^2
+   \phi((x_1, x_2)) &= (x_1^2, \sqrt{2} x_1 x_2, x_2^2) \\
+   k(\boldsymbol{x}, \boldsymbol{y}) &= x_1^2 y_1^2 + 2 x_1 x_2 y_1 y_2 + x_2^2 y_2^2 = \langle \boldsymbol{x}, \boldsymbol{y} \rangle^2.
 
 This means by just replacing the regular scalar product in our linear
 classification with the map :math:`k`, we can actually express much more
@@ -115,121 +115,117 @@ of the PennyLane ``kernels`` module implemented alongside with it.
 # A toy problem
 # -------------
 # In this demo, we will treat a toy problem that showcases the
-# inner workings of our approach and the available functionalities
-# in PennyLane. We of course need to start with some imports:
+# inner workings of classification with quantum embedding kernels,
+# training variational embedding kernels and the available functionalities
+# to do both in PennyLane. We of course need to start with some imports:
 
-import pennylane as qml
 from pennylane import numpy as np
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 
 np.random.seed(1359)
 
 ##############################################################################
 # And we proceed right away to create a dataset to work with, the
-# ``DoubleCake`` dataset. We define it as a class with a convenience
-# plotting method and you may skip ahead if you are not interested in the
-# class itself.
+# ``DoubleCake`` dataset. We define a generating and a plotting function.
+# The details of these functions are not essential for understanding the demo,
+# so don't mind them if they are confusing.
 
+def _make_circular_data(num_sectors):
+    """Generate datapoints arranged in an even circle."""
+    center_indices = np.array(range(0, num_sectors))
+    sector_angle = 2 * np.pi / num_sectors
+    angles = (center_indices + 0.5) * sector_angle
+    x = 0.7 * np.cos(angles)
+    y = 0.7 * np.sin(angles)
+    labels = 2 * np.remainder(np.floor_divide(angles, sector_angle), 2) - 1
 
-class DoubleCake:
-    def _make_circular_data(self):
-        """Generate datapoints arranged in an even circle."""
-        center_indices = np.array(range(0, self.num_sectors))
-        sector_angle = 2 * np.pi / self.num_sectors
-        angles = (center_indices + 0.5) * sector_angle
-        x = 0.7 * np.cos(angles)
-        y = 0.7 * np.sin(angles)
-        labels = 2 * np.remainder(np.floor_divide(angles, sector_angle), 2) - 1
+    return x, y, labels
 
-        return x, y, labels
+def make_double_cake_data(num_sectors):
+    x1, y1, labels1 = _make_circular_data(num_sectors)
+    x2, y2, labels2 = _make_circular_data(num_sectors)
 
-    def __init__(self, num_sectors):
-        self.num_sectors = num_sectors
+    # x and y coordinates of the datapoints
+    x = np.hstack([x1, 0.5 * x2])
+    y = np.hstack([y1, 0.5 * y2])
 
-        x1, y1, labels1 = self._make_circular_data()
-        x2, y2, labels2 = self._make_circular_data()
+    # Canonical form of dataset
+    X = np.vstack([x, y]).T
 
-        # x and y coordinates of the datapoints
-        self.x = np.hstack([x1, 0.5 * x2])
-        self.y = np.hstack([y1, 0.5 * y2])
+    labels = np.hstack([labels1, -1 * labels2])
 
-        # Canonical form of dataset
-        self.X = np.vstack([self.x, self.y]).T
+    # Canonical form of labels
+    Y = labels.astype(int)
 
-        self.labels = np.hstack([labels1, -1 * labels2])
+    return X, Y
 
-        # Canonical form of labels
-        self.Y = self.labels.astype(int)
+def plot_double_cake_data(X, Y, ax, num_sectors=None):
+    """Plot double cake data and corresponding sectors."""
+    x, y = X.T
+    cmap = mpl.colors.ListedColormap(["#FF0000", "#0000FF"])
+    ax.scatter(x, y, c=Y, cmap=cmap, s=25, marker="s")
 
-    def plot(self, ax, show_sectors=False):
-        ax.scatter(
-            self.x,
-            self.y,
-            c=self.labels,
-            cmap=mpl.colors.ListedColormap(["#FF0000", "#0000FF"]),
-            s=25,
-            marker="s",
-        )
-        sector_angle = 360 / self.num_sectors
-
-        if show_sectors:
-            for i in range(self.num_sectors):
-                color = ["#FF0000", "#0000FF"][(i % 2)]
-                other_color = ["#FF0000", "#0000FF"][((i + 1) % 2)]
-                ax.add_artist(
-                    mpl.patches.Wedge(
-                        (0, 0),
-                        1,
-                        i * sector_angle,
-                        (i + 1) * sector_angle,
-                        lw=0,
-                        color=color,
-                        alpha=0.1,
-                        width=0.5,
-                    )
+    if num_sectors is not None:
+        sector_angle = 360 / num_sectors
+        for i in range(num_sectors):
+            color = ["#FF0000", "#0000FF"][(i % 2)]
+            other_color = ["#FF0000", "#0000FF"][((i + 1) % 2)]
+            ax.add_artist(
+                mpl.patches.Wedge(
+                    (0, 0),
+                    1,
+                    i * sector_angle,
+                    (i + 1) * sector_angle,
+                    lw=0,
+                    color=color,
+                    alpha=0.1,
+                    width=0.5,
                 )
-                ax.add_artist(
-                    mpl.patches.Wedge(
-                        (0, 0),
-                        0.5,
-                        i * sector_angle,
-                        (i + 1) * sector_angle,
-                        lw=0,
-                        color=other_color,
-                        alpha=0.1,
-                    )
+            )
+            ax.add_artist(
+                mpl.patches.Wedge(
+                    (0, 0),
+                    0.5,
+                    i * sector_angle,
+                    (i + 1) * sector_angle,
+                    lw=0,
+                    color=other_color,
+                    alpha=0.1,
                 )
-                ax.set_xlim(-1, 1)
+            )
+            ax.set_xlim(-1, 1)
 
-        ax.set_ylim(-1, 1)
-        ax.set_aspect("equal")
-        ax.axis("off")
+    ax.set_ylim(-1, 1)
+    ax.set_aspect("equal")
+    ax.axis("off")
 
+    return ax
 
 ##############################################################################
 # Let's now have a look at our dataset. In our example, we will work with
-# 6 sectors:
+# 3 sectors:
 
-dataset = DoubleCake(3)
+import matplotlib.pyplot as plt
 
-dataset.plot(plt.gca(), show_sectors=True)
+num_sectors = 3
+X, Y = make_double_cake_data(num_sectors)
+
+plot_double_cake_data(X, Y, plt.gca(), num_sectors=num_sectors)
 
 ##############################################################################
 # Defining a Quantum Embedding Kernel
 # -----------------------------------
-# PennyLane's ``kernels`` module allows for a particularly simple
+# PennyLane's `kernels module <https://pennylane.readthedocs.io/en/latest/code/qml_kernels.html>`__
+# allows for a particularly simple
 # implementation of Quantum Embedding Kernels. The first ingredient we
-# need for this is an *Ansatz* that represents the unitary
-# :math:`U(\boldsymbol{x})` we use for embedding the data into a quantum
-# state as well as its adjoint :math:`U(\boldsymbol{x})^\dagger`.
-# We will use a structure where a single layer is repeated multiple times
-# and with variational parameters that determine :math:`U` in addition to
-# the datapoint :math:`\boldsymbol{x}`.
+# need for this is an *ansatz* that represents the unitary
+# :math:`U(\boldsymbol{x})` we use to embed the data into a quantum
+# state, as well as its adjoint :math:`U(\boldsymbol{x})^\dagger`.
 
+import pennylane as qml
 
 def layer(x, params, wires, i0=0, inc=1):
-    """Building block of the embedding Ansatz"""
+    """Building block of the embedding ansatz"""
     i = i0
     for j, wire in enumerate(wires):
         qml.Hadamard(wires=[wire])
@@ -239,10 +235,14 @@ def layer(x, params, wires, i0=0, inc=1):
 
     qml.broadcast(unitary=qml.CRZ, pattern="ring", wires=wires, parameters=params[1])
 
+##############################################################################
+# Defining a Quantum Embedding Kernel
+# We will use a structure where a single layer is repeated multiple times
+# and with variational parameters that determine :math:`U` in addition to
+# the datapoint :math:`\boldsymbol{x}`.
 
-@qml.template
 def ansatz(x, params, wires):
-    """The embedding Ansatz"""
+    """The embedding ansatz"""
     for j, layer_params in enumerate(params):
         layer(x, layer_params, wires, i0=j * len(wires))
 
@@ -256,8 +256,8 @@ def random_params(num_wires, num_layers):
 
 
 ##############################################################################
-# Together with the Ansatz we only need a device to run the quantum circuit on.
-# For the purposes of this tutorial we will use PennyLane's ``default.qubit``
+# Together with the ansatz we only need a device to run the quantum circuit on.
+# For the purpose of this tutorial we will use PennyLane's ``default.qubit``
 # device with 5 wires in analytic mode.
 
 dev = qml.device("default.qubit", wires=5, shots=None)
@@ -274,14 +274,13 @@ wires = dev.wires.tolist()
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
     adjoint_ansatz(x2, params, wires=wires)
-
     return qml.probs(wires=wires)
 
 
 ##############################################################################
 # The kernel function itself is now obtained by looking at the probability
 # of observing the all-zero state at the end of the kernel circuit -- because
-# of the ordering in `qml.probs`, this is the first entry:
+# of the ordering in ``qml.probs``, this is the first entry:
 
 
 def kernel(x1, x2, params):
@@ -289,9 +288,18 @@ def kernel(x1, x2, params):
 
 
 ##############################################################################
+#
+# .. note::
+#     An alternative way to set up the kernel circuit in PennyLane would be
+#     to use the observable type
+#     `Projector <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.Projector.html>`__.
+#     This is shown in the
+#     `demo on kernel-based training of quantum models <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`__, where you will also find more
+#     background information on the kernel circuit structure itself.
+#
 # Before focusing on the kernel values we have to provide values for the
 # variational parameters. At this point we fix the number of layers in the
-# Ansatz circuit to :math:`6`.
+# ansatz circuit to :math:`6`.
 
 init_params = random_params(num_wires=5, num_layers=6)
 
@@ -299,19 +307,23 @@ init_params = random_params(num_wires=5, num_layers=6)
 # Now we can have a look at the kernel value between the first and the
 # second datapoint:
 
-kernel_value = kernel(dataset.X[0], dataset.X[1], init_params)
+kernel_value = kernel(X[0], X[1], init_params)
 print(f"The kernel value between the first and second datapoint is {kernel_value:.3f}")
 
 ##############################################################################
 # The mutual kernel values between all elements of the dataset form the
 # *kernel matrix*. We can inspect it via the ``qml.kernels.square_kernel_matrix``
-# method. The option ``assume_normalized_kernel=True`` ensures that we do not
+# method, which makes use of symmetry of the kernel,
+# :math:`k(\boldsymbol{x}_i,\boldsymbol{x}_j) = k(\boldsymbol{x}_j, \boldsymbol{x}_i)`.
+# In addition, the option ``assume_normalized_kernel=True`` ensures that we do not
 # calculate the entries between the same datapoints, as we know them to be 1
-# for our noiseless simulation. To include the variational parameters, we
-# construct a ``lambda`` function that fixes them to the values we sampled above.
+# for our noiseless simulation. Overall this means that we compute
+# :math:`\frac{1}{2}(N^2-N)` kernel values for :math:`N` datapoints.
+# To include the variational parameters, we construct a ``lambda`` function that
+# fixes them to the values we sampled above.
 
 init_kernel = lambda x1, x2: kernel(x1, x2, init_params)
-K_init = qml.kernels.square_kernel_matrix(dataset.X, init_kernel, assume_normalized_kernel=True)
+K_init = qml.kernels.square_kernel_matrix(X, init_kernel, assume_normalized_kernel=True)
 
 with np.printoptions(precision=3, suppress=True):
     print(K_init)
@@ -333,17 +345,15 @@ from sklearn.svm import SVC
 # this functionality. It expects the kernel to not have additional parameters
 # besides the datapoints, which is why we again supply the variational
 # parameters via the ``lambda`` function from above.
-# Once we have this, we can let scikit adjust the SVM from our Quantum Embedding
-# Kernel.
+# Once we have this, we can let scikit-learn adjust the SVM from our Quantum
+# Embedding Kernel.
 #
 # .. note::
-#     this step does *not* modify the variational parameters in our circuit
-#     Ansatz. What it does is solving a different optimization task for the
+#     This step does *not* modify the variational parameters in our circuit
+#     ansatz. What it does is solving a different optimization task for the
 #     :math:`\alpha` and :math:`b` vectors we introduced in the beginning.
 
-svm = SVC(kernel=lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, init_kernel)).fit(
-    dataset.X, dataset.Y
-)
+svm = SVC(kernel=lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, init_kernel)).fit(X, Y)
 
 ##############################################################################
 # To see how well our classifier performs we will measure which percentage
@@ -354,7 +364,7 @@ def accuracy(classifier, X, Y_target):
     return 1 - np.count_nonzero(classifier.predict(X) - Y_target) / len(Y_target)
 
 
-accuracy_init = accuracy(svm, dataset.X, dataset.Y)
+accuracy_init = accuracy(svm, X, Y)
 print(f"The accuracy of the kernel with random parameters is {accuracy_init:.3f}")
 
 ##############################################################################
@@ -380,7 +390,7 @@ def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
         alpha=0.2,
         levels=[-1, 0, 1],
     )
-    dataset.plot(ax)
+    plot_double_cake_data(X, Y, ax)
 
     return plot_data
 
@@ -415,7 +425,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # :math:`K_2`:
 #
 # .. math::
-#    \operatorname{KA}(K_1, K_2) = \frac{\operatorname{Tr}(K_1 K_2)}{\sqrt{\operatorname{Tr}(K_1^2)\operatorname{Tr}(K_2^2)}}
+#    \operatorname{KA}(K_1, K_2) = \frac{\operatorname{Tr}(K_1 K_2)}{\sqrt{\operatorname{Tr}(K_1^2)\operatorname{Tr}(K_2^2)}}.
 #
 # .. note::
 #     Seen from a more theoretical side, :math:`\operatorname{KA}`
@@ -433,7 +443,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # of the corresponding labels:
 #
 # .. math::
-#    k_{\boldsymbol{y}}(\boldsymbol{x}_i, \boldsymbol{x}_j) = y_i y_j
+#    k_{\boldsymbol{y}}(\boldsymbol{x}_i, \boldsymbol{x}_j) = y_i y_j.
 #
 # The assigned kernel is thus :math:`+1` if both datapoints lie in the
 # same class and :math:`-1` otherwise and its kernel matrix is simply
@@ -462,12 +472,8 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # ``kernel`` module allows you to easily evaluate the kernel
 # target alignment:
 
-kta_init = qml.kernels.target_alignment(
-    dataset.X,
-    dataset.Y,
-    init_kernel,
-    assume_normalized_kernel=True,
-)
+kta_init = qml.kernels.target_alignment(X, Y, init_kernel, assume_normalized_kernel=True)
+
 print(f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}")
 
 ##############################################################################
@@ -523,11 +529,11 @@ opt = qml.GradientDescentOptimizer(0.2)
 
 for i in range(500):
     # Choose subset of datapoints to compute the KTA on.
-    subset = np.random.choice(list(range(len(dataset.X))), 4)
+    subset = np.random.choice(list(range(len(X))), 4)
     # Define the cost function for optimization
     cost = lambda _params: -target_alignment(
-        dataset.X[subset],
-        dataset.Y[subset],
+        X[subset],
+        Y[subset],
         lambda x1, x2: kernel(x1, x2, _params),
         assume_normalized_kernel=True,
     )
@@ -537,8 +543,8 @@ for i in range(500):
     # Report the alignment on the full dataset every 50 steps.
     if (i + 1) % 50 == 0:
         current_alignment = target_alignment(
-            dataset.X,
-            dataset.Y,
+            X,
+            Y,
             lambda x1, x2: kernel(x1, x2, params),
             assume_normalized_kernel=True,
         )
@@ -549,23 +555,24 @@ for i in range(500):
 # kernel. Thus, let's build a second support vector classifier with the
 # trained kernel:
 
-svm_trained = SVC(
-    kernel=lambda X1, X2: qml.kernels.kernel_matrix(
-        X1,
-        X2,
-        lambda x1, x2: kernel(x1, x2, params),
-    )
-).fit(dataset.X, dataset.Y)
+# First create a kernel with the trained parameter baked into it.
+trained_kernel = lambda x1, x2: kernel(x1, x2, params)
+
+# Second create a kernel matrix function using the trained kernel.
+trained_kernel_matrix = lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, trained_kernel)
+
+# Note that SVC expects the kernel argument to be a kernel matrix function.
+svm_trained = SVC(kernel=trained_kernel_matrix).fit(X, Y)
 
 ##############################################################################
 # We expect to see an accuracy improvement vs. the SVM with random
 # parameters:
 
-accuracy_trained = accuracy(svm_trained, dataset.X, dataset.Y)
+accuracy_trained = accuracy(svm_trained, X, Y)
 print(f"The accuracy of a kernel with trained parameters is {accuracy_trained:.3f}")
 
 ##############################################################################
-# Very well! We now achieved perfect classification!
+# We have now achieved perfect classification! 🎆
 #
 # Following on the results that SVM's have proven good generalisation
 # behavior, it will be interesting to inspect the decision boundaries of
