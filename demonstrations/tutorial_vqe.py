@@ -118,7 +118,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # :class:`~.pennylane.DoubleExcitation` operation, implemented in PennyLane
 # as a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_, which couples
 # the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle`.
-# For a more details on how to use the excitation operations to build
+# For more details on how to use the excitation operations to build
 # quantum circuits for quantum chemistry applications see the
 # tutorial :doc:`tutorial_givens_rotations`.
 #
@@ -143,7 +143,7 @@ def circuit(param, wires):
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :class:`~.ExpvalCost`
 # class, which is tailored for VQE optimization. It requires specifying the
-# circuit, target Hamiltonian, and the device, then returning a cost function that can
+# circuit, target Hamiltonian, and the device, and it returns a cost function that can
 # be evaluated with the gate parameter :math:`\theta`:
 
 cost_fn = qml.ExpvalCost(circuit, H, dev)
@@ -151,8 +151,8 @@ cost_fn = qml.ExpvalCost(circuit, H, dev)
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of
 # the :math:`\mathrm{H}_2` molecule. To start, we need to define the classical optimizer.
-# PennyLane offers different built-in
-# `optimizers <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_ .
+# PennyLane offers many different built-in
+# `optimizers <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_.
 # Here we use a basic gradient-descent optimizer.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
