@@ -101,7 +101,8 @@ print("The Hamiltonian is ", H)
 # We use the :func:`~.pennylane_qchem.qchem.spin2` function to build the
 # :math:`\hat{S}^2` observable.
 
-S2 = qml.qchem.spin2(electrons=2, orbitals=qubits)
+electrons = 2
+S2 = qml.qchem.spin2(electrons, qubits)
 print(S2)
 
 ##############################################################################
@@ -208,8 +209,10 @@ S2_exp_value = qml.ExpvalCost(ansatz, S2, dev)
 #
 # We define a function to compute the total spin
 
+
 def total_spin(params):
     return -0.5 + np.sqrt(1 / 4 + S2_exp_value(params))
+
 
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state. We define
@@ -218,7 +221,7 @@ def total_spin(params):
 opt = qml.GradientDescentOptimizer(stepsize=0.8)
 np.random.seed(0)  # for reproducibility
 theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
-print(params)
+print(theta)
 
 ##############################################################################
 # We carry out the optimization over a maximum of 100 steps aiming to reach a
@@ -243,7 +246,7 @@ for n in range(max_iterations):
         break
 
 print("\n" f"Final value of the ground-state energy = {energy:.8f} Ha")
-print(f"Optimal value of the circuit parameters = {theta}")
+print("\n" f"Optimal value of the circuit parameters = {theta}")
 
 ##############################################################################
 # As a result, we have estimated the lowest-energy state of the hydrogen molecule
@@ -257,7 +260,7 @@ print(f"Optimal value of the circuit parameters = {theta}")
 # excitations whose total-spin projection differs by the quantity ``delta_sz=1`
 # with respect to the Hartree-Fock reference state.
 
-singles, doubles = qchem.excitations(electrons, qubits, delta_sz=1)
+singles, doubles = qml.qchem.excitations(electrons, qubits, delta_sz=1)
 print(singles)
 print(doubles)
 
@@ -266,11 +269,9 @@ print(doubles)
 # double excitations but only a spin-flip single excitation from qubit 1 to 2.
 # And, that's it!. From this point on the algorithm is the same as described above.
 
-# s_wires, d_wires = qchem.excitations_to_wires(singles, doubles)
-s_wires = qchem.excitations_to_wires(singles, doubles)[0]
-hf_state = qchem.hf_state(electrons, qubits)
+s_wires, d_wires = qchem.excitations_to_wires(singles, doubles)
 
-ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires)
+ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
 
 cost_fn = qml.ExpvalCost(ansatz, H, dev)
 S2_exp_value = qml.ExpvalCost(ansatz, S2, dev)
@@ -280,7 +281,7 @@ S2_exp_value = qml.ExpvalCost(ansatz, S2, dev)
 # optimize the new variational circuit.
 
 np.random.seed(0)
-params = np.random.normal(0, np.pi, len(singles) + len(doubles))
+theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
 
 max_iterations = 100
 conv_tol = 1e-06
@@ -301,7 +302,7 @@ for n in range(max_iterations):
         break
 
 print("\n" f"Final value of the energy = {energy:.8f} Ha")
-print(f"Optimal value of the circuit parameters = {theta}")
+print("\n" f"Optimal value of the circuit parameters = {theta}")
 
 ##############################################################################
 # In this case, the VQE algorithms finds the lowest-energy state with total spin
