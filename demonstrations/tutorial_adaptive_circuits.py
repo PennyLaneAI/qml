@@ -185,17 +185,51 @@ for n in range(10):
 # having only two gates in the circuit.
 
 ##############################################################################
-# Sparsity
+# Sparse method
 # Molecular Hamiltonian and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for H3+. We can compute the matrix representation of the Hamiltonian in the computational
-# basis using the ... function of PL. This function returns the matrix in the scipy sparse
-# coordinate format. We can already see that the matrix has 64x64 elements which only 304 of them
+# basis using the sparse_hamiltonian function. This function returns the matrix in the scipy sparse
+# coordinate format.
+
+H_sparse = qml.utils.sparse_hamiltonian(H)
+print(H_sparse)
+
+##############################################################################
+# We can already see that the matrix has 64x64 elements which only 304 of them
 # are non-zero. Leveraging this sparsity in the VQE simulations can significantly reduce the
-# simulation times. We use the SparseHamiltonian class in PL to use the implemented functionality
-# for computing the expectation value of the sparse observable with sparse operations. This can
-# reduce the cost of the VQE simulations by orders of magnitude depending on the molecular size.
+# simulation times. We use the implemented functionality in PennyLane for computing the expectation
+# value of the sparse Hamiltonian observable. This can reduce the cost of the VQE simulations by
+# orders of magnitude depending on the molecular size. We use the selected gates in the previous
+# steps and perform the final VQE step with the sparse method.
+
+dev = qml.device("default.qubit", wires=qubits)
+opt = qml.GradientDescentOptimizer(stepsize=0.5)
+params = [0.0] * (len(doubles) + len(singles))
+
+@qml.qnode(dev, diff_method="parameter-shift")
+def circuit(params, wires, H_sparse):
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=wires)
+
+    for i, excitation in enumerate(doubles):
+        qml.DoubleExcitation(params[i], wires=excitation)
+
+    for j, excitation in enumerate(singles):
+        qml.SingleExcitation(params[i + j + 1], wires=excitation)
+
+    return qml.expval(qml.SparseHamiltonian(H_sparse, wires=wires))
+
+def cost(params, wires, H_sparse):
+    return circuit(params, wires, H_sparse)
+
+for n in range(20):
+    params, energy = opt.step_and_cost(cost, params, wires, H_sparse)
+    print("n = {:},  E = {:.8f} H".format(n, energy))
+
+##############################################################################
+# Using the sparse method reproduces the exact ground state energy while the optimization time is
+# reduced. The performance of the optimization will be more significant for larger molecules.
 #
-# In conclusion, we have leaned that building quantum chemistry circuits adaptively and using the PL
+# In conclusion, we have leaned that building quantum chemistry circuits adaptively and using the
 # functionality for sparse objects makes molecular simulations very efficient.
 #
 # References
