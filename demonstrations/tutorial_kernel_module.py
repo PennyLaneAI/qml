@@ -89,7 +89,7 @@ classification with the map :math:`k`, we can actually express much more
 intricate decision boundaries!
 
 This is very important, because in many interesting cases the embedding :math:`\phi`
-will be much more costlier to compute than the kernel :math:`k`.
+will be much costlier to compute than the kernel :math:`k`.
 
 In this demo, we will explore one particular kind of kernel
 that can be realized on near-term quantum computers, namely *Quantum
