@@ -126,8 +126,8 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. customgalleryitem::
     :tooltip: Kernels and alignment training with PennyLane.
-    :figure: demonstrations/kernel_module/QEK_thumbnail.png
-    :description: :doc:`demos/tutorial_kernel_module`
+    :figure: demonstrations/kernels_module/QEK_thumbnail.png
+    :description: :doc:`demos/tutorial_kernels_module`
     :tags: kernels alignment classification 
 
 :html:`</div></div><div style='clear:both'>`
