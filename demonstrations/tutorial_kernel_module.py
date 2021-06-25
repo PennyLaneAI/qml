@@ -14,7 +14,7 @@ r"""Quantum Embedding Kernels with the kernels module
 Hubregtsen, Johannes Jakob Meyer and David Wierichs. Posted: 24 June 2021*
 
 Kernel methods are one of the cornerstones of classical machine
-learning. To understand what a kernel method does, let’s first revisit
+learning. To understand what a kernel method does, let's first revisit
 one of the simplest methods to assign binary labels to datapoints:
 linear classification.
 
@@ -40,7 +40,7 @@ extended to higher dimensional vectors :math:`\boldsymbol{x}`, where a
 line does not divide the entire space into two regions anymore. Instead
 one needs a *hyperplane*. It is immediately clear that this method is
 not very powerful, as datasets that are not separable by a hyperplane
-can’t be classified without error.
+can't be classified without error.
 
 We can actually sneak around this limitation by performing a neat trick:
 if we define some map :math:`\phi(\boldsymbol{x})` that *embeds* our
@@ -74,10 +74,11 @@ space:
 .. math::
    k(\boldsymbol{x}_i, \boldsymbol{x}_j) = \langle \phi(\boldsymbol{x}_i), \phi(\boldsymbol{x}_j)\rangle.
 
-We call this function the *kernel*. The clue now is that we can often
+We call this function the *kernel*. It provides the advantage that we can often
 find an explicit formula for the kernel :math:`k` that makes it
-superfluous to actually perform the embedding :math:`\phi`. Consider for
-example the following embedding and the associated kernel:
+superfluous to actually perform the (potentially expensive) embedding
+:math:`\phi`. Consider for example the following embedding and the
+associated kernel:
 
 .. math::
    \phi((x_1, x_2)) = (x_1^2, \sqrt{2} x_1 x_2, x_2^2) \qquad
@@ -207,7 +208,7 @@ class DoubleCake:
 
 
 ##############################################################################
-# Let’s now have a look at our dataset. In our example, we will work with
+# Let's now have a look at our dataset. In our example, we will work with
 # 6 sectors:
 
 dataset = DoubleCake(3)
@@ -217,7 +218,7 @@ dataset.plot(plt.gca(), show_sectors=True)
 ##############################################################################
 # Defining a Quantum Embedding Kernel
 # -----------------------------------
-# PennyLane’s ``kernels`` module allows for a particularly simple
+# PennyLane's ``kernels`` module allows for a particularly simple
 # implementation of Quantum Embedding Kernels. The first ingredient we
 # need for this is an *Ansatz* that represents the unitary
 # :math:`U(\boldsymbol{x})` we use for embedding the data into a quantum
@@ -256,7 +257,7 @@ def random_params(num_wires, num_layers):
 
 ##############################################################################
 # Together with the Ansatz we only need a device to run the quantum circuit on.
-# For the purposes of this tutorial we will use PennyLane’s ``default.qubit``
+# For the purposes of this tutorial we will use PennyLane's ``default.qubit``
 # device with 5 wires in analytic mode.
 
 dev = qml.device("default.qubit", wires=5, shots=None)
@@ -321,7 +322,7 @@ with np.printoptions(precision=3, suppress=True):
 # The quantum kernel alone can not be used to make predictions on a
 # dataset, becaues it is essentially just a tool to measure the similarity
 # between two datapoints. To perform an actual prediction we will make use
-# of scikit-learn’s Support Vector Classifier (SVC).
+# of scikit-learn's Support Vector Classifier (SVC).
 
 from sklearn.svm import SVC
 
@@ -385,7 +386,7 @@ def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
 
 
 ##############################################################################
-# With that done, let’s have a look at the decision boundaries for our
+# With that done, let's have a look at the decision boundaries for our
 # initial classifier:
 
 init_plot_data = plot_decision_boundaries(svm, plt.gca())
@@ -457,7 +458,7 @@ init_plot_data = plot_decision_boundaries(svm, plt.gca())
 # guaranteed for good performance, but optimal alignment will not always
 # bring optimal training accuracy with it.
 #
-# Let’s now come back to the actual implementation. PennyLane’s
+# Let's now come back to the actual implementation. PennyLane's
 # ``kernel`` module allows you to easily evaluate the kernel
 # target alignment:
 
@@ -470,13 +471,13 @@ kta_init = qml.kernels.target_alignment(
 print(f"The kernel-target alignment for our dataset and random parameters is {kta_init:.3f}")
 
 ##############################################################################
-# Now let’s code up an optimization loop and improve the kernel-target alignment!
+# Now let's code up an optimization loop and improve the kernel-target alignment!
 #
 # We will make use of regular gradient descent optimization. To speed up
 # the optimization we will not use the entire training set to compute
 # :math:`\operatorname{KTA}` but rather
 # sample smaller subsets of the data at each step, we choose :math:`4`
-# datapoints at random. Remember that PennyLane’s inbuilt optimizer works
+# datapoints at random. Remember that PennyLane's inbuilt optimizer works
 # to *minimize* the cost function that is given to it, which is why we
 # have to multiply the kernel target alignment by :math:`-1` to actually
 # *maximize* it in the process.
@@ -545,7 +546,7 @@ for i in range(500):
 
 ##############################################################################
 # We want to assess the impact of training the parameters of the quantum
-# kernel. Thus, let’s build a second support vector classifier with the
+# kernel. Thus, let's build a second support vector classifier with the
 # trained kernel:
 
 svm_trained = SVC(
@@ -566,7 +567,7 @@ print(f"The accuracy of a kernel with trained parameters is {accuracy_trained:.3
 ##############################################################################
 # Very well! We now achieved perfect classification!
 #
-# Following on the results that SVM’s have proven good generalisation
+# Following on the results that SVM's have proven good generalisation
 # behavior, it will be interesting to inspect the decision boundaries of
 # our classifier:
 
