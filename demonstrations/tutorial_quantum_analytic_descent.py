@@ -231,49 +231,15 @@ line2 = ax.plot(
 #     This does lead to an exponentially increasing number of terms, but if we chop the series soon enough it will not get too much out of hand.
 #     The proposal here is to only go up to second order terms, so we are safe.
 #
-# Adapting the function basis
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# Before we construct the model we need to understand a difference between monomials and trigonometric monomials.
-# The :math:`r^{\text{th}}` order coefficients in a Taylor series directly correspond to the :math:`r^{\text{th}}` derivative at the reference point
-# of the expansion. We can write this fact as (note that in relative coordinates, the reference point is the origin)
-#
-# .. math:: \frac{\mathrm{d}^r}{\mathrm{d}x^r}a_s x^s\Bigg|_{x=0} = a_s\delta_{rs},
-#
-# where we used the Kronecker delta :math:`\delta_{rs}` which is zero unless :math:`r=s`.
-# This is not the case for trigonometric monomial, where all terms -- except for the constant part --
-# have infinitely many non-zero derivatives. We therefore instead care about the *leading* order
-# of the trigonometric polynomials and simply will be careful not to assume the neat separation
-# of orders in :math:`x` that we have for standard monomials. The note below contains the technical
-# details on separating the leading orders up to the second.
-#
-# .. note::
-#     Let's look at the trigonometric monomials that appear in the cost function: :math:`1`,
-#     :math:`\sin(x)` and :math:`\cos(x)`. As :math:`\sin(x)` and its second derivative :math:`-\sin(x)`
-#     vanish at the origin but the first derivative :math:`\cos(x)` does not,
-#     it contributes to the leading first order term. Indeed, the first derivative of the other
-#     two monomials vanishes at zero and so :math:`\sin(x)` is the *only* term contributing to this order.
-#     For the :math:`0^{\text{th}}` order, however, not only the :math:`0^{\text{th}}` monomial :math:`1`,
-#     but also :math:`\cos(x)` contributes.
-#     In order to separate the leading orders again, we therefore recombine these two basis functions into two new ones:
-#     :math:`\frac{\cos(x)+1}{2}` contributes to the :math:`0^{\text{th}}` order but :math:`\cos(x)-1` does not.
-#     You might raise the concern that both contribute to the :math:`2^{\text{nd}}` order but for the grouping we just care about the
-#     *leading* order.
-#     We rewrite the new basis functions as
-#
-#     .. math::
-#
-#       \frac{1+\cos(x)}{2} &= \cos\left(\frac{x}{2}\right)^2\\
-#       \sin(x) &= 2\sin\left(\frac{x}{2}\right)\cos\left(\frac{x}{2}\right)\\
-#       1-\cos(x)&= 2\sin\left(\frac{x}{2}\right)^2
-#
-#     so that we can read off the (leading) order of the monomial from its exponent of :math:`\sin\left(\frac{x}{2}\right)`.
-#     In case they seem arbitrary to you, the prefactors here are chosen such that the leading order coefficient is :math:`1`.
-#
 # Expanding in adapted trigonometric polynomials
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Now we can group the terms in the multi-parameter model by their order, and compare them to the analogue terms in a Taylor series:
+# One important aspect in which trigonometric series differ from regular
+# expansions is that there is not a clear separation between what terms
+# contribute to what order of th expansion (due to the fact that all order
+# derivatives of sine and cosine are non-zero in general).
+# Because of this, we group the terms by their leading order contribution, and
+# in the following table write them next to their non-trigonometric analogues.
 #
 # .. list-table::
 #    :widths: 10 70 20
@@ -381,7 +347,9 @@ print(
 # .. math:: \hat{E}(\boldsymbol{\theta}_0+\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{k<l}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
 #
 # Let us now take a few moments to breath deeply and admire the entirety of it.
-# On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k`, and :math:`D_{kl}` functions, which we said would play the role of the monomials :math:`1`, :math:`x_k`, :math:`x_k^2`, and :math:`x_kx_l` in a regular Taylor expansion.
+# On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k`, and
+# :math:`D_{kl}` functions, which we said are the basis functions of the
+# expansion. 
 # On the other hand we have the real-valued coefficients :math:`E^{(A/B/C/D)}` for the previous functions which are nothing but the derivatives in the corresponding input components.
 # Combining them yields the trigonometric expansion, which we implement with another function:
 
@@ -450,20 +418,34 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #     **Counting parameters and evaluations**
 #
 #     How many parameters does our model have?
-#     For an :math:`m`-dimensional input variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
+#     In the following table we count them for an :math:`m`-dimensional input
+#     variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
 #
-#     #. We have one :math:`E^{(A)}`.
-#     #. We have :math:`m` many :math:`E^{(B)}`'s, one for each component.
-#     #. We have :math:`m` many :math:`E^{(C)}`'s, also one for each component.
-#     #. We have :math:`(m-1)m/2` many :math:`E^{(D)}`'s, because we only need to check every pair once.
+#     .. list-table::
+#        :widths: 20 35 45 
+#        :header-rows: 1
 #
-#     So, in total, there are :math:`m^2/2 + 3m/2 + 1` parameters, which is indeed polynomially many.
+#        * - 
+#          - Number of coefficients
+#          - Number of circuit evaluations
+#        * - :math:`E^{(A)}`
+#          - :math:`1`
+#          - :math:`1`
+#        * - :math:`E^{(B)}`
+#          - :math:`m`
+#          - :math:`2m`
+#        * - :math:`E^{(C)}`
+#          - :math:`m`
+#          - :math:`m`
+#        * - :math:`E^{(D)}`
+#          - :math:`\frac{m(m-1)}{2}`
+#          - :math:`4\frac{m(m-1)}{2}`
+#        * - Total:
+#          - :math:`\frac{m^2}{2}+\frac{3m}{2}+1`
+#          - :math:`2m^2+m+1`
 #
-#     In practice, not every parameter needs the same amount of circuit evaluations, though!
-#     Without going into detail on the parameter-shift rule for the gradient and Hessian,
-#     we remark that we need :math:`1` circuit evaluation for :math:`E^{(A)}`, :math:`2\times m` and :math:`m` 
-#     evaluations for :math:`E^{(B)}` and :math:`E^{(C)}`, respectively, and :math:`4\times (m-1)m/2` many for
-#     :math:`E^{(D)}` which amounts to a total of :math:`2m^2+m+1`.
+#     So there we go!
+#     We only need polynomially many parameters and circuit evaluations.
 #     This is much cheaper than the :math:`3^m` we would need if we naively tried to construct the cost landscape exactly, without chopping after second order.
 #
 # Now this should be enough theory, so let's visualize the model that results from our trigonometric expansion.
