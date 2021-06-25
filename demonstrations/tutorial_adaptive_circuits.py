@@ -56,8 +56,7 @@ excitation gates and select gates based on the magnitude of the computed gradien
 different ways to select the gates based on the computed gradients and here we apply two of these
 strategies to compute the ground state energy of the trihydrogen cation. Both of these methods
 require constructing the Hamiltonian and determine all possible excitations. We first import the
-required libraries and define the molecular parameters. Then compute the the molecular Hamiltonian
-and the electronic excitations.Note that the atomic coordinates are in Bohr.
+required libraries and define the molecular parameters. Note that the atomic coordinates are in Bohr.
 """
 
 import numpy as np
@@ -68,6 +67,9 @@ symbols = ["H", "H", "H"]
 geometry = np.array([0.01076341,  0.04449877, 0.00000000,
                      0.98729511,  1.63059090, 0.00000000,
                      1.87262411, -0.00815842, 0.00000000])
+
+##############################################################################
+# Then we compute the the molecular Hamiltonian and the electronic excitations.
 
 H, qubits = qchem.molecular_hamiltonian(
     symbols,
@@ -81,158 +83,106 @@ H, qubits = qchem.molecular_hamiltonian(
 singles, doubles = qchem.excitations(2, qubits)
 
 ##############################################################################
-# We first implement a strategy which constructs the circuit by adding one gate at a time. The first
-# step is to compute the gradients for each of the existing gates. This requires creating a circuit
-# with all excitation gates.
+# We first implement a strategy which constructs the circuit by adding groups of gate at a time.
+# The first step is to compute the gradients for a set of the existing gates. We construct our first
+# group by including all of the double excitations anc create a circuit that applies those gates to
+# a reference Hartree-Fock state.
 
 def circuit_1(params, wires, excitations):
-    qml.PauliX(0)
-    qml.PauliX(1)
-
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=wires)
     for i, excitation in enumerate(excitations):
-
         if len(excitation) == 4:
             qml.DoubleExcitation(params[i], wires=excitation)
         else:
             qml.SingleExcitation(params[i], wires=excitation)
 
 ##############################################################################
-# We no compute the gradients for each excitation gate:
+# We now compute the gradients for each of the double excitation gates. We also need to define a
+# device and a cost function.
 
 dev = qml.device("default.qubit", wires = qubits)
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
+
 dcircuit = qml.grad(cost_fn, argnum=0)
 
-for excitation in singles + doubles:
-    grad = dcircuit([0.0], excitations=[excitation])
-    print(excitation, grad)
+params = [0.0] * len(doubles)
+grads = dcircuit(params, excitations=doubles)
+
+print(grads)
 
 ##############################################################################
-# We then select the gate with the largest gradient and add it to the circuit. Now, we perform one
-# VQE step to determine the optimized parameter for the selected gate. Note that this VQE is not
-# very costly as we only have one gate in our circuit.
+# The computed gradients have different values that are a measure of the contribution of each gate
+# in the final state prepared by the circuit. We select those gates that have a gradient above a
+# pre-defined threshold which we set to 0.001.
+
+doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 0.001]
+
+##############################################################################
+# We add the selected gates to the circuit and perform one VQE step to determine the optimized
+# parameters for the selected gates. We also need to define an optimizer. Note that the VQE
+# optimization is not very costly as we only have two gate in our circuit.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
-params = [0.0]
 
-for n in range(20):
-    params, energy = opt.step_and_cost(cost_fn, params, excitations=[[0, 1, 2, 3]])
+params_doubles = [0.0] * len(doubles_select)
+
+for n in range(10):
+    params_doubles, energy = opt.step_and_cost(cost_fn, params_doubles, excitations=doubles_select)
     print(energy)
 
 ##############################################################################
-# Now the gradients are computed for each of the excitations again and the gate with the largest
-# gradient is selected and added to the circuit. Note that we eliminate the selected gates form the
-# initial pool such that one gate cannot appear more than one time in the circuit. We repeat the
-# process until the norm of the computed gradient is zero. To do that, we need a more general
-# circuit that contains two groups of gates: the selected gates with fixed parameters and those
-# gates for which we want to compute the gradients.
+# Now, we keep the selected gates in the circuit and compute the gradients with respect to all of
+# the single excitation gates and select those that have a non-negligible gradient. To do that, we
+# need to slightly modify our circuit such that parameters of the double excitation gates are kept
+# fixed while the gradients are computed for the single excitation gates.
 
 def circuit_2(params, wires, excitations, gates_select, params_select):
-    qml.PauliX(0)
-    qml.PauliX(1)
-
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=wires)
     for i, gate in enumerate(gates_select):
-
         if len(gate) == 4:
             qml.DoubleExcitation(params_select[i], wires=gate)
         elif len(gate) == 2:
             qml.SingleExcitation(params_select[i], wires=gate)
 
     for i, gate in enumerate(excitations):
-
         if len(gate) == 4:
             qml.DoubleExcitation(params[i], wires=gate)
         elif len(gate) == 2:
             qml.SingleExcitation(params[i], wires=gate)
 
 ##############################################################################
-# The iterative process of selecting and adding gates can be done with the following code:
+#  We now compute the gradients for the single excitation gates.
 
-opt = qml.GradientDescentOptimizer(stepsize=0.5)
-excitations = doubles + singles
-cost_fn_2 = qml.ExpvalCost(circuit_2, H, dev, optimize=True)
-dcircuit_2 = qml.grad(cost_fn_2, argnum=0)
-
-gate_select = []
-params_fix = [0.0]
-
-for n in range(5):
-
-    G = []
-    params = [0.0]
-
-    for excitation in excitations:
-        grad = dcircuit_2(params, excitations=[excitation], gates_select=gate_select,
-                          params_select=params_fix)
-        G.append(grad[0])
-
-    if np.linalg.norm(G) < 1.0e-5:
-        print('zero gradient')
-        break
-
-    gate_select.append(excitations[np.argmax(abs(np.array(G)))])
-    excitations = [wires for wires in excitations if wires not in gate_select]
-
-    params = [0.0] * len(gate_select)
-    for n in range(10):
-        params, energy = opt.step_and_cost(cost_fn, params, excitations=gate_select)
-
-    params_fix = params + [0]
-
-    print(gate_select, energy, np.linalg.norm(G))
-
-##############################################################################
-# Following this approach for the terihydrogen cation indicates that the exact ground state energy
-# can be obtained by having only two gates in the circuit.
-#
-# Let’s now consider a second approach for building the circuit adaptively which is even simpler
-# and more efficient. Here we work with a group of excitation gates instead of adding them one at
-# a time. We first start by computing the gradients for all of the double excitation gates and
-# select those that have a gradient above a pre-defined threshold.
-
-dev = qml.device("default.qubit", wires = qubits)
-cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
-dcircuit = qml.grad(cost_fn, argnum=0)
-
-params = [0.0] * len(doubles)
-grads = dcircuit(params, excitations=doubles)
-print(grads)
-
-doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 0.001]
-
-##############################################################################
-# We add the selected gates to the circuit and perform one VQE step to determine the optimized
-# parameters for the selected gates.
-
-params = [0.0] * len(doubles_select)
-
-for n in range(10):
-    params, energy = opt.step_and_cost(cost_fn, params, excitations=doubles_select)
-    print(energy)
-
-##############################################################################
-# Now, we keep the selected gates in the circuit and compute the gradients with respect to all of
-# the single excitation gates and select those that have a non-negligible gradient. Now, we have
-# all the gates we need to build our circuit and perform one final step of VQE optimization to get
-# the ground state energy. The resulting energy is the exact energy of the ground state.
-
-params_fix = params
-dev = qml.device("default.qubit", wires = qubits)
 cost_fn = qml.ExpvalCost(circuit_2, H, dev, optimize=True)
+
 dcircuit = qml.grad(cost_fn, argnum=0)
 
 params = [0.0] * len(singles)
 
-grads = dcircuit(params, excitations=singles, gates_select=doubles_select, params_select=params_fix)
+grads = dcircuit(params, excitations=singles, gates_select=doubles_select, params_select=params_doubles)
+
+##############################################################################
+# Similar to the double excitation gates, we select those single excitations that have a gradient
+# larger than a predefined threshold.
 
 singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 0.001]
 
+##############################################################################
+# Now, we have all the gates we need to build our circuit and perform one final step of VQE
+# optimization to get the ground state energy. The resulting energy is the exact energy of the
+# ground state.
+
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
+
 params = [0.0] * len(doubles_select + singles_select)
 
 for n in range(10):
     params, energy = opt.step_and_cost(cost_fn, params, excitations=doubles_select + singles_select)
     print(energy)
+
+##############################################################################
+# Success! We can obtain the exact ground state energy of the terihydrogen cation indicates by
+# having only two gates in the circuit.
 
 ##############################################################################
 # Sparsity
