@@ -135,7 +135,7 @@ print(S2)
 # that is used to initialize the qubit register.
 
 hf = qml.qchem.hf_state(electrons, qubits)
-print(hf_state)
+print(hf)
 
 ##############################################################################
 # Next, we use the :func:`~.pennylane_qchem.qchem.excitations`
@@ -177,7 +177,7 @@ print(d_wires)
 # Finally, we can use the :func:`~.pennylane.templates.subroutines.UCCSD` function to define
 # our VQE ansatz.
 
-ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
+ansatz = partial(UCCSD, init_state=hf, s_wires=s_wires, d_wires=d_wires)
 
 ##############################################################################
 # Running the VQE simulation
@@ -271,7 +271,7 @@ print(doubles)
 
 s_wires, d_wires = qchem.excitations_to_wires(singles, doubles)
 
-ansatz = partial(UCCSD, init_state=hf_state, s_wires=s_wires, d_wires=d_wires)
+ansatz = partial(UCCSD, init_state=hf, s_wires=s_wires, d_wires=d_wires)
 
 cost_fn = qml.ExpvalCost(ansatz, H, dev)
 S2_exp_value = qml.ExpvalCost(ansatz, S2, dev)
