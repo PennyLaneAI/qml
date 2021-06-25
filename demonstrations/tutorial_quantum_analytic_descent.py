@@ -452,32 +452,27 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # We'll use the coefficients and the ``model_cost`` function from above and sample a new random parameter position.
 
 from mpl_toolkits.mplot3d import Axes3D
-from itertools import chain
+from itertools import product
 
 # We actually make the plotting a function because we will reuse it below.
-def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_points=20):
+def plot_cost_and_model(f, model, params, shift_radius=5 * np.pi / 8, num_points=20):
     """Plot a function and a model of the function as well as its deviation."""
 
     coords = np.linspace(-shift_radius, shift_radius, num_points)
     X, Y = np.meshgrid(coords + params[0], coords + params[1])
+
     # Compute the original cost function and the model on the grid.
-    Z_original = np.array([[fun(params + np.array([t1, t2])) for t2 in coords] for t1 in coords])
+    Z_original = np.array([[f(params + np.array([t1, t2])) for t2 in coords] for t1 in coords])
     Z_model = np.array([[model(np.array([t1, t2])) for t2 in coords] for t1 in coords])
-    # Prepare sampled points for plotting.
+
+    # Prepare sampled points for plotting rods.
     shifts = [-np.pi / 2, 0, np.pi / 2]
-    samples = list(
-        chain.from_iterable(
-            [
-                [
-                    [params[0] + s2, params[1] + s1, fun(params + np.array([s1, s2]))]
-                    for s2 in shifts
-                ]
-                for s1 in shifts
-            ]
-        )
-    )
+    samples = []
+    for s1, s2 in product(shifts, repeat=2):
+        shifted_params = params + np.array([s1, s2])
+        samples.append([*(params+np.array([s2, s1])), f(shifted_params)])
+
     # Display landscapes incl. sampled points and deviation.
-    # Transparency parameter for landscapes.
     alpha = 0.6
     fig, (ax0, ax1, ax2) = plt.subplots(1, 3, subplot_kw={"projection": "3d"}, figsize=(10, 4))
     green = "#209494"
@@ -485,15 +480,15 @@ def plot_cost_and_model(fun, model, params, shift_radius=5 * np.pi / 8, num_poin
     red = "xkcd:brick red"
     surf = ax0.plot_surface(X, Y, Z_original, color=green, alpha=alpha)
     ax0.set_title("Original energy and samples")
-    for sample in samples:
-        ax0.plot([sample[0]] * 2, [sample[1]] * 2, [np.min(Z_original) - 0.2, sample[2]], color="k")
-    for ax, z in zip((ax0, ax1), (fun(params), model(0 * params))):
-        ax.plot([params[0]] * 2, [params[1]] * 2, [np.min(Z_original) - 0.2, z], color="k")
-        ax.scatter([params[0]], [params[1]], [z], color="k", marker="o")
     ax1.plot_surface(X, Y, Z_model, color=orange, alpha=alpha)
     ax1.set_title("Model energy")
     ax2.plot_surface(X, Y, Z_original - Z_model, color=red, alpha=alpha)
     ax2.set_title("Deviation")
+    for s in samples:
+        ax0.plot([s[0]] * 2, [s[1]] * 2, [np.min(Z_original) - 0.2, s[2]], color="k")
+    for ax, z in zip((ax0, ax1), (f(params), model(0 * params))):
+        ax.plot([params[0]] * 2, [params[1]] * 2, [np.min(Z_original) - 0.2, z], color="k")
+        ax.scatter([params[0]], [params[1]], [z], color="k", marker="o")
     plt.tight_layout(pad=2, w_pad=2.5)
 
 
@@ -645,11 +640,10 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 # Could we visualize this behavior more clearly, please?
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-ax.plot(range(N_iter_outer * N_iter_inner + 1), circuit_log, color="#209494", label="True")
+ax.plot(circuit_log, color="#209494", label="True")
 for i in range(N_iter_outer):
-    (line,) = ax.plot(
-        range(i * N_iter_inner, (i + 1) * N_iter_inner + 1), model_logs[i], ls="--", color="#ED7D31"
-    )
+    x = range(i * N_iter_inner, (i + 1) * N_iter_inner + 1)
+    (line,) = ax.plot(x, model_logs[i], ls="--", color="#ED7D31")
     if i == 0:
         line.set_label("Model")
 ax.plot([0, N_iter_outer * N_iter_inner], [-1.0, -1.0], lw=0.6, color="0.6", label="Solution")
