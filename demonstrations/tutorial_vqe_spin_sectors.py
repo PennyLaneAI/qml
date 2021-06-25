@@ -25,7 +25,7 @@ related to the spin components :math:`S_z=-1, 0, 1`.
 
 |
 
-.. figure:: /demonstrations/vqe_uccsd_obs/energy_spectra_h2_sto3g.png
+.. figure:: /demonstrations/vqe_spin_sectors/energy_spectra_h2_sto3g.png
     :width: 75%
     :align: center
 
@@ -141,11 +141,12 @@ print(hf_state)
 # function to generate all single- and double-excitations of the HF reference state.
 # This function allows us to define the keyword argument ``delta_sz``
 # to specify the variation of the total-spin projection of the generated excitations
-# with respect to the reference state. This is illustrated in the figure below.
+# with respect to the reference state. This is illustrated in the figure below for two
+# electrons and four spin-orbitals.
 #
 # |
 #
-# .. figure:: /demonstrations/vqe_uccsd_obs/energy_spectra_h2_sto3g.png
+# .. figure:: /demonstrations/vqe_spin_sectors/fig_excitations.png
 #     :width: 75%
 #     :align: center
 #
