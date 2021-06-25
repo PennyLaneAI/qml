@@ -89,7 +89,7 @@ singles, doubles = qchem.excitations(2, qubits)
 # a reference Hartree-Fock state.
 
 def circuit_1(params, wires, excitations):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=wires)
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
             qml.DoubleExcitation(params[i], wires=excitation)
@@ -126,7 +126,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
 params_doubles = [0.0] * len(doubles_select)
 
-for n in range(10):
+for n in range(20):
     params_doubles, energy = opt.step_and_cost(cost_fn, params_doubles, excitations=doubles_select)
     print(energy)
 
@@ -161,6 +161,8 @@ params = [0.0] * len(singles)
 
 grads = dcircuit(params, excitations=singles, gates_select=doubles_select, params_select=params_doubles)
 
+print(grads)
+
 ##############################################################################
 # Similar to the double excitation gates, we select those single excitations that have a gradient
 # larger than a predefined threshold.
@@ -176,7 +178,7 @@ cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
 params = [0.0] * len(doubles_select + singles_select)
 
-for n in range(10):
+for n in range(20):
     params, energy = opt.step_and_cost(cost_fn, params, excitations=doubles_select + singles_select)
     print(energy)
 
@@ -192,7 +194,7 @@ for n in range(10):
 # coordinate format.
 
 H_sparse = qml.utils.sparse_hamiltonian(H)
-print(H_sparse)
+H_sparse
 
 ##############################################################################
 # We can already see that the matrix has 64x64 elements which only 304 of them
@@ -204,25 +206,26 @@ print(H_sparse)
 
 dev = qml.device("default.qubit", wires=qubits)
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
-params = [0.0] * (len(doubles) + len(singles))
+excitations = doubles_select + singles_select
+params = [0.0] * len(excitations)
 
 @qml.qnode(dev, diff_method="parameter-shift")
-def circuit(params, wires, H_sparse):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=wires)
+def circuit(params):
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=range(qubits))
 
-    for i, excitation in enumerate(doubles):
-        qml.DoubleExcitation(params[i], wires=excitation)
+    for i, excitation in enumerate(excitations):
+        if len(excitation) == 4:
+            qml.DoubleExcitation(params[i], wires=excitation)
+        elif len(excitation) == 2:
+            qml.SingleExcitation(params[i], wires=excitation)
 
-    for j, excitation in enumerate(singles):
-        qml.SingleExcitation(params[i + j + 1], wires=excitation)
+    return qml.expval(qml.SparseHamiltonian(H_sparse, wires=range(qubits)))
 
-    return qml.expval(qml.SparseHamiltonian(H_sparse, wires=wires))
-
-def cost(params, wires, H_sparse):
-    return circuit(params, wires, H_sparse)
+def cost(params):
+    return circuit(params)
 
 for n in range(20):
-    params, energy = opt.step_and_cost(cost, params, wires, H_sparse)
+    params, energy = opt.step_and_cost(cost, params)
     print("n = {:},  E = {:.8f} H".format(n, energy))
 
 ##############################################################################
