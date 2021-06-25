@@ -40,7 +40,7 @@ extended to higher dimensional vectors :math:`\boldsymbol{x}`, where a
 line does not divide the entire space into two regions anymore. Instead
 one needs a *hyperplane*. It is immediately clear that this method is
 not very powerful, as datasets that are not separable by a hyperplane
-can’t be treated.
+can’t be classified without error.
 
 We can actually sneak around this limitation by performing a neat trick:
 if we define some map :math:`\phi(\boldsymbol{x})` that *embeds* our
