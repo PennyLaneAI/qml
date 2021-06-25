@@ -15,7 +15,7 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: PennyLane dev team. Last updated: 24 June 2021.*
+*Author: PennyLane dev team. Last updated: 25 June 2021.*
 
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
@@ -190,9 +190,8 @@ for n in range(max_iterations):
     if conv <= conv_tol:
         break
 
-print()
 print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
-print(f"Optimal value of the circuit parameter = {angle[-1]:.4f}")
+print("\n" f"Optimal value of the circuit parameter = {angle[-1]:.4f}")
 
 ##############################################################################
 # Let's plot the values of the ground state energy of the molecule
