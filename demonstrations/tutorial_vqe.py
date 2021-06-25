@@ -42,7 +42,6 @@ Let's get started!
 
 Building the electronic Hamiltonian
 -----------------------------------
-
 The first step is to specify the molecule we want to simulate. This
 is done by providing a list with the symbols of the constituent atoms
 and a one-dimensional array with the corresponding nuclear coordinates
