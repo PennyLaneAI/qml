@@ -177,6 +177,9 @@ print(d_wires)
 # Finally, we can use the :func:`~.pennylane.templates.subroutines.UCCSD` function to define
 # our VQE ansatz.
 
+from pennylane.templates.subroutines import UCCSD
+from functools import partial
+
 ansatz = partial(UCCSD, init_state=hf, s_wires=s_wires, d_wires=d_wires)
 
 ##############################################################################
