@@ -272,7 +272,7 @@ print(doubles)
 # double excitations but only a spin-flip single excitation from qubit 1 to 2.
 # And, that's it!. From this point on the algorithm is the same as described above.
 
-s_wires, d_wires = qchem.excitations_to_wires(singles, doubles)
+s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
 
 ansatz = partial(UCCSD, init_state=hf, s_wires=s_wires, d_wires=d_wires)
 

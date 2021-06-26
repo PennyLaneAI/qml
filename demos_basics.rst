@@ -140,8 +140,8 @@ hardware.
 
 .. customgalleryitem::
     :tooltip: VQE in different spin sectors
-    :figure: demonstrations/vqe_uccsd_obs/thumbnail_spectra_h2.png
-    :description: :doc:`demos/tutorial_vqe_uccsd_obs`
+    :figure: demonstrations/vqe_spin_sectors/thumbnail_spectra_h2.png
+    :description: :doc:`demos/tutorial_vqe_spin_sectors`
     :tags: chemistry
     
 .. customgalleryitem::
@@ -181,6 +181,7 @@ hardware.
     demos/tutorial_backprop
     demos/tutorial_quantum_chemistry
     demos/tutorial_vqe
+    demos/tutorial_vqe_spin_sectors
     demos/tutorial_variational_classifier
     demos/tutorial_qaoa_maxcut
     demos/tutorial_state_preparation
