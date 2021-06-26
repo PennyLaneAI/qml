@@ -148,7 +148,7 @@ print(hf)
 # |
 #
 # .. figure:: /demonstrations/vqe_spin_sectors/fig_excitations.png
-#     :width: 75%
+#     :width: 100%
 #     :align: center
 #
 # |
