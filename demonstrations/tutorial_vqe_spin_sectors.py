@@ -141,9 +141,8 @@ print(hf)
 # Next, we use the :func:`~.pennylane_qchem.qchem.excitations`
 # function to generate all single- and double-excitations of the HF reference state.
 # This function allows us to define the keyword argument ``delta_sz``
-# to specify the variation of the total-spin projection of the generated excitations
-# with respect to the reference state. This is illustrated in the figure below for two
-# electrons and four spin-orbitals.
+# to specify the total-spin projection of the excitations with respect to the reference state.
+# This is illustrated in the figure below for the case of two electrons and four spin-orbitals.
 #
 # |
 #
