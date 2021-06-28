@@ -506,7 +506,7 @@ print(f"The kernel-target alignment for our dataset and random parameters is {kt
 # the optimization we will not use the entire training set to compute
 # :math:`\operatorname{KTA}` but rather
 # sample smaller subsets of the data at each step, we choose :math:`4`
-# datapoints at random. Remember that PennyLane's inbuilt optimizer works
+# datapoints at random. Remember that PennyLane's built-in optimizer works
 # to *minimize* the cost function that is given to it, which is why we
 # have to multiply the kernel target alignment by :math:`-1` to actually
 # *maximize* it in the process.
