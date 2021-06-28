@@ -21,7 +21,7 @@ and train them with gradient-based optimization, and all that using the
 functionality of PennyLane's
 `kernels module <https://pennylane.readthedocs.io/en/latest/code/qml_kernels.html>`__.
 The demo is based on Ref. [#Training_QEKs]_, a project from Xanadu's own
-`qhack <https://qhack.ai/>`__ hackathon.
+`QHack <https://qhack.ai/>`__ hackathon.
 
 What are kernel methods?
 ------------------------
