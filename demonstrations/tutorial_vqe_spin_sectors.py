@@ -188,7 +188,7 @@ print(d_wires)
 # the quantum circuit.
 
 def circuit(params, wires):
-    qml.templates.subroutines.UCCSD(params, wires, s_wires, d_wires, hf_state)
+    qml.templates.subroutines.UCCSD(params, wires, s_wires, d_wires, hf)
 
 ##############################################################################
 # Running the VQE simulation
@@ -281,7 +281,7 @@ print(doubles)
 s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
 
 def circuit(params, wires):
-    qml.templates.subroutines.UCCSD(params, wires, s_wires, d_wires, hf_state)
+    qml.templates.subroutines.UCCSD(params, wires, s_wires, d_wires, hf)
 
 cost_fn = qml.ExpvalCost(circuit, H, dev)
 S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
@@ -325,8 +325,8 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # the trial states of molecule. By choosing the total-spin projection of the single- and 
 # double-excitations entering the UCCSD unitary, we were able to probe the lowest-energy
 # eigenstates of the molecular Hamiltonian in different sectors of the spin quantum numbers.
-# We showed that the optimized ground and excited states are also eigenstates
-# of the total-spin operator :math:`\hat{S}^2`.
+# We showed that the optimized states were also eigenstates of the total-spin operator
+# :math:`\hat{S}^2`.
 #
 # References
 # ----------
