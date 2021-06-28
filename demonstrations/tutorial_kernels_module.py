@@ -623,5 +623,5 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 # .. [#Alignment]
 #
 #     Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian.
-#     “An overview of kernel alignment and its applications.”
+#     "An overview of kernel alignment and its applications."
 #     `Artificial Intelligence Review 43.2: 179-192 <https://link.springer.com/article/10.1007/s10462-012-9369-4>`__, 2015.
