@@ -137,11 +137,10 @@ print(S2)
 #
 # where :math:`\vert \mathrm{HF} \rangle` is the Hartree-Fock (HF) state.
 #
-# Now, we demonstrate how to use PennyLane functionalities to build up the
-# `UCCSD ansatz
+# Now, we demonstrate how to build up the `UCCSD 
 # <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.UCCSD.html>`_
-# for VQE simulations. First, we use the :func:`~.pennylane_qchem.qchem.hf_state` function
-# to generate the vector representing the HF state :math:`\vert 1100 \rangle` of the
+# ansatz above for VQE simulations. First, we use the :func:`~.pennylane_qchem.qchem.hf_state`
+# function to generate the vector representing the HF state :math:`\vert 1100 \rangle` of the
 # :math:`\mathrm{H}_2` molecule.
 
 hf = qml.qchem.hf_state(electrons, qubits)
