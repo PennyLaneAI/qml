@@ -602,7 +602,7 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 ##############################################################################
 # Indeed, we see that now not only every data instance falls within the
 # correct class, but also that there are no strong artifacts that would make us
-# distrust the model. In this sense, our approach benefits from both: On
+# distrust the model. In this sense, our approach benefits from both: on
 # one hand it can adjust itself to the dataset, and on the other hand
 # is not expected to suffer from bad generalisation.
 #
