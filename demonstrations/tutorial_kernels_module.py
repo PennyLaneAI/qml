@@ -46,7 +46,7 @@ via
    y(\boldsymbol{x}) = \operatorname{sgn}(\langle \boldsymbol{w}, \boldsymbol{x}\rangle + b).
 
 The vector :math:`\boldsymbol{w}` points perpendicular to the line and
-thus determine its slope. The independent term :math:`b` specificies the
+thus determine its slope. The independent term :math:`b` specifies the
 position on the plane. In this form, linear classification can also be
 extended to higher dimensional vectors :math:`\boldsymbol{x}`, where a
 line does not divide the entire space into two regions anymore. Instead
