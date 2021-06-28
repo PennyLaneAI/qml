@@ -616,7 +616,7 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 #
 #     Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks,
 #     Paul K. Faehrmann, and Johannes Jakob Meyer.
-#     “Training Quantum Embedding Kernels on Near-Term Quantum Computers.”
+#     "Training Quantum Embedding Kernels on Near-Term Quantum Computers."
 #     `arXiv:2105.02276 <https://arxiv.org/abs/2105.02276>`__, 2021.
 #
 # .. [#Alignment]
