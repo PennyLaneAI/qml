@@ -173,8 +173,7 @@ def make_double_cake_data(num_sectors):
     return X, Y
 
 ##############################################################################
-# Next, we define a function to help plot the ``DoubleCake`` data
-# and classification boundaries:
+# Next, we define a function to help plot the ``DoubleCake`` data:
 
 def plot_double_cake_data(X, Y, ax, num_sectors=None):
     """Plot double cake data and corresponding sectors."""
@@ -228,7 +227,7 @@ import matplotlib.pyplot as plt
 num_sectors = 3
 X, Y = make_double_cake_data(num_sectors)
 
-plot_double_cake_data(X, Y, plt.gca(), num_sectors=num_sectors);
+ax = plot_double_cake_data(X, Y, plt.gca(), num_sectors=num_sectors)
 
 ##############################################################################
 # Defining a Quantum Embedding Kernel
