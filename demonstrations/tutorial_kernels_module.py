@@ -172,6 +172,9 @@ def make_double_cake_data(num_sectors):
 
     return X, Y
 
+##############################################################################
+# Next, we define a function to help plot the ``DoubleCake`` data
+# and classification boundaries:
 
 def plot_double_cake_data(X, Y, ax, num_sectors=None):
     """Plot double cake data and corresponding sectors."""
