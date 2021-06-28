@@ -136,7 +136,8 @@ np.random.seed(1359)
 
 ##############################################################################
 # And we proceed right away to create a dataset to work with, the
-# ``DoubleCake`` dataset. We define a generating and a plotting function.
+# ``DoubleCake`` dataset. Firstly, we define two functions to enable us to
+# generate the data.
 # The details of these functions are not essential for understanding the demo,
 # so don't mind them if they are confusing.
 
