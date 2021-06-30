@@ -79,7 +79,6 @@ this corresponds to running an optimization program to find the :math:`\boldsymb
 If the gates in the variational form are restricted to be Pauli rotations, then the cost function is a sum of *multilinear trigonometric terms* in each of the parameters.
 That's a scary sequence of words!
 What it means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
-
 That is, for each parameter :math:`\theta_i` there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` such that the cost can be written as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
