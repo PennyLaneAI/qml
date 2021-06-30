@@ -177,23 +177,72 @@
                 }
               </style>
               <script type="text/javascript">
-                function toggle_filters() {
-                  var val = $(".tags input[type='radio']:checked").val();
-                  $(".filters label[for="+  val  +"]").addClass("active");
-                  $(".filters label:not([for="+  val  +"])").removeClass("active");
+                function searchGalleryItems($galleryItems, searchQuery) {
+                    $galleryItems.each(function(index, item) {
+                        var $item = $(item);
+                        var tooltipText = $item.attr("tooltip").toLowerCase();
+                        var categoryText = $item.attr("data-category").toLowerCase();
+                        var descriptionText = $item.find("span.doc").text().toLowerCase();
+                        var itemText = categoryText + ' ' + tooltipText + ' ' + descriptionText;
 
-                  if (val != "all"){
-                    $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").css("display", "none")
-                    $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").css("display", "block")
-                  } else {
-                    $(".gallery-grid .sphx-glr-thumbcontainer").css("display", "block")
-                  }
+                        if (!itemText.includes(searchQuery)) {
+                            $item.addClass('d-none');
+                        }
+
+                        if (itemText.includes(searchQuery) && $item.hasClass('d-none')) {
+                            $item.removeClass('d-none');
+                        }
+                    });
+                }
+
+                function toggle_filters() {
+                    var val = $(".tags input[type='radio']:checked").val();
+                    var searchQuery = $("#tutorialDemoSearchInput").val();
+                    $(".filters label[for="+  val  +"]").addClass("active");
+                    $(".filters label:not([for="+  val  +"])").removeClass("active");
+
+                    if (val !== "all") {
+                        if (searchQuery.length) {
+                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
+                            $(".gallery-grid .sphx-glr-thumbcontainer").each(function(index, item) {
+                                var $item = $(item);
+                                if (!$item.hasClass('d-none') && !$item.attr('data-category').includes(val)) {
+                                    $item.addClass('d-none');
+                                }
+                            });
+                        } else {
+                            $(".gallery-grid .sphx-glr-thumbcontainer:not([data-category~="+ val +"])").addClass('d-none');
+                            $(".gallery-grid .sphx-glr-thumbcontainer[data-category~="+ val +"]").removeClass('d-none');
+                        }
+                    } else {
+                        if (searchQuery.length) {
+                            searchGalleryItems($(".gallery-grid .sphx-glr-thumbcontainer"), searchQuery);
+                        } else {
+                            $(".gallery-grid .sphx-glr-thumbcontainer").removeClass('d-none');
+                        }
+                    }
                 }
 
                 toggle_filters();
 
                 $(".tags input").on("change", function() {
-                  toggle_filters();
+                    toggle_filters();
+                });
+
+                $("#tutorialDemoSearchInput").on("keyup", function(e) {
+                    e.preventDefault();
+                    var searchQuery = e.target.value.toLowerCase();
+                    var $galleryItems = $(".gallery-grid .sphx-glr-thumbcontainer");
+
+                    if (!searchQuery.length) {
+                        $galleryItems.each(function(index, item) {
+                            if ($(item).hasClass('d-none')) { $(item).removeClass('d-none'); }
+                        });
+                    } else {
+                        searchGalleryItems($galleryItems, searchQuery);
+                    }
+
+                    toggle_filters();
                 });
               </script>
             {% elif pagename == "videos" %}
@@ -243,24 +292,29 @@
           }
         });
         $(".document > .section").removeClass("section");
-        $(".comment-container .nano-content").css("height", $("#content").height());
-        $(".comment-container").css("height", $("#content").height());
+        var tocContainer = document.querySelector('.comment-container');
+        tocContainer.style.height = '85vh';
         $(".nano").nanoScroller();
     </script>
     <!-- lightslider -->
     <script src="{{ pathto('_static/js/lightslider.min.js', 1) }}"></script>
 
     <script type="text/javascript">
-      $(".document > .section").removeClass("section");
-      $(".nano").nanoScroller();
-    </script>
-    <script type="text/javascript">
       $(window).scroll(function(){
-        var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
-        if (scrollBottom < 342) {
-          $('.comment-container').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
-          $('.comment-container .nano-content').css("height", "calc(100% - " + (342 - scrollBottom + 119) + "px)");
-        }
+          var windowHeight = window.innerHeight;
+          var footer = document.querySelector('.page-footer');
+          var footerPosition = footer.getBoundingClientRect();
+          var tocContainer = document.querySelector('.comment-container');
+
+          // Check if the footer is visible
+          if (footerPosition.top < windowHeight && footerPosition.bottom >= 0) {
+              // We want the height of the TOC to be the height of the main content minus how much of the footer is visible.
+              tocContainer.style.height = 'calc(85vh - 45px - ' + (windowHeight - footerPosition.top) + 'px)'
+          } else {
+            // When the user scrolls back to the top of the page after scrolling to the bottom of the page,
+            // We want to reset the TOC container back to it's original height
+            if (tocContainer.style.height !== '85vh') tocContainer.style.height = '85vh';
+          }
       });
       $(document).ready(function () {
           $(".css-transitions-only-after-page-load").each(function (index, element) {
