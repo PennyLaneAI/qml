@@ -38,7 +38,7 @@ Quantum Analytic Descent paper [#QAD]_
 propose an algorithm that constructs a classical model which approximates the
 landscape, so that the gradients can be calculated on a classical computer, which is much cheaper.
 In order to build the classical model, we need to use the quantum device to
-evaluate the cost function on (a) a reference point :math:`\boldsymbol{\theta}_0`
+evaluate the cost function on (a) a reference point :math:`\boldsymbol{\theta}_0`,
 and (b) a number of points shifted away from :math:`\boldsymbol{\theta}_0`.
 With the cost values at these points, we can build the classical model that
 approximates the landscape.
