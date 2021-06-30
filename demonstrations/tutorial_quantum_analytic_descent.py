@@ -260,7 +260,7 @@ line2 = ax.plot(
 #      - :math:`D_{kl}(\boldsymbol{\theta}) = 4\sin\left(\frac{\theta_k}{2}\right)\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_l}{2}\right)\cos\left(\frac{\theta_l}{2}\right)\prod_{i\neq k,l} \cos\left(\frac{\theta_i}{2}\right)^2`
 #      - :math:`x_kx_l`
 #
-# Those are really large terms as compared to a Taylor series!
+# Those are really large terms compared to a Taylor series!
 # However, you may have noticed all of those terms have large parts in common.
 # Indeed, we can rewrite the longer ones in a shorter way which is more decent to look at:
 #
