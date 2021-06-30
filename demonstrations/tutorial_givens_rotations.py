@@ -14,7 +14,7 @@ Givens rotations for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: PennyLane dev team. Posted: June 1, 2021. Last updated: June 1, 2021*
+*Author: PennyLane dev team. Posted: June 30, 2021. Last updated: June 30, 2021*
 
 In the book `"Sophie's world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
