@@ -489,6 +489,7 @@ print("Output state =", output)
 # .. [#arrazola]
 #
 #   J. M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran, "Universal
-#   quantum circuits for quantum chemistry", arXiv:2021:1234, (2021)
+#   quantum circuits for quantum chemistry", arXiv:2106.13839, (2021)
+
 #
 #
