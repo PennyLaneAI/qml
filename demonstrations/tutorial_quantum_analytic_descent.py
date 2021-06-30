@@ -621,7 +621,7 @@ mapped_model = lambda params: model_cost(params, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
 
 ###############################################################################
-# **Iteration 2:** Now we observe the model to stay closer to the original landscape. In addition, the minimum of the model is within the displayed range -- we're getting closer.
+# **Iteration 2:** Now we observe the model better resembles the original landscape. In addition, the minimum of the model is within the displayed range -- we're getting closer.
 
 mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
