@@ -240,7 +240,8 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 # In the context of quantum chemistry, it is common to consider excitations on a fixed reference
 # state and include only the excitations that preserve the spin orientation of the electron.
 # For a system with :math:`n` qubits and :math:`k` particles, this reference state is typically
-# chosen as the state with the first :math:`k` qubits in state :math:`|1\rangle, and the remainder
+# chosen as the state with the first :math:`k` qubits in state :math:`|1\rangle`, and the remainder
+
 # in state :math:`|0\rangle`.
 # PennyLane allows you to obtain all such excitations using the function
 # :func:`~.pennylane_qchem.qchem.excitations`. Let's employ it to build a circuit that includes
