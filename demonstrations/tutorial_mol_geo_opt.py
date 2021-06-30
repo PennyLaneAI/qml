@@ -11,7 +11,7 @@ Optimization of molecular geometries
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: PennyLane dev team. Posted: 27 May 2021. Last updated: 27 May 2021.*
+*Author: PennyLane dev team. Posted: 30 June 2021. Last updated: 30 June 2021.*
 
 Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
 in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
@@ -415,8 +415,7 @@ plt.show()
 # .. [#qchemcircuits]
 #
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
-#     "Universal quantum circuits for quantum chemistry".
-#     arXiv preprint
+#     "Universal quantum circuits for quantum chemistry". arXiv:2106.13839, (2021)
 #
 # .. [#ref_gamess]
 #
@@ -429,7 +428,7 @@ plt.show()
 #
 #     A. Delgado, J.M. Arrazola, S. Jahangiri, Z. Niu, J. Izaac, C. Roberts, N. Killoran.
 #     "Variational quantum algorithm for molecular geometry optimization".
-#     arXiv preprint (2021)
+#     arXiv:2106.13840, (2021)
 #
 # .. [#pulay]
 #
