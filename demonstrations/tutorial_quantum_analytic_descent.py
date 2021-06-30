@@ -17,7 +17,7 @@ Quantum analytic descent
    tutorial_stochastic_parameter_shift Obtaining gradients stochastically
 
 
-*Authors: Elies Gil-Fuster, David Wierichs (Xanadu residents). Posted: ?? May 2021.*
+*Authors: Elies Gil-Fuster, David Wierichs (Xanadu residents). Posted: 30 June 2021.*
 
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
@@ -54,7 +54,7 @@ So: sit down, relax, and enjoy your optimization!
     :align: center
     :width: 50%
     :target: javascript:void(0)
-    
+
     Optimization progress with Quantum Analytic Descent.
 
 
@@ -235,10 +235,12 @@ line2 = ax.plot(
 #
 # One important aspect in which trigonometric series differ from regular
 # expansions is that there is not a clear separation between what terms
-# contribute to each order of the expansion (due to the fact that all 
+# contribute to each order of the expansion (due to the fact that all
 # derivatives of sine and cosine are non-zero in general).
 # Because of this, we group the terms by their leading order contribution, and
 # in the following table write them next to their non-trigonometric analogues.
+# All chosen trigonometric monomials have leading order coefficient :math:`1`
+# and they all differ in their leading order contribution.
 #
 # .. list-table::
 #    :widths: 10 70 20
@@ -348,7 +350,7 @@ print(
 # Let us now take a few moments to breath deeply and admire the entirety of it.
 # On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k`, and
 # :math:`D_{kl}` functions, which we said are the basis functions of the
-# expansion. 
+# expansion.
 # On the other hand we have the real-valued coefficients :math:`E^{(A/B/C/D)}` for the previous functions which are nothing but the derivatives in the corresponding input components.
 # Combining them yields the trigonometric expansion, which we implement with another function:
 
@@ -421,10 +423,10 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #     variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
 #
 #     .. list-table::
-#        :widths: 20 35 45 
+#        :widths: 20 35 45
 #        :header-rows: 1
 #
-#        * - 
+#        * -
 #          - Number of coefficients
 #          - Number of circuit evaluations
 #        * - :math:`E^{(A)}`
