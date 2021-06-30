@@ -669,7 +669,7 @@ leg = ax.legend()
 # impact on the overall optimization.
 #
 # In this demo we've seen how to implement the Quantum Analytic Descent algorithm
-# using PennyLane for a toy-example of a Variational Quantum Eigensolver.
+# using PennyLane for a toy example of a Variational Quantum Eigensolver.
 # By making extensive use of 3D-plots we have also tried to illustrate exactly
 # what is going on in both the true cost landscape and the trigonometric expansion
 # approximation.
