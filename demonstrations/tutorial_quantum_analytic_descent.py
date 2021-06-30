@@ -655,7 +655,7 @@ leg = ax.legend()
 # different reference point.
 # We can now more easily appreciate the phenomenon we just described:
 # towards the end of each "outer" optimization step, the model cost
-# can be seen to be significantly lower than the true cost.
+# can potentially be significantly lower than the true cost.
 # Once the true cost itself approaches the absolute minimum, this means the
 # model cost can overstep the allowed range.
 # *Wasn't this forbidden? You guys told us the function could only take values in* :math:`[-1,1]` >:@
