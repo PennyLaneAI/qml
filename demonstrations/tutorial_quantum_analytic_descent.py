@@ -66,7 +66,7 @@ When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind,
 The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
 After the variational form, the circuit ends with the measurement of a chosen observable
 :math:`\mathcal{M}`, based on the problem
-we try to solve.
+we are trying to solve.
 
 The idea in VQE is to fix a variational form such that the expected value of the measurement relates to the energy of an interesting Hamiltonian:
 
