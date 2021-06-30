@@ -235,7 +235,7 @@ line2 = ax.plot(
 #
 # One important aspect in which trigonometric series differ from regular
 # expansions is that there is not a clear separation between what terms
-# contribute to what order of th expansion (due to the fact that all order
+# contribute to each order of the expansion (due to the fact that all 
 # derivatives of sine and cosine are non-zero in general).
 # Because of this, we group the terms by their leading order contribution, and
 # in the following table write them next to their non-trigonometric analogues.
