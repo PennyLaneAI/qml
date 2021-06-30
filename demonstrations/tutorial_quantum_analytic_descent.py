@@ -22,7 +22,7 @@ Quantum analytic descent
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
 `The Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ combines smart circuit
-design with a gradient-based optimization to solve this task.
+design with gradient-based optimization to solve this task.
 Several practical demonstrations have shown how near-term quantum
 devices may be suitable for VQE and other variational quantum algorithms.
 One issue for such an approach, though, is that the optimization landscape is
