@@ -170,7 +170,7 @@ line2 = ax.plot(
 # *if the variational parameters feed into Pauli rotations, the energy landscape is a multilinear combination of trigonometric functions*.
 # What is a good thing about trigonometric functions?
 # That's right!
-# We have studied them since high school and know how their graphs look!
+# We have studied them since high school and know how their graphs look.
 #
 # The QAD strategy
 # ----------------
