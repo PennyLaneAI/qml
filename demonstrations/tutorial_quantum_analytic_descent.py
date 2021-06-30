@@ -273,7 +273,7 @@ line2 = ax.plot(
 # With that, we know what type of terms we should expect to encounter in our local classical model:
 # the model we want to construct is a linear combination of the functions
 # :math:`A(\boldsymbol{\theta})`, :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
-# for each parameter, and :math:`D_{kl}(\boldsymbol{\theta})` for every pair of different variables :math:`(\theta_k,\theta_l)`.
+# for each parameter, and :math:`D_{kl}(\boldsymbol{\theta})` for every pair of different parameters :math:`(\theta_k,\theta_l)`.
 #
 # Computing the expansion coefficients
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
