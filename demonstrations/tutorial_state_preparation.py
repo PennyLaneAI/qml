@@ -179,6 +179,7 @@ for n in range(steps):
 
     # keeps track of best parameters
     if loss < best_cost:
+        best_cost = loss
         best_params = params
 
     # Keep track of progress every 10 steps
