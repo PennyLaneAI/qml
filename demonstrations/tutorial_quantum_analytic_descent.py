@@ -226,7 +226,7 @@ line2 = ax.plot(
 #
 #     .. math:: f_\text{Trig}(x) = \sum a_n \cos(n(x-x_0))+ b_n \sin(n(x-x_0)).
 #
-#     For higher-dimensional variables we have to take products of the basis functions of each coordinate, i.e. of monomials or trigonometric monomials respectively.
+#     For higher-dimensional variables we have to take products of the basis functions of each coordinate, i.e., of monomials or trigonometric monomials respectively.
 #     This does lead to an exponentially increasing number of terms, but if we chop the series soon enough it will not get too much out of hand.
 #     The proposal here is to only go up to second order terms, so we are safe.
 #
