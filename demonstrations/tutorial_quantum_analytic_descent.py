@@ -507,7 +507,7 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # The rod with the bead on top indicates the reference point around which the model
 # is built and at which it coincides with the original cost function up to second
 # order. This is underlined in the third plot, where we see the difference between
-# model and true landscape.
+# the model and true landscapes.
 # Around the reference point the difference is very small and changes very slowly,
 # only growing significantly for large simultaneous perturbations in both
 # parameters. This already hints at the value of the model for local optimization.
