@@ -43,7 +43,8 @@ learn how to use these gates to build arbitrary states of a fixed number of part
 Particle-conserving unitaries
 -----------------------------
 
-Understanding the electronic structure of molecules is arguably the central problem in quantum chemistry. Quantum computers tackle this problem by using systems of qubits to
+Understanding the electronic structure of molecules is arguably the central problem in quantum chemistry.
+Quantum computers tackle this problem by using systems of qubits to
 represent the quantum states of the electrons. One method is to consider a
 collection of `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_, which
 capture the three-dimensional region of space occupied by the electrons. Each orbital can be
@@ -114,7 +115,7 @@ Basis states of two qubits can be categorized depending on
 their number of particles.
 
 We have:
- 
+
 - :math:`|00\rangle` with zero particles,
 - :math:`|01\rangle,|10\rangle` with one particle, and
 - :math:`|11\rangle` with two particles.
@@ -241,7 +242,6 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 # state and include only the excitations that preserve the spin orientation of the electron.
 # For a system with :math:`n` qubits and :math:`k` particles, this reference state is typically
 # chosen as the state with the first :math:`k` qubits in state :math:`|1\rangle`, and the remainder
-
 # in state :math:`|0\rangle`.
 # PennyLane allows you to obtain all such excitations using the function
 # :func:`~.pennylane_qchem.qchem.excitations`. Let's employ it to build a circuit that includes
