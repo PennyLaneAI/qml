@@ -54,7 +54,7 @@ The main idea behind building adaptive circuits is to compute the gradients of t
 value of a molecular Hamiltonian with respect to all the existing the excitation gates and select
 gates based on the magnitude of the computed gradients. There are different ways to select the gates
 based on the computed gradients and here we discuss one of these strategies to compute the ground
-state energy of the trihydrogen cation. Both of these methods require constructing the Hamiltonian
+state energy of LiH. Both of these methods require constructing the Hamiltonian
 and determining all possible excitations which we can do with PennyLane functionalities shown below.
 But we first need to import the required libraries and define the molecular parameters including
 atomic symbols and coordinates. Note that the atomic coordinates are in Bohr.
@@ -64,10 +64,9 @@ import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
 
-symbols = ["H", "H", "H"]
-geometry = np.array([0.01076341,  0.04449877, 0.00000000,
-                     0.98729511,  1.63059090, 0.00000000,
-                     1.87262411, -0.00815842, 0.00000000])
+symbols = ["Li", "H"]
+geometry = np.array([0.000000000,  0.000000000, 0.000000000,
+                     0.000000000,  0.000000000, 2.969280527])
 
 ##############################################################################
 # We now compute the molecular Hamiltonian and the electronic excitations.
@@ -75,21 +74,22 @@ geometry = np.array([0.01076341,  0.04449877, 0.00000000,
 H, qubits = qchem.molecular_hamiltonian(
     symbols,
     geometry,
-    charge = 1,
+    charge = 0,
     mult = 1,
     basis = 'sto-3g',
     active_electrons = 2,
-    active_orbitals  = 3)
+    active_orbitals  = 5)
 
 singles, doubles = qchem.excitations(2, qubits)
 
 ##############################################################################
-# We now implement a strategy which constructs the circuit by adding groups of gate at a time.
-# The first step is to compute the gradients for a set of the existing gates. We create a circuit
-# that applies a selected group of gates to a reference Hartree-Fock state.
+# Note that we have a total number of 24 excitation gates. We now implement a strategy which
+# constructs the circuit by adding groups of gate at a time. The first step is to compute the
+# gradients for a set of the existing gates. We create a circuit that applies a selected group of
+# gates to a reference Hartree-Fock state.
 
 def circuit_1(params, wires, excitations):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0]), wires=wires)
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
             qml.DoubleExcitation(params[i], wires=excitation)
@@ -116,7 +116,8 @@ print(grads)
 # in the final state prepared by the circuit. We select those gates that have a gradient above a
 # pre-defined threshold which we set to 0.001.
 
-doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 0.001]
+doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-5]
+doubles_select
 
 ##############################################################################
 # We add the selected gates to the circuit and perform one VQE step to determine the optimized
@@ -138,7 +139,7 @@ for n in range(20):
 # fixed while the gradients are computed for the single excitation gates.
 
 def circuit_2(params, wires, excitations, gates_select, params_select):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=wires)
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0], requires_grad=False), wires=wires)
     for i, gate in enumerate(gates_select):
         if len(gate) == 4:
             qml.DoubleExcitation(params_select[i], wires=gate)
@@ -168,12 +169,13 @@ print(grads)
 # Similar to the double excitation gates, we select those single excitations that have a gradient
 # larger than a predefined threshold.
 
-singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 0.001]
+singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0e-5]
+singles_select
 
 ##############################################################################
 # Now, we have all of the gates we need to build our circuit and perform one final step of VQE
 # optimization to get the ground state energy. The resulting energy must be the exact energy of the
-# ground electronic state of the trihydrogen cation which is.
+# ground electronic state of LiH which is -7.8825378193 Ha.
 
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
@@ -184,13 +186,14 @@ for n in range(20):
     print(energy)
 
 ##############################################################################
-# Success! We obtained the exact ground state energy of the trihydrogen cation by having only two
-# gates in our circuit.
+# Success! We obtained the exact ground state energy of LiH, within chemical accuracy, by having
+# only 10 gates in our circuit which is less than half of the total numbers of single and double
+# excitations of LiH (24).
 
 ##############################################################################
 # Sparse method
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
-# we built for the trihydrogen cation. We can compute the matrix representation of the Hamiltonian
+# we built for LiH. We can compute the matrix representation of the Hamiltonian
 # in the computational basis using the sparse_hamiltonian function of PennyLane. This function
 # returns the matrix in the scipy 'sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>'_ format.
 
@@ -213,7 +216,7 @@ params = [0.0] * len(excitations)
 
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=range(qubits))
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0], requires_grad=False), wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
