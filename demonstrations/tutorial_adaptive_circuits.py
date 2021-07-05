@@ -60,9 +60,9 @@ But we first need to import the required libraries and define the molecular para
 atomic symbols and coordinates. Note that the atomic coordinates are in Bohr.
 """
 
-import numpy as np
 import pennylane as qml
 from pennylane import qchem
+from pennylane import numpy as np
 
 symbols = ["H", "H", "H"]
 geometry = np.array([0.01076341,  0.04449877, 0.00000000,
@@ -213,7 +213,7 @@ params = [0.0] * len(excitations)
 
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=range(qubits))
+    qml.BasisState(np.array([1, 1, 0, 0, 0, 0], requires_grad=False), wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
