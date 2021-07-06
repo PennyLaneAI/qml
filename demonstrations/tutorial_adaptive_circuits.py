@@ -238,7 +238,10 @@ for n in range(20):
 # much shorter. The performance of the optimization will be more significant for larger molecules.
 #
 # In conclusion, we have leaned that building quantum chemistry circuits adaptively and using the
-# functionality for sparse objects makes molecular simulations significantly efficient.
+# functionality for sparse objects makes molecular simulations significantly efficient. In this
+# tutorial, we followed an adaptive strategy that selects a group of gates at each time. This method
+# can be extended such that the gates are selected one at time [#grimsley2019]_. You can implement
+# the second method yourself and compare the results with the one we obtained above.
 #
 # References
 # ----------
