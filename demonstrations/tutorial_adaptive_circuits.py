@@ -201,7 +201,7 @@ H_sparse = qml.utils.sparse_hamiltonian(H)
 H_sparse
 
 ##############################################################################
-# We can already see that the matrix has 4096 entries which only 304 of them
+# We can already see that the matrix has 1048576 entries which only 11264 of them
 # are non-zero. Leveraging this sparsity in the VQE simulations can significantly reduce the
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
 # value of the sparse Hamiltonian observable. This can reduce the cost of the VQE simulations by

@@ -213,6 +213,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_mol_geo_opt`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Adaptive circuits for quantum chemistry.
+    :figure: demonstrations/
+    :description: :doc:`demos/tutorial_adaptive_circuits`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
