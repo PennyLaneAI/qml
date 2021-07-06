@@ -168,6 +168,12 @@ hardware.
     :description: :doc:`demos/braket-parallel-gradients`
     :tags: braket
 
+.. customgalleryitem::
+    :tooltip: Discover the building blocks of quantum circuits for quantum chemistry
+    :figure: demonstrations/givens_rotations/Givens_rotations.png
+    :description: :doc:`demos/tutorial_givens_rotations`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -195,3 +201,4 @@ hardware.
     demos/tutorial_jax_transformations
     demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
+    demos/tutorial_givens_rotations
