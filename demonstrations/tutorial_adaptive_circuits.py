@@ -65,20 +65,14 @@ from pennylane import qchem
 from pennylane import numpy as np
 
 symbols = ["Li", "H"]
-geometry = np.array([0.000000000,  0.000000000, 0.000000000,
-                     0.000000000,  0.000000000, 2.969280527])
+geometry = np.array([0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 2.969280527])
 
 ##############################################################################
 # We now compute the molecular Hamiltonian and the electronic excitations.
 
 H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    geometry,
-    charge = 0,
-    mult = 1,
-    basis = 'sto-3g',
-    active_electrons = 2,
-    active_orbitals  = 5)
+    symbols, geometry, charge=0, mult=1, basis="sto-3g", active_electrons=2, active_orbitals=5
+)
 
 singles, doubles = qchem.excitations(2, qubits)
 
@@ -88,6 +82,7 @@ singles, doubles = qchem.excitations(2, qubits)
 # gradients for a set of the existing gates. We create a circuit that applies a selected group of
 # gates to a reference Hartree-Fock state.
 
+
 def circuit_1(params, wires, excitations):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0]), wires=wires)
     for i, excitation in enumerate(excitations):
@@ -96,12 +91,13 @@ def circuit_1(params, wires, excitations):
         else:
             qml.SingleExcitation(params[i], wires=excitation)
 
+
 ##############################################################################
 # We construct our first group of gates by including all of the double excitations and compute the
 # gradients for each of the double excitation gates. We also need to define a
 # device and a cost function.
 
-dev = qml.device("default.qubit", wires = qubits)
+dev = qml.device("default.qubit", wires=qubits)
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
 dcircuit = qml.grad(cost_fn, argnum=0)
@@ -138,6 +134,7 @@ for n in range(20):
 # need to slightly modify our circuit such that parameters of the double excitation gates are kept
 # fixed while the gradients are computed for the single excitation gates.
 
+
 def circuit_2(params, wires, excitations, gates_select, params_select):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0], requires_grad=False), wires=wires)
     for i, gate in enumerate(gates_select):
@@ -152,6 +149,7 @@ def circuit_2(params, wires, excitations, gates_select, params_select):
         elif len(gate) == 2:
             qml.SingleExcitation(params[i], wires=gate)
 
+
 ##############################################################################
 #  We now compute the gradients for the single excitation gates.
 
@@ -161,7 +159,9 @@ dcircuit = qml.grad(cost_fn, argnum=0)
 
 params = [0.0] * len(singles)
 
-grads = dcircuit(params, excitations=singles, gates_select=doubles_select, params_select=params_doubles)
+grads = dcircuit(
+    params, excitations=singles, gates_select=doubles_select, params_select=params_doubles
+)
 
 print(grads)
 
@@ -214,9 +214,12 @@ opt = qml.GradientDescentOptimizer(stepsize=0.5)
 excitations = doubles_select + singles_select
 params = [0.0] * len(excitations)
 
+
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0], requires_grad=False), wires=range(qubits))
+    qml.BasisState(
+        np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0], requires_grad=False), wires=range(qubits)
+    )
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
@@ -226,8 +229,10 @@ def circuit(params):
 
     return qml.expval(qml.SparseHamiltonian(H_sparse, wires=range(qubits)))
 
+
 def cost(params):
     return circuit(params)
+
 
 for n in range(20):
     params, energy = opt.step_and_cost(cost, params)
