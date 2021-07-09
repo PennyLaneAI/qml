@@ -248,8 +248,8 @@ for n in range(20):
 # In conclusion, we have leaned that building quantum chemistry circuits adaptively and using the
 # functionality for sparse objects makes molecular simulations significantly efficient. In this
 # tutorial, we followed an adaptive strategy that selects a group of gates at each time. This method
-# can be extended such that the gates are selected one at time [#grimsley2019]_, or 
-even to other more elaborate strategies.
+# can be extended such that the gates are selected one at time [#grimsley2019]_, or
+# even to other more elaborate strategies.
 #
 # References
 # ----------
