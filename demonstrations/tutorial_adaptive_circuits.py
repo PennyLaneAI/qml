@@ -27,35 +27,36 @@ specialized approach that builds a customized ansatz for the given molecule. Usi
 ansatz has the disadvantage of reducing performance in favour of generality while building a
 customized circuit helps with improving performance in the cost of reducing generality.
 
-In this tutorial you will learn how to build customized quantum chemistry circuits adaptively. This
+In this tutorial, you will learn how to  **adaptively** build customized quantum chemistry circuits. This
 includes a recipe for adaptive selection of the gates that have a significant contribution to the
-desired state and neglecting those which have zero or small contribution. You also learn to use
+desired state and neglecting those that have a small contribution. You also learn to use
+
 the functionality in PennyLane for leveraging the sparsity of a molecular Hamiltonian to make the
 computation of the expectation values even more efficient. Let’s get started!
 
 Quantum chemistry circuits
 --------------------------
 
-Quantum chemistry circuits are typically build using a pre-generated wavefunction ansatz such as
+Quantum circuits for quantum chemistry are typically build using a pre-generated wavefunction ansatz such as
 UCCSD. In this approach, one includes all possible single and double excitations of electrons from
 the occupied spin-orbitals of a reference state to the unoccupied spin-orbitals. This makes
-construction of the ansatz straightforward for any given molecule. However, we know that in
+construction of the ansatz straightforward for any given molecule. However, in
 practical applications, only a selected number of such excitations are necessary to prepare the
-exact ground state wavefunction and including all possible excitations increases the cost of the
-simulations without improving the accuracy of the results. This motivates implementing an strategy
-that allows approximating the contribution of the excitations and select only those excitations
+exact ground state wavefunction. Including all possible excitations increases the cost of the
+simulations without improving the accuracy of the results. This motivates implementing a strategy
+that allows approximating the contribution of the excitations and selecting only those excitations
 that are found to be important for the given molecule. This can be done by using adaptive methods
 to construct a circuit for each given problem [#grimsley2019]_.
 
 Adaptive circuits
 -----------------
 
-The main idea behind building adaptive circuits is to compute the gradients of the expectation
-value of a molecular Hamiltonian with respect to all the existing the excitation gates and select
-gates based on the magnitude of the computed gradients. There are different ways to select the gates
-based on the computed gradients and here we discuss one of these strategies to compute the ground
+The main idea behind building adaptive circuits is to compute the gradients with respect to all
+possible excitation gates and select gates based on the magnitude of the computed gradients. 
+There are different ways to select the gates
+based on the computed gradients. Here we discuss one of these strategies to compute the ground
 state energy of LiH. Both of these methods require constructing the Hamiltonian
-and determining all possible excitations which we can do with PennyLane functionalities shown below.
+and determining all possible excitations, which we can do with PennyLane functionalities shown below.
 But we first need to import the required libraries and define the molecular parameters including
 atomic symbols and coordinates. Note that the atomic coordinates are in Bohr.
 """
@@ -65,10 +66,10 @@ from pennylane import qchem
 from pennylane import numpy as np
 
 symbols = ["Li", "H"]
-geometry = np.array([0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 2.969280527])
+geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 
 ##############################################################################
-# We now compute the molecular Hamiltonian and the electronic excitations.
+# We now compute the molecular Hamiltonian in the STO-3G basis, and the electronic excitations.
 
 H, qubits = qchem.molecular_hamiltonian(
     symbols, geometry, charge=0, mult=1, basis="sto-3g", active_electrons=2, active_orbitals=5
@@ -110,14 +111,14 @@ print(grads)
 ##############################################################################
 # The computed gradients have different values which reflect the contribution of each gate
 # in the final state prepared by the circuit. We select those gates that have a gradient above a
-# pre-defined threshold which we set to 0.001.
+# pre-defined threshold, which we set to 0.001.
 
-doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-5]
+doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-3]
 doubles_select
 
 ##############################################################################
-# We add the selected gates to the circuit and perform one VQE step to determine the optimized
-# parameters for the selected gates. We also need to define an optimizer. Note that the VQE
+# We add the selected gates to the circuit and perform one optimization step to determine the updated
+# parameters for the selected gates. We also need to define an optimizer. Note that the
 # optimization is not very costly as we only have two gate in our circuit.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
@@ -130,7 +131,7 @@ for n in range(20):
 
 ##############################################################################
 # Now, we keep the selected gates in the circuit and compute the gradients with respect to all of
-# the single excitation gates and select those that have a non-negligible gradient. To do that, we
+# the single excitation gates, selecting those that have a non-negligible gradient. To do that, we
 # need to slightly modify our circuit such that parameters of the double excitation gates are kept
 # fixed while the gradients are computed for the single excitation gates.
 
@@ -169,11 +170,12 @@ print(grads)
 # Similar to the double excitation gates, we select those single excitations that have a gradient
 # larger than a predefined threshold.
 
-singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0e-5]
+singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0e-3]
 singles_select
 
 ##############################################################################
-# Now, we have all of the gates we need to build our circuit and perform one final step of VQE
+# We have all of the gates we need to build our circuit and perform one final step of
+
 # optimization to get the ground state energy. The resulting energy must be the exact energy of the
 # ground electronic state of LiH which is -7.8825378193 Ha.
 
@@ -187,7 +189,8 @@ for n in range(20):
 
 ##############################################################################
 # Success! We obtained the exact ground state energy of LiH, within chemical accuracy, by having
-# only 10 gates in our circuit which is less than half of the total numbers of single and double
+# only 10 gates in our circuit. This is less than half of the total number of single and double
+
 # excitations of LiH (24).
 
 ##############################################################################
@@ -201,12 +204,12 @@ H_sparse = qml.utils.sparse_hamiltonian(H)
 H_sparse
 
 ##############################################################################
-# We can already see that the matrix has 1048576 entries which only 11264 of them
-# are non-zero. Leveraging this sparsity in the VQE simulations can significantly reduce the
+# The matrix has 1024^2=1048576 entries, but only 11264 of them
+# are non-zero. Leveraging this sparsity in the simulations can significantly reduce the
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
-# value of the sparse Hamiltonian observable. This can reduce the cost of the VQE simulations by
+# value of the sparse Hamiltonian observable. This can reduce the cost of simulations by
 # orders of magnitude depending on the molecular size. We use the selected gates in the previous
-# steps and perform the final VQE step with the sparse method.
+# steps and perform the final optimization step with the sparse method.
 
 dev = qml.device("default.qubit", wires=qubits)
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
@@ -245,8 +248,8 @@ for n in range(20):
 # In conclusion, we have leaned that building quantum chemistry circuits adaptively and using the
 # functionality for sparse objects makes molecular simulations significantly efficient. In this
 # tutorial, we followed an adaptive strategy that selects a group of gates at each time. This method
-# can be extended such that the gates are selected one at time [#grimsley2019]_. You can implement
-# the second method yourself and compare the results with the one we obtained above.
+# can be extended such that the gates are selected one at time [#grimsley2019]_, or 
+even to other more elaborate strategies.
 #
 # References
 # ----------
