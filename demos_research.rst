@@ -213,6 +213,11 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_falqon`
     :tags: autograd
 
+.. customgalleryitem::
+    :tooltip: Optimizing the geometry of molecules.
+    :figure: demonstrations/mol_geo_opt/fig_thumbnail.png
+    :description: :doc:`demos/tutorial_mol_geo_opt`
+    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -292,4 +297,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
+    demos/tutorial_mol_geo_opt
     demos/tutorial_classical_shadows
