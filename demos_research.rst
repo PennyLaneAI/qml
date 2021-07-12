@@ -124,6 +124,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/learning2learn`
     :tags: tensorflow
 
+.. customgalleryitem::
+    :tooltip: Kernels and alignment training with PennyLane.
+    :figure: demonstrations/kernels_module/QEK_thumbnail.png
+    :description: :doc:`demos/tutorial_kernels_module`
+    :tags: kernels alignment classification 
+
 :html:`</div></div><div style='clear:both'>`
 
 Optimization
