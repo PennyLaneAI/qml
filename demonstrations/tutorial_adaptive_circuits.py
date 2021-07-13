@@ -5,7 +5,6 @@ Adaptive circuits for quantum chemistry
 
 .. meta::
     :property="og:description": Learn how to build quantum chemistry circuits adaptively
-
     :property="og:image": https://pennylane.ai/qml/_images/adaptive_circuits.png
 
 .. related::
@@ -204,7 +203,7 @@ H_sparse = qml.utils.sparse_hamiltonian(H)
 H_sparse
 
 ##############################################################################
-# The matrix has 1024^2=1048576 entries, but only 11264 of them
+# The matrix has :math:`1024^2=1048576` entries, but only 11264 of them
 # are non-zero. Leveraging this sparsity in the simulations can significantly reduce the
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
 # value of the sparse Hamiltonian observable. This can reduce the cost of simulations by
