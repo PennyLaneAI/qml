@@ -37,7 +37,7 @@ Quantum chemistry circuits
 Quantum circuits for quantum chemistry are typically build using a pre-generated wavefunction ansatz
 such as UCCSD [#romero2017]_. In this approach, one includes all possible single and double
 excitations of electrons from the occupied spin-orbitals of a reference state to the unoccupied
-spin-orbitals :doc:`tutorial_givens_rotations`. This makes construction of the ansatz
+spin-orbitals [#givenstutorial]_. This makes construction of the ansatz
 straightforward for any given molecule. However, in practical applications, only a selected number
 of such excitations are necessary to prepare the exact ground state wavefunction. Including all
 possible excitations increases the cost of the simulations without improving the accuracy of the
@@ -67,21 +67,32 @@ symbols = ["Li", "H"]
 geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 
 ##############################################################################
-# We now compute the molecular Hamiltonian in the STO-3G basis, and the electronic excitations.
+# We now compute the molecular Hamiltonian in the STO-3G basis and the electronic excitations. Here
+# we restrict ourself to single and double excitations but higher-level excitations, such as
+# triple and quadruple, can be considered as well. Each of these electronic excitations is
+# represented by a gate that excites electrons from the occupied orbitals of a reference state to
+# the unoccupied ones. This allows us to prepare a state that is a superposition of the reference
+# state and all of the excited states similar to coupled cluster and configuration interaction
+# methods in classical quantum chemistry.
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols, geometry, active_electrons=2, active_orbitals=5
-)
+H, qubits = qchem.molecular_hamiltonian(symbols, geometry, active_electrons=2, active_orbitals=5)
 
 singles, doubles = qchem.excitations(2, qubits)
 
 print(f"Total number of excitations = {len(singles) + len(doubles)}")
 
 ##############################################################################
-# Note that we have a total number of 24 excitation gates. We now implement a strategy which
-# constructs the circuit by adding groups of gate at a time. The first step is to compute the
-# gradients for a set of the existing gates. We create a circuit that applies a selected group of
-# gates to a reference Hartree-Fock state.
+# Note that we have a total number of 24 excitations which can be represented by the same number of
+# excitation gates [#givenstutorial]_. We now implement a strategy which constructs
+# the circuit by adding groups of gate at a time. We follow theses steps:
+#
+# 1. Compute gradients for all double excitations.
+# 2. Select the double excitations with gradients larger than a pre-defined threshold.
+# 3. Perform VQE to obtain the optimized parameters for the selected double excitations.
+# 4. Repeats steps 1 and 2 for the single excitations.
+# 5. Perform the final VQE optimization with all the selected excitations.
+#
+# We create a circuit that applies a selected group of gates to a reference Hartree-Fock state.
 
 
 def circuit_1(params, wires, excitations):
@@ -104,10 +115,10 @@ def circuit_1(params, wires, excitations):
 dev = qml.device("default.qubit", wires=qubits)
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
-dcircuit = qml.grad(cost_fn, argnum=0)
+circuit_gradient = qml.grad(cost_fn, argnum=0)
 
 params = [0.0] * len(doubles)
-grads = dcircuit(params, excitations=doubles)
+grads = circuit_gradient(params, excitations=doubles)
 
 for i in range(len(doubles)):
     print(f"Excitation : {doubles[i]}, Gradient: {grads[i]}")
@@ -115,9 +126,9 @@ for i in range(len(doubles)):
 ##############################################################################
 # The computed gradients have different values which reflect the contribution of each gate
 # in the final state prepared by the circuit. Many of the gradient values are zero and we select
-# those gates that have a gradient above a pre-defined threshold, which we set to 0.001.
+# those gates that have a gradient above a pre-defined threshold, which we set to 0.00001.
 
-doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-3]
+doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-5]
 doubles_select
 
 ##############################################################################
@@ -160,9 +171,9 @@ def circuit_2(params, wires, excitations, gates_select, params_select):
 #  We now compute the gradients for the single excitation gates.
 
 cost_fn = qml.ExpvalCost(circuit_2, H, dev, optimize=True)
-dcircuit = qml.grad(cost_fn, argnum=0)
+circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
-grads = dcircuit(
+grads = circuit_gradient(
     params, excitations=singles, gates_select=doubles_select, params_select=params_doubles
 )
 for i in range(len(singles)):
@@ -172,7 +183,7 @@ for i in range(len(singles)):
 # Similar to the double excitation gates, we select those single excitations that have a gradient
 # larger than a predefined threshold.
 
-singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0e-3]
+singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0e-5]
 singles_select
 
 ##############################################################################
@@ -189,12 +200,11 @@ for n in range(20):
     t1 = time.time()
     params, energy = opt.step_and_cost(cost_fn, params, excitations=doubles_select + singles_select)
     t2 = time.time()
-    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2-t1))
+    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
 ##############################################################################
 # Success! We obtained the exact ground state energy of LiH, within chemical accuracy, by having
 # only 10 gates in our circuit. This is less than half of the total number of single and double
-
 # excitations of LiH (24).
 
 ##############################################################################
@@ -227,9 +237,7 @@ params = [0.0] * len(excitations)
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
     hf_state = qchem.hf_state(2, qubits)
-    qml.BasisState(
-        np.array(hf_state, requires_grad=False), wires=range(qubits)
-    )
+    qml.BasisState(np.array(hf_state, requires_grad=False), wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
@@ -248,7 +256,7 @@ for n in range(20):
     t1 = time.time()
     params, energy = opt.step_and_cost(cost, params)
     t2 = time.time()
-    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2-t1))
+    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
 ##############################################################################
 # Using the sparse method reproduces the exact ground state energy while the optimization time is
@@ -289,3 +297,7 @@ for n in range(20):
 #     J. Romero, R. Babbush, *et al.*, "Strategies for quantum computing molecular
 #     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
 #     <https://arxiv.org/abs/1701.02691>`_
+#
+# .. [#givenstutorial]
+#
+#     :doc:`tutorial_givens_rotations`
