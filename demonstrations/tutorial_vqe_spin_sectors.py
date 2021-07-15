@@ -10,17 +10,17 @@ VQE in different spin sectors
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 25 June 2021.*
+*Author: PennyLane dev team. Last updated: 15 July 2021.*
 
-The Variational Quantum Eigensolver (VQE) algorithm is an approach
-for finding the lowest-energy eigenstate of the electronic Hamiltonian of a molecule using a
-quantum computer [#peruzzo2014]_.
+The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
+lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
 
 In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_,
-the eigenstates of the molecular Hamiltonian can be computed in a specific sector of the total
-spin quantum numbers. This is illustrated in the figure below for the energy
-spectrum of the hydrogen molecule. In this case, the ground state has total spin :math:`S=0`
-while the lowest-lying excited states, with total spin :math:`S=1`, form a triplet
+the eigenstates of the molecular Hamiltonian can be calculated for specific values of the
+spin quantum numbers. For example, this allows us to find the energy of the electronic states
+in different sectors of the total-spin projection :math:`S_z`. This is illustrated in the figure
+below for the energy spectrum of the hydrogen molecule. In this case, the ground state has total
+spin :math:`S=0` while the lowest-lying excited states, with total spin :math:`S=1`, form a triplet
 related to the spin components :math:`S_z=-1, 0, 1`.
 
 |
@@ -32,8 +32,8 @@ related to the spin components :math:`S_z=-1, 0, 1`.
 |
 
 In this tutorial you will learn how to run VQE simulations to find the lowest-energy states
-of a molecular Hamiltonian in different sectors of the total spin.
-For the sake of simplicity, we illustrate this for the hydrogen molecule although
+of a molecular Hamiltonian with different values of the total spin.
+We illustrate this for the hydrogen molecule although
 the same methodology can be applied to other molecules. First, we show how to build
 the electronic Hamiltonian and the total-spin operator. 
 Next, we use the unitary coupled-clusters singles and doubles (UCCSD)
