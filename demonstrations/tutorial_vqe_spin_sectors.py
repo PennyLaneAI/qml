@@ -154,7 +154,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, hf_state, singles, doubles)
+    qml.templates.AllSinglesDoubles(params, wires, hf, singles, doubles)
 
 
 ##############################################################################
@@ -163,14 +163,14 @@ def circuit(params, wires):
 #
 # .. math::
 #
-#     \vert \Psi(\theta_1, \theta_2, \theta_3) =
-#     C_\mathrm{HF}(\theta_1, \theta_2, \theta_3) \vert 1100 \rangle
-#     + C_{0123}(\theta_1, \theta_2, \theta_3) \vert 0011 \rangle
-#     + C_{02}(\theta_1, \theta_2, \theta_3) \vert 0110 \rangle
-#     + C_{23}(\theta_1, \theta_2, \theta_3) \vert 1001 \rangle,
+#     \vert \Psi(\theta) =
+#     C_\mathrm{HF}(\theta) \vert 1100 \rangle
+#     + C_{0123}(\theta) \vert 0011 \rangle
+#     + C_{02}(\theta) \vert 0110 \rangle
+#     + C_{23}(\theta) \vert 1001 \rangle,
 #
 # where the coefficients :math:`C` are functions of the variational parameters
-# :math:`\theta_1, \theta_2, \theta_3` to be optimized by the VQE algorithm.
+# :math:`\theta = (\theta_1, \theta_2, \theta_3)` to be optimized by the VQE algorithm.
 # Since the ground state of the hydrogen molecule does not contain any contribution
 # from the single excitations, the coefficients :math:`C_{02}, C_{23}` must be zero
 # for the optimal set of angles :math:`theta`.
@@ -270,7 +270,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, np.flip(hf_state), singles, doubles)
+    qml.templates.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
 
 
 ##############################################################################
