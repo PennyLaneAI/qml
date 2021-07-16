@@ -4,7 +4,7 @@ Optimization of molecular geometries
 
 .. meta::
     :property="og:description": Find the equilibrium geometry of a molecule
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
+    :property="og:image": https://pennylane.ai/qml/_images/fig_pes.png
 
 .. related::
    tutorial_quantum_chemistry Quantum Chemistry with PennyLane
