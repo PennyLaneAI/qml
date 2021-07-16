@@ -37,7 +37,7 @@ We illustrate this for the hydrogen molecule although
 the same methodology can be applied to other molecules. First, we show how to build
 the electronic Hamiltonian and the total-spin operator. 
 Next, we use the unitary coupled-clusters singles and doubles (UCCSD)
-*ansatz* [#romero2017]_ to prepare the states of the molecule in different spin sectors.
+ansatz [#romero2017]_ to prepare the states of the molecule in different spin sectors.
 Finally, we run the VQE algorithm to find the the ground and the lowest-lying excited states
 of the :math:`\mathrm{H}_2` molecule.
 
@@ -181,7 +181,7 @@ print(s_wires)
 print(d_wires)
 
 ##############################################################################
-# Finally, we can use the :func:`~.pennylane.templates.subroutines.UCCSD` function to define
+# Finally, we can use the :class:`~.pennylane.templates.subroutines.UCCSD` function to define
 # the quantum circuit.
 
 def circuit(params, wires):
