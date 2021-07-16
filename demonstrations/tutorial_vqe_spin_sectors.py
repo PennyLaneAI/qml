@@ -10,7 +10,7 @@ VQE in different spin sectors
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 15 July 2021.*
+*Author: PennyLane dev team. Last updated: 16 July 2021.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
@@ -36,10 +36,9 @@ of a molecular Hamiltonian with different values of the total spin.
 We illustrate this for the hydrogen molecule although
 the same methodology can be applied to other molecules. First, we show how to build
 the electronic Hamiltonian and the total-spin operator. 
-Next, we use the unitary coupled-clusters singles and doubles (UCCSD)
-ansatz [#romero2017]_ to prepare the states of the molecule in different spin sectors.
-Finally, we run the VQE algorithm to find the the ground and the lowest-lying excited states
-of the :math:`\mathrm{H}_2` molecule.
+Next, we use excitation operations implemented in PennyLane as Givens rotations
+to prepare the trial states of the molecule. Finally, we run the VQE algorithm to find the
+ground and the lowest-lying excited states of the :math:`\mathrm{H}_2` molecule.
 
 Let's get started!
 
@@ -108,38 +107,16 @@ print(S2)
 ##############################################################################
 # Building the quantum circuit to find the ground state
 # -----------------------------------------------------
-# In this example, we use the unitary coupled cluster ansatz truncated to the level of
-# single and double excitations (UCCSD). Within the first-order Trotter approximation,
-# the UCCSD unitary is given by [#barkoutsos2018]_
+# We build the variational circuit for the ground state of the hydrogen molecule using the
+# :class:`~.pennylane.SingleExcitation` and :class:`~.pennylane.DoubleExcitation` operations
+# implemented in PennyLane. These operations act as Givens rotations on the subspace of
+# the qubits encoding the single- and double-excitations of the Hartree-Fock reference state
+# [#qchemcircuits]. For more details on how to use the excitation operations for
+# for quantum chemistry applications see the tutorial :doc:`tutorial_givens_rotations`.
 #
-# .. math::
-#
-#     \hat{U}(\vec{\theta}) = \prod_{p > r} \mathrm{exp}
-#     \Big\{\theta_{pr}(\hat{c}_p^\dagger \hat{c}_r-\mathrm{H.c.}) \Big\}
-#     \prod_{p > q > r > s} \mathrm{exp} \Big\{\theta_{pqrs}
-#     (\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s-\mathrm{H.c.}) \Big\}.
-#
-# In the equation above, the indices :math:`r, s` and :math:`p, q` run, respectively, over the
-# occupied and unoccupied Hartree-Fock orbitals. The operator
-# :math:`\hat{c}_p^\dagger \hat{c}_r` creates a single excitation since it
-# annihilates an electron in the occupied orbital :math:`r` and creates it in the unoccupied
-# orbital :math:`p`. Similarly, the operator
-# :math:`\hat{c}_p^\dagger \hat{c}_q^\dagger \hat{c}_r \hat{c}_s` creates a double excitation.
-# The parameters :math:`\theta_{pr}` and :math:`\theta_{pqrs}` have to be optimized to minimize
-# the expectation value,
-#
-# .. math::
-#
-#     E(\vec{\theta}) = \langle \mathrm{HF} \vert \hat{U}^\dagger(\vec{\theta})
-#     \hat{H} \hat{U}(\vec{\theta}) \vert \mathrm{HF} \rangle,
-#
-# where :math:`\vert \mathrm{HF} \rangle` is the Hartree-Fock (HF) state.
-#
-# We demonstrate how to build the `UCCSD 
-# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.subroutines.UCCSD.html>`_
-# ansatz above for VQE simulations. First, we use the :func:`~.pennylane_qchem.qchem.hf_state`
-# function to generate the vector representing the Hartree-Fock state :math:`\vert 1100 \rangle` of the
-# :math:`\mathrm{H}_2` molecule.
+# First, we use the :func:`~.pennylane_qchem.qchem.hf_state`
+# function to generate the vector representing the Hartree-Fock state
+# :math:`\vert 1100 \rangle` of the :math:`\mathrm{H}_2` molecule.
 
 hf = qml.qchem.hf_state(electrons, qubits)
 print(hf)
@@ -171,26 +148,38 @@ print(doubles)
 # single and double excitations. Even and odd indices correspond, respectively, to spin-up
 # and spin-down orbitals. For ``delta_sz = 0`` we have two single excitations, one from qubit
 # 0 to 2 and the other from qubit 1 to 3, and one double excitation from qubits 0, 1 to 2, 3.
-#
-# We use the function :func:`~.pennylane_qchem.qchem.excitations_to_wires` to generate the
-# set of wires that the UCCSD circuit will act on. The inputs to this function are the indices
-# stored in the ``singles`` and ``doubles`` lists.
+# In order to build the build the variational circuit, we just apply the corresponding
+# excitation operations. This is done straightforwardly using the
+# :class:`~.pennylane.templates.subroutines.AllSinglesDoubles` function.
 
-s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
-print(s_wires)
-print(d_wires)
-
-##############################################################################
-# Finally, we can use the :class:`~.pennylane.templates.subroutines.UCCSD` function to define
-# the quantum circuit.
 
 def circuit(params, wires):
-    qml.templates.subroutines.UCCSD(params, wires, s_wires, d_wires, hf)
+    qml.templates.AllSinglesDoubles(params, wires, hf_state, singles, doubles)
+
+
+##############################################################################
+# The circuit above prepares full configuration interaction (FCI) trial states for the
+# :math:`\mathrm{H}_2` molecule in a minimal basis set:
+#
+# .. math::
+#
+#     \vert \Psi(\theta_1, \theta_2, \theta_3) =
+#     C_\mathrm{HF}(\theta_1, \theta_2, \theta_3) \vert 1100 \rangle
+#     + C_{0123}(\theta_1, \theta_2, \theta_3) \vert 0011 \rangle
+#     + C_{02}(\theta_1, \theta_2, \theta_3) \vert 0110 \rangle
+#     + C_{23}(\theta_1, \theta_2, \theta_3) \vert 1001 \rangle,
+#
+# where the coefficients :math:`C` are functions of the variational parameters
+# :math:`\theta_1, \theta_2, \theta_3` to be optimized by the VQE algorithm.
+# Since the ground state of the hydrogen molecule does not contain any contribution
+# from the single excitations, the coefficients :math:`C_{02}, C_{23}` must be zero
+# for the optimal set of angles :math:`theta`.
 
 ##############################################################################
 # Running the VQE simulation
 # --------------------------
-# We begin by defining the device, in this case a qubit simulator:
+# Now we proceed to optimize the variational parameters. First, we define the device,
+# in this case a qubit simulator:
 
 dev = qml.device("default.qubit", wires=qubits)
 
@@ -217,8 +206,10 @@ S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
 #
 # We define a function to compute the total spin.
 
+
 def total_spin(params):
     return -0.5 + np.sqrt(1 / 4 + S2_exp_value(params))
+
 
 ##############################################################################
 # Now, we proceed to minimize the cost function to find the ground state. We define
@@ -261,8 +252,8 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # Finding the lowest-lying excited state with :math:`S=1`
 # -------------------------------------------------------
 # In the last part of the tutorial, we use VQE to find the lowest-lying
-# excited state of the hydrogen molecule with total spin :math:`S=1`. In this case,
-# we use the :func:`~.pennylane_qchem.qchem.excitations` function to generate
+# excited state of the hydrogen molecule with total spin quantum numbers :math:`S=1`.
+# In this case, we use the :func:`~.pennylane_qchem.qchem.excitations` function to generate
 # excitations whose total-spin projection differs by the quantity ``delta_sz=1``
 # with respect to the Hartree-Fock reference state.
 
@@ -273,12 +264,30 @@ print(doubles)
 ##############################################################################
 # For the :math:`\mathrm{H}_2` molecule in a minimal basis set there are no
 # double excitations, but only a spin-flip single excitation from qubit 1 to 2.
-# And, that's it! From this point on the algorithm is the same as described above.
+# In this case, the circuit will contain only one :class:`~.pennylane.SingleExcitation`
+# operation. Furthermore, we initialize the qubit states to encode the double
+# excitation :math:`\vert 0011 \rangle`.
 
-s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
 
 def circuit(params, wires):
-    qml.templates.subroutines.UCCSD(params, wires, s_wires, d_wires, hf)
+    qml.templates.AllSinglesDoubles(params, wires, np.flip(hf_state), singles, doubles)
+
+
+##############################################################################
+# Now the trial states prepared by the circuit above have the form,
+#
+# .. math::
+#
+#     \vert \Psi^*(\theta) = C_{03}(\theta) \vert 0101 \rangle
+#     + C_{0123}(\theta) \vert 0011 \rangle,
+#
+# where the first term corresponds to a spin-flip single excitation with :math:`S_z=-1` and the
+# second term is a double excitation with :math:`S_z=0`. As it was mentioned in the introduction,
+# the electronic Hamiltonian conserves the total spin-projection of the electronic states, meaning
+# that one of the two components must be dropped by the VQE algorithm while minimizing the
+# cost function. Since the double excitation term increases the energy, the optimized state
+# will be :math:`\vert \Psi^*(\theta^*) = C_{03}(\theta^*) \vert 0101 \rangle` which is precisely
+# the lowest-energy state in the spin quantum numbers :math:`S=1, S_z=-1`.
 
 cost_fn = qml.ExpvalCost(circuit, H, dev)
 S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
@@ -312,18 +321,18 @@ print("\n" f"Final value of the energy = {energy:.8f} Ha")
 print("\n" f"Optimal value of the circuit parameters = {theta}")
 
 ##############################################################################
-# In this case, the VQE algorithms has found the lowest-energy state with total spin
+# As expected, the VQE algorithms has found the lowest-energy state with total spin
 # :math:`S=1` which is an excited state of the hydrogen molecule.
 #
 # Conclusion
 # ----------
 # In this tutorial we have used the standard VQE algorithm to find the ground and the
-# lowest-lying excited states of the hydrogen molecule. We have used the UCCSD ansatz to prepare
-# the trial states of a molecule. By choosing the total-spin projection of the single- and 
-# double-excitations entering the UCCSD unitary, we were able to probe the lowest-energy
-# eigenstates of the molecular Hamiltonian in different sectors of the spin quantum numbers.
-# We showed that the optimized states were also eigenstates of the total-spin operator
-# :math:`\hat{S}^2`.
+# lowest-lying excited states of the hydrogen molecule. We have used the excitation operations
+# implemented as Givens rotations to prepare the trial states of a molecule. By choosing the
+# total-spin projection of the single- and double-excitations VQE ansatz,
+# we were able to probe the lowest-energy eigenstates of the molecular Hamiltonian in different
+# sectors of the spin quantum numbers. We showed that the optimized states were also eigenstates
+# of the total-spin operator :math:`\hat{S}^2`.
 #
 # References
 # ----------
@@ -334,14 +343,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
-# .. [#romero2017]
+# .. [#qchemcircuits]
 #
-#     J. Romero, R. Babbush, *et al.*, "Strategies for quantum computing molecular
-#     energies using the unitary coupled cluster ansatz". `arXiv:1701.02691
-#     <https://arxiv.org/abs/1701.02691>`_
-#
-# .. [#barkoutsos2018]
-#
-#     P. Kl. Barkoutsos, J. F. Gonthier, *et al.*, "Quantum algorithms for electronic structure
-#     calculations: particle/hole Hamiltonian and optimized wavefunction expansions".
-#     `arXiv:1805.04340. <https://arxiv.org/abs/1805.04340>`_
+#     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
+#     "Universal quantum circuits for quantum chemistry". arXiv:2106.13839, (2021)
