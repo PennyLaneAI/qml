@@ -172,11 +172,9 @@ def circuit(params, wires):
 #
 # where the coefficients :math:`C` are functions of the variational parameters
 # :math:`\theta = (\theta_1, \theta_2, \theta_3)` to be optimized by the VQE algorithm.
-# Note that the prepared state :math:`\vert \Psi(\theta) \rangle` contains the contribution
-# from the Hartree-Fock state and all possible single and double excitations.
-# Since the ground state of the hydrogen molecule does not contain any contribution
-# from the single excitations, the coefficients :math:`C_{02}, C_{23}` must be zero
-# for the optimal set of the gate parameters :math:`\theta`.
+# Note that the prepared state :math:`\vert \Psi(\theta) \rangle` is a superposition of the
+# the Hartree-Fock (HF) state with all possible single and double excitations that preserve
+# the spin projection of the HF reference state.
 
 ##############################################################################
 # Running the VQE simulation
@@ -188,7 +186,7 @@ dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we use the :class:`~.pennylane.ExpvalCost` class to define the cost function.
-# This requires specifying the circuit, target Hamiltonian, and the device. It returns
+# This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
 cost_fn = qml.ExpvalCost(circuit, H, dev)
@@ -277,7 +275,7 @@ def circuit(params, wires):
 
 
 ##############################################################################
-# Now the trial states prepared by the circuit above have the form,
+# The trial states prepared by the circuit above have the form,
 #
 # .. math::
 #
@@ -290,13 +288,16 @@ def circuit(params, wires):
 # spin-projection of the electronic states. This means that the double-excitation coefficient
 # should vanish as the VQE algorithm minimizes the cost function. The optimized state will
 # correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1`.
+#
+# Now, we defined the new functions to compute the expectation values of the Hamiltonian
+# and the total spin operator for the new circuit.
 
 cost_fn = qml.ExpvalCost(circuit, H, dev)
 S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
 
 ##############################################################################
-# Then, we generate the new set of initial parameters, and proceed with the VQE algorithm to
-# optimize the new variational circuit.
+# Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
+# optimize the variational circuit.
 
 np.random.seed(0)
 theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
@@ -330,7 +331,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # ----------
 # In this tutorial we have used the standard VQE algorithm to find the ground and the
 # lowest-lying excited states of the hydrogen molecule. We have used the single- and
-# double-excitation operations, implemented as Givens rotations in PennyLane,
+# double-excitation operations, implemented as Givens rotations,
 # to prepare the trial states of a molecule. By choosing the total-spin projection of the
 # generated excitations we were able to probe the lowest-energy eigenstates of the molecular
 # Hamiltonian in different sectors of the spin quantum numbers. We showed that the optimized
