@@ -97,7 +97,7 @@ print("The Hamiltonian is ", H)
 # <https://pennylane.readthedocs.io/en/stable/code/api/pennylane_qchem.qchem.obs.spin2.html>`_
 # :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of spin orbitals.
 #
-# We use the :func:`~.pennylane_qchem.qchem.spin2` function to build the
+# We use the :func:`~.pennylane_qchem.qchem.obs.spin2` function to build the
 # :math:`\hat{S}^2` observable.
 
 electrons = 2
