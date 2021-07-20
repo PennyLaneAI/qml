@@ -345,7 +345,7 @@ print(
 #
 # Bringing all of the above ingredients together, we have the following gorgeous trigonometric expansion up to second order:
 #
-# .. math:: \hat{E}(\boldsymbol{\theta}_0+\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{k<l}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
+# .. math:: \hat{E}(\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{k<l}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
 #
 # Let us now take a few moments to breath deeply and admire the entirety of it.
 # On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k`, and
