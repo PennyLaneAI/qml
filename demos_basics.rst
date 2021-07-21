@@ -169,10 +169,15 @@ hardware.
     :tags: braket
 
 .. customgalleryitem::
+    :tooltip: Discover the building blocks of quantum circuits for quantum chemistry
+    :figure: demonstrations/givens_rotations/Givens_rotations.png
+    :description: :doc:`demos/tutorial_givens_rotations`
+    :tags: chemistry
+    
+.. customgalleryitem::
     :tooltip: Study chemical reactions using VQE.
     :figure: demonstrations/vqe_bond_dissociation/reaction.png
     :description: :doc:`demos/tutorial_vqe_bond_dissociation`
-    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -202,3 +207,4 @@ hardware.
     demos/tutorial_noisy_circuits
     demos/braket-parallel-gradients
     demos/tutorial_vqe_bond_dissociation
+    demos/tutorial_givens_rotations
