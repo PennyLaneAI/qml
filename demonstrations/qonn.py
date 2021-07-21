@@ -12,7 +12,7 @@ Optimizing a quantum optical neural network
 
    quantum_neural_net Function fitting with a photonic QNN
 
-*Author: PennyLane dev team. Last updated: 20 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 15 Apr 2021.*
 
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
@@ -319,8 +319,8 @@ def cost_wrapper(var, grad=[]):
     evals += 1
 
     if grad.size > 0:
-        # Get the gradient for `var` (idx 0) by first "unflattening" it
-        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)[0]
+        # Get the gradient for `var` by first "unflattening" it
+        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)
         grad[:] = var_grad.flatten()
     cost_val = cost(var.reshape((num_layers, num_variables_per_layer)), X, Y)
 

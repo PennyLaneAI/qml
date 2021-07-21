@@ -117,7 +117,7 @@ from pennylane import numpy as np
 # .. admonition:: Definition
 #     :class: defn
 #
-#     Any computational object that can apply quantum operations, and return an measurement value
+#     Any computational object that can apply quantum operations and return a measurement value
 #     is called a quantum **device**.
 #
 #     In PennyLane, a device could be a hardware device (such as the IBM QX4, via the

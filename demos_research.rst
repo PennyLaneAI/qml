@@ -21,7 +21,7 @@ or discover other variational quantum optimization algorithms under `Optimizatio
 
 Quantum machine learning
 ------------------------
-Delve into the plethora of exciting research made by the scientific community in
+Delve into the latest exciting research and cutting-edge ideas in
 quantum machine learning. Implement and run a vast array of different QML
 applications on your own computer—using simulators from Xanadu,
 IBM, Google, Rigetti, and many more—or on real hardware devices.
@@ -107,11 +107,11 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Making a quantum machine learning model using neutral atoms.
+    :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
-    
+
 .. customgalleryitem::
     :tooltip: Kernel-based training with scikit-learn.
     :figure: demonstrations/kernel_based_training/scaling.png
@@ -123,6 +123,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/learning2learn/l2l_thumbnail.png
     :description: :doc:`demos/learning2learn`
     :tags: tensorflow
+
+.. customgalleryitem::
+    :tooltip: Kernels and alignment training with PennyLane.
+    :figure: demonstrations/kernels_module/QEK_thumbnail.png
+    :description: :doc:`demos/tutorial_kernels_module`
+    :tags: kernels alignment classification 
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -195,6 +201,30 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_measurement_optimize`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
+    :figure: demonstrations/spsa/spsa_mntn.png
+    :description: :doc:`demos/spsa`
+    :tags: qiskit
+
+.. customgalleryitem::
+    :tooltip: Solve combinatorial problems without a classical optimizer.
+    :figure: demonstrations/falqon/falqon_thumbnail.png
+    :description: :doc:`demos/tutorial_falqon`
+    :tags: autograd
+
+.. customgalleryitem::
+    :tooltip: Optimizing the geometry of molecules.
+    :figure: demonstrations/mol_geo_opt/fig_thumbnail.png
+    :description: :doc:`demos/tutorial_mol_geo_opt`
+    :tags: chemistry
+ 
+.. customgalleryitem::
+    :tooltip: Build trigonometric local models of your cost function.
+    :figure: demonstrations/quantum_analytic_descent/xkcd.png
+    :description: :doc:`demos/tutorial_quantum_analytic_descent`
+    :tags: optimization model vqe
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -224,6 +254,18 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/quantum_volume`
    :tags: characterization qiskit
 
+.. customgalleryitem::
+   :tooltip: Learn how to sample quantum states uniformly at random
+   :figure: demonstrations/haar_measure/spherical_int_dtheta.png
+   :description: :doc:`demos/tutorial_haar_measure`
+   :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Approximate quantum states with classical shadows.
+    :figure: demonstrations/classical_shadows/atom_shadow.png
+    :description: :doc:`demos/tutorial_classical_shadows`
+    :tags: quantumcomputing characterization
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -243,6 +285,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_vqt
     demos/tutorial_vqe_qng
     demos/tutorial_measurement_optimize
+    demos/spsa
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_data_reuploading_classifier
@@ -257,5 +300,9 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_expressivity_fourier_series
     demos/qsim_beyond_classical
     demos/quantum_volume
+    demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/learning2learn
+    demos/tutorial_mol_geo_opt
+    demos/tutorial_classical_shadows
+    demos/tutorial_quantum_analytic_descent

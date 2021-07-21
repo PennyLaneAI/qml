@@ -12,7 +12,7 @@ Accelerating VQEs with quantum natural gradient
    tutorial_vqe Variational quantum eigensolver
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 21 Jan 2021.*
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 8 Apr 2021.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
@@ -232,7 +232,7 @@ plt.legend()
 plt.show()
 
 ##############################################################################
-# Here, the red regions indicate states with lower energies, and the blue regions indicate
+# Here, the blue regions indicate states with lower energies, and the red regions indicate
 # states with higher energies. We can see that the ``QNGOptimizer`` takes a more direct
 # route to the minimum in larger strides compared to the path taken by the ``GradientDescentOptimizer``.
 #
@@ -254,13 +254,16 @@ plt.show()
 # (2) Hydrogen VQE Example
 # ------------------------
 #
-# To construct our system Hamiltonian, we call the function
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# To construct our system Hamiltonian, we first read the molecular geometry from
+# the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
+# :func:`~.pennylane_qchem.qchem.read_structure` function (see more details in the
+# :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
+# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
 
-name = "h2"
 geo_file = "h2.xyz"
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(name, geo_file)
+symbols, coordinates = qml.qchem.read_structure(geo_file)
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 
 print("Number of qubits = ", qubits)
 

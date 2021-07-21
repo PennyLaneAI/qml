@@ -12,7 +12,7 @@ VQE with parallel QPUs on Rigetti Forest
 
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 22 Jan 2021.*
+*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
@@ -78,11 +78,16 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 
 ##############################################################################
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
+# We do this by first reading the molecular geometry from the external file using the
+# :func:`~.pennylane_qchem.qchem.read_structure` function and passing the atomic symbols
+# and coordinates to :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+
 
 hamiltonians = []
 
 for separation, file in data.items():
-    h = qchem.molecular_hamiltonian(name=str(separation), geo_file=file)[0]
+    symbols, coordinates = qchem.read_structure(file)
+    h = qchem.molecular_hamiltonian(symbols, coordinates, name=str(separation))[0]
     hamiltonians.append(h)
 
 ##############################################################################

@@ -4,7 +4,7 @@ Quantum volume
 ==============
 
 .. meta::
-    :property="og:description": Learn about quantum volume, and how to 
+    :property="og:description": Learn about quantum volume, and how to
         compute it.
     :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
 
@@ -12,7 +12,7 @@ Quantum volume
 
     qsim_beyond_classical Beyond classical computing with qsim
 
-*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 20 Mar 2021.*
+*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 15 Apr 2021.*
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
@@ -95,7 +95,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # ~~~~~~~~~~~~
 #
 # Quantum volume relates
-# to the largest *square* circuit that a quantum processor can run reliably. This benchmark 
+# to the largest *square* circuit that a quantum processor can run reliably. This benchmark
 # uses *random* square circuits with a very particular form:
 #
 # .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
@@ -378,14 +378,14 @@ def qv_circuit_layer(num_qubits):
 # need to run the same random circuit on two devices independently.
 
 num_qubits = 5
-dev_ideal = qml.device("default.qubit", analytic=True, wires=num_qubits)
+dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
     qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
 
-print(tape.draw(wire_order=dev_ideal.wires, show_all_wires=True))
+print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
 
 
 ##############################################################################
@@ -488,7 +488,7 @@ with tape:
     qml.probs(wires=range(m))
 
 # Run the circuit, compute heavy outputs, and print results
-output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
+output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print("State\tProbability")
@@ -534,7 +534,12 @@ print(f"Heavy outputs are {heavy_outputs}")
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
-
+# .. note::
+#
+#    In the time since the original release of this demo, the Ourense device is
+#    no longer available from IBM Q. However, we leave the original results for
+#    expository purposes, and note that the methods are applicable in general.
+#
 dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense")
 
 ##############################################################################
@@ -624,11 +629,11 @@ for m in range(min_m, max_m + 1):
             qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
             qml.probs(wires=range(m))
 
-        output_probs = tape.execute(dev_ideal).reshape(2 ** m, )
+        output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
         # Execute circuit on the noisy device
-        tape.execute(dev_noisy)
+        tape.expand().execute(dev_noisy)
 
         # Get the output bit strings; flip ordering of qubits to match PennyLane
         counts = dev_noisy._current_job.result().get_counts()
@@ -661,7 +666,7 @@ probs_mean_noisy = np.mean(probs_noisy, axis=1)
 print(f"Ideal mean probabilities:")
 for idx, prob in enumerate(probs_mean_ideal):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
-    
+
 print(f"\nDevice mean probabilities:")
 for idx, prob in enumerate(probs_mean_noisy):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")

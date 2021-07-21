@@ -20,28 +20,29 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v22f-{{ .Branch }}-
-            - pip-v22f-
+            - pip-v27c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v27c-{{ .Branch }}-
+            - pip-v27c-
 
       - run:
           name: Install dependencies
           command: |
+            sudo apt install pandoc -qq
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt
 
       - save_cache:
           paths:
             - venv
-          key: pip-v22f-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v27c-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v14-{{ .Branch }}-{{ .Revision }}
-            - gallery-v14-{{ .Branch }}-
-            - gallery-v14-
+            - gallery-v27a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v27a-{{ .Branch }}-
+            - gallery-v27a-
 
       - run:
           name: Build tutorials
@@ -57,7 +58,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v14-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v27a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
@@ -101,7 +102,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
-            pip install -r requirements.txt --use-feature=2020-resolver
+            pip install -r requirements.txt
 
       - run:
           name: Build tutorials
