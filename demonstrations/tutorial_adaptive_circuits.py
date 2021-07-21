@@ -56,7 +56,8 @@ There are different ways to select the gates based on their gradients. Here we d
 these strategies to compute the ground state energy of LiH. This method requires constructing the
 Hamiltonian and determining all possible excitations, which we can do with the PennyLane functionalities
 shown below. But we first need to import the required libraries and define the molecular parameters
-including atomic symbols and coordinates. Note that the atomic coordinates are in Bohr.
+including atomic symbols and coordinates. Note that the atomic coordinates are in
+'Bohr <https://en.wikipedia.org/wiki/Bohr_radius>'_.
 """
 
 import pennylane as qml
@@ -134,7 +135,7 @@ doubles_select
 # There are only 6 gates, among the total number of 16, that have gradients above the threshold.
 # We add the selected gates to the circuit and perform one optimization step to determine the
 # updated parameters for the selected gates. We also need to define an optimizer. Note that the
-# optimization is not very costly as we only have two gate in our circuit.
+# optimization is not very costly as we only have six gate in our circuit.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
