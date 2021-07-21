@@ -124,6 +124,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/learning2learn`
     :tags: tensorflow
 
+.. customgalleryitem::
+    :tooltip: Kernels and alignment training with PennyLane.
+    :figure: demonstrations/kernels_module/QEK_thumbnail.png
+    :description: :doc:`demos/tutorial_kernels_module`
+    :tags: kernels alignment classification 
+
 :html:`</div></div><div style='clear:both'>`
 
 Optimization
@@ -212,6 +218,12 @@ plateaus in quantum neural networks.
     :figure: demonstrations/mol_geo_opt/fig_thumbnail.png
     :description: :doc:`demos/tutorial_mol_geo_opt`
     :tags: chemistry
+ 
+.. customgalleryitem::
+    :tooltip: Build trigonometric local models of your cost function.
+    :figure: demonstrations/quantum_analytic_descent/xkcd.png
+    :description: :doc:`demos/tutorial_quantum_analytic_descent`
+    :tags: optimization model vqe
 
 .. customgalleryitem::
     :tooltip: Adaptive circuits for quantum chemistry.
@@ -299,3 +311,4 @@ such as benchmarking and characterizing quantum processors.
     demos/learning2learn
     demos/tutorial_mol_geo_opt
     demos/tutorial_classical_shadows
+    demos/tutorial_quantum_analytic_descent
