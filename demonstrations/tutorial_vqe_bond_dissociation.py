@@ -260,7 +260,7 @@ multiplicity = 2
 # To build a potential energy surface for the hydrogen exchange, we fix the positions of the
 # outermost atoms, and change only the placement of the middle atom. For this circuit, we employ all
 # single and double excitation gates, which can be conveniently done with the
-# :class:`~qml.templates.AllSinglesDoubles` template. The rest of the procedure follows as before.
+# :class:`~.pennylane.templates.subroutines.AllSinglesDoubles` template. The rest of the procedure follows as before.
 
 from pennylane.templates import AllSinglesDoubles
 
