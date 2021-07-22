@@ -214,7 +214,7 @@ for n in range(20):
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for LiH. We can compute its matrix representation in the computational basis using the
 # function :func:`~.pennylane.utils.sparse_hamiltonian` of PennyLane. This function
-# returns the matrix in the scipy 'sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>'_ format.
+# returns the matrix in the SciPy `sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>`_ format.
 
 H_sparse = qml.utils.sparse_hamiltonian(H)
 H_sparse
