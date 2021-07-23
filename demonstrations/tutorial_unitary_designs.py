@@ -507,8 +507,8 @@ def conjugate_with_unitary(tape, matrix):
 
     qml.QubitUnitary(matrix.conj().T, wires=0)
 
-    for op in tape.measurements:
-        qml.apply(op)
+    for m in tape.measurements:
+        qml.apply(m)
 
 ######################################################################
 # Finally, in order to perform a comparison, we need a function to compute the
@@ -579,8 +579,8 @@ def conjugate_with_clifford(tape, clifford_string):
 
     apply_single_clifford(clifford_string, inverse=True)
 
-    for op in tape.measurements:
-        qml.apply(op)
+    for m in tape.measurements:
+        qml.apply(m)
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as
