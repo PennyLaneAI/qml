@@ -177,7 +177,7 @@ hardware.
 .. customgalleryitem::
     :tooltip: Study chemical reactions using VQE.
     :figure: demonstrations/vqe_bond_dissociation/reaction.png
-    :description: :doc:`demos/tutorial_vqe_bond_dissociation`
+    :description: :doc:`demos/tutorial_chemical_reactions`
 
 :html:`</div></div><div style='clear:both'>`
 
