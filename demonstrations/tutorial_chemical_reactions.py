@@ -10,7 +10,7 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe Variational Quantum Eigensolver
 
-*Author: PennyLane dev team. Posted: 26 July 2021. Last updated: 26 July 2021*
+*Author: PennyLane dev team. Posted: 23 July 2021. Last updated: 23 July 2021*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
