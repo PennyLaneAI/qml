@@ -11,7 +11,7 @@ Building molecular Hamiltonians
 .. related::
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 15 July 2021*
+*Author: PennyLane dev team. Last updated: 19 July 2021*
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
@@ -213,7 +213,7 @@ multiplicity = 1
 # As mentioned above, molecular orbitals are represented as a linear combination
 # of atomic orbitals which are typically modeled as `Gaussian-type orbitals
 # <https://en.wikipedia.org/wiki/Gaussian_orbital>`_. We can specify different types
-# of `Gaussian atomic basis <https://www.basissetexchange.org/>`_. In this example we
+# of `Gaussian atomic bases <https://www.basissetexchange.org/>`_. In this example we
 # choose a `minimal basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Minimal_basis_sets>`_.
 
