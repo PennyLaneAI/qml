@@ -24,16 +24,13 @@ unitary coupled cluster with single and double excitations (UCCSD) [#romero2017]
 Using a pre-constructed ansatz has the disadvantage of reducing performance in favour of generality:
 the approach may work well in many cases, but it will not be optimized for a specific problem.
 Quantum circuits can also be designed using specialized approaches that build a customized ansatz for
-
 the given molecule. This helps improve performance at the cost of reducing generality.
-
 
 In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
 This includes a recipe to adaptively select gates that have a significant contribution to
 the desired state, while neglecting those that have a small contribution. You will also learn how to use
 the functionality in PennyLane for leveraging the sparsity of a molecular Hamiltonian to make the
 computation of the expectation values even more efficient. Let's get started!
-
 
 Quantum chemistry circuits
 --------------------------
@@ -73,16 +70,19 @@ symbols = ["Li", "H"]
 geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 
 ##############################################################################
-# We now compute the molecular Hamiltonian in the STO-3G basis and the electronic excitations. Here
-# we restrict ourselves to single and double excitations, but higher-level ones, such as
-# triple and quadruple excitations, can be considered as well. Each of these electronic excitations is
-# represented by a gate that excites electrons from the occupied orbitals of a reference state to
+# We now compute the molecular Hamiltonian in the
+# `STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_ basis and the electronic excitations.
+# Here we restrict ourselves to single and double excitations, but higher-level ones, such as
+# triple and quadruple excitations, can be considered as well. Each of these electronic excitations
+# is represented by a gate that excites electrons from the occupied orbitals of a reference state to
 # the unoccupied ones. This allows us to prepare a state that is a superposition of the reference
 # state and all of the excited states.
 
 H, qubits = qchem.molecular_hamiltonian(symbols, geometry, active_electrons=2, active_orbitals=5)
 
-singles, doubles = qchem.excitations(2, qubits)
+active_electrons = 2
+
+singles, doubles = qchem.excitations(active_electrons, qubits)
 
 print(f"Total number of excitations = {len(singles) + len(doubles)}")
 
@@ -100,10 +100,11 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 #
 # We create a circuit that applies a selected group of gates to a reference Hartree-Fock state.
 
+hf_state = qchem.hf_state(active_electrons, qubits)
+
 
 def circuit_1(params, wires, excitations):
-    hf_state = qchem.hf_state(2, qubits)
-    qml.BasisState(np.array(hf_state), wires=wires)
+    qml.BasisState(hf_state, wires=wires)
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
@@ -158,8 +159,7 @@ for n in range(20):
 
 
 def circuit_2(params, wires, excitations, gates_select, params_select):
-    hf_state = qchem.hf_state(2, qubits)
-    qml.BasisState(np.array(hf_state, requires_grad=False), wires=wires)
+    qml.BasisState(hf_state, wires=wires)
 
     for i, gate in enumerate(gates_select):
         if len(gate) == 4:
@@ -206,9 +206,11 @@ cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
 params = [0.0] * len(doubles_select + singles_select)
 
+gates_select = doubles_select + singles_select
+
 for n in range(20):
     t1 = time.time()
-    params, energy = opt.step_and_cost(cost_fn, params, excitations=doubles_select + singles_select)
+    params, energy = opt.step_and_cost(cost_fn, params, excitations=gates_select)
     t2 = time.time()
     print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
@@ -237,7 +239,9 @@ H_sparse
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
 # value of the sparse Hamiltonian observable. This can reduce the cost of simulations by
 # orders of magnitude depending on the molecular size. We use the selected gates in the previous
-# steps and perform the final optimization step with the sparse method.
+# steps and perform the final optimization step with the sparse method. Note that the sparse method
+# only works with the parameter-shift differentiation method currently.
+
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
@@ -247,8 +251,7 @@ params = [0.0] * len(excitations)
 
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
-    hf_state = qchem.hf_state(2, qubits)
-    qml.BasisState(np.array(hf_state, requires_grad=False), wires=range(qubits))
+    qml.BasisState(hf_state, wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
@@ -271,17 +274,18 @@ for n in range(20):
 
 ##############################################################################
 # Using the sparse method reproduces the exact ground state energy while the optimization time is
-# much shorter. The performance of the optimization will be more significant for larger molecules.
+# much shorter. The average iteration time for the sparse method is about 18 times smaller than the
+# original non-sparse approach. The performance of the sparse optimization will be even better for
+# larger molecules.
 #
 # Conclusions
 # -----------
 # We have learned that building quantum chemistry circuits adaptively and using the
 
 # functionality for sparse objects makes molecular simulations significantly more efficient. In this
-# tutorial, we followed an adaptive strategy that selects a group of gates 
-# based on information about the gradients. This method
-# can be extended such that the gates are selected one at time [#grimsley2019]_, or
-# even to other more elaborate strategies.
+# tutorial, we followed an adaptive strategy that selects a group of gates based on information
+# about the gradients. This method can be extended such that the gates are selected one at time or
+# even to other more elaborate strategies [#grimsley2019]_.
 #
 # References
 # ----------
