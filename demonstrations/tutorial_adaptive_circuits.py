@@ -275,9 +275,11 @@ for n in range(20):
 #
 # Conclusions
 # -----------
-# We have learnt that building quantum chemistry circuits adaptively and using the
+# We have learned that building quantum chemistry circuits adaptively and using the
+
 # functionality for sparse objects makes molecular simulations significantly more efficient. In this
-# tutorial, we followed an adaptive strategy that selects a group of gates at each time. This method
+# tutorial, we followed an adaptive strategy that selects a group of gates 
+# based on information about the gradients. This method
 # can be extended such that the gates are selected one at time [#grimsley2019]_, or
 # even to other more elaborate strategies.
 #
