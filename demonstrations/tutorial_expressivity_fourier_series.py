@@ -205,7 +205,7 @@ def target_function(x):
     """Generate a truncated Fourier series, where the data gets re-scaled."""
     res = coeff0
     for idx, coeff in enumerate(coeffs):
-        exponent = np.complex128(0, scaling * (idx+1) * x)
+        exponent = np.complex128(scaling * (idx+1) * x * 1j)
         conj_coeff = np.conjugate(coeff)
         res += coeff * np.exp(exponent) + conj_coeff * np.exp(-exponent)
     return np.real(res)
