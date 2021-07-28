@@ -17,11 +17,11 @@ lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
 
 In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_,
 the eigenstates of the molecular Hamiltonian can be calculated for specific values of the
-spin quantum numbers. This allows us to compute quantities such as the energy of the electronic states
-in different sectors of the total-spin projection :math:`S_z`. This is illustrated in the figure
-below for the energy spectrum of the hydrogen molecule. In this case, the ground state has total
-spin :math:`S=0` while the lowest-lying excited states, with total spin :math:`S=1`, form a triplet
-related to the spin components :math:`S_z=-1, 0, 1`.
+spin quantum numbers. This allows us to compute quantities such as the energy of the electronic
+states in different sectors of the total-spin projection :math:`S_z`. This is illustrated in the
+figure below for the energy spectrum of the hydrogen molecule. In this case, the ground state has
+total spin :math:`S=0` while the lowest-lying excited states, with total spin :math:`S=1`, form
+a triplet related to the spin components :math:`S_z=-1, 0, 1`.
 
 |
 
@@ -33,12 +33,13 @@ related to the spin components :math:`S_z=-1, 0, 1`.
 
 In this tutorial you will learn how to run VQE simulations to find the lowest-energy states
 of a molecular Hamiltonian with different values of the total spin.
-We illustrate this for the hydrogen molecule although
-the same methodology can be applied to other molecules. First, we show how to build
-the electronic Hamiltonian and the total-spin operator. 
+We illustrate this for the hydrogen molecule although the same methodology can be applied to
+other molecules. First, we show how to build the electronic Hamiltonian and the total-spin operator. 
 Next, we use excitation operations, implemented in PennyLane as Givens rotations [#qchemcircuits]_,
-to prepare the trial states of the molecule. Finally, we run the VQE algorithm to find the
-ground and the lowest-lying excited states of the :math:`\mathrm{H}_2` molecule.
+to prepare the trial states of the molecule. Finally, we run the VQE algorithm to find the ground
+and the lowest-lying excited states of the :math:`\mathrm{H}_2` molecule by applying
+excitation operations that preserve and modify, respectively, the total-spin projection of the
+initial state.
 
 Let's get started!
 
@@ -125,7 +126,7 @@ print(hf)
 
 ##############################################################################
 # Next, we use the :func:`~.pennylane_qchem.qchem.excitations`
-# function to generate all single- and double-excitations of the Hartree-Fock state.
+# function to generate all single and double excitations of the Hartree-Fock state.
 # This function allows us to define the keyword argument ``delta_sz``
 # to specify the total-spin projection of the excitations with respect to the reference
 # state. This is illustrated in the figure below.
@@ -165,12 +166,12 @@ def circuit(params, wires):
 # .. math::
 #
 #     \vert \Psi(\theta) \rangle =
-#     C_\mathrm{HF}(\theta) \vert 1100 \rangle
-#     + C_{0123}(\theta) \vert 0011 \rangle
-#     + C_{02}(\theta) \vert 0110 \rangle
-#     + C_{23}(\theta) \vert 1001 \rangle,
+#     c_\mathrm{HF}(\theta) \vert 1100 \rangle
+#     + c_{0123}(\theta) \vert 0011 \rangle
+#     + c_{02}(\theta) \vert 0110 \rangle
+#     + c_{23}(\theta) \vert 1001 \rangle,
 #
-# where the coefficients :math:`C` are functions of the variational parameters
+# where the coefficients :math:`c` are functions of the variational parameters
 # :math:`\theta = (\theta_1, \theta_2, \theta_3)` to be optimized by the VQE algorithm.
 # Note that the prepared state :math:`\vert \Psi(\theta) \rangle` is a superposition of the
 # Hartree-Fock (HF) state with all possible single and double excitations that preserve
@@ -266,8 +267,9 @@ print(doubles)
 # For the :math:`\mathrm{H}_2` molecule in a minimal basis set there are no
 # double excitations, but only a spin-flip single excitation from qubit 1 to 2.
 # In this case, the circuit will contain only one :class:`~.pennylane.SingleExcitation`
-# operation. Additionally, we initialize the qubit states to encode the double
-# excitation :math:`\vert 0011 \rangle`.
+# operation. Additionally, as we want to probe the excited state of hydrogen molecule
+# consisting of one single excitation, we initialize the qubit register to the state
+# :math:`\vert 0011 \rangle`.
 
 
 def circuit(params, wires):
@@ -275,17 +277,17 @@ def circuit(params, wires):
 
 
 ##############################################################################
-# The trial states prepared by the circuit above have the form
+# Note that this allows us to prepare trial states of the form
 #
 # .. math::
 #
-#     \vert \Psi(\theta) \rangle = C_{03}(\theta) \vert 0101 \rangle
-#     + C_{0123}(\theta) \vert 0011 \rangle,
+#     \vert \Psi(\theta) \rangle = c_{03}(\theta) \vert 0101 \rangle
+#     + c_{0123}(\theta) \vert 0011 \rangle,
 #
 # where the first term :math:`\vert 0101 \rangle` encodes a spin-flip single excitation with
 # :math:`S_z=-1` and the second term is a double excitation with :math:`S_z=0`.
 # As mentioned in the introduction, the electronic Hamiltonian conserves the total
-# spin-projection of the electronic states. This means that the double-excitation coefficient
+# spin-projection of the electronic states. This means that the double excitation coefficient
 # should vanish as the VQE algorithm minimizes the cost function. The optimized state will
 # correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1`.
 #
@@ -330,12 +332,13 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # Conclusion
 # ----------
 # In this tutorial we have used the standard VQE algorithm to find the ground and the
-# lowest-lying excited states of the hydrogen molecule. We have used the single- and
-# double-excitation operations, implemented as Givens rotations,
+# lowest-lying excited states of the hydrogen molecule. We have used the single and
+# double excitation operations, implemented as Givens rotations,
 # to prepare the trial states of a molecule. By choosing the total-spin projection of the
 # generated excitations we were able to probe the lowest-energy eigenstates of the molecular
-# Hamiltonian in different sectors of the spin quantum numbers. We showed that the optimized
-# states were also eigenstates of the total-spin operator :math:`\hat{S}^2`.
+# Hamiltonian in different sectors of the spin quantum numbers. We also showed how to build
+# the total-spin operator :math:`\hat{S}^2` and used it to compute the total spin
+# of the optimized states.
 #
 # References
 # ----------
