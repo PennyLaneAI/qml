@@ -31,15 +31,14 @@ a triplet related to the spin components :math:`S_z=-1, 0, 1`.
 
 |
 
-In this tutorial you will learn how to run VQE simulations to find the lowest-energy states
-of a molecular Hamiltonian with different values of the total spin.
-We illustrate this for the hydrogen molecule although the same methodology can be applied to
-other molecules. First, we show how to build the electronic Hamiltonian and the total-spin operator. 
-Next, we use excitation operations, implemented in PennyLane as Givens rotations [#qchemcircuits]_,
-to prepare the trial states of the molecule. Finally, we run the VQE algorithm to find the ground
-and the lowest-lying excited states of the :math:`\mathrm{H}_2` molecule by applying
-excitation operations that preserve and modify, respectively, the total-spin projection of the
-initial state.
+In this tutorial we demonstrate how to run VQE simulations to find the lowest-energy states
+of the hydrogen molecule in different spin sectors. First, we show how to
+build the electronic Hamiltonian and the total-spin operator. Next, we use excitation operations,
+implemented in PennyLane as Givens rotations [#qchemcircuits]_, to prepare the trial states of the
+molecule. In order to probe the molecular states with total spin :math:`S=0` and :math:`S=1`, we
+apply excitation operations which preserve and modify, respectively, the total-spin
+projection of the initial state encoded in the qubit register. Finally, we run the VQE algorithm
+to compute the energy of the states.
 
 Let's get started!
 
@@ -286,8 +285,8 @@ def circuit(params, wires):
 #
 # where the first term :math:`\vert 0101 \rangle` encodes a spin-flip single excitation with
 # :math:`S_z=-1` and the second term is a double excitation with :math:`S_z=0`.
-# As mentioned in the introduction, the electronic Hamiltonian conserves the total
-# spin-projection of the electronic states. This means that the double excitation coefficient
+# Since an eigenstate of the electronic Hamiltonian can not contain a superposition of
+# states with different total-spin projection, the double excitation coefficient
 # should vanish as the VQE algorithm minimizes the cost function. The optimized state will
 # correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1`.
 #
