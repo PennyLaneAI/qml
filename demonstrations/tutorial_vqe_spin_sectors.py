@@ -33,12 +33,12 @@ a triplet related to the spin components :math:`S_z=-1, 0, 1`.
 
 In this tutorial we demonstrate how to run VQE simulations to find the lowest-energy states
 of the hydrogen molecule in different spin sectors. First, we show how to
-build the electronic Hamiltonian and the total-spin operator. Next, we use excitation operations,
-implemented in PennyLane as Givens rotations [#qchemcircuits]_, to prepare the trial states of the
-molecule. In order to probe the molecular states with total spin :math:`S=0` and :math:`S=1`, we
-apply excitation operations which preserve and modify, respectively, the total-spin
-projection of the initial state encoded in the qubit register. Finally, we run the VQE algorithm
-to compute the energy of the states.
+build the electronic Hamiltonian and the total-spin operator :math:`\hat{S}^2`. Next, we use
+excitation operations, implemented in PennyLane as Givens rotations [#qchemcircuits]_, to prepare
+the trial states of the molecule. In order to probe the molecular states with total spin
+:math:`S=0` and :math:`S=1`, we apply excitation operations which preserve and modify, respectively,
+the total-spin projection of the initial state encoded in the qubit register. Finally, we run
+the VQE algorithm to compute the energy of the states.
 
 Let's get started!
 
@@ -283,10 +283,10 @@ def circuit(params, wires):
 #     \vert \Psi(\theta) \rangle = c_{03}(\theta) \vert 0101 \rangle
 #     + c_{0123}(\theta) \vert 0011 \rangle,
 #
-# where the first term :math:`\vert 0101 \rangle` encodes a spin-flip single excitation with
+# where the first term :math:`\vert 0101 \rangle` encodes a spin-flip excitation with
 # :math:`S_z=-1` and the second term is a double excitation with :math:`S_z=0`.
 # Since an eigenstate of the electronic Hamiltonian can not contain a superposition of
-# states with different total-spin projection, the double excitation coefficient
+# states with different total-spin projections, the double excitation coefficient
 # should vanish as the VQE algorithm minimizes the cost function. The optimized state will
 # correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1`.
 #
