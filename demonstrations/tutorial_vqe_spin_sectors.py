@@ -335,8 +335,8 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # to prepare the trial states of a molecule. We also showed how to build
 # the total-spin operator :math:`\hat{S}^2` and used it to compute the total spin
 # of the optimized states. By choosing the total-spin projection of the
-# generated excitations we were able to probe the lowest-energy eigenstates of the molecular
-# Hamiltonian in different sectors of the spin quantum numbers.
+# generated excitations, we were able to probe the lowest-energy eigenstates of the
+# molecular Hamiltonian in different sectors of the spin quantum numbers.
 #
 # References
 # ----------
