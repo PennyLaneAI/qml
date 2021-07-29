@@ -27,8 +27,7 @@ straightforward for any given molecule. However, using a pre-constructed ansatz 
 of reducing performance in favour of generality: the approach may work well in many cases, but it
 will not be optimized for a specific problem.
 
-In practical applications, only a selected number of excitations are necessary to prepare the exact
-ground state wavefunction. Including all possible excitations usually increases the cost of the
+In practical applications, including all possible excitations usually increases the cost of the
 simulations without improving the accuracy of the results. This motivates implementing a strategy
 that allows for approximation of the contribution of the excitations and selects only those
 excitations that are found to be important for the given molecule. This can be done by using
@@ -49,8 +48,8 @@ possible excitation gates, and then select gates based on the magnitude of the c
 
 There are different ways to make use of the gradient information, and here we discuss one of
 these strategies and apply it to compute the ground state energy of LiH. This method requires constructing the
-Hamiltonian and determining all possible excitations, which we can do with functionality built-in to PennyLane.
-But we first need to define the molecular parameters including atomic symbols and coordinates.
+Hamiltonian and determining all possible excitations, which we can do with functionality built into PennyLane.
+But we first need to define the molecular parameters, including atomic symbols and coordinates.
 Note that the atomic coordinates are in `Bohr <https://en.wikipedia.org/wiki/Bohr_radius>`_.
 """
 
@@ -75,7 +74,9 @@ H, qubits = qchem.molecular_hamiltonian(
     symbols,
     geometry,
     active_electrons=2,
-    active_orbitals=5)
+    active_orbitals=5
+)
+
 
 active_electrons = 2
 
@@ -85,7 +86,6 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 
 ##############################################################################
 # Note that we have a total of 24 excitations which can be represented by the same number of
-
 # excitation gates [#givenstutorial]_. We now implement a strategy that constructs
 # the circuit by adding groups of gates one at a time. We follow these steps:
 #
@@ -187,7 +187,6 @@ for i in range(len(singles)):
 
 ##############################################################################
 # Similar to the double excitation gates, we select those single excitations that have a gradient
-
 # larger than a predefined threshold.
 
 singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0e-5]
@@ -195,7 +194,7 @@ singles_select
 
 ##############################################################################
 # We now have all of the gates we need to build our circuit and perform one final step of
-# optimization to get the ground state energy. The resulting energy should match the exact energy of the
+# optimization to get the ground-state energy. The resulting energy should match the exact energy of the
 
 # ground electronic state of LiH which is -7.8825378193 Ha.
 
@@ -223,7 +222,6 @@ for n in range(20):
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for LiH. We can compute its matrix representation in the computational basis using the
 # PennyLane function :func:`~.pennylane.utils.sparse_hamiltonian`. This function
-
 # returns the matrix in the SciPy `sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>`_ format.
 
 H_sparse = qml.utils.sparse_hamiltonian(H)
@@ -232,13 +230,11 @@ H_sparse
 ##############################################################################
 # The matrix has :math:`1024^2=1,048,576` entries, but only 11264 of them
 # are non-zero. Leveraging this sparsity can significantly reduce the
-
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
 # value of the sparse Hamiltonian observable. This can reduce the cost of simulations by
 # orders of magnitude depending on the molecular size. We use the selected gates in the previous
 # steps and perform the final optimization step with the sparse method. Note that the sparse method
-# only works with the parameter-shift differentiation method currently.
-
+# currently only works with the parameter-shift differentiation method.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
@@ -278,10 +274,9 @@ for n in range(20):
 # Conclusions
 # -----------
 # We have learned that building quantum chemistry circuits adaptively and using the
-
 # functionality for sparse objects makes molecular simulations significantly more efficient. In this
 # tutorial, we followed an adaptive strategy that selects a group of gates based on information
-# about the gradients. This method can be extended such that the gates are selected one at time or
+# about the gradients. This method can be extended such that the gates are selected one at time, or
 # even to other more elaborate strategies [#grimsley2019]_.
 #
 # References
