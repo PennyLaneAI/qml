@@ -10,7 +10,7 @@ VQE in different spin sectors
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_vqe_parallel VQE with parallel QPUs
 
-*Author: PennyLane dev team. Last updated: 28 July 2021.*
+*Author: PennyLane dev team. Last updated: 29 July 2021.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
@@ -266,9 +266,8 @@ print(doubles)
 # For the :math:`\mathrm{H}_2` molecule in a minimal basis set there are no
 # double excitations, but only a spin-flip single excitation from qubit 1 to 2.
 # In this case, the circuit will contain only one :class:`~.pennylane.SingleExcitation`
-# operation. Additionally, as we want to probe the excited state of the hydrogen molecule
-# consisting of one single excitation, we initialize the qubit register to the state
-# :math:`\vert 0011 \rangle`.
+# operation. Additionally, as we want to probe the excited state of the hydrogen molecule,
+# we initialize the qubit register to the state :math:`\vert 0011 \rangle`.
 
 
 def circuit(params, wires):
