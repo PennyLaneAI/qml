@@ -266,7 +266,7 @@ print(doubles)
 # For the :math:`\mathrm{H}_2` molecule in a minimal basis set there are no
 # double excitations, but only a spin-flip single excitation from qubit 1 to 2.
 # In this case, the circuit will contain only one :class:`~.pennylane.SingleExcitation`
-# operation. Additionally, as we want to probe the excited state of hydrogen molecule
+# operation. Additionally, as we want to probe the excited state of the hydrogen molecule
 # consisting of one single excitation, we initialize the qubit register to the state
 # :math:`\vert 0011 \rangle`.
 
@@ -276,7 +276,7 @@ def circuit(params, wires):
 
 
 ##############################################################################
-# Note that this allows us to prepare trial states of the form
+# This allows us to prepare trial states of the form
 #
 # .. math::
 #
@@ -285,7 +285,7 @@ def circuit(params, wires):
 #
 # where the first term :math:`\vert 0101 \rangle` encodes a spin-flip excitation with
 # :math:`S_z=-1` and the second term is a double excitation with :math:`S_z=0`.
-# Since an eigenstate of the electronic Hamiltonian can not contain a superposition of
+# Since an eigenstate of the electronic Hamiltonian cannot contain a superposition of
 # states with different total-spin projections, the double excitation coefficient
 # should vanish as the VQE algorithm minimizes the cost function. The optimized state will
 # correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1`.
