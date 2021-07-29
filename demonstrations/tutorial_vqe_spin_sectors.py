@@ -332,11 +332,11 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # In this tutorial we have used the standard VQE algorithm to find the ground and the
 # lowest-lying excited states of the hydrogen molecule. We used the single and
 # double excitation operations, implemented as Givens rotations,
-# to prepare the trial states of a molecule. By choosing the total-spin projection of the
-# generated excitations we were able to probe the lowest-energy eigenstates of the molecular
-# Hamiltonian in different sectors of the spin quantum numbers. We also showed how to build
+# to prepare the trial states of a molecule. We also showed how to build
 # the total-spin operator :math:`\hat{S}^2` and used it to compute the total spin
-# of the optimized states.
+# of the optimized states. By choosing the total-spin projection of the
+# generated excitations we were able to probe the lowest-energy eigenstates of the molecular
+# Hamiltonian in different sectors of the spin quantum numbers.
 #
 # References
 # ----------
