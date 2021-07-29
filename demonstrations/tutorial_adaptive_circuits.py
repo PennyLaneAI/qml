@@ -10,7 +10,7 @@ Adaptive circuits for quantum chemistry
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
     tutorial_vqe A brief overview of VQE
-
+    tutorial_givens_rotations Givens rotations for quantum chemistry
 
 
 *Author: PennyLane dev team. Posted:  2021. Last updated: *
@@ -76,7 +76,6 @@ H, qubits = qchem.molecular_hamiltonian(
     active_electrons=2,
     active_orbitals=5
 )
-
 
 active_electrons = 2
 
