@@ -350,4 +350,5 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # .. [#qchemcircuits]
 #
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
-#     "Universal quantum circuits for quantum chemistry". arXiv:2106.13839, (2021)
+#     "Universal quantum circuits for quantum chemistry". `arXiv:2106.13839, (2021)
+#     <https://arxiv.org/abs/2106.13839>`__
