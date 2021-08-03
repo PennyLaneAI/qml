@@ -135,9 +135,9 @@ doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0
 doubles_select
 
 ##############################################################################
-# There are only 6 double excitation gates, out of the original 16, that have gradients above the threshold.
-# We add the selected gates to the circuit and perform one optimization step to determine the
-# updated parameters for the selected gates. We also need to define an optimizer. Note that the
+# There are only 6 double excitation gates, out of the original 16, that have gradients above the
+# threshold. We add the selected gates to the circuit and perform one optimization step to determine
+# the updated parameters for the selected gates. We also need to define an optimizer. Note that the
 # optimization is not very costly as we only have six gates in our circuit.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
@@ -193,8 +193,8 @@ singles_select
 
 ##############################################################################
 # We now have all of the gates we need to build our circuit and perform one final step of
-# optimization to get the ground-state energy. The resulting energy should match the exact energy of the
-# ground electronic state of LiH which is -7.8825378193 Ha.
+# optimization to get the ground-state energy. The resulting energy should match the exact energy of
+# the ground electronic state of LiH which is -7.8825378193 Ha.
 
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
