@@ -194,7 +194,6 @@ singles_select
 ##############################################################################
 # We now have all of the gates we need to build our circuit and perform one final step of
 # optimization to get the ground-state energy. The resulting energy should match the exact energy of the
-
 # ground electronic state of LiH which is -7.8825378193 Ha.
 
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
