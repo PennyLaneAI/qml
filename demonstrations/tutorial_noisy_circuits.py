@@ -229,7 +229,7 @@ for p in ps:
 # ensure that the trainable parameters give rise to a valid channel parameter, i.e., a number
 # between 0 and 1.
 #
-ev = np.tensor([0.7781], requires_grad=False)  # observed expectation value
+ev = np.tensor(0.7781, requires_grad=False)  # observed expectation value
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
@@ -257,7 +257,7 @@ def cost(x, target):
 
 opt = qml.GradientDescentOptimizer(stepsize=10)
 steps = 35
-x = np.tensor([0.0], requires_grad=True)
+x = np.tensor(0.0, requires_grad=True)
 
 for i in range(steps):
     (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
