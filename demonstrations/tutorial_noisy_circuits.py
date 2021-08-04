@@ -248,7 +248,7 @@ def damping_circuit(x):
 
 
 def cost(x, target):
-    return (damping_circuit(x) - target[0])**2
+    return (damping_circuit(x) - target)**2
 
 ######################################################################
 # All that remains is to optimize the parameter. We use a straightforward gradient descent
@@ -265,7 +265,7 @@ for i in range(steps):
         print(f"Step: {i}    Cost: {cost_val}")
 
 print(f"QNode output after optimization = {damping_circuit(x):.4f}")
-print(f"Experimental expectation value = {ev[0]}")
+print(f"Experimental expectation value = {ev}")
 print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 
 ######################################################################
