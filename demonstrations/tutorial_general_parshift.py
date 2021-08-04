@@ -39,14 +39,16 @@ and the random observable :math:`B` for a given number of qubits :math:`N` and a
 from scipy.stats import unitary_group
 import numpy.random as rnd
 
+
 def random_state(N, seed):
-    states = unitary_group.rvs(2**N, random_state=rnd.default_rng(seed))
+    states = unitary_group.rvs(2 ** N, random_state=rnd.default_rng(seed))
     return states[0]
+
 
 def random_observable(N, seed):
     rnd.seed(seed)
     # Generate real and imaginary part separately and (anti-)symmetrize them for Hermiticity
-    real_part, imag_part = rnd.random((2, 2**N, 2**N))
+    real_part, imag_part = rnd.random((2, 2 ** N, 2 ** N))
     real_part += real_part.T
     imag_part -= imag_part.T
     return real_part + 1j * imag_part
@@ -60,6 +62,7 @@ def random_observable(N, seed):
 
 
 from jax.config import config
+
 config.update("jax_enable_x64", True)
 from jax import numpy as np
 
@@ -68,11 +71,11 @@ N = 4
 # Test random state
 psi = random_state(N, 1234)
 print("psi is normalized:       ", np.isclose(np.linalg.norm(psi), 1.0))
-print("psi has shape (2**N,):   ", psi.shape==(2**N,))
+print("psi has shape (2**N,):   ", psi.shape == (2 ** N,))
 # Test random observable
 B = random_observable(N, 1234)
 print("B is Hermitian:          ", np.allclose(B, B.T.conj()))
-print("B has shape (2**N, 2**N):", B.shape==(2**N, 2**N))
+print("B has shape (2**N, 2**N):", B.shape == (2 ** N, 2 ** N))
 
 
 ###############################################################################
@@ -83,10 +86,11 @@ print("B has shape (2**N, 2**N):", B.shape==(2**N, 2**N))
 
 import pennylane as qml
 
-def device_and_cost(N, seed):
-    dev = qml.device('default.qubit', wires=N)
 
-    @qml.qnode(dev, interface='jax')
+def device_and_cost(N, seed):
+    dev = qml.device("default.qubit", wires=N)
+
+    @qml.qnode(dev, interface="jax")
     def cost(x):
         qml.QubitStateVector(random_state(N, seed), wires=dev.wires)
         for w in dev.wires:
@@ -94,6 +98,7 @@ def device_and_cost(N, seed):
         return qml.expval(qml.Hermitian(random_observable(N, seed), wires=dev.wires))
 
     return dev, cost
+
 
 ###############################################################################
 # Section II A of [#GenPar]_ shows that the output of this circuit, namely the function
@@ -116,7 +121,7 @@ Ns = list(range(1, 6))
 seed = 7658741
 # Set the plotting range on the x-axis
 xlim = (-np.pi, np.pi)
-fig, axs = plt.subplots(1, len(Ns), figsize=(16,2))
+fig, axs = plt.subplots(1, len(Ns), figsize=(16, 2))
 cost_functions = []
 X = np.linspace(*xlim, 60)
 for ax, N in zip(axs, Ns):
@@ -124,10 +129,10 @@ for ax, N in zip(axs, Ns):
     dev, cost = device_and_cost(N, seed)
     ax.plot(X, [cost(x) for x in X])
     ax.set_title(f"{N} qubits")
-    ax.set_xlabel('$x$')
+    ax.set_xlabel("$x$")
     # Store the cost function for later
     cost_functions.append(copy.deepcopy(cost))
-axs[0].set_ylabel('$E$');
+axs[0].set_ylabel("$E$")
 
 
 ###############################################################################
@@ -147,11 +152,11 @@ for i, cost_function in enumerate(cost_functions):
     bar(coeffs, 1, axs[:, i], show_freqs=True)
     axs[0, i].set_title(f"{Ns[i]} qubits")
     # Set x-axis labels
-    axs[1, i].text(5, axs[1, i].get_ylim()[0], f"Frequency", ha='center', va='top')
+    axs[1, i].text(5, axs[1, i].get_ylim()[0], f"Frequency", ha="center", va="top")
     # Clean up y-axis labels
-    if i>1:
-        axs[0, i].set_ylabel('')
-        axs[1, i].set_ylabel('')
+    if i > 1:
+        axs[0, i].set_ylabel("")
+        axs[1, i].set_ylabel("")
 
 
 ###############################################################################
@@ -226,12 +231,15 @@ def full_reconstruction_equ(fun, R):
     """Reconstruct a univariate trigonometric function
     with up to R frequencies using equidistant shifts."""
     # Shift angles for the reconstruction
-    shifts = [2*mu*np.pi/(2*R+1) for mu in range(-R, R+1)]
+    shifts = [2 * mu * np.pi / (2 * R + 1) for mu in range(-R, R + 1)]
     # Shifted function evaluations
     evals = np.array([fun(shift) for shift in shifts])
-    kernels = lambda x: np.array([
-        sinc((R+0.5)*(x-shift)/np.pi)/sinc(0.5*(x-shift)/np.pi) for shift in shifts
-    ])
+    kernels = lambda x: np.array(
+        [
+            sinc((R + 0.5) * (x - shift) / np.pi) / sinc(0.5 * (x - shift) / np.pi)
+            for shift in shifts
+        ]
+    )
     return lambda x: np.sum(evals * kernels(x))
 
 
@@ -245,34 +253,35 @@ def full_reconstruction_equ(fun, R):
 
 def compare_functions(originals, reconstructions, Ns, show_diff=True):
     if show_diff:
-        fig, axs = plt.subplots(2, len(originals), figsize=(16,4))
+        fig, axs = plt.subplots(2, len(originals), figsize=(16, 4))
     else:
-        fig, *axs = plt.subplots(1, len(originals), figsize=(16,4))
-    for i, (orig, recon, N) in enumerate(zip(originals, reconstructions, Ns):
-        shifts = [2*mu*np.pi/(2*N+1) for mu in range(-N, N+1)]
+        fig, *axs = plt.subplots(1, len(originals), figsize=(16, 4))
+    for i, (orig, recon, N) in enumerate(zip(originals, reconstructions, Ns)):
+        shifts = [2 * mu * np.pi / (2 * N + 1) for mu in range(-N, N + 1)]
         E = np.array([orig(x) for x in X])
         E_rec = np.array([recon(x) for x in X])
         E_shifts = np.array([orig(shift) for shift in shifts])
 
         # Show E, the reconstruction, and the shifts (top)
-        axs[0,i].plot(X, E)
-        axs[0,i].plot(X, E_rec, linestyle='--')
-        axs[0,i].plot(shifts, E_shifts, ls='', marker='x', c='red')
-        axs[0,i].set_title(f"{N} qubits")
-        axs[0,i].set_xticks([])
+        axs[0, i].plot(X, E)
+        axs[0, i].plot(X, E_rec, linestyle="--")
+        axs[0, i].plot(shifts, E_shifts, ls="", marker="x", c="red")
+        axs[0, i].set_title(f"{N} qubits")
+        axs[0, i].set_xticks([])
         # Show the reconstruction error (bottom)
         if show_diff:
-            axs[1,i].plot(X, E-E_rec)
-            axs[1,i].set_xlabel('$x$')
-    axs[0,0].set_ylabel('$E$');
+            axs[1, i].plot(X, E - E_rec)
+            axs[1, i].set_xlabel("$x$")
+    axs[0, 0].set_ylabel("$E$")
     if show_diff:
-        axs[1,0].set_ylabel('$E-E_{rec}$');
+        axs[1, 0].set_ylabel("$E-E_{rec}$")
     return axs
+
 
 reconstructions_equ = [
     copy.deepcopy(full_reconstruction_equ(orig, N)) for orig, N in zip(cost_functions, Ns)
 ]
-compare_functions(cost_functions, reconstructions_equ, Ns);
+compare_functions(cost_functions, reconstructions_equ, Ns)
 
 ###############################################################################
 # *Works.*
@@ -312,10 +321,10 @@ compare_functions(cost_functions, reconstructions_equ, Ns);
 
 def full_reconstruction_gen(fun, shifts):
     """Reconstruct a univariate trigonometric function using arbitrary shifts."""
-    R = (len(shifts)-1)//2
-    frequencies = np.array(list(range(1, R+1)))
+    R = (len(shifts) - 1) // 2
+    frequencies = np.array(list(range(1, R + 1)))
     # Construct the matrix C case by case
-    C1 = np.ones((2*R+1, 1))
+    C1 = np.ones((2 * R + 1, 1))
     C2 = np.cos(np.outer(shifts, frequencies))
     C3 = np.sin(np.outer(shifts, frequencies))
     C = np.hstack([C1, C2, C3])
@@ -325,11 +334,11 @@ def full_reconstruction_gen(fun, shifts):
     w = np.linalg.inv(C) @ evals
     # Extract the Fourier coefficients
     a0 = w[0]
-    a = w[1:R+1]
-    b = w[R+1:]
+    a = w[1 : R + 1]
+    b = w[R + 1 :]
     # Construct the Fourier series
     reconstruction = lambda x: (
-        a0 + np.dot(a, np.cos(frequencies*x)) + np.dot(b, np.sin(frequencies*x))
+        a0 + np.dot(a, np.cos(frequencies * x)) + np.dot(b, np.sin(frequencies * x))
     )
     return reconstruction
 
@@ -339,9 +348,9 @@ def full_reconstruction_gen(fun, shifts):
 
 reconstructions_gen = []
 for orig, N in zip(cost_functions, Ns):
-    shifts = rnd.random(2*N+1)*2*np.pi-np.pi
+    shifts = rnd.random(2 * N + 1) * 2 * np.pi - np.pi
     reconstructions_gen.append(full_reconstruction_gen(orig, shifts))
-compare_functions(cost_functions, reconstructions_gen, Ns);
+compare_functions(cost_functions, reconstructions_gen, Ns)
 
 
 ###############################################################################
@@ -366,11 +375,11 @@ compare_functions(cost_functions, reconstructions_gen, Ns);
 reconstructions_overp = []
 for orig, N in zip(cost_functions, Ns):
     # Assume R to be too big
-    R = N+2
+    R = N + 2
     # Sample more shifts than required for the original function
-    shifts = rnd.random(2*R+1)*2*np.pi-np.pi
+    shifts = rnd.random(2 * R + 1) * 2 * np.pi - np.pi
     reconstructions_overp.append(full_reconstruction_gen(orig, shifts))
-compare_functions(cost_functions, reconstructions_overp, Ns);
+compare_functions(cost_functions, reconstructions_overp, Ns)
 
 
 ###############################################################################
@@ -404,16 +413,17 @@ compare_functions(cost_functions, reconstructions_overp, Ns);
 
 
 from scipy.optimize import brute, shgo
-optimizer = 'brute' # 'shgo'
-axs = compare_functions(cost_functions, reconstructions_equ, Ns, show_diff=False);
-for i, recon, N in enumerate(zip(reconstructions_equ, Ns)):
+
+optimizer = "brute"  # 'shgo'
+axs = compare_functions(cost_functions, reconstructions_equ, Ns, show_diff=False)
+for i, (recon, N) in enumerate(zip(reconstructions_equ, Ns)):
     # Minimize the (classical) reconstructed function
-    if optimizer=='brute':
+    if optimizer == "brute":
         x_min, y_min, *_ = brute(recon, ranges=(xlim,), Ns=100, full_output=True)
-    elif optimizer=='shgo':
+    elif optimizer == "shgo":
         opt_res = shgo(recon, (xlim,))
         x_min, y_min = opt_res.x, opt_res.fun
-    axs[i].plot(x_min, y_min, marker='o')
+    axs[i].plot(x_min, y_min, marker="o")
 
 
 ###############################################################################
@@ -430,13 +440,14 @@ for i, recon, N in enumerate(zip(reconstructions_equ, Ns)):
 def rotosolve_substep(univariate_fun, R, gridsearch_steps):
     """Globally minimize a univariate function using ``scipy.optimize.brute``."""
     recon = full_reconstruction_equ(univariate_fun, R)
-    center, width = 0.0, 2*np.pi
+    center, width = 0.0, 2 * np.pi
     # Refine the gridsearch multiple times
     for _ in range(gridsearch_steps):
-        ranges = ((center-width/2, center+width/2),)
+        ranges = ((center - width / 2, center + width / 2),)
         center, y_center, *_ = brute(recon, ranges=ranges, Ns=100, full_output=True)
         width /= 100
     return center, y_center
+
 
 def rotosolve_step(fun, param, Rs, gridsearch_steps=1):
     """Update all parameter once by restricting a function to one parameter at a time."""
@@ -454,6 +465,7 @@ def rotosolve_step(fun, param, Rs, gridsearch_steps=1):
         # Caching minima of reconstructed functions
         y_values.append(y_min)
     return param, y_values
+
 
 ###############################################################################
 # todo: add minimal test case, think about where exactly to refer to.
@@ -480,34 +492,40 @@ def rotosolve_step(fun, param, Rs, gridsearch_steps=1):
 
 
 def parameter_shift(fun, R, order=1):
-    if order==1:
+    if order == 1:
         # Classically computed coefficients, including the sign \alpha
-        coeffs = np.array([
+        coeffs = np.array(
             [
-                -alpha*(-1)**mu / ( 4*R*np.sin((2*mu-1)*np.pi/(4*R))**2 )
-                for mu in range(1, R+1)
+                [
+                    -alpha * (-1) ** mu / (4 * R * np.sin((2 * mu - 1) * np.pi / (4 * R)) ** 2)
+                    for mu in range(1, R + 1)
+                ]
+                for alpha in (-1, 1)
             ]
-            for alpha in (-1, 1)
-        ])
+        )
         # Evaluations of the cost function E(x_\mu)
-        evaluations = np.array([
-            [fun(alpha*(2*mu-1)*np.pi/(2*R)) for mu in range(1, R+1)]
-            for alpha in (-1, 1)
-        ])
-    elif order==2:
+        evaluations = np.array(
+            [
+                [fun(alpha * (2 * mu - 1) * np.pi / (2 * R)) for mu in range(1, R + 1)]
+                for alpha in (-1, 1)
+            ]
+        )
+    elif order == 2:
         # Classically computed coefficients for the regular sum
-        _coeffs = np.array([
-            [-(-1)**mu/(2*np.sin(mu*np.pi/(2*R))**2) for mu in range(1, R)]
-            for alpha in (-1, 1)
-        ])
+        _coeffs = np.array(
+            [
+                [-((-1) ** mu) / (2 * np.sin(mu * np.pi / (2 * R)) ** 2) for mu in range(1, R)]
+                for alpha in (-1, 1)
+            ]
+        )
         # Include the coefficients for the "special" terms E(0) and E(\pi)
-        coeffs = np.hstack([_coeffs, np.array([[-(2*R**2+1)/6], [-(-1)**R/2]])])
+        coeffs = np.hstack([_coeffs, np.array([[-(2 * R ** 2 + 1) / 6], [-((-1) ** R) / 2]])])
         # Evaluate at the regularily shifted positions
-        _evaluations = np.array([
-            [fun(alpha*mu*np.pi/R) for mu in range(1, R)] for alpha in (-1, 1)
-        ])
+        _evaluations = np.array(
+            [[fun(alpha * mu * np.pi / R) for mu in range(1, R)] for alpha in (-1, 1)]
+        )
         # Include the "special" terms E(0) and E(\pi).
-        evaluations = np.hstack([_evaluations, np.array([[fun(0)],[fun(np.pi)]])])
+        evaluations = np.hstack([_evaluations, np.array([[fun(0)], [fun(np.pi)]])])
     # contract coefficients with evaluations.
     return np.sum(coeffs * evaluations)
 
@@ -519,16 +537,17 @@ def parameter_shift(fun, R, order=1):
 
 dx = 5e-5
 ps_der1 = [parameter_shift(cost_functions[N], N, 1) for N in Ns]
-fd_der1 = [(cost_functions[N](dx/2)-cost_functions[N](-dx/2))/(dx) for N in Ns]
+fd_der1 = [(cost_functions[N](dx / 2) - cost_functions[N](-dx / 2)) / (dx) for N in Ns]
 ps_der2 = [parameter_shift(cost_functions[N], N, 2) for N in Ns]
 fd_der2 = [
     (
-        (cost_functions[N](dx)-cost_functions[N](0))/dx
-        -(cost_functions[N](0)-cost_functions[N](-dx))/dx
-    )/dx
+        (cost_functions[N](dx) - cost_functions[N](0)) / dx
+        - (cost_functions[N](0) - cost_functions[N](-dx)) / dx
+    )
+    / dx
     for N in range(1, 6)
 ]
-print("Number of qubits/RZ gates:         ", *range(1, 6), sep=" "*9)
+print("Number of qubits/RZ gates:         ", *range(1, 6), sep=" " * 9)
 print(f"First-order parameter-shift rule:  {np.round(np.array(ps_der1), 6)}")
 print(f"First-order finite difference:     {np.round(np.array(fd_der1), 6)}")
 print(f"Second-order parameter-shift rule: {np.round(np.array(ps_der2), 6)}")
@@ -577,37 +596,42 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 # for the kernels.
 
 
-shifts_odd = lambda R: [(2*mu-1)*np.pi/(2*R) for mu in range(1, R+1)]
+shifts_odd = lambda R: [(2 * mu - 1) * np.pi / (2 * R) for mu in range(1, R + 1)]
 # Odd linear combination of Dirichlet kernels
-D_odd = lambda x, R: np.array([
-    (
-        sinc(R*(x-shift))/sinc(0.5*(x-shift))*np.cos(0.5*(x-shift))
-        -sinc(R*(x+shift))/sinc(0.5*(x+shift))*np.cos(0.5*(x+shift))
-    )
-    for shift in shifts_odd(R)
-])
+D_odd = lambda x, R: np.array(
+    [
+        (
+            sinc(R * (x - shift)) / sinc(0.5 * (x - shift)) * np.cos(0.5 * (x - shift))
+            - sinc(R * (x + shift)) / sinc(0.5 * (x + shift)) * np.cos(0.5 * (x + shift))
+        )
+        for shift in shifts_odd(R)
+    ]
+)
 # Reconstruction of E_odd
 def odd_reconstruction_equ(fun, R):
-    evaluations = np.array([(fun(shift) - fun(-shift))/2 for shift in shifts_odd(R)])
+    evaluations = np.array([(fun(shift) - fun(-shift)) / 2 for shift in shifts_odd(R)])
     return lambda x: np.dot(evaluations, D_odd(x, R))
 
-shifts_even = lambda R: [mu*np.pi/R for mu in range(1, R)]
+
+shifts_even = lambda R: [mu * np.pi / R for mu in range(1, R)]
 # Even linear combination of Dirichlet kernels
-D_even = lambda x, R: np.array([
-    (
-        sinc(R*(x-shift))/sinc(0.5*(x-shift))*np.cos(0.5*(x-shift))
-        +sinc(R*(x+shift))/sinc(0.5*(x+shift))*np.cos(0.5*(x+shift))
-    )
-    for shift in shifts_even(R)
-])
+D_even = lambda x, R: np.array(
+    [
+        (
+            sinc(R * (x - shift)) / sinc(0.5 * (x - shift)) * np.cos(0.5 * (x - shift))
+            + sinc(R * (x + shift)) / sinc(0.5 * (x + shift)) * np.cos(0.5 * (x + shift))
+        )
+        for shift in shifts_even(R)
+    ]
+)
 # Special cases of even kernels
-D0 = lambda x, R: sinc(R*x)/(sinc(x/2))*np.cos(x/2)
-Dpi = lambda x, R: sinc(R*(x-np.pi))/sinc((x-np.pi)/2)*np.cos((x-np.pi)/2)
+D0 = lambda x, R: sinc(R * x) / (sinc(x / 2)) * np.cos(x / 2)
+Dpi = lambda x, R: sinc(R * (x - np.pi)) / sinc((x - np.pi) / 2) * np.cos((x - np.pi) / 2)
 # Reconstruction E_even
 def even_reconstruction_equ(fun, R):
-    _evaluations = np.array([(fun(shift)+fun(-shift))/2 for shift in shifts_even(R)])
+    _evaluations = np.array([(fun(shift) + fun(-shift)) / 2 for shift in shifts_even(R)])
     evaluations = np.array([fun(0), *_evaluations, fun(np.pi)])
-    kernels = lambda x: np.array([D0(x, R), *D_even(x, R), Dpi(x,R)])
+    kernels = lambda x: np.array([D0(x, R), *D_even(x, R), Dpi(x, R)])
     return lambda x: np.dot(evaluations, kernels(x))
 
 
@@ -615,17 +639,24 @@ def even_reconstruction_equ(fun, R):
 # Let's now look at these even and odd reconstructions and how they indeed combine into the
 # full function (we will use the ``compare_functions`` utility from above for the latter).
 
-odd_reconstructions = [copy.deepcopy(odd_reconstruction_equ(orig, N)) for orig, N in zip(cost_functions, Ns)]
-even_reconstructions = [copy.deepcopy(even_reconstruction_equ(orig, N)) for orig, N in zip(cost_functions, Ns)]
-summed_reconstructions = [lambda x: odd_recon(x)+even_recon(x) for odd_recon, even_recon in zip(odd_reconstructions, even_reconstructions)]
+odd_reconstructions = [
+    copy.deepcopy(odd_reconstruction_equ(orig, N)) for orig, N in zip(cost_functions, Ns)
+]
+even_reconstructions = [
+    copy.deepcopy(even_reconstruction_equ(orig, N)) for orig, N in zip(cost_functions, Ns)
+]
+summed_reconstructions = [
+    lambda x: odd_recon(x) + even_recon(x)
+    for odd_recon, even_recon in zip(odd_reconstructions, even_reconstructions)
+]
 axs = compare_functions(cost_functions, summed_reconstructions, Ns)
 
 for i, (odd_recon, even_recon) in enumerate(zip(odd_reconstructions, even_reconstructions)):
     E_odd = np.array([odd_recon(x) for x in X])
     E_even = np.array([even_recon(x) for x in X])
-    axs[0,N-1].plot(X, E_odd, color='xkcd:brick red')
-    axs[0,N-1].plot(X, E_even, color='xkcd:green')
-axs[1,0].set_ylabel('$E-(E_{odd}+E_{even})$');
+    axs[0, N - 1].plot(X, E_odd, color="xkcd:brick red")
+    axs[0, N - 1].plot(X, E_even, color="xkcd:green")
+axs[1, 0].set_ylabel("$E-(E_{odd}+E_{even})$")
 
 
 ###############################################################################
@@ -642,21 +673,22 @@ axs[1,0].set_ylabel('$E-(E_{odd}+E_{even})$');
 
 
 from jax import grad
+
 # An iterator, computing the ``order``th derivative of a function ``f`` via JAX
-grad_gen = lambda f, order: grad_gen(grad(f), order-1) if order>0 else f
+grad_gen = lambda f, order: grad_gen(grad(f), order - 1) if order > 0 else f
 
 # Compute the first, second, and fifth derivative
 for order, name in zip([1, 2, 5], ["First", "Second", "5th"]):
-    recons = odd_reconstructions if order%2 else even_reconstructions
-    recon_name = "odd " if order%2 else "even"
-    cost_grads = [grad_gen(cost_functions, order)(0.) for N in Ns]
-    recon_grads = [grad_gen(recon, order)(0.) for recon in recons]
+    recons = odd_reconstructions if order % 2 else even_reconstructions
+    recon_name = "odd " if order % 2 else "even"
+    cost_grads = [grad_gen(cost_functions, order)(0.0) for N in Ns]
+    recon_grads = [grad_gen(recon, order)(0.0) for recon in recons]
     all_equal = (
         "All entries match" if np.allclose(cost_grads, recon_grads) else "Some entries differ!"
     )
     print(f"{name} derivatives via autograd: {all_equal}")
     print("From the cost functions:       ", np.round(np.array(cost_grads), 5))
-    print(f"From the {recon_name} reconstructions: ", np.round(np.array(recon_grads), 5), '\n')
+    print(f"From the {recon_name} reconstructions: ", np.round(np.array(recon_grads), 5), "\n")
 
 
 ###############################################################################
@@ -671,11 +703,11 @@ for order, name in zip([1, 2, 5], ["First", "Second", "5th"]):
 # todo: referrals?
 #
 #
-#Gen Parshift
-#Rotosolve (https://arxiv.org/abs/1905.09692)
-#Algebraic?
-#Sasha?
-#(https://arxiv.org/abs/1812.06323))
-#Ns vs Ns in optimizer (brute)
+# Gen Parshift
+# Rotosolve (https://arxiv.org/abs/1905.09692)
+# Algebraic?
+# Sasha?
+# (https://arxiv.org/abs/1812.06323))
+# Ns vs Ns in optimizer (brute)
 #
-#links: brute, shgo, RotosolveOptimizer
+# links: brute, shgo, RotosolveOptimizer
