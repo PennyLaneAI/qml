@@ -227,7 +227,7 @@ plateaus in quantum neural networks.
 
 .. customgalleryitem::
     :tooltip: Reconstruct and differentiate univariate quantum functions.
-    :figure: demonstrations/general_parshift/genpar_thumbnail.png
+    :figure: demonstrations/general_parshift/thumbnail_genpar.png
     :description: :doc:`demos/tutorial_general_parshift`
     :tags: gradients reconstruction
 
