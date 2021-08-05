@@ -64,9 +64,11 @@ and the random observable :math:`B` for a given number of qubits :math:`N` and a
 from scipy.stats import unitary_group
 import numpy.random as rnd
 
+
 def random_state(N, seed):
     states = unitary_group.rvs(2 ** N, random_state=rnd.default_rng(seed))
     return states[0]
+
 
 def random_observable(N, seed):
     rnd.seed(seed)
@@ -85,6 +87,7 @@ def random_observable(N, seed):
 
 
 from jax.config import config
+
 config.update("jax_enable_x64", True)
 from jax import numpy as np
 
