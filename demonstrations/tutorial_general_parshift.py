@@ -64,11 +64,9 @@ and the random observable :math:`B` for a given number of qubits :math:`N` and a
 from scipy.stats import unitary_group
 import numpy.random as rnd
 
-
 def random_state(N, seed):
     states = unitary_group.rvs(2 ** N, random_state=rnd.default_rng(seed))
     return states[0]
-
 
 def random_observable(N, seed):
     rnd.seed(seed)
@@ -87,7 +85,6 @@ def random_observable(N, seed):
 
 
 from jax.config import config
-
 config.update("jax_enable_x64", True)
 from jax import numpy as np
 
@@ -141,7 +138,7 @@ def device_and_cost(N, seed):
 import matplotlib.pyplot as plt
 
 # Qubit numbers
-Ns = [1, 2, 4, 7]
+Ns = [1, 2, 4, 5]
 # Fix a random seed
 seed = 7658741
 # Set the plotting range on the x-axis
@@ -768,7 +765,7 @@ from jax import grad
 grad_gen = lambda f, order: grad_gen(grad(f), order - 1) if order > 0 else f
 
 # Compute the first, second, and fifth derivative
-for order, name in zip([1, 2, 5], ["First", "Second", "5th"]):
+for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
     recons = odd_reconstructions if order % 2 else even_reconstructions
     recon_name = "odd " if order % 2 else "even"
     cost_grads = [grad_gen(orig, order)(0.0) for orig in cost_functions]
