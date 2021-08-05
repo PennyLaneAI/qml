@@ -530,9 +530,10 @@ for step in range(5):
     y_values.extend(_y_values)
 print(f"Final cost: {y_values[-1]}")
 
+iterations = range(0, len(y_values), len(Rs))
 fig, ax = plt.subplots(1, 1, figsize=(5, 4))
 plt.plot(y_values, color=green)
-plt.plot(range(0, len(y_values), len(Rs)), y_values[:: len(Rs)], ls="", marker="o", color=orange)
+plt.plot(iterations, y_values[:: len(Rs)], ls="", marker="o", color=orange)
 plt.xlabel("$\#$ Univariate updates")
 plt.ylabel("$E$");
 
