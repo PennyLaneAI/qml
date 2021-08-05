@@ -159,7 +159,7 @@ for ax, N in zip(axs, Ns):
     ax.set_xlabel("$x$")
     # Store the cost function for later
     cost_functions.append(cost)
-axs[0].set_ylabel("$E$");
+_ = axs[0].set_ylabel("$E$")
 
 
 ###############################################################################
@@ -182,9 +182,9 @@ for i, cost_function in enumerate(cost_functions):
     axs[1, i].text(Ns[i] + 2, axs[1, i].get_ylim()[0], f"Frequency", ha="center", va="top")
     # Clean up y-axis labels
     if i == 0:
-        [axs[j, i].set_ylabel(lab) for j, lab in enumerate(["$a_\ell/2$", "$b_\ell/2$"])];
+        _ = [axs[j, i].set_ylabel(lab) for j, lab in enumerate(["$a_\ell/2$", "$b_\ell/2$"])]
     else:
-        [axs[j, i].set_ylabel("") for j in [0, 1]];
+        _ = [axs[j, i].set_ylabel("") for j in [0, 1]]
 
 
 ###############################################################################
@@ -305,9 +305,9 @@ def compare_functions(originals, reconstructions, Ns, shifts, show_diff=True):
             E_shifts_rec = np.array([recon(shift) for shift in _shifts])
             axs[1, i].plot(X, E - E_rec, color=blue)
             axs[1, i].set_xlabel("$x$")
-    _axs[0].set_ylabel("$E$");
+    _ = _axs[0].set_ylabel("$E$")
     if show_diff:
-        axs[1, 0].set_ylabel("$E-E_{rec}$");
+        _ = axs[1, 0].set_ylabel("$E-E_{rec}$")
     return axs
 
 
@@ -535,7 +535,7 @@ fig, ax = plt.subplots(1, 1, figsize=(5, 4))
 plt.plot(y_values, color=green)
 plt.plot(iterations, y_values[:: len(Rs)], ls="", marker="o", color=orange)
 plt.xlabel("$\#$ Univariate updates")
-plt.ylabel("$E$");
+_ = plt.ylabel("$E$")
 
 
 ###############################################################################
@@ -744,7 +744,7 @@ for i, (odd_recon, even_recon) in enumerate(zip(odd_reconstructions, even_recons
     E_even = np.array([even_recon(x) for x in X])
     axs[0, i].plot(X, E_odd, color=red)
     axs[0, i].plot(X, E_even, color=blue)
-axs[1, 0].set_ylabel("$E-(E_{odd}+E_{even})$");
+_ = axs[1, 0].set_ylabel("$E-(E_{odd}+E_{even})$")
 
 
 ###############################################################################
