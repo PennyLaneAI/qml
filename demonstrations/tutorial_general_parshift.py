@@ -169,7 +169,7 @@ _ = axs[0].set_ylabel("$E$")
 # Indeed we see that :math:`E(x)` is a periodic function whose complexity grows when increasing
 # the number of gates parametrized by :math:`x`.
 # We take a look at the frequencies that are supported by the functions using features from
-# PennyLane's ``fourier`` module.
+# PennyLane's :mod:`~.pennylane.fourier` module.
 
 
 from pennylane.fourier.visualize import bar
