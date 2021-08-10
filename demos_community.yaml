@@ -1,3 +1,18 @@
+- title: Quantum PPO/TRPO- Taking gradients through experiments: LSTMs and memory proximal policy optimization for black-box quantum control
+  author: Abhilash Majumder
+  date: 08/10/2021
+  code: https://colab.research.google.com/drive/1wkZpEpOuZHUdI-vRxQAiDlQD455diFSs?usp=sharing
+  color: heavy-rain-gradient
+  description: |
+    Reinforcement Learning as quantum control leverages quantum hybrid circuits
+    (QHC) for creating optimizations on policy networks for Deep RL.
+    Policy-gradient-based reinforcement learning (RL) algorithms are well suited
+    for optimizing the variational parameters of QAOA in a noise-robust fashion,
+    opening up the way for developing RL techniques for continuous quantum control.
+    This is advantageous to help mitigate and monitor the potentially unknown
+    sources of errors in modern quantum simulators. This demo aims to provide an
+    implementation of PPO on policy algorithm with QHC for continuous control.
+
 - title: EVA (Exponential Value Approximation) algorithm
   author: Guillermo Alonso-Linaje
   date: 07/30/2021
