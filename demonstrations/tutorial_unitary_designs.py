@@ -543,8 +543,8 @@ for _ in range(n_samples):
     noisy_qnode = qml.QNode(conjugated_noisy_experiment, dev)
 
     # Execute the QNodes
-    ideal_state = ideal_qnode()[0]
-    noisy_state = noisy_qnode()[0]
+    ideal_state = ideal_qnode()
+    noisy_state = noisy_qnode()
 
     # Compute the fidelity
     fidelities.append(fidelity(ideal_state, noisy_state))
@@ -598,8 +598,8 @@ for C in single_qubit_cliffords:
     ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
     noisy_qnode = qml.QNode(conjugated_noisy_experiment, dev)
 
-    ideal_state = ideal_qnode()[0]
-    noisy_state = noisy_qnode()[0]
+    ideal_state = ideal_qnode()
+    noisy_state = noisy_qnode()
 
     fidelities.append(fidelity(ideal_state, noisy_state))
 
