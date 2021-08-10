@@ -1,5 +1,7 @@
 r"""
 
+todo: restructure even/odd reconstruction parts into odd Eq - odd code - even Eq - even code
+
 .. _general_parshift:
 
 General parameter-shift rules for quantum gradients
@@ -246,7 +248,7 @@ for i, cost_function in enumerate(cost_functions):
 
 
 ###############################################################################
-# We find the real (imaginary) Fourier coefficients to be (anti-)symmetric as expected and 
+# We find the real (imaginary) Fourier coefficients to be (anti-)symmetric as expected and
 # the number of frequencies that appear in :math:`E(x)` is the same as the
 # number of ``RZ`` gates we used in the circuit.
 #
@@ -270,13 +272,13 @@ for i, cost_function in enumerate(cost_functions):
 # .. math ::
 #
 #   \{\omega_j\} = \left\{-\frac{N}{2},-\frac{N-2}{2},\dots, \frac{N-2}{2}, \frac{N}{2} \right\},
-# 
+#
 # which we can check in the code (we only compute the diagonal of the generator).
 
 
 N = 6
 # PauliZ operator acting on the ith of N qubits
-PauliZ = lambda i: np.kron(np.ones(2**i), np.kron(np.array([1, -1]), np.ones(2**(N-1-i))))
+PauliZ = lambda i: np.kron(np.ones(2 ** i), np.kron(np.array([1, -1]), np.ones(2 ** (N - 1 - i))))
 # Sum the PauliZ operators to the generator
 generator = 0.5 * np.sum(np.array(list(map(PauliZ, range(N)))), axis=0)
 # Show the unique eigenvalues
@@ -293,13 +295,21 @@ print(f"The eigenvalues are: {omegas}")
 #   \{\Omega_\ell\} = \{1, 2,\dots, N\},
 #
 # as well as a zero frequency leading to the constant term :math:`a_0` in :math:`E(x)`.
-# This is exactly what we saw in the plots above and again we also can compute those in code:
+# This is exactly what we saw in the plots above and again we also can compute those in code
+# (recall from above that we don't need to count negative frequencies):
 
 
 from pennylane.utils import _flatten
-Omegas = sorted(list(set(_flatten(
-    [[omega1-omega2 for omega1 in omegas if omega1 >= omega2] for omega2 in omegas]
-))))
+
+Omegas = sorted(
+    list(
+        set(
+            _flatten(
+                [[omega1 - omega2 for omega1 in omegas if omega1 >= omega2] for omega2 in omegas]
+            )
+        )
+    )
+)
 print(f"The frequencies are: {Omegas}")
 
 
@@ -345,7 +355,7 @@ def full_reconstruction_equ(fun, R):
 
     @jax.jit
     def reconstruction(x):
-        f"""Univariate reconstruction with up to {R} frequencies based on equidistant shifts."""
+        f"""Univariate reconstruction with up to {R} frequencies using equidistant shifts."""
         kernels = np.array(
             [sinc((R + 0.5) * (x - shift)) / sinc(0.5 * (x - shift)) for shift in shifts]
         )
@@ -439,8 +449,6 @@ axs = compare_functions(cost_functions, reconstructions_equ, Ns, equ_shifts)
 #
 # Let's implement this right away! We will take the function and the shifts :math:`x_\mu` as
 # inputs, inferring :math:`R` from the number of the provided shifts, which is :math:`2R+1`.
-#
-# to do: We will sample the shifts :math:`x_\mu` at random in :math:`[-\pi,\pi)`.
 
 
 def full_reconstruction_gen(fun, shifts):
@@ -476,6 +484,7 @@ def full_reconstruction_gen(fun, shifts):
 
 ###############################################################################
 # Again, let's see the reconstruction in action:
+# We will sample the shifts :math:`x_\mu` at random in :math:`[-\pi,\pi)`.
 
 
 shifts = [rnd.random(2 * N + 1) * 2 * np.pi - np.pi for N in Ns]
@@ -663,13 +672,13 @@ _ = plt.ylabel("$E$")
 
 def parameter_shift_first(fun, R):
     """Compute the first-order derivative of a function with R frequencies at 0."""
-    shifts = [(2 * mu - 1) * np.pi / (4 * R) for mu in range(1, 2*R+1)]
+    shifts = [(2 * mu - 1) * np.pi / (4 * R) for mu in range(1, 2 * R + 1)]
     # Classically computed coefficients
     coeffs = np.array(
         [(-1) ** mu / (4 * R * np.sin(shift) ** 2) for mu, shift in enumerate(shifts)]
     )
     # Evaluations of the cost function E(x_mu)
-    evaluations = np.array([fun(2*shift) for shift in shifts])
+    evaluations = np.array([fun(2 * shift) for shift in shifts])
     # Contract coefficients with evaluations
     return np.dot(coeffs, evaluations)
 
@@ -689,11 +698,11 @@ def parameter_shift_first(fun, R):
 def parameter_shift_second(fun, R):
     """Compute the second-order derivative of a function with R frequencies at 0."""
     # Classically computed coefficients for the main sum
-    _coeffs = [-(-1) ** mu / (2 * np.sin(mu * np.pi / (2 * R)) ** 2) for mu in range(1, 2*R)]
+    _coeffs = [-((-1) ** mu) / (2 * np.sin(mu * np.pi / (2 * R)) ** 2) for mu in range(1, 2 * R)]
     # Include the coefficients for the "special" term E(0).
     coeffs = np.array([-(2 * R ** 2 + 1) / 6] + _coeffs)
     # Evaluate at the regularily shifted positions
-    _evaluations = [fun(mu * np.pi / R) for mu in range(1, 2*R)]
+    _evaluations = [fun(mu * np.pi / R) for mu in range(1, 2 * R)]
     # Include the "special" term E(0).
     evaluations = np.array([fun(0)] + _evaluations)
     # Contract coefficients with evaluations.
@@ -817,7 +826,7 @@ Dpi = lambda x, R: sinc(R * (x - np.pi)) / sinc((x - np.pi) / 2) * np.cos((x - n
 
 
 def even_reconstruction_equ(fun, R):
-    """Reconstruct the even part of an ``R``-frequency input function via equidistant shifts."""
+    """Reconstruct the even part of ``R``-frequency input function via equidistant shifts."""
     _evaluations = np.array([(fun(shift) + fun(-shift)) / 2 for shift in shifts_even(R)])
     evaluations = np.array([fun(0), *_evaluations, fun(np.pi)])
     kernels = lambda x: np.array([D0(x, R), *D_even(x, R), Dpi(x, R)])
