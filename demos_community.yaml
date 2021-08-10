@@ -1,4 +1,4 @@
-- title: Quantum PPO/TRPO- Taking gradients through experiments: LSTMs and memory proximal policy optimization for black-box quantum control
+- title: Quantum PPO/TRPO - LSTMs and memory proximal policy optimization for black-box quantum control
   author: Abhilash Majumder
   date: 08/10/2021
   code: https://colab.research.google.com/drive/1wkZpEpOuZHUdI-vRxQAiDlQD455diFSs?usp=sharing
