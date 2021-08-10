@@ -17,12 +17,7 @@ General parameter-shift rules for quantum gradients
 
 *Author: David Wierichs (Xanadu resident). Posted: ?? August 2021.*
 
-Before going through this tutorial, we recommend that readers refer to the
-:doc:`Rotosolve & Rotoselect tutorial </demos/tutorial_rotoselect>`, and having a basic
-understanding of the :doc:`parameter-shift rule </glossary/parameter_shift>` might make
-this tutorial easier to dive into.
-
-In this demo we will learn how to reconstruct univariate quantum functions, i.e. those that
+In this demo we will learn how to reconstruct univariate quantum functions, i.e., those that
 depend on a single parameter. This reconstruction and variants thereof allow us to derive more
 general parameter-shift rules to compute the derivatives of any order.
 Furthermore, there are some optimization techniques that use such reconstructions.
@@ -55,6 +50,12 @@ one focusing on special gates and spectral decompositions, namely
 
     Function reconstruction and differentiation via parameter shifts.
 
+.. note ::
+
+    Before going through this tutorial, we recommend that readers refer to the
+    :doc:`Rotosolve & Rotoselect tutorial </demos/tutorial_rotoselect>`, and having a basic
+    understanding of the :doc:`parameter-shift rule </glossary/parameter_shift>` might make
+    this tutorial easier to dive into.
 
 Cost functions arising from quantum gates
 -----------------------------------------
@@ -174,7 +175,17 @@ pink = "xkcd:bright pink"
 #
 #   U(x)=\prod_{a=1}^N R_Z^{(a)}(x) = \prod_{a=1}^N \exp\left(-i\frac{x}{2} Z_a\right),
 #
-# takes the form of a Fourier series in the variable :math:`x`.
+# takes the form of a Fourier series in the variable :math:`x`. That is to say that
+#
+# .. math ::
+#
+#   E(x) = a_0 + \sum_{\ell=1}^R a_{\ell}\cos(\ell x)+b_{\ell}\sin(\ell x).
+#
+# Here, :math:`a_{\ell}` and :math:`b_{\ell}` are the Fourier coefficients and we only
+# restrict ourselves to positive frequencies :math:`\Omega_{\ell}=\ell` as :math:`E(x)` is
+# real-valued. This is because :math:`B` is Hermitian, which implies (anti-)symmetry for the
+# real (imaginary) Fourier coefficients.
+#
 # This is true for any number of qubits (and therefore ``RZ`` gates) we use.
 # Using our function ``make_cost`` from above, we create the functions for several
 # numbers of qubits and store both the function and its evaluations on the plotting range
@@ -235,9 +246,11 @@ for i, cost_function in enumerate(cost_functions):
 
 
 ###############################################################################
-# We find the number of (positive) frequencies that appear in :math:`E(x)` to be the same as the
+# We find the real (imaginary) Fourier coefficients to be (anti-)symmetric as expected and 
+# the number of frequencies that appear in :math:`E(x)` is the same as the
 # number of ``RZ`` gates we used in the circuit.
-# This is no coincidence:
+#
+# The latter can be understood in the following way:
 # Let's look at our parametrized unitary :math:`U(x)` a bit closer. Note that the generators of
 # the used Pauli rotations commute, and that we therefore can rewrite :math:`U` as
 #
@@ -279,8 +292,8 @@ print(f"The eigenvalues are: {omegas}")
 #
 #   \{\Omega_\ell\} = \{1, 2,\dots, N\},
 #
-# as well as a zero frequency leading to a constant term in :math:`E(x)`.
-# This is exactly what we saw in the plots above and we can compute those in code again:
+# as well as a zero frequency leading to the constant term :math:`a_0` in :math:`E(x)`.
+# This is exactly what we saw in the plots above and again we also can compute those in code:
 
 
 from pennylane.utils import _flatten
@@ -293,10 +306,6 @@ print(f"The frequencies are: {Omegas}")
 ###############################################################################
 # In general we will call the number of these frequencies :math:`R`, so that we have :math:`R=N`
 # for the layer of ``RZ`` gates above.
-#
-# The reason we can restrict ourselves to positive frequencies is that :math:`E(x)` is real-valued.
-# This is because :math:`B` is Hermitian, and it implies (anti-)symmetry for the real (imaginary)
-# Fourier coefficients, as one can also see in the spectral plots above.
 #
 # Determining the full dependence on :math:`x`
 # --------------------------------------------
@@ -646,7 +655,7 @@ _ = plt.ylabel("$E$")
 #
 # .. math ::
 #
-#   E'(0) &= \sum_{\mu=1}^{2R} E\left(\frac{2\mu-1}{2R}\pi\right) \frac{(-1)^{\mu-1}}{4R\sin^2\left(\frac{2\mu-1}{4R}\pi\right)}, \\
+#   E'(0) = \sum_{\mu=1}^{2R} E\left(\frac{2\mu-1}{2R}\pi\right) \frac{(-1)^{\mu-1}}{4R\sin^2\left(\frac{2\mu-1}{4R}\pi\right)},
 #
 # This is straight-forward to implement by defining the coefficients and evaluating
 # :math:`E` at the shifted positions :math:`x_\mu`:
@@ -671,7 +680,7 @@ def parameter_shift_first(fun, R):
 #
 # .. math ::
 #
-#   E''(0) &= -E(0)\frac{2R^2+1}{6} - \sum_{\mu=1}^{2R-1} E\left(\frac{\mu\pi}{R}\right)\frac{(-1)^\mu}{2\sin^2 \left(\frac{\mu\pi}{2R}\right)}.
+#   E''(0) = -E(0)\frac{2R^2+1}{6} - \sum_{\mu=1}^{2R-1} E\left(\frac{\mu\pi}{R}\right)\frac{(-1)^\mu}{2\sin^2 \left(\frac{\mu\pi}{2R}\right)}.
 #
 # Let's code this up, again we only get slight complications from the special evaluation
 # at :math:`0`:
@@ -693,7 +702,7 @@ def parameter_shift_second(fun, R):
 
 ###############################################################################
 # Let's compare these two shift rules to the finite-difference derivative commonly used for
-# numerical differentiation. We choose a finite difference of :math:`d_x=5\cdot10^{-5}`.
+# numerical differentiation. We choose a finite difference of :math:`d_x=5\times 10^{-5}`.
 
 
 # Compute the parameter-shift derivatives
@@ -890,8 +899,8 @@ for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
         "All entries match" if np.allclose(cost_grads, recon_grads) else "Some entries differ!"
     )
     print(f"{name} derivatives via jax: {all_equal}")
-    print("From the cost functions:       ", np.round(np.array(cost_grads), 5))
-    print(f"From the {recon_name} reconstructions: ", np.round(np.array(recon_grads), 5), "\n")
+    print("From the cost functions:       ", np.round(np.array(cost_grads), 6))
+    print(f"From the {recon_name} reconstructions: ", np.round(np.array(recon_grads), 6), "\n")
 
 
 ###############################################################################
