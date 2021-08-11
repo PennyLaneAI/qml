@@ -1,7 +1,5 @@
 r"""
 
-todo: restructure even/odd reconstruction parts into odd Eq - odd code - even Eq - even code
-
 .. _general_parshift:
 
 General parameter-shift rules for quantum gradients
@@ -763,26 +761,12 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 #   E_\text{odd}(x) &= \sum_{\mu=1}^R E_\text{odd}(x_\mu) \tilde{D}_\mu(x)\\
 #   \tilde{D}_\mu(x) &= \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} - \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)},
 #
-# whereas the even part is
-#
-# .. math ::
-#
-#   E_\text{even}(x) &= \sum_{\mu=0}^R E_\text{even}(x_\mu) \hat{D}_\mu(x)\\
-#   \hat{D}_\mu(x) &=
-#   \begin{cases}
-#      \frac{\sin(Rx)}{2R \tan(x/2)} &\text{if } \mu = 0 \\
-#      \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} + \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)} & \text{if } \mu \in [R-1] \\
-#      \frac{\sin(R (x-\pi))}{2R \tan\left(\frac{1}{2} (x-\pi)\right)} & \text{if } \mu = R.
-#   \end{cases}
-#
-# Note that the shifted positions :math:`\{x_\mu\}` differ between the odd and even case.
-# We will now implement these equations, using the reformulation
-#
+# which we can implement using the reformulation
 # .. math ::
 #
 #   \frac{\sin(X)}{\tan(Y)}=\frac{X}{Y}\frac{\operatorname{sinc}(X)}{\operatorname{sinc}(Y)}\cos(Y)
 #
-# for the kernels.
+# for the kernel.
 
 
 shifts_odd = lambda R: [(2 * mu - 1) * np.pi / (2 * R) for mu in range(1, R + 1)]
@@ -808,6 +792,26 @@ def odd_reconstruction_equ(fun, R):
 
     return reconstruction
 
+odd_reconstructions = list(map(odd_reconstruction_equ, cost_functions, Ns))
+
+
+###############################################################################
+# The even part on the other hand takes the form
+#
+# .. math ::
+#
+#   E_\text{even}(x) &= \sum_{\mu=0}^R E_\text{even}(x_\mu) \hat{D}_\mu(x)\\
+#   \hat{D}_\mu(x) &=
+#   \begin{cases}
+#      \frac{\sin(Rx)}{2R \tan(x/2)} &\text{if } \mu = 0 \\
+#      \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} + \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)} & \text{if } \mu \in [R-1] \\
+#      \frac{\sin(R (x-\pi))}{2R \tan\left(\frac{1}{2} (x-\pi)\right)} & \text{if } \mu = R.
+#   \end{cases}
+#
+# Note that the shifted positions :math:`\{x_\mu\}` differ between the odd and even case.
+# We also set up a function that performs both partial reconstructions and sums the resulting
+# functions to the full Fourier series.
+
 
 shifts_even = lambda R: [mu * np.pi / R for mu in range(1, R)]
 # Even linear combination of Dirichlet kernels
@@ -824,7 +828,6 @@ D_even = lambda x, R: np.array(
 D0 = lambda x, R: sinc(R * x) / (sinc(x / 2)) * np.cos(x / 2)
 Dpi = lambda x, R: sinc(R * (x - np.pi)) / sinc((x - np.pi) / 2) * np.cos((x - np.pi) / 2)
 
-
 def even_reconstruction_equ(fun, R):
     """Reconstruct the even part of ``R``-frequency input function via equidistant shifts."""
     _evaluations = np.array([(fun(shift) + fun(-shift)) / 2 for shift in shifts_even(R)])
@@ -837,6 +840,7 @@ def even_reconstruction_equ(fun, R):
 
     return reconstruction
 
+even_reconstructions = list(map(even_reconstruction_equ, cost_functions, Ns))
 
 def summed_reconstruction_equ(fun, R):
     """Sum an odd and an even reconstruction into the full function."""
@@ -849,16 +853,14 @@ def summed_reconstruction_equ(fun, R):
 
     return reconstruction
 
+summed_reconstructions = list(map(summed_reconstruction_equ, cost_functions, Ns))
+
 
 ###############################################################################
 # Let's now look at these even (blue) and odd (red) reconstructions and how they indeed
 # combine to the full function (we will use the ``compare_functions`` utility from above
 # for the latter).
 
-# Reconstruct odd and even parts and sum the functions
-odd_reconstructions = list(map(odd_reconstruction_equ, cost_functions, Ns))
-even_reconstructions = list(map(even_reconstruction_equ, cost_functions, Ns))
-summed_reconstructions = list(map(summed_reconstruction_equ, cost_functions, Ns))
 
 # Obtain the shifts for the reconstruction of both parts
 odd_and_even_shifts = [
