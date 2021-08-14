@@ -6,6 +6,7 @@ General parameter-shift rules for quantum gradients
 ===================================================
 
 .. meta::
+
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_genpar.png
 
@@ -275,8 +276,10 @@ for i, cost_function in enumerate(cost_functions):
 
 
 N = 6
+# Identity matrix acting on k qubits
+_eye = lambda k: np.ones(2 ** k)
 # PauliZ operator acting on the ith of N qubits
-PauliZ = lambda i: np.kron(np.ones(2 ** i), np.kron(np.array([1, -1]), np.ones(2 ** (N - 1 - i))))
+PauliZ = lambda i: np.kron(_eye(i), np.kron(np.array([1, -1]), _eye(N - 1 - i)))
 # Sum the PauliZ operators to the generator
 generator = 0.5 * np.sum(np.array(list(map(PauliZ, range(N)))), axis=0)
 # Show the unique eigenvalues
@@ -303,7 +306,7 @@ Omegas = sorted(
     list(
         set(
             _flatten(
-                [[omega1 - omega2 for omega1 in omegas if omega1 >= omega2] for omega2 in omegas]
+                [[om1 - om2 for om1 in omegas if om1 >= om2] for om2 in omegas]
             )
         )
     )
@@ -623,8 +626,7 @@ def cost(param):
 ###############################################################################
 # Now we sample initial parameters and run the ``rotosolve_step`` function repeatedly,
 # say 5 times corresponding to 15 univariate minimizations, and observe the cost
-# being minimized. We will mark the points between which each parameter was updated once
-# (orange circles).
+# being minimized.
 
 
 rnd.seed(seed)
@@ -640,13 +642,23 @@ for step in range(5):
     y_values.extend(_y_values)
 print(f"Final cost: {y_values[-1]}")
 
-# Plot the optimization curve and the cost after each full iteration
+
+###############################################################################
+# Let's also look at the optimization in a plot. We will show the energy after each
+# ``rotosolve_substep`` and additionally mark the energies after each ``rotosolve_step``,
+# between which each parameter was updated once (orange circles).
+
+
+# Number of substeps at which steps are completed
 iterations = range(0, len(y_values), len(Rs))
 fig, ax = plt.subplots(1, 1, figsize=(5, 4))
-plt.plot(y_values, color=green)
-plt.plot(iterations, y_values[:: len(Rs)], ls="", marker="o", color=orange)
-plt.xlabel("$\#$ Univariate updates")
-_ = plt.ylabel("$E$")
+# Energies after substeps
+ax.plot(y_values, color=green)
+# Energies after steps
+ax.plot(iterations, y_values[:: len(Rs)], ls="", marker="o", color=orange)
+# Labels
+ax.set_xlabel("$\#$ Univariate updates")
+_ = ax.set_ylabel("$E$")
 
 
 ###############################################################################
@@ -695,12 +707,13 @@ def parameter_shift_first(fun, R):
 
 def parameter_shift_second(fun, R):
     """Compute the second-order derivative of a function with R frequencies at 0."""
+    shifts = [mu * np.pi / (2 * R) for mu in range(1, 2 * R)]
     # Classically computed coefficients for the main sum
-    _coeffs = [-((-1) ** mu) / (2 * np.sin(mu * np.pi / (2 * R)) ** 2) for mu in range(1, 2 * R)]
+    _coeffs = [(-1) ** mu / (2 * np.sin(shift) ** 2) for mu, shift in enumerate(shifts)]
     # Include the coefficients for the "special" term E(0).
     coeffs = np.array([-(2 * R ** 2 + 1) / 6] + _coeffs)
     # Evaluate at the regularily shifted positions
-    _evaluations = [fun(mu * np.pi / R) for mu in range(1, 2 * R)]
+    _evaluations = [fun(2 * shift) for shift in shifts]
     # Include the "special" term E(0).
     evaluations = np.array([fun(0)] + _evaluations)
     # Contract coefficients with evaluations.
@@ -762,6 +775,7 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 #   \tilde{D}_\mu(x) &= \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} - \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)},
 #
 # which we can implement using the reformulation
+#
 # .. math ::
 #
 #   \frac{\sin(X)}{\tan(Y)}=\frac{X}{Y}\frac{\operatorname{sinc}(X)}{\operatorname{sinc}(Y)}\cos(Y)
@@ -791,6 +805,7 @@ def odd_reconstruction_equ(fun, R):
         return np.dot(evaluations, D_odd(x, R))
 
     return reconstruction
+
 
 odd_reconstructions = list(map(odd_reconstruction_equ, cost_functions, Ns))
 
@@ -828,6 +843,7 @@ D_even = lambda x, R: np.array(
 D0 = lambda x, R: sinc(R * x) / (sinc(x / 2)) * np.cos(x / 2)
 Dpi = lambda x, R: sinc(R * (x - np.pi)) / sinc((x - np.pi) / 2) * np.cos((x - np.pi) / 2)
 
+
 def even_reconstruction_equ(fun, R):
     """Reconstruct the even part of ``R``-frequency input function via equidistant shifts."""
     _evaluations = np.array([(fun(shift) + fun(-shift)) / 2 for shift in shifts_even(R)])
@@ -840,7 +856,9 @@ def even_reconstruction_equ(fun, R):
 
     return reconstruction
 
+
 even_reconstructions = list(map(even_reconstruction_equ, cost_functions, Ns))
+
 
 def summed_reconstruction_equ(fun, R):
     """Sum an odd and an even reconstruction into the full function."""
@@ -852,6 +870,7 @@ def summed_reconstruction_equ(fun, R):
         return _odd_part(x) + _even_part(x)
 
     return reconstruction
+
 
 summed_reconstructions = list(map(summed_reconstruction_equ, cost_functions, Ns))
 
