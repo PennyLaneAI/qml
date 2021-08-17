@@ -32,13 +32,13 @@ version can be found together with details on the reconstruction idea, derivatio
 parameter-shift rules, and considerations for multivariate functions in the paper
 `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`_
 [#GenPar]_.
-The core idea to consider these quantum functions as Fourier series was also presented in
+The core idea to consider these quantum functions as Fourier series was first presented in
 the preprint
-`Calculus on parameterized quantum circuits <https://arxiv.org/abs/1812.06323>`_ [#CalcPQC]_, which derived different, slightly less efficient shift rules from this.
-We will follow [#GenPar]_ regarding the contents and notation but also point out two more
-preprints discussing general parameter-shift rules: an algebraic approach in
-`Analytic gradients in variational quantum algorithms: Algebraic extensions of the parameter-shift rule to general unitary transformations <https://arxiv.org/abs/2107.08131>`_ [#AlgeShift]_ and
-one focusing on special gates and spectral decompositions, namely
+`Calculus on parameterized quantum circuits <https://arxiv.org/abs/1812.06323>`_ [#CalcPQC]_,
+we will follow [#GenPar]_, but there also are two preprints discussing general parameter-shift
+rules: an algebraic approach in
+`Analytic gradients in variational quantum algorithms: Algebraic extensions of the parameter-shift rule to general unitary transformations <https://arxiv.org/abs/2107.08131>`_ [#AlgeShift]_
+and one focusing on special gates and spectral decompositions, namely
 `Generalized quantum circuit differentiation rules <https://arxiv.org/abs/2108.01218>`_
 [#GenDiffRules]_.
 
@@ -186,8 +186,8 @@ pink = "xkcd:bright pink"
 # restrict ourselves to positive frequencies :math:`\Omega_{\ell}=\ell` as :math:`E(x)` is
 # real-valued. This is because :math:`B` is Hermitian, which implies (anti-)symmetry for the
 # real (imaginary) Fourier coefficients.
-#
 # This is true for any number of qubits (and therefore ``RZ`` gates) we use.
+#
 # Using our function ``make_cost`` from above, we create the functions for several
 # numbers of qubits and store both the function and its evaluations on the plotting range
 # ``X``.
@@ -302,15 +302,13 @@ print(f"The eigenvalues are: {omegas}")
 
 from pennylane.utils import _flatten
 
-Omegas = sorted(
-    list(
-        set(
-            _flatten(
-                [[om1 - om2 for om1 in omegas if om1 >= om2] for om2 in omegas]
-            )
-        )
-    )
+# Compute all differences, including duplicates
+differences = _flatten(
+    [[om1 - om2 for om1 in omegas if om1 >= om2] for om2 in omegas]
 )
+# Remove duplicates and sort in ascending order
+Omegas = sorted(list(set(differences)))
+
 print(f"The frequencies are: {Omegas}")
 
 
@@ -419,7 +417,7 @@ axs = compare_functions(cost_functions, reconstructions_equ, Ns, equ_shifts)
 
 
 ###############################################################################
-# *Works.*
+# *It Works!*
 #
 # Now let's test the reconstruction with less regular sampling points on which to evaluate
 # :math:`E`. This means we can no longer use the closed from expression from above but switch
@@ -502,33 +500,22 @@ axs = compare_functions(cost_functions, reconstructions_gen, Ns, shifts)
 # very close to each other, so that inverting the matrix :math:`C` becomes less stable numerically.
 # Conceptually, we see that the reconstruction does not rely on equidistant evaluations points.
 #
-# For some applications, the number of frequencies :math:`R` is not known exactly but an upper
-# bound might be available. In this case, it is very useful that a reconstruction which assumes
-# *too many* frequencies in :math:`E(x)` works perfectly fine, and just spends too many evaluations.
-# Here we demonstrate this by repeating the previous code cell, but assume :math:`R` to be larger
-# than we know it to be and sample four too many shifts:
-
-
-# Sample more shifts than required for the original function
-shifts = [rnd.random(2 * (N + 2) + 1) * 2 * np.pi - np.pi for N in Ns]
-reconstructions_gen = list(map(full_reconstruction_gen, cost_functions, shifts))
-axs = compare_functions(cost_functions, reconstructions_gen, Ns, shifts)
-
-
-###############################################################################
-# There are two disadvantages when doing this: first, we have to evaluate :math:`E` at more shifted
-# positions if we only know a loose upper bound to :math:`R`; and second, when using randomly
-# sampled shifts, we are more likely to sample some that are close to each other, leading to
-# numerical instability.
-# While the latter aspect can easily be taken care of by enforcing a minimal distance between the
-# sampled shifts or choosing regular ones, there is no immediate remedy for the former, which is
-# highly relevant in applications.
-# In addition, not only the number of distinct circuits to evaluate grows with :math:`R`, which is
-# important for simulators and cloud queueing, but also the number of required measurements, which
-# is meaningful for the (time) complexity of quantum operations, does so as well!
+# .. note ::
+#
+#     For some applications, the number of frequencies :math:`R` is not known exactly but an upper
+#     bound for :math:`R` might be available. In this case, it is very useful that a reconstruction
+#     that assumes *too many* frequencies in :math:`E(x)` works perfectly fine.
+#     However, it has the disadvantage of spending too many evaluations on the reconstruction
+#     and similarly the number of required measurements, which is meaningful for the (time)
+#     complexity of quantum algorithms, does so as well!
 #
 # Rotosolve
 # ---------
+#
+# .. note ::
+#
+#     Before going through this section, we recommend that readers refer to the
+#     :doc:`Rotosolve & Rotoselect tutorial </demos/tutorial_rotoselect>`.
 #
 # Now what can we do with these reconstruction methods? Before diving into the computation of
 # derivatives, a first idea is to obtain the global minimum of this univariate function.
@@ -543,7 +530,7 @@ axs = compare_functions(cost_functions, reconstructions_gen, Ns, shifts)
 
 from scipy.optimize import brute, shgo
 
-optimizer = "brute"  # "shgo"
+optimizer = "brute"  # Can be changed to "shgo"
 axs = compare_functions(cost_functions, reconstructions_equ, Ns, equ_shifts, show_diff=False)
 
 for i, (recon, N) in enumerate(zip(reconstructions_equ, Ns)):
