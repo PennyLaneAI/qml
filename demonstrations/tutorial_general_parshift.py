@@ -561,7 +561,7 @@ for i, (recon, N) in enumerate(zip(reconstructions_equ, Ns)):
 # The idea of using this one-dimensional minimization for functions of multiple variables, by
 # applying it coordinate-wise, was proposed in general in [#CalcPQC]_ and for Pauli rotation
 # gates in particular in [#Rotosolve]_. The name for this algorithm, put forward by the latter
-# paper, is *Rotosolve* and more generally, methods that optimize a subset of parameters at a
+# paper, is *Rotosolve* and methods that optimize a subset of parameters at a
 # time are often referred to as *layerwise training*.
 # For completeness and as a minimal example, we here write out Rotosolve for quantum gates with
 # equidistant frequencies, but PennyLane also provides a full implementation via |Rotosolve_code|_.
