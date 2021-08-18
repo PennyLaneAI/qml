@@ -227,7 +227,7 @@ plateaus in quantum neural networks.
 
 .. customgalleryitem::
     :tooltip: Adaptive circuits for quantum chemistry.
-    :figure: demonstrations/adapt_circ/lih.png
+    :figure: demonstrations/adaptive_circuits/main.png
     :description: :doc:`demos/tutorial_adaptive_circuits`
     :tags: chemistry
 

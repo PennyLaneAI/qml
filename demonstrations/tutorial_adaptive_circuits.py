@@ -34,6 +34,12 @@ excitations that are found to be important for the given molecule. This can be d
 adaptive methods to construct a circuit for each given problem [#grimsley2019]_. Using adaptive
 circuits helps improve performance at the cost of reducing generality.
 
+.. figure:: /demonstrations/adaptive_circuits/main.png
+    :width: 50%
+    :align: center
+
+    Examples of selecting specific single and double excitation gates to generate adaptive circuits.
+
 In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
 This includes a recipe to adaptively select gates that have a significant contribution to
 the desired state, while neglecting those that have a small contribution. You will also learn how to use
@@ -192,9 +198,14 @@ singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0
 singles_select
 
 ##############################################################################
-# We now have all of the gates we need to build our circuit and perform one final step of
-# optimization to get the ground-state energy. The resulting energy should match the exact energy of
-# the ground electronic state of LiH which is -7.8825378193 Ha.
+# We now have all of the gates we need to build our circuit.
+#
+# .. figure:: /demonstrations/adaptive_circuits/adapted_circuit.png
+#   :width: 50%
+#   :align: center
+#
+# We perform one final step of optimization to get the ground-state energy. The resulting energy
+# should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
