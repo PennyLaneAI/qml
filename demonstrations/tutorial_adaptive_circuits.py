@@ -50,9 +50,9 @@ Adaptive circuits
 -----------------
 
 The main idea behind building adaptive circuits is to compute the gradients with respect to all
-possible excitation gates, and then select gates based on the magnitude of the computed gradients. 
+possible excitation gates and then select gates based on the magnitude of the computed gradients.
 
-There are different ways to make use of the gradient information, and here we discuss one of
+There are different ways to make use of the gradient information and here we discuss one of
 these strategies and apply it to compute the ground state energy of LiH. This method requires constructing the
 Hamiltonian and determining all possible excitations, which we can do with functionality built into PennyLane.
 But we first need to define the molecular parameters, including atomic symbols and coordinates.
@@ -69,9 +69,9 @@ geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 
 ##############################################################################
 # We now compute the molecular Hamiltonian in the
-# `STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_ basis and the electronic excitations.
-# Here we restrict ourselves to single and double excitations, but higher-level ones, such as
-# triple and quadruple excitations, can be considered as well. Each of these electronic excitations
+# `STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_ basis and obtain the electronic
+# excitations. We restrict ourselves to single and double excitations, but higher-level ones such
+# as triple and quadruple excitations can be considered as well. Each of these electronic excitations
 # is represented by a gate that excites electrons from the occupied orbitals of a reference state to
 # the unoccupied ones. This allows us to prepare a state that is a superposition of the reference
 # state and all of the excited states.
@@ -116,7 +116,7 @@ def circuit_1(params, wires, excitations):
 
 
 ##############################################################################
-# We now construct our first group of gates by including all the double excitations, and compute the
+# We now construct our first group of gates by including all the double excitations and compute the
 # gradient for each one. We also need to define a device and a cost
 # function. We initialize the parameter values to zero such that the gradients are computed
 # with respect to the Hartree-Fock state.
@@ -184,7 +184,10 @@ circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
 
 grads = circuit_gradient(
-    params, excitations=singles, gates_select=doubles_select, params_select=params_doubles
+    params,
+    excitations=singles,
+    gates_select=doubles_select,
+    params_select=params_doubles
 )
 
 for i in range(len(singles)):
@@ -221,7 +224,7 @@ for n in range(20):
     print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
 ##############################################################################
-# Success! We obtained the exact ground state energy of LiH, within chemical accuracy, by having
+# Success! We obtained the ground state energy of LiH, within chemical accuracy, by having
 # only 10 gates in our circuit. This is less than half of the total number of single and double
 # excitations of LiH (24).
 
@@ -249,9 +252,9 @@ H_sparse
 # Leveraging this sparsity can significantly reduce the
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
 # value of the sparse Hamiltonian observable. This can reduce the cost of simulations by
-# orders of magnitude depending on the molecular size. We use the selected gates in the previous
-# steps and perform the final optimization step with the sparse method. Note that the sparse method
-# currently only works with the parameter-shift differentiation method.
+# orders of magnitude depending on the size of the molecule. We use the selected gates obtained in
+# the previous steps and perform the final optimization step with the sparse method. Note that the
+# sparse method currently only works with the parameter-shift differentiation method.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
@@ -283,10 +286,10 @@ for n in range(20):
     print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
 ##############################################################################
-# Using the sparse method reproduces the exact ground state energy while the optimization time is
-# much shorter. The average iteration time for the sparse method is about 18 times smaller than the
-# original non-sparse approach. The performance of the sparse optimization will be even better for
-# larger molecules.
+# Using the sparse method reproduces the ground state energy while the optimization time is
+# much shorter. The average iteration time for the sparse method is about 18 times smaller than that
+# of the original non-sparse approach. The performance of the sparse optimization will be even
+# better for larger molecules.
 #
 # Conclusions
 # -----------
@@ -311,13 +314,6 @@ for n in range(20):
 #     `Chem. Rev. 2019, 119, 19, 10856-10915.
 #     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
-# .. [#grimsley2019]
-#
-#     Harper R. Grimsley, Sophia E. Economou, Edwin Barnes,  Nicholas J. Mayhall, "An adaptive
-#     variational algorithm for exact molecular simulations on a quantum computer".
-#     `Nat. Commun. 2019, 10, 3007.
-#     <https://www.nature.com/articles/s41467-019-10988-2>`__
-#
 # .. [#romero2017]
 #
 #     J. Romero, R. Babbush, *et al.*, "Strategies for quantum computing molecular
@@ -327,3 +323,10 @@ for n in range(20):
 # .. [#givenstutorial]
 #
 #     :doc:`tutorial_givens_rotations`
+#
+# .. [#grimsley2019]
+#
+#     Harper R. Grimsley, Sophia E. Economou, Edwin Barnes,  Nicholas J. Mayhall, "An adaptive
+#     variational algorithm for exact molecular simulations on a quantum computer".
+#     `Nat. Commun. 2019, 10, 3007.
+#     <https://www.nature.com/articles/s41467-019-10988-2>`__
