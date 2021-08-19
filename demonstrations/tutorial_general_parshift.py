@@ -679,9 +679,9 @@ for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
 #
 #     While we used the :math:`2R+1` evaluations :math:`x_\mu=\frac{2\mu\pi}{2R+1}` for the full
 #     reconstruction, derivatives only require :math:`2R` calls to the respective circuit.
-#     Note that the derivatives can be computed at any position :math:`x_0` other than :math:`0`
-#     by simply reconstructing the function :math:`E(x+x_0)`, which again will be a Fourier series
-#     like :math:`E(x)`.
+#     Also note that the derivatives can be computed at any position :math:`x_0` other than 
+#     :math:`0` by simply reconstructing the function :math:`E(x+x_0)`, which again will be
+#     a Fourier series like :math:`E(x)`.
 #
 # Generalized parameter-shift rules
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
