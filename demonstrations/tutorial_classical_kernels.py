@@ -144,6 +144,190 @@ import math
 
 np.random.seed(42)
 
+###############################################################################
+# now we define the function and plot it as a mild sanity check:
+
+def gaussian_kernel(delta):
+    return math.exp(-delta ** 2)
+
+def make_data(n_samples, lower=-np.pi, higher=np.pi):
+    X = np.linspace(lower, higher, n_samples)
+    Y = np.array([gaussian_kernel(x) for x in X])
+    
+    return X, Y
+
+X, Y_gaussian = make_data(100)
+
+plt.plot(X, Y_gaussian)
+plt.show();
+
+###############################################################################
+# That's exactly what I have in mind when I think of a Gauss bell curve.
+# So far so good!
+#
+# Quantum Embedding Kernels
+# --------------------------
+#
+# The quantum algorithms we build today belong to the family of Quantum
+# Embedding Kernels (QEKs), which were introduced in LINK TO QEK DEMO.
+# In a nutshell, a QEK can be thought of as a function estimated with a quantum
+# computer in which, by doubling the size of the circuit, we spare ourselves
+# the trouble of finding a good measurement observable.
+# Indeed, for a given feature map :math:`\rho:\mathcal{X}\to\mathcal{H}_d`,
+# where :math:`\mathcal{H}_d` is the Hilbert space of a quantum system of
+# :math:`d` dimensions (also called a qu:math:`d`it), we have the associated
+# QEK:
+#
+# .. math:: k_Q(x_1, x_2) = \operatorname{tr}[\rho(x_1)\rho^\dagger(x_2)].
+#
+# 
+# Now, oftentimes the feature map will be nothing other than applying a unitary
+# gate depending on the data :math:`U(x)` to the ground state of the
+# qu:math`d`it:
+# 
+# .. math:: \rho(x) = U(x)\vert0\rangle\!\langle0\vert U^\dagger(x).
+#
+# In this very natural case, the QEK reduces to an expression which maybe looks
+# more familiar to some
+#
+# .. math:: k_Q(x_1, x_2) = \lvert\langle0\vert
+# U^\dagger(x_1)U(x_2)\vert0\rangle\rvert^2.
+#
+# And this is the bare bone of what we call Quantum Embedding Kernels!
+#
+# By now you may have already realized QEKs are very cool and all but they have
+# one shortcoming: in general :math:`k_Q` won't be a shift-invariant function
+# (but why is this a shortcoming?! I don't know, you tell me!)
+# The key word here is *general*.
+# General QEKs are not shift-invariant, so one reasonable question would be:
+# which restrictions do we have to impose for these kernels to be
+# shift-invariant?
+# We are not going to fully answer this question here, but rather take one
+# first step towards it.
+# Namely, we next introduce one particular class of QEKs which are indeed
+# shift-invariant.
+# Behold, ladies and gents, *the Boring kernel*!
+#
+# The Boring kernel
+# ------------------
+#
+# The boring kerne is a stationary kernel that can be estimated with a
+# qu:math:`d`it-based algorithm with only three gates.
+# The first and last gates are adjoint of one another, we name them :math:`W`
+# and :math:`W^\dagger` respectively.
+# :math:`W` is a trainable :math:`d`-dimensional unitary, independent of the
+# input data.
+# The data is encoded as the time parameter in the time evolution of a diagonal
+# number-operator hamiltonian :math:`H_d=\operatorname{diag}(0, 1, \ldots,
+# d-1)`.
+# Circuitwise, this is a diagonal unitary :math:`S(x)` whose entries are
+# :math:`e^{-ijx}` for :math:`j\in\{0, \ldots, d-1\}`
+#
+# .. math:: S(x) = \operatorname{diag}(0, e^{-ix}, e^{-i2x}, \ldots,
+# e^{-i(d-1)x}).
+#
+# A priori we can think of :math:`W` as *any* :math:`d`-dimensional unitary.
+# Only when it comes to actually implementing the boring kernel in a computer
+# will we have to think about how to parametrize it.
+#
+# Using a similar formalism to that of LINK TO FOURIER PAPER (further
+# illustrated in LINK TO FOURIER DEMO), we reach an axpression for the boring
+# kernel :math:`k_d`:
+#
+# .. math:: k_d(\delta) = \sum_{s=-(d-1)}^{d-1} a_s e^{i\delta s},
+#
+# where
+#
+# .. math:: a_s = \sum_{j=\lvert s\rvert}^{d-1} w_j w_{j-\lvert s\rvert},
+#
+# and where :math:`w_j = \lvert W_{j,0}\rvert^2` is the absolut value squared
+# of the :math:`j^\text{th}` element of the first column of the matrix
+# representation of :math:`W`.
+#
+# Implementing the boring kernel on PennyLane
+# --------------------------------------------
+#
+# Now that we've laid out the formulas, we only need to write down the PL code
+# that relized the quantum circuit, right?
+# Wrong!!
+# But, kind of right.
+#
+# We do only have to realize the quantum circuit, but as it turns out, we can
+# only operate on qubits, not qu:math:`d`its!
+# So, what can we do?
+# We can set :math:`d=2^n` for some :math:`n\in\mathbb{N}` and then use
+# :math:`n` qubits, which are analogous to a qu:math:`2^n`it.
+#
+# This is the point where we will have to fix an Ansatz for :math:`W`, and
+# since we want to work with qubits we shall use a few trainable Pauli
+# rotations interleaved with also trainable entangling gates so we can get
+# reasonably close an arbitrary unitary.
+#
+# But what about :math:`S(x)`?
+# Conceptually, the definition we've given with the number operator hamiltonian
+# is already quite simple, but how do we implement it on a qubit based system?
+#
+# The fact is we can replicate the eigenvalue spectrum of :math:`S` with a
+# layer of Pauli-Z rotations, one on each qubit
+# 
+# .. math:: R_{Z_1}(\vartheta_1 x)\otimes R_{Z_2}(\vartheta_2
+# x)\otimes\cdots\otimes R_{Z_m}(\vartheta_n x) =
+# \operatorname{diag}(e^{-i\lambda_1x}, \ldots, e^{-i\lambda_{2^n}x}).
+#
+# In particular, we want to find :math:`\vartheta_1, \ldots, \vartheta_n` such
+# that for all :math:`j` the eigenvalues fulfill :math:`\lambda_{j+1} -
+# \lambda_j = 1`.
+# This might seem a bit strange, but since multiplication times a global phase
+# :math:`e^{i\alpha}` has no physical effect, if we find the combination of
+# parameters that yields :math:`\lambda_j = \lambda_1 + (j - 1)`, then we can
+# multiply everything with :math:`e^{-i\lambda_1x}` to obtain the desired
+# spectrum :math:`(0, 1, \ldots, 2^n-1)`.
+#
+# We will also be spared of some details here (or, as your quantum mechanics
+# prof would say, the derivation is left as an exercise for the reader), but
+# one valid choice for this to happen is :math:`\vartheta_j = -2^{j-1}`.
+#
+# With this, we can *finally* start getting our hands dirty!
+#
+# Writing down the circuit
+# -------------------------
+#
+# The boring kernel is defined irrespective of the qu:math:`d`it dimension.
+# We can directly define :math:`S(x)`, where we include a `thetas` argument in
+# case at a later stage we want to try encoding with different diagonal
+# Hamiltonians:
+
+def S(x, thetas, wires):
+    for (i, wire) in enumerate(wires):
+        qml.RZ(thetas[i] * x, wires = [wire])
+
+
+###############################################################################
+# For :math:`W` we use a few layers of single qubit Pauli rotations and two
+# qubit entangling gates, all trainable:
+#
+# WHY ARE ALL OF THEM X ROTATIONS? SHOULDN´T I RATHER USE THE ENTANGLING LAYER
+# TEMPLATES?
+
+def W(parameters, wires):
+    # 1st layer: trainable Pauli X rotations
+    for (i, wire) in enumerate(wires):
+        qml.RX(parameters[0][i], wires = [wire])
+
+    # 2nd layer: ring of controlled Pauli X rotations
+    qml.broadcast(unitary=qml.CRX, pattern="ring", wires=wires,
+                  parameters=parameters[1])
+
+    # 3rd layer: trainable Pauli X rotations
+    for (i, wire) in enumerate(wires):
+        qml.RX(parameters[2][i], wires=[wire])
+
+    # 4th layer: ring of controlled Pauli X rotations
+    qml.broadcast(unitary=qml.CRX, pattern="ring", wires=wires,
+                  parameters=parameters[3])
+
+
+
 # Create a device with 2 qubits.
 dev = qml.device("default.qubit", wires=2)
 
