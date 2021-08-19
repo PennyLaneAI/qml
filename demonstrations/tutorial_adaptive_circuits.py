@@ -13,7 +13,7 @@ Adaptive circuits for quantum chemistry
     tutorial_givens_rotations Givens rotations for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted:  2021. Last updated: *
+*Author: PennyLane dev team. Posted:  2021. Last updated: 18 August 2021*
 
 The key component of variational quantum algorithms for quantum chemistry is the circuit used to
 prepare electronic ground states of a molecule. The variational quantum eigensolver (VQE)
@@ -35,7 +35,7 @@ adaptive methods to construct a circuit for each given problem [#grimsley2019]_.
 circuits helps improve performance at the cost of reducing generality.
 
 .. figure:: /demonstrations/adaptive_circuits/main.png
-    :width: 50%
+    :width: 75%
     :align: center
 
     Examples of selecting specific single and double excitation gates to generate adaptive circuits.
@@ -198,10 +198,11 @@ singles_select = [singles[i] for i in range(len(singles)) if abs(grads[i]) > 1.0
 singles_select
 
 ##############################################################################
-# We now have all of the gates we need to build our circuit.
+# We now have all of the gates we need to build our circuit. The selected single and double
+# excitation gates are highlighted in the figure below.
 #
 # .. figure:: /demonstrations/adaptive_circuits/adapted_circuit.png
-#   :width: 50%
+#   :width: 100%
 #   :align: center
 #
 # We perform one final step of optimization to get the ground-state energy. The resulting energy
@@ -237,8 +238,13 @@ H_sparse = qml.utils.sparse_hamiltonian(H)
 H_sparse
 
 ##############################################################################
-# The matrix has :math:`1024^2=1,048,576` entries, but only 11264 of them
-# are non-zero. Leveraging this sparsity can significantly reduce the
+# The matrix has :math:`1024^2=1,048,576` entries, but only 11264 of them are non-zero.
+#
+# .. figure:: /demonstrations/adaptive_circuits/h_sparse.png
+#   :width: 65%
+#   :align: center
+#
+# Leveraging this sparsity can significantly reduce the
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
 # value of the sparse Hamiltonian observable. This can reduce the cost of simulations by
 # orders of magnitude depending on the molecular size. We use the selected gates in the previous
