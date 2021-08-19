@@ -181,7 +181,7 @@ hardware.
 
 .. customgalleryitem::
     :tooltip: Adaptive circuits for quantum chemistry.
-    :figure: demonstrations/adaptive_circuits/adapted_circuit.png
+    :figure: demonstrations/adaptive_circuits/thumbnail.png
     :description: :doc:`demos/tutorial_adaptive_circuits`
     :tags: chemistry
 
