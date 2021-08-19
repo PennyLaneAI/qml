@@ -225,12 +225,6 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_quantum_analytic_descent`
     :tags: optimization model vqe
 
-.. customgalleryitem::
-    :tooltip: Adaptive circuits for quantum chemistry.
-    :figure: demonstrations/adaptive_circuits/main.png
-    :description: :doc:`demos/tutorial_adaptive_circuits`
-    :tags: chemistry
-
 :html:`</div></div><div style='clear:both'>`
 
 
