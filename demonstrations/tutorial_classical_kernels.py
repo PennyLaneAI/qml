@@ -11,10 +11,10 @@ Emulating classical kernels
 
 .. related::
 
-   tutorial_vqe A brief overview of VQE
-   tutorial_quantum_natural_gradient Quantum Natural Gradient (QNG)
-   tutorial_rotoselect Leveraging trigonometry with Rotoselect
-   tutorial_stochastic_parameter_shift Obtaining gradients stochastically
+   tutorial_kernels_module Training and evaluating quantum kernels
+   tutorial_kernel_based_training Kernel-based training of quantum models with
+   scikit-learn
+   tutorial_expressivity_fourier_series Quantum models as Fourier series
 
 
 *Author: Elies Gil-Fuster (Xanadu resident). Posted: DD MMMM 2021.*
@@ -43,10 +43,15 @@ and (b) a number of points shifted away from :math:`\boldsymbol{\theta}_0`.
 With the cost values at these points, we can build the classical model that
 approximates the landscape.
 
-In this demo, you will learn how to implement Quantum Analytic Descent using PennyLane.
-In addition, you will look under the hood of the constructed models and the optimization steps
-carried out by the algorithm.
-So: sit down, relax, and enjoy your optimization!
+In this demo we will briefly revisit some notions of kernel-based Machine
+Learning (ML) and introduce one very specific Quantum Embedding Kernel (QEK)
+LINK TO QEK DEMO.
+We will also use this QEK to demonstrate we can approximate a large class of
+classical kernels with it, known as shift-invariant or stationary kernels.
+Both the math and the code will stay high-level throughout the explanation,
+this is not one of those very technical demos!
+So, if you feel like exploring one link between classical and quantum kernels,
+this is the place for you!
 
 |
 
@@ -59,45 +64,85 @@ So: sit down, relax, and enjoy your optimization!
 
 
 
-VQEs give rise to trigonometric cost functions
+Kernel-based Machine Learning
 ----------------------------------------------
 
-When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which are typically initialized in the base state :math:`|0\rangle`.
-The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
-After the variational form, the circuit ends with the measurement of a chosen observable
-:math:`\mathcal{M}`, based on the problem
-we are trying to solve.
+As we just said, in the interest of keeping the concepts at a high level we
+will not be reviewing all the notins of kernels in-depth here.
+Instead, we only need to know that there's an entire branch of ML which
+revolves around some functions we call kernels.
+If you'd still like to know more about where these functions come from, why
+they're important, and how we can use them (e.g. with PennyLane), luckily there
+are already two very nice demos that cover different aspects extensively:
+1. LINK TO KERNELS DEMO
+2. LINK TO QEK DEMO
 
-The idea in VQE is to fix a variational form such that the expected value of the measurement relates to the energy of an interesting Hamiltonian:
+Now, a kernel for us is a real-valued function of two variables
+:math:`k(\cdot,\cdot)` from a given data domain :math:`x_1, x_2\in\mathcal{X}`.
+Further, we require a kernel to be symmetric to exchanging the variable
+positions :math:`k(x_1,x_2) = k(x_2,x_1)`.
+Finally, we will also want to enforce the kernels be positive semi-definite,
+but let's avoit getting lost in mathematical definitions, you can trust that
+all kernels featuring in this demo are positive semi-definite.
 
-.. math:: E(\boldsymbol{\theta}) = \langle 0|V^\dagger(\boldsymbol{\theta})\mathcal{M}V(\boldsymbol{\theta})|0\rangle.
+If you take whichever textbook on kernel methods and search for the word
+``prominent", chances are you'll find it next to the word ``example" in a
+sentence that introduces the so-called Gaussian (Radial Basis Function) kernel
+:math:`k_\sigma`.
+For the sake of simplicity, we assume we are dealing with real numbers
+:math:`\mathcal{X}\subseteq\mathbb{R}`, in which case the Gaussian kernel looks
+like
 
-We want to find the lowest possible energy the system can attain;
-this corresponds to running an optimization program to find the :math:`\boldsymbol{\theta}` that minimizes the function above.
+.. math:: k_\sigma(x_1, x_2) = e^{-\frac{\lvert x_1 - x_2\rvert^2}{\sigma}},
 
+where the variance :math:`\sigma` is a positive real tunable parameter (the
+generalization to higher-dimensional data is straightforward using the
+Euclidean norm :math:`\lVert x_1 - x_2 \rVert_2^2`.)
+Now for practical purposes the Gaussian kernel has the advantage of being
+simple enough to study as a function, while still yielding good performance for
+real-life tasks.
 
-If the gates in the variational form are restricted to be Pauli rotations, then the cost function is a sum of *multilinear trigonometric terms* in each of the parameters.
-That's a scary sequence of words!
-What it means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
-That is, for each parameter :math:`\theta_i` there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` such that the cost can be written as
+In particular, one of the properties of the Gaussian kernel is that it is a
+shift-invariant function (also called stationary).
+That means that adding a constant shift to both arguments does not change the
+value of the kernel, that is for :math:`a\in\mathcal{X}`, we have
+:math:`k_\sigma(x_1 + a, x_2 + a) = k(x_1, x_2)`.
+At the same time, it also means we can express the kernel as a function of only
+one variable, the so-called lag (or shift) :math:`\delta = x_1 -
+x_2\in\mathbb{R}`, where we have
 
-.. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
+.. math:: k_\sigma(x_1, x_2) = e^{-\frac{\lvert x_1 - x_2 \rvert^2}{\sigma}} =
+e^{-\frac{\delta^2}{\sigma}} = k_\sigma(\delta).
 
-All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
-Another technique using this structure of :math:`E(\boldsymbol{\theta})` are the
-Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect.html>`__.
+Also, this combined with the property :math:`k(x_1, x_2) = k(x_2, x_1)` results
+in the new property :math:`k(\delta)=k(-\delta)`.
 
-Let's look at a toy example to illustrate this structure of the cost function.
+Of course the Gaussian kenrel is not the only shift-invariant kernel out there.
+As it turns out, there are many others (REFERENCES OR POINTERS OR SOMETHING!)
+which are also used in practice and have the shift-invariance property.
+Nevertheless, here we will only look at the simple Gaussian kernel with
+:math:`\sigma = 1`:
+
+.. math:: k_1(\delta) = e^{-\delta^2},
+
+but all the arguments and code we use are also amenable to other kernels which
+fulfill the following mild restrictions:
+1. Shift-invariance.
+2. Normalization :math:`k(0)=1`.
+3. Smoothness (seen as quickly decaying Fourier spectrum)
+
+Let's warm up our coding by writing the simple Gaussian kernel!
+
+First, importers gonna import B-)
 """
 
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
-import warnings
+import math 
 
-warnings.filterwarnings("ignore")
 
-np.random.seed(0)
+np.random.seed(42)
 
 # Create a device with 2 qubits.
 dev = qml.device("default.qubit", wires=2)
