@@ -38,7 +38,7 @@ circuits helps improve performance at the cost of reducing generality.
     :width: 75%
     :align: center
 
-    Examples of selecting specific single and double excitation gates to generate adaptive circuits.
+    Examples of selecting specific gates to generate adaptive circuits.
 
 In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
 This includes a recipe to adaptively select gates that have a significant contribution to
@@ -202,7 +202,7 @@ singles_select
 # excitation gates are highlighted in the figure below.
 #
 # .. figure:: /demonstrations/adaptive_circuits/adapted_circuit.png
-#   :width: 100%
+#   :width: 90%
 #   :align: center
 #
 # We perform one final step of optimization to get the ground-state energy. The resulting energy
@@ -243,6 +243,8 @@ H_sparse
 # .. figure:: /demonstrations/adaptive_circuits/h_sparse.png
 #   :width: 65%
 #   :align: center
+#
+#   Matrix representation of the LiH Hamiltonian in the computational basis.
 #
 # Leveraging this sparsity can significantly reduce the
 # simulation times. We use the implemented functionality in PennyLane for computing the expectation
