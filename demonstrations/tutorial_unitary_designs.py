@@ -473,14 +473,14 @@ def noisy_operations(damp_factor, depo_factor, flip_prob):
 def apply_noise(tape, damp_factor, depo_factor, flip_prob):
     # Apply the original operations
     for op in tape.operations:
-        op.queue()
+        qml.apply(op)
 
     # Apply the noisy sequence
     noisy_operations(damp_factor, depo_factor, flip_prob)
 
     # Apply the original measurements
-    for op in tape.measurements:
-        op.queue()
+    for m in tape.measurements:
+        qml.apply(m)
 
 ######################################################################
 # We can now apply this transform to create a noisy version of our ideal
@@ -503,24 +503,24 @@ def conjugate_with_unitary(tape, matrix):
     qml.QubitUnitary(matrix, wires=0)
 
     for op in tape.operations:
-        op.queue()
+        qml.apply(op)
 
     qml.QubitUnitary(matrix.conj().T, wires=0)
 
-    for op in tape.measurements:
-        op.queue()
+    for m in tape.measurements:
+        qml.apply(m)
 
 ######################################################################
 # Finally, in order to perform a comparison, we need a function to compute the
 # `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`__
 # compared to the ideal operation.
 
-def fidelity(state_1, state_2):
-    # state_1 and state_2 are single-qubit density matrices.
-    # This particular expression requires state_1 to be a pure state
-    fid = np.trace(np.dot(state_1, state_2)) + 2 * np.sqrt(
-        np.linalg.det(state_1) * np.linalg.det(state_2)
-    )
+from scipy.linalg import sqrtm
+
+def fidelity(rho, sigma):
+    # Inputs rho and sigma are density matrices
+    sqrt_sigma = sqrtm(sigma)
+    fid = np.trace(sqrtm(sqrt_sigma @ rho @ sqrt_sigma))
     return fid.real
 
 ######################################################################
@@ -575,12 +575,12 @@ def conjugate_with_clifford(tape, clifford_string):
     apply_single_clifford(clifford_string, inverse=False)
 
     for op in tape.operations:
-        op.queue()
+        qml.apply(op)
 
     apply_single_clifford(clifford_string, inverse=True)
 
-    for op in tape.measurements:
-        op.queue()
+    for m in tape.measurements:
+        qml.apply(m)
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as
