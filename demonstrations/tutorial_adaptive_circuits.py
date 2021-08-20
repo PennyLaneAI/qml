@@ -241,7 +241,7 @@ H_sparse = qml.utils.sparse_hamiltonian(H)
 H_sparse
 
 ##############################################################################
-# The matrix has :math:`1024^2=1,048,576` entries, but only 11264 of them are non-zero.
+# The matrix has :math:`1024^2=1,048,576` entries, but only :math:`11264` of them are non-zero.
 #
 # .. figure:: /demonstrations/adaptive_circuits/h_sparse.png
 #   :width: 65%
