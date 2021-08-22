@@ -147,6 +147,7 @@ def make_cost(N, seed):
     """Create a cost function on N qubits with N frequencies."""
     dev = qml.device("default.qubit", wires=N)
 
+    @jax.jit
     @qml.qnode(dev, interface="jax")
     def cost(x):
         """Cost function on N qubits with N frequencies."""
@@ -227,6 +228,14 @@ _ = axs[0].set_ylabel("$E$")
 # :math:`N` and therefore the number of gates parametrized by :math:`x`.
 # Let's take a look at the frequencies that are present in these functions, by using
 # PennyLane's :mod:`~.pennylane.fourier` module.
+# 
+# .. note ::
+# 
+#     The analysis tool :func:`~.pennylane.fourier.spectrum` makes use of the internal
+#     structure of the :class:`~.pennylane.QNode` that encodes the cost function.
+#     As we used the ``jax.jit`` decorator when defining the cost function above, we
+#     here need to pass the wrapped function to ``spectrum``, which is stored in
+#     ``cost_function.__wrapped__``.
 
 
 from pennylane.fourier import spectrum
@@ -234,7 +243,7 @@ from pennylane.fourier import spectrum
 spectra = []
 for N, cost_function in zip(Ns, cost_functions):
     # Compute spectrum with respect to parameter x
-    spec = spectrum(cost_function)(X[0])["x"]
+    spec = spectrum(cost_function.__wrapped__)(X[0])["x"]
     print(f"For {N} qubits the spectrum is {spec}.")
     # Store spectrum
     spectra.append([freq for freq in spec if freq>0.0])
@@ -534,6 +543,7 @@ def odd_reconstruction_equ(fun, R):
     """Reconstruct the odd part of an ``R``-frequency input function via equidistant shifts."""
     evaluations = np.array([(fun(shift) - fun(-shift)) / 2 for shift in shifts_odd(R)])
 
+    @jax.jit
     def reconstruction(x):
         """Odd reconstruction based on equidistant shifts."""
         return np.dot(evaluations, D_odd(x, R))
@@ -583,6 +593,7 @@ def even_reconstruction_equ(fun, R):
     evaluations = np.array([fun(0), *_evaluations, fun(np.pi)])
     kernels = lambda x: np.array([D0(x, R), *D_even(x, R), Dpi(x, R)])
 
+    @jax.jit
     def reconstruction(x):
         """Even reconstruction based on equidistant shifts."""
         return np.dot(evaluations, kernels(x))
