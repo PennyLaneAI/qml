@@ -10,7 +10,7 @@
     the excited energy states by transforming the |0⋯0⟩ to the ground state,
     and another orthogonal basis state |0⋯1⟩ to the first excited state and so on.
     As a demonstration, the weighted SSVQE is used to find out the excited states
-    of a Transverse Ising model with 4 spins and that of the Hydrogen molecule.
+    of a transverse Ising model with 4 spins and that of the hydrogen molecule.
 
 - title: Quantum PPO/TRPO - LSTMs and memory proximal policy optimization for black-box quantum control
   author: Abhilash Majumder
