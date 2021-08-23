@@ -178,7 +178,7 @@ pink = "xkcd:bright pink"
 #
 # Here, :math:`a_{\ell}` and :math:`b_{\ell}` are the *Fourier coefficients*.
 # If you would like to understand this a bit better still, have a read of
-# `:mod:`~.pennylane.fourier` and remember to check out the
+# :mod:`~.pennylane.fourier` and remember to check out the
 # :doc:`Fourier module tutorial </demos/tutorial_expressivity_fourier_series>`.
 #
 # Due to :math:`B` being Hermitian, :math:`E(x)` is a real-valued function, so 
