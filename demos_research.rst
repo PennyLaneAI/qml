@@ -128,7 +128,13 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Kernels and alignment training with PennyLane.
     :figure: demonstrations/kernels_module/QEK_thumbnail.png
     :description: :doc:`demos/tutorial_kernels_module`
-    :tags: kernels alignment classification 
+    :tags: kernels alignment classification
+
+.. customgalleryitem::
+    :tooltip: Approximating classical kernels with a quantum computer.
+    :figure: demonstrations/classical_kernels/boring_kernel.jpg
+    :description: :doc:`demos/tutorial_classical_kernels`
+    :tags: kernels approximation gaussian
 
 :html:`</div></div><div style='clear:both'>`
 
