@@ -17,7 +17,7 @@ Generalized parameter-shift rules
    tutorial_quantum_analytic_descent Building multivariate models with QAD
 
 
-*Author: David Wierichs (Xanadu resident). Posted: 19 August 2021.*
+*Author: David Wierichs (Xanadu resident). Posted: 23 August 2021.*
 
 In this demo we will look at univariate quantum functions, i.e., those that
 depend on a single parameter. We will investigate the form such functions usually take
@@ -691,7 +691,7 @@ colors = [green, red, blue, orange]
 styles = ['-', '-', '-', '--']
 handles = [Line2D([0], [0], color=c, ls=ls, lw=1.2) for c, ls in zip(colors, styles)]
 labels = ['Original', 'Odd reconstruction', 'Even reconstruction', 'Summed reconstruction']
-fig.legend(handles, labels, bbox_to_anchor=(0.2, 0.89), loc='lower left', ncol=4)
+_ = fig.legend(handles, labels, bbox_to_anchor=(0.2, 0.89), loc='lower left', ncol=4)
 
 
 ###############################################################################
