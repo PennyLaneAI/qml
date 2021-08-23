@@ -76,7 +76,7 @@ state, so that our cost function overall has the form
 
   E(x)=\langle\psi | U^\dagger(x) B U(x)|\psi\rangle
 
-with :math:`U(x)` summarizing the layer of ``RZ`` gates,
+Here, :math:`U(x)` consists of a layer of ``RZ`` gates,
 
 .. math ::
 
