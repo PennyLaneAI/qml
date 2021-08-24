@@ -6,7 +6,7 @@ Emulating classical kernels
 ============================
 
 .. meta::
-    :property="og:description": Show how to approximate the Gaussian kernel.
+    :property="og:description": Approximating the Gaussian kernel with quantum circuits.
     :property="og:image": https://pennylane.ai/qml/_images/boring_kernel.jpg
 
 .. related::
@@ -44,7 +44,7 @@ Kernel-based Machine Learning
 ----------------------------------------------
 
 As we just said, in the interest of keeping the concepts at a high level we
-will not be reviewing all the notins of kernels in-depth here.
+will not be reviewing all the notions of kernels in-depth here.
 Instead, we only need to know that there's an entire branch of ML which
 revolves around some functions we call kernels.
 If you'd still like to know more about where these functions come from, why
@@ -54,7 +54,7 @@ are already two very nice demos that cover different aspects extensively:
 #. `Training and evaluating quantum kernels <https://pennylane.ai/qml/demos/tutorial_kernels_module.html>`_
 #. `Kernel-based training of quantum models with scikit-learn <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_
 
-Now, a kernel for us is a real-valued function of two variables
+Now, for the purpose of this demo, a kernel is a real-valued function of two variables
 :math:`k(\cdot,\cdot)` from a given data domain :math:`x_1, x_2\in\mathcal{X}`.
 Further, we require a kernel to be symmetric to exchanging the variable
 positions :math:`k(x_1,x_2) = k(x_2,x_1)`.
@@ -63,8 +63,8 @@ but let's avoit getting lost in mathematical definitions, you can trust that
 all kernels featuring in this demo are positive semi-definite.
 
 If you take whichever textbook on kernel methods and search for the word
-``prominent", chances are you'll find it next to the word ``example" in a
-sentence that introduces the so-called Gaussian (Radial Basis Function) kernel
+"prominent", chances are you'll find it next to the word "example" in a
+sentence that introduces the so-called Gaussian (or Radial Basis Function) kernel
 :math:`k_\sigma`.
 For the sake of simplicity, we assume we are dealing with real numbers
 :math:`\mathcal{X}\subseteq\mathbb{R}`, in which case the Gaussian kernel looks
@@ -72,15 +72,15 @@ like
 
 .. math:: k_\sigma(x_1, x_2) = e^{-\frac{\lvert x_1 - x_2\rvert^2}{\sigma}},
 
-where the variance :math:`\sigma` is a positive real tunable parameter (the
+where the variance :math:`\sigma` is a positive real tunable parameter. The
 generalization to higher-dimensional data is straightforward using the
-Euclidean norm :math:`\lVert x_1 - x_2 \rVert_2^2`.)
+Euclidean norm :math:`\lVert x_1 - x_2 \rVert_2^2`.
 Now for practical purposes the Gaussian kernel has the advantage of being
-simple enough to study as a function, while still yielding good performance for
+simple enough to study as a function, while yielding good performance for a wide range of
 real-life tasks.
 
 In particular, one of the properties of the Gaussian kernel is that it is a
-shift-invariant function (also called stationary).
+shift-invariant (also called *stationary*) function .
 That means that adding a constant shift to both arguments does not change the
 value of the kernel, that is for :math:`a\in\mathcal{X}`, we have
 :math:`k_\sigma(x_1 + a, x_2 + a) = k(x_1, x_2)`.
@@ -90,24 +90,25 @@ x_2\in\mathbb{R}`, where we have
 
 .. math:: k_\sigma(x_1, x_2) = e^{-\frac{\lvert x_1 - x_2 \rvert^2}{\sigma}} =e^{-\frac{\delta^2}{\sigma}} = k_\sigma(\delta).
 
-Also, this combined with the property :math:`k(x_1, x_2) = k(x_2, x_1)` results
+Combined with the property :math:`k(x_1, x_2) = k(x_2, x_1)`, this results
 in the new property :math:`k(\delta)=k(-\delta)`.
 
-Of course the Gaussian kenrel is not the only shift-invariant kernel out there.
+Of course the Gaussian kernel is not the only shift-invariant kernel out there.
 As it turns out, there are many others (REFERENCES OR POINTERS OR SOMETHING!)
 which are also used in practice and have the shift-invariance property.
 Nevertheless, here we will only look at the simple Gaussian kernel with
 :math:`\sigma = 1`:
 
-.. math:: k_1(\delta) = e^{-\delta^2},
+.. math:: k_1(\delta) = e^{-\delta^2}.
 
-but all the arguments and code we use are also amenable to other kernels which
+All the arguments and code we use are also amenable to other kernels which
 fulfill the following mild restrictions:
-#. Shift-invariance.
-#. Normalization :math:`k(0)=1`.
-#. Smoothness (seen as quickly decaying Fourier spectrum).
 
-Let's warm up our coding by writing the simple Gaussian kernel!
+* Shift-invariance.
+* Normalization :math:`k(0)=1`.
+* Smoothness (in the sense of a quickly decaying Fourier spectrum - more on that later).
+
+Let's warm up by implementing a classical Gaussian kernel!
 
 First, importers gonna import B-)
 """
@@ -121,7 +122,7 @@ import math
 np.random.seed(53173)
 
 ###############################################################################
-# now we define the function and plot it as a mild sanity check:
+# Now we define the kernel function and plot it as a mild sanity check:
 
 def gaussian_kernel(delta):
     return math.exp(-delta ** 2)
@@ -174,11 +175,11 @@ plt.show();
 # And this is the bare bone of what we call Quantum Embedding Kernels!
 #
 # By now you may have already realized QEKs are very cool and all but they have
-# one shortcoming: in general :math:`k_Q` won't be a shift-invariant function
+# one shortcoming: In general, :math:`k_Q` won't be a shift-invariant function
 # (but is this really a shortcoming?)
 # The key word here is *general*.
 # General QEKs are not shift-invariant, so one reasonable question would be:
-# which restrictions do we have to impose for these kernels to be
+# Which restrictions do we have to impose for these kernels to be
 # shift-invariant?
 # We are not going to fully answer this question here, but rather take one
 # first step towards it.
@@ -189,7 +190,7 @@ plt.show();
 # The Boring kernel
 # ------------------
 #
-# The boring kerne is a stationary kernel that can be estimated with a
+# The boring kernel is a stationary kernel that can be estimated with a
 # qu-:math:`d`-it based algorithm with only three gates.
 # The first and last gates are adjoint of one another, we name them :math:`W`
 # and :math:`W^\dagger` respectively.
@@ -226,7 +227,7 @@ plt.show();
 # --------------------------------------------
 #
 # Now that we've laid out the formulas, we only need to write down the PL code
-# that relized the quantum circuit, right?
+# that realized the quantum circuit, right?
 # Wrong!!
 # But, kind of right.
 #
@@ -260,7 +261,7 @@ plt.show();
 # spectrum :math:`(0, 1, \ldots, 2^n-1)`.
 #
 # We will also be spared of some details here (or, as your quantum mechanics
-# prof would say, the derivation is left as an exercise for the reader), but
+# Prof would say, the derivation is left as an exercise for the reader), but
 # one valid choice for this to happen is :math:`\vartheta_j = -2^{j-1}`.
 #
 # With this, we can *finally* start getting our hands dirty!
@@ -311,7 +312,7 @@ def ansatz(x1, x2, thetas, parameters, wires):
 
 ###############################################################################
 # And we also provide a function that generates a random tensor of parameters
-# with the cirrect size.
+# with the correct size.
 # For now we'll be happy with uniformly distributed parameters in the interval
 # :math:`[0,2\pi)`.
 
@@ -320,7 +321,7 @@ def random_parameters(n_wires):
 
 ###############################################################################
 # And finally we also define a function that gives us the vector of parameters
-# we need to feed to :math:`S(x)`
+# we need to feed to :math:`S(x)`:
 
 def make_thetas(n_wires):
     return [-2**i for i in range(n_wires)]
@@ -329,7 +330,7 @@ def make_thetas(n_wires):
 # Computing the QEK on the quantum computer
 # ------------------------------------------
 #
-# That is to say, on the ``default.qubit`` PL quantum simulator ;)
+# That is to say, on the ``default.qubit`` PL quantum simulator ;).
 #
 # At this point we need to fix the number of qubits.
 # For the present example it suffices to set :math:`n=5`, which yields
@@ -343,7 +344,7 @@ wires = dev.wires.tolist()
 ###############################################################################
 # Next we define the circuit function, which outputs the vector of
 # probabilities for the computational basis states.
-# This is also the point where we need the vector of ``thetas``
+# This is also the point where we need the vector of ``thetas``:
 
 thetas = make_thetas(n_wires)
 
