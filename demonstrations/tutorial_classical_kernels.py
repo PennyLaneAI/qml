@@ -253,6 +253,9 @@ plt.show();
 # series of only a few terms.
 # For a study of the Fourier representation of quantum kernels specifically,
 # do check [#qkernels]_ out!
+# (In turn, `this demo
+# <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_ is
+# based on that reference).
 # Using a similar formalism to those references we reach an expression for the
 # stationary toy QEK kernel :math:`k_d`:
 #
@@ -407,7 +410,8 @@ def toy_qek_circuit(x1, x2, thetas, parameters):
 # In particular, each entry of this array contains the probability of obtaining
 # each computational basis state at the end of the circuit.
 # This is because we didn't specify any observable to measure on, which is what
-# we do with a number of quantum algorithms, e.g. VQE.
+# we do with a number of quantum algorithms, e.g.
+# `VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>.
 # But we only need to keep the probability of the state
 # :math:`\vert00000\rangle` being measured, so we take the first entry of the
 # array of probabilities and discard everything else.
