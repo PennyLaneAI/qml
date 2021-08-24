@@ -156,7 +156,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # The median of this probability distribution is:
 
 import numpy as np
-prob_array = np.fromiter(measurement_probs.values(), dtype=np.float)
+prob_array = np.fromiter(measurement_probs.values(), dtype=np.float64)
 print(f"Median = {np.median(prob_array):.3f}")
 
 ##############################################################################
