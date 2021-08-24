@@ -68,7 +68,7 @@ and one focusing on special gates and spectral decompositions, namely
 
 Cost functions arising from quantum gates
 -----------------------------------------
-We start our investigations with a cost function that arises from measuring the expectation
+We start our investigation by considering a cost function that arises from measuring the expectation
 value of an observable in a quantum state created with a parametrized quantum operation
 that depends on a single variational parameter :math:`x`.
 That is, the state may be prepared by any circuit but we will only allow a single parameter
