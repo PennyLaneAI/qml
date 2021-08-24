@@ -7,7 +7,7 @@ Emulating classical kernels
 
 .. meta::
     :property="og:description": Approximating the Gaussian kernel with quantum circuits.
-    :property="og:image": https://pennylane.ai/qml/_images/boring_kernel.jpg
+    :property="og:image": https://pennylane.ai/qml/_images/toy_qek.png
 
 .. related::
 
@@ -36,7 +36,7 @@ this is the place for you!
     :width: 80%
     :target: javascript:void(0)
 
-    The Quantum Embedding Kernel covered in this demo. 
+    The Quantum Embedding Kernel covered in this demo.
 
 
 
@@ -62,6 +62,9 @@ Finally, we will also want to enforce the kernels be positive semi-definite,
 but let's avoid getting lost in mathematical definitions, you can trust that
 all kernels featuring in this demo are positive semi-definite.
 
+The Gaussian kernel
+^^^^^^^^^^^^^^^^^^^^
+
 If you take whichever textbook on kernel methods and search for the word
 "prominent", chances are you'll find it next to the word "example" in a
 sentence that introduces the so-called Gaussian (or Radial Basis Function)
@@ -79,6 +82,9 @@ Now for practical purposes the Gaussian kernel has the advantage of being
 simple enough to study as a function, while yielding good performance for
 a wide range of real-life tasks.
 
+Shift-invariant kernels
+^^^^^^^^^^^^^^^^^^^^^^^^
+
 In particular, one of the properties of the Gaussian kernel is that it is a
 shift-invariant (also called *stationary*) function.
 That means that adding a constant shift to both arguments does not change the
@@ -94,7 +100,7 @@ Combined with the property :math:`k(x_1, x_2) = k(x_2, x_1)`, this results
 in the new property :math:`k(\delta)=k(-\delta)`.
 
 Of course the Gaussian kernel is not the only shift-invariant kernel out there.
-As it turns out, there are many others (REFERENCES OR POINTERS OR SOMETHING!)
+As it turns out, there are many others [#Rasmussen]_ [#Scholkopf]_
 which are also used in practice and have the shift-invariance property.
 Nevertheless, here we will only look at the simple Gaussian kernel with
 :math:`\sigma = 1`:
@@ -107,6 +113,9 @@ fulfill the following mild restrictions:
 #. Shift-invariance.
 #. Normalization :math:`k(0)=1`.
 #. Smoothness (seen as quickly decaying Fourier spectrum).
+
+Implementation example
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's warm up by implementing a classical Gaussian kernel!
 
@@ -130,7 +139,7 @@ def gaussian_kernel(delta):
 def make_data(n_samples, lower=-np.pi, higher=np.pi):
     X = np.linspace(lower, higher, n_samples)
     Y = np.array([gaussian_kernel(x) for x in X])
-    
+
     return X, Y
 
 X, Y_gaussian = make_data(100)
@@ -148,10 +157,10 @@ plt.show();
 # Quantum Embedding Kernels
 # --------------------------
 #
-# The quantum algorithms we build today belong to the family of Quantum
-# Embedding Kernels (QEKs), introduced in the paper [#QEK]_ corresponding to
-# the `Training and evaluating quantum kernels
-# <https://pennylane.ai/qml/demos_research.html>`_ demo.
+# The quantum algorithms we build today belong to a family of kernels dubbed
+# Quantum Embedding Kernels (QEKs) in [#QEK]_ (after others had proposed the
+# ideas of quantum kernels), corresponding to the `Training and evaluating
+# quantum kernels <https://pennylane.ai/qml/kernels_module.html>`_ demo.
 # In a nutshell, a QEK can be thought of as a function estimated with a quantum
 # computer in which, by doubling the size of the circuit, we spare ourselves
 # the trouble of finding a good measurement observable.
@@ -162,7 +171,17 @@ plt.show();
 #
 # .. math:: k_Q(x_1, x_2) = \operatorname{tr}[\rho(x_1)\rho^\dagger(x_2)].
 #
-# 
+# .. Note::
+#
+#       Working with one qu-:math:`d`-it instead of with several qubits is a
+#       matter of taste. Indeed, since a qu-:math:`d`-it is "a quantum system
+#       with :math:`d` levels", if we would rather think of qubits, we can just
+#       set :math:`d` to be some integer power of :math:`2`, :math:`d=2^n`.
+#       Then, everything we say or do on the qu-:math:`2^n`-it is equivalent
+#       and portable to a system of :math:`n` qubits.
+#       We will see all of this when it comes to implementing the algorithm on
+#       a quantum computer, where we are forced to work with qubits.
+#
 # Now, oftentimes the feature map will be nothing other than applying a unitary
 # gate depending on the data :math:`U(x)` to the ground state of the
 # qu-:math`d`-it:
@@ -188,33 +207,54 @@ plt.show();
 # first step towards it.
 # Namely, we next introduce one particular class of QEKs which are indeed
 # shift-invariant.
-# Behold, ladies and gents, *the Boring kernel*!
+# Behold, ladies and gents, *the stationary toy QEK*!
 #
-# The Boring kernel
-# ------------------
+# The Stationary toy QEK 
+# -----------------------
 #
-# The boring kernel is a stationary kernel that can be estimated with a
-# qu-:math:`d`-it based algorithm with only three gates.
+# The stationary toy QEK can be estimated with a qu-:math:`d`-it based algorithm
+# with only three gates.
 # The first and last gates are adjoint of one another, we name them :math:`W`
 # and :math:`W^\dagger` respectively.
 # :math:`W` is a trainable :math:`d`-dimensional unitary, independent of the
 # input data.
-# The data is encoded as the time parameter in the time evolution of a diagonal
-# number-operator hamiltonian :math:`H_d=\operatorname{diag}(0, 1, \ldots,
-# d-1)`.
-# Circuitwise, this is a diagonal unitary :math:`S(x)` whose entries are
+#
+# To make things simple, we need a Hamiltonian with consecutive integer numbers
+# on its diagonal, and zeroes everywhere else
+#
+# .. math::`H_d=\operatorname{diag}(0, 1, \ldots, d-1)`;
+#
+# this is known in continuous-variable quantum computing as a number operator.
+# The data is then encoded as the time parameter in the time evolution of this
+# Hamiltonian.
+# We can write this as unitary gate :math:`S(x)=e^{-ixH_d}`.
+# Circuitwise, :math:`S(x)` is a diagonal unitary whose entries are
 # :math:`e^{-ijx}` for :math:`j\in\{0, \ldots, d-1\}`
 #
 # .. math:: S(x) = \operatorname{diag}(0, e^{-ix}, e^{-i2x}, \ldots, e^{-i(d-1)x}).
 #
-# A priori we can think of :math:`W` as *any* :math:`d`-dimensional unitary.
-# Only when it comes to actually implementing the boring kernel in a computer
-# will we have to think about how to parametrize it.
+# Despite this construction looking more or less arbitrary, having this
+# consecutive integer Hamiltonian simplifies the analysis of approximating
+# functions under-the-hood.
 #
-# Using a similar formalism to that of [#Fourier]_ (further
-# illustrated in `this demo <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html>`_),
-# we reach an expression for the boring
-# kernel :math:`k_d`:
+# .. figure:: ../demonstrations/classical_kernels/toy_qek.png
+#       :align: center
+#       :width: 60%
+#       :target: javascript:void(0)
+#
+# A priori we can think of :math:`W` as *any* :math:`d`-dimensional unitary.
+# Only when it comes to actually implementing the stationary toy QEK in a
+# computer will we have to think about how to parametrize it.
+#
+# Owing to the study presented in [#Fourier]_ (further illustrated in `this
+# demo
+# <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html>`_),
+# we know that many quantum kernels, ours included, can be expressed as Fourier
+# series of only a few terms.
+# For a study of the Fourier representation of quantum kernels specifically,
+# do check [#qkernels]_ out!
+# Using a similar formalism to those references we reach an expression for the
+# stationary toy QEK kernel :math:`k_d`:
 #
 # .. math:: k_d(\delta) = \sum_{s=-(d-1)}^{d-1} a_s e^{i\delta s},
 #
@@ -222,15 +262,17 @@ plt.show();
 #
 # .. math:: a_s = \sum_{j=\lvert s\rvert}^{d-1} w_j w_{j-\lvert s\rvert},
 #
-# and where :math:`w_j = \lvert W_{j,0}\rvert^2` is the absolut value squared
+# and where :math:`w_j = \lvert W_{j,0}\rvert^2` is the absolute value squared
 # of the :math:`j^\text{th}` element of the first column of the matrix
 # representation of :math:`W`.
 #
-# Implementing the boring kernel on PennyLane
-# --------------------------------------------
+# 
+#
+# Implementing the stationary toy QEK on PennyLane
+# -------------------------------------------------
 #
 # Now that we've laid out the formulas, we only need to write down the PL code
-# that realized the quantum circuit, *right?*
+# that realizes the quantum circuit, *right?*
 #
 # *Wrong!!*
 #
@@ -240,12 +282,12 @@ plt.show();
 # only operate on qubits, not qu-:math:`d`-its!
 # So, what can we do?
 # We can set :math:`d=2^n` for some :math:`n\in\mathbb{N}` and then use
-# :math:`n` qubits, which are analogous to a qu-:math:`2^n`-it.
+# :math:`n` qubits, which are analogous to one qu-:math:`2^n`-it.
 #
 # This is the point where we will have to fix an Ansatz for :math:`W`, and
 # since we want to work with qubits we shall use a few trainable Pauli
 # rotations interleaved with also trainable entangling gates so we can get
-# reasonably close an arbitrary unitary.
+# reasonably close to an arbitrary unitary.
 #
 # But what about :math:`S(x)`?
 # Conceptually, the definition we've given with the number operator hamiltonian
@@ -269,20 +311,22 @@ plt.show();
 # Prof would say, the derivation is left as an exercise for the reader), but
 # one valid choice for this to happen is :math:`\vartheta_j = -2^{j-1}`.
 #
-# With this, we can *finally* start getting our hands dirty!
+# With this, we can *finally* start getting our hands dirty pushing towards our
+# ultimate goal: using the stationary toy QEK to approximate the classical
+# Gaussian kernel.
 #
 # Writing down the circuit
 # -------------------------
 #
-# The boring kernel is defined irrespective of the qu-:math:`d`-it dimension.
-# We can directly define :math:`S(x)`, where we include a ``thetas`` argument in
-# case at a later stage we want to try encoding with different diagonal
+# The stationary toy QEK is defined irrespective of the qu-:math:`d`-it
+# dimension.
+# We can directly define :math:`S(x)`, where we include a ``thetas`` argument
+# in case at a later stage we want to try encoding with different diagonal
 # Hamiltonians:
 
 def S(x, thetas, wires):
     for (i, wire) in enumerate(wires):
         qml.RZ(thetas[i] * x, wires = [wire])
-
 
 ###############################################################################
 # For :math:`W` we use a few layers of single qubit Pauli rotations and two
@@ -332,8 +376,8 @@ def make_thetas(n_wires):
     return [-2**i for i in range(n_wires)]
 
 ###############################################################################
-# Computing the QEK on the quantum computer
-# ------------------------------------------
+# Computing the stationary toy QEK on the quantum computer
+# ---------------------------------------------------------
 #
 # That is to say, on the ``default.qubit`` PL quantum simulator ;).
 #
@@ -354,44 +398,50 @@ wires = dev.wires.tolist()
 thetas = make_thetas(n_wires)
 
 @qml.qnode(dev)
-def boring_kernel_circuit(x1, x2, thetas, parameters):
+def toy_qek_circuit(x1, x2, thetas, parameters):
     ansatz(x1, x2, thetas, parameters, wires=wires)
     return qml.probs(wires=wires)
 
 ###############################################################################
+# The output of ``toy_qek_circuit` is an array of real numbers.
+# In particular, each entry of this array contains the probability of obtaining
+# each computational basis state at the end of the circuit.
+# This is because we didn't specify any observable to measure on, which is what
+# we do with a number of quantum algorithms, e.g. VQE.
 # But we only need to keep the probability of the state
-# :math:`\vert00000\rangle` being measured:
+# :math:`\vert00000\rangle` being measured, so we take the first entry of the
+# array of probabilities and discard everything else.
 
-def boring_kernel(x1, x2, thetas, parameters):
-    return boring_kernel_circuit(x1, x2, thetas, parameters)[0]
+def toy_qek(x1, x2, thetas, parameters):
+    return toy_qek_circuit(x1, x2, thetas, parameters)[0]
 
 ###############################################################################
 # We can do now a small test with random parameters:
 
 random_pars = random_parameters(n_wires)
-print("The boring kernel with parameters:")
+print("The stationary toy QEK with parameters:")
 print(random_pars)
-print("for x1 = 0.1 and x2 = 0.6 is\n\tk(x1, x2) =", boring_kernel(.1, .6, thetas, random_pars))
+print("for x1 = 0.1 and x2 = 0.6 is\n\tk(x1, x2) =", toy_qek(.1, .6, thetas, random_pars))
 
 ###############################################################################
-# Quality of life improvement: let's make this small function that evaluates
-# the boring kernel on an array of shifts :math:`\delta`.
+# Quality of life improvement: let's make a small function that evaluates
+# the stationary toy QEK on an array of shifts :math:`\delta`.
 # Notice that the argument of this function ought to be thought of as
-# :math:`\delta = x_1 - x_2`, that's why we call the function ``boring_kernel``
+# :math:`\delta = x_1 - x_2`, that's why the function ``toy_qek`` is called
 # with :math:`0` on the second argument, because :math:`S(x_1)S^\dagger(x_2) =
 # S(x_1-x_2)S^\dagger(0) = S(x_1-x_2)`.
 
-def boring_on_dataset(deltas, thetas, parameters):
-    y = np.array([boring_kernel(delta, 0, thetas, parameters) for delta in deltas])
+def toy_qek_on_dataset(deltas, thetas, parameters):
+    y = np.array([toy_qek(delta, 0, thetas, parameters) for delta in deltas])
     return y
 
 ###############################################################################
 # Let's see what this function looks like for the same data interval as before:
 
-Y_boring = boring_on_dataset(X, thetas, random_pars)
+Y_toy = toy_qek_on_dataset(X, thetas, random_pars)
 
-plt.plot(X, Y_boring)
-plt.suptitle("Boring kernel with random parameters")
+plt.plot(X, Y_toy)
+plt.suptitle("Stationary toy QEK with random parameters")
 plt.xlabel("$\delta$")
 plt.ylabel("$k_d(\delta)$")
 plt.show();
@@ -401,11 +451,11 @@ plt.show();
 # sanity check we see it fulfills :math:`k_d(0) = 1` and :math:`k_d(\delta) =
 # k_d(-\delta)`.
 #
-# Approximating the Gaussian kernel with the boring kernel
-# ---------------------------------------------------------
+# Approximating the Gaussian kernel with the toy stationary QEK
+# --------------------------------------------------------------
 #
-# Next step is to tune the parameters of :math:`W` to make the boring kernel
-# become closer to the Gaussian kernel.
+# Next step is to tune the parameters of :math:`W` to make the stationary toy
+# QEK become closer to the Gaussian kernel.
 # We lay this out as a supervised learning problem, where we define the loss as
 # the pointwise distance
 #
@@ -414,8 +464,8 @@ plt.show();
 #     L = \frac{1}{2N} \sum_{n=1}^N \lvert k_1(\delta_n0-k_d(\delta_n)\rvert^2,
 #
 # where :math:`k_1` is the Gaussian kernel with :math:`\sigma=1`, :math:`k_d`
-# is the :math:`d`-dimensional boring kernel, and :math:`\{\delta_1, \ldots,
-# \delta_n\}` is the dataset ``X`` in the code.
+# is the :math:`d`-dimensional stationary toy QEK, and :math:`\{\delta_1,
+# \ldots, \delta_n\}` is the dataset ``X`` in the code.
 
 def square_loss(targets, predictions):
     loss = 0
@@ -425,7 +475,7 @@ def square_loss(targets, predictions):
     return .5*loss
 
 def cost(parameters, thetas, X, Y):
-    predictions = boring_on_dataset(X, thetas, parameters)
+    predictions = toy_qek_on_dataset(X, thetas, parameters)
     return square_loss(Y, predictions)
 
 ###############################################################################
@@ -458,14 +508,14 @@ for step in range(max_steps):
 trained_pars = random_pars
 
 ###############################################################################
-# After the optimization, we plot one last time the values of the boring
-# kernel, this time superposed to those of the Gaussian one:
+# After the optimization, we plot one last time the values of the stationary
+# toy QEK, this time superposed to those of the Gaussian one:
 
-Y_trained = boring_on_dataset(X, thetas, trained_pars)
+Y_trained = toy_qek_on_dataset(X, thetas, trained_pars)
 
 plt.plot(X, Y_gaussian, label='Gaussian kernel')
-plt.plot(X, Y_trained, label='boring kernel')
-plt.suptitle("Comparison between Gaussian and boring kernel")
+plt.plot(X, Y_trained, label='Stationary toy QEK')
+plt.suptitle("Comparison between Gaussian and stationary toy QEK")
 plt.xlabel("$\delta$")
 plt.legend()
 plt.show();
@@ -473,8 +523,8 @@ plt.show();
 ###############################################################################
 # *et voilà!*
 #
-# This was how you can approximate the Gaussian kernel using a boiled down QEK
-# we called the boring kernel!
+# This was how you can approximate the Gaussian kernel using a stationary toy
+# QEK!
 #
 # .. figure:: ../demonstrations/classical_kernels/salesman.PNG
 #       :align: center
@@ -483,6 +533,18 @@ plt.show();
 #
 # References
 # -----------
+#
+# .. [#Rasmussen]
+#
+#       Carl Edward Rasmussen, Christopher K. I. Williams.
+#       `"Gaussian Processes for Machine Learning" <gaussianprocess.org/qpml/chapters>`__.
+#       MIT Press, 2006.
+#
+# .. [#Scholkopf]
+#
+#       Bernhard Schölkopf, Alexander J. Smola.
+#       `"Learning with Kernels" <mitpress.mit.edu/books/learning-kernels>`__.
+#       MIT Press, 2001.
 #
 # .. [#QEK]
 #
@@ -498,3 +560,9 @@ plt.show();
 #       quantum machine learning models".
 #       `Phys. Rev. A 103, 032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__,
 #       `arXiv preprint arXiv:2008.08605 <https://arxiv.org/abs/2008.08605>`__.
+#
+# .. [#qkernels]
+#
+#       Maria Schuld.
+#       "Supervised quantum machine learning models are kernel methods".
+#       `arXiv preprint arXiv:2101.11020 <https://arxiv.org/abs/2101.11020>`__.
