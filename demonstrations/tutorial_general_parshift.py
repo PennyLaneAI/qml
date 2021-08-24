@@ -82,7 +82,7 @@ state, so that our cost function overall has the form
 
 .. math ::
 
-  E(x)=\langle\psi | U^\dagger(x) B U(x)|\psi\rangle
+  E(x)=\langle\psi | U^\dagger(x) B U(x)|\psi\rangle.
 
 Here, :math:`U(x)` consists of a layer of ``RZ`` gates,
 
@@ -122,6 +122,7 @@ def random_observable(N, seed):
 # measuring the expectation value of :math:`B`. This generator has the advantage that
 # we can quickly create the cost function for various numbers of qubits --- and therefore
 # cost functions with different complexity.
+#
 # We will use the default qubit simulator with its JAX backend and also will rely
 # on the NumPy implementation of JAX.
 # To obtain precise results, we enable 64-bit ``float`` precision via the JAX config.
@@ -216,6 +217,7 @@ for ax, N, E in zip(axs, Ns, evaluated_cost):
     # Axis and plot labels
     ax.set_title(f"{N} qubits")
     ax.set_xlabel("$x$")
+
 _ = axs[0].set_ylabel("$E$")
 
 
@@ -768,7 +770,7 @@ ps_der1 = list(map(parameter_shift_first, cost_functions, Ns))
 
 
 ###############################################################################
-# The second-order derivative takes a similar form but we have to take care of the evaluation at
+# The second-order derivative takes a similar form, but we have to take care of the evaluation at
 # :math:`0` and the corresponding coefficient separately:
 #
 # .. math ::
@@ -833,8 +835,8 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 # parameter shift rules.
 # Note that the techniques above can partially be extended to frequencies that are not
 # integer-valued, but many closed form expressions are no longer valid.
-# For the reconstruction, the approach via Dirichlet kernels does no longer work in the general
-# case and instead a system of equations has to be solved, but with generalized
+# For the reconstruction, the approach via Dirichlet kernels no longer works in the general
+# case; instead, a system of equations has to be solved, but with generalized
 # frequencies :math:`\{\Omega_\ell\}` instead of :math:`\{\ell\}`.
 #
 #
