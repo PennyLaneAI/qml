@@ -837,7 +837,8 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 # integer-valued, but many closed form expressions are no longer valid.
 # For the reconstruction, the approach via Dirichlet kernels no longer works in the general
 # case; instead, a system of equations has to be solved, but with generalized
-# frequencies :math:`\{\Omega_\ell\}` instead of :math:`\{\ell\}`.
+# frequencies :math:`\{\Omega_\ell\}` instead of :math:`\{\ell\}` (see e.g. 
+# Sections III A-C in [#GenPar]_)
 #
 #
 # References
