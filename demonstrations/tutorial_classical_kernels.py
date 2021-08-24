@@ -22,8 +22,8 @@ Emulating classical kernels
 In this demo we will briefly revisit some notions of kernel-based Machine
 Learning (ML) and introduce one very specific `Quantum Embedding Kernel (QEK)
 <https://pennylane.ai/qml/demos/tutorial_kernels_module.html>`_.
-We will also use this QEK to demonstrate we can approximate a large class of
-classical kernels with it, known as shift-invariant or stationary kernels.
+We will use this QEK to demonstrate we can approximate an important class
+of classical kernels with it, known as shift-invariant or stationary kernels.
 Both the math and the code will stay high-level throughout the explanation,
 this is not one of those very technical demos!
 So, if you feel like exploring one link between classical and quantum kernels,
@@ -59,7 +59,7 @@ Now, a kernel for us is a real-valued function of two variables
 Further, we require a kernel to be symmetric to exchanging the variable
 positions :math:`k(x_1,x_2) = k(x_2,x_1)`.
 Finally, we will also want to enforce the kernels be positive semi-definite,
-but let's avoit getting lost in mathematical definitions, you can trust that
+but let's avoid getting lost in mathematical definitions, you can trust that
 all kernels featuring in this demo are positive semi-definite.
 
 If you take whichever textbook on kernel methods and search for the word
@@ -136,6 +136,8 @@ X, Y_gaussian = make_data(100)
 
 plt.plot(X, Y_gaussian)
 plt.suptitle("The gaussian kernel with $\sigma=1$")
+plt.xtitle("$\delta$")
+plt.ytitle("$k(\delta)$")
 plt.show();
 
 ###############################################################################
@@ -162,7 +164,7 @@ plt.show();
 # 
 # Now, oftentimes the feature map will be nothing other than applying a unitary
 # gate depending on the data :math:`U(x)` to the ground state of the
-# qu:math`d`it:
+# qu-:math`d`-it:
 # 
 # .. math:: \rho(x) = U(x)\vert0\rangle\!\langle0\vert U^\dagger(x).
 #
@@ -386,6 +388,8 @@ Y_boring = boring_on_dataset(X, thetas, random_pars)
 
 plt.plot(X, Y_boring)
 plt.suptitle("Boring kernel with random parameters")
+plt.xtitle("$\delta$")
+plt.ytitle("$k_d(\delta)$")
 plt.show();
 
 ###############################################################################
@@ -458,6 +462,7 @@ Y_trained = boring_on_dataset(X, thetas, trained_pars)
 plt.plot(X, Y_gaussian, label='Gaussian kernel')
 plt.plot(X, Y_trained, label='boring kernel')
 plt.suptitle("Comparison between Gaussian and boring kernel")
+plt.xtitle("\delta")
 plt.legend()
 plt.show();
 
