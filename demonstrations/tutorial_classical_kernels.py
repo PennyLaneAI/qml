@@ -54,9 +54,10 @@ are already two very nice demos that cover different aspects extensively:
 #. `Training and evaluating quantum kernels <https://pennylane.ai/qml/demos/tutorial_kernels_module.html>`_
 #. `Kernel-based training of quantum models with scikit-learn <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_
 
-Now, for the puyrpose of this demo, a kernel is a real-valued function of two
+Now, for the purpose of this demo, a kernel is a real-valued function of two
 variables :math:`k(\cdot,\cdot)` from a given data domain :math:`x_1,
-x_2\in\mathcal{X}`. Further, we require a kernel to be symmetric to exchanging
+x_2\in\mathcal{X}`.
+Further, we require a kernel to be symmetric to exchanging
 the variable positions :math:`k(x_1,x_2) = k(x_2,x_1)`.
 Finally, we will also want to enforce the kernels be positive semi-definite,
 but let's avoid getting lost in mathematical definitions, you can trust that
@@ -86,7 +87,7 @@ Shift-invariant kernels
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 In particular, one of the properties of the Gaussian kernel is that it is a
-shift-invariant (also called *stationary*) function.
+*shift-invariant* (also called *stationary*) function.
 That means that adding a constant shift to both arguments does not change the
 value of the kernel, that is for :math:`a\in\mathcal{X}`, we have
 :math:`k_\sigma(x_1 + a, x_2 + a) = k(x_1, x_2)`.
@@ -118,8 +119,6 @@ Implementation example
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's warm up by implementing a classical Gaussian kernel!
-
-First, importers gonna import B-).
 """
 
 import pennylane as qml
@@ -153,6 +152,7 @@ plt.show();
 ###############################################################################
 # That's exactly what I have in mind when I think of a Gauss bell curve.
 # So far so good!
+# Our goal is to approximate this function using a quantum computer.
 #
 # Quantum Embedding Kernels
 # --------------------------
@@ -197,11 +197,13 @@ plt.show();
 #
 # By now you may have already realized QEKs are very cool and all but, if our
 # goal is to emulate the Gaussian kernel on a quantum computer (which is what
-# we're trying to do here), they have
-# one shortcoming: In general, :math:`k_Q` won't be a shift-invariant function.
+# we're trying to do here), they do have one shortcoming:
+# In general, :math:`k_Q` won't be a shift-invariant function.
 # The key word here is *general*.
-# General QEKs are not shift-invariant, so one reasonable question would be:
-# which restrictions do we have to impose for these kernels to be
+# General QEKs are not shift-invariant, so a priori we should not expect to be
+# able to approximate shift-invariant functions with them.
+# Then one reasonable question would be:
+# which restrictions do we have to impose for these kernels to become
 # shift-invariant?
 # We are not going to fully answer this question here, but rather take one
 # first step towards it.
@@ -269,8 +271,6 @@ plt.show();
 # of the :math:`j^\text{th}` element of the first column of the matrix
 # representation of :math:`W`.
 #
-# 
-#
 # Implementing the stationary toy QEK on PennyLane
 # -------------------------------------------------
 #
@@ -281,8 +281,8 @@ plt.show();
 #
 # *But, kind of right.*
 #
-# We do only have to realize the quantum circuit, but as it turns out, we can
-# only operate on qubits, not qu-:math:`d`-its!
+# We do only have to realize the quantum circuit, but that is not so easy a
+# task given that we must work on qubits, not qu-:math:`d`-its!
 # So, what can we do?
 # We can set :math:`d=2^n` for some :math:`n\in\mathbb{N}` and then use
 # :math:`n` qubits, which are analogous to one qu-:math:`2^n`-it.
@@ -294,7 +294,7 @@ plt.show();
 #
 # But what about :math:`S(x)`?
 # Conceptually, the definition we've given with the number operator hamiltonian
-# is already quite simple, but how do we implement it on a qubit based system?
+# is somewhat simple, but how do we implement it on a qubit based system?
 #
 # The fact is we can replicate the eigenvalue spectrum of :math:`S` with a
 # layer of Pauli-Z rotations, one on each qubit
@@ -406,7 +406,7 @@ def toy_qek_circuit(x1, x2, thetas, parameters):
     return qml.probs(wires=wires)
 
 ###############################################################################
-# The output of ``toy_qek_circuit` is an array of real numbers.
+# The output of ``toy_qek_circuit`` is an array of real numbers.
 # In particular, each entry of this array contains the probability of obtaining
 # each computational basis state at the end of the circuit.
 # This is because we didn't specify any observable to measure on, which is what
