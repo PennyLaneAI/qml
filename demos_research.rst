@@ -132,7 +132,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. customgalleryitem::
     :tooltip: Approximating classical kernels with a quantum computer.
-    :figure: demonstrations/classical_kernels/boring_kernel.jpg
+    :figure: demonstrations/classical_kernels/toy_qek.png
     :description: :doc:`demos/tutorial_classical_kernels`
     :tags: kernels approximation gaussian
 
