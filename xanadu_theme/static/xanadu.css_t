@@ -586,6 +586,10 @@ div.sphinxsidebar input {
 
 /* Left-nav search box
 -------------------------------------------------- */
+#tutorialDemoSearchInput {
+  width: 64%; /* Needed for crossbrowser consistency */
+}
+
 .form-control:focus {
   border-color: #119a68;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(66, 164, 94, 0.6);
@@ -1185,13 +1189,13 @@ div.topic.contents > ul > li {
 
 .admonition.note,
 .admonition.hint {
-  border-left-color: #31708f;
-  background-color: #dae1f0;
+  border-left-color: #19b37b;
+  background-color: #f2f9f5;
 }
 
 .admonition.note .admonition-title,
 .admonition.hint .admonition-title {
-  color: #31708f;
+  color: #209494;
 }
 
 .admonition-todo {

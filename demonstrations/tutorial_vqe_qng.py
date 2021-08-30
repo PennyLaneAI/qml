@@ -232,7 +232,7 @@ plt.legend()
 plt.show()
 
 ##############################################################################
-# Here, the red regions indicate states with lower energies, and the blue regions indicate
+# Here, the blue regions indicate states with lower energies, and the red regions indicate
 # states with higher energies. We can see that the ``QNGOptimizer`` takes a more direct
 # route to the minimum in larger strides compared to the path taken by the ``GradientDescentOptimizer``.
 #
