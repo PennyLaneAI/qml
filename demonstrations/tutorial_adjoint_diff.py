@@ -12,6 +12,35 @@ Adjoint Differentiation
 """
 
 ##############################################################################
+""" Classical autodifferentiation has two methods of calculation: forward and reverse.
+ In forward mode, the computer calculates the function value and derivative at the same time.
+ In reverse mode, the computer stores the derivatives of components during evaluation then
+ calculates the total derivative later during a "backward pass". Which method someone should
+ use depends on the structure of the problem; is the function many-to-one or one-to-many? We 
+ use properties of the problem to optimize how we calculate derivatives.
+
+Standard methods to calculate the derivatives for quantum circuits either are direct applications
+of classical gradient methods to quantum simulations, or quantum hardware methods like parameter-shift
+where we can only extract restricted pieces of information.
+
+Adjoint differentiation straddles these two strategies taking benefits from each.
+ On simulators, we can see the complete statevector and any point and apply any operation to it, 
+ but we know our quantum circuit has a limited structure.  Namely, a circuit is initialization, 
+ unitary operators, and an expectation value of a Hermitian operator:
+
+.. math::
+   |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
+
+.. math::
+    \langle M \rangle = \langle \Psi | M | \Psi \rangle
+    = \langle 0 | U_0^{\dagger} \dots U_{n-1}^{\dagger} U_{n}^{\dagger} M U_{n} U_{n-1} \dots U_0 |0\rangle
+
+Since all our operators are unitary, we can easily "undo" or "erase" them by applying their adjoint.
+The "adjoint" differentiation method takes advantage of this fact to create a time and memory  efficient
+method for computing observables. """
+
+
+##############################################################################
 # Start with a quantum state
 #
 # .. math::
