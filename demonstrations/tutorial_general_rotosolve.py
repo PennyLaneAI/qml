@@ -51,56 +51,181 @@ They will typically take the form
 
 where $|\psi\rangle$ is some initial state, $B$ is a Hermitian observable, and $U_j(x_j)$ are 
 parametrized unitaries that encode the dependence on the variational parameters $\boldsymbol{x}$.
-We will take a closer look at which unitaries and which other cost function structures can be 
-handled by Rotosolve further below.
-
-It turns out that we then know $E$ to be a $n$-input *Fourier series* of the parameters.
-This enables us to understand the full functionality of the circuit and once we know the
-coefficients of this series, we do not even need to fire up a quantum machine anymore.
-However, obtaining all coefficients of the series is expensive---very expensive, actually---as we
-would need to measure the original $E$ at a number of sampling points that grows *exponentially*
-with $n$.
-
-Instead, Rotosolve makes use of `coordinate descent
-<https://en.wikipedia.org/wiki/Coordinate_descent>`__. This is a basic idea for optimizing
-functions depending on multiple parameters: simply optimize the parameters one at a time and cycle
-through them. Applying this to cost functions like the one above, we again get a Fourier
-series, but this time it only depends on a single parameter $x_j$ that we currently optimize
-over:
-
-.. math ::
-
-    E_j(x_j) = a_0 + \sum_{\ell=1}^R a_\ell \cos(\Omega_\ell x_j) + b_\ell \sin(\Omega_\ell x_j)
-
-Here, $\{a_\ell\}$ and $\{b_\ell\}$ are the coefficients and $\{\Omega_\ell\}$ are the frequencies
-of the series, the number and values of which are dictated by the unitary $U_j(x_j)$.
-
-If you are interested in details on why $E_j$ is a Fourier series, how the frequencies come about,
-and how one can make use of this knowledge for quantum machine learning, we recommend the
-:
-
-
-
-
-
-
-
-
-  #. *Super*brief overview of cost functions as Fourier series -> Reference to 
-     *Quantum models as Fourier series* demo.
-  #. Reconstruction concept via Fourier trafo -> Reference to *General parameter-shift
-     rule* demo.
-  #. Rotosolve: Slowly walk through one step containing multiple substeps.
+Let's set up a simple example circuit as a toy model; more details on which cost functions can 
+be handled by Rotosolve and a more complex example can be found further below.
 """
 
-def code():
-    return
+import pennylane as qml
+
+dev = qml.device('default.qubit', wires=3)
+@qml.qnode(dev)
+def cost(x, y, z):
+    for _x, w in zip(x, dev.wires):
+        qml.RX(_x, wires=w, id=f"x{w}")
+
+    for i in range(dev.num_wires):
+        qml.CRY(y[0], wires=[i, (i + 1) % dev.num_wires], id="y0")
+
+    qml.RZ(z[0], wires=0, id="z0")
+    qml.RZ(z[1], wires=1, id="z1")
+    qml.RZ(z[1], wires=2, id="z1")
+
+    return qml.expval(qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliX(2))
 
 ###############################################################################
+# This function takes three arguments, an array ``x`` with three parameters,
+# a single parameter ``y``, and a two-parameter array ``z``. We will need some
+# initial parameters later on:
+
+from pennylane import numpy as np
+
+x_0 = np.array([-0.2, 1.6, -0.3])
+y_0 = np.array([0.711])
+z_0 = np.array([-1.24, 0.84])
+initial_cost = cost(x_0, y_0, z_0)
+print(f"The initial cost is: {initial_cost:.5f}")
+
+###############################################################################
+# It turns out that we then know $E$ to be a $n$-input *Fourier series* of the parameters.
+# This enables us to understand the full functionality of the circuit and once we know the
+# coefficients of this series, we do not even need to fire up a quantum machine anymore.
+# However, obtaining all coefficients of the series is expensive---very expensive, actually---as we
+# would need to measure the original $E$ at a number of sampling points that grows *exponentially*
+# with $n$.
+# 
+# Instead, Rotosolve makes use of `coordinate descent
+# <https://en.wikipedia.org/wiki/Coordinate_descent>`__. This is a basic idea for optimizing
+# functions depending on multiple parameters: simply optimize the parameters one at a time!
+# If we restrict cost functions like the one above to a single parameter $x_j$, we again get 
+# a Fourier series, but this time it only depends on $x_j$:
+# 
+# .. math ::
+# 
+#     E_j(x_j) = a_0 + \sum_{\ell=1}^R a_\ell \cos(\Omega_\ell x_j) + b_\ell \sin(\Omega_\ell x_j)
+# 
+# Here, $\{a_\ell\}$ and $\{b_\ell\}$ are the coefficients and $\{\Omega_\ell\}$ are the frequencies
+# of the series, the number $R$ and values of which are dictated by the unitary $U_j(x_j)$.
+# 
+# For our simple toy cost function above, the :mod:`~.pennylane.fourier` module can tell us
+# what the frequency spectra for the different parameters are:
+
+spectra = qml.fourier.spectrum(cost)(x_0, y_0, z_0)
+print(*(f"{key}: {val}" for key, val in spectra.items()), sep='\n')
+frequencies = [[f for f in freqs if f>0.0] for freqs in spectra.values()]
+
+###############################################################################
+# In the last line we here prepared ``frequencies`` for usage with 
+# :class:`~.pennylane.optimize.RotosolveOptimizer`  later on, by simply removing 
+# non-positive frequencies.
+#
+# If you are interested in details on why $E_j$ is a Fourier series, how the frequencies come about,
+# and how one can make use of this knowledge for quantum machine learning, we recommend the
+# :doc:`Fourier series expressiveness tutorial </demos/tutorial_expressivity_fourier_series>` as
+# further reading.
+# 
+# Finding the coefficients of the Fourier series $E_j$ for a single parameter is much more
+# reasonable than the exponential cost of doing so for the full cost function $E$.
+# And finding the coefficients of a one-dimensional (finite) Fourier series actually is 
+# well-known---it's simply a `(discrete) Fourier transform (DFT)
+# <https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`__!
+# How this can be implemented using PennyLane, which is also how Rotosolve will
+# do it, is discussed in the :doc:`General parameter-shift rule tutorial 
+# </demos/tutorial_general_parshift>`.
+# 
+# Once we know the coefficients $\{a_\ell\}$ and $\{b_\ell\}$, we know the entire one-dimensional
+# function $E_j$---recall that we know the frequencies $\{\Omega_\ell\}$ because we know which 
+# unitary operations we use in the circuit---and can optimize it using a classical computer. 
+# This is not such a hard challenge because many global optimization strategies are very 
+# efficient in one dimension.
+# 
+# Now that we have all ingredients, let us recollect the full Rotosolve algorithm:
+# 
+#   #. Loop over Rotosolve iterations
+#   #.    Loop over parameters (index $j$)
+#   #.        Reconstruct $E_j$ via DFT $\Rightarrow$ $\hat{E}_j$
+#   #.        Minimize $\hat{E}_j$ and update $x_j$ to the minimizer
+# 
+# As we can see, the structure is quite short and simple. As inputs we only require
+# the cost function (to obtain the samples for the DFT), the frequency spectrum 
+# $\{\Omega_\ell\}$ per parameter (to choose where to sample $E_j$ and perform the DFT), 
+# and some initial parameters.
+#
+# Let's continue by applying the PennyLane implementation 
+# :class:`~.pennylane.optimize.RotosolveOptimizer` of Rotosolve to our toy circuit from above.
+
+num_freqs = [len(freqs) for freqs in frequencies]
+num_freqs = [num_freqs[:3], num_freqs[3], num_freqs[4:]]
+opt = qml.RotosolveOptimizer()
+num_steps = 10
+x, y, z = x_0, y_0, z_0
+for step in range(num_steps):
+    print(f"After {step} steps, the cost is:       {cost(x, y, z):.5f}")
+    x, y, z = opt.step(cost, x, y, z, num_freqs=num_freqs)
+print(f"The final cost after {num_steps} steps is: {cost(x, y, z):.5f}")
+print(x_0)
+
+###############################################################################
+# The optimization with Rotosolve worked! We arrived at the minimal eigenvalue of the
+# observable $B=X\otimes X\otimes X$ that we are measuring in th circuit.
+# 
 # New features
 # ------------
 # 
-#   #. Explain ``Rs`` input parameter.
+# Maybe you already noticed the ``num_freqs`` argument we passed to ``opt.step`` above
+# during the optimization. It describes the number of frequencies per parameter, i.e.
+# it captures the numbers $R$ for each of the inputs. The current implementation of
+# Rotosolve assumes the frequencies to be the integers $[1,\cdots R]$ and will use
+# this assumption to perform the DFT during its ``step``. See below for details on how
+# to cover more general parameter dependencies.
+#
+# Note that the ``num_freqs`` argument is expected to either be
+#  
+#   #. an integer that applies to all input arguments of ``cost``,
+#   #. an integer per argument of ``cost``,
+#   #. a list of integers per argument of ``cost``, or
+#   #. a mixture of 2. and 3.
+#
+# Please refer to the `documentation 
+# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.RotosolveOptimizer.html>`__ 
+# for details.
+#
+# Regarding the one-dimensional minimization, we did not tell the ``RotosolveOptimizer`` which
+# method to use. It therefore used its default, which is a `grid search
+# <https://en.wikipedia.org/wiki/Hyperparameter_optimization#Grid_search>`__ implemented via
+# `SciPy's optimize.brute 
+# <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html>`__.
+# If we want to use a different strategy, we can pass it as a function that takes a 
+# one-dimensional function and some keyword arguments and returns a minimum position ``x_min``
+# and value ``y_min``. An example based on `SciPy's optimize.shgo
+# <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html>`__
+# would be:
+
+from scipy.optimize import shgo
+
+def shgo_optimizer(fun, **kwargs):
+    r"""Wrapper for ``scipy.optimize.shgo`` (Simplicial Homology global optimizer)."""
+    opt_res = shgo(fun, **kwargs)
+    return opt_res.x, opt_res.fun
+kwargs = {'bounds': ((-np.pi, np.pi),)}
+
+###############################################################################
+# Then we can reset the parameters to the initial values and run the optimization
+# a second time with this new one-dimensional optimizer subroutine.
+
+x, y, z = x_0, y_0, z_0
+for step in range(num_steps):
+    print(f"After {step} steps, the cost is:       {cost(x, y, z):.5f}")
+    x, y, z = opt.step(
+        cost, x, y, z, num_freqs=num_freqs, optimizer=shgo_optimizer, optimizer_kwargs=kwargs
+    )
+print(f"The final cost after {num_steps} steps is: {cost(x, y, z):.5f}")
+
+###############################################################################
+# Alternatively, the SHGO optimizer can be selected via ``optimizer='shgo'``.
+# Note that for parameters with $R=1$, the minimum is known analytically and the
+# optimizer is not used for those parameters.
+# 
+# The updated implementation also comes with a few convenience functionalities. 
 #   #. Explain ``full_output`` and ``reconstructed_output`` options.
 #   #. Use on example circuit from *The Rotosolve idea*.
 
