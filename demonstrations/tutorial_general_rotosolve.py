@@ -40,8 +40,51 @@ we only know the quantum gates we are using well enough. *What does that mean,* 
 you might ask---read on and find out!
 
 
-The Rotosolve idea
-------------------
+Rotosolve--Coordinate descent meets Fourier series
+--------------------------------------------------
+The first ingredient we will need are the cost functions that Rotosolve can tackle.
+They will typically take the form
+
+.. math ::
+
+    E(\boldsymbol{x}) = \langle \psi|U_1(x_1)^\dagger\cdots U_n(x_n)^\dagger B U_n(x_n)\cdots U_1(x_1) |\psi\rangle
+
+where $|\psi\rangle$ is some initial state, $B$ is a Hermitian observable, and $U_j(x_j)$ are 
+parametrized unitaries that encode the dependence on the variational parameters $\boldsymbol{x}$.
+We will take a closer look at which unitaries and which other cost function structures can be 
+handled by Rotosolve further below.
+
+It turns out that we then know $E$ to be a $n$-input *Fourier series* of the parameters.
+This enables us to understand the full functionality of the circuit and once we know the
+coefficients of this series, we do not even need to fire up a quantum machine anymore.
+However, obtaining all coefficients of the series is expensive---very expensive, actually---as we
+would need to measure the original $E$ at a number of sampling points that grows *exponentially*
+with $n$.
+
+Instead, Rotosolve makes use of `coordinate descent
+<https://en.wikipedia.org/wiki/Coordinate_descent>`__. This is a basic idea for optimizing
+functions depending on multiple parameters: simply optimize the parameters one at a time and cycle
+through them. Applying this to cost functions like the one above, we again get a Fourier
+series, but this time it only depends on a single parameter $x_j$ that we currently optimize
+over:
+
+.. math ::
+
+    E_j(x_j) = a_0 + \sum_{\ell=1}^R a_\ell \cos(\Omega_\ell x_j) + b_\ell \sin(\Omega_\ell x_j)
+
+Here, $\{a_\ell\}$ and $\{b_\ell\}$ are the coefficients and $\{\Omega_\ell\}$ are the frequencies
+of the series, the number and values of which are dictated by the unitary $U_j(x_j)$.
+
+If you are interested in details on why $E_j$ is a Fourier series, how the frequencies come about,
+and how one can make use of this knowledge for quantum machine learning, we recommend the
+:
+
+
+
+
+
+
+
 
   #. *Super*brief overview of cost functions as Fourier series -> Reference to 
      *Quantum models as Fourier series* demo.
