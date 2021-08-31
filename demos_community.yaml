@@ -1,3 +1,32 @@
+- title: Subspace Search Variational Quantum Eigensolver
+  author: Shah Ishman Mohtashim, Turbasu Chatterjee, Arnav Das
+  date: 08/23/2021
+  code: https://github.com/LegacYFTw/SSVQE
+  paper: https://arxiv.org/abs/1810.09434
+  color: heavy-rain-gradient
+  description: |
+    The variational quantum eigensolver (VQE) is an algorithm for searching the
+    ground state of a quantum system. The SSVQE uses a simple technique to find
+    the excited energy states by transforming the |0⋯0⟩ to the ground state,
+    and another orthogonal basis state |0⋯1⟩ to the first excited state and so on.
+    As a demonstration, the weighted SSVQE is used to find out the excited states
+    of a transverse Ising model with 4 spins and that of the hydrogen molecule.
+
+- title: Quantum PPO/TRPO - LSTMs and memory proximal policy optimization for black-box quantum control
+  author: Abhilash Majumder
+  date: 08/10/2021
+  code: https://colab.research.google.com/drive/1wkZpEpOuZHUdI-vRxQAiDlQD455diFSs?usp=sharing
+  color: heavy-rain-gradient
+  description: |
+    Reinforcement Learning as quantum control leverages quantum hybrid circuits
+    (QHC) for creating optimizations on policy networks for Deep RL.
+    Policy-gradient-based reinforcement learning (RL) algorithms are well suited
+    for optimizing the variational parameters of QAOA in a noise-robust fashion,
+    opening up the way for developing RL techniques for continuous quantum control.
+    This is advantageous to help mitigate and monitor the potentially unknown
+    sources of errors in modern quantum simulators. This demo aims to provide an
+    implementation of PPO on policy algorithm with QHC for continuous control.
+
 - title: EVA (Exponential Value Approximation) algorithm
   author: Guillermo Alonso-Linaje
   date: 07/30/2021
