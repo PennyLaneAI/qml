@@ -113,7 +113,7 @@ Demos
                 </a>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_community.html">
+                    <a href="demos_optimization.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
                             <div>
