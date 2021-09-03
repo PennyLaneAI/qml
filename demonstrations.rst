@@ -34,7 +34,7 @@ Demos
                                 <br>
                                 <strong>Getting started</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Begin your journey into quantum machine learning using PennyLane.</p>
+                                <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@ Demos
                                 <br>
                                 <strong>Quantum Computing</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Begin your journey into quantum machine learning using PennyLane.</p>
+                                <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -96,7 +96,7 @@ Demos
                 </a>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_research.html">
+                    <a href="demos_quantum-chemistry.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
                             <div>
@@ -105,7 +105,7 @@ Demos
                                 <br>
                                 <strong>Quantum Chemistry</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
+                                <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum computing using PennyLane.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
