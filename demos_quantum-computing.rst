@@ -1,0 +1,68 @@
+ .. role:: html(raw)
+   :format: html
+
+Quantum Computing
+=================
+
+.. meta::
+   :property="og:description": Explore the applications of PennyLane to more general quantum computing tasks such as benchmarking and characterizing quantum processors.
+   :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
+
+
+Explore the applications of PennyLane to more general quantum computing tasks
+such as benchmarking and characterizing quantum processors.
+
+.. raw:: html
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+
+:html:`<div class="gallery-grid row">`
+
+.. customgalleryitem::
+    :tooltip: Making a quantum machine learning model using neutral atoms
+    :figure: demonstrations/pasqal/pasqal_thumbnail.png
+    :description: :doc:`demos/tutorial_pasqal`
+    :tags: cirq tensorflow
+
+.. customgalleryitem::
+    :tooltip: Beyond classical computing with qsim.
+    :figure: demonstrations/qsim_beyond_classical/sycamore.png
+    :description: :doc:`demos/qsim_beyond_classical`
+    :tags: cirq qsim
+
+.. customgalleryitem::
+   :tooltip: Construct and simulate a Gaussian Boson Sampler.
+   :figure: demonstrations/tutorial_gbs_thumbnail.png
+   :description: :doc:`demos/tutorial_gbs`
+   :tags: photonics strawberryfields
+
+.. customgalleryitem::
+   :tooltip: Learn how to compute the quantum volume of a quantum processor.
+   :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
+   :description: :doc:`demos/quantum_volume`
+   :tags: characterization qiskit
+
+.. customgalleryitem::
+   :tooltip: Learn how to sample quantum states uniformly at random
+   :figure: demonstrations/haar_measure/spherical_int_dtheta.png
+   :description: :doc:`demos/tutorial_haar_measure`
+   :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Approximate quantum states with classical shadows.
+    :figure: demonstrations/classical_shadows/atom_shadow.png
+    :description: :doc:`demos/tutorial_classical_shadows`
+    :tags: quantumcomputing characterization
+
+:html:`</div></div><div style='clear:both'>`
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+
+    demos/tutorial_pasqal
+    demos/qsim_beyond_classical
+    demos/quantum_volume
+    demos/tutorial_haar_measure
+    demos/tutorial_gbs
+    demos/tutorial_classical_shadows

@@ -79,7 +79,7 @@ Demos
 
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_basics.html">
+                    <a href="demos_quantum-computing.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
                             <div>
