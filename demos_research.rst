@@ -225,6 +225,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_quantum_analytic_descent`
     :tags: optimization model vqe
 
+.. customgalleryitem::
+    :tooltip: Reconstruct and differentiate univariate quantum functions.
+    :figure: demonstrations/general_parshift/thumbnail_genpar.png
+    :description: :doc:`demos/tutorial_general_parshift`
+    :tags: gradients reconstruction
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -266,6 +272,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_classical_shadows`
     :tags: quantumcomputing characterization
 
+.. customgalleryitem::
+   :tooltip: Explore the amazing applications of unitary t-designs.
+   :figure: demonstrations/unitary_designs/fano.png
+   :description: :doc:`demos/tutorial_unitary_designs`
+   :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -306,3 +318,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_mol_geo_opt
     demos/tutorial_classical_shadows
     demos/tutorial_quantum_analytic_descent
+    demos/tutorial_general_parshift
