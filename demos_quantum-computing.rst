@@ -54,6 +54,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_classical_shadows`
     :tags: quantumcomputing characterization
 
+.. customgalleryitem::
+   :tooltip: Explore the amazing applications of unitary t-designs.
+   :figure: demonstrations/unitary_designs/fano.png
+   :description: :doc:`demos/tutorial_unitary_designs`
+   :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -66,3 +72,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_haar_measure
     demos/tutorial_gbs
     demos/tutorial_classical_shadows
+    demos/tutorial_unitary_designs
