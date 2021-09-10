@@ -323,7 +323,6 @@ def circuit(seed=42, return_probs=False):
     if return_probs:
         return qml.probs(wires=range(wires))
     else:
-        # return [qml.sample(qml.PauliZ(i)) for i in range(wires)]
         return qml.sample()
 
 ######################################################################
