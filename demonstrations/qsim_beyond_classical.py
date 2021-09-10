@@ -323,8 +323,8 @@ def circuit(seed=42, return_probs=False):
     if return_probs:
         return qml.probs(wires=range(wires))
     else:
-        return [qml.sample(qml.PauliZ(i)) for i in range(wires)]
-
+        # return [qml.sample(qml.PauliZ(i)) for i in range(wires)]
+        return qml.sample()
 
 ######################################################################
 # The cross-entropy benchmarking fidelity
@@ -403,15 +403,12 @@ def fidelity_xeb(samples, probs):
 
 seed = np.random.randint(0, 42424242)
 probs = circuit(seed=seed, return_probs=True)
+circuit_samples = circuit(seed=seed)
 
-# transpose the samples to get the shape (shots, wires)
-circuit_samples = circuit(seed=seed).T
-
-# take the eigenvalues and transform -1 to 1 and 1 to 0
+# get bitstrings from the samples
 bitstring_samples = []
 for sam in circuit_samples:
-    bitstring_sample = -(sam - 1) // 2
-    bitstring_samples.append("".join(str(bs) for bs in bitstring_sample))
+    bitstring_samples.append("".join(str(bs) for bs in sam))
 
 f_circuit = fidelity_xeb(bitstring_samples, probs)
 
@@ -493,12 +490,11 @@ for i in range(num_of_evaluations):
     seed = np.random.randint(0, 42424242)
 
     probs = circuit(seed=seed, return_probs=True)
-    samples = circuit(seed=seed).T
+    samples = circuit(seed=seed)
 
     bitstring_samples = []
     for sam in samples:
-        new_sam = -(sam - 1) // 2
-        bitstring_samples.append("".join(str(bs) for bs in new_sam))
+        bitstring_samples.append("".join(str(bs) for bs in sam))
 
     f_circuit.append(fidelity_xeb(bitstring_samples, probs))
     print(f"\r{i + 1:4d} / {num_of_evaluations:4d}{' ':17}{np.mean(f_circuit):.7f}", end="")
