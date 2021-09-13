@@ -91,13 +91,6 @@ from pennylane import qchem
 # Hartree-Fock state
 hf = qml.qchem.hf_state(electrons=2, orbitals=4)
 
-def circuit(params, wires):
-    # Prepare the HF state: |1100>
-    qml.BasisState(hf, wires=wires)
-    qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
-    qml.SingleExcitation(params[1], wires=[0, 2])
-    qml.SingleExcitation(params[2], wires=[1, 3])
-
 
 ##############################################################################
 # To construct the potential energy surface, we vary the location of the nuclei and calculate the
@@ -138,10 +131,19 @@ for r in r_range:
     # Obtain the qubit Hamiltonian 
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
-    # define the device, cost function, and optimizer
+    # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
-    cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
+
+    @qml.qnode(dev)
+    def circuit(parameters):
+        # Prepare the HF state: |1100>
+        qml.BasisState(hf, wires=qubits)
+        qml.DoubleExcitation(parameters[0], wires=[0, 1, 2, 3])
+        qml.SingleExcitation(parameters[1], wires=[0, 2])
+        qml.SingleExcitation(parameters[2], wires=[1, 3])
+
+        return qml.expval(H)  # we are interested in minimizing this expectation value
 
     # initialize the gate parameters
     params = np.zeros(3)
@@ -153,7 +155,7 @@ for r in r_range:
     prev_energy = 0.0
     for n in range(50):
         # perform optimization step
-        params, energy = opt.step_and_cost(cost_fn, params)
+        params, energy = opt.step_and_cost(circuit, params)
 
         if np.abs(energy - prev_energy) < 1e-6:
             break
@@ -286,8 +288,17 @@ for r in r_range:
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
 
     dev = qml.device("default.qubit", wires=qubits)
-    cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
+
+    @qml.qnode(dev)
+    def circuit(parameters):
+        # Prepare the HF state: |1100>
+        qml.BasisState(hf, wires=qubits)
+        qml.DoubleExcitation(parameters[0], wires=[0, 1, 2, 3])
+        qml.SingleExcitation(parameters[1], wires=[0, 2])
+        qml.SingleExcitation(parameters[2], wires=[1, 3])
+
+        return qml.expval(H)
 
     params = np.zeros(len(singles) + len(doubles))
 
@@ -297,7 +308,7 @@ for r in r_range:
     prev_energy = 0.0
 
     for n in range(60):
-        params, energy = opt.step_and_cost(cost_fn, params)
+        params, energy = opt.step_and_cost(circuit, params)
         if np.abs(energy - prev_energy) < 1e-6:
             break
         prev_energy = energy
