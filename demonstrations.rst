@@ -26,16 +26,33 @@ Demos
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
                     <a href="demos_getting-started.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                                <div>
+                        <div class="card rounded-lg h-100">
+                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
+                                <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <img src="_static/board.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
                                     <strong>Getting started</strong>
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                    <div class="white-text d-flex justify-content-center mt-auto "><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <a href="demos_optimization.html">
+                        <div class="card rounded-lg h-100">
+                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
+                                <div class="d-flex flex-column h-100">
+                                    <h3 class="card-title">
+                                    <img src="_static/optimization.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <br>
+                                    <strong>Optimization</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Learn how to train quantum circuits like neural networks, using the latest tips and tricks from the literature.</p>
+                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
                         </div>
@@ -43,33 +60,16 @@ Demos
                 </div>
                 <div class="col-lg-3 mb-4">
                     <a href="demos_qml.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                                <div>
+                        <div class="card rounded-lg h-100">
+                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
+                                <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <img src="_static/wigner.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
                                     <strong>QML</strong>
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 mb-4">
-                    <a href="demos_community.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                                <div>
-                                    <h3 class="card-title">
-                                    <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
-                                    <br>
-                                    <strong>Community</strong>
-                                    </h3>
-                                    <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
                         </div>
@@ -79,51 +79,51 @@ Demos
 
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_quantum-computing.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                                <div>
-                                    <h3 class="card-title">
-                                    <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
-                                    <br>
-                                    <strong>Quantum Computing</strong>
-                                    </h3>
-                                    <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 mb-4">
                     <a href="demos_quantum-chemistry.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                                <div>
+                        <div class="card rounded-lg h-100">
+                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
+                                <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <img src="_static/quantum-chemistry.png" class="img-fluid" style="max-width: 110px;"></img>
                                     <br>
                                     <strong>Quantum Chemistry</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum computing using PennyLane.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                    <p class="mb-1 grey-text px-3">Investigate, simulate, and infer properties of molecules and materials using quantum computing.</p>
+                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_optimization.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                                <div>
+                    <a href="demos_quantum-computing.html">
+                        <div class="card rounded-lg h-100">
+                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
+                                <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <img src="_static/quantum-computing.png" class="img-fluid" style="max-width: 66px;"></img>
                                     <br>
-                                    <strong>Optimization</strong>
+                                    <strong>Quantum Computing</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Explore general quantum computing tasks and algorithms, from quantum volume to Boson sampling.</p>
+                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <a href="demos_community.html">
+                        <div class="card rounded-lg h-100">
+                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
+                                <div class="d-flex flex-column h-100">
+                                    <h3 class="card-title">
+                                    <img src="_static/community.png" class="img-fluid" style="max-width: 130px;"></img>
+                                    <br>
+                                    <strong>Community</strong>
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
                         </div>
