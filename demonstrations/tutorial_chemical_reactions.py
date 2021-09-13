@@ -286,6 +286,7 @@ for r in r_range:
 
     # We now specify the multiplicity
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
+    print(qubits)
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
