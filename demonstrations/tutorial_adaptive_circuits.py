@@ -42,9 +42,9 @@ circuits helps improve performance at the cost of reducing generality.
 
 In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
 This includes a recipe to adaptively select gates that have a significant contribution to
-the desired state, while neglecting those that have a small contribution. You will also learn how to use
-the functionality in PennyLane for leveraging the sparsity of a molecular Hamiltonian to make the
-computation of the expectation values even more efficient. Let's get started!
+the desired state, while neglecting those that have a small contribution. You will also learn how to
+use the functionality in PennyLane for leveraging the sparsity of a molecular Hamiltonian to make
+the computation of the expectation values even more efficient. Let's get started!
 
 Adaptive circuits
 -----------------
