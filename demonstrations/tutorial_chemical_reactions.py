@@ -275,8 +275,6 @@ orbitals = 6
 singles, doubles = qchem.excitations(electrons, orbitals)
 hf = qml.qchem.hf_state(electrons, orbitals)
 
-def circuit(params, wires):
-    AllSinglesDoubles(params, wires, hf, singles, doubles)
 
 # loop to change reaction coordinate
 r_range = np.arange(1.0, 3.0, 0.1)
@@ -286,20 +284,14 @@ for r in r_range:
 
     # We now specify the multiplicity
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
-    print(qubits)
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
     @qml.qnode(dev)
     def circuit(parameters):
-        # Prepare the HF state: |1100>
-        qml.BasisState(hf, wires=range(qubits))
-        qml.DoubleExcitation(parameters[0], wires=[0, 1, 2, 3])
-        qml.SingleExcitation(parameters[1], wires=[0, 2])
-        qml.SingleExcitation(parameters[2], wires=[1, 3])
-
-        return qml.expval(H)
+        AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
+        return qml.expval(H)  # we are interested in minimizing this expectation value
 
     params = np.zeros(len(singles) + len(doubles))
 
