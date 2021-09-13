@@ -25,109 +25,109 @@ Demos
         <section class="my-5">
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_gettting-started.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
-                                <br>
-                                <strong>Getting started</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                    <a href="demos_getting-started.html">
+                        <div class="card rounded-lg">
+                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
+                                <div>
+                                    <h3 class="card-title">
+                                    <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <br>
+                                    <strong>Getting started</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
+                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <a href="demos_qml.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
-                                <br>
-                                <strong>QML</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        <div class="card rounded-lg">
+                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
+                                <div>
+                                    <h3 class="card-title">
+                                    <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <br>
+                                    <strong>QML</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
+                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <a href="demos_community.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
-                                <br>
-                                <strong>Community</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        <div class="card rounded-lg">
+                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
+                                <div>
+                                    <h3 class="card-title">
+                                    <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <br>
+                                    <strong>Community</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
+                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 </div>
             </div>
 
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
                     <a href="demos_quantum-computing.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
-                                <br>
-                                <strong>Quantum Computing</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        <div class="card rounded-lg">
+                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
+                                <div>
+                                    <h3 class="card-title">
+                                    <img src="_static/board.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <br>
+                                    <strong>Quantum Computing</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
+                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <a href="demos_quantum-chemistry.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
-                                <br>
-                                <strong>Quantum Chemistry</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum computing using PennyLane.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        <div class="card rounded-lg">
+                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
+                                <div>
+                                    <h3 class="card-title">
+                                    <img src="_static/research.png" class="img-fluid" style="max-width: 88px;"></img>
+                                    <br>
+                                    <strong>Quantum Chemistry</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum computing using PennyLane.</p>
+                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <a href="demos_optimization.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
-                                <br>
-                                <strong>Optimization</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        <div class="card rounded-lg">
+                            <div class="text-center d-flex align-items-center pb-2" style="justify-content: center;">
+                                <div>
+                                    <h3 class="card-title">
+                                    <img src="_static/community.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <br>
+                                    <strong>Optimization</strong>
+                                    </h3>
+                                    <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
+                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 </div>
             </div>
 
@@ -244,7 +244,9 @@ Demos
     :caption: QML Demos
     :hidden:
 
-    demos_basics
-    demos_research
     demos_community
-    demos_submission
+    demos_getting-started
+    demos_qml
+    demos_quantum-computing
+    demos_quantum-chemistry
+    demos_optimization
