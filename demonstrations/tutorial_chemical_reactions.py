@@ -138,7 +138,7 @@ for r in r_range:
     @qml.qnode(dev)
     def circuit(parameters):
         # Prepare the HF state: |1100>
-        qml.BasisState(hf, wires=qubits)
+        qml.BasisState(hf, wires=range(qubits))
         qml.DoubleExcitation(parameters[0], wires=[0, 1, 2, 3])
         qml.SingleExcitation(parameters[1], wires=[0, 2])
         qml.SingleExcitation(parameters[2], wires=[1, 3])
@@ -293,7 +293,7 @@ for r in r_range:
     @qml.qnode(dev)
     def circuit(parameters):
         # Prepare the HF state: |1100>
-        qml.BasisState(hf, wires=qubits)
+        qml.BasisState(hf, wires=range(qubits))
         qml.DoubleExcitation(parameters[0], wires=[0, 1, 2, 3])
         qml.SingleExcitation(parameters[1], wires=[0, 2])
         qml.SingleExcitation(parameters[2], wires=[1, 3])
