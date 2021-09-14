@@ -216,12 +216,14 @@ def falqon_layer(beta_k, cost_h, driver_h, delta_t):
     qml.templates.ApproxTimeEvolution(driver_h, delta_t * beta_k, 1)
 
 ######################################################################
-# We then define a method which returns a FALQON ansatz corresponding to a particular cost Hamiltonian, driver
-# Hamiltonian, and :math:`\Delta t`. This involves multiple repetitions of the "FALQON layer" defined above. The
-# initial state of our circuit is an even superposition:
+# We then define a method which returns a circuit that generates a FALQON ansatz corresponding to a particular cost
+# Hamiltonian, driver Hamiltonian, and :math:`\Delta t`. This involves multiple repetitions of the "FALQON layer"
+# defined above. The circuit ends with a measurement of the expectation value of the provided measurement operator;
+# if no operator is provided it returns the probability distribution of the computational basis.
+# The initial state of our circuit is an even superposition:
 
 def build_maxclique_ansatz(cost_h, driver_h, delta_t):
-    def ansatz(beta, **kwargs):
+    def ansatz(beta,  measurement_h=None, **kwargs):
         layers = len(beta)
         for w in dev.wires:
             qml.Hadamard(wires=w)
@@ -234,6 +236,12 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
             delta_t=delta_t
         )
 
+        if measurement_h is None:
+            return qml.probs(wires=dev.wires)
+
+        else:
+            return qml.expval(measurement_h)
+
     return ansatz
 
 ######################################################################
@@ -244,21 +252,16 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     comm_h = build_hamiltonian(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
-    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t) # Builds the FALQON ansatz
+    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t) # Builds the FALQON ansatz circuit
+    ansatz = qml.Qnode(ansatz, dev) # The FalQON ansatz circuit is now executable
 
     beta = [beta_1] # Records each value of beta_k
     energies = [] # Records the value of the cost function at each step
 
     for i in range(n):
-        # Creates a function that can evaluate the expectation value of the commutator
-        cost_fn = qml.ExpvalCost(ansatz, comm_h, dev)
-
-        # Creates a function that returns the expectation value of the cost Hamiltonian
-        cost_fn_energy = qml.ExpvalCost(ansatz, cost_h, dev)
-
         # Adds a value of beta to the list and evaluates the cost function
-        beta.append(-1 * cost_fn(beta))
-        energy = cost_fn_energy(beta)
+        beta.append(-1 * ansatz(beta, comm_h))  # this ansatz call measures the expectation of the commuter hamiltonian
+        energy = ansatz(beta, cost_h)  # this ansatz call measures the expectation of the cost hamiltonian
         energies.append(energy)
 
     return beta, energies
@@ -293,19 +296,12 @@ plt.show()
 # The expectation value decreases!
 #
 # To get a better understanding of the performance of the FALQON algorithm,
-# we can create a graph showing the probability of measuring each possible bit string. We define the
-# following circuit, feeding in the optimal values of :math:`\beta_k`:
+# we can create a graph showing the probability of measuring each possible bit string.
+# we call the ansatz circuit again, feeding in the optimal values of :math:`\beta_k`, but we don't specify a
+# measurement operator in order to extract the probabilities:
 
-@qml.qnode(dev)
-def prob_circuit():
-    build_maxclique_ansatz(cost_h, driver_h, delta_t)(res_beta)
-    return qml.probs(wires=dev.wires)
-
-######################################################################
-# Running this circuit gives us the following probability distribution:
-#
-
-probs = prob_circuit()
+ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
+probs = ansatz(res_beta, measurement_h=None)
 plt.bar(range(2**len(dev.wires)), probs)
 plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
@@ -410,14 +406,14 @@ def qaoa_layer(gamma, beta):
     qaoa.cost_layer(gamma, cost_h)
     qaoa.mixer_layer(beta, mixer_h)
 
-# Creates the full QAOA circuit
+# Creates the full QAOA circuit as an executable cost function
+@qml.qnode(dev)
 def qaoa_circuit(params, **kwargs):
     for w in dev.wires:
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
-# Creates a cost function with executes the QAOA circuit
-cost_fn = qml.ExpvalCost(qaoa_circuit, cost_h, dev)
+    return qml.expval(cost_h)
 
 ######################################################################
 # Now all we have to do is run FALQON for :math:`5` steps to get our initial QAOA parameters.
@@ -438,7 +434,7 @@ steps = 40
 optimizer = qml.GradientDescentOptimizer()
 
 for s in range(steps):
-    params, cost = optimizer.step_and_cost(cost_fn, params)
+    params, cost = optimizer.step_and_cost(qaoa_circuit, params)
     print("Step {}, Cost = {}".format(s + 1, cost))
 
 ######################################################################
@@ -447,11 +443,14 @@ for s in range(steps):
 # create a bar graph:
 
 @qml.qnode(dev)
-def prob_circuit():
-    qaoa_circuit(params)
+def prob_circuit(params):
+    for w in dev.wires:
+        qml.Hadamard(wires=w)
+    qml.layer(qaoa_layer, depth, params[0], params[1])
+
     return qml.probs(wires=dev.wires)
 
-probs = prob_circuit()
+probs = prob_circuit(params)
 plt.bar(range(2**len(dev.wires)), probs)
 plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
