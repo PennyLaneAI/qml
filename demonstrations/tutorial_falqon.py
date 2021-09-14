@@ -236,11 +236,8 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
             delta_t=delta_t
         )
 
-        if measurement_h is None:
-            return qml.probs(wires=dev.wires)
-
-        else:
-            return qml.expval(measurement_h)
+        if measurement_h is not None:
+            return qml.expval(measurement_h.item())
 
     return ansatz
 
@@ -297,11 +294,19 @@ plt.show()
 #
 # To get a better understanding of the performance of the FALQON algorithm,
 # we can create a graph showing the probability of measuring each possible bit string.
-# we call the ansatz circuit again, feeding in the optimal values of :math:`\beta_k`, but we don't specify a
-# measurement operator in order to extract the probabilities:
+# We define the following circuit, feeding in the optimal values of :math:`\beta_k`:
 
-ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
-probs = ansatz(res_beta, measurement_h=None)
+@qml.qnode(dev)
+def prob_circuit():
+    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
+    ansatz(res_beta)
+    return qml.probs(wires=dev.wires)
+
+######################################################################
+# Running this circuit gives us the following probability distribution:
+#
+
+probs = prob_circuit()
 plt.bar(range(2**len(dev.wires)), probs)
 plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
