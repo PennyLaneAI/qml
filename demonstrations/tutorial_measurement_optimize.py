@@ -141,14 +141,18 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-cost = qml.ExpvalCost(ansatz, H, dev)
+# cost = qml.ExpvalCost(ansatz, H, dev)
+@qml.qnode(dev)
+def cost_circuit(params):
+    ansatz(params)
+    return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
 # QNodes under the hood---one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
-print("Cost function value:", cost(params))
+print("Cost function value:", cost_circuit(params))
 print("Number of quantum evaluations:", dev.num_executions)
 
 ##############################################################################
@@ -750,7 +754,11 @@ print("<H> = ", np.sum(np.hstack(result)))
 # optimized:
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.templates.StronglyEntanglingLayers, H, dev, optimize=True)
+@qml.qnode(dev)
+def cost_fn(params):
+    qml.templates.StronglyEntanglingLayers(params)
+    return qml.expval(H)
+
 print(cost_fn(weights))
 
 ##############################################################################
