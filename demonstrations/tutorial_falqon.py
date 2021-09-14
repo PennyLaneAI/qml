@@ -253,7 +253,7 @@ def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     comm_h = build_hamiltonian(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
     ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t) # Builds the FALQON ansatz circuit
-    ansatz = qml.Qnode(ansatz, dev) # The FalQON ansatz circuit is now executable
+    ansatz = qml.QNode(ansatz, dev) # The FalQON ansatz circuit is now executable
 
     beta = [beta_1] # Records each value of beta_k
     energies = [] # Records the value of the cost function at each step
