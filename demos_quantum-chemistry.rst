@@ -73,6 +73,12 @@ Quantum Chemistry
     :description: :doc:`demos/tutorial_mol_geo_opt`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Adaptive circuits for quantum chemistry.
+    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
+    :description: :doc:`demos/tutorial_adaptive_circuits`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -90,3 +96,4 @@ Quantum Chemistry
     demos/tutorial_vqe_qng
     demos/tutorial_measurement_optimize
     demos/tutorial_mol_geo_opt
+    demos/tutorial_adaptive_circuits
