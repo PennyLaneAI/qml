@@ -144,7 +144,7 @@ ansatz = functools.partial(
 # cost = qml.ExpvalCost(ansatz, H, dev)
 @qml.qnode(dev)
 def cost_circuit(params):
-    ansatz(params)
+    ansatz(params, wires=dev.wires)
     return qml.expval(H)
 
 ##############################################################################
@@ -756,7 +756,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
 @qml.qnode(dev)
 def cost_fn(params):
-    qml.templates.StronglyEntanglingLayers(params)
+    qml.templates.StronglyEntanglingLayers(params, wires=dev.wires)
     return qml.expval(H)
 
 print(cost_fn(weights))
