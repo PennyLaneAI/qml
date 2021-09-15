@@ -179,6 +179,12 @@ hardware.
     :figure: demonstrations/vqe_bond_dissociation/reaction.png
     :description: :doc:`demos/tutorial_chemical_reactions`
 
+.. customgalleryitem::
+    :tooltip: Adaptive circuits for quantum chemistry.
+    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
+    :description: :doc:`demos/tutorial_adaptive_circuits`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -209,3 +215,4 @@ hardware.
     demos/braket-parallel-gradients
     demos/tutorial_vqe_bond_dissociation
     demos/tutorial_givens_rotations
+    demos/tutorial_adaptive_circuits
