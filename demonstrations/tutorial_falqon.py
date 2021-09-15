@@ -237,7 +237,7 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
         )
 
         if measurement_h is not None:
-            return qml.expval(measurement_h.item())
+            return qml.expval(measurement_h)
 
     return ansatz
 
@@ -257,8 +257,8 @@ def max_clique_falqon(graph, n, beta_1, delta_t, dev):
 
     for i in range(n):
         # Adds a value of beta to the list and evaluates the cost function
-        beta.append(-1 * ansatz(beta, comm_h))  # this ansatz call measures the expectation of the commuter hamiltonian
-        energy = ansatz(beta, cost_h)  # this ansatz call measures the expectation of the cost hamiltonian
+        beta.append(-1 * ansatz(beta, measurement_h=comm_h))  # this ansatz call measures the expectation of the commuter hamiltonian
+        energy = ansatz(beta, measurement_h=cost_h)  # this ansatz call measures the expectation of the cost hamiltonian
         energies.append(energy)
 
     return beta, energies
