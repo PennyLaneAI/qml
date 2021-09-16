@@ -458,6 +458,7 @@ from qiskit.providers.aer import noise
 
 # Note: you will need to be authenticated to IBMQ to run the following code.
 # Do not run the simulation on this device, as it will send it to real hardware
+# For access to IBMQ, the following statements will be useful:
 # IBMQ.save_account(TOKEN)
 # IBMQ.load_account() # Load account from disk
 # IBMQ.providers()    # List all available providers
