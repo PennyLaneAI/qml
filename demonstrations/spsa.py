@@ -431,7 +431,7 @@ from pennylane import qchem
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
-h2_ham, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
 def circuit(params, wires):
