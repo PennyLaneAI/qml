@@ -539,9 +539,6 @@ print(f"Heavy outputs are {heavy_outputs}")
 #    In the time since the original release of this demo, the Ourense device is
 #    no longer available from IBM Q. However, we leave the original results for
 #    expository purposes, and note that the methods are applicable in general.
-#
-# .. note::
-#
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
