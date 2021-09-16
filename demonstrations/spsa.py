@@ -461,6 +461,7 @@ from qiskit.providers.aer import noise
 # For access to IBMQ, the following statements will be useful:
 # IBMQ.save_account(TOKEN)
 # IBMQ.load_account() # Load account from disk
+# List the providers to pick an available backend:
 # IBMQ.providers()    # List all available providers
 
 dev_melbourne = qml.device(
