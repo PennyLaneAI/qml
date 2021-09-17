@@ -2,7 +2,7 @@
    :format: html
 
 Quantum Chemistry
-============
+=================
 
 .. meta::
    :property="og:description": Implementations of the latest cutting-edge ideas and research from quantum machine learning using PennyLane.

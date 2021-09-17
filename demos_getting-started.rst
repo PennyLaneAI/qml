@@ -2,7 +2,7 @@
    :format: html
 
 Getting Started
-======
+===============
 
 .. meta::
    :property="og:description": Begin your journey into quantum machine learning using PennyLane by exploring tutorials and basic applications.
