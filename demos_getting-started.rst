@@ -96,14 +96,14 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :hidden:
 
     demos/tutorial_qubit_rotation
-    demos/tutorial_gaussian_transformation
-    demos/tutorial_plugins_hybrid
     demos/tutorial_backprop
+    demos/tutorial_plugins_hybrid
+    demos/tutorial_noisy_circuits
+    demos/tutorial_gaussian_transformation
+    demos/braket-parallel-gradients
+    demos/tutorial_jax_transformations
+    demos/tutorial_qnn_module_tf
+    demos/tutorial_qnn_module_torch
     demos/tutorial_state_preparation
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
-    demos/tutorial_qnn_module_tf
-    demos/tutorial_qnn_module_torch
-    demos/tutorial_jax_transformations
-    demos/tutorial_noisy_circuits
-    demos/braket-parallel-gradients
