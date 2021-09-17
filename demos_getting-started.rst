@@ -23,10 +23,10 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: autograd
 
 .. customgalleryitem::
-    :tooltip: Use quantum machine learning to tune a beamsplitter.
-    :figure: demonstrations/gaussian_transformation/gauss-circuit.png
-    :description: :doc:`demos/tutorial_gaussian_transformation`
-    :tags: autograd photonics
+    :tooltip: Compare the parameter-shift rule with backpropagation.
+    :figure: demonstrations/tutorial_backprop_thumbnail.png
+    :description: :doc:`demos/tutorial_backprop`
+    :tags: tensorflow autograd
 
 .. customgalleryitem::
     :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
@@ -35,34 +35,28 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: autograd photonics strawberryfields
 
 .. customgalleryitem::
-    :tooltip: Compare the parameter-shift rule with backpropagation.
-    :figure: demonstrations/tutorial_backprop_thumbnail.png
-    :description: :doc:`demos/tutorial_backprop`
-    :tags: tensorflow autograd
-
-.. customgalleryitem::
     :tooltip: Simulate noisy quantum computations.
     :figure: demonstrations/noisy_circuits/N-Nisq.png
     :description: :doc:`demos/tutorial_noisy_circuits`
     :tags: beginner
 
 .. customgalleryitem::
-    :tooltip: Extend PyTorch with real quantum computing power.
-    :figure: demonstrations/pytorch_noise/bloch.gif
-    :description: :doc:`demos/pytorch_noise`
-    :tags: forest pytorch
+    :tooltip: Use quantum machine learning to tune a beamsplitter.
+    :figure: demonstrations/gaussian_transformation/gauss-circuit.png
+    :description: :doc:`demos/tutorial_gaussian_transformation`
+    :tags: autograd photonics
 
 .. customgalleryitem::
-    :tooltip: Do arbitrary state preparation on a real quantum computer.
-    :figure: demonstrations/state_preparation/NOON.png
-    :description: :doc:`demos/tutorial_state_preparation`
-    :tags: pytorch
+    :tooltip: Parallelize gradient calculations with Amazon Braket
+    :figure: _static/pl-braket.png
+    :description: :doc:`demos/braket-parallel-gradients`
+    :tags: braket
 
 .. customgalleryitem::
-    :tooltip: Learn how noise can affect the optimization and training of quantum computations.
-    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
-    :description: :doc:`demos/tutorial_noisy_circuit_optimization`
-    :tags: cirq
+    :tooltip: Learn how to use JAX with PennyLane.
+    :figure: demonstrations/jax_logo/jax.png
+    :description: :doc:`demos/tutorial_jax_transformations`
+    :tags: beginner
 
 .. customgalleryitem::
     :tooltip: Learn how to create hybrid ML models using Keras
@@ -77,16 +71,22 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: pytorch
 
 .. customgalleryitem::
-    :tooltip: Learn how to use JAX with PennyLane.
-    :figure: demonstrations/jax_logo/jax.png
-    :description: :doc:`demos/tutorial_jax_transformations`
-    :tags: beginner
+    :tooltip: Do arbitrary state preparation on a real quantum computer.
+    :figure: demonstrations/state_preparation/NOON.png
+    :description: :doc:`demos/tutorial_state_preparation`
+    :tags: pytorch
 
 .. customgalleryitem::
-    :tooltip: Parallelize gradient calculations with Amazon Braket
-    :figure: _static/pl-braket.png
-    :description: :doc:`demos/braket-parallel-gradients`
-    :tags: braket
+    :tooltip: Extend PyTorch with real quantum computing power.
+    :figure: demonstrations/pytorch_noise/bloch.gif
+    :description: :doc:`demos/pytorch_noise`
+    :tags: forest pytorch
+
+.. customgalleryitem::
+    :tooltip: Learn how noise can affect the optimization and training of quantum computations.
+    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
+    :description: :doc:`demos/tutorial_noisy_circuit_optimization`
+    :tags: cirq
 
 :html:`</div></div><div style='clear:both'>`
 
