@@ -17,6 +17,7 @@ pennylane-sf==0.16.0
 pennylane-forest==0.17.0
 pennylane-cirq==0.17.0
 pennylane-qiskit==0.17.0
+pennylane-lightning==0.18.0
 qulacs==0.1.10.1
 pennylane-qulacs==0.16.0
 pyquil==2.21
