@@ -127,6 +127,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_general_parshift`
     :tags: gradients reconstruction
 
+.. customgalleryitem::
+    :tooltip: VQE optimization using quantum natural gradient.
+    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
+    :description: :doc:`demos/tutorial_vqe_qng`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -152,3 +158,4 @@ plateaus in quantum neural networks.
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_falqon
     demos/tutorial_rotoselect
+    demos/tutorial_vqe_qng

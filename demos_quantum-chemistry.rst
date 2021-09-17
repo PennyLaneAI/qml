@@ -56,12 +56,6 @@ Quantum Chemistry
     :tags: chemistry
 
 .. customgalleryitem::
-    :tooltip: VQE optimization using quantum natural gradient.
-    :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
-    :description: :doc:`demos/tutorial_vqe_qng`
-    :tags: chemistry
-
-.. customgalleryitem::
     :tooltip: Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
     :figure: demonstrations/measurement_optimize/meas_optimize_thumbnail.png
     :description: :doc:`demos/tutorial_measurement_optimize`
@@ -93,7 +87,6 @@ Quantum Chemistry
     demos/tutorial_givens_rotations
     demos/tutorial_chemical_reactions
     demos/tutorial_vqt
-    demos/tutorial_vqe_qng
     demos/tutorial_measurement_optimize
     demos/tutorial_mol_geo_opt
     demos/tutorial_adaptive_circuits
