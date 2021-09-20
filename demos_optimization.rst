@@ -133,6 +133,12 @@ plateaus in quantum neural networks.
     :description: :doc:`demos/tutorial_vqe_qng`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
+    :figure: demonstrations/vqt/thumbnail.png
+    :description: :doc:`demos/tutorial_vqt`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -159,3 +165,4 @@ plateaus in quantum neural networks.
     demos/tutorial_falqon
     demos/tutorial_rotoselect
     demos/tutorial_vqe_qng
+    demos/tutorial_vqt
