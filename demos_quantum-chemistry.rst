@@ -35,6 +35,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :tags: chemistry
 
 .. customgalleryitem::
+    :tooltip: Adaptive circuits for quantum chemistry.
+    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
+    :description: :doc:`demos/tutorial_adaptive_circuits`
+    :tags: chemistry
+
+.. customgalleryitem::
     :tooltip: Study chemical reactions using VQE.
     :figure: demonstrations/vqe_bond_dissociation/reaction.png
     :description: :doc:`demos/tutorial_chemical_reactions`
@@ -63,11 +69,6 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :description: :doc:`demos/tutorial_vqe_parallel`
     :tags: chemistry
 
-.. customgalleryitem::
-    :tooltip: Adaptive circuits for quantum chemistry.
-    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
-    :description: :doc:`demos/tutorial_adaptive_circuits`
-    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
