@@ -10,7 +10,7 @@ Demos
 =====
 
 .. meta::
-   :property="og:description": Take a deeper dive into quantum computing by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.
+   :property="og:description": Take a deeper dive into quantum computing by exploring cutting-edge algorithms using PennyLane and quantum hardware.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
 .. raw:: html
@@ -19,8 +19,9 @@ Demos
 
     <div class="container">
         <!-- Section: Features v.1 -->
-            <p class="lead grey-text text-center mx-auto mb-5">
-            Take a deeper dive into quantum computing by exploring cutting-edge algorithms using PennyLane and near-term quantum hardware.</p>
+        <p class="lead grey-text text-center mx-auto mb-5">
+          Take a deeper dive into quantum computing by exploring cutting-edge algorithms using PennyLane and quantum hardware.
+        </p>
 
         <section class="my-5">
             <div class="row justify-content-center main-cards">
@@ -88,7 +89,7 @@ Demos
                                     <br>
                                     <strong>Quantum Chemistry</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Investigate, simulate, and infer properties of molecules and materials using quantum computing.</p>
+                                    <p class="mb-1 grey-text px-3">Study the properties of molecules and materials using quantum computing.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
@@ -105,7 +106,7 @@ Demos
                                     <br>
                                     <strong>Quantum Computing</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Explore general quantum computing tasks and algorithms, from quantum volume to Boson sampling.</p>
+                                    <p class="mb-1 grey-text px-3">Explore general quantum computing tasks and algorithms, from quantum volume to boson sampling.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
