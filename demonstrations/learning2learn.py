@@ -11,7 +11,7 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 16 Jun 2021.*
+*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 15 Sep 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -585,6 +585,7 @@ plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
@@ -675,6 +676,7 @@ plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
@@ -928,6 +930,7 @@ plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
@@ -1069,7 +1072,7 @@ model.summary()
 #
 #  .. code-block:: none
 #
-#        Model: "model"
+#        Model: "functional_1"
 #        __________________________________________________________________________________________________
 #        Layer (type)                    Output Shape         Param #     Connected to                     
 #        ==================================================================================================
