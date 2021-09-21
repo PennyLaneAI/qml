@@ -1,3 +1,14 @@
+- title: Quantum circuit learning to compute option prices and their sensitivities
+  author: Takayuki Sakuma
+  date: 09/16/2021
+  code: https://github.com/ta641/option_QCL/blob/master/qclop_tutorial.ipynb
+  paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3922040
+  color: heavy-rain-gradient
+  description: |
+    Quantum circuit learning is applied to computing option prices and their sensitivities. 
+    The advantage of this method is that a suitable choice of quantum circuit architecture 
+    makes it possible to compute the sensitivities analytically by applying parameter-shift rules.
+
 - title: Subspace Search Variational Quantum Eigensolver
   author: Shah Ishman Mohtashim, Turbasu Chatterjee, Arnav Das
   date: 08/23/2021
