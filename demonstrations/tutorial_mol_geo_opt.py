@@ -188,11 +188,12 @@ print(hf)
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
 
-def circuit(params, wires):
+def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
 
+    return qml.expval(obs)
 ##############################################################################
 # This circuit prepares the trial state
 #
@@ -224,7 +225,9 @@ dev = qml.device("default.qubit", wires=6)
 # Hamiltonian parameters.
 
 def cost(params, x):
-    return qml.ExpvalCost(circuit, H(x), dev)(params)
+    hamiltonian = H(x)
+    run_circuit = qml.QNode(circuit, dev)
+    return run_circuit(params, obs=hamiltonian, wires=range(6))
 
 ##############################################################################
 #
@@ -247,7 +250,7 @@ def cost(params, x):
 
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
-    grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
+    grad = [qml.QNode(circuit, dev)(params, obs=obs, wires=range(6)) for obs in grad_h]
     return np.array(grad)
 
 ##############################################################################
