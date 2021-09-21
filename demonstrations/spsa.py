@@ -429,9 +429,8 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 
 from pennylane import qchem
 
-geometry = "h2.xyz"
-
-symbols, coordinates = qchem.read_structure(geometry)
+symbols = ["H", "H"]
+coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
@@ -459,6 +458,12 @@ from qiskit.providers.aer import noise
 
 # Note: you will need to be authenticated to IBMQ to run the following code.
 # Do not run the simulation on this device, as it will send it to real hardware
+# For access to IBMQ, the following statements will be useful:
+# IBMQ.save_account(TOKEN)
+# IBMQ.load_account() # Load account from disk
+# List the providers to pick an available backend:
+# IBMQ.providers()    # List all available providers
+
 dev_melbourne = qml.device(
     "qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne"
 )
