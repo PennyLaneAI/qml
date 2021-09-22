@@ -125,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", wires=num_qubits)
+dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
 
 # number of electrons
 electrons = 2
@@ -141,7 +141,6 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-# cost = qml.ExpvalCost(ansatz, H, dev)
 @qml.qnode(dev)
 def cost_circuit(params):
     ansatz(params, wires=dev.wires)
@@ -152,8 +151,10 @@ def cost_circuit(params):
 # QNodes under the hood---one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
-print("Cost function value:", cost_circuit(params))
-print("Number of quantum evaluations:", dev.num_executions)
+with qml.Tracker(dev) as tracker:  # track the number of executions
+    print("Cost function value:", cost_circuit(params))
+
+print("Number of quantum evaluations:", tracker.totals['executions'])
 
 ##############################################################################
 # How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
@@ -749,9 +750,8 @@ print("<H> = ", np.sum(np.hstack(result)))
 ##############################################################################
 # Finally, we don't need to go through this process manually every time; if our cost function can be
 # written in the form of an expectation value of a Hamiltonian (as is the case for most VQE and QAOA
-# problems), we can use the :class:`qml.ExpvalCost <pennylane.ExpvalCost>` function
-# to generate our cost function with the number of measurement automatically
-# optimized:
+# problems), we can use the :func:`qml.expval` function
+# to generate our cost function:
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
 @qml.qnode(dev)
