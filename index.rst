@@ -24,7 +24,7 @@ Quantum machine learning
             This, in turn, is driving the development of quantum machine learning and variational quantum circuits.</p>
 
         <section class="my-5">
-            <div class="row" id="main-cards">
+            <div class="row main-cards">
                 <div class="col-lg-3 mb-5">
                     <a href="whatisqml.html">
                     <div class="card rounded-lg">
