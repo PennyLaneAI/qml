@@ -80,9 +80,8 @@ quantum machine learning paper/result.
   your demo.
 
 * When complete, create a gallery link to your demo. This can be done by adding the
-  snippet below to `demos_basic.rst` for introductory demos, or `demos_research.rst`
-  for more advanced topics, such as those based on research papers. 
-  
+  snippet below to `demos_getting-started.rst` for introductory demos.
+
   ```rest
   .. customgalleryitem::
       :tooltip: An extended description of the demo
