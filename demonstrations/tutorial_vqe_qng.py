@@ -63,7 +63,11 @@ coeffs = [1, 1]
 obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
-cost_fn = qml.ExpvalCost(circuit, H, dev)
+
+@qml.qnode(dev)
+def cost_fn(params):
+    circuit(params)
+    return qml.expval(H)
 
 ##############################################################################
 # To analyze the performance of quantum natural gradient on VQE calculations,
@@ -291,9 +295,12 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 ##############################################################################
 # Note that the qubit register has been initialized to :math:`|1100\rangle`, which encodes for
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
-# Again, we define the cost function using the ``ExpvalCost`` class.
+# Again, we define the cost function using ``expval(H)``.
 
-cost = qml.ExpvalCost(ansatz, hamiltonian, dev, diff_method="parameter-shift")
+@qml.qnode(dev)
+def cost(params):
+    ansatz(params)
+    return qml.expval(hamiltonian)
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
