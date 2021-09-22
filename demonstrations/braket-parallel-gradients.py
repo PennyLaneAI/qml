@@ -346,9 +346,10 @@ def circuit(params, **kwargs):
         qml.Hadamard(wires=i)
 
     qml.layer(qaoa_layer, n_layers, params[0], params[1])
+    return qml.expval(cost_h)
 
 
-cost_function = qml.ExpvalCost(circuit, cost_h, dev, optimize=True)
+cost_function = qml.QNode(circuit, dev)
 optimizer = qml.AdagradOptimizer(stepsize=0.1)
 
 ##############################################################################
