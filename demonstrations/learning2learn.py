@@ -241,8 +241,7 @@ def qaoa_from_graph(graph, n_layers=1):
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
-        # cost = qml.ExpvalCost(circuit, cost_h, dev, interface="tf", diff_method="backprop")
-        cost = qml.QNode(circuit, dev)
+        cost = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
 
         return cost(params)
 

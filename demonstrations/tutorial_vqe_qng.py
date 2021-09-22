@@ -55,7 +55,7 @@ def circuit(params, wires=0):
 
 
 ##############################################################################
-# We then define our cost function using the ``ExpvalCost`` class, which supports the computation of
+# We then define our cost function which supports the computation of
 # block-diagonal or diagonal approximations to the Fubini-Study metric tensor [#stokes2019]_. This tensor is a
 # crucial component for optimizing with quantum natural gradients.
 

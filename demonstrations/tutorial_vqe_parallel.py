@@ -159,22 +159,13 @@ devs = dev1 + dev2
 # circuit has a single free parameter, which controls a Y-rotation on the third qubit.
 
 
-def circuit(param):
+def circuit(param, wires):
     qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=[0, 1, 2, 3])
     qml.RY(param, wires=2)
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[3, 1])
 
-
-def get_expval_qnode(hamiltonian):
-    """Makes a new circuit which prepares the ansatz and
-     measures the expectation value of the hamiltonian"""
-    def execute_circ_and_measure_expval(params):
-        circuit(params)
-        return qml.expval(hamiltonian)
-
-    return qml.QNode(execute_circ_and_measure_expval, devs)
 
 ##############################################################################
 # The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
@@ -187,9 +178,10 @@ def get_expval_qnode(hamiltonian):
 params = np.load("vqe_parallel/RY_params.npy")
 
 ##############################################################################
-# Finally, the energies as functions of rotation angle can be generated using:
+# Finally, the energies as functions of rotation angle can be given using
+# :class:`~.pennylane.ExpvalCost`.
 
-energies = [get_expval_qnode(h) for h in hamiltonians]
+energies = [qml.ExpvalCost(circuit, h, devs) for h in hamiltonians]
 
 ##############################################################################
 # Calculating the potential energy surface
