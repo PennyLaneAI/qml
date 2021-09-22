@@ -185,17 +185,23 @@ def circuit(params, wires):
 dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
-# Next, we use the :class:`~.pennylane.ExpvalCost` class to define the cost function.
+# Next, we use the :func:`~.pennylane.expval` function to define the cost function.
 # This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
-cost_fn = qml.ExpvalCost(circuit, H, dev)
+@qml.qnode(dev)
+def cost_fn(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(H)
 
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
 
-S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
+@qml.qnode(dev)
+def S2_exp_value(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(S2)
 
 ##############################################################################
 # The total spin :math:`S` of the trial state can be obtained from the
@@ -292,8 +298,15 @@ def circuit(params, wires):
 # Now, we define the new functions to compute the expectation values of the Hamiltonian
 # and the total spin operator for the new circuit.
 
-cost_fn = qml.ExpvalCost(circuit, H, dev)
-S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
+@qml.qnode(dev)
+def cost_fn(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(H)
+
+@qml.qnode(dev)
+def S2_exp_value(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(S2)
 
 ##############################################################################
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
