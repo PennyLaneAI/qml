@@ -496,8 +496,8 @@ def prepare_and_sample(weights):
     variational_block(weights)
 
     # We assume that the system is measured in the computational basis.
-    # then sampling the device will give us a value of 0 or 1 for each qubit (n_qubits)
-    # this will be repeated for the total number of shots provided (n_shots)
+    # Therefore, sampling the device will give us a value of 0 or 1 for each qubit (n_qubits)
+    # this will be repeated for the total number of shots provided (n_shots).
     return qml.sample()
 
 
