@@ -176,9 +176,8 @@ def U_C(gamma):
 
 
 ##############################################################################
-# We will need a way to take our sampled measurement, which is a bitstring
-# representing the measured state in the computational basis, and convert it
-# to an int
+# We will need a way to sample a measurement of multiple qubits in the computational basis
+#  in integer form.
 
 def bitstring_to_int(bit_string_sample):
     bit_string = "".join(str(bs) for bs in bit_string_sample)
