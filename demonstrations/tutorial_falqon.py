@@ -216,14 +216,12 @@ def falqon_layer(beta_k, cost_h, driver_h, delta_t):
     qml.templates.ApproxTimeEvolution(driver_h, delta_t * beta_k, 1)
 
 ######################################################################
-# We then define a method which returns a circuit that generates a FALQON ansatz corresponding to a particular cost
-# Hamiltonian, driver Hamiltonian, and :math:`\Delta t`. This involves multiple repetitions of the "FALQON layer"
-# defined above. The circuit ends with a measurement of the expectation value of the provided measurement operator;
-# if no operator is provided it returns the probability distribution of the computational basis.
-# The initial state of our circuit is an even superposition:
+# We then define a method which returns a FALQON ansatz corresponding to a particular cost Hamiltonian, driver
+# Hamiltonian, and :math:`\Delta t`. This involves multiple repetitions of the "FALQON layer" defined above. The
+# initial state of our circuit is an even superposition:
 
 def build_maxclique_ansatz(cost_h, driver_h, delta_t):
-    def ansatz(beta,  measurement_h=None, **kwargs):
+    def ansatz(beta, **kwargs):
         layers = len(beta)
         for w in dev.wires:
             qml.Hadamard(wires=w)
@@ -236,10 +234,13 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
             delta_t=delta_t
         )
 
-        if measurement_h is not None:
-            return qml.expval(measurement_h)
-
     return ansatz
+
+
+def expval_circuit(beta, measurement_h):
+    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
+    ansatz(beta)
+    return qml.expval(measurement_h)
 
 ######################################################################
 # Finally, we implement the recursive process, where FALQON is able to determine the values
@@ -249,16 +250,15 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     comm_h = build_hamiltonian(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
-    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t) # Builds the FALQON ansatz circuit
-    ansatz = qml.QNode(ansatz, dev) # The FalQON ansatz circuit is now executable
+    cost_fn = qml.QNode(expval_circuit, dev) # The ansatz + measurement circuit is executable
 
     beta = [beta_1] # Records each value of beta_k
     energies = [] # Records the value of the cost function at each step
 
     for i in range(n):
         # Adds a value of beta to the list and evaluates the cost function
-        beta.append(-1 * ansatz(beta, measurement_h=comm_h))  # this ansatz call measures the expectation of the commuter hamiltonian
-        energy = ansatz(beta, measurement_h=cost_h)  # this ansatz call measures the expectation of the cost hamiltonian
+        beta.append(-1 * cost_fn(beta, measurement_h=comm_h))  # this call measures the expectation of the commuter hamiltonian
+        energy = cost_fn(beta, measurement_h=cost_h)  # this call measures the expectation of the cost hamiltonian
         energies.append(energy)
 
     return beta, energies
@@ -412,12 +412,15 @@ def qaoa_layer(gamma, beta):
     qaoa.mixer_layer(beta, mixer_h)
 
 # Creates the full QAOA circuit as an executable cost function
-@qml.qnode(dev)
 def qaoa_circuit(params, **kwargs):
-    for w in dev.wires:
+    for w in new_graph.nodes:
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
+
+@qml.qnode(dev)
+def qaoa_expval(params):
+    qaoa_circuit(params)
     return qml.expval(cost_h)
 
 ######################################################################
@@ -439,7 +442,7 @@ steps = 40
 optimizer = qml.GradientDescentOptimizer()
 
 for s in range(steps):
-    params, cost = optimizer.step_and_cost(qaoa_circuit, params)
+    params, cost = optimizer.step_and_cost(qaoa_expval, params)
     print("Step {}, Cost = {}".format(s + 1, cost))
 
 ######################################################################
@@ -449,10 +452,7 @@ for s in range(steps):
 
 @qml.qnode(dev)
 def prob_circuit(params):
-    for w in dev.wires:
-        qml.Hadamard(wires=w)
-    qml.layer(qaoa_layer, depth, params[0], params[1])
-
+    qaoa_circuit(params)
     return qml.probs(wires=dev.wires)
 
 probs = prob_circuit(params)

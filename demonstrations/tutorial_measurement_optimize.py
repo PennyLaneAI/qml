@@ -750,15 +750,12 @@ print("<H> = ", np.sum(np.hstack(result)))
 ##############################################################################
 # Finally, we don't need to go through this process manually every time; if our cost function can be
 # written in the form of an expectation value of a Hamiltonian (as is the case for most VQE and QAOA
-# problems), we can use the :func:`qml.expval` function
-# to generate our cost function:
+# problems), we can use the :class:`qml.ExpvalCost <pennylane.ExpvalCost>` function
+# to generate our cost function with the number of measurement automatically
+# optimized:
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-@qml.qnode(dev)
-def cost_fn(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=dev.wires)
-    return qml.expval(H)
-
+cost_fn = qml.ExpvalCost(qml.templates.StronglyEntanglingLayers, H, dev, optimize=True)
 print(cost_fn(weights))
 
 ##############################################################################
