@@ -465,7 +465,7 @@ from qiskit.providers.aer import noise
 # IBMQ.providers()    # List all available providers
 
 dev_melbourne = qml.device(
-    "qiskit.ibmq", wires=num_qubits, backend="ibmq_santiago"
+    "qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne"
 )
 noise_model = noise.NoiseModel.from_backend(dev_melbourne.backend.properties())
 dev_noisy = qml.device(
