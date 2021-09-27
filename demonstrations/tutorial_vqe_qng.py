@@ -295,7 +295,7 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 ##############################################################################
 # Note that the qubit register has been initialized to :math:`|1100\rangle`, which encodes for
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
-# Again, we define the cost function using ``expval(H)``.
+# Again, we define the cost function to be the following QNode using the ``expval(H)`` function.
 
 @qml.qnode(dev)
 def cost(params):
