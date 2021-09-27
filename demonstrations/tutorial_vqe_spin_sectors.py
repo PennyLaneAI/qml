@@ -185,7 +185,8 @@ def circuit(params, wires):
 dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
-# Next, we use the :func:`~.pennylane.expval` function to define the cost function.
+# Next, we define the cost function as the following QNode, where we make use of
+# the :func:`~.pennylane.expval` function to compute the expectation value of the hamiltonian.
 # This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
