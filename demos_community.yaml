@@ -1,3 +1,27 @@
+- title: Hybrid MNIST Classification Model
+  author: Sophie Choe
+  date: 09/28/2021
+  code: https://github.com/sophchoe/Hybrid-Quantum-Classical-MNIST-Classfication-Model
+  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  color: heavy-rain-gradient
+  description: |
+    Keras-Pennylane hybrid model for MNIST classification, inspired by the Supervised learning with hybrid networks 
+    in "Continuous-variable quantum neural networks".
+
+- title: Hybrid quantum-classical auto encoder
+  author: Sophie Choe
+  date: 09/28/2021
+  code: https://github.com/sophchoe/QML/blob/main/auto_encoder_Pennylane_Keras.ipynb
+  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  color: heavy-rain-gradient
+  description: |
+    Keras auto-encoder hybrid model
+    Encoder: 6 Keras dense layers
+    Decoder: 3 Pennylane qml layers
+    The loss function in the paper requires state vectors and probability, however Pennylane measurement module does
+    not support state vector retrieval (as of 9/24/2021). Hence mean squared error from Keras is used instead on the
+    output vectors of probability measurement. To get vectors of length 3, the cutoff dimension parameter is set to 3.
+
 - title: Quantum circuit learning to compute option prices and their sensitivities
   author: Takayuki Sakuma
   date: 09/16/2021
