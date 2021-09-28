@@ -413,7 +413,7 @@ def qaoa_layer(gamma, beta):
 
 # Creates the full QAOA circuit as an executable cost function
 def qaoa_circuit(params, **kwargs):
-    for w in new_graph.nodes:
+    for w in dev.wires:
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 

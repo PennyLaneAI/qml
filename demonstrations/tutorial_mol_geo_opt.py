@@ -217,7 +217,8 @@ def circuit(params, obs, wires):
 # to compute the expectation value. In this example, we use the ``default.qubit``
 # simulator:
 
-dev = qml.device("default.qubit", wires=6)
+num_wires = 6
+dev = qml.device("default.qubit", wires=num_wires)
 
 ##############################################################################
 # Next, we define the `cost`` function :math:`g(\theta, x)` which depends on
@@ -227,7 +228,7 @@ dev = qml.device("default.qubit", wires=6)
 def cost(params, x):
     hamiltonian = H(x)
     run_circuit = qml.QNode(circuit, dev)
-    return run_circuit(params, obs=hamiltonian, wires=range(6))
+    return run_circuit(params, obs=hamiltonian, wires=range(num_wires))
 
 ##############################################################################
 #
@@ -249,7 +250,7 @@ def cost(params, x):
 
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
-    grad = [qml.QNode(circuit, dev)(params, obs=obs, wires=range(6)) for obs in grad_h]
+    grad = [qml.QNode(circuit, dev)(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
 
 ##############################################################################
