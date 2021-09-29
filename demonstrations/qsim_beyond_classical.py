@@ -297,7 +297,7 @@ def generate_single_qubit_gate_list():
 # From the QNode, we need both the probabilities of the measurement
 # results, as well as raw samples. To facilitate this, we add a keyword
 # argument to our circuit allowing us to switch between the two returns. We
-# take samples from the computational basis from all wires, which will give us
+# take samples from the computational basis state using all wires, which will return bitstrings of
 # values :math:`0` and :math:`1`, corresponding to the states
 # :math:`\left|0\right>` and :math:`\left|1\right>`.
 #
