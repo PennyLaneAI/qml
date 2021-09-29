@@ -231,6 +231,7 @@ def qaoa_from_graph(graph, n_layers=1):
         for w in wires:
             qml.Hadamard(wires=w)
         qml.layer(qaoa_layer, n_layers, params[0], params[1])
+        return qml.expval(cost_h)
 
     # Evaluates the cost Hamiltonian
     def hamiltonian(params, **kwargs):
@@ -239,8 +240,8 @@ def qaoa_from_graph(graph, n_layers=1):
         # We set the default.qubit.tf device for seamless integration with TensorFlow
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
-        # ExpvalCost evaluates the expectation value of an operator
-        cost = qml.ExpvalCost(circuit, cost_h, dev, interface="tf", diff_method="backprop")
+        # This qnode evaluates the expectation value of the cost hamiltonian operator
+        cost = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
 
         return cost(params)
 
