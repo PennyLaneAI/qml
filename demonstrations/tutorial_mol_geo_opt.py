@@ -187,12 +187,19 @@ print(hf)
 ##############################################################################
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
+# First, we define the quantum device used to compute the expectation value.
+# In this example, we use the ``default.qubit`` simulator:
+num_wires = 6
+dev = qml.device("default.qubit", wires=num_wires)
 
-def circuit(params, wires):
+
+@qml.qnode(dev)
+def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
 
+    return qml.expval(obs)
 ##############################################################################
 # This circuit prepares the trial state
 #
@@ -212,19 +219,16 @@ def circuit(params, wires):
 # The third step of the algorithm is to define the cost function
 # :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle`. It
 # evaluates the expectation value of the parametrized Hamiltonian :math:`H(x)` in the
-# trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the quantum device used
-# to compute the expectation value. In this example, we use the ``default.qubit``
-# simulator:
-
-dev = qml.device("default.qubit", wires=6)
+# trial state :math:`\vert\Psi(\theta)\rangle`.
 
 ##############################################################################
-# Next, we use the PennyLane class :class:`~.pennylane.ExpvalCost` to define the
-# ``cost`` function :math:`g(\theta, x)` which depends on both the circuit and the
-# Hamiltonian parameters.
+# Next, we define the ``cost`` function :math:`g(\theta, x)` which depends on
+# both the circuit and the Hamiltonian parameters. Specifically we consider the
+# expectation values of the Hamiltonian.
 
 def cost(params, x):
-    return qml.ExpvalCost(circuit, H(x), dev)(params)
+    hamiltonian = H(x)
+    return circuit(params, obs=hamiltonian, wires=range(num_wires))
 
 ##############################################################################
 #
@@ -240,14 +244,13 @@ def cost(params, x):
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
 # We use the :func:`~.pennylane.finite_diff` function to compute the gradient of
-# the Hamiltonian using a central-difference approximation. Then, the PennyLane class
-# :class:`~.pennylane.ExpvalCost` is used to evaluate the expectation value of
-# the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
+# the Hamiltonian using a central-difference approximation. Then, we evaluate the expectation
+# value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
 
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
-    grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
+    grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
 
 ##############################################################################

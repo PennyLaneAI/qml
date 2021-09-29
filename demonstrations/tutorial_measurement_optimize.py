@@ -125,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", wires=num_qubits)
+dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
 
 # number of electrons
 electrons = 2
@@ -141,15 +141,20 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-cost = qml.ExpvalCost(ansatz, H, dev)
+@qml.qnode(dev)
+def cost_circuit(params):
+    ansatz(params, wires=dev.wires)
+    return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
 # QNodes under the hood---one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
-print("Cost function value:", cost(params))
-print("Number of quantum evaluations:", dev.num_executions)
+with qml.Tracker(dev) as tracker:  # track the number of executions
+    print("Cost function value:", cost_circuit(params))
+
+print("Number of quantum evaluations:", tracker.totals['executions'])
 
 ##############################################################################
 # How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
