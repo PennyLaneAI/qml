@@ -315,7 +315,7 @@ def circuit(params, **kwargs):
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
 # The cost function is the expectation value of :math:`H_C`, which we want to minimize. We
-# use the function :func:`~.pennylane.expval` by passing it a Hamiltonian `H`: it returns the
+# use the function :func:`~.pennylane.expval` which returns the
 # expectation value of the Hamiltonian with respect to the circuit's output state.
 # We also define the device on which the simulation is performed. We use the
 # PennyLane-Qulacs plugin to run the circuit on the Qulacs simulator:
