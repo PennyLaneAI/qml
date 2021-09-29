@@ -187,7 +187,13 @@ print(hf)
 ##############################################################################
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
+# First, we define the quantum device used to compute the expectation value.
+# In this example, we use the ``default.qubit`` simulator:
+num_wires = 6
+dev = qml.device("default.qubit", wires=num_wires)
 
+
+@qml.qnode(dev)
 def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
@@ -213,12 +219,7 @@ def circuit(params, obs, wires):
 # The third step of the algorithm is to define the cost function
 # :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle`. It
 # evaluates the expectation value of the parametrized Hamiltonian :math:`H(x)` in the
-# trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the quantum device used
-# to compute the expectation value. In this example, we use the ``default.qubit``
-# simulator:
-
-num_wires = 6
-dev = qml.device("default.qubit", wires=num_wires)
+# trial state :math:`\vert\Psi(\theta)\rangle`.
 
 ##############################################################################
 # Next, we define the ``cost`` function :math:`g(\theta, x)` which depends on
@@ -227,8 +228,7 @@ dev = qml.device("default.qubit", wires=num_wires)
 
 def cost(params, x):
     hamiltonian = H(x)
-    run_circuit = qml.QNode(circuit, dev)
-    return run_circuit(params, obs=hamiltonian, wires=range(num_wires))
+    return circuit(params, obs=hamiltonian, wires=range(num_wires))
 
 ##############################################################################
 #
@@ -250,7 +250,7 @@ def cost(params, x):
 
 def grad_x(x, params):
     grad_h = qml.finite_diff(H)(x)
-    grad = [qml.QNode(circuit, dev)(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
+    grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
 
 ##############################################################################
