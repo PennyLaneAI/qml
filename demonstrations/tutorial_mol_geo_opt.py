@@ -221,7 +221,7 @@ num_wires = 6
 dev = qml.device("default.qubit", wires=num_wires)
 
 ##############################################################################
-# Next, we define the `cost`` function :math:`g(\theta, x)` which depends on
+# Next, we define the ``cost`` function :math:`g(\theta, x)` which depends on
 # both the circuit and the Hamiltonian parameters. Specifically we consider the
 # expectation values of the Hamiltonian.
 
