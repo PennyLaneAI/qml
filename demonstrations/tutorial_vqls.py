@@ -485,7 +485,7 @@ def prepare_and_sample(weights):
 
 raw_samples = prepare_and_sample(w)
 
-# Here we convert the raw samples (bit strings) into integers and count them
+# convert the raw samples (bit strings) into integers and count them
 samples = []
 for sam in raw_samples:
     samples.append(int("".join(str(bs) for bs in sam), base=2))
