@@ -176,8 +176,8 @@ def U_C(gamma):
 
 
 ##############################################################################
-# We will need a way to sample a measurement of multiple qubits in the computational basis
-# in integer form.
+# We will need a way to convert a bitstring, representing a sample of multiple qubits
+# in the computational basis, to integer or base-10 form.
 
 def bitstring_to_int(bit_string_sample):
     bit_string = "".join(str(bs) for bs in bit_string_sample)
