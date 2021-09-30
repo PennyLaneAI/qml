@@ -176,15 +176,12 @@ def U_C(gamma):
 
 
 ##############################################################################
-# We will need a way to sample
-# a measurement of multiple qubits in the computational basis, so we define
-# a Hermitian operator to do this. The eigenvalues of the operator are
-# the qubit measurement values in integer form.
+# We will need a way to convert a bitstring, representing a sample of multiple qubits
+# in the computational basis, to integer or base-10 form.
 
-
-def comp_basis_measurement(wires):
-    n_wires = len(wires)
-    return qml.Hermitian(np.diag(range(2 ** n_wires)), wires=wires)
+def bitstring_to_int(bit_string_sample):
+    bit_string = "".join(str(bs) for bs in bit_string_sample)
+    return int(bit_string, base=2)
 
 
 ##############################################################################
@@ -218,7 +215,7 @@ def circuit(gammas, betas, edge=None, n_layers=1):
         U_B(betas[i])
     if edge is None:
         # measurement phase
-        return qml.sample(comp_basis_measurement(range(n_wires)))
+        return qml.sample()
     # during the optimization phase we are evaluating a term
     # in the objective using expval
     return qml.expval(qml.Hermitian(pauli_z_2, wires=edge))
@@ -269,7 +266,7 @@ def qaoa_maxcut(n_layers=1):
     bit_strings = []
     n_samples = 100
     for i in range(0, n_samples):
-        bit_strings.append(int(circuit(params[0], params[1], edge=None, n_layers=n_layers)))
+        bit_strings.append(bitstring_to_int(circuit(params[0], params[1], edge=None, n_layers=n_layers)))
 
     # print optimal parameters and most frequently sampled bitstring
     counts = np.bincount(np.array(bit_strings))
