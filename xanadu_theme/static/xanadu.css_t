@@ -2055,7 +2055,14 @@ span.eqno {
     background-color: inherit!important;
 }
 
+.q-hack-link {
+  height: 39px !important;
+  display: flex !important;
+}
 
+.q-hack-link img {
+  margin-top: auto !important;
+}
 
 .social-section {
   font-size: 22px;
