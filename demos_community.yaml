@@ -1,3 +1,16 @@
+- title: Fraud Detection
+  author: Sophie Choe
+  date: 10/04/2021
+  code: https://github.com/sophchoe/Binary_Classification_Pennylane_Keras/blob/main/fraud_detection_Pennylane_Keras.ipynb
+  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  color: heavy-rain-gradient
+  description: |
+    This is a binary classification hybrid model as proposed in the paper
+    "Continuous Variable Quantum Neural Networks", composed of 2 layers of feed forward 
+    classical layers and 4 layers of quantum neural network. Using the Pennylane Tensorflow plug-in, 
+    the whole network is wrapped as a Keras sequential network, whose parameters are updated via 
+    Keras's built in loss function and optimizer.
+
 - title: Quantum-Classical MNIST Classification Model
   author: Sophie Choe
   date: 09/28/2021
