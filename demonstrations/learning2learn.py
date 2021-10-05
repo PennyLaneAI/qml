@@ -11,7 +11,7 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 2 March 2021.*
+*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 15 Sep 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -231,6 +231,7 @@ def qaoa_from_graph(graph, n_layers=1):
         for w in wires:
             qml.Hadamard(wires=w)
         qml.layer(qaoa_layer, n_layers, params[0], params[1])
+        return qml.expval(cost_h)
 
     # Evaluates the cost Hamiltonian
     def hamiltonian(params, **kwargs):
@@ -239,8 +240,8 @@ def qaoa_from_graph(graph, n_layers=1):
         # We set the default.qubit.tf device for seamless integration with TensorFlow
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
-        # ExpvalCost evaluates the expectation value of an operator
-        cost = qml.ExpvalCost(circuit, cost_h, dev, interface="tf", diff_method="backprop")
+        # This qnode evaluates the expectation value of the cost hamiltonian operator
+        cost = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
 
         return cost(params)
 
@@ -259,7 +260,7 @@ cost = qaoa_from_graph(graph=graphs[0], n_layers=1)
 x = tf.Variable([[0.5], [0.5]], dtype=tf.float32)
 
 # Evaluate th QAOA instance just created with some angles.
-cost(x)
+print(cost(x))
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -585,6 +586,7 @@ plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
@@ -615,7 +617,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 #
 
 # Parameters are randomly initialized
-x0 = tf.Variable(np.random.rand(2, 1))
+x = tf.Variable(np.random.rand(2, 1))
 
 # We set the optimizer to be a Stochastic Gradient Descent
 opt = tf.keras.optimizers.SGD(learning_rate=0.01)
@@ -626,13 +628,13 @@ steps = []
 sdg_losses = []
 for _ in range(step):
     with tf.GradientTape() as tape:
-        loss = new_cost(x0)
+        loss = new_cost(x)
 
-    steps.append(x0)
+    steps.append(x)
     sdg_losses.append(loss)
 
-    gradients = tape.gradient(loss, [x0])
-    opt.apply_gradients(zip(gradients, [x0]))
+    gradients = tape.gradient(loss, [x])
+    opt.apply_gradients(zip(gradients, [x]))
     print(f"Step {_+1} - Loss = {loss}")
 
 print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()}")
@@ -659,9 +661,9 @@ print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()
 #      Step 13 - Loss = [-5.82749126]
 #      Step 14 - Loss = [-5.82820626]
 #      Step 15 - Loss = [-5.82864379]
-#      Final cost function: [-5.78429065]
-#      Optimized angles: [[0.53574044]
-#       [1.2945652 ]]
+#      Final cost function: -5.828932361904984
+#      Optimized angles: [[ 0.5865477 ]
+#       [-0.3228858]]
 #
 
 fig, ax = plt.subplots()
@@ -675,6 +677,7 @@ plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
@@ -823,6 +826,7 @@ gs_cost_list = [qaoa_from_graph(g) for g in gs]
 
 # Shuffle the dataset
 import random
+random.seed(1234)
 random.shuffle(gs_cost_list)
 
 
@@ -855,21 +859,21 @@ for epoch in range(epochs):
 #
 #  .. code-block:: none
 #
-#      Epoch 1
-#       > Graph 1/15 - Loss: [[-2.3892174]]
-#       > Graph 6/15 - Loss: [[-2.1072261]]
-#       > Graph 11/15 - Loss: [[-1.957976]]
-#       >> Mean Loss during epoch: -2.0667606353759767
-#      Epoch 2
-#       > Graph 1/15 - Loss: [[-2.3797882]]
-#       > Graph 6/15 - Loss: [[-2.2293403]]
-#       > Graph 11/15 - Loss: [[-1.9649515]]
-#       >> Mean Loss during epoch: -2.117209537823995
-#      Epoch 3
-#       > Graph 1/15 - Loss: [[-2.3686786]]
-#       > Graph 6/15 - Loss: [[-2.2524612]]
-#       > Graph 11/15 - Loss: [[-1.9757932]]
-#       >> Mean Loss during epoch: -2.1220582803090413
+#        Epoch 1
+#        > Graph 1/15 - Loss: [[-1.4876363]]
+#        > Graph 6/15 - Loss: [[-1.8590403]]
+#        > Graph 11/15 - Loss: [[-1.7644017]]
+#        >> Mean Loss during epoch: -1.9704322338104248
+#        Epoch 2
+#        > Graph 1/15 - Loss: [[-1.8650053]]
+#        > Graph 6/15 - Loss: [[-1.9578737]]
+#        > Graph 11/15 - Loss: [[-1.8377447]]
+#        >> Mean Loss during epoch: -2.092947308222453
+#        Epoch 3
+#        > Graph 1/15 - Loss: [[-1.9009062]]
+#        > Graph 6/15 - Loss: [[-1.9726204]]
+#        > Graph 11/15 - Loss: [[-1.8668792]]
+#        >> Mean Loss during epoch: -2.1162660201390584
 #
 
 
@@ -927,6 +931,7 @@ plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
@@ -1061,6 +1066,53 @@ model = tf.keras.Model(
 model.summary()
 
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Model: "functional_1"
+#        __________________________________________________________________________________________________
+#        Layer (type)                    Output Shape         Param #     Connected to                     
+#        ==================================================================================================
+#        input_1 (InputLayer)            [(None, 1)]          0                                            
+#        __________________________________________________________________________________________________
+#        input_2 (InputLayer)            [(None, 2)]          0                                            
+#        __________________________________________________________________________________________________
+#        input_3 (InputLayer)            [(None, 2)]          0                                            
+#        __________________________________________________________________________________________________
+#        input_4 (InputLayer)            [(None, 2)]          0                                            
+#        __________________________________________________________________________________________________
+#        qrnn (QRNN)                     [(1, 1), (None, 2),  48          input_1[0][0]                    
+#                                                                        input_2[0][0]                    
+#                                                                        input_3[0][0]                    
+#                                                                        input_4[0][0]                    
+#                                                                        qrnn[0][0]                       
+#                                                                        qrnn[0][1]                       
+#                                                                        qrnn[0][2]                       
+#                                                                        qrnn[0][3]                       
+#                                                                        qrnn[1][0]                       
+#                                                                        qrnn[1][1]                       
+#                                                                        qrnn[1][2]                       
+#                                                                        qrnn[1][3]                       
+#        __________________________________________________________________________________________________
+#        tf.math.multiply (TFOpLambda)   (1, 1)               0           qrnn[0][0]                       
+#        __________________________________________________________________________________________________
+#        tf.math.multiply_1 (TFOpLambda) (1, 1)               0           qrnn[1][0]                       
+#        __________________________________________________________________________________________________
+#        tf.math.multiply_2 (TFOpLambda) (1, 1)               0           qrnn[2][0]                       
+#        __________________________________________________________________________________________________
+#        average_147 (Average)           (1, 1)               0           tf.math.multiply[0][0]           
+#                                                                        tf.math.multiply_1[0][0]         
+#                                                                        tf.math.multiply_2[0][0]         
+#        ==================================================================================================
+#        Total params: 48
+#        Trainable params: 48
+#        Non-trainable params: 0
+#
+
 ######################################################################
 # A basic training routine for the ``Keras Model`` just created:
 #
@@ -1090,9 +1142,28 @@ for _ in range(step):
 
 print("Final Loss:", loss.numpy())
 print("Final Outs:")
-for t, s in zip(pred, ["Step 1", "Step 2", "Step 3", "Loss"]):
+for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
     print(f" >{s}: {t.numpy()}")
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Step 1 - Loss = [[-1.5563084]] - Cost = -4.762684301954701
+#        Step 2 - Loss = [[-1.5649065]] - Cost = -4.799981173473755
+#        Step 3 - Loss = [[-1.5741502]] - Cost = -4.840036354736862
+#        Step 4 - Loss = [[-1.5841404]] - Cost = -4.883246647056216
+#        Step 5 - Loss = [[-1.5948243]] - Cost = -4.929228976649736
+#        Final Loss: [[-1.5948243]]
+#        Final Outs:
+#        >out0: [[-0.01041588  0.01016874]]
+#        >out1: [[-0.04530389  0.38148248]]
+#        >out2: [[-0.10258182  0.4134117 ]]
+#        >Loss: [[-1.5948243]]
+#
 
 ######################################################################
 # .. note::
@@ -1104,5 +1175,5 @@ for t, s in zip(pred, ["Step 1", "Step 2", "Step 3", "Loss"]):
 #     just a single one. Still, this might prove particularly hard, since
 #     TensorFlow deals with tensors, and is not able to directly manage
 #     other data structures, like graphs or functions taking graphs as
-#     input, like ``qoao_from_graph``.
+#     input, like ``qaoa_from_graph``.
 #

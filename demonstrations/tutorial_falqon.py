@@ -58,19 +58,17 @@ construct a quantum control process such that the energy expectation :math:`\lan
 
 where the product rule and
 `the Schrödinger equation <https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-dependent_equation>`__ are used to derive the above formula.
-If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t`, so that
+If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t,` so that
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
 
 then :math:`\langle H_c \rangle` is guaranteed to strictly decrease, as desired!
-Using `techniques from control theory <https://arxiv.org/pdf/1304.3997.pdf>`__, it is possible to rigorously show that
-this choice of :math:`\beta(t)` will eventually drive the system into the ground state of :math:`H_c`. Thus, if we
-evolve some initial state :math:`|\psi_0\rangle` under the time evolution operator :math:`U` corresponding to :math:`H`,
+Thus, if we evolve some initial state :math:`|\psi_0\rangle` under the time evolution operator :math:`U` corresponding to :math:`H`,
 
 .. math:: U(T) = \mathcal{T} \exp \Big[ -i \displaystyle\int_{0}^{T} H(t) \ dt \Big] \approx \mathcal{T} \exp \Big[ -i \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t \Big],
 
 where :math:`\mathcal{T}` is the `time-ordering operator <https://en.wikipedia.org/wiki/Path-ordering#Time_ordering>`__ and :math:`\Delta t` is some small time step,
-we will arrive at the ground state of :math:`H_c`, for a large enough value of :math:`T`. This is exactly the procedure used by FALQON.
+then the energy expectation will strictly decrease, for a large enough value of :math:`T`. This is exactly the procedure used by FALQON to minimize :math:`\langle H_c \rangle`.
 In general, implementing a time evolution unitary in a quantum circuit is
 difficult, so we use a
 `Trotter-Suzuki decomposition <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki%E2%80%93Trotter_expansion>`__
@@ -238,6 +236,12 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
 
     return ansatz
 
+
+def expval_circuit(beta, measurement_h):
+    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
+    ansatz(beta)
+    return qml.expval(measurement_h)
+
 ######################################################################
 # Finally, we implement the recursive process, where FALQON is able to determine the values
 # of :math:`\beta_k`, feeding back into itself as the number of layers increases. This is
@@ -246,21 +250,15 @@ def build_maxclique_ansatz(cost_h, driver_h, delta_t):
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     comm_h = build_hamiltonian(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
-    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t) # Builds the FALQON ansatz
+    cost_fn = qml.QNode(expval_circuit, dev) # The ansatz + measurement circuit is executable
 
     beta = [beta_1] # Records each value of beta_k
     energies = [] # Records the value of the cost function at each step
 
     for i in range(n):
-        # Creates a function that can evaluate the expectation value of the commutator
-        cost_fn = qml.ExpvalCost(ansatz, comm_h, dev)
-
-        # Creates a function that returns the expectation value of the cost Hamiltonian
-        cost_fn_energy = qml.ExpvalCost(ansatz, cost_h, dev)
-
         # Adds a value of beta to the list and evaluates the cost function
-        beta.append(-1 * cost_fn(beta))
-        energy = cost_fn_energy(beta)
+        beta.append(-1 * cost_fn(beta, measurement_h=comm_h))  # this call measures the expectation of the commuter hamiltonian
+        energy = cost_fn(beta, measurement_h=cost_h)  # this call measures the expectation of the cost hamiltonian
         energies.append(energy)
 
     return beta, energies
@@ -295,12 +293,13 @@ plt.show()
 # The expectation value decreases!
 #
 # To get a better understanding of the performance of the FALQON algorithm,
-# we can create a graph showing the probability of measuring each possible bit string. We define the
-# following circuit, feeding in the optimal values of :math:`\beta_k`:
+# we can create a graph showing the probability of measuring each possible bit string.
+# We define the following circuit, feeding in the optimal values of :math:`\beta_k`:
 
 @qml.qnode(dev)
 def prob_circuit():
-    build_maxclique_ansatz(cost_h, driver_h, delta_t)(res_beta)
+    ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
+    ansatz(res_beta)
     return qml.probs(wires=dev.wires)
 
 ######################################################################
@@ -412,14 +411,17 @@ def qaoa_layer(gamma, beta):
     qaoa.cost_layer(gamma, cost_h)
     qaoa.mixer_layer(beta, mixer_h)
 
-# Creates the full QAOA circuit
+# Creates the full QAOA circuit as an executable cost function
 def qaoa_circuit(params, **kwargs):
     for w in dev.wires:
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
-# Creates a cost function with executes the QAOA circuit
-cost_fn = qml.ExpvalCost(qaoa_circuit, cost_h, dev)
+
+@qml.qnode(dev)
+def qaoa_expval(params):
+    qaoa_circuit(params)
+    return qml.expval(cost_h)
 
 ######################################################################
 # Now all we have to do is run FALQON for :math:`5` steps to get our initial QAOA parameters.
@@ -440,7 +442,7 @@ steps = 40
 optimizer = qml.GradientDescentOptimizer()
 
 for s in range(steps):
-    params, cost = optimizer.step_and_cost(cost_fn, params)
+    params, cost = optimizer.step_and_cost(qaoa_expval, params)
     print("Step {}, Cost = {}".format(s + 1, cost))
 
 ######################################################################
@@ -449,11 +451,11 @@ for s in range(steps):
 # create a bar graph:
 
 @qml.qnode(dev)
-def prob_circuit():
+def prob_circuit(params):
     qaoa_circuit(params)
     return qml.probs(wires=dev.wires)
 
-probs = prob_circuit()
+probs = prob_circuit(params)
 plt.bar(range(2**len(dev.wires)), probs)
 plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
