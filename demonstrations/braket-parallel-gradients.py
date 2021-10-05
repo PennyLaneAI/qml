@@ -96,7 +96,7 @@ Let's load the SV1 simulator in PennyLane with 25 qubits. We must specify both t
 the address of the `S3 bucket <https://aws.amazon.com/s3/>`__ where results are to be stored:
 """
 
-my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
+my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket, keep the 'amazon-braket-' prefix and then include the bucket name
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
@@ -346,9 +346,10 @@ def circuit(params, **kwargs):
         qml.Hadamard(wires=i)
 
     qml.layer(qaoa_layer, n_layers, params[0], params[1])
+    return qml.expval(cost_h)
 
 
-cost_function = qml.ExpvalCost(circuit, cost_h, dev, optimize=True)
+cost_function = qml.QNode(circuit, dev)
 optimizer = qml.AdagradOptimizer(stepsize=0.1)
 
 ##############################################################################
