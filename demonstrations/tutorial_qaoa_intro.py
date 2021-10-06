@@ -275,6 +275,19 @@ print("Mixer Hamiltonian", mixer_h)
 
 ######################################################################
 #
+# We will use a little trick that can help to speed up simulations that measure 
+# the expectation of a Hamiltonian. The following line computes information 
+# on how to summarise the Hamiltonian's local observables into groups so that 
+# all observables in a group commute with each other. The information is stored 
+# in the ``Hamiltonian.grouping_indices`` attribute and can be accessed by PennyLane devices 
+# to reduce computational costs. However, for big Hamiltonians this method 
+# can become slow, and the remainder of the tutorial will work 
+# perfectly fine if the cell is not run. 
+
+cost_h.compute_grouping()
+
+######################################################################
+#
 # A single layer of QAOA consists of time evolution under these
 # Hamiltonians:
 #
