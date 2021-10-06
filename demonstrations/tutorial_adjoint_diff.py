@@ -12,117 +12,111 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-""" Classical autodifferentiation has two methods of calculation: forward and reverse.
- In forward mode, the computer calculates the function value and derivative at the same time.
- In reverse mode, the computer stores the derivatives of components during evaluation then
- calculates the total derivative later during a "backward pass". Which method someone should
- use depends on the structure of the problem; is the function many-to-one or one-to-many? We 
- use properties of the problem to optimize how we calculate derivatives.
-
-Standard methods to calculate the derivatives for quantum circuits either are direct applications
-of classical gradient methods to quantum simulations, or quantum hardware methods like parameter-shift
-where we can only extract restricted pieces of information.
-
-Adjoint differentiation straddles these two strategies taking benefits from each.
- On simulators, we can see the complete statevector and any point and apply any operation to it, 
- but we know our quantum circuit has a limited structure.  Namely, a circuit is initialization, 
- unitary operators, and an expectation value of a Hermitian operator:
-
-.. math::
-   |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
-
-.. math::
-    \langle M \rangle = \langle \Psi | M | \Psi \rangle
-    = \langle 0 | U_0^{\dagger} \dots U_{n-1}^{\dagger} U_{n}^{\dagger} M U_{n} U_{n-1} \dots U_0 |0\rangle
-
-Since all our operators are unitary, we can easily "undo" or "erase" them by applying their adjoint.
-The "adjoint" differentiation method takes advantage of this fact to create a time and memory  efficient
-method for computing observables. """
-
-
-##############################################################################
-# Start with a quantum state
+# Introduction
+# ------------
+# 
+# Classical automatic differentiation has two methods of calculation: forward and reverse.
+#  The optimal choice of method depends on the structure of the problem; is the function 
+# many-to-one or one-to-many? We use the properties of the problem to optimize how we 
+# calculate derivatives.
+# 
+# Most methods for calculating the derivatives of quantum circuits either are direct applications
+# of classical gradient methods to quantum simulations, or quantum hardware methods like parameter-shift
+# where we can only extract restricted pieces of information.
+# 
+# Adjoint differentiation straddles these two strategies taking benefits from each.
+#  On simulators, we can examine and modify the state vector at any point. At the same time, we know our
+#  quantum circuit holds specific properties not present in an arbitrary classical computation. 
+#  
+# Quantum circuits only involve:
+# 1) initialization
+# .. math:: |0\rangle
+# 
+# 2) application of unitary operators
+# .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
 #
-# .. math::
-#   |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
+# 3) taking an expectation value of a Hermitian operator:
+# .. math:: \langle M \rangle = \langle \Psi | M | \Psi \rangle
+# 
+# Since all our operators are unitary, we can easily "undo" or "erase" them by applying their adjoint:
+# 
+# .. math:: U^{\dagger} U | \phi \rangle = |\phi\rangle.
+# 
+# The "adjoint" differentiation method takes advantage of the ability to erase, creating a time and
+#  memory-efficient method for computing gradients.
+# 
+# Time for some code
+# -------------------
 #
-# We can then take an expectation value:
-#
-# .. math::
-#   \langle M \rangle = \langle \Psi | M | \Psi \rangle
-#   = \langle 0 | U_0^{\dagger} \dots U_{n-1}^{\dagger} U_{n}^{\dagger} M U_{n} U_{n-1} \dots U_0 |0\rangle
-#
-# created by a sequence of unitary operations.  I leave out parameters here for
-# simplicity.
-# We usually think of this expectation value as an inner product of a left vector
-# and a right vector:
-#
-# .. math::
-#   | b \rangle = M | \Psi \rangle = M U_n U_{n-1} \dots U_0 |0\rangle
-#
-# .. math::
-#   | k \rangle =  |\Psi \rangle = U_n U_{n-1} \dots U_0 |0\rangle
-#
-# .. math::
-#   \langle M \rangle = \langle b | k \rangle
-#
-# I use :math:`|b\rangle` and :math:`|k\rangle` to be the "bra" and "ket" vectors
-# respectively.
-#
-# I could have attached :math:`M`, a Hermitian observable :math:`M^{\dagger}=M`, to
-# either the bra or the ket, but attaching it to the bra side will be useful later.
-#
-# We will be using some hidden methods of ``'default.qubit'``. So we will start
-# by creating a ``'default.qubit'`` instance with two wires:
+# So how does it work? Instead of jumping straight to the algorithm, let's explore the above equations
+# and their implementation in a bit more detail.
+# 
+# To start, we import PennyLane and PennyLane's numpy:
 
 import pennylane as qml
 from pennylane import numpy as np
 
-dev = qml.device("default.qubit", wires=2)
-
 ##############################################################################
-# And then, we can apply operations to get any arbitrary state :math:`|\Psi\rangle`.  We
-# will be using the a simple vector of operations ``ops`` and an observable ``M`` in our
-#  operations, but we can compare our problem to that of the QNode ``circuit``.
+# We also need a circuit to simulate:
+
+dev = qml.device('default.qubit', wires=2)
 
 x = np.array([0.1, 0.2, 0.3])
-
-ops = [qml.RX(x[0], wires=0), qml.CNOT(wires=(0, 1)), qml.RY(x[1], wires=1), qml.RZ(x[2], wires=1)]
-M = qml.PauliX(wires=1)
-
-n = len(ops)
-n_params = 3
-
 
 @qml.qnode(dev)
 def circuit(a):
     qml.RX(a[0], wires=0)
-    qml.CNOT(wires=(0, 1))
+    qml.CNOT(wires=(0,1))
     qml.RY(a[1], wires=1)
     qml.RZ(a[2], wires=1)
     return qml.expval(qml.PauliX(wires=1))
 
+##############################################################################
+# We will use the ``circuit`` QNode just for comparison purposes.  Thoughout this
+# demo, we will instead use a list of operations ``ops`` and a single observable ``M``.
+
+n_gates = 4
+n_params = 3
+
+ops = [qml.RX(x[0], wires=0),
+    qml.CNOT(wires=(0,1)),
+    qml.RY(x[1], wires=1),
+    qml.RZ(x[2], wires=1)]
+M = qml.PauliX(wires=1)
 
 ##############################################################################
-# We create our state by using the ``"default.qubit"`` methods ``dev._create_basis_state`` and
-# ``dev._apply_operation``.
+# We create our state by using the ``"default.qubit"`` methods ``_create_basis_state``
+# and ``_apply_operation``.
+# 
+# These are private methods that users typically won't need to know about,
+# but we use them here to illustrate the algorithm.
 
 state = dev._create_basis_state(0)
 
 for op in ops:
     state = dev._apply_operation(state, op)
-
+    
 print(state)
 
 ##############################################################################
-# Using this state, we can then create our :math:`|b\rangle` and :math:`|k\rangle` vectors from above:
+# We can think of the expectation $\langle M \rangle$ as an inner product between a bra and a ket:
+# .. math:: \langle M \rangle = \langle b | k \rangle = \langle \Psi | M | \Psi \rangle
+# where:
+# .. math:: \langle b | = \langle \Psi| M = \langle 0 | U_0^{\dagger} \dots U_n^{\dagger} M
+# .. math:: | k \rangle =  |\Psi \rangle = U_n U_{n-1} \dots U_0 |0\rangle
+# 
+# I could have attached :math:`M`, a Hermitian observable :math:`M^{\dagger}=M`, to either the
+#  bra or the ket, but attaching it to the bra side will be useful later.
+# 
+# Using the state calculated above, we can then create our :math:`|b\rangle` and :math:`|k\rangle`
+#  vectors.  In the code, ``bra`` indicates :math:`|b\rangle`, the conjugate transpose of :math:`\langle b|`. 
 
 bra = dev._apply_operation(state, M)
 ket = state
 
-#########################################################################################
-# Now we use ``np.vdot`` take the inner product.  ``np.vdot`` sums over all dimensions and
-# takes the complex conjugate of the first input.
+##############################################################################
+# Now we use `np.vdot` take the inner product.  `np.vdot` sums over all dimensions'
+# and takes the complex conjugate of the first input.
 
 M_expval = np.vdot(bra, ket)
 print(M_expval)
@@ -133,20 +127,16 @@ print(M_expval)
 print(circuit(x))
 
 ##############################################################################
-# But the dividing line between what makes the "bra" and "ket" vector is much more
-# arbitrary than I stated above.  We can divide the two vectors at any point from
-# one :math:`\langle 0 |` to the other :math:`|0\rangle`. For example, we could have used:
+# But the dividing line between what makes the "bra" and "ket" vector is actually
+# fairly arbitrary.  We can divide the two vectors at any point from one :math:`\langle 0 |`
+# to the other :math:`|0\rangle`. For example, we could have used:
+# 
+# .. math:: \langle b_n | = \langle 0 | U_1^{\dagger} \dots  U_n^{\dagger} M U_n
+# 
+# .. math:: |k_n \rangle = U_{n-1} \dots U_1 |0\rangle
 #
-# .. math::
-#
-#   |b_n \rangle = U_n^{\dagger} M U_n U_{n-1} \dots U_1 |0\rangle
-#
-# .. math::
-#
-#   |k_n \rangle = U_{n-1} \dots U_1 |0\rangle
-#
-# And gotten the exact same results.  I use :math:`n` to indicate that :math:`U_n` was moved
-# to the other side.  Let's calculate that instead:
+# And gotten the exact same results.  I use :math:`n` to indicate that :math:`U_n`
+# was moved to the bra side of the expression.  Let's calculate that instead:
 
 bra_n = dev._create_basis_state(0)
 
@@ -155,43 +145,47 @@ for op in ops:
 bra_n = dev._apply_operation(bra_n, M)
 bra_n = dev._apply_operation(bra_n, ops[-1].inv())
 
-ops[-1].inv()  # returning the operation to an uninverted state
-
+ops[-1].inv() # returning the operation to an uninverted state
 
 ket_n = dev._create_basis_state(0)
 
-for op in ops[0:-1]:  # don't apply last operation
+for op in ops[0:-1]: # don't apply last operation
     ket_n = dev._apply_operation(ket_n, op)
 
 M_expval_n = np.vdot(bra_n, ket_n)
 print(M_expval_n)
 
 ##############################################################################
-# Yay! Same answer!
+# Same answer!
+# 
+# But... we can calculate that in a more efficient way if we already had the
+# initial ``state`` :math:`| \Psi \rangle`. To shift the splitting point, we don't
+# have to recalculate everything from scratch. We just remove the operation from
+#  the ket and add the inverse to the bra.
+# 
+# .. math:: \langle b_n | = \langle b | U_n
 #
-# But we could have done that in a much more elegant way.  We had our initial bra and
-# ket vectors.  To shift our splitting point, we don't have to recalculate
-# everything from scratch.
+# .. math:: |k_n\rangle = U_n^{\dagger} |k\rangle 
+# 
+# For the ket vector, I think of :math:`U_n^{\dagger}` as "eating" it's
+# corresponding Unitary from the initial full vector, erasing it from the list.
+# 
+# Of course, we actually work with the conjugate transpose of :math:`\langle b_n |`:
 #
-# .. math::
+# .. math:: |b_n\rangle = U_n^{\dagger} | b \rangle
 #
-#   |b_n\rangle = U_n^{\dagger} |b\rangle
-#
-# .. math::
-#
-#    |k\rangle = U_n |k_n\rangle \rightarrow |k_n\rangle = U_n^{\dagger} |k\rangle
-#
-#
-# For the right side vector, I think of :math:`U_n^{\dagger}` as "eating" it's corresponding
-# Unitary on the right side, erasing it from the list.
+# Once we write it in this form, we see that the adjoint of the operation :math:`U_n^{\dagger}`
+#  operates on both :math:`|k_n\rangle` and :math:`|b_n\rangle` to move the splitting point right.
+# 
+# I label this the "version 2" method.
 
-bra = dev._apply_operation(state, M)
-ket = state
+bra_n_v2 = dev._apply_operation(state, M)
+ket_n_v2 = state
 
 ops[-1].inv()
 
-bra_n_v2 = dev._apply_operation(bra, ops[-1])
-ket_n_v2 = dev._apply_operation(ket, ops[-1])
+bra_n_v2 = dev._apply_operation(bra_n_v2, ops[-1])
+ket_n_v2 = dev._apply_operation(ket_n_v2, ops[-1])
 
 ops[-1].inv()
 
@@ -200,11 +194,22 @@ print(M_expval_n_v2)
 
 ##############################################################################
 # Much simpler!
-#
-# We can easily iterate over all the operations to show you will always get the same
-# result no matter where you split the operations.  We have to reverse the order of
-# operations, as we start by moving :math:`U_n` at the end of the list and finish by
-# moving :math:`U_1` at the start of the list.
+# 
+# We can easily iterate over all the operations to show that the same result occurs
+#  no matter where you split the operations.  
+# 
+# .. math:: \langle b_i | = \langle b_{i+1}| U_{i}
+# 
+# .. math:: |k_{i+1} \rangle = U_{i} |k_{i}\rangle
+# 
+# Rewritten, we have our iteration formulas:
+# 
+# .. math:: | b_i \rangle = U_i^{\dagger} |b_{i+1}\rangle
+# 
+# .. math:: | k_i \rangle  = U_i^{\dagger} |k_{i+1}\rangle
+# 
+# For each iteration, we move an operation from the ket side to the bra side.
+# We start near the center at :math:`U_n` and reverse through the operations list till we reach :math:`U_0`.
 
 bra_loop = dev._apply_operation(state, M)
 ket_loop = state
@@ -218,120 +223,101 @@ for op in reversed(ops):
 
 ##############################################################################
 # Finally to Derivatives!
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------
 #
-# We showed how to calculate the same thing a bunch of
-# different ways. Why is this useful?
-#
-# Wherever we have that cut, we can stick additional things in the middle.  Let's
-# take a look at the formula for a derivative of an expectation value.
-#
-# For simplicity sake, I assume each unitary operation :math:`U_i` is a function of a
-# single parameter :math:`\theta_i`.  For non-parametrized gates like CNOT, we can then
-# say its derivative is zero.  Multi-parametrized gates can be decomposed into
-# single parameter gates usually.
-#
+# We showed how to calculate the same thing a bunch of different ways. Why is this useful? 
+# 
+# Wherever we cut, we can stick additional things in the middle. What are we sticking in the middle?
+# The derivative of a gate.
+# 
+# For simplicity's sake, I assume each unitary operation :math:`U_i` is a function of a single
+# parameter :math:`\theta_i`.  For non-parametrized gates like CNOT, we say its derivative is zero.
+# We can also generalize the algorithm to multi-parameter gates, but we leave those out for now.
+# 
 # .. math::
+#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 
+#       \langle 0 | U_1^{\dagger} \dots \frac{\text{d} U_i^{\dagger}}{\text{d} \theta_i} \dots M \dots U_i \dots U_1 | 0\rangle
 #
-#   \frac{\partial \langle M \rangle}{\partial \theta_i} =
-#   \langle 0 | U_1^{\dagger} \dots \frac{\text{d} U_i^{\dagger}}{\text{d} \theta_i} \dots M
-#   \dots U_i \dots U_1 | 0\rangle
+# 
+# .. math:: 
+#     + \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M \dots \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle
 #
+# We can now notice that those two components are complex conjugates of each other, so we can
+# further simplify.  Note that each term is not an expectation value of a Hermitian observable,
+# only the sum is an expectation value. Each component is not guaranteed to be real.  Therefore
+# we have to select out the real component; imaginary part gets cancelled out.
+# 
 # .. math::
+#       = 2 \text{Real}\left( \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M \dots \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle \right)
 #
-#   + \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M
-#   \dots \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle
-#
-# We can now notice that those two components are complex conjugates,
-# so we can further simplify.  Note that each term is not an expectation value of
-# a Hermitian observable, only the sum is an expectation value. Each component is
-# not guaranteed to be real.  Therefore we have to select out the real component;
-# the imaginary part gets cancelled out.
-#
+# We can take that formula and break it into its "bra" and "ket" halves for a derivative at the :math:`i`th position:
+# 
 # .. math::
-#   = 2 \text{Real}\left( \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M \dots
-#   \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle \right)
+#    \frac{\partial \langle M \rangle }{\partial \theta_i } = 
+#    2 \text{Real} \left( \langle b_i | \frac{\text{d} U_i }{\text{d} \theta_i} | k_i \rangle \right)
 #
-# We can take that formula and break it into its "bra" and "ket" halves for a
-# derivative at the :math:`i` th position:
+# where
+# 
+# .. math:: \langle b_i | = \langle 0 | U_1^{\dagger} \dots U_n^{\dagger} M U_n \dots U_{i+1}
+# 
 #
+# ..math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle
+# 
+# 
+# This :math:`|b_i\rangle` is different than the one defined above when we weren't taking
+# the derivative. Now, on step :math:`i`, the :math:`U_i` operator is removed and substituted
+# for something else, it's derivative.  Only once the calculation is complete do we continue
+#  moving the operator over to the bra.
+# 
+# For the actual expectation value calculation, we use a temporary version of the bra:
+# 
+# .. math:: \langle \tilde{b}_i | = \langle b_i | \frac{\text{d} U_i}{\text{d} \theta_i}
+# 
+# And use these to get the derivative
+# 
 # .. math::
+#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Real}\left( \langle \tilde{b}_i | k_i \rangle \right)
+# 
+# Both the bra and the ket can be calculated recursively:
 #
-#   |k_i \rangle = U_{i-1} \dots U_1 |0\rangle
+# .. math:: | b_{i} \rangle = U^{\dagger}_{i+1} |b_{i+1}\rangle
 #
-# .. math::
-#
-#   = U_{i}^{\dagger} | k_{i+1}\rangle
-#
-# .. math::
-#
-#   |b_i\rangle = U_{i+1}^{\dagger} \dots U_n^{\dagger} M U_n \dots U_1 |0\rangle
-#
-# .. math::
-#
-#   = U_{i+1}^{\dagger} |b_{i+1} \rangle
-#
-# This :math:`|b_i\rangle` is different than the one defined above when we weren't
-# taking the derivative. Now, on step :math:`i`, the :math:`U_i` operator is removed
-# and substituted for something else, its derivative.  Only once the calculation is
-# complete do we continue moving the operator over to the bra.
-#
-# For the actually expectation value calculation, we use a temporary version of the bra:
-#
-# .. math::
-#
-#   |\tilde{b}_i\rangle = \frac{\text{d} U^{\dagger}_i}{\text{d} \theta_i} |b_i \rangle
-#
-# And use these to get the derivative:
-#
-# .. math::
-#
-#   \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Real}\left( \langle
-#   \tilde{b}_i | k_i \rangle \right)
-#
-# Both the bra and the ket have simple recursive definitions.  We can iterate through
-# the operations starting at :math:`n` and ending at :math:`1`. As this iteration is
-# reversed going from high to low values, the recursion formulas go from :math:`i+1`
-# to :math:`i`.
-#
-# We need to calculate the state first, a "forward" pass, but once we have that,
-# we only have about the same amount of work to calculate all the derivatives,
+# .. math:: | k_{i} \rangle = U^{\dagger}_{i} |k_{i+1}\rangle
+# 
+# We can iterate through the operations starting at :math:`n` and ending at :math:`1`.
+# 
+# We do have to calculate the state first, a "forward" pass, but once we have that,
+# we only have about the same amount of work to calculate all the derivatives, 
 # instead of quadratically more work.
-#
+# 
 # Derivative of an Operator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------
 #
-# One final thing before we get back to coding, how do we get the derivative of an operator?
-#
-# Most parametrized gates can be represented in terms of Pauli Rotations, and Pauli
-# rotations can be written as:
-#
-# .. math::
-#
-#   U = e^{i c \hat{G} \theta}
-#
+# One final thing before we get back to coding, how do we get the derivative of a operator?
+# 
+# Most parametrized gates can be represented in terms of Pauli Rotations, and Pauli rotations can be written as:
+# 
+# .. math:: U = e^{i c \hat{G} \theta}
+# 
 # For a matrix :math:`\hat{G}`, a constant :math:`c`, and the parameter :math:`\theta`.
 # Thus we can write easily calculate their derivatives:
 #
-# .. math::
-#   \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U
-#
-#
-# Luckily, we already have a built-in PennyLane function for calculating this.
+# .. math:: \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U 
+# 
+# Luckily, we already have built-in PennyLane function for calculating this.
 
-d_op = qml.operation.operation_derivative(ops[0])
-print(d_op)
+grad_op0 = qml.operation.operation_derivative(ops[0])
+print(grad_op0)
 
 ##############################################################################
 # Now for calculating the derivative!
-#
-# We loop over the reversed operations, just as before.
-#
-# But if the operation has a parameter, we calculate it's derivative and append it
-# to a list before moving on.
-#
-# Since the ``operation_derivative`` function spits back out a matrix instead of an
-# operation, we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{b}_i\rangle`.
+# 
+# We loop over the reversed operations, just as before.  
+# 
+# But if the operation has a parameter, we calculate it's derivative and append it to a list before moving on.
+# 
+# Since the ``operation_derivative`` function spits back out a matrix instead of an operation,
+# we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{b}_i\rangle`.
 
 bra = dev._apply_operation(state, M)
 ket = state
@@ -341,66 +327,70 @@ grads = []
 for op in reversed(ops):
     op.inv()
     ket = dev._apply_operation(ket, op)
-
+    
     # Calculating the derivative
     if op.num_params != 0:
         dU = qml.operation.operation_derivative(op)
-
+        
         bra_temp = dev._apply_unitary(bra, dU, op.wires)
-
+        
         dM = 2 * np.real(np.vdot(bra_temp, ket))
         grads.append(dM)
-
+    
     bra = dev._apply_operation(bra, op)
     op.inv()
 
 
-# Finally, reverse the order of the gradients
+# Finally reverse the order of the gradients
 # since we calculated them in reverse
 grads = grads[::-1]
 
-print("our calculation: ", grads)
+print(grads)
 
-pl_calc = qml.grad(circuit)(x)
-print("Comparison: ", pl_calc)
+grad_compare = qml.grad(circuit)(x)
+print(grad_compare)
 
 ##############################################################################
 # It matches!!!
-#
+# 
 # If you want to use adjoint differentiation without having to code up your own
-# method that can support arbitrary circuits, you can use adjoint diff in PennyLane
-# with ``"default.qubit"``
+#  method that can support arbitrary circuits, you can use adjoint diff in PennyLane with 
+# ``"default.qubit"`` or PennyLane's fast C++ simulator ``"lightning.qubit"``.
 
 
-@qml.qnode(dev, diff_method="adjoint")
+dev_lightning = qml.device('lightning.qubit', wires=2)
+
+@qml.qnode(dev_lightning, diff_method="adjoint")
 def circuit_adjoint(a):
     qml.RX(a[0], wires=0)
-    qml.CNOT(wires=(0, 1))
+    qml.CNOT(wires=(0,1))
     qml.RY(a[1], wires=1)
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
 
-
 qml.grad(circuit_adjoint)(x)
-
 
 ##############################################################################
 # Time Scaling
-# ~~~~~~~~~~~~
-#
+# --------------
+# 
 # In this section, I've deliberately used the same timing framework as the
-# `backpropagation tutorial <https://pennylane.ai/qml/demos/tutorial_backprop.html#time-comparison>`_ .
+# [backpropogation tutorial](https://pennylane.ai/qml/demos/tutorial_backprop.html#time-comparison).
 # Though I don't repeat that data here, you can compare the graphs.
-#
+# 
 # For this section, we need two additional packages: ``timeit`` and ``pyplot``.
 
 import timeit
 import matplotlib.pyplot as plt
 
+
+# To determine scaling, we will instead use ``"lightning.qubit"```, our fast c++ simulator
+# that natively supports adjoint differentiation. 
+
+
 n_wires = 4
 
-dev = qml.device("default.qubit", wires=n_wires)
-
+dev = qml.device("lightning.qubit", wires=n_wires)
 
 @qml.qnode(dev, diff_method="adjoint")
 def circuit(params):
@@ -421,66 +411,65 @@ n_params = []
 rng = np.random.default_rng(seed=42)
 
 for i_layers in n_layers:
-
+    
     # set up the parameters
-    param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=i_layers)
-    params = np.array(rng.standard_normal(param_shape))
+    param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=n_wires, n_layers=i_layers)
+    params = rng.standard_normal(param_shape)
     params.requires_grad = True
     n_params.append(params.size)
-
+    
+    
     ti_exec_set = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
-    ti_exec = min(ti_exec_set) / num
+    ti_exec = min(ti_exec_set)/num
     t_exec.append(ti_exec)
-
-    ti_grad_set = timeit.repeat(
-        "qml.grad(circuit)(params)", globals=globals(), number=num, repeat=reps
-    )
-    ti_grad = min(ti_grad_set) / num
+    
+    ti_grad_set = timeit.repeat("qml.grad(circuit)(params)", globals=globals(), number=num, repeat=reps)
+    ti_grad = min(ti_grad_set)/num
     t_grad.append(ti_grad)
+    
+    ratio.append(ti_grad/ti_exec)
 
-    ratio.append(ti_grad / ti_exec)
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-ax.plot(n_params, t_exec, label="execution")
-ax.plot(n_params, t_grad, label="gradient")
+plt.plot(n_params, t_exec, label="execution")
+plt.plot(n_params, t_grad, label="gradient")
 
-ax.legend()
+plt.legend()
 
-ax.set_xlabel("Number of parameters")
-ax.set_ylabel("Time")
+plt.xlabel("Number of parameters")
+plt.ylabel("Time")
 
-fig.suptitle("Adjoint Time Scaling")
+plt.title("Time per execution and gradient")
 plt.show()
-
-##############################################################################
-# Just like backpropagation, adjoint is roughly a constant factor longer than straight
-# execution times.  BUT, the adjoint method has a constant memory overhead.
-# Backpropagation balloons in memory. Memory is already a limiting factor in quantum
-# computation even before you start taking derivatives.  You can always run a
-# simulation for twice as long; it is much harder to double your available RAM.
 
 n_params = np.array(n_params)
 
 m, b = np.polyfit(n_params, ratio, deg=1)
-ratio_fit = lambda x: m * x + b
+ratio_fit = lambda x: m*x+b
 
 print(f"ratio fit: {m}*x + {b}")
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-ax.plot(n_params, ratio, label="ratio")
-ax.plot(n_params, ratio_fit(n_params), label=f"{m:.3f}*x + {b:.3f}")
+plt.plot(n_params, ratio, label="ratio")
+plt.plot(n_params, ratio_fit(n_params), label=f"{m:.3f}*x + {b:.3f}")
 
-fig.suptitle("Gradient time per execution time")
-ax.set_xlabel("number of parameters")
-ax.set_ylabel("Normalized Time")
-ax.legend()
+plt.title("Gradient time per execution time")
+plt.xlabel("number of parameters")
+plt.ylabel("Normalized Time")
+plt.legend()
 plt.show()
 
-
 ##############################################################################
-# Bibliography
-# ~~~~~~~~~~~~
+# Just like backpropogation, adjoint is roughly a constant factor longer than straight execution times.
+# BUT, the adjoint method has a constant memory overhead. Backpropogation balloons in memory, which is
+# already a limiting factor in quantum computation even before you start taking derivatives.  You can
+#  always run a simulation for twice as long; much harder to double your available RAM. 
+# 
 #
-# Jones and Gacon. Efficient calculation of gradients in classical simulations
-#  of variational quantum algorithms.
-# `https://arxiv.org/abs/2009.02823 <https://arxiv.org/abs/2009.02823>`_
+# Bibliography
+# -------------
+# 
+# Jones and Gacon. Efficient calculation of gradients in classical simulations of variational quantum algorithms.[https://arxiv.org/abs/2009.02823](https://arxiv.org/abs/2009.02823)
+
+
+
+
+
