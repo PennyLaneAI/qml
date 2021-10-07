@@ -439,7 +439,7 @@ for i_layers in n_layers:
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-ax.plot(n_params, t_exec, '.-', 'label="execution")
+ax.plot(n_params, t_exec, '.-', label="execution")
 ax.plot(n_params, t_grad, '.-', label="gradient")
 
 ax.legend()
