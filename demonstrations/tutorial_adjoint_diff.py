@@ -16,7 +16,7 @@ Adjoint Differentiation
 # ------------
 # 
 # Classical automatic differentiation has two methods of calculation: forward and reverse.
-#  The optimal choice of method depends on the structure of the problem; is the function 
+# The optimal choice of method depends on the structure of the problem; is the function 
 # many-to-one or one-to-many? We use the properties of the problem to optimize how we 
 # calculate derivatives.
 # 
@@ -25,17 +25,21 @@ Adjoint Differentiation
 # where we can only extract restricted pieces of information.
 # 
 # Adjoint differentiation straddles these two strategies taking benefits from each.
-#  On simulators, we can examine and modify the state vector at any point. At the same time, we know our
-#  quantum circuit holds specific properties not present in an arbitrary classical computation. 
+# On simulators, we can examine and modify the state vector at any point. At the same time, we know our
+# quantum circuit holds specific properties not present in an arbitrary classical computation. 
 #  
 # Quantum circuits only involve:
+#
 # 1) initialization
+#
 # .. math:: |0\rangle
 # 
 # 2) application of unitary operators
+#
 # .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
 #
 # 3) taking an expectation value of a Hermitian operator:
+#
 # .. math:: \langle M \rangle = \langle \Psi | M | \Psi \rangle
 # 
 # Since all our operators are unitary, we can easily "undo" or "erase" them by applying their adjoint:
@@ -43,10 +47,10 @@ Adjoint Differentiation
 # .. math:: U^{\dagger} U | \phi \rangle = |\phi\rangle.
 # 
 # The "adjoint" differentiation method takes advantage of the ability to erase, creating a time and
-#  memory-efficient method for computing gradients.
+# memory-efficient method for computing gradients.
 # 
 # Time for some code
-# -------------------
+# ------------------
 #
 # So how does it work? Instead of jumping straight to the algorithm, let's explore the above equations
 # and their implementation in a bit more detail.
@@ -99,32 +103,32 @@ for op in ops:
 print(state)
 
 ##############################################################################
-# We can think of the expectation $\langle M \rangle$ as an inner product between a bra and a ket:
+# We can think of the expectation :math:`\langle M \rangle` as an inner product between a bra and a ket:
+#
 # .. math:: \langle M \rangle = \langle b | k \rangle = \langle \Psi | M | \Psi \rangle
+#
 # where:
+#
 # .. math:: \langle b | = \langle \Psi| M = \langle 0 | U_0^{\dagger} \dots U_n^{\dagger} M
+#
 # .. math:: | k \rangle =  |\Psi \rangle = U_n U_{n-1} \dots U_0 |0\rangle
 # 
 # I could have attached :math:`M`, a Hermitian observable :math:`M^{\dagger}=M`, to either the
-#  bra or the ket, but attaching it to the bra side will be useful later.
+# bra or the ket, but attaching it to the bra side will be useful later.
 # 
 # Using the state calculated above, we can then create our :math:`|b\rangle` and :math:`|k\rangle`
-#  vectors.  In the code, ``bra`` indicates :math:`|b\rangle`, the conjugate transpose of :math:`\langle b|`. 
+# vectors.  In the code, ``bra`` indicates :math:`|b\rangle`, the conjugate transpose of :math:`\langle b|`. 
 
 bra = dev._apply_operation(state, M)
 ket = state
 
 ##############################################################################
-# Now we use `np.vdot` take the inner product.  `np.vdot` sums over all dimensions'
+# Now we use ``np.vdot`` take the inner product.  ``np.vdot`` sums over all dimensions
 # and takes the complex conjugate of the first input.
 
 M_expval = np.vdot(bra, ket)
-print(M_expval)
-
-##############################################################################
-# We can compare this to the QNode calculation:
-
-print(circuit(x))
+print("vdot  : ", M_expval)
+print("QNode : ", circuit(x))
 
 ##############################################################################
 # But the dividing line between what makes the "bra" and "ket" vector is actually
@@ -161,7 +165,7 @@ print(M_expval_n)
 # But... we can calculate that in a more efficient way if we already had the
 # initial ``state`` :math:`| \Psi \rangle`. To shift the splitting point, we don't
 # have to recalculate everything from scratch. We just remove the operation from
-#  the ket and add the inverse to the bra.
+# the ket and add the inverse to the bra.
 # 
 # .. math:: \langle b_n | = \langle b | U_n
 #
@@ -175,7 +179,7 @@ print(M_expval_n)
 # .. math:: |b_n\rangle = U_n^{\dagger} | b \rangle
 #
 # Once we write it in this form, we see that the adjoint of the operation :math:`U_n^{\dagger}`
-#  operates on both :math:`|k_n\rangle` and :math:`|b_n\rangle` to move the splitting point right.
+# operates on both :math:`|k_n\rangle` and :math:`|b_n\rangle` to move the splitting point right.
 # 
 # I label this the "version 2" method.
 
@@ -196,7 +200,7 @@ print(M_expval_n_v2)
 # Much simpler!
 # 
 # We can easily iterate over all the operations to show that the same result occurs
-#  no matter where you split the operations.  
+# no matter where you split the operations.  
 # 
 # .. math:: \langle b_i | = \langle b_{i+1}| U_{i}
 # 
@@ -261,13 +265,13 @@ for op in reversed(ops):
 # .. math:: \langle b_i | = \langle 0 | U_1^{\dagger} \dots U_n^{\dagger} M U_n \dots U_{i+1}
 # 
 #
-# ..math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle
+# .. math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle
 # 
 # 
 # This :math:`|b_i\rangle` is different than the one defined above when we weren't taking
 # the derivative. Now, on step :math:`i`, the :math:`U_i` operator is removed and substituted
 # for something else, it's derivative.  Only once the calculation is complete do we continue
-#  moving the operator over to the bra.
+# moving the operator over to the bra.
 # 
 # For the actual expectation value calculation, we use a temporary version of the bra:
 # 
@@ -345,16 +349,16 @@ for op in reversed(ops):
 # since we calculated them in reverse
 grads = grads[::-1]
 
-print(grads)
+print("our calculation: ", grads)
 
 grad_compare = qml.grad(circuit)(x)
-print(grad_compare)
+print("comparison: ", grad_compare)
 
 ##############################################################################
 # It matches!!!
 # 
 # If you want to use adjoint differentiation without having to code up your own
-#  method that can support arbitrary circuits, you can use adjoint diff in PennyLane with 
+# method that can support arbitrary circuits, you can use adjoint diff in PennyLane with 
 # ``"default.qubit"`` or PennyLane's fast C++ simulator ``"lightning.qubit"``.
 
 
@@ -375,13 +379,14 @@ qml.grad(circuit_adjoint)(x)
 # --------------
 # 
 # In this section, I've deliberately used the same timing framework as the
-# [backpropogation tutorial](https://pennylane.ai/qml/demos/tutorial_backprop.html#time-comparison).
+# `backpropogation tutorial <https://pennylane.ai/qml/demos/tutorial_backprop.html#time-comparison>`__.
 # Though I don't repeat that data here, you can compare the graphs.
 # 
 # For this section, we need two additional packages: ``timeit`` and ``pyplot``.
 
 import timeit
 import matplotlib.pyplot as plt
+plt.style.use("bmh")
 
 
 # To determine scaling, we will instead use ``"lightning.qubit"```, our fast c++ simulator
@@ -429,17 +434,23 @@ for i_layers in n_layers:
     
     ratio.append(ti_grad/ti_exec)
 
+##############################################################################
+# Now we can plot the results.
 
-plt.plot(n_params, t_exec, label="execution")
-plt.plot(n_params, t_grad, label="gradient")
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-plt.legend()
+ax.plot(n_params, t_exec, '.-', 'label="execution")
+ax.plot(n_params, t_grad, '.-', label="gradient")
 
-plt.xlabel("Number of parameters")
-plt.ylabel("Time")
+ax.legend()
 
-plt.title("Time per execution and gradient")
+ax.set_xlabel("Number of parameters")
+ax.set_ylabel("Time")
+
 plt.show()
+
+##############################################################################
+# How does the ratio scale?
 
 n_params = np.array(n_params)
 
@@ -448,26 +459,30 @@ ratio_fit = lambda x: m*x+b
 
 print(f"ratio fit: {m}*x + {b}")
 
-plt.plot(n_params, ratio, label="ratio")
-plt.plot(n_params, ratio_fit(n_params), label=f"{m:.3f}*x + {b:.3f}")
+fig2, ax2 = plt.subplots(1, 1, figsize=(6, 4))
 
-plt.title("Gradient time per execution time")
-plt.xlabel("number of parameters")
-plt.ylabel("Normalized Time")
-plt.legend()
+ax2.plot(n_params, ratio, '.-', label="ratio")
+ax2.plot(n_params, ratio_fit(n_params), label=f"{m:.3f}*x + {b:.2f}")
+
+fig2.suptitle("Gradient time per execution time")
+ax2.set_xlabel("number of parameters")
+ax2.set_ylabel("Normalized Time")
+ax2.legend()
+
 plt.show()
 
 ##############################################################################
 # Just like backpropogation, adjoint is roughly a constant factor longer than straight execution times.
 # BUT, the adjoint method has a constant memory overhead. Backpropogation balloons in memory, which is
 # already a limiting factor in quantum computation even before you start taking derivatives.  You can
-#  always run a simulation for twice as long; much harder to double your available RAM. 
+# always run a simulation for twice as long; much harder to double your available RAM. 
 # 
 #
 # Bibliography
 # -------------
 # 
-# Jones and Gacon. Efficient calculation of gradients in classical simulations of variational quantum algorithms.[https://arxiv.org/abs/2009.02823](https://arxiv.org/abs/2009.02823)
+# Jones and Gacon. Efficient calculation of gradients in classical simulations of variational quantum algorithms.
+# `https://arxiv.org/abs/2009.02823 <https://arxiv.org/abs/2009.02823>`__
 
 
 
