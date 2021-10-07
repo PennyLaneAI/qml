@@ -10,7 +10,7 @@ strawberryfields==0.15
 sympy==1.6.2
 pillow==7.1.0
 pip==20.1
-pyscf==1.7.2
+pyscf==1.7.6
 pennylane==0.18.0
 pennylane-qchem==0.17.0
 pennylane-sf==0.16.0
