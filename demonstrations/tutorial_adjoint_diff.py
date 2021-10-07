@@ -254,7 +254,7 @@ for op in reversed(ops):
 # .. math::
 #       = 2 \text{Real}\left( \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M \dots \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle \right)
 #
-# We can take that formula and break it into its "bra" and "ket" halves for a derivative at the :math:`i`th position:
+# We can take that formula and break it into its "bra" and "ket" halves for a derivative at the :math:`i` th position:
 # 
 # .. math::
 #    \frac{\partial \langle M \rangle }{\partial \theta_i } = 
@@ -383,15 +383,13 @@ qml.grad(circuit_adjoint)(x)
 # Though I don't repeat that data here, you can compare the graphs.
 # 
 # For this section, we need two additional packages: ``timeit`` and ``pyplot``.
+#
+# To determine scaling, we will instead use ``"lightning.qubit"```, our fast c++ simulator
+# that natively supports adjoint differentiation. 
 
 import timeit
 import matplotlib.pyplot as plt
 plt.style.use("bmh")
-
-
-# To determine scaling, we will instead use ``"lightning.qubit"```, our fast c++ simulator
-# that natively supports adjoint differentiation. 
-
 
 n_wires = 4
 
