@@ -1,3 +1,38 @@
+- title: Fraud Detection
+  author: Sophie Choe
+  date: 10/04/2021
+  code: https://github.com/sophchoe/Binary_Classification_Pennylane_Keras/blob/main/fraud_detection_Pennylane_Keras.ipynb
+  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  color: heavy-rain-gradient
+  description: |
+    This is a binary classification hybrid model as proposed in the paper
+    "Continuous Variable Quantum Neural Networks", composed of 2 layers of feed forward 
+    classical layers and 4 layers of quantum neural network. Using the Pennylane Tensorflow plug-in, 
+    the whole network is wrapped as a Keras sequential network, whose parameters are updated via 
+    Keras's built in loss function and optimizer.
+
+- title: Quantum-Classical MNIST Classification Model
+  author: Sophie Choe
+  date: 09/28/2021
+  code: https://github.com/sophchoe/Hybrid-Quantum-Classical-MNIST-Classfication-Model
+  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  color: heavy-rain-gradient
+  description: |
+    Keras-PennyLane hybrid model for MNIST classification, inspired by the "Supervised
+    learning with hybrid networks" section of the paper "Continuous-variable
+    quantum neural networks".
+
+- title: Hybrid quantum-classical auto encoder
+  author: Sophie Choe
+  date: 09/28/2021
+  code: https://github.com/sophchoe/QML/blob/main/auto_encoder_Pennylane_Keras.ipynb
+  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  color: heavy-rain-gradient
+  description: |
+    Keras-PennyLane implementation of the hybrid quantum-classical auto encoder proposed in the paper
+    "Continous-variable quantum neural networks". The loss function used here is the mean-squared error,
+    unlike the paper which requires state vector retrieval.
+
 - title: Quantum circuit learning to compute option prices and their sensitivities
   author: Takayuki Sakuma
   date: 09/16/2021
