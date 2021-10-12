@@ -48,6 +48,10 @@ Adjoint Differentiation
 # 
 # The "adjoint" differentiation method takes advantage of the ability to erase, creating a time and
 # memory-efficient method for computing quantum gradients.
+#
+# In this demo, you will learn how adjoint differentiation works and how to request it
+# for your PennyLane QNode. We will also look at the performance benefits and when you might want
+# to use it.
 # 
 # Time for some code
 # ------------------
@@ -67,7 +71,7 @@ dev = qml.device('default.qubit', wires=2)
 
 x = np.array([0.1, 0.2, 0.3])
 
-@qml.qnode(dev)
+@qml.qnode(dev, diff_method="adjoint")
 def circuit(a):
     qml.RX(a[0], wires=0)
     qml.CNOT(wires=(0,1))
@@ -76,6 +80,10 @@ def circuit(a):
     return qml.expval(qml.PauliX(wires=1))
 
 ##############################################################################
+# The fast c++ simulator device ``"lightning.qubit"`` also supports adjoint differentiation,
+# but here we want to quickly prototype a minimal version to illustrate how the algorithm works,
+# not understand how to optimize the code for performance.
+#
 # We will use the ``circuit`` QNode just for comparison purposes.  Thoughout this
 # demo, we will instead use a list of its operations ``ops`` and a single observable ``M``.
 
@@ -133,6 +141,9 @@ print("vdot  : ", M_expval)
 print("QNode : ", circuit(x))
 
 ##############################################################################
+# We got the same result via both methods! This validates our use of ``vdot`` and
+# device methods.
+#
 # But the dividing line between what makes the "bra" and "ket" vector is actually
 # fairly arbitrary.  We can divide the two vectors at any point from one :math:`\langle 0 |`
 # to the other :math:`|0\rangle`. For example, we could have used:
@@ -167,7 +178,7 @@ print(M_expval_n)
 # We can calculate this in a more efficient way if we already have the
 # initial ``state`` :math:`| \Psi \rangle`. To shift the splitting point, we don't
 # have to recalculate everything from scratch. We just remove the operation from
-# the ket and add the inverse to the bra.
+# the ket and add it to the bra.
 # 
 # .. math:: \langle b_n | = \langle b | U_n
 #
@@ -239,6 +250,9 @@ for op in reversed(ops):
 # For simplicity's sake, assume each unitary operation :math:`U_i` is a function of a single
 # parameter :math:`\theta_i`.  For non-parametrized gates like CNOT, we say its derivative is zero.
 # We can also generalize the algorithm to multi-parameter gates, but we leave those out for now.
+#
+# Remember that each parameter occurs twice in :math:`\langle M \rangle`: once in the bra and once in
+# the ket. Therefore we use the product rule to take the derivative with respect to both locations.
 # 
 # .. math::
 #       \frac{\partial \langle M \rangle}{\partial \theta_i} = 
@@ -319,11 +333,9 @@ print(grad_op0)
 ##############################################################################
 # Now for calculating the derivative!
 # 
-# We loop over the reversed operations, just as before.  
-# 
-# But if the operation has a parameter, we calculate it's derivative and append it to a list before moving on.
-# 
-# Since the ``operation_derivative`` function spits back out a matrix instead of an operation,
+# We loop over the reversed operations, just as before.  But if the operation has a parameter,
+# we calculate it's derivative and append it to a list before moving on. Since the ``operation_derivative``
+# function spits back out a matrix instead of an operation,
 # we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{b}_i\rangle`.
 
 bra = dev._apply_operation(state, M)
@@ -380,7 +392,7 @@ qml.grad(circuit_adjoint)(x)
 ##############################################################################
 # Time Scaling
 # --------------
-# 
+#
 # In this section, I've deliberately used the same timing framework as the
 # `backpropogation tutorial <https://pennylane.ai/qml/demos/tutorial_backprop.html#time-comparison>`__.
 # Though I don't repeat that data here, you can compare the graphs.
@@ -389,90 +401,9 @@ qml.grad(circuit_adjoint)(x)
 #
 # To determine scaling, we will instead use ``"lightning.qubit"```, our fast c++ simulator
 # that natively supports adjoint differentiation. 
-
-import timeit
-import matplotlib.pyplot as plt
-plt.style.use("bmh")
-
-n_wires = 4
-
-dev = qml.device("lightning.qubit", wires=n_wires)
-
-@qml.qnode(dev, diff_method="adjoint")
-def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=range(n_wires))
-    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
-
-
-reps = 2
-num = 3
-
-n_layers = range(1, 21)
-
-t_exec = []
-t_grad = []
-ratio = []
-n_params = []
-
-rng = np.random.default_rng(seed=42)
-
-for i_layers in n_layers:
-    
-    # set up the parameters
-    param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=n_wires, n_layers=i_layers)
-    params = rng.standard_normal(param_shape)
-    params.requires_grad = True
-    n_params.append(params.size)
-    
-    
-    ti_exec_set = timeit.repeat("circuit(params)", globals=globals(), number=num, repeat=reps)
-    ti_exec = min(ti_exec_set)/num
-    t_exec.append(ti_exec)
-    
-    ti_grad_set = timeit.repeat("qml.grad(circuit)(params)", globals=globals(), number=num, repeat=reps)
-    ti_grad = min(ti_grad_set)/num
-    t_grad.append(ti_grad)
-    
-    ratio.append(ti_grad/ti_exec)
-
-##############################################################################
-# Now we can plot the results.
-
-fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-
-ax.plot(n_params, t_exec, '.-', label="execution")
-ax.plot(n_params, t_grad, '.-', label="gradient")
-
-ax.legend()
-
-ax.set_xlabel("Number of parameters")
-ax.set_ylabel("Time")
-
-plt.show()
-
-##############################################################################
-# How does the ratio scale?
-
-n_params = np.array(n_params)
-
-m, b = np.polyfit(n_params, ratio, deg=1)
-ratio_fit = lambda x: m*x+b
-
-print(f"ratio fit: {m}*x + {b}")
-
-fig2, ax2 = plt.subplots(1, 1, figsize=(6, 4))
-
-ax2.plot(n_params, ratio, '.-', label="ratio")
-ax2.plot(n_params, ratio_fit(n_params), label=f"{m:.3f}*x + {b:.2f}")
-
-fig2.suptitle("Gradient time per execution time")
-ax2.set_xlabel("number of parameters")
-ax2.set_ylabel("Normalized Time")
-ax2.legend()
-
-plt.show()
-
-##############################################################################
+#
+# .. include:: adjoint_timing.py
+#
 # Just like backpropagation, adjoint is roughly a constant factor longer than straight execution times.
 # BUT, the adjoint method has a constant memory overhead. Backpropagation balloons in memory, which is
 # already a limiting factor in quantum computation even before you start taking derivatives.  You can
