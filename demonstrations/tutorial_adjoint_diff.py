@@ -404,6 +404,7 @@ qml.grad(circuit_adjoint)(x)
 #
 
 if False:
+
     import timeit
     import matplotlib.pyplot as plt
     import pennylane as qml
@@ -482,6 +483,15 @@ if False:
 
     plt.show()
 
+##############################################################################
+#
+# .. figure:: ../demonstrations/adjoint_diff/adjoint_timing1.png
+#     :width: 100%
+#     :align: center
+#
+# .. figure:: ../demonstrations/adjoint_diff/adjoint_timing2.png
+#     :width: 100%
+#     :align: center
 #
 # Just like backpropagation, adjoint is roughly a constant factor longer than straight execution times.
 # BUT, the adjoint method has a constant memory overhead. Backpropagation balloons in memory, which is
