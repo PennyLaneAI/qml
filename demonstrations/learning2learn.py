@@ -11,7 +11,7 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 16 Jun 2021.*
+*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 15 Sep 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -231,6 +231,7 @@ def qaoa_from_graph(graph, n_layers=1):
         for w in wires:
             qml.Hadamard(wires=w)
         qml.layer(qaoa_layer, n_layers, params[0], params[1])
+        return qml.expval(cost_h)
 
     # Evaluates the cost Hamiltonian
     def hamiltonian(params, **kwargs):
@@ -239,8 +240,8 @@ def qaoa_from_graph(graph, n_layers=1):
         # We set the default.qubit.tf device for seamless integration with TensorFlow
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
-        # ExpvalCost evaluates the expectation value of an operator
-        cost = qml.ExpvalCost(circuit, cost_h, dev, interface="tf", diff_method="backprop")
+        # This qnode evaluates the expectation value of the cost hamiltonian operator
+        cost = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
 
         return cost(params)
 
@@ -585,6 +586,7 @@ plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
@@ -675,6 +677,7 @@ plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
@@ -928,6 +931,7 @@ plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
+plt.show()
 
 ######################################################################
 # .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
@@ -1069,7 +1073,7 @@ model.summary()
 #
 #  .. code-block:: none
 #
-#        Model: "model"
+#        Model: "functional_1"
 #        __________________________________________________________________________________________________
 #        Layer (type)                    Output Shape         Param #     Connected to                     
 #        ==================================================================================================

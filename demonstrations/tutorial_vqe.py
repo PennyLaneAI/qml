@@ -140,12 +140,13 @@ def circuit(param, wires):
 ##############################################################################
 # The next step is to define the cost function to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
-# We do this using the :class:`~.ExpvalCost`
-# class, which is tailored for VQE optimization. It requires specifying the
-# circuit, target Hamiltonian, and the device, and it returns a cost function that can
-# be evaluated with the gate parameter :math:`\theta`:
+# We do this using the :func:`~.expval` function. The decorator syntax allows us to
+# run the cost function as an executable QNode with the gate parameter :math:`\theta`:
 
-cost_fn = qml.ExpvalCost(circuit, H, dev)
+@qml.qnode(dev)
+def cost_fn(param):
+    circuit(param, wires=range(qubits))
+    return qml.expval(H)
 
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of

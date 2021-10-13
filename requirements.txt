@@ -10,13 +10,13 @@ strawberryfields==0.15
 sympy==1.6.2
 pillow==7.1.0
 pip==20.1
-pyscf==1.7.2
-pennylane==0.17.0
+pyscf==1.7.6
+pennylane==0.18.0
 pennylane-qchem==0.17.0
 pennylane-sf==0.16.0
 pennylane-forest==0.17.0
 pennylane-cirq==0.17.0
-pennylane-qiskit==0.17.0
+pennylane-qiskit==0.18.0
 qulacs==0.1.10.1
 pennylane-qulacs==0.16.0
 pyquil==2.21
@@ -29,8 +29,8 @@ sphinx_gallery==0.9.0
 seaborn==0.10.1
 tensorflow==2.4.2
 toml==0.10.2
-torch==1.7.0+cpu
-torchvision==0.8.1+cpu
+torch==1.9.0+cpu
+torchvision==0.10.0+cpu
 dask[delayed]==2.10.1
 scikit-learn==0.23.2
 matplotlib==3.3.3

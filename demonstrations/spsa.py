@@ -429,9 +429,8 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 
 from pennylane import qchem
 
-geometry = "h2.xyz"
-
-symbols, coordinates = qchem.read_structure(geometry)
+symbols = ["H", "H"]
+coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
@@ -459,6 +458,12 @@ from qiskit.providers.aer import noise
 
 # Note: you will need to be authenticated to IBMQ to run the following code.
 # Do not run the simulation on this device, as it will send it to real hardware
+# For access to IBMQ, the following statements will be useful:
+# IBMQ.save_account(TOKEN)
+# IBMQ.load_account() # Load account from disk
+# List the providers to pick an available backend:
+# IBMQ.providers()    # List all available providers
+
 dev_melbourne = qml.device(
     "qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne"
 )
@@ -467,9 +472,13 @@ dev_noisy = qml.device(
     "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
 )
 
+def exp_val_circuit(params):
+    circuit(params, range(dev_melbourne.num_wires))
+    return qml.expval(h2_ham)
+
 # Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
-cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
+cost = qml.QNode(exp_val_circuit, dev_noisy)
 
 # This random seed was used in the original VQE demo and is known to allow the
 # algorithm to converge to the global minimum.
@@ -562,7 +571,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 dev_noisy_spsa = qml.device(
     "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
 )
-cost_spsa = qml.ExpvalCost(circuit, h2_ham, dev_noisy_spsa)
+cost_spsa = qml.QNode(exp_val_circuit, dev_noisy_spsa)
 
 # Wrapping the cost function and flattening the parameters to be compatible
 # with noisyopt which assumes a flat array of input parameters
