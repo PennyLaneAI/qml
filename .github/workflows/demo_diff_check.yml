@@ -1,4 +1,4 @@
-name: demo-diff-check
+name: Check the output of demos on the master and dev branches
 on:
   schedule:
     - cron: '0 0 * * 0'
@@ -90,3 +90,59 @@ jobs:
           path: |
             /tmp/qml_demos.zip
             _build/html
+
+  check-diffs:
+    runs-on: ubuntu-latest
+    needs: [build-dev, build-master]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: demo_checker
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: built-website-dev
+
+    - name: Display structure of downloaded files
+      run: ls -la
+
+    - name: Create dev dir
+      run: mkdir /tmp/dev/
+
+    - name: Unzip dev demos
+      run: unzip built-website-dev.zip -d /tmp/dev/
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: built-website-master
+
+    - name: Create master dir
+      run: mkdir /tmp/master/
+
+    - name: Unzip master demos
+      run: unzip built-website-master.zip -d /tmp/master/
+
+    - name: Display structure of downloaded files
+      run: ls -la /tmp/
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Display structure of downloaded files
+      run: |
+        git config user.name "QML demo checker Bot"
+        git config user.email "<>"
+
+        pip install pytz
+        python ./generate_diffs.py
+        git add demo_diffs.md
+        git commit -m "Update diffs found"
+        git push
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: demo_diffs
+        path: |
+          demo_diffs.md
