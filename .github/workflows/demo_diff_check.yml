@@ -100,7 +100,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: demo_checker
+        ref: demo_output_check
 
     - uses: actions/download-artifact@v2
       with:
