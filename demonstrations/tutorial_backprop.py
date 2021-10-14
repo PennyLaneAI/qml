@@ -91,7 +91,7 @@ print("Expectation value:", circuit(params))
 ##############################################################################
 # We can also draw the executed quantum circuit:
 
-print(circuit.draw())
+print(qml.draw(circuit)(params))
 
 
 ##############################################################################
@@ -127,13 +127,21 @@ def parameter_shift(qnode, params):
 print(parameter_shift(circuit, params))
 
 ##############################################################################
-# We can compare this to PennyLane's *built-in* parameter-shift feature by using
-# the :func:`qml.grad <pennylane.grad>` function. Remember, when we defined the
+# We can compare this to PennyLane's *built-in* quantum gradient support by using
+# the :func:`qml.grad <pennylane.grad>` function, which allows us to compute gradients
+# of hybrid quantum-classical cost functions. Remember, when we defined the
 # QNode, we specified that we wanted it to be differentiable using the parameter-shift
 # method (``diff_method="parameter-shift"``).
 
 grad_function = qml.grad(circuit)
 print(grad_function(params)[0])
+
+##############################################################################
+# Alternatively, we can directly compute quantum gradients of QNodes using
+# PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
+
+print(qml.gradients.param_shift(circuit)(params))
+
 
 ##############################################################################
 # If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
