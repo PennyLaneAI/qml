@@ -113,7 +113,7 @@ jobs:
       run: mkdir /tmp/dev/
 
     - name: Unzip dev demos
-      run: unzip built-website-dev.zip -d /tmp/dev/
+      run: unzip /home/runner/work/qml/qml/built-website-dev.zip -d /tmp/dev/
 
     - uses: actions/download-artifact@v2
       with:
@@ -123,10 +123,12 @@ jobs:
       run: mkdir /tmp/master/
 
     - name: Unzip master demos
-      run: unzip built-website-master.zip -d /tmp/master/
+      run: unzip /home/runner/work/qml/qml/built-website-master.zip -d /tmp/master/
 
     - name: Display structure of downloaded files
-      run: ls -la /tmp/
+      run: |
+        ls -la /tmp/dev/
+        ls -la /tmp/master/
 
     - name: Set up Python
       uses: actions/setup-python@v2
