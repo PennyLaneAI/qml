@@ -145,7 +145,7 @@ jobs:
         git config user.email "<>"
 
         pip install pytz
-        python ./generate_diffs.py
+        python .github/workflows/generate_diffs.py
         git add demo_diffs.md
         git commit -m "Update diffs found"
         git push
