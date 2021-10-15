@@ -102,33 +102,37 @@ jobs:
       with:
         ref: demo_output_check
 
-    - uses: actions/download-artifact@v2
-      with:
-        name: built-website-dev
-
-    - name: Display structure of downloaded files
-      run: ls -la
-
     - name: Create dev dir
       run: mkdir /tmp/dev/
 
-    - name: Unzip dev demos
-      run: unzip /home/runner/work/qml/qml/built-website-dev.zip -d /tmp/dev/
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: /tmp/dev/
 
     - uses: actions/download-artifact@v2
       with:
-        name: built-website-master
+        name: built-website-dev
+        path: /tmp/dev/
+
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: /tmp/dev/
 
     - name: Create master dir
       run: mkdir /tmp/master/
 
-    - name: Unzip master demos
-      run: unzip /home/runner/work/qml/qml/built-website-master.zip -d /tmp/master/
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: /tmp/master/
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: built-website-master
+        path: /tmp/master/
 
     - name: Display structure of downloaded files
-      run: |
-        ls -la /tmp/dev/
-        ls -la /tmp/master/
+      run: ls -R
+      working-directory: /tmp/master/
 
     - name: Set up Python
       uses: actions/setup-python@v2
