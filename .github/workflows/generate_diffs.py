@@ -89,9 +89,13 @@ def main():
     dev_url = 'http://pennylane.ai-dev.s3-website-us-east-1.amazonaws.com/qml/demos/'
 
     # Get all the filenames
-    files = os.listdir(master_path)
+    master_files = os.listdir(master_path)
+    dev_files = os.listdir(dev_path)
 
-    automatically_run = [f for f in files if f.startswith("tutorial_")]
+    master_automatically_run = set([f for f in master_files if f.startswith("tutorial_")])
+    dev_automatically_run = set([f for f in dev_files if f.startswith("tutorial_")])
+
+    automatically_run = master_automatically_run.union(dev_automatically_run)
 
     output_file = open('demo_diffs.md','w')
 
