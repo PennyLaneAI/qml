@@ -9,10 +9,10 @@ from html_parser import DemoOutputParser
 TIMEZONE = pytz.timezone("America/Toronto")
 
 def parse_demo_outputs(filename):
-    """Parse the outputs produced by a demonstration from the QML repository.
+    """Parse the outputs produced of a QML repo demonstration from file.
 
     Args:
-        filename (str): the name of the demonstration file. The file is
+        filename (str): The name of the demonstration file. The file is
             expected to be in HTML format.
 
     Returns:
@@ -26,6 +26,8 @@ def parse_demo_outputs(filename):
 
     outputs = []
     for d in parser.data:
+
+        # We expect to find 'Out' sections as per how Sphinx produces outputs
         if d != 'Out:':
 
             if '\n' in d:
@@ -38,13 +40,14 @@ def parse_demo_outputs(filename):
     return outputs
 
 def write_file_diff(file_obj, qml_version, file_url, outputs, diff_indices):
-    """Parse the outputs produced by a demonstration from the QML repository.
+    """Write the outputs produced by a demonstration from the QML repository to
+    a file.
 
     Args:
-        file_obj (object): the file object used to write the diffs found for a
-            specific qml_version
+        file_obj (object): the file object used to write the diffs found when
+            checking a specific version of the demonstration
         qml_version (str): the version of the QML repository for which results
-            are written; e.g., Master or Dev
+            are written; e.g., "Master" or "Dev"
         file_url (str): the URL for the demo; either a page on the PennyLane
             website or a page on the hosted dev version of the PennyLane website
         outputs (list): the list of demo outputs
@@ -58,28 +61,34 @@ def write_file_diff(file_obj, qml_version, file_url, outputs, diff_indices):
         # Insert a dropdown option if too many outputs
         # Note: html tags are being used that are compatible with GitHub
         # markdown
-        file_obj.write(f'<details> \n <summary>\n More \n </summary>\n <pre>\n <code>\n')
+
+        # End html details and code sections, provide a quick summary
+        summary_section = "<summary>\n More \n </summary>\n"
+        file_obj.write(f'<details> \n {summary_section} <pre>\n <code>\n')
 
         # Dump the outputs
         for idx in diff_indices:
             file_obj.write(f'{outputs[idx]}\n')
 
+        # End html code and details sections
         file_obj.write(f' </code>\n </pre>\n </details>\n\n')
 
     else:
 
-        # Create a code block
+        # Start a markdown code block
         file_obj.write(f'```\n')
 
         # Dump the outputs
         for idx in diff_indices:
             file_obj.write(f'{outputs[idx]}\n')
+
+        # End the markdown code block
         file_obj.write(f'```\n\n')
 
 
 def main():
-    """Parses two versions automatically run demonstrations from the QML
-    repository, compares the output of each demo and writes a file based on the
+    """Parses two versions of the automatically run demonstrations from the QML
+    repository, compares the output of each demo and writes to a file based on the
     differences found.
     """
     master_path = "/tmp/master/home/runner/work/qml/qml/_build/html/demos/"
