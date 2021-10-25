@@ -33,6 +33,7 @@ torch==1.9.0+cpu
 torchvision==0.10.0+cpu
 dask[delayed]==2.10.1
 scikit-learn==0.23.2
+pyparsing==2.4.7
 matplotlib==3.3.3
 noisyopt==0.2.2
 Jinja2==2.11.3
