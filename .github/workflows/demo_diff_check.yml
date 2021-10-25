@@ -146,8 +146,9 @@ jobs:
 
         pip install pytz
         python .github/workflows/generate_diffs.py
-        git add demo_diffs.md
-        git commit -m "Update diffs found"
+        mv demo_diffs.md .github/workflows/demo_output_results
+        git add .github/workflows/demo_output_results/demo_diffs.md
+        git commit -m "Update the demonstration differences found"
         git push
 
     - uses: actions/upload-artifact@v2
