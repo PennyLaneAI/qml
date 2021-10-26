@@ -100,7 +100,7 @@ n = 2
 
 @qml.qnode(dev)
 def circuit():
-    qml.templates.ApproxTimeEvolution(H, t, n)
+    qml.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
 print(qml.draw(circuit)())

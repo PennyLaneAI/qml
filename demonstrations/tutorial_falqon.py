@@ -212,8 +212,8 @@ print(build_hamiltonian(graph))
 # the form :math:`U_d(\beta_k) U_c`. Note that we can use the :class:`~.pennylane.templates.ApproxTimeEvolution` template:
 
 def falqon_layer(beta_k, cost_h, driver_h, delta_t):
-    qml.templates.ApproxTimeEvolution(cost_h, delta_t, 1)
-    qml.templates.ApproxTimeEvolution(driver_h, delta_t * beta_k, 1)
+    qml.ApproxTimeEvolution(cost_h, delta_t, 1)
+    qml.ApproxTimeEvolution(driver_h, delta_t * beta_k, 1)
 
 ######################################################################
 # We then define a method which returns a FALQON ansatz corresponding to a particular cost Hamiltonian, driver
