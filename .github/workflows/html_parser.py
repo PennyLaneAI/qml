@@ -16,6 +16,7 @@ class DemoOutputParser(HTMLParser):
         file of a demonstration.'''
 
         super().__init__()
+    self.is_demo_output = False
     
     def handle_starttag(self, tag, attrs):
         """Handles the start tag of a html section looking for Sphinx galery
