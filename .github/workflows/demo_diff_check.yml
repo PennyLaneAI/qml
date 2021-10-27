@@ -3,9 +3,6 @@ on:
   schedule:
     - cron: '0 0 * * 0'
   workflow_dispatch:
-  push:
-    branches:
-      - demo_output_check
 
 jobs:
   build-dev:
@@ -100,7 +97,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: demo_output_check
+        ref: master
 
     - name: Create dev dir
       run: mkdir /tmp/dev/
