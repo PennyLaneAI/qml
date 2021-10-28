@@ -160,7 +160,7 @@ Once we have a device selected, we just need a couple of other ingredients for
 the pieces of an example optimization to come together:
 
 * a circuit ansatz: :func:`~.pennylane.templates.layers.StronglyEntanglingLayers`,
-* initial parameters: conveniently generated using :func:`~.pennylane.init.strong_ent_layers_normal`,
+* initial parameters: the correct shape can be computed by :func:`~.pennylane.templates.layers.StronglyEntanglingLayers.shape`,
 * an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i`, where :math:`N` stands
   for the number of qubits.
 
@@ -191,9 +191,9 @@ def circuit(params):
 # be a flattened array. As a result, our cost function must accept a flat array of parameters
 # to be optimized.
 flat_shape = num_layers * num_wires * 3
-init_params = qml.init.strong_ent_layers_normal(
-    n_wires=num_wires, n_layers=num_layers
-)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=num_wires, n_layers=num_layers)
+init_params = np.random.normal(size=param_shape)
+
 init_params_spsa = init_params.reshape(flat_shape)
 
 qnode_spsa = qml.QNode(circuit, dev_sampler_spsa)
