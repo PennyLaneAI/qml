@@ -10,7 +10,7 @@ The Stochastic Parameter-Shift Rule
 
    parameter_shift Parameter shift rules
    tutorial_backprop Quantum gradients with backprop
-   tutorial_doubly_stochastic Doubly stochastic gradient descent
+   tutorial_general_parshift Generalized parameter-shift rules
 
 *Author: PennyLane dev team. Last updated: 15 Jan 2021.*
 
@@ -142,6 +142,11 @@ def rotation_circuit(theta):
 # evaluations, with forward and backward shifts in angles.
 # PennyLane also provides a convenience function :func:`~pennylane.grad`
 # to automatically compute the gradient. We can use it here for comparison.
+#
+# .. note::
+#
+#     Check out the :mod:`qml.gradients <pennylane.gradients>` module
+#     to explore all quantum gradient transforms provided by PennyLane.
 
 def param_shift(theta):
     # using the convention u=1/2

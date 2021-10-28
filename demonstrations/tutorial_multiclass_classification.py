@@ -106,7 +106,7 @@ def layer(W):
 
 
 def circuit(weights, feat=None):
-    qml.templates.embeddings.AmplitudeEmbedding(feat, range(num_qubits), pad=0.0, normalize=True)
+    qml.templates.embeddings.AmplitudeEmbedding(feat, range(num_qubits), pad_with=0.0, normalize=True)
     for W in weights:
         layer(W)
 
