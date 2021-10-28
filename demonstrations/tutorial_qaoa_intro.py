@@ -103,8 +103,7 @@ def circuit():
     qml.templates.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit()
-print(circuit.draw())
+print(qml.draw(circuit)())
 
 ######################################################################
 # Layering circuits
@@ -149,8 +148,7 @@ def circuit(param):
     circ(param)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit(0.5)
-print(circuit.draw())
+print(qml.draw(circuit)(0.5))
 
 ######################################################################
 #
@@ -162,8 +160,7 @@ def circuit(params, **kwargs):
     qml.layer(circ, 3, params)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit([0.3, 0.4, 0.5])
-print(circuit.draw())
+print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 
 ######################################################################
 #
