@@ -102,49 +102,33 @@ jobs:
     - name: Create dev dir
       run: mkdir /tmp/dev/
 
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: /tmp/dev/
-
     - uses: actions/download-artifact@v2
       with:
         name: built-website-dev
         path: /tmp/dev/
 
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: /tmp/dev/
-
     - name: Create master dir
       run: mkdir /tmp/master/
-
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: /tmp/master/
 
     - uses: actions/download-artifact@v2
       with:
         name: built-website-master
         path: /tmp/master/
 
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: /tmp/master/
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
 
-    - name: Display structure of downloaded files
+    - name: Update the output file
       run: |
         git config user.name "QML demo checker Bot"
         git config user.email "<>"
 
         pip install pytz
         python .github/workflows/generate_diffs.py
-        mv demo_diffs.md .github/workflows/demo_output_results
-        git add .github/workflows/demo_output_results/demo_diffs.md
+        mv demo_diffs.md demo_checker
+        git add demo_checker/demo_diffs.md
         git commit -m "Update the demonstration differences found"
         git push
 
@@ -152,4 +136,4 @@ jobs:
       with:
         name: demo_diffs
         path: |
-          demo_diffs.md
+          demo_checker/demo_diffs.md
