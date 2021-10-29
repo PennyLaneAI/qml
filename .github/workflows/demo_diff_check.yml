@@ -100,7 +100,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: master
+        ref: demo_output_comparison
 
     - name: Create dev dir
       run: mkdir /tmp/dev/
