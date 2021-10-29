@@ -5,7 +5,7 @@ Trapped ion quantum computers
 
 .. meta::
     :property="og:description": Description and assessment of trapped ion quantum computers
-    :property="og:image": https://pennylane.ai/qml/_images/trapped_ion.png
+    :property="og:image": https://pennylane.ai/qml/_images/trapped_ions_tn.png
 
 .. related::
    tutorial_pasqal Quantum Computation with neutral atoms
@@ -231,11 +231,11 @@ innovative ways to get around them.
 # tightly bound to the atom, so it is the one that we manipulate as a
 # qubit.
 # 
-# .. container:: alert alert-block alert-success
-# 
-#    Atomic Physics Primer: Atoms consist of a positively charged nucleus
+# .. container:: alert alert-block alert-info
+#
+#    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
 #    and negative electrons around them. The electrons inhabit energy
-#    levels , which have a population limit. As levels fill up, the
+#    levels, which have a population limit. As levels fill up, the
 #    electrons occupy higher and higher energy levels. But as long as
 #    there is space, electrons can change energy levels, with a preference
 #    for the lower ones. This can happen spontaneously or due to external
@@ -250,16 +250,25 @@ innovative ways to get around them.
 #    proportional to the frequency (colour) of the photon.
 # 
 #    Conversely, we can use laser light to induce the opposite process.
-#    When an electron is in a stable or ground state , we can use lasers
+#    When an electron is in a stable or ground state, we can use lasers
 #    with light frequency tuned (set approximately equal) to a difference
-#    in energy levels, or energy gap , between the ground state and an
+#    in energy levels, or energy gap, between the ground state and an
 #    excited state . If a photon hits an electron, it will go to that
 #    higher energy state. When the light stimulus is removed, the excited
 #    electrons will return to stable states. The time it takes them to do
 #    so depends on the particular excited state they are in since,
 #    sometimes, the laws of physics will make it harder for electrons to
 #    jump back on their own.
-# 
+#    
+#    .. figure:: ../demonstrations/trapped_ions/atomic.png
+#       :align: center
+#       :width: 60%
+#
+#       ..
+#    
+#       Photons with an energy equal to the atomic gap drive excitations
+#    
+#
 # Having chosen the ions that will act as our qubits, we need to prepare
 # them in a stable fiducial state, known as the **ground state** and
 # denoted by :math:`\left\lvert g \right\rangle`. The preparation is done
@@ -312,7 +321,15 @@ innovative ways to get around them.
 # transition between these two states, so while coherence times are longer
 # for these **hyperfine qubits**, gate implementation is more complicated
 # and needs a lot of precision.
-# 
+#
+# .. figure:: ../demonstrations/trapped_ions/hyperfine.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#    
+#    Optical vs. hyperfine qubits
+#
 # We have now learned how trapped ions make for very stable qubits that
 # allow us to implement many quantum operations without decohering too
 # soon. We have also learned how to prepare these qubits in a stable
@@ -349,6 +366,14 @@ innovative ways to get around them.
 # photons emitted by the ions, we need to collect the photons using a lens
 # and a photomultiplier, a device that transforms weak light signals into
 # electric currents.
+#
+# .. figure:: ../demonstrations/trapped_ions/measurement.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#    
+#    Optical pumping to prepare the ground state
 # 
 # Have we fully satisfied the fifth criterion? Via a careful experimental
 # arrangement, we can detect the emission of photons of each atom
@@ -498,9 +523,9 @@ print(1j*ion_Tgate(1))
 # half is not theoretically difficult to implement. Still, it can be
 # experimentally challenging.
 # 
-# .. container:: alert alert-block alert-warning
+# .. container:: alert alert-block alert-info
 #
-#    Optional reading: In fact, we can solve the Schrodinger equation
+#    **Optional reading**: In fact, we can solve the Schrodinger equation
 #    explicitly (feel free to do this if you want to practice solving
 #    differential equations!). If we do this, we can deduce that the
 #    ground state :math:`\left\lvert g \right\rangle` evolves to
@@ -619,26 +644,26 @@ print(1j*ion_Tgate(1))
 # 
 # .. raw:: html
 # 
-#    <p style="background:rgb(232, 215, 243)">
+#    <div class = "alert alert-block alert-info">
 # 
-# Note: The results above are relatively simple to understand, but they
-# are not exact. In particular, to guarantee that the sideband frequencies
-# will have the effects we described on the ion chain, we must operate
-# within the Lamb-Dicke regime. This means that the separation between
-# ions must be large enough, or else stronger interactions will come into
-# play, and we will not be able to act on individual ions with the laser
-# beams.
+#     <b>Note</b>: The results above are relatively simple to understand, but they
+#     are not exact. In particular, to guarantee that the sideband frequencies
+#     will have the effects we described on the ion chain, we must operate
+#     within the Lamb-Dicke regime. This means that the separation between
+#     ions must be large enough, or else stronger interactions will come into
+#     play, and we will not be able to act on individual ions with the laser
+#     beams.
 # 
 # .. raw:: html
 # 
-#    </p>
+#    </div>
 # 
 # Entangling ions with multi-qubit gates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # .. container:: alert alert-block alert-success
 # 
-#    Primer on entangled states: Systems that have two or more components
+#    **Entangled states primer:** Systems that have two or more components
 #    can be in an entangled state, which means that the measurement
 #    results of one component affect the outcome of the other one. In
 #    other words, there is a correlation between the measurement outcomes
@@ -661,8 +686,8 @@ print(1j*ion_Tgate(1))
 #    is in this same state. Moreover, each of these two outcomes has a
 #    probability of :math:`1/2` since the coefficients before these states
 #    are both :math:`\sqrt{1/2}`. When all outcomes have the same
-#    probability in an entangled state, we call it a maximally entangled
-#    state .
+#    probability in an entangled state, we call it a **maximally entangled
+#    state.**
 # 
 # The **Cirac-Zoller** gate can completely entangle ions. It is also the
 # simplest way to illustrate how we can use the states of the harmonic
@@ -713,8 +738,15 @@ print(1j*ion_Tgate(1))
 # 
 # The net effect this interaction with laser light is to excite
 # :math:`\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle`,
-# and it can do so through any of the four paths shown below: **Insert
-# Image**
+# and it can do so through any of the four paths shown below:
+# 
+# .. figure:: ../demonstrations/trapped_ions/molmer_sorensen.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#    
+#    Mølmer-Sørensen gate implemented with two simultaneous laser pulses
 # 
 # Using a quantum mechanical technnique known as perturbation theory, we
 # can deduce that that there is also a Rabi frequency :math:`\Omega_{MS}`
@@ -727,7 +759,7 @@ print(1j*ion_Tgate(1))
 # :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle\left\lvert n \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle\right)`
 # to obtain the maximally entangled state
 # :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\right)`.
-# Using Schrodinger�s equation allows us to derive how the qubits evolve
+# Using Schrodinger's equation allows us to derive how the qubits evolve
 # when we apply the Mølmer-Sørensen protocol for a time :math:`t`. The
 # Hamiltonian is more involved, so we will not do this. We simply state
 # the result and implement it via a Python function
@@ -865,6 +897,14 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # prone to decoherence. The phonon frequencies are also sufficiently
 # spread apart so that the gates can be implemented.
 # 
+# .. figure:: ../demonstrations/trapped_ions/qccd.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#    
+#    Example of a proposed QCCD architecture
+#
 # QCCD architectures sound like a straightforward solution, but seeing as
 # we do not have large quantum computers yet, there must be some nuances.
 # In practice, moving ions around a trap is not easy at all. The
@@ -899,5 +939,25 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # direct the photons to target ions. Combined with a better QCCD
 # architecture, this optical integration would equip us well to run
 # quantum computing algorithms with trapped ions.
+#
+# Concluding Remarks
+# ~~~~~~~~~~~~~~~~~~
 # 
+# Ion trapping is currently one of the most widespread physical implementations
+# of quantum computers, both in academia and in industry. Their popularity comes
+# as no surprise, since the physical principles that make the paradigm work are
+# simple enough, and the necessary technology is already well-developed. 
+# Granted, there are challenging technical difficulties to scale these quantum 
+# computers further. However, viable solutions have been proposed, and many 
+# institutions around the world are working non-stop to make them a reality. 
+# Moreover, what could be considered simple prototypes of such technologies have 
+# already proven extremely powerful, to the point of achieving the highest quantum
+# volume so far. The big unknown is whether such devices can scale as much as we 
+# would like them to. It would we unwise to give up only because the challenge is 
+# imposing. After all, personal computers were the fruit of hard-work and 
+# inventiveness, and very few people were able to predict that they would scale 
+# as much as they have. We hope to have drawn you attention to these latest 
+# developments in quantum computing. Make sure to check our future demos on 
+# superconducting qubits and photonics to learn more about the latest quantum
+# computing technologies!
 
