@@ -192,7 +192,7 @@ def circuit(params):
 # to be optimized.
 flat_shape = num_layers * num_wires * 3
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=num_wires, n_layers=num_layers)
-init_params = np.random.normal(size=param_shape)
+init_params = np.random.normal(scale=0.1, size=param_shape)
 
 init_params_spsa = init_params.reshape(flat_shape)
 
