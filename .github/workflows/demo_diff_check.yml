@@ -100,6 +100,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
+        # We checkout a dedicated unprotected branch and store the output of
+        # the checker there
         ref: demo_output_comparison
 
     - name: Create dev dir
