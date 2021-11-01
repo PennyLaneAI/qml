@@ -179,7 +179,7 @@ def circuit(params):
 
 # initialize circuit parameters
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
-params = np.random.normal(size=param_shape)
+params = np.random.normal(scale=0.1, size=param_shape)
 print(params.size)
 print(circuit(params))
 
@@ -277,7 +277,7 @@ def circuit(params):
 
 # initialize circuit parameters
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
-params = np.random.normal(size=param_shape)
+params = np.random.normal(scale=0.1, size=param_shape)
 params = np.array(params, requires_grad=True)
 print(circuit(params))
 
@@ -337,7 +337,7 @@ gradient_backprop = []
 
 for depth in range(0, 21):
     param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=depth)
-    params = np.random.normal(size=param_shape)
+    params = np.random.normal(scale=0.1, size=param_shape)
     num_params = params.size
     params = np.array(params, requires_grad=True)
 
