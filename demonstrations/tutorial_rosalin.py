@@ -213,7 +213,7 @@ def cost(params):
 # that our cost function evaluates correctly.
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = 2*np.pi*np.random.random(size=param_shape)
+init_params = np.random.uniform(low=0.0, high=2*np.pi, size=param_shape)
 print(cost(init_params))
 
 

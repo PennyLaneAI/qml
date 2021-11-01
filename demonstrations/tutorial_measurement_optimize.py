@@ -398,7 +398,7 @@ def circuit2(weights):
     return qml.expval(obs[1])
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
-weights = np.random.normal(size=param_shape)
+weights = np.random.normal(scale=0.1, size=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
@@ -736,7 +736,7 @@ def circuit(weights, group=None, **kwargs):
     return [qml.expval(o) for o in group]
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
-weights = np.random.normal(size=param_shape)
+weights = np.random.normal(scale=0.1, size=param_shape)
 result = [circuit(weights, group=g) for g in obs_groupings]
 
 print("Term expectation values:")
