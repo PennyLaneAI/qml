@@ -134,8 +134,6 @@ obs = [
 # and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
 # :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 
-from pennylane import expval
-from pennylane.init import strong_ent_layers_uniform
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 num_layers = 2
@@ -214,7 +212,8 @@ def cost(params):
 # Evaluating our cost function with some initial parameters, we can test out
 # that our cost function evaluates correctly.
 
-init_params = strong_ent_layers_uniform(n_layers=num_layers, n_wires=num_wires)
+param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
+init_params = np.random.uniform(low=0.0, high=2*np.pi, size=param_shape)
 print(cost(init_params))
 
 
