@@ -167,7 +167,7 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev, diff_method="parameter-shift", mutable=False)
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 
@@ -272,7 +272,7 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev, diff_method="backprop")
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 # initialize circuit parameters
@@ -317,7 +317,7 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 dev = qml.device("default.qubit", wires=4)
 
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 ##############################################################################

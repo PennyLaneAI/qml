@@ -181,7 +181,7 @@ all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num
 
 
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
+    qml.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
     return qml.expval(all_pauliz_tensor_prod)
 
 
