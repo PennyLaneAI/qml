@@ -118,7 +118,7 @@ def layer(theta, phi, wires):
     M = len(wires)
     phi_nonlinear = np.pi / 2
 
-    qml.templates.Interferometer(
+    qml.Interferometer(
         theta, phi, np.zeros(M), wires=wires, mesh="triangular",
     )
 

@@ -137,7 +137,7 @@ initial_state = qml.qchem.hf_state(electrons, num_qubits)
 singles, doubles = qml.qchem.excitations(electrons, num_qubits)
 s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
 ansatz = functools.partial(
-    qml.templates.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
+    qml.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
 )
 
 # generate the cost function
@@ -388,13 +388,13 @@ dev = qml.device("default.qubit", wires=3)
 
 @qml.qnode(dev)
 def circuit1(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
 @qml.qnode(dev)
 def circuit2(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
 
 
@@ -409,7 +409,7 @@ print("Expectation value of XIZ = ", circuit2(weights))
 
 @qml.qnode(dev)
 def circuit_qwc(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
 
     # rotate wire 0 into the shared eigenbasis
     qml.RY(-np.pi / 2, wires=0)
@@ -455,7 +455,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 
 @qml.qnode(dev)
 def circuit(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return [
         qml.expval(qml.PauliX(0) @ qml.PauliY(1)),
         qml.expval(qml.PauliX(0) @ qml.PauliZ(2))
@@ -489,7 +489,7 @@ print(new_obs)
 #
 #     @qml.qnode(dev)
 #     def circuit(weights):
-#         qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+#         qml.StronglyEntanglingLayers(weights, wires=range(3))
 #         return [
 #             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
 #             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
@@ -732,7 +732,7 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev)
 def circuit(weights, group=None, **kwargs):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(4))
+    qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
 
 weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=4)
@@ -755,7 +755,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # optimized:
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.templates.StronglyEntanglingLayers, H, dev, optimize=True)
+cost_fn = qml.ExpvalCost(qml.StronglyEntanglingLayers, H, dev, optimize=True)
 print(cost_fn(weights))
 
 ##############################################################################

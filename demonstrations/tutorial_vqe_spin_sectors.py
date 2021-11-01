@@ -156,7 +156,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, hf, singles, doubles)
+    qml.AllSinglesDoubles(params, wires, hf, singles, doubles)
 
 
 ##############################################################################
@@ -278,7 +278,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
+    qml.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
 
 
 ##############################################################################

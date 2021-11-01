@@ -335,7 +335,7 @@ rng = np.random.default_rng()
 def permute_qubits(num_qubits):
     # A random permutation
     perm_order = list(rng.permutation(num_qubits))
-    qml.templates.Permute(perm_order, wires=list(range(num_qubits)))
+    qml.Permute(perm_order, wires=list(range(num_qubits)))
 
 
 ##############################################################################
@@ -383,7 +383,7 @@ dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
 m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
-    qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
+    qml.layer(qv_circuit_layer, m, num_qubits=m)
 
 print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
 
@@ -628,7 +628,7 @@ for m in range(min_m, max_m + 1):
 
         # Simulate the circuit analytically
         with qml.tape.QuantumTape() as tape:
-            qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
+            qml.layer(qv_circuit_layer, m, num_qubits=m)
             qml.probs(wires=range(m))
 
         output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
