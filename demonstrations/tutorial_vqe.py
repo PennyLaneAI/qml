@@ -47,7 +47,7 @@ is done by providing a list with the symbols of the constituent atoms
 and a one-dimensional array with the corresponding nuclear coordinates
 in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
-import numpy as np
+from pennylane import numpy as np
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -161,7 +161,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.4)
 # We initialize the circuit parameter :math:`\theta` to zero, meaning that we start
 # from the Hartree-Fock state.
 
-theta = 0.0
+theta = np.array(0.0, requires_grad=True)
 
 ##############################################################################
 # We carry out the optimization over a maximum of 100 steps aiming to reach a
@@ -208,7 +208,7 @@ E_fci = -1.136189454088
 
 # Add energy plot on column 1
 ax1 = fig.add_subplot(121)
-ax1.plot(range(n + 2), energy, "go-", ls="dashed")
+ax1.plot(range(n + 2), energy, "go", ls="dashed")
 ax1.plot(range(n + 2), np.full(n + 2, E_fci), color="red")
 ax1.set_xlabel("Optimization step", fontsize=13)
 ax1.set_ylabel("Energy (Hartree)", fontsize=13)
@@ -219,7 +219,7 @@ plt.yticks(fontsize=12)
 
 # Add angle plot on column 2
 ax2 = fig.add_subplot(122)
-ax2.plot(range(n + 2), angle, "go-", ls="dashed")
+ax2.plot(range(n + 2), angle, "go", ls="dashed")
 ax2.set_xlabel("Optimization step", fontsize=13)
 ax2.set_ylabel("Gate parameter $\\theta$ (rad)", fontsize=13)
 plt.xticks(fontsize=12)
