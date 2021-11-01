@@ -230,7 +230,7 @@ print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 #
 
 from pennylane import qaoa
-import numpy as np
+from pennylane import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
 
@@ -335,7 +335,7 @@ def cost_function(params):
 
 optimizer = qml.GradientDescentOptimizer()
 steps = 70
-params = [[0.5, 0.5], [0.5, 0.5]]
+params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 
 ######################################################################
@@ -449,7 +449,7 @@ def cost_function(params):
     circuit(params)
     return qml.expval(new_cost_h)
 
-params = [[0.5, 0.5], [0.5, 0.5]]
+params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)
