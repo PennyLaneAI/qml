@@ -2056,7 +2056,7 @@ span.eqno {
 }
 
 .q-hack-link {
-  height: 39px !important;
+  height: 36px !important;
   display: flex !important;
 }
 
