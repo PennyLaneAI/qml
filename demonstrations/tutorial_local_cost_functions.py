@@ -436,10 +436,14 @@ global_circuit = qml.QNode(global_cost_simple, dev)
 for runs in range(samples):
     print("--- New run! ---")
     has_been_trained = False
-    params_global = np.array([
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-    ], requires_grad=True)
+
+    params_global = np.array(
+        [
+            [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
+            [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
+        ],
+        requires_grad=True,
+    )
 
     for i in range(steps):
         # update the circuit parameters
