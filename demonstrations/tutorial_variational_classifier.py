@@ -137,9 +137,7 @@ def circuit(weights, x):
 # variables for easy use in the quantum node.
 
 
-def variational_classifier(var, x):
-    weights = var[0]
-    bias = var[1]
+def variational_classifier(weights, bias, x):
     return circuit(weights, x) + bias
 
 
@@ -182,8 +180,8 @@ def accuracy(labels, predictions):
 # labels considered in the iteration of the optimization routine.
 
 
-def cost(var, X, Y):
-    predictions = [variational_classifier(var, x) for x in X]
+def cost(weights, bias, X, Y):
+    predictions = [variational_classifier(weights, bias, x) for x in X]
     return square_loss(Y, predictions)
 
 
@@ -218,9 +216,10 @@ print("...")
 np.random.seed(0)
 num_qubits = 4
 num_layers = 2
-var_init = (0.01 * np.random.randn(num_layers, num_qubits, 3), 0.0)
+weights_init = 0.01 * np.random.randn(num_layers, num_qubits, 3, requires_grad=True)
+bias_init = np.array(0.0, requires_grad=True)
 
-print(var_init)
+print(weights_init, bias_init)
 
 ##############################################################################
 # Next we create an optimizer and choose a batch size…
@@ -234,22 +233,23 @@ batch_size = 5
 # variational classifier and turn them into predictions in
 # :math:`\{-1,1\}` by taking the sign of the output.
 
-var = var_init
+weights = weights_init
+bias = bias_init
 for it in range(25):
 
     # Update the weights by one optimizer step
     batch_index = np.random.randint(0, len(X), (batch_size,))
     X_batch = X[batch_index]
     Y_batch = Y[batch_index]
-    var = opt.step(lambda v: cost(v, X_batch, Y_batch), var)
+    weights, bias = opt.step(lambda w, b: cost(w, b, X_batch, Y_batch), weights, bias)
 
     # Compute accuracy
-    predictions = [np.sign(variational_classifier(var, x)) for x in X]
+    predictions = [np.sign(variational_classifier(weights, bias, x)) for x in X]
     acc = accuracy(Y, predictions)
 
     print(
         "Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.7f} ".format(
-            it + 1, cost(var, X, Y), acc
+            it + 1, cost(weights, bias, X, Y), acc
         )
     )
 
@@ -365,14 +365,12 @@ def circuit(weights, angles):
     return qml.expval(qml.PauliZ(0))
 
 
-def variational_classifier(var, angles):
-    weights = var[0]
-    bias = var[1]
+def variational_classifier(weights, bias, angles):
     return circuit(weights, angles) + bias
 
 
-def cost(weights, features, labels):
-    predictions = [variational_classifier(weights, f) for f in features]
+def cost(weights, bias, features, labels):
+    predictions = [variational_classifier(weights, bias, f) for f in features]
     return square_loss(labels, predictions)
 
 
@@ -479,7 +477,9 @@ X_val = X[index[num_train:]]
 
 num_qubits = 2
 num_layers = 6
-var_init = (0.01 * np.random.randn(num_layers, num_qubits, 3), 0.0)
+
+weights_init = 0.01 * np.random.randn(num_layers, num_qubits, 3, requires_grad=True)
+bias_init = np.array(0.0, requires_grad=True)
 
 ##############################################################################
 # Again we optimize the cost. This may take a little patience.
@@ -488,18 +488,19 @@ opt = NesterovMomentumOptimizer(0.01)
 batch_size = 5
 
 # train the variational classifier
-var = var_init
+weights = weights_init
+bias = bias_init
 for it in range(60):
 
     # Update the weights by one optimizer step
     batch_index = np.random.randint(0, num_train, (batch_size,))
     feats_train_batch = feats_train[batch_index]
     Y_train_batch = Y_train[batch_index]
-    var = opt.step(lambda v: cost(v, feats_train_batch, Y_train_batch), var)
+    weights, bias = opt.step(lambda w, b: cost(w, b, feats_train_batch, Y_train_batch), weights, bias)
 
     # Compute predictions on train and validation set
-    predictions_train = [np.sign(variational_classifier(var, f)) for f in feats_train]
-    predictions_val = [np.sign(variational_classifier(var, f)) for f in feats_val]
+    predictions_train = [np.sign(variational_classifier(weights, bias, f)) for f in feats_train]
+    predictions_val = [np.sign(variational_classifier(weights, bias, f)) for f in feats_val]
 
     # Compute accuracy on train and validation set
     acc_train = accuracy(Y_train, predictions_train)
@@ -507,7 +508,7 @@ for it in range(60):
 
     print(
         "Iter: {:5d} | Cost: {:0.7f} | Acc train: {:0.7f} | Acc validation: {:0.7f} "
-        "".format(it + 1, cost(var, features, Y), acc_train, acc_val)
+        "".format(it + 1, cost(weights, bias, features, Y), acc_train, acc_val)
     )
 
 
@@ -530,7 +531,7 @@ X_grid = (X_grid.T / normalization).T  # normalize each input
 features_grid = np.array(
     [get_angles(x) for x in X_grid]
 )  # angles for state preparation are new features
-predictions_grid = [variational_classifier(var, f) for f in features_grid]
+predictions_grid = [variational_classifier(weights, bias, f) for f in features_grid]
 Z = np.reshape(predictions_grid, xx.shape)
 
 # plot decision regions
