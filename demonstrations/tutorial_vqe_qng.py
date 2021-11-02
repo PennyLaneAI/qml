@@ -127,7 +127,7 @@ print("Number of iterations = ", n)
 ##############################################################################
 # We then repeat the process for the optimizer employing quantum natural gradients:
 
-opt = qml.QNGOptimizer(stepsize=step_size, diag_approx=False)
+opt = qml.QNGOptimizer(stepsize=step_size, approx="block-diag")
 
 params = init_params
 
@@ -359,7 +359,7 @@ print("Final circuit parameters = \n", params)
 
 ##############################################################################
 # Next, we run the optimizer employing quantum natural gradients.
-opt = qml.QNGOptimizer(step_size, lam=0.001, diag_approx=False)
+opt = qml.QNGOptimizer(step_size, lam=0.001, approx="block-diag")
 
 params = init_params
 prev_energy = cost(params)
