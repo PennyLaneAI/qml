@@ -10,7 +10,7 @@ Trapped ion quantum computers
 .. related::
    tutorial_pasqal Quantum Computation with neutral atoms
 
-*Author: Alvaro Ballon Bordo. Last updated: 27 October 2021.*
+*Author: Alvaro Ballon Bordo. Last updated: 01 November 2021.*
 
 The race for quantum supremacy is on. Hundreds of research institutions,
 including universities and privately funded companies, are currently
@@ -57,7 +57,7 @@ innovative ways to get around them.
 # 
 # To build a quantum computer, we will find it helpful to formulate some
 # concrete objectives. In the year 2000, David DiVincenzo proposed a
-# wishlist for the experimental characteristics of a quantum computer.
+# wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
 # **DiVincenzo's criteria** have since become the main guideline for
 # physicists and engineers in the quantum computing industry and academia.
 # They are based on the features that made classical computers successful,
@@ -130,11 +130,11 @@ innovative ways to get around them.
 # possible to contain neutral atoms using optical tweezers but, in
 # practice, it is much easier to use an electromagnetic trap. Ion traps
 # are rather old technology: their history goes back to 1953 when Wolfgang
-# Paul proposed his now-called Paul trap. This technique awarded Paul and
+# Paul proposed his now-called Paul trap [#Paul1953]_. This technique awarded Paul and
 # Dehmelt the 1989 Physics Nobel Prize since it is used to make highly
 # precise atomic clocks. Current trapped ion quantum computers extensively
 # use the Paul trap, but Paul won the prize six years before such an
-# application was proposed!
+# application was proposed [#CiracZoller]_!
 # 
 # It is not easy to create electric fields that contain the ion in a tiny
 # region of space. The sought-for potential would look like this:
@@ -170,12 +170,12 @@ innovative ways to get around them.
 # the potential plotted above? We can imagine that if the saddle potential
 # rotates at a specific frequency, the wall will catch the ion as it tries
 # to escape in the downhill direction. Explicitly, the electric potential
-# that we generate is given by
+# that we generate is given by [#Malinowski]_
 # 
 # .. math:: \Phi = \frac{1}{2}\left(u_x x^2 + u_y y^2 + u_z z^2\right) + \frac{1}{2}\left(v_x x^2 + v_y y^2 + v_z z^2\right)\cos(\omega t+\phi).
 # 
 # The parameters :math:`u_i`, :math:`v_i`, and :math:`\phi` need to be
-# adjusted to the charge and mass of the ion and to the potential�s
+# adjusted to the charge and mass of the ion and to the potential's
 # angular frequency :math:`\omega`. We have to do this tuning of
 # parameters very carefully, since the ion could escape if we do not apply
 # the right forces at the right time. It takes a lot of care, but this
@@ -204,7 +204,7 @@ innovative ways to get around them.
 # all down to the point where their motion in space is quantized**. In
 # this scenario, photons that would bring the ion to their excited states
 # will not cause any relative motion. Instead, all ions will recoil
-# together. This phenomenon is called the **Mossbauer effect**. We will
+# together [#NandC2000]_. This phenomenon is called the **Mossbauer effect**. We will
 # see later that by carefully tuning the laser frequency, we can control
 # both the excitations of the ions and the motion of the ion chain. This
 # user-controlled motion is precisely what we need to perform quantum
@@ -225,7 +225,7 @@ innovative ways to get around them.
 # getting the desired frequency is not too much of a problem. The best
 # ions for our purposes are single-charged ions in Group II of the
 # periodic table, such as Calcium-40, Beryllium-9, and Barium-138,
-# commonly used in university laboratories. The rare earth Yterbium-171 is
+# commonly used in university laboratories [#Bergou2021]_. The rare earth Yterbium-171 is
 # used by IonQ and Honeywell. These elements have two valence electrons,
 # and their ionized version only has one. The valence electron is not so
 # tightly bound to the atom, so it is the one that we manipulate as a
@@ -350,8 +350,9 @@ innovative ways to get around them.
 # qubits. Since it takes quite a bit of work to trap an ion, it would be
 # ideal if we could measure the state of our qubits without getting rid of
 # the ion. We definitely do not want to trap ions again after performing
-# one measurement. Such a measurement is called a **non-demolition
-# measurement**, and they are easy enough to carry out for trapped ions.
+# one measurement. Moreover, we want measurements that can be repeated 
+# on the same ions and yield consistent results. These are called **non-demolition
+# measurements**, and they are easy enough to carry out for trapped ions.
 # 
 # The measurement method uses a similar principle to that of optical
 # pumping. Once again, and continuing with the Calcium-40 example, we make
@@ -359,8 +360,11 @@ innovative ways to get around them.
 # of 397 nm that drives the transition from
 # :math:`\left\lvert g \right\rangle` to the auxiliary state
 # :math:`\left\lvert \textrm{aux} \right\rangle`. The transition is
-# short-lived, so we will measure :math:`\left\lvert g \right\rangle` if
-# we see the ion glowing: it continuously emits light at a frequency of
+# short-lived; it will quickly go back to so :math:`\left\lvert g \right\rangle`, 
+# emitting a photon of the same wavelength. The state 
+# :math:`\left\lvert e \right\rangle` is not affected. Therefore,
+# we will measure :math:`\left\lvert g \right\rangle` if
+# we see the ion glowing: it continuously emits light at a wavelength of
 # 397 nm. Conversely, if the ion is dark, we will have measured the result
 # corresponding to state :math:`\left\lvert e\right\rangle`. To see the
 # photons emitted by the ions, we need to collect the photons using a lens
@@ -373,7 +377,7 @@ innovative ways to get around them.
 #
 #    ..
 #    
-#    Optical pumping to prepare the ground state
+#    Non-demolition measurement of ion states
 # 
 # Have we fully satisfied the fifth criterion? Via a careful experimental
 # arrangement, we can detect the emission of photons of each atom
@@ -383,10 +387,10 @@ innovative ways to get around them.
 # the **ancilla**. If these ions emit light, they can accidentally excite
 # other ions on the chain, causing decoherence. A way to avoid this source
 # of uncertainty is two use two species of ions: one for the ancilla and
-# one for the logical qubits. In this case, the ions emitted by the
-# ancilla ions would not excite the logical qubits. However, we will see
-# using two different species of ions causes extra trouble when we want to
-# implement quantum computing operations.
+# one for the qubits that are not measured, or **logical qubits**. 
+# In this case, the ions emitted by the ancilla ions would not excite the
+# logical qubits. However, using two different species of ions causes 
+# extra trouble when we want to implement arbitrary qubit operations [#Hughes2020].
 # 
 # Rabi oscillations to manipulate single qubits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -395,7 +399,7 @@ innovative ways to get around them.
 # lasers to excite states. But is there a way to put the electron in a
 # superposition of the ground and excited states? Since we aim to change
 # the energy state of an electron, we have no choice but to continue using
-# lasers to shoot photons at it, tuning the frequency to that of the
+# lasers to shoot photons at it, tuning the frequency to the
 # energy gap. To understand how we would achieve a state superposition by
 # interacting with the ion using light, let us look at a mathematical
 # operator called the Hamiltonian. In physics, the Hamiltonian describes
@@ -528,7 +532,7 @@ print(1j*ion_Tgate(1))
 #    **Optional reading**: In fact, we can solve the Schrodinger equation
 #    explicitly (feel free to do this if you want to practice solving
 #    differential equations!). If we do this, we can deduce that the
-#    ground state :math:`\left\lvert g \right\rangle` evolves to
+#    ground state :math:`\left\lvert g \right\rangle` evolves to [#Bergou2021]_
 #
 #    .. math:: \left\lvert \psi_0(t) \right\rangle = \cos\left(\frac{\Omega t}{2}\right)\left\lvert g \right\rangle -i\sin\left(\frac{\Omega t}{2}\right) e^{i\varphi}\left\lvert e \right\rangle .
 # 
@@ -689,9 +693,10 @@ print(1j*ion_Tgate(1))
 #    probability in an entangled state, we call it a **maximally entangled
 #    state.**
 # 
-# The **Cirac-Zoller** gate can completely entangle ions. It is also the
+# The **Cirac-Zoller** gate [#CiracZoller]_ can completely entangle ions. It is also the
 # simplest way to illustrate how we can use the states of the harmonic
-# oscillator as an aid to create two-qubit gates. We saw above that
+# oscillator as an aid to create two-qubit gates. For a chain
+# with zero motional energy, we saw above that
 # applying a blue-sideband pulse of duration :math:`t=\pi/2` and phase
 # :math:`\varphi=\pi/2` to the first ion gives us the state
 # 
@@ -709,8 +714,6 @@ print(1j*ion_Tgate(1))
 #
 #    Implementation of the Cirac-Zoller gate using phonon states
 #
-# This quantum computer has :math:`\log_2 V_Q = 4`, as the 4-qubit square
-# circuits are the largest ones it can run successfully.
 # We see that the consecutive application of a blue sideband, a carrier
 # frequency, and a red sideband, with different durations, gives us a
 # maximally entangled state. It is important to note that, in the last
@@ -728,7 +731,7 @@ print(1j*ion_Tgate(1))
 # decoherence.
 # 
 # For actual applications, we use a more ingenious gate, known as the
-# **Mølmer-Sørensen** gate. It has the advantage that the ions do not
+# **Mølmer-Sørensen** gate [#Molmer1999]_. It has the advantage that the ions do not
 # need to be perfectly cooled to the motional ground state for it to work.
 # It relies on simultaneously shining two lasers at different frequencies
 # :math:`\omega_{\pm}` on the two target ions, which are slightly detuned
@@ -762,8 +765,16 @@ print(1j*ion_Tgate(1))
 # Using Schrodinger's equation allows us to derive how the qubits evolve
 # when we apply the Mølmer-Sørensen protocol for a time :math:`t`. The
 # Hamiltonian is more involved, so we will not do this. We simply state
-# the result and implement it via a Python function
-# 
+# the result (for zero phase) and implement it via a Python function
+#
+# .. math::  U_{MS}(t) =\left( \begin{array}{cccc}
+#                 \cos(\frac{\Omega_{MS}t}{2}) & 0 & 0 & -i\sin(\frac{\Omega_{MS} t}{2})\\
+#                 0 & \cos(\frac{\Omega_{MS} t}{2}) & -i\sin(\frac{\Omega_{MS} t}{2}) & 0 \\
+#                 0 & -i\sin(\frac{\Omega_{MS} t}{2}) & \cos(\frac{\Omega_{MS} t}{2}) & 0 \\
+#                  -i\sin(\frac{\Omega_{MS} t}{2}) & 0 & 0 & \cos(\frac{\Omega_{MS} t}{2})
+#                  \end{array}
+#                  \right)
+#
 
 Omega = 100
 def Molmer_Sorensen(t):
@@ -779,7 +790,7 @@ def Molmer_Sorensen(t):
 # use it to obtain it? Indeed, it is possible by using a combination of
 # single-qubit rotations and the two lasers applied for a period of
 # :math:`t=\pi/2\Omega`. Explicitly, the CNOT is obtained using the
-# following circuit:
+# following circuit [#Brown2019]_:
 # 
 # .. figure:: ../demonstrations/trapped_ions/CNOTgate.png
 #    :align: center
@@ -885,7 +896,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # 
 # The main issue discussed above is that a long ion chain is noisy and
 # makes qubits challenging to manipulate. In 2002, Kielpinski and
-# collaborators came up with an intelligent solution: if the size is a
+# collaborators [#QCCD2002]_ came up with an intelligent solution: if the size is a
 # problem, let us make the chain shorter! Of course, we would still like
 # to be able to manipulate thousands of qubits. To achieve this, we could
 # build a segmented trap, also known as a **QCCD** (Quantum Charge-Coupled
@@ -903,7 +914,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 #
 #    ..
 #    
-#    Example of a proposed QCCD architecture
+#    Example of a proposed QCCD architecture, as in [#Amini2010]_
 #
 # QCCD architectures sound like a straightforward solution, but seeing as
 # we do not have large quantum computers yet, there must be some nuances.
@@ -916,7 +927,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # arbitrary ions to be brought together to run quantum algorithms without
 # any limitations. In April 2021, Honeywell reported building a
 # multi-segment QCCD architecture with six qubits and two interaction
-# zones. However, it is unclear how this proposed technology would scale
+# zones [#Pino2021]_. However, it is unclear how this proposed technology would scale
 # to higher orders of magnitude.
 # 
 # Another path towards a solution would be to simply accept the short
@@ -924,7 +935,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # faster. Such an approach is being followed by the startup IonQ. In
 # January 2021, they showed that it is possible to speed up the
 # Mølmer-Sørensen gate by one order of magnitude by changing the shape
-# of the laser pulse. Such a speedup might not be enough as the ion chain
+# of the laser pulsen [#Blumel2021]_. Such a speedup might not be enough as the ion chain
 # grows more. However, a combination of approaches involving QCCDs and
 # faster gates may yield the solution to the scalability problem in the
 # future.
@@ -933,9 +944,9 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # trapped-ion quantum computers. There is still much to do to improve the
 # precision of measurements, for example. Most of the photons emitted by
 # ions during a measurement are lost, so it would be good to direct them
-# to the detector. One could do this using a waveguide architecture inside
+# to the detector. One can do this using a waveguide architecture inside
 # the trap. Similarly, as the number of ions grows, the number of laser
-# beams we need does as well. Again, waveguides could also be used to
+# beams we need does as well [#Niffenegger2020]_. Again, waveguides can also be used to
 # direct the photons to target ions. Combined with a better QCCD
 # architecture, this optical integration would equip us well to run
 # quantum computing algorithms with trapped ions.
@@ -960,4 +971,105 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # developments in quantum computing. Make sure to check our future demos on 
 # superconducting qubits and photonics to learn more about the latest quantum
 # computing technologies!
+#
+# References
+# ----------
+#
+# .. [#DiVincenzo2000]
+#
+#     D. DiVincenzo. (2000) "The Physical Implementation of Quantum Computation",
+#     `Fortschritte der Physik 48 (9–11): 771–783
+#     <https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E>`__.
+#     (`arXiv <https://arxiv.org/abs/quant-ph/0002077>`__)
+#
+# .. [#Paul1953]
+#
+#     W. Paul, H. Steinwedel. (1953) "Ein neues Massenspektrometer ohne Magnetfeld",
+#     RZeitschrift für Naturforschung A 8 (7): 448-450.
+#
+# .. [#CiracZoller]
+#     
+#     J. Cirac, P. Zoller. (1995) "Quantum Computations with Cold Trapped Ions". 
+#     Physical Review Letters 74 (20): 4091–4094.
+#
+# .. [#Malinowski]
+#     
+#     M. Malinowski. (2021) "Unitary and Dissipative Trapped-​Ion Entanglement Using 
+#     Integrated Optics". PhD Thesis retrieved from `ETH thesis repository
+#     <https://ethz.ch/content/dam/ethz/special-interest/phys/quantum-electronics/tiqi-dam/documents/phd_theses/Thesis-Maciej-Malinowski>`__.
+#
+# .. [#NandC2000]
+#
+#     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
+#     Cambridge University Press.
+#
+# .. [#Hughes2020]
+#
+#     A. Hughes, V. Schafer, K. Thirumalai, et al. (2020)
+#     "Benchmarking a High-Fidelity Mixed-Species Entangling Gate"
+#     `Phys. Rev. Lett. 125, 080504
+#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.080504>`__.
+#     (`arXiv <https://arxiv.org/abs/2004.08162>`__)
+#
+# .. [#Bergou2021]
+#
+#     J. Bergou, M. Hillery, and M. Saffman. (2021) "Quantum Information Processing",
+#     Springer. 
+#
+# .. [#Molmer1999]
+#
+#     A. Sørensen, K. Mølmer.  (1999) "Multi-particle entanglement of hot trapped ions", 
+#     `Physical Review Letters. 82 (9): 1835–1838
+#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.82.1835>`__.
+#     (`arXiv <https://arxiv.org/abs/quant-ph/9810040>`__)
+#
+# .. [#Brown2019]
+#
+#     M. Brown, M. Newman, and K. Brown. (2019)  
+#     "Handling leakage with subsystem codes",
+#     `New J. Phys. 21 073055
+#     <https://iopscience.iop.org/article/10.1088/1367-2630/ab3372>`__.
+#     (`arXiv <https://arxiv.org/abs/1903.03937>`__)
+#
+# .. [#QCCD2002]
+#
+#     D. Kielpinski, C. Monroe, and D. Wineland. (2002) 
+#     "Architecture for a large-scale ion-trap quantum computer", 
+#     `Nature 417, 709–711 (2002).
+#     <https://www.nature.com/articles/nature00784>`__.
+#
+# .. [#Amini2010]
+#
+#     J. Amini, H. Uys, J. Wesenberg, et al. (2010)  
+#     "Toward scalable ion traps for quantum information processing",
+#     `New J. Phys 12 033031
+#     <https://iopscience.iop.org/article/10.1088/1367-2630/12/3/033031/meta>`__.
+#     (`arXiv <https://arxiv.org/abs/0909.2464>`__)
+#
+#
+# .. [#Pino2021]
+#
+#     J. Pino, J. Dreiling, J, C, Figgatt, et al. (2021) 
+#     "Demonstration of the trapped-ion quantum CCD computer architecture". 
+#     `Nature 592, 209–213
+#     <https://www.nature.com/articles/s41586-021-03318-4>`__.
+#     (`arXiv <https://arxiv.org/abs/2003.01293>`__)
+#
+# .. [#Blumel2021]
+#
+#     R. Blumel, N. Grzesiak, N. Nguyen, et al. (2021)
+#     "Efficient Stabilized Two-Qubit Gates on a Trapped-Ion Quantum Computer"
+#     `Phys. Rev. Lett. 126, 220503
+#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.126.220503>`__.
+#     (`arXiv <https://arxiv.org/abs/2101.07887>`__)
+#
+# .. [#Niffenegger2020]
+#
+#     R. Niffenegger, J. Stuart, C.Sorace-Agaskar, et al. (2020)
+#     "Integrated multi-wavelength control of an ion qubit"
+#     `Nature volume 586, pages538–542
+#     <https://www.nature.com/articles/s41586-020-2811-x>`__.
+#     (`arXiv <https://arxiv.org/abs/2001.05052>`__)
+
+
 
