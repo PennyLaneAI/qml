@@ -437,7 +437,7 @@ for runs in range(samples):
     print("--- New run! ---")
     has_been_trained = False
 
-    np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
+    params_global = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
 
     for i in range(steps):
         # update the circuit parameters
