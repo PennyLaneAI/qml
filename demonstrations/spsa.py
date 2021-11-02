@@ -166,7 +166,7 @@ the pieces of an example optimization to come together:
 
 """
 import pennylane as qml
-import numpy as np
+from pennylane import numpy as np
 
 num_wires = 4
 num_layers = 5
@@ -192,7 +192,7 @@ def circuit(params):
 # to be optimized.
 flat_shape = num_layers * num_wires * 3
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=num_wires, n_layers=num_layers)
-init_params = np.random.normal(scale=0.1, size=param_shape)
+init_params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 
 init_params_spsa = init_params.reshape(flat_shape)
 
@@ -483,7 +483,7 @@ cost = qml.QNode(exp_val_circuit, dev_noisy)
 # This random seed was used in the original VQE demo and is known to allow the
 # algorithm to converge to the global minimum.
 np.random.seed(0)
-init_params = np.random.normal(0, np.pi, (num_qubits, 3))
+init_params = np.random.normal(0, np.pi, (num_qubits, 3), requires_grad=True)
 params = init_params.copy()
 
 h2_grad_device_executions_melbourne = [0]
