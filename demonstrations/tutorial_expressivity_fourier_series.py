@@ -334,7 +334,7 @@ plt.show()
 # Finally, let's look at the circuit we just created:
 # 
 
-print(serial_quantum_model.draw())
+print(qml.draw(serial_quantum_model)(weights, x[-1]))
 
 
 ######################################################################
@@ -495,9 +495,7 @@ def ansatz(weights):
     return qml.expval(qml.Identity(wires=0))
 
 weights_ansatz = 2 * np.pi * np.random.random(size=(n_ansatz_layers, n_qubits, 3))
-
-ansatz(weights_ansatz)
-print(ansatz.draw())
+print(qml.draw(ansatz)(weights_ansatz))
 
 
 ######################################################################
