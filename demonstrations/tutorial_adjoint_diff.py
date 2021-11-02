@@ -471,8 +471,6 @@ qml.grad(circuit_adjoint)(x)
 #       m, b = np.polyfit(n_params, ratio, deg=1)
 #       ratio_fit = lambda x: m*x+b
 #   
-#       print(f"ratio fit: {m}*x + {b}")
-#   
 #       fig2, ax2 = plt.subplots(1, 1, figsize=(6, 4))
 #   
 #       ax2.plot(n_params, ratio, '.-', label="ratio")
