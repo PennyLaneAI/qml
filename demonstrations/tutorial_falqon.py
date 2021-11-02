@@ -110,7 +110,7 @@ which gives us an approximation for the ground state of :math:`H_c`.
 #
 
 import pennylane as qml
-import numpy as np
+from pennylane import numpy as np
 from matplotlib import pyplot as plt
 from pennylane import qaoa as qaoa
 import networkx as nx
@@ -431,7 +431,7 @@ delta_t = 0.02
 
 res, res_energy = max_clique_falqon(new_graph, depth-1, 0.0, delta_t, dev)
 
-params = np.array([[delta_t for k in res], [delta_t * k for k in res]])
+params = np.array([[delta_t for k in res], [delta_t * k for k in res]], requires_grad=True)
 
 ######################################################################
 # Finally, we run our QAOA optimization procedure. We set the number of QAOA executions to :math:`40`:
