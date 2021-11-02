@@ -241,7 +241,7 @@ for it in range(25):
     batch_index = np.random.randint(0, len(X), (batch_size,))
     X_batch = X[batch_index]
     Y_batch = Y[batch_index]
-    weights, bias = opt.step(lambda w, b: cost(w, b, X_batch, Y_batch), weights, bias)
+    weights, bias, _, _ = opt.step(cost, weights, bias, X_batch, Y_batch)
 
     # Compute accuracy
     predictions = [np.sign(variational_classifier(weights, bias, x)) for x in X]
@@ -405,7 +405,7 @@ X_norm = (X_pad.T / normalization).T
 print("First X sample (normalized):", X_norm[0])
 
 # angles for state preparation are new features
-features = np.array([get_angles(x) for x in X_norm])
+features = np.array([get_angles(x) for x in X_norm], requires_grad=False)
 print("First features sample      :", features[0])
 
 Y = data[:, -1]
@@ -496,7 +496,7 @@ for it in range(60):
     batch_index = np.random.randint(0, num_train, (batch_size,))
     feats_train_batch = feats_train[batch_index]
     Y_train_batch = Y_train[batch_index]
-    weights, bias = opt.step(lambda w, b: cost(w, b, feats_train_batch, Y_train_batch), weights, bias)
+    weights, bias, _, _ = opt.step(cost, weights, bias, feats_train_batch, Y_train_batch)
 
     # Compute predictions on train and validation set
     predictions_train = [np.sign(variational_classifier(weights, bias, f)) for f in feats_train]
