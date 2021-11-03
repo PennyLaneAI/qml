@@ -130,8 +130,8 @@ innovative ways to get around them.
 # possible to contain neutral atoms using optical tweezers but, in
 # practice, it is much easier to use an electromagnetic trap. Ion traps
 # are rather old technology: their history goes back to 1953 when Wolfgang
-# Paul proposed his now-called Paul trap [#Paul1953]_. This technique awarded Paul and
-# Dehmelt the 1989 Physics Nobel Prize since it is used to make highly
+# Paul proposed his now-called Paul trap [#Paul1953]_. For this invention, Paul and
+# Dehmelt were awarded the 1989 Physics Nobel Prize, since it is used to make highly
 # precise atomic clocks. Current trapped ion quantum computers extensively
 # use the Paul trap, but Paul won the prize six years before such an
 # application was proposed [#CiracZoller]_!
@@ -228,7 +228,7 @@ innovative ways to get around them.
 # commonly used in university laboratories [#Bergou2021]_. The rare earth Yterbium-171 is
 # used by IonQ and Honeywell. These elements have two valence electrons,
 # but their ionized version only has one. The valence electron is not so
-# tightly bound to the atom, so it is the one that we manipulate as a
+# tightly bound to the atom, so it is the one whose state we use to represent a
 # qubit.
 # 
 # .. container:: alert alert-block alert-info
@@ -386,7 +386,7 @@ innovative ways to get around them.
 # algorithms, we only measure the state of a pre-chosen set of ions called
 # the **ancilla**. If these ions emit light, they can accidentally excite
 # other ions on the chain, causing decoherence. A way to avoid this source
-# of uncertainty is two use two species of ions: one for the ancilla and
+# of uncertainty is to use two species of ions: one for the ancilla and
 # one for the qubits that are not measured, or **logical qubits**. 
 # In this case, the ions emitted by the ancilla ions would not excite the
 # logical qubits. However, using two different species of ions causes 
@@ -451,8 +451,6 @@ S_minus = np.array([[0,1],[0,0]])
 def evolution(phi,t):
     Ham = Omega/2*(S_plus*np.exp(1j*phi)+S_minus*np.exp(-1j*phi))
     return expm(-1j*Ham*t)
-
-
 
 dev = qml.device("default.qubit",wires=1)
 
@@ -563,7 +561,7 @@ print(1j*ion_Tgate(1))
 # gates on at least two qubits. In particular, the goal is to make the
 # CNOT gate since it allows for universal quantum computation. How can we
 # create such a gate between ions? It turns out that placing ions in a
-# chain is ideal for multiple qubit gate implementations. When cooled
+# chain is ideal for multiple-qubit gate implementations. When cooled
 # down, the entire ion chain acts as a **quantum harmonic oscillator**,
 # meaning that it can vibrate with energies that are multiples of the
 # fundamental constant :math:`\hbar` times a fundamental frequency
@@ -651,7 +649,7 @@ print(1j*ion_Tgate(1))
 #     <b>Note</b>: The results above are relatively simple to understand, but they
 #     are not exact. In particular, to guarantee that the sideband frequencies
 #     will have the effects we described on the ion chain, we must operate
-#     within the Lamb-Dicke regime. This means that the separation between
+#     within something called the Lamb-Dicke regime. This means that the separation between
 #     ions must be large enough, or else stronger interactions will come into
 #     play, and we will not be able to act on individual ions with the laser
 #     beams.
@@ -838,7 +836,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # 
 # We have learned that the trapped ion paradigm allows us to prepare and
 # measure individual qubits, and that we can implement single and
-# multi-qubit gates with high accuracy. What is not to like? As in every
+# multi-qubit gates with high accuracy. What's not to like? As in every
 # physical realization of quantum computers, trapped ions come with
 # advantages and disadvantages. The main problem shared by all physical
 # implementations of quantum computers is scalability. The root of the
@@ -941,8 +939,8 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # Implementing multi-qubit gates is not the only problem for
 # trapped-ion quantum computers. There is still much to do to improve the
 # precision of measurements, for example. Most of the photons emitted by
-# ions during a measurement are lost, so it would be good to direct them
-# to the detector. One can do this using a waveguide architecture inside
+# ions during a measurement are lost, so it would be good to find ways to 
+# direct more of them to the detector. One can do this using a waveguide architecture inside
 # the trap. Similarly, as the number of ions grows, the number of laser
 # beams we need does as well [#Niffenegger2020]_. Again, waveguides can also be used to
 # direct the photons to target ions. Combined with a better QCCD
@@ -962,7 +960,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # Moreover, what could be considered simple prototypes of such technologies have 
 # already proven extremely powerful. The big unknown is whether such devices can scale as much as we 
 # would like them to. It would we unwise to give up only because the challenge is 
-# imposing. After all, personal computers were the fruit of hard-work and 
+# imposing. After all, personal computers were the fruit of hard work and 
 # inventiveness, and very few people were able to predict that they would scale 
 # as much as they have. We hope to have drawn your attention to these latest 
 # developments in quantum computing. Make sure to check our future demos on 
