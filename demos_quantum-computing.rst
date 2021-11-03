@@ -61,7 +61,7 @@ such as benchmarking and characterizing quantum processors.
    :tags: photonics strawberryfields
 
 .. customgalleryitem::
-    :tooltip: Quantum Computing using trapped ions
+    :tooltip: Quantum computing using trapped ions
     :figure: demonstrations/trapped_ions/trapped_ions_tn.png
     :description: :doc:`demos/tutorial_trapped_ions`
     :tags: quantumcomputing
