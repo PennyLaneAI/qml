@@ -112,7 +112,7 @@ We can solve for the ground state energy using the variational quantum eigensolv
 
 First, let's import NumPy and PennyLane, and define our Hamiltonian.
 """
-import numpy as np
+from pennylane import numpy as np
 import pennylane as qml
 
 # set the random seed
@@ -213,7 +213,7 @@ def cost(params):
 # that our cost function evaluates correctly.
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0.0, high=2*np.pi, size=param_shape)
+init_params = np.random.uniform(low=0.0, high=2*np.pi, size=param_shape, requires_grad=True)
 print(cost(init_params))
 
 
