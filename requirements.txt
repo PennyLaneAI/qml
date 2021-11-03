@@ -27,6 +27,7 @@ sphinx-sitemap
 pypandoc==1.5
 sphinx_gallery==0.9.0
 seaborn==0.10.1
+keras==2.6.0
 tensorflow==2.6.0
 toml==0.10.2
 torch==1.10.0+cpu
