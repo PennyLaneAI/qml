@@ -325,7 +325,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #
 # First we write a function that randomly permutes qubits. We'll do this by
 # using numpy to generate a permutation, and then apply it with the built-in
-# :func:`~.pennylane.templates.subroutines.Permute` subroutine.
+# :func:`~.pennylane.Permute` subroutine.
 
 import pennylane as qml
 
@@ -335,7 +335,7 @@ rng = np.random.default_rng()
 def permute_qubits(num_qubits):
     # A random permutation
     perm_order = list(rng.permutation(num_qubits))
-    qml.templates.Permute(perm_order, wires=list(range(num_qubits)))
+    qml.Permute(perm_order, wires=list(range(num_qubits)))
 
 
 ##############################################################################
@@ -383,7 +383,7 @@ dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
 m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
-    qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
+    qml.layer(qv_circuit_layer, m, num_qubits=m)
 
 print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
 
@@ -542,7 +542,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_ourense")
+dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_santiago")  # <-- need a fix for this
 
 ##############################################################################
 #
@@ -628,7 +628,7 @@ for m in range(min_m, max_m + 1):
 
         # Simulate the circuit analytically
         with qml.tape.QuantumTape() as tape:
-            qml.templates.layer(qv_circuit_layer, m, num_qubits=m)
+            qml.layer(qv_circuit_layer, m, num_qubits=m)
             qml.probs(wires=range(m))
 
         output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
