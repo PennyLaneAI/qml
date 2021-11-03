@@ -8,7 +8,7 @@ Trapped ion quantum computers
     :property="og:image": https://pennylane.ai/qml/_images/trapped_ions_tn.png
 
 .. related::
-   tutorial_pasqal Quantum Computation with neutral atoms
+   tutorial_pasqal Quantum computation with neutral atoms
 
 *Author: Alvaro Ballon Bordo. Last updated: 01 November 2021.*
 
