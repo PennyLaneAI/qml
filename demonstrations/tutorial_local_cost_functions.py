@@ -470,10 +470,8 @@ for runs in range(samples):
     locality = 1
     print("--- New run! ---")
     has_been_trained = False
-    params_tunable = [
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-    ]
+
+    params_tunable = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
     for i in range(steps):
         # update the circuit parameters
         params_tunable = opt.step(cost_tunable, params_tunable)
