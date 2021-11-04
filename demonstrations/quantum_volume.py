@@ -159,9 +159,6 @@ import numpy as np
 prob_array = np.fromiter(measurement_probs.values(), dtype=np.float64)
 print(f"Median = {np.median(prob_array):.3f}")
 
-import os
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
-
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
@@ -385,20 +382,11 @@ dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
-# with qml.tape.QuantumTape() as tape:
-#     qml.layer(qv_circuit_layer, m, num_qubits=m)
-#
-# print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
+with qml.tape.QuantumTape() as tape:
+    qml.layer(qv_circuit_layer, m, num_qubits=m)
 
-@qml.qnode(dev_ideal)
-def our_circuit():
-    for i in range(m):
-        qv_circuit_layer(m)
+print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
 
-    return qml.sample()
-
-
-print(qml.draw(our_circuit)())
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -496,20 +484,12 @@ def heavy_output_set(m, probs):
 #
 
 # Adds a measurement of the first m qubits to the previous circuit
-# with tape:
-#     qml.probs(wires=range(m))
-
-def circuit(active_qubits=3):
-    for i in range(active_qubits):
-        qv_circuit_layer(active_qubits)
-
-    return qml.probs(wires=range(active_qubits))
-
-ideal_circuit = qml.QNode(circuit, dev_ideal)
+with tape:
+    qml.probs(wires=range(m))
 
 # Run the circuit, compute heavy outputs, and print results
-# output_probs = tape.expand().execute(dev_ideal).reshape(2 ** m, )
-output_probs = ideal_circuit().reshape(2 ** m, )
+output_probs = qml.execute([tape], dev_ideal, None)  # returns a list of result !
+output_probs = output_probs[0].reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print("State\tProbability")
@@ -563,7 +543,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_santiago")  # <-- need a fix for this
+dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_bogota")
 
 ##############################################################################
 #
@@ -648,17 +628,16 @@ for m in range(min_m, max_m + 1):
     for trial in range(num_trials):
 
         # Simulate the circuit analytically
-        # with qml.tape.QuantumTape() as tape:
-        #     qml.layer(qv_circuit_layer, m, num_qubits=m)
-        #     qml.probs(wires=range(m))
-        ideal_circuit = qml.QNode(circuit, dev_ideal)
-        output_probs = ideal_circuit(active_qubits=m).reshape(2 ** m, )
+        with qml.tape.QuantumTape() as tape:
+            qml.layer(qv_circuit_layer, m, num_qubits=m)
+            qml.probs(wires=range(m))
+
+        output_probs = qml.execute([tape], dev_ideal, None)
+        output_probs = output_probs[0].reshape(2 ** m, )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
         # Execute circuit on the noisy device
-        # tape.expand().execute(dev_noisy)
-        noisy_circuit = qml.QNode(circuit, dev_noisy)
-        noisy_circuit(active_qubits=m)
+        qml.execute([tape], dev_noisy, None)
 
         # Get the output bit strings; flip ordering of qubits to match PennyLane
         counts = dev_noisy._current_job.result().get_counts()
