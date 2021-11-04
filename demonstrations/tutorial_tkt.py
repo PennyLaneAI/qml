@@ -1,6 +1,6 @@
 """
-Carnival
-===============
+PennyLane Quantum Carnival
+==========================
 
 .. meta::
     :property="og:description": Party with PennyLane.
@@ -12,9 +12,9 @@ Congratulations on finding this ticket! 🤩 Be sure to note down the code and s
 If you were looking for a demo and can't find it, why not create the demo yourself?
 Quantum computing is built on thousands of people making one contribution at a time.
 
-During November new community demos will recieve Quantum Carnival tickets 🎟️ worth several points.
+During November new community demos will recieve additional Quantum Carnival tickets 🎟️.
 
-Keep exploring PennyLane and having fun doing quantum! 🥳
+Keep exploring PennyLane, and having fun doing quantum! 🥳
 """
 
 ##############################################################################
