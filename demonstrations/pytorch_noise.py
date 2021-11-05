@@ -25,7 +25,7 @@ Amazon Braket.
 To follow along with this tutorial on your own computer, you will require the
 following dependencies:
 
-* The `Forest SDK <https://rigetti.com/forest>`_, which contains the quantum virtual
+* The `Forest SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
 
