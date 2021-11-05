@@ -385,7 +385,8 @@ m = 3  # number of qubits
 with qml.tape.QuantumTape() as tape:
     qml.layer(qv_circuit_layer, m, num_qubits=m)
 
-print(tape.expand().draw(wire_order=dev_ideal.wires, show_all_wires=True))
+print(tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary)).draw(wire_order=dev_ideal.wires, show_all_wires=True))
+
 
 
 ##############################################################################
