@@ -10,7 +10,7 @@ Trapped ion quantum computers
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
 
-*Author: Alvaro Ballon Bordo. Last updated: 01 November 2021.*
+*Author: PennyLane dev team. Posted: XX November 2021. Last updated: 05 November 2021.*
 
 The race for quantum advantage is on. Hundreds of research institutions,
 including universities and privately funded companies, are currently
@@ -25,126 +25,87 @@ technologies to build a quantum computer? What are the hurdles that we
 need to overcome to develop a useful quantum computer?
  
 Different players are using various technologies to build a quantum
-computer. The three main approaches are to use **ion traps,
-superconducting circuits, or photons**. Discussing whether one of them
+computer. Some common approaches are to use **ion traps,
+superconducting circuits, photons**, among others. Discussing whether one of them
 is a superior framework leads to a neverending debate. All of them pose
 complex technological challenges, which we can only solve through
 innovation, inventiveness, hard work, and a bit of luck. It is difficult
 to predict whether these problems are solvable in a given timeframe.
 More often than not, our predictions have been wrong, but new knowledge
-is always produced in the process. This series of tutorials aims not to
-speculate but to explain where we are and what needs to be done. Whether
-to invest or begin a quantum startup, we hope to give you the
-tools to assess each framework's probability of success by themselves.
+is always produced in the process. 
 
-In this first part of the series, we introduce **trapped ion quantum
+Here, we introduce **trapped ion quantum
 computers**. It is the preferred technology research groups use at
-universities like Oxford and ETH Zurich, and at companies like
+several universities around the world, and at research companies like
 Honeywell and IonQ. In particular, Honeywell has achieved a quantum
 volume of 128, the largest in the market! As the name suggests, the
 qubits are ions trapped by electric fields and manipulated with lasers.
-Trapped ions have long coherence times, which means that the qubits are
-long-lived and can easily interact with their neighbours. They do have
-some severe scalability problems, but, as we will see, there are
+Trapped ions have relatively long coherence times, which means that the qubits are
+long-lived. Moreover, they and can easily interact with their neighbours. 
+They do have some scalability problems, but, as we will see, there are
 innovative ways to get around them.
+
+After reading this demo, you will learn how trapped ion quantum computers
+prepare, evolve, and measure quantum states. In particular, you will gain 
+knowledge on how single and multi-qubit gates are implemented and how we can 
+simulate them using PennyLane. You will also identify the features that
+make trapped ion quantum computers an appropriate physical implementation, and where the 
+technical challenges lie, in terms of **DiVincenzo's criteria** (see box below). 
+Finally, you will have obtained the tools to understand recent articles on the topic 
+and read future papers to keep yourself updated with the most recent developments.
+
+.. container:: alert alert-block alert-info
+    
+    **Di Vincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
+    wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
+    DiVincenzo's criteria have since become the main guideline for
+    physicists and engineers building quantum computers. We list them below.
+
+    1. **Well-characterized and scalable qubits**. Many of the quantum systems that 
+    we find in nature are not qubits, so we must find a way to make them behave as such.
+    Moreover, we need to put many of these systems together.
+
+    2. **Qubit initialization**. We must be able to prepare the same state repeatedly within
+    an acceptable margin of error.
+
+    3. **Long coherence times**. Qubits will lose their quantum properties after
+    interacting with their environment for a while. We would like them to last long
+    enough so that we can perform quantum operations.
+
+    4. **Universal set of gates**. We need to perform arbitrary operations on the
+    qubits. To do this, we require both single-qubit gates and two-qubit gates.
+
+    5. **Measurement of individual qubits**. To read the result of a quantum algorithm,
+    we must accurately measure the final state of a pre-chosen set of qubits. 
 
 """
 
 ##############################################################################
 #
-# What makes a good quantum computer?
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# To build a quantum computer, we will find it helpful to formulate some
-# concrete objectives. In the year 2000, David DiVincenzo proposed a
-# wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
-# **DiVincenzo's criteria** have since become the main guideline for
-# physicists and engineers building quantum computers.
-# They are based on the features that made classical computers successful,
-# but they are not always easy to implement on a quantum computer. Even
-# though they were formulated two decades ago, they are still relevant
-# today. Let us write them down and outline how trapped ions satisfy these
-# criteria.
-# 
-# 1. **Well-characterized and scalable qubits**. Every quantum computing
-#    algorithm uses qubits: quantum mechanical systems that can be in two
-#    primary states. However, many of the quantum systems that we find in
-#    nature are not two-level systems. In the case of trapped ions, we
-#    deal with atomic energy levels, which are infinitely many. We can
-#    restrict ourselves to the transitions between two energy levels by
-#    using ingenious techniques, effectively making a qubit. The selection
-#    of atomic levels is made such that the electron can stay there for a
-#    long time. Such choices are not unique, and we will see that they
-#    come with different advantages and drawbacks.
-# 
-# 2. **Qubit initialization**. We must be able to prepare every physical
-#    system that we are working on in a stable quantum state. We can use
-#    lasers to induce the electrons in the ion to occupy a specific stable
-#    energy level via a process known as optical pumping.
-# 
-# 3. **Long coherence times**. One of the main obstacles in building a
-#    quantum computer is isolating the qubits. If we do not, the
-#    environment will change their state by interacting with them too
-#    much. This phenomenon is called **decoherence** and is the primary
-#    source of error in quantum mechanical experiments. However, the
-#    qubits cannot be completely isolated. After all, to carry out quantum
-#    computations, we need to be able to manipulate them. We would like to
-#    have qubits that are resistant to decoherence and are, at the same
-#    time, accessible enough. Ion traps give us a choice of energy levels,
-#    and some electrons can stay in these for a long time despite not
-#    being completely isolated.
-# 
-# 4. **Universal set of gates**. These include two types of gates, each of
-#    which presents unique challenges in their implementation. We would
-#    like them to be implemented in short intervals of time. Indeed,
-#    decoherence will destroy our state if we do not act fast.
-# 
-#    -  **Single-qubit gates**: We need to make arbitrary operations on
-#       single qubits since this is required for a quantum computer that
-#       can run all possible logical operations. In ion traps, this is
-#       done by manipulating the ions with laser pulses.
-# 
-#    -  **Two-qubit gates**: In particular, we must be able to entangle
-#       qubits. Entanglement is required to make our quantum computer a
-#       universal Turing Machine and to achieve quantum advantage. Often,
-#       this is one of the most difficult challenges when building a
-#       quantum computer. Moreover, we would like to perform operations on
-#       any two qubits, which is even more complicated. We can implement
-#       two-qubit gates in trapped ions by making an ion chain oscillate
-#       using specific frequencies of light.
-# 
-# 5. **Measurement of individual qubits**. At the end of a quantum
-#    algorithm, we always need to read a result through a measurement. In
-#    quantum mechanics, measurements are probabilistic, so we need to
-#    measure several times and derive results from the obtained
-#    statistics. A very convenient feature of the trapped ion paradigm is
-#    that we can measure without losing the ion, so we can keep reusing
-#    the qubits we already have without the need to generate more. All we
-#    will need to do is prepare them in the ground state again.
-# 
 # How to trap an ion
 # ~~~~~~~~~~~~~~~~~~
-# 
+#
 # Why do we use ions, i.e., charged atoms, as qubits? The main reason
 # is that they can be contained (that is, trapped) in one precise location using electric fields. It is
-# possible to contain neutral atoms using optical tweezers but, in
-# practice, it is much easier to use an electromagnetic trap. Ion traps
+# possible to contain neutral atoms using optical tweezers, but our focus
+# is will be on ions, which can be contained using an electromagnetic trap. Ion traps
 # are rather old technology: their history goes back to 1953 when Wolfgang
 # Paul proposed his now-called Paul trap [#Paul1953]_. For this invention, Paul and
 # Dehmelt were awarded the 1989 Physics Nobel Prize, since it is used to make highly
 # precise atomic clocks. Current trapped ion quantum computers extensively
 # use the Paul trap, but Paul won the prize six years before such an
 # application was proposed [#CiracZoller]_!
-# 
+#
 # It is not easy to create electric fields that contain the ion in a tiny
-# region of space. The sought-for potential would look like this:
-# 
+# region of space. The ideal configuration of an electric field —
+# also known as a *potential*— would look like this:
+#
 # .. figure:: ../demonstrations/trapped_ions/confining.png
 #    :align: center
 #    :width: 70%
 #
 #    ..
-#    
+#
 #    Confining potential
 #
 # The potential should be interpreted as a wall that the ion must climb
@@ -153,14 +114,14 @@ innovative ways to get around them.
 # achieve an electric potential like the above, the ion should remain
 # trapped in the pit. However, using the laws of electrostatics, we can
 # show that it is impossible to create a confining potential with only
-# static electric fields. Instead, they produce saddle-point potentials:
-# 
+# static electric fields. Instead, they produce saddle-shaped potentials:
+#
 # .. figure:: ../demonstrations/trapped_ions/saddle_potential.png
 #    :align: center
 #    :width: 70%
 #
 #    ..
-#    
+#
 #    Saddle-shaped potential allowed by electrostatics
 #
 # This potential is problematic since the ion is contained in one
@@ -171,17 +132,17 @@ innovative ways to get around them.
 # rotates at a specific frequency, the wall will catch the ion as it tries
 # to escape in the downhill direction. Explicitly, the electric potential
 # that we generate is given by [#Malinowski]_
-# 
+#
 # .. math:: \Phi = \frac{1}{2}\left(u_x x^2 + u_y y^2 + u_z z^2\right) + \frac{1}{2}\left(v_x x^2 + v_y y^2 + v_z z^2\right)\cos(\omega t+\phi).
-# 
+#
 # The parameters :math:`u_i`, :math:`v_i`, and :math:`\phi` need to be
 # adjusted to the charge and mass of the ion and to the potential's
-# angular frequency :math:`\omega`. We have to do this tuning of
+# angular frequency :math:`\omega`. We have to tune these
 # parameters very carefully, since the ion could escape if we do not apply
 # the right forces at the right time. It takes a lot of care, but this
 # technique is so old that it is almost perfect by now. Here is what the
 # rotating potential would look like:
-# 
+#
 # .. figure:: ../demonstrations/trapped_ions/Rotating.gif
 #     :align: center
 #     :width: 70%
@@ -190,14 +151,14 @@ innovative ways to get around them.
 #
 #     A rotating potential with the correct frequency and magnitude
 #     can contain an ion
-# 
+#
 # We want to make a quantum computer, so having one qubit cannot be
 # enough. We would like as many as we can possibly afford! The good news
 # is that we have the technology to trap many ions and put them close
 # together in a one-dimensional array, called an ion chain. Why do we need
 # this particular configuration? To manipulate the qubits, we need the
 # system of ions to absorb photons. However, shooting a photon at an ion
-# can cause unwanted relative motion between ions in the chain. The
+# can cause unwanted relative motion between ions. The
 # proximity between qubits will cause unwanted interactions, which could
 # modify their state. Happily, there is a solution to this issue: place
 # the ions in a sufficiently spaced one-dimensional array, and **cool them
@@ -209,10 +170,10 @@ innovative ways to get around them.
 # both the excitations of the ions and the motion of the ion chain. This
 # user-controlled motion is precisely what we need to perform quantum
 # operations with two qubits.
-# 
+#
 # Trapped ions as robust qubits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # Now that we know how to trap ions, we would like to use them as qubits.
 # Would any ion out there work well as a qubit? In fact, only a select few
 # isotopes will do the trick. The reason is that our qubit basis states
@@ -230,7 +191,7 @@ innovative ways to get around them.
 # but their ionized version only has one. The valence electron is not so
 # tightly bound to the atom, so it is the one whose state we use to represent a
 # qubit.
-# 
+#
 # .. container:: alert alert-block alert-info
 #
 #    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
@@ -240,7 +201,7 @@ innovative ways to get around them.
 #    there is space, electrons can change energy levels, with a preference
 #    for the lower ones. This can happen spontaneously or due to external
 #    influences.
-# 
+#
 #    When the lower energy levels are not occupied, higher energy levels
 #    are unstable: electrons will prefer to minimize their energy and jump to
 #    a lower level on their own. What happens when an electron jumps from
@@ -248,7 +209,7 @@ innovative ways to get around them.
 #    that the energy must go somewhere. Indeed, a photon with an energy
 #    equal to the energy lost by the electron is emitted. This energy is
 #    proportional to the frequency (colour) of the photon.
-# 
+#
 #    Conversely, we can use laser light to induce the opposite process.
 #    When an electron is in a stable or ground state, we can use lasers
 #    with their frequency set roughly to the difference
@@ -259,53 +220,56 @@ innovative ways to get around them.
 #    so depends on the particular excited state they are in since,
 #    sometimes, the laws of physics will make it harder for electrons to
 #    jump back on their own.
-#    
+#
 #    .. figure:: ../demonstrations/trapped_ions/atomic.png
 #       :align: center
 #       :width: 60%
 #
 #       ..
-#    
+#
 #       Photons with an energy equal to the atomic gap drive excitations
-#    
+#
 #
 # Having chosen the ions that will act as our qubits, we need to prepare
 # them in a stable fiducial state, known as the **ground state** and
 # denoted by :math:`\left\lvert g \right\rangle`. The preparation is done
 # by a procedure called optical pumping. To see how this works, let us
 # take Calcium-40 as an example. In this case, the electron has two stable
-# states, which we denote by :math:`\left\lvert g_1 \right\rangle` and
+# states with the same energy, but different direction of rotation.
+# We denote these by :math:`\left\lvert g_1 \right\rangle` and
 # :math:`\left\lvert g_2\right\rangle`. We do not know which stable state
 # the electron is in, and we would like to ensure that the electron is in
 # the :math:`\left\lvert g_1\right\rangle` state. This will be our chosen
 # fiducial state, so
 # :math:`\left\lvert g\right\rangle = \left\lvert g_1\right\rangle`.
 # However, quantum mechanics forbids a direct transition between these two
-# stable states. Instead, we take a detour: by using circularly polarized
-# laser light of a particular wavelength (397nm for Calcium-40), we excite
+# stable states. To get from one state to the other, the electron
+# would have to change its rotation without giving out any energy, which
+# is impossible! But we can take a detour: we use circularly polarized
+# laser light of a particular wavelength (397nm for Calcium-40) to excite
 # :math:`\left\lvert g_2\right\rangle` into a short-lived excited state
 # :math:`\left\lvert \textrm{aux}\right\rangle`. This light does not
 # stimulate any other transitions in the ion so that an electron in the
-# ground state :math:`\left\lvert g_1\right\rangle` will remain there. The theory of quantum mechanical angular
-# momentum tells us that, in a matter of nanoseconds, the excited electron
+# ground state :math:`\left\lvert g_1\right\rangle` will remain there.
+# Quantum mechanics tells us that, in a matter of nanoseconds, the excited electron
 # decays to our desired ground state :math:`\left\lvert g \right\rangle`
 # with probability 1/3, but returns to
 # :math:`\left\lvert g_2 \right\rangle` otherwise. For this reason, we
 # need to repeat the procedure many times, gradually "pumping" the
 # electrons in all (or the vast majority of) our ions to the ground state.
-# 
+#
 # .. figure:: ../demonstrations/trapped_ions/pumping.png
 #    :align: center
 #    :width: 60%
 #
 #    ..
-#    
+#
 #    Optical pumping to prepare the ground state
-# 
+#
 # What about the other basis qubit state? It will be a long-lived excited
 # state, denoted by :math:`\left\lvert e \right\rangle`. For the
-# Calcium-40 ion, this state is a **metastable state**. Metastable states
-# have sufficiently long lifetimes since quantum mechanics restricts, but
+# Calcium-40 ion, this state is a *metastable state:* a state that
+# has a sufficiently long lifetime since quantum mechanics restricts, but
 # does not entirely forbid, transitions to a lower energy level. For
 # example, the metastable state of Calcium-40 has a half-life of about 1
 # second. While apparently short, most quantum operations can be performed
@@ -314,10 +278,11 @@ innovative ways to get around them.
 # could decay much quicker. The energy difference between the ground and
 # excited state corresponds to a laser frequency of 729nm, achievable with
 # an infrared laser. Therefore, we call this an **optical qubit**. An
-# alternative is to use an ion, such as Calcium-43, that has a hyperfine
-# structure. In this case, there are two states separated by a very small
-# energy gap, which makes the higher energy state have a virtually
-# infinite lifespan. We can use a procedure similar to optical pumping to
+# alternative is to use an ion, such as Calcium-43, that has a *hyperfine
+# structure*, which means that the ground and excited states are separated by a very small
+# energy gap. In this case, the higher energy state has a virtually
+# infinite lifespan, since it is only slightly different
+# from the stable ground state. We can use a procedure similar to optical pumping to
 # transition between these two states, so while coherence times are longer
 # for these **hyperfine qubits**, gate implementation is more complicated
 # and needs a lot of precision.
@@ -327,7 +292,7 @@ innovative ways to get around them.
 #    :width: 60%
 #
 #    ..
-#    
+#
 #    Optical vs. hyperfine qubits
 #
 # We have now learned how trapped ions make for very stable qubits that
@@ -342,26 +307,26 @@ innovative ways to get around them.
 # meeting the third criterion. For now, let us focus on how to satisfy
 # criteria 4 and 5, and we will come back to these issues once we discuss
 # what happens when we deal with multiple ions.
-# 
+#
 # Non-demolition measurements
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # Let us now discuss the last step in a quantum computation: measuring the
 # qubits. Since it takes quite a bit of work to trap an ion, it would be
 # ideal if we could measure the state of our qubits without it escaping
 # from the trap. We definitely do not want to trap ions again after performing
-# one measurement. Moreover, we want measurements that can be repeated 
+# one measurement. Moreover, we want measurements that can be repeated
 # on the same ions and yield consistent results. These are called **non-demolition
 # measurements**, and they are easy enough to carry out for trapped ions.
-# 
+#
 # The measurement method uses a similar principle to that of optical
 # pumping. Once again, and continuing with the Calcium-40 example, we make
 # use of the auxiliary state. This time, we shine a laser light wavelength
 # of 397 nm that drives the transition from
 # :math:`\left\lvert g \right\rangle` to the auxiliary state
 # :math:`\left\lvert \textrm{aux} \right\rangle`. The transition is
-# short-lived; it will quickly go back to so :math:`\left\lvert g \right\rangle`, 
-# emitting a photon of the same wavelength. The state 
+# short-lived; it will quickly go back to so :math:`\left\lvert g \right\rangle`,
+# emitting a photon of the same wavelength. The state
 # :math:`\left\lvert e \right\rangle` is not affected. Therefore,
 # we will measure :math:`\left\lvert g \right\rangle` if
 # we see the ion glowing: it continuously emits light at a wavelength of
@@ -376,9 +341,9 @@ innovative ways to get around them.
 #    :width: 60%
 #
 #    ..
-#    
+#
 #    Non-demolition measurement of ion states
-# 
+#
 # Have we fully satisfied the fifth criterion? Via a careful experimental
 # arrangement, we can detect the emission of photons of each atom
 # individually, so we are on the right track. But in reality, there is
@@ -387,14 +352,14 @@ innovative ways to get around them.
 # the **ancilla**. If these ions emit light, they can accidentally excite
 # other ions on the chain, causing decoherence. A way to avoid this source
 # of uncertainty is to use two species of ions: one for the ancilla and
-# one for the qubits that are not measured, or **logical qubits**. 
+# one for the qubits that are not measured, or **logical qubits**.
 # In this case, the ions emitted by the ancilla ions would not excite the
-# logical qubits. However, using two different species of ions causes 
-# extra trouble when we want to implement arbitrary qubit operations [#Hughes2020].
-# 
+# logical qubits. However, using two different species of ions causes
+# extra trouble when we want to implement arbitrary qubit operations [#Hughes2020]_.
+#
 # Rabi oscillations to manipulate single qubits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # How do we make single-qubit quantum gates? So far, we have been using
 # lasers to excite states. But is there a way to put the electron in a
 # superposition of the ground and excited states? Since we aim to change
@@ -402,118 +367,173 @@ innovative ways to get around them.
 # lasers to shoot photons at it, tuning the frequency to the
 # energy gap. To understand how we would achieve a state superposition by
 # interacting with the ion using light, let us look at a mathematical
-# operator called the Hamiltonian. In physics, the Hamiltonian describes
+# operator called the *Hamiltonian*. In physics, the Hamiltonian describes
 # the motion and external forces around an object we want to study. One of
 # the main difficulties encountered in quantum mechanics is determining
 # the correct Hamiltonian for a system. In our case, this work has already
 # been done by quantum optics experts. After many simplifications
 # involving some approximations, we find that the Hamiltonian that
 # describes an electron in an ion resonant to the laser light is given by
-# the matrix:
-# 
+# the operator:
+#
 # .. math:: \hat{H}=\frac{\hbar\Omega}{2}\left(S_+ e^{i\varphi}+S_{-}e^{-i\varphi}\right).
-# 
+#
 # Here, :math:`\Omega` is the **Rabi frequency**. It is defined by
 # :math:`\Omega=\mu_m B/2\hbar`, where :math:`B` is the applied magnetic
 # field due to the laser, and :math:`\mu_m` is the magnetic moment of the
 # ion. The phase :math:`\varphi` measures the initial displacement of the
 # light wave at the atom's position. The matrices :math:`S_+` and
 # :math:`S_-` are given by:
-# 
+#
 # .. math:: S_+=\left( \begin{array}{cc} 0 & 0 \\ 1 & 0\end{array}\right) \qquad S_-=\left( \begin{array}{cc} 0 & 1 \\ 0 & 0\end{array}\right).
-# 
+#
 # Hamiltonians in physics are helpful because they tell us how systems
 # change in time in the presence of external interactions. In quantum
-# mechanics, Hamiltonians are matrices, and the evolution of a system is
-# calculated using Schrodinger's equation. When the Hamiltonian does not
+# mechanics, Hamiltonians are represented by matrices, and the evolution of a system is
+# calculated using Schrödinger's equation. When the Hamiltonian does not
 # depend on time, a state that starts on the qubit
 # :math:`\left\lvert g \right\rangle` will evolve into the following
 # time-dependent state:
-# 
+#
 # .. math:: \left\lvert \psi(t)\right\rangle = \exp(-i \hat{H} t/\hbar)\left\lvert g \right\rangle,
-# 
-# where :math:`\exp` denotes the matrix exponential. We do not need to
+#
+# where :math:`\exp` denotes the matrix exponential and :math:`t` is
+# the duration of the interaction, which is controlled using *pulses*, i.e. short
+# bursts of light. We do not need to
 # elaborate on how matrix exponentials are calculated, since we can
 # implement them using the scipy library in Python. Let us see how our
 # basis states :math:`\left\lvert g \right\rangle` and
 # :math:`\left\lvert e \right\rangle` evolve under the action of this
-# Hamiltonian:
-# 
+# Hamiltonian. First, we write a function that returns the matrix exponential
+# :math:`\exp(-i \hat{H} t/\hbar)` as a function of :math:`\varphi` and the
+# duration :math:`t` of the pulse, with :math:`\Omega` set to 100 kHz.
 
 import pennylane as qml
 from pennylane import numpy as np
 from scipy.linalg import expm
 
-Omega=100
-S_plus = np.array([[0, 0],[1, 0]])
-S_minus = np.array([[0,1],[0,0]])
+Omega = 100
+S_plus = np.array([[0, 0], [1, 0]])
+S_minus = np.array([[0, 1], [0, 0]])
 
-def evolution(phi,t):
-    Ham = Omega/2*(S_plus*np.exp(1j*phi)+S_minus*np.exp(-1j*phi))
-    return expm(-1j*Ham*t)
 
-dev = qml.device("default.qubit",wires=1)
+def evolution(phi, t):
+    Ham = Omega / 2 * (S_plus * np.exp(1j * phi) + S_minus * np.exp(-1j * phi))
+    return expm(-1j * Ham * t)
+
+
+##############################################################################
+# With this operator implemented, we can check that a combination of pulses
+# with different phases and durations give is the Hadamard gate.
+
+dev = qml.device("default.qubit", wires=1)
+
 
 @qml.qnode(dev)
 def ion_hadamard(state):
-    
-    if state ==1:
-        qml.PauliX(wires=0)
-        
-    qml.QubitUnitary(evolution(0,-np.pi/2/Omega),wires=0)
-    qml.QubitUnitary(evolution(np.pi/2,np.pi/2/Omega),wires=0)
-    qml.QubitUnitary(evolution(0,np.pi/2/Omega),wires=0)
-    qml.QubitUnitary(evolution(np.pi/2,np.pi/2/Omega),wires=0)
-    qml.QubitUnitary(evolution(0,np.pi/2/Omega),wires=0)
-    
-    return qml.state()
-    
-print(1j*ion_hadamard(0))   
-print(1j*ion_hadamard(1)) 
 
-dev = qml.device("default.qubit",wires=1)
+    if state == 1:
+        qml.PauliX(wires=0)
+
+    qml.QubitUnitary(evolution(0, -np.pi / 2 / Omega), wires=0)
+    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 2 / Omega), wires=0)
+    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
+    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 2 / Omega), wires=0)
+    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
+
+    return qml.state()
+
+
+@qml.qnode(dev)
+def hadamard(state):
+
+    if state == 1:
+        qml.PauliX(wires=0)
+
+    qml.Hadamard(wires=0)
+
+    return qml.state()
+
+
+print(np.isclose(1j * ion_hadamard(0), hadamard(0)))
+print(np.isclose(1j * ion_hadamard(1), hadamard(1)))
+
+##############################################################################
+# Where we note that the desired gate was obtained up to a global phase factor.
+# A similar excersise can be done for the T-gate:
+
 
 @qml.qnode(dev)
 def ion_Tgate(state):
-    
-    if state ==1:
+
+    if state == 1:
         qml.PauliX(wires=0)
-        
-    qml.QubitUnitary(evolution(0,-np.pi/2/Omega),wires=0)
-    qml.QubitUnitary(evolution(np.pi/2,np.pi/4/Omega),wires=0)
-    qml.QubitUnitary(evolution(0,np.pi/2/Omega),wires=0)
-        
+
+    qml.QubitUnitary(evolution(0, -np.pi / 2 / Omega), wires=0)
+    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 4 / Omega), wires=0)
+    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
+
     return qml.state()
-    
-print(1j*ion_Tgate(0))   
-print(1j*ion_Tgate(1)) 
+
+
+@qml.qnode(dev)
+def tgate(state):
+
+    if state == 1:
+        qml.PauliX(wires=0)
+
+    qml.T(wires=0)
+
+    return qml.state()
+
+
+print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(0), tgate(0)))
+print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
 
 ##############################################################################
-# The PennyLane code above shows that we can obtain a Hadamard gate and a
-# T gate using consecutive pulses with different times and phases. Namely,
+# This Pennylane code shows that we can obtain a Hadamard gate and a
+# T-gate using consecutive pulses with different times and phases. Namely,
 # to get a Hadamard gate, we do five pulses, all of them with duration
 # :math:`t=\frac{\pi}{2\Omega}`, where the second and the fourth pulse
-# have a phase of :math:`\pi/2`. Hadamard and T gates together can be used to
+# have a phase of :math:`\pi/2`. The Hadamard and T gates together can be used to
 # implement any operation on a single qubit, to an arbitrary degree of approximation. We
 # see that timing and dephasing our laser pulses provide a versatile way
-# to manipulate single qubits. To get a better idea about how the duration
+# to manipulate single qubits.
+#
+# To get a better idea about how the duration
 # of the pulses affects the state that we generate, let us plot the probability
 # of obtaining the state :math:`\left\lvert e \right\rangle` against the
-# duration of the pulse for a fixed phase of [insert phase here].
-#
-# .. figure:: ../demonstrations/trapped_ions/rabi.png
-#    :align: center
-#    :width: 60%
-#
-#    ..
-#    
-#    Probability of obtaining the excited state vs. duration of pulse
-#
+# duration of the pulse for a fixed phase of :math:`\varphi = 0`.
+
+import matplotlib.pyplot as plt
+
+
+@qml.qnode(dev)
+def evolution_prob(t):
+
+    qml.QubitUnitary(evolution(0, t / Omega), wires=0)
+
+    return qml.probs(wires=0)
+
+
+t = np.linspace(0, 4 * np.pi, 101)
+s = [evolution_prob(i)[1].numpy() for i in t]
+
+fig1, ax1 = plt.subplots(figsize=(9, 6))
+
+ax1.plot(t, s, color="#9D2EC5")
+
+ax1.set(xlabel="time / Ω", ylabel="Probability", title="Probability of measuring the excited state")
+ax1.grid()
+
+plt.show()
+
+##############################################################################
 # We see that the probability of obtaining the excited state changes with
 # the duration of the pulse, reaching a maximum at a time
-# :math:`t=\pi/\Omega`, and then vanishes at :math:`t=2\pi/\Omega`. This
+# :math:`t=\pi/\Omega`, and then vanishing at :math:`t=2\pi/\Omega`. This
 # pattern keeps repeating itself and is known as a **Rabi oscillation**.
-# 
+#
 # Achieving the required superpositions of quantum states requires precise
 # control of the timing and phase of the pulse. This feat is not easy, but
 # it is not the most challenging step towards creating a trapped-ion
@@ -524,56 +544,53 @@ print(1j*ion_Tgate(1))
 # a consequence, we have now satisfied half of criterion 4. The second
 # half is not theoretically difficult to implement. Still, it can be
 # experimentally challenging.
-# 
-# .. container:: alert alert-block alert-info
 #
-#    **Optional reading**: In fact, we can solve the Schrodinger equation
-#    explicitly (feel free to do this if you want to practice solving
-#    differential equations!). If we do this, we can deduce that the
-#    ground state :math:`\left\lvert g \right\rangle` evolves to [#Bergou2021]_
+# In fact, we can solve the Schrödinger equation
+# explicitly (feel free to do this if you want to practice solving
+# differential equations!). If we do this, we can deduce that the
+# ground state :math:`\left\lvert g \right\rangle` evolves to [#Bergou2021]_
 #
-#    .. math:: \left\lvert \psi_0(t) \right\rangle = \cos\left(\frac{\Omega t}{2}\right)\left\lvert g \right\rangle -i\sin\left(\frac{\Omega t}{2}\right) e^{i\varphi}\left\lvert e \right\rangle .
-# 
-#    We observe that we can obtain an arbitrary superposition of qubits by
-#    adjusting the duration of the interaction and the phase. This means
-#    that we can produce any single-qubit gate! To be more precise, let us
-#    see what would happen if the initial state was
-#    :math:`\left\lvert e \right\rangle`. As before, we can show that the
-#    evolution is given by
-# 
-#    .. math:: \left\lvert \psi_1(t) \right\rangle = -i\sin\left(\frac{\Omega t}{2}\right)e^{-i\varphi}\left\lvert g \right\rangle +\cos\left(\frac{\Omega t}{2}\right)\left\lvert e \right\rangle .
-# 
-#    Therefore, the unitary induced by a laser pulse of amplitude
-#    :math:`B`, duration :math:`t`, and phase :math:`\varphi` on an ion
-#    with magnetic moment :math:`\mu_m` is
-# 
-#    .. math::  U(\Omega,\varphi,t)=\left( \begin{array}{cc} \cos\left(\frac{\Omega t}{2}\right) & -i\sin\left(\frac{\Omega t}{2}\right)e^{-i\varphi} \\ -i\sin\left(\frac{\Omega t}{2}\right)e^{i\varphi} & \cos\left(\frac{\Omega t}{2}\right)\end{array}\right)
-# 
-#    which has the form of a general rotation. Since we can generate
-#    arbitrary X and Y rotations using :math:`\varphi=0` and
-#    :math:`\varphi=\pi/2`, Rabi oscillations allow us to build a
-#    universal set of single-qubit gates.
-# 
+# .. math:: \left\lvert \psi_0(t) \right\rangle = \cos\left(\frac{\Omega t}{2}\right)\left\lvert g \right\rangle -i\sin\left(\frac{\Omega t}{2}\right) e^{i\varphi}\left\lvert e \right\rangle .
+#
+# We observe that we can obtain an arbitrary superposition of qubits by
+# adjusting the duration of the interaction and the phase. This means
+# that we can produce any single-qubit gate! To be more precise, let us
+# see what would happen if the initial state was
+# :math:`\left\lvert e \right\rangle`. As before, we can show that the
+# evolution is given by
+#
+# .. math:: \left\lvert \psi_1(t) \right\rangle = -i\sin\left(\frac{\Omega t}{2}\right)e^{-i\varphi}\left\lvert g \right\rangle +\cos\left(\frac{\Omega t}{2}\right)\left\lvert e \right\rangle .
+#
+# Therefore, the unitary induced by a laser pulse of amplitude
+# :math:`B`, duration :math:`t`, and phase :math:`\varphi` on an ion
+# with magnetic moment :math:`\mu_m` is
+#
+# .. math::  U(\Omega,\varphi,t)=\left( \begin{array}{cc} \cos\left(\frac{\Omega t}{2}\right) & -i\sin\left(\frac{\Omega t}{2}\right)e^{-i\varphi} \\ -i\sin\left(\frac{\Omega t}{2}\right)e^{i\varphi} & \cos\left(\frac{\Omega t}{2}\right)\end{array}\right)
+#
+# which has the form of a general rotation. Since we can generate
+# arbitrary X and Y rotations using :math:`\varphi=0` and
+# :math:`\varphi=\pi/2`, Rabi oscillations allow us to build a
+# universal set of single-qubit gates.
+#
 # The ion chain as a harmonic oscillator
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # To address the second part of the fourth criterion, we need to create
-# gates on at least two qubits. In particular, the goal is to make the
-# CNOT gate since it allows for universal quantum computation. How can we
+# gates on at least two qubits. How can we
 # create such a gate between ions? It turns out that placing ions in a
 # chain is ideal for multiple-qubit gate implementations. When cooled
 # down, the entire ion chain acts as a **quantum harmonic oscillator**,
-# meaning that it can vibrate with energies that are multiples of the
-# fundamental constant :math:`\hbar` times a fundamental frequency
+# meaning that it can vibrate with energies that are multiples of Planck's
+# constant :math:`\hbar` times a fundamental frequency
 # :math:`\omega`:
-# 
+#
 # .. math:: E=n\hbar\omega.
-# 
+#
 # When the chain is oscillating with energy :math:`E=n\hbar\omega`, we
 # denote the harmonic oscillator state, also known as **phonon state** or
 # **motional state**, by :math:`\left\lvert n\right\rangle`. The harmonic
 # oscillator can absorb and emit energy in multiples of
-# :math:`\hbar\omega`, in packets of energy known as phonons. 
+# :math:`\hbar\omega`, in packets of energy known as phonons.
 # When we shine laser light on a particular atom of
 # the ion chain, the entire chain could absorb the energy of the photons
 # and start oscillating. However, we have seen that this does not happen
@@ -584,7 +601,7 @@ print(1j*ion_Tgate(1))
 # the atom and the harmonic oscillator in some special circumstances. We
 # can use the harmonic oscillator states as auxiliary states that will
 # allow us to build two-qubit gates.
-# 
+#
 # Let us introduce some notation that will help us understand exactly how
 # the two-qubit gates are implemented. When an ion is in the ground state
 # :math:`\left\lvert g \right\rangle` and the chain in is in the state
@@ -593,25 +610,26 @@ print(1j*ion_Tgate(1))
 # similarly when the ion is in the excited state
 # :math:`\left\lvert e \right\rangle`. If we are studying two ions at the
 # same time, then we will write the states in the form
-# :math:`\left\lvert g, e \right\rangle\left\lvert g, e \right\rangle\left\lvert n \right\rangle`,
+# :math:`\left\lvert g \right\rangle\left\lvert g \right\rangle\left\lvert n \right\rangle`,
 # where the last :math:`\left\lvert n \right\rangle` always represents the
 # state of the oscillating ion chain. Suppose that the ion's energy gap
 # value is :math:`\Delta`, and we shine light of frequency
 # :math:`\omega_b=\omega+\Delta` on a particular ion. If it is in the
 # ground state, it will absorb an energy :math:`\Delta`, and the ion chain
 # will absorb the rest. Therefore, this light frequency induces the
-# following **blue-sideband** transition:
-# 
-# .. math:: \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert n+1\right\rangle. 
-# 
+# following **blue sideband** transition:
+#
+# .. math:: \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert n+1\right\rangle.
+#
 # By using the frequency :math:`\omega_r=\Delta-\omega`, we can instead
 # excite the ion and de-excite the ion chain, also known as a
-# **red-sideband** transition
-# 
-# .. math:: \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert n-1\right\rangle. 
-# 
+# **red sideband** transition
+#
+# .. math:: \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert n-1\right\rangle.
+#
 # Crucially, this frequency will do nothing if the ion-chain is in the
-# state of zero energy. If the light frequency is exactly :math:`\Delta`,
+# state of zero energy. This one seems counterintuitive
+# If the light frequency is exactly :math:`\Delta`,
 # the ion chain does not absorb any phonons, but the ion does become
 # excited. We will call this a **carrier** transition.
 #
@@ -620,91 +638,74 @@ print(1j*ion_Tgate(1))
 #    :width: 60%
 #
 #    ..
-#    
+#
 #    Effects of sideband and carrier frequencies on an ion chain
-# 
+#
 # Since the oscillations of the ion chain are quantum states, we may
 # wonder whether we can also create superpositions of motional states. For
-# both the red- and blue-sideband frequencies, the Hamiltonian turns out to
+# both the red and blue sideband frequencies, the Hamiltonian turns out to
 # be similar to the one we saw above, but with a different Rabi frequency
 # :math:`\tilde{\Omega}`. Following the same prescription as with single
 # ions, we can tune the duration and phase of the pulses to form
-# superpositions of phonon states. For example, for a blue-sideband pulse
+# superpositions of phonon states. For example, for a blue sideband pulse
 # of duration :math:`t=\pi/2\tilde{\Omega}` and phase
 # :math:`\varphi=\pi/2`, a system of two ions in both the motional and
 # electronic ground state evolves as
-# 
+#
 # .. math:: \left\lvert g\right\rangle \left\lvert g\right\rangle \left\lvert n\right\rangle \rightarrow \frac{1}{\sqrt{2}}\left(\left\lvert g\right\rangle \left\lvert g\right\rangle \left\lvert n\right\rangle + \left\lvert e\right\rangle \left\lvert g\right\rangle \left\lvert n+1\right\rangle\right)
-# 
+#
 # when the pulse is incident on the first ion. Similarly, other choices of
 # duration and phase allow for arbitrary superposition between phonon
 # states. This freedom to act on the motional states gives us the
 # necessary tools to implement two-qubit gates. We will see two examples
-# and use one of them to build a CNOT gate.
-# 
-# .. raw:: html
-# 
-#    <div class = "alert alert-block alert-info">
-# 
-#     <b>Note</b>: The results above are relatively simple to understand, but they
+# and use one of them to build a CNOT gate which, as is well-known, allows
+# for universal computations when combined with single-qubit gates.
+#
+# .. note::
+#
+#     The results above are relatively simple to understand, but they
 #     are not exact. In particular, to guarantee that the sideband frequencies
-#     will have the effects we described on the ion chain, we must operate
-#     within something called the Lamb-Dicke regime. This means that the separation between
-#     ions must be large enough, or else stronger interactions will come into
+#     will have the effects we described on the ion chain, the separation between
+#     ions must be large enough, in a range known as the Lamb-Dicke regime. If we do
+#     not operate under this condition, stronger interactions will come into
 #     play, and we will not be able to act on individual ions with the laser
 #     beams.
-# 
-# .. raw:: html
-# 
-#    </div>
-# 
+#
 # Entangling ions with multi-qubit gates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# .. container:: alert alert-block alert-success
-# 
-#    **Entangled states primer:** Systems that have two or more components
-#    can be in an entangled state, which means that the measurement
-#    results of one component affect the outcome of the other one. In
-#    other words, there is a correlation between the measurement outcomes
-#    of the two components. In quantum computing, entanglement is
-#    necessary to achieve quantum advantage. The prototypical example of
-#    an entangled state can be written as follows:
-# 
+#
+# .. container:: alert alert-block alert-info
+#
+#    **Maximally entangled states:** When all outcomes have the same
+#    probability in an entangled state, such as in the two-ion state
+#
 #    .. math::
-# 
-#       \left\lvert \psi \right\rangle = \frac{1}{\sqrt{2}}\left(\left\lvert 0 \right\rangle \left\lvert 0 \right\rangle +
-#       \left\lvert 1 \right\rangle \left\lvert 1 \right\rangle\right). 
-# 
-#    How should we read this? The first two-component state in the sum is
-#    :math:`\left\lvert 0 \right\rangle \left\lvert 0 \right\rangle`,
-#    which means that if we measure the first component to be in state
-#    :math:`0`, the second one will also be. The second two-component
-#    state in the sum is
-#    :math:`\left\lvert 1 \right\rangle \left\lvert 1\right\rangle`, so
-#    measuring one component in state :math:`1` means that the other one
-#    is in this same state. Moreover, each of these two outcomes has a
-#    probability of :math:`1/2` since the coefficients before these states
-#    are both :math:`\sqrt{1/2}`. When all outcomes have the same
-#    probability in an entangled state, we call it a **maximally entangled
-#    state.**
-# 
+#
+#       \left\lvert \psi \right\rangle = \frac{1}{\sqrt{2}}\left(\left\lvert e \right\rangle \left\lvert g \right\rangle +
+#       \left\lvert g \right\rangle \left\lvert e \right\rangle\right).
+#
+#    we say that it is **maximally entangled**. To be able to do arbitrary
+#    computations and for quantum advantage to be possible, we need two-qubit gates
+#    that, combined with single qubit gates, produce maximally entangled states.
+#    The CNOT gate is an example of this, and we will learn about others below.
+#
+#
 # The **Cirac-Zoller** gate [#CiracZoller]_ can completely entangle ions. It is also the
 # simplest way to illustrate how we can use the states of the harmonic
 # oscillator as an aid to create two-qubit gates. For a chain
 # with zero motional energy, we saw above that
-# applying a blue-sideband pulse of duration :math:`t=\pi/2` and phase
+# applying a blue sideband pulse of duration :math:`t=\pi/2` and phase
 # :math:`\varphi=\pi/2` to the first ion gives us the state
-# 
+#
 # .. math:: \left\lvert \psi \right\rangle = \frac{1}{\sqrt{2}}\left(\left\lvert g\right\rangle \left\lvert g\right\rangle \left\lvert 0\right\rangle + \left\lvert e\right\rangle \left\lvert g\right\rangle \left\lvert 1\right\rangle\right).
-# 
+#
 # We can then use a similar idea to keep creating superpositions until we
 # end up in a maximally entangled state. The steps to implement the
 # Cirac-Zoller gate are shown on the diagram:
-# 
-# .. figure:: ../demonstrations/trapped_ions/CZgate2.png
+#
+# .. figure:: ../demonstrations/trapped_ions/CZgate.png
 #    :align: center
-#    :width: 75%
+#    :width: 85%
 #
 #    ..
 #
@@ -716,7 +717,7 @@ print(1j*ion_Tgate(1))
 # step, the part of the superposition that has no chain motion is
 # unaffected by the red sideband. This property allows the creation of
 # entanglement in electronic states by using the phonon states.
-# 
+#
 # However, the implementation of the Cirac-Zoller gate in real life is
 # plagued by problems. First, the ion chain needs to be completely cooled
 # down to the ground motional state, which can never be achieved. Second,
@@ -725,28 +726,28 @@ print(1j*ion_Tgate(1))
 # harmonic oscillator states. Since ion chains are large and less isolated
 # from the environment, phonon states are rather short-lived due to
 # decoherence.
-# 
+#
 # For actual applications, we use a more ingenious gate, known as the
 # **Mølmer-Sørensen** gate [#Molmer1999]_. It has the advantage that the ions do not
 # need to be perfectly cooled to the motional ground state for it to work.
 # It relies on simultaneously shining two lasers at different frequencies
 # :math:`\omega_{\pm}` on the two target ions, which are slightly detuned
 # from the atomic energy gap :math:`\Delta`:
-# 
+#
 # .. math:: \omega_{\pm}=\Delta \pm \delta
-# 
-# The net effect this interaction with laser light is to excite
+#
+# The net effect of this interaction with laser light is to excite
 # :math:`\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle`,
 # and it can do so through any of the four paths shown below:
-# 
+#
 # .. figure:: ../demonstrations/trapped_ions/molmer_sorensen.png
 #    :align: center
 #    :width: 60%
 #
 #    ..
-#    
+#
 #    Mølmer-Sørensen gate implemented with two simultaneous laser pulses
-# 
+#
 # Using a quantum mechanical technique known as perturbation theory, we
 # can deduce that there is also a Rabi frequency :math:`\Omega_{MS}`
 # associated with this evolution. Therefore, adjusting the time and the
@@ -773,67 +774,74 @@ print(1j*ion_Tgate(1))
 #
 
 Omega = 100
+
+
 def Molmer_Sorensen(t):
-    ms = np.array([[np.cos(Omega*t/2),0,0, -1j*np.sin(Omega*t/2)],
-                   [0,np.cos(Omega*t/2),-1j*np.sin(Omega*t/2),0],
-                   [0,-1j*np.sin(Omega*t/2),np.cos(Omega*t/2),0],
-                   [-1j*np.sin(Omega*t/2),0,0,np.cos(Omega*t/2)]])
+    ms = np.array(
+        [
+            [np.cos(Omega * t / 2), 0, 0, -1j * np.sin(Omega * t / 2)],
+            [0, np.cos(Omega * t / 2), -1j * np.sin(Omega * t / 2), 0],
+            [0, -1j * np.sin(Omega * t / 2), np.cos(Omega * t / 2), 0],
+            [-1j * np.sin(Omega * t / 2), 0, 0, np.cos(Omega * t / 2)],
+        ]
+    )
     return ms
 
 
 ##############################################################################
-# The Mølmer-Sørensen gate is not the sought-for CNOT gate, but can we
-# use it to obtain it? Indeed, it is possible by using a combination of
-# single-qubit rotations and the two lasers applied for a period of
-# :math:`t=\pi/2\Omega`. Explicitly, the CNOT is obtained using the
+# Since the CNOT gate is commonly used in quantum algorithms, let us
+# derive how to obtain it from the Mølmer-Sørensen gate.
+# It is possible to obtain the CNOT gate by using a combination of
+# single-qubit rotations and the Mølmer-Sørensen gate applied for a period of
+# :math:`t=\pi/2\Omega_{MS}`. Explicitly, we do this using the
 # following circuit [#Brown2019]_:
-# 
+#
 # .. figure:: ../demonstrations/trapped_ions/CNOTgate.png
 #    :align: center
 #    :width: 100%
 #
 #    ..
-#    
+#
 #    Circuit for the CNOT gate using rotations and an MS gate
 #
-# where :math:`RX` and :math:`RY` are rotations over around the X and Y
-# axes, and :math:`MS(\pi/2)` is the Mølmer-Sørensen gate applied got a
-# time :math:`t=\pi/2\Omega`. Let us verify that this is indeed the case
+# where :math:`RX` and :math:`RY` are the usual rotations around the X and Y
+# axes, and :math:`MS(t)` denotes the Mølmer-Sørensen gate applied for a
+# time :math:`t/\Omega_{MS}`. Let us verify that this is indeed the case
 # by building the circuit in PennyLane:
 
-dev = qml.device("default.qubit",wires=2)
+dev2 = qml.device("default.qubit", wires=2)
 
-@qml.qnode(dev)
-def ion_cnot(st):
-    
-    if st[0] == 1:
-        qml.PauliX(wires=0)
-    if st[1] == 1:
-        qml.PauliX(wires=1)
-        
-    qml.RY(np.pi/2, wires=0)
-    qml.QubitUnitary(Molmer_Sorensen(np.pi/2/Omega),wires=[0,1])
-    qml.RX(-np.pi/2, wires=0)
-    qml.RX(-np.pi/2, wires=1)
-    qml.RY(-np.pi/2, wires=0)
-    
+
+@qml.qnode(dev2)
+def ion_cnot(basis_state):
+
+    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+
+    qml.RY(np.pi / 2, wires=0)
+    qml.QubitUnitary(Molmer_Sorensen(np.pi / 2 / Omega), wires=[0, 1])
+    qml.RX(-np.pi / 2, wires=0)
+    qml.RX(-np.pi / 2, wires=1)
+    qml.RY(-np.pi / 2, wires=0)
+
     return qml.state()
-    
-print(np.exp(-1j*np.pi/4)*ion_cnot([0,0]))   
-print(np.exp(-1j*np.pi/4)*ion_cnot([0,1]))
-print(np.exp(-1j*np.pi/4)*ion_cnot([1,0]))   
-print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
+
+
+print(np.exp(-1j * np.pi / 4) * ion_cnot([0, 0]))
+print(np.exp(-1j * np.pi / 4) * ion_cnot([0, 1]))
+print(np.exp(-1j * np.pi / 4) * ion_cnot([1, 0]))
+print(np.exp(-1j * np.pi / 4) * ion_cnot([1, 1]))
 
 ##############################################################################
+# This is indeed the CNOT gate, up to a global phase.
 # At sufficiently low temperatures, the Rabi frequency :math:`\Omega_{MS}`
 # does not depend on the initial harmonic oscillator state, so this method
 # can be used reliably even when we fail to cool down the ion chain
 # completely. This property also makes this gate more robust to the
 # decoherence of the chain.
-# 
+#
 # The problem with too many ions
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # We have learned that the trapped ion paradigm allows us to prepare and
 # measure individual qubits, and that we can implement single and
 # multi-qubit gates with high accuracy. What's not to like? As in every
@@ -842,7 +850,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # implementations of quantum computers is scalability. The root of the
 # problem and the technological challenges involved depend on our
 # particular framework.
-# 
+#
 # To understand why scalability is a problem for trapped ions, let us
 # consider a long ion chain. As discussed in the previous section, to
 # implement multi-qubit gates, we need to lean on the harmonic oscillator
@@ -854,7 +862,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # our laser frequencies, we may end up in the wrong quantum state. We do
 # not have infinite precision, so when the number of ions becomes close to
 # 100, our current gate technology becomes practically unusable.
-# 
+#
 # Is there a way to make the frequency values more spread out? One way is
 # to reduce the Rabi frequency of the Mølmer-Sørensen gate, which we
 # control by changing the strength of the laser light. Disappointingly,
@@ -864,7 +872,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # applying multi-qubit gates since the motional states of the chain are
 # extremely sensitive to decoherence. We cannot afford to have even slower
 # gates.
-# 
+#
 # Which of the DiVincenzo criteria do trapped ions quantum computers still
 # fail to meet? Criterion 1 is only met partially: we do have robust
 # qubits, but there seems to be a hard technological limit for
@@ -879,17 +887,17 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # challenging to implement consecutive good-quality two-qubit gates
 # between different ion species: strategies like the Mølmer-Sørensen
 # gate will not work and need modification.
-# 
+#
 # The state of the art
 # ~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # Of course, no matter how insurmountable these challenges seem to be,
 # physicists will not give up. Many ingenious ways to address these
 # technical complications have already been proposed. Not surprisingly, it
 # is one of the hottest research topics in quantum computing, and papers
 # with newer technologies have probably been published since this tutorial
 # was written.
-# 
+#
 # The main issue discussed above is that a long ion chain is noisy and
 # makes qubits challenging to manipulate. In 2002, Kielpinski and
 # collaborators [#QCCD2002]_ came up with an intelligent solution: if the size is a
@@ -903,13 +911,13 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # entangle qubits is not long. This method makes the motional states less
 # prone to decoherence. The phonon frequencies are also sufficiently
 # spread apart so that the gates can be implemented.
-# 
+#
 # .. figure:: ../demonstrations/trapped_ions/qccd.png
 #    :align: center
 #    :width: 60%
 #
 #    ..
-#    
+#
 #    Example of a proposed QCCD architecture, as in [#Amini2010]_
 #
 # QCCD architectures sound like a straightforward solution, but seeing as
@@ -925,7 +933,7 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # multi-segment QCCD architecture with six qubits and two interaction
 # zones [#Pino2021]_. However, it is unclear how this proposed technology would scale
 # to higher orders of magnitude.
-# 
+#
 # Another path towards a solution would be to simply accept the short
 # coherence times of the ion chains, and try to make the two-qubit gates
 # faster. Such an approach is being followed by the startup IonQ. In
@@ -935,11 +943,18 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # grows. However, a combination of approaches involving QCCDs and
 # faster gates may yield the solution to the scalability problem in the
 # future.
-# 
+#
+# .. note::
+#
+#    There is another proposed solution to apply two-qubit gates efficiently, which
+#    involves connecting the ions with photons. Using polarization state
+#    measurements, we can also entangle electronic states [#Monroe2014]_. This technology
+#    is still in the earlier stages of development.
+#
 # Implementing multi-qubit gates is not the only problem for
 # trapped-ion quantum computers. There is still much to do to improve the
 # precision of measurements, for example. Most of the photons emitted by
-# ions during a measurement are lost, so it would be good to find ways to 
+# ions during a measurement are lost, so it would be good to find ways to
 # direct more of them to the detector. One can do this using a waveguide architecture inside
 # the trap. Similarly, as the number of ions grows, the number of laser
 # beams we need does as well [#Niffenegger2020]_. Again, waveguides can also be used to
@@ -949,23 +964,23 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 #
 # Concluding Remarks
 # ~~~~~~~~~~~~~~~~~~
-# 
+#
 # Ion trapping is currently one of the most widespread physical implementations
 # of quantum computers, both in academia and in industry. Their popularity comes
 # as no surprise, since the physical principles that make the paradigm work are
-# simple enough, and the necessary technology is already well-developed. 
-# Granted, there are challenging technical difficulties to scale these quantum 
-# computers further. However, viable solutions have been proposed, and many 
-# institutions around the world are working non-stop to make them a reality. 
-# Moreover, what could be considered simple prototypes of such technologies have 
-# already proven extremely powerful. The big unknown is whether such devices can scale as much as we 
-# would like them to. It would we unwise to give up only because the challenge is 
-# imposing. After all, personal computers were the fruit of hard work and 
-# inventiveness, and very few people were able to predict that they would scale 
-# as much as they have. We hope to have drawn your attention to these latest 
-# developments in quantum computing. Make sure to check our future demos on 
-# superconducting qubits and photonics to learn more about the latest quantum
-# computing technologies!
+# simple enough, and the necessary technology is already well-developed.
+# Granted, there are challenging technical difficulties to scale these quantum
+# computers further. However, viable solutions have been proposed, and many
+# institutions around the world are working non-stop to make them a reality.
+# Moreover, what could be considered simple prototypes of such technologies have
+# already proven extremely powerful. The big unknown is whether such devices can scale as much as we
+# would like them to. It would we unwise to give up only because the challenge is
+# imposing. After all, personal computers were the fruit of hard work and
+# inventiveness, and very few people were able to predict that they would scale
+# as much as they have. Now you possess a high-level knowledge of how trapped
+# ion computers work! Make sure to read any new papers that come out
+# to keep updated on new developments. Will the trapped ion framework
+# emerge victorious in this race to obtain a useful quantum computer? Only time will tell!
 #
 # References
 # ----------
@@ -983,13 +998,13 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 #     RZeitschrift für Naturforschung A 8 (7): 448-450.
 #
 # .. [#CiracZoller]
-#     
-#     J. Cirac, P. Zoller. (1995) "Quantum Computations with Cold Trapped Ions". 
+#
+#     J. Cirac, P. Zoller. (1995) "Quantum Computations with Cold Trapped Ions".
 #     Physical Review Letters 74 (20): 4091–4094.
 #
 # .. [#Malinowski]
-#     
-#     M. Malinowski. (2021) "Unitary and Dissipative Trapped-​Ion Entanglement Using 
+#
+#     M. Malinowski. (2021) "Unitary and Dissipative Trapped-​Ion Entanglement Using
 #     Integrated Optics". PhD Thesis retrieved from `ETH thesis repository
 #     <https://ethz.ch/content/dam/ethz/special-interest/phys/quantum-electronics/tiqi-dam/documents/phd_theses/Thesis-Maciej-Malinowski>`__.
 #
@@ -1009,33 +1024,41 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 # .. [#Bergou2021]
 #
 #     J. Bergou, M. Hillery, and M. Saffman. (2021) "Quantum Information Processing",
-#     Springer. 
+#     Springer.
 #
 # .. [#Molmer1999]
 #
-#     A. Sørensen, K. Mølmer.  (1999) "Multi-particle entanglement of hot trapped ions", 
+#     A. Sørensen, K. Mølmer.  (1999) "Multi-particle entanglement of hot trapped ions",
 #     `Physical Review Letters. 82 (9): 1835–1838
 #     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.82.1835>`__.
 #     (`arXiv <https://arxiv.org/abs/quant-ph/9810040>`__)
 #
 # .. [#Brown2019]
 #
-#     M. Brown, M. Newman, and K. Brown. (2019)  
+#     M. Brown, M. Newman, and K. Brown. (2019)
 #     "Handling leakage with subsystem codes",
 #     `New J. Phys. 21 073055
 #     <https://iopscience.iop.org/article/10.1088/1367-2630/ab3372>`__.
 #     (`arXiv <https://arxiv.org/abs/1903.03937>`__)
 #
+# .. [#Monroe2014]
+#
+#     C. Monroe, R. Ruassendorf, A Ruthven, et al. (2019)
+#     "Large scale modular quantum computer architecture with atomic memory and photonic interconnects",
+#     `Phys. Rev. A 89 022317
+#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.89.022317>`__.
+#     (`arXiv <https://arxiv.org/abs/1208.0391>`__)
+#
 # .. [#QCCD2002]
 #
-#     D. Kielpinski, C. Monroe, and D. Wineland. (2002) 
-#     "Architecture for a large-scale ion-trap quantum computer", 
+#     D. Kielpinski, C. Monroe, and D. Wineland. (2002)
+#     "Architecture for a large-scale ion-trap quantum computer",
 #     `Nature 417, 709–711 (2002).
 #     <https://www.nature.com/articles/nature00784>`__.
 #
 # .. [#Amini2010]
 #
-#     J. Amini, H. Uys, J. Wesenberg, et al. (2010)  
+#     J. Amini, H. Uys, J. Wesenberg, et al. (2010)
 #     "Toward scalable ion traps for quantum information processing",
 #     `New J. Phys 12 033031
 #     <https://iopscience.iop.org/article/10.1088/1367-2630/12/3/033031/meta>`__.
@@ -1044,8 +1067,8 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 #
 # .. [#Pino2021]
 #
-#     J. Pino, J. Dreiling, J, C, Figgatt, et al. (2021) 
-#     "Demonstration of the trapped-ion quantum CCD computer architecture". 
+#     J. Pino, J. Dreiling, J, C, Figgatt, et al. (2021)
+#     "Demonstration of the trapped-ion quantum CCD computer architecture".
 #     `Nature 592, 209–213
 #     <https://www.nature.com/articles/s41586-021-03318-4>`__.
 #     (`arXiv <https://arxiv.org/abs/2003.01293>`__)
@@ -1065,6 +1088,3 @@ print(np.exp(-1j*np.pi/4)*ion_cnot([1,1]))
 #     `Nature volume 586, pages538–542
 #     <https://www.nature.com/articles/s41586-020-2811-x>`__.
 #     (`arXiv <https://arxiv.org/abs/2001.05052>`__)
-
-
-
