@@ -88,6 +88,11 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
 
+.. customgalleryitem::
+    :tooltip: A quantum carnival special
+    :figure: demonstrations/tkt/pinata.png
+    :description: :doc:`demos/tutorial_tkt`
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -107,3 +112,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_state_preparation
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_tkt
