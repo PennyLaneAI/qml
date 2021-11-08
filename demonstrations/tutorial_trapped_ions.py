@@ -390,8 +390,8 @@ and read future papers to keep up-to-date with the most recent developments.
 # elaborate on how matrix exponentials are calculated, since we can
 # implement them using the scipy library in Python. Let us see how our
 # basis states :math:`\left\lvert g \right\rangle` and
-# :math:`\left\lvert e \right\rangle` (:math:`\left\lvert g \right\rangle` and
-# :math:`\left\lvert e \right\rangle` in PennyLane) evolve under the action of this
+# :math:`\left\lvert e \right\rangle` (:math:`\left\lvert 0 \right\rangle` and
+# :math:`\left\lvert 1 \right\rangle` in PennyLane) evolve under the action of this
 # Hamiltonian. First, we write a function that returns the matrix exponential
 # :math:`\exp(-i \hat{H} t/\hbar)` as a function of :math:`\varphi` and the
 # duration :math:`t` of the pulse, with :math:`\Omega` set to 100 kHz.
@@ -624,7 +624,7 @@ plt.show()
 # .. math:: \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert n-1\right\rangle.
 #
 # Crucially, this frequency will do nothing if the ion chain is in the
-# state of zero energy. This one seems counterintuitive
+# state of zero energy.
 # If the light frequency is exactly :math:`\Delta`,
 # the ion chain does not absorb any phonons, but the ion does become
 # excited. We will call this a **carrier** transition.
@@ -753,7 +753,7 @@ plt.show()
 # :math:`\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle`.
 # For example, we can obtain the state
 # :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle\left\lvert n \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle\right)`
-# to obtain the maximally entangled state
+# which, in the two-ion subsystem, corresponds to the maximally entangled state
 # :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\right)`.
 # Using Schrödinger's equation allows us to derive how the qubits evolve
 # when we apply the Mølmer-Sørensen protocol for a time :math:`t`. The
@@ -787,7 +787,7 @@ def Molmer_Sorensen(t):
 ##############################################################################
 # Since the CNOT gate is commonly used in quantum algorithms, let us
 # determine how to obtain it from the Mølmer-Sørensen gate.
-# It is possible to obtain the CNOT gate by using a combination of
+# It is possible to do so by using a combination of
 # single-qubit rotations and the Mølmer-Sørensen gate applied for a period of
 # :math:`t=\pi/2\Omega_{MS}`. Explicitly, we do this using the
 # following circuit [#Brown2019]_:
