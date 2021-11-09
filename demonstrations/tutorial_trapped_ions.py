@@ -10,7 +10,7 @@ Trapped ion quantum computers
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
 
-*Author: PennyLane dev team. Posted: XX November 2021. Last updated: 05 November 2021.*
+*Author: PennyLane dev team. Posted: 10 November 2021. Last updated: 10 November 2021.*
 
 The race for quantum advantage is on! 
 A host of competitors are using different technologies to build a useful quantum
