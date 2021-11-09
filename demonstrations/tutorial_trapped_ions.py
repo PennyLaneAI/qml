@@ -571,9 +571,9 @@ plt.show()
 # The ion chain as a harmonic oscillator
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# To address the second part of the fourth criterion, we need to create
-# gates on at least two qubits. How can we
-# create such a gate between ions? It turns out that placing ions in a
+# To fully address the fourth criterion, we need to create
+# gates on two qubits. How can we
+# achieve this? It turns out that placing ions in a
 # chain is ideal for multiple-qubit gate implementations. When cooled
 # down, the entire ion chain acts as a **quantum harmonic oscillator**,
 # meaning that it can vibrate with energies that are multiples of Planck's
@@ -885,7 +885,7 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 # qubits, but there seems to be a hard technological limit for
 # scalability. Criterion 3 also becomes an issue when the ion chain is too
 # long since coherence times for motional states become shorter. The
-# second part of criterion 4 is related to this decoherence problem since
+# two-qubit requirement of criterion 4 is related to this decoherence problem since
 # multi-qubit gates can take too long to implement accurately in a long
 # ion chain. Criterion 2, as already discussed, does not present too much
 # of a problem thanks to optical pumping technology. However, problems remain for criterion 5.
@@ -988,6 +988,17 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 # ion computers work! Make sure to read any new papers that come out
 # to keep updated on new developments. Will the trapped ion framework
 # emerge victorious in this race to obtain a useful quantum computer? Only time will tell!
+#
+# Congratulations on reaching the end of this demo! Enjoy this #QuantumCarnival 
+# ticket and keep participating in the celebrations.
+#
+# If you're not yet participating in the carnival go to our 
+# `carnival website <https://pennylane.ai/carnival/>`_ and check it out! 
+#
+# .. image:: ../demonstrations/trapped_ions/trapped-ions-tkt.png
+#    :width: 300px
+#    :align: center
+#    :target: https://pennylane.ai/carnival/
 #
 # References
 # ----------
