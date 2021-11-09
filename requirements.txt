@@ -11,11 +11,11 @@ sympy==1.6.2
 pillow==7.1.0
 pip==20.1
 pyscf==1.7.6
-pennylane==0.18.0
-pennylane-qchem==0.17.0
-pennylane-sf==0.16.0
+pennylane==0.19.0
+pennylane-qchem==0.19.0
+pennylane-sf==0.19.0
 pennylane-forest==0.17.0
-pennylane-cirq==0.17.0
+pennylane-cirq==0.19.0
 pennylane-qiskit==0.18.0
 qulacs==0.1.10.1
 pennylane-qulacs==0.16.0

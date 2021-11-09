@@ -118,7 +118,7 @@ def layer(theta, phi, wires):
     M = len(wires)
     phi_nonlinear = np.pi / 2
 
-    qml.templates.Interferometer(
+    qml.Interferometer(
         theta, phi, np.zeros(M), wires=wires, mesh="triangular",
     )
 
@@ -285,7 +285,7 @@ M = len(X[0])
 num_variables_per_layer = M * (M - 1)
 
 rng = np.random.default_rng(seed=1234)
-var_init = (4 * rng.random(size=(num_layers, num_variables_per_layer)) - 2) * np.pi
+var_init = (4 * rng.random(size=(num_layers, num_variables_per_layer), requires_grad=True) - 2) * np.pi
 print(var_init)
 
 ##############################################################################
@@ -321,7 +321,9 @@ def cost_wrapper(var, grad=[]):
 
     if grad.size > 0:
         # Get the gradient for `var` by first "unflattening" it
-        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)
+        var = var.reshape((num_layers, num_variables_per_layer))
+        var = np.array(var, requires_grad=True)
+        var_grad = cost_grad(var, X, Y)
         grad[:] = var_grad.flatten()
     cost_val = cost(var.reshape((num_layers, num_variables_per_layer)), X, Y)
 

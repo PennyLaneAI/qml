@@ -143,7 +143,6 @@ dev = qml.device("cirq.mixedsimulator", wires=3, shots=1000)
 from pennylane_cirq import ops as cirq_ops
 
 
-@qml.template
 def encoding(phi, gamma):
     for i in range(3):
         qml.RZ(phi[i], wires=[i])
@@ -156,16 +155,14 @@ def encoding(phi, gamma):
 # we make use of the
 # `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_
 # template from PennyLane.
-@qml.template
 def ansatz(weights):
-    qml.templates.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
+    qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
 NUM_ANSATZ_PARAMETERS = 14
 
-@qml.template
 def measurement(weights):
     for i in range(3):
-        qml.templates.ArbitraryStatePreparation(
+        qml.ArbitraryStatePreparation(
             weights[2 * i : 2 * (i + 1)], wires=[i]
         )
 

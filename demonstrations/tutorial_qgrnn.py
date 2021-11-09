@@ -196,7 +196,7 @@ The Quantum Graph Recurrent Neural Network
 
 import pennylane as qml
 from matplotlib import pyplot as plt
-import numpy as np
+from pennylane import numpy as np
 import scipy
 import networkx as nx
 import copy
@@ -563,8 +563,8 @@ steps = 300
 
 optimizer = qml.AdamOptimizer(stepsize=0.5)
 
-weights = rng.random(size=len(new_ising_graph.edges)) - 0.5
-bias = rng.random(size=qubit_number) - 0.5
+weights = rng.random(size=len(new_ising_graph.edges), requires_grad=True) - 0.5
+bias = rng.random(size=qubit_number, requires_grad=True) - 0.5
 
 initial_weights = copy.copy(weights)
 initial_bias = copy.copy(bias)
