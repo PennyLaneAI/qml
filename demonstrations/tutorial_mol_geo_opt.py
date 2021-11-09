@@ -100,7 +100,7 @@ set of nuclear coordinates in `atomic units
 
 """
 
-import numpy as np
+from pennylane import numpy as np
 
 symbols = ["H", "H", "H"]
 x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
@@ -274,7 +274,7 @@ opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
 # is the Hartree-Fock state.
 
-theta = [0.0, 0.0]
+theta = np.array([0.0, 0.0], requires_grad=True)
 
 ##############################################################################
 # The initial set of nuclear coordinates :math:`x`, defined at

@@ -238,7 +238,7 @@ def single_rotation(phi_params, qubits):
 
     rotations = ["Z", "Y", "X"]
     for i in range(0, len(rotations)):
-        qml.templates.AngleEmbedding(phi_params[i], wires=qubits, rotation=rotations[i])
+        qml.AngleEmbedding(phi_params[i], wires=qubits, rotation=rotations[i])
 
 
 ######################################################################
@@ -257,7 +257,7 @@ dev = qml.device("default.qubit", wires=nr_qubits)
 def quantum_circuit(rotation_params, coupling_params, sample=None):
 
     # Prepares the initial basis state corresponding to the sample
-    qml.templates.BasisStatePreparation(sample, wires=range(nr_qubits))
+    qml.BasisStatePreparation(sample, wires=range(nr_qubits))
 
     # Prepares the variational ansatz for the circuit
     for i in range(0, depth):

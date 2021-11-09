@@ -279,7 +279,7 @@ plot_surface(local_surface)
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
-rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))])
+rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_global = rotations
@@ -300,7 +300,7 @@ print(qml.draw(global_circuit)(params_global))
 # function and see how it performs.
 #
 
-rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]])
+rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_local = rotations
@@ -436,10 +436,9 @@ global_circuit = qml.QNode(global_cost_simple, dev)
 for runs in range(samples):
     print("--- New run! ---")
     has_been_trained = False
-    params_global = [
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-    ]
+
+    params_global = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
+
     for i in range(steps):
         # update the circuit parameters
         params_global = opt.step(cost_global, params_global)
@@ -471,10 +470,8 @@ for runs in range(samples):
     locality = 1
     print("--- New run! ---")
     has_been_trained = False
-    params_tunable = [
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-    ]
+
+    params_tunable = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
     for i in range(steps):
         # update the circuit parameters
         params_tunable = opt.step(cost_tunable, params_tunable)

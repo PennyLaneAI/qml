@@ -49,7 +49,7 @@ with the symbols of the constituent atoms and a one-dimensional array with the c
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
 
-import numpy as np
+from pennylane import numpy as np
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -156,7 +156,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, hf, singles, doubles)
+    qml.AllSinglesDoubles(params, wires, hf, singles, doubles)
 
 
 ##############################################################################
@@ -225,7 +225,7 @@ def total_spin(params):
 
 opt = qml.GradientDescentOptimizer(stepsize=0.8)
 np.random.seed(0)  # for reproducibility
-theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
+theta = np.random.normal(0, np.pi, len(singles) + len(doubles), requires_grad=True)
 print(theta)
 
 ##############################################################################
@@ -278,7 +278,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
+    qml.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
 
 
 ##############################################################################
@@ -314,7 +314,7 @@ def S2_exp_value(params):
 # optimize the variational circuit.
 
 np.random.seed(0)
-theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
+theta = np.random.normal(0, np.pi, len(singles) + len(doubles), requires_grad=True)
 
 max_iterations = 100
 conv_tol = 1e-06
