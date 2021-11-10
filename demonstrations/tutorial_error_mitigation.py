@@ -9,12 +9,6 @@ Error mitigation with Mitiq and PennyLane
 
 *Author: Mitiq and PennyLane dev teams. Last updated: 10 November 2021*
 
-.. figure:: ../demonstrations/error_mitigation/laptop.png
-    :align: center
-    :scale: 55%
-    :alt: Mitiq and PennyLane
-    :target: javascript:void(0);
-
 Have you ever run a circuit on quantum hardware and not quite got the result you were expecting?
 If so, welcome to the world of noisy intermediate scale quantum (NISQ) devices! These devices must
 function in noisy environments and are unable to execute quantum circuits perfectly, resulting in
@@ -32,5 +26,11 @@ of Mitiq, which can be installed using
 .. code-block:: bash
 
     pip install "mitiq>=0.11"
+
+.. figure:: ../demonstrations/error_mitigation/laptop.png
+    :align: center
+    :scale: 55%
+    :alt: Mitiq and PennyLane
+    :target: javascript:void(0);
 
 """
