@@ -6,7 +6,7 @@ Adjoint Differentiation
 =======================
 
 .. meta::
-    :property="og:description": Learn how the adjoint differentation method works.
+    :property="og:description": Learn how the adjoint differentiation method works.
     :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
 
 """
@@ -66,6 +66,7 @@ from pennylane import numpy as np
 
 ##############################################################################
 # We also need a circuit to simulate:
+#
 
 dev = qml.device('default.qubit', wires=2)
 
@@ -82,7 +83,8 @@ def circuit(a):
 ##############################################################################
 # The fast c++ simulator device ``"lightning.qubit"`` also supports adjoint differentiation,
 # but here we want to quickly prototype a minimal version to illustrate how the algorithm works,
-# not understand how to optimize the code for performance.
+# not understand how to optimize the code for performance. We recommend performing
+# adjoint differentiation on ``"lightning.qubit"`` for substantial performance increases.
 #
 # We will use the ``circuit`` QNode just for comparison purposes.  Thoughout this
 # demo, we will instead use a list of its operations ``ops`` and a single observable ``M``.
@@ -390,113 +392,42 @@ def circuit_adjoint(a):
 qml.grad(circuit_adjoint)(x)
 
 ##############################################################################
-# Time Scaling
+# Performance
 # --------------
 #
-# In this section, I've deliberately used the same timing framework as the
-# `backpropogation tutorial <https://pennylane.ai/qml/demos/tutorial_backprop.html#time-comparison>`__.
-# Though I don't repeat that data here, you can compare the graphs.
-# 
-# For this section, we need two additional packages: ``timeit`` and ``pyplot``.
+# The algorithm gives us the correct answers, but is it worth using? Parameter-shift
+# gradients require at least two execution per parameter, so that method gets more
+# and more expensive the bigger the circuits are, especially on simulators. 
+# Backpropogation also demonstrates decent time scaling, but requires more and more 
+# memory as the circuit gets larger.  Simulation of large circuits is already 
+# RAM limited, and backpropogation constrains the size of possible circuits even more.
+# PennyLane also achieves backpropogation derivatives from a Python simulator and
+# interface-specific functions. ``"lightning.qubit"`` therefore does not support this method
+# of differentiation.
 #
-# To determine scaling, we will instead use ``"lightning.qubit"```, our fast c++ simulator
-# that natively supports adjoint differentiation. 
+# With adjoint differentiation on Lightning, you can get the best of both worlds: fast and 
+# memory efficient.
 #
-# .. code-block:: python
-# 
-#       import timeit
-#       import matplotlib.pyplot as plt
-#       import pennylane as qml
-#       from pennylane import numpy as np
-#       plt.style.use("bmh")
+# But how fast? The provided script `here <https://pennylane.ai/qml/demos/adjoint_diff_benchmarking.py>`__ 
+# generated the following images on a mid-range laptop.
 #
-#       n_wires = 4
-#
-#       dev = qml.device("lightning.qubit", wires=n_wires)
-#
-#       @qml.qnode(dev, diff_method="adjoint")
-#       def circuit(params):
-#           qml.templates.StronglyEntanglingLayers(params, wires=range(n_wires))
-#           return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
-#
-#
-#       reps = 2
-#       num = 3
-#
-#       n_layers = range(1, 21)
-#
-#       t_exec = []
-#       t_grad = []
-#       ratio = []
-#       n_params = []
-#   
-#       rng = np.random.default_rng(seed=42)
-#   
-#       for i_layers in n_layers:
-#           
-#           # set up the parameters
-#           param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=n_wires, n_layers=i_layers)
-#           params = rng.standard_normal(param_shape)
-#           params.requires_grad = True
-#           n_params.append(params.size)
-#           
-#           
-#           ti_exec_set = timeit.repeat("circuit(params)",
-#               globals=globals(), number=num, repeat=reps)
-#           ti_exec = min(ti_exec_set)/num
-#           t_exec.append(ti_exec)
-#           
-#           ti_grad_set = timeit.repeat("qml.grad(circuit)(params)",
-#               globals=globals(), number=num, repeat=reps)
-#           ti_grad = min(ti_grad_set)/num
-#           t_grad.append(ti_grad)
-#           
-#           ratio.append(ti_grad/ti_exec)
-#   
-#       fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-#   
-#       ax.plot(n_params, t_exec, '.-', label="circuit execution")
-#       ax.plot(n_params, t_grad, '.-', label="gradient")
-#   
-#       ax.legend()
-#   
-#       ax.set_xlabel("Number of parameters")
-#       ax.set_ylabel("Time")
-#       fig.suptitle("")
-#   
-#       plt.show()
-#   
-#       n_params = np.array(n_params)
-#   
-#       m, b = np.polyfit(n_params, ratio, deg=1)
-#       ratio_fit = lambda x: m*x+b
-#   
-#       fig2, ax2 = plt.subplots(1, 1, figsize=(6, 4))
-#   
-#       ax2.plot(n_params, ratio, '.-', label="ratio")
-#       ax2.plot(n_params, ratio_fit(n_params), label=f"{m:.3f}*x + {b:.2f}")
-#   
-#       fig2.suptitle("Gradient time per execution time")
-#       ax2.set_xlabel("number of parameters")
-#       ax2.set_ylabel("Normalized Time")
-#       ax2.legend()
-#   
-#       plt.show()
-#   
-#
-# .. figure:: ../demonstrations/adjoint_diff/adjoint_timing1.png
+# .. figure:: ../demonstrations/adjoint_diff/layers_scaling.png
 #     :width: 50%
 #     :align: center
 #
-# .. figure:: ../demonstrations/adjoint_diff/adjoint_timing2.png
+# .. figure:: ../demonstrations/adjoint_diff/wires_scaling.png
 #     :width: 50%
 #     :align: center
 #
-# Just like backpropagation, adjoint is roughly a constant factor longer than straight execution times.
-# BUT, the adjoint method has a constant memory overhead. Backpropagation balloons in memory, which is
-# already a limiting factor in quantum computation even before you start taking derivatives.  You can
-# always run a simulation for twice as long; much harder to double your available RAM. 
+# Conclusions
+# -----------
 # 
+# So what have we learned? Adjoint differentiation is an efficient method for differentiating
+# quantum circuits with a statevector simulation.  It scales nicely in time without 
+# excessive memory requirements. Now that you've seen how the algorithm works, you can
+# better understand what is happening when you select adjoint differentiation from one
+# of PennyLane's simulators.
+#
 #
 # Bibliography
 # -------------

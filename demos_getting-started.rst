@@ -30,7 +30,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 
 .. customgalleryitem::
     :tooltip: Learn how adjoint differentiation works
-    :figure: demonstrations/tutorial_backprop_thumbnail.png
+    :figure: demonstrations/adjoint_diff/icon.png
     :description: :doc:`demos/tutorial_adjoint_diff`
     :tags: 
 
