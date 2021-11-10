@@ -1,3 +1,13 @@
+- title: Hybrid Neural Network using Data-Reuploading technique
+  author: Nikolaos Schetakis (nikschet)
+  date: 11/04/2021
+  code: https://github.com/nsansen/Quantum-Machine-Learning/blob/main/Pennylane%20DEMO%20v2.ipynb
+  paper: https://arxiv.org/pdf/2111.03372.pdf
+  color: heavy-rain-gradient
+  description: |
+    By combining a standard Variational Classifier (VC) with a Data-Reuploading Classifier (DRC) 
+    we create a new Qnode which is then used as a quantum layer in a Hybrid Neural Network.
+
 - title: Fraud Detection
   author: Sophie Choe
   date: 10/04/2021
