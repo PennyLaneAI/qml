@@ -20,7 +20,7 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v29c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v29c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
             - pip-v29c-{{ .Branch }}-
             - pip-v29c-
 
@@ -32,11 +32,12 @@ jobs:
             . venv/bin/activate
             pip install pip setuptools --upgrade
             pip install -r requirements.txt
+            pip install --no-deps -r requirements_no_deps.txt
 
       - save_cache:
           paths:
             - venv
-          key: pip-v29c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v29c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
 
       - restore_cache:
           keys:
@@ -103,6 +104,7 @@ jobs:
             . venv/bin/activate
             pip install pip setuptools --upgrade
             pip install -r requirements.txt
+            pip install --no-deps -r requirements_no_deps.txt
 
       - run:
           name: Build tutorials
