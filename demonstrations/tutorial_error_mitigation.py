@@ -19,7 +19,18 @@ error *mitigation*, which aims to minimize the effects of noise by executing a f
 circuits and using the results to estimate an error-free value.
 
 This demo shows how error mitigation can be carried out by combining PennyLane with the
-`Mitiq <https://github.com/unitaryfund/mitiq>`__ package, which is a Python-based library providing
-a range of error mitigation techniques.
+`Mitiq <https://github.com/unitaryfund/mitiq>`__ package, a Python-based library providing a range
+of error mitigation techniques. Integration with PennyLane is available from the ``0.11`` version
+of Mitiq, which can be installed using
+
+.. code-block:: bash
+
+    pip install "mitiq>=0.11"
+
+.. figure:: error_mitigation/laptop.png
+    :align: center
+    :scale: 75%
+    :alt: Mitiq and PennyLane
+    :target: javascript:void(0);
 
 """
