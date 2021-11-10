@@ -27,7 +27,7 @@ of Mitiq, which can be installed using
 
     pip install "mitiq>=0.11"
 
-.. figure:: error_mitigation/laptop.png
+.. figure:: ../demonstrations/error_mitigation/laptop.png
     :align: center
     :scale: 75%
     :alt: Mitiq and PennyLane
