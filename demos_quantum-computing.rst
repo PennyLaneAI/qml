@@ -60,6 +60,11 @@ such as benchmarking and characterizing quantum processors.
    :description: :doc:`demos/tutorial_gbs`
    :tags: photonics strawberryfields
 
+.. customgalleryitem::
+    :tooltip: Quantum computing using trapped ions
+    :figure: demonstrations/trapped_ions/trapped_ions_tn.png
+    :description: :doc:`demos/tutorial_trapped_ions`
+    :tags: quantumcomputing
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -73,3 +78,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_pasqal
     demos/qsim_beyond_classical
     demos/tutorial_gbs
+    demos/tutorial_trapped_ions
+	
