@@ -148,7 +148,7 @@ doubles_select
 
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
-params_doubles = [0.0] * len(doubles_select)
+params_doubles = np.zeros(len(doubles_select), requires_grad=True)
 
 for n in range(20):
     params_doubles = opt.step(cost_fn, params_doubles, excitations=doubles_select)
@@ -213,7 +213,7 @@ singles_select
 
 cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
 
-params = [0.0] * len(doubles_select + singles_select)
+params = np.zeros(len(doubles_select + singles_select), requires_grad=True)
 
 gates_select = doubles_select + singles_select
 
@@ -259,8 +259,8 @@ H_sparse
 opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
 excitations = doubles_select + singles_select
-params = [0.0] * len(excitations)
 
+params = np.zeros(len(excitations), requires_grad=True)
 
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):

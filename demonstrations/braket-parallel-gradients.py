@@ -365,7 +365,7 @@ optimizer = qml.AdagradOptimizer(stepsize=0.1)
 import time
 
 np.random.seed(1967)
-params = 0.01 * np.random.uniform(size=[2, n_layers])
+params = 0.01 * np.random.uniform(size=[2, n_layers], requires_grad=True)
 iterations = 10
 
 for i in range(iterations):

@@ -106,7 +106,7 @@ hf = qml.qchem.hf_state(electrons=2, orbitals=4)
 # the equilibrium bond length, and the point where the bond is broken, which occurs when the atoms
 # are far away from each other.
 
-import numpy as np
+from pennylane import numpy as np
 
 # atomic symbols defining the molecule
 symbols = ['H', 'H']
@@ -146,7 +146,7 @@ for r in r_range:
         return qml.expval(H)  # we are interested in minimizing this expectation value
 
     # initialize the gate parameters
-    params = np.zeros(3)
+    params = np.zeros(3, requires_grad=True)
 
     # initialize with converged parameters from previous point
     if pes_point > 0:
@@ -293,7 +293,7 @@ for r in r_range:
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value
 
-    params = np.zeros(len(singles) + len(doubles))
+    params = np.zeros(len(singles) + len(doubles), requires_grad=True)
 
     if pes_point > 0:
         params = params_old

@@ -209,7 +209,7 @@ def rotosolve_cycle(cost, params):
 # gates in the ansatz circuit structure and perform an optimization using the
 # Rotosolve algorithm.
 
-init_params = [0.3, 0.25]
+init_params = np.array([0.3, 0.25], requires_grad=True)
 params_rsol = init_params.copy()
 n_steps = 30
 
