@@ -1,6 +1,7 @@
 --find-links https://download.pytorch.org/whl/torch_stable.html
 appdirs==1.4.4
 autograd==1.3
+mitiq==0.11.0
 numpy==1.19.2
 numba==0.53.1
 networkx==2.5.1
