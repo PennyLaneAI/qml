@@ -397,27 +397,26 @@ qml.grad(circuit_adjoint)(x)
 #
 # The algorithm gives us the correct answers, but is it worth using? Parameter-shift
 # gradients require at least two execution per parameter, so that method gets more
-# and more expensive the bigger the circuits are, especially on simulators. 
-# Backpropogation also demonstrates decent time scaling, but requires more and more 
+# and more expensive with the size of the circuit, especially on simulators. 
+# Backpropagation demonstrates decent time scaling, but requires more and more 
 # memory as the circuit gets larger.  Simulation of large circuits is already 
-# RAM limited, and backpropogation constrains the size of possible circuits even more.
-# PennyLane also achieves backpropogation derivatives from a Python simulator and
-# interface-specific functions. ``"lightning.qubit"`` therefore does not support this method
-# of differentiation.
+# RAM limited, and backpropagation constrains the size of possible circuits even more.
+# PennyLane also achieves backpropagation derivatives from a Python simulator and
+# interface-specific functions. The ``"lightning.qubit"`` device does not support 
+# backpropagation, so backpropagation derivatives lose the speedup from an optimized
+# simulator.
 #
 # With adjoint differentiation on Lightning, you can get the best of both worlds: fast and 
 # memory efficient.
 #
 # But how fast? The provided script `here <https://pennylane.ai/qml/demos/adjoint_diff_benchmarking.py>`__ 
-# generated the following images on a mid-range laptop.
+# generated the following images on a mid-range laptop. We can see that the time to compute the gradient
+# scales similarly to the time to compute a circuit, both when adding more wires and more layers.
 #
-# .. figure:: ../demonstrations/adjoint_diff/layers_scaling.png
-#     :width: 50%
+# .. figure:: ../demonstrations/adjoint_diff/scaling.png
+#     :width: 80%
 #     :align: center
 #
-# .. figure:: ../demonstrations/adjoint_diff/wires_scaling.png
-#     :width: 50%
-#     :align: center
 #
 # Conclusions
 # -----------
