@@ -8,6 +8,8 @@
   description: |
     By combining a standard Variational Classifier (VC) with a Data-Reuploading Classifier (DRC) 
     we create a new Qnode which is then used as a quantum layer in a Hybrid Neural Network.
+    Note: this demo only works on Python version 3.7-3.8
+
 
 - title: Fraud Detection
   author: Sophie Choe
