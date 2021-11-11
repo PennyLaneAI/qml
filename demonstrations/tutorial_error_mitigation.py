@@ -18,6 +18,12 @@ error-prone NISQ devices for practical tasks? One proposed solution is to adopt 
 error *mitigation*, which aims to minimize the effects of noise by executing a family of related
 circuits and using the results to estimate an error-free value.
 
+.. figure:: ../demonstrations/error_mitigation/laptop.png
+    :align: center
+    :scale: 55%
+    :alt: Mitiq and PennyLane
+    :target: javascript:void(0);
+
 This demo shows how error mitigation can be carried out by combining PennyLane with the
 `Mitiq <https://github.com/unitaryfund/mitiq>`__ package, a Python-based library providing a range
 of error mitigation techniques. Integration with PennyLane is available from the ``0.11`` version
@@ -26,11 +32,5 @@ of Mitiq, which can be installed using
 .. code-block:: bash
 
     pip install "mitiq>=0.11"
-
-.. figure:: ../demonstrations/error_mitigation/laptop.png
-    :align: center
-    :scale: 55%
-    :alt: Mitiq and PennyLane
-    :target: javascript:void(0);
 
 """
