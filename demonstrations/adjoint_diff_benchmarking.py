@@ -9,6 +9,8 @@ Adjoint Differentiation
     :property="og:description": Benchmarking file for adjoint diff demonstration.
     :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
 
+
+
 """
 
 ##############################################################################
@@ -102,13 +104,13 @@ if __name__ == "__main__":
     wires_list = [3, 6, 9, 12, 15]
     n_layers = 3
     adjoint_wires, backprop_wires, ps_wires = wires_scaling(wires_list, n_layers)
-    # Generating the graphic
 
+    # Generating the graphic
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
     ax1.plot(wires_list, adjoint_wires, '.-', label="adjoint")
-    ax1.plot(wires_list, ps_wires, '.-', label="parameter-shift")
     ax1.plot(wires_list, backprop_wires, '.-', label="backprop")
+    ax1.plot(wires_list, ps_wires, '.-', label="parameter-shift")
 
     ax1.legend()
 
@@ -119,8 +121,8 @@ if __name__ == "__main__":
     ax1.set_title("Scaling with wires")
 
     ax2.plot(layers_list, adjoint_layers, '.-', label="adjoint")
-    ax2.plot(layers_list, ps_layers, '.-', label="parameter-shift")
     ax2.plot(layers_list, backprop_layers, '.-', label="backprop")
+    ax2.plot(layers_list, ps_layers, '.-', label="parameter-shift")
 
     ax2.legend()
 
@@ -130,3 +132,10 @@ if __name__ == "__main__":
     ax2.set_title("Scaling with Layers")
 
     plt.savefig("adjoint_diff/scaling.png")
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/adjoint_diff/scaling.png
+#     :width: 80%
+#     :align: center
+#

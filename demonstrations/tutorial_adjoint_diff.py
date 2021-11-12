@@ -9,12 +9,21 @@ Adjoint Differentiation
     :property="og:description": Learn how the adjoint differentiation method works.
     :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
 
+.. related::
+
+   tutorial_backprop  Quantum gradients with backpropagation
+   tutorial_quantum_natural_gradient Quantum natural gradient
+   tutorial_general_parshift Generalized parameter-shift rules
+   tutorial_stochastic_parameter_shift The Stochastic Parameter-Shift Rule
+
+
 """
 
 ##############################################################################
 # Author: PennyLane dev team. Posted: XX Nov 2021. Last updated: XX Nov 2021.
 # 
-# Classical automatic differentiation has two methods of calculation: forward and reverse.
+# `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
+# has two methods of calculation: forward and reverse.
 # The optimal choice of method depends on the structure of the problem; is the function 
 # many-to-one or one-to-many? We use the properties of the problem to optimize how we 
 # calculate derivatives.
@@ -46,7 +55,9 @@ Adjoint Differentiation
 # .. math:: U^{\dagger} U | \phi \rangle = |\phi\rangle.
 # 
 # The **adjoint differentiation method** takes advantage of the ability to erase, creating a time- and
-# memory-efficient method for computing quantum gradients.
+# memory-efficient method for computing quantum gradients. Tyson Jones and Julien Gacon describe this
+# algorithm in their paper
+# `"Efficient calculation of gradients in classical simulations of variational quantum algorithms" <https://arxiv.org/abs/2009.02823>`__ .
 #
 # In this demo, you will learn how adjoint differentiation works and how to request it
 # for your PennyLane QNode. We will also look at the performance benefits and when you might want
@@ -105,6 +116,9 @@ M = qml.PauliX(wires=1)
 # 
 # These are private methods that you typically wouldn't need to know about,
 # but we use them here to illustrate the algorithm.
+#
+# Internally, the device uses a 2x2x2x... array to represent the state, whereas
+# the device attribute ``dev.state`` flattens this internal representation.
 
 state = dev._create_basis_state(0)
 
@@ -307,8 +321,11 @@ for op in reversed(ops):
 # 
 # We can iterate through the operations starting at :math:`n` and ending at :math:`1`.
 # 
-# We do have to calculate the state first, a "forward" pass, but once we have that,
-# we only have about the same amount of work to calculate all the derivatives, 
+# We do have to calculate initial state first, the "forward" pass:
+# 
+# .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
+# 
+#  Once we have that, we only have about the same amount of work to calculate all the derivatives, 
 # instead of quadratically more work.
 # 
 # Derivative of an Operator
@@ -408,8 +425,10 @@ qml.grad(circuit_adjoint)(x)
 # memory efficient.
 #
 # But how fast? The provided script `here <https://pennylane.ai/qml/demos/adjoint_diff_benchmarking.py>`__ 
-# generated the following images on a mid-range laptop. We can see that the time to compute the gradient
-# scales similarly to the time to compute a circuit, both when adding more wires and more layers.
+# generated the following images on a mid-range laptop. 
+# The backpropagation times were produced with the Python simulator ``"default.qubit"``, while parameter-shift
+# and adjoint differentiation times were calculated with ``"lightning.qubit"``.
+# The adjoint method clearly wins out for performance.
 #
 # .. figure:: ../demonstrations/adjoint_diff/scaling.png
 #     :width: 80%
