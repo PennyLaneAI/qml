@@ -12,8 +12,7 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# Introduction
-# ------------
+# Author: PennyLane dev team. Posted: XX Nov 2021. Last updated: XX Nov 2021.
 # 
 # Classical automatic differentiation has two methods of calculation: forward and reverse.
 # The optimal choice of method depends on the structure of the problem; is the function 
@@ -24,7 +23,7 @@ Adjoint Differentiation
 # of classical gradient methods to quantum simulations, or quantum hardware methods like parameter-shift
 # where we can only extract restricted pieces of information.
 # 
-# Adjoint differentiation straddles these two strategies taking benefits from each.
+# Adjoint differentiation straddles these two strategies, taking benefits from each.
 # On simulators, we can examine and modify the state vector at any point. At the same time, we know our
 # quantum circuit holds specific properties not present in an arbitrary classical computation. 
 #  
@@ -38,7 +37,7 @@ Adjoint Differentiation
 #
 # .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle,
 #
-# 3) taking an expectation value of a Hermitian operator,
+# 3) measurement, such as estimating an expectation value of a Hermitian operator,
 #
 # .. math:: \langle M \rangle = \langle \Psi | M | \Psi \rangle.
 # 
@@ -46,7 +45,7 @@ Adjoint Differentiation
 # 
 # .. math:: U^{\dagger} U | \phi \rangle = |\phi\rangle.
 # 
-# The "adjoint" differentiation method takes advantage of the ability to erase, creating a time and
+# The **adjoint differentiation method** takes advantage of the ability to erase, creating a time- and
 # memory-efficient method for computing quantum gradients.
 #
 # In this demo, you will learn how adjoint differentiation works and how to request it
@@ -86,7 +85,7 @@ def circuit(a):
 # not understand how to optimize the code for performance. We recommend performing
 # adjoint differentiation on ``"lightning.qubit"`` for substantial performance increases.
 #
-# We will use the ``circuit`` QNode just for comparison purposes.  Thoughout this
+# We will use the ``circuit`` QNode just for comparison purposes.  Throughout this
 # demo, we will instead use a list of its operations ``ops`` and a single observable ``M``.
 
 n_gates = 4
@@ -117,13 +116,13 @@ print(state)
 ##############################################################################
 # We can think of the expectation :math:`\langle M \rangle` as an inner product between a bra and a ket:
 #
-# .. math:: \langle M \rangle = \langle b | k \rangle = \langle \Psi | M | \Psi \rangle
+# .. math:: \langle M \rangle = \langle b | k \rangle = \langle \Psi | M | \Psi \rangle,
 #
-# where:
+# where
 #
-# .. math:: \langle b | = \langle \Psi| M = \langle 0 | U_0^{\dagger} \dots U_n^{\dagger} M
+# .. math:: \langle b | = \langle \Psi| M = \langle 0 | U_0^{\dagger} \dots U_n^{\dagger} M,
 #
-# .. math:: | k \rangle =  |\Psi \rangle = U_n U_{n-1} \dots U_0 |0\rangle
+# .. math:: | k \rangle =  |\Psi \rangle = U_n U_{n-1} \dots U_0 |0\rangle.
 # 
 # We could have attached :math:`M`, a Hermitian observable (:math:`M^{\dagger}=M`), to either the
 # bra or the ket, but attaching it to the bra side will be useful later.
@@ -154,7 +153,7 @@ print("QNode : ", circuit(x))
 # 
 # .. math:: |k_n \rangle = U_{n-1} \dots U_1 |0\rangle
 #
-# And gotten the exact same results.  I use :math:`n` to indicate that :math:`U_n`
+# And gotten the exact same results.  Here, the subscript :math:`n` is used to indicate that :math:`U_n`
 # was moved to the bra side of the expression.  Let's calculate that instead:
 
 bra_n = dev._create_basis_state(0)
@@ -228,7 +227,7 @@ print(M_expval_n_v2)
 # .. math:: | k_i \rangle  = U_i^{\dagger} |k_{i+1}\rangle
 # 
 # For each iteration, we move an operation from the ket side to the bra side.
-# We start near the center at :math:`U_n` and reverse through the operations list till we reach :math:`U_0`.
+# We start near the center at :math:`U_n` and reverse through the operations list until we reach :math:`U_0`.
 
 bra_loop = dev._apply_operation(state, M)
 ket_loop = state
@@ -245,7 +244,6 @@ for op in reversed(ops):
 # -----------------------
 #
 # We showed how to calculate the same thing a bunch of different ways. Why is this useful? 
-# 
 # Wherever we cut, we can stick additional things in the middle. What are we sticking in the middle?
 # The derivative of a gate.
 # 
@@ -254,7 +252,7 @@ for op in reversed(ops):
 # We can also generalize the algorithm to multi-parameter gates, but we leave those out for now.
 #
 # Remember that each parameter occurs twice in :math:`\langle M \rangle`: once in the bra and once in
-# the ket. Therefore we use the product rule to take the derivative with respect to both locations.
+# the ket. Therefore, we use the product rule to take the derivative with respect to both locations.
 # 
 # .. math::
 #       \frac{\partial \langle M \rangle}{\partial \theta_i} = 
@@ -287,19 +285,19 @@ for op in reversed(ops):
 # .. math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle
 # 
 # 
-# This :math:`|b_i\rangle` is different than the one defined above when we weren't taking
+# This :math:`|b_i\rangle` is different from the one defined above when we weren't taking
 # the derivative. Now, on step :math:`i`, the :math:`U_i` operator is removed and substituted
 # for something else, it's derivative.  Only once the calculation is complete do we continue
 # moving the operator over to the bra.
 # 
-# For the actual expectation value calculation, we use a temporary version of the bra:
+# For the actual expectation value calculation, we use a temporary version of the bra,
 # 
-# .. math:: \langle \tilde{b}_i | = \langle b_i | \frac{\text{d} U_i}{\text{d} \theta_i}
+# .. math:: \langle \tilde{b}_i | = \langle b_i | \frac{\text{d} U_i}{\text{d} \theta_i},
 # 
-# And use these to get the derivative
+# and use these to get the derivative
 # 
 # .. math::
-#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Real}\left( \langle \tilde{b}_i | k_i \rangle \right)
+#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Real}\left( \langle \tilde{b}_i | k_i \rangle \right).
 # 
 # Both the bra and the ket can be calculated recursively:
 #
@@ -318,11 +316,11 @@ for op in reversed(ops):
 #
 # One final thing before we get back to coding, how do we get the derivative of a operator?
 # 
-# Most parametrized gates can be represented in terms of Pauli Rotations, and Pauli rotations can be written as:
+# Most parametrized gates can be represented in terms of Pauli Rotations, which can be written as
 # 
 # .. math:: U = e^{i c \hat{G} \theta}
 # 
-# for a matrix :math:`\hat{G}`, a constant :math:`c`, and the parameter :math:`\theta`.
+# for a Pauli matrix :math:`\hat{G}`, a constant :math:`c`, and the parameter :math:`\theta`.
 # Thus we can write easily calculate their derivatives:
 #
 # .. math:: \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U 
@@ -422,7 +420,7 @@ qml.grad(circuit_adjoint)(x)
 # -----------
 # 
 # So what have we learned? Adjoint differentiation is an efficient method for differentiating
-# quantum circuits with a statevector simulation.  It scales nicely in time without 
+# quantum circuits with a state vector simulation.  It scales nicely in time without 
 # excessive memory requirements. Now that you've seen how the algorithm works, you can
 # better understand what is happening when you select adjoint differentiation from one
 # of PennyLane's simulators.
