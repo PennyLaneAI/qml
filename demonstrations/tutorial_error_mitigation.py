@@ -106,9 +106,13 @@ ideal_qnode = QNode(circuit, dev_ideal)
 noisy_qnode = QNode(circuit, dev_noisy)
 
 ##############################################################################
-# As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
+# First, we'll visualize the circuit:
 
 print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
+
+##############################################################################
+# As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
+
 ideal_qnode(w1, w2)
 
 ##############################################################################
@@ -116,7 +120,9 @@ ideal_qnode(w1, w2)
 
 noisy_qnode(w1, w2)
 
-
+##############################################################################
+# So, we have set ourselves up with a benchmark circuit and seen that executing on a noisy device
+# gives imperfect results. Can the results be improved?
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
