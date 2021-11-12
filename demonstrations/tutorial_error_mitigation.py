@@ -7,6 +7,11 @@ Error mitigation with Mitiq and PennyLane
 
     :property="og:image": https://pennylane.ai/qml/_images/laptop.png
 
+.. related::
+
+   tutorial_vqe A brief overview of VQE
+   tutorial_noisy_circuits Explore NISQ devices
+
 *Author: Mitiq and PennyLane dev teams. Last updated: 10 November 2021*
 
 Have you ever run a circuit on quantum hardware and not quite got the result you were expecting?
@@ -33,4 +38,32 @@ of Mitiq, which can be installed using
 
     pip install "mitiq>=0.11"
 
+We'll begin the demo by jumping straight into the deep end and seeing how to mitigate a simple noisy
+circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and discuss the theory
+behind the error mitigation approach we used, known as zero-noise extrapolation. The final part of
+this demo showcases how mitigation can be applied in quantum chemistry, allowing us to more
+accurately calculate the potential energy surface of molecular hydrogen.
+
+Mitigating a simple circuit
+---------------------------
+
+We first need a noisy device to execute our circuit on. Let's keep things simple for now by loading
+the :mod:`default.mixed <pennylane.devices.default_mixed>` device and artificially adding
+:class:`PhaseDamping <pennylane.PhaseDamping>` noise.
 """
+
+import pennylane as qml
+
+noise_gate = qml.PhaseDamping
+noise_strength = 0.1
+n_wires = 4
+
+dev_ideal = qml.device("default.mixed", wires=n_wires)
+dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
+
+###############################################################################
+# In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy`` which
+# is constructed from the :func:`qml.transforms.insert <pennylane.transforms.insert>` transform.
+# This transform works by intercepting each circuit executed on the device and adding the
+# :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel directly after every gate in the
+# circuit.
