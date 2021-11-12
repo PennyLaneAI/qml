@@ -6,9 +6,8 @@
   paper: https://arxiv.org/pdf/2111.03372.pdf
   color: heavy-rain-gradient
   description: |
-    By combining a standard Variational Classifier (VC) with a Data-Reuploading Classifier (DRC) 
-    we create a new Qnode which is then used as a quantum layer in a Hybrid Neural Network.
-    Note: this demo only works on Python versions 3.7-3.8.
+    We combine a standard Variational Classifier with a Data-Reuploading Classifier,
+    and integrate the resulting QNode as a quantum layer in a Hybrid Neural Network.
 
 
 
