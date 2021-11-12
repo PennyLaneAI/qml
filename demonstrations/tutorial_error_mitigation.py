@@ -66,4 +66,61 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 # is constructed from the :func:`qml.transforms.insert <pennylane.transforms.insert>` transform.
 # This transform works by intercepting each circuit executed on the device and adding the
 # :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel directly after every gate in the
-# circuit.
+# circuit. To get a better understanding of noise channels like
+# :class:`PhaseDamping <pennylane.PhaseDamping>`, check out the :doc:`tutorial_noisy_circuits`
+# tutorial.
+#
+# The next step is to define our circuit. Inspired by the mirror circuits concept introduced by
+# Proctor *et al.* [#proctor2020measuring]_ let's fix a circuit of the form :math:`U^{\dagger} U`
+# with :math:`U` a unitary given by the :class:`SimplifiedTwoDesign <pennylane.SimplifiedTwoDesign>`
+# template. We also fix a measurement of the :class:`PauliZ <pennylane.PauliZ>` observable on our
+# first qubit. Importantly, such a circuit performs an identity transformation
+# :math:`U^{\dagger} U = \mathbb{I}` and we can show that the expected value of an ideal circuit
+# execution is
+#
+# .. math::
+#
+#     \langle 0 | U U^{\dagger} Z U^{\dagger} U | 0 \rangle = 1.
+#
+# Although this circuit seems trivial, it provides an ideal test case for benchmarking noisy
+# devices where we expect the output to be less than one due to the detrimental effects of noise.
+# Let's check this out in PennyLane code:
+
+from pennylane import numpy as np
+from pennylane.beta import QNode
+np.random.seed(1967)
+
+n_layers = 1
+template = qml.SimplifiedTwoDesign
+weights_shape = template.shape(n_layers, n_wires)
+w1, w2 = [2 * np.pi * np.random.random(s) for s in weights_shape]
+
+
+def circuit(w1, w2):
+    template(w1, w2, wires=range(n_wires))
+    qml.adjoint(template)(w1, w2, wires=range(n_wires))
+    return qml.expval(qml.PauliZ(0))
+
+
+ideal_qnode = QNode(circuit, dev_ideal)
+noisy_qnode = QNode(circuit, dev_noisy)
+
+##############################################################################
+# As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
+
+print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
+ideal_qnode(w1, w2)
+
+##############################################################################
+# On the other hand, we obtain a noisy result when running on ``dev_noisy``:
+
+noisy_qnode(w1, w2)
+
+
+
+##############################################################################
+# .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
+#             `"Measuring the Capabilities of Quantum Computers" <https://arxiv.org/abs/2008.11294>`_,
+#             arXiv:2008.11294 (2020).
+
+
