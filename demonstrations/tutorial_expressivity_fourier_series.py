@@ -216,7 +216,7 @@ def target_function(x):
 # 
 
 x = np.linspace(-6, 6, 70, requires_grad=False)
-target_y = np.array([target_function(x_) for x_ in x])
+target_y = np.array([target_function(x_) for x_ in x], requires_grad=False)
 
 plt.plot(x, target_y, c='black')
 plt.scatter(x, target_y, facecolor='white', edgecolor='black')
@@ -365,7 +365,7 @@ for step in range(max_steps):
     y_batch = target_y[batch_index]
 
     # Update the weights by one optimizer step
-    weights = opt.step(lambda w: cost(w, x_batch, y_batch), weights)
+    weights, _, _ = opt.step(cost, weights, x_batch, y_batch)
 
     # Save, and possibly print, the current cost
     c = cost(weights, x, target_y)
@@ -573,7 +573,7 @@ for step in range(max_steps):
     y_batch = target_y[batch_index]
 
     # update the weights by one optimizer step
-    weights = opt.step(lambda w: cost(w, x_batch, y_batch), weights)
+    weights, _, _ = opt.step(cost, weights, x_batch, y_batch)
     
     # save, and possibly print, the current cost
     c = cost(weights, x, target_y)

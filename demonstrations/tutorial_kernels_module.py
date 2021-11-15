@@ -323,7 +323,7 @@ def kernel(x1, x2, params):
 # variational parameters. At this point we fix the number of layers in the
 # ansatz circuit to :math:`6`.
 
-init_params = random_params(num_wires=5, num_layers=6)
+init_params = random_params(num_wires=5, num_layers=6, requires_grad=True)
 
 ##############################################################################
 # Now we can have a look at the kernel value between the first and the
