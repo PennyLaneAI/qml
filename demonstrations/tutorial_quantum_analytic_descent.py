@@ -582,7 +582,7 @@ for iter_outer in range(N_iter_outer):
     opt = qml.AdamOptimizer(0.05)
     # Recall that the parameters of the model are relative coordinates.
     # Correspondingly, we initialize at 0, not at parameters.
-    relative_parameters = np.zeros_like(parameters)
+    relative_parameters = np.zeros_like(parameters, requires_grad=True)
     model_log = [mapped_model(relative_parameters)]
     print(f"-Iteration {iter_outer+1}-")
 
