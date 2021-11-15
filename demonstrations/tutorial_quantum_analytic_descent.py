@@ -118,7 +118,7 @@ def circuit(parameters):
 num_samples = 50
 
 # Fix a parameter position.
-parameters = np.array([3.3, 0.5])
+parameters = np.array([3.3, 0.5], requires_grad=True)
 
 theta_func = np.linspace(0, 2 * np.pi, num_samples)
 C1 = [circuit(np.array([theta, parameters[1]])) for theta in theta_func]
@@ -327,7 +327,7 @@ def get_model_data(fun, params):
 ###############################################################################
 # Let's test our brand-new function for the circuit from above, at a random parameter position:
 
-parameters = np.random.random(2) * 2 * np.pi
+parameters = np.random.random(2, requires_grad=True) * 2 * np.pi
 print(f"Random parameters (params): {parameters}")
 coeffs = get_model_data(circuit, parameters)
 print(
@@ -494,7 +494,7 @@ def plot_cost_and_model(f, model, params, shift_radius=5 * np.pi / 8, num_points
 
 
 # Get some fresh random parameters and the model coefficients
-parameters = np.random.random(2) * 2 * np.pi
+parameters = np.random.random(2, requires_grad=True) * 2 * np.pi
 coeffs = get_model_data(circuit, parameters)
 
 # Define a mapped model that has the model coefficients fixed.
