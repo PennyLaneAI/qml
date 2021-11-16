@@ -113,20 +113,53 @@ print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
 
-ideal_qnode(w1, w2)
+ideal_qnode(w1, w2).numpy()
 
 ##############################################################################
 # On the other hand, we obtain a noisy result when running on ``dev_noisy``:
 
-noisy_qnode(w1, w2)
+noisy_qnode(w1, w2).numpy()
 
 ##############################################################################
 # So, we have set ourselves up with a benchmark circuit and seen that executing on a noisy device
-# gives imperfect results. Can the results be improved?
+# gives imperfect results. Can the results be improved? Time for error mitigation! We'll first
+# show how easy it is to add error mitigation in PennyLane with Mitiq as a backend, before
+# explaining what is going on behind the scenes.
+
+from mitiq.zne.scaling import fold_global
+from mitiq.zne.inference import RichardsonFactory
+from pennylane.transforms import mitigate_with_zne
+
+extrapolate = RichardsonFactory.extrapolate
+scale_factors = [1, 2, 3]
+
+mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(noisy_qnode)
+mitigated_qnode(w1, w2)
+
+##############################################################################
+# Amazing! Using PennyLane's :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>`
+# transform, we can create a new ``mitigated_qnode`` whose result is closer to the ideal noise-free
+# value of ``1``. How does this work?
+#
+# Understanding error mitigation
+# ------------------------------
+#
+# Error mitigation can be realized through a number of techniques and the Mitiq
+# `documentation <https://mitiq.readthedocs.io/en/stable/>`__ is a great resource to learn more. In
+# this tutorial we focus upon the zero-noise extrapolation (ZNE) method originally introduced by
+# Temme et al. [#temme2017error]_ and Li et al. [#li2017efficient]_.
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
 #             `"Measuring the Capabilities of Quantum Computers" <https://arxiv.org/abs/2008.11294>`_,
 #             arXiv:2008.11294 (2020).
+#
+# .. [#temme2017error] K. Temme, S. Bravyi, J. M. Gambetta
+#             `"Error Mitigation for Short-Depth Quantum Circuits" <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.180509>`_,
+#             Phys. Rev. Lett. 119, 180509 (2017).
+#
+# .. [#li2017efficient]_ Y. Li, S. C. Benjamin
+#             `"Efficient Variational Quantum Simulator Incorporating Active Error Minimization" <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.7.021050>`_,
+#             Phys. Rev. X 7, 021050 (2017).
 
 
