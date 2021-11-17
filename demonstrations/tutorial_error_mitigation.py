@@ -286,7 +286,7 @@ y = qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
 extrapolated = RichardsonFactory.extrapolate(x, y, full_output=True)
 zero_noise, _, _, _, f = extrapolated
 
-print(f"ZNE result: {zero_noise}")
+print(f"ZNE result: {zero_noise[0]}")
 
 ##############################################################################
 # When called with ``full_output=True``, the
@@ -515,7 +515,7 @@ execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 #
 # Finally, we can plot the three surfaces and compare:
 #
-# .. code-block::
+# .. code-block:: python
 #
 #     plt.plot(ideal_energies, label="ideal")
 #     plt.plot(noisy_energies, label="noisy")
