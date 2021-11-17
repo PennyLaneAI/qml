@@ -526,7 +526,7 @@ execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 #
 # .. figure:: ../demonstrations/error_mitigation/mitigated_energy_surface.svg
 #     :align: center
-#     :width: 90%
+#     :width: 70%
 #
 # References
 # ----------
