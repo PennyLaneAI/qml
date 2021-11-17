@@ -145,9 +145,59 @@ mitigated_qnode(w1, w2)
 # ------------------------------
 #
 # Error mitigation can be realized through a number of techniques and the Mitiq
-# `documentation <https://mitiq.readthedocs.io/en/stable/>`__ is a great resource to learn more. In
-# this tutorial we focus upon the zero-noise extrapolation (ZNE) method originally introduced by
-# Temme et al. [#temme2017error]_ and Li et al. [#li2017efficient]_.
+# `documentation <https://mitiq.readthedocs.io/en/stable/>`__ is a great resource to start learning
+# more. In this tutorial we focus upon the zero-noise extrapolation (ZNE) method originally
+# introduced by Temme et al. [#temme2017error]_ and Li et al. [#li2017efficient]_.
+#
+# The ZNE method works by assuming that the amount of noise present when a circuit is run on a
+# noisy device is enumerated by a parameter :math:`\gamma`. Suppose we have an input circuit
+# that experiences an amount of noise equal to :math:`\gamma = \gamma_{0}` when executed.
+# Ideally, we would like to evaluate the result of the circuit in the :math:`\gamma = 0`
+# noise-free setting.
+#
+# To do this, we create a family of equivalent circuits whose ideal noise-free value is the
+# same as our input circuit. However, when run on a noisy device, each circuit experiences
+# an amount of noise equal to :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s`. By
+# evaluating the noisy outputs of each circuit, we can extrapolate to :math:`s=0` to estimate
+# the result of running a noise-free circuit.
+#
+# A key element of ZNE is the ability to run equivalent circuits for a range of scale factors
+# :math:`s`. When the noise present in a circuit scales with the number of gates, :math:`s`
+# can be varied using unitary folding [#giurgica2020digital]_.
+# Unitary folding works by noticing that any unitary :math:`V` is equivalent to
+# :math:`V V^{\dagger} V`. This type of transform can be applied to individual gates in the
+# circuit or to the whole circuit.
+# When no folding occurs, the scale factor is
+# :math:`s=1` and we are running our input circuit. On the other hand, when each gate has been
+# folded once, we have tripled the amount of noise in the circuit so that :math:`s=3`. For
+# :math:`s \geq 3`, each gate in the circuit will be folded more than once.
+#
+# Let's see how
+# folding works in code using Mitiq's
+# `fold_global <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.scaling.folding.fold_global>`__
+# function, which folds globally by setting :math:`V` to be the whole circuit.
+# We begin by making a copy of our above circuit using a
+# :class:`QuantumTape <pennylane.tape.QuantumTape>`, which provides a low-level approach for circuit
+# construction in PennyLane.
+
+with qml.tape.QuantumTape() as tape:
+    template(w1, w2, wires=range(n_wires))
+    qml.adjoint(template)(w1, w2, wires=range(n_wires))
+
+##############################################################################
+# Don't worry, in most situations you will not need to worry about working with a PennyLane
+# :class:`QuantumTape <pennylane.tape.QuantumTape>`! We are just dropping down to this
+# representation to gain a greater understanding of the Mitiq integration. Let's see how folding
+# works for some typical scale factors:
+
+folded_tapes = [fold_global(tape, scale_factor=i) for i in [1, 2, 3]]
+
+for tape in folded_tapes:
+    print(tape.draw())
+
+# Although these circuits are a bit deep, if you look carefully you might be able to convince
+# yourself that they are all equivalent!
+
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
@@ -161,5 +211,9 @@ mitigated_qnode(w1, w2)
 # .. [#li2017efficient] Y. Li, S. C. Benjamin
 #             `"Efficient Variational Quantum Simulator Incorporating Active Error Minimization" <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.7.021050>`_,
 #             Phys. Rev. X 7, 021050 (2017).
+#
+# .. [#giurgica2020digital] T. Giurgica-Tiron, Y. Hindy, R. LaRose, A. Mari, W. J. Zeng
+#             `"Digital zero noise extrapolation for quantum error mitigation" <https://ieeexplore.ieee.org/document/9259940>`_,
+#             IEEE International Conference on Quantum Computing and Engineering (2020).
 
 
