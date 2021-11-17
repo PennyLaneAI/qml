@@ -212,7 +212,7 @@ for s, circuit in zip(scale_factors, folded_circuits):
 #
 #   Hence, the :math:`s=1` setting gives us the original unfolded circuit.
 #
-# - When :math`s=3`, the resulting circuit is
+# - When :math:`s=3`, the resulting circuit is
 #
 #   .. math::
 #
@@ -257,8 +257,8 @@ qml.execute(folded_circuits_with_meas, dev_ideal, gradient_fn=None)
 ##############################################################################
 # By construction, these circuits are equivalent to the original and have the same output value of
 # :math:`1`. On the other hand, each circuit has a different depth. If we expect each gate in a
-# circuit to contribute an amount of noise when running on NISQ hardware, we should expect to see
-# result of the execute circuit degrade with increased depth. This can be confirmed using the
+# circuit to contribute an amount of noise when running on NISQ hardware, we should see the
+# result of the executed circuit degrade with increased depth. This can be confirmed using the
 # ``dev_noisy`` device
 
 qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
@@ -271,7 +271,42 @@ qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
 # results back to :math:`s=0`, providing us with an estimate of the noise-free result of the
 # circuit.
 #
-# There are many extrapolation methods available and Mitiq provides access.
+# Performing extrapolation is a well-studied numeric method in mathematics and Mitiq provides
+# access to some of the core approaches. Here we use the
+# `Richardson extrapolation <https://en.wikipedia.org/wiki/Richardson_extrapolation>`__ method with
+# the objective of finding a curve :math:`y = f(x)` with some fixed :math:`(x, y)` values given by
+# the scale factors and corresponding circuit execution results, respectively. This can be performed
+# using:
+
+x = scale_factors
+y = qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
+
+extrapolated = RichardsonFactory.extrapolate(x, y, full_output=True)
+zero_noise, _, _, _, f = extrapolated
+
+print(f"ZNE result: {zero_noise}")
+
+##############################################################################
+# When called with ``full_output=True``, the
+# `RichardsonFactory.extrapolate <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.inference.RichardsonFactory.extrapolate>`__ method returns the zero-noise extrapolated result :math:`f(0)`, the fitted
+# function :math:`f`, as well as some additional fitting data. Let's make a plot of the data and
+# fitted function.
+
+import matplotlib.pyplot as plt
+
+x_fit = np.linspace(0, 4)
+y_fit = [f(x) for x in x_fit]
+
+plt.plot(x_fit, y_fit)
+plt.scatter(x, y)
+plt.xlabel("s")
+plt.ylabel("Circuit result")
+plt.hlines(zero_noise, 0, 4, linestyles='dashed')
+plt.vlines(0, min(y_fit), 1, linestyles='dashed');
+
+##############################################################################
+# The dashed lines show how the extrapolated result :math:`f(0)` is calculated graphically by
+# finding the height at which the fitted curve crosses the :math:`x=0` line.
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
