@@ -9,7 +9,7 @@ Error mitigation with Mitiq and PennyLane
 
 .. related::
 
-   tutorial_vqe A brief overview of VQE
+   tutorial_chemical_reactions Modelling chemical reactions
    tutorial_noisy_circuits Explore NISQ devices
 
 *Author: Mitiq and PennyLane dev teams. Last updated: 10 November 2021*
@@ -43,7 +43,7 @@ circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and 
 behind the error mitigation approach we used, known as zero-noise extrapolation. Using this
 knowledge, we'll give a more detailed explanation of how error mitigation can be carried out in
 PennyLane. The final part of
-this demo showcases how mitigation can be applied in quantum chemistry, allowing us to more
+this demo showcases the application of mitigation to quantum chemistry, allowing us to more
 accurately calculate the potential energy surface of molecular hydrogen.
 
 Mitigating noise in a simple circuit
@@ -171,11 +171,6 @@ mitigated_qnode(w1, w2)
 # Unitary folding works by noticing that any unitary :math:`V` is equivalent to
 # :math:`V V^{\dagger} V`. This type of transform can be applied to individual gates in the
 # circuit or to the whole circuit.
-# When no folding occurs, the scale factor is
-# :math:`s=1` and we are running our input circuit. On the other hand, when each gate has been
-# folded once, we have tripled the amount of noise in the circuit so that :math:`s=3`. For
-# :math:`s \geq 3`, each gate in the circuit will be folded more than once.
-#
 # Let's see how
 # folding works in code using Mitiq's
 # `fold_global <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.scaling.folding.fold_global>`__
@@ -189,7 +184,7 @@ with qml.tape.QuantumTape() as circuit:
     qml.adjoint(template)(w1, w2, wires=range(n_wires))
 
 ##############################################################################
-# Don't worry, in most situations you will not need to worry about working with a PennyLane
+# Don't worry, in most situations you will not need to work with a PennyLane
 # :class:`QuantumTape <pennylane.tape.QuantumTape>`! We are just dropping down to this
 # representation to gain a greater understanding of the Mitiq integration. Let's see how folding
 # works for some typical scale factors:
@@ -336,12 +331,13 @@ plt.vlines(0, min(y_fit), 1, linestyles='dashed');
 # We now provide an example of how ``mitigate_with_zne`` can be used when constructing a QNode:
 
 from mitiq.zne.scaling import fold_gates_at_random as folding
+from pennylane.beta import qnode
 
 extrapolate = RichardsonFactory.extrapolate
 
 
 @mitigate_with_zne(scale_factors, folding, extrapolate, reps_per_factor=100)
-@qml.qnode(dev_noisy)
+@qnode(dev_noisy)
 def mitigated_qnode(w1, w2):
     template(w1, w2, wires=range(n_wires))
     qml.adjoint(template)(w1, w2, wires=range(n_wires))
@@ -431,7 +427,7 @@ execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 #     noise_model = noise.NoiseModel.from_backend(backend)
 #
 # Note that to run the above code you will need an account with IBMQ and to have set up your token
-# using ``IBMQ.save_account("<my_token>")``. In time, the `ibmq_lima`` device may become
+# using ``IBMQ.save_account("<my_token>")``. In time, the ``ibmq_lima`` device may become
 # unavailable and you will need to replace it with a currently-available device.
 #
 # We can then set up our ideal device and the noisy simulator of ``ibmq_lima``.
