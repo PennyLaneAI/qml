@@ -355,8 +355,8 @@ mitigated_qnode(w1, w2)
 # In the above, we can easily add in error mitigation using the ``@mitigate_with_zne`` decorator. To
 # keep things interesting, we've swapped out our folding function to instead perform folding on
 # randomly-selected gates. Whenever the folding function is stochastic, there will not be a unique
-# folded circuit corresponding to a given scale factor. For example, the following three circuits
-# have all have a scale factor of :math:`s=1.1`:
+# folded circuit corresponding to a given scale factor. For example, the following three distinct
+# circuits are all folded with a scale factor of :math:`s=1.1`:
 
 for _ in range(3):
     print(folding(circuit, scale_factor=1.1).draw())
@@ -366,7 +366,38 @@ for _ in range(3):
 # fixed :math:`s` and average over the execution results to generate the value :math:`f(s)` used
 # for extrapolation. As shown above, the number of repetitions is controlled by setting the optional
 # ``reps_per_factor`` argument.
+#
+# We conclude this section by highlighting the possibility to instead work directly with the core
+# functionality available in Mitiq. For example, the
+# `execute_with_zne <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.zne.execute_with_zne>`__
+# function is one of the central components of ZNE support in Mitiq and is compatible with circuits
+# constructed using a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>`. Working directly
+# with Mitiq can be preferable when more flexibility is required in specifying the error mitigation
+# protocol. For example, the code below shows how an adaptive approach can be used to determine a
+# sequence of scale factors for extrapolation using Mitiq's
+# `AdaExpFactory <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.inference.AdaExpFactory>`__.
 
+from mitiq.zne import execute_with_zne
+from mitiq.zne.inference import AdaExpFactory
+
+factory = AdaExpFactory(steps=20)
+
+
+def executor(circuit):
+    with qml.tape.QuantumTape() as circuit_with_meas:
+        for o in circuit.operations:
+            qml.apply(o)
+        qml.expval(qml.PauliZ(0))
+
+    return qml.execute([circuit_with_meas], dev_noisy, gradient_fn=None)
+
+
+execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
+
+##############################################################################
+# Recall that ``circuit`` is a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>` that
+# should not include measurements. We must also define an ``executor`` function that accepts folded
+# circuits, adds on the target measurement, and executes on a noisy device.
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
