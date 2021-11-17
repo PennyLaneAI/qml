@@ -41,9 +41,8 @@ of Mitiq, which can be installed using
 We'll begin the demo by jumping straight into the deep end and seeing how to mitigate a simple noisy
 circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and discuss the theory
 behind the error mitigation approach we used, known as zero-noise extrapolation. Using this
-knowledge, we'll return to our original example and establish the TODO
-
-The final part of
+knowledge, we'll give a more detailed explanation of how error mitigation can be carried out in
+PennyLane. The final part of
 this demo showcases how mitigation can be applied in quantum chemistry, allowing us to more
 accurately calculate the potential energy surface of molecular hydrogen.
 
@@ -151,7 +150,7 @@ mitigated_qnode(w1, w2)
 #
 # Error mitigation can be realized through a number of techniques and the Mitiq
 # `documentation <https://mitiq.readthedocs.io/en/stable/>`__ is a great resource to start learning
-# more. In this tutorial we focus upon the zero-noise extrapolation (ZNE) method originally
+# more. In this demo we focus upon the zero-noise extrapolation (ZNE) method originally
 # introduced by Temme et al. [#temme2017error]_ and Li et al. [#li2017efficient]_.
 #
 # The ZNE method works by assuming that the amount of noise present when a circuit is run on a
@@ -396,8 +395,44 @@ execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 
 ##############################################################################
 # Recall that ``circuit`` is a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>` and that
-# should not include measurements. We must also define an ``executor`` function that accepts folded
-# circuits, adds on the target measurement, and executes on a noisy device.
+# it should not include measurements. We must also define an ``executor`` function that accepts
+# folded circuits, adds on the target measurement, and executes on a noisy device.
+#
+# Mitigating noisy circuits in quantum chemistry
+# ----------------------------------------------
+#
+# We're now ready to apply our knowledge to a more practical problem in quantum chemistry:
+# calculating the potential energy surface of molecular hydrogen. This is achieved by finding the
+# ground state energy of :math:`H_{2}` as we increase the bond length between the hydrogen atoms. As
+# shown in :doc:`this <tutorial_chemical_reactions>` tutorial, one approach to finding the ground
+# state energy is to calculate the corresponding qubit Hamiltonian and to fix an ansatz variational
+# quantum circuit that returns its expectation value. We can then vary the parameters of the
+# circuit to minimize the energy.
+#
+# To find the potential energy surface of :math:`H_{2}`, we must choose a range of inter-atomic
+# distances and calculate the qubit Hamiltonian corresponding to each distance. We then optimize the
+# variational circuit with a new set of parameters for each Hamiltonian and plot the resulting
+# energies for each distance. In this demo we compare the potential energy surface reconstructed
+# when the optimized variational circuits are run on ideal, noisy, and noise-mitigated devices.
+#
+# Instead of modifying the :mod:`default.mixed <pennylane.devices.default_mixed>` device to add
+# simple noise as we do above, let's choose a noise model that is a little closer to physical
+# hardware. Suppose we want to simulate the ``ibmq_lima`` hardware device available on IBMQ. We
+# can load a noise model that represents this device using:
+#
+# .. code-block:: python
+#
+#     from qiskit import IBMQ
+#     import qiskit.providers.aer.noise as noise
+#
+#     provider = IBMQ.load_account()
+#     backend = provider.get_backend('ibmq_lima')
+#
+#     noise_model = noise.NoiseModel.from_backend(backend)
+#
+# Note that to run the above code you will need an account with IBMQ and to have set up your token
+# using ``IBMQ.save_account("<my_token>")``. In time, the `ibmq_lima`` device may become
+# unavailable and will need to be replaced with a currently-available device.
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
