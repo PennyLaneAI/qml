@@ -71,12 +71,14 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 # tutorial.
 #
 # The next step is to define our circuit. Inspired by the mirror circuits concept introduced by
-# Proctor *et al.* [#proctor2020measuring]_ let's fix a circuit of the form :math:`U^{\dagger} U`
-# with :math:`U` a unitary given by the :class:`SimplifiedTwoDesign <pennylane.SimplifiedTwoDesign>`
+# Proctor *et al.* [#proctor2020measuring]_ let's fix a circuit that applies a unitary :math:`U`
+# followed by its inverse :math:`U^{\dagger}`, with :math:`U` given by the
+# :class:`SimplifiedTwoDesign <pennylane.SimplifiedTwoDesign>`
 # template. We also fix a measurement of the :class:`PauliZ <pennylane.PauliZ>` observable on our
 # first qubit. Importantly, such a circuit performs an identity transformation
-# :math:`U^{\dagger} U = \mathbb{I}` and we can show that the expected value of an ideal circuit
-# execution is
+# :math:`U^{\dagger} U |\psi\rangle = |\psi\rangle` to any input state :math:`|\psi\rangle` and we
+# can show that the expected value of an ideal circuit execution with an input state
+# :math:`|0\rangle` is
 #
 # .. math::
 #
@@ -180,7 +182,7 @@ mitigated_qnode(w1, w2)
 # :class:`QuantumTape <pennylane.tape.QuantumTape>`, which provides a low-level approach for circuit
 # construction in PennyLane.
 
-with qml.tape.QuantumTape() as tape:
+with qml.tape.QuantumTape() as circuit:
     template(w1, w2, wires=range(n_wires))
     qml.adjoint(template)(w1, w2, wires=range(n_wires))
 
@@ -190,14 +192,86 @@ with qml.tape.QuantumTape() as tape:
 # representation to gain a greater understanding of the Mitiq integration. Let's see how folding
 # works for some typical scale factors:
 
-folded_tapes = [fold_global(tape, scale_factor=i) for i in [1, 2, 3]]
+scale_factors = [1, 2, 3]
+folded_circuits = [fold_global(circuit, scale_factor=s) for s in scale_factors]
 
-for tape in folded_tapes:
-    print(tape.draw())
+for s, circuit in zip(scale_factors, folded_circuits):
+    print(f"Globally-folded circuit with a scale factor of {s}:")
+    print(circuit.draw())
 
+##############################################################################
 # Although these circuits are a bit deep, if you look carefully you might be able to convince
-# yourself that they are all equivalent!
+# yourself that they are all equivalent! In fact, since we have fixed our original circuit to be
+# of the form :math:`U U^{\dagger}`, we get:
+#
+# - When the scale factor is :math:`s=1`, the resulting circuit is
+#
+#   .. math::
+#
+#       V = U^{\dagger} U = \mathbb{I}.
+#
+#   Hence, the :math:`s=1` setting gives us the original unfolded circuit.
+#
+# - When :math`s=3`, the resulting circuit is
+#
+#   .. math::
+#
+#       V V^{\dagger} V = U^{\dagger} U U U^{\dagger} U^{\dagger} U = \mathbb{I}.
+#
+#   In other words, we fold the whole circuit once when :math:`s=3`. Generally, whenever :math:`s`
+#   is an odd integer, we fold :math:`(s - 1) / 2` times.
+#
+# - The :math:`s=2` setting is a bit more subtle. Now we apply folding only to the second half of
+#   the circuit, which is in our case given by :math:`U^{\dagger}`. The resulting partially-folded
+#   circuit is
+#
+#   .. math::
+#
+#       (U^{\dagger} U U^{\dagger}) U = \mathbb{I}.
+#
+#   Visit Ref. [#giurgica2020digital]_ to gain a deeper understanding of unitary folding.
+#
+# If you're still not convinced, we can evaluate the folded circuits on our noise-free device
+# ``dev_ideal``. To do this, we must first transform our circuits to add the
+# :class:`PauliZ <pennylane.PauliZ>` measurement on the first qubit.
 
+folded_circuits_with_meas = []
+
+for circuit in folded_circuits:
+    with qml.tape.QuantumTape() as c:
+        for op in circuit.operations:
+            qml.apply(op)
+        qml.expval(qml.PauliZ(0))
+    folded_circuits_with_meas.append(c)
+
+##############################################################################
+# We need to do this step as part of the Mitiq integration with the low-level PennyLane
+# :class:`QuantumTape <pennylane.tape.QuantumTape>`. You will not have to worry about these details
+# when using the main :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>` function we
+# encountered earlier.
+#
+# Now, let's execute these circuits:
+
+qml.execute(folded_circuits_with_meas, dev_ideal, gradient_fn=None)
+
+##############################################################################
+# By construction, these circuits are equivalent to the original and have the same output value of
+# :math:`1`. On the other hand, each circuit has a different depth. If we expect each gate in a
+# circuit to contribute an amount of noise when running on NISQ hardware, we should expect to see
+# result of the execute circuit degrade with increased depth. This can be confirmed using the
+# ``dev_noisy`` device
+
+qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
+
+##############################################################################
+# Although this degradation may seem undesirable, it is part of the standard recipe for ZNE error
+# mitigation: we have a family of equivalent circuits that experience a varying amount of noise
+# when executed on hardware, and we are able to control the amount of noise by varying the folding
+# scale factor :math:`s` which determines the circuit depth. The final step is to extrapolate our
+# results back to :math:`s=0`, providing us with an estimate of the noise-free result of the
+# circuit.
+#
+# There are many extrapolation methods available and Mitiq provides access.
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
