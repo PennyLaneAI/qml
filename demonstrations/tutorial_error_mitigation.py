@@ -158,7 +158,7 @@ mitigated_qnode(w1, w2)
 #             `"Error Mitigation for Short-Depth Quantum Circuits" <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.180509>`_,
 #             Phys. Rev. Lett. 119, 180509 (2017).
 #
-# .. [#li2017efficient]_ Y. Li, S. C. Benjamin
+# .. [#li2017efficient] Y. Li, S. C. Benjamin
 #             `"Efficient Variational Quantum Simulator Incorporating Active Error Minimization" <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.7.021050>`_,
 #             Phys. Rev. X 7, 021050 (2017).
 
