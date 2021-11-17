@@ -40,7 +40,10 @@ of Mitiq, which can be installed using
 
 We'll begin the demo by jumping straight into the deep end and seeing how to mitigate a simple noisy
 circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and discuss the theory
-behind the error mitigation approach we used, known as zero-noise extrapolation. The final part of
+behind the error mitigation approach we used, known as zero-noise extrapolation. Using this
+knowledge, we'll return to our original example and establish the TODO
+
+The final part of
 this demo showcases how mitigation can be applied in quantum chemistry, allowing us to more
 accurately calculate the potential energy surface of molecular hydrogen.
 
@@ -195,9 +198,9 @@ with qml.tape.QuantumTape() as circuit:
 scale_factors = [1, 2, 3]
 folded_circuits = [fold_global(circuit, scale_factor=s) for s in scale_factors]
 
-for s, circuit in zip(scale_factors, folded_circuits):
+for s, c in zip(scale_factors, folded_circuits):
     print(f"Globally-folded circuit with a scale factor of {s}:")
-    print(circuit.draw())
+    print(c.draw())
 
 ##############################################################################
 # Although these circuits are a bit deep, if you look carefully you might be able to convince
@@ -237,9 +240,9 @@ for s, circuit in zip(scale_factors, folded_circuits):
 
 folded_circuits_with_meas = []
 
-for circuit in folded_circuits:
+for folded_circuit in folded_circuits:
     with qml.tape.QuantumTape() as c:
-        for op in circuit.operations:
+        for op in folded_circuit.operations:
             qml.apply(op)
         qml.expval(qml.PauliZ(0))
     folded_circuits_with_meas.append(c)
@@ -307,6 +310,63 @@ plt.vlines(0, min(y_fit), 1, linestyles='dashed');
 ##############################################################################
 # The dashed lines show how the extrapolated result :math:`f(0)` is calculated graphically by
 # finding the height at which the fitted curve crosses the :math:`x=0` line.
+#
+# Error mitigation in PennyLane
+# -----------------------------
+#
+# Now that we understand the ZNE method for error mitigation we can provide a few more details on
+# how it can be performed using PennyLane. As we have seen, the
+# :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>` function provides the main
+# entrypoint. This function is an example of a :doc:`circuit transform </code/qml_transforms>` and
+# it can be applied to pre-constructed QNodes as well as being used as a decorator when constructing
+# new QNodes. For example, suppose we have a ``qnode`` already defined. A mitigated QNode can be
+# created using:
+#
+# .. code-block:: python
+#
+#     mitigated_qnode = mitigate_with_zne(scale_factors, folding, extrapolate)(qnode)
+#
+# When using ``mitigate_with_zne``, we must specify the target scale factors as well as providing
+# functions for folding and extrapolation. Due to PennyLane's integration with Mitiq, it is possible
+# to use the folding functions provided in the
+# `mitiq.zne.scaling.folding <https://mitiq.readthedocs.io/en/stable/apidoc.html#module-mitiq.zne.scaling.folding>`__
+# module. For extrapolation, one can use the ``extrapolate`` method of the factories in the
+# `mitiq.zne.inference <https://mitiq.readthedocs.io/en/stable/apidoc.html#module-mitiq.zne.inference>`__
+# module.
+#
+# We now provide an example of how ``mitigate_with_zne`` can be used when constructing a QNode:
+
+from mitiq.zne.scaling import fold_gates_at_random as folding
+
+extrapolate = RichardsonFactory.extrapolate
+
+
+@mitigate_with_zne(scale_factors, folding, extrapolate, reps_per_factor=100)
+@qml.qnode(dev_noisy)
+def mitigated_qnode(w1, w2):
+    template(w1, w2, wires=range(n_wires))
+    qml.adjoint(template)(w1, w2, wires=range(n_wires))
+    return qml.expval(qml.PauliZ(0))
+
+
+mitigated_qnode(w1, w2)
+
+##############################################################################
+# In the above, we can easily add in error mitigation using the ``@mitigate_with_zne`` decorator. To
+# keep things interesting, we've swapped out our folding function to instead perform folding on
+# randomly-selected gates. Whenever the folding function is stochastic, there will not be a unique
+# folded circuit corresponding to a given scale factor. For example, the following three circuits
+# have all have a scale factor of :math:`s=1.1`:
+
+for _ in range(3):
+    print(folding(circuit, scale_factor=1.1).draw())
+
+##############################################################################
+# To accommodate for this randomness, we can perform multiple repetitions of random folding for a
+# fixed :math:`s` and average over the execution results to generate the value :math:`f(s)` used
+# for extrapolation. As shown above, the number of repetitions is controlled by setting the optional
+# ``reps_per_factor`` argument.
+
 
 ##############################################################################
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
