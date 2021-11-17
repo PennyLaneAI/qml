@@ -303,7 +303,7 @@ def serial_quantum_model(weights, x):
 # 
 
 r = 1 # number of times the encoding gets repeated (here equal to the number of layers)
-weights = 2 * np.pi * np.random.random(size=(r+1, 3)) # some random initial weights
+weights = 2 * np.pi * np.random.random(size=(r+1, 3), requires_grad=True) # some random initial weights
 
 x = np.linspace(-6, 6, 70, requires_grad=False)
 random_quantum_model_y = [serial_quantum_model(weights, x_) for x_ in x]
@@ -532,7 +532,7 @@ def parallel_quantum_model(weights, x):
 # 
 
 trainable_block_layers = 3
-weights = 2 * np.pi * np.random.random(size=(2, trainable_block_layers, r, 3))
+weights = 2 * np.pi * np.random.random(size=(2, trainable_block_layers, r, 3), requires_grad=True)
 
 x = np.linspace(-6, 6, 70, requires_grad=False)
 random_quantum_model_y = [parallel_quantum_model(weights, x_) for x_ in x]

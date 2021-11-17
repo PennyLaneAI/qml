@@ -192,7 +192,7 @@ def cost(params):
 # To begin our optimization, let's choose the following small initial values of
 # :math:`\theta` and :math:`\phi`:
 
-init_params = np.array([0.01, 0.01])
+init_params = np.array([0.01, 0.01], requires_grad=True)
 print(cost(init_params))
 
 ##############################################################################
