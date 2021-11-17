@@ -432,9 +432,105 @@ execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 #
 # Note that to run the above code you will need an account with IBMQ and to have set up your token
 # using ``IBMQ.save_account("<my_token>")``. In time, the `ibmq_lima`` device may become
-# unavailable and will need to be replaced with a currently-available device.
-
-##############################################################################
+# unavailable and you will need to replace it with a currently-available device.
+#
+# We can then set up our ideal device and the noisy simulator of ``ibmq_lima``.
+#
+# .. code-block:: python
+#
+#     n_wires = 4
+#
+#     dev_ideal = qml.device("default.qubit", wires=n_wires)
+#     dev_noisy = qml.device('qiskit.aer', wires=n_wires, noise_model=noise_model, optimization_level=0, shots=10000)
+#
+# Note the use of the ``optimization_level=0`` argument when loading the noisy device. This prevents
+# the ``qiskit.aer`` transpiler from performing a pre-execution circuit optimization.
+#
+# To simplify this demo, we will load pre-trained parameters for our variational circuit.
+#
+# .. code-block:: python
+#
+#     params = np.load("params.npy")
+#
+# These parameters can be downloaded by clicking
+# :download:`here <../demonstrations/error_mitigation/params.npy>`. We are now ready to set up the
+# variational circuit and run on the ideal and noisy devices:
+#
+# .. code-block:: python
+#
+#     from pennylane import qchem
+#
+#     symbols = ["H", "H"]
+#     distances = np.arange(0.5, 3.0, 0.25)
+#
+#     ideal_energies = []
+#     noisy_energies = []
+#
+#     for r, phi in zip(distances, params):
+#         coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+#         H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
+#
+#
+#         def qchem_circuit(phi):
+#             qml.PauliX(wires=0)
+#             qml.PauliX(wires=1)
+#             qml.DoubleExcitation(phi, wires=range(n_wires))
+#             return qml.expval(H)
+#
+#
+#         ideal_energy = QNode(qchem_circuit, dev_ideal)
+#         noisy_energy = QNode(qchem_circuit, dev_noisy)
+#
+#         ideal_energies.append(ideal_energy(phi))
+#         noisy_energies.append(noisy_energy(phi))
+#
+# An error-mitigated version of the potential energy surface can also be calculated using the
+# following:
+#
+# .. code-block:: python
+#
+#     mitig_energies = []
+#
+#     for r, phi in zip(distances, params):
+#         coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+#         H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
+#
+#         with qml.tape.QuantumTape() as circuit:
+#             qml.PauliX(wires=0)
+#             qml.PauliX(wires=1)
+#             qml.DoubleExcitation(phi, wires=range(n_wires))
+#
+#         def executor(circuit):
+#             with qml.tape.QuantumTape() as circuit_with_meas:
+#                 for o in circuit.operations:
+#                     qml.apply(o)
+#                 qml.expval(H)
+#
+#             circuits, postproc = qml.transforms.hamiltonian_expand(circuit_with_meas, group=False)
+#             circuits_executed = qml.execute(circuits, dev_noisy, gradient_fn=None)
+#             return postproc(circuits_executed)
+#
+#         mitig_energy = execute_with_zne(circuit, executor, scale_noise=fold_global)
+#         mitig_energies.append(mitig_energy)
+#
+# Finally, we can plot the three surfaces and compare:
+#
+# .. code-block::
+#
+#     plt.plot(ideal_energies, label="ideal")
+#     plt.plot(noisy_energies, label="noisy")
+#     plt.plot(mitig_energies, label="mitigated")
+#     plt.xlabel("Bond length (Bohr)")
+#     plt.ylabel("Total energy (Hartree)")
+#     plt.legend();
+#
+# .. figure:: ../demonstrations/error_mitigation/mitigated_energy_surface.svg
+#     :align: center
+#     :width: 90%
+#
+# References
+# ----------
+#
 # .. [#proctor2020measuring] T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout
 #             `"Measuring the Capabilities of Quantum Computers" <https://arxiv.org/abs/2008.11294>`_,
 #             arXiv:2008.11294 (2020).
@@ -450,5 +546,3 @@ execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 # .. [#giurgica2020digital] T. Giurgica-Tiron, Y. Hindy, R. LaRose, A. Mari, W. J. Zeng
 #             `"Digital zero noise extrapolation for quantum error mitigation" <https://ieeexplore.ieee.org/document/9259940>`_,
 #             IEEE International Conference on Quantum Computing and Engineering (2020).
-
-
