@@ -395,7 +395,7 @@ def executor(circuit):
 execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
 
 ##############################################################################
-# Recall that ``circuit`` is a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>` that
+# Recall that ``circuit`` is a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>` and that
 # should not include measurements. We must also define an ``executor`` function that accepts folded
 # circuits, adds on the target measurement, and executes on a noisy device.
 
