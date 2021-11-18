@@ -92,6 +92,7 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 
 from pennylane import numpy as np
 from pennylane.beta import QNode
+
 np.random.seed(1967)
 
 n_layers = 1
@@ -298,8 +299,8 @@ plt.plot(x_fit, y_fit)
 plt.scatter(x, y)
 plt.xlabel("s")
 plt.ylabel("Circuit result")
-plt.hlines(zero_noise, 0, 4, linestyles='dashed')
-plt.vlines(0, min(y_fit), 1, linestyles='dashed');
+plt.hlines(zero_noise, 0, 4, linestyles="dashed")
+plt.vlines(0, min(y_fit), 1, linestyles="dashed")
 
 ##############################################################################
 # The dashed lines show how the extrapolated result :math:`f(0)` is calculated graphically by
