@@ -331,7 +331,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.4)
 # set the number of steps
 steps = 100
 # set the initial parameter values
-params = np.array([0.01, 0.01])
+params = np.array([0.01, 0.01], requires_grad=True)
 
 for i in range(steps):
     # update the circuit parameters
