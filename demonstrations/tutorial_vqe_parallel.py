@@ -29,7 +29,6 @@ We begin by importing the prerequisite libraries:
 import time
 
 import matplotlib.pyplot as plt
-import numpy as np
 from pennylane import numpy as np
 import pennylane as qml
 from pennylane import qchem

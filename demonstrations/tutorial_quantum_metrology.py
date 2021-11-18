@@ -279,7 +279,7 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
 # Seed for reproducible results
 np.random.seed(395)
 weights = np.random.uniform(
-    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS
+    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS, requires_grad=True
 )
 
 opt = qml.AdagradOptimizer(stepsize=0.1)
