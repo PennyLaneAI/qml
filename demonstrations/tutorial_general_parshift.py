@@ -232,19 +232,19 @@ _ = axs[0].set_ylabel("$E$")
 #
 # .. note ::
 #
-#     The analysis tool :func:`~.pennylane.fourier.circuit_spectrum` makes use of the internal
+#     The analysis tool :func:`~.pennylane.fourier.spectrum` makes use of the internal
 #     structure of the :class:`~.pennylane.QNode` that encodes the cost function.
 #     As we used the ``jax.jit`` decorator when defining the cost function above, we
-#     here need to pass the wrapped function to ``circuit_spectrum``, which is stored in
+#     here need to pass the wrapped function to ``spectrum``, which is stored in
 #     ``cost_function.__wrapped__``.
 
 
-from pennylane.fourier import circuit_spectrum
+from pennylane.fourier import spectrum
 
 spectra = []
 for N, cost_function in zip(Ns, cost_functions):
     # Compute spectrum with respect to parameter x
-    spec = circuit_spectrum(cost_function.__wrapped__)(X[0])["x"]
+    spec = spectrum(cost_function.__wrapped__)(X[0])["x"]
     print(f"For {N} qubits the spectrum is {spec}.")
     # Store spectrum
     spectra.append([freq for freq in spec if freq>0.0])
@@ -718,8 +718,8 @@ grad_gen = lambda f, order: grad_gen(jax.grad(f), order - 1) if order > 0 else f
 for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
     recons = odd_reconstructions if order % 2 else even_reconstructions
     recon_name = "odd " if order % 2 else "even"
-    cost_grads = np.array([grad_gen(orig, order)(0.0) for orig in cost_functions])
-    recon_grads = np.array([grad_gen(recon, order)(0.0) for recon in recons])
+    cost_grads = [grad_gen(orig, order)(0.0) for orig in cost_functions]
+    recon_grads = [grad_gen(recon, order)(0.0) for recon in recons]
     all_equal = (
         "All entries match" if np.allclose(cost_grads, recon_grads) else "Some entries differ!"
     )
