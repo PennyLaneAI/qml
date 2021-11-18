@@ -239,7 +239,7 @@ def qaoa_maxcut(n_layers=1):
     print("\np={:d}".format(n_layers))
 
     # initialize the parameters near zero
-    init_params = 0.01 * np.random.rand(2, n_layers)
+    init_params = 0.01 * np.random.rand(2, n_layers, requires_grad=True)
 
     # minimize the negative of the objective function
     def objective(params):
