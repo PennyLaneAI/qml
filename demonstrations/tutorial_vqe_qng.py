@@ -77,7 +77,7 @@ def cost_fn(params):
 #
 # To perform a fair comparison, we fix the initial parameters for the two optimizers.
 
-init_params = np.array([3.97507603, 3.00854038])
+init_params = np.array([3.97507603, 3.00854038], requires_grad=True)
 
 
 ##############################################################################
@@ -313,7 +313,7 @@ exact_value = -1.136189454088
 # We now set up our optimizations runs.
 
 np.random.seed(0)
-init_params = np.random.uniform(low=0, high=2 * np.pi, size=12)
+init_params = np.random.uniform(low=0, high=2 * np.pi, size=12, requires_grad=True)
 max_iterations = 500
 step_size = 0.5
 conv_tol = 1e-06

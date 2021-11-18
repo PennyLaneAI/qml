@@ -315,7 +315,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.4)
 # set the number of steps
 steps = 100
 # set the initial parameter values
-init_params = np.array([0.011, 0.055])
+init_params = np.array([0.011, 0.055], requires_grad=True)
 noisy_circuit_params = init_params
 params = init_params
 
