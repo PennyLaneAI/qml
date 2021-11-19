@@ -138,7 +138,9 @@ from pennylane.transforms import mitigate_with_zne
 extrapolate = RichardsonFactory.extrapolate
 scale_factors = [1, 2, 3]
 
-mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(noisy_qnode)
+mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(
+    noisy_qnode
+)
 mitigated_qnode(w1, w2)
 
 ##############################################################################
@@ -421,7 +423,13 @@ noise_model = NoiseModel.from_backend(backend)
 n_wires = 4
 
 dev_ideal = qml.device("default.qubit", wires=n_wires)
-dev_noisy = qml.device('qiskit.aer', wires=n_wires, noise_model=noise_model, optimization_level=0, shots=10000)
+dev_noisy = qml.device(
+    "qiskit.aer",
+    wires=n_wires,
+    noise_model=noise_model,
+    optimization_level=0,
+    shots=10000,
+)
 
 ##############################################################################
 # Note the use of the ``optimization_level=0`` argument when loading the noisy device. This prevents
@@ -448,13 +456,11 @@ for r, phi in zip(distances, params):
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
     H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
 
-
     def qchem_circuit(phi):
         qml.PauliX(wires=0)
         qml.PauliX(wires=1)
         qml.DoubleExcitation(phi, wires=range(n_wires))
         return qml.expval(H)
-
 
     ideal_energy = QNode(qchem_circuit, dev_ideal)
     noisy_energy = QNode(qchem_circuit, dev_noisy)
@@ -483,7 +489,9 @@ for r, phi in zip(distances, params):
                 qml.apply(o)
             qml.expval(H)
 
-        circuits, postproc = qml.transforms.hamiltonian_expand(circuit_with_meas, group=False)
+        circuits, postproc = qml.transforms.hamiltonian_expand(
+            circuit_with_meas, group=False
+        )
         circuits_executed = qml.execute(circuits, dev_noisy, gradient_fn=None)
         return postproc(circuits_executed)
 
@@ -500,7 +508,7 @@ plt.plot(noisy_energies, label="noisy")
 plt.plot(mitig_energies, label="mitigated")
 plt.xlabel("Bond length (Bohr)")
 plt.ylabel("Total energy (Hartree)")
-plt.legend();
+plt.legend()
 
 ##############################################################################
 # References
