@@ -718,8 +718,8 @@ grad_gen = lambda f, order: grad_gen(jax.grad(f), order - 1) if order > 0 else f
 for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
     recons = odd_reconstructions if order % 2 else even_reconstructions
     recon_name = "odd " if order % 2 else "even"
-    cost_grads = np.array([grad_gen(orig, order)(0.0) for orig in cost_functions])
-    recon_grads = np.array([grad_gen(recon, order)(0.0) for recon in recons])
+    cost_grads = [grad_gen(orig, order)(0.0) for orig in cost_functions]
+    recon_grads = [grad_gen(recon, order)(0.0) for recon in recons]
     all_equal = (
         "All entries match" if np.allclose(cost_grads, recon_grads) else "Some entries differ!"
     )

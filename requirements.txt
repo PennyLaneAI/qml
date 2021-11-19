@@ -39,5 +39,5 @@ matplotlib==3.3.3
 noisyopt==0.2.2
 Jinja2==2.11.3
 pyyaml==5.4.1
-jax==0.2.25
-jaxlib==0.1.74
+jax==0.2.10
+jaxlib==0.1.64
