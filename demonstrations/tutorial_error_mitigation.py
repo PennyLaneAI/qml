@@ -507,6 +507,8 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 #
 # .. code-block:: python
 #
+#     import matplotlib.pyplot as plt
+#
 #     plt.plot(ideal_energies, label="ideal")
 #     plt.plot(noisy_energies, label="noisy")
 #     plt.plot(mitig_energies, label="mitigated")
