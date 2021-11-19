@@ -388,7 +388,7 @@ def executor(circuit):
     return qml.execute([circuit_with_meas], dev_noisy, gradient_fn=None)
 
 
-execute_with_zne(circuit, executor, factory=factory, num_to_average=10)
+execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 
 ##############################################################################
 # Recall that ``circuit`` is a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>` and that
