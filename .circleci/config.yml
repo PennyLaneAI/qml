@@ -53,7 +53,7 @@ jobs:
             make html
             cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
             zip -r /tmp/qml_demos.zip demos
-            zip -r /tmp/qml_backreferences backreferences
+            #zip -r /tmp/qml_backreferences backreferences
 
       - save_cache:
           paths:
@@ -71,8 +71,8 @@ jobs:
       - store_artifacts:
           path: /tmp/qml_demos.zip
 
-      - store_artifacts:
-          path: /tmp/qml_backreferences.zip
+      #- store_artifacts:
+      #    path: /tmp/qml_backreferences.zip
 
       - store_artifacts:
           path: _build/html
@@ -113,7 +113,7 @@ jobs:
             make html
             cd _build/ && zip -r /tmp/qml_html.zip html && cd ../
             zip -r /tmp/qml_demos.zip demos
-            zip -r /tmp/qml_backreferences backreferences
+            #zip -r /tmp/qml_backreferences backreferences
 
       - save_cache:
           paths:
