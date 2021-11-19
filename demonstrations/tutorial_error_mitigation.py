@@ -430,7 +430,7 @@ dev_noisy = qml.device('qiskit.aer', wires=n_wires, noise_model=noise_model, opt
 #
 # To simplify this demo, we will load pre-trained parameters for our variational circuit.
 
-params = np.load("params.npy")
+params = np.load("error_mitigation/params.npy")
 
 ##############################################################################
 # These parameters can be downloaded by clicking
