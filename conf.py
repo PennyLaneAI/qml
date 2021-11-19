@@ -82,7 +82,7 @@ sphinx_gallery_conf = {
          # The module you locally document uses None
         'pennylane': "https://pennylane.readthedocs.io/en/stable/",
     },
-    #'backreferences_dir'  : 'backreferences',
+    'backreferences_dir'  : 'backreferences',
     'doc_module'          : ('pennylane'),
     'junit': '../test-results/sphinx-gallery/junit.xml',
 }
