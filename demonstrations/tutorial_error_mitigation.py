@@ -283,7 +283,7 @@ executor(folded_circuits, dev=dev_noisy)
 # using:
 
 # Evaluate noise-scaled expectation values
-noisy_expectation_values = qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
+noisy_expectation_values = executor(folded_circuits, dev=dev_noisy)
 
 # Initialize extrapolation method
 fac = RichardsonFactory(scale_factors)
@@ -303,7 +303,8 @@ print(f"ZNE result: {zero_noise[0]}")
 _ = fac.plot_fit()
 
 ##############################################################################
-# Since we are using the Richardson extrapolation method, the fitted function (dashed line) corresponds to a polynomial interpolation of the measured data (blue points).
+# Since we are using the Richardson extrapolation method, the fitted function (dashed line)
+# corresponds to a polynomial interpolation of the measured data (blue points).
 #
 # The zero-noise limit corresponds to the value of the extrapolation function evaluated at `x=0`.
 #
@@ -383,8 +384,8 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 
 ##############################################################################
 # Recall that ``circuit`` is a PennyLane :class:`QuantumTape <pennylane.tape.QuantumTape>` and that
-# it should not include measurements. We must also define an ``executor`` function that accepts
-# folded circuits, adds on the target measurement, and executes on a noisy device.
+# it should not include measurements. We also use the ``executor`` function defined earlier that
+# adds on the target measurement and executes on a noisy device.
 #
 # Mitigating noisy circuits in quantum chemistry
 # ----------------------------------------------
