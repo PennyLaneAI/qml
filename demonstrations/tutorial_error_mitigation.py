@@ -236,6 +236,7 @@ for s, c in zip(scale_factors, folded_circuits):
 
 
 def executor(circuits, dev=dev_noisy):
+    circuits = [circuits] if isinstance(circuits, qml.tape.QuantumTape) else circuits
     circuits_with_meas = []
 
     for c in circuits:
