@@ -230,17 +230,23 @@ for s, c in zip(scale_factors, folded_circuits):
 #   Visit Ref. [#giurgica2020digital]_ to gain a deeper understanding of unitary folding.
 #
 # If you're still not convinced, we can evaluate the folded circuits on our noise-free device
-# ``dev_ideal``. To do this, we must first transform our circuits to add the
-# :class:`PauliZ <pennylane.PauliZ>` measurement on the first qubit.
+# ``dev_ideal``. To do this, we'll define an ``executor`` function that adds the
+# :class:`PauliZ <pennylane.PauliZ>` measurement onto the first qubit of each input circuit and
+# then runs the circuits on a target device.
 
-folded_circuits_with_meas = []
 
-for folded_circuit in folded_circuits:
-    with qml.tape.QuantumTape() as c:
-        for op in folded_circuit.operations:
-            qml.apply(op)
-        qml.expval(qml.PauliZ(0))
-    folded_circuits_with_meas.append(c)
+def executor(circuits, dev=dev_noisy):
+    circuits_with_meas = []
+
+    for c in circuits:
+        with qml.tape.QuantumTape() as circuit_with_meas:
+            for o in c.operations:
+                qml.apply(o)
+            qml.expval(qml.PauliZ(0))
+        circuits_with_meas.append(circuit_with_meas)
+
+    return qml.execute(circuits_with_meas, dev, gradient_fn=None)
+
 
 ##############################################################################
 # We need to do this step as part of the Mitiq integration with the low-level PennyLane
@@ -250,7 +256,7 @@ for folded_circuit in folded_circuits:
 #
 # Now, let's execute these circuits:
 
-qml.execute(folded_circuits_with_meas, dev_ideal, gradient_fn=None)
+executor(folded_circuits, dev=dev_ideal)
 
 ##############################################################################
 # By construction, these circuits are equivalent to the original and have the same output value of
@@ -259,7 +265,7 @@ qml.execute(folded_circuits_with_meas, dev_ideal, gradient_fn=None)
 # result of the executed circuit degrade with increased depth. This can be confirmed using the
 # ``dev_noisy`` device
 
-qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
+executor(folded_circuits, dev=dev_noisy)
 
 ##############################################################################
 # Although this degradation may seem undesirable, it is part of the standard recipe for ZNE error
@@ -377,16 +383,6 @@ from mitiq.zne import execute_with_zne
 from mitiq.zne.inference import AdaExpFactory
 
 factory = AdaExpFactory(steps=20)
-
-
-def executor(circuit):
-    with qml.tape.QuantumTape() as circuit_with_meas:
-        for o in circuit.operations:
-            qml.apply(o)
-        qml.expval(qml.PauliZ(0))
-
-    return qml.execute([circuit_with_meas], dev_noisy, gradient_fn=None)
-
 
 execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 
