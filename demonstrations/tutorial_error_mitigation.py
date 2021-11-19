@@ -335,13 +335,12 @@ _ = fac.plot_fit()
 # We now provide an example of how ``mitigate_with_zne`` can be used when constructing a QNode:
 
 from mitiq.zne.scaling import fold_gates_at_random as folding
-from pennylane.beta import qnode
 
 extrapolate = RichardsonFactory.extrapolate
 
 
 @mitigate_with_zne(scale_factors, folding, extrapolate, reps_per_factor=100)
-@qnode(dev_noisy)
+@qml.qnode(dev_noisy)
 def mitigated_qnode(w1, w2):
     template(w1, w2, wires=range(n_wires))
     qml.adjoint(template)(w1, w2, wires=range(n_wires))
