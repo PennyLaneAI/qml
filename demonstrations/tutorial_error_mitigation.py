@@ -162,7 +162,7 @@ mitigated_qnode(w1, w2)
 #
 # To do this, we create a family of equivalent circuits whose ideal noise-free value is the
 # same as our input circuit. However, when run on a noisy device, each circuit experiences
-# an amount of noise equal to :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s`. By
+# an amount of noise equal to :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s \ge 1`. By
 # evaluating the noisy outputs of each circuit, we can extrapolate to :math:`s=0` to estimate
 # the result of running a noise-free circuit.
 #
@@ -282,35 +282,30 @@ executor(folded_circuits, dev=dev_noisy)
 # the scale factors and corresponding circuit execution results, respectively. This can be performed
 # using:
 
-x = scale_factors
-y = qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
+# Evaluate noise-scaled expectation values
+noisy_expectation_values = qml.execute(folded_circuits_with_meas, dev_noisy, gradient_fn=None)
 
-extrapolated = RichardsonFactory.extrapolate(x, y, full_output=True)
-zero_noise, _, _, _, f = extrapolated
+# Initialize extrapolation method
+fac = RichardsonFactory(scale_factors)
+
+# Load data into extrapolation factory
+for x, y in zip(scale_factors, noisy_expectation_values):
+    fac.push({"scale_factor": x}, y)
+
+# Run extrapolation
+zero_noise = fac.reduce()
 
 print(f"ZNE result: {zero_noise[0]}")
 
 ##############################################################################
-# When called with ``full_output=True``, the
-# `RichardsonFactory.extrapolate <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.inference.RichardsonFactory.extrapolate>`__ method returns the zero-noise extrapolated result :math:`f(0)`, the fitted
-# function :math:`f`, as well as some additional fitting data. Let's make a plot of the data and
-# fitted function.
+# Let's make a plot of the data and fitted extrapolation function.
 
-import matplotlib.pyplot as plt
-
-x_fit = np.linspace(0, 4)
-y_fit = [f(x) for x in x_fit]
-
-plt.plot(x_fit, y_fit)
-plt.scatter(x, y)
-plt.xlabel("s")
-plt.ylabel("Circuit result")
-plt.hlines(zero_noise, 0, 4, linestyles="dashed")
-plt.vlines(0, min(y_fit), 1, linestyles="dashed")
+_ = fac.plot_fit()
 
 ##############################################################################
-# The dashed lines show how the extrapolated result :math:`f(0)` is calculated graphically by
-# finding the height at which the fitted curve crosses the :math:`x=0` line.
+# Since we are using the Richardson extrapolation method, the fitted function (dashed line) corresponds to a polynomial interpolation of the measured data (blue points).
+#
+# The zero-noise limit corresponds to the value of the extrapolation function evaluated at `x=0`.
 #
 # Error mitigation in PennyLane
 # -----------------------------
