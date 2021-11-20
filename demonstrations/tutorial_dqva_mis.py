@@ -10,7 +10,7 @@ Solving MIS with the DQVA Ansatz
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
 
-*Author: PennyLane dev team. Posted: 10 November 2021. Last updated: 10 November 2021.*
+*Author: *
 
 DQVA ansatz intro
 
@@ -33,17 +33,10 @@ DQVA ansatz intro
 #
 #    ..
 #
-#    Confining potential
+#    Image caption
 #
 # What are the limitations for the general QAOA? 
 #
-# .. figure:: ../demonstrations/trapped_ions/saddle_potential.png
-#    :align: center
-#    :width: 70%
-#
-#    ..
-#
-#    Image caption
 #
 
 
@@ -57,7 +50,7 @@ import networkx as nx
 G = nx.Graph()
 G.add_edges_from([(0, 1), (1, 2), (2, 0), (2, 3)])
 
-nx.draw(graph, with_labels=True)
+nx.draw(G, with_labels=True)
 plt.show()
 
 def hamming_weight(bitstr):
@@ -173,208 +166,14 @@ def dqva_layer(G, P=1, params=[], init_state=None, mixer_order=None):
 ##############################################################################
 # Text in between code goes here
 
-dev = qml.device("default.qubit", wires=1)
-
-
-@qml.qnode(dev)
-def ion_hadamard(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-    
-    """We use a series of seemingly arbitrary pulses that will give the Hadamard gate.
-    Why this is the case will become clear later"""
-
-    qml.QubitUnitary(evolution(0, -np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
-
-    return qml.state()
-
-#For comparison, we use the Hadamard built into PennyLane
-@qml.qnode(dev)
-def hadamard(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-
-    qml.Hadamard(wires=0)
-
-    return qml.state()
-
-#We confirm that the values given by both functions are the same up to numerical error
-print(np.isclose(1j * ion_hadamard(0), hadamard(0)))
-print(np.isclose(1j * ion_hadamard(1), hadamard(1)))
-
-##############################################################################
-# Note that the desired gate was obtained up to a global phase factor.
-# A similar exercise can be done for the :math:`T` gate:
-
-
-@qml.qnode(dev)
-def ion_Tgate(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-
-    qml.QubitUnitary(evolution(0, -np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 4 / Omega), wires=0)
-    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
-
-    return qml.state()
-
-
-@qml.qnode(dev)
-def tgate(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-
-    qml.T(wires=0)
-
-    return qml.state()
-
-
-print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(0), tgate(0)))
-print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
-
-##############################################################################
-# Text
-
-import matplotlib.pyplot as plt
-
-
-@qml.qnode(dev)
-def evolution_prob(t):
-
-    qml.QubitUnitary(evolution(0, t / Omega), wires=0)
-
-    return qml.probs(wires=0)
-
-
-t = np.linspace(0, 4 * np.pi, 101)
-s = [evolution_prob(i)[1].numpy() for i in t]
-
-fig1, ax1 = plt.subplots(figsize=(9, 6))
-
-ax1.plot(t, s, color="#9D2EC5")
-
-ax1.set(
-    xlabel="time (in units of 1/Ω)", 
-    ylabel="Probability", 
-    title="Probability of measuring the excited state"
-)
-ax1.grid()
-
-plt.show()
 
 
 #
 # References
 # ----------
 #
-# .. [#DiVincenzo2000]
+# .. [#Saleem2020]
 #
-#     D. DiVincenzo. (2000) "The Physical Implementation of Quantum Computation",
-#     `Fortschritte der Physik 48 (9–11): 771–783
-#     <https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E>`__.
-#     (`arXiv <https://arxiv.org/abs/quant-ph/0002077>`__)
+#     Z. H. Saleem, T. Tomesh, B. Tariq, M. Suchara. (2000) "Approaches to Constrained Quantum Approximate Optimization",
+#     `arXiv preprint arXiv:2010.06660 <https://arxiv.org/abs/2010.06660>`__.
 #
-# .. [#Paul1953]
-#
-#     W. Paul, H. Steinwedel. (1953) "Ein neues Massenspektrometer ohne Magnetfeld",
-#     RZeitschrift für Naturforschung A 8 (7): 448-450.
-#
-# .. [#CiracZoller]
-#
-#     J. Cirac, P. Zoller. (1995) "Quantum Computations with Cold Trapped Ions".
-#     Physical Review Letters 74 (20): 4091–4094.
-#
-# .. [#Malinowski]
-#
-#     M. Malinowski. (2021) "Unitary and Dissipative Trapped-​Ion Entanglement Using
-#     Integrated Optics". PhD Thesis retrieved from `ETH thesis repository
-#     <https://ethz.ch/content/dam/ethz/special-interest/phys/quantum-electronics/tiqi-dam/documents/phd_theses/Thesis-Maciej-Malinowski>`__.
-#
-# .. [#NandC2000]
-#
-#     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
-#     Cambridge University Press.
-#
-# .. [#Hughes2020]
-#
-#     A. Hughes, V. Schafer, K. Thirumalai, et al. (2020)
-#     "Benchmarking a High-Fidelity Mixed-Species Entangling Gate"
-#     `Phys. Rev. Lett. 125, 080504
-#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.080504>`__.
-#     (`arXiv <https://arxiv.org/abs/2004.08162>`__)
-#
-# .. [#Bergou2021]
-#
-#     J. Bergou, M. Hillery, and M. Saffman. (2021) "Quantum Information Processing",
-#     Springer.
-#
-# .. [#Molmer1999]
-#
-#     A. Sørensen, K. Mølmer.  (1999) "Multi-particle entanglement of hot trapped ions",
-#     `Physical Review Letters. 82 (9): 1835–1838
-#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.82.1835>`__.
-#     (`arXiv <https://arxiv.org/abs/quant-ph/9810040>`__)
-#
-# .. [#Brown2019]
-#
-#     M. Brown, M. Newman, and K. Brown. (2019)
-#     "Handling leakage with subsystem codes",
-#     `New J. Phys. 21 073055
-#     <https://iopscience.iop.org/article/10.1088/1367-2630/ab3372>`__.
-#     (`arXiv <https://arxiv.org/abs/1903.03937>`__)
-#
-# .. [#Monroe2014]
-#
-#     C. Monroe, R. Ruassendorf, A Ruthven, et al. (2019)
-#     "Large scale modular quantum computer architecture with atomic memory and photonic interconnects",
-#     `Phys. Rev. A 89 022317
-#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.89.022317>`__.
-#     (`arXiv <https://arxiv.org/abs/1208.0391>`__)
-#
-# .. [#QCCD2002]
-#
-#     D. Kielpinski, C. Monroe, and D. Wineland. (2002)
-#     "Architecture for a large-scale ion-trap quantum computer",
-#     `Nature 417, 709–711 (2002).
-#     <https://www.nature.com/articles/nature00784>`__.
-#
-# .. [#Amini2010]
-#
-#     J. Amini, H. Uys, J. Wesenberg, et al. (2010)
-#     "Toward scalable ion traps for quantum information processing",
-#     `New J. Phys 12 033031
-#     <https://iopscience.iop.org/article/10.1088/1367-2630/12/3/033031/meta>`__.
-#     (`arXiv <https://arxiv.org/abs/0909.2464>`__)
-#
-#
-# .. [#Pino2021]
-#
-#     J. Pino, J. Dreiling, J, C, Figgatt, et al. (2021)
-#     "Demonstration of the trapped-ion quantum CCD computer architecture".
-#     `Nature 592, 209–213
-#     <https://www.nature.com/articles/s41586-021-03318-4>`__.
-#     (`arXiv <https://arxiv.org/abs/2003.01293>`__)
-#
-# .. [#Blumel2021]
-#
-#     R. Blumel, N. Grzesiak, N. Nguyen, et al. (2021)
-#     "Efficient Stabilized Two-Qubit Gates on a Trapped-Ion Quantum Computer"
-#     `Phys. Rev. Lett. 126, 220503
-#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.126.220503>`__.
-#     (`arXiv <https://arxiv.org/abs/2101.07887>`__)
-#
-# .. [#Niffenegger2020]
-#
-#     R. Niffenegger, J. Stuart, C.Sorace-Agaskar, et al. (2020)
-#     "Integrated multi-wavelength control of an ion qubit"
-#     `Nature volume 586, pages538–542
-#     <https://www.nature.com/articles/s41586-020-2811-x>`__.
-#     (`arXiv <https://arxiv.org/abs/2001.05052>`__)
