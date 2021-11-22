@@ -28,7 +28,7 @@ Adjoint Differentiation
 # many-to-one or one-to-many? We use the properties of the problem to optimize how we 
 # calculate derivatives.
 # 
-# Most methods for calculating the derivatives of quantum circuits are either  direct applications
+# Most methods for calculating the derivatives of quantum circuits are either direct applications
 # of classical gradient methods to quantum simulations, or quantum hardware methods like parameter-shift
 # where we can only extract restricted pieces of information.
 # 
@@ -55,13 +55,12 @@ Adjoint Differentiation
 # .. math:: U^{\dagger} U | \phi \rangle = |\phi\rangle.
 # 
 # The **adjoint differentiation method** takes advantage of the ability to erase, creating a time- and
-# memory-efficient method for computing quantum gradients. Tyson Jones and Julien Gacon describe this
+# memory-efficient method for computing quantum gradients on statevector simulators. Tyson Jones and Julien Gacon describe this
 # algorithm in their paper
 # `"Efficient calculation of gradients in classical simulations of variational quantum algorithms" <https://arxiv.org/abs/2009.02823>`__ .
 #
 # In this demo, you will learn how adjoint differentiation works and how to request it
-# for your PennyLane QNode. We will also look at the performance benefits and when you might want
-# to use it.
+# for your PennyLane QNode. We will also look at the performance benefits.
 # 
 # Time for some code
 # ------------------
@@ -278,8 +277,8 @@ for op in reversed(ops):
 #
 # We can now notice that those two components are complex conjugates of each other, so we can
 # further simplify.  Note that each term is not an expectation value of a Hermitian observable,
-# only the sum is an expectation value. Each component is not guaranteed to be real,
-# but when we add them together, the imaginary part cancels out, we obtain twice the
+# and therefore not guaranteed to be real.
+# When we add them together, the imaginary part cancels out, we obtain twice the
 # value of the real part.
 # 
 # .. math::
@@ -289,7 +288,7 @@ for op in reversed(ops):
 # 
 # .. math::
 #    \frac{\partial \langle M \rangle }{\partial \theta_i } = 
-#    2 \text{Real} \left( \langle b_i | \frac{\text{d} U_i }{\text{d} \theta_i} | k_i \rangle \right)
+#    2 \text{Re} \left( \langle b_i | \frac{\text{d} U_i }{\text{d} \theta_i} | k_i \rangle \right)
 #
 # where
 # 
@@ -298,20 +297,16 @@ for op in reversed(ops):
 #
 # .. math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle.
 # 
-# 
-# This :math:`|b_i\rangle` is different from the one defined above when we weren't taking
-# the derivative. Now, on step :math:`i`, the :math:`U_i` operator is removed and substituted
-# for something else, it's derivative.  Only once the calculation is complete do we continue
-# moving the operator over to the bra.
-# 
-# For the actual expectation value calculation, we use a temporary version of the bra,
+# Notice that :math:`U_i` does not appear in either the bra or the ket in the above equations.
+# These formulas differ from the ones we used when just calculating the expectation value.
+# For the actual derivative calculation, we use a temporary version of the bra,
 # 
 # .. math:: \langle \tilde{b}_i | = \langle b_i | \frac{\text{d} U_i}{\text{d} \theta_i},
 # 
 # and use these to get the derivative
 # 
 # .. math::
-#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Real}\left( \langle \tilde{b}_i | k_i \rangle \right).
+#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Re}\left( \langle \tilde{b}_i | k_i \rangle \right).
 # 
 # Both the bra and the ket can be calculated recursively:
 #
@@ -329,9 +324,9 @@ for op in reversed(ops):
 # instead of quadratically more work.
 # 
 # Derivative of an Operator
-# -------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# One final thing before we get back to coding, how do we get the derivative of a operator?
+# One final thing before we get back to coding: how do we get the derivative of an operator?
 # 
 # Most parametrized gates can be represented in terms of Pauli Rotations, which can be written as
 # 
@@ -450,8 +445,10 @@ qml.grad(circuit_adjoint)(x)
 # 
 # Jones and Gacon. Efficient calculation of gradients in classical simulations of variational quantum algorithms.
 # `https://arxiv.org/abs/2009.02823 <https://arxiv.org/abs/2009.02823>`__
-
-
+#
+# Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang. Yao.jl: `Extensible, efficient framework for quantum
+# algorithm design <https://quantum-journal.org/papers/q-2020-10-11-341/>`__ , 2019
+#
 
 
 
