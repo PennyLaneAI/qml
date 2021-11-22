@@ -251,7 +251,7 @@ def density_matrix(state):
 
 label_0 = [[1], [0]]
 label_1 = [[0], [1]]
-state_labels = [label_0, label_1]
+state_labels = np.array([label_0, label_1], requires_grad=False)
 
 
 ##############################################################################
@@ -376,10 +376,10 @@ num_training = 200
 num_test = 2000
 
 Xdata, y_train = circle(num_training)
-X_train = np.hstack((Xdata, np.zeros((Xdata.shape[0], 1))))
+X_train = np.hstack((Xdata, np.zeros((Xdata.shape[0], 1), requires_grad=False)))
 
 Xtest, y_test = circle(num_test)
-X_test = np.hstack((Xtest, np.zeros((Xtest.shape[0], 1))))
+X_test = np.hstack((Xtest, np.zeros((Xtest.shape[0], 1), requires_grad=False)))
 
 
 # Train using Adam optimizer and evaluate the classifier
@@ -391,7 +391,7 @@ batch_size = 32
 opt = AdamOptimizer(learning_rate, beta1=0.9, beta2=0.999)
 
 # initialize random weights
-params = np.random.uniform(size=(num_layers, 3))
+params = np.random.uniform(size=(num_layers, 3), requires_grad=True)
 
 predicted_train, fidel_train = test(params, X_train, y_train, state_labels)
 accuracy_train = accuracy_score(y_train, predicted_train)
@@ -412,7 +412,7 @@ print(
 
 for it in range(epochs):
     for Xbatch, ybatch in iterate_minibatches(X_train, y_train, batch_size=batch_size):
-        params = opt.step(lambda v: cost(v, Xbatch, ybatch, state_labels), params)
+        params, _, _, _ = opt.step(cost, params, Xbatch, ybatch, state_labels)
 
     predicted_train, fidel_train = test(params, X_train, y_train, state_labels)
     accuracy_train = accuracy_score(y_train, predicted_train)
