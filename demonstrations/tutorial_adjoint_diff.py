@@ -20,7 +20,7 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# Author: PennyLane dev team. Posted: XX Nov 2021. Last updated: XX Nov 2021.
+# Author: PennyLane dev team. Posted: 23 Nov 2021. Last updated: 23 Nov 2021.
 # 
 # `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
 # has two methods of calculation: forward and reverse.
@@ -91,7 +91,7 @@ def circuit(a):
 
 ##############################################################################
 # The fast c++ simulator device ``"lightning.qubit"`` also supports adjoint differentiation,
-# but here we want to quickly prototype a minimal version to illustrate how the algorithm works,
+# but here we want to quickly prototype a minimal version to illustrate how the algorithm works.
 # We recommend performing
 # adjoint differentiation on ``"lightning.qubit"`` for substantial performance increases.
 #
@@ -113,11 +113,13 @@ M = qml.PauliX(wires=1)
 # We create our state by using the ``"default.qubit"`` methods ``_create_basis_state``
 # and ``_apply_operation``.
 # 
-# These are private methods that you typically wouldn't need to know about,
+# These are private methods that you shouldn't typically use and are subject to change
+# without a deprecation period,
 # but we use them here to illustrate the algorithm.
 #
 # Internally, the device uses a 2x2x2x... array to represent the state, whereas
-# the device attribute ``dev.state`` flattens this internal representation.
+# the measurement ``qml.state()`` and the device attribute ``dev.state``
+# flatten this internal representation.
 
 state = dev._create_basis_state(0)
 
