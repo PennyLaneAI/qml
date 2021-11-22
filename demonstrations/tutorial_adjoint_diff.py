@@ -7,7 +7,7 @@ Adjoint Differentiation
 
 .. meta::
     :property="og:description": Learn how the adjoint differentiation method works.
-    :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
+    :property="og:image": https://pennylane.ai/qml/_images/icon.png
 
 .. related::
 
@@ -28,7 +28,7 @@ Adjoint Differentiation
 # many-to-one or one-to-many? We use the properties of the problem to optimize how we 
 # calculate derivatives.
 # 
-# Most methods for calculating the derivatives of quantum circuits either are direct applications
+# Most methods for calculating the derivatives of quantum circuits are either  direct applications
 # of classical gradient methods to quantum simulations, or quantum hardware methods like parameter-shift
 # where we can only extract restricted pieces of information.
 # 
@@ -93,7 +93,7 @@ def circuit(a):
 ##############################################################################
 # The fast c++ simulator device ``"lightning.qubit"`` also supports adjoint differentiation,
 # but here we want to quickly prototype a minimal version to illustrate how the algorithm works,
-# not understand how to optimize the code for performance. We recommend performing
+# We recommend performing
 # adjoint differentiation on ``"lightning.qubit"`` for substantial performance increases.
 #
 # We will use the ``circuit`` QNode just for comparison purposes.  Throughout this
@@ -142,7 +142,7 @@ print(state)
 # bra or the ket, but attaching it to the bra side will be useful later.
 # 
 # Using the ``state`` calculated above, we can create these :math:`|b\rangle` and :math:`|k\rangle`
-# vectors.  In the code, ``bra`` indicates :math:`|b\rangle`, the conjugate transpose of :math:`\langle b|`. 
+# vectors.
 
 bra = dev._apply_operation(state, M)
 ket = state
@@ -161,13 +161,13 @@ print("QNode : ", circuit(x))
 #
 # But the dividing line between what makes the "bra" and "ket" vector is actually
 # fairly arbitrary.  We can divide the two vectors at any point from one :math:`\langle 0 |`
-# to the other :math:`|0\rangle`. For example, we could have used:
+# to the other :math:`|0\rangle`. For example, we could have used
 # 
-# .. math:: \langle b_n | = \langle 0 | U_1^{\dagger} \dots  U_n^{\dagger} M U_n
+# .. math:: \langle b_n | = \langle 0 | U_1^{\dagger} \dots  U_n^{\dagger} M U_n,
 # 
-# .. math:: |k_n \rangle = U_{n-1} \dots U_1 |0\rangle
+# .. math:: |k_n \rangle = U_{n-1} \dots U_1 |0\rangle,
 #
-# And gotten the exact same results.  Here, the subscript :math:`n` is used to indicate that :math:`U_n`
+# and gotten the exact same results.  Here, the subscript :math:`n` is used to indicate that :math:`U_n`
 # was moved to the bra side of the expression.  Let's calculate that instead:
 
 bra_n = dev._create_basis_state(0)
@@ -202,9 +202,9 @@ print(M_expval_n)
 # For the ket vector, you can think of :math:`U_n^{\dagger}` as "eating" it's
 # corresponding unitary from the vector, erasing it from the list of operations.
 # 
-# Of course, we actually work with the conjugate transpose of :math:`\langle b_n |`:
+# Of course, we actually work with the conjugate transpose of :math:`\langle b_n |`,
 #
-# .. math:: |b_n\rangle = U_n^{\dagger} | b \rangle
+# .. math:: |b_n\rangle = U_n^{\dagger} | b \rangle.
 #
 # Once we write it in this form, we see that the adjoint of the operation :math:`U_n^{\dagger}`
 # operates on both :math:`|k_n\rangle` and :math:`|b_n\rangle` to move the splitting point right.
@@ -228,17 +228,17 @@ print(M_expval_n_v2)
 # Much simpler!
 # 
 # We can easily iterate over all the operations to show that the same result occurs
-# no matter where you split the operations.  
+# no matter where you split the operations:
 # 
-# .. math:: \langle b_i | = \langle b_{i+1}| U_{i}
+# .. math:: \langle b_i | = \langle b_{i+1}| U_{i},
 # 
-# .. math:: |k_{i+1} \rangle = U_{i} |k_{i}\rangle
+# .. math:: |k_{i+1} \rangle = U_{i} |k_{i}\rangle.
 # 
-# Rewritten, we have our iteration formulas:
+# Rewritten, we have our iteration formulas
 # 
-# .. math:: | b_i \rangle = U_i^{\dagger} |b_{i+1}\rangle
+# .. math:: | b_i \rangle = U_i^{\dagger} |b_{i+1}\rangle,
 # 
-# .. math:: | k_i \rangle  = U_i^{\dagger} |k_{i+1}\rangle
+# .. math:: | k_i \rangle  = U_i^{\dagger} |k_{i+1}\rangle.
 # 
 # For each iteration, we move an operation from the ket side to the bra side.
 # We start near the center at :math:`U_n` and reverse through the operations list until we reach :math:`U_0`.
@@ -293,10 +293,10 @@ for op in reversed(ops):
 #
 # where
 # 
-# .. math:: \langle b_i | = \langle 0 | U_1^{\dagger} \dots U_n^{\dagger} M U_n \dots U_{i+1}
+# .. math:: \langle b_i | = \langle 0 | U_1^{\dagger} \dots U_n^{\dagger} M U_n \dots U_{i+1},
 # 
 #
-# .. math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle
+# .. math :: |k_i \rangle = U_{i-1} \dots U_1 |0\rangle.
 # 
 # 
 # This :math:`|b_i\rangle` is different from the one defined above when we weren't taking
@@ -315,9 +315,9 @@ for op in reversed(ops):
 # 
 # Both the bra and the ket can be calculated recursively:
 #
-# .. math:: | b_{i} \rangle = U^{\dagger}_{i+1} |b_{i+1}\rangle
+# .. math:: | b_{i} \rangle = U^{\dagger}_{i+1} |b_{i+1}\rangle,
 #
-# .. math:: | k_{i} \rangle = U^{\dagger}_{i} |k_{i+1}\rangle
+# .. math:: | k_{i} \rangle = U^{\dagger}_{i} |k_{i+1}\rangle.
 # 
 # We can iterate through the operations starting at :math:`n` and ending at :math:`1`.
 # 
@@ -325,7 +325,7 @@ for op in reversed(ops):
 # 
 # .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
 # 
-#  Once we have that, we only have about the same amount of work to calculate all the derivatives, 
+# Once we have that, we only have about the same amount of work to calculate all the derivatives, 
 # instead of quadratically more work.
 # 
 # Derivative of an Operator
@@ -340,7 +340,7 @@ for op in reversed(ops):
 # for a Pauli matrix :math:`\hat{G}`, a constant :math:`c`, and the parameter :math:`\theta`.
 # Thus we can write easily calculate their derivatives:
 #
-# .. math:: \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U 
+# .. math:: \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U .
 # 
 # Luckily, PennyLane already has a built-in function for calculating this.
 
@@ -348,10 +348,10 @@ grad_op0 = qml.operation.operation_derivative(ops[0])
 print(grad_op0)
 
 ##############################################################################
-# Now for calculating the derivative!
+# Now for calculating the full derivative using the adjoint method!
 # 
 # We loop over the reversed operations, just as before.  But if the operation has a parameter,
-# we calculate it's derivative and append it to a list before moving on. Since the ``operation_derivative``
+# we calculate its derivative and append it to a list before moving on. Since the ``operation_derivative``
 # function spits back out a matrix instead of an operation,
 # we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{b}_i\rangle`.
 
@@ -390,7 +390,7 @@ print("comparison: ", grad_compare)
 # It matches!!!
 # 
 # If you want to use adjoint differentiation without having to code up your own
-# method that can support arbitrary circuits, you can use ``diff_method=adjoint`` in PennyLane with 
+# method that can support arbitrary circuits, you can use ``diff_method="adjoint"`` in PennyLane with 
 # ``"default.qubit"`` or PennyLane's fast C++ simulator ``"lightning.qubit"``.
 
 
@@ -411,17 +411,17 @@ qml.grad(circuit_adjoint)(x)
 # --------------
 #
 # The algorithm gives us the correct answers, but is it worth using? Parameter-shift
-# gradients require at least two execution per parameter, so that method gets more
+# gradients require at least two executions per parameter, so that method gets more
 # and more expensive with the size of the circuit, especially on simulators. 
 # Backpropagation demonstrates decent time scaling, but requires more and more 
 # memory as the circuit gets larger.  Simulation of large circuits is already 
-# RAM limited, and backpropagation constrains the size of possible circuits even more.
+# RAM-limited, and backpropagation constrains the size of possible circuits even more.
 # PennyLane also achieves backpropagation derivatives from a Python simulator and
 # interface-specific functions. The ``"lightning.qubit"`` device does not support 
 # backpropagation, so backpropagation derivatives lose the speedup from an optimized
 # simulator.
 #
-# With adjoint differentiation on Lightning, you can get the best of both worlds: fast and 
+# With adjoint differentiation on ``"lightning.qubit"``, you can get the best of both worlds: fast and 
 # memory efficient.
 #
 # But how fast? The provided script `here <https://pennylane.ai/qml/demos/adjoint_diff_benchmarking.py>`__ 
@@ -439,7 +439,7 @@ qml.grad(circuit_adjoint)(x)
 # -----------
 # 
 # So what have we learned? Adjoint differentiation is an efficient method for differentiating
-# quantum circuits with a state vector simulation.  It scales nicely in time without 
+# quantum circuits with state vector simulation.  It scales nicely in time without 
 # excessive memory requirements. Now that you've seen how the algorithm works, you can
 # better understand what is happening when you select adjoint differentiation from one
 # of PennyLane's simulators.
