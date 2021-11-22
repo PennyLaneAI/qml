@@ -20,7 +20,7 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# Author: PennyLane dev team. Posted: 23 Nov 2021. Last updated: 23 Nov 2021.
+# *Author: PennyLane dev team. Posted: 23 Nov 2021. Last updated: 23 Nov 2021.*
 # 
 # `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
 # has two methods of calculation: forward and reverse.
@@ -55,7 +55,7 @@ Adjoint Differentiation
 # .. math:: U^{\dagger} U | \phi \rangle = |\phi\rangle.
 # 
 # The **adjoint differentiation method** takes advantage of the ability to erase, creating a time- and
-# memory-efficient method for computing quantum gradients on statevector simulators. Tyson Jones and Julien Gacon describe this
+# memory-efficient method for computing quantum gradients on state vector simulators. Tyson Jones and Julien Gacon describe this
 # algorithm in their paper
 # `"Efficient calculation of gradients in classical simulations of variational quantum algorithms" <https://arxiv.org/abs/2009.02823>`__ .
 #
@@ -194,13 +194,13 @@ print(M_expval_n)
 # We can calculate this in a more efficient way if we already have the
 # initial ``state`` :math:`| \Psi \rangle`. To shift the splitting point, we don't
 # have to recalculate everything from scratch. We just remove the operation from
-# the ket and add it to the bra.
+# the ket and add it to the bra:
 # 
-# .. math:: \langle b_n | = \langle b | U_n
+# .. math:: \langle b_n | = \langle b | U_n,
 #
-# .. math:: |k_n\rangle = U_n^{\dagger} |k\rangle 
+# .. math:: |k_n\rangle = U_n^{\dagger} |k\rangle .
 # 
-# For the ket vector, you can think of :math:`U_n^{\dagger}` as "eating" it's
+# For the ket vector, you can think of :math:`U_n^{\dagger}` as "eating" its
 # corresponding unitary from the vector, erasing it from the list of operations.
 # 
 # Of course, we actually work with the conjugate transpose of :math:`\langle b_n |`,
@@ -267,11 +267,11 @@ for op in reversed(ops):
 # We can also generalize the algorithm to multi-parameter gates, but we leave those out for now.
 #
 # Remember that each parameter occurs twice in :math:`\langle M \rangle`: once in the bra and once in
-# the ket. Therefore, we use the product rule to take the derivative with respect to both locations.
+# the ket. Therefore, we use the product rule to take the derivative with respect to both locations:
 # 
 # .. math::
 #       \frac{\partial \langle M \rangle}{\partial \theta_i} = 
-#       \langle 0 | U_1^{\dagger} \dots \frac{\text{d} U_i^{\dagger}}{\text{d} \theta_i} \dots M \dots U_i \dots U_1 | 0\rangle
+#       \langle 0 | U_1^{\dagger} \dots \frac{\text{d} U_i^{\dagger}}{\text{d} \theta_i} \dots M \dots U_i \dots U_1 | 0\rangle.
 #
 # 
 # .. math:: 
@@ -280,11 +280,11 @@ for op in reversed(ops):
 # We can now notice that those two components are complex conjugates of each other, so we can
 # further simplify.  Note that each term is not an expectation value of a Hermitian observable,
 # and therefore not guaranteed to be real.
-# When we add them together, the imaginary part cancels out, we obtain twice the
-# value of the real part.
+# When we add them together, the imaginary part cancels out, and we obtain twice the
+# value of the real part:
 # 
 # .. math::
-#       = 2 \cdot \text{Re}\left( \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M \dots \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle \right)
+#       = 2 \cdot \text{Re}\left( \langle 0 | U_1^{\dagger} \dots U_i^{\dagger} \dots M \dots \frac{\text{d} U_i}{\text{d} \theta_i}  \dots U_1 |0\rangle \right).
 #
 # We can take that formula and break it into its "bra" and "ket" halves for a derivative at the :math:`i` th position:
 # 
@@ -320,7 +320,7 @@ for op in reversed(ops):
 # 
 # We do have to calculate initial state first, the "forward" pass:
 # 
-# .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle
+# .. math:: |\Psi\rangle = U_{n} U_{n-1} \dots U_0 |0\rangle.
 # 
 # Once we have that, we only have about the same amount of work to calculate all the derivatives, 
 # instead of quadratically more work.
@@ -335,7 +335,7 @@ for op in reversed(ops):
 # .. math:: U = e^{i c \hat{G} \theta}
 # 
 # for a Pauli matrix :math:`\hat{G}`, a constant :math:`c`, and the parameter :math:`\theta`.
-# Thus we can write easily calculate their derivatives:
+# Thus we can easily calculate their derivatives:
 #
 # .. math:: \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U .
 # 
