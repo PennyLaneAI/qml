@@ -139,6 +139,7 @@ def make_cost(N, seed):
     """Create a cost function on N qubits with N frequencies."""
     dev = qml.device("default.qubit", wires=N)
 
+    @jax.jit
     @qml.qnode(dev, interface="jax")
     def cost(x):
         """Cost function on N qubits with N frequencies."""
