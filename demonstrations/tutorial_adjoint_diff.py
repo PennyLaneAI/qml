@@ -6,7 +6,7 @@ Adjoint Differentiation
 =======================
 
 .. meta::
-    :property="og:description": Learn how the adjoint differentiation method works.
+    :property="og:description": Learn how to use the adjoint method to compute gradients of quantum circuits."
     :property="og:image": https://pennylane.ai/qml/_images/icon.png
 
 .. related::
