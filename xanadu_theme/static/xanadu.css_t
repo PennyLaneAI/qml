@@ -54,7 +54,7 @@ body {
   /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 50px 0 rgba(0, 0, 0, 0.19);*/
 }
 
-#main-cards {
+.main-cards {
   width: 150%;
   margin-left: -200px;
 }
@@ -1890,7 +1890,7 @@ span.eqno {
 }
 
 @media screen and (max-width: 1200px){
-  #main-cards {
+  .main-cards {
     width: 100%;
     margin-left: 0px;
   }
@@ -2055,7 +2055,14 @@ span.eqno {
     background-color: inherit!important;
 }
 
+.q-hack-link {
+  height: 36px !important;
+  display: flex !important;
+}
 
+.q-hack-link img {
+  margin-top: auto !important;
+}
 
 .social-section {
   font-size: 22px;
@@ -2097,10 +2104,10 @@ footer.page-footer .footer-copyright {
     background-color: white;
 }
 
-#main-cards .card h3 {
+.main-cards .card h3 {
     margin-top: 20px;
 }
-#main-cards .card h5 {
+.main-cards .card h5 {
     margin-top: 10px;
 }
 

@@ -143,7 +143,6 @@ dev = qml.device("cirq.mixedsimulator", wires=3, shots=1000)
 from pennylane_cirq import ops as cirq_ops
 
 
-@qml.template
 def encoding(phi, gamma):
     for i in range(3):
         qml.RZ(phi[i], wires=[i])
@@ -156,16 +155,14 @@ def encoding(phi, gamma):
 # we make use of the
 # `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_
 # template from PennyLane.
-@qml.template
 def ansatz(weights):
-    qml.templates.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
+    qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
 NUM_ANSATZ_PARAMETERS = 14
 
-@qml.template
 def measurement(weights):
     for i in range(3):
-        qml.templates.ArbitraryStatePreparation(
+        qml.ArbitraryStatePreparation(
             weights[2 * i : 2 * (i + 1)], wires=[i]
         )
 
@@ -183,13 +180,12 @@ def experiment(weights, phi, gamma=0.0):
 
     return qml.probs(wires=[0, 1, 2])
 
-# Make a dry run to be able to draw
-experiment(
+# Draw the circuit at the given parameter values
+print(qml.draw(experiment)(
     np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
     np.zeros(3),
-    gamma=0.2,
+    gamma=0.2)
 )
-print(experiment.draw())
 
 
 ##############################################################################
@@ -283,7 +279,7 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
 # Seed for reproducible results
 np.random.seed(395)
 weights = np.random.uniform(
-    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS
+    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS, requires_grad=True
 )
 
 opt = qml.AdagradOptimizer(stepsize=0.1)

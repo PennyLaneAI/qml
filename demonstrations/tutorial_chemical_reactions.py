@@ -91,13 +91,6 @@ from pennylane import qchem
 # Hartree-Fock state
 hf = qml.qchem.hf_state(electrons=2, orbitals=4)
 
-def circuit(params, wires):
-    # Prepare the HF state: |1100>
-    qml.BasisState(hf, wires=wires)
-    qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
-    qml.SingleExcitation(params[1], wires=[0, 2])
-    qml.SingleExcitation(params[2], wires=[1, 3])
-
 
 ##############################################################################
 # To construct the potential energy surface, we vary the location of the nuclei and calculate the
@@ -113,7 +106,7 @@ def circuit(params, wires):
 # the equilibrium bond length, and the point where the bond is broken, which occurs when the atoms
 # are far away from each other.
 
-import numpy as np
+from pennylane import numpy as np
 
 # atomic symbols defining the molecule
 symbols = ['H', 'H']
@@ -138,13 +131,22 @@ for r in r_range:
     # Obtain the qubit Hamiltonian 
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
-    # define the device, cost function, and optimizer
+    # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
-    cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
+    @qml.qnode(dev)
+    def circuit(parameters):
+        # Prepare the HF state: |1100>
+        qml.BasisState(hf, wires=range(qubits))
+        qml.DoubleExcitation(parameters[0], wires=[0, 1, 2, 3])
+        qml.SingleExcitation(parameters[1], wires=[0, 2])
+        qml.SingleExcitation(parameters[2], wires=[1, 3])
+
+        return qml.expval(H)  # we are interested in minimizing this expectation value
+
     # initialize the gate parameters
-    params = np.zeros(3)
+    params = np.zeros(3, requires_grad=True)
 
     # initialize with converged parameters from previous point
     if pes_point > 0:
@@ -153,7 +155,7 @@ for r in r_range:
     prev_energy = 0.0
     for n in range(50):
         # perform optimization step
-        params, energy = opt.step_and_cost(cost_fn, params)
+        params, energy = opt.step_and_cost(circuit, params)
 
         if np.abs(energy - prev_energy) < 1e-6:
             break
@@ -273,8 +275,6 @@ orbitals = 6
 singles, doubles = qchem.excitations(electrons, orbitals)
 hf = qml.qchem.hf_state(electrons, orbitals)
 
-def circuit(params, wires):
-    AllSinglesDoubles(params, wires, hf, singles, doubles)
 
 # loop to change reaction coordinate
 r_range = np.arange(1.0, 3.0, 0.1)
@@ -286,10 +286,14 @@ for r in r_range:
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
 
     dev = qml.device("default.qubit", wires=qubits)
-    cost_fn = qml.ExpvalCost(circuit, H, dev)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
-    params = np.zeros(len(singles) + len(doubles))
+    @qml.qnode(dev)
+    def circuit(parameters):
+        AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
+        return qml.expval(H)  # we are interested in minimizing this expectation value
+
+    params = np.zeros(len(singles) + len(doubles), requires_grad=True)
 
     if pes_point > 0:
         params = params_old
@@ -297,7 +301,7 @@ for r in r_range:
     prev_energy = 0.0
 
     for n in range(60):
-        params, energy = opt.step_and_cost(cost_fn, params)
+        params, energy = opt.step_and_cost(circuit, params)
         if np.abs(energy - prev_energy) < 1e-6:
             break
         prev_energy = energy

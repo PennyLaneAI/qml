@@ -100,11 +100,10 @@ n = 2
 
 @qml.qnode(dev)
 def circuit():
-    qml.templates.ApproxTimeEvolution(H, t, n)
+    qml.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit()
-print(circuit.draw())
+print(qml.draw(circuit)())
 
 ######################################################################
 # Layering circuits
@@ -149,8 +148,7 @@ def circuit(param):
     circ(param)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit(0.5)
-print(circuit.draw())
+print(qml.draw(circuit)(0.5))
 
 ######################################################################
 #
@@ -162,8 +160,7 @@ def circuit(params, **kwargs):
     qml.layer(circ, 3, params)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit([0.3, 0.4, 0.5])
-print(circuit.draw())
+print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 
 ######################################################################
 #
@@ -233,7 +230,7 @@ print(circuit.draw())
 #
 
 from pennylane import qaoa
-import numpy as np
+from pennylane import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
 
@@ -314,16 +311,19 @@ def circuit(params, **kwargs):
 # ``params[0]`` and ``params[1]`` into each layer of the circuit. That's it! The last
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
-# The cost function is the expectation value of :math:`H_C`, which we want to minimize. The
-# function :func:`~.pennylane.ExpvalCost` is designed for this purpose: it returns the
-# expectation value of an input Hamiltonian with respect to the circuit's output state.
-# We also define the device on which the simulation is
-# performed. We use the PennyLane-Qulacs plugin to
-# run the circuit on the Qulacs simulator:
+# The cost function is the expectation value of :math:`H_C`, which we want to minimize. We
+# use the function :func:`~.pennylane.expval` which returns the
+# expectation value of the Hamiltonian with respect to the circuit's output state.
+# We also define the device on which the simulation is performed. We use the
+# PennyLane-Qulacs plugin to run the circuit on the Qulacs simulator:
 #
 
 dev = qml.device("qulacs.simulator", wires=wires)
-cost_function = qml.ExpvalCost(circuit, cost_h, dev)
+
+@qml.qnode(dev)
+def cost_function(params):
+    circuit(params)
+    return qml.expval(cost_h)
 
 
 ######################################################################
@@ -335,7 +335,7 @@ cost_function = qml.ExpvalCost(circuit, cost_h, dev)
 
 optimizer = qml.GradientDescentOptimizer()
 steps = 70
-params = [[0.5, 0.5], [0.5, 0.5]]
+params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 
 ######################################################################
@@ -444,9 +444,12 @@ def circuit(params, **kwargs):
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
-cost_function = qml.ExpvalCost(circuit, new_cost_h, dev)
+@qml.qnode(dev)
+def cost_function(params):
+    circuit(params)
+    return qml.expval(new_cost_h)
 
-params = [[0.5, 0.5], [0.5, 0.5]]
+params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)

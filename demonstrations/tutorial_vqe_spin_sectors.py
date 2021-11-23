@@ -49,7 +49,7 @@ with the symbols of the constituent atoms and a one-dimensional array with the c
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
 
-import numpy as np
+from pennylane import numpy as np
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -156,7 +156,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, hf, singles, doubles)
+    qml.AllSinglesDoubles(params, wires, hf, singles, doubles)
 
 
 ##############################################################################
@@ -185,17 +185,24 @@ def circuit(params, wires):
 dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
-# Next, we use the :class:`~.pennylane.ExpvalCost` class to define the cost function.
+# Next, we define the cost function as the following QNode, where we make use of
+# the :func:`~.pennylane.expval` function to compute the expectation value of the hamiltonian.
 # This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
-cost_fn = qml.ExpvalCost(circuit, H, dev)
+@qml.qnode(dev)
+def cost_fn(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(H)
 
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
 
-S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
+@qml.qnode(dev)
+def S2_exp_value(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(S2)
 
 ##############################################################################
 # The total spin :math:`S` of the trial state can be obtained from the
@@ -218,7 +225,7 @@ def total_spin(params):
 
 opt = qml.GradientDescentOptimizer(stepsize=0.8)
 np.random.seed(0)  # for reproducibility
-theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
+theta = np.random.normal(0, np.pi, len(singles) + len(doubles), requires_grad=True)
 print(theta)
 
 ##############################################################################
@@ -271,7 +278,7 @@ print(doubles)
 
 
 def circuit(params, wires):
-    qml.templates.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
+    qml.AllSinglesDoubles(params, wires, np.flip(hf), singles, doubles)
 
 
 ##############################################################################
@@ -292,15 +299,22 @@ def circuit(params, wires):
 # Now, we define the new functions to compute the expectation values of the Hamiltonian
 # and the total spin operator for the new circuit.
 
-cost_fn = qml.ExpvalCost(circuit, H, dev)
-S2_exp_value = qml.ExpvalCost(circuit, S2, dev)
+@qml.qnode(dev)
+def cost_fn(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(H)
+
+@qml.qnode(dev)
+def S2_exp_value(params):
+    circuit(params, wires=range(qubits))
+    return qml.expval(S2)
 
 ##############################################################################
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
 # optimize the variational circuit.
 
 np.random.seed(0)
-theta = np.random.normal(0, np.pi, len(singles) + len(doubles))
+theta = np.random.normal(0, np.pi, len(singles) + len(doubles), requires_grad=True)
 
 max_iterations = 100
 conv_tol = 1e-06

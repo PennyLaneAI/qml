@@ -83,7 +83,7 @@ def circuit(params):
 # Let's test the variational circuit evaluation with some parameter input:
 
 # initial parameters
-params = np.random.random([6])
+params = np.random.random([6], requires_grad=True)
 
 print("Parameters:", params)
 print("Expectation value:", circuit(params))
@@ -91,7 +91,7 @@ print("Expectation value:", circuit(params))
 ##############################################################################
 # We can also draw the executed quantum circuit:
 
-print(circuit.draw())
+print(qml.draw(circuit)(params))
 
 
 ##############################################################################
@@ -127,13 +127,21 @@ def parameter_shift(qnode, params):
 print(parameter_shift(circuit, params))
 
 ##############################################################################
-# We can compare this to PennyLane's *built-in* parameter-shift feature by using
-# the :func:`qml.grad <pennylane.grad>` function. Remember, when we defined the
+# We can compare this to PennyLane's *built-in* quantum gradient support by using
+# the :func:`qml.grad <pennylane.grad>` function, which allows us to compute gradients
+# of hybrid quantum-classical cost functions. Remember, when we defined the
 # QNode, we specified that we wanted it to be differentiable using the parameter-shift
 # method (``diff_method="parameter-shift"``).
 
 grad_function = qml.grad(circuit)
 print(grad_function(params)[0])
+
+##############################################################################
+# Alternatively, we can directly compute quantum gradients of QNodes using
+# PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
+
+print(qml.gradients.param_shift(circuit)(params))
+
 
 ##############################################################################
 # If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
@@ -159,7 +167,7 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev, diff_method="parameter-shift", mutable=False)
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 
@@ -170,7 +178,8 @@ def circuit(params):
 
 
 # initialize circuit parameters
-params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
+params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 print(params.size)
 print(circuit(params))
 
@@ -263,12 +272,12 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev, diff_method="backprop")
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 # initialize circuit parameters
-params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=15)
-params = np.array(params, requires_grad=True)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
+params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 print(circuit(params))
 
 ##############################################################################
@@ -307,7 +316,7 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 dev = qml.device("default.qubit", wires=4)
 
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
+    qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 ##############################################################################
@@ -326,9 +335,9 @@ forward_backprop = []
 gradient_backprop = []
 
 for depth in range(0, 21):
-    params = qml.init.strong_ent_layers_normal(n_wires=4, n_layers=depth)
+    param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=depth)
+    params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
     num_params = params.size
-    params = np.array(params, requires_grad=True)
 
     # forward pass timing
     # ===================

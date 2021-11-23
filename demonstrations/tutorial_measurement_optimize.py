@@ -125,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", wires=num_qubits)
+dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
 
 # number of electrons
 electrons = 2
@@ -137,19 +137,24 @@ initial_state = qml.qchem.hf_state(electrons, num_qubits)
 singles, doubles = qml.qchem.excitations(electrons, num_qubits)
 s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
 ansatz = functools.partial(
-    qml.templates.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
+    qml.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
 )
 
 # generate the cost function
-cost = qml.ExpvalCost(ansatz, H, dev)
+@qml.qnode(dev)
+def cost_circuit(params):
+    ansatz(params, wires=dev.wires)
+    return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
 # QNodes under the hood---one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
-print("Cost function value:", cost(params))
-print("Number of quantum evaluations:", dev.num_executions)
+with qml.Tracker(dev) as tracker:  # track the number of executions
+    print("Cost function value:", cost_circuit(params))
+
+print("Number of quantum evaluations:", tracker.totals['executions'])
 
 ##############################################################################
 # How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
@@ -383,17 +388,17 @@ dev = qml.device("default.qubit", wires=3)
 
 @qml.qnode(dev)
 def circuit1(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
 @qml.qnode(dev)
 def circuit2(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
 
-
-weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=3)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
+weights = np.random.normal(scale=0.1, size=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
@@ -404,7 +409,7 @@ print("Expectation value of XIZ = ", circuit2(weights))
 
 @qml.qnode(dev)
 def circuit_qwc(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
 
     # rotate wire 0 into the shared eigenbasis
     qml.RY(-np.pi / 2, wires=0)
@@ -450,7 +455,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 
 @qml.qnode(dev)
 def circuit(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return [
         qml.expval(qml.PauliX(0) @ qml.PauliY(1)),
         qml.expval(qml.PauliX(0) @ qml.PauliZ(2))
@@ -484,7 +489,7 @@ print(new_obs)
 #
 #     @qml.qnode(dev)
 #     def circuit(weights):
-#         qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+#         qml.StronglyEntanglingLayers(weights, wires=range(3))
 #         return [
 #             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
 #             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
@@ -727,10 +732,11 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev)
 def circuit(weights, group=None, **kwargs):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(4))
+    qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
 
-weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=4)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
+weights = np.random.normal(scale=0.1, size=param_shape)
 result = [circuit(weights, group=g) for g in obs_groupings]
 
 print("Term expectation values:")
@@ -750,7 +756,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # optimized:
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.templates.StronglyEntanglingLayers, H, dev, optimize=True)
+cost_fn = qml.ExpvalCost(qml.StronglyEntanglingLayers, H, dev, optimize=True)
 print(cost_fn(weights))
 
 ##############################################################################

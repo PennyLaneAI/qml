@@ -55,7 +55,7 @@ def circuit(params, wires=0):
 
 
 ##############################################################################
-# We then define our cost function using the ``ExpvalCost`` class, which supports the computation of
+# We then define our cost function which supports the computation of
 # block-diagonal or diagonal approximations to the Fubini-Study metric tensor [#stokes2019]_. This tensor is a
 # crucial component for optimizing with quantum natural gradients.
 
@@ -63,7 +63,11 @@ coeffs = [1, 1]
 obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
-cost_fn = qml.ExpvalCost(circuit, H, dev)
+
+@qml.qnode(dev)
+def cost_fn(params):
+    circuit(params)
+    return qml.expval(H)
 
 ##############################################################################
 # To analyze the performance of quantum natural gradient on VQE calculations,
@@ -73,7 +77,7 @@ cost_fn = qml.ExpvalCost(circuit, H, dev)
 #
 # To perform a fair comparison, we fix the initial parameters for the two optimizers.
 
-init_params = np.array([3.97507603, 3.00854038])
+init_params = np.array([3.97507603, 3.00854038], requires_grad=True)
 
 
 ##############################################################################
@@ -123,7 +127,7 @@ print("Number of iterations = ", n)
 ##############################################################################
 # We then repeat the process for the optimizer employing quantum natural gradients:
 
-opt = qml.QNGOptimizer(stepsize=step_size, diag_approx=False)
+opt = qml.QNGOptimizer(stepsize=step_size, approx="block-diag")
 
 params = init_params
 
@@ -291,9 +295,12 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 ##############################################################################
 # Note that the qubit register has been initialized to :math:`|1100\rangle`, which encodes for
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
-# Again, we define the cost function using the ``ExpvalCost`` class.
+# Again, we define the cost function to be the following QNode that measures ``expval(H)``:
 
-cost = qml.ExpvalCost(ansatz, hamiltonian, dev, diff_method="parameter-shift")
+@qml.qnode(dev)
+def cost(params):
+    ansatz(params)
+    return qml.expval(hamiltonian)
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
@@ -306,7 +313,7 @@ exact_value = -1.136189454088
 # We now set up our optimizations runs.
 
 np.random.seed(0)
-init_params = np.random.uniform(low=0, high=2 * np.pi, size=12)
+init_params = np.random.uniform(low=0, high=2 * np.pi, size=12, requires_grad=True)
 max_iterations = 500
 step_size = 0.5
 conv_tol = 1e-06
@@ -352,7 +359,7 @@ print("Final circuit parameters = \n", params)
 
 ##############################################################################
 # Next, we run the optimizer employing quantum natural gradients.
-opt = qml.QNGOptimizer(step_size, lam=0.001, diag_approx=False)
+opt = qml.QNGOptimizer(step_size, lam=0.001, approx="block-diag")
 
 params = init_params
 prev_energy = cost(params)

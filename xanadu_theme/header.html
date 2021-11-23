@@ -24,6 +24,9 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="https://pennylane.ai/qml/demonstrations.html" class="nav-link">Demos</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="https://pennylane.ai/install.html">Install</a>
       </li>
       <li class="nav-item">
@@ -36,7 +39,9 @@
         <a class="nav-link" href="https://pennylane.ai/blog">Blog</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="https://qhack.ai"><img src="https://pennylane.ai/img/qhack_plain_black.png"></a>
+        <a class="nav-link q-hack-link" href="https://pennylane.ai/carnival">
+          <img src="https://pennylane.ai/img/carnival.png">
+        </a>
       </li>
     </ul>
     <!-- Links -->
@@ -62,3 +67,24 @@
   <!-- Collapsible content -->
 </nav>
 <!--/.Navbar-->
+
+<script type="text/javascript">
+var isDemoPages = window.location.pathname.includes('/demos_') || window.location.pathname.includes('/demonstrations') || window.location.pathname.includes('/demos/');
+
+if (isDemoPages) {
+  var $navItems = $('.nav-item');
+
+  var previousActiveLink = $navItems.filter(function(index, item) {
+    var $item = $(item);
+    return $item.hasClass('active') && $item.innerText !== 'Demos';
+  });
+
+  if (previousActiveLink.length) $(previousActiveLink[0]).removeClass('active');
+
+  var demoLink = $navItems.filter(function(index, item) {
+    return item.innerText === 'Demos';
+  });
+
+  if (demoLink.length) $(demoLink[0]).addClass('active');
+}
+</script>
