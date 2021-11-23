@@ -92,6 +92,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_ensemble_multi_qpu`
     :tags: pytorch forest qiskit
 
+.. customgalleryitem::
+    :tooltip: Estimate a classical kernel function on a quantum computer.
+    :figure: demonstrations/classical_kernels/QEK.jpg
+    :description: :doc:`demos/tutorial_classical_kernels`
+    :tags: kernels approximation
+
 :html:`</div></div><div style='clear:both'>`
 
 

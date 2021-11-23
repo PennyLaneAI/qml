@@ -2,8 +2,8 @@ r"""
 
 .. _classical_kernels:
 
-Can we use a quantum copmuter to compute a classical kernel function?
-=====================================================================
+How to approximate a classical kernel function with a quantum computer
+=======================================================================
 
 .. meta::
     :property="og:description": Finding a QEK to approximate the Gaussian
@@ -24,7 +24,7 @@ Forget about advantages, supremacies, or speed-ups.
 Let us understand better what we can and cannot do with a quantum computer.
 In particular, how can we exploit the Fourier representation of quantum
 embedding kernels (QEKs)?
-To whate use can we put our knowledge of it?
+To what use can we put our knowledge of it?
 
 Can we replicate a classical kernel function with a quantum computer?
 Lots of researchers have lengthily stared at the opposite question, namely that
@@ -54,6 +54,9 @@ sense.
 
 In order to keep the demo short and sweet, we focus on one simple example, but
 the same ideas would apply for more general scenarios.
+Also, Refs. _[#Fourier], _[#qkernels], and _[#QEK] should be helpful for those
+who'd like to see the underlying theory of QEKs and their Fourier
+representation.
 The relaitvely short sections with self-explanatory titles should give a good
 ides of what awaits ahead.
 So tag along if you'd like to see how we build a quantum embedding kernel that
@@ -61,7 +64,7 @@ appeoximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/sketch.PNG
+.. figure:: ../demonstrations/classical_kernels/QEK.jpg
     :align: center
     :width: 80%
     :target: javascript:void(0)
@@ -128,13 +131,14 @@ np.random.seed(53173)
 
 ###############################################################################
 # We'll look at the Gaussian kernel:
-# :math:`k_\sigma(x_1,x_2):=e^{-\lVertx_1-x_2\rVert^2/2\sigma^2}`.
+# :math:`k_\sigma(x_1,x_2):=e^{-\lVert x_1-x_2\rVert^2/2\sigma^2}`.
 # This function is clearly shift-invariant:
 #
-# ..math:: 
-#    k_\sigma(x_1+a,x_2+a) &= e^{-\lVert(x_1+a)-(x_2+a)\rVert^2/2\sigma^2} \\
-#    & = e^{-\lVert x_1-x_2\rVert^2/2\sigma^2} \\
-#     & = k_\sigma(x_1,x_2).
+# .. math::
+#
+#   k_\sigma(x_1+a,x_2+a) &= e^{-\lVert(x_1+a)-(x_2+a)\rVert^2/2\sigma^2} \\
+#   & = e^{-\lVert x_1-x_2\rVert^2/2\sigma^2} \\
+#   & = k_\sigma(x_1,x_2).
 #
 # The object of our study will be a simple version of the Gaussian kernel,
 # where we consider :math:`1`-dimensional data, so :math:`\lVert
@@ -144,9 +148,9 @@ np.random.seed(53173)
 # We can always re-introduce it later by rescaling the data.
 # Again, we can write the function in terms of the lag vector only:
 #
-#..math:: k(\delta)=e^{-\delta^2}.
+# .. math:: k(\delta)=e^{-\delta^2}.
 #
-#Now let's write a few lines to plot the Gaussian kernel:
+# Now let's write a few lines to plot the Gaussian kernel:
 
 def gaussian_kernel(delta):
     return math.exp(-delta ** 2)
@@ -174,11 +178,12 @@ plt.show();
 # #. Normalization :math:`k(0)=1`.
 # #. Smoothness (seen as quickly decaying Fourier spectrum).
 #
-# Fourier analysis for the Gaussian kernel
+# Fourier analysis of the Gaussian kernel
 # -------------------------------------------
-
-# Once we've found the Fourier spectrum of the Gaussian kernel (easy), we'll
-# try to build a QEK with the same spectrum.
+#
+# The first next step will be to find the Fourier spectrum of the Gaussian
+# kernel, which is an easy problem for classical computers.
+# Once we've found it, we'll build a QEK with the same spectrum.
 # The QEK produces a finite Fourier series approximation for the gaussian
 # kernel.
 #
@@ -186,7 +191,7 @@ plt.show();
 # periodic function using the sine and cosine functions.
 # Fourier analysis tells us that we can write any given periodic function as
 #
-# ..math:: f(x) = a_0 + \sum_n a_n\cos(n\omega_0x) + b_n\sin(n\omega_0x).
+# .. math:: f(x) = a_0 + \sum_n a_n\cos(n\omega_0x) + b_n\sin(n\omega_0x).
 #
 # For that, we only need to find the suitable base frequency :math:`\omega_0`
 # and coefficients :math:`a_0, a_1, \ldots, b_0, b_1,\ldots`.
@@ -221,14 +226,14 @@ plt.show();
 # infinity.
 #
 # Next up, how does the Fourier spectrum of such an object look like?
-# We can find out using PennyLane's `fourier` module!
+# We can find out using PennyLane's ``fourier`` module!
 
 from pennylane.fourier import coefficients
 
 ##################################################################################
-# The function `coefficients` computes for us the coefficients of the Fourier
+# The function ``coefficients`` computes for us the coefficients of the Fourier
 # series up to a fixed term.
-# One tiny dfetail here: `coefficients` returns one cumplex number :math:`c_n`
+# One tiny dfetail here: ``coefficients`` returns one complex number :math:`c_n`
 # for each frequency :math:`n`.
 # The real part corresponds to the :math:`a_n` coefficient, and the imaginary
 # part to the :math:`b_n` coefficient: :math:`c_n=a_n+ib_n`.
@@ -277,6 +282,27 @@ plt.show();
 # Designing a suitable QEK
 # --------------------------
 #
+# Designing a suitable QEK amounts to designing a suitable parametrized quantum
+# circuit.
+# Let's take a moment to refresh the big scheme of things, with the following
+# picture:
+#
+# |
+#
+# .. figure:: ../demonstrations/classical_kernels/flowchart.PNG
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+#
+#     Schematic of the steps covered in this demo
+#
+# Indeed, we start from a classical kernel, obtain its spectrum, and then
+# specify two building blocks of the parametrized quantum circuit: the
+# trainable gates and the encoding gates.
+# With the particularity, that we'll use a state preparation template instead
+# of some directly parametrized Ansatz, and we'll have one single layer of
+# encoding gates *after* the state preparation one.
+#
 # Start with the fixed gate we'll use to encode the data :math:`S(x)`.
 # It consists of applying one Pauli-:math:`Z` rotation to each qubit with
 # rotation parameter :math:`x` times some parameter :math:`\vartheta_i`, for
@@ -286,7 +312,7 @@ def S(x, thetas, wires):
     for (i, wire) in enumerate(wires):
         qml.RZ(thetas[i] * x, wires = [wire])
 ###############################################################################
-# By setting the `thetas` properly, we achieve the integer-valued spectrum:
+# By setting the ``thetas`` properly, we achieve the integer-valued spectrum:
 # :math:`\{0, 1, \ldots, 2^n-2, 2^n-1\}`, for :math:`n` qubits.
 # Some math shows that setting :math:`\vartheta_i=2^{n-i}`, for
 # :math:`\{1,\ldots,n\}` produces the desired outcome.
@@ -297,11 +323,11 @@ def make_thetas(m_wires):
 ###############################################################################
 # Next we introduce the only trainable gate we neet to make use of.
 # Contrary to the usual Ans\"atze used in supervised and unsupervised learning,
-# we use a state preparation template called `MottonenStatePreparation`.
+# we use a state preparation template called ``MottonenStatePreparation``.
 # The unitary associated to this template transforms the :math:\lvert0\rangle`
 # state into a state with amplitudes :math:`a=(a_1,a_2,\ldots,a_{2^n-1})`,
 # namely :math:`\lvert a\rangle=\sum_j a_j\lvert j\rangle`, provided
-# "math"`\lVert a\rVert^2=1`.
+# :math:`\lVert a\rVert^2=1`.
 
 def W(features, wires):
     qml.templates.state_preparations.MottonenStatePreparation(features, wires)
@@ -310,18 +336,19 @@ def W(features, wires):
 # With that, we have the feature map onto the Hilbert space of the quantum
 # computer:
 #
-# ..math:: \lvert x_a\rangle = S(x)W_a\lvert0\rangle,
+# .. math:: \lvert x_a\rangle = S(x)W_a\lvert0\rangle,
 #
 # for a given :math:`a`, which we will specify later.
 #
 # Accordingly, we can build the QEK corresponding to this feature map as
 #
-# ..math::
+# .. math::
+#
 #   k_a(x_1,x_2) &= \lvert\langle0\rvert W_a^\dagger S^\dagger(x_1)
-#   S(x_2)W_a\lvert0\rangle\rveret^2 \\
+#   S(x_2)W_a\lvert0\rangle\rvert^2 \\
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_2-x_1) W_a\lvert0\rangle\rvert^2.
 #
-# In the code, we call :math:`a` `amplitudes`:
+# In the code, we call :math:`a` ``amplitudes``:
 
 def ansatz(x1, x2, thetas, amplitudes, wires):
     W(amplitudes, wires)
@@ -331,7 +358,8 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 ###############################################################################
 # Since this kernel is by construction real-valued, we also have
 #
-# ..math::
+# .. math::
+#
 #   (k_a(x_1,x_2))^\dagger &= k_a(x_1,x_2) \\
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_1-x_2) W_a\lvert0\rangle\rvert^2 \\
 #   &= k_a(x_2,x_1).
@@ -340,7 +368,8 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 # x_2+s)` for any :math:`s\in\mathbb{R}`.
 # So we can also write it in terms of the lag :math:`\delta=x_1-x_2`:
 #
-# ..math::
+# .. math::
+#
 #   k_a(\delta) = \lvert\langle0\rvert W_a^\dagger
 #   S(\delta)W_a\lvert0\rangle\rvert^2.
 #
@@ -351,7 +380,7 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 # -------------------------------------------------
 #
 # Also, at this point we need to set the number of qubits of our computer.
-# For this example, we'll use the variable `n_wires`, and set it to :math:`5`.
+# For this example, we'll use the variable ``n_wires``, and set it to :math:`5`.
 
 n_wires = 5
 
@@ -362,7 +391,7 @@ dev = qml.device("default.qubit", wires = n_wires, shots = None)
 wires = dev.wires.tolist()
 
 ###############################################################################
-# And write the function that will use the device, hence the `@qml.qnode`
+# And write the function that will use the device, hence the ``@qml.qnode``
 # decorator!
 
 @qml.qnode(dev)
@@ -373,7 +402,7 @@ def QEK_circuit(x1, x2, thetas, amplitudes):
 ###############################################################################
 # Recall that the outputs of QEKs are defined as the probability of obtaining
 # the outcome :math:`\lvert0\rangle` when measuring on the computational basis.
-# That corresponds to the :math:`0^\text{th}` entry of `qml.probs`:
+# That corresponds to the :math:`0^\text{th}` entry of ``qml.probs``:
 
 def QEK_2(x1, x2, thetas, amplitudes):
     return QEK_circuit(x1, x2, thetas, amplitudes)[0]
@@ -391,13 +420,13 @@ def QEK_on_dataset(deltas, thetas, amplitudes):
     return y
 
 ###############################################################################
-# This is also a good place to fix the `thetas` array, so that we don't forget
+# This is also a good place to fix the ``thetas`` array, so that we don't forget
 # later.
 
 thetas = make_thetas(n_wires)
 
 ###############################################################################
-# Let's see how this looks like for one particular choice of `amplitudes`.
+# Let's see how this looks like for one particular choice of ``amplitudes``.
 # We need to make sure the array fulfills the normalization conditions.
 
 test_features = np.asarray([1./(1+i) for i in range(2 ** n_wires)])
@@ -419,18 +448,18 @@ plt.show();
 # ----------------------------------
 #
 # In order to simplify the formulas, we introduce new variables, which we call
-# `probabilities` :math:`(w_0, w_1, w_2, \ldots, w_{2^n-1})`, and we define as
+# ``probabilities`` :math:`(w_0, w_1, w_2, \ldots, w_{2^n-1})`, and we define as
 # :math:`w_j=a_j^2`.
 # Following the normalization property above, we have :math:`\sum_j w_j=1`.
 # Don't get too fond of them, we only need them for this step!
 # Remember we introduced the vector :math:`a` for the
-# `MottonenStatePreparation` as the *amplitudes* of a quantum state?
+# ``MottonenStatePreparation`` as the *amplitudes* of a quantum state?
 # Then it makes sense that we call its squares *probabilities*, doesn't it?
 #
-# There is a crazy formula that matches the entries of `probabilities` with the
+# There is a crazy formula that matches the entries of *probabilities* with the
 # Fourier series of the resulting QEK function:
 #
-# ..math:: 
+# .. math:: 
 #
 #   \text{probabilities} &\longrightarrow \text{Fourier coefficients} \\
 #   \begin{pmatrix} w_0 \\ w_1 \\ w_2 \\ \vdots \\ w_{2^n-1} \end{pmatrix}
@@ -444,7 +473,7 @@ plt.show();
 # We consider now a slightly different map :math:`F_s`, for a given spectrum
 # :math:`(s_0, s_1, \ldots, s_{2^n-1})`:
 #
-# ..math::
+# .. math::
 #
 #   F_s: \text{probabilities} &\longrightarrow \text{Difference between Fourier
 #   coefficients} \\
@@ -477,7 +506,7 @@ def predict_spectrum(probabilities):
     return spectrum
 
 ###############################################################################
-# And then :math:`F_s` is just `predict_spectrum` minus the spectrum we want to
+# And then :math:`F_s` is just ``predict_spectrum`` minus the spectrum we want to
 # predict:
 
 def F(probabilities, spectrum):
@@ -521,7 +550,7 @@ def make_initial_probabilities(d):
 probabilities = make_initial_probabilities(2 ** n_wires)
 
 ###############################################################################
-# Recall the `spectrum` we want to match is that of the periodic extension of
+# Recall the ``spectrum`` we want to match is that of the periodic extension of
 # the Gaussian kernel.
 
 spectrum = fourier_p(2 ** n_wires)
@@ -563,8 +592,8 @@ plt.show();
 # But all those probabilities being close to :math:`0` makes me fear some of
 # them must've turned negative.
 # This isn't necessarily bad in general, only for us.
-# For `MottonenStatePreparation` we'll need to give `amplitudes` as one of the
-# arguments, which is the componentwise square root of `probabilities` so it
+# For ``MottonenStatePreparation`` we'll need to give ``amplitudes`` as one of the
+# arguments, which is the componentwise square root of ``probabilities`` so it
 # won't hurt to add this here:
 
 def probabilities_threshold_normalize(probabilities, thresh = 1.e-10):
@@ -599,7 +628,7 @@ plt.show();
 #
 # And the moment of truth!
 # Does the solution really match the spectrum?
-# We try it first using `predict_spectrum` only
+# We try it first using ``predict_spectrum`` only
 
 plt.plot(range(d), fourier_p(d)[:d], '+', label = "Gaussian kernel")
 plt.plot(range(d), predict_spectrum(probabilities)[:d], 'x', label = "QEK predicted")
@@ -614,7 +643,7 @@ plt.show();
 # But as we just said this is still only the predicted spectrum.
 # We haven't called the quantum computer at all yet!
 #
-# Let's see what happens when we call the function `coefficients` on the QEK
+# Let's see what happens when we call the function ``coefficients`` on the QEK
 # function we defined earlier.
 # Good coding praxis tells us we should probably turn this step into a function
 # itself, in case it is of use later:
@@ -653,11 +682,6 @@ plt.show();
 # Yeah!
 # We did it!
 #
-# *et voilà!*
-#
-# This was how you can approximate the Gaussian kernel using a stationary toy
-# QEK!
-#
 # .. figure:: ../demonstrations/classical_kernels/salesman.PNG
 #       :align: center
 #       :width: 70%
@@ -665,18 +689,6 @@ plt.show();
 #
 # References
 # -----------
-#
-# .. [#Rasmussen]
-#
-#       Carl Edward Rasmussen, Christopher K. I. Williams.
-#       `"Gaussian Processes for Machine Learning" <gaussianprocess.org/qpml/chapters>`__.
-#       MIT Press, 2006.
-#
-# .. [#Scholkopf]
-#
-#       Bernhard Schölkopf, Alexander J. Smola.
-#       `"Learning with Kernels" <mitpress.mit.edu/books/learning-kernels>`__.
-#       MIT Press, 2001.
 #
 # .. [#QEK]
 #
