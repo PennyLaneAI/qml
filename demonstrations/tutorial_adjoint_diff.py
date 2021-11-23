@@ -451,6 +451,10 @@ qml.grad(circuit_adjoint)(x)
 # Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang. Yao.jl: `Extensible, efficient framework for quantum
 # algorithm design <https://quantum-journal.org/papers/q-2020-10-11-341/>`__ , 2019
 #
-
-
+#
+# Thank you for reading this tutorial. Here's a Quantum Carnival ticket. Enjoy!
+#
+#  .. figure:: ../demonstrations/adjoint_diff/adjoint-diff-tkt.png
+#     :width: 50%
+#     :align: center
 
