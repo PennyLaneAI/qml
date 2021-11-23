@@ -29,6 +29,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: tensorflow autograd
 
 .. customgalleryitem::
+    :tooltip: Learn how to compute gradients of quantum circuits with the adjoint method.
+    :figure: demonstrations/adjoint_diff/icon.png
+    :description: :doc:`demos/tutorial_adjoint_diff`
+    :tags: 
+
+.. customgalleryitem::
     :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
     :figure: demonstrations/plugins_hybrid/photon_redirection.png
     :description: :doc:`demos/tutorial_plugins_hybrid`
