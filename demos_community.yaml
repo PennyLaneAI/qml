@@ -1,3 +1,16 @@
+- title: Exploring quantum models with a teacher-student scheme
+  author: Katerina Gratsea and Patrick Huembeli
+  date: 11/22/2021
+  code: https://github.com/KaterinaGratsea/Teacher-student_scheme
+
+  paper: https://arxiv.org/abs/2105.01477
+  color: heavy-rain-gradient
+  description: |
+    Using PennyLane, we introduce a teacher-student scheme to systematically compare 
+    different Quantum Neural Network (QNN) architectures and to evaluate their relative expressive power. 
+    This scheme avoids training with a specific dataset and compares the learning 
+    capacity of different quantum models.
+
 - title: Hybrid Neural Network using Data-Reuploading technique
   author: Nikolaos Schetakis (nikschet)
   date: 11/04/2021
@@ -8,8 +21,6 @@
   description: |
     We combine a standard Variational Classifier with a Data-Reuploading Classifier,
     and integrate the resulting QNode as a quantum layer in a Hybrid Neural Network.
-
-
 
 - title: Fraud Detection
   author: Sophie Choe
