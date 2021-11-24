@@ -12,10 +12,10 @@ Error mitigation with Mitiq and PennyLane
    tutorial_chemical_reactions Modelling chemical reactions
    tutorial_noisy_circuits Explore NISQ devices
 
-*Author: Mitiq and PennyLane dev teams. Last updated: 10 November 2021*
+*Author: Mitiq and PennyLane dev teams. Last updated: 29 November 2021*
 
 Have you ever run a circuit on quantum hardware and not quite got the result you were expecting?
-If so, welcome to the world of noisy intermediate scale quantum (NISQ) devices! These devices must
+If so, welcome to the world of noisy intermediate-scale quantum (NISQ) devices! These devices must
 function in noisy environments and are unable to execute quantum circuits perfectly, resulting in
 outputs that can have a significant error. The long-term plan of quantum computing is to develop a
 subsequent generation of error-corrected hardware. In the meantime, how can we best utilize our
@@ -64,7 +64,7 @@ dev_ideal = qml.device("default.mixed", wires=n_wires)
 dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 
 ###############################################################################
-# In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy`` which
+# In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``, which
 # is constructed from the :func:`qml.transforms.insert <pennylane.transforms.insert>` transform.
 # This transform works by intercepting each circuit executed on the device and adding the
 # :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel directly after every gate in the
@@ -151,20 +151,20 @@ mitigated_qnode(w1, w2)
 # Understanding error mitigation
 # ------------------------------
 #
-# Error mitigation can be realized through a number of techniques and the Mitiq
+# Error mitigation can be realized through a number of techniques, and the Mitiq
 # `documentation <https://mitiq.readthedocs.io/en/stable/>`__ is a great resource to start learning
-# more. In this demo we focus upon the zero-noise extrapolation (ZNE) method originally
+# more. In this demo, we focus upon the zero-noise extrapolation (ZNE) method originally
 # introduced by Temme et al. [#temme2017error]_ and Li et al. [#li2017efficient]_.
 #
 # The ZNE method works by assuming that the amount of noise present when a circuit is run on a
 # noisy device is enumerated by a parameter :math:`\gamma`. Suppose we have an input circuit
-# that experiences an amount of noise equal to :math:`\gamma = \gamma_{0}` when executed.
+# that experiences an amount of noise :math:`\gamma = \gamma_{0}` when executed.
 # Ideally, we would like to evaluate the result of the circuit in the :math:`\gamma = 0`
 # noise-free setting.
 #
 # To do this, we create a family of equivalent circuits whose ideal noise-free value is the
 # same as our input circuit. However, when run on a noisy device, each circuit experiences
-# an amount of noise equal to :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s \ge 1`. By
+# an amount of noise :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s \ge 1`. By
 # evaluating the noisy outputs of each circuit, we can extrapolate to :math:`s=0` to estimate
 # the result of running a noise-free circuit.
 #
@@ -200,7 +200,7 @@ for s, c in zip(scale_factors, folded_circuits):
     print(c.draw())
 
 ##############################################################################
-# Although these circuits are a bit deep, if you look carefully you might be able to convince
+# Although these circuits are a bit deep, if you look carefully, you might be able to convince
 # yourself that they are all equivalent! In fact, since we have fixed our original circuit to be
 # of the form :math:`U U^{\dagger}`, we get:
 #
@@ -278,7 +278,7 @@ executor(folded_circuits, dev=dev_noisy)
 # results back to :math:`s=0`, providing us with an estimate of the noise-free result of the
 # circuit.
 #
-# Performing extrapolation is a well-studied numeric method in mathematics and Mitiq provides
+# Performing extrapolation is a well-studied numeric method in mathematics, and Mitiq provides
 # access to some of the core approaches. Here we use the
 # `Richardson extrapolation <https://en.wikipedia.org/wiki/Richardson_extrapolation>`__ method with
 # the objective of finding a curve :math:`y = f(x)` with some fixed :math:`(x, y)` values given by
@@ -314,10 +314,10 @@ _ = fac.plot_fit()
 # Error mitigation in PennyLane
 # -----------------------------
 #
-# Now that we understand the ZNE method for error mitigation we can provide a few more details on
+# Now that we understand the ZNE method for error mitigation, we can provide a few more details on
 # how it can be performed using PennyLane. As we have seen, the
 # :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>` function provides the main
-# entrypoint. This function is an example of a :doc:`circuit transform </code/qml_transforms>` and
+# entry point. This function is an example of a :doc:`circuit transform, </code/qml_transforms>` and
 # it can be applied to pre-constructed QNodes as well as being used as a decorator when constructing
 # new QNodes. For example, suppose we have a ``qnode`` already defined. A mitigated QNode can be
 # created using:
@@ -326,7 +326,7 @@ _ = fac.plot_fit()
 #
 #     mitigated_qnode = mitigate_with_zne(scale_factors, folding, extrapolate)(qnode)
 #
-# When using ``mitigate_with_zne``, we must specify the target scale factors as well as providing
+# When using ``mitigate_with_zne``, we must specify the target scale factors as well as provide
 # functions for folding and extrapolation. Due to PennyLane's integration with Mitiq, it is possible
 # to use the folding functions provided in the
 # `mitiq.zne.scaling.folding <https://mitiq.readthedocs.io/en/stable/apidoc.html#module-mitiq.zne.scaling.folding>`__
@@ -367,7 +367,7 @@ for _ in range(3):
 # for extrapolation. As shown above, the number of repetitions is controlled by setting the optional
 # ``reps_per_factor`` argument.
 #
-# We conclude this section by highlighting the possibility to instead work directly with the core
+# We conclude this section by highlighting the possibility of working directly with the core
 # functionality available in Mitiq. For example, the
 # `execute_with_zne <https://mitiq.readthedocs.io/en/stable/apidoc.html#mitiq.zne.zne.execute_with_zne>`__
 # function is one of the central components of ZNE support in Mitiq and is compatible with circuits
@@ -400,10 +400,10 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # quantum circuit that returns its expectation value. We can then vary the parameters of the
 # circuit to minimize the energy.
 #
-# To find the potential energy surface of :math:`H_{2}`, we must choose a range of inter-atomic
+# To find the potential energy surface of :math:`H_{2}`, we must choose a range of interatomic
 # distances and calculate the qubit Hamiltonian corresponding to each distance. We then optimize the
 # variational circuit with a new set of parameters for each Hamiltonian and plot the resulting
-# energies for each distance. In this demo we compare the potential energy surface reconstructed
+# energies for each distance. In this demo, we compare the potential energy surface reconstructed
 # when the optimized variational circuits are run on ideal, noisy, and noise-mitigated devices.
 #
 # Instead of modifying the :mod:`default.mixed <pennylane.devices.default_mixed>` device to add
