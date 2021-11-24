@@ -134,6 +134,18 @@ noisy_qnode(w1, w2).numpy()
 # gives imperfect results. Can the results be improved? Time for error mitigation! We'll first
 # show how easy it is to add error mitigation in PennyLane with Mitiq as a backend, before
 # explaining what is going on behind the scenes.
+#
+# .. note::
+#
+#     To run the code below you will need to have the Qiskit plugin installed. This plugin can be
+#     installed using:
+#
+#     .. code-block:: bash
+#
+#         pip install pennylane-qiskit
+#
+#     The Qiskit plugin is required to convert our PennyLane circuits to OpenQASM 2.0, which is used
+#     as an intermediate representation when working with Mitiq.
 
 from mitiq.zne.scaling import fold_global
 from mitiq.zne.inference import RichardsonFactory
