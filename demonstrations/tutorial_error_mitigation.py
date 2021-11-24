@@ -537,6 +537,19 @@ plt.legend()
 plt.show()
 
 ##############################################################################
+#
+# Great, error mitigation has allowed us to more closely approximate the ideal noise-free curve!
+#
+# We have seen in this demo how easy error mitigation can be in PennyLane when using Mitiq as a
+# backend. As well as understanding the basics of the ZNE method, we have also seen how mitigation
+# can be used to uplift the performance of noisy devices for practical tasks like quantum chemistry.
+# On the other hand, we've only just started to scratch the surface of what can be done with error
+# mitigation. We can explore applying the ZNE method to other use cases, or even try out other
+# mitigation methods like
+# `probabilistic error cancellation <https://mitiq.readthedocs.io/en/stable/examples/pec-tutorial.html>`__.
+# Let us know where your adventures take you, and the Mitiq and PennyLane teams will keep working to
+# help make error mitigation as easy as possible!
+#
 # References
 # ----------
 #
