@@ -461,7 +461,17 @@ params = np.load("error_mitigation/params.npy")
 ##############################################################################
 # These parameters can be downloaded by clicking
 # :download:`here <../demonstrations/error_mitigation/params.npy>`. We are now ready to set up the
-# variational circuit and run on the ideal and noisy devices:
+# variational circuit and run on the ideal and noisy devices.
+#
+# .. note::
+#
+#     The following code requires installation of PennyLane's
+#     `QChem <https://pennylane.readthedocs.io/en/stable/introduction/chemistry.html>`__ package,
+#     which can be installed using:
+#
+#     .. code-block:: bash
+#
+#         pip install pennylane-qchem
 
 from pennylane import qchem
 
