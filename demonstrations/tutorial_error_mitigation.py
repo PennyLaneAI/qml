@@ -50,7 +50,7 @@ Mitigating noise in a simple circuit
 ------------------------------------
 
 We first need a noisy device to execute our circuit on. Let's keep things simple for now by loading
-the :mod:`default.mixed <pennylane.devices.default_mixed>` device and artificially adding
+the :mod:`default.mixed <pennylane.devices.default_mixed>` simulator and artificially adding
 :class:`PhaseDamping <pennylane.PhaseDamping>` noise.
 """
 
