@@ -56,10 +56,13 @@ the :mod:`default.mixed <pennylane.devices.default_mixed>` device and artificial
 
 import pennylane as qml
 
-noise_gate = qml.PhaseDamping
-noise_strength = 0.1
 n_wires = 4
 
+# Describe noise
+noise_gate = qml.PhaseDamping
+noise_strength = 0.1
+
+# Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
 dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 
@@ -95,6 +98,7 @@ from pennylane.beta import QNode
 
 np.random.seed(1967)
 
+# Select template to use within circuit and generate parameters
 n_layers = 1
 template = qml.SimplifiedTwoDesign
 weights_shape = template.shape(n_layers, n_wires)
@@ -238,9 +242,12 @@ for s, c in zip(scale_factors, folded_circuits):
 
 
 def executor(circuits, dev=dev_noisy):
+    # Support both a single circuit and multiple circuit execution
     circuits = [circuits] if isinstance(circuits, qml.tape.QuantumTape) else circuits
+
     circuits_with_meas = []
 
+    # Loop through circuits and add on measurement
     for c in circuits:
         with qml.tape.QuantumTape() as circuit_with_meas:
             for o in c.operations:
@@ -446,6 +453,7 @@ params = np.load("error_mitigation/params.npy")
 
 from pennylane import qchem
 
+# Describe quantum chemistry problem
 symbols = ["H", "H"]
 distances = np.arange(0.5, 3.0, 0.25)
 
@@ -453,9 +461,13 @@ ideal_energies = []
 noisy_energies = []
 
 for r, phi in zip(distances, params):
+    # Assume atoms lie on the Z axis
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+
+    # Load qubit Hamiltonian
     H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
 
+    # Define ansatz circuit
     def qchem_circuit(phi):
         qml.PauliX(wires=0)
         qml.PauliX(wires=1)
@@ -475,20 +487,33 @@ for r, phi in zip(distances, params):
 mitig_energies = []
 
 for r, phi in zip(distances, params):
+    # Assume atoms lie on the Z axis
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+
+    # Load qubit Hamiltonian
     H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
 
+    # Define ansatz circuit
     with qml.tape.QuantumTape() as circuit:
         qml.PauliX(wires=0)
         qml.PauliX(wires=1)
         qml.DoubleExcitation(phi, wires=range(n_wires))
 
+    # Define custom executor that expands Hamiltonian measurement
+    # into a linear combination of tensor products of Pauli
+    # operators.
     def executor(circuit):
+
+        # Add Hamiltonian measurement to circuit
         with qml.tape.QuantumTape() as circuit_with_meas:
             for o in circuit.operations:
                 qml.apply(o)
             qml.expval(H)
 
+        # Expand Hamiltonian measurement into tensor product of
+        # of Pauli operators. We get a list of circuits to execute
+        # and a postprocessing function to combine the results into
+        # a single number.
         circuits, postproc = qml.transforms.hamiltonian_expand(
             circuit_with_meas, group=False
         )
