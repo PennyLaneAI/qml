@@ -135,10 +135,6 @@ import jax
 from jax import numpy as np
 import pennylane as qml
 
-
-# NOTE: dummy change to trigger running this demo
-a = 1
-
 def make_cost(N, seed):
     """Create a cost function on N qubits with N frequencies."""
     dev = qml.device("default.qubit", wires=N)
