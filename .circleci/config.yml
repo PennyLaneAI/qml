@@ -20,9 +20,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v30c-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v30c-{{ .Branch }}-
-            - pip-v30c-
+            - pip-v31c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-v31c-{{ .Branch }}-
+            - pip-v31c-
 
       - run:
           name: Install dependencies
@@ -36,13 +36,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v30c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v31c-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v30a-{{ .Branch }}-{{ .Revision }}
-            - gallery-v30a-{{ .Branch }}-
-            - gallery-v30a-
+            - gallery-v31a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v31a-{{ .Branch }}-
+            - gallery-v31a-
 
       - run:
           name: Build tutorials
@@ -58,7 +58,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v30a-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v31a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
