@@ -272,7 +272,7 @@ def circuit(key, param):
     dev = qml.device("default.qubit.jax", wires=2, shots=10, prng_key=key)
 
     # Now we can create our qnode within the circuit function.
-    @qml.qnode(dev, interface="jax", diff_method=None)
+    @qml.qnode(dev, interface="jax", diff_method="backprop")
     def my_circuit():
         qml.RX(param, wires=0)
         qml.CNOT(wires=[0, 1])
