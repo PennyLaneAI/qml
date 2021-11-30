@@ -160,25 +160,18 @@ print(qml.gradients.param_shift(circuit)(params))
 # ~~~~~~~~~~~~
 #
 # Let's consider an example with a significantly larger number of parameters.
-# We'll make use of the :class:`~pennylane.templates.StronglyEntanglingLayers` template
+# We'll make use of the :class:`~pennylane.StronglyEntanglingLayers` template
 # to make a more complicated QNode.
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev, diff_method="parameter-shift", mutable=False)
+@qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
-
-##############################################################################
-# Note that we specify that the QNode is **immutable**. This is more restrictive than a standard
-# mutable QNode (the quantum circuit structure cannot change/differ between executions); however, it
-# reduces processing overhead.
-
-
 # initialize circuit parameters
-param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
+param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
 params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 print(params.size)
 print(circuit(params))
@@ -203,7 +196,6 @@ print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 # create the gradient function
 grad_fn = qml.grad(circuit)
-circuit.qtape = None
 
 times = timeit.repeat("grad_fn(params)", globals=globals(), number=num, repeat=reps)
 backward_time = min(times) / num
@@ -276,7 +268,7 @@ def circuit(params):
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
 # initialize circuit parameters
-param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
+param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
 params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 print(circuit(params))
 
@@ -335,15 +327,15 @@ forward_backprop = []
 gradient_backprop = []
 
 for depth in range(0, 21):
-    param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=4, n_layers=depth)
+    param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=depth)
     params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
     num_params = params.size
 
     # forward pass timing
     # ===================
 
-    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop", mutable=False)
+    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift")
+    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop")
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
@@ -359,8 +351,8 @@ for depth in range(0, 21):
     # Gradient timing
     # ===============
 
-    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift", mutable=False)
-    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop", mutable=False)
+    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift")
+    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop")
 
     # parameter-shift
     t = timeit.repeat("qml.grad(qnode_shift)(params)", globals=globals(), number=num, repeat=reps)
