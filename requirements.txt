@@ -11,6 +11,7 @@ sympy==1.6.2
 pillow==7.1.0
 pip==21.1
 pyscf==1.7.6
+git+https://github.com/PennyLaneAI/pennylane-lightning.git
 git+https://github.com/PennyLaneAI/pennylane.git
 git+https://github.com/PennyLaneAI/pennylane.git#subdirectory=qchem
 git+https://github.com/PennyLaneAI/pennylane-sf.git
