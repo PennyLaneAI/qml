@@ -28,7 +28,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt install pandoc -qq
-            sudo apt-get -y -q install cmake gcc
+            sudo apt-get update && sudo apt-get -y -q install cmake gcc
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools --upgrade
