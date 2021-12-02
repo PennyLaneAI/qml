@@ -200,7 +200,7 @@ num_qubits = 2
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
 # simple circuit to prepare rho
-@qml.qnode(device=dev)
+@qml.qnode(dev)
 def local_qubit_rotation_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
     for w in dev.wires:
@@ -355,7 +355,7 @@ dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword argument.
-@qml.qnode(device=dev)
+@qml.qnode(dev)
 def bell_state_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
 
@@ -582,7 +582,7 @@ num_qubits = 10
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
 
-@qml.qnode(device=dev)
+@qml.qnode(dev)
 def circuit(params, **kwargs):
     observables = kwargs.pop("observable")
     for w in range(num_qubits):
