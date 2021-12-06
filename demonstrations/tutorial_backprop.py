@@ -91,7 +91,8 @@ print("Expectation value:", circuit(params))
 ##############################################################################
 # We can also draw the executed quantum circuit:
 
-print(qml.draw(circuit)(params))
+fig, ax = qml.draw_mpl(circuit, decimals=2)(params)
+fig.show()
 
 
 ##############################################################################

@@ -153,10 +153,15 @@ rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
 
 print("Global Cost: {: .7f}".format(cost_global(rotations)))
 print("Local Cost: {: .7f}".format(cost_local(rotations)))
-print("--- Global Circuit ---")
-print(qml.draw(global_circuit)(rotations))
-print("--- Local Circuit")
-print(qml.draw(local_circuit)(rotations))
+
+qml.drawer.use_style('black_white')
+fig1, ax1 = qml.draw_mpl(global_circuit, decimals=2)(rotations)
+fig1.suptitle("Global Cost", fontsize='xx-large')
+fig1.show()
+
+fig2, ax2 = qml.draw_mpl(local_circuit, decimals=2)(rotations)
+fig2.suptitle("Local Cost", fontsize='xx-large')
+fig2.show()
 
 
 ######################################################################
@@ -291,7 +296,8 @@ for i in range(steps):
         print("Cost after step {:5d}: {: .7f}".format(i + 1, cost_global(params_global)))
     if cost_global(params_global) < 0.1:
         break
-print(qml.draw(global_circuit)(params_global))
+fig, ax = qml.draw_mpl(global_circuit, decimals=2)(params_global)
+fig.show()
 
 
 ######################################################################
@@ -312,7 +318,9 @@ for i in range(steps):
         print("Cost after step {:5d}: {: .7f}".format(i + 1, cost_local(params_local)))
     if cost_local(params_local) < 0.05:
         break
-print(qml.draw(local_circuit)(params_local))
+
+fig, ax = qml.draw_mpl(local_circuit, decimals=2)(params_local)
+fig.show()
 
 
 ######################################################################
@@ -374,7 +382,8 @@ tunable_circuit = qml.QNode(tunable_cost_simple, dev)
 locality = 2
 params_tunable = params_local
 print(cost_tunable(params_tunable))
-print(qml.draw(tunable_circuit)(params_tunable))
+fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
+fig.show()
 
 locality = 2
 opt = qml.GradientDescentOptimizer(stepsize=0.1)
@@ -397,7 +406,8 @@ for i in range(steps):
         continue
     elif runCost < 0.1 and locality >= wires:
         break
-print(qml.draw(tunable_circuit)(params_tunable))
+fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
+fig.show()
 
 
 ######################################################################
