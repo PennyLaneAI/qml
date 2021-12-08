@@ -1,7 +1,7 @@
 r"""
 
-Autodifferentiable Hartree-Fock solver
-======================================
+Autodifferentiable Hartree-Fock calculations
+============================================
 
 .. meta::
     :property="og:description": Learn how to use the differentiable Hartree-Fock solver
@@ -55,10 +55,17 @@ algorithm. Let's get started!
 Hartree-Fock method
 -------------------
 
-The main goal of the Hartree-Fock method is to obtain molecular spin-orbitals that minimize the energy of a state where
-electrons are treated as independent particles occupying the lowest-energy orbitals.
+The main goal of the Hartree-Fock method is to obtain molecular spin-orbitals that minimize the
+energy of a state where electrons are treated as independent particles occupying the lowest-energy
+orbitals. These optimized molecular orbitals are then used to construct one- and two-body electron
+integrals in the molecular orbital basis which are used to generate differentiable second-quantized
+Hamiltonians in the fermionic and qubit basis.
+
+To get started, we need to define the atomic symbols and coordinates of the desired molecule. For
+the hydrogen molecule we define the symbols and geometry as
 """
 
+import autograd
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -67,5 +74,25 @@ geometry = np.array([[0.0, 0.0, -0.672943567415407],
                      [0.0, 0.0,  0.672943567415407]], requires_grad=True)
 
 ##############################################################################
-# We now compute the molecular Hamiltonian in the
-# `STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_ basis.
+# Note that `requires_grad=True` specifies that the atomic coordinates are differentiable
+# parameters. We can now compute the Hartree-Fock energy and its gradient with respect to the atomic
+# coordinates for hydrogen. To do that, we need to create a molecule object which stores all the
+# molecular parameters needed to perform a Hartree-Fock calculation.
+
+mol = qml.hf.Molecule(symbols, geometry)
+
+##############################################################################
+# The Hartree-Fock energy can now be computed with the :func:`~.pennylane.hf.hf_energy` function
+
+qml.hf.hf_energy(mol)(geometry)
+
+##############################################################################
+# The computed energy matches the reference value of :math:`-1.1175058849` Ha. We now compute the
+# gradient of the energy with respect to the atomic coordinates with autograd
+
+autograd.grad(qml.hf.hf_energy(mol))(geometry)
+
+##############################################################################
+# Not that we need to pass the `mol` object and the values of the atomic coordinates. The computed
+# gradients are equal or very close to zero bacause the initial geometry we used here has been
+# already optimized at the Hartree-Fock level.
