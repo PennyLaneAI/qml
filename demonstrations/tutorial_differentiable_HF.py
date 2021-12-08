@@ -94,5 +94,95 @@ autograd.grad(qml.hf.hf_energy(mol))(geometry)
 
 ##############################################################################
 # Not that we need to pass the `mol` object and the values of the atomic coordinates. The computed
-# gradients are equal or very close to zero bacause the initial geometry we used here has been
+# gradients are equal or very close to zero because the initial geometry we used here has been
 # already optimized at the Hartree-Fock level.
+
+# We can also compute the values and gradients of several other quantities that are computed during
+# the Hartree-Fock procedure. These include all integrals over basis functions, matrices formed from
+# these integrals and the one- and two-body integrals over molecular orbitals. Let's look at few
+# examples.
+
+# We first compute the overlap integral between the two S atomic orbitals located on each of the
+# hydrogen atoms. Remember that in the 3to-3g basis set each of the atomic orbitals is represented
+# by a single basis function which is stored in the molecule object.
+
+S1 = mol.basis_set[0]
+S2 = mol.basis_set[1]
+
+##############################################################################
+# We can check the parameters of the basis functions as
+
+S1.params
+
+# which returns the exponents, contraction coeeficients and centers of the three Gaussian functions
+# of the sto-3g basis set. These data can be obtained individually by using `S1.alpha`, `S1.coeff`
+# and `S1.r` respectively. You can verify that both of the S1 and S2 orbitals have the same
+# exponents and contraction coefficients but are centered on different hydrogen atoms. You can also
+# verify that the orbitals are S-type ones by returning the angular momentum quantum numbers with
+# S1.l which gives you a tuple of three integers, representing the exponents of the x, y and z
+# components in the Gaussian functions.
+
+# Having the two atomic orbitals, we can now compute the overlap integral by passing the orbitals
+# and their centers to the :func:`~.pennylane.hf.generate_overlap` function. Note that the centers
+# of the orbitals are those of the hydrogen atoms by default and are therefore treated as
+# differentiable parameters by PennyLane.
+
+qml.hf.generate_overlap(S1, S2)([S1.r, S2.r])
+
+##############################################################################
+# You can verify that the overlap integral between two identical atomic orbitals is zero. We can now
+# compute the gradient of the overlap integral with respect to the Gaussian centers
+
+autograd.grad(qml.hf.generate_overlap(S1, S2))([S1.r, S2.r])
+
+##############################################################################
+# Can you explain why some of the computed gradients are zero?
+
+# Let's now compute the molecular Hamiltonian with the :func:`~.pennylane.hf.generate_hamiltonian`
+
+hamiltonian = qml.hf.generate_hamiltonian(mol)(geometry)
+print(hamiltonian)
+
+##############################################################################
+# The Hamiltonian contains 15 terms and importantly the coefficients of the Hamiltonian are also
+# differentiable. We can construct a circuit and perform a VQE simulation in which both of the
+# circuit parameters and the molecular geometries are optimized simultaneously by using gradients
+# computed with the methods of automatic differentiation.
+
+dev = qml.device("default.qubit", wires=4)
+def energy(mol):
+    @qml.qnode(dev)
+    def circuit(*args):
+        qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
+        qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
+        return qml.expval(qml.hf.generate_hamiltonian(mol)(*args[1:]))
+    return circuit
+
+##############################################################################
+# We now compute the gradients of the energy with respect to the circuit parameters and the atomic
+# coordinates. Note that the latter gradients are simply the forces on the atomic nuclai.
+
+circuit_param = [np.array([0.0], requires_grad=True)]
+
+for n in range(50):
+
+    args = [circuit_param, geometry]
+    mol = qml.hf.Molecule(symbols, geometry)
+
+    # gradient for circuit parameters
+    g_param = autograd.grad(energy(mol), argnum = 0)(*args)
+    circuit_param = circuit_param - 0.25 * g_param[0]
+
+    # gradient for nuclear coordinates
+    forces = -autograd.grad(energy(mol), argnum = 1)(*args)
+    geometry = geometry + 0.5 * forces
+
+    if n % 5 == 0:
+        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}, G-param: {abs(g_param[0][0]):.8f}')
+
+##############################################################################
+# Notice that after 50 steps of optimization the forces on the atomic nuclai and the gradient of the
+# circuit parameter are both approaching zero and the energy og the molecule is that of the
+# optimized geometry at the full-CI level: :math:`-1.1373060483` Ha. You can print the optimized
+# geometry and verify that the final bond length of hydrogen is that of the full-CI which is
+# :math:`1.3888` Bohr.
