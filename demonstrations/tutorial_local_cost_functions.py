@@ -381,7 +381,6 @@ dev.shots = 10000
 tunable_circuit = qml.QNode(tunable_cost_simple, dev)
 locality = 2
 params_tunable = params_local
-print(cost_tunable(params_tunable))
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
 plt.show()
 
