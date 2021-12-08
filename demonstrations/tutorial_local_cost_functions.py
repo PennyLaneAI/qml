@@ -383,6 +383,7 @@ locality = 2
 params_tunable = params_local
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
 plt.show()
+print(cost_tunable(params_tunable))
 
 locality = 2
 opt = qml.GradientDescentOptimizer(stepsize=0.1)
