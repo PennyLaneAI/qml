@@ -62,7 +62,7 @@ y = data["target"]
 # We shuffle the data and then embed the four features into a two-dimensional space for ease of
 # plotting later on. The first two principal components of the data are used.
 
-np.random.seed(1967)
+np.random.seed(1968)
 x, y = zip(*np.random.permutation(list(zip(x, y))))
 
 pca = sklearn.decomposition.PCA(n_components=n_features)

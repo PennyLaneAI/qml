@@ -95,7 +95,7 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 
 from pennylane import numpy as np
 
-np.random.seed(1967)
+np.random.seed(1968)
 
 # Select template to use within circuit and generate parameters
 n_layers = 1
