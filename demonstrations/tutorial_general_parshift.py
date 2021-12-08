@@ -219,6 +219,7 @@ for ax, N, E in zip(axs, Ns, evaluated_cost):
     ax.set_xlabel("$x$")
 
 _ = axs[0].set_ylabel("$E$")
+plt.show()
 
 
 ###############################################################################
@@ -278,6 +279,7 @@ for i, (cost_function, spec) in enumerate(zip(cost_functions, spectra)):
         _ = [axs[j, i].set_ylabel(lab) for j, lab in enumerate(["$a_\ell/2$", "$b_\ell/2$"])]
     else:
         _ = [axs[j, i].set_ylabel("") for j in [0, 1]]
+plt.show()
 
 
 ###############################################################################
@@ -407,6 +409,7 @@ def compare_functions(originals, reconstructions, Ns, shifts, show_diff=True):
 
 equ_shifts = [[2 * mu * np.pi / (2 * N + 1) for mu in range(-N, N + 1)] for N in Ns]
 fig, axs = compare_functions(cost_functions, reconstructions_equ, Ns, equ_shifts)
+plt.show()
 
 
 ###############################################################################
@@ -485,6 +488,7 @@ def full_reconstruction_gen(fun, shifts):
 shifts = [rnd.random(2 * N + 1) * 2 * np.pi - np.pi for N in Ns]
 reconstructions_gen = list(map(full_reconstruction_gen, cost_functions, shifts))
 fig, axs = compare_functions(cost_functions, reconstructions_gen, Ns, shifts)
+plt.show()
 
 
 ###############################################################################
@@ -694,6 +698,7 @@ styles = ['-', '-', '-', '--']
 handles = [Line2D([0], [0], color=c, ls=ls, lw=1.2) for c, ls in zip(colors, styles)]
 labels = ['Original', 'Odd reconstruction', 'Even reconstruction', 'Summed reconstruction']
 _ = fig.legend(handles, labels, bbox_to_anchor=(0.2, 0.89), loc='lower left', ncol=4)
+plt.show()
 
 
 ###############################################################################
