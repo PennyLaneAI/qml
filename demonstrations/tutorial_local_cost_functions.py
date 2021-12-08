@@ -157,11 +157,11 @@ print("Local Cost: {: .7f}".format(cost_local(rotations)))
 qml.drawer.use_style('black_white')
 fig1, ax1 = qml.draw_mpl(global_circuit, decimals=2)(rotations)
 fig1.suptitle("Global Cost", fontsize='xx-large')
-fig1.show()
+plt.show()
 
 fig2, ax2 = qml.draw_mpl(local_circuit, decimals=2)(rotations)
 fig2.suptitle("Local Cost", fontsize='xx-large')
-fig2.show()
+plt.show()
 
 
 ######################################################################
@@ -297,7 +297,7 @@ for i in range(steps):
     if cost_global(params_global) < 0.1:
         break
 fig, ax = qml.draw_mpl(global_circuit, decimals=2)(params_global)
-fig.show()
+plt.show()
 
 
 ######################################################################
@@ -320,7 +320,7 @@ for i in range(steps):
         break
 
 fig, ax = qml.draw_mpl(local_circuit, decimals=2)(params_local)
-fig.show()
+plt.show()
 
 
 ######################################################################
@@ -383,7 +383,7 @@ locality = 2
 params_tunable = params_local
 print(cost_tunable(params_tunable))
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
-fig.show()
+plt.show()
 
 locality = 2
 opt = qml.GradientDescentOptimizer(stepsize=0.1)
@@ -407,7 +407,7 @@ for i in range(steps):
     elif runCost < 0.1 and locality >= wires:
         break
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
-fig.show()
+plt.show()
 
 
 ######################################################################
