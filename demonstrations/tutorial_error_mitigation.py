@@ -96,7 +96,7 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 from pennylane import numpy as np
 from pennylane.beta import QNode
 
-np.random.seed(1968)
+np.random.seed(1967)
 
 # Select template to use within circuit and generate parameters
 n_layers = 1
@@ -151,8 +151,8 @@ from mitiq.zne.scaling import fold_global
 from mitiq.zne.inference import RichardsonFactory
 from pennylane.transforms import mitigate_with_zne
 
-extrapolate = RichardsonFactory.extrapolate
 scale_factors = [1, 2, 3]
+extrapolate = RichardsonFactory.extrapolate
 
 mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(
     noisy_qnode
