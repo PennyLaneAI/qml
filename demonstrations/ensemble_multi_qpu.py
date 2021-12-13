@@ -136,7 +136,7 @@ plot_points(x_train, y_train, x_test, y_test)
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_001.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 #
 
@@ -161,7 +161,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # prediction.
 #
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_diagram.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 #
 # Quantum nodes
@@ -195,7 +195,7 @@ devs = [dev0, dev1]
 # The circuits for both QPUs are shown in the figure below:
 #
 # .. figure:: /demonstrations/ensemble_multi_qpu/diagram_circuits.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 
 
@@ -529,7 +529,7 @@ plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_002.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 #
 
@@ -539,7 +539,7 @@ plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_003.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 #
 
@@ -549,7 +549,7 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_004.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 #
 
