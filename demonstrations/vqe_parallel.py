@@ -100,6 +100,31 @@ for op in h.ops:
     print("Measurement {} on wires {}".format(op.name, op.wires))
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Number of terms: 15
+#
+#    Measurement Identity on wires <Wires = [0]>
+#    Measurement PauliZ on wires <Wires = [0]>
+#    Measurement PauliZ on wires <Wires = [1]>
+#    Measurement PauliZ on wires <Wires = [2]>
+#    Measurement PauliZ on wires <Wires = [3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 1]>
+#    Measurement ['PauliY', 'PauliX', 'PauliX', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliY', 'PauliY', 'PauliX', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliX', 'PauliX', 'PauliY', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliX', 'PauliY', 'PauliY', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 2]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 2]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [2, 3]>
+
+##############################################################################
 # Defining the energy function
 # ----------------------------
 #
@@ -144,7 +169,7 @@ devs = dev1 + dev2
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
 #    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/en/stable/>`__ or, for users with Docker, by running:
+#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
 #
 #    .. code-block:: bash
 #
@@ -217,10 +242,52 @@ print("\nEvaluating the potential energy surface in parallel")
 surface_par, t_par = calculate_surface(parallel=True)
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Evaluating the potential energy surface sequentially
+#    Running for inter-atomic distance 0.3 Å
+#    Running for inter-atomic distance 0.5 Å
+#    Running for inter-atomic distance 0.7 Å
+#    Running for inter-atomic distance 0.9 Å
+#    Running for inter-atomic distance 1.1 Å
+#    Running for inter-atomic distance 1.3 Å
+#    Running for inter-atomic distance 1.5 Å
+#    Running for inter-atomic distance 1.7 Å
+#    Running for inter-atomic distance 1.9 Å
+#    Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 285.41 s
+#
+#    Evaluating the potential energy surface in parallel
+#    Running for inter-atomic distance 0.3 Å
+#    Running for inter-atomic distance 0.5 Å
+#    Running for inter-atomic distance 0.7 Å
+#    Running for inter-atomic distance 0.9 Å
+#    Running for inter-atomic distance 1.1 Å
+#    Running for inter-atomic distance 1.3 Å
+#    Running for inter-atomic distance 1.5 Å
+#    Running for inter-atomic distance 1.7 Å
+#    Running for inter-atomic distance 1.9 Å
+#    Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 74.55 s
+
+##############################################################################
 # We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel. This results
 # in a speed up in processing:
 
 print("Speed up: {0:.2f}".format(t_seq / t_par))
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Speed up: 3.83
 
 ##############################################################################
 # Can you think of other ways to combine multiple QPUs to improve the
@@ -233,6 +300,12 @@ plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
 plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
+
+##############################################################################
+# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
+#    :width: 50%
+#    :align: center
+#
 
 ##############################################################################
 # These surfaces overlap, with any variation due to the limited number of shots used to evaluate the
