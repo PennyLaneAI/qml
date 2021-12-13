@@ -7,12 +7,6 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.12
-      - image: rigetti/quilc
-        command:
-        - -R
-      - image: rigetti/qvm
-        command:
-        - -S
 
     steps:
       - checkout
@@ -87,12 +81,6 @@ jobs:
   build_dev:
     docker:
       - image: circleci/python:3.7.12
-      - image: rigetti/quilc
-        command:
-        - -R
-      - image: rigetti/qvm
-        command:
-        - -S
 
     steps:
       - checkout
