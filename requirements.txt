@@ -6,7 +6,7 @@ numba==0.53.1
 networkx==2.5.1
 nlopt==2.6.2
 semantic_version==2.6
-strawberryfields==0.15
+strawberryfields==0.19.2
 sympy==1.6.2
 pillow==7.1.0
 pip==21.1
