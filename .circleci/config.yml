@@ -102,7 +102,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install pip setuptools --upgrade
+            pip install pip setuptools cmake --upgrade
             pip install -r requirements.txt
             pip install --no-deps -r requirements_no_deps.txt
 
