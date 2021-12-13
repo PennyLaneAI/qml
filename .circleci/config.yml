@@ -86,7 +86,7 @@ jobs:
 
   build_dev:
     docker:
-      - image: circleci/python:3.7.2
+      - image: circleci/python:3.7.12
       - image: rigetti/quilc
         command:
         - -R
