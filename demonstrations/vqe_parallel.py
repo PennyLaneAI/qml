@@ -302,8 +302,8 @@ plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
 
 ##############################################################################
-# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
-#    :width: 50%
+# .. figure:: /vqe_parallel/vqe_parallel_001.png
+#    :width: 80%
 #    :align: center
 #
 
