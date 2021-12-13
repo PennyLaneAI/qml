@@ -12,7 +12,7 @@ Ensemble classification with Forest and Qiskit devices
 
    tutorial_variational_classifier Variational quantum classifier
 
-*Author: PennyLane dev team. Last updated: 6 Aug 2020.*
+*Author: PennyLane dev team. Last updated: 13 Dec 2021.*
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
