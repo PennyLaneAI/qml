@@ -68,10 +68,11 @@ the hydrogen molecule we define the symbols and geometry as
 import autograd
 import pennylane as qml
 from pennylane import numpy as np
+import matplotlib.pyplot as plt
 
 symbols = ["H", "H"]
-geometry = np.array([[0.0, 0.0, -0.672943567415407],
-                     [0.0, 0.0,  0.672943567415407]], requires_grad=True)
+geometry = np.array([[-0.672943567415407, 0.0, 0.0],
+                     [ 0.672943567415407, 0.0, 0.0]], requires_grad=True)
 
 ##############################################################################
 # Note that `requires_grad=True` specifies that the atomic coordinates are differentiable
@@ -93,7 +94,7 @@ qml.hf.hf_energy(mol)(geometry)
 autograd.grad(qml.hf.hf_energy(mol))(geometry)
 
 ##############################################################################
-# Not that we need to pass the `mol` object and the values of the atomic coordinates. The computed
+# Note that we need to pass the `mol` object and the values of the atomic coordinates. The computed
 # gradients are equal or very close to zero because the initial geometry we used here has been
 # already optimized at the Hartree-Fock level.
 
@@ -104,7 +105,7 @@ autograd.grad(qml.hf.hf_energy(mol))(geometry)
 
 # We first compute the overlap integral between the two S atomic orbitals located on each of the
 # hydrogen atoms. Remember that in the 3to-3g basis set each of the atomic orbitals is represented
-# by a single basis function which is stored in the molecule object.
+# by a single basis function which is an attribute of the molecule object.
 
 S1 = mol.basis_set[0]
 S2 = mol.basis_set[1]
@@ -116,38 +117,85 @@ S1.params
 
 # which returns the exponents, contraction coeeficients and centers of the three Gaussian functions
 # of the sto-3g basis set. These data can be obtained individually by using `S1.alpha`, `S1.coeff`
-# and `S1.r` respectively. You can verify that both of the S1 and S2 orbitals have the same
+# and `S1.r`, respectively. You can verify that both of the S1 and S2 orbitals have the same
 # exponents and contraction coefficients but are centered on different hydrogen atoms. You can also
-# verify that the orbitals are S-type ones by returning the angular momentum quantum numbers with
-# S1.l which gives you a tuple of three integers, representing the exponents of the x, y and z
-# components in the Gaussian functions.
+# verify that the orbitals are S-type orbitals by printing the angular momentum quantum numbers with
 
-# Having the two atomic orbitals, we can now compute the overlap integral by passing the orbitals
-# and their centers to the :func:`~.pennylane.hf.generate_overlap` function. Note that the centers
-# of the orbitals are those of the hydrogen atoms by default and are therefore treated as
-# differentiable parameters by PennyLane.
-
-qml.hf.generate_overlap(S1, S2)([S1.r, S2.r])
+print(S1.l)
 
 ##############################################################################
-# You can verify that the overlap integral between two identical atomic orbitals is zero. We can now
+# This gives you a tuple of three integers, representing the exponents of the `x`, `y` and `z`
+# components in the Gaussian functions [#grimsley2019]_.
+#
+# Having the two atomic orbitals, we can now compute the overlap integral by passing the orbitals
+# and the initial values of their centers to the :func:`~.pennylane.hf.generate_overlap` function.
+# Note that the centers of the orbitals are those of the hydrogen atoms by default and are therefore
+# treated as differentiable parameters by PennyLane.
+
+qml.hf.generate_overlap(S1, S2)([geometry[0], geometry[1]])
+
+##############################################################################
+# You can verify that the overlap integral between two identical atomic orbitals is one. We can now
 # compute the gradient of the overlap integral with respect to the Gaussian centers
 
-autograd.grad(qml.hf.generate_overlap(S1, S2))([S1.r, S2.r])
+autograd.grad(qml.hf.generate_overlap(S1, S2))([geometry[0], geometry[1]])
 
 ##############################################################################
 # Can you explain why some of the computed gradients are zero?
+#
+# Let's now do a cool thing and plot the atomic orbitals and their overlap. We can do it by using
+# the :func:`~.pennylane.hf.molecule.atomic_orbital` function. This function computes the actual
+# value of the atomic orbital at a given coordinate. For instance, the value of the S orbital on the
+# first hydrogen atom can be computed at the origin as
 
-# Let's now compute the molecular Hamiltonian with the :func:`~.pennylane.hf.generate_hamiltonian`
-
-hamiltonian = qml.hf.generate_hamiltonian(mol)(geometry)
-print(hamiltonian)
+S1 = mol.atomic_orbital(0)
+S1(0.0, 0.0, 0.0)
 
 ##############################################################################
-# The Hamiltonian contains 15 terms and importantly the coefficients of the Hamiltonian are also
+# We can compute the value of this orbital on different points along the `x` axis and plot it.
+
+x = np.linspace(-5, 5, 1000)
+
+##############################################################################
+# We can also plot the second S orbital and visualize the overlap between them
+
+S2 = mol.atomic_orbital(1)
+plt.plot(x, S1(x, 0.0, 0.0), color='teal')
+plt.plot(x, S2(x, 0.0, 0.0), color='teal')
+
+##############################################################################
+# By looking at the orbitals, can you guess at what distance the value of the overlap becomes
+# negligible? Can you verify your guess by computing the overlap at that distance?
+#
+# Similarly, we can plot the molecular orbitals of the hydrogen molecule obtained from the
+# Hartree-Fock calculations. We plot the cross section of the bonding orbital on the `x-y` plane.
+
+n = 30 # number of grid points along each axis
+xmin, xmax = -2, 2
+ymin, ymax = -2, 2
+
+mo = mol.molecular_orbital(0)
+x, y = np.meshgrid(np.linspace(xmin, xmax, n),
+                   np.linspace(ymin, ymax, n))
+val = np.vectorize(mo)(x, y, 0)
+val = np.array([val[i][j]._value for i in range(n) for j in range(n)]).reshape(n, n)
+
+plt.contour(x, y, val, 10, cmap='Greens_r')
+plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s=80, color='black')
+
+##############################################################################
+# After performing the Hartree-Fock calculations, we obtain a set of one- and two-body integrals
+# over molecular orbitals that can be used to construct the molecular Hamiltonian with the
+# :func:`~.pennylane.hf.generate_hamiltonian` function.
+
+hamiltonian = qml.hf.generate_hamiltonian(mol)(geometry)
+hamiltonian.terms
+
+##############################################################################
+# The Hamiltonian contains 15 terms and, importantly, the coefficients of the Hamiltonian are all
 # differentiable. We can construct a circuit and perform a VQE simulation in which both of the
-# circuit parameters and the molecular geometries are optimized simultaneously by using gradients
-# computed with the methods of automatic differentiation.
+# circuit parameters and the atomic coordinates are optimized simultaneously by using gradients
+# computed with Autograd.
 
 dev = qml.device("default.qubit", wires=4)
 def energy(mol):
@@ -160,7 +208,7 @@ def energy(mol):
 
 ##############################################################################
 # We now compute the gradients of the energy with respect to the circuit parameters and the atomic
-# coordinates. Note that the latter gradients are simply the forces on the atomic nuclai.
+# coordinates. Note that the atomic coordinate gradients are simply the forces on the atomic nuclai.
 
 circuit_param = [np.array([0.0], requires_grad=True)]
 
@@ -182,7 +230,16 @@ for n in range(50):
 
 ##############################################################################
 # Notice that after 50 steps of optimization the forces on the atomic nuclai and the gradient of the
-# circuit parameter are both approaching zero and the energy og the molecule is that of the
+# circuit parameter are both approaching zero and the energy of the molecule is that of the
 # optimized geometry at the full-CI level: :math:`-1.1373060483` Ha. You can print the optimized
-# geometry and verify that the final bond length of hydrogen is that of the full-CI which is
-# :math:`1.3888` Bohr.
+# geometry and verify that the final bond length of hydrogen is identical to the one computed with
+# full-CI which is :math:`1.3888` Bohr.
+#
+# References
+# ----------
+#
+# .. [#arrazola2021]
+#
+#     Juan Miguel Arrazola, Soran Jahangiri, Alain Delgado, Jack Ceroni *et al.*, "Differentiable
+#     quantum computational chemistry with PennyLane". `arXiv:2111.09967
+#     <https://arxiv.org/abs/2111.09967>`__
