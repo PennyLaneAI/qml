@@ -103,7 +103,7 @@ np.random.seed(0)
 dev = qml.device("default.qubit", wires=2)
 
 # Define the variational form V and observable M and combine them into a QNode.
-@qml.qnode(dev, diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift", max_diff=2)
 def circuit(parameters):
     qml.RX(parameters[0], wires=0)
     qml.RX(parameters[1], wires=1)

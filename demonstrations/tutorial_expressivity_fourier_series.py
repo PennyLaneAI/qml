@@ -495,7 +495,7 @@ def ansatz(weights):
     return qml.expval(qml.Identity(wires=0))
 
 weights_ansatz = 2 * np.pi * np.random.random(size=(n_ansatz_layers, n_qubits, 3))
-print(qml.draw(ansatz)(weights_ansatz))
+print(qml.draw(ansatz, expansion_strategy="device")(weights_ansatz))
 
 
 ######################################################################

@@ -94,7 +94,6 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
 # Let's check this out in PennyLane code:
 
 from pennylane import numpy as np
-from pennylane.beta import QNode
 
 np.random.seed(1967)
 
@@ -111,8 +110,8 @@ def circuit(w1, w2):
     return qml.expval(qml.PauliZ(0))
 
 
-ideal_qnode = QNode(circuit, dev_ideal)
-noisy_qnode = QNode(circuit, dev_noisy)
+ideal_qnode = qml.QNode(circuit, dev_ideal)
+noisy_qnode = qml.QNode(circuit, dev_noisy)
 
 ##############################################################################
 # First, we'll visualize the circuit:
@@ -496,8 +495,8 @@ for r, phi in zip(distances, params):
         qml.DoubleExcitation(phi, wires=range(n_wires))
         return qml.expval(H)
 
-    ideal_energy = QNode(qchem_circuit, dev_ideal)
-    noisy_energy = QNode(qchem_circuit, dev_noisy)
+    ideal_energy = qml.QNode(qchem_circuit, dev_ideal)
+    noisy_energy = qml.QNode(qchem_circuit, dev_noisy)
 
     ideal_energies.append(ideal_energy(phi))
     noisy_energies.append(noisy_energy(phi))
