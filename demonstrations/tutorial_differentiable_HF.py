@@ -89,7 +89,7 @@ qml.hf.hf_energy(mol)(geometry)
 
 ##############################################################################
 # The computed energy matches the reference value of :math:`-1.1175058849` Ha. We now compute the
-# gradient of the energy with respect to the atomic coordinates with autograd
+# gradient of the energy with respect to the atomic coordinates with Autograd
 
 autograd.grad(qml.hf.hf_energy(mol))(geometry)
 
@@ -115,7 +115,7 @@ S2 = mol.basis_set[1]
 
 S1.params
 
-# which returns the exponents, contraction coeeficients and centers of the three Gaussian functions
+# which returns the exponents, contraction coefficients and centers of the three Gaussian functions
 # of the sto-3g basis set. These data can be obtained individually by using `S1.alpha`, `S1.coeff`
 # and `S1.r`, respectively. You can verify that both of the S1 and S2 orbitals have the same
 # exponents and contraction coefficients but are centered on different hydrogen atoms. You can also
@@ -208,7 +208,7 @@ def energy(mol):
 
 ##############################################################################
 # We now compute the gradients of the energy with respect to the circuit parameters and the atomic
-# coordinates. Note that the atomic coordinate gradients are simply the forces on the atomic nuclai.
+# coordinates. Note that the atomic coordinate gradients are simply the forces on the atomic nuclei.
 
 circuit_param = [np.array([0.0], requires_grad=True)]
 
@@ -229,7 +229,7 @@ for n in range(50):
         print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}, G-param: {abs(g_param[0][0]):.8f}')
 
 ##############################################################################
-# Notice that after 50 steps of optimization the forces on the atomic nuclai and the gradient of the
+# Notice that after 50 steps of optimization the forces on the atomic nuclei and the gradient of the
 # circuit parameter are both approaching zero and the energy of the molecule is that of the
 # optimized geometry at the full-CI level: :math:`-1.1373060483` Ha. You can print the optimized
 # geometry and verify that the final bond length of hydrogen is identical to the one computed with
