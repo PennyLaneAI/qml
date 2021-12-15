@@ -170,17 +170,18 @@ plt.plot(x, S2(x, 0.0, 0.0), color='teal')
 # Similarly, we can plot the molecular orbitals of the hydrogen molecule obtained from the
 # Hartree-Fock calculations. We plot the cross section of the bonding orbital on the `x-y` plane.
 
-n = 30 # number of grid points along each axis
-xmin, xmax = -2, 2
-ymin, ymax = -2, 2
+n = 50 # number of grid points along each axis
 
+mol.mo_coefficients = mol.mo_coefficients.T
 mo = mol.molecular_orbital(0)
-x, y = np.meshgrid(np.linspace(xmin, xmax, n),
-                   np.linspace(ymin, ymax, n))
+x, y = np.meshgrid(np.linspace(-3, 3, n),
+                   np.linspace(-3, 3, n))
 val = np.vectorize(mo)(x, y, 0)
 val = np.array([val[i][j]._value for i in range(n) for j in range(n)]).reshape(n, n)
 
-plt.contour(x, y, val, 10, cmap='Greens_r')
+fig, ax = plt.subplots()
+co = ax.contour(x, y, val, 10, cmap='summer_r', zorder=0)
+ax.clabel(co, inline=2, fontsize=10)
 plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s=80, color='black')
 
 ##############################################################################
@@ -226,7 +227,7 @@ for n in range(50):
     geometry = geometry + 0.5 * forces
 
     if n % 5 == 0:
-        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}, G-param: {abs(g_param[0][0]):.8f}')
+        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
 
 ##############################################################################
 # Notice that after 50 steps of optimization the forces on the atomic nuclei and the gradient of the
@@ -234,6 +235,67 @@ for n in range(50):
 # optimized geometry at the full-CI level: :math:`-1.1373060483` Ha. You can print the optimized
 # geometry and verify that the final bond length of hydrogen is identical to the one computed with
 # full-CI which is :math:`1.3888` Bohr.
+#
+# We are now ready to perform a full optimization where the circuit parameters, the atomic
+# coordinates and the basis set parameters are all differentiable parameters that can be optimized
+# simultaneously.
+
+# geometry
+geometry = np.array([[0.0, 0.0, -0.672943567415407],
+                     [0.0, 0.0, 0.672943567415407]], requires_grad=True)
+
+# basis set exponents
+alpha = np.array([[3.42525091, 0.62391373, 0.1688554],
+                  [3.42525091, 0.62391373, 0.1688554]], requires_grad=True)
+
+# basis set contraction coefficients
+coeff = np.array([[0.1543289673, 0.5353281423, 0.4446345422],
+                  [0.1543289673, 0.5353281423, 0.4446345422]], requires_grad=True)
+
+circuit_param = [np.array([0.0], requires_grad=True)]
+
+for n in range(51):
+
+    args = [circuit_param, geometry, alpha, coeff]
+    mol = qml.hf.Molecule(symbols, geometry, alpha=alpha, coeff=coeff)
+
+    # gradient for circuit parameters
+    g_param = autograd.grad(energy(mol), argnum=0)(*args)
+    circuit_param = circuit_param - 0.25 * g_param[0]
+
+    # gradient for nuclear coordinates
+    forces = -autograd.grad(energy(mol), argnum=1)(*args)
+    geometry = geometry + 0.5 * forces
+
+    # gradient for basis set exponents
+    g_alpha = autograd.grad(energy(mol), argnum=2)(*args)
+    alpha = alpha - 0.25 * g_alpha
+
+    # gradient for basis set contraction coefficients
+    g_coeff = autograd.grad(energy(mol), argnum=3)(*args)
+    coeff = coeff - 0.25 * g_coeff
+
+    if n % 5 == 0:
+        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
+
+##############################################################################
+# You can also print the gradients of the circuit and basis set parameters and confirm that they are
+# approaching zero. It is important to note that the computed energy of :math:`-1.14041334` Ha is
+# lower than the full-CI energy, math:`-1.1373060483` Ha, obtained with the sto-3g basis set for the
+# hydrogen molecule because we have optimized the basis set parameters in our example. This means
+# we can reach a lower energy for hydrogen without increasing the basis set size which in principle
+# leads to a larger number of qubits.
+#
+# Conclusions
+# -----------
+# This tutorial introduces an important feature of PennyLane that allows performing fully-
+# differentiable Hartree-Fock and subsequently VQE simulations. This feature provides two major
+# benefits: i) all gradient computations needed for parameter optimization can be carried out
+# with the elegant methods of automatic differentiation. ii) By optimizing the molecular parameters
+# such as the exponent and contraction coefficients of Gaussian functions of the basis set, one can
+# reach a lower energy without increasing the number of basis functions. Can you think of other
+# interesting molecular parameters that cab be optimized along with the atomic coordinates and basis
+# set parameters that we optimized in this tutorial?
 #
 # References
 # ----------
