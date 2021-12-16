@@ -52,7 +52,7 @@ with respect to the underlying parameters. We will introduce a workflow to joint
 parameters, nuclear coordinates, and basis set parameters in a variational quantum eigensolver
 algorithm. Let's get started!
 
-Hartree-Fock method
+The Hartree-Fock method
 -------------------
 
 The main goal of the Hartree-Fock method is to obtain molecular spin-orbitals that minimize the
@@ -97,12 +97,12 @@ autograd.grad(qml.hf.hf_energy(mol))(geometry)
 # Note that we need to pass the `mol` object and the values of the atomic coordinates. The computed
 # gradients are equal or very close to zero because the initial geometry we used here has been
 # already optimized at the Hartree-Fock level.
-
+#
 # We can also compute the values and gradients of several other quantities that are computed during
 # the Hartree-Fock procedure. These include all integrals over basis functions, matrices formed from
 # these integrals and the one- and two-body integrals over molecular orbitals. Let's look at few
 # examples.
-
+#
 # We first compute the overlap integral between the two S atomic orbitals located on each of the
 # hydrogen atoms. Remember that in the 3to-3g basis set each of the atomic orbitals is represented
 # by a single basis function which is an attribute of the molecule object.
@@ -170,21 +170,24 @@ plt.plot(x, S2(x, 0.0, 0.0), color='teal')
 # Similarly, we can plot the molecular orbitals of the hydrogen molecule obtained from the
 # Hartree-Fock calculations. We plot the cross section of the bonding orbital on the `x-y` plane.
 
-n = 50 # number of grid points along each axis
+n = 30 # number of grid points along each axis
 
 mol.mo_coefficients = mol.mo_coefficients.T
 mo = mol.molecular_orbital(0)
-x, y = np.meshgrid(np.linspace(-3, 3, n),
-                   np.linspace(-3, 3, n))
+x, y = np.meshgrid(np.linspace(-2, 2, n),
+                   np.linspace(-2, 2, n))
 val = np.vectorize(mo)(x, y, 0)
 val = np.array([val[i][j]._value for i in range(n) for j in range(n)]).reshape(n, n)
 
 fig, ax = plt.subplots()
 co = ax.contour(x, y, val, 10, cmap='summer_r', zorder=0)
 ax.clabel(co, inline=2, fontsize=10)
-plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s=80, color='black')
+plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s = 80, color='black')
 
 ##############################################################################
+# VQE with the differentiable Hartree-Fock solver
+# -----------------------------------------------
+#
 # After performing the Hartree-Fock calculations, we obtain a set of one- and two-body integrals
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.hf.generate_hamiltonian` function.
@@ -213,7 +216,7 @@ def energy(mol):
 
 circuit_param = [np.array([0.0], requires_grad=True)]
 
-for n in range(50):
+for n in range(36):
 
     args = [circuit_param, geometry]
     mol = qml.hf.Molecule(symbols, geometry)
@@ -254,7 +257,7 @@ coeff = np.array([[0.1543289673, 0.5353281423, 0.4446345422],
 
 circuit_param = [np.array([0.0], requires_grad=True)]
 
-for n in range(51):
+for n in range(36):
 
     args = [circuit_param, geometry, alpha, coeff]
     mol = qml.hf.Molecule(symbols, geometry, alpha=alpha, coeff=coeff)
@@ -284,13 +287,22 @@ for n in range(51):
 # lower than the full-CI energy, math:`-1.1373060483` Ha, obtained with the sto-3g basis set for the
 # hydrogen molecule because we have optimized the basis set parameters in our example. This means
 # we can reach a lower energy for hydrogen without increasing the basis set size which in principle
-# leads to a larger number of qubits.
+# leads to a larger number of qubits. You can visualize the bonding molecular orbital of hydrogen
+# during each step of the optimisation and create and verify the change in the shape of the
+# molecular orbital visually. Here is an example:
+#
+# .. figure:: /demonstrations/differentiable_HF/h2.gif
+#     :width: 75%
+#     :align: center
+#
+#     The bonding molecular orbital of hydrogen visualized during a full geometry, circuit and
+#     basis set optimisation.
 #
 # Conclusions
 # -----------
 # This tutorial introduces an important feature of PennyLane that allows performing fully-
 # differentiable Hartree-Fock and subsequently VQE simulations. This feature provides two major
-# benefits: i) all gradient computations needed for parameter optimization can be carried out
+# benefits: i) all gradient computations needed for parameter optimisation can be carried out
 # with the elegant methods of automatic differentiation. ii) By optimizing the molecular parameters
 # such as the exponent and contraction coefficients of Gaussian functions of the basis set, one can
 # reach a lower energy without increasing the number of basis functions. Can you think of other
