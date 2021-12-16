@@ -113,8 +113,9 @@ S2 = mol.basis_set[1]
 ##############################################################################
 # We can check the parameters of the basis functions as
 
-S1.params
+print(S1.params)
 
+##############################################################################
 # which returns the exponents, contraction coefficients and centers of the three Gaussian functions
 # of the sto-3g basis set. These data can be obtained individually by using `S1.alpha`, `S1.coeff`
 # and `S1.r`, respectively. You can verify that both of the S1 and S2 orbitals have the same
@@ -125,7 +126,7 @@ print(S1.l)
 
 ##############################################################################
 # This gives you a tuple of three integers, representing the exponents of the `x`, `y` and `z`
-# components in the Gaussian functions [#grimsley2019]_.
+# components in the Gaussian functions [#arrazola2021]_.
 #
 # Having the two atomic orbitals, we can now compute the overlap integral by passing the orbitals
 # and the initial values of their centers to the :func:`~.pennylane.hf.generate_overlap` function.
@@ -162,6 +163,7 @@ x = np.linspace(-5, 5, 1000)
 S2 = mol.atomic_orbital(1)
 plt.plot(x, S1(x, 0.0, 0.0), color='teal')
 plt.plot(x, S2(x, 0.0, 0.0), color='teal')
+plt.xlabel('X [Bohr]')
 
 ##############################################################################
 # By looking at the orbitals, can you guess at what distance the value of the overlap becomes
@@ -182,18 +184,20 @@ val = np.array([val[i][j]._value for i in range(n) for j in range(n)]).reshape(n
 fig, ax = plt.subplots()
 co = ax.contour(x, y, val, 10, cmap='summer_r', zorder=0)
 ax.clabel(co, inline=2, fontsize=10)
+ax.set_xlabel('X [Bohr]')
+ax.set_ylabel('Y [Bohr]')
 plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s = 80, color='black')
 
 ##############################################################################
-# VQE with the differentiable Hartree-Fock solver
-# -----------------------------------------------
+# VQE simulations
+# ---------------
 #
 # After performing the Hartree-Fock calculations, we obtain a set of one- and two-body integrals
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.hf.generate_hamiltonian` function.
 
 hamiltonian = qml.hf.generate_hamiltonian(mol)(geometry)
-hamiltonian.terms
+print(hamiltonian)
 
 ##############################################################################
 # The Hamiltonian contains 15 terms and, importantly, the coefficients of the Hamiltonian are all
@@ -237,7 +241,7 @@ for n in range(36):
 # circuit parameter are both approaching zero and the energy of the molecule is that of the
 # optimized geometry at the full-CI level: :math:`-1.1373060483` Ha. You can print the optimized
 # geometry and verify that the final bond length of hydrogen is identical to the one computed with
-# full-CI which is :math:`1.3888` Bohr.
+# full-CI which is :math:`1.3888` `Bohr <https://en.wikipedia.org/wiki/Bohr_radius>`_.
 #
 # We are now ready to perform a full optimization where the circuit parameters, the atomic
 # coordinates and the basis set parameters are all differentiable parameters that can be optimized
@@ -284,11 +288,11 @@ for n in range(36):
 ##############################################################################
 # You can also print the gradients of the circuit and basis set parameters and confirm that they are
 # approaching zero. It is important to note that the computed energy of :math:`-1.14041334` Ha is
-# lower than the full-CI energy, math:`-1.1373060483` Ha, obtained with the sto-3g basis set for the
-# hydrogen molecule because we have optimized the basis set parameters in our example. This means
-# we can reach a lower energy for hydrogen without increasing the basis set size which in principle
-# leads to a larger number of qubits. You can visualize the bonding molecular orbital of hydrogen
-# during each step of the optimisation and create and verify the change in the shape of the
+# lower than the full-CI energy, :math:`-1.1373060483` Ha, obtained with the sto-3g basis set for
+# the hydrogen molecule because we have optimized the basis set parameters in our example. This
+# means we can reach a lower energy for hydrogen without increasing the basis set size which in
+# principle leads to a larger number of qubits. You can visualize the bonding molecular orbital of
+# hydrogen during each step of the optimisation and create and verify the change in the shape of the
 # molecular orbital visually. Here is an example:
 #
 # .. figure:: /demonstrations/differentiable_HF/h2.gif
