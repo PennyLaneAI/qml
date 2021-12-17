@@ -44,15 +44,16 @@ We want to study the link between classical and quantum kernels through the
 lens of the Fourier representation of a kernel, which is a common tool in
 classical ML.
 Two functions can only have the same Fourier spectrum if they are the same
-function, and it turns out that for certain classes of quantum circuits we can
-theoretically describe the Fourier spectrum rather well.
+function, and it turns out that for certain classes of quantum circuits `we can
+theoretically describe the Fourier spectrum rather well
+<https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html>`_.
 
 Using this theory together with some good old-fashioned convex optimisation, we
 will derive a quantum circuit that approximates the famous Gaussian kernel.
 
 In order to keep the demo short and sweet, we focus on one simple example, but
 the same ideas would apply for more general scenarios.
-Also, Refs. _[#Fourier], _[#qkernels], and _[#QEK] should be helpful for those
+Also, Refs. [#QEK]_, [#Fourier]_, and [#qkernels]_ should be helpful for those
 who'd like to see the underlying theory of QEKs and their Fourier
 representation.
 So tag along if you'd like to see how we build a quantum embedding kernel that
@@ -334,7 +335,7 @@ def make_thetas(m_wires):
 
 ###############################################################################
 # Next we introduce the only trainable gate we neet to make use of.
-# Contrary to the usual Ans\"atze used in supervised and unsupervised learning,
+# Contrary to the usual Ansätze used in supervised and unsupervised learning,
 # we use a state preparation template called ``MottonenStatePreparation``.
 # The unitary associated to this template transforms the :math:`\lvert0\rangle`
 # state into a state with amplitudes :math:`a=(a_1,a_2,\ldots,a_{2^n-1})`,
@@ -452,17 +453,25 @@ plt.suptitle("QEK with test amplitudes")
 plt.show();
 
 ###############################################################################
-# I don't really know what I was expecting to come out of there, but that's
-# already cool!
-# One could even say it looks like a :math:`1/\lvert x\rvert`.
+# One can see that the stationary kernel with an arbitrary initial state has a
+# decaying spectrum which looks similar to :math:`1/\lvert x\rvert` - but not
+# yet like a Gaussian.
 #
 # The necessary little bit of math
 # ----------------------------------
 #
+# One could just take the function implementing the classical kernel and the
+# function implementing the quantum kernel and then tune the parameters of the
+# quantum kernel in a gradient-based manner until it matched the classical one.
+# But we want to go a different route here.
+# For that, we derive an equation that links the amplitudes to the spectrum we
+# want to construct, and then use old-fashioned convex optimisation to find the
+# solution.
+#
 # In order to simplify the formulas, we introduce new variables, which we call
-# ``probabilities`` :math:`(w_0, w_1, w_2, \ldots, w_{2^n-1})`, and we define as
-# :math:`w_j=a_j^2`.
-# Following the normalization property above, we have :math:`\sum_j w_j=1`.
+# ``probabilities`` :math:`(p_0, p_1, p_2, \ldots, p_{2^n-1})`, and we define as
+# :math:`p_j=a_j^2`.
+# Following the normalization property above, we have :math:`\sum_j p_j=1`.
 # Don't get too fond of them, we only need them for this step!
 # Remember we introduced the vector :math:`a` for the
 # ``MottonenStatePreparation`` as the *amplitudes* of a quantum state?
@@ -474,12 +483,12 @@ plt.show();
 # .. math:: 
 #
 #   \text{probabilities} &\longrightarrow \text{Fourier coefficients} \\
-#   \begin{pmatrix} w_0 \\ w_1 \\ w_2 \\ \vdots \\ w_{2^n-1} \end{pmatrix}
-#   &\longmapsto \begin{pmatrix} \sum_{j=0}^{2^n-1} w_j^2 \\ \sum_{j=1}^{2^n-1}
-#   w_j w_{j-1} \\ \sum_{j=2}^{2^n-1} w_j w_{j-2} \\ \vdots \\ w_{2^n-1} w_0
+#   \begin{pmatrix} p_0 \\ p_1 \\ p_2 \\ \vdots \\ p_{2^n-1} \end{pmatrix}
+#   &\longmapsto \begin{pmatrix} \sum_{j=0}^{2^n-1} p_j^2 \\ \sum_{j=1}^{2^n-1}
+#   p_j p_{j-1} \\ \sum_{j=2}^{2^n-1} p_j p_{j-2} \\ \vdots \\ p_{2^n-1} p_0
 #   \end{pmatrix}
 #
-# Our goal is to find the set of :math:`w_j`'s that produces the Fourier
+# Our goal is to find the set of :math:`p_j`'s that produces the Fourier
 # coefficients of a given kernel function (in our case, the Gaussian kernel),
 # namely its spectrum :math:`(s_0, s_1, s_2, \ldots, s_{2^n-1})`.
 # We consider now a slightly different map :math:`F_s`, for a given spectrum
@@ -489,10 +498,10 @@ plt.show();
 #
 #   F_s: \text{probabilities} &\longrightarrow \text{Difference between Fourier
 #   coefficients} \\
-#   \begin{pmatrix} w_0 \\ w_1 \\ w_2 \\ \vdots \\ w_{2^n-1} \end{pmatrix}
-#   &\longmapsto \begin{pmatrix} \sum_{j=0}^{2^n-1} w_j^2 - s_0 \\
-#   \sum_{j=1}^{2^n-1} w_j w_{j-1} - s_1 \\ \sum_{j=2}^{2^n-1} w_j
-#   w_{j-2} - s_2 \\ \vdots \\ w_{2^n-1}w_0 - s_{2^n-1} \end{pmatrix}.
+#   \begin{pmatrix} p_0 \\ p_1 \\ p_2 \\ \vdots \\ p_{2^n-1} \end{pmatrix}
+#   &\longmapsto \begin{pmatrix} \sum_{j=0}^{2^n-1} p_j^2 - s_0 \\
+#   \sum_{j=1}^{2^n-1} p_j p_{j-1} - s_1 \\ \sum_{j=2}^{2^n-1} p_j
+#   p_{j-2} - s_2 \\ \vdots \\ p_{2^n-1}p_0 - s_{2^n-1} \end{pmatrix}.
 #
 # If you look at it again, you'll see that the zero (or solution) of this
 # second map :math:`F_s` is precisely the array of *probabilities* we are
@@ -550,8 +559,9 @@ def J_F(probabilities):
 # Showing that this is indeed :math:`\nabla F_s` is left as an exercise for the
 # reader.
 # For Newton's method we also need an initial guess.
-# I *guess* I was lucky enough that the first one I tried already gave good
-# results :)
+# Finding a good initial guess requires some tinkering, different problems will
+# benefit from different ones.
+# Here is a tame one that works for the gaussian kernel.
 
 def make_initial_probabilities(d):
     probabilities = np.ones(d)
