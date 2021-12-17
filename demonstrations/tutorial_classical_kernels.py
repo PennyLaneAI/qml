@@ -22,35 +22,33 @@ How to approximate a classical kernel function with a quantum computer
 
 Forget about advantages, supremacies, or speed-ups.
 Let us understand better what we can and cannot do with a quantum computer.
-In particular, how can we exploit the Fourier representation of quantum
-embedding kernels (QEKs)?
-To what use can we put our knowledge of it?
-
-Can we replicate a classical kernel function with a quantum computer?
+More specifically, in this demo we want to look into quantum kernels and ask
+whether we can replicate classical kernel functions with a quantum computer.
 Lots of researchers have lengthily stared at the opposite question, namely that
 of classical simulation of quantum algorithms.
-Yet, by studying what classes of functions QEKs can realize we can gain some
-insight into their inner workings.
+Yet, by studying what classes of functions we can realize with quantum kernels,
+we can gain some insight into their inner workings.
 
 Usually, in quantum machine learning (QML) we use parametrized quantum circuits
 (PQCs) to find good functions, whatever *good* means here.
 Consequently, since kernels are just one specific kind of well-defined
-functions, the task of finding a QEK that approximates a given classical kernel
-could be posed as a supervised learning regression problem.
+functions, the task of finding a quantum kernel that approximates a given
+classical one could be posed as a supervised learning regression problem.
 The way to attack this task would be to define a loss function directly
 quantifying the distance between both functions (the classical kernel function,
 and the PQC-based hypothesis).
 This sort of approach is more or less oblivious to the Fourier representation
 of the kernels, though.
-In order to exploit the Fourier characterization of kernels, first thing we'll
-do will be finding the Fourier spectrum of the given classical kernel function
-(more on Fourier spectra down below).
-Once we have the spectrum we want to approximate, we'll want to design a QEK
-with the exact same spectrum.
+
+We want to study the link between classical and quantum kernels through the
+lens of the Fourier representation of a kernel, which is a common tool in
+classical ML.
 Two functions can only have the same Fourier spectrum if they are the same
-function, so what we're saying is we want to bring the approximation problem
-from the space of functions to the space of Fourier spectra, if that makes
-sense.
+function, and it turns out that for certain classes of quantum circuits we can
+theoretically describe the Fourier spectrum rather well.
+
+Using this theory together with some good old-fashioned convex optimisation, we
+will derive a quantum circuit that approximates the famous Gaussian kernel.
 
 In order to keep the demo short and sweet, we focus on one simple example, but
 the same ideas would apply for more general scenarios.
@@ -76,7 +74,7 @@ appeoximates the well-known Gaussian kernel function!
 Kernel-based Machine Learning
 ----------------------------------------------
 
-will not be reviewing all the notions of kernels in-depth here.
+We will not be reviewing all the notions of kernels in-depth here.
 Instead, we only need to know that there's an entire branch of ML which
 revolves around some functions we call kernels.
 If you'd like to see a more comprehensive introduction to where these functions
@@ -118,6 +116,8 @@ Accordingly, we say :math:`k` is an *even function*.
 Warm up: Implementing the Gaussian kernel
 -------------------------------------------
 
+First, let's introduce a simple classical kernel that we will try to
+approximate on the quantum computer.
 Start importing the usual suspects:
 """
 
