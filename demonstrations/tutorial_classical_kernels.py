@@ -246,7 +246,16 @@ def fourier_p(d):
     return np.real(coefficients(Gauss_p, 1, d-1)[:d])
 
 ##################################################################################
-# Let's see what happens for different cut-off values, as a sanity check!
+# With this we are restricted to considering only a finite number of Fourier
+# terms.
+# But isn't that problematic, one may say?
+# Well, maybe.
+# Since we know the Gaussian kernel is a smooth function, we expect that the
+# coefficients converge to :math:`0` at some point.
+# We will not need to take more terms than this point, since all the extra ones
+# would have to be :math:`0` in any case.
+# Let's look at the coefficients we obtain by setting a low value for the
+# number of coefficients, and then letting it slowly grow:
 
 N = [0]
 for n in range(2,7):
@@ -260,13 +269,21 @@ plt.ylabel("Fourier coefficient $c_n$")
 plt.show();
 
 ##################################################################################
-# It seems like starting :math:`5` or :math:`6` all the non-zero contributions
-# are well captured.
-# This is important for us, since it tells us that we should use at least
-# :math:`3` qubits, which would correspond to :math:`2^3=8` frequencies.
+# What do we see?
+# For very small coefficient counts, like :math:`2` and :math:`3`, we see that
+# the last allowed coefficient is still far from :math:`0`.
+# That's a very clear indicator that we need to consider more frequencies.
+# At the same time, it seems like starting :math:`5` or :math:`6` all the
+# non-zero contributions have already been well captured.
+# This is important for us, since it tells us that we should use how many
+# qubits we should use at least.
+# One can see that every new qubit doubles the number of frequencies we can
+# use, so for :math:`n` qubits, we will have :math:`2^n`.
+# So, at least :math:`6` frequencies means at least :math:`3` qubits, which
+# would correspond to :math:`2^3=8` frequencies.
 # As we'll see later, we'll work with :math:`5` qubits, so :math:`32`
 # frequencies.
-# That menas the spectrum we will be trying to replicate will be the following:
+# That means the spectrum we will be trying to replicate will be the following:
 
 plt.plot(range(32), fourier_p(32), 'x')
 plt.xlabel("frequency $n$")
