@@ -2,7 +2,7 @@ r"""
 
 .. _classical_kernels:
 
-How to approximate a classical kernel function with a quantum computer
+How to approximate a classical kernel with a quantum computer
 =======================================================================
 
 .. meta::
@@ -57,10 +57,8 @@ the same ideas would apply for more general scenarios.
 Also, Refs. _[#Fourier], _[#qkernels], and _[#QEK] should be helpful for those
 who'd like to see the underlying theory of QEKs and their Fourier
 representation.
-The relaitvely short sections with self-explanatory titles should give a good
-ides of what awaits ahead.
 So tag along if you'd like to see how we build a quantum embedding kernel that
-appeoximates the well-known Gaussian kernel function!
+approximates the well-known Gaussian kernel function!
 
 |
 
@@ -69,7 +67,7 @@ appeoximates the well-known Gaussian kernel function!
     :width: 80%
     :target: javascript:void(0)
 
-    The Quantum Embedding Kernel covered in this demo.
+    The type of quantum kernel considered in this demo.
 
 
 
@@ -82,7 +80,7 @@ revolves around some functions we call kernels.
 If you'd like to see a more comprehensive introduction to where these functions
 come from, why they're important, and how we can use them (e.g. with
 PennyLane), you could check out the following demos, which cover different
-aspectes extensively:
+aspects extensively:
 
 #. `Training and evaluating quantum kernels <https://pennylane.ai/qml/demos/tutorial_kernels_module.html>`_
 #. `Kernel-based training of quantum models with scikit-learn <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_
@@ -176,7 +174,7 @@ plt.show();
 #
 # #. Shift-invariance
 # #. Normalization :math:`k(0)=1`.
-# #. Smoothness (seen as quickly decaying Fourier spectrum).
+# #. Smoothness (in the sense of a quickly decaying Fourier spectrum).
 #
 # Fourier analysis of the Gaussian kernel
 # -------------------------------------------
@@ -233,7 +231,7 @@ from pennylane.fourier import coefficients
 ##################################################################################
 # The function ``coefficients`` computes for us the coefficients of the Fourier
 # series up to a fixed term.
-# One tiny dfetail here: ``coefficients`` returns one complex number :math:`c_n`
+# One tiny detail here: ``coefficients`` returns one complex number :math:`c_n`
 # for each frequency :math:`n`.
 # The real part corresponds to the :math:`a_n` coefficient, and the imaginary
 # part to the :math:`b_n` coefficient: :math:`c_n=a_n+ib_n`.
@@ -299,9 +297,6 @@ plt.show();
 # Indeed, we start from a classical kernel, obtain its spectrum, and then
 # specify two building blocks of the parametrized quantum circuit: the
 # trainable gates and the encoding gates.
-# With the particularity, that we'll use a state preparation template instead
-# of some directly parametrized Ansatz, and we'll have one single layer of
-# encoding gates *after* the state preparation one.
 #
 # Start with the fixed gate we'll use to encode the data :math:`S(x)`.
 # It consists of applying one Pauli-:math:`Z` rotation to each qubit with
@@ -324,7 +319,7 @@ def make_thetas(m_wires):
 # Next we introduce the only trainable gate we neet to make use of.
 # Contrary to the usual Ans\"atze used in supervised and unsupervised learning,
 # we use a state preparation template called ``MottonenStatePreparation``.
-# The unitary associated to this template transforms the :math:\lvert0\rangle`
+# The unitary associated to this template transforms the :math:`\lvert0\rangle`
 # state into a state with amplitudes :math:`a=(a_1,a_2,\ldots,a_{2^n-1})`,
 # namely :math:`\lvert a\rangle=\sum_j a_j\lvert j\rangle`, provided
 # :math:`\lVert a\rVert^2=1`.
@@ -408,7 +403,7 @@ def QEK_2(x1, x2, thetas, amplitudes):
     return QEK_circuit(x1, x2, thetas, amplitudes)[0]
 
 ###############################################################################
-# As a couple quality of life improvements, we write a function that implements
+# As a couple quality-of-life improvements, we write a function that implements
 # the QEK with the lag :math:`\delta` as argument, and one that implements it
 # on a given set of data:
 
@@ -514,7 +509,7 @@ def F(probabilities, spectrum):
     return predict_spectrum(probabilities)[:d] - spectrum[:d]
 
 ###############################################################################
-# These closed form equations allow us to find the solution numerically, using
+# These closed-form equations allow us to find the solution numerically, using
 # Newton's method!
 #
 # Finding the solution
@@ -645,7 +640,7 @@ plt.show();
 #
 # Let's see what happens when we call the function ``coefficients`` on the QEK
 # function we defined earlier.
-# Good coding praxis tells us we should probably turn this step into a function
+# Good coding practice tells us we should probably turn this step into a function
 # itself, in case it is of use later:
 
 def fourier_q(d, thetas, amplitudes):
