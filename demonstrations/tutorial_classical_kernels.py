@@ -6,7 +6,7 @@ How to approximate a classical kernel with a quantum computer
 =======================================================================
 
 .. meta::
-    :property="og:description": Finding a QEK to approximate the Gaussian
+    :property="og:description": Finding a QK to approximate the Gaussian
     kernel.
     :property="og:image": https://pennylane.ai/qml/_images/toy_qek.png
 
@@ -32,7 +32,7 @@ we can gain some insight into their inner workings.
 Usually, in quantum machine learning (QML) we use parametrized quantum circuits
 (PQCs) to find good functions, whatever *good* means here.
 Consequently, since kernels are just one specific kind of well-defined
-functions, the task of finding a quantum kernel that approximates a given
+functions, the task of finding a quantum kernel (QK) that approximates a given
 classical one could be posed as a supervised learning regression problem.
 The way to attack this task would be to define a loss function directly
 quantifying the distance between both functions (the classical kernel function,
@@ -54,9 +54,9 @@ will derive a quantum circuit that approximates the famous Gaussian kernel.
 In order to keep the demo short and sweet, we focus on one simple example, but
 the same ideas would apply for more general scenarios.
 Also, Refs. [#QEK]_, [#Fourier]_, and [#qkernels]_ should be helpful for those
-who'd like to see the underlying theory of QEKs and their Fourier
-representation.
-So tag along if you'd like to see how we build a quantum embedding kernel that
+who'd like to see the underlying theory of QKs (and also Quantum Embedding
+Kernels) and their Fourier representation.
+So tag along if you'd like to see how we build a quantum kernel that
 approximates the well-known Gaussian kernel function!
 
 |
@@ -99,8 +99,8 @@ Shift-invariant kernels
 Some kernels fulfill another important restriction, called *shift-invariance*.
 Shift-invariant kernels are those whose value doesn't change if we add a shift
 to both inputs. That means, for any suitable shift vector
-:math:`a\in\mathcal{X}`, shift-invariant kernels are those for which
-:math:`k(x_1+a,x_2+a)=k(x_1,x_2)` holds.
+:math:`\zeta\in\mathcal{X}`, shift-invariant kernels are those for which
+:math:`k(x_1+\zeta,x_2+\zeta)=k(x_1,x_2)` holds.
 At the same time, having this property means the function can be written in
 terms of only one variable, which we call the *lag vector*
 :math:`\delta:=x_1-x_2\in\mathcal{X}`, abusing notation a bit:
@@ -135,7 +135,7 @@ np.random.seed(53173)
 #
 # .. math::
 #
-#   k_\sigma(x_1+a,x_2+a) &= e^{-\lVert(x_1+a)-(x_2+a)\rVert^2/2\sigma^2} \\
+#   k_\sigma(x_1+\zeta,x_2+\zeta) &= e^{-\lVert(x_1+\zeta)-(x_2+\zeta)\rVert^2/2\sigma^2} \\
 #   & = e^{-\lVert x_1-x_2\rVert^2/2\sigma^2} \\
 #   & = k_\sigma(x_1,x_2).
 #
@@ -177,13 +177,16 @@ plt.show();
 # #. Normalization :math:`k(0)=1`.
 # #. Smoothness (in the sense of a quickly decaying Fourier spectrum).
 #
+# Note that is a very large class of kernels!
+# And also an important one for practical applications.
+#
 # Fourier analysis of the Gaussian kernel
 # -------------------------------------------
 #
 # The first next step will be to find the Fourier spectrum of the Gaussian
 # kernel, which is an easy problem for classical computers.
-# Once we've found it, we'll build a QEK with the same spectrum.
-# The QEK produces a finite Fourier series approximation for the gaussian
+# Once we've found it, we'll build a QK with the same spectrum.
+# The QK produces a finite Fourier series approximation for the gaussian
 # kernel.
 #
 # Let's briefly recall that a Fourier series is the representation of a
@@ -293,12 +296,12 @@ plt.suptitle("Fourier spectrum of the Gaussian kernel")
 plt.show();
 
 ##################################################################################
-# We just need a QEK with the same Fourier spectrum!
+# We just need a QK with the same Fourier spectrum!
 #
-# Designing a suitable QEK
+# Designing a suitable QK
 # --------------------------
 #
-# Designing a suitable QEK amounts to designing a suitable parametrized quantum
+# Designing a suitable QK amounts to designing a suitable parametrized quantum
 # circuit.
 # Let's take a moment to refresh the big scheme of things, with the following
 # picture:
@@ -312,13 +315,16 @@ plt.show();
 #
 #     Schematic of the steps covered in this demo
 #
-# Indeed, we start from a classical kernel, obtain its spectrum, and then
-# specify two building blocks of the parametrized quantum circuit: the
-# trainable gates and the encoding gates.
+# We construct the quantum kernel from a quantum embedding (see the demo on
+# `Quantum Embedding Kernels <pennylane.ai/qml/demos/tutorial_kernels_module.html>`_).
+# The quantum embedding circuit will consist of two parts.
+# The first one, trainable, will be a parametrised general state preparation
+# scheme :math:`W_a`, with parameters :math:`a`. 
+# In the second one we input the data, and call it :math:`S(x)`.
 #
-# Start with the fixed gate we'll use to encode the data :math:`S(x)`.
+# Start with the non-trainable gate we'll use to encode the data :math:`S(x)`.
 # It consists of applying one Pauli-:math:`Z` rotation to each qubit with
-# rotation parameter :math:`x` times some parameter :math:`\vartheta_i`, for
+# rotation parameter :math:`x` times some constant :math:`\vartheta_i`, for
 # the :math:`i^\text{th}` qubit.
 
 def S(x, thetas, wires):
@@ -353,7 +359,7 @@ def W(features, wires):
 #
 # for a given :math:`a`, which we will specify later.
 #
-# Accordingly, we can build the QEK corresponding to this feature map as
+# Accordingly, we can build the QK corresponding to this feature map as
 #
 # .. math::
 #
@@ -377,7 +383,7 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_1-x_2) W_a\lvert0\rangle\rvert^2 \\
 #   &= k_a(x_2,x_1).
 #
-# Further, this QEK is also shift-invariant :math:`k_a(x_1,x_2) = k_a(x_1+s,
+# Further, this QK is also shift-invariant :math:`k_a(x_1,x_2) = k_a(x_1+s,
 # x_2+s)` for any :math:`s\in\mathbb{R}`.
 # So we can also write it in terms of the lag :math:`\delta=x_1-x_2`:
 #
@@ -389,7 +395,7 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 # So far we only wrote the gate layout for the quantum circuit, no measurement!
 # We need a few more functions for that!
 #
-# Computing the QEK function on a quantum device
+# Computing the QK function on a quantum device
 # -------------------------------------------------
 #
 # Also, at this point we need to set the number of qubits of our computer.
@@ -401,35 +407,34 @@ n_wires = 5
 # We initialize the quantum simulator:
 
 dev = qml.device("default.qubit", wires = n_wires, shots = None)
-wires = dev.wires.tolist()
 
 ###############################################################################
 # And write the function that will use the device, hence the ``@qml.qnode``
 # decorator!
 
 @qml.qnode(dev)
-def QEK_circuit(x1, x2, thetas, amplitudes):
-    ansatz(x1, x2, thetas, amplitudes, wires = wires)
-    return qml.probs(wires = wires)
+def QK_circuit(x1, x2, thetas, amplitudes):
+    ansatz(x1, x2, thetas, amplitudes, wires = range(n_wires))
+    return qml.probs(wires = range(n_wires))
 
 ###############################################################################
-# Recall that the outputs of QEKs are defined as the probability of obtaining
+# Recall that the outputs of QKs are defined as the probability of obtaining
 # the outcome :math:`\lvert0\rangle` when measuring on the computational basis.
 # That corresponds to the :math:`0^\text{th}` entry of ``qml.probs``:
 
-def QEK_2(x1, x2, thetas, amplitudes):
-    return QEK_circuit(x1, x2, thetas, amplitudes)[0]
+def QK_2(x1, x2, thetas, amplitudes):
+    return QK_circuit(x1, x2, thetas, amplitudes)[0]
 
 ###############################################################################
 # As a couple quality-of-life improvements, we write a function that implements
-# the QEK with the lag :math:`\delta` as argument, and one that implements it
+# the QK with the lag :math:`\delta` as argument, and one that implements it
 # on a given set of data:
 
-def QEK(delta, thetas, amplitudes):
-    return QEK_2(delta, 0, thetas, amplitudes)
+def QK(delta, thetas, amplitudes):
+    return QK_2(delta, 0, thetas, amplitudes)
 
-def QEK_on_dataset(deltas, thetas, amplitudes):
-    y = np.array([QEK(delta, thetas, amplitudes) for delta in deltas])
+def QK_on_dataset(deltas, thetas, amplitudes):
+    y = np.array([QK(delta, thetas, amplitudes) for delta in deltas])
     return y
 
 ###############################################################################
@@ -445,11 +450,11 @@ thetas = make_thetas(n_wires)
 test_features = np.asarray([1./(1+i) for i in range(2 ** n_wires)])
 test_amplitudes = test_features / np.sqrt(np.sum(test_features ** 2))
 
-Y_test = QEK_on_dataset(X, thetas, test_amplitudes)
+Y_test = QK_on_dataset(X, thetas, test_amplitudes)
 
 plt.plot(X, Y_test)
 plt.xlabel("$\delta$")
-plt.suptitle("QEK with test amplitudes")
+plt.suptitle("QK with test amplitudes")
 plt.show();
 
 ###############################################################################
@@ -478,7 +483,7 @@ plt.show();
 # Then it makes sense that we call its squares *probabilities*, doesn't it?
 #
 # There is a crazy formula that matches the entries of *probabilities* with the
-# Fourier series of the resulting QEK function:
+# Fourier series of the resulting QK function:
 #
 # .. math:: 
 #
@@ -653,7 +658,7 @@ plt.show();
 # We try it first using ``predict_spectrum`` only
 
 plt.plot(range(d), fourier_p(d)[:d], '+', label = "Gaussian kernel")
-plt.plot(range(d), predict_spectrum(probabilities)[:d], 'x', label = "QEK predicted")
+plt.plot(range(d), predict_spectrum(probabilities)[:d], 'x', label = "QK predicted")
 plt.xlabel("frequency $n$")
 plt.ylabel("Fourier coefficient")
 plt.suptitle("Fourier spectrum of the Gaussian kernel")
@@ -665,21 +670,21 @@ plt.show();
 # But as we just said this is still only the predicted spectrum.
 # We haven't called the quantum computer at all yet!
 #
-# Let's see what happens when we call the function ``coefficients`` on the QEK
+# Let's see what happens when we call the function ``coefficients`` on the QK
 # function we defined earlier.
 # Good coding practice tells us we should probably turn this step into a function
 # itself, in case it is of use later:
 
 def fourier_q(d, thetas, amplitudes):
-    return np.real(coefficients(lambda x: QEK(x, thetas, amplitudes), 1, d-1))
+    return np.real(coefficients(lambda x: QK(x, thetas, amplitudes), 1, d-1))
 
 ###############################################################################
 # And with this we can finally visualize how the Fourier spectrum of the
-# QEK function compares to that of the Gaussian kernel:
+# QK function compares to that of the Gaussian kernel:
 
 plt.plot(range(d), fourier_p(d)[:d], '+', label = "Gaussian kernel")
-plt.plot(range(d), predict_spectrum(probabilities)[:d], 'x', label="QEK predicted")
-plt.plot(range(d), fourier_q(d, thetas, amplitudes)[:d], '.', label = "QEK computer")
+plt.plot(range(d), predict_spectrum(probabilities)[:d], 'x', label="QK predicted")
+plt.plot(range(d), fourier_q(d, thetas, amplitudes)[:d], '.', label = "QK computer")
 plt.xlabel("frequency $n$")
 plt.ylabel("Fourier coefficient")
 plt.suptitle("Fourier spectrum of the Gaussian kernel")
@@ -690,10 +695,10 @@ plt.show();
 # It seems it went well!
 # Matching spectra should mean matching kernel functions, right?
 
-Y_learned = QEK_on_dataset(X, thetas, amplitudes)
+Y_learned = QK_on_dataset(X, thetas, amplitudes)
 Y_truth = [Gauss_p(x_) for x_ in X]
 
-plt.plot(X, Y_learned, '-.', label = "QEK")
+plt.plot(X, Y_learned, '-.', label = "QK")
 plt.plot(X, Y_truth, '--', label = "Gaussian kernel")
 plt.xlabel("$\delta$")
 plt.ylabel("$k(\delta)$")
