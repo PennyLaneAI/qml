@@ -12,7 +12,7 @@ Ensemble classification with Forest and Qiskit devices
 
    tutorial_variational_classifier Variational quantum classifier
 
-*Author: PennyLane dev team. Last updated: 6 Aug 2020.*
+*Author: PennyLane dev team. Last updated: 13 Dec 2021.*
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
@@ -135,6 +135,12 @@ def plot_points(x_train, y_train, x_test, y_test):
 plot_points(x_train, y_train, x_test, y_test)
 
 ##############################################################################
+# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_001.png
+#    :width: 80%
+#    :align: center
+#
+
+##############################################################################
 # This plot shows us that class 0 points can be nicely separated, but that there is an overlap
 # between points from classes 1 and 2.
 #
@@ -155,7 +161,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # prediction.
 #
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_diagram.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 #
 # Quantum nodes
@@ -179,7 +185,7 @@ devs = [dev0, dev1]
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
 #    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/en/stable/>`__ or, for users with Docker, by running:
+#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
 #
 #    .. code-block:: bash
 #
@@ -189,7 +195,7 @@ devs = [dev0, dev1]
 # The circuits for both QPUs are shown in the figure below:
 #
 # .. figure:: /demonstrations/ensemble_multi_qpu/diagram_circuits.png
-#    :width: 50%
+#    :width: 80%
 #    :align: center
 
 
@@ -299,6 +305,30 @@ print("Predicting on test dataset")
 p_test, p_test_0, p_test_1, choices_test = predict(params, x=x_test)
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Predicting on training dataset
+#    Completed up to iteration 10
+#    Completed up to iteration 20
+#    Completed up to iteration 30
+#    Completed up to iteration 40
+#    Completed up to iteration 50
+#    Completed up to iteration 60
+#    Completed up to iteration 70
+#    Completed up to iteration 80
+#    Completed up to iteration 90
+#    Completed up to iteration 100
+#    Completed up to iteration 110
+#    Completed up to iteration 120
+#    Predicting on test dataset
+#    Completed up to iteration 10
+#    Completed up to iteration 20
+
+##############################################################################
 # Analyze performance
 # -------------------
 #
@@ -325,10 +355,33 @@ print("Training accuracy (QPU0):  {}".format(accuracy(p_train_0, y_train)))
 print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Training accuracy (ensemble): 0.824
+#    Training accuracy (QPU0):  0.648
+#    Training accuracy (QPU1):  0.28
+
+##############################################################################
 
 print("Test accuracy (ensemble): {}".format(accuracy(p_test, y_test)))
 print("Test accuracy (QPU0):  {}".format(accuracy(p_test_0, y_test)))
 print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Test accuracy (ensemble): 0.72
+#    Test accuracy (QPU0):  0.56
+#    Test accuracy (QPU1):  0.24
+
 ##############################################################################
 # These numbers tell us a few things:
 #
@@ -358,6 +411,20 @@ print("Choices: {}".format(choices))
 print("Choices counts: {}".format(Counter(choices)))
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Choices: [0 0 1 1 0 0 1 0 0 0 1 0 0 0 0 0 0 1 1 0 0 1 0 1 1 0 0 0 1 0 0 1 0 1 0 0 0
+#     0 1 1 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 1 1 0 0 0 0 1 0 0 0
+#     0 0 0 0 0 1 1 1 1 0 0 0 1 0 1 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0
+#     1 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 1 1 0 1 0 0
+#     0 0]
+#    Choices counts: Counter({0: 110, 1: 40})
+
+##############################################################################
 # The following lines keep track of choices and corresponding predictions in the ensemble model.
 
 
@@ -379,6 +446,21 @@ expl = "When QPU{} was chosen by the ensemble, it made the following distributio
 print(expl.format("0", Counter(predictions_0)))
 print("\n" + expl.format("1", Counter(predictions_1)))
 print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    When QPU0 was chosen by the ensemble, it made the following distribution of predictions:
+#    Counter({0: 55, 2: 55})
+#
+#    When QPU1 was chosen by the ensemble, it made the following distribution of predictions:
+#    Counter({1: 37, 0: 3})
+#
+#    Distribution of classes in iris dataset: Counter({0: 50, 2: 50, 1: 50})
 
 ##############################################################################
 # These results show us that QPU0 specializes to making predictions on classes 0 and 2,
@@ -446,12 +528,30 @@ def plot_points_prediction(x, y, p, title):
 plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 
 ##############################################################################
+# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_002.png
+#    :width: 80%
+#    :align: center
+#
+
+##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 
 ##############################################################################
+# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_003.png
+#    :width: 80%
+#    :align: center
+#
+
+##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
+
+##############################################################################
+# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_004.png
+#    :width: 80%
+#    :align: center
+#
 
 ##############################################################################
 # These plots reinforce the specialization of the two QPUs. QPU1 concentrates on doing a good job

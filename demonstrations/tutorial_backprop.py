@@ -56,6 +56,7 @@ Let's have a go implementing the parameter-shift rule manually in PennyLane.
 """
 import pennylane as qml
 from pennylane import numpy as np
+from matplotlib import pyplot as plt
 
 # set the random seed
 np.random.seed(42)
@@ -91,7 +92,8 @@ print("Expectation value:", circuit(params))
 ##############################################################################
 # We can also draw the executed quantum circuit:
 
-print(qml.draw(circuit)(params))
+fig, ax = qml.draw_mpl(circuit, decimals=2)(params)
+plt.show()
 
 
 ##############################################################################
@@ -370,7 +372,6 @@ forward_backprop = np.array(forward_backprop).T
 ##############################################################################
 # We now import matplotlib, and plot the results.
 
-from matplotlib import pyplot as plt
 plt.style.use("bmh")
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
