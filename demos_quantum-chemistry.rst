@@ -35,6 +35,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :tags: chemistry
 
 .. customgalleryitem::
+    :tooltip: Autodifferentiable Hartree-Fock calculations.
+    :figure: demonstrations/differentiable_HF/h2.gif
+    :description: :doc:`demos/tutorial_differentiable_HF`
+    :tags: chemistry
+
+.. customgalleryitem::
     :tooltip: Adaptive circuits for quantum chemistry.
     :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
     :description: :doc:`demos/tutorial_adaptive_circuits`
