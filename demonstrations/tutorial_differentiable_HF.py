@@ -18,15 +18,35 @@ Differentiable Hartree-Fock
 
 Variational quantum algorithms aim to calculate the energy of a molecule by constructing a
 parametrized quantum circuit and finding a set of parameters that minimize the expectation value of
-the electronic molecular Hamiltonian. For a given molecule, the electronic Hamiltonian is obtained
-by solving the Hartree-Fock equations which provide a set of integrals that are used to construct
-the Hamiltonian. The constructed Hamiltonian depends on molecular parameters such as nuclear
-coordinates and basis set parameters that can also be optimized concurrently with the circuit
-parameters. This can be beneficial to solve problems such as molecular geometry optimization where
-the atomic coordinates and the circuit parameters can be optimized simultaneously to obtain the
-equilibrium geometry of a molecule at the ground or excited electronic state. The optimization
-problem can now be solved by differentiating the expectation value of the Hamiltonian with respect
-to the circuit and molecular parameters and using an algorithm such as
+the electronic molecular Hamiltonian. The optimization can be carried out by computing the gradients
+of the expectation value with respect to these parameters and iteratively updating the parameters
+based on the computed gradients. In principle, the optimization proces is not limited to the circuit
+parameters only and can be extended to include the parameters of the Hamiltonian which depend on
+molecular properties that can be optimized concurrently with the circuit parameters.
+
+Computing the gradient of a molecular Hamiltonian is typically challenging because the dependency of
+the Hamiltonian to the molecular parameters is usually very complicated. This makes symbolic
+differentiation methods, which obtain derivatives of an input function by direct mathematical
+manipulation, of limited scope. Furthermore, numerical differentiation methods based on finite
+differences are not always reliable due to their intrinsic instability specially when the number of
+differentiable parameters is large. These limitations can be alleviated by using automatic
+differentiation which can be used to compute exact gradients of a function, implemented with
+computer code, using resources comparable to those required to evaluate the function itself. This
+makes automatic differentiation a suitable method for computing molecular Hamiltonian derivatives.
+
+Efficient optimization of the molecular Hamiltonian parameters in a variational quantum algorithm
+is essential for problems such as geometry optimization and vibrational frequency calculations which
+requre first and second derivatives of the molecular energy with respect to nuclear coordinates.
+Furthermore, the optimization problem can be extended to the parameters of the basis set used to
+construct the atomic orbitals which can in principle increase the accuracy of the computed molecular
+electronic energy without increasing the number of qubits in a quantum simulation.
+
+The electronic Hamiltonian for a given molecule is constructed using one- and two-electron integrals
+over optimized molecular orbitals. These orbitals are obtained by solving the Hartree-Fock
+equations. The constructed Hamiltonian depends on molecular parameters such as nuclear coordinates
+and basis set parameters that can also be optimized concurrently with the circuit parameters. The
+variational problem can now be solved by differentiating the expectation value of the Hamiltonian
+with respect to the circuit parameters and the molecular parameters and using an algorithm such as
 `gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_ to obtain the set of parameters
 that minimize the following expectation value
 
@@ -35,25 +55,6 @@ that minimize the following expectation value
        \left \langle \Psi(\theta) | H(\beta) | \Psi(\theta) \right \rangle,
 
 where :math:`\theta` and :math:`\beta` represent the circuit and molecular parameters, respectively.
-The ability to optimize the Hamiltonian parameters provides computational advantages for geometry
-optimization and also allows customizing basis set parameters for a given molecule such that a lower
-energy cn be reached with the same number of basis functions.
-
-The gradients of the Hamiltonian expectation value can be obtained from symbolic, numeric, or
-automatic differentiation. Symbolic differentiation obtains derivatives of an input function by
-direct mathematical manipulation, for example using standard strategies of differential calculus.
-These can be performed by hand or with the help of computer algebra software. The resulting
-expressions are exact, but the symbolic approach is of limited scope, particularly since many
-functions are not known in explicit analytical form. Symbolic methods also suffer from the
-expression swell problem where careless usage can lead to exponentially large symbolic expressions.
-Numerical differentiation is a versatile but unstable method, often relying on finite differences to
-calculate approximate derivatives. This is problematic especially for large computations consisting
-of many differentiable parameters. Automatic differentiation is a computational strategy where a
-function implemented using computer code is differentiated by expressing it in terms of elementary
-operations for which derivatives are known. The gradient of the target function is then obtained by
-applying the chain rule through the entire code. In principle, automatic differentiation can be used
-to calculate derivatives of a function using resources comparable to those required to evaluate the
-function itself.
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver. The
 Hartree-Fock module in PennyLane provides built-in methods for constructing atomic
@@ -88,15 +89,15 @@ geometry = np.array([[-0.672943567415407, 0.0, 0.0],
 
 ##############################################################################
 # The use of `requires_grad=True` specifies that the atomic coordinates are differentiable
-# parameters. We can now compute the
-# Hartree-Fock energy and its gradient with respect to the atomic coordinates for hydrogen. To do
-# that, we create a molecule object that stores all the molecular parameters needed to
-# perform a Hartree-Fock calculation.
+# parameters. We can now compute the Hartree-Fock energy and its gradient with respect to the atomic
+# coordinates for hydrogen. To do that, we create a molecule object that stores all the molecular
+# parameters needed to perform a Hartree-Fock calculation.
 
 mol = qml.hf.Molecule(symbols, geometry)
 
 ##############################################################################
 # The Hartree-Fock energy can now be computed with the :func:`~.pennylane.hf.hf_energy` function
+# which is a function transform
 
 qml.hf.hf_energy(mol)(geometry)
 
@@ -143,10 +144,15 @@ S1.l
 # This gives us a tuple of three integers, representing the exponents of the `x`, `y` and `z`
 # components in the Gaussian functions [#arrazola2021]_.
 #
-# Having the two atomic orbitals, we can now compute the overlap integral by passing the orbitals
-# and the initial values of their centres to the :func:`~.pennylane.hf.generate_overlap` function.
-# The centres of the orbitals are those of the hydrogen atoms by default and are therefore
-# treated as differentiable parameters by PennyLane.
+# We can now compute the overlap integral between the atomic orbitals, denoted by :math:`\chi`,
+#
+# ..math::
+#
+# \int \chi_\mu (r) \chi_\nu (r) dr,
+#
+# by passing the orbitals and the initial values of their centres to the
+# :func:`~.pennylane.hf.generate_overlap` function. The centres of the orbitals are those of the
+# hydrogen atoms by default and are therefore treated as differentiable parameters by PennyLane.
 
 qml.hf.generate_overlap(S1, S2)([geometry[0], geometry[1]])
 
@@ -164,25 +170,25 @@ grad(qml.hf.generate_overlap(S1, S2))([geometry[0], geometry[1]])
 # value of the atomic orbital at a given coordinate. For instance, the value of the S orbital on the
 # first hydrogen atom can be computed at the origin as
 
-S1 = mol.atomic_orbital(0)
-S1(0.0, 0.0, 0.0)
+V1 = mol.atomic_orbital(0)
+V1(0.0, 0.0, 0.0)
 
 ##############################################################################
 # We can compute the value of this orbital on different points along the `x` axis and plot it.
 
 x = np.linspace(-5, 5, 1000)
-plt.plot(x, S1(x, 0.0, 0.0), color='teal')
+plt.plot(x, V1(x, 0.0, 0.0), color='teal')
 plt.xlabel('X [Bohr]')
 plt.show()
 
 ##############################################################################
 # We can also plot the second S orbital and visualize the overlap between them
 
-S2 = mol.atomic_orbital(1)
-plt.plot(x, S1(x, 0.0, 0.0), color='teal')
-plt.plot(x, S2(x, 0.0, 0.0), color='teal')
+V2 = mol.atomic_orbital(1)
+plt.plot(x, V1(x, 0.0, 0.0), color='teal')
+plt.plot(x, V2(x, 0.0, 0.0), color='teal')
 plt.fill_between(
-    x,  np.minimum(S1(x, 0.0, 0.0), S2(x, 0.0, 0.0)), color = 'red', alpha = 0.5, hatch = '||')
+    x,  np.minimum(V1(x, 0.0, 0.0), V2(x, 0.0, 0.0)), color = 'red', alpha = 0.5, hatch = '||')
 plt.xlabel('X [Bohr]')
 plt.show()
 
