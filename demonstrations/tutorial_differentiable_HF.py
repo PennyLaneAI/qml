@@ -45,7 +45,7 @@ set of parameters that minimize the following expectation value
 
    .. math::
 
-       \left \langle \Psi(\theta) | H(\beta) | \Psi(\theta) \right \rangle,
+       \left \langle \Psi(\theta) | H(\beta) | \Psi(\theta) \right \rangle
 
 where :math:`\theta` and :math:`\beta` represent the circuit and molecular parameters, respectively.
 
@@ -143,9 +143,7 @@ S1.l
 #
 # We can now compute the overlap integral between the atomic orbitals, denoted by :math:`\chi`,
 #
-# ..math::
-#
-# \int \chi_\mu (r) \chi_\nu (r) dr,
+# :math:`\int \chi_\mu (r) \chi_\nu (r) dr`,
 #
 # by passing the orbitals and the initial values of their centres to the
 # :func:`~.pennylane.hf.generate_overlap` function. The centres of the orbitals are those of the
