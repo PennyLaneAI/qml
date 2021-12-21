@@ -24,7 +24,7 @@ jobs:
             sudo apt install pandoc -qq
             python3 -m venv venv
             . venv/bin/activate
-            pip install pip setuptools cmake --upgrade
+            pip install pip setuptools<0.60 cmake --upgrade
             pip install -r requirements.txt
             pip install --no-deps -r requirements_no_deps.txt
 
@@ -90,7 +90,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install pip setuptools cmake --upgrade
+            pip install pip setuptools<0.60 cmake --upgrade
             pip install -r requirements.txt
             pip install --no-deps -r requirements_no_deps.txt
 
