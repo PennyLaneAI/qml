@@ -87,7 +87,7 @@ aspects extensively:
 For the purposes of this demo, a *kernel* is a real-valued function of two
 variables :math:`k(\cdot,\cdot)` from a given data domain :math:`x_1,
 x_2\in\mathcal{X}`.
-A kernel has to be symmetric with respect to to exchanging both variables
+A kernel has to be symmetric with respect to exchanging both variables
 :math:`k(x_1,x_2) = k(x_2,x_1)`.
 We also enforce kernels to be positive semi-definite, but let's avoid getting
 lost in mathematical lingo, you can trust that all kernels featuring in this
@@ -185,9 +185,8 @@ plt.show();
 #
 # The first next step will be to find the Fourier spectrum of the Gaussian
 # kernel, which is an easy problem for classical computers.
-# Once we've found it, we'll build a QK with the same spectrum.
-# The QK produces a finite Fourier series approximation for the gaussian
-# kernel.
+# Once we've found it, we'll build a QK that produces a finite Fourier series
+# approximation to that spectrum.
 #
 # Let's briefly recall that a Fourier series is the representation of a
 # periodic function using the sine and cosine functions.
@@ -279,8 +278,8 @@ plt.show();
 # That's a very clear indicator that we need to consider more frequencies.
 # At the same time, it seems like starting :math:`5` or :math:`6` all the
 # non-zero contributions have already been well captured.
-# This is important for us, since it tells us that we should use how many
-# qubits we should use at least.
+# This is important for us, since it tells us how many qubits we should use at
+# least.
 # One can see that every new qubit doubles the number of frequencies we can
 # use, so for :math:`n` qubits, we will have :math:`2^n`.
 # So, at least :math:`6` frequencies means at least :math:`3` qubits, which
@@ -383,8 +382,8 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_1-x_2) W_a\lvert0\rangle\rvert^2 \\
 #   &= k_a(x_2,x_1).
 #
-# Further, this QK is also shift-invariant :math:`k_a(x_1,x_2) = k_a(x_1+s,
-# x_2+s)` for any :math:`s\in\mathbb{R}`.
+# Further, this QK is also shift-invariant :math:`k_a(x_1,x_2) = k_a(x_1+\zeta,
+# x_2+\zeta)` for any :math:`\zeta\in\mathbb{R}`.
 # So we can also write it in terms of the lag :math:`\delta=x_1-x_2`:
 #
 # .. math::
@@ -410,7 +409,7 @@ dev = qml.device("default.qubit", wires = n_wires, shots = None)
 
 ###############################################################################
 # And write the function that will use the device, hence the ``@qml.qnode``
-# decorator!
+# decorator
 
 @qml.qnode(dev)
 def QK_circuit(x1, x2, thetas, amplitudes):
@@ -418,7 +417,7 @@ def QK_circuit(x1, x2, thetas, amplitudes):
     return qml.probs(wires = range(n_wires))
 
 ###############################################################################
-# Recall that the outputs of QKs are defined as the probability of obtaining
+# Recall that the outputs of QKs can be defined as the probability of obtaining
 # the outcome :math:`\lvert0\rangle` when measuring on the computational basis.
 # That corresponds to the :math:`0^\text{th}` entry of ``qml.probs``:
 
@@ -458,8 +457,8 @@ plt.suptitle("QK with test amplitudes")
 plt.show();
 
 ###############################################################################
-# One can see that the stationary kernel with an arbitrary initial state has a
-# decaying spectrum which looks similar to :math:`1/\lvert x\rvert` - but not
+# One can see that the stationary kernel with this particular initial state has
+# a decaying spectrum which looks similar to :math:`1/\lvert x\rvert` - but not
 # yet like a Gaussian.
 #
 # The necessary little bit of math
@@ -616,8 +615,8 @@ plt.show();
 ###############################################################################
 # Would you be able to tell whether this is correct?
 # Me neither!
-# But all those probabilities being close to :math:`0` makes me fear some of
-# them must've turned negative.
+# But all those probabilities being close to :math:`0` should make us fear some
+# of them must've turned negative.
 # This isn't necessarily bad in general, only for us.
 # For ``MottonenStatePreparation`` we'll need to give ``amplitudes`` as one of the
 # arguments, which is the componentwise square root of ``probabilities`` so it
