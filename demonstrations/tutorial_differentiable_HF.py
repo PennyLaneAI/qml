@@ -19,42 +19,39 @@ Differentiable Hartree-Fock
 Variational quantum algorithms aim to calculate the energy of a molecule by constructing a
 parametrized quantum circuit and finding a set of parameters that minimize the expectation value of
 the electronic molecular Hamiltonian. The optimization can be carried out by computing the gradients
-of the expectation value with respect to these parameters and iteratively updating the parameters
-based on the computed gradients. In principle, the optimization proces is not limited to the circuit
-parameters only and can be extended to include the parameters of the Hamiltonian which depend on
+of the expectation value with respect to these parameters and iteratively updating them until
+convergence is achieved. In principle, the optimization proces is not limited to the circuit
+parameters and can be extended to include the parameters of the Hamiltonian, which depend on
 molecular properties that can be optimized concurrently with the circuit parameters.
 
-Computing the gradient of a molecular Hamiltonian is typically challenging because the dependency of
-the Hamiltonian to the molecular parameters is usually very complicated. This makes symbolic
+Computing the gradient of a molecular Hamiltonian is challenging because the dependency of the
+Hamiltonian to the molecular parameters is typically not very straightforward. This makes symbolic
 differentiation methods, which obtain derivatives of an input function by direct mathematical
 manipulation, of limited scope. Furthermore, numerical differentiation methods based on finite
 differences are not always reliable due to their intrinsic instability specially when the number of
 differentiable parameters is large. These limitations can be alleviated by using automatic
-differentiation which can be used to compute exact gradients of a function, implemented with
-computer code, using resources comparable to those required to evaluate the function itself. This
-makes automatic differentiation a suitable method for computing molecular Hamiltonian derivatives.
+differentiation methods which can be used to compute exact gradients of a function, implemented with
+computer code, using resources comparable to those required to evaluate the function itself.
 
 Efficient optimization of the molecular Hamiltonian parameters in a variational quantum algorithm
-is essential for problems such as geometry optimization and vibrational frequency calculations which
-requre first and second derivatives of the molecular energy with respect to nuclear coordinates.
-Furthermore, the optimization problem can be extended to the parameters of the basis set used to
-construct the atomic orbitals which can in principle increase the accuracy of the computed molecular
-electronic energy without increasing the number of qubits in a quantum simulation.
-
-The electronic Hamiltonian for a given molecule is constructed using one- and two-electron integrals
-over optimized molecular orbitals. These orbitals are obtained by solving the Hartree-Fock
-equations. The constructed Hamiltonian depends on molecular parameters such as nuclear coordinates
-and basis set parameters that can also be optimized concurrently with the circuit parameters. The
-variational problem can now be solved by differentiating the expectation value of the Hamiltonian
-with respect to the circuit parameters and the molecular parameters and using an algorithm such as
-`gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_ to obtain the set of parameters
-that minimize the following expectation value
+is essential for tackling problems such as geometry optimization and vibrational frequency
+calculations. These problems require computing the first- and second-order derivatives of the
+molecular energy with respect to nuclear coordinates which can be efficiently obtained if the
+variational workflow is automatically differentiable. Another important usecase is the simultaneous
+optimization of the parameters of the basis set used to construct the atomic orbitals which can in
+principle increase the accuracy of the computed molecular electronic energy without increasing the
+number of qubits in a quantum simulation. The aim of the variational algorithm is now obtaining the
+set of parameters that minimize the following expectation value
 
    .. math::
 
        \left \langle \Psi(\theta) | H(\beta) | \Psi(\theta) \right \rangle,
 
 where :math:`\theta` and :math:`\beta` represent the circuit and molecular parameters, respectively.
+
+The electronic Hamiltonian for a given molecule is constructed using one- and two-electron integrals
+over optimized molecular orbitals. These optimized orbitals are obtained by solving the Hartree-Fock
+equations.
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver. The
 Hartree-Fock module in PennyLane provides built-in methods for constructing atomic
