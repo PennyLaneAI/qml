@@ -94,6 +94,12 @@ paulix_sector = [1, -1, -1]
 
 H_tapered = qml.hf.transform_hamiltonian(hamiltonian, generators, paulix_ops, paulix_sector)
 
+print(H_tapered)
+
+##############################################################################
+# Conclusions
+# -----------
+#
 #
 # References
 # ----------
