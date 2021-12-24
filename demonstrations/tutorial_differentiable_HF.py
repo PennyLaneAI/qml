@@ -21,15 +21,16 @@ parametrized quantum circuit and finding a set of parameters that minimize the e
 the electronic molecular Hamiltonian. The optimization can be carried out by computing the gradients
 of the expectation value with respect to these parameters and iteratively updating them until
 convergence is achieved. In principle, the optimization process is not limited to the circuit
-parameters and can be extended to include the parameters of the Hamiltonian, which depend on
-molecular properties that can be optimized concurrently with the circuit parameters. The aim is now
-to obtain the set of parameters that minimize the following expectation value
+parameters and can be extended to include the parameters of the Hamiltonian that can be optimized
+concurrently with the circuit parameters. The aim is now to obtain the set of parameters that
+minimize the following expectation value
 
    .. math::
 
        \left \langle \Psi(\theta) | H(\beta) | \Psi(\theta) \right \rangle
 
-where :math:`\theta` and :math:`\beta` represent the circuit and molecular parameters, respectively.
+where :math:`\theta` and :math:`\beta` represent the circuit and Hamiltonian parameters,
+respectively.
 
 Computing the gradient of a molecular Hamiltonian is challenging because the dependency of the
 Hamiltonian to the molecular parameters is typically not very straightforward. This makes symbolic
@@ -46,23 +47,30 @@ calculations. These problems require computing the first- and second-order deriv
 molecular energy with respect to nuclear coordinates which can be efficiently obtained if the
 variational workflow is automatically differentiable. Another important example is the simultaneous
 optimization of the parameters of the basis set used to construct the atomic orbitals which can in
-principle increase the accuracy of the computed molecular electronic energy without increasing the
-number of qubits in a quantum simulation. The joint optimization of the circuit and Hamiltonian
-parameters can also be used when the chemical problem involves optimizing external factors such as
-implicit solvent effects or external potentials.
-
-The electronic Hamiltonian for a given molecule is constructed using one- and two-electron integrals
-over optimized molecular orbitals. These optimized orbitals are obtained by solving the Hartree-Fock
-equations.
+principle increase the accuracy of the computed energy without increasing the number of qubits in a
+quantum simulation. The joint optimization of the circuit and Hamiltonian parameters can also be
+used when the chemical problem involves optimizing the parameters of external potentials. The
+electronic Hamiltonian for a given molecule is constructed using one- and two-electron integrals
+over optimized molecular orbitals which are obtained by solving the Hartree-Fock equations.
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver. The
-Hartree-Fock module in PennyLane provides built-in methods for constructing atomic
-and molecular orbitals, building Fock matrices, and solving the self-consistent Hartree-Fock
-equations to obtain optimized orbitals, which can be used to construct fully-differentiable
-molecular Hamiltonians. PennyLane allows users to natively compute derivatives of all these objects
-with respect to the underlying parameters using the methods of automatic differentiation. We also
-introduce a workflow to jointly optimize circuit parameters, nuclear coordinates, and basis set
-parameters in a variational quantum eigensolver algorithm. Let's get started!
+Hartree-Fock module in PennyLane provides built-in methods for constructing atomic and molecular
+orbitals, building Fock matrices, and solving the self-consistent field equations to obtain
+optimized orbitals, which can be used to construct fully-differentiable molecular Hamiltonians.
+PennyLane allows users to natively compute derivatives of all these objects with respect to the
+underlying parameters using the methods of automatic differentiation. We introduce a workflow
+to jointly optimize circuit parameters, nuclear coordinates, and basis set parameters in a
+variational quantum eigensolver algorithm. You will also learn how to visualize the atomic and
+molecular orbital and create images like this:
+
+.. figure:: /demonstrations/differentiable_HF/h2.gif
+    :width: 75%
+    :align: center
+
+    The bonding molecular orbital of hydrogen visualized during a full geometry, circuit, and
+    basis set optimization.
+
+Let's get started!
 
 The Hartree-Fock method
 -------------------
@@ -87,8 +95,8 @@ where :math:`a^\dagger` and :math:`a` are the fermionic creation and annihilatio
 respectively. This Hamiltonian is then transformed to the qubit basis. Let's see how this can be
 done in PennyLane.
 
-To get started, we need to define the atomic symbols and coordinates of the desired molecule. For
-the hydrogen molecule we define the symbols and geometry as
+To get started, we need to define the atomic symbols and the nuclear coordinates of the molecule.
+For the hydrogen molecule we have
 """
 
 from autograd import grad
@@ -102,10 +110,10 @@ geometry = np.array([[-0.672943567415407, 0.0, 0.0],
                      [ 0.672943567415407, 0.0, 0.0]], requires_grad=True)
 
 ##############################################################################
-# The use of `requires_grad=True` specifies that the atomic coordinates are differentiable
-# parameters. We can now compute the Hartree-Fock energy and its gradient with respect to the atomic
-# coordinates for the hydrogen molecule. To do that, we create a molecule object that stores all the
-# molecular parameters needed to perform a Hartree-Fock calculation.
+# The use of `requires_grad=True` specifies that the nuclear coordinates are differentiable
+# parameters. We can now compute the Hartree-Fock energy and its gradient with respect to the
+# nuclear coordinates. To do that, we create a molecule object that stores all the molecular
+# parameters needed to perform a Hartree-Fock calculation.
 
 mol = qml.hf.Molecule(symbols, geometry)
 
@@ -116,14 +124,14 @@ mol = qml.hf.Molecule(symbols, geometry)
 qml.hf.hf_energy(mol)(geometry)
 
 ##############################################################################
-# We now compute the gradient of the energy with respect to the atomic coordinates
+# We now compute the gradient of the energy with respect to the nuclear coordinates
 
 grad(qml.hf.hf_energy(mol))(geometry)
 
 ##############################################################################
 # The obtained gradients are equal or very close to zero because the geometry we used here has been
 # previously optimized at the Hartree-Fock level. You can use a different geometry and verify that
-# the newly computed  gradients are not all zero.
+# the newly computed gradients are not all zero.
 #
 # We can also compute the values and gradients of several other quantities that are obtained during
 # the Hartree-Fock procedure. These include all integrals over basis functions, matrices formed from
@@ -133,7 +141,7 @@ grad(qml.hf.hf_energy(mol))(geometry)
 # We first compute the overlap integral between the two S-type atomic orbitals of the hydrogen
 # atoms. Here we are using the `STO-3G <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
 # basis set in which each of the atomic orbitals is represented by one basis function composed of
-# three contracted Gaussian functions. These basis functions can be accessed from the molecule
+# three primitive Gaussian functions. These basis functions can be accessed from the molecule
 # object as
 
 S1 = mol.basis_set[0]
@@ -162,7 +170,7 @@ S1.l
 #
 # .. math::
 #
-#     \int \chi_\mu (r) \chi_\nu (r) dr
+#     \int \chi_\mu^* (r) \chi_\nu (r) dr
 #
 # between the atomic orbitals :math:`\chi`, by passing the orbitals and the initial values of their
 # centres to the :func:`~.pennylane.hf.generate_overlap` function. The centres of the orbitals are
@@ -181,15 +189,15 @@ grad(qml.hf.generate_overlap(S1, S2))([geometry[0], geometry[1]])
 # Can you explain why some of the computed gradients are zero?
 #
 # Let's now plot the atomic orbitals and their overlap. We can do it by using
-# the :func:`~.pennylane.hf.molecule.atomic_orbital` function, which computes the actual
-# value of the atomic orbital at a given coordinate. For instance, the value of the S orbital on the
-# first hydrogen atom can be computed at the origin as
+# the :func:`~.pennylane.hf.molecule.atomic_orbital` function, which evaluates the atomic orbital at
+# a given coordinate. For instance, the value of the S orbital on the first hydrogen atom can be
+# computed at the origin as
 
 V1 = mol.atomic_orbital(0)
 V1(0.0, 0.0, 0.0)
 
 ##############################################################################
-# We can compute the value of this orbital on different points along the `x` axis and plot it.
+# We can evaluate this orbital at different points along the `x` axis and plot it.
 
 x = np.linspace(-5, 5, 1000)
 plt.plot(x, V1(x, 0.0, 0.0), color='teal')
@@ -245,10 +253,10 @@ print(hamiltonian)
 ##############################################################################
 # The Hamiltonian contains 15 terms and, importantly, the coefficients of the Hamiltonian are all
 # differentiable. We can construct a circuit and perform a VQE simulation in which both of the
-# circuit parameters and the atomic coordinates are optimized simultaneously by using the computed
+# circuit parameters and the nuclear coordinates are optimized simultaneously by using the computed
 # gradients. We will have two sets of differentiable parameters: the first set is the
 # rotation angles of the `Excitation` gates which are applied to the reference Hartree-Fock state
-# to construct the exact ground state. The second set contains the atomic coordinates of the
+# to construct the exact ground state. The second set contains the nuclear coordinates of the
 # hydrogen atoms.
 
 dev = qml.device("default.qubit", wires=4)
@@ -263,8 +271,8 @@ def energy(mol):
 ##############################################################################
 # Note that we only use the `DoubleExcitation` gate as the `SingleExcitation` ones can be neglected
 # in this particular example [#szabo1996]_. We now compute the gradients of the energy with respect
-# to the circuit parameter and the atomic coordinates and update the parameters iteratively. Note
-# that the atomic coordinate gradients are simply the forces on the atomic nuclei.
+# to the circuit parameter and the nuclear coordinates and update the parameters iteratively. Note
+# that the nuclear coordinate gradients are simply the forces on the atomic nuclei.
 
 # initial value of the circuit parameter
 circuit_param = [np.array([0.0], requires_grad=True)]
@@ -298,7 +306,7 @@ for n in range(36):
 # coordinates and the basis set parameters are all differentiable parameters that can be optimized
 # simultaneously.
 
-# initial values of the atomic coordinates
+# initial values of the nuclear coordinates
 geometry = np.array([[0.0, 0.0, -0.672943567415407],
                      [0.0, 0.0, 0.672943567415407]], requires_grad=True)
 
@@ -340,19 +348,10 @@ for n in range(36):
 ##############################################################################
 # You can also print the gradients of the circuit and basis set parameters and confirm that they are
 # approaching zero. The computed energy of :math:`-1.14040160` Ha is
-# lower than the full-CI energy, :math:`-1.1373060483` Ha, obtained with the STO-3G basis set for
-# the hydrogen molecule because we have optimized the basis set parameters in our example. This
+# lower than the full-CI energy, :math:`-1.1373060483` Ha (obtained with the STO-3G basis set for
+# the hydrogen molecule) because we have optimized the basis set parameters in our example. This
 # means that we can reach a lower energy for hydrogen without increasing the basis set size which in
-# principle leads to a larger number of qubits. You can visualize the bonding molecular orbital of
-# hydrogen during each step of the optimization and monitor the change in the shape of the molecular
-# orbital visually. Here is an example:
-#
-# .. figure:: /demonstrations/differentiable_HF/h2.gif
-#     :width: 75%
-#     :align: center
-#
-#     The bonding molecular orbital of hydrogen visualized during a full geometry, circuit, and
-#     basis set optimization.
+# principle leads to a larger number of qubits.
 #
 # Conclusions
 # -----------
@@ -364,7 +363,7 @@ for n in range(36):
 # ii) By optimizing the molecular parameters such as the exponent and contraction coefficients of
 # Gaussian functions of the basis set, one can reach a lower energy without increasing the number of
 # basis functions. Can you think of other interesting molecular parameters that can be optimized
-# along with the atomic coordinates and basis set parameters that we optimized in this tutorial?
+# along with the nuclear coordinates and basis set parameters that we optimized in this tutorial?
 #
 # References
 # ----------
