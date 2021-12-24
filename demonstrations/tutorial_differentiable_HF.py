@@ -97,6 +97,7 @@ from autograd import grad
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
+np.set_printoptions(precision=5)
 
 symbols = ["H", "H"]
 # optimized geometry at the Hartree-Fock level
@@ -144,7 +145,8 @@ S2 = mol.basis_set[1]
 ##############################################################################
 # We can check the parameters of the basis functions as
 
-S1.params
+for param in S1.params:
+    print(param)
 
 ##############################################################################
 # This returns the exponents, contraction coefficients and the centres of the three Gaussian
