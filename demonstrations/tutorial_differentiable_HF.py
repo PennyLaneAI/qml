@@ -166,7 +166,7 @@ S1.l
 #
 # .. math::
 #
-#     \int \chi_\mu^* (r) \chi_\nu (r) dr
+#     S_{\mu \nu} = \int \chi_\mu^* (r) \chi_\nu (r) dr
 #
 # between the atomic orbitals :math:`\chi`, by passing the orbitals and the initial values of their
 # centres to the :func:`~.pennylane.hf.generate_overlap` function. The centres of the orbitals are
