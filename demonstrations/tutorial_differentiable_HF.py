@@ -1,8 +1,7 @@
 r"""
 
 Differentiable Hartree-Fock Solver
-
-===========================
+==================================
 
 .. meta::
     :property="og:description": Learn how to use the differentiable Hartree-Fock solver
@@ -15,16 +14,16 @@ Differentiable Hartree-Fock Solver
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted:  2021. Last updated: XX December 2021*
+*Author: PennyLane dev team. Posted:  2021. Last updated: XX January 2022*
 
 Variational quantum algorithms aim to calculate the energy of a molecule by constructing a
 parametrized quantum circuit and finding a set of parameters that minimize the expectation value of
-the electronic molecular Hamiltonian. The optimization can be carried out by computing the gradients
-of the expectation value with respect to these parameters and iteratively updating them until
-convergence is achieved. In principle, the optimization process is not limited to the circuit
-parameters and can be extended to include the parameters of the Hamiltonian that can be optimized
-concurrently with the circuit parameters. The aim is now to obtain the set of parameters that
-minimize the following expectation value
+the electronic `molecular Hamiltonian <https://en.wikipedia.org/wiki/Molecular_Hamiltonian>`_. The
+optimization can be carried out by computing the gradients of the expectation value with respect to
+these parameters and iteratively updating them until convergence is achieved. In principle, the
+optimization process is not limited to the circuit parameters and can be extended to include the
+parameters of the Hamiltonian that can be optimized concurrently with the circuit parameters. The
+aim is now to obtain the set of parameters that minimize the following expectation value
 
 .. math:: \left \langle \Psi(\theta) | H(\beta) | \Psi(\theta) \right \rangle,
 
@@ -82,7 +81,8 @@ construct one- and two-body electron integrals in the basis of molecular orbital
 .. math:: h_{pq} =\int dx \,\phi_p^*(x)\left(-\frac{\nabla^2}{2}-\sum_{i=1}^N\frac{Z_i}{|r-R_i|}\right)\phi_q(x),\\\\
 .. math:: h_{pqrs} = \int dx_1 dx_2\, \frac{\phi_p^*(x_1)\phi_q^*(x_2)\phi_r(x_2)\phi_s(x_1)}{|r_1-r_2|}.
 
-These integrals are used to generate a differentiable [second-quantized](https://en.wikipedia.org/wiki/Second_quantization) molecular Hamiltonian as
+These integrals are used to generate a differentiable
+`second-quantized <https://en.wikipedia.org/wiki/Second_quantization>`_ molecular Hamiltonian as
 
 
 .. math:: H=\sum_{pq} h_{pq}a_p^\dagger a_q +\frac{1}{2}\sum_{pqrs}h_{pqrs}a_p^\dagger a_q^\dagger a_r a_s,
@@ -94,7 +94,7 @@ done in PennyLane.
 To get started, we need to define the atomic symbols and the nuclear coordinates of the molecule.
 For the hydrogen molecule we have
 """
-
+import pennylane.hf
 from autograd import grad
 import pennylane as qml
 from pennylane import numpy as np
@@ -187,9 +187,9 @@ grad(qml.hf.generate_overlap(S1, S2))([geometry[0], geometry[1]])
 # Can you explain why some of the computed gradients are zero?
 #
 # Let's now plot the atomic orbitals and their overlap. We can do it by using
-# the :func:`~.pennylane.hf.molecule.atomic_orbital` function, which evaluates the atomic orbital at
-# a given coordinate. For instance, the value of the S orbital on the first hydrogen atom can be
-# computed at the origin as
+# the :py:meth:`~.pennylane.hf.Molecule.atomic_orbital` function, which evaluates the atomic
+# orbital at a given coordinate. For instance, the value of the S orbital on the first hydrogen atom
+# can be computed at the origin as
 
 V1 = mol.atomic_orbital(0)
 V1(0.0, 0.0, 0.0)
@@ -355,17 +355,16 @@ for n in range(36):
 #
 # Conclusions
 # -----------
-# This tutorial introduces an important feature of PennyLane that allows performing fully-differentiable
-# Hartree-Fock and subsequently VQE simulations. This feature provides two major
-
-# benefits: i) All gradient computations needed for parameter optimization can be carried out
+# This tutorial introduces an important feature of PennyLane that allows performing
+# fully-differentiable Hartree-Fock and subsequently VQE simulations. This feature provides two
+# major benefits: i) All gradient computations needed for parameter optimization can be carried out
 # with the elegant methods of automatic differentiation which facilitates simultaneous optimizations
-# of circuit and Hamiltonian parameters in applications such as VQE molecular geometry optimizations.
-
-# ii) By optimizing the molecular parameters such as the exponent and contraction coefficients of
-# Gaussian functions of the basis set, one can reach a lower energy without increasing the number of
-# basis functions. Can you think of other interesting molecular parameters that can be optimized
-# along with the nuclear coordinates and basis set parameters that we optimized in this tutorial?
+# of circuit and Hamiltonian parameters in applications such as VQE molecular geometry
+# optimizations. ii) By optimizing the molecular parameters such as the exponent and contraction
+# coefficients of Gaussian functions of the basis set, one can reach a lower energy without
+# increasing the number of basis functions. Can you think of other interesting molecular parameters
+# that can be optimized along with the nuclear coordinates and basis set parameters that we
+# optimized in this tutorial?
 #
 # References
 # ----------

@@ -35,7 +35,7 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :tags: chemistry
 
 .. customgalleryitem::
-    :tooltip: Differentiable Hartree-Fock.
+    :tooltip: Differentiable Hartree-Fock Solver.
     :figure: demonstrations/differentiable_HF/h2.png
     :description: :doc:`demos/tutorial_differentiable_HF`
     :tags: chemistry
