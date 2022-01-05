@@ -1,6 +1,7 @@
 r"""
 
-Differentiable Hartree-Fock
+Differentiable Hartree-Fock Solver
+
 ===========================
 
 .. meta::
@@ -81,7 +82,8 @@ construct one- and two-body electron integrals in the basis of molecular orbital
 .. math:: h_{pq} =\int dx \,\phi_p^*(x)\left(-\frac{\nabla^2}{2}-\sum_{i=1}^N\frac{Z_i}{|r-R_i|}\right)\phi_q(x),\\\\
 .. math:: h_{pqrs} = \int dx_1 dx_2\, \frac{\phi_p^*(x_1)\phi_q^*(x_2)\phi_r(x_2)\phi_s(x_1)}{|r_1-r_2|}.
 
-These integrals are used to generate a differentiable second-quantized molecular Hamiltonian as
+These integrals are used to generate a differentiable [second-quantized](https://en.wikipedia.org/wiki/Second_quantization) molecular Hamiltonian as
+
 
 .. math:: H=\sum_{pq} h_{pq}a_p^\dagger a_q +\frac{1}{2}\sum_{pqrs}h_{pqrs}a_p^\dagger a_q^\dagger a_r a_s,
 
@@ -291,8 +293,9 @@ for n in range(36):
         print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
 
 ##############################################################################
-# After 35 steps of optimization the forces on the atomic nuclei and the gradient of the
-# circuit parameter are both approaching zero and the energy of the molecule is that of the
+# After 35 steps of optimization, the forces on the atomic nuclei and the gradient of the
+# circuit parameter are both approaching zero, and the energy of the molecule is that of the
+
 # optimized geometry at the
 # `full-CI <https://en.wikipedia.org/wiki/Full_configuration_interaction>`_ level:
 # :math:`-1.1373060483` Ha. You can print the optimized geometry and verify that the final bond
@@ -352,11 +355,13 @@ for n in range(36):
 #
 # Conclusions
 # -----------
-# This tutorial introduces an important feature of PennyLane that allows performing fully-
-# differentiable Hartree-Fock and subsequently VQE simulations. This feature provides two major
+# This tutorial introduces an important feature of PennyLane that allows performing fully-differentiable
+# Hartree-Fock and subsequently VQE simulations. This feature provides two major
+
 # benefits: i) All gradient computations needed for parameter optimization can be carried out
 # with the elegant methods of automatic differentiation which facilitates simultaneous optimizations
-# of circuit and Hamiltonian parameter in applications such as VQE molecular geometry optimizations.
+# of circuit and Hamiltonian parameters in applications such as VQE molecular geometry optimizations.
+
 # ii) By optimizing the molecular parameters such as the exponent and contraction coefficients of
 # Gaussian functions of the basis set, one can reach a lower energy without increasing the number of
 # basis functions. Can you think of other interesting molecular parameters that can be optimized
