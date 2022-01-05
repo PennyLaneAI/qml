@@ -71,7 +71,7 @@ molecular orbital and create images like this:
 Let's get started!
 
 The Hartree-Fock method
--------------------
+-----------------------
 
 The main goal of the Hartree-Fock method is to obtain molecular orbitals that minimize the
 energy of a system where electrons are treated as independent particles that experience a mean field
@@ -295,7 +295,6 @@ for n in range(36):
 ##############################################################################
 # After 35 steps of optimization, the forces on the atomic nuclei and the gradient of the
 # circuit parameter are both approaching zero, and the energy of the molecule is that of the
-
 # optimized geometry at the
 # `full-CI <https://en.wikipedia.org/wiki/Full_configuration_interaction>`_ level:
 # :math:`-1.1373060483` Ha. You can print the optimized geometry and verify that the final bond
