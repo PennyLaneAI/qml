@@ -22,22 +22,8 @@ limitation hinders the treatment of large molecules with algorithms such as the 
 eigensolver (VQE). Several approaches have been developed to reduce the qubit requirements for
 electronic structure calculations. In this tutorial, we demonstrate the symmetry-based qubit
 tapering approach which allows reducing the number of qubits required to perform molecular quantum
-simulations by leveraging the symmetries present in molecular Hamiltonians
-[#bravyi2017]_ [#setia2019]_.
-
-# The key step in the qubit tapering approach is to transform a molecular Hamiltonian such that it
-# acts trivially, with an identity operator or at most one Pauli operator, on a set of :math:`k`
-# qubits.
-#
-# The key step in the qubit tapering approach is to transform a molecular Hamiltonian such
-# that it acts trivially, with an identity operator or at most one Pauli operator, on a set of
-# :math:`k` qubits. This guarantees that each of the Pauli operators, applied to the :math:`k`-th
-# qubit, commutes with each term of the transformed Hamiltonian and therefore they commute with the
-# transformed Hamiltonian as well. Recall that two commuting operators share an eigenbasis and the
-# molecular wavefunction is an eigenfunction of both the transformed Hamiltonian and each of the Pauli
-# operators applied to the :math:`k`-th qubit. Then we can factor out those Pauli operators from the
-# transformed Hamiltonian and replace them with their eigenvalues which are :math:`\pm 1`. This gives
-# us a tapered Hamiltonian in which the set of :math:`k` qubits are eliminated.
+simulations by leveraging the symmetries present in molecular Hamiltonians [#bravyi2017]_
+[#setia2019]_.
 
 Qubit tapering with symmetries
 ------------------------------
@@ -67,45 +53,24 @@ eigenfunction of both the transformed Hamiltonian and each of the Pauli operator
 and replace them with their eigenvalues which are :math:`\pm 1`. This gives us a tapered Hamiltonian
 in which the set of :math:`k` qubits are eliminated.`
 
+The unitary operator :math:`U` is constructed from the generators of the symmetry group of :math:`H`
+and a set of Pauli-X operators which act on the qubits that will be ultimately tapered off from the
+Hamiltonian [#bravyi2017]_. The symmetry group of the Hamiltonian is defined as a group of pauli
+words commuting with each term in :math:`H` and the group does not contain :math:`−I`
+[#bravyi2017]_. Recall that the
+`generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
+those elements of the group that can be linearly combined, along with their inverses, to create any
+other member of the group.
 
-# to find a unitary operator that transforms the
-# Hamiltonian in such a way that it acts trivially, with an identity operator or at most one Pauli
-# operator, on a set of :math:`k` qubits. This guarantees that each of the Pauli operators, applied to
-# the :math:`k`-th qubit, commutes with each term of the transformed Hamiltonian and therefore they
-# commute with the transformed Hamiltonian as well. Recall that two commuting operators share an
-# eigenbasis and the molecular wavefunction is an eigenfunction of both the transformed Hamiltonian
-# and each of the Pauli operators, applied to the :math:`k`-th qubit. Then we can factor out those
-# Pauli operators from the transformed Hamiltonian and replace them with their eigenvalues which are
-# :math:`\pm 1`. This gives us a tapered Hamiltonian in which the set of :math:`k` qubits are
-# eliminated.`
-#
-# The Hamiltonian :math:`H` is constructed such that :math:`\eta_i \in P_M` where
-#
-# .. math:: P_M = \pm \left \{ I, \sigma_x, \sigma_y, \sigma_z  \right \}^{\bigotimes M},
-#
-# and :math:`M` is the total number of qubits. The aim here is to find a unitary operator :math:`U`
-# that is applied to :math:`H` to provide a transformed Hamiltonian :math:`H'`
-#
-# .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
-#
-# such that each :math:`\mu_i` term acts trivially on a set of :math:`k` qubits and
-# :math:`\mu_i \equiv U^{\dagger} \eta_i U`.
-#
-# Recalling that a Clifford group :math:`C` is defined as a set of unitary operators :math:`U` such
-# that :math:`U \eta U^{\dagger} \in P_M` for :math:`\eta \in P_M`, we can conclude that
-# :math:`\mu \in P_M`.
-#
-# We now define the Abelian group :math:`S \in P_M` such that each term in :math:`S` commutes with
-# :math:`\eta`. It has been shown `here <https://arxiv.org/abs/1701.08213>`__ that for any Abelian
-# group :math:`S \in P_M` and :math:`-I \notin S`, there is a set set of generators
-# :math:`S = \left \langle \tau_1, ..., \tau_k \right \rangle` such that
-#
-# .. math:: \tau_i = U \sigma_x^i U^{\dagger}.
-#
-# Based on the definition of :math:`S`, we already know that :math:`[\tau_i ,\eta_j] = 0`,
-# then it is easy to show that :math:`[\mu_j, \sigma_x^i] = 0`. This implies that there are :math:`k`
-# terms in :math:`\mu_j` that are either :math:`I` or :math:`\sigma_x` which can then be replaced with
-# their eigenvalues :math:`\pm 1` and tapered off from :math:`H'`.
+Once we have the generators, :math:`\tau`, and the Pauli-X operators, the unitary operator :math:`U`
+can be constructed as
+
+.. math:: U = \Pi_i \left [\frac{1}{\sqrt{2}} \left (\sigma_x^{q_i} + \tau_i \right) \right].
+
+In PennyLane, the generators and the Pauli-X operators are constructed by the
+:func:`~.pennylane.hf.generate_symmetries` function.
+
+
 
 """
 
@@ -175,3 +140,43 @@ print(H_tapered)
 #     Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield,
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
+#
+##############################################################################
+# to find a unitary operator that transforms the
+# Hamiltonian in such a way that it acts trivially, with an identity operator or at most one Pauli
+# operator, on a set of :math:`k` qubits. This guarantees that each of the Pauli operators, applied to
+# the :math:`k`-th qubit, commutes with each term of the transformed Hamiltonian and therefore they
+# commute with the transformed Hamiltonian as well. Recall that two commuting operators share an
+# eigenbasis and the molecular wavefunction is an eigenfunction of both the transformed Hamiltonian
+# and each of the Pauli operators, applied to the :math:`k`-th qubit. Then we can factor out those
+# Pauli operators from the transformed Hamiltonian and replace them with their eigenvalues which are
+# :math:`\pm 1`. This gives us a tapered Hamiltonian in which the set of :math:`k` qubits are
+# eliminated.`
+#
+# The Hamiltonian :math:`H` is constructed such that :math:`\eta_i \in P_M` where
+#
+# .. math:: P_M = \pm \left \{ I, \sigma_x, \sigma_y, \sigma_z  \right \}^{\bigotimes M},
+#
+# and :math:`M` is the total number of qubits. The aim here is to find a unitary operator :math:`U`
+# that is applied to :math:`H` to provide a transformed Hamiltonian :math:`H'`
+#
+# .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
+#
+# such that each :math:`\mu_i` term acts trivially on a set of :math:`k` qubits and
+# :math:`\mu_i \equiv U^{\dagger} \eta_i U`.
+#
+# Recalling that a Clifford group :math:`C` is defined as a set of unitary operators :math:`U` such
+# that :math:`U \eta U^{\dagger} \in P_M` for :math:`\eta \in P_M`, we can conclude that
+# :math:`\mu \in P_M`.
+#
+# We now define the Abelian group :math:`S \in P_M` such that each term in :math:`S` commutes with
+# :math:`\eta`. It has been shown `here <https://arxiv.org/abs/1701.08213>`__ that for any Abelian
+# group :math:`S \in P_M` and :math:`-I \notin S`, there is a set of generators
+# :math:`S = \left \langle \tau_1, ..., \tau_k \right \rangle` such that
+#
+# .. math:: \tau_i = U \sigma_x^i U^{\dagger}.
+#
+# Based on the definition of :math:`S`, we already know that :math:`[\tau_i ,\eta_j] = 0`,
+# then it is easy to show that :math:`[\mu_j, \sigma_x^i] = 0`. This implies that there are :math:`k`
+# terms in :math:`\mu_j` that are either :math:`I` or :math:`\sigma_x` which can then be replaced with
+# their eigenvalues :math:`\pm 1` and tapered off from :math:`H'`.
