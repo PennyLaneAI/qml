@@ -22,8 +22,8 @@ limitation hinders the treatment of large molecules with algorithms such as the 
 eigensolver (VQE). Several approaches have been developed to reduce the qubit requirements for
 electronic structure calculations. In this tutorial, we demonstrate the symmetry-based qubit
 tapering approach which allows reducing the number of qubits required to perform molecular quantum
-simulations by leveraging the symmetries present in molecular Hamiltonians [#bravyi2017]_
-[#setia2019]_.
+simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
+[#bravyi2017]_ [#setia2019]_.
 
 Qubit tapering with symmetries
 ------------------------------
@@ -102,9 +102,9 @@ generators, paulix_ops = qml.hf.generate_symmetries(H, len(H.wires))
 # the reference Hartree-Fock state and the generated symmetries by using the
 # :func:`~.pennylane.hf.optimal_sector` function
 
-active_electrons = 2
-paulix_sector = qml.hf.optimal_sector(H, generators, active_electrons)
-print(paulix_sector)
+# active_electrons = 2
+# paulix_sector = qml.hf.optimal_sector(H, generators, active_electrons)
+# print(paulix_sector)
 
 ##############################################################################
 # The optimal eigenvalues are :math:`+1, -1, -1` for qubits :math:`1, 2, 3`, respectively. We can
@@ -113,8 +113,8 @@ print(paulix_sector)
 # qubits :math:`1-3` by replacing the Pauli-X operators acting on those qubits with the optimal
 # eigenvalues.
 
-H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
-print(H_tapered)
+# H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
+# print(H_tapered)
 
 ##############################################################################
 # The new Hamiltonian has only three non-zero terms acting on only 1 wire! We can verify that the
@@ -122,7 +122,7 @@ print(H_tapered)
 # representation of the Hamiltonians in the computational basis.
 
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
-print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
+# print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 
 ##############################################################################
 # We can also compute the Hartree-Fock of the ground state by directly applying the tapered
