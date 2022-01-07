@@ -84,7 +84,7 @@ print(H)
 # any other member of the group.
 #
 # Once we have the generators, :math:`\tau`, and the Pauli-X operators, the unitary operator
-# :math:`U` can be constructed as
+# :math:`U` can be constructed as [#bravyi2017]_
 #
 # .. math:: U = \Pi_i \left [\frac{1}{\sqrt{2}} \left (\sigma_x^{q_i} + \tau_i \right) \right].
 #
@@ -125,7 +125,7 @@ print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
 # print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 
 ##############################################################################
-# We can also compute the Hartree-Fock of the ground state by directly applying the tapered
+# We can also compute the Hartree-Fock energy of the ground state by directly applying the tapered
 # Hamiltonian to the reference Hartree-Fock state. This requires transforming the Hartree-Fock state
 # with the same symmetries obtained for the Hamiltonian and reduce the number of qubits in the
 # Hartree-Fock state to match that of the Hamiltonian. This can be done with the
