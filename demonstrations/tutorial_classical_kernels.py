@@ -61,12 +61,12 @@ approximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/QEK.jpg
+.. figure:: ../demonstrations/classical_kernels/flowchart.PNG
     :align: center
-    :width: 80%
+    :width: 60%
     :target: javascript:void(0)
 
-    The type of quantum kernel considered in this demo.
+    Schematic of the steps covered in this demo.
 
 
 
@@ -303,12 +303,12 @@ plt.show();
 #
 # |
 #
-# .. figure:: ../demonstrations/classical_kernels/flowchart.PNG
+# .. figure:: ../demonstrations/classical_kernels/QEK.jpg
 #     :align: center
-#     :width: 60%
+#     :width: 70%
 #     :target: javascript:void(0)
 #
-#     Schematic of the steps covered in this demo
+#     The quantum kernel considered in this demo.
 #
 # We construct the quantum kernel from a quantum embedding (see the demo on
 # `Quantum Embedding Kernels <pennylane.ai/qml/demos/tutorial_kernels_module.html>`_).
@@ -456,8 +456,8 @@ plt.show();
 # a decaying spectrum which looks similar to :math:`1/\lvert x\rvert` - but not
 # yet like a Gaussian.
 #
-# The necessary little bit of math
-# ----------------------------------
+# How to find the amplitudes emulating a Gaussian kernel
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # One could just take the function implementing the classical kernel and the
 # function implementing the quantum kernel and then tune the parameters of the
