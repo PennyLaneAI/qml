@@ -33,14 +33,14 @@ Usually, in quantum machine learning (QML) we use parametrized quantum circuits
 (PQCs) to find good functions, whatever *good* means here.
 Consequently, since kernels are just one specific kind of well-defined
 functions, the task of finding a quantum kernel (QK) that approximates a given
-classical one could be posed as a supervised learning regression problem.
+classical one could be posed as an optimisation problem.
 The way to attack this task would be to define a loss function directly
 quantifying the distance between both functions (the classical kernel function,
 and the PQC-based hypothesis).
-This sort of approach is more or less oblivious to the Fourier representation
-of the kernels, though.
+This sort of approach does not help us much to gain theoretical insights about the 
+structure of kernel-emulating quantum circuits, though.
 
-We want to study the link between classical and quantum kernels through the
+In order to build intuition, we will instead study the link between classical and quantum kernels through the
 lens of the Fourier representation of a kernel, which is a common tool in
 classical ML.
 Two functions can only have the same Fourier spectrum if they are the same
@@ -54,8 +54,8 @@ will derive a quantum circuit that approximates the famous Gaussian kernel.
 In order to keep the demo short and sweet, we focus on one simple example, but
 the same ideas would apply for more general scenarios.
 Also, Refs. [#QEK]_, [#Fourier]_, and [#qkernels]_ should be helpful for those
-who'd like to see the underlying theory of QKs (and also Quantum Embedding
-Kernels) and their Fourier representation.
+who'd like to see the underlying theory of QKs (and also so-called _Quantum Embedding
+Kernels_) and their Fourier representation.
 So tag along if you'd like to see how we build a quantum kernel that
 approximates the well-known Gaussian kernel function!
 
@@ -124,8 +124,6 @@ import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
 import math
-
-
 np.random.seed(53173)
 
 ###############################################################################
@@ -157,13 +155,12 @@ def gaussian_kernel(delta):
 def make_data(n_samples, lower=-np.pi, higher=np.pi):
     x = np.linspace(lower, higher, n_samples)
     y = np.array([gaussian_kernel(x_) for x_ in x])
-
     return x,y
 
 X, Y_gaussian = make_data(100)
 
 plt.plot(X, Y_gaussian)
-plt.suptitle("The gaussian kernel with $\sigma=1/\sqrt{2}$")
+plt.suptitle("The Gaussian kernel with $\sigma=1/\sqrt{2}$")
 plt.xlabel("$\delta$")
 plt.ylabel("$k(\delta)$")
 plt.show();
@@ -183,7 +180,7 @@ plt.show();
 # Fourier analysis of the Gaussian kernel
 # -------------------------------------------
 #
-# The first next step will be to find the Fourier spectrum of the Gaussian
+# The next step will be to find the Fourier spectrum of the Gaussian
 # kernel, which is an easy problem for classical computers.
 # Once we've found it, we'll build a QK that produces a finite Fourier series
 # approximation to that spectrum.
@@ -238,12 +235,12 @@ from pennylane.fourier import coefficients
 # for each frequency :math:`n`.
 # The real part corresponds to the :math:`a_n` coefficient, and the imaginary
 # part to the :math:`b_n` coefficient: :math:`c_n=a_n+ib_n`.
-# Because the Gaussian kernel is an even function, we know the imaginary part
+# Because the Gaussian kernel is an even function, we know that the imaginary part
 # of every coefficient will be zero, so :math:`c_n=a_n`.
 
 def fourier_p(d):
-    # we only take the first d coefficients [:d]
-    # because `coefficients` treats the negative frequencies
+    # We only take the first d coefficients [:d]
+    # because coefficients() treats the negative frequencies
     # as different from the positive ones.
     # For real functions, they are the same.
     return np.real(coefficients(Gauss_p, 1, d-1)[:d])
@@ -254,9 +251,8 @@ def fourier_p(d):
 # But isn't that problematic, one may say?
 # Well, maybe.
 # Since we know the Gaussian kernel is a smooth function, we expect that the
-# coefficients converge to :math:`0` at some point.
-# We will not need to take more terms than this point, since all the extra ones
-# would have to be :math:`0` in any case.
+# coefficients converge to :math:`0` at some point, and we will only need to 
+# consider terms up to this point.
 # Let's look at the coefficients we obtain by setting a low value for the
 # number of coefficients, and then letting it slowly grow:
 
@@ -408,8 +404,7 @@ n_wires = 5
 dev = qml.device("default.qubit", wires = n_wires, shots = None)
 
 ###############################################################################
-# And write the function that will use the device, hence the ``@qml.qnode``
-# decorator
+# Next we construct the quantum node:
 
 @qml.qnode(dev)
 def QK_circuit(x1, x2, thetas, amplitudes):
@@ -556,7 +551,6 @@ def J_F(probabilities):
                 J[i][j] += probabilities[i + j]
             if(i - j <= 0):
                 J[i][j] += probabilities[j - i]
-
     return J
 
 ###############################################################################
@@ -565,7 +559,7 @@ def J_F(probabilities):
 # For Newton's method we also need an initial guess.
 # Finding a good initial guess requires some tinkering, different problems will
 # benefit from different ones.
-# Here is a tame one that works for the gaussian kernel.
+# Here is a tame one that works for the Gaussian kernel.
 
 def make_initial_probabilities(d):
     probabilities = np.ones(d)
@@ -582,7 +576,7 @@ probabilities = make_initial_probabilities(2 ** n_wires)
 spectrum = fourier_p(2 ** n_wires)
 
 ###############################################################################
-# Fix the hyperparameters for Newton's method
+# We fix the hyperparameters for Newton's method:
 
 d = 2 ** n_wires
 max_steps = 100
@@ -619,7 +613,7 @@ plt.show();
 # of them must've turned negative.
 # This isn't necessarily bad in general, only for us.
 # For ``MottonenStatePreparation`` we'll need to give ``amplitudes`` as one of the
-# arguments, which is the componentwise square root of ``probabilities`` so it
+# arguments, which is the component-wise square root of ``probabilities`` so it
 # won't hurt to add this here:
 
 def probabilities_threshold_normalize(probabilities, thresh = 1.e-10):
