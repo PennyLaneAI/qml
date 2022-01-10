@@ -459,13 +459,23 @@ plt.show();
 # How to find the amplitudes emulating a Gaussian kernel
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# One could just take the function implementing the classical kernel and the
-# function implementing the quantum kernel and then tune the parameters of the
-# quantum kernel in a gradient-based manner until it matched the classical one.
-# But we want to go a different route here.
+# If we knew exactly which amplitudes to choose in order to build a given
+# Fourier spectrum, our job would be done here.
+# However, the equations derived in the literature are not trivial to solve.
+#
+# As mentioned in the introduction, one could just "learn" this relation: take
+# the function implementing the classical kernel and the function implementing
+# the quantum kernel and the tune the parameters of the quantum kernel in a
+# gradient-based manner until it matches the classical one.
+#
+# We want to take an intermediate route between analytical solution and
+# black-box optimisation here.
 # For that, we derive an equation that links the amplitudes to the spectrum we
 # want to construct, and then use old-fashioned convex optimisation to find the
 # solution.
+# If you are not interested in the details, you can just jump to the last plots
+# of this demo and confirm that it allows us to emulate the Gaussian kernel
+# using the ansatz for our QK constructed above.
 #
 # In order to simplify the formulas, we introduce new variables, which we call
 # ``probabilities`` :math:`(p_0, p_1, p_2, \ldots, p_{2^n-1})`, and we define as
