@@ -405,7 +405,7 @@ print(np.round(g, 8))
 # PennyLane contains a built-in function for computing the Fubini-Study metric
 # tensor, :func:`~.pennylane.metric_tensor`, which
 # we can use to verify this result:
-print(np.round(qml.metric_tensor(circuit)(params), 8))
+print(np.round(qml.metric_tensor(circuit, approx="block-diag")(params), 8))
 
 ##############################################################################
 # As opposed to our manual computation, which required 6 different quantum

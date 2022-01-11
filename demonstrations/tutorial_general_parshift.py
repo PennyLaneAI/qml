@@ -219,6 +219,7 @@ for ax, N, E in zip(axs, Ns, evaluated_cost):
     ax.set_xlabel("$x$")
 
 _ = axs[0].set_ylabel("$E$")
+plt.show()
 
 
 ###############################################################################
@@ -232,19 +233,19 @@ _ = axs[0].set_ylabel("$E$")
 #
 # .. note ::
 #
-#     The analysis tool :func:`~.pennylane.fourier.spectrum` makes use of the internal
+#     The analysis tool :func:`~.pennylane.fourier.qnode_spectrum` makes use of the internal
 #     structure of the :class:`~.pennylane.QNode` that encodes the cost function.
 #     As we used the ``jax.jit`` decorator when defining the cost function above, we
-#     here need to pass the wrapped function to ``spectrum``, which is stored in
+#     here need to pass the wrapped function to ``qnode_spectrum``, which is stored in
 #     ``cost_function.__wrapped__``.
 
 
-from pennylane.fourier import spectrum
+from pennylane.fourier import qnode_spectrum
 
 spectra = []
 for N, cost_function in zip(Ns, cost_functions):
     # Compute spectrum with respect to parameter x
-    spec = spectrum(cost_function.__wrapped__)(X[0])["x"]
+    spec = qnode_spectrum(cost_function.__wrapped__)(X[0])["x"][()]
     print(f"For {N} qubits the spectrum is {spec}.")
     # Store spectrum
     spectra.append([freq for freq in spec if freq>0.0])
@@ -278,6 +279,7 @@ for i, (cost_function, spec) in enumerate(zip(cost_functions, spectra)):
         _ = [axs[j, i].set_ylabel(lab) for j, lab in enumerate(["$a_\ell/2$", "$b_\ell/2$"])]
     else:
         _ = [axs[j, i].set_ylabel("") for j in [0, 1]]
+plt.show()
 
 
 ###############################################################################
@@ -407,6 +409,7 @@ def compare_functions(originals, reconstructions, Ns, shifts, show_diff=True):
 
 equ_shifts = [[2 * mu * np.pi / (2 * N + 1) for mu in range(-N, N + 1)] for N in Ns]
 fig, axs = compare_functions(cost_functions, reconstructions_equ, Ns, equ_shifts)
+plt.show()
 
 
 ###############################################################################
@@ -485,6 +488,7 @@ def full_reconstruction_gen(fun, shifts):
 shifts = [rnd.random(2 * N + 1) * 2 * np.pi - np.pi for N in Ns]
 reconstructions_gen = list(map(full_reconstruction_gen, cost_functions, shifts))
 fig, axs = compare_functions(cost_functions, reconstructions_gen, Ns, shifts)
+plt.show()
 
 
 ###############################################################################
@@ -694,6 +698,7 @@ styles = ['-', '-', '-', '--']
 handles = [Line2D([0], [0], color=c, ls=ls, lw=1.2) for c, ls in zip(colors, styles)]
 labels = ['Original', 'Odd reconstruction', 'Even reconstruction', 'Summed reconstruction']
 _ = fig.legend(handles, labels, bbox_to_anchor=(0.2, 0.89), loc='lower left', ncol=4)
+plt.show()
 
 
 ###############################################################################
@@ -718,8 +723,8 @@ grad_gen = lambda f, order: grad_gen(jax.grad(f), order - 1) if order > 0 else f
 for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
     recons = odd_reconstructions if order % 2 else even_reconstructions
     recon_name = "odd " if order % 2 else "even"
-    cost_grads = [grad_gen(orig, order)(0.0) for orig in cost_functions]
-    recon_grads = [grad_gen(recon, order)(0.0) for recon in recons]
+    cost_grads = np.array([grad_gen(orig, order)(0.0) for orig in cost_functions])
+    recon_grads = np.array([grad_gen(recon, order)(0.0) for recon in recons])
     all_equal = (
         "All entries match" if np.allclose(cost_grads, recon_grads) else "Some entries differ!"
     )
