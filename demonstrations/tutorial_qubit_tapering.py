@@ -1,7 +1,7 @@
 r"""
 
-Qubit tapering
-==============
+Qubit tapering with symmetries
+==============================
 
 .. meta::
     :property="og:description": Learn how to taper off qubits
@@ -25,8 +25,8 @@ tapering approach which allows reducing the number of qubits required to perform
 simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
 [#bravyi2017]_ [#setia2019]_.
 
-Qubit tapering with symmetries
-------------------------------
+Tapering the molecular Hamiltonian
+----------------------------------
 
 A molecular qubit Hamiltonian is constructed as a linear combination of Pauli strings as
 
@@ -129,11 +129,13 @@ print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 
 ##############################################################################
-# We can also compute the ground state Hartree-Fock energy of by directly applying the Hamiltonians
-# to the reference Hartree-Fock state. For the tapered Hamiltonian, this requires transforming the
-# Hartree-Fock state with the same symmetries obtained for the original Hamiltonian. This reduces
-# the number of qubits in the Hartree-Fock state to match that of the tapered Hamiltonian. It can be
-# done with the :func:`~.pennylane.hf.transform_hf`.
+# Tapering the reference state
+# ----------------------------
+# The ground state Hartree-Fock energy of :math:`\textrm{HeH}^+` can be computed by directly
+# applying the Hamiltonians to the Hartree-Fock state. For the tapered Hamiltonian, this requires
+# transforming the Hartree-Fock state with the same symmetries obtained for the original
+# Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
+# tapered Hamiltonian. It can be done with the :func:`~.pennylane.hf.transform_hf`.
 
 state_tapered = qml.hf.transform_hf(
                 generators, paulix_ops, paulix_sector, mol.n_electrons, len(H.wires))
@@ -165,6 +167,8 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 ##############################################################################
 # These values are identical to the reference Hartree-Fock energy :math:`-2.8543686493` Ha.
 #
+# VQE simulation
+# --------------
 # Finally, we can use the tapered Hamiltonian to perform a VQE simulation and compute the ground
 # state energy of the :math:`\textrm{HeH}^+` cation. We use the tapered Hartree-Fock state and build
 # a circuit that prepares a qubit coupled-cluster ansatz [#ryabinkin2018] tailored for the
