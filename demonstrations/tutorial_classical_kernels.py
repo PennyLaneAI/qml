@@ -205,13 +205,12 @@ plt.show();
 def Gauss_p(x, L=np.pi):
     # Send x to x_mod in the period around 0
     x_mod = np.mod(x+L, 2*L) - L
-
     return gaussian_kernel(x_mod)
 
 ###############################################################################
 # which we can now plot
 
-x_func = np.linspace(-10, 10, 123)
+x_func = np.linspace(-10, 10, 321)
 y_func = [Gauss_p(x) for x in x_func]
 
 plt.plot(x_func, y_func)
@@ -338,8 +337,12 @@ def make_thetas(m_wires):
 # Next we introduce the only trainable gate we neet to make use of.
 # Contrary to the usual Ansätze used in supervised and unsupervised learning,
 # we use a state preparation template called ``MottonenStatePreparation``.
+# This is one option for amplitude encoding already implemented in PennyLane,
+# so we don't need to code it ourselves.
+# Amplitude encoding is a common way of embedding classical data into a quantum
+# system in QML.
 # The unitary associated to this template transforms the :math:`\lvert0\rangle`
-# state into a state with amplitudes :math:`a=(a_1,a_2,\ldots,a_{2^n-1})`,
+# state into a state with amplitudes :math:`a=(a_0,a_2,\ldots,a_{2^n-1})`,
 # namely :math:`\lvert a\rangle=\sum_j a_j\lvert j\rangle`, provided
 # :math:`\lVert a\rVert^2=1`.
 
@@ -374,7 +377,7 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 #
 # .. math::
 #
-#   (k_a(x_1,x_2))^\dagger &= k_a(x_1,x_2) \\
+#   (k_a(x_1,x_2))^\ast &= k_a(x_1,x_2) \\
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_1-x_2) W_a\lvert0\rangle\rvert^2 \\
 #   &= k_a(x_2,x_1).
 #
@@ -479,7 +482,7 @@ plt.show();
 #
 # In order to simplify the formulas, we introduce new variables, which we call
 # ``probabilities`` :math:`(p_0, p_1, p_2, \ldots, p_{2^n-1})`, and we define as
-# :math:`p_j=a_j^2`.
+# :math:`p_j=\lvert a_j\rvert^2`.
 # Following the normalization property above, we have :math:`\sum_j p_j=1`.
 # Don't get too fond of them, we only need them for this step!
 # Remember we introduced the vector :math:`a` for the
