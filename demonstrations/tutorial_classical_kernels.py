@@ -54,8 +54,8 @@ will derive a quantum circuit that approximates the famous Gaussian kernel.
 In order to keep the demo short and sweet, we focus on one simple example, but
 the same ideas would apply for more general scenarios.
 Also, Refs. [#QEK]_, [#Fourier]_, and [#qkernels]_ should be helpful for those
-who'd like to see the underlying theory of QKs (and also so-called _Quantum Embedding
-Kernels_) and their Fourier representation.
+who'd like to see the underlying theory of QKs (and also so-called *Quantum Embedding
+Kernels*) and their Fourier representation.
 So tag along if you'd like to see how we build a quantum kernel that
 approximates the well-known Gaussian kernel function!
 
@@ -342,7 +342,7 @@ def make_thetas(m_wires):
 # Amplitude encoding is a common way of embedding classical data into a quantum
 # system in QML.
 # The unitary associated to this template transforms the :math:`\lvert0\rangle`
-# state into a state with amplitudes :math:`a=(a_0,a_2,\ldots,a_{2^n-1})`,
+# state into a state with amplitudes :math:`a=(a_0,a_1,\ldots,a_{2^n-1})`,
 # namely :math:`\lvert a\rangle=\sum_j a_j\lvert j\rangle`, provided
 # :math:`\lVert a\rVert^2=1`.
 
@@ -500,6 +500,12 @@ plt.show();
 #   p_j p_{j-1} \\ \sum_{j=2}^{2^n-1} p_j p_{j-2} \\ \vdots \\ p_{2^n-1} p_0
 #   \end{pmatrix}
 #
+# This looks a bit scary, it follows from expanding the matrix product
+# :math:`W_a^\dagger S(\delta)W_a`, and then collecting terms according to
+# Fourier basis monomials.
+# In this sense, the formula is general and it applies to any shift-invariant
+# kernel we might want to approximate, not only the Gaussian kernel.
+#
 # Our goal is to find the set of :math:`p_j`'s that produces the Fourier
 # coefficients of a given kernel function (in our case, the Gaussian kernel),
 # namely its spectrum :math:`(s_0, s_1, s_2, \ldots, s_{2^n-1})`.
@@ -549,6 +555,9 @@ def F(probabilities, spectrum):
 ###############################################################################
 # These closed-form equations allow us to find the solution numerically, using
 # Newton's method!
+# Newton's method is a classical one from convex optimisation theory.
+# For our case, since the formula is quadratic, we rest assured that we are
+# within the realm of convex functions.
 #
 # Finding the solution
 # -------------------------
@@ -616,7 +625,7 @@ for step in range(max_steps):
 
 plt.plot(range(d), probabilities, 'x')
 plt.xlabel("array entry $j$")
-plt.ylabel("probabilities $w_j$")
+plt.ylabel("probabilities $p_j$")
 plt.show();
 
 ###############################################################################
@@ -649,7 +658,7 @@ amplitudes = np.sqrt(probabilities)
 ###############################################################################
 # A little plotting never killed nobody
 
-plt.plot(range(d), probabilities, '+', label = "probability $w_j = a_j^2$")
+plt.plot(range(d), probabilities, '+', label = "probability $p_j = |a_j|^2$")
 plt.plot(range(d), amplitudes, 'x', label = "amplitude $a_j$")
 plt.xlabel("array entry $j$")
 plt.legend()
