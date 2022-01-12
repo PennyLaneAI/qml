@@ -41,11 +41,13 @@ construct the Hamiltonian
 """
 import pennylane as qml
 from pennylane import numpy as np
+import scipy
 
 symbols = ["He", "H"]
-geometry = np.array([[-0.672943567415407, 0.0, 0.0],
-                     [ 0.672943567415407, 0.0, 0.0]], requires_grad=True)
-mol = qml.hf.Molecule(symbols, geometry, charge=1)
+geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
+                     [0.00000000, 0.00000000,  0.87818362]])
+
+mol = qml.hf.Molecule(symbols, geometry, charge = 1)
 
 ##############################################################################
 # Once we have the molecule object, the Hamiltonian is created as
@@ -54,7 +56,7 @@ H = qml.hf.generate_hamiltonian(mol)(geometry)
 print(H)
 
 ##############################################################################
-# This Hamiltonian contains 15 terms where each term acts on one to four qubits.
+# This Hamiltonian contains 27 terms where each term acts on up to four qubits.
 #
 # The key step in the qubit tapering approach is to find a unitary operator :math:`U` that is
 # applied to :math:`H` to provide a transformed Hamiltonian :math:`H'`
@@ -92,6 +94,8 @@ print(H)
 # :func:`~.pennylane.hf.generate_symmetries` function.
 
 generators, paulix_ops = qml.hf.generate_symmetries(H, len(H.wires))
+print(f'generator: {generators[0]}, paulix_op: {paulix_ops[0]}')
+print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
@@ -102,9 +106,8 @@ generators, paulix_ops = qml.hf.generate_symmetries(H, len(H.wires))
 # the reference Hartree-Fock state and the generated symmetries by using the
 # :func:`~.pennylane.hf.optimal_sector` function
 
-# active_electrons = 2
-# paulix_sector = qml.hf.optimal_sector(H, generators, active_electrons)
-# print(paulix_sector)
+paulix_sector = qml.hf.optimal_sector(H, generators, mol.n_electrons)
+print(paulix_sector)
 
 ##############################################################################
 # The optimal eigenvalues are :math:`+1, -1, -1` for qubits :math:`1, 2, 3`, respectively. We can
@@ -113,24 +116,36 @@ generators, paulix_ops = qml.hf.generate_symmetries(H, len(H.wires))
 # qubits :math:`1-3` by replacing the Pauli-X operators acting on those qubits with the optimal
 # eigenvalues.
 
-# H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
-# print(H_tapered)
+H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
+print(H_tapered)
 
 ##############################################################################
-# The new Hamiltonian has only three non-zero terms acting on only 1 wire! We can verify that the
-# original and the tapered Hamiltonian have similar eigenvalues by diagonalizing the matrix
-# representation of the Hamiltonians in the computational basis.
+# The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
+# original and the tapered Hamiltonian give the ground state energy of the HeH cation, which is
+# :math:`-2.8626948638` computed with the full configuration interaction (FCI) method, by
+# diagonalizing the matrix representation of the Hamiltonians in the computational basis.
 
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
-# print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
+print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 
 ##############################################################################
-# We can also compute the Hartree-Fock energy of the ground state by directly applying the tapered
-# Hamiltonian to the reference Hartree-Fock state. This requires transforming the Hartree-Fock state
-# with the same symmetries obtained for the Hamiltonian and reduce the number of qubits in the
-# Hartree-Fock state to match that of the Hamiltonian. This can be done with the
-# :func:`~.pennylane.hf.transform_hf`.
-#
+# We can also compute the ground state Hartree-Fock energy of by directly applying the Hamiltonians
+# to the reference Hartree-Fock state. For the tapered Hamiltonian, this requires transforming the
+# Hartree-Fock state with the same symmetries obtained for the original Hamiltonian. This reduces
+# the number of qubits in the Hartree-Fock state to match that of the tapered Hamiltonian. It can be
+# done with the :func:`~.pennylane.hf.transform_hf`.
+
+state_tapered = qml.hf.transform_hf(generators, paulix_ops, paulix_sector, mol.n_electrons, len(H.wires))
+print(state_tapered)
+
+##############################################################################
+# Recall that the original Hartree-Fock state for the HeH cation is [1 1 0 0]. We can now generate
+# the qubit representation of these states and compute the Hartree-Fock energies for each
+# Hamiltonian
+
+
+
+
 ##############################################################################
 # Conclusions
 # -----------
