@@ -41,7 +41,6 @@ construct the Hamiltonian
 """
 import pennylane as qml
 from pennylane import numpy as np
-import scipy
 
 symbols = ["He", "H"]
 geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
@@ -121,9 +120,9 @@ print(H_tapered)
 
 ##############################################################################
 # The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
-# original and the tapered Hamiltonian give the ground state energy of the HeH cation, which is
-# :math:`-2.8626948638` computed with the full configuration interaction (FCI) method, by
-# diagonalizing the matrix representation of the Hamiltonians in the computational basis.
+# original and the tapered Hamiltonian give the ground state energy of the HeH:math:`^+` cation,
+# which is :math:`-2.8626948638` Ha computed with the full configuration interaction (FCI) method,
+# by diagonalizing the matrix representation of the Hamiltonians in the computational basis.
 
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
@@ -139,17 +138,69 @@ state_tapered = qml.hf.transform_hf(generators, paulix_ops, paulix_sector, mol.n
 print(state_tapered)
 
 ##############################################################################
-# Recall that the original Hartree-Fock state for the HeH cation is [1 1 0 0]. We can now generate
-# the qubit representation of these states and compute the Hartree-Fock energies for each
-# Hamiltonian
+# Recall that the original Hartree-Fock state for the HeH:math:`^+` cation is :math:`[1 1 0 0]`. We
+# can now generate the qubit representation of these states and compute the Hartree-Fock energies
+# for each Hamiltonian
 
+dev = qml.device('default.qubit', wires=H.wires)
+@qml.qnode(dev)
+def circuit():
+    qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
+    return qml.state()
+qubit_state = circuit()
+HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H).toarray() @ qubit_state
+print(f'HF energy: {np.real(HF_energy):.8f} Ha')
 
+dev = qml.device('default.qubit', wires=H_tapered.wires)
+@qml.qnode(dev)
+def circuit():
+    qml.BasisState(np.array([0, 0]), wires=H_tapered.wires)
+    return qml.state()
+qubit_state = circuit()
+HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H_tapered).toarray() @ qubit_state
+print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 
+##############################################################################
+# These values are identical to the reference Hartree-Fock energy :math:`-2.8543686493` Ha.
+#
+# Finally, we can use the tapered Hamiltonian to perform a VQE simulation and compute the ground
+# state energy of the HeH:math:`^+` cation. We use the tapered Hartree-Fock state and build a
+# circuit that prepares a qubit coupled-cluster ansatz [#ryabinkin2018] tailored for the
+# HeH:math:`^+` cation
 
+dev = qml.device('default.qubit', wires=H_tapered.wires)
+@qml.qnode(dev)
+def circuit(params):
+    qml.BasisState(state_tapered, wires=H_tapered.wires)
+    qml.PauliRot(params[2], 'Y',  wires=[0])
+    qml.PauliRot(params[1], 'Y',  wires=[1])
+    qml.PauliRot(params[0], 'YX', wires=[0, 1])
+    return qml.expval(H_tapered)
+
+##############################################################################
+# We define an optimizer and the initial values of the circuit parameters and optimize the circuit
+# parameters with respect to the ground state energy
+
+optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
+params = np.zeros(3)
+
+for n in range(1, 21):
+    params, energy = optimizer.step_and_cost(circuit, params)
+    print(f'n: {n}, E: {energy:.8f} Ha')
+
+##############################################################################
+# The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, and we need only two qubits
+# in the simulation.
+#
 ##############################################################################
 # Conclusions
 # -----------
-#
+# Molecular Hamiltonians posses symmetries that can be leveraged to taper off qubits in quantum
+# computing simulations. This tutorial introduces the PennyLane functionality that can be used for
+# qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure of obtaining the tapered
+# Hamiltonian and the tapered reference state is straightforward, however, building the wavefunction
+# ansatz needs some experience. The qubit coupled-cluster method is recommended as an appropriate
+# model for building the variational ansatz.
 #
 # References
 # ----------
@@ -157,11 +208,16 @@ print(state_tapered)
 # .. [#bravyi2017]
 #
 #     Sergey Bravyi, Jay M. Gambetta, Antonio Mezzacapo, Kristan Temme, "Tapering off qubits to
-#     simulate fermionic Hamiltonians". `arXiv:1701.08213
-#     <https://arxiv.org/abs/1701.08213>`__
+#     simulate fermionic Hamiltonians". `arXiv:1701.08213 <https://arxiv.org/abs/1701.08213>`__
 #
 # .. [#setia2019]
 #
 #     Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield,
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
+#
+# .. [#ryabinkin2018]
+#
+#     Ilya G. Ryabinkin, Tzu-Ching Yen, Scott N. Genin, Artur F. Izmaylov, "Qubit coupled-cluster
+#     method: A systematic approach to quantum chemistry on a quantum computer".
+#     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
