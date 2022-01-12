@@ -42,10 +42,10 @@ construct the Hamiltonian
 import pennylane as qml
 from pennylane import numpy as np
 
-symbols = ["H", "H"]
+symbols = ["He", "H"]
 geometry = np.array([[-0.672943567415407, 0.0, 0.0],
                      [ 0.672943567415407, 0.0, 0.0]], requires_grad=True)
-mol = qml.hf.Molecule(symbols, geometry)
+mol = qml.hf.Molecule(symbols, geometry, charge=1)
 
 ##############################################################################
 # Once we have the molecule object, the Hamiltonian is created as
