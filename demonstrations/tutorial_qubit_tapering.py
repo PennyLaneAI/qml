@@ -37,7 +37,8 @@ qubits.
 
 In PennyLane, a molecular Hamiltonian can be created by specifying the atomic symbols and
 coordinates and then creating a molecule object that stores all the molecular parameters needed to
-construct the Hamiltonian
+construct the Hamiltonian. We use the `Helium hydride cation
+<https://en.wikipedia.org/wiki/Helium_hydride_ion>`__, :math:`\textrm{HeH}^+`, in this tutorial.
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -78,7 +79,7 @@ print(H)
 # The unitary operator :math:`U` is constructed from the generators of the symmetry group of
 # :math:`H` and a set of Pauli-X operators which act on the qubits that will be ultimately tapered
 # off from the Hamiltonian [#bravyi2017]_. The symmetry group of the Hamiltonian is defined as a
-# group of pauli words commuting with each term in :math:`H` and the group does not contain
+# group of Pauli words commuting with each term in :math:`H` and the group does not contain
 # :math:`−I` [#bravyi2017]_. Recall that the
 # `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
 # those elements of the group that can be linearly combined, along with their inverses, to create
@@ -120,9 +121,9 @@ print(H_tapered)
 
 ##############################################################################
 # The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
-# original and the tapered Hamiltonian give the ground state energy of the HeH:math:`^+` cation,
-# which is :math:`-2.8626948638` Ha computed with the full configuration interaction (FCI) method,
-# by diagonalizing the matrix representation of the Hamiltonians in the computational basis.
+# original and the tapered Hamiltonian give the ground state energy of the :math:`\textrm{HeH}^+`
+# cation, which is :math:`-2.8626948638` Ha computed with the full configuration interaction (FCI)
+# method, by diagonalizing the matrix representation of the Hamiltonians in the computational basis.
 
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
@@ -134,13 +135,14 @@ print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 # the number of qubits in the Hartree-Fock state to match that of the tapered Hamiltonian. It can be
 # done with the :func:`~.pennylane.hf.transform_hf`.
 
-state_tapered = qml.hf.transform_hf(generators, paulix_ops, paulix_sector, mol.n_electrons, len(H.wires))
+state_tapered = qml.hf.transform_hf(
+                generators, paulix_ops, paulix_sector, mol.n_electrons, len(H.wires))
 print(state_tapered)
 
 ##############################################################################
-# Recall that the original Hartree-Fock state for the HeH:math:`^+` cation is :math:`[1 1 0 0]`. We
-# can now generate the qubit representation of these states and compute the Hartree-Fock energies
-# for each Hamiltonian
+# Recall that the original Hartree-Fock state for the :math:`\textrm{HeH}^+` cation is
+# :math:`[1 1 0 0]`. We can now generate the qubit representation of these states and compute the
+# Hartree-Fock energies for each Hamiltonian
 
 dev = qml.device('default.qubit', wires=H.wires)
 @qml.qnode(dev)
@@ -164,8 +166,8 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # These values are identical to the reference Hartree-Fock energy :math:`-2.8543686493` Ha.
 #
 # Finally, we can use the tapered Hamiltonian to perform a VQE simulation and compute the ground
-# state energy of the HeH:math:`^+` cation. We use the tapered Hartree-Fock state and build a
-# circuit that prepares a qubit coupled-cluster ansatz [#ryabinkin2018] tailored for the
+# state energy of the :math:`\textrm{HeH}^+` cation. We use the tapered Hartree-Fock state and build
+# a circuit that prepares a qubit coupled-cluster ansatz [#ryabinkin2018] tailored for the
 # HeH:math:`^+` cation
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
@@ -192,7 +194,6 @@ for n in range(1, 21):
 # The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, and we need only two qubits
 # in the simulation.
 #
-##############################################################################
 # Conclusions
 # -----------
 # Molecular Hamiltonians posses symmetries that can be leveraged to taper off qubits in quantum
