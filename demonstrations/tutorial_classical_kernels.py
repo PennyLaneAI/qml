@@ -85,8 +85,10 @@ aspects extensively:
 #. `Kernel-based training of quantum models with scikit-learn <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_
 
 For the purposes of this demo, a *kernel* is a real-valued function of two
-variables :math:`k(\cdot,\cdot)` from a given data domain :math:`x_1,
+variables :math:`k(x_1,x_2)` from a given data domain :math:`x_1,
 x_2\in\mathcal{X}`.
+Most often, and in this demo, we'll deal with real vector spaces as the data
+domain :math:`\mathcal{X}\subseteq\mathbb{R}^d`, of some dimension :math:`d`.
 A kernel has to be symmetric with respect to exchanging both variables
 :math:`k(x_1,x_2) = k(x_2,x_1)`.
 We also enforce kernels to be positive semi-definite, but let's avoid getting
@@ -98,8 +100,9 @@ Shift-invariant kernels
 
 Some kernels fulfill another important restriction, called *shift-invariance*.
 Shift-invariant kernels are those whose value doesn't change if we add a shift
-to both inputs. That means, for any suitable shift vector
-:math:`\zeta\in\mathcal{X}`, shift-invariant kernels are those for which
+to both inputs.
+Explicitly, for any suitable shift vector :math:`\zeta\in\mathcal{X}`,
+shift-invariant kernels are those for which
 :math:`k(x_1+\zeta,x_2+\zeta)=k(x_1,x_2)` holds.
 At the same time, having this property means the function can be written in
 terms of only one variable, which we call the *lag vector*
@@ -189,7 +192,7 @@ plt.show();
 # periodic function using the sine and cosine functions.
 # Fourier analysis tells us that we can write any given periodic function as
 #
-# .. math:: f(x) = a_0 + \sum_n a_n\cos(n\omega_0x) + b_n\sin(n\omega_0x).
+# .. math:: f(x) = a_0 + \sum_{n=1}^\infty a_n\cos(n\omega_0x) + b_n\sin(n\omega_0x).
 #
 # For that, we only need to find the suitable base frequency :math:`\omega_0`
 # and coefficients :math:`a_0, a_1, \ldots, b_0, b_1,\ldots`.
@@ -219,8 +222,10 @@ plt.suptitle("Periodic extension to the Gaussian kernel")
 plt.show();
 
 ##################################################################################
-# In practice we'll be interested in cases where the period approaches
-# infinity.
+# In practice, we would construct several periodic extensions of the aperiodic
+# function, with increasing periods.
+# This way, we would be able to study the behavior when the period approaches
+# infinity, i.e. the regime where the function stops being periodic.
 #
 # Next up, how does the Fourier spectrum of such an object look like?
 # We can find out using PennyLane's ``fourier`` module!
@@ -238,10 +243,12 @@ from pennylane.fourier import coefficients
 # of every coefficient will be zero, so :math:`c_n=a_n`.
 
 def fourier_p(d):
-    # We only take the first d coefficients [:d]
-    # because coefficients() treats the negative frequencies
-    # as different from the positive ones.
-    # For real functions, they are the same.
+    """
+    We only take the first d coefficients [:d]
+    because coefficients() treats the negative frequencies
+    as different from the positive ones.
+    For real functions, they are the same.
+    """
     return np.real(coefficients(Gauss_p, 1, d-1)[:d])
 
 ##################################################################################
