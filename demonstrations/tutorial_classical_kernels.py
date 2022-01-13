@@ -104,9 +104,9 @@ to both inputs.
 Explicitly, for any suitable shift vector :math:`\zeta\in\mathcal{X}`,
 shift-invariant kernels are those for which
 :math:`k(x_1+\zeta,x_2+\zeta)=k(x_1,x_2)` holds.
-At the same time, having this property means the function can be written in
+Having this property means the function can be written in
 terms of only one variable, which we call the *lag vector*
-:math:`\delta:=x_1-x_2\in\mathcal{X}`, abusing notation a bit:
+:math:`\delta:=x_1-x_2\in\mathcal{X}`. Abusing notation a bit:
 
 .. math:: k(x_1,x_2)=k(x_1-x_2,0) = k(\delta).
 
