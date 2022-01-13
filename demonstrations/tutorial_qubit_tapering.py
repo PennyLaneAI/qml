@@ -28,12 +28,11 @@ simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Ha
 Tapering the molecular Hamiltonian
 ----------------------------------
 
-A molecular qubit Hamiltonian is constructed as a linear combination of Pauli strings as
+A molecular qubit Hamiltonian is constructed as a linear combination of Pauli words as
 
 .. math:: H = \sum_{i=1}^r c_i \eta_i
 
-where :math:`c_i` is a real coefficient and :math:`\eta_i` is a Pauli string acting on a number of
-qubits.
+where :math:`c_i` is a real coefficient and :math:`\eta_i` is a tensor product of Pauli operators.
 
 In PennyLane, a molecular Hamiltonian can be created by specifying the atomic symbols and
 coordinates and then creating a molecule object that stores all the molecular parameters needed to
