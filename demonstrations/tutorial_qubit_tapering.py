@@ -33,7 +33,7 @@ as
 where :math:`c_i` is a real coefficient and :math:`\eta_i` is a tensor product of Pauli and
 Identity operators acting on M qubits
 
-\eta_i \in \pm \left \{ I, \sigma_x, \sigma_y, \sigma_z \right \} ^ {\bigotimes M}.
+.. math:: \eta_i \in \pm \left \{ I, \sigma_x, \sigma_y, \sigma_z \right \} ^ {\bigotimes M}.
 
 The main idea in the symmetry-based qubit tapering approach is to find a unitary operator :math:`U`
 that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eigenvalues as
