@@ -59,7 +59,7 @@ operators from the transformed Hamiltonian and replace them with their eigenvalu
 
 The unitary operator :math:`U` can be constructed as a Clifford operator [#bravyi2017]_
 
-.. math:: U = \Pi_j \left [\frac{1}{\sqrt{2}} \left (\sigma_x^{q(i)} + \tau_i \right) \right],
+.. math:: U = \Pi_j \left [\frac{1}{\sqrt{2}} \left (\sigma_x^{q(j)} + \tau_j \right) \right],
 
 where :math:`\tau` denotes the generators of the symmetry group of :math:`H` and
 :math:`\sigma_x^{q}` operators which act on those qubits that will be ultimately tapered off from
