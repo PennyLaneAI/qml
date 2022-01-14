@@ -25,19 +25,63 @@ tapering approach which allows reducing the number of qubits required to perform
 simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
 [#bravyi2017]_ [#setia2019]_.
 
-Tapering the molecular Hamiltonian
-----------------------------------
-
-A molecular qubit Hamiltonian is constructed as a linear combination of Pauli words as
+A molecular Hamiltonian in the qubit basis is constructed as a linear combination of Pauli words
+as
 
 .. math:: H = \sum_{i=1}^r c_i \eta_i
 
-where :math:`c_i` is a real coefficient and :math:`\eta_i` is a tensor product of Pauli operators.
+where :math:`c_i` is a real coefficient and :math:`\eta_i` is a tensor product of Pauli and
+Identity operators acting on M qubits
+
+\eta_i \in \pm \left \{ I, \sigma_x, \sigma_y, \sigma_z \right \} ^ {\bigotimes M}.
+
+The main idea in the symmetry-based qubit tapering approach is to find a unitary operator :math:`U`
+that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eigenvalues as
+:math:`H`
+
+.. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
+
+such that each :math:`\mu_i` term in the new Hamiltonian acts trivially, e.g., with an Identity
+operator, on a set of qubits. This allows tapering-off those qubits from the Hamiltonian. We can
+also construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a Pauli-X operator
+on a set of qubits :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This
+guarantees that each term of the transformed Hamiltonian commutes with the Pauli-X operator applied
+to :math:`j`-th qubit and
+
+.. math:: [H', \sigma_x^{q_j}] = 0.
+
+Recall that two commuting operators share an eigenbasis. This means that the eigenfunction of the
+transformed Hamiltonian :math:`H'` is also an eigenfunction of each of the :math:`\sigma_x^{q_j}`
+operators. As a result, we can factor out the :math:`\sigma_x^{q_j}`
+operators from the transformed Hamiltonian and replace them with their eigenvalues which are
+:math:`\pm 1`. This gives us a tapered Hamiltonian in which the set of
+:math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}` qubits are eliminated.
+
+The unitary operator :math:`U` can be constructed as a Clifford operator [#bravyi2017]_
+
+.. math:: U = \Pi_j \left [\frac{1}{\sqrt{2}} \left (\sigma_x^{q(i)} + \tau_i \right) \right],
+
+where :math:`\tau` denotes the generators of the symmetry group of :math:`H` and
+:math:`\sigma_x^{q}` operators which act on those qubits that will be ultimately tapered off from
+the Hamiltonian.
+
+The symmetry group of the Hamiltonian is defined as an abelian group of pauli words that commute
+with each term in the Hamiltonian (excluding :math:`−I`). The
+`generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
+those elements of the group that can be linearly combined, along with their inverses, to create any
+other member of the group. The symmetry group and the generators of the Hamiltonian can be obtained
+from the binary matrix representation of the Hamiltonian [#bravyi2017]_ with the functions of the
+PennyLane :py:mod:`~.pennylane.hf.tapering` module.
+
+Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
+cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
+
+Tapering the molecular Hamiltonian
+----------------------------------
 
 In PennyLane, a molecular Hamiltonian can be created by specifying the atomic symbols and
 coordinates and then creating a molecule object that stores all the molecular parameters needed to
-construct the Hamiltonian. We use the `Helium hydride cation
-<https://en.wikipedia.org/wiki/Helium_hydride_ion>`__, :math:`\textrm{HeH}^+`, in this tutorial.
+construct the Hamiltonian.
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -57,62 +101,32 @@ print(H)
 ##############################################################################
 # This Hamiltonian contains 27 terms where each term acts on up to four qubits.
 #
-# The key step in the qubit tapering approach is to find a unitary operator :math:`U` that is
-# applied to :math:`H` to provide a transformed Hamiltonian :math:`H'`
-#
-# .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
-#
-# such that each :math:`\mu_i` term acts trivially, with an identity operator or at most one Pauli
-# operator, on a set of :math:`k` qubits. This guarantees that each of the Pauli operators, applied
-# to the :math:`k`-th qubit, commutes with each term of the transformed Hamiltonian and therefore
-# they commute with the transformed Hamiltonian as well.
-#
-# .. math:: [H', \sigma_x^{q(i)}] = 0.
-#
-# Recall that two commuting operators share an eigenbasis and the molecular wavefunction is an
-# eigenfunction of both the transformed Hamiltonian and each of the Pauli operators, applied to the
-# :math:`k`-th qubit. Then we can factor out those Pauli operators from the transformed Hamiltonian
-# and replace them with their eigenvalues which are :math:`\pm 1`. This gives us a tapered
-# Hamiltonian in which the set of :math:`k` qubits are eliminated.`
-#
-# The unitary operator :math:`U` is constructed from the generators of the symmetry group of
-# :math:`H` and a set of Pauli-X operators which act on the qubits that will be ultimately tapered
-# off from the Hamiltonian [#bravyi2017]_. The symmetry group of the Hamiltonian is defined as a
-# group of Pauli words commuting with each term in :math:`H` and the group does not contain
-# :math:`−I` [#bravyi2017]_. Recall that the
-# `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
-# those elements of the group that can be linearly combined, along with their inverses, to create
-# any other member of the group.
-#
-# Once we have the generators, :math:`\tau`, and the Pauli-X operators, the unitary operator
-# :math:`U` can be constructed as [#bravyi2017]_
-#
-# .. math:: U = \Pi_i \left [\frac{1}{\sqrt{2}} \left (\sigma_x^{q_i} + \tau_i \right) \right].
-#
-# In PennyLane, the generators and the Pauli-X operators are constructed by the
-# :func:`~.pennylane.hf.generate_symmetries` function.
+# We can now obtain the symmetry generators and the :math:`\sigma_x^{q_j}` operators that are
+# applied to the qubits that we will be tapering-off from the Hamiltonian. In PennyLane, these are
+# constructed by using the :func:`~.pennylane.hf.generate_symmetries` function.
 
 generators, paulix_ops = qml.hf.generate_symmetries(H, len(H.wires))
 print(f'generator: {generators[0]}, paulix_op: {paulix_ops[0]}')
 print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
 
 ##############################################################################
-# Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
-# :math:`1-3` either with Identity or with a Pauli-X operator. For each of these qubits, we can
-# simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`. This
-# results in a total number of :math:`2^n` Hamiltonians each corresponding to one eigenvalue sector.
-# The optimal sector corresponding to the ground state energy of the molecule can be obtained from
-# the reference Hartree-Fock state and the generated symmetries by using the
-# :func:`~.pennylane.hf.optimal_sector` function
+# The generators and the Pauli-X operators are used to construct the unitary :math:`U` operator that
+# transforms the :math:`\textrm{HeH}^+` Hamiltonian. Once the operator :math:`U` is applied, each
+# of the Hamiltonian terms will act on the qubits :math:`0, 1` either with Identity or with a
+# Pauli-X operator. For each of these qubits, we can simply replace the Pauli-X operator with one
+# of its eigenvalues :math:`+1` or :math:`-1`. This results in a total number of :math:`2^n`
+# Hamiltonians each corresponding to one eigenvalue sector. The optimal sector corresponding to the
+# ground state energy of the molecule can be obtained from the reference Hartree-Fock state and the
+# generated symmetries by using the :func:`~.pennylane.hf.optimal_sector` function
 
 paulix_sector = qml.hf.optimal_sector(H, generators, mol.n_electrons)
 print(paulix_sector)
 
 ##############################################################################
-# The optimal eigenvalues are :math:`+1, -1, -1` for qubits :math:`1, 2, 3`, respectively. We can
-# now build the tapered Hamiltonian with the :func:`~.pennylane.hf.transform_hamiltonian` function
-# which constructs the operator :math:`U`, applies it to the Hamiltonian and finally tapers off the
-# qubits :math:`1-3` by replacing the Pauli-X operators acting on those qubits with the optimal
+# The optimal eigenvalues are :math:`-1, -1` for qubits :math:`0, 1`, respectively. We can now build
+# the tapered Hamiltonian with the :func:`~.pennylane.hf.transform_hamiltonian` function which
+# constructs the operator :math:`U`, applies it to the Hamiltonian and finally tapers off the
+# qubits :math:`0, 1` by replacing the Pauli-X operators acting on those qubits with the optimal
 # eigenvalues.
 
 H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
@@ -120,9 +134,10 @@ print(H_tapered)
 
 ##############################################################################
 # The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
-# original and the tapered Hamiltonian give the ground state energy of the :math:`\textrm{HeH}^+`
-# cation, which is :math:`-2.8626948638` Ha computed with the full configuration interaction (FCI)
-# method, by diagonalizing the matrix representation of the Hamiltonians in the computational basis.
+# original and the tapered Hamiltonian both give the correct ground state energy of the
+# :math:`\textrm{HeH}^+` cation, which is :math:`-2.8626948638` Ha computed with the full
+# configuration interaction (FCI) method, by diagonalizing the matrix representation of the
+# Hamiltonians in the computational basis.
 
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
@@ -168,10 +183,10 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 #
 # VQE simulation
 # --------------
-# Finally, we can use the tapered Hamiltonian to perform a VQE simulation and compute the ground
-# state energy of the :math:`\textrm{HeH}^+` cation. We use the tapered Hartree-Fock state and build
-# a circuit that prepares a qubit coupled-cluster ansatz [#ryabinkin2018] tailored for the
-# HeH:math:`^+` cation
+# Finally, we can use the tapered Hamiltonian and the tapered references state to perform a VQE
+# simulation and compute the ground state energy of the :math:`\textrm{HeH}^+` cation. We use the
+# tapered Hartree-Fock state to build a circuit that prepares a variational qubit coupled-cluster
+# ansatz [#ryabinkin2018] tailored for the HeH:math:`^+` cation
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
 @qml.qnode(dev)
@@ -194,8 +209,8 @@ for n in range(1, 21):
     print(f'n: {n}, E: {energy:.8f} Ha')
 
 ##############################################################################
-# The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, and we need only two qubits
-# in the simulation.
+# The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, while the number of qubits
+# and the Hamiltonian terms is significantly reduced with respect to their original values.
 #
 # Conclusions
 # -----------
@@ -203,7 +218,7 @@ for n in range(1, 21):
 # computing simulations. This tutorial introduces the PennyLane functionality that can be used for
 # qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure of obtaining the tapered
 # Hamiltonian and the tapered reference state is straightforward, however, building the wavefunction
-# ansatz needs some experience. The qubit coupled-cluster method is recommended as an appropriate
+# ansatz needs some experience. The qubit coupled cluster method might be used as an appropriate
 # model for building the variational ansatz.
 #
 # References
