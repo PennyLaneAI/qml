@@ -4,7 +4,7 @@ Solving MIS with the QAO-Ansatz and the DQVA
 ============================================
 
 .. meta::
-    :property="og:description": Description and assessment of trapped ion quantum computers
+    :property="og:description": Solving MIS with the QAO-Ansatz and the DQVA
     :property="og:image": https://pennylane.ai/qml/_images/trapped_ions_tn.png
 
 .. related::
@@ -14,9 +14,6 @@ Solving MIS with the QAO-Ansatz and the DQVA
 *Author: Priya Angara*
 
 This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxiv.org/abs/2010.06660>` and the `Quantum Alternating Operator Ansatz (QAO-Ansatz) <https://arxiv.org/abs/1709.03489)>` for constrained quantum approximate optimization in the context of solving the Maximum Independent Set problem. 
-.. container:: alert alert-block alert-info
-    
-    Alert block
 
 """
 
@@ -488,10 +485,8 @@ for i in range(len(graph.nodes)):
 
 
 ######################################################################
-# DQVA
-# ----
-#
-######################################################################
+# Dynamic Quantum Variational Ansatz
+# ----------------------------------
 # We will now formulate the MIS using the DQVA Ansatz. The cost function
 # is the same as the QAO-Ansatz (the Hamming weight operator).
 #
@@ -769,7 +764,6 @@ for i in range(len(graph.nodes)):
 # Conclusion
 # ----------
 #
-######################################################################
 # In this demo, we looked into solving a constrained combinatorial
 # optimization problem using the QAO-Ansatz and the DQVA. The QAO-Ansatz
 # defines mixer unitaries with partial mixers in such a way that we never
