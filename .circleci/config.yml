@@ -6,13 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.2
-      - image: rigetti/quilc
-        command:
-        - -R
-      - image: rigetti/qvm
-        command:
-        - -S
+      - image: circleci/python:3.7.12
 
     steps:
       - checkout
@@ -20,9 +14,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v29c-{{ .Branch }}-{{ checksum "requirements.txt" }}
-            - pip-v29c-{{ .Branch }}-
-            - pip-v29c-
+            - pip-v31c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
+            - pip-v31c-{{ .Branch }}-
+            - pip-v31c-
 
       - run:
           name: Install dependencies
@@ -30,19 +24,20 @@ jobs:
             sudo apt install pandoc -qq
             python3 -m venv venv
             . venv/bin/activate
-            pip install pip setuptools --upgrade
+            pip install pip setuptools cmake --upgrade
             pip install -r requirements.txt
+            pip install --no-deps -r requirements_no_deps.txt
 
       - save_cache:
           paths:
             - venv
-          key: pip-v29c-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: pip-v31c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v29a-{{ .Branch }}-{{ .Revision }}
-            - gallery-v29a-{{ .Branch }}-
-            - gallery-v29a-
+            - gallery-v31a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v31a-{{ .Branch }}-
+            - gallery-v31a-
 
       - run:
           name: Build tutorials
@@ -58,7 +53,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v29a-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v31a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
@@ -85,13 +80,7 @@ jobs:
 
   build_dev:
     docker:
-      - image: circleci/python:3.7.2
-      - image: rigetti/quilc
-        command:
-        - -R
-      - image: rigetti/qvm
-        command:
-        - -S
+      - image: circleci/python:3.7.12
 
     steps:
       - checkout
@@ -101,8 +90,9 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install pip setuptools --upgrade
+            pip install pip setuptools cmake --upgrade
             pip install -r requirements.txt
+            pip install --no-deps -r requirements_no_deps.txt
 
       - run:
           name: Build tutorials

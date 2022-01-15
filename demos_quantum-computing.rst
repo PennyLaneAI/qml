@@ -65,6 +65,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/trapped_ions/trapped_ions_tn.png
     :description: :doc:`demos/tutorial_trapped_ions`
     :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Error mitigation with Mitiq and PennyLane
+    :figure: demonstrations/error_mitigation/laptop.png
+    :description: :doc:`demos/tutorial_error_mitigation`
+    :tags: quantumcomputing
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -79,4 +85,5 @@ such as benchmarking and characterizing quantum processors.
     demos/qsim_beyond_classical
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
-	
+    demos/tutorial_error_mitigation
+

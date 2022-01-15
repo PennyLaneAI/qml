@@ -1,7 +1,7 @@
 name: build-dev
 on:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 0 * * 0,2,4,6' # At 00:00 on Sunday, Tuesday, Thursday, and Saturday.
   workflow_dispatch:
 
 jobs:
@@ -34,6 +34,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip wheel
           pip install -r requirements.txt --use-feature=2020-resolver
+          pip install --no-deps -r requirements_no_deps.txt --use-feature=2020-resolver
 
       - name: Build tutorials
         run: |
