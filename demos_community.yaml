@@ -1,3 +1,31 @@
+- title: quantum Case-Based Reasoning (qCBR) learning by cases
+  author: Parfait Atchade
+  date: 12/22/2021
+  code: https://github.com/pifparfait/qCBR-learning-by-cases
+
+  paper: https://arxiv.org/abs/2104.00409
+  color: heavy-rain-gradient
+  description: |
+    A supervised classifier is a program that can predict a label (class) for a new 
+    input object, based on the value of its attributes and on a training set. 
+    The training set consists of labelled data. The main idea of quantum Case-Based Reasoning (qCBR) 
+    is to interpret the statement of the problem as an input object, and the solution to the problem as an output (label). 
+    Therefore, if we have a series of situations (inputs) with their outcomes (labels), 
+    we can train our classifier to determine the solution given a new problem.
+
+- title: Exploring quantum models with a teacher-student scheme
+  author: Katerina Gratsea and Patrick Huembeli
+  date: 11/22/2021
+  code: https://github.com/KaterinaGratsea/Teacher-student_scheme
+
+  paper: https://arxiv.org/abs/2105.01477
+  color: heavy-rain-gradient
+  description: |
+    Using PennyLane, we introduce a teacher-student scheme to systematically compare 
+    different Quantum Neural Network (QNN) architectures and to evaluate their relative expressive power. 
+    This scheme avoids training with a specific dataset and compares the learning 
+    capacity of different quantum models.
+
 - title: Hybrid Neural Network using Data-Reuploading technique
   author: Nikolaos Schetakis (nikschet)
   date: 11/04/2021
@@ -8,8 +36,6 @@
   description: |
     We combine a standard Variational Classifier with a Data-Reuploading Classifier,
     and integrate the resulting QNode as a quantum layer in a Hybrid Neural Network.
-
-
 
 - title: Fraud Detection
   author: Sophie Choe
