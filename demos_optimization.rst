@@ -139,6 +139,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_qaoa_maxcut`
     :tags: autograd
 
+.. customgalleryitem::
+    :tooltip: QAO-Ansatz and DQVA for MIS.
+    :figure: demonstrations/dqva_mis/mixer-unitary.png
+    :description: :doc:`demos/tutorial_dqva_mis`
+    :tags: autograd
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -166,3 +172,4 @@ in quantum neural networks.
     demos/qonn
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
+    demos/tutorial_dqva_mis

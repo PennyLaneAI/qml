@@ -5,7 +5,7 @@ Solving MIS with the QAO-Ansatz and the DQVA
 
 .. meta::
     :property="og:description": Solving MIS with the QAO-Ansatz and the DQVA
-    :property="og:image": https://pennylane.ai/qml/_images/trapped_ions_tn.png
+    :property="og:image": https://pennylane.ai/qml/_images/mixer_unitary.png
 
 .. related::
    tutorial_qaoa_intro Introduction to QAOA
