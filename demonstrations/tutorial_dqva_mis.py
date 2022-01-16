@@ -13,7 +13,7 @@ Solving MIS with the QAO-Ansatz and the DQVA
 
 *Author: Priya Angara*
 
-This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxiv.org/abs/2010.06660>` and the `Quantum Alternating Operator Ansatz (QAO-Ansatz) <https://arxiv.org/abs/1709.03489)>` for constrained quantum approximate optimization in the context of solving the Maximum Independent Set problem. 
+This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxiv.org/abs/2010.06660>`__ and the `Quantum Alternating Operator Ansatz (QAO-Ansatz) <https://arxiv.org/abs/1709.03489)>`__ for constrained quantum approximate optimization in the context of solving the Maximum Independent Set problem. 
 
 """
 
@@ -45,7 +45,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # sequence of partial mixers :math:`U_{M, x}` which may not correspond to
 # time evolution under a fixed mixer Hamiltonian :math:`H_M`.
 #
-# .. figure:: ../demonstrations/dqva_mis/partial_mixers.png
+# .. figure:: ../demonstrations/dqva_mis/partial-mixers.png
 #    :align: center
 #    :width: 100%
 #
@@ -74,8 +74,6 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # Now that we have the basics in place, let's implement the QAO-Ansatz and
 # the DQVA!
 
-#
-
 
 ######################################################################
 # Formulating the Maximum Independent Set (MIS) problem
@@ -89,7 +87,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # MIS of a given graph. The following image shows some independent sets of
 # a graph with 5 vertices:
 #
-# .. figure:: ../demonstrations/dqva_mis/independent_sets.png
+# .. figure:: ../demonstrations/dqva_mis/independent-sets.png
 #    :align: center
 #    :width: 100%
 #
@@ -262,7 +260,7 @@ def cost_layer(gamma):
 # This extra qubit is used as an ancillary qubit to serve as the target
 # for the multi-controlled Toffoli gates.
 #
-# .. figure:: ../demonstrations/dqva_mis/mixer_unitary.png
+# .. figure:: ../demonstrations/dqva_mis/mixer-unitary.png
 #    :align: center
 #    :width: 100%
 #
@@ -490,7 +488,7 @@ for i in range(len(graph.nodes)):
 ######################################################################
 # Dynamic Quantum Variational Ansatz
 # ----------------------------------
-# We will now formulate the MIS using the DQVA Ansatz. The cost function
+# We will now formulate the MIS using the DQVA Ansatz [#Saleem2020]. The cost function
 # is the same as the QAO-Ansatz (the Hamming weight operator).
 #
 # In the DQVA, the way mixers are defined is slightly different from the
@@ -635,7 +633,7 @@ def probability_dqva(P, params=[], init_state=None, mixer_order=None):
 # 5. If no new Hamming weight is obtained, the partial mixers are randomized and steps 2 and 3 are repeated to check if
 # a better Hamming weight is found. The number of randomizations is controlled via a hyperparameter.
 #
-
+#
 
 def solve_mis_dqva(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutoff=1):
 
@@ -790,6 +788,6 @@ for i in range(len(graph.nodes)):
 # References
 # ----------
 #
-# .. [#Saleem2020] Z. H. Saleem, T. Tomesh, B. Tariq, M. Suchara. (2000) "Approaches to Constrained Quantum Approximate Optimization",
+# .. [#Saleem2020] Z. H. Saleem, T. Tomesh, B. Tariq, M. Suchara. (2020) "Approaches to Constrained Quantum Approximate Optimization",
 #     `arXiv preprint arXiv:2010.06660 <https://arxiv.org/abs/2010.06660>`__.
 #
