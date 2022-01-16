@@ -204,9 +204,12 @@ def cost_layer(gamma):
 
 
 ######################################################################
-# The mixer unitary for the QAO-Ansatz is defined as $
-# U_M(:raw-latex:`\beta`) = :raw-latex:`\prod`\_i
-# e^{i:raw-latex:`\beta `M_i}$
+# The mixer unitary for the QAO-Ansatz is defined as 
+#
+# .. math::
+#
+#
+#       U_M(\beta) = \prod\_i e^{i \beta M_i}
 #
 # where
 #
@@ -787,8 +790,6 @@ for i in range(len(graph.nodes)):
 # References
 # ----------
 #
-# .. [#Saleem2020]
-#
-#     Z. H. Saleem, T. Tomesh, B. Tariq, M. Suchara. (2000) "Approaches to Constrained Quantum Approximate Optimization",
+# .. [#Saleem2020] Z. H. Saleem, T. Tomesh, B. Tariq, M. Suchara. (2000) "Approaches to Constrained Quantum Approximate Optimization",
 #     `arXiv preprint arXiv:2010.06660 <https://arxiv.org/abs/2010.06660>`__.
 #
