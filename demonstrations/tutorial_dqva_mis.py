@@ -98,7 +98,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # Here, independent sets can be represented as bitstrings
 # :math:`b = \{b_1, b_2, \cdots b_n\} \in \{0, 1\}^n`. In the graph shown
 # above :math:`00000`, :math:`10000`, :math:`01001`, :math:`10101` are
-# independent sets of size 0, 1, and 2 respectively. The Minimum Vertex
+# independent sets of size 0, 1, 2, and 3 respectively. The Minimum Vertex
 # Cover, i.e, vertices that cover all edges, is the dual of MIS.
 #
 # We will start with the QAO-Ansatz and then re-use most components to
