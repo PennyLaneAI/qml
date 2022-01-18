@@ -22,37 +22,37 @@ How to approximate a classical kernel with a quantum computer
 
 Forget about advantages, supremacies, or speed-ups.
 Let us understand better what we can and cannot do with a quantum computer.
-More specifically, in this demo we want to look into quantum kernels and ask
+More specifically, in this demo, we want to look into quantum kernels and ask
 whether we can replicate classical kernel functions with a quantum computer.
 Lots of researchers have lengthily stared at the opposite question, namely that
 of classical simulation of quantum algorithms.
 Yet, by studying what classes of functions we can realize with quantum kernels,
 we can gain some insight into their inner workings.
 
-Usually, in quantum machine learning (QML) we use parametrized quantum circuits
+Usually, in quantum machine learning (QML), we use parametrized quantum circuits
 (PQCs) to find good functions, whatever *good* means here.
-Consequently, since kernels are just one specific kind of well-defined
+Since kernels are just one specific kind of well-defined
 functions, the task of finding a quantum kernel (QK) that approximates a given
 classical one could be posed as an optimisation problem.
-The way to attack this task would be to define a loss function directly
-quantifying the distance between both functions (the classical kernel function,
+One way to attack this task is to define a loss function
+quantifying the distance between both functions (the classical kernel function
 and the PQC-based hypothesis).
 This sort of approach does not help us much to gain theoretical insights about the 
 structure of kernel-emulating quantum circuits, though.
 
 In order to build intuition, we will instead study the link between classical and quantum kernels through the
 lens of the Fourier representation of a kernel, which is a common tool in
-classical ML.
+classical machine learning.
 Two functions can only have the same Fourier spectrum if they are the same
-function, and it turns out that for certain classes of quantum circuits `we can
+function. It turns out that, for certain classes of quantum circuits, `we can
 theoretically describe the Fourier spectrum rather well
 <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html>`_.
 
-Using this theory together with some good old-fashioned convex optimisation, we
+Using this theory, together with some good old-fashioned convex optimization, we
 will derive a quantum circuit that approximates the famous Gaussian kernel.
 
 In order to keep the demo short and sweet, we focus on one simple example, but
-the same ideas would apply for more general scenarios.
+same ideas apply to more general scenarios.
 Also, Refs. [#QEK]_, [#Fourier]_, and [#qkernels]_ should be helpful for those
 who'd like to see the underlying theory of QKs (and also so-called *Quantum Embedding
 Kernels*) and their Fourier representation.
@@ -74,11 +74,11 @@ Kernel-based Machine Learning
 ----------------------------------------------
 
 We will not be reviewing all the notions of kernels in-depth here.
-Instead, we only need to know that there's an entire branch of ML which
+Instead, we only need to know that an entire branch of machine learning
 revolves around some functions we call kernels.
-If you'd like to see a more comprehensive introduction to where these functions
+If you'd like to learn more about where these functions
 come from, why they're important, and how we can use them (e.g. with
-PennyLane), you could check out the following demos, which cover different
+PennyLane), check out the following demos, which cover different
 aspects extensively:
 
 #. `Training and evaluating quantum kernels <https://pennylane.ai/qml/demos/tutorial_kernels_module.html>`_
@@ -87,12 +87,12 @@ aspects extensively:
 For the purposes of this demo, a *kernel* is a real-valued function of two
 variables :math:`k(x_1,x_2)` from a given data domain :math:`x_1,
 x_2\in\mathcal{X}`.
-Most often, and in this demo, we'll deal with real vector spaces as the data
+In this demo, we'll deal with real vector spaces as the data
 domain :math:`\mathcal{X}\subseteq\mathbb{R}^d`, of some dimension :math:`d`.
 A kernel has to be symmetric with respect to exchanging both variables
 :math:`k(x_1,x_2) = k(x_2,x_1)`.
 We also enforce kernels to be positive semi-definite, but let's avoid getting
-lost in mathematical lingo, you can trust that all kernels featuring in this
+lost in mathematical lingo. You can trust that all kernels featured in this
 demo are positive semi-definite.
 
 Shift-invariant kernels
@@ -118,7 +118,7 @@ Accordingly, we say :math:`k` is an *even function*.
 Warm up: Implementing the Gaussian kernel
 -------------------------------------------
 
-First, let's introduce a simple classical kernel that we will try to
+First, let's introduce a simple classical kernel that we will
 approximate on the quantum computer.
 Start importing the usual suspects:
 """
@@ -169,7 +169,7 @@ plt.ylabel("$k(\delta)$")
 plt.show();
 
 ###############################################################################
-# In this demo we will consider only this one example, but the arguments we
+# In this demo, we will consider only this one example. However, the arguments we
 # make and the code we use are also amenable to any kernel with the following
 # mild restrictions:
 #
@@ -224,7 +224,7 @@ plt.show();
 ##################################################################################
 # In practice, we would construct several periodic extensions of the aperiodic
 # function, with increasing periods.
-# This way, we would be able to study the behavior when the period approaches
+# This way, we can study the behaviour when the period approaches
 # infinity, i.e. the regime where the function stops being periodic.
 #
 # Next up, how does the Fourier spectrum of such an object look like?
@@ -252,7 +252,7 @@ def fourier_p(d):
     return np.real(coefficients(Gauss_p, 1, d-1)[:d])
 
 ##################################################################################
-# With this we are restricted to considering only a finite number of Fourier
+# We are restricted to considering only a finite number of Fourier
 # terms.
 # But isn't that problematic, one may say?
 # Well, maybe.
@@ -260,7 +260,7 @@ def fourier_p(d):
 # coefficients converge to :math:`0` at some point, and we will only need to 
 # consider terms up to this point.
 # Let's look at the coefficients we obtain by setting a low value for the
-# number of coefficients, and then letting it slowly grow:
+# number of coefficients and then slowly letting it grow:
 
 N = [0]
 for n in range(2,7):
@@ -278,14 +278,13 @@ plt.show();
 # For very small coefficient counts, like :math:`2` and :math:`3`, we see that
 # the last allowed coefficient is still far from :math:`0`.
 # That's a very clear indicator that we need to consider more frequencies.
-# At the same time, it seems like starting :math:`5` or :math:`6` all the
+# At the same time, it seems like starting at :math:`5` or :math:`6` all the
 # non-zero contributions have already been well captured.
-# This is important for us, since it tells us how many qubits we should use at
-# least.
+# This is important for us, since it tells us the minimum number of qubits we should use.
 # One can see that every new qubit doubles the number of frequencies we can
 # use, so for :math:`n` qubits, we will have :math:`2^n`.
-# So, at least :math:`6` frequencies means at least :math:`3` qubits, which
-# would correspond to :math:`2^3=8` frequencies.
+# At minimum of :math:`6` frequencies means at least :math:`3` qubits, corresponding
+# to :math:`2^3=8` frequencies.
 # As we'll see later, we'll work with :math:`5` qubits, so :math:`32`
 # frequencies.
 # That means the spectrum we will be trying to replicate will be the following:
@@ -304,7 +303,7 @@ plt.show();
 #
 # Designing a suitable QK amounts to designing a suitable parametrized quantum
 # circuit.
-# Let's take a moment to refresh the big scheme of things, with the following
+# Let's take a moment to refresh the big scheme of things with the following
 # picture:
 #
 # |
@@ -319,9 +318,9 @@ plt.show();
 # We construct the quantum kernel from a quantum embedding (see the demo on
 # `Quantum Embedding Kernels <pennylane.ai/qml/demos/tutorial_kernels_module.html>`_).
 # The quantum embedding circuit will consist of two parts.
-# The first one, trainable, will be a parametrised general state preparation
+# The first one, trainable, will be a parametrized general state preparation
 # scheme :math:`W_a`, with parameters :math:`a`. 
-# In the second one we input the data, and call it :math:`S(x)`.
+# In the second one, we input the data, denoted by :math:`S(x)`.
 #
 # Start with the non-trainable gate we'll use to encode the data :math:`S(x)`.
 # It consists of applying one Pauli-:math:`Z` rotation to each qubit with
@@ -341,7 +340,7 @@ def make_thetas(m_wires):
     return [2 ** i for i in range(n_wires-1, -1, -1)]
 
 ###############################################################################
-# Next we introduce the only trainable gate we neet to make use of.
+# Next, we introduce the only trainable gate we need to make use of.
 # Contrary to the usual Ansätze used in supervised and unsupervised learning,
 # we use a state preparation template called ``MottonenStatePreparation``.
 # This is one option for amplitude encoding already implemented in PennyLane,
@@ -372,7 +371,7 @@ def W(features, wires):
 #   S(x_2)W_a\lvert0\rangle\rvert^2 \\
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_2-x_1) W_a\lvert0\rangle\rvert^2.
 #
-# In the code, we call :math:`a` ``amplitudes``:
+# In the code below, the variable ``amplitudes`` corresponds to our set  :math:`a`.
 
 def ansatz(x1, x2, thetas, amplitudes, wires):
     W(amplitudes, wires)
@@ -397,13 +396,13 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 #   k_a(\delta) = \lvert\langle0\rvert W_a^\dagger
 #   S(\delta)W_a\lvert0\rangle\rvert^2.
 #
-# So far we only wrote the gate layout for the quantum circuit, no measurement!
+# So far, we only wrote the gate layout for the quantum circuit, no measurement!
 # We need a few more functions for that!
 #
 # Computing the QK function on a quantum device
 # -------------------------------------------------
 #
-# Also, at this point we need to set the number of qubits of our computer.
+# Also, at this point, we need to set the number of qubits of our computer.
 # For this example, we'll use the variable ``n_wires``, and set it to :math:`5`.
 
 n_wires = 5
@@ -414,7 +413,7 @@ n_wires = 5
 dev = qml.device("default.qubit", wires = n_wires, shots = None)
 
 ###############################################################################
-# Next we construct the quantum node:
+# Next, we construct the quantum node:
 
 @qml.qnode(dev)
 def QK_circuit(x1, x2, thetas, amplitudes):
@@ -422,16 +421,16 @@ def QK_circuit(x1, x2, thetas, amplitudes):
     return qml.probs(wires = range(n_wires))
 
 ###############################################################################
-# Recall that the outputs of QKs can be defined as the probability of obtaining
-# the outcome :math:`\lvert0\rangle` when measuring on the computational basis.
+# Recall that the output of a QK is defined as the probability of obtaining
+# the outcome :math:`\lvert0\rangle` when measuring in the computational basis.
 # That corresponds to the :math:`0^\text{th}` entry of ``qml.probs``:
 
 def QK_2(x1, x2, thetas, amplitudes):
     return QK_circuit(x1, x2, thetas, amplitudes)[0]
 
 ###############################################################################
-# As a couple quality-of-life improvements, we write a function that implements
-# the QK with the lag :math:`\delta` as argument, and one that implements it
+# As a couple of quality-of-life improvements, we write a function that implements
+# the QK with the lag :math:`\delta` as its argument, and one that implements it
 # on a given set of data:
 
 def QK(delta, thetas, amplitudes):
@@ -463,7 +462,7 @@ plt.show();
 
 ###############################################################################
 # One can see that the stationary kernel with this particular initial state has
-# a decaying spectrum which looks similar to :math:`1/\lvert x\rvert` - but not
+# a decaying spectrum that looks similar to :math:`1/\lvert x\rvert` - but not
 # yet like a Gaussian.
 #
 # How to find the amplitudes emulating a Gaussian kernel
@@ -479,12 +478,12 @@ plt.show();
 # gradient-based manner until it matches the classical one.
 #
 # We want to take an intermediate route between analytical solution and
-# black-box optimisation here.
+# black-box optimization.
 # For that, we derive an equation that links the amplitudes to the spectrum we
-# want to construct, and then use old-fashioned convex optimisation to find the
+# want to construct and then use old-fashioned convex optimization to find the
 # solution.
 # If you are not interested in the details, you can just jump to the last plots
-# of this demo and confirm that it allows us to emulate the Gaussian kernel
+# of this demo and confirm that we can to emulate the Gaussian kernel
 # using the ansatz for our QK constructed above.
 #
 # In order to simplify the formulas, we introduce new variables, which we call
@@ -562,7 +561,7 @@ def F(probabilities, spectrum):
 ###############################################################################
 # These closed-form equations allow us to find the solution numerically, using
 # Newton's method!
-# Newton's method is a classical one from convex optimisation theory.
+# Newton's method is a classical one from convex optimization theory.
 # For our case, since the formula is quadratic, we rest assured that we are
 # within the realm of convex functions.
 #
@@ -585,8 +584,8 @@ def J_F(probabilities):
 ###############################################################################
 # Showing that this is indeed :math:`\nabla F_s` is left as an exercise for the
 # reader.
-# For Newton's method we also need an initial guess.
-# Finding a good initial guess requires some tinkering, different problems will
+# For Newton's method, we also need an initial guess.
+# Finding a good initial guess requires some tinkering; different problems will
 # benefit from different ones.
 # Here is a tame one that works for the Gaussian kernel.
 
@@ -641,8 +640,8 @@ plt.show();
 # But all those probabilities being close to :math:`0` should make us fear some
 # of them must've turned negative.
 # This isn't necessarily bad in general, only for us.
-# For ``MottonenStatePreparation`` we'll need to give ``amplitudes`` as one of the
-# arguments, which is the component-wise square root of ``probabilities`` so it
+# For ``MottonenStatePreparation``, we'll need to give ``amplitudes`` as one of the
+# arguments, which is the component-wise square root of ``probabilities``, so it
 # won't hurt to add this here:
 
 def probabilities_threshold_normalize(probabilities, thresh = 1.e-10):
@@ -689,7 +688,7 @@ plt.show();
 
 ###############################################################################
 # It seems like it does!
-# But as we just said this is still only the predicted spectrum.
+# But as we just said, this is still only the predicted spectrum.
 # We haven't called the quantum computer at all yet!
 #
 # Let's see what happens when we call the function ``coefficients`` on the QK
@@ -701,7 +700,7 @@ def fourier_q(d, thetas, amplitudes):
     return np.real(coefficients(lambda x: QK(x, thetas, amplitudes), 1, d-1))
 
 ###############################################################################
-# And with this we can finally visualize how the Fourier spectrum of the
+# And with this, we can finally visualize how the Fourier spectrum of the
 # QK function compares to that of the Gaussian kernel:
 
 plt.plot(range(d), fourier_p(d)[:d], '+', label = "Gaussian kernel")
