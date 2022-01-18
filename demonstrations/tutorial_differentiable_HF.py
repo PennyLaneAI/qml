@@ -1,7 +1,7 @@
 r"""
 
-Differentiable Hartree-Fock Solver
-==================================
+Differentiable Hartree-Fock
+===========================
 
 .. meta::
     :property="og:description": Learn how to use the differentiable Hartree-Fock solver
@@ -59,7 +59,7 @@ PennyLane allows users to natively compute derivatives of all these objects with
 underlying parameters using the methods of automatic differentiation. We introduce a workflow
 to jointly optimize circuit parameters, nuclear coordinates, and basis set parameters in a
 variational quantum eigensolver algorithm. You will also learn how to visualize the atomic and
-molecular orbital and create images like this:
+molecular orbital, which could be sued and create images like this:
 
 .. figure:: /demonstrations/differentiable_HF/h2.gif
     :width: 75%
@@ -94,7 +94,6 @@ done in PennyLane.
 To get started, we need to define the atomic symbols and the nuclear coordinates of the molecule.
 For the hydrogen molecule we have
 """
-import pennylane.hf
 from autograd import grad
 import pennylane as qml
 from pennylane import numpy as np
@@ -161,8 +160,8 @@ for param in S1.params:
 S1.l
 
 ##############################################################################
-# This gives us a tuple of three integers, representing the exponents of the ``x``, ``y`` and ``z``
-# components in the Gaussian functions [#arrazola2021]_.
+# This gives us a tuple of three integers, representing the exponents of the :math:`x`, :math:`y`
+# and :math:`z` components in the Gaussian functions [#arrazola2021]_.
 #
 # We can now compute the overlap integral,
 #
@@ -195,7 +194,7 @@ V1 = mol.atomic_orbital(0)
 V1(0.0, 0.0, 0.0)
 
 ##############################################################################
-# We can evaluate this orbital at different points along the ``x`` axis and plot it.
+# We can evaluate this orbital at different points along the :math:`x` axis and plot it.
 
 x = np.linspace(-5, 5, 1000)
 plt.plot(x, V1(x, 0.0, 0.0), color='teal')
@@ -218,7 +217,8 @@ plt.show()
 # negligible? Can you verify your guess by computing the overlap at that distance?
 #
 # Similarly, we can plot the molecular orbitals of the hydrogen molecule obtained from the
-# Hartree-Fock calculations. We plot the cross section of the bonding orbital on the ``x-y`` plane.
+# Hartree-Fock calculations. We plot the cross section of the bonding orbital on the :math:`x-y`
+# plane.
 
 n = 30 # number of grid points along each axis
 
@@ -267,11 +267,11 @@ def energy(mol):
     return circuit
 
 ##############################################################################
-# Note that we only use the ``DoubleExcitation`` gate as the ``SingleExcitation`` ones can be
-# neglected in this particular example [#szabo1996]_. We now compute the gradients of the energy
-# with respect to the circuit parameter and the nuclear coordinates and update the parameters
-# iteratively. Note that the nuclear coordinate gradients are simply the forces on the atomic
-# nuclei.
+# Note that we only use the :class:`~.pennylane.DoubleExcitation` gate as the
+# :class:`~.pennylane.SingleExcitation` ones can be neglected in this particular example
+# [#szabo1996]_. We now compute the gradients of the energy with respect to the circuit parameter
+# and the nuclear coordinates and update the parameters iteratively. Note that the nuclear
+# coordinate gradients are simply the forces on the atomic nuclei.
 
 # initial value of the circuit parameter
 circuit_param = [np.array([0.0], requires_grad=True)]
