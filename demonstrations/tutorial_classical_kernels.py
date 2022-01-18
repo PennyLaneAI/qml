@@ -51,7 +51,7 @@ theoretically describe the Fourier spectrum rather well
 Using this theory, together with some good old-fashioned convex optimization, we
 will derive a quantum circuit that approximates the famous Gaussian kernel.
 
-In order to keep the demo short and sweet, we focus on one simple example, but
+In order to keep the demo short and sweet, we focus on one simple example. The
 same ideas apply to more general scenarios.
 Also, Refs. [#QEK]_, [#Fourier]_, and [#qkernels]_ should be helpful for those
 who'd like to see the underlying theory of QKs (and also so-called *Quantum Embedding
@@ -472,10 +472,9 @@ plt.show();
 # Fourier spectrum, our job would be done here.
 # However, the equations derived in the literature are not trivial to solve.
 #
-# As mentioned in the introduction, one could just "learn" this relation: take
-# the function implementing the classical kernel and the function implementing
-# the quantum kernel and the tune the parameters of the quantum kernel in a
-# gradient-based manner until it matches the classical one.
+# As mentioned in the introduction, one could just "learn" this relation, that
+# is, tune the parameters of the quantum kernel in a gradient-based manner
+# until it matches the classical one.
 #
 # We want to take an intermediate route between analytical solution and
 # black-box optimization.
@@ -639,10 +638,14 @@ plt.show();
 # Me neither!
 # But all those probabilities being close to :math:`0` should make us fear some
 # of them must've turned negative.
-# This isn't necessarily bad in general, only for us.
+# That would be fatal for us.
 # For ``MottonenStatePreparation``, we'll need to give ``amplitudes`` as one of the
-# arguments, which is the component-wise square root of ``probabilities``, so it
-# won't hurt to add this here:
+# arguments, which is the component-wise square root of ``probabilities``.
+# And hence the problem!
+# Even if they are very small values, if any entry of ``probabilities`` is
+# negative, the square root will give ``nan``.
+# In order to avoid that, we use a simple thresholding where we replace very
+# small entries by :math:`0`.
 
 def probabilities_threshold_normalize(probabilities, thresh = 1.e-10):
     d = len(probabilities)
