@@ -47,7 +47,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #
 # .. figure:: ../demonstrations/dqva_mis/partial-mixers.png
 #    :align: center
-#    :width: 100%
+#    :width: 90%
 #
 #    ..
 #
@@ -262,7 +262,7 @@ def cost_layer(gamma):
 #
 # .. figure:: ../demonstrations/dqva_mis/mixer-unitary.png
 #    :align: center
-#    :width: 100%
+#    :width: 80%
 #
 #    ..
 #
