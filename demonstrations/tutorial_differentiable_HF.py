@@ -253,7 +253,7 @@ print(hamiltonian)
 # differentiable. We can construct a circuit and perform a VQE simulation in which both of the
 # circuit parameters and the nuclear coordinates are optimized simultaneously by using the computed
 # gradients. We will have two sets of differentiable parameters: the first set is the
-# rotation angles of the ``Excitation`` gates which are applied to the reference Hartree-Fock state
+# rotation angles of the excitation gates which are applied to the reference Hartree-Fock state
 # to construct the exact ground state. The second set contains the nuclear coordinates of the
 # hydrogen atoms.
 
