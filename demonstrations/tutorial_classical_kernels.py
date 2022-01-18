@@ -331,7 +331,9 @@ def S(x, thetas, wires):
     for (i, wire) in enumerate(wires):
         qml.RZ(thetas[i] * x, wires = [wire])
 ###############################################################################
-# By setting the ``thetas`` properly, we achieve the integer-valued spectrum:
+# By setting the ``thetas`` properly, we achieve the integer-valued spectrum,
+# as required by the Fourier series expansion of a function of period
+# :math:`2\pi`:
 # :math:`\{0, 1, \ldots, 2^n-2, 2^n-1\}`, for :math:`n` qubits.
 # Some math shows that setting :math:`\vartheta_i=2^{n-i}`, for
 # :math:`\{1,\ldots,n\}` produces the desired outcome.
