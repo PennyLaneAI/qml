@@ -51,7 +51,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #
 #    ..
 #
-#    Independent sets of a graph
+#    Structure of a partial mixer
 #
 # The QAO-Ansatz guarantees that the output never leaves the set of
 # feasible states (in contrast, the penalty term optimization requires an
@@ -93,7 +93,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #
 #    ..
 #
-#    Independent sets of a graph
+#    Independent sets of a graph with the MIS highlighted.
 #
 # Here, independent sets can be represented as bitstrings
 # :math:`b = \{b_1, b_2, \cdots b_n\} \in \{0, 1\}^n`. In the graph shown
