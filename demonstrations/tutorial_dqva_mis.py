@@ -117,11 +117,10 @@ import copy
 
 ######################################################################
 # Next, we define the graph shown above with 5 nodes for which we would
-# like to find the Maximum Independent Set.
+# like to find the Maximum Indep  endent Set.
 #
 
 edges = [(0, 1), (0, 3), (1, 2), (1, 3), (3, 4)]
-# edges = [(0, 1), (0, 3), (0, 5), (1, 2), (1, 6), (2, 3), (2, 7), (3, 4), (4, 5), (4, 7), (5, 6), (6, 7)]
 graph = nx.Graph(edges)
 nx.draw(graph, with_labels=True)
 plt.show()
