@@ -17,7 +17,7 @@ Qubit tapering with symmetries
 *Author: PennyLane dev team. Posted:  2021. Last updated: XX January 2022*
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
-required to prepare the trial wave function ansatz. In the context of quantum chemistry, this
+required to represent wave functions. In the context of quantum chemistry, this
 limitation hinders the treatment of large molecules with algorithms such as the variational quantum
 eigensolver (VQE). Several approaches have been developed to reduce the qubit requirements for
 electronic structure calculations. In this tutorial, we demonstrate the symmetry-based qubit
@@ -25,7 +25,7 @@ tapering approach which allows reducing the number of qubits required to perform
 simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
 [#bravyi2017]_ [#setia2019]_.
 
-A molecular Hamiltonian in the qubit basis is constructed as a linear combination of Pauli words
+A molecular Hamiltonian in the qubit basis can be expressed as a linear combination of Pauli words
 as
 
 .. math:: H = \sum_{i=1}^r c_i \eta_i
@@ -46,12 +46,12 @@ operator, on a set of qubits. This allows tapering-off those qubits from the Ham
 also construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a Pauli-X operator
 on a set of qubits :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This
 guarantees that each term of the transformed Hamiltonian commutes with the Pauli-X operator applied
-to :math:`j`-th qubit and
+to the :math:`j`-th qubit:
 
 .. math:: [H', \sigma_x^{q_j}] = 0.
 
-Recall that two commuting operators share an eigenbasis. This means that the eigenfunction of the
-transformed Hamiltonian :math:`H'` is also an eigenfunction of each of the :math:`\sigma_x^{q_j}`
+Recall that two commuting operators share an eigenbasis. This means that the eigenvectors of the
+transformed Hamiltonian :math:`H'` are also eigenvectors of each of the :math:`\sigma_x^{q_j}`
 operators. As a result, we can factor out the :math:`\sigma_x^{q_j}`
 operators from the transformed Hamiltonian and replace them with their eigenvalues which are
 :math:`\pm 1`. This gives us a tapered Hamiltonian in which the set of
@@ -65,7 +65,7 @@ where :math:`\tau` denotes the generators of the symmetry group of :math:`H` and
 :math:`\sigma_x^{q}` operators which act on those qubits that will be ultimately tapered off from
 the Hamiltonian.
 
-The symmetry group of the Hamiltonian is defined as an abelian group of pauli words that commute
+The symmetry group of the Hamiltonian is defined as an Abelian group of Pauli words that commute
 with each term in the Hamiltonian (excluding :math:`−I`). The
 `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
 those elements of the group that can be linearly combined, along with their inverses, to create any
@@ -214,10 +214,10 @@ for n in range(1, 21):
 #
 # Conclusions
 # -----------
-# Molecular Hamiltonians posses symmetries that can be leveraged to taper off qubits in quantum
+# Molecular Hamiltonians posses symmetries that can be leveraged to the number of qubits required in quantum
 # computing simulations. This tutorial introduces the PennyLane functionality that can be used for
 # qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure of obtaining the tapered
-# Hamiltonian and the tapered reference state is straightforward, however, building the wavefunction
+# Hamiltonian and the tapered reference state is straightforward, but building the wavefunction
 # ansatz needs some experience. The qubit coupled cluster method might be used as an appropriate
 # model for building the variational ansatz.
 #
