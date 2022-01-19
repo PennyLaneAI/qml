@@ -340,7 +340,7 @@ def probability_circuit(P, params=[], init_state=None, mixer_order=None):
 # function ``f`` by running the probability circuit and calculating the
 # Hamming weight (which is defined as the cost). In each iteration, an
 # ansatz is constructed based on the mixer order, with optimal parameters
-# from classical minimization of the cost function (Gradient Descent)
+# from classical minimization of the cost function using gradient descent:
 #
 # .. math::
 #
@@ -413,6 +413,8 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
             probs = probability_circuit(
                 P, params=opt_params, init_state=cur_init_state, mixer_order=cur_permutation
             )
+
+            # Sort bitstrings by decreasing probability
             top_counts = list(
                 map(lambda x: np.binary_repr(x, len(graph.nodes)), np.argsort(probs))
             )[::-1]
