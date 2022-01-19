@@ -31,7 +31,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # parameters. You can learn more about this in `PennyLane's tutorial on
 # QAOA <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__.
 #
-# For solving constrained combinatorial optimization problems such as MIS
+# For solving constrained combinatorial optimization problems such as maximal independent set (MIS) 
 # using QAOA, constraints can be imposed in two ways:
 #
 # 1. By adding a penalty term to the problem's objective function (the Lagrange multiplier approach)
@@ -223,7 +223,7 @@ def cost_layer(gamma):
 #
 #    \tilde{B} = \prod_{j=1}^{l} \tilde{b}_{v_j}.
 #
-# Here, where :math:`v_j` are the neighbors and :math:`l` is the number of
+# Here, where :math:`v_j` are the neighbors, :math:`l` is the number of
 # neighbors for the :math:`i`-th node and
 #
 # .. math::
@@ -776,7 +776,7 @@ for i in range(len(graph.nodes)):
 # mixer ordering. Furthermore, Saleem et al., recommend starting with a
 # set of initial states that are independent sets found by any classical
 # polynomial time approximation algorithm to "warm start" the
-# initialization. Furthermore, they propose the first useful application
+# initialization. They also propose the first useful application
 # of `circuit-cutting techniques <https://arxiv.org/abs/2107.07532>`__ to
 # solve MIS, which involves classical partitioning of a large graph into
 # sub-graphs, finding a solution using DQVA on a subgraph, and then
