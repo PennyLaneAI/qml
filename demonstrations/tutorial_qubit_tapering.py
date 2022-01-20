@@ -103,6 +103,8 @@ In PennyLane, a molecular Hamiltonian can be created by specifying the atomic sy
 coordinates and then creating a molecule object that stores all the molecular parameters needed to
 construct the Hamiltonian.
 """
+import pennylane as qml
+from pennylane import numpy as np
 
 symbols = ["He", "H"]
 geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
