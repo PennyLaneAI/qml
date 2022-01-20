@@ -96,8 +96,9 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #    Independent sets of a graph with the MIS highlighted.
 #
 # Here, independent sets can be represented as bitstrings
-# :math:`b = \{b_1, b_2, \cdots b_n\} \in \{0, 1\}^n`. In the graph shown
-# above :math:`00000`, :math:`10000`, :math:`01001`, :math:`10101` are
+# :math:`b = \{b_1, b_2, \cdots b_n\} \in \{0, 1\}^n`. This is convenient as the outputs of 
+# quantum computations are also bitstrings!
+# In the graph shown above :math:`00000`, :math:`10000`, :math:`01001`, :math:`10101` are
 # independent sets of size 0, 1, 2, and 3 respectively. The Minimum Vertex
 # Cover, i.e, vertices that cover all edges, is the dual of MIS.
 #
