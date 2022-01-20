@@ -61,20 +61,20 @@ which gives us
 This means that the Hamiltonian :math:`H` is equivalent to :math:`\pm1(Z_0 I_1 - I_0 I_1 + Y_0 I_1)`
 which can be simplified as
 
-.. math:: h_tapered = \pm1 (Z_0 - I_0 + Y_0).
+.. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
 More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
 :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This guarantees that each term
 of the transformed Hamiltonian commutes with the Pauli-X operator applied to the :math:`j`-th qubit:
 
-.. math:: [H', X^{q_j}] = 0.
+.. math:: [H', X^{q_j}] = 0,
 
-This means that the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of
-each of the :math:`X^{q_j}` operators. As a result, we can factor out the :math:`X^{q_j}`
-operators from the transformed Hamiltonian and replace them with their eigenvalues which are
-:math:`\pm 1`. This gives us a tapered Hamiltonian in which the set of
-:math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}` qubits are eliminated.
+and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of each of the
+:math:`X^{q_j}` operators. Then we can factor out the :math:`X^{q_j}` operators from the transformed
+Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a tapered
+Hamiltonian in which the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`
+qubits are eliminated.
 
 The unitary operator :math:`U` can be constructed as a
 `Clifford <https://en.wikipedia.org/wiki/Clifford_gates>`__ operator [#bravyi2017]_
