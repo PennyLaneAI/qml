@@ -20,7 +20,7 @@ The performance of variational quantum algorithms is considerably limited by the
 required to represent wave functions. In the context of quantum chemistry, this
 limitation hinders the treatment of large molecules with algorithms such as the variational quantum
 eigensolver (VQE). Several approaches have been developed to reduce the qubit requirements for
-electronic structure calculations. In this tutorial, we demonstrate the symmetry-based qubit
+quantum chemistry calculations. In this tutorial, we demonstrate the symmetry-based qubit
 tapering approach which allows reducing the number of qubits required to perform molecular quantum
 simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
 [#bravyi2017]_ [#setia2019]_.
@@ -28,12 +28,12 @@ simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Ha
 A molecular Hamiltonian in the qubit basis can be expressed as a linear combination of Pauli words
 as
 
-.. math:: H = \sum_{i=1}^r h_i \P_i
+.. math:: H = \sum_{i=1}^r h_i P_i
 
-where :math:`h_i` is a real coefficient and :math:`\P_i` is a tensor product of Pauli and
+where :math:`h_i` is a real coefficient and :math:`P_i` is a tensor product of Pauli and
 Identity operators acting on M qubits
 
-.. math:: \P_i \in \pm \left \{ I, X, Y, Z \right \} ^ {\bigotimes M}.
+.. math:: P_i \in \pm \left \{ I, X, Y, Z \right \} ^ {\bigotimes M}.
 
 The main idea in the symmetry-based qubit tapering approach is to find a unitary operator :math:`U`
 that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eigenvalues as
@@ -42,17 +42,36 @@ that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eig
 .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
 
 such that each :math:`\mu_i` term in the new Hamiltonian acts trivially, e.g., with an Identity
-operator or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the
-Hamiltonian. We can also construct the unitary :math:`U` such that each :math:`\mu_i` term acts with
-a Pauli-X operator on a set of qubits
+operator or a Pauli operator at most, on a set of qubits. This allows tapering-off those qubits from
+the Hamiltonian. For instance, consider the following Hamiltonian
+
+.. math:: H = Z_0 X_1 - X_1 + Y_0 X_1,
+
+where all terms in the Hamiltonian act on the second qubit with the :math:`X` operator. It is
+straightforward to show that each term in the Hamiltonian commutes with :math:`I_0 X_1` and the
+ground state eigenvector of :math:`H` is also an eigenvector of :math:`I_0 X_1` with eigenvalues
+:math:`\pm 1`. We can also rewrite the Hamiltonian as
+
+.. math:: H = (Z_0 I_1 - I_0 I_1 + Y_0 I_1) I_0 X_1
+
+which gives us
+
+.. math:: H|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle.
+
+This means that the Hamiltonian :math:`H` is equivalent to :math:`\pm1(Z_0 I_1 - I_0 I_1 + Y_0 I_1)`
+which can be simplified as
+
+.. math:: h_tapered = \pm1 (Z_0 - I_0 + Y_0).
+
+More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
+Pauli-X operator on a set of qubits
 :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This guarantees that each term
 of the transformed Hamiltonian commutes with the Pauli-X operator applied to the :math:`j`-th qubit:
 
 .. math:: [H', X^{q_j}] = 0.
 
-Recall that two commuting operators share an eigenbasis. This means that the eigenvectors of the
-transformed Hamiltonian :math:`H'` are also eigenvectors of each of the :math:`X^{q_j}`
-operators. As a result, we can factor out the :math:`X^{q_j}`
+This means that the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of
+each of the :math:`X^{q_j}` operators. As a result, we can factor out the :math:`X^{q_j}`
 operators from the transformed Hamiltonian and replace them with their eigenvalues which are
 :math:`\pm 1`. This gives us a tapered Hamiltonian in which the set of
 :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}` qubits are eliminated.
@@ -72,7 +91,7 @@ with each term in the Hamiltonian (excluding :math:`−I`). The
 those elements of the group that can be combined, along with their inverses, to create any other
 member of the group. The symmetry group and the generators of the Hamiltonian can be obtained from
 the binary matrix representation of the Hamiltonian [#bravyi2017]_ with the functions of the
-PennyLane :py:mod:`~.pennylane.hf.tapering` module.
+PennyLane :mod:`~.pennylane.hf.tapering` module.
 
 Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
 cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
@@ -84,8 +103,6 @@ In PennyLane, a molecular Hamiltonian can be created by specifying the atomic sy
 coordinates and then creating a molecule object that stores all the molecular parameters needed to
 construct the Hamiltonian.
 """
-import pennylane as qml
-from pennylane import numpy as np
 
 symbols = ["He", "H"]
 geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
