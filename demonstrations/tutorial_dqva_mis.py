@@ -152,7 +152,7 @@ dev = qml.device("default.qubit", wires=range(wires))
 # .. math::
 #
 #
-#    b_i = \frac{1}{2} (1 - Z_i).
+#    b_i = \frac{1}{2} (I - Z_i).
 #
 # Here :math:`Z_i` is the Pauli-Z operator acting on the :math:`i`-th
 # qubit.
@@ -228,7 +228,7 @@ def cost_layer(gamma):
 # .. math::
 #
 #
-#    \tilde{b}_{v_j} = \frac{1+Z_{v_j}}{2}.
+#    \tilde{b}_{v_j} = \frac{I+Z_{v_j}}{2}.
 #
 # The mixer unitary can also be written as a product of :math:`N` partial
 # mixers :math:`V_i`:
