@@ -13,7 +13,7 @@ pip==21.1
 wheel==0.37.0
 pyscf==1.7.6
 git+https://github.com/PennyLaneAI/pennylane-lightning.git
-git+https://github.com/PennyLaneAI/pennylane.git
+git+https://github.com/PennyLaneAI/pennylane.git@op-refactor
 git+https://github.com/PennyLaneAI/pennylane.git#subdirectory=qchem
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
