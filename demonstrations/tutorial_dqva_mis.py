@@ -18,11 +18,11 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 """
 
 ######################################################################
-# QAOA, QAO-Ansatz, and DQVA
+#QAO-Ansatz and DQVA
 # --------------------------
 #
 # The **Quantum Approximate Optimization Algorithm (QAOA)**, a hybrid
-# quantum-classical algorithm by `Farhi et
+# quantum-classical algorithm due to `Farhi et
 # al. <https://arxiv.org/abs/1411.4028>`__ is a significant meta-heuristic
 # for finding solutions to combinatorial optimization problems. The
 # quantum part involves alternating between a *cost Hamiltonian*,
@@ -37,13 +37,14 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # 1. By adding a penalty term to the problem's objective function (the Lagrange multiplier approach)
 # 2. By constructing the variational ansatz in a way such that constraints are satisfied at all times
 #
-# Hadfield et al., extend the QAOA framework and introduce the **Quantum
+# Hadfield et al., extend QAOA by introducing the **Quantum
 # Alternating Operator Ansatz (QAO-Ansatz)** which alternates between more
-# general families of operators thereby supporting potentially more useful
-# sets of states by focusing on unitaries rather than Hamiltonians. For
-# example, a mixing operator :math:`U_M (\beta)` is decomposed into a
-# sequence of partial mixers :math:`U_{M, x}` which may not correspond to
-# time evolution under a fixed mixer Hamiltonian :math:`H_M`.
+# general families of unitary operators. This has the potential to narrow the focus 
+# of the algorithm on a more useful set of states. For
+# example, the mixing operator :math:`U_M (\beta)` can be a product
+# of partial mixers :math:`U_{M, x}(\beta)` which may not commute. 
+# In contrast, the original proposal for QAOA used a mixing operator
+# which was a simple product of single-qubit gates.
 #
 # .. figure:: ../demonstrations/dqva_mis/partial-mixers.png
 #    :align: center
@@ -53,13 +54,13 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #
 #    Structure of a partial mixer
 #
-# The QAO-Ansatz guarantees that the output never leaves the set of
-# feasible states (in contrast, the penalty term optimization requires an
-# additional pruning step since the output contains both feasible and
-# infeasible solutions). However, the QAO-Ansatz requires more complex
-# quantum circuitry, which in the case of the MIS, manifests itself as
+# The QAO-Ansatz can be used to guarantee that the state of the circuit never leaves the set of
+# feasible states. In contrast, the penalty term approach requires an
+# additional pruning step since the output can correspond to an
+# infeasible solution. However, the QAO-Ansatz requires more complicated
+# quantum circuits. In the case of MIS, one must apply
 # Multi-Controlled Toffoli gates that require high connectivity between
-# qubits. This makes the QAO-Ansatz inadequate for large graphs on current
+# qubits, limiting the practicality of the QAO-Ansatz for large graphs on 
 # near-term quantum computers.
 #
 # This brings us to the **Dynamic Quantum Variational Ansatz (DQVA)** that
@@ -118,7 +119,7 @@ import copy
 
 ######################################################################
 # Next, we define the graph shown above with 5 nodes for which we would
-# like to find the Maximum Indep  endent Set.
+# like to find the Maximum Independent Set.
 #
 
 edges = [(0, 1), (0, 3), (1, 2), (1, 3), (3, 4)]
@@ -140,7 +141,7 @@ dev = qml.device("default.qubit", wires=range(wires))
 # For MIS, our goal is to maximize the number of vertices that form an
 # independent set, which is equivalent to maximizing the `Hamming
 # weight <https://en.wikipedia.org/wiki/Hamming_weight>`__ of the
-# bitstring. Therefore, our objective function is the Hamming weight
+# bitstring. Therefore, our objective function is encoded by the Hamming weight
 # operator,
 #
 # .. math::
@@ -186,13 +187,13 @@ def is_indset(bitstr, G):
 
 
 ######################################################################
-# Next, we define a cost unitary that incorporates the objective function,
+# Next, we define a cost unitary that incorporates the Hamming weight operator,
 # :math:`H` and is parameterized by :math:`\gamma`:
 #
 # .. math::
 #
 #
-#    U_C(\gamma) = \prod_i e^{i \gamma H}.
+#    U_C(\gamma) = e^{i \gamma H}.
 #
 
 
@@ -207,24 +208,24 @@ def cost_layer(gamma):
 # .. math::
 #
 #
-#       U_M(\beta) = \prod\_i e^{i \beta M_i}
+#       U_M(\beta) = \prod_j e^{i \beta M_j}
 #
-# where
+# where the product is over each node :math:`j`,
 #
 # .. math::
 #
 #
-#    M_i = X_i \tilde{B},
+#    M_j = X_j \tilde{B},
 #
 # and
 #
 # .. math::
 #
 #
-#    \tilde{B} = \prod_{j=1}^{l} \tilde{b}_{v_j}.
+#    \tilde{B} = \prod_{k=1}^{l} \tilde{b}_{v_k}.
 #
-# Here, where :math:`v_j` are the neighbors, :math:`l` is the number of
-# neighbors for the :math:`i`-th node and
+# Here, :math:`v_k` are the neighbors, :math:`l` is the number of
+# neighbors for the :math:`j`-th node and
 #
 # .. math::
 #
@@ -239,15 +240,14 @@ def cost_layer(gamma):
 #
 #    U_M(\beta) = \prod_{i=1}^N V_i (\beta) =\prod_{i=1}^N  (I + (e^{-i\beta X_i} - I)\tilde{B}) 
 #
-# The partial mixers may not commute with each other, i.e.,
-# :math:`[V_i, V_j] \neq 0` therefore, different orderings of these mixers
-# may have different outputs. Therefore, the variational ansatz is defined
+# As mentioned earlier, the partial mixers may not commute with each other, i.e.,
+# :math:`[V_i, V_j] \neq 0`. Therefore, the variational ansatz is defined
 # up to a permutation:
 #
 # .. math::
 #
 #
-#    U_M(\beta) \simeq \mathcal{P}(V_1(\beta)V_2(\beta)\cdots V_N(\beta))
+#    U_M(\beta) \simeq \mathcal{P}(V_1(\beta)V_2(\beta)\cdots V_n(\beta))
 #
 # where P is the permutation's function of labels from :math:`1` to
 # :math:`N`.
@@ -271,8 +271,18 @@ def cost_layer(gamma):
 # In the figure above, a PauliX rotation is applied to qubit :math:`\vert i \rangle` between two multi-controlled Toffoli gates
 # controlled by the neighbors of the :math:`i`'th vertex.
 
-def mixer_layer(beta, ancilla, mixer_order):
-
+def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
+      """
+      Builds the QAO-Ansatz mixer layer for max independent set problem using PennyLane operations
+      
+      Args:
+          beta (List): A list of values for the mixing parameter
+          ancilla (int): The qubit to be used as the ancilla
+          mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+          
+      Returns: 
+          None
+      """
     # Permute the order of mixing unitaries
     if mixer_order is None:
         mixer_order = list(graph.nodes)
@@ -311,7 +321,8 @@ def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
         for qb, bit in enumerate(reversed(init_state)):
             if bit == "1":
                 qml.PauliX(wires=qb)
-    assert len(params) == 2 * P, "Incorrect number of parameters!"
+    if len(params) == 2 * P:
+      raise ValueError("Incorrect number of parameters!")
 
     betas = [a for i, a in enumerate(params) if i % 2 == 0]
     gammas = [a for i, a in enumerate(params) if i % 2 == 1]
@@ -372,9 +383,7 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
         return -avg_cost
 
     # Begin outer optimization loop
-    best_indset = init_state
-    best_init_state = init_state
-    cur_init_state = init_state
+    best_indset = best_init_state = cur_init_state = init_state
     best_params = None
     best_perm = copy.copy(cur_permutation)
 
@@ -386,9 +395,7 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
 
         while inner_round < 2:
             print(
-                "Start round {}.{}, Initial state = {}".format(
-                    mixer_round, inner_round, cur_init_state
-                )
+                f"Start round {mixer_round}.{inner_round}, Initial state = {cur_init_state}"
             )
 
             # Begin inner variational loop
@@ -418,7 +425,6 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
             top_counts = list(
                 map(lambda x: np.binary_repr(x, len(graph.nodes)), np.argsort(probs))
             )[::-1]
-            # print (top_counts)
 
             best_hamming_weight = hamming_weight(best_indset)
             better_strs = []
@@ -446,9 +452,7 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
             best_perm = copy.copy(cur_permutation)
             cur_init_state = best_indset
             print(
-                "\tFound new independent set: {}, Hamming weight = {}".format(
-                    best_indset, new_hamming_weight
-                )
+                f"\tFound new independent set: {best_indset}, Hamming weight = {new_hamming_weight}"
             )
 
             inner_round = inner_round + 1
@@ -466,7 +470,7 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
 base_str = "0" * len(graph.nodes)
 
 out = solve_mis_qaoa(base_str, P=1, m=4, threshold=1e-5, cutoff=1)
-print("Init string: {}, Best MIS: {}".format("".join(base_str), out[0]))
+print(f"Init string: {base_str}, Best MIS: {out[0]}")
 print()
 
 
@@ -483,7 +487,7 @@ for i in range(len(graph.nodes)):
     init_str = list(base_str)
     init_str[i] = "1"
     out = solve_mis_qaoa("".join(init_str), P=1, m=4, threshold=1e-5, cutoff=2)
-    print("Init string: {}, Best MIS: {}".format("".join(init_str), out[0]))
+    print(f"Init string: {init_str}, Best MIS: {out[0]}")
     print()
 
 
