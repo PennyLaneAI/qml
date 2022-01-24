@@ -66,15 +66,19 @@ which can be simplified as
 More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
 :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This guarantees that each term
-of the transformed Hamiltonian commutes with the Pauli-X operator applied to the :math:`j`-th qubit:
+of the transformed Hamiltonian commutes with each of the the Pauli-X operator applied to the
+:math:`j`-th qubit:
 
 .. math:: [H', X^{q_j}] = 0,
 
 and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of each of the
-:math:`X^{q_j}` operators. Then we can factor out the :math:`X^{q_j}` operators from the transformed
-Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a tapered
-Hamiltonian in which the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`
-qubits are eliminated.
+:math:`X^{q_j}` operators. Then we can factor out all of the the :math:`X^{q_j}` operators from the
+transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
+set of tapered Hamiltonians, depending on which eigenvalue :math:`\pm 1` we chose for each
+:math:`X^{q_j}` operator, in which the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`
+qubits are eliminated. For instance, in the case of two tapered qubites, we have four eigenvalue
+sector: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1].
+
 
 The unitary operator :math:`U` can be constructed as a
 `Clifford <https://en.wikipedia.org/wiki/Clifford_gates>`__ operator [#bravyi2017]_
@@ -89,9 +93,8 @@ The symmetry group of the Hamiltonian is defined as an Abelian group of Pauli wo
 with each term in the Hamiltonian (excluding :math:`−I`). The
 `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
 those elements of the group that can be combined, along with their inverses, to create any other
-member of the group. The symmetry group and the generators of the Hamiltonian can be obtained from
-the binary matrix representation of the Hamiltonian [#bravyi2017]_ with the functions of the
-PennyLane :mod:`~.pennylane.hf.tapering` module.
+member of the group. The generators of the  symmetry group of the Hamiltonian can be obtained with
+the :func:`~.pennylane.hf.generate_symmetries` function in PennyLane.
 
 Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
 cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
@@ -207,8 +210,9 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered references state to perform a VQE
 # simulation and compute the ground state energy of the :math:`\textrm{HeH}^+` cation. We use the
-# tapered Hartree-Fock state to build a circuit that prepares a variational qubit coupled-cluster
-# ansatz [#ryabinkin2018] tailored for the HeH:math:`^+` cation
+# tapered Hartree-Fock state to build a circuit that prepares an entangled state by applying Pauli
+# rotation gates [#ryabinkin2018] since we cannot use the typical particle-conserving gates
+# with the tapered state
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
 @qml.qnode(dev)
@@ -236,12 +240,11 @@ for n in range(1, 21):
 #
 # Conclusions
 # -----------
-# Molecular Hamiltonians posses symmetries that can be leveraged to the number of qubits required in quantum
-# computing simulations. This tutorial introduces the PennyLane functionality that can be used for
-# qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure of obtaining the tapered
-# Hamiltonian and the tapered reference state is straightforward, but building the wavefunction
-# ansatz needs some experience. The qubit coupled cluster method might be used as an appropriate
-# model for building the variational ansatz.
+# Molecular Hamiltonians posses symmetries that can be leveraged to the number of qubits required
+# in quantum computing simulations. This tutorial introduces the PennyLane functionality that can
+# be used for qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure includes
+# obtaining tapered Hamiltonians and tapered reference states that can be used in variational
+# quantum algorithms such as VQE.
 #
 # References
 # ----------
