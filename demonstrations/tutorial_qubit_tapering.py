@@ -58,8 +58,7 @@ which gives us
 
 .. math:: H|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle.
 
-This means that the Hamiltonian :math:`H` is equivalent to :math:`\pm1(Z_0 I_1 - I_0 I_1 + Y_0 I_1)`
-which can be simplified as
+This means that the Hamiltonian :math:`H` can be simplified as
 
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
