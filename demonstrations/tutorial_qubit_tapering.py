@@ -78,7 +78,7 @@ and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvec
 transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
 set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose for each of the
 :math:`X^{q_j}` operator. For  instance, in the case of two tapered qubits, we have four eigenvalue
-sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]. In these tapered
+sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`. In these tapered
 Hamiltonians, the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
 of the eigenvalues that corresponds to the ground-state. This has been explained in more details in
