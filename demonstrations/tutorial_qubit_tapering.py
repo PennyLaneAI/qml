@@ -63,6 +63,9 @@ which can be simplified as
 
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
+The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues :math:`[-2.41421, 0.41421]` and
+:math:`[2.41421, 0.41421]` for the :math:`+1` and :math:`-1` eigenvalues, respectively.
+
 More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
 :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This guarantees that each term
@@ -72,13 +75,15 @@ of the transformed Hamiltonian commutes with each of the Pauli-X operators appli
 .. math:: [H', X^{q_j}] = 0,
 
 and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of each of the
-:math:`X^{q_j}` operators. Then we can factor out all of the the :math:`X^{q_j}` operators from the
+:math:`X^{q_j}` operators. Then we can factor out all of the :math:`X^{q_j}` operators from the
 transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
-set of tapered Hamiltonians, depending on which eigenvalue :math:`\pm 1` we chose for each
-:math:`X^{q_j}` operator, in which the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`
-qubits are eliminated. For instance, in the case of two tapered qubits, we have four eigenvalue
-sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1].
-
+set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose for each of the
+:math:`X^{q_j}` operator. For  instance, in the case of two tapered qubits, we have four eigenvalue
+sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]. In these tapered
+Hamiltonians, the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}` qubits
+are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
+of the eigenvalues that corresponds to the ground-state. This has been explained in more details in
+the following.
 
 The unitary operator :math:`U` can be constructed as a
 `Clifford <https://en.wikipedia.org/wiki/Clifford_gates>`__ operator [#bravyi2017]_
