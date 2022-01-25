@@ -66,7 +66,7 @@ which can be simplified as
 More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
 :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This guarantees that each term
-of the transformed Hamiltonian commutes with each of the the Pauli-X operator applied to the
+of the transformed Hamiltonian commutes with each of the Pauli-X operators applied to the
 :math:`j`-th qubit:
 
 .. math:: [H', X^{q_j}] = 0,
@@ -76,8 +76,8 @@ and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvec
 transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
 set of tapered Hamiltonians, depending on which eigenvalue :math:`\pm 1` we chose for each
 :math:`X^{q_j}` operator, in which the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`
-qubits are eliminated. For instance, in the case of two tapered qubites, we have four eigenvalue
-sector: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1].
+qubits are eliminated. For instance, in the case of two tapered qubits, we have four eigenvalue
+sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1].
 
 
 The unitary operator :math:`U` can be constructed as a
@@ -135,11 +135,11 @@ print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
-# :math:`q_0, q_1` either with Identity or with a Pauli-X operator. For each of these qubits, we can
+# :math:`q_0, q_1` either with the Identity or with a Pauli-X operator. For each of these qubits, we can
 # simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`. This
 # results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
-# tapered-off qubits. Each Hamiltonian corresponding to one eigenvalue sector. The optimal sector
-# corresponding to the ground state energy of the molecule can be obtained from the reference
+# tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
+# corresponding to the ground-state energy of the molecule can be obtained from the reference
 # Hartree-Fock state and the generated symmetries by using the :func:`~.pennylane.hf.optimal_sector`
 # function
 
