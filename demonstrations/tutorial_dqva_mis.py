@@ -1,10 +1,10 @@
 r""".. _dqva_mis:
 
-Solving MIS with the QAO-Ansatz and the DQVA
-============================================
+Dynamic Quantum Variational Ansatz (DQVA) for Combinatorial Optimization
+========================================================================
 
 .. meta::
-    :property="og:description": Solving MIS with the QAO-Ansatz and the DQVA
+    :property="og:description": Dynamic Quantum Variational Ansatz (DQVA) for Combinatorial Optimization
     :property="og:image": https://pennylane.ai/qml/_images/mixer-unitary.png
 
 .. related::
@@ -13,7 +13,7 @@ Solving MIS with the QAO-Ansatz and the DQVA
 
 *Author: Priya Angara*
 
-This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxiv.org/abs/2010.06660>`__ and the `Quantum Alternating Operator Ansatz (QAO-Ansatz) <https://arxiv.org/abs/1709.03489)>`__ for constrained quantum approximate optimization in the context of solving the Maximum Independent Set problem. 
+This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxiv.org/abs/2010.06660>`__ [#Saleem2020]_ and the `Quantum Alternating Operator Ansatz (QAO-Ansatz) <https://arxiv.org/abs/1709.03489)>`__ [#Hadfield2019]_ for constrained quantum approximate optimization in the context of solving the Maximum Independent Set problem. 
 
 """
 
@@ -23,8 +23,7 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #
 # The **Quantum Approximate Optimization Algorithm (QAOA)**, a hybrid
 # quantum-classical algorithm due to `Farhi et
-# al. <https://arxiv.org/abs/1411.4028>`__ is a significant meta-heuristic
-# for finding solutions to combinatorial optimization problems. The
+# al. <https://arxiv.org/abs/1411.4028>`__ [#Farhi2015]_  is an approach to solving combinatorial optimization problems using quantum computers. The
 # quantum part involves alternating between a *cost Hamiltonian*,
 # :math:`H_C`, and a *mixer Hamiltonian*, :math:`H_M`, to evaluate the
 # objective function and a classical optimization loop updates the ansatz
@@ -272,17 +271,17 @@ def cost_layer(gamma):
 # controlled by the neighbors of the :math:`i`'th vertex.
 
 def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
-      """
-      Builds the QAO-Ansatz mixer layer for max independent set problem using PennyLane operations
-      
-      Args:
-          beta (List): A list of values for the mixing parameter
-          ancilla (int): The qubit to be used as the ancilla
-          mixer_order (Optional[List]=None): The desired permutation of the partial mixers
-          
-      Returns: 
-          None
-      """
+    """
+    Builds the QAO-Ansatz mixer layer for max independent set problem using PennyLane operations
+    
+    Args:
+        beta (List): A list of values for the mixing parameter
+        ancilla (int): The qubit to be used as the ancilla
+        mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+        
+    Returns: 
+        None
+    """
     # Permute the order of mixing unitaries
     if mixer_order is None:
         mixer_order = list(graph.nodes)
@@ -322,7 +321,7 @@ def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
             if bit == "1":
                 qml.PauliX(wires=qb)
     if len(params) == 2 * P:
-      raise ValueError("Incorrect number of parameters!")
+        raise ValueError("Incorrect number of parameters!")
 
     betas = [a for i, a in enumerate(params) if i % 2 == 0]
     gammas = [a for i, a in enumerate(params) if i % 2 == 1]
@@ -781,7 +780,7 @@ for i in range(len(graph.nodes)):
 # set of initial states that are independent sets found by any classical
 # polynomial time approximation algorithm to "warm start" the
 # initialization. They also propose the first useful application
-# of `circuit-cutting techniques <https://arxiv.org/abs/2107.07532>`__ to
+# of `circuit-cutting techniques <https://arxiv.org/abs/2107.07532>`__ [#Saleem2021]_ to
 # solve MIS, which involves classical partitioning of a large graph into
 # sub-graphs, finding a solution using DQVA on a subgraph, and then
 # preparing a set of states to be passed as an input, essentially
@@ -797,3 +796,11 @@ for i in range(len(graph.nodes)):
 # .. [#Saleem2020] Z. H. Saleem, T. Tomesh, B. Tariq, M. Suchara. (2020) "Approaches to Constrained Quantum Approximate Optimization",
 #     `arXiv preprint arXiv:2010.06660 <https://arxiv.org/abs/2010.06660>`__.
 #
+# .. [#Farhi2014] E. Farhi, J. Goldstone, S. Gutmann. (2014) "A Quantum Approximate Optimization Algorithm",
+#     `arXiv preprint arXiv:1411.4028 <https://arxiv.org/abs/1411.4028>`__.
+# 
+# .. [#Hadfield2019] S. Hadfield,  Z. Wang, B. O’Gorman, E. Rieffel, D. Venturelli, R. Biswas. (2019) "From the Quantum Approximate Optimization Algorithm to a Quantum Alternating Operator Ansatz",
+#     `arXiv preprint arXiv:1709.03489 <https://arxiv.org/abs/1709.03489>`__.
+#
+# .. [#Saleem2021] Z. H. Saleem, T. Tomesh, M. A. Perlin, P. Gokhale M. Suchara. (2021) "Quantum Divide and Conquer for Combinatorial Optimization and Distributed Computing",
+#     `arXiv preprint arXiv:2107.07532 <https://arxiv.org/abs/2107.07532>`__.
