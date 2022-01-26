@@ -271,7 +271,7 @@ def cost_layer(gamma):
 # In the figure above, a PauliX rotation is applied to qubit :math:`\vert i \rangle` between two multi-controlled Toffoli gates
 # controlled by the neighbors of the :math:`i`'th vertex.
 
-def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
+def mixer_layer(beta, ancilla, mixer_order):
       """
       Builds the QAO-Ansatz mixer layer for max independent set problem using PennyLane operations
       
