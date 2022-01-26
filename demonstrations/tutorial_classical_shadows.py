@@ -301,8 +301,8 @@ def snapshot_state(b_list, obs_list):
 
     # local qubit unitaries
     phase_z = np.array([[1, 0], [0, -1j]], dtype=complex)
-    hadamard = qml.Hadamard(0).matrix
-    identity = qml.Identity(0).matrix
+    hadamard = qml.Hadamard(0).matrix()
+    identity = qml.Identity(0).matrix()
 
     # undo the rotations that were added implicitly to the circuit for the Pauli measurements
     unitaries = [hadamard, hadamard @ phase_z, identity]
@@ -621,7 +621,7 @@ list_of_observables = (
 # for all :math:`1\leq i \leq M`.
 
 shadow_size_bound, k = shadow_bound(
-    error=2e-1, observables=[o.matrix for o in list_of_observables]
+    error=2e-1, observables=[o.matrix() for o in list_of_observables]
 )
 shadow_size_bound
 
@@ -638,7 +638,7 @@ estimates = []
 for error in epsilon_grid:
     # get the number of samples needed so that the absolute error < epsilon.
     shadow_size_bound, k = shadow_bound(
-        error=error, observables=[o.matrix for o in list_of_observables]
+        error=error, observables=[o.matrix() for o in list_of_observables]
     )
     shadow_sizes.append(shadow_size_bound)
     print(f"{shadow_size_bound} samples required ")

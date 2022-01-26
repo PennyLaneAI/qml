@@ -149,9 +149,9 @@ def create_hamiltonian_matrix(n, graph):
         x = y = z = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                x = np.kron(x, qml.PauliX.matrix)
-                y = np.kron(y, qml.PauliY.matrix)
-                z = np.kron(z, qml.PauliZ.matrix)
+                x = np.kron(x, qml.PauliX.matrix())
+                y = np.kron(y, qml.PauliY.matrix())
+                z = np.kron(z, qml.PauliZ.matrix())
             else:
                 x = np.kron(x, np.identity(2))
                 y = np.kron(y, np.identity(2))
