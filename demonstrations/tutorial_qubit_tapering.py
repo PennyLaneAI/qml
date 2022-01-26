@@ -45,18 +45,18 @@ such that each :math:`\mu_i` term in the new Hamiltonian acts trivially, e.g., w
 or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the Hamiltonian.
 For instance, consider the following Hamiltonian
 
-.. math:: H = Z_0 X_1 - X_1 + Y_0 X_1,
+.. math:: H' = Z_0 X_1 - X_1 + Y_0 X_1,
 
 where all terms in the Hamiltonian act on the second qubit with the :math:`X` operator. It is
 straightforward to show that each term in the Hamiltonian commutes with :math:`I_0 X_1` and the
-ground state eigenvector of :math:`H` is also an eigenvector of :math:`I_0 X_1` with eigenvalues
+ground state eigenvector of :math:`H'` is also an eigenvector of :math:`I_0 X_1` with eigenvalues
 :math:`\pm 1`. We can also rewrite the Hamiltonian as
 
-.. math:: H = (Z_0 I_1 - I_0 I_1 + Y_0 I_1) I_0 X_1
+.. math:: H' = (Z_0 I_1 - I_0 I_1 + Y_0 I_1) I_0 X_1
 
 which gives us
 
-.. math:: H|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle,
+.. math:: H'|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle,
 
 where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the Hamiltonian
 :math:`H` can be simplified as
