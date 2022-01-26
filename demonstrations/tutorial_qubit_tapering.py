@@ -42,8 +42,8 @@ that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eig
 .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
 
 such that each :math:`\mu_i` term in the new Hamiltonian acts trivially, e.g., with an Identity
-operator or a Pauli operator at most, on a set of qubits. This allows tapering-off those qubits from
-the Hamiltonian. For instance, consider the following Hamiltonian
+or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the Hamiltonian.
+For instance, consider the following Hamiltonian
 
 .. math:: H = Z_0 X_1 - X_1 + Y_0 X_1,
 
@@ -56,9 +56,10 @@ ground state eigenvector of :math:`H` is also an eigenvector of :math:`I_0 X_1` 
 
 which gives us
 
-.. math:: H|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle.
+.. math:: H|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle,
 
-This means that the Hamiltonian :math:`H` can be simplified as
+where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the Hamiltonian
+:math:`H` can be simplified as
 
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
@@ -67,19 +68,19 @@ The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues :math:`[-2.41421
 
 More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
-:math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}`. This guarantees that each term
-of the transformed Hamiltonian commutes with each of the Pauli-X operators applied to the
-:math:`j`-th qubit:
+:math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` where :math:`j` is the qubit label.
+This guarantees that each term of the transformed Hamiltonian commutes with each of the Pauli-X
+operators applied to the :math:`j` qubit:
 
-.. math:: [H', X^{q_j}] = 0,
+.. math:: [H', X^j] = 0,
 
 and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of each of the
-:math:`X^{q_j}` operators. Then we can factor out all of the :math:`X^{q_j}` operators from the
+:math:`X^{j}` operators. Then we can factor out all of the :math:`X^{j}` operators from the
 transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
 set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose for each of the
-:math:`X^{q_j}` operator. For  instance, in the case of two tapered qubits, we have four eigenvalue
+:math:`X^{j}` operator. For  instance, in the case of two tapered qubits, we have four eigenvalue
 sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`. In these tapered
-Hamiltonians, the set of :math:`\left \{ q_j \right \}, j \in \left \{ l, ..., k \right \}` qubits
+Hamiltonians, the set of :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
 of the eigenvalues that corresponds to the ground-state. This has been explained in more details in
 the following.
@@ -128,7 +129,7 @@ print(H)
 ##############################################################################
 # This Hamiltonian contains 27 terms where each term acts on up to four qubits.
 #
-# We can now obtain the symmetry generators and the :math:`X^{q_j}` operators that are
+# We can now obtain the symmetry generators and the :math:`X^{j}` operators that are
 # used to construct the unitary :math:`U` operator that transforms the :math:`\textrm{HeH}^+`
 # Hamiltonian. In PennyLane, these are constructed by using the
 # :func:`~.pennylane.hf.generate_symmetries` function.
