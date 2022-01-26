@@ -22,11 +22,10 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # --------------------------
 #
 # The **Quantum Approximate Optimization Algorithm (QAOA)**, a hybrid
-# quantum-classical algorithm due to `Farhi et
+# quantum-classical technique due to `Farhi et
 # al. <https://arxiv.org/abs/1411.4028>`__ [#Farhi2015]_  is an approach to solving combinatorial optimization problems using quantum computers. The
-# quantum part involves alternating between a *cost Hamiltonian*,
-# :math:`H_C`, and a *mixer Hamiltonian*, :math:`H_M`, to evaluate the
-# objective function and a classical optimization loop updates the ansatz
+# quantum part evaluates the objective function and involves alternating between a *cost Hamiltonian*,
+# :math:`H_C`, and a *mixer Hamiltonian*, :math:`H_M`. A classical optimization loop updates the ansatz
 # parameters. You can learn more about this in `PennyLane's tutorial on
 # QAOA <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__.
 #
@@ -114,6 +113,7 @@ from pennylane import numpy as np
 import networkx as nx
 from matplotlib import pyplot as plt
 import copy
+from typing import List, Optional
 
 
 ######################################################################
@@ -302,7 +302,6 @@ def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
             control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
         )
 
-
 ######################################################################
 # We are now ready to build the circuit consisting of alternating cost and
 # mixer layers. A list of ``params`` includes parameters for the mixer
@@ -320,7 +319,7 @@ def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
         for qb, bit in enumerate(reversed(init_state)):
             if bit == "1":
                 qml.PauliX(wires=qb)
-    if len(params) == 2 * P:
+    if len(params) != 2 * P:
         raise ValueError("Incorrect number of parameters!")
 
     betas = [a for i, a in enumerate(params) if i % 2 == 0]
@@ -558,7 +557,6 @@ def mixer_dqva(alpha, ancilla, init_state, mixer_order):
             control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
         )
 
-
 ######################################################################
 # The structure of the cost and mixer unitaries is similar QAO-Ansatz,
 # however, we now alternate between :math:`p` applications of the mixing
@@ -608,6 +606,7 @@ def dqva_ansatz(P, params=[], init_state=None, mixer_order=None):
         if i < len(gamma_list):
             gamma = gamma_list[i]
             cost_layer(gamma)
+
 
 
 ######################################################################
