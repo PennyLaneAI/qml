@@ -140,9 +140,9 @@ print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
-# :math:`q_0, q_1` either with the Identity or with a Pauli-X operator. For each of these qubits, we can
-# simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`. This
-# results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
+# :math:`q_0, q_1` either with the Identity or with a Pauli-X operator. For each of these qubits,
+# we can simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`.
+# This results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
 # tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
 # corresponding to the ground-state energy of the molecule can be obtained from the reference
 # Hartree-Fock state and the generated symmetries by using the :func:`~.pennylane.hf.optimal_sector`
