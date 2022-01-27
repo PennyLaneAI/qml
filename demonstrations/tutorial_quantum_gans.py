@@ -1,5 +1,7 @@
-"""
-Introduction
+r"""
+.. _quantum_gans:
+
+Quantum GANs
 ============
 
 """
@@ -7,11 +9,11 @@ Introduction
 
 ######################################################################
 # *Author: James Ellis. Contact: jamesellis9570@yahoo.co.uk. Last updated:
-# 26 Jan 2022.*
+# 27 Jan 2022.*
 #
 # In this tutorial, we will explore quantum GANs to generate hand-written
 # digits of zero. We will first cover the theory of the classical case,
-# then extend to a recent quantum method proposed in the literature. If
+# then extend to a quantum method recently proposed in the literature. If
 # you have no experience with GANs, particularly in Pytorch, you might
 # find `Pytorch’s
 # tutorial <https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html>`__
@@ -21,7 +23,7 @@ Introduction
 
 ######################################################################
 # Generative Adversarial Networks (GANs)
-# ======================================
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 
@@ -42,7 +44,7 @@ Introduction
 # starts from some initial latent distribution, :math:`P_z`, and maps it
 # to :math:`P_g = G(P_z)`. The best solution would be for
 # :math:`P_g = P_{data}`. However, this point is rarely achieved in
-# practice apart from the most simple tasks.
+# practice apart from in the most simple tasks.
 #
 # Both the discriminator, :math:`D`, and generator, :math:`G`, play in a
 # 2-player minimax game. The discriminator tries to maximise the
@@ -61,7 +63,7 @@ Introduction
 #    classifying fake data as real
 #
 # In practice, the two networks are trained iteratively, each with
-# separate loss function to be minimised,
+# a separate loss function to be minimised,
 #
 # .. math::  L_D = -[y \cdot log(D(x)) + (1-y)\cdot log(1-D(G(z)))]
 #
@@ -79,29 +81,29 @@ Introduction
 
 ######################################################################
 # Quantum GANs: The Patch Method
-# ==============================
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 
 ######################################################################
 # In this tutorial, we re-create one of the quantum GAN methods presented
-# by Huang et al. [2]: the patch method. This method uses several quantum
+# by Huang et al.[2]: the patch method. This method uses several quantum
 # generators, with each sub-generator, :math:`G^{(i)}`, responsible for
 # constructing a small patch of the final image. The final image is
 # contructed by concatenting all of the patches together as shown below.
 #
 # .. figure:: ../demonstrations/quantum_gans/patch.jpeg
-#    :alt: title
-#
-#    title
+#   :scale: 33% 
+#   :alt: quantum_patch_method
+#   :align: center
 #
 # The main advantage of this method is that it is particulary suited to
-# situations where the number of availbale qubits are limited. The same
+# situations where the number of available qubits are limited. The same
 # quantum device can be used for each sub-generator in an iterative
 # fashion, or execution of the generators can be parallelised across
 # multiple devices.
 #
-#    **Note**
+# .. note::
 #
 #    In this tutorial, parenthesised superscripts are used to denote
 #    individual objects as part of a collection.
@@ -110,7 +112,7 @@ Introduction
 
 ######################################################################
 # Module Imports
-# ==============
+# ~~~~~~~~~~~~~~
 #
 
 # Library imports
@@ -119,6 +121,7 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import pennylane as qml
 
 # Pytorch imports
@@ -138,7 +141,7 @@ random.seed(seed)
 
 ######################################################################
 # Data
-# ====
+# ~~~~
 #
 
 
@@ -204,31 +207,20 @@ dataloader = torch.utils.data.DataLoader(
 
 
 ######################################################################
-# Now we create a function to visualise our training data. We will also
-# use this function later to inspect the output of the generator.
-#
+# Let's visual some data.
 
-dataiter = iter(dataloader)
-images, labels = dataiter.next()
-
-
-def imshow(tensor):
-    batch_size = tensor.size(0)
-    tensor = torch.squeeze(tensor, dim=1)
-    for i, im in enumerate(tensor):
-        plt.subplot(1, batch_size, i + 1)
-        plt.axis("off")
-        plt.imshow(im.numpy(), cmap="gray")
-
-    plt.show()
-
-
-imshow(images)
+for i in range(8):
+    image = dataset[i][0].reshape(image_size,image_size)
+    plt.subplot(1,8,i+1)
+    plt.axis('off')
+    plt.imshow(image.numpy(), cmap='gray')
+    
+plt.show()
 
 
 ######################################################################
 # Implementing the Discriminator
-# ==============================
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 
@@ -263,7 +255,7 @@ class Discriminator(nn.Module):
 
 ######################################################################
 # Implementing the Generator
-# ==========================
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 
@@ -278,26 +270,26 @@ class Discriminator(nn.Module):
 # the discussion.
 #
 # .. figure:: ../demonstrations/quantum_gans/qcircuit.jpeg
-#    :alt: title
+#   :scale: 33% 
+#   :alt: quantum_circuit
+#   :align: center
 #
-#    title
-#
-# State Embedding
-# ~~~~~~~~~~~~~~~
+# **1.) State Embedding**
+# 
 #
 # A latent vector, :math:`\boldsymbol{z}\in\mathbb{R}^N`, is sampled from
 # a uniform distribution in the interval :math:`[0,\pi/2)`. All
 # sub-generators receive the same latent vector which is then embedded
 # using RY gates.
 #
-# Parameterised Layers
-# ~~~~~~~~~~~~~~~~~~~~
+# **2.) Parameterised Layers**
+# 
 #
 # The parameterised layer consists of parameterised RY gates followed by
 # control Z gates. This layer is repeated :math:`D` times in total.
 #
-# Non-Linear Transform
-# ~~~~~~~~~~~~~~~~~~~~
+# **3.) Non-Linear Transform**
+# 
 #
 # Quantum gates in the circuit model are unitary which, by definition,
 # linearly transform the quantum state. A linear mapping between the
@@ -320,22 +312,21 @@ class Discriminator(nn.Module):
 # The post-measurement state, :math:`\rho(\boldsymbol{z})`, is dependent
 # on :math:`\boldsymbol{z}` in both the numerator and denominator. This
 # means the state has been non-linearly transformed! For this tutorial,
-# :math:`\Pi = |0\rangle \langle0|`.
+# :math:`\Pi = (|0\rangle \langle0|)^{\otimes N_A}`, where :math:`N_A` 
+# is the number of ancillary qubits in the system.
 #
-# With the remaining qubits, we measure the probability of
+# With the remaining data qubits, we measure the probability of
 # :math:`\rho(\boldsymbol{z})` in each computational basis state,
 # :math:`P(j)`, to obtain the sub-generator output,
 # :math:`\boldsymbol{g}^{(i)}`,
 #
 # .. math::  \boldsymbol{g}^{(i)} = [P(0), P(1), ... ,P(2^{N-N_A} - 1)]
 #
-# where :math:`N_A` is the number of ancillary qubits in the system.
+# **4.) Post Processing**
+# 
 #
-# Post Processing
-# ~~~~~~~~~~~~~~~
-#
-# It is noteable that all elements in :math:`\boldsymbol{g}^{(i)}` must
-# sum to one given the normalisation constraint of the measurment. This is
+# Due to the normalisation constraint of the measurment, all elements in 
+# :math:`\boldsymbol{g}^{(i)}` must sum to one. This is
 # a problem if we are to use :math:`\boldsymbol{g}^{(i)}` as the pixel
 # intensity values for our patch. For example, imagine a hypothetical
 # situation where a patch of full intensity pixels was the target. The
@@ -367,7 +358,8 @@ dev = qml.device("lightning.qubit", wires=n_qubits)
 # Enable CUDA device if available
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-
+######################################################################
+# Next, we define the quantum circuit and measurement process described above.
 @qml.qnode(dev, interface="torch", diff_method="parameter-shift")
 def quantum_circuit(noise, weights):
 
@@ -402,6 +394,8 @@ def partial_measure(noise, weights):
     probsgiven = probsgiven0 / torch.max(probsgiven0)
     return probsgiven
 
+######################################################################
+# Now we create a quantum generator class to use during training.
 
 class PatchQuantumGenerator(nn.Module):
     """Quantum generator class for the patch method"""
@@ -447,13 +441,18 @@ class PatchQuantumGenerator(nn.Module):
 
 ######################################################################
 # Training
-# ========
+# ~~~~~~~~
 #
 
-# Training Variables
+######################################################################
+# Let's define learning rates and number of iterations for the training process.
+
 lrG = 0.3  # Learning rate for the generator
 lrD = 0.01  # Learning rate for the discriminator
 num_iter = 500  # Number of training iterations
+
+######################################################################
+# Now putting everything together and executing the training process.
 
 discriminator = Discriminator().to(device)
 generator = PatchQuantumGenerator(n_generators).to(device)
@@ -473,6 +472,9 @@ fixed_noise = torch.rand(8, n_qubits, device=device) * math.pi / 2
 
 # Iteration counter
 counter = 0
+
+# Collect images for plotting later
+results = []
 
 while True:
     for i, (data, _) in enumerate(dataloader):
@@ -508,12 +510,14 @@ while True:
 
         counter += 1
 
+        # Show loss values         
         if counter % 10 == 0:
-            print(
-                f"Iteration: {counter}, Discriminator Loss: {errD:0.3f}, Generator Loss: {errG:0.3f}"
-            )
-            test_images = generator(fixed_noise).view(8, 1, image_size, image_size).cpu().detach()
-            imshow(test_images)
+            print(f'Iteration: {counter}, Discriminator Loss: {errD:0.3f}, Generator Loss: {errG:0.3f}')
+            test_images = generator(fixed_noise).view(8,1,image_size,image_size).cpu().detach()
+            
+            # Save images every 50 iterations
+            if counter % 50 == 0:
+                results.append(test_images)
 
         if counter == num_iter:
             break
@@ -522,7 +526,7 @@ while True:
 
 
 ######################################################################
-#    **Note**
+#.. note::
 #
 #    You may have noticed ``errG = criterion(outD_fake, real_labels)`` and
 #    wondered why we don’t use ``fake_labels`` instead of ``real_labels``.
@@ -533,10 +537,33 @@ while True:
 #    of the binary cross entropy loss function.
 #
 
+######################################################################
+# Finally, we plot how the generated images evolved throughout training.
+
+fig = plt.figure(figsize=(10, 8))
+outer = gridspec.GridSpec(5, 2, wspace=0.1)
+
+for i, images in enumerate(results):
+    inner = gridspec.GridSpecFromSubplotSpec(1, images.size(0),
+                    subplot_spec=outer[i])
+    
+    images = torch.squeeze(images, dim=1)
+    for j, im in enumerate(images):
+
+        ax = plt.Subplot(fig, inner[j])
+        ax.imshow(im.numpy(), cmap="gray")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        if j==0:
+            ax.set_title(f'Iteration {50+i*50}', loc='left')
+        fig.add_subplot(ax)
+
+plt.show()
+
 
 ######################################################################
 # Acknowledgements
-# ================
+# ~~~~~~~~~~~~~~~~
 #
 
 
@@ -550,7 +577,7 @@ while True:
 
 ######################################################################
 # References
-# ==========
+# ~~~~~~~~~~
 #
 
 
