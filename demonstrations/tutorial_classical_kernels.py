@@ -33,7 +33,7 @@ Usually, in quantum machine learning (QML), we use parametrized quantum circuits
 (PQCs) to find good functions, whatever *good* means here.
 Since kernels are just one specific kind of well-defined
 functions, the task of finding a quantum kernel (QK) that approximates a given
-classical one could be posed as an optimisation problem.
+classical one could be posed as an optimization problem.
 One way to attack this task is to define a loss function
 quantifying the distance between both functions (the classical kernel function
 and the PQC-based hypothesis).
@@ -203,7 +203,7 @@ plt.show();
 # *What can we do?!*
 #
 # We can cook up a periodic extension to the Gaussian kernel, for a given
-# period :math:`2L` (we take :math:`2\pi` as default):
+# period :math:`2L` (we take :math:`L=\pi` as default):
 
 def Gauss_p(x, L=np.pi):
     # Send x to x_mod in the period around 0
@@ -464,7 +464,7 @@ plt.show();
 
 ###############################################################################
 # One can see that the stationary kernel with this particular initial state has
-# a decaying spectrum that looks similar to :math:`1/\lvert x\rvert` - but not
+# a decaying spectrum that looks similar to :math:`1/\lvert x\rvert` — but not
 # yet like a Gaussian.
 #
 # How to find the amplitudes emulating a Gaussian kernel
