@@ -52,7 +52,12 @@ Quantum GANs
 # to minimise the same probability. The value function for the game is
 # summarised by,
 #
-# .. math:: \min_G \max_D V(D,G) = \mathbb{E}_{\boldsymbol{x}\sim p_{data}}[\log D(\boldsymbol{x})] + \mathbb{E}_{\boldsymbol{z}\sim p_{\boldsymbol{z}}}[\log(1 - D(G(\boldsymbol{z}))]
+# .. math::
+# 
+#    \begin{align}
+#    \min_G \max_D V(D,G) &= \mathbb{E}_{\boldsymbol{x}\sim p_{data}}[\log D(\boldsymbol{x})] \\
+#        & ~~ + \mathbb{E}_{\boldsymbol{z}\sim p_{\boldsymbol{z}}}[\log(1 - D(G(\boldsymbol{z}))]
+#    \end{align}
 #
 # -  :math:`\boldsymbol{x}`: real data sample
 # -  :math:`\boldsymbol{z}`: latent vector
@@ -93,7 +98,7 @@ Quantum GANs
 # contructed by concatenting all of the patches together as shown below.
 #
 # .. figure:: ../demonstrations/quantum_gans/patch.jpeg
-#   :scale: 33% 
+#   :width: 90% 
 #   :alt: quantum_patch_method
 #   :align: center
 #
@@ -270,7 +275,7 @@ class Discriminator(nn.Module):
 # the discussion.
 #
 # .. figure:: ../demonstrations/quantum_gans/qcircuit.jpeg
-#   :scale: 33% 
+#   :width: 90% 
 #   :alt: quantum_circuit
 #   :align: center
 #
