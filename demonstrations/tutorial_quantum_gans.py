@@ -600,5 +600,6 @@ plt.show()
 # `arXiv:1406.2661 <https://arxiv.org/abs/2010.06201>`__ (2014).
 #
 # [2] He-Liang Huang et al. *Experimental Quantum Generative Adversarial
-# Networks for Image Generation*. `arXiv:2010.06201 <https://arxiv.org/abs/1406.2661>`__ (2020).
+# Networks for Image Generation*. 
+# `arXiv:2010.06201 <https://arxiv.org/abs/1406.2661>`__ (2020).
 #
