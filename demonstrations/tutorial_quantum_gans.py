@@ -21,8 +21,8 @@ Quantum GANs
 # In this tutorial, we will explore quantum GANs to generate hand-written
 # digits of zero. We will first cover the theory of the classical case,
 # then extend to a quantum method recently proposed in the literature. If
-# you have no experience with GANs, particularly in Pytorch, you might
-# find `Pytorch’s
+# you have no experience with GANs, particularly in PyTorch, you might
+# find `PyTorch's
 # tutorial <https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html>`__
 # useful since it serves as the foundation for what is to follow.
 #
@@ -77,17 +77,17 @@ Quantum GANs
 # In practice, the two networks are trained iteratively, each with
 # a separate loss function to be minimised,
 #
-# .. math::  L_D = -[y \cdot log(D(x)) + (1-y)\cdot log(1-D(G(z)))]
+# .. math::  L_D = -[y \cdot \log(D(x)) + (1-y)\cdot \log(1-D(G(z)))]
 #
-# .. math::  L_G = [(1-y) \cdot log(1-D(G(z)))]
+# .. math::  L_G = [(1-y) \cdot \log(1-D(G(z)))]
 #
 # where :math:`y` is a binary label for real (:math:`y=1`) or fake
 # (:math:`y=0`) data. In practice, generator training is shown to be more
-# stable [1] when made to maximise :math:`log(D(G(z)))` instead of
-# minimising :math:`log(1-D(G(z)))`. Hence, the generator loss function to
+# stable [1] when made to maximise :math:`\log(D(G(z)))` instead of
+# minimising :math:`\log(1-D(G(z)))`. Hence, the generator loss function to
 # be minimised becomes,
 #
-# .. math::  L_G = -[(1-y) \cdot log(D(G(z)))]
+# .. math::  L_G = -[(1-y) \cdot \log(D(G(z)))]
 #
 
 
@@ -219,7 +219,7 @@ dataloader = torch.utils.data.DataLoader(
 
 
 ######################################################################
-# Let's visual some data.
+# Let's visualize some of the data.
 
 for i in range(8):
     image = dataset[i][0].reshape(image_size,image_size)
@@ -319,7 +319,7 @@ class Discriminator(nn.Module):
 # measurment, :math:`\Pi`, and trace out the ancillary subsystem,
 # :math:`\mathcal{A}`,
 #
-# .. math:: \rho(\boldsymbol{z}) = \frac{Tr_{\mathcal{A}}(\Pi \otimes \mathbb{I} |\Psi(z)\rangle \langle \Psi(\boldsymbol{z})|) }{Tr(\Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle \langle \Psi(\boldsymbol{z})|))} = \frac{Tr_{\mathcal{A}}(\Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle \langle \Psi(\boldsymbol{z})|) }{\langle \Psi(\boldsymbol{z})| \Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle}
+# .. math:: \rho(\boldsymbol{z}) = \frac{\text{Tr}_{\mathcal{A}}(\Pi \otimes \mathbb{I} |\Psi(z)\rangle \langle \Psi(\boldsymbol{z})|) }{\text{Tr}(\Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle \langle \Psi(\boldsymbol{z})|))} = \frac{\text{Tr}_{\mathcal{A}}(\Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle \langle \Psi(\boldsymbol{z})|) }{\langle \Psi(\boldsymbol{z})| \Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle}
 #
 # The post-measurement state, :math:`\rho(\boldsymbol{z})`, is dependent
 # on :math:`\boldsymbol{z}` in both the numerator and denominator. This
@@ -346,7 +346,7 @@ class Discriminator(nn.Module):
 # at a magnitude of :math:`\frac{1}{2^{N-N_A}}`. To alleviate this
 # constraint, we apply a post-processing technique to each patch,
 #
-# .. math::  \boldsymbol{\tilde{x}^{(i)}} = \frac{\boldsymbol{g}^{(i)}}{max_{k}\boldsymbol{g}_k^{(i)}}
+# .. math::  \boldsymbol{\tilde{x}^{(i)}} = \frac{\boldsymbol{g}^{(i)}}{\max_{k}\boldsymbol{g}_k^{(i)}}
 #
 # Therefore, the final image, :math:`\boldsymbol{\tilde{x}}`, is given by
 #
@@ -545,7 +545,7 @@ while True:
 #    However, this is simply a trick to be able to use the same
 #    ``criterion`` function for both the generator and discriminator.
 #    Using ``real_labels`` forces the generator loss function to use the
-#    :math:`log(D(G(z))` term instead of the :math:`log(1 - D(G(z))` term
+#    :math:`\log(D(G(z))` term instead of the :math:`\log(1 - D(G(z))` term
 #    of the binary cross entropy loss function.
 #
 
