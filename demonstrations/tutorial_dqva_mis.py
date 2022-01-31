@@ -65,8 +65,8 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # maximizes the performance of the QAO-Ansatz by:
 #
 # 1. *Warm starting the optimization* by starting with an initial state that is a feasible state
-#     or a superposition of feasible states. A feasible state can be found by
-#     using a classical approximate polynomial-time algorithm.
+# or a superposition of feasible states. A feasible state can be found by
+# using a classical approximate polynomial-time algorithm.
 # 2. *Updating the ansatz dynamically* by turning partial mixers *on* and *off*
 # 3. *Randomizing the ordering of the partial mixers* in the mixer unitaries
 #
@@ -95,11 +95,10 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #    Independent sets of a graph with the MIS highlighted.
 #
 # Here, independent sets can be represented as bitstrings
-# :math:`b = \{b_1, b_2, \cdots b_n\} \in \{0, 1\}^n`. This is convenient as the outputs of 
+# :math:`b = \{b_1, b_2, \cdots b_n\} \in \{0, 1\}^n`, where the i'th bit being one represents inclusion of the ith vertex in the set. This is convenient as the outputs of 
 # quantum computations are also bitstrings!
 # In the graph shown above :math:`00000`, :math:`10000`, :math:`01001`, :math:`10101` are
-# independent sets of size 0, 1, 2, and 3 respectively. The Minimum Vertex
-# Cover, i.e, vertices that cover all edges, is the dual of MIS.
+# independent sets of size 0, 1, 2, and 3 respectively.
 #
 # We will start with the QAO-Ansatz and then re-use most components to
 # formulate the DQVA.
@@ -171,20 +170,24 @@ def hamming_weight(bitstr):
     return sum([1 for bit in bitstr if bit == "1"])
 
 
+# def is_indset(bitstr, G):
+#     nodes = list(G.nodes)
+#     ind_set = []
+#     for idx, bit in enumerate(bitstr):
+#         if bit == "1":
+#             cur_neighbors = list(G.neighbors(idx))
+#             for node in ind_set:
+#                 if node in cur_neighbors:
+#                     return False
+#             else:
+#                 ind_set.append(idx)
+#     return True
+
 def is_indset(bitstr, G):
-    nodes = list(G.nodes)
-    ind_set = []
-    for idx, bit in enumerate(bitstr):
-        if bit == "1":
-            cur_neighbors = list(G.neighbors(idx))
-            for node in ind_set:
-                if node in cur_neighbors:
-                    return False
-            else:
-                ind_set.append(idx)
+    for edge in list(G.edges):
+        if bitstr[edge[0]] == "1" and bitstr[edge[1]] == "1":
+            return False
     return True
-
-
 ######################################################################
 # Next, we define a cost unitary that incorporates the Hamming weight operator,
 # :math:`H` and is parameterized by :math:`\gamma`:
