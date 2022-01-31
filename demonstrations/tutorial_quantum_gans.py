@@ -221,6 +221,8 @@ dataloader = torch.utils.data.DataLoader(
 ######################################################################
 # Let's visualize some of the data.
 
+plt.figure(figsize=(8,2))
+
 for i in range(8):
     image = dataset[i][0].reshape(image_size,image_size)
     plt.subplot(1,8,i+1)
