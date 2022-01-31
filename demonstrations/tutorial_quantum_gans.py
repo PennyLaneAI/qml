@@ -286,7 +286,7 @@ class Discriminator(nn.Module):
 #   :alt: quantum_circuit
 #   :align: center
 #
-# **1.) State Embedding**
+# **1) State Embedding**
 # 
 #
 # A latent vector, :math:`\boldsymbol{z}\in\mathbb{R}^N`, is sampled from
@@ -294,13 +294,13 @@ class Discriminator(nn.Module):
 # sub-generators receive the same latent vector which is then embedded
 # using RY gates.
 #
-# **2.) Parameterised Layers**
+# **2) Parameterised Layers**
 # 
 #
 # The parameterised layer consists of parameterised RY gates followed by
 # control Z gates. This layer is repeated :math:`D` times in total.
 #
-# **3.) Non-Linear Transform**
+# **3) Non-Linear Transform**
 # 
 #
 # Quantum gates in the circuit model are unitary which, by definition,
@@ -334,7 +334,7 @@ class Discriminator(nn.Module):
 #
 # .. math::  \boldsymbol{g}^{(i)} = [P(0), P(1), ... ,P(2^{N-N_A} - 1)]
 #
-# **4.) Post Processing**
+# **4) Post Processing**
 # 
 #
 # Due to the normalisation constraint of the measurment, all elements in 
