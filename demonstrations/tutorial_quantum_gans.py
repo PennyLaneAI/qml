@@ -4,6 +4,13 @@ r"""
 Quantum GANs
 ============
 
+.. meta::
+    :property="og:description": Explore quantum GANs to generate hand-written digits of zero
+    :property="og:image": https://pennylane.ai/qml/_images/patch.jpeg
+
+.. related::
+    tutorial_QGAN QGANs with Cirq + TensorFlow
+
 """
 
 
