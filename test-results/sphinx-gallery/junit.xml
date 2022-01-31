@@ -1,5 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="sphinx-gallery" skipped="0" tests="1" time="0.6799509525299072"><testcase classname="tutorial_dqva_mis" file="demonstrations\tutorial_dqva_mis.py" line="1" name="Dynamic Quantum Variational Ansatz (DQVA) for Combinatorial Optimization" time="0.6799509525299072"><failure message="NameError: name 'List' is not defined">Traceback (most recent call last):
-  File "C:\Users\panga\Documents\PhD\Research\xanadu\qml\demonstrations\tutorial_dqva_mis.py", line 274, in &lt;module&gt;
-    def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
-NameError: name 'List' is not defined
-</failure></testcase></testsuite>
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="0" name="sphinx-gallery" skipped="0" tests="1" time="252.1876916885376"><testcase classname="tutorial_dqva_mis" file="demonstrations\tutorial_dqva_mis.py" line="1" name="Dynamic Quantum Variational Ansatz (DQVA) for Combinatorial Optimization" time="252.1876916885376"></testcase></testsuite>
