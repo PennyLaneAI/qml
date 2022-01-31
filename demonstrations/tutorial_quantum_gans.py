@@ -552,7 +552,7 @@ while True:
 ######################################################################
 # Finally, we plot how the generated images evolved throughout training.
 
-fig = plt.figure(figsize=(10, 8))
+fig = plt.figure(figsize=(10, 5))
 outer = gridspec.GridSpec(5, 2, wspace=0.1)
 
 for i, images in enumerate(results):
