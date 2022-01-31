@@ -229,15 +229,15 @@ def cost_layer(gamma):
 # .. math::
 #
 #
-#    \tilde{b}_{v_j} = \frac{I+Z_{v_j}}{2}.
+#    \tilde{b}_{v_k} = \frac{I + Z_{v_k}}{2}.
 #
 # The mixer unitary can also be written as a product of :math:`N` partial
-# mixers :math:`V_i`:
+# mixers :math:`V_j`:
 #
 # .. math::
 #
 #
-#    U_M(\beta) = \prod_{i=1}^N V_i (\beta) =\prod_{i=1}^N  (I + (e^{-i\beta X_i} - I)\tilde{B}) 
+#    U_M(\beta) = \prod_{j=1}^n V_j (\beta) =\prod_{j=1}^n  (I + (e^{-i\beta X_j} - I)\tilde{B}) 
 #
 # As mentioned earlier, the partial mixers may not commute with each other, i.e.,
 # :math:`[V_i, V_j] \neq 0`. Therefore, the variational ansatz is defined
@@ -345,11 +345,11 @@ def probability_circuit(P, params=[], init_state=None, mixer_order=None):
 
 ######################################################################
 # Finally, we run the quantum-classical loop for ``m`` different mixer
-# permutations. The expectation value is also calculated in the cost
-# function ``f`` by running the probability circuit and calculating the
-# Hamming weight (which is defined as the cost). In each iteration, an
-# ansatz is constructed based on the mixer order, with optimal parameters
-# from classical minimization of the cost function using gradient descent:
+# permutations. To evaluate the cost function ``f``, the expectation value
+# :math:`\langle C_{obj}\rangle is obtained by running the probability circuit 
+# and calculating the average Hamming weight. In each iteration, an
+# ansatz is constructed based on the mixer order and the optimal parameters
+# are determined by a classical minimization of the cost function using gradient descent.
 #
 # .. math::
 #
@@ -503,7 +503,7 @@ for i in range(len(graph.nodes)):
 #
 #    U_M^k(\alpha_k) = \mathcal{P}(V_1^k(\alpha_k^1)V_2^k(\alpha_k^2)\cdots V_N^k(\alpha_k^N))
 #
-# where :math:`k = 1, 2 \cdots p`.
+# where :math:`k = 1, 2, \dots, p`.
 #
 # In the DQVA, whenever the :math:`j`-th bit of the initial state is one,
 # the corresponding parameter :math:`\alpha_k^j` is set to 0. For example,
@@ -585,9 +585,9 @@ def dqva_ansatz(P, params=[], init_state=None, mixer_order=None):
                 qml.PauliX(wires=qb)
 
     num_nonzero = nq - hamming_weight(init_state)
-    assert len(params) == (nq + 1) * P, "Incorrect number of parameters!"
-    alpha_list = []
-    gamma_list = []
+    if len(params) == (nq + 1) * P:
+        raise ValueError("Incorrect number of parameters!")
+    alpha_list = gamma_list = []
     last_idx = 0
     for p in range(P):
         chunk = num_nonzero + 1
@@ -635,7 +635,7 @@ def probability_dqva(P, params=[], init_state=None, mixer_order=None):
 # 3. Based on this new state, partial mixers are updated (i.e., turned off for ones and turned on for zeros)
 # 4. Steps 2 and 3 are repeated until the Hamming weight can no longer be improved
 # 5. If no new Hamming weight is obtained, the partial mixers are randomized and steps 2 and 3 are repeated to check if
-# a better Hamming weight is found. The number of randomizations is controlled via a hyperparameter.
+#    a better Hamming weight is found. The number of randomizations is controlled via a hyperparameter.
 #
 #
 
@@ -755,7 +755,7 @@ for i in range(len(graph.nodes)):
     init_str = list(base_str)
     init_str[i] = "1"
     out = solve_mis_dqva("".join(init_str), P=1, m=4, threshold=1e-5, cutoff=1)
-    print("Init string: {}, Best MIS: {}".format("".join(init_str), out[0]))
+    print(f"Init string: {init_str}, Best MIS: {out[0]}")
     print()
 
 
