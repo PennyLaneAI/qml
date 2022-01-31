@@ -65,8 +65,8 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # maximizes the performance of the QAO-Ansatz by:
 #
 # 1. *Warm starting the optimization* by starting with an initial state that is a feasible state
-# or a superposition of feasible states. A feasible state can be found by
-# using a classical approximate polynomial-time algorithm.
+#     or a superposition of feasible states. A feasible state can be found by
+#     using a classical approximate polynomial-time algorithm.
 # 2. *Updating the ansatz dynamically* by turning partial mixers *on* and *off*
 # 3. *Randomizing the ordering of the partial mixers* in the mixer unitaries
 #
