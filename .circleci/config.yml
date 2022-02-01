@@ -87,9 +87,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          # Increased timeout for building Lightning from source
           command: |
-            export PYTHONUNBUFFERED=1
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools cmake --upgrade
