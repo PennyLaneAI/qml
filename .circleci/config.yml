@@ -79,8 +79,8 @@ jobs:
           path: _build/test-results
 
   build_dev:
-    machine:
-      image: ubuntu-2004:202111-02
+    docker:
+      - image: circleci/python:3.7.12
 
     steps:
       - checkout
