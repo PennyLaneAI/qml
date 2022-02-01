@@ -21,6 +21,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            sudo apt-get update && sudo apt-get install python3.8
             sudo apt install pandoc -qq
             python3 -m venv venv
             . venv/bin/activate
@@ -88,6 +89,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            sudo apt-get update && sudo apt-get install python3.8
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools cmake --upgrade
