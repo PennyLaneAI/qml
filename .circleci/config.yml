@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     machine:
-      - image: ubuntu-2004:202111-02
+      image: ubuntu-2004:202111-02
 
     steps:
       - checkout
@@ -80,7 +80,7 @@ jobs:
 
   build_dev:
     machine:
-      - image: ubuntu-2004:202111-02
+      image: ubuntu-2004:202111-02
 
     steps:
       - checkout
