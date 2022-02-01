@@ -90,6 +90,7 @@ jobs:
           # Increased timeout for building Lightning from source
           no_output_timeout: 30m
           command: |
+            export PYTHONUNBUFFERED=1
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools cmake --upgrade
