@@ -597,9 +597,9 @@ plt.show()
 
 ######################################################################
 # [1] Ian J. Goodfellow et al. *Generative Adversarial Networks*.
-# `arXiv:1406.2661 <https://arxiv.org/abs/2010.06201>`__ (2014).
+# `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
 #
 # [2] He-Liang Huang et al. *Experimental Quantum Generative Adversarial
 # Networks for Image Generation*. 
-# `arXiv:2010.06201 <https://arxiv.org/abs/1406.2661>`__ (2020).
+# `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
