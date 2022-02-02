@@ -269,7 +269,7 @@ print(cost(x))
 #
 #  .. code-block:: none
 #
-#      <tf.Tensor: shape=(1,), dtype=float64, numpy=array([-3.19326796])>
+#      tf.Tensor(-3.193267957255582, shape=(), dtype=float64)
 #
 
 
