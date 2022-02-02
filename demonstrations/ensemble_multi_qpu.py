@@ -133,6 +133,7 @@ def plot_points(x_train, y_train, x_test, y_test):
 
 
 plot_points(x_train, y_train, x_test, y_test)
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_001.png
@@ -526,6 +527,7 @@ def plot_points_prediction(x, y, p, title):
 
 
 plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_002.png
@@ -536,6 +538,7 @@ plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 ##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_003.png
@@ -546,6 +549,7 @@ plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 ##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_004.png
