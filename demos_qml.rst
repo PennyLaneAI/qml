@@ -89,8 +89,14 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. customgalleryitem::
     :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
-    :description: :doc:`demos/tutorial_ensemble_multi_qpu`
+    :description: :doc:`demos/ensemble_multi_qpu`
     :tags: pytorch forest qiskit
+    
+.. customgalleryitem::
+    :tooltip: Generate images with Quantums GANs.
+    :figure: demonstrations/quantum_gans/patch.jpeg
+    :description: :doc:`demos/tutorial_quantum_gans`
+    :tags: pytorch 
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -111,3 +117,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/learning2learn
     demos/tutorial_quanvolution
     demos/tutorial_ensemble_multi_qpu
+    demos/tutorial_quantum_gans
