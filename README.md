@@ -51,8 +51,8 @@ quantum machine learning paper/result.
 ### Adding demos
 
 * Demos are written in the form of an executable Python script.
-  Any package listed in `requirements.txt` and `requirements_no_deps.txt` you can assume is
-  available to be imported.
+  Any package listed in `requirements.txt`, `lightning_requirements.txt` and
+  `requirements_no_deps.txt` you can assume is available to be imported.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
