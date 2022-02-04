@@ -165,10 +165,13 @@ dev = qml.device("default.qubit", wires=range(wires))
 
 
 def hamming_weight(bitstr: str) -> int:
+    """Helper function to calculate the hamming weight of a bitstring"""
     return sum([1 for bit in bitstr if bit == "1"])
 
 
 def is_indset(bitstr:str, G: nx.Graph) -> bool:
+    """Helper function that returns True when a bitstring is a valid independent set"""
+
     for edge in list(G.edges):
         if bitstr[edge[0]] == "1" and bitstr[edge[1]] == "1":
             return False
@@ -187,6 +190,15 @@ def is_indset(bitstr:str, G: nx.Graph) -> bool:
 
 
 def cost_layer(gamma: List) -> None:
+    """
+    Builds the QAO-Ansatz cost layer for max independent set problem using PennyLane operations
+    
+    Args:
+        gamma (List): A list of values for the cost parameter
+        
+    Returns: 
+        None
+    """
     for qb in graph.nodes:
         qml.RZ(2 * gamma, wires=qb)
 
@@ -314,7 +326,7 @@ def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None) -> N
 
 
 def initialize_ansatz(init_state: Optional[str]=None) -> None:
-    """ Helper function to initialize circuit ansatz"""
+    """Helper function to initialize circuit ansatz"""
     nq = len(graph.nodes)
 
     if init_state is None:
@@ -327,6 +339,18 @@ def initialize_ansatz(init_state: Optional[str]=None) -> None:
 
 
 def qaoa_ansatz(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order: Optional[List]=None) -> None:
+    """
+    Builds the QAO-Ansatz for max independent set problem
+    
+    Args:
+        P (int): Number of parameters
+        params (Optional[List]=[]): A list of 2*P parameters
+        init_state (Optional[str]=None): Bitstring representing the initial state
+        mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+        
+    Returns: 
+        None
+    """
     nq = len(graph.nodes)
     
     initialize_ansatz(init_state)
@@ -352,6 +376,8 @@ def qaoa_ansatz(P: int, params: Optional[List]=[], init_state: Optional[str]=Non
 
 @qml.qnode(dev)
 def probability_circuit(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order:  Optional[List]=None) -> np.ndarray:
+    """Obtains probabilities for the QAO-Ansatz given a set of parameters, initial state, and the mixer order"""
+
     qaoa_ansatz(P, params, init_state, mixer_order)
     return qml.probs(wires=range(wires - 1))
 
@@ -408,6 +434,22 @@ def better_ind_sets(probs: np.ndarray, best_indset, cutoff) -> List:
 
 def solve_mis_qaoa(init_state: str, P: Optional[int]=1, m: Optional[int]=1, mixer_order: Optional[List]=None, 
                    threshold: Optional[float]=1e-5, cutoff: Optional[int]=1) -> Tuple[str, np.ndarray, str, List]:
+    """
+    Solver for max independent set problem using the QAO-Ansatz 
+    
+    Args:
+        init_state (Optional[str]=None): Bitstring representing the initial state
+        P (int): Number of parameters
+        m (int): Number of mixer rounds
+        mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+        threshold (Optional[float]=1e-5): A threshold to remove low probability outcomes 
+        cutoff (Optional[int]=1): number of "better" independent sets to consider
+    Returns: 
+        str: Best independent set
+        np.ndarray: Best parameters
+        str: Best initial state
+        List: Best mixer order
+    """
     # Select an ordering for the partial mixers
     if mixer_order == None:
         cur_permutation = np.random.permutation(list(graph.nodes)).tolist()
@@ -549,7 +591,17 @@ for i in range(len(graph.nodes)):
 
 
 def mixer_dqva(alpha: List, ancilla: int, init_state: str, mixer_order: Optional[List]=None) -> None:
-
+    """
+    Builds the DQVA mixer layer for max independent set problem using PennyLane operations
+    
+    Args:
+        beta (List): A list of values for the mixing parameter
+        ancilla (int): The qubit to be used as the ancilla
+        mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+        
+    Returns: 
+        None
+    """
     # Permute the order of mixing unitaries
     if mixer_order is None:
         mixer_order = list(graph.nodes)
@@ -588,6 +640,18 @@ def mixer_dqva(alpha: List, ancilla: int, init_state: str, mixer_order: Optional
 
 
 def dqva_ansatz(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order: Optional[List]=None) -> None:
+    """
+    Builds the DQVA for max independent set problem
+    
+    Args:
+        P (int): Number of parameters
+        params (Optional[List]=[]): a list of 2*P parameters
+        init_state (Optional[str]=None): bitstring representing the initial state
+        mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+        
+    Returns: 
+        None
+    """
     nq = len(graph.nodes)
 
     initialize_ansatz(init_state)
@@ -626,6 +690,8 @@ def dqva_ansatz(P: int, params: Optional[List]=[], init_state: Optional[str]=Non
 
 @qml.qnode(dev)
 def probability_dqva(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order: Optional[List]=None) -> np.ndarray:
+    """Obtains probabilities for the DQVA given a set of parameters, initial state, and the mixer order"""
+
     dqva_ansatz(P, params, init_state, mixer_order)
     return qml.probs(wires=dev.wires[:-1])
 
@@ -650,7 +716,22 @@ def probability_dqva(P: int, params: Optional[List]=[], init_state: Optional[str
 
 
 def solve_mis_dqva(init_state: Optional[str], P: Optional[int]=1, m: Optional[int]=1, mixer_order: Optional[List]=None, threshold: Optional[float]=1e-5, cutoff: Optional[int]=1) -> Tuple[str, np.ndarray, str, List]:
-
+    """
+    Solver for max independent set problem using the DQVA 
+    
+    Args:
+        init_state (Optional[str]=None): Bitstring representing the initial state
+        P (int): Number of parameters
+        m (int): Number of mixer rounds
+        mixer_order (Optional[List]=None): The desired permutation of the partial mixers
+        threshold (Optional[float]=1e-5): A threshold to remove low probability outcomes 
+        cutoff (Optional[int]=1): number of "better" independent sets to consider
+    Returns: 
+        str: Best independent set
+        np.ndarray: Best parameters
+        str: Best initial state
+        List: Best mixer order
+    """
     # Select an ordering for the partial mixers
     if mixer_order == None:
         cur_permutation = np.random.permutation(list(graph.nodes)).tolist()
