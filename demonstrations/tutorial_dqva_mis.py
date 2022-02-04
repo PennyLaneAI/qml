@@ -23,8 +23,8 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 #
 # The **Quantum Approximate Optimization Algorithm (QAOA)**, a hybrid
 # quantum-classical technique due to `Farhi et
-# al. <https://arxiv.org/abs/1411.4028>`__ [#Farhi2015]_  is an approach to solving combinatorial optimization problems using quantum computers. The
-# quantum part evaluates the objective function and involves alternating between a *cost Hamiltonian*,
+# al. <https://arxiv.org/abs/1411.4028>`__ [#Farhi2014]_  is an approach to solving combinatorial optimization problems using quantum computers. The
+# quantum part evaluates the objective function and involves alternating between unitaries corresponding to a *cost Hamiltonian*,
 # :math:`H_C`, and a *mixer Hamiltonian*, :math:`H_M`. A classical optimization loop updates the ansatz
 # parameters. You can learn more about this in `PennyLane's tutorial on
 # QAOA <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__.
@@ -65,8 +65,8 @@ This demo discusses the `Dynamic Quantum Variational Ansatz (DQVA) <https://arxi
 # maximizes the performance of the QAO-Ansatz by:
 #
 # 1. *Warm starting the optimization* by starting with an initial state that is a feasible state
-# or a superposition of feasible states. A feasible state can be found by
-# using a classical approximate polynomial-time algorithm.
+#     or a superposition of feasible states. A feasible state can be found by
+#     using a classical approximate polynomial-time algorithm.
 # 2. *Updating the ansatz dynamically* by turning partial mixers *on* and *off*
 # 3. *Randomizing the ordering of the partial mixers* in the mixer unitaries
 #
@@ -112,8 +112,7 @@ from pennylane import numpy as np
 import networkx as nx
 from matplotlib import pyplot as plt
 import copy
-from typing import List, Optional
-
+from typing import List, Optional, Tuple, Callable
 
 ######################################################################
 # Next, we define the graph shown above with 5 nodes for which we would
@@ -133,7 +132,6 @@ plt.show()
 
 wires = len(graph.nodes) + 1
 dev = qml.device("default.qubit", wires=range(wires))
-
 
 ######################################################################
 # For MIS, our goal is to maximize the number of vertices that form an
@@ -166,28 +164,17 @@ dev = qml.device("default.qubit", wires=range(wires))
 #
 
 
-def hamming_weight(bitstr):
+def hamming_weight(bitstr: str) -> int:
     return sum([1 for bit in bitstr if bit == "1"])
 
 
-# def is_indset(bitstr, G):
-#     nodes = list(G.nodes)
-#     ind_set = []
-#     for idx, bit in enumerate(bitstr):
-#         if bit == "1":
-#             cur_neighbors = list(G.neighbors(idx))
-#             for node in ind_set:
-#                 if node in cur_neighbors:
-#                     return False
-#             else:
-#                 ind_set.append(idx)
-#     return True
-
-def is_indset(bitstr, G):
+def is_indset(bitstr:str, G: nx.Graph) -> bool:
     for edge in list(G.edges):
         if bitstr[edge[0]] == "1" and bitstr[edge[1]] == "1":
             return False
     return True
+
+
 ######################################################################
 # Next, we define a cost unitary that incorporates the Hamming weight operator,
 # :math:`H` and is parameterized by :math:`\gamma`:
@@ -199,7 +186,7 @@ def is_indset(bitstr, G):
 #
 
 
-def cost_layer(gamma):
+def cost_layer(gamma: List) -> None:
     for qb in graph.nodes:
         qml.RZ(2 * gamma, wires=qb)
 
@@ -264,16 +251,41 @@ def cost_layer(gamma):
 #
 # .. figure:: ../demonstrations/dqva_mis/mixer-unitary.png
 #    :align: center
-#    :width: 80%
+#    :width: 60%
 #
 #    ..
 #
 #    Formulation of the mixer unitary
 #
 # In the figure above, a PauliX rotation is applied to qubit :math:`\vert i \rangle` between two multi-controlled Toffoli gates
-# controlled by the neighbors of the :math:`i`'th vertex.
+# controlled by the neighbors of the :math:`i`'th vertex. Let us define a 
+# helper function that applies the operations shown in the figure above. 
 
-def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
+
+def apply_multi_controlled_toffoli(ancilla: int, beta:List, qubit: int) -> None:
+    """Helper function to apply the multi-controlled Toffoli, targeting the ancilla qubit"""
+
+    neighbors = list(graph.neighbors(qubit))
+
+    # Apply the multi-controlled Toffoli, targetting the ancilla qubit
+    ctrl_qubits = [i for i in neighbors]
+
+    qml.MultiControlledX(
+        control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
+    )
+
+    qml.CRX(2 * beta, wires=[ancilla, qubit])
+
+    # Uncompute the ancilla
+    qml.MultiControlledX(
+        control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
+    )
+
+# We are now ready to build the mixer layer for the QAO-Ansatz by applying the
+# multi-controlled Toffoli operations on each of the qubits in the graph. 
+
+
+def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None) -> None:
     """
     Builds the QAO-Ansatz mixer layer for max independent set problem using PennyLane operations
     
@@ -290,31 +302,20 @@ def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None):
         mixer_order = list(graph.nodes)
 
     for qubit in list(mixer_order):
-        neighbors = list(graph.neighbors(qubit))
-
-        # Apply the multi-controlled Toffoli, targetting the ancilla qubit
-        ctrl_qubits = [i for i in neighbors]
-        qml.MultiControlledX(
-            control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
-        )
-
-        qml.CRX(2 * beta, wires=[ancilla, qubit])
-
-        # Uncompute the ancilla
-        qml.MultiControlledX(
-            control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
-        )
+        apply_multi_controlled_toffoli(ancilla, beta, qubit)
 
 ######################################################################
 # We are now ready to build the circuit consisting of alternating cost and
 # mixer layers. A list of ``params`` includes parameters for the mixer
 # layer (even elements) and cost layer (odd elements).
-#
+# First let's define a helper function to initialize the ansatz. 
+# This function applies Pauli-X operations on qubits to   
+# prepare an initial state.
 
-
-def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
+def initialize_ansatz(init_state: Optional[str]=None) -> None:
+    """ Helper function to initialize circuit ansatz"""
     nq = len(graph.nodes)
-    # Initialize
+
     if init_state is None:
         init_state = "0" * nq
 
@@ -322,6 +323,13 @@ def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
         for qb, bit in enumerate(reversed(init_state)):
             if bit == "1":
                 qml.PauliX(wires=qb)
+
+
+def qaoa_ansatz(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order: Optional[List]=None) -> None:
+    nq = len(graph.nodes)
+    
+    initialize_ansatz(init_state)
+    
     if len(params) != 2 * P:
         raise ValueError("Incorrect number of parameters!")
 
@@ -334,6 +342,7 @@ def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
         cost_layer(gamma)
 
 
+
 ######################################################################
 # Now, let's build the circuit that finds the probabilities of measuring
 # each bitstring.
@@ -341,7 +350,7 @@ def qaoa_ansatz(P, params=[], init_state=None, mixer_order=None):
 
 
 @qml.qnode(dev)
-def probability_circuit(P, params=[], init_state=None, mixer_order=None):
+def probability_circuit(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order:  Optional[List]=None) -> np.ndarray:
     qaoa_ansatz(P, params, init_state, mixer_order)
     return qml.probs(wires=range(wires - 1))
 
@@ -352,16 +361,50 @@ def probability_circuit(P, params=[], init_state=None, mixer_order=None):
 # :math:`\langle C_{obj}\rangle is obtained by running the probability circuit 
 # and calculating the average Hamming weight. In each iteration, an
 # ansatz is constructed based on the mixer order and the optimal parameters
-# are determined by a classical minimization of the cost function using gradient descent.
+# are determined by a classical minimization of the cost function.
 #
-# .. math::
-#
-#
-#    \langle \beta, \gamma \vert C_{obj} \vert \beta, \gamma \rangle.
-#
+# Let us construct the optimizer that uses gradient descent to minimize a 
+# cost function f. 
+
+def optimize_params(f: Callable[[List], float], init_params: List) -> Tuple[List, float]:
+    """ Helper function to optimize circuit parameters"""
+
+    optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
+    cur_params = init_params.copy()
+
+    for i in range(70):
+        cur_params, opt_cost = optimizer.step_and_cost(f, cur_params)
+
+    return cur_params, opt_cost
 
 
-def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutoff=1):
+# We will also define a helper function that compares the independent sets 
+# generated by the solver with a currently-known best independent set.
+# This is done by comparing the hamming weights of the bitstrings 
+# with the highest probabilities with the best independent set. 
+
+
+def better_ind_sets(probs: np.ndarray, best_indset, cutoff) -> List:
+    """ Helper function to calculate better independent sets"""
+    top_counts = list(
+        map(lambda x: np.binary_repr(x, len(graph.nodes)), np.argsort(probs))
+    )[::-1]
+
+    best_hamming_weight = hamming_weight(best_indset)
+    better_strs = []
+
+    print(top_counts[:cutoff])
+    for bitstr in top_counts[:cutoff]:
+
+        this_hamming = hamming_weight(bitstr)
+        if is_indset(bitstr, graph) and this_hamming > best_hamming_weight:
+            better_strs.append((bitstr, this_hamming))
+
+    better_strs = sorted(better_strs, key=lambda t: t[1], reverse=True)
+    return better_strs  
+
+def solve_mis_qaoa(init_state: str, P: Optional[int]=1, m: Optional[int]=1, mixer_order: Optional[List]=None, 
+                   threshold: Optional[float]=1e-5, cutoff: Optional[int]=1) -> Tuple[str, np.ndarray, str, List]:
     # Select an ordering for the partial mixers
     if mixer_order == None:
         cur_permutation = np.random.permutation(list(graph.nodes)).tolist()
@@ -405,15 +448,9 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
 
             init_params = np.random.uniform(low=-np.pi, high=np.pi, size=num_params)
             print("\tCurrent Mixer Order:", cur_permutation)
-
+            
             # Optimize parameters
-            optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-            cur_params = init_params.copy()
-
-            for i in range(70):
-                cur_params, opt_cost = optimizer.step_and_cost(f, cur_params)
-
-            opt_params = cur_params.copy()
+            opt_params, opt_cost = optimize_params(f, init_params)
 
             print("\tOptimal cost:", opt_cost)
 
@@ -423,21 +460,7 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
             )
 
             # Sort bitstrings by decreasing probability
-            top_counts = list(
-                map(lambda x: np.binary_repr(x, len(graph.nodes)), np.argsort(probs))
-            )[::-1]
-
-            best_hamming_weight = hamming_weight(best_indset)
-            better_strs = []
-
-            print(top_counts[:cutoff])
-            for bitstr in top_counts[:cutoff]:
-
-                this_hamming = hamming_weight(bitstr)
-                if is_indset(bitstr, graph) and this_hamming > best_hamming_weight:
-                    better_strs.append((bitstr, this_hamming))
-
-            better_strs = sorted(better_strs, key=lambda t: t[1], reverse=True)
+            better_strs = better_ind_sets(probs, best_indset, cutoff)
 
             # If no improvement was made, break and go to next mixer round
             if len(better_strs) == 0:
@@ -464,6 +487,7 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
     return best_indset, best_params, best_init_state, best_perm
 
 
+
 ######################################################################
 # Let's run this to find the MIS!
 #
@@ -471,9 +495,8 @@ def solve_mis_qaoa(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
 base_str = "0" * len(graph.nodes)
 
 out = solve_mis_qaoa(base_str, P=1, m=4, threshold=1e-5, cutoff=1)
-print(f"Init string: {base_str}, Best MIS: {out[0]}")
+print(f"Init string: {base_str}, Best MIS: {out}")
 print()
-
 
 ######################################################################
 # Starting with an all-zero initial string will give us an independent
@@ -487,15 +510,15 @@ base_str = "0" * len(graph.nodes)
 for i in range(len(graph.nodes)):
     init_str = list(base_str)
     init_str[i] = "1"
-    out = solve_mis_qaoa("".join(init_str), P=1, m=4, threshold=1e-5, cutoff=2)
-    print(f"Init string: {init_str}, Best MIS: {out[0]}")
+    input_string = "".join(init_str)
+    out = solve_mis_qaoa(input_string, P=1, m=4, threshold=1e-5, cutoff=2)
+    print(f"Init string: {input_string}, Best MIS: {out[0]}")
     print()
-
 
 ######################################################################
 # Dynamic Quantum Variational Ansatz
 # ----------------------------------
-# We will now formulate the MIS using the DQVA Ansatz [#Saleem2020]. The cost function
+# We will now formulate the MIS using the DQVA Ansatz [#Saleem2020]_. The cost function
 # is the same as the QAO-Ansatz (the Hamming weight operator).
 #
 # In the DQVA, the way mixers are defined is slightly different from the
@@ -522,7 +545,7 @@ for i in range(len(graph.nodes)):
 #
 
 
-def mixer_dqva(alpha, ancilla, init_state, mixer_order):
+def mixer_dqva(alpha: List, ancilla: int, init_state: str, mixer_order: Optional[List]=None) -> None:
 
     # Permute the order of mixing unitaries
     if mixer_order is None:
@@ -544,21 +567,7 @@ def mixer_dqva(alpha, ancilla, init_state, mixer_order):
         if pad_alpha[qubit] == None or not graph.has_node(qubit):
             # Turn off mixers for qubits which are already 1
             continue
-
-        neighbors = list(graph.neighbors(qubit))
-
-        # Apply the multi-controlled Toffoli, targetting the ancilla qubit
-        ctrl_qubits = [i for i in neighbors]
-        qml.MultiControlledX(
-            control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
-        )
-
-        qml.CRX(2 * pad_alpha[qubit], wires=[ancilla, qubit])
-
-        # Uncompute the ancilla
-        qml.MultiControlledX(
-            control_wires=ctrl_qubits, wires=[ancilla], control_values="0" * len(neighbors)
-        )
+        apply_multi_controlled_toffoli(ancilla, pad_alpha[qubit], qubit)
 
 ######################################################################
 # The structure of the cost and mixer unitaries is similar QAO-Ansatz,
@@ -575,22 +584,16 @@ def mixer_dqva(alpha, ancilla, init_state, mixer_order):
 #
 
 
-def dqva_ansatz(P, params=[], init_state=None, mixer_order=None):
+def dqva_ansatz(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order: Optional[List]=None) -> None:
     nq = len(graph.nodes)
 
-    # Step1: Initialize
-    if init_state is None:
-        init_state = "0" * nq
-
-    else:
-        for qb, bit in enumerate(reversed(init_state)):
-            if bit == "1":
-                qml.PauliX(wires=qb)
+    initialize_ansatz(init_state)
 
     num_nonzero = nq - hamming_weight(init_state)
-    if len(params) == (nq + 1) * P:
+    if len(params) != (nq + 1) * P:
         raise ValueError("Incorrect number of parameters!")
-    alpha_list = gamma_list = []
+    alpha_list = []
+    gamma_list = []
     last_idx = 0
     for p in range(P):
         chunk = num_nonzero + 1
@@ -612,13 +615,14 @@ def dqva_ansatz(P, params=[], init_state=None, mixer_order=None):
 
 
 
+
 ######################################################################
 # Let's also define the probability circuit for the DQVA ansatz
 #
 
 
 @qml.qnode(dev)
-def probability_dqva(P, params=[], init_state=None, mixer_order=None):
+def probability_dqva(P: int, params: Optional[List]=[], init_state: Optional[str]=None, mixer_order: Optional[List]=None) -> np.ndarray:
     dqva_ansatz(P, params, init_state, mixer_order)
     return qml.probs(wires=dev.wires[:-1])
 
@@ -636,13 +640,13 @@ def probability_dqva(P, params=[], init_state=None, mixer_order=None):
 # 1. Optimization of parameters using Gradient Descent and finding the Hamming weight with new parameters
 # 2. If the Hamming weight of the new state is larger than the initial state, the initial state gets updated to this new state
 # 3. Based on this new state, partial mixers are updated (i.e., turned off for ones and turned on for zeros)
-# 4. Steps 2 and 3 are repeated unti                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  l the Hamming weight can no longer be improved
+# 4. Steps 2 and 3 are repeated until the Hamming weight can no longer be improved
 # 5. If no new Hamming weight is obtained, the partial mixers are randomized and steps 2 and 3 are repeated to check if
 #    a better Hamming weight is found. The number of randomizations is controlled via a hyperparameter.
 #
 #
 
-def solve_mis_dqva(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutoff=1):
+def solve_mis_dqva(init_state: Optional[str], P: Optional[int]=1, m: Optional[int]=1, mixer_order: Optional[List]=None, threshold: Optional[float]=1e-5, cutoff: Optional[int]=1) -> Tuple[str, np.ndarray, str, List]:
 
     # Select an ordering for the partial mixers
     if mixer_order == None:
@@ -665,9 +669,7 @@ def solve_mis_dqva(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
         return -avg_cost
 
     # Begin outer optimization loop
-    best_indset = init_state
-    best_init_state = init_state
-    cur_init_state = init_state
+    best_indset = best_init_state = cur_init_state = init_state
     best_params = None
     best_perm = copy.copy(cur_permutation)
 
@@ -691,13 +693,7 @@ def solve_mis_dqva(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
             print("\tCurrent Mixer Order:", cur_permutation)
 
             # Optimize parameters
-            optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-            cur_params = init_params.copy()
-
-            for i in range(70):
-                cur_params, opt_cost = optimizer.step_and_cost(f, cur_params)
-
-            opt_params = cur_params.copy()
+            opt_params, opt_cost = optimize_params(f, init_params)
 
             print("\tOptimal cost:", opt_cost)
 
@@ -705,18 +701,8 @@ def solve_mis_dqva(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
                 P, params=opt_params, init_state=cur_init_state, mixer_order=cur_permutation
             )
 
-            top_counts = list(
-                map(lambda x: np.binary_repr(x, len(graph.nodes)), np.argsort(probs))
-            )[::-1]
-
-            best_hamming_weight = hamming_weight(best_indset)
-            better_strs = []
-
-            for bitstr in top_counts[:1]:
-                this_hamming = hamming_weight(bitstr)
-                if is_indset(bitstr, graph) and this_hamming > best_hamming_weight:
-                    better_strs.append((bitstr, this_hamming))
-            better_strs = sorted(better_strs, key=lambda t: t[1], reverse=True)
+            # Sort bitstrings by decreasing probability
+            better_strs = better_ind_sets(probs, best_indset, cutoff)
 
             # If no improvement was made, break and go to next mixer round
             if len(better_strs) == 0:
@@ -753,12 +739,12 @@ def solve_mis_dqva(init_state, P=1, m=1, mixer_order=None, threshold=1e-5, cutof
 #
 
 base_str = "0" * len(graph.nodes)
-all_init_strs = []
 for i in range(len(graph.nodes)):
     init_str = list(base_str)
     init_str[i] = "1"
-    out = solve_mis_dqva("".join(init_str), P=1, m=4, threshold=1e-5, cutoff=1)
-    print(f"Init string: {init_str}, Best MIS: {out[0]}")
+    input_string = "".join(init_str)
+    out = solve_mis_dqva(input_string, P=1, m=4, threshold=1e-5, cutoff=1)
+    print(f"Init string: {input_string}, Best MIS: {out[0]}")
     print()
 
 
