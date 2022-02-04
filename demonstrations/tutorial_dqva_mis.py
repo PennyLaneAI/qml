@@ -312,6 +312,7 @@ def mixer_layer(beta: List, ancilla: int, mixer_order: Optional[List]=None) -> N
 # This function applies Pauli-X operations on qubits to   
 # prepare an initial state.
 
+
 def initialize_ansatz(init_state: Optional[str]=None) -> None:
     """ Helper function to initialize circuit ansatz"""
     nq = len(graph.nodes)
@@ -366,6 +367,7 @@ def probability_circuit(P: int, params: Optional[List]=[], init_state: Optional[
 # Let us construct the optimizer that uses gradient descent to minimize a 
 # cost function f. 
 
+
 def optimize_params(f: Callable[[List], float], init_params: List) -> Tuple[List, float]:
     """ Helper function to optimize circuit parameters"""
 
@@ -402,6 +404,7 @@ def better_ind_sets(probs: np.ndarray, best_indset, cutoff) -> List:
 
     better_strs = sorted(better_strs, key=lambda t: t[1], reverse=True)
     return better_strs  
+
 
 def solve_mis_qaoa(init_state: str, P: Optional[int]=1, m: Optional[int]=1, mixer_order: Optional[List]=None, 
                    threshold: Optional[float]=1e-5, cutoff: Optional[int]=1) -> Tuple[str, np.ndarray, str, List]:
@@ -644,7 +647,7 @@ def probability_dqva(P: int, params: Optional[List]=[], init_state: Optional[str
 # 5. If no new Hamming weight is obtained, the partial mixers are randomized and steps 2 and 3 are repeated to check if
 #    a better Hamming weight is found. The number of randomizations is controlled via a hyperparameter.
 #
-#
+
 
 def solve_mis_dqva(init_state: Optional[str], P: Optional[int]=1, m: Optional[int]=1, mixer_order: Optional[List]=None, threshold: Optional[float]=1e-5, cutoff: Optional[int]=1) -> Tuple[str, np.ndarray, str, List]:
 
