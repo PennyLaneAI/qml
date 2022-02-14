@@ -338,7 +338,7 @@ def S(x, thetas, wires):
 # Some math shows that setting :math:`\vartheta_i=2^{n-i}`, for
 # :math:`\{1,\ldots,n\}` produces the desired outcome.
 
-def make_thetas(m_wires):
+def make_thetas(n_wires):
     return [2 ** i for i in range(n_wires-1, -1, -1)]
 
 ###############################################################################
