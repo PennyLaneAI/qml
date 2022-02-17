@@ -98,6 +98,11 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_quantum_gans`
     :tags: pytorch 
 
+.. customgalleryitem::
+    :tooltip: Tensor network quantum circuits
+    :figure: demonstrations/tn_circuits/thumbnail_tn_circuits.png
+    :description: :doc:`demos/tutorial_tn_circuits`
+
 :html:`</div></div><div style='clear:both'>`
 
 
