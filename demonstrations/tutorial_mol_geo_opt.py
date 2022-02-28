@@ -243,13 +243,25 @@ def cost(params, x):
 #
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
-# We use the :func:`~.pennylane.finite_diff` function to compute the gradient of
+# We use the :func:`finite_diff` function to compute the gradient of
 # the Hamiltonian using a central-difference approximation. Then, we evaluate the expectation
 # value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
 
+def finite_diff(f, x, delta=0.01):
+    """Compute the central-difference finite difference of a function"""
+    gradient = []
+
+    for i in range(len(x)):
+        shift = np.zeros_like(x)
+        shift[i] += 0.5 * delta
+        res = (f(x + shift) - f(x - shift)) * delta**-1
+        gradient.append(res)
+
+    return gradient
+
 def grad_x(params, x):
-    grad_h = qml.finite_diff(H)(x)
+    grad_h = finite_diff(H, x)
     grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
 
