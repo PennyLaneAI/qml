@@ -64,9 +64,11 @@ where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
 The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues :math:`[-2.41421, 0.41421]` and
-:math:`[2.41421, 0.41421]` for the :math:`+1` and :math:`-1` eigenvalues, respectively.
+:math:`[2.41421, -0.41421]` for the :math:`+1` and :math:`-1` eigenvalues, respectively. The
+eigenvalues of the original Hamiltonian :math:`H` are
+:math:`[2.41421356, -2.41421356,  0.41421356, -0.41421356]`
 
-More generaly, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
+More generally, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
 :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` where :math:`j` is the qubit label.
 This guarantees that each term of the transformed Hamiltonian commutes with each of the Pauli-X
@@ -83,7 +85,7 @@ sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`.
 Hamiltonians, the set of :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
 of the eigenvalues that corresponds to the ground-state. This has been explained in more details in
-the following.
+the following sections.
 
 The unitary operator :math:`U` can be constructed as a
 `Clifford <https://en.wikipedia.org/wiki/Clifford_gates>`__ operator [#bravyi2017]_
@@ -140,7 +142,7 @@ print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
-# :math:`q_0, q_1` either with the Identity or with a Pauli-X operator. For each of these qubits,
+# :math:`q_2, q_3` either with the Identity or with a Pauli-X operator. For each of these qubits,
 # we can simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`.
 # This results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
 # tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
@@ -152,22 +154,22 @@ paulix_sector = qml.hf.optimal_sector(H, generators, mol.n_electrons)
 print(paulix_sector)
 
 ##############################################################################
-# The optimal eigenvalues are :math:`-1, -1` for qubits :math:`q_0, q_1`, respectively. We can now
+# The optimal eigenvalues are :math:`-1, -1` for qubits :math:`q_2, q_3`, respectively. We can now
 # build the tapered Hamiltonian with the :func:`~.pennylane.hf.transform_hamiltonian` function which
 # constructs the operator :math:`U`, applies it to the Hamiltonian and finally tapers off the
-# qubits :math:`q_0, q_1` by replacing the Pauli-X operators acting on those qubits with the optimal
+# qubits :math:`q_2, q_3` by replacing the Pauli-X operators acting on those qubits with the optimal
 # eigenvalues.
 
 H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
 print(H_tapered)
 
 ##############################################################################
-# The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! The qubit labels have been
-# updated to :math:`q_0, q_1` for simplicity. We can verify that the original and the tapered
-# Hamiltonian both give the correct ground state energy of the :math:`\textrm{HeH}^+` cation, which
-# is :math:`-2.8626948638` Ha computed with the full configuration interaction (FCI) method. In
-# PennyLane, it's possible to build a sparse matrix representation of Hamiltonians. This allows us
-# to directly diagonalize them to obtain exact values of the ground-state energies.
+# The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
+# original and the tapered Hamiltonian both give the correct ground state energy of the
+# :math:`\textrm{HeH}^+` cation, which is :math:`-2.8626948638` Ha computed with the full
+# configuration interaction (FCI) method. In PennyLane, it's possible to build a sparse matrix
+# representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
+# of the ground-state energies.
 
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
 print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
@@ -202,7 +204,7 @@ print(f'HF energy: {np.real(HF_energy):.8f} Ha')
 dev = qml.device('default.qubit', wires=H_tapered.wires)
 @qml.qnode(dev)
 def circuit():
-    qml.BasisState(np.array([0, 0]), wires=H_tapered.wires)
+    qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H_tapered).toarray() @ qubit_state
@@ -216,7 +218,7 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # Finally, we can use the tapered Hamiltonian and the tapered references state to perform a VQE
 # simulation and compute the ground state energy of the :math:`\textrm{HeH}^+` cation. We use the
 # tapered Hartree-Fock state to build a circuit that prepares an entangled state by applying Pauli
-# rotation gates [#ryabinkin2018] since we cannot use the typical particle-conserving gates
+# rotation gates [#ryabinkin2018]_ since we cannot use the typical particle-conserving gates
 # with the tapered state
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
@@ -237,7 +239,7 @@ params = np.zeros(3)
 
 for n in range(1, 21):
     params, energy = optimizer.step_and_cost(circuit, params)
-    print(f'n: {n}, E: {energy:.8f} Ha')
+    print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
 
 ##############################################################################
 # The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, while the number of qubits
