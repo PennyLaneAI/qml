@@ -10,9 +10,7 @@
     The quantum perceptron can be implemented as a single (fast) adiabatic 
     passage in a model of interacting spins. To demonstrate the learning ability 
     of the quantum perceptron, we train it to perform the XOR gate and discuss 
-    its power consumption.
-
-    Author affiliation: ICFO
+    its power consumption. Author affiliation: ICFO.
 
 
 - title: quantum Case-Based Reasoning (qCBR) learning by cases
