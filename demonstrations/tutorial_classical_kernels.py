@@ -18,7 +18,7 @@ How to approximate a classical kernel with a quantum computer
    tutorial_expressivity_fourier_series Quantum models as Fourier series
 
 
-*Author: Elies Gil-Fuster (Xanadu resident). Posted: 01 Mar 2022.*
+*Author: Elies Gil-Fuster (Xanadu resident). Posted: DD MMMM 2021.*
 
 Forget about advantages, supremacies, or speed-ups.
 Let us understand better what we can and cannot do with a quantum computer.
