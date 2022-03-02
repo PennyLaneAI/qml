@@ -1,3 +1,20 @@
+- title: Implementing a unitary quantum perceptron with quantum computing
+  author: Katerina Gratsea
+  date: 03/02/2022
+  code: https://github.com/KaterinaGratsea/Unitary_quantum_perceptron
+
+  paper: https://iopscience.iop.org/article/10.1209/0295-5075/125/30004
+  color: heavy-rain-gradient
+  description: |
+    Here, we simulate a unitary quantum perceptron with quantum computing. 
+    The quantum perceptron can be implemented as a single (fast) adiabatic 
+    passage in a model of interacting spins. To demonstrate the learning ability 
+    of the quantum perceptron, we train it to perform the XOR gate and discuss 
+    its power consumption.
+
+    Author affiliation: ICFO
+
+
 - title: quantum Case-Based Reasoning (qCBR) learning by cases
   author: Parfait Atchade
   date: 12/22/2021
