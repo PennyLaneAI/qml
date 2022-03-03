@@ -1,3 +1,29 @@
+- title: Weighted SubSpace VQE to find Kth excited state energies
+  author: Jay Patel, Siddharth Patel, and Amit Hirpara
+  date: 03/07/2022
+  code: https://github.com/Jay-Patel-257/Qhack-2022/blob/main/SSVQE.ipynb
+
+  paper: https://arxiv.org/pdf/1810.09434.pdf
+  color: heavy-rain-gradient
+  description: |
+    Generally, The variational quantum eigensolver (VQE) is used for finding 
+    the ground state energy for a given hamiltonian. To find the kth excited 
+    state energy of the hamiltonian we would need to run the VQE optimization 
+    process for at least k+1 time. Not to mention each time we need to calculate 
+    the hamiltonian again taking into account the state of the previous iteration. 
+    Even after that, the accuracy decreases as the value of k increases.
+    
+    This is where the idea of Subspace Search VQE (SSVQE) comes in. 
+    The algorithm is used to find kth excited-state energy of a hamiltonian in 
+    just two subsequent optimization processes. The original research about the 
+    development of SSVQE is given in this paper. But, can we do better? 
+    Yes, the research shows that using the weights as hyperparameters we can find the 
+    kth excited-state energy in just a single optimization process. This is a more 
+    generalised version of SSVQE namely, Weighted SSVQE and it will be the centre of 
+    our focus in this project. There are two variants of this algorithm:
+    Weighted SSVQE to find kth excited state energy, and weighted SSVQE to find all 
+    energies up to the kth excited state.
+
 - title: Implementing a unitary quantum perceptron with quantum computing
   author: Katerina Gratsea
   date: 03/02/2022
