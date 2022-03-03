@@ -15,7 +15,7 @@
     
     The Subspace Search VQE (SSVQE) algorithm is used to find the kth excited-state energy of a hamiltonian in 
     two subsequent optimization processes.
-    Research on a more generalised version of SSVQE, namely Weighted SSVQE, shows that by using the weights as hyperparameters we can find the 
+    Research on a more generalized version of SSVQE, namely Weighted SSVQE, shows that by using the weights as hyperparameters we can find the 
     kth excited-state energy in just a single optimization process. There are two variants of this algorithm:
     Weighted SSVQE to find kth excited state energy, and weighted SSVQE to find all 
     energies up to the kth excited state.
