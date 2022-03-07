@@ -14,7 +14,7 @@ Tensor-Network Quantum Circuits
    tutorial_gaussian_transformation Gaussian transformation
    tutorial_state_preparation Training a quantum circuit with PyTorch
 
-*Author: PennyLane dev team. Last updated: 2 March 2022.*
+*Authors: Diego Guala, Esther Cruz-Rico, Shaoming Zhang, Juan Miguel Arrazola Last updated: 4 March 2022.*
 
 This demonstration explains how to use PennyLane templates to design and implement tensor-network quantum circuits
 as in `Huggins et. al. (2018) <https://arxiv.org/abs/1803.11537>`__. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
@@ -44,7 +44,7 @@ In diagrammatic notation, the repeated indices appear as lines connecting tensor
 We see two tensors of rank two, connected by one repeated index, :math:`k`. The dimension of the
 repeated index is called the bond dimension.
 
-.. image:: ../demonstrations/tn_circuits/Simple_TN.PNG
+.. image:: ../demonstrations/tn_circuits/Simple_TN_Color.PNG
     :align: center
     :width: 50 %
 
@@ -83,7 +83,7 @@ guideline for the shape of the quantum circuit.
 More specifically, the tensors in the tensor networks above are replaced with
 unitary operations to obtain quantum circuits of the form:
 
-.. image:: ../demonstrations/tn_circuits/MPS_TTN_Circuit.PNG
+.. image:: ../demonstrations/tn_circuits/MPS_TTN_Circuit_Color.PNG
     :align: center
     :width: 50 %
 
@@ -204,9 +204,9 @@ qml.draw_mpl(circuit)(template_weights)
 
 
 def block(weights, wires):
-    qml.CNOT(wires=wires)
     qml.RX(weights[0], wires=wires[0])
     qml.RX(weights[1], wires=wires[1])
+    qml.CNOT(wires=wires)
 
 
 dev = qml.device("default.qubit", wires=4)
@@ -256,9 +256,9 @@ for i in BAS:
 
 
 def block(weights, wires):
-    qml.CNOT(wires=wires)
     qml.RX(weights[0], wires=wires[0])
     qml.RX(weights[1], wires=wires[1])
+    qml.CNOT(wires=wires)
 
 
 dev = qml.device("default.qubit", wires=4)
