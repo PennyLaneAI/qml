@@ -5,14 +5,12 @@ Tensor-Network Quantum Circuits
 ================================
 
 .. meta::
-    :property="og:description": This demonstration explins how to simulate tensor-network quantum circuits.
+    :property="og:description": This demonstration explains how to simulate tensor-network quantum circuits.
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tn_circuits.png
 
 .. related::
 
-   tutorial_plugins_hybrid Plugins and Hybrid computation
-   tutorial_gaussian_transformation Gaussian transformation
-   tutorial_state_preparation Training a quantum circuit with PyTorch
+   tutorial_variational_classifier Variational classifier
 
 *Authors: PennyLane Dev Team, Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
 Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 9 March 2022.*
