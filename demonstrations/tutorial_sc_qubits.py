@@ -10,19 +10,16 @@ Superconducting qubits
 .. related::
    tutorial_trapped_ions Quantum computation with trapped ions
 
-*Author: PennyLane dev team. Posted: XX November 2021. Last updated: XX November 2021.*
+*Author: PennyLane dev team. Posted: 22 March 2022. Last updated: 22 March 2022.*
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers. 
-It is no surprise that this technology is being used by companies such as Google and IBM in 
-their quest to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 
-2019, and IBM recently built its Eagle quantum computer with 127 qubits, outmatching its 
-competitors by tenths of qubits! The central insight that allows for these quantum computers 
-is that superconductivity is a quantum phenomenon, so we can use superconducting circuits 
-as quantum systems that we can control at will. They are nothing but a modification of 
-current microchip technology adapted to work with superconductors, so we have most of the
-infrastructure in place! However, the large size of the qubit makes it prone to decoherence, 
-making it more short-lived than other types of qubits. Nevertheless, we can get around this, 
-and the results speak for themselves.
+It is no surprise that this technology is being used by well-known tech companies in their quest 
+to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 and, in 2021, 
+IBM built its Eagle quantum computer with 127 qubits! The central insight that allows for these 
+quantum computers is that superconductivity is a quantum phenomenon, so we can use superconducting
+circuits as quantum systems that we can control at will. They are nothing but a modification of 
+current microchip technology adapted to work with superconductors, so we have most of the 
+infrastructure in place! 
 
 By the end of this demo, you will learn how superconductors are used to create, prepare, 
 control, and measure the state of a qubit. Moreover, you will identify the strengths and
@@ -62,188 +59,260 @@ to come soon.
 # Superconductivity
 # ~~~~~~~~~~~~~~~~~~
 #
-# To introduce superconductivity, we need to understand why some materials resist
-# the passage of electrons at the microscopic level. When an electric current travels
-# through a material, there are two types of electrons: those flowing freely,
-# known as *conduction electrons*; and those attached to an atom, known as *valence electrons*.
-# In atoms, electrons populate some discrete energy levels, which have a population limit.
-# Levels with lower energies are preferred, but they reject any new electrons to higher
-# levels as they fill up. A very similar phenomenon occurs for the conduction electrons:
-# if too many conduction electrons have a low energy, they will reject any new conduction
-# electrons to a higher energy range.
+# .. figure:: ../demonstrations/sc_qubits/sc_device.png
+#    :align: center
+#    :width: 60%
 #
-# The energies of the valence electrons are usually lower than those of the conduction electrons.
-# A material is a good conductor of electricity if a valence electron does not need too
-# much energy to become a conduction electron. In other words, the *energy bandgap* of the
-# material is small. In conductors, this gap is, in fact, zero: electrons in atoms can easily
-# unbind themselves and become free to move in the conductor. However, even in conductors, the
-# electrons rejected by the filled conduction levels may scatter and collide with the atoms,
-# dissipating energy. The higher the temperature, the more likely these collisions are since
-# the atoms move around more. These collisions are the origin of electric resistance.
+#    ..
 #
-# For some materials, at extremely low temperatures, something somewhat counterintuitive occurs.
-# Conduction electrons start attracting each other and form pairs. This phenomenon is strange
-# since electrons are supposed to repel each other. However, as the motional energy of the
-# atoms in the conductor decreases, the conduction electrons can attract the positive nuclei,
-# which in turn attract other electrons. The net effect is a coupling of electrons in *Cooper pairs*,
-# which behave very differently to individual electrons: **any number of them can have the
-# same energy**. Therefore, they can all be in the lowest conduction energy state.
-# They will not reject any other Cooper pairs, and consequently, they will not scatter
-# into the atoms and dissipate energy. Cooper pairs flow through the material without any
-# resistance. They are the reason that we have superconductors!
+#    Superconducting chip with 4 qubits (schematics)
 #
-# Quantum Circuits
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# To understand how superconducting qubits are, we first need to explain why some materials are 
+# superconductors. Let's begin by addressing a simpler question: why do conductors allow for the 
+# easy passage of electrons, and insulating materials don't? Solid-state physics tell us that, 
+# when an electric current travels through a material, the electrons therein can be of two types. 
+# *Conduction electrons* flow freely through the material; *valence electrons*, are attached to 
+# the atoms that form the material itself. A material is a good conductor of electricity 
+# if the valence electrons require # no energy to be stripped from the atoms to become 
+# conduction electrons. Similarly, the material is a semi-conductor if the energy needed is small; 
+# and it's an insulator if the energy is large.
 #
-# What do we need for a system to be quantum? Contrary to common lore,
-# it is neither necessary nor sufficient for it to be small. We have
-# observed quantum behaviour in superconducting circuits, which are
-# larger than most bacteria. To showcase quantum effects, we have
-# observed that the superconducting circuit must be **isolated from
-# an environment we cannot control**. To achieve this, we need to
-# satisfy two conditions.
+# But, if there's a zero energy cost to get conduction electrons, then why don't all conductors 
+# have infinite conductivity? Even the tiniest of stimuli should create a very large current! 
+# To address this valid concern, let us recall the *exclusion principle* in atomic physics: 
+# the atom's discrete energy levels have a population limit, so only a limited number of 
+# electrons can have the same energy. However, the exclusion principle is not limited 
+# to electrons in atomic orbitals. In fact, it applies to all *fermions*, that is, particles 
+# that have half-integer spin. Conduction electrons also happen to be organized in discrete 
+# *conduction energy levels*. They are no less a fermion than valence electrons are, 
+# so they must also abide by this law! The conductivity is then limited because, when the 
+# lower conduction energy levels are occupied, the energy required to promote valence to 
+# conduction electrons is no longer zero. This energy will keep increasing as the population 
+# of conduction electrons grows.
 #
-# First, we have to ensure that **we are not putting too much energy into
-# the environment**, compared to the energy they store. An energy leak
-# carries information about the system and counts as a partial measurement,
-# thus destroying the quantum properties. Superconductors are great in this
-# regard: since there is no resistance, there will be no energy output.
-# But this is not enough, as we can observe by turning on our microwave.
-# This appliance stores a lot of energy and does not dissipate it into our
-# kitchen. So what makes a microwave non-quantum?
+# .. figure:: ../demonstrations/sc_qubits/conduction_band.png
+#    :align: center
+#    :width: 60%
 #
-# Here is where the second condition kicks in. When a system is at a high temperature,
-# **particles in the environment are constantly interacting with it, causing decoherence**.
-# For a superconducting circuit to preserve its quantum properties for a long time,
-# we need to **cool it to about 10 mK**, well below the temperature required by
-# superconductivity. Such low temperatures are reached inside a dilution refrigerator.
+#    ..
 #
-# Let us study a simple circuit known as a *resonator*. This circuit has two components.
-# The first one is a capacitor :math:`C`, which consists of two parallel metallic plates that
-# can store charge. The second one is an inductor :math:`L` connected to both capacitor plates.
-# When a varying current goes through the inductor, it exerts a force on the charges opposite
-# to their motion. But the attraction between the plates is proportional to the charge contained
-# in each of them.  The net effect of both components is that the more charge a capacitor has,
-# the more the flow of charges is resisted by the inductor. This behaviour is the same as a spring's:
-# the more one stretches a spring, the more it resists being extended and, once released,
-# it starts to oscillate. Since its behaviour is similar to that of a prototypical harmonic
-# oscillator, this circuit is also a harmonic oscillator.
+#    Valence and conduction energy levels
 #
-# We can now make the resonator superconducting by bringing the temperature down. At these
-# low temperatures, we experimentally observe that the possible energy values are given by
+# However, superconductors do have infinite conductivity. How is this even possible? 
+# It's not a phenomenon that we see in our daily lives. For some materials, 
+# at extremely low temperatures, the conduction electrons attract the positive nuclei 
+# to form regions of high positive charge density, alternating with regions of 
+# low charge density. This charge distribution oscillates in an organized manner, 
+# creating waves in the material known as *phonons*. The conduction electrons are 
+# pushed together by these phonons, forming *Cooper pairs*. Most importantly, 
+# these pairs of electrons are no longer fermions; they are bosons — particles with integer spin — 
+# and need not obey the exclusion principle. We no longer have a population limit in 
+# the lower conduction energy levels, allowing for infinite conductivity!
 #
-# .. math:: E = n\hbar\omega.
+# .. figure:: ../demonstrations/sc_qubits/cooper_pairs.png
+#    :align: center
+#    :width: 50%
 #
-# where :math:`n`is a natural number, :math:`\hbar` is Planck's constant, and :math:`\omega` is the resonant
-# frequency of the circuit, which depends on the the inductance and the capacitance.
-# The circuit can only absorb or emit energy in multiples of :math:`\hbar\omega` in packets
-# known as *photons*. This separation of energy levels is an inherently quantum effect,
-# so superconducting circuits are quantum systems. In particular, the superconducting
-# resonator is a quantum harmonic oscillator: its energy levels are evenly spaced.
+#    ..
+#
+#    Cooper pairs are formed in region of high positive charge
 #
 # Building an artificial atom
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Can we use the superconducting resonator as a qubit? By definition, a qubit is a system
-# with two energy levels. The harmonic oscillator has infinitely many, but this does not
-# matter in many applications: we simply restrict to the two lowest energy levels.
-# This cannot be done with the harmonic oscillator. The energy levels are equally spaced,
-# which means that if we feed the system with photons of energy :math:`\hbar\omega`, there
-# is the possibility of reaching the higher energy states. This is rather inconvenient
-# since it makes it impossible to focus only on two energy states. If we want to get
-# around this issue, we should find a way to change the energy level differences in our circuit.
+# When we code in PennyLane, we deal with the abstraction of a qubit. But how is a qubit 
+# actually implemented physically? Some of the most widely used real-life qubits are 
+# individual atoms. But atoms are given to us by nature, and we cannot alter their properties. 
+# So although they are reliable qubits, they are not versatile at all. We may adapt our 
+# technology to the atoms, but they cannot adapt to our technology. Could there be a way to
+# build a device with the same properties that make atoms suitable qubits? 
+# Let's see if we can build an artificial atom!
 #
-# There is, in fact, a circuit element that does this: a *Josephson junction*. It
-# consists of a very thin piece of an insulating placed between two superconducting metals.
-# At first thought, the Josephson junction should play the role of a resistor, and
-# since we have superconducting metals on either side of it, no current should go through it.
-# Here is where *tunnelling*, another famous quantum effect, comes into play.
-# Because of the spread-out nature of their wave function, Cooper pairs can
-# actually go through the Josephson junction with some probability.
+# Our first task is to isolate the features that an ideal qubit should have. First and foremost, 
+# we must not forget that a qubit is a physical system with **two distinguishable configurations** 
+# that correspond to the computational basis states. In the case of an atom, these are usually the 
+# ground and excited states, :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`, of a 
+# valence electron. We can distinguish these states reliably because the energy levels in an atom are discrete, 
+# an exclusive feature of quantum systems. This means that if we measure the energy of the valence electron 
+# that is in either  :math:`\left\lvert g \right\rangle` or :math:`\left\lvert e \right\rangle`, 
+# we will get two — and only two — possible values :math:`E_0` and :math:`E_1`, associated to  
+# :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle` respectively. 
+# We cannot get anything in between! Therefore, our artificial atom should be a device 
+# whose **energy levels are discrete**. 
 #
-# By replacing the inductor in the superconducting circuit with a Josephson junction,
-# we introduce anharmonicity in the energy levels. Like in atoms, energy levels
-# become unevenly spaced, so we call such a circuit an *artificial atom*.
-# They consist of the junction :math:`J` and the capacitor :math:`C`, but we have to add one
-# element for them to be useful as a qubit. To interact with the environment in
-# a controlled way, we need a *gate capacitor* :math:`C_g` in the artificial atom that
-# receives electromagnetic inputs from outside. The amount of charge :math`Q_g` in this
-# capacitor can be chosen by the experimenter, and it determines how strongly the
-# circuit interacts with the environment. Moreover, the separation in energy levels
-# depends on :math`Q_g` as shown below.
+# .. figure:: ../demonstrations/sc_qubits/photon_absorb.png
+#    :align: center
+#    :width: 60%
 #
-# There is a problem with this dependence, however. A small change in the gate charge :math:`Q_g`
-# can change the difference in energy levels significantly. A solution to this issue is to
-# work around the value :math:`Q_g/2e = 1/2`, where the levels are not too sensitive to changes in
-# the gate charge. But there is a more straightforward solution: the difference in energy level
-# also depends on the in-circuit capacitance :math:`C` and the physical characteristics of the junction,
-# which we take as fixed. As we make the capacitance larger, the energy level differences become
-# less sensitive to :math:`Q_g`.
+#    ..
 #
-# As we see from the graph above, there is a price to be paid: making :math:`C` larger does reduce
-# the sensitivity to the gate charge, but it also makes the differences in energy levels more equal.
-# However, the latter effect turns out to be smaller than the former, so we can adjust the capacitance
-# value and preserve some anharmonicity. The regime that has been proven ideal is known as the
-# **transmon regime**, and artificial atoms in the regime are called **transmons**.
-# They have proven to be highly effective as qubits, and they are used in almost all
-# applications nowadays. We can thus work with the first two energy levels of the transmon,
-# which we take to be separated by an energy gap
+#    Photon with a particular energy excite electrons
+#
+# A valence electron in an atom, however, may be in more than these two states. In fact, the 
+# energy levels in an atom are infintely many.  How do we guarantee that an electron does not 
+# escape to another state that is neither of our hand-picked states :math:`\left\lvert g \right\rangle` 
+# and :math:`\left\lvert e \right\rangle`? The transition between the ground and the excited state
+# only happens when the electron a absorbs photon (a particle of light) with energy 
+# :math:`\Delta E = E_1 - E_0`. To get to another state with energy :math:`E_2`, 
+# the electron would need to absorb a photon with energy :math:`E_2 - E_1` or :math:`E_2-E_0`. In an atom, 
+# these energy differences are always different: there is a **non-uniform spacing between the energy levels**. 
+# Therefore, if we limit ourselves to interacting with the atom using photons with energy :math:`\Delta E`, 
+# we will not go beyond the states that define our qubit. 
+#
+# .. figure:: ../demonstrations/sc_qubits/anarmonic.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Atomic vs. superconducting LC circuit energy levels
+#
+# Most importantly, the physical system under consideration must **exhibit quantum properties**. 
+# The presence of energy levels is indeed one such property, so if we do build a device that stores 
+# energy in discrete values, we can be sure that it obeys the laws of quantum mechanics. Usually, 
+# one thinks of quantum system as being at least as small as a molecule, but building something 
+# so small is technologically impossible. It turns out that we don't need to go to such small 
+# scales. If we build a somewhat small electric circuit using superconducting wires and bring 
+# it to temperatures of about 10 mK, then it exhibits discrete energy levels, so it must be a 
+# quantum system. 
+#
+# Let's then build the simplest superconducting circuit. We do not want the circuit to warm up, or 
+# it will lose its quantum properties. Of all the elements that an ordinary circuit may have, 
+# only two of them do not produce heat when they're superconducting: *capacitors* and *inductors*.
+# Capacitors are two parallel # metalic plates that store electric charge. 
+# They are characterized by their *capacitance* :math:`C`, which measures how much charge 
+# they can store when connected to a source of fixed voltage.  Inductors are wires shaped 
+# as a coil and store magentic fields when a current passes through. 
+# These magnetic fields, in turn, slow down changing currents that pass through the element. 
+# They are described by an *inductance* :math:`L`, which measures the strength of the magnetic field 
+# stored in the inductor, at a fixed current. The simplest superconducting circuit is therefore 
+# and capacitor connected to an inductor, as shown below:
+#
+# .. figure:: ../demonstrations/sc_qubits/LC_circuit.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Superconducting LC circuit
+#
+# Sadly, this simple circuit has a problem: the spacing between energy levels is constant, 
+# so we can't guarantee that we'll be working with two energy states. But there turns out to 
+# be a fix for this. Enter the *Josephson junction*. It consists of a very thin piece of an 
+# insulating placed between two superconducting metals. Why do we need this? If it's insulating, 
+# no current should go through it and our circuit should stop working! Here's where another 
+# famous quantum effect comes into play: the *tunnel effect*. Due to the quantum probabilistic
+# behaviour of their location, Cooper pairs can sometimes go through the Josephson junction. 
+# If we replace the inductor by one of these junctions, the energy levels become unevenly spaced, exactly 
+# as we wanted. We have built an artificial atom!
+#
+# .. figure:: ../demonstrations/sc_qubits/JC_circuit.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Circuit with a Josephson junction and a gate capacitor
+#
+# The transmon
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Mission accomplished? Not yet. We want our qubit to be useful for building quantum computers. 
+# In short, this means that we need to interact with the environment in a controlled way. 
+# A way to do this is to add a *gate capacitor* :math:`C_g` to the artificial atom, so that it
+# can receive external signals (photons in our case). The amount of charge :math:`Q_g` in this 
+# capacitor can be chosen by the experimenter, and it determines how strongly the circuit 
+# interacts with the environment. But we run into a problem again, the gate capacitor messes 
+# up with our uneven energy levels, which we worked so hard to obtain. The separation in energy 
+# levels depends on :math:`Q_g` as shown below.
+#
+# .. figure:: ../demonstrations/sc_qubits/energy_levels.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Energy levels as a function of the charge in the gate capacitor
+#
+# The problem with this dependence is that a small change in the gate charge :math:`Q_g` can change the 
+# difference in energy levels significantly. A solution to this issue is to work around the 
+# value :math:`Q_g/2e = 1/2`, where the levels are not too sensitive to changes in the gate charge. 
+# But there is a more straightforward solution: the difference in energy levels also depends 
+# on the in-circuit capacitance :math:`C` and the physical characteristics of the junction, which 
+# we take as fixed. As we make the capacitance larger, the energy level differences 
+# become less sensitive to :math:`Q_g`. 
+#
+# But there is a price to be paid: making the in-circuit capacitance :math:`C` larger does reduce the 
+# sensitivity to the gate charge, but it also makes the differences in energy levels more uniform.
+# Does that make the Josephson junction pointless? Thankfully, the latter effect turns out to be 
+# smaller than the former, so we can adjust the capacitance value and preserve some non-uniformity. 
+# The regime that has been proven ideal is known as the **transmon regime**, and artificial atoms
+# in the regime are called **transmons**. They have proven to be highly effective as qubits, 
+# and they are used in almost all applications nowadays. We can thus work with the first two 
+# energy levels of the transmon, which we will also denote :math:`\left\lvert g \right\rangle` and 
+# :math:`\left\lvert e \right\rangle`, the ground and excited states respectively. The energy difference 
+# between these states is known as the *energy gap* :math:`E_a`. We can stimulate transitions using 
+# photons of frequency :math:`\omega_a`, where
 #
 # .. math:: E_a = \hbar\omega_a
 #
-# Here, :math:`\omega_a` is the resonant frequency of the qubit: a photon with that frequency
-# will tend to make the transmon go from the ground to the excited state.
-#
-# We have now partially satisfied Di Vincenzo's first criterion of a well-defined qubit, and
-# we will discuss scalability later. A great feature of superconducting qubits is that the second
-# criterion is satisfied effortlessly. Since the excited states in an artificial atom are
-# short-lived and prefer to be on the ground state, all we have to do is wait for a short period.
-# If the circuit is well isolated, it is guaranteed that all the qubits will be in the ground
-# state with a high probability after this short interval.
+# We have now partially satisfied Di Vincenzo's first criterion of a well-defined qubit, 
+# and we will discuss scalability later. A great feature of superconducting qubits is that 
+# the second criterion is satisfied effortlessly. Since the excited states in an artificial 
+# atom are short-lived and prefer to be on the ground state, all we have to do is wait for a 
+# short period. If the circuit is well isolated, it is guaranteed that all the qubits will 
+# be in the ground state with a high probability after this short interval. 
 #
 # Measuring the circuit's state
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Now that we have fabricated our qubit to our liking, we need to understand how to manipulate it.
-# The way to do this is to put the qubit inside an *optical cavity*, a metal box where we can
-# contain electromagnetic waves. Our focus will be on the so-called *Fabry-Perot* cavities.
-# They consist of two mirrors facing each other and whose rears are coated with an
-# anti-reflecting material. Something surprising happens when we shine a beam of light
-# on a  Fabry-Perot cavity of length :math:`L`: electromagnetic waves will only be transmitted
-# when they have a wavelength :math `\lambda` such that
+# Now that we have finally fabricated our qubit, we need to understand how to manipulate it. 
+# The way to do this is to put the qubit inside an *optical cavity*, a metal box where we can 
+# contain electromagnetic waves. Our focus will be on the so-called *Fabry-Perot* cavities. 
+# They consist of two mirrors facing each other and whose rears are coated with an anti-reflecting 
+# material. Something surprising happens when we shine a beam of light on a  Fabry-Perot cavity of 
+# length $L$: electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda` 
+# such that
 #
 # .. math:: L = L=n\lambda/2,
 #
-# where :math:`n` is an arbitrary positive integer. If this condition is not met, most photons
-# will be reflected away. Therefore, we will have an electromagnetic field inside if we
-# carefully tune our light source to one of these wavelengths. In this case, we say that
-# we are *driving* the cavity. For superconducting qubits, it is most common to use
-# wavelengths in the microwave range.
+# where :math:`n` is an arbitrary positive integer. If this condition is not met, most photons will be reflected away. 
+# Therefore, we will have an electromagnetic field inside if we carefully tune our light source to one of these
+# wavelengths. In this case, we say that we are *driving* the cavity. For superconducting qubits, it is most 
+# common to use wavelengths in the microwave range.
 #
-# Following Di Vincenzo's fifth criterion, let us see how we can measure the state of the qubit
-# placed inside the cavity. To transmit information, we need to shine light at a frequency :math:`\omega_r`
-# that the cavity can transmit (recall that the frequency and the wavelength are inversely proportional).
-# We may also choose the frequency value to be far from the frequency gap :math:`\omega_a` of the
-# superconducting circuit, so the photons are not absorbed by it. Namely, the *detuning*
-# :math:`\Delta` needs to be large:
+# .. figure:: ../demonstrations/sc_qubits/fabry_perot.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Fabry-Perot cavity
+#
+# Following Di Vincenzo's fifth criterion, let's see how we can measure the state of the qubit placed inside the cavity. 
+# To transmit information, we need to shine light at a frequency :math:`\omega_r` that the cavity can transmit 
+# (recall that the frequency and the wavelength are related via :math:`\omega = 2\pi c/\lambda`, where :math:`c` is the speed of light). 
+# We may also choose the frequency value :math:`\omega_r` to be far from the transmon's frequency gap :math:`\omega_a`, so the qubit 
+# does not absorb the photons. Namely, the *detuning* :math:`\Delta` needs to be large:
 #
 # .. math:: \Delta \equiv \left\lvert \omega_r - \omega_a \right\rvert \gg 1.
 #
-# What happens to the photons of this frequency that meet paths with the qubit? They are scattered
-# by the circuit, so this chosen value for the frequency is known as the *dispersive regime*.
-# Scattering counts as an interaction, albeit a weak one, so the scattered photons contain
-# some information about the qubit's state. Indeed, the collision causes an exchange in
-# momentum and energy. For the photon, this means that its frequency will change slightly.
-# The qubit will simply acquire a negligible amount of kinetic energy. If we carefully measure
-# the frequency of the scattered photons, we will distill the information about the state of
-# the qubit and measure its state.
+# What happens to the photons of this frequency that meet paths with the qubit? They are scattered by the circuit, 
+# as opposed to photons of frequency :math:`\omega_a`, which get absorbed. Scattering counts as an interaction, 
+# albeit a weak one, so the scattered photons contain some information about the qubit's state. 
+# Indeed, the collision causes an exchange in momentum and energy. For the photon, this means that its 
+# frequency will change slightly. If we carefully measure the frequency of the scattered photons, 
+# we can distill the information about the state of the qubit and measure its state.
 #
-# Let us recall that Hamiltonians tell us how quantum states change in time due to external influences.
-# For example, assuming that the cavity starts in the vacuum state :math:`\left\lvert 0 \right\rangle`,
-# according to Schrodinger's equation,  the state evolves to :math:`\left\lvert \psi(t)\right\rangle=
-# \exp(-i\hat{H}/\hbar)\left\lvert 0 \right\rangle` after a time :math:`t`. Suppose we shine an
-# electromagnetic wave of amplitude :math:`\epsilon` and frequency within the dispersive regime on the cavity.
-# The Hamiltonian that describes the field-qubit system inside it is
+# To understand how this works in more detail, we need to do some hands-on calculations. We will rely on the concept 
+# of a Hamiltonian; do read the blue box above if you need a refresher on the topic! We are given a Hamiltonian 
+# :math:`\hat{H}` that describes the transmon and the photons inside the cavity. The transmon is initially in its ground state 
+# :math:`\left\lvert g \right\rangle` and cavity starts without any photons in it, in the *vacuum state* denoted 
+# by :math:`\left\lvert 0 \right\rangle`. According to Schrodinger's equation,  the state of the cavity evolves 
+# into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}/\hbar)\left\lvert g \right\rangle\otimes\left\lvert 0 \right\rangle` 
+# after a time :math:`t`. What is the Hamiltonian that describes light of amplitude:math: `\epsilon` and frequency :math:`\omega_r` incident 
+# on the cavity, when the detuning :math:`\Delta` is large? Deriving the Hamiltonian is not an easy job, so we should trust 
+# physicists on this one!  The Hamiltonian turns out  to be
 #
 # .. math:: \hat{H}=\hbar(\omega_r I+\chi\hat{\sigma}_z)\otimes\hat{N} + \hbar\epsilon I\otimes \hat{P},
 #
@@ -251,11 +320,11 @@ to come soon.
 # :math:`\epsilon` is the amplitude of the electromagnetic wave incident on the cavity. The shift :math:`\chi` is
 # a quantity that depends on the circuit and gate capacitances and the detuning :math:`\Delta`.
 #
-# The effect of this evolution can be calculated explicitly. Driving the cavity with microwaves gives us a *coherent
-# state* of light contained in it, which is the state of light that lasers give out.
-# Coherent states are completely determined by their average position :math:`\bar{x}` and average momentum :math:`\bar{p}`,
-# so we will denote them via :math:`\left\lvert \bar{x}, \bar{p}\right\rangle`. For the state of the qubit
-# and cavity system, we write the ket in the form :math:`\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle`.
+# The effect of this evolution can be calculated explicitly. Shining microwaves on the cavity gives 
+# us a *coherent state* of light contained in it, which is the state of light that lasers give out. 
+# Coherent states are completely determined by their average position :math:`\bar{x}` and average momentum :math:`\bar{p}`, 
+# so we will denote them via :math:`\left\lvert \bar{x}, \bar{p}\right\rangle`. For the state of the qubit and cavity 
+# system, we write the ket in the form :math:`\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle`.  
 # The Hamiltonian above has (approximately) the following effect:
 #
 # .. math:: \left\lvert g \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle
@@ -270,12 +339,21 @@ to come soon.
 # In general, this represents an entangled state between the qubit and the cavity. So if we measure the state of the light
 # transmitted by the cavity, we are measuring the qubit's state as well.
 #
-# Let us see how this works in practice using PennyLane. The default.gaussian device allows us to work with an initial
-# vacuum state of light. The PennyLane function qml.Displacement(x,0) applies a *displacement operator*, which creates
-# a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle`. The rotation operator qml.Rotation(phi) rotates the state
+# Let us see how this works in practice using PennyLane. The ``default.gaussian`` device allows us to work with an initial
+# vacuum state of light. The PennyLane function ``qml.Displacement(x,0)`` applies a *displacement operator*, which creates
+# a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle`. The rotation operator ``qml.Rotation(phi)`` rotates the state
 # :math:`\left\lvert \bar{x}, 0\right\rangle` in :math:`(\bar{x}, \bar{p})` space. When applied after a large displacement,
 # it changes the value of :math:`\bar{x}` only slightly, but noticeably changes the value of :math:`\bar{p}` by shifting it
 # off from zero, as shown in the figure:
+#
+#
+# .. figure:: ../demonstrations/sc_qubits/phase_space.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Translation and rotation in the momentum-position grid
 #
 # This sequence of operations implements the evolution of the cavity state exactly. Note that here we are
 # taking :math:`\omega_r=0`, which simply corresponds to taking it as a reference frequency, so a rotation by
