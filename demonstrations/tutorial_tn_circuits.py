@@ -74,7 +74,7 @@ specific patterns of connections between tensors and can be extended to have
 many or few indices. Examples of these architectures with only a few tensors 
 can be seen in the figure below.
 
-.. image:: ../demonstrations/tn_circuits/MPS_TTN_Color2.PNG
+.. image:: ../demonstrations/tn_circuits/MPS_TTN_Color.PNG
     :align: center
     :width: 50 %
 
@@ -86,7 +86,7 @@ We call these circuits *tensor-network quantum circuits*.
 In tensor-network quantum circuits, the tensor network architecture acts as a
 guideline for the shape of the quantum circuit.
 More specifically, the tensors in the tensor networks above are replaced with
-unitary operations to obtain quantum circuits of the form:
+unitary operations to obtain quantum circuits of the form in the following image.
 
 .. image:: ../demonstrations/tn_circuits/MPS_TTN_Circuit_Color.PNG
     :align: center
@@ -159,7 +159,8 @@ def deep_block(weights, wires):
 
 
 ##############################################################################
-# We again call the :class:`~pennylane.MPS` template.
+# We can use the :class:`~pennylane.MPS` template again and simply set
+# ``n_params_block = 3`` to suit the new block.
 
 dev = qml.device("default.qubit", wires=4)
 
@@ -177,7 +178,7 @@ def circuit(template_weights):
 
 ##############################################################################
 # To ensure that the weights of the block and ``template_weights``
-# fed to the :class:`~pennylane.MPS` template are compatible, we use
+# sent to the :class:`~pennylane.MPS` template are compatible, we use
 # the :class:`~pennylane.StronglyEntanglingLayers.shape` function and
 # replicate the elemnts for the number of expected blocks. Since this example
 # will have three blocks, we replicate the elements three times using ``[list]*3``.
@@ -282,6 +283,8 @@ for i in BAS:
     plt.subplot(1, 4, j)
     j += 1
     plt.imshow(np.reshape(i, [2, 2]), cmap="gray")
+    plt.xticks([])
+    plt.yticks([])
 
 ##############################################################################
 # The next step is to define the parameterized quantum circuit that will be optimized
@@ -349,8 +352,9 @@ def costfunc(params):
 
 
 ##############################################################################
-# Finally, we initialize the parameters and gradient descent optimizer then
-# train the circuit over 100 steps
+# Finally, we initialize the parameters and use PennyLane’s built-in optimizer
+# train the circuit over 100 iterations. This optimizer will attempt to minimize
+# the cost function.
 
 params = np.random.random(size=[3, 2], requires_grad=True)
 optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
@@ -361,7 +365,8 @@ for k in range(100):
     params = optimizer.step(costfunc, params)
 
 ##############################################################################
-# We can now show the full circuits and the resulting output for each image input.
+# With the circuit trained and the parameters stored in ``params``,
+# we can now show the full circuits and the resulting output for each image input.
 
 for image in BAS:
     fig, ax = qml.draw_mpl(circuit)(image, params)
@@ -376,6 +381,10 @@ for image in BAS:
     plt.yticks([])
 
 ##############################################################################
+# The resulting labels are all correct. For images with stripes, the circuit outputs
+# an expectation value of minus one, corresponding to "stripes" and for images with
+# bars the circuit outputs an expectation value of positive one, corresponding to "bars".
+#
 # .. _tn_circuits_references:
 #
 # References
