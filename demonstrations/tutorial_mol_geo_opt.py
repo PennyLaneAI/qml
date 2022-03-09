@@ -103,7 +103,7 @@ set of nuclear coordinates in `atomic units
 from pennylane import numpy as np
 
 symbols = ["H", "H", "H"]
-x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
+x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires_grad=True)
 
 ##############################################################################
 # Next, we need to build the parametrized electronic Hamiltonian :math:`H(x)`.
@@ -248,7 +248,7 @@ def cost(params, x):
 # value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
 
-def grad_x(x, params):
+def grad_x(params, x):
     grad_h = qml.finite_diff(H)(x)
     grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
@@ -304,11 +304,14 @@ bohr_angs = 0.529177210903
 for n in range(100):
 
     # Optimize the circuit parameters
-    theta = opt_theta.step(partial(cost, x=x), theta)
+    theta.requires_grad = True
+    x.requires_grad = False
+    theta, _ = opt_theta.step(cost, theta, x)
 
     # Optimize the nuclear coordinates
-    grad_fn = partial(grad_x, params=theta)
-    x = opt_x.step(partial(cost, params=theta), x, grad_fn=grad_fn)
+    x.requires_grad = True
+    theta.requires_grad = False
+    _, x = opt_x.step(cost, theta, x, grad_fn=grad_x)
 
     energy.append(cost(theta, x))
     bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
@@ -317,7 +320,7 @@ for n in range(100):
         print(f"Step = {n},  E = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
     # Check maximum component of the nuclear gradient
-    if np.max(grad_fn(x)) <= 1e-05:
+    if np.max(grad_x(theta, x)) <= 1e-05:
         break
 
 print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")

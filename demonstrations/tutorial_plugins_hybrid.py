@@ -192,7 +192,7 @@ def cost(params):
 # To begin our optimization, let's choose the following small initial values of
 # :math:`\theta` and :math:`\phi`:
 
-init_params = np.array([0.01, 0.01])
+init_params = np.array([0.01, 0.01], requires_grad=True)
 print(cost(init_params))
 
 ##############################################################################
@@ -331,7 +331,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.4)
 # set the number of steps
 steps = 100
 # set the initial parameter values
-params = np.array([0.01, 0.01])
+params = np.array([0.01, 0.01], requires_grad=True)
 
 for i in range(steps):
     # update the circuit parameters

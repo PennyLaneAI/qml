@@ -150,7 +150,7 @@ plt.show()
 
 np.random.seed(0)
 num_layers = 4
-var_init = 0.05 * np.random.randn(num_layers, 5)
+var_init = 0.05 * np.random.randn(num_layers, 5, requires_grad=True)
 print(var_init)
 
 ##############################################################################
@@ -172,7 +172,7 @@ opt = AdamOptimizer(0.01, beta1=0.9, beta2=0.999)
 
 var = var_init
 for it in range(500):
-    var, _cost = opt.step_and_cost(lambda v: cost(v, X, Y), var)
+    (var, _, _), _cost = opt.step_and_cost(cost, var, X, Y)
     print("Iter: {:5d} | Cost: {:0.7f} ".format(it, _cost))
 
 

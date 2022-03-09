@@ -989,17 +989,6 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 # to keep updated on new developments. Will the trapped ion framework
 # emerge victorious in this race to obtain a useful quantum computer? Only time will tell!
 #
-# Congratulations on reaching the end of this demo! Enjoy this #QuantumCarnival 
-# ticket and keep participating in the celebrations.
-#
-# If you're not yet participating in the PennyLane quantum carnival go to our 
-# `carnival website <https://pennylane.ai/carnival/>`_ and check it out! 
-#
-# .. image:: ../demonstrations/trapped_ions/trapped-ions-tkt.png
-#    :width: 500px
-#    :align: center
-#    :target: https://pennylane.ai/carnival/
-#
 # References
 # ----------
 #

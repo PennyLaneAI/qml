@@ -181,7 +181,7 @@ def experiment(weights, phi, gamma=0.0):
     return qml.probs(wires=[0, 1, 2])
 
 # Draw the circuit at the given parameter values
-print(qml.draw(experiment)(
+print(qml.draw(experiment, expansion_strategy='device')(
     np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
     np.zeros(3),
     gamma=0.2)
@@ -279,7 +279,7 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
 # Seed for reproducible results
 np.random.seed(395)
 weights = np.random.uniform(
-    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS
+    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS, requires_grad=True
 )
 
 opt = qml.AdagradOptimizer(stepsize=0.1)

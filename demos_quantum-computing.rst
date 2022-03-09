@@ -72,6 +72,10 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_sc_qubits`
     :tags: quantumcomputing
 
+    :tooltip: Error mitigation with Mitiq and PennyLane
+    :figure: demonstrations/error_mitigation/laptop.png
+    :description: :doc:`demos/tutorial_error_mitigation`
+    :tags: quantumcomputing
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -87,3 +91,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
 	demos/tutorial_sc_qubits
+    demos/tutorial_error_mitigation
+

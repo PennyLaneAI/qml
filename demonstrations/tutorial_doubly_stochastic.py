@@ -155,7 +155,7 @@ qnode_analytic = qml.QNode(circuit, dev_analytic)
 qnode_stochastic = qml.QNode(circuit, dev_stochastic)
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape)
+init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
 
 # Optimizing using exact gradient descent
 
