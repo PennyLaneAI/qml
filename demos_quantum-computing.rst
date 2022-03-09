@@ -72,6 +72,7 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_sc_qubits`
     :tags: quantumcomputing
 
+.. customgalleryitem::
     :tooltip: Error mitigation with Mitiq and PennyLane
     :figure: demonstrations/error_mitigation/laptop.png
     :description: :doc:`demos/tutorial_error_mitigation`
