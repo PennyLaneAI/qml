@@ -166,11 +166,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 fig = plt.figure(figsize=(6, 4))
-plt.plot(x, cost_pt, label = 'global minimum')
-plt.xlabel("Optimization steps")
-plt.ylabel("Cost / Energy")
-plt.legend()
-plt.show()
+
+# Enable processing the Torch trainable tensors
+with torch.no_grad():
+    plt.plot(x, cost_pt, label = 'global minimum')
+    plt.xlabel("Optimization steps")
+    plt.ylabel("Cost / Energy")
+    plt.legend()
+    plt.show()
 
 ###############################################################################
 # Local minimum
@@ -218,11 +221,14 @@ for j in range(100):
 ###############################################################################
 
 fig = plt.figure(figsize=(6, 4))
-plt.plot(x, cost_pt_loc, 'r', label = 'local minimum')
-plt.xlabel("Optimization steps")
-plt.ylabel("Cost / Energy")
-plt.legend()
-plt.show()
+
+# Enable processing the Torch trainable tensors
+with torch.no_grad():
+    plt.plot(x, cost_pt_loc, 'r', label = 'local minimum')
+    plt.xlabel("Optimization steps")
+    plt.ylabel("Cost / Energy")
+    plt.legend()
+    plt.show()
 
 ###############################################################################
 # |
