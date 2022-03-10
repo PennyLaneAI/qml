@@ -131,7 +131,7 @@ plt.show();
 # one another more easily, we will artificially scale some dimensions
 # when placing the atoms.
 
-from cirq.pasqal import ThreeDQubit
+from cirq_pasqal import ThreeDQubit
 xy_scale = 1.5
 z_scale = 0.75
 qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
