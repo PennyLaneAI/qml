@@ -15,9 +15,8 @@ Tensor-Network Quantum Circuits
 *Authors: Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
 Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 9 March 2022.*
 
-.. raw:: html
-
-    <center> <sup>1</sup> Xanadu, Toronto, ON, M5G 2C8, Canada <br> <sup> 2 </sup> BMW AG, Munich, Germany</center> <br>
+| :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
+| :sup:`2` BMW AG, Munich, Germany
 
 This demonstration explains how to use PennyLane templates to design and implement tensor-network quantum circuits
 as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
@@ -58,7 +57,6 @@ matrix multiplication formula and can be expressed as
     C_{ij} = \sum_{k}A_{ik}B_{kj},
 
 where :math:`C_{ij}` denotes the entry for the :math:`i`-th row and :math:`j`-th column of the product :math:`C=AB`. 
-Here, the number of terms in the summation is equal to the bond dimension of the index :math:`k`.
 
 A tensor network is a collection of tensors where a subset of 
 all indices are contracted. As mentioned above, we can use diagrammatic notation
@@ -70,7 +68,7 @@ several tensors with many indices contracted in sophisticated patterns.
 Two well-known tensor network architectures are matrix product states (MPS) and tree tensor networks (TTN). These follow
 specific patterns of connections between tensors and can be extended to have
 many or few indices. Examples of these architectures with only a few tensors 
-can be seen in the figure below.
+can be seen in the figure below. An MPS is shown on the left and a TTN on the right.
 
 .. image:: ../demonstrations/tn_circuits/MPS_TTN_Color.PNG
     :align: center
@@ -122,9 +120,9 @@ def block(weights, wires):
 
 ##############################################################################
 # With the block defined, we can build the full tensor-network quantum circuit.
-# The following code uses the :class:`~pennylane.MPS` template to broadcast the above block into the
-# shape of an MPS tensor network. It then adds a :class:`~pennylane.PauliZ` measurement at the end,
-# simulates the circuit, and prints the result of the :class:`~pennylane.PauliZ` expectation value.
+# The following code broadcasts the above block into the
+# shape of an MPS tensor network and computes the expectation value of a Pauli Z
+# measurement on the bottom qubit.
 
 dev = qml.device("default.qubit", wires=4)
 
@@ -141,7 +139,6 @@ def circuit(template_weights):
 
 np.random.seed(1)
 weights = np.random.random(size=[3, 2])
-print(f"The circuit result is {circuit(weights):.02f}")
 qml.drawer.use_style("black_white")
 fig, ax = qml.draw_mpl(circuit)(weights)
 fig.set_size_inches((6, 3))
@@ -180,15 +177,18 @@ def circuit(template_weights):
 # the :class:`~pennylane.StronglyEntanglingLayers.shape` function and
 # replicate the elemnts for the number of expected blocks. Since this example
 # will have three blocks, we replicate the elements three times using ``[list]*3``.
+# The resulting circuit is illustrated in the figure below the code.
+# Note that this circuit retains the layout of an MPS, 
+# but each block is now a deeper circuit with more gates.
 
 shape = qml.StronglyEntanglingLayers.shape(n_layers=2, n_wires=2)
 template_weights = [np.random.random(size=shape)] * 3
-print(f"The circuit result is {circuit(template_weights):.02f}")
 fig, ax = qml.draw_mpl(circuit)(template_weights)
 
 ##############################################################################
 # In addition to deep blocks, we can easily expand to wider blocks with more
-# input wires:
+# input wires. In the next example, we use the :class:`~pennylane.SimplifiedTwoDesign`
+# template as the block.
 
 
 def wide_block(weights, wires):
@@ -198,7 +198,9 @@ def wide_block(weights, wires):
 ###############################################################################
 # To implement this wider block, we can use the :class:`~pennylane.MPS` template
 # as before. To account for the extra wires per block, we simply set the ``n_block_wires``
-# argument to a higher number.
+# argument to a higher number. The figure below shows the resulting circuit. Notice
+# that, in the circuit diagram, gates are left-justified. Therefore parts of later blocks
+# appear near the beginning of the circuit.
 
 dev = qml.device("default.qubit", wires=8)
 
@@ -216,13 +218,11 @@ def circuit(template_weights):
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
 template_weights = [weights] * 3
-print(f"The circuit result is {circuit(template_weights):.02f}")
 fig, ax = qml.draw_mpl(circuit)(template_weights)
 
 ##############################################################################
-# We can also easily call a different tensor network architecture by using the
-# :class:`~pennylane.TTN` template. This broadcasts the block to the tree tensor
-# network architecture.
+# We can also broadcast a block to the tree tensor network architecture by using the
+# :class:`~pennylane.TTN` template.
 
 
 def block(weights, wires):
@@ -230,24 +230,23 @@ def block(weights, wires):
     qml.RX(weights[1], wires=wires[1])
     qml.CNOT(wires=wires)
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("default.qubit", wires=8)
 
 @qml.qnode(dev, expansion_strategy="device")
 def circuit(template_weights):
     qml.TTN(
-        wires=range(4),
+        wires=range(8),
         n_block_wires=2,
         block=block,
         n_params_block=2,
         template_weights=template_weights,
     )
-    return qml.expval(qml.PauliZ(wires=3))
+    return qml.expval(qml.PauliZ(wires=7))
 
 
-weights = np.random.random(size=[3, 2])
-print(f"The circuit result is {circuit(weights):.02f}")
+weights = np.random.random(size=[7, 2])
 fig, ax = qml.draw_mpl(circuit)(weights)
-fig.set_size_inches((6, 3.8))
+fig.set_size_inches((4,4))
 ##############################################################################
 # Classifying the bars and stripes data set
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -263,11 +262,11 @@ fig.set_size_inches((6, 3.8))
 #   :align: center
 #   :height: 300
 #
-# A successful quantum circuit should accept any image from the data set as input, process
-# the input and, after training, output the correct label for that input.
+# A quantum circuit that successfully performs this task 
+# accepts any image from the data set as input and outputs the correct label.
 # We will therefore choose a data encoding strategy that can record the input image in
 # a qubit register, a processing circuit that can analyze the data, and a final measurement
-# that can serve as a label of either "stripes" or "bars".
+# that can serve as a label of either stripes or bars.
 #
 # The first step is to generate the bars and stripes data set.
 # For :math:`2\times 2` images, we can manually define the full data set, giving white pixels a value of 1
@@ -277,8 +276,9 @@ import matplotlib.pyplot as plt
 
 BAS = [[1, 1, 0, 0], [0, 0, 1, 1], [1, 0, 1, 0], [0, 1, 0, 1]]
 j = 1
+plt.figure(figsize=[3,3])
 for i in BAS:
-    plt.subplot(1, 4, j)
+    plt.subplot(2, 2, j)
     j += 1
     plt.imshow(np.reshape(i, [2, 2]), cmap="gray")
     plt.xticks([])
@@ -288,8 +288,7 @@ for i in BAS:
 # The next step is to define the parameterized quantum circuit that will be trained
 # to label the images. This involves determining the block and the tensor-network architecture.
 # For the block, a circuit consisting of :class:`~pennylane.RY` rotations and
-# :class:`~pennylane.CNOT` gates suffices for this simple data set. The following block
-# has enough expressibility to classify the four possible inputs to the circuit.
+# :class:`~pennylane.CNOT` gates suffices for this simple data set.
 
 
 def block(weights, wires):
@@ -299,19 +298,13 @@ def block(weights, wires):
 
 
 ##############################################################################
-# As for the tensor-network architecture, since :class:`~pennylane.MPS` is better suited
-# for one-dimensional data [#Huggins]_,
-# we use the tree tensor-network quantum circuit instead.
-# Since the input images are essentially four bit binary strings and stored as lists
-# of zeros and ones, :class:`~pennylane.BasisStatePreparation` can be used to easily encode the input images.
-# The following :class:`~pennylane.QNode` implements the :class:`~pennylane.BasisStatePreparation` encoding,
-# followed by a :class:`~pennylane.TTN` circuit using the above ``block``. Finally, we obtain the expectation
-# value of a :class:`~pennylane.PauliZ` measurement as the output label. We use the :class:`~pennylane.PauliZ`
-# measurement because its output is a value between minus one and one. This easily translates to a "stripes" label
-# for any negative expectation value and a "bars" label for any positive expectation value.
-# The circuit diagram below show what a full circuit looks like. The :class:`~pennylane.BasisStatePreparation`
-# encoding appears in the initial :class:`~pennylane.PauliX` gates. This is followed by the block broadcast
-# into the :class:`~pennylane.TTN` architecture and a measurement at the end.
+# As for the tensor-network architecture, we use the tree tensor-network quantum circuit.
+# We use :class:`~pennylane.BasisStatePreparation` to encode the input images.
+# The following code implements the :class:`~pennylane.BasisStatePreparation` encoding,
+# followed by a :class:`~pennylane.TTN` circuit using the above ``block``. Finally, we compute the expectation
+# value of a :class:`~pennylane.PauliZ` measurement as the output
+# The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisStatePreparation`
+# encoding appears in the initial :class:`~pennylane.PauliX` gates.
 
 dev = qml.device("default.qubit", wires=4)
 
@@ -332,11 +325,12 @@ fig, ax = qml.draw_mpl(circuit)(BAS[0], weights)
 fig.set_size_inches((6, 3.5))
 
 ##############################################################################
-# The next step is to define a cost function to train the circuit.
+# When the output of the above circuit is less than zero, we label the image stripes,
+# otherwise we label it bars. Based on these labels, we define a cost function to train the circuit.
 # The cost function in the following code adds the expectation value result
 # if the label should be negative and subtracts the result if the label should
-# be positive. In other words, the cost will be minimized when the "stripes" images
-# output negative one and the "bars" images output positive one.
+# be positive. In other words, the cost will be minimized when the stripes images
+# output negative one and the bars images output positive one.
 
 
 def costfunc(params):
@@ -380,8 +374,8 @@ for image in BAS:
 
 ##############################################################################
 # The resulting labels are all correct. For images with stripes, the circuit outputs
-# an expectation value of minus one, corresponding to "stripes" and for images with
-# bars the circuit outputs an expectation value of positive one, corresponding to "bars".
+# an expectation value of minus one, corresponding to stripes and for images with
+# bars the circuit outputs an expectation value of positive one, corresponding to bars.
 #
 # .. _tn_circuits_references:
 #
