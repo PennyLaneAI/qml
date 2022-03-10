@@ -12,7 +12,7 @@ Tensor-Network Quantum Circuits
 
    tutorial_variational_classifier Variational classifier
 
-*Authors: PennyLane Dev Team, Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
+*Authors: Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
 Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 9 March 2022.*
 
 .. raw:: html
@@ -20,12 +20,12 @@ Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last
     <center> <sup>1</sup> Xanadu, Toronto, ON, M5G 2C8, Canada <br> <sup> 2 </sup> BMW AG, Munich, Germany</center> <br>
 
 This demonstration explains how to use PennyLane templates to design and implement tensor-network quantum circuits
-as in [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
-(MPS) and tree tensor networks (TTN).
+as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
+and tree tensor networks.
 
 We begin with a short introduction to tensor networks and explain their relationship to quantum circuits. Next, we 
-demonstrate how PennyLane's templates make it easy to design, customize, and simulate these circuits. Finally, we
-show how to use the templates to learn to classify the bars and stripes data set. This is a toy problem where the template
+illustrate how PennyLane's templates make it easy to design, customize, and simulate these circuits. Finally, we
+show how to use the circuits to learn to classify the bars and stripes data set. This is a toy problem where the template
 learns to recognize whether an image exhibits horizontal stripes or vertical bars.
 
 Tensors and Tensor Networks
@@ -36,15 +36,15 @@ generalization of scalars, vectors, and matrices.
 Tensors can be described by their rank, indices, and the dimension of the indices.
 The rank is the number of indices in a tensor --- a scalar has 
 rank zero, a vector has rank one, and a matrix has rank two.
-The dimension of an index is how many values that index can take.
+The dimension of an index is the number of values that index can take.
 For example, a vector with three elements has one index that can take three
 values. This is vector is therefore a rank one tensor and its index has dimension
 three.
 
-To define tensor networks, it is important to first understand tensor contration.
+To define tensor networks, it is important to first understand tensor contraction.
 Two or more tensors can be contracted by summing over repeated indices.
-In diagrammatic notation, the repeated indices appear as lines connecting tensors as in the figure below. 
-We see two tensors of rank two, connected by one repeated index, :math:`k`. The dimension of the
+In diagrammatic notation, the repeated indices appear as lines connecting tensors, as in the figure below. 
+We see two tensors of rank two connected by one repeated index, :math:`k`. The dimension of the
 repeated index is called the bond dimension.
 
 .. image:: ../demonstrations/tn_circuits/simple_tn_color.PNG
@@ -61,13 +61,13 @@ where :math:`C_{ij}` denotes the entry for the :math:`i`-th row and :math:`j`-th
 Here, the number of terms in the summation is equal to the bond dimension of the index :math:`k`.
 
 A tensor network is a collection of tensors where a subset of 
-all indices are contracted. As mentioned above, we use diagrammatic notation
+all indices are contracted. As mentioned above, we can use diagrammatic notation
 to specify which indices and tensors will be contracted together by connecting
 individual tensors with lines.
-Tensor networks can therefore represent complicated operations involving
+Tensor networks can represent complicated operations involving
 several tensors with many indices contracted in sophisticated patterns.
 
-Two well-known tensor network architectures are the MPS and TTN. These follow
+Two well-known tensor network architectures are matrix product states (MPS) and tree tensor networks (TTN). These follow
 specific patterns of connections between tensors and can be extended to have
 many or few indices. Examples of these architectures with only a few tensors 
 can be seen in the figure below.
@@ -77,22 +77,22 @@ can be seen in the figure below.
     :width: 50 %
 
 These tensor networks are commonly used to efficiently represent many-body quantum
-systems in classical simulations [#orus]_.
-We can reverse this, instead designing quantum systems, e.g., quantum circuits, that follow the structure and connectivity of tensor networks.
-We call these circuits *tensor-network quantum circuits*.
+states [#orus]_.
+We can also design quantum circuits that follow the structure and connectivity of tensor networks.
+We call these **tensor-network quantum circuits**.
 
 In tensor-network quantum circuits, the tensor network architecture acts as a
 guideline for the shape of the quantum circuit.
 More specifically, the tensors in the tensor networks above are replaced with
-unitary operations to obtain quantum circuits of the form in the following image.
+unitary operations to obtain quantum circuits, as illustrated in the figure below.
 
 .. image:: ../demonstrations/tn_circuits/MPS_TTN_Circuit_Color.PNG
     :align: center
     :width: 70 %
 
 Since the unitary operations :math:`U_1` to :math:`U_3` are in principle completely general,
-it is not always clear how to implement them with the gate sets available in quantum hardware. 
-Instead, we can replace the unitary operations with variational quantum circuits,
+it is not always clear how to implement them with a specific gate set. 
+Instead, we can replace the unitary operations with variational quantum circuits
 determined by a specific template of choice.
 The PennyLane tensor network templates allow us to do precisely this: implement tensor-network quantum
 circuits with user-defined circuit ansatze as the unitary operations. In this sense, just as a template
@@ -102,9 +102,9 @@ i.e., as meta-templates.
 
 
 
-PennyLane Design
+PennyLane Implementation
 ^^^^^^^^^^^^^^^^
-In this section, we demonstrate how to use PennyLane to build and simulate tensor-network quantum circuits.
+We now demonstrate how to use PennyLane to build and simulate tensor-network quantum circuits.
 
 The first step is to define the circuit that will be broadcast into the tensor network shape.
 We call this a block. The block circuit defines a variational quantum circuit that takes the position 
@@ -123,7 +123,7 @@ def block(weights, wires):
 ##############################################################################
 # With the block defined, we can build the full tensor-network quantum circuit.
 # The following code uses the :class:`~pennylane.MPS` template to broadcast the above block into the
-# shape of a matrix product state tensor network. It then adds a :class:`~pennylane.PauliZ` measurement at the end,
+# shape of an MPS tensor network. It then adds a :class:`~pennylane.PauliZ` measurement at the end,
 # simulates the circuit, and prints the result of the :class:`~pennylane.PauliZ` expectation value.
 
 dev = qml.device("default.qubit", wires=4)
@@ -253,7 +253,7 @@ fig.set_size_inches((6, 3.8))
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Next, we use a tensor-network quantum circuit to tackle a toy machine learning problem.
 # For this, we use the bars and stripes data set and optimize a parametrized circuit to label the images as
-# either *bars* or *stripes*.
+# either bars or stripes.
 # The data set is composed of binary black and white images of size :math:`n \times n` pixels.
 # In images that should receive the bars label, all pixels in any given column have the same color.
 # In images with the stripes label, all pixels in any given row have the same color.
@@ -285,8 +285,8 @@ for i in BAS:
     plt.yticks([])
 
 ##############################################################################
-# The next step is to define the parameterized quantum circuit that will be optimized
-# and label the images. This involves determining the block and the tensor-network architecture.
+# The next step is to define the parameterized quantum circuit that will be trained
+# to label the images. This involves determining the block and the tensor-network architecture.
 # For the block, a circuit consisting of :class:`~pennylane.RY` rotations and
 # :class:`~pennylane.CNOT` gates suffices for this simple data set. The following block
 # has enough expressibility to classify the four possible inputs to the circuit.
@@ -364,7 +364,7 @@ for k in range(100):
 
 ##############################################################################
 # With the circuit trained and the parameters stored in ``params``,
-# we can now show the full circuits and the resulting output for each image input.
+# we can now show the full circuits and the resulting output for each image.
 
 for image in BAS:
     fig, ax = qml.draw_mpl(circuit)(image, params)
