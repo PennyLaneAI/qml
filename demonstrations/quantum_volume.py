@@ -582,7 +582,7 @@ nx.draw_networkx(
 
 from qiskit.providers.aer import noise
 
-noise_model = noise.NoiseModel.from_backend(dev_ourense.backend.properties())
+noise_model = noise.NoiseModel.from_backend(dev_ourense.backend)
 
 dev_noisy = qml.device(
     "qiskit.aer", wires=dev_ourense.num_wires, shots=1000, noise_model=noise_model
