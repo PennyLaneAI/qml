@@ -1,6 +1,6 @@
 r""".. _superconducting_qubits:
 
-Superconducting qubits
+Quantum Computing with Superconducting qubits
 =============================
 
 .. meta::
@@ -67,7 +67,7 @@ to come soon.
 #
 #    Superconducting chip with 4 qubits (schematics)
 #
-# To understand how superconducting qubits are, we first need to explain why some materials are 
+# To understand how superconducting qubits work, we first need to explain why some materials are 
 # superconductors. Let's begin by addressing a simpler question: why do conductors allow for the 
 # easy passage of electrons, and insulating materials don't? Solid-state physics tell us that, 
 # when an electric current travels through a material, the electrons therein can be of two types. 
@@ -77,7 +77,7 @@ to come soon.
 # conduction electrons. Similarly, the material is a semi-conductor if the energy needed is small; 
 # and it's an insulator if the energy is large.
 #
-# But, if there's a zero energy cost to get conduction electrons, then why don't all conductors 
+# But, if conductors have a zero energy cost to get conduction electrons, then why don't they all 
 # have infinite conductivity? Even the tiniest of stimuli should create a very large current! 
 # To address this valid concern, let us recall the *exclusion principle* in atomic physics: 
 # the atom's discrete energy levels have a population limit, so only a limited number of 
@@ -179,9 +179,9 @@ to come soon.
 # Let's then build the simplest superconducting circuit. We do not want the circuit to warm up, or 
 # it will lose its quantum properties. Of all the elements that an ordinary circuit may have, 
 # only two of them do not produce heat when they're superconducting: *capacitors* and *inductors*.
-# Capacitors are two parallel # metalic plates that store electric charge. 
+# Capacitors are two parallel metalic plates that store electric charge. 
 # They are characterized by their *capacitance* :math:`C`, which measures how much charge 
-# they can store when connected to a source of fixed voltage.  Inductors are wires shaped 
+# they can store when connected to a given power source.  Inductors are wires shaped 
 # as a coil and store magentic fields when a current passes through. 
 # These magnetic fields, in turn, slow down changing currents that pass through the element. 
 # They are described by an *inductance* :math:`L`, which measures the strength of the magnetic field 
@@ -202,8 +202,9 @@ to come soon.
 # insulating placed between two superconducting metals. Why do we need this? If it's insulating, 
 # no current should go through it and our circuit should stop working! Here's where another 
 # famous quantum effect comes into play: the *tunnel effect*. Due to the quantum probabilistic
-# behaviour of their location, Cooper pairs can sometimes go through the Josephson junction. 
-# If we replace the inductor by one of these junctions, the energy levels become unevenly spaced, exactly 
+# behaviour of their location, Cooper pairs can sometimes go through the Josephson junction, so
+# that the current is reduced but not completely stopped.  
+# If we replace the inductor by one of these junctions, the energy levels of the superconducting circuit become unevenly spaced, exactly 
 # as we wanted. We have built an artificial atom!
 #
 # .. figure:: ../demonstrations/sc_qubits/JC_circuit.png
@@ -220,9 +221,9 @@ to come soon.
 # Mission accomplished? Not yet. We want our qubit to be useful for building quantum computers. 
 # In short, this means that we need to interact with the environment in a controlled way. 
 # A way to do this is to add a *gate capacitor* :math:`C_g` to the artificial atom, so that it
-# can receive external signals (photons in our case). The amount of charge :math:`Q_g` in this 
+# can receive external signals (photons, in our case). The amount of charge :math:`Q_g` in this 
 # capacitor can be chosen by the experimenter, and it determines how strongly the circuit 
-# interacts with the environment. But we run into a problem again, the gate capacitor messes 
+# interacts with the environment. But we run into a problem again, adding a gate capacitor messes 
 # up with our uneven energy levels, which we worked so hard to obtain. The separation in energy 
 # levels depends on :math:`Q_g` as shown below.
 #
@@ -247,7 +248,7 @@ to come soon.
 # Does that make the Josephson junction pointless? Thankfully, the latter effect turns out to be 
 # smaller than the former, so we can adjust the capacitance value and preserve some non-uniformity. 
 # The regime that has been proven ideal is known as the **transmon regime**, and artificial atoms
-# in the regime are called **transmons**. They have proven to be highly effective as qubits, 
+# in this regime are called **transmons**. They have proven to be highly effective as qubits, 
 # and they are used in almost all applications nowadays. We can thus work with the first two 
 # energy levels of the transmon, which we will also denote :math:`\left\lvert g \right\rangle` and 
 # :math:`\left\lvert e \right\rangle`, the ground and excited states respectively. The energy difference 
@@ -271,14 +272,14 @@ to come soon.
 # contain electromagnetic waves. Our focus will be on the so-called *Fabry-Perot* cavities. 
 # They consist of two mirrors facing each other and whose rears are coated with an anti-reflecting 
 # material. Something surprising happens when we shine a beam of light on a  Fabry-Perot cavity of 
-# length $L$: electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda` 
+# length :math:`L` electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda` 
 # such that
 #
 # .. math:: L = L=n\lambda/2,
 #
-# where :math:`n` is an arbitrary positive integer. If this condition is not met, most photons will be reflected away. 
+# where :math:`n` is an arbitrary positive integer. If this condition is not met, most of the wave will be reflected away. 
 # Therefore, we will have an electromagnetic field inside if we carefully tune our light source to one of these
-# wavelengths. In this case, we say that we are *driving* the cavity. For superconducting qubits, it is most 
+# wavelengths. For superconducting qubits, it is most 
 # common to use wavelengths in the microwave range.
 #
 # .. figure:: ../demonstrations/sc_qubits/fabry_perot.png
@@ -290,7 +291,7 @@ to come soon.
 #    Fabry-Perot cavity
 #
 # Following Di Vincenzo's fifth criterion, let's see how we can measure the state of the qubit placed inside the cavity. 
-# To transmit information, we need to shine light at a frequency :math:`\omega_r` that the cavity can transmit 
+# To obtain information, we need to shine light at a frequency :math:`\omega_r` that the cavity lets through 
 # (recall that the frequency and the wavelength are related via :math:`\omega = 2\pi c/\lambda`, where :math:`c` is the speed of light). 
 # We may also choose the frequency value :math:`\omega_r` to be far from the transmon's frequency gap :math:`\omega_a`, so the qubit 
 # does not absorb the photons. Namely, the *detuning* :math:`\Delta` needs to be large:
@@ -304,13 +305,29 @@ to come soon.
 # frequency will change slightly. If we carefully measure the frequency of the scattered photons, 
 # we can distill the information about the state of the qubit and measure its state.
 #
+# .. container:: alert alert-block alert-info
+#
+#    **Primer on Hamiltonians:** When a physical system is exposed to outside influences, it will change configurations.
+#    One way to describe these external interactions is through a mathematical object called a **Hamiltonian**, which 
+#    represents the total energy on the system. In quantum mechanics, the Hamiltonian :math:`hat{H}` is a Hermitian matrix whose eigen
+#    values represent the possible energies the system may have. The Hamiltonian also tells us how an initial state  changes 
+#    in time. In quantum mechanics, this change is described by a differential equation knows as Schrodinger's equation:
+# 
+#    .. math:: i\hbar \frac{\partial}{\partial t}\left\lvert \psi(t)\right\rangle = \hat{H}\left\lvert \psi(t)\right\rangle.
+#
+#    When the Hamiltonian does not depend on time, this equation can be solved exactly:
+#
+#    .. math:: \left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}/\hbar)\left\lvert \psi(0)\right\rangle
+#
+#    where :math:`\exp` represent the matrix exponential. 
+#
 # To understand how this works in more detail, we need to do some hands-on calculations. We will rely on the concept 
 # of a Hamiltonian; do read the blue box above if you need a refresher on the topic! We are given a Hamiltonian 
 # :math:`\hat{H}` that describes the transmon and the photons inside the cavity. The transmon is initially in its ground state 
 # :math:`\left\lvert g \right\rangle` and cavity starts without any photons in it, in the *vacuum state* denoted 
-# by :math:`\left\lvert 0 \right\rangle`. According to Schrodinger's equation,  the state of the cavity evolves 
+# by :math:`\left\lvert 0 \right\rangle`. According to Schrodinger's equation,  the state of the cavity (transmon and photons system) evolves 
 # into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}/\hbar)\left\lvert g \right\rangle\otimes\left\lvert 0 \right\rangle` 
-# after a time :math:`t`. What is the Hamiltonian that describes light of amplitude:math: `\epsilon` and frequency :math:`\omega_r` incident 
+# after a time :math:`t`. What is the Hamiltonian that describes light of amplitude :math:`\epsilon` and frequency :math:`\omega_r` incident 
 # on the cavity, when the detuning :math:`\Delta` is large? Deriving the Hamiltonian is not an easy job, so we should trust 
 # physicists on this one!  The Hamiltonian turns out  to be
 #
@@ -405,13 +422,12 @@ plt.show()
 # Superconducting single-qubit gates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We have seen that shining light with frequency in the dispersive regime is used to perform
-# measurements. It is precisely the opposite choice that allows us to manipulate the state
-# of the qubit. But how can we make the photons get transmitted by the Fabry-Perot cavity
-# if they are not at the frequency that the cavity can transmit? We must emphasize that
-# the cavity reflects only the vast majority of photons, but not all of them. If we
-# compensate by increasing the radiation intensity, some photons will still be transmitted
-# into the cavity and be absorbed by the superconducting qubit.
+# We have seen that shining light with  detuning :math:`\Delta \gg 1` is used to perform measurements. 
+# A rather different choice, :math:`\omega_r =\omega_a` (:math:`\Delta=0`), allows us to manipulate the state 
+# of the qubit. But does the Fabry-Perot cavity transmit these photons if their wavelength does not 
+# allow it? We must emphasize that the cavity reflects only the vast majority of photons, 
+# but not all of them. If we compensate by increasing the radiation intensity, some photons 
+# will still be transmitted into the cavity and be absorbed by the superconducting qubit.
 #
 # If we shine a coherent state light with frequency :math:`\omega_a` on the cavity, and with phase
 # :math:`\phi` at the position of the qubit, then the Hamiltonian for the artificial atom is
@@ -420,7 +436,7 @@ plt.show()
 #
 # Here, :math:`\Omega_R` is the Rabi frequency, which depends on the average electric field in the
 # cavity and the size of the superconducting qubit. With this Hamiltonian, we can implement
-# a universal set of single-qubit gates since :math: `\phi_d=0` implements an :math:`X`-rotation and :math:`\phi_d=\pi/2`
+# a universal set of single-qubit gates since :math: `\phi=0` implements an :math:`X`-rotation and :math:`\phi_d=\pi/2`
 # applies a :math:`Y`-rotation. Let us check this using PennyLane. For qubits, we can define
 # Hamiltonians using qml.Hamiltonian and evolve an initial state using ApproxTimeEvolution:
 
@@ -491,7 +507,7 @@ print(np.isclose(Sc_Y_rot(1, np.pi / 3), H_evolve(1, np.pi / 2, np.pi / 6)))
 # which involves connecting the two superconducting qubits through a capacitor. In this case, the Hamiltonian
 # for the system of two qubits reads
 #
-# .. math:: H=\hbar J (\sigma^{+}_1\sigma^{-}_2+\sigma^{-}_1\sigma^{+}_2),
+# .. math:: \hat{H}=\frac{\hbar J}{2} (\sigma^{x}_1\sigma^{x}_2+\sigma^{y}_1\sigma^{y}_2),
 #
 # where the coupling :math:`J` depends on the coupling capacitance and the characteristics of both circuits. In the derivation
 # of this Hamiltonian, we assumed that both qubits have the same energy difference between the ground and excited levels.
@@ -499,7 +515,7 @@ print(np.isclose(Sc_Y_rot(1, np.pi / 3), H_evolve(1, np.pi / 2, np.pi / 6)))
 #
 # .. math:: iSWAP = \left( \begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & 0 & i & 0 \\ 0 & i & 0 & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
 #
-# when applied for a time :math`t=\pi/2J`, as shown with the following PennyLane code:
+# when applied for a time :math:`t=\pi/2J`, as shown with the following PennyLane code:
 #
 dev3 = qml.device("default.qubit", wires=2)
 
@@ -548,7 +564,7 @@ def cnot_with_iswap2(basis_state):
     return qml.state()
 ##############################################################################
 #
-# Note that capacitative coupling between qubits does not involve driving the cavity with a microwave.
+# Note that capacitative coupling between qubits does not involves shining the cavity with a microwave.
 # Instead, the Hamiltonian acts at all times between the connected circuits. We may wonder how to
 # switch the interaction on and off since we need to tune its duration. We can switch off by
 # changing the characteristics of one of the qubits since the Hamiltonian for capacitative coupling
@@ -564,7 +580,33 @@ def cnot_with_iswap2(basis_state):
 # Another option is to use **all-microwave gates**. In this scenario, two qubits placed in a single
 # cavity are both driven at the frequency of the second qubit. The first qubit will scatter the
 # photons, and the other will absorb them, causing a similar effect to that of the qubit-cavity
-# system in the case of dispersive measurement. As a consequence, we can entangle the two qubits.
+# system in the case of measurement. As a consequence, we can entangle the two qubits. We can use 
+# similar techniques to the ones introduced before to see how this happens. When the first qubit
+# receives a microwave at the frequency that estimulates the second qubit, one can show that the (simplified) 
+# Hamiltonian is given by
+#
+# .. math:: \hat{H}=\hbar \tilde{\Omega} (\cos\phi\sigma^{z}_1\sigma^{x}_2+\sin\phi\sigma^{z}_1\sigma^{y}_2),
+#
+# where :math:`phi` is the phase of the wave. As promised, we can obtain an entangled state by concatenating
+# the evolution under this Hamiltonianv# for a time :math:`t=\pi/4\Omega` with `RX` and `RZ` rotations and a `Hadamard`
+# gate:
+# 
+@qml.qnode(dev3)
+def H_evolve(state,phi,time):
+    qml.templates.BasisStatePreparation(state, wires=range(2))  
+    coeffs=[np.cos(phi),np.sin(phi)]
+    ops=[qml.PauliZ(0)@qml.PauliX(1),qml.PauliZ(0)@qml.PauliY(1)]
+    Ham=qml.Hamiltonian(coeffs,ops)
+    qml.Hadamard(wires=0)
+    qml.RX(-np.pi/2,wires=1)
+    ApproxTimeEvolution(Ham,time,1)
+    qml.RZ(-np.pi/2,wires=0)
+    return qml.state()
+
+np.exp(-1j*np.pi/4)*H_evolve([0,0],0,np.pi/4) 
+
+############################################################################## 
+#
 # Although this method increases the coherence time of the qubit, these gates turn out to be
 # slower than those built using flux-tuning since the Rabi frequency for this interaction
 # turns out to be smaller.
@@ -608,7 +650,7 @@ def cnot_with_iswap2(basis_state):
 # Eagle quantum computer, leading to ground-breaking results. However, much more work needs to
 # be done to address this scalability issue.
 #
-# Conclusing remarks
+# Concluding remarks
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #
