@@ -343,28 +343,28 @@ to come soon.
 #
 # .. math:: \hat{H}=\hbar(\omega_r I+\chi\hat{\sigma}_z)\otimes\hat{N} + \hbar\epsilon I\otimes \hat{P},
 #
-# where :math:`\hat{N}` counts the cavity number of photons, :math:`\hat{P}` is the photon momentum operator, and
+# where :math:`\hat{N}` counts the number of photons in the cavity, :math:`\hat{P}` is the photon momentum operator, and
 # :math:`\epsilon` is the amplitude of the electromagnetic wave incident on the cavity. The shift :math:`\chi` is
 # a quantity that depends on the circuit and gate capacitances and the detuning :math:`\Delta`.
 #
 # The effect of this evolution can be calculated explicitly. Shining microwaves on the cavity gives 
 # us a *coherent state* of light contained in it, which is the state of light that lasers give out. 
-# Coherent states are completely determined by their average position :math:`\bar{x}` and average momentum :math:`\bar{p}`, 
+# Coherent states are completely determined by two quantities called :math:`\bar{x}` and :math:`\bar{p}` (these quantities are mathematically similar to the notions of average position and average momentum, but are in fact physically connected to the phase of the light)
 # so we will denote them via :math:`\left\lvert \bar{x}, \bar{p}\right\rangle`. For the state of the qubit and cavity 
 # system, we write the ket in the form :math:`\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle`.  
 # The Hamiltonian above has (approximately) the following effect:
 #
-# .. math:: \left\lvert g \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle
+# .. math:: \left\lvert g \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle,
 #
-# .. math:: \left\lvert e \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert \epsilon t, (\omega_r-\chi)t \right\rangle
+# .. math:: \left\lvert e \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert \epsilon t, (\omega_r-\chi)t \right\rangle.
 #
-# Consequently, if the state of the qubit were the superposition
+# Consequently, if the state of the qubit was initially the superposition
 # :math:`\alpha \left\lvert g \right\rangle +\beta \left\lvert e \right\rangle`, then the qubit-cavity system would evolve to the state
 #
 # .. math:: \left\lvert\psi(t)\right\rangle=\alpha \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle +\beta \left\lvert e \right\rangle \left\lvert \epsilon t, (\omega_r-\chi)t \right\rangle.
 #
 # In general, this represents an entangled state between the qubit and the cavity. So if we measure the state of the light
-# transmitted by the cavity, we are measuring the qubit's state as well.
+# transmitted by the cavity, we can determine the qubit's state as well.
 #
 # Let us see how this works in practice using PennyLane. The ``default.gaussian`` device allows us to work with an initial
 # vacuum state of light. The PennyLane function ``qml.Displacement(x,0)`` applies a *displacement operator*, which creates
