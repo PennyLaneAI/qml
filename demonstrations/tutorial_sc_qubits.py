@@ -380,7 +380,7 @@ to come soon.
 #
 #    ..
 #
-#    Translation and rotation in the momentum-position grid
+#    Translation and rotation in the position-momentum picture
 #
 # It turns out that this sequence of operations implements the evolution of the cavity state exactly. Note that here we are
 # taking :math:`\omega_r=0`, which simply corresponds to taking it as a reference frequency, so a rotation by
@@ -392,7 +392,6 @@ import matplotlib.pyplot as plt
 
 dev = qml.device("default.gaussian", wires=1, shots=50)
 epsilon, chi = 1.0, 0.1
-
 
 @qml.qnode(dev)
 def measure_P_shots(time, state):
@@ -408,7 +407,7 @@ def measure_P_shots(time, state):
 #    when we work with photonic system. But it is also valid to use it here, since we are modelling a measurement
 #    process that uses photons.
 #
-# We measure the photon's momentum (its frequency) at the end since it allows us to distinguish qubit states
+# We measure the photon's momentum (its frequency) at the end, since it allows us to distinguish qubit states
 # as long as we can resolve them. If we plot for different durations of the microwave drive, we find, for
 # 50 photons measuring qubits either in the ground or excited state:
 
@@ -447,18 +446,19 @@ plt.show()
 # If we shine a coherent state light with frequency :math:`\omega_a` on the cavity and phase
 # :math:`\phi` at the position of the qubit, then the Hamiltonian for the artificial atom is
 #
-# .. math:: \hat{H}=\hbar\Omega_R(\hat{\sigma}_{x}\cos\phi + \hat{\sigma}_{y}\sin\phi)
+# .. math:: \hat{H}=\hbar\Omega_R(\hat{\sigma}_{x}\cos\phi + \hat{\sigma}_{y}\sin\phi).
 #
-# Here, :math:`\Omega_R` is the Rabi frequency, which depends on the average electric field in the
+# Here, :math:`\Omega_R` is a special frequency called the *Rabi frequency*, which depends on the average electric field in the
 # cavity and the size of the superconducting qubit. With this Hamiltonian, we can implement
 # a universal set of single-qubit gates since :math:`\phi=0` implements an :math:`X`-rotation and :math:`\phi=\pi/2`
-# applies a :math:`Y`-rotation. Let us check this using PennyLane. For qubits, we can define
+# applies a :math:`Y`-rotation. 
+# 
+# Let us check this using PennyLane. For qubits, we can define
 # Hamiltonians using `qml.Hamiltonian` and evolve an initial state using `ApproxTimeEvolution`:
 
 from pennylane.templates import ApproxTimeEvolution
 
 dev2 = qml.device("default.qubit", wires=1)
-
 
 @qml.qnode(dev2)
 def H_evolve(state, phi, time):
