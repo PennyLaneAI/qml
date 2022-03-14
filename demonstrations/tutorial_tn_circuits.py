@@ -65,8 +65,8 @@ individual tensors with lines.
 Tensor networks can represent complicated operations involving
 several tensors with many indices contracted in sophisticated patterns.
 
-Two well-known tensor network architectures are matrix product states (MPS) and tree tensor networks (TTN). These follow
-specific patterns of connections between tensors and can be extended to have
+Two well-known tensor network architectures are matrix product states (MPS) and tree tensor networks (TTN). 
+These follow specific patterns of connections between tensors and can be extended to have
 many or few indices. Examples of these architectures with only a few tensors 
 can be seen in the figure below. An MPS is shown on the left and a TTN on the right.
 
@@ -74,10 +74,14 @@ can be seen in the figure below. An MPS is shown on the left and a TTN on the ri
     :align: center
     :width: 50 %
 
-These tensor networks are commonly used to efficiently represent many-body quantum
-states [#orus]_.
-We can also design quantum circuits that follow the structure and connectivity of tensor networks.
+These tensor networks are commonly used to efficiently represent certain many-body quantum
+states [#orus]_. Every quantum circuit can be represented as a tensor network, with the bond
+dimension dependent on the width and connectivity of the circuit. Moreover, one can design the architecture of the
+circuit to have the same connectivity as well-known tensor networks like MPS and TTN.
 We call these **tensor-network quantum circuits**.
+Note that the connectivity of a tensor network is related to how entanglement is distributed and
+how correlations spread in the resulting tensor-network quantum circuit. We therefore design
+circuits based on the tensor networks that best capture the information we want to extract.
 
 In tensor-network quantum circuits, the tensor network architecture acts as a
 guideline for the shape of the quantum circuit.
@@ -180,6 +184,8 @@ def circuit(template_weights):
 # The resulting circuit is illustrated in the figure below the code.
 # Note that this circuit retains the layout of an MPS, 
 # but each block is now a deeper circuit with more gates.
+# Both this circuit and the previous circuit
+# can be represented by an MPS with a bond dimension of two.
 
 shape = qml.StronglyEntanglingLayers.shape(n_layers=2, n_wires=2)
 template_weights = [np.random.random(size=shape)] * 3
@@ -200,7 +206,9 @@ def wide_block(weights, wires):
 # as before. To account for the extra wires per block, we simply set the ``n_block_wires``
 # argument to a higher number. The figure below shows the resulting circuit. Notice
 # that, in the circuit diagram, gates are left-justified. Therefore parts of later blocks
-# appear near the beginning of the circuit.
+# appear near the beginning of the circuit. Furthermore, we note that according to Ref. [#Huggins]_,
+# this circuit has a higher bond dimension than the previous ones and
+# would be related to an MPS with a bond dimension of four.
 
 dev = qml.device("default.qubit", wires=8)
 
