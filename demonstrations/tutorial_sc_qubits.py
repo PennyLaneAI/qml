@@ -65,7 +65,7 @@ to come soon.
 #
 #    ..
 #
-#    Superconducting chip with 4 qubits (schematics)
+#    Superconducting chip with 4 qubits
 #
 # To understand how superconducting qubits work, we first need to explain why some materials are 
 # superconductors. Let's begin by addressing a simpler question: why do conductors allow for the 
@@ -98,7 +98,7 @@ to come soon.
 #
 #    Valence and conduction energy levels
 #
-# However, superconductors do have infinite conductivity. How is this even possible? 
+# However, superconductors *do* have infinite conductivity. How is this even possible? 
 # It's not a phenomenon that we see in our daily lives. For some materials, 
 # at extremely low temperatures, the conduction electrons attract the positive nuclei 
 # to form regions of high positive charge density, alternating with regions of 
@@ -129,7 +129,7 @@ to come soon.
 #
 # When we code in PennyLane, we deal with the abstraction of a qubit. But how is a qubit 
 # actually implemented physically? Some of the most widely used real-life qubits are 
-# individual atoms. But atoms are given to us by nature, and we cannot alter their properties. 
+# built from individual atoms. But atoms are given to us by nature, and we cannot easily alter their properties. 
 # So although they are reliable qubits, they are not versatile at all. We may adapt our 
 # technology to the atoms, but they cannot adapt to our technology. Could there be a way to
 # build a device with the same properties that make atoms suitable qubits? 
@@ -156,7 +156,7 @@ to come soon.
 #    Photons with a particular energy excite electrons
 #
 # A valence electron in an atom, however, may be in more than these two states. In fact, the 
-# energy levels in an atom are infintely many.  How do we guarantee that an electron does not 
+# energy levels in an atom are infintely many. How do we guarantee that an electron does not 
 # escape to another state that is neither of our hand-picked states :math:`\left\lvert g \right\rangle` 
 # and :math:`\left\lvert e \right\rangle`? The transition between the ground and the excited state
 # only happens when the electron a absorbs photon (a particle of light) with energy 
@@ -180,8 +180,7 @@ to come soon.
 # one thinks of quantum system as being at least as small as a molecule, but building something 
 # so small is technologically impossible. It turns out that we don't need to go to such small 
 # scales. If we build a somewhat small electric circuit using superconducting wires and bring 
-# it to temperatures of about 10 mK, then it exhibits discrete energy levels, so it must be a 
-# quantum system. 
+# it to temperatures of about 10 mK, it becomes a quantum system with discrete energy levels. 
 #
 # Let's then build the simplest superconducting circuit. We do not want the circuit to warm up, or 
 # it will lose its quantum properties. Of all the elements that an ordinary circuit may have, 
@@ -204,15 +203,16 @@ to come soon.
 #    Superconducting LC circuit
 #
 # Sadly, this simple circuit has a problem: the spacing between energy levels is constant, 
-# so we can't guarantee that we'll be working with two energy states. But there turns out to 
+# which means our photon probes will cause energy transitions between many neighbouring pairs of states. 
+# This makes it difficult to isolate just two specific states for our qubit. But there turns out to 
 # be a fix for this. Enter the *Josephson junction*. It consists of a very thin piece of an 
 # insulating placed between two superconducting metals. Why do we need this? If it's insulating, 
 # no current should go through it and our circuit should stop working! Here's where another 
-# famous quantum effect comes into play: the *tunnel effect*. Due to the quantum probabilistic
+# famous quantum effect comes into play: the *tunnel effect*. Due to the quantum-probabilistic
 # behaviour of their location, Cooper pairs can sometimes go through the Josephson junction, so
 # that the current is reduced but not completely stopped.  
-# If we replace the inductor by one of these junctions, the energy levels of the superconducting circuit become unevenly spaced, exactly 
-# as we wanted. We have built an artificial atom!
+# If we replace the inductor by one of these junctions, the energy levels of the superconducting 
+# circuit become unevenly spaced, exactly as we wanted. We have built an artificial atom!
 #
 # The transmon
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,7 +221,7 @@ to come soon.
 # In short, this means that we need to interact with the environment in a controlled way. 
 # A way to do this is to add a *gate capacitor* with capacitance :math:`C_g` to the artificial atom, so that it
 # can receive external signals (photons, in our case). The amount of charge :math:`Q_g` in this 
-# capacitor can be chosen by the experimenter, and it determines how strongly the circuit 
+# capacitor can be chosen by the operator, and it determines how strongly the circuit 
 # interacts with the environment. 
 # 
 # .. figure:: ../demonstrations/sc_qubits/JC_circuit.png
@@ -233,7 +233,7 @@ to come soon.
 #    Circuit with a Josephson junction and a gate capacitor
 # 
 # But we run into a problem again, adding a gate capacitor messes 
-# up with our uneven energy levels, which we worked so hard to obtain. The separation in energy 
+# with our uneven energy levels, which we worked so hard to obtain. The separation in energy 
 # levels depends on :math:`Q_g` as shown below.
 #
 # .. figure:: ../demonstrations/sc_qubits/energy_levels.png
@@ -284,7 +284,7 @@ to come soon.
 # length :math:`L` electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda` 
 # such that
 #
-# .. math:: L = L=n\lambda/2,
+# .. math:: L = n\lambda/2,
 #
 # where :math:`n` is an arbitrary positive integer. If this condition is not met, most of the wave will be reflected away. 
 # Therefore, we will have an electromagnetic field inside if we carefully tune our light source to one of these
@@ -334,7 +334,7 @@ to come soon.
 # To understand how this works in more detail, we need to do some hands-on calculations. We will rely on the concept 
 # of a Hamiltonian; do read the blue box above if you need a refresher on the topic! We are given a Hamiltonian 
 # :math:`\hat{H}` that describes the transmon and the photons inside the cavity. The transmon is initially in its ground state 
-# :math:`\left\lvert g \right\rangle` and cavity starts without any photons in it, in the *vacuum state* denoted 
+# :math:`\left\lvert g \right\rangle` and the cavity starts without any photons in it, i.e., in the *vacuum state* denoted 
 # by :math:`\left\lvert 0 \right\rangle`. According to Schrodinger's equation,  the state of the cavity (transmon and photons system) evolves 
 # into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert g \right\rangle\otimes\left\lvert 0 \right\rangle` 
 # after a time :math:`t`. What is the Hamiltonian that describes light of amplitude :math:`\epsilon` and frequency :math:`\omega_r` incident 
