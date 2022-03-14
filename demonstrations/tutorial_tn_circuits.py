@@ -76,8 +76,8 @@ can be seen in the figure below. An MPS is shown on the left and a TTN on the ri
 
 These tensor networks are commonly used to efficiently represent certain many-body quantum
 states [#orus]_. Every quantum circuit can be represented as a tensor network, with the bond
-dimension dependent on the width and connectivity of the circuit. Moreover, one can design the architecture of the
-circuit to have the same connectivity as well-known tensor networks like MPS and TTN.
+dimension dependent on the width and connectivity of the circuit. Moreover, one can design
+quantum circuits that have the same connectivity as well-known tensor networks like MPS and TTN.
 We call these **tensor-network quantum circuits**.
 Note that the connectivity of a tensor network is related to how entanglement is distributed and
 how correlations spread in the resulting tensor-network quantum circuit. We therefore design
@@ -208,7 +208,7 @@ def wide_block(weights, wires):
 # that, in the circuit diagram, gates are left-justified. Therefore parts of later blocks
 # appear near the beginning of the circuit. Furthermore, we note that according to Ref. [#Huggins]_,
 # this circuit has a higher bond dimension than the previous ones and
-# would be related to an MPS with a bond dimension of four.
+# would correspond to an MPS with a bond dimension of four.
 
 dev = qml.device("default.qubit", wires=8)
 
