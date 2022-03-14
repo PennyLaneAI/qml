@@ -4,7 +4,7 @@ Quantum Computing with Superconducting qubits
 =============================
 
 .. meta::
-    :property="og:description": Description and assessment of superconducting quantum technology
+    :property="og:description": Learn how quantum computers based on superconducting qubits work
     :property="og:image": https://pennylane.ai/qml/_images/sc_qubits.png
 
 .. related::
