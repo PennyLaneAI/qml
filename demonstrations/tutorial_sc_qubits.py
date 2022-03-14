@@ -1,10 +1,10 @@
 r""".. _superconducting_qubits:
 
-Quantum Computing with Superconducting qubits
+Quantum computing with superconducting qubits
 =============================
 
 .. meta::
-    :property="og:description": Learn how quantum computers based on superconducting qubits work
+    :property="og:description": Learn about quantum computers based on superconducting qubits
     :property="og:image": https://pennylane.ai/qml/_images/sc_qubits.png
 
 .. related::
@@ -82,11 +82,10 @@ to come soon.
 # To address this valid concern, let us recall the *exclusion principle* in atomic physics: 
 # the atom's discrete energy levels have a population limit, so only a limited number of 
 # electrons can have the same energy. However, the exclusion principle is not limited 
-# to electrons in atomic orbitals. In fact, it applies to all *fermions*, that is, particles 
-# that have half-integer spin. Conduction electrons also happen to be organized in discrete 
-# *conduction energy levels*. They are no less a fermion than valence electrons are, 
-# so they must also abide by this law! The conductivity is then limited because, when the 
-# lower conduction energy levels are occupied, the energy required to promote valence to 
+# to electrons in atomic orbitals. In fact, it applies to all electrons that are
+# organized in discrete energy levels. Since conduction electrons also occupy discrete
+# *conduction energy levels*, they must also abide by this law! The conductivity is then limited because, 
+# when the lower conduction energy levels are occupied, the energy required to promote valence to 
 # conduction electrons is no longer zero. This energy will keep increasing as the population 
 # of conduction electrons grows.
 #
@@ -105,8 +104,8 @@ to come soon.
 # low charge density. This charge distribution oscillates in an organized manner, 
 # creating waves in the material known as *phonons*. The conduction electrons are 
 # pushed together by these phonons, forming *Cooper pairs*. Most importantly, 
-# these pairs of electrons are no longer fermions; they are bosons — particles with integer spin — 
-# and need not obey the exclusion principle. We no longer have an electron population limit in 
+# these coupled pairs of electrons need not obey the exclusion principle. 
+# We no longer have an electron population limit in 
 # the lower conduction energy levels, allowing for infinite conductivity!
 #
 # .. figure:: ../demonstrations/sc_qubits/cooper_pairs.png
@@ -115,12 +114,13 @@ to come soon.
 #
 #    ..
 #
-#    Cooper pairs are formed in regions of high positive charge
+#    Cooper pairs are formed by alternating regions of high and low density of positive
+#    charge (phonons) represented by the density of red dots. 
 #
 # .. container:: alert alert-block alert-info
 #
 #    **PennyLane plugins:** You can run your quantum algorithms on actual superconducting 
-#    qubit quantum computers on the Cloud. The Qiskit, Amazon Braket, and Rigetti PennyLane plugins
+#    qubit quantum computers on the Cloud. The Qiskit, Amazon Braket, Cirq, and Rigetti PennyLane plugins
 #    give you access to some of the most powerful quantum hardware. 
 #    
 #
@@ -139,13 +139,31 @@ to come soon.
 # we must not forget that a qubit is a physical system with **two distinguishable configurations** 
 # that correspond to the computational basis states. In the case of an atom, these are usually the 
 # ground and excited states, :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`, of a 
-# valence electron. We can distinguish these states reliably because the energy levels in an atom are discrete, 
-# an exclusive feature of quantum systems. This means that if we measure the energy of the valence electron 
-# that is in either  :math:`\left\lvert g \right\rangle` or :math:`\left\lvert e \right\rangle`, 
-# we will get two — and only two — possible values :math:`E_0` and :math:`E_1`, associated to  
-# :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle` respectively. 
-# We cannot get anything in between! Therefore, our artificial atom should be a device 
-# whose **energy levels are discrete**. 
+# valence electron. In atoms, we can distinguish these states reliably because the ground and excited
+# states have two distinct values of energy that can be resolved by our measuring devices. If we 
+# measure the energy of the valence electron that is in either  :math:`\left\lvert g \right\rangle` 
+# or :math:`\left\lvert e \right\rangle`, we will measure two — and only two — possible values 
+# :math:`E_0` and :math:`E_1`, associated to :math:`\left\lvert g \right\rangle` 
+# and :math:`\left\lvert e \right\rangle` respectively.
+#
+# Most importantly, the physical system under consideration must **exhibit quantum properties**. 
+# The presence of **discrete energy levels** is indeed one such property, so if we do build a device that stores 
+# energy in discrete values, we can suspect that it obeys the laws of quantum mechanics. Usually, 
+# one thinks of quantum system as being at least as small as a molecule, but building something 
+# so small is technologically impossible. It turns out that we don't need to go to such small 
+# scales. If we build a somewhat small electric circuit using superconducting wires and bring 
+# it to temperatures of about 10 mK, it becomes a quantum system with discrete energy levels. 
+#
+# Finally, we must account for the fact that electrons in atoms have more states available than just 
+# :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`. In fact, the 
+# energy levels in an atom are infintely many. How do we guarantee that an electron does not 
+# escape to another state that is neither of our hand-picked states? The transition between the ground 
+# and the excited state only happens when the electron a absorbs photon (a particle of light) with energy 
+# :math:`\Delta E = E_1 - E_0`. To get to another state with energy :math:`E_2`, 
+# the electron would need to absorb a photon with energy :math:`E_2 - E_1` or :math:`E_2-E_0`. In an atom, 
+# these energy differences are always different: there is a **non-uniform spacing between the energy levels**. 
+# Therefore, if we limit ourselves to interacting with the atom using photons with energy :math:`\Delta E`, 
+# we will not go beyond the states that define our qubit. 
 #
 # .. figure:: ../demonstrations/sc_qubits/photon_absorb.png
 #    :align: center
@@ -154,33 +172,6 @@ to come soon.
 #    ..
 #
 #    Photons with a particular energy excite electrons
-#
-# A valence electron in an atom, however, may be in more than these two states. In fact, the 
-# energy levels in an atom are infintely many. How do we guarantee that an electron does not 
-# escape to another state that is neither of our hand-picked states :math:`\left\lvert g \right\rangle` 
-# and :math:`\left\lvert e \right\rangle`? The transition between the ground and the excited state
-# only happens when the electron a absorbs photon (a particle of light) with energy 
-# :math:`\Delta E = E_1 - E_0`. To get to another state with energy :math:`E_2`, 
-# the electron would need to absorb a photon with energy :math:`E_2 - E_1` or :math:`E_2-E_0`. In an atom, 
-# these energy differences are always different: there is a **non-uniform spacing between the energy levels**. 
-# Therefore, if we limit ourselves to interacting with the atom using photons with energy :math:`\Delta E`, 
-# we will not go beyond the states that define our qubit. 
-#
-# .. figure:: ../demonstrations/sc_qubits/anharmonic.png
-#    :align: center
-#    :width: 60%
-#
-#    ..
-#
-#    Uniform vs. non-uniform energy levels
-#
-# Most importantly, the physical system under consideration must **exhibit quantum properties**. 
-# The presence of discrete energy levels is indeed one such property, so if we do build a device that stores 
-# energy in discrete values, we can be sure that it obeys the laws of quantum mechanics. Usually, 
-# one thinks of quantum system as being at least as small as a molecule, but building something 
-# so small is technologically impossible. It turns out that we don't need to go to such small 
-# scales. If we build a somewhat small electric circuit using superconducting wires and bring 
-# it to temperatures of about 10 mK, it becomes a quantum system with discrete energy levels. 
 #
 # Let's then build the simplest superconducting circuit. We do not want the circuit to warm up, or 
 # it will lose its quantum properties. Of all the elements that an ordinary circuit may have, 
@@ -192,7 +183,7 @@ to come soon.
 # These magnetic fields, in turn, slow down changing currents that pass through the inductor. 
 # They are described by an *inductance* :math:`L`, which measures the strength of the magnetic field 
 # stored in the inductor, at a fixed current. The simplest superconducting circuit is therefore 
-# and capacitor connected to an inductor, as shown below:
+# and capacitor connected to an inductor, also knows as an LC circuit, as shown below:
 #
 # .. figure:: ../demonstrations/sc_qubits/LC_circuit.png
 #    :align: center
@@ -203,10 +194,19 @@ to come soon.
 #    Superconducting LC circuit
 #
 # Sadly, this simple circuit has a problem: the spacing between energy levels is constant, 
-# which means our photon probes will cause energy transitions between many neighbouring pairs of states. 
-# This makes it difficult to isolate just two specific states for our qubit. But there turns out to 
-# be a fix for this. Enter the *Josephson junction*. It consists of a very thin piece of an 
-# insulating placed between two superconducting metals. Why do we need this? If it's insulating, 
+# which means identical photons will cause energy transitions between many neighbouring pairs of states. 
+# This makes it difficult to isolate just two specific states for our qubit. 
+# 
+# .. figure:: ../demonstrations/sc_qubits/anharmonic.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#    
+#    Non-uniform energy levels in an atom vs. uniform energy levels in a superconducting LC circuit
+# 
+# But there turns out to be a fix for the even spacing. Enter the *Josephson junction*. It consists of a very thin piece of an 
+# insulating material placed between two superconducting metals. Why do we need this? If it's insulating, 
 # no current should go through it and our circuit should stop working! Here's where another 
 # famous quantum effect comes into play: the *tunnel effect*. Due to the quantum-probabilistic
 # behaviour of their location, Cooper pairs can sometimes go through the Josephson junction, so
@@ -242,15 +242,15 @@ to come soon.
 #
 #    ..
 #
-#    Energy levels as a function of the charge in the gate capacitor
+#    Energy levels as a function of the charge in the gate capacitor.
 #
 # The problem with this dependence is that a small change in the gate charge :math:`Q_g` can change the 
 # difference in energy levels significantly. A solution to this issue is to work around the 
 # value :math:`Q_g/2e = 1/2`, where the levels are not too sensitive to changes in the gate charge. 
 # But there is a more straightforward solution: the difference in energy levels also depends 
-# on the in-circuit capacitance :math:`C` and the physical characteristics of the junction, which 
-# we take as fixed. As we make the capacitance larger, the energy level differences 
-# become less sensitive to :math:`Q_g`. 
+# on the in-circuit capacitance :math:`C` and the physical characteristics of the junction. If we can make 
+# the capacitance larger, the energy level differences become less sensitive to :math:`Q_g`. So all we need
+# to do is choose an appropriate capacitor. 
 #
 # But there is a price to be paid: making the in-circuit capacitance :math:`C` larger does reduce the 
 # sensitivity to the gate charge, but it also makes the differences in energy levels more uniform.
@@ -258,7 +258,7 @@ to come soon.
 # smaller than the former, so we can adjust the capacitance value and preserve some non-uniformity. 
 # The regime that has been proven ideal is known as the **transmon regime**, and artificial atoms
 # in this regime are called **transmons**. They have proven to be highly effective as qubits, 
-# and they are used in almost all applications nowadays. We can thus work with the first two 
+# and they are used in many applications nowadays. We can thus work with the first two 
 # energy levels of the transmon, which we will also denote :math:`\left\lvert g \right\rangle` and 
 # :math:`\left\lvert e \right\rangle`, the ground and excited states respectively. The energy difference 
 # between these states is known as the *energy gap* :math:`E_a`. We can stimulate transitions using 
@@ -281,7 +281,7 @@ to come soon.
 # contain electromagnetic waves. Our focus will be on the so-called *Fabry-Perot* cavities. 
 # They consist of two mirrors facing each other and whose rears are coated with an anti-reflecting 
 # material. Something surprising happens when we shine a beam of light on a  Fabry-Perot cavity of 
-# length :math:`L` electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda` 
+# length :math:`L`: electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda` 
 # such that
 #
 # .. math:: L = n\lambda/2,
@@ -297,7 +297,8 @@ to come soon.
 #
 #    ..
 #
-#    Fabry-Perot cavity
+#    The Fabry-Perot Cavity reject most of the red wave but allows all of the blue wave, since
+#    an integer number of blue wavelengths fit exactly in the cavity.
 #
 # Following Di Vincenzo's fifth criterion, let's see how we can measure the state of the qubit placed inside the cavity. 
 # To obtain information, we need to shine light at a frequency :math:`\omega_r` that the cavity lets through 
@@ -314,6 +315,9 @@ to come soon.
 # frequency will change slightly. If we carefully measure the frequency of the scattered photons, 
 # we can distill the information about the state of the qubit and measure its state.
 #
+# To understand how this works in more detail, we need to do some hands-on calculations. We will rely on the concept 
+# of a Hamiltonian; do read the blue box below if you need a refresher on the topic! 
+# 
 # .. container:: alert alert-block alert-info
 #
 #    **Primer on Hamiltonians:** When a physical system is exposed to outside influences, it will change configurations.
@@ -330,16 +334,17 @@ to come soon.
 #
 #    where :math:`\exp` represent the matrix exponential. Don't worry, there's no need to know how to solve this equation
 #    or calculate matrix exponentials. Pennylane can do this for us using `ApproxTimeEvolution`.
-#
-# To understand how this works in more detail, we need to do some hands-on calculations. We will rely on the concept 
-# of a Hamiltonian; do read the blue box above if you need a refresher on the topic! We are given a Hamiltonian 
-# :math:`\hat{H}` that describes the transmon and the photons inside the cavity. The transmon is initially in its ground state 
-# :math:`\left\lvert g \right\rangle` and the cavity starts without any photons in it, i.e., in the *vacuum state* denoted 
-# by :math:`\left\lvert 0 \right\rangle`. According to Schrodinger's equation,  the state of the cavity (transmon and photons system) evolves 
-# into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert g \right\rangle\otimes\left\lvert 0 \right\rangle` 
-# after a time :math:`t`. What is the Hamiltonian that describes light of amplitude :math:`\epsilon` and frequency :math:`\omega_r` incident 
-# on the cavity, when the detuning :math:`\Delta` is large? Deriving the Hamiltonian is not an easy job, so we should trust 
-# physicists on this one!  The Hamiltonian turns out  to be
+# 
+# 
+# We are given a Hamiltonian :math:`\hat{H}` that describes the transmon and the photons inside the cavity. 
+# The transmon is initially in its ground state # :math:`\left\lvert g \right\rangle` and the cavity starts 
+# without any photons in it, i.e., in the *vacuum state* denoted # by :math:`\left\lvert 0 \right\rangle`. 
+# According to Schrodinger's equation,  the state of the cavity (transmon and photons system) evolves 
+# into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert g \right\rangle\left\lvert 0 \right\rangle` 
+# after a time :math:`t`. What is the Hamiltonian that describes light of amplitude :math:`\epsilon` 
+# and frequency :math:`\omega_r` incident # on the cavity, when the detuning :math:`\Delta` is large? 
+# Deriving the Hamiltonian is not an easy job, so we should trust physicists on this one!  The Hamiltonian turns out
+# to be
 #
 # .. math:: \hat{H}=\hbar(\omega_r I+\chi\hat{\sigma}_z)\otimes\hat{N} + \hbar\epsilon I\otimes \hat{P},
 #
@@ -363,8 +368,8 @@ to come soon.
 #
 # .. math:: \left\lvert\psi(t)\right\rangle=\alpha \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle +\beta \left\lvert e \right\rangle \left\lvert \epsilon t, (\omega_r-\chi)t \right\rangle.
 #
-# In general, this represents an entangled state between the qubit and the cavity. So if we measure the state of the light
-# transmitted by the cavity, we can determine the qubit's state as well.
+# In general, this state represents an entangled state between the qubit and the cavity. So if we measure the state of the light
+# trapped by the cavity, we can determine the qubit's state as well.
 #
 # Let us see how this works in practice using PennyLane. The ``default.gaussian`` device allows us to work with an initial
 # vacuum state of light. The PennyLane function ``qml.Displacement(x,0)`` applies a *displacement operator*, which creates
@@ -383,7 +388,7 @@ to come soon.
 #    Translation and rotation in the position-momentum picture
 #
 # It turns out that this sequence of operations implements the evolution of the cavity state exactly. Note that here we are
-# taking :math:`\omega_r=0`, which simply corresponds to taking it as a reference frequency, so a rotation by
+# taking :math:`\omega_r=0`, which simply corresponds to taking :math:`\omega_r` as a reference frequency, so a rotation by
 # angle :math:`\phi` actually means a rotation by :math:`\omega_r+\phi`. In PennyLane, the operations read:
 
 import pennylane as qml
@@ -408,19 +413,20 @@ def measure_P_shots(time, state):
 #    process that uses photons.
 #
 # We measure the photon's momentum (its frequency) at the end, since it allows us to distinguish qubit states
-# as long as we can resolve them. If we plot for different durations of the microwave drive, we find, for
-# 50 photons measuring qubits either in the ground or excited state:
+# as long as we can resolve them. Let us plot for three different durations of the microwave drive. We will simulate 
+# the measurement of 50 photons, which inform us whether the qubit is in the ground or excited state:
 
-N_meas = np.arange(1, 51)
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-fig.suptitle("Momentum measurement")
-ax1.scatter(N_meas, measure_P_shots(1, 0))
-ax1.scatter(N_meas, measure_P_shots(1, 1))
-ax2.scatter(N_meas, measure_P_shots(3, 0))
-ax2.scatter(N_meas, measure_P_shots(3, 1))
-ax3.scatter(N_meas, measure_P_shots(5, 0))
-ax3.scatter(N_meas, measure_P_shots(5, 1))
-plt.show()
+N_meas = np.arange(1,51)
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15,5),constrained_layout=True,sharex=True,sharey=True)
+fig.suptitle('Momentum measurement',fontsize = 18)
+ax1.scatter(measure_X_shots(1,0), measure_P_shots(1,0))
+ax1.scatter(measure_X_shots(1,1), measure_P_shots(1,1))
+ax2.scatter(measure_X_shots(3,0), measure_P_shots(3,0))
+ax2.scatter(measure_X_shots(3,1), measure_P_shots(3,1))
+ax3.scatter(measure_X_shots(5,0), measure_P_shots(5,0))
+ax3.scatter(measure_X_shots(5,1), measure_P_shots(5,1))
+ax1.set_ylabel("Momentum", fontsize=14)
+ax2.set_xlabel("Position",fontsize=14)
 
 ##############################################################################
 #
@@ -457,46 +463,46 @@ plt.show()
 # Hamiltonians using `qml.Hamiltonian` and evolve an initial state using `ApproxTimeEvolution`:
 
 from pennylane.templates import ApproxTimeEvolution
-
 dev2 = qml.device("default.qubit", wires=1)
 
 @qml.qnode(dev2)
-def H_evolve(state, phi, time):
-
+def H_evolve(state,phi,time):
+    
     if state == 1:
         qml.PauliX(wires=0)
-
-    coeffs = [np.cos(phi), np.sin(phi)]
-    ops = [qml.PauliX(0), qml.PauliY(0)]
-    Ham = qml.Hamiltonian(coeffs, ops)
-    ApproxTimeEvolution(Ham, time, 1)
+    
+    coeffs=[np.cos(phi),np.sin(phi)]
+    ops=[qml.PauliX(0),qml.PauliY(0)]
+    Ham=qml.Hamiltonian(coeffs,ops)
+    ApproxTimeEvolution(Ham,time,1)
     return qml.state()
-
 
 @qml.qnode(dev2)
-def Sc_X_rot(state, phi):
-
+def Sc_X_rot(state,phi):
+    
     if state == 1:
         qml.PauliX(wires=0)
-
-    qml.RX(phi, wires=0)
+        
+    qml.RX(phi,wires=0)
     return qml.state()
-
 
 @qml.qnode(dev2)
-def Sc_Y_rot(state, phi):
-
+def Sc_Y_rot(state,phi):
+    
     if state == 1:
         qml.PauliX(wires=0)
-
-    qml.RY(phi, wires=0)
+        
+    qml.RY(phi,wires=0)
     return qml.state()
 
+print("State |0>:")
 
-print(np.isclose(Sc_X_rot(1, np.pi / 3), H_evolve(1, 0, np.pi / 6)))
-print(np.isclose(Sc_X_rot(1, np.pi / 3), H_evolve(1, 0, np.pi / 6)))
-print(np.isclose(Sc_Y_rot(0, np.pi / 3), H_evolve(0, np.pi / 2, np.pi / 6)))
-print(np.isclose(Sc_Y_rot(1, np.pi / 3), H_evolve(1, np.pi / 2, np.pi / 6)))
+print("X-rotated by pi/3: {}; Evolved for phi=0, t=pi/6: {}".format(Sc_X_rot(0,np.pi/3).round(2),H_evolve(0,0,np.pi/6).round(2)))
+print("Y-rotated by pi/3: {}; Evolved for phi=pi/2, t=pi/6: {}\n".format(Sc_Y_rot(0,np.pi/3).round(2),H_evolve(0,np.pi/2,np.pi/6).round(2)))
+
+print("State |1>:")
+print("X-rotated by pi/3: {}; Evolved for phi=0, t=pi/6: {}".format(Sc_X_rot(1,np.pi/3).round(2),H_evolve(1,0,np.pi/6).round(2)))
+print("Y-rotated by pi/3: {}; Evolved for phi=pi/2, t=pi/6: {}\n".format(Sc_Y_rot(1,np.pi/3).round(2),H_evolve(1,np.pi/2,np.pi/6).round(2)))
 
 ##############################################################################
 #
@@ -531,8 +537,8 @@ print(np.isclose(Sc_Y_rot(1, np.pi / 3), H_evolve(1, np.pi / 2, np.pi / 6)))
 #    Photons with a particular energy excite electrons
 # 
 # As we will see, this capacitor helps us have
-# a controlled interaction between qubits. When two **identical** transmons are connected in this way, the Hamiltonian
-# for the system of two qubits reads
+# a controlled interaction between qubits. When two **identical** transmons are connected through a coupling
+# capacitor, the Hamiltonian for the system of two qubits reads
 #
 # .. math:: \hat{H}=\frac{\hbar J}{2} (\sigma^{x}_1\sigma^{x}_2+\sigma^{y}_1\sigma^{y}_2),
 #
@@ -542,7 +548,7 @@ print(np.isclose(Sc_Y_rot(1, np.pi / 3), H_evolve(1, np.pi / 2, np.pi / 6)))
 #
 # .. math:: iSWAP = \left( \begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & 0 & i & 0 \\ 0 & i & 0 & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
 #
-# when applied for a time :math:`t=\pi/2J`, as shown with the following PennyLane code:
+# when applied for a time :math:`t=3\pi/2J`, as shown with the following PennyLane code:
 #
 dev3 = qml.device("default.qubit", wires=2)
 
@@ -573,9 +579,9 @@ print(np.isclose(Sc_ISWAP([1, 1], 3 * np.pi / 2), iswap([1, 1])))
 
 ##############################################################################
 #
-# To allow for universal computation, the two-qubit gate has to be equivalent to the well-known CNOT gate,
-# up to single-qubit gates. The following quantum circuit illustrates how the two are related up to a
-# global phase, and we can verify this using PennyLane:
+# To allow for universal computation, we must be able to build the ``CNOT`` gate by using only the ``ISWAP``
+# gate and any number of single-qubit gates. The following quantum circuit illustrates we can achieve
+# this.  And we can verify this using PennyLane:
 #
 @qml.qnode(dev3)
 def cnot_with_iswap2(basis_state):
