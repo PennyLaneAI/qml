@@ -366,10 +366,11 @@ to come soon.
 # In general, this represents an entangled state between the qubit and the cavity. So if we measure the state of the light
 # transmitted by the cavity, we can determine the qubit's state as well.
 #
-# Let us see how this works in practice using PennyLane. The ``default.gaussian`` device allows us to work with an initial
-# vacuum state of light. The PennyLane function ``qml.Displacement(x,0)`` applies a *displacement operator*, which creates
+# Let us see how this works in practice using PennyLane. The ``default.gaussian`` device allows us to simulate 
+# coherent states of light. These states start implicitly in the vacuum (no photons) state. 
+# The PennyLane function ``qml.Displacement(x,0)`` applies a *displacement operator*, which creates
 # a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle`. The rotation operator ``qml.Rotation(phi)`` rotates the state
-# :math:`\left\lvert \bar{x}, 0\right\rangle` in :math:`(\bar{x}, \bar{p})` space. When applied after a large displacement,
+# :math:`\left\lvert \bar{x}, 0\right\rangle` in :math:`(x, p)` space. When applied after a large displacement,
 # it changes the value of :math:`\bar{x}` only slightly, but noticeably changes the value of :math:`\bar{p}` by shifting it
 # off from zero, as shown in the figure:
 #
@@ -697,7 +698,7 @@ np.exp(-1j*np.pi/4)*H_evolve([0,0],0,np.pi/4)
 # Eagle quantum computer. However, much more work needs to
 # be done to address this scalability issue.
 #
-# Concluding remarks
+# Conclusion
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #
