@@ -67,15 +67,15 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing
 
 .. customgalleryitem::
-    :tooltip: Superconducting qubits
-    :figure: demonstrations/sc_qubits/sc_qubits_tn.png
-    :description: :doc:`demos/tutorial_sc_qubits`
-    :tags: quantumcomputing
-
-.. customgalleryitem::
     :tooltip: Error mitigation with Mitiq and PennyLane
     :figure: demonstrations/error_mitigation/laptop.png
     :description: :doc:`demos/tutorial_error_mitigation`
+    :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Superconducting qubits
+    :figure: demonstrations/sc_qubits/sc_qubits_tn.png
+    :description: :doc:`demos/tutorial_sc_qubits`
     :tags: quantumcomputing
 :html:`</div></div><div style='clear:both'>`
 
@@ -91,6 +91,7 @@ such as benchmarking and characterizing quantum processors.
     demos/qsim_beyond_classical
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
-	demos/tutorial_sc_qubits
     demos/tutorial_error_mitigation
+	demos/tutorial_sc_qubits
+    
 

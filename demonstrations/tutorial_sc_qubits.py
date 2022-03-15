@@ -242,7 +242,7 @@ to come soon.
 #
 #    ..
 #
-#    Energy levels as a function of the charge in the gate capacitor.
+#    First three energy levels (green, orange, purple) as a function of the charge in the gate capacitor.
 #
 # The problem with this dependence is that a small change in the gate charge :math:`Q_g` can change the 
 # difference in energy levels significantly. A solution to this issue is to work around the 
@@ -251,6 +251,14 @@ to come soon.
 # on the in-circuit capacitance :math:`C` and the physical characteristics of the junction. If we can make 
 # the capacitance larger, the energy level differences become less sensitive to :math:`Q_g`. So all we need
 # to do is choose an appropriate capacitor. 
+#
+# .. figure:: ../demonstrations/sc_qubits/levels_capacitance.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
+#
+#    Energy levels vs gate capacitor charge for different values of in-circuit capacitance.
 #
 # But there is a price to be paid: making the in-circuit capacitance :math:`C` larger does reduce the 
 # sensitivity to the gate charge, but it also makes the differences in energy levels more uniform.
@@ -405,12 +413,18 @@ def measure_P_shots(time, state):
     qml.Rotation((-1) ** state * chi * time, wires=0)
     return qml.sample(qml.P(0))
 
+@qml.qnode(dev)
+def measure_X_shots(time, state):
+    qml.Displacement(epsilon * time, 0, wires=0)
+    qml.Rotation((-1) ** state * chi * time, wires=0)
+    return qml.sample(qml.X(0))
+
 ##############################################################################
 #
 # .. note::
 #
 #    It may be surprising to see the `default.gaussian` device being used here, since they are most often used
-#    when we work with photonic system. But it is also valid to use it here, since we are modelling a measurement
+#    when we work with photonic systems. But it is also valid to use it here, since we are modelling a measurement
 #    process that uses photons.
 #
 # We measure the photon's momentum (its frequency) at the end, since it allows us to distinguish qubit states
@@ -418,7 +432,7 @@ def measure_P_shots(time, state):
 # the measurement of 50 photons, which inform us whether the qubit is in the ground or excited state:
 
 N_meas = np.arange(1,51)
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15,5),constrained_layout=True,sharex=True,sharey=True)
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15,5))
 fig.suptitle('Momentum measurement',fontsize = 18)
 ax1.scatter(measure_X_shots(1,0), measure_P_shots(1,0))
 ax1.scatter(measure_X_shots(1,1), measure_P_shots(1,1))
@@ -426,8 +440,12 @@ ax2.scatter(measure_X_shots(3,0), measure_P_shots(3,0))
 ax2.scatter(measure_X_shots(3,1), measure_P_shots(3,1))
 ax3.scatter(measure_X_shots(5,0), measure_P_shots(5,0))
 ax3.scatter(measure_X_shots(5,1), measure_P_shots(5,1))
+ax1.title.set_text(r"$t=1/\epsilon$")
+ax2.title.set_text(r"$t=3/\epsilon$")
+ax3.title.set_text(r"$t=5/\epsilon$")
 ax1.set_ylabel("Momentum", fontsize=14)
 ax2.set_xlabel("Position",fontsize=14)
+plt.show()
 
 ##############################################################################
 #
@@ -573,20 +591,36 @@ def iswap(basis_state):
     return qml.state()
 
 
-print(np.isclose(Sc_ISWAP([0, 0], 3 * np.pi / 2), iswap([0, 0])))
-print(np.isclose(Sc_ISWAP([0, 1], 3 * np.pi / 2), iswap([0, 1])))
-print(np.isclose(Sc_ISWAP([1, 0], 3 * np.pi / 2), iswap([1, 0])))
-print(np.isclose(Sc_ISWAP([1, 1], 3 * np.pi / 2), iswap([1, 1])))
+print("State |0>|0>:")
+print("Evolved for t=3*pi/2: {}; Output of ISWAP gate: {}\n ".format(Sc_ISWAP([0,0],3*np.pi/2).round(2),iswap([0,0]).round(2)))
+
+print("State |0>|1>:")
+print("Evolved for t=3*pi/2: {}; Output of ISWAP gate: {}\n ".format(Sc_ISWAP([0,1],3*np.pi/2).round(2),iswap([0,1]).round(2)))
+
+print("State |1>|0>:")
+print("Evolved for t=3*pi/2: {}; Output of ISWAP gate: {}\n ".format(Sc_ISWAP([1,0],3*np.pi/2).round(2),iswap([1,0]).round(2)))
+
+print("State |1>|1>:")
+print("Evolved for t=3*pi/2: {}; Output of ISWAP gate: {}\n ".format(Sc_ISWAP([1,1],3*np.pi/2).round(2),iswap([1,1]).round(2)))
+ 
 
 ##############################################################################
 #
 # To allow for universal computation, we must be able to build the ``CNOT`` gate by using only the ``ISWAP``
-# gate and any number of single-qubit gates. The following quantum circuit illustrates we can achieve
-# this.  And we can verify this using PennyLane:
+# gate and any number of single-qubit gates. The following quantum circuit diagram depicts how we can achieve
+# this.  
 #
-@qml.qnode(dev3)
-def cnot_with_iswap2(basis_state):
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+# .. figure:: ../demonstrations/sc_qubits/circuit.png
+#    :align: center
+#    :width: 85%
+#
+#    ..
+#
+#    Circuit to obtain the CNOT gate from the ISWAP gate
+# 
+# We can verify that the circuit above gives us the ``CNOT`` gate up to a global phase using PennyLane:
+#
+def cnot_with_iswap():
     qml.RZ(-np.pi/2,wires=0)
     qml.RX(np.pi/2,wires=1)
     qml.RZ(np.pi/2,wires=1)
@@ -595,7 +629,10 @@ def cnot_with_iswap2(basis_state):
     qml.ISWAP(wires=[0,1])
     qml.RZ(np.pi/2,wires=1)
     
-    return qml.state()
+get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
+
+np.exp(1j*np.pi/4)*get_matrix()
+
 ##############################################################################
 #
 #
@@ -658,7 +695,7 @@ np.exp(-1j*np.pi/4)*H_evolve([0,0],0,np.pi/4)
 #
 #    **Historical note:** In the literature, you may find some proper names for particular
 #    types of coupled transmons. One of the most common is the **xmon**, which are transmons coupled
-#    with a "+" shaped capacitor. A further improvement over the xmon is the *gmon*, which adds an additional
+#    with a "+" shaped capacitor. A further improvement over the xmon is the **gmon**, which adds an additional
 #    inductor to the coupling to better switch interactions on and off. Since building the best superconducting
 #    qubit is an open research problem and many more architectures have been proposed since the introduction
 #    of the xmon and the gmon, we have reached a point where it is better to avoid getting lost in names. 
