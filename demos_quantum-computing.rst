@@ -73,7 +73,7 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing
 
 .. customgalleryitem::
-    :tooltip: Superconducting qubits
+    :tooltip: Quantum computing with superconducting qubits
     :figure: demonstrations/sc_qubits/sc_qubits_tn.png
     :description: :doc:`demos/tutorial_sc_qubits`
     :tags: quantumcomputing
