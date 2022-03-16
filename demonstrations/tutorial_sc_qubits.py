@@ -120,7 +120,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 #    **PennyLane plugins:** You can run your quantum algorithms on actual superconducting
 #    qubit quantum computers on the Cloud. The Qiskit, Amazon Braket, Cirq, and Rigetti PennyLane plugins
-#    give you access to some of the most powerful quantum hardware.
+#    give you access to some of the most powerful superconducting quantum hardware.
 #
 #
 # Building an artificial atom
@@ -157,7 +157,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 # :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`. In fact, the
 # energy levels in an atom are infintely many. How do we guarantee that an electron does not
 # escape to another state that is neither of our hand-picked states? The transition between the ground
-# and the excited state only happens when the electron a absorbs photon (a particle of light) with energy
+# and the excited state only happens when the electron absorbs a photon (a particle of light) with energy
 # :math:`\Delta E = E_1 - E_0`. To get to another state with energy :math:`E_2`,
 # the electron would need to absorb a photon with energy :math:`E_2 - E_1` or :math:`E_2-E_0`. In an atom,
 # these energy differences are always different: there is a **non-uniform spacing between the energy levels**.
@@ -363,7 +363,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 # us a *coherent state* of light contained in it, which is the state of light that lasers give out.
 # Coherent states are completely determined by two quantities called :math:`\bar{x}` and :math:`\bar{p}`
 # (these quantities are mathematically similar to the notions of average position and average momentum,
-# but are in fact physically connected to the phase of the light)
+# but are in fact physically connected to the phase of the light),
 # so we will denote them via :math:`\left\lvert \bar{x}, \bar{p}\right\rangle`. For the state of the qubit and cavity
 # system, we write the ket in the form :math:`\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle`.
 # The Hamiltonian above has (approximately) the following effect:
@@ -406,7 +406,6 @@ from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
 # Call the default.gaussian device with 50 shots
-
 dev = qml.device("default.gaussian", wires=1, shots=50)
 
 # Fix parameters
@@ -440,7 +439,7 @@ def measure_X_shots(time, state):
 #
 # We measure the photon's momentum (its frequency) at the end, since it allows us to distinguish qubit states
 # as long as we can resolve them. Let us plot for three different durations of the microwave drive. We will simulate
-# the measurement of 50 photons, which inform us whether the qubit is in the ground or excited state:
+# the measurement of 50 photons, which can inform us whether the qubit is in the ground or excited state:
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
 fig.suptitle("Momentum measurement", fontsize=18)
@@ -474,7 +473,7 @@ plt.show()
 # Superconducting single-qubit gates
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We have seen that shining light with  detuning :math:`\Delta \gg 1` is used to perform measurements.
+# We have seen that shining light with  detuning :math:`\Delta \gg 1` is used to perform indirect measurements.
 # A rather different choice, :math:`\omega_r =\omega_a` (:math:`\Delta=0`), allows us to manipulate the state
 # of the qubit. But does the Fabry-Perot cavity transmit these photons if their wavelength does not
 # allow it? We must emphasize that the cavity reflects only the vast majority of photons,
@@ -690,11 +689,9 @@ def cnot_with_iswap():
 
 
 # Get matrix of circuit above
-
 get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
 
 # Multiply by a global phase to obtain CNOT
-
 (np.exp(1j * np.pi / 4) * get_matrix()).round(2)
 
 ##############################################################################
@@ -722,7 +719,7 @@ get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
 #    SQUID architecture surrounding a transmon
 #
 # Another option is to use **all-microwave gates**. In this scenario, we place two **different** transmons in a single
-# cavity, and shine microwaves that can be absorbed by second qubit. The first qubit will scatter the
+# cavity, and shine microwaves that can be absorbed by the second qubit. The first qubit will scatter the
 # photons, and the other will absorb them, causing a similar effect to that of the qubit-cavity
 # system in the case of measurement. This means that we can entangle the two qubits. When the first qubit
 # receives a microwave at the frequency that estimulates the second qubit, one can show that the (simplified)
@@ -755,7 +752,7 @@ def H_evolve(state, phi, time):
 
 ##############################################################################
 #
-# Although this method does not affect the qubit's state much, these gates turn are
+# Although this method does not affect the qubit's state much, these gates are
 # slower than those built using flux-tuning, since the Rabi frequency for this interaction
 # turns out to be smaller.
 #
@@ -775,7 +772,7 @@ def H_evolve(state, phi, time):
 # Superconducting qubits are a force to be reckoned with as practical implementations of quantum computers.
 # Nonetheless, there are still some technological challenges preventing them from scaling further.
 # A glaring issue is that we need to keep the transmons at very low temperatures, which requires the use of
-# large cryogenic devices known as *dilution refrigerators*. However, all of the most popular quantum computing
+# large cryogenic devices known as *dilution refrigerators*. However, many quantum computing
 # technologies need to use cryogenic devices for different reasons. In the future, other quantum
 # technologies may bypass the use of low temperatures, but superconducting qubits may not be so lucky, since
 # they are constrained by the laws of physics that allow for superconductivity.
@@ -815,7 +812,7 @@ def H_evolve(state, phi, time):
 #
 #
 # Superconducting quantum computing has gained momentum in the last decade as a leading competitor
-# in the race for building a functional quantum computer. It is but a simulation of atomic systems
+# in the race for building a functional quantum computer. It is based on artificial versions of atomic systems
 # done using superconducting circuits, which allows for versatility and control.
 # They have been easy to scale so far, but increasing the qubit coherence time and the speed of quantum
 # operations and measurements is essential to scaling this technology further. This has motivated so
@@ -836,7 +833,7 @@ def H_evolve(state, phi, time):
 #
 #     `"IBM Unveils Breakthrough 127-Qubit Quantum Processor"
 #     <https://newsroom.ibm.com/2021-11-16-IBM-Unveils-Breakthrough-127-Qubit-Quantum-Processor>`__.
-#     IBM Newsroom. Retrieved 2022-03-15
+#     IBM Newsroom. Retrieved 2022-03-15.
 #
 # .. [#DiVincenzo2000]
 #
@@ -866,7 +863,7 @@ def H_evolve(state, phi, time):
 #
 # .. [#Rigetti2003]
 #
-#     Rigetti, C., Devoret, M. (2009) "Fully microwave-tunable universal gates in superconducting qubits with linear couplings and f ixed transition frequencies",
+#     Rigetti, C., Devoret, M. (2009) "Fully microwave-tunable universal gates in superconducting qubits with linear couplings and fixed transition frequencies",
 #     `Phys. Rev. B 81, 134057
 #     <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.81.134507>`__.
 #
