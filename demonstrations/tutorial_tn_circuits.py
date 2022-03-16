@@ -13,7 +13,7 @@ Tensor-Network Quantum Circuits
    tutorial_variational_classifier Variational classifier
 
 *Authors: Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
-Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 9 March 2022.*
+Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 16 March 2022.*
 
 | :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
 | :sup:`2` BMW AG, Munich, Germany
@@ -92,6 +92,12 @@ unitary operations to obtain quantum circuits, as illustrated in the figure belo
     :align: center
     :width: 70 %
 
+.. |vspace| raw:: latex
+
+   \vspace{15mm}
+
+|vspace|
+
 Since the unitary operations :math:`U_1` to :math:`U_3` are in principle completely general,
 it is not always clear how to implement them with a specific gate set. 
 Instead, we can replace the unitary operations with variational quantum circuits
@@ -109,7 +115,7 @@ PennyLane Implementation
 We now demonstrate how to use PennyLane to build and simulate tensor-network quantum circuits.
 
 The first step is to define the circuit that will be broadcast into the tensor network shape.
-We call this a block. The block circuit defines a variational quantum circuit that takes the position 
+We call this a block. The block defines a variational quantum circuit that takes the position 
 of tensors in the network.
 """
 
@@ -126,7 +132,7 @@ def block(weights, wires):
 # With the block defined, we can build the full tensor-network quantum circuit.
 # The following code broadcasts the above block into the
 # shape of an MPS tensor network and computes the expectation value of a Pauli Z
-# measurement on the bottom qubit.
+# operator on the bottom qubit.
 
 dev = qml.device("default.qubit", wires=4)
 
@@ -206,9 +212,8 @@ def wide_block(weights, wires):
 # as before. To account for the extra wires per block, we simply set the ``n_block_wires``
 # argument to a higher number. The figure below shows the resulting circuit. Notice
 # that, in the circuit diagram, gates are left-justified. Therefore parts of later blocks
-# appear near the beginning of the circuit. Furthermore, we note that according to Ref. [#Huggins]_,
-# this circuit has a higher bond dimension than the previous ones and
-# would correspond to an MPS with a bond dimension of four.
+# appear near the beginning of the circuit. Furthermore, this circuit has a higher bond 
+# dimension than the previous ones and would correspond to an MPS with a bond dimension of four.
 
 dev = qml.device("default.qubit", wires=8)
 
@@ -310,7 +315,7 @@ def block(weights, wires):
 # We use :class:`~pennylane.BasisStatePreparation` to encode the input images.
 # The following code implements the :class:`~pennylane.BasisStatePreparation` encoding,
 # followed by a :class:`~pennylane.TTN` circuit using the above ``block``. Finally, we compute the expectation
-# value of a :class:`~pennylane.PauliZ` measurement as the output
+# value of a :class:`~pennylane.PauliZ` measurement as the output.
 # The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisStatePreparation`
 # encoding appears in the initial :class:`~pennylane.PauliX` gates.
 
@@ -333,8 +338,8 @@ fig, ax = qml.draw_mpl(circuit)(BAS[0], weights)
 fig.set_size_inches((6, 3.5))
 
 ##############################################################################
-# When the output of the above circuit is less than zero, we label the image stripes,
-# otherwise we label it bars. Based on these labels, we define a cost function to train the circuit.
+# When the output of the above circuit is less than zero, we label the image "stripes",
+# otherwise we label it "bars". Based on these labels, we define a cost function to train the circuit.
 # The cost function in the following code adds the expectation value result
 # if the label should be negative and subtracts the result if the label should
 # be positive. In other words, the cost will be minimized when the stripes images
@@ -370,12 +375,12 @@ for k in range(100):
 
 for image in BAS:
     fig, ax = qml.draw_mpl(circuit)(image, params)
-    plt.figure()
+    plt.figure(figsize=[1.8,1.8])
     plt.imshow(np.reshape(image, [2, 2]), cmap="gray")
     plt.title(
-        f"Expectation Value = {format(circuit(image,params),'.02f')};"
+        f"Exp. Val. = {circuit(image,params):.0f};"
         + f" Label = {'Bars' if circuit(image,params)>0 else 'Stripes'}",
-        fontsize=20,
+        fontsize=8,
     )
     plt.xticks([])
     plt.yticks([])
