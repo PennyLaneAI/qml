@@ -13,13 +13,13 @@ Tensor-Network Quantum Circuits
    tutorial_variational_classifier Variational classifier
 
 *Authors: Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
-Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 16 March 2022.*
+Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 17 March 2022.*
 
 | :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
 | :sup:`2` BMW AG, Munich, Germany
 
 This demonstration explains how to use PennyLane templates to design and implement tensor-network quantum circuits
-as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
+as in Ref. \[[#Huggins]_\]. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
 and tree tensor networks.
 
 We begin with a short introduction to tensor networks and explain their relationship to quantum circuits. Next, we 
@@ -75,7 +75,7 @@ can be seen in the figure below. An MPS is shown on the left and a TTN on the ri
     :width: 50 %
 
 These tensor networks are commonly used to efficiently represent certain many-body quantum
-states [#orus]_. Every quantum circuit can be represented as a tensor network, with the bond
+states \[[#orus]_\]. Every quantum circuit can be represented as a tensor network, with the bond
 dimension dependent on the width and connectivity of the circuit. Moreover, one can design
 quantum circuits that have the same connectivity as well-known tensor networks like MPS and TTN.
 We call these **tensor-network quantum circuits**.
@@ -136,7 +136,7 @@ def block(weights, wires):
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev, expansion_strategy="device")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
         wires=range(4),
@@ -150,7 +150,7 @@ def circuit(template_weights):
 np.random.seed(1)
 weights = np.random.random(size=[3, 2])
 qml.drawer.use_style("black_white")
-fig, ax = qml.draw_mpl(circuit)(weights)
+fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
 fig.set_size_inches((6, 3))
 
 ##############################################################################
@@ -169,7 +169,7 @@ def deep_block(weights, wires):
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev, expansion_strategy="device")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
         wires=range(4),
@@ -195,7 +195,7 @@ def circuit(template_weights):
 
 shape = qml.StronglyEntanglingLayers.shape(n_layers=2, n_wires=2)
 template_weights = [np.random.random(size=shape)] * 3
-fig, ax = qml.draw_mpl(circuit)(template_weights)
+fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(template_weights)
 
 ##############################################################################
 # In addition to deep blocks, we can easily expand to wider blocks with more
@@ -217,7 +217,7 @@ def wide_block(weights, wires):
 
 dev = qml.device("default.qubit", wires=8)
 
-@qml.qnode(dev, expansion_strategy="device")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
         wires=range(8),
@@ -231,7 +231,7 @@ def circuit(template_weights):
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
 template_weights = [weights] * 3
-fig, ax = qml.draw_mpl(circuit)(template_weights)
+fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(template_weights)
 
 ##############################################################################
 # We can also broadcast a block to the tree tensor network architecture by using the
@@ -245,7 +245,7 @@ def block(weights, wires):
 
 dev = qml.device("default.qubit", wires=8)
 
-@qml.qnode(dev, expansion_strategy="device")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.TTN(
         wires=range(8),
@@ -258,7 +258,7 @@ def circuit(template_weights):
 
 
 weights = np.random.random(size=[7, 2])
-fig, ax = qml.draw_mpl(circuit)(weights)
+fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
 fig.set_size_inches((4,4))
 ##############################################################################
 # Classifying the bars and stripes data set
@@ -321,7 +321,7 @@ def block(weights, wires):
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev, expansion_strategy="device")
+@qml.qnode(dev)
 def circuit(image, template_weights):
     qml.BasisStatePreparation(image, wires=range(4))
     qml.TTN(
@@ -334,7 +334,7 @@ def circuit(image, template_weights):
     return qml.expval(qml.PauliZ(wires=3))
 
 weights = np.random.random(size=[3, 2])
-fig, ax = qml.draw_mpl(circuit)(BAS[0], weights)
+fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(BAS[0], weights)
 fig.set_size_inches((6, 3.5))
 
 ##############################################################################
@@ -374,7 +374,7 @@ for k in range(100):
 # we can now show the full circuits and the resulting output for each image.
 
 for image in BAS:
-    fig, ax = qml.draw_mpl(circuit)(image, params)
+    fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(image, params)
     plt.figure(figsize=[1.8,1.8])
     plt.imshow(np.reshape(image, [2, 2]), cmap="gray")
     plt.title(
