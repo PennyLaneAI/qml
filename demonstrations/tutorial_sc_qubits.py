@@ -14,8 +14,8 @@ Quantum computing with superconducting qubits
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers. 
 It is no surprise that this technology is being used by well-known tech companies in their quest 
-to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 [#Google2019]_ and, in 2021, 
-IBM built its Eagle quantum computer with 127 qubits [#IBM2021]_! The central insight that allows for these 
+to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 [[#Google2019]_] and, in 2021, 
+IBM built its Eagle quantum computer with 127 qubits [[#IBM2021]_]! The central insight that allows for these 
 quantum computers is that superconductivity is a quantum phenomenon, so we can use superconducting
 circuits as quantum systems that we can control at will. We can actually bring the quantum world 
 to a larger scale and manipulate it more freely!
@@ -24,12 +24,12 @@ By the end of this demo, you will learn how superconductors are used to create, 
 control, and measure the state of a qubit. Moreover, you will identify the strengths and
 weaknesses of this technology in terms of Di Vincenzo's criteria, as introduced in the 
 box below. You will be armed with the basic concepts to understand the main scientific 
-papers on the topic and to keep up-to-date with the newest developments.
+papers on the topic and keep up-to-date with the newest developments.
 
 .. container:: alert alert-block alert-info
     
     **Di Vincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
-    wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
+    wishlist for the experimental characteristics of a quantum computer [[#DiVincenzo2000]_].
     DiVincenzo's criteria have since become the main guideline for
     physicists and engineers building quantum computers:
 
@@ -68,12 +68,12 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 # To understand how superconducting qubits work, we first need to explain why some materials are
 # superconductors. Let's begin by addressing a simpler question: why do conductors allow for the
-# easy passage of electrons, and insulating materials don't? Solid-state physics tell us that,
-# when an electric current travels through a material, the electrons therein can be of two types.
+# easy passage of electrons and insulating materials don't? Solid-state physics tells us that 
+# when an electric current travels through a material, the electrons therein come in two types.
 # *Conduction electrons* flow freely through the material, while *valence electrons* are attached to
 # the atoms that form the material itself. A material is a good conductor of electricity
 # if the valence electrons require no energy to be stripped from the atoms to become
-# conduction electrons. Similarly, the material is a semi-conductor if the energy needed is small;
+# conduction electrons. Similarly, the material is a semi-conductor if the energy needed is small,
 # and it's an insulator if the energy is large.
 #
 # But, if conduction electrons can be obtained for free in conducting materials, then why don't all conductors
@@ -103,9 +103,9 @@ papers on the topic and to keep up-to-date with the newest developments.
 # low charge density. This charge distribution oscillates in an organized manner,
 # creating waves in the material known as *phonons*. The conduction electrons are
 # pushed together by these phonons, forming *Cooper pairs*. Most importantly,
-# these coupled pairs of electrons need not obey the exclusion principle.
+# these coupled electrons need not obey the exclusion principle.
 # We no longer have an electron population limit in
-# the lower conduction energy levels, allowing for infinite conductivity! [#Bergou2021]_
+# the lower conduction energy levels, allowing for infinite conductivity! [[#Bergou2021]_]
 #
 # .. figure:: ../demonstrations/sc_qubits/cooper_pairs.png
 #    :align: center
@@ -148,14 +148,14 @@ papers on the topic and to keep up-to-date with the newest developments.
 # Most importantly, the physical system under consideration must **exhibit quantum properties**.
 # The presence of **discrete energy levels** is indeed one such property, so if we do build a device that stores
 # energy in discrete values, we can suspect that it obeys the laws of quantum mechanics. Usually,
-# one thinks of quantum system as being at least as small as a molecule, but building something
+# one thinks of a quantum system as being at least as small as a molecule, but building something
 # so small is technologically impossible. It turns out that we don't need to go to such small
 # scales. If we build a somewhat **small electric circuit using superconducting wires** and bring
 # it to temperatures of about 10 mK, it becomes a quantum system with discrete energy levels.
 #
 # Finally, we must account for the fact that electrons in atoms have more states available than just
 # :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`. In fact, the
-# energy levels in an atom are infintely many. How do we guarantee that an electron does not
+# energy levels in an atom are infinitely many. How do we guarantee that an electron does not
 # escape to another state that is neither of our hand-picked states? The transition between the ground
 # and the excited state only happens when the electron absorbs a photon (a particle of light) with energy
 # :math:`\Delta E = E_1 - E_0`. To get to another state with energy :math:`E_2`,
@@ -174,15 +174,15 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 # Let's then build the simplest superconducting circuit. We do not want the circuit to warm up, or
 # it will lose its quantum properties. Of all the elements that an ordinary circuit may have,
-# only two of them do not produce heat when they're superconducting: *capacitors* and *inductors*.
-# Capacitors are two parallel metalic plates that store electric charge.
+# only two do not produce heat when they're superconducting: *capacitors* and *inductors*.
+# Capacitors are two parallel metallic plates that store electric charge.
 # They are characterized by their *capacitance* :math:`C`, which measures how much charge
 # they can store when connected to a given power source.  Inductors are wires shaped
-# as a coil and store magentic fields when a current passes through.
+# as a coil and store magnetic fields when a current passes through.
 # These magnetic fields, in turn, slow down changing currents that pass through the inductor.
 # They are described by an *inductance* :math:`L`, which measures the strength of the magnetic field
-# stored in the inductor, at a fixed current. The simplest superconducting circuit is therefore
-# and capacitor connected to an inductor, also known as an LC circuit, as shown below:
+# stored in the inductor at a fixed current. The simplest superconducting circuit is, therefore,
+# a capacitor connected to an inductor, also known as an LC circuit, as shown below:
 #
 # .. figure:: ../demonstrations/sc_qubits/LC_circuit.png
 #    :align: center
@@ -194,7 +194,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 # Sadly, this simple circuit has a problem: the spacing between energy levels is constant,
 # which means identical photons will cause energy transitions between many neighbouring pairs of states.
-# This makes it difficult to isolate just two specific states for our qubit.
+# This makes it impossible to isolate just two specific states for our qubit.
 #
 # .. figure:: ../demonstrations/sc_qubits/anharmonic.png
 #    :align: center
@@ -210,7 +210,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 # famous quantum effect comes into play: the *tunnel effect*. Due to the quantum-probabilistic
 # behaviour of their location, Cooper pairs can sometimes go through the Josephson junction, so
 # that the current is reduced but not completely stopped.
-# If we replace the inductor by one of these junctions, the energy levels of the superconducting
+# If we replace the inductor with one of these junctions, the energy levels of the superconducting
 # circuit become unevenly spaced, exactly as we wanted. We have built an artificial atom!
 #
 # The transmon
@@ -231,9 +231,9 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 #    Circuit with a Josephson junction and a gate capacitor
 #
-# But we run into a problem again, adding a gate capacitor messes
+# But we run into a problem again. Adding a gate capacitor messes
 # with our uneven energy levels, which we worked so hard to obtain. The separation in energy
-# levels depends on :math:`Q_g` as shown below [#Blais2021]_.
+# levels depends on :math:`Q_g,` as shown below [[#Blais2021]_].
 #
 # .. figure:: ../demonstrations/sc_qubits/energy_levels.png
 #    :align: center
@@ -293,7 +293,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 # .. math:: L = n\lambda/2,
 #
-# where :math:`n` is an arbitrary positive integer. If this condition is not met, most of the wave will be reflected away.
+# where :math:`n` is an arbitrary positive integer. If this condition is not met, most of the photons in the wave will be reflected away.
 # Therefore, we will have an electromagnetic field inside if we carefully tune our light source to one of these
 # wavelengths. For superconducting qubits, it is most
 # common to use wavelengths in the microwave range.
@@ -339,12 +339,12 @@ papers on the topic and to keep up-to-date with the newest developments.
 #
 #    .. math:: \left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert \psi(0)\right\rangle
 #
-#    where :math:`\exp` represent the matrix exponential. Don't worry, there's no need to know how to solve this equation
+#    where :math:`\exp` represents the matrix exponential. Don't worry, there's no need to know how to solve this equation
 #    or calculate matrix exponentials. Pennylane can do this for us using ``ApproxTimeEvolution``.
 #
 #
 # We are given a Hamiltonian :math:`\hat{H}` that describes the transmon and the photons inside the cavity.
-# The transmon is initially in its ground state :math:`\left\lvert g \right\rangle` and the cavity starts
+# The transmon is initially in its ground state :math:`\left\lvert g \right\rangle,` and the cavity starts
 # without any photons in it, i.e., in the *vacuum state* denoted by :math:`\left\lvert 0 \right\rangle`.
 # According to Schrodinger's equation,  the state of the cavity (transmon and photons system) evolves
 # into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert g \right\rangle\left\lvert 0 \right\rangle`
@@ -386,7 +386,7 @@ papers on the topic and to keep up-to-date with the newest developments.
 # a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle`. The rotation operator ``qml.Rotation(phi)`` rotates the state
 # :math:`\left\lvert \bar{x}, 0\right\rangle` in :math:`(x, p)` space. When applied after a large displacement,
 # it changes the value of :math:`\bar{x}` only slightly, but noticeably changes the value of :math:`\bar{p}` by shifting it
-# off from zero, as shown in the figure [#Blais2021]_:
+# off from zero, as shown in the figure [[#Blais2021]_]:
 #
 #
 # .. figure:: ../demonstrations/sc_qubits/phase_space.png
@@ -432,12 +432,12 @@ def measure_X_shots(time, state):
 #
 # .. note::
 #
-#    It may be surprising to see the ``default.gaussian`` device being used here, since they are most often used
+#    It may be surprising to see the ``default.gaussian`` device being used here, since it is most often used
 #    when we work with photonic systems. But it is also valid to use it here, since we are modelling a measurement
 #    process that uses photons.
 #
 # We measure the photon's momentum (its frequency) at the end, since it allows us to distinguish qubit states
-# as long as we can resolve them. Let us plot for three different durations of the microwave drive. We will simulate
+# as long as we can resolve them. Let us plot for three different durations of the microwave-cavity interaction. We will simulate
 # the measurement of 50 photons, which can inform us whether the qubit is in the ground or excited state:
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
@@ -448,11 +448,11 @@ ax2.scatter(measure_X_shots(3, 0), measure_P_shots(3, 0))
 ax2.scatter(measure_X_shots(3, 1), measure_P_shots(3, 1))
 ax3.scatter(measure_X_shots(5, 0), measure_P_shots(5, 0))
 ax3.scatter(measure_X_shots(5, 1), measure_P_shots(5, 1))
-ax1.title.set_text(r"$t=1/\epsilon$")
-ax2.title.set_text(r"$t=3/\epsilon$")
-ax3.title.set_text(r"$t=5/\epsilon$")
-ax1.set_ylabel("Momentum", fontsize=14)
-ax2.set_xlabel("Position", fontsize=14)
+ax1.set_title(r"$t=1/\epsilon$", fontsize=16)
+ax2.set_title(r"$t=3/\epsilon$", fontsize=16)
+ax3.set_title(r"$t=5/\epsilon$", fontsize=16)
+ax1.set_ylabel("Momentum", fontsize=16)
+ax2.set_xlabel("Position", fontsize=16)
 plt.show()
 
 ##############################################################################
@@ -461,7 +461,7 @@ plt.show()
 # and :math:`\left\lvert e \right\rangle` respectively.
 #
 # We see that the longer we shine microwaves on the cavity, the greater our ability
-# to resolve the change of frequency, making for an equally good measurement of the qubit's
+# to resolve the frequency change, making for an equally good measurement of the qubit's
 # state. However, this poses a problem: being a relatively large object, the state of the
 # qubit is rather short-lived due to decoherence. Therefore, taking a long time to make
 # the measurement introduces additional inaccuracies: the qubits may lose quantum
@@ -563,7 +563,7 @@ print(
 #
 # Thus, for a particular choice of angle, we have verified that this Hamiltonian implements rotations around the X and Y axes.
 # We can do this for any choice of angle, where we see that the time interval needed for a rotation by an angle
-# :math:`\theta` is :math:`t=2\theta/\Omega_R`. This time can be controlled simply by turning the source of microwaves on and off.
+# :math:`\theta` is :math:`t=2\theta/\Omega_R.` This time can be controlled simply by turning the source of microwaves on and off.
 #
 # The typical times in which a single-qubit gate is executed are in the order of the nanoseconds, making superconducting
 # quantum computers the fastest ones out there. Why do they have this intrinsic advantage? The reason is that the
@@ -594,7 +594,7 @@ print(
 #
 # As we will see, this capacitor helps us have
 # a controlled interaction between qubits. When two **identical** transmons are connected through a coupling
-# capacitor, the Hamiltonian for the system of two qubits reads [#Schuch2003]_
+# capacitor, the Hamiltonian for the system of two qubits reads [[#Schuch2003]_]
 #
 # .. math:: \hat{H}=\frac{\hbar J}{2} (\sigma^{x}_1\sigma^{x}_2+\sigma^{y}_1\sigma^{y}_2),
 #
@@ -665,7 +665,7 @@ print(
 #
 # To allow for universal computation, we must be able to build the ``CNOT`` gate by using only the ``ISWAP``
 # gate and any number of single-qubit gates. The following quantum circuit diagram depicts how we can achieve
-# this [#Schuch2003]_.
+# this [[#Schuch2003]_].
 #
 # .. figure:: ../demonstrations/sc_qubits/circuit.png
 #    :align: center
@@ -721,13 +721,13 @@ get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
 # cavity, and shine microwaves that can be absorbed by the second qubit. The first qubit will scatter the
 # photons, and the other will absorb them, causing a similar effect to that of the qubit-cavity
 # system in the case of measurement. This means that we can entangle the two qubits. When the first qubit
-# receives a microwave at the frequency that estimulates the second qubit, one can show that the (simplified)
-# Hamiltonian is given by [#Rigetti2003]_
+# receives a microwave at the frequency that stimulates the second qubit, one can show that the (simplified)
+# Hamiltonian is given by [[#Rigetti2003]_]
 #
 # .. math:: \hat{H}=\hbar \tilde{\Omega} (\sigma^{z}_1\sigma^{x}_2\cos\phi+\sigma^{z}_1\sigma^{y}_2\sin\phi),
 #
 # where :math:`\phi` is the phase of the wave. As promised, we can obtain an entangled state by concatenating
-# the evolution under this Hamiltonian for a time :math:`t=\tfrac{\pi}{4\Omega}` with :math:`R_x` and :math:`R_x` rotations
+# the evolution under this Hamiltonian for a time :math:`t=\tfrac{\pi}{4\Omega}` with :math:`R_x` and :math:`R_y` rotations
 # and a ``qml.Hadamard`` gate:
 #
 @qml.qnode(dev3)
@@ -761,7 +761,7 @@ def H_evolve(state, phi, time):
 #    types of coupled transmons. One of the most common is the **xmon**, which are transmons coupled
 #    with a "+" shaped capacitor. A further improvement over the xmon is the **gmon**, which adds an additional
 #    inductor to the coupling to better switch interactions on and off. Many more architectures have been
-#    proposed since the introduction of the xmon and the gmon, we have reached a point where it is
+#    proposed since the introduction of the xmon and the gmon, so we have reached a point where it is
 #    better to avoid getting lost in names. Understanding the basic principles introduced
 #    above will make us go a long way!
 #
@@ -804,7 +804,7 @@ def H_evolve(state, phi, time):
 # the problem of *frequency crowding*: if we interconnect too many qubits together inside a cavity, they
 # may start to have similar energy gaps. In that case, we may manipulate qubits that we did
 # not intend to. The problem can be somewhat addressed by changing the geometry in which the qubits
-# are connected [#IBMHex2021]_. However, much more work needs to be done to address this scalability issue.
+# are connected [[#IBMHex2021]_]. However, much more work needs to be done to address this scalability issue.
 #
 # Conclusion
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -850,7 +850,7 @@ def H_evolve(state, phi, time):
 #
 #     Blais, A., Grimsmo, A., Girvin, S., and Walraff, A. (2021) "Circuit quantum electrodynamics",
 #     `Rev. Mod. Phys. 93, 025005
-#     <https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E>`__.
+#     <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.93.025005>`__.
 #     (`arXiv <https://arxiv.org/abs/2005.12667>`__)
 #
 # .. [#Schuch2003]
