@@ -409,7 +409,6 @@ import matplotlib.pyplot as plt
 dev = qml.device("default.gaussian", wires=1, shots=50)
 
 # Fix parameters
-
 epsilon, chi = 1.0, 0.1
 
 # Implement displacement and rotation and measure both X and P observables
@@ -442,7 +441,7 @@ def measure_X_shots(time, state):
 # the measurement of 50 photons, which can inform us whether the qubit is in the ground or excited state:
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-fig.suptitle("Momentum measurement", fontsize=18)
+fig.suptitle("Position/momentum measurement", fontsize=18)
 ax1.scatter(measure_X_shots(1, 0), measure_P_shots(1, 0))
 ax1.scatter(measure_X_shots(1, 1), measure_P_shots(1, 1))
 ax2.scatter(measure_X_shots(3, 0), measure_P_shots(3, 0))
@@ -458,7 +457,7 @@ plt.show()
 
 ##############################################################################
 #
-# In the above, the blue and orange dots represent qubits measured in the state :math:`\left\lvert g \right\rangle`
+# In the above, the blue and orange dots represent qubits which we can infer to be in the state :math:`\left\lvert g \right\rangle`
 # and :math:`\left\lvert e \right\rangle` respectively.
 #
 # We see that the longer we shine microwaves on the cavity, the greater our ability
@@ -728,7 +727,7 @@ get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
 # .. math:: \hat{H}=\hbar \tilde{\Omega} (\sigma^{z}_1\sigma^{x}_2\cos\phi+\sigma^{z}_1\sigma^{y}_2\sin\phi),
 #
 # where :math:`\phi` is the phase of the wave. As promised, we can obtain an entangled state by concatenating
-# the evolution under this Hamiltonian for a time :math:`t=\pi/4\Omega` with :math:`R_x` and :math:`R_x` rotations
+# the evolution under this Hamiltonian for a time :math:`t=\tfrac{\pi}{4\Omega}` with :math:`R_x` and :math:`R_x` rotations
 # and a ``qml.Hadamard`` gate:
 #
 @qml.qnode(dev3)
