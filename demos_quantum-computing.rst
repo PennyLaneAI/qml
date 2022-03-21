@@ -71,6 +71,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/error_mitigation/laptop.png
     :description: :doc:`demos/tutorial_error_mitigation`
     :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Learning ground state of 2D antiferromagnetic Heisenberg model
+    :figure: demonstrations/ml_classical_shadows/ml_classical_shadows.png
+    :description: :doc:`demos/tutorial_ml_classical_shadows`
+    :tags: quantumcomputing characterization machinelearning
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -86,4 +92,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
+    demos/tutorial_ml_classical_shadows
 
