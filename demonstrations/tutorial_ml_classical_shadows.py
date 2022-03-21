@@ -156,8 +156,8 @@ def corr_function_op(ind, idx):
         ops.append(op(ind) @ op(idx)) if ind != idx else ops.append(qml.Identity(idx))
     return ops
 
-
-corr_function_op(1, 2)
+for op in corr_function_op(1, 2):
+    print(op)
 
 
 ######################################################################
@@ -176,12 +176,15 @@ if len(ham.ops):
     eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
     psi0 = eigvecs[:, np.argmin(eigvals)]
 
-dev_exact = qml.device("default.qubit", wires=num_qubits)  # for exact simulation
-dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)  # for single-shot simulation
+# for exact simulation
+dev_exact = qml.device("default.qubit", wires=num_qubits)
+# for single-shot simulation
+dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)  
 
 
 def circuit(psi, **kwargs):
-    """circuit for measuring expectation value of an observables O_i with respect to state |psi>"""
+    """circuit for measuring expectation value of an observables O_i 
+    with respect to state |psi>"""
     observables = kwargs.pop("observable")
     qml.QubitStateVector(psi / np.linalg.norm(psi), wires=range(int(np.log2(len(psi)))))
     return [qml.expval(o) for o in observables]
@@ -218,6 +221,7 @@ ax.yaxis.set_ticks(range(num_qubits))
 ax.xaxis.set_tick_params(labelsize=18)
 ax.yaxis.set_tick_params(labelsize=18)
 
+fig.subplots_adjust(right=0.8)
 cbar_ax = fig.add_axes([0.96, 0.124, 0.05, 0.754])
 bar = fig.colorbar(shw, cax=cbar_ax)
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
@@ -315,7 +319,8 @@ shadow[0][:5], shadow[1][:5]
 
 
 def snapshot_state(meas_list, obs_list):
-    """Build the \sigma_T snapshot for reconstructing the quantum state from its classical shadow"""
+    """Build the \sigma_T snapshot for reconstructing the quantum state 
+    from its classical shadow"""
     # undo the rotations done for performing Pauli measurements in the specific basis
     rotations = [
         qml.Hadamard(wires=0).matrix,  # X-basis
@@ -326,7 +331,8 @@ def snapshot_state(meas_list, obs_list):
     # reconstruct snapshot from local Pauli measurements
     rho_snapshot = [1]
     for meas_out, basis in zip(meas_list, obs_list):
-        # preparing state |s_i><s_i| using the post measurement outcome: |0><0| for 1 and |1><1| for -1
+        # preparing state |s_i><s_i| using the post measurement outcome: 
+        # |0><0| for 1 and |1><1| for -1
         state = np.array([[1, 0], [0, 0]]) if meas_out == 1 else np.array([[0, 0], [0, 1]])
         local_rho = 3 * (rotations[basis].conj().T @ state @ rotations[basis]) - np.eye(2)
         rho_snapshot = np.kron(rho_snapshot, local_rho)
@@ -335,7 +341,8 @@ def snapshot_state(meas_list, obs_list):
 
 
 def shadow_state_reconst(shadow):
-    """Reconstruct the quantum state from its classical shadow by averaging over computed \sigma_T"""
+    """Reconstruct the quantum state from its classical shadow by 
+    averaging over computed \sigma_T"""
     num_snapshots, num_qubits = shadow[0].shape
     meas_lists, obs_lists = shadow
 
@@ -432,7 +439,9 @@ for i, j in coups:
         expval_estmt[i][j] = 1.0
     else:
         expval_estmt[i][j] = (
-            np.sum(np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])) / 3
+            np.sum(
+                np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])
+            ) / 3
         )
         expval_estmt[j][i] = expval_estmt[i][j]
 
@@ -443,6 +452,7 @@ ax.yaxis.set_ticks(range(num_qubits))
 ax.xaxis.set_tick_params(labelsize=18)
 ax.yaxis.set_tick_params(labelsize=18)
 
+fig.subplots_adjust(right=0.8)
 cbar_ax = fig.add_axes([0.96, 0.124, 0.05, 0.754])
 bar = fig.colorbar(shw, cax=cbar_ax)
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
@@ -552,11 +562,16 @@ def build_dataset(num_points, Nr, Nc, T=500):
                 expval_exact[i][j], expval_estim[i][j] = 1.0, 1.0
             else:
                 expval_exact[i][j] = (
-                    np.sum(np.array([circuit_exact(psi, observable=[o]) for o in corrs]).T) / 3
+                    np.sum(
+                        np.array([circuit_exact(psi, observable=[o]) for o in corrs]).T
+                    ) / 3
                 )
                 expval_estim[i][j] = (
-                    np.sum(np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]))
-                    / 3
+                    np.sum(
+                        np.array(
+                            [estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]
+                        )
+                    ) / 3
                 )
                 expval_exact[j][i], expval_estim[j][i] = expval_exact[i][j], expval_estim[i][j]
 
@@ -663,7 +678,8 @@ kernel_NN.shape
 
 
 def fit_predict_data(cij, kernel, opt="linear"):
-    """Trains the dataset via hyperparameter tuning and returns the prediction from the best model"""
+    """Trains dataset via hyperparameter tuning and returns the predictions
+    from best model"""
 
     # perform instance-wise normalization to get k(x, x')
     for idx in range(len(kernel)):
@@ -671,17 +687,21 @@ def fit_predict_data(cij, kernel, opt="linear"):
 
     # training data (estimated from measurement data)
     y = np.array([y_estim[i][cij] for i in range(len(X_data))])
-    X_train, X_test, y_train, y_test = train_test_split(kernel, y, test_size=0.3, random_state=24)
+    X_train, X_test, y_train, y_test = train_test_split(kernel, y, test_size=0.3, 
+                                                        random_state=24)
 
     # testing data (exact expectation values)
     y_clean = np.array([y_exact[i][cij] for i in range(len(X_data))])
-    _, _, _, y_test_clean = train_test_split(kernel, y_clean, test_size=0.3, random_state=24)
+    _, _, _, y_test_clean = train_test_split(kernel, y_clean, test_size=0.3, 
+                                            random_state=24)
 
     # hyperparameter tuning with cross validation
     models = [
-        (lambda Cx: svm.SVR(kernel=opt, C=Cx, epsilon=0.1)),  # Epsilon-Support Vector Regression
+        # Epsilon-Support Vector Regression
+        (lambda Cx: svm.SVR(kernel=opt, C=Cx, epsilon=0.1)),
+        # Kernel-Ridge based Regression
         (lambda Cx: KernelRidge(kernel=opt, alpha=1 / (2 * Cx))),
-    ]  # Kernel-Ridge based Regression
+    ] 
     hyperparams = [
         0.0025,
         0.0125,
@@ -699,7 +719,8 @@ def fit_predict_data(cij, kernel, opt="linear"):
         for hyperparam in hyperparams:
             cv_score = -np.mean(
                 cross_val_score(
-                    model(hyperparam), X_train, y_train, cv=5, scoring="neg_root_mean_squared_error"
+                    model(hyperparam), X_train, y_train, 
+                    cv=5, scoring="neg_root_mean_squared_error"
                 )
             )
             if best_cv_score > cv_score:
@@ -729,15 +750,15 @@ kernel_data = np.zeros((num_qubits ** 2, len(kernel_list), 2))
 y_predclean, y_predicts1, y_predicts2, y_predicts3 = [], [], [], []
 
 for cij in range(num_qubits ** 2):
-    clf, y_predict, y_clean, best_cv_score, test_score = fit_predict_data(cij, X_data, opt="rbf")
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, X_data, opt="rbf")
     y_predclean.append(y_clean)
-    kernel_data[cij][0] = (best_cv_score, test_score)
+    kernel_data[cij][0] = (cv_score, test_score)
     y_predicts1.append(y_predict)
-    clf, y_predict, y_clean, best_cv_score, test_score = fit_predict_data(cij, kernel_dirichlet)
-    kernel_data[cij][1] = (best_cv_score, test_score)
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_dirichlet)
+    kernel_data[cij][1] = (cv_score, test_score)
     y_predicts2.append(y_predict)
-    clf, y_predict, y_clean, best_cv_score, test_score = fit_predict_data(cij, kernel_NN)
-    kernel_data[cij][2] = (best_cv_score, test_score)
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_NN)
+    kernel_data[cij][2] = (cv_score, test_score)
     y_predicts3.append(y_predict)
 
 # For each C_ij print (best_cv_score, test_score) pair
@@ -746,7 +767,8 @@ print(row_format.format("", *kernel_list))
 for idx, data in enumerate(kernel_data):
     print(
         row_format.format(
-            f"C_{idx//num_qubits}{idx%num_qubits} \t| ", str(data[0]), str(data[1]), str(data[2])
+            f"C_{idx//num_qubits}{idx%num_qubits} \t| ", 
+            str(data[0]), str(data[1]), str(data[2])
         )
     )
 
@@ -766,13 +788,14 @@ for idx, data in enumerate(kernel_data):
 # diagonalization.
 #
 
-fig, axes = plt.subplots(3, 4, figsize=(24, 12))
+fig, axes = plt.subplots(3, 4, figsize=(28, 15))
 corr_vals = [y_predclean, y_predicts1, y_predicts2, y_predicts3]
-plt_plots = [2, 1, 23]
+plt_plots = [5, 17, 23]
 
 cols = [
     "From {}".format(col)
-    for col in ["Exact Diagnalization", "RBF Kernel", "Dirichlet Kernel", "Neural Tangent Kernel"]
+    for col in ["Exact Diagnalization", "RBF Kernel", 
+                "Dirichlet Kernel", "Neural Tangent Kernel"]
 ]
 rows = ["Model {}".format(row) for row in plt_plots]
 
@@ -820,10 +843,10 @@ plt.show()
 
 ######################################################################
 # .. figure::  /demonstrations/ml_classical_shadows/rmse_shadow.png
-#     :width: 48 %
+#     :width: 45 %
 #
 # .. figure::  /demonstrations/ml_classical_shadows/rmse_training.png
-#     :width: 48 %
+#     :width: 45 %
 #
 # Predicting two-point correlation functions for ground state of
 # 2D antiferromagnetic Heisenberg model over different training size :math:`N`
@@ -840,8 +863,7 @@ plt.show()
 #
 #    H. Y. Huang, R. Kueng, G. Torlai, V. V. Albert, J. Preskill, "Provably
 #    efficient machine learning for quantum many-body problems",
-#    `arXiv:2106.12627 [quant-ph] (2021)
-#     <https://arxiv.org/abs/2106.12627>`__
+#    `arXiv:2106.12627 [quant-ph] (2021) <https://arxiv.org/abs/2106.12627>`__
 #
 # .. [#neurtangkernel]
 #
