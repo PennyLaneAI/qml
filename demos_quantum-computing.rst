@@ -74,9 +74,10 @@ such as benchmarking and characterizing quantum processors.
 
 .. customgalleryitem::
     :tooltip: Learning ground state of 2D antiferromagnetic Heisenberg model
-    :figure: demonstrations/ml_classical_shadows/ml_classical_shadows.png
+    :figure: demonstrations/ml_classical_shadows/ml_classical_shadow.png
     :description: :doc:`demos/tutorial_ml_classical_shadows`
     :tags: quantumcomputing characterization machinelearning
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::

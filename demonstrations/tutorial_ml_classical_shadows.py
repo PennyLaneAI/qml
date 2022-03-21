@@ -30,6 +30,7 @@ Hamiltonian, correlations functions, entanglement entropies, etc.
 
 .. figure::  /demonstrations/ml_classical_shadows/class_shadow_ml.png
    :align: center
+   :width: 100 %
    :alt: Combining ML with Classical Shadow
 
    Combining machine learning and classical shadow
@@ -249,6 +250,7 @@ plt.show()
 ######################################################################
 # .. figure::  /demonstrations/ml_classical_shadows/class_shadow_prep.png
 #    :align: center
+#    :width: 100 %
 #    :alt: Preparing Classical Shadows
 #
 #    Workflow for classical shadow preparation
@@ -356,6 +358,7 @@ def shadow_state_reconst(shadow):
 #
 # .. figure:: /demonstrations/ml_classical_shadows/fidel_snapshot.png
 #    :align: center
+#    :width: 100 %
 #    :alt: Fidelity of reconstructed ground state with different shadow sizes :math:`T`
 #
 #    Fidelity of reconstructed ground state with different shadow sizes :math:`T`
@@ -763,7 +766,7 @@ for idx, data in enumerate(kernel_data):
 # diagonalization.
 #
 
-fig, axes = plt.subplots(3, 4, figsize=(22, 12))
+fig, axes = plt.subplots(3, 4, figsize=(24, 12))
 corr_vals = [y_predclean, y_predicts1, y_predicts2, y_predicts3]
 plt_plots = [2, 1, 23]
 
@@ -816,7 +819,7 @@ plt.show()
 
 
 ######################################################################
-# .. figure::  /demonstrations/ml_classical_shadows/rmse_shadaow.png
+# .. figure::  /demonstrations/ml_classical_shadows/rmse_shadow.png
 #     :width: 48 %
 #
 # .. figure::  /demonstrations/ml_classical_shadows/rmse_training.png
