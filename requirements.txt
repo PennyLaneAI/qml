@@ -42,4 +42,4 @@ Jinja2==2.11.3
 pyyaml==5.4.1
 jax==0.2.10
 jaxlib==0.1.64
-neural-tangents==0.5.0
+neural-tangents
