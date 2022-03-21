@@ -842,9 +842,9 @@ plt.show()
 
 ######################################################################
 # .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
-#     :width: 45 %
+#     :width: 47 %
 # .. image::  /demonstrations/ml_classical_shadows/rmse_training.png
-#     :width: 45 %
+#     :width: 47 %
 #
 # Predicting two-point correlation functions for ground state of
 # 2D antiferromagnetic Heisenberg model over different training size :math:`N`
