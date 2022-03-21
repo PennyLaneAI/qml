@@ -1,5 +1,5 @@
 r"""
-Learning ground state of 2D antiferromagnetic Heisenberg mode
+Learning ground state of 2D antiferromagnetic Heisenberg model
 ==============================================================
 
 .. meta::
