@@ -440,7 +440,9 @@ for i, j in coups:
         expval_estmt[i][j] = 1.0
     else:
         expval_estmt[i][j] = (
-            np.sum(np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])) / 3
+            np.sum(
+                np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])
+            ) / 3
         )
         expval_estmt[j][i] = expval_estmt[i][j]
 
@@ -561,11 +563,14 @@ def build_dataset(num_points, Nr, Nc, T=500):
                 expval_exact[i][j], expval_estim[i][j] = 1.0, 1.0
             else:
                 expval_exact[i][j] = (
-                    np.sum(np.array([circuit_exact(psi, observable=[o]) for o in corrs]).T) / 3
+                    np.sum(
+                        np.array([circuit_exact(psi, observable=[o]) for o in corrs]).T
+                    ) / 3
                 )
                 expval_estim[i][j] = (
-                    np.sum(np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]))
-                    / 3
+                    np.sum(
+                        np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])
+                    ) / 3
                 )
                 expval_exact[j][i], expval_estim[j][i] = expval_exact[i][j], expval_estim[i][j]
 
@@ -681,11 +686,13 @@ def fit_predict_data(cij, kernel, opt="linear"):
 
     # training data (estimated from measurement data)
     y = np.array([y_estim[i][cij] for i in range(len(X_data))])
-    X_train, X_test, y_train, y_test = train_test_split(kernel, y, test_size=0.3, random_state=24)
+    X_train, X_test, y_train, y_test = train_test_split(kernel, y, test_size=0.3, 
+                                                        random_state=24)
 
     # testing data (exact expectation values)
     y_clean = np.array([y_exact[i][cij] for i in range(len(X_data))])
-    _, _, _, y_test_clean = train_test_split(kernel, y_clean, test_size=0.3, random_state=24)
+    _, _, _, y_test_clean = train_test_split(kernel, y_clean, test_size=0.3, 
+                                             random_state=24)
 
     # hyperparameter tuning with cross validation
     models = [
@@ -711,7 +718,8 @@ def fit_predict_data(cij, kernel, opt="linear"):
         for hyperparam in hyperparams:
             cv_score = -np.mean(
                 cross_val_score(
-                    model(hyperparam), X_train, y_train, cv=5, scoring="neg_root_mean_squared_error"
+                    model(hyperparam), X_train, y_train, 
+                    cv=5, scoring="neg_root_mean_squared_error"
                 )
             )
             if best_cv_score > cv_score:
@@ -758,7 +766,8 @@ print(row_format.format("", *kernel_list))
 for idx, data in enumerate(kernel_data):
     print(
         row_format.format(
-            f"C_{idx//num_qubits}{idx%num_qubits} \t| ", str(data[0]), str(data[1]), str(data[2])
+            f"C_{idx//num_qubits}{idx%num_qubits} \t| ", 
+            str(data[0]), str(data[1]), str(data[2])
         )
     )
 
@@ -784,7 +793,8 @@ plt_plots = [5, 17, 23]
 
 cols = [
     "From {}".format(col)
-    for col in ["Exact Diagnalization", "RBF Kernel", "Dirichlet Kernel", "Neural Tangent Kernel"]
+    for col in ["Exact Diagnalization", "RBF Kernel", 
+                "Dirichlet Kernel", "Neural Tangent Kernel"]
 ]
 rows = ["Model {}".format(row) for row in plt_plots]
 
@@ -831,10 +841,9 @@ plt.show()
 
 
 ######################################################################
-# .. figure::  /demonstrations/ml_classical_shadows/rmse_shadow.png
+# .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
 #     :width: 45 %
-#
-# .. figure::  /demonstrations/ml_classical_shadows/rmse_training.png
+# .. image::  /demonstrations/ml_classical_shadows/rmse_training.png
 #     :width: 45 %
 #
 # Predicting two-point correlation functions for ground state of
