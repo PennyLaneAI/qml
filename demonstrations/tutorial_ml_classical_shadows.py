@@ -60,7 +60,6 @@ import scipy as sp
 import itertools as it
 import matplotlib.pyplot as plt
 import networkx as nx
-from tqdm.notebook import tqdm
 
 
 ######################################################################
@@ -524,7 +523,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
     num_qubits = Nr * Nc
     X, y_exact, y_estim = [], [], []
 
-    for idx in tqdm(range(num_points), leave=False):
+    for idx in range(num_points):
 
         coupling_mat = build_coupling_mat(Nr, Nc)
         ham = H(coupling_mat)
@@ -726,7 +725,7 @@ kernel_list = ["Gaussian kernel", "Dirichlet kernel", "Neural Tangent kernel"]
 kernel_data = np.zeros((num_qubits ** 2, len(kernel_list), 2))
 y_predclean, y_predicts1, y_predicts2, y_predicts3 = [], [], [], []
 
-for cij in tqdm(range(num_qubits ** 2), leave=False):
+for cij in range(num_qubits ** 2):
     clf, y_predict, y_clean, best_cv_score, test_score = fit_predict_data(cij, X_data, opt="rbf")
     y_predclean.append(y_clean)
     kernel_data[cij][0] = (best_cv_score, test_score)
