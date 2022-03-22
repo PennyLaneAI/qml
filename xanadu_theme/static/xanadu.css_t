@@ -2096,6 +2096,31 @@ footer.page-footer .footer-copyright {
 
 }
 
+/*
+Enclose square brackets with an extra pair of square brackets as to make up for
+change of how references are rendered with Sphinx >2.0.0.
+
+Example:
+--------
+
+- With Sphinx <v2.0.0, a reference like
+
+[#arrasmith2020]_
+
+would render as
+
+[1.]
+
+- With Sphinx >v2.0.0, the same rendering is achieved with
+
+[[#arrasmith2020]_]
+
+
+Hence, the citation [#arrasmith2020]_ has to be enclosed with square brackets.
+*/
+.footnote span.brackets:before, a.footnote-reference.brackets:before { content: "[" }
+.footnote span.brackets:after, a.footnote-reference.brackets:after { content: "]" }
+
 .card {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.05)!important;
     border: 0;
