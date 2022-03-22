@@ -12,28 +12,28 @@ Quantum computing with superconducting qubits
 
 *Author: PennyLane dev team. Posted: 22 March 2022. Last updated: 22 March 2022.*
 
-**Superconducting qubits** are among the most promising approaches to building quantum computers. 
-It is no surprise that this technology is being used by well-known tech companies in their quest 
-to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 [[#Google2019]_] and, in 2021, 
-IBM built its Eagle quantum computer with 127 qubits [[#IBM2021]_]! The central insight that allows for these 
+**Superconducting qubits** are among the most promising approaches to building quantum computers.
+It is no surprise that this technology is being used by well-known tech companies in their quest
+to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 [#Google2019]_ and, in 2021,
+IBM built its Eagle quantum computer with 127 qubits [#IBM2021]_! The central insight that allows for these
 quantum computers is that superconductivity is a quantum phenomenon, so we can use superconducting
-circuits as quantum systems that we can control at will. We can actually bring the quantum world 
+circuits as quantum systems that we can control at will. We can actually bring the quantum world
 to a larger scale and manipulate it more freely!
 
-By the end of this demo, you will learn how superconductors are used to create, prepare, 
+By the end of this demo, you will learn how superconductors are used to create, prepare,
 control, and measure the state of a qubit. Moreover, you will identify the strengths and
-weaknesses of this technology in terms of Di Vincenzo's criteria, as introduced in the 
-box below. You will be armed with the basic concepts to understand the main scientific 
+weaknesses of this technology in terms of Di Vincenzo's criteria, as introduced in the
+box below. You will be armed with the basic concepts to understand the main scientific
 papers on the topic and keep up-to-date with the newest developments.
 
 .. container:: alert alert-block alert-info
-    
+
     **Di Vincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
-    wishlist for the experimental characteristics of a quantum computer [[#DiVincenzo2000]_].
+    wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
     DiVincenzo's criteria have since become the main guideline for
     physicists and engineers building quantum computers:
 
-    1. **Well-characterized and scalable qubits**. Many of the quantum systems that 
+    1. **Well-characterized and scalable qubits**. Many of the quantum systems that
     we find in nature are not qubits, so we must find a way to make them behave as such.
     Moreover, we need to put many of these systems together.
 
@@ -48,7 +48,7 @@ papers on the topic and keep up-to-date with the newest developments.
     qubits. To do this, we require both single-qubit gates and two-qubit gates.
 
     5. **Measurement of individual qubits**. To read the result of a quantum algorithm,
-    we must accurately measure the final state of a pre-chosen set of qubits. 
+    we must accurately measure the final state of a pre-chosen set of qubits.
 
 """
 
@@ -68,7 +68,7 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 # To understand how superconducting qubits work, we first need to explain why some materials are
 # superconductors. Let's begin by addressing a simpler question: why do conductors allow for the
-# easy passage of electrons and insulating materials don't? Solid-state physics tells us that 
+# easy passage of electrons and insulating materials don't? Solid-state physics tells us that
 # when an electric current travels through a material, the electrons therein come in two types.
 # *Conduction electrons* flow freely through the material, while *valence electrons* are attached to
 # the atoms that form the material itself. A material is a good conductor of electricity
@@ -105,7 +105,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # pushed together by these phonons, forming *Cooper pairs*. Most importantly,
 # these coupled electrons need not obey the exclusion principle.
 # We no longer have an electron population limit in
-# the lower conduction energy levels, allowing for infinite conductivity! [[#Bergou2021]_]
+# the lower conduction energy levels, allowing for infinite conductivity! [#Bergou2021]_
 #
 # .. figure:: ../demonstrations/sc_qubits/cooper_pairs.png
 #    :align: center
@@ -233,7 +233,7 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 # But we run into a problem again. Adding a gate capacitor messes
 # with our uneven energy levels, which we worked so hard to obtain. The separation in energy
-# levels depends on :math:`Q_g,` as shown below [[#Blais2021]_].
+# levels depends on :math:`Q_g,` as shown below [#Blais2021]_.
 #
 # .. figure:: ../demonstrations/sc_qubits/energy_levels.png
 #    :align: center
@@ -386,7 +386,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle`. The rotation operator ``qml.Rotation(phi)`` rotates the state
 # :math:`\left\lvert \bar{x}, 0\right\rangle` in :math:`(x, p)` space. When applied after a large displacement,
 # it changes the value of :math:`\bar{x}` only slightly, but noticeably changes the value of :math:`\bar{p}` by shifting it
-# off from zero, as shown in the figure [[#Blais2021]_]:
+# off from zero, as shown in the figure [#Blais2021]_:
 #
 #
 # .. figure:: ../demonstrations/sc_qubits/phase_space.png
@@ -594,7 +594,7 @@ print(
 #
 # As we will see, this capacitor helps us have
 # a controlled interaction between qubits. When two **identical** transmons are connected through a coupling
-# capacitor, the Hamiltonian for the system of two qubits reads [[#Schuch2003]_]
+# capacitor, the Hamiltonian for the system of two qubits reads [#Schuch2003]_
 #
 # .. math:: \hat{H}=\frac{\hbar J}{2} (\sigma^{x}_1\sigma^{x}_2+\sigma^{y}_1\sigma^{y}_2),
 #
@@ -665,7 +665,7 @@ print(
 #
 # To allow for universal computation, we must be able to build the ``CNOT`` gate by using only the ``ISWAP``
 # gate and any number of single-qubit gates. The following quantum circuit diagram depicts how we can achieve
-# this [[#Schuch2003]_].
+# this [#Schuch2003]_.
 #
 # .. figure:: ../demonstrations/sc_qubits/circuit.png
 #    :align: center
@@ -722,7 +722,7 @@ get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
 # photons, and the other will absorb them, causing a similar effect to that of the qubit-cavity
 # system in the case of measurement. This means that we can entangle the two qubits. When the first qubit
 # receives a microwave at the frequency that stimulates the second qubit, one can show that the (simplified)
-# Hamiltonian is given by [[#Rigetti2003]_]
+# Hamiltonian is given by [#Rigetti2003]_
 #
 # .. math:: \hat{H}=\hbar \tilde{\Omega} (\sigma^{z}_1\sigma^{x}_2\cos\phi+\sigma^{z}_1\sigma^{y}_2\sin\phi),
 #
@@ -804,7 +804,7 @@ def H_evolve(state, phi, time):
 # the problem of *frequency crowding*: if we interconnect too many qubits together inside a cavity, they
 # may start to have similar energy gaps. In that case, we may manipulate qubits that we did
 # not intend to. The problem can be somewhat addressed by changing the geometry in which the qubits
-# are connected [[#IBMHex2021]_]. However, much more work needs to be done to address this scalability issue.
+# are connected [#IBMHex2021]_. However, much more work needs to be done to address this scalability issue.
 #
 # Conclusion
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
