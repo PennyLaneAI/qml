@@ -2096,21 +2096,8 @@ footer.page-footer .footer-copyright {
 
 }
 
-.brackets:before {
-    content: "[";
-}
-
-.brackets:after {
-    content: "]";
-}
-
-.footnote.brackets:before {
-    content: "";
-}
-
-.footnote.brackets:after {
-    content: "";
-}
+.footnote span.brackets:before, a.footnote-reference.brackets:before { content: "[" }
+.footnote span.brackets:after, a.footnote-reference.brackets:after { content: "]" }
 
 .card {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.05),0 2px 25px 2px rgba(0,0,0,.05)!important;
