@@ -28,9 +28,9 @@ of the quantum systems such as the expectation value of such as Hamiltonian,
 correlations functions, and entanglement entropies.
 
 .. figure::  /demonstrations/ml_classical_shadows/class_shadow_ml.png
-:align: center
-:width: 100 %
-:alt: Combining ML with Classical Shadow
+   :align: center
+   :width: 100 %
+   :alt: Combining ML with Classical Shadow
 
 Combining machine learning and classical shadoww
 
