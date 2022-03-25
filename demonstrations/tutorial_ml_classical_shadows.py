@@ -505,7 +505,6 @@ from sklearn.ensemble import RandomForestRegressor
 # obtained from exact diagonalization and classical shadow representation
 # (with :math:`T=500`), respectively.
 #
-import tqdm
 
 def build_dataset(num_points, Nr, Nc, T=500):
     """Builds dataset for Heisenberg model: X (copling vector), y (correlation matrix)"""
@@ -514,7 +513,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
     X, y_exact, y_estim = [], [], []
     coupling_mats = build_coupling_mats(num_points, Nr, Nc)
 
-    for coupling_mat in tqdm.tqdm(coupling_mats):
+    for coupling_mat in coupling_mats:
 
         ham = Hamiltonian(coupling_mat)
 
