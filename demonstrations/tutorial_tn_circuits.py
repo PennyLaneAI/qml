@@ -19,7 +19,7 @@ Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last
 | :sup:`2` BMW Group, Munich, Germany
 
 This demonstration explains how to use PennyLane templates to design and implement tensor-network quantum circuits
-as in Ref. \[[#Huggins]_\]. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
+as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
 and tree tensor networks.
 
 We begin with a short introduction to tensor networks and explain their relationship to quantum circuits. Next, we 
@@ -75,7 +75,7 @@ can be seen in the figure below. An MPS is shown on the left and a TTN on the ri
     :width: 50 %
 
 These tensor networks are commonly used to efficiently represent certain many-body quantum
-states \[[#orus]_\]. Every quantum circuit can be represented as a tensor network, with the bond
+states [#orus]_. Every quantum circuit can be represented as a tensor network, with the bond
 dimension dependent on the width and connectivity of the circuit. Moreover, one can design
 quantum circuits that have the same connectivity as well-known tensor networks like MPS and TTN.
 We call these **tensor-network quantum circuits**.
