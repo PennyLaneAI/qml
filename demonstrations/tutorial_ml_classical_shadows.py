@@ -7,39 +7,37 @@ Machine learning for quantum many-body problems
     :property="og:image": https://pennylane.ai/qml/_images/ml_classical_shadow.png
 
 .. related::
-
-tutorial_classical_shadows Classical Shadows
+    tutorial_classical_shadows Classical Shadows
 
 
 *Author: PennyLane dev team". Posted: XX. Last Updated: XX March 2022*
 
 
-In general, simulating an :math:`n`-qubit quantum mechanical system
-becomes classically intractable as the number of classical bits required
-to store the state of the system scale exponentially in :math:`n`. This
-inhibits us from using classical simulation of larger quantum systems to
-estimate their properties. The challenge of classically representing states
-of quantum systems has been recently addressed by the quantum community
-using classical shadow formalism, which allows one to build a concise
-classical description of the state of a quantum system. It was argued in
-Ref. #[preskill]_ that combining classical shadows with classical
-machine learning enables using methods to efficiently predict properties
-of the quantum systems such as the expectation value of such as Hamiltonian,
-correlations functions, and entanglement entropies.
+Storing and processing of a complete description of an :math:`n`-qubit quantum mechanical
+system as density matrices becomes classically intractable as the number of classical bits
+scales exponentially in :math:`n` (:math:`O(2^{n})`). Therefore, there lies a need for
+having a more efficient classical representation of the quantum state. The quantum community
+recently addressed this challenge using classical shadow formalism, which allows one to build
+a concise classical description of the state of a quantum system using randomized single-qubit
+measurements. It was argued in Ref. [#preskill]_ that combining classical shadows with classical
+machine learning enables using methods to efficiently predict properties of the quantum systems
+such as the expectation value of such as Hamiltonian, correlations functions, and entanglement
+entropies.
 
 .. figure:: /demonstrations/ml_classical_shadows/class_shadow_ml.png
    :align: center
    :width: 100 %
    :alt: Combining ML with Classical Shadow
 
-Combining machine learning and classical shadoww
+    Combining machine learning and classical shadow
 
 
-In this demo, we demonstrate one of the ideas presented in Ref. #[preskill]_
-for combining classical shadow formalism with classical machine learning
-and using it to predicting the ground-state properties of the 2D antiferromagnetic
-Heisenberg model. So let's get started!
-
+In this demo, we demonstrate one of the ideas presented in Ref. #[preskill]_ for using classical
+shadow formalism with classical machine learning to predict the ground-state properties of the
+2D antiferromagnetic Heisenberg model. We begin by first learning how to build the Heisenberg model,
+computing its ground state properties, and computing its classical shadow. Finally, we demonstrate
+using kernel-based learning models for learning these classical shadows and predicting the ground
+state properties from them. So let's get started!
 
 Building the 2D Heisenberg Model
 ---------------------------------
@@ -56,7 +54,7 @@ Here, we consider the family of Hamiltonians where all the couplings :math:`J_{i
 are sampled uniformly from [0, 2]. For defining each model, we build a coupling matrix
 :math:`J` by providing the number of rows :math:`N_r` and columns :math:`N_c` present
 in the square lattice. The shape of this matrix will be :math:`N_s \times N_s`,
-where :math:`N_s = N_r \times N_c` is the total number of spins present in the model.e
+where :math:`N_s = N_r \times N_c` is the total number of spins present in the model.
 
 
 """
@@ -65,36 +63,39 @@ import pennylane.numpy as np
 import numpy as anp
 import itertools as it
 
+
 def build_coupling_mats(num_mats, num_rows, num_cols):
-    """ Build the coupling matrices for the 2D spin lattice of Heisenberg Model """
-    num_spins = num_rows*num_cols
+    """Build the coupling matrices for the 2D spin lattice of Heisenberg Model"""
+    num_spins = num_rows * num_cols
     coupling_mats = np.zeros((num_mats, num_spins, num_spins))
-    coup_term_mat = anp.random.RandomState(24).uniform(0, 2, size=(num_mats,
-                                            2*num_rows*num_cols-num_rows-num_cols))
+    coup_term_mat = anp.random.RandomState(24).uniform(
+        0, 2, size=(num_mats, 2 * num_rows * num_cols - num_rows - num_cols)
+    )
     for itr in range(num_mats):
         # store coupling terms for each matrix as an iterator
         coup_terms = iter(coup_term_mat[itr])
         for i, j in it.product(range(num_spins), range(num_spins)):
             if not coupling_mats[itr][i][j]:
-                if ((i+1)%num_cols and j-i == 1) or (j-i == num_cols):
+                if ((i + 1) % num_cols and j - i == 1) or (j - i == num_cols):
                     coupling_mats[itr][i][j] = next(coup_terms)
                     coupling_mats[itr][j][i] = coupling_mats[itr][i][j]
     return coupling_mats
 
 
 ######################################################################
-# In this demo, we study the model with four spins arranged on the nodes of
-# a square lattice and require four qubits for the simulation. For this, we
-# build the coupling matrix using our previously defined function.
+# For this demo, we study the model with four spins arranged on the nodes of
+# a square lattice that would require four qubits for the simulation, i.e., 
+# one qubit for one spin each. For constructing an instance of this model, 
+# we first build the coupling matrix using our previously defined function.
 #
 
 Nr, Nc = 2, 2
-num_qubits = Nr * Nc # Ns
+num_qubits = Nr * Nc  # Ns
 J_mat = build_coupling_mats(1, Nr, Nc)[0]
 
 
 ######################################################################
-# We can visualize the model by representing the coupling matrix as a
+# We can visualize the model instance by representing the coupling matrix as a
 # ``networkx`` graph:
 
 import matplotlib.pyplot as plt
@@ -119,14 +120,13 @@ plt.show()
 
 
 ######################################################################
-# We use the same coupling matrix :math:`J_mat` to obtain the Hamiltonian
-# :math:`H` for our sample model visualized above.
+# We then use the same coupling matrix :math:`J_mat` to obtain the Hamiltonian
+# :math:`H` for the model instance we instantiated above. 
 #
 
 import pennylane as qml
 
 def Hamiltonian(J_mat):
-    """Build the Hamiltonian for the Heisenberg model"""
     coeffs, ops = [], []
     for i in range(J_mat.shape[0]):
         for j in range(i + 1, J_mat.shape[0]):
@@ -145,14 +145,14 @@ print(Hamiltonian(J_mat))
 # For the Heisenberg model, a propetry of interest is usally the two-body
 # correlation function :math:`C_ij`, which for a pair of spins :math:`\sigma^{z}_{i}`
 # and :math:`\sigma^{z}_{j}` is defined as:
-# 
+#
 # .. math::  \hat{C}_{ij} = \frac{1}{3} (X_i X_j + Y_iY_j + Z_iZ_j)
 #
 # Expectation value of each such element :math:`\hat{C}_{ij}` with respect to
 # the ground state :math:`|\psi_{0}\rangle` of the modelcan be used to build
 # the correlation matrix :math:`C`:
-# 
-# .. math:: {C}_{ij} = \frac{1}{3} \langle \psi_{0} | X_i X_j + Y_iY_j + Z_iZ_j | \psi_{0} \rangle
+#
+# .. math:: {C}_{ij} = \langle \hat{C}_{ij} \rangle = \frac{1}{3} \langle \psi_{0} | X_i X_j + Y_iY_j + Z_iZ_j | \psi_{0} \rangle
 #
 
 
@@ -166,8 +166,8 @@ def corr_function_op(i, j):
 
 ######################################################################
 # To calculate the exact ground state :math:`|\psi_{0}\rangle` of the
-# model, we diagonalize the Hamiltonian :math:`H` and obtain the
-# eigenvector corresponding to the smallest eigenvalue. We then build a
+# model, we diagonalize its corresponding Hamiltonian :math:`H` and obtain 
+# the eigenvector corresponding to the smallest eigenvalue. We then build a
 # circuit that will initialize the qubits into the quantum state given by
 # this eigenvector and measure the expectation value for the provided set
 # of observables.
@@ -191,9 +191,9 @@ circuit_exact = qml.QNode(circuit, dev_exact)
 
 
 ######################################################################
-# Finally, to build the exact correlation matrix :math:`C`, we build each
-# correlation operator :math:`\hat{C}_{ij}` and calculate its expectation
-# value with respect to the ground state :math:`|\psi_0\rangle`.
+# Finally, we build the exact correlation matrix :math:`C` by computing
+# the correlation operators :math:`\hat{C}_{ij}` for every pair
+# :math:`\langle i, j\ranlge` with respect to the ground state :math:`|\psi_0\rangle`.
 #
 
 coups = list(it.product(range(num_qubits), repeat=2))
@@ -272,6 +272,7 @@ circuit_oshot = qml.QNode(circuit, dev_oshot)
 # of randomized Pauli basis measurements
 #
 
+
 def gen_class_shadow(circ_template, circuit_params, num_shadows, num_qubits):
     # prepare the complete set of available Pauli operators
     unitary_ops = [qml.PauliX, qml.PauliY, qml.PauliZ]
@@ -338,7 +339,7 @@ def shadow_state_reconst(shadow):
 ######################################################################
 # Let’s see how well does this reconstruction work for different value of :math:`T`
 # by looking at the `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`_
-# :math:`\mathcal{F}` of the actual quantum state with respect to the reconstructed 
+# :math:`\mathcal{F}` of the actual quantum state with respect to the reconstructed
 # quantum state from the classical shadow with :math:`T` copies. We see that
 # on average, as the number of copies :math:`T` is increased, the reconstruction
 # becomes more effective, and in the limit :math:`T\rightarrow\infty`, it will be
@@ -419,9 +420,8 @@ for i, j in coups:
         expval_estmt[i][j] = 1.0
     else:
         expval_estmt[i][j] = (
-            np.sum(
-                np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])
-            ) / 3
+            np.sum(np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]))
+            / 3
         )
         expval_estmt[j][i] = expval_estmt[i][j]
 
@@ -506,6 +506,7 @@ from sklearn.ensemble import RandomForestRegressor
 # (with :math:`T=500`), respectively.
 #
 
+
 def build_dataset(num_points, Nr, Nc, T=500):
     """Builds dataset for Heisenberg model: X (copling vector), y (correlation matrix)"""
 
@@ -538,14 +539,16 @@ def build_dataset(num_points, Nr, Nc, T=500):
                 expval_exact[i][j], expval_estim[i][j] = 1.0, 1.0
             else:
                 expval_exact[i][j] = (
-                    np.sum(
-                        np.array([circuit_exact(psi, observables=[o]) for o in corrs]).T
-                    ) / 3
+                    np.sum(np.array([circuit_exact(psi, observables=[o]) for o in corrs]).T)
+                    / 3
                 )
                 expval_estim[i][j] = (
                     np.sum(
-                        np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs])
-                    ) / 3
+                        np.array(
+                            [estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]
+                        )
+                    )
+                    / 3
                 )
                 expval_exact[j][i], expval_estim[j][i] = expval_exact[i][j], expval_estim[i][j]
 
@@ -553,7 +556,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
         for coup in coupling_mat.reshape(1, -1)[0]:
             if coup and coup not in coupling_vec:
                 coupling_vec.append(coup)
-        coupling_vec = np.array(coupling_vec)/np.linalg.norm(coupling_vec)
+        coupling_vec = np.array(coupling_vec) / np.linalg.norm(coupling_vec)
 
         X.append(coupling_vec)
         y_exact.append(expval_exact.reshape(1, -1)[0])
@@ -603,11 +606,11 @@ X_data.shape, y_data.shape, y_exact.shape
 #
 
 ## Dirichlet kernel ##
-kernel_dirichlet = np.zeros((X_data.shape[0], 7*X_data.shape[1]))
+kernel_dirichlet = np.zeros((X_data.shape[0], 7 * X_data.shape[1]))
 for idx in range(len(X_data)):
     for k in range(len((X_data[idx]))):
         for k1 in range(-3, 4):
-            kernel_dirichlet[idx, 7*k + k1 + 3] += np.cos(np.pi * k1 * X_data[idx][k])
+            kernel_dirichlet[idx, 7 * k + k1 + 3] += np.cos(np.pi * k1 * X_data[idx][k])
 kernel_dirichlet.shape
 
 
@@ -662,13 +665,13 @@ def fit_predict_data(cij, kernel, opt="linear"):
 
     # training data (estimated from measurement data)
     y = np.array([y_estim[i][cij] for i in range(len(X_data))])
-    X_train, X_test, y_train, y_test = train_test_split(kernel, y, test_size=0.3, 
-                                                        random_state=24)
+    X_train, X_test, y_train, y_test = train_test_split(
+        kernel, y, test_size=0.3, random_state=24
+    )
 
     # testing data (exact expectation values)
     y_clean = np.array([y_exact[i][cij] for i in range(len(X_data))])
-    _, _, _, y_test_clean = train_test_split(kernel, y_clean, test_size=0.3, 
-                                            random_state=24)
+    _, _, _, y_test_clean = train_test_split(kernel, y_clean, test_size=0.3, random_state=24)
 
     # hyperparameter tuning with cross validation
     models = [
@@ -694,8 +697,11 @@ def fit_predict_data(cij, kernel, opt="linear"):
         for hyperparam in hyperparams:
             cv_score = -np.mean(
                 cross_val_score(
-                    model(hyperparam), X_train, y_train, 
-                    cv=5, scoring="neg_root_mean_squared_error"
+                    model(hyperparam),
+                    X_train,
+                    y_train,
+                    cv=5,
+                    scoring="neg_root_mean_squared_error",
                 )
             )
             if best_cv_score > cv_score:
@@ -725,17 +731,17 @@ kernel_data = np.zeros((num_qubits ** 2, len(kernel_list), 2))
 y_predclean, y_predicts1, y_predicts2, y_predicts3 = [], [], [], []
 
 for cij in range(num_qubits ** 2):
-    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, X_data.copy(), opt="rbf")
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, X_data, opt="rbf")
     y_predclean.append(y_clean)
     kernel_data[cij][0] = (cv_score, test_score)
     y_predicts1.append(y_predict)
-    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_dirichlet.copy())
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_dirichlet)
     kernel_data[cij][1] = (cv_score, test_score)
     y_predicts2.append(y_predict)
-    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_NN.copy())
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_NN)
     kernel_data[cij][2] = (cv_score, test_score)
     y_predicts3.append(y_predict)
-    
+
 
 # For each C_ij print (best_cv_score, test_score) pair
 row_format = "{:>10}{:>22}{:>23}{:>25}"
@@ -743,8 +749,10 @@ print(row_format.format("", *kernel_list))
 for idx, data in enumerate(kernel_data):
     print(
         row_format.format(
-            f"C_{idx//num_qubits}{idx%num_qubits} \t| ", 
-            str(data[0]), str(data[1]), str(data[2])
+            f"C_{idx//num_qubits}{idx%num_qubits} \t| ",
+            str(data[0]),
+            str(data[1]),
+            str(data[2]),
         )
     )
 
@@ -770,8 +778,12 @@ plt_plots = [1, 14, 25]
 
 cols = [
     "From {}".format(col)
-    for col in ["Exact Diagnalization", "RBF Kernel", 
-                "Dirichlet Kernel", "Neural Tangent Kernel"]
+    for col in [
+        "Exact Diagnalization",
+        "Gaussian Kernel",
+        "Dirichlet Kernel",
+        "Neur. Tang. Kernel",
+    ]
 ]
 rows = ["Model {}".format(row) for row in plt_plots]
 
@@ -843,6 +855,6 @@ plt.show()
 # .. [#neurtangkernel]
 #
 #    A. Jacot, F. Gabriel, and C. Hongler. "Neural tangent kernel:
-#    Convergence and generalization in neural networks". `NeurIPS, 8571–8580 
+#    Convergence and generalization in neural networks". `NeurIPS, 8571–8580
 #    <https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf>`__ (2018)
 #
