@@ -121,7 +121,7 @@ plt.show()
 
 ######################################################################
 # We then use the same coupling matrix :math:`J_mat` to obtain the Hamiltonian
-# :math:`H` for the model instance we instantiated above. 
+# :math:`H` for the model we have instantiated above. 
 #
 
 import pennylane as qml
@@ -149,8 +149,8 @@ print(Hamiltonian(J_mat))
 # .. math::  \hat{C}_{ij} = \frac{1}{3} (X_i X_j + Y_iY_j + Z_iZ_j)
 #
 # Expectation value of each such element :math:`\hat{C}_{ij}` with respect to
-# the ground state :math:`|\psi_{0}\rangle` of the modelcan be used to build
-# the correlation matrix :math:`C`:
+# the ground state :math:`|\psi_{0}\rangle` of the model can be used to build
+# the correlation matrix :math:`C`, such that:
 #
 # .. math:: {C}_{ij} = \langle \hat{C}_{ij} \rangle = \frac{1}{3} \langle \psi_{0} | X_i X_j + Y_iY_j + Z_iZ_j | \psi_{0} \rangle
 #
@@ -166,11 +166,8 @@ def corr_function_op(i, j):
 
 ######################################################################
 # To calculate the exact ground state :math:`|\psi_{0}\rangle` of the
-# model, we diagonalize its corresponding Hamiltonian :math:`H` and obtain 
-# the eigenvector corresponding to the smallest eigenvalue. We then build a
-# circuit that will initialize the qubits into the quantum state given by
-# this eigenvector and measure the expectation value for the provided set
-# of observables.
+# model, we first diagonalize its corresponding Hamiltonian :math:`H`
+# and obtain the eigenvector corresponding to the smallest eigenvalue. 
 #
 
 import scipy as sp
@@ -179,11 +176,16 @@ ham = Hamiltonian(J_mat)
 eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
 psi0 = eigvecs[:, np.argmin(eigvals)]
 
-# for exact simulation
-dev_exact = qml.device("default.qubit", wires=num_qubits)
+
+# We then build a circuit that initializes the qubits into the quantum
+# state represented by this eigenvector and measures the expectation value of
+# the provided set of observables.
+#
+
+dev_exact = qml.device("default.qubit", wires=num_qubits) # for exact simulation
 
 def circuit(psi, observables):
-    psi = psi / np.linalg.norm(psi)
+    psi = psi / np.linalg.norm(psi) # normalize the state
     qml.QubitStateVector(psi, wires=range(num_qubits))
     return [qml.expval(o) for o in observables]
 
@@ -191,9 +193,9 @@ circuit_exact = qml.QNode(circuit, dev_exact)
 
 
 ######################################################################
-# Finally, we build the exact correlation matrix :math:`C` by computing
-# the correlation operators :math:`\hat{C}_{ij}` for every pair
-# :math:`\langle i, j\ranlge` with respect to the ground state :math:`|\psi_0\rangle`.
+# Finally, we execute this circuit to obtain the exact correlation matrix
+# :math:`C`. We compute the correlation operators :math:`\hat{C}_{ij}` and
+# their expecation values with respect to the ground state :math:`|\psi_0\rangle`.
 #
 
 coups = list(it.product(range(num_qubits), repeat=2))
@@ -209,6 +211,11 @@ for i, j in coups:
             np.sum(np.array([circuit_exact(psi0, observables=[o]) for o in corrs]).T) / 3
         )
         expval_exact[j][i] = expval_exact[i][j]
+
+#########################################################################
+# Once built, we can visualize :math:`C` as an image uing the matplotlib
+# function `imshow()``.
+#
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 6))
 im = ax.imshow(expval_exact, cmap=plt.get_cmap("RdBu"), vmin=-1, vmax=1)
@@ -230,6 +237,8 @@ plt.show()
 
 
 ######################################################################
+# Now that we have built our Heisenberg model, the next step is to construct
+# a classical shadow representation for it. First we look at , 
 # To build an an approximate classical representation of an :math:`n`-qubit
 # quantum state :math:`\rho`, we perform randomized single-qubit
 # measurements on :math:`T`-copies of :math:`\rho`. Each measurement is
@@ -251,23 +260,20 @@ plt.show()
 #    :width: 100 %
 #    :alt: Preparing Classical Shadows
 #
-#
 
 
 ######################################################################
 # To prepare a classical shadow for the ground state of the Heisenberg
-# model, we build ``circuit_oshot`` that prepares the ground state that we
-# find using exact diagonalization of the Hamiltonian. To do so, it uses
-# the ``qml.QubitStateVector`` operation for initializing the circuit in
-# the provided state.
+# model, we simply reuse the circuit template used above and reconstruct
+# a qnode using a device that performs single-shot measurements.
 #
 
-# for single-shot simulation
 dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)
 circuit_oshot = qml.QNode(circuit, dev_oshot)
 
+
 ######################################################################
-# Now, we write a function to build the classical shadow for the quantum
+# Now, we define a function to build the classical shadow for the quantum
 # state prepared by a given :math:`n`-qubit circuit using :math:`T`-copies
 # of randomized Pauli basis measurements
 #
@@ -296,7 +302,7 @@ print("First five measurement bases =\n", shadow[1][:5])
 
 ######################################################################
 # Furthermore, :math:`S_{T}` can be used to construct an approximation
-# of the underlying :math:`n`-qubit state :math:`\rho`:
+# of the underlying :math:`n`-qubit state :math:`\rho` by averaging over \sigma_t:
 #
 # .. math::  \sigma_T(\rho) = \frac{1}{T} \sum_{1}^{T} \big(3|s_{1}^{(t)}\rangle\langle s_1^{(t)}| - \mathbb{I}\big)\otimes \ldots \otimes \big(3|s_{n}^{(t)}\rangle\langle s_n^{(t)}| - \mathbb{I}\big)
 #
@@ -323,12 +329,10 @@ def snapshot_state(meas_list, obs_list):
 
 
 def shadow_state_reconst(shadow):
-    """Reconstruct the quantum state from its classical shadow by
-    averaging over computed \sigma_T"""
     num_snapshots, num_qubits = shadow[0].shape
     meas_lists, obs_lists = shadow
 
-    # Averaging over snapshot states.
+    # Reconstruct the quantum state from its classical shadow 
     shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=complex)
     for i in range(num_snapshots):
         shadow_rho += snapshot_state(meas_lists[i], obs_lists[i])
@@ -337,13 +341,13 @@ def shadow_state_reconst(shadow):
 
 
 ######################################################################
-# Let’s see how well does this reconstruction work for different value of :math:`T`
-# by looking at the `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`_
+# To see how well does the reconstruction work for different value of :math:`T`,
+# we look at the `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`_
 # :math:`\mathcal{F}` of the actual quantum state with respect to the reconstructed
-# quantum state from the classical shadow with :math:`T` copies. We see that
-# on average, as the number of copies :math:`T` is increased, the reconstruction
-# becomes more effective, and in the limit :math:`T\rightarrow\infty`, it will be
-# exact.
+# quantum state from the classical shadow with :math:`T` copies. We see that on average,
+# as the number of copies :math:`T` is increased, the reconstruction becomes more
+# effective with on an average higher fidelity values (orange) and lower variance (blue)
+# Eventually, in the limit :math:`T\rightarrow\infty`, the reconstruction will be exact.
 #
 # .. figure:: /demonstrations/ml_classical_shadows/fidel_snapshot.png
 #    :align: center
@@ -355,7 +359,7 @@ def shadow_state_reconst(shadow):
 
 
 ######################################################################
-# The reconstructed quantum state :math:`\sigma_T` can then be used to
+# The reconstructed quantum state :math:`\sigma_T` can also be used to
 # evaluate expectation values :math:`\text{Tr}(O\sigma_T)` for some localized
 # observable :math:`O = \bigotimes_{i}^{n} P_i`, where :math:`P_i \in \{I, X, Y, Z\}`
 # However, as shown above, :math:`\sigma_T` would be only an approximation of
@@ -400,7 +404,7 @@ def estimate_shadow_obervable(shadow, observable, k=10):
 
 
 ######################################################################
-# Let us try to estimate the correlation matrix :math:`C` from the
+# Now, let us try to estimate the correlation matrix :math:`C^{\prime}` from the
 # classical shadow of our Heisenberg model this time.
 #
 
@@ -424,6 +428,10 @@ for i, j in coups:
             / 3
         )
         expval_estmt[j][i] = expval_estmt[i][j]
+
+#########################################################################
+# Once again, we visualize the :math:`C^{\prime}` as an image for comparing
+# it with :math:`C`.
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 6))
 im = ax.imshow(expval_estmt, cmap=plt.get_cmap("RdBu"), vmin=-1, vmax=1)
@@ -451,8 +459,9 @@ plt.show()
 # parameter, estimating a property from such learned classical representations,
 # or a combination of both. In our case, we consider the problem of using
 # infinite-width neural networks to learn the ground-state representation of the
-# Heisenberg model Hamiltonian :math:`Hamiltonian(x_l)` from the coupling
-# vector :math:`x_l` and predict the correlation functions :math:`C_{ij}`:
+# Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l`, 
+# where :math:`x_l = [J_{i,j} \text{ for } i < j]` and predict the correlation
+# functions :math:`C_{ij}`:
 #
 # .. math::  \big\{x_l \rightarrow \sigma_T(\rho(x_l)) \rightarrow \text{Tr}(\hat{C}_{ij} \sigma_T(\rho(x_l))) \big\}_{l=1}^{N}
 #
@@ -656,9 +665,6 @@ kernel_NN.shape
 
 
 def fit_predict_data(cij, kernel, opt="linear"):
-    """Trains dataset via hyperparameter tuning and returns the predictions
-    from best model"""
-
     # perform instance-wise normalization to get k(x, x')
     for idx in range(len(kernel)):
         kernel[idx] /= np.linalg.norm(kernel[idx])
