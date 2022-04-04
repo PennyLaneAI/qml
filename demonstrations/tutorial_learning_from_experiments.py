@@ -132,7 +132,7 @@ def circuit(ts=False):
     else:
         ops = [qml.RX, qml.RY, qml.RZ]  # general unitaries
 
-    weights = np.random.rand(layers, gates) * pi
+    weights = np.random.rand(layers, gates) * np.pi
     RandomLayers(weights, wires=range(qubits), rotations=ops, seed=np.random.randint(0, 10000))
 
     return [qml.sample(op=qml.PauliY(q)) for q in range(qubits)]
@@ -271,7 +271,7 @@ def enhanced_circuit(ts=False):
     else:
         ops = [qml.RX, qml.RY, qml.RZ]
 
-    weights = np.random.rand(layers, n_shots) * pi
+    weights = np.random.rand(layers, n_shots) * np.pi
     seed = np.random.randint(0, 10000)
 
     for q in range(qubits):
@@ -380,7 +380,7 @@ def enhanced_circuit(ts=False):
     else:
         ops = [qml.RX, qml.RY, qml.RZ]
 
-    weights = np.random.rand(layers, n_shots) * pi
+    weights = np.random.rand(layers, n_shots) * np.pi
     seed = np.random.randint(0, 10000)
 
     for q in range(qubits):
@@ -391,7 +391,7 @@ def enhanced_circuit(ts=False):
     )
     RandomLayers(weights, wires=range(0, qubits), rotations=ops, seed=seed)
     RandomLayers(weights, wires=range(qubits, 2 * qubits), rotations=ops, seed=seed)
-    noise_layer(pi / 4)  # added noise layer
+    noise_layer(np.pi / 4)  # added noise layer
     qml.broadcast(
         qml.CNOT, pattern=[[qubits + q, q] for q in range(qubits)], wires=range(qubits * 2)
     )
