@@ -32,7 +32,7 @@ entropies.
     Combining machine learning and classical shadow
 
 
-In this demo, we demonstrate one of the ideas presented in Ref. #[preskill]_ for using classical
+In this demo, we demonstrate one of the ideas presented in Ref. [#preskill]_ for using classical
 shadow formalism with classical machine learning to predict the ground-state properties of the
 2D antiferromagnetic Heisenberg model. We begin by first learning how to build the Heisenberg model,
 computing its ground state properties, and computing its classical shadow. Finally, we demonstrate
@@ -620,7 +620,6 @@ for idx in range(len(X_data)):
     for k in range(len((X_data[idx]))):
         for k1 in range(-3, 4):
             kernel_dirichlet[idx, 7 * k + k1 + 3] += np.cos(np.pi * k1 * X_data[idx][k])
-kernel_dirichlet.shape
 
 
 ######################################################################
@@ -649,8 +648,6 @@ kernel_NN = kernel_fn(X_data, X_data, "ntk")
 for i in range(len(kernel_NN)):
     for j in range(len(kernel_NN)):
         kernel_NN[i][j] /= (kernel_NN[i][i] * kernel_NN[j][j]) ** 0.5
-
-kernel_NN.shape
 
 
 ######################################################################
@@ -765,7 +762,7 @@ for idx, data in enumerate(kernel_data):
 
 ######################################################################
 # Overall, we find that the model with Gaussian kernel performed the best,
-# while the Dirichlet kernel ones performed the worst for predicting the
+# while the Dirichlet kernel one performed the worst for predicting the
 # expectation value of the correlation function :math:`C_{ij}` for the
 # ground state of the Heisenberg model. However, the best choice of
 # :math:`\lambda` differed substantially across the different
@@ -778,7 +775,7 @@ for idx, data in enumerate(kernel_data):
 # diagonalization.
 #
 
-fig, axes = plt.subplots(3, 4, figsize=(28, 15))
+fig, axes = plt.subplots(3, 4, figsize=(28, 16))
 corr_vals = [y_predclean, y_predicts1, y_predicts2, y_predicts3]
 plt_plots = [1, 14, 25]
 
@@ -812,8 +809,8 @@ for itr in range(3):
         axes[itr][idx].xaxis.set_tick_params(labelsize=18)
         axes[itr][idx].yaxis.set_tick_params(labelsize=18)
 
-fig.subplots_adjust(right=0.8)
-cbar_ax = fig.add_axes([0.82, 0.15, 0.01, 0.7])
+fig.subplots_adjust(right=0.96)
+cbar_ax = fig.add_axes([0.98, 0.15, 0.015, 0.72])
 bar = fig.colorbar(shw, cax=cbar_ax)
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
 bar.ax.tick_params(labelsize=16)
@@ -821,17 +818,15 @@ plt.show()
 
 
 ######################################################################
-# Finally, we also try to showcase the effect of a bigger training data
-# size :math:`N` and a larger number of randomized Pauli measurements
-# :math:`T`. For this, we look at the average value of ``best_cv_score``
-# for each model, which gives the RMSE (root-mean-square error) error for
-# prediction of :math:`C_ij`. The first plot looks at the different
-# training sizes :math:`N` with a fixed number of randomized Pauli
-# measurements :math:`T=100`. In comparison, the second plot looks at
-# different shadow sizes :math:`T` with a fixed training data size
-# :math:`N = 70`. In both cases, the performance improvement saturates
-# after a sufficient increase in :math:`N` and :math:`T` values for all
-# three kernels.
+# Finally, we also attempt to showcase the effect of the size of training data
+# :math:`N` and the number of Pauli measurements :math:`T`. For this, we look
+# at the average value of ``best_cv_score`` for each mode, which gives us the
+# root-mean-square error (RMSE) for predicting :math:`C_ij`. Here, the first
+# plot looks at the different training sizes :math:`N` with a fixed number of
+# randomized Pauli measurements :math:`T=100`. In contrast, the second plot
+# looks at the different shadow sizes :math:`T` with a fixed training data size
+# :math:`N=70`. In both cases, the performance improvement saturates after a
+# sufficient increase in :math:`N` and :math:`T` values for all three kernels.
 #
 
 
