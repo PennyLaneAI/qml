@@ -775,7 +775,7 @@ for idx, data in enumerate(kernel_data):
 # diagonalization.
 #
 
-fig, axes = plt.subplots(3, 4, figsize=(28, 16))
+fig, axes = plt.subplots(3, 4, figsize=(18, 14))
 corr_vals = [y_predclean, y_predicts1, y_predicts2, y_predicts3]
 plt_plots = [1, 14, 25]
 
@@ -809,9 +809,10 @@ for itr in range(3):
         axes[itr][idx].xaxis.set_tick_params(labelsize=18)
         axes[itr][idx].yaxis.set_tick_params(labelsize=18)
 
-fig.subplots_adjust(right=0.96)
-cbar_ax = fig.add_axes([0.98, 0.15, 0.015, 0.72])
+fig.subplots_adjust(right=0.94)
+cbar_ax = fig.add_axes([0.96, 0.15, 0.015, 0.72])
 bar = fig.colorbar(shw, cax=cbar_ax)
+
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
 bar.ax.tick_params(labelsize=16)
 plt.show()
