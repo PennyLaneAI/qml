@@ -130,3 +130,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_quanvolution
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quantum_gans
+    demos/tutorial_learning_from_experiments
