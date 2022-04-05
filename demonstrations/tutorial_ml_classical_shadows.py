@@ -10,12 +10,12 @@ Machine learning for quantum many-body problems
     tutorial_classical_shadows Classical Shadows
 
 
-*Author: PennyLane dev team". Posted: XX. Last Updated: XX March 2022*
+*Author: PennyLane dev team. Posted: XX. Last Updated: XX March 2022*
 
 
 Storing and processing of a complete description of an :math:`n`-qubit quantum mechanical
 system as density matrices becomes classically intractable as the number of classical bits
-scales exponentially in :math:`n` (:math:`O(2^{n})`). Therefore, there lies a need for
+scales exponentially in :math:`n` as :math:`O(2^{n})`. Therefore, there lies a need for
 having a more efficient classical representation of the quantum state. The quantum community
 recently addressed this challenge using classical shadow formalism, which allows one to build
 a concise classical description of the state of a quantum system using randomized single-qubit
@@ -857,7 +857,7 @@ plt.show()
 # 
 # .. [#tutorial]
 #
-#    R. Wiersema & B. Doolittle, `"Classical Shadows",
+#    R. Wiersema & B. Doolittle, `"Classical Shadows"
 #    <https://pennylane.ai/qml/demos/tutorial_classical_shadows.html>`__ (2021)
 #
 # .. [#neurtangkernel]
