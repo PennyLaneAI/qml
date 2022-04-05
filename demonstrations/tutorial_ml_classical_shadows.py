@@ -76,7 +76,7 @@ def build_coupling_mats(num_mats, num_rows, num_cols):
         coup_terms = iter(coup_term_mat[itr])
         for i, j in it.product(range(num_spins), range(num_spins)):
             if not coupling_mats[itr][i][j]:
-                if ((i + 1) % num_cols and j - i == 1) or (j - i == num_cols):
+                if (j % num_cols and j - i == 1) or (j - i == num_cols):
                     coupling_mats[itr][i][j] = next(coup_terms)
                     coupling_mats[itr][j][i] = coupling_mats[itr][i][j]
     return coupling_mats
@@ -84,8 +84,8 @@ def build_coupling_mats(num_mats, num_rows, num_cols):
 
 ######################################################################
 # For this demo, we study the model with four spins arranged on the nodes of
-# a square lattice that would require four qubits for the simulation, i.e., 
-# one qubit for one spin each. For constructing an instance of this model, 
+# a square lattice that would require four qubits for the simulation, i.e.,
+# one qubit for one spin each. For constructing an instance of this model,
 # we first build the coupling matrix using our previously defined function.
 #
 
@@ -490,17 +490,10 @@ plt.show()
 # :math:`C_{ij}`.
 #
 
-# Neural tangent kernel
-import jax
-from neural_tangents import stax
-
-# ML methods and techniques
+# imports for ML methods and techniques
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn import datasets
 from sklearn import svm
 from sklearn.kernel_ridge import KernelRidge
-from sklearn.ensemble import RandomForestRegressor
-
 
 ######################################################################
 # First, to build the dataset, we use the function ``build_dataset`` that
@@ -633,6 +626,7 @@ for idx in range(len(X_data)):
 #
 
 ## Neural tangent kernel ##
+from neural_tangents import stax
 init_fn, apply_fn, kernel_fn = stax.serial(
     stax.Dense(32),
     stax.Relu(),
