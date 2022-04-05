@@ -809,8 +809,8 @@ for itr in range(3):
         axes[itr][idx].xaxis.set_tick_params(labelsize=18)
         axes[itr][idx].yaxis.set_tick_params(labelsize=18)
 
-fig.subplots_adjust(right=0.9)
-cbar_ax = fig.add_axes([0.92, 0.15, 0.015, 0.72])
+fig.subplots_adjust(right=0.88)
+cbar_ax = fig.add_axes([0.90, 0.15, 0.015, 0.72])
 bar = fig.colorbar(shw, cax=cbar_ax)
 
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
