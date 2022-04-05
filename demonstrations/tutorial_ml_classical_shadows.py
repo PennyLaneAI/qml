@@ -177,6 +177,7 @@ eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
 psi0 = eigvecs[:, np.argmin(eigvals)]
 
 
+######################################################################
 # We then build a circuit that initializes the qubits into the quantum
 # state represented by this eigenvector and measures the expectation value of
 # the provided set of observables.
