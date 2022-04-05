@@ -2,9 +2,7 @@
 Quantum advantage in learning from experiments
 ==============================================
 
-*Authors: Hsin-Yuan Huang, Michael Broughton, Jordan Cotler, Sitan Chen,
-Jerry Li, Masoud Mohseni, Hartmut Neven, Ryan Babbush, Richard Kueng,
-John Preskill, and Jarrod R. McClean*
+*Authors: Joseph Bowles
 
 *Posted: xxxx 2022*
 

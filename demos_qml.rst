@@ -110,6 +110,11 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_tn_circuits`
     :tags: tensor network
 
+.. customgalleryitem::
+    :tooltip: See how quantum memory can give a boost to quantum machine learning algorithms
+    :figure: demonstrations/learning_from_experiments/thumbnail.png
+    :description: :doc:`demos/learning_from_experiments`
+
 :html:`</div></div><div style='clear:both'>`
 
 

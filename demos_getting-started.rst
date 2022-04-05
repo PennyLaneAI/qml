@@ -94,10 +94,6 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
 
-.. customgalleryitem::
-    :tooltip: See how quantum memory can give an enormous boost to quantum machine learning algorithms
-    :figure: demonstrations/learning_from_experiments/thumbnail.png
-    :description: :doc:`demos/learning_from_experiments`
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -118,4 +114,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_state_preparation
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
-    demos/tutorial_learning_from_experiments
+
