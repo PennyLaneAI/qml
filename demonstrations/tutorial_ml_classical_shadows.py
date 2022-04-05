@@ -238,21 +238,21 @@ plt.show()
 
 ######################################################################
 # Now that we have built our Heisenberg model, the next step is to construct
-# a classical shadow representation for it. First we look at , 
-# To build an an approximate classical representation of an :math:`n`-qubit
-# quantum state :math:`\rho`, we perform randomized single-qubit
-# measurements on :math:`T`-copies of :math:`\rho`. Each measurement is
-# chosen randomly among the Pauli bases :math:`X`, :math:`Y`, or :math:`Z`
-# to yeild random :math:`n` pure product states :math:`|s_i\rangle` for each copy:
+# a classical shadow representation for it. To build an approximate
+# classical representation of an :math:`n`-qubit quantum state :math:`\rho`,
+# we perform randomized single-qubit measurements on :math:`T`-copies of
+# :math:`\rho`. Each measurement is chosen randomly among the Pauli bases
+# :math:`X`, :math:`Y`, or :math:`Z` to yeild random :math:`n` pure product
+# states :math:`|s_i\rangle` for each copy:
 #
 # .. math::  S_T(\rho) = \big\{|s_{i}^{(t)}\rangle: i\in\{1,\ldots, n\} t\in\{1,\ldots, T\} \big\} \in \{|0\rangle, |1\rangle, |+\rangle, |-\rangle, |i+\rangle, |i-\rangle\}.
 #
 # Each of the :math:`|s_i^{(t)}\rangle` provides us with classical access
 # to a single snapshot of the :math:`\rho`, and the :math:`nT`
 # measurements yield the complete snapshot :math:`S_{T}`, which requires
-# just :math:`3nT` bits to be stored in classical memory.
+# just :math:`3nT` bits to be stored in classical memory. This is discussed
+# in further details in our previous demo about classical shadows [#tutorial]_.
 #
-
 
 ######################################################################
 # .. figure::  /demonstrations/ml_classical_shadows/class_shadow_prep.png
@@ -444,6 +444,7 @@ bar = fig.colorbar(im, pad=0.05, shrink=0.82)
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
 bar.ax.tick_params(labelsize=14)
 plt.show()
+
 
 
 ######################################################################
@@ -853,6 +854,11 @@ plt.show()
 #    H. Y. Huang, R. Kueng, G. Torlai, V. V. Albert, J. Preskill, "Provably
 #    efficient machine learning for quantum many-body problems",
 #    `arXiv:2106.12627 [quant-ph] <https://arxiv.org/abs/2106.12627>`__ (2021)
+# 
+# .. [#tutorial]
+#
+#    R. Wiersema & B. Doolittle, `"Classical Shadows",
+#    <https://pennylane.ai/qml/demos/tutorial_classical_shadows.html>`__ (2021)
 #
 # .. [#neurtangkernel]
 #
