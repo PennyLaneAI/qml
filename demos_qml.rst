@@ -111,9 +111,10 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: tensor network
 
 .. customgalleryitem::
-    :tooltip: See how quantum memory can give a boost to quantum machine learning algorithms
+    :tooltip: Quantum advantage in learning from experiments
     :figure: demonstrations/learning_from_experiments/thumbnail.png
     :description: :doc:`demos/learning_from_experiments`
+    :tags: advantage experiments
 
 :html:`</div></div><div style='clear:both'>`
 
