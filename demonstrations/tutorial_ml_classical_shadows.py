@@ -48,7 +48,7 @@ such a model depends strongly on the couplings :math:`J_{ij}` present between
 the spins :math:`\sigma^{z}_{i}` and :math:`\sigma^{z}_{j}`, and help determine
 the overall Hamiltonian associated with the model as following:
 
-.. math::  H = \sum_{\langle ij\rangle} J_{ij}(X_i X_j + Y_i Y_j + Z_i Z_j) .
+.. math::  H = \sum_{i < j} J_{ij}(X_i X_j + Y_i Y_j + Z_i Z_j) .
 
 Here, we consider the family of Hamiltonians where all the couplings :math:`J_{ij}`
 are sampled uniformly from [0, 2]. For defining each model, we build a coupling matrix
