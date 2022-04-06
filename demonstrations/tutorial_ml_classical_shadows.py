@@ -10,7 +10,7 @@ Machine learning for quantum many-body problems
     tutorial_classical_shadows Classical Shadows
 
 
-*Author: PennyLane dev team. Posted: XX. Last Updated: XX March 2022*
+*Author: PennyLane dev team. Posted: XX. Last Updated: XX April 2022*
 
 
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
@@ -22,7 +22,7 @@ shadow formalism, which allows one to build a concise classical description of t
 a quantum system using randomized single-qubit measurements. It was argued in Ref. [#preskill]_
 that combining classical shadows with classical machine learning enables using methods to
 efficiently predict properties of the quantum systems such as the expectation value of a
-Hamiltonian, correlations functions, and entanglement entropies.
+Hamiltonian, correlations functions and entanglement entropies.
 
 .. figure:: /demonstrations/ml_classical_shadows/class_shadow_ml.png
    :align: center
@@ -35,7 +35,7 @@ Hamiltonian, correlations functions, and entanglement entropies.
 In this demo, we demonstrate one of the ideas presented in Ref. [#preskill]_ for using classical
 shadow formalism with classical machine learning to predict the ground-state properties of the
 2D antiferromagnetic Heisenberg model. We begin by first learning how to build the Heisenberg model,
-compute its ground state properties, and compute its classical shadow. Finally, we demonstrate
+compute its ground state properties and compute its classical shadow. Finally, we demonstrate
 using kernel-based learning models for learning these classical shadows and predicting the ground
 state properties from them. So let's get started!
 
@@ -251,7 +251,7 @@ plt.show()
 # .. math::  S_T(\rho) = \big\{|s_{i}^{(t)}\rangle: i\in\{1,\ldots, n\} t\in\{1,\ldots, T\} \big\} \in \{|0\rangle, |1\rangle, |+\rangle, |-\rangle, |i+\rangle, |i-\rangle\}.
 #
 # Each of the :math:`|s_i^{(t)}\rangle` provides us with classical access
-# to a single snapshot of the :math:`\rho`, and the :math:`nT`
+# to a single snapshot of the :math:`\rho` and the :math:`nT`
 # measurements yield the complete snapshot :math:`S_{T}`, which requires
 # just :math:`3nT` bits to be stored in classical memory. This is discussed
 # in further details in our previous demo about classical shadows [#tutorial]_.
@@ -474,12 +474,12 @@ plt.show()
 # Using the theory of infinite-width neural networks [#neurtangkernel]_, we
 # consider the following machine learning models:
 #
-# .. math::  \hat{\sigma}_{N} (x) = \sum_{l=1}^{N} \kappa(x, x_l)\sigma_T (x_l) = \sum_{l=1}^N \left(\sum_{l^{\prime}=1}^{N} k(x, x_{l^{\prime}})(K+\lambda I)^{-1}_{l, l^{\prime}} \sigma_T(x_l) \right),
+# .. math::  \hat{\sigma}_{N} (x) = \sum_{l=1}^{N} \kappa(x, x_l)\sigma_T (x_l) = \sum_{l=1}^{N} \left(\sum_{l^{\prime}=1}^{N} k(x, x_{l^{\prime}})(K+\lambda I)^{-1}_{l, l^{\prime}} \sigma_T(x_l) \right),
 #
 # where :math:`\lambda > 0` is a regularization parameter in cases when
 # :math:`K` is not invertible, :math:`\sigma_T(x_l)` denotes the classical
 # representation of the ground state :math:`\rho(x_l)` of the Heisenberg
-# model constructed using :math:`T` randomized Pauli measurements, and
+# model constructed using :math:`T` randomized Pauli measurements and
 # :math:`K_{ij}=k(x_i, x_j)` is the kernel matrix with
 # :math:`k(x, x^{\prime})` as the kernel function.
 #
@@ -503,7 +503,7 @@ from sklearn.kernel_ridge import KernelRidge
 ######################################################################
 # First, to build the dataset, we use the function ``build_dataset`` that
 # takes as input the size of the dataset (``num_points``), the topology of
-# the lattice (:math:`Nr` and :math:`Nc`), and the number of randomized
+# the lattice (:math:`Nr` and :math:`Nc`) and the number of randomized
 # Pauli measurements (T) for construction of classical shadows. The
 # ``X_data`` is the set of coupling vectors which are defined as a
 # stripped version of coupling matrix :math:`J`, where only non-duplicate
@@ -582,7 +582,7 @@ X_data.shape, y_data.shape, y_exact.shape
 ######################################################################
 # Now that we have our dataset ready. We shift our focus to the ML models.
 # Here, we use a set of three different Kernel functions: (i) Gaussian
-# Kernel, (ii) Dirichlet Kernel, and (iii) Neural Tangent Kernel. For all
+# Kernel, (ii) Dirichlet Kernel and (iii) Neural Tangent Kernel. For all
 # three of them, we consider the regularization parameter :math:`\lambda`
 # from the following set:
 #
@@ -597,7 +597,7 @@ X_data.shape, y_data.shape, y_exact.shape
 # .. math::  k(x, x^{\prime}) = e^{-\gamma||x - x^{\prime}||^{2}_{2}} \tag{Gaussian Kernel}
 #
 # For Gaussian kernel, the hyperparameter
-# :math:`\gamma = N^{2}/\sum_{i=1}^{N} \sum_{j=1}^{N} ||x_i-x_j||^2_2 > 0`
+# :math:`\gamma = N^{2}/\sum_{i=1}^{N} \sum_{j=1}^{N} ||x_i-x_j||^{2}_{2} > 0`
 # is chosen to be the inverse of the average Euclidean distance
 # :math:`x_i` and :math:`x_j` and the kernel is implemented using the
 # Radial-basis function (rbf) kernel in the ``sklearn`` library.
@@ -626,7 +626,7 @@ for idx in range(len(X_data)):
 #
 # The neural tangent kernel :math:`k^{\text{NTK}}` used here is equivalent
 # to an infinite-width feed-forward neural network with four hidden
-# layers, and that uses the rectified linear unit (ReLU) as the activation
+# layers and that uses the rectified linear unit (ReLU) as the activation
 # function. This is implemented using the ``neural_tangents`` library.
 #
 
