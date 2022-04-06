@@ -374,7 +374,7 @@ def shadow_state_reconst(shadow):
 #
 
 
-def estimate_shadow_obervable(shadow, observable, k=10):
+def estimate_shadow_observable(shadow, observable, k=10):
     """Estimate observable related to the quantum system using its classical shadow"""
     shadow_size, num_qubits = shadow[0].shape
 
@@ -427,7 +427,7 @@ for i, j in coups:
         expval_estmt[i][j] = 1.0
     else:
         expval_estmt[i][j] = (
-            np.sum(np.array([estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]))
+            np.sum(np.array([estimate_shadow_observable(shadow, o, k=k + 1) for o in corrs]))
             / 3
         )
         expval_estmt[j][i] = expval_estmt[i][j]
@@ -553,7 +553,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
                 expval_estim[i][j] = (
                     np.sum(
                         np.array(
-                            [estimate_shadow_obervable(shadow, o, k=k + 1) for o in corrs]
+                            [estimate_shadow_observable(shadow, o, k=k + 1) for o in corrs]
                         )
                     )
                     / 3
