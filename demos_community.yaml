@@ -1,3 +1,14 @@
+- title: Continuous Variable Quantum Classifiers -  MNIST
+  author: Sophie Choe
+  date: 04/06/2022
+  code: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers
+
+  paper: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers/blob/main/MNIST_QNN.pdf
+  color: heavy-rain-gradient
+  description: |
+    MNIST dataset classifiers using different number of qumodes: classical and CV quantum hybrid networks.
+    Author affiliation: Portland State University, Electrical and Computer Engineering.
+
 - title: Weighted SubSpace VQE to find kth excited state energies
   author: Jay Patel, Siddharth Patel, and Amit Hirpara
   date: 03/07/2022
