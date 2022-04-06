@@ -6,7 +6,8 @@
   paper: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers/blob/main/MNIST_QNN.pdf
   color: heavy-rain-gradient
   description: |
-    We built 8 MNIST dataset classifiers using 2-8 qumodes. This family of MNIST classifiers are classical-quantum hybrid circuits using Keras and PennyLane. The quantum circuit is composed of a data encoding circuit and a quantum neural network circuit as proposed in ["Continuous variable quantum neural networks"](https://arxiv.org/pdf/1806.06871v1.pdf). The PennyLane-TensorFlow interface converts the quantum circuit into a Keras layer, and the whole network is treated as a Keras network, to which Keras' built in loss function and optimizer can be applied for parameter updates. Categorical cross-entropy is used as the loss function and Stochastic Gradient Descent is used for the optimizer.
+    We built 8 MNIST dataset classifiers using 2-8 qumodes. This family of MNIST classifiers are classical-quantum hybrid circuits using Keras and PennyLane. The quantum circuit is composed of a data encoding circuit and a quantum neural network circuit as proposed in the paper "Continuous variable quantum neural networks" by Killoran et al. The PennyLane-TensorFlow interface converts the quantum circuit into a Keras layer, and the whole network is treated as a Keras network, to which Keras' built in loss function and optimizer can be applied for parameter updates. Categorical cross-entropy is used as the loss function and Stochastic Gradient Descent is used for the optimizer.
+
     Author affiliation: Portland State University, Electrical and Computer Engineering.
 
 
