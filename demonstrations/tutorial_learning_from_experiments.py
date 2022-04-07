@@ -6,20 +6,24 @@ Quantum advantage in learning from experiments
 
 *Posted: xxxx 2022*
 
-Quantum computers can store copies of quantum states in quantum memory
-and process them coherently, but how useful is this for quantum machine
-learning? This is the central question posed by Hsin-Yuan Huang and
-co-authors in the article `Quantum advantage in learning from
-experiments <https://arxiv.org/abs/2112.00778>`__ `[1] <#ref1>`__.
-Suprisingly, they show that access to even a small quantum memory can
-help a lot. They even prove that there exist learning problems for which
-algorithms with quantum memory require *exponentially less data* than
-those without.
+This demo is based on the article `Quantum advantage in learning from
+experiments <https://arxiv.org/abs/2112.00778>`__ `[1] <#ref1>`__ by
+Hsin-Yuan Huang and co-authors. The article investigates the following
+question:
 
-In this demo we take a look at one problem presented in `[1] <#ref1>`__
-for which this is the case: deciding if a unitary is time-reversal
-symmetric (we’ll call them T-symmetric) or not.
+*How useful is access to quantum memory for quantum machine learning?*
 
+They show that access to quantum memory can make a big difference, and
+prove that there exist learning problems for which algorithms with
+quantum memory require *exponentially less resources* than those
+without. We look at one learning task studied in `[1] <#ref1>`__ for
+which this is the case.
+
+The learning task
+-----------------
+
+The learning task we focus on involves deciding if a unitary is
+time-reversal symmetric (we’ll call them T-symmetric) or not.
 Mathematically, a unitary :math:`U` is T-symmetric if
 
 .. math:: U^*=U.
@@ -36,7 +40,6 @@ but we are not told which ones are which.
 """
 
 
-
 ##############################################################################
 # .. figure:: ../demonstrations/learning_from_experiments/fig1b.png
 #    :align: center
@@ -45,10 +48,11 @@ but we are not told which ones are which.
 
 ######################################################################
 # The task is to design an algorithm to determine which of the
-# :math:`U`\ ’s are T-symmetric and which are not. Note that we do not
-# have any labels here, so this is an unsupervised learning task. To make
-# things concrete, let’s consider unitaries acting on 8 qubits. We will
-# also limit the number of times we can use each unitary:
+# :math:`U`\ ’s are T-symmetric and which are not, given query access to
+# the unitaries. Note that we do not have any labels here, so this is an
+# unsupervised learning task. To make things concrete, let’s consider
+# unitaries acting on 8 qubits. We will also limit the number of times we
+# can use each unitary:
 # 
 
 qubits= 8 #the number of qubits on which the unitaries act
@@ -104,7 +108,6 @@ n_shots = 100 #the number of times we can use each unitary
 # If we succeed in clustering the data then we have successfully managed
 # to discriminate the two classes!
 # 
-
 
 
 ##############################################################################
@@ -296,7 +299,7 @@ plt.scatter(fit[:,0],fit[:,1],c=c)
 
 ######################################################################
 # The quantum-enhanced way
-# ========================
+# ------------------------
 # 
 # Now let’s see what difference having a quantum memory can make. Instead
 # of using a single unitary to generate measurement data, we will make use
@@ -308,7 +311,6 @@ plt.scatter(fit[:,0],fit[:,1],c=c)
 # .. figure:: ../demonstrations/learning_from_experiments/fig3b.png
 #    :align: center
 #    :width: 70%
-
 
 ######################################################################
 # In practice, this could be done by storing the output state from the
@@ -506,3 +508,4 @@ plt.scatter(fit[:,0],fit[:,1],c=c)
 # memory*, Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li,
 # `arxiv:2111.05881 <https://arxiv.org/abs/2111.05881>`__ (2021)
 # 
+
