@@ -2,7 +2,7 @@
 Quantum advantage in learning from experiments
 ==============================================
 
-*Authors: Joseph Bowles*
+*Author: Joseph Bowles*
 
 *Posted: xxxx 2022*
 
@@ -43,7 +43,7 @@ but we are not told which ones are which.
 ##############################################################################
 # .. figure:: ../demonstrations/learning_from_experiments/fig1b.png
 #    :align: center
-#    :width: 60%
+#    :width: 50%
 
 
 ######################################################################
