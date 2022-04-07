@@ -608,9 +608,9 @@ X_data.shape, y_data.shape, y_exact.shape
 # .. math::  k(x, x^{\prime}) = \sum_{i\neq j}\sum_{k_i=-3}^{3}\sum_{k_j=-3}^{3} \cos{\big(\pi(k_i(x_i-x_i^{\prime}) + k_j(x_j-x_j^{\prime}))\big)} \tag{Dirichlet Kernel}
 # 
 # Dirichlet kernel is motivated by writing the :math:`\text{k}^{th}`
-# partial sum of the Fourier series of any function :math:`f` with
-# period :math:`2\pi` as a convolution. Here, we build this kernel
-# as ``kernel_dirichlet`` for :math:`k=7` as defined above.
+# partial sum of the Fourier series of a function with period :math:`2\pi`
+# as a convolution. Here, we build this kernel as ``kernel_dirichlet``
+# for :math:`k=7` as defined above.
 #
 
 ## Dirichlet kernel ##
