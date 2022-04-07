@@ -2,20 +2,23 @@
 Quantum advantage in learning from experiments
 ==============================================
 
-*Authors: Joseph Bowles
+*Authors: Joseph Bowles*
 
 *Posted: xxxx 2022*
 
 Quantum computers can store copies of quantum states in quantum memory
 and process them coherently, but how useful is this for quantum machine
-learning? In [1] it is shown that access to quantum memory can help a
-lot. In fact, it is even proven that there exist learning problems for
-which algorithms with quantum memory require **exponentially less data**
-than those without.
+learning? This is the central question posed by Hsin-Yuan Huang and
+co-authors in the article `Quantum advantage in learning from
+experiments <https://arxiv.org/abs/2112.00778>`__ `[1] <#ref1>`__.
+Suprisingly, they show that access to even a small quantum memory can
+help a lot. They even prove that there exist learning problems for which
+algorithms with quantum memory require *exponentially less data* than
+those without.
 
-In this tutorial we take a look at one problem presented in
-arXiv:2112.00778 for which this is the case: deciding if a unitary is
-time-reversal symmetric (we’ll call them T-symmetric) or not.
+In this demo we take a look at one problem presented in `[1] <#ref1>`__
+for which this is the case: deciding if a unitary is time-reversal
+symmetric (we’ll call them T-symmetric) or not.
 
 Mathematically, a unitary :math:`U` is T-symmetric if
 
@@ -28,76 +31,110 @@ evolution is the same both forward and backward in time.
 
 Now for the learning task. Let’s say we have a bunch of quantum circuits
 :math:`U_1, \cdots, U_n`, some of which are T-symmetric and some not,
-but we are not told which ones.
+but we are not told which ones are which.
 
 """
+
 
 
 ##############################################################################
 # .. figure:: ../demonstrations/learning_from_experiments/fig1b.png
 #    :align: center
-#    :width: 90%
+#    :width: 60%
 
 
 ######################################################################
-# The task is to design an algorithm to determine which of the U’s are
-# T-symmetric. Note that we do not have any labels here, so this is an
-# unsupervised learning task. To make things concrete, let’s consider
-# unitaries acting on 8 qubits. We will also limit the number of times we
-# can use each unitary:
-#
+# The task is to design an algorithm to determine which of the
+# :math:`U`\ ’s are T-symmetric and which are not. Note that we do not
+# have any labels here, so this is an unsupervised learning task. To make
+# things concrete, let’s consider unitaries acting on 8 qubits. We will
+# also limit the number of times we can use each unitary:
+# 
 
-qubits = 8  # the number of qubits on which the unitaries act
-n_shots = 100  # the number of times we can use each unitary
+qubits= 8 #the number of qubits on which the unitaries act
+n_shots = 100 #the number of times we can use each unitary
+
+
+######################################################################
+# Experiments with and without a quantum memory
+# ---------------------------------------------
+# 
+
+
+######################################################################
+# To tackle this task we consider experiments with and without quantum
+# memory. We also assume that we have access to a single physical
+# realization of each unitary; in other words, we do not have multiple
+# copies of the devices that implement :math:`U_i`.
+# 
+# An experiment without quantum memory can therefore only make use of a
+# single query to :math:`U_i` in each circuit, since querying :math:`U_i`
+# again would require storing the state of the first query in memory and
+# re-using the unitary. In the paper these experiments are called
+# **conventional experiments**.
+# 
+# Experiments with quantum memory do not have the limitations of
+# conventional experiments. This means that multiple queries can be made
+# to :math:`U_i` in a single circuit, which can be realized in practice by
+# using a quantum memory. These experiments are called **quantum-enhanced
+# experiments**.
+# 
+# Note that we are not comparing classical and quantum algorithms here,
+# but rather two classes of quantum algorithms.
+# 
 
 
 ######################################################################
 # The conventional way
 # --------------------
-#
+# 
 
 
 ######################################################################
-# First, we will try to do this without access to a quantum memory. In the
-# paper, this is called a *conventional experiment*. Our strategy will be
-# as follows:
-#
+# First, we will try to solve the task with a conventional experiment. Our
+# strategy will be as follows:
+# 
 # -  For each :math:`U_i`, prepare the state :math:`U_i\vert0\rangle`
 #    ``n_shots`` number of times and measure each state to generate
 #    classical measurement data.
 # -  Use an unsupervised classical machine learning algorithm (kernel
 #    PCA), to try and separate the data into two clusters corresponding to
 #    T-symmetric unitaries vs. the rest.
-#
+# 
 # If we succeed in clustering the data then we have successfully managed
 # to discriminate the two classes!
-#
+# 
+
 
 
 ##############################################################################
 # .. figure:: ../demonstrations/learning_from_experiments/fig2b.png
 #    :align: center
-#    :width: 90%
+#    :width: 70%
 
 
 ######################################################################
 # To generate the measurement data, we will measure the states
-# :math:`U_i\vert0\rangle` in the :math:`y` basis. For T-symmetric
-# unitaries, the local expectation values take the form
-#
+# :math:`U_i\vert0\rangle` in the :math:`y` basis. The local expectation
+# values take the form
+# 
 # .. math:: E_i  = \langle 0\vert U^{\dagger}\sigma_y^{(i)} U \vert 0 \rangle.
-#
+# 
 # where :math:`\sigma_y^{(i)}` acts on the :math:`i^{\text{th}}` qubit.
-# Using the property :math:`U^*=U` one finds that :math:`E_i^*=-E_i`,
-# which implies that all local expectations values are 0. For general
-# unitaries this is not the case, and so it seems as though this will
-# allow us to discriminate the two classes of circuits easily. However,
-# for general random unitaries the local expectation values decrease
-# exponentially with the number of qubits: from finite measurement data it
-# can still be very hard to see any difference! In fact, in [2] it is
+# 
+# Using the property :math:`U^*=U` for T-symmetric unitaries, one finds
+# that :math:`E_i^*=-E_i`, which implies that all local expectations
+# values are 0 for this class. For general unitaries this is not the case,
+# and so it seems as though this will allow us to discriminate the two
+# classes of circuits easily. However, for general random unitaries the
+# local expectation values approach zero exponentially with the number of
+# qubits: from finite measurement data it can still be very hard to see
+# any difference! In fact, in the article `exponential separations between
+# learning with and without quantum
+# memory <https://arxiv.org/abs/2111.05881>`__ `[2] <#ref2>`__ it is
 # proven that using conventional experiments, any successful algorithm
 # *must* use the unitaries an exponential number of times.
-#
+# 
 
 
 ######################################################################
@@ -108,7 +145,7 @@ n_shots = 100  # the number of times we can use each unitary
 # rotations, since these unitaries contain only real numbers, and
 # therefore result in T-symmetric unitaries. For the other unitaries, we
 # will allow rotations about X,Y, and Z.
-#
+# 
 
 import pennylane as qml
 from pennylane.templates.layers import RandomLayers
@@ -116,47 +153,53 @@ from pennylane import numpy as np
 
 np.random.seed(234087)
 
-layers, gates = 10, 10  # the number of layers and gates used in RandomLayers
+layers, gates = 10, 10 #the number of layers and gates used in RandomLayers
 
-dev = qml.device("default.qubit", wires=qubits, shots=n_shots)
+def generate_circuit(shots):
+    '''
+    generate a random circuit that returns a number of measuement samples
+    given by shots
+    '''
+    dev = qml.device('default.qubit',wires=qubits,shots=shots)
+    @qml.qnode(dev)
+    def circuit(ts=False):
 
+        if ts==True:
+            ops = [qml.RY] #time-symmetric unitaries
+        else:
+            ops = [qml.RX,qml.RY,qml.RZ] #general unitaries
 
-@qml.qnode(dev)
-def circuit(ts=False):
-    "create a random unitary circuit, and return measurement results in the y-basis"
+        weights = np.random.rand(layers,gates)*np.pi
+        RandomLayers(weights, wires=range(qubits),rotations=ops,seed=np.random.randint(0,10000))
 
-    if ts == True:
-        ops = [qml.RY]  # time-symmetric unitaries
-    else:
-        ops = [qml.RX, qml.RY, qml.RZ]  # general unitaries
-
-    weights = np.random.rand(layers, gates) * np.pi
-    RandomLayers(weights, wires=range(qubits), rotations=ops, seed=np.random.randint(0, 10000))
-
-    return [qml.sample(op=qml.PauliY(q)) for q in range(qubits)]
+        return [qml.sample(op = qml.PauliY(q)) for q in range(qubits)]
+    return circuit
 
 
 ######################################################################
 # let’s check if that worked
-#
+# 
 
-# the measurement outcomes for the first 3 shots
-print(circuit(ts=True)[:, 0:3])
-print("\n")
-print(circuit(ts=False)[:, 0:3])
+#the measurement outcomes for the first 3 shots
+circuit = generate_circuit(n_shots)
+print(circuit(ts=True)[:,0:3]) 
+print('\n')
+print(circuit(ts=False)[:,0:3])
 
 
 ######################################################################
 # Now we can generate some data. The first 30 circuits in the data set are
-# T-symmetric and the second 30 circuits are not.
-#
+# T-symmetric and the second 30 circuits are not. Since we are in an
+# unsupervised setting, the algorithm will not know this information.
+# 
 
-circuits = 30  # the number of circuits in each data set
+circuits = 30 #the number of circuits in each data set
 
-raw_data = []
+raw_data=[]
 
 for ts in [True, False]:
     for __ in range(circuits):
+        circuit = generate_circuit(n_shots)
         raw_data.append(circuit(ts=ts))
 
 
@@ -165,25 +208,24 @@ for ts in [True, False]:
 # little. For each circuit, we calculate the mean and the variance of each
 # output bit and store this in a vector of size ``2*qubits``. These
 # vectors make up our classical data set.
-#
-
+# 
 
 def process_data(raw_data):
-    "convert raw data to vectors of means and variances of each qubit"
-
+    'convert raw data to vectors of means and variances of each qubit'
+    
     nc = len(raw_data)
     nq = len(raw_data[0])
-    new_data = np.zeros([nc, 2 * nq])
-
+    new_data = np.zeros([nc,2*nq])
+    
     for k, outcomes in enumerate(raw_data):
-        means = [np.mean(outcomes[q, :]) for q in range(nq)]
-        variances = [np.var(outcomes[q, :]) for q in range(nq)]
-        new_data[k] = np.array(means + variances)
-
+        means = [np.mean(outcomes[q,:]) for q in range(nq)]
+        variances = [np.var(outcomes[q,:]) for q in range(nq)]
+        new_data[k]=np.array(means+variances)
+    
     return new_data
 
+data = process_data(raw_data)        
 
-data = process_data(raw_data)
 
 
 ######################################################################
@@ -192,57 +234,80 @@ data = process_data(raw_data)
 # package to try and cluster the data. This performs principal component
 # analysis in a high dimensional feature space defined by a kernel (below
 # we use the radial basis function kernel).
-#
+# 
 
 from sklearn.decomposition import KernelPCA
 from sklearn import preprocessing
 
-kernel_pca = KernelPCA(
-    n_components=None, kernel="rbf", gamma=None, fit_inverse_transform=True, alpha=0.1
-)
+kernel_pca = KernelPCA(n_components=None, kernel='rbf', gamma=None, fit_inverse_transform=True, alpha=0.1)
 
-# rescale the data so it has unit standard deviation and zero mean.
+#rescale the data so it has unit standard deviation and zero mean.
 scaler = preprocessing.StandardScaler().fit(data)
 data = scaler.transform(data)
-# try to cluster the data
+#try to cluster the data
 fit = kernel_pca.fit(data).transform(data)
 
 
 ######################################################################
 # Let’s plot the result. Here we look at the first two principal
 # components.
-#
+# 
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-# make a colour map for the points
-c = np.array([0 for __ in range(circuits)] + [1 for __ in range(circuits)])
+#make a colour map for the points
+c = np.array([0 for __ in range(circuits)]+[1 for __ in range(circuits)])
 
-plt.scatter(fit[:, 0], fit[:, 1], c=c)
+plt.scatter(fit[:,0],fit[:,1],c=c)
 
 
 ######################################################################
-# Looks like the algorithm failed to cluster the data! This is hardly a
-# surprise given the exponential hardness of the task using conventional
-# experiments.
-#
+# Looks like the algorithm failed to cluster the data. We can try to get a
+# separation by increasing the number of shots. Let’s increase the number
+# of shots by 100 and see what happens.
+# 
+
+n_shots = 10000 #100 x more shots
+
+raw_data=[]
+
+for ts in [True, False]:
+    for __ in range(circuits):
+        circuit = generate_circuit(n_shots)
+        raw_data.append(circuit(ts=ts))
+        
+data = process_data(raw_data)  
+scaler = preprocessing.StandardScaler().fit(data)
+data = scaler.transform(data)
+
+fit = kernel_pca.fit(data).transform(data)
+
+plt.scatter(fit[:,0],fit[:,1],c=c)
+
+
+######################################################################
+# Now we have a separation, however we required a lot of shots from the
+# quantum circuit. As we increase the number of qubits, the number of
+# shots we need will scale exponentially (as shown in `[2] <#ref2>`__),
+# and so conventional strategies cannot learn to separate the data
+# efficiently.
+# 
 
 
 ######################################################################
 # The quantum-enhanced way
 # ========================
-#
+# 
 # Now let’s see what difference having a quantum memory can make. Instead
 # of using a single unitary to generate measurement data, we will make use
 # of twice the number of qubits, and apply the unitary twice:
-#
+# 
 
 
 ##############################################################################
 # .. figure:: ../demonstrations/learning_from_experiments/fig3b.png
 #    :align: center
-#    :width: 90%
+#    :width: 70%
 
 
 ######################################################################
@@ -252,84 +317,69 @@ plt.scatter(fit[:, 0], fit[:, 1], c=c)
 # implement that. Note that since we now have twice as many qubits, we use
 # half the number of shots as before so that the total number of uses of
 # the unitary is unchanged.
-#
+# 
 
 n_shots = 50
 qubits = 8
 
-dev = qml.device("default.qubit", wires=qubits * 2, shots=n_shots)
-
-
+dev = qml.device('default.qubit',wires=qubits*2,shots=n_shots)
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
-    "implement the enhanced circuit, using a random unitary"
-
-    if ts == True:
+    'implement the enhanced circuit, using a random unitary'
+    
+    if ts==True:
         ops = [qml.RY]
     else:
-        ops = [qml.RX, qml.RY, qml.RZ]
-
-    weights = np.random.rand(layers, n_shots) * np.pi
-    seed = np.random.randint(0, 10000)
-
+        ops = [qml.RX,qml.RY,qml.RZ]
+        
+    weights = np.random.rand(layers,n_shots)*np.pi
+    seed = np.random.randint(0,10000)
+    
     for q in range(qubits):
         qml.Hadamard(wires=q)
-
-    qml.broadcast(
-        qml.CNOT, pattern=[[q, qubits + q] for q in range(qubits)], wires=range(qubits * 2)
-    )
-    RandomLayers(weights, wires=range(0, qubits), rotations=ops, seed=seed)
-    RandomLayers(weights, wires=range(qubits, 2 * qubits), rotations=ops, seed=seed)
-    qml.broadcast(
-        qml.CNOT, pattern=[[qubits + q, q] for q in range(qubits)], wires=range(qubits * 2)
-    )
-
+        
+    qml.broadcast(qml.CNOT,pattern=[[q,qubits+q] for q in range(qubits)], wires=range(qubits*2))
+    RandomLayers(weights, wires=range(0,qubits), rotations=ops,seed=seed)
+    RandomLayers(weights, wires=range(qubits,2*qubits), rotations=ops,seed=seed)
+    qml.broadcast(qml.CNOT,pattern=[[q,qubits+q] for q in range(qubits)], wires=range(qubits*2))
+    
     for q in range(qubits):
-        qml.Hadamard(wires=qubits + q)
+        qml.Hadamard(wires=q)
+    
+    return [qml.sample(op = qml.PauliZ(q)) for q in range(2*qubits)]
 
-    return [qml.sample(op=qml.PauliZ(q)) for q in range(2 * qubits)]
-
-
-######################################################################
-# We can use pennylane’s ``draw_mpl`` function to get a circuit diagram of
-# the enhanced experiement.
-#
-
-fig, ax = qml.draw_mpl(enhanced_circuit)(ts=False)
-fig.set_dpi(40)
-fig.show()
 
 
 ######################################################################
 # Now we generate some raw measurement data, and calculate the mean and
 # variance of each qubit as before. Our data vectors are now twice as long
 # since we have twice the number of qubits.
-#
+# 
 
 raw_data = []
 
 for ts in [True, False]:
     for __ in range(circuits):
         raw_data.append(enhanced_circuit(ts))
-
+        
 data = process_data(raw_data)
+
 
 
 ######################################################################
 # Let’s throw that into Kernel PCA again and plot the result.
-#
+# 
 
-kernel_pca = KernelPCA(
-    n_components=None, kernel="rbf", gamma=None, fit_inverse_transform=True, alpha=0.1
-)
+kernel_pca = KernelPCA(n_components=None, kernel='rbf', gamma=None, fit_inverse_transform=True, alpha=.1)
 
 scaler = preprocessing.StandardScaler().fit(data)
 data = scaler.transform(data)
 
 fit = kernel_pca.fit(data).transform(data)
 
-c = np.array([0 for __ in range(circuits)] + [1 for __ in range(circuits)])
-plt.scatter(fit[:, 0], fit[:, 1], c=c)
+c = np.array([0 for __ in range(circuits)]+[1 for __ in range(circuits)])
+plt.scatter(fit[:,0],fit[:,1],c=c)
+
 
 
 ######################################################################
@@ -337,107 +387,122 @@ plt.scatter(fit[:, 0], fit[:, 1], c=c)
 # T-symmetric unitaries have been mapped to the same point. This is
 # because the circuit is actually equivalent to performing
 # :math:`U^TU\otimes \mathbb{I}\vert 0 \rangle`, which for T-symmetric
-# unitaries is just the identity operation (small exercise for the
-# motivated: prove this using the fact that
-# :math:`A\otimes \mathbb{I}\vert\Phi^+\rangle= \mathbb{I}\otimes A^T\vert\Phi^+\rangle`).
-#
+# unitaries is just the identity operation.
+# 
+# To see this, note that the Hadamard and CNOT gates before
+# :math:`U_i\otimes U_i` map the :math:`\vert0\rangle` state to the
+# maximally entanged state
+# :math:`\vert \Phi^+\rangle = \frac{1}{\sqrt{2}}(\vert 00...0\rangle+ \vert11...1\rangle`,
+# and the gates after :math:`U_i\otimes U_i` are just the inverse
+# transformation. The probability that all measurement outcomes give the
+# result :math:`+1` is therefore.
+# 
+# .. math:: p(11\cdots 1) = \langle \Phi^+ \vert U_i \otimes U_i \vert\Phi^+ \rangle.
+# 
+# A well known fact about the maximally entanged state is that
+# :math:`U\otimes \mathbb{I}\vert\Phi^+\rangle= \mathbb{I}\otimes U^T\vert\Phi^+\rangle`.
+# The probabilty is therefore
+# 
+# .. math:: p(11\cdots 1) = \langle \Phi^+ \vert U_i^T U_i \otimes \mathbb{I} \vert\Phi^+ \rangle.
+# 
+# For T-symmetric unitaries :math:`U_i^T=U_i^\dagger`, so this probability
+# is equal to one: the :math:`11\cdots 1` outcome is always obtained.
+# 
 # If we look at the raw measurement data for the T-symmetric unitaries:
-#
+# 
 
-raw_data[0][:, 0:5]  # outcomes of first 5 shots of the first T-symmetric circuit
+raw_data[0][:,0:5] #outcomes of first 5 shots of the first T-symmetric circuit
 
 
 ######################################################################
-# We see that indeed the outcome corresponding to
-# :math:`\vert 00\cdots 0 \rangle` occurs every time. To make things a bit
-# more interesting, let’s add some noise to the circuit. We will define a
-# function ``noise_layer(epsilon)`` that adds some random single qubit
-# rotations, where the maximum rotation angle is ``epsilon``.
-#
-
+# We see that indeed this is the only measurement outcome.
+# 
+# To make things a bit more interesting, let’s add some noise to the
+# circuit. We will define a function ``noise_layer(epsilon)`` that adds
+# some random single qubit rotations, where the maximum rotation angle is
+# ``epsilon``.
+# 
 
 def noise_layer(epsilon):
-    "apply a random rotation to each qubit"
-    for q in range(2 * qubits):
-        angles = (2 * np.random.rand(3) - 1) * epsilon
-        qml.Rot(angles[0], angles[1], angles[2], wires=q)
+    'apply a random rotation to each qubit'
+    for q in range(2*qubits):
+        angles = (2*np.random.rand(3)-1)*epsilon
+        qml.Rot(angles[0],angles[1],angles[2],wires=q)
 
 
 ######################################################################
 # We redefine our ``enhanced_circuit()`` function with a noise layer
 # applied after the unitaries
-#
-
+# 
 
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
-    "implement the enhanced circuit, using a random unitary with a noise layer"
-
-    if ts == True:
+    'implement the enhanced circuit, using a random unitary with a noise layer'
+    
+    if ts==True:
         ops = [qml.RY]
     else:
-        ops = [qml.RX, qml.RY, qml.RZ]
-
-    weights = np.random.rand(layers, n_shots) * np.pi
-    seed = np.random.randint(0, 10000)
-
+        ops = [qml.RX,qml.RY,qml.RZ]
+        
+    weights = np.random.rand(layers,n_shots)*np.pi
+    seed = np.random.randint(0,10000)
+    
     for q in range(qubits):
         qml.Hadamard(wires=q)
-
-    qml.broadcast(
-        qml.CNOT, pattern=[[q, qubits + q] for q in range(qubits)], wires=range(qubits * 2)
-    )
-    RandomLayers(weights, wires=range(0, qubits), rotations=ops, seed=seed)
-    RandomLayers(weights, wires=range(qubits, 2 * qubits), rotations=ops, seed=seed)
-    noise_layer(np.pi / 4)  # added noise layer
-    qml.broadcast(
-        qml.CNOT, pattern=[[qubits + q, q] for q in range(qubits)], wires=range(qubits * 2)
-    )
-
+        
+    qml.broadcast(qml.CNOT,pattern=[[q,qubits+q] for q in range(qubits)], wires=range(qubits*2))
+    RandomLayers(weights, wires=range(0,qubits), rotations=ops,seed=seed)
+    RandomLayers(weights, wires=range(qubits,2*qubits), rotations=ops,seed=seed)
+    noise_layer(np.pi/4) #added noise layer
+    qml.broadcast(qml.CNOT,pattern=[[qubits+q,q] for q in range(qubits)], wires=range(qubits*2))
+    
     for q in range(qubits):
-        qml.Hadamard(wires=qubits + q)
+        qml.Hadamard(wires=qubits+q)
+        
+    return [qml.sample(op = qml.PauliZ(q)) for q in range(2*qubits)]
 
-    return [qml.sample(op=qml.PauliZ(q)) for q in range(2 * qubits)]
+
 
 
 ######################################################################
 # Now we generate the data and feed it to kernel PCA again.
-#
+# 
 
 raw_data = []
 
 for ts in [True, False]:
     for __ in range(circuits):
         raw_data.append(enhanced_circuit(ts))
-
+        
 data = process_data(raw_data)
 
-kernel_pca = KernelPCA(
-    n_components=None, kernel="rbf", gamma=None, fit_inverse_transform=True, alpha=0.1
-)
+kernel_pca = KernelPCA(n_components=None, kernel='rbf', gamma=None, fit_inverse_transform=True, alpha=.1)
 scaler = preprocessing.StandardScaler().fit(data)
 data = scaler.transform(data)
 fit = kernel_pca.fit(data).transform(data)
 
-c = np.array([0 for __ in range(circuits)] + [1 for __ in range(circuits)])
-plt.scatter(fit[:, 0], fit[:, 1], c=c)
+c = np.array([0 for __ in range(circuits)]+[1 for __ in range(circuits)])
+plt.scatter(fit[:,0],fit[:,1],c=c)
+
+
 
 
 ######################################################################
 # Nice! Even in the presence of noise we still have a clean separation of
-# the two classes.
-#
+# the two classes. This shows that using entanglement can make a big
+# difference to learning.
+# 
 
 
 ######################################################################
 # References
 # ----------
-#
+# 
 # [1] *Quantum advantage in learning from experiments*, Hsin-Yuan Huang
 # et. al., `arxiv:2112.00778 <https://arxiv.org/pdf/2112.00778.pdf>`__
 # (2021)
-#
+# 
 # [2] *Exponential separations between learning with and without quantum
-# memory*, Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li
+# memory*, Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li,
 # `arxiv:2111.05881 <https://arxiv.org/abs/2111.05881>`__ (2021)
-#
+# 
