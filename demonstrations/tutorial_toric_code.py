@@ -14,17 +14,9 @@ want to study non-local properties, we need to start using topology, the
 mathematical study of properties that are invariant under continuous
 deformation. For example, a coffee cup is equivalent to a donut:
 
-.. figure:: ../demonstrations/toric_code/torus_to_cup1.png
-    :align: left
-    :width: 30%
-
-.. figure:: ../demonstrations/toric_code/to_coffee_cup.png
+.. figure:: ../demonstrations/toric_code/torus_to_cup.png
     :align: center
-    :width: 30%
-
-.. figure:: ../demonstrations/toric_code/coffee_cup.png
-    :align: right
-    :width: 30%
+    :width: 50%
 
 When we zoom in really close, both a sphere and a torus look the same.
 Only when you zoom out and consider the whole object can you see the
