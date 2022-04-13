@@ -15,8 +15,8 @@ mathematical study of properties that are invariant under continuous
 deformation. For example, a coffee cup is equivalent to a donut, or a
 cow really is spherical!
 
-Keenan Crane; GIF by username:Nepluno, CC BY-SA 4.0
-https://creativecommons.org/licenses/by-sa/4.0, via Wikimedia Commons
+<a title="Keenan Crane; GIF by username:Nepluno, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Spot_the_cow.gif"><img width=200em alt="Spot the cow" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Spot_the_cow.gif"></a>
+Keenan Crane; GIF by username:Nepluno, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
 
 At least a cow without a digestive track.
 
@@ -33,6 +33,10 @@ paths are equivalent to each other because you can smoothly move one
 into the other. You cannot move the blue path into the green path
 without going through the defect, so they are not equivalent to each
 other.
+
+.. figure:: ../demonstrations/toric_code/homotopy.py
+    :align: center
+    :width: 90%
 
 What does all this mathematics have to do with actual physics? The toric
 code is considered a topological state of matter. These states of matter
@@ -124,6 +128,10 @@ fractional quantum Hall systems has anyonic particles with spin
 # this checkerboard no longer look like stars and plaquettes, we will call
 # them the “Z Group” and “X Group” operators in this tutorial.
 # 
+##############################################################################
+#.. figure:: ../demonstrations/toric_code/stars_plaquettes2.pn
+#    :align: center
+#    :width: 90%
 
 
 ######################################################################
@@ -793,6 +801,11 @@ plt.show()
 # 3. Another Hadamard is applied to the auxiliary qubit
 # 4. The auxiliary qubit is measured
 # 
+##############################################################################
+#.. figure:: ../demonstrations/toric_code/Hadamard_test.png
+#    :align: center
+#    :width: 90%
+#
 # Since the unitary in this case is the application of a phase to a state,
 # :math:`e^{i \phi}`, the real component is :math:`\cos (\phi)`.
 # 

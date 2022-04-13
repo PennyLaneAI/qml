@@ -19,6 +19,12 @@ such as benchmarking and characterizing quantum processors.
 :html:`<div class="gallery-grid row">`
 
 .. customgalleryitem::
+    :tooltip: Learn about the toric code and its excitations
+    :figure: demonstrations/toric_code/homotopy.png
+    :description: :doc:`demos/tutorial_toric_code`
+    :tags: errorcorrection
+
+.. customgalleryitem::
     :tooltip: Learn how to compute the quantum volume of a quantum processor.
     :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
     :description: :doc:`demos/quantum_volume`
@@ -83,6 +89,7 @@ such as benchmarking and characterizing quantum processors.
     :maxdepth: 2
     :hidden:
 
+    demos/tutorial_toric_code
     demos/quantum_volume
     demos/tutorial_haar_measure
     demos/tutorial_unitary_designs
