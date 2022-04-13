@@ -12,13 +12,19 @@ mathematics and condensed matter physics. In order to protect from local
 fluctuations, we turn to a dependence on non-local properties. If we
 want to study non-local properties, we need to start using topology, the
 mathematical study of properties that are invariant under continuous
-deformation. For example, a coffee cup is equivalent to a donut, or a
-cow really is spherical!
+deformation. For example, a coffee cup is equivalent to a donut:
 
-<a title="Keenan Crane; GIF by username:Nepluno, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Spot_the_cow.gif"><img width=200em alt="Spot the cow" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Spot_the_cow.gif"></a>
-Keenan Crane; GIF by username:Nepluno, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
+.. figure:: ../demonstrations/toric_code/torus_to_cup1.png
+    :align: left
+    :width: 30%
 
-At least a cow without a digestive track.
+.. figure:: ../demonstrations/toric_code/to_coffee_cup.png
+    :align: center
+    :width: 30%
+
+.. figure:: ../demonstrations/toric_code/coffee_cup.png
+    :align: right
+    :width: 30%
 
 When we zoom in really close, both a sphere and a torus look the same.
 Only when you zoom out and consider the whole object can you see the
@@ -34,9 +40,9 @@ into the other. You cannot move the blue path into the green path
 without going through the defect, so they are not equivalent to each
 other.
 
-.. figure:: ../demonstrations/toric_code/homotopy.py
+.. figure:: ../demonstrations/toric_code/homotopy.png
     :align: center
-    :width: 90%
+    :width: 40%
 
 What does all this mathematics have to do with actual physics? The toric
 code is considered a topological state of matter. These states of matter
@@ -107,13 +113,9 @@ fractional quantum Hall systems has anyonic particles with spin
 # What is the source of all this interesting physics? The Hamiltonian is:
 # 
 # .. math::
-# 
-# 
 #    \mathcal{H} = -\sum_s S_s - \sum_p P_p
 # 
 # .. math::
-# 
-# 
 #    S_s = \prod_{i \in s} Z_i \quad P_p = \prod_{j \in p} X_j
 # 
 # In the literature, the :math:`S_s` terms are called the “star”
@@ -128,13 +130,10 @@ fractional quantum Hall systems has anyonic particles with spin
 # this checkerboard no longer look like stars and plaquettes, we will call
 # them the “Z Group” and “X Group” operators in this tutorial.
 # 
-##############################################################################
-#.. figure:: ../demonstrations/toric_code/stars_plaquettes2.pn
-#    :align: center
-#    :width: 90%
-
-
-######################################################################
+# .. figure:: ../demonstrations/toric_code/stars_plaquettes2.png
+#     :align: center
+#     :width: 70%
+#
 # We will be embedding the lattice on a torus via periodic boundary
 # conditions. Periodic boundary conditions basically “glue” the bottom of
 # the lattice to the top of the lattice and the left to the right.
@@ -142,6 +141,9 @@ fractional quantum Hall systems has anyonic particles with spin
 # This matching is done with modular arithemetic. Any site at ``(x,y)`` is
 # the same as a site at ``(x+width, y+height)``.
 # 
+# .. figure:: ../demonstrations/toric_code/converting_to_torus.png
+#     :align: center
+#     :width: 70%
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -446,7 +448,7 @@ def print_info(x_expvals, z_expvals):
     print("Total energy: ", E)
     print("Energy above the ground state: ", E - E0)
     print("X Group occupation numbers: ", occupation_numbers(x_expvals))
-    print("Y Group occupation numbers: ", occupation_numbers(z_expvals))
+    print("Z Group occupation numbers: ", occupation_numbers(z_expvals))
     
 print_info(x_expvals, z_expvals)
 
@@ -484,6 +486,8 @@ fig, ax = excitation_plot(x_expvals, z_expvals)
 
 ax.scatter(*zip(*single_x), color="maroon", s=100)
 
+plt.show()
+
 
 ######################################################################
 # Now what if we apply a Z operation instead at the same site? We instead
@@ -500,6 +504,7 @@ fig, ax = excitation_plot(x_expvals, z_expvals)
 
 ax.scatter(*zip(*single_z), color="navy", s=100)
 
+plt.show()
 
 ######################################################################
 # What happens if we apply the same pertubation twice at the same
@@ -613,6 +618,7 @@ fig, ax = excitation_plot(x_expvals, z_expvals)
 
 ax.plot(*zip(*contractable_loop), color="maroon", linewidth=10)
 
+plt.show()
 
 ######################################################################
 # The loop doesn’t effect the positions of any excitations, but does it
@@ -656,6 +662,10 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractable_prob
 # -  A vertical loop around the boundaries
 # -  A loop around both the horiztonal and vertical boundaries
 # 
+# .. figure:: ../demonstrations/toric_code/types_of_loops.png
+#     :align: center
+#     :width: 50%
+#
 # All of these do not create any net excitations, so the wavefunction
 # remains in the ground state.
 # 
@@ -667,6 +677,8 @@ fig, ax = excitation_plot(excitations(xgroup_ops, horizontal_loop+vertical_loop,
 
 ax.plot(*zip(*horizontal_loop), color="maroon", linewidth=10)
 ax.plot(*zip(*vertical_loop), color="maroon", linewidth=10)
+
+plt.show()
 
 
 ######################################################################
@@ -801,10 +813,9 @@ plt.show()
 # 3. Another Hadamard is applied to the auxiliary qubit
 # 4. The auxiliary qubit is measured
 # 
-##############################################################################
-#.. figure:: ../demonstrations/toric_code/Hadamard_test.png
-#    :align: center
-#    :width: 90%
+# .. figure:: ../demonstrations/toric_code/Hadamard_test.png
+#     :align: center
+#     :width: 50%
 #
 # Since the unitary in this case is the application of a phase to a state,
 # :math:`e^{i \phi}`, the real component is :math:`\cos (\phi)`.
