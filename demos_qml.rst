@@ -112,7 +112,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. customgalleryitem::
     :tooltip: Quantum advantage in learning from experiments
-    :figure: demonstrations/learning_from_experiments/thumbnail.png
+    :figure: demonstrations/learning_from_experiments/learning_from_exp_thumbnail.png
     :description: :doc:`demos/tutorial_learning_from_experiments`
     :tags: advantage experiments
 
