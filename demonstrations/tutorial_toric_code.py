@@ -2,51 +2,17 @@
 Braiding Toric Code Excitations
 ===============================
 
-The toric code model is a treasure trove of interesting physics and
-mathematics. It is the quintessential example of a surface code and
-describes a key category of error correction models. But why is the
+The `toric code model <https://arxiv.org/abs/quant-ph/9707021>`__ is a treasure trove of interesting physics and
+mathematics. The model sparked the development of the error-correcting `surface codes <https://arxiv.org/pdf/1208.0928.pdf>`__ , an essential category of error correction models. But why is the
 model so useful for error correction?
 
-A deeper answer to that question touches on some amazingly rich areas of
-mathematics and condensed matter physics. In order to protect from local
-fluctuations, we turn to a dependence on non-local properties. If we
-want to study non-local properties, we need to start using topology, the
-mathematical study of properties that are invariant under continuous
-deformation. For example, a coffee cup is equivalent to a donut:
+To answer that question, we need to delve into mathematics and condensed matter physics. Viewing the model as a description of spins in a really exotic magnet allows us to start analyzing the model as a material. What kind of material is it? The toric code is an example of a topological state of matter.
 
-.. figure:: ../demonstrations/toric_code/torus_to_cup.png
-    :align: center
-    :width: 50%
+A state of matter, or phase, cannot become a different phase without some kind of discontinuity in the physical properties as coefficients in the Hamiltonian change. For example, ice cannot become water without a discontinuity in density as the temperature changes. The ground state of a <b>topological</b> state of matter cannot be smoothly deformed to a non-entangled state without a phase transition. Entanglement, and more critically <i>long-range</i> entanglement, is a key hallmark of a topological state of matter.
 
-When we zoom in really close, both a sphere and a torus look the same.
-Only when you zoom out and consider the whole object can you see the
-differences.
+This exotic phase cannot be detected by local measurements but can only be measured across the entire system. To better consider this type of property, consider the parity of the number of dancers on a dance floor. Does everyone have a partner, or is there an odd person out? To measure that, we have to look at the entire system.
 
-One subset of topology is called
-`Homotopy <https://en.wikipedia.org/wiki/Homotopy>`__. Two paths are
-homotopy equivalent if they can be continuously deformed into each
-other. For the next picture, assume the red “X” is some kind of defect
-in space, like a tear in a sheet or some kind of object. The two blue
-paths are equivalent to each other because you can smoothly move one
-into the other. You cannot move the blue path into the green path
-without going through the defect, so they are not equivalent to each
-other.
-
-.. figure:: ../demonstrations/toric_code/homotopy.png
-    :align: center
-    :width: 40%
-
-What does all this mathematics have to do with actual physics? The toric
-code is considered a topological state of matter. These states of matter
-often share properties like:
-
--  long range entanglement entropy
--  ground state degeneracy
--  a global influence of edges
--  non-trivial excitations
-
-An excitation or excited state is an eigenstate that is not the ground
-state.
+Topology is the study of global properties that are preserved under continuous deformations. For example, a coffee cup is equivalent to a donut because they both have a single hole. More technically, they both have an `Euler characteristic <https://en.wikipedia.org/wiki/Euler_characteristic>`__ of zero. When we zoom to a local patch, both a sphere and a torus look the same. Only by considering the object as a whole can you detect the single hole.
 
 In this demo, we will be looking at the degenerate ground state and the
 excitations of the toric code model. The toric code was initialized
@@ -56,86 +22,50 @@ a quantum processor” by K. J. Satzinger et al. For further reading, I
 recommend “Quantum Spin Liquids” by Lucile Savary and Leon Balents. (add
 links and proper citations and stuff)
 
-To describe these excitations, I will introduce a second term:
-quasiparticle. Quasiparticles allow physicists to describe complex
-systems as interacting particles in a vacuum. Common examples of
-quasiparticles include electrons and holes in semiconductors, phonons,
-and magnons.
+What is the source of all this interesting physics? The Hamiltonian is:
 
-Imagine trying to describe the traffic on a road. We could either:
+.. math::
+   \mathcal{H} = -\sum_s S_s - \sum_p P_p
 
--  explicitly enumerate the location of each vehicle
--  describe the locations and severities of traffic jam
+.. math::
+   S_s = \prod_{i \in s} Z_i \quad P_p = \prod_{j \in p} X_j
 
-The first option provides the complete information about the system but
-is much more difficult to work with. For most purposes, we can just work
-with information about how the traffic deviates from a baseline. In
-semiconductors, we don’t write out the wavefunction for every single
-electron. We instead use electrons and holes. Neither quasiparticle
-electrons or holes are fundamental particles like an electron or
-positron in a vacuum. Instead, they are useful descriptions of how the
-wavefunction differs from its ground state.
+In the literature, the :math:`S_s` terms are called the “star”
+operators, and the :math:`P_p` terms are called the “plaquette”
+operators. In the most common formulation of the model, sites live on
+the edges of a square lattice. The “plaquette” operators are all sites
+in a square, and the “star” operators are all sites that touch a vertex.
 
-While the electrons and holes of a metal behave just like electrons and
-positrons in a vacuum, some condensed matter systems contain
-quasiparticles that cannot or do not exist as fundamental particles.
+The model can also be viewed as a checkerboard of alternating square
+types. I find this to be the easier description. Adjacent squares
+alternate between the two types of operators. Since the operators on
+this checkerboard no longer look like stars and plaquettes, we will call
+them the “Z Group” and “X Group” operators in this tutorial.
 
-When one indistinguishable fermion of spin 1/2 orbits another fermion of
-the same type, the combined wavefunction picks up a factor of negative
-one. When fermions of different types orbit each other, the state is
-unchanged. For example, if an electron goes around a proton and comes
-back to the same spot, the wavefunction is unchanged. If a boson orbits
-around a different type of boson, again the wavefunction is unchanged.
+.. figure:: ../demonstrations/toric_code/stars_plaquettes2.png
+    :align: center
+    :width: 70%
 
-What if a particle went around a different type of particle and
-everything picked up a phase? Would it be a boson or a fermion?
+We will be embedding the lattice on a torus via periodic boundary
+conditions. Periodic boundary conditions basically “glue” the bottom of
+the lattice to the top of the lattice and the left to the right.
 
-It would be something else entirely: an anyon. An anyon is anything that
-doesn’t cleanly fall into the boson+fermion categorization of particles.
+This matching is done with modular arithemetic. Any site at ``(x,y)`` is
+the same as a site at ``(x+width, y+height)``.
 
-While the toric code itself is just an extremely useful mathematical
-model, anyons actually exist in real materials. For example, the
-fractional quantum Hall systems has anyonic particles with spin
-:math:`1/q` for different integers :math:`q`.
+.. figure:: ../demonstrations/toric_code/converting_to_torus.png
+    :align: center
+    :width: 70%
 
+On to some practical coding!
+
+We will be storing our lattice sites as a tuple of x and y coordinates.
+We will be using this tuples as wires labels, but we will have to be
+careful so that PennyLane does not interpret the site as two wire
+labels, but instead a single wire label. Whenever passing a single site,
+be careful to wrap it within a object of length 1, like ``[s]`` instead
+of passing ``(x,y)`` as a wire label by itself.
 """
-
-
-######################################################################
-# What is the source of all this interesting physics? The Hamiltonian is:
-# 
-# .. math::
-#    \mathcal{H} = -\sum_s S_s - \sum_p P_p
-# 
-# .. math::
-#    S_s = \prod_{i \in s} Z_i \quad P_p = \prod_{j \in p} X_j
-# 
-# In the literature, the :math:`S_s` terms are called the “star”
-# operators, and the :math:`P_p` terms are called the “plaquette”
-# operators. In the most common formulation of the model, sites live on
-# the edges of a square lattice. The “plaquette” operators are all sites
-# in a square, and the “star” operators are all sites that touch a vertex.
-# 
-# The model can also be viewed as a checkerboard of alternating square
-# types. I find this to be the easier description. Adjacent squares
-# alternate between the two types of operators. Since the operators on
-# this checkerboard no longer look like stars and plaquettes, we will call
-# them the “Z Group” and “X Group” operators in this tutorial.
-# 
-# .. figure:: ../demonstrations/toric_code/stars_plaquettes2.png
-#     :align: center
-#     :width: 70%
-#
-# We will be embedding the lattice on a torus via periodic boundary
-# conditions. Periodic boundary conditions basically “glue” the bottom of
-# the lattice to the top of the lattice and the left to the right.
-# 
-# This matching is done with modular arithemetic. Any site at ``(x,y)`` is
-# the same as a site at ``(x+width, y+height)``.
-# 
-# .. figure:: ../demonstrations/toric_code/converting_to_torus.png
-#     :align: center
-#     :width: 70%
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -144,18 +74,6 @@ from itertools import product
 
 import numpy as np
 np.set_printoptions(suppress=True)
-
-
-######################################################################
-# On to some practical coding!
-# 
-# We will be storing our lattice sites as a tuple of x and y coordinates.
-# We will be using this tuples as wires labels, but we will have to be
-# careful so that PennyLane does not interpret the site as two wire
-# labels, but instead a single wire label. Whenever passing a single site,
-# be careful to wrap it within a object of length 1, like ``[s]`` instead
-# of passing ``(x,y)`` as a wire label by itself.
-# 
 
 height = 4
 width = 6
@@ -273,22 +191,10 @@ plt.show()
 # This generalized GHZ state can be prepared with a Hadamard and 3 CNOT
 # gates:
 # 
-
-@qml.qnode(qml.device('lightning.qubit', wires=4))
-def generalized_ghz():
-    qml.Hadamard(0)
-    for target in (1,2,3):
-        qml.CNOT(wires=(0,target))
-    return qml.state()
-    
-print("Superposition state: ", generalized_ghz())
-
-qml.drawer.use_style('black_white')
-fig, ax = qml.draw_mpl(generalized_ghz)()
-plt.show()
-
-
-######################################################################
+# .. figure:: ../demonstrations/toric_code/generalized_ghz_draw.png
+#     :align: center
+#     :width: 50%
+#
 # This decomposition for :math:`U_p` holds only when the initial Hadamard
 # qubit begins in the :math:`|0\rangle` state, so we need to be careful in
 # choosing which qubit to apply the initial Hadamard gate to. This is the
@@ -299,18 +205,12 @@ plt.show()
 # four edges of the lattice, as it will already be prepared by preparation
 # of the surrounding groups.
 # 
-
-
-######################################################################
 # The paper “Realizing topologically ordered states on a quantum
 # processor” that inspired this demo used a special order of operations to
 # prepare the ground state to accomdate the constraints of the Sycamore
 # processor. We don’t have the same contraints on a simulator, so we chose
 # a more straightforward ordering.
 # 
-
-
-######################################################################
 # Now let’s actually put these together into a circuit!
 # 
 
@@ -353,10 +253,30 @@ print("Total energy: ", E0)
 ######################################################################
 # Excitations
 # -----------
-# 
-# What happens we apply a Pauli operator to the ground state? Let’s start
-# by considering what happens to an Z Group eigenvalue when we apply a X
-# operator on one of the sites that it contains:
+#
+# Quasiparticles allow physicists to describe complex
+# systems as interacting particles in a vacuum. Common examples of
+# quasiparticles include electrons and holes in semiconductors, phonons,
+# and magnons.
+#
+# Imagine trying to describe the traffic on a road. We could either:
+#
+# -  explicitly enumerate the location of each vehicle
+# -  describe the locations and severities of traffic jam
+#
+# The first option provides the complete information about the system but
+# is much more difficult to work with. For most purposes, we can just work
+# with information about how the traffic deviates from a baseline. In
+# semiconductors, we don’t write out the wavefunction for every single
+# electron. We instead use electrons and holes. Neither quasiparticle
+# electrons or holes are fundamental particles like an electron or
+# positron in a vacuum. Instead, they are useful descriptions of how the
+# wavefunction differs from its ground state.
+#
+# While the electrons and holes of a metal behave just like electrons and
+# positrons in a vacuum, some condensed matter systems contain
+# quasiparticles that cannot or do not exist as fundamental particles.
+#
 # 
 # .. math::
 # 
@@ -564,10 +484,23 @@ ax.plot(*zip(*long_string), color="navy", linewidth=10)
 
 plt.show()
 
-
 ######################################################################
 # We end up with these strings of sites that connect pairs of particles
 # and move them around.
+#
+# One subset of topology is called
+# `Homotopy <https://en.wikipedia.org/wiki/Homotopy>`__. Two paths are
+# homotopy equivalent if they can be continuously deformed into each
+# other. For the next picture, assume the red “X” is some kind of defect
+# in space, like a tear in a sheet or some kind of object. The two blue
+# paths are equivalent to each other because you can smoothly move one
+# into the other. You cannot move the blue path into the green path
+# without going through the defect, so they are not equivalent to each
+# other.
+#
+# .. figure:: ../demonstrations/toric_code/homotopy.png
+#     :align: center
+#     :width: 40%
 # 
 # What if we decided to move the particle to it’s final location via a
 # different route?
@@ -697,13 +630,7 @@ combo_probs = probs(horizontal_loop+vertical_loop, [])
 # 
 
 print("Are the probabilities equal? ",qml.math.allclose(null_probs, horizontal_probs))
-
-
-######################################################################
-# Let’s perform an extra sanity check on that to make sure the difference
-# between the probabilties is significant.
-# 
-
+print("Is this significant?")
 print("Maximum difference in probabilities: ", max(abs(null_probs-horizontal_probs)))
 print("Maximum probability: ", max(null_probs) )
 
@@ -737,7 +664,7 @@ for name, probs1 in zip(names, all_probs):
 # toric code. Instead 24 qubits, we work with 2 logical qubits (4 states)
 # that are cleanly separated from each other by topological operations.
 # 
-# Further exploration: What happens if you have two loops in the same
+# Further exploration: What happens with two loops in the same
 # direction?
 # 
 
@@ -745,10 +672,32 @@ for name, probs1 in zip(names, all_probs):
 ######################################################################
 # Mutual Exchange Statistics
 # --------------------------
-# 
+#
 # The hole in the center of the donut isn’t the only thing that prevents
 # paths from smoothly deforming into each other. We don’t yet know if we
 # can deform paths past other particles.
+#
+# # When one indistinguishable fermion of spin 1/2 orbits another fermion of
+# the same type, the combined wavefunction picks up a factor of negative
+# one. When fermions of different types orbit each other, the state is
+# unchanged. For example, if an electron goes around a proton and comes
+# back to the same spot, the wavefunction is unchanged. If a boson orbits
+# around a different type of boson, again the wavefunction is unchanged.
+#
+# What if a particle went around a different type of particle and
+# everything picked up a phase? Would it be a boson or a fermion?
+#
+# It would be something else entirely: an anyon. An anyon is anything that
+# doesn’t cleanly fall into the boson+fermion categorization of particles.
+#
+# While the toric code itself is just an extremely useful mathematical
+# model, anyons actually exist in real materials. For example, the
+# fractional quantum Hall systems has anyonic particles with spin
+# :math:`1/q` for different integers :math:`q`.
+# What happens we apply a Pauli operator to the ground state? Let’s start
+# by considering what happens to an Z Group eigenvalue when we apply a X
+# operator on one of the sites that it contains:
+#
 # 
 
 prep1 = [(1, 1), (2,1)]

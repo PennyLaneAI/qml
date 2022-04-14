@@ -20,7 +20,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. customgalleryitem::
     :tooltip: Learn about the toric code and its excitations
-    :figure: demonstrations/toric_code/homotopy.png
+    :figure: demonstrations/toric_code/types_of_loops.png
     :description: :doc:`demos/tutorial_toric_code`
     :tags: errorcorrection
 
