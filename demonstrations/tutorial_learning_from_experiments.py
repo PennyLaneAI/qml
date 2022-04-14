@@ -26,14 +26,11 @@ The learning task
 
 The learning task we focus on involves deciding if a unitary is
 time-reversal symmetric (we’ll call them T-symmetric) or not.
-Mathematically, a unitary :math:`U` is T-symmetric if
+Mathematically, time-reversal symmetry in quantum mechanics involves
+reversing the sense of :math:`i` so that :math:`i\rightarrow -i`.
+Hence, a unitary :math:`U` is T-symmetric if
 
 .. math:: U^*=U.
-
-This is because if one replaces :math:`t` by :math:`-t` in the
-Schrödinger equation, this changes the time evolution from
-:math:`U=e^{-i H t}` to :math:`e^{i H t}=U^*`. So if :math:`U^*=U`, the
-evolution is the same both forward and backward in time.
 
 Now for the learning task. Let’s say we have a bunch of quantum circuits
 :math:`U_1, \cdots, U_n`, some of which are T-symmetric and some not,
