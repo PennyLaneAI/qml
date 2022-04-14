@@ -62,22 +62,19 @@ import pennylane.numpy as np
 import numpy as anp
 import itertools as it
 
-
 def build_coupling_mats(num_mats, num_rows, num_cols):
     """Build the coupling matrices for the 2D spin lattice of Heisenberg Model"""
-    num_spins = num_rows * num_cols
+    num_spins = num_rows*num_cols
     coupling_mats = np.zeros((num_mats, num_spins, num_spins))
-    coup_term_mat = anp.random.RandomState(24).uniform(
-        0, 2, size=(num_mats, 2 * num_rows * num_cols - num_rows - num_cols)
-    )
-    for itr in range(num_mats):
-        # store coupling terms for each matrix as an iterator
-        coup_terms = iter(coup_term_mat[itr])
-        for i, j in it.product(range(num_spins), range(num_spins)):
-            if not coupling_mats[itr][i][j]:
-                if (j % num_cols and j - i == 1) or (j - i == num_cols):
-                    coupling_mats[itr][i][j] = next(coup_terms)
-                    coupling_mats[itr][j][i] = coupling_mats[itr][i][j]
+    coup_terms = anp.random.RandomState(24).uniform(0, 2, size = (num_mats,
+                                      2 * num_rows * num_cols - num_rows - num_cols))
+    # populate edges to build the grid lattice
+    edges = [(si, sj) for si, sj in it.combinations(range(num_spins), 2)
+                        if (sj % num_cols and sj - si == 1) or (sj - si == num_cols)]
+    for itr in range(num_mats): 
+        for (i, j), term in zip(edges, coup_terms[itr]):
+            coupling_mats[itr][i][j] = coupling_mats[itr][j][i] = term
+
     return coupling_mats
 
 
@@ -105,6 +102,7 @@ pos = {i: (i % Nc, -(i // Nc)) for i in G.nodes()}
 edge_labels = {(x, y): np.round(J_mat[x, y], 2) for x, y in G.edges()}
 weights = [x + 1.5 for x in list(nx.get_edge_attributes(G, "weight").values())]
 
+plt.figure(figsize=(4, 4))
 nx.draw(
     G,
     pos,
@@ -119,7 +117,7 @@ plt.show()
 
 
 ######################################################################
-# We then use the same coupling matrix :math:`J_mat` to obtain the Hamiltonian
+# We then use the same coupling matrix `J_mat` to obtain the Hamiltonian
 # :math:`H` for the model we have instantiated above. 
 #
 
@@ -167,7 +165,7 @@ def corr_function(i, j):
 ######################################################################
 # To calculate the exact ground state :math:`|\psi_{0}\rangle` of the
 # model, we first diagonalize its corresponding Hamiltonian and obtain
-# the eigenvector corresponding to the smallest eigenvalue. 
+# the eigenvector corresponding to the smallest eigenvalue.
 #
 
 import scipy as sp
@@ -216,15 +214,15 @@ for i, j in coups:
 # Once built, we can visualize the correlation matrix:
 #
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 6))
+fig, ax = plt.subplots(1, 1, figsize=(4, 4))
 im = ax.imshow(expval_exact, cmap=plt.get_cmap("RdBu"), vmin=-1, vmax=1)
 ax.xaxis.set_ticks(range(num_qubits))
 ax.yaxis.set_ticks(range(num_qubits))
 ax.xaxis.set_tick_params(labelsize=18)
 ax.yaxis.set_tick_params(labelsize=18)
-ax.set_title("Exact Correlation Matrix", fontsize=18)
+ax.set_title("Exact Correlation Matrix", fontsize=14)
 
-bar = fig.colorbar(im, pad=0.05, shrink=0.82)
+bar = fig.colorbar(im, pad=0.05, shrink=0.80    )
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
 bar.ax.tick_params(labelsize=14)
 plt.show()
@@ -295,9 +293,9 @@ def gen_class_shadow(circ_template, circuit_params, num_shadows, num_qubits):
     return outcomes, unitary_ensmb
 
 
-shadow = gen_class_shadow(circuit_oshot, psi0, 100, num_qubits)
-print("First five measurement outcomes =\n", shadow[0][:5])
-print("First five measurement bases =\n", shadow[1][:5])
+outcomes, basis = gen_class_shadow(circuit_oshot, psi0, 100, num_qubits)
+print("First five measurement outcomes =\n", outcomes[:5])
+print("First five measurement bases =\n", basis[:5])
 
 
 ######################################################################
@@ -311,10 +309,10 @@ print("First five measurement bases =\n", shadow[1][:5])
 def snapshot_state(meas_list, obs_list):
     # undo the rotations done for performing Pauli measurements in the specific basis
     rotations = [
-        qml.Hadamard(wires=0).matrix, # X-basis
-        qml.Hadamard(wires=0).matrix @ qml.S(wires=0).inv().matrix, # Y-basis
-        qml.Identity(wires=0).matrix, # Z-basis
-    ]  
+        qml.matrix(qml.Hadamard(wires=0)), # X-basis
+        qml.matrix(qml.Hadamard(wires=0)) @ qml.matrix(qml.S(wires=0).inv()), # Y-basis
+        qml.matrix(qml.Identity(wires=0)), # Z-basis
+    ]
 
     # reconstruct snapshot from local Pauli measurements
     rho_snapshot = [1]
@@ -354,7 +352,7 @@ def shadow_state_reconst(shadow):
 #    :width: 80 %
 #    :alt: Fidelity of reconstructed ground state with different shadow sizes :math:`T`
 #
-#    Fidelity of reconstructed ground state with different shadow sizes :math:`T`
+#    Fidelity of the reconstructed ground state with different shadow sizes :math:`T`
 #
 
 
@@ -371,7 +369,7 @@ def shadow_state_reconst(shadow):
 #
 
 
-def estimate_shadow_observable(shadow, observable, k=10):
+def estimate_shadow_obs(shadow, observable, k=10):
     """Estimate observable related to the quantum system using its classical shadow"""
     shadow_size, num_qubits = shadow[0].shape
 
@@ -423,7 +421,7 @@ for i, j in coups:
         expval_estmt[i][j] = 1.0
     else:
         expval_estmt[i][j] = (
-            np.sum(np.array([estimate_shadow_observable(shadow, o, k=k + 1) for o in corrs]))
+            np.sum(np.array([estimate_shadow_obs(shadow, o, k=k + 1) for o in corrs]))
             / 3
         )
         expval_estmt[j][i] = expval_estmt[i][j]
@@ -433,15 +431,15 @@ for i, j in coups:
 # matrix (:math:`C`) and the estimated correlation matrix (:math:`C^{\prime}`).
 #
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 6))
+fig, ax = plt.subplots(1, 1, figsize=(4, 4))
 im = ax.imshow(expval_exact-expval_estmt, cmap=plt.get_cmap("RdBu"), vmin=-1, vmax=1)
 ax.xaxis.set_ticks(range(num_qubits))
 ax.yaxis.set_ticks(range(num_qubits))
 ax.xaxis.set_tick_params(labelsize=18)
 ax.yaxis.set_tick_params(labelsize=18)
-ax.set_title("Error in estimating the correlation matrix", fontsize=16)
+ax.set_title("Error in estimating\nthe correlation matrix", fontsize=14)
 
-bar = fig.colorbar(im, pad=0.05, shrink=0.82)
+bar = fig.colorbar(im, pad=0.05, shrink=0.80)
 bar.set_label(r"$\Delta C_{ij}$", fontsize=18, rotation=0)
 bar.ax.tick_params(labelsize=14)
 plt.show()
@@ -510,7 +508,6 @@ from sklearn.kernel_ridge import KernelRidge
 
 
 def build_dataset(num_points, Nr, Nc, T=500):
-    """Builds dataset for Heisenberg model: X (coupling vector), y (correlation matrix)"""
 
     num_qubits = Nr * Nc
     X, y_exact, y_estim = [], [], []
@@ -519,11 +516,8 @@ def build_dataset(num_points, Nr, Nc, T=500):
     for coupling_mat in coupling_mats:
 
         ham = Hamiltonian(coupling_mat)
-
-        psi = np.zeros(2 ** num_qubits)
-        if len(ham.ops):  # Sanity Check
-            eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
-            psi = eigvecs[:, np.argmin(eigvals)]
+        eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
+        psi = eigvecs[:, np.argmin(eigvals)]
 
         shadow = gen_class_shadow(circuit_oshot, psi, T, num_qubits)
 
@@ -544,11 +538,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
                     / 3
                 )
                 expval_estim[i][j] = (
-                    np.sum(
-                        np.array(
-                            [estimate_shadow_observable(shadow, o, k=k + 1) for o in corrs]
-                        )
-                    )
+                    np.sum(np.array([estimate_shadow_obs(shadow, o, k=k + 1) for o in corrs]))
                     / 3
                 )
                 expval_exact[j][i], expval_estim[j][i] = expval_exact[i][j], expval_estim[i][j]
@@ -573,18 +563,15 @@ X_data.shape, y_data.shape, y_exact.shape
 
 
 ######################################################################
-# Now that we have our dataset ready. We shift our focus to the ML models.
-# Here, we use a set of three different Kernel functions: (i) Gaussian
-# Kernel, (ii) Dirichlet Kernel and (iii) Neural Tangent Kernel. For all
-# three of them, we consider the regularization parameter :math:`\lambda`
-# from the following set:
+# Now that our dataset is ready, we can shift our focus to ML models.
+# Here, we use two different Kernel functions: (i) Gaussian Kernel and
+# (ii) Neural Tangent Kernel. For both of them, we consider the
+# regularization parameter :math:`\lambda` from the following set of values:
 #
 # .. math::  \lambda = \left\{ 0.0025, 0.0125, 0.025, 0.05, 0.125, 0.25, 0.5, 1.0, 5.0, 10.0 \right\}.
 #
 # Next, we define the kernel functions :math:`k(x, x^{\prime})` for each
 # of the mentioned kernels:
-#
-
 
 ######################################################################
 # .. math::  k(x, x^{\prime}) = e^{-\gamma||x - x^{\prime}||^{2}_{2}}. \tag{Gaussian Kernel}
@@ -595,23 +582,6 @@ X_data.shape, y_data.shape, y_exact.shape
 # :math:`x_i` and :math:`x_j` and the kernel is implemented using the
 # Radial-basis function (rbf) kernel in the ``sklearn`` library.
 #
-
-
-######################################################################
-# .. math::  k(x, x^{\prime}) = \sum_{i\neq j}\sum_{k_i=-3}^{3}\sum_{k_j=-3}^{3} \cos{\big(\pi(k_i(x_i-x_i^{\prime}) + k_j(x_j-x_j^{\prime}))\big)}. \tag{Dirichlet Kernel}
-# 
-# The Dirichlet kernel is motivated by writing the :math:`\text{k}^{th}`
-# partial sum of the Fourier series of a function with period :math:`2\pi`
-# as a convolution. Here, we build this kernel as ``kernel_dirichlet``
-# for :math:`k=7` as defined above.
-#
-
-kernel_dirichlet = np.zeros((X_data.shape[0], 7 * X_data.shape[1]))
-for idx in range(len(X_data)):
-    for k in range(len((X_data[idx]))):
-        for k1 in range(-3, 4):
-            kernel_dirichlet[idx, 7 * k + k1 + 3] += np.cos(np.pi * k1 * X_data[idx][k])
-
 
 ######################################################################
 # .. math::  k(x, x^{\prime}) = k^{\text{NTK}}(x, x^{\prime}). \tag{Neural Tangent Kernel}
@@ -642,7 +612,7 @@ for i in range(len(kernel_NN)):
 
 
 ######################################################################
-# From the three defined kernel methods, to obtain the best ML model, we
+# From the two defined kernel methods, to obtain the best ML model, we
 # perform hyperparameter tuning using cross-validation for the prediction
 # task of each :math:`C_{ij}`. For this purpose, we implement the function
 # ``fit_predict_data``, which takes input as the correlation function
@@ -653,9 +623,6 @@ for i in range(len(kernel_NN)):
 
 
 def fit_predict_data(cij, kernel, opt="linear"):
-    # perform instance-wise normalization to get k(x, x')
-    for idx in range(len(kernel)):
-        kernel[idx] /= np.linalg.norm(kernel[idx])
 
     # training data (estimated from measurement data)
     y = np.array([y_estim[i][cij] for i in range(len(X_data))])
@@ -720,54 +687,48 @@ def fit_predict_data(cij, kernel, opt="linear"):
 # the output in a tabular format.
 #
 
-kernel_list = ["Gaussian kernel", "Dirichlet kernel", "Neural Tangent kernel"]
+kernel_list = ["Gaussian kernel", "Neural Tangent kernel"]
 kernel_data = np.zeros((num_qubits ** 2, len(kernel_list), 2))
-y_predclean, y_predicts1, y_predicts2, y_predicts3 = [], [], [], []
+y_predclean, y_predicts1, y_predicts2 = [], [], []
 
 for cij in range(num_qubits ** 2):
     clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, X_data, opt="rbf")
     y_predclean.append(y_clean)
     kernel_data[cij][0] = (cv_score, test_score)
     y_predicts1.append(y_predict)
-    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_dirichlet)
+    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_NN)
     kernel_data[cij][1] = (cv_score, test_score)
     y_predicts2.append(y_predict)
-    clf, y_predict, y_clean, cv_score, test_score = fit_predict_data(cij, kernel_NN)
-    kernel_data[cij][2] = (cv_score, test_score)
-    y_predicts3.append(y_predict)
-
 
 # For each C_ij print (best_cv_score, test_score) pair
-row_format = "{:>10}{:>22}{:>23}{:>25}"
-print(row_format.format("", *kernel_list))
+row_format = "{:>25}{:>35}{:>35}"
+print(row_format.format("Correlation", *kernel_list))
 for idx, data in enumerate(kernel_data):
     print(
         row_format.format(
-            f"C_{idx//num_qubits}{idx%num_qubits} \t| ",
+            f"\t C_{idx//num_qubits}{idx%num_qubits} \t| ",
             str(data[0]),
             str(data[1]),
-            str(data[2]),
         )
     )
 
 
 ######################################################################
-# Overall, we find that the model with Gaussian kernel performed the best,
-# while the Dirichlet kernel one performed the worst for predicting the
-# expectation value of the correlation function :math:`C_{ij}` for the
-# ground state of the Heisenberg model. However, the best choice of
-# :math:`\lambda` differed substantially across the different
-# :math:`C_{ij}` for all the kernels. This means that no particular choice
-# of the hyperparameter :math:`\lambda` could perform better than others
-# at an average. We present the predicted correlation matrix
-# :math:`C^{\prime}` for randomly selected Heisenberg models from the test
-# set below for comparison against the actual correlation matrix
-# :math:`C`, which is obtained from the ground state found using exact
-# diagonalization.
+# Overall, we find that the models with the Gaussian kernel performed
+# better than the ones with NTK for predicting the expectation value
+# of the correlation function :math:`C_{ij}` for the ground state of
+# the Heisenberg model. However, the best choice of :math:`\lambda`
+# differed substantially across the different :math:`C_{ij}` for both
+# kernels. This means that no particular hyperparameter choice
+# :math:`\lambda` could perform better than others at an average.
+# We present the predicted correlation matrix :math:`C^{\prime}` for
+# randomly selected Heisenberg models from the test set below for
+# comparison against the actual correlation matrix :math:`C`, which is
+# obtained from the ground state found using exact diagonalization.
 #
 
-fig, axes = plt.subplots(3, 4, figsize=(18, 14))
-corr_vals = [y_predclean, y_predicts1, y_predicts2, y_predicts3]
+fig, axes = plt.subplots(3, 3, figsize=(14, 14))
+corr_vals = [y_predclean, y_predicts1, y_predicts2]
 plt_plots = [1, 14, 25]
 
 cols = [
@@ -775,7 +736,6 @@ cols = [
     for col in [
         "Exact Diagnalization",
         "Gaussian Kernel",
-        "Dirichlet Kernel",
         "Neur. Tang. Kernel",
     ]
 ]
@@ -800,8 +760,8 @@ for itr in range(3):
         axes[itr][idx].xaxis.set_tick_params(labelsize=18)
         axes[itr][idx].yaxis.set_tick_params(labelsize=18)
 
-fig.subplots_adjust(right=0.88)
-cbar_ax = fig.add_axes([0.90, 0.15, 0.015, 0.72])
+fig.subplots_adjust(right=0.86)
+cbar_ax = fig.add_axes([0.90, 0.15, 0.015, 0.71])
 bar = fig.colorbar(shw, cax=cbar_ax)
 
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
@@ -828,9 +788,8 @@ plt.show()
 # .. image::  /demonstrations/ml_classical_shadows/rmse_training.png
 #     :width: 47 %
 #
-# Predicting two-point correlation functions for ground state of
-# 2D antiferromagnetic Heisenberg model over different training size :math:`N`
-# and different shadow size :math:`T`.
+#    Error in predicting two-point correlation functions over different
+#    training size :math:`N` and different shadow size :math:`T`.
 
 
 ######################################################################
