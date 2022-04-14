@@ -1,6 +1,14 @@
-"""
-Braiding Toric Code Excitations
-===============================
+""".. _toric_code:
+Toric Code Topology
+===================
+
+
+.. meta::
+    :property="og:description": Investigation of the toric code degenerate ground state and anyon excitations
+    :property="og:image": https://pennylane.ai/qml/_images/types_of_loops.png
+
+*Author: PennyLane dev team. Posted: xx April 2022*
+
 
 The `toric code model <https://arxiv.org/abs/quant-ph/9707021>`__ is a treasure trove of interesting physics and
 mathematics. The model sparked the development of the error-correcting `surface codes <https://arxiv.org/pdf/1208.0928.pdf>`__ , an essential category of error correction models. But why is the
@@ -8,11 +16,15 @@ model so useful for error correction?
 
 To answer that question, we need to delve into mathematics and condensed matter physics. Viewing the model as a description of spins in a really exotic magnet allows us to start analyzing the model as a material. What kind of material is it? The toric code is an example of a topological state of matter.
 
-A state of matter, or phase, cannot become a different phase without some kind of discontinuity in the physical properties as coefficients in the Hamiltonian change. For example, ice cannot become water without a discontinuity in density as the temperature changes. The ground state of a <b>topological</b> state of matter cannot be smoothly deformed to a non-entangled state without a phase transition. Entanglement, and more critically <i>long-range</i> entanglement, is a key hallmark of a topological state of matter.
+A state of matter, or phase, cannot become a different phase without some kind of discontinuity in the physical properties as coefficients in the Hamiltonian change. For example, ice cannot become water without a discontinuity in density as the temperature changes. The ground state of a **topological** state of matter cannot be smoothly deformed to a non-entangled state without a phase transition. Entanglement, and more critically *long-range* entanglement, is a key hallmark of a topological state of matter.
 
 This exotic phase cannot be detected by local measurements but can only be measured across the entire system. To better consider this type of property, consider the parity of the number of dancers on a dance floor. Does everyone have a partner, or is there an odd person out? To measure that, we have to look at the entire system.
 
 Topology is the study of global properties that are preserved under continuous deformations. For example, a coffee cup is equivalent to a donut because they both have a single hole. More technically, they both have an `Euler characteristic <https://en.wikipedia.org/wiki/Euler_characteristic>`__ of zero. When we zoom to a local patch, both a sphere and a torus look the same. Only by considering the object as a whole can you detect the single hole.
+
+.. figure:: ../demonstrations/toric_code/torus_to_cup.png
+    :align: center
+    :width: 70%
 
 In this demo, we will be looking at the degenerate ground state and the
 excitations of the toric code model. The toric code was initialized
@@ -21,6 +33,9 @@ and this demo was inspired by “Realizing topologically ordered states on
 a quantum processor” by K. J. Satzinger et al. For further reading, I
 recommend “Quantum Spin Liquids” by Lucile Savary and Leon Balents. (add
 links and proper citations and stuff)
+
+The Model
+---------
 
 What is the source of all this interesting physics? The Hamiltonian is:
 
@@ -32,13 +47,13 @@ What is the source of all this interesting physics? The Hamiltonian is:
 
 In the literature, the :math:`S_s` terms are called the “star”
 operators, and the :math:`P_p` terms are called the “plaquette”
-operators. In the most common formulation of the model, sites live on
-the edges of a square lattice. The “plaquette” operators are all sites
-in a square, and the “star” operators are all sites that touch a vertex.
+operators. Each star :math:`s` and plaquette :math:`p` is a group of 4 sites. In the most common formulation of the model, sites live on
+the edges of a square lattice. The “plaquette” operators are products of Pauli X operators on all the sites
+in a square, and the "star" operators are products of Pauli Z operators on all the sites bordering a vertex.
 
 The model can also be viewed as a checkerboard of alternating square
-types. I find this to be the easier description. Adjacent squares
-alternate between the two types of operators. Since the operators on
+types. Each square is a group of four sites, and adjacent squares
+alternate between the two types of groups. Since the groups on
 this checkerboard no longer look like stars and plaquettes, we will call
 them the “Z Group” and “X Group” operators in this tutorial.
 
@@ -85,22 +100,22 @@ all_sites = [(i,j) for i, j in product(range(width), range(height))]
 # Setting up Operators
 # --------------------
 # 
-
-
-######################################################################
 # For each type of group operator (X and Z) we will have two different
-# lists, the “sites” and the “ops”. The “sites” list will have virtual
+# lists, the “sites” and the “ops”. The “sites” will include virtual
 # sites off the edge of the lattice that match up with locations on the
 # other side. For example, the site ``(6, 1)`` denotes the real location
 # ``(0,1)``. We will use the ``zgroup_sites`` and ``xgroup_sites`` lists
 # to help us view the measurements of the corresponding operators.
 # 
+# The "ops" list will contain the tensor observables.
+$
 
 mod = lambda s: (s[0] % width, s[1] % height)
 
-zgroup_sites = []
-zgroup_ops = []
-for x, y in product(range(3), range(4)):
+zgroup_sites = [] # list of sites in each group
+zgroup_ops = [] # list of operators for each group
+
+for x, y in product(range(width//2), range(height)):
     
     x_shift = 2*x + (y+1)%2
 
@@ -110,6 +125,9 @@ for x, y in product(range(3), range(4)):
     
     zgroup_sites.append(sites)
     zgroup_ops.append(op)
+
+print("First set of sites: ", zgroup_sites[0])
+print("First operator: ", zgroup_ops[0])
 
 
 ######################################################################
@@ -121,7 +139,7 @@ for x, y in product(range(3), range(4)):
 
 xgroup_sites = []
 xgroup_ops = []
-for x, y in product(range(3), range(4)):
+for x, y in product(range(width//2), range(height)):
     x_shift = 2*x + y%2
     
     sites = [(x_shift+1, y+1), (x_shift, y+1), (x_shift, y), (x_shift+1, y)]
@@ -149,10 +167,10 @@ fig, ax = plt.subplots()
 fig, ax = misc_plot_formatting(fig, ax)
 
 for group in xgroup_sites:
-    x_patch = ax.add_patch(Polygon(group, color="lavender"))
+    x_patch = ax.add_patch(Polygon(group, color="lavender", zorder=0))
 
 for group in zgroup_sites:
-    z_patch = ax.add_patch(Polygon(group, color="mistyrose"))
+    z_patch = ax.add_patch(Polygon(group, color="mistyrose", zorder=0))
     
 plt_sites = ax.scatter(*zip(*all_sites))
 
@@ -378,10 +396,10 @@ def excitation_plot(x_excite, z_excite):
     fig, ax = misc_plot_formatting(fig, ax)
     
     for expval, sites in zip(x_excite, xgroup_sites):
-        ax.add_patch(Polygon(sites, color=x_color(expval) ))
+        ax.add_patch(Polygon(sites, color=x_color(expval), zorder=0))
 
     for expval, sites in zip(z_excite, zgroup_sites):
-        ax.add_patch(Polygon(sites, color=z_color(expval) ))
+        ax.add_patch(Polygon(sites, color=z_color(expval), zorder=0))
 
     handles = [ Patch(color="navy", label="X Group -1"),
         Patch(color="lavender", label="X Group +1"),
