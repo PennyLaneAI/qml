@@ -108,7 +108,7 @@ all_sites = [(i,j) for i, j in product(range(width), range(height))]
 # to help us view the measurements of the corresponding operators.
 # 
 # The "ops" list will contain the tensor observables.
-$
+
 
 mod = lambda s: (s[0] % width, s[1] % height)
 
