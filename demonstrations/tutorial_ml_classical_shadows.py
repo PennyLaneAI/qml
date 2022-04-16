@@ -118,13 +118,12 @@ import pennylane as qml
 def Hamiltonian(J_mat):
     coeffs, ops = [], []
     ns = J_mat.shape[0]
-    for i in range(ns):
-        for j in range(i + 1, ns):
+    for i, j in it.combinations(range(ns), r=2):
+        coeff = J_mat[i, j]
+        if coeff:
             for op in [qml.PauliX, qml.PauliY, qml.PauliZ]:
-                coeff = J_mat[i, j]
-                if coeff:
-                    coeffs.append(coeff)
-                    ops.append(op(i) @ op(j))
+                coeffs.append(coeff)
+                ops.append(op(i) @ op(j))
     H = qml.Hamiltonian(coeffs, ops)
     return H
 
@@ -141,7 +140,10 @@ print(f"Hamiltonian =\n{Hamiltonian(J_mat)}")
 def corr_function(i, j):
     ops = []
     for op in [qml.PauliX, qml.PauliY, qml.PauliZ]:
-        ops.append(op(i) @ op(j)) if i != j else ops.append(qml.Identity(i))
+        if i != j:
+            ops.append(op(i) @ op(j))
+        else:
+            ops.append(qml.Identity(i))
     return ops
 
 ######################################################################   
@@ -368,7 +370,7 @@ def shadow_state_reconst(shadow):
 
 def estimate_shadow_obs(shadow, observable, k=10):
     shadow_size = shadow[0].shape[0]
-    
+
     # convert Pennylane observables to indices
     map_name_to_int = {"PauliX": 0, "PauliY": 1, "PauliZ": 2}
     if isinstance(observable, (qml.PauliX, qml.PauliY, qml.PauliZ)):
@@ -598,6 +600,7 @@ for i in range(len(kernel_NN)):
 # from the ``sklearn`` library.
 #
 
+from sklearn.metrics import mean_squared_error
 
 def fit_predict_data(cij, kernel, opt="linear"):
 
@@ -634,9 +637,9 @@ def fit_predict_data(cij, kernel, opt="linear"):
                 best_model = model(hyperparam).fit(X_train, y_train)
                 best_pred = best_model.predict(X_test)
                 best_cv_score = cv_score
-                best_test_score = np.linalg.norm(
-                    best_model.predict(X_test).ravel() - y_test_clean.ravel()
-                ) / (len(y_test) ** 0.5)
+                best_test_score = mean_squared_error(
+                    best_model.predict(X_test).ravel(), y_test_clean.ravel(), squared=False
+                )
 
     return (
         best_pred, y_test_clean, np.round(best_cv_score, 5), np.round(best_test_score, 5)
@@ -727,25 +730,33 @@ plt.show()
 ######################################################################
 # Finally, we also attempt to showcase the effect of the size of training data
 # :math:`N` and the number of Pauli measurements :math:`T`. For this, we look
-# at the average value of ``best_cv_score`` for each mode, which gives us the
-# root-mean-square error (RMSE) for predicting :math:`C_{ij}`. Here, the first
+# at the average root-mean-square error (RMSE) in prediction for each kernel
+# over all two-point correlation functions :math:`C_{ij}`. Here, the first
 # plot looks at the different training sizes :math:`N` with a fixed number of
 # randomized Pauli measurements :math:`T=100`. In contrast, the second plot
 # looks at the different shadow sizes :math:`T` with a fixed training data size
-# :math:`N=70`. The performance improvement saturates after a sufficient increase
-# in :math:`N` and :math:`T` values for all two kernels in both the cases.
+# :math:`N=70`. The performance improvement seems to be saturating after a
+# sufficient increase in :math:`N` and :math:`T` values for all two kernels
+# in both the cases.
 #
 
-
 ######################################################################
-# .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
-#     :width: 47 %
 # .. image::  /demonstrations/ml_classical_shadows/rmse_training.png
 #     :width: 47 %
 #
-# Error in predicting two-point correlation functions over different training
-# size :math:`N` and different shadow size :math:`T`.
+# .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
+#     :width: 47 %
 #   
+
+######################################################################
+# This demo concludes that classical machine learning models can benefit from
+# classical shadow formalism derived from randomized Pauli measurements
+# for learning characteristics and predicting the behavior of quantum systems.
+# Therefore, as demonstrated in Ref. [#preskill]_, we hope that models trained
+# on experimental data can effectively address quantum many-body problems that
+# cannot be solved using classical methods alone. 
+#
+
 
 
 ######################################################################
