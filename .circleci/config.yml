@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/python:3.7.12
+      - image: cimg/python:3.7.13
 
     steps:
       - checkout
@@ -22,7 +22,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt-get update && sudo apt-get install -y pandoc
-            python3 -m venv venv
+            python -m venv venv
             . venv/bin/activate
             pip install pip setuptools cmake --upgrade
             pip install -r requirements.txt
@@ -80,7 +80,7 @@ jobs:
 
   build_dev:
     docker:
-      - image: cimg/python:3.7.12
+      - image: cimg/python:3.7.13
 
     steps:
       - checkout
@@ -88,7 +88,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            python3 -m venv venv
+            python -m venv venv
             . venv/bin/activate
             pip install pip setuptools cmake --upgrade
             pip install -r requirements.txt
