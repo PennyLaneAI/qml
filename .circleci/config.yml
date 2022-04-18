@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.12
+      - image: cimg/python:3.7.12
 
     steps:
       - checkout
@@ -80,7 +80,7 @@ jobs:
 
   build_dev:
     docker:
-      - image: circleci/python:3.7.12
+      - image: cimg/python:3.7.12
 
     steps:
       - checkout
