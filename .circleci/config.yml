@@ -14,15 +14,9 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v34c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
-            - pip-v34c-{{ .Branch }}-
-            - pip-v34c-
-
-      - run:
-          name: Where's Python
-          command: |
-            python --version
-            python -m site --user-site
+            - pip-v35c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
+            - pip-v35c-{{ .Branch }}-
+            - pip-v35c-
 
       - run:
           name: Install dependencies
@@ -37,13 +31,13 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v34c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
+          key: pip-v35c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
 
       - restore_cache:
           keys:
-            - gallery-v34a-{{ .Branch }}-{{ .Revision }}
-            - gallery-v34a-{{ .Branch }}-
-            - gallery-v34a-
+            - gallery-v35a-{{ .Branch }}-{{ .Revision }}
+            - gallery-v35a-{{ .Branch }}-
+            - gallery-v35a-
 
       - run:
           name: Build tutorials
@@ -59,7 +53,7 @@ jobs:
       - save_cache:
           paths:
             - ./demos
-          key: gallery-v34a-{{ .Branch }}-{{ .Revision }}
+          key: gallery-v35a-{{ .Branch }}-{{ .Revision }}
 
       - save_cache:
           paths:
