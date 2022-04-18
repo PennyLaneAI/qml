@@ -19,6 +19,12 @@ jobs:
             - pip-v34c-
 
       - run:
+          name: Where's Python
+          command: |
+            python --version
+            python -m site --user-site
+
+      - run:
           name: Install dependencies
           command: |
             sudo apt-get update && sudo apt-get install -y pandoc
