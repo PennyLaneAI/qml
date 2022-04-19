@@ -103,6 +103,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/classical_kernels/flowchart.PNG
     :description: :doc:`demos/tutorial_classical_kernels`
     :tags: kernels approximation
+    
+.. customgalleryitem::
+    :tooltip: Tensor network quantum circuits
+    :figure: demonstrations/tn_circuits/thumbnail_tn_circuits.png
+    :description: :doc:`demos/tutorial_tn_circuits`
+    :tags: tensor network
 
 .. customgalleryitem::
     :tooltip: Machine learning for quantum many-body problems
