@@ -695,7 +695,7 @@ plt_plots = [1, 14, 25]
 
 cols = [
     "From {}".format(col)
-    for col in ["Exact Diagnalization", "Gaussian Kernel", "Neur. Tang. Kernel"]
+    for col in ["Exact Diagonalization", "Gaussian Kernel", "Neur. Tang. Kernel"]
 ]
 rows = ["Model {}".format(row) for row in plt_plots]
 
@@ -744,10 +744,10 @@ plt.show()
 #
 # .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
 #     :width: 47 %
-#   
+#
+# | 
 
 ######################################################################
-# 
 # This demo illustrates how classical machine learning models can benefit from
 # the classical shadow formalism for learning characteristics and predicting
 # the behavior of quantum systems. As argued in Ref. [#preskill]_, this raises
