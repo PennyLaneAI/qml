@@ -14,7 +14,6 @@ wheel==0.37.0
 pyscf==1.7.6
 pennylane-lightning
 git+https://github.com/PennyLaneAI/pennylane.git
-git+https://github.com/PennyLaneAI/pennylane.git#subdirectory=qchem
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
 git+https://github.com/PennyLaneAI/pennylane-qiskit.git
