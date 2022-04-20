@@ -81,7 +81,6 @@ H, qubits = qchem.molecular_hamiltonian(
     geometry,
     active_electrons=2,
     active_orbitals=5,
-    method='pyscf'
 )
 
 active_electrons = 2
