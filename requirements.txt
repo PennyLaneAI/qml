@@ -13,6 +13,8 @@ pip==21.1
 wheel==0.37.0
 h5py<=3.2.1
 pyscf==1.7.6
+cirq-core==0.14.1
+cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
 git+https://github.com/PennyLaneAI/pennylane.git@v0.23.0-rc0
 git+https://github.com/PennyLaneAI/pennylane-sf.git
