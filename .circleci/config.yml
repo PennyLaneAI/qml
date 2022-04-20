@@ -91,7 +91,6 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install pip setuptools cmake --upgrade
-            pip install -i https://test.pypi.org/simple/ PennyLane-Lightning --pre --upgrade
             pip install -r requirements.txt
             pip install --no-deps -r requirements_no_deps.txt
 
