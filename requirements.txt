@@ -14,6 +14,7 @@ wheel==0.37.0
 pyscf==1.7.6
 # PennyLane-Lightning installed in the runner file
 git+https://github.com/PennyLaneAI/pennylane.git@v0.23.0-rc0
+openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
 git+https://github.com/PennyLaneAI/pennylane-qiskit.git
