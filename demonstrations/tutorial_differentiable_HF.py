@@ -245,7 +245,7 @@ plt.show()
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
-hamiltonian = qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, args=mol.coordinates)
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, args=[mol.coordinates])
 print(hamiltonian)
 
 ##############################################################################
@@ -263,7 +263,7 @@ def energy(mol):
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
-        return qml.expval(qml.qchem.generate_hamiltonian(mol)(*args[1:]))
+        return qml.expval(qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, alpha=mol.alpha, coeff=mol.coeff, args=args[1:])[0])
     return circuit
 
 ##############################################################################
@@ -298,7 +298,7 @@ for n in range(36):
 # optimized geometry at the
 # `full-CI <https://en.wikipedia.org/wiki/Full_configuration_interaction>`_ level:
 # :math:`-1.1373060483` Ha. You can print the optimized geometry and verify that the final bond
-# length of hydrogen is identical to the one computed with full-CI which is :math:`1.3888`
+# length of hydrogen is identical to the one computed with full-CI which is :math:`1.389`
 # `Bohr <https://en.wikipedia.org/wiki/Bohr_radius>`_.
 #
 # We are now ready to perform a full optimization where the circuit parameters, the nuclear
