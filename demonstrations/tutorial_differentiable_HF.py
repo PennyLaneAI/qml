@@ -14,7 +14,7 @@ Differentiable Hartree-Fock
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted:  2021. Last updated: 26 January 2022*
+*Author: PennyLane dev team. Posted:  2022. Last updated: 21 April 2022*
 
 Variational quantum algorithms aim to calculate the energy of a molecule by constructing a
 parameterized quantum circuit and finding a set of parameters that minimize the expectation value of
@@ -111,18 +111,18 @@ geometry = np.array([[-0.672943567415407, 0.0, 0.0],
 # nuclear coordinates. To do that, we create a molecule object that stores all the molecular
 # parameters needed to perform a Hartree-Fock calculation.
 
-mol = qml.hf.Molecule(symbols, geometry)
+mol = qml.qchem.Molecule(symbols, geometry)
 
 ##############################################################################
 # The Hartree-Fock energy can now be computed with the :func:`~.pennylane.hf.hf_energy` function
 # which is a function transform
 
-qml.hf.hf_energy(mol)(geometry)
+qml.qchem.hf_energy(mol)(geometry)
 
 ##############################################################################
 # We now compute the gradient of the energy with respect to the nuclear coordinates
 
-grad(qml.hf.hf_energy(mol))(geometry)
+grad(qml.qchem.hf_energy(mol))(geometry)
 
 ##############################################################################
 # The obtained gradients are equal or very close to zero because the geometry we used here has been
@@ -170,17 +170,17 @@ S1.l
 #     S_{\mu \nu} = \int \chi_\mu^* (r) \chi_\nu (r) dr
 #
 # between the atomic orbitals :math:`\chi`, by passing the orbitals and the initial values of their
-# centres to the :func:`~.pennylane.hf.generate_overlap` function. The centres of the orbitals are
-# those of the hydrogen atoms by default and are therefore treated as differentiable parameters by
-# PennyLane.
+# centres to the :func:`~.pennylane.qchem.overlap_integral` function. The centres of the orbitals
+# are those of the hydrogen atoms by default and are therefore treated as differentiable parameters
+# by PennyLane.
 
-qml.hf.generate_overlap(S1, S2)([geometry[0], geometry[1]])
+qml.qchem.overlap_integral(S1, S2)([geometry[0], geometry[1]])
 
 ##############################################################################
 # You can verify that the overlap integral between two identical atomic orbitals is equal to one.
 # We can now compute the gradient of the overlap integral with respect to the orbital centres
 
-grad(qml.hf.generate_overlap(S1, S2))([geometry[0], geometry[1]])
+grad(qml.qchem.overlap_integral(S1, S2))([geometry[0], geometry[1]])
 
 ##############################################################################
 # Can you explain why some of the computed gradients are zero?
@@ -243,9 +243,9 @@ plt.show()
 #
 # By performing the Hartree-Fock calculations, we obtain a set of one- and two-body integrals
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
-# :func:`~.pennylane.hf.generate_hamiltonian` function.
+# :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
-hamiltonian = qml.hf.generate_hamiltonian(mol)(geometry)
+hamiltonian = qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, args=mol.coordinates)
 print(hamiltonian)
 
 ##############################################################################
@@ -263,7 +263,7 @@ def energy(mol):
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
-        return qml.expval(qml.hf.generate_hamiltonian(mol)(*args[1:]))
+        return qml.expval(qml.qchem.generate_hamiltonian(mol)(*args[1:]))
     return circuit
 
 ##############################################################################
@@ -279,7 +279,7 @@ circuit_param = [np.array([0.0], requires_grad=True)]
 for n in range(36):
 
     args = [circuit_param, geometry]
-    mol = qml.hf.Molecule(symbols, geometry)
+    mol = qml.qchem.Molecule(symbols, geometry)
 
     # gradient for circuit parameters
     g_param = grad(energy(mol), argnum = 0)(*args)
@@ -323,7 +323,7 @@ circuit_param = [np.array([0.0], requires_grad=True)]
 for n in range(36):
 
     args = [circuit_param, geometry, alpha, coeff]
-    mol = qml.hf.Molecule(symbols, geometry, alpha=alpha, coeff=coeff)
+    mol = qml.qchem.Molecule(symbols, geometry, alpha=alpha, coeff=coeff)
 
     # gradient for circuit parameters
     g_param = grad(energy(mol), argnum=0)(*args)
