@@ -66,7 +66,7 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
 .. customgalleryitem::
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
     :figure: demonstrations/vqe_parallel/vqe_diagram.png
-    :description: :doc:`demos/tutorial_vqe_parallel`
+    :description: :doc:`demos/vqe_parallel`
     :tags: chemistry
 
 .. customgalleryitem::
