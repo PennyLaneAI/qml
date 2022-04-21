@@ -100,8 +100,8 @@ The symmetry group of the Hamiltonian is defined as an Abelian group of Pauli wo
 with each term in the Hamiltonian (excluding :math:`−I`). The
 `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
 those elements of the group that can be combined, along with their inverses, to create any other
-member of the group. The generators of the  symmetry group of the Hamiltonian can be obtained with
-the :func:`~.pennylane.hf.generate_symmetries` function in PennyLane.
+member of the group. The generators of the symmetry group of the Hamiltonian can be obtained with
+the :func:`~.pennylane.qchem.symmetry_generators` function in PennyLane.
 
 Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
 cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
@@ -110,8 +110,7 @@ Tapering the molecular Hamiltonian
 ----------------------------------
 
 In PennyLane, a molecular Hamiltonian can be created by specifying the atomic symbols and
-coordinates and then creating a molecule object that stores all the molecular parameters needed to
-construct the Hamiltonian.
+coordinates.
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -120,12 +119,10 @@ symbols = ["He", "H"]
 geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
 
-mol = qml.hf.Molecule(symbols, geometry, charge = 1)
-
 ##############################################################################
 # Once we have the molecule object, the Hamiltonian is created as
 
-H = qml.hf.generate_hamiltonian(mol)(geometry)
+H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
 print(H)
 
 ##############################################################################
@@ -134,11 +131,13 @@ print(H)
 # We can now obtain the symmetry generators and the :math:`X^{j}` operators that are
 # used to construct the unitary :math:`U` operator that transforms the :math:`\textrm{HeH}^+`
 # Hamiltonian. In PennyLane, these are constructed by using the
-# :func:`~.pennylane.hf.generate_symmetries` function.
+# :func:`~.pennylane.qchem.symmetry_generators` and :func:`~.pennylane.paulix_ops` functions.
 
-generators, paulix_ops = qml.hf.generate_symmetries(H, len(H.wires))
-print(f'generator: {generators[0]}, paulix_op: {paulix_ops[0]}')
-print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
+generators = qml.symmetry_generators(H)
+paulixops = qml.paulix_ops(generators, qubits)
+
+print(f'generator: {generators[0]}, paulix_op: {paulixops[0]}')
+print(f'generator: {generators[1]}, paulix_op: {paulixops[1]}')
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
@@ -146,21 +145,21 @@ print(f'generator: {generators[1]}, paulix_op: {paulix_ops[1]}')
 # we can simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`.
 # This results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
 # tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
-# corresponding to the ground-state energy of the molecule can be obtained from the reference
-# Hartree-Fock state and the generated symmetries by using the :func:`~.pennylane.hf.optimal_sector`
-# function
+# corresponding to the ground-state energy of the molecule can be obtained by using the
+# :func:`~.pennylane.qchem.optimal_sector` function
 
-paulix_sector = qml.hf.optimal_sector(H, generators, mol.n_electrons)
+n_electrons = 2
+paulix_sector = qml.qchem.optimal_sector(H, generators, n_electrons)
 print(paulix_sector)
 
 ##############################################################################
 # The optimal eigenvalues are :math:`-1, -1` for qubits :math:`q_2, q_3`, respectively. We can now
-# build the tapered Hamiltonian with the :func:`~.pennylane.hf.transform_hamiltonian` function which
+# build the tapered Hamiltonian with the :func:`~.pennylane.taper` function which
 # constructs the operator :math:`U`, applies it to the Hamiltonian and finally tapers off the
 # qubits :math:`q_2, q_3` by replacing the Pauli-X operators acting on those qubits with the optimal
 # eigenvalues.
 
-H_tapered = qml.hf.transform_hamiltonian(H, generators, paulix_ops, paulix_sector)
+H_tapered = qml.taper(H, generators, paulixops, paulix_sector)
 print(H_tapered)
 
 ##############################################################################
@@ -181,10 +180,10 @@ print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 # applying the Hamiltonians to the Hartree-Fock state. For the tapered Hamiltonian, this requires
 # transforming the Hartree-Fock state with the same symmetries obtained for the original
 # Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
-# tapered Hamiltonian. It can be done with the :func:`~.pennylane.hf.transform_hf`.
+# tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf`.
 
-state_tapered = qml.hf.transform_hf(
-                generators, paulix_ops, paulix_sector, mol.n_electrons, len(H.wires))
+state_tapered = qml.qchem.taper_hf(
+                generators, paulixops, paulix_sector, n_electrons, len(H.wires))
 print(state_tapered)
 
 ##############################################################################
