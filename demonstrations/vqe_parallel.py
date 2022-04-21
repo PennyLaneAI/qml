@@ -34,12 +34,11 @@ import pennylane as qml
 from pennylane import qchem
 
 ##############################################################################
-# This tutorial requires the ``pennylane-qchem``, ``pennylane-forest`` and ``dask``
+# This tutorial requires the ``pennylane-forest`` and ``dask``
 # packages, which are installed separately using:
 #
 # .. code-block:: bash
 #
-#    pip install pennylane-qchem
 #    pip install pennylane-forest
 #    pip install "dask[delayed]"
 #
