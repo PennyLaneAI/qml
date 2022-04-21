@@ -260,9 +260,9 @@ plt.show()
 #
 # To construct our system Hamiltonian, we first read the molecular geometry from
 # the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
-# :func:`~.pennylane_qchem.qchem.read_structure` function (see more details in the
+# :func:`~.pennylane.qchem.read_structure` function (see more details in the
 # :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
-# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# built using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 geo_file = "h2.xyz"
 
