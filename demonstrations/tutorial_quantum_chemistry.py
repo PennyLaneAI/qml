@@ -259,7 +259,7 @@ print(H)
 
 symbols = ["H", "H"]
 geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.0]])
-H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, method='pyscf')
+H, qubits = qchem.molecular_hamiltonian(symbols, geometry, method='pyscf')
 
 ##############################################################################
 # The non-differentiable backend requires the ``OpenFermion-PySCF`` plugin to be installed by the
