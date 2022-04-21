@@ -358,7 +358,11 @@ print("Final circuit parameters = \n", params)
 
 
 ##############################################################################
-# Next, we run the optimizer employing quantum natural gradients.
+# Next, we run the optimizer employing quantum natural gradients. We also need to make the
+# Hamiltonian coefficients non-differentiable by setting ``requires_grad=False``.
+
+hamiltonian = qml.Hamiltonian(np.array(hamiltonian.coeffs, requires_grad=False), hamiltonian.ops)
+
 opt = qml.QNGOptimizer(step_size, lam=0.001, approx="block-diag")
 
 params = init_params
