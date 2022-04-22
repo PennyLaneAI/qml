@@ -101,7 +101,7 @@ with each term in the Hamiltonian (excluding :math:`−I`). The
 `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
 those elements of the group that can be combined, along with their inverses, to create any other
 member of the group. The generators of the symmetry group of the Hamiltonian can be obtained with
-the :func:`~.pennylane.qchem.symmetry_generators` function in PennyLane.
+the :func:`~.pennylane.symmetry_generators` function in PennyLane.
 
 Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
 cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
@@ -131,7 +131,7 @@ print(H)
 # We can now obtain the symmetry generators and the :math:`X^{j}` operators that are
 # used to construct the unitary :math:`U` operator that transforms the :math:`\textrm{HeH}^+`
 # Hamiltonian. In PennyLane, these are constructed by using the
-# :func:`~.pennylane.qchem.symmetry_generators` and :func:`~.pennylane.paulix_ops` functions.
+# :func:`~.pennylane.symmetry_generators` and :func:`~.pennylane.paulix_ops` functions.
 
 generators = qml.symmetry_generators(H)
 paulixops = qml.paulix_ops(generators, qubits)
