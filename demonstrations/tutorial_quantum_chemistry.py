@@ -256,9 +256,7 @@ print(H)
 # backend can be selected by setting `method='pyscf'` in
 # :func:`~.pennylane.qchem.molecular_hamiltonian`:
 
-symbols = ["H", "H"]
-geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.0]])
-H, qubits = qchem.molecular_hamiltonian(symbols, geometry, method='pyscf')
+H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
 
 ##############################################################################
 # This backend requires the ``OpenFermion-PySCF`` plugin to be installed by the user with
