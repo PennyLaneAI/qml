@@ -16,6 +16,28 @@ Differentiable Hartree-Fock
 
 *Author: PennyLane dev team. Posted:  2022. Last updated: 21 April 2022*
 
+In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
+[#arrazola2021]_. The Hartree-Fock module in PennyLane provides built-in methods for constructing
+atomic and molecular orbitals, building Fock matrices, and solving the self-consistent field
+equations to obtain optimized orbitals, which can be used to construct fully-differentiable
+molecular Hamiltonians. PennyLane allows users to natively compute derivatives of all these objects
+with respect to the underlying parameters using the methods of automatic differentiation. We
+introduce a workflow to jointly optimize circuit parameters, nuclear coordinates, and basis set
+parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
+atomic and molecular orbital, which could be sued and create images like this:
+
+.. figure:: /demonstrations/differentiable_HF/h2.gif
+    :width: 60%
+    :align: center
+
+    The bonding molecular orbital of hydrogen visualized during a full geometry, circuit, and
+    basis set optimization.
+
+Let's get started!
+
+Differentiable Hamiltonians
+---------------------------
+
 Variational quantum algorithms aim to calculate the energy of a molecule by constructing a
 parameterized quantum circuit and finding a set of parameters that minimize the expectation value of
 the electronic `molecular Hamiltonian <https://en.wikipedia.org/wiki/Molecular_Hamiltonian>`_. The
@@ -48,25 +70,6 @@ optimization of the parameters of the basis set used to construct the atomic orb
 principle increase the accuracy of the computed energy without increasing the number of qubits in a
 quantum simulation. The joint optimization of the circuit and Hamiltonian parameters can also be
 used when the chemical problem involves optimizing the parameters of external potentials.
-
-In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
-[#arrazola2021]_. The Hartree-Fock module in PennyLane provides built-in methods for constructing
-atomic and molecular orbitals, building Fock matrices, and solving the self-consistent field
-equations to obtain optimized orbitals, which can be used to construct fully-differentiable
-molecular Hamiltonians. PennyLane allows users to natively compute derivatives of all these objects
-with respect to the underlying parameters using the methods of automatic differentiation. We
-introduce a workflow to jointly optimize circuit parameters, nuclear coordinates, and basis set
-parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
-atomic and molecular orbital, which could be sued and create images like this:
-
-.. figure:: /demonstrations/differentiable_HF/h2.gif
-    :width: 60%
-    :align: center
-
-    The bonding molecular orbital of hydrogen visualized during a full geometry, circuit, and
-    basis set optimization.
-
-Let's get started!
 
 The Hartree-Fock method
 -----------------------
