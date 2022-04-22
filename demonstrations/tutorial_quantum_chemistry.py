@@ -249,11 +249,11 @@ print(H)
 #
 # OpenFermion-PySCF backend
 # -------------------------
-# The :func:`~.pennylane.qchem.molecular_hamiltonian` function can be also used to construct the
+# The :func:`~.pennylane.qchem.molecular_hamiltonian` function can also be used to construct the
 # molecular Hamiltonian with a non-differentiable backend that uses the
 # `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin interfaced with the
 # electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. This
-# backend can be selected by setting `method='pyscf'` in
+# backend can be selected by setting ``method='pyscf'`` in
 # :func:`~.pennylane.qchem.molecular_hamiltonian`:
 
 H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
