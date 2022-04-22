@@ -257,6 +257,7 @@ print(H)
 # :func:`~.pennylane.qchem.molecular_hamiltonian`:
 
 H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
+print(H)
 
 ##############################################################################
 # This backend requires the ``OpenFermion-PySCF`` plugin to be installed by the user with
