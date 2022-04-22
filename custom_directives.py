@@ -392,7 +392,7 @@ class Bio(Directive):
         author = ' '.join([str(item) for item in authorStringArray])
         photo = self.options.get("photo", None)
         bio = self.content[0].strip()
-        bio_block = '<div class="bio" > <div class="photo" ><img class="photo__img" src="{}" alt="{}" ></div><div class="bio-text"><h4 class="bio-text__h4">{}</h4><p class="bio-text__p">{}</p></div></div>'.format(
+        bio_block = '<div class="bio" > <div class="photo" ><img class="photo__img" src="{}" alt="{}" ></div><div class="bio-text"><h4 class="bio-text__author-name">{}</h4><p class="bio-text__author-description">{}</p></div></div>'.format(
             photo, author, author, bio)
         return [
             nodes.raw("", bio_block, format="html"),

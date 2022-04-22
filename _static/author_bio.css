@@ -10,12 +10,12 @@
     width: 100%;
     border-radius: 50%;
 }
-.bio-text__h4 {
+.bio-text__author-name {
     margin-top: 0;
     margin-bottom: 0;
     font-weight: bold;
 }
-.bio-text__p {
+.bio-text__description {
     margin-top: 1em;
 }
 @media (max-width: 500px) {
