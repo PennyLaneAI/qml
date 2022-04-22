@@ -31,7 +31,7 @@ where :math:`\theta` and :math:`\beta` represent the circuit and Hamiltonian par
 respectively.
 
 Computing the gradient of a molecular Hamiltonian is challenging because the dependency of the
-Hamiltonian to the molecular parameters is typically not very straightforward. This makes symbolic
+Hamiltonian on the molecular parameters is typically not very straightforward. This makes symbolic
 differentiation methods, which obtain derivatives of an input function by direct mathematical
 manipulation, of limited scope. Furthermore, numerical differentiation methods based on finite
 differences are not always reliable due to their intrinsic instability specially when the number of
@@ -47,9 +47,7 @@ variational workflow is automatically differentiable. Another important example 
 optimization of the parameters of the basis set used to construct the atomic orbitals which can in
 principle increase the accuracy of the computed energy without increasing the number of qubits in a
 quantum simulation. The joint optimization of the circuit and Hamiltonian parameters can also be
-used when the chemical problem involves optimizing the parameters of external potentials. The
-electronic Hamiltonian for a given molecule is constructed using one- and two-electron integrals
-over optimized molecular orbitals which are obtained by solving the Hartree-Fock equations.
+used when the chemical problem involves optimizing the parameters of external potentials.
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
 [#arrazola2021]_. The Hartree-Fock module in PennyLane provides built-in methods for constructing
@@ -62,7 +60,7 @@ parameters in a variational quantum eigensolver algorithm. You will also learn h
 atomic and molecular orbital, which could be sued and create images like this:
 
 .. figure:: /demonstrations/differentiable_HF/h2.gif
-    :width: 75%
+    :width: 60%
     :align: center
 
     The bonding molecular orbital of hydrogen visualized during a full geometry, circuit, and
@@ -353,8 +351,8 @@ for n in range(36):
 # approaching zero. The computed energy of :math:`-1.14040160` Ha is
 # lower than the full-CI energy, :math:`-1.1373060483` Ha (obtained with the STO-3G basis set for
 # the hydrogen molecule) because we have optimized the basis set parameters in our example. This
-# means that we can reach a lower energy for hydrogen without increasing the basis set size which in
-# principle leads to a larger number of qubits.
+# means that we can reach a lower energy for hydrogen without increasing the basis set size, which
+# would otherwise lead to a larger number of qubits.
 #
 # Conclusions
 # -----------
