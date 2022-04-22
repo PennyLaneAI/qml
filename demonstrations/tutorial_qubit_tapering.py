@@ -170,8 +170,11 @@ print(H_tapered)
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
 
-print("Eigenvalues of H:\n", np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
-print("\n Eigenvalues of H_tapered:\n", np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
+H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
+H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
+
+print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
+print("\n Eigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 
 ##############################################################################
 # Tapering the reference state
