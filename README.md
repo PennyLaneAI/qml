@@ -173,42 +173,6 @@ sphinx-build -D sphinx_gallery_conf.filename_pattern=tutorial_QGAN\.py -b html .
 
 where `tutorial_QGAN` should be replaced with the name of the demo to build.
 
-## Building and running locally on Mac (M1)
-
-- Install [miniforge](https://github.com/conda-forge/miniforge) (for Homebrew: `brew install miniforge`).
-- Install each package in `requirements.txt` by running `conda install package-name` or `conda install package1 package2 etc.`. Skip any that throw a warning or compatibility error. The essentials seem to be:
-
-```
-appdirs
-autograd
-numpy
-numba
-networkx
-semantic_version
-sympy
-pip
-wheel
-scikit-learn
-docutils
-markupsafe
-sphinx
-sphinx-sitemap
-seaborn
-keras
-toml
-dask
-scikit-learn
-pyparsing
-matplotlib
-Jinja2
-pyyaml
-jax
-```
-
-- In the `Makefile` change `SPHINXBUILD = sphinx-build` to `SPHINXBUILD = python3 -m sphinx.cmd.build`.
-- Run `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
-- If `make html-norun` does not succeed, there are probably errors for missing packages/modules. Install each missing package with `pip install package-name` until `make html-norun` works.
-
 ## Support
 
 - **Source Code:** https://github.com/PennyLaneAI/QML
