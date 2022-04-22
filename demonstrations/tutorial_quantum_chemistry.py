@@ -135,8 +135,7 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 #
 # where :math:`C_j` is a scalar coefficient and :math:`\sigma_i` represents an
 # element of the Pauli group :math:`\{ I, X, Y, Z \}`.
-
-##############################################################################
+#
 # In PennyLane we have the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function which encapsulates all the steps explained above. It simplifies the process of building
 # the electronic Hamiltonian to a single line of code. We just need to input the
