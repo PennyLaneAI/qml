@@ -120,7 +120,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
 # of the trihydrogen cation using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
 
@@ -178,7 +178,7 @@ def H(x):
 # |
 #
 # To implement this quantum circuit, we use the 
-# :func:`~.pennylane_qchem.qchem.hf_state` function to generate the
+# :func:`~.pennylane.qchem.hf_state` function to generate the
 # occupation-number vector representing the Hartree-Fock state 
 
 hf = qml.qchem.hf_state(electrons=2, orbitals=6)

@@ -102,8 +102,8 @@ The measurement problem
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
 has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
-QChem to verify the number of terms. In this tutorial, we use the :func:`~.pennylane_qchem.qchem.read_structure`
+structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
 function to read the geometry of the molecule from an external file.
 
 """
