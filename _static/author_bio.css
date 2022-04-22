@@ -1,0 +1,30 @@
+.bio-content-container {
+    display: flex;
+    margin-bottom: 2em;
+}
+.author-photo-container {
+    max-width: 60px;
+    margin-right: 1em;
+}
+.author-photo-container img {
+    width: 100%;
+    border-radius: 50%;
+}
+.bio-text-container h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+.bio-text-container p {
+    margin-top: 1em;
+}
+@media (max-width: 500px) {
+    .bio-content-container {
+        display: unset;
+        justify-content: unset;
+    }
+    .author-photo-container {
+        margin-right: unset;
+        margin-bottom: 1em;
+    }
+}

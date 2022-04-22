@@ -27,6 +27,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+from __future__ import unicode_literals
 from docutils.parsers.rst import Directive, directives
 from docutils.statemachine import StringList
 from docutils import nodes
@@ -99,14 +100,16 @@ class CustomGalleryItemDirective(Directive):
             if 'figure' in self.options:
                 env = self.state.document.settings.env
                 rel_figname, figname = env.relfn2path(self.options['figure'])
-                thumbnail = os.path.join('_static/thumbs/', os.path.basename(figname))
+                thumbnail = os.path.join(
+                    '_static/thumbs/', os.path.basename(figname))
 
                 try:
                     os.makedirs('_static/thumbs')
                 except FileExistsError:
                     pass
 
-                sphinx_gallery.gen_rst.scale_image(figname, thumbnail, 400, 280)
+                sphinx_gallery.gen_rst.scale_image(
+                    figname, thumbnail, 400, 280)
             else:
                 thumbnail = '_static/thumbs/code.png'
 
@@ -318,7 +321,8 @@ class CommunityCardDirective(Directive):
             code_footer=code_footer,
             blog_footer=blog_footer,
             color=color,
-            id=remove_accents(self.options["author"].split(" ")[-1].lower()) + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
+            id=remove_accents(self.options["author"].split(
+                " ")[-1].lower()) + self.options["date"].split("/")[-1] + self.options["title"].split(" ")[0].lower(),
         )
 
         thumbnail = StringList(card_rst.split('\n'))
@@ -355,5 +359,41 @@ class RelatedDirective(Directive):
         html = RELATED.format(urls=urls, linkText=linkText)
         str_list = StringList(html.split('\n'))
         related_variables = nodes.paragraph()
-        self.state.nested_parse(str_list, self.content_offset, related_variables)
+        self.state.nested_parse(
+            str_list, self.content_offset, related_variables)
         return [related_variables]
+
+
+class Bio(Directive):
+    """ Embed author bio in posts (ReST format).
+    Based on the pelican_youtube plugin:
+    https://github.com/kura/pelican_youtube
+    Usage:
+    .. bio:: Author name goes here
+    :photo: ../_static/avatar.webp
+
+    Write the author bio content here. It must be preceded by a blank line.
+    """
+
+    def boolean(argument):
+        """Conversion function for yes/no True/False."""
+        value = directives.choice(argument, ("yes", "True", "no", "False"))
+        return value in ("yes", "True")
+    required_arguments = 1
+    optional_arguments = 8
+    option_spec = {
+        "photo": str,
+    }
+    final_argument_whitespace = False
+    has_content = True
+
+    def run(self):
+        authorStringArray = self.arguments
+        author = ' '.join([str(item) for item in authorStringArray])
+        photo = self.options.get("photo", None)
+        bio = self.content[0].strip()
+        bio_block = '<div class="bio-content-container" > <div class="author-photo-container" ><img src="{}" alt="{}" ></div><div class="bio-text-container"><h4>{}</h4><p>{}</p></div></div>'.format(
+            photo, author, author, bio)
+        return [
+            nodes.raw("", bio_block, format="html"),
+        ]
