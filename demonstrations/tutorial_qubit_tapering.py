@@ -28,10 +28,10 @@ simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Ha
 A molecular Hamiltonian in the qubit basis can be expressed as a linear combination of Pauli words
 as
 
-.. math:: H = \sum_{i=1}^r h_i P_i
+.. math:: H = \sum_{i=1}^r h_i P_i,
 
 where :math:`h_i` is a real coefficient and :math:`P_i` is a tensor product of Pauli and
-Identity operators acting on M qubits
+identity operators acting on M qubits
 
 .. math:: P_i \in \pm \left \{ I, X, Y, Z \right \} ^ {\bigotimes M}.
 
@@ -41,7 +41,7 @@ that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eig
 
 .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
 
-such that each :math:`\mu_i` term in the new Hamiltonian acts trivially, e.g., with an Identity
+such that each :math:`\mu_i` term in the new Hamiltonian always acts trivially, e.g., with an identity
 or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the Hamiltonian.
 For instance, consider the following Hamiltonian
 
@@ -49,10 +49,10 @@ For instance, consider the following Hamiltonian
 
 where all terms in the Hamiltonian act on the second qubit with the :math:`X` operator. It is
 straightforward to show that each term in the Hamiltonian commutes with :math:`I_0 X_1` and the
-ground state eigenvector of :math:`H'` is also an eigenvector of :math:`I_0 X_1` with eigenvalues
+ground-state eigenvector of :math:`H'` is also an eigenvector of :math:`I_0 X_1` with eigenvalues
 :math:`\pm 1`. We can also rewrite the Hamiltonian as
 
-.. math:: H' = (Z_0 I_1 - I_0 I_1 + Y_0 I_1) I_0 X_1
+.. math:: H' = (Z_0 I_1 - I_0 I_1 + Y_0 I_1) I_0 X_1,
 
 which gives us
 
@@ -64,15 +64,15 @@ where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
 The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues :math:`[-2.41421, 0.41421]` and
-:math:`[2.41421, -0.41421]` for the :math:`+1` and :math:`-1` eigenvalues, respectively. The
+:math:`[2.41421, -0.41421]` depending on the value of the :math:`\pm 1` prefactor. The
 eigenvalues of the original Hamiltonian :math:`H` are
-:math:`[2.41421356, -2.41421356,  0.41421356, -0.41421356]`
+:math:`[2.41421356, -2.41421356,  0.41421356, -0.41421356]`, which are thus reproduced by the tapered Hamiltonian.
 
 More generally, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
 :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` where :math:`j` is the qubit label.
 This guarantees that each term of the transformed Hamiltonian commutes with each of the Pauli-X
-operators applied to the :math:`j` qubit:
+operators applied to the :math:`j`-th qubit:
 
 .. math:: [H', X^j] = 0,
 
@@ -84,7 +84,7 @@ set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose
 sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`. In these tapered
 Hamiltonians, the set of :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
-of the eigenvalues that corresponds to the ground-state. This has been explained in more details in
+of the eigenvalues that corresponds to the ground state. This is explained in more details in
 the following sections.
 
 The unitary operator :math:`U` can be constructed as a
@@ -141,7 +141,7 @@ for idx, generator in enumerate(generators):
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
-# :math:`q_2, q_3` either with the Identity or with a Pauli-X operator. For each of these qubits,
+# :math:`q_2, q_3` either with the identity or with a Pauli-X operator. For each of these qubits,
 # we can simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`.
 # This results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
 # tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
@@ -180,7 +180,7 @@ print("\n Eigenvalues of H_tapered:\n", np.linalg.eig(qml.utils.sparse_hamiltoni
 # applying the Hamiltonians to the Hartree-Fock state. For the tapered Hamiltonian, this requires
 # transforming the Hartree-Fock state with the same symmetries obtained for the original
 # Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
-# tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf`.
+# tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf` function.
 
 state_tapered = qml.qchem.taper_hf(
                 generators, paulixops, paulix_sector, n_electrons, len(H.wires))
@@ -214,8 +214,8 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 #
 # VQE simulation
 # --------------
-# Finally, we can use the tapered Hamiltonian and the tapered references state to perform a VQE
-# simulation and compute the ground state energy of the :math:`\textrm{HeH}^+` cation. We use the
+# Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
+# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We use the
 # tapered Hartree-Fock state to build a circuit that prepares an entangled state by applying Pauli
 # rotation gates [#ryabinkin2018]_ since we cannot use the typical particle-conserving gates
 # with the tapered state
@@ -247,8 +247,8 @@ for n in range(1, 20):
 #
 # Conclusions
 # -----------
-# Molecular Hamiltonians posses symmetries that can be leveraged to the number of qubits required
-# in quantum computing simulations. This tutorial introduces the PennyLane functionality that can
+# Molecular Hamiltonians posses symmetries that can be leveraged to reduce the number of qubits required
+# in quantum computing simulations. This tutorial introduces PennyLane functionality that can
 # be used for qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure includes
 # obtaining tapered Hamiltonians and tapered reference states that can be used in variational
 # quantum algorithms such as VQE.
