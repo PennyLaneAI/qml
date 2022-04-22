@@ -21,7 +21,8 @@ In this tutorial, you will learn how to use PennyLane's differentiable Hartree-F
 atomic and molecular orbitals, building Fock matrices, and solving the self-consistent field
 equations to obtain optimized orbitals, which can be used to construct fully-differentiable
 molecular Hamiltonians. PennyLane allows users to natively compute derivatives of all these objects
-with respect to the underlying parameters using the methods of automatic differentiation. We
+with respect to the underlying parameters using the methods of
+`automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation>`_. We
 introduce a workflow to jointly optimize circuit parameters, nuclear coordinates, and basis set
 parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
 atomic and molecular orbital, which could be sued and create images like this:
@@ -55,14 +56,17 @@ respectively.
 Computing the gradient of a molecular Hamiltonian is challenging because the dependency of the
 Hamiltonian on the molecular parameters is typically not very straightforward. This makes symbolic
 differentiation methods, which obtain derivatives of an input function by direct mathematical
-manipulation, of limited scope. Furthermore, numerical differentiation methods based on finite
-differences are not always reliable due to their intrinsic instability specially when the number of
+manipulation, of limited scope. Furthermore, numerical differentiation methods based on
+`finite differences <https://en.wikipedia.org/wiki/Finite_difference_method>`_ are not always
+reliable due to their intrinsic instability specially when the number of
 differentiable parameters is large. These limitations can be alleviated by using automatic
 differentiation methods which can be used to compute exact gradients of a function, implemented with
 computer code, using resources comparable to those required to evaluate the function itself.
 
 Efficient optimization of the molecular Hamiltonian parameters in a variational quantum algorithm
-is essential for tackling problems such as geometry optimization and vibrational frequency
+is essential for tackling problems such as
+`geometry optimization <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`_ and vibrational
+frequency
 calculations. These problems require computing the first- and second-order derivatives of the
 molecular energy with respect to nuclear coordinates which can be efficiently obtained if the
 variational workflow is automatically differentiable. Another important example is the simultaneous
