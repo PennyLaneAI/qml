@@ -136,8 +136,8 @@ print(H)
 generators = qml.symmetry_generators(H)
 paulixops = qml.paulix_ops(generators, qubits)
 
-print(f'generator: {generators[0]}, paulix_op: {paulixops[0]}')
-print(f'generator: {generators[1]}, paulix_op: {paulixops[1]}')
+for idx, generator in enumerate(generators):
+    print(f'generator {idx+1}: {generator}, paulix_op: {paulixops[idx]}')
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
@@ -170,8 +170,8 @@ print(H_tapered)
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
 
-print(np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
-print(np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
+print("Eigenvalues of H:\n", np.linalg.eig(qml.utils.sparse_hamiltonian(H).toarray())[0])
+print("\n Eigenvalues of H_tapered:\n", np.linalg.eig(qml.utils.sparse_hamiltonian(H_tapered).toarray())[0])
 
 ##############################################################################
 # Tapering the reference state
@@ -236,9 +236,10 @@ def circuit(params):
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
 params = np.zeros(3)
 
-for n in range(1, 21):
+for n in range(1, 20):
     params, energy = optimizer.step_and_cost(circuit, params)
-    print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
+    if n % 2:
+        print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
 
 ##############################################################################
 # The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, while the number of qubits
