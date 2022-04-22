@@ -121,7 +121,7 @@ r_range = np.arange(0.5, 5.0, 0.25)
 pes_point = 0
 
 ##############################################################################
-# We build the Hamiltonian using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# We build the Hamiltonian using the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function, and use standard Pennylane techniques to optimize the circuit.
 
 for r in r_range:
