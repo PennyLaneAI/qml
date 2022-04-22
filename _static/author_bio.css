@@ -1,29 +1,29 @@
-.bio-content-container {
+.bio {
     display: flex;
-    margin-bottom: 2em;
+    margin: 1em 0;
 }
-.author-photo-container {
+.photo {
     max-width: 60px;
     margin-right: 1em;
 }
-.author-photo-container img {
+.photo__img {
     width: 100%;
     border-radius: 50%;
 }
-.bio-text-container h4 {
+.bio-text__h4 {
     margin-top: 0;
     margin-bottom: 0;
     font-weight: bold;
 }
-.bio-text-container p {
+.bio-text__p {
     margin-top: 1em;
 }
 @media (max-width: 500px) {
-    .bio-content-container {
+    .bio {
         display: unset;
         justify-content: unset;
     }
-    .author-photo-container {
+    .photo {
         margin-right: unset;
         margin-bottom: 1em;
     }
