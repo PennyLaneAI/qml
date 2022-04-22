@@ -137,7 +137,7 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # element of the Pauli group :math:`\{ I, X, Y, Z \}`.
 
 ##############################################################################
-# It PennyLane we have the :func:`~.pennylane.qchem.molecular_hamiltonian`
+# In PennyLane we have the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function which encapsulates all the steps explained above. It simplifies the process of building
 # the electronic Hamiltonian to a single line of code. We just need to input the
 # symbols and the nuclear coordinates of the molecule, as shown below:
@@ -253,7 +253,7 @@ print(H)
 # The :func:`~.pennylane.qchem.molecular_hamiltonian` function can be also used to construct the
 # molecular Hamiltonian with a non-differentiable backend that uses the
 # `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin interfaced with the
-# electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. The non-differentiable
+# electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. This
 # backend can be selected by setting `method='pyscf'` in
 # :func:`~.pennylane.qchem.molecular_hamiltonian`:
 
@@ -262,12 +262,11 @@ geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.0]])
 H, qubits = qchem.molecular_hamiltonian(symbols, geometry, method='pyscf')
 
 ##############################################################################
-# The non-differentiable backend requires the ``OpenFermion-PySCF`` plugin to be installed by the
-# user with
+# This backend requires the ``OpenFermion-PySCF`` plugin to be installed by the user with
 #
 # .. code-block:: bash
 #
-# pip install openfermionpyscf
+#    pip install openfermionpyscf
 #
 # Additionally, if you have built your electronic Hamiltonian independently using
 # `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools, it can
