@@ -196,7 +196,7 @@ def cost(weights, bias, X, Y):
 #     The parity dataset can be downloaded
 #     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt"
 #     download=parity.txt target="_blank">here</a>` and
-#     should be placed in the subfolder ``variational_classifer/data``.
+#     should be placed in the subfolder ``variational_classifier/data``.
 
 data = np.loadtxt("variational_classifier/data/parity.txt")
 X = np.array(data[:, :-1], requires_grad=False)
