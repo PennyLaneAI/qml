@@ -14,7 +14,8 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - pip-v34c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
+            - pip-v34c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{
+              checksum "requirements_no_deps.txt" }}
             - pip-v34c-{{ .Branch }}-
             - pip-v34c-
 
@@ -31,7 +32,8 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: pip-v34c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements_no_deps.txt" }}
+          key: pip-v34c-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum
+            "requirements_no_deps.txt" }}
 
       - restore_cache:
           keys:
@@ -77,6 +79,8 @@ jobs:
 
       - store_artifacts:
           path: _build/test-results
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: large
 
   build_dev:
     docker:
@@ -165,7 +169,8 @@ jobs:
 
       - run:
           name: Invalidate CloudFront
-          command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /qml/*
+          command: aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID
+            --paths /qml/*
 
 workflows:
   version: 2
