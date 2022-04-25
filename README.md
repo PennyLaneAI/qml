@@ -174,13 +174,13 @@ To install dependencies on an M1 Mac and build the QML website, the following in
 - Install each package in `requirements-norun.txt` by running
 
   ```bash
-  conda install --file requirements.txt
+  conda install --file requirements-norun.txt
   ```
 
-  Alternatively, you can do this in a new virtual environment using 
+  Alternatively, you can do this in a new virtual environment using
 
   ```bash
-  conda install -n <env_name> --file requirements.txt
+  conda install -n <env_name> --file requirements-norun.txt
   ```
 
 Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
