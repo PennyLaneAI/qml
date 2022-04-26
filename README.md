@@ -80,6 +80,18 @@ quantum machine learning paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
 
+- You may add author bios within ReST comments by using the following syntax:
+
+  ```python
+  ##############################################################################
+  #.. bio:: Author name goes here
+  #    :photo: ../_static/avatar.webp
+  #
+  #    Write the author bio content here. It must be preceded by a blank line.
+  ```
+
+  Leave the selected photo as above to display the default avatar, or add and select an author photo from the `_static` folder.
+
 - When complete, create a gallery link to your demo. This can be done by adding the
   snippet below to `demos_getting-started.rst` for introductory demos.
 

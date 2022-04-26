@@ -34,12 +34,11 @@ import pennylane as qml
 from pennylane import qchem
 
 ##############################################################################
-# This tutorial requires the ``pennylane-qchem``, ``pennylane-forest`` and ``dask``
+# This tutorial requires the ``pennylane-forest`` and ``dask``
 # packages, which are installed separately using:
 #
 # .. code-block:: bash
 #
-#    pip install pennylane-qchem
 #    pip install pennylane-forest
 #    pip install "dask[delayed]"
 #
@@ -51,8 +50,8 @@ from pennylane import qchem
 # the bond length between the hydrogen atoms.
 #
 # Each inter-atomic distance results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function of the
-# :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
+# Hamiltonian, we use the :func:`~.pennylane.qchem.molecular_hamiltonian` function of the
+# :mod:`~.pennylane.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
 # :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
 # tutorials.
@@ -78,8 +77,8 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 ##############################################################################
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
 # We do this by first reading the molecular geometry from the external file using the
-# :func:`~.pennylane_qchem.qchem.read_structure` function and passing the atomic symbols
-# and coordinates to :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# :func:`~.pennylane.qchem.read_structure` function and passing the atomic symbols
+# and coordinates to :func:`~.pennylane.qchem.molecular_hamiltonian`.
 
 
 hamiltonians = []
