@@ -146,7 +146,7 @@ for idx, generator in enumerate(generators):
 # This results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
 # tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
 # corresponding to the ground-state energy of the molecule can be obtained by using the
-# :func:`~.pennylane.qchem.optimal_sector` function
+# :func:`~.pennylane.qchem.tapering.optimal_sector` function
 
 n_electrons = 2
 paulix_sector = qml.qchem.optimal_sector(H, generators, n_electrons)
@@ -183,7 +183,7 @@ print("\n Eigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 # applying the Hamiltonians to the Hartree-Fock state. For the tapered Hamiltonian, this requires
 # transforming the Hartree-Fock state with the same symmetries obtained for the original
 # Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
-# tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf` function.
+# tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.tapering.taper_hf` function.
 
 state_tapered = qml.qchem.taper_hf(
                 generators, paulixops, paulix_sector, n_electrons, len(H.wires))
