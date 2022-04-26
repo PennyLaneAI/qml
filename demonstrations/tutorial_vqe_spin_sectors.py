@@ -56,13 +56,13 @@ coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 ##############################################################################
 # The geometry of the molecule can also be imported from an external file using
-# the :func:`~.pennylane_qchem.qchem.read_structure` function.
+# the :func:`~.pennylane.qchem.read_structure` function.
 #
 # Now, we can build the electronic Hamiltonian. We use a minimal `basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ approximation to represent
 # the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_. Then,
 # the qubit Hamiltonian of the molecule is built using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
 
@@ -76,7 +76,7 @@ print("The Hamiltonian is ", H)
 # required for the quantum simulations. For the :math:`\mathrm{H}_2` molecule in a minimal
 # basis, we have four molecular **spin**-orbitals, which defines the number of qubits.
 #
-# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function allows us to define
+# The :func:`~.pennylane.qchem.molecular_hamiltonian` function allows us to define
 # additional keyword arguments to simulate more complicated molecules. For more details
 # take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
 #
@@ -94,10 +94,10 @@ print("The Hamiltonian is ", H)
 # creation operators, and
 # :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
 # is the `matrix element of the two-body spin operator
-# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane_qchem.qchem.obs.spin2.html>`_
+# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qchem.obs.spin2.html>`_
 # :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of spin orbitals.
 #
-# We use the :func:`~.pennylane_qchem.qchem.obs.spin2` function to build the
+# We use the :func:`~.pennylane.qchem.obs.spin2` function to build the
 # :math:`\hat{S}^2` observable.
 
 electrons = 2
@@ -116,7 +116,7 @@ print(S2)
 # For more details on how to use the excitation operations see the
 # tutorial :doc:`tutorial_givens_rotations`.
 #
-# First, we use the :func:`~.pennylane_qchem.qchem.hf_state`
+# First, we use the :func:`~.pennylane.qchem.hf_state`
 # function to generate the vector representing the Hartree-Fock state
 # :math:`\vert 1100 \rangle` of the :math:`\mathrm{H}_2` molecule.
 
@@ -124,7 +124,7 @@ hf = qml.qchem.hf_state(electrons, qubits)
 print(hf)
 
 ##############################################################################
-# Next, we use the :func:`~.pennylane_qchem.qchem.excitations`
+# Next, we use the :func:`~.pennylane.qchem.excitations`
 # function to generate all single and double excitations of the Hartree-Fock state.
 # This function allows us to define the keyword argument ``delta_sz``
 # to specify the total-spin projection of the excitations with respect to the reference
@@ -261,7 +261,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # -------------------------------------------------------
 # In the last part of the tutorial, we will use VQE to find the lowest-lying
 # excited state of the hydrogen molecule with total spin :math:`S=1`.
-# In this case, we use the :func:`~.pennylane_qchem.qchem.excitations` function to generate
+# In this case, we use the :func:`~.pennylane.qchem.excitations` function to generate
 # excitations whose total-spin projection differs by the quantity ``delta_sz=1``
 # with respect to the Hartree-Fock state.
 

@@ -260,9 +260,9 @@ plt.show()
 #
 # To construct our system Hamiltonian, we first read the molecular geometry from
 # the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
-# :func:`~.pennylane_qchem.qchem.read_structure` function (see more details in the
+# :func:`~.pennylane.qchem.read_structure` function (see more details in the
 # :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
-# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# built using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 geo_file = "h2.xyz"
 
@@ -358,7 +358,11 @@ print("Final circuit parameters = \n", params)
 
 
 ##############################################################################
-# Next, we run the optimizer employing quantum natural gradients.
+# Next, we run the optimizer employing quantum natural gradients. We also need to make the
+# Hamiltonian coefficients non-differentiable by setting ``requires_grad=False``.
+
+hamiltonian = qml.Hamiltonian(np.array(hamiltonian.coeffs, requires_grad=False), hamiltonian.ops)
+
 opt = qml.QNGOptimizer(step_size, lam=0.001, approx="block-diag")
 
 params = init_params
