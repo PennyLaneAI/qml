@@ -8,7 +8,6 @@ jobs:
     docker:
       - image: circleci/python:3.7.12
     resource_class: large
-    parallelism: 4
 
     steps:
       - checkout
@@ -84,7 +83,6 @@ jobs:
     docker:
       - image: circleci/python:3.7.12
     resource_class: large
-    parallelism: 4
 
     steps:
       - checkout
