@@ -165,22 +165,24 @@ where `tutorial_QGAN` should be replaced with the name of the demo to build.
 
 To install dependencies on an M1 Mac and build the QML website, the following instructions may be useful.
 
-- If Python is not currently installed, we recommend you install [miniforge](https://github.com/conda-forge/miniforge). This can be done with Homebrew:
+- If python3 is not currently installed, we recommend you install via [Homebrew](https://github.com/conda-forge/miniforge):
 
   ```bash
-  brew install miniforge
+  brew install python
   ```
 
 - Install each package in `requirements-norun.txt` by running
 
   ```bash
-  conda install --file requirements-norun.txt
+  pip3 install -r requirements-norun.txt
   ```
 
   Alternatively, you can do this in a new virtual environment using
 
   ```bash
-  conda install -n <env_name> --file requirements-norun.txt
+  python -m venv [venv_name]
+  cd [venv_name] && source bin/activate
+  pip install -r requirements-norun.txt
   ```
 
 Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
@@ -194,6 +196,18 @@ command not found: sphinx-build
 you may need to make the following change:
 
 - In the `Makefile` change `SPHINXBUILD = sphinx-build` to `SPHINXBUILD = python3 -m sphinx.cmd.build`.
+
+If you are running into the error message
+
+```
+ModuleNotFoundError: No module named 'the-module-name'
+```
+
+you may need to install the module manually:
+
+```
+pip3 install the-module-name
+```
 
 ## Support
 
