@@ -67,7 +67,7 @@ jobs:
               run_id: context.payload.workflow_run.id
             });
             let htmlArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == 'qml_html.zip'
+              return artifact.name == 'html.zip'
             })[0];
             let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
@@ -76,12 +76,12 @@ jobs:
               archive_format: 'zip'
             });
             let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/qml_html.zip`, Buffer.from(download.data));
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/html.zip`, Buffer.from(download.data));
 
       - name: Unpack HTML
         run: |
           mkdir website
-          unzip qml_html.zip -d website
+          unzip html.zip -d website
 
       - name: Upload HTML
         env:
