@@ -22,7 +22,7 @@ jobs:
             });
             console.log(artifacts);
             let prArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == 'pr_info'
+              return artifact.name == 'pr_info.zip'
             })[0];
             console.log(prArtifact);
             let download = await github.actions.downloadArtifact({
