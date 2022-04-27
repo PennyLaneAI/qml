@@ -48,10 +48,7 @@ jobs:
       - name: Echo
         run: |
           echo ${{ steps.read_pr_info.outputs.result }}
-
-      - name: Say PR ID
-        run: |
-          echo ${{ steps.read_pr_info.outputs.result['id'] }}
+          echo ${{ steps.read_pr_info.outputs.result }} | jq '.id'
 
 #      - name: Cache PR Info
 #        uses: actions/cache@v3
