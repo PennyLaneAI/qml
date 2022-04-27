@@ -16,7 +16,8 @@ pyscf==1.7.6
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
-git+https://github.com/PennyLaneAI/pennylane.git@v0.23.0-rc0
+pennylane-lightning
+git+https://github.com/PennyLaneAI/pennylane.git
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
 git+https://github.com/PennyLaneAI/pennylane-qiskit.git
@@ -44,6 +45,3 @@ Jinja2==2.11.3
 pyyaml==5.4.1
 jax==0.2.10
 jaxlib==0.1.64
-
---extra-index-url https://test.pypi.org/simple/ --pre
-PennyLane-Lightning
