@@ -17,7 +17,8 @@ Differentiable Hartree-Fock
 *Author: PennyLane dev team. Posted:  2022. Last updated: 21 April 2022*
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
-[#arrazola2021]_. The quantum chemistry module in PennyLane provides built-in methods for constructing
+[#arrazola2021]_. The quantum chemistry, :mod:`qml.qchem  <pennylane.qchem>`, module in PennyLane
+provides built-in methods for constructing
 atomic and molecular orbitals, building Fock matrices, and solving the self-consistent field
 equations to obtain optimized orbitals, which can be used to construct fully-differentiable
 molecular Hamiltonians. PennyLane allows users to natively compute derivatives of all these objects
@@ -119,8 +120,8 @@ geometry = np.array([[-0.672943567415407, 0.0, 0.0],
 mol = qml.qchem.Molecule(symbols, geometry)
 
 ##############################################################################
-# The Hartree-Fock energy can now be computed with the :func:`~.pennylane.hf.hf_energy` function
-# which is a function transform
+# The Hartree-Fock energy can now be computed with the
+# :func:`~.pennylane.qchem.hf_energy` function which is a function transform
 
 qml.qchem.hf_energy(mol)(geometry)
 
@@ -191,9 +192,9 @@ grad(qml.qchem.overlap_integral(S1, S2))([geometry[0], geometry[1]])
 # Can you explain why some of the computed gradients are zero?
 #
 # Let's now plot the atomic orbitals and their overlap. We can do it by using
-# the :py:meth:`~.pennylane.hf.Molecule.atomic_orbital` function, which evaluates the atomic
-# orbital at a given coordinate. For instance, the value of the S orbital on the first hydrogen atom
-# can be computed at the origin as
+# the :py:meth:`~.pennylane.qchem.Molecule.atomic_orbital` function, which evaluates the
+# atomic orbital at a given coordinate. For instance, the value of the S orbital on the first
+# hydrogen atom can be computed at the origin as
 
 V1 = mol.atomic_orbital(0)
 V1(0.0, 0.0, 0.0)
