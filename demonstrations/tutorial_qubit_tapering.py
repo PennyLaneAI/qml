@@ -41,9 +41,9 @@ that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eig
 
 .. math:: H' = U^{\dagger} H U = \sum_{i=1}^r c_i \mu_i,
 
-such that each :math:`\mu_i` term in the new Hamiltonian always acts trivially, e.g., with an identity
-or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the Hamiltonian.
-For instance, consider the following Hamiltonian
+such that each :math:`\mu_i` term in the new Hamiltonian always acts trivially, e.g., with an
+identity or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the
+Hamiltonian. For instance, consider the following Hamiltonian
 
 .. math:: H' = Z_0 X_1 - X_1 + Y_0 X_1,
 
@@ -66,7 +66,8 @@ where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the
 The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues :math:`[-2.41421, 0.41421]` and
 :math:`[2.41421, -0.41421]` depending on the value of the :math:`\pm 1` prefactor. The
 eigenvalues of the original Hamiltonian :math:`H` are
-:math:`[2.41421356, -2.41421356,  0.41421356, -0.41421356]`, which are thus reproduced by the tapered Hamiltonian.
+:math:`[2.41421356, -2.41421356,  0.41421356, -0.41421356]`, which are thus reproduced by the
+tapered Hamiltonian.
 
 More generally, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
@@ -166,7 +167,6 @@ print(H_tapered)
 
 ##############################################################################
 # The new Hamiltonian has only nine non-zero terms acting on only two qubits! We can verify that the
-
 # original and the tapered Hamiltonian both give the correct ground state energy of the
 # :math:`\textrm{HeH}^+` cation, which is :math:`-2.8626948638` Ha computed with the full
 # configuration interaction (FCI) method. In PennyLane, it's possible to build a sparse matrix
@@ -253,10 +253,9 @@ for n in range(1, 20):
 #
 # Conclusions
 # -----------
-# Molecular Hamiltonians possess symmetries that can be leveraged to reduce the number of qubits required
-
-# in quantum computing simulations. This tutorial introduces PennyLane functionality that can
-# be used for qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure includes
+# Molecular Hamiltonians possess symmetries that can be leveraged to reduce the number of qubits
+# required in quantum computing simulations. This tutorial introduces PennyLane functionality that
+# can be used for qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure includes
 # obtaining tapered Hamiltonians and tapered reference states that can be used in variational
 # quantum algorithms such as VQE.
 #
