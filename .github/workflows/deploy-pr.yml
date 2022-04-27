@@ -20,11 +20,11 @@ jobs:
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }}
             });
-            let htmlArtifact = artifacts.data.artifacts.filter((artifact) => {
+            let prArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == 'pr_info'
             })[0];
             let fs = require('fs')
-            fs.writeFileSync('${{ github.workspace }}/pr_info.zip', Buffer.from(download.data));
+            fs.writeFileSync('${{ github.workspace }}/pr_info.zip', Buffer.from(prArtifact.data));
 
       - name: Unpack PR Info
         run: |
@@ -36,7 +36,7 @@ jobs:
         with:
           script: |
             let fs = require('fs')
-            const prData = fs.readFileSync('pr_info');
+            const prData = fs.readFileSync('pr_info.json');
             return JSON.parse(prData);
 
       - name: Echo
