@@ -14,7 +14,7 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted:  2021. Last updated: 26 April 2022*
+*Author: PennyLane dev team. Posted: 26 April 2022. Last updated: 26 April 2022*
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
