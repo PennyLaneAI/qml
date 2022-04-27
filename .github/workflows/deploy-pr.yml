@@ -45,10 +45,16 @@ jobs:
             const prData = fs.readFileSync('pr_info.json');
             return JSON.parse(prData);
 
-      - name: Echo
+      - name: Parse PR Info
+        id: pr_info
         run: |
           echo ${{ steps.read_pr_info.outputs.result }}
-          echo ${{ steps.read_pr_info.outputs.result }} | jq '.id'
+          echo '${{ steps.read_pr_info.outputs.result }}' | jq '.id'
+          echo "::set-output name=pr_id::$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.id')"
+
+      - name: Read Parsed Info
+        run: |
+          echo ${{ steps.pr_info.outputs.pr_id}}
 
 #      - name: Cache PR Info
 #        uses: actions/cache@v3
