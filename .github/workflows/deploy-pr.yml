@@ -25,7 +25,7 @@ jobs:
               return artifact.name == 'pr_info.zip'
             })[0];
             console.log(prArtifact);
-            let download = await github.actions.downloadArtifact({
+            let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: prArtifact.id,
