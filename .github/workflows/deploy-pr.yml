@@ -1,0 +1,70 @@
+name: Deploy Website
+on:
+  workflow_run:
+    workflows:
+      - Build Website
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Download PR Info
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: ${{ github.event.workflow_run.id }}
+            });
+            let htmlArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == 'pr_info'
+            })[0];
+            let fs = require('fs')
+            fs.writeFileSync('${{ github.workspace }}/pr_info.zip', Buffer.from(download.data));
+
+      - name: Unpack PR Info
+        run: |
+          unzip pr_info.zip
+
+      - name: Read PR Info
+        id: read_pr_info
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let fs = require('fs')
+            const prData = fs.readFileSync('pr_info');
+            return JSON.parse(prData);
+
+      - name: Echo
+        run: |
+          echo ${{ steps.read_pr_info.outputs.result }}
+
+#      - name: Cache PR Info
+#        uses: actions/cache@v3
+#        with:
+#          path: pr_info
+#          key:
+#      - name: Download Artifact
+#        uses: actions/github-script@v6
+#        with:
+#          script: |
+#            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              run_id: ${{ github.event.workflow_run.id }}
+#            });
+#            let htmlArtifact = artifacts.data.artifacts.filter((artifact) => {
+#              return artifact.name == 'qml_html.zip'
+#            })[0];
+#            let download = await github.actions.downloadArtifact({
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              artifact_id: htmlArtifact.id,
+#              archive_format: 'zip'
+#            });
+#            let fs = require('fs')
+#            fs.writeFileSync('${{ github.workspace }}/html.zip', Buffer.from(download.data));
