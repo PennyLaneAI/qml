@@ -23,8 +23,14 @@ jobs:
             let prArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == 'pr_info'
             })[0];
+            let download = await github.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: prArtifact.id,
+              archive_format: 'zip'
+            });
             let fs = require('fs')
-            fs.writeFileSync('${{ github.workspace }}/pr_info.zip', Buffer.from(prArtifact.data));
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_info.zip`, Buffer.from(download.data));
 
       - name: Unpack PR Info
         run: |
