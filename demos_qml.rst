@@ -110,6 +110,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_tn_circuits`
     :tags: tensor network
 
+.. customgalleryitem::
+    :tooltip: Quantum advantage in learning from experiments
+    :figure: demonstrations/learning_from_experiments/learning_from_exp_thumbnail.png
+    :description: :doc:`demos/tutorial_learning_from_experiments`
+    :tags: advantage experiments
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -130,3 +136,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_quanvolution
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quantum_gans
+    demos/tutorial_learning_from_experiments
