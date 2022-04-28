@@ -1,0 +1,103 @@
+name: Build Website
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.7
+
+      - name: Checkout PR
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Venv Cache
+        uses: actions/cache@v3
+        with:
+          path: venv
+          key: pip-v34c-${{ github.ref_name }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
+          restore-keys: |
+            pip-v34c-${{ github.ref_name }}-
+            pip-v34c-
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get install pandoc -qq
+          python3 -m venv venv
+          venv/bin/python -m pip install pip setuptools cmake --upgrade
+          venv/bin/python -m pip install -r requirements.txt
+          venv/bin/python -m pip install --no-deps -r requirements_no_deps.txt
+
+      - name: Gallery Cache
+        uses: actions/cache@v3
+        with:
+          path: demos
+          key: gallery-v34a-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            gallery-v34a-${{ github.ref_name }}-
+            gallery-v34a-
+
+      - name: Build Tutorials
+        run: |
+          source venv/bin/activate
+          make download
+          make html
+
+      - name: Upload QML Demos
+        uses: actions/upload-artifact@v3
+        with:
+          name: qml_demos.zip
+          path: demos
+          retention-days: 30
+
+      - name: Upload QML Backreferences
+        uses: actions/upload-artifact@v3
+        with:
+          name: qml_backreferences.zip
+          path: backreferences
+          retention-days: 30
+
+      - name: Upload Html
+        uses: actions/upload-artifact@v3
+        with:
+          name: html.zip
+          path: _build/html
+          retention-days: 30
+
+      - name: Upload Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: results
+          path: _build/test-results
+          retention-days: 30
+
+      # These two steps are required as the subsequent workflow_run will not have
+      #  the current context available to it.
+      - name: Save PR Number
+        run: |
+          mkdir -p /tmp/pr
+          cat >/tmp/pr/pr_info.json <<EOL
+          {
+            "id": "${{ github.event.pull_request.number }}",
+            "title": "${{ github.event.pull_request.title }}",
+            "author": "${{ github.event.pull_request.user.login }}",
+            "ref": "${{ github.sha }}",
+            "ref_name": "${{ github.ref_name }}"
+          }
+          EOL
+      - name: Upload PR Number as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr_info.zip
+          path: /tmp/pr
+          retention-days: 30
