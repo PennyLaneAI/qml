@@ -1,9 +1,16 @@
 name: Build Website
 on:
   pull_request:
+  push:
+    branches:
+      - master
+      - dev
+
+env:
+  NUM_WORKERS: 10
 
 jobs:
-  build:
+  cancel:
     runs-on: ubuntu-20.04
     steps:
       - name: Cancel Previous Runs
@@ -11,6 +18,38 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
+  matrix:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.7
+
+      - name: Generate Build Matrix
+        id: matrix
+        run: |
+          echo "::set-output name=matrix::$(python3 .github/workflows/github_job_scheduler.py \
+            build-matrix \
+            ${{ github.workspace }} \
+            --num-workers=${{ env.NUM_WORKERS }})"
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+  build:
+    runs-on: ubuntu-20.04
+    needs:
+      - cancel
+      - matrix
+    strategy:
+      matrix:
+        offset: ${{ fromJson(needs.matrix.outputs.matrix) }}
+    steps:
       - name: Checkout PR
         uses: actions/checkout@v3
         with:
@@ -35,14 +74,32 @@ jobs:
           pip install -r requirements.txt
           pip install --no-deps -r requirements_no_deps.txt
 
-      - name: Gallery Cache
+      - name: Execute Matrix offset
+        run: |
+          python3 .github/workflows/github_job_scheduler.py \
+           execute-matrix \
+           ${{ github.workspace }} \
+           --num-workers=${{ env.NUM_WORKERS }} \
+           --offset=${{ matrix.offset }} \
+           --verbose
+
+      - name: Gallery Cache (on Pull Request)
+        if: github.event_name == 'pull_request'
         uses: actions/cache@v3
         with:
           path: demos
-          key: gallery-v34a-${{ github.ref_name }}-${{ github.sha }}
+          key: gallery-v34a-${{ matrix.offset }}-${{ env.NUM_WORKERS }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            gallery-v34a-${{ github.ref_name }}-
+            gallery-v34a-${{ matrix.offset }}-${{ env.NUM_WORKERS }}-${{ github.ref_name }}-
+            gallery-v34a-${{ matrix.offset }}-${{ env.NUM_WORKERS }}-
             gallery-v34a-
+
+      - name: Gallery Cache (on Push to default branches)
+        if: github.event_name == 'push'
+        uses: actions/cache@v3
+        with:
+          path: demos
+          key: gallery-v34a-${{ matrix.offset }}-${{ env.NUM_WORKERS }}-
 
       - name: Build Tutorials
         run: |
@@ -50,36 +107,41 @@ jobs:
           make html
 
       - name: Upload QML Demos
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: qml_demos.zip
+          name: qml_demos-${{ matrix.offset }}.zip
           path: demos
           retention-days: 30
 
       - name: Upload QML Backreferences
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: qml_backreferences.zip
+          name: qml_backreferences-${{ matrix.offset }}.zip
           path: backreferences
           retention-days: 30
 
       - name: Upload Html
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: html.zip
+          name: html-${{ matrix.offset }}.zip
           path: _build/html
           retention-days: 30
 
       - name: Upload Results
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: results
+          name: results-${{ matrix.offset }}.zip
           path: _build/test-results
           retention-days: 30
 
       # These two steps are required as the subsequent workflow_run will not have
       #  the current context available to it.
       - name: Save PR Number
+        if: github.event_name == 'pull_request' && matrix.offset == 1
         run: |
           mkdir -p /tmp/pr
           cat >/tmp/pr/pr_info.json <<EOL
@@ -92,6 +154,7 @@ jobs:
           }
           EOL
       - name: Upload PR Number as Artifact
+        if: github.event_name == 'pull_request' && matrix.offset == 1
         uses: actions/upload-artifact@v3
         with:
           name: pr_info.zip

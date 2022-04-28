@@ -61,27 +61,31 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            let fs = require('fs');
             let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
-            let htmlArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == 'html.zip'
-            })[0];
-            let download = await github.rest.actions.downloadArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: htmlArtifact.id,
-              archive_format: 'zip'
+            let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name.startsWith('html')
             });
-            let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/html.zip`, Buffer.from(download.data));
+            for (const [i, artifact] of htmlArtifacts.entries()) {
+              let download = await github.rest.actions.downloadArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id,
+                archive_format: 'zip'
+              });
+              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/html-${i}.zip`, Buffer.from(download.data));
+            }
 
       - name: Unpack HTML
         run: |
           mkdir website
-          unzip html.zip -d website
+          for f in html-*.zip; do
+            unzip -o -d website $f
+          done
 
       - name: Upload HTML
         env:
@@ -89,7 +93,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run:
-          aws s3 sync website s3://${{ secrets.AWS_S3_BUCKET_ID }}/pr_builds/${{ steps.pr_info.outputs.pr_id }}/
+          aws s3 sync website s3://${{ secrets.AWS_S3_BUCKET_ID }}/pr_builds/${{ steps.pr_info.outputs.pr_id }}/ --delete
 
       - name: Comment on PR
         if: steps.cache_pr.outputs.cache-hit != 'true'
