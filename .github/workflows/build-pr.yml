@@ -11,32 +11,29 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.7
-
       - name: Checkout PR
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
-      - name: Venv Cache
-        uses: actions/cache@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
         with:
-          path: venv
-          key: pip-v34c-${{ github.ref_name }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
-          restore-keys: |
-            pip-v34c-${{ github.ref_name }}-
-            pip-v34c-
+          python-version: 3.7
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements_no_deps.txt
 
-      - name: Install build dependencies
+      - name: Install OS build dependencies
         run: |
-          sudo apt-get install pandoc -qq
-          python3 -m venv venv
-          venv/bin/python -m pip install pip setuptools cmake --upgrade
-          venv/bin/python -m pip install -r requirements.txt
-          venv/bin/python -m pip install --no-deps -r requirements_no_deps.txt
+          sudo apt-get install -y pandoc -qq
+
+      - name: Install pip dependencies
+        run: |
+          pip install pip setuptools cmake --upgrade
+          pip install -r requirements.txt
+          pip install --no-deps -r requirements_no_deps.txt
 
       - name: Gallery Cache
         uses: actions/cache@v3
@@ -49,7 +46,6 @@ jobs:
 
       - name: Build Tutorials
         run: |
-          source venv/bin/activate
           make download
           make html
 
