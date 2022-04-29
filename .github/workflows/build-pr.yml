@@ -137,6 +137,7 @@ jobs:
         with:
           name: qml_backreferences-${{ matrix.offset }}.zip
           path: backreferences
+          if-no-files-found: ignore
           retention-days: 1
 
       - name: Upload Html
@@ -145,6 +146,7 @@ jobs:
         with:
           name: html-${{ matrix.offset }}.zip
           path: _build/html
+          if-no-files-found: error
           retention-days: 1
 
       - name: Upload Results

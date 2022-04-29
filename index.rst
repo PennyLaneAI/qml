@@ -21,7 +21,7 @@ Quantum machine learning
         <!-- Section: Features v.1 -->
             <p class="lead grey-text text-center mx-auto mb-5">We're entering an exciting time in quantum physics and quantum computation: <span class="teal-text">near-term quantum devices</span> are rapidly becoming a reality, accessible to everyone over the internet.
             <br><br>
-            This, in turn, is driving the development of quantum machine learning and variational quantum circuits.</p>
+            This, in turn, is driving the development of quantum machine learning and variational quantum circuits (which are cool).</p>
 
         <section class="my-5">
             <div class="row main-cards">
@@ -33,7 +33,7 @@ Quantum machine learning
                                 <h3 class="card-title">
                                 <img src="_static/brain_board.png" class="img-fluid" style="max-width: 86px;"></img>
                                 <br>
-                                <strong>What is QML</strong>
+                                <strong>What is QML?</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>

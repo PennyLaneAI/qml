@@ -61,7 +61,7 @@ def build_matrix(num_workers: int,
                  parser_namespace: argparse.Namespace) -> List[str]:
     glob_pattern = parser_namespace.glob_pattern
     file_count = len(list(build_directory.glob(glob_pattern)))
-    files_per_worker = math.ceil(file_count / (num_workers + 1))
+    files_per_worker = math.ceil(file_count / num_workers)
 
     return list(range(1, file_count, files_per_worker))
 
@@ -77,7 +77,7 @@ def execute_matrix(num_workers: int,
     assert offset and offset > 0, f"Invalid value for offset. Expected int greater than 0; Got: {offset}"
 
     files = sorted(build_directory.glob(glob_pattern))
-    files_per_worker = math.ceil(len(files) / (num_workers + 1))
+    files_per_worker = math.ceil(len(files) / num_workers)
 
     files_to_retain = files[offset - 1:offset + files_per_worker - 1]
     if dry_run:
