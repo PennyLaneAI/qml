@@ -172,7 +172,7 @@ print(H_tapered)
 ##############################################################################
 # The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
 # original and the tapered Hamiltonian both give the correct ground state energy of the
-# :math:`\textrm{HeH}^+` cation, which is :math:`-2.8626948638` Ha computed with the full
+# :math:`\textrm{HeH}^+` cation, which is :math:`-2.862595242378` Ha computed with the full
 # configuration interaction (FCI) method. In PennyLane, it's possible to build a sparse matrix
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
@@ -252,7 +252,7 @@ for n in range(1, 20):
         print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
 
 ##############################################################################
-# The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, while the number of qubits
+# The computed energy matches the FCI energy, :math:`-2.862595242378` Ha, while the number of qubits
 # and the number of Hamiltonian terms are significantly reduced with respect to their original
 # values.
 #
