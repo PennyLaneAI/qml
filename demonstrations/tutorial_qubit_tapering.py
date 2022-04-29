@@ -14,7 +14,7 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted: 26 April 2022. Last updated: 26 April 2022*
+*Author: PennyLane dev team. Posted: 29 April 2022. Last updated: 29 April 2022*
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
@@ -31,7 +31,7 @@ as
 .. math:: H = \sum_{i=1}^r h_i P_i,
 
 where :math:`h_i` is a real coefficient and :math:`P_i` is a tensor product of Pauli and
-identity operators acting on M qubits
+identity operators acting on :math:`M` qubits
 
 .. math:: P_i \in \pm \left \{ I, X, Y, Z \right \} ^ {\bigotimes M}.
 
@@ -43,7 +43,9 @@ that transforms :math:`H` to a new Hamiltonian :math:`H'` which has the same eig
 
 such that each :math:`\mu_i` term in the new Hamiltonian always acts trivially, e.g., with an
 identity or a Pauli operator, on a set of qubits. This allows tapering-off those qubits from the
-Hamiltonian. For instance, consider the following Hamiltonian
+Hamiltonian.
+
+For instance, consider the following Hamiltonian
 
 .. math:: H' = Z_0 X_1 - X_1 + Y_0 X_1,
 
@@ -63,11 +65,20 @@ where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the
 
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
 
-The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues :math:`[-2.41421, 0.41421]` and
-:math:`[2.41421, -0.41421]` depending on the value of the :math:`\pm 1` prefactor. The
-eigenvalues of the original Hamiltonian :math:`H` are
-:math:`[2.41421356, -2.41421356,  0.41421356, -0.41421356]`, which are thus reproduced by the
-tapered Hamiltonian.
+The tapered Hamiltonian :math:`H_{tapered}` has the eigenvalues
+
+.. math:: [-2.41421, 0.41421],
+
+and
+
+.. math::  [2.41421, -0.41421],
+
+depending on the value of the :math:`\pm 1` prefactor. The eigenvalues of the original Hamiltonian
+:math:`H` are
+
+.. math:: [2.41421356, -2.41421356,  0.41421356, -0.41421356],
+
+which are thus reproduced by the tapered Hamiltonian.
 
 More generally, we can construct the unitary :math:`U` such that each :math:`\mu_i` term acts with a
 Pauli-X operator on a set of qubits
@@ -85,9 +96,8 @@ set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose
 sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`. In these tapered
 Hamiltonians, the set of :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
-of the eigenvalues that corresponds to the ground state. This is explained in more detail in
-
-the following sections.
+of the eigenvalues that corresponds to the ground state. This is explained in more detail in the
+following sections.
 
 The unitary operator :math:`U` can be constructed as a
 `Clifford <https://en.wikipedia.org/wiki/Clifford_gates>`__ operator [#bravyi2017]_
@@ -95,15 +105,12 @@ The unitary operator :math:`U` can be constructed as a
 .. math:: U = \Pi_j \left [\frac{1}{\sqrt{2}} \left (X^{q(j)} + \tau_j \right) \right],
 
 where :math:`\tau` denotes the generators of the symmetry group of :math:`H` and
-:math:`X^{q}` operators which act on those qubits that will be ultimately tapered off from
-the Hamiltonian.
-
-The symmetry group of the Hamiltonian is defined as an Abelian group of Pauli words that commute
+:math:`X^{q}` operators act on those qubits that will be ultimately tapered off from
+the Hamiltonian. The symmetry group of the Hamiltonian is defined as an Abelian group of Pauli words that commute
 with each term in the Hamiltonian (excluding :math:`−I`). The
 `generators <https://en.wikipedia.org/wiki/Generating_set_of_a_group>`__ of the symmetry group are
 those elements of the group that can be combined, along with their inverses, to create any other
-member of the group. The generators of the symmetry group of the Hamiltonian can be obtained with
-the :func:`~.pennylane.symmetry_generators` function in PennyLane.
+member of the group.
 
 Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
 cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
@@ -120,9 +127,6 @@ from pennylane import numpy as np
 symbols = ["He", "H"]
 geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
-
-##############################################################################
-# Once we have the molecule object, the Hamiltonian is created as
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
 print(H)
@@ -166,7 +170,7 @@ H_tapered = qml.taper(H, generators, paulixops, paulix_sector)
 print(H_tapered)
 
 ##############################################################################
-# The new Hamiltonian has only nine non-zero terms acting on only two qubits! We can verify that the
+# The new Hamiltonian has only 9 non-zero terms acting on only 2 qubits! We can verify that the
 # original and the tapered Hamiltonian both give the correct ground state energy of the
 # :math:`\textrm{HeH}^+` cation, which is :math:`-2.8626948638` Ha computed with the full
 # configuration interaction (FCI) method. In PennyLane, it's possible to build a sparse matrix
@@ -249,12 +253,13 @@ for n in range(1, 20):
 
 ##############################################################################
 # The computed energy matches the FCI energy, :math:`-2.8626948638` Ha, while the number of qubits
-# and the Hamiltonian terms is significantly reduced with respect to their original values.
+# and the number of Hamiltonian terms are significantly reduced with respect to their original
+# values.
 #
 # Conclusions
 # -----------
 # Molecular Hamiltonians possess symmetries that can be leveraged to reduce the number of qubits
-# required in quantum computing simulations. This tutorial introduces PennyLane functionality that
+# required in quantum computing simulations. This tutorial introduces a PennyLane functionality that
 # can be used for qubit tapering based on :math:`\mathbb{Z}_2` symmetries. The procedure includes
 # obtaining tapered Hamiltonians and tapered reference states that can be used in variational
 # quantum algorithms such as VQE.
