@@ -33,7 +33,7 @@ Quantum machine learning
                                 <h3 class="card-title">
                                 <img src="_static/brain_board.png" class="img-fluid" style="max-width: 86px;"></img>
                                 <br>
-                                <strong>What is QML?</strong>
+                                <strong>What is QML</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>

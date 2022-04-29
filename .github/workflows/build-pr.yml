@@ -7,7 +7,7 @@ on:
       - dev
 
 env:
-  NUM_WORKERS: 10
+  NUM_WORKERS: 15
 
 jobs:
   cancel:
@@ -55,12 +55,20 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Set Matrix offset file
+        run: |
+          cat >matrix_info.txt <<EOL
+          workers: ${{ env.NUM_WORKERS }}
+          offset: ${{ matrix.offset }}
+          EOL
+
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: 3.7
           cache: pip
           cache-dependency-path: |
+            matrix_info.txt
             requirements.txt
             requirements_no_deps.txt
 
@@ -106,13 +114,22 @@ jobs:
           make download
           make html
 
+      - name: Clean HTML Files
+        run: |
+          python3 .github/workflows/github_job_scheduler.py \
+           clean-html \
+           ${{ github.workspace }} \
+           --num-workers=${{ env.NUM_WORKERS }} \
+           --offset=${{ matrix.offset }} \
+           --verbose
+
       - name: Upload QML Demos
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: qml_demos-${{ matrix.offset }}.zip
           path: demos
-          retention-days: 30
+          retention-days: 1
 
       - name: Upload QML Backreferences
         if: github.event_name == 'pull_request'
@@ -120,7 +137,7 @@ jobs:
         with:
           name: qml_backreferences-${{ matrix.offset }}.zip
           path: backreferences
-          retention-days: 30
+          retention-days: 1
 
       - name: Upload Html
         if: github.event_name == 'pull_request'
@@ -128,7 +145,7 @@ jobs:
         with:
           name: html-${{ matrix.offset }}.zip
           path: _build/html
-          retention-days: 30
+          retention-days: 1
 
       - name: Upload Results
         if: github.event_name == 'pull_request'
@@ -136,7 +153,7 @@ jobs:
         with:
           name: results-${{ matrix.offset }}.zip
           path: _build/test-results
-          retention-days: 30
+          retention-days: 1
 
       # These two steps are required as the subsequent workflow_run will not have
       #  the current context available to it.
