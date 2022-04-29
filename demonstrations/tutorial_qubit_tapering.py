@@ -199,7 +199,7 @@ print(state_tapered)
 ##############################################################################
 # Recall that the original Hartree-Fock state for the :math:`\textrm{HeH}^+` cation is
 # :math:`[1 1 0 0]`. We can now generate the qubit representation of these states and compute the
-# Hartree-Fock energies for each Hamiltonian
+# Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device('default.qubit', wires=H.wires)
 @qml.qnode(dev)
@@ -228,7 +228,7 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We use the
 # tapered Hartree-Fock state to build a circuit that prepares an entangled state by applying Pauli
 # rotation gates [#ryabinkin2018]_ since we cannot use the typical particle-conserving gates
-# with the tapered state
+# with the tapered state.
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
 @qml.qnode(dev)
@@ -241,7 +241,7 @@ def circuit(params):
 
 ##############################################################################
 # We define an optimizer and the initial values of the circuit parameters and optimize the circuit
-# parameters with respect to the ground state energy
+# parameters with respect to the ground state energy.
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
 params = np.zeros(3)
