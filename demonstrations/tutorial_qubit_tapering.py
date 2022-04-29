@@ -76,7 +76,7 @@ and
 depending on the value of the :math:`\pm 1` prefactor. The eigenvalues of the original Hamiltonian
 :math:`H` are
 
-.. math:: [2.41421356, -2.41421356,  0.41421356, -0.41421356],
+.. math:: [2.41421, -2.41421,  0.41421, -0.41421],
 
 which are thus reproduced by the tapered Hamiltonian.
 
