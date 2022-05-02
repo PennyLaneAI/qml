@@ -303,7 +303,7 @@ plt.show()
 # but we note that the technology to produce squeezed states is quite mature. 
 # In PennyLane, we can generate squeezed states thorugh the squeezing 
 # operator qml.Squeezing. This function depends on the squeezing parameter 
-# :math`r` which tells us how much the variance in :math:`x` is reduced, and phi 
+# :math:`r` which tells us how much the variance in :math:`x` is reduced, and phi 
 # which (rotates the state??) Need to improve this part.
 #
 # Measuring quadratures
@@ -447,5 +447,33 @@ print(measurement2(3,0,1,0))
 # The figure below gives more detail on how to implement all the gates we need for 
 # universal quantum computation using optical gates on GKP states.
 #
-
+# The state of the art
+# ~~~~~~~~~~~~~~~~~~~~
+#
+# We have now learned the basics of how to build a quantum computer using photonics. So what is preventing this approach
+# from scaling further? In terms of Di Vincenzo's criteria, it is the first one, the ability to *prepare a qubit*, that poses
+# a challenge. We need GKP states, but these cannot be prepared deterministically; we have to get a bit lucky. We can bypass this
+# by *multiplexing*, that is, using many Gaussian Boson Sampling circuits in parallel. But we would need a lot of these circuits,  
+# which do require the photon detectors to be held at low temperatures. Moreover, generating more precise GKP states 
+# requires more qumodes, which in turn exponentially decreases the probability of obtaining them.
+# 
+# What can we do instead? When we fail to produce a GKP state, the output of a Gaussian Boson Sampling circuit is
+# a squeezed state entangled with other qumodes. Should we just get rid of it? Not at all! Strongly entangled squeezed
+# states are still a precious resource, so we shouldn't just throw them away. Indeed, using other encodings beyond GKP allows us
+# to use these highly entangled squeezed states as a resource for quantum computing, although they're more prone to error. This approach,
+# currently used by Xanadu, reduces the amount of multiplexing needed to perform quantum computations.
+# 
+# Conclusion
+# ~~~~~~~~~~ 
+#
+# The approach of photonic devices to quantum computing is quite different from their qubit-based counterparts. Recent theoretical
+# and technological developments have given a boost to their status as a scalable approach, although the generation of qubits
+# remians troublesome. The variety of ways that we can encode qubits into photons state leave plenty of room for creativity, and open the
+# door for further research and engineering breakthroughs. If you would like to learn more about photonics, make sure to 
+# check out the Strawberry Fields demos, as well that the references listed below. 
+#
+#
+#
+#
+#
 
