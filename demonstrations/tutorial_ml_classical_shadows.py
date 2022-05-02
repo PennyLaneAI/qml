@@ -10,7 +10,7 @@ Machine learning for quantum many-body problems
     tutorial_classical_shadows Classical Shadows
 
 
-*Author: PennyLane dev team. Posted: XX. Last Updated: XX April 2022*
+*Author: PennyLane dev team. Posted: 2 May 2022. Last Updated: 2 May 2022*
 
 
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
