@@ -115,6 +115,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :figure: demonstrations/learning_from_experiments/learning_from_exp_thumbnail.png
     :description: :doc:`demos/tutorial_learning_from_experiments`
     :tags: advantage experiments
+    
+.. customgalleryitem::
+    :tooltip: Machine learning for quantum many-body problems
+    :figure: demonstrations/ml_classical_shadows/ml_classical_shadow.png
+    :description: :doc:`demos/tutorial_ml_classical_shadows`
+    :tags: kernels manybodyphysics classicalml 
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -137,3 +143,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_ensemble_multi_qpu
     demos/tutorial_quantum_gans
     demos/tutorial_learning_from_experiments
+    demos/tutorial_ml_classical_shadows
