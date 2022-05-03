@@ -173,6 +173,54 @@ sphinx-build -D sphinx_gallery_conf.filename_pattern=tutorial_QGAN\.py -b html .
 
 where `tutorial_QGAN` should be replaced with the name of the demo to build.
 
+## Building and running locally on Mac (M1)
+
+To install dependencies on an M1 Mac and build the QML website, the following instructions may be useful.
+
+- If python3 is not currently installed, we recommend you install via [Homebrew](https://github.com/conda-forge/miniforge):
+
+  ```bash
+  brew install python
+  ```
+
+- Install each package in `requirements-norun.txt` by running
+
+  ```bash
+  pip3 install -r requirements-norun.txt
+  ```
+
+  Alternatively, you can do this in a new virtual environment using
+
+  ```bash
+  python -m venv [venv_name]
+  cd [venv_name] && source bin/activate
+  pip install -r requirements-norun.txt
+  ```
+
+Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
+
+If you are running into the error message
+
+```
+command not found: sphinx-build
+```
+
+you may need to make the following change:
+
+- In the `Makefile` change `SPHINXBUILD = sphinx-build` to `SPHINXBUILD = python3 -m sphinx.cmd.build`.
+
+If you are running into the error message
+
+```
+ModuleNotFoundError: No module named 'the-module-name'
+```
+
+you may need to install the module manually:
+
+```
+pip3 install the-module-name
+```
+
 ## Support
 
 - **Source Code:** https://github.com/PennyLaneAI/QML
