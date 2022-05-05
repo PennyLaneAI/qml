@@ -8,6 +8,8 @@ Machine learning for quantum many-body problems
 
 .. related::
     tutorial_classical_shadows Classical Shadows
+    tutorial_kernel_based_training Kernel-based training with scikit-learn
+    tutorial_kernels_module Training and evaluating quantum kernels
 
 
 *Author: PennyLane dev team. Posted: 2 May 2022. Last Updated: 2 May 2022*
@@ -16,7 +18,7 @@ Machine learning for quantum many-body problems
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
 system is challenging because the amount of memory required generally scales exponentially
 with the number of qubits. The quantum community has recently addressed this challenge by using
-the classical shadow formalism, which allows us to build more concise classical descriptions
+the :doc:`classical shadow <tutorial_classical_shadows>` < formalism, which allows us to build more concise classical descriptions
 of quantum states using randomized single-qubit measurements. It was argued in Ref. [#preskill]_
 that combining classical shadows with classical machine learning enables using learning models
 that efficiently predict properties of the quantum systems, such as the expectation value of a
@@ -34,13 +36,14 @@ In this demo, we describe one of the ideas presented in Ref. [#preskill]_ for us
 shadow formalism and machine learning to predict the ground-state properties of the
 2D antiferromagnetic Heisenberg model. We begin by learning how to build the Heisenberg model,
 calculate its ground-state properties, and compute its classical shadow. Finally, we demonstrate
-how to use kernel-based learning models to predict ground-state properties from the learned
+how to use :doc:`kernel-based learning models <tutorial_kernels_module>` to predict ground-state properties from the learned
 classical shadows. So let's get started!
 
 Building the 2D Heisenberg Model
 ---------------------------------
 
-We define a two-dimensional antiferromagnetic Heisenberg model as a square
+We define a two-dimensional antiferromagnetic `Heisenberg model
+<https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__ as a square
 lattice, where a spin-1/2 particle occupies each site. The antiferromagnetic
 nature and the overall physics of this model depend on the couplings
 :math:`J_{ij}` present between the spins, as reflected in the Hamiltonian
@@ -50,7 +53,7 @@ associated with the model:
 
 Here, we consider the family of Hamiltonians where all the couplings :math:`J_{ij}`
 are sampled uniformly from [0, 2]. We build a coupling matrix :math:`J` by providing
-the number of rows :math:`N_r` and columns :math:`N_c` present in the square lattice. 
+the number of rows :math:`N_r` and columns :math:`N_c` present in the square lattice.
 The dimensions of this matrix are :math:`N_s \times N_s`, where :math:`N_s = N_r \times N_c`
 is the total number of spin particles present in the model.
 
@@ -67,7 +70,7 @@ def build_coupling_mats(num_mats, num_rows, num_cols):
     coup_terms = anp.random.RandomState(24).uniform(0, 2,
                         size=(num_mats, 2 * num_rows * num_cols - num_rows - num_cols))
     # populate edges to build the grid lattice
-    edges = [(si, sj) for (si, sj) in it.combinations(range(num_spins), 2) 
+    edges = [(si, sj) for (si, sj) in it.combinations(range(num_spins), 2)
                         if sj % num_cols and sj - si == 1 or sj - si == num_cols]
     for itr in range(num_mats):
         for ((i, j), term) in zip(edges, coup_terms[itr]):
@@ -110,7 +113,7 @@ plt.show()
 
 ######################################################################
 # We then use the same coupling matrix ``J_mat`` to obtain the Hamiltonian
-# :math:`H` for the model we have instantiated above. 
+# :math:`H` for the model we have instantiated above.
 #
 
 import pennylane as qml
@@ -146,7 +149,7 @@ def corr_function(i, j):
             ops.append(qml.Identity(i))
     return ops
 
-######################################################################   
+######################################################################
 #
 # The expectation value of each such operator :math:`\hat{C}_{ij}` with respect to
 # the ground state :math:`|\psi_{0}\rangle` of the model can be used to build
@@ -234,7 +237,7 @@ plt.show()
 
 ######################################################################
 # Now that we have built the Heisenberg model, the next step is to construct
-# a classical shadow representation for its ground state. To construct an
+# a :doc:`classical shadow <tutorial_classical_shadows>` representation for its ground state. To construct an
 # approximate classical representation of an :math:`n`-qubit quantum state :math:`\rho`,
 # we perform randomized single-qubit measurements on :math:`T`-copies of
 # :math:`\rho`. Each measurement is chosen randomly among the Pauli bases
@@ -243,13 +246,13 @@ plt.show()
 #
 # .. math:: |s_{i}^{(t)}\rangle \in \{|0\rangle, |1\rangle, |+\rangle, |-\rangle, |i+\rangle, |i-\rangle\}.
 #
-# .. math::  S_T(\rho) = \big\{|s_{i}^{(t)}\rangle: i\in\{1,\ldots, n\},\ t\in\{1,\ldots, T\} \big\}. 
+# .. math::  S_T(\rho) = \big\{|s_{i}^{(t)}\rangle: i\in\{1,\ldots, n\},\ t\in\{1,\ldots, T\} \big\}.
 #
 # Each of the :math:`|s_i^{(t)}\rangle` provides us with a snapshot of the
 # state :math:`\rho`, and the :math:`nT` measurements yield the complete
 # set :math:`S_{T}`, which requires just :math:`3nT` bits to be stored
 # in classical memory. This is discussed in further detail in our previous
-# demo about classical shadows [#tutorial]_.
+# demo about :doc:`classical shadows <tutorial_classical_shadows>`.
 #
 
 ######################################################################
@@ -329,7 +332,7 @@ def shadow_state_reconst(shadow):
     num_snapshots, num_qubits = shadow[0].shape
     meas_lists, obs_lists = shadow
 
-    # Reconstruct the quantum state from its classical shadow 
+    # Reconstruct the quantum state from its classical shadow
     shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=complex)
     for i in range(num_snapshots):
         shadow_rho += snapshot_state(meas_lists[i], obs_lists[i])
@@ -428,7 +431,7 @@ expval_estmt = build_estim_corrmat(coups, corrs, len(qbobs), shadow)
 #########################################################################
 # This time, let us visualize the deviation observed between the exact correlation
 # matrix (:math:`C`) and the estimated correlation matrix (:math:`C^{\prime}`)
-# to assess the effectiveness of classical shadow formalism. 
+# to assess the effectiveness of classical shadow formalism.
 #
 
 fig, ax = plt.subplots(1, 1, figsize=(4.2, 4))
@@ -457,8 +460,8 @@ plt.show()
 # the classical representation of quantum systems based on some system
 # parameter, estimating a property from such learned classical representations,
 # or a combination of both. In our case, we consider the problem of using
-# kernel-based models to learn the ground-state representation of the
-# Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l`, 
+# :doc:`kernel-based models <tutorial_kernel_based_training>` to learn the ground-state representation of the
+# Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l`,
 # where :math:`x_l = [J_{i,j} \text{ for } i < j]`. The goal is to predict the
 # correlation functions :math:`C_{ij}`:
 #
@@ -494,7 +497,7 @@ from sklearn.kernel_ridge import KernelRidge
 # First, to build the dataset, we use the function ``build_dataset`` that
 # takes as input the size of the dataset (``num_points``), the topology of
 # the lattice (``Nr`` and ``Nc``), and the number of randomized
-# Pauli measurements (:math:`T`) for the construction of classical shadows. 
+# Pauli measurements (:math:`T`) for the construction of classical shadows.
 # The ``X_data`` is the set of coupling vectors that are defined as a
 # stripped version of the coupling matrix :math:`J`, where only non-duplicate
 # and non-zero :math:`J_{ij}` are considered. The ``y_exact`` and
@@ -623,13 +626,13 @@ def fit_predict_data(cij, kernel, opt="linear"):
     ]
 
     # Regularization parameter
-    hyperparams = [0.0025, 0.0125, 0.025, 0.05, 0.125, 0.25, 0.5, 1.0, 5.0, 10.0]  
+    hyperparams = [0.0025, 0.0125, 0.025, 0.05, 0.125, 0.25, 0.5, 1.0, 5.0, 10.0]
     best_pred, best_cv_score, best_test_score = None, np.inf, np.inf
     for model in models:
         for hyperparam in hyperparams:
             cv_score = -np.mean(
                 cross_val_score(
-                    model(hyperparam), X_train, y_train, cv=5, 
+                    model(hyperparam), X_train, y_train, cv=5,
                     scoring="neg_root_mean_squared_error",
                 )
             )
@@ -745,7 +748,7 @@ plt.show()
 # .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
 #     :width: 47 %
 #
-# | 
+# |
 
 ######################################################################
 # This demo illustrates how classical machine learning models can benefit from
@@ -753,7 +756,7 @@ plt.show()
 # the behavior of quantum systems. As argued in Ref. [#preskill]_, this raises
 # the possibility that models trained on experimental or quantum data data can
 # effectively address quantum many-body problems that cannot be solved using
-# classical methods alone. 
+# classical methods alone.
 #
 
 
@@ -769,11 +772,6 @@ plt.show()
 #    H. Y. Huang, R. Kueng, G. Torlai, V. V. Albert, J. Preskill, "Provably
 #    efficient machine learning for quantum many-body problems",
 #    `arXiv:2106.12627 [quant-ph] <https://arxiv.org/abs/2106.12627>`__ (2021)
-# 
-# .. [#tutorial]
-#
-#    R. Wiersema & B. Doolittle, `"Classical Shadows"
-#    <https://pennylane.ai/qml/demos/tutorial_classical_shadows.html>`__ (2021)
 #
 # .. [#neurtangkernel]
 #
