@@ -227,7 +227,7 @@ plt.show()
 # a pulse of laser light. How can we obtain any Gaussian state of our liking? 
 # This is achieved through *Gaussian operations*, which transform a Gaussian state to 
 # another Gaussian state. These operations are relatively easy to implement in a lab 
-# using some of the optical elements introduced in the box below. 
+# using some of the optical elements introduced in the box below (missing). 
 #
 # What if, for example, I would like to change the expectation value of the :math:`x` 
 # quadrature without changing anything else about the state? This can be done 
@@ -259,8 +259,8 @@ plt.show()
 ##############################################################################    
 #
 # Exactly as we expected. But how do we make a displacement in the lab? One method 
-# is shown below, which uses a beam splitter and a source of high-intensity coherent light
-# 
+# is shown below (missing), which uses a beam splitter and a source of high-intensity coherent light
+#
 # We can check that this setup implements a displacement operator using PennyLane. This time,
 # we need two qumodes, since we rely on combining the qumode we want to displace with a 
 # coherent state in a beam-splitter
@@ -292,19 +292,30 @@ plt.show()
 
 ############################################################################## 
 #
-# Similarly, we can implement rotations in phase space using qml.Rotation, which 
-# simply amounts to changing the phase of light using a piece of glass. We have 
-# focused on changing the expectation values of :math:`x` and :math:`p`, but what if we 
-# also want to change the spread of the quadratures? That corresponds to 
+# Similarly, we can implement rotations in phase space using ``qml.Rotation``, which 
+# simply amounts to changing the phase of light using a thermo-optic phase shifter. 
+# 
+# We have # focused on changing the expectation values of :math:`x` and :math:`p`, 
+# but what if we also want to change the spread of the quadratures? That corresponds to 
 # creating *squeezed states*, which is more difficult than simply using 
-# beamsplitters and lenses. It requires shining light through non-linear 
+# beamsplitters and phase shifters. It requires shining light through non-linear 
 # materials, where the state of light will undergo unitary evolution in a 
-# way that changes :math:`\Delta x` and :math:`\Delta p`. We won't go into detail here, 
-# but we note that the technology to produce squeezed states is quite mature. 
+# way that changes :math:`\Delta x` and :math:`\Delta p` 
+# 
+# .. figure:: ../demonstrations/photonics/Squeezer.png
+#    :align: center
+#    :width: 70%
+#
+#    ..
+#
+#    A non-linear material can work as a squeezer
+#
+# We won't go into detail here, 
+# but we note that the technology to produce these is quite mature. 
 # In PennyLane, we can generate squeezed states thorugh the squeezing 
 # operator qml.Squeezing. This function depends on the squeezing parameter 
 # :math:`r` which tells us how much the variance in :math:`x` is reduced, and phi 
-# which (rotates the state??) Need to improve this part.
+# which rotates the state in phase space. (Need to show a code block and a Wigner function)
 #
 # Measuring quadratures
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -349,9 +360,18 @@ measure_n_coherent(1,np.pi/3)
 #
 # Since the expectation value is not an integer number, the measurement results cannot have been all the same integer!
 #
+# .. figure:: ../demonstrations/photonics/Homodyne.png
+#    :align: center
+#    :width: 70%
+#
+#    ..
+#
+#    Measuring quadratures using photon counters
+#
 # Now we know how to measure the number of photons, which is good and all. But what about the promised 
 # quadratures? We can do this through a combination of quadrature measurement and a beamsplitter, 
 # as shown in the diagram below. 
+
 
 dev_exact2=qml.device('default.gaussian', wires = 2)
 @qml.qnode(dev_exact2)
@@ -399,11 +419,27 @@ print(measurement2(3,0,1,0))
 # Let's explore how this works. The main idea is to tweak a particular photonic circuit known 
 # as *Gaussian Boson Sampling*, which is shown below:
 #
+# .. figure:: ../demonstrations/photonics/GBS.png
+#    :align: center
+#    :width: 70%
+#
+#    ..
+#
+#    The Gaussian Boson Sampling circuit
+#
 # Gaussian boson sampling is interesting on its own. The output probabilities that we just obtained 
 # allow us to calculate the Hafnian of a matrix, which is classically a hard problem 
 # (see this tutorial for an in-depth discussion). This was the great accomplishment of Jiuzhang, 
 # the first photonic quantum computer to achieve quantum advantage. But the most interesting 
 # application comes from removing the detector in the last wire, as shown below.
+#
+# .. figure:: ../demonstrations/photonics/GKP_Circuit.png
+#    :align: center
+#    :width: 70%
+#
+#    ..
+#
+#    Circuit to produce non-Gaussian states probabilistically
 #
 # Generalizations of circuits like the above can, after photon detection of the other qumodes, 
 # produce a good approximation of any non-Gaussian state that we want. For example, 
@@ -412,6 +448,14 @@ print(measurement2(3,0,1,0))
 # *Write GKP state*
 #
 # but only when the detectors measure 5 and 7 photons.  This state's Wigner function is shown below:
+#
+# .. figure:: ../demonstrations/photonics/gkp_wigner.png
+#    :align: center
+#    :width: 70%
+#
+#    ..
+#
+#    TWigner function of non-Gaussian state
 #
 #
 # It does not have the shape of a Gaussian and moreover, it can be negative, a tell-tale feature of  
