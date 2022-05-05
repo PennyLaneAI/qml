@@ -18,7 +18,7 @@ Machine learning for quantum many-body problems
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
 system is challenging because the amount of memory required generally scales exponentially
 with the number of qubits. The quantum community has recently addressed this challenge by using
-the :doc:`classical shadow <tutorial_classical_shadows>` < formalism, which allows us to build more concise classical descriptions
+the :doc:`classical shadow <tutorial_classical_shadows>` formalism, which allows us to build more concise classical descriptions
 of quantum states using randomized single-qubit measurements. It was argued in Ref. [#preskill]_
 that combining classical shadows with classical machine learning enables using learning models
 that efficiently predict properties of the quantum systems, such as the expectation value of a
