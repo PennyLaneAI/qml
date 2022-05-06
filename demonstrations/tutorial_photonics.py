@@ -207,7 +207,7 @@ plt.show()
 #    :width: 70% 
 # 
 # The density has the shape of a 2-dimensional Gaussian surface, hence the name. For Gaussian 
-# states only, the density is exactly equal to the Wigner function W(x,p), 
+# states only, the density is exactly equal to the Wigner function :math:`W(x,p)`, 
 # defined using the wave function :math:`\psi(x)`:
 #
 # .. math:: W(x,p) = \frac{1}{\pi\hbar}\int_{-\infty}^{\infty}\psi^{*}(x+y)\psi(x-y)e^{2ipy/\hbar}dy.
@@ -227,7 +227,27 @@ plt.show()
 # a pulse of laser light. How can we obtain any Gaussian state of our liking? 
 # This is achieved through *Gaussian operations*, which transform a Gaussian state to 
 # another Gaussian state. These operations are relatively easy to implement in a lab 
-# using some of the optical elements introduced in the box below (missing). 
+# using some of the optical elements introduced in the table below.
+# 
+# .. rst-class:: docstable
+#
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | .. centered::       | .. centered::                                                | .. centered::                                                       |
+#     |  Element            |  Diagram                                                     |   Description                                                       |
+#     +=====================+==============================================================+=====================================================================+
+#     | Waveguide           | .. figure:: ../demonstrations/photonics/Waveguide.png        | A long strip of material that contains and guides                   |
+#     |                     |    :align: center                                            | electromagentic waves. In photonics, optical fibres are used.       |
+#     |                     |    :width: 70%                                               |                                                                     | 
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Thermo-optic        | .. figure:: ../demonstrations/photonics/Thermo-optic.png     | A waveguide with a resistive material inside. When it heats up,     |
+#     | phase shifter       |    :align: center                                            | the properties of the waveguide change, which allows us to          |
+#     |                     |    :width: 70%                                               | shift the phase of light in a controlled way.                       |
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Beamsplitter        | .. figure:: ../demonstrations/photonics/Beam_splitter.png    | An element with two entry and two exit ports. It transmits a        |
+#     |                     |    :align: center                                            | fraction :math:`t` of the photons coming in, and reflects the rest. |
+#     |                     |    :width: 100%                                              | It can entangle states of light if it takes in two qumodes          |
+#     |                     |                                                              |                                                                     |
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
 #
 # What if, for example, I would like to change the expectation value of the :math:`x` 
 # quadrature without changing anything else about the state? This can be done 
@@ -259,7 +279,11 @@ plt.show()
 ##############################################################################    
 #
 # Exactly as we expected. But how do we make a displacement in the lab? One method 
-# is shown below (missing), which uses a beam splitter and a source of high-intensity coherent light
+# is shown below, which uses a beam splitter and a source of high-intensity coherent light
+#
+# .. figure:: ../demonstrations/photonics/Displacement.png
+#    :align: center
+#    :width: 70% 
 #
 # We can check that this setup implements a displacement operator using PennyLane. This time,
 # we need two qumodes, since we rely on combining the qumode we want to displace with a 
@@ -455,8 +479,7 @@ print(measurement2(3,0,1,0))
 #
 #    ..
 #
-#    TWigner function of non-Gaussian state
-#
+#    Wigner function of non-Gaussian state
 #
 # It does not have the shape of a Gaussian and moreover, it can be negative, a tell-tale feature of  
 # non-Gaussian states (we can only interpret this function as a probability for Gaussian states!). 
@@ -490,6 +513,26 @@ print(measurement2(3,0,1,0))
 # bit-flip gate :math:`X`. Similarly, a rotation operator by :math:`\pi/2` implements the Hadamard gate. 
 # The figure below gives more detail on how to implement all the gates we need for 
 # universal quantum computation using optical gates on GKP states.
+#
+# .. rst-class:: docstable
+#
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | .. centered::       | .. centered::                                                | .. centered::                                                       |
+#     |  Qumode Gate        |  Optical Diagram                                             |  Qubit gate on GKP states                                           |
+#     +=====================+==============================================================+=====================================================================+
+#     | Displacement        | .. figure:: ../demonstrations/photonics/Displacement.png     | Pauli X gate if displacement is in :math:`x` direction.             |
+#     |                     |    :align: center                                            | Pauli Z gate if displacement is in :math:`p` direction              |
+#     |                     |    :width: 70%                                               |                                                                     | 
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Rotation            | .. figure:: ../demonstrations/photonics/Rotation.png         | Hadamard gate for :math:`\phi=\pi/2`.                               |
+#     |                     |    :align: center                                            |                                                                     |
+#     |                     |    :width: 70%                                               |                                                                     |
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Continuous variable | .. figure:: ../demonstrations/photonics/CV_ctrlz.png         | CNOT                                                                |
+#     | CNOT                |    :align: center                                            |                                                                     |
+#     |                     |    :width: 100%                                              |                                                                     |
+#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#
 #
 # The state of the art
 # ~~~~~~~~~~~~~~~~~~~~
