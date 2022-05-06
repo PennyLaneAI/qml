@@ -7,12 +7,13 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
-*Author: Joost Bus. Posted: Day Month 2022. Last updated: 4 May 2022.*
+*Author: Radoica Draskic & Joost Bus. Posted: Day Month 2022. Last updated: 4 May 2022.*
 
 **Measurement-based quantum computation** [#OneWay] is one of the prososals of a physical implementation of a quantum Turing machine.
 
 """
 
+print("hi")
 
 ##############################################################################
 #
