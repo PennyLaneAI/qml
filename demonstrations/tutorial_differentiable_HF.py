@@ -26,7 +26,7 @@ with respect to the underlying parameters using the methods of
 `automatic differentiation <https://pennylane.ai/qml/glossary/automatic_differentiation.html>`_. We
 introduce a workflow to jointly optimize circuit parameters, nuclear coordinates and basis set
 parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
-atomic and molecular orbital which can be used to create animations like this:
+atomic and molecular orbitals which can be used to create an animation like this:
 
 .. figure:: /demonstrations/differentiable_HF/h2.gif
     :width: 60%
