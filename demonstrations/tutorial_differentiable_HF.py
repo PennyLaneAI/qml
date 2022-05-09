@@ -23,7 +23,7 @@ atomic and molecular orbitals, building Fock matrices and solving the self-consi
 equations to obtain optimized orbitals which can be used to construct fully-differentiable
 molecular Hamiltonians. PennyLane allows users to natively compute derivatives of all these objects
 with respect to the underlying parameters using the methods of
-`automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation>`_. We
+`automatic differentiation <https://pennylane.ai/qml/glossary/automatic_differentiation.html>`_. We
 introduce a workflow to jointly optimize circuit parameters, nuclear coordinates and basis set
 parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
 atomic and molecular orbital which can be used to create animations like this:
