@@ -12,7 +12,7 @@ Machine learning for quantum many-body problems
     tutorial_kernels_module Training and evaluating quantum kernels
 
 
-*Author: PennyLane dev team. Posted: 2 May 2022. Last Updated: 2 May 2022*
+*Author: Utkarsh Azad. Posted: 2 May 2022. Last Updated: 9 May 2022*
 
 
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
@@ -751,6 +751,8 @@ plt.show()
 # |
 
 ######################################################################
+# Conclusion
+# ----------
 # This demo illustrates how classical machine learning models can benefit from
 # the classical shadow formalism for learning characteristics and predicting
 # the behavior of quantum systems. As argued in Ref. [#preskill]_, this raises
@@ -759,7 +761,15 @@ plt.show()
 # classical methods alone.
 #
 
-
+##############################################################################
+#.. bio:: Utkarsh Azad
+#    :photo: ../_static/authors/utkarsh_azad.png
+#
+#    Utkarsh is a quantum software researcher at Xanadu, working on making quantum
+#    computing more useful and accessible, with a focus on exploring its applications
+#    in natural sciences. Whenever he's not tinkering with code, he will be walking
+#    miles searching either for fractals in nature or a cup of filter coffee.
+#
 
 ######################################################################
 # .. _ml_classical_shadow_references:
