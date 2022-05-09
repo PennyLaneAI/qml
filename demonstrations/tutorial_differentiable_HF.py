@@ -223,7 +223,7 @@ plt.show()
 # negligible? Can you verify your guess by computing the overlap at that distance?
 #
 # Similarly, we can plot the molecular orbitals of the hydrogen molecule obtained from the
-# Hartree-Fock calculations. We plot the cross section of the bonding orbital on the :math:`x-y`
+# Hartree-Fock calculations. We plot the cross-section of the bonding orbital on the :math:`x-y`
 # plane.
 
 n = 30 # number of grid points along each axis
