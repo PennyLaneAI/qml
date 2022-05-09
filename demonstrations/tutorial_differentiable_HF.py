@@ -59,7 +59,7 @@ Hamiltonian on the molecular parameters is typically not very straightforward. T
 differentiation methods, which obtain derivatives of an input function by direct mathematical
 manipulation, of limited scope. Furthermore, numerical differentiation methods based on
 `finite differences <https://en.wikipedia.org/wiki/Finite_difference_method>`_ are not always
-reliable due to their intrinsic instability specially when the number of
+reliable due to their intrinsic instability, especially when the number of
 differentiable parameters is large. These limitations can be alleviated by using automatic
 differentiation methods which can be used to compute exact gradients of a function, implemented with
 computer code, using resources comparable to those required to evaluate the function itself.
