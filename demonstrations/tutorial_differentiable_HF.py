@@ -14,7 +14,7 @@ Differentiable Hartree-Fock
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted: 29 April 2022. Last updated: 29 April 2022*
+*Author: PennyLane dev team. Posted: 9 May 2022. Last updated: 9 May 2022*
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
 [#arrazola2021]_. The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`,
