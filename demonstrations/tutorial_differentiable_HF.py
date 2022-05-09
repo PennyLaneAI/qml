@@ -388,3 +388,9 @@ for n in range(36):
 #
 #     Attila Szabo, Neil S. Ostlund, "Modern Quantum Chemistry: Introduction to Advanced Electronic
 #     Structure Theory". Dover Publications, 1996.
+
+ ##############################################################################
+  #.. bio:: Soran Jahangiri
+  #    :photo: ../_static/Soran.png
+  #
+  #    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
