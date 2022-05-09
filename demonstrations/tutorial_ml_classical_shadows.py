@@ -748,27 +748,17 @@ plt.show()
 # .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
 #     :width: 47 %
 #
-# |
 
 ######################################################################
 # Conclusion
 # ----------
+#
 # This demo illustrates how classical machine learning models can benefit from
 # the classical shadow formalism for learning characteristics and predicting
 # the behavior of quantum systems. As argued in Ref. [#preskill]_, this raises
 # the possibility that models trained on experimental or quantum data data can
 # effectively address quantum many-body problems that cannot be solved using
 # classical methods alone.
-#
-
-##############################################################################
-#.. bio:: Utkarsh Azad
-#    :photo: ../_static/authors/utkarsh_azad.png
-#
-#    Utkarsh is a quantum software researcher at Xanadu, working on making quantum
-#    computing more useful and accessible, with a focus on exploring its applications
-#    in natural sciences. Whenever he's not tinkering with code, he will be walking
-#    miles searching either for fractals in nature or a cup of filter coffee.
 #
 
 ######################################################################
@@ -788,4 +778,11 @@ plt.show()
 #    A. Jacot, F. Gabriel, and C. Hongler. "Neural tangent kernel:
 #    Convergence and generalization in neural networks". `NeurIPS, 8571–8580
 #    <https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf>`__ (2018)
+#
+
+##############################################################################
+#.. bio:: Utkarsh Azad
+#    :photo: ../_static/authors/utkarsh_azad.png
+#
+#    Utkarsh is a quantum software researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences. Whenever he's not tinkering with code, he will be walking miles searching either for fractals in nature or a cup of filter coffee.
 #
