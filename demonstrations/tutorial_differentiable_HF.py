@@ -388,6 +388,8 @@ for n in range(36):
 #
 #     Attila Szabo, Neil S. Ostlund, "Modern Quantum Chemistry: Introduction to Advanced Electronic
 #     Structure Theory". Dover Publications, 1996.
+# About the author
+# ----------
 
 ##############################################################################
 #.. bio:: Soran Jahangiri
