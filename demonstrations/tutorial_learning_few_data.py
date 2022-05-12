@@ -5,8 +5,7 @@ Generalization in QML from few training data
 ==========================================
 
 .. meta::
-   :property="og:description": Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane.
-       We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.
+   :property="og:description": some description.
    :property="og:image": https://pennylane.ai/qml/_images/surface.png
 
 .. related::
@@ -15,32 +14,17 @@ Generalization in QML from few training data
 
 *Author: XYZ (XYZ@gmail.com). Last updated: 26 Oct 2020.*
 
-In classical optimization, it is suggested that saddle
-points, not local minima, provide a fundamental impediment
-to rapid high-dimensional non-convex optimization
-(Dauphin et al., 2014).
+In some intro....
 
-The problem of such barren plateaus manifests in a different
-form in variational quantum circuits, which are at the heart
-of techniques such as quantum neural networks or approximate
-optimization e.g., QAOA (Quantum Adiabatic Optimization Algorithm)
+ e.g., QAOA (Quantum Adiabatic Optimization Algorithm)
 which can be found in this `PennyLane QAOA tutorial
 <https://pennylane.readthedocs.io/en/latest/tutorials/pennylane_run_qaoa_maxcut.html#qaoa-maxcut>`_.
 
-While starting from a parameterized
-random quantum circuit seems like a good unbiased choice if
-we do not know the problem structure, McClean et al. (2018)
-show that
+somethingsomething
 
-*"for a wide class of reasonable parameterized quantum
-circuits, the probability that the gradient along any
-reasonable direction is non-zero to some fixed precision
-is exponentially small as a function of the number
-of qubits."*
+*"fsoomethinggggg."*
 
-Thus, randomly selected quantum circuits might not be the best
-option to choose while implementing variational quantum
-algorithms.
+Thus, somethingsomething.
 
 
 .. figure:: ../demonstrations/learning_few_data/qcnn.png
@@ -60,7 +44,7 @@ In this tutorial, we do something.
 
     *"Some note."*
 
-Exploring the barren plateau problem with PennyLane
+SOME TITLE
 ---------------------------------------------------
 
 First, we import PennyLane, NumPy, and Matplotlib
@@ -77,107 +61,89 @@ import matplotlib.pyplot as plt
 # Set a seed for reproducibility
 np.random.seed(42)
 
-num_qubits = 4
-dev = qml.device("default.qubit", wires=num_qubits)
-gate_set = [qml.RX, qml.RY, qml.RZ]
-
-
 def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
-    """A random variational quantum circuit.
-
-    Args:
-        params (array[float]): array of parameters
-        random_gate_sequence (dict): a dictionary of random gates
-        num_qubits (int): the number of qubits in the circuit
-
-    Returns:
-        float: the expectation value of the target observable
-    """
-    for i in range(num_qubits):
-        qml.RY(np.pi / 4, wires=i)
-
-    for i in range(num_qubits):
-        random_gate_sequence[i](params[i], wires=i)
-
-    for i in range(num_qubits - 1):
-        qml.CZ(wires=[i, i + 1])
-
-    H = np.zeros((2 ** num_qubits, 2 ** num_qubits))
-    H[0, 0] = 1
-    wirelist = [i for i in range(num_qubits)]
-    return qml.expval(qml.Hermitian(H, wirelist))
+    pass
 
 
 ##############################################################################
-# Now we can compute the gradient and calculate the variance.
-# While we only sample 200 random circuits to allow the code
-# to run in a reasonable amount of time, this can be
-# increased for more accurate results. We only consider the
-# gradient of the output with respect to the last parameter in the
-# circuit. Hence we choose to save ``gradient[-1]`` only.
+# Now here we have some text
+# ``gradient[-1]`` only.
 
 grad_vals = []
 num_samples = 200
 
-for i in range(num_samples):
-    gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
-    qcircuit = qml.QNode(rand_circuit, dev)
-    grad = qml.grad(qcircuit, argnum=0)
-    params = np.random.uniform(0, 2 * np.pi, size=num_qubits)
-    gradient = grad(params, random_gate_sequence=gate_sequence, num_qubits=num_qubits)
-    grad_vals.append(gradient[-1])
 
-print("Variance of the gradients for {} random circuits: {}".format(
-    num_samples, np.var(grad_vals)
-    )
-)
-print("Mean of the gradients for {} random circuits: {}".format(
-    num_samples, np.mean(grad_vals)
-    )
-)
+
+
+##############################################################################
+# QCNN
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Define QCNN.
+
+def convolutional_layer(weights, wires, skip_first_layer=True): 
+    n_wires= len(wires)
+    assert n_wires>=3, "this circuit is too small!"
+
+    for p in [0,1]:
+        for indx,w in enumerate(wires):
+            if indx%2==p and indx<n_wires-1:
+                if indx%2==0 and skip_first_layer:
+                    qml.U3(*weights[:3], wires = [w])
+                    qml.U3(*weights[3:6], wires = [wires[indx+1]])
+                qml.IsingXX(weights[6], wires = [w, wires[indx+1]])
+                qml.IsingYY(weights[7], wires = [w, wires[indx+1]])
+                qml.IsingZZ(weights[8], wires = [w, wires[indx+1]])
+                qml.U3(*weights[9:12], wires = [w])
+                qml.U3(*weights[12:], wires = [wires[indx+1]])
+
+def pooling_layer(weights, wires):
+    n_wires= len(wires)
+    assert len(wires)>=2, "this circuit is too small!"
+    
+    for indx,w in enumerate(wires):
+        if indx%2==1 and indx<n_wires:
+            m_outcome = qml.measure(w)
+            qml.cond(m_outcome, qml.U3)(*weights, wires = wires[indx-1])
+
+def conv_and_pooling(kernel_weights, n_wires):
+    convolutional_layer(kernel_weights[:15], n_wires)
+    pooling_layer(kernel_weights[15:], n_wires)
+    
+def dense_layer(weights, wires):
+    qml.ArbitraryUnitary(weights, wires)
+
+##############################################################################
+# Define circuit blah blah
+# ``gradient[-1]`` only.
+
+n_qubits = 16
+dev = qml.device("default.qubit", wires=n_qubits)
+
+@qml.qnode(dev)
+def circuit(weights, last_layer_weights):
+    assert weights.shape[0]==18, "The size of your weights vector is incorrect!"
+    
+    layers = weights.shape[1]
+    wires = list(range(n_qubits))
+    
+    for j in range(layers):
+        conv_and_pooling(weights[:,j], wires)
+        wires = wires[::2]
+    
+    assert last_layer_weights.size == 4**(len(wires)) - 1, f"The size of the last layer weights vector is incorrect! \n Expected {4**(len(wires)) - 1 }, Given {last_layer_weights.size}"
+    dense_layer(last_layer_weights, wires)
+    return qml.probs(wires=wires)
+
+qml.draw_mpl(circuit)(np.random.rand(18,3), np.random.rand(4**2 -1))
 
 ##############################################################################
 # Performance vs. training dataset size
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# We can repeat the above analysis with increasing number of qubits.
+# We can repeat the above analysis with increasing size of the training dataset.
 
 
 qubits = [2, 3, 4, 5, 6]
-variances = []
 
-
-for num_qubits in qubits:
-    grad_vals = []
-    for i in range(num_samples):
-        dev = qml.device("default.qubit", wires=num_qubits)
-        qcircuit = qml.QNode(rand_circuit, dev)
-        grad = qml.grad(qcircuit, argnum=0)
-
-        gate_set = [qml.RX, qml.RY, qml.RZ]
-        random_gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
-
-        params = np.random.uniform(0, np.pi, size=num_qubits)
-        gradient = grad(
-            params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits
-        )
-        grad_vals.append(gradient[-1])
-    variances.append(np.var(grad_vals))
-
-variances = np.array(variances)
-qubits = np.array(qubits)
-
-
-# Fit the semilog plot to a straight line
-p = np.polyfit(qubits, np.log(variances), 1)
-
-
-# Plot the straight line fit to the semilog
-plt.semilogy(qubits, variances, "o")
-plt.semilogy(qubits, np.exp(p[0] * qubits + p[1]), "o-.", label="Slope {:3.2f}".format(p[0]))
-plt.xlabel(r"N Qubits")
-plt.ylabel(r"$\langle \partial \theta_{1, 1} E\rangle$ variance")
-plt.legend()
-plt.show()
 
 
 ##############################################################################
