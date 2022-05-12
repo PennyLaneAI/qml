@@ -18,6 +18,18 @@ This demo is reproducing the results in `Generalization in quantum machine learn
 by Matthias Caro and co-authors. The authors find bounds on the necessary training data to guarantuee generalization for quantum machine learning (QML) tasks.
 """
 
+##############################################################################
+# Generalization Bounds for Quantum Machine Learning Models
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# | X
+# | X
+# | Some high level theoretical results here ...
+# | X
+# | X
+# | some more detailed results (e.g. specifically for QCNNs etc. ...
+# | X
+# | X
+
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
