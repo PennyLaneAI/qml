@@ -1,4 +1,6 @@
 r"""
+.. _learning_few_data:
+
 Generalization in quantum machine learning from few training data
 ==========================================
 
