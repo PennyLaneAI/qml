@@ -5,8 +5,8 @@ Generalization in quantum machine learning from few training data
 ==========================================
 
 .. meta::
-    :property="og:description": some description.
-    :property="og:image": https://pennylane.ai/qml/_images/surface.png
+    :property="og:description": Generalization of quantum machine learning models.
+    :property="og:image": https://pennylane.ai/qml/_images/few_data_thumbnail.png
 
 .. related::
 
@@ -81,19 +81,23 @@ def dense_layer(weights, wires):
     qml.ArbitraryUnitary(weights, wires)
 
 ##############################################################################
-# Define circuit blah blah
-# ``gradient[-1]`` only.
+# Let us now define a circuit using a ``qml.qnode`` that 
+# .
 
 n_qubits = 16
 dev = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev)
-def circuit(weights, last_layer_weights):
+def circuit(weights, last_layer_weights, input_state):
     assert weights.shape[0]==18, "The size of your weights vector is incorrect!"
     
     layers = weights.shape[1]
     wires = list(range(n_qubits))
     
+    #inputs the state input_state
+    qml.QubitStateVector(input_state, wires=wires)
+    
+    #adds convolutional and pooling layers
     for j in range(layers):
         conv_and_pooling(weights[:,j], wires)
         wires = wires[::2]
@@ -102,7 +106,11 @@ def circuit(weights, last_layer_weights):
     dense_layer(last_layer_weights, wires)
     return qml.probs(wires=wires)
 
-qml.draw_mpl(circuit)(np.random.rand(18,3), np.random.rand(4**2 -1))
+qml.draw_mpl(circuit)(np.random.rand(18,3), np.random.rand(4**2 -1), np.random.rand(2**16))
+
+# .. figure:: ../demonstrations/learning_few_data/qcnn.png
+#     :width: 100%
+#     :align: center
 
 ##############################################################################
 # Performance vs. training dataset size
