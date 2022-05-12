@@ -18,6 +18,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
+  # Generates a JSON list that is used by the strategy.matrix of the build job to spawn multiple workers
   matrix:
     runs-on: ubuntu-20.04
     steps:
@@ -64,7 +65,7 @@ jobs:
           # However, it is currently quite slow since it only caches the downloaded form of the packages,
           # not the installed version. Caching a venv in that sense is much faster.
           # However, caching the venv may cause broken symlinks sporadically when restored.
-          # Once the following issues are resolved, the action version should be updated to provider a performance boost
+          # Once the following issues are resolved, the action version should be updated to provide a performance boost
           # Ref:
           # - https://github.com/actions/setup-python/issues/276
           # - https://github.com/actions/setup-python/issues/330
@@ -74,6 +75,10 @@ jobs:
           #   requirements.txt
           #   requirements_no_deps.txt
 
+      # Creates a temp file with current matrix information.
+      # The hash of this file is used to as portion of the key in subsequent caching steps.
+      # This ensures that if the number of worker / tutorials change,
+      # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
         run: |
           cat >matrix_info.txt <<EOL
@@ -91,6 +96,8 @@ jobs:
         run: |
           sudo apt-get install -y pandoc -qq
 
+      # Caches the python virtual environment. Once the caching issues outlined in actions/setup-python (described above)
+      # are resolved, then this step can be removed
       - name: Python Cache
         id: python_cache
         uses: actions/cache@v3
@@ -106,12 +113,16 @@ jobs:
             python3 -m venv venv
           fi
 
+      # Once the caching issues outlined in actions/setup-python (described above)
+      # Then the `venv/bin/` prefix can be removed here.
       - name: Install pip dependencies
         run: |
           venv/bin/python3 -m pip install pip setuptools cmake --upgrade
           venv/bin/python3 -m pip install -r requirements.txt
           venv/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
 
+      # Removes executable code from tutorials that are not relevant to current node
+      # See documentation in github_job_scheduler.py for more details.
       - name: Execute Matrix offset
         run: |
           python3 .github/workflows/github_job_scheduler.py \
@@ -128,15 +139,16 @@ jobs:
           path: demos
           key: gallery-v34a-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            gallery-v34a-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
-            gallery-v34a-${{ hashFiles('matrix_info.txt') }}-
+            gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
+            gallery-${{ hashFiles('matrix_info.txt') }}-
 
+      # Refreshes cache on 'push' event as that run on 'master' or 'dev'
       - name: Gallery Cache (on Push to default branches)
         if: github.event_name == 'push'
         uses: actions/cache@v3
         with:
           path: demos
-          key: gallery-v34a-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}
+          key: gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}
 
       - name: Sphinx Cache
         uses: actions/cache@v3
@@ -152,6 +164,8 @@ jobs:
           make download
           make SPHINXBUILD="venv/bin/sphinx-build" SPHINXOPTS="-d sphinx_cache-${{ hashFiles('matrix_info.txt') }}" html
 
+      # Removes built html files that are not relevant to current node
+      # See documentation in github_job_scheduler.py for more details.
       - name: Clean HTML Files
         if: matrix.offset == 1
         run: |
@@ -200,7 +214,7 @@ jobs:
             
 
       # These two steps are required as the subsequent workflow_run will not have
-      #  the current context available to it.
+      # the current context available to it.
       - name: Save PR Number
         if: github.event_name == 'pull_request' && matrix.offset == 1
         run: |
