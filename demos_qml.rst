@@ -122,6 +122,13 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_ml_classical_shadows`
     :tags: kernels manybodyphysics classicalml 
 
+.. customgalleryitem::
+    :tooltip: Generalization in quantum machine learning from few training data
+    :figure: demonstrations/learning_few_data/few_data_thumbnail.png
+    :description: :doc:`demos/tutorial_learning_few_data`
+    :tags: qcnn advantage 
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -144,3 +151,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_quantum_gans
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
+    demos/tutorial_learning_few_data
