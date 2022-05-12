@@ -1,53 +1,19 @@
 r"""
-.. _learning_few_data:
-
-Generalization in QML from few training data
+Generalization in quantum machine learning from few training data
 ==========================================
 
 .. meta::
-   :property="og:description": some description.
-   :property="og:image": https://pennylane.ai/qml/_images/surface.png
+    :property="og:description": some description.
+    :property="og:image": https://pennylane.ai/qml/_images/surface.png
 
 .. related::
 
-   tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
+    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Author: XYZ (XYZ@gmail.com). Last updated: 26 Oct 2020.*
+*Authors: asdasd. Posted: 01 June 2022*
 
-In some intro....
-
- e.g., QAOA (Quantum Adiabatic Optimization Algorithm)
-which can be found in this `PennyLane QAOA tutorial
-<https://pennylane.readthedocs.io/en/latest/tutorials/pennylane_run_qaoa_maxcut.html#qaoa-maxcut>`_.
-
-somethingsomething
-
-*"fsoomethinggggg."*
-
-Thus, somethingsomething.
-
-
-.. figure:: ../demonstrations/learning_few_data/qcnn.png
-   :width: 90%
-   :align: center
-   :alt: surface
-
-|
-
-In this tutorial, we do something.
-
-.. note::
-
-    **tile**
-
-    Some notes:
-
-    *"Some note."*
-
-SOME TITLE
----------------------------------------------------
-
-First, we import PennyLane, NumPy, and Matplotlib
+This demo is reproducing the results in `Generalization in quantum machine learning from few training data <https://arxiv.org/abs/2111.05292>`__ `[1] <#ref1>`__  
+by Matthias Caro and co-authors. The authors find bounds on the necessary training data to guarantuee generalization for quantum machine learning (QML) tasks.
 """
 
 import pennylane as qml
@@ -146,19 +112,9 @@ qubits = [2, 3, 4, 5, 6]
 
 
 
-##############################################################################
+######################################################################
 # References
 # ----------
 #
-# 1. Dauphin, Yann N., et al.,
-#    Identifying and attacking the saddle point problem in high-dimensional non-convex
-#    optimization. Advances in Neural Information Processing
-#    systems (2014).
-#
-# 2. McClean, Jarrod R., et al.,
-#    Barren plateaus in quantum neural network training landscapes.
-#    Nature communications 9.1 (2018): 4812.
-#
-# 3. Grant, Edward, et al.
-#    An initialization strategy for addressing barren plateaus in
-#    parametrized quantum circuits. arXiv preprint arXiv:1903.05076 (2019).
+# [1] *Generalization in quantum machine learning from few training data*, Matthias Caro
+# et. al., `arxiv:2111.05292 <https://arxiv.org/abs/2111.05292>`__ (2021)
