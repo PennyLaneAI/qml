@@ -12,7 +12,7 @@ Function Fitting using Quantum Signal Processing (QSP)
 
 .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.gif
     :align: center
-    :width: 65%
+    :width: 50%
 
 1. Introduction:
 ~~~~~~~~~~~~~~~~
@@ -132,16 +132,16 @@ Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 ######################################################################
 # 2. Lets Plot some Polynomials:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # Let us put this theorem to the test! In this section we will construct
 # the SRO (:math:`\hat{W}(a)`), and then use PennyLane to define the SPO.
 # To test the theorem we will randomly generate parameters
 # :math:`\vec{\phi}` and plot the expectation value
 # :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}` for
 # :math:`a \in [-1, 1]`.
-# 
+#
 # We begin by importing the required packages:
-# 
+#
 
 import math
 import torch
@@ -156,26 +156,27 @@ import matplotlib.pyplot as plt
 # (``generate_many_sro(a_vals)``) which, given an array of possible values
 # for ‘:math:`a`’, will generate an array of :math:`\hat{W}(a)` associated
 # with each element.
-# 
+#
+
 
 def compute_signal_rotation_mat(a):
     """Given a fixed value 'a', compute the signal rotation matrix W(a).
-         (requires -1 <= 'a' <= 1)
+    (requires -1 <= 'a' <= 1)
     """
     diag = a
-    off_diag = (1 - a**2)**(1/2) * 1j
-    W = [[diag,     off_diag],
-         [off_diag,     diag]]
-    
+    off_diag = (1 - a**2) ** (1 / 2) * 1j
+    W = [[diag, off_diag], [off_diag, diag]]
+
     return W
+
 
 def generate_many_sro(a_vals):
     """Given a tensor of possible 'a' vals, return a tensor of W(a)"""
     w_array = []
-    for a in a_vals: 
+    for a in a_vals:
         w = compute_signal_rotation_mat(a)
         w_array.append(w)
-    
+
     return torch.tensor(w_array, dtype=torch.complex64, requires_grad=False)
 
 
@@ -186,17 +187,18 @@ def generate_many_sro(a_vals):
 # relax the 3rd condition of the theorem (*see note in introduction*). We
 # accomplish this by sandwiching the SPO between two Hadamard gates to
 # account for this change of basis.
-# 
+#
+
 
 def QSP_circ(phi, W):
-    """This circuit applies the SPO, the components in the matrix 
-    representation of the final Unitary are polynomials! 
+    """This circuit applies the SPO, the components in the matrix
+    representation of the final Unitary are polynomials!
     """
     qml.Hadamard(wires=0)  # set initial state |+>
     for i in range(len(phi) - 1):  # iterate through rotations in reverse order
-            qml.RZ(phi[i], wires=0)
-            qml.QubitUnitary(W, wires=0)
-    
+        qml.RZ(phi[i], wires=0)
+        qml.QubitUnitary(W, wires=0)
+
     qml.RZ(phi[-1], wires=0)  # final rotation
     qml.Hadamard(wires=0)  # change of basis |+> , |->
     return
@@ -207,15 +209,15 @@ def QSP_circ(phi, W):
 # expectation value :math:`\bra{+}\hat{U}_{sp}\ket{+}` as a function of
 # :math:`a`. In this case we choose :math:`d = 5`. Due to the conditions
 # of the theorem, we expect to observe the following:
-# 
+#
 # -  Since :math:`d \ \text{mod}(2) = 1` is odd, we expect all of the
 #    polynomials we plot to have odd symmetry
 # -  Since :math:`d = 5`, we expect none of the polynomials will have
 #    terms ~ :math:`O(a^6)`
 # -  All of the polynomials are bounded by :math:`\pm1`
-# 
+#
 
-d = 5 
+d = 5
 a_vals = torch.linspace(-1, 1, 50)
 w_mats = generate_many_sro(a_vals)
 
@@ -223,14 +225,14 @@ gen = torch.Generator()
 gen.manual_seed(444422)  # set random seed for reproducibility
 
 for i in range(5):
-    phi = torch.rand(d+1, generator=gen) * 2 * torch.tensor([math.pi], requires_grad=False)
+    phi = torch.rand(d + 1, generator=gen) * 2 * torch.tensor([math.pi], requires_grad=False)
     matrix_func = qml.matrix(QSP_circ)
     y_vals = [matrix_func(phi, w)[0, 0].real for w in w_mats]
-    
+
     plt.plot(a_vals, y_vals, label=f"poly #{i}")
 
-plt.vlines(0.0, -1.0, 1.0, color='black')
-plt.hlines(0.0, -1.0, 1.0, color='black')
+plt.vlines(0.0, -1.0, 1.0, color="black")
+plt.hlines(0.0, -1.0, 1.0, color="black")
 plt.legend(loc=1)
 plt.show()
 
@@ -244,111 +246,113 @@ plt.show()
 
 ######################################################################
 # Exactly as predicted, all of these conditions are met!
-# 
+#
 # -  all curves are odd in :math:`a`
 # -  we observe a good spread between the degree of each polynomial
 #    plotted (eg. polynomial #3 looks linear, polynomial #1 and #2 look
 #    cubic, polynomial #0 has degree 5), all of which have degree
 #    :math:`\leq 5`
 # -  each plot does not exceed :math:`\pm1` !
-# 
+#
 # 3. Function Fitting with Quantum Signal Processing:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+#
 # Another observation we can make about this theorem is the fact that it
 # holds true in both directions: If we have two polynomials :math:`P(a)`
 # and :math:`Q(a)` that satisfy the conditions of the theorem, then there
 # exists a :math:`\vec{\phi}` for which we can construct a signal
 # processing operator which maps :math:`a \to P(a)`.
-# 
+#
 # In this section we try to answer the question:
-# 
+#
 # ***“Can we learn the parameter values of*** :math:`\vec{\phi}` ***to transform
 # our signal processing operator polynomial to fit a given function?”***.
-# 
+#
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
 # random initialization of our parameter vector :math:`\vec{\phi}`. The
 # ``forward()`` method takes an array of signal rotation matrices
 # (:math:`\hat{W}(a)` for varying :math:`a`), and produces the
 # predicted y values.
-# 
+#
 # Next we make use of the PennyLane function ``qml.matrix()``, which
 # accepts our quantum function (it can also accept quantum tapes and
 # QNodes) and returns its unitary matrix representation. We are interested
 # in the real value of the top left entry, this corresponds to
 # :math:`P(a)`.
-# 
+#
 
 torch_pi = torch.Tensor([math.pi])
 
+
 class QSP_Func_Fit(torch.nn.Module):
-    
     def __init__(self, degree, num_vals, random_seed=None):
         """Given the degree and number of samples, this method randomly
         initializes the parameter vector (randomness can be set by random_seed)
         """
         super().__init__()
-        if random_seed is None: 
+        if random_seed is None:
             self.phi = torch_pi * torch.rand(degree + 1, requires_grad=True)
-            
+
         else:
             gen = torch.Generator()
             gen.manual_seed(random_seed)
             self.phi = torch_pi * torch.rand(degree + 1, requires_grad=True, generator=gen)
-        
+
         self.phi = torch.nn.Parameter(self.phi)
         self.num_phi = degree + 1
         self.num_vals = num_vals
-    
+
     def forward(self, omega_mats):
         """PennyLane forward implementation"""
         y_pred = []
         generate_qsp_mat = qml.matrix(QSP_circ)
-        
+
         for w in omega_mats:
             u_qsp = generate_qsp_mat(self.phi, w)
-            P_a = u_qsp[0, 0]       # Taking the (0,0) entry of the matrix corresponds to <0|U|0> 
+            P_a = u_qsp[0, 0]  # Taking the (0,0) entry of the matrix corresponds to <0|U|0>
             y_pred.append(P_a.real)
-        
+
         return torch.stack(y_pred, 0)
 
 
 ######################################################################
 # Next we create a ``Model_Runner`` class to handle running the
 # optimization, storing the results, and providing plotting functionality:
-# 
+#
 
-class Model_Runner():
-    
+
+class Model_Runner:
     def __init__(self, model, degree, num_samples, x_vals, process_x_vals, y_true):
-        """Given a model and a series of model specific arguments, store everythign in 
+        """Given a model and a series of model specific arguments, store everythign in
         internal attributes.
         """
         self.model = model
         self.degree = degree
         self.num_samples = num_samples
-        
-        self.x_vals = x_vals 
+
+        self.x_vals = x_vals
         self.inp = process_x_vals(x_vals)
         self.y_true = y_true
 
-    def execute(self, random_seed=13021967, max_shots=25000, verbose=True):  # easter egg: oddly specific seed? 
+    def execute(
+        self, random_seed=13021967, max_shots=25000, verbose=True
+    ):  # easter egg: oddly specific seed?
         """Run the optimization protocol on the model using Mean Square Error as a loss
         function and using stochastic gradient descent as the optimizer.
         """
         model = self.model(degree=self.degree, num_vals=self.num_samples, random_seed=random_seed)
-        
-        criterion = torch.nn.MSELoss(reduction='sum')
+
+        criterion = torch.nn.MSELoss(reduction="sum")
         optimizer = torch.optim.SGD(model.parameters(), lr=1e-5)
-        
-        t = 0 
+
+        t = 0
         j = 0
         loss_val = 1.0
         prev_loss = 2.0
-        
+
         while (t <= max_shots) and (loss_val > 0.5):
-            
+
             self.y_pred = model(self.inp)
 
             if t == 1:
@@ -360,7 +364,7 @@ class Model_Runner():
 
             if (t % 100 == 0) and verbose:
                 print(f"---- iter: {t}, loss: {round(loss_val, 4)} -----")
-                    
+
             # Zero gradients, perform a backward pass, and update the weights.
             optimizer.zero_grad()
             loss.backward()
@@ -368,16 +372,16 @@ class Model_Runner():
 
             prev_loss = loss_val
             t += 1
-        
+
         self.model_params = model.phi
 
     def plot_result(self, show=True):
         """Plot the results"""
-        plt.plot(self.x_vals, self.y_true.tolist(), '--b', label="target func")
-        plt.plot(self.x_vals, self.y_pred.tolist(), '.g', label="optim params")
-        plt.plot(self.x_vals, self.init_y_pred.tolist(), '.r', label="init params")
+        plt.plot(self.x_vals, self.y_true.tolist(), "--b", label="target func")
+        plt.plot(self.x_vals, self.y_pred.tolist(), ".g", label="optim params")
+        plt.plot(self.x_vals, self.init_y_pred.tolist(), ".r", label="init params")
         plt.legend(loc=1)
-        
+
         if show:
             plt.show()
 
@@ -389,9 +393,9 @@ class Model_Runner():
 # polynomial does. To do this, we defined a function ``custom_poly(x)``
 # which implements the target polynomial. In this case, we (arbitrarily)
 # choose the target polynomial:
-# 
-# .. math::  y = 4x^{5} - 5x^{3} + x 
-# 
+#
+# .. math::  y = 4x^{5} - 5x^{3} + x
+#
 # Lets see how well we can fit this polynomial!
 #
 #
@@ -403,16 +407,16 @@ class Model_Runner():
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
+
 def custom_poly(x):
     """A custom polynomial of degree <= d and parity d % 2"""
-    return torch.tensor(4*x**5 - 5*x**3 + x, requires_grad=False, dtype=torch.float)
+    return torch.tensor(4 * x**5 - 5 * x**3 + x, requires_grad=False, dtype=torch.float)
+
 
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = custom_poly(a_vals)
 
-qsp_model_runner = Model_Runner(
-    QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true
-)
+qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
 
 qsp_model_runner.execute()
 qsp_model_runner.plot_result()
@@ -587,9 +591,9 @@ qsp_model_runner.plot_result()
 #     ---- iter: 16000, loss: 0.5128 -----
 #     ---- iter: 16100, loss: 0.5017 -----
 #
-#  .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
-#     :align: left
-#     :width: 50%
+#   .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
+#      :align: left
+#      :width: 50%
 #
 
 
@@ -600,27 +604,27 @@ qsp_model_runner.plot_result()
 # bounds constraints on our polynomials. If our target function does not
 # satisfy them as well, then we cannot hope to generate a good polynomial
 # fit, regardless of how long we train for.
-# 
+#
 # A good non-polynomial candidate to fit to, that obeys our constraints,
 # is the step function. Let’s try it!
-# 
+#
 
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
+
 def step_func(x):
-    """A step function (odd parity) which maps all values <= 0 to -1 
+    """A step function (odd parity) which maps all values <= 0 to -1
     and all values > 0 to +1.
     """
     res = [-1.0 if x_i <= 0 else 1.0 for x_i in x]
     return torch.tensor(res, requires_grad=False, dtype=torch.float)
 
+
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = step_func(a_vals)
 
-qsp_model_runner = Model_Runner(
-    QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true
-)
+qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
 
 qsp_model_runner.execute()
 qsp_model_runner.plot_result()
@@ -884,16 +888,16 @@ qsp_model_runner.plot_result()
 #     ---- iter: 24900, loss: 4.3846 -----
 #     ---- iter: 25000, loss: 4.3839 -----
 #
-#  .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
-#     :align: center
-#     :width: 50%
+#   .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
+#      :align: left
+#      :width: 50%
 #
 
 
 ######################################################################
 # 4. Conclusion:
 # ~~~~~~~~~~~~~~
-# 
+#
 # In this demo, we explored the Quantum Signal Processing theorem. We
 # showed that one could use a simple gradient descent model to train a
 # parameter vector :math:`\vec{\phi}` to generate a reasonably good
@@ -911,15 +915,15 @@ qsp_model_runner.plot_result()
 ######################################################################
 # 5. References:
 # ~~~~~~~~~~~~~~
-# 
+#
 # [1]: *John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang. “A
 # Grand Unification of Quantum Algorithms”*\ `PRX Quantum 2,
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
-# 
+#
 
 
 ##############################################################################
-#.. bio:: Jay Soni
+# .. bio:: Jay Soni
 #    :photo: ../_static/authors/jay_soni.png
 #
 #    Jay completed his BSc. in Mathematical Physics from the University of Waterloo and currently works as a Quantum Software Developer at Xanadu. Fun fact, you will often find him sipping on a Tim Horton's IceCapp while he is coding.
