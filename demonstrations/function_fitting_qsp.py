@@ -1,126 +1,136 @@
+r"""
+
+.. function_fitting_qsp:
+
+Function Fitting using Quantum Signal Processing (QSP)
+======================================================
+
+.. meta::
+    :property="og:description": Learn how to create polynomial approximations to functions
+        using Quantum Signal Processing (QSP).
+    :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
+
+1. Introduction:
+~~~~~~~~~~~~~~~~
+
+This demo was inspired by the paper `‘A Grand Unification of Quantum
+Algorithms’ <https://arxiv.org/abs/2105.02859>`__ which may sound like a
+very ambitious title, yet the authors fully deliver. This paper centers
+around the ‘Quantum Singular Value Transform’ (QSVT) protocol and how it
+provides a single framework to generalize some of the most famous
+quantum algorithms (from Shor’s factoring and Grover search, to
+hamiltonian simulation and more).
+
+The QSVT is a method to apply polynomial transformations to the singular
+values of *any* matrix (does not have to be square). From polynomial
+transformations we can generate arbitrary function transformations
+(using taylor approximations). The QSVT protocol is an extension of the
+more constrained ‘Quantum Signal Processing’ (QSP) protocol which
+presents a method for polynomial transformation of matrix entries in a
+single-qubit unitary operator. The QSVT protocol is quite sophisticated
+and involved in its derivation, but the idea at its core is quite
+simple. By studying QSP, we get a relatively simpler path to explore
+this idea at the foundation of QSVT.
+
+In this demo, we will explore the QSP protocol and how it can be used
+for curve fitting. This is a powerful tool that will ultimately allow us
+to approximate *any function* on the interval :math:`[-1, 1]` that
+satisfies certain constraints. Before we can dive into function fitting,
+let’s develop some intuition. Consider the following operator
+parameterized by :math:`a \in [-1, 1]`:
+
+.. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}
+
+:math:`\hat{W}(a)` is called the *Signal Rotation Operator* (SRO). In
+this particular case we are rotating around the x-axis but it can, in
+general, take other forms. Using this operator, we can construct another
+operator called the *Signal Processing Operator* (SPO),
+
+.. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k})
+
+The SPO is parameterized by a vector
+:math:`\vec{\phi} \in \mathbb{R}^{d+1}`, where :math:`d` is a free
+parameter which represents the number of repeated applications
+:math:`\hat{W}(a)`.
+
+The SPO alternates between applying the SRO and parameterized rotations
+around the z-axis. Let’s see what happens when we try to compute the
+expectation value :math:`\bra{0}\hat{U}_{sp}\ket{0}` for the particular
+case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
+
+.. math::
+
+
+   \begin{align*}
+   \bra{0}\hat{U}_{sp}\ket{0} &= \bra{0} \ \hat{R}_{z}(0) \prod_{k=1}^{2} \hat{W}(a) \hat{R}_{z}(0) \ \ket{0} \\
+   \bra{0}\hat{U}_{sp}\ket{0} &= \bra{0} \hat{W}(a)^{2} \ket{0} \\
+   \end{align*}
+
+.. math::
+
+
+   \bra{0}\hat{U}_{sp}\ket{0} = \bra{0} \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ \circ \ \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ket{0}
+
+.. math::
+
+
+   \bra{0}\hat{U}_{sp}\ket{0} = \bra{0} \begin{bmatrix} 2a^{2} - 1 & 2ai\sqrt{1 - a^{2}} \\ 2ai\sqrt{1 - a^{2}} & 2a^{2} - 1 \end{bmatrix} \ket{0}
+
+.. math::  \bra{0}\hat{U}_{sp}\ket{0} = 2a^{2} - 1
+
+Notice that this quantity is a polynomial in :math:`a`. Equivalently,
+suppose we wanted to create a map $ S: a :raw-latex:`\to `2a^2 - 1$.
+This expectation value would give us the means to perform such a mapping
+:math:`S`. This may seem oddly specific at first, but it turns out that
+this process can be generalized for generating a mapping
+:math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
+
+Theorem: Quantum Signal Processing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
+complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
+:math:`\hat{U}_{sp}`, can be expressed in matrix form as:
+
+.. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k})
+
+.. math::
+
+
+   \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix}
+
+Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
+:math:`Q(a)` satisfy the following constraints:
+
+-  :math:`deg(P) \leq d \ ` and :math:`deg(Q) \leq d - 1`
+-  :math:`P` has parity :math:`d` mod 2 and :math:`Q` has parity
+   :math:`d - 1` mod 2
+-  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`
+
+**Note:** *Condition 3 is actually quite restrictive because if we
+substitute :math:`a = \pm 1`, we get the result
+:math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomial to be
+pinned to :math:`\pm 1` at the end points of our domain
+:math:`a = \pm 1`. This condition can be relaxed to
+:math:`|P^{2}(a)| \leq 1` by expressing our signal processing operator
+in the Hadamard basis (ie.
+:math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
+redefining :math:`P(a)` such that:*
+
+.. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
+
+*This is the convention we follow in this demo.*
+
 """
-.. math:: \newcommand{\ket}[1]{\left|{#1}\right\rangle}
 
-.. math:: \newcommand{\bra}[1]{\left\langle{#1}\right|}
-
-"""
-
+# """
+# .. math:: \newcommand{\ket}[1]{\left|{#1}\right\rangle}
+#
+# .. math:: \newcommand{\bra}[1]{\left\langle{#1}\right|}
+#
+# """
 
 ######################################################################
-# Function Fitting using Quantum Signal Processing (QSP)
-# ======================================================
-# 
-# 1. Introduction:
-# ~~~~~~~~~~~~~~~~
-# 
-# This demo was inspired by the paper `‘A Grand Unification of Quantum
-# Algorithms’ <https://arxiv.org/abs/2105.02859>`__ which may sound like a
-# very ambitious title, yet the authors fully deliver. This paper centers
-# around the ‘Quantum Singular Value Transform’ (QSVT) protocal and how it
-# provides a single framework to generalize some of the most famous
-# quantum algorithms (from Shor’s factoring and Grover search, to
-# hamiltonian simulation and more).
-# 
-# The QSVT is a method to apply polynomial transformations to the singular
-# values of *any* matrix (does not have to be square). From polynomial
-# transformations we can generate arbitrary function transformations
-# (using taylor approximations). The QSVT protocol is an extension of the
-# more constrained ‘Quantum Signal Processing’ (QSP) protocol which
-# presents a method for polynomial trasformation of matrix entries in a
-# single-qubit unitary operator. The QSVT protocol is quite sophisticated
-# and involved in its derivation, but the idea at its core is quite
-# simple. By studying QSP, we get a relatively simpler path to explore
-# this idea at the foundation of QSVT.
-# 
-# In this demo, we will explore the QSP protocol and how it can be used
-# for curve fitting. This is a powerful tool that will ultimately allow us
-# to approximate *any function* on the interval :math:`[-1, 1]` that
-# satisfies certain constraints. Before we can dive into function fitting,
-# let’s develop some intuition. Consider the following operator
-# parameterized by :math:`a \in [-1, 1]`:
-# 
-# .. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}
-# 
-# :math:`\hat{W}(a)` is called the *Signal Rotation Operator* (SRO). In
-# this particular case we are rotating around the x-axis but it can, in
-# general, take other forms. Using this operator, we can construct another
-# operator called the *Signal Processing Operator* (SPO),
-# 
-# .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k})
-# 
-# The SPO is parameterized by a vector
-# :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, where :math:`d` is a free
-# parameter which represents the number of repeated applications
-# :math:`\hat{W}(a)`.
-# 
-# The SPO alternates between applying the SRO and parameterized rotations
-# around the z-axis. Let’s see what happens when we try to compute the
-# expectation value :math:`\bra{0}\hat{U}_{sp}\ket{0}` for the particular
-# case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
-# 
-# .. math::
-# 
-# 
-#    \begin{align*}
-#    \bra{0}\hat{U}_{sp}\ket{0} &= \bra{0} \ \hat{R}_{z}(0) \prod_{k=1}^{2} \hat{W}(a) \hat{R}_{z}(0) \ \ket{0} \\
-#    \bra{0}\hat{U}_{sp}\ket{0} &= \bra{0} \hat{W}(a)^{2} \ket{0} \\
-#    \end{align*}
-# 
-# .. math::
-# 
-# 
-#    \bra{0}\hat{U}_{sp}\ket{0} = \bra{0} \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ \circ \ \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ket{0}
-# 
-# .. math::
-# 
-# 
-#    \bra{0}\hat{U}_{sp}\ket{0} = \bra{0} \begin{bmatrix} 2a^{2} - 1 & 2ai\sqrt{1 - a^{2}} \\ 2ai\sqrt{1 - a^{2}} & 2a^{2} - 1 \end{bmatrix} \ket{0}
-# 
-# .. math::  \bra{0}\hat{U}_{sp}\ket{0} = 2a^{2} - 1 
-# 
-# Notice that this quantity is a polynomial in :math:`a`. Equivalently,
-# suppose we wanted to create a map $ S: a :raw-latex:`\to `2a^2 - 1$.
-# This expectation value would give us the means to perform such a mapping
-# :math:`S`. This may seem oddly specific at first, but it turns out that
-# this process can be generalized for generating a mapping
-# :math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
-# 
-# Theorem: Quantum Signal Processing
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
-# complex ploynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
-# :math:`\hat{U}_{sp}`, can be expressed in matrix form as:
-# 
-# .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}) 
-# 
-# .. math::
-# 
-#     
-#    \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix} 
-# 
-# Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
-# :math:`Q(a)` satisfy the following constraints:
-# 
-# -  :math:`deg(P) \leq d \ ` and $  deg(Q) :raw-latex:`\leq `d - 1$
-# -  :math:`P` has parity :math:`d` mod 2 and :math:`Q` has parity
-#    :math:`d - 1` mod 2
-# -  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`
-# 
-# **Note:** *Condition 3 is actually quite restrictive because if we
-# substitute :math:`a = \pm 1`, we get the result
-# :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomial to be
-# pinned to :math:`\pm 1` at the end points of our domain
-# :math:`a = \pm 1`. This condition can be relaxed to
-# :math:`|P^{2}(a)| \leq 1` by expressing our signal processing operator
-# in the Hadamard basis (ie.
-# :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
-# redefining :math:`P(a)` such that:*
-# 
-# .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
-# 
-# *This is the convention we follow in this demo.*
-# 
 # 2. Lets Plot some Polynomials:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -156,10 +166,11 @@ def compute_signal_rotation_mat(a):
     diag = a
     off_diag = (1 - a**2)**(1/2) * 1j
 
-    W = [[diag    , off_diag],
+    W = [[diag,     off_diag],
          [off_diag,     diag]]
     
     return W
+
 
 def generate_many_sro(a_vals):
     """Given a tensor of possible 'a' vals, return a tensor of W(a)"""
@@ -177,7 +188,7 @@ def generate_many_sro(a_vals):
 # PennyLane to define a quantum function which will compute the SPO
 # (:math:`\hat{U}_{sp}`). Recall we are measuring in the Hadamard basis to
 # relax the 3rd condition of the theorem (*see note in introduction*). We
-# accomplish this by sandwhiching the SPO between two Hadamarad gates to
+# accomplish this by sandwiching the SPO between two Hadamard gates to
 # account for this change of basis.
 # 
 
@@ -185,15 +196,15 @@ def QSP_circ(phi, W):
     """This circuit applies the SPO, the components in the matrix 
     representation of the final Unitary are polynomials! 
     """
-    qml.Hadamard(wires=0) # set initial state |+> 
+    qml.Hadamard(wires=0)  # set initial state |+>
     
-    for i in range(len(phi) - 1): # iterate through rotations in reverse order 
+    for i in range(len(phi) - 1):  # iterate through rotations in reverse order
             qml.RZ(phi[i], wires=0)
             qml.QubitUnitary(W, wires=0)
     
-    qml.RZ(phi[-1], wires=0) # final rotation
+    qml.RZ(phi[-1], wires=0)  # final rotation
     
-    qml.Hadamard(wires=0) # change of basis |+> , |->
+    qml.Hadamard(wires=0)  # change of basis |+> , |->
     return
 
 
@@ -257,7 +268,7 @@ plt.show()
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
 # random initialization of our parameter vector :math:`\vec{\phi}`. The
-# ``forward`` method takes an array of signal rotation matricies
+# ``forward`` method takes an array of signal rotation matrices
 # (:math:`\hat{W}(a)` where each entry corresponds to a different
 # :math:`a`), and produces the predicted y values.
 # 
@@ -289,7 +300,6 @@ class QSP_Func_Fit(torch.nn.Module):
         self.phi = torch.nn.Parameter(self.phi)
         self.num_phi = degree + 1
         self.num_vals = num_vals
-
     
     def forward(self, omega_mats):
         """PennyLane forward implementation (~ 10 - 20 mins to converge)"""
@@ -323,7 +333,6 @@ class Model_Runner():
         self.inp = process_x_vals(x_vals)
         self.y_true = y_true
 
-        
     def execute(self, random_seed=13021967, max_shots=25000, verbose=True):  # easter egg: oddly specific seed? 
         """Run the optimization protocol on the model using Mean Square Error as a loss
         function and using stochastic gradient descent as the optimizer.
@@ -351,12 +360,6 @@ class Model_Runner():
 
             if (t % 100 == 0) and verbose:
                 print(f"---- iter: {t}, loss: {round(loss_val, 4)} -----")
-            
-            if (t % 1000 == 0):
-                j+=1
-                self.plot_result(show=False)
-                plt.savefig(f'{j}.png')
-                plt.clf()
                     
             # Zero gradients, perform a backward pass, and update the weights.
             optimizer.zero_grad()
@@ -364,11 +367,10 @@ class Model_Runner():
             optimizer.step()
 
             prev_loss = loss_val
-            t+=1
+            t += 1
         
         self.model_params = model.phi
-        
-        
+
     def plot_result(self, show=True):
         """Plot the results"""
         plt.plot(self.x_vals, self.y_true.tolist(), '--b', label="target func")
@@ -378,7 +380,6 @@ class Model_Runner():
         
         if show:
             plt.show()
-        
 
 
 ######################################################################
@@ -386,16 +387,18 @@ class Model_Runner():
 # expect this to perform well when the target polynomial also obeys the
 # symmetry and degree constraints that our quantum signal processing
 # polynomial does. To do this, we defined a function ``custom_poly(x)``
-# which implments the target polynomial. In this case, we (arbitrarily)
+# which implements the target polynomial. In this case, we (arbitrarily)
 # choose the target polynomial:
 # 
 # .. math::  y = 4x^{5} - 5x^{3} + x 
 # 
 # Lets see how well we can fit this polynomial!
-# 
+#
 
-d = 9 # dim(phi) = d + 1,
+
+d = 9  # dim(phi) = d + 1,
 num_samples = 50
+
 
 def custom_poly(x):
     """A custom polynomial of degree <= d and parity d % 2"""
@@ -424,8 +427,9 @@ qsp_model_runner.plot_result()
 # is the step function. Let’s try it!
 # 
 
-d = 9 # dim(phi) = d + 1,
+d = 9  # dim(phi) = d + 1,
 num_samples = 50
+
 
 def step_func(x):
     """A step function (odd parity) which maps all values <= 0 to -1 
@@ -433,6 +437,7 @@ def step_func(x):
     """
     res = [-1.0 if x_i <= 0 else 1.0 for x_i in x]
     return torch.tensor(res, requires_grad=False, dtype=torch.float)
+
 
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = step_func(a_vals)
@@ -451,7 +456,7 @@ qsp_model_runner.plot_result()
 # showed that one could use a simple gradient descent model to train a
 # parameter vector :math:`\vec{\phi}` to generate a reasonably good
 # polynomial approximation of an arbitrary function (provided the function
-# satisfied the same constrainints).
+# satisfied the same constraints).
 # 
 # 5. References:
 # ~~~~~~~~~~~~~~
@@ -460,4 +465,3 @@ qsp_model_runner.plot_result()
 # Grand Unification of Quantum Algorithms”*\ `PRX Quantum 2,
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
 # 
-
