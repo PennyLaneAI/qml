@@ -33,14 +33,14 @@ jobs:
           python-version: 3.7
 
       - name: Generate Build Matrix
-        id: matrix
+        id: compute-matrix
         run: |
-          echo "::set-output name=matrix::$(python3 .github/workflows/github_job_scheduler.py \
+          echo "::set-output name=build-matrix::$(python3 .github/workflows/github_job_scheduler.py \
             build-matrix \
             ${{ github.workspace }} \
             --num-workers=${{ env.NUM_WORKERS }})"
     outputs:
-      matrix: ${{ steps.matrix.outputs.matrix }}
+      build-matrix: ${{ steps.compute-matrix.outputs.build-matrix }}
 
   build:
     runs-on: ubuntu-20.04
@@ -49,7 +49,7 @@ jobs:
       - compute-build-matrix
     strategy:
       matrix:
-        offset: ${{ fromJson(needs.compute-build-matrix.outputs.matrix) }}
+        offset: ${{ fromJson(needs.compute-build-matrix.outputs.build-matrix) }}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v3
