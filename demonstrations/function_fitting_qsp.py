@@ -10,6 +10,10 @@ Function Fitting using Quantum Signal Processing (QSP)
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
+.. figure:: ../demonstrations/function_fitting_qsp/trained_poly.gif
+    :align: center
+    :width: 80%
+
 1. Introduction:
 ~~~~~~~~~~~~~~~~
 
@@ -79,7 +83,7 @@ case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 .. math::  \bra{0}\hat{U}_{sp}\ket{0} = 2a^{2} - 1
 
 Notice that this quantity is a polynomial in :math:`a`. Equivalently,
-suppose we wanted to create a map $ S: a :raw-latex:`\to `2a^2 - 1$.
+suppose we wanted to create a map :math:'S: a \to 2a^2 - 1'.
 This expectation value would give us the means to perform such a mapping
 :math:`S`. This may seem oddly specific at first, but it turns out that
 this process can be generalized for generating a mapping
@@ -96,8 +100,8 @@ complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
 
 .. math::
 
-
    \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix}
+
 
 Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 :math:`Q(a)` satisfy the following constraints:
@@ -107,28 +111,23 @@ Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
    :math:`d - 1` mod 2
 -  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`
 
-**Note:** *Condition 3 is actually quite restrictive because if we
-substitute :math:`a = \pm 1`, we get the result
-:math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomial to be
-pinned to :math:`\pm 1` at the end points of our domain
-:math:`a = \pm 1`. This condition can be relaxed to
-:math:`|P^{2}(a)| \leq 1` by expressing our signal processing operator
-in the Hadamard basis (ie.
-:math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
-redefining :math:`P(a)` such that:*
 
-.. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
+.. note::
+    *Condition 3 is actually quite restrictive because if we
+    substitute* :math:`a = \pm 1`*, we get the result*
+    :math:`|P^{2}(\pm 1)| = 1`*. Thus it restricts our polynomial to be
+    pinned to* :math:`\pm 1` *at the end points of our domain*
+    :math:`a = \pm 1`*. This condition can be relaxed to*
+    :math:`|P^{2}(a)| \leq 1` *by expressing our signal processing operator
+    in the Hadamard basis (ie.*
+    :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`*). This is equivalent to
+    redefining* :math:`P(a)` *such that:*
 
-*This is the convention we follow in this demo.*
+    .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
+
+    *This is the convention we follow in this demo.*
 
 """
-
-# """
-# .. math:: \newcommand{\ket}[1]{\left|{#1}\right\rangle}
-#
-# .. math:: \newcommand{\bra}[1]{\left\langle{#1}\right|}
-#
-# """
 
 ######################################################################
 # 2. Lets Plot some Polynomials:
@@ -165,17 +164,14 @@ def compute_signal_rotation_mat(a):
     """
     diag = a
     off_diag = (1 - a**2)**(1/2) * 1j
-
     W = [[diag,     off_diag],
          [off_diag,     diag]]
     
     return W
 
-
 def generate_many_sro(a_vals):
     """Given a tensor of possible 'a' vals, return a tensor of W(a)"""
-    w_array = [] 
-    
+    w_array = []
     for a in a_vals: 
         w = compute_signal_rotation_mat(a)
         w_array.append(w)
@@ -197,13 +193,11 @@ def QSP_circ(phi, W):
     representation of the final Unitary are polynomials! 
     """
     qml.Hadamard(wires=0)  # set initial state |+>
-    
     for i in range(len(phi) - 1):  # iterate through rotations in reverse order
             qml.RZ(phi[i], wires=0)
             qml.QubitUnitary(W, wires=0)
     
     qml.RZ(phi[-1], wires=0)  # final rotation
-    
     qml.Hadamard(wires=0)  # change of basis |+> , |->
     return
 
@@ -226,7 +220,7 @@ a_vals = torch.linspace(-1, 1, 50)
 w_mats = generate_many_sro(a_vals)
 
 gen = torch.Generator()
-gen.manual_seed(444422)
+gen.manual_seed(444422)  # set random seed for reproducibility
 
 for i in range(5):
     phi = torch.rand(d+1, generator=gen) * 2 * torch.tensor([math.pi], requires_grad=False)
@@ -239,6 +233,13 @@ plt.vlines(0.0, -1.0, 1.0, color='black')
 plt.hlines(0.0, -1.0, 1.0, color='black')
 plt.legend(loc=1)
 plt.show()
+
+
+######################################################################
+# .. figure:: ../demonstrations/function_fitting_qsp/random_poly.png
+#     :align: center
+#     :width: 80%
+#
 
 
 ######################################################################
@@ -262,15 +263,15 @@ plt.show()
 # 
 # In this section we try to answer the question:
 # 
-# **“*Can we learn the parameter values of :math:`\vec{\phi}` to transform
-# our signal processing operator polynomial to fit a given function?*”**.
+# ***“Can we learn the parameter values of*** :math:`\vec{\phi}` ***to transform
+# our signal processing operator polynomial to fit a given function?”***.
 # 
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
 # random initialization of our parameter vector :math:`\vec{\phi}`. The
-# ``forward`` method takes an array of signal rotation matrices
-# (:math:`\hat{W}(a)` where each entry corresponds to a different
-# :math:`a`), and produces the predicted y values.
+# ``forward()`` method takes an array of signal rotation matrices
+# (:math:`\hat{W}(a)` for varying :math:`a`), and produces the
+# predicted y values.
 # 
 # Next we make use of the PennyLane function ``qml.matrix()``, which
 # accepts our quantum function (it can also accept quantum tapes and
@@ -288,7 +289,6 @@ class QSP_Func_Fit(torch.nn.Module):
         initializes the parameter vector (randomness can be set by random_seed)
         """
         super().__init__()
-        
         if random_seed is None: 
             self.phi = torch_pi * torch.rand(degree + 1, requires_grad=True)
             
@@ -302,7 +302,7 @@ class QSP_Func_Fit(torch.nn.Module):
         self.num_vals = num_vals
     
     def forward(self, omega_mats):
-        """PennyLane forward implementation (~ 10 - 20 mins to converge)"""
+        """PennyLane forward implementation"""
         y_pred = []
         generate_qsp_mat = qml.matrix(QSP_circ)
         
@@ -394,25 +394,35 @@ class Model_Runner():
 # 
 # Lets see how well we can fit this polynomial!
 #
-
+#
+#   .. note::
+#       Depending on the initial parameters, training can take
+#       anywhere from 10 - 30 mins
+#
 
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
-
 def custom_poly(x):
     """A custom polynomial of degree <= d and parity d % 2"""
     return torch.tensor(4*x**5 - 5*x**3 + x, requires_grad=False, dtype=torch.float)
-#     return torch.tensor(-4*x*(x - 0.5)*(x+0.5), requires_grad=False, dtype=torch.float)
-
 
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = custom_poly(a_vals)
 
-qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
-qsp_model_runner.execute()
+qsp_model_runner = Model_Runner(
+    QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true
+)
 
+qsp_model_runner.execute()
 qsp_model_runner.plot_result()
+
+
+######################################################################
+# .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
+#     :align: center
+#     :width: 80%
+#
 
 
 ######################################################################
@@ -430,7 +440,6 @@ qsp_model_runner.plot_result()
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
-
 def step_func(x):
     """A step function (odd parity) which maps all values <= 0 to -1 
     and all values > 0 to +1.
@@ -438,14 +447,22 @@ def step_func(x):
     res = [-1.0 if x_i <= 0 else 1.0 for x_i in x]
     return torch.tensor(res, requires_grad=False, dtype=torch.float)
 
-
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = step_func(a_vals)
 
-qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
-qsp_model_runner.execute()
+qsp_model_runner = Model_Runner(
+    QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true
+)
 
+qsp_model_runner.execute()
 qsp_model_runner.plot_result()
+
+
+######################################################################
+# .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
+#     :align: center
+#     :width: 80%
+#
 
 
 ######################################################################
@@ -457,7 +474,16 @@ qsp_model_runner.plot_result()
 # parameter vector :math:`\vec{\phi}` to generate a reasonably good
 # polynomial approximation of an arbitrary function (provided the function
 # satisfied the same constraints).
-# 
+#
+
+
+######################################################################
+# .. figure:: ../demonstrations/function_fitting_qsp/trained_step.gif
+#     :align: center
+#     :width: 80%
+#
+
+######################################################################
 # 5. References:
 # ~~~~~~~~~~~~~~
 # 
@@ -465,3 +491,10 @@ qsp_model_runner.plot_result()
 # Grand Unification of Quantum Algorithms”*\ `PRX Quantum 2,
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
 # 
+
+##############################################################################
+#.. bio:: Jay Soni
+#    :photo: ../_static/authors/jay_soni.png
+#
+#    Jay completed his BSc. in Mathematical Physics from the University of Waterloo and currently works as a Quantum Software Developer at Xanadu. Fun fact, you will often find him sipping on a Tim Horton's IceCapp while he is coding.
+#
