@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - cancel
-      - matrix
+      - compute-build-matrix
     strategy:
       matrix:
         offset: ${{ fromJson(needs.compute-build-matrix.outputs.matrix) }}
