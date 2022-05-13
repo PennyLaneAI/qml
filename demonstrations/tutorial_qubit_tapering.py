@@ -287,6 +287,7 @@ for n in range(1, 20):
 #
 # About the author
 # ----------------
+
 ##############################################################################
 #.. bio:: Soran Jahangiri
 #    :photo: ../_static/Soran.png
