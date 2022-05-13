@@ -196,7 +196,10 @@ jobs:
           retention-days: 1
           path: _build/html
 
-      # Only upload demos since all other html files are pushed as artifact from offset 1
+      # Only upload demos since all other html files are pushed as artifact from offset 0
+      # This step excludes static files (files that are the same across all workers) from being included in the
+      # built artifact. This is done as a performance boost.
+      # The step above this is executed by only one worker which uploads all static content.
       - name: Upload Demo Html
         if: github.event_name == 'pull_request' && matrix.offset != 0
         uses: actions/upload-artifact@v3
