@@ -12,6 +12,7 @@ Qubit tapering
     tutorial_vqe A brief overview of VQE
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
+    tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
 *Author: PennyLane dev team. Posted: 17 May 2022. Last updated: 17 May 2022*
