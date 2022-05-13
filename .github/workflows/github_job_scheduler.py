@@ -88,19 +88,31 @@ import re
 import json
 import math
 import argparse
-from enum import IntEnum
+from enum import Enum, IntEnum
 from itertools import chain
 from pathlib import PosixPath
 from typing import List, Optional
 
-
-class State(IntEnum):
-    NORMAL = 0
-    BLOCK_SINGLE_QUOTE = 1
-    BLOCK_DOUBLE_QUOTE = 2
+# Used to handle an edge case where you may have a multi-line marked comment start and end on the same line
+# """ hello """ <-- Example
+MULTI_LINE_MIN_LEN = 6
 
 
-def _remove_executable_from_doc(input_file_path: PosixPath, output_file_path: PosixPath) -> None:
+class CommentType(Enum):
+    SINGLE_LINE = "#"
+    MULTI_LINE = ("'''", "r'''", '"""', 'r"""')
+
+
+class FileReadState(IntEnum):
+    NORMAL = 1
+    MULTI_LINE_COMMENT = 2
+
+
+def _remove_executable_from_doc(
+        input_file_path: PosixPath,
+        output_file_path: PosixPath,
+        encoding: str = "utf-8"
+) -> None:
     """
     Given a python file to read, this function will remove all executable code from the file but retain all comments.
 
@@ -117,6 +129,7 @@ def _remove_executable_from_doc(input_file_path: PosixPath, output_file_path: Po
     # Send HTTP Request
     resp = requests.get("https://example.com")
     print(resp.status_code)
+    # Thanks
     ```
 
     This function would update that file to following:
@@ -132,7 +145,7 @@ def _remove_executable_from_doc(input_file_path: PosixPath, output_file_path: Po
     # Send HTTP Request
 
 
-    # %%%%%%RUNNABLE_CODE_REMOVED%%%%%%
+    # Thanks
     ```
 
     Args:
@@ -142,43 +155,29 @@ def _remove_executable_from_doc(input_file_path: PosixPath, output_file_path: Po
     Returns:
         None
     """
-    lines = []
-    current_state = State.NORMAL
-    with input_file_path.open() as fh:
+    output_lines = []
+    current_read_state = FileReadState.NORMAL
+    with input_file_path.open(encoding=encoding) as fh:
         for line in fh:
-            if current_state == State.NORMAL:
-                if line.startswith("#"):
-                    lines.append(line)
-                    current_state = State.NORMAL
-                elif line.startswith(('"""', 'r"""')) and line.endswith(('"""', '"""\n')) and len(line) > 6:
-                    lines.append(line)
-                    current_state = State.NORMAL
-                elif line.startswith(('"""', '"""\n', 'r"""', 'r"""\n')):
-                    lines.append(line)
-                    current_state = State.BLOCK_DOUBLE_QUOTE
-                elif line.startswith(("'''", "r'''")) and line.endswith(("'''", "'''\n")) and len(line) > 6:
-                    lines.append(line)
-                    current_state = State.NORMAL
-                elif line.startswith(("'''", "'''\n", "r'''", "r'''\n")):
-                    lines.append(line)
-                    current_state = State.BLOCK_SINGLE_QUOTE
+            original_line = line
+            line = line.strip()
+            if current_read_state == FileReadState.NORMAL:
+                if line.startswith(CommentType.SINGLE_LINE.value):
+                    output_lines.append(original_line)
+                elif line.startswith(CommentType.MULTI_LINE.value):
+                    output_lines.append(original_line)
+                    if not line.endswith(CommentType.MULTI_LINE.value) or len(line) < MULTI_LINE_MIN_LEN:
+                        current_read_state = FileReadState.MULTI_LINE_COMMENT
                 else:
-                    lines.append("\n")
-                    current_state = State.NORMAL
-            elif current_state == State.BLOCK_DOUBLE_QUOTE:
-                lines.append(line)
-                current_state = State.NORMAL if line.startswith(('"""', '"""\n')) or line.endswith(('"""', '"""\n')) \
-                    else State.BLOCK_DOUBLE_QUOTE
-            elif current_state == State.BLOCK_SINGLE_QUOTE:
-                lines.append(line)
-                current_state = State.NORMAL if line.startswith(("'''", "'''\n")) or line.endswith(("'''", "'''\n")) \
-                    else State.BLOCK_SINGLE_QUOTE
-    lines.append("\n# %%%%%%RUNNABLE_CODE_REMOVED%%%%%%")
-
-    with output_file_path.open("w", encoding="utf-8") as fh:
-        for line in lines:  # More space efficient in this case than using str.join
+                    output_lines.append("\n")
+            elif current_read_state == FileReadState.MULTI_LINE_COMMENT:
+                output_lines.append(original_line)
+                if line.startswith(CommentType.MULTI_LINE.value) or line.endswith(CommentType.MULTI_LINE.value):
+                    current_read_state = FileReadState.NORMAL
+    with output_file_path.open("w", encoding=encoding) as fh:
+        # More memory efficient than using str.join as the entire document isn't held in memory as one string
+        for line in output_lines:
             fh.write(line)
-
     return None
 
 
@@ -236,7 +235,7 @@ def build_matrix(num_workers: int,
         -> [0, 5, 10]
         This when fed into GitHub's strategy.matrix will tell the workflow to spawn 3 nodes.
 
-        Each node will have access to it's own offset from this list. It will recalculate the total files to execute
+        Each node will have access to its own offset from this list. It will recalculate the total files to execute
         and determine the files relevant to it.
     Args:
         num_workers: The total number of nodes that needs to be spawned
@@ -257,7 +256,7 @@ def execute_matrix(num_workers: int,
                    build_directory: PosixPath,
                    parser_namespace: argparse.Namespace) -> Optional[List[str]]:
     """
-    Deletes executable to code from all tutorials that are not relevant to the current node calling this function.
+    Deletes executable code from all tutorials that are not relevant to the current node calling this function.
 
     The files that are relevant is determined as such:
       -> Glob all tutorial files (sorted order)
@@ -271,7 +270,7 @@ def execute_matrix(num_workers: int,
         parser_namespace: The argparse object containing input from cli
 
     Returns:
-        By default, return `None`. If dry_run flag is set from cli, then returns a list of file names that will
+        Optional[List[str]]. By default, return `None`. If dry_run flag is set from cli, then returns a list of file names that will
         have executable code retained.
     """
     glob_pattern = parser_namespace.glob_pattern
@@ -313,7 +312,7 @@ def clean_html(num_workers: int,
 
     Args:
         num_workers: The total number of workers that are in the workflow
-        root_directory: The directory where the QML repo resides.
+        root_directory: The directory where the QML repo resides
         build_directory: The directory where all the demonstrations reside
         parser_namespace: The argparse object containing input from cli
 
@@ -398,7 +397,6 @@ if __name__ == "__main__":
                              "Default: '*.py'",
                         type=str,
                         default="*.py")
-    parser_build = parser.add_argument_group("Build Matrix")
 
     parser_execute = parser.add_argument_group("Execute Matrix / Clean")
     parser_execute.add_argument("--offset",
@@ -433,4 +431,5 @@ if __name__ == "__main__":
         }
         output = action_dict[parser_results.action](worker_count, directory_examples, parser_results)
 
-    print(json.dumps(output) if output else "")
+    if output:
+        print(json.dumps(output))
