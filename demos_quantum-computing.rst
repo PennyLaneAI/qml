@@ -77,6 +77,7 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/sc_qubits/sc_qubits_tn.png
     :description: :doc:`demos/tutorial_sc_qubits`
     :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -92,6 +93,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
-	demos/tutorial_sc_qubits
-    
-
+  	demos/tutorial_sc_qubits
