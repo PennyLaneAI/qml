@@ -93,7 +93,7 @@ and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvec
 :math:`X^{j}` operators. Then we can factor out all of the :math:`X^{j}` operators from the
 transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
 set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose for each of the
-:math:`X^{j}` operator. For  instance, in the case of two tapered qubits, we have four eigenvalue
+:math:`X^{j}` operators. For  instance, in the case of two tapered qubits, we have four eigenvalue
 sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`. In these tapered
 Hamiltonians, the set of :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
