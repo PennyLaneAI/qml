@@ -208,7 +208,7 @@ def build_matrix(num_workers: int,
           "13.py",
           "14.py"
         ]
-        And you have 3 workers, then the files to be excuted per worker is:
+        And you have 3 workers, then the files to be executed per worker is:
         math.ceil(15 / 3) = 5
 
         The above list is then broken into chunks of 5
