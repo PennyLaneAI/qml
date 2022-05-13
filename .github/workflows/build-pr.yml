@@ -167,7 +167,7 @@ jobs:
       # Removes built html files that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
       - name: Clean HTML Files
-        if: matrix.offset == 1
+        if: matrix.offset == 0
         run: |
           python3 .github/workflows/github_job_scheduler.py \
            clean-html \
@@ -178,7 +178,7 @@ jobs:
            --verbose
 
       - name: Clean HTML Files and Images
-        if: matrix.offset != 1
+        if: matrix.offset != 0
         run: |
           python3 .github/workflows/github_job_scheduler.py \
            clean-html \
@@ -188,7 +188,7 @@ jobs:
            --verbose
 
       - name: Upload Html
-        if: github.event_name == 'pull_request' && matrix.offset == 1
+        if: github.event_name == 'pull_request' && matrix.offset == 0
         uses: actions/upload-artifact@v3
         with:
           name: html-${{ matrix.offset }}.zip
@@ -198,7 +198,7 @@ jobs:
 
       # Only upload demos since all other html files are pushed as artifact from offset 1
       - name: Upload Demo Html
-        if: github.event_name == 'pull_request' && matrix.offset != 1
+        if: github.event_name == 'pull_request' && matrix.offset != 0
         uses: actions/upload-artifact@v3
         with:
           name: html-${{ matrix.offset }}.zip
@@ -216,7 +216,7 @@ jobs:
       # These two steps are required as the subsequent workflow_run will not have
       # the current context available to it.
       - name: Save PR Number
-        if: github.event_name == 'pull_request' && matrix.offset == 1
+        if: github.event_name == 'pull_request' && matrix.offset == 0
         run: |
           mkdir -p /tmp/pr
           cat >/tmp/pr/pr_info.json <<EOL
@@ -229,7 +229,7 @@ jobs:
           }
           EOL
       - name: Upload PR Number as Artifact
-        if: github.event_name == 'pull_request' && matrix.offset == 1
+        if: github.event_name == 'pull_request' && matrix.offset == 0
         uses: actions/upload-artifact@v3
         with:
           name: pr_info.zip
