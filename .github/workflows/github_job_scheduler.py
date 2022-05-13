@@ -38,7 +38,7 @@ This information is then used by the workers to determine as such:
 
 2) Call 'execute-matrix' function
 ```
-python3 github_job_scheduler.py build-matrix {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
+python3 github_job_scheduler.py execute-matrix {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
  --offset={CURRENT WORKER MATRIX OFFSET FROM 'build-matrix'}
 ```
 
@@ -74,9 +74,9 @@ This allows all workers to build all tutorials, but only the tutorials relevant 
 executable code preserved. This also preserves proper indexing, and table of contents.
 
 
-2) Call 'clean-html' function
+3) Call 'clean-html' function
 ```
-python3 github_job_scheduler.py build-matrix {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
+python3 github_job_scheduler.py clean-html {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
  --offset={CURRENT WORKER MATRIX OFFSET FROM 'build-matrix'}
 ```
 Once the sphinx-build process has completed, the html files that were generated which are not relevant to the current
