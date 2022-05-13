@@ -9,15 +9,11 @@ on:
 env:
   NUM_WORKERS: 15
 
-jobs:
-  cancel:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.4.1
-        with:
-          access_token: ${{ github.token }}
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
   # Generates a JSON list that is used by the strategy.matrix of the build job to spawn multiple workers
   compute-build-matrix:
     runs-on: ubuntu-20.04
@@ -45,7 +41,6 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     needs:
-      - cancel
       - compute-build-matrix
     strategy:
       matrix:
