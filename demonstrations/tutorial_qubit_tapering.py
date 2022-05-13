@@ -284,10 +284,10 @@ for n in range(1, 20):
 #     Ilya G. Ryabinkin, Tzu-Ching Yen, Scott N. Genin, Artur F. Izmaylov, "Qubit coupled-cluster
 #     method: A systematic approach to quantum chemistry on a quantum computer".
 #     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
-
+#
 # About the author
 # ----------------
-
+#
 ##############################################################################
 #.. bio:: Soran Jahangiri
 #    :photo: ../_static/Soran.png
