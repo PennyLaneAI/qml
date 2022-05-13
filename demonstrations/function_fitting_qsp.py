@@ -13,25 +13,50 @@
 # 1. Introduction:
 # ~~~~~~~~~~~~~~~~
 # 
-# In this demo we explore the `‘Quantum Signal Processing’ <link>`__ (QSP)
-# protocol and how it can be used to fit polynomials. Before we can dive
-# into function fitting, lets develope some intuition. Consider the
-# following operator parameterized by :math:`a \in [-1, 1]`:
+# This demo was inspired by the paper `‘A Grand Unification of Quantum
+# Algorithms’ <https://arxiv.org/abs/2105.02859>`__ which may sound like a
+# very ambitious title, yet the authors fully deliver. This paper centers
+# around the ‘Quantum Singular Value Transform’ (QSVT) protocal and how it
+# provides a single framework to generalize some of the most famous
+# quantum algorithms (from Shor’s factoring and Grover search, to
+# hamiltonian simulation and more).
+# 
+# The QSVT is a method to apply polynomial transformations to the singular
+# values of *any* matrix (does not have to be square). From polynomial
+# transformations we can generate arbitrary function transformations
+# (using taylor approximations). The QSVT protocol is an extension of the
+# more constrained ‘Quantum Signal Processing’ (QSP) protocol which
+# presents a method for polynomial trasformation of matrix entries in a
+# single-qubit unitary operator. The QSVT protocol is quite sophisticated
+# and involved in its derivation, but the idea at its core is quite
+# simple. By studying QSP, we get a relatively simpler path to explore
+# this idea at the foundation of QSVT.
+# 
+# In this demo, we will explore the QSP protocol and how it can be used
+# for curve fitting. This is a powerful tool that will ultimately allow us
+# to approximate *any function* on the interval :math:`[-1, 1]` that
+# satisfies certain constraints. Before we can dive into function fitting,
+# let’s develop some intuition. Consider the following operator
+# parameterized by :math:`a \in [-1, 1]`:
 # 
 # .. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}
 # 
-# This operator is called the ‘Signal Rotation Operator’, in this
-# particular case we are using a rotation around the x-axis, but in
-# general this operator can take other forms. Using this operator we can
-# construct a new operator called the ‘Signal Processing Operator’ which
-# is parameterized by a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`
+# :math:`\hat{W}(a)` is called the *Signal Rotation Operator* (SRO). In
+# this particular case we are rotating around the x-axis but it can, in
+# general, take other forms. Using this operator, we can construct another
+# operator called the *Signal Processing Operator* (SPO),
 # 
 # .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k})
 # 
-# This operator alternates between applying the signal rotation operator
-# and parameterized rotation around the z-axis. Let’s see what happens
-# when we try to compute the expectation value of this operator
-# :math:`\bra{0}\hat{U}_{sp}\ket{0}` for :math:`\vec{\phi} = (0, 0, 0)` :
+# The SPO is parameterized by a vector
+# :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, where :math:`d` is a free
+# parameter which represents the number of repeated applications
+# :math:`\hat{W}(a)`.
+# 
+# The SPO alternates between applying the SRO and parameterized rotations
+# around the z-axis. Let’s see what happens when we try to compute the
+# expectation value :math:`\bra{0}\hat{U}_{sp}\ket{0}` for the particular
+# case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 # 
 # .. math::
 # 
@@ -53,18 +78,19 @@
 # 
 # .. math::  \bra{0}\hat{U}_{sp}\ket{0} = 2a^{2} - 1 
 # 
-# Notice that this quantity is a polynomial in :math:`a`. So suppose we
-# were given a signal $ S: x :raw-latex:`\to `a $, then this expectation
-# value would give us a means to map $ x :raw-latex:`\to `2a^{2} - 1$.
-# This may seem oddly specific at first, but it turns out that in general:
+# Notice that this quantity is a polynomial in :math:`a`. Equivalently,
+# suppose we wanted to create a map $ S: a :raw-latex:`\to `2a^2 - 1$.
+# This expectation value would give us the means to perform such a mapping
+# :math:`S`. This may seem oddly specific at first, but it turns out that
+# this process can be generalized for generating a mapping
+# :math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
 # 
 # Theorem: Quantum Signal Processing
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Given a :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist complex
-# ploynomials :math:`P(a)` and :math:`Q(a)` such that the signal
-# processing operator :math:`\hat{U}_{sp}` can be expressed in matrix form
-# as (for :math:`a \in [-1, 1]`):
+# Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
+# complex ploynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
+# :math:`\hat{U}_{sp}`, can be expressed in matrix form as:
 # 
 # .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}) 
 # 
@@ -73,30 +99,35 @@
 #     
 #    \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix} 
 # 
-# Where the polynomials satisfy the following constraints:
+# Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
+# :math:`Q(a)` satisfy the following constraints:
 # 
 # -  :math:`deg(P) \leq d \ ` and $  deg(Q) :raw-latex:`\leq `d - 1$
-# -  :math:`P` has parity d mod 2 and :math:`Q` has parity d - 1 mod 2
+# -  :math:`P` has parity :math:`d` mod 2 and :math:`Q` has parity
+#    :math:`d - 1` mod 2
 # -  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`
 # 
-# **Note:** *Condition 3 is actually quite restrictive because we have
-# :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomials to those
-# which pass through :math:`\pm 1` for :math:`a = \pm 1`. This condition
-# can be relaxed to :math:`|P^{2}(a)| \leq 1` by expressing our signal
-# processing operator in the Hadamard basis. This is equivalent to
+# **Note:** *Condition 3 is actually quite restrictive because if we
+# substitute :math:`a = \pm 1`, we get the result
+# :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomial to be
+# pinned to :math:`\pm 1` at the end points of our domain
+# :math:`a = \pm 1`. This condition can be relaxed to
+# :math:`|P^{2}(a)| \leq 1` by expressing our signal processing operator
+# in the Hadamard basis (ie.
+# :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
 # redefining :math:`P(a)` such that:*
 # 
-# .. math:: P^{'}(a) = Re(P(a)) + iRe(Q(a))\sqrt{1 - a^{2}}
+# .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
 # 
 # *This is the convention we follow in this demo.*
 # 
-# 2. Lets Plot some Polynomials!
+# 2. Lets Plot some Polynomials:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Let us put this theorem to the test! In this section we will construct
-# the signal rotation operator, and then use PennyLane to define the
-# quantum signal processing sequence. To test the theorem we will randomly
-# generate parameters :math:`\vec{\phi}` and plot the expectation value
+# the SRO (:math:`\hat{W}(a)`), and then use PennyLane to define the SPO.
+# To test the theorem we will randomly generate parameters
+# :math:`\vec{\phi}` and plot the expectation value
 # :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}` for
 # :math:`a \in [-1, 1]`.
 # 
@@ -111,10 +142,11 @@ import matplotlib.pyplot as plt
 
 
 ######################################################################
-# Here we implement the ``compute_signal_rotation_mat`` function, which
-# will construct the signal rotation matrix. We also make a helper
-# function which, given an array of :math:`a` values, will generate an
-# array of :math:`\hat{W}(a)`
+# Next, we introduce a function called ``compute_signal_rotation_mat(a)``,
+# which will construct the SRO matrix. We can also make a helper function
+# (``generate_many_sro(a_vals)``) which, given an array of possible values
+# for ‘:math:`a`’, will generate an array of :math:`\hat{W}(a)` associated
+# with each element.
 # 
 
 def compute_signal_rotation_mat(a):
@@ -129,9 +161,8 @@ def compute_signal_rotation_mat(a):
     
     return W
 
-
-def generate_inp(a_vals):
-    """Given a tensor of 'a' vals, return a tensor of W(a)"""
+def generate_many_sro(a_vals):
+    """Given a tensor of possible 'a' vals, return a tensor of W(a)"""
     w_array = [] 
     
     for a in a_vals: 
@@ -142,49 +173,49 @@ def generate_inp(a_vals):
 
 
 ######################################################################
-# Here we use PennyLane to define a quantum function which will compute
-# our signal processing operator :math:`\hat{U}_{sp}`. Since we are
-# measuring in the Hadamard basis (*see note in introduction*) we
-# sandwhich the operator between two Hadamarad gates to account for this
-# change of basis.
+# Now having access to the matrix elements of the SRO, we can leverage
+# PennyLane to define a quantum function which will compute the SPO
+# (:math:`\hat{U}_{sp}`). Recall we are measuring in the Hadamard basis to
+# relax the 3rd condition of the theorem (*see note in introduction*). We
+# accomplish this by sandwhiching the SPO between two Hadamarad gates to
+# account for this change of basis.
 # 
 
-
 def QSP_circ(phi, W):
-    """This circuit applies the QSP operator, the components in the matrix 
+    """This circuit applies the SPO, the components in the matrix 
     representation of the final Unitary are polynomials! 
     """
-    qml.Hadamard(wires=0) # initial state |+> 
+    qml.Hadamard(wires=0) # set initial state |+> 
     
     for i in range(len(phi) - 1): # iterate through rotations in reverse order 
             qml.RZ(phi[i], wires=0)
             qml.QubitUnitary(W, wires=0)
     
     qml.RZ(phi[-1], wires=0) # final rotation
-    qml.Hadamard(wires=0)   # change of basis |+> , |->
     
+    qml.Hadamard(wires=0) # change of basis |+> , |->
     return
 
 
 ######################################################################
-# Finally, we randomly generate our :math:`\vec{\phi}` and plot the
-# expectation value as a function of :math:`a`. In this case we choose
-# :math:`d = 5`. As a result of this (due to the conditions of the
-# theorem) we expect to observe the following:
+# Finally, we randomly generate the vector :math:`\vec{\phi}` and plot the
+# expectation value :math:`\bra{+}\hat{U}_{sp}\ket{+}` as a function of
+# :math:`a`. In this case we choose :math:`d = 5`. Due to the conditions
+# of the theorem, we expect to observe the following:
 # 
-# -  Since :math:`d \mod 2 = 1` is odd, we expect all of the resultant
-#    plots to have odd symmetry
-# -  Since :math:`d = 5`, we expect that non of the polynomials will be of
-#    degree :math:`\geq 6`
+# -  Since :math:`d \ \text{mod}(2) = 1` is odd, we expect all of the
+#    polynomials we plot to have odd symmetry
+# -  Since :math:`d = 5`, we expect none of the polynomials will have
+#    terms ~ :math:`O(a^6)`
 # -  All of the polynomials are bounded by :math:`\pm1`
 # 
 
 d = 5 
 a_vals = torch.linspace(-1, 1, 50)
-w_mats = generate_inp(a_vals)
+w_mats = generate_many_sro(a_vals)
 
 gen = torch.Generator()
-gen.manual_seed(499567)
+gen.manual_seed(444422)
 
 for i in range(5):
     phi = torch.rand(d+1, generator=gen) * 2 * torch.tensor([math.pi], requires_grad=False)
@@ -200,20 +231,23 @@ plt.show()
 
 
 ######################################################################
-# All of these conditions are met! We see that indeed all of the plots are
-# odd in symmetry. We observe a good spread between the degree of each
-# plot (eg. poly #3 looks linear, poly #1 and #2 look cubic, poly #0 has
-# degree 5), all of which are :math:`\leq 5`. We also see that each plot
-# does not exceed :math:`\pm1` !
+# Exactly as predicted, all of these conditions are met!
 # 
-# 3. Function Fitting with Quantum Signal Processing!
+# -  all curves are odd in :math:`a`
+# -  we observe a good spread between the degree of each polynomial
+#    plotted (eg. polynomial #3 looks linear, polynomial #1 and #2 look
+#    cubic, polynomial #0 has degree 5), all of which have degree
+#    :math:`\leq 5`
+# -  each plot does not exceed :math:`\pm1` !
+# 
+# 3. Function Fitting with Quantum Signal Processing:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Another observation we can make about this theorem, is the fact that it
-# holds true in both directions. This means that if we have two
-# polynomials :math:`P(a), Q(a)` that satisfy the conditions of the
-# theorem, then there exists a :math:`\vec{\phi}` for which we can
-# construct a signal processing operator which maps :math:`a \to P(a)`.
+# Another observation we can make about this theorem is the fact that it
+# holds true in both directions: If we have two polynomials :math:`P(a)`
+# and :math:`Q(a)` that satisfy the conditions of the theorem, then there
+# exists a :math:`\vec{\phi}` for which we can construct a signal
+# processing operator which maps :math:`a \to P(a)`.
 # 
 # In this section we try to answer the question:
 # 
@@ -221,23 +255,22 @@ plt.show()
 # our signal processing operator polynomial to fit a given function?*”**.
 # 
 # In order to answer this question, we begin by building a machine
-# learning model (using torch). The ``__init__()`` method handles the
+# learning model using Pytorch. The ``__init__()`` method handles the
 # random initialization of our parameter vector :math:`\vec{\phi}`. The
 # ``forward`` method takes an array of signal rotation matricies
 # (:math:`\hat{W}(a)` where each entry corresponds to a different
-# :math:`a`), and produces the predicted y value.
+# :math:`a`), and produces the predicted y values.
 # 
-# Here we make use of the PennyLane function ``qml.matrix()`` which
+# Next we make use of the PennyLane function ``qml.matrix()``, which
 # accepts our quantum function (it can also accept quantum tapes and
 # QNodes) and returns its unitary matrix representation. We are interested
-# in the real value of the top left entry (this corresponds to
-# :math:`P(a)`).
+# in the real value of the top left entry, this corresponds to
+# :math:`P(a)`.
 # 
 
 torch_pi = torch.Tensor([math.pi])
 
-
-class QSPFuncFit(torch.nn.Module):
+class QSP_Func_Fit(torch.nn.Module):
     
     def __init__(self, degree, num_vals, random_seed=None):
         """Given the degree and number of samples, this method randomly
@@ -257,6 +290,7 @@ class QSPFuncFit(torch.nn.Module):
         self.num_phi = degree + 1
         self.num_vals = num_vals
 
+    
     def forward(self, omega_mats):
         """PennyLane forward implementation (~ 10 - 20 mins to converge)"""
         y_pred = []
@@ -264,48 +298,18 @@ class QSPFuncFit(torch.nn.Module):
         
         for w in omega_mats:
             u_qsp = generate_qsp_mat(self.phi, w)
-            P_a = u_qsp[0, 0]
+            P_a = u_qsp[0, 0]       # Taking the (0,0) entry of the matrix corresponds to <0|U|0> 
             y_pred.append(P_a.real)
         
         return torch.stack(y_pred, 0)
 
-#     def forward(self, omega_mats):  #NOTE: Should we delete this? or keep it in and add a note for users? 
-#         """Fast forward implementation using torch directly (~ 1 - 3 mins to converge)"""
-        
-#         hadamard = torch.sqrt(torch.tensor([1/2], dtype=torch.complex64)) * torch.tensor([[1., 1.], [1., -1.]], dtype=torch.complex64)
-#         hadamard = (torch.unsqueeze(hadamard, 0)).expand(self.num_vals, -1, -1)
-        
-#         pauli_z = torch.Tensor([[1, 0], [0, -1]])
-#         pauli_z = (torch.unsqueeze(pauli_z, 0)).expand(self.num_vals, -1, -1) # added dimension for omegas
-#         pauli_z = (torch.unsqueeze(pauli_z, 0)).expand(self.num_phi, -1, -1, -1) # added dimension for phis
-        
-#         cmplx_phi = torch.complex(torch.zeros(self.num_phi), self.phi)
-#         rz = (pauli_z.transpose(0 , 3) * cmplx_phi).transpose(0, 3)
-#         rz = torch.reshape(rz, (self.num_phi * self.num_vals, 2, 2))
-#         rz = torch.linalg.matrix_exp(rz)
-#         rz = torch.reshape(rz, (self.num_phi, self.num_vals, 2, 2))
-        
-#         ident = torch.tensor([[1.0, 0.], [0., 1.0]], dtype=torch.complex64)
-#         ident = (torch.unsqueeze(ident, 0)).expand(self.num_vals, -1, -1)
-        
-#         u_qsp = torch.matmul(hadamard, ident)
-        
-#         for i in range(self.num_phi - 1):
-#             u_qsp = torch.matmul(rz[i], u_qsp)
-#             u_qsp = torch.matmul(omega_mats, u_qsp)
-        
-#         u_qsp = torch.matmul(rz[-1], u_qsp)
-#         u_qsp = torch.matmul(hadamard, u_qsp)
-        
-#         return u_qsp.real[:, 0, 0].to(torch.float)
-
 
 ######################################################################
-# Here we create a ``ModelRunner`` class to handle running the
-# optimization, storing the results and providing plotting functionality:
+# Next we create a ``Model_Runner`` class to handle running the
+# optimization, storing the results, and providing plotting functionality:
 # 
 
-class ModelRunner:
+class Model_Runner():
     
     def __init__(self, model, degree, num_samples, x_vals, process_x_vals, y_true):
         """Given a model and a series of model specific arguments, store everythign in 
@@ -319,7 +323,8 @@ class ModelRunner:
         self.inp = process_x_vals(x_vals)
         self.y_true = y_true
 
-    def execute(self, random_seed=2147483647, max_shots=25000, verbose=True):
+        
+    def execute(self, random_seed=13021967, max_shots=25000, verbose=True):  # easter egg: oddly specific seed? 
         """Run the optimization protocol on the model using Mean Square Error as a loss
         function and using stochastic gradient descent as the optimizer.
         """
@@ -328,29 +333,31 @@ class ModelRunner:
         criterion = torch.nn.MSELoss(reduction='sum')
         optimizer = torch.optim.SGD(model.parameters(), lr=1e-5)
         
-        t = 1 
-        successive_loss = 1.0
+        t = 0 
+        j = 0
         loss_val = 1.0
         prev_loss = 2.0
         
-        while (t <= max_shots) and (loss_val > 1e-2):
+        while (t <= max_shots) and (loss_val > 0.5):
             
-            y_pred = model(self.inp)
+            self.y_pred = model(self.inp)
 
             if t == 1:
-                self.init_y_pred = y_pred
+                self.init_y_pred = self.y_pred
 
             # Compute and print loss
-            loss = criterion(y_pred, self.y_true)
+            loss = criterion(self.y_pred, self.y_true)
             loss_val = loss.item()
 
-            if t > 1: 
-                successive_loss = loss_val - prev_loss
-
-
             if (t % 100 == 0) and verbose:
-                print(f"---- iter: {t}, loss: {loss_val}, successive_loss: {successive_loss} -----")
-
+                print(f"---- iter: {t}, loss: {round(loss_val, 4)} -----")
+            
+            if (t % 1000 == 0):
+                j+=1
+                self.plot_result(show=False)
+                plt.savefig(f'{j}.png')
+                plt.clf()
+                    
             # Zero gradients, perform a backward pass, and update the weights.
             optimizer.zero_grad()
             loss.backward()
@@ -360,15 +367,18 @@ class ModelRunner:
             t+=1
         
         self.model_params = model.phi
-        self.y_pred = y_pred
         
-    def plot_result(self):
+        
+    def plot_result(self, show=True):
         """Plot the results"""
         plt.plot(self.x_vals, self.y_true.tolist(), '--b', label="target func")
         plt.plot(self.x_vals, self.y_pred.tolist(), '.g', label="optim params")
         plt.plot(self.x_vals, self.init_y_pred.tolist(), '.r', label="init params")
-        plt.legend()
-        plt.show()
+        plt.legend(loc=1)
+        
+        if show:
+            plt.show()
+        
 
 
 ######################################################################
@@ -381,41 +391,41 @@ class ModelRunner:
 # 
 # .. math::  y = 4x^{5} - 5x^{3} + x 
 # 
-# Lets see how well we can fit this polynomial:
-#
+# Lets see how well we can fit this polynomial!
+# 
 
-d = 9  # dim(phi) = d + 1,
+d = 9 # dim(phi) = d + 1,
 num_samples = 50
-
 
 def custom_poly(x):
     """A custom polynomial of degree <= d and parity d % 2"""
     return torch.tensor(4*x**5 - 5*x**3 + x, requires_grad=False, dtype=torch.float)
+#     return torch.tensor(-4*x*(x - 0.5)*(x+0.5), requires_grad=False, dtype=torch.float)
 
 
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = custom_poly(a_vals)
 
-qsp_model_runner = ModelRunner(QSPFuncFit, d, num_samples, a_vals, generate_inp, y_true)
+qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
 qsp_model_runner.execute()
+
 qsp_model_runner.plot_result()
 
 
 ######################################################################
 # We were able to fit that polynomial almost perfectly (within the given
-# iteration limit)! Lets try something more challenging. Lets try and fit
-# our polynomials to a non-polynomial function. One thing to keep in mind
-# is the symmetry and bounds constriants on our polynomials. If our target
-# function does not satisfy them as well, then we cannot hope to generate
-# a good polynomial fit, regardless of how long we train for.
+# iteration limit)! Lets try something more challenging: fitting a
+# non-polynomial function. One thing to keep in mind is the symmetry and
+# bounds constraints on our polynomials. If our target function does not
+# satisfy them as well, then we cannot hope to generate a good polynomial
+# fit, regardless of how long we train for.
 # 
-# Here we try to generate a polynomial approximation for the sign/step
-# function:
+# A good non-polynomial candidate to fit to, that obeys our constraints,
+# is the step function. Let’s try it!
 # 
 
-d = 9  # dim(phi) = d + 1,
+d = 9 # dim(phi) = d + 1,
 num_samples = 50
-
 
 def step_func(x):
     """A step function (odd parity) which maps all values <= 0 to -1 
@@ -424,11 +434,12 @@ def step_func(x):
     res = [-1.0 if x_i <= 0 else 1.0 for x_i in x]
     return torch.tensor(res, requires_grad=False, dtype=torch.float)
 
-
+a_vals = np.linspace(-1, 1, num_samples)
 y_true = step_func(a_vals)
 
-qsp_model_runner = ModelRunner(QSPFuncFit, d, num_samples, a_vals, generate_inp, y_true)
+qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
 qsp_model_runner.execute()
+
 qsp_model_runner.plot_result()
 
 
@@ -436,11 +447,11 @@ qsp_model_runner.plot_result()
 # 4. Conclusion:
 # ~~~~~~~~~~~~~~
 # 
-# In this demo we explored the Quantum Signal Processing theorem. We
-# showed that one could use a simple gradient descent model to train the
+# In this demo, we explored the Quantum Signal Processing theorem. We
+# showed that one could use a simple gradient descent model to train a
 # parameter vector :math:`\vec{\phi}` to generate a reasonably good
-# polynomial approximation to fit an arbitrary function (provided the
-# function satisfied the same symmetry and bounds constrainints).
+# polynomial approximation of an arbitrary function (provided the function
+# satisfied the same constrainints).
 # 
 # 5. References:
 # ~~~~~~~~~~~~~~
@@ -449,3 +460,4 @@ qsp_model_runner.plot_result()
 # Grand Unification of Quantum Algorithms”*\ `PRX Quantum 2,
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
 # 
+
