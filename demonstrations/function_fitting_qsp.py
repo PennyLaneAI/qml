@@ -113,19 +113,19 @@ Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 
 
 .. note::
-    *Condition 3 is actually quite restrictive because if we
-    substitute* :math:`a = \pm 1`*, we get the result*
-    :math:`|P^{2}(\pm 1)| = 1`*. Thus it restricts our polynomial to be
-    pinned to* :math:`\pm 1` *at the end points of our domain*
-    :math:`a = \pm 1`*. This condition can be relaxed to*
-    :math:`|P^{2}(a)| \leq 1` *by expressing our signal processing operator
-    in the Hadamard basis (ie.*
-    :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`*). This is equivalent to
-    redefining* :math:`P(a)` *such that:*
+    Condition 3 is actually quite restrictive because if we
+    substitute :math:`a = \pm 1`, we get the result
+    :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomial to be
+    pinned to :math:`\pm 1` at the end points of our domain
+    :math:`a = \pm 1`. This condition can be relaxed to
+    :math:`|P^{2}(a)| \leq 1` by expressing our signal processing operator
+    in the Hadamard basis (ie.
+    :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
+    redefining :math:`P(a)` such that:
 
     .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
 
-    *This is the convention we follow in this demo.*
+    *This is the convention we follow in this demo.*s
 
 """
 
@@ -240,7 +240,7 @@ plt.show()
 ######################################################################
 # .. figure:: ../demonstrations/function_fitting_qsp/random_poly.png
 #     :align: center
-#     :width: 80%
+#     :width: 50%
 #
 
 
@@ -591,9 +591,9 @@ qsp_model_runner.plot_result()
 #     ---- iter: 16000, loss: 0.5128 -----
 #     ---- iter: 16100, loss: 0.5017 -----
 #
-#   .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
-#      :align: left
-#      :width: 50%
+#  .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
+#     :align: left
+#     :width: 50%
 #
 
 
@@ -888,9 +888,9 @@ qsp_model_runner.plot_result()
 #     ---- iter: 24900, loss: 4.3846 -----
 #     ---- iter: 25000, loss: 4.3839 -----
 #
-#   .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
-#      :align: left
-#      :width: 50%
+#  .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
+#     :align: left
+#     :width: 50%
 #
 
 
