@@ -592,7 +592,7 @@ qsp_model_runner.plot_result()
 #     ---- iter: 16100, loss: 0.5017 -----
 #
 #  .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
-#     :align: left
+#     :align: center
 #     :width: 50%
 #
 
@@ -889,7 +889,7 @@ qsp_model_runner.plot_result()
 #     ---- iter: 25000, loss: 4.3839 -----
 #
 #  .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
-#     :align: left
+#     :align: center
 #     :width: 50%
 #
 
