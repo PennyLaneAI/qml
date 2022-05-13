@@ -160,7 +160,7 @@ def _remove_executable_from_doc(
     with input_file_path.open(encoding=encoding) as fh:
         for line in fh:
             original_line = line
-            line = line.strip()
+            line = line.rstrip()
             if current_read_state == FileReadState.NORMAL:
                 if line.startswith(CommentType.SINGLE_LINE.value):
                     output_lines.append(original_line)
