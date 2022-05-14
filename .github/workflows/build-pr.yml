@@ -103,15 +103,8 @@ jobs:
       - name: Create venv
         if: steps.python_cache.outputs.cache-hit != 'true'
         run: |
-          if [ ! -f venv/bin/python3 ]; then
-            rm -rf venv
-            python3 -m venv venv
-          fi
-
-      # Once the caching issues outlined in actions/setup-python (described above)
-      # Then the `venv/bin/` prefix can be removed here.
-      - name: Install pip dependencies
-        run: |
+          if [ -d "venv" ]; then rm -rf venv; fi
+          python3 -m venv venv
           venv/bin/python3 -m pip install pip setuptools cmake --upgrade
           venv/bin/python3 -m pip install -r requirements.txt
           venv/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
