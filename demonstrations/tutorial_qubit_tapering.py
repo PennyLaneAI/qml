@@ -15,7 +15,8 @@ Qubit tapering
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
-*Author: PennyLane dev team. Posted: 17 May 2022. Last updated: 17 May 2022*
+*Author: Soran Jahangiri. Posted: 16 May 2022. Last updated: 16 May 2022*
+
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
