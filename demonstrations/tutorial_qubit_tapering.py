@@ -19,8 +19,8 @@ Qubit tapering
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
-limitation hinders the treatment of large molecules with algorithms such as the variational quantum
-eigensolver (VQE). Several approaches have been developed to reduce the qubit requirements for
+limitation hinders the treatment of large molecules with algorithms such as the :doc:`variational quantum
+eigensolver (VQE) <tutorial_vqe>`. Several approaches have been developed to reduce the qubit requirements for
 quantum chemistry calculations. In this tutorial, we demonstrate the symmetry-based qubit
 tapering approach which allows reducing the number of qubits required to perform molecular quantum
 simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
