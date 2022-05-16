@@ -18,27 +18,27 @@ Function Fitting using Quantum Signal Processing (QSP)
 ~~~~~~~~~~~~~~~~
 
 This demo was inspired by the paper `‘A Grand Unification of Quantum
-Algorithms’ <https://arxiv.org/abs/2105.02859>`__ which may sound like a
-very ambitious title, yet the authors fully deliver. This paper centers
-around the ‘Quantum Singular Value Transform’ (QSVT) protocol and how it
-provides a single framework to generalize some of the most famous
-quantum algorithms (from Shor’s factoring and Grover search, to
-hamiltonian simulation and more).
+Algorithms’ <https://arxiv.org/abs/2105.02859>`__; this may sound like a
+very ambitious title, but in my opinion the authors fully deliver. This
+paper is centered around the ‘Quantum Singular Value Transform’ (QSVT)
+protocol and how it provides a single framework to generalize some of
+the most famous quantum algorithms like Shor’s factoring, Grover search,
+and more.
 
 The QSVT is a method to apply polynomial transformations to the singular
-values of *any* matrix (does not have to be square). From polynomial
-transformations we can generate arbitrary function transformations
-(using taylor approximations). The QSVT protocol is an extension of the
-more constrained ‘Quantum Signal Processing’ (QSP) protocol which
-presents a method for polynomial transformation of matrix entries in a
-single-qubit unitary operator. The QSVT protocol is quite sophisticated
-and involved in its derivation, but the idea at its core is quite
-simple. By studying QSP, we get a relatively simpler path to explore
+values of *any matrix* (does not have to be square). This is powerful
+because from polynomial transformations we can generate arbitrary function
+transformations (using taylor approximations). The QSVT protocol is an
+extension of the more constrained ‘Quantum Signal Processing’ (QSP)
+protocol which presents a method for polynomial transformation of matrix
+entries in a single-qubit unitary operator. The QSVT protocol is quite
+sophisticated and involved in its derivation, but the idea at its core
+is quite simple. By studying QSP, we get a relatively simpler path to explore
 this idea at the foundation of QSVT.
 
 In this demo, we will explore the QSP protocol and how it can be used
 for curve fitting. This is a powerful tool that will ultimately allow us
-to approximate *any function* on the interval :math:`[-1, 1]` that
+to approximate any function on the interval :math:`[-1, 1]` that
 satisfies certain constraints. Before we can dive into function fitting,
 let’s develop some intuition. Consider the following operator
 parameterized by :math:`a \in [-1, 1]`:
@@ -83,7 +83,7 @@ case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 .. math::  \bra{0}\hat{U}_{sp}\ket{0} = 2a^{2} - 1
 
 Notice that this quantity is a polynomial in :math:`a`. Equivalently,
-suppose we wanted to create a map :math:'S: a \to 2a^2 - 1'.
+suppose we wanted to create a map :math:`S: a \to 2a^2 - 1`.
 This expectation value would give us the means to perform such a mapping
 :math:`S`. This may seem oddly specific at first, but it turns out that
 this process can be generalized for generating a mapping
@@ -125,7 +125,7 @@ Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 
     .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
 
-    *This is the convention we follow in this demo.*s
+    *This is the convention we follow in this demo.*
 
 """
 
@@ -134,7 +134,7 @@ Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Let us put this theorem to the test! In this section we will construct
-# the SRO (:math:`\hat{W}(a)`), and then use PennyLane to define the SPO.
+# the SRO :math:`\hat{W}(a)`, and then use PennyLane to define the SPO.
 # To test the theorem we will randomly generate parameters
 # :math:`\vec{\phi}` and plot the expectation value
 # :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}` for
@@ -247,12 +247,9 @@ plt.show()
 ######################################################################
 # Exactly as predicted, all of these conditions are met!
 #
-# -  all curves are odd in :math:`a`
-# -  we observe a good spread between the degree of each polynomial
-#    plotted (eg. polynomial #3 looks linear, polynomial #1 and #2 look
-#    cubic, polynomial #0 has degree 5), all of which have degree
-#    :math:`\leq 5`
-# -  each plot does not exceed :math:`\pm1` !
+# -  All curves have odd symmetry in :math:`a`
+# -  None of the curves are of (:math:`O(a^6)` (most of the curves look cubic)
+# -  Each plot does not exceed :math:`\pm1` !
 #
 # 3. Function Fitting with Quantum Signal Processing:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,8 +262,8 @@ plt.show()
 #
 # In this section we try to answer the question:
 #
-# ***“Can we learn the parameter values of*** :math:`\vec{\phi}` ***to transform
-# our signal processing operator polynomial to fit a given function?”***.
+# **“Can we learn the parameter values of** :math:`\vec{\phi}` **to transform
+# our signal processing operator polynomial to fit a given function?”**.
 #
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
@@ -275,7 +272,7 @@ plt.show()
 # (:math:`\hat{W}(a)` for varying :math:`a`), and produces the
 # predicted y values.
 #
-# Next we make use of the PennyLane function ``qml.matrix()``, which
+# Next we leverage the PennyLane function ``qml.matrix()``, which
 # accepts our quantum function (it can also accept quantum tapes and
 # QNodes) and returns its unitary matrix representation. We are interested
 # in the real value of the top left entry, this corresponds to
@@ -283,7 +280,6 @@ plt.show()
 #
 
 torch_pi = torch.Tensor([math.pi])
-
 
 class QSP_Func_Fit(torch.nn.Module):
     def __init__(self, degree, num_vals, random_seed=None):
@@ -324,7 +320,7 @@ class QSP_Func_Fit(torch.nn.Module):
 
 class Model_Runner:
     def __init__(self, model, degree, num_samples, x_vals, process_x_vals, y_true):
-        """Given a model and a series of model specific arguments, store everythign in
+        """Given a model and a series of model specific arguments, store everything in
         internal attributes.
         """
         self.model = model
@@ -336,7 +332,7 @@ class Model_Runner:
         self.y_true = y_true
 
     def execute(
-        self, random_seed=13021967, max_shots=25000, verbose=True
+        self, random_seed=13_02_1967, max_shots=25000, verbose=True
     ):  # easter egg: oddly specific seed?
         """Run the optimization protocol on the model using Mean Square Error as a loss
         function and using stochastic gradient descent as the optimizer.
@@ -407,11 +403,9 @@ class Model_Runner:
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
-
 def custom_poly(x):
     """A custom polynomial of degree <= d and parity d % 2"""
     return torch.tensor(4 * x**5 - 5 * x**3 + x, requires_grad=False, dtype=torch.float)
-
 
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = custom_poly(a_vals)
@@ -612,14 +606,12 @@ qsp_model_runner.plot_result()
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
-
 def step_func(x):
     """A step function (odd parity) which maps all values <= 0 to -1
     and all values > 0 to +1.
     """
     res = [-1.0 if x_i <= 0 else 1.0 for x_i in x]
     return torch.tensor(res, requires_grad=False, dtype=torch.float)
-
 
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = step_func(a_vals)
@@ -900,8 +892,8 @@ qsp_model_runner.plot_result()
 #
 # In this demo, we explored the Quantum Signal Processing theorem. We
 # showed that one could use a simple gradient descent model to train a
-# parameter vector :math:`\vec{\phi}` to generate a reasonably good
-# polynomial approximation of an arbitrary function (provided the function
+# parameter vector :math:`\vec{\phi}` to generate reasonably good
+# polynomial approximations of arbitrary functions (provided the function
 # satisfied the same constraints).
 #
 
