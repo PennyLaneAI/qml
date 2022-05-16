@@ -119,7 +119,7 @@ cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}
 Tapering the molecular Hamiltonian
 ----------------------------------
 
-In PennyLane, a molecular Hamiltonian can be created by specifying the atomic symbols and
+In PennyLane, a :doc:`molecular Hamiltonian <tutorial_quantum_chemistry>` can be created by specifying the atomic symbols and
 coordinates.
 """
 import pennylane as qml
