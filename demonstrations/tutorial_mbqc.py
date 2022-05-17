@@ -12,13 +12,33 @@ Measurement-based quantum computation
 **Measurement-based quantum computation** [#OneWay] is one of the prososals of a physical implementation of a quantum Turing machine.
 
 """
+import pennylane as qml
+from pennylane import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
-print("hi")
+np.random.seed(42)
+
+######################################################################
+# Visualizing the problem
+# -----------------------
+#
+# To start, let's look at the task of learning the identity gate
+# across multiple qubits. This will help us visualize the problem and get
+# a sense of what is happening in the cost landscape.
+#
+# First we define a number of wires we want to train on. The work by
+# Cerezo et al. shows that circuits are trainable under certain regimes, so
+# how many qubits we train on will effect our results.
+
+wires = 6
+dev = qml.device("default.qubit", wires=wires, shots=10000)
+
 
 ##############################################################################
 #
 # Cluster states
-# ~~~~~~~~~~~~~~~~~~
+# --------------
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
@@ -29,8 +49,9 @@ print("hi")
 #    Cluster state proposed [#XanaduBlueprint2021]
 #
 # To understand how MBQC qubits work, we first need to explain what cluster states are...
-#
-#
+
+
+##############################################################################
 # References
 # ----------
 #
