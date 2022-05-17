@@ -70,8 +70,11 @@ jobs:
           #   requirements.txt
           #   requirements_no_deps.txt
 
-      # Creates a temp file with current matrix information.
-      # The hash of this file is used to as portion of the key in subsequent caching steps.
+      # Creates a temp file with current matrix information, which includes:
+      #  - Current offset
+      #  - Total Workers
+      #  - The name of files that will be executed by this worker
+      # The hash of this file is used as portion of the key in subsequent caching steps.
       # This ensures that if the number of worker / tutorials change,
       # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
