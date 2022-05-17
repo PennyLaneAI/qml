@@ -116,7 +116,7 @@ jobs:
 
       # Removes executable code from tutorials that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
-      - name: Execute Matrix offset
+      - name: Remove extraneous executable code from demos
         run: |
           python3 .github/workflows/github_job_scheduler.py \
            remove-executable-code \
