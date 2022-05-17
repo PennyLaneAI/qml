@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   # Generates a JSON list that is used by the strategy.matrix of the build job to spawn multiple workers
-  compute-build-matrix:
+  compute-build-strategy-matrix:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout PR
@@ -29,22 +29,22 @@ jobs:
           python-version: 3.7
 
       - name: Generate Build Matrix
-        id: compute-matrix
+        id: compute-strategy-matrix
         run: |
-          echo "::set-output name=build-matrix::$(python3 .github/workflows/github_job_scheduler.py \
-            build-matrix \
+          echo "::set-output name=strategy-matrix::$(python3 .github/workflows/github_job_scheduler.py \
+            build-strategy-matrix \
             ${{ github.workspace }} \
             --num-workers=${{ env.NUM_WORKERS }})"
     outputs:
-      build-matrix: ${{ steps.compute-matrix.outputs.build-matrix }}
+      strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
 
   build:
     runs-on: ubuntu-20.04
     needs:
-      - compute-build-matrix
+      - compute-build-strategy-matrix
     strategy:
       matrix:
-        offset: ${{ fromJson(needs.compute-build-matrix.outputs.build-matrix) }}
+        offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v3
@@ -81,7 +81,7 @@ jobs:
           offset: ${{ matrix.offset }}
           EOL
           python3 .github/workflows/github_job_scheduler.py \
-           execute-matrix \
+           remove-executable-code \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
            --offset=${{ matrix.offset }} \
@@ -93,6 +93,8 @@ jobs:
 
       # Caches the python virtual environment. Once the caching issues outlined in actions/setup-python (described above)
       # are resolved, then this step can be removed
+      # (General) Info about GitHub caching:
+      # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
       - name: Python Cache
         id: python_cache
         uses: actions/cache@v3
@@ -114,7 +116,7 @@ jobs:
       - name: Execute Matrix offset
         run: |
           python3 .github/workflows/github_job_scheduler.py \
-           execute-matrix \
+           remove-executable-code \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
            --offset=${{ matrix.offset }} \
@@ -158,7 +160,7 @@ jobs:
         if: matrix.offset == 0
         run: |
           python3 .github/workflows/github_job_scheduler.py \
-           clean-html \
+           remove-html \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
            --offset=${{ matrix.offset }} \
@@ -169,7 +171,7 @@ jobs:
         if: matrix.offset != 0
         run: |
           python3 .github/workflows/github_job_scheduler.py \
-           clean-html \
+           remove-html \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
            --offset=${{ matrix.offset }} \

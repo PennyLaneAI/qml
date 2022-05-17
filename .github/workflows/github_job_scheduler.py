@@ -89,13 +89,19 @@ import json
 import math
 import argparse
 from enum import Enum, IntEnum
-from itertools import chain
 from pathlib import PosixPath
+from dataclasses import dataclass
 from typing import List, Optional
 
 # Used to handle an edge case where you may have a multi-line marked comment start and end on the same line
 # """ hello """ <-- Example
 MULTI_LINE_MIN_LEN = 6
+
+
+@dataclass
+class WorkerFileCount:
+    total_files: int
+    files_per_worker: int
 
 
 class CommentType(Enum):
@@ -181,9 +187,86 @@ def _remove_executable_from_doc(
     return None
 
 
-def build_matrix(num_workers: int,
-                 build_directory: PosixPath,
-                 parser_namespace: argparse.Namespace) -> List[str]:
+def _calculate_files_per_worker(
+        num_workers: int,
+        build_directory: PosixPath,
+        glob_pattern: str = "*.py"
+) -> WorkerFileCount:
+    """
+    Calculates how many files should be allocated per worker based on the total number of files found.
+
+    Example:
+        If you have 15 tutorials (files are globbed using pathlib):
+        [
+          "0.py",  # File names in this case are their respective indexes in this list (illustrative purpose)
+          "1.py",
+          "2.py",
+          "3.py",
+          "4.py",
+          "5.py",
+          "6.py",
+          "7.py",
+          "8.py",
+          "9.py",
+          "10.py",
+          "11.py",
+          "12.py",
+          "13.py",
+          "14.py"
+        ]
+        And you have 3 workers, then the files to be executed per worker is:
+        math.ceil(15 / 3) = 5
+
+        So in this scenario this function would return the WorkerFileCount(total_files=15, files_per_worker=5)
+
+    Args:
+        num_workers:  The total number of workers that will be spawned.
+        build_directory: The directory where all the demonstrations reside
+        glob_pattern: The pattern use to glob all demonstration files inside build_directory. Defaults to "*.py"
+
+    Returns:
+        WorkerFileCount. An object containing the total number of files globbed `total_examples` and allocation
+        of files to workers `files_per_worker`.
+    """
+    files = list(build_directory.glob(glob_pattern))
+    files_count = len(files)
+    return WorkerFileCount(
+        total_files=files_count,
+        files_per_worker=math.ceil(files_count / num_workers)
+    )
+
+
+def _calculate_files_to_retain(
+        num_workers: int,
+        offset: int,
+        build_directory: PosixPath,
+        glob_pattern: str = "*.py",
+) -> List[str]:
+    """
+    Determines the exact file names that a worker needs to execute.
+
+    Args:
+        num_workers:  The total number of workers that have been spawned
+        offset: The current strategy.matrix offset in the GitHub workflow
+        build_directory: The directory where all the demonstrations reside
+        glob_pattern: The pattern use to glob all demonstration files inside build_directory. Defaults to "*.py"
+
+    Returns:
+        List[str]. List where each element is the name of a file the current worker has to execute.
+    """
+    file_info = _calculate_files_per_worker(num_workers, build_directory, glob_pattern)
+
+    files = sorted(build_directory.glob(glob_pattern))
+    files_to_retain = files[offset:offset + file_info.files_per_worker]
+
+    return list(map(lambda x: x.name, files_to_retain))
+
+
+def build_strategy_matrix_offsets(
+        num_workers: int,
+        build_directory: PosixPath,
+        parser_namespace: argparse.Namespace
+) -> List[str]:
     """
     Generates a JSON list of "offsets" that indicate where each node should start building tutorials from.
     This function calculates how many files should be allocated per worker, then generates a list indicating the index
@@ -246,15 +329,18 @@ def build_matrix(num_workers: int,
         List[str]. JSON list of integers indicating the offset of each node to execute tutorials.
     """
     glob_pattern = parser_namespace.glob_pattern
-    file_count = len(list(build_directory.glob(glob_pattern)))
-    files_per_worker = math.ceil(file_count / num_workers)
+    file_info = _calculate_files_per_worker(num_workers, build_directory, glob_pattern)
+    file_count = file_info.total_files
+    files_per_worker = file_info.files_per_worker
 
     return list(range(0, file_count, files_per_worker))
 
 
-def execute_matrix(num_workers: int,
-                   build_directory: PosixPath,
-                   parser_namespace: argparse.Namespace) -> Optional[List[str]]:
+def remove_extraneous_executable_code(
+        num_workers: int,
+        build_directory: PosixPath,
+        parser_namespace: argparse.Namespace
+) -> Optional[List[str]]:
     """
     Deletes executable code from all tutorials that are not relevant to the current node calling this function.
 
@@ -280,27 +366,26 @@ def execute_matrix(num_workers: int,
 
     assert offset >= 0, f"Invalid value for offset. Expected positive int; Got: {offset}"
 
-    files = sorted(build_directory.glob(glob_pattern))
-    files_per_worker = math.ceil(len(files) / num_workers)
+    files_to_retain = _calculate_files_to_retain(num_workers, offset, build_directory, glob_pattern)
 
-    files_to_retain = files[offset:offset + files_per_worker]
     if dry_run:
-        return list(map(lambda x: x.name, files_to_retain))
+        return files_to_retain
 
-    files_to_delete_1 = files[:offset]
-    files_to_delete_2 = files[offset + files_per_worker:]
-
-    for file in chain(files_to_delete_1, files_to_delete_2):
+    for file in build_directory.glob(glob_pattern):
+        if file.name in files_to_retain:
+            continue
         _remove_executable_from_doc(file, file)
         if verbose:
             print("Removing executable code from", file.name)
     return None
 
 
-def clean_html(num_workers: int,
-               root_directory: PosixPath,
-               build_directory: PosixPath,
-               parser_namespace: argparse.Namespace) -> Optional[List[str]]:
+def remove_extraneous_html(
+        num_workers: int,
+        root_directory: PosixPath,
+        build_directory: PosixPath,
+        parser_namespace: argparse.Namespace
+) -> Optional[List[str]]:
     """
     Deletes all html files after sphinx-build that are not relevant to the current node.
 
@@ -322,8 +407,9 @@ def clean_html(num_workers: int,
     """
     current_dry_run = parser_namespace.dry_run
     verbose = parser_namespace.verbose
-    parser_namespace.dry_run = True
-    files_to_retain = execute_matrix(num_workers, build_directory, parser_namespace)
+    offset = parser_namespace.offset
+    glob_pattern = parser_namespace.glob_pattern
+    files_to_retain = _calculate_files_to_retain(num_workers, offset, build_directory, glob_pattern)
     files_to_retain = list(map(lambda f: "".join(f.split(".")[:-1]), files_to_retain))
 
     image_files = (root_directory / "_build" / "html" / "_images").glob("*")
@@ -379,7 +465,7 @@ if __name__ == "__main__":
                         help="build-matrix -> Build strategy.matrix that will be used to schedule jobs dynamically. "
                              "execute-matrix -> Remove executable code from non-relevant files in current offset. "
                              "clean-html -> Delete html files built that are not relevant for current matrix offset.",
-                        choices=["build-matrix", "execute-matrix", "clean-html"],
+                        choices=["build-strategy-matrix", "remove-executable-code", "remove-html"],
                         type=str)
     parser.add_argument("directory",
                         help="The path to the qml directory",
@@ -422,12 +508,12 @@ if __name__ == "__main__":
     worker_count = parser_results.num_workers
     assert worker_count > 0, "Total number of workers has to be greater than 1"
 
-    if parser_results.action == "clean-html":
-        output = clean_html(worker_count, directory_qml, directory_examples, parser_results)
+    if parser_results.action == "remove-html":
+        output = remove_extraneous_html(worker_count, directory_qml, directory_examples, parser_results)
     else:
         action_dict = {
-            "build-matrix": build_matrix,
-            "execute-matrix": execute_matrix
+            "build-strategy-matrix": build_strategy_matrix_offsets,
+            "remove-executable-code": remove_extraneous_executable_code
         }
         output = action_dict[parser_results.action](worker_count, directory_examples, parser_results)
 
