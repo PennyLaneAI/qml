@@ -7,11 +7,17 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
-*Author: Radoica Draskic & Joost Bus. Posted: Day Month 2022. Last updated: 4 May 2022.*
-
-**Measurement-based quantum computation** [#OneWay2021] is one of the prososals of a physical implementation of a quantum Turing machine.
+*Author: Radoica Draskic & Joost Bus. Posted: Day Month 2022. Last updated: Day Month 2022.*
 
 """
+
+##############################################################################
+#
+# Measurement-based quantum computation
+# --------------
+# Measurement-based quantum computation** [#OneWay2021]_ is one of the prososals of a physical
+# implementation of a quantum Turing machine.
+
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
@@ -28,7 +34,7 @@ import matplotlib.pyplot as plt
 #
 #    ..
 #
-#    Cluster state proposed [#XanaduBlueprint2021]
+#    Cluster state proposed [#XanaduBlueprint2021]_
 #
 # To understand how MBQC qubits work, we first need to explain what cluster states are...
 
