@@ -1,0 +1,53 @@
+name: Teardown Website
+on:
+  pull_request_target:
+    types:
+      - closed
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  teardown:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check if deployment exists
+        id: check_deployment
+        run: |
+          num_obj=$(aws s3 ls s3://${{ secrets.AWS_BUCKET_ID }}/${{ secrets.AWS_BUCKET_BUILD_DIR }}/${{ github.event.pull_request.number }}/index.html --summarize | grep "Total Objects: " | sed 's/[^0-9]*//g')
+          echo "::set-output name=exists::$num_obj"
+
+      - name: Teardown
+        if: steps.check_deployment.outputs.exists != '0'
+        run: |
+          aws s3 rm s3://${{ secrets.AWS_BUCKET_ID }}/${{ secrets.AWS_BUCKET_BUILD_DIR }}/${{ github.event.pull_request.number }} --recursive
+
+      - name: Deactivate Deployment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const deployments = await github.rest.repos.listDeployments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment: 'preview',
+              task: 'deploy:pr-${{ github.event.pull_request.number }}'
+            });
+            
+            const numDeployments = deployments.data.length;
+            if (numDeployments > 0) {
+              for (const deployment of deployments.data) {
+                await github.rest.repos.createDeploymentStatus({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: deployment.id,
+                  state: 'inactive'
+                });
+                await github.rest.repos.deleteDeployment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: deployment.id
+                });
+              }
+            }
