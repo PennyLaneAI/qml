@@ -11,6 +11,9 @@ Function Fitting using Quantum Signal Processing
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
 
+Introduction
+~~~~~~~~~~~~~
+
 This demo is inspired by the paper `‘A Grand Unification of Quantum
 Algorithms’ <https://arxiv.org/abs/2105.02859>`__. This
 paper is centered around the Quantum Singular Value Transform (QSVT)
@@ -47,7 +50,7 @@ parameterized by :math:`a \in [-1, 1]`:
 
 :math:`\hat{W}(a)` is called the *signal rotation operator* (SRO). Using
 this operator, we can construct another operator called the
-*signal processing pperator* (SPO),
+*signal processing operator* (SPO),
 
 .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}).
 
