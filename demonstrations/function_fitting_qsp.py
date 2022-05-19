@@ -10,16 +10,9 @@ Function Fitting using Quantum Signal Processing
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
-.. figure:: ../demonstrations/function_fitting_qsp/trained_poly.gif
-    :align: center
-    :width: 50%
-
-1. Introduction:
-~~~~~~~~~~~~~~~~
 
 This demo is inspired by the paper `‘A Grand Unification of Quantum
-Algorithms’ <https://arxiv.org/abs/2105.02859>`__; this may sound like a
-very ambitious title, but in my opinion the authors fully deliver. This
+Algorithms’ <https://arxiv.org/abs/2105.02859>`__. This
 paper is centered around the Quantum Singular Value Transform (QSVT)
 protocol and how it provides a single framework to generalize some of
 the most famous quantum algorithms like Shor’s factoring algorithm, Grover search,
@@ -37,7 +30,14 @@ is quite simple. By studying QSP, we get a relatively simpler path to explore
 this idea at the foundation of QSVT.
 
 In this demo, we explore the QSP protocol and how it can be used
-for curve fitting. This is a powerful tool that will ultimately allow us
+for curve fitting. We show how you can fit polynomials, as illustrated in
+the animation below.
+
+.. figure:: ../demonstrations/function_fitting_qsp/trained_poly.gif
+    :align: center
+    :width: 50%
+
+This is a powerful tool that will ultimately allow us
 to approximate any function on the interval :math:`[-1, 1]` that
 satisfies certain constraints. Before we can dive into function fitting,
 let’s develop some intuition. Consider the following single-qubit operator
@@ -45,16 +45,15 @@ parameterized by :math:`a \in [-1, 1]`:
 
 .. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}.
 
-:math:`\hat{W}(a)` is called the *signal rotation operator* (SRO). In
-this particular case we are rotating around the x-axis but it can, in
-general, take other forms. Using this operator, we can construct another
-operator called the *signal processing pperator* (SPO),
+:math:`\hat{W}(a)` is called the *signal rotation operator* (SRO). Using
+this operator, we can construct another operator called the
+*signal processing pperator* (SPO),
 
 .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}).
 
 The SPO is parameterized by a vector
 :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, where :math:`d` is a free
-parameter which represents the number of repeated applications
+parameter which represents the number of repeated applications of
 :math:`\hat{W}(a)`.
 
 The SPO alternates between applying the SRO and parameterized rotations
