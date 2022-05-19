@@ -17,7 +17,7 @@ cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
 pennylane-lightning
-pennylane==0.23.0
+pennylane==0.23.1
 pennylane-sf==0.20.1
 pennylane-cirq==0.22.0
 pennylane-qiskit==0.23.0
@@ -45,3 +45,4 @@ Jinja2==2.11.3
 pyyaml==5.4.1
 jax==0.2.10
 jaxlib==0.1.64
+neural-tangents==0.3.6

@@ -102,3 +102,4 @@ such as benchmarking and characterizing quantum processors.
     demos/photonics
     
 
+  	demos/tutorial_sc_qubits
