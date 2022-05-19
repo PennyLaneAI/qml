@@ -2,7 +2,7 @@ r"""
 
 .. function_fitting_qsp:
 
-Function Fitting using Quantum Signal Processing (QSP)
+Function Fitting using Quantum Signal Processing
 ======================================================
 
 .. meta::
