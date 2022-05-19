@@ -17,40 +17,40 @@ Function Fitting using Quantum Signal Processing
 1. Introduction:
 ~~~~~~~~~~~~~~~~
 
-This demo was inspired by the paper `‘A Grand Unification of Quantum
+This demo is inspired by the paper `‘A Grand Unification of Quantum
 Algorithms’ <https://arxiv.org/abs/2105.02859>`__; this may sound like a
 very ambitious title, but in my opinion the authors fully deliver. This
-paper is centered around the ‘Quantum Singular Value Transform’ (QSVT)
+paper is centered around the Quantum Singular Value Transform (QSVT)
 protocol and how it provides a single framework to generalize some of
-the most famous quantum algorithms like Shor’s factoring, Grover search,
+the most famous quantum algorithms like Shor’s factoring algorithm, Grover search,
 and more.
 
 The QSVT is a method to apply polynomial transformations to the singular
-values of *any matrix* (does not have to be square). This is powerful
+values of *any matrix*. This is powerful
 because from polynomial transformations we can generate arbitrary function
-transformations (using taylor approximations). The QSVT protocol is an
-extension of the more constrained ‘Quantum Signal Processing’ (QSP)
+transformations using Taylor approximations. The QSVT protocol is an
+extension of the more constrained Quantum Signal Processing (QSP)
 protocol which presents a method for polynomial transformation of matrix
-entries in a single-qubit unitary operator. The QSVT protocol is quite
-sophisticated and involved in its derivation, but the idea at its core
+entries in a single-qubit unitary operator. The QSVT protocol is sophisticated,
+but the idea at its core
 is quite simple. By studying QSP, we get a relatively simpler path to explore
 this idea at the foundation of QSVT.
 
-In this demo, we will explore the QSP protocol and how it can be used
+In this demo, we explore the QSP protocol and how it can be used
 for curve fitting. This is a powerful tool that will ultimately allow us
 to approximate any function on the interval :math:`[-1, 1]` that
 satisfies certain constraints. Before we can dive into function fitting,
-let’s develop some intuition. Consider the following operator
+let’s develop some intuition. Consider the following single-qubit operator
 parameterized by :math:`a \in [-1, 1]`:
 
-.. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}
+.. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}.
 
-:math:`\hat{W}(a)` is called the *Signal Rotation Operator* (SRO). In
+:math:`\hat{W}(a)` is called the *signal rotation operator* (SRO). In
 this particular case we are rotating around the x-axis but it can, in
 general, take other forms. Using this operator, we can construct another
-operator called the *Signal Processing Operator* (SPO),
+operator called the *signal processing pperator* (SPO),
 
-.. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k})
+.. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}).
 
 The SPO is parameterized by a vector
 :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, where :math:`d` is a free
@@ -84,8 +84,8 @@ case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 
 Notice that this quantity is a polynomial in :math:`a`. Equivalently,
 suppose we wanted to create a map :math:`S: a \to 2a^2 - 1`.
-This expectation value would give us the means to perform such a mapping
-:math:`S`. This may seem oddly specific at first, but it turns out that
+This expectation value would give us the means to perform such a mapping.
+This may seem oddly specific at first, but it turns out that
 this process can be generalized for generating a mapping
 :math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
 
@@ -96,30 +96,29 @@ Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
 complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
 :math:`\hat{U}_{sp}`, can be expressed in matrix form as:
 
-.. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k})
+.. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}),
 
 .. math::
 
-   \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix}
+   \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix},
 
-
-Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
+where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 :math:`Q(a)` satisfy the following constraints:
 
--  :math:`deg(P) \leq d \ ` and :math:`deg(Q) \leq d - 1`
--  :math:`P` has parity :math:`d` mod 2 and :math:`Q` has parity
+-  :math:`deg(P) \leq d \ ` and :math:`deg(Q) \leq d - 1`,
+-  :math:`P` has parity :math:`d` mod 2 and :math:`Q` has parity,
    :math:`d - 1` mod 2
--  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`
+-  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`.
 
 
 .. note::
     Condition 3 is actually quite restrictive because if we
     substitute :math:`a = \pm 1`, we get the result
-    :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts our polynomial to be
-    pinned to :math:`\pm 1` at the end points of our domain
+    :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts the polynomial to be
+    pinned to :math:`\pm 1` at the end points of the domain,
     :math:`a = \pm 1`. This condition can be relaxed to
-    :math:`|P^{2}(a)| \leq 1` by expressing our signal processing operator
-    in the Hadamard basis (ie.
+    :math:`|P^{2}(a)| \leq 1` by expressing the signal processing operator
+    in the Hadamard basis, i.e.,
     :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
     redefining :math:`P(a)` such that:
 
@@ -130,10 +129,10 @@ Where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 """
 
 ######################################################################
-# 2. Lets Plot some Polynomials:
+# Let's Plot some Polynomials
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Let us put this theorem to the test! In this section we will construct
+# Now we put this theorem to the test! In this section we construct
 # the SRO :math:`\hat{W}(a)`, and then use PennyLane to define the SPO.
 # To test the theorem we will randomly generate parameters
 # :math:`\vec{\phi}` and plot the expectation value
@@ -182,17 +181,17 @@ def generate_many_sro(a_vals):
 
 ######################################################################
 # Now having access to the matrix elements of the SRO, we can leverage
-# PennyLane to define a quantum function which will compute the SPO
-# (:math:`\hat{U}_{sp}`). Recall we are measuring in the Hadamard basis to
-# relax the 3rd condition of the theorem (*see note in introduction*). We
+# PennyLane to define a quantum function that will compute the SPO.
+# Recall we are measuring in the Hadamard basis to
+# relax the third condition of the theorem. We
 # accomplish this by sandwiching the SPO between two Hadamard gates to
 # account for this change of basis.
 #
 
 
 def QSP_circ(phi, W):
-    """This circuit applies the SPO, the components in the matrix
-    representation of the final Unitary are polynomials!
+    """This circuit applies the SPO. The components in the matrix
+    representation of the final unitary are polynomials!
     """
     qml.Hadamard(wires=0)  # set initial state |+>
     for i in range(len(phi) - 1):  # iterate through rotations in reverse order
@@ -207,13 +206,13 @@ def QSP_circ(phi, W):
 ######################################################################
 # Finally, we randomly generate the vector :math:`\vec{\phi}` and plot the
 # expectation value :math:`\bra{+}\hat{U}_{sp}\ket{+}` as a function of
-# :math:`a`. In this case we choose :math:`d = 5`. Due to the conditions
-# of the theorem, we expect to observe the following:
+# :math:`a`. In this case we choose :math:`d = 5`.
+# We expect to observe the following:
 #
-# -  Since :math:`d \ \text{mod}(2) = 1` is odd, we expect all of the
+# -  Since :math:`d` is odd, we expect all of the
 #    polynomials we plot to have odd symmetry
 # -  Since :math:`d = 5`, we expect none of the polynomials will have
-#    terms ~ :math:`O(a^6)`
+#    terms ~ :math:`O(a^6)` or higher
 # -  All of the polynomials are bounded by :math:`\pm1`
 #
 
@@ -251,7 +250,7 @@ plt.show()
 # -  None of the curves are of (:math:`O(a^6)` (most of the curves look cubic)
 # -  Each plot does not exceed :math:`\pm1` !
 #
-# 3. Function Fitting with Quantum Signal Processing:
+# Function Fitting with Quantum Signal Processing:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Another observation we can make about this theorem is the fact that it
@@ -262,15 +261,15 @@ plt.show()
 #
 # In this section we try to answer the question:
 #
-# **“Can we learn the parameter values of** :math:`\vec{\phi}` **to transform
-# our signal processing operator polynomial to fit a given function?”**.
+# **Can we learn the parameter values of** :math:`\vec{\phi}` **to transform
+# our signal processing operator polynomial to fit a given function?**.
 #
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
 # random initialization of our parameter vector :math:`\vec{\phi}`. The
 # ``forward()`` method takes an array of signal rotation matrices
-# (:math:`\hat{W}(a)` for varying :math:`a`), and produces the
-# predicted y values.
+# :math:`\hat{W}(a)` for varying :math:`a`, and produces the
+# predicted :math:`y` values.
 #
 # Next we leverage the PennyLane function ``qml.matrix()``, which
 # accepts our quantum function (it can also accept quantum tapes and
@@ -592,8 +591,8 @@ qsp_model_runner.plot_result()
 
 
 ######################################################################
-# We were able to fit that polynomial almost perfectly (within the given
-# iteration limit)! Lets try something more challenging: fitting a
+# We were able to fit that polynomial quite well!
+# Lets try something more challenging: fitting a
 # non-polynomial function. One thing to keep in mind is the symmetry and
 # bounds constraints on our polynomials. If our target function does not
 # satisfy them as well, then we cannot hope to generate a good polynomial
