@@ -119,6 +119,20 @@ jobs:
         with:
           script: |
             let fs = require('fs');
+            
+            const maxRetry = 15;
+            const backoffDelay = (retryCount) => new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+            
+            const downloadHtmlArtifact = async (artifact) => {
+              let download = await github.rest.actions.downloadArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id,
+                archive_format: 'zip'
+              });
+              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
+            };
+            
             let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -127,14 +141,27 @@ jobs:
             let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
+      
             for (const artifact of htmlArtifacts) {
-              let download = await github.rest.actions.downloadArtifact({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                artifact_id: artifact.id,
-                archive_format: 'zip'
-              });
-              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
+              for (let i = 1; i < maxRetry + 1; i++) {
+                 try {
+                   console.log(`Attempting to download artifact: ${artifact.name}`);
+                   await downloadHtmlArtifact(artifact);
+                   console.log(`Successfully downloaded artifact: ${artifact.name}`);
+                   break;
+                 } catch (e) {
+                   console.log(`Error while trying to download artifact: ${artifact.name}, i: ${i}, error: ${e}`);
+                   ['message', 'status', 'request', 'response'].forEach((attr) => {
+                     if (e.hasOwnProperty(attr)) {
+                       console.log(`error_${attr}:`);
+                       console.log(e[attr]);
+                     }
+                   });
+                   if (i === maxRetry) throw new Error(e);
+                   console.log(`Retrying download of artifact: ${artifact.name}`);
+                   await backoffDelay(i);
+                 }
+              }
             }
 
       - name: Unpack HTML
