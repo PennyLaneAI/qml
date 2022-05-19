@@ -141,7 +141,16 @@ jobs:
             let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
-      
+            /*
+            Attempt to download the artifact one at a time and save them to disk.
+            In the event of an error, back-off (incrementally) and try again.
+
+            Each error increases the back-off delay by 1s, in other words:
+            > failure -> wait (1s) -> try-again -> failure -> wait (2s) -> try-again -> ...
+
+            This deals with network congestion and rate-limiting errors that occur if the artifact
+            download happens during a time of high load on GitHub Actions.
+            */
             for (const artifact of htmlArtifacts) {
               for (let i = 1; i < maxRetry + 1; i++) {
                  try {
