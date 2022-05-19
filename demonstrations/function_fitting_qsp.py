@@ -89,7 +89,7 @@ this process can be generalized for generating a mapping
 :math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
 
 Theorem: Quantum Signal Processing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
 complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
@@ -311,7 +311,6 @@ class QSP_Func_Fit(torch.nn.Module):
 # Next we create a ``Model_Runner`` class to handle running the
 # optimization, storing the results, and providing plotting functionality:
 #
-
 
 class Model_Runner:
     def __init__(self, model, degree, num_samples, x_vals, process_x_vals, y_true):
@@ -906,7 +905,7 @@ qsp_model_runner.plot_result()
 #
 
 ######################################################################
-# 5. References:
+# References:
 # ~~~~~~~~~~~~~~
 #
 # [1]: *John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang. “A
