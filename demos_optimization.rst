@@ -139,12 +139,6 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_qaoa_maxcut`
     :tags: autograd
 
-.. customgalleryitem::
-    :tooltip: Train polynomial approximations to functions using QSP.
-    :figure: demonstrations/function_fitting_qsp/cover.png
-    :description: :doc:`demos/function_fitting_qsp`
-    :tags: pytorch
-
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -172,4 +166,3 @@ in quantum neural networks.
     demos/qonn
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
-    demos/function_fitting_qsp
