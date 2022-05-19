@@ -56,8 +56,8 @@ The SPO is parameterized by a vector
 parameter which represents the number of repeated applications of
 :math:`\hat{W}(a)`.
 
-The SPO alternates between applying the SRO and parameterized rotations
-around the z-axis. Let’s see what happens when we try to compute the
+The SPO :math:`\hat{U}_{sp}` alternates between applying the SRO :math:`\hat{W}(a)`
+and parameterized rotations around the z-axis. Let’s see what happens when we try to compute the
 expectation value :math:`\bra{0}\hat{U}_{sp}\ket{0}` for the particular
 case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 
@@ -89,7 +89,7 @@ this process can be generalized for generating a mapping
 :math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
 
 Theorem: Quantum Signal Processing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
 complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
@@ -110,20 +110,16 @@ where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
 -  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`.
 
 
-.. note::
-    Condition 3 is actually quite restrictive because if we
-    substitute :math:`a = \pm 1`, we get the result
-    :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts the polynomial to be
-    pinned to :math:`\pm 1` at the end points of the domain,
-    :math:`a = \pm 1`. This condition can be relaxed to
-    :math:`|P^{2}(a)| \leq 1` by expressing the signal processing operator
-    in the Hadamard basis, i.e.,
-    :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
-    redefining :math:`P(a)` such that:
+The third condition is actually quite restrictive because if we substitute :math:`a = \pm 1`,
+we get the result :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts the polynomial to be
+pinned to :math:`\pm 1` at the end points of the domain, :math:`a = \pm 1`. This condition
+can be relaxed to :math:`|P^{2}(a)| \leq 1` by expressing the signal processing operator
+in the Hadamard basis, i.e., :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
+redefining :math:`P(a)` such that:
 
-    .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
+.. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
 
-    *This is the convention we follow in this demo.*
+*This is the convention we follow in this demo.*
 
 """
 
@@ -153,7 +149,8 @@ import matplotlib.pyplot as plt
 # which will construct the SRO matrix. We can also make a helper function
 # (``generate_many_sro(a_vals)``) which, given an array of possible values
 # for ‘:math:`a`’, will generate an array of :math:`\hat{W}(a)` associated
-# with each element.
+# with each element. We us Pytorch to construct this array as it will later
+# be used as input when training our function fitting model.
 #
 
 
@@ -335,7 +332,9 @@ class Model_Runner:
         """Run the optimization protocol on the model using Mean Square Error as a loss
         function and using stochastic gradient descent as the optimizer.
         """
-        model = self.model(degree=self.degree, num_vals=self.num_samples, random_seed=random_seed)
+        model = self.model(degree=self.degree,
+                           num_vals=self.num_samples,
+                           random_seed=random_seed)
 
         criterion = torch.nn.MSELoss(reduction="sum")
         optimizer = torch.optim.SGD(model.parameters(), lr=1e-5)
@@ -408,7 +407,9 @@ def custom_poly(x):
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = custom_poly(a_vals)
 
-qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
+qsp_model_runner = Model_Runner(
+    QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true
+)
 
 qsp_model_runner.execute()
 qsp_model_runner.plot_result()
@@ -614,7 +615,9 @@ def step_func(x):
 a_vals = np.linspace(-1, 1, num_samples)
 y_true = step_func(a_vals)
 
-qsp_model_runner = Model_Runner(QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true)
+qsp_model_runner = Model_Runner(
+    QSP_Func_Fit, d, num_samples, a_vals, generate_many_sro, y_true
+)
 
 qsp_model_runner.execute()
 qsp_model_runner.plot_result()
@@ -885,7 +888,7 @@ qsp_model_runner.plot_result()
 
 
 ######################################################################
-# 4. Conclusion:
+# Conclusion:
 # ~~~~~~~~~~~~~~
 #
 # In this demo, we explored the Quantum Signal Processing theorem. We
