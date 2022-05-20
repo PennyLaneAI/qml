@@ -12,10 +12,50 @@ Generalization in quantum machine learning from few training data
 
     tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Authors: asdasd. Posted: 01 June 2022*
+*Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber. Posted: 01 June 2022*
 
-This demo is reproducing the results in `Generalization in quantum machine learning from few training data <https://arxiv.org/abs/2111.05292>`__ `[1] <#ref1>`__  
-by Matthias Caro and co-authors. The authors find bounds on the necessary training data to guarantuee generalization for quantum machine learning (QML) tasks.
+In this tutorial we dive into the generalization capabilities of quantum machine learning models.
+For the example of a Quantum Convolutional Neural Nework (QCNN), we show how its generalization error behaves as a
+function of the number of training samples. This demo is based on the paper
+*"Generalization in quantum machine learning from few training data"*. by Caro et al. [#CaroGeneralization]_.
+
+What is Generalization in (Q)ML?
+------------------------
+When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
+distribution of interest, like images of cats and dogs. However, in practice we are limited to a finite amount of
+data, necessitating the need to reason about how our model performs on new, previously unseen data. The difference
+between the model's performance on the true data distribution, and the performance estimated from our training data is
+called the *generalization error* and indicates how well the model has learned to generalize to unseen data. While we
+It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
+perfectly fit the training data, i.e. which admit a low bias, have a higher variance, typically perform poorly on unseen
+test data and don't generalize well. In the classical machine learning community, this trade off has been extensively
+studied and and lead to optimization techniques which favour generalization, for example by regularizing models via
+their variance [#NamkoongVariance]_.
+
+Let us now dive deeper into generalization properties of quantum machine learning (QML) models. We start by describing
+the typical data processing pipeline of a QML model. A classical data input :math:`x` is first encoded in a quantum
+state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a parametrized quantum
+channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` and a measurement is performed on the resulting state
+to get the final prediction. The goal is now to minimize the expected loss over the data generating distribution
+:math:`P` indicating how well our model performs on new data:
+
+.. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)].
+
+As :math:`P` is generally not known, in practice this quantity has to be estimated from a finite amount of data. Given
+a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N`, we estimate the performance of our QML model by calculating the
+average loss over the training set
+
+.. math:: \hat{R}_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i)
+
+which is referred to as the training loss. This is hence only a proxy to the true quantity of interest :math:`R(\alpha)`
+and their difference is called the generalization error
+
+.. math:: \mathrm{gen}(\alpha) = \hat{R}_S(\alpha) - R(\alpha).
+
+By upper bounding the :math:`\mathrm{gen}(\alpha)` we can justify minimizing the training error. In this tutorial, we
+illustrate results from Ref. [#CaroGeneralization]_ showing that the generalization error roughly scales as
+:math:`\mathcal{O}(\sqrt{T / N})` where :math:`T` is the number of parametrized gates and :math:`N` is the number of
+training samples.
 """
 
 ##############################################################################
@@ -289,9 +329,19 @@ ax.set_xlabel("h", fontsize=20)
 plt.show()
 
 
-######################################################################
+##############################################################################
 # References
 # ----------
 #
-# [1] *Generalization in quantum machine learning from few training data*, Matthias Caro
-# et. al., `arxiv:2111.05292 <https://arxiv.org/abs/2111.05292>`__ (2021)
+# .. [#CaroGeneralization]
+#
+#     Matthias C. Caro, Hsin-Yuan Huang, M. Cerezo, Kunal Sharma, Andrew Sornborger, Lukasz Cincio, Patrick J. Coles.
+#     "Generalization in quantum machine learning from few training data"
+#     `arxiv:2111.05292 <https://arxiv.org/abs/2111.05292>`__, 2021.
+#
+# .. [#NamkoongVariance]
+#
+#     Hongseok Namkoong and John C. Duchi.
+#     "Variance-based regularization with convex objectives."
+#     `Advances in Neural Information Processing Systems
+#     <https://proceedings.neurips.cc/paper/2017/file/5a142a55461d5fef016acfb927fee0bd-Paper.pdf>`__, 2017.
