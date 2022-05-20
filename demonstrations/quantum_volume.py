@@ -385,7 +385,8 @@ m = 3  # number of qubits
 with qml.tape.QuantumTape() as tape:
     qml.layer(qv_circuit_layer, m, num_qubits=m)
 
-print(tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary)).draw(wire_order=dev_ideal.wires, show_all_wires=True))
+expanded_tape = tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary))
+print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_wires=True, show_matrices=True))
 
 
 
@@ -396,13 +397,13 @@ print(tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary)).draw(wire
 #
 #  .. code-block:: none
 #
-#      0: ────╭SWAP─────────╭U0──╭SWAP─────────╭U1──╭SWAP──╭U2──┤
-#      1: ────│──────╭SWAP──╰U0──│──────╭SWAP──╰U1──╰SWAP──╰U2──┤
+#      0: ────╭SWAP─────────╭M0──╭SWAP─────────╭M1──╭SWAP──╭M2──┤
+#      1: ────│──────╭SWAP──╰M0──│──────╭SWAP──╰M1──╰SWAP──╰M2──┤
 #      2: ────╰SWAP──╰SWAP───────╰SWAP──╰SWAP───────────────────┤
 #      3: ──────────────────────────────────────────────────────┤
 #      4: ──────────────────────────────────────────────────────┤
 #
-#     U0 =
+#     M0 =
 #     [[-0.17514647+0.00759447j  0.11975927+0.16007614j -0.41793925+0.49643728j
 #        0.62304058-0.34640531j]
 #      [-0.73367896-0.58079555j -0.11348577+0.00751965j -0.02640159-0.15592112j
@@ -411,7 +412,7 @@ print(tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary)).draw(wire
 #        0.16283233-0.11885036j]
 #      [-0.13103809-0.25850305j  0.18298996+0.2497364j   0.34879438+0.57771772j
 #       -0.02385446+0.60346274j]]
-#     U1 =
+#     M1 =
 #     [[ 0.14296171+0.28087257j -0.5985737 -0.27489922j -0.43838149+0.10344812j
 #        0.04022491+0.51216658j]
 #      [-0.21538853+0.02728431j -0.24776721-0.57146257j  0.60975755+0.36241573j
@@ -420,7 +421,7 @@ print(tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary)).draw(wire
 #        0.44143429-0.64714776j]
 #      [-0.750841  -0.47630904j -0.28666068+0.22820556j -0.09459735+0.07429451j
 #       -0.17243398+0.17582253j]]
-#    U2 =
+#    M2 =
 #    [[-0.63733359+1.91519046e-01j -0.49615702+9.79920998e-05j
 #       0.06949634+4.54968771e-01j  0.21112196-2.33571716e-01j]
 #     [ 0.4774216 +5.19692450e-02j -0.2741782 -3.71778068e-01j

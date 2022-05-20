@@ -688,10 +688,10 @@ def cnot_with_iswap():
 
 
 # Get matrix of circuit above
-get_matrix = qml.transforms.get_unitary_matrix(cnot_with_iswap)
+matrix = qml.matrix(cnot_with_iswap)()
 
 # Multiply by a global phase to obtain CNOT
-(np.exp(1j * np.pi / 4) * get_matrix()).round(2)
+(np.exp(1j * np.pi / 4) * matrix).round(2)
 
 ##############################################################################
 #

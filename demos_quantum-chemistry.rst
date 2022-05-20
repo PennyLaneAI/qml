@@ -35,6 +35,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :tags: chemistry
 
 .. customgalleryitem::
+    :tooltip: Differentiable Hartree-Fock Solver.
+    :figure: demonstrations/differentiable_HF/h2.png
+    :description: :doc:`demos/tutorial_differentiable_HF`
+    :tags: chemistry
+
+.. customgalleryitem::
     :tooltip: Adaptive circuits for quantum chemistry.
     :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
     :description: :doc:`demos/tutorial_adaptive_circuits`
@@ -67,6 +73,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :tooltip: Evaluate the potential energy surface of H2 with parallel QPUs
     :figure: demonstrations/vqe_parallel/vqe_diagram.png
     :description: :doc:`demos/vqe_parallel`
+    :tags: chemistry
+
+.. customgalleryitem::
+    :tooltip: Qubit tapering with symmetries
+    :figure: demonstrations/qubit_tapering/qubit_tapering.png
+    :description: :doc:`demos/tutorial_qubit_tapering`
     :tags: chemistry
 
 
