@@ -245,7 +245,7 @@ optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
 train_loss = [] ; val_loss = []
 train_acc = [] ; val_acc = []
 
-n_iter = 100
+n_iter = 40
 for k in range(n_iter):
     if k % 10 == 0:
         print(f"Step {k+1} / {n_iter}, cost: {old_loss}")
