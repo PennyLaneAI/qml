@@ -75,6 +75,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :description: :doc:`demos/vqe_parallel`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Qubit tapering with symmetries
+    :figure: demonstrations/qubit_tapering/qubit_tapering.png
+    :description: :doc:`demos/tutorial_qubit_tapering`
+    :tags: chemistry
+
 
 :html:`</div></div><div style='clear:both'>`
 
