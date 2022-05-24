@@ -10,6 +10,7 @@ Function Fitting using Quantum Signal Processing
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
+*Author: Jay Soni. Posted: 24 May 2022*
 
 Introduction
 ~~~~~~~~~~~~~
