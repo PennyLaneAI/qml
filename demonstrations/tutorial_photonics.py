@@ -15,8 +15,8 @@ Photonic quantum computers
 To create a functional quantum computer, we need to gather and control a 
 large number of qubits. This feat has proven difficult, although significant 
 progress has been made using trapped ions, superconducting circuits, 
-and many other technologies. Scalability — the ability to put many 
-qubits together — is limited because individual qubits in a multi-qubit 
+and many other technologies. Scalability—the ability to put many 
+qubits together—is limited because individual qubits in a multi-qubit 
 system lose their quantum properties quickly. This phenomenon, 
 known as decoherence, happens due to the interactions of the qubits with 
 each other and their surroundings. One way to get scalable qubits is to 
