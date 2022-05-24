@@ -551,8 +551,9 @@ qsp_model_runner.plot_result()
 # We also showed that one could use a simple gradient descent model to
 # train a parameter vector :math:`\vec{\phi}` to generate reasonably good
 # polynomial approximations of arbitrary functions (provided the function
-# satisfied the same constraints). It turns out there exist *efficient*
-# algorithms for explicitly computing the optimal values for :math:`\vec{\phi}`
+# satisfied the same constraints). This isn't the only way to compute the
+# optimal values. It turns out there exist *efficient* algorithms for
+# explicitly computing the optimal values for :math:`\vec{\phi}`
 # known as "Remez-type exchange algorithms" for analytic function fitting. If
 # you want to explore other approaches to function fitting, checkout this
 # `demo <https://pennylane.ai/qml/demos/quantum_neural_net.html>`__
