@@ -62,11 +62,11 @@ Di Vincenzo's criteria, introduced in the blue box below.
     5. **Measurement of individual qubits**. To read the result of a quantum algorithm,
     we must accurately measure the final state of a pre-chosen set of qubits. 
 
-Our journey will start by defining the simplest qumodes of light, known as Gaussian states. We will also
+Our journey will start by defining the simplest states of light, known as Gaussian states. We will also
 describe how we can perform simple gates and measurements on such states. The next step is to  
 figure out simple ways to generate the more general non-Gaussian states, needed for universal
 quantum computing. We'll see that we end up needing only 
-some special type of non-Gaussian states, known as GKP states. 
+a special type of non-Gaussian states, known as GKP states. 
 Finally, we will bring all the concepts together to understand how qubit-based
 computations can be performed by using qumodes. Let's get started!
 
@@ -80,17 +80,17 @@ computations can be performed by using qumodes. Let's get started!
 # Why are the quantum states of light so durable? Photons seldom interact with each other, 
 # which means we can easily avoid uncontrolled interactions that destroy their quantum 
 # state. However, to build a universal quantum computer, we need multi-qubit gates, 
-# which means that photons must communicate with each other! We *can* make photons 
+# which means that photons must be made to communicate with each other somehow! We *can* make photons 
 # affect each other, but for now, let's focus on the quantum states of light that 
 # we can theoretically obtain when photons don't need to interact. Such states are called 
 # **Gaussian states**, and they can be fabricated with a 100% success rate
 # using common optical devices. 
 #
 #
-# To precisely define a Gaussian state is, we need a mathematical representation for states 
+# To precisely define a Gaussian state, we need a mathematical representation for states 
 # of light. As is the case with qubits, states of light are represented by a linear 
 # combination of basis vectors. But unlike qubits, two basis vectors aren't enough. Why not?
-# The reason is that light is characterized by its position and momentum *quadratures* :math:`x` and :math:`p`, 
+# The reason is that light is characterized by its so-called *position and momentum quadratures* :math:`x` and :math:`p`, 
 # measured by the observables :math:`\hat{X}` and :math:`\hat{P}` respectively. 
 # 
 # .. note::
@@ -100,9 +100,10 @@ computations can be performed by using qumodes. Let's get started!
 #    to the amplitude and phase of light. The names come from the fact that the quadrature observables :math:`\hat{X}`
 #    and :math:`\hat{P}` satisfy 
 #    
-#    .. math:: \left[ \hat{X},\hat{P}\right]=i\hbar.
+#    .. math:: \left[ \hat{X},\hat{P}\right]=i\hbar,
 #
-#    As a consequence, the standard deviations of the measurements of :math:`x` and :math:`p` satisfy the
+# which is the same relation satisfied by conventional position and momentum in quantum mechanics.
+# As a consequence, the standard deviations of the measurements of :math:`x` and :math:`p` satisfy the
 #    uncertainty relation
 #
 #    .. math:: \Delta x \Delta p \geq 1,
