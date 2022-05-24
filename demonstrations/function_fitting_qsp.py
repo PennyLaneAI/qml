@@ -264,8 +264,12 @@ plt.show()
 # **Can we learn the parameter values of** :math:`\vec{\phi}` **to transform
 # our signal processing operator polynomial to fit a given function?**
 #
-# In order to answer this question, we begin by building a machine
-# learning model using Pytorch. The ``__init__()`` method handles the
+# In order to answer this question, we leverage the power of machine learning.
+# In this demo we assume you are familiar with some concepts from quantum
+# machine learning, for a refresher checkout this `blog post on QML
+# <https://pennylane.ai/blog/2021/10/how-to-start-learning-quantum-machine-learning/>`__.
+# We begin by building a machine learning model using Pytorch. The ``__init__()``
+# method handles the
 # random initialization of our parameter vector :math:`\vec{\phi}`. The
 # ``forward()`` method takes an array of signal rotation matrices
 # :math:`\hat{W}(a)` for varying :math:`a`, and produces the
@@ -532,7 +536,7 @@ qsp_model_runner.plot_result()
 # arises from the repeated application of :math:`\hat{W}(a)` and the
 # parameterized Z-axis rotations :math:`e^{i \phi \hat{Z}}`. Note, the
 # SRO is itself a transformation, in this case a rotation around the
-# X-axis by :math:`theta = -2 \cos^{-1}(a)`, which rotates our basis.
+# X-axis by :math:`\theta = -2 \cos^{-1}(a)`, which rotates our basis.
 # Thus the underlying principal of quantum signal processing is that we
 # can generate polynomial transformations through parameterized rotations
 # along a principal axis followed by change of basis transformations
@@ -567,7 +571,7 @@ qsp_model_runner.plot_result()
 # ~~~~~~~~~~~~~~
 #
 # [1]: *John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang. “A
-# Grand Unification of Quantum Algorithms”*\ `PRX Quantum 2,
+# Grand Unification of Quantum Algorithms”*  `PRX Quantum 2,
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
 #
 
