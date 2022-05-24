@@ -262,7 +262,7 @@ plt.show()
 # In this section we try to answer the question:
 #
 # **Can we learn the parameter values of** :math:`\vec{\phi}` **to transform
-# our signal processing operator polynomial to fit a given function?**.
+# our signal processing operator polynomial to fit a given function?**
 #
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
