@@ -138,18 +138,9 @@ redefining :math:`P(a)` such that:
 # :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}` for
 # :math:`a \in [-1, 1]`.
 #
-# We begin by importing the required packages:
-#
-
-import math
-import torch
-import numpy as np
-import pennylane as qml
-import matplotlib.pyplot as plt
-
 
 ######################################################################
-# Next, we introduce a function called ``compute_signal_rotation_mat(a)``,
+# Next, we introduce a function called ``rotation_mat(a)``,
 # which will construct the SRO matrix. We can also make a helper function
 # (``generate_many_sro(a_vals)``) which, given an array of possible values
 # for ‘:math:`a`’, will generate an array of :math:`\hat{W}(a)` associated
@@ -158,7 +149,9 @@ import matplotlib.pyplot as plt
 #
 
 
-def compute_signal_rotation_mat(a):
+import torch
+
+def rotation_mat(a):
     """Given a fixed value 'a', compute the signal rotation matrix W(a).
     (requires -1 <= 'a' <= 1)
     """
@@ -173,7 +166,7 @@ def generate_many_sro(a_vals):
     """Given a tensor of possible 'a' vals, return a tensor of W(a)"""
     w_array = []
     for a in a_vals:
-        w = compute_signal_rotation_mat(a)
+        w = rotation_mat(a)
         w_array.append(w)
 
     return torch.tensor(w_array, dtype=torch.complex64, requires_grad=False)
@@ -188,6 +181,8 @@ def generate_many_sro(a_vals):
 # account for this change of basis.
 #
 
+
+import pennylane as qml
 
 def QSP_circ(phi, W):
     """This circuit applies the SPO. The components in the matrix
@@ -216,6 +211,8 @@ def QSP_circ(phi, W):
 # -  All of the polynomials are bounded by :math:`\pm1`
 #
 
+import math
+import matplotlib.pyplot as plt
 d = 5
 a_vals = torch.linspace(-1, 1, 50)
 w_mats = generate_many_sro(a_vals)
@@ -246,8 +243,8 @@ plt.show()
 ######################################################################
 # Exactly as predicted, all of these conditions are met!
 #
-# -  All curves have odd symmetry in :math:`a`
-# -  None of the curves are of (:math:`O(a^6)` (most of the curves look cubic)
+# -  All curves have odd symmetry
+# -  Qualitatively, the plots look similar to polynomials of low degree
 # -  Each plot does not exceed :math:`\pm1` !
 #
 # Function Fitting with Quantum Signal Processing
@@ -343,9 +340,7 @@ class Model_Runner:
         optimizer = torch.optim.SGD(model.parameters(), lr=1e-5)
 
         t = 0
-        j = 0
         loss_val = 1.0
-        prev_loss = 2.0
 
         while (t <= max_shots) and (loss_val > 0.5):
 
@@ -358,15 +353,14 @@ class Model_Runner:
             loss = criterion(self.y_pred, self.y_true)
             loss_val = loss.item()
 
-            if (t % 100 == 0) and verbose:
+            if (t % 1000 == 0) and verbose:
                 print(f"---- iter: {t}, loss: {round(loss_val, 4)} -----")
 
-            # Zero gradients, perform a backward pass, and update the weights.
+            # Perform a backward pass and update weights.
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            prev_loss = loss_val
             t += 1
 
         self.model_params = model.phi
@@ -400,6 +394,7 @@ class Model_Runner:
 #       anywhere from 10 - 30 mins
 #
 
+import numpy as np
 d = 9  # dim(phi) = d + 1,
 num_samples = 50
 
