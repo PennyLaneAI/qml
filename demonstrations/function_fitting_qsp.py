@@ -153,7 +153,7 @@ import matplotlib.pyplot as plt
 # which will construct the SRO matrix. We can also make a helper function
 # (``generate_many_sro(a_vals)``) which, given an array of possible values
 # for ‘:math:`a`’, will generate an array of :math:`\hat{W}(a)` associated
-# with each element. We us Pytorch to construct this array as it will later
+# with each element. We use Pytorch to construct this array as it will later
 # be used as input when training our function fitting model.
 #
 
