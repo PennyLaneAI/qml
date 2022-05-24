@@ -24,8 +24,8 @@ use photons (particles of light). Photons rarely affect each other and
 their quantum state is not easily destroyed, so we may be onto something!
 
 Indeed, many approaches to use photons for quantum
-computing have been proposed. We will focus on *linear optical quantum computing*.
-A modern approach that has already achieved quantum advantage. It 
+computing have been proposed. We will focus on *linear optical quantum computing*,
+an approach that has already achieved quantum advantage. It 
 is being developed further by Xanadu, Psi Quantum, and many other institutions
 around the globe. Linear optical quantum computing does not use qubits directly. 
 Instead, it's based on qumodes: states of 
