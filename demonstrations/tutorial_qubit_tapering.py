@@ -183,7 +183,7 @@ H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
 H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=all)
 
 print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
-print("\n Eigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
+print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 
 ##############################################################################
 # Tapering the reference state
