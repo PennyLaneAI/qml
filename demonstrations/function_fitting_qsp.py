@@ -10,6 +10,7 @@ Function Fitting using Quantum Signal Processing
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
+*Author: Jay Soni. Posted: 24 May 2022*
 
 Introduction
 ~~~~~~~~~~~~~
@@ -152,7 +153,7 @@ import matplotlib.pyplot as plt
 # which will construct the SRO matrix. We can also make a helper function
 # (``generate_many_sro(a_vals)``) which, given an array of possible values
 # for ‘:math:`a`’, will generate an array of :math:`\hat{W}(a)` associated
-# with each element. We us Pytorch to construct this array as it will later
+# with each element. We use Pytorch to construct this array as it will later
 # be used as input when training our function fitting model.
 #
 
@@ -261,7 +262,7 @@ plt.show()
 # In this section we try to answer the question:
 #
 # **Can we learn the parameter values of** :math:`\vec{\phi}` **to transform
-# our signal processing operator polynomial to fit a given function?**.
+# our signal processing operator polynomial to fit a given function?**
 #
 # In order to answer this question, we begin by building a machine
 # learning model using Pytorch. The ``__init__()`` method handles the
