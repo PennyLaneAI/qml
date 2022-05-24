@@ -249,7 +249,7 @@ plt.show()
 # -  None of the curves are of (:math:`O(a^6)` (most of the curves look cubic)
 # -  Each plot does not exceed :math:`\pm1` !
 #
-# Function Fitting with Quantum Signal Processing:
+# Function Fitting with Quantum Signal Processing
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Another observation we can make about this theorem is the fact that it
@@ -890,7 +890,7 @@ qsp_model_runner.plot_result()
 
 
 ######################################################################
-# Conclusion:
+# Conclusion
 # ~~~~~~~~~~~~~~
 #
 # In this demo, we explored the Quantum Signal Processing theorem. We
@@ -908,7 +908,7 @@ qsp_model_runner.plot_result()
 #
 
 ######################################################################
-# References:
+# References
 # ~~~~~~~~~~~~~~
 #
 # [1]: *John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang. “A
