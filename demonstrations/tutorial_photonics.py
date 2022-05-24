@@ -26,7 +26,7 @@ their quantum state is not easily destroyed, so we may be onto something!
 Indeed, many approaches to use photons for quantum
 computing have been proposed. We will focus on *linear optical quantum computing*,
 an approach that has already achieved quantum advantage. It 
-is being developed further by Xanadu, Psi Quantum, and many other institutions
+is being developed further by Xanadu, PsiQuantum, and other institutions
 around the globe. Linear optical quantum computing does not use qubits directly. 
 Instead, it's based on qumodes: states of 
 many photons that are superpositions of infinitely many basis states. But no need to panic. 
