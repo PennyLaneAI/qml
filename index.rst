@@ -21,7 +21,7 @@ Quantum machine learning
         <!-- Section: Features v.1 -->
             <p class="lead grey-text text-center mx-auto mb-5">We're entering an exciting time in quantum physics and quantum computation: <span class="teal-text">near-term quantum devices</span> are rapidly becoming a reality, accessible to everyone over the internet.
             <br><br>
-            This, in turn, is driving the development of quantum machine learning and variational quantum circuits.</p>
+            This, in turn, is driving the development of quantum machine learning and variational quantum circuits (which are cool).</p>
 
         <section class="my-5">
             <div class="row main-cards">

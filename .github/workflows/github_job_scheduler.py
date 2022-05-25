@@ -156,7 +156,7 @@ def _remove_executable_from_doc(
 
     Args:
         input_file_path: PosixPath of python file to read in
-        output_file_path: PosixPath of where to save python file with all executable code removed
+        outpu<<<<<<< mastert_file_path: PosixPath of where to save python file with all executable code removed
 
     Returns:
         None
