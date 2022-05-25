@@ -37,7 +37,7 @@ In this demo, we explore the QSP protocol and how it can be used
 for curve fitting. We show how you can fit polynomials, as illustrated in
 the animation below.
 
-.. figure:: ../demonstrations/function_fitting_qsp/trained_poly.mp4
+.. figure:: ../demonstrations/function_fitting_qsp/trained_poly.gif
     :align: center
     :width: 50%
 
@@ -562,7 +562,7 @@ qsp_model_runner.plot_result()
 #
 
 ######################################################################
-# .. figure:: ../demonstrations/function_fitting_qsp/trained_step.mp4
+# .. figure:: ../demonstrations/function_fitting_qsp/trained_step.gif
 #     :align: center
 #     :width: 50%
 #
