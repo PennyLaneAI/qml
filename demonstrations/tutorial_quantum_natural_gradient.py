@@ -186,9 +186,8 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 #
 # Let's consider a small variational quantum circuit example coded in PennyLane:
 
-import numpy as np
-
 import pennylane as qml
+from pennylane import numpy as np
 
 dev = qml.device("default.qubit", wires=3)
 
@@ -406,7 +405,7 @@ print(np.round(g, 8))
 # PennyLane contains a built-in function for computing the Fubini-Study metric
 # tensor, :func:`~.pennylane.metric_tensor`, which
 # we can use to verify this result:
-print(np.round(qml.metric_tensor(circuit)(params), 8))
+print(np.round(qml.metric_tensor(circuit, approx="block-diag")(params), 8))
 
 ##############################################################################
 # As opposed to our manual computation, which required 6 different quantum
@@ -422,7 +421,7 @@ print(np.round(qml.metric_tensor(circuit)(params), 8))
 #
 # Note that the :func:`~.pennylane.metric_tensor` function also supports computing the diagonal
 # approximation to the metric tensor:
-print(qml.metric_tensor(circuit, diag_approx=True)(params))
+print(qml.metric_tensor(circuit, approx='diag')(params))
 
 ##############################################################################
 # Furthermore, the returned metric tensor is **full differentiable**; include it
@@ -438,7 +437,7 @@ print(qml.metric_tensor(circuit, diag_approx=True)(params))
 # circuit above.
 
 steps = 200
-init_params = np.array([0.432, -0.123, 0.543, 0.233])
+init_params = np.array([0.432, -0.123, 0.543, 0.233], requires_grad=True)
 
 ##############################################################################
 # Performing vanilla gradient descent:

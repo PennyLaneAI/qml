@@ -12,7 +12,7 @@ VQE with parallel QPUs on Rigetti Forest
 
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 8 Apr 2021.*
+*Author: PennyLane dev team. Last updated: 13 Dec 2021.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
@@ -29,18 +29,16 @@ We begin by importing the prerequisite libraries:
 import time
 
 import matplotlib.pyplot as plt
-import numpy as np
 from pennylane import numpy as np
 import pennylane as qml
 from pennylane import qchem
 
 ##############################################################################
-# This tutorial requires the ``pennylane-qchem``, ``pennylane-forest`` and ``dask``
+# This tutorial requires the ``pennylane-forest`` and ``dask``
 # packages, which are installed separately using:
 #
 # .. code-block:: bash
 #
-#    pip install pennylane-qchem
 #    pip install pennylane-forest
 #    pip install "dask[delayed]"
 #
@@ -52,8 +50,8 @@ from pennylane import qchem
 # the bond length between the hydrogen atoms.
 #
 # Each inter-atomic distance results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function of the
-# :mod:`~.pennylane_qchem.qchem` package. Further details on the mapping from the electronic
+# Hamiltonian, we use the :func:`~.pennylane.qchem.molecular_hamiltonian` function of the
+# :mod:`~.pennylane.qchem` package. Further details on the mapping from the electronic
 # Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
 # :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
 # tutorials.
@@ -79,8 +77,8 @@ data = {  # keys: atomic separations (in Angstroms), values: corresponding files
 ##############################################################################
 # The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
 # We do this by first reading the molecular geometry from the external file using the
-# :func:`~.pennylane_qchem.qchem.read_structure` function and passing the atomic symbols
-# and coordinates to :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`.
+# :func:`~.pennylane.qchem.read_structure` function and passing the atomic symbols
+# and coordinates to :func:`~.pennylane.qchem.molecular_hamiltonian`.
 
 
 hamiltonians = []
@@ -99,6 +97,31 @@ h = hamiltonians[0]
 print("Number of terms: {}\n".format(len(h.ops)))
 for op in h.ops:
     print("Measurement {} on wires {}".format(op.name, op.wires))
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Number of terms: 15
+#
+#    Measurement Identity on wires <Wires = [0]>
+#    Measurement PauliZ on wires <Wires = [0]>
+#    Measurement PauliZ on wires <Wires = [1]>
+#    Measurement PauliZ on wires <Wires = [2]>
+#    Measurement PauliZ on wires <Wires = [3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 1]>
+#    Measurement ['PauliY', 'PauliX', 'PauliX', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliY', 'PauliY', 'PauliX', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliX', 'PauliX', 'PauliY', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliX', 'PauliY', 'PauliY', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 2]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 2]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 3]>
+#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [2, 3]>
 
 ##############################################################################
 # Defining the energy function
@@ -145,7 +168,7 @@ devs = dev1 + dev2
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
 #    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/en/stable/>`__ or, for users with Docker, by running:
+#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
 #
 #    .. code-block:: bash
 #
@@ -218,10 +241,52 @@ print("\nEvaluating the potential energy surface in parallel")
 surface_par, t_par = calculate_surface(parallel=True)
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Evaluating the potential energy surface sequentially
+#    Running for inter-atomic distance 0.3 Å
+#    Running for inter-atomic distance 0.5 Å
+#    Running for inter-atomic distance 0.7 Å
+#    Running for inter-atomic distance 0.9 Å
+#    Running for inter-atomic distance 1.1 Å
+#    Running for inter-atomic distance 1.3 Å
+#    Running for inter-atomic distance 1.5 Å
+#    Running for inter-atomic distance 1.7 Å
+#    Running for inter-atomic distance 1.9 Å
+#    Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 285.41 s
+#
+#    Evaluating the potential energy surface in parallel
+#    Running for inter-atomic distance 0.3 Å
+#    Running for inter-atomic distance 0.5 Å
+#    Running for inter-atomic distance 0.7 Å
+#    Running for inter-atomic distance 0.9 Å
+#    Running for inter-atomic distance 1.1 Å
+#    Running for inter-atomic distance 1.3 Å
+#    Running for inter-atomic distance 1.5 Å
+#    Running for inter-atomic distance 1.7 Å
+#    Running for inter-atomic distance 1.9 Å
+#    Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 74.55 s
+
+##############################################################################
 # We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel. This results
 # in a speed up in processing:
 
 print("Speed up: {0:.2f}".format(t_seq / t_par))
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#    Speed up: 3.83
 
 ##############################################################################
 # Can you think of other ways to combine multiple QPUs to improve the
@@ -234,6 +299,12 @@ plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
 plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
+
+##############################################################################
+# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
+#    :width: 80%
+#    :align: center
+#
 
 ##############################################################################
 # These surfaces overlap, with any variation due to the limited number of shots used to evaluate the

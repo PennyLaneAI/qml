@@ -407,7 +407,7 @@ opt = qml.GradientDescentOptimizer(eta)
 # We initialize the variational weights with random parameters (with a fixed seed).
 
 np.random.seed(rng_seed)
-w = q_delta * np.random.randn(n_qubits)
+w = q_delta * np.random.randn(n_qubits, requires_grad=True)
 
 ##############################################################################
 # We are ready to perform the optimization loop.

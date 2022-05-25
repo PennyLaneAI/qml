@@ -24,16 +24,16 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 
 The content consists of four main areas:
 
-* [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
+- [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning.
 
-* [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
+- [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
   machine learning with fully-coded implementations of major works.
 
-* [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
+- [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
   quantum machine learning and optimization.
 
-* [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
+- [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
   discussing various aspects of quantum machine learning.
 
 <a href="https://pennylane.ai/qml/demonstations.html">
@@ -50,24 +50,25 @@ quantum machine learning paper/result.
 
 ### Adding demos
 
-* Demos are written in the form of an executable Python script.
-  Any package listed in `requirements.txt` you can assume is available to be imported.
+- Demos are written in the form of an executable Python script.
+  Any package listed in `requirements.txt` and `requirements_no_deps.txt` you can assume is
+  available to be imported.
   Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
 
-* If you would like to write the demo using a Jupyter notebook, you can convert
+- If you would like to write the demo using a Jupyter notebook, you can convert
   the notebook to the required executable Python format by using
   [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
 
-* All demos should have a file name beginning with `tutorial_`.
+- All demos should have a file name beginning with `tutorial_`.
   The python files are saved in the `demonstrations` directory.
 
-* [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
+- [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
   sections may be anywhere within the script by beginning the comment with
   79 hashes (`#`). These are useful for breaking up large code-blocks.
 
-* You may add figures within ReST comments by using the following syntax:
+- You may add figures within ReST comments by using the following syntax:
 
   ```python
   ##############################################################################
@@ -79,7 +80,19 @@ quantum machine learning paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
 
-* When complete, create a gallery link to your demo. This can be done by adding the
+- You may add author bios within ReST comments by using the following syntax:
+
+  ```python
+  ##############################################################################
+  #.. bio:: Author name goes here
+  #    :photo: ../_static/avatar.webp
+  #
+  #    Write the author bio content here. It must be preceded by a blank line.
+  ```
+
+  Leave the selected photo as above to display the default avatar, or add and select an author photo from the `_static` folder.
+
+- When complete, create a gallery link to your demo. This can be done by adding the
   snippet below to `demos_getting-started.rst` for introductory demos.
 
   ```rest
@@ -92,10 +105,10 @@ quantum machine learning paper/result.
   You should also add a link to your demo to the table of contents, by adding to the
   end of the `.. toctree::` in the appropriate file.
 
-  If you're unsure which file to put your demo in, choose the one you think is  best,
+  If you're unsure which file to put your demo in, choose the one you think is best,
   and we will work together to sort it during the review process.
 
-* Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
+- Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
 
   ```bash
   pip install black
@@ -108,39 +121,38 @@ If your demo uses the latest release of PennyLane, simply make your PR against t
 `master` branch. If you instead require the cutting-edge development versions of
 PennyLane or any relevant plugins, make your PR against the `dev` branch instead.
 
-
 #### Tutorial guidelines
 
 While you are free to be as creative as you like with your demo,
 there are a couple of guidelines to keep in mind.
 
-* Submissions should include your name (and optionally email) at the top
+- Submissions should include your name (and optionally email) at the top
   under the title.
 
-* All contributions must be made under the Apache 2.0 license.
+- All contributions must be made under the Apache 2.0 license.
 
-* The title should be clear and concise, and if based on a paper it should be similar to the paper
+- The title should be clear and concise, and if based on a paper it should be similar to the paper
   that is being implemented.
 
-* All demos should include a summary below the title.
+- All demos should include a summary below the title.
   The summary should be 1-3 sentences that makes clear the
   goal and outcome of the demo, and links to any papers/resources used.
 
-* Code should be clearly commented and explained, either
+- Code should be clearly commented and explained, either
   as a ReST-formatted comment or a standard Python comment.
 
-* Thumbnails should be legible, interesting, and unique --- but not too busy!
+- Thumbnails should be legible, interesting, and unique --- but not too busy!
   Any included text should be minimal and legible.
 
-* If your content contains random variables/outputs, a fixed seed should
+- If your content contains random variables/outputs, a fixed seed should
   be set for reproducibility.
 
-* All content must be original or free to reuse subject to license compatibility.
+- All content must be original or free to reuse subject to license compatibility.
   For example, if you are implementing someone else's research, reach out first to
   recieve permission to reproduce exact figures. Otherwise, avoid direct screenshots
   from papers, and instead refer to figures in the paper within the text.
 
-* All submissions must pass code review before being merged into the repository.
+- All submissions must pass code review before being merged into the repository.
 
 ## Building
 
@@ -160,6 +172,54 @@ sphinx-build -D sphinx_gallery_conf.filename_pattern=tutorial_QGAN\.py -b html .
 ```
 
 where `tutorial_QGAN` should be replaced with the name of the demo to build.
+
+## Building and running locally on Mac (M1)
+
+To install dependencies on an M1 Mac and build the QML website, the following instructions may be useful.
+
+- If python3 is not currently installed, we recommend you install via [Homebrew](https://github.com/conda-forge/miniforge):
+
+  ```bash
+  brew install python
+  ```
+
+- Install each package in `requirements-norun.txt` by running
+
+  ```bash
+  pip3 install -r requirements-norun.txt
+  ```
+
+  Alternatively, you can do this in a new virtual environment using
+
+  ```bash
+  python -m venv [venv_name]
+  cd [venv_name] && source bin/activate
+  pip install -r requirements-norun.txt
+  ```
+
+Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
+
+If you are running into the error message
+
+```
+command not found: sphinx-build
+```
+
+you may need to make the following change:
+
+- In the `Makefile` change `SPHINXBUILD = sphinx-build` to `SPHINXBUILD = python3 -m sphinx.cmd.build`.
+
+If you are running into the error message
+
+```
+ModuleNotFoundError: No module named 'the-module-name'
+```
+
+you may need to install the module manually:
+
+```
+pip3 install the-module-name
+```
 
 ## Support
 

@@ -274,7 +274,7 @@ adjoint_ansatz = qml.adjoint(ansatz)
 
 def random_params(num_wires, num_layers):
     """Generate random variational parameters in the shape for the ansatz."""
-    return np.random.uniform(0, 2 * np.pi, (num_layers, 2, num_wires))
+    return np.random.uniform(0, 2 * np.pi, (num_layers, 2, num_wires), requires_grad=True)
 
 
 ##############################################################################

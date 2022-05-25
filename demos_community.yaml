@@ -1,8 +1,84 @@
+- title: Weighted SubSpace VQE to find kth excited state energies
+  author: Jay Patel, Siddharth Patel, and Amit Hirpara
+  date: 03/07/2022
+  code: https://github.com/Jay-Patel-257/Qhack-2022/blob/main/SSVQE.ipynb
+
+  paper: https://arxiv.org/pdf/1810.09434.pdf
+  color: heavy-rain-gradient
+  description: |
+    The variational quantum eigensolver (VQE) is generally used for finding 
+    the ground state energy of a given hamiltonian. To find the kth excited 
+    state energy of the hamiltonian we need to run the VQE optimization 
+    process at least k+1 times. Each time we also need to calculate 
+    the hamiltonian again, taking into account the state of the previous iteration. 
+    Even after that, the accuracy decreases as the value of k increases.
+    
+    The Subspace Search VQE (SSVQE) algorithm is used to find the kth excited-state energy of a hamiltonian in 
+    two subsequent optimization processes.
+    Research on a more generalized version of SSVQE, namely Weighted SSVQE, shows that by using the weights as hyperparameters we can find the 
+    kth excited-state energy in just a single optimization process. There are two variants of this algorithm:
+    Weighted SSVQE to find kth excited state energy, and weighted SSVQE to find all 
+    energies up to the kth excited state.
+
+- title: Implementing a unitary quantum perceptron with quantum computing
+  author: Katerina Gratsea
+  date: 03/02/2022
+  code: https://github.com/KaterinaGratsea/Unitary_quantum_perceptron
+
+  paper: https://iopscience.iop.org/article/10.1209/0295-5075/125/30004
+  color: heavy-rain-gradient
+  description: |
+    Here, we simulate a unitary quantum perceptron with quantum computing. 
+    The quantum perceptron can be implemented as a single (fast) adiabatic 
+    passage in a model of interacting spins. To demonstrate the learning ability 
+    of the quantum perceptron, we train it to perform the XOR gate and discuss 
+    its power consumption. Author affiliation: ICFO.
+
+
+- title: quantum Case-Based Reasoning (qCBR) learning by cases
+  author: Parfait Atchade
+  date: 12/22/2021
+  code: https://github.com/pifparfait/qCBR-learning-by-cases
+
+  paper: https://arxiv.org/abs/2104.00409
+  color: heavy-rain-gradient
+  description: |
+    A supervised classifier is a program that can predict a label (class) for a new 
+    input object, based on the value of its attributes and on a training set. 
+    The training set consists of labelled data. The main idea of quantum Case-Based Reasoning (qCBR) 
+    is to interpret the statement of the problem as an input object, and the solution to the problem as an output (label). 
+    Therefore, if we have a series of situations (inputs) with their outcomes (labels), 
+    we can train our classifier to determine the solution given a new problem.
+
+- title: Exploring quantum models with a teacher-student scheme
+  author: Katerina Gratsea and Patrick Huembeli
+  date: 11/22/2021
+  code: https://github.com/KaterinaGratsea/Teacher-student_scheme
+
+  paper: https://arxiv.org/abs/2105.01477
+  color: heavy-rain-gradient
+  description: |
+    Using PennyLane, we introduce a teacher-student scheme to systematically compare 
+    different Quantum Neural Network (QNN) architectures and to evaluate their relative expressive power. 
+    This scheme avoids training with a specific dataset and compares the learning 
+    capacity of different quantum models.
+
+- title: Hybrid Neural Network using Data-Reuploading technique
+  author: Nikolaos Schetakis (nikschet)
+  date: 11/04/2021
+  code: https://github.com/nsansen/Quantum-Machine-Learning/blob/main/Pennylane%20DEMO%20v4.ipynb
+
+  paper: https://arxiv.org/pdf/2111.03372.pdf
+  color: heavy-rain-gradient
+  description: |
+    We combine a standard Variational Classifier with a Data-Reuploading Classifier,
+    and integrate the resulting QNode as a quantum layer in a Hybrid Neural Network.
+
 - title: Fraud Detection
   author: Sophie Choe
   date: 10/04/2021
   code: https://github.com/sophchoe/Binary_Classification_Pennylane_Keras/blob/main/fraud_detection_Pennylane_Keras.ipynb
-  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  paper: https://github.com/sophchoe/Hybrid-Quantum-Classical-MNIST-Classfication-Model/blob/main/QNN.pdf
   color: heavy-rain-gradient
   description: |
     This is a binary classification hybrid model as proposed in the paper
@@ -15,7 +91,7 @@
   author: Sophie Choe
   date: 09/28/2021
   code: https://github.com/sophchoe/Hybrid-Quantum-Classical-MNIST-Classfication-Model
-  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  paper: https://github.com/sophchoe/Hybrid-Quantum-Classical-MNIST-Classfication-Model/blob/main/QNN.pdf
   color: heavy-rain-gradient
   description: |
     Keras-PennyLane hybrid model for MNIST classification, inspired by the "Supervised
@@ -26,7 +102,7 @@
   author: Sophie Choe
   date: 09/28/2021
   code: https://github.com/sophchoe/QML/blob/main/auto_encoder_Pennylane_Keras.ipynb
-  paper: https://arxiv.org/pdf/1806.06871v1.pdf
+  paper: https://github.com/sophchoe/Hybrid-Quantum-Classical-MNIST-Classfication-Model/blob/main/QNN.pdf
   color: heavy-rain-gradient
   description: |
     Keras-PennyLane implementation of the hybrid quantum-classical auto encoder proposed in the paper

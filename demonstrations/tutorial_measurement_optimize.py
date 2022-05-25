@@ -102,8 +102,8 @@ The measurement problem
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
 has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
-QChem to verify the number of terms. In this tutorial, we use the :func:`~.pennylane_qchem.qchem.read_structure`
+structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
 function to read the geometry of the molecule from an external file.
 
 """
@@ -137,7 +137,7 @@ initial_state = qml.qchem.hf_state(electrons, num_qubits)
 singles, doubles = qml.qchem.excitations(electrons, num_qubits)
 s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
 ansatz = functools.partial(
-    qml.templates.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
+    qml.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
 )
 
 # generate the cost function
@@ -170,7 +170,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in over triple the number of qubits required and 2050 measurements that must be made!
+# resulted in over triple the number of qubits required and 2110 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -388,17 +388,17 @@ dev = qml.device("default.qubit", wires=3)
 
 @qml.qnode(dev)
 def circuit1(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
 @qml.qnode(dev)
 def circuit2(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
 
-
-weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=3)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
+weights = np.random.normal(scale=0.1, size=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
@@ -409,7 +409,7 @@ print("Expectation value of XIZ = ", circuit2(weights))
 
 @qml.qnode(dev)
 def circuit_qwc(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
 
     # rotate wire 0 into the shared eigenbasis
     qml.RY(-np.pi / 2, wires=0)
@@ -455,7 +455,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 
 @qml.qnode(dev)
 def circuit(weights):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+    qml.StronglyEntanglingLayers(weights, wires=range(3))
     return [
         qml.expval(qml.PauliX(0) @ qml.PauliY(1)),
         qml.expval(qml.PauliX(0) @ qml.PauliZ(2))
@@ -489,7 +489,7 @@ print(new_obs)
 #
 #     @qml.qnode(dev)
 #     def circuit(weights):
-#         qml.templates.StronglyEntanglingLayers(weights, wires=range(3))
+#         qml.StronglyEntanglingLayers(weights, wires=range(3))
 #         return [
 #             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
 #             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
@@ -732,10 +732,11 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev)
 def circuit(weights, group=None, **kwargs):
-    qml.templates.StronglyEntanglingLayers(weights, wires=range(4))
+    qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
 
-weights = qml.init.strong_ent_layers_normal(n_layers=3, n_wires=4)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
+weights = np.random.normal(scale=0.1, size=param_shape)
 result = [circuit(weights, group=g) for g in obs_groupings]
 
 print("Term expectation values:")
@@ -755,7 +756,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # optimized:
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.templates.StronglyEntanglingLayers, H, dev, optimize=True)
+cost_fn = qml.ExpvalCost(qml.StronglyEntanglingLayers, H, dev, optimize=True)
 print(cost_fn(weights))
 
 ##############################################################################
@@ -775,7 +776,7 @@ groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf'
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*
+# We went from 2110 required measurements/circuit evaluations to 556 (just over *two thousand*
 # down to *five hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.

@@ -89,8 +89,44 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. customgalleryitem::
     :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
-    :description: :doc:`demos/tutorial_ensemble_multi_qpu`
+    :description: :doc:`demos/ensemble_multi_qpu`
     :tags: pytorch forest qiskit
+    
+.. customgalleryitem::
+    :tooltip: Generate images with Quantums GANs.
+    :figure: demonstrations/quantum_gans/patch.jpeg
+    :description: :doc:`demos/tutorial_quantum_gans`
+    :tags: pytorch 
+
+.. customgalleryitem::
+    :tooltip: Estimate a classical kernel function on a quantum computer.
+    :figure: demonstrations/classical_kernels/flowchart.PNG
+    :description: :doc:`demos/tutorial_classical_kernels`
+    :tags: kernels approximation
+    
+.. customgalleryitem::
+    :tooltip: Tensor network quantum circuits
+    :figure: demonstrations/tn_circuits/thumbnail_tn_circuits.png
+    :description: :doc:`demos/tutorial_tn_circuits`
+    :tags: tensor network
+
+.. customgalleryitem::
+    :tooltip: Quantum advantage in learning from experiments
+    :figure: demonstrations/learning_from_experiments/learning_from_exp_thumbnail.png
+    :description: :doc:`demos/tutorial_learning_from_experiments`
+    :tags: advantage experiments
+    
+.. customgalleryitem::
+    :tooltip: Machine learning for quantum many-body problems
+    :figure: demonstrations/ml_classical_shadows/ml_classical_shadow.png
+    :description: :doc:`demos/tutorial_ml_classical_shadows`
+    :tags: kernels manybodyphysics classicalml
+
+.. customgalleryitem::
+    :tooltip: Train polynomial approximations to functions using QSP.
+    :figure: demonstrations/function_fitting_qsp/cover.png
+    :description: :doc:`demos/function_fitting_qsp`
+    :tags: pytorch
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -111,3 +147,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/learning2learn
     demos/tutorial_quanvolution
     demos/tutorial_ensemble_multi_qpu
+    demos/tutorial_quantum_gans
+    demos/tutorial_learning_from_experiments
+    demos/tutorial_ml_classical_shadows
+    demos/function_fitting_qsp

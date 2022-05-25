@@ -12,7 +12,7 @@ Optimizing a quantum optical neural network
 
    quantum_neural_net Function fitting with a photonic QNN
 
-*Author: PennyLane dev team. Last updated: 15 Apr 2021.*
+*Author: PennyLane dev team. Last updated: 8 Mar 2022.*
 
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
@@ -118,7 +118,7 @@ def layer(theta, phi, wires):
     M = len(wires)
     phi_nonlinear = np.pi / 2
 
-    qml.templates.Interferometer(
+    qml.Interferometer(
         theta, phi, np.zeros(M), wires=wires, mesh="triangular",
     )
 
@@ -285,7 +285,7 @@ M = len(X[0])
 num_variables_per_layer = M * (M - 1)
 
 rng = np.random.default_rng(seed=1234)
-var_init = (4 * rng.random(size=(num_layers, num_variables_per_layer)) - 2) * np.pi
+var_init = (4 * rng.random(size=(num_layers, num_variables_per_layer), requires_grad=True) - 2) * np.pi
 print(var_init)
 
 ##############################################################################
@@ -321,7 +321,9 @@ def cost_wrapper(var, grad=[]):
 
     if grad.size > 0:
         # Get the gradient for `var` by first "unflattening" it
-        var_grad = cost_grad(var.reshape((num_layers, num_variables_per_layer)), X, Y)
+        var = var.reshape((num_layers, num_variables_per_layer))
+        var = np.array(var, requires_grad=True)
+        var_grad = cost_grad(var, X, Y)
         grad[:] = var_grad.flatten()
     cost_val = cost(var.reshape((num_layers, num_variables_per_layer)), X, Y)
 
@@ -446,8 +448,7 @@ for i, x in enumerate(X):
 ##############################################################################
 # We can also print the circuit to see how the final network looks.
 
-quantum_neural_net(var_init, X[0])
-print(quantum_neural_net.draw())
+print(qml.draw(quantum_neural_net)(var_init, X[0]))
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -456,9 +457,18 @@ print(quantum_neural_net.draw())
 #
 #  .. code-block:: none
 #
-#        0: ──|1⟩───────────────────────────────────────╭BS(5.32, 5.83)─────R(0)────────────────Kerr(1.57)─────────────────────────────────────────────────────────────────╭BS(2.2, -5.53)───R(0)─────────────Kerr(1.57)──────────────────────────────┤ ⟨n⟩
-#        1: ──|0⟩────────────────────╭BS(-1.51, -2.28)──╰BS(5.32, 5.83)────╭BS(-2.27, -0.741)───R(0)────────────Kerr(1.57)────────────────────────────────╭BS(4.57, 4.65)──╰BS(2.2, -5.53)──╭BS(2.96, 2.15)───R(0)────────────Kerr(1.57)──────────────┤ ⟨n⟩
-#        2: ──|1⟩──╭BS(5.99, -3.25)──╰BS(-1.51, -2.28)──╭BS(-2.99, -2.97)──╰BS(-2.27, -0.741)──╭BS(-4.8, 1.38)──R(0)────────Kerr(1.57)──╭BS(4.57, -4.12)──╰BS(4.57, 4.65)──╭BS(2.01, 2.31)──╰BS(2.96, 2.15)──╭BS(-3.48, 1.4)──R(0)────────Kerr(1.57)──┤ ⟨n⟩
-#        3: ──|0⟩──╰BS(5.99, -3.25)─────────────────────╰BS(-2.99, -2.97)──────────────────────╰BS(-4.8, 1.38)──R(0)────────Kerr(1.57)──╰BS(4.57, -4.12)───────────────────╰BS(2.01, 2.31)───────────────────╰BS(-3.48, 1.4)──R(0)────────Kerr(1.57)──┤ ⟨n⟩
+#        0: ──|1⟩──────────────────────────────────╭BS(5.32,5.83)────R(0.00)──────────Kerr(1.57)────
+#        1: ──|0⟩─────────────────╭BS(-1.51,-2.28)─╰BS(5.32,5.83)───╭BS(-2.27,-0.74)──R(0.00)───────
+#        2: ──|1⟩─╭BS(5.99,-3.25)─╰BS(-1.51,-2.28)─╭BS(-2.99,-2.97)─╰BS(-2.27,-0.74)─╭BS(-4.80,1.38)
+#        3: ──|0⟩─╰BS(5.99,-3.25)──────────────────╰BS(-2.99,-2.97)──────────────────╰BS(-4.80,1.38)
 #
-
+#        ─────────────────────────────────────────────────────────╭BS(2.20,-5.53)──R(0.00)──────
+#        ───Kerr(1.57)─────────────────────────────╭BS(4.57,4.65)─╰BS(2.20,-5.53)─╭BS(2.96,2.15)
+#        ───R(0.00)─────Kerr(1.57)─╭BS(4.57,-4.12)─╰BS(4.57,4.65)─╭BS(2.01,2.31)──╰BS(2.96,2.15)
+#        ───R(0.00)─────Kerr(1.57)─╰BS(4.57,-4.12)────────────────╰BS(2.01,2.31)────────────────
+#
+#        ───Kerr(1.57)─────────────────────────────┤  <n>
+#        ───R(0.00)─────────Kerr(1.57)─────────────┤  <n>
+#        ──╭BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
+#        ──╰BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
+#

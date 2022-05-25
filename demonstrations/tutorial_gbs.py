@@ -162,7 +162,7 @@ def gbs_circuit():
         qml.Squeezing(1.0, 0.0, wires=i)
 
     # linear interferometer
-    qml.Interferometer(U, wires=range(n_wires))
+    qml.InterferometerUnitary(U, wires=range(n_wires))
     return qml.probs(wires=range(n_wires))
 
 

@@ -125,7 +125,6 @@ from pennylane import numpy as np
 np.random.seed(3)
 
 from pennylane import expval
-from pennylane.init import strong_ent_layers_uniform
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 num_layers = 2
@@ -155,7 +154,8 @@ def circuit(params):
 qnode_analytic = qml.QNode(circuit, dev_analytic)
 qnode_stochastic = qml.QNode(circuit, dev_stochastic)
 
-init_params = strong_ent_layers_uniform(num_layers, num_wires)
+param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
+init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
 
 # Optimizing using exact gradient descent
 

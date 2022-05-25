@@ -100,11 +100,10 @@ n = 2
 
 @qml.qnode(dev)
 def circuit():
-    qml.templates.ApproxTimeEvolution(H, t, n)
+    qml.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit()
-print(circuit.draw())
+print(qml.draw(circuit, expansion_strategy='device')())
 
 ######################################################################
 # Layering circuits
@@ -149,8 +148,7 @@ def circuit(param):
     circ(param)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit(0.5)
-print(circuit.draw())
+print(qml.draw(circuit)(0.5))
 
 ######################################################################
 #
@@ -162,8 +160,7 @@ def circuit(params, **kwargs):
     qml.layer(circ, 3, params)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-circuit([0.3, 0.4, 0.5])
-print(circuit.draw())
+print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 
 ######################################################################
 #
@@ -233,7 +230,7 @@ print(circuit.draw())
 #
 
 from pennylane import qaoa
-import numpy as np
+from pennylane import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
 
@@ -338,7 +335,7 @@ def cost_function(params):
 
 optimizer = qml.GradientDescentOptimizer()
 steps = 70
-params = [[0.5, 0.5], [0.5, 0.5]]
+params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 
 ######################################################################
@@ -452,7 +449,7 @@ def cost_function(params):
     circuit(params)
     return qml.expval(new_cost_h)
 
-params = [[0.5, 0.5], [0.5, 0.5]]
+params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 for i in range(steps):
     params = optimizer.step(cost_function, params)
