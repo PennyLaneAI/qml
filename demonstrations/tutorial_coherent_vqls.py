@@ -407,7 +407,7 @@ opt = qml.GradientDescentOptimizer(eta)
 # We initialize the variational weights with random parameters (with a fixed seed).
 
 np.random.seed(rng_seed)
-w = q_delta * np.random.randn(n_qubits)
+w = q_delta * np.random.randn(n_qubits, requires_grad=True)
 
 ##############################################################################
 # We are ready to perform the optimization loop.
@@ -496,18 +496,22 @@ def prepare_and_sample(weights):
     variational_block(weights)
 
     # We assume that the system is measured in the computational basis.
-    # If we label each basis state with a decimal integer j = 0, 1, ... 2 ** n_qubits - 1,
-    # this is equivalent to a measurement of the following diagonal observable.
-    basis_obs = qml.Hermitian(np.diag(range(2 ** n_qubits)), wires=range(n_qubits))
-
-    return qml.sample(basis_obs)
+    # Therefore, sampling from the device will give us a value of 0 or 1 for each qubit (n_qubits)
+    # this will be repeated for the total number of shots provided (n_shots).
+    return qml.sample()
 
 
 ##############################################################################
 # To estimate the probability distribution over the basis states we first take ``n_shots``
 # samples and then compute the relative frequency of each outcome.
 
-samples = prepare_and_sample(w).astype(int)
+raw_samples = prepare_and_sample(w)
+
+# convert the raw samples (bit strings) into integers and count them
+samples = []
+for sam in raw_samples:
+    samples.append(int("".join(str(bs) for bs in sam), base=2))
+
 q_probs = np.bincount(samples, minlength=2 ** n_qubits) / n_shots
 
 ##############################################################################

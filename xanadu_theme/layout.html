@@ -124,6 +124,7 @@
 
 {%- block header -%}
   <link rel="stylesheet" type="text/css" href="{{ pathto('_static/xanadu_gallery.css', 1) }}" />
+  <link rel="stylesheet" type="text/css" href="{{ pathto('_static/author_bio.css', 1) }}" />
   {% include "header.html" %}
 {%- endblock %}
 
@@ -169,7 +170,7 @@
           </div>
           {%- block comments -%}
 
-            {% if pagename in ["demos_basics", "demos_research"] %}
+            {% if pagename in ["demos_getting-started", "demos_qml", "demos_optimization", "demos_quantum-computing", "demos_quantum-chemistry"] %}
               {% include "filters.html" %}
               <style>
                 .comment-container {

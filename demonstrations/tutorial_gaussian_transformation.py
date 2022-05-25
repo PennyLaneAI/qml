@@ -114,7 +114,7 @@ def cost(params):
 ###############################################################################
 # At the beginning of the optimization, we choose arbitrary small initial parameters:
 
-init_params = [0.015, 0.02, 0.005]
+init_params = np.array([0.015, 0.02, 0.005], requires_grad=True)
 print(cost(init_params))
 
 ###############################################################################

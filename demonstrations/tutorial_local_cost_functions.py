@@ -153,10 +153,15 @@ rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
 
 print("Global Cost: {: .7f}".format(cost_global(rotations)))
 print("Local Cost: {: .7f}".format(cost_local(rotations)))
-print("--- Global Circuit ---")
-print(global_circuit.draw())
-print("--- Local Circuit")
-print(local_circuit.draw())
+
+qml.drawer.use_style('black_white')
+fig1, ax1 = qml.draw_mpl(global_circuit, decimals=2)(rotations)
+fig1.suptitle("Global Cost", fontsize='xx-large')
+plt.show()
+
+fig2, ax2 = qml.draw_mpl(local_circuit, decimals=2)(rotations)
+fig2.suptitle("Local Cost", fontsize='xx-large')
+plt.show()
 
 
 ######################################################################
@@ -279,7 +284,7 @@ plot_surface(local_surface)
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
-rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))])
+rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_global = rotations
@@ -291,7 +296,8 @@ for i in range(steps):
         print("Cost after step {:5d}: {: .7f}".format(i + 1, cost_global(params_global)))
     if cost_global(params_global) < 0.1:
         break
-print(global_circuit.draw())
+fig, ax = qml.draw_mpl(global_circuit, decimals=2)(params_global)
+plt.show()
 
 
 ######################################################################
@@ -300,7 +306,7 @@ print(global_circuit.draw())
 # function and see how it performs.
 #
 
-rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]])
+rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_local = rotations
@@ -312,7 +318,9 @@ for i in range(steps):
         print("Cost after step {:5d}: {: .7f}".format(i + 1, cost_local(params_local)))
     if cost_local(params_local) < 0.05:
         break
-print(local_circuit.draw())
+
+fig, ax = qml.draw_mpl(local_circuit, decimals=2)(params_local)
+plt.show()
 
 
 ######################################################################
@@ -373,8 +381,9 @@ dev.shots = 10000
 tunable_circuit = qml.QNode(tunable_cost_simple, dev)
 locality = 2
 params_tunable = params_local
+fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
+plt.show()
 print(cost_tunable(params_tunable))
-print(tunable_circuit.draw())
 
 locality = 2
 opt = qml.GradientDescentOptimizer(stepsize=0.1)
@@ -397,7 +406,8 @@ for i in range(steps):
         continue
     elif runCost < 0.1 and locality >= wires:
         break
-print(tunable_circuit.draw())
+fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
+plt.show()
 
 
 ######################################################################
@@ -436,10 +446,9 @@ global_circuit = qml.QNode(global_cost_simple, dev)
 for runs in range(samples):
     print("--- New run! ---")
     has_been_trained = False
-    params_global = [
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-    ]
+
+    params_global = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
+
     for i in range(steps):
         # update the circuit parameters
         params_global = opt.step(cost_global, params_global)
@@ -471,10 +480,8 @@ for runs in range(samples):
     locality = 1
     print("--- New run! ---")
     has_been_trained = False
-    params_tunable = [
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-        [np.random.uniform(-np.pi, np.pi) for i in range(wires)],
-    ]
+
+    params_tunable = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
     for i in range(steps):
         # update the circuit parameters
         params_tunable = opt.step(cost_tunable, params_tunable)

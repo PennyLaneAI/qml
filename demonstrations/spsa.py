@@ -160,13 +160,13 @@ Once we have a device selected, we just need a couple of other ingredients for
 the pieces of an example optimization to come together:
 
 * a circuit ansatz: :func:`~.pennylane.templates.layers.StronglyEntanglingLayers`,
-* initial parameters: conveniently generated using :func:`~.pennylane.init.strong_ent_layers_normal`,
+* initial parameters: the correct shape can be computed by :func:`~.pennylane.templates.layers.StronglyEntanglingLayers.shape`,
 * an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i`, where :math:`N` stands
   for the number of qubits.
 
 """
 import pennylane as qml
-import numpy as np
+from pennylane import numpy as np
 
 num_wires = 4
 num_layers = 5
@@ -181,7 +181,7 @@ all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num
 
 
 def circuit(params):
-    qml.templates.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
+    qml.StronglyEntanglingLayers(params, wires=list(range(num_wires)))
     return qml.expval(all_pauliz_tensor_prod)
 
 
@@ -191,9 +191,9 @@ def circuit(params):
 # be a flattened array. As a result, our cost function must accept a flat array of parameters
 # to be optimized.
 flat_shape = num_layers * num_wires * 3
-init_params = qml.init.strong_ent_layers_normal(
-    n_wires=num_wires, n_layers=num_layers
-)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=num_wires, n_layers=num_layers)
+init_params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
+
 init_params_spsa = init_params.reshape(flat_shape)
 
 qnode_spsa = qml.QNode(circuit, dev_sampler_spsa)
@@ -305,7 +305,7 @@ res = minimizeSPSA(
 #
 # Now let's perform the same optimization using gradient descent. We set the
 # step size according to a favourable value found after grid search for fast
-# convergence. Note that we also create a new device in order to reset the execution count to 0. 
+# convergence. Note that we also create a new device in order to reset the execution count to 0.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
 
@@ -429,9 +429,8 @@ print(f"Device execution ratio: {grad_desc_exec_min/spsa_exec_min}.")
 
 from pennylane import qchem
 
-geometry = "h2.xyz"
-
-symbols, coordinates = qchem.read_structure(geometry)
+symbols = ["H", "H"]
+coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
 
 # Variational ansatz for H_2 - see Intro VQE demo for more details
@@ -451,7 +450,7 @@ def circuit(params, wires):
 #
 # Since SPSA is robust to noise, let's see how it fares compared to gradient
 # descent when run on noisy hardware. For this, we will set up and use a simulated
-# version of IBM Q's Melbourne hardware.
+# version of IBM Q's hardware.
 #
 
 from qiskit import IBMQ
@@ -459,34 +458,43 @@ from qiskit.providers.aer import noise
 
 # Note: you will need to be authenticated to IBMQ to run the following code.
 # Do not run the simulation on this device, as it will send it to real hardware
-dev_melbourne = qml.device(
-    "qiskit.ibmq", wires=num_qubits, backend="ibmq_16_melbourne"
+# For access to IBMQ, the following statements will be useful:
+# IBMQ.load_account() # Load account from disk
+# List the providers to pick an available backend:
+# IBMQ.providers()    # List all available providers
+
+dev = qml.device(
+    "qiskit.ibmq", wires=num_qubits, backend="ibmq_lima"
 )
-noise_model = noise.NoiseModel.from_backend(dev_melbourne.backend.properties())
+noise_model = noise.NoiseModel.from_backend(dev.backend)
 dev_noisy = qml.device(
-    "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
+    "qiskit.aer", wires=dev.num_wires, shots=1000, noise_model=noise_model
 )
+
+def exp_val_circuit(params):
+    circuit(params, range(dev.num_wires))
+    return qml.expval(h2_ham)
 
 # Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
-cost = qml.ExpvalCost(circuit, h2_ham, dev_noisy)
+cost = qml.QNode(exp_val_circuit, dev_noisy)
 
 # This random seed was used in the original VQE demo and is known to allow the
 # algorithm to converge to the global minimum.
 np.random.seed(0)
-init_params = np.random.normal(0, np.pi, (num_qubits, 3))
+init_params = np.random.normal(0, np.pi, (num_qubits, 3), requires_grad=True)
 params = init_params.copy()
 
-h2_grad_device_executions_melbourne = [0]
-h2_grad_energies_melbourne = []
+h2_grad_device_executions_ibm = [0]
+h2_grad_energies_ibm = []
 
 max_iterations = 20
 
 # Run the gradient descent algorithm
 for n in range(max_iterations):
     params, energy = opt.step_and_cost(cost, params)
-    h2_grad_device_executions_melbourne.append(dev_noisy.num_executions)
-    h2_grad_energies_melbourne.append(energy)
+    h2_grad_device_executions_ibm.append(dev_noisy.num_executions)
+    h2_grad_energies_ibm.append(energy)
 
     if n % 5 == 0:
         print(
@@ -495,7 +503,7 @@ for n in range(max_iterations):
             f"Energy = {energy:.8f} Ha"
         )
 
-h2_grad_energies_melbourne.append(cost(params))
+h2_grad_energies_ibm.append(cost(params))
 
 true_energy = -1.136189454088
 
@@ -525,9 +533,9 @@ print(
 plt.figure(figsize=(10, 6))
 
 plt.plot(
-    h2_grad_device_executions_melbourne,
-    h2_grad_energies_melbourne,
-    label="Gradient descent, Melbourne sim.",
+    h2_grad_device_executions_ibm,
+    h2_grad_energies_ibm,
+    label="Gradient descent, IBM sim.",
 )
 
 plt.xticks(fontsize=13)
@@ -544,7 +552,7 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots_melbourne.png
+# .. figure:: ../demonstrations/spsa/h2_vqe_noisy_shots_ibm.png
 #     :align: center
 #     :width: 90%
 #
@@ -560,9 +568,9 @@ plt.title("H2 energy from the VQE using gradient descent", fontsize=16)
 # Since there are 15 terms, and 200 iterations, we expect 6000 total device
 # executions.
 dev_noisy_spsa = qml.device(
-    "qiskit.aer", wires=dev_melbourne.num_wires, shots=1000, noise_model=noise_model
+    "qiskit.aer", wires=dev.num_wires, shots=1000, noise_model=noise_model
 )
-cost_spsa = qml.ExpvalCost(circuit, h2_ham, dev_noisy_spsa)
+cost_spsa = qml.QNode(exp_val_circuit, dev_noisy_spsa)
 
 # Wrapping the cost function and flattening the parameters to be compatible
 # with noisyopt which assumes a flat array of input parameters
@@ -575,19 +583,19 @@ num_params = 3
 
 params = init_params.copy().reshape(num_qubits * num_params)
 
-h2_spsa_device_executions_melbourne = [0]
-h2_spsa_energies_melbourne = [wrapped_cost(params)]
+h2_spsa_device_executions_ibm = [0]
+h2_spsa_energies_ibm = [wrapped_cost(params)]
 
 
 def callback_fn(xk):
     cost_val = wrapped_cost(xk)
-    h2_spsa_energies_melbourne.append(cost_val)
+    h2_spsa_energies_ibm.append(cost_val)
 
     # We have evaluated every term twice, so we need to make up for this
     num_executions = int(dev_noisy_spsa.num_executions / 2)
-    h2_spsa_device_executions_melbourne.append(num_executions)
+    h2_spsa_device_executions_ibm.append(num_executions)
 
-    iteration_num = len(h2_spsa_energies_melbourne)
+    iteration_num = len(h2_spsa_energies_ibm)
     if iteration_num % 10 == 0:
         print(
             f"Iteration = {iteration_num}, "
@@ -648,15 +656,15 @@ print(
 plt.figure(figsize=(10, 6))
 
 plt.plot(
-    h2_grad_device_executions_melbourne,
-    h2_grad_energies_melbourne,
-    label="Gradient descent, Melbourne sim.",
+    h2_grad_device_executions_ibm,
+    h2_grad_energies_ibm,
+    label="Gradient descent, IBM sim.",
 )
 
 plt.plot(
-    h2_spsa_device_executions_melbourne,
-    h2_spsa_energies_melbourne,
-    label="SPSA, Melbourne sim.",
+    h2_spsa_device_executions_ibm,
+    h2_spsa_energies_ibm,
+    label="SPSA, IBM sim.",
 )
 
 plt.title("H2 energy from the VQE using gradient descent vs. SPSA", fontsize=16)

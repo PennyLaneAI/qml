@@ -100,10 +100,10 @@ set of nuclear coordinates in `atomic units
 
 """
 
-import numpy as np
+from pennylane import numpy as np
 
 symbols = ["H", "H", "H"]
-x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
+x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires_grad=True)
 
 ##############################################################################
 # Next, we need to build the parametrized electronic Hamiltonian :math:`H(x)`.
@@ -120,7 +120,7 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0])
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
 # of the trihydrogen cation using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
 
@@ -178,7 +178,7 @@ def H(x):
 # |
 #
 # To implement this quantum circuit, we use the 
-# :func:`~.pennylane_qchem.qchem.hf_state` function to generate the
+# :func:`~.pennylane.qchem.hf_state` function to generate the
 # occupation-number vector representing the Hartree-Fock state 
 
 hf = qml.qchem.hf_state(electrons=2, orbitals=6)
@@ -187,12 +187,19 @@ print(hf)
 ##############################################################################
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
+# First, we define the quantum device used to compute the expectation value.
+# In this example, we use the ``default.qubit`` simulator:
+num_wires = 6
+dev = qml.device("default.qubit", wires=num_wires)
 
-def circuit(params, wires):
+
+@qml.qnode(dev)
+def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
 
+    return qml.expval(obs)
 ##############################################################################
 # This circuit prepares the trial state
 #
@@ -212,19 +219,16 @@ def circuit(params, wires):
 # The third step of the algorithm is to define the cost function
 # :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle`. It
 # evaluates the expectation value of the parametrized Hamiltonian :math:`H(x)` in the
-# trial state :math:`\vert\Psi(\theta)\rangle`. First, we define the quantum device used
-# to compute the expectation value. In this example, we use the ``default.qubit``
-# simulator:
-
-dev = qml.device("default.qubit", wires=6)
+# trial state :math:`\vert\Psi(\theta)\rangle`.
 
 ##############################################################################
-# Next, we use the PennyLane class :class:`~.pennylane.ExpvalCost` to define the
-# ``cost`` function :math:`g(\theta, x)` which depends on both the circuit and the
-# Hamiltonian parameters.
+# Next, we define the ``cost`` function :math:`g(\theta, x)` which depends on
+# both the circuit and the Hamiltonian parameters. Specifically we consider the
+# expectation values of the Hamiltonian.
 
 def cost(params, x):
-    return qml.ExpvalCost(circuit, H(x), dev)(params)
+    hamiltonian = H(x)
+    return circuit(params, obs=hamiltonian, wires=range(num_wires))
 
 ##############################################################################
 #
@@ -239,15 +243,26 @@ def cost(params, x):
 #
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
-# We use the :func:`~.pennylane.finite_diff` function to compute the gradient of
-# the Hamiltonian using a central-difference approximation. Then, the PennyLane class
-# :class:`~.pennylane.ExpvalCost` is used to evaluate the expectation value of
-# the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
+# We use the :func:`finite_diff` function to compute the gradient of
+# the Hamiltonian using a central-difference approximation. Then, we evaluate the expectation
+# value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
 
-def grad_x(x, params):
-    grad_h = qml.finite_diff(H)(x)
-    grad = [qml.ExpvalCost(circuit, obs, dev)(params) for obs in grad_h]
+def finite_diff(f, x, delta=0.01):
+    """Compute the central-difference finite difference of a function"""
+    gradient = []
+
+    for i in range(len(x)):
+        shift = np.zeros_like(x)
+        shift[i] += 0.5 * delta
+        res = (f(x + shift) - f(x - shift)) * delta**-1
+        gradient.append(res)
+
+    return gradient
+
+def grad_x(params, x):
+    grad_h = finite_diff(H, x)
+    grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
 
 ##############################################################################
@@ -271,7 +286,7 @@ opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
 # is the Hartree-Fock state.
 
-theta = [0.0, 0.0]
+theta = np.array([0.0, 0.0], requires_grad=True)
 
 ##############################################################################
 # The initial set of nuclear coordinates :math:`x`, defined at
@@ -301,11 +316,14 @@ bohr_angs = 0.529177210903
 for n in range(100):
 
     # Optimize the circuit parameters
-    theta = opt_theta.step(partial(cost, x=x), theta)
+    theta.requires_grad = True
+    x.requires_grad = False
+    theta, _ = opt_theta.step(cost, theta, x)
 
     # Optimize the nuclear coordinates
-    grad_fn = partial(grad_x, params=theta)
-    x = opt_x.step(partial(cost, params=theta), x, grad_fn=grad_fn)
+    x.requires_grad = True
+    theta.requires_grad = False
+    _, x = opt_x.step(cost, theta, x, grad_fn=grad_x)
 
     energy.append(cost(theta, x))
     bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
@@ -314,7 +332,7 @@ for n in range(100):
         print(f"Step = {n},  E = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
     # Check maximum component of the nuclear gradient
-    if np.max(grad_fn(x)) <= 1e-05:
+    if np.max(grad_x(theta, x)) <= 1e-05:
         break
 
 print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
