@@ -9,9 +9,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-20.04
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Download PR Info
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -33,11 +34,13 @@ jobs:
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_info.zip`, Buffer.from(download.data));
 
       - name: Unpack PR Info
+        if: github.event.workflow_run.event == 'pull_request'
         run: |
           unzip pr_info.zip
 
       - name: Read PR Info
         id: read_pr_info
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -47,6 +50,7 @@ jobs:
 
       - name: Parse PR Info
         id: pr_info
+        if: github.event.workflow_run.event == 'pull_request'
         run: |
           PR_ID=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.id')
           PR_ID_NO_QUOTE="${PR_ID%\"}"
@@ -66,6 +70,7 @@ jobs:
 
       - name: Get Build IDs
         id: build_ids
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -82,8 +87,15 @@ jobs:
             });
             return buildIds
 
+      - name: Get Branch name (on Push)
+        id: push_branch_info
+        if: github.event.workflow_run.event == 'push'
+        run: |
+          echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+
       - name: Create Deployment
         id: deployment
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           result-encoding: string
@@ -180,15 +192,36 @@ jobs:
             unzip -o -d website $f
           done
 
-      - name: Upload HTML
+      - name: Upload HTML (Pull Request)
+        if: github.event.workflow_run.event == 'pull_request'
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run:
-          aws s3 sync website s3://${{ secrets.AWS_BUCKET_ID }}/${{ secrets.AWS_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
+          aws s3 sync website s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
+
+      - name: Upload HTML (Push to master / dev)
+        if: github.event.workflow_run.event == 'push'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          AWS_BUCKET_NAME=${{ secrets[format('AWS_ENV_S3_BUCKET_{0}', steps.push_branch_info.outputs.branch_name)] }}
+          aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
+
+      - name: Invalidate Cloudfront cache (Prod)
+        if: github.event.workflow_run.event == 'push' && steps.push_branch_info.outputs.branch_name == 'master'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths /qml/*
 
       - name: Comment on PR
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -238,7 +271,7 @@ jobs:
             }
 
       - name: Update Deployment (success)
-        if: success()
+        if: success() && github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         env:
           DEPLOYMENT_STAGE: success
@@ -259,7 +292,7 @@ jobs:
             });
 
       - name: Update Deployment (failure)
-        if: failure()
+        if: failure() && github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         env:
           DEPLOYMENT_STAGE: failure
