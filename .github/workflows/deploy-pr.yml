@@ -91,7 +91,8 @@ jobs:
         id: push_branch_info
         if: github.event.workflow_run.event == 'push'
         run: |
-          echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          echo "::set-output name=branch_name::${BRANCH_NAME^^}"
 
       - name: Create Deployment
         id: deployment
