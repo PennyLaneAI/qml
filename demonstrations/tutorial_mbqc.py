@@ -78,6 +78,43 @@ def cluster_state():
 print(qml.draw(cluster_state)())
 
 ##############################################################################
+# Teleportation
+# ----------
+# .. figure:: ../demonstrations/mbqc/one-bit-teleportation.PNG
+#    :align: center
+#    :width: 60%
+#
+#    ..
+
+import pennylane as qml
+import pennylane.numpy as np
+
+dev = qml.device("default.qubit", wires=2)
+input_state = np.array([1, -1], requires_grad=False) / np.sqrt(2)
+
+
+@qml.qnode(dev)
+def one_bit_teleportation(state, theta):
+    # Prepare input state
+    qml.QubitStateVector(state, wires=0)
+
+    qml.Hadamard(wires=1)
+    qml.CZ(wires=[0, 1])
+
+    qml.Hadamard(wires=0)
+    qml.PhaseShift(theta, wires=0)
+
+    # measure the first qubit
+    m = qml.measure(0)
+    qml.cond(m == 1, qml.PauliX)(wires=1)
+
+    return qml.density_matrix(wires=1)
+
+
+print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, np.pi))
+
+
+##############################################################################
 # References
 # ----------
 #
