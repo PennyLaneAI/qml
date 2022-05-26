@@ -15,8 +15,13 @@ Measurement-based quantum computation
 #
 # Measurement-based quantum computation
 # --------------
-# Measurement-based quantum computation** [#OneWay2021]_ is one of the prososals of a physical
-# implementation of a quantum Turing machine.
+# Measurement-based quantum computing (MBQC) is a clever approach towards quantum computing that
+# makes use of entanglement as a resource for computation. This method, also referred to as one-way
+# quantum computing, is very dissimilar from the gate-based model but is universal nonetheless. In a
+# one-way quantum computer, we start out with an entangled state, a so-called cluster state, and
+# apply particular single-qubit measurements that correspond to the desired quantum circuit. In
+# MBQC, the measurements are the computation and the entanglement of the cluster state is used as a
+# resource.
 
 import pennylane as qml
 from pennylane import numpy as np
