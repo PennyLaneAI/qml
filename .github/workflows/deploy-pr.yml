@@ -9,9 +9,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-20.04
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Download PR Info
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -33,11 +34,13 @@ jobs:
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_info.zip`, Buffer.from(download.data));
 
       - name: Unpack PR Info
+        if: github.event.workflow_run.event == 'pull_request'
         run: |
           unzip pr_info.zip
 
       - name: Read PR Info
         id: read_pr_info
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -47,12 +50,13 @@ jobs:
 
       - name: Parse PR Info
         id: pr_info
+        if: github.event.workflow_run.event == 'pull_request'
         run: |
           PR_ID=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.id')
           PR_ID_NO_QUOTE="${PR_ID%\"}"
           PR_ID_NO_QUOTE="${PR_ID_NO_QUOTE#\"}"
           echo "::set-output name=pr_id::$PR_ID_NO_QUOTE"
-          echo "::set-output name=pr_site::https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html"
+          echo "::set-output name=pr_site::https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html"
           
           PR_REF=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.ref')
           PR_REF_NO_QUOTE="${PR_REF%\"}"
@@ -63,22 +67,53 @@ jobs:
           PR_REF_NAME_NO_QUOTE="${PR_REF_NAME%\"}"
           PR_REF_NAME_NO_QUOTE="${PR_REF_NAME_NO_QUOTE#\"}"
           echo "::set-output name=pr_ref_name::$PR_REF_NAME_NO_QUOTE"
-          
+
+      - name: Get Build IDs
+        id: build_ids
+        if: github.event.workflow_run.event == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.payload.workflow_run.id
+            });
+            let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name.startsWith('html-')
+            });
+            let buildIds = htmlArtifacts.map((artifact) => {
+              return artifact.name.split('.')[0].split('-')[1];
+            });
+            return buildIds
+
+      - name: Get Branch name (on Push)
+        id: push_branch_info
+        if: github.event.workflow_run.event == 'push'
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          echo "${BRANCH_NAME^^}"
+          echo "::set-output name=branch_name::${BRANCH_NAME^^}"
 
       - name: Create Deployment
         id: deployment
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           result-encoding: string
           script: |
             const deploymentStage = 'in_progress';
-            
+            const buildIds = JSON.parse('${{ steps.build_ids.outputs.result }}')
+            const requiredContexts = buildIds.map((buildId) => {
+              return `build (${buildId})`;
+            });
             const deployment = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: '${{ steps.pr_info.outputs.pr_ref }}',
               environment: 'preview',
               task: 'deploy:pr-${{ steps.pr_info.outputs.pr_id }}',
+              required_contexts: requiredContexts,
               transient_environment: true,
               auto_merge: false,
               description: `QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}`
@@ -98,6 +133,20 @@ jobs:
         with:
           script: |
             let fs = require('fs');
+            
+            const maxRetry = 15;
+            const backoffDelay = (retryCount) => new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+            
+            const downloadHtmlArtifact = async (artifact) => {
+              let download = await github.rest.actions.downloadArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id,
+                archive_format: 'zip'
+              });
+              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
+            };
+            
             let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -106,14 +155,36 @@ jobs:
             let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
+            /*
+            Attempt to download the artifact one at a time and save them to disk.
+            In the event of an error, back-off (incrementally) and try again.
+
+            Each error increases the back-off delay by 1s, in other words:
+            > failure -> wait (1s) -> try-again -> failure -> wait (2s) -> try-again -> ...
+
+            This deals with network congestion and rate-limiting errors that occur if the artifact
+            download happens during a time of high load on GitHub Actions.
+            */
             for (const artifact of htmlArtifacts) {
-              let download = await github.rest.actions.downloadArtifact({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                artifact_id: artifact.id,
-                archive_format: 'zip'
-              });
-              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
+              for (let i = 1; i < maxRetry + 1; i++) {
+                 try {
+                   console.log(`Attempting to download artifact: ${artifact.name}`);
+                   await downloadHtmlArtifact(artifact);
+                   console.log(`Successfully downloaded artifact: ${artifact.name}`);
+                   break;
+                 } catch (e) {
+                   console.log(`Error while trying to download artifact: ${artifact.name}, i: ${i}, error: ${e}`);
+                   ['message', 'status', 'request', 'response'].forEach((attr) => {
+                     if (e.hasOwnProperty(attr)) {
+                       console.log(`error_${attr}:`);
+                       console.log(e[attr]);
+                     }
+                   });
+                   if (i === maxRetry) throw new Error(e);
+                   console.log(`Retrying download of artifact: ${artifact.name}`);
+                   await backoffDelay(i);
+                 }
+              }
             }
 
       - name: Unpack HTML
@@ -123,15 +194,38 @@ jobs:
             unzip -o -d website $f
           done
 
-      - name: Upload HTML
+      - name: Upload HTML (Pull Request)
+        if: github.event.workflow_run.event == 'pull_request'
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run:
-          aws s3 sync website s3://${{ secrets.AWS_BUCKET_ID }}/${{ secrets.AWS_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
+          aws s3 sync website s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
+
+      - name: Upload HTML (Push to master / dev)
+        if: github.event.workflow_run.event == 'push'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET_ACTIONS_ID: ${{ format('AWS_ENV_S3_BUCKET_{0}', steps.push_branch_info.outputs.branch_name) }}
+        run: |
+          echo "Got actions Bucket ID: ${{ env.BUCKET_ACTIONS_ID }}"
+          AWS_BUCKET_NAME=${{ secrets[env.BUCKET_ACTIONS_ID] }}
+          aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
+
+      - name: Invalidate Cloudfront cache (Prod)
+        if: github.event.workflow_run.event == 'push' && steps.push_branch_info.outputs.branch_name == 'master'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths /qml/*
 
       - name: Comment on PR
+        if: github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
@@ -181,7 +275,7 @@ jobs:
             }
 
       - name: Update Deployment (success)
-        if: success()
+        if: success() && github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         env:
           DEPLOYMENT_STAGE: success
@@ -202,7 +296,7 @@ jobs:
             });
 
       - name: Update Deployment (failure)
-        if: failure()
+        if: failure() && github.event.workflow_run.event == 'pull_request'
         uses: actions/github-script@v6
         env:
           DEPLOYMENT_STAGE: failure
