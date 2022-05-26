@@ -23,11 +23,6 @@ Measurement-based quantum computation
 # MBQC, the measurements are the computation and the entanglement of the cluster state is used as a
 # resource.
 
-import pennylane as qml
-from pennylane import numpy as np
-import matplotlib.pyplot as plt
-
-
 ##############################################################################
 #
 # Cluster states
@@ -47,6 +42,8 @@ import matplotlib.pyplot as plt
 # .. math::
 #    |\psi⟩=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n},$$
 # where :math:`G` is some graph and :math:`E(G)` is the set of its edges.
+
+import networkx as nx
 
 a, b = 10, 2
 n = a * b  # number of qubits
