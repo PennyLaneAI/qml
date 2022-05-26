@@ -10,7 +10,7 @@ env:
   NUM_WORKERS: 15
 
 concurrency:
-  group: ${{ github.ref }}
+  group: build-docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -141,7 +141,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: demos
-          key: gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}
+          key: gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
 
       - name: Sphinx Cache
         uses: actions/cache@v3
@@ -181,7 +183,7 @@ jobs:
            --verbose
 
       - name: Upload Html
-        if: github.event_name == 'pull_request' && matrix.offset == 0
+        if: matrix.offset == 0
         uses: actions/upload-artifact@v3
         with:
           name: html-${{ matrix.offset }}.zip
@@ -194,7 +196,7 @@ jobs:
       # built artifact. This is done as a performance boost.
       # The step above this is executed by only one worker which uploads all static content.
       - name: Upload Demo Html
-        if: github.event_name == 'pull_request' && matrix.offset != 0
+        if: matrix.offset != 0
         uses: actions/upload-artifact@v3
         with:
           name: html-${{ matrix.offset }}.zip
