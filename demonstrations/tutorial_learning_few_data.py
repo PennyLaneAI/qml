@@ -126,7 +126,7 @@ def ising_dask(h, n_wires):
     H = H_ising(h, n_wires)
     Hmat = qml.utils.sparse_hamiltonian(H)
     E, V = linalg.eigsh(Hmat, k=1, which="SA", return_eigenvectors=True, ncv=20)
-    return V[:, 0], E[0]
+    return V[:, 0]
 
 
 n_wires = 8
@@ -142,9 +142,12 @@ def magz(vec):
     return [qml.expval(qml.PauliZ(i)) for i in range(n_wires)]
 
 
-mzs = np.array([magz(vec) for vec in res[:, 0]])
+mzs = np.array([magz(vec) for vec in data])
 mzs = np.sum(mzs, axis=-1) / n_wires
 plt.plot(hs, mzs, "x--")
+plt.xlabel("h", fontsize=20)
+plt.ylabel("$\\langle \sigma_z \\rangle$", fontsize=20)
+plt.show()
 
 
 ##############################################################################
