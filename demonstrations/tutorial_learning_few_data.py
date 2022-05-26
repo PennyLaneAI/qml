@@ -74,6 +74,11 @@ import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
+# This tutorial includes a lot of loops through big datasets so it is
+# very advantageous to use dask to parallelize those for loops
+from dask.distributed import Client
+import dask
+
 
 ##############################################################################
 # Next, we create a randomized variational circuit
@@ -117,17 +122,18 @@ def H_ising(h, n_wires):
     coefs += [-1e-03 for _ in range(n_wires)]
     return qml.Hamiltonian(coefs, ops)
 
-
-def ising(h, n_wires):
+@dask.delayed
+def ising_dask(h, n_wires):
     H = H_ising(h, n_wires)
     Hmat = qml.utils.sparse_hamiltonian(H)
     E, V = linalg.eigsh(Hmat, k=1, which="SA", return_eigenvectors=True, ncv=20)
-    return V[:, 0], E[0]
+    return V[:, 0]
 
 
 n_wires = 8
 hs = np.linspace(0, 2, 200)
-res = np.array([ising(h, n_wires) for h in hs], dtype=object)  # should be <10s
+res = np.array([ising_dask(h, n_wires) for h in hs], dtype=object)  # should be <10s
+data = np.array(dask.compute(*res))
 dev = qml.device("default.qubit", wires=n_wires)
 
 
@@ -137,18 +143,18 @@ def magz(vec):
     return [qml.expval(qml.PauliZ(i)) for i in range(n_wires)]
 
 
-mzs = np.array([magz(vec) for vec in res[:, 0]])
+mzs = np.array([magz(vec) for vec in data])
 mzs = np.sum(mzs, axis=-1) / n_wires
 plt.plot(hs, mzs, "x--")
+plt.xlabel("h", fontsize=20)
+plt.ylabel("$\\langle \sigma_z \\rangle$", fontsize=20)
+plt.show()
 
 
 ##############################################################################
 # We now take these ground states as our data for training and testing. We can
 # initialize any circuit in PennyLane using `qml.QubitStateVector()` as shown
 # in the example below.
-
-data = res[:, 0]
-
 
 ##############################################################################
 # Quantum Convolutional Neural Netwokr
@@ -209,7 +215,6 @@ def dense_layer(weights, wires):
 # `dense_layer`. Finally, we calculate the probabilities of the outcomes {00, 01
 # 10, 11} with `qml.probs` which will allow us to do the phase classification.
 
-n_wires = 8
 dev = qml.device("default.qubit", wires=n_wires)
 
 
@@ -250,13 +255,14 @@ qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.rando
 
 labels = np.zeros(len(data), dtype=int)
 labels[np.where(mzs<0.5)] = 1
-N_train = 20
-N_val = 20
-randomstate = np.random.default_rng( 0 )
-choice = randomstate.choice(len(data), N_train + N_val, replace=False, shuffle=False )
+N_train = 10
+N_val = 10
 
-train_choice = choice[:N_train]
-val_choice = choice[N_train:]
+randomstate = np.random.default_rng( 0 )
+safe_range = np.concatenate([np.where(mzs>0.9)[0], np.where(mzs<0.1)[0]]) # making sure to be away from the phase transition ~h in [0.5-1]
+train_choice = randomstate.choice(safe_range, N_train, replace=False, shuffle=False )
+val_choice = randomstate.choice(safe_range, N_val, replace=False, shuffle=False )
+
 train_data = data[train_choice]
 train_labels = labels[train_choice]
 train_hs = hs[train_choice]
@@ -299,9 +305,9 @@ optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
 train_loss = [] ; val_loss = []
 train_acc = [] ; val_acc = []
 
-n_iter = 40
-for k in range(1,n_iter+1):
-    if k % 10 == 0:
+n_iter = 20
+for k in range(1, n_iter+1):
+    if k % 3 == 0:
         print(f"Step {k} / {n_iter}, cost: {old_loss}")
         train_acc.append(accuracy(weights, weights_last, train_data, train_labels))
         val_acc.append(accuracy(weights, weights_last, val_data, val_labels))
@@ -319,16 +325,21 @@ val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
 
 fig, axs = plt.subplots(ncols=2, figsize=(10,5))
 ax = axs[0]
-ax.plot(train_loss,"x--")
+ax.plot(train_loss,"x--", label="train")
+ax.plot(val_loss,"x--", label="val")
+ax.set_ylabel("loss", fontsize=20)
+ax.set_xlabel("epoch", fontsize=20)
+ax.legend(fontsize=20)
 
 ax = axs[1]
-ax.plot(np.arange(0,n_iter,10), val_acc,"x--", label="val")
-ax.plot(np.arange(0,n_iter,10), train_acc,"o:", label="train")
-ax.legend(fontsize=20)
+ax.plot(np.arange(1,n_iter-1,3), train_acc,"o:", label="train")
+ax.plot(np.arange(1,n_iter-1,3), val_acc,"x--", label="val")
 ax.set_ylabel("accuracy", fontsize=20)
 ax.set_xlabel("epoch", fontsize=20)
+ax.legend(fontsize=20)
 
 plt.tight_layout()
+#plt.savefig("few-data_loss_accuracy.png")
 plt.show()
 
 ##############################################################################

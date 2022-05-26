@@ -8,7 +8,7 @@ nlopt==2.6.2
 semantic_version==2.6
 strawberryfields==0.22
 sympy==1.6.2
-pillow==7.1.0
+pillow==9.0.1
 pip==21.1
 wheel==0.37.0
 h5py<=3.2.1
@@ -32,7 +32,7 @@ pypandoc==1.5
 sphinx_gallery==0.10.0
 seaborn==0.11.2
 keras==2.8.0
-tensorflow==2.8.0
+tensorflow==2.8.1
 toml==0.10.2
 torch==1.10.0+cpu
 torchvision==0.11.1+cpu
