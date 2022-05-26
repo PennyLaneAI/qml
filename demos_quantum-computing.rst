@@ -79,7 +79,7 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing
 
 .. customgalleryitem::
-    :tooltip: Photonic quantum computing
+    :tooltip: Photonic quantum computers
     :figure: demonstrations/photonics/photonics_tn.png
     :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
@@ -99,7 +99,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
 	demos/tutorial_sc_qubits
-    demos/photonics
+    demos/tutorial_photonics
     
-
-  	demos/tutorial_sc_qubits
