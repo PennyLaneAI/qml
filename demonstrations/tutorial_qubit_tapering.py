@@ -15,7 +15,7 @@ Qubit tapering
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
-*Author: Soran Jahangiri. Posted: 16 May 2022. Last updated: 16 May 2022*
+*Author: Soran Jahangiri. Posted: 16 May 2022. Last updated: 24 May 2022*
 
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
@@ -180,10 +180,10 @@ print(H_tapered)
 # of the ground-state energies.
 
 H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
-H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
+H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=all)
 
 print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
-print("\n Eigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
+print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 
 ##############################################################################
 # Tapering the reference state

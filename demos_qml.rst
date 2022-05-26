@@ -120,7 +120,13 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Machine learning for quantum many-body problems
     :figure: demonstrations/ml_classical_shadows/ml_classical_shadow.png
     :description: :doc:`demos/tutorial_ml_classical_shadows`
-    :tags: kernels manybodyphysics classicalml 
+    :tags: kernels manybodyphysics classicalml
+
+.. customgalleryitem::
+    :tooltip: Train polynomial approximations to functions using QSP.
+    :figure: demonstrations/function_fitting_qsp/cover.png
+    :description: :doc:`demos/function_fitting_qsp`
+    :tags: pytorch
 
 .. customgalleryitem::
     :tooltip: Generalization in quantum machine learning from few training data
@@ -151,4 +157,5 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_quantum_gans
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
+    demos/function_fitting_qsp
     demos/tutorial_learning_few_data
