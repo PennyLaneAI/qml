@@ -34,7 +34,7 @@ Measurement-based quantum computation
 #
 #    ..
 #
-#    Cluster state proposed [#XanaduBlueprint2021]_
+#    Cluster state proposed in [#XanaduBlueprint2021]_
 #
 # To understand how MBQC qubits work, it's good to have an understanding of the cluster state. There
 # is not one cluster state, but rather it’s a name for a class of highly entangled multi-qubit
