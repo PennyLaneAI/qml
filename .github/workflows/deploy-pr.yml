@@ -56,7 +56,7 @@ jobs:
           PR_ID_NO_QUOTE="${PR_ID%\"}"
           PR_ID_NO_QUOTE="${PR_ID_NO_QUOTE#\"}"
           echo "::set-output name=pr_id::$PR_ID_NO_QUOTE"
-          echo "::set-output name=pr_site::https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html"
+          echo "::set-output name=pr_site::https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html"
           
           PR_REF=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.ref')
           PR_REF_NO_QUOTE="${PR_REF%\"}"
