@@ -105,7 +105,8 @@ import scipy.sparse.linalg as linalg
 import numpy as np
 import pennylane.numpy as pnp
 from matplotlib import pyplot as plt
-
+import seaborn as sns
+sns.set_theme()
 
 def H_ising(h, n_wires):
     ops = [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(n_wires - 1)]
@@ -150,10 +151,19 @@ data = res[:, 0]
 
 
 ##############################################################################
-# QCNN
+# Quantum Convolutional Neural Netwokr
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Define QCNN.
-
+# Let us now create a quantum CNN like the one  proposed by Cong, et al. 
+# [#CongQuantumCNN]. Similar to a classical CNN, we have both a 
+# `convolutional_layer` and a `pooling_layer`. The former layer acts as a window
+#  that extracts local correlations, while the former allows reducing the 
+# dimensionality of the feature vector. In the simplest case, the 
+# `convolutional_layer` consists of a two-qubit unitary that is shifted along 
+# the circuit and the `pooling_layer` of a single qubit gate conditioned on the 
+# measurement of a neighbouring qubit. These two layers are alternatingly 
+# concatenated (conv-pool-conv-pool). Additionally, similar to classical CNNs, 
+# we concatenate the reduced feature vector with a `dense layer`, which in our 
+# case can be modeled as an all-to-all unitary gate.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     n_wires = len(wires)
@@ -192,8 +202,12 @@ def dense_layer(weights, wires):
 
 
 ##############################################################################
-# Let us now define a circuit using a ``qml.qnode`` that
-# .
+# Let us now define a circuit that takes as an input the weights of the QCNN and
+# the quantum state to be processed. We first take the vector representation of 
+# the states calculated in `ising` and input them to a quantum circuit using
+#`qml.QuibtStateVector`. Them we use `conv_and_pooling` layers, followed by a
+# `dense_layer`. Finally, we calculate the probabilities of the outcomes {00, 01
+# 10, 11} with `qml.probs` which will allow us to do the phase classification.
 
 n_wires = 8
 dev = qml.device("default.qubit", wires=n_wires)
@@ -286,9 +300,9 @@ train_loss = [] ; val_loss = []
 train_acc = [] ; val_acc = []
 
 n_iter = 40
-for k in range(n_iter):
+for k in range(1,n_iter+1):
     if k % 10 == 0:
-        print(f"Step {k+1} / {n_iter}, cost: {old_loss}")
+        print(f"Step {k} / {n_iter}, cost: {old_loss}")
         train_acc.append(accuracy(weights, weights_last, train_data, train_labels))
         val_acc.append(accuracy(weights, weights_last, val_data, val_labels))
         print(f"train_acc = {train_acc[-1]} val_acc = {val_acc[-1]}")
@@ -305,7 +319,7 @@ val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
 
 fig, axs = plt.subplots(ncols=2, figsize=(10,5))
 ax = axs[0]
-ax.plot(losses,"x--")
+ax.plot(train_loss,"x--")
 
 ax = axs[1]
 ax.plot(np.arange(0,n_iter,10), val_acc,"x--", label="val")
@@ -345,3 +359,10 @@ plt.show()
 #     "Variance-based regularization with convex objectives."
 #     `Advances in Neural Information Processing Systems
 #     <https://proceedings.neurips.cc/paper/2017/file/5a142a55461d5fef016acfb927fee0bd-Paper.pdf>`__, 2017.
+#
+# .. [#CongQuantumCNN]
+#
+#     Iris Cong, Soonwon Choi, Mikhail D. Lukin.
+#     "Quantum Convolutional Neural Networks"
+#     `arxiv:1810.03787 <https://arxiv.org/abs/1810.03787>`__, 2018.
+#
