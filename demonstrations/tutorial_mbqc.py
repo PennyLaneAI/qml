@@ -41,8 +41,44 @@ import matplotlib.pyplot as plt
 #
 #    Cluster state proposed [#XanaduBlueprint2021]_
 #
-# To understand how MBQC qubits work, we first need to explain what cluster states are...
+# To understand how MBQC qubits work, it's good to have an understanding of the cluster state. There
+# is not one cluster state, but rather it’s a name for a class of highly entangled multi-qubit
+# states. One example of a cluster state would be
+# .. math::
+#    |\psi⟩=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n},$$
+# where :math:`G` is some graph and :math:`E(G)` is the set of its edges.
 
+a, b = 10, 2
+n = a * b  # number of qubits
+
+G = nx.grid_graph(dim=[a, b])
+
+# .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
+#    :align: center
+#    :width: 60%
+#
+#    ..
+
+import pennylane as qml
+
+qubits = [str(n) for n in G.nodes]
+
+dev = qml.device("default.qubit", wires=qubits)
+
+
+@qml.qnode(dev)
+def cluster_state():
+    for node in qubits:
+        qml.Hadamard(wires=[node])
+
+    for edge in G.edges:
+        i, j = edge
+        qml.CZ(wires=[str(i), str(j)])
+
+    return qml.expval(qml.PauliZ(0))
+
+
+print(qml.draw(cluster_state)())
 
 ##############################################################################
 # References
