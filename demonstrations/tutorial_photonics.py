@@ -121,7 +121,7 @@ can be performed using these tools. Let's get started!
 # where :math:`\vert x \rangle` is the eigenstate of :math:`\hat{X}` with eigenvalue
 # :math:`x`, and :math:`\psi` is a complex-valued function known as the *wave function*.
 # A similar expansion can be done in terms of the eigenstates :math:`\vert p \rangle` of :math:`\hat{P}`.
-#
+# Note that an integral is used here rather than an infinite sum because the eigenvalues of :math:`\hat{X}` and :math: `\hat{P}` are continuous.
 # So how do we define a Gaussian state using this representation? It is a state that is completely
 # determined by the average values :math:`\bar{x}` and :math:`\bar{p}` of the position and momentum quadratures,
 # as well as their standard deviations :math:`\Delta x` and :math:`\Delta p`. The most trivial
