@@ -668,7 +668,7 @@ print(
 # the setup into getting an arbitrary non-Gaussian state.
 #
 # But there's one non-Gausian operation that's been right in front of our eyes all this time.
-# The measurement of the number of photons takes a Gaussian and collapse it into a Fock state (although this destroys the photons);
+# The measurement of the number of photons takes a Gaussian and collapses it into a Fock state (although this destroys the photons);
 # therefore, photon number detection is not a Gaussian operation. Measuring the exact number of photons is not that easy.
 # We need fancy devices known a photon-number resolving detectors (PNRDs),
 # which are superconductor-based, so they work only at low temperatures. Combined with squeezed states and beamsplitters,
@@ -713,7 +713,7 @@ print(
 # .. math:: t_1 = 0.8624, \quad t_2=0.7688, \quad t_3 = 0.7848,
 # .. math:: S_1 = -1.38, \quad S_2 = -1.22, \quad S_3 = 0.780 \quad S_4 = 0.196,
 #
-# for this generalized GBS circuit produces, with some probability,  the following state(expressed as a combination of Fock states)
+# for this generalized GBS circuit produces, with some probability,  the following state (expressed as a combination of Fock states)
 #
 # .. math:: \vert \psi \rangle = S(0.196)\left(0.661 \vert 0\rangle -0.343 \vert 2\rangle + 0.253\vert 4\rangle -0.368\vert 6\rangle
 #             +0.377 \vert 8\rangle + 0.323 \vert 10\rangle + 0.325\vert 12\rangle\right),
@@ -730,7 +730,7 @@ print(
 #    Wigner function of non-Gaussian state
 #
 # The Wigner function does not have the shape of a Gaussian and moreover, it can be negative, a tell-tale feature of
-# non-Gaussian states (we can only interpret this function as some sort of probability distribution for the case of Gaussian states!).
+# non-Gaussian states (we can only interpret the Wigner function as some sort of probability distribution for the case of Gaussian states!).
 # The only issue is that the non-Gaussian state is produced only with some probability, that is,
 # *when the detectors measure some particular number of photons*. But, at the very least, we can
 # be sure that we have obtained the non-Gaussian state we wanted, and otherwise we
@@ -742,7 +742,7 @@ print(
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # It's great that we can manipulate quantum states of light so freely, but we haven't discussed how
-# to use them for quantum computing. We would like is a way to encode qubits into qumodes, so
+# to use them for quantum computing. We would like a way to encode qubits into qumodes, so
 # that we can run any qubit-based quantum algorithm using qumodes.
 # Surely there's more than one way to encode a two-dimensional subspace into an infinite-dimensional
 # one. The only problem is that most of these encodings are extremely sensitive to the noise
@@ -953,4 +953,4 @@ print(
 # .. bio:: Alvaro Ballon
 #    :photo: ../_static/Alvaro.png
 #
-#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accesible to the community
+#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.
