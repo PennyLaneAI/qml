@@ -206,9 +206,9 @@ def dense_layer(weights, wires):
 # Let us now define a circuit that takes as an input the weights of the QCNN and
 # the quantum state to be processed. We first take the vector representation of 
 # the states calculated in `ising` and input them to a quantum circuit using
-#`qml.QuibtStateVector`. Them we use `conv_and_pooling` layers, followed by a
-# `dense_layer`. Finally, we calculate the probabilities of the outcomes {00, 01
-# 10, 11} with `qml.probs` which will allow us to do the phase classification.
+# ``qml.QuibtStateVector``. Then we use ``conv_and_pooling`` layers, followed by a
+# ``dense_layer``. Finally, we calculate the probabilities of the outcomes ``{00, 01
+# 10, 11}`` with ``qml.probs`` which will allow us to do the phase classification.
 
 dev = qml.device("default.qubit", wires=n_wires)
 
