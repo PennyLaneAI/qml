@@ -422,7 +422,7 @@ plt.show()
 # we need two qumodes, since we rely on combining the input state that we want to displace with a
 # coherent state in a beamsplitter. Let us code this circuit in the case that the input is a coherent state
 # as a particular case (the operation will work for any state). 
-# Let us be mindful that this will only work when the amplitude of the input state us much smaller
+# Let us be mindful that this will only work when the amplitude of the input state is much smaller
 # than that of the auxiliary coherent state.
 
 dev2 = qml.device("default.gaussian", wires=2, shots=1000)
