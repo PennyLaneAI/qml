@@ -111,7 +111,7 @@ import numpy as np
 import pennylane.numpy as pnp
 from matplotlib import pyplot as plt
 import seaborn as sns
-sns.set_theme()
+sns.set()
 
 def H_ising(h, n_wires):
     ops = [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(n_wires - 1)]
