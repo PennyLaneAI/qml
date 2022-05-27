@@ -9,6 +9,9 @@ Photonic quantum computers
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
+   tutorial_trapped_ions Trapped ion quantum computing
+   tutorial_sc_qubits Quantum computing with superconducting qubits
+   tutorial_gbs Quantum advantage with Gaussian Boson Sampling
 
 *Author: Alvaro Ballon. Posted: 31 May 2022. Last updated: 31 May 2022.*
 
@@ -75,31 +78,31 @@ can be performed using these tools. Let's get started!
 # Gaussian states of light
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Why are the quantum states of light so durable? Photons seldom interact with each other, 
+# Why are the quantum states of light so durable? Photons seldom interact with each other,
 # which means we can easily avoid uncontrolled interactions that destroy their quantum state.
-# However, to build a universal quantum computer, we need multi-qubit gates, 
-# which means that photons must be made to communicate with each other somehow! We *can* make photons 
+# However, to build a universal quantum computer, we need multi-qubit gates,
+# which means that photons must be made to communicate with each other somehow! We *can* make photons
 # affect each other by using a material as a mediator. To start with, we will focus on manipulating
 # photons using *linear materials*, whose properties are unchanged when they interact with light. With linear materials,
 # we can produce a subset of the so-called **Gaussian states**. They can be fabricated with a 100% success rate
-# using common optical devices, so they are our safest tool in photonics. 
+# using common optical devices, so they are our safest tool in photonics.
 #
-# To precisely define a Gaussian state, we need a mathematical representation for states 
-# of light. As is the case with qubits, states of light are represented by a linear 
+# To precisely define a Gaussian state, we need a mathematical representation for states
+# of light. As is the case with qubits, states of light are represented by a linear
 # combination of basis vectors. But unlike qubits, two basis vectors aren't enough.
-# The reason is that light is characterized by its so-called *position and momentum quadratures* :math:`x` and :math:`p`, 
-# captured by the operators :math:`\hat{X}` and :math:`\hat{P}` respectively. Upon measurement, these quadratures 
-# can take any real value, which means that :math:`\hat{X}` and 
-# :math:`\hat{P}` have infinitely many eigenvectors. Therefore, to describe a quantum of light, 
+# The reason is that light is characterized by its so-called *position and momentum quadratures* :math:`x` and :math:`p`,
+# captured by the operators :math:`\hat{X}` and :math:`\hat{P}` respectively. Upon measurement, these quadratures
+# can take any real value, which means that :math:`\hat{X}` and
+# :math:`\hat{P}` have infinitely many eigenvectors. Therefore, to describe a quantum of light,
 # :math:`\left\lvert \psi \right\rangle` we need infinitely many basis vectors!
-# 
+#
 # .. note::
 #
-#    The position and momentum quadratures :math:`x` and :math:`p` do not represent the position and momentum 
+#    The position and momentum quadratures :math:`x` and :math:`p` do not represent the position and momentum
 #    of one photon. They describe the state of possibly many photons, and they are related
 #    to the amplitude and phase of light. The names come from the fact that the quadrature observables :math:`\hat{X}`
-#    and :math:`\hat{P}` satisfy 
-#    
+#    and :math:`\hat{P}` satisfy
+#
 #    .. math:: \left[ \hat{X},\hat{P}\right]=i\hbar,
 #
 #    which is the same relation satisfied by conventional position and momentum in quantum mechanics. This means that
@@ -108,23 +111,23 @@ can be performed using these tools. Let's get started!
 #    uncertainty relation
 #
 #    .. math:: \Delta x \Delta p \geq 1,
-# 
+#
 #    where we work in units where :math:`\hbar = 2.` Sometimes the word "quadratures" is omitted for simplicity.
-# 
+#
 # For example, we write
 #
 # .. math:: \left\lvert \psi \right\rangle = \int_\mathbb{R}\psi(x)\vert x \rangle dx,
 #
-# where :math:`\vert x \rangle` is the eigenstate of :math:`\hat{X}` with eigenvalue 
-# :math:`x`, and :math:`\psi` is a complex-valued function known as the *wave function*. 
-# A similar expansion can be done in terms of the eigenstates :math:`\vert p \rangle` of :math:`\hat{P}`. 
+# where :math:`\vert x \rangle` is the eigenstate of :math:`\hat{X}` with eigenvalue
+# :math:`x`, and :math:`\psi` is a complex-valued function known as the *wave function*.
+# A similar expansion can be done in terms of the eigenstates :math:`\vert p \rangle` of :math:`\hat{P}`.
 #
-# So how do we define a Gaussian state using this representation? It is a state that is completely 
-# determined by the average values :math:`\bar{x}` and :math:`\bar{p}` of the position and momentum quadratures, 
-# as well as their standard deviations :math:`\Delta x` and :math:`\Delta p`. The most trivial 
-# Gaussian state is the *vacuum*—the state with no photons. Let us see what happens if 
-# we sample measurements of the quadratures :math:`\hat{X}` and :math:`\hat{P}` when light is in the vacuum. 
-# We can use PennyLane's ``default.gaussian`` device, which lets us create, manipulate, and measure Gaussian 
+# So how do we define a Gaussian state using this representation? It is a state that is completely
+# determined by the average values :math:`\bar{x}` and :math:`\bar{p}` of the position and momentum quadratures,
+# as well as their standard deviations :math:`\Delta x` and :math:`\Delta p`. The most trivial
+# Gaussian state is the *vacuum*—the state with no photons. Let us see what happens if
+# we sample measurements of the quadratures :math:`\hat{X}` and :math:`\hat{P}` when light is in the vacuum.
+# We can use PennyLane's ``default.gaussian`` device, which lets us create, manipulate, and measure Gaussian
 # states of light. Let's first call the usual imports,
 #
 
@@ -136,76 +139,89 @@ import matplotlib.pyplot as plt
 #
 # and define the device.
 
-dev = qml.device('default.gaussian', wires = 1, shots=1000)
+dev = qml.device("default.gaussian", wires=1, shots=1000)
 
 ##############################################################################
 #
-# .. container:: alert alert-block alert-warning
+# .. important:: 
 #
-#    **Important**: What do the wires represent in a photonic device? They are independent
-#    information carriers known as **qumodes**. In photonic quantum computers, these are waves of light 
+#    What do the wires represent in a photonic device? They are independent
+#    information carriers known as **qumodes**. In photonic quantum computers, these are waves of light
 #    contained inside an optical fibre. Qumodes are not two-level system in general, so we must use an
-#    infinite superposition of basis states to represent their quantum state. 
+#    infinite superposition of basis states to represent their quantum state.
 #
-# We would like to know how the measured values of position and momentum 
-# are distributed in the :math:`x`-:math:`p` space, usually called `phase space <https://en.wikipedia.org/wiki/Optical_phase_space>`__. 
-# The initial state in ``default.gaussian`` is the vacuum, so the circuits 
-# to measure the quadratures need not contain any operations, except for measurements! 
+# We would like to know how the measured values of position and momentum
+# are distributed in the :math:`x`-:math:`p` space, usually called `phase space <https://en.wikipedia.org/wiki/Optical_phase_space>`__.
+# The initial state in ``default.gaussian`` is the vacuum, so the circuits
+# to measure the quadratures need not contain any operations, except for measurements!
 # We plot 1000 measurement results for both :math:`x` and :math:`p`.
+
 
 @qml.qnode(dev)
 def vacuum_measure_x():
-    return qml.sample(qml.X(0)) #Samples X quadratures
+    return qml.sample(qml.X(0))  # Samples X quadratures
+
+
 @qml.qnode(dev)
 def vacuum_measure_p():
-    return qml.sample(qml.P(0)) #Samples P quadrature
+    return qml.sample(qml.P(0))  # Samples P quadrature
 
-#Sample measurements in phase space
+
+# Sample measurements in phase space
 x_sample = vacuum_measure_x().numpy()
 p_sample = vacuum_measure_p().numpy()
 
-#Import some libraries for a nicer plot
+# Import some libraries for a nicer plot
 from scipy.stats import gaussian_kde
 from numpy import vstack as vstack
 
-#Point density calculation
-xp = vstack([x_sample,p_sample])
+# Point density calculation
+xp = vstack([x_sample, p_sample])
 z = gaussian_kde(xp)(xp)
 
-#Sort the points by density
+# Sort the points by density
 sorted = z.argsort()
 x, y, z = x_sample[sorted], p_sample[sorted], z[sorted]
 
-#Plot
+# Plot
 fig, ax = plt.subplots()
-ax.scatter(x,y, c=z, s=50, cmap='turbo')
-plt.title("Vacuum",fontsize=12)
+ax.scatter(x, y, c=z, s=50, cmap="turbo")
+plt.title("Vacuum", fontsize=12)
 ax.set_ylabel("Momentum", fontsize=11)
 ax.set_xlabel("Position", fontsize=11)
-ax.set_aspect('equal', adjustable='box')
+ax.set_aspect("equal", adjustable="box")
 plt.show()
 
 ##############################################################################
 #
-# We observe that the values of the quadratures are distributed around the 
-# origin with a spread of approximately 1. We can check these eyeballed values explicitly, 
-# using a device without shots this time. 
+# We observe that the values of the quadratures are distributed around the
+# origin with a spread of approximately 1. We can check these eyeballed values explicitly,
+# using a device without shots this time.
 
-dev_exact=qml.device('default.gaussian', wires=1) #No explicit shots gives analytic calculations
+dev_exact = qml.device("default.gaussian", wires=1)  # No explicit shots gives analytic calculations
+
+
 @qml.qnode(dev_exact)
 def vacuum_mean_x():
-    return qml.expval(qml.X(0)) #Returns exact expecation value of x
+    return qml.expval(qml.X(0))  # Returns exact expecation value of x
+
+
 @qml.qnode(dev_exact)
 def vacuum_mean_p():
-    return qml.expval(qml.P(0)) #Returns exact expectation value of p
+    return qml.expval(qml.P(0))  # Returns exact expectation value of p
+
+
 @qml.qnode(dev_exact)
 def vacuum_var_x():
-    return qml.var(qml.X(0)) #Returns exact variance of x
+    return qml.var(qml.X(0))  # Returns exact variance of x
+
+
 @qml.qnode(dev_exact)
 def vacuum_var_p():
-    return qml.var(qml.P(0)) #Returns exact variane of p
+    return qml.var(qml.P(0))  # Returns exact variane of p
 
-#Print calculated statistical quantities
+
+# Print calculated statistical quantities
 print("Expectation value of x-quadrature: {}".format(vacuum_mean_x()))
 print("Expectation value of p-quadrature: {}".format(vacuum_mean_p()))
 print("Variance of x-quadrature: {}".format(vacuum_var_x()))
@@ -213,103 +229,106 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 
 ##############################################################################
 #
-# But where does the name Gaussian come from? If we plot the density 
+# But where does the name Gaussian come from? If we plot the density
 # of quadrature measurements for a coherent in three dimensions, we obtain the following plot.
-# 
+#
 # .. figure:: ../demonstrations/photonics/vacuum_wigner.png
 #    :align: center
-#    :width: 70% 
-#    
+#    :width: 70%
+#
 #    ..
 #
 #    Density of measurement results in phase space for the vacuum state
-# 
-# The density has the shape of a 2-dimensional Gaussian surface, hence the name. *For Gaussian 
-# states only*, the density is exactly equal to the so-called `Wigner function <https://en.wikipedia.org/wiki/Wigner_quasiprobability_distribution>`__ :math:`W(x,p)`, 
+#
+# The density has the shape of a 2-dimensional Gaussian surface, hence the name. *For Gaussian
+# states only*, the density is exactly equal to the so-called `Wigner function <https://en.wikipedia.org/wiki/Wigner_quasiprobability_distribution>`__ :math:`W(x,p)`,
 # defined using the wave function :math:`\psi(x)`:
 #
 # .. math:: W(x,p) = \frac{1}{\pi\hbar}\int_{-\infty}^{\infty}\psi^{*}(x+y)\psi(x-y)e^{2ipy/\hbar}dy.
 #
-# Since the Wigner function satisfies  
-# 
+# Since the Wigner function satisfies
+#
 # .. math:: \int_{\mathbb{R}^2}W(x,p)dxdp = 1
 #
 # and is positive for Gaussian states,
-# it is *almost as if*  the values of the momentum and position had an underlying classical 
-# probability distribution, save for the fact that the quadratures can't be measured simultaneously. 
-# For this reason, Gaussian states are considered to be "classical" states of light. Now we're ready 
+# it is *almost as if*  the values of the momentum and position had an underlying classical
+# probability distribution, save for the fact that the quadratures can't be measured simultaneously.
+# For this reason, Gaussian states are considered to be "classical" states of light. Now we're ready
 # for the technical definition of a Gaussian state.
-# 
+#
 # .. admonition:: Definition
 #     :class: defn
 #
 #     A photonic system is said to be in a **Gaussian** state if its Wigner function is a two-dimensional
-#     Gaussian function [#Weedbrook2012]_. 
+#     Gaussian function [#Weedbrook2012]_.
 #
-# What other Gaussian states are there? The states produced by lasers are called *coherent states*, 
-# which are also Gaussian with :math:`\Delta x = \Delta p = 1`. Coherent states, in general, 
-# can have non-zero expectation values for the 
-# quadratures (i.e., they are not centered around the origin). 
-# 
+# What other Gaussian states are there? The states produced by lasers are called *coherent states*,
+# which are also Gaussian with :math:`\Delta x = \Delta p = 1`. Coherent states, in general,
+# can have non-zero expectation values for the
+# quadratures (i.e., they are not centered around the origin).
+#
 # .. note::
 #
 #    More generally, a coherent state is one that saturates the uncertainty relation. That is,
 #
 #    .. math:: \Delta x \Delta p = 1.
-# 
-# The ``default.gaussian`` device allows for the easy preparation of coherent states 
-# through ``qml.CoherentState``. This function takes two parameters :math:`\alpha` and :math:`\phi,` 
-# where :math:`\alpha=\sqrt{\vert\bar{x}\vert^2+\vert\bar{p}\vert^2}` is the magnitude 
+#
+# The ``default.gaussian`` device allows for the easy preparation of coherent states
+# through the function :class:`~pennylane.CoherentState`, which takes two parameters :math:`\alpha` and :math:`\phi.`
+# Here, :math:`\alpha=\sqrt{\vert\bar{x}\vert^2+\vert\bar{p}\vert^2}` is the magnitude
 # and :math:`\phi` is the polar angle of the point :math:`(\bar{x}, \bar{p}).`
 # Let us plot sample quadrature measurements for a coherent state.
- 
-@qml.qnode(dev)
-def measure_coherent_x(alpha,phi):
-    qml.CoherentState(alpha,phi,wires=0) #Prepares coherent state
-    return qml.sample(qml.X(0)) #Measures X quadrature
+
 
 @qml.qnode(dev)
-def measure_coherent_p(alpha,phi):
-    qml.CoherentState(alpha,phi,wires=0) #Prepares coherent state
-    return qml.sample(qml.P(0)) #Measures P quadrature
+def measure_coherent_x(alpha, phi):
+    qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
+    return qml.sample(qml.X(0))  # Measures X quadrature
 
-#Choose alpha and phi and sample 1000 measurements
-x_sample_coherent = measure_coherent_x(3,np.pi/3).numpy()
-p_sample_coherent = measure_coherent_p(3,np.pi/3).numpy()
 
-#Plot as before
-xp = vstack([x_sample_coherent,p_sample_coherent])
+@qml.qnode(dev)
+def measure_coherent_p(alpha, phi):
+    qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
+    return qml.sample(qml.P(0))  # Measures P quadrature
+
+
+# Choose alpha and phi and sample 1000 measurements
+x_sample_coherent = measure_coherent_x(3, np.pi / 3).numpy()
+p_sample_coherent = measure_coherent_p(3, np.pi / 3).numpy()
+
+# Plot as before
+xp = vstack([x_sample_coherent, p_sample_coherent])
 z1 = gaussian_kde(xp)(xp)
 
 sorted = z1.argsort()
 x, y, z = x_sample_coherent[sorted], p_sample_coherent[sorted], z1[sorted]
 
 fig, ax1 = plt.subplots()
-ax1.scatter(x,y, c=z, s=50, cmap='turbo')
-ax1.set_title("Coherent State",fontsize=12)
+ax1.scatter(x, y, c=z, s=50, cmap="turbo")
+ax1.set_title("Coherent State", fontsize=12)
 ax1.set_ylabel("Momentum", fontsize=11)
 ax1.set_xlabel("Position", fontsize=11)
-ax1.set_aspect('equal', adjustable='box')
-plt.xlim([-0.5,8])
-plt.ylim([0,9])
+ax1.set_aspect("equal", adjustable="box")
+plt.xlim([-0.5, 8])
+plt.ylim([0, 9])
 plt.show()
 ##############################################################################
 #
-# We see that the distribution of quadrature measurement is similar to that of the vacuum, except that
-# it is not centered at the origin. 
+# Indeed, we see that the distribution of quadrature measurements is similar to that of the vacuum, except that
+# it is not centered at the origin.
 
 ##############################################################################
 #
 # Gaussian operations
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We have only learned about two types of Gaussian states so far. The vacuum can be obtained 
-# by carefully isolating a system from any environmental influences, and a coherent state can be produced 
-# by a laser, so we already have these at hand. But how can we obtain any Gaussian state of our liking? 
-# This is achieved through *Gaussian operations*, which transform a Gaussian state to 
-# another Gaussian state. These operations are relatively easy to implement in a lab 
+# We have only learned about two types of Gaussian states so far. The vacuum can be obtained
+# by carefully isolating a system from any environmental influences, and a coherent state can be produced
+# by a laser, so we already have these at hand. But how can we obtain any Gaussian state of our liking?
+# This is achieved through *Gaussian operations*, which transform a Gaussian state to
+# another Gaussian state. These operations are relatively easy to implement in a lab
 # using some of the optical elements introduced in the table below.
-# 
+#
 # .. rst-class:: docstable
 #
 #     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
@@ -321,7 +340,7 @@ plt.show()
 #     |                     |    :width: 70%                                               | of waveguide.                                                              |
 #     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
 #     | Phase-shifter       | .. figure:: ../demonstrations/photonics/Thermo-optic.png     | A piece of material that changes the phase of light. The figure            |
-#     |                     |    :align: center                                            | shows a particular implementation known as a `thermo-optic phase           |
+#     |                     |    :align: center                                            | shows a particular implementation known as a thermo-optic phase           |
 #     |                     |    :width: 70%                                               | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
 #     |                     |                                                              | that changes properties when heated up using a resistor.                   |
 #     |                     |                                                              | This allows us to control the applied phase difference.                    |
@@ -331,135 +350,144 @@ plt.show()
 #     |                     |    :width: 100%                                              | port, and reflects a fraction :math:`R=1-T`. The input qumodes can         |
 #     |                     |                                                              | be combined to create entangled states across the output ports.            |
 #     |                     |                                                              | In a photonic quantum computing chip, a `directional coupler               |
-#     |                     |                                                              | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ | 
-#     |                     |                                                              | is used.                                                                   |                                          
+#     |                     |                                                              | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
+#     |                     |                                                              | is used.                                                                   |
 #     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
 #
-# The vacuum is centered at the origin in phase space. But our objectice is to generate states that
-# are centered at any point in phase space. 
-# How would we, for example, change the mean of the :math:`\bar{x}` of the :math:`x`-quadrature 
-# without changing anything else about the state? This can be done 
-# via the *displacement operator*, implemented in PennyLane via ``qml.Displacement``. 
+# The vacuum is centered at the origin in phase space. But our objective is to generate states that
+# are centered at any point in phase space.
+# How would we, for example, change the mean :math:`\bar{x}` of the :math:`x`-quadrature
+# without changing anything else about the state? This can be done
+# via the *displacement operator*, implemented in PennyLane via :class:`~pennylane.Displacement`.
 # Let's see the effect of this operation on an intial coherent state.
 
+
 @qml.qnode(dev)
-def displace_coherent_x(alpha,phi,x):
-    qml.CoherentState(alpha,phi,wires=0) #Create coherent state
-    qml.Displacement(x,0, wires=0) #Second argument is the displacement direction in phase space
+def displace_coherent_x(alpha, phi, x):
+    qml.CoherentState(alpha, phi, wires=0)  # Create coherent state
+    qml.Displacement(x, 0, wires=0)  # Second argument is the displacement direction in phase space
     return qml.sample(qml.X(0))
 
+
 @qml.qnode(dev)
-def displace_coherent_p(alpha,phi,x):
-    qml.CoherentState(alpha,phi,wires=0)
-    qml.Displacement(x,0, wires=0)
+def displace_coherent_p(alpha, phi, x):
+    qml.CoherentState(alpha, phi, wires=0)
+    qml.Displacement(x, 0, wires=0)
     return qml.sample(qml.P(0))
 
-#We plot both the initial and displaced state
-initial_x=displace_coherent_x(3,np.pi/3,0) #initial state amounts to 0 displacement
-initial_p=displace_coherent_p(3,np.pi/3,0)
-displaced_x=displace_coherent_x(3,np.pi/3,3) #set a parameter x=3 to displace in x-direction
-displaced_p=displace_coherent_p(3,np.pi/3,3)
-#Plot as before
-fig, ax1 = plt.subplots(figsize=(10,5))
-xp1 = vstack([initial_x,initial_p])
+
+# We plot both the initial and displaced state
+initial_x = displace_coherent_x(3, np.pi / 3, 0)  # initial state amounts to 0 displacement
+initial_p = displace_coherent_p(3, np.pi / 3, 0)
+displaced_x = displace_coherent_x(3, np.pi / 3, 3)  # set a parameter x=3 to displace in x-direction
+displaced_p = displace_coherent_p(3, np.pi / 3, 3)
+# Plot as before
+fig, ax1 = plt.subplots(figsize=(10, 5))
+xp1 = vstack([initial_x, initial_p])
 z1 = gaussian_kde(xp1)(xp1)
-sorted1=z1.argsort()
-x1,y1,z1= initial_x[sorted1], initial_p[sorted1], z1[sorted1]
-xp2 = vstack([displaced_x,displaced_p])
+sorted1 = z1.argsort()
+x1, y1, z1 = initial_x[sorted1], initial_p[sorted1], z1[sorted1]
+xp2 = vstack([displaced_x, displaced_p])
 z2 = gaussian_kde(xp2)(xp2)
-sorted2=z2.argsort()
-x2,y2,z2= displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
-ax1.scatter(x1,y1,c=z1, s=50,cmap='turbo')
-ax1.scatter(x2,y2,c=z2, s=50,cmap='turbo')
-plt.xlim([0,12])
-plt.ylim([0,9])
-ax1.set_aspect('equal', adjustable='box')
-plt.text(1,0.8,"Before displacement")
-plt.text(7.5,0.8,"After displacement")
+sorted2 = z2.argsort()
+x2, y2, z2 = displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
+ax1.scatter(x1, y1, c=z1, s=50, cmap="turbo")
+ax1.scatter(x2, y2, c=z2, s=50, cmap="turbo")
+plt.xlim([0, 12])
+plt.ylim([0, 9])
+ax1.set_aspect("equal", adjustable="box")
+plt.text(1, 0.8, "Before displacement")
+plt.text(7.5, 0.8, "After displacement")
 ax1.set_ylabel("Momentum", fontsize=11)
 ax1.set_xlabel("Position", fontsize=11)
-ax1.set_title("Displacing coherent states",fontsize=12)
+ax1.set_title("Displacing coherent states", fontsize=12)
 plt.show()
 
-##############################################################################    
+##############################################################################
 #
-# Note that setting :math:`x=3` gives a displacement of 6 units in the  horizontal direction. 
-# But how do we make a displacement operation in the lab? One method 
+# Note that setting :math:`x=3` gave a displacement of 6 units in the horizontal direction in phase space.
+#
+# So how do we make a displacement operation in the lab? One method
 # is shown below, which uses a beam splitter and a source of **high-intensity coherent light** [#Paris1996]_.
 #
 # .. figure:: ../demonstrations/photonics/Displacement.png
 #    :align: center
-#    :width: 70% 
+#    :width: 70%
 #
 #    ..
 #
 #    This setup displaces the input state :math:`\lvert\psi\rangle` by a quantity proportional to :math:`z`.
 #
 # We can check that this setup implements a displacement operator using PennyLane. This time,
-# we need two qumodes, since we rely on combining the input state that we want to displace with a 
-# coherent state in a beamsplitter. Let us code this in the case that the input is a coherent state.
+# we need two qumodes, since we rely on combining the input state that we want to displace with a
+# coherent state in a beamsplitter. Let us code this circuit in the case that the input is a coherent state
+# as a particular case (the operation will work for any state). 
 # Let us be mindful that this will only work when the amplitude of the input state us much smaller
-# than that of the auxiliary coherent state. 
+# than that of the auxiliary coherent state.
 
-dev2 = qml.device('default.gaussian', wires = 2, shots=1000)
+dev2 = qml.device("default.gaussian", wires=2, shots=1000)
+
 
 @qml.qnode(dev2)
-def disp_optics(z,x):
-    qml.CoherentState(z,0,wires=0) #High-amplitude auxiliary coherent state
-    qml.CoherentState(3,np.pi/3,wires=1) #Input state (e.g. low amplitude coherent state)
-    qml.Beamsplitter(np.arccos(1-x**2/z**2),0,wires=[0,1]) #Beamsplitter 
-    return qml.sample(qml.X(1)) #Measure x quadrature
-@qml.qnode(dev2)
-def mom_optics(z,x):
-    qml.CoherentState(z,0,wires=0)
-    qml.CoherentState(3,np.pi/3,wires=1)
-    qml.Beamsplitter(np.arccos(1-x**2/z**2),0,wires=[0,1])
-    return qml.sample(qml.P(1)) #Measure p quadrature
+def disp_optics(z, x):
+    qml.CoherentState(z, 0, wires=0)  # High-amplitude auxiliary coherent state
+    qml.CoherentState(3, np.pi / 3, wires=1)  # Input state (e.g. low amplitude coherent state)
+    qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires=[0, 1])  # Beamsplitter
+    return qml.sample(qml.X(1))  # Measure x quadrature
 
-#Plot quadrature measurement before and after implementation of displacement
-initial_x=disp_optics(100,0) #Initial corresponds to beam splitter with t=0 (x=0)
-initial_p=mom_optics(100,0)  #Amplitude of coherent state must be large
-displaced_x=disp_optics(100,3)
-displaced_p=mom_optics(100,3) #Set some non-trivial t
-#Plot as before
+
+@qml.qnode(dev2)
+def mom_optics(z, x):
+    qml.CoherentState(z, 0, wires=0)
+    qml.CoherentState(3, np.pi / 3, wires=1)
+    qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires=[0, 1])
+    return qml.sample(qml.P(1))  # Measure p quadrature
+
+
+# Plot quadrature measurement before and after implementation of displacement
+initial_x = disp_optics(100, 0)  # Initial corresponds to beam splitter with t=0 (x=0)
+initial_p = mom_optics(100, 0)  # Amplitude of coherent state must be large
+displaced_x = disp_optics(100, 3)
+displaced_p = mom_optics(100, 3)  # Set some non-trivial t
+# Plot as before
 fig, ax1 = plt.subplots()
-xp1 = vstack([initial_x,initial_p])
+xp1 = vstack([initial_x, initial_p])
 z1 = gaussian_kde(xp1)(xp1)
-sorted1=z1.argsort()
-x1,y1,z1= initial_x[sorted1], initial_p[sorted1], z1[sorted1]
-xp2 = vstack([displaced_x,displaced_p])
+sorted1 = z1.argsort()
+x1, y1, z1 = initial_x[sorted1], initial_p[sorted1], z1[sorted1]
+xp2 = vstack([displaced_x, displaced_p])
 z2 = gaussian_kde(xp2)(xp2)
-sorted2=z2.argsort()
-x2,y2,z2= displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
-ax1.scatter(x1,y1,c=z1, s=50,cmap='turbo')
-ax1.scatter(x2,y2,c=z2, s=50,cmap='turbo')
-ax1.set_title("Initial",fontsize=12)
-plt.xlim([-0.5,15])
-plt.ylim([0,9])
+sorted2 = z2.argsort()
+x2, y2, z2 = displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
+ax1.scatter(x1, y1, c=z1, s=50, cmap="turbo")
+ax1.scatter(x2, y2, c=z2, s=50, cmap="turbo")
+ax1.set_title("Initial", fontsize=12)
+plt.xlim([-0.5, 15])
+plt.ylim([0, 9])
 ax1.set_ylabel("Momentum", fontsize=11)
 ax1.set_xlabel("Position", fontsize=11)
-plt.text(1,0.5,"Before displacement")
-plt.text(9.5,0.5,"After displacement")
-ax1.set_aspect('equal', adjustable='box')
-ax1.set_title("Implementation of displacement operator",fontsize=12)
+plt.text(1, 0.5, "Before displacement")
+plt.text(9.5, 0.5, "After displacement")
+ax1.set_aspect("equal", adjustable="box")
+ax1.set_title("Implementation of displacement operator", fontsize=12)
 plt.show()
 
-############################################################################## 
+##############################################################################
 #
 # We see that we get a displaced state. The amount of displacement can be adjusted by
-# changing the parameters of the beamsplitter. 
-# Similarly, we can implement rotations in phase space using ``qml.Rotation``, which 
+# changing the parameters of the beamsplitter.
+# Similarly, we can implement rotations in phase space using :class:`~pennylane.Rotation`, which
 # simply amounts to changing the phase of light using a phase shifter. In phase space,
 # this amounts to rotating the point :math:`(\bar{x},\bar{p})` around the origin.
-# 
-# So far, we have focused on changing the mean values of :math:`x` and :math:`p`. 
-# But what if we also want to change the spread of the quadratures while keeping :math:`\Delta x\Delta p =1`?. 
-# This would "squeeze" the Wigner function in one direction. Aptly, the resulting state 
-# is known as a *squeezed state*, which is more difficult to obtain. 
-# It requires shining light through non-linear 
-# materials, where the state of light will undergo unitary evolution in a 
+#
+# So far, we have focused on changing the mean values of :math:`x` and :math:`p`.
+# But what if we also want to change the spread of the quadratures while keeping :math:`\Delta x\Delta p =1`?.
+# This would "squeeze" the Wigner function in one direction. Aptly, the resulting state
+# is known as a *squeezed state*, which is more difficult to obtain.
+# It requires shining light through non-linear
+# materials, where the state of light will undergo unitary evolution in a
 # way that changes :math:`\Delta x` and :math:`\Delta p.`
-# 
+#
 # .. figure:: ../demonstrations/photonics/Squeezer.png
 #    :align: center
 #    :width: 70%
@@ -468,102 +496,109 @@ plt.show()
 #
 #    A non-linear material can work as a squeezer [#Braunstein2005]_.
 #
-# We won't go into detail here, 
-# but we note that the technology to produce these is quite mature. 
-# In PennyLane, we can generate squeezed states through the squeezing 
-# operator ``qml.Squeezing``. This function depends on the squeezing parameter 
-# :math:`r` which tells us how much the variance in :math:`x` and :math:`p` changes, and :math:`\phi`, 
+# We won't go into detail here,
+# but we note that the technology to produce these states is quite mature.
+# In PennyLane, we can generate squeezed states through the squeezing
+# operator :class:`~pennylane.Squeezing`. This function depends on the squeezing parameter
+# :math:`r` which tells us how much the variance in :math:`x` and :math:`p` changes, and :math:`\phi`,
 # which rotates the in phase space. Let's take a look at how squeezing changes the distribution
-# of quadrature measurements. 
+# of quadrature measurements.
+
 
 @qml.qnode(dev)
 def measure_squeezed_x(r):
-    qml.Squeezing(r,0,wires=0)
+    qml.Squeezing(r, 0, wires=0)
     return qml.sample(qml.X(0))
+
+
 @qml.qnode(dev)
 def measure_squeezed_p(r):
-    qml.Squeezing(r,0,wires=0)
+    qml.Squeezing(r, 0, wires=0)
     return qml.sample(qml.P(0))
 
-#Choose alpha and phi and sample 1000 measurements
+
+# Choose alpha and phi and sample 1000 measurements
 x_sample_squeezed = measure_squeezed_x(0.4).numpy()
 p_sample_squeezed = measure_squeezed_p(0.4).numpy()
 
-#Plot as before
-xp = vstack([x_sample_squeezed,p_sample_squeezed])
+# Plot as before
+xp = vstack([x_sample_squeezed, p_sample_squeezed])
 z = gaussian_kde(xp)(xp)
 
 sorted_meas = z.argsort()
 x, y, z = x_sample_squeezed[sorted_meas], p_sample_squeezed[sorted_meas], z[sorted_meas]
 
-fig, ax1 = plt.subplots(figsize=(7,7))
-ax1.scatter(x,y, c=z, s=50, cmap='turbo')
-ax1.set_title("Squeezed State",fontsize=12)
+fig, ax1 = plt.subplots(figsize=(7, 7))
+ax1.scatter(x, y, c=z, s=50, cmap="turbo")
+ax1.set_title("Squeezed State", fontsize=12)
 ax1.set_ylabel("Momentum", fontsize=11)
 ax1.set_xlabel("Position", fontsize=11)
-ax1.set_xlim([-4,4])
+ax1.set_xlim([-4, 4])
 plt.show()
 
 ##############################################################################
 #
 # This confirms that squeezing changes the variances of the quadratures.
-# 
+#
 # .. note::
 #
 #    The squeezed states produced above satisfy :math:`\Delta x \Delta p = 1`,
-#    which means they are coherent states as well. We won't need to use any 
+#    which means they are coherent states as well. We won't need to use any
 #    more general Gaussian states.
 #
 #
 # Measuring quadratures
 # ~~~~~~~~~~~~~~~~~~~~~
 #
-# Now that we know how to manipulate Gaussian states, we would like to perform measurements 
-# on them. So far, we have taken for granted that we can measure the quadratures 
-# :math:`\hat{X}` and :math:`\hat{P}`. But how do we actually measure them using optical elements? 
-# We will need a measuring device known as a photodetector. These contain a piece of a 
-# photoelectric material, where each outer electron can be stimulated by a photon. 
-# The more photons that are incident on the photodetector, the more electrons that are 
+# Now that we know how to manipulate Gaussian states, we would like to perform measurements
+# on them. So far, we have taken for granted that we can measure the quadratures
+# :math:`\hat{X}` and :math:`\hat{P}`. But how do we actually measure them using optical elements?
+# We will need a measuring device known as a photodetector. These contain a piece of a
+# photoelectric material, where each outer electron can be stimulated by a photon.
+# The more photons that are incident on the photodetector, the more electrons that are
 # freed in the material, which in turn form an electric current. Mathematically,
 #
 # .. math:: I = qN,
 #
-# where :math:`I` is the electric current, :math:`N` is the number of photons, and :math:`q` is a detector-dependent 
+# where :math:`I` is the electric current, :math:`N` is the number of photons, and :math:`q` is a detector-dependent
 # proportionality constant [#Braunstein2005]_. Hence, measuring the current amounts to measuring the number of photons indirectly!
 #
-# The number of photons in a quantum of light is not fixed. It is measured by the quantum 
-# photon-number observable :math:`\hat{N}`, which has eigenstates denoted :math:`\vert 0 \rangle, \vert 1\rangle, \vert 2 \rangle,...`. 
-# These states, known as *Fock states*, do have a well-defined number of photons: 
-# repeated measurements of :math:`\hat{N}` on the same will yield the same output. 
-# The natural number :math:`n` in the Fock :math:`\vert n \rangle` denotes the only possible 
-# result we would get upon measuring the photon number. But nothing prevents light from being in a superposition of 
+# The number of photons in a quantum of light is not fixed. It is measured by the quantum
+# photon-number observable :math:`\hat{N}`, which has eigenstates denoted :math:`\vert 0 \rangle, \vert 1\rangle, \vert 2 \rangle,...`.
+# These states, known as *Fock states*, do have a well-defined number of photons:
+# repeated measurements of :math:`\hat{N}` on the same will yield the same output.
+# The natural number :math:`n` in the Fock :math:`\vert n \rangle` denotes the only possible
+# result we would get upon measuring the photon number. But nothing prevents light from being in a superposition of
 # Fock states. For example, when we measure :math:`\hat{N}` for the state
 #
 # .. math:: \vert \psi \rangle = \frac{1}{\sqrt{3}}\left(\vert 0 \rangle + \vert 1 \rangle + \vert 2 \rangle\right),
 #
-# we get 0, 1, or 2 photons, each with probability :math:`1/3`. 
+# we get 0, 1, or 2 photons, each with probability :math:`1/3`.
 #
-# Except for the vacuum :math:`\vert 0 \rangle,` *Fock states are not Gaussian*. But all states of light 
-# are superpositions of Fock States, including Gaussian states! 
-# For example, let's measure the expected photon-number for some squeezed state:
+# Except for the vacuum :math:`\vert 0 \rangle,` *Fock states are not Gaussian*. But all states of light
+# are superpositions of Fock States, including Gaussian states!
+# For example, let's measure the expected photon number for some squeezed state:
 
-dev3 = qml.device('default.gaussian', wires = 1)
+dev3 = qml.device("default.gaussian", wires=1)
+
+
 @qml.qnode(dev3)
-def measure_n_coherent(alpha,phi):
-    qml.Squeezing(alpha,phi,wires=0)
+def measure_n_coherent(alpha, phi):
+    qml.Squeezing(alpha, phi, wires=0)
     return qml.expval(qml.NumberOperator(0))
 
-coherent_expval = measure_n_coherent(1,np.pi/3)
+
+coherent_expval = measure_n_coherent(1, np.pi / 3)
 print("Expected number of photons: {}".format(coherent_expval))
 
-############################################################################## 
+##############################################################################
 #
 # Since the expectation value is not an integer number, the measurement results cannot have been all the same integer.
 # This squeezed cannot be a Fock state!
 #
-# But what about the promised quadrature measurements? We can perform them through a 
-# combination of photodetectors and a beamsplitter, 
-# as shown in the diagram below [#Braunstein2005]_. 
+# But what about the promised quadrature measurements? We can perform them through a
+# combination of photodetectors and a beamsplitter,
+# as shown in the diagram below [#Braunstein2005]_.
 #
 # .. figure:: ../demonstrations/photonics/Homodyne.png
 #    :align: center
@@ -575,62 +610,71 @@ print("Expected number of photons: {}".format(coherent_expval))
 #
 # Let's code this setup using PennyLane and check that it amounts to the measurement of quadratures.
 
-dev_exact2=qml.device('default.gaussian', wires = 2)
+dev_exact2 = qml.device("default.gaussian", wires=2)
+
+
 @qml.qnode(dev_exact2)
-def measurement(a,phi):
-    qml.Displacement(a,phi,wires=0) #Implement displacement using PennyLane
+def measurement(a, phi):
+    qml.Displacement(a, phi, wires=0)  # Implement displacement using PennyLane
     return qml.expval(qml.X(0))
+
 
 @qml.qnode(dev_exact2)
 def measurement2(a, theta, alpha, phi):
-    qml.Displacement(a,theta, wires=0) #We choose the initial to be a displaced vacuum
-    qml.CoherentState(alpha, phi, wires = 1) #Prepare coherent as second qumode
-    qml.Beamsplitter(np.pi/4, 0, wires = [0,1]) #Interfere both states
-    return qml.expval(qml.NumberOperator(0)), qml.expval(qml.NumberOperator(1)) #Read out N
+    qml.Displacement(a, theta, wires=0)  # We choose the initial to be a displaced vacuum
+    qml.CoherentState(alpha, phi, wires=1)  # Prepare coherent as second qumode
+    qml.Beamsplitter(np.pi / 4, 0, wires=[0, 1])  # Interfere both states
+    return qml.expval(qml.NumberOperator(0)), qml.expval(qml.NumberOperator(1))  # Read out N
 
-print("Expectation value of x-quadrature after displacement: {}\n".format(measurement(3,0).numpy()))
+
+print(
+    "Expectation value of x-quadrature after displacement: {}\n".format(measurement(3, 0).numpy())
+)
 print("Expected current in each detector:")
-print("Detector 1: {}".format(measurement2(3,0,1,0)[0].numpy()))
-print("Detector 2: {}".format(measurement2(3,0,1,0)[1].numpy()))
-print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-measurement2(3,0,1,0)[0].numpy()))
+print("Detector 1: {}".format(measurement2(3, 0, 1, 0)[0].numpy()))
+print("Detector 2: {}".format(measurement2(3, 0, 1, 0)[1].numpy()))
+print(
+    "Difference between currents: {}".format(
+        measurement2(3, 0, 1, 0)[1].numpy() - measurement2(3, 0, 1, 0)[0].numpy()
+    )
+)
 
 ##############################################################################
 #
 # Here we used :math:`q=1` as the detector constant, but we should note that this quantity can't really be measured
-# precisely. However, all we care is about distinguishing different states of light, so knowing the constant isn't really needed!
+# precisely. However, we only care about distinguishing different states of light, so knowing the constant isn't really needed!
 #
-# Trying the above # with many input states should convince you that this setup, known as *homodyne measurement*, 
+# Trying the above with many input states should convince you that this setup, known as *homodyne measurement*,
 # allows us to measure the quadratures :math:`\hat{X}` and :math:`\hat{P}`. Feel free to play around
 # changing the values of :math:`\phi` and :math:`a`!
 #
 # Beyond Gaussian states
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# We've learned a lot about Gaussian states now, but they don't seem to have many quantum properties. 
-# They are described by their positive Wigner 
-# function, which is to an extent analogous to a 
-# probability distribution. Are they really very different from classical states? Not that much and indeed, to build a universal photonic 
+# We've learned a lot about Gaussian states now, but they don't seem to have many quantum properties.
+# They are described by their positive Wigner
+# function, which is to an extent analogous to a
+# probability distribution. Are they really different from classical states? Not that much and indeed, to build a universal photonic
 # quantum computer we need both Gaussian *and* non-Gaussian states. Moreover,
 # we need to be able to entangle any two states.
 #
 # Entanglement is not a problem, since combinations of Gaussian operations involving
-# squeezers and beamsplitters can entangle the input states! 
-# Let us set on the more challenging mission to find a way to prepare non-Gaussian states. 
-# All of the operations that we have learned so far—displacements, rotations, squeezing—are Gaussian. 
-# Do we need some kind of strange material that will implement a non-Gaussian operation? That's certainly 
-# a possibility, and there are materials which can provide non-Gaussian interactions—like the `Kerr effect <https://en.wikipedia.org/wiki/Kerr_effect>__`. But relying 
-# on these non-linear materials is far from optimal, since the Kerr effect is weak and we don't have much freedom to manipulate 
-# the setup into getting an arbitrary non-Gaussian state. 
+# squeezers and beamsplitters can entangle the input states!
+# Let us set on the more challenging mission to find a way to prepare non-Gaussian states.
+# All of the operations that we have learned so far—displacements, rotations, squeezing—are Gaussian.
+# Do we need some kind of strange material that will implement a non-Gaussian operation? That's certainly
+# a possibility, and there are materials which can provide non-Gaussian interactions—like the `Kerr effect <https://en.wikipedia.org/wiki/Kerr_effect>`__. But relying
+# on these non-linear materials is far from optimal, since the Kerr effect is weak and we don't have much freedom to manipulate
+# the setup into getting an arbitrary non-Gaussian state.
 #
-# But there's one non-Gausian operation that's been right in front of our eyes all this time. 
-# The measurement of the number of photons takes a Gaussian and collapse it into a Fock state (although this destroys the photons); 
-# therefore, photon number detection is not a Gaussian operation. Measuring the exact number of photons is not that easy, however.
-# We could use simple photodetectors for homodyne measurements because we were only interested in a
-# difference of electric currents. To measure the number of photons, we need devices known a photon-number resolving detectors (PNRDs),
-# which are superconductor-based devices, so they work only at low temperatures. Combined with squeezed states and beamsplitters, 
-# we have all the ingredients to produce any non-Gaussian that we like. 
+# But there's one non-Gausian operation that's been right in front of our eyes all this time.
+# The measurement of the number of photons takes a Gaussian and collapse it into a Fock state (although this destroys the photons);
+# therefore, photon number detection is not a Gaussian operation. Measuring the exact number of photons is not that easy.
+# We need fancy devices known a photon-number resolving detectors (PNRDs),
+# which are superconductor-based, so they work only at low temperatures. Combined with squeezed states and beamsplitters,
+# we have all the ingredients to produce any non-Gaussian that we like.
 #
-# Let's explore how this works. The main idea is to tweak a particular photonic circuit known 
+# Let's explore how this works. The main idea is to tweak a particular photonic circuit known
 # as a *Gaussian Boson Sampler* [#Hamilton2017]_, which is shown below.
 #
 # .. figure:: ../demonstrations/photonics/GBS.png
@@ -639,14 +683,14 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #
 #    ..
 #
-#    A Gaussian Boson Sampling circuit. The beamsplitters here may include phase shifts. 
+#    A Gaussian Boson Sampling circuit. The beamsplitters here may include phase shifts.
 #
-# Gaussian boson sampling (GBS) is interesting on its own 
-# (see :doc:`this tutorial </demos/tutorial_gbs>` for an in-depth discussion). 
+# Gaussian boson sampling (GBS) is interesting on its own
+# (see :doc:`this tutorial </demos/tutorial_gbs>` for an in-depth discussion).
 # The circuit earned Jiuzhang, the quantum computer at the University of Science and Technology
-# of China, the honour of being  
+# of China, the honour of being
 # the first photonic quantum computer to achieve quantum advantage [#Zhong2020]_. Jiuzhang used GBS to sample quickly from
-# a probability distribution that classical computers take too long to simulate. But the most interesting 
+# a probability distribution that classical computers take too long to simulate. But the most interesting
 # application comes from removing the PNRD in the last wire, as shown below.
 #
 # .. figure:: ../demonstrations/photonics/GKP_Circuit.png
@@ -657,16 +701,16 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #
 #    Circuit to produce non-Gaussian states probabilistically
 #
-# Circuits like the above can, after photon detection of the other qumodes, 
-# produce non-Gaussian states. The reason is that the 
-# final state of the circuit is entangled, and we apply a non-Gaussian operation to some of the 
-# qumodes. This measurement affects the remaining qumode, whose state becomes non-Gaussian in general. This is 
-# the magic of quantum mechanics: due to entanglement, a measurement on a physical can affect another separate system! Moreover,
-# generalizations of the GBS circuit above can be built to produce any non-Gaussian state that we want. 
+# Circuits like the above can, after photon detection of the other qumodes,
+# produce non-Gaussian states. The reason is that the
+# final state of the circuit is entangled, and we apply a non-Gaussian operation to some of the
+# qumodes. This measurement affects the remaining qumode, whose state becomes non-Gaussian in general. This is
+# the magic of quantum mechanics: due to entanglement, a measurement on a physical system can affect the state of another! Moreover,
+# generalizations of the GBS circuit above can be built to produce any non-Gaussian state that we want.
 #
-# For example, the choice of parameters  
-# 
-# .. math:: t_1 = 0.8624, \quad t_2=0.7688, \quad t_3 = 0.7848, 
+# For example, the choice of parameters
+#
+# .. math:: t_1 = 0.8624, \quad t_2=0.7688, \quad t_3 = 0.7848,
 # .. math:: S_1 = -1.38, \quad S_2 = -1.22, \quad S_3 = 0.780 \quad S_4 = 0.196,
 #
 # for this generalized GBS circuit produces, with some probability,  the following state(expressed as a combination of Fock states)
@@ -674,8 +718,8 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 # .. math:: \vert \psi \rangle = S(0.196)\left(0.661 \vert 0\rangle -0.343 \vert 2\rangle + 0.253\vert 4\rangle -0.368\vert 6\rangle
 #             +0.377 \vert 8\rangle + 0.323 \vert 10\rangle + 0.325\vert 12\rangle\right),
 #
-# where :math:`S` is the squeezing operator [#Tzitrin2020]_. This state's 
-# Wigner function is shown below:
+# where :math:`S` is the squeezing operator [#Tzitrin2020]_. This state's
+# Wigner function is shown below.
 #
 # .. figure:: ../demonstrations/photonics/gkp_wigner.png
 #    :align: center
@@ -685,24 +729,24 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #
 #    Wigner function of non-Gaussian state
 #
-# The Wigner function does not have the shape of a Gaussian and moreover, it can be negative, a tell-tale feature of  
-# non-Gaussian states (we can only interpret this function as some sort of probability distribution for the case of Gaussian states!). 
+# The Wigner function does not have the shape of a Gaussian and moreover, it can be negative, a tell-tale feature of
+# non-Gaussian states (we can only interpret this function as some sort of probability distribution for the case of Gaussian states!).
 # The only issue is that the non-Gaussian state is produced only with some probability, that is,
-# *when the detectors measure some particular number of photons*. But, at the very least, we can 
-# be sure that we have obtained the non-Gaussian state we wanted in that case, and otherwise we 
-# just discard the qumode. For more precise calculations, you can check out `this 
-# tutorial <https://the-walrus.readthedocs.io/en/latest/gallery/gkp.html>`__ from PennyLane's sister library The Walrus, 
-# which is optimized for simulating this type of circuit.  
+# *when the detectors measure some particular number of photons*. But, at the very least, we can
+# be sure that we have obtained the non-Gaussian state we wanted, and otherwise we
+# just discard the qumode. For more precise calculations, you can check out `this
+# tutorial <https://the-walrus.readthedocs.io/en/latest/gallery/gkp.html>`__ from PennyLane's sister library The Walrus,
+# which is optimized for simulating this type of circuit.
 #
 # Encoding qubits into qumodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# It's great that we can manipulate quantum states of light so freely, but we haven't discussed how 
-# to use them for quantum computing. We would like is a way to encode qubits into qumodes, so 
-# that we can run any algorithm designed for qubit-based quantum computers using qumodes. 
-# Surely there's more than one way to encode a two-dimensional subspace into an infinite-dimensional 
-# one. The only problem is that most of these encodings are extremely sensitive to the noise 
-# affecting the larger space. A way that has proven to be quite robust to errors is to 
+# It's great that we can manipulate quantum states of light so freely, but we haven't discussed how
+# to use them for quantum computing. We would like is a way to encode qubits into qumodes, so
+# that we can run any qubit-based quantum algorithm using qumodes.
+# Surely there's more than one way to encode a two-dimensional subspace into an infinite-dimensional
+# one. The only problem is that most of these encodings are extremely sensitive to the noise
+# affecting the larger space. A way that has proven to be quite robust to errors is to
 # encode qubits in states of light is using a special type of non-Gaussian states called *GKP states* [#Gottesman2001]_.
 #
 # GKP states are linear combinations of the following two basis states:
@@ -710,25 +754,25 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 # .. math:: \vert 0 \rangle_{GKP} = \sum_{n} \vert 2n\pi\rangle_x,
 # .. math:: \vert 1 \rangle_{GKP} = \sum_{n} \vert (2n+1)\pi\rangle_x,
 #
-# where the subscript :math:`x` means that the kets in the sum are eigenstates of the quadrature observable 
-# :math:`\hat{X}`. Therefore, an arbitrary qubit :math:`\vert \psi \rangle = \alpha\vert 0 \rangle + \beta\vert 1 \rangle` 
+# where the subscript :math:`x` means that the kets in the sum are eigenstates of the quadrature observable
+# :math:`\hat{X}`. Therefore, an arbitrary qubit :math:`\vert \psi \rangle = \alpha\vert 0 \rangle + \beta\vert 1 \rangle`
 # can be expressed through the qumode as
 #
 # .. math:: \vert \psi \rangle_{GKP} = \alpha\vert 0 \rangle_{GKP} + \beta\vert 1 \rangle_{GKP}.
 #
 # Producing these GKP states is physically impossible. But we can produce approximate versions of them and still
 # run a quantum computation with great precision. In fact, the GBS circuit we built to produce non-Gaussian states can also produce
-# approximate GKP states. This will only happen when we measure 5 and 7 photons in each of the detectors [#Tzitrin2020]_. The probability of this happening 
-# is rather small but finite. 
+# approximate GKP states. This will only happen when we measure 5 and 7 photons in each of the detectors [#Tzitrin2020]_. The probability of this happening
+# is rather small but finite.
 #
 # We can remain within the subspace spanned by the GKP basis states by restricting the operations we apply
-# on our qumodes. For example, we see that applying a displacement by :math:`\sqrt{\pi}` to :math:`\vert 0 \rangle_{GKP}` gives the 
-# :math:`\vert 1 \rangle_{GKP}`, and vice versa. Therefore, the displacement operator corresponds to the qubit 
-# bit-flip gate :math:`\bar{X}`. Similarly, a rotation operator by :math:`\pi/2` implements the Hadamard gate. 
-# The figure below gives more detail on how to implement all the gates we need for 
+# on our qumodes. For example, we see that applying a displacement by :math:`\sqrt{\pi}` to :math:`\vert 0 \rangle_{GKP}` gives the
+# :math:`\vert 1 \rangle_{GKP}` state, and vice versa. Therefore, the displacement operator corresponds to the qubit
+# bit-flip gate :math:`\bar{X}`. Similarly, a rotation operator by :math:`\pi/2` implements the Hadamard gate.
+# The figure below gives more detail on how to implement all the gates we need for
 # universal quantum computation using optical gates on  exact GKP states [#Bourassa2021]_ (on approximate GKP states, the effects of these
-# gates will be approximate on the qubit level). 
-# 
+# gates will be approximate on the qubit level).
+#
 #
 # .. rst-class:: docstable
 #
@@ -754,11 +798,11 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
 #     | Magic state         | .. figure:: ../demonstrations/photonics/Tgate.png            | We use an auxiliary *magic state* :math:`\vert M\rangle`,           |
 #     | teleportation       |    :align: center                                            | which is the GKP state                                              |
-#     |                     |    :width: 100%                                              | :math:`\vert M\rangle = \vert +\rangle +e^{2i\pi/8} \vert -\rangle,`|
-#     |                     |                                                              | and a :math:`\hat{P}` homodyne measurement. If we measure           |             
+#     |                     |    :width: 100%                                              | :math:`\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,` |
+#     |                     |                                                              | and a :math:`\hat{P}` homodyne measurement. If we measure           |
 #     |                     |                                                              | :math:`\vert -\rangle`, we apply the shown rotations and squeezers  |
-#     |                     |                                                              | with :math:`r=\cosh^{-1}(3/4)`, :math:`\theta=\tan^{-1}(1/2),`      |       
-#     |                     |                                                              | and :math:`\phi=-\pi/2-\theta`, resulting in a GKP *T gate*.        |                                                        
+#     |                     |                                                              | with :math:`r=\cosh^{-1}(3/4)`, :math:`\theta=\tan^{-1}(1/2),`      |
+#     |                     |                                                              | and :math:`\phi=-\pi/2-\theta`, resulting in a GKP *T gate*.        |
 #     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
 #
 # Even if their effect is approximate, these gates are quick
@@ -772,43 +816,43 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 # The state of the art
 # ~~~~~~~~~~~~~~~~~~~~
 #
-# We have now learned the basics of how to build a quantum computer using photonics. So what challenges 
-# are there to overcome for scaling further? 
-# Let us analyze what we have learned in terms of Di Vincenzo's criteria. 
+# We have now learned the basics of how to build a quantum computer using photonics. So what challenges
+# are there to overcome for scaling further?
+# Let us analyze what we have learned in terms of Di Vincenzo's criteria.
 #
-# Looking at the first criterion, we already know that our qubits are far from perfect. 
-# Photonics rely on imperfect realizations of GKP states, which in turn makes quantum computations only approximate. 
+# Looking at the first criterion, we already know that our qubits are far from perfect.
+# Photonics rely on imperfect realizations of GKP states, which in turn makes quantum computations only approximate.
 # Moreover, while we know a lot about GKP states, it is not easy to characterize them after taking into account the noise,
 # so the qubits are not as well-defined as we would like. But our qubits are scalable: GBS circuits can be built on
 # small chips, which we can stack and connect together using optical fibers. Moreover, compared to other implementations where
-# low temperatures are needed everywhere, in photonic quantum computers we only need them to keep the PNRDs at working temperatures.
+# low temperatures are needed everywhere, in photonic quantum computers we only need them for the PNRDs to work.
 # Since cryogenics are a bulky part of quantum computing architectures, photonic technology promises to be more scalable than, for example,
 # :doc:`trapped ion </demos/tutorial_trapped_ions>` or :doc:`superconducting </demos/tutorial_sc_qubits>` devices.
-# 
-# The second criterion, the ability to prepare a qubit, is clearly a challenge. We need GKP states, 
-# but these cannot be prepared deterministically; we need to get a bit lucky. 
-# We can bypass this by *multiplexing*, that is, using many 
-# Gaussian Boson Sampling circuits in parallel. Moreover, higher quality GKP states needs larger circuits, 
-# which in turn can decrease the probability of qubit production. How can we try to solve this? 
+#
+# The second criterion, the ability to prepare a qubit, is clearly a challenge. We need GKP states,
+# but these cannot be prepared deterministically; we need to get a bit lucky.
+# We can bypass this by *multiplexing*, that is, using many
+# Gaussian Boson Sampling circuits in parallel. Moreover, higher quality GKP states need larger circuits,
+# which in turn can decrease the probability of qubit production. How can we try to solve this?
 # Xanadu is currently following a hybrid approach.
 # When we fail to produce a GKP state, Xanadu's architecture produces squeezed states using a separate squeezer.
 # Strongly-entangled squeezed states are a precious resource, since other encodings beyond GKP allow us
 # to use these states as a resource for (non-universal) quantum computing [#Bourassa2021]_.
-# 
-# The third criterion of long decoherence seems inocuous at a first glance. However, although the quantum state of individual photons
-# is robust, we do need to minimize the number of photons that escape to the environment. Recall that our quantum states 
-# of light are superpositions of Fock states. If a photon escapes, our state changes! The technology for the minimization of photon loss 
+#
+# The third criterion of long decoherence times seems inocuous at a first glance. However, although the quantum state of individual photons
+# is robust, we do need to minimize the number of photons that escape to the environment. Recall that all quantum states
+# of light are superpositions of Fock states. If a photon escapes, our state changes! The technology for the minimization of photon loss
 # has come a long way, but it's not perfect yet. We can avoid losses by optimizing the depth of our circuits, so that photons
 # have a smaller probability of escaping. The GKP encoding also works in our favour, since it is robust against noise and small
 # displacements from GKP states can be easily steered back.
-#   
-# The fourth criterion is pretty much satisfied by photonic quantum computers. We have seen that we can perform universal computations 
+#
+# The fourth criterion is pretty much satisfied by photonic quantum computers. We have seen that we can perform universal computations
 # using Gaussian operations, provided that we have GKP states. Barring our imperfect qubits, quantum computing
-# gates are straightforward to implement with good precision inside a chip. Moreover, entangling photons is relatively easy using 
+# gates are straightforward to implement with good precision inside a chip. Moreover, entangling photons is relatively easy using
 # common optical devices, as opposed to other technologies that rely on rather complicated and slow gates.
 #
 # Finally, we need to be able to measure qubits. Homodyne detection can be done easily and with great precision. In general,
-# we do not need to measure the number of photons at the end of a quantum computations, the quadratures are enough to distinguish quantum
+# we do not need to measure the number of photons at the end of a quantum computation, quadrature measurement is enough to distinguish quantum
 # states. The fancy PNRDs are only required for qubit production!
 #
 # .. figure:: ../demonstrations/photonics/chip.png
@@ -818,18 +862,18 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #    ..
 #
 #    Xanadu's X8 Gaussian Boson Sampling chip. Variants of this chip can be used to generate approximate GKP states.
-# 
-# 
+#
+#
 # Conclusion
-# ~~~~~~~~~~ 
+# ~~~~~~~~~~
 #
 # The approach of photonic devices to quantum computing is quite different from other technologies. Recent theoretical
 # and technological developments have given a boost to their status as a scalable approach, although the generation of qubits
-# remains a challenge to overcome. The variety of ways that we can encode 
+# remains a challenge to overcome. The variety of ways that we can encode
 # qubits into photonic states leave plenty of room for creativity, and opens the
-# door for further research and engineering breakthroughs. If you would like to learn more about photonics, make sure to 
-# check out the `Strawberry Fields demos <https://strawberryfields.ai/photonics/demonstrations.html>`__, 
-# as well as the references listed below. 
+# door for further research and engineering breakthroughs. If you would like to learn more about photonics, make sure to
+# check out the `Strawberry Fields demos <https://strawberryfields.ai/photonics/demonstrations.html>`__,
+# as well as the references listed below.
 #
 # References
 # ----------
@@ -855,7 +899,7 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #     <https://ieeexplore.ieee.org/document/9345963>`__.
 #
 # .. [#Paris1996]
-#     
+#
 #     M. Paris. (1996) "Displacement operator by beam splitter",
 #     `Physics Letters A, 217 (2-3): 78-80
 #     <https://www.sciencedirect.com/science/article/abs/pii/0375960196003398?via%3Dihub>`__.
@@ -873,16 +917,16 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 #     `Phys. Rev. Lett. 119, 170501
 #     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.170501>`__.
 #     (`arXiv <https://arxiv.org/abs/1612.01199>`__)
-# 
+#
 # .. [#Zhong2020]
-# 
+#
 #     H.S. Zhong, et al. (2020) "Quantum computationa advantage using photons",
 #     `Science 370, 6523: 1460-1463
 #     <https://www.science.org/doi/10.1126/science.abe8770>`__.
 #     (`arXiv <https://arxiv.org/abs/2012.01625>`__)
-#         
+#
 # .. [#Tzitrin2020]
-#    
+#
 #     I. Tzitrin, et al. (2020) "Progress towards practical qubit computation using approximate Gottesman-Kitaev-Preskill codes"
 #     `Phys. Rev. A 101, 032315
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.101.032315>`__.
@@ -906,10 +950,7 @@ print("Difference between currents: {}".format(measurement2(3,0,1,0)[1].numpy()-
 # ----------------
 
 ##############################################################################
-#.. bio:: Alvaro Ballon
+# .. bio:: Alvaro Ballon
 #    :photo: ../_static/Alvaro.png
 #
 #    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accesible to the community
-
-
-
