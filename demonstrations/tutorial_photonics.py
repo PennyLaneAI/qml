@@ -33,7 +33,7 @@ is being developed further by Xanadu, PsiQuantum, and other institutions
 around the globe. Unlike other physical systems, photonics allows us access to 
 an infinite number of states. How can we leverage these extra states to make quantum computers? 
 By the end of this demo, you will be able to explain how photonic 
-qumode devices can be used to build universal quantum computers. You will learn how to prepare,
+devices can be used to build universal quantum computers. You will learn how to prepare,
 measure and manipulate the quantum states of light, and how we can encode
 qubits in photons. Moreover, you will identify 
 the strengths and weaknesses of photonic devices in terms of 
