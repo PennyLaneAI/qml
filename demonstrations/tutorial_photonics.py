@@ -65,7 +65,7 @@ Di Vincenzo's criteria, introduced in the blue box below.
 
 Our journey will start by defining the simplest states of light, known as Gaussian states. We will also
 describe how we can perform simple gates and measurements on such states. The next step is to  
-figure out reliable methods to generate the more general non-Gaussian states, needed for universal
+figure out reliable methods to generate the more general non-Gaussian states that are required for universal
 quantum computing. We'll see that we end up needing only 
 a special type of non-Gaussian states, known as GKP states. 
 Finally, we will bring all the concepts together to understand how quantum algorithms
