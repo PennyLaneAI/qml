@@ -185,7 +185,7 @@ x, y, z = x_sample[sorted], p_sample[sorted], z[sorted]
 
 # Plot
 fig, ax = plt.subplots()
-ax.scatter(x, y, c = z, s = 50, cmap="turbo")
+ax.scatter(x, y, c = z, s = 50, cmap="RdYlGn")
 plt.title("Vacuum", fontsize=12)
 ax.set_ylabel("Momentum", fontsize = 11)
 ax.set_xlabel("Position", fontsize = 11)
@@ -230,7 +230,7 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 ##############################################################################
 #
 # But where does the name Gaussian come from? If we plot the density
-# of quadrature measurements for a coherent in three dimensions, we obtain the following plot.
+# of quadrature measurements for the vacuum state in three dimensions, we obtain the following plot.
 #
 # .. figure:: ../demonstrations/photonics/vacuum_wigner.png
 #    :align: center
@@ -269,9 +269,9 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 #
 # .. note::
 #
-#    More generally, a coherent state is one that saturates the uncertainty relation. That is,
+#    More generally, a coherent state is one that has minimal uncertainty in the quadratures. That is,
 #
-#    .. math:: \Delta x \Delta p = 1.
+#    .. math:: \Delta x = \Delta p = 1.
 #
 # The ``default.gaussian`` device allows for the easy preparation of coherent states
 # through the function :class:`~pennylane.CoherentState`, which takes two parameters :math:`\alpha` and :math:`\phi.`
@@ -304,7 +304,7 @@ sorted = z1.argsort()
 x, y, z = x_sample_coherent[sorted], p_sample_coherent[sorted], z1[sorted]
 
 fig, ax1 = plt.subplots()
-ax1.scatter(x, y, c = z, s = 50, cmap="turbo")
+ax1.scatter(x, y, c = z, s = 50, cmap = "RdYlGn")
 ax1.set_title("Coherent State", fontsize = 12)
 ax1.set_ylabel("Momentum", fontsize = 11)
 ax1.set_xlabel("Position", fontsize = 11)
@@ -340,7 +340,7 @@ plt.show()
 #     |                     |    :width: 70%                                               | of waveguide.                                                              |
 #     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
 #     | Phase-shifter       | .. figure:: ../demonstrations/photonics/Thermo-optic.png     | A piece of material that changes the phase of light. The figure            |
-#     |                     |    :align: center                                            | shows a particular implementation known as a thermo-optic phase           |
+#     |                     |    :align: center                                            | shows a particular implementation known as a thermo-optic phase            |
 #     |                     |    :width: 70%                                               | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
 #     |                     |                                                              | that changes properties when heated up using a resistor.                   |
 #     |                     |                                                              | This allows us to control the applied phase difference.                    |
@@ -354,7 +354,7 @@ plt.show()
 #     |                     |                                                              | is used.                                                                   |
 #     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
 #
-# The vacuum is centered at the origin in phase space. But our objective is to generate states that
+# The vacuum is centered at the origin in phase space. It is advantageous to generate states that
 # are centered at any point in phase space.
 # How would we, for example, change the mean :math:`\bar{x}` of the :math:`x`-quadrature
 # without changing anything else about the state? This can be done
@@ -379,7 +379,7 @@ def displace_coherent_p(alpha, phi, x):
 # We plot both the initial and displaced state
 initial_x = displace_coherent_x(3, np.pi / 3, 0)  # initial state amounts to 0 displacement
 initial_p = displace_coherent_p(3, np.pi / 3, 0)
-displaced_x = displace_coherent_x(3, np.pi / 3, 3)  # set a parameter x=3 to displace in x-direction
+displaced_x = displace_coherent_x(3, np.pi / 3, 3)  # displace x=3 in x-direction
 displaced_p = displace_coherent_p(3, np.pi / 3, 3)
 # Plot as before
 fig, ax1 = plt.subplots(figsize=(10, 5))
@@ -391,8 +391,8 @@ xp2 = vstack([displaced_x, displaced_p])
 z2 = gaussian_kde(xp2)(xp2)
 sorted2 = z2.argsort()
 x2, y2, z2 = displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
-ax1.scatter(x1, y1, c = z1, s = 50, cmap = "turbo")
-ax1.scatter(x2, y2, c = z2, s = 50, cmap = "turbo")
+ax1.scatter(x1, y1, c = z1, s = 50, cmap  ="RdYlGn")
+ax1.scatter(x2, y2, c = z2, s = 50, cmap = "RdYlGn")
 plt.xlim([0, 12])
 plt.ylim([0, 9])
 ax1.set_aspect("equal", adjustable="box")
@@ -401,6 +401,7 @@ plt.text(7.5, 0.8, "After displacement")
 ax1.set_ylabel("Momentum", fontsize=11)
 ax1.set_xlabel("Position", fontsize=11)
 ax1.set_title("Displacing coherent states", fontsize=12)
+ax1.set_aspect("equal", adjustable = "box")
 plt.show()
 
 ##############################################################################
@@ -409,7 +410,7 @@ plt.show()
 # This is because the scale of phase space is set by our choice of units :math:`\hbar=2.`
 #
 # So how do we make a displacement operation in the lab? One method
-# is shown below, which uses a beam splitter and a source of **high-intensity coherent light** [#Paris1996]_.
+# is shown below, which uses a beamsplitter and a source of **high-intensity coherent light** [#Paris1996]_.
 #
 # .. figure:: ../demonstrations/photonics/Displacement.png
 #    :align: center
@@ -446,7 +447,7 @@ def mom_optics(z, x):
 
 
 # Plot quadrature measurement before and after implementation of displacement
-initial_x = disp_optics(100, 0)  # Initial corresponds to beam splitter with t=0 (x=0)
+initial_x = disp_optics(100, 0)  # Initial corresponds to beamsplitter with t=0 (x=0)
 initial_p = mom_optics(100, 0)  # Amplitude of coherent state must be large
 displaced_x = disp_optics(100, 3)
 displaced_p = mom_optics(100, 3)  # Set some non-trivial t
@@ -460,8 +461,8 @@ xp2 = vstack([displaced_x, displaced_p])
 z2 = gaussian_kde(xp2)(xp2)
 sorted2 = z2.argsort()
 x2, y2, z2 = displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
-ax1.scatter(x1, y1, c = z1, s = 50, cmap = "turbo")
-ax1.scatter(x2, y2, c = z2, s = 50, cmap = "turbo")
+ax1.scatter(x1, y1, c = z1, s = 50, cmap = "RdYlGn")
+ax1.scatter(x2, y2, c = z2, s = 50, cmap = "RdYlGn")
 ax1.set_title("Initial", fontsize = 12)
 plt.xlim([-0.5, 15])
 plt.ylim([0, 9])
@@ -530,11 +531,12 @@ sorted_meas = z.argsort()
 x, y, z = x_sample_squeezed[sorted_meas], p_sample_squeezed[sorted_meas], z[sorted_meas]
 
 fig, ax1 = plt.subplots(figsize=(7, 7))
-ax1.scatter(x, y, c = z, s = 50, cmap="turbo")
+ax1.scatter(x, y, c = z, s = 50, cmap = "RdYlGn")
 ax1.set_title("Squeezed State", fontsize = 12)
 ax1.set_ylabel("Momentum", fontsize = 11)
 ax1.set_xlabel("Position", fontsize = 11)
 ax1.set_xlim([-4, 4])
+ax1.set_aspect("equal", adjustable = "box")
 plt.show()
 
 ##############################################################################
@@ -544,8 +546,8 @@ plt.show()
 # .. note::
 #
 #    The squeezed states produced above satisfy :math:`\Delta x \Delta p = 1,`
-#    which means they are coherent states as well. We won't need to use any
-#    more general Gaussian states.
+#    but more general Gaussian states need not satisfy these. For the purposes
+#    of photonic quantum computing, we won't need these generalized states. 
 #
 #
 # Measuring quadratures
@@ -786,12 +788,12 @@ print(
 #     |                     |    :align: center                                            | the :math:`x`-direction. *Pauli Z* if the same displacement is      |
 #     |                     |    :width: 70%                                               | in the :math:`p`-direction                                          |
 #     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
-#     | Rotation            | .. figure:: ../demonstrations/photonics/Rotation.png         | *Hadamard* gate for :math:`\phi=\frac{\pi}{2}.`                             |
+#     | Rotation            | .. figure:: ../demonstrations/photonics/Rotation.png         | *Hadamard* gate for :math:`\phi=\frac{\pi}{2}.`                     |
 #     |                     |    :align: center                                            |                                                                     |
 #     |                     |    :width: 70%                                               |                                                                     |
 #     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
 #     | Continuous variable | .. figure:: ../demonstrations/photonics/CV_ctrlz.png         | The squeezing parameter is given by :math:`r=\sinh^{-1}(1/2)` and   |
-#     | CNOT                |    :align: center                                            | the beam splitters have :math:`T=\frac{1}{4}(1-\tanh(r)).`          |
+#     | CNOT                |    :align: center                                            | the beamsplitters have :math:`T=\frac{1}{4}(1-\tanh(r)).`           |
 #     |                     |    :width: 100%                                              | Applies a *Control-Z* operation on the GKP states when              |
 #     |                     |                                                              | :math:`\phi = 0` and a *CNOT* operation when :math:`\phi=\pi/2.`    |
 #     |                     |                                                              |                                                                     |
@@ -803,7 +805,7 @@ print(
 #     |                     |    :width: 100%                                              | :math:`\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,` |
 #     |                     |                                                              | and a :math:`\hat{P}` homodyne measurement. If we measure           |
 #     |                     |                                                              | :math:`\vert -\rangle,` we apply the shown rotations and squeezers  |
-#     |                     |                                                              | with :math:`r=\cosh^{-1}(3/4)`, :math:`\theta=\tan^{-1}(1/2),`      |
+#     |                     |                                                              | with :math:`r=\cosh^{-1}(3/4),` :math:`\theta=\tan^{-1}(1/2),`      |
 #     |                     |                                                              | and :math:`\phi=-\pi/2-\theta,` resulting in a GKP *T gate*.        |
 #     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
 #
