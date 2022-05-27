@@ -74,11 +74,6 @@ import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
-# This tutorial includes a lot of loops through big datasets so it is
-# very advantageous to use dask to parallelize those for loops
-from dask.distributed import Client
-import dask
-
 
 ##############################################################################
 # Next, we create a randomized variational circuit
@@ -107,8 +102,10 @@ def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
 
 import pennylane as qml
 import scipy.sparse.linalg as linalg
+
 import numpy as np
 import pennylane.numpy as pnp
+
 from matplotlib import pyplot as plt
 import seaborn as sns
 sns.set_theme()
@@ -122,8 +119,7 @@ def H_ising(h, n_wires):
     coefs += [-1e-03 for _ in range(n_wires)]
     return qml.Hamiltonian(coefs, ops)
 
-@dask.delayed
-def ising_dask(h, n_wires):
+def ising(h, n_wires):
     H = H_ising(h, n_wires)
     Hmat = qml.utils.sparse_hamiltonian(H)
     E, V = linalg.eigsh(Hmat, k=1, which="SA", return_eigenvectors=True, ncv=20)
@@ -132,8 +128,7 @@ def ising_dask(h, n_wires):
 
 n_wires = 8
 hs = np.linspace(0, 2, 200)
-res = np.array([ising_dask(h, n_wires) for h in hs], dtype=object)  # should be <10s
-data = np.array(dask.compute(*res))
+data = np.array([ising(h, n_wires) for h in hs])
 dev = qml.device("default.qubit", wires=n_wires)
 
 
@@ -153,7 +148,7 @@ plt.show()
 
 ##############################################################################
 # We now take these ground states as our data for training and testing. We can
-# initialize any circuit in PennyLane using `qml.QubitStateVector()` as shown
+# initialize any circuit in PennyLane using ``qml.QubitStateVector()`` as shown
 # in the example below.
 
 ##############################################################################
@@ -162,7 +157,7 @@ plt.show()
 # Let us now create a quantum CNN like the one  proposed by Cong, et al. 
 # [#CongQuantumCNN]. Similar to a classical CNN, we have both a 
 # `convolutional_layer` and a `pooling_layer`. The former layer acts as a window
-#  that extracts local correlations, while the former allows reducing the 
+# that extracts local correlations, while the former allows reducing the 
 # dimensionality of the feature vector. In the simplest case, the 
 # `convolutional_layer` consists of a two-qubit unitary that is shifted along 
 # the circuit and the `pooling_layer` of a single qubit gate conditioned on the 
@@ -306,9 +301,9 @@ train_loss = [] ; val_loss = []
 train_acc = [] ; val_acc = []
 
 n_iter = 20
-for k in range(1, n_iter+1):
-    if k % 3 == 0:
-        print(f"Step {k} / {n_iter}, cost: {old_loss}")
+for k in range(0, n_iter):
+    if not k == 0:
+        print(f"Step {k+1} / {n_iter}, cost: {old_loss}")
         train_acc.append(accuracy(weights, weights_last, train_data, train_labels))
         val_acc.append(accuracy(weights, weights_last, val_data, val_labels))
         print(f"train_acc = {train_acc[-1]} val_acc = {val_acc[-1]}")
@@ -323,7 +318,7 @@ val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
 ##############################################################################
 # We can check if the training was successful by looking at the loss and accuracy for the training and validation set during training:
 
-fig, axs = plt.subplots(ncols=2, figsize=(10,5))
+fig, axs = plt.subplots(ncols=3, figsize=(14,5))
 ax = axs[0]
 ax.plot(train_loss,"x--", label="train")
 ax.plot(val_loss,"x--", label="val")
@@ -332,10 +327,16 @@ ax.set_xlabel("epoch", fontsize=20)
 ax.legend(fontsize=20)
 
 ax = axs[1]
-ax.plot(np.arange(1,n_iter-1,3), train_acc,"o:", label="train")
-ax.plot(np.arange(1,n_iter-1,3), val_acc,"x--", label="val")
+ax.plot(train_acc,"o:", label="train")
+ax.plot(val_acc,"x--", label="val")
 ax.set_ylabel("accuracy", fontsize=20)
 ax.set_xlabel("epoch", fontsize=20)
+ax.legend(fontsize=20)
+
+ax = axs[2]
+ax.plot(train_acc, val_acc,"o:")
+ax.set_ylabel("val accuracy", fontsize=20)
+ax.set_xlabel("train accuracy", fontsize=20)
 ax.legend(fontsize=20)
 
 plt.tight_layout()
@@ -345,12 +346,18 @@ plt.show()
 ##############################################################################
 # We can also look at the phase diagram directly and see for which transverse field parameters the training is successful:
 
-out = [np.argmax(conv_net(weights, weights_last, state)) for state in data]
+out = [conv_net(weights, weights_last, state)[0] for state in data]
+labels_predicted = [(0 if x>0.5 else 1) for x in out]
+
+
 fig, ax = plt.subplots(figsize=(6,5))
-ax.plot(hs, out,".--", label="class")
+ax.plot(hs, labels_predicted,".--", label="pred. class")
+ax.plot(hs, labels, "o", label="actual class")
 ax.plot(hs, mzs,"o:", label="mag")
+ax.plot(hs, out, ".:", label="p(0)")
 ax.legend(fontsize=20)
 ax.set_xlabel("h", fontsize=20)
+#plt.savefig("few-data_classification-result.png")
 plt.show()
 
 
