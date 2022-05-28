@@ -251,7 +251,7 @@ qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.rando
 labels = np.zeros(len(data), dtype=int)
 labels[np.where(mzs<0.5)] = 1
 N_train = 10
-N_val = 10
+N_val = 50
 
 randomstate = np.random.default_rng( 0 )
 safe_range = np.concatenate([np.where(mzs>0.9)[0], np.where(mzs<0.1)[0]]) # making sure to be away from the phase transition ~h in [0.5-1]
@@ -296,11 +296,11 @@ weights_last = pnp.random.rand(4**(2)-1, requires_grad = True)
 ##############################################################################
 # We can now train
 
-optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
+optimizer = qml.GradientDescentOptimizer(stepsize=0.01)
 train_loss = [] ; val_loss = []
 train_acc = [] ; val_acc = []
 
-n_iter = 20
+n_iter = 50
 for k in range(0, n_iter):
     if not k == 0:
         print(f"Step {k+1} / {n_iter}, cost: {old_loss}")
