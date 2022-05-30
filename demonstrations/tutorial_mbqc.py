@@ -82,7 +82,7 @@ print(qml.draw(cluster_state)())
 ##############################################################################
 # Teleportation
 # ----------
-# .. figure:: ../demonstrations/mbqc/one-bit-teleportation.PNG
+# .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
 #    :width: 60%
 #
