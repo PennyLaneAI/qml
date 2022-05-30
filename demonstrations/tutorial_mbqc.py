@@ -133,3 +133,8 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #     `Quantum 5, 392
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
 #
+# .. [#LatticeSurgeryRaussendorf2018]
+#
+#     Daniel Herr, Alexandru Paler, Simon J. Devitt and Franco Nori (2018) "Lattice Surgery on the Raussendorf Lattice",
+#     `IOP Publishing 3, 3
+#     <https://arxiv.org/abs/1711.04921>`__.
