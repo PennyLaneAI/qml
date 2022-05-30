@@ -50,7 +50,7 @@ Di Vincenzo's criteria, introduced in the blue box below.
     we find in nature are not qubits, so we must find a way to make them behave as such.
     Moreover, we need to put many of these systems together.
 
-    2. **Qubit initialization**. We must be able to prepare the same repeatedly within
+    2. **Qubit initialization**. We must be able to prepare the same state repeatedly within
     an acceptable margin of error.
 
     3. **Long coherence times**. Qubits will lose their quantum properties after
@@ -61,11 +61,11 @@ Di Vincenzo's criteria, introduced in the blue box below.
     qubits. To do this, we require both single-qubit gates and two-qubit gates.
 
     5. **Measurement of individual qubits**. To read the result of a quantum algorithm,
-    we must accurately measure the final of a pre-chosen set of qubits. 
+    we must accurately measure the final state of a pre-chosen set of qubits. 
 
-Our journey will start by defining the simplest states of light, known as Gaussian states. We will also
+Our journey will start by defining the simplest states of light, known as *Gaussian states*. We will also
 describe how we can perform simple gates and measurements on such states. The next step is to  
-figure out reliable methods to generate the more general "non-Gaussian" states that are required for universal
+figure out reliable methods to generate the more general *non-Gaussian* states that are required for universal
 quantum computing. We'll see that we end up needing only 
 a special type of non-Gaussian states, known as GKP states. 
 Finally, we will bring all the concepts together to understand how quantum algorithms
@@ -266,12 +266,6 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 # which are also Gaussian with :math:`\Delta x = \Delta p = 1.` Coherent states, in general,
 # can have non-zero expectation values for the
 # quadratures (i.e., they are not centered around the origin).
-#
-# .. note::
-#
-#    More generally, a coherent state is one that has minimal uncertainty in the quadratures. That is,
-#
-#    .. math:: \Delta x = \Delta p = 1.
 #
 # The ``default.gaussian`` device allows for the easy preparation of coherent states
 # through the function :class:`~pennylane.CoherentState`, which takes two parameters :math:`\alpha` and :math:`\phi.`
