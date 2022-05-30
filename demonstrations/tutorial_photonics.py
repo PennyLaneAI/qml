@@ -147,7 +147,7 @@ dev = qml.device("default.gaussian", wires=1, shots=1000)
 #
 #    What do the wires represent in a photonic device? They are independent
 #    information carriers known as **qumodes**. In photonic quantum computers, these are waves of light
-#    contained inside an optical fibre. Qumodes are not two-level systems in general, so we must use an
+#    contained inside an optical cavity. Qumodes are not two-level systems in general, so we must use an
 #    infinite superposition of basis states to represent their quantum state.
 #
 # We would like to know how the measured values of position and momentum
@@ -218,7 +218,7 @@ def vacuum_var_x():
 
 @qml.qnode(dev_exact)
 def vacuum_var_p():
-    return qml.var(qml.P(0))  # Returns exact variane of p
+    return qml.var(qml.P(0))  # Returns exact variance of p
 
 
 # Print calculated statistical quantities
