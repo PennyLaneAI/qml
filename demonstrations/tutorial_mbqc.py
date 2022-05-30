@@ -46,11 +46,12 @@ Measurement-based quantum computation
 
 import networkx as nx
 
-a, b = 10, 2
+a, b = 5, 2
 n = a * b  # number of qubits
 
 G = nx.grid_graph(dim=[a, b])
 
+##############################################################################
 # .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
 #    :align: center
 #    :width: 60%
