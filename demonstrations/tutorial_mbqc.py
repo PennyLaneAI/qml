@@ -23,12 +23,14 @@ Measurement-based quantum computation
 #
 # The structure of this demo will be as follows. First we introduce the concept of a cluster state, 
 # the substrate for measurement-based quantum computation. Then, we will move on to explain to 
-# implement arbitrary quantum circuits in MBQC. That is,
-# 1. How does **information propagate** through the cluster state?
-# 2. How can **arbitrary qubit rotations** be implemented?
-# 3. How do we implement a **two-qubit gate** in this scheme?
+# implement arbitrary quantum circuits, thus proving that MBQC is also universal. In particular, we 
+# will illustrate
+# 1. How **information propagates** through the cluster state.
+# 2. How **arbitrary qubit rotations** can be implemented.
+# 3. How a **two-qubit gate** can be implemented in this scheme.
 #
-# Once these operations are explained, we will move on to fault-tolerance. [elaborate]
+# Once these operations are explained, we will move on to fault-tolerance and sketch how this can be
+# achieved through lattice surgery. [elaborate]
 
 ##############################################################################
 #
@@ -89,7 +91,7 @@ def cluster_state():
 print(qml.draw(cluster_state)())
 
 ##############################################################################
-# Teleportation
+# Information propagation and Teleportation
 # ----------
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
@@ -124,6 +126,17 @@ def one_bit_teleportation(state, theta):
 
 print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, np.pi))
 
+##############################################################################
+# Single-qubit rotations
+# ----------
+# Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
+# MBQC, we can implement arbitrary single-qubit rotations by using the entanglement of the cluster state.
+
+##############################################################################
+# The two-qubit gate: CNOT
+# ----------
+# The last ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
+# show how to do a CNOT in the measurement-based framework.
 
 ##############################################################################
 # References
