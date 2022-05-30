@@ -27,7 +27,8 @@ Measurement-based quantum computation
 # 1. How does **information propagate** through the cluster state?
 # 2. How can **arbitrary qubit rotations** be implemented?
 # 3. How do we implement a **two-qubit gate** in this scheme?
-
+#
+# Once these operations are explained, we will move on to fault-tolerance. [elaborate]
 
 ##############################################################################
 #
