@@ -39,8 +39,9 @@ Measurement-based quantum computation
 # To understand how MBQC qubits work, it's good to have an understanding of the cluster state. There
 # is not one cluster state, but rather it’s a name for a class of highly entangled multi-qubit
 # states. One example of a cluster state would be
-# .. math::
-#    |\psi⟩=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n},$$
+#
+# .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n},
+#
 # where :math:`G` is some graph and :math:`E(G)` is the set of its edges.
 
 import networkx as nx
