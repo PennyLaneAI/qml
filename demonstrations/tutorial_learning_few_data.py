@@ -64,14 +64,50 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 ##############################################################################
 # Generalization Bounds for Quantum Machine Learning Models
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# | X
-# | X
-# | Some high level theoretical results here ... AND I JUST MADE A CHANGE
-# | X
-# | X
-# | some more detailed results (e.g. specifically for QCNNs etc. ...
-# | X
-# | X
+# As hinted at earlier, we expect the generalization error to depend both on the richness of the model class, as well as
+# on the amount of training data available. As a first result, the authors of Ref. [#CaroGeneralization]_ found that for
+# a QMLM model with at most :math:`T` parametrized local quantum channels, the generalization error depends on :math:`T`
+# and :math:`N` via
+#
+# .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
+#
+# We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
+# of training samples, and increases with the number of parametrized gates. However, as is the case for quantum
+# convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number of
+# gates :math:`M` which have been reused. Naively, one could suspect that the generalization error scales as
+# :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
+# :math:`\tilde{\mathcal{O}}` includes logarithmic factors). However, the authors of Ref. [#CaroGeneralization]_ found
+# that such models actually adhere to the better scaling
+#
+# .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log MT}{N}}\right).
+#
+# With this we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon`, we need a
+# training set of size :math:`N \sim T \log MT / \epsilon^2`. For the special case of QCNNs, we can explicitly connect
+# the number of samples needed for good generalization to the system size :math:`n` since these models
+# use :math:`\mathcal{O}(\log(n))` independendently parametrized gates, each of which is used at most :math:`n` times.
+# Putting the pieces together, we find that a training set of size
+#
+# .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
+#
+# is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon`.
+# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify phases.
+#
+# X
+# X
+#
+# X
+#
+# X
+#
+# TODO: some nice transition text
+# X
+#
+# X
+#
+# X
+#
+#
+
 
 import pennylane as qml
 from pennylane import numpy as np
