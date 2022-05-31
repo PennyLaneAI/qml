@@ -25,11 +25,11 @@ When optimizing a machine learning model, be it classical or quantum, we aim to 
 distribution of interest, like images of cats and dogs. However, in practice we are limited to a finite amount of
 data, necessitating the need to reason about how our model performs on new, previously unseen data. The difference
 between the model's performance on the true data distribution, and the performance estimated from our training data is
-called the *generalization error* and indicates how well the model has learned to generalize to unseen data. While we
-It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
+called the *generalization error* and indicates how well the model has learned to generalize to unseen data. It is good
+to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
 perfectly fit the training data, i.e. which admit a low bias, have a higher variance, typically perform poorly on unseen
 test data and don't generalize well. In the classical machine learning community, this trade off has been extensively
-studied and and lead to optimization techniques which favour generalization, for example by regularizing models via
+studied and has lead to optimization techniques which favour generalization, for example by regularizing models via
 their variance [#NamkoongVariance]_.
 
 Let us now dive deeper into generalization properties of quantum machine learning (QML) models. We start by describing
@@ -37,7 +37,8 @@ the typical data processing pipeline of a QML model. A classical data input :mat
 state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a parametrized quantum
 channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` and a measurement is performed on the resulting state
 to get the final prediction. The goal is now to minimize the expected loss over the data generating distribution
-:math:`P` indicating how well our model performs on new data:
+:math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math: `\ell`, the
+expected loss is given by
 
 .. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)].
 
@@ -47,15 +48,17 @@ average loss over the training set
 
 .. math:: \hat{R}_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i)
 
-which is referred to as the training loss. This is hence only a proxy to the true quantity of interest :math:`R(\alpha)`
-and their difference is called the generalization error
+which is referred to as the training loss and is an unbiased estimate of :math:`R(\alpha)`. This is only a proxy
+to the true quantity of interest :math:`R(\alpha)` and their difference is called the generalization error
 
-.. math:: \mathrm{gen}(\alpha) = \hat{R}_S(\alpha) - R(\alpha).
+.. math:: \mathrm{gen}(\alpha) = \hat{R}_S(\alpha) - R(\alpha)
 
-By upper bounding the :math:`\mathrm{gen}(\alpha)` we can justify minimizing the training error. In this tutorial, we
-illustrate results from Ref. [#CaroGeneralization]_ showing that the generalization error roughly scales as
-:math:`\mathcal{O}(\sqrt{T / N})` where :math:`T` is the number of parametrized gates and :math:`N` is the number of
-training samples.
+which is the quantity that we explore in this tutorial. Keeping in mind the bias-variance trade off, one would expect
+that more complex models, i.e. models with a larger number of parameters, achieve a lower error on the training data,
+but a higher generalization error. Having more training data on the other hand leads to a better approximation of the
+true expected loss and hence lower generalization error. This intuition is made precise in Ref. [#CaroGeneralization]_
+where it is shown that :math:`\mathrm{gen}(\alpha)` roughly scales as :math:`\mathcal{O}(\sqrt{T / N})` where :math:`T`
+is the number of parametrized gates and :math:`N` is the number of training samples.
 """
 
 ##############################################################################
