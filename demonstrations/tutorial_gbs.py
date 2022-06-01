@@ -15,20 +15,23 @@ Quantum advantage with Gaussian Boson Sampling
     tutorial_gaussian_transformation Gaussian transformation
     qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
+    tutorial_photonics Photonic Quantum Computers
 
 *Author: PennyLane dev team. Posted: 4 Dec 2020. Last updated: 4 Dec 2020.*
 
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
-any classical algorithm. The Google Quantum team was the first to claim this achievement,
-announced in their paper `Quantum supremacy using a programmable superconducting
-processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_. Now a team led
-by Chao-Yang Lu and Jian-Wei Pan has performed a similar feat using quantum photonics. While
-Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
-using a superconducting processor, the new experiment, published in the paper
-`Quantum computational advantage using photons
-<https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
-[#Zhong2020]_ leverages the quantum properties of light to tackle a task called
+any classical algorithm. The launch of Xanadu's Borealis device marked an important milestone
+within the quantum computing community, wherein our very own quantum computational advantage 
+experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.  
+Among other quantum advantage achievements are the Google Quantum team as can be seen in their paper 
+`Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,  
+and the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper 
+`Quantum computational advantage using photons <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
+[#Zhong2020]_. 
+While Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
+using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the 
+quantum properties of light to tackle a task called
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
 This tutorial will walk you through the basic elements of GBS, motivate why it is
@@ -155,6 +158,7 @@ cutoff = 10
 
 dev = qml.device("strawberryfields.gaussian", wires=n_wires, cutoff_dim=cutoff)
 
+
 @qml.qnode(dev)
 def gbs_circuit():
     # prepare the input squeezed states
@@ -202,7 +206,7 @@ print(probs.shape)
 # Let's extract and view the probabilities of measuring various Fock states.
 
 # Fock states to measure at output
-measure_states = [(0,0,0,0), (1,1,0,0), (0,1,0,1), (1,1,1,1), (2,0,0,0)]
+measure_states = [(0, 0, 0, 0), (1, 1, 0, 0), (0, 1, 0, 1), (1, 1, 1, 1), (2, 0, 0, 0)]
 
 # extract the probabilities of calculating several
 # different Fock states at the output, and print them out
@@ -277,7 +281,7 @@ from thewalrus import hafnian as haf
 # Now, for the right-hand side numerator, we first calculate the submatrix
 # :math:`A = [(UU^T\tanh(r))]_{st}`:
 
-A = (np.dot(U, U.T) * np.tanh(1))
+A = np.dot(U, U.T) * np.tanh(1)
 
 ######################################################################
 # In GBS, we determine the submatrix by taking the
@@ -324,7 +328,7 @@ print(probs[0, 1, 0, 1])
 #
 # This corresponds to the hafnian of the full matrix :math:`A=UU^T\tanh(r)`:
 
-A = (np.dot(U, U.T) * np.tanh(1))
+A = np.dot(U, U.T) * np.tanh(1)
 print(np.abs(haf(A)) ** 2 / np.cosh(1) ** 4)
 print(probs[1, 1, 1, 1])
 
