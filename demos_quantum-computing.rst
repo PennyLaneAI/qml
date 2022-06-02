@@ -79,11 +79,10 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing
 
 .. customgalleryitem::
-    :tooltip: Measurement-based quantum computation
-    :figure: demonstrations/mbqc/mbqc_blueprint.png
-    :description: :doc:`demos/tutorial_mbqc`
+    :tooltip: Photonic quantum computers
+    :figure: demonstrations/photonics/photonics_tn.png
+    :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
-
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -99,5 +98,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
-  	demos/tutorial_sc_qubits
-    demos/tutorial_mbqc
+	demos/tutorial_sc_qubits
+    demos/tutorial_photonics
+    
