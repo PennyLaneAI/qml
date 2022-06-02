@@ -24,11 +24,12 @@ milestones is to demonstrate a quantum device carrying out tasks that are beyond
 any classical algorithm. The launch of Xanadu's Borealis device marked an important milestone
 within the quantum computing community, wherein our very own quantum computational advantage 
 experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.  
-Among other quantum advantage achievements are the Google Quantum team as can be seen in their paper 
+Among other quantum advantage achievements are the Google Quantum team's experiment as can be seen in their paper 
 `Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,  
-and the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper 
+and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper 
 `Quantum computational advantage using photons <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
 [#Zhong2020]_. 
+
 While Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
 using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the 
 quantum properties of light to tackle a task called
