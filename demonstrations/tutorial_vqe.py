@@ -54,10 +54,10 @@ coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 ##############################################################################
 # The molecular structure can also be imported from an external file using
-# the :func:`~.pennylane_qchem.qchem.read_structure` function.
+# the :func:`~.pennylane.qchem.read_structure` function.
 #
 # Now, we can build the electronic Hamiltonian of the hydrogen molecule
-# using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
 

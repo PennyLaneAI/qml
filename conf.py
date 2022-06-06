@@ -80,7 +80,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
     'reference_url': {
          # The module you locally document uses None
-        'pennylane': "https://pennylane.readthedocs.io/en/stable/",
+        'pennylane': "https://pennylane.readthedocs.io/en/latest/",
     },
     'backreferences_dir'  : 'backreferences',
     'doc_module'          : ('pennylane'),
@@ -220,9 +220,9 @@ with open("demos_community.rst", 'w') as f:
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://pennylane.readthedocs.io/en/stable/": None}
+intersphinx_mapping = {"https://pennylane.readthedocs.io/en/latest/": None}
 
-from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective
+from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective, Bio
 
 def setup(app):
     app.add_directive("customgalleryitem", CustomGalleryItemDirective)
@@ -230,3 +230,4 @@ def setup(app):
     app.add_directive("community-card", CommunityCardDirective)
     app.add_directive("related", RelatedDirective)
     app.add_stylesheet("xanadu_gallery.css")
+    app.add_directive("bio", Bio)
