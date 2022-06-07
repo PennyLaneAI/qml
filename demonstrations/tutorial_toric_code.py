@@ -180,16 +180,28 @@ plt.show()
 
 
 ######################################################################
-# Preparing the ground state
-# ==========================
+# The ground state
+# ================
 # 
-
-
-######################################################################
-# A toric ground state is:
+# While individual X and Z operators do not commute with each other, the X Group and Z Group operators
+# do:
+#
+# .. math::
+#
+#      [S_s, P_p] = 0.
+#
+# Since they commute, the wavefunction can be an eigenstate of each group operator individually. To minimize
+# the energy of the Hamiltonian on the system as a whole, we can just minimize the contribution of each group operator.
+# Due to the negative coefficients in the Hamiltonian, to minimize the contribution of a term, we need to maximize the
+# eigenvalue an individual operator.  The maximum eigenvalue for each operator is simply one.
+#
+# .. math::
+#
+#       S_s |G \rangle = +1 |G \rangle \qquad \qquad P_p | G \rangle = +1 |G\rangle.
+# 
+# Now we just have to find a wavefunction that obeys these constraints. 
 # 
 # .. math::
-# 
 # 
 #    | G \rangle =  \prod_{p} \frac{\mathbb{I} + P_p}{\sqrt{2}} |00\dots 0\rangle = \prod_{p} U_p |00\dots 0 \rangle
 # 
