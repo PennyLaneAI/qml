@@ -568,7 +568,6 @@ def shadow_bound(error, observables, failure_rate=0.01):
         )
         ** 2
     )
-    print(observables)
     N = 34 * max(shadow_norm(o) for o in observables) / error ** 2
     return int(np.ceil(N * K)), int(K)
 
