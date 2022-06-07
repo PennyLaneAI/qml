@@ -26,8 +26,9 @@ of this race is not easy at all!
 Here, we introduce **trapped ion quantum
 computers**. It is the preferred technology that research groups use at
 several universities around the world, and at research companies like
-Honeywell and IonQ. In particular, Honeywell has achieved a `quantum
-volume <https://pennylane.ai/qml/demos/quantum_volume.html>`_
+`Honeywell <https://www.honeywell.com/us/en/company/quantum>`_ and `IonQ <https://ionq.com/>`_. 
+In particular, Honeywell has achieved a 
+`quantum volume <https://pennylane.ai/qml/demos/quantum_volume.html>`_
 of 128, the largest in the market! As the name suggests, the
 qubits are ions trapped by electric fields and manipulated with lasers.
 Trapped ions have relatively long coherence times, which means that the qubits are
