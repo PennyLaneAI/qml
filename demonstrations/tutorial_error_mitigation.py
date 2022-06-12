@@ -156,6 +156,7 @@ scale_factors = [1, 2, 3]
 mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(
     noisy_qnode
 )
+mitigated_qnode(w1, w2)
 
 ##############################################################################
 # Amazing! Using PennyLane's :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>`
