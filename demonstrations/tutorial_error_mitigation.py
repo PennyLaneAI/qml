@@ -121,12 +121,12 @@ print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
 
-ideal_qnode(w1, w2).numpy()
+ideal_qnode(w1, w2)
 
 ##############################################################################
 # On the other hand, we obtain a noisy result when running on ``dev_noisy``:
 
-noisy_qnode(w1, w2).numpy()
+noisy_qnode(w1, w2)
 
 ##############################################################################
 # So, we have set ourselves up with a benchmark circuit and seen that executing on a noisy device
@@ -156,7 +156,6 @@ scale_factors = [1, 2, 3]
 mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(
     noisy_qnode
 )
-mitigated_qnode(w1, w2)
 
 ##############################################################################
 # Amazing! Using PennyLane's :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>`
