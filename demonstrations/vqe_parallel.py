@@ -182,13 +182,12 @@ devs = dev1 + dev2
 # circuit has a single free parameter, which controls a Y-rotation on the third qubit.
 
 
-def circuit(param, H):
+def circuit(param, wires):
     qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=[0, 1, 2, 3])
     qml.RY(param, wires=2)
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[3, 1])
-    return qml.expval(H)
 
 
 ##############################################################################
@@ -205,7 +204,7 @@ params = np.load("vqe_parallel/RY_params.npy")
 # Finally, the energies as functions of rotation angle can be given using
 # :class:`~.pennylane.ExpvalCost`.
 
-energies = [qml.QNode(circuit, devs) for _ in hamiltonians]
+energies = [qml.ExpvalCost(circuit, h, devs) for h in hamiltonians]
 
 ##############################################################################
 # Calculating the potential energy surface
@@ -227,7 +226,7 @@ def calculate_surface(parallel=True):
 
     for i, e in enumerate(energies):
         print("Running for inter-atomic distance {} Å".format(list(data.keys())[i]))
-        s.append(e(params[i], hamiltonians[i], parallel=parallel))
+        s.append(e(params[i], parallel=parallel))
 
     t1 = time.time()
 
