@@ -481,33 +481,7 @@ print(new_obs)
 # terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.grouping <pennylane.grouping>`
 # documentation for more details on its provided functionality and how it works.
 #
-# What happens, though, if we (in a moment of reckless abandon!) ask a QNode to simultaneously
-# measure two observables that *aren't* qubit-wise commuting? For example, let's consider
-# :math:`X\otimes Y` and :math:`Z\otimes Z`:
-#
-# .. code-block:: python
-#
-#     @qml.qnode(dev)
-#     def circuit(weights):
-#         qml.StronglyEntanglingLayers(weights, wires=range(3))
-#         return [
-#             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
-#             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-#         ]
-#
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#     pennylane.qnodes.base.QuantumFunctionError: Only observables that are qubit-wise commuting
-#     Pauli words can be returned on the same wire
-#
-# The QNode has detected that the two observables are not qubit-wise commuting, and
-# has raised an error.
-#
-# So, a strategy begins to take shape: given a Hamiltonian containing a large number of Pauli terms,
+# Given a Hamiltonian containing a large number of Pauli terms,
 # there is a high likelihood of there being a significant number of terms that qubit-wise commute. Can
 # we somehow partition the terms into **fewest** number of QWC groups to minimize the number of measurements
 # we need to take?
@@ -751,12 +725,14 @@ print("<H> = ", np.sum(np.hstack(result)))
 ##############################################################################
 # Finally, we don't need to go through this process manually every time; if our cost function can be
 # written in the form of an expectation value of a Hamiltonian (as is the case for most VQE and QAOA
-# problems), we can use the :class:`qml.ExpvalCost <pennylane.ExpvalCost>` function
-# to generate our cost function with the number of measurement automatically
-# optimized:
+# problems), we can use the option ``grouping_type="qwc"`` in :class:`~.pennylane.Hamiltonian` to
+# automatically optimize the measurements.
 
-H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.StronglyEntanglingLayers, H, dev, optimize=True)
+H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+@qml.qnode(dev)
+def cost_fn(weights):
+    qml.StronglyEntanglingLayers(weights, wires=range(4))
+    return qml.expval(H)
 print(cost_fn(weights))
 
 ##############################################################################
