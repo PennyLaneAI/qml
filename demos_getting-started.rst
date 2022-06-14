@@ -94,6 +94,11 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
 
+.. customgalleryitem::
+    :tooltip: Learn how to use the QFT to create basic operations.
+    :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
+    :description: :doc:`demos/tutorial_qft_arithmetic`
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -114,4 +119,5 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_state_preparation
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_qft_arithmetic
 
