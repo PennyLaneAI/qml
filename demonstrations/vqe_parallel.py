@@ -367,8 +367,6 @@ plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
 plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
-plt.savefig("vqe_parallel_001.png")
-plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
