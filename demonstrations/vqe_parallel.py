@@ -227,7 +227,7 @@ print(f"Evaluation time: {dt_seq:.2f} s")
 ##############################################################################
 # We can parallelize the individual evaluations using ``dask`` in the following way: We take the 15 terms of the Hamiltonian and
 # distribute them to the 15 devices in ``devs``. This evaluation is delayed using ``dask.delayed`` and later computed
-# in parallel using ``dask.compute``, which asynchronously executes the delayed objects in results.
+# in parallel using ``dask.compute``, which asynchronously executes the delayed objects in ``results``.
 
 def compute_energy_parallel(H, devs, param):
     assert len(H.ops) == len(devs)
@@ -338,8 +338,7 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 
 
 ##############################################################################
-# We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel. This results
-# in a speed up in processing:
+# We have seen how Hamiltonian measurements can be parallelized and optimized at the same time.
 
 print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 
