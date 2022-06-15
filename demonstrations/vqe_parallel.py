@@ -241,8 +241,10 @@ def compute_energy_parallel(H, devs, param):
     return result
 
 ##############################################################################
-# We can now compute all 10 different energy surfaces sequentially, where each execution is making use of 
-# parallel device execution.
+# We can now compute all 10 samples from the energy surface sequentially, where each execution is making use of 
+# parallel device execution. Curiously, in this example the overhead from doing so outweighs the speed-up
+# and the execution is slower than standard execution using ``qml.expval``. For different circuits and
+# different Hamiltonians, however, parallelization may provide significant speed-ups.
 
 print("Evaluating the potential energy surface in parallel")
 t0 = time.time()
@@ -258,7 +260,7 @@ print(f"Evaluation time: {dt_par:.2f} s")
 
 
 ##############################################################################
-# We can improve this further by optimizing the measurement procedure. Currently, we are measuring each term of the Hamiltonian
+# We can improve this procedure further by optimizing the measurement. Currently, we are measuring each term of the Hamiltonian
 # in a separate measurement. This is not necessary as there are sub-groups of commuting terms in the Hamiltonian that can be measured
 # simultaneously. We can utilize the grouping function :func:`~.pennylane.grouping.group_observables` to generate few measurements that
 # are executed in parallel:
@@ -352,8 +354,7 @@ print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 #    Speed up: 1.48
 
 ##############################################################################
-# Can you think of other ways to combine multiple QPUs to improve the
-# performance of quantum algorithms? To conclude the tutorial, let's plot the calculated
+# To conclude the tutorial, let's plot the calculated
 # potential energy surfaces:
 
 np.savez("vqe_parallel", energies_seq=energies_seq, energies_par=energies_par, energies_par_opt=energies_par_opt)
