@@ -27,6 +27,7 @@ We begin by importing the prerequisite libraries:
 """
 
 import time
+import dask
 
 import matplotlib.pyplot as plt
 from pennylane import numpy as np
@@ -34,9 +35,6 @@ import pennylane as qml
 from pennylane import qchem
 
 ##############################################################################
-# .. warning::
-#
-#    This demonstration contains features like ``qml.ExpvalCost`` that are now deprecated and will soon be removed from PennyLane.
 #
 # This tutorial requires the ``pennylane-forest`` and ``dask``
 # packages, which are installed separately using:
@@ -186,12 +184,13 @@ devs = dev1 + dev2
 # circuit has a single free parameter, which controls a Y-rotation on the third qubit.
 
 
-def circuit(param, wires):
+def circuit(param, H):
     qml.BasisState(np.array([1, 1, 0, 0], requires_grad=False), wires=[0, 1, 2, 3])
     qml.RY(param, wires=2)
     qml.CNOT(wires=[2, 3])
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[3, 1])
+    return qml.expval(H)
 
 
 ##############################################################################
@@ -205,44 +204,90 @@ def circuit(param, wires):
 params = np.load("vqe_parallel/RY_params.npy")
 
 ##############################################################################
-# Finally, the energies as functions of rotation angle can be given using
-# :class:`~.pennylane.ExpvalCost`.
-
-energies = [qml.ExpvalCost(circuit, h, devs) for h in hamiltonians]
-
-##############################################################################
 # Calculating the potential energy surface
 # ----------------------------------------
-#
-# :class:`~.pennylane.ExpvalCost` returns a :class:`~.pennylane.QNodeCollection` which can be
-# evaluated using the input parameters to the ansatz circuit. The
-# :class:`~.pennylane.QNodeCollection` can be evaluated asynchronously by passing the keyword
-# argument ``parallel=True``. When ``parallel=False`` (the default behaviour), the QNodes are
-# instead evaluated sequentially.
-#
-# We can use this feature to compare the sequential and parallel times required to calculate the
-# potential energy surface. The following function calculates the surface:
+# The most vanilla execution of these 10 energy surfaces is using the standard PennyLane functionalities by executing the QNodes.
+# Internally, this creates a measurement for each term in the Hamiltonian that are then sequentially computed.
+
+print("Evaluating the potential energy surface sequantially")
+t0 = time.time()
+
+energies_seq = []
+for i, (h, param) in enumerate(zip(hamiltonians, params)):
+    print(f"{i+1} / {len(params)}: Sequential execution; Running for inter-atomic distance {list(data.keys())[i]} Å")
+    energies_seq.append(qml.QNode(circuit, devs[0])(param, h))
+
+dt_seq = time.time() - t0
+
+print(f"Evaluation time: {dt_seq:.2f} s")
+
+##############################################################################
+# We can parallelize the individual evaluations using ``dask`` in the following way: We take the 15 terms of the Hamiltonian and
+# distribute them to the 15 devices in ``devs``. This evaluation is delayed using ``dask.delayed`` and later computed
+# in parallel using ``dask.compute``, which asynchronously executes the delayed objects in ``results``.
+
+def compute_energy_parallel(H, devs, param):
+    assert len(H.ops) == len(devs)
+    results = []
+
+    for i in range(len(H.ops)):
+        qnode = qml.QNode(circuit, devs[i])
+        results.append(dask.delayed(qnode)(param, H.ops[i]))
+
+    result = H.coeffs @ dask.compute(*results, scheduler="threads")
+    return result
+
+##############################################################################
+# We can now compute all 10 samples from the energy surface sequentially, where each execution is making use of 
+# parallel device execution. Curiously, in this example the overhead from doing so outweighs the speed-up
+# and the execution is slower than standard execution using ``qml.expval``. For different circuits and
+# different Hamiltonians, however, parallelization may provide significant speed-ups.
+
+print("Evaluating the potential energy surface in parallel")
+t0 = time.time()
+
+energies_par = []
+for i, (h, param) in enumerate(zip(hamiltonians, params)):
+    print(f"{i+1} / {len(params)}: Parallel execution; Running for inter-atomic distance {list(data.keys())[i]} Å")
+    energies_par.append(compute_energy_parallel(h, devs, param))
+
+dt_par = time.time() - t0
+
+print(f"Evaluation time: {dt_par:.2f} s")
 
 
-def calculate_surface(parallel=True):
-    s = []
-    t0 = time.time()
+##############################################################################
+# We can improve this procedure further by optimizing the measurement. Currently, we are measuring each term of the Hamiltonian
+# in a separate measurement. This is not necessary as there are sub-groups of commuting terms in the Hamiltonian that can be measured
+# simultaneously. We can utilize the grouping function :func:`~.pennylane.grouping.group_observables` to generate few measurements that
+# are executed in parallel:
 
-    for i, e in enumerate(energies):
-        print("Running for inter-atomic distance {} Å".format(list(data.keys())[i]))
-        s.append(e(params[i], parallel=parallel))
+def compute_energy_parallel_optimized(H, devs, param):
+    assert len(H.ops) == len(devs)
+    results = []
 
-    t1 = time.time()
+    obs_groupings, coeffs_groupings = qml.grouping.group_observables(H.ops, H.coeffs, "qwc")
 
-    print("Evaluation time: {0:.2f} s".format(t1 - t0))
-    return s, t1 - t0
+    for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):
+        H_part = qml.Hamiltonian(coeffs, obs)
+        qnode = qml.QNode(circuit, devs[i])
+        results.append(dask.delayed(qnode)(param, H_part))
 
+    result = qml.math.sum(dask.compute(*results, scheduler="threads"))
+    return result
 
-print("Evaluating the potential energy surface sequentially")
-surface_seq, t_seq = calculate_surface(parallel=False)
+print("Evaluating the potential energy surface in parallel with measurement optimization")
+t0 = time.time()
 
-print("\nEvaluating the potential energy surface in parallel")
-surface_par, t_par = calculate_surface(parallel=True)
+energies_par_opt = []
+for i, (h, param) in enumerate(zip(hamiltonians, params)):
+    print(f"{i+1} / {len(params)}: Parallel execution and measurement optimization; Running for inter-atomic distance {list(data.keys())[i]} Å")
+    energies_par_opt.append(compute_energy_parallel_optimized(h, devs, param))
+
+dt_par_opt = time.time() - t0
+
+print(f"Evaluation time: {dt_par_opt:.2f} s")
+
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -251,37 +296,50 @@ surface_par, t_par = calculate_surface(parallel=True)
 #
 #  .. code-block:: none
 #
-#    Evaluating the potential energy surface sequentially
-#    Running for inter-atomic distance 0.3 Å
-#    Running for inter-atomic distance 0.5 Å
-#    Running for inter-atomic distance 0.7 Å
-#    Running for inter-atomic distance 0.9 Å
-#    Running for inter-atomic distance 1.1 Å
-#    Running for inter-atomic distance 1.3 Å
-#    Running for inter-atomic distance 1.5 Å
-#    Running for inter-atomic distance 1.7 Å
-#    Running for inter-atomic distance 1.9 Å
-#    Running for inter-atomic distance 2.1 Å
-#    Evaluation time: 285.41 s
+#    Evaluating the potential energy surface sequantially
+#    1 / 10: Sequential execution; Running for inter-atomic distance 0.3 Å
+#    2 / 10: Sequential execution; Running for inter-atomic distance 0.5 Å
+#    3 / 10: Sequential execution; Running for inter-atomic distance 0.7 Å
+#    4 / 10: Sequential execution; Running for inter-atomic distance 0.9 Å
+#    5 / 10: Sequential execution; Running for inter-atomic distance 1.1 Å
+#    6 / 10: Sequential execution; Running for inter-atomic distance 1.3 Å
+#    7 / 10: Sequential execution; Running for inter-atomic distance 1.5 Å
+#    8 / 10: Sequential execution; Running for inter-atomic distance 1.7 Å
+#    9 / 10: Sequential execution; Running for inter-atomic distance 1.9 Å
+#    10 / 10: Sequential execution; Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 39.33 s
 #
 #    Evaluating the potential energy surface in parallel
-#    Running for inter-atomic distance 0.3 Å
-#    Running for inter-atomic distance 0.5 Å
-#    Running for inter-atomic distance 0.7 Å
-#    Running for inter-atomic distance 0.9 Å
-#    Running for inter-atomic distance 1.1 Å
-#    Running for inter-atomic distance 1.3 Å
-#    Running for inter-atomic distance 1.5 Å
-#    Running for inter-atomic distance 1.7 Å
-#    Running for inter-atomic distance 1.9 Å
-#    Running for inter-atomic distance 2.1 Å
-#    Evaluation time: 74.55 s
+#    1 / 10: Parallel execution; Running for inter-atomic distance 0.3 Å
+#    2 / 10: Parallel execution; Running for inter-atomic distance 0.5 Å
+#    3 / 10: Parallel execution; Running for inter-atomic distance 0.7 Å
+#    4 / 10: Parallel execution; Running for inter-atomic distance 0.9 Å
+#    5 / 10: Parallel execution; Running for inter-atomic distance 1.1 Å
+#    6 / 10: Parallel execution; Running for inter-atomic distance 1.3 Å
+#    7 / 10: Parallel execution; Running for inter-atomic distance 1.5 Å
+#    8 / 10: Parallel execution; Running for inter-atomic distance 1.7 Å
+#    9 / 10: Parallel execution; Running for inter-atomic distance 1.9 Å
+#    10 / 10: Parallel execution; Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 73.42 s
+#
+#    Evaluating the potential energy surface in parallel with measurement optimization
+#    1 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.3 Å
+#    2 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.5 Å
+#    3 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.7 Å
+#    4 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.9 Å
+#    5 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.1 Å
+#    6 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.3 Å
+#    7 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.5 Å
+#    8 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.7 Å
+#    9 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.9 Å
+#    10 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 2.1 Å
+#    Evaluation time: 26.51 s
+
 
 ##############################################################################
-# We have seen how a :class:`~.pennylane.QNodeCollection` can be evaluated in parallel. This results
-# in a speed up in processing:
+# We have seen how Hamiltonian measurements can be parallelized and optimized at the same time.
 
-print("Speed up: {0:.2f}".format(t_seq / t_par))
+print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -290,15 +348,18 @@ print("Speed up: {0:.2f}".format(t_seq / t_par))
 #
 #  .. code-block:: none
 #
-#    Speed up: 3.83
+#    Speed up: 1.48
 
 ##############################################################################
-# Can you think of other ways to combine multiple QPUs to improve the
-# performance of quantum algorithms? To conclude the tutorial, let's plot the calculated
+# To conclude the tutorial, let's plot the calculated
 # potential energy surfaces:
 
-plt.plot(surface_seq, linewidth=2.2, marker="o", color="red")
-plt.plot(surface_par, linewidth=2.2, marker="d", color="blue")
+np.savez("vqe_parallel", energies_seq=energies_seq, energies_par=energies_par, energies_par_opt=energies_par_opt)
+
+plt.plot(energies_seq, linewidth=2.2, marker="d", color="blue", label="sequential")
+plt.plot(energies_par, linewidth=2.2, marker="o", color="red", label="parallel")
+plt.plot(energies_par_opt, linewidth=2.2, marker="d", color="blue", label="paralell and optimized")
+plt.legend(fontsize=12)
 plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
 plt.ylabel("Ground state energy (Ha)", fontsize=16)
