@@ -35,9 +35,6 @@ import pennylane as qml
 from pennylane import qchem
 
 ##############################################################################
-# .. warning::
-#
-#    This demonstration contains features like ``qml.ExpvalCost`` that are now deprecated and will soon be removed from PennyLane.
 #
 # This tutorial requires the ``pennylane-forest`` and ``dask``
 # packages, which are installed separately using:
