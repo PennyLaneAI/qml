@@ -16,8 +16,8 @@ Basic arithmetic with the QFT
 
 Throughout all our material we have seen concepts as varied as the
 application of quantum computing to the field of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
-`chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ or optimization problems. All of them are problems of
-great complexity but, can we apply quantum computing to more fundamental
+`chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ or `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems. All of them are complex problems of
+ but, can we apply quantum computing to more fundamental
 tasks? Throughout this tutorial we will answer this question by showing
 how we can work with basic arithmetic using an important tool such as
 the quantum Fourier Transform (QFT).
@@ -145,13 +145,8 @@ plt.show()
 
 ######################################################################
 # As we can see the qubit 0 is place on top and the rest of the qubit
-# below it. With this in mind, what we will do now, with the objective of
-# learning about basic arithmetic, is to create an operator
-# :math:`\text{Sum}(k)` such that it takes a state :math:`\vert m \rangle`
-# and returns the value :math:`\vert m + k\rangle`. We will see that this
-# task is especially easy, if instead of working in the computational
-# basis, we work in the Fourier basis. Let us quickly recall the
-# representation in this basis.
+# below it. However, this is not the only way we have to represent numbers,
+# and we can represent them in different bases such as the fourier base.
 #
 # In this basis, all the basic states will be represented with qubits in
 # the XY plane of the Bloch sphere each of them rotated by a certain
@@ -175,8 +170,9 @@ plt.show()
 #
 # The fact that the encoding of numbers is now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this,
-# let’s look at the following situation. We have a number :math:`m`
-# encoded in binary and we want to add :math:`k` units, the procedure will
+# let’s look at the following situation. We want to create an operator
+# :math:`\text{Sum}(k)` such that it takes a state :math:`\vert m \rangle`
+# and returns the value :math:`\vert m + k\rangle`. The procedure will
 # be as follows:
 #
 # -  We convert the computational basis into Fourier basis by applying QFT on the
@@ -415,8 +411,8 @@ qml.draw_mpl(factorization)(n, wires_m, wires_k, wires_sol)
 plt.show()
 
 ######################################################################
-# A very cool circuit, let’s calculate the probabilities to see each basic
-# state!
+# A very cool circuit! let’s calculate the probabilities to see each basic
+# state:
 #
 
 plt.bar(range(2 ** len(wires_m)), factorization(n, wires_m, wires_k, wires_sol))
@@ -431,9 +427,11 @@ plt.show()
 # more complicated operators, but until then, let’s keep on learning 🚀
 #
 
+# About the author
+# ----------------
 ##############################################################################
 # .. bio:: Guillermo Alonso-Linaje
-#    :photo: ../_static/authors/guillermo_alonso.png
+#    :photo: ../_static/authors/guillermo_alonso.jpeg
 #
 #    Guillermo is a mathematician and computer scientist from the University of Valladolid and is currently working as an educator and quantum researcher at Xanadu. Fun fact, Guillermo is a great foosball player and is also a paella master.
 #
