@@ -1,3 +1,12 @@
+- title: Optimizing a Variational Quantum Circuit via Simulated Annealing
+  author: Mahnoor Fatima
+  date: 16/06/2022
+  code: https://github.com/maxwell04-wq/simulated-annealing-pennylane/blob/main/Simulated_Annealing_Tutorial_Pennylane.ipynb
+  paper: https://projecteuclid.org/journals/statistical-science/volume-8/issue-1/Simulated-Annealing/10.1214/ss/1177011077.full
+  color: heavy-rain-gradient
+  description: |
+    In this tutorial, a variational quantum circuit is optimized by using simulated annealing. This algorithm returns a stochastic global optima for the optimization problem.
+
 - title: Continuous Variable Quantum Classifiers -  MNIST
   author: Sophie Choe
   date: 04/06/2022
