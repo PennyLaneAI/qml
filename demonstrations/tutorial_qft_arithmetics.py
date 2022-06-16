@@ -5,19 +5,18 @@ Basic arithmetic with the QFT
 
 .. meta::
     :property="og:description": Learn how to use the Quantum Fourier Transform (QFT) to implement basic operations
-    :property="og:image": https://pennylane.ai/qml/_images/adaptive_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_images/qft_arithmetics_thumbnail.png
 
 .. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
-    tutorial_vqe A brief overview of VQE
-    tutorial_givens_rotations Givens rotations for quantum chemistry
+    tutorial_qubit_rotation Basis tutorial: qubit rotation
+
 
 
 *Author: Guillermo Alonso-Linaje. Posted:  2022. Last updated: 13 June 2022*
 
 Throughout all our material we have seen concepts as varied as the
-application of quantum computing to the field of machine learning,
-quantum chemistry or optimization problems. All of them are problems of
+application of quantum computing to the field of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
+`chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ or optimization problems. All of them are problems of
 great complexity but, can we apply quantum computing to more fundamental
 tasks? Throughout this tutorial we will answer this question by showing
 how we can work with basic arithmetic using an important tool such as
@@ -45,12 +44,12 @@ Having said that, the first step is to remember what is the Pennylane
 standard for encoding numbers in binary. A binary number can be
 represented as a string of 1s and 0s which we will represent as follows:
 
-.. math:: \vert q_0q_1...q_{n-1}\rangle
+.. math:: \vert q_0q_1...q_{n-1}\rangle,
 
 where :math:`q_0` refers to the most representative bit, so the formula
 to obtain the equivalent decimal number will be:
 
-.. math:: m:= \sum_{i = 0}^{n-1}2^{n-1-i}q_i
+.. math:: m:= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
 
 That means that the number
 :math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
@@ -70,12 +69,12 @@ be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. So be sure to use
 enough qubits to represent your solutions!
 
 We can use
-the qml.BasisEmbedding
+the :class:`qml.BasisEmbedding <pennylane.BasisEmbedding>`
 template to obtain the binary representation in a simple way:
 
 """
 
-################## Provisional: I need the new version of BasisEmbedding so forget this cell
+################## Provisional: I need the new version of BasisEmbedding so FORGET THIS CELL
 import pennylane as qml
 from pennylane.operation import Operation, AnyWires
 from pennylane.wires import Wires
@@ -124,8 +123,9 @@ class BasisEmbedding(Operation):
             if bit == 1:
                 ops_list.append(qml.PauliX(wire))
 
-        return ops_list
-################################################ End provisional!
+        return ops_list # End provisional!
+
+###############################################
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -179,7 +179,7 @@ plt.show()
 # encoded in binary and we want to add :math:`k` units, the procedure will
 # be as follows:
 #
-# -  We convert the encoding into Fourier basis by applying QFT on the
+# -  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
 # -  We do a phase rotation to each j qubit of :math:`\frac{k}{2^{j}}`
 #    with a :math:`R_Z` gate.
@@ -360,7 +360,7 @@ plt.show()
 # number 21 as a product of two terms, is this something we could do
 # following this previous reasoning? The answer is yes! We can make use of
 # Grover’s algorithm to amplify the states whose product is the number we
-# are looking for. All we would need is to construct the oracle U, i.e. an
+# are looking for. All we would need is to construct the oracle U, i.e., an
 # operator such that:
 #
 # .. math:: U\vert m \rangle \vert k \rangle = \vert m \rangle \vert k \rangle \text{ if }m\times k \not = 21
@@ -429,4 +429,11 @@ plt.show()
 # can see that the construction is simple and is a great example to
 # illustrate basic arithmetic! This will help us in the future to build
 # more complicated operators, but until then, let’s keep on learning 🚀
+#
+
+##############################################################################
+# .. bio:: Guillermo Alonso-Linaje
+#    :photo: ../_static/authors/guillermo_alonso.png
+#
+#    Guillermo is a mathematician and computer scientist from the University of Valladolid and is currently working as an educator and quantum researcher at Xanadu. Fun fact, Guillermo is a great foosball player and is also a paella master.
 #
