@@ -362,7 +362,7 @@ class Model_Runner:
             loss_val = loss.item()
 
             if (t % 1000 == 0) and verbose:
-                print(f"       ---- iter: {t}, loss: {round(loss_val, 4)} -----")
+                print(f"---- iter: {t}, loss: {round(loss_val, 4)} -----")
 
             # Perform a backward pass and update weights.
             optimizer.zero_grad()
@@ -429,23 +429,23 @@ qsp_model_runner.plot_result()
 #
 #  .. code-block:: none
 #
-#          ---- iter: 0, loss: 13.5938 -----
-#          ---- iter: 1000, loss: 11.8809 -----
-#          ---- iter: 2000, loss: 10.229 -----
-#          ---- iter: 3000, loss: 8.6693 -----
-#          ---- iter: 4000, loss: 7.2557 -----
-#          ---- iter: 5000, loss: 6.0084 -----
-#          ---- iter: 6000, loss: 4.9197 -----
-#          ---- iter: 7000, loss: 3.9801 -----
-#          ---- iter: 8000, loss: 3.1857 -----
-#          ---- iter: 9000, loss: 2.5312 -----
-#          ---- iter: 10000, loss: 2.0045 -----
-#          ---- iter: 11000, loss: 1.5873 -----
-#          ---- iter: 12000, loss: 1.2594 -----
-#          ---- iter: 13000, loss: 1.0021 -----
-#          ---- iter: 14000, loss: 0.7997 -----
-#          ---- iter: 15000, loss: 0.6397 -----
-#          ---- iter: 16000, loss: 0.5127 -----
+#      ---- iter: 0, loss: 13.5938 -----
+#      ---- iter: 1000, loss: 11.8809 -----
+#      ---- iter: 2000, loss: 10.229 -----
+#      ---- iter: 3000, loss: 8.6693 -----
+#      ---- iter: 4000, loss: 7.2557 -----
+#      ---- iter: 5000, loss: 6.0084 -----
+#      ---- iter: 6000, loss: 4.9197 -----
+#      ---- iter: 7000, loss: 3.9801 -----
+#      ---- iter: 8000, loss: 3.1857 -----
+#      ---- iter: 9000, loss: 2.5312 -----
+#      ---- iter: 10000, loss: 2.0045 -----
+#      ---- iter: 11000, loss: 1.5873 -----
+#      ---- iter: 12000, loss: 1.2594 -----
+#      ---- iter: 13000, loss: 1.0021 -----
+#      ---- iter: 14000, loss: 0.7997 -----
+#      ---- iter: 15000, loss: 0.6397 -----
+#      ---- iter: 16000, loss: 0.5127 -----
 #
 #  .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
 #     :align: center
@@ -493,32 +493,32 @@ qsp_model_runner.plot_result()
 #
 #  .. code-block:: none
 #
-#      ---- iter: 0, loss: 33.8345 -----
-#      ---- iter: 1000, loss: 19.0937 -----
-#      ---- iter: 2000, loss: 11.6557 -----
-#      ---- iter: 3000, loss: 8.2853 -----
-#      ---- iter: 4000, loss: 6.6824 -----
-#      ---- iter: 5000, loss: 5.8523 -----
-#      ---- iter: 6000, loss: 5.3855 -----
-#      ---- iter: 7000, loss: 5.1036 -----
-#      ---- iter: 8000, loss: 4.9227 -----
-#      ---- iter: 9000, loss: 4.8004 -----
-#      ---- iter: 10000, loss: 4.7138 -----
-#      ---- iter: 11000, loss: 4.6502 -----
-#      ---- iter: 12000, loss: 4.6018 -----
-#      ---- iter: 13000, loss: 4.5638 -----
-#      ---- iter: 14000, loss: 4.5333 -----
-#      ---- iter: 15000, loss: 4.5082 -----
-#      ---- iter: 16000, loss: 4.4872 -----
-#      ---- iter: 17000, loss: 4.4693 -----
-#      ---- iter: 18000, loss: 4.4537 -----
-#      ---- iter: 19000, loss: 4.4401 -----
-#      ---- iter: 20000, loss: 4.4281 -----
-#      ---- iter: 21000, loss: 4.4174 -----
-#      ---- iter: 22000, loss: 4.4078 -----
-#      ---- iter: 23000, loss: 4.3991 -----
-#      ---- iter: 24000, loss: 4.3912 -----
-#      ---- iter: 25000, loss: 4.3839 -----
+#     ---- iter: 0, loss: 33.8345 -----
+#     ---- iter: 1000, loss: 19.0937 -----
+#     ---- iter: 2000, loss: 11.6557 -----
+#     ---- iter: 3000, loss: 8.2853 -----
+#     ---- iter: 4000, loss: 6.6824 -----
+#     ---- iter: 5000, loss: 5.8523 -----
+#     ---- iter: 6000, loss: 5.3855 -----
+#     ---- iter: 7000, loss: 5.1036 -----
+#     ---- iter: 8000, loss: 4.9227 -----
+#     ---- iter: 9000, loss: 4.8004 -----
+#     ---- iter: 10000, loss: 4.7138 -----
+#     ---- iter: 11000, loss: 4.6502 -----
+#     ---- iter: 12000, loss: 4.6018 -----
+#     ---- iter: 13000, loss: 4.5638 -----
+#     ---- iter: 14000, loss: 4.5333 -----
+#     ---- iter: 15000, loss: 4.5082 -----
+#     ---- iter: 16000, loss: 4.4872 -----
+#     ---- iter: 17000, loss: 4.4693 -----
+#     ---- iter: 18000, loss: 4.4537 -----
+#     ---- iter: 19000, loss: 4.4401 -----
+#     ---- iter: 20000, loss: 4.4281 -----
+#     ---- iter: 21000, loss: 4.4174 -----
+#     ---- iter: 22000, loss: 4.4078 -----
+#     ---- iter: 23000, loss: 4.3991 -----
+#     ---- iter: 24000, loss: 4.3912 -----
+#     ---- iter: 25000, loss: 4.3839 -----
 #
 #  .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
 #     :align: center
