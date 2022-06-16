@@ -1,6 +1,6 @@
 r"""
 
-Basic arithmetic with the Quantum Fourier Tranform
+Basic arithmetic with the QFT
 =======================================
 
 .. meta::
@@ -75,7 +75,7 @@ template to obtain the binary representation in a simple way:
 
 """
 
-################## Provisional: I need the new version of BasisEmbedding
+################## Provisional: I need the new version of BasisEmbedding so forget this cell
 import pennylane as qml
 from pennylane.operation import Operation, AnyWires
 from pennylane.wires import Wires
@@ -217,6 +217,7 @@ def circuit(m, k):
 circuit(3, 4)
 
 ######################################################################
+# Perfect, we have obtained :math:`0111` which is equivalent to the number :math:`7` in binary!
 # It is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
 # new base we can use it in a simple way.
@@ -373,7 +374,7 @@ plt.show()
 # -  execute the inverse of the circuit to clear the auxiliary qubits
 #
 
-n = 7
+n = 21
 
 wires_m = [0, 1, 2]
 wires_k = [3, 4, 5]
@@ -427,5 +428,5 @@ plt.show()
 # does not achieve exponential improvement as Shor’s algorithm does but we
 # can see that the construction is simple and is a great example to
 # illustrate basic arithmetic! This will help us in the future to build
-# more complicated operators, but until then, let’s keep on learning :)
+# more complicated operators, but until then, let’s keep on learning 🚀
 #
