@@ -96,7 +96,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 
 .. customgalleryitem::
     :tooltip: Learn how to use the Quantum Fourier Transform (QFT) to implement basic operations
-    :figure: demonstrations/noisy_circuit_optimization/qft_arithmetics_thumbnail.jpeg
+    :figure: demonstrations/qft_arithmetics/qft_arithmetics_thumbnail.png
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft
 
