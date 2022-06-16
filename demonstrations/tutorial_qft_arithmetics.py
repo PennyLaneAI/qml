@@ -57,7 +57,7 @@ That means that the number
 
 Let’s see how we would represent all the numbers with 3 qubits.
 
-.. figure:: /demonstrations/qft_arithmetics/comp_basis.png
+.. figure:: /demonstrations/qft_arithmetics/comp_basis.gif
    :width: 90%
    :align: center
 
@@ -70,7 +70,7 @@ be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. So be sure to use
 enough qubits to represent your solutions!
 
 We can use
-the\ ```qml.BasisEmbedding`` <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.BasisEmbedding.html>`__
+the qml.BasisEmbedding
 template to obtain the binary representation in a simple way:
 
 """
@@ -125,7 +125,7 @@ class BasisEmbedding(Operation):
                 ops_list.append(qml.PauliX(wire))
 
         return ops_list
-################################################ End provisional
+################################################ End provisional!
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -143,58 +143,51 @@ def circuit():
 qml.draw_mpl(circuit, show_all_wires=True)()
 plt.show()
 
-r"""
-As we can see the qubit 0 is place on top and the rest of the qubit
-below it, so we have achieved the desired representation!
-
-Main operations
----------------
-
-With this in mind, what we will do now, with the objective of
-learning about basic arithmetic, is to create an operator
-:math:`\text{Sum}(k)` such that it takes a state :math:`\vert m \rangle`
-and returns the value :math:`\vert m + k\rangle`. We will see that this
-task is especially easy, if instead of working in the computational
-basis, we work in the Fourier basis. Let us quickly recall the
-representation in this basis.
-
-In this basis, all the basic states will be represented with qubits in
-the XY plane of the Bloch sphere each of them rotated by a certain
-amount. How can we know what angle each qubit is rotated to represent a
-certain number? Well, actually is very easy! Suppose we are working with
-:math:`n` qubits and we want to represent the number :math:`m` in
-fourier basis. Then the j-th qubit will have the following phase:
-
-.. math:: \alpha_j = \frac{m\pi}{2^{j}}
-
-Let’s see how to represent the numbers in the case of 3 qubits:
-
-.. figure:: /demonstrations/qft_arithmetics/qft_basis.png
-   :width: 90%
-   :align: center
-
-As we can see, the least significant qubit will advance
-:math:`\frac{1}{8}` of a turn as we increase the number. The next qubit,
-:math:`\frac{1}{4}` turn and finally the most significant qubit will go
-half a turn each time we advance one unit.
-
-The fact that the encoding of numbers is now in phase gives us great
-flexibility in carrying out our arithmetic operations. To see this,
-let’s look at the following situation. We have a number :math:`m`
-encoded in binary and we want to add :math:`k` units, the procedure will
-be as follows:
-
--  We convert the encoding into Fourier basis by applying QFT on the
-   :math:`\vert m \rangle` state.
--  We do a phase rotation to each j qubit of :math:`\frac{k}{2^{j}}`
-   with a :math:`R_Z` gate.
--  We have therefore that the new phases are
-   :math:`\frac{(m + k)\pi}{2^{j}}`.
--  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
-   and obtain :math:`m+k`.
-
-
-"""
+######################################################################
+# As we can see the qubit 0 is place on top and the rest of the qubit
+# below it. With this in mind, what we will do now, with the objective of
+# learning about basic arithmetic, is to create an operator
+# :math:`\text{Sum}(k)` such that it takes a state :math:`\vert m \rangle`
+# and returns the value :math:`\vert m + k\rangle`. We will see that this
+# task is especially easy, if instead of working in the computational
+# basis, we work in the Fourier basis. Let us quickly recall the
+# representation in this basis.
+#
+# In this basis, all the basic states will be represented with qubits in
+# the XY plane of the Bloch sphere each of them rotated by a certain
+# amount. How can we know what angle each qubit is rotated to represent a
+# certain number? Well, actually is very easy! Suppose we are working with
+# :math:`n` qubits and we want to represent the number :math:`m` in
+# fourier basis. Then the j-th qubit will have the following phase:
+#
+# .. math:: \alpha_j = \frac{m\pi}{2^{j}}
+#
+# Let’s see how to represent the numbers in the case of 3 qubits:
+#
+# .. figure:: /demonstrations/qft_arithmetics/qft_basis.gif
+#   :width: 90%
+#   :align: center
+#
+# As we can see, the least significant qubit will advance
+# :math:`\frac{1}{8}` of a turn as we increase the number. The next qubit,
+# :math:`\frac{1}{4}` turn and finally the most significant qubit will go
+# half a turn each time we advance one unit.
+#
+# The fact that the encoding of numbers is now in phase gives us great
+# flexibility in carrying out our arithmetic operations. To see this,
+# let’s look at the following situation. We have a number :math:`m`
+# encoded in binary and we want to add :math:`k` units, the procedure will
+# be as follows:
+#
+# -  We convert the encoding into Fourier basis by applying QFT on the
+#    :math:`\vert m \rangle` state.
+# -  We do a phase rotation to each j qubit of :math:`\frac{k}{2^{j}}`
+#    with a :math:`R_Z` gate.
+# -  We have therefore that the new phases are
+#    :math:`\frac{(m + k)\pi}{2^{j}}`.
+# -  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
+#    and obtain :math:`m+k`.
+#
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -223,30 +216,28 @@ def circuit(m, k):
 
 circuit(3, 4)
 
-r"""
-
-It is important to point out that it is not necessary to know how the
-QFT is constructed in order to use it. By knowing the properties of the
-new base we can use it in a simple way.
-
-In this particular algorithm, we have had to introduce :math:`k` in a
-classical way. But let us imagine that what we are interested in is that
-another register of qubits determine what is the quantity to be summed,
-i.e., we look for a new operator :math:`\text{Sum}` such that:
-
-.. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle
-
-In this case, we can understand the third register (which is initially
-at 0) as a counter, and we will add as many units as :math:`m` and
-:math:`k` indicate. In this case, having the binary decomposition will
-make it simple. If we have :math:`m = \vert q_0q_1q_2 \rangle` we will
-have to add 1 to the counter if :math:`q_2 = 1` and not add anything
-otherwise. Generically we should add :math:`2^{n-i-1}` units if the i-th
-qubit is a 1 and 0 otherwise. As we can appreciate, this idea it is the
-same of the controlled gate concept and we will apply a corresponding
-phase if indeed the control qubit takes state 1.
-
-"""
+######################################################################
+# It is important to point out that it is not necessary to know how the
+# QFT is constructed in order to use it. By knowing the properties of the
+# new base we can use it in a simple way.
+#
+# In this particular algorithm, we have had to introduce :math:`k` in a
+# classical way. But let us imagine that what we are interested in is that
+# another register of qubits determine what is the quantity to be summed,
+# i.e., we look for a new operator :math:`\text{Sum}` such that:
+#
+# .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle
+#
+# In this case, we can understand the third register (which is initially
+# at 0) as a counter, and we will add as many units as :math:`m` and
+# :math:`k` indicate. In this case, having the binary decomposition will
+# make it simple. If we have :math:`m = \vert q_0q_1q_2 \rangle` we will
+# have to add 1 to the counter if :math:`q_2 = 1` and not add anything
+# otherwise. Generically we should add :math:`2^{n-i-1}` units if the i-th
+# qubit is a 1 and 0 otherwise. As we can appreciate, this idea it is the
+# same of the controlled gate concept and we will apply a corresponding
+# phase if indeed the control qubit takes state 1.
+#
 
 wires_m = [0, 1, 2]
 wires_k = [3, 4, 5]
@@ -290,28 +281,27 @@ print(circuit(7, 3, wires_m, wires_k, wires_sol))
 qml.draw_mpl(circuit, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
 plt.show()
 
-r"""
-Great! We have just seen how to add a number to a counter and in this
-example, when we added :math:`3 + 7` to get :math:`10`, which in binary
-is :math:`1010`. Following the same idea we will see how easily we can
-implement the multiplication. Let’s imagine that we want to multiply
-:math:`m` and :math:`k` and store the result in another register as we
-have done before, that is, we look for the operator Mul such that:
-
-.. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\times k \rangle
-
-To understand the multiplication process, let’s suppose that we have to
-multiply :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
-:math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i`. In this case, the result would
-be:
-
-.. math:: k \times m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \times 2^{l-j-1}),
-
-or in other words, if :math:`k_i = 1` and :math:`m_i = 1` add
-:math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where n and l
-are the number of qubits with which we encode m and k respectively.
-
-"""
+######################################################################
+# Great! We have just seen how to add a number to a counter and in this
+# example, when we added :math:`3 + 7` to get :math:`10`, which in binary
+# is :math:`1010`. Following the same idea we will see how easily we can
+# implement the multiplication. Let’s imagine that we want to multiply
+# :math:`m` and :math:`k` and store the result in another register as we
+# have done before, that is, we look for the operator Mul such that:
+#
+# .. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\times k \rangle
+#
+# To understand the multiplication process, let’s suppose that we have to
+# multiply :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
+# :math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i`. In this case, the result would
+# be:
+#
+# .. math:: k \times m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \times 2^{l-j-1}),
+#
+# or in other words, if :math:`k_i = 1` and :math:`m_i = 1` add
+# :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where n and l
+# are the number of qubits with which we encode m and k respectively.
+#
 
 wires_m = [0, 1, 2]
 wires_k = [3, 4, 5]
@@ -353,32 +343,35 @@ print(circuit(7, 3))
 qml.draw_mpl(circuit, show_all_wires=True)(7, 3)
 plt.show()
 
-r"""
-Awesome! We have multiplied :math:`7 \times 3` and as a result we have
-:math:`10101` that is, :math:`21` in binary.
 
-With this we have already gained a large repertoire of interesting
-operations that we can do but let’s give the idea one more twist and
-apply what we have learned in an example.
+######################################################################
+# Awesome! We have multiplied :math:`7 \times 3` and as a result we have
+# :math:`10101` that is, :math:`21` in binary.
+#
 
-Let’s imagine now that what we want is just the opposite, to factor the
-number 21 as a product of two terms, is this something we could do
-following this previous reasoning? The answer is yes! We can make use of
-Grover’s algorithm to amplify the states whose product is the number we
-are looking for. All we would need is to construct the oracle U, i.e. an
-operator such that:
 
-.. math:: U\vert m \rangle \vert k \rangle = \vert m \rangle \vert k \rangle \text{ if }m\times k \not = 21
-
-.. math:: U\vert m \rangle \vert k \rangle = -\vert m \rangle \vert k \rangle \text{ if }m\times k  = 21
-
-The idea of the oracle is as simple as this:
-
--  use auxiliary registers to store the product
--  check if the product state is 10101 and in that case change the sign
--  execute the inverse of the circuit to clear the auxiliary qubits
-
-"""
+######################################################################
+# With this we have already gained a large repertoire of interesting
+# operations that we can do but let’s give the idea one more twist and
+# apply what we have learned in an example.
+#
+# Let’s imagine now that what we want is just the opposite, to factor the
+# number 21 as a product of two terms, is this something we could do
+# following this previous reasoning? The answer is yes! We can make use of
+# Grover’s algorithm to amplify the states whose product is the number we
+# are looking for. All we would need is to construct the oracle U, i.e. an
+# operator such that:
+#
+# .. math:: U\vert m \rangle \vert k \rangle = \vert m \rangle \vert k \rangle \text{ if }m\times k \not = 21
+#
+# .. math:: U\vert m \rangle \vert k \rangle = -\vert m \rangle \vert k \rangle \text{ if }m\times k  = 21
+#
+# The idea of the oracle is as simple as this:
+#
+# -  use auxiliary registers to store the product
+# -  check if the product state is 10101 and in that case change the sign
+# -  execute the inverse of the circuit to clear the auxiliary qubits
+#
 
 n = 7
 
@@ -420,19 +413,19 @@ def factorization(n, wires_m, wires_k, wires_sol):
 qml.draw_mpl(factorization)(n, wires_m, wires_k, wires_sol)
 plt.show()
 
-r"""
-A very cool circuit, let’s calculate the probabilities to see each basic
-state!
-"""
+######################################################################
+# A very cool circuit, let’s calculate the probabilities to see each basic
+# state!
+#
 
 plt.bar(range(2 ** len(wires_m)), factorization(n, wires_m, wires_k, wires_sol))
 plt.show()
 
-r"""
-By plotting the probabilities of obtaining each basic state we get the
-prime factors are just amplified! Factorization via Grover’s algorithm
-does not achieve exponential improvement as Shor’s algorithm does but we
-can see that the construction is simple and is a great example to
-illustrate basic arithmetic! This will help us in the future to build
-more complicated operators, but until then, let’s keep on learning :)
-"""
+######################################################################
+# By plotting the probabilities of obtaining each basic state we get the
+# prime factors are just amplified! Factorization via Grover’s algorithm
+# does not achieve exponential improvement as Shor’s algorithm does but we
+# can see that the construction is simple and is a great example to
+# illustrate basic arithmetic! This will help us in the future to build
+# more complicated operators, but until then, let’s keep on learning :)
+#
