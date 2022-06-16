@@ -16,8 +16,8 @@ Basic arithmetic with the QFT
 
 Throughout all our material we have seen concepts as varied as the
 application of quantum computing to the field of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
-`chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ or `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems. All of them are complex problems of
- but, can we apply quantum computing to more fundamental
+`chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ or `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems.
+All of them are complex challenges but, can we apply quantum computing to more fundamental
 tasks? Throughout this tutorial we will answer this question by showing
 how we can work with basic arithmetic using an important tool such as
 the quantum Fourier Transform (QFT).
@@ -426,9 +426,9 @@ plt.show()
 # illustrate basic arithmetic! This will help us in the future to build
 # more complicated operators, but until then, let’s keep on learning 🚀
 #
-
 # About the author
 # ----------------
+
 ##############################################################################
 # .. bio:: Guillermo Alonso-Linaje
 #    :photo: ../_static/authors/guillermo_alonso.jpeg
