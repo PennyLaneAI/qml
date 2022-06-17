@@ -295,7 +295,7 @@ print("\n", H)
 # .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 #
 # Luckily, this tensor product structure allows us to take a bit of a shortcut. Rather than consider
-# **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
+# **full commutativity**, we can consider a more strict condition known as **qubit-wise
 # commutativity** (QWC).
 #
 # To start with, let's consider single-qubit Pauli operators and the identity. We know that the Pauli operators
