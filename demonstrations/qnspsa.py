@@ -21,9 +21,10 @@ from Gacon et al. [1] using Pennylane.
 #
 # A simple example of such an optimizer is the vanilla gradient descent
 # (GD), the update rule of which is written as:
-# :raw-latex:`\begin{equation}
-# \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \nabla f(\mathbf{x}^{(t)}) \label{eq:vanilla}\tag{1}.
-# \end{equation}`
+#
+# .. math::
+# 
+#    \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \nabla f(\mathbf{x}^{(t)}) \label{eq:vanilla}\tag{1}.
 #
 # Here the gradient :math:`\nabla f` is estimated dimension by dimension,
 # requiring :math:`O(d)` quantum measurements (:math:`d` being the
@@ -488,7 +489,7 @@ if loss_curr + tol < loss_next:
 # 2(current and the next-step loss) = 8 circuits. In practice, we measure
 # a 50% reduction in the step-wise optimization time.
 #
-# The test is done with the Braket Jobs service, as it is a handy tool to
+# The test is done with the Amazon Braket Hybrid Jobs, as it is a handy tool to
 # scale up experiments systematically. We will show how to do that towards
 # the end of the tutorial.
 #
@@ -499,7 +500,7 @@ if loss_curr + tol < loss_next:
 
 
 ######################################################################
-# Similarly, with Braket Jobs, we can also confirm that blocking indeed is
+# Similarly, with Hybrid Jobs, we can also confirm that blocking indeed is
 # necessary for this second-order SPSA optimizer, though it does not make
 # much difference for SPSA. Here the envelope of the QN-SPSA curves
 # without blocking is not plotted since it is too noisy to visualize. SPSA
@@ -802,7 +803,7 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of Ref [1] with the following Braket Job (find a
+# QN-SPSA in Fig. 1(b) of Ref [1] with the following job (find a
 # more detailed version of the example and the corresponding scripts
 # `here <https://github.com/aws/amazon-braket-examples/blob/qnspsa/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__
 # [TODO: change to the main branch link]).
@@ -843,22 +844,16 @@ job = AwsQuantumJob.create(
 
 
 ######################################################################
-# Visualizing the Job results, we get the following plot. In the plot, the
-# observations from Gacon et al. [1] are reproduced. This confirms our
-# implementation of the optimizer. In this example, the average behavior
-# of SPSA matches the one from GD. QN-SPSA outperforms the two both in the
-# final loss value and in the step-wise convergence speed. Step-wise
-# speaking, QNG performs the best among the 4 candidates.
-#
-# We also want to take the optimization time into consideration. The
-# step-wise optimization times for GD, QNG, SPSA and QN-SPSA are 0.43s,
-# 0.75s, 0.03s and 0.20s. One can see the stochastic optimizers are
-# significantly faster, and this advantage will become more prominent with
-# larger and more complicated circuits due to the :math:`O(1)` to
-# :math:`O(N)` scaling advantage. On the other hand, although QN-SPSA is
-# slower comparing to SPSA, the difference does not scale with the system
-# size. Overall, QN-SPSA shows up as a very promising candidate for
-# complicated VQE problems.
+# Visualizing the job results, we get the following plot.The results are
+# well aligned with the observations from Gacon et al. [1]. The
+# step-wise optimization times for GD, QNG, SPSA and QN-SPSA are measured to
+# be 0.43s, 0.75s, 0.03s and 0.20s. In this example, the average behavior of
+# SPSA matches the one from GD. QNG performs the best among the 4 candidates,
+# however, requires the most circuit executions and shots per step. In
+# particular for QPUs this is a severe disadvantage of this method.
+# From the more shot-frugal options, QN-SPSA demonstrates the fastest
+# convergence and best final accuracy, making it a promising candidate
+# for variational algorithms.
 #
 # .. figure:: ../demonstrations/qnspsa/qnspsa_braket.png
 #    :align: center
@@ -869,7 +864,7 @@ job = AwsQuantumJob.create(
 # To sum up, in this tutorial, we showed step-by-step how we can implement
 # the QN-SPSA optimizer with Pennylane, along with a few tricks to further
 # improve the optimizer’s performance. We also demonstrated how one can
-# scale up the benchmarking experiments with Braket Jobs.
+# scale up the benchmarking experiments with Amazon Braket Hybrid Jobs.
 #
 
 

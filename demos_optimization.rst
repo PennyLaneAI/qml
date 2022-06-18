@@ -142,7 +142,7 @@ in quantum neural networks.
 .. customgalleryitem::
     :tooltip: Quantum natural SPSA optimizer that reduces the number of quantum measurements in the optimization.
     :figure: demonstrations/qnspsa/qnspsa_cover.png
-    :description: :doc:`demos/tutorial_qnspsa`   
+    :description: :doc:`demos/qnspsa`   
     :tags: braket
 
 :html:`</div></div><div style='clear:both'>`
@@ -172,4 +172,4 @@ in quantum neural networks.
     demos/qonn
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
-    demos/tutorial_qnspsa
+    demos/qnspsa
