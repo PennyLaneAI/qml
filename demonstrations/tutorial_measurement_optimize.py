@@ -102,8 +102,8 @@ The measurement problem
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
 has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
-QChem to verify the number of terms. In this tutorial, we use the :func:`~.pennylane_qchem.qchem.read_structure`
+structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
 function to read the geometry of the molecule from an external file.
 
 """
@@ -170,7 +170,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in over triple the number of qubits required and 2050 measurements that must be made!
+# resulted in over triple the number of qubits required and 2110 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -295,7 +295,7 @@ print("\n", H)
 # .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 #
 # Luckily, this tensor product structure allows us to take a bit of a shortcut. Rather than consider
-# **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
+# **full commutativity**, we can consider a more strict condition known as **qubit-wise
 # commutativity** (QWC).
 #
 # To start with, let's consider single-qubit Pauli operators and the identity. We know that the Pauli operators
@@ -776,7 +776,7 @@ groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf'
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*
+# We went from 2110 required measurements/circuit evaluations to 556 (just over *two thousand*
 # down to *five hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.
