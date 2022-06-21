@@ -224,7 +224,8 @@ plt.show()
 # -  We rotate the j-th qubit by an angle :math:`\frac{k}{2^{j}}`
 
 #    with a :math:`R_Z` gate.
-# -  We have therefore that the new phases are
+# -  Therefore, the new phases are
+
 #    :math:`\frac{(m + k)\pi}{2^{j}}`.
 # -  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
 #    and obtain :math:`m+k`.
