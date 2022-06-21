@@ -492,7 +492,8 @@ plt.bar(range(2 ** len(wires_m)), factorization(n, wires_m, wires_k, wires_sol))
 plt.show()
 
 ######################################################################
-# By plotting the probabilities of obtaining each basic state we get the
+# By plotting the probabilities of obtaining each basic state we see that
+
 # prime factors are just amplified! Factorization via Grover’s algorithm
 # does not achieve exponential improvement as Shor’s algorithm does but we
 # can see that the construction is simple and is a great example to
