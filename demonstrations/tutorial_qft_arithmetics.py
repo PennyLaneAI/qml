@@ -411,7 +411,8 @@ plt.show()
 ######################################################################
 # Awesome! We have multiplied :math:`7 \times 3` and, as a result, we have
 
-# :math:`10101` that is, :math:`21` in binary.
+# :math:`10101,` which is :math:`21` in binary.
+
 #
 
 
