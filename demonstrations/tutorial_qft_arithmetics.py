@@ -356,7 +356,8 @@ plt.show()
 # :math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i`. In this case, the result would
 # be:
 #
-# .. math:: k \times m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \times 2^{l-j-1}),
+# .. math:: k \times m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \times 2^{l-j-1}).
+
 #
 # or in other words, if :math:`k_i = 1` and :math:`m_i = 1` add
 # :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where n and l
