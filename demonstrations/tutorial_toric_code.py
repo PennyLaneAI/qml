@@ -685,7 +685,7 @@ def probs(x_sites, z_sites):
     for s in z_sites:
         qml.PauliZ(Wire(*s))
 
-    return qml.probs(wires=all_sites)
+    return qml.probs(wires=[Wire(*s) for s in all_sites])
 
 
 null_probs = probs([], [])
