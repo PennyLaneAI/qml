@@ -16,23 +16,17 @@ Basic arithmetic with the QFT
 *Author: Guillermo Alonso-Linaje. Posted:  2022. Last updated: 13 June 2022*
 
 Throughout our demos we have seen a wide array of
-
 applications of quantum computing to the fields of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
-
 `chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ and `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems.
 
 All of them are complex topics. So we might wonder: can we apply quantum computing to more fundamental
-
 tasks? Throughout this tutorial we will answer this question by showing
 how we can perform basic arithmetic computations using an ubiquitous tool in quantum computing:
-
 the Quantum Fourier Transform (QFT).
 
 In this demo, we will not focus on understanding how the QFT is built,
-
 as we can find a great explanation in the
 `Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
-
 intuition of how it works and what applications we can give it.
 
 Motivation
@@ -40,13 +34,13 @@ Motivation
 
 The first question we have to answer before we start developing the whole idea is to understand if it makes sense. Is the
 goal purely academic or is it really something that is needed in certain algorithms?  Why implement in a quantum computer
- something that I can do with a calculator?
+something that I can do with a calculator?
 
 The first thing we might think is that this is something we have not needed so far. In algorithms like Deustch-Jozsa or
 Grover we have never needed it, or maybe we do? When working with this algorithm there is a concept that we will not get
- tired of hearing, the _oracle_. This is a gate that behaves like a black box that provides us with results that interest
- us for the algorithm.  However, this is not as nice as it seems. I am sorry to tell you that but oracles are not black boxes
- that are going to give you. You have to build them, and of course, it is not an easy task!
+tired of hearing, the _oracle_. This is a gate that behaves like a black box that provides us with results that interest
+us for the algorithm.  However, this is not as nice as it seems. I am sorry to tell you that but oracles are not black boxes
+that are going to give you. You have to build them, and of course, it is not an easy task!
 Normally, these oracles perform certain operations to define a function so in this demo we will look at building the most
 basic operations.
 
@@ -60,40 +54,28 @@ QFT representation
 
 Arithmetic is the part of mathematics that studies numbers and the
 operations that are done with them. Our objective now is to learn how to add,
-
 subtract and multiply numbers using quantum devices. But we must keep in mind
-
 that, since we are working with qubits, —which as bits, can take the
-
 values 0 or 1—, we will represent the numbers in binary. For the
-
 purposes of this tutorial, we will assume that we are working with
 integers. Therefore, if we have :math:`n` qubits, we will be able to
-
 represent the numbers from :math:`0` to :math:`2^n-1`.
 
 The first thing we need to know is PennyLane's
-
 standard for encoding numbers in binary. A binary number can be
 represented as a string of 1s and 0s which we will represent as the multi-qubit state
 
-
 .. math:: \vert \psi \rangle = \vert q_0q_1...q_{n-1}\rangle,
 
-
 where the formula to obtain the equivalent decimal number :math:`m` will be:
-
 
 .. math:: m= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
 
 
 For instance, the natural number 6
-
 is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
 
-
-Let’s see how we would represent all the integers from 0 to 7 using product states of three qubits, using separate Bloch spheres for each qubit.  
-
+Let’s see how we would represent all the integers from 0 to 7 using product states of three qubits, using separate Bloch spheres for each qubit.
 
 .. figure:: /demonstrations/qft_arithmetics/comp_basis.gif
    :width: 90%
@@ -102,12 +84,9 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
 Note that if the result of an operation is greater than the maximum
 value :math:`2^n-1`, we will start again from zero, that is to say, we
 will calculate the sum modulo :math :`2^n-1.` For instance, in our three-qubit example, suppose that
-
 qubits and we want to calculate :math:`6+3.` We see that we do not have
-
 enough space since :math:`6+3 = 9 > 2^3-1`. The result we will get will
 be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. Make sure to use
-
 enough qubits to represent your solutions!
 
 We can use
@@ -116,7 +95,6 @@ template to obtain the binary representation in a simple way:
 
 """
 
-######################################################################
 import pennylane as qml
 import matplotlib.pyplot as plt
 
