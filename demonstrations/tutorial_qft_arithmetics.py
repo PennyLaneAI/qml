@@ -177,7 +177,8 @@ plt.show()
 # We can represent them in different bases such as the so-called _Fourier base_.
 
 #
-# In this basis, all the basic states will be represented with qubits in
+# In this basis, all the basic states will be represented via qubits in
+
 # the XY plane of the Bloch sphere each of them rotated by a certain
 # amount. How can we know what angle each qubit is rotated to represent a
 # certain number? Well, actually is very easy! Suppose we are working with
