@@ -45,7 +45,8 @@ operations that are done with them. Our objective now is to learn how to add,
 
 subtract and multiply numbers using quantum devices. But we must keep in mind
 
-account is that since we are working with qubits (which can take the
+that, since we are working with qubits, —which can take the
+
 values 0 or 1), we will represent the numbers in binary. For the
 purposes of this tutorial, we will assume that we are working with
 integers and therefore if we have :math:`n` qubits, we will be able to
