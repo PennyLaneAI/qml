@@ -71,7 +71,8 @@ to obtain the equivalent decimal number :math:`m` will be:
 .. math:: m= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
 
 
-That means that the number
+For instance, the natural number 6
+
 :math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
 
 Let’s see how we would represent all the numbers with 3 qubits.
