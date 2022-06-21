@@ -26,7 +26,8 @@ All of them are complex topics. So we might wonder: can we apply quantum computi
 tasks? Throughout this tutorial we will answer this question by showing
 how we can perform basic arithmetic computations using an ubiquitous tool in quantum computing:
 
-the quantum Fourier Transform (QFT).
+the Quantum Fourier Transform (QFT).
+
 
 In this case, we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
