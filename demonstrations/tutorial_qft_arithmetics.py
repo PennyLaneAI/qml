@@ -21,7 +21,8 @@ applications of quantum computing to the fields of `machine learning <https://pe
 
 `chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ and `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems.
 
-All of them are complex challenges but, can we apply quantum computing to more fundamental
+All of them are complex topics. So we might wonder: can we apply quantum computing to more fundamental
+
 tasks? Throughout this tutorial we will answer this question by showing
 how we can work with basic arithmetic using an important tool such as
 the quantum Fourier Transform (QFT).
