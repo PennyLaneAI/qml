@@ -221,7 +221,8 @@ plt.show()
 #
 # -  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
-# -  We do a phase rotation to each j qubit of :math:`\frac{k}{2^{j}}`
+# -  We rotate the j-th qubit by an angle :math:`\frac{k}{2^{j}}`
+
 #    with a :math:`R_Z` gate.
 # -  We have therefore that the new phases are
 #    :math:`\frac{(m + k)\pi}{2^{j}}`.
