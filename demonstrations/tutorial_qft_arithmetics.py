@@ -336,7 +336,8 @@ qml.draw_mpl(circuit, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
 plt.show()
 
 ######################################################################
-# Great! We have just seen how to add a number to a counter and in this
+# Great! We have just seen how to add a number to a counter. In the example above,
+
 # example, when we added :math:`3 + 7` to get :math:`10`, which in binary
 # is :math:`1010`. Following the same idea we will see how easily we can
 # implement the multiplication. Let’s imagine that we want to multiply
