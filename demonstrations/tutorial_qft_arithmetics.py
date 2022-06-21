@@ -262,7 +262,8 @@ circuit(3, 4)
 # Perfect, we have obtained :math:`0111` which is equivalent to the number :math:`7` in binary!
 # It is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
-# new base we can use it in a simple way.
+# new basis, we can use it in a simple way.
+
 #
 # In this particular algorithm, we have had to introduce :math:`k` in a
 # classical way. But let us imagine that what we are interested in is that
