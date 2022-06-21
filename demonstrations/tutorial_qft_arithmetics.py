@@ -417,7 +417,8 @@ plt.show()
 
 
 ######################################################################
-# With this we have already gained a large repertoire of interesting
+# With this, we have already gained a large repertoire of interesting
+
 # operations that we can do but let’s give the idea one more twist and
 # apply what we have learned in an example.
 #
