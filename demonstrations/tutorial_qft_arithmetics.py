@@ -89,7 +89,8 @@ will calculate the modulus of the sum. For example, if we have three
 qubits and we want to calculate :math:`6+3.` We see that we do not have
 
 enough space since :math:`6+3 = 9 > 2^3-1`. The result we will get will
-be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. So be sure to use
+be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. Make sure to use
+
 enough qubits to represent your solutions!
 
 We can use
