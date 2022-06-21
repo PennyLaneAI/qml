@@ -114,61 +114,41 @@ plt.show()
 ######################################################################
 
 # As we can see, the first qubit —the 0-th wire— is placed on top and the rest of the qubits are
-
 # below it. However, this is not the only way we have to represent numbers.
-
 # We can represent them in different bases such as the so-called _Fourier base_.
-
 #
 # In this basis, all the basic states will be represented via qubits in
-
 # the XY plane of the Bloch sphere each of them rotated by a certain
 # amount. How do we know how much we must rotate each qubit to represent a certain number?
-
 # certain number? It is actually very easy! Suppose we are working with
-
 # :math:`n` qubits and we want to represent some the number :math:`m` in the
-
 # Fourier basis. Then the j-th qubit will have a phase:
-
 #
 # .. math:: \alpha_j = \frac{m\pi}{2^{j}}.
-
 #
 # Let’s see how to represent numbers in the Fourier basis using 3 qubits:
-
 #
 # .. figure:: /demonstrations/qft_arithmetics/qft_basis.gif
 #   :width: 90%
 #   :align: center
 #
 # As we can see, the least significant qubit will rotate
-
 # :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
-
 # rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
-
 # half a turn every time we add one to the number we are representing.
-
 #
 # The fact that the states encoding the numbers are now in phase gives us great
-
 # flexibility in carrying out our arithmetic operations. To see this,
 # let’s look at the following situation. We want to create an operator
 # that takes a state :math:`\vert m \rangle`
-
 # to the state :math:`\vert m + k\rangle`. A procedure to implement such a unitary
-
 # is the following.
-
 #
 # -  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
 # -  We rotate the j-th qubit by an angle :math:`\frac{k}{2^{j}}`
-
 #    with a :math:`R_Z` gate.
 # -  Therefore, the new phases are
-
 #    :math:`\frac{(m + k)\pi}{2^{j}}`.
 # -  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
 #    and obtain :math:`m+k`.
@@ -207,33 +187,22 @@ print(f"The ket representation of the sum of 3 and 4 is {add_k_circuit(3,4)}")
 # It is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
 # new basis, we can use it in a simple way.
-
 #
 # In this particular algorithm, we have had to introduce :math:`k` in a
-# classical way. But suppose that what we are in specifying the integer to be added using another register of qubits. 
-
+# classical way. But suppose that what we are in specifying the integer to be added using another register of qubits.
 # That is,
-
 # we are looking look for a new operator :math:`\text{Sum}` such that
-
 #
 # .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
-
 #
 # In this case, we can understand the third register (which is initially
 # at 0) as a counter that will tally as many units as :math:`m` and
-
 # :math:`k` combined. The binary decomposition will
-
 # make it simple. If we have :math:`m = \vert q_0q_1q_2 \rangle` we will
 # have to add 1 to the counter if :math:`q_2 = 1` and nothing
-
 # otherwise. In general, we should add :math:`2^{n-i-1}` units if the :math:`i`-th
-
 # qubit is in state :math:`\vert 1 \rangle` and 0 otherwise. As we can appreciate, this is the same idea
-
 # behind the concept of a controlled gate. Indeed, observe that we will apply a corresponding
-
 # phase if indeed the control qubit takes state 1.
 #
 
@@ -281,19 +250,13 @@ plt.show()
 
 ######################################################################
 # Great! We have just seen how to add a number to a counter. In the example above,
-
 # we added :math:`3 + 7` to get :math:`10`, which in binary
-
 # is :math:`1010`. Following the same idea, we will see how easily we can
-
 # implement multiplication. Let’s imagine that we want to multiply
-
 # :math:`m` and :math:`k` and store the result in another register as we
 # did before. This time, we look for an operator Mul such that
-
 #
 # .. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\times k \rangle.
-
 #
 # To understand the multiplication process, let’s suppose that we have to
 # multiply :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
@@ -301,14 +264,10 @@ plt.show()
 # be:
 #
 # .. math:: k \times m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \times 2^{l-j-1}).
-
 #
 # In other words, if :math:`k_i = 1` and :math:`m_i = 1`, we would add
-
 # :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where :math:`n` and :math:`l`
-
 # are the number of qubits with which we encode :math:`m` and :math:`k` respectively.
-
 #
 
 wires_m = [0, 1, 2]
@@ -354,25 +313,18 @@ plt.show()
 
 ######################################################################
 # Awesome! We have multiplied :math:`7 \times 3` and, as a result, we have
-
 # :math:`10101,` which is :math:`21` in binary.
-
 #
 
 
 ######################################################################
 # With this, we have already gained a large repertoire of interesting
-
 # operations that we can do, but let’s give the idea one more twist and
-
 # apply what we have learned in an example.
 #
 # Let’s imagine now that we want just the opposite: to factor the
-
 # number 21 as a product of two terms. Is this something we could do
-
 # following our previous reasoning? The answer is yes! We can make use of
-
 # Grover’s algorithm to amplify the states whose product is the number we
 # are looking for. All we would need is to construct the oracle U, i.e., an
 # operator such that
@@ -438,9 +390,7 @@ plt.show()
 
 ######################################################################
 # By plotting the probabilities of obtaining each basic state we see that
-
 # prime factors are amplified! Factorization via Grover’s algorithm
-
 # does not achieve exponential improvement as Shor’s algorithm does but we
 # can see that the construction is simple and is a great example to
 # illustrate basic arithmetic! This will help us in the future to build
