@@ -340,7 +340,8 @@ plt.show()
 
 # we added :math:`3 + 7` to get :math:`10`, which in binary
 
-# is :math:`1010`. Following the same idea we will see how easily we can
+# is :math:`1010`. Following the same idea, we will see how easily we can
+
 # implement the multiplication. Let’s imagine that we want to multiply
 # :math:`m` and :math:`k` and store the result in another register as we
 # have done before, that is, we look for the operator Mul such that:
