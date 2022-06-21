@@ -268,7 +268,8 @@ circuit(3, 4)
 # In this particular algorithm, we have had to introduce :math:`k` in a
 # classical way. But suppose that what we are in specifying the integer to be added using another register of qubits. 
 
-# another register of qubits determine what is the quantity to be summed,
+# That is,
+
 # i.e., we look for a new operator :math:`\text{Sum}` such that:
 #
 # .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle
