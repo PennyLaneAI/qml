@@ -286,7 +286,8 @@ circuit(3, 4)
 
 # otherwise. In general, we should add :math:`2^{n-i-1}` units if the :math:`i`-th
 
-# qubit is a 1 and 0 otherwise. As we can appreciate, this idea it is the
+# qubit is in state :math:`\vert 1 \rangle` and 0 otherwise. As we can appreciate, this is the same idea
+
 # same of the controlled gate concept and we will apply a corresponding
 # phase if indeed the control qubit takes state 1.
 #
