@@ -54,7 +54,8 @@ integers. Therefore, if we have :math:`n` qubits, we will be able to
 
 represent the numbers from :math:`0` to :math:`2^n-1`.
 
-Having said that, the first step is to remember what is the Pennylane
+The first thing we need to know is PennyLane's
+
 standard for encoding numbers in binary. A binary number can be
 represented as a string of 1s and 0s which we will represent as follows:
 
