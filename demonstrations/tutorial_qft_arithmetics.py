@@ -427,7 +427,8 @@ plt.show()
 
 # number 21 as a product of two terms. Is this something we could do
 
-# following this previous reasoning? The answer is yes! We can make use of
+# following our previous reasoning? The answer is yes! We can make use of
+
 # Grover’s algorithm to amplify the states whose product is the number we
 # are looking for. All we would need is to construct the oracle U, i.e., an
 # operator such that:
