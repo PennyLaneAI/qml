@@ -292,7 +292,7 @@ plt.show()
 # Now let’s actually put these together into a circuit!
 #
 
-dev = qml.device("lightning.qubit", wires=[Wire(s) for s in all_sites])
+dev = qml.device("lightning.qubit", wires=[Wire(*s) for s in all_sites])
 
 
 def state_prep():
@@ -892,7 +892,7 @@ plt.show()
 # Below we implement this algorithm in PennyLane and measure the mutual exchange statistics
 # of a X Group excitation and a Z Group excitation.
 
-dev_aux = qml.device("lightning.qubit", wires=[Wire(s) for s in all_sites] + ["aux"])
+dev_aux = qml.device("lightning.qubit", wires=[Wire(*s) for s in all_sites] + ["aux"])
 
 
 def loop(x_loop, z_loop):
