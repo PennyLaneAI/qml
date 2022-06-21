@@ -182,7 +182,8 @@ plt.show()
 # the XY plane of the Bloch sphere each of them rotated by a certain
 # amount. How do we know how much we must rotate each qubit to represent a certain number?
 
-# certain number? Well, actually is very easy! Suppose we are working with
+# certain number? It is actually very easy! Suppose we are working with
+
 # :math:`n` qubits and we want to represent the number :math:`m` in
 # fourier basis. Then the j-th qubit will have the following phase:
 #
