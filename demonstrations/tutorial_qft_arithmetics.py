@@ -273,7 +273,8 @@ circuit(3, 4)
 # we are looking look for a new operator :math:`\text{Sum}` such that
 
 #
-# .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle
+# .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
+
 #
 # In this case, we can understand the third register (which is initially
 # at 0) as a counter, and we will add as many units as :math:`m` and
