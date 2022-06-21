@@ -86,7 +86,8 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
 Note that if the result of an operation is greater than the maximum
 value :math:`2^n-1`, we will start again from zero, that is to say, we
 will calculate the modulus of the sum. For example, if we have three
-qubits and we want to add :math:`6+3`, we will see that we do not have
+qubits and we want to calculate :math:`6+3.` We see that we do not have
+
 enough space since :math:`6+3 = 9 > 2^3-1`. The result we will get will
 be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. So be sure to use
 enough qubits to represent your solutions!
