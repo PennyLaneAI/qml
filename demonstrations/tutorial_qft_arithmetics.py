@@ -342,7 +342,8 @@ plt.show()
 
 # is :math:`1010`. Following the same idea, we will see how easily we can
 
-# implement the multiplication. Let’s imagine that we want to multiply
+# implement multiplication. Let’s imagine that we want to multiply
+
 # :math:`m` and :math:`k` and store the result in another register as we
 # did before. This time, we look for an operator Mul such that
 
