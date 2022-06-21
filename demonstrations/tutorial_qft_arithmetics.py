@@ -212,7 +212,8 @@ plt.show()
 
 # flexibility in carrying out our arithmetic operations. To see this,
 # let’s look at the following situation. We want to create an operator
-# :math:`\text{Sum}(k)` such that it takes a state :math:`\vert m \rangle`
+# that takes a state :math:`\vert m \rangle`
+
 # and returns the value :math:`\vert m + k\rangle`. The procedure will
 # be as follows:
 #
