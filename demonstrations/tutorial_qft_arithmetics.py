@@ -298,7 +298,7 @@ def add_qubit_registers_circuit(m, k, wires_m, wires_k, wires_sol):
 print(f"The ket representation of the sum of 7 and 3 is "
       f"{add_qubit_registers_circuit(7, 3, wires_m, wires_k, wires_sol)}")
 
-qml.draw_mpl(circuit, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
+qml.draw_mpl(add_qubit_registers_circuit, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
 plt.show()
 
 ######################################################################
