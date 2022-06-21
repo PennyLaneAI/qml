@@ -288,7 +288,8 @@ circuit(3, 4)
 
 # qubit is in state :math:`\vert 1 \rangle` and 0 otherwise. As we can appreciate, this is the same idea
 
-# same of the controlled gate concept and we will apply a corresponding
+# behind the concept of a controlled gate. Indeed, observe that we will apply a corresponding
+
 # phase if indeed the control qubit takes state 1.
 #
 
