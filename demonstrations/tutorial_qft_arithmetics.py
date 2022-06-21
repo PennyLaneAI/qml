@@ -344,7 +344,8 @@ plt.show()
 
 # implement the multiplication. Let’s imagine that we want to multiply
 # :math:`m` and :math:`k` and store the result in another register as we
-# have done before, that is, we look for the operator Mul such that:
+# did before. This time, we look for an operator Mul such that
+
 #
 # .. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\times k \rangle
 #
