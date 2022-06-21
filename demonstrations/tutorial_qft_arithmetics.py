@@ -68,7 +68,8 @@ where :math:`q_0` refers to the most representative bit. The formula
 to obtain the equivalent decimal number :math:`m` will be:
 
 
-.. math:: m:= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
+.. math:: m= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
+
 
 That means that the number
 :math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
