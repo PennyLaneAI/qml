@@ -184,7 +184,8 @@ plt.show()
 
 # certain number? It is actually very easy! Suppose we are working with
 
-# :math:`n` qubits and we want to represent the number :math:`m` in
+# :math:`n` qubits and we want to represent some the number :math:`m` in the
+
 # fourier basis. Then the j-th qubit will have the following phase:
 #
 # .. math:: \alpha_j = \frac{m\pi}{2^{j}}
