@@ -203,7 +203,8 @@ plt.show()
 
 # :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
 
-# :math:`\frac{1}{4}` turn and finally the most significant qubit will go
+# rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
+
 # half a turn each time we advance one unit.
 #
 # The fact that the encoding of numbers is now in phase gives us great
