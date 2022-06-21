@@ -32,7 +32,8 @@ the Quantum Fourier Transform (QFT).
 In this demo, we will not focus on understanding how the QFT is built,
 
 as we can find a great explanation in the
-`Codebook <https://codebook.xanadu.ai/F.1>`__, but we will develop the
+`Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
+
 intuition of how it works and what applications we can give it.
 
 
