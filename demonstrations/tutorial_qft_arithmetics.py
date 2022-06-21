@@ -28,13 +28,31 @@ how we can perform basic arithmetic computations using an ubiquitous tool in qua
 
 the Quantum Fourier Transform (QFT).
 
-
 In this demo, we will not focus on understanding how the QFT is built,
 
 as we can find a great explanation in the
 `Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
 
 intuition of how it works and what applications we can give it.
+
+Motivation
+----------
+
+The first question we have to answer before we start developing the whole idea is to understand if it makes sense. Is the
+goal purely academic or is it really something that is needed in certain algorithms?  Why implement in a quantum computer
+ something that I can do with a calculator?
+
+The first thing we might think is that this is something we have not needed so far. In algorithms like Deustch-Jozsa or
+Grover we have never needed it, or maybe we do? When working with this algorithm there is a concept that we will not get
+ tired of hearing, the _oracle_. This is a gate that behaves like a black box that provides us with results that interest
+ us for the algorithm.  However, this is not as nice as it seems. I am sorry to tell you that but oracles are not black boxes
+ that are going to give you. You have to build them, and of course, it is not an easy task!
+Normally, these oracles perform certain operations to define a function so in this demo we will look at building the most
+basic operations.
+
+The second question is why do we work with the QFT? There are other procedures to perform the basic operations, for example
+imitating the classical algorithm, but it has been seen that QFT needs less qubits to perform these operations, which is
+nowadays of vital importance.
 
 
 QFT representation
@@ -45,7 +63,7 @@ operations that are done with them. Our objective now is to learn how to add,
 
 subtract and multiply numbers using quantum devices. But we must keep in mind
 
-that, since we are working with qubits, —which can take the
+that, since we are working with qubits, —which as bits, can take the
 
 values 0 or 1—, we will represent the numbers in binary. For the
 
@@ -63,9 +81,7 @@ represented as a string of 1s and 0s which we will represent as the multi-qubit 
 .. math:: \vert \psi \rangle = \vert q_0q_1...q_{n-1}\rangle,
 
 
-where :math:`q_0` refers to the most representative bit. The formula
-
-to obtain the equivalent decimal number :math:`m` will be:
+where the formula to obtain the equivalent decimal number :math:`m` will be:
 
 
 .. math:: m= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
@@ -100,7 +116,7 @@ template to obtain the binary representation in a simple way:
 
 """
 
-
+######################################################################
 import pennylane as qml
 import matplotlib.pyplot as plt
 
@@ -109,15 +125,16 @@ dev = qml.device("default.qubit", wires=3)
 
 @qml.qnode(dev)
 @qml.compile()
-def circuit():
-    qml.BasisEmbedding(6, wires=range(3))
+def basis_embedding_circuit(m):
+    qml.BasisEmbedding(m, wires=range(3))
     return qml.state()
 
-
-qml.draw_mpl(circuit, show_all_wires=True)()
+m = 6
+qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
 plt.show()
 
 ######################################################################
+
 # As we can see, the first qubit —the 0-th wire— is placed on top and the rest of the qubits are
 
 # below it. However, this is not the only way we have to represent numbers.
@@ -192,7 +209,7 @@ def add_k_fourier(k, wires):
 
 
 @qml.qnode(dev)
-def circuit(m, k):
+def add_k_circuit(m, k):
     qml.BasisEmbedding(m, wires=range(n_wires))  # step 1
 
     qml.QFT(wires=range(n_wires))  # step 2
@@ -204,10 +221,11 @@ def circuit(m, k):
     return qml.sample()
 
 
-circuit(3, 4)
+print(f"The ket representation of the sum of 3 and 4 is {add_k_circuit(3,4)}")
 
 ######################################################################
 # Perfect, we have obtained :math:`0111` which is equivalent to the number :math:`7` in binary!
+# Note that this is a deterministic algorithm so that by executing a single shot we have the desired solution.
 # It is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
 # new basis, we can use it in a simple way.
@@ -267,7 +285,7 @@ def addition(wires_m, wires_k, wires_sol):
 
 
 @qml.qnode(dev)
-def circuit(m, k, wires_m, wires_k, wires_sol):
+def add_qubit_registers_circuit(m, k, wires_m, wires_k, wires_sol):
     # m and k codification
     qml.BasisEmbedding(m, wires=wires_m)
     qml.BasisEmbedding(k, wires=wires_k)
@@ -277,8 +295,8 @@ def circuit(m, k, wires_m, wires_k, wires_sol):
 
     return qml.sample(wires=wires_sol)
 
-
-print(circuit(7, 3, wires_m, wires_k, wires_sol))
+print(f"The ket representation of the sum of 7 and 3 is "
+      f"{add_qubit_registers_circuit(7, 3, wires_m, wires_k, wires_sol)}")
 
 qml.draw_mpl(circuit, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
 plt.show()
@@ -339,7 +357,7 @@ def multiplication(wires_m, wires_k, wires_sol):
 
 
 @qml.qnode(dev)
-def circuit(m, k):
+def multiplication_circuit(m, k):
     # m and k codification
     qml.BasisEmbedding(m, wires=wires_m)
     qml.BasisEmbedding(k, wires=wires_k)
@@ -350,9 +368,9 @@ def circuit(m, k):
     return qml.sample(wires=wires_sol)
 
 
-print(circuit(7, 3))
+print(f"The ket representation of the multiplication of 3 and 7 is {multiplication_circuit(3,7)}")
 
-qml.draw_mpl(circuit, show_all_wires=True)(7, 3)
+qml.draw_mpl(multiplication_circuit, show_all_wires=True)(3, 7)
 plt.show()
 
 
@@ -379,17 +397,17 @@ plt.show()
 
 # Grover’s algorithm to amplify the states whose product is the number we
 # are looking for. All we would need is to construct the oracle U, i.e., an
-# operator such that:
+# operator such that
 #
-# .. math:: U\vert m \rangle \vert k \rangle = \vert m \rangle \vert k \rangle \text{ if }m\times k \not = 21
+# .. math:: U\vert m \rangle \vert k \rangle = \vert m \rangle \vert k \rangle \text{ if }m\times k \not = 21,
 #
 # .. math:: U\vert m \rangle \vert k \rangle = -\vert m \rangle \vert k \rangle \text{ if }m\times k  = 21
 #
 # The idea of the oracle is as simple as this:
 #
-# -  use auxiliary registers to store the product
-# -  check if the product state is 10101 and in that case change the sign
-# -  execute the inverse of the circuit to clear the auxiliary qubits
+# -  use auxiliary registers to store the product,
+# -  check if the product state is 10101 and, in that case, change the sign,
+# -  execute the inverse of the circuit to clear the auxiliary qubits.
 #
 
 n = 21
