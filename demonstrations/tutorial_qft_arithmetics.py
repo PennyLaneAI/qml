@@ -17,7 +17,8 @@ Basic arithmetic with the QFT
 
 Throughout our demos we have seen a wide array of
 
-application of quantum computing to the field of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
+applications of quantum computing to the fields of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
+
 `chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ or `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems.
 All of them are complex challenges but, can we apply quantum computing to more fundamental
 tasks? Throughout this tutorial we will answer this question by showing
