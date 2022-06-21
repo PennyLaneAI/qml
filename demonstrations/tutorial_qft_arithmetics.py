@@ -76,7 +76,8 @@ For instance, the natural number 6
 is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
 
 
-Let’s see how we would represent all the numbers with 3 qubits.
+Let’s see how we would represent all the integers from 0 to 7 using product states of three qubits, using separate Bloch spheres for each qubit.  
+
 
 .. figure:: /demonstrations/qft_arithmetics/comp_basis.gif
    :width: 90%
