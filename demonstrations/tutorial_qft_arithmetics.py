@@ -24,7 +24,8 @@ applications of quantum computing to the fields of `machine learning <https://pe
 All of them are complex topics. So we might wonder: can we apply quantum computing to more fundamental
 
 tasks? Throughout this tutorial we will answer this question by showing
-how we can work with basic arithmetic using an important tool such as
+how we can perform basic arithmetic computations using an ubiquitous tool in quantum computing:
+
 the quantum Fourier Transform (QFT).
 
 In this case, we will not focus on understanding how the QFT is built,
