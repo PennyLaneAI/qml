@@ -348,7 +348,8 @@ plt.show()
 # did before. This time, we look for an operator Mul such that
 
 #
-# .. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\times k \rangle
+# .. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\times k \rangle.
+
 #
 # To understand the multiplication process, let’s suppose that we have to
 # multiply :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
