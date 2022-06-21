@@ -359,7 +359,8 @@ plt.show()
 # .. math:: k \times m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \times 2^{l-j-1}).
 
 #
-# or in other words, if :math:`k_i = 1` and :math:`m_i = 1` add
+# In other words, if :math:`k_i = 1` and :math:`m_i = 1`, we would add
+
 # :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where n and l
 # are the number of qubits with which we encode m and k respectively.
 #
