@@ -73,7 +73,8 @@ to obtain the equivalent decimal number :math:`m` will be:
 
 For instance, the natural number 6
 
-:math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
+is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert 110 \rangle = 1 \times 2^2 + 1\times 2^1+0\times 2^0 = 6`.
+
 
 Let’s see how we would represent all the numbers with 3 qubits.
 
