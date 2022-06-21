@@ -41,7 +41,8 @@ QFT representation
 -----------------
 
 Arithmetic is the part of mathematics that studies numbers and the
-operations that are done with them, that is, we will learn to add,
+operations that are done with them. Our objective now is to learn how to add,
+
 subtract and multiply numbers. But here something that we must take into
 account is that since we are working with qubits (which can take the
 values 0 or 1), we will represent the numbers in binary. For the
