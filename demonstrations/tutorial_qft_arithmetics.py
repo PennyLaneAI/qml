@@ -361,7 +361,8 @@ plt.show()
 #
 # In other words, if :math:`k_i = 1` and :math:`m_i = 1`, we would add
 
-# :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where n and l
+# :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where :math:`n` and :math:`l`
+
 # are the number of qubits with which we encode m and k respectively.
 #
 
