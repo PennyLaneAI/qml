@@ -60,7 +60,8 @@ standard for encoding numbers in binary. A binary number can be
 represented as a string of 1s and 0s which we will represent as the multi-qubit state
 
 
-.. math:: \vert q_0q_1...q_{n-1}\rangle,
+.. math:: \vert \psi \rangle = \vert q_0q_1...q_{n-1}\rangle,
+
 
 where :math:`q_0` refers to the most representative bit, so the formula
 to obtain the equivalent decimal number will be:
