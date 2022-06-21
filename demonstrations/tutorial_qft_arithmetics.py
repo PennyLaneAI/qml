@@ -279,7 +279,8 @@ circuit(3, 4)
 # In this case, we can understand the third register (which is initially
 # at 0) as a counter that will tally as many units as :math:`m` and
 
-# :math:`k` indicate. In this case, having the binary decomposition will
+# :math:`k` combined. The binary decomposition will
+
 # make it simple. If we have :math:`m = \vert q_0q_1q_2 \rangle` we will
 # have to add 1 to the counter if :math:`q_2 = 1` and not add anything
 # otherwise. Generically we should add :math:`2^{n-i-1}` units if the i-th
