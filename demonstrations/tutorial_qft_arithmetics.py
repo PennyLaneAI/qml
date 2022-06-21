@@ -180,7 +180,8 @@ plt.show()
 # In this basis, all the basic states will be represented via qubits in
 
 # the XY plane of the Bloch sphere each of them rotated by a certain
-# amount. How can we know what angle each qubit is rotated to represent a
+# amount. How do we know how much we must rotate each qubit to represent a certain number?
+
 # certain number? Well, actually is very easy! Suppose we are working with
 # :math:`n` qubits and we want to represent the number :math:`m` in
 # fourier basis. Then the j-th qubit will have the following phase:
