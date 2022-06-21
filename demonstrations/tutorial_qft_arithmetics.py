@@ -270,7 +270,8 @@ circuit(3, 4)
 
 # That is,
 
-# i.e., we look for a new operator :math:`\text{Sum}` such that:
+# we are looking look for a new operator :math:`\text{Sum}` such that
+
 #
 # .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle
 #
