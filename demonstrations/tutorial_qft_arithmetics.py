@@ -208,7 +208,8 @@ plt.show()
 # half a turn every time we add one to the number we are representing.
 
 #
-# The fact that the encoding of numbers is now in phase gives us great
+# The fact that the states encoding the numbers are now in phase gives us great
+
 # flexibility in carrying out our arithmetic operations. To see this,
 # let’s look at the following situation. We want to create an operator
 # :math:`\text{Sum}(k)` such that it takes a state :math:`\vert m \rangle`
