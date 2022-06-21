@@ -216,7 +216,8 @@ plt.show()
 
 # to the state :math:`\vert m + k\rangle`. A procedure to implement such a unitary
 
-# be as follows:
+# is the following.
+
 #
 # -  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
