@@ -174,7 +174,8 @@ plt.show()
 
 # below it. However, this is not the only way we have to represent numbers.
 
-# and we can represent them in different bases such as the fourier base.
+# We can represent them in different bases such as the so-called _Fourier base_.
+
 #
 # In this basis, all the basic states will be represented with qubits in
 # the XY plane of the Bloch sphere each of them rotated by a certain
