@@ -50,7 +50,8 @@ that, since we are working with qubits, —which can take the
 values 0 or 1—, we will represent the numbers in binary. For the
 
 purposes of this tutorial, we will assume that we are working with
-integers and therefore if we have :math:`n` qubits, we will be able to
+integers. Therefore, if we have :math:`n` qubits, we will be able to
+
 represent the numbers from :math:`0` to :math:`2^n-1`.
 
 Having said that, the first step is to remember what is the Pennylane
