@@ -189,7 +189,8 @@ plt.show()
 # Fourier basis. Then the j-th qubit will have a phase:
 
 #
-# .. math:: \alpha_j = \frac{m\pi}{2^{j}}
+# .. math:: \alpha_j = \frac{m\pi}{2^{j}}.
+
 #
 # Let’s see how to represent the numbers in the case of 3 qubits:
 #
