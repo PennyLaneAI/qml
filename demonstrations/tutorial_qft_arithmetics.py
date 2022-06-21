@@ -363,7 +363,8 @@ plt.show()
 
 # :math:`2^{n-i-1} \times 2^{l-j-1}` units to the counter, where :math:`n` and :math:`l`
 
-# are the number of qubits with which we encode m and k respectively.
+# are the number of qubits with which we encode :math:`m` and :math:`k` respectively.
+
 #
 
 wires_m = [0, 1, 2]
