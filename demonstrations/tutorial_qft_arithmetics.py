@@ -266,7 +266,8 @@ circuit(3, 4)
 
 #
 # In this particular algorithm, we have had to introduce :math:`k` in a
-# classical way. But let us imagine that what we are interested in is that
+# classical way. But suppose that what we are in specifying the integer to be added using another register of qubits. 
+
 # another register of qubits determine what is the quantity to be summed,
 # i.e., we look for a new operator :math:`\text{Sum}` such that:
 #
