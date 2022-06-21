@@ -100,58 +100,6 @@ template to obtain the binary representation in a simple way:
 
 """
 
-################## Provisional: I need the new version of BasisEmbedding so FORGET THIS CELL
-import pennylane as qml
-from pennylane.operation import Operation, AnyWires
-from pennylane.wires import Wires
-
-
-class BasisEmbedding(Operation):
-
-    num_wires = AnyWires
-    grad_method = None
-
-    def __init__(self, features, wires, do_queue=True, id=None):
-
-        if isinstance(features, int):
-            bin_string = f"{features:b}".zfill(len(wires))
-            features = [1 if d == "1" else 0 for d in bin_string]
-
-        wires = Wires(wires)
-        shape = qml.math.shape(features)
-
-        if len(shape) != 1:
-            raise ValueError(f"Features must be one-dimensional; got shape {shape}.")
-
-        n_features = shape[0]
-        if n_features != len(wires):
-            raise ValueError(
-                f"Features must be of length {len(wires)}; got length {n_features} (features={features})."
-            )
-
-        features = list(qml.math.toarray(features))
-
-        if not set(features).issubset({0, 1}):
-            raise ValueError(f"Basis state must only consist of 0s and 1s; got {features}")
-
-        self._hyperparameters = {"basis_state": features}
-
-        super().__init__(wires=wires, do_queue=do_queue, id=id)
-
-    @property
-    def num_params(self):
-        return 0
-
-    @staticmethod
-    def compute_decomposition(wires, basis_state):  # pylint: disable=arguments-differ
-        ops_list = []
-        for wire, bit in zip(wires, basis_state):
-            if bit == 1:
-                ops_list.append(qml.PauliX(wire))
-
-        return ops_list # End provisional!
-
-###############################################
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -162,7 +110,7 @@ dev = qml.device("default.qubit", wires=3)
 @qml.qnode(dev)
 @qml.compile()
 def circuit():
-    BasisEmbedding(6, wires=range(3))
+    qml.BasisEmbedding(6, wires=range(3))
     return qml.state()
 
 
@@ -245,7 +193,7 @@ def add_k_fourier(k, wires):
 
 @qml.qnode(dev)
 def circuit(m, k):
-    BasisEmbedding(m, wires=range(n_wires))  # step 1
+    qml.BasisEmbedding(m, wires=range(n_wires))  # step 1
 
     qml.QFT(wires=range(n_wires))  # step 2
 
@@ -321,8 +269,8 @@ def addition(wires_m, wires_k, wires_sol):
 @qml.qnode(dev)
 def circuit(m, k, wires_m, wires_k, wires_sol):
     # m and k codification
-    BasisEmbedding(m, wires=wires_m)
-    BasisEmbedding(k, wires=wires_k)
+    qml.BasisEmbedding(m, wires=wires_m)
+    qml.BasisEmbedding(k, wires=wires_k)
 
     # apply the addition circuit
     addition(wires_m, wires_k, wires_sol)
@@ -393,8 +341,8 @@ def multiplication(wires_m, wires_k, wires_sol):
 @qml.qnode(dev)
 def circuit(m, k):
     # m and k codification
-    BasisEmbedding(m, wires=wires_m)
-    BasisEmbedding(k, wires=wires_k)
+    qml.BasisEmbedding(m, wires=wires_m)
+    qml.BasisEmbedding(k, wires=wires_k)
 
     # Apply multiplication
     multiplication(wires_m, wires_k, wires_sol)
@@ -468,9 +416,9 @@ def factorization(n, wires_m, wires_k, wires_sol):
     multiplication(wires_m, wires_k, wires_sol)
 
     # Change sign to n
-    BasisEmbedding(2 ** len(wires_sol) - n - 1, wires=wires_sol)
+    qml.BasisEmbedding(2 ** len(wires_sol) - n - 1, wires=wires_sol)
     qml.ctrl(qml.PauliZ, control=wires_sol[:-1])(wires=wires_sol[-1])
-    BasisEmbedding(2 ** len(wires_sol) - n - 1, wires=wires_sol)
+    qml.BasisEmbedding(2 ** len(wires_sol) - n - 1, wires=wires_sol)
 
     # Uncompute multiplication
     qml.adjoint(multiplication)(wires_m, wires_k, wires_sol)
