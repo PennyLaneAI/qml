@@ -205,7 +205,8 @@ plt.show()
 
 # rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
 
-# half a turn each time we advance one unit.
+# half a turn every time we add one to the number we are representing.
+
 #
 # The fact that the encoding of numbers is now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this,
