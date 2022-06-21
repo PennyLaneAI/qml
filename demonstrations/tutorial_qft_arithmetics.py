@@ -186,7 +186,8 @@ plt.show()
 
 # :math:`n` qubits and we want to represent some the number :math:`m` in the
 
-# fourier basis. Then the j-th qubit will have the following phase:
+# Fourier basis. Then the j-th qubit will have a phase:
+
 #
 # .. math:: \alpha_j = \frac{m\pi}{2^{j}}
 #
