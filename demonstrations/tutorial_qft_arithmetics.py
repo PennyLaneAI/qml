@@ -283,7 +283,8 @@ circuit(3, 4)
 
 # make it simple. If we have :math:`m = \vert q_0q_1q_2 \rangle` we will
 # have to add 1 to the counter if :math:`q_2 = 1` and not add anything
-# otherwise. Generically we should add :math:`2^{n-i-1}` units if the i-th
+# otherwise. In general, we should add :math:`2^{n-i-1}` units if the :math:`i`-th
+
 # qubit is a 1 and 0 otherwise. As we can appreciate, this idea it is the
 # same of the controlled gate concept and we will apply a corresponding
 # phase if indeed the control qubit takes state 1.
