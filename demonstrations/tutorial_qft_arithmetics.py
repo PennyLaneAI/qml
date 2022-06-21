@@ -419,7 +419,8 @@ plt.show()
 ######################################################################
 # With this, we have already gained a large repertoire of interesting
 
-# operations that we can do but let’s give the idea one more twist and
+# operations that we can do, but let’s give the idea one more twist and
+
 # apply what we have learned in an example.
 #
 # Let’s imagine now that we want just the opposite: to factor the
