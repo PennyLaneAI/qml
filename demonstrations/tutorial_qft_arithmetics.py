@@ -65,7 +65,8 @@ represented as a string of 1s and 0s which we will represent as the multi-qubit 
 
 where :math:`q_0` refers to the most representative bit. The formula
 
-to obtain the equivalent decimal number will be:
+to obtain the equivalent decimal number :math:`m` will be:
+
 
 .. math:: m:= \sum_{i = 0}^{n-1}2^{n-1-i}q_i.
 
