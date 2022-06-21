@@ -200,7 +200,8 @@ plt.show()
 #
 # As we can see, the least significant qubit will rotate
 
-# :math:`\frac{1}{8}` of a turn as we increase the number. The next qubit,
+# :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
+
 # :math:`\frac{1}{4}` turn and finally the most significant qubit will go
 # half a turn each time we advance one unit.
 #
