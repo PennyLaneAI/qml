@@ -17,20 +17,21 @@ mathematics. The model sparked the development of the error-correcting `surface 
 <https://arxiv.org/pdf/1208.0928.pdf>`__ , an essential category of error correction models. But why is the
 model so useful for error correction?
 
-To answer that question, we can to delve into mathematics and condensed matter physics.
-Viewing the model as a description of spins in a really exotic magnet allows us to start
+We delve into mathematics and condensed matter physics to answer that very question.
+Viewing the model as a description of spins in an exotic magnet allows us to start
 analyzing the model as a material. What kind of material is it? The toric code is an
 example of a topological state of matter.
 
-A state of matter, or phase, cannot become a different phase without some kind of discontinuity
+A state of matter, or phase, cannot become a different phase without some discontinuity
 in the physical properties as coefficients in the Hamiltonian change. For example, ice cannot
 become water without a discontinuity in density as the temperature changes. The ground state
-of a **topological** state of matter cannot be smoothly deformed to a non-entangled state
+of a **topological** state of matter cannot smoothly deform to a non-entangled state
 without a phase transition. Entanglement, and more critically *long-range* entanglement,
 is a key hallmark of a topological state of matter.
 
-This exotic phase cannot be detected by local measurements but can only be measured across the 
-entire system. To better consider this type of property, consider the parity of the number of 
+Local measurements cannot detect topological states of matter. We have to consider the
+entire system to determine a topological phase.
+To better consider this type of property, consider the parity of the number of 
 dancers on a dance floor. Does everyone have a partner, or is there an odd person out? To 
 measure that, we have to look at the entire system.
 
@@ -46,17 +47,17 @@ the object as a whole can you detect the single hole.
     :width: 70%
 
 In this demo, we will be looking at the degenerate ground state and the
-excitations of the toric code model. The toric code was initialized
-proposed in “Fault-tolerant quantum computation by anyons” by Kitaev,
-and this demo was inspired by “Realizing topologically ordered states on
-a quantum processor” by K. J. Satzinger et al. For further reading, I
+excitations of the toric code model. The toric code was initially
+proposed in “Fault-tolerant quantum computation by anyons” by Kitaev. 
+This demo was inspired by “Realizing topologically ordered states on
+a quantum processor” by K. J. Satzinger et al. For further reading, I
 recommend “Quantum Spin Liquids” by Lucile Savary and Leon Balents. (add
 links and proper citations and stuff)
 
 The Model
 ---------
 
-What is the source of all this interesting physics? The Hamiltonian is:
+What is the source of all this fascinating physics? The Hamiltonian is:
 
 .. math::
    \mathcal{H} = -\sum_s S_s - \sum_p P_p
@@ -72,7 +73,7 @@ In the most common formulation of the model, sites live on
 the edges of a square lattice. In this formulation, the “plaquette” operators are products of Pauli X operators on all the sites
 in a square, and the "star" operators are products of Pauli Z operators on all the sites bordering a vertex.
 
-The model can also be viewed as a checkerboard of alternating square
+Instead, we can view the model as a checkerboard of alternating square
 types. In this formulation, all sites :math:`i` and :math:`j` are the vertices
 of a square lattice.
 Each square is a group of four sites, and adjacent squares
@@ -88,7 +89,7 @@ We will be embedding the lattice on a torus via periodic boundary
 conditions. Periodic boundary conditions basically “glue” the bottom of
 the lattice to the top of the lattice and the left to the right.
 
-This matching is done with modular arithemetic. Any site at ``(x,y)`` is
+Modular arithmetic accomplishes this matching. Any site at ``(x,y)`` is
 the same as a site at ``(x+width, y+height)``.
 
 .. figure:: ../demonstrations/toric_code/converting_to_torus.png
@@ -116,15 +117,17 @@ all_sites = [(i, j) for i, j in product(range(width), range(height))]
 ######################################################################
 # For our wire labels, we will be using an `Immutable Data Class <https://realpython.com/python-data-classes/#immutable-data-classes>`__ .
 # PennyLane allows wire labels to be any **hashable** object, but iterable wire labels are currently not supported.
-# Therefore we use a frozen dataclass to easily represent individual wires by a row and column position.
+# Therefore we use a frozen dataclass to represent individual wires by a row and column position.
 #
+
 
 @dataclass(frozen=True)
 class Wire:
-    i:int
-    j:int
+    i: int
+    j: int
 
-example_wire = Wire(0,0)
+
+example_wire = Wire(0, 0)
 print("Example wire: ", example_wire)
 print("At coordinates: ", example_wire.i, example_wire.j)
 
@@ -133,7 +136,7 @@ print("At coordinates: ", example_wire.i, example_wire.j)
 # Setting up Operators
 # --------------------
 #
-# For each type of group operator (X and Z) we will have two different
+# For each type of group operator (X and Z), we will have two different
 # lists, the “sites” and the “ops”. The “sites” are tuples and will include virtual
 # sites off the edge of the lattice that match up with locations on the
 # other side. For example, the site ``(6, 1)`` denotes the real location
@@ -167,7 +170,7 @@ print("First operator: ", zgroup_ops[0])
 ######################################################################
 # We will later use the X Group operator sites to prepare the ground
 # state, so the order here is important. One group needs a slightly
-# different order in due to interference with the periodic boundary
+# different order due to interference with the periodic boundary
 # condition.
 #
 
@@ -190,9 +193,9 @@ for x, y in product(range(width // 2), range(height)):
 # How can we best visualize these groups of four sites?
 #
 # We use matplotlib to show each group of four sites as a Polygon patch,
-# colored according to the type of group. The ``misc_plot_formatting`` function
-# just performs some minor styling improvements that will
-# be performed repeated throughout this demo. The dotted horizontal lines and 
+# coloured according to the type of group. The ``misc_plot_formatting`` function
+# performs some minor styling improvements
+# repeated throughout this demo. The dotted horizontal lines and
 # dashed vertical lines denote where we glue our boundaries together.
 #
 
@@ -236,11 +239,11 @@ plt.show()
 #
 #      [S_s, P_p] = 0.
 #
-# Since they commute, the wavefunction can be an eigenstate of each group operator individually. To minimize
-# the energy of the Hamiltonian on the system as a whole, we can just minimize the contribution of each group operator.
+# Since they commute, the wavefunction can be an eigenstate of each group operator independently. To minimize
+# the energy of the Hamiltonian on the system as a whole, we can minimize the contribution of each group operator.
 # Due to the negative coefficients in the Hamiltonian, we need to maximize the
-# eigenvalue an individual operator to minimize the contribution of its term.
-# The maximum eigenvalue for each operator is simply one. We can turn this
+# expectation value of each operator.
+# The maximum eigenvalue for each operator is :math:`+1`. We can turn this
 # into a constraint on our ground state:
 #
 # .. math::
@@ -260,7 +263,7 @@ plt.show()
 #    For extra understanding, confirm that this ground state obeys the constraints using pen and paper.
 #
 # This formula is a product of unitaries :math:`U_p`. If we can figure out how to apply a single
-# :math:`U_p` using a quantum computer's operations, we can simply apply that decomposition
+# :math:`U_p` using a quantum computer's operations, we can apply that decomposition
 # for every :math:`p` in the product.
 #
 # To better understand how to decompose :math:`U_p`, let’s write
@@ -281,13 +284,12 @@ plt.show()
 #
 # This decomposition for :math:`U_p` holds only when the initial Hadamard
 # qubit begins in the :math:`|0\rangle` state, so we need to be careful in
-# choosing which qubit to apply the initial Hadamard gate to. This is the
-# reason why we rotated the order for a single X Group on the right border
+# the choice of the Hadamard's qubit. This restriction is
+# why we rotated the order for a single X Group on the right border
 # earlier.
 #
 # We will also not need to prepare the final X Group that contains the
-# four edges of the lattice, as it will already be prepared by preparation
-# of the surrounding groups.
+# four edges of the lattice.
 #
 # Now let’s actually put these together into a circuit!
 #
@@ -305,12 +307,12 @@ def state_prep():
 @qml.qnode(dev, diff_method=None)
 def circuit():
     state_prep()
-    return [qml.expval(op) for op in xgroup_ops+zgroup_ops]
+    return [qml.expval(op) for op in xgroup_ops + zgroup_ops]
 
 
 ######################################################################
-# From this QNode, we can calculate the expectation values of the
-# individual operators and the total energy of the system.
+# From this QNode, we can calculate the group operators' expectation
+# values and the system's total energy.
 #
 
 n_xgroups = len(xgroup_ops)
@@ -330,40 +332,37 @@ print("Total energy: ", E0)
 # -----------
 #
 # Quasiparticles allow physicists to describe complex
-# systems as interacting particles in a vacuum. Common examples of
+# systems as interacting particles in a vacuum. Examples of
 # quasiparticles include electrons and holes in semiconductors, phonons,
 # and magnons.
 #
-# Imagine trying to describe the traffic on a road. We could either:
+# Imagine trying to describe the traffic on the road. We could either explicitly
+# enumerate the location of each vehicle or list the positions and severities of traffic jams.
 #
-# -  explicitly enumerate the location of each vehicle,
-# -  describe the locations and severities of traffic jam.
-#
-# The first option provides the complete information about the system but
-# is much more difficult to work with. For most purposes, we can just work
+# The first option provides complete information about the system but
+# is much more challenging to analyze. For most purposes, we can work
 # with information about how the traffic deviates from a baseline. In
 # semiconductors, we don’t write out the wavefunction for every single
 # electron. We instead use electrons and holes. Neither quasiparticle
-# electrons or holes are fundamental particles like an electron or
+# electrons nor holes are fundamental particles like an electron or
 # positron in a vacuum. Instead, they are useful descriptions of how the
 # wavefunction differs from its ground state.
 #
 # While the electrons and holes of a metal behave just like electrons and
 # positrons in a vacuum, some condensed matter systems contain
 # quasiparticles that cannot or do not exist as fundamental particles.
-#
 # The excitations of the toric code are one such example. To find these quasiparticles,
 # we look at states that are *almost* the ground state, such as the ground state
 # with a single operator applied to it.
 #
-# Suppose we apply a pertubation to the ground state in the form of a single
+# Suppose we apply a perturbation to the ground state in the form of a single
 # X gate at location :math:`i` :
 #
 # .. math::
 #
 #    | \phi \rangle = X_i | G \rangle.
 #
-# Two Z group operators :math:`S` contain individual Z operators at that
+# Two Z group operators :math:`S_s` contain individual Z operators at that
 # same site :math:`i`:. The noise term :math:`X_i` will anti-commute with both
 # of these group operators:
 #
@@ -371,32 +370,35 @@ print("Total energy: ", E0)
 #
 #    S_s X_i = \left( Z_i Z_a Z_b Z_c \right) X_i = - X_i S_s.
 #
-# Using this relation, we can determine the eigenvalue of the Z group
-# operators on the pertubed state:
+# Using this relation, we can determine the expectation value of the Z group
+# operators with the altered state:
 #
 # .. math::
 #
 #    S_s |\phi\rangle = S_s X_i |G\rangle = - X_i S_s |G\rangle = - X_i |G\rangle = - |\phi\rangle.
 #
-# :math:`S_s` now has an eigenvalue of :math:`-1`.
+# .. math::
 #
-# Applying a single X operator noise term changes the eigenvalues of *two* Z group operators.
+#    \langle \phi | S_s | \phi \rangle = -1
+#
+# :math:`S_s` now has an expectation value of :math:`-1`.
+#
+# Applying a single X operator noise term changes the expectation value of *two* Z group operators.
 #
 # This analysis repeats for the effect of a Z operator on the X Group
-# eigenvalue. A single Z operator noise term changes the eigenvalues of *two*
+# measurement. A single Z operator noise term changes the expectation values of *two*
 # X group operators.
 #
-# Each group with a flipped eigenvalue is considered an excitation. In the
+# Each group with a negative expectation value is considered an excitation. In the
 # literature, you will often see a Z Group excitation
 # :math:`\langle S_s \rangle = -1` called an “electric” :math:`e` excitation and
 # an X Group excitation :math:`\langle P_p \rangle = -1` called a
-# “magnetic” :math:`m` excitation. You may also see inclusion of an identity
+# “magnetic” :math:`m` excitation. You may also see the inclusion of an identity
 # :math:`\mathbb{I}` particle for the ground state and the combination
 # particle :math:`\Psi` consisting of a single :math:`e` and a single :math:`m`
 # excitation.
 #
-# Let’s create a QNode where we can apply these pertubations:
-#
+# Let’s create a QNode where we can apply these perturbations:
 
 
 @qml.qnode(dev, diff_method=None)
@@ -409,12 +411,12 @@ def excitations(x_sites, z_sites):
     for s in z_sites:
         qml.PauliZ(Wire(*s))
 
-    return [qml.expval(op) for op in xgroup_ops+zgroup_ops]
+    return [qml.expval(op) for op in xgroup_ops + zgroup_ops]
 
 
 ######################################################################
 # What are the expectation values when we apply a single X operation?
-# We see we have indeed flipped the eigenvalues for two groups.
+# Two Z group measurements have indeed changed signs.
 #
 
 single_x = [(1, 2)]
@@ -426,14 +428,15 @@ print("ZGroup: ", z_expvals)
 
 
 ######################################################################
-# Instead of interpreting the state via the eigenvalues of the operators,
+# Instead of interpreting the state via the expectation values of the operators,
 # we can view the state as occupation numbers of the corresponding
-# quasiparticles. A group with an eigenvalue of :math:`+1` is in the
+# quasiparticles. A group with an expectation value of :math:`+1` is in the
 # ground state and thus has an occupation number of :math:`0`. If the
 # eigenvalue is :math:`-1`, then a quasiparticle exists in that location.
 #
 
 occupation_numbers = lambda expvals: 0.5 * (1 - expvals)
+
 
 def print_info(x_expvals, z_expvals):
     E = -sum(x_expvals) - sum(z_expvals)
@@ -448,7 +451,7 @@ print_info(x_expvals, z_expvals)
 
 
 ######################################################################
-# Since we are going to plot the same thing many times, we can group the
+# Since we will plot the same thing many times, we can group the
 # code into a function to easily call later.
 #
 
@@ -481,14 +484,12 @@ def excitation_plot(x_excite, z_excite):
 
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
-
 ax.scatter(*zip(*single_x), color="maroon", s=100)
-
 plt.show()
 
 
 ######################################################################
-# Now what if we apply a Z operation instead at the same site? We instead
+# What if we apply a Z operation instead at the same site? We instead
 # get two X Group excitations.
 #
 
@@ -502,28 +503,27 @@ print_info(x_expvals, z_expvals)
 #
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
-
 ax.scatter(*zip(*single_z), color="navy", s=100)
-
 plt.show()
 
 ######################################################################
-# What happens if we apply the same pertubation twice at the same
-# location? We regain the ground state. 
+# What happens if we apply the same pertubartion twice at one
+# location? We regain the ground state.
 #
 # The excitations of the toric code are
-# Majorana particles, particles who are their own antiparticles. While
+# Majorana particles: particles that are their own antiparticles. While
 # postulated to exist in standard particle physics, Majorana particles
 # have only been experimentally seen as quasiparticle excitations in
 # materials.
 #
 # We can think of the second operation as creating another set of
-# excitations at the same location that annihilate the existing particles.
+# excitations at the same location. This second pair then
+# annihilates the existing particles.
 #
 
 single_z = [(1, 2)]
 
-expvals = excitations([], single_z+single_z)
+expvals = excitations([], single_z + single_z)
 x_expvals, z_expvals = separate_expvals(expvals)
 
 print_info(x_expvals, z_expvals)
@@ -531,17 +531,16 @@ print_info(x_expvals, z_expvals)
 
 ######################################################################
 # Moving Excitations and String Operators
-# ---------------------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# What if we create a second set of particles such that one of the new
-# particles overlaps with an existing particle? Then one old particle and
-# one new particle annihilate each other. We are left we one of the old
-# particles and one new particle, so we still have two particles in total.
+# What if we create a second set of particles such that one of the new particles
+# overlaps with an existing particle? One old and one new particle annihilate
+# each other. One old and one new particle remain. We still have two particles
+# in total.
 #
-# We can think about the situation as creating a new pair of particles
-# where two particles cancel each other out, but we can also view the
-# application of a new pertubation as moving one of the excitations. Let’s
-# see what that looks like in code:
+# Alternatively, we can view the second operation as moving a single excitation.
+#
+# Let’s see what that looks like in code:
 #
 
 two_z = [(1, 2), (2, 2)]
@@ -555,14 +554,12 @@ print_info(x_expvals, z_expvals)
 #
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
-
 ax.plot(*zip(*two_z), color="navy", linewidth=10)
-
 plt.show()
 
 
 ######################################################################
-# In that example we just moved an excitation a little. How about we try
+# In that example, we just moved an excitation a little. How about we try
 # moving it even further?
 #
 
@@ -577,14 +574,12 @@ print_info(x_expvals, z_expvals)
 #
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
-
 ax.plot(*zip(*long_string), color="navy", linewidth=10)
-
 plt.show()
 
 ######################################################################
-# We end up with these strings of sites that connect pairs of particles.
-#
+# We end up with strings of operations that connect pairs of particles.
+
 # We can use a branch of topology called `Homotopy <https://en.wikipedia.org/wiki/Homotopy>`__
 # to describe the relationship between these strings and the wavefunction.
 # Two paths :math:`s_1` and :math:`s_2` are
@@ -595,9 +590,9 @@ plt.show()
 #
 #    s_1 \sim s_2
 #
-# For the next picture, assume the red “X” is some kind of defect
-# in space, like a tear in a sheet or some kind of object. The two blue
-# paths are equivalent to each other because you can smoothly move one
+# In the following picture, assume the red “X” is a defect
+# in space, like a tear in a sheet. The two blue
+# paths are equivalent because you can smoothly move one
 # into the other. You cannot move the blue path into the green path
 # without going through the defect, so they are not equivalent to each
 # other.
@@ -606,21 +601,22 @@ plt.show()
 #     :align: center
 #     :width: 40%
 #
-# We can divide the set of all possible paths into *Homotopy classes*. A homotopy class
+# We can divide the set of all possible paths into **Homotopy classes**. A homotopy class
 # is an `equivalence class <https://en.wikipedia.org/wiki/Equivalence_class>`__ under
 # homotopy. Every member of the same homotopy class can be deformed into every other member of the
 # same class, and
 # members of different homotopy classes cannot be deformed into each other. All the
 # homotopy classes for a given space :math:`S` form its
-# `homotopy group <https://en.wikipedia.org/wiki/Homotopy_group>`__, denoted by :math:`\pi_1(S)`.
+# `first homotopy group <https://en.wikipedia.org/wiki/Homotopy_group>`__, denoted by :math:`\pi_1(S)`.
+# The first homotopy group of a space is also called its *fundamental group*.
 #
-# What if we decided to move the particle to it’s final location via a
-# different route?
+# How do these mathematical concepts apply to the toric code model?
+# To find out, let's look at a string of Z operations homotopic to the one above.
 #
-# The below string gets us to the exact same final state.
+# This next string creates the same final state.
 # Only the homotopy class of the path used to create the excitations influences
-# the occupation numbers and total energy of the state.
-# As long as the endpoints are the same and the path doesn’t
+# the occupation numbers and total energy.
+# If the endpoints are the same and the path doesn’t
 # wrap around the torus or other particles, the details do not
 # impact any observables.
 #
@@ -636,18 +632,15 @@ print_info(x_expvals, z_expvals)
 #
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
-
 ax.plot(*zip(*equivalent_string), color="navy", linewidth=10)
-
 plt.show()
 
-
 ######################################################################
-# Looping the torus
-# ^^^^^^^^^^^^^^^^^
+# Contractible loops
+# ^^^^^^^^^^^^^^^^^^
 #
 # We can also have a loop of operations that doesn’t create any new
-# excitations. The loop creates a pair, moves one around in a circle, and
+# excitations. The loop forms a pair, moves one around in a circle, and
 # then annihilates the two particles again.
 #
 
@@ -670,8 +663,8 @@ plt.show()
 # The loop doesn’t affect the positions of any excitations, but does it
 # affect the state at all?
 #
-# To answer that question, we will look at the probabilities instead of
-# the expectation values of tensor observables.
+# We will look at the probabilities instead of the expectation values
+# to answer that question.
 #
 
 
@@ -695,30 +688,31 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractable_prob
 
 
 ######################################################################
-# This result is explained, once again, by the fact that the toric code
-# only cares about the homotopy class of the paths. All paths we
-# can smoothly deform into each other will give the same result. The
-# contractible loop can be smoothly deformed away to nothing, so the
-# state with the contractible loop is the same state as a state with no loop.
+# Again, the toric code's dependence on the homotopy of the path explains
+# this result. All paths we can smoothly deform into each other will give
+# the same result. The contractible loop can be smoothly deformed to nothing,
+# so the state with the contractible loop is the same as a state with no loop.
 #
 
 
 ######################################################################
+# Looping the torus
+# ^^^^^^^^^^^^^^^^^
 # On the torus, we have four types of unique paths:
 #
 # -  The trivial path that contracts to nothing
 # -  A horizontal loop around the boundaries
 # -  A vertical loop around the boundaries
-# -  A loop around both the horiztonal and vertical boundaries
+# -  A loop around both the horizontal and vertical boundaries
 #
 # .. figure:: ../demonstrations/toric_code/types_of_loops.png
 #     :align: center
 #     :width: 50%
 #
 # Each of these paths represents a member of the first homotopy group
-# of the torus: :math:`\pi_1(T) = \mathbb{Z}^2`.
+# of the torus: :math:`\pi_1(T) = \mathbb{Z}^2` modulo 2.
 #
-# All of these do not create any net excitations, so the wavefunction
+# None of these loops create net excitations, so the wavefunction
 # remains in the ground state.
 #
 
@@ -745,7 +739,7 @@ combo_probs = probs(horizontal_loop + vertical_loop, [])
 
 
 ######################################################################
-# While both X and Z operations can change the group operator eigenvalues
+# While X and Z operations can change the group operator expectation values
 # and create quasiparticles, only X operators can change the probability
 # distribution. Applying a Z operator would only rotate the phase of the
 # state and not change any amplitudes. Hence we only use loops of X
@@ -763,11 +757,13 @@ print("Maximum difference in probabilities: ", max(abs(null_probs - horizontal_p
 print("Maximum probability: ", max(null_probs))
 
 ######################################################################
-# The size of the difference 
-# So this isn’t just random fluctuations and errors.
+# These numbers seem small, but remember we have 24 qubits, and thus
+# :math:`2^{24}=16777216` probability components. Since the maximum difference
+# in probabilities is the same size as the maximum probability, we know
+# this isn’t just random fluctuations and errors.
 #
-# That was just comparing a horizontal “x” loop with the initial ground
-# state. How about the other two types of loops? Let’s loop over all
+# That compared a horizontal “x” loop with the initial ground
+# state. How about the other two types of loops? Let’s iterate over all
 # combinations of two probability distributions to see if any match.
 #
 
@@ -778,19 +774,19 @@ print("\t" + "\t".join(names))
 
 for name, probs1 in zip(names, all_probs):
 
-    comparisons = (format(np.allclose(probs1, probs2), ".0f") for probs2 in all_probs)
+    comparisons = (str(np.allclose(probs1, probs2)) for probs2 in all_probs)
     print(name, "\t", "\t".join(comparisons))
 
 
 ######################################################################
-# This shows us we have four distinct ground states. More importantly,
+# This table shows the model has four distinct ground states. More importantly,
 # these ground states are separated from each other by long-range
-# operations. We have to perform a loop of operations across the entire
-# lattice in order to switch ground state.
+# operations. We must perform a loop of operations across the entire
+# lattice to switch ground state.
 #
-# This four way degeneracy is the source of the error correction in the
-# toric code. Instead 24 qubits, we work with 2 logical qubits (4 states)
-# that are cleanly separated from each other by topological operations.
+# This four-way degeneracy is the source of the error correction in the
+# toric code. Instead of 24 qubits, we work with two logical qubits (4 states)
+# that are well separated from each other by topological operations.
 #
 # .. note::
 #
@@ -798,9 +794,11 @@ for name, probs1 in zip(names, all_probs):
 #    loops the same boundaries twice.
 #
 # In this section, we've seen that the space of ground states is directly
-# equivalent to the first homotopy group of the lattice it is defined on.
-# Since our lattice is on a torus, the space of ground states is :math:`\pi_1(T) = \mathbb{Z}^2`.
-# What if we defined the model on a differently shaped lattice? Then the space of the 
+# related to the first homotopy group of the lattice. The first homotopy group
+# of a torus is :math:`\pi_1(T) = \mathbb{Z}^2`, and the space of ground states is
+# that group modulo two, :math:`\mathbb{Z}_2^2`
+#
+# What if we defined the model on a differently shaped lattice? Then the space of the
 # ground state would change to reflect the first homotopy group of that space.
 # For example, if the model was defined on a sphere, then only a single unique ground state would exist.
 # Adding defects like missing sites to the lattice also changes the topology. Error correction
@@ -816,14 +814,14 @@ for name, probs1 in zip(names, all_probs):
 #
 # The hole in the center of the donut isn’t the only thing that prevents
 # paths from smoothly deforming into each other. We don’t yet know if we
-# can deform paths past other particles.
+# can distort paths past other particles.
 #
 # When one indistinguishable fermion of spin 1/2 orbits another fermion of
 # the same type, the combined wavefunction picks up a relative phase of negative
 # one. When fermions of different types orbit each other, the state is
-# unchanged. For example, if an electron goes around a proton and comes
-# back to the same spot, the wavefunction is unchanged. If a boson orbits
-# around a different type of boson, again the wavefunction is unchanged.
+# unchanged. For example, if an electron goes around a proton and returns
+# to the same spot, the wavefunction is unchanged. If a boson orbits
+# around a different type of boson, again, the wavefunction is unchanged.
 #
 # What if a particle went around a different type of particle and
 # everything picked up a phase? Would it be a boson or a fermion?
@@ -831,12 +829,12 @@ for name, probs1 in zip(names, all_probs):
 # It would be something else entirely: an anyon. An anyon is anything that
 # doesn’t cleanly fall into the boson/ fermion categorization of particles.
 #
-# While the toric code itself is just an extremely useful mathematical
-# model, anyons actually exist in real materials. For example, the
+# While the toric code is just an extremely useful mathematical
+# model, anyons exist in physical materials. For example,
 # fractional quantum Hall systems have anyonic particles with spin
 # :math:`1/q` for different integers :math:`q`.
 #
-# To measure the exchange statistics of a Z Group excitation and a X group
+# To measure the exchange statistics of a Z Group excitation and an X group
 # excitation, we need to prepare at least one of each type of particle and then
 # orbit one around the other.
 #
@@ -847,7 +845,7 @@ prep1 = [(1, 1), (2, 1)]
 prep2 = [(1, 3)]
 loop1 = [(2, 3), (2, 2), (2, 1), (3, 1), (3, 2), (2, 3)]
 
-expvals = excitations(prep1, prep2+loop1)
+expvals = excitations(prep1, prep2 + loop1)
 x_expvals, z_expvals = separate_expvals(expvals)
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
@@ -859,7 +857,7 @@ plt.show()
 
 ######################################################################
 # While we managed to loop one particle around the other, we did not
-# extract the relative phase applied to the wavefunction.  To extract
+# extract the relative phase applied to the wavefunction.  To procure
 # this information, we will need the *Hadamard test*.
 
 
@@ -869,7 +867,7 @@ plt.show()
 #
 # The `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`__
 # extracts the real component of a unitary operation
-# :math:`\text{Re}\left(\langle \psi | U \rangle \right)`. If the Unitary operation just applies a phase
+# :math:`\text{Re}\left(\langle \psi | U \rangle \right)`. If the unitary operation just applies a phase
 # :math:`U |\psi\rangle = e^{i \phi} |\psi \rangle`, the measured quantity reduces to :math:`\cos (\phi)`.
 #
 # The steps in the Hadamard test are:
@@ -890,7 +888,7 @@ plt.show()
 #    For extra understanding, validate the Hadamard test algorithm using pen and paper.
 #
 # Below we implement this algorithm in PennyLane and measure the mutual exchange statistics
-# of a X Group excitation and a Z Group excitation.
+# of an X Group excitation and a Z Group excitation.
 
 dev_aux = qml.device("lightning.qubit", wires=[Wire(*s) for s in all_sites] + ["aux"])
 
@@ -934,7 +932,7 @@ print("Move x excitation around z excitation: ", x_around_z)
 #
 #    * A Z Group excitation and a Z Group Excitation
 #    * An X Group excitation and an X Group Excitation
-#    * A combination :math:`\Psi` particle and a X Group excitation
+#    * A combination :math:`\Psi` particle and an X Group excitation
 #    * A combination :math:`\Psi` particle and a Z Group excitation
 #    * A combination :math:`\Psi` particle with another :math:`\Psi` particle
 #
