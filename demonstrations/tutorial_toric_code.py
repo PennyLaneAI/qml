@@ -12,9 +12,9 @@ Toric Code Topology
 Introduction
 ------------
 
-The `toric code model <https://arxiv.org/abs/quant-ph/9707021>`__ is a treasure trove of interesting physics and
-mathematics. The model sparked the development of the error-correcting `surface codes 
-<https://arxiv.org/pdf/1208.0928.pdf>`__ , an essential category of error correction models. But why is the
+The *toric code model* [#Kitaev2003] is a treasure trove of interesting physics and
+mathematics. The model sparked the development of the error-correcting surface codes [#surface_codes]_ ,
+an essential category of error correction models. But why is the
 model so useful for error correction?
 
 We delve into mathematics and condensed matter physics to answer that very question.
@@ -48,11 +48,11 @@ the object as a whole can you detect the single hole.
 
 In this demo, we will be looking at the degenerate ground state and the
 excitations of the toric code model. The toric code was initially
-proposed in “Fault-tolerant quantum computation by anyons” by Kitaev. 
+proposed in “Fault-tolerant quantum computation by anyons” by Kitaev [#Kitaev2003]_. 
 This demo was inspired by “Realizing topologically ordered states on
-a quantum processor” by K. J. Satzinger et al. For further reading, I
-recommend “Quantum Spin Liquids” by Lucile Savary and Leon Balents. (add
-links and proper citations and stuff)
+a quantum processor” by K. J. Satzinger et al [#google_paper]_. For further reading, I
+recommend “Quantum Spin Liquids” by Lucile Savary and Leon Balents [#savary_balents]_ and
+"A Pedogogical Overview on 2D and 3D Toric Codes and the Origin of their Topological Orders" [#Resende]_ .
 
 The Model
 ---------
@@ -125,7 +125,6 @@ all_sites = [(i, j) for i, j in product(range(width), range(height))]
 class Wire:
     i: int
     j: int
-
 
 example_wire = Wire(0, 0)
 print("Example wire: ", example_wire)
@@ -243,7 +242,7 @@ plt.show()
 # the energy of the Hamiltonian on the system as a whole, we can minimize the contribution of each group operator.
 # Due to the negative coefficients in the Hamiltonian, we need to maximize the
 # expectation value of each operator.
-# The maximum eigenvalue for each operator is :math:`+1`. We can turn this
+# The maximum possible expectation value for each operator is :math:`+1`. We can turn this
 # into a constraint on our ground state:
 #
 # .. math::
@@ -296,13 +295,11 @@ plt.show()
 
 dev = qml.device("lightning.qubit", wires=[Wire(*s) for s in all_sites])
 
-
 def state_prep():
     for op in xgroup_ops[0:-1]:
         qml.Hadamard(op.wires[0])
         for w in op.wires[1:]:
             qml.CNOT(wires=[op.wires[0], w])
-
 
 @qml.qnode(dev, diff_method=None)
 def circuit():
@@ -432,11 +429,10 @@ print("ZGroup: ", z_expvals)
 # we can view the state as occupation numbers of the corresponding
 # quasiparticles. A group with an expectation value of :math:`+1` is in the
 # ground state and thus has an occupation number of :math:`0`. If the
-# eigenvalue is :math:`-1`, then a quasiparticle exists in that location.
+# expectation value is :math:`-1`, then a quasiparticle exists in that location.
 #
 
 occupation_numbers = lambda expvals: 0.5 * (1 - expvals)
-
 
 def print_info(x_expvals, z_expvals):
     E = -sum(x_expvals) - sum(z_expvals)
@@ -446,12 +442,11 @@ def print_info(x_expvals, z_expvals):
     print("X Group occupation numbers: ", occupation_numbers(x_expvals))
     print("Z Group occupation numbers: ", occupation_numbers(z_expvals))
 
-
 print_info(x_expvals, z_expvals)
 
 
 ######################################################################
-# Since we will plot the same thing many times, we can group the
+# Since we will plot the same thing many times, we group the following
 # code into a function to easily call later.
 #
 
@@ -579,7 +574,7 @@ plt.show()
 
 ######################################################################
 # We end up with strings of operations that connect pairs of particles.
-
+#
 # We can use a branch of topology called `Homotopy <https://en.wikipedia.org/wiki/Homotopy>`__
 # to describe the relationship between these strings and the wavefunction.
 # Two paths :math:`s_1` and :math:`s_2` are
@@ -644,9 +639,9 @@ plt.show()
 # then annihilates the two particles again.
 #
 
-contractable_loop = [(1, 1), (2, 1), (3, 1), (4, 1), (4, 2), (3, 3), (2, 3), (1, 2)]
+contractible_loop = [(1, 1), (2, 1), (3, 1), (4, 1), (4, 2), (3, 3), (2, 3), (1, 2)]
 
-expvals = excitations(contractable_loop, [])
+expvals = excitations(contractible_loop, [])
 x_expvals, z_expvals = separate_expvals(expvals)
 print_info(x_expvals, z_expvals)
 
@@ -655,7 +650,7 @@ print_info(x_expvals, z_expvals)
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
 
-ax.plot(*zip(*contractable_loop), color="maroon", linewidth=10)
+ax.plot(*zip(*contractible_loop), color="maroon", linewidth=10)
 
 plt.show()
 
@@ -682,13 +677,13 @@ def probs(x_sites, z_sites):
 
 
 null_probs = probs([], [])
-contractable_probs = probs(contractable_loop, [])
+contractible_probs = probs(contractible_loop, [])
 
-print("Are the probabilities equal? ", np.allclose(null_probs, contractable_probs))
+print("Are the probabilities equal? ", np.allclose(null_probs, contractible_probs))
 
 
 ######################################################################
-# Again, the toric code's dependence on the homotopy of the path explains
+# The toric code's dependence on the homotopy of the path explains
 # this result. All paths we can smoothly deform into each other will give
 # the same result. The contractible loop can be smoothly deformed to nothing,
 # so the state with the contractible loop is the same as a state with no loop.
@@ -773,7 +768,6 @@ all_probs = [null_probs, horizontal_probs, vertical_probs, combo_probs]
 print("\t" + "\t".join(names))
 
 for name, probs1 in zip(names, all_probs):
-
     comparisons = (str(np.allclose(probs1, probs2)) for probs2 in all_probs)
     print(name, "\t", "\t".join(comparisons))
 
@@ -892,13 +886,11 @@ plt.show()
 
 dev_aux = qml.device("lightning.qubit", wires=[Wire(*s) for s in all_sites] + ["aux"])
 
-
 def loop(x_loop, z_loop):
     for s in x_loop:
         qml.PauliX(Wire(*s))
     for s in z_loop:
         qml.PauliZ(Wire(*s))
-
 
 @qml.qnode(dev_aux, diff_method=None)
 def hadamard_test(x_prep, z_prep, x_loop, z_loop):
@@ -914,7 +906,6 @@ def hadamard_test(x_prep, z_prep, x_loop, z_loop):
     qml.ctrl(loop, control="aux")(x_loop, z_loop)
     qml.Hadamard("aux")
     return qml.expval(qml.PauliZ("aux"))
-
 
 x_around_z = hadamard_test(prep1, prep2, [], loop1)
 print("Move x excitation around z excitation: ", x_around_z)
@@ -946,6 +937,39 @@ print("Move x excitation around z excitation: ", x_around_z)
 # 3. The ground state degeneracy of the model on a toric lattice, arising
 #    from homotopically distinct loops of operations
 # 4. The excitations are anyons due to non-trivial mutual statistics
+#
+# References
+# ----------
+#
+# .. [#Kitaev2003]
+#
+#    Kitaev, A. Yu. "Fault-tolerant quantum computation by anyons."
+#    `Annals of Physics 303.1 (2003): 2-30. <https://doi.org/10.1016/S0003-4916(02)00018-0>`__.
+#    (`arXiv <https://arxiv.org/pdf/quant-ph/9707021>`__)
+#
+# .. [#google_paper]
+#
+#    Satzinger, K. J., et al. "Realizing topologically ordered states on a quantum processor."
+#    `Science 374.6572 (2021): 1237-1241. <https://www.science.org/doi/abs/10.1126/science.abi8378>`__.
+#    (`arXiv <https://arxiv.org/pdf/2104.01180>`__)
+#
+# .. [#savary_balents]
+# 
+#    Savary, Lucile, and Leon Balents. "Quantum spin liquids: a review."
+#    `Reports on Progress in Physics 80.1 (2016): 016502. <https://iopscience.iop.org/article/10.1088/0034-4885/80/1/016502/meta>`__.
+#    (`arXiv <https://arxiv.org/abs/1601.03742>`__)
+#
+# .. [#Resende]
+#
+#    Araujo de Resende, M. F. "A pedagogical overview on 2D and 3D Toric Codes and the origin of their topological orders."
+#    `Reviews in Mathematical Physics 32.02 (2020): 2030002. <https://doi.org/10.1142/S0129055X20300022>`__
+#    (`arXiv <https://arxiv.org/pdf/1712.01258.pdf>`__)
+#
+# .. [#surface_codes]
+#
+#    Fowler, Austin G., et al. "Surface codes: Towards practical large-scale quantum computation."
+#    `Physical Review A 86.3 (2012): 032324. <https://doi.org/10.1103/PhysRevA.86.032324>`__.
+#    (`arXiv <https://arxiv.org/pdf/1208.0928>`__)
 #
 # About the author
 # ----------------
