@@ -104,30 +104,30 @@ from Gacon et al. [1] using Pennylane.
 # and :math:`\mathbf{h}_1, \mathbf{h}_2 \in \mathcal{U}(\{-1, 1\}^d)` are
 # two randomly sampled directions.
 #
-# With Eq. :raw-latex:`\eqref{eq:fs_qnspsa}`, QN-SPSA provides an update
+# With Eq. (7), QN-SPSA provides an update
 # rule of:
 #
 # .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\boldsymbol{g}}^{-1}(\mathbf{x}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)})_{SPSA} \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:qnspsa}\tag{9}.
 #
 # In each optimization step :math:`t`, one will need to randomly sample 3
 # perturbation directions
-# :math:`\mathbf{h}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)}`. Eq.
-# :raw-latex:`\eqref{eq:qnspsa}` is then applied to compute the parameters
-# for the :math:`(t + 1)`\ th step accordingly. This :math:`O(1)` update
-# rule fits into NISQ devices well.
+# :math:`\mathbf{h}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)}`. Eq. (9)
+# is then applied to compute the parameters for the :math:`(t + 1)`\ th 
+# step accordingly. This :math:`O(1)` update rule fits into NISQ devices 
+# well.
 #
 # Numerical stability
 # -------------------
 #
-# The QN-SPSA update rule given in Eq. :raw-latex:`\eqref{eq:qnspsa}` is
-# highly stochastic, and may not behave well numerically. In practice, a
-# few tricks are applied to ensure the method’s numerical stability [1]:
+# The QN-SPSA update rule given in Eq. (9) is highly stochastic, and may 
+# not behave well numerically. In practice, a few tricks are applied to 
+# ensure the method’s numerical stability [1]:
 #
 # Averaging on the Fubini-Study metric tensor
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# A running average is taken on the tensor metric estimated from Eq.
-# :raw-latex:`\eqref{eq:fs_qnspsa}` at each step :math:`t`:
+# A running average is taken on the tensor metric estimated from Eq. (7) 
+# at each step :math:`t`:
 #
 # .. math:: \bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) = \frac{1}{t + 1} \Big(\sum_{i=1}^{t}\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1^{(i)}, \mathbf{h}_2^{(i)})_{SPSA} + \boldsymbol{g}^{(0)}\Big)\label{eq:tensorRunningAvg}\tag{10} ,
 #
@@ -138,14 +138,12 @@ from Gacon et al. [1] using Pennylane.
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # To ensure the positive semi-definite property of the metric tensor near
-# a minimum, the running average in Eq.
-# :raw-latex:`\eqref{eq:tensorRunningAvg}` is regularized:
+# a minimum, the running average in Eq. (10) is regularized:
 #
 # .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}) = \sqrt{\bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) \bar{\boldsymbol{g}}^{(t)}(\mathbf{x})} + \beta \mathbb{1}\label{eq:tensor_reg}\tag{11},
 #
-# where :math:`\beta` is the regularization coefficient. With Eq.
-# :raw-latex:`\eqref{eq:tensor_reg}`, the QN-SPSA update rule we implement
-# in code goes as:
+# where :math:`\beta` is the regularization coefficient. With Eq. (11), 
+# the QN-SPSA update rule we implement in code goes as:
 #
 # .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta (\bar{\boldsymbol{g}}^{(t)}_{reg})^{-1}(\mathbf{x}^{(t)}) \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:qnspsa_reg}\tag{12}.
 #
@@ -220,6 +218,15 @@ print("Loss value:", cost_function(params_curr))
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      input parameter shape: (2, 2)
+#      Loss value: -1.5099999999999998
+#
 # With the problem set up, we will for now focus on implementing a
 # single-step update of the QNSPSA. Given the current parameters
 # ``params_curr``, we would like to compute the parameters for the next
@@ -268,6 +275,15 @@ print(get_perturbation_direction(params_curr))
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      [[-1  1]
+#      [ 1 -1]]
+#
 # With the function, we start with the gradient estimator:
 #
 
@@ -289,6 +305,16 @@ print("Estimated SPSA gradient:\n", grad)
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Estimated SPSA gradient:
+#      [[-3.05 -3.05]
+#      [ 3.05  3.05]]
+#
 # To estimate the raw stochastic metric tensor, we will first need to
 # measure the state overlap
 # :math:`F(\mathbf{x}_1, \mathbf{x}_2) = \bigr\rvert\langle \phi(\mathbf{x}_1) | \phi(\mathbf{x}_2) \rangle \bigr\rvert ^ 2`.
@@ -337,6 +363,16 @@ print("Perfect overlap: ", get_state_overlap(tape))
 tape = get_overlap_tape(cost_function, params_curr, 2 * np.pi * (np.random.rand(2, depth) - 0.5))
 print("Random state overlap: ", get_state_overlap(tape))
 
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Perfect overlap:  1.0
+#      Random state overlap:  0.599
+#      
 
 def get_raw_tensor_metric(params_curr):
 
@@ -373,6 +409,18 @@ print("Raw estimated metric tensor:\n", metric_tensor_raw)
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Raw estimated metric tensor:
+#      [[ 2.5  0.  -2.5  2.5]
+#      [ 0.  -2.5  0.   0. ]
+#      [-2.5  0.   2.5 -2.5]
+#      [ 2.5  0.  -2.5  2.5]]
+#
 # Apply the running average and regularization tricks:
 #
 
@@ -390,6 +438,18 @@ print("Updated metric tensor after the step:\n", metric_tensor)
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Updated metric tensor after the step:
+#      [[ 1.74925075  0.         -1.24875125  1.24875125]
+#      [ 0.          0.75024975  0.          0.        ]
+#      [-1.24875125  0.          1.74925075 -1.24875125]
+#      [ 1.24875125  0.         -1.24875125  1.74925075]]
+# 
 # Eq. (12) requires computing the inverse of the metric tensor. A
 # numerically more stable approach is to solve the equivalent linear
 # equation:
@@ -412,6 +472,16 @@ print("Next parameters:\n", params_next)
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Next parameters:
+#      [[-1.03117138 -0.54824992]
+#      [-2.03318839  0.80331292]]
+# 
 # Now it is the time to apply the blocking condition. Let’s first try the
 # proposal in Ref [6] to use twice the standard deviation of the loss as
 # the tolerance. To do so, we will need to repeat the cost function
@@ -437,6 +507,16 @@ print("Next parameters after blocking:\n", params_next)
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Next parameters after blocking:
+#      [[-1.03117138 -0.54824992]
+#      [-2.03318839  0.80331292]]
+# 
 # As quantum measurements are generally expensive, computing the tolerance
 # this way adds significant overhead to the QN-SPSA optimizer. To be
 # specific, in each step of the optimization, QN-SPSA only requires
@@ -800,6 +880,21 @@ for i in range(300):
 
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Step 0: cost = -2.0730
+#      Step 40: cost = -2.5390
+#      Step 80: cost = -2.7240
+#      Step 120: cost = -2.6760
+#      Step 160: cost = -2.7540
+#      Step 200: cost = -2.7060
+#      Step 240: cost = -2.8110
+#      Step 280: cost = -2.7930
+#
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
