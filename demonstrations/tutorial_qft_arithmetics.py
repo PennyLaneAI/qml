@@ -81,6 +81,8 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
    :width: 90%
    :align: center
 
+   Representation of the computational basis with 3 qubits
+
 We can use
 the :class:`qml.BasisEmbedding <pennylane.BasisEmbedding>`
 template to obtain the binary representation in a simple way.
@@ -122,6 +124,8 @@ plt.show()
 #   :width: 90%
 #   :align: center
 #
+#   Representation of the Fourier basis with 3 qubits
+#
 # As we can see, the least significant qubit will rotate
 # :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
 # rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
@@ -137,18 +141,20 @@ plt.show()
 # to the state :math:`\vert m + k\rangle`. A procedure to implement such unitary
 # is the following.
 #
-# 1-  We convert the computational basis into Fourier basis by applying QFT on the
+# 1.  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
-# 2-  We rotate the j-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}`
+# 2.  We rotate the j-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}`
 #    with a :math:`R_Z` gate. Therefore, the new phases are
 #    :math:`\frac{2(m + k)\pi}{2^{j}}`.
-# 3-  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
+# 3.  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
 #    and obtain :math:`m+k`.
 #
 #
 # .. figure:: /demonstrations/qft_arithmetics/qft_add.gif
 #   :width: 90%
 #   :align: center
+#
+#   Addition process with QFT
 #
 # Let's see how it would look in Pennylane.
 
