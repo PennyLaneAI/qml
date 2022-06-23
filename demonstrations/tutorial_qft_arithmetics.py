@@ -77,7 +77,7 @@ is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert
 
 Let’s see how we would represent all the integers from 0 to 7 using product states of three qubits, using separate Bloch spheres for each qubit.
 
-.. figure:: /demonstrations/qft_arithmetics/comp_basis.gif
+.. figure:: /demonstrations/qft_arithmetics/qft_com.gif
    :width: 90%
    :align: center
 
@@ -114,7 +114,7 @@ plt.show()
 # :math:`n` qubits and we want to represent some the number :math:`m` in the
 # Fourier basis. Then the j-th qubit will have a phase:
 #
-# .. math:: \alpha_j = \frac{m\pi}{2^{j}}.
+# .. math:: \alpha_j = \frac{2m\pi}{2^{j}}.
 #
 # Let’s see how to represent numbers in the Fourier basis using 3 qubits:
 #
@@ -127,8 +127,8 @@ plt.show()
 # rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
 # half a turn every time we add one to the number we are representing.
 #
-# Adding _k_ to a register
-# ------------------------
+# Adding :math:`k` to a register
+# ------------------------------
 #
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this,
@@ -139,12 +139,18 @@ plt.show()
 #
 # 1-  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
-# 2-  We rotate the j-th qubit by an angle :math:`\frac{k}{2^{j}}`
+# 2-  We rotate the j-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}`
 #    with a :math:`R_Z` gate. Therefore, the new phases are
-#    :math:`\frac{(m + k)\pi}{2^{j}}`.
+#    :math:`\frac{2(m + k)\pi}{2^{j}}`.
 # 3-  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
 #    and obtain :math:`m+k`.
 #
+#
+# .. figure:: /demonstrations/qft_arithmetics/qft_add.gif
+#   :width: 90%
+#   :align: center
+#
+# Let's see how it would look in Pennylane.
 
 import pennylane as qml
 from pennylane import numpy as np
