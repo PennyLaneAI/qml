@@ -103,7 +103,6 @@ qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
 plt.show()
 
 ######################################################################
-
 # As we can see, the first qubit —the 0-th wire— is placed on top and the rest of the qubits are
 # below it. However, this is not the only way we have to represent numbers.
 # We can represent them in different bases such as the so-called _Fourier base_.
@@ -129,7 +128,7 @@ plt.show()
 # half a turn every time we add one to the number we are representing.
 #
 # Adding _k_ to a register
-# ----------------------
+# ------------------------
 #
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this,
@@ -153,11 +152,9 @@ from pennylane import numpy as np
 n_wires = 4
 dev = qml.device("default.qubit", wires=n_wires, shots=1)
 
-
 def add_k_fourier(k, wires):
     for j in range(len(wires)):
         qml.RZ(k * np.pi / (2**j), wires=wires[j])
-
 
 @qml.qnode(dev)
 def sum(m, k):
@@ -217,7 +214,6 @@ dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_sol, shots=1)
 
 n_wires = len(dev.wires)
 
-
 def addition(wires_m, wires_k, wires_sol):
     # prepare sol-qubits to counting
     qml.QFT(wires=wires_sol)
@@ -232,7 +228,6 @@ def addition(wires_m, wires_k, wires_sol):
 
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_sol)
-
 
 @qml.qnode(dev)
 def sum2(m, k, wires_m, wires_k, wires_sol):
@@ -256,7 +251,7 @@ plt.show()
 # we added :math:`3 + 7` to get :math:`10`, which in binary
 # is :math:`1010`.
 #
-#  Multiplying qubits
+# Multiplying qubits
 # -------------------
 #
 # Following the same idea, we will see how easily we can
@@ -286,7 +281,6 @@ dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_sol, shots=1)
 
 n_wires = len(dev.wires)
 
-
 def multiplication(wires_m, wires_k, wires_sol):
     # prepare sol-qubits to counting
     qml.QFT(wires=wires_sol)
@@ -299,7 +293,6 @@ def multiplication(wires_m, wires_k, wires_sol):
 
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_sol)
-
 
 @qml.qnode(dev)
 def mul(m, k):
@@ -358,7 +351,6 @@ wires_sol = [6, 7, 8, 9, 10]
 dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_sol)
 
 n_wires = len(dev.wires)
-
 
 @qml.qnode(dev)
 def factorization(n, wires_m, wires_k, wires_sol):
