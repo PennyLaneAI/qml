@@ -81,25 +81,16 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
    :width: 90%
    :align: center
 
-Note that if the result of an operation is greater than the maximum
-value :math:`2^n-1`, we will start again from zero, that is to say, we
-will calculate the sum modulo :math :`2^n-1.` For instance, in our three-qubit example, suppose that
-qubits and we want to calculate :math:`6+3.` We see that we do not have
-enough space since :math:`6+3 = 9 > 2^3-1`. The result we will get will
-be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. Make sure to use
-enough qubits to represent your solutions!
-
 We can use
 the :class:`qml.BasisEmbedding <pennylane.BasisEmbedding>`
-template to obtain the binary representation in a simple way:
-
+template to obtain the binary representation in a simple way.
+Let's see how we would code the number 6.
 """
 
 import pennylane as qml
 import matplotlib.pyplot as plt
 
 dev = qml.device("default.qubit", wires=3)
-
 
 @qml.qnode(dev)
 @qml.compile()
@@ -120,7 +111,7 @@ plt.show()
 # In this basis, all the basic states will be represented via qubits in
 # the XY plane of the Bloch sphere each of them rotated by a certain
 # amount. How do we know how much we must rotate each qubit to represent a certain number?
-# certain number? It is actually very easy! Suppose we are working with
+# It is actually very easy! Suppose we are working with
 # :math:`n` qubits and we want to represent some the number :math:`m` in the
 # Fourier basis. Then the j-th qubit will have a phase:
 #
@@ -137,20 +128,22 @@ plt.show()
 # rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
 # half a turn every time we add one to the number we are representing.
 #
+# Adding _k_ to a register
+# ----------------------
+#
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this,
 # let’s look at the following situation. We want to create an operator
 # that takes a state :math:`\vert m \rangle`
-# to the state :math:`\vert m + k\rangle`. A procedure to implement such a unitary
+# to the state :math:`\vert m + k\rangle`. A procedure to implement such unitary
 # is the following.
 #
-# -  We convert the computational basis into Fourier basis by applying QFT on the
+# 1-  We convert the computational basis into Fourier basis by applying QFT on the
 #    :math:`\vert m \rangle` state.
-# -  We rotate the j-th qubit by an angle :math:`\frac{k}{2^{j}}`
-#    with a :math:`R_Z` gate.
-# -  Therefore, the new phases are
+# 2-  We rotate the j-th qubit by an angle :math:`\frac{k}{2^{j}}`
+#    with a :math:`R_Z` gate. Therefore, the new phases are
 #    :math:`\frac{(m + k)\pi}{2^{j}}`.
-# -  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
+# 3-  We apply :math:`\text{QFT}^{-1}` to return to the computational basis
 #    and obtain :math:`m+k`.
 #
 
@@ -167,33 +160,43 @@ def add_k_fourier(k, wires):
 
 
 @qml.qnode(dev)
-def add_k_circuit(m, k):
-    qml.BasisEmbedding(m, wires=range(n_wires))  # step 1
+def sum(m, k):
+    qml.BasisEmbedding(m, wires=range(n_wires))  # m encoding
 
-    qml.QFT(wires=range(n_wires))  # step 2
+    qml.QFT(wires=range(n_wires))  # step 1
 
-    add_k_fourier(k, range(n_wires))  # step 3
+    add_k_fourier(k, range(n_wires))  # step 2
 
-    qml.adjoint(qml.QFT)(wires=range(n_wires))  # step 4
+    qml.adjoint(qml.QFT)(wires=range(n_wires))  # step 3
 
     return qml.sample()
 
 
-print(f"The ket representation of the sum of 3 and 4 is {add_k_circuit(3,4)}")
+print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 
 ######################################################################
 # Perfect, we have obtained :math:`0111` which is equivalent to the number :math:`7` in binary!
 # Note that this is a deterministic algorithm so that by executing a single shot we have the desired solution.
-# It is important to point out that it is not necessary to know how the
+# On the other hand, if the result of an operation is greater than the maximum
+# value :math:`2^n-1`, we will start again from zero, that is to say, we
+# will calculate the sum modulo :math :`2^n-1.` For instance, in our three-qubit example, suppose that
+# we want to calculate :math:`6+3.` We see that we do not have
+# enough space since :math:`6+3 = 9 > 2^3-1`. The result we will get will
+# be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. Make sure to use
+# enough qubits to represent your solutions!
+# Finally, it is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
 # new basis, we can use it in a simple way.
 #
-# In this particular algorithm, we have had to introduce :math:`k` in a
-# classical way. But suppose that what we are in specifying the integer to be added using another register of qubits.
-# That is,
-# we are looking look for a new operator :math:`\text{Sum}` such that
+# Adding two different registers
+# ------------------------------
 #
-# .. math:: \text{Sum}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
+# In this previous algorithm, we have had to say manually which :math:`k` we want to add.
+# But suppose that what we are in specifying the integer to be added using another register of qubits.
+# That is,
+# we are looking look for a new operator :math:`\text{Sum2}` such that
+#
+# .. math:: \text{Sum2}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
 #
 # In this case, we can understand the third register (which is initially
 # at 0) as a counter that will tally as many units as :math:`m` and
@@ -232,7 +235,7 @@ def addition(wires_m, wires_k, wires_sol):
 
 
 @qml.qnode(dev)
-def add_qubit_registers_circuit(m, k, wires_m, wires_k, wires_sol):
+def sum2(m, k, wires_m, wires_k, wires_sol):
     # m and k codification
     qml.BasisEmbedding(m, wires=wires_m)
     qml.BasisEmbedding(k, wires=wires_k)
@@ -243,15 +246,20 @@ def add_qubit_registers_circuit(m, k, wires_m, wires_k, wires_sol):
     return qml.sample(wires=wires_sol)
 
 print(f"The ket representation of the sum of 7 and 3 is "
-      f"{add_qubit_registers_circuit(7, 3, wires_m, wires_k, wires_sol)}")
+      f"{sum2(7, 3, wires_m, wires_k, wires_sol)}")
 
-qml.draw_mpl(add_qubit_registers_circuit, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
+qml.draw_mpl(sum2, show_all_wires=True)(7, 3, wires_m, wires_k, wires_sol)
 plt.show()
 
 ######################################################################
 # Great! We have just seen how to add a number to a counter. In the example above,
 # we added :math:`3 + 7` to get :math:`10`, which in binary
-# is :math:`1010`. Following the same idea, we will see how easily we can
+# is :math:`1010`.
+#
+#  Multiplying qubits
+# -------------------
+#
+# Following the same idea, we will see how easily we can
 # implement multiplication. Let’s imagine that we want to multiply
 # :math:`m` and :math:`k` and store the result in another register as we
 # did before. This time, we look for an operator Mul such that
@@ -294,7 +302,7 @@ def multiplication(wires_m, wires_k, wires_sol):
 
 
 @qml.qnode(dev)
-def multiplication_circuit(m, k):
+def mul(m, k):
     # m and k codification
     qml.BasisEmbedding(m, wires=wires_m)
     qml.BasisEmbedding(k, wires=wires_k)
@@ -305,9 +313,9 @@ def multiplication_circuit(m, k):
     return qml.sample(wires=wires_sol)
 
 
-print(f"The ket representation of the multiplication of 3 and 7 is {multiplication_circuit(3,7)}")
+print(f"The ket representation of the multiplication of 3 and 7 is {mul(3,7)}")
 
-qml.draw_mpl(multiplication_circuit, show_all_wires=True)(3, 7)
+qml.draw_mpl(mul, show_all_wires=True)(3, 7)
 plt.show()
 
 
@@ -315,9 +323,10 @@ plt.show()
 # Awesome! We have multiplied :math:`7 \times 3` and, as a result, we have
 # :math:`10101,` which is :math:`21` in binary.
 #
-
-
-######################################################################
+#
+# Factorization with Grover
+# -------------------------
+#
 # With this, we have already gained a large repertoire of interesting
 # operations that we can do, but let’s give the idea one more twist and
 # apply what we have learned in an example.
@@ -398,8 +407,7 @@ plt.show()
 #
 # About the author
 # ----------------
-
-##############################################################################
+#
 # .. bio:: Guillermo Alonso-Linaje
 #    :photo: ../_static/authors/guillermo_alonso.jpeg
 #
