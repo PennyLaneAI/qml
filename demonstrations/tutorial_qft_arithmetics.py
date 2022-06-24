@@ -38,7 +38,7 @@ something that I can do with a calculator?
 
 The first thing we might think is that this is something we have not needed so far. In algorithms like Deustch-Jozsa or
 Grover we have never needed it, or maybe we do? When working with this algorithm there is a concept that we will not get
-tired of hearing, the _oracle_. This is a gate that behaves like a black box that provides us with results that interest
+tired of hearing, the :math:`\textit{oracle}`. This is a gate that behaves like a black box that provides us with results that interest
 us for the algorithm.  However, this is not as nice as it seems. I am sorry to tell you that but oracles are not black boxes
 that are going to give you. You have to build them, and of course, it is not an easy task!
 Normally, these oracles perform certain operations to define a function so in this demo we will look at building the most
@@ -83,6 +83,15 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
 
    Representation of the computational basis with 3 qubits
 
+ .. note::
+
+    The `"Bloch Sphere" <https://en.wikipedia.org/wiki/Bloch_sphere>`_
+    is a way of graphically representing the state of a qubit.
+    At the top of the sphere we will place the state :math:`\vert 0 \rangle`, at the bottom
+    :math:`\vert 1 \rangle` and in the rest of the
+    sphere we will place the possible states in superposition. It is a very useful
+    representation that helps to interpret gates such as rotations.
+
 We can use
 the :class:`qml.BasisEmbedding <pennylane.BasisEmbedding>`
 template to obtain the binary representation in a simple way.
@@ -107,20 +116,12 @@ plt.show()
 ######################################################################
 # As we can see, the first qubit —the 0-th wire— is placed on top and the rest of the qubits are
 # below it. However, this is not the only way we have to represent numbers.
-# We can represent them in different bases such as the so-called math:`\textit{Fourier base}`.
+# We can represent them in different bases such as the so-called :math:`\textit{Fourier base}`.
 #
 # In this basis, all the basic states will be represented via qubits in
 # the XY plane of the Bloch sphere, each rotated by a certain
 # amount.
 #
-# .. note::
-#
-#    The `"Bloch Sphere" <https://en.wikipedia.org/wiki/Bloch_sphere>`_
-#    is a way of graphically representing the state of a qubit.
-#    At the top of the sphere we will place the state :math:`\vert 0 \rangle`, at the bottom
-#    :math:`\vert 1 \rangle` and in the rest of the
-#    sphere we will place the possible states in superposition. It is a very useful
-#    representation that helps to interpret gates such as rotations.
 #
 # How do we know how much we must rotate each qubit to represent a certain number?
 # It is actually very easy! Suppose we are working with
@@ -426,7 +427,7 @@ plt.show()
 # illustrate basic arithmetic!
 #
 # I hope we are starting to see that oracles are not something magical and that there
-# is a lot of work behind their construction.This will help us in the future to build
+# is a lot of work behind their construction! This will help us in the future to build
 # more complicated operators, but until then, let’s keep on learning 🚀
 #
 # About the author
