@@ -162,6 +162,7 @@ plt.show()
 #
 # 3.  We apply :math:`\text{QFT}^{-1}` to return to the computational basis and obtain :math:`m+k`.
 #
+# In the following image we can see the procedure to add :math:`3+4`.
 #
 # .. figure:: /demonstrations/qft_arithmetics/qft_add.gif
 #   :width: 90%
