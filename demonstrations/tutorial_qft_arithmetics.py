@@ -107,7 +107,7 @@ plt.show()
 ######################################################################
 # As we can see, the first qubit —the 0-th wire— is placed on top and the rest of the qubits are
 # below it. However, this is not the only way we have to represent numbers.
-# We can represent them in different bases such as the so-called _Fourier base_.
+# We can represent them in different bases such as the so-called math:`\textit{Fourier base}`.
 #
 # In this basis, all the basic states will be represented via qubits in
 # the XY plane of the Bloch sphere, each rotated by a certain
@@ -155,8 +155,10 @@ plt.show()
 #
 # 1.  We convert the computational basis into Fourier basis by applying QFT on
 # the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
+#
 # 2.  We rotate the j-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}` with
 # a :math:`R_Z` gate. Therefore, the new phases are :math:`\frac{2(m + k)\pi}{2^{j}}`.
+#
 # 3.  We apply :math:`\text{QFT}^{-1}` to return to the computational basis and obtain :math:`m+k`.
 #
 #
@@ -166,7 +168,7 @@ plt.show()
 #
 #   Addition process with QFT
 #
-# Let's see how it would look in Pennylane.
+# Let's see how it would look in PennyLane.
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -213,9 +215,9 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 # In this previous algorithm, we have had to say manually which :math:`k` we want to add.
 # But suppose that what we are in specifying the integer to be added using another register of qubits.
 # That is,
-# we are looking look for a new operator :math:`\text{Sum2}` such that
+# we are looking look for a new operator :math:`\text{Sum}_2` such that
 #
-# .. math:: \text{Sum2}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
+# .. math:: \text{Sum}_2\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
 #
 # In this case, we can understand the third register (which is initially
 # at 0) as a counter that will tally as many units as :math:`m` and
@@ -364,7 +366,7 @@ plt.show()
 # -  check if the product state is 10101 and, in that case, change the sign,
 # -  execute the inverse of the circuit to clear the auxiliary qubits.
 #
-# Let's go back to Pennylane to implement this idea.
+# Let's go back to PennyLane to implement this idea.
 
 n = 21
 
