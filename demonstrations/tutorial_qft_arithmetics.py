@@ -110,8 +110,19 @@ plt.show()
 # We can represent them in different bases such as the so-called _Fourier base_.
 #
 # In this basis, all the basic states will be represented via qubits in
-# the XY plane of the Bloch sphere each of them rotated by a certain
-# amount. How do we know how much we must rotate each qubit to represent a certain number?
+# the XY plane of the Bloch sphere, each rotated by a certain
+# amount.
+#
+# .. note::
+#
+#    The `"Bloch Sphere" <https://en.wikipedia.org/wiki/Bloch_sphere>`_
+#    is a way of graphically representing the state of a qubit.
+#    At the top of the sphere we will place the state :math:`\vert 0 \rangle`, at the bottom
+#    :math:`\vert 1 \rangle` and in the rest of the
+#    sphere we will place the possible states in superposition. It is a very useful
+#    representation that helps to interpret gates such as rotations.
+#
+# How do we know how much we must rotate each qubit to represent a certain number?
 # It is actually very easy! Suppose we are working with
 # :math:`n` qubits and we want to represent some the number :math:`m` in the
 # Fourier basis. Then the j-th qubit will have a phase:
@@ -126,9 +137,9 @@ plt.show()
 #
 #   Representation of the Fourier basis with 3 qubits
 #
-# As we can see, the least significant qubit will rotate
+# As we can see, the third qubit will rotate
 # :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
-# rotates :math:`\frac{1}{4}` turn and, finally, the most significant qubit will revolve
+# rotates :math:`\frac{1}{4}` turn and, finally, the first qubit will revolve
 # half a turn every time we add one to the number we are representing.
 #
 # Adding :math:`k` to a register
@@ -407,10 +418,13 @@ plt.show()
 ######################################################################
 # By plotting the probabilities of obtaining each basic state we see that
 # prime factors are amplified! Factorization via Grover’s algorithm
-# does not the achieve exponential improvement that
+# does not achieve exponential improvement that
 # `"Shor's algorithm" <https://en.wikipedia.org/wiki/Shor%27s_algorithm>`_ does, but we
 # can see that the construction is simple and is a great example to
-# illustrate basic arithmetic! This will help us in the future to build
+# illustrate basic arithmetic!
+#
+# I hope we are starting to see that oracles are not something magical and that there
+# is a lot of work behind their construction.This will help us in the future to build
 # more complicated operators, but until then, let’s keep on learning 🚀
 #
 # About the author
