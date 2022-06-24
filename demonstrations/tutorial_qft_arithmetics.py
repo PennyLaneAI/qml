@@ -83,7 +83,7 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
 
    Representation of the computational basis with 3 qubits
 
- .. note::
+.. note::
 
     The `"Bloch Sphere" <https://en.wikipedia.org/wiki/Bloch_sphere>`_
     is a way of graphically representing the state of a qubit.
