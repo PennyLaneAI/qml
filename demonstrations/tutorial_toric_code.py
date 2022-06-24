@@ -238,7 +238,7 @@ plt.show()
 #
 #      [S_s, P_p] = 0.
 #
-# Since they commute, the wavefunction can be an eigenstate of each group operator independently. To minimize
+# Since they commute, the wave function can be an eigenstate of each group operator independently. To minimize
 # the energy of the Hamiltonian on the system as a whole, we can minimize the contribution of each group operator.
 # Due to the negative coefficients in the Hamiltonian, we need to maximize the
 # expectation value of each operator.
@@ -249,7 +249,7 @@ plt.show()
 #
 #       S_s |G \rangle = +1 |G \rangle \qquad \qquad P_p | G \rangle = +1 |G\rangle.
 #
-# The wavefunction:
+# The wave function:
 #
 # .. math::
 #
@@ -339,11 +339,11 @@ print("Total energy: ", E0)
 # The first option provides complete information about the system but
 # is much more challenging to analyze. For most purposes, we can work
 # with information about how the traffic deviates from a baseline. In
-# semiconductors, we don’t write out the wavefunction for every single
+# semiconductors, we don’t write out the wave function for every single
 # electron. We instead use electrons and holes. Neither quasiparticle
 # electrons nor holes are fundamental particles like an electron or
 # positron in a vacuum. Instead, they are useful descriptions of how the
-# wavefunction differs from its ground state.
+# wave function differs from its ground state.
 #
 # While the electrons and holes of a metal behave just like electrons and
 # positrons in a vacuum, some condensed matter systems contain
@@ -576,7 +576,7 @@ plt.show()
 # We end up with strings of operations that connect pairs of particles.
 #
 # We can use a branch of topology called `Homotopy <https://en.wikipedia.org/wiki/Homotopy>`__
-# to describe the relationship between these strings and the wavefunction.
+# to describe the relationship between these strings and the wave function.
 # Two paths :math:`s_1` and :math:`s_2` are
 # **homotopy equivalent** or **homotopic** if they can be continuously deformed into each
 # other:
@@ -707,7 +707,7 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractible_prob
 # Each of these paths represents a member of the first homotopy group
 # of the torus: :math:`\pi_1(T) = \mathbb{Z}^2` modulo 2.
 #
-# None of these loops create net excitations, so the wavefunction
+# None of these loops create net excitations, so the wave function
 # remains in the ground state.
 #
 
@@ -814,8 +814,8 @@ for name, probs1 in zip(names, all_probs):
 # the same type, the combined wave function picks up a relative phase of negative
 # one. When fermions of different types orbit each other, the state is
 # unchanged. For example, if an electron goes around a proton and returns
-# to the same spot, the wavefunction is unchanged. If a boson orbits
-# around a different type of boson, again, the wavefunction is unchanged.
+# to the same spot, the wave function is unchanged. If a boson orbits
+# around a different type of boson, again, the wave function is unchanged.
 #
 # What if a particle went around a different type of particle and
 # everything picked up a phase? Would it be a boson or a fermion?
@@ -851,7 +851,7 @@ plt.show()
 
 ######################################################################
 # While we managed to loop one particle around the other, we did not
-# extract the relative phase applied to the wavefunction.  To procure
+# extract the relative phase applied to the wave function.  To procure
 # this information, we will need the *Hadamard test*.
 
 
