@@ -12,7 +12,7 @@ Toric Code Topology
 Introduction
 ------------
 
-The *toric code model* [#Kitaev2003] is a treasure trove of interesting physics and
+The *toric code model* [#Kitaev2003]_ is a treasure trove of interesting physics and
 mathematics. The model sparked the development of the error-correcting surface codes [#surface_codes]_ ,
 an essential category of error correction models. But why is the
 model so useful for error correction?
@@ -60,7 +60,7 @@ The Model
 What is the source of all this fascinating physics? The Hamiltonian is:
 
 .. math::
-   \mathcal{H} = -\sum_s S_s - \sum_p P_p
+   \mathcal{H} = -\sum_s S_s - \sum_p P_p,
 
 .. math::
    S_s = \prod_{i \in s} Z_i \quad P_p = \prod_{j \in p} X_j.
@@ -96,7 +96,7 @@ the same as a site at ``(x+width, y+height)``.
     :align: center
     :width: 70%
 
-On to some practical coding!
+On to some practical coding! First, let's define the sites on a $4\times 6$ lattice.
 """
 
 import pennylane as qml
@@ -115,7 +115,7 @@ width = 6
 all_sites = [(i, j) for i, j in product(range(width), range(height))]
 
 ######################################################################
-# For our wire labels, we will be using an `Immutable Data Class <https://realpython.com/python-data-classes/#immutable-data-classes>`__ .
+# We would like for our wire labels to match the sites. To do this, we will be using an `Immutable Data Class <https://realpython.com/python-data-classes/#immutable-data-classes>`__ .
 # PennyLane allows wire labels to be any **hashable** object, but iterable wire labels are currently not supported.
 # Therefore we use a frozen dataclass to represent individual wires by a row and column position.
 #
@@ -191,7 +191,7 @@ for x, y in product(range(width // 2), range(height)):
 ######################################################################
 # How can we best visualize these groups of four sites?
 #
-# We use matplotlib to show each group of four sites as a Polygon patch,
+# We use ``matplotlib`` to show each group of four sites as a Polygon patch,
 # coloured according to the type of group. The ``misc_plot_formatting`` function
 # performs some minor styling improvements
 # repeated throughout this demo. The dotted horizontal lines and
@@ -360,7 +360,7 @@ print("Total energy: ", E0)
 #    | \phi \rangle = X_i | G \rangle.
 #
 # Two Z group operators :math:`S_s` contain individual Z operators at that
-# same site :math:`i`:. The noise term :math:`X_i` will anti-commute with both
+# same site :math:`i`. The noise term :math:`X_i` will anti-commute with both
 # of these group operators:
 #
 # .. math::
@@ -373,10 +373,10 @@ print("Total energy: ", E0)
 # .. math::
 #
 #    S_s |\phi\rangle = S_s X_i |G\rangle = - X_i S_s |G\rangle = - X_i |G\rangle = - |\phi\rangle.
-#
+# Thus,
 # .. math::
 #
-#    \langle \phi | S_s | \phi \rangle = -1
+#    \langle \phi | S_s | \phi \rangle = -1.
 #
 # :math:`S_s` now has an expectation value of :math:`-1`.
 #
@@ -596,7 +596,7 @@ plt.show()
 #     :align: center
 #     :width: 40%
 #
-# We can divide the set of all possible paths into **Homotopy classes**. A homotopy class
+# We can divide the set of all possible paths into **homotopy classes**. A homotopy class
 # is an `equivalence class <https://en.wikipedia.org/wiki/Equivalence_class>`__ under
 # homotopy. Every member of the same homotopy class can be deformed into every other member of the
 # same class, and
@@ -811,7 +811,7 @@ for name, probs1 in zip(names, all_probs):
 # can distort paths past other particles.
 #
 # When one indistinguishable fermion of spin 1/2 orbits another fermion of
-# the same type, the combined wavefunction picks up a relative phase of negative
+# the same type, the combined wave function picks up a relative phase of negative
 # one. When fermions of different types orbit each other, the state is
 # unchanged. For example, if an electron goes around a proton and returns
 # to the same spot, the wavefunction is unchanged. If a boson orbits
@@ -821,7 +821,7 @@ for name, probs1 in zip(names, all_probs):
 # everything picked up a phase? Would it be a boson or a fermion?
 #
 # It would be something else entirely: an anyon. An anyon is anything that
-# doesn’t cleanly fall into the boson/ fermion categorization of particles.
+# doesn’t cleanly fall into the boson/fermion categorization of particles.
 #
 # While the toric code is just an extremely useful mathematical
 # model, anyons exist in physical materials. For example,
@@ -937,7 +937,7 @@ print("Move x excitation around z excitation: ", x_around_z)
 # 3. The ground state degeneracy of the model on a toric lattice, arising
 #    from homotopically distinct loops of operations
 # 4. The excitations are anyons due to non-trivial mutual statistics
-#
+# Make sure to go and modify the code as suggested if you wish to gain more intuition. Do check the references below if you want to learn more!
 # References
 # ----------
 #
