@@ -471,6 +471,4 @@ plt.show()
 # .. bio:: Alain Delgado
 #    :photo: ../_static/alain-delgado.png
 #
-#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. His research background lies at the intersection of
-#    many-body physics, quantum chemistry and materials science. His work focuses on the application of quantum algorithms
-#    for simulating advanced materials.
+#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.
