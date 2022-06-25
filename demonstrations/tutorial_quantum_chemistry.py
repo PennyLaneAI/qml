@@ -256,7 +256,7 @@ print(H)
 # backend can be selected by setting ``method='pyscf'`` in
 # :func:`~.pennylane.qchem.molecular_hamiltonian`:
 
-H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
+H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method="pyscf")
 print(H)
 
 ##############################################################################
@@ -312,14 +312,14 @@ print(H)
 #
 #     J.J. Bao, S.S. Dong, L. Gagliardi, D.G. Truhlar. "Automatic Selection of an
 #     Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT".
-#     `Journal of Chemical Theory and Computation 14, 2017 (2018). 
+#     `Journal of Chemical Theory and Computation 14, 2017 (2018).
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032>`_
 #
 # About the author
 # ----------------
 
 ##############################################################################
-#.. bio:: Alain Delgado
+# .. bio:: Alain Delgado
 #    :photo: ../_static/alain-delgado.jpg
 #
 #    Alain Delgado Gran is a senior quantum scientist working at Xanadu. His research background lies at the intersection of

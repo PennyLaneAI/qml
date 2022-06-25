@@ -190,19 +190,23 @@ dev = qml.device("default.qubit", wires=qubits)
 # This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
+
 @qml.qnode(dev)
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
+
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
+
 
 @qml.qnode(dev)
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
+
 
 ##############################################################################
 # The total spin :math:`S` of the trial state can be obtained from the
@@ -299,15 +303,18 @@ def circuit(params, wires):
 # Now, we define the new functions to compute the expectation values of the Hamiltonian
 # and the total spin operator for the new circuit.
 
+
 @qml.qnode(dev)
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
+
 @qml.qnode(dev)
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
+
 
 ##############################################################################
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
@@ -371,7 +378,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # ----------------
 
 ##############################################################################
-#.. bio:: Alain Delgado
+# .. bio:: Alain Delgado
 #    :photo: ../_static/alain-delgado.jpg
 #
 #    Alain Delgado Gran is a senior quantum scientist working at Xanadu. His research background lies at the intersection of
