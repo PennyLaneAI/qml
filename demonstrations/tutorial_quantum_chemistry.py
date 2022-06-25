@@ -11,7 +11,7 @@ Building molecular Hamiltonians
 .. related::
    tutorial_vqe Variational quantum eigensolver
 
-*Author: PennyLane dev team. Last updated: 22 April 2022*
+*Author: Alain Delgado. Last updated: 25 June 2022*
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
@@ -314,3 +314,14 @@ print(H)
 #     Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT".
 #     `Journal of Chemical Theory and Computation 14, 2017 (2018). 
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032>`_
+#
+# About the author
+# ----------------
+
+##############################################################################
+#.. bio:: Alain Delgado
+#    :photo: ../_static/alain-delgado.jpg
+#
+#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. His research background lies at the intersection of
+#    many-body physics, quantum chemistry and materials science. His work focuses on the application of quantum algorithms
+#    for simulating advanced materials.

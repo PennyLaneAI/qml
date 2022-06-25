@@ -15,7 +15,7 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: PennyLane dev team. Last updated: 15 July 2021.*
+*Author: Alain Delgado. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
@@ -271,3 +271,14 @@ plt.show()
 #     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
 #     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
+#
+# About the author
+# ----------------
+
+##############################################################################
+#.. bio:: Alain Delgado
+#    :photo: ../_static/alain-delgado.jpg
+#
+#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. His research background lies at the intersection of
+#    many-body physics, quantum chemistry and materials science. His work focuses on the application of quantum algorithms
+#    for simulating advanced materials.

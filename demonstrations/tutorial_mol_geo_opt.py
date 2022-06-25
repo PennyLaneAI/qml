@@ -11,7 +11,7 @@ Optimization of molecular geometries
    tutorial_vqe Variational Quantum Eigensolver
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: PennyLane dev team. Posted: 30 June 2021. Last updated: 30 June 2021.*
+*Author: Alain Delgado. Posted: 30 June 2021. Last updated: 25 June 2022.*
 
 Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
 in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
@@ -454,3 +454,14 @@ plt.show()
 #     "Analytical derivative methods in quantum chemistry".
 #     `Advances in Chemical Sciences (1987)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/9780470142943.ch4>`__
+#
+# About the author
+# ----------------
+
+##############################################################################
+#.. bio:: Alain Delgado
+#    :photo: ../_static/alain-delgado.jpg
+#
+#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. His research background lies at the intersection of
+#    many-body physics, quantum chemistry and materials science. His work focuses on the application of quantum algorithms
+#    for simulating advanced materials.
