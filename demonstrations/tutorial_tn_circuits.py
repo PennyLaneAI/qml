@@ -12,8 +12,8 @@ Tensor-Network Quantum Circuits
 
    tutorial_variational_classifier Variational classifier
 
-*Authors: Diego Guala* :superscript:`1` *, Esther Cruz-Rico* :superscript:`2` *,
-Shaoming Zhang* :superscript:`2` *, Juan Miguel Arrazola* :superscript:`1` *Last updated: 17 March 2022.*
+*Authors: Diego Guala*:superscript:`1` *, Esther Cruz-Rico*:superscript:`2` *,
+Shaoming Zhang*:superscript:`2` *, Juan Miguel Arrazola*:superscript:`1` *Last updated: 27 June 2022.*
 
 | :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
 | :sup:`2` BMW Group, Munich, Germany
@@ -122,6 +122,7 @@ of tensors in the network.
 import pennylane as qml
 from pennylane import numpy as np
 
+
 def block(weights, wires):
     qml.RX(weights[0], wires=wires[0])
     qml.RY(weights[1], wires=wires[1])
@@ -136,6 +137,7 @@ def block(weights, wires):
 
 dev = qml.device("default.qubit", wires=4)
 
+
 @qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
@@ -146,6 +148,7 @@ def circuit(template_weights):
         template_weights=template_weights,
     )
     return qml.expval(qml.PauliZ(wires=3))
+
 
 np.random.seed(1)
 weights = np.random.random(size=[3, 2])
@@ -169,6 +172,7 @@ def deep_block(weights, wires):
 
 dev = qml.device("default.qubit", wires=4)
 
+
 @qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
@@ -188,7 +192,7 @@ def circuit(template_weights):
 # replicate the elemnts for the number of expected blocks. Since this example
 # will have three blocks, we replicate the elements three times using ``[list]*3``.
 # The resulting circuit is illustrated in the figure below the code.
-# Note that this circuit retains the layout of an MPS, 
+# Note that this circuit retains the layout of an MPS,
 # but each block is now a deeper circuit with more gates.
 # Both this circuit and the previous circuit
 # can be represented by an MPS with a bond dimension of two.
@@ -212,10 +216,11 @@ def wide_block(weights, wires):
 # as before. To account for the extra wires per block, we simply set the ``n_block_wires``
 # argument to a higher number. The figure below shows the resulting circuit. Notice
 # that, in the circuit diagram, gates are left-justified. Therefore parts of later blocks
-# appear near the beginning of the circuit. Furthermore, this circuit has a higher bond 
+# appear near the beginning of the circuit. Furthermore, this circuit has a higher bond
 # dimension than the previous ones and would correspond to an MPS with a bond dimension of four.
 
 dev = qml.device("default.qubit", wires=8)
+
 
 @qml.qnode(dev)
 def circuit(template_weights):
@@ -227,6 +232,7 @@ def circuit(template_weights):
         template_weights=template_weights,
     )
     return qml.expval(qml.PauliZ(wires=7))
+
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
@@ -243,7 +249,9 @@ def block(weights, wires):
     qml.RX(weights[1], wires=wires[1])
     qml.CNOT(wires=wires)
 
+
 dev = qml.device("default.qubit", wires=8)
+
 
 @qml.qnode(dev)
 def circuit(template_weights):
@@ -259,7 +267,7 @@ def circuit(template_weights):
 
 weights = np.random.random(size=[7, 2])
 fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
-fig.set_size_inches((4,4))
+fig.set_size_inches((4, 4))
 ##############################################################################
 # Classifying the bars and stripes data set
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -275,7 +283,7 @@ fig.set_size_inches((4,4))
 #   :align: center
 #   :height: 300
 #
-# A quantum circuit that successfully performs this task 
+# A quantum circuit that successfully performs this task
 # accepts any image from the data set as input and outputs the correct label.
 # We will therefore choose a data encoding strategy that can record the input image in
 # a qubit register, a processing circuit that can analyze the data, and a final measurement
@@ -289,7 +297,7 @@ import matplotlib.pyplot as plt
 
 BAS = [[1, 1, 0, 0], [0, 0, 1, 1], [1, 0, 1, 0], [0, 1, 0, 1]]
 j = 1
-plt.figure(figsize=[3,3])
+plt.figure(figsize=[3, 3])
 for i in BAS:
     plt.subplot(2, 2, j)
     j += 1
@@ -321,6 +329,7 @@ def block(weights, wires):
 
 dev = qml.device("default.qubit", wires=4)
 
+
 @qml.qnode(dev)
 def circuit(image, template_weights):
     qml.BasisStatePreparation(image, wires=range(4))
@@ -332,6 +341,7 @@ def circuit(image, template_weights):
         template_weights=template_weights,
     )
     return qml.expval(qml.PauliZ(wires=3))
+
 
 weights = np.random.random(size=[3, 2])
 fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(BAS[0], weights)
@@ -375,7 +385,7 @@ for k in range(100):
 
 for image in BAS:
     fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(image, params)
-    plt.figure(figsize=[1.8,1.8])
+    plt.figure(figsize=[1.8, 1.8])
     plt.imshow(np.reshape(image, [2, 2]), cmap="gray")
     plt.title(
         f"Exp. Val. = {circuit(image,params):.0f};"
@@ -406,3 +416,21 @@ for image in BAS:
 #
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
+# About the authors
+# -----------------
+
+##############################################################################
+# .. bio:: Diego Guala
+#    :photo: ../_static/authors/diego_guala.jpg
+#
+#    Diego Guala is a quantum scientist working at Xanadu. His work is focused on developing and implementing quantum algorithms for industrial applications.
+#
+# .. bio:: Esther Cruz-Rico
+#    :photo: ../_static/authors/esther_cruz.jpeg
+#
+#    Esther is a graduate in physics and mathematics, currently pursuing her PhD in quantum algorithms at the Max-Planck Institute of Quantum Optics.
+#
+# .. bio:: Shaoming Zhang
+#    :photo: ../_static/authors/shaoming_zhang.png
+#
+#    Shaoming Zhang is a graduate student at TU Munich and BMW. His research interests are numerical methods for quantum many-body systems and quantum algorithms.
