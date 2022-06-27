@@ -433,4 +433,4 @@ for image in BAS:
 # .. bio:: Shaoming Zhang
 #    :photo: ../_static/authors/shaoming_zhang.png
 #
-#    Shaoming Zhang is a graduate student at TU Munich and BMW. His research interests are numerical methods for quantum many-body system and quantum algorithms.
+#    Shaoming Zhang is a graduate student at TU Munich and BMW. His research interests are numerical methods for quantum many-body systems and quantum algorithms.
