@@ -428,7 +428,7 @@ for image in BAS:
 # .. bio:: Esther Cruz-Rico
 #    :photo: ../_static/authors/esther_cruz.jpeg
 #
-#    Esther is a graduate in physics and mathematics, currently pursuing her PhD in quantum algorithms at Max-Planck Institute of Quantum Optics.
+#    Esther is a graduate in physics and mathematics, currently pursuing her PhD in quantum algorithms at the Max-Planck Institute of Quantum Optics.
 #
 # .. bio:: Shaoming Zhang
 #    :photo: ../_static/authors/shaoming_zhang.png
