@@ -406,3 +406,21 @@ for image in BAS:
 #
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
+# About the authors
+# -----------------
+
+##############################################################################
+#.. bio:: Diego Guala
+#    :photo: ../_static/authors/diego_guala.jpg
+#
+#    Diego Guala is a quantum scientist working at Xanadu. His work is focused on developing and implementing quantum algorithms for industrial applications.
+#
+#.. bio:: Esther Cruz-Rico 
+#    :photo: ../_static/authors/esther_cruz.jpeg
+#
+#    Esther is a graduate in physics and mathematics, currently pursuing her PhD in quantum algorithms at Max-Planck Institute of Quantum Optics.
+#
+#.. bio:: Shaoming Zhang
+#    :photo: ../_static/authors/shaoming_zhang.png
+#
+#    Shaoming Zhang is a graduate student at TU Munich and BMW. His research interests are numerical methods for quantum many-body system and quantum algorithms.
