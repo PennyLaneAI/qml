@@ -1,4 +1,4 @@
-"""
+r"""
 Quantum advantage in learning from experiments
 ==============================================
 
