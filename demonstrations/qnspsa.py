@@ -355,7 +355,7 @@ print("Estimated SPSA gradient:\n", grad)
 # doubles the circuit depth of the ansatz, and therefore has longer
 # execution time and experiences more accumulated noise from the device.
 # The function ``get_state_overlap`` returns a state overlap value between
-# 0 and 1. 1 for perfect overlap, and 0 for minimum overlap.
+# 0 and 1: 1 for perfect overlap, and 0 for minimum overlap.
 #
 
 
@@ -560,7 +560,7 @@ print("Next parameters after blocking:\n", params_next)
 # this way adds significant overhead to the QN-SPSA optimizer. To be
 # specific, in each step of the optimization, QN-SPSA only requires
 # executing 2 circuits for the gradient, and 4 for the metric tensor. Yet
-# in the approach above, there are additional 10 (repeat number) + 1
+# in the approach above, there are additional 10 (from the repeat number) + 1
 # circuits required to apply the blocking.
 #
 # To address this issue, we propose to define the tolerance as the
@@ -605,8 +605,8 @@ if loss_curr + tol < loss_next:
 # profiles of 25 trials of the experiment. One can confirm the
 # past-:math:`N`-step (:math:`N=5` for the plot) standard deviation works
 # just as well. With the new choice of the tolerance, for each step, the
-# QN-SPSA will only need to execute 2(gradient) + 4(metric tensor) +
-# 2(current and the next-step loss) = 8 circuits. In practice, we measure
+# QN-SPSA will only need to execute 2 (for gradient) + 4 (for metric tensor) +
+# 2 (for the current and the next-step loss) = 8 circuits. In practice, we measure
 # a 50% reduction in the step-wise optimization time.
 #
 # The test is done with Amazon Braket Hybrid Jobs, as it is a handy tool to
@@ -954,8 +954,8 @@ for i in range(300):
 # between the gradient descent, quantum natural gradient descent, SPSA and
 # QN-SPSA in Fig. 1(b) of Ref. [#Gacon2021]_ with the following job (find a
 # more detailed version of the example and the corresponding scripts
-# `here <https://github.com/aws/amazon-braket-examples/blob/qnspsa/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__
-# [TODO: change to the main branch link]).
+# `here <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__
+# ).
 #
 
 from braket.aws import AwsSession, AwsQuantumJob
