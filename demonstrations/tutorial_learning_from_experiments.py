@@ -27,7 +27,7 @@ The learning task
 The learning task we focus on involves deciding if a unitary is
 time-reversal symmetric (we’ll call them T-symmetric) or not.
 Mathematically, time-reversal symmetry in quantum mechanics involves
-reversing the sense of :math:`i` so that :math:`i\rightarrow -i`.
+reversing the sense of :math:`i` so that :math:`i \rightarrow -i`.
 Hence, a unitary :math:`U` is T-symmetric if
 
 .. math:: U^*=U.
