@@ -72,6 +72,8 @@ where
 In the literature, the :math:`S_s` terms are called the “star”
 operators, and the :math:`P_p` terms are called the “plaquette”
 operators. Each star :math:`s` and plaquette :math:`p` is a group of 4 sites on a square lattice.
+You can compare this model to something like the `Heisenberg model <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`_
+used to describe spins interacting magnetically in a material.  
 
 In the most common formulation of the model, sites live on
 the edges of a square lattice. In this formulation, the “plaquette” operators are products of Pauli X operators on all the sites
