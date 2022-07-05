@@ -966,6 +966,8 @@ print("Move x excitation around z excitation: ", x_around_z)
 #    from homotopically distinct loops of operations
 # 4. The excitations are anyons due to non-trivial mutual statistics
 # Make sure to go and modify the code as suggested if you wish to gain more intuition. Do check the references below if you want to learn more!
+#
+#
 # References
 # ----------
 #
