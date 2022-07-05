@@ -386,7 +386,9 @@ print("Total energy: ", E0)
 # .. math::
 #
 #    S_s |\phi\rangle = S_s X_i |G\rangle = - X_i S_s |G\rangle = - X_i |G\rangle = - |\phi\rangle.
+#
 # Thus,
+#
 # .. math::
 #
 #    \langle \phi | S_s | \phi \rangle = -1.
