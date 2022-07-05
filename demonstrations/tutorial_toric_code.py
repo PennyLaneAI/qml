@@ -109,7 +109,7 @@ the same as a site at ``(x+width, y+height)``.
     By matching up the edges with periodic boundary conditions, we turn a square grid into
     a torus.
 
-On to some practical coding! First, let's define the sites on a $4\times 6$ lattice.
+On to some practical coding! First, let's define the sites on a :math:`4\times 6` lattice.
 """
 
 import pennylane as qml
