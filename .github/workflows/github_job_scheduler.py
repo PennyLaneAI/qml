@@ -9,9 +9,9 @@ Please refer to the doc strings of each function to see how this is done. Summar
 
 Summary of workflow:
 
-1) Call `build-matrix` function
+1) Call `build-strategy-matrix` function
 ```
-python3 github_job_scheduler.py build-matrix {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN}
+python3 github_job_scheduler.py build-strategy-matrix {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN}
 ```
 This simply calculates how many tutorials are there in total, then divides that by the total number of workers
 to get  the 'jobs per worker' count. It then outputs a JSON list of 'offset' which basically means where in the
@@ -36,10 +36,10 @@ This information is then used by the workers to determine as such:
 ]
 
 
-2) Call 'execute-matrix' function
+2) Call 'remove-executable-code' function
 ```
-python3 github_job_scheduler.py execute-matrix {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
- --offset={CURRENT WORKER MATRIX OFFSET FROM 'build-matrix'}
+python3 github_job_scheduler.py remove-executable-code {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
+ --offset={CURRENT WORKER MATRIX OFFSET FROM 'build-strategy-matrix'}
 ```
 
 There is no option to actually build 'partial gallery' in sphinx. It is also not possible to simply delete tutorials
@@ -48,9 +48,9 @@ that are not relevant as that would break table of contents, thumbnails and othe
 To achieve parallelisation, the workers remove executable code from tutorials that are not relevant to them.
 
 Example:
-If worker 1 from above example called 'execute-matrix', then the following would happen to "a.py" tutorial.
+If worker 1 from above example called 'remove-executable-code', then the following would happen to "a.py" tutorial.
 
-Contents of a.py (before execute-matrix):
+Contents of a.py (before remove-executable-code):
 ```
 # This is a tutorial file
 
@@ -61,23 +61,22 @@ for i in range(10):
 # Conclusion
 ```
 
-Contents of a.py (after execute-matrix):
+Contents of a.py (after remove-executable-code):
 ```
 # This is a tutorial file
 
 
 # Conclusion
-# %%%%%%RUNNABLE_CODE_REMOVED%%%%%%
 ```
 
 This allows all workers to build all tutorials, but only the tutorials relevant to each worker will have appropriate
 executable code preserved. This also preserves proper indexing, and table of contents.
 
 
-3) Call 'clean-html' function
+3) Call 'remove-html' function
 ```
-python3 github_job_scheduler.py clean-html {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
- --offset={CURRENT WORKER MATRIX OFFSET FROM 'build-matrix'}
+python3 github_job_scheduler.py remove-html {PATH_TO_REPO} --num-workers={TOTAL WORKERS TO SPAWN} \
+ --offset={CURRENT WORKER MATRIX OFFSET FROM 'build-strategy-matrix'}
 ```
 Once the sphinx-build process has completed, the html files that were generated which are not relevant to the current
 worker are deleted. This ensures that when all the html files are aggregated, the proper executed html files is present
@@ -88,6 +87,8 @@ import re
 import json
 import math
 import argparse
+from shutil import rmtree
+from itertools import chain
 from enum import Enum, IntEnum
 from pathlib import PosixPath
 from dataclasses import dataclass
@@ -413,6 +414,12 @@ def remove_extraneous_html(
     files_to_retain = list(map(lambda f: "".join(f.split(".")[:-1]), files_to_retain))
 
     image_files = (root_directory / "_build" / "html" / "_images").glob("*")
+
+    # Convert downloadable content globs to list as the directories will be cleaned as well
+    # which will scanning errors for the generator
+    downloadable_python_files = list((root_directory / "_build" / "html" / "_downloads").rglob("*.py"))
+    downloadable_notebook_files = list((root_directory / "_build" / "html" / "_downloads").rglob("*.ipynb"))
+
     html_files = (root_directory / "_build" / "html" / "demos").glob("*.html")
 
     dry_run = []
@@ -421,7 +428,7 @@ def remove_extraneous_html(
 
         if file_stem == "index":
             continue
-        file_name = f"html/{file.name}"
+        file_name = f"demos/{file.name}"
         if file_stem not in files_to_retain:
             if current_dry_run:
                 dry_run.append(file_name)
@@ -448,6 +455,19 @@ def remove_extraneous_html(
                 dry_run.append(file_name)
             else:
                 file.unlink()
+            if verbose:
+                print("Deleted", file_name)
+
+    for file in chain(downloadable_python_files, downloadable_notebook_files):
+        file_stem = file.stem
+        file_parent = file.parent
+        file_name = "/".join(["_downloads", file_parent.name, file.name])
+
+        if file_stem not in files_to_retain:
+            if current_dry_run:
+                dry_run.append(file_name)
+            else:
+                rmtree(file_parent)
             if verbose:
                 print("Deleted", file_name)
 
