@@ -16,7 +16,7 @@ Intro error mitigation
 
 Showing off new functionality with ZNE
 --------------------------------------
-Could be nice to base the tutorial on jax as it the new functions are jitable and super fast?
+Could be nice to base the tutorial on jax as the new functions are jitable and super fast?
 Including the example from the fold_global details section, showing the manual fit in ZNE to assure it makes sense (visualization always helps imo)
 
 VQE example using a noisy device with mitigation
@@ -25,8 +25,8 @@ VQE example using a noisy device with mitigation
 Showing off other interfaces and how to get their gradients
 -----------------------------------------------------------
 
-Discussing differentiation the mitigation scheme itself
--------------------------------------------------------
+Discussing differentiation of the mitigation scheme itself
+----------------------------------------------------------
 Havent figured out how this works, but could be worth it to potentially ignite some sparks.
 
 
