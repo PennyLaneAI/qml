@@ -62,7 +62,7 @@ G = nx.grid_graph(dim=[a, b])
 ##############################################################################
 # .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
 #    :align: center
-#    :width: 60%
+#    :width: 75%
 #
 #    ..
 
@@ -106,7 +106,7 @@ print(qml.draw(cluster_state)())
 # 
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
-#    :width: 60%
+#    :width: 50%
 #
 #    ..
 
@@ -177,7 +177,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
-#    :width: 60%
+#    :width: 75%
 #
 #    ..
 #
