@@ -92,13 +92,17 @@ print(qml.draw(cluster_state)())
 # ======================================
 # 
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In 
-# particular, we make use of a protocol called *teleportation*. 
-# Admittedly, this is a rather delusive name, but it is a powerful idea that can be used in many 
-# quantum technologies like communication and, indeed, MBQC.
+# particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
+# teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
+# in safe communication protocols that are not possible with classical communication so it's certainly worth to learn about.
+# In this protocol, we transport *information* between systems. Note that we do not transport matter. 
+# Admittedly, it has a rather delusive name because it is not instantaneous but requires additional 
+# classical information to be communicated too. This classical information transfer is naturally 
+# limited by the speed of light. 
 #
-# Let us consider a simple example of teleportation. We start with a maximally entangled 2-qubit 
-# state, a Bell state. To relate this to the cluster states - this is a cluster state with two nodes
-# and one edge connecting them.
+# Let us have a deeper look at the principles behind the protocol using a simple example of 
+# teleportation. We start with a maximally entangled 2-qubit state, a Bell state. To relate this to 
+# the cluster states - this is a cluster state with two nodes and one edge connecting them.
 # 
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
