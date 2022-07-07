@@ -134,6 +134,19 @@ def one_bit_teleportation(state, theta):
 print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, np.pi))
 
 ##############################################################################
+#
+# The information propagates through the cluster state as we apply measurements to one end. 
+# Interestingly enough, we don not have to prepare all the entanglement at once...
+#
+# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Cluster state proposed in [#XanaduBlueprint2021]_
+
+##############################################################################
 # Universality
 # ======================
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
