@@ -26,7 +26,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Generate Build Matrix
         id: compute-strategy-matrix
@@ -55,7 +55,7 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.7
+          python-version: 3.8
           # Caching pip packages using setup-python is the recommended route by GitHub.
           # However, it is currently quite slow since it only caches the downloaded form of the packages,
           # not the installed version. Caching a venv in that sense is much faster.
