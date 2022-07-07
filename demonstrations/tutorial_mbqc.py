@@ -14,7 +14,7 @@ Measurement-based quantum computation
 ##############################################################################
 #
 # Measurement-based quantum computing (MBQC) is a clever approach towards quantum computing that
-# makes use of entanglement as a resource for computation. This method, also referred to as one-way
+# makes use of *offline* entanglement as a resource for computation. This method, also referred to as one-way
 # quantum computing, seems very dissimilar from the gate-based model. However, they can be proven to
 # be equivalent and so both are universal. In a one-way quantum computer, we start out with an entangled state, a so-called cluster state, and
 # apply particular single-qubit measurements that correspond to the desired quantum circuit. In
@@ -30,30 +30,25 @@ Measurement-based quantum computation
 # 3. How a **two-qubit gate** can be implemented in this scheme.
 #
 # Once these operations are explained, we will move on to fault-tolerance and sketch how this can be
-# achieved through lattice surgery. [elaborate]
+# achieved through lattice surgery. Throughout this tutorial, we will explain the underlying concepts 
+# with the help of some `PennyLane<https://pennylane.readthedocs.io/en/stable/>`__ and 
+# `FlamingPy<https://flamingpy.readthedocs.io/en/latest/>`__ code snippets. The latter is a relatively
+# new software package developped by Xanadu's architecture team for quantum error correction research.
 
 ##############################################################################
 #
 # Cluster states
 # --------------
 #
-# Cluster states are the basis of measurement-based quantum computation. They are also dubbed
-# as graph states, because they can be represented as an undirected graph :math:`G = (V,E)` whose vertices . 
-#
-# .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
-#    :align: center
-#    :width: 60%
-#
-#    ..
-#
-#    Cluster state proposed in [#XanaduBlueprint2021]_
+# Cluster states are the basis of measurement-based quantum computation. They are a special instance 
+# of graph states, a class of entangled multi-qubit states that can be represented by an undirected 
+# graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges with entanglement 
+# between them. 
 #
 # There is not one cluster state, but rather it’s a name for a class of highly entangled multi-qubit
 # states. One example of a cluster state would be
 #
 # .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n},
-#
-# where :math:`G` is some graph and :math:`E(G)` is the set of its edges.
 
 import networkx as nx
 
@@ -137,6 +132,22 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # ----------
 # The last ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
 # show how to do a CNOT in the measurement-based framework.
+
+##############################################################################
+# Fault-tolerance
+# ----------
+#
+# To mitigate the risk of failure during a quantum computation we require quantum error correction.
+# This requires a 3-dimensional cluster state [CITE]
+#
+# .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    Cluster state proposed in [#XanaduBlueprint2021]_
+
 
 ##############################################################################
 # References
