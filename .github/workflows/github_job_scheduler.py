@@ -116,9 +116,7 @@ class FileReadState(IntEnum):
 
 
 def _remove_executable_from_doc(
-        input_file_path: PosixPath,
-        output_file_path: PosixPath,
-        encoding: str = "utf-8"
+    input_file_path: PosixPath, output_file_path: PosixPath, encoding: str = "utf-8"
 ) -> None:
     """
     Given a python file to read, this function will remove all executable code from the file but retain all comments.
@@ -173,13 +171,18 @@ def _remove_executable_from_doc(
                     output_lines.append(original_line)
                 elif line.startswith(CommentType.MULTI_LINE.value):
                     output_lines.append(original_line)
-                    if not line.endswith(CommentType.MULTI_LINE.value) or len(line) < MULTI_LINE_MIN_LEN:
+                    if (
+                        not line.endswith(CommentType.MULTI_LINE.value)
+                        or len(line) < MULTI_LINE_MIN_LEN
+                    ):
                         current_read_state = FileReadState.MULTI_LINE_COMMENT
                 else:
                     output_lines.append("\n")
             elif current_read_state == FileReadState.MULTI_LINE_COMMENT:
                 output_lines.append(original_line)
-                if line.startswith(CommentType.MULTI_LINE.value) or line.endswith(CommentType.MULTI_LINE.value):
+                if line.startswith(CommentType.MULTI_LINE.value) or line.endswith(
+                    CommentType.MULTI_LINE.value
+                ):
                     current_read_state = FileReadState.NORMAL
     with output_file_path.open("w", encoding=encoding) as fh:
         # More memory efficient than using str.join as the entire document isn't held in memory as one string
@@ -189,9 +192,7 @@ def _remove_executable_from_doc(
 
 
 def _calculate_files_per_worker(
-        num_workers: int,
-        build_directory: PosixPath,
-        glob_pattern: str = "*.py"
+    num_workers: int, build_directory: PosixPath, glob_pattern: str = "*.py"
 ) -> WorkerFileCount:
     """
     Calculates how many files should be allocated per worker based on the total number of files found.
@@ -232,16 +233,12 @@ def _calculate_files_per_worker(
     files = list(build_directory.glob(glob_pattern))
     files_count = len(files)
     return WorkerFileCount(
-        total_files=files_count,
-        files_per_worker=math.ceil(files_count / num_workers)
+        total_files=files_count, files_per_worker=math.ceil(files_count / num_workers)
     )
 
 
 def _calculate_files_to_retain(
-        num_workers: int,
-        offset: int,
-        build_directory: PosixPath,
-        glob_pattern: str = "*.py",
+    num_workers: int, offset: int, build_directory: PosixPath, glob_pattern: str = "*.py"
 ) -> List[str]:
     """
     Determines the exact file names that a worker needs to execute.
@@ -258,15 +255,13 @@ def _calculate_files_to_retain(
     file_info = _calculate_files_per_worker(num_workers, build_directory, glob_pattern)
 
     files = sorted(build_directory.glob(glob_pattern))
-    files_to_retain = files[offset:offset + file_info.files_per_worker]
+    files_to_retain = files[offset : offset + file_info.files_per_worker]
 
     return list(map(lambda x: x.name, files_to_retain))
 
 
 def build_strategy_matrix_offsets(
-        num_workers: int,
-        build_directory: PosixPath,
-        parser_namespace: argparse.Namespace
+    num_workers: int, build_directory: PosixPath, parser_namespace: argparse.Namespace
 ) -> List[str]:
     """
     Generates a JSON list of "offsets" that indicate where each node should start building tutorials from.
@@ -338,9 +333,7 @@ def build_strategy_matrix_offsets(
 
 
 def remove_extraneous_executable_code(
-        num_workers: int,
-        build_directory: PosixPath,
-        parser_namespace: argparse.Namespace
+    num_workers: int, build_directory: PosixPath, parser_namespace: argparse.Namespace
 ) -> Optional[List[str]]:
     """
     Deletes executable code from all tutorials that are not relevant to the current node calling this function.
@@ -382,10 +375,10 @@ def remove_extraneous_executable_code(
 
 
 def remove_extraneous_html(
-        num_workers: int,
-        root_directory: PosixPath,
-        build_directory: PosixPath,
-        parser_namespace: argparse.Namespace
+    num_workers: int,
+    root_directory: PosixPath,
+    build_directory: PosixPath,
+    parser_namespace: argparse.Namespace,
 ) -> Optional[List[str]]:
     """
     Deletes all html files after sphinx-build that are not relevant to the current node.
@@ -415,10 +408,15 @@ def remove_extraneous_html(
 
     image_files = (root_directory / "_build" / "html" / "_images").glob("*")
 
-    # Convert downloadable content globs to list as the directories will be cleaned as well
-    # which will scanning errors for the generator
-    downloadable_python_files = list((root_directory / "_build" / "html" / "_downloads").rglob("*.py"))
-    downloadable_notebook_files = list((root_directory / "_build" / "html" / "_downloads").rglob("*.ipynb"))
+    # Path.rglob returns a generator that scans the globbed directory as you iterate the generator.
+    # This causes a scanner error as the directories are deleted as the loop iterates through the generator.
+    # Converting the generator to a list ensures the all the files are scanned first prior to the loop.
+    downloadable_python_files = list(
+        (root_directory / "_build" / "html" / "_downloads").rglob("*.py")
+    )
+    downloadable_notebook_files = list(
+        (root_directory / "_build" / "html" / "_downloads").rglob("*.ipynb")
+    )
 
     html_files = (root_directory / "_build" / "html" / "demos").glob("*.html")
 
@@ -437,10 +435,7 @@ def remove_extraneous_html(
             if verbose:
                 print("Deleted", file_name)
 
-    image_file_possible_prefixes = [
-        f"sphx_glr_{file_name}"
-        for file_name in files_to_retain
-    ]
+    image_file_possible_prefixes = [f"sphx_glr_{file_name}" for file_name in files_to_retain]
     image_file_regex_pattern = f"^({'|'.join(image_file_possible_prefixes)}).*"
     image_file_regex = re.compile(image_file_regex_pattern, re.IGNORECASE)
     for file in image_files:
@@ -479,63 +474,78 @@ def remove_extraneous_html(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="QML Build Scheduler",
-        description="This Python script aids in splitting the build process of the QML docs across multiple nodes"
+        description="This Python script aids in splitting the build process of the QML docs across multiple nodes",
     )
-    parser.add_argument("action",
-                        help="build-matrix -> Build strategy.matrix that will be used to schedule jobs dynamically. "
-                             "execute-matrix -> Remove executable code from non-relevant files in current offset. "
-                             "clean-html -> Delete html files built that are not relevant for current matrix offset.",
-                        choices=["build-strategy-matrix", "remove-executable-code", "remove-html"],
-                        type=str)
-    parser.add_argument("directory",
-                        help="The path to the qml directory",
-                        type=str)
-    parser.add_argument("--examples-dir",
-                        help="The directory where sphinx documents exists. Similar to Sphinx examples-dir."
-                             "Default: 'demonstrations'",
-                        default="demonstrations")
-    parser.add_argument("--num-workers",
-                        help="The total number of jobs the build should be split across",
-                        type=int,
-                        required=True)
-    parser.add_argument("--glob-pattern",
-                        help="The pattern to use to search for files in the examples-dir."
-                             "Default: '*.py'",
-                        type=str,
-                        default="*.py")
+    parser.add_argument(
+        "action",
+        help="build-matrix -> Build strategy.matrix that will be used to schedule jobs dynamically. "
+        "execute-matrix -> Remove executable code from non-relevant files in current offset. "
+        "clean-html -> Delete html files built that are not relevant for current matrix offset.",
+        choices=["build-strategy-matrix", "remove-executable-code", "remove-html"],
+        type=str,
+    )
+    parser.add_argument("directory", help="The path to the qml directory", type=str)
+    parser.add_argument(
+        "--examples-dir",
+        help="The directory where sphinx documents exists. Similar to Sphinx examples-dir."
+        "Default: 'demonstrations'",
+        default="demonstrations",
+    )
+    parser.add_argument(
+        "--num-workers",
+        help="The total number of jobs the build should be split across",
+        type=int,
+        required=True,
+    )
+    parser.add_argument(
+        "--glob-pattern",
+        help="The pattern to use to search for files in the examples-dir." "Default: '*.py'",
+        type=str,
+        default="*.py",
+    )
 
     parser_execute = parser.add_argument_group("Execute Matrix / Clean")
-    parser_execute.add_argument("--offset",
-                                help="The current matrix output to retain files from",
-                                type=int)
-    parser_execute.add_argument("--dry-run",
-                                help="Will not delete files but list what will be deleted",
-                                action="store_true")
-    parser_execute.add_argument("--preserve-non-sphinx-images",
-                                help="Do not delete static images in the gallery _images directory",
-                                action="store_true")
-    parser_execute.add_argument("--verbose",
-                                help="Print name of files that are being cleaned up for current offset",
-                                action="store_true")
+    parser_execute.add_argument(
+        "--offset", help="The current matrix output to retain files from", type=int
+    )
+    parser_execute.add_argument(
+        "--dry-run", help="Will not delete files but list what will be deleted", action="store_true"
+    )
+    parser_execute.add_argument(
+        "--preserve-non-sphinx-images",
+        help="Do not delete static images in the gallery _images directory",
+        action="store_true",
+    )
+    parser_execute.add_argument(
+        "--verbose",
+        help="Print name of files that are being cleaned up for current offset",
+        action="store_true",
+    )
 
     parser_results = parser.parse_args()
 
     directory_qml = PosixPath(parser_results.directory)
     directory_examples = directory_qml / parser_results.examples_dir
-    assert directory_examples.exists(), f"Could not find {parser_results.examples_dir!r} folder " \
-                                        f"under {parser_results.directory!r}"
+    assert directory_examples.exists(), (
+        f"Could not find {parser_results.examples_dir!r} folder "
+        f"under {parser_results.directory!r}"
+    )
 
     worker_count = parser_results.num_workers
     assert worker_count > 0, "Total number of workers has to be greater than 1"
 
     if parser_results.action == "remove-html":
-        output = remove_extraneous_html(worker_count, directory_qml, directory_examples, parser_results)
+        output = remove_extraneous_html(
+            worker_count, directory_qml, directory_examples, parser_results
+        )
     else:
         action_dict = {
             "build-strategy-matrix": build_strategy_matrix_offsets,
-            "remove-executable-code": remove_extraneous_executable_code
+            "remove-executable-code": remove_extraneous_executable_code,
         }
-        output = action_dict[parser_results.action](worker_count, directory_examples, parser_results)
+        output = action_dict[parser_results.action](
+            worker_count, directory_examples, parser_results
+        )
 
     if output:
         print(json.dumps(output))
