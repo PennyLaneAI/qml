@@ -38,7 +38,7 @@ Measurement-based quantum computation
 ##############################################################################
 #
 # Cluster states
-# --------------
+# =================
 #
 # Cluster states are the basis of measurement-based quantum computation. They are a special instance 
 # of graph states, a class of entangled multi-qubit states that can be represented by an undirected 
@@ -87,7 +87,7 @@ print(qml.draw(cluster_state)())
 
 ##############################################################################
 # Information propagation and Teleportation
-# ----------
+# ======================================
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
 #    :width: 60%
@@ -122,6 +122,12 @@ def one_bit_teleportation(state, theta):
 print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, np.pi))
 
 ##############################################################################
+# Universality
+# ======================
+# Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
+# MBQC, we can implement arbitrary single-qubit rotations by using the entanglement of the cluster state.
+
+##############################################################################
 # Single-qubit rotations
 # ----------
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
@@ -135,7 +141,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 
 ##############################################################################
 # Fault-tolerance
-# ----------
+# ======================
 #
 # To mitigate the risk of failure during a quantum computation we require quantum error correction.
 # This requires a 3-dimensional cluster state [CITE]
