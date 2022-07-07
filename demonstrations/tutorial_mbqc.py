@@ -43,12 +43,14 @@ Measurement-based quantum computation
 # Cluster states are the basis of measurement-based quantum computation. They are a special instance 
 # of graph states, a class of entangled multi-qubit states that can be represented by an undirected 
 # graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges with entanglement 
-# between them. 
+# between them. The associated quantum state reads as follows
 #
-# There is not one cluster state, but rather it’s a name for a class of highly entangled multi-qubit
-# states. One example of a cluster state would be
+# .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n}.
 #
-# .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n},
+# The difference between a cluster state and a graph state is that the cluster state is ...
+#
+# 
+# 
 
 import networkx as nx
 
@@ -88,6 +90,16 @@ print(qml.draw(cluster_state)())
 ##############################################################################
 # Information propagation and Teleportation
 # ======================================
+# 
+# Measurement-based quantum computation heavily relies on the idea of information propagation. In 
+# particular, we make use of a protocol called *teleportation*. 
+# Admittedly, this is a rather delusive name, but it is a powerful idea that can be used in many 
+# quantum technologies like communication and, indeed, MBQC.
+#
+# Let us consider a simple example of teleportation. We start with a maximally entangled 2-qubit 
+# state, a Bell state. To relate this to the cluster states - this is a cluster state with two nodes
+# and one edge connecting them.
+# 
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
 #    :width: 60%
