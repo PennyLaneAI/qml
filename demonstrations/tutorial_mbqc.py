@@ -32,8 +32,9 @@ Measurement-based quantum computation
 #
 # 3. How a **two-qubit gate** can be implemented in this scheme.
 #
-# Once these operations are explained, we will move on to fault-tolerance and sketch how this can be
-# achieved through lattice surgery. Throughout this tutorial, we will explain the underlying concepts 
+# 4. How **Fault-tolerance** can be achieved in this scheme.
+#
+# Throughout this tutorial, we will explain the underlying concepts 
 # with the help of some `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and 
 # `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ code snippets. The latter is a relatively
 # new software package developped by Xanadu's architecture team for quantum error correction research.
