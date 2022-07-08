@@ -160,7 +160,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # Single-qubit rotations
 # ```````````````````````
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
-# MBQC, we can implement arbitrary single-qubit rotations by using the entanglement of the cluster state.
+# MBQC, we can implement these rotations by using the entanglement of the cluster state.
 
 ##############################################################################
 # The two-qubit gate: CNOT
