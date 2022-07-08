@@ -22,8 +22,8 @@ function of the number of training samples. This demo is based on the paper
 What is Generalization in (Q)ML?
 ------------------------
 When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
-distribution of interest, like images of cats and dogs. However, in practice we are limited to a finite amount of
-data, necessitating the need to reason about how our model performs on new, previously unseen data. The difference
+distribution of interest, like for example images of cats and dogs. However, in practice we are limited to a finite amount of
+data, for which reason it is necessary to reason about how our model performs on new, previously unseen data. The difference
 between the model's performance on the true data distribution, and the performance estimated from our training data is
 called the *generalization error* and indicates how well the model has learned to generalize to unseen data. It is good
 to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
@@ -37,12 +37,12 @@ the typical data processing pipeline of a QML model. A classical data input :mat
 state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a parametrized quantum
 channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` and a measurement is performed on the resulting state
 to get the final prediction. The goal is now to minimize the expected loss over the data generating distribution
-:math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math: `\ell`, the
+:math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
 expected loss is given by
 
 .. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)].
 
-As :math:`P` is generally not known, in practice this quantity has to be estimated from a finite amount of data. Given
+As :math:`P` is generally unknown, in practice this quantity has to be estimated from a finite amount of data. Given
 a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N`, we estimate the performance of our QML model by calculating the
 average loss over the training set
 
@@ -66,8 +66,8 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # As hinted at earlier, we expect the generalization error to depend both on the richness of the model class, as well as
 # on the amount of training data available. As a first result, the authors of Ref. [#CaroGeneralization]_ found that for
-# a QMLM model with at most :math:`T` parametrized local quantum channels, the generalization error depends on :math:`T`
-# and :math:`N` via
+# a QML model with at most :math:`T` parametrized local quantum channels, the generalization error depends on :math:`T`
+# and :math:`N` according to
 #
 # .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
 #
@@ -90,24 +90,12 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
 #
 # is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon`.
-# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify phases.
-#
-# X
-# X
-#
-# X
-#
-# X
-#
-# TODO: some nice transition text
-# X
-#
-# X
-#
-# X
-#
-#
+# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different phases of
+# the transverse field Ising model.
 
+##############################################################################
+# Generalization of Quantum Convolutional Neural Networks
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -191,18 +179,18 @@ plt.show()
 # in the example below.
 
 ##############################################################################
-# Quantum Convolutional Neural Netwokr
+# Quantum Convolutional Neural Network
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Let us now create a quantum CNN like the one  proposed by Cong, et al. 
-# [#CongQuantumCNN]. Similar to a classical CNN, we have both a 
+# Let us now create a quantum CNN like the one  proposed by Cong, et al.
+# [#CongQuantumCNN]. Similar to a classical CNN, we have both a
 # `convolutional_layer` and a `pooling_layer`. The former layer acts as a window
-# that extracts local correlations, while the former allows reducing the 
-# dimensionality of the feature vector. In the simplest case, the 
-# `convolutional_layer` consists of a two-qubit unitary that is shifted along 
-# the circuit and the `pooling_layer` of a single qubit gate conditioned on the 
-# measurement of a neighbouring qubit. These two layers are alternatingly 
-# concatenated (conv-pool-conv-pool). Additionally, similar to classical CNNs, 
-# we concatenate the reduced feature vector with a `dense layer`, which in our 
+# that extracts local correlations, while the former allows reducing the
+# dimensionality of the feature vector. In the simplest case, the
+# `convolutional_layer` consists of a two-qubit unitary that is shifted along
+# the circuit and the `pooling_layer` of a single qubit gate conditioned on the
+# measurement of a neighbouring qubit. These two layers are alternatingly
+# concatenated (conv-pool-conv-pool). Additionally, similar to classical CNNs,
+# we concatenate the reduced feature vector with a `dense layer`, which in our
 # case can be modeled as an all-to-all unitary gate.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
@@ -243,7 +231,7 @@ def dense_layer(weights, wires):
 
 ##############################################################################
 # Let us now define a circuit that takes as an input the weights of the QCNN and
-# the quantum state to be processed. We first take the vector representation of 
+# the quantum state to be processed. We first take the vector representation of
 # the states calculated in `ising` and input them to a quantum circuit using
 # ``qml.QuibtStateVector``. Then we use ``conv_and_pooling`` layers, followed by a
 # ``dense_layer``. Finally, we calculate the probabilities of the outcomes ``{00, 01
@@ -309,7 +297,7 @@ val_hs = hs[val_choice]
 # We now define the loss function that we want to optimize. In this case we only have two classes, which allows us to use the output
 # of one qubit as the label (here: the first). More specifically, we use the probability of measuring ``0`` as the label for the ferromagnetic phase, and
 # the probability of measuring ``1`` as the label for the paramagnetic phase. Mathematically, the cost function that we
-# are then trying to optimize is 
+# are then trying to optimize is
 #
 # .. math:: \mathcal{L} = \sum_i p(y_i)
 #
