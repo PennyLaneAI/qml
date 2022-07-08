@@ -148,7 +148,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 #    ..
 #
-#    Cluster state proposed in [#XanaduBlueprint2021]_
+#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
 
 ##############################################################################
 # Universality
@@ -189,7 +189,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # ----------
 #
 #
-# .. [#OneWay2021]
+# .. [#OneWay2001]
 #
 #     Robert Raussendorf and Hans J. Briegel (2021) "A One-Way Quantum Computer",
 #     `Phys. Rev. Lett. 86, 5188
