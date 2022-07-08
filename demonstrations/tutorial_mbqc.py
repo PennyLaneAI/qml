@@ -25,8 +25,11 @@ Measurement-based quantum computation
 # the substrate for measurement-based quantum computation. Then, we will move on to explain to 
 # implement arbitrary quantum circuits, thus proving that MBQC is also universal. In particular, we 
 # will illustrate
+#
 # 1. How **information propagates** through the cluster state.
+#
 # 2. How **arbitrary qubit rotations** can be implemented.
+#
 # 3. How a **two-qubit gate** can be implemented in this scheme.
 #
 # Once these operations are explained, we will move on to fault-tolerance and sketch how this can be
