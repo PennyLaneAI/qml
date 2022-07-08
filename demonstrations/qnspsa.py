@@ -183,7 +183,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # problem <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__  to do so. 
 #
 
-# intialize a graph for the max cut problem
+# initialize a graph for the max cut problem
 import networkx as nx
 from matplotlib import pyplot as plt
 import pennylane as qml
@@ -196,7 +196,7 @@ seed = 121
 g = nx.gnm_random_graph(nodes, edges, seed=seed)
 cost_h, mixer_h = qaoa.maxcut(g)
 depth = 2
-# defining device to be the PennyLane lightning local simulator
+# define device to be the PennyLane lightning local simulator
 dev = qml.device("lightning.qubit", wires=n_qubits, shots=1000)
 
 
@@ -206,16 +206,16 @@ def qaoa_layer(gamma, alpha):
 
 
 def qaoa_circuit(params, n_qubits, depth):
-    # initalizing all qubits into +X eigenstate.
+    # initialize all qubits into +X eigenstate.
     for w in range(n_qubits):
         qml.Hadamard(wires=w)
     gammas = params[0]
     alphas = params[1]
-    # stacking building blocks for depth times.
+    # stack building blocks for depth times.
     qml.layer(qaoa_layer, depth, gammas, alphas)
 
 
-# defining ansatz and loss function
+# define ansatz and loss function
 @qml.qnode(dev)
 def cost_function(params):
     qaoa_circuit(params, n_qubits, depth)
@@ -230,8 +230,8 @@ def cost_function(params):
 
 from pennylane import numpy as np
 
-# Initializing a random parameter tensor with shape (2, depth), scaled
-# to [-pi, pi).
+# initialize a random parameter tensor with shape (2, depth), scaled
+# to [-pi, pi)
 params_curr = 2 * np.pi * (np.random.rand(2, depth) - 0.5)
 print("Input parameter shape:", params_curr.shape)
 print("Loss value:", cost_function(params_curr))
@@ -537,7 +537,7 @@ for i in range(repeats):
 tol = 2 * loss_curr_list.std()
 loss_curr = loss_curr_list.mean()
 
-# block updates that leads to significant increase
+# block updates that lead to significant increase
 # of the loss value
 if loss_curr + tol < loss_next:
     params_next = params_curr
@@ -576,13 +576,13 @@ print("Next parameters after blocking:\n", params_next)
 # The implementation of this new tolerance is shown below:
 #
 
-# defining number of steps to track
+# define number of steps to track
 history_length = 5
-# tracking the past losses in an array
+# track the past losses in an array
 last_n_steps = np.zeros(history_length)
 
 
-# step-wise update
+# stepwise update
 loss_curr = cost_function(params_curr)
 loss_next = cost_function(params_next)
 
@@ -598,7 +598,7 @@ if loss_curr + tol < loss_next:
 
 ######################################################################
 # The efficacy of this new tolerance definition is confirmed by
-# reproducing the experiment on QN-SPSA in Fig. 1(b) from Ref. [#Gacon2021]_. In the
+# reproducing the experiment on QN-SPSA in Fig. 1(b) from reference [#Gacon2021]_. In the
 # following figure, we show the performance of the optimizer with the two
 # tolerance definitions for an 11-qubit system. The shaded areas are the
 # profiles of 25 trials of the experiment. One can confirm the
@@ -606,7 +606,7 @@ if loss_curr + tol < loss_next:
 # just as well. With the new choice of the tolerance, for each step, the
 # QN-SPSA will only need to execute 2 (for gradient) + 4 (for metric tensor) +
 # 2 (for the current and the next-step loss) = 8 circuits. In practice, we measure
-# a 50% reduction in the step-wise optimization time.
+# a 50% reduction in the stepwise optimization time.
 #
 # The test is done with Amazon Braket Hybrid Jobs, as it is a handy tool to
 # scale up experiments systematically. We will show how to do that towards
@@ -676,7 +676,7 @@ class QNSPSA:
         resamplings (int): The number of samples to average for each parameter
             update.
         blocking (boolean): When set to be True, the optimizer only accepts
-            updates that leads to a loss value no larger than the loss value
+            updates that lead to a loss value no larger than the loss value
             before update, plus a tolerance. The tolerance is set with the
             parameter history_length.
         history_length (int): When blocking is True, the tolerance is set to be
@@ -951,7 +951,7 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of Reference [#Gacon2021]_ with the following job (find a
+# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job (find a
 # more detailed version of the example and the corresponding scripts
 # `here <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__
 # ).
@@ -994,7 +994,7 @@ job = AwsQuantumJob.create(
 ######################################################################
 # Visualizing the job results, we get the following plot. The results are
 # well aligned with the observations from Gacon et al. [#Gacon2021]_. The
-# stepwise optimization times for GD, QNG, SPSA and QN-SPSA are measured to
+# stepwise optimization time for GD, QNG, SPSA and QN-SPSA is measured to
 # be 0.43s, 0.75s, 0.03s and 0.20s. In this example, the average behavior of
 # SPSA matches the one from GD. QNG performs the best among the 4 candidates,
 # but it requires the most circuit executions and shots per step. In
