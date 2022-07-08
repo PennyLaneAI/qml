@@ -20,15 +20,15 @@ Most variational quantum algorithms (VQAs) are concerned with optimizing a `quan
 
 for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H`. These algorithms are specifically designed
 to be executed on noisy hardware. This means, that naturally we do not have direct access to :math:`f`, but rather a noisy version
-:math:`f^\text{\lightning}(\theta) := \text{tr}\left[H \Phi(\rho(\theta)) \right]` where :math:`\Phi(\bullet)` is a noise channel and
+:math:`f^{⚡}(\theta) := \text{tr}\left[H \Phi(\rho(\theta)) \right]` where :math:`\Phi(\bullet)` is a noise channel and
 :math:`\rho(\theta) = U^\dagger(\theta)|0\rangle \langle 0|U(\theta)` the variational state.
 
 To be able to get the most out of these devices, it is advisable to use quantum error mitigation. That is, a way of
-altering and/or post-processing the quantum function :math:`f^\text{\lightning}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
+altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
 
-Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^\text{\lightning}` to a new, mitigated, quantum function :math:`\tilde{f}`,
+Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^{⚡}` to a new, mitigated, quantum function :math:`\tilde{f}`,
 
-.. math:: \text{mitigate}: f^\text{\lightning} \mapsto \tilde{f}.
+.. math:: \text{mitigate}: f^{⚡} \mapsto \tilde{f}.
 
 In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable - both formally and practically in our implementation.
 PennyLane now provides one such differentiable quantum error mitigation technique with `zero noise extrapolation` (ZNE), which can be used and differentiated in simulation and on hardware.
@@ -83,7 +83,7 @@ qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 ##############################################################################
-# We can then simply transform the noisy qnode :math:`f^\text{\lightning}` with ``qml.transforms.mitigate_with_zne`` to generate :math:`\tilde{f}`.
+# We can then simply transform the noisy qnode :math:`f^{⚡}` with ``qml.transforms.mitigate_with_zne`` to generate :math:`\tilde{f}`.
 # If everything goes as planned, executing the mitigated ``qnode`` is then closer to the ideal result:
 
 scale_factors = [1.0, 2.0, 3.0]
@@ -119,7 +119,7 @@ print(grad(w1, w2))
 #
 # where :math:`n = \lfloor (\lambda - 1)/2 \rfloor` and :math:`s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor` are determined via the ``scale_factor`` :math:`=\lambda`.
 #
-# The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^\text{\lightning}` for different scale factors,
+# The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^{⚡}` for different scale factors,
 # and then extrapolate to :math:`\lambda \rightarrow 0`. Note that ``scale_factor=1`` corresponds to the original circuit, i.e. the noisy execution.
 
 scale_factors = [1., 2., 3.]
