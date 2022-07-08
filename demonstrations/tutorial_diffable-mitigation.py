@@ -59,7 +59,7 @@ dev_noisy = qml.transforms.insert(noise_gate, noise_strength, position="all")(de
 ##############################################################################
 # We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable.
 
-coeffs = np.concatenate([-1*np.ones(n_wires-1), 0.5* np.ones(n_wires)], requires_grad=False)
+coeffs = coeffs =  [1.] * (n_wires-1) + [0.5] * n_wires
 observables = [qml.PauliX(i) @ qml.PauliX(i+1) for i in range(n_wires-1)]
 observables += [qml.PauliZ(i) for i in range(n_wires)]
 
@@ -193,20 +193,90 @@ plt.legend(fontsize=14)
 plt.xlabel("epoch", fontsize=18)
 plt.ylabel("energy", fontsize=18)
 plt.show()
-
 ##############################################################################
-# Note that the discrepancies between the ideal simulation and exact result are due to the limited expressivity of our Ansatz.
-
-
-##############################################################################
-# Showing off other interfaces and how to get their gradients
-# -----------------------------------------------------------
-# also discuss jitting here. Comes at a higher cost for compilation but execution is 3 orders of magnitude faster
-#
+# Note that the discrepancies between the ideal simulation and exact result are due to the limited expressivity of our Ansatz,
+# which on the other hand is due to limitations in depth by noise. 
 # 
-# Discussing differentiation of the mitigation scheme itself
-# ----------------------------------------------------------
-# Havent figured out how this works, but could be worth it to potentially ignite some sparks.
+# Differentiate using JAX, JAX-JIT, torch, and tensorflow
+# -------------------------------------------------------
+# So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
+# executions. We show here briefly how you can also use the three other supported interfaces to compute gradients in PennyLane.
+# 
+# JAX / JAX-JIT:
+
+import jax
+import jax.numpy as jnp
+
+w1_jax = jnp.array(w1)
+w2_jax = jnp.array(w2)
+
+# quite slow! 15 s vs 1s in autograd
+res = qnode_mitigated(w1_jax, w2_jax)
+grad_jax = jax.grad(qnode_mitigated, argnums=[0, 1])
+print(grad_jax(w1_jax, w2_jax))
+
+# extreeeeemly slow > 10 min to compile
+# grad_jax_jit = jax.jit(jax.grad(mitigated_qnode, argnums=[0, 1]))
+# print(grad_jax_jit(w1_jax, w2_jax))
+
+##############################################################################
+# Torch:
+
+import torch
+
+w1_torch = torch.tensor(w1, requires_grad=True)
+w2_torch = torch.tensor(w2, requires_grad=True)
+
+res = mitigated_qnode(w1_torch, w2_torch)
+res.backward()
+print(w1_torch.grad, w2_torch.grad)
+
+##############################################################################
+# Tensorflow:
+
+import tensorflow as tf
+
+w1_tf = tf.Variable(w1)
+w2_tf = tf.Variable(w2)
+
+with tf.GradientTape() as tape:
+    res = qnode_mitigated(w1_tf, w2_tf)
+grad_tf = tape.gradient(res, w1_tf, w2_tf)
+print(grad_tf)
+
+
+
+# Differentiating the mitigation transform itself
+# ------------------------------------------------
+#
+# So far we have been concerned with differentiating `through` the mitigation transform. An interesting direction for future work
+# is differentiating the transform itself [cite transform paper]. In particular, the authors in [cite VAQEM] make the interesting observation
+# that for some error mitigation schemes, the cost function is a smooth in some of the mitigation parameters. We show here one of their
+# examples, which is a time-sensitive dynamical decoupling scheme:
+# 
+# .. figure:: /demonstrations/diffable-mitigation/Mitigate_real_vs_sim3.png
+#     :width: 50%
+#     :align: center
+#
+#     Time-sensitive dynamical decoupling scheme.
+# 
+# In this mitigation technique, the single qubit state is put into equal superposition
+# :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt(2)`. During the first idle time :math:`t_1`, the state is altered due to noise. 
+# Applying :math:`X` reverse the roles of each computational basis state. The idea is that the noise in the second idle time
+# :math:`T-t_1` is canceling out the effect of the first time window. We see that the output fidelity with respect to the noise-free
+# execution is a smooth function of :math:`t_1`. This was executed on ``ibm_perth``, and we note that simple noise models,
+# like the simulated IBM device, do not suffice to reproduce the behavior of the real device. 
+# 
+# This is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact of the simulation result.
+# It is therefore desirable to be able to optimize this parameter at the same time as we perform a variational quantum algorithm. 
+# However, there are formal and practical obstacles. Formally, writing down the derivative of this transform with respect to
+# the idle time in order to derive its parameter-shift rules would require access to the noise model.
+# This, on the other hand, is very difficult for a realistic scenario. Further, most mitigation parameters are integers and would have
+# to be smoothed in a differentiable way. 
+# 
+# META: need to find a good conclusion for this. Open for ideas!
+# META: currently does not execute on CI runs because the features are not merged to master yet
+# 
 #
 # References
 # ----------
