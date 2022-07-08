@@ -38,7 +38,7 @@ Measurement-based quantum computation
 ##############################################################################
 #
 # Cluster states
-# =================
+# ----------------
 #
 # Cluster states are the basis of measurement-based quantum computation. They are a special instance 
 # of graph states, a class of entangled multi-qubit states that can be represented by an undirected 
@@ -89,7 +89,7 @@ print(qml.draw(cluster_state)())
 
 ##############################################################################
 # Information propagation and Teleportation
-# ======================================
+# --------------------------------------
 # 
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In 
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
@@ -152,25 +152,25 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 
 ##############################################################################
 # Universality
-# ======================
+# -----------
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
 # MBQC, we can implement arbitrary single-qubit rotations by using the entanglement of the cluster state.
 
 ##############################################################################
 # Single-qubit rotations
-# ----------
+# ```````````````````````
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
 # MBQC, we can implement arbitrary single-qubit rotations by using the entanglement of the cluster state.
 
 ##############################################################################
 # The two-qubit gate: CNOT
-# ----------
+# ``````````````````````````	
 # The last ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
 # show how to do a CNOT in the measurement-based framework.
 
 ##############################################################################
 # Fault-tolerance
-# ======================
+# ----------------
 #
 # To mitigate the risk of failure during a quantum computation we require quantum error correction.
 # This requires a 3-dimensional cluster state [CITE]
