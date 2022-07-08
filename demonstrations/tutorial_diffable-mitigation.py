@@ -227,7 +227,7 @@ import torch
 w1_torch = torch.tensor(w1, requires_grad=True)
 w2_torch = torch.tensor(w2, requires_grad=True)
 
-res = mitigated_qnode(w1_torch, w2_torch)
+res = qnode_mitigated(w1_torch, w2_torch)
 res.backward()
 print(w1_torch.grad, w2_torch.grad)
 
@@ -245,13 +245,13 @@ grad_tf = tape.gradient(res, w1_tf, w2_tf)
 print(grad_tf)
 
 
-
+##############################################################################
 # Differentiating the mitigation transform itself
 # ------------------------------------------------
 #
 # So far we have been concerned with differentiating `through` the mitigation transform. An interesting direction for future work
 # is differentiating the transform itself [cite transform paper]. In particular, the authors in [cite VAQEM] make the interesting observation
-# that for some error mitigation schemes, the cost function is a smooth in some of the mitigation parameters. We show here one of their
+# that for some error mitigation schemes, the cost function is smooth in some of the mitigation parameters. Here, we show one of their
 # examples, which is a time-sensitive dynamical decoupling scheme:
 # 
 # .. figure:: /demonstrations/diffable-mitigation/Mitigate_real_vs_sim3.png
@@ -262,12 +262,12 @@ print(grad_tf)
 # 
 # In this mitigation technique, the single qubit state is put into equal superposition
 # :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt(2)`. During the first idle time :math:`t_1`, the state is altered due to noise. 
-# Applying :math:`X` reverse the roles of each computational basis state. The idea is that the noise in the second idle time
+# Applying :math:`X` reverses the roles of each computational basis state. The idea is that the noise in the second idle time
 # :math:`T-t_1` is canceling out the effect of the first time window. We see that the output fidelity with respect to the noise-free
 # execution is a smooth function of :math:`t_1`. This was executed on ``ibm_perth``, and we note that simple noise models,
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device. 
 # 
-# This is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact of the simulation result.
+# This is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact to the simulation result.
 # It is therefore desirable to be able to optimize this parameter at the same time as we perform a variational quantum algorithm. 
 # However, there are formal and practical obstacles. Formally, writing down the derivative of this transform with respect to
 # the idle time in order to derive its parameter-shift rules would require access to the noise model.
