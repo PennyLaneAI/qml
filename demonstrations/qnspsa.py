@@ -139,7 +139,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # The QN-SPSA update rule given in equation (9) is highly stochastic and may
 # not behave well numerically. In practice, a few tricks are applied to
-# ensure the method’s numerical stability [1]:
+# ensure the method’s numerical stability [#Gacon2021]_:
 #
 # Averaging on the Fubini-Study metric tensor
 #   A running average is taken on the metric tensor estimated from equation (7)
@@ -307,7 +307,8 @@ print(get_perturbation_direction(params_curr))
 #      [[-1  1]
 #      [ 1 -1]]
 #
-# With this function at our disposal, we implement the gradient estimator ``get_grad``:
+# With this function at our disposal, we implement the gradient estimator ``get_grad`` 
+# following equation (2):
 #
 
 
@@ -407,7 +408,7 @@ print("Random state overlap: ", get_state_overlap(tape))
 # :math:`\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}`.
 # With the function ``get_raw_tensor_metric``, we sample two perturbations with
 # ``get_perturbation_direction`` independently and estimate the raw metric
-# tensor with equation (8) and (7).
+# tensor with equations (8) and (7).
 #
 
 
@@ -950,7 +951,7 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of Ref. [#Gacon2021]_ with the following job (find a
+# QN-SPSA in Fig. 1(b) of Reference [#Gacon2021]_ with the following job (find a
 # more detailed version of the example and the corresponding scripts
 # `here <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__
 # ).
@@ -992,12 +993,12 @@ job = AwsQuantumJob.create(
 
 ######################################################################
 # Visualizing the job results, we get the following plot. The results are
-# well aligned with the observations from Gacon et al. [1]. The
+# well aligned with the observations from Gacon et al. [#Gacon2021]_. The
 # stepwise optimization times for GD, QNG, SPSA and QN-SPSA are measured to
 # be 0.43s, 0.75s, 0.03s and 0.20s. In this example, the average behavior of
 # SPSA matches the one from GD. QNG performs the best among the 4 candidates,
 # but it requires the most circuit executions and shots per step. In
-# particular ,for QPUs, this is a severe disadvantage of this method.
+# particular, for QPUs, this is a severe disadvantage of this method.
 # From the more shot-frugal options, QN-SPSA demonstrates the fastest
 # convergence and best final accuracy, making it a promising candidate
 # for variational algorithms.
