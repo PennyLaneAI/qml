@@ -14,15 +14,15 @@ In this tutorial, we show how we can implement the
 from Gacon et al. using PennyLane.
 
 Variational quantum algorithms (VQA) are in close analogy to their counterparts 
-of classical machine learning, in that they both build a close optimization loop, and utilize an
+of classical machine learning.  They both build a closed optimization loop and utilize an
 optimizer to iterate on the parameters. However, out-of-the-box classical gradient-based 
 optimizers, such as gradient descent, are often unsatisfying for VQA, as quantum measurements
-are notoriously expensive, and gradient measurements for quantum circuits scales poorly 
+are notoriously expensive and gradient measurements for quantum circuits scale poorly 
 with the system size.
 
-In Ref. [#Gacon2021]_. Gacon et al. propose QN-SPSA, which is tailored for quantum 
+In [#Gacon2021]_, Gacon et al. propose QN-SPSA, which is tailored for quantum 
 algorithms. In each optimization step, QN-SPSA executes only 2 quantum circuits to 
-estimate gradient, and another 4 for the Fubini-Study metric tensor, independent of the 
+estimate the gradient, and another 4 for the Fubini-Study metric tensor, independent of the 
 problem size. This preferred scaling makes it a promising candidate for optimization tasks
 for noisy intermediate-scale quantum (NISQ) devices.
 
@@ -50,16 +50,16 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # where :math:`f(\mathbf{x})` is the loss function with input parameter
 # :math:`\mathbf{x}`, while :math:`\eta` is the learning rate. The superscript
-# :math:`t` stands for the :math:`t` th iteration step in the optimization.
+# :math:`t` stands for the :math:`t`-th iteration step in the optimization.
 # Here the gradient :math:`\nabla f` is estimated dimension by dimension,
 # requiring :math:`O(d)` quantum measurements (:math:`d` being the
 # dimension of the parameter space). As quantum measurements are
-# expensive, this scaling makes GD impractical for high-dimensional
-# complicated circuits.
+# expensive, this scaling makes GD impractical for complicated high-dimensional
+# circuits.
 #
-# To address this unsatisfying scaling, `simultaneous perturbation
+# To address this unsatisfying scaling, the `simultaneous perturbation
 # stochastic approximation (SPSA) optimizer <https://pennylane.ai/qml/demos/spsa.html>`__
-# replaces this dimension-wise gradient estimation with a stochastic one [#SPSA]_.
+# replaces this dimensionwise gradient estimation with a stochastic one [#SPSA]_.
 # In SPSA, a random direction :math:`\mathbf{h} \in \mathcal{U}(\{-1, 1\}^d)`
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
 # :math:`d`-dimensional discrete uniform distribution.  The gradient
@@ -82,16 +82,16 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:spsa}\tag{4},
 #
 # where :math:`\mathbf{h}^{(t)}` is sampled at each step. Although this
-# stochastic approach cannot provide a step-wise unbiased gradient
+# stochastic approach cannot provide a stepwise unbiased gradient
 # estimation, SPSA is proved to be especially effective when accumulated
 # over multiple optimization steps.
 #
 # On the other hand, `quantum natural gradient descent (QNG)
 # <https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html>`__ [#Stokes2020]_
 # is a variant of gradient descent. It introduces the Fubini-Study metric tensor
-# :math:`\boldsymbol{g}` [#FS]_ into the optimization to account for the
-# structure of the non-Euclidean parameter space. The
-# :math:`d`-by-:math:`d` metric tensor is defined as
+# :math:`\boldsymbol{g}`  into the optimization to account for the
+# structure of the non-Euclidean parameter space [#FS]_. The
+# :math:`d \times d` metric tensor is defined as
 #
 # .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},\label{eq:fsTensor}\tag{5}
 #
@@ -104,7 +104,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \boldsymbol{g}^{-1}(\mathbf{x}^{(t)}) \nabla f(\mathbf{x}^{(t)}) \label{eq:qn}\tag{6}.
 #
 # While the introduction of the metric tensor helps to find better minima
-# and converge faster [#Yamamoto2019]_ [#Stokes2020]_,
+# and allows for faster convergence  [#Stokes2020]_ [#Yamamoto2019]_,
 # the algorithm is not as scalable due to the number of measurements
 # required to estimate :math:`\boldsymbol{g}`.
 #
@@ -130,14 +130,14 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # In each optimization step :math:`t`, one will need to randomly sample 3
 # perturbation directions
 # :math:`\mathbf{h}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)}`. Equation (9)
-# is then applied to compute the parameters for the :math:`(t + 1)`\ th
+# is then applied to compute the parameters for the :math:`(t + 1)`-th
 # step accordingly. This :math:`O(1)` update rule fits into NISQ devices
 # well.
 #
 # Numerical stability
 # -------------------
 #
-# The QN-SPSA update rule given in equation (9) is highly stochastic, and may
+# The QN-SPSA update rule given in equation (9) is highly stochastic and may
 # not behave well numerically. In practice, a few tricks are applied to
 # ensure the method’s numerical stability [1]:
 #
@@ -151,16 +151,16 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #   identity matrix.
 #
 # Fubini-Study metric tensor regularization
-#   To ensure the positive semi-definite property of the metric tensor near
+#   To ensure the positive semidefiniteness of the metric tensor near
 #   a minimum, the running average in equation (10) is regularized:
 #
 #   .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}) = \sqrt{\bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) \bar{\boldsymbol{g}}^{(t)}(\mathbf{x})} + \beta \mathbb{I}\label{eq:tensor_reg}\tag{11},
 #
 #   where :math:`\beta` is the regularization coefficient. We can consider :math:`\beta`
-#   as a hyperparameter and choose a suitable value by trial and error. A
-#   :math:`\beta` that is too small cannot protect the positive semi-definiteness
-#   of :math:`\bar{\boldsymbol{g}}_{reg}`, while too large a :math:`\beta` will wipe out
-#   the information from the Fubini-Study metric tensor; QN-SPSA is then reduced to the first
+#   as a hyperparameter and choose a suitable value by trial and error. If
+#   :math:`\beta` is too small, it cannot protect the positive semidefiniteness
+#   of :math:`\bar{\boldsymbol{g}}_{reg}`. If :math:`\beta` is too large, it will wipe out
+#   the information from the Fubini-Study metric tensor, reducing QN-SPSA to the first
 #   order SPSA.
 #
 #   With equation (11), the QN-SPSA update rule we implement in code reads
@@ -169,8 +169,8 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # Blocking condition on the parameter update
 #   A blocking condition is applied onto the parameter update. The optimizer
-#   only accepts updates that leads to a loss value no larger than the one
-#   before update, plus a tolerance. Ref. [#Spall1997]_ suggests choosing a tolerance
+#   only accepts updates that lead to a loss value no larger than the one
+#   before update, plus a tolerance. Reference [#Spall1997]_ suggests choosing a tolerance
 #   that is twice the standard deviation of the loss.
 #
 # Implementation
@@ -179,10 +179,8 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # We are now going to implement the QN-SPSA optimizer with all the tricks for numerical stability
 # included, and test it with a toy optimization problem.
 #
-# Let’s first set up the toy example to optimize. We use a QAOA max cut
-# problem to do so. Refer to `this
-# page <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__
-# for more details.
+# Let’s first set up the toy example to optimize. We use a `QAOA max cut
+# problem <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__  to do so. 
 #
 
 # intialize a graph for the max cut problem
@@ -198,7 +196,7 @@ seed = 121
 g = nx.gnm_random_graph(nodes, edges, seed=seed)
 cost_h, mixer_h = qaoa.maxcut(g)
 depth = 2
-# defining device to be the pennylane lightning local simulator
+# defining device to be the PennyLane lightning local simulator
 dev = qml.device("lightning.qubit", wires=n_qubits, shots=1000)
 
 
@@ -285,7 +283,7 @@ metric_tensor = np.identity(params_number)
 # function that we call ``get_perturbation_direction``. The function takes
 # the input parameter to the circuit ansatz, and returns a direction tensor
 # of the same shape. The direction tensor is sampled from a discrete uniform
-# distribution :math:`\mathcal{U}(\{-1, 1\}^d)` with ``random.choices``.
+# distribution :math:`\mathcal{U}(\{-1, 1\}^d)` using ``random.choices``.
 #
 
 
@@ -355,7 +353,7 @@ print("Estimated SPSA gradient:\n", grad)
 # doubles the circuit depth of the ansatz, and therefore has longer
 # execution time and experiences more accumulated noise from the device.
 # The function ``get_state_overlap`` returns a state overlap value between
-# 0 and 1: 1 for perfect overlap, and 0 for minimum overlap.
+# 0 (minimum overlap) and 1 (perfect overlap).
 #
 
 
@@ -404,11 +402,11 @@ print("Random state overlap: ", get_state_overlap(tape))
 #      Perfect overlap:  1.0
 #      Random state overlap:  0.599
 #
-# Now that we have confirmed our implementation on the state overlap, we can
+# Now that we have confirmed our implementation of the state overlap, we can
 # proceed to compute the raw stochastic metric tensor
 # :math:`\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}`.
 # With the function ``get_raw_tensor_metric``, we sample two perturbations with
-# ``get_perturbation_direction`` independently, and estimate the raw metric
+# ``get_perturbation_direction`` independently and estimate the raw metric
 # tensor with equation (8) and (7).
 #
 
@@ -460,7 +458,7 @@ print("Raw estimated metric tensor:\n", metric_tensor_raw)
 #      [-2.5  0.   2.5 -2.5]
 #      [ 2.5  0.  -2.5  2.5]]
 #
-# Apply the running average in equation (10), and the regularization in equation (11):
+# Now, let's apply the running average in equation (10), and the regularization in equation (11):
 #
 
 from scipy.linalg import sqrtm
@@ -521,8 +519,8 @@ print("Next parameters:\n", params_next)
 #      [[-1.03117138 -0.54824992]
 #      [-2.03318839  0.80331292]]
 #
-# Now it is the time to apply the blocking condition. Let’s first try the
-# proposal in Ref. [#Spall1997]_ to use twice the sample standard deviation of the loss
+# Now, it is the time to apply the blocking condition. Let’s first try the
+# proposal in [#Spall1997]_ to use twice the sample standard deviation of the loss
 # at the current step as the tolerance. To collect such a sample, we need to
 # repeat the qnode exeuction for the loss ``cost_function`` for, say, 10 times.
 # The straightforward implementation goes as follows:
@@ -560,13 +558,13 @@ print("Next parameters after blocking:\n", params_next)
 # this way adds significant overhead to the QN-SPSA optimizer. To be
 # specific, in each step of the optimization, QN-SPSA only requires
 # executing 2 circuits for the gradient, and 4 for the metric tensor. Yet
-# in the approach above, there are additional 10 (from the repeat number) + 1
+# in the approach above, there are an additional 10 (from the repeat number) + 1
 # circuits required to apply the blocking.
 #
 # To address this issue, we propose to define the tolerance as the
 # standard deviation of the loss values of the past :math:`N` steps
 # instead, where :math:`N` is a hyperparameter we choose.
-# The intuition here is, when the optimizer is working in a
+# The intuition here is that when the optimizer is working in a
 # fast-descending regime, the blocking condition is unlikely to be
 # triggered, as new loss values are often smaller than the previous ones.
 # On the other hand, when the optimizer is working in a rather flat energy
@@ -601,7 +599,7 @@ if loss_curr + tol < loss_next:
 # The efficacy of this new tolerance definition is confirmed by
 # reproducing the experiment on QN-SPSA in Fig. 1(b) from Ref. [#Gacon2021]_. In the
 # following figure, we show the performance of the optimizer with the two
-# tolerance definitions for a 11-qubit system. The shaded areas are the
+# tolerance definitions for an 11-qubit system. The shaded areas are the
 # profiles of 25 trials of the experiment. One can confirm the
 # past-:math:`N`-step (:math:`N=5` for the plot) standard deviation works
 # just as well. With the new choice of the tolerance, for each step, the
@@ -617,9 +615,9 @@ if loss_curr + tol < loss_next:
 #    :align: center
 #    :width: 80%
 #
-# Similarly, with Hybrid Jobs, we can also confirm that blocking indeed is
+# Similarly, with Hybrid Jobs, we can confirm that blocking is
 # necessary for this second-order SPSA optimizer, though it does not make
-# much difference for SPSA. Here the envelope of the QN-SPSA curves
+# much difference for SPSA. Here, the envelope of the QN-SPSA curves
 # without blocking is not plotted since it is too noisy to visualize. SPSA
 # is implemented by replacing the metric tensor with an identity
 # matrix.
@@ -635,8 +633,8 @@ if loss_curr + tol < loss_next:
 # of the code. In the code example above, we compute gradient, metric
 # tensor, and the loss values through individual calls on the
 # ``QNode.__call__()`` function (in this example, ``cost_function()``). In
-# a hand-wavy argument, each ``QNode.__call__()`` does the following two
-# things: (1) it constructs a tape with the given parameters, and then (2)
+# a handwavy argument, each ``QNode.__call__()`` does the following two
+# things: (1) it constructs a tape with the given parameters, and (2)
 # calls ``qml.execute()`` to execute the single tape.
 #
 # However, in this use case, the better practice is to group the tapes and
@@ -647,7 +645,7 @@ if loss_curr + tol < loss_next:
 # the `task
 # batching <https://docs.aws.amazon.com/braket/latest/developerguide/braket-batching-tasks.html?tag=local002>`__
 # feature from the Braket SV1 simulator, we are able to reduce the
-# optimization time by 75% for large circuits. For quantum hardwares,
+# optimization time by 75% for large circuits. For quantum hardware,
 # sending tapes in batches could also enable further efficiency
 # improvement in circuit compilation.
 #
@@ -993,13 +991,13 @@ job = AwsQuantumJob.create(
 
 
 ######################################################################
-# Visualizing the job results, we get the following plot.The results are
+# Visualizing the job results, we get the following plot. The results are
 # well aligned with the observations from Gacon et al. [1]. The
-# step-wise optimization times for GD, QNG, SPSA and QN-SPSA are measured to
+# stepwise optimization times for GD, QNG, SPSA and QN-SPSA are measured to
 # be 0.43s, 0.75s, 0.03s and 0.20s. In this example, the average behavior of
 # SPSA matches the one from GD. QNG performs the best among the 4 candidates,
-# however, requires the most circuit executions and shots per step. In
-# particular for QPUs this is a severe disadvantage of this method.
+# but it requires the most circuit executions and shots per step. In
+# particular ,for QPUs, this is a severe disadvantage of this method.
 # From the more shot-frugal options, QN-SPSA demonstrates the fastest
 # convergence and best final accuracy, making it a promising candidate
 # for variational algorithms.
