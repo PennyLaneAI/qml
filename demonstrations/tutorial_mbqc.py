@@ -31,8 +31,8 @@ Measurement-based quantum computation
 #
 # Once these operations are explained, we will move on to fault-tolerance and sketch how this can be
 # achieved through lattice surgery. Throughout this tutorial, we will explain the underlying concepts 
-# with the help of some `PennyLane<https://pennylane.readthedocs.io/en/stable/>`__ and 
-# `FlamingPy<https://flamingpy.readthedocs.io/en/latest/>`__ code snippets. The latter is a relatively
+# with the help of some `PennyLane<https://pennylane.readthedocs.io/en/stable/>`_ and 
+# `FlamingPy<https://flamingpy.readthedocs.io/en/latest/>`_ code snippets. The latter is a relatively
 # new software package developped by Xanadu's architecture team for quantum error correction research.
 
 ##############################################################################
@@ -153,8 +153,11 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 ##############################################################################
 # Universality
 # -----------
-# Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
-# MBQC, we can implement arbitrary single-qubit rotations by using the entanglement of the cluster state.
+# How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We 
+# have to prove it! In particular, we want to show that a measurement-based quantum computer is a 
+# called quantum Turing machine (WTM) also known as a universal quantum computer. To do this, we
+# need to show that the following three properties are true:
+
 
 ##############################################################################
 # Single-qubit rotations
