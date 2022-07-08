@@ -34,6 +34,16 @@ Measurement-based quantum computation
 # with the help of some `PennyLane<https://pennylane.readthedocs.io/en/stable/>`_ and 
 # `FlamingPy<https://flamingpy.readthedocs.io/en/latest/>`_ code snippets. The latter is a relatively
 # new software package developped by Xanadu's architecture team for quantum error correction research.
+#
+#
+#
+# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
+#
+#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
 
 ##############################################################################
 #
@@ -142,13 +152,6 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # The information propagates through the cluster state as we apply measurements to one end. 
 # Interestingly enough, we don not have to prepare all the entanglement at once...
 #
-# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
-#    :align: center
-#    :width: 60%
-#
-#    ..
-#
-#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
 
 ##############################################################################
 # Universality
