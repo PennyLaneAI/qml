@@ -185,15 +185,15 @@ plt.show()
 # Quantum Convolutional Neural Network
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Let us now create a quantum CNN like the one  proposed by Cong, et al.
-# [#CongQuantumCNN]. Similar to a classical CNN, we have both a
-# `convolutional_layer` and a `pooling_layer`. The former layer acts as a window
+# [#CongQuantumCNN]_. Similar to a classical CNN, we have both a
+# ``convolutional_layer`` and a ``pooling_layer``. The former layer acts as a window
 # that extracts local correlations, while the former allows reducing the
 # dimensionality of the feature vector. In the simplest case, the
-# `convolutional_layer` consists of a two-qubit unitary that is shifted along
-# the circuit and the `pooling_layer` of a single qubit gate conditioned on the
+# ``convolutional_layer`` consists of a two-qubit unitary that is shifted along
+# the circuit and the ``pooling_layer`` of a single qubit gate conditioned on the
 # measurement of a neighbouring qubit. These two layers are alternatingly
 # concatenated (conv-pool-conv-pool). Additionally, similar to classical CNNs,
-# we concatenate the reduced feature vector with a `dense layer`, which in our
+# we concatenate the reduced feature vector with a ``dense_layer``, which in our
 # case can be modeled as an all-to-all unitary gate.
 
 
@@ -268,11 +268,11 @@ def conv_net(weights, last_layer_weights, input_state):
 
 qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**16))
 
+##############################################################################
 # .. figure:: ../demonstrations/learning_few_data/qcnn.png
 #     :width: 100%
 #     :align: center
-
-##############################################################################
+#
 # Performance vs. training dataset size
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # We can repeat the above analysis with increasing size of the training dataset.
