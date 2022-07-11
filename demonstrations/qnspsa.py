@@ -13,10 +13,10 @@ In this tutorial, we show how we can implement the
 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__ [#Gacon2021]_ 
 from Gacon et al. using PennyLane.
 
-Variational quantum algorithms (VQA) are in close analogy to their counterparts 
+Variational quantum algorithms (VQAs) are in close analogy to their counterparts 
 of classical machine learning.  They both build a closed optimization loop and utilize an
 optimizer to iterate on the parameters. However, out-of-the-box classical gradient-based 
-optimizers, such as gradient descent, are often unsatisfying for VQA, as quantum measurements
+optimizers, such as gradient descent, are often unsatisfying for VQAs, as quantum measurements
 are notoriously expensive and gradient measurements for quantum circuits scale poorly 
 with the system size.
 
@@ -994,7 +994,7 @@ job = AwsQuantumJob.create(
 ######################################################################
 # Visualizing the job results, we get the following plot. The results are
 # well aligned with the observations from Gacon et al. [#Gacon2021]_. The
-# stepwise optimization time for GD, QNG, SPSA and QN-SPSA is measured to
+# stepwise optimization times for GD, QNG, SPSA and QN-SPSA are measured to
 # be 0.43s, 0.75s, 0.03s and 0.20s. In this example, the average behavior of
 # SPSA matches the one from GD. QNG performs the best among the 4 candidates,
 # but it requires the most circuit executions and shots per step. In
