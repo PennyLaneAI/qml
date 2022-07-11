@@ -135,7 +135,9 @@ import pennylane.numpy as pnp
 
 from matplotlib import pyplot as plt
 import seaborn as sns
+
 sns.set()
+
 
 def H_ising(h, n_wires):
     ops = [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(n_wires - 1)]
@@ -145,6 +147,7 @@ def H_ising(h, n_wires):
     coefs += [-h for _ in range(n_wires)]
     coefs += [-1e-03 for _ in range(n_wires)]
     return qml.Hamiltonian(coefs, ops)
+
 
 def ising(h, n_wires):
     H = H_ising(h, n_wires)
@@ -192,6 +195,7 @@ plt.show()
 # concatenated (conv-pool-conv-pool). Additionally, similar to classical CNNs,
 # we concatenate the reduced feature vector with a `dense layer`, which in our
 # case can be modeled as an all-to-all unitary gate.
+
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     n_wires = len(wires)
@@ -276,14 +280,16 @@ qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.rando
 # ``N_val`` validation samples that acts as a proxy for the full test set during training.
 
 labels = np.zeros(len(data), dtype=int)
-labels[np.where(mzs<0.5)] = 1
+labels[np.where(mzs < 0.5)] = 1
 N_train = 10
 N_val = 50
 
-randomstate = np.random.default_rng( 0 )
-safe_range = np.concatenate([np.where(mzs>0.9)[0], np.where(mzs<0.1)[0]]) # making sure to be away from the phase transition ~h in [0.5-1]
-train_choice = randomstate.choice(safe_range, N_train, replace=False, shuffle=False )
-val_choice = randomstate.choice(safe_range, N_val, replace=False, shuffle=False )
+randomstate = np.random.default_rng(0)
+safe_range = np.concatenate(
+    [np.where(mzs > 0.9)[0], np.where(mzs < 0.1)[0]]
+)  # making sure to be away from the phase transition ~h in [0.5-1]
+train_choice = randomstate.choice(safe_range, N_train, replace=False, shuffle=False)
+val_choice = randomstate.choice(safe_range, N_val, replace=False, shuffle=False)
 
 train_data = data[train_choice]
 train_labels = labels[train_choice]
@@ -305,27 +311,37 @@ val_hs = hs[val_choice]
 #
 # In our implementation in PennyLane, we simply achieve this by taking the corresponding entry of the ``qml.probs`` output for the first qubit:
 
+
 def loss_fn(weights, weights_last, data, labels):
-    return 1-qml.math.sum([conv_net(weights, weights_last, state)[label] for state, label in zip(data, labels)])/len(data)
+    return 1 - qml.math.sum(
+        [conv_net(weights, weights_last, state)[label] for state, label in zip(data, labels)]
+    ) / len(data)
+
 
 ##############################################################################
 # Similarily, we compute the accuracy, which is the relative frequency of guessing the right label, i.e. :math:`p(y_i)>0.5`.
 
+
 def accuracy(weights, weights_last, data, labels):
-    return qml.math.sum([conv_net(weights, weights_last, state)[label]>0.5 for state, label in zip(data, labels)])/len(data)
+    return qml.math.sum(
+        [conv_net(weights, weights_last, state)[label] > 0.5 for state, label in zip(data, labels)]
+    ) / len(data)
+
 
 ##############################################################################
 # In order to use PennyLane's automatid differentiation we specify the trainable parameters, which will later then be automatically picked up
 
 weights = pnp.random.rand(18, 2, requires_grad=True)
-weights_last = pnp.random.rand(4**(2)-1, requires_grad = True)
+weights_last = pnp.random.rand(4 ** (2) - 1, requires_grad=True)
 
 ##############################################################################
 # We can now train
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.01)
-train_loss = [] ; val_loss = []
-train_acc = [] ; val_acc = []
+train_loss = []
+val_loss = []
+train_acc = []
+val_acc = []
 
 n_iter = 50
 for k in range(0, n_iter):
@@ -335,7 +351,9 @@ for k in range(0, n_iter):
         val_acc.append(accuracy(weights, weights_last, val_data, val_labels))
         print(f"train_acc = {train_acc[-1]} val_acc = {val_acc[-1]}")
 
-    (weights, weights_last), old_loss = optimizer.step_and_cost(loss_fn, weights, weights_last, data=train_data, labels=train_labels)
+    (weights, weights_last), old_loss = optimizer.step_and_cost(
+        loss_fn, weights, weights_last, data=train_data, labels=train_labels
+    )
     train_loss.append(old_loss)
     val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
 
@@ -345,46 +363,46 @@ val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
 ##############################################################################
 # We can check if the training was successful by looking at the loss and accuracy for the training and validation set during training:
 
-fig, axs = plt.subplots(ncols=3, figsize=(14,5))
+fig, axs = plt.subplots(ncols=3, figsize=(14, 5))
 ax = axs[0]
-ax.plot(train_loss,"x--", label="train")
-ax.plot(val_loss,"x--", label="val")
+ax.plot(train_loss, "x--", label="train")
+ax.plot(val_loss, "x--", label="val")
 ax.set_ylabel("loss", fontsize=20)
 ax.set_xlabel("epoch", fontsize=20)
 ax.legend(fontsize=20)
 
 ax = axs[1]
-ax.plot(train_acc,"o:", label="train")
-ax.plot(val_acc,"x--", label="val")
+ax.plot(train_acc, "o:", label="train")
+ax.plot(val_acc, "x--", label="val")
 ax.set_ylabel("accuracy", fontsize=20)
 ax.set_xlabel("epoch", fontsize=20)
 ax.legend(fontsize=20)
 
 ax = axs[2]
-ax.plot(train_acc, val_acc,"o:")
+ax.plot(train_acc, val_acc, "o:")
 ax.set_ylabel("val accuracy", fontsize=20)
 ax.set_xlabel("train accuracy", fontsize=20)
 ax.legend(fontsize=20)
 
 plt.tight_layout()
-#plt.savefig("few-data_loss_accuracy.png")
+# plt.savefig("few-data_loss_accuracy.png")
 plt.show()
 
 ##############################################################################
 # We can also look at the phase diagram directly and see for which transverse field parameters the training is successful:
 
 out = [conv_net(weights, weights_last, state)[0] for state in data]
-labels_predicted = [(0 if x>0.5 else 1) for x in out]
+labels_predicted = [(0 if x > 0.5 else 1) for x in out]
 
 
-fig, ax = plt.subplots(figsize=(6,5))
-ax.plot(hs, labels_predicted,".--", label="pred. class")
+fig, ax = plt.subplots(figsize=(6, 5))
+ax.plot(hs, labels_predicted, ".--", label="pred. class")
 ax.plot(hs, labels, "o", label="actual class")
-ax.plot(hs, mzs,"o:", label="mag")
+ax.plot(hs, mzs, "o:", label="mag")
 ax.plot(hs, out, ".:", label="p(0)")
 ax.legend(fontsize=20)
 ax.set_xlabel("h", fontsize=20)
-#plt.savefig("few-data_classification-result.png")
+# plt.savefig("few-data_classification-result.png")
 plt.show()
 
 
