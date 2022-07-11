@@ -6,7 +6,7 @@ Quantum natural SPSA optimizer
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
     
-*Author: Yiheng Duan (yiheng@amazon.com). Posted: 28 June 2022*
+*Author: Yiheng Duan (yiheng@amazon.com). Posted: 13 July 2022*
 
 In this tutorial, we show how we can implement the 
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer 
@@ -1024,11 +1024,11 @@ job = AwsQuantumJob.create(
 #    Wikipedia.
 #    https://en.wikipedia.org/wiki/Simultaneous_perturbation_stochastic_approximation
 #
-# .. [#FS] Fubini–Study metric (2022). Wikipedia.
-#    https://en.wikipedia.org/wiki/Fubini%E2%80%93Study_metric
-#
 # .. [#Stokes2020] Stokes, J., Izaac, J., Killoran, N., & Carleo, G. (2020). *Quantum
 #    natural gradient*. `Quantum, 4, 269 <https://quantum-journal.org/papers/q-2020-05-25-269/>`__.
+#
+# .. [#FS] Fubini–Study metric (2022). Wikipedia.
+#    https://en.wikipedia.org/wiki/Fubini%E2%80%93Study_metric
 #
 # .. [#Yamamoto2019] Yamamoto, N. (2019). *On the natural gradient for variational
 #    quantum eigensolver*. `arXiv preprint arXiv:1909.05074 <https://arxiv.org/abs/1909.05074>`__.
@@ -1038,3 +1038,9 @@ job = AwsQuantumJob.create(
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
 #
+
+##############################################################################
+#.. bio:: Yiheng Duan
+#    :photo: ../_static/authors/yiheng.jpeg
+#
+#    Yiheng Duan is an Applied Scientist at AWS Braket. Yiheng works at the intersection of quantum computing and machine learning.
