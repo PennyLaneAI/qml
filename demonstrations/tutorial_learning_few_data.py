@@ -269,10 +269,6 @@ def conv_net(weights, last_layer_weights, input_state):
 qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**16))
 
 ##############################################################################
-# .. figure:: ../demonstrations/learning_few_data/qcnn.png
-#     :width: 100%
-#     :align: center
-#
 # Performance vs. training dataset size
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # We can repeat the above analysis with increasing size of the training dataset.
