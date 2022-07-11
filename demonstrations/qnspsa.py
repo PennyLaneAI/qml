@@ -1,9 +1,9 @@
-"""
+r"""
 Quantum natural SPSA optimizer
 ==============================
 
 .. meta::
-    :property="og:description": Quantum natural SPSA optimizer that reduces the number of quantum measurements in the optimization.
+    :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
     
 *Author: Yiheng Duan (yiheng@amazon.com). Posted: 28 June 2022*
@@ -14,7 +14,7 @@ In this tutorial, we show how we can implement the
 from Gacon et al. using PennyLane.
 
 Variational quantum algorithms (VQAs) are in close analogy to their counterparts 
-of classical machine learning.  They both build a closed optimization loop and utilize an
+in classical machine learning.  They both build a closed optimization loop and utilize an
 optimizer to iterate on the parameters. However, out-of-the-box classical gradient-based 
 optimizers, such as gradient descent, are often unsatisfying for VQAs, as quantum measurements
 are notoriously expensive and gradient measurements for quantum circuits scale poorly 
@@ -108,7 +108,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # the algorithm is not as scalable due to the number of measurements
 # required to estimate :math:`\boldsymbol{g}`.
 #
-# QN-SPSA manages to combine the merits of both QNG and SPSA by estimating
+# QN-SPSA manages to combine the merits of QNG and SPSA by estimating
 # both the gradient and the metric tensor stochastically. The gradient is
 # estimated in the same fashion as the SPSA algorithm, while the
 # Fubini-Study metric is computed by a second-order process with another
@@ -180,7 +180,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # included, and test it with a toy optimization problem.
 #
 # Let’s first set up the toy example to optimize. We use a `QAOA max cut
-# problem <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__  to do so. 
+# problem <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__  as our testing ground. 
 #
 
 # initialize a graph for the max cut problem
@@ -224,7 +224,7 @@ def cost_function(params):
 
 ######################################################################
 # Let’s confirm this circuit works. We generate a set of random parameters
-# as input, and check if the qnode ``cost_function`` for the circuit can be
+# as input, and check if the QNode ``cost_function`` for the circuit can be
 # executed.
 #
 
@@ -523,7 +523,7 @@ print("Next parameters:\n", params_next)
 # Now, it is the time to apply the blocking condition. Let’s first try the
 # proposal in [#Spall1997]_ to use twice the sample standard deviation of the loss
 # at the current step as the tolerance. To collect such a sample, we need to
-# repeat the qnode exeuction for the loss ``cost_function`` for, say, 10 times.
+# repeat the QNode execution for the loss ``cost_function`` for, say, 10 times.
 # The straightforward implementation goes as follows:
 #
 
@@ -881,7 +881,7 @@ class QNSPSA:
         return tape
 
     def __get_operations(self, cost, params):
-        # Given a qnode, returns the list of operations before the measurement.
+        # Given a QNode, returns the list of operations before the measurement.
         cost.construct([params], {})
         return cost.tape.operations
 
