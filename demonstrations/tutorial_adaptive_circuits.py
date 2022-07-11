@@ -105,14 +105,15 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 hf_state = qchem.hf_state(active_electrons, qubits)
 
 
-def circuit_1(params, wires, excitations):
-    qml.BasisState(hf_state, wires=wires)
+def circuit_1(params, excitations):
+    qml.BasisState(hf_state, wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
             qml.DoubleExcitation(params[i], wires=excitation)
         else:
             qml.SingleExcitation(params[i], wires=excitation)
+    return qml.expval(H)
 
 
 ##############################################################################
@@ -122,7 +123,7 @@ def circuit_1(params, wires, excitations):
 # with respect to the Hartree-Fock state.
 
 dev = qml.device("default.qubit", wires=qubits)
-cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
+cost_fn = qml.QNode(circuit_1, dev)
 
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 
@@ -160,8 +161,8 @@ for n in range(20):
 # fixed while the gradients are computed for the single excitation gates.
 
 
-def circuit_2(params, wires, excitations, gates_select, params_select):
-    qml.BasisState(hf_state, wires=wires)
+def circuit_2(params, excitations, gates_select, params_select):
+    qml.BasisState(hf_state, wires=range(qubits))
 
     for i, gate in enumerate(gates_select):
         if len(gate) == 4:
@@ -174,12 +175,13 @@ def circuit_2(params, wires, excitations, gates_select, params_select):
             qml.DoubleExcitation(params[i], wires=gate)
         elif len(gate) == 2:
             qml.SingleExcitation(params[i], wires=gate)
+    return qml.expval(H)
 
 
 ##############################################################################
 #  We now compute the gradients for the single excitation gates.
 
-cost_fn = qml.ExpvalCost(circuit_2, H, dev, optimize=True)
+cost_fn = qml.QNode(circuit_2, dev)
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
 
@@ -211,7 +213,7 @@ singles_select
 # We perform one final step of optimization to get the ground-state energy. The resulting energy
 # should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
-cost_fn = qml.ExpvalCost(circuit_1, H, dev, optimize=True)
+cost_fn = qml.QNode(circuit_1, dev)
 
 params = np.zeros(len(doubles_select + singles_select), requires_grad=True)
 
@@ -275,13 +277,9 @@ def circuit(params):
     return qml.expval(qml.SparseHamiltonian(H_sparse, wires=range(qubits)))
 
 
-def cost(params):
-    return circuit(params)
-
-
 for n in range(20):
     t1 = time.time()
-    params, energy = opt.step_and_cost(cost, params)
+    params, energy = opt.step_and_cost(circuit, params)
     t2 = time.time()
     print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
