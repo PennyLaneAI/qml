@@ -590,7 +590,7 @@ loss_next = cost_function(params_next)
 ind = (k - 2) % history_length
 last_n_steps[ind] = loss_curr
 
-tol = 2 * self.last_n_steps.std() if k > history_length else 2 * last_n_steps[: k - 1].std()
+tol = 2 * last_n_steps.std() if k > history_length else 2 * last_n_steps[: k - 1].std()
 
 if loss_curr + tol < loss_next:
     params_next = params_curr
