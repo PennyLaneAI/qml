@@ -31,7 +31,6 @@ called the *generalization error* and indicates how well the model has learned t
     :width: 75%
     :align: center
 
-
 It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
 perfectly fit the training data, i.e. which admit a low bias, have a higher variance, typically perform poorly on unseen
 test data and don't generalize well. In the classical machine learning community, this trade off has been extensively
@@ -236,7 +235,7 @@ def init_weights():
 # We are going to perform the classification for differently sized training sets. We therefore define the classification procedure once and then perform it for different 
 # datasets.
 
-def train_qcnn(n_train, n_test, n_epochs, desc=f'n={n}'):
+def train_qcnn(n_train, n_test, n_epochs, desc):
     """
     Args:
         n_train  (int): number of training examples
