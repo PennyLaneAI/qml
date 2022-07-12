@@ -23,10 +23,16 @@ What is Generalization in (Q)ML?
 ------------------------
 When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
 distribution of interest, like for example images of cats and dogs. However, in practice we are limited to a finite amount of
-data, for which reason it is necessary to reason about how our model performs on new, previously unseen data. The difference
+data, which is why it is necessary to reason about how our model performs on new, previously unseen data. The difference
 between the model's performance on the true data distribution, and the performance estimated from our training data is
-called the *generalization error* and indicates how well the model has learned to generalize to unseen data. It is good
-to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
+called the *generalization error* and indicates how well the model has learned to generalize to unseen data. 
+
+.. figure:: /demonstrations/learning_few_data/true_vs_sample.png
+    :width: 75%
+    :align: center
+
+
+It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
 perfectly fit the training data, i.e. which admit a low bias, have a higher variance, typically perform poorly on unseen
 test data and don't generalize well. In the classical machine learning community, this trade off has been extensively
 studied and has lead to optimization techniques which favour generalization, for example by regularizing models via
@@ -113,7 +119,7 @@ seed = 0
 rng = np.random.default_rng(seed=seed)
 
 ##############################################################################
-# META: add description of convolutional layer @Luis. 
+# META: add motivate the use of convolutional layers and explain how they work @Luis. 
 # text text text.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
