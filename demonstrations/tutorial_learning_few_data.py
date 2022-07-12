@@ -1,8 +1,8 @@
 r"""
 .. _learning_few_data:
 
-Generalization in quantum machine learning from few training data
-==========================================
+Generalization in QML from few training data
+============================================
 
 .. meta::
     :property="og:description": Generalization of quantum machine learning models.
@@ -90,320 +90,12 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
 #
 # is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon`.
-# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different phases of
-# the transverse field Ising model.
+# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different 
+# digits in the classical ``digits`` dataset. Before that, we set up our QCNN.
 
 ##############################################################################
-# Generalization of Quantum Convolutional Neural Networks
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-import pennylane as qml
-from pennylane import numpy as np
-import matplotlib.pyplot as plt
-
-
-##############################################################################
-# Next, we create a randomized variational circuit
-
-# Set a seed for reproducibility
-np.random.seed(42)
-
-
-def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
-    pass
-
-
-##############################################################################
-# *Generating the training data*
-# We are considering the transverse field Ising model Hamiltonian
-#
-# .. math:: H = -\sum_i \sigma_i^z \sigma_{i+1}^z - h\sum_i \sigma_i^x.
-#
-# We compute the ground state for 50 different values of the transverse
-# field h. We use `L = 10` which is a trade off between finite size effects
-# and simulation time. The phase transition in the thermodynamic limit
-# :math:`L\rightarrow \infty` is known to be at `h=1`, but as we see below,
-# for our finite size system we can estimate it around `h=0.5`. This is important
-# for the classification later.
-#
-
-import pennylane as qml
-import scipy.sparse.linalg as linalg
-
-import numpy as np
-import pennylane.numpy as pnp
-
-from matplotlib import pyplot as plt
-import seaborn as sns
-
-sns.set()
-
-
-def H_ising(h, n_wires):
-    ops = [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(n_wires - 1)]
-    ops += [qml.PauliX(i) for i in range(n_wires)]
-    ops += [qml.PauliZ(i) for i in range(n_wires)]  # extra term to break the symmetry
-    coefs = [-1 for _ in range(n_wires - 1)]
-    coefs += [-h for _ in range(n_wires)]
-    coefs += [-1e-03 for _ in range(n_wires)]
-    return qml.Hamiltonian(coefs, ops)
-
-
-def ising(h, n_wires):
-    H = H_ising(h, n_wires)
-    Hmat = qml.utils.sparse_hamiltonian(H)
-    E, V = linalg.eigsh(Hmat, k=1, which="SA", return_eigenvectors=True, ncv=20)
-    return V[:, 0]
-
-
-n_wires = 8
-hs = np.linspace(0, 2, 200)
-data = np.array([ising(h, n_wires) for h in hs])
-dev = qml.device("default.qubit", wires=n_wires)
-
-
-@qml.qnode(dev)
-def magz(vec):
-    qml.QubitStateVector(vec, wires=range(n_wires))
-    return [qml.expval(qml.PauliZ(i)) for i in range(n_wires)]
-
-
-mzs = np.array([magz(vec) for vec in data])
-mzs = np.sum(mzs, axis=-1) / n_wires
-plt.plot(hs, mzs, "x--")
-plt.xlabel("h", fontsize=20)
-plt.ylabel("$\\langle \sigma_z \\rangle$", fontsize=20)
-plt.show()
-
-
-##############################################################################
-# We now take these ground states as our data for training and testing. We can
-# initialize any circuit in PennyLane using ``qml.QubitStateVector()`` as shown
-# in the example below.
-
-##############################################################################
-# Quantum Convolutional Neural Network
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Let us now create a quantum CNN like the one  proposed by Cong, et al.
-# [#CongQuantumCNN]_. Similar to a classical CNN, we have both a
-# ``convolutional_layer`` and a ``pooling_layer``. The former layer acts as a window
-# that extracts local correlations, while the former allows reducing the
-# dimensionality of the feature vector. In the simplest case, the
-# ``convolutional_layer`` consists of a two-qubit unitary that is shifted along
-# the circuit and the ``pooling_layer`` of a single qubit gate conditioned on the
-# measurement of a neighbouring qubit. These two layers are alternatingly
-# concatenated (conv-pool-conv-pool). Additionally, similar to classical CNNs,
-# we concatenate the reduced feature vector with a ``dense_layer``, which in our
-# case can be modeled as an all-to-all unitary gate.
-
-
-def convolutional_layer(weights, wires, skip_first_layer=True):
-    n_wires = len(wires)
-    assert n_wires >= 3, "this circuit is too small!"
-
-    for p in [0, 1]:
-        for indx, w in enumerate(wires):
-            if indx % 2 == p and indx < n_wires - 1:
-                if indx % 2 == 0 and skip_first_layer:
-                    qml.U3(*weights[:3], wires=[w])
-                    qml.U3(*weights[3:6], wires=[wires[indx + 1]])
-                qml.IsingXX(weights[6], wires=[w, wires[indx + 1]])
-                qml.IsingYY(weights[7], wires=[w, wires[indx + 1]])
-                qml.IsingZZ(weights[8], wires=[w, wires[indx + 1]])
-                qml.U3(*weights[9:12], wires=[w])
-                qml.U3(*weights[12:], wires=[wires[indx + 1]])
-
-
-def pooling_layer(weights, wires):
-    n_wires = len(wires)
-    assert len(wires) >= 2, "this circuit is too small!"
-
-    for indx, w in enumerate(wires):
-        if indx % 2 == 1 and indx < n_wires:
-            m_outcome = qml.measure(w)
-            qml.cond(m_outcome, qml.U3)(*weights, wires=wires[indx - 1])
-
-
-def conv_and_pooling(kernel_weights, n_wires):
-    convolutional_layer(kernel_weights[:15], n_wires)
-    pooling_layer(kernel_weights[15:], n_wires)
-
-
-def dense_layer(weights, wires):
-    qml.ArbitraryUnitary(weights, wires)
-
-
-##############################################################################
-# Let us now define a circuit that takes as an input the weights of the QCNN and
-# the quantum state to be processed. We first take the vector representation of
-# the states calculated in `ising` and input them to a quantum circuit using
-# ``qml.QuibtStateVector``. Then we use ``conv_and_pooling`` layers, followed by a
-# ``dense_layer``. Finally, we calculate the probabilities of the outcomes ``{00, 01
-# 10, 11}`` with ``qml.probs`` which will allow us to do the phase classification.
-
-dev = qml.device("default.qubit", wires=n_wires)
-
-
-@qml.qnode(dev)
-def conv_net(weights, last_layer_weights, input_state):
-    assert weights.shape[0] == 18, "The size of your weights vector is incorrect!"
-
-    layers = weights.shape[1]
-    wires = list(range(n_wires))
-
-    # inputs the state input_state
-    qml.QubitStateVector(input_state, wires=wires)
-
-    # adds convolutional and pooling layers
-    for j in range(layers):
-        conv_and_pooling(weights[:, j], wires)
-        wires = wires[::2]
-
-    assert (
-        last_layer_weights.size == 4 ** (len(wires)) - 1
-    ), f"The size of the last layer weights vector is incorrect! \n Expected {4**(len(wires)) - 1 }, Given {last_layer_weights.size}"
-    dense_layer(last_layer_weights, wires)
-    return qml.probs(wires=(0))
-
-
-qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**16))
-
-##############################################################################
-# Performance vs. training dataset size
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# We can repeat the above analysis with increasing size of the training dataset.
-# First, we create the labels and draw ``N_train`` random training samples. Additionally, we also draw
-# ``N_val`` validation samples that acts as a proxy for the full test set during training.
-
-labels = np.zeros(len(data), dtype=int)
-labels[np.where(mzs < 0.5)] = 1
-N_train = 10
-N_val = 50
-
-randomstate = np.random.default_rng(0)
-safe_range = np.concatenate(
-    [np.where(mzs > 0.9)[0], np.where(mzs < 0.1)[0]]
-)  # making sure to be away from the phase transition ~h in [0.5-1]
-train_choice = randomstate.choice(safe_range, N_train, replace=False, shuffle=False)
-val_choice = randomstate.choice(safe_range, N_val, replace=False, shuffle=False)
-
-train_data = data[train_choice]
-train_labels = labels[train_choice]
-train_hs = hs[train_choice]
-
-val_data = data[val_choice]
-val_labels = labels[val_choice]
-val_hs = hs[val_choice]
-
-##############################################################################
-# We now define the loss function that we want to optimize. In this case we only have two classes, which allows us to use the output
-# of one qubit as the label (here: the first). More specifically, we use the probability of measuring ``0`` as the label for the ferromagnetic phase, and
-# the probability of measuring ``1`` as the label for the paramagnetic phase. Mathematically, the cost function that we
-# are then trying to optimize is
-#
-# .. math:: \mathcal{L} = \sum_i p(y_i)
-#
-# where :math:`y_i \in \{0, 1\}` is the corresponding label of training example `i`.
-#
-# In our implementation in PennyLane, we simply achieve this by taking the corresponding entry of the ``qml.probs`` output for the first qubit:
-
-
-def loss_fn(weights, weights_last, data, labels):
-    return 1 - qml.math.sum(
-        [conv_net(weights, weights_last, state)[label] for state, label in zip(data, labels)]
-    ) / len(data)
-
-
-##############################################################################
-# Similarily, we compute the accuracy, which is the relative frequency of guessing the right label, i.e. :math:`p(y_i)>0.5`.
-
-
-def accuracy(weights, weights_last, data, labels):
-    return qml.math.sum(
-        [conv_net(weights, weights_last, state)[label] > 0.5 for state, label in zip(data, labels)]
-    ) / len(data)
-
-
-##############################################################################
-# In order to use PennyLane's automatid differentiation we specify the trainable parameters, which will later then be automatically picked up
-
-weights = pnp.random.rand(18, 2, requires_grad=True)
-weights_last = pnp.random.rand(4 ** (2) - 1, requires_grad=True)
-
-##############################################################################
-# We can now train
-
-optimizer = qml.GradientDescentOptimizer(stepsize=0.01)
-train_loss = []
-val_loss = []
-train_acc = []
-val_acc = []
-
-n_iter = 50
-for k in range(0, n_iter):
-    if not k == 0:
-        print(f"Step {k+1} / {n_iter}, cost: {old_loss}")
-        train_acc.append(accuracy(weights, weights_last, train_data, train_labels))
-        val_acc.append(accuracy(weights, weights_last, val_data, val_labels))
-        print(f"train_acc = {train_acc[-1]} val_acc = {val_acc[-1]}")
-
-    (weights, weights_last), old_loss = optimizer.step_and_cost(
-        loss_fn, weights, weights_last, data=train_data, labels=train_labels
-    )
-    train_loss.append(old_loss)
-    val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
-
-train_loss.append(loss_fn(weights, weights_last, train_data, train_labels))
-val_loss.append(loss_fn(weights, weights_last, val_data, val_labels))
-
-##############################################################################
-# We can check if the training was successful by looking at the loss and accuracy for the training and validation set during training:
-
-fig, axs = plt.subplots(ncols=3, figsize=(14, 5))
-ax = axs[0]
-ax.plot(train_loss, "x--", label="train")
-ax.plot(val_loss, "x--", label="val")
-ax.set_ylabel("loss", fontsize=20)
-ax.set_xlabel("epoch", fontsize=20)
-ax.legend(fontsize=20)
-
-ax = axs[1]
-ax.plot(train_acc, "o:", label="train")
-ax.plot(val_acc, "x--", label="val")
-ax.set_ylabel("accuracy", fontsize=20)
-ax.set_xlabel("epoch", fontsize=20)
-ax.legend(fontsize=20)
-
-ax = axs[2]
-ax.plot(train_acc, val_acc, "o:")
-ax.set_ylabel("val accuracy", fontsize=20)
-ax.set_xlabel("train accuracy", fontsize=20)
-ax.legend(fontsize=20)
-
-plt.tight_layout()
-# plt.savefig("few-data_loss_accuracy.png")
-plt.show()
-
-##############################################################################
-# We can also look at the phase diagram directly and see for which transverse field parameters the training is successful:
-
-out = [conv_net(weights, weights_last, state)[0] for state in data]
-labels_predicted = [(0 if x > 0.5 else 1) for x in out]
-
-
-fig, ax = plt.subplots(figsize=(6, 5))
-ax.plot(hs, labels_predicted, ".--", label="pred. class")
-ax.plot(hs, labels, "o", label="actual class")
-ax.plot(hs, mzs, "o:", label="mag")
-ax.plot(hs, out, ".:", label="p(0)")
-ax.legend(fontsize=20)
-ax.set_xlabel("h", fontsize=20)
-# plt.savefig("few-data_classification-result.png")
-plt.show()
-
-##############################################################################
-# Alternative: QCNN on digits data
-# ----------
+# Quantum convolutional neural network
+# ------------------------------------
 # Import modules and fix random number generator:
 import matplotlib.pyplot as plt
 import numpy as np
@@ -421,7 +113,8 @@ seed = 0
 rng = np.random.default_rng(seed=seed)
 
 ##############################################################################
-# define QCNN:
+# META: add description of convolutional layer @Luis. 
+# text text text.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     n_wires = len(wires)
@@ -485,26 +178,12 @@ def conv_net(weights, last_layer_weights, features):
 
 
 ##############################################################################
-# helper functions to compute loss and accuracy:
-def compute_accuracy(weights, weights_last, features, labels):
-    corr_preds = [int(conv_net(weights, weights_last, feats)[label] > 0.5) for feats, label in zip(features, labels)]
-    accuracy = qml.math.sum(corr_preds) / len(labels)
-    return accuracy
+# Training the QCNN on the digits dataset
+# ---------------------------------------
+# In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
+# The following function helps load the dataset from ``sklearn.dataset``. Further, we provide utility functions
+# for evaluating the cost and accuracy of our classification.
 
-def compute_cost(weights, weights_last, features, labels):
-    class_probs = [conv_net(weights, weights_last, feats)[label] for feats, label in zip(features, labels)]
-    loss = 1.0 - qml.math.sum(class_probs) / len(labels)
-    return loss
-
-##############################################################################
-# initialize weights
-def init_weights():
-    weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
-    weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
-    return weights, weights_last
-
-##############################################################################
-# load data:
 def load_digits_data(num_train, num_test, rng):
     digits = datasets.load_digits()
     features, labels = digits.data, digits.target
@@ -526,9 +205,43 @@ def load_digits_data(num_train, num_test, rng):
     return x_train, y_train, x_test, y_test
 
 ##############################################################################
-# function to train qcnn for a specific configuration
+# Computing the accuracy and cost of our training objective.
 
-def train_qcnn(n_train, n_test, n_epochs, desc):
+def compute_accuracy(weights, weights_last, features, labels):
+    corr_preds = [int(conv_net(weights, weights_last, feats)[label] > 0.5) for feats, label in zip(features, labels)]
+    accuracy = qml.math.sum(corr_preds) / len(labels)
+    return accuracy
+
+def compute_cost(weights, weights_last, features, labels):
+    class_probs = [conv_net(weights, weights_last, feats)[label] for feats, label in zip(features, labels)]
+    loss = 1.0 - qml.math.sum(class_probs) / len(labels)
+    return loss
+
+##############################################################################
+# Weights initialization.
+def init_weights():
+    weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
+    weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
+    return weights, weights_last
+
+
+
+##############################################################################
+# We are going to perform the classification for differently sized training sets. We therefore define the classification procedure once and then perform it for different 
+# datasets.
+
+def train_qcnn(n_train, n_test, n_epochs, desc=f'n={n}'):
+    """
+    Args:
+        n_train  (int): number of training examples
+        n_test   (int): number of test examples
+        n_epochs (int): number of training epochs
+        desc  (string): displayed string during optimization
+    
+    Returns:
+        dict: n_train, steps, train_cost_epochs, train_acc_epochs, test_cost_epochs, test_acc_epochs
+
+    """
     # load data
     x_train, y_train, x_test, y_test = load_digits_data(n_train, n_test, rng)
 
@@ -569,7 +282,8 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
     )
 
 ##############################################################################
-# train for different training set sizes:
+# Training for different training set sizes yields different accuracies, as can be seen below. As we increase the training data size, the the overall test accuracy, 
+# a proxy for the models' generalization capabilities, increases.
 
 train_set_sizes = [10, 20]
 n_test = 50
