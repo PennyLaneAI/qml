@@ -401,6 +401,192 @@ ax.set_xlabel("h", fontsize=20)
 # plt.savefig("few-data_classification-result.png")
 plt.show()
 
+##############################################################################
+# Alternative: QCNN on digits data
+# ----------
+# Import modules and fix random number generator:
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+import seaborn as sns
+from tqdm.auto import trange
+
+import pennylane as qml
+import pennylane.numpy as pnp
+
+sns.set()
+
+seed = 0
+rng = np.random.default_rng(seed=seed)
+
+##############################################################################
+# define QCNN:
+
+def convolutional_layer(weights, wires, skip_first_layer=True):
+    n_wires = len(wires)
+    assert n_wires >= 3, "this circuit is too small!"
+
+    for p in [0, 1]:
+        for indx, w in enumerate(wires):
+            if indx % 2 == p and indx < n_wires - 1:
+                if indx % 2 == 0 and skip_first_layer:
+                    qml.U3(*weights[:3], wires=[w])
+                    qml.U3(*weights[3:6], wires=[wires[indx + 1]])
+                qml.IsingXX(weights[6], wires=[w, wires[indx + 1]])
+                qml.IsingYY(weights[7], wires=[w, wires[indx + 1]])
+                qml.IsingZZ(weights[8], wires=[w, wires[indx + 1]])
+                qml.U3(*weights[9:12], wires=[w])
+                qml.U3(*weights[12:], wires=[wires[indx + 1]])
+
+
+def pooling_layer(weights, wires):
+    n_wires = len(wires)
+    assert len(wires) >= 2, "this circuit is too small!"
+
+    for indx, w in enumerate(wires):
+        if indx % 2 == 1 and indx < n_wires:
+            m_outcome = qml.measure(w)
+            qml.cond(m_outcome, qml.U3)(*weights, wires=wires[indx - 1])
+
+
+def conv_and_pooling(kernel_weights, n_wires):
+    convolutional_layer(kernel_weights[:15], n_wires)
+    pooling_layer(kernel_weights[15:], n_wires)
+
+
+def dense_layer(weights, wires):
+    qml.ArbitraryUnitary(weights, wires)
+
+
+num_wires = 6
+device = qml.device('default.qubit', wires=num_wires)
+
+@qml.qnode(device)
+def conv_net(weights, last_layer_weights, features):
+    # assert weights.shape[0] == 18, "The size of your weights vector is incorrect!"
+
+    layers = weights.shape[1]
+    wires = list(range(num_wires))
+
+    # inputs the state input_state
+    qml.AmplitudeEmbedding(features=features, wires=wires, pad_with=0.5)
+
+    # adds convolutional and pooling layers
+    for j in range(layers):
+        conv_and_pooling(weights[:, j], wires)
+        wires = wires[::2]
+
+    assert (
+            last_layer_weights.size == 4 ** (len(wires)) - 1
+    ), f"The size of the last layer weights vector is incorrect! \n Expected {4 ** (len(wires)) - 1}, Given {last_layer_weights.size}"
+    dense_layer(last_layer_weights, wires)
+    return qml.probs(wires=(0))
+
+
+##############################################################################
+# helper functions to compute loss and accuracy:
+def compute_accuracy(weights, weights_last, features, labels):
+    corr_preds = [int(conv_net(weights, weights_last, feats)[label] > 0.5) for feats, label in zip(features, labels)]
+    accuracy = qml.math.sum(corr_preds) / len(labels)
+    return accuracy
+
+def compute_cost(weights, weights_last, features, labels):
+    class_probs = [conv_net(weights, weights_last, feats)[label] for feats, label in zip(features, labels)]
+    loss = 1.0 - qml.math.sum(class_probs) / len(labels)
+    return loss
+
+##############################################################################
+# initialize weights
+def init_weights():
+    weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
+    weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
+    return weights, weights_last
+
+##############################################################################
+# load data:
+def load_digits_data(num_train, num_test, rng):
+    digits = datasets.load_digits()
+    features, labels = digits.data, digits.target
+
+    # only use first two classes
+    features = features[np.where((labels == 0) | (labels == 1))]
+    labels = labels[np.where((labels == 0) | (labels == 1))]
+
+    # normalize data
+    features = features / np.linalg.norm(features, axis=1).reshape((-1, 1))
+
+    # subsample train and test split
+    train_indices = rng.choice(len(labels), num_train, replace=False)
+    test_indices = rng.choice(np.setdiff1d(range(len(labels)), train_indices), num_test, replace=False)
+
+    x_train, y_train = features[train_indices], labels[train_indices]
+    x_test, y_test = features[test_indices], labels[test_indices]
+
+    return x_train, y_train, x_test, y_test
+
+##############################################################################
+# function to train qcnn for a specific configuration
+
+def train_qcnn(n_train, n_test, n_epochs, desc):
+    # load data
+    x_train, y_train, x_test, y_test = load_digits_data(n_train, n_test, rng)
+
+    # init weights and optimizer
+    weights, weights_last = init_weights()
+    optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
+
+    # data containers
+    train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = [], [], [], []
+
+    pbar = trange(n_epochs, desc=desc)
+
+    for step in pbar:
+        (weights, weights_last), train_cost = optimizer.step_and_cost(compute_cost, weights, weights_last, features=x_train, labels=y_train)
+        train_cost_epochs.append(train_cost)
+
+        # compute accuracy on training data
+        train_acc = compute_accuracy(weights, weights_last, x_train, y_train)
+        train_acc_epochs.append(train_acc)
+
+        # compute cost on testing data
+        test_cost = compute_cost(weights, weights_last, x_test, y_test)
+        test_cost_epochs.append(test_cost)
+
+        # compute accuracy on testing data
+        test_acc = compute_accuracy(weights, weights_last, x_test, y_test)
+        test_acc_epochs.append(test_acc)
+
+        pbar.set_postfix(train_cost=train_cost, test_cost=test_cost, train_acc=train_acc, test_acc=test_acc)
+
+    return dict(
+        n_train=n_train,
+        steps=list(range(n_epochs)),
+        train_cost_epochs=train_cost_epochs,
+        train_acc_epochs=train_acc_epochs,
+        test_cost_epochs=test_cost_epochs,
+        test_acc_epochs=test_acc_epochs
+    )
+
+##############################################################################
+# train for different training set sizes:
+
+train_set_sizes = [10, 20]
+n_test = 50
+n_epochs = 25
+
+df = pd.DataFrame(columns=['train_acc', 'train_loss', 'test_acc', 'test_loss', 'step', 'n_train'])
+
+all_results = []
+
+for n in train_set_sizes:
+    results = train_qcnn(n, n_test, n_epochs, desc=f'n={n}')
+    all_results.append(results)
+
+##############################################################################
+# make some pretty plots...
+# TODO
+
 
 ##############################################################################
 # References
