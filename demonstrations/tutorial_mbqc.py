@@ -29,7 +29,7 @@ Measurement-based quantum computation
 # Throughout this tutorial, we will explain the underlying concepts with the help of some code 
 # snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum 
 # error correction software `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developped 
-# by our architecture team [#PassiveArchitecture]_.
+# by our architecture team [#XanaduPassiveArchitecture]_.
 #
 #
 #
@@ -202,7 +202,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # ----------------
 #
 # To mitigate the risk of failure during a quantum computation we require quantum error correction.
-# This requires a 3-dimensional cluster state [CITE]
+# This requires a 3-dimensional cluster state [#XanaduBlueprint]_.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
@@ -210,7 +210,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 #    ..
 #
-#    Cluster state proposed in [#XanaduBlueprint2021]_
+#    Cluster state proposed in [#XanaduBlueprint]_
 
 
 ##############################################################################
@@ -224,13 +224,13 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #     `Phys. Rev. Lett. 86, 5188
 #     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188>`__.
 #
-# .. [#XanaduBlueprint2021]
+# .. [#XanaduBlueprint]
 #
 #     J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer et al. (2021) "Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer",
 #     `Quantum 5, 392
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
 #
-# .. [#PassiveArchitecture]
+# .. [#XanaduPassiveArchitecture]
 #
 #     Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa, 
 #     Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) "Fault-Tolerant Quantum Computation with Static Linear Optics",
