@@ -237,6 +237,7 @@ RHG.draw()
 #
 #    Cluster state proposed in [#XanaduBlueprint]_
 
+# Trying out if plotly offers interactivity on the website #TODO: remove this
 import plotly.io as pio
 pio.renderers.default = "sphinx_gallery"
 
