@@ -34,10 +34,10 @@ Measurement-based quantum computation
 #
 # 4. How **fault-tolerance** can be achieved in this scheme.
 #
-# Throughout this tutorial, we will explain the underlying concepts 
-# with the help of some `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and 
-# `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ code snippets. The latter is a relatively
-# new software package developped by Xanadu's architecture team for quantum error correction research.
+# Throughout this tutorial, we will explain the underlying concepts with the help of some code 
+# snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum 
+# error correction software `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developped 
+# by our architecture team [#PassiveArchitecture].
 #
 #
 #
@@ -231,6 +231,13 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #     J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer et al. (2021) "Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer",
 #     `Quantum 5, 392
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
+#
+# .. [#PassiveArchitecture]
+#
+#     Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa, 
+#     Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) "Fault-Tolerant Quantum Computation with Static Linear Optics",
+#     `PRX Quantum, Vol. 2, No. 4
+#     <http://dx.doi.org/10.1103/PRXQuantum.2.040353>`__.
 #
 # .. [#LatticeSurgeryRaussendorf2018]
 #
