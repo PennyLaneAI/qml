@@ -250,7 +250,8 @@ fig.write_html("rhg-graph.html")
 # .. raw:: 
 #    
 #     <iframe src="rhg-graph.html" width="100%" height="500"></iframe>
-#   
+#
+#    ..
 
 ##############################################################################
 # References
