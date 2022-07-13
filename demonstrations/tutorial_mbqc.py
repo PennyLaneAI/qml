@@ -221,7 +221,7 @@ import matplotlib.pyplot as plt
 
 code_distance = 3
 RHG = SurfaceCode(code_distance)
-plt.show()
+RHG.draw()
 
 ##############################################################################
 #
