@@ -210,10 +210,10 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # environmental factors causing errors. This is a scheme that encodes the logical information in a larger system 
 # 
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state 
-# [#XanaduBlueprint]_. The code that you want to implement dictates the structure of the cluster 
-# state. For example, the cluster state that is associated with the surface code is the RHG lattice, 
-# named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster state
-# with FlamingPy.
+# [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure 
+# of the cluster state. For example, the cluster state that is associated with the surface code is 
+# the RHG lattice, named after its architects Raussendorf, Harrington, and Goyal. We can visualize 
+# this cluster state with FlamingPy.
 #
 
 from flamingpy.codes import SurfaceCode
@@ -224,6 +224,10 @@ RHG = SurfaceCode(code_distance)
 plt.show()
 
 ##############################################################################
+#
+# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme 
+# with a 3-dimensional cluster state using photonics. The main ideas are presented in 
+# [#XanaduBlueprint]_, and the corresponding cluster state looks like this:
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
