@@ -32,7 +32,7 @@ Measurement-based quantum computation
 #
 # 3. How a **two-qubit gate** can be implemented in this scheme.
 #
-# 4. How **Fault-tolerance** can be achieved in this scheme.
+# 4. How **fault-tolerance** can be achieved in this scheme.
 #
 # Throughout this tutorial, we will explain the underlying concepts 
 # with the help of some `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and 
