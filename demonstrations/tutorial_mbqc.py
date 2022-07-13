@@ -201,7 +201,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 # .. [#OneWay2001]
 #
-#     Robert Raussendorf and Hans J. Briegel (2021) "A One-Way Quantum Computer",
+#     Robert Raussendorf and Hans J. Briegel (2001) "A One-Way Quantum Computer",
 #     `Phys. Rev. Lett. 86, 5188
 #     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188>`__.
 #
