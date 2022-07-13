@@ -201,8 +201,27 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # Fault-tolerance
 # ----------------
 #
-# To mitigate the risk of failure during a quantum computation we require quantum error correction.
-# This requires a 3-dimensional cluster state [#XanaduBlueprint]_.
+# To mitigate the physical errors that can (and will) happen during a quantum computation we 
+# require error correction, in particular quantum error correction. This is a 
+# 
+# Error correction is not exclusively for quantum computers; it is also ubiquitous in `"classical" computing 
+# <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_ and communication. However,  it is much more 
+# essential in the quantum realm as the systems we work with are much precarious and prone to 
+# environmental factors causing errors. This is a scheme that encodes the logical information in a larger system 
+# 
+# In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state 
+# [#XanaduBlueprint]_. The code that you want to implement dictates the structure of the cluster 
+# state. For example, the cluster state that is associated with the surface code is the RHG lattice, 
+# named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster state
+# with FlamingPy.
+#
+
+from flamingpy.codes import SurfaceCode
+
+code_distance = 3
+RHG = SurfaceCode(code_distance)
+
+##############################################################################
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
