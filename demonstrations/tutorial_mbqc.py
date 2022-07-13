@@ -217,9 +217,11 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 
 from flamingpy.codes import SurfaceCode
+import matplotlib.pyplot as plt
 
 code_distance = 3
 RHG = SurfaceCode(code_distance)
+plt.show()
 
 ##############################################################################
 #
