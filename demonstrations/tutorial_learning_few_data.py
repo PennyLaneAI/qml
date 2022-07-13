@@ -300,7 +300,7 @@ results = train_qcnn(n_train=40, n_test=100, n_epochs=n_epochs, desc=f'n=20')
 
 # write results to dataframe
 results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
-results_df = pd.concat([results_df_40, pd.DataFrame.from_dict(results40)], axis=0, ignore_index=True)
+results_df = pd.concat([results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True)
 
 ##############################################################################
 # make some pretty plots...
