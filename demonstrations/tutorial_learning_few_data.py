@@ -216,16 +216,19 @@ def load_digits_data(num_train, num_test, rng):
 # Computing the accuracy and cost of our training objective.
 
 def compute_out(weights, weights_last, features, labels):
+    """Computes the output of the corresponding label in the qcnn"""
     cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[label]
     return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(weights, weights_last, features, labels)
 
 @jax.jit
 def compute_accuracy(weights, weights_last, features, labels):
+    """Computes the accuracy over the provided features and labels"""
     out = compute_out(weights, weights_last, features, labels)
     return jnp.sum(out > 0.5)/len(out)
 
 @jax.jit
 def compute_cost(weights, weights_last, features, labels):
+    """Computes the cost over the provided features and labels"""
     out = compute_out(weights, weights_last, features, labels)
     return 1.0 - jnp.sum(out) / len(labels)
 
@@ -338,6 +341,7 @@ def make_plot(df, n_train):
     ax.legend(fontsize=14)
 
     fig.suptitle(f'Performance Measures for Training Set of Size $N=${n_train}', fontsize=20)
+    plt.tight_layout()
     plt.show()
 
 make_plot(results_df, n_train=40)
