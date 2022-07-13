@@ -238,14 +238,17 @@ RHG.draw()
 #    Cluster state proposed in [#XanaduBlueprint]_
 
 # Trying out if plotly offers interactivity on the website #TODO: remove this
-import plotly.io as pio
-pio.renderers.default = "iframe"
 
 import plotly.express as px
 df = px.data.iris()
 fig = px.scatter_3d(df, x='sepal_length', y='sepal_width', z='petal_width',
               color='species')
-fig.show()
+fig.write_html("rhg-graph.html")
+
+##############################################################################
+#
+# .. raw:: 
+#     :file: rhg-graph.html
 
 ##############################################################################
 # References
