@@ -109,6 +109,9 @@ from sklearn import datasets
 import seaborn as sns
 from tqdm.auto import trange
 
+import jax
+import jax.numpy as jnp
+
 import pennylane as qml
 import pennylane.numpy as pnp
 
@@ -207,27 +210,31 @@ def load_digits_data(num_train, num_test, rng):
     x_train, y_train = features[train_indices], labels[train_indices]
     x_test, y_test = features[test_indices], labels[test_indices]
 
-    return x_train, y_train, x_test, y_test
+    return jnp.asarray(x_train), jnp.asarray(y_train), jnp.asarray(x_test), jnp.asarray(y_test)
 
 ##############################################################################
 # Computing the accuracy and cost of our training objective.
 
-def compute_accuracy(weights, weights_last, features, labels):
-    corr_preds = [int(conv_net(weights, weights_last, feats)[label] > 0.5) for feats, label in zip(features, labels)]
-    accuracy = qml.math.sum(corr_preds) / len(labels)
-    return accuracy
+def compute_out(weights, weights_last, features, labels):
+    cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[label]
+    return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(weights, weights_last, features, labels)
 
+@jax.jit
+def compute_accuracy(weights, weights_last, features, labels):
+    out = compute_out(weights, weights_last, features, labels)
+    return jnp.sum(out > 0.5)/len(out)
+
+@jax.jit
 def compute_cost(weights, weights_last, features, labels):
-    class_probs = [conv_net(weights, weights_last, feats)[label] for feats, label in zip(features, labels)]
-    loss = 1.0 - qml.math.sum(class_probs) / len(labels)
-    return loss
+    out = compute_out(weights, weights_last, features, labels)
+    return 1.0 - jnp.sum(out) / len(labels)
 
 ##############################################################################
 # Weights initialization.
 def init_weights():
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
     weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
-    return weights, weights_last
+    return jnp.array(weights), jnp.array(weights_last)
 
 
 
