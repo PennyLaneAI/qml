@@ -238,7 +238,7 @@ RHG.draw()
 #    Cluster state proposed in [#XanaduBlueprint]_
 
 import plotly.io as pio
-pio.renderers.default = "browser"
+pio.renderers.default = "sphinx_gallery"
 
 import plotly.express as px
 df = px.data.iris()
