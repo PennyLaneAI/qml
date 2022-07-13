@@ -48,3 +48,4 @@ jaxlib==0.1.64
 neural-tangents==0.3.6
 flamingpy==0.9.0b0
 plotly==5.9.0
+ipython==7.4.0
