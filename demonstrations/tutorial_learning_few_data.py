@@ -163,7 +163,7 @@ def dense_layer(weights, wires):
 num_wires = 6
 device = qml.device('default.qubit', wires=num_wires)
 
-@qml.qnode(device)
+@qml.qnode(device, interface="jax")
 def conv_net(weights, last_layer_weights, features):
     # assert weights.shape[0] == 18, "The size of your weights vector is incorrect!"
 
