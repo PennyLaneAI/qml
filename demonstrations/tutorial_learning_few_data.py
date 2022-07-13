@@ -25,7 +25,7 @@ When optimizing a machine learning model, be it classical or quantum, we aim to 
 distribution of interest, like for example images of cats and dogs. However, in practice we are limited to a finite amount of
 data, which is why it is necessary to reason about how our model performs on new, previously unseen data. The difference
 between the model's performance on the true data distribution, and the performance estimated from our training data is
-called the *generalization error* and indicates how well the model has learned to generalize to unseen data. 
+called the *generalization error* and indicates how well the model has learned to generalize to unseen data.
 
 .. figure:: /demonstrations/learning_few_data/true_vs_sample.png
     :width: 75%
@@ -95,7 +95,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
 #
 # is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon`.
-# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different 
+# In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different
 # digits in the classical ``digits`` dataset. Before that, we set up our QCNN.
 
 ##############################################################################
@@ -118,7 +118,7 @@ seed = 0
 rng = np.random.default_rng(seed=seed)
 
 ##############################################################################
-# META: add motivate the use of convolutional layers and explain how they work @Luis. 
+# META: add motivate the use of convolutional layers and explain how they work @Luis.
 # text text text.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
@@ -232,7 +232,7 @@ def init_weights():
 
 
 ##############################################################################
-# We are going to perform the classification for differently sized training sets. We therefore define the classification procedure once and then perform it for different 
+# We are going to perform the classification for differently sized training sets. We therefore define the classification procedure once and then perform it for different
 # datasets.
 
 def train_qcnn(n_train, n_test, n_epochs, desc):
@@ -242,7 +242,7 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
         n_test   (int): number of test examples
         n_epochs (int): number of training epochs
         desc  (string): displayed string during optimization
-    
+
     Returns:
         dict: n_train, steps, train_cost_epochs, train_acc_epochs, test_cost_epochs, test_acc_epochs
 
@@ -252,7 +252,7 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
 
     # init weights and optimizer
     weights, weights_last = init_weights()
-    optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
+    optimizer = qml.AdamOptimizer(stepsize=0.01)
 
     # data containers
     train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = [], [], [], []
@@ -260,7 +260,9 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
     pbar = trange(n_epochs, desc=desc)
 
     for step in pbar:
-        (weights, weights_last), train_cost = optimizer.step_and_cost(compute_cost, weights, weights_last, features=x_train, labels=y_train)
+        (weights, weights_last), train_cost = optimizer.step_and_cost(
+            compute_cost, weights, weights_last, features=x_train, labels=y_train
+        )
         train_cost_epochs.append(train_cost)
 
         # compute accuracy on training data
@@ -278,33 +280,60 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
         pbar.set_postfix(train_cost=train_cost, test_cost=test_cost, train_acc=train_acc, test_acc=test_acc)
 
     return dict(
-        n_train=n_train,
-        steps=list(range(n_epochs)),
-        train_cost_epochs=train_cost_epochs,
-        train_acc_epochs=train_acc_epochs,
-        test_cost_epochs=test_cost_epochs,
-        test_acc_epochs=test_acc_epochs
+        n_train=[n_train] * n_epochs,
+        step=np.arange(1, n_epochs+1, dtype=int),
+        train_cost=train_cost_epochs,
+        train_acc=train_acc_epochs,
+        test_cost=test_cost_epochs,
+        test_acc=test_acc_epochs
     )
 
 ##############################################################################
-# Training for different training set sizes yields different accuracies, as can be seen below. As we increase the training data size, the the overall test accuracy, 
+# Training for different training set sizes yields different accuracies, as can be seen below. As we increase the training data size, the the overall test accuracy,
 # a proxy for the models' generalization capabilities, increases.
 
-train_set_sizes = [10, 20]
-n_test = 50
-n_epochs = 25
+n_test = 100
+n_epochs = 20
 
-df = pd.DataFrame(columns=['train_acc', 'train_loss', 'test_acc', 'test_loss', 'step', 'n_train'])
+# train on 40 train samples
+results = train_qcnn(n_train=40, n_test=100, n_epochs=n_epochs, desc=f'n=20')
 
-all_results = []
-
-for n in train_set_sizes:
-    results = train_qcnn(n, n_test, n_epochs, desc=f'n={n}')
-    all_results.append(results)
+# write results to dataframe
+results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
+results_df = pd.concat([results_df_40, pd.DataFrame.from_dict(results40)], axis=0, ignore_index=True)
 
 ##############################################################################
 # make some pretty plots...
-# TODO
+
+def make_plot(df, n_train):
+    fig, axs = plt.subplots(ncols=3, figsize=(14,5))
+
+    ax = axs[0]
+    ax.plot(df.train_cost, "x--", label="train")
+    ax.plot(df.test_cost, "x--", label="test")
+    ax.set_ylabel("loss", fontsize=18)
+    ax.set_xlabel("epoch", fontsize=18)
+    ax.legend(fontsize=14)
+
+    ax = axs[1]
+    ax.plot(df.train_acc,"o:", label=f"train")
+    ax.plot(df.test_acc,"x--", label=f"test")
+    ax.set_ylabel("accuracy", fontsize=18)
+    ax.set_xlabel("epoch", fontsize=18)
+    ax.legend(fontsize=14)
+
+    ax = axs[2]
+    ax.plot(df.train_acc, results_df.test_acc,"o:", label='N=40')
+    ax.set_xlim(df.test_acc.min()-0.05, 1.05)
+    ax.plot(np.linspace(df.test_acc.min(), 1.0), np.linspace(df.test_acc.min(), 1.0), ls='--', color='black')
+    ax.set_ylabel("test accuracy", fontsize=18)
+    ax.set_xlabel("train accuracy", fontsize=18)
+    ax.legend(fontsize=14)
+
+    fig.suptitle(f'Performance Measures for Training Set of Size $N=${n_train}', fontsize=20)
+    plt.show()
+
+make_plot(results_df, n_train=40)
 
 
 ##############################################################################
