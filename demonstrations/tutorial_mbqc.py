@@ -22,17 +22,9 @@ Measurement-based quantum computation
 # and the entanglement of the cluster state is used as a resource.
 #
 # The structure of this demo will be as follows. First we introduce the concept of a cluster state, 
-# the substrate for measurement-based quantum computation. Then, we will move on to explain to 
-# implement arbitrary quantum circuits, thus proving that MBQC is also universal. In particular, we 
-# will illustrate
-#
-# 1. How **information propagates** through the cluster state.
-#
-# 2. How **arbitrary qubit rotations** can be implemented.
-#
-# 3. How a **two-qubit gate** can be implemented in this scheme.
-#
-# 4. How **fault-tolerance** can be achieved in this scheme.
+# the substrate for measurement-based quantum computation. Then, we will move on to explain how to
+# implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will 
+# consider how **fault-tolerance** can be achieved in this scheme.
 #
 # Throughout this tutorial, we will explain the underlying concepts with the help of some code 
 # snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum 
@@ -184,7 +176,13 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We 
 # have to prove it! In particular, we want to show that a measurement-based quantum computer is a 
 # called quantum Turing machine (WTM) also known as a universal quantum computer. To do this, we
-# need to show that the following three properties are true:
+# need to show 3 things
+#
+# 1. How **information propagates** through the cluster state.
+#
+# 2. How **arbitrary qubit rotations** can be implemented.
+#
+# 3. How a **two-qubit gate** can be implemented in this scheme.
 
 
 ##############################################################################
