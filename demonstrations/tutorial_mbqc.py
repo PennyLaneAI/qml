@@ -250,11 +250,15 @@ fig.show()
 
 ##############################################################################
 #
-# .. raw:: 
-#    
-#     <iframe src="rhg-graph.html" width="100%" height="500"></iframe>
-#
-#    ..
+# .. jupyter-execute::
+#    import plotly.graph_objects as go
+#    trace = go.Scatter(
+#        x=[0, 1, 2, 3, 4],
+#        y=[0, 1, 4, 9, 16],
+#    )
+#    layout = go.Layout(title='Growth')
+#    figure = go.Figure(data=[trace], layout=layout)
+#    figure.show()
 
 ##############################################################################
 # References
