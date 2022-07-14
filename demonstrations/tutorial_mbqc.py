@@ -221,15 +221,7 @@ import matplotlib.pyplot as plt
 
 code_distance = 3
 RHG = SurfaceCode(code_distance)
-RHG.draw()
-
-# Trying out if plotly offers interactivity on the website #TODO: remove this
-
-import plotly.express as px
-df = px.data.iris()
-fig = px.scatter_3d(df, x='sepal_length', y='sepal_width', z='petal_width',
-              color='species')
-fig.show()
+# RHG.draw(backend="plotly") #TODO: uncomment this line after merging #103
 
 ##############################################################################
 #
@@ -252,20 +244,7 @@ fig.show()
 #    Cluster state proposed in [#XanaduBlueprint]_
 #
 #
-#
 
-##############################################################################
-#
-# .. jupyter-execute::
-#    import plotly.graph_objects as go
-#    trace = go.Scatter(
-#        x=[0, 1, 2, 3, 4, 5],
-#        y=[0, 1, 4, 9, 16, 5],
-#    )
-#    layout = go.Layout(title='Growth')
-#    figure = go.Figure(data=[trace], layout=layout)
-#    figure.show()
-#
 
 ##############################################################################
 # References
