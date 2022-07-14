@@ -608,7 +608,7 @@ if loss_curr + tol < loss_next:
 # 2 (for the current and the next-step loss) = 8 circuits. In practice, we measure
 # a 50% reduction in the stepwise optimization time.
 #
-# The test is done with Amazon Braket Hybrid Jobs, as it is a handy tool to
+# The test is done with `Amazon Braket Hybrid Jobs <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs.html>`__, as it is a handy tool to
 # scale up experiments systematically. We will show how to do that towards
 # the end of the tutorial.
 #
