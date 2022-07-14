@@ -50,3 +50,4 @@ flamingpy==0.9.0b0
 plotly==5.9.0
 ipython==7.4.0
 nbformat>=4.2.0
+jupyter-sphinx>=0.4.0
