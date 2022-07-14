@@ -239,9 +239,6 @@ RHG.draw()
 
 # Trying out if plotly offers interactivity on the website #TODO: remove this
 
-import plotly.io as pio
-pio.renderers.default = 'sphinx_gallery'
-
 import plotly.express as px
 df = px.data.iris()
 fig = px.scatter_3d(df, x='sepal_length', y='sepal_width', z='petal_width',

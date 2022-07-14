@@ -55,7 +55,6 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
     "sphinx_sitemap",
-    "jupyter_sphinx.execute",
 ]
 
 
