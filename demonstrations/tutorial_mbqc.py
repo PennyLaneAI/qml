@@ -223,20 +223,6 @@ code_distance = 3
 RHG = SurfaceCode(code_distance)
 RHG.draw()
 
-##############################################################################
-#
-# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme 
-# with a 3-dimensional cluster state using photonics. The main ideas are presented in 
-# [#XanaduBlueprint]_, and the corresponding cluster state looks like this:
-#
-# .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
-#    :align: center
-#    :width: 75%
-#
-#    ..
-#
-#    Cluster state proposed in [#XanaduBlueprint]_
-
 # Trying out if plotly offers interactivity on the website #TODO: remove this
 
 import plotly.express as px
@@ -251,6 +237,19 @@ fig.show()
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
 
+##############################################################################
+#
+# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme 
+# with a 3-dimensional cluster state using photonics. The main ideas are presented in 
+# [#XanaduBlueprint]_, and the corresponding cluster state looks like this:
+#
+# .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
+#    :align: center
+#    :width: 75%
+#
+#    ..
+#
+#    Cluster state proposed in [#XanaduBlueprint]_
 
 ##############################################################################
 #
