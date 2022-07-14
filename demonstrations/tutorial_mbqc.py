@@ -241,7 +241,7 @@ fig.show()
 #
 # Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme 
 # with a 3-dimensional cluster state using photonics. The main ideas are presented in 
-# [#XanaduBlueprint]_, and the corresponding cluster state looks like this:
+# [#XanaduBlueprint]_, and the corresponding cluster state looks like the figure below.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
@@ -250,6 +250,9 @@ fig.show()
 #    ..
 #
 #    Cluster state proposed in [#XanaduBlueprint]_
+#
+#
+#
 
 ##############################################################################
 #
