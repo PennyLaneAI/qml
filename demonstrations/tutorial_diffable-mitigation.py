@@ -73,8 +73,8 @@ H = qml.Hamiltonian(coeffs, observables)
 
 n_layers = 2
 
-w1 = np.pi / 4 * np.ones((n_wires), requires_grad=True)
-w2 = np.pi / 4 * np.ones((n_layers, n_wires - 1, 2), requires_grad=True)
+w1 = np.ones((n_wires), requires_grad=True)
+w2 = np.ones((n_layers, n_wires - 1, 2), requires_grad=True)
 
 
 def qfunc(w1, w2):
@@ -156,13 +156,13 @@ plt.show()
 # the ideal, noisy and mitigated qnodes and see that the mitigated one comes close to the ideal results, whereas the noisy execution is further off.
 
 
-def VQE_run(cost_fn, max_iter, stepsize=0.4):
+def VQE_run(cost_fn, max_iter, stepsize=0.1):
     """VQE Optimization loop"""
-    opt = qml.GradientDescentOptimizer(stepsize=stepsize)
+    opt = qml.AdamOptimizer(stepsize=stepsize)
 
     # fixed initial guess
-    w1 = np.pi / 4 * np.ones((n_wires), requires_grad=True)
-    w2 = np.pi / 4 * np.ones((n_layers, n_wires - 1, 2), requires_grad=True)
+    w1 = np.ones((n_wires), requires_grad=True)
+    w2 = np.ones((n_layers, n_wires - 1, 2), requires_grad=True)
 
     energy = []
 
@@ -177,7 +177,7 @@ def VQE_run(cost_fn, max_iter, stepsize=0.4):
     return energy
 
 
-max_iter = 50
+max_iter = 70
 
 energy_ideal = VQE_run(qnode_ideal, max_iter)
 energy_noisy = VQE_run(qnode_noisy, max_iter)
