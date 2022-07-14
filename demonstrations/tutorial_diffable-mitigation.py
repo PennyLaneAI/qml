@@ -3,7 +3,7 @@ r"""Differentiating quantum error mitigation transforms
 
 .. meta::
     :property="og:description": Differentiable error mitigation
-    :property="og:image": https://pennylane.ai/qml/_images/QEK_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_images/diffable_mitigation_thumb.png
 
 .. related::
 
@@ -223,6 +223,8 @@ print("Execution time jax grad: {} s".format(exec_time_jax))
 # We can also just-in-time compile the function and/or gradient for very fast executions. We note, however, that compilation of this function takes a significant amount of time. 
 # Whether or not doing it is worth it needs to be tested for each individual use case.
 grad_jax_jit = jax.jit(jax.grad(qnode_mitigated, argnums=[0, 1]))
+compilation_time_jax_jit = timeit.timeit(lambda : grad_jax_jit(w1_jax, w2_jax), number = 1)
+print("Compilation time jax jit grad: {} s".format(compilation_time_jax_jit))
 exec_time_jax_jit = timeit.timeit(lambda : grad_jax_jit(w1_jax, w2_jax), number = 100)/100
 print("Execution time jax jit grad: {} s".format(exec_time_jax_jit))
 
