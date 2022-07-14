@@ -257,7 +257,7 @@ fig.show()
 
 ##############################################################################
 #
-# .. raw::
+# .. raw:: html
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
 
@@ -273,6 +273,7 @@ fig.show()
 #    layout = go.Layout(title='Growth')
 #    figure = go.Figure(data=[trace], layout=layout)
 #    figure.show()
+#
 
 ##############################################################################
 # References
