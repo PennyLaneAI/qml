@@ -219,8 +219,8 @@ print(grad_jax(w1_jax, w2_jax))
 print("Execution time: {} s".format(timeit.timeit("grad_jax(w1_jax, w2_jax)", number = 100)/100))
 
 ##############################################################################
-# We can also just-in-time compile the function and/or gradient for very fast executions. We note, however, that compilation of this function takes significant amount of times 
-# and is only worth doing if the gradient is executed many times.
+# We can also just-in-time compile the function and/or gradient for very fast executions. We note, however, that compilation of this function takes a significant amount of time. 
+# Whether or not doing it is worth it needs to be tested for each individual use case.
 grad_jax_jit = jax.jit(jax.grad(qnode_mitigated, argnums=[0, 1]))
 print(grad_jax_jit(w1_jax, w2_jax))
 print("Execution time: {} s".format(timeit.timeit("grad_jax_jit(w1_jax, w2_jax)", number = 100)/100))
