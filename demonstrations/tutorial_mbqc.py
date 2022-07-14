@@ -247,6 +247,23 @@ fig.show()
 
 ##############################################################################
 #
+# .. raw:: html
+#
+#    <iframe width="560" height="315" src="https://www.youtube.com/embed/AaZ_RSt0KP8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+#
+# The cluster state is a 3-dimensional lattice. The first dimension is the qubit state, the second
+# dimension is the qubit rotation, and the third dimension is the qubit rotation.
+#
+
+##############################################################################
+#
+# .. raw::
+#    :file: ../demonstrations/mbqc/rhg-graph.html
+#
+
+
+##############################################################################
+#
 # .. jupyter-execute::
 #    import plotly.graph_objects as go
 #    trace = go.Scatter(
