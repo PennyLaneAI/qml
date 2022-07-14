@@ -18,6 +18,7 @@ import warnings
 import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
+import jupyter_sphinx
 
 sys.path.insert(0, os.path.abspath("."))
 
