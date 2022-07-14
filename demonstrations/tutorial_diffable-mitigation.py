@@ -216,14 +216,15 @@ w2_jax = jnp.array(w2)
 res = qnode_mitigated(w1_jax, w2_jax)
 grad_jax = jax.grad(qnode_mitigated, argnums=[0, 1])
 print(grad_jax(w1_jax, w2_jax))
-print("Execution time: {} s".format(timeit.timeit("grad_jax(w1_jax, w2_jax)", number = 100)/100))
+exec_time_jax = timeit.timeit(lambda : grad_jax(w1_jax, w2_jax), number = 5)/5
+print("Execution time jax grad: {} s".format(exec_time_jax))
 
 ##############################################################################
 # We can also just-in-time compile the function and/or gradient for very fast executions. We note, however, that compilation of this function takes a significant amount of time. 
 # Whether or not doing it is worth it needs to be tested for each individual use case.
 grad_jax_jit = jax.jit(jax.grad(qnode_mitigated, argnums=[0, 1]))
-print(grad_jax_jit(w1_jax, w2_jax))
-print("Execution time: {} s".format(timeit.timeit("grad_jax_jit(w1_jax, w2_jax)", number = 100)/100))
+exec_time_jax_jit = timeit.timeit(lambda : grad_jax_jit(w1_jax, w2_jax), number = 100)/100
+print("Execution time jax jit grad: {} s".format(exec_time_jax_jit))
 
 ##############################################################################
 # Torch:
