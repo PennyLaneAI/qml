@@ -199,65 +199,10 @@ plt.show()
 # Note that the discrepancies between the ideal simulation and exact result are due to the limited expressivity of our Ansatz,
 # which on the other hand is due to limitations in depth by noise.
 #
-# Differentiate using JAX, JAX-JIT, torch, and tensorflow
-# -------------------------------------------------------
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
-# executions. We show here briefly how you can also use the three other supported interfaces to compute gradients in PennyLane.
+# executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way 
+# as described in :doc:`introduction/interfaces`.
 #
-# JAX / JAX-JIT:
-
-import jax
-import jax.numpy as jnp
-import timeit
-
-w1_jax = jnp.array(w1)
-w2_jax = jnp.array(w2)
-
-res = qnode_mitigated(w1_jax, w2_jax)
-grad_jax = jax.grad(qnode_mitigated, argnums=[0, 1])
-print(grad_jax(w1_jax, w2_jax))
-exec_time_jax = timeit.timeit(lambda : grad_jax(w1_jax, w2_jax), number = 5)/5
-print("Execution time jax grad: {} s".format(exec_time_jax))
-
-##############################################################################
-# We can also just-in-time compile the function and/or gradient for very fast executions. We note, however, that compilation of this function takes a significant amount of time. 
-# Whether or not doing it is worth it needs to be tested for each individual use case.
-grad_jax_jit = jax.jit(jax.grad(qnode_mitigated, argnums=[0, 1]))
-compilation_time_jax_jit = timeit.timeit(lambda : grad_jax_jit(w1_jax, w2_jax), number = 1)
-print("Compilation time jax jit grad: {} s".format(compilation_time_jax_jit))
-exec_time_jax_jit = timeit.timeit(lambda : grad_jax_jit(w1_jax, w2_jax), number = 100)/100
-print("Execution time jax jit grad: {} s".format(exec_time_jax_jit))
-
-##############################################################################
-# Torch:
-
-import torch
-
-w1_torch = torch.ones((n_wires), dtype=torch.float64, requires_grad=True)
-w2_torch = torch.ones((n_layers, n_wires - 1, 2), dtype=torch.float64, requires_grad=True)
-
-qnode_mitigated = mitigate_with_zne(scale_factors, fold_global, richardson_extrapolate)(qnode_noisy)
-
-res = qnode_mitigated(w1_torch, w2_torch)
-res.backward()
-print(w1_torch.grad, w2_torch.grad)
-
-##############################################################################
-# Tensorflow:
-
-import tensorflow as tf
-
-w1_tf = tf.Variable(torch.ones((n_wires)), dtype="float64")
-w2_tf = tf.Variable(torch.ones((n_layers, n_wires - 1, 2)), dtype="float64")
-
-qnode_mitigated = mitigate_with_zne(scale_factors, fold_global, richardson_extrapolate)(qnode_noisy)
-
-with tf.GradientTape() as tape:
-    res = qnode_mitigated(w1_tf, w2_tf)
-grad_tf = tape.gradient(res, (w1_tf, w2_tf))
-print(grad_tf)
-
-
 ##############################################################################
 # Differentiating the mitigation transform itself
 # ------------------------------------------------
