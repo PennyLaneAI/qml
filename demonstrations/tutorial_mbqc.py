@@ -202,15 +202,22 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # ----------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation we
-# require some kind of error correction. Error correction is a technique of detecting errors and reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
+# require some kind of error correction. Error correction is a technique of detecting errors and 
+# reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
 # it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_
-# and communication. However,  it is much more essential in the quantum realm as the systems we work
-# with are much precarious and prone to environmental factors causing errors.
+# and communication. However, it is a stringent requisite in the quantum realm as the systems one 
+# works with are much more precarious and therefore prone to environmental factors, causing errors.
 #
-# Due to the peculiarities of quantum physics, we have to be careful though. First of all, we can
+# Due to the peculiarities of quantum physics, we have to be careful when though. First of all, we can
 # not simply look inside our quantum computer and see if an error occured. This would collapse the
 # wavefunction which caries valuable information. Secondly, we can not make copies of a quantum
-# state to create redundancy. This is due to the no-cloning theorem.
+# state to create redundancy. This is because of the no-cloning theorem. A whole research field is devoted
+# to combat these challenges since Peter Shor's published a seminal paper in 1995 [#ShorQEC1995]. A 
+# full coverage of this topic is beyond the scope of this tutorial, but a good place to start is 
+# `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by 
+# Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact 
+# introduction. Instead, what we will do here is showing how to implement error correction in the 
+# MBQC framework.
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
@@ -256,25 +263,31 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#OneWay2001]
 #
-#     Robert Raussendorf and Hans J. Briegel (2001) "A One-Way Quantum Computer",
+#     Robert Raussendorf and Hans J. Briegel (2001) *A One-Way Quantum Computer*,
 #     `Phys. Rev. Lett. 86, 5188
 #     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188>`__.
 #
 # .. [#XanaduBlueprint]
 #
-#     J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer et al. (2021) "Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer",
+#     J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer et al. (2021) *Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer*,
 #     `Quantum 5, 392
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
 #
 # .. [#XanaduPassiveArchitecture]
 #
 #     Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa,
-#     Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) "Fault-Tolerant Quantum Computation with Static Linear Optics",
+#     Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) *Fault-Tolerant Quantum Computation with Static Linear Optics*,
 #     `PRX Quantum, Vol. 2, No. 4
 #     <http://dx.doi.org/10.1103/PRXQuantum.2.040353>`__.
 #
+# .. [#ShorQEC1995]
+#
+#     Peter W. Shor (1995) *Scheme for reducing decoherence in quantum computer memory*,
+#     `Physical Review A, Vol. 52, Iss. 4
+#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.52.R2493>`__.
+#
 # .. [#LatticeSurgeryRaussendorf2018]
 #
-#     Daniel Herr, Alexandru Paler, Simon J. Devitt and Franco Nori (2018) "Lattice Surgery on the Raussendorf Lattice",
+#     Daniel Herr, Alexandru Paler, Simon J. Devitt and Franco Nori (2018) *Lattice Surgery on the Raussendorf Lattice*,
 #     `IOP Publishing 3, 3
 #     <https://arxiv.org/abs/1711.04921>`__.
