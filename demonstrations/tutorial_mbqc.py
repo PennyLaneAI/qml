@@ -212,7 +212,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # not simply look inside our quantum computer and see if an error occured. This would collapse the
 # wavefunction which caries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy. This is because of the no-cloning theorem. A whole research field is devoted
-# to combat these challenges since Peter Shor's published a seminal paper in 1995 [#ShorQEC1995]. A 
+# to combat these challenges since Peter Shor's published a seminal paper in 1995 [#ShorQEC1995]_. A 
 # full coverage of this topic is beyond the scope of this tutorial, but a good place to start is 
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by 
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact 
@@ -221,7 +221,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
-# of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode, #GoogleQEC2022]_ as 
+# of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as 
 # an example. The cluster state that is associated with this code is known as the the RHG lattice, 
 # named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster 
 # state with FlamingPy.
@@ -239,7 +239,13 @@ RHG = SurfaceCode(code_distance)
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
-# The actual computation is done by performing single-qubit measurements, as illustrated below. The 
+
+##############################################################################
+#
+# The actual computation is done by performing single-qubit measurements, as illustrated below. At 
+# each timestep, we measure all the qubits on one sheet of the lattice. The binary outcomes of these 
+# measurements determine the measurement bases for future measurements, and the last sheet of the 
+# lattice encodes the result of the computation which can be read out by yet another measurement!
 # 
 #
 # .. figure:: ../demonstrations/mbqc/gif_measuring.gif
@@ -248,7 +254,7 @@ RHG = SurfaceCode(code_distance)
 #
 #    ..
 #
-#    Performing a computation on a using the RHG lattice [#XanaduBlueprint]_
+#    Performing a computation with measurements using the RHG lattice. [#XanaduBlueprint]_
 #
 
 
@@ -269,7 +275,8 @@ RHG = SurfaceCode(code_distance)
 #
 #    ..
 #
-#    Cluster state proposed in [#XanaduBlueprint]_
+#
+#    Hybrid cluster state proposed in [#XanaduBlueprint]_.
 #
 #
 #
