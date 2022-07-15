@@ -142,12 +142,13 @@ rng = np.random.default_rng(seed=seed)
 # the measurement of a neighbouring qubit. Finally, we use a "dense layer" that entangles all qubits
 # of the final state using a all-to-all unitary gate. 
 # 
-# Let's break down each layer:
+# *Let's break down each layer:*
+#
 # The convolutional layer should has as an input the weights of the two-qubit unitary which are to 
 # be determined in the training rounds. In ``pennylane``, we model this arbitrary two-qubit unitary
-# with two single-qubit gates ``U3`` (parametrized by three parameters, each), followed by an three ising 
+# with two single-qubit gates ``qml.U3`` (parametrized by three parameters, each), followed by an three ising 
 # interaction between both qubits (each interaction is parametrized by one parameter), and two additional
-# ``U3``` gates in each qubit. 
+# ``qml.U3``` gates in each qubit. 
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     n_wires = len(wires)
@@ -167,7 +168,7 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
 
 ##############################################################################
 # The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in 
-# this case, are ``U3`` gates. Then, we apply these conditional measurement to half of the 
+# this case, are ``qml.U3`` gates. Then, we apply these conditional measurement to half of the 
 # unmeasured wires, reducing our system size by half. 
 
 def pooling_layer(weights, wires):
@@ -220,6 +221,10 @@ def conv_net(weights, last_layer_weights, features):
 
 
 ##############################################################################
+# In the problem we will address, we will need to encode 64 features
+# in the state to be processed by the QCNN. Thus, we require 6 qubits to encode
+# each feature value in the amplitude of each computational basis state. 
+#
 # Training the QCNN on the digits dataset
 # ---------------------------------------
 # In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
