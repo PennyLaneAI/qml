@@ -227,9 +227,9 @@ def conv_net(weights, last_layer_weights, features):
 #
 # Training the QCNN on the digits dataset
 # ---------------------------------------
-# In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
-# The following function helps load the dataset from ``sklearn.dataset``. Further, we provide utility functions
-# for evaluating the cost and accuracy of our classification.
+# In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset. 
+# These are 8 by 8 pixel arrays of hand-written digits, which we then flatten out to feed the QCNN with. 
+# The ``load_digits_data`` function below helps loading the dataset from ``sklearn.dataset``. 
 
 def load_digits_data(num_train, num_test, rng):
     digits = datasets.load_digits()
@@ -252,7 +252,8 @@ def load_digits_data(num_train, num_test, rng):
     return jnp.asarray(x_train), jnp.asarray(y_train), jnp.asarray(x_test), jnp.asarray(y_test)
 
 ##############################################################################
-# Computing the accuracy and cost of our training objective.
+# To optimize the weights of our variatiational model, we define the cost and accurracy functions 
+# to train and quantify the performance on classification of the previously defines QCNN.
 
 def compute_out(weights, weights_last, features, labels):
     """Computes the output of the corresponding label in the qcnn"""
@@ -271,18 +272,18 @@ def compute_cost(weights, weights_last, features, labels):
     out = compute_out(weights, weights_last, features, labels)
     return 1.0 - jnp.sum(out) / len(labels)
 
-##############################################################################
-# Weights initialization.
 def init_weights():
+    """Initializes random weights for the QCNN model."""
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
     weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
     return jnp.array(weights), jnp.array(weights_last)
 
 
-
 ##############################################################################
-# We are going to perform the classification for differently sized training sets. We therefore define the classification procedure once and then perform it for different
-# datasets.
+# We are going to perform the classification for differently sized training sets. We therefore
+# define the classification procedure once and then perform it for different datasets.
+# We update the weights using the ``qml.AdamOptimizer`` and use these updated weights to 
+# calculate the cost and accurracy on the testing and training set.
 
 def train_qcnn(n_train, n_test, n_epochs, desc):
     """
@@ -352,7 +353,8 @@ results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_
 results_df = pd.concat([results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True)
 
 ##############################################################################
-# make some pretty plots...
+# Finally, we plot the loss and accurracy for both the training and testing set
+# for all training epochs, and compare the test and train accurracy of the model.
 
 def make_plot(df, n_train):
     fig, axs = plt.subplots(ncols=3, figsize=(14,5))
