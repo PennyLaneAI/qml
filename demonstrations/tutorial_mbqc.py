@@ -99,16 +99,16 @@ print(qml.draw(cluster_state)())
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
 # teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
 # in safe communication protocols that are not possible with classical communication so it's certainly worth to learn about.
-# In this protocol, we transport *information* between systems. Note that we do not transport matter.
-# Admittedly, it has a rather delusive name because it is not instantaneous but requires additional
-# classical information to be communicated too. This classical information transfer is naturally
-# limited by the speed of light.
+# In this protocol, we do transport matter but *information* between systems. Admittedly, it has a 
+# rather delusive name because it is not instantaneous but requires additional classical information 
+# to be communicated too, which is naturally limited by the speed of light.
 #
 # Quantum Teleportation
 # `````````````````````
-# Let us have a deeper look at the principles behind the protocol using a simple example of
+# Let us have a deeper look at the principles behind the protocol using a simple example of qubit
 # teleportation. We start with a maximally entangled 2-qubit state, a Bell state. To relate this to
-# the cluster states - this is a cluster state with two nodes and one edge connecting them.
+# cluster states - this is a cluster state with two nodes and one edge connecting them. The circuit 
+# for teleportation is shown in the figure below.
 #
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
@@ -120,28 +120,54 @@ import pennylane as qml
 import pennylane.numpy as np
 
 dev = qml.device("default.qubit", wires=2)
-input_state = np.array([1, -1], requires_grad=False) / np.sqrt(2)
-
 
 @qml.qnode(dev)
-def one_bit_teleportation(state, theta):
+def one_bit_teleportation(input_state):
     # Prepare input state
-    qml.QubitStateVector(state, wires=0)
-
+    qml.QubitStateVector(input_state, wires=0)
     qml.Hadamard(wires=1)
-    qml.CZ(wires=[0, 1])
 
-    qml.Hadamard(wires=0)
-    qml.PhaseShift(theta, wires=0)
-
-    # measure the first qubit
-    m = qml.measure(0)
+    qml.CNOT(wires=[1, 0])
+    
+    # Measure the first qubit and apply an X-gate conditioned on the outcome
+    m = qml.measure(wires = [0])
     qml.cond(m == 1, qml.PauliX)(wires=1)
+    
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires = [1])
 
-    return qml.density_matrix(wires=1)
 
+##############################################################################
+#
+# Now let's prepare a random qubit state and see if the teleportation protocol is working as 
+# expected. To do so, we generate two random complex numbers :math:`a` and :math:`b` and then 
+# normalize them to create a valid qubit state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`. 
+#
 
-print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, np.pi))
+# Define a function to show the density matrix for easy comparison
+qubit = qml.device("default.qubit", wires=1)
+
+@qml.qnode(qubit)
+def density_matrix(input_state):
+    qml.QubitStateVector(input_state, wires=0)
+    return qml.density_matrix(0)
+
+# Generate random input state
+a, b = np.random.random(2) + 1j*np.random.random(2)
+norm = np.linalg.norm([a, b])
+
+alpha = a / norm
+beta = b / norm
+
+input_state = np.array([alpha, beta])
+
+density_matrix(input_state)
+
+##############################################################################
+# We then apply the teleportation protocol and see if the resulting density matrix of the output 
+# state of the second qubit is the same as the input state of the first qubit.
+
+one_bit_teleportation(input_state)
 
 ##############################################################################
 # Information propagation
