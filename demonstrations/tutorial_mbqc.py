@@ -202,12 +202,15 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # ----------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation we 
-# require some kind of error correction. 
+# require some kind of error correction. Error correction is a technique of detecting errors and reconstructing the logical data without losing any information. It is not exclusive to quantum computing; 
+# it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_ 
+# and communication. However,  it is much more essential in the quantum realm as the systems we work 
+# with are much precarious and prone to environmental factors causing errors. 
 # 
-# Error correction is not exclusively for quantum computers; it is also ubiquitous in `"classical" computing 
-# <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_ and communication. However,  it is much more 
-# essential in the quantum realm as the systems we work with are much precarious and prone to 
-# environmental factors causing errors. This is a scheme that encodes the logical information in a larger system 
+# Due to the peculiarities of quantum physics, we have to be careful though. First of all, we can 
+# not simply look inside our quantum computer and see if an error occured. This would collapse the
+# wavefunction which caries valuable information. Secondly, we can not make copies of a quantum 
+# state to create redundancy. This is due to the no-cloning theorem.
 # 
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state 
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure 
@@ -233,7 +236,7 @@ RHG = SurfaceCode(code_distance)
 #
 # Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme 
 # with a 3-dimensional cluster state using photonics. The main ideas are presented in 
-# [#XanaduBlueprint]_, and the corresponding cluster state looks like the figure below.
+# [#XanaduBlueprint]_, and the corresponding cluster state is shown in the figure below.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
 #    :align: center
