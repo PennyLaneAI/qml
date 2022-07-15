@@ -151,6 +151,11 @@ rng = np.random.default_rng(seed=seed)
 # ``qml.U3``` gates in each qubit. 
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
+    """Adds a convolutional layer to a circuit.
+    Args:
+        weights (np.array): 1D array with 15 weights of the parametrized gates.
+        wires (list[int]): Wires where the convolutional layer acts on.
+        skip_first_layer (bool): Skips the first two U3 gates of a layer."""
     n_wires = len(wires)
     assert n_wires >= 3, "this circuit is too small!"
 
@@ -172,6 +177,11 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
 # unmeasured wires, reducing our system size by half. 
 
 def pooling_layer(weights, wires):
+    """Adds a pooling layer to a circuit.
+    Args:
+        weights (np.array): Array with the weights of the conditional U3 gate.
+        wires (list[int]): List of wires to apply the pooling layer on.
+    """
     n_wires = len(wires)
     assert len(wires) >= 2, "this circuit is too small!"
 
@@ -188,11 +198,13 @@ def pooling_layer(weights, wires):
 # and eventually get the desired measurement statistics of the circuit. 
 
 def conv_and_pooling(kernel_weights, n_wires):
+    """Apply both the convolutional and pooling layer."""
     convolutional_layer(kernel_weights[:15], n_wires)
     pooling_layer(kernel_weights[15:], n_wires)
 
 
 def dense_layer(weights, wires):
+    """Apply an arbitrary unitary gate to a specified set of wires."""
     qml.ArbitraryUnitary(weights, wires)
 
 num_wires = 6
@@ -200,7 +212,11 @@ device = qml.device('default.qubit', wires=num_wires)
 
 @qml.qnode(device, interface="jax")
 def conv_net(weights, last_layer_weights, features):
-    # assert weights.shape[0] == 18, "The size of your weights vector is incorrect!"
+    """Define the QCNN circuit
+    Args:
+        weights (np.array): Parameters of the convolution and pool layers.
+        last_layer_weights (np.array): Parameters of the last dense layer.
+        features (np.array): Input data to be embedded using AmplitudEmbedding."""
 
     layers = weights.shape[1]
     wires = list(range(num_wires))
@@ -232,6 +248,7 @@ def conv_net(weights, last_layer_weights, features):
 # The ``load_digits_data`` function below helps loading the dataset from ``sklearn.dataset``. 
 
 def load_digits_data(num_train, num_test, rng):
+    """Return training and testing data of digits dataset."""
     digits = datasets.load_digits()
     features, labels = digits.data, digits.target
 
