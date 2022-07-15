@@ -202,7 +202,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # ----------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation we 
-# require error correction, in particular quantum error correction. This is a 
+# require some kind of error correction. 
 # 
 # Error correction is not exclusively for quantum computers; it is also ubiquitous in `"classical" computing 
 # <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_ and communication. However,  it is much more 
@@ -227,8 +227,6 @@ RHG = SurfaceCode(code_distance)
 #
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/rhg-graph.html
-#    :align: center
-#    :width: 75%
 #
 
 ##############################################################################
