@@ -91,7 +91,7 @@ def cluster_state():
 print(qml.draw(cluster_state)())
 
 ##############################################################################
-# Information propagation and Teleportation
+# Information propagation and teleportation
 # --------------------------------------
 #
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
@@ -180,7 +180,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 # 1. How **information propagates** through the cluster state.
 #
-# 2. How **arbitrary qubit rotations** can be implemented.
+# 2. How arbitrary **single-qubit rotations** can be implemented.
 #
 # 3. How a **two-qubit gate** can be implemented in this scheme.
 
@@ -239,22 +239,8 @@ RHG = SurfaceCode(code_distance)
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
-
-##############################################################################
-#
-# `Xanadu's path towards a fault-tolerant quantum computer <https://www.youtube.com/watch?v=SD6TH7GZ1rM>`_ 
-# is via a measurement-based scheme with a 3-dimensional cluster state using photonics. The architecture are presented in
-# [#XanaduBlueprint]_, and the corresponding cluster state is shown in the figure below.
-#
-# .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
-#    :align: center
-#    :width: 75%
-#
-#    ..
-#
-#    Cluster state proposed in [#XanaduBlueprint]_
-#
-# The computation is done by single-qubit measurements.
+# The actual computation is done by performing single-qubit measurements, as illustrated below. The 
+# 
 #
 # .. figure:: ../demonstrations/mbqc/gif_measuring.gif
 #    :align: center
@@ -262,7 +248,29 @@ RHG = SurfaceCode(code_distance)
 #
 #    ..
 #
-#    Performing a quantum computation on a measurement-based quantum computer using the RHG lattice [#XanaduBlueprint]_
+#    Performing a computation on a using the RHG lattice [#XanaduBlueprint]_
+#
+
+
+##############################################################################
+# Xanadu's approach
+# ----------------
+# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme with a 
+# 3-dimensional cluster state using photonics. The main ideas of the architecture is presented in 
+# [#XanaduBlueprint]_, and the corresponding cluster state is shown in the figure below. One 
+# interesting aspect of this architecture is the use of a hybrid cluster: a combination of GKP 
+# states and squeezed states. If you want to dive into more depth, you can have a look at `this 
+# blog post <https://medium.com/xanaduai/from-a-state-of-light-to-state-of-the-art-the-photonic-path-to-millions-of-qubits-c0e08ca1cb21>`_
+# or `this video <https://www.youtube.com/watch?v=SD6TH7GZ1rM>`_.
+#
+# .. figure:: ../demonstrations/mbqc/mbqc_blueprint_full.png
+#    :align: center
+#    :width: 75%
+#
+#    ..
+#
+#    Cluster state proposed in [#XanaduBlueprint]_
+#
 #
 #
 
