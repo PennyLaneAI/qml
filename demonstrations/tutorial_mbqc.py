@@ -35,7 +35,7 @@ Measurement-based quantum computation
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
 #    :align: center
-#    :width: 60%
+#    :width: 75%
 #
 #    ..
 #
