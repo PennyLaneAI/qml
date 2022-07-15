@@ -221,7 +221,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
-# of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode, #GoogleQEC2022] as 
+# of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode, #GoogleQEC2022]_ as 
 # an example. The cluster state that is associated with this code is known as the the RHG lattice, 
 # named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster 
 # state with FlamingPy.
@@ -242,8 +242,8 @@ RHG = SurfaceCode(code_distance)
 
 ##############################################################################
 #
-# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme
-# with a 3-dimensional cluster state using photonics. The main ideas are presented in
+# `Xanadu's path towards a fault-tolerant quantum computer <https://www.youtube.com/watch?v=SD6TH7GZ1rM>`_ 
+# is via a measurement-based scheme with a 3-dimensional cluster state using photonics. The architecture are presented in
 # [#XanaduBlueprint]_, and the corresponding cluster state is shown in the figure below.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
@@ -254,8 +254,17 @@ RHG = SurfaceCode(code_distance)
 #
 #    Cluster state proposed in [#XanaduBlueprint]_
 #
+# The computation is done by single-qubit measurements.
 #
-
+# .. figure:: ../demonstrations/mbqc/gif_measuring.gif
+#    :align: center
+#    :width: 75%
+#
+#    ..
+#
+#    Performing a quantum computation on a measurement-based quantum computer using the RHG lattice [#XanaduBlueprint]_
+#
+#
 
 ##############################################################################
 # References
