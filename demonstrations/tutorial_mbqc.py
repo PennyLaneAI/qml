@@ -111,7 +111,7 @@ print(qml.draw(cluster_state)())
 # 
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
-#    :width: 50%
+#    :width: 75%
 #
 #    ..
 
@@ -227,6 +227,8 @@ RHG = SurfaceCode(code_distance)
 #
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/rhg-graph.html
+#    :align: center
+#    :width: 75%
 #
 
 ##############################################################################
