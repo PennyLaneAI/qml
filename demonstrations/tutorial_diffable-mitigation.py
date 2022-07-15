@@ -201,7 +201,7 @@ plt.show()
 #
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
 # executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way 
-# as described in :doc:`introduction/interfaces`.
+# as described in the :doc:`interfaces section of the documentation <../introduction/interfaces>`.
 #
 ##############################################################################
 # Differentiating the mitigation transform itself
