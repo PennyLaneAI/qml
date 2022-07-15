@@ -142,7 +142,7 @@ rng = np.random.default_rng(seed=seed)
 # the measurement of a neighbouring qubit. Finally, we use a "dense layer" that entangles all qubits
 # of the final state using a all-to-all unitary gate. 
 # 
-# *Let's break down each layer:*
+# **Let's break down each layer:**
 #
 # The convolutional layer should has as an input the weights of the two-qubit unitary which are to 
 # be determined in the training rounds. In ``pennylane``, we model this arbitrary two-qubit unitary
