@@ -256,8 +256,8 @@ RHG = SurfaceCode(code_distance)
 # Xanadu's approach
 # ----------------
 # Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme with a 
-# 3-dimensional cluster state using photonics. The main ideas of the architecture is presented in 
-# [#XanaduBlueprint]_, and the corresponding cluster state is shown in the figure below. One 
+# 3-dimensional cluster state using photonics. The main ideas of the architecture are presented in 
+# [#XanaduBlueprint]_ and the corresponding cluster state is shown in the figure below. One 
 # interesting aspect of this architecture is the use of a hybrid cluster: a combination of GKP 
 # states and squeezed states. If you want to dive into more depth, you can have a look at `this 
 # blog post <https://medium.com/xanaduai/from-a-state-of-light-to-state-of-the-art-the-photonic-path-to-millions-of-qubits-c0e08ca1cb21>`_
