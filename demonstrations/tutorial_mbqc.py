@@ -221,9 +221,10 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
-# of the cluster state. For example, the cluster state that is associated with the surface code is
-# the RHG lattice, named after its architects Raussendorf, Harrington, and Goyal. We can visualize
-# this cluster state with FlamingPy.
+# of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode, #GoogleQEC2022] as 
+# an example. The cluster state that is associated with this code is known as the the RHG lattice, 
+# named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster 
+# state with FlamingPy.
 #
 
 from flamingpy.codes import SurfaceCode
@@ -291,3 +292,12 @@ RHG = SurfaceCode(code_distance)
 #     Daniel Herr, Alexandru Paler, Simon J. Devitt and Franco Nori (2018) *Lattice Surgery on the Raussendorf Lattice*,
 #     `IOP Publishing 3, 3
 #     <https://arxiv.org/abs/1711.04921>`__.
+#
+# .. [#GoogleQEC2022]
+#
+#     Google Quantum AI (2022) *Quantum Error Correction in Quantum Computers*, `arXiv <https://arxiv.org/pdf/2207.06431.pdf>`__.
+#
+# .. [#FowlerSurfaceCode]
+#
+#     Austin G. Fowler, Matteo Mariantoni, John M. Martinis, Andrew N. Cleland (2012) 
+#     *Surface codes: Towards practical large-scale quantum computation*, `arXiv <https://arxiv.org/abs/1208.0928>`__.
