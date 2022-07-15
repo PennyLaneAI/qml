@@ -10,7 +10,7 @@ Quantum natural SPSA optimizer
 
 In this tutorial, we show how we can implement the 
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer 
-<https://quantum-journal.org/papers/q-2021-10-20-567/>`__ [#Gacon2021]_ 
+<https://quantum-journal.org/papers/q-2021-10-20-567/>`__
 from Gacon et al. using PennyLane.
 
 Variational quantum algorithms (VQAs) are in close analogy to their counterparts 
