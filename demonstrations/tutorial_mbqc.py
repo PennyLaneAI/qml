@@ -14,21 +14,21 @@ Measurement-based quantum computation
 ##############################################################################
 #
 # **Measurement-based quantum computing (MBQC)** is a clever approach towards quantum computing that
-# makes use of *offline* entanglement as a resource for computation. This method, also referred to 
-# as one-way quantum computing, seems very dissimilar from the gate-based model. However, they can 
-# be proven to be equivalent and so both are universal. In a one-way quantum computer, we start out 
-# with an entangled state, a so-called cluster state, and apply particular single-qubit measurements 
-# that correspond to the desired quantum circuit. In MBQC, the measurements *are* the computation 
+# makes use of *offline* entanglement as a resource for computation. This method, also referred to
+# as one-way quantum computing, seems very dissimilar from the gate-based model. However, they can
+# be proven to be equivalent and so both are universal. In a one-way quantum computer, we start out
+# with an entangled state, a so-called cluster state, and apply particular single-qubit measurements
+# that correspond to the desired quantum circuit. In MBQC, the measurements *are* the computation
 # and the entanglement of the cluster state is used as a resource.
 #
-# The structure of this demo will be as follows. First of all, we introduce the concept of a cluster 
-# state, the substrate for measurement-based quantum computation. Then, we will move on to explain 
-# how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will 
+# The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
+# state, the substrate for measurement-based quantum computation. Then, we will move on to explain
+# how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
 # consider how quantum error correction is done in this scheme.
 #
-# Throughout this tutorial, we will explain the underlying concepts with the help of some code 
-# snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum 
-# error correction software `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developed 
+# Throughout this tutorial, we will explain the underlying concepts with the help of some code
+# snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum
+# error correction software `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developed
 # by our architecture team [#XanaduPassiveArchitecture]_.
 #
 #
@@ -46,17 +46,17 @@ Measurement-based quantum computation
 # Cluster states
 # ----------------
 #
-# Cluster states are the basis of measurement-based quantum computation. They are a special instance 
-# of graph states, a class of entangled multi-qubit states that can be represented by an undirected 
-# graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges with entanglement 
+# Cluster states are the basis of measurement-based quantum computation. They are a special instance
+# of graph states, a class of entangled multi-qubit states that can be represented by an undirected
+# graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges with entanglement
 # between them. The associated quantum state reads as follows
 #
 # .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n}.
 #
 # The difference between a cluster state and a graph state is that the cluster state is ...
 #
-# 
-# 
+#
+#
 
 import networkx as nx
 
@@ -93,22 +93,22 @@ print(qml.draw(cluster_state)())
 ##############################################################################
 # Information propagation and Teleportation
 # --------------------------------------
-# 
-# Measurement-based quantum computation heavily relies on the idea of information propagation. In 
+#
+# Measurement-based quantum computation heavily relies on the idea of information propagation. In
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
 # teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
 # in safe communication protocols that are not possible with classical communication so it's certainly worth to learn about.
-# In this protocol, we transport *information* between systems. Note that we do not transport matter. 
-# Admittedly, it has a rather delusive name because it is not instantaneous but requires additional 
-# classical information to be communicated too. This classical information transfer is naturally 
-# limited by the speed of light. 
+# In this protocol, we transport *information* between systems. Note that we do not transport matter.
+# Admittedly, it has a rather delusive name because it is not instantaneous but requires additional
+# classical information to be communicated too. This classical information transfer is naturally
+# limited by the speed of light.
 #
 # Quantum Teleportation
-# `````````````````````	
-# Let us have a deeper look at the principles behind the protocol using a simple example of 
-# teleportation. We start with a maximally entangled 2-qubit state, a Bell state. To relate this to 
+# `````````````````````
+# Let us have a deeper look at the principles behind the protocol using a simple example of
+# teleportation. We start with a maximally entangled 2-qubit state, a Bell state. To relate this to
 # the cluster states - this is a cluster state with two nodes and one edge connecting them.
-# 
+#
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
 #    :width: 75%
@@ -145,15 +145,15 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 ##############################################################################
 # Information propagation
 # ``````````````````````
-# Essentially, we keep logical information in one end of our cluster state which we progagate to the 
-# other end using the teleportation protocol. By choosing adaptive measurements, we can "write" our 
-# circuit onto the cluster state. Later, we will see how we can actually do this. 
-# 
-# It's good to emphasize that the entanglement of the cluster state is created *off-line*. This 
-# means that the entanglement is made independently from the computation, like how a blank sheet of 
-# paper is made separately from the text of a book. Interestingly enough, we don not have to prepare 
-# all the entanglement at once. Just like we can already start printing text upon the first few 
-# pages, we can apply measurements to one end of the cluster, while growing it at the same time as 
+# Essentially, we keep logical information in one end of our cluster state which we progagate to the
+# other end using the teleportation protocol. By choosing adaptive measurements, we can "write" our
+# circuit onto the cluster state. Later, we will see how we can actually do this.
+#
+# It's good to emphasize that the entanglement of the cluster state is created *off-line*. This
+# means that the entanglement is made independently from the computation, like how a blank sheet of
+# paper is made separately from the text of a book. Interestingly enough, we don not have to prepare
+# all the entanglement at once. Just like we can already start printing text upon the first few
+# pages, we can apply measurements to one end of the cluster, while growing it at the same time as
 # shown in the figure below. That is, we can start printing the text on the first few pages while at
 # the same time reloading the printer's paper tray!
 #
@@ -164,17 +164,17 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 #    ..
 #
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
-# expendable qubits that don't have to stick around for the full calculation. If we can find a 
-# reliable way to produce qubits and stitch them together through entanglement, we can use it to 
-# produce our cluster state resource! Essentially, we need some kind of qubit factory and a 
+# expendable qubits that don't have to stick around for the full calculation. If we can find a
+# reliable way to produce qubits and stitch them together through entanglement, we can use it to
+# produce our cluster state resource! Essentially, we need some kind of qubit factory and a
 # stitching mechanism that puts it all together.
 #
 
 ##############################################################################
 # Universality of MBQC
 # ----------------------
-# How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We 
-# have to prove it! In particular, we want to show that a measurement-based quantum computer is a 
+# How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We
+# have to prove it! In particular, we want to show that a measurement-based quantum computer is a
 # called quantum Turing machine (WTM) also known as a universal quantum computer. To do this, we
 # need to show 3 things
 #
@@ -193,7 +193,7 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 
 ##############################################################################
 # The two-qubit gate: CNOT
-# ``````````````````````````	
+# ``````````````````````````
 # The last ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
 # show how to do a CNOT in the measurement-based framework.
 
@@ -201,21 +201,21 @@ print(qml.draw(one_bit_teleportation, expansion_strategy="device")(input_state, 
 # Quantum error correction and fault tolerance
 # ----------------
 #
-# To mitigate the physical errors that can (and will) happen during a quantum computation we 
-# require some kind of error correction. Error correction is a technique of detecting errors and reconstructing the logical data without losing any information. It is not exclusive to quantum computing; 
-# it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_ 
-# and communication. However,  it is much more essential in the quantum realm as the systems we work 
-# with are much precarious and prone to environmental factors causing errors. 
-# 
-# Due to the peculiarities of quantum physics, we have to be careful though. First of all, we can 
+# To mitigate the physical errors that can (and will) happen during a quantum computation we
+# require some kind of error correction. Error correction is a technique of detecting errors and reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
+# it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_
+# and communication. However,  it is much more essential in the quantum realm as the systems we work
+# with are much precarious and prone to environmental factors causing errors.
+#
+# Due to the peculiarities of quantum physics, we have to be careful though. First of all, we can
 # not simply look inside our quantum computer and see if an error occured. This would collapse the
-# wavefunction which caries valuable information. Secondly, we can not make copies of a quantum 
+# wavefunction which caries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy. This is due to the no-cloning theorem.
-# 
-# In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state 
-# [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure 
-# of the cluster state. For example, the cluster state that is associated with the surface code is 
-# the RHG lattice, named after its architects Raussendorf, Harrington, and Goyal. We can visualize 
+#
+# In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
+# [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
+# of the cluster state. For example, the cluster state that is associated with the surface code is
+# the RHG lattice, named after its architects Raussendorf, Harrington, and Goyal. We can visualize
 # this cluster state with FlamingPy.
 #
 
@@ -234,8 +234,8 @@ RHG = SurfaceCode(code_distance)
 
 ##############################################################################
 #
-# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme 
-# with a 3-dimensional cluster state using photonics. The main ideas are presented in 
+# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme
+# with a 3-dimensional cluster state using photonics. The main ideas are presented in
 # [#XanaduBlueprint]_, and the corresponding cluster state is shown in the figure below.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_blueprint.png
@@ -268,7 +268,7 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#XanaduPassiveArchitecture]
 #
-#     Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa, 
+#     Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa,
 #     Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) "Fault-Tolerant Quantum Computation with Static Linear Optics",
 #     `PRX Quantum, Vol. 2, No. 4
 #     <http://dx.doi.org/10.1103/PRXQuantum.2.040353>`__.
