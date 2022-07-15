@@ -24,7 +24,8 @@ Measurement-based quantum computation
 # The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
-# consider how quantum error correction is done in this scheme.
+# consider how quantum error correction is done in this scheme and how Xanadu plans to achieve a 
+# fault-tolerant quantum computer with this scheme.
 #
 # Throughout this tutorial, we will explain the underlying concepts with the help of some code
 # snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum
