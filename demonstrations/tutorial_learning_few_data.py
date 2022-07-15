@@ -101,7 +101,19 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 ##############################################################################
 # Quantum convolutional neural network
 # ------------------------------------
-# Import modules and fix random number generator:
+# Before we start building a quantum CNN, let us remember the idea of their classical counterpart.
+# Classical CNNs are a family of neural network with a specific type of architecture aimed to 
+# perform image processing. To achieve this goal, one uses what is known as a *convolutional layer*, 
+# which consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local 
+# information about such an array. In addition, depending on the purpose of your CNN, one might want
+# to do classification or feature preduction, which are arrays much smaller than the original image.
+# To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These 
+# layers are used to reduce the dimensionality of the 2D array being processed (whereas inverse pooling increase the
+# dimensionality of a 2D array). Finally, one takes these two layers and apply them repeatedly and
+# interchangeably. We want to build something similar for a quantum circuit. 
+# 
+# First, let us import a few libraries that we will use along this demo. 
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -121,8 +133,21 @@ seed = 0
 rng = np.random.default_rng(seed=seed)
 
 ##############################################################################
-# META: add motivate the use of convolutional layers and explain how they work @Luis.
-# text text text.
+# To construct a convolutional and pooling layer in a quantum circuit, we will
+# follow the QCNN construction proposed by [#CongQuantumCNN]_. The former layer 
+# will extract local correlations, while the latter allows reducing the dimensionality
+# of the feature vector. In a qubit circuit, the convolutional layer, which consists of a kernel that
+# is sweept along all the image, is now translated to a two-qubit unitary that correlates neighbouring
+# qubits. As for the pooling layer, we will use a conditioned single qubit unitary that depends on
+# the measurement of a neighbouring qubit. Finally, we use a "dense layer" that entangles all qubits
+# of the final state using a all-to-all unitary gate. 
+# 
+# Let's break down each layer:
+# The convolutional layer should has as an input the weights of the two-qubit unitary which are to 
+# be determined in the training rounds. In ``pennylane``, we model this arbitrary two-qubit unitary
+# with two single-qubit gates ``U3`` (parametrized by three parameters, each), followed by an three ising 
+# interaction between both qubits (each interaction is parametrized by one parameter), and two additional
+# ``U3``` gates in each qubit. 
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     n_wires = len(wires)
@@ -140,6 +165,10 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
                 qml.U3(*weights[9:12], wires=[w])
                 qml.U3(*weights[12:], wires=[wires[indx + 1]])
 
+##############################################################################
+# The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in 
+# this case, are ``U3`` gates. Then, we apply these conditional measurement to half of the 
+# unmeasured wires, reducing our system size by half. 
 
 def pooling_layer(weights, wires):
     n_wires = len(wires)
@@ -151,6 +180,12 @@ def pooling_layer(weights, wires):
             qml.cond(m_outcome, qml.U3)(*weights, wires=wires[indx - 1])
 
 
+##############################################################################
+# Combining both layers together, and using a arbitrary unitary to model a dense layer,
+# we can construct a quantum CNN, which will take as input a set of features (the image),
+# encode this features using an embedding map, apply rounds of convolutional and pooling layers,
+# and eventually get the desired measurement statistics of the circuit. 
+
 def conv_and_pooling(kernel_weights, n_wires):
     convolutional_layer(kernel_weights[:15], n_wires)
     pooling_layer(kernel_weights[15:], n_wires)
@@ -158,7 +193,6 @@ def conv_and_pooling(kernel_weights, n_wires):
 
 def dense_layer(weights, wires):
     qml.ArbitraryUnitary(weights, wires)
-
 
 num_wires = 6
 device = qml.device('default.qubit', wires=num_wires)
