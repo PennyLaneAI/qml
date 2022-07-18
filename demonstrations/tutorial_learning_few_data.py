@@ -312,6 +312,14 @@ def init_weights():
 # We update the weights using the ``qml.AdamOptimizer`` and use these updated weights to 
 # calculate the cost and accurracy on the testing and training set.
 
+def train_step(cost, args, argnums=[0, 1], lrate=0.1):
+    grad = jax.grad(cost, argnums=argnums)(*args)
+    weights = args[0] - lrate * grad[0]
+    weights_last = args[1] - lrate * grad[1]
+    return weights, weights_last
+
+
+
 def train_qcnn(n_train, n_test, n_epochs, desc):
     """
     Args:
@@ -337,9 +345,10 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
     pbar = trange(n_epochs, desc=desc)
 
     for step in pbar:
-        (weights, weights_last), train_cost = optimizer.step_and_cost(
-            compute_cost, weights, weights_last, features=x_train, labels=y_train
+        weights, weights_last = train_step(
+            compute_cost, (weights, weights_last, x_train, y_train)
         )
+        train_cost = compute_cost(weights, weights_last, x_train, y_train)
         train_cost_epochs.append(train_cost)
 
         # compute accuracy on training data
@@ -370,7 +379,7 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
 # a proxy for the models' generalization capabilities, increases.
 
 n_test = 100
-n_epochs = 20
+n_epochs = 100
 n_train = 40
 
 # train on n_train train samples
