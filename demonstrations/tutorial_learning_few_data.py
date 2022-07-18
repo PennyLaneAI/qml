@@ -284,18 +284,17 @@ def load_digits_data(num_train, num_test, rng):
 # To optimize the weights of our variatiational model, we define the cost and accurracy functions 
 # to train and quantify the performance on classification of the previously defines QCNN.
 
+@jax.jit
 def compute_out(weights, weights_last, features, labels):
     """Computes the output of the corresponding label in the qcnn"""
     cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[label]
     return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(weights, weights_last, features, labels)
 
-@jax.jit
 def compute_accuracy(weights, weights_last, features, labels):
     """Computes the accuracy over the provided features and labels"""
     out = compute_out(weights, weights_last, features, labels)
     return jnp.sum(out > 0.5)/len(out)
 
-@jax.jit
 def compute_cost(weights, weights_last, features, labels):
     """Computes the cost over the provided features and labels"""
     out = compute_out(weights, weights_last, features, labels)
@@ -307,6 +306,7 @@ def init_weights():
     weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
     return jnp.array(weights), jnp.array(weights_last)
 
+value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 
 ##############################################################################
 # We are going to perform the classification for differently sized training sets. We therefore
@@ -340,28 +340,24 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
     pbar = trange(n_epochs, desc=desc)
 
     for step in pbar:
-        train_cost, grad_circuit = jax.value_and_grad(compute_cost, argnums=[0, 1])(weights, weights_last, x_train, y_train)
+        # Training step with (adam) optimizer
+        train_cost, grad_circuit = value_and_grad(weights, weights_last, x_train, y_train)
         updates, opt_state = optimizer.update(grad_circuit, opt_state)
         weights, weights_last = optax.apply_updates((weights, weights_last), updates)
 
-
-        #weights, weights_last = train_step(
-        #    compute_cost, (weights, weights_last, x_train, y_train)
-        #)
-        #train_cost = compute_cost(weights, weights_last, x_train, y_train)
         train_cost_epochs.append(train_cost)
 
         # compute accuracy on training data
         train_acc = compute_accuracy(weights, weights_last, x_train, y_train)
         train_acc_epochs.append(train_acc)
 
-        # compute cost on testing data
-        test_cost = compute_cost(weights, weights_last, x_test, y_test)
-        test_cost_epochs.append(test_cost)
-
-        # compute accuracy on testing data
-        test_acc = compute_accuracy(weights, weights_last, x_test, y_test)
+        # compute accuracy and cost on testing data
+        test_out = compute_out(weights, weights_last, x_test, y_test)
+        test_acc = jnp.sum(test_out > 0.5)/len(test_out)
         test_acc_epochs.append(test_acc)
+        test_cost = 1.0 - jnp.sum(test_out) / len(test_out)
+        test_cost_epochs.append(test_cost)
+        
 
         pbar.set_postfix(train_cost=train_cost, test_cost=test_cost, train_acc=train_acc, test_acc=test_acc)
 
@@ -375,6 +371,13 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
     )
 
 ##############################################################################
+# .. note:: 
+#
+#     There are some small intricacies for speeding up this code that are worth mentioning: We are using ``jax`` for our training
+#     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution 
+#     and cached for future executions. This means the first execution will take longer but all following executions are substantially faster. 
+#     Further, we use ``jax.vmap`` to vectorize the execution of the qcnn over all input states (as opposed to looping through the training and test set at every execution)
+#
 # Training for different training set sizes yields different accuracies, as can be seen below. As we increase the training data size, the the overall test accuracy,
 # a proxy for the models' generalization capabilities, increases.
 
@@ -383,11 +386,31 @@ n_epochs = 100
 n_train = 40
 
 # train on n_train train samples
-results = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
+import time
+t0 = time.time()
+results0 = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
+dt = time.time() - t0
+print(f"first execution: {dt}")
+
+t0 = time.time()
+results1 = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
+dt = time.time() - t0
+print(f"second execution: {dt}")
+
+t0 = time.time()
+results2 = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
+dt = time.time() - t0
+print(f"third execution: {dt}")
 
 # write results to dataframe
-results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
-results_df = pd.concat([results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True)
+results0_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
+results0_df = pd.concat([results0_df, pd.DataFrame.from_dict(results0)], axis=0, ignore_index=True)
+
+results1_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
+results1_df = pd.concat([results1_df, pd.DataFrame.from_dict(results1)], axis=0, ignore_index=True)
+
+results2_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
+results2_df = pd.concat([results2_df, pd.DataFrame.from_dict(results2)], axis=0, ignore_index=True)
 
 ##############################################################################
 # Finally, we plot the loss and accurracy for both the training and testing set
@@ -411,7 +434,7 @@ def make_plot(df, n_train):
     ax.legend(fontsize=14)
 
     ax = axs[2]
-    ax.plot(df.train_acc, results_df.test_acc,"o:", label=f'N={n_train}')
+    ax.plot(df.train_acc, df.test_acc,"o:", label=f'N={n_train}')
     ax.set_xlim(df.test_acc.min()-0.05, 1.05)
     ax.plot(np.linspace(df.test_acc.min(), 1.0), np.linspace(df.test_acc.min(), 1.0), ls='--', color='black')
     ax.set_ylabel("test accuracy", fontsize=18)
@@ -422,7 +445,9 @@ def make_plot(df, n_train):
     plt.tight_layout()
     plt.show()
 
-make_plot(results_df, n_train=40)
+make_plot(results0_df, n_train=40)
+make_plot(results1_df, n_train=40)
+make_plot(results2_df, n_train=40)
 
 ##############################################################################
 # References
