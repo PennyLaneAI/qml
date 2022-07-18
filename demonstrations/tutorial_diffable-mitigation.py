@@ -9,7 +9,7 @@ r"""Differentiating quantum error mitigation transforms
 
     tutorial_error_mitigation Error mitigation with Mitiq and PennyLane
 
-*Author: KK,.. Posted: 27 July 2022*
+*Author: Korbinian Kottmann, Posted: 27 July 2022*
 
 Error mitigation is an important strategy for minimizing noise when using noisy-intermediate scale quantum (NISQ) hardware.
 This can be very important when designing and testing variational algorithms. In this demo, we will show how error mitigation
@@ -249,3 +249,9 @@ plt.show()
 #     Gokul Subramanian Ravi, Kaitlin N. Smith, Pranav Gokhale, Andrea Mari, Nathan Earnest, Ali Javadi-Abhari, Frederic T. Chong.
 #     "VAQEM: A Variational Approach to Quantum Error Mitigation."
 #     `arXiv:2112.05821 <https://arxiv.org/abs/2112.05821>`__, 2021.
+
+##############################################################################
+#.. bio:: Korbinian Kottmann
+#    :photo: ../_static/qottmann.jpg
+#
+#    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
