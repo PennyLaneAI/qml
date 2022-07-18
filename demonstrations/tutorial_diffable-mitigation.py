@@ -11,6 +11,10 @@ r"""Differentiating quantum error mitigation transforms
 
 *Author: KK,.. Posted: 27 July 2022*
 
+Error mitigation is an important strategy for minimizing noise when using noisy-intermediate scale quantum (NISQ) hardware.
+This can be very important when designing and testing variational algorithms. In this demo, we will show how error mitigation
+can be combined with variational workflows, allowing you to differentiate `through` the error mitigation.
+
 Differentiating quantum error mitigation transforms
 ---------------------------------------------------
 
@@ -32,10 +36,8 @@ Formally, we can treat error mitigation as yet another transform that maps the n
 
 In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable --- both formally and practically in our implementation.
 PennyLane now provides one such differentiable quantum error mitigation technique with `zero noise extrapolation` (ZNE), which can be used and differentiated in simulation and on hardware.
+Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
 We will briefly introduce these new functionalities and afterwards go more in depth to explore what happens under the hood.
-
-Differentiable transform
-------------------------
 
 We start by initializing a noisy device under the ``qml.DepolarizingChannel``:
 """
