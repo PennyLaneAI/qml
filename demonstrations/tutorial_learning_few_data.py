@@ -112,7 +112,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # dimensionality of a 2D array). Finally, one takes these two layers and applies them repeatedly and
 # interchangeably. We want to build something similar for a quantum circuit. 
 # 
-# First, we import a few libraries we will use in this demo.
+# First, we import the necessary libraries we will need in this demo and set a seed for reproducibility.
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -403,7 +403,6 @@ def make_plot(df, n_train):
     plt.show()
 
 make_plot(results_df, n_train=40)
-
 
 ##############################################################################
 # References
