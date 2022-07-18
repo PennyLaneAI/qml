@@ -361,9 +361,10 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
 
 n_test = 100
 n_epochs = 20
+n_train = 40
 
-# train on 40 train samples
-results = train_qcnn(n_train=40, n_test=100, n_epochs=n_epochs, desc=f'n=20')
+# train on n_train train samples
+results = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
 
 # write results to dataframe
 results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
@@ -391,7 +392,7 @@ def make_plot(df, n_train):
     ax.legend(fontsize=14)
 
     ax = axs[2]
-    ax.plot(df.train_acc, results_df.test_acc,"o:", label='N=40')
+    ax.plot(df.train_acc, results_df.test_acc,"o:", label=f'N={n_train}')
     ax.set_xlim(df.test_acc.min()-0.05, 1.05)
     ax.plot(np.linspace(df.test_acc.min(), 1.0), np.linspace(df.test_acc.min(), 1.0), ls='--', color='black')
     ax.set_ylabel("test accuracy", fontsize=18)
