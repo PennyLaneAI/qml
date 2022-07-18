@@ -86,7 +86,7 @@ qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 ##############################################################################
-# We can then simply transform the noisy qnode :math:`f^{⚡}` with ``qml.transforms.mitigate_with_zne`` to generate :math:`\tilde{f}`.
+# We can then simply transform the noisy qnode :math:`f^{⚡}` with :func:`~pennylane.mitigate_with_zne` to generate :math:`\tilde{f}`.
 # If everything goes as planned, executing the mitigated ``qnode`` is then closer to the ideal result:
 
 scale_factors = [1.0, 2.0, 3.0]
@@ -98,7 +98,7 @@ print("Mitigated qnode: ", qnode_mitigated(w1, w2))
 print("Noisy qnode: ", qnode_noisy(w1, w2))
 
 ##############################################################################
-# The cool thing about this new mitigated qnode is that it is still differentiable! I.e. we can compute its gradient as usual:
+# The cool thing about this new mitigated QNode is that it is still differentiable! That is, we can compute its gradient as usual:
 
 grad = qml.grad(qnode_mitigated)
 print(grad(w1, w2))
@@ -112,7 +112,7 @@ print(grad(w1, w2))
 #
 # Notice how the two circuits :math:`U` and :math:`U U^\dagger U` are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
 # This is the underlying concept of unitary folding, which is used to artificially increase the noise of a quantum function. Given a unitary circuit :math:`U = L_d .. L_1`,
-# where :math:`L_i` can be either a gate or layer, we use ``qml.transforms.fold_global`` to construct
+# where :math:`L_i` can be either a gate or layer, we use :func:`~pennylane.transforms.fold_global` to construct
 #
 # .. math:: \text{fold_global}(U) = U (U^\dagger U)^n (L^\dagger_d L^\dagger_{d-1} .. L^\dagger_s) (L_s .. L_d),
 #
@@ -153,7 +153,7 @@ plt.show()
 # ------------------------------------------------------------
 #
 # We now use mitigation while we optimize the parameters our variational circuit to obtain the ground state of the Hamiltonian. We compare VQE optimization runs for
-# the ideal, noisy and mitigated qnodes and see that the mitigated one comes close to the ideal results, whereas the noisy execution is further off.
+# the ideal, noisy and mitigated QNodes and see that the mitigated one comes close to the ideal results, whereas the noisy execution is further off.
 
 
 def VQE_run(cost_fn, max_iter, stepsize=0.1):
@@ -201,9 +201,8 @@ plt.show()
 #
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
 # executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way 
-# as described in the :doc:`interfaces section of the documentation <../introduction/interfaces>`.
+# as described in the :doc:`interfaces section of the documentation </introduction/interfaces>`.
 #
-##############################################################################
 # Differentiating the mitigation transform itself
 # ------------------------------------------------
 #
