@@ -88,7 +88,7 @@ qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 ##############################################################################
-# We can then simply transform the noisy qnode :math:`f^{⚡}` with :func:`~pennylane.mitigate_with_zne` to generate :math:`\tilde{f}`.
+# We can then simply transform the noisy qnode :math:`f^{⚡}` with :func:`~.pennylane.mitigate_with_zne` to generate :math:`\tilde{f}`.
 # If everything goes as planned, executing the mitigated ``qnode`` is then closer to the ideal result:
 
 scale_factors = [1.0, 2.0, 3.0]
@@ -114,7 +114,7 @@ print(grad(w1, w2))
 #
 # Notice how the two circuits :math:`U` and :math:`U U^\dagger U` are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
 # This is the underlying concept of unitary folding, which is used to artificially increase the noise of a quantum function. Given a unitary circuit :math:`U = L_d .. L_1`,
-# where :math:`L_i` can be either a gate or layer, we use :func:`~pennylane.transforms.fold_global` to construct
+# where :math:`L_i` can be either a gate or layer, we use :func:`~.pennylane.transforms.fold_global` to construct
 #
 # .. math:: \text{fold_global}(U) = U (U^\dagger U)^n (L^\dagger_d L^\dagger_{d-1} .. L^\dagger_s) (L_s .. L_d),
 #
