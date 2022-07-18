@@ -244,8 +244,18 @@ def conv_net(weights, last_layer_weights, features):
 # Training the QCNN on the digits dataset
 # ---------------------------------------
 # In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset. 
-# These are 8 by 8 pixel arrays of hand-written digits, which we then flatten out to feed the QCNN with. 
-# The ``load_digits_data`` function below helps loading the dataset from ``sklearn.dataset``. 
+# These are 8 by 8 pixel arrays of hand-written digits as shown below. 
+
+digits = datasets.load_digits()
+fig, (ax1, ax2) = plt.subplots(1,2)
+ax1.imshow(digits.data[0].reshape((8,8)), cmap='gray')
+ax1.axis('off')
+ax2.imshow(digits.data[1].reshape((8,8)), cmap='gray')
+ax2.axis('off')
+
+##############################################################################
+# For convenience, we create a ``load_digits_data`` function that will make random training and 
+# testing sets from the ``digits`` dataset from ``sklearn.dataset``. 
 
 def load_digits_data(num_train, num_test, rng):
     """Return training and testing data of digits dataset."""
