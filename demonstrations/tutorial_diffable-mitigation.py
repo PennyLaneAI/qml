@@ -23,7 +23,7 @@ to be executed on noisy hardware. This means that naturally we do not have direc
 :math:`f^{⚡}(\theta) := \text{tr}\left[H \Phi(\rho(\theta)) \right]` where :math:`\Phi(\bullet)` is a noise channel and
 :math:`\rho(\theta) = U^\dagger(\theta)|0\rangle \langle 0|U(\theta)` the variational state.
 
-To be able to get the most out of these devices, it is advisable to use quantum error mitigation. That is, a way of
+To be able to get the most out of these devices, it is advisable to use quantum error mitigation --- a method of
 altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
 
 Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^{⚡}` to a new, mitigated, quantum function :math:`\tilde{f}`,
