@@ -199,12 +199,10 @@ plt.ylabel("energy", fontsize=18)
 plt.show()
 
 ##############################################################################
-# Note that the discrepancies between the ideal simulation and exact result are due to the limited expressivity of our Ansatz,
-# which on the other hand is due to limitations in depth by noise.
 #
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
 # executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way 
-# as described in the :doc:`interfaces section of the documentation </introduction/interfaces>`.
+# as described in the interfaces section of the documentation :doc:`introduction/interfaces`.
 #
 # Differentiating the mitigation transform itself
 # ------------------------------------------------
