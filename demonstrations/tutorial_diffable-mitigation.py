@@ -58,7 +58,7 @@ dev_ideal = qml.device("default.mixed", wires=n_wires)
 dev_noisy = qml.transforms.insert(noise_gate, noise_strength, position="all")(dev_ideal)
 
 ##############################################################################
-# We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable.
+# We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable, and a simplified unitary 2-design as our ansatz:
 
 coeffs = [1.0] * (n_wires - 1) + [0.5] * n_wires
 observables = [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(n_wires - 1)]
