@@ -30,7 +30,7 @@ Formally, we can treat error mitigation as yet another transform that maps the n
 
 .. math:: \text{mitigate}: f^{⚡} \mapsto \tilde{f}.
 
-In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable - both formally and practically in our implementation.
+In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable --- both formally and practically in our implementation.
 PennyLane now provides one such differentiable quantum error mitigation technique with `zero noise extrapolation` (ZNE), which can be used and differentiated in simulation and on hardware.
 We will briefly introduce these new functionalities and afterwards go more in depth to explore what happens under the hood.
 
