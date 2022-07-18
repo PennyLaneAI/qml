@@ -122,6 +122,7 @@ print(grad(w1, w2))
 #
 # The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^{⚡}` for different scale factors,
 # and then extrapolate to :math:`\lambda \rightarrow 0`. Note that ``scale_factor=1`` corresponds to the original circuit, i.e. the noisy execution.
+# 
 
 scale_factors = [1.0, 2.0, 3.0]
 folded_res = [qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors]
