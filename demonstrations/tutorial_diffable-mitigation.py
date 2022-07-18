@@ -37,7 +37,7 @@ We will briefly introduce these new functionalities and afterwards go more in de
 Differentiable transform
 ------------------------
 
-We start by initializing a noisy device under the ``qml.DepolarizingChannel``.
+We start by initializing a noisy device under the ``qml.DepolarizingChannel``:
 """
 
 import pennylane as qml
