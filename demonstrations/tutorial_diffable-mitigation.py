@@ -68,8 +68,8 @@ H = qml.Hamiltonian(coeffs, observables)
 
 
 ##############################################################################
-# As well as a simplified unitary 2-design as our Ansatz. The qfunc can then be executed on the noisy or ideal device
-# by creating individual ``qml.QNode`` functions.
+# The quantum function can then be executed on the noisy or ideal device
+# by creating individual QNodes:
 
 n_layers = 2
 
