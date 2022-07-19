@@ -149,7 +149,7 @@ print("At coordinates: ", example_wire.i, example_wire.j)
 # --------------------
 #
 # For each type of group operator (X and Z), we will have two different
-# lists, the “sites” and the “ops”. The “sites” are tuples and will include virtual
+# lists: the “sites” and the “ops”. The “sites” are tuples and will include virtual
 # sites off the edge of the lattice that match up with locations on the
 # other side. For example, the site ``(6, 1)`` denotes the real location
 # ``(0,1)``. We will use the ``zgroup_sites`` and ``xgroup_sites`` lists
@@ -251,7 +251,7 @@ plt.show()
 #
 #      [S_s, P_p] = 0.
 #
-# Since they commute, the wave function can be an eigenstate of each group operator independently. To minimize
+# Since they commute, the wavefunction can be an eigenstate of each group operator independently. To minimize
 # the energy of the Hamiltonian on the system as a whole, we can minimize the contribution of each group operator.
 # Due to the negative coefficients in the Hamiltonian, we need to maximize the
 # expectation value of each operator.
@@ -262,19 +262,19 @@ plt.show()
 #
 #       S_s |G \rangle = +1 |G \rangle \qquad \qquad P_p | G \rangle = +1 |G\rangle.
 #
-# The wave function:
+# The wavefunction
 #
 # .. math::
 #
 #    | G \rangle =  \prod_{p} \frac{\mathbb{I} + P_p}{\sqrt{2}} |00\dots 0\rangle = \prod_{p} U_p |00\dots 0 \rangle,
 #
-# where :math:`P_p` (plaquette) denotes an X Group operator, is a such a state.
+# where :math:`P_p` (plaquette) denotes an X Group operator, is such a state.
 #
 # .. note::
 #
-#    For extra understanding, confirm that this ground state obeys the constraints using pen and paper.
+#    To check your understanding, confirm that this ground state obeys the constraints using pen and paper.
 #
-# This formula is a product of unitaries :math:`U_p`. If we can figure out how to apply a single
+# :math:`|G \rangle` contains a product of unitaries :math:`U_p`. If we can figure out how to apply a single
 # :math:`U_p` using a quantum computer's operations, we can apply that decomposition
 # for every :math:`p` in the product.
 #
@@ -284,7 +284,7 @@ plt.show()
 # .. math::
 #    U |0000 \rangle =
 #    \frac{\left(\mathbb{I} + X_1 X_2 X_3 X_4 \right)}{\sqrt{2}} |0000 \rangle
-#    = \frac{1}{\sqrt{2}} \left( |0000\rangle + |1111\rangle \right)
+#    = \frac{1}{\sqrt{2}} \left( |0000\rangle + |1111\rangle \right).
 #
 # This `generalized GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`__
 # can be prepared with a Hadamard and 3 CNOT
@@ -588,7 +588,7 @@ ax.plot(*zip(*long_string), color="navy", linewidth=10)
 plt.show()
 
 ######################################################################
-# We end up with strings of operations that connect pairs of particles.
+# We end up with strings of operations that connect pairs of quasiparticles.
 #
 # We can use a branch of topology called `Homotopy <https://en.wikipedia.org/wiki/Homotopy>`__
 # to describe the relationship between these strings and the wave function.
@@ -703,7 +703,7 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractible_prob
 # The toric code's dependence on the homotopy of the path explains
 # this result. All paths we can smoothly deform into each other will give
 # the same result. The contractible loop can be smoothly deformed to nothing,
-# so the state with the contractible loop is the same as a state with no loop.
+# so the state with the contractible loop is the same as the state with no loop, our initial :math:`|G\rangle`.
 #
 
 
@@ -727,7 +727,7 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractible_prob
 # Each of these paths represents a member of the first homotopy group
 # of the torus: :math:`\pi_1(T) = \mathbb{Z}^2` modulo 2.
 #
-# None of these loops create net excitations, so the wave function
+# None of these loops of X operations create net excitations, so the wave function
 # remains in the ground state.
 #
 
@@ -775,7 +775,8 @@ print("Maximum probability: ", max(null_probs))
 # These numbers seem small, but remember we have 24 qubits, and thus
 # :math:`2^{24}=16777216` probability components. Since the maximum difference
 # in probabilities is the same size as the maximum probability, we know
-# this isn’t just random fluctuations and errors.
+# this isn’t just random fluctuations and errors. The states are different, but the energies are the same,
+# so they are *degenerate*.
 #
 # That compared a horizontal “x” loop with the initial ground
 # state. How about the other two types of loops? Let’s iterate over all
@@ -796,7 +797,7 @@ for name, probs1 in zip(names, all_probs):
 # This table shows the model has four distinct ground states. More importantly,
 # these ground states are separated from each other by long-range
 # operations. We must perform a loop of operations across the entire
-# lattice to switch ground state.
+# lattice to switch between degenerate ground states.
 #
 # This four-way degeneracy is the source of the error correction in the
 # toric code. Instead of 24 qubits, we work with two logical qubits (4 states)
@@ -810,7 +811,7 @@ for name, probs1 in zip(names, all_probs):
 # In this section, we've seen that the space of ground states is directly
 # related to the first homotopy group of the lattice. The first homotopy group
 # of a torus is :math:`\pi_1(T) = \mathbb{Z}^2`, and the space of ground states is
-# that group modulo two, :math:`\mathbb{Z}_2^2`
+# that group modulo two, :math:`\mathbb{Z}_2^2`.
 #
 # What if we defined the model on a differently shaped lattice? Then the space of the
 # ground state would change to reflect the first homotopy group of that space.
@@ -888,7 +889,7 @@ plt.show()
 #
 # The `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`__
 # extracts the real component of a unitary operation
-# :math:`\text{Re}\left(\langle \psi | U \rangle \right)`. If the unitary operation just applies a phase
+# :math:`\text{Re}\left(\langle \psi | U | \psi \rangle \right)`. If the unitary operation just applies a phase
 # :math:`U |\psi\rangle = e^{i \phi} |\psi \rangle`, the measured quantity reduces to :math:`\cos (\phi)`.
 #
 # The steps in the Hadamard test are:
