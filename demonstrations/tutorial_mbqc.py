@@ -320,11 +320,12 @@ RHG = SurfaceCode(code_distance)
 #     `IOP Publishing 3, 3
 #     <https://arxiv.org/abs/1711.04921>`__.
 #
-# .. [#GoogleQEC2022]
-#
-#     Google Quantum AI (2022) *Quantum Error Correction in Quantum Computers*, `arXiv <https://arxiv.org/pdf/2207.06431.pdf>`__.
-#
 # .. [#FowlerSurfaceCode]
 #
 #     Austin G. Fowler, Matteo Mariantoni, John M. Martinis, Andrew N. Cleland (2012) 
 #     *Surface codes: Towards practical large-scale quantum computation*, `arXiv <https://arxiv.org/abs/1208.0928>`__.
+#
+# .. [#GoogleQEC2022]
+#
+#     Google Quantum AI (2022) *Suppressing quantum errors by scaling a surface code logical qubit*, `arXiv <https://arxiv.org/pdf/2207.06431.pdf>`__.
+#
