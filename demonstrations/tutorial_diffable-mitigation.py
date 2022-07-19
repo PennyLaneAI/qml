@@ -225,7 +225,7 @@ plt.show()
 # execution is a smooth function of :math:`t_1`. This was executed on ``ibm_perth``, and we note that simple noise models,
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device.
 #
-# Obtaining the gradient with respect to this parameter is diffult. There are formal and practical obstacles:
+# Obtaining the gradient with respect to this parameter is difficult. There are formal and practical obstacles:
 # Formally, writing down the derivative of this transform with respect to the idle time in order to derive its parameter-shift 
 # rules would require access to the noise model.
 # This, on the other hand, is very difficult for a realistic scenario. Further, most mitigation parameters are integers and would have
