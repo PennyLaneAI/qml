@@ -24,8 +24,7 @@ Measurement-based quantum computation
 # The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
-# consider how quantum error correction is done in this scheme and how Xanadu plans to achieve a 
-# fault-tolerant quantum computer with this scheme.
+# briefly touch upon how quantum error correction is done in this scheme.
 #
 # Throughout this tutorial, we will explain the underlying concepts with the help of some code
 # snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum
@@ -225,7 +224,7 @@ one_bit_teleportation(input_state)
 # show how to do a CNOT in the measurement-based framework.
 
 ##############################################################################
-# Quantum error correction and fault tolerance
+# Quantum error correction
 # ----------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation we
@@ -282,30 +281,6 @@ RHG = SurfaceCode(code_distance)
 #    ..
 #
 #    Performing a computation with measurements using the RHG lattice. [#XanaduBlueprint]_
-#
-
-
-##############################################################################
-# Xanadu's approach
-# ----------------
-# Xanadu's path towards a fault-tolerant quantum computer is via a measurement-based scheme with a 
-# 3-dimensional cluster state using photonics. The main ideas of the architecture are presented in 
-# [#XanaduBlueprint]_ and the corresponding cluster state is shown in the figure below. One 
-# interesting aspect of this architecture is the use of a hybrid cluster: a combination of GKP 
-# states and squeezed states. If you want to dive into more depth, you can have a look at `this 
-# blog post <https://medium.com/xanaduai/from-a-state-of-light-to-state-of-the-art-the-photonic-path-to-millions-of-qubits-c0e08ca1cb21>`_
-# or `this video <https://www.youtube.com/watch?v=SD6TH7GZ1rM>`_.
-#
-# .. figure:: ../demonstrations/mbqc/mbqc_blueprint_full.png
-#    :align: center
-#    :width: 75%
-#
-#    ..
-#
-#
-#    Hybrid cluster state proposed in [#XanaduBlueprint]_.
-#
-#
 #
 
 ##############################################################################
