@@ -15,7 +15,7 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: PennyLane dev team. Last updated: 15 July 2021.*
+*Author: Alain Delgado. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
@@ -66,7 +66,7 @@ print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 
 ##############################################################################
-# The outputs of the function are the Hamiltonian, represented as 
+# The outputs of the function are the Hamiltonian, represented as
 # a linear combination of Pauli operators, and the number of qubits
 # required for the quantum simulations. For this example, we use a
 # `minimal basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_
@@ -89,7 +89,7 @@ dev = qml.device("default.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we need to define the quantum circuit that prepares the trial state of the
-# molecule. We want to prepare states of the form, 
+# molecule. We want to prepare states of the form,
 #
 # .. math::
 #     \vert \Psi(\theta) \rangle = \cos(\theta/2)~|1100\rangle -\sin(\theta/2)~|0011\rangle,
@@ -121,7 +121,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # quantum circuits for quantum chemistry applications see the
 # tutorial :doc:`tutorial_givens_rotations`.
 #
-# Implementing the circuit above using PennyLane is straightforward. First, we use the 
+# Implementing the circuit above using PennyLane is straightforward. First, we use the
 # :func:`hf_state` function to generate the vector representing the Hartree-Fock state.
 
 electrons = 2
@@ -133,9 +133,11 @@ print(hf)
 # the qubit register. Then, we just act with the :class:`~.pennylane.DoubleExcitation` operation
 # on the four qubits.
 
+
 def circuit(param, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(param, wires=[0, 1, 2, 3])
+
 
 ##############################################################################
 # The next step is to define the cost function to compute the expectation value
@@ -143,10 +145,12 @@ def circuit(param, wires):
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
 # run the cost function as an executable QNode with the gate parameter :math:`\theta`:
 
+
 @qml.qnode(dev)
 def cost_fn(param):
     circuit(param, wires=range(qubits))
     return qml.expval(H)
+
 
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of
@@ -244,7 +248,7 @@ plt.show()
 # of the hydrogen molecule. We used a simple circuit to prepare quantum states of
 # the molecule beyond the Hartree-Fock approximation. The ground-state energy
 # was obtained by minimizing a cost function defined as the expectation value of the
-# molecular Hamiltonian in the trial state. 
+# molecular Hamiltonian in the trial state.
 #
 # The VQE algorithm can be used to simulate other chemical phenomena.
 # In the tutorial :doc:`tutorial_vqe_bond_dissociation`, we use VQE to explore the
@@ -271,3 +275,12 @@ plt.show()
 #     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
 #     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
+#
+# About the author
+# ----------------
+
+##############################################################################
+# .. bio:: Alain Delgado
+#    :photo: ../_static/alain-delgado.png
+#
+#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.
