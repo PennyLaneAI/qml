@@ -492,6 +492,12 @@ def excitation_plot(x_excite, z_excite):
 
     return fig, ax
 
+######################################################################
+# With this function, we can quickly view the expectation values and the location of 
+# the additional X operation. The operation changes the expectation values for the 
+# adjacent Z groups.
+#
+
 
 fig, ax = excitation_plot(x_expvals, z_expvals)
 ax.scatter(*zip(*single_x), color="maroon", s=100)
