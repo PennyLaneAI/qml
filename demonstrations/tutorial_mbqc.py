@@ -27,9 +27,10 @@ Measurement-based quantum computation
 # briefly touch upon how quantum error correction is done in this scheme.
 #
 # Throughout this tutorial, we will explain the underlying concepts with the help of some code
-# snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_ and Xanadu's quantum
-# error correction software `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developed
-# by our architecture team [#XanaduPassiveArchitecture]_.
+# snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_. In the section on QEC,
+# we will also use Xanadu's quantum error correction software 
+# `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developed by our architecture team 
+# [#XanaduPassiveArchitecture]_.
 #
 #
 #
