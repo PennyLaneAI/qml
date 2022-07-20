@@ -343,7 +343,7 @@ def train_qcnn(n_train, n_test, n_epochs):
     weights, weights_last = init_weights()
 
     # learning rate decay
-    cosine_decay_scheduler = optax.cosine_decay_schedule(0.01, decay_steps=n_epochs, alpha=0.95)
+    cosine_decay_scheduler = optax.cosine_decay_schedule(0.1, decay_steps=n_epochs, alpha=0.95)
     optimizer = optax.adam(learning_rate=cosine_decay_scheduler)
     opt_state = optimizer.init((weights, weights_last))
 
