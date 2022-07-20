@@ -252,6 +252,6 @@ plt.show()
 
 ##############################################################################
 #.. bio:: Korbinian Kottmann
-#    :photo: ../_static/qottmann.jpg
+#    :photo: demonstrations/diffable-mitigation/qottmann.jpg
 #
 #    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
