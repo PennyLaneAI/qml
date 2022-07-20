@@ -102,16 +102,16 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # Quantum convolutional neural network
 # ------------------------------------
 # Before we start building a quantum CNN, let us remember the idea of their classical counterpart.
-# Classical CNNs are a family of neural networks with a specific architecture to 
-# perform image processing. To achieve this goal, one uses what is known as a *convolutional layer*, 
-# which consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local 
+# Classical CNNs are a family of neural networks with a specific architecture to
+# perform image processing. To achieve this goal, one uses what is known as a *convolutional layer*,
+# which consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local
 # information about such an array. In addition, depending on the purpose of your CNN, one might want
 # to make classification or feature predictions, which are arrays much smaller than the original image.
-# To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These 
+# To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These
 # layers are used to reduce the dimensionality of the 2D array being processed (whereas inverse pooling increases the
 # dimensionality of a 2D array). Finally, one takes these two layers and applies them repeatedly and
-# interchangeably. We want to build something similar for a quantum circuit. 
-# 
+# interchangeably. We want to build something similar for a quantum circuit.
+#
 # First, we import the necessary libraries we will need in this demo and set a seed for reproducibility.
 
 import matplotlib.pyplot as plt
@@ -136,21 +136,21 @@ rng = np.random.default_rng(seed=seed)
 
 ##############################################################################
 # To construct a convolutional and pooling layer in a quantum circuit, we will
-# follow the QCNN construction proposed by [#CongQuantumCNN]_. The former layer 
+# follow the QCNN construction proposed by [#CongQuantumCNN]_. The former layer
 # will extract local correlations, while the latter allows reducing the dimensionality
-# of the feature vector. In a qubit circuit, the convolutional layer, consisting of a kernel swept 
-# along the entire image, is now translated to a two-qubit unitary that correlates neighboring 
-# qubits.  As for the pooling layer, we will use a conditioned single-qubit unitary that depends 
-# on the measurement of a neighboring qubit. Finally, we use a “dense layer” that entangles all 
+# of the feature vector. In a qubit circuit, the convolutional layer, consisting of a kernel swept
+# along the entire image, is now translated to a two-qubit unitary that correlates neighboring
+# qubits.  As for the pooling layer, we will use a conditioned single-qubit unitary that depends
+# on the measurement of a neighboring qubit. Finally, we use a “dense layer” that entangles all
 # qubits of the final state using an all-to-all unitary gate.
-# 
+#
 # **Let's break down each layer:**
 #
-# The convolutional layer should have as an input the weights of the two-qubit unitary, which are 
+# The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
-# with two single-qubit gates ``qml.U3`` (parametrized by three parameters, each), followed by an three ising 
+# with two single-qubit gates ``qml.U3`` (parametrized by three parameters, each), followed by an three ising
 # interaction between both qubits (each interaction is parametrized by one parameter), and two additional
-# ``qml.U3`` gates in each qubit. 
+# ``qml.U3`` gates in each qubit.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     """Adds a convolutional layer to a circuit.
@@ -174,9 +174,9 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
                 qml.U3(*weights[12:], wires=[wires[indx + 1]])
 
 ##############################################################################
-# The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in 
-# this case, are ``qml.U3`` gates. Then, we apply these conditional measurements to half of the 
-# unmeasured wires, reducing our system size by half. 
+# The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in
+# this case, are ``qml.U3`` gates. Then, we apply these conditional measurements to half of the
+# unmeasured wires, reducing our system size by half.
 
 def pooling_layer(weights, wires):
     """Adds a pooling layer to a circuit.
@@ -194,10 +194,10 @@ def pooling_layer(weights, wires):
 
 
 ##############################################################################
-# We can construct a quantum CNN by combining both layers and using an arbitrary unitary to model 
-# a dense layer. It will take as input a set of features (the image), encode these features using 
-# an embedding map, apply rounds of convolutional and pooling layers, and eventually get the 
-# desired measurement statistics of the circuit. 
+# We can construct a quantum CNN by combining both layers and using an arbitrary unitary to model
+# a dense layer. It will take as input a set of features (the image), encode these features using
+# an embedding map, apply rounds of convolutional and pooling layers, and eventually get the
+# desired measurement statistics of the circuit.
 
 def conv_and_pooling(kernel_weights, n_wires):
     """Apply both the convolutional and pooling layer."""
@@ -241,23 +241,33 @@ def conv_net(weights, last_layer_weights, features):
 ##############################################################################
 # In the problem we will address, we need to encode 64 features
 # in the state to be processed by the QCNN. Thus, we require six qubits to encode
-# each feature value in the amplitude of each computational basis state. 
+# each feature value in the amplitude of each computational basis state.
 #
 # Training the QCNN on the digits dataset
 # ---------------------------------------
-# In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset. 
-# These are 8 by 8 pixel arrays of hand-written digits as shown below. 
+# In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
+# These are 8 by 8 pixel arrays of hand-written digits as shown below.
 
+digits = datasets.load_digits();
 digits = datasets.load_digits()
-fig, (ax1, ax2) = plt.subplots(1,2)
-ax1.imshow(digits.data[0].reshape((8,8)), cmap='gray')
-ax1.axis('off')
-ax2.imshow(digits.data[1].reshape((8,8)), cmap='gray')
-ax2.axis('off')
+images, labels = digits.data, digits.target
+
+images = images[np.where((labels == 0) | (labels == 1))]
+labels = labels[np.where((labels == 0) | (labels == 1))]
+
+fig, axes = plt.subplots(nrows=12,ncols=12, figsize=(3, 3));
+
+for i, ax in enumerate(axes.flatten()):
+    ax.imshow(images[i].reshape((8,8)), cmap='gray')
+    ax.axis('off')
+
+plt.tight_layout()
+plt.subplots_adjust(wspace=0, hspace=0)
+plt.show()
 
 ##############################################################################
-# For convenience, we create a ``load_digits_data`` function that will make random training and 
-# testing sets from the ``digits`` dataset from ``sklearn.dataset``. 
+# For convenience, we create a ``load_digits_data`` function that will make random training and
+# testing sets from the ``digits`` dataset from ``sklearn.dataset``.
 
 def load_digits_data(num_train, num_test, rng):
     """Return training and testing data of digits dataset."""
@@ -281,7 +291,7 @@ def load_digits_data(num_train, num_test, rng):
     return jnp.asarray(x_train), jnp.asarray(y_train), jnp.asarray(x_test), jnp.asarray(y_test)
 
 ##############################################################################
-# To optimize the weights of our variatiational model, we define the cost and accurracy functions 
+# To optimize the weights of our variatiational model, we define the cost and accurracy functions
 # to train and quantify the performance on classification of the previously defines QCNN.
 
 @jax.jit
@@ -311,10 +321,10 @@ value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 ##############################################################################
 # We are going to perform the classification for differently sized training sets. We therefore
 # define the classification procedure once and then perform it for different datasets.
-# We update the weights using the ``qml.AdamOptimizer`` and use these updated weights to 
+# We update the weights using the ``qml.AdamOptimizer`` and use these updated weights to
 # calculate the cost and accurracy on the testing and training set.
 
-def train_qcnn(n_train, n_test, n_epochs, desc):
+def train_qcnn(n_train, n_test, n_epochs):
     """
     Args:
         n_train  (int): number of training examples
@@ -331,15 +341,16 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
 
     # init weights and optimizer
     weights, weights_last = init_weights()
-    optimizer = optax.adam(learning_rate=0.01)
+
+    # learning rate decay
+    cosine_decay_scheduler = optax.cosine_decay_schedule(0.01, decay_steps=n_epochs, alpha=0.95)
+    optimizer = optax.adam(learning_rate=cosine_decay_scheduler)
     opt_state = optimizer.init((weights, weights_last))
 
     # data containers
     train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = [], [], [], []
 
-    pbar = trange(n_epochs, desc=desc)
-
-    for step in pbar:
+    for step in range(n_epochs):
         # Training step with (adam) optimizer
         train_cost, grad_circuit = value_and_grad(weights, weights_last, x_train, y_train)
         updates, opt_state = optimizer.update(grad_circuit, opt_state)
@@ -357,9 +368,6 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
         test_acc_epochs.append(test_acc)
         test_cost = 1.0 - jnp.sum(test_out) / len(test_out)
         test_cost_epochs.append(test_cost)
-        
-
-        pbar.set_postfix(train_cost=train_cost, test_cost=test_cost, train_acc=train_acc, test_acc=test_acc)
 
     return dict(
         n_train=[n_train] * n_epochs,
@@ -371,11 +379,11 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
     )
 
 ##############################################################################
-# .. note:: 
+# .. note::
 #
 #     There are some small intricacies for speeding up this code that are worth mentioning: We are using ``jax`` for our training
-#     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution 
-#     and cached for future executions. This means the first execution will take longer but all following executions are substantially faster. 
+#     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution
+#     and cached for future executions. This means the first execution will take longer but all following executions are substantially faster.
 #     Further, we use ``jax.vmap`` to vectorize the execution of the qcnn over all input states (as opposed to looping through the training and test set at every execution)
 #
 # Training for different training set sizes yields different accuracies, as can be seen below. As we increase the training data size, the the overall test accuracy,
@@ -383,34 +391,19 @@ def train_qcnn(n_train, n_test, n_epochs, desc):
 
 n_test = 100
 n_epochs = 100
-n_train = 40
+n_reps = 100
 
-# train on n_train train samples
-import time
-t0 = time.time()
-results0 = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
-dt = time.time() - t0
-print(f"first execution: {dt}")
+def run_iterations(n_train):
+    results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
+    pbar = trange(n_reps, desc='train qcnn')
 
-t0 = time.time()
-results1 = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
-dt = time.time() - t0
-print(f"second execution: {dt}")
+    for _ in pbar:
+        results = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs)
+        results_df = pd.concat([results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True)
 
-t0 = time.time()
-results2 = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs, desc=f'n=20')
-dt = time.time() - t0
-print(f"third execution: {dt}")
+    return results_df
 
-# write results to dataframe
-results0_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
-results0_df = pd.concat([results0_df, pd.DataFrame.from_dict(results0)], axis=0, ignore_index=True)
-
-results1_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
-results1_df = pd.concat([results1_df, pd.DataFrame.from_dict(results1)], axis=0, ignore_index=True)
-
-results2_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
-results2_df = pd.concat([results2_df, pd.DataFrame.from_dict(results2)], axis=0, ignore_index=True)
+results_df = run_iterations(n_train=40)
 
 ##############################################################################
 # Finally, we plot the loss and accurracy for both the training and testing set
@@ -419,35 +412,39 @@ results2_df = pd.concat([results2_df, pd.DataFrame.from_dict(results2)], axis=0,
 def make_plot(df, n_train):
     fig, axs = plt.subplots(ncols=3, figsize=(14,5))
 
+    df_agg = df.groupby(['step']).agg(['mean', 'std'])
+
+    # plot epoch vs loss
     ax = axs[0]
-    ax.plot(df.train_cost, "x--", label="train")
-    ax.plot(df.test_cost, "x--", label="test")
+    ax.plot(df_agg.index, df_agg.train_cost['mean'], "o--", label="train", markevery=10)
+    ax.plot(df_agg.index, df_agg.test_cost['mean'], "x--", label="test", markevery=10)
     ax.set_ylabel("loss", fontsize=18)
     ax.set_xlabel("epoch", fontsize=18)
     ax.legend(fontsize=14)
 
+    # plot epoch vs acc (train + test)
     ax = axs[1]
-    ax.plot(df.train_acc,"o:", label=f"train")
-    ax.plot(df.test_acc,"x--", label=f"test")
+    ax.plot(df_agg.index, df_agg.train_acc['mean'],"o:", label=f"train", markevery=10)
+    ax.plot(df_agg.index, df_agg.test_acc['mean'],"x--", label=f"test", markevery=10)
     ax.set_ylabel("accuracy", fontsize=18)
     ax.set_xlabel("epoch", fontsize=18)
     ax.legend(fontsize=14)
 
+
+    # plot train acc vs test acc
     ax = axs[2]
-    ax.plot(df.train_acc, df.test_acc,"o:", label=f'N={n_train}')
-    ax.set_xlim(df.test_acc.min()-0.05, 1.05)
-    ax.plot(np.linspace(df.test_acc.min(), 1.0), np.linspace(df.test_acc.min(), 1.0), ls='--', color='black')
+    ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker='D')
+    beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
+    reg = np.poly1d([beta, m])
+    ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)),"-", color='black', lw=0.75)
     ax.set_ylabel("test accuracy", fontsize=18)
     ax.set_xlabel("train accuracy", fontsize=18)
-    ax.legend(fontsize=14)
 
     fig.suptitle(f'Performance Measures for Training Set of Size $N=${n_train}', fontsize=20)
     plt.tight_layout()
     plt.show()
 
-make_plot(results0_df, n_train=40)
-make_plot(results1_df, n_train=40)
-make_plot(results2_df, n_train=40)
+make_plot(results_df, n_train=40)
 
 ##############################################################################
 # References
