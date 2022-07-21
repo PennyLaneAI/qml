@@ -103,7 +103,7 @@ such as benchmarking and characterizing quantum processors.
     demos/qsim_beyond_classical
     demos/tutorial_gbs
     demos/tutorial_trapped_ions
-    demos/tutorial_error_mitigation
+  demos/tutorial_error_mitigation
 	demos/tutorial_sc_qubits
     demos/tutorial_photonics
     demos/tutorial_toric_code
