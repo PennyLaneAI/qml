@@ -1,4 +1,4 @@
-""".. _toric_code:
+r""".. _toric_code:
 Toric Code Topology
 ===================
 
@@ -13,7 +13,7 @@ Introduction
 ------------
 
 The *toric code model* [#Kitaev2003]_ is a treasure trove of interesting physics and
-mathematics. The model sparked the development of the error-correcting surface codes [#surface_codes]_ ,
+mathematics. The model sparked the development of the error-correcting surface codes [#surface_codes]_,
 an essential category of error correction models. But why is the
 model so useful for error correction?
 
@@ -23,7 +23,8 @@ analyzing the model as a material. What kind of material is it? The toric code i
 example of a topological state of matter.
 
 A state of matter, or phase, cannot become a different phase without some discontinuity
-in the physical properties as coefficients in the Hamiltonian change. For example, ice cannot
+in the physical properties as coefficients in the Hamiltonian change. This discontinuity
+may exist in an arbitrary order derivative or non-local observable. For example, ice cannot
 become water without a discontinuity in density as the temperature changes. The ground state
 of a **topological** state of matter cannot smoothly deform to a non-entangled state
 without a phase transition. Entanglement, and more critically *long-range* entanglement,
@@ -48,13 +49,13 @@ the object as a whole can you detect the single hole.
 
     A donut can be smoothly deformed into a mug.
 
-In this demo, we will be looking at the degenerate ground state and the
+In this demo, we will look at the degenerate ground state and the
 excitations of the toric code model. The toric code was initially
 proposed in “Fault-tolerant quantum computation by anyons” by Kitaev [#Kitaev2003]_. 
 This demo was inspired by “Realizing topologically ordered states on
 a quantum processor” by K. J. Satzinger et al [#google_paper]_. For further reading, I
 recommend “Quantum Spin Liquids” by Lucile Savary and Leon Balents [#savary_balents]_ and
-"A Pedogogical Overview on 2D and 3D Toric Codes and the Origin of their Topological Orders" [#Resende]_ .
+"A Pedagogical Overview on 2D and 3D Toric Codes and the Origin of their Topological Orders" [#Resende]_.
 
 The Model
 ---------
@@ -523,7 +524,7 @@ ax.scatter(*zip(*single_z), color="navy", s=100)
 plt.show()
 
 ######################################################################
-# What happens if we apply the same pertubartion twice at one
+# What happens if we apply the same perturbation twice at one
 # location? We regain the ground state.
 #
 # The excitations of the toric code are
@@ -789,12 +790,12 @@ print("Maximum probability: ", max(null_probs))
 # combinations of two probability distributions to see if any match.
 #
 
-names = ["null", "x", "y", "combo"]
+probs_type_labels = ["null", "x", "y", "combo"]
 all_probs = [null_probs, horizontal_probs, vertical_probs, combo_probs]
 
-print("\t" + "\t".join(names))
+print("\t" + "\t".join(probs_type_labels))
 
-for name, probs1 in zip(names, all_probs):
+for name, probs1 in zip(probs_type_labels, all_probs):
     comparisons = (str(np.allclose(probs1, probs2)) for probs2 in all_probs)
     print(name, "\t", "\t".join(comparisons))
 
@@ -857,9 +858,9 @@ for name, probs1 in zip(names, all_probs):
 #
 # The **statistics** are described by the phase accumulated by moving one particle
 # around another. For example, if the particle picks up phases like a fermion, then it
-# obeys `Fermi-Dirac statistics <https://en.wikipedia.org/wiki/Fermi–Dirac_statistics>`_ .
+# obeys `Fermi-Dirac statistics <https://en.wikipedia.org/wiki/Fermi–Dirac_statistics>`_.
 # **Exchange statistics** are described by the phases that accumulate from exchanging
-# the *same* type of particles.  **Mutual** statistics are described by the phase acquired
+# the *same* type of particles.  **Mutual** statistics are characterized by the phase acquired
 # by moving one particle around a particle of a *different* type.
 # 
 # To measure the mutual statistics of a Z Group excitation and an X group
@@ -972,7 +973,8 @@ print("Move x excitation around z excitation: ", x_around_z)
 # 3. The ground state degeneracy of the model on a toric lattice, arising
 #    from homotopically distinct loops of operations
 # 4. The excitations are anyons due to non-trivial mutual statistics
-# Make sure to go and modify the code as suggested if you wish to gain more intuition. Do check the references below if you want to learn more!
+#    Make sure to go and modify the code as suggested if you wish to gain more intuition.
+#    Do check the references below if you want to learn more!
 #
 #
 # References
@@ -983,6 +985,12 @@ print("Move x excitation around z excitation: ", x_around_z)
 #    Kitaev, A. Yu. "Fault-tolerant quantum computation by anyons."
 #    `Annals of Physics 303.1 (2003): 2-30. <https://doi.org/10.1016/S0003-4916(02)00018-0>`__.
 #    (`arXiv <https://arxiv.org/pdf/quant-ph/9707021>`__)
+#
+# .. [#surface_codes]
+#
+#    Fowler, Austin G., et al. "Surface codes: Towards practical large-scale quantum computation."
+#    `Physical Review A 86.3 (2012): 032324. <https://doi.org/10.1103/PhysRevA.86.032324>`__.
+#    (`arXiv <https://arxiv.org/pdf/1208.0928>`__)
 #
 # .. [#google_paper]
 #
@@ -1001,12 +1009,6 @@ print("Move x excitation around z excitation: ", x_around_z)
 #    Araujo de Resende, M. F. "A pedagogical overview on 2D and 3D Toric Codes and the origin of their topological orders."
 #    `Reviews in Mathematical Physics 32.02 (2020): 2030002. <https://doi.org/10.1142/S0129055X20300022>`__
 #    (`arXiv <https://arxiv.org/pdf/1712.01258.pdf>`__)
-#
-# .. [#surface_codes]
-#
-#    Fowler, Austin G., et al. "Surface codes: Towards practical large-scale quantum computation."
-#    `Physical Review A 86.3 (2012): 032324. <https://doi.org/10.1103/PhysRevA.86.032324>`__.
-#    (`arXiv <https://arxiv.org/pdf/1208.0928>`__)
 #
 # About the author
 # ----------------
