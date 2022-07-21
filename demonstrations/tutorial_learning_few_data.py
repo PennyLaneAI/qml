@@ -14,17 +14,17 @@ Generalization in QML from few training data
 
 *Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber. Posted: 01 June 2022*
 
-In this tutorial we dive into the generalization capabilities of quantum machine learning models.
-For the example of a Quantum Convolutional Neural Nework (QCNN), we show how its generalization error behaves as a
+In this tutorial, we dive into the generalization capabilities of quantum machine learning models.
+For the example of a Quantum Convolutional Neural Network (QCNN), we show how its generalization error behaves as a
 function of the number of training samples. This demo is based on the paper
 *"Generalization in quantum machine learning from few training data"*. by Caro et al. [#CaroGeneralization]_.
 
 What is Generalization in (Q)ML?
 ------------------------
 When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
-distribution of interest, like for example images of cats and dogs. However, in practice we are limited to a finite amount of
+distribution of interest, for example, images of cats and dogs. However, in practice, we are limited to a finite amount of
 data, which is why it is necessary to reason about how our model performs on new, previously unseen data. The difference
-between the model's performance on the true data distribution, and the performance estimated from our training data is
+between the model's performance on the true data distribution and the performance estimated from our training data is
 called the *generalization error* and indicates how well the model has learned to generalize to unseen data.
 
 .. figure:: /demonstrations/learning_few_data/true_vs_sample.png
@@ -32,22 +32,22 @@ called the *generalization error* and indicates how well the model has learned t
     :align: center
 
 It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
-perfectly fit the training data, i.e. which admit a low bias, have a higher variance, typically perform poorly on unseen
-test data and don't generalize well. In the classical machine learning community, this trade off has been extensively
-studied and has lead to optimization techniques which favour generalization, for example by regularizing models via
+perfectly fit the training data, i.e., which admit a low bias, have a higher variance, typically perform poorly on unseen
+test data and don't generalize well. In the classical machine learning community, this trade-off has been extensively
+studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
 their variance [#NamkoongVariance]_.
 
 Let us now dive deeper into generalization properties of quantum machine learning (QML) models. We start by describing
 the typical data processing pipeline of a QML model. A classical data input :math:`x` is first encoded in a quantum
 state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a parametrized quantum
 channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` and a measurement is performed on the resulting state
-to get the final prediction. The goal is now to minimize the expected loss over the data generating distribution
+to get the final prediction. Now, the goal is to minimize the expected loss over the data generating distribution
 :math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
 expected loss is given by
 
 .. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)].
 
-As :math:`P` is generally unknown, in practice this quantity has to be estimated from a finite amount of data. Given
+In practice, as :math:`P` is generally unknown, this quantity has to be estimated from a finite amount of data. Given
 a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N`, we estimate the performance of our QML model by calculating the
 average loss over the training set
 
@@ -58,9 +58,9 @@ to the true quantity of interest :math:`R(\alpha)` and their difference is calle
 
 .. math:: \mathrm{gen}(\alpha) = \hat{R}_S(\alpha) - R(\alpha)
 
-which is the quantity that we explore in this tutorial. Keeping in mind the bias-variance trade off, one would expect
-that more complex models, i.e. models with a larger number of parameters, achieve a lower error on the training data,
-but a higher generalization error. Having more training data on the other hand leads to a better approximation of the
+which is the quantity that we explore in this tutorial. Keeping in mind the bias-variance trade-off, one would expect
+that more complex models, i.e., models with a larger number of parameters, achieve a lower error on the training data
+but a higher generalization error. Having more training data, on the other hand, leads to a better approximation of the
 true expected loss and hence lower generalization error. This intuition is made precise in Ref. [#CaroGeneralization]_
 where it is shown that :math:`\mathrm{gen}(\alpha)` roughly scales as :math:`\mathcal{O}(\sqrt{T / N})` where :math:`T`
 is the number of parametrized gates and :math:`N` is the number of training samples.
@@ -77,7 +77,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
-# of training samples, and increases with the number of parametrized gates. However, as is the case for quantum
+# of training samples and increases with the number of parametrized gates. However, as is the case for quantum
 # convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number of
 # gates :math:`M` which have been reused. Naively, one could suspect that the generalization error scales as
 # :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
@@ -86,10 +86,10 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #
 # .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log MT}{N}}\right).
 #
-# With this we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon`, we need a
+# With this, we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon`, we need a
 # training set of size :math:`N \sim T \log MT / \epsilon^2`. For the special case of QCNNs, we can explicitly connect
 # the number of samples needed for good generalization to the system size :math:`n` since these models
-# use :math:`\mathcal{O}(\log(n))` independendently parametrized gates, each of which is used at most :math:`n` times.
+# use :math:`\mathcal{O}(\log(n))` independently parametrized gates, each of which is used at most :math:`n` times.
 # Putting the pieces together, we find that a training set of size
 #
 # .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
@@ -148,9 +148,10 @@ rng = np.random.default_rng(seed=seed)
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
-# with two single-qubit gates ``qml.U3`` (parametrized by three parameters, each), followed by an three ising
-# interaction between both qubits (each interaction is parametrized by one parameter), and two additional
-# ``qml.U3`` gates in each qubit.
+# with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three 
+# parameters, each), followed by three Ising interactions between both qubits (each interaction is 
+# parametrized by one parameter), and end with two additional ``qml.U3`` gates in each of the two 
+# qubits.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     """Adds a convolutional layer to a circuit.
@@ -291,8 +292,8 @@ def load_digits_data(num_train, num_test, rng):
     return jnp.asarray(x_train), jnp.asarray(y_train), jnp.asarray(x_test), jnp.asarray(y_test)
 
 ##############################################################################
-# To optimize the weights of our variatiational model, we define the cost and accurracy functions
-# to train and quantify the performance on classification of the previously defines QCNN.
+# To optimize the weights of our variational model, we define the cost and accuracy functions
+# to train and quantify the performance on the classification task of the previously described QCNN.
 
 @jax.jit
 def compute_out(weights, weights_last, features, labels):
@@ -319,9 +320,9 @@ def init_weights():
 value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 
 ##############################################################################
-# We are going to perform the classification for differently sized training sets. We therefore
+# We are going to perform the classification for differently sized training sets. Therefore, we
 # define the classification procedure once and then perform it for different datasets.
-# We update the weights using the ``qml.AdamOptimizer`` and use these updated weights to
+# Finally, we update the weights using the ``qml.AdamOptimizer`` and use these updated weights to
 # calculate the cost and accurracy on the testing and training set.
 
 def train_qcnn(n_train, n_test, n_epochs):
@@ -380,13 +381,13 @@ def train_qcnn(n_train, n_test, n_epochs):
 
 ##############################################################################
 # .. note::
-#
+
 #     There are some small intricacies for speeding up this code that are worth mentioning: We are using ``jax`` for our training
 #     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution
-#     and cached for future executions. This means the first execution will take longer but all following executions are substantially faster.
-#     Further, we use ``jax.vmap`` to vectorize the execution of the qcnn over all input states (as opposed to looping through the training and test set at every execution)
-#
-# Training for different training set sizes yields different accuracies, as can be seen below. As we increase the training data size, the the overall test accuracy,
+#     and cached for future executions. This means the first execution will take longer, but all subsequent executions are substantially faster.
+#     Further, we use ``jax.vmap`` to vectorize the execution of the QCNN over all input states (as opposed to looping through the training and test set at every execution)
+
+# Training for different training set sizes yields different accuracies, as seen below. As we increase the training data size, the overall test accuracy,
 # a proxy for the models' generalization capabilities, increases.
 
 n_test = 100
@@ -406,8 +407,8 @@ def run_iterations(n_train):
 results_df = run_iterations(n_train=40)
 
 ##############################################################################
-# Finally, we plot the loss and accurracy for both the training and testing set
-# for all training epochs, and compare the test and train accurracy of the model.
+# Finally, we plot the loss and accuracy for both the training and testing set
+# for all training epochs, and compare the test and train accuracy of the model.
 
 def make_plot(df, n_train):
     fig, axs = plt.subplots(ncols=3, figsize=(14,5))
