@@ -83,14 +83,13 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/photonics/photonics_tn.png
     :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
-    :html:`</div></div><div style='clear:both'>`
 
 .. customgalleryitem::
     :tooltip: Learn about the toric code and its excitations
     :figure: demonstrations/toric_code/types_of_loops.png
     :description: :doc:`demos/tutorial_toric_code`
     :tags: errorcorrection
-
+ :html:`</div></div><div style='clear:both'>`
 .. toctree::
     :maxdepth: 2
     :hidden:
