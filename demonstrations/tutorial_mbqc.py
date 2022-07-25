@@ -259,7 +259,7 @@ import matplotlib.pyplot as plt
 
 code_distance = 3
 RHG = SurfaceCode(code_distance)
-# RHG.draw(backend="plotly") #TODO: uncomment this line after merging #103
+# RHG.draw(backend="plotly") #TODO: uncomment this line after merging FP#103
 
 ##############################################################################
 #
