@@ -14,9 +14,9 @@ Measurement-based quantum computation
 ##############################################################################
 #
 # **Measurement-based quantum computing (MBQC)** is a clever approach towards quantum computing that
-# makes use of *offline* entanglement as a resource for computation. This method, also referred to
-# as one-way quantum computing, seems very dissimilar from the gate-based model. However, they can
-# be proven to be equivalent and so both are universal. In a one-way quantum computer, we start out
+# makes use of *offline* entanglement as a resource for computation. If you are more familiar with
+# the gate-based model, this method might seem unintuitive to you at first, but the approaches can 
+# be proven to be equally powerful. In a one-way quantum computer, we start out
 # with an entangled state, a so-called cluster state, and apply particular single-qubit measurements
 # that correspond to the desired quantum circuit. In MBQC, the measurements *are* the computation
 # and the entanglement of the cluster state is used as a resource.
@@ -24,11 +24,11 @@ Measurement-based quantum computation
 # The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
-# briefly touch upon how quantum error correction is done in this scheme.
+# briefly touch upon how quantum error correction (QEC) is done in this scheme.
 #
 # Throughout this tutorial, we will explain the underlying concepts with the help of some code
 # snippets using `PennyLane <https://pennylane.readthedocs.io/en/stable/>`_. In the section on QEC,
-# we will also use Xanadu's quantum error correction software 
+# we will also use Xanadu's quantum error correction simulation software 
 # `FlamingPy <https://flamingpy.readthedocs.io/en/latest/>`_ developed by our architecture team 
 # [#XanaduPassiveArchitecture]_.
 #
