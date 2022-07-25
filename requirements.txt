@@ -44,6 +44,6 @@ noisyopt==0.2.2
 Jinja2==2.11.3
 pyyaml==5.4.1
 jax==0.3.14
-jaxlib==0.1.64
+jaxlib==0.3.7
 neural-tangents==0.3.6
 optax==0.1.3
