@@ -21,6 +21,14 @@ Measurement-based quantum computation
 # that correspond to the desired quantum circuit. In MBQC, the measurements *are* the computation
 # and the entanglement of the cluster state is used as a resource.
 #
+# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+#    :align: center
+#    :width: 75%
+#
+#    ..
+#
+#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
+#
 # The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
@@ -34,13 +42,12 @@ Measurement-based quantum computation
 #
 #
 #
-# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+# .. figure:: ../demonstrations/mbqc/DALLE-mbqc.png
 #    :align: center
 #    :width: 75%
 #
 #    ..
 #
-#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
 
 ##############################################################################
 #
