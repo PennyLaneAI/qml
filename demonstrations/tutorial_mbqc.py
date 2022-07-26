@@ -1,7 +1,7 @@
 r""".. _mbqc:
 
 Measurement-based quantum computation
-=============================
+=====================================
 
 .. meta::
     :property="og:description": Learn about measurement-based quantum computation
@@ -63,12 +63,14 @@ Measurement-based quantum computation
 #
 # The difference between a cluster state and a graph state is that the cluster state is ...
 #
-#
+# As the creation of a cluster state is also described by a unitary, we can create them with a 
+# gate-based description. Let us first define a graph we want to look at, and then write up
+# a circuit in Pennylane to create the corresponding graph state.
 #
 
 import networkx as nx
 
-a, b = 5, 2
+a, b = 5, 2 # dimensions of a 2-dimensional lattice
 n = a * b  # number of qubits
 
 G = nx.grid_graph(dim=[a, b])
@@ -76,6 +78,7 @@ G = nx.grid_graph(dim=[a, b])
 ##############################################################################
 #
 # Now that we have a graph, we can construct the cluster state with PennyLane
+#
 
 import pennylane as qml
 
@@ -122,6 +125,7 @@ print(qml.draw(cluster_state)())
 #    :width: 75%
 #
 #    ..
+#
 
 import pennylane as qml
 import pennylane.numpy as np
@@ -173,6 +177,7 @@ density_matrix(input_state)
 ##############################################################################
 # We then apply the teleportation protocol and see if the resulting density matrix of the output 
 # state of the second qubit is the same as the input state of the first qubit.
+#
 
 one_bit_teleportation(input_state)
 
@@ -217,7 +222,7 @@ one_bit_teleportation(input_state)
 # 2. How arbitrary **single-qubit rotations** can be implemented.
 #
 # 3. How a **two-qubit gate** can be implemented in this scheme.
-
+#
 
 ##############################################################################
 # Single-qubit rotations
