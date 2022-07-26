@@ -44,7 +44,7 @@ Measurement-based quantum computation
 #
 # .. figure:: ../demonstrations/mbqc/DALLE-mbqc.png
 #    :align: center
-#    :width: 75%
+#    :width: 40%
 #
 #    ..
 #
