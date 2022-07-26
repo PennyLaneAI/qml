@@ -229,7 +229,7 @@ one_bit_teleportation(input_state)
 # ```````````````````````````
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
 # gate, the CNOT, the final step is to show that we can implement arbitrary quantum circuits. To do
-# so, we simply have to note that we have a **universal gate set**. However, you might wonder - how
+# so, we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might wonder - how
 # many resouces do these cluster states require? The amount of qubits needed to construct an 
 # arbitrary circuit in particular can grow to be very large. To resolve this, we have to go back to
 # what we learned about the off-line entanglement. Interestingly enough, we don not have to prepare
