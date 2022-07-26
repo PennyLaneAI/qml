@@ -100,7 +100,7 @@ print(qml.draw(cluster_state)())
 
 ##############################################################################
 # Information propagation and teleportation
-# --------------------------------------
+# ------------------------------------------
 #
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
@@ -178,7 +178,7 @@ one_bit_teleportation(input_state)
 
 ##############################################################################
 # Information propagation
-# ``````````````````````
+# ````````````````````````
 # Essentially, we keep logical information in one end of our cluster state which we progagate to the
 # other end using the teleportation protocol. By choosing adaptive measurements, we can "write" our
 # circuit onto the cluster state. Later, we will see how we can actually do this.
@@ -233,7 +233,7 @@ one_bit_teleportation(input_state)
 
 ##############################################################################
 # Quantum error correction
-# ----------------
+# -------------------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation we
 # require some kind of error correction. Error correction is a technique of detecting errors and 
@@ -294,7 +294,7 @@ RHG = SurfaceCode(code_distance)
 ##############################################################################
 #
 # Conclusion and further reading
-# ---------------------------
+# -------------------------------
 #
 # Xanadu approach towards a universal quantum computer involves continuous-variable cluster states 
 # [#CV-MBQC]. If you would like to learn more about the architecture, you can read our blueprint 
@@ -306,7 +306,7 @@ RHG = SurfaceCode(code_distance)
 
 ##############################################################################
 # References
-# ----------
+# ------------
 #
 #
 # .. [#OneWay2001]
