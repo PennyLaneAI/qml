@@ -355,5 +355,5 @@ RHG = SurfaceCode(code_distance)
 #    Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand, 
 #    Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a 
 #    programmable photonic processor* 
-#   `Nature 606, 75-81 <https://www.nature.com/articles/s41586-022-04725-x>`_
+#   `Nature 606, 75-81 <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
