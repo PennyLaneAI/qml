@@ -590,7 +590,10 @@ kernel_NN = kernel_fn(X_data, X_data, "ntk")
 
 for i in range(len(kernel_NN)):
     for j in range(len(kernel_NN)):
-        kernel_NN[i][j] /= (kernel_NN[i][i] * kernel_NN[j][j]) ** 0.5
+        # kernel_NN[i][j] /= (kernel_NN[i][i] * kernel_NN[j][j]) ** 0.5
+        kernel_NN.at[i,j].set(
+            kernel_NN[i,j] / (kernel_NN[i, i] * kernel_NN[j, j]) ** 0.5
+            )
 
 
 ######################################################################
