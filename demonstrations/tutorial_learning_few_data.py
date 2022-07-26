@@ -148,9 +148,9 @@ rng = np.random.default_rng(seed=seed)
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
-# with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three 
-# parameters, each), followed by three Ising interactions between both qubits (each interaction is 
-# parametrized by one parameter), and end with two additional ``qml.U3`` gates in each of the two 
+# with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three
+# parameters, each), followed by three Ising interactions between both qubits (each interaction is
+# parametrized by one parameter), and end with two additional ``qml.U3`` gates in each of the two
 # qubits.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
@@ -256,7 +256,7 @@ images, labels = digits.data, digits.target
 images = images[np.where((labels == 0) | (labels == 1))]
 labels = labels[np.where((labels == 0) | (labels == 1))]
 
-fig, axes = plt.subplots(nrows=12,ncols=12, figsize=(3, 3));
+fig, axes = plt.subplots(nrows=1,ncols=12, figsize=(3, 3));
 
 for i, ax in enumerate(axes.flatten()):
     ax.imshow(images[i].reshape((8,8)), cmap='gray')
@@ -387,6 +387,7 @@ def train_qcnn(n_train, n_test, n_epochs):
 #     and cached for future executions. This means the first execution will take longer, but all subsequent executions are substantially faster.
 #     Further, we use ``jax.vmap`` to vectorize the execution of the QCNN over all input states (as opposed to looping through the training and test set at every execution)
 
+##############################################################################
 # Training for different training set sizes yields different accuracies, as seen below. As we increase the training data size, the overall test accuracy,
 # a proxy for the models' generalization capabilities, increases.
 
