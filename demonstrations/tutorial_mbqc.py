@@ -21,14 +21,6 @@ Measurement-based quantum computation
 # that correspond to the desired quantum circuit. In MBQC, the measurements *are* the computation
 # and the entanglement of the cluster state is used as a resource.
 #
-# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
-#    :align: center
-#    :width: 75%
-#
-#    ..
-#
-#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
-#
 # The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
@@ -44,7 +36,7 @@ Measurement-based quantum computation
 #
 # .. figure:: ../demonstrations/mbqc/DALLE-mbqc.png
 #    :align: center
-#    :width: 40%
+#    :width: 60%
 #
 #    ..
 #
@@ -112,6 +104,14 @@ print(qml.draw(cluster_state)())
 # In this protocol, we do transport matter but *information* between systems. Admittedly, it has a 
 # rather delusive name because it is not instantaneous but requires additional classical information 
 # to be communicated too, which is naturally limited by the speed of light.
+#
+# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+#    :align: center
+#    :width: 75%
+#
+#    ..
+#
+#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
 #
 # Quantum Teleportation
 # `````````````````````
