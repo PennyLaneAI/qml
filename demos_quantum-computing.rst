@@ -90,6 +90,7 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_toric_code`
     :tags: errorcorrection
  :html:`</div></div><div style='clear:both'>`
+
 .. toctree::
     :maxdepth: 2
     :hidden:
