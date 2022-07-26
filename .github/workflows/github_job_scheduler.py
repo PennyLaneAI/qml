@@ -93,6 +93,7 @@ from enum import Enum, IntEnum
 from pathlib import PosixPath
 from dataclasses import dataclass
 from typing import List, Optional
+from xml.etree import ElementTree
 
 # Used to handle an edge case where you may have a multi-line marked comment start and end on the same line
 # """ hello """ <-- Example
@@ -471,6 +472,75 @@ def remove_extraneous_html(
     return None
 
 
+def remove_html_from_sitemap(
+    root_directory: PosixPath, html_files_to_remove: List[str], parser_namespace: argparse.Namespace
+):
+    """
+    Removes html files from the _build/html folder similar to `remove_extraneous_html` function.
+    However, this function is used to remove files that are not relevant to *any node*.
+    It not only removes the given html files but further updates the sitemap of the built demos
+    so that SEO coverage is not affected.
+
+    To call this function, pass the directory where the qml repo resides, and a list of files to delete.
+    The path to the list of files need to be the path *after* the base url e.g: pennylane.ai/qml.
+
+    Example:
+        If the path to a file is: https://pennylane.ai/qml/demos/my_old_demo.html
+        And the base url to qml is: https://pennylane.ai/qml
+        Then to delete that html file, pass:
+          remove_html_from_sitemap("/path/to/qml/repository",
+                                   ["demos/my_old_demo.html"])
+        Then the set HTML would get removed from the gallery directory AND also the sitemap.xml file.
+
+    Args:
+        root_directory: The directory where the QML repo resides
+        html_files_to_remove: List of string. Each string being a file name relative to the base url.
+        parser_namespace: The argparse object containing input from cli
+
+    Returns:
+        None
+    """
+    verbose = parser_namespace.verbose
+    dry_run = parser_namespace.dry_run
+
+    sitemap_location = root_directory / "_build" / "html" / "sitemap.xml"
+    sitemap_tree = ElementTree.parse(sitemap_location)
+    sitemap_root = sitemap_tree.getroot()
+
+    default_ns_match = re.match(r"{(.*)}", sitemap_root.tag)
+    default_ns = "" if not default_ns_match else default_ns_match.group(1)
+
+    # Prefixing the default namespace here to the xml tag as it seems to work more steadily
+    # across both Python 3.7 and above. Once QML starts using a higher version of Python then this
+    # method can be converted to passing the namespace to findall using the `namespaces` parameter.
+    xml_search_paths = {
+        "url": "url" if not default_ns else f"{{{default_ns}}}url",
+        "loc": "loc" if not default_ns else f"{{{default_ns}}}loc",
+    }
+    if default_ns and verbose:
+        print(f"Detected default namespace for sitemap: '{default_ns}'")
+    sitemap_urls = sitemap_root.findall(xml_search_paths["url"])
+    for file_to_remove in html_files_to_remove:
+        file = root_directory / "_build" / "html" / file_to_remove
+        if file.exists():
+            if verbose:
+                print(f"Deleting file from _build/html: '{file_to_remove}'")
+            if not dry_run:
+                file.unlink()
+        for url in sitemap_urls:
+            url_location = url.find(xml_search_paths["loc"])
+            loc = url_location.text
+            if loc.endswith(file_to_remove):
+                if verbose:
+                    print(f"Deleting following url from sitemap.xml: '{loc}'")
+                if not dry_run:
+                    sitemap_root.remove(url)
+    if default_ns:
+        ElementTree.register_namespace("", default_ns)
+    sitemap_tree.write(str(sitemap_location))
+    return None
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="QML Build Scheduler",
@@ -480,8 +550,9 @@ if __name__ == "__main__":
         "action",
         help="build-matrix -> Build strategy.matrix that will be used to schedule jobs dynamically. "
         "execute-matrix -> Remove executable code from non-relevant files in current offset. "
-        "clean-html -> Delete html files built that are not relevant for current matrix offset.",
-        choices=["build-strategy-matrix", "remove-executable-code", "remove-html"],
+        "remove-html -> Delete html files built that are not relevant for current matrix offset."
+        "clean-sitemap -> Delete html files and remove them from sitemap.xml",
+        choices=["build-strategy-matrix", "remove-executable-code", "remove-html", "clean-sitemap"],
         type=str,
     )
     parser.add_argument("directory", help="The path to the qml directory", type=str)
@@ -495,7 +566,7 @@ if __name__ == "__main__":
         "--num-workers",
         help="The total number of jobs the build should be split across",
         type=int,
-        required=True,
+        default=1,
     )
     parser.add_argument(
         "--glob-pattern",
@@ -522,6 +593,13 @@ if __name__ == "__main__":
         action="store_true",
     )
 
+    parser_sitemap = parser.add_argument_group("Sitemap cleanup")
+    parser_sitemap.add_argument(
+        "--html-files",
+        help="A comma separated list of html files that needs to be deleted from build directory and sitemap.xml",
+        default="",
+    )
+
     parser_results = parser.parse_args()
 
     directory_qml = PosixPath(parser_results.directory)
@@ -538,6 +616,16 @@ if __name__ == "__main__":
         output = remove_extraneous_html(
             worker_count, directory_qml, directory_examples, parser_results
         )
+    elif parser_results.action == "clean-sitemap":
+        html_files_to_remove = list(
+            map(str.strip, filter(None, parser_results.html_files.split(",")))
+        )
+        assert len(html_files_to_remove), (
+            "Action `clean-sitemap` requires flag `--html-files` "
+            "and a comma separated list of files to remove"
+        )
+        remove_html_from_sitemap(directory_qml, html_files_to_remove, parser_results)
+        output = None
     else:
         action_dict = {
             "build-strategy-matrix": build_strategy_matrix_offsets,
