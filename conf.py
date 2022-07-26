@@ -229,5 +229,5 @@ def setup(app):
     app.add_directive("youtube", YoutubeItemDirective)
     app.add_directive("community-card", CommunityCardDirective)
     app.add_directive("related", RelatedDirective)
-    app.add_stylesheet("xanadu_gallery.css")
+    app.add_css_file("xanadu_gallery.css")
     app.add_directive("bio", Bio)
