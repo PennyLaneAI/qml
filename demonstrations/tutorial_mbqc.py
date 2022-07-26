@@ -291,7 +291,10 @@ RHG = SurfaceCode(code_distance)
 #
 # Xanadu approach towards a universal quantum computer involves continuous-variable cluster states 
 # [#CV-MBQC]. If you would like to learn more about the architecture, you can read our blueprint 
-# [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_.
+# paper [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. In the meantime on the hardware side, 
+# efforts are made to develop the necessary technology. This includes the recent `Borealis 
+# experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where a 
+# 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage. 
 #
 
 ##############################################################################
@@ -344,4 +347,13 @@ RHG = SurfaceCode(code_distance)
 #     Nicolas C. Menicucci, Peter van Loock, Mile Gu, Christian Weedbrook, Timothy C. Ralph, and 
 #     Michael A. Nielsen (2006) *Universal Quantum Computation with Continuous-Variable Cluster States*, 
 #     `arXiv <https://arxiv.org/abs/quant-ph/0605198>`__.
+#
+# .. [#Borealis]
+#
+#    Lars S. Madsen, Fabian Laudenbach, Mohsen Falamarzi. Askarani, Fabien Rortais, Trevor Vincent, 
+#    Jacob F. F. Bulmer, Filippo M. Miatto, Leonhard Neuhaus, Lukas G. Helt, Matthew J. Collins, 
+#    Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand, 
+#    Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a 
+#    programmable photonic processor* 
+#   `Nature 606, 75-81 <https://www.nature.com/articles/s41586-022-04725-x>`_
 #
