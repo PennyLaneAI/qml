@@ -285,6 +285,16 @@ RHG = SurfaceCode(code_distance)
 #
 
 ##############################################################################
+#
+# Conclusion and further reading
+# ---------------------------
+#
+# Xanadu approach towards a universal quantum computer involves continuous-variable cluster states 
+# [#CV-MBQC]. If you would like to learn more about the architecture, you can read our blueprint 
+# [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_.
+#
+
+##############################################################################
 # References
 # ----------
 #
@@ -328,4 +338,10 @@ RHG = SurfaceCode(code_distance)
 # .. [#GoogleQEC2022]
 #
 #     Google Quantum AI (2022) *Suppressing quantum errors by scaling a surface code logical qubit*, `arXiv <https://arxiv.org/pdf/2207.06431.pdf>`__.
+#
+# .. [#CV-MBQC]
+#
+#     Nicolas C. Menicucci, Peter van Loock, Mile Gu, Christian Weedbrook, Timothy C. Ralph, and 
+#     Michael A. Nielsen (2006) *Universal Quantum Computation with Continuous-Variable Cluster States*, 
+#     `arXiv <https://arxiv.org/abs/quant-ph/0605198>`__.
 #
