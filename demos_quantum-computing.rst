@@ -89,7 +89,7 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/toric_code/types_of_loops.png
     :description: :doc:`demos/tutorial_toric_code`
     :tags: errorcorrection
- :html:`</div></div><div style='clear:both'>`
+:html:`</div></div><div style='clear:both'>`
 
 .. toctree::
     :maxdepth: 2
