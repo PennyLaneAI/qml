@@ -89,6 +89,7 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/mbqc/mbqc_blueprint.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -107,4 +108,3 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_sc_qubits
     demos/tutorial_photonics
     demos/tutorial_mbqc
-    
