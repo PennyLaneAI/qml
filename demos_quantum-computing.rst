@@ -83,13 +83,13 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/photonics/photonics_tn.png
     :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
-:html:`</div></div><div style='clear:both'>`
 
 .. customgalleryitem::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/mbqc_blueprint.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing
+:html:`</div></div><div style='clear:both'>`
 
 .. toctree::
     :maxdepth: 2
