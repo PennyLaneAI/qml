@@ -249,14 +249,14 @@ one_bit_teleportation(input_state)
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, 
 #   \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
-# where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_1 + 1}\alpha`, 
-# :math:`\theta_{a_2} = (-1)^{m_2}\beta`, and :math:`\theta_{a_3} = (-1)^{m_1 + m_3}\gamma` with 
-# :math:`m_1, m_2, m_3` and :math:`m_4` being the measurement outcomes. Note that the
+# where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_{\mathrm{in}} + 1}\alpha`, 
+# :math:`\theta_{a_2} = (-1)^{m_1}\beta`, and :math:`\theta_{a_3} = (-1)^{m_{\mathrm{in}} + m_2}\gamma` with 
+# :math:`m_{\mathrm{in}}, m_1, m_2` and :math:`m_3` being the measurement outcomes. Note that the
 # measurement basis is adaptive - the measurement on :math:`a_3` for example depends on the outcome 
 # of earlier measurements on the chain. After these operations, the state of qubit 
 # :math:`t_\mathrm{out}` is given by
 #
-# .. math:: \hat{U}(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)
+# .. math:: \hat{U}(\alpha, \beta, \gamma) = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to 
