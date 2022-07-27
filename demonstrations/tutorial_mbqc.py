@@ -40,6 +40,8 @@ Measurement-based quantum computation
 #
 #    ..
 #
+#    Seeing is computing!
+#
 
 ##############################################################################
 #
