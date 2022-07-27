@@ -73,8 +73,8 @@ nx.draw(G, node_color='black')
 
 ##############################################################################
 #
-# This is a fairly simple cluster state, but we will later see how even this simple graph is useful 
-# for logical operations :ref:`single-qubit-rotations`. Now we have defined a graph, we can go ahead 
+# This is a fairly simple cluster state, but we `will later see <#single-qubit-rotations>`__ how even 
+# this simple graph is useful for logical operations. Now we have defined a graph, we can go ahead 
 # and define a circuit to prepare the cluster state.
 #
 
