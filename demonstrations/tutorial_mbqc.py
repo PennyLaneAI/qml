@@ -220,9 +220,12 @@ one_bit_teleportation(input_state)
 # single-qubit gate can be represented as a composition of three rotations along two different axes, 
 # for example :math:`U(\alpha, \beta, \gamma) = R_x(\gamma)R_z(\beta)R_x(\alpha)` where 
 # :math:`R_x` and :math:`R_Z` represent rotations around the :math:`X` and :math:`Z` axis, 
-# respectively.This operation can be implemented using a linear chain of 5 qubits in a cluster 
-# state with the input state on qubit :math:`t_\mathrm{in}` and the output qubit 
-# :math:`t_\mathrm{out}`, as shown in the figure below. 
+# respectively. 
+#
+# We will see that in our measurement-based scheme, this operation can be implemented using a linear 
+# chain of 5 qubits prepared in a cluster state, as shown in the figure below. The first qubit 
+# :math:`t_\mathrm{in}` is prepared in some input state :math:`|\phi_\mathrm{in}\rangle`, 
+# and we are interested in the final state of the output qubit :math:`t_\mathrm{out}`.
 #
 # .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
 #    :align: center
@@ -234,20 +237,21 @@ one_bit_teleportation(input_state)
 # :math:`a_2`, and :math:`a_3` are then measured in the bases
 #
 # .. math::
-#   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
+#   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, 
+#   \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
 # where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_1 + 1}\alpha`, 
 # :math:`\theta_{a_2} = (-1)^{m_2}\beta`, and :math:`\theta_{a_3} = (-1)^{m_1 + m_3}\gamma` with 
 # :math:`m_1, m_2, m_3` and :math:`m_4` being the measurement outcomes. Note that the
 # measurement basis is adaptive - the measurement on :math:`a_3` for example depends on the outcome 
 # of earlier measurements on the chain. After these operations, the state of qubit 
-# :math:`t_\mathrm{out}` given by
+# :math:`t_\mathrm{out}` is given by
 #
-# .. math:: \tilde{U}(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma).
+# .. math:: \hat{U}(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)|\phi_{\mathrm{in}}\rangle.
 #
-# This unitary :math:`\tilde{U}` is related to our desired unitary :math:`U` up to possible the 
-# first two Pauli terms. Luckily, we can correct for these by choosing the final the measurement 
-# basis appropriately!
+# Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to 
+# possible the first two Pauli terms. However, we can correct for these additional Pauli gates by 
+# choosing the final the measurement basis appropriately!
 
 ##############################################################################
 # The two-qubit gate: CNOT
