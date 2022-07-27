@@ -7,7 +7,7 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
-*Authors: Joost Bus & Radoica Draškić. Posted: Day Month 2022. Last updated: 27 07 2022.*
+*Authors: Joost Bus & Radoica Draškić. Posted: 27 July 2022. Last updated: 27 July 2022.*
 
 """
 
@@ -378,6 +378,19 @@ RHG = SurfaceCode(code_distance)
 #    Jacob F. F. Bulmer, Filippo M. Miatto, Leonhard Neuhaus, Lukas G. Helt, Matthew J. Collins, 
 #    Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand, 
 #    Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a 
-#    programmable photonic processor* 
+#    programmable photonic processor*,
 #   `Nature 606, 75-81 <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
+# About the authors
+# ----------------
+
+##############################################################################
+# .. bio:: Joost Bus
+#    :photo: ../_static/authors/jbus.webp
+#
+#    I am a MSc student in Quantum Engineering at ETH Zürich who likes to explore how to wield quantum physics for technology. This summer, I am working with the architecture team on FlamingPy as a Xanadu resident. Unlike my colleague Davide, I am more fearful of the plentiful squirrels roaming around Toronto.
+#
+# .. bio:: Radoica Draškić
+#    :photo: ../_static/authors/radoica_draskic.jpg
+#
+#    I am a trained theoretical physicist and a wannabe computer scientist. I am currently working as a summer resident at Xanadu.
