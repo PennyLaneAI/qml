@@ -67,13 +67,15 @@ Measurement-based quantum computation
 
 import networkx as nx
 
-a, b = 5, 2 # dimensions of a 2-dimensional lattice
+a, b = 5, 1 # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b]) # there are a * b qubits
 nx.draw(G)
 
 ##############################################################################
 #
-# Now we have defined a graph, we can go ahead and define a circuit to prepare the cluster state.
+# This is a fairly simple cluster state, but we will later see how even this simple graph is useful 
+# for logical operations :ref:`single-qubit-rotations`. Now we have defined a graph, we can go ahead 
+# and define a circuit to prepare the cluster state.
 #
 
 import pennylane as qml
@@ -184,7 +186,7 @@ density_matrix(input_state)
 one_bit_teleportation(input_state)
 
 ##############################################################################
-# Information propagation
+# Propagation of logical information
 # ````````````````````````
 # Essentially, we keep logical information in one end of our cluster state which we progagate to the
 # other end using the teleportation protocol. By choosing adaptive measurements, we can "write" our
@@ -217,6 +219,9 @@ one_bit_teleportation(input_state)
 #
 
 ##############################################################################
+#
+# .. _single-qubit-rotations:
+#
 # Single-qubit rotations
 # ```````````````````````
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
