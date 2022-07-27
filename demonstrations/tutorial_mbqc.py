@@ -48,8 +48,8 @@ Measurement-based quantum computation
 # Cluster states and graph states
 # ----------------
 #
-# Cluster states are the universal substrate for measurement-based quantum computation 
-# [#OneWay2001]_. They are a special instance of graph states, a class of entangled multi-qubit 
+# *Cluster states* are the universal substrate for measurement-based quantum computation 
+# [#OneWay2001]_. They are a special instance of *graph states*, a class of entangled multi-qubit 
 # states that can be represented by an undirected graph :math:`G = (V,E)` whose vertices are 
 # associated with qubits and the edges with entanglement between them. The associated quantum state 
 # reads as follows
