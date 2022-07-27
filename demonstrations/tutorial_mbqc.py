@@ -216,8 +216,10 @@ one_bit_teleportation(input_state)
 # represent rotations around the :math:`X` and :math:`Z` axis respectively.
 # This operation can be implemented using a linear chain of 5 qubits in a cluster state with the input state
 # on qubit 1. Then, qubits 1 through 4 are measure in the bases
-#     .. math::
-#         \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\}
+#
+# .. math::
+#   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
+#
 # where :math:`\theta_1 = 0`, :math:`\theta_2 = (-1)^{m_1 + 1}\alpha`, :math:`\theta_3 = (-1)^{m_2}\beta`, :math:`\theta_4 = (-1)^{m_1 + m_3}\gamma`,
 # and :math:`m_1, m_2, m_3, m_4` are measurement outcomes. The implemented unitary gate is given by
 # :math:`U_G(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)` where the first two
