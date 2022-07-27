@@ -7,13 +7,13 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
-*Author: Radoica Draskic & Joost Bus. Posted: Day Month 2022. Last updated: Day Month 2022.*
+*Authors: Joost Bus & Radoica Draškić. Posted: 27 July 2022. Last updated: 27 July 2022.*
 
 """
 
 ##############################################################################
 #
-# **Measurement-based quantum computing (MBQC)** is a clever approach towards quantum computing that
+# **Measurement-based quantum computing (MBQC)** is a clever approach to quantum computing that
 # makes use of *offline* entanglement as a resource for computation. If you are more familiar with
 # the gate-based model, this method might seem unintuitive to you at first, but the approaches can 
 # be proven to be equally powerful. In a one-way quantum computer, we start out
@@ -53,19 +53,15 @@ Measurement-based quantum computation
 #
 # .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n}.
 #
-# The difference between a cluster state and a graph state is that the cluster state is ...
-#
 # As the creation of a cluster state is also described by a unitary, we can create them with a 
 # gate-based description. Let us first define a graph we want to look at, and then write up
-# a circuit in Pennylane to create the corresponding graph state.
+# a circuit in PennyLane to create the corresponding graph state.
 #
 
 import networkx as nx
 
 a, b = 5, 2 # dimensions of a 2-dimensional lattice
-n = a * b  # number of qubits
-
-G = nx.grid_graph(dim=[a, b])
+G = nx.grid_graph(dim=[a, b]) # there are a * b qubits
 
 ##############################################################################
 #
@@ -74,7 +70,7 @@ G = nx.grid_graph(dim=[a, b])
 
 import pennylane as qml
 
-qubits = [str(n) for n in G.nodes]
+qubits = [str(node) for node in G.nodes]
 
 dev = qml.device("default.qubit", wires=qubits)
 
@@ -88,7 +84,7 @@ def cluster_state():
         i, j = edge
         qml.CZ(wires=[str(i), str(j)])
 
-    return qml.expval(qml.PauliZ(0))
+    return qml.state()
 
 
 print(qml.draw(cluster_state)())
@@ -100,10 +96,10 @@ print(qml.draw(cluster_state)())
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
 # teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
-# in safe communication protocols that are not possible with classical communication so it's certainly worth to learn about.
-# In this protocol, we do transport matter but *information* between systems. Admittedly, it has a 
-# rather delusive name because it is not instantaneous but requires additional classical information 
-# to be communicated too, which is naturally limited by the speed of light.
+# in safe communication protocols that are impossible with classical communication so it's certainly worth learning about.
+# In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a 
+# rather delusive name because it is not instantaneous but requires communication of additional classical information,
+# which is naturally limited by the speed of light.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
 #    :align: center
@@ -207,15 +203,27 @@ one_bit_teleportation(input_state)
 #
 # 3. How a **two-qubit gate** can be implemented in this scheme.
 #
-# 4. How to implement **arbitray quantum circuits**.
+# 4. How to implement **arbitrary quantum circuits**.
 #
 
 ##############################################################################
 # Single-qubit rotations
 # ```````````````````````
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
-# MBQC, we can implement these rotations by using the entanglement of the cluster state.
+# MBQC, we can implement these rotations by using the entanglement of the cluster state. Any signle-qubit
+# gate can be represented as a composition of three rotations along two different axes, for example,
+# :math:`U(\alpha, \beta, \gamma) = R_X(\gamma)R_Z(\beta)R_X(\alpha)` where :math:`R_X` and :math:`R_Z`
+# represent rotations around the :math:`X` and :math:`Z` axis respectively.
+# This operation can be implemented using a linear chain of 5 qubits in a cluster state with the input state
+# on qubit 1. Then, qubits 1 through 4 are measure in the bases
 #
+# .. math::
+#   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
+#
+# where :math:`\theta_1 = 0`, :math:`\theta_2 = (-1)^{m_1 + 1}\alpha`, :math:`\theta_3 = (-1)^{m_2}\beta`, :math:`\theta_4 = (-1)^{m_1 + m_3}\gamma`,
+# and :math:`m_1, m_2, m_3, m_4` are measurement outcomes. The implemented unitary gate is given by
+# :math:`U_G(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)` where the first two
+# terms represent the required correction based on the measurement results.
 
 ##############################################################################
 # The two-qubit gate: CNOT
@@ -230,9 +238,9 @@ one_bit_teleportation(input_state)
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
 # gate, the CNOT, the final step is to show that we can implement arbitrary quantum circuits. To do
 # so, we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might wonder - how
-# many resouces do these cluster states require? The amount of qubits needed to construct an 
-# arbitrary circuit in particular can grow to be very large. To resolve this, we have to go back to
-# what we learned about the off-line entanglement. Interestingly enough, we don not have to prepare
+# many resouces do these cluster states require? The number of qubits needed to construct an 
+# arbitrary circuit can grow to be very large. To resolve this, we have to go back to
+# what we learned about the off-line entanglement. Interestingly enough, we do not have to prepare
 # all the entanglement at once. Just like we can already start printing text upon the first few
 # pages, we can apply measurements to one end of the cluster, while growing it at the same time as
 # shown in the figure below. That is, we can start printing the text on the first few pages while at
@@ -256,27 +264,27 @@ one_bit_teleportation(input_state)
 # -------------------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation we
-# require some kind of error correction. Error correction is a technique of detecting errors and 
+# require some kind of error correction. Error correction is a technique for detecting errors and 
 # reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
 # it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_
-# and communication. However, it is a stringent requisite in the quantum realm as the systems one 
+# and communication. However, it is a stringent requirement in the quantum realm as the systems one 
 # works with are much more precarious and therefore prone to environmental factors, causing errors.
 #
 # Due to the peculiarities of quantum physics, we have to be careful when though. First of all, we can
-# not simply look inside our quantum computer and see if an error occured. This would collapse the
-# wavefunction which caries valuable information. Secondly, we can not make copies of a quantum
+# not simply look inside our quantum computer and see if an error occurred. This would collapse the
+# wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy. This is because of the no-cloning theorem. A whole research field is devoted
-# to combat these challenges since Peter Shor's published a seminal paper in 1995 [#ShorQEC1995]_. A 
-# full coverage of this topic is beyond the scope of this tutorial, but a good place to start is 
+# to combating these challenges since Peter Shor's published a seminal paper in 1995 [#ShorQEC1995]_.
+# Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is 
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by 
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact 
-# introduction. Instead, what we will do here is showing how to implement error correction in the 
+# introduction. Instead, what we will do here is show how to implement error correction in the 
 # MBQC framework.
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
 # of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as 
-# an example. The cluster state that is associated with this code is known as the the RHG lattice, 
+# an example. The cluster state that is associated with this code is known as the RHG lattice, 
 # named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster 
 # state with FlamingPy.
 #
@@ -296,7 +304,7 @@ RHG = SurfaceCode(code_distance)
 
 ##############################################################################
 #
-# The computation and error correction are again done with single-qubit measurements, as illustrated 
+# The computation and error correction are again performed with single-qubit measurements, as illustrated 
 # below. At each timestep, we measure all the qubits on one sheet of the lattice. The binary 
 # outcomes of these measurements determine the measurement bases for future measurements, and the 
 # last sheet of the lattice encodes the result of the computation which can be read out by yet 
@@ -317,9 +325,9 @@ RHG = SurfaceCode(code_distance)
 # Conclusion and further reading
 # -------------------------------
 #
-# Xanadu approach towards a universal quantum computer involves continuous-variable cluster states 
-# [#CV-MBQC]. If you would like to learn more about the architecture, you can read our blueprint 
-# paper [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. In the meantime on the hardware side, 
+# Xanadu's approach toward a universal quantum computer involves continuous-variable cluster states 
+# [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint 
+# papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. In the meantime on the hardware side, 
 # efforts are made to develop the necessary technology. This includes the recent `Borealis 
 # experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where a 
 # 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage. 
@@ -382,6 +390,19 @@ RHG = SurfaceCode(code_distance)
 #    Jacob F. F. Bulmer, Filippo M. Miatto, Leonhard Neuhaus, Lukas G. Helt, Matthew J. Collins, 
 #    Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand, 
 #    Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a 
-#    programmable photonic processor* 
+#    programmable photonic processor*,
 #   `Nature 606, 75-81 <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
+# About the authors
+# ----------------
+
+##############################################################################
+# .. bio:: Joost Bus
+#    :photo: ../_static/authors/jbus.webp
+#
+#    I am a MSc student in Quantum Engineering at ETH Zürich who likes to explore how to wield quantum physics for technology. This summer, I am working with the architecture team on FlamingPy as a Xanadu resident. Unlike my colleague Davide, I am more fearful of the plentiful squirrels roaming around Toronto.
+#
+# .. bio:: Radoica Draškić
+#    :photo: ../_static/authors/radoica_draskic.jpg
+#
+#    I am a trained theoretical physicist and a wannabe computer scientist. I am currently working as a summer resident at Xanadu.
