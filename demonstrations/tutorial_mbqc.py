@@ -249,9 +249,14 @@ one_bit_teleportation(input_state)
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, 
 #   \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
-# where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_{\mathrm{in}} + 1}\alpha`, 
-# :math:`\theta_{a_2} = (-1)^{m_1}\beta`, and :math:`\theta_{a_3} = (-1)^{m_{\mathrm{in}} + m_2}\gamma` with 
-# :math:`m_{\mathrm{in}}, m_1, m_2` and :math:`m_3` being the measurement outcomes. Note that the
+# where the angles :math:`\theta_j`. Explicitly, these angles are given as
+#
+# .. :math:: \theta_{t_\mathrm{in}} = 0, \quad \theta_{a_1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, 
+#    \theta_{a_2} = (-1)^{m_1} \beta, \text{ and } \theta_{a_3} = (-1)^{m_{\mathrm{in}} + m_2} 
+#    \gamma
+# 
+# with :math:`m_{\mathrm{in}}, m_1, m_2` and :math:`m_3` being the measurement outcomes on nodes 
+# :math:`t_\mathrm{in}`, :math:`a_1`, :math:`a_2`, and :math:`a_3`, respectively. Note that the 
 # measurement basis is adaptive - the measurement on :math:`a_3` for example depends on the outcome 
 # of earlier measurements on the chain. After these operations, the state of qubit 
 # :math:`t_\mathrm{out}` is given by
