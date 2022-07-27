@@ -215,13 +215,21 @@ one_bit_teleportation(input_state)
 # :math:`U(\alpha, \beta, \gamma) = R_X(\gamma)R_Z(\beta)R_X(\alpha)` where :math:`R_X` and :math:`R_Z`
 # represent rotations around the :math:`X` and :math:`Z` axis respectively.
 # This operation can be implemented using a linear chain of 5 qubits in a cluster state with the input state
-# on qubit 1. Then, qubits 1 through 4 are measure in the bases
+# on qubit :math:`t_\mathrm{in}` like in the figure below. 
+#
+# .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
+#    :align: center
+#    :width: 75%
+#
+#    ..
+#
+# Then, qubits :math:`t_\mathrm{in}`, :math:`a_1`, :math:`a_2`, and :math:`a_3` are measured in the bases
 #
 # .. math::
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
-# where :math:`\theta_1 = 0`, :math:`\theta_2 = (-1)^{m_1 + 1}\alpha`, :math:`\theta_3 = (-1)^{m_2}\beta`, :math:`\theta_4 = (-1)^{m_1 + m_3}\gamma`,
-# and :math:`m_1, m_2, m_3, m_4` are measurement outcomes. The implemented unitary gate is given by
+# where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_1 + 1}\alpha`, :math:`\theta_{a_2} = (-1)^{m_2}\beta`, :math:`\theta_{a_3} = (-1)^{m_1 + m_3}\gamma`,
+# and :math:`m_1, m_2, m_3, m_4` are measurement outcomes. The unitary gate is finally implemented on qubit :math:`t_\mathrm{out}` and is given by
 # :math:`U_G(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)` where the first two
 # terms represent the required correction based on the measurement results.
 
@@ -229,7 +237,16 @@ one_bit_teleportation(input_state)
 # The two-qubit gate: CNOT
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
-# show how to do a CNOT in the measurement-based framework.
+# show how to do a CNOT in the measurement-based framework. Input state is given on two qubits,
+# control qubit :math:`c` and target qubit :math:`t_\mathrm{in}`. Preparing the cluster state shown in
+# the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the Hadamard basis,
+# we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections.
+#
+# .. figure:: ../demonstrations/mbqc/cnot.png
+#    :align: center
+#    :width: 50%
+#
+#    ..
 #
 
 ##############################################################################
