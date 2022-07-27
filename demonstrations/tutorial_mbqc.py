@@ -57,7 +57,7 @@ Measurement-based quantum computation
 # .. math::    |\psi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
 #
 # where :math:`C_{ij}` is the controlled-Z gate between qubits :math:`i` and :math:`j`, and 
-# math:`|+\rangle = \frac{|0\rangle + |1\rangle}{\sqrt{2}}` is the :math:`+1`` eigenstate of the 
+# :math:`|+\rangle = \frac{|0\rangle + |1\rangle}{\sqrt{2}}` is the :math:`+1`` eigenstate of the 
 # Pauli-X operator.
 #
 # We can also describe the creation of a cluster state in the gate-based description. Let us first 
