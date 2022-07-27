@@ -69,7 +69,7 @@ import networkx as nx
 
 a, b = 5, 1 # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b]) # there are a * b qubits
-nx.draw(G)
+nx.draw(G, node_color='black')
 
 ##############################################################################
 #
