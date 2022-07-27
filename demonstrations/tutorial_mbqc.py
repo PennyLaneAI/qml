@@ -251,8 +251,8 @@ one_bit_teleportation(input_state)
 #
 # where the angles :math:`\theta_j`. Explicitly, these angles are given as
 #
-# .. :math:: \theta_{t_\mathrm{in}} = 0, \quad \theta_{a_1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, 
-#    \theta_{a_2} = (-1)^{m_1} \beta, \text{ and } \theta_{a_3} = (-1)^{m_{\mathrm{in}} + m_2} 
+# .. :math:: \theta_{\mathrm{in}} = 0, \quad \theta_{1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, 
+#    \theta_{2} = (-1)^{m_1} \beta, \text{ and } \theta_{3} = (-1)^{m_{\mathrm{in}} + m_2} 
 #    \gamma
 # 
 # with :math:`m_{\mathrm{in}}, m_1, m_2` and :math:`m_3` being the measurement outcomes on nodes 
