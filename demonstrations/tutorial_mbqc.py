@@ -45,37 +45,41 @@ Measurement-based quantum computation
 
 ##############################################################################
 #
-# Cluster states
+# Cluster states and graph states
 # ----------------
 #
-# Cluster states are the universal substrate for measurement-based quantum computation. They are a 
-# special instance of graph states, a class of entangled multi-qubit states that can be represented 
-# by an undirected graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges 
-# with entanglement between them. The associated quantum state reads as follows
+# Cluster states are the universal substrate for measurement-based quantum computation 
+# [#OneWay2001]_. They are a special instance of graph states, a class of entangled multi-qubit 
+# states that can be represented by an undirected graph :math:`G = (V,E)` whose vertices are 
+# associated with qubits and the edges with entanglement between them. The associated quantum state 
+# reads as follows
 #
-# .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n}.
+# .. math::    |\psi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
 #
-# As the creation of a cluster state is also described by a unitary, we can create them with a 
-# gate-based description. Let us first define a graph we want to look at, and then write up
-# a circuit in PennyLane to create the corresponding graph state.
+# where :math:`C_{ij}` is the controlled-Z gate between qubits :math:`i` and :math:`j`, and 
+# math:`|+\rangle = \frac{|0\rangle + |1\rangle}{\sqrt{2}}` is the :math:`+1`` eigenstate of the 
+# Pauli-X operator.
+#
+# We can also describe the creation of a cluster state in the gate-based description. Let us first 
+# define a graph we want to look at, and then construct a circuit in PennyLane to create the 
+# corresponding graph state.
 #
 
 import networkx as nx
 
 a, b = 5, 2 # dimensions of a 2-dimensional lattice
 G = nx.grid_graph(dim=[a, b]) # there are a * b qubits
+nx.draw(G)
 
 ##############################################################################
 #
-# Now that we have a graph, we can construct the cluster state with PennyLane
+# Now we have defined a graph, we can go ahead and define a circuit to prepare the cluster state.
 #
 
 import pennylane as qml
 
 qubits = [str(node) for node in G.nodes]
-
 dev = qml.device("default.qubit", wires=qubits)
-
 
 @qml.qnode(dev)
 def cluster_state():
