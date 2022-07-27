@@ -224,7 +224,7 @@ one_bit_teleportation(input_state)
 #
 # We will see that in our measurement-based scheme, this operation can be implemented using a linear 
 # chain of 5 qubits prepared in a cluster state, as shown in the figure below. The first qubit 
-# :math:`t_\mathrm{in}` is prepared in some input state :math:`|\phi_\mathrm{in}\rangle`, 
+# :math:`t_\mathrm{in}` is prepared in some input state :math:`|\psi_\mathrm{in}\rangle`, 
 # and we are interested in the final state of the output qubit :math:`t_\mathrm{out}`.
 #
 # .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
@@ -248,7 +248,7 @@ one_bit_teleportation(input_state)
 # :math:`t_\mathrm{out}` is given by
 #
 # .. math:: \hat{U}(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)
-#    |\phi_{\mathrm{in}}\rangle.
+#    |\psi_{\mathrm{in}}\rangle.
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to 
 # possible the first two Pauli terms. However, we can correct for these additional Pauli gates by 
