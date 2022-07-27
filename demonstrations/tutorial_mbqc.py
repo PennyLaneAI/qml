@@ -96,8 +96,10 @@ def cluster_state():
         i, j = edge
         qml.CZ(wires=[str(i), str(j)])
 
+    return qml.state()
 
-print(qml.transforms.make_tape(cluster_state).draw())
+
+print(qml.draw(cluster_state)())
 
 ##############################################################################
 # Information propagation and teleportation
