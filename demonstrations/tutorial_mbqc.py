@@ -228,7 +228,7 @@ one_bit_teleportation(input_state)
 # MBQC, we can implement these rotations by using the entanglement of the cluster state. Any 
 # single-qubit gate can be represented as a composition of three rotations along two different axes, 
 # for example :math:`U(\alpha, \beta, \gamma) = R_x(\gamma)R_z(\beta)R_x(\alpha)` where 
-# :math:`R_x` and :math:`R_Z` represent rotations around the :math:`X` and :math:`Z` axis, 
+# :math:`R_x` and :math:`R_z` represent rotations around the :math:`X` and :math:`Z` axis, 
 # respectively. 
 #
 # We will see that in our measurement-based scheme, this operation can be implemented using a linear 
