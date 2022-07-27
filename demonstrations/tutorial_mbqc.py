@@ -120,9 +120,9 @@ print(qml.draw(cluster_state)())
 # Quantum Teleportation
 # `````````````````````
 # Let us have a deeper look at the principles behind the protocol using a simple example of qubit
-# teleportation. We start with a maximally entangled 2-qubit state, a Bell state. To relate this to
-# cluster states - this is a cluster state with two nodes and one edge connecting them. The circuit 
-# for teleportation is shown in the figure below.
+# teleportation. We start with a maximally entangled 2-qubit state, often referred to as a Bell 
+# state. To relate this to cluster states - this is a cluster state with two nodes and one edge 
+# connecting them. The circuit for teleportation is shown in the figure below.
 #
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
