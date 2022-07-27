@@ -214,12 +214,13 @@ one_bit_teleportation(input_state)
 # Single-qubit rotations
 # ```````````````````````
 # Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
-# MBQC, we can implement these rotations by using the entanglement of the cluster state. Any signle-qubit
-# gate can be represented as a composition of three rotations along two different axes, for example,
-# :math:`U(\alpha, \beta, \gamma) = R_X(\gamma)R_Z(\beta)R_X(\alpha)` where :math:`R_X` and :math:`R_Z`
-# represent rotations around the :math:`X` and :math:`Z` axis respectively.
-# This operation can be implemented using a linear chain of 5 qubits in a cluster state with the input state
-# on qubit :math:`t_\mathrm{in}` like in the figure below. 
+# MBQC, we can implement these rotations by using the entanglement of the cluster state. Any 
+# single-qubit gate can be represented as a composition of three rotations along two different axes, 
+# for example :math:`U(\alpha, \beta, \gamma) = R_x(\gamma)R_z(\beta)R_x(\alpha)` where 
+# :math:`R_x` and :math:`R_Z` represent rotations around the :math:`X` and :math:`Z` axis, 
+# respectively.This operation can be implemented using a linear chain of 5 qubits in a cluster 
+# state with the input state on qubit :math:`t_\mathrm{in}` and the output qubit 
+# :math:`t_\mathrm{out}`, as shown in the figure below. 
 #
 # .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
 #    :align: center
@@ -227,15 +228,24 @@ one_bit_teleportation(input_state)
 #
 #    ..
 #
-# Then, qubits :math:`t_\mathrm{in}`, :math:`a_1`, :math:`a_2`, and :math:`a_3` are measured in the bases
+# The input qubit :math:`t_\mathrm{in}`, together with the intermediate qubits :math:`a_1`, 
+# :math:`a_2`, and :math:`a_3` are then measured in the bases
 #
 # .. math::
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}}, \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
-# where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_1 + 1}\alpha`, :math:`\theta_{a_2} = (-1)^{m_2}\beta`, :math:`\theta_{a_3} = (-1)^{m_1 + m_3}\gamma`,
-# and :math:`m_1, m_2, m_3, m_4` are measurement outcomes. The unitary gate is finally implemented on qubit :math:`t_\mathrm{out}` and is given by
-# :math:`U_G(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma)` where the first two
-# terms represent the required correction based on the measurement results.
+# where :math:`\theta_{t_\mathrm{in}} = 0`, :math:`\theta_{a_1} = (-1)^{m_1 + 1}\alpha`, 
+# :math:`\theta_{a_2} = (-1)^{m_2}\beta`, and :math:`\theta_{a_3} = (-1)^{m_1 + m_3}\gamma` with 
+# :math:`m_1, m_2, m_3` and :math:`m_4` being the measurement outcomes. Note that the
+# measurement basis is adaptive - the measurement on :math:`a_3` for example depends on the outcome 
+# of earlier measurements on the chain. After these operations, the state of qubit 
+# :math:`t_\mathrm{out}` given by
+#
+# .. math:: \tilde{U}(\alpha, \beta, \gamma) = X^{m_2 + m_4}Z^{m_1 + m_3}U(\alpha, \beta, \gamma).
+#
+# This unitary :math:`\tilde{U}` is related to our desired unitary :math:`U` up to possible the 
+# first two Pauli terms. Luckily, we can correct for these by choosing the final the measurement 
+# basis appropriately!
 
 ##############################################################################
 # The two-qubit gate: CNOT
