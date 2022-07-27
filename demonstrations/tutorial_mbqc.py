@@ -48,10 +48,10 @@ Measurement-based quantum computation
 # Cluster states
 # ----------------
 #
-# Cluster states are the basis of measurement-based quantum computation. They are a special instance
-# of graph states, a class of entangled multi-qubit states that can be represented by an undirected
-# graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges with entanglement
-# between them. The associated quantum state reads as follows
+# Cluster states are the universal substrate for measurement-based quantum computation. They are a 
+# special instance of graph states, a class of entangled multi-qubit states that can be represented 
+# by an undirected graph :math:`G = (V,E)` whose vertices are associated with qubits and the edges 
+# with entanglement between them. The associated quantum state reads as follows
 #
 # .. math::    |\psi\rangle=\Pi_{(i,j)\in E(G)}CZ_{ij}|+⟩^{\otimes n}.
 #
