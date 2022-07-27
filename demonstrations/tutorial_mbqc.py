@@ -403,12 +403,12 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#Borealis]
 #
-#    Lars S. Madsen, Fabian Laudenbach, Mohsen Falamarzi. Askarani, Fabien Rortais, Trevor Vincent, 
-#    Jacob F. F. Bulmer, Filippo M. Miatto, Leonhard Neuhaus, Lukas G. Helt, Matthew J. Collins, 
-#    Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand, 
-#    Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a 
-#    programmable photonic processor*,
-#   `Nature 606, 75-81 <https://www.nature.com/articles/s41586-022-04725-x>`__.
+#     Lars S. Madsen, Fabian Laudenbach, Mohsen Falamarzi. Askarani, Fabien Rortais, Trevor Vincent, 
+#     Jacob F. F. Bulmer, Filippo M. Miatto, Leonhard Neuhaus, Lukas G. Helt, Matthew J. Collins, 
+#     Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand, 
+#     Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a 
+#     programmable photonic processor*, `Nature 606, 75-81 
+#     <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
 # About the authors
 # ----------------
@@ -417,7 +417,9 @@ RHG = SurfaceCode(code_distance)
 # .. bio:: Joost Bus
 #    :photo: ../_static/authors/jbus.webp
 #
-#    I am a MSc student in Quantum Engineering at ETH Zürich who likes to explore how to wield quantum physics for technology. This summer, I am working with the architecture team on FlamingPy as a Xanadu resident. Unlike my colleague Davide, I am more fearful of the plentiful squirrels roaming around Toronto.
+#    I am a MSc student in Quantum Engineering at ETH Zürich who likes to explore how to wield 
+#    quantum physics for technology. This summer, I am working with the architecture team on 
+#    FlamingPy as a Xanadu resident.
 #
 # .. bio:: Radoica Draškić
 #    :photo: ../_static/authors/radoica_draskic.jpg
