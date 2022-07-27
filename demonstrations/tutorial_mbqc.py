@@ -60,6 +60,10 @@ Measurement-based quantum computation
 # and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` is the :math:`+1`` 
 # eigenstate of the Pauli-:math:`X` operator.
 #
+# The distinction between a graph state and a cluster state is that the latter has the additional 
+# condition that the underlying graph has to be a lattice. Physically, this means that ...
+# ... require Pauli measurements ... fully disentangle bla bla.
+#
 # We can also describe the creation of a cluster state in the gate-based description. Let us first 
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the 
 # corresponding graph state.
