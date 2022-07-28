@@ -73,9 +73,9 @@ Measurement-based quantum computation
 
 import networkx as nx
 
-a, b = 5, 1  # dimensions of the graph (lattice)
+a, b = 1, 5  # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b])  # there are a * b qubits
-nx.draw(G, node_color="black")
+nx.draw(G, pos={node:node for node in G}, node_size=500, node_color="black")
 
 ##############################################################################
 #
