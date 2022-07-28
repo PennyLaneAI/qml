@@ -268,7 +268,7 @@ one_bit_teleportation(input_state)
 # of earlier measurements on the chain. After these operations, the state of qubit
 # :math:`t_\mathrm{out}` is given by
 #
-# .. math:: \hat{U}(\alpha, \beta, \gamma) = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
+# .. math:: |\psi_{\mathrm{out}}\rangle = \hat{U}(\alpha, \beta, \gamma)|\psi_{\mathrm{in}}\rangle = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
