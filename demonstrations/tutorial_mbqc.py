@@ -13,13 +13,15 @@ Measurement-based quantum computation
 
 ##############################################################################
 #
-# **Measurement-based quantum computing (MBQC)** is a clever approach to quantum computing that
-# makes use of *offline* entanglement as a resource for computation. Coming from the gate-based 
-# model, this method - also known as one-way quantum computing - might seem unintuitive to you at 
-# first, but the approaches can be proven to be equally powerful. A one-way quantum computer starts 
-# out with an entangled state, a so-called *cluster state*, and apply particular single-qubit 
-# measurements that correspond to the desired quantum circuit. In MBQC, the measurements *are* the 
-# computation and the entanglement of the cluster state is used as a resource.
+# **Measurement-based quantum computing (MBQC)** also known as one-way quantum computing is an
+# inventive approach to quantum computing that makes use of *off-line* entanglement as a resource 
+# for computation. A one-way quantum computer starts out with an entangled state, a so-called 
+# *cluster state*, and applies particular single-qubit measurements that correspond to the desired quantum circuit. In this context, 
+# off-line means that the entanglement is created independently from the rest of the 
+# computation, like how a blank sheet of paper is made separately from the text of a book. Coming 
+# from the gate-based model, this method might seem unintuitive to you at first, but the approaches 
+# can be proven to be equally powerful. In MBQC, the measurements *are* the computation and the 
+# entanglement of the cluster state is used as a resource.
 #
 # The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
@@ -194,11 +196,7 @@ one_bit_teleportation(input_state)
 # ````````````````````````
 # Essentially, we keep logical information in one end of our cluster state which we progagate to the
 # other end using the teleportation protocol. By choosing adaptive measurements, we can "write" our
-# circuit onto the cluster state. Later, we will see how we can actually do this.
-#
-# It's good to emphasize that the entanglement of the cluster state is created *off-line*. This
-# means that the entanglement is made independently from the computation, like how a blank sheet of
-# paper is made separately from the text of a book. 
+# circuit onto the cluster state. In the next section, we will see how we can actually do this.
 #
 
 ##############################################################################
@@ -291,15 +289,19 @@ one_bit_teleportation(input_state)
 # Arbitrary quantum circuits
 # ```````````````````````````
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
-# gate, the CNOT, the final step is to show that we can implement arbitrary quantum circuits. To do
-# so, we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might wonder - how
-# many resouces do these cluster states require? The number of qubits needed to construct an 
-# arbitrary circuit can grow to be very large. To resolve this, we have to go back to
-# what we learned about the off-line entanglement. Interestingly enough, we do not have to prepare
-# all the entanglement at once. Just like we can already start printing text upon the first few
-# pages, we can apply measurements to one end of the cluster, while growing it at the same time as
-# shown in the figure below. That is, we can start printing the text on the first few pages while at
-# the same time reloading the printer's paper tray!
+# gate, the final step is to show that we can implement arbitrary quantum circuits. To do so, 
+# we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might 
+# wonder - how many resouces do these cluster states require? 
+# 
+# The number of qubits needed to construct a circuit can grow to be very large, as it depends on the
+# amount of logical gates. At this point, it's good to reiterate that the entanglement of the cluster 
+# state is created *off-line*. This means that the entanglement is made independently from the 
+# computation, like how a blank sheet of paper is made separately from the text of a book. 
+# Interestingly enough, we do not have to prepare all the entanglement at once. Just like we can 
+# already start printing text upon the first few pages, we can apply measurements to one end of the 
+# cluster, while growing it at the same time as shown in the figure below. That is, we can start 
+# printing the text on the first few pages while at the same time reloading the printer's paper 
+# tray!
 #
 # .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
 #    :align: center
