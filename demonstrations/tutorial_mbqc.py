@@ -375,15 +375,25 @@ RHG = SurfaceCode(code_distance)
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
-
-##############################################################################
 #
-# The computation and error correction are again performed with single-qubit measurements, as illustrated
-# below. At each timestep, we measure all the qubits on one sheet of the lattice. The binary
+# For the sake of intuition, you can think of the state as having two spatial dimensions and one 
+# temporal dimension. The cluster state alternates between *primal* and *dual sheets*, shown in the
+# figure above on the xy-plane. You can view
+# these sheets as measuring the :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively. 
+# 
+# In principle, any quantum error correction code can be foliated into a graph state for 
+# measurement-based QEC. However, the foliations are particularly nice for CSS codes, named after 
+# Calderbank, Shor and Steane. The stabilizers of these codes include exclusively either :math:`Z`- 
+# or :math:`X`-stabilizers. Indeed, the surface code is a CSS code as it is described by 
+# stabilizers exclusively containing :math:`Z`- or :math:`X`-stabilizers, namely :math:`XX`, 
+# :math:`XXXX`, :math:`ZZ` or :math:`ZZZZ`. There are other CSS codes, such as the colour codes that
+# where the 
+# 
+# The computation and error correction are again performed with single-qubit measurements, as illustrated below.
+# At each timestep, we measure all the qubits on one sheet of the lattice. The binary
 # outcomes of these measurements determine the measurement bases for future measurements, and the
 # last sheet of the lattice encodes the result of the computation which can be read out by yet
-# another measurement!
-#
+# another measurement.
 #
 # .. figure:: ../demonstrations/mbqc/gif_measuring.gif
 #    :align: center
@@ -393,6 +403,7 @@ RHG = SurfaceCode(code_distance)
 #
 #    Performing a computation with measurements using the RHG lattice. [#XanaduBlueprint]_
 #
+
 
 ##############################################################################
 #
