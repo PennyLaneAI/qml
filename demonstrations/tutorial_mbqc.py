@@ -342,12 +342,20 @@ one_bit_teleportation(input_state)
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
 # introduction. Instead, what we will do here is show how to implement error correction in the
-# MBQC framework.
+# MBQC framework by using the surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as
+# an example.
+#
+# .. figure:: ../demonstrations/mbqc/surfacecode.jpg
+#    :align: center
+#    :width: 50%
+#
+#    ..
+#
+#    A distance-3 surface code
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
-# of the cluster state. Let's see how we can implement the famous surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as
-# an example. The cluster state that is associated with this code is known as the RHG lattice,
+# of the cluster state. The cluster state that is associated with this code is known as the RHG lattice,
 # named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster
 # state with FlamingPy.
 #
