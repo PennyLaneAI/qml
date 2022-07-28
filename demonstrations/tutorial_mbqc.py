@@ -273,7 +273,8 @@ one_bit_teleportation(input_state)
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
-# choosing the final the measurement basis appropriately!
+# choosing the final the measurement basis appropriately or correcting for them after the 
+# computation.
 #
 
 ##############################################################################
