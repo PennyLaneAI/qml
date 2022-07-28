@@ -273,11 +273,13 @@ one_bit_teleportation(input_state)
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
-# choosing the final the measurement basis appropriately or correcting for them after the 
-# computation.
+# choosing the final the measurement basis appropriately or correcting for them classically after 
+# the quantum computation.
 #
-
-##############################################################################
+# Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
+#
+#
+# 
 # The two-qubit gate: CNOT
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
@@ -292,8 +294,9 @@ one_bit_teleportation(input_state)
 #
 #    ..
 #
-
-##############################################################################
+# Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
+#
+#
 # Arbitrary quantum circuits
 # ```````````````````````````
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
