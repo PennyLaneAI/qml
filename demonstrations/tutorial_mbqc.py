@@ -316,6 +316,8 @@ one_bit_teleportation(input_state)
 #
 #    ..
 #
+#   We can also consume the cluster state while we grow it.
+#
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
 # reliable way to produce qubits and stitch them together through entanglement, we can use it to
@@ -346,8 +348,7 @@ one_bit_teleportation(input_state)
 # MBQC framework by using the surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as
 # an example.
 #
-# .. figure:: Test
-#    ../demonstrations/mbqc/surfacecode.jpg
+# .. figure:: ../demonstrations/mbqc/surfacecode.jpg
 #    :align: center
 #    :width: 50%
 #
@@ -395,15 +396,21 @@ RHG = SurfaceCode(code_distance)
 
 ##############################################################################
 #
-# Conclusion and further reading
+# Conclusion
 # -------------------------------
+#
+# The MBQC framework is a powerful quantum computing approach. It offers several advantageous over 
+# the gate-based model and is particularly useful in platforms that allows for many expendable 
+# qubits. One major benefit is that it circumvents the need for creating in-line entanglement gates. 
+# These gates that are often the most noisy operations in gate-based quantum computers based on for 
+# example trapped-ions or superconducting circuits.
 #
 # Xanadu's approach toward a universal quantum computer involves continuous-variable cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
-# papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. In the meantime on the hardware side,
+# papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. On the hardware side,
 # efforts are made to develop the necessary technology. This includes the recent `Borealis
-# experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where a
-# 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage.
+# experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where 
+# a 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage.
 #
 
 ##############################################################################
