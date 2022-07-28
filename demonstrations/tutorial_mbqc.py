@@ -393,6 +393,11 @@ RHG = SurfaceCode(code_distance)
 # experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where a
 # 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage.
 #
+##############################################################################
+#
+# .. raw:: html
+#    :file: ../demonstrations/mbqc/borealis.html
+#
 
 ##############################################################################
 # References
