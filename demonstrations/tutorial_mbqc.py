@@ -454,10 +454,18 @@ RHG = SurfaceCode(code_distance)
 #     programmable photonic processor*, `Nature 606, 75-81
 #     <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
-# About the authors
-# ----------------
+# .. [#DiVincenzo]
+# 
+#    David P. DiVincenzo (2000) *The Physical Implementation of Quantum Computation*,
+#    `arXiv <https://arxiv.org/abs/quant-ph/0002077>`__.
+#
+
 
 ##############################################################################
+#
+# About the authors
+# ----------------
+#
 # .. bio:: Joost Bus
 #    :photo: ../_static/authors/jbus.webp
 #
