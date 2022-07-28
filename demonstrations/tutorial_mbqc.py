@@ -345,7 +345,8 @@ one_bit_teleportation(input_state)
 # MBQC framework by using the surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as
 # an example.
 #
-# .. figure:: ../demonstrations/mbqc/surfacecode.jpg
+# .. figure:: Test
+#    ../demonstrations/mbqc/surfacecode.jpg
 #    :align: center
 #    :width: 50%
 #
