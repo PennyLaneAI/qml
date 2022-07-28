@@ -111,8 +111,8 @@ print(qml.draw(cluster_state)())
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
 # teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
-# in safe communication protocols that are impossible with classical communication so it's certainly worth learning about.
-# In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
+# in safe communication protocols that are impossible with classical communication so it's certainly 
+# worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
 # rather delusive name because it is not instantaneous but requires communication of additional classical information,
 # which is naturally limited by the speed of light.
 #
@@ -196,11 +196,13 @@ density_matrix(input_state)
 one_bit_teleportation(input_state)
 
 ##############################################################################
-# Propagation of logical information
-# ````````````````````````
-# Essentially, we keep logical information in one end of our cluster state which we progagate to the
-# other end using the teleportation protocol. By choosing adaptive measurements, we can "write" our
-# circuit onto the cluster state. In the next section, we will see how we can actually do this.
+# 
+# As we can see, we found that the output state is identical to the input state! 
+# 
+# This protocol is one of the main ingredients of one-way quantum computing. Essentially, we 
+# propagate the information in one end of our cluster state to the other end by using the 
+# teleportation protocol. In addition, we can "write" our circuit onto the cluster state by 
+# choosing adaptive measurements. In the next section, we will see how we can actually do this.
 #
 
 ##############################################################################
