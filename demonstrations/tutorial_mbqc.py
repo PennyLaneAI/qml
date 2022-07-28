@@ -420,7 +420,7 @@ RHG = SurfaceCode(code_distance)
 # These gates that are often the most noisy operations in gate-based quantum computers based on for 
 # example trapped-ions or superconducting circuits.
 #
-# Xanadu's approach toward a universal quantum computer involves continuous-variable cluster states
+# Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
 # papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. On the hardware side,
 # efforts are made to develop the necessary technology. This includes the recent `Borealis
