@@ -13,7 +13,7 @@ Photonic quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_gbs Quantum advantage with Gaussian Boson Sampling
 
-*Author: Alvaro Ballon. Posted: 31 May 2022. Last updated: 31 May 2022.*
+*Author: Alvaro Ballon. Posted: 31 May 2022. Last updated: 16 June 2022.*
 
 To create a functional quantum computer, we need to produce and control a 
 large number of qubits. This feat has proven difficult, although significant 
@@ -684,11 +684,14 @@ print(
 #
 # Gaussian boson sampling (GBS) is interesting on its own
 # (see :doc:`this tutorial </demos/tutorial_gbs>` for an in-depth discussion).
-# Large-scale versions of this circuit earned Jiuzhang, the quantum computer at the University of Science and Technology
-# of China, the honour of being
-# the first photonic quantum computer to achieve quantum advantage [#Zhong2020]_. Jiuzhang used GBS to sample quickly from
-# a probability distribution that classical computers take too long to simulate. But the most interesting
-# application comes from removing the PNR in the last wire, as shown below.
+# So far, two quantum devices have used large-scale versions of this circuit
+# to achieve quantum advantage on a particular computation, which involves sampling from
+# a probability distribution that classical computers take too long to simulate. In 2019, USTC's Jiuzhang device took 200 seconds
+# to perform this sampling, which would take 2.5 billion years for some of our most powerful supercomputers [#Zhong2020]_. In 2022,
+# Xanadu's Borealis performed the same calculation in 36 microseconds, with the added benefit of being programmable 
+# and available on the Cloud [#Madsen2020]_. 
+# 
+# But the most interesting application of GBS comes from removing the PNR in the last wire, as shown below.
 #
 # .. figure:: ../demonstrations/photonics/GKP_Circuit.png
 #    :align: center
@@ -919,10 +922,16 @@ print(
 #
 # .. [#Zhong2020]
 #
-#     H.S. Zhong, et al. (2020) "Quantum computationa advantage using photons",
+#     H.S. Zhong, et al. (2020) "Quantum computational advantage using photons",
 #     `Science 370, 6523: 1460-1463
 #     <https://www.science.org/doi/10.1126/science.abe8770>`__.
 #     (`arXiv <https://arxiv.org/abs/2012.01625>`__)
+#
+# .. [#Madsen2020]
+#
+#     L. Madsen, et al. (2022) "Quantum computational advantage with a programmable photonic processor"
+#     `Nature 606, 75-81
+#     <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
 # .. [#Tzitrin2020]
 #

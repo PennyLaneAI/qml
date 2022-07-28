@@ -1,3 +1,17 @@
+- title: Continuous Variable Quantum Classifiers -  MNIST
+  author: Sophie Choe
+  date: 04/06/2022
+  code: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers
+
+  paper: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers/blob/main/MNIST_QNN.pdf
+  color: heavy-rain-gradient
+  description: |
+    We built 8 MNIST dataset classifiers using 2-8 qumodes. This family of MNIST classifiers are classical-quantum hybrid circuits using Keras and PennyLane. The quantum circuit is composed of a data encoding circuit and a quantum neural network circuit as proposed in the paper "Continuous variable quantum neural networks" by Killoran et al. The PennyLane-TensorFlow interface converts the quantum circuit into a Keras layer, and the whole network is treated as a Keras network, to which Keras' built-in loss function and optimizer can be applied for parameter updates. Categorical cross-entropy is used as the loss function and Stochastic Gradient Descent is used for the optimizer.
+
+
+    Author affiliation: Portland State University, Electrical and Computer Engineering.
+
+
 - title: Weighted SubSpace VQE to find kth excited state energies
   author: Jay Patel, Siddharth Patel, and Amit Hirpara
   date: 03/07/2022
