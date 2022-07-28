@@ -272,8 +272,9 @@ one_bit_teleportation(input_state)
 #    |\psi_{\mathrm{in}}\rangle.
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
-# the first two Pauli terms. However, we can correct for these additional Pauli gates by
+# the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
 # choosing the final the measurement basis appropriately!
+#
 
 ##############################################################################
 # The two-qubit gate: CNOT
