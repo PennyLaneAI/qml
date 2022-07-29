@@ -416,8 +416,8 @@ RHG = SurfaceCode(code_distance)
 # The MBQC framework is a powerful quantum computing approach. It offers several advantages over 
 # the gate-based model and is particularly useful in platforms that allow for many expendable 
 # qubits. One major benefit is that it circumvents the need for creating in-line entanglement gates. 
-# These gates that are often the most noisy operations in gate-based quantum computers based on for 
-# example trapped-ions or superconducting circuits.
+# These gates are often the most noisy operations in gate-based quantum computers based on, for 
+# example, trapped-ions or superconducting circuits.
 #
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
