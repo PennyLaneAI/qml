@@ -301,7 +301,7 @@ one_bit_teleportation(input_state)
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
 # gate, the final step is to show that we can implement arbitrary quantum circuits. To do so,
 # we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might
-# wonder - how many resouces do these cluster states require?
+# wonder - how many resources do these cluster states require?
 #
 # The number of qubits needed to construct a circuit can grow to be very large, as it depends on the
 # amount of logical gates. At this point, it's good to reiterate that the entanglement of the cluster
