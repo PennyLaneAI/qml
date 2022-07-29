@@ -257,7 +257,8 @@ one_bit_teleportation(input_state)
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}},
 #   \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
-# where the angles :math:`\theta_j`. Explicitly, these angles are given as
+# where the angles :math:`\theta_j` depend on prior measurement outcomes. Explicitly, these angles 
+# are given by
 #
 # .. math:: \theta_{\mathrm{in}} = 0, \qquad \theta_{1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, \qquad
 #   \theta_{2} = (-1)^{m_1} \beta, \quad \text{and} \quad \theta_{3} = (-1)^{m_{\mathrm{in}} + m_2} \gamma
