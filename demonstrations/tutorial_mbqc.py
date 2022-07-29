@@ -66,7 +66,7 @@ Measurement-based quantum computation
 # condition that the underlying graph has to be a lattice. Physically, this means that ...
 # ... require Pauli measurements ... fully disentangle bla bla.
 #
-# We can also describe the creation of a cluster state in the gate-based description. Let us first
+# We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
 # corresponding graph state.
 #
