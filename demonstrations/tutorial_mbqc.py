@@ -315,7 +315,7 @@ one_bit_teleportation(input_state)
 # printing the text on the first few pages while at the same time reloading the printer's paper
 # tray!
 #
-# .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
+# .. figure:: ../demonstrations/mbqc/measure_entangle.jpg
 #    :align: center
 #    :width: 75%
 #
