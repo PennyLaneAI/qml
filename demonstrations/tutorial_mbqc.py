@@ -208,7 +208,7 @@ one_bit_teleportation(input_state)
 # ----------------------
 # How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We
 # have to prove it! In particular, we want to show that a measurement-based quantum computer is a
-# called quantum Turing machine (QTM) also known as a universal quantum computer. To do this, we
+# quantum Turing machine (QTM) also known as a universal quantum computer. To do this, we
 # need to show 4 things [#OneWay2001]_:
 #
 #   1. How **information propagates** through the cluster state.
