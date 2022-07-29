@@ -339,7 +339,7 @@ one_bit_teleportation(input_state)
 # and communication. However, it is a stringent requirement in the quantum realm as the systems one
 # works with are much more precarious and therefore prone to environmental factors, causing errors.
 #
-# Due to the peculiarities of quantum physics, we have to be careful when though. First of all, we can
+# Due to the peculiarities of quantum physics, we have to be careful when implementing error correction. First of all, we can
 # not simply look inside our quantum computer and see if an error occurred. This would collapse the
 # wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy. This is because of the no-cloning theorem. A whole research field is devoted
