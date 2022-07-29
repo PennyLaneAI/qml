@@ -23,7 +23,7 @@ Measurement-based quantum computation
 # can be proven to be equally powerful. In MBQC, the measurements *are* the computation and the
 # entanglement of the cluster state is used as a resource.
 #
-# The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
+# The structure of this demo will be as follows. First, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
 # briefly touch upon how quantum error correction (QEC) is done in this scheme.
@@ -66,7 +66,7 @@ Measurement-based quantum computation
 # condition that the underlying graph has to be a lattice. Physically, this means that ...
 # ... require Pauli measurements ... fully disentangle bla bla.
 #
-# We can also describe the creation of a cluster state in the gate-based description. Let us first
+# We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
 # corresponding graph state.
 #
@@ -76,12 +76,13 @@ import matplotlib.pyplot as plt
 
 a, b = 1, 5  # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b])  # there are a * b qubits
+plt.figure(figsize=(5,1))
 nx.draw(G, pos={node:node for node in G}, node_size=500, node_color="black")
 
 ##############################################################################
 #
 # This is a fairly simple cluster state, but we `will later see <#single-qubit-rotations>`_ how even
-# this simple graph is useful for logical operations. Now we have defined a graph, we can go ahead
+# this simple graph is useful for logical operations. Now that we have defined a graph, we can go ahead
 # and define a circuit to prepare the cluster state.
 #
 
@@ -182,10 +183,7 @@ def density_matrix(input_state):
 a, b = np.random.random(2) + 1j * np.random.random(2)
 norm = np.linalg.norm([a, b])
 
-alpha = a / norm
-beta = b / norm
-
-input_state = np.array([alpha, beta])
+input_state = np.array([a, b]) / norm
 
 density_matrix(input_state)
 
@@ -211,7 +209,7 @@ one_bit_teleportation(input_state)
 # ----------------------
 # How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We
 # have to prove it! In particular, we want to show that a measurement-based quantum computer is a
-# called quantum Turing machine (QTM) also known as a universal quantum computer. To do this, we
+# quantum Turing machine (QTM) also known as a universal quantum computer. To do this, we
 # need to show 4 things [#OneWay2001]_:
 #
 #   1. How **information propagates** through the cluster state.
@@ -258,7 +256,7 @@ one_bit_teleportation(input_state)
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}},
 #   \frac{|0\rangle - e^{i\theta_j}|1\rangle}{\sqrt{2}}\right\},
 #
-# where the angles :math:`\theta_j` depend on prior measurement outcomes. Explicitly, these angles 
+# where the angles :math:`\theta_j` depend on prior measurement outcomes and
 # are given by
 #
 # .. math:: \theta_{\mathrm{in}} = 0, \qquad \theta_{1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, \qquad
@@ -285,7 +283,7 @@ one_bit_teleportation(input_state)
 # The two-qubit gate: CNOT
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
-# show how to do a CNOT in the measurement-based framework. Input state is given on two qubits,
+# show how to perform a CNOT operation in the measurement-based framework. The input state is given on two qubits,
 # control qubit :math:`c` and target qubit :math:`t_\mathrm{in}`. Preparing the cluster state shown in
 # the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the Hadamard basis,
 # we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections.
@@ -304,7 +302,7 @@ one_bit_teleportation(input_state)
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
 # gate, the final step is to show that we can implement arbitrary quantum circuits. To do so,
 # we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might
-# wonder - how many resouces do these cluster states require?
+# wonder - how many resources do these cluster states require?
 #
 # The number of qubits needed to construct a circuit can grow to be very large, as it depends on the
 # amount of logical gates. At this point, it's good to reiterate that the entanglement of the cluster
@@ -312,7 +310,7 @@ one_bit_teleportation(input_state)
 # computation, like how a blank sheet of paper is made separately from the text of a book.
 # Interestingly enough, we do not have to prepare all the entanglement at once. Just like we can
 # already start printing text upon the first few pages, we can apply measurements to one end of the
-# cluster, while growing it at the same time as shown in the figure below. That is, we can start
+# cluster, while growing it at the same time, as shown in the figure below. That is, we can start
 # printing the text on the first few pages while at the same time reloading the printer's paper
 # tray!
 #
@@ -335,18 +333,18 @@ one_bit_teleportation(input_state)
 # Quantum error correction
 # -------------------------
 #
-# To mitigate the physical errors that can (and will) happen during a quantum computation we
+# To mitigate the physical errors that can (and will) happen during a quantum computation, we
 # require some kind of error correction. Error correction is a technique for detecting errors and
 # reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
 # it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_
 # and communication. However, it is a stringent requirement in the quantum realm as the systems one
 # works with are much more precarious and therefore prone to environmental factors, causing errors.
 #
-# Due to the peculiarities of quantum physics, we have to be careful when though. First of all, we can
+# Due to the peculiarities of quantum physics, we have to be careful when implementing error correction. First of all, we can
 # not simply look inside our quantum computer and see if an error occurred. This would collapse the
 # wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy. This is because of the no-cloning theorem. A whole research field is devoted
-# to combating these challenges since Peter Shor's published a seminal paper in 1995 [#ShorQEC1995]_.
+# to combating these challenges since Peter Shor published the seminal paper in 1995 [#ShorQEC1995]_.
 # Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
@@ -418,8 +416,8 @@ RHG = SurfaceCode(code_distance)
 # The MBQC framework is a powerful quantum computing approach. It offers several advantages over 
 # the gate-based model and is particularly useful in platforms that allow for many expendable 
 # qubits. One major benefit is that it circumvents the need for creating in-line entanglement gates. 
-# These gates that are often the most noisy operations in gate-based quantum computers based on for 
-# example trapped-ions or superconducting circuits.
+# These gates are often the most noisy operations in gate-based quantum computers based on, for 
+# example, trapped-ions or superconducting circuits.
 #
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
