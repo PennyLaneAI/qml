@@ -72,6 +72,7 @@ Measurement-based quantum computation
 #
 
 import networkx as nx
+import matplotlib.pyplot as plt
 
 a, b = 1, 5  # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b])  # there are a * b qubits
@@ -369,7 +370,6 @@ one_bit_teleportation(input_state)
 #
 
 from flamingpy.codes import SurfaceCode
-import matplotlib.pyplot as plt
 
 code_distance = 3
 RHG = SurfaceCode(code_distance)
