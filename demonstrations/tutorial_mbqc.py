@@ -332,7 +332,7 @@ one_bit_teleportation(input_state)
 # Quantum error correction
 # -------------------------
 #
-# To mitigate the physical errors that can (and will) happen during a quantum computation we
+# To mitigate the physical errors that can (and will) happen during a quantum computation, we
 # require some kind of error correction. Error correction is a technique for detecting errors and
 # reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
 # it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_
