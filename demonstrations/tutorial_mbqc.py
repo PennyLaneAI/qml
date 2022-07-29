@@ -315,13 +315,13 @@ one_bit_teleportation(input_state)
 # printing the text on the first few pages while at the same time reloading the printer's paper
 # tray!
 #
-# .. figure:: ../demonstrations/mbqc/measure_entangle.jpg
+# .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
 #    :align: center
 #    :width: 75%
 #
 #    ..
 #
-#   We can also consume the cluster state while we grow it.
+#    We can also consume the cluster state while we grow it.
 #
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
