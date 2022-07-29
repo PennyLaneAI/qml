@@ -182,10 +182,7 @@ def density_matrix(input_state):
 a, b = np.random.random(2) + 1j * np.random.random(2)
 norm = np.linalg.norm([a, b])
 
-alpha = a / norm
-beta = b / norm
-
-input_state = np.array([alpha, beta])
+input_state = np.array([a, b]) / norm
 
 density_matrix(input_state)
 
