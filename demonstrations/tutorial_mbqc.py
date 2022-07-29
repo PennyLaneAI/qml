@@ -23,7 +23,7 @@ Measurement-based quantum computation
 # can be proven to be equally powerful. In MBQC, the measurements *are* the computation and the
 # entanglement of the cluster state is used as a resource.
 #
-# The structure of this demo will be as follows. First of all, we introduce the concept of a cluster
+# The structure of this demo will be as follows. First, we introduce the concept of a cluster
 # state, the substrate for measurement-based quantum computation. Then, we will move on to explain
 # how to implement arbitrary quantum circuits, thus proving that MBQC is universal. Lastly, we will
 # briefly touch upon how quantum error correction (QEC) is done in this scheme.
