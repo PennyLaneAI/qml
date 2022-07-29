@@ -76,8 +76,9 @@ import matplotlib.pyplot as plt
 
 a, b = 1, 5  # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b])  # there are a * b qubits
-plt.figure(figsize=(5,1))
-nx.draw(G, pos={node:node for node in G}, node_size=500, node_color="black")
+
+plt.figure(figsize=(5, 1))
+nx.draw(G, pos={node: node for node in G}, node_size=500, node_color="black")
 
 ##############################################################################
 #
@@ -113,7 +114,7 @@ print(qml.draw(cluster_state)())
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
 # particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
 # teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
-# in safe communication protocols that are impossible with classical communication so it's certainly 
+# in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
 # rather delusive name because it is not instantaneous but requires communication of additional classical information,
 # which is naturally limited by the speed of light.
@@ -195,12 +196,12 @@ density_matrix(input_state)
 one_bit_teleportation(input_state)
 
 ##############################################################################
-# 
-# As we can see, we found that the output state is identical to the input state! 
-# 
-# This protocol is one of the main ingredients of one-way quantum computing. Essentially, we 
-# propagate the information in one end of our cluster state to the other end by using the 
-# teleportation protocol. In addition, we can "write" our circuit onto the cluster state by 
+#
+# As we can see, we found that the output state is identical to the input state!
+#
+# This protocol is one of the main ingredients of one-way quantum computing. Essentially, we
+# propagate the information in one end of our cluster state to the other end by using the
+# teleportation protocol. In addition, we can "write" our circuit onto the cluster state by
 # choosing adaptive measurements. In the next section, we will see how we can actually do this.
 #
 
@@ -273,13 +274,13 @@ one_bit_teleportation(input_state)
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
-# choosing the final the measurement basis appropriately or correcting for them classically after 
+# choosing the final the measurement basis appropriately or correcting for them classically after
 # the quantum computation.
 #
 # Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
 #
 #
-# 
+#
 # The two-qubit gate: CNOT
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
@@ -379,19 +380,19 @@ RHG = SurfaceCode(code_distance)
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
 #
-# For the sake of intuition, you can think of the state as having two spatial dimensions and one 
+# For the sake of intuition, you can think of the state as having two spatial dimensions and one
 # temporal dimension. The cluster state alternates between *primal* and *dual sheets*, shown in the
 # figure above on the xy-plane. You can view
-# these sheets as measuring the :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively. 
-# 
-# In principle, any quantum error correction code can be foliated into a graph state for 
-# measurement-based QEC. However, the foliations are particularly nice for CSS codes, named after 
-# Calderbank, Shor and Steane. The stabilizers of these codes include exclusively either :math:`Z`- 
-# or :math:`X`-stabilizers. Indeed, the surface code is a CSS code as it is described by 
-# stabilizers exclusively containing :math:`Z`- or :math:`X`-stabilizers, namely :math:`XX`, 
+# these sheets as measuring the :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
+#
+# In principle, any quantum error correction code can be foliated into a graph state for
+# measurement-based QEC. However, the foliations are particularly nice for CSS codes, named after
+# Calderbank, Shor and Steane. The stabilizers of these codes include exclusively either :math:`Z`-
+# or :math:`X`-stabilizers. Indeed, the surface code is a CSS code as it is described by
+# stabilizers exclusively containing :math:`Z`- or :math:`X`-stabilizers, namely :math:`XX`,
 # :math:`XXXX`, :math:`ZZ` or :math:`ZZZZ`. There are other CSS codes, such as the colour codes that
-# where the 
-# 
+# where the
+#
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary
 # outcomes of these measurements determine the measurement bases for future measurements, and the
@@ -413,17 +414,17 @@ RHG = SurfaceCode(code_distance)
 # Conclusion
 # -------------------------------
 #
-# The MBQC framework is a powerful quantum computing approach. It offers several advantages over 
-# the gate-based model and is particularly useful in platforms that allow for many expendable 
-# qubits. One major benefit is that it circumvents the need for creating in-line entanglement gates. 
-# These gates are often the most noisy operations in gate-based quantum computers based on, for 
+# The MBQC framework is a powerful quantum computing approach. It offers several advantages over
+# the gate-based model and is particularly useful in platforms that allow for many expendable
+# qubits. One major benefit is that it circumvents the need for creating in-line entanglement gates.
+# These gates are often the most noisy operations in gate-based quantum computers based on, for
 # example, trapped-ions or superconducting circuits.
 #
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
 # papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. On the hardware side,
 # efforts are made to develop the necessary technology. This includes the recent `Borealis
-# experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where 
+# experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where
 # a 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage.
 #
 
@@ -488,7 +489,7 @@ RHG = SurfaceCode(code_distance)
 #     <https://www.nature.com/articles/s41586-022-04725-x>`__.
 #
 # .. [#DiVincenzo]
-# 
+#
 #    David P. DiVincenzo (2000) *The Physical Implementation of Quantum Computation*,
 #    `arXiv <https://arxiv.org/abs/quant-ph/0002077>`__.
 #
