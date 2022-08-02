@@ -342,9 +342,7 @@ density_matrix = CNOT(input_state)
 print(density_matrix)
 print(np.allclose(density_matrix, CNOT_MBQC(input_state)))
 
-# 
-#
-#
+##############################################################################
 # Arbitrary quantum circuits
 # ```````````````````````````
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
