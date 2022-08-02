@@ -80,6 +80,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :figure: demonstrations/qubit_tapering/qubit_tapering.png
     :description: :doc:`demos/tutorial_qubit_tapering`
     :tags: chemistry
+    
+.. customgalleryitem::
+    :tooltip: Quantum Phase Estimation for Molecular Hamiltonians
+    :figure: demonstrations/qpe/qpe_circuit.png
+    :description: :doc:`demos/tutorial_qpe`
+    :tags: chemistry
 
 
 :html:`</div></div><div style='clear:both'>`
@@ -98,3 +104,4 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     demos/tutorial_vqe_spin_sectors
     demos/tutorial_measurement_optimize
     demos/tutorial_vqe_parallel
+    demos/tutorial_qpe
