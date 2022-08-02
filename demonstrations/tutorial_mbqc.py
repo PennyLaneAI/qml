@@ -288,7 +288,61 @@ print(np.allclose(density_matrix, one_bit_teleportation(input_state)))
 #
 #    ..
 #
-# Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
+# Let's now see how this pans out in PennyLane.
+
+# Let's implement a CNOT gate on an arbitrary state for comparison
+dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(dev)
+def CNOT(input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.CNOT(wires=[0, 1])
+
+    return qml.density_matrix(wires=[0, 1])
+
+# Let's now implement a CNOT in MBQC formalism
+# Qubits 0 through 3 correspond to qubits c, t_in, a, and t_out in the figure respectively
+mbqc_dev = qml.device("default.qubit", wires=4)
+
+@qml.qnode(mbqc_dev)
+def CNOT_MBQC(input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=[0, 1])
+
+    # Prepare the cluster state
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    qml.CZ(wires=[2, 0])
+    qml.CZ(wires=[2, 1])
+    qml.CZ(wires=[2, 3])
+
+    # Measure the qubits in the appropriate bases
+    qml.Hadamard(wires=1)
+    m1 = qml.measure(wires=[1])
+    qml.Hadamard(wires=2)
+    m2 = qml.measure(wires=[2])
+
+    # Correct the state
+    qml.cond(m1 == 1, qml.PauliZ)(wires=0)
+    qml.cond(m2 == 1, qml.PauliX)(wires=3)
+    qml.cond(m1 == 1, qml.PauliZ)(wires=3)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[0, 3])
+
+##############################################################################
+# Now let's prepare a random input state and check our implementation.
+
+input_state = np.random.random(4)
+input_state = input_state / np.linalg.norm(input_state)
+
+density_matrix = CNOT(input_state)
+
+print(density_matrix)
+print(np.allclose(density_matrix, CNOT_MBQC(input_state)))
+
+# 
 #
 #
 # Arbitrary quantum circuits
