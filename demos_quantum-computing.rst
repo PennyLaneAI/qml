@@ -86,7 +86,7 @@ such as benchmarking and characterizing quantum processors.
     
 .. customgalleryitem::
     :tooltip: Learn how to simulate a large quantum circuit using a small quantum computer
-    :figure: demonstrations/CutQC/thumbnail.png
+    :figure: demonstrations/CutQC/cutqc_logo.PNG
     :description: :doc:`demos/tutorial_CutQC`
 :html:`</div></div><div style='clear:both'>`
 

@@ -198,7 +198,7 @@ CutQC: Simulating Large Quantum Circuits on a Small Quantum Computer
 #
 #    </p>
 #
-# .. |Bloch-Sphere| image:: ./figs/bloch-sphere.png
+# .. |Bloch-Sphere| image:: ../demonstrations/CutQC/bloch-sphere.png
 #
 
 
@@ -332,7 +332,7 @@ CutQC: Simulating Large Quantum Circuits on a Small Quantum Computer
 #
 #    </p>
 #
-# .. |CutQC| image:: ./figs/cutqc.png
+# .. |CutQC| image:: ../demonstrations/CutQC/cutqc.png
 #
 
 
@@ -405,7 +405,7 @@ CutQC: Simulating Large Quantum Circuits on a Small Quantum Computer
 #
 #    </p>
 #
-# .. |1-Qubit CutQC| image:: ./figs/cutqc_single_qubit_02.png
+# .. |1-Qubit CutQC| image:: ../demonstrations/CutQC/cutqc_single_qubit_02.png
 #
 
 
@@ -531,7 +531,7 @@ plot_histogram(counts)
 #
 #    </p>
 #
-# .. |CutQC circuit cutting| image:: ./figs/1Qubit-circuit-cutting-02.png
+# .. |CutQC circuit cutting| image:: ../demonstrations/CutQC/1Qubit-circuit-cutting-02.png
 #
 
 
@@ -556,7 +556,7 @@ plot_histogram(counts)
 #
 #    </p>
 #
-# .. |image0| image:: ./figs/1Qubit-Circuit-Cutting-4terms-03.png
+# .. |image0| image:: ../demonstrations/CutQC/1Qubit-Circuit-Cutting-4terms-03.png
 #
 
 
@@ -773,7 +773,7 @@ print("The probabilities from the uncut circuit is: ", prob_dict(probs_uncut))
 #
 #    </p>
 #
-# .. |5-Qubits Quantum Circuit| image:: ./figs/cutqc-5qubits.png
+# .. |5-Qubits Quantum Circuit| image:: ../demonstrations/CutQC/cutqc-5qubits.png
 #
 
 
@@ -859,7 +859,7 @@ plot_histogram(multi_counts, figsize=(16, 6))
 #
 #    </p>
 #
-# .. |image0| image:: ./figs/5qubits-cuts-02.png
+# .. |image0| image:: ../demonstrations/CutQC/5qubits-cuts-02.png
 #
 
 
@@ -895,7 +895,7 @@ plot_histogram(multi_counts, figsize=(16, 6))
 #
 #    </p>
 #
-# .. |Subcircuit terms required for CutQC| image:: ./figs/5qubits-terms-02.png
+# .. |Subcircuit terms required for CutQC| image:: ../demonstrations/CutQC/5qubits-terms-02.png
 #
 
 
