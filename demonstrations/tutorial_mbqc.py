@@ -153,17 +153,17 @@ dev = qml.device("default.qubit", wires=2)
 def one_bit_teleportation(input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
-    
+
     # Prepare the cluster state
-    qml.Hadamard(wires=0)
     qml.Hadamard(wires=1)
     qml.CZ(wires=[0, 1])
 
-    # Measure the first qubit in the Pauli-X basis 
+    # Measure the first qubit in the Pauli-X basis
     # and apply an X-gate conditioned on the outcome
     qml.Hadamard(wires=0)
     m = qml.measure(wires=[0])
     qml.cond(m == 1, qml.PauliX)(wires=1)
+    qml.Hadamard(wires=1)
 
     # Return the density matrix of the output state
     return qml.density_matrix(wires=[1])
@@ -172,21 +172,19 @@ def one_bit_teleportation(input_state):
 ##############################################################################
 #
 # Now let's prepare a random qubit state and see if the teleportation protocol is working as
-# expected. To do so, we generate two random complex numbers :math:`a` and :math:`b` and then
-# normalize them to create a valid qubit state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
+# expected. To do so, we generate a random complex vector and normalize it to create a valid
+# quantum state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
 # We then apply the teleportation protocol and see if the resulting density matrix of the output
 # state of the second qubit is the same as the input state of the first qubit.
 
 # Generate a random input state
-a, b = np.random.random(2) + 1j * np.random.random(2)
-norm = np.linalg.norm([a, b])
-
-input_state = np.array([a, b]) / norm
+input_state = np.random.random(2) + 1j * np.random.random(2)
+input_state = input_state / np.linalg.norm(input_state)
 
 density_matrix = np.outer(input_state, np.conj(input_state))
+density_matrix_mbqc = one_bit_teleportation(input_state)
 
-print(density_matrix)
-print(np.allclose(density_matrix, one_bit_teleportation(input_state)))
+np.allclose(density_matrix, density_matrix_mbqc)
 
 ##############################################################################
 #
@@ -334,13 +332,10 @@ def CNOT_MBQC(input_state):
 ##############################################################################
 # Now let's prepare a random input state and check our implementation.
 
-input_state = np.random.random(4)
+input_state = np.random.random(4) + 1j * np.random.random(4)
 input_state = input_state / np.linalg.norm(input_state)
 
-density_matrix = CNOT(input_state)
-
-print(density_matrix)
-print(np.allclose(density_matrix, CNOT_MBQC(input_state)))
+np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 
 ##############################################################################
 # Arbitrary quantum circuits
