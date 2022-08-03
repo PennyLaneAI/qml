@@ -96,11 +96,9 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # Quantum Phase Estimation
 # ========================
 # 
-# :sup:`2` As we have already mentioned, the Quantum Phase Estimation algorithm
+# As we have already mentioned, the Quantum Phase Estimation algorithm
 # does a seemingly impossible thing — it allows us to figure out the
-# global phase acquired by an evolved quantum state. [ref]And, as it turns
-# out, it is a pretty valuable feature, so QPE is an important subroutine
-# of many advanced quantum algorithms.[/ref] Let us formalize this
+# global phase acquired by an evolved quantum state :sup:`2` . Let us formalize this
 # statement a bit and say that in the simplest form QPE solves the
 # following problem:
 # 
@@ -113,7 +111,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # 
 #    <!-- Just in case, don't be afraid of an ominous requirement for $\varphi_{u}$ to be a $k$-bit binary fraction — it just makes the QPE succeed after one run. We will mention later that if $\varphi_{u}$ is not a $k$-bit binary fraction, then it will take several executions of QPE to get $\varphi_{u}$ to a desired accuracy. -->
 # 
-# Now, let’s go through the main stages of QPE. First, let’s have a look
+# Now, let’s go through the main stages of QPE :sup:`3` . First, let’s have a look
 # at the circuit implementing the algorithm.
 # 
 
@@ -157,17 +155,20 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 #    and the system register (i.e. on qubits actually affected by the
 #    unitary):
 #
-# .. math:: \widehat{CU^{2^{k - 1}}} \left[\left(\frac{|0\rangle_k + |1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right] = \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes \hat{U}^{2^{k - 1}} |u\rangle \right] = \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |u\rangle \right] = \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
+# .. math:: \widehat{CU^{2^{k - 1}}} \left[\left(\frac{|0\rangle_k + |1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right] &= \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes \hat{U}^{2^{k - 1}} |u\rangle \right] \\
+#                                                    &= \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |u\rangle \right] = \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
+#
 #
 # As a result, by the end of this stage the information
-#    about the phase :math:`\varphi_{u}` is encoded in the first register
-#    and the full system state is:
+# about the phase :math:`\varphi_{u}` is encoded in the first register
+# and the full system state is:
 # 
 # .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
 #
+#
 # The approach we used is called *phase kickback* and
-#    as you have just seen it indeed *kicks back* the global phase from
-#    one register to another.
+# as you have just seen it indeed *kicks back* the global phase from
+# one register to another.
 #
 # 2. **Phase decoding.** Now the QPE algorithm does seemingly little but
 #    in fact achieves a lot. Namely, it applies the *inverse* quantum
@@ -176,6 +177,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 #    we can see that it is equivalent to:
 #
 # .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle = \sum_{j=0}^{2^K - 1} e^{i \cdot 2 \pi \varphi_u j} |j\rangle |u\rangle.
+#
 #
 # Here by :math:`|j\rangle` we mean a state of the
 # readout register given by the binary expansion of :math:`j`, i.e. if
@@ -783,7 +785,10 @@ with plt.xkcd():
 # energies of reagents. If you are as excited now as we are (and we are!),
 # you are welcome to keep reading the demo.
 #
-# [2] For a more detailed analysis of all the derivations presented in this
+# [2] And, as it turns out, it is a pretty valuable feature, 
+# so QPE is an important subroutine of many advanced quantum algorithms.
+#
+# [3] For a more detailed analysis of all the derivations presented in this
 # section please look at Quantum Information and Quantum computation by
 # Michael A. Nielsen and Isaac L. Chuang.
 
