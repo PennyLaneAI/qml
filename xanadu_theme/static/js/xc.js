@@ -8,7 +8,7 @@ $(document).ready(function(){
       const xc_url = `https://pennylane.xanadu.ai/lab/tree/demo%3A${demo_name}.ipynb`;
 
       const button = `
-      <a href="${xc_url}" class="button">Open demo in Xanadu Cloud</a>
+      <a href="${xc_url}" class="btn btn-primary">Open demo in Xanadu Cloud</a>
       `;
 
       $( button ).insertAfter($("h1").first());
