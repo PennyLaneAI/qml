@@ -373,9 +373,7 @@ theta = 2 * np.pi * np.random.random()
 
 np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 
-#
-#
-#
+##############################################################################
 # The two-qubit gate: CNOT
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
