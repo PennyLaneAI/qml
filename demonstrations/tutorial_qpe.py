@@ -17,13 +17,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # computers will make finding the ground state energies easier; b) the
 # quantum phase estimation (QPE) algorithm should be somehow involved
 # there — and you are keen to learn how ground state energies and QPE go
-# together. [ref]If not, no worries, but briefly yes, we hope that the
-# future quantum computers will make calculations of ground state energies
-# more efficient and more accurate. Possible implications include, for
-# example, better prediction of chemical reactions rates — just because
-# the latter (roughly) depend on the difference between ground state
-# energies of reagents. If you are as excited now as we are (and we are!),
-# you are welcome to keep reading the demo[/ref] Well, in this case you
+# together :sup:`1` . Well, in this case you
 # are in the right place indeed, because in this demo we will: 1. Explain
 # the connection between the ground state energies and quantum phases; 2.
 # Recap the quantum phase estimation algorithm, which is great in, well,
@@ -32,24 +26,26 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # caveats; 5. And, of course, provide the PennyLane implementation!
 # 
 
-
 ######################################################################
 # Relating energies to quantum phases
 # -----------------------------------
 # 
 # Suppose we have a system described by a Hamiltonian :math:`\hat{H}` and
 # :math:`|n\rangle` are its eigenstates,
-# i.e. :math:`\hat{H}|n\rangle = E_n|n\rangle`. Let us now let the system
+# i.e. :math:`\hat{H}|n\rangle = E_n|n\rangle`. Let us now let the system
 # evolve for a time :math:`t`. The time-dependent Schrödinger equation
 # tells us that the evolution operator should be
 # :math:`\hat{U}(t) = e^{-\frac{i\hat{H}t}{\hbar}}`. We can decompose it
 # in the basis of the Hamiltonian eigenvectors as follows:
-# :raw-latex:`\begin{equation}
-# \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|.
-# \end{equation}` Now, let’s act with :math:`\hat{U}(t)` on any of
-# Hamiltonian eigenstates: :raw-latex:`\begin{equation}
-# \hat{U}(t)|m\rangle = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \underbrace{\langle n|m\rangle}_{\delta_{nm}} = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \delta_{nm} = e^{-\frac{i E_m t}{\hbar}} |m\rangle.
-# \end{equation}` What we have just obtained? Well, our derivation says
+#
+# .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|
+#
+# Now, let’s act with :math:`\hat{U}(t)` on any of
+# Hamiltonian eigenstates: 
+#
+# .. math::  \hat{U}(t)|m\rangle = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \underbrace{\langle n|m\rangle}_{\delta_{nm}} = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \delta_{nm} = e^{-\frac{i E_m t}{\hbar}} |m\rangle.
+#
+# What we have just obtained? Well, our derivation says
 # that as the system evolves, its eigenstates basically stay the same — up
 # to a global quantum phase. Importantly, the acquired phase is not
 # random, for each eigenstate it is related to its energy in a known way.
@@ -96,12 +92,11 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # components.
 # 
 
-
 ######################################################################
 # Quantum Phase Estimation
 # ========================
 # 
-# As we have already mentioned, the Quantum Phase Estimation algorithm
+# :sup:`2` As we have already mentioned, the Quantum Phase Estimation algorithm
 # does a seemingly impossible thing — it allows us to figure out the
 # global phase acquired by an evolved quantum state. [ref]And, as it turns
 # out, it is a pretty valuable feature, so QPE is an important subroutine
@@ -148,9 +143,10 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 #    Also, we apply Hadamard gate to each qubit in the readout register,
 #    which creates a uniform superposition of all computational basis
 #    states in that register. By the end of this stage the state of the
-#    system is: :raw-latex:`\begin{equation}
-#    |\Psi_0\rangle = \left(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\right)^{\otimes K} \otimes |u\rangle
-#    \end{equation}`
+#    system is:
+#
+# .. math:: |\Psi_0\rangle = \left(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\right)^{\otimes K} \otimes |u\rangle
+#
 # 1. **Phase encoding.** Here we apply a sequence of :math:`K` controlled
 #    unitaries. The :math:`k`-th unitary is controlled by :math:`k`-th
 #    qubit in the readout register and applies the operator
@@ -159,25 +155,32 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 #    readout register. To see that, let’s consider the action of
 #    :math:`k`-th unitary on :math:`k`-th qubit of the readout register
 #    and the system register (i.e. on qubits actually affected by the
-#    unitary): :raw-latex:`\begin{equation}
-#    \widehat{CU^{2^{k - 1}}} \left[\left(\frac{|0\rangle_k + |1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right] = \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes \hat{U}^{2^{k - 1}} |u\rangle \right] = \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |u\rangle \right] = \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
-#    \end{equation}` As a result, by the end of this stage the information
+#    unitary):
+#
+# .. math:: \widehat{CU^{2^{k - 1}}} \left[\left(\frac{|0\rangle_k + |1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right] = \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes \hat{U}^{2^{k - 1}} |u\rangle \right] = \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |u\rangle \right] = \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
+#
+# As a result, by the end of this stage the information
 #    about the phase :math:`\varphi_{u}` is encoded in the first register
-#    and the full system state is: :raw-latex:`\begin{equation}
-#    |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
-#    \end{equation}` The approach we used is called *phase kickback* and
+#    and the full system state is:
+# 
+# .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
+#
+# The approach we used is called *phase kickback* and
 #    as you have just seen it indeed *kicks back* the global phase from
 #    one register to another.
+#
 # 2. **Phase decoding.** Now the QPE algorithm does seemingly little but
 #    in fact achieves a lot. Namely, it applies the *inverse* quantum
 #    Fourier transform to the readout register. Why it does so? Well, if
 #    we expand the brackets in the expression for :math:`|\Psi_1\rangle`,
-#    we can see that it is equivalent to: :raw-latex:`\begin{equation}
-#    |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle = \sum_{j=0}^{2^K - 1} e^{i \cdot 2 \pi \varphi_u j} |j\rangle |u\rangle.
-#    \end{equation}` Here by :math:`|j\rangle` we mean a state of the
-#    readout register given by the binary expansion of :math:`j`, i.e. if
-#    :math:`j = j_K \cdot 2^{K - 1} + \ldots + j_2 \cdot 2^1 + j_1 \cdot 2^0`,
-#    then :math:`|j\rangle = |j_1 j_2 \ldots j_k\rangle`.
+#    we can see that it is equivalent to:
+#
+# .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle = \sum_{j=0}^{2^K - 1} e^{i \cdot 2 \pi \varphi_u j} |j\rangle |u\rangle.
+#
+# Here by :math:`|j\rangle` we mean a state of the
+# readout register given by the binary expansion of :math:`j`, i.e. if
+# :math:`j = j_K \cdot 2^{K - 1} + \ldots + j_2 \cdot 2^1 + j_1 \cdot 2^0`,
+# then :math:`|j\rangle = |j_1 j_2 \ldots j_k\rangle`.
 # 
 # Now, if we define :math:`\omega = 2 \pi \varphi_u`, then we can see that
 # the amplitudes of the readout register encode the function
@@ -194,14 +197,17 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # quantum Fourier tranform does.
 # 
 # Long story short, the state of the system at the end of this stage is:
-# :raw-latex:`\begin{equation}
-# |\Psi_2\rangle = \sum_{l = 0}^{2^K - 1} \alpha_l |l\rangle |u\rangle,
-# \end{equation}` where
-# :math:`\alpha_l := \mathfrak{F}^{-1}\left[e^{i 2 \pi \varphi_u j}\right](l)`,
+#
+# .. math:: |\Psi_2\rangle = \sum_{l = 0}^{2^K - 1} \alpha_l |l\rangle |u\rangle,
+#
+# where :math:`\alpha_l := \mathfrak{F}^{-1}\left[e^{i 2 \pi \varphi_u j}\right](l)`,
 # i.e. to calculate :math:`\alpha_l` one applies the inverse DFT to the
 # function :math:`e^{i 2 \pi \varphi_u j}` and then takes its value at the
-# point (at the discrete frequency) :math:`l`. Phew, let’s proceed to the
-# final stage! 3. **Measurement.** On the one hand, this stage is very
+# point (at the discrete frequency) :math:`l`.
+#
+# Phew, let’s proceed to the final stage! 
+#
+# 3. **Measurement.** On the one hand, this stage is very
 # straightforward: we just measure the readout register. On the other
 # hand, simple as it sounds, we need to figure out what the measurement
 # result would be.
@@ -214,9 +220,10 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # :math:`l_{\varphi_{u}} \in [0..2^K - 1]` such that
 # :math:`\varphi_{u} \cdot 2^{K} = l_{\varphi_{u}}`. In this case the
 # expression for the amplitudes of the readout register is simple:
-# :raw-latex:`\begin{equation}
-# \alpha_l = \begin{cases}1, \text{if } l=l_{\varphi_{u}} \\ 0, \text{otherwise.} \end{cases}
-# \end{equation}` Indeed, in this case the function
+#
+# .. math:: \alpha_l = \begin{cases}1, \text{if } l=l_{\varphi_{u}} \\ 0, \text{otherwise.} \end{cases}
+#
+# Indeed, in this case the function
 # :math:`f(j) = e^{i 2 \pi \varphi_{u} j}` is just one of the complex
 # harmonics used in the IFFT, and we will have only non-zero coefficient
 # corresponding to this harmonic. Hence, the measurement of the readout
@@ -229,9 +236,11 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # :math:`\tilde{\varphi}_{u} < \varphi_u`
 # (i.e. :math:`\delta := \varphi_u - \tilde{\varphi}_{u} < 2^{-K}`). In
 # this case after some algebra juggling we can obtain the following
-# expression for :math:`\alpha_l`: :raw-latex:`\begin{equation}
-# \alpha_l = \frac{1}{2^K}\left(\frac{1 - e^{i 2\pi \left(\delta \cdot 2^K - l\right)}}{1 - e^{i 2\pi\left(\delta - \frac{l}{2^K}\right)}}\right).
-# \end{equation}` In general, there is more than one non-zero
+# expression for :math:`\alpha_l`:
+#
+# .. math:: \alpha_l = \frac{1}{2^K}\left(\frac{1 - e^{i 2\pi \left(\delta \cdot 2^K - l\right)}}{1 - e^{i 2\pi\left(\delta - \frac{l}{2^K}\right)}}\right).
+#
+# In general, there is more than one non-zero
 # :math:`\alpha_l`, and therefore after the measurement we will be
 # observing the readout register in different states :math:`|l\rangle`
 # with probabilities :math:`\left|\alpha_l\right|^2`. Thus, the QPE
@@ -310,9 +319,10 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # is guaranteed to be in :math:`[0, 1)`. 2. Due to the fact that phases
 # are defined modulo :math:`2 \pi` the phase :math:`\tilde{\varphi}_0`
 # estimated by QPE relates to :math:`\varphi_0` as follows:
-# :raw-latex:`\begin{equation}
-# \varphi_0 = \tilde{\varphi}_0 + m, \ m \in \mathbb{Z}.
-# \end{equation}` As a matter of fact, it is usually possible to find such
+#
+# .. math:: \varphi_0 = \tilde{\varphi}_0 + m, \ m \in \mathbb{Z}.
+#
+# As a matter of fact, it is usually possible to find such
 # :math:`E_0^{\min}` and :math:`E_0^{\max}` that only one integer
 # :math:`m` would satisfy the relation between :math:`\varphi_0` and
 # :math:`\tilde{\varphi}_0`, and thus the former would be uniqely obtained
@@ -329,15 +339,17 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # :math:`\varphi_0` ? As we have announced, this is not strictly required.
 # Indeed, suppose that at the Stage 0 of QPE we prepare not an eigenstate
 # of :math:`\hat{U}` but rather some superposition of its eigenstates:
-# :raw-latex:`\begin{equation}
-# |\Psi_0\rangle = \sum_{n} c_n |u_n\rangle, \ \text{where } \hat{U}|u_n\rangle = e^{i 2\pi \varphi_n} |u_n\rangle.
-# \end{equation}`
+#
+# .. math:: |\Psi_0\rangle = \sum_{n} c_n |u_n\rangle, \ \text{where } \hat{U}|u_n\rangle = e^{i 2\pi \varphi_n} |u_n\rangle.
+# 
 # 
 # Then, if we juggle some algebra again, we will be able to see that at
 # the end of QPE phase decoding stage we have the following state in the
-# readout register: :raw-latex:`\begin{equation}
-# |\Psi_2\rangle = \sum_{n} c_n \sum_{l = 0}^{2^K - 1} \alpha_l^{(n)} |l\rangle |u_n\rangle.
-# \end{equation}` Basically it looks like a superposition of QPE results
+# readout register:
+#
+# .. math:: |\Psi_2\rangle = \sum_{n} c_n \sum_{l = 0}^{2^K - 1} \alpha_l^{(n)} |l\rangle |u_n\rangle.
+#
+# Basically it looks like a superposition of QPE results
 # for different eigenstates of :math:`\hat{U}`. In particular, if we have
 # previously chosen the parameters of our circuit such that the error
 # probability is :math:`\varepsilon`
@@ -637,7 +649,7 @@ for method, prep_circuit in prep_circuits.items():
 ######################################################################
 # The energy obtained with the initial state corresponding to the FCI
 # state is again :math:`E_{\rm QPE-FCI} = -1.27627` while the estimate of
-# the randomly initialized state is :math:`E_{\rm QPE-Random} = -6.13592`.
+# the randomly initialized state is :math:`E_{\rm QPE-Random} = -0.73631`.
 # The random initial state preparation has profoundly changed our
 # estimate! O.o
 # 
@@ -683,7 +695,7 @@ with plt.xkcd():
 # 
 # In the next section we will go greedy and will look at the accuracy
 # improvements that we can get by adding more qubits in the readout
-# register :3
+# register :3!
 # 
 
 
@@ -761,6 +773,19 @@ with plt.xkcd():
 # eigenvalue. Now it’s time for you to step in and try to use the QPE in
 # different settings with PennyLane!
 # 
+
+######################################################################
+# [1] If not, no worries, but briefly yes, we hope that the
+# future quantum computers will make calculations of ground state energies
+# more efficient and more accurate. Possible implications include, for
+# example, better prediction of chemical reactions rates — just because
+# the latter (roughly) depend on the difference between ground state
+# energies of reagents. If you are as excited now as we are (and we are!),
+# you are welcome to keep reading the demo.
+#
+# [2] For a more detailed analysis of all the derivations presented in this
+# section please look at Quantum Information and Quantum computation by
+# Michael A. Nielsen and Isaac L. Chuang.
 
 
 ######################################################################
