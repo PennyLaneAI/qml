@@ -268,7 +268,111 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # choosing the final the measurement basis appropriately or correcting for them classically after
 # the quantum computation.
 #
-# Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
+# PennyLane currently does not support conditional gates with arbitrary logical conditions so we
+# will instead demonstrate how to perform single-axis rotations :math:`R_z(\theta)` and :math:`R_x(\theta)`.
+# First, we implement the :math:`R_z(\theta)` gate using two qubits.
+
+# Let's implement an Rz gate on an arbitrary state for comparison
+dev = qml.device('default.qubit', wires=1)
+
+@qml.qnode(dev)
+def RZ(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+    
+    # Perform the Rz rotation
+    qml.RZ(theta, wires=0)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[0])
+
+# Now let's implement an Rz gate on an arbitrary state in MBQC formalism
+mbqc_dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(mbqc_dev)
+def RZ_MBQC(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+
+    # Prepare the cluster state
+    qml.Hadamard(wires=1)
+    qml.CZ(wires=[0, 1])
+
+    # Measure the first qubit an correct the state
+    qml.RZ(theta, wires=0)
+    qml.Hadamard(wires=0)
+    m = qml.measure(wires=[0])
+
+    qml.cond(m == 1, qml.PauliX)(wires=1)
+    qml.Hadamard(wires=1)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[1])
+
+##############################################################################
+# Now let's prepare a random input state and check our implementation.
+
+# Generate a random input state
+input_state = np.random.random(2) + 1j * np.random.random(2)
+input_state = input_state / np.linalg.norm(input_state)
+theta = 2 * np.pi * np.random.random()
+
+np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
+
+##############################################################################
+# Next, let's implement the :math:`R_x(\theta)` gate.
+
+dev = qml.device('default.qubit', wires=1)
+
+@qml.qnode(dev)
+def RX(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+    
+    # Perform the Rz rotation
+    qml.RX(theta, wires=0)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[0])
+
+mbqc_dev = qml.device("default.qubit", wires=3)
+
+@qml.qnode(mbqc_dev)
+def RX_MBQC(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+
+    # Prepare the cluster state
+    qml.Hadamard(wires=1)
+    qml.Hadamard(wires=2)
+    qml.CZ(wires=[0, 1])
+    qml.CZ(wires=[1, 2])
+
+    # Measure the qubits and perform corrections
+    qml.Hadamard(wires=0)
+    m1 = qml.measure(wires=[0])
+
+    qml.RZ(theta, wires=1)
+    qml.cond(m1 == 1, qml.RX)(-2 * theta, wires=2)
+    qml.Hadamard(wires=1)
+    m2 = qml.measure(wires=[1])
+
+    qml.cond(m2 == 1, qml.PauliX)(wires=2)
+    qml.cond(m1 == 1, qml.PauliZ)(wires=2)
+    
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[2])
+
+##############################################################################
+# And finally let's compare the two implementations with random state as an input.
+
+# Generate a random input state
+input_state = np.random.random(2) + 1j * np.random.random(2)
+input_state = input_state / np.linalg.norm(input_state)
+theta = 2 * np.pi * np.random.random()
+
+np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
+
 #
 #
 #
