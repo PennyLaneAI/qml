@@ -404,34 +404,33 @@ def CNOT(input_state):
     return qml.density_matrix(wires=[0, 1])
 
 # Let's now implement a CNOT in MBQC formalism
-# Qubits 0 through 3 correspond to qubits c, t_in, a, and t_out in the figure respectively
-mbqc_dev = qml.device("default.qubit", wires=4)
+mbqc_dev = qml.device("default.qubit", wires=['t_in', 'c', 'a', 't_out']) # 0 1 2 3
 
 @qml.qnode(mbqc_dev)
 def CNOT_MBQC(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.QubitStateVector(input_state, wires=['c', 't_in'])
 
     # Prepare the cluster state
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
-    qml.CZ(wires=[2, 0])
-    qml.CZ(wires=[2, 1])
-    qml.CZ(wires=[2, 3])
+    qml.Hadamard(wires='a')
+    qml.Hadamard(wires='t_out')
+    qml.CZ(wires=['a', 'c'])
+    qml.CZ(wires=['a', 't_in'])
+    qml.CZ(wires=['a', 't_out'])
 
     # Measure the qubits in the appropriate bases
-    qml.Hadamard(wires=1)
-    m1 = qml.measure(wires=[1])
-    qml.Hadamard(wires=2)
-    m2 = qml.measure(wires=[2])
+    qml.Hadamard(wires='t_in')
+    m1 = qml.measure(wires=['t_in'])
+    qml.Hadamard(wires='a')
+    m2 = qml.measure(wires=['a'])
 
     # Correct the state
-    qml.cond(m1 == 1, qml.PauliZ)(wires=0)
-    qml.cond(m2 == 1, qml.PauliX)(wires=3)
-    qml.cond(m1 == 1, qml.PauliZ)(wires=3)
+    qml.cond(m1 == 1, qml.PauliZ)(wires='c')
+    qml.cond(m2 == 1, qml.PauliX)(wires='t_out')
+    qml.cond(m1 == 1, qml.PauliZ)(wires='t_out')
 
     # Return the density matrix of the output state
-    return qml.density_matrix(wires=[0, 3])
+    return qml.density_matrix(wires=['c', 't_out'])
 
 ##############################################################################
 # Now let's prepare a random input state and check our implementation.
