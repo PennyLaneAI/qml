@@ -177,9 +177,13 @@ def one_bit_teleportation(input_state):
 # We then apply the teleportation protocol and see if the resulting density matrix of the output
 # state of the second qubit is the same as the input state of the first qubit.
 
-# Generate a random input state
-input_state = np.random.random(2) + 1j * np.random.random(2)
-input_state = input_state / np.linalg.norm(input_state)
+# Define helper function for random input states
+def generate_random_state(n=1):
+    input_state = np.random.random(2**n) + 1j * np.random.random(2**n)
+    return input_state / np.linalg.norm(input_state)
+
+# Generate a random input state for n=1 qubit
+input_state = generate_random_state()
 
 density_matrix = np.outer(input_state, np.conj(input_state))
 density_matrix_mbqc = one_bit_teleportation(input_state)
@@ -313,8 +317,7 @@ def RZ_MBQC(theta, input_state):
 # Now let's prepare a random input state and check our implementation.
 
 # Generate a random input state
-input_state = np.random.random(2) + 1j * np.random.random(2)
-input_state = input_state / np.linalg.norm(input_state)
+input_state = generate_random_state()
 theta = 2 * np.pi * np.random.random()
 
 np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
@@ -367,8 +370,7 @@ def RX_MBQC(theta, input_state):
 # And finally let's compare the two implementations with random state as an input.
 
 # Generate a random input state
-input_state = np.random.random(2) + 1j * np.random.random(2)
-input_state = input_state / np.linalg.norm(input_state)
+input_state = generate_random_state()
 theta = 2 * np.pi * np.random.random()
 
 np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
@@ -434,8 +436,8 @@ def CNOT_MBQC(input_state):
 ##############################################################################
 # Now let's prepare a random input state and check our implementation.
 
-input_state = np.random.random(4) + 1j * np.random.random(4)
-input_state = input_state / np.linalg.norm(input_state)
+# Generate a random 2-qubit state
+input_state = generate_random_state(n=2)
 
 np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 
