@@ -494,7 +494,9 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
 # reliable way to produce qubits and stitch them together through entanglement, we can use it to
 # produce our cluster state resource! Essentially, we need some kind of qubit factory and a
-# stitching mechanism that puts it all together.
+# stitching mechanism that puts it all together. The stitching mechanism depends on the physical 
+# platform, and can for example be implemented with an Ising interaction [#OneWay2001]_ or in the
+# context of photonics by interfering two modes with a beamsplitter.
 #
 
 ##############################################################################
