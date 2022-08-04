@@ -337,12 +337,13 @@ one_bit_teleportation(input_state)
 # To mitigate the physical errors that can (and will) happen during a quantum computation, we
 # require some kind of error correction. Error correction is a technique for detecting errors and
 # reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
-# it is also ubiquitous in `"classical" computing <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_
-# and communication. However, it is a stringent requirement in the quantum realm as the systems one
-# works with are much more precarious and therefore prone to environmental factors, causing errors.
+# it is also ubiquitous in "classical" computing and communication where one also has to deal `with 
+# noise coming from the environment <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_. However, it is 
+# a stringent requirement in the quantum realm as the systems one works with are much more 
+# precarious and therefore prone to environmental factors, causing errors.
 #
-# Due to the peculiarities of quantum physics, we have to be careful when implementing error correction. First of all, we can
-# not simply look inside our quantum computer and see if an error occurred. This would collapse the
+# Due to the peculiarities of quantum physics, we have to be careful when implementing error 
+# correction. First of all, we can not simply look inside our quantum computer and see if an error occurred. This would collapse the
 # wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy. This is because of the no-cloning theorem. A whole research field is devoted
 # to combating these challenges since Peter Shor published the seminal paper in 1995 [#ShorQEC1995]_.
@@ -382,16 +383,12 @@ RHG = SurfaceCode(code_distance)
 #
 # For the sake of intuition, you can think of the state as having two spatial dimensions and one
 # temporal dimension. The cluster state alternates between *primal* and *dual sheets*, shown in the
-# figure above on the xy-plane. You can view
-# these sheets as measuring the :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
-#
-# In principle, any quantum error correction code can be foliated into a graph state for
-# measurement-based QEC. However, the foliations are particularly nice for CSS codes, named after
-# Calderbank, Shor and Steane. The stabilizers of these codes include exclusively either :math:`Z`-
-# or :math:`X`-stabilizers. Indeed, the surface code is a CSS code as it is described by
-# stabilizers exclusively containing :math:`Z`- or :math:`X`-stabilizers, namely :math:`XX`,
-# :math:`XXXX`, :math:`ZZ` or :math:`ZZZZ`. There are other CSS codes, such as the colour codes that
-# where the
+# figure above on the xy-plane. In principle, any quantum error correction code can be foliated into 
+# a graph state for measurement-based QEC. However, the foliations are particularly nice for CSS 
+# codes, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
+# :math:`X`-checks *or* :math:`Z`-checks, and include the surface code and colour code families. 
+# For these CSS codes, you can view the primal and dual sheets as measuring the 
+# :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
 #
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary
