@@ -390,9 +390,9 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 #
 #    ..
 #
-# Let's now see how this pans out in PennyLane.
+# Let's see how one can do this in PennyLane.
 
-# Let's implement a CNOT gate on an arbitrary state for comparison
+# As sanity check, we will implement a CNOT gate on an arbitrary state.
 dev = qml.device("default.qubit", wires=2)
 
 @qml.qnode(dev)
@@ -403,8 +403,8 @@ def CNOT(input_state):
 
     return qml.density_matrix(wires=[0, 1])
 
-# Let's now implement a CNOT in MBQC formalism
-# Qubits 0 through 3 correspond to qubits c, t_in, a, and t_out in the figure respectively
+# Let's now implement a CNOT in MBQC formalism!
+# We will associate qubits c, t_in, a, and t_out in the figure with qubits 0, 1, 2, 3, respectively.
 mbqc_dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(mbqc_dev)
