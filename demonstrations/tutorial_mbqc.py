@@ -264,7 +264,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # of earlier measurements on the chain. After these operations, the state of qubit
 # :math:`t_\mathrm{out}` is given by
 #
-# .. math:: |\psi_{\mathrm{out}}\rangle = \hat{U}(\alpha, \beta, \gamma)|\psi_{\mathrm{in}}\rangle = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
+# .. math:: |\psi_{\mathrm{out}}\rangle = \hat{U}(\alpha, \beta, \gamma)|\psi_{\mathrm{in}}\rangle 
+#    = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
@@ -272,9 +273,10 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # choosing the final the measurement basis appropriately or correcting for them classically after
 # the quantum computation.
 #
-# PennyLane currently does not support conditional gates with arbitrary logical conditions so we
-# will instead demonstrate how to perform single-axis rotations :math:`R_z(\theta)` and :math:`R_x(\theta)`.
-# First, we implement the :math:`R_z(\theta)` gate using two qubits.
+# To demonstrate that this actually works, we will use PennyLane. For simplicity, we will just 
+# show the ability will to perform single-axis rotations :math:`R_z(\theta)` and 
+# :math:`R_x(\theta)`. Note these two plus the CNOT also constitute also a universal gate set. 
+# To start of, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach.
 
 # Let's implement an Rz gate on an arbitrary state for comparison
 dev = qml.device('default.qubit', wires=1)
@@ -290,7 +292,11 @@ def RZ(theta, input_state):
     # Return the density matrix of the output state
     return qml.density_matrix(wires=[0])
 
+##############################################################################
+#
 # Now let's implement an Rz gate on an arbitrary state in MBQC formalism
+#
+
 mbqc_dev = qml.device("default.qubit", wires=2)
 
 @qml.qnode(mbqc_dev)
@@ -314,7 +320,9 @@ def RZ_MBQC(theta, input_state):
     return qml.density_matrix(wires=[1])
 
 ##############################################################################
-# Now let's prepare a random input state and check our implementation.
+#
+# Next, we will prepare a random input state and compare the two approaches.
+#
 
 # Generate a random input state
 input_state = generate_random_state()
@@ -323,7 +331,9 @@ theta = 2 * np.pi * np.random.random()
 np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 
 ##############################################################################
-# Next, let's implement the :math:`R_x(\theta)` gate.
+#
+# Now, let's have a look at the :math:`R_x(\theta)` gate.
+#
 
 dev = qml.device('default.qubit', wires=1)
 
@@ -367,7 +377,9 @@ def RX_MBQC(theta, input_state):
     return qml.density_matrix(wires=[2])
 
 ##############################################################################
-# And finally let's compare the two implementations with random state as an input.
+#
+# And finally we can compare the two implementations with random state as an input.
+#
 
 # Generate a random input state
 input_state = generate_random_state()
