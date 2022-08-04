@@ -463,7 +463,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 #    ..
 #
-#    We can also consume the cluster state while we grow it.
+#    We can also consume the cluster state while we grow it [TODO: CITATION].
 #
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
