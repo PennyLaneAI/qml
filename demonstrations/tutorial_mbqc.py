@@ -281,7 +281,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
-# choosing the final the measurement basis appropriately or correcting for them classically after
+# choosing the measurement basis of qubit :math:`t_\mathrm{out}` appropriately or correcting for them classically after
 # the quantum computation.
 #
 # To demonstrate that this actually works, we will use PennyLane. For simplicity, we will just 
