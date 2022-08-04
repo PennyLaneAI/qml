@@ -289,7 +289,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # :math:`R_x(\theta)`. Note these two plus the CNOT also constitute also a universal gate set. 
 # To start of, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach.
 
-# Let's implement an Rz gate on an arbitrary state for comparison
+# Let's implement an :math:`R_z` gate on an arbitrary state for comparison
 dev = qml.device('default.qubit', wires=1)
 
 @qml.qnode(dev)
@@ -305,7 +305,7 @@ def RZ(theta, input_state):
 
 ##############################################################################
 #
-# Now let's implement an Rz gate on an arbitrary state in MBQC formalism
+# Now let's implement an :math:`R_z` gate on an arbitrary state in MBQC formalism
 #
 
 mbqc_dev = qml.device("default.qubit", wires=2)
