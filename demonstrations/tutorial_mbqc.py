@@ -108,6 +108,17 @@ def cluster_state():
 print(qml.draw(cluster_state)())
 
 ##############################################################################
+#
+# Observe that the structure of the circuit is fairly simple. It only requires Hadamard
+# gates on each qubit and then a controlled-:math:`Z` gate between connected qubits. This part of
+# the computation is not actually computing anything. In fact, aside from the width and depth of 
+# the desired quantum circuit, the cluster state generation is essentially independent of the 
+# calculation. If you have a reliable way of applying these two operations (Hadamard and 
+# controlled-:math:`Z`), you are ready for the next step: worrying about conditional single-qubit 
+# measurements.
+#
+
+##############################################################################
 # Information propagation and teleportation
 # ------------------------------------------
 #
