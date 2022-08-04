@@ -7,7 +7,7 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
-*Authors: Joost Bus & Radoica Draškić. Posted: 27 July 2022. Last updated: 27 July 2022.*
+*Authors: Joost Bus & Radoica Draškić. Posted: 01 August 2022. Last updated: 01 August 2022.*
 
 """
 
@@ -112,8 +112,8 @@ print(qml.draw(cluster_state)())
 # ------------------------------------------
 #
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
-# particular, we make use of a protocol called *teleportation*. Despite its esoteric name, quantum
-# teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has applications
+# particular, we make use of a protocol called *one-bit teleportation*. Despite its esoteric name, one-bit
+# teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
 # rather delusive name because it is not instantaneous but requires communication of additional classical information,
@@ -127,12 +127,14 @@ print(qml.draw(cluster_state)())
 #
 #    The flow of information in a measurement-based quantum computation [#OneWay2001]_
 #
-# Quantum Teleportation
+# One-bit Teleportation
 # `````````````````````
-# Let us have a deeper look at the principles behind the protocol using a simple example of qubit
-# teleportation. We start with a maximally entangled 2-qubit state, often referred to as a Bell
-# state. To relate this to cluster states - this is a cluster state with two nodes and one edge
-# connecting them. The circuit for teleportation is shown in the figure below.
+# Let us have a deeper look at the principles behind the protocol using a simple example of one-bit
+# teleportation. We start with one qubit in the state :math:`|\psi\rangle` that we want to transfer
+# to the second qubit initially in the state :math:`|0\rangle`. The figure below represents the 
+# one-bit teleportation protocol. The green box represents the creation of a cluster state while
+# the red box represents the measurement of a qubit with the appropriate correction applied to 
+# the second qubit based on the single bit acquired through the measurement.
 #
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
@@ -140,24 +142,28 @@ print(qml.draw(cluster_state)())
 #
 #    ..
 #
+# Let's implement one-bit teleportation in PennyLane. 
 
 import pennylane as qml
 import pennylane.numpy as np
 
 dev = qml.device("default.qubit", wires=2)
 
-
 @qml.qnode(dev)
 def one_bit_teleportation(input_state):
-    # Prepare input state
+    # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
+
+    # Prepare the cluster state
     qml.Hadamard(wires=1)
+    qml.CZ(wires=[0, 1])
 
-    qml.CNOT(wires=[1, 0])
-
-    # Measure the first qubit and apply an X-gate conditioned on the outcome
+    # Measure the first qubit in the Pauli-X basis
+    # and apply an X-gate conditioned on the outcome
+    qml.Hadamard(wires=0)
     m = qml.measure(wires=[0])
     qml.cond(m == 1, qml.PauliX)(wires=1)
+    qml.Hadamard(wires=1)
 
     # Return the density matrix of the output state
     return qml.density_matrix(wires=[1])
@@ -166,34 +172,19 @@ def one_bit_teleportation(input_state):
 ##############################################################################
 #
 # Now let's prepare a random qubit state and see if the teleportation protocol is working as
-# expected. To do so, we generate two random complex numbers :math:`a` and :math:`b` and then
-# normalize them to create a valid qubit state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
-#
-
-# Define a function to show the density matrix for easy comparison
-qubit = qml.device("default.qubit", wires=1)
-
-
-@qml.qnode(qubit)
-def density_matrix(input_state):
-    qml.QubitStateVector(input_state, wires=0)
-    return qml.density_matrix(0)
-
-
-# Generate random input state
-a, b = np.random.random(2) + 1j * np.random.random(2)
-norm = np.linalg.norm([a, b])
-
-input_state = np.array([a, b]) / norm
-
-density_matrix(input_state)
-
-##############################################################################
+# expected. To do so, we generate a random complex vector and normalize it to create a valid
+# quantum state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
 # We then apply the teleportation protocol and see if the resulting density matrix of the output
 # state of the second qubit is the same as the input state of the first qubit.
-#
 
-one_bit_teleportation(input_state)
+# Generate a random input state
+input_state = np.random.random(2) + 1j * np.random.random(2)
+input_state = input_state / np.linalg.norm(input_state)
+
+density_matrix = np.outer(input_state, np.conj(input_state))
+density_matrix_mbqc = one_bit_teleportation(input_state)
+
+np.allclose(density_matrix, density_matrix_mbqc)
 
 ##############################################################################
 #
@@ -277,10 +268,112 @@ one_bit_teleportation(input_state)
 # choosing the final the measurement basis appropriately or correcting for them classically after
 # the quantum computation.
 #
-# Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
-#
-#
-#
+# PennyLane currently does not support conditional gates with arbitrary logical conditions so we
+# will instead demonstrate how to perform single-axis rotations :math:`R_z(\theta)` and :math:`R_x(\theta)`.
+# First, we implement the :math:`R_z(\theta)` gate using two qubits.
+
+# Let's implement an Rz gate on an arbitrary state for comparison
+dev = qml.device('default.qubit', wires=1)
+
+@qml.qnode(dev)
+def RZ(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+    
+    # Perform the Rz rotation
+    qml.RZ(theta, wires=0)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[0])
+
+# Now let's implement an Rz gate on an arbitrary state in MBQC formalism
+mbqc_dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(mbqc_dev)
+def RZ_MBQC(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+
+    # Prepare the cluster state
+    qml.Hadamard(wires=1)
+    qml.CZ(wires=[0, 1])
+
+    # Measure the first qubit an correct the state
+    qml.RZ(theta, wires=0)
+    qml.Hadamard(wires=0)
+    m = qml.measure(wires=[0])
+
+    qml.cond(m == 1, qml.PauliX)(wires=1)
+    qml.Hadamard(wires=1)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[1])
+
+##############################################################################
+# Now let's prepare a random input state and check our implementation.
+
+# Generate a random input state
+input_state = np.random.random(2) + 1j * np.random.random(2)
+input_state = input_state / np.linalg.norm(input_state)
+theta = 2 * np.pi * np.random.random()
+
+np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
+
+##############################################################################
+# Next, let's implement the :math:`R_x(\theta)` gate.
+
+dev = qml.device('default.qubit', wires=1)
+
+@qml.qnode(dev)
+def RX(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+    
+    # Perform the Rz rotation
+    qml.RX(theta, wires=0)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[0])
+
+mbqc_dev = qml.device("default.qubit", wires=3)
+
+@qml.qnode(mbqc_dev)
+def RX_MBQC(theta, input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=0)
+
+    # Prepare the cluster state
+    qml.Hadamard(wires=1)
+    qml.Hadamard(wires=2)
+    qml.CZ(wires=[0, 1])
+    qml.CZ(wires=[1, 2])
+
+    # Measure the qubits and perform corrections
+    qml.Hadamard(wires=0)
+    m1 = qml.measure(wires=[0])
+
+    qml.RZ(theta, wires=1)
+    qml.cond(m1 == 1, qml.RX)(-2 * theta, wires=2)
+    qml.Hadamard(wires=1)
+    m2 = qml.measure(wires=[1])
+
+    qml.cond(m2 == 1, qml.PauliX)(wires=2)
+    qml.cond(m1 == 1, qml.PauliZ)(wires=2)
+    
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[2])
+
+##############################################################################
+# And finally let's compare the two implementations with random state as an input.
+
+# Generate a random input state
+input_state = np.random.random(2) + 1j * np.random.random(2)
+input_state = input_state / np.linalg.norm(input_state)
+theta = 2 * np.pi * np.random.random()
+
+np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
+
+##############################################################################
 # The two-qubit gate: CNOT
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
@@ -295,9 +388,58 @@ one_bit_teleportation(input_state)
 #
 #    ..
 #
-# Let's now see how this pans out in PennyLane. [WORK IN PROGRESS]
-#
-#
+# Let's now see how this pans out in PennyLane.
+
+# Let's implement a CNOT gate on an arbitrary state for comparison
+dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(dev)
+def CNOT(input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.CNOT(wires=[0, 1])
+
+    return qml.density_matrix(wires=[0, 1])
+
+# Let's now implement a CNOT in MBQC formalism
+# Qubits 0 through 3 correspond to qubits c, t_in, a, and t_out in the figure respectively
+mbqc_dev = qml.device("default.qubit", wires=4)
+
+@qml.qnode(mbqc_dev)
+def CNOT_MBQC(input_state):
+    # Prepare the input state
+    qml.QubitStateVector(input_state, wires=[0, 1])
+
+    # Prepare the cluster state
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    qml.CZ(wires=[2, 0])
+    qml.CZ(wires=[2, 1])
+    qml.CZ(wires=[2, 3])
+
+    # Measure the qubits in the appropriate bases
+    qml.Hadamard(wires=1)
+    m1 = qml.measure(wires=[1])
+    qml.Hadamard(wires=2)
+    m2 = qml.measure(wires=[2])
+
+    # Correct the state
+    qml.cond(m1 == 1, qml.PauliZ)(wires=0)
+    qml.cond(m2 == 1, qml.PauliX)(wires=3)
+    qml.cond(m1 == 1, qml.PauliZ)(wires=3)
+
+    # Return the density matrix of the output state
+    return qml.density_matrix(wires=[0, 3])
+
+##############################################################################
+# Now let's prepare a random input state and check our implementation.
+
+input_state = np.random.random(4) + 1j * np.random.random(4)
+input_state = input_state / np.linalg.norm(input_state)
+
+np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
+
+##############################################################################
 # Arbitrary quantum circuits
 # ```````````````````````````
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
@@ -435,6 +577,11 @@ RHG = SurfaceCode(code_distance)
 #     Robert Raussendorf and Hans J. Briegel (2001) *A One-Way Quantum Computer*,
 #     `Phys. Rev. Lett. 86, 5188
 #     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188>`__.
+#
+# .. [#MBQCRealization]
+#
+#     Swapnil Nitin Shah (2021) *Realizations of Measurement Based Quantum Computing*,
+#     `arXiv <https://arxiv.org/pdf/2112.11601.pdf>`__.
 #
 # .. [#XanaduBlueprint]
 #
