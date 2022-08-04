@@ -550,8 +550,8 @@ RHG = SurfaceCode(code_distance)
 #    :file: ../demonstrations/mbqc/rhg-graph.html
 #
 #
-# For the sake of intuition, you can think of the state as having two spatial dimensions and one
-# temporal dimension. The cluster state alternates between *primal* and *dual sheets*, shown in the
+# For the sake of intuition, you can think of the state as having two spatial dimensions (:math:`x` 
+# and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown in the
 # figure above on the xy-plane. In principle, any quantum error correction code can be foliated into 
 # a graph state for measurement-based QEC. However, the foliations are particularly nice for CSS 
 # codes, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
