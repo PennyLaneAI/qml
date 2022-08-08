@@ -7,7 +7,7 @@ on:
       - dev
 
 env:
-  NUM_WORKERS: 15
+  NUM_WORKERS: 14
 
 concurrency:
   group: build-docs-${{ github.ref }}
