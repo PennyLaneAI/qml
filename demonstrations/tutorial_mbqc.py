@@ -7,7 +7,7 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
-*Authors: Joost Bus & Radoica Draškić. Posted: 01 August 2022. Last updated: 01 August 2022.*
+*Authors: Joost Bus & Radoica Draškić. Posted: 08 August 2022. Last updated: 08 August 2022.*
 
 """
 
@@ -56,11 +56,11 @@ Measurement-based quantum computation
 # associated with qubits and the edges with entanglement between them. The associated quantum state
 # reads as follows
 #
-# .. math::    |\psi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
+# .. math::    |\phi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
 #
-# where :math:`CZ_{ij}` is the controlled-:math:`Z`` gate between qubits :math:`i` and :math:`j`,
-# and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` is the :math:`+1``
-# eigenstate of the Pauli-:math:`X` operator.
+# where :math:`n` is the number of qubits, :math:`CZ_{ij}` is the controlled-:math:`Z`` gate between
+# qubits :math:`i` and :math:`j`, and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` 
+# is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator.
 #
 # The distinction between a graph state and a cluster state is that the latter has the additional
 # condition that the underlying graph has to be a lattice. Physically, this means that ...
@@ -246,7 +246,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # respectively.
 #
 # We will see that in our measurement-based scheme, this operation can be implemented using a linear
-# chain of 5 qubits prepared in a cluster state, as shown in the figure below. The first qubit
+# chain of 5 qubits prepared in a cluster state, as shown in the figure below [#MBQCRealization]_. The first qubit
 # :math:`t_\mathrm{in}` is prepared in some input state :math:`|\psi_\mathrm{in}\rangle`,
 # and we are interested in the final state of the output qubit :math:`t_\mathrm{out}`.
 #
@@ -269,7 +269,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # .. math:: \theta_{\mathrm{in}} = 0, \qquad \theta_{1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, \qquad
 #   \theta_{2} = (-1)^{m_1} \beta, \quad \text{and} \quad \theta_{3} = (-1)^{m_{\mathrm{in}} + m_2} \gamma
 #
-# with :math:`m_{\mathrm{in}}, m_1, m_2` and :math:`m_3` being the measurement outcomes on nodes
+# with :math:`m_{\mathrm{in}}, m_1, m_2, m_3 \in \{0, 1\}` being the measurement outcomes on nodes
 # :math:`t_\mathrm{in}`, :math:`a_1`, :math:`a_2`, and :math:`a_3`, respectively. Note that the
 # measurement basis is adaptive - the measurement on :math:`a_3` for example depends on the outcome
 # of earlier measurements on the chain. After these operations, the state of qubit
@@ -405,7 +405,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 # show how to perform a CNOT operation in the measurement-based framework. The input state is given on two qubits,
 # control qubit :math:`c` and target qubit :math:`t_\mathrm{in}`. Preparing the cluster state shown in
 # the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the Hadamard basis,
-# we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections.
+# we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections [#MBQCRealization]_.
 #
 # .. figure:: ../demonstrations/mbqc/cnot.png
 #    :align: center
