@@ -1,6 +1,6 @@
 r""".. _toric_code:
-Toric Code Topology
-===================
+Modeling the toric code on a quantum computer
+=============================================
 
 
 .. meta::
