@@ -7,7 +7,7 @@ Toric Code Topology
     :property="og:description": Investigation of the toric code degenerate ground state and anyon excitations
     :property="og:image": https://pennylane.ai/qml/_images/types_of_loops.png
 
-*Author: Christina Lee. Posted: xx June 2022*
+*Author: Christina Lee. Posted: August 8 2022. *
 
 Introduction
 ------------
