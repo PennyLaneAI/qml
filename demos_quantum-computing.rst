@@ -85,12 +85,16 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing
 
 .. customgalleryitem::
+    :tooltip: Learn about the toric code and its excitations
+    :figure: demonstrations/toric_code/types_of_loops.png
+    :description: :doc:`demos/tutorial_toric_code`
+    :tags: errorcorrection
+    
+.. customgalleryitem::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/mbqc_blueprint.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing
-
-:html:`</div></div><div style='clear:both'>`
 
 .. toctree::
     :maxdepth: 2
@@ -107,4 +111,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_error_mitigation
     demos/tutorial_sc_qubits
     demos/tutorial_photonics
+    demos/tutorial_toric_code
     demos/tutorial_mbqc
+    
