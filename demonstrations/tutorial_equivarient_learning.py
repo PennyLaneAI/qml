@@ -131,7 +131,6 @@ restrict our gates to being unitary representations of the group.
 """
 
 
-
 ##############################################################################
 #
 # Noughts and Crosses
@@ -143,14 +142,14 @@ restrict our gates to being unitary representations of the group.
 # on the choices of the players a draw is possible. Our learning task
 # is to take a set of completed games labelled with their outcomes and
 # teach the algorithm to identify these correctly.
-# 
+#
 
 
 ######################################################################
 # This board of nine elements has the symmetry of the square, also known
 # as the 'dihedral group'. This means it is symmetric under
 # :math:`\frac{\pi}{2}` rotations and flips about the lines of symmetry of
-# a square (vertical, horizontal, and diagonal). 
+# a square (vertical, horizontal, and diagonal).
 
 ##############################################################################
 # .. figure:: ../demonstrations/equivarient_learning/NandC_sym.png
@@ -185,24 +184,23 @@ restrict our gates to being unitary representations of the group.
 # this.
 
 
-
 ######################################################################
 # The secret will be to encode the symmetries into the gate set so the
 # observables we are interested in inherently respect the symmetries. How do
 # we do this? We need to select the collections of gates that commute with
 # the symmetries. In general we can use the twirling formula for this:
-# 
+#
 
 
 ######################################################################
 # Let S be the group that encodes our symmetries and :math:`U_{s}` be a
 # unitary representation of :math:`\mathcal{S}`. Then,
-# 
+#
 # .. math::
-# 
-# 
+#
+#
 #    \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
-# 
+#
 # defines a projector onto the set of operators commuting with all
 # elements of the representation, i.e.,
 # :math:`\left[\mathcal{T}_{U}[X], U(s)\right]=` 0 for all :math:`X` and
@@ -212,14 +210,14 @@ restrict our gates to being unitary representations of the group.
 # the group action), you might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
 # matter!
-# 
+#
 
 
 ######################################################################
 # So let's look again at our choice of gates, single qubit
 # :math:`R_X(\theta)` rotations, and entangling 2 qubit :math:`CR_Y(\phi)`
 # gates. What will we get by twirling these?
-# 
+#
 
 
 ######################################################################
@@ -236,31 +234,31 @@ restrict our gates to being unitary representations of the group.
 # We can see that for a single qubit rotation the inavarient maps are rotations
 # on the central qubit, at all the corners, and at all the central
 # edges.
-# 
+#
 
 
 ######################################################################
 # For entangling gates the situation is similar. There are three invarient
 # classes, the centre entagled with all corners, with all edges, and the
 # edges paired in a ring.
-# 
+#
 
 
 ######################################################################
 # The prediction of a label is obtained via a one-hot-encoding by measuring
 # the expectation values of three invariant observables:
-# 
+#
 
 
 ######################################################################
 # :math:`O_{-}=Z_{\text {middle }}=Z_{8}`
-# 
+#
 # :math:`O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{4}+Z_{6}+Z_{7}\right]`
-# 
+#
 # :math:`O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{3}+Z_{7}+Z_{9}\right]`
 #
 # :math:`\hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)`
-# 
+#
 
 
 ######################################################################
@@ -269,50 +267,50 @@ restrict our gates to being unitary representations of the group.
 # class for which the observed expectation value is the largest.
 
 
-
-
-
 ######################################################################
 # Now that we have a specific encoding and have decided on our observables
 # we need to choose a suitable cost function to optimise.
-# 
+#
 
 
 ######################################################################
 # We will use an :math:`l_2` loss function acting on pairs of games and
 # labels :math:`D={(g,y)}`
-# 
+#
 
 
 ######################################################################
 # :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
-# 
+#
 
 
 ######################################################################
 # Let's now impliment this!
-#First lets generate some games
+# First lets generate some games
 #
-#Here we are creating a small program that will play noughts and crosses against itself.
-#On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
+# Here we are creating a small program that will play noughts and crosses against itself.
+# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 
 import torch
 import random
 from toolz import unique
+
 torch.manual_seed(0)
 
 #  create an empty board
 def create_board():
     return torch.tensor([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
 
+
 # Check for empty places on board
 def possibilities(board):
     l = []
     for i in range(len(board)):
         for j in range(3):
-            if board[i,j] == 0:
+            if board[i, j] == 0:
                 l.append((i, j))
     return l
+
 
 # Select a random place for the player
 def random_place(board, player):
@@ -321,105 +319,109 @@ def random_place(board, player):
     board[current_loc] = player
     return board
 
-#Check if there is a winner by having 3 in a row
+
+# Check if there is a winner by having 3 in a row
 def row_win(board, player):
     for x in range(3):
-        lista =[]
+        lista = []
         win = True
-    
+
         for y in range(3):
-            lista.append(board[x,y])
-        
-            if board[x,y] != player:
+            lista.append(board[x, y])
+
+            if board[x, y] != player:
                 win = False
-            
+
         if win:
-            #print("row win")
+            # print("row win")
             break
-            
+
     return win
 
-#Check if there is a winner by having 3 in a column
+
+# Check if there is a winner by having 3 in a column
 def col_win(board, player):
     for x in range(3):
         win = True
-        
+
         for y in range(3):
-            if board[y,x] != player:
+            if board[y, x] != player:
                 win = False
-            
+
         if win:
-            #print("col win")
+            # print("col win")
             break
 
     return win
 
-#Check if there is a winner by having 3 along a diagonal
+
+# Check if there is a winner by having 3 along a diagonal
 def diag_win(board, player):
     win1 = True
     win2 = True
-    for x,y in [(0,0),(1,1),(2,2)]:
-        if board[x,y] != player:
+    for x, y in [(0, 0), (1, 1), (2, 2)]:
+        if board[x, y] != player:
             win1 = False
-         
-    for x,y in [(0,2),(1,1),(2,0)]:
-        if board[x,y] != player:
+
+    for x, y in [(0, 2), (1, 1), (2, 0)]:
+        if board[x, y] != player:
             win2 = False
-    
 
-    return(win1 or win2)
+    return win1 or win2
 
-#Check if the win conditions have been met or if a draw has occured
+
+# Check if the win conditions have been met or if a draw has occured
 def evaluate_game(board):
     winner = 99
     for player in [1, -1]:
-        if (row_win(board, player) or col_win(board,player) or diag_win(board,player)):
-            winner = player      
-            
+        if row_win(board, player) or col_win(board, player) or diag_win(board, player):
+            winner = player
+
     if torch.all(board != 0) and winner == 99:
         winner = 0
-        
+
     return winner
+
 
 # Main function to start the game
 def play_game():
     board, winner, counter = create_board(), 99, 1
-    #print(board)
+    # print(board)
     while winner == 99:
         for player in [1, -1]:
             board = random_place(board, player)
-            #print("Board after " + str(counter) + " move")
-            #print(board)
+            # print("Board after " + str(counter) + " move")
+            # print(board)
             counter += 1
             winner = evaluate_game(board)
             if winner != 99:
-                break       
-        
+                break
+
     return [board.flatten(), winner]
 
 
 def create_dataset(size_for_each_winner):
     game_d = {-1: [], 0: [], 1: []}
-    
+
     while min([len(v) for k, v in game_d.items()]) < size_for_each_winner:
         board, winner = play_game()
         if len(game_d[winner]) < size_for_each_winner:
             game_d[winner].append(board)
-            
+
     res = []
     for winner, boards in game_d.items():
         res += [(board, winner) for board in boards]
-    
+
     return res
+
 
 NUM_TRAINING = 450
 NUM_VALIDATION = 600
 
-#Create datasets but with even numbers of each outcome
+# Create datasets but with even numbers of each outcome
 with torch.no_grad():
     dataset = create_dataset(NUM_TRAINING // 3)
     dataset_val = create_dataset(NUM_VALIDATION // 3)
-
 
 
 ######################################################################
@@ -431,16 +433,16 @@ with torch.no_grad():
 import pennylane as qml
 import matplotlib.pyplot as plt
 
-#Set up a 9 qubit system
+# Set up a 9 qubit system
 dev = qml.device("default.qubit.torch", wires=9)
 
 ob_center = qml.PauliZ(4)
-ob_corner = (qml.PauliZ(0)+qml.PauliZ(2)+qml.PauliZ(6)+qml.PauliZ(8)) * (1/4)
-ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1/4)
+ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
+ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-#A reuploadable model for the edge qubit observable
+# A reuploadable model for the edge qubit observable
 @qml.qnode(dev, interface="torch")
-def circuit(x,p):
+def circuit(x, p):
 
     qml.RX(x[0], wires=0)
     qml.RX(x[1], wires=1)
@@ -478,36 +480,37 @@ def circuit(x,p):
     qml.RY(p[5], wires=5)
     qml.RY(p[5], wires=7)
 
-    qml.IsingYY(p[6],wires=[0,1])
-    qml.IsingYY(p[6],wires=[2,1])
-    qml.IsingYY(p[6],wires=[2,5])
-    qml.IsingYY(p[6],wires=[8,5])
-    qml.IsingYY(p[6],wires=[8,7])
-    qml.IsingYY(p[6],wires=[6,7])
-    qml.IsingYY(p[6],wires=[6,3])
-    qml.IsingYY(p[6],wires=[0,3])
+    qml.IsingYY(p[6], wires=[0, 1])
+    qml.IsingYY(p[6], wires=[2, 1])
+    qml.IsingYY(p[6], wires=[2, 5])
+    qml.IsingYY(p[6], wires=[8, 5])
+    qml.IsingYY(p[6], wires=[8, 7])
+    qml.IsingYY(p[6], wires=[6, 7])
+    qml.IsingYY(p[6], wires=[6, 3])
+    qml.IsingYY(p[6], wires=[0, 3])
 
-    qml.IsingYY(p[7],wires=[4,0])
-    qml.IsingYY(p[7],wires=[4,2])
-    qml.IsingYY(p[7],wires=[4,6])
-    qml.IsingYY(p[7],wires=[4,8])
+    qml.IsingYY(p[7], wires=[4, 0])
+    qml.IsingYY(p[7], wires=[4, 2])
+    qml.IsingYY(p[7], wires=[4, 6])
+    qml.IsingYY(p[7], wires=[4, 8])
 
-    qml.IsingYY(p[8],wires=[1,4])
-    qml.IsingYY(p[8],wires=[3,4])
-    qml.IsingYY(p[8],wires=[5,4])
-    qml.IsingYY(p[8],wires=[7,4])
-    
+    qml.IsingYY(p[8], wires=[1, 4])
+    qml.IsingYY(p[8], wires=[3, 4])
+    qml.IsingYY(p[8], wires=[5, 4])
+    qml.IsingYY(p[8], wires=[7, 4])
+
     return [qml.expval(ob_center), qml.expval(ob_corner), qml.expval(ob_edge)]
 
-fig, ax = qml.draw_mpl(circuit)([0]*9,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+fig, ax = qml.draw_mpl(circuit)([0] * 9, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
 ob_center = qml.PauliZ(4)
-ob_corner = (qml.PauliZ(0)+qml.PauliZ(2)+qml.PauliZ(6)+qml.PauliZ(8)) * (1/4)
-ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1/4)
+ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
+ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-#A reuploadable model for the edge qubit observable without symmetry
+# A reuploadable model for the edge qubit observable without symmetry
 @qml.qnode(dev, interface="torch")
-def circuit_no_sym(x,p):
+def circuit_no_sym(x, p):
 
     qml.RX(x[0], wires=0)
     qml.RX(x[1], wires=1)
@@ -545,28 +548,29 @@ def circuit_no_sym(x,p):
     qml.RY(p[16], wires=5)
     qml.RY(p[17], wires=7)
 
-    qml.CRY(p[18],wires=[0,1])
-    qml.CRY(p[19],wires=[2,1])
-    qml.CRY(p[20],wires=[2,5])
-    qml.CRY(p[21],wires=[8,5])
-    qml.CRY(p[22],wires=[8,7])
-    qml.CRY(p[23],wires=[6,7])
-    qml.CRY(p[24],wires=[6,3])
-    qml.CRY(p[25],wires=[0,3])
+    qml.CRY(p[18], wires=[0, 1])
+    qml.CRY(p[19], wires=[2, 1])
+    qml.CRY(p[20], wires=[2, 5])
+    qml.CRY(p[21], wires=[8, 5])
+    qml.CRY(p[22], wires=[8, 7])
+    qml.CRY(p[23], wires=[6, 7])
+    qml.CRY(p[24], wires=[6, 3])
+    qml.CRY(p[25], wires=[0, 3])
 
-    qml.CRY(p[26],wires=[4,0])
-    qml.CRY(p[27],wires=[4,2])
-    qml.CRY(p[28],wires=[4,6])
-    qml.CRY(p[29],wires=[4,8])
+    qml.CRY(p[26], wires=[4, 0])
+    qml.CRY(p[27], wires=[4, 2])
+    qml.CRY(p[28], wires=[4, 6])
+    qml.CRY(p[29], wires=[4, 8])
 
-    qml.CRY(p[30],wires=[1,4])
-    qml.CRY(p[31],wires=[3,4])
-    qml.CRY(p[32],wires=[5,4])
-    qml.CRY(p[33],wires=[7,4])
-    
+    qml.CRY(p[30], wires=[1, 4])
+    qml.CRY(p[31], wires=[3, 4])
+    qml.CRY(p[32], wires=[5, 4])
+    qml.CRY(p[33], wires=[7, 4])
+
     return [qml.expval(ob_center), qml.expval(ob_corner), qml.expval(ob_edge)]
 
-fig, ax = qml.draw_mpl(circuit_no_sym)([0]*9,[0]*34)
+
+fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 
 ######################################################################
@@ -577,9 +581,10 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0]*9,[0]*34)
 
 import math
 
+
 def encode_game(game):
     board, res = game
-    x = board * (2*math.pi)/3
+    x = board * (2 * math.pi) / 3
     if res == 1:
         y = [-1, -1, 1]
     elif res == -1:
@@ -587,7 +592,6 @@ def encode_game(game):
     else:
         y = [-1, 1, -1]
     return x, y
-
 
 
 ######################################################################
@@ -602,13 +606,15 @@ from math import log
 def cost_function(params, input, target):
     output = torch.stack([circuit(x, params) for x in input])
     vec = output - target
-    sum_sqr = torch.sum(vec * vec, dim = 1)
+    sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
 
+
 from torch import optim
+
 params = 0.01 * torch.randn(9)
 params.requires_grad = True
-opt = optim.Adam([params], lr = 1e-2)
+opt = optim.Adam([params], lr=1e-2)
 
 import numpy as np
 
@@ -619,12 +625,14 @@ batch_size = 15
 encoded_dataset = list(zip(*[encode_game(game) for game in dataset]))
 encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
 
+
 def accuracy(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
         y_out = torch.stack([circuit(x, p) for x in x_val])
         acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1)) / len(x_val)
         return acc
+
 
 print(f"accuracy without training = {accuracy(params, *encoded_dataset_val)}")
 
@@ -638,13 +646,13 @@ for epoch in range(max_epoch):
     # Shuffled dataset
     x_dataset = x_dataset[rand_idx]
     y_dataset = y_dataset[rand_idx]
-    
-    costs=[]
-    
+
+    costs = []
+
     for step in range(max_step):
-        x_batch = x_dataset[step*batch_size:(step+1)*batch_size]
-        y_batch = y_dataset[step*batch_size:(step+1)*batch_size]
-        
+        x_batch = x_dataset[step * batch_size : (step + 1) * batch_size]
+        y_batch = y_dataset[step * batch_size : (step + 1) * batch_size]
+
         # Following https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
         def opt_func():
             opt.zero_grad()
@@ -652,36 +660,34 @@ for epoch in range(max_epoch):
             costs.append(loss.item())
             loss.backward()
             return loss
-        
+
         opt.step(opt_func)
-    
+
     cost = np.mean(costs)
     saved_costs_sym.append(cost)
-    
+
     if (epoch + 1) % 1 == 0:
         # Compute validation accuracy
         acc_val = accuracy(params, *encoded_dataset_val)
         saved_accs_sym.append(acc_val)
 
         res = [epoch + 1, cost, acc_val]
-        print(
-        "Epoch: {:2d} | Loss: {:3f} | Validation accuracy: {:3f}".format(
-            *res
-        ))
-
+        print("Epoch: {:2d} | Loss: {:3f} | Validation accuracy: {:3f}".format(*res))
 
 
 params = 0.01 * torch.randn(34)
 params.requires_grad = True
-opt = optim.Adam([params], lr = 1e-2)
+opt = optim.Adam([params], lr=1e-2)
 
 # calculate cross entropy for classification problem
+
 
 def cost_function_no_sym(params, input, target):
     output = torch.stack([circuit_no_sym(x, params) for x in input])
     vec = output - target
-    sum_sqr = torch.sum(vec * vec, dim = 1)
+    sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
+
 
 import numpy as np
 
@@ -692,12 +698,14 @@ batch_size = 15
 encoded_dataset = list(zip(*[encode_game(game) for game in dataset]))
 encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
 
+
 def accuracy_no_sym(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
         y_out = torch.stack([circuit_no_sym(x, p) for x in x_val])
         acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1)) / len(x_val)
         return acc
+
 
 print(f"accuracy without training = {accuracy_no_sym(params, *encoded_dataset_val)}")
 
@@ -711,13 +719,13 @@ for epoch in range(max_epoch):
     # Shuffled dataset
     x_dataset = x_dataset[rand_idx]
     y_dataset = y_dataset[rand_idx]
-    
-    costs=[]
-    
+
+    costs = []
+
     for step in range(max_step):
-        x_batch = x_dataset[step*batch_size:(step+1)*batch_size]
-        y_batch = y_dataset[step*batch_size:(step+1)*batch_size]
-        
+        x_batch = x_dataset[step * batch_size : (step + 1) * batch_size]
+        y_batch = y_dataset[step * batch_size : (step + 1) * batch_size]
+
         # Following https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
         def opt_func():
             opt.zero_grad()
@@ -725,29 +733,24 @@ for epoch in range(max_epoch):
             costs.append(loss.item())
             loss.backward()
             return loss
-        
+
         opt.step(opt_func)
-    
+
     cost = np.mean(costs)
     saved_costs.append(costs)
-    
-    
+
     if (epoch + 1) % 1 == 0:
         # Compute validation accuracy
         acc_val = accuracy_no_sym(params, *encoded_dataset_val)
         saved_accs.append(acc_val)
 
         res = [epoch + 1, cost, acc_val]
-        print(
-        "Epoch: {:2d} | Loss: {:3f} | Validation accuracy: {:3f}".format(
-            *res
-        ))
-
+        print("Epoch: {:2d} | Loss: {:3f} | Validation accuracy: {:3f}".format(*res))
 
 
 from matplotlib import pyplot as plt
 
-plt.title("Validation accuracies" )
+plt.title("Validation accuracies")
 plt.style.use("seaborn")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
 plt.plot(saved_accs, "g", label="Standard")
@@ -761,5 +764,3 @@ plt.show()
 ######################################################################
 # This example is inspired by the model used in `Meyer et al. (2022) <https://arxiv.org/abs/2205.06217>`.
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
-
-
