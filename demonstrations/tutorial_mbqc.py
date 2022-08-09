@@ -67,8 +67,9 @@ Measurement-based quantum computation
 # is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator.
 #
 # The distinction between a graph state and a cluster state is that the latter has the additional
-# condition that the underlying graph has to be a lattice. Physically, this means that ...
-# ... require Pauli measurements ... fully disentangle bla bla.
+# condition that the underlying graph has to be a lattice. Physically, this means that TODO ... 
+# - require Pauli measurements 
+# - fully disentangle
 #
 # We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
