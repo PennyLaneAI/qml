@@ -129,9 +129,9 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: pytorch
 
 .. customgalleryitem::
-    :tooltip: Learn how use symmetries to improve training with equivarient learning.
-    :figure: demonstrations/equivarient_learning/D4_sym_thumbnail.png
-    :description: :doc:`demos/tutorial_equivarient_learning`
+    :tooltip: Learn how use symmetries to improve training with equivariant learning.
+    :figure: demonstrations/equivariant_learning/D4_sym_thumbnail.png
+    :description: :doc:`demos/tutorial_equivariant_learning`
     :tags: pytorch
 
 :html:`</div></div><div style='clear:both'>`
@@ -157,4 +157,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
     demos/function_fitting_qsp
-    demos/tutorial_equivarient_learning
+    demos/tutorial_equivariant_learning

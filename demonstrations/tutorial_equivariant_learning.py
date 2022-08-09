@@ -1,6 +1,6 @@
 r"""
 
-Introduction to Equivarient Learning
+Introduction to Equivariant Learning
 ======================================================
 
 .. meta::
@@ -152,7 +152,7 @@ restrict our gates to being unitary representations of the group.
 # a square (vertical, horizontal, and diagonal).
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivarient_learning/NandC_sym.png
+# .. figure:: ../demonstrations/equivariant_learning/NandC_sym.png
 #     :align: center
 #     :width: 70%
 
@@ -225,7 +225,7 @@ restrict our gates to being unitary representations of the group.
 # operation geometrically as the symmtries involved are all
 # permutations. Let's consider the R_x rotation acting on one qubit. Now
 # if it is in the centre then you can flip around any symmetry axis you
-# like, this operation is invarient, so we've identified one equivarient
+# like, this operation is invarient, so we've identified one equivariant
 # gate immediately. If it's on the corners then the flipping will send
 # this qubit rotation to each of the other corners. Similairly if it's on the central
 # edge then it will be sent round the other edges. So we can see that the
