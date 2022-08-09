@@ -123,8 +123,10 @@ print(qml.draw(cluster_state)())
 # ------------------------------------------
 #
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
-# particular, we make use of a protocol called *one-bit teleportation*. Despite its esoteric name, one-bit
-# teleportation is very real and it's one of the driving concepts behind MBQC. Moreover, it has related applications
+# particular, we make use of a protocol called *quantum teleportation*, one of the driving concepts behind MBQC. Despite its esoteric name, quantum
+# teleportation is very real and experimentally demonstrated multiple times in the last few decades 
+# [#Hermans2022]_, [#Furusawa1998]_, [#Riebe2004], [#Nielsen1998].
+# The protocol has been experimentally demonstrated. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
 # rather delusive name because it is not instantaneous but requires communication of additional classical information,
@@ -666,10 +668,32 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#DiVincenzo]
 #
-#    David P. DiVincenzo (2000) *The Physical Implementation of Quantum Computation*,
+#    David P. DiVincenzo. (2000) *The Physical Implementation of Quantum Computation*,
 #    `arXiv <https://arxiv.org/abs/quant-ph/0002077>`__.
 #
-
+# .. [#Furusawa1998]
+#
+#    A. Furusawa, J. L. Sørensen, S. L. Braunstein, C. A. Fuchs,H. J. Kimble, E. S. Polzik. (1998) 
+#    *Unconditional Quantum Teleportation*, `Science Vol 282, Issue 5389 <https://www.science.org/doi/10.1126/science.282.5389.706>`__.
+#
+#
+# .. [#Nielsen1998]
+#
+#   M. A. Nielsen, E. Knill & R. Laflamme. (1998) *Complete quantum teleportation using nuclear 
+#   magnetic resonance* `Nature volume 396, 52–55 <https://www.nature.com/articles/23891>`__.
+#
+# .. [#Hermans2022]
+#
+#    S. L. N. Hermans, M. Pompili, H. K. C. Beukers, S. Baier, J. Borregaard & R. Hanson. (2022) 
+#    *Qubit teleportation between non-neighbouring nodes in a quantum network*  
+#    `Nature 605, 663–668 <https://www.nature.com/articles/s41586-022-04697-y>`__.
+#
+# .. [#Riebe2004]
+#
+#   M. Riebe, H. Häffner, C. F. Roos, W. Hänsel, J. Benhelm, G. P. T. Lancaster, T. W. Körber, 
+#   C. Becher, F. Schmidt-Kaler, D. F. V. James & R. Blatt. (2002) *Deterministic quantum 
+#   teleportation with atoms* `Nature 429, 734-737 <https://www.nature.com/articles/nature02570>`__.
+#
 
 ##############################################################################
 #
