@@ -605,7 +605,7 @@ RHG = SurfaceCode(code_distance)
 # .. container:: alert alert-block alert-info
 # 
 #   **A system that is capable of creating an entangled cluster state and performing adaptive 
-#   arbitrary single-qubit measurements is a universal quantum computer!**
+#   arbitrary single-qubit measurements on it is a universal quantum computer!**
 #
 # In this demo, we assumed that the hardware is capable of performing arbitrary
 # single-qubit measurements. This is not a strict requirement, as one can get the same capabilities
