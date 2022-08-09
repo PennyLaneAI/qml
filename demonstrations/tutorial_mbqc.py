@@ -306,7 +306,8 @@ def RZ(theta, input_state):
 
 ##############################################################################
 #
-# Now he have a gate we can compare to, let's implement an :math:`R_z` gate on an arbitrary state in MBQC formalism
+# Now he have a gate we can compare to, let's implement an :math:`R_z` gate on an arbitrary state 
+# in the MBQC formalism.
 #
 
 mbqc_dev = qml.device("default.qubit", wires=2)
@@ -334,6 +335,14 @@ def RZ_MBQC(theta, input_state):
 ##############################################################################
 #
 # Seems good! As we can see, the resulting states are practically the same as we wanted to show. 
+# Note that we return `*density matrices* <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
+# functions above because we are dealing with a *quantum channel* that includes a measurement on a 
+# subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
+# pure state vectors also known as *kets*. In our specific case, the state on the output qubit is 
+# pure as can be seen by looking at the purity of the reduced density matrix. However, this only holds
+# for special cases and one should use the density matrix formalism to descibe channels that include 
+# mid-circuit measurements.
+#
 # Next, we will prepare a random input state and compare the two approaches.
 #
 
@@ -610,52 +619,52 @@ RHG = SurfaceCode(code_distance)
 #
 #     Robert Raussendorf and Hans J. Briegel (2001) *A One-Way Quantum Computer*,
 #     `Phys. Rev. Lett. 86, 5188
-#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188>`__.
+#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188>`_.
 #
 # .. [#MBQCRealization]
 #
 #     Swapnil Nitin Shah (2021) *Realizations of Measurement Based Quantum Computing*,
-#     `arXiv <https://arxiv.org/pdf/2112.11601.pdf>`__.
+#     `arXiv <https://arxiv.org/pdf/2112.11601.pdf>`_.
 #
 # .. [#XanaduBlueprint]
 #
 #     J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer et al. (2021) *Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer*,
 #     `Quantum 5, 392
-#     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
+#     <https://quantum-journal.org/papers/q-2021-02-04-392/>`_.
 #
 # .. [#XanaduPassiveArchitecture]
 #
 #     Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa,
 #     Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) *Fault-Tolerant Quantum Computation with Static Linear Optics*,
 #     `PRX Quantum, Vol. 2, No. 4
-#     <http://dx.doi.org/10.1103/PRXQuantum.2.040353>`__.
+#     <http://dx.doi.org/10.1103/PRXQuantum.2.040353>`_.
 #
 # .. [#ShorQEC1995]
 #
 #     Peter W. Shor (1995) *Scheme for reducing decoherence in quantum computer memory*,
 #     `Physical Review A, Vol. 52, Iss. 4
-#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.52.R2493>`__.
+#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.52.R2493>`_.
 #
 # .. [#LatticeSurgeryRaussendorf2018]
 #
 #     Daniel Herr, Alexandru Paler, Simon J. Devitt and Franco Nori (2018) *Lattice Surgery on the Raussendorf Lattice*,
 #     `IOP Publishing 3, 3
-#     <https://arxiv.org/abs/1711.04921>`__.
+#     <https://arxiv.org/abs/1711.04921>`_.
 #
 # .. [#FowlerSurfaceCode]
 #
 #     Austin G. Fowler, Matteo Mariantoni, John M. Martinis, Andrew N. Cleland (2012)
-#     *Surface codes: Towards practical large-scale quantum computation*, `arXiv <https://arxiv.org/abs/1208.0928>`__.
+#     *Surface codes: Towards practical large-scale quantum computation*, `arXiv <https://arxiv.org/abs/1208.0928>`_.
 #
 # .. [#GoogleQEC2022]
 #
-#     Google Quantum AI (2022) *Suppressing quantum errors by scaling a surface code logical qubit*, `arXiv <https://arxiv.org/pdf/2207.06431.pdf>`__.
+#     Google Quantum AI (2022) *Suppressing quantum errors by scaling a surface code logical qubit*, `arXiv <https://arxiv.org/pdf/2207.06431.pdf>`_.
 #
 # .. [#CV-MBQC]
 #
 #     Nicolas C. Menicucci, Peter van Loock, Mile Gu, Christian Weedbrook, Timothy C. Ralph, and
 #     Michael A. Nielsen (2006) *Universal Quantum Computation with Continuous-Variable Cluster States*,
-#     `arXiv <https://arxiv.org/abs/quant-ph/0605198>`__.
+#     `arXiv <https://arxiv.org/abs/quant-ph/0605198>`_.
 #
 # .. [#Borealis]
 #
@@ -664,35 +673,35 @@ RHG = SurfaceCode(code_distance)
 #     Adriana E. Lita, Thomas Gerrits, Sae Woo Nam, Varun D. Vaidya, Matteo Menotti, Ish Dhand,
 #     Zachary Vernon, Nicolás Quesada & Jonathan Lavoie (2022) *Quantum computational advantage with a
 #     programmable photonic processor*, `Nature 606, 75-81
-#     <https://www.nature.com/articles/s41586-022-04725-x>`__.
+#     <https://www.nature.com/articles/s41586-022-04725-x>`_.
 #
 # .. [#DiVincenzo]
 #
 #    David P. DiVincenzo. (2000) *The Physical Implementation of Quantum Computation*,
-#    `arXiv <https://arxiv.org/abs/quant-ph/0002077>`__.
+#    `arXiv <https://arxiv.org/abs/quant-ph/0002077>`_.
 #
 # .. [#Furusawa1998]
 #
 #    A. Furusawa, J. L. Sørensen, S. L. Braunstein, C. A. Fuchs,H. J. Kimble, E. S. Polzik. (1998) 
-#    *Unconditional Quantum Teleportation*, `Science Vol 282, Issue 5389 <https://www.science.org/doi/10.1126/science.282.5389.706>`__.
+#    *Unconditional Quantum Teleportation*, `Science Vol 282, Issue 5389 <https://www.science.org/doi/10.1126/science.282.5389.706>`_.
 #
 #
 # .. [#Nielsen1998]
 #
 #   M. A. Nielsen, E. Knill & R. Laflamme. (1998) *Complete quantum teleportation using nuclear 
-#   magnetic resonance* `Nature volume 396, 52–55 <https://www.nature.com/articles/23891>`__.
+#   magnetic resonance* `Nature volume 396, 52–55 <https://www.nature.com/articles/23891>`_.
 #
 # .. [#Hermans2022]
 #
 #    S. L. N. Hermans, M. Pompili, H. K. C. Beukers, S. Baier, J. Borregaard & R. Hanson. (2022) 
 #    *Qubit teleportation between non-neighbouring nodes in a quantum network*  
-#    `Nature 605, 663–668 <https://www.nature.com/articles/s41586-022-04697-y>`__.
+#    `Nature 605, 663–668 <https://www.nature.com/articles/s41586-022-04697-y>`_.
 #
 # .. [#Riebe2004]
 #
 #   M. Riebe, H. Häffner, C. F. Roos, W. Hänsel, J. Benhelm, G. P. T. Lancaster, T. W. Körber, 
 #   C. Becher, F. Schmidt-Kaler, D. F. V. James & R. Blatt. (2002) *Deterministic quantum 
-#   teleportation with atoms* `Nature 429, 734-737 <https://www.nature.com/articles/nature02570>`__.
+#   teleportation with atoms* `Nature 429, 734-737 <https://www.nature.com/articles/nature02570>`_.
 #
 
 ##############################################################################
