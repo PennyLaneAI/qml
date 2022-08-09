@@ -631,9 +631,10 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#XanaduBlueprint]
 #
-#     J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer et al. (2021) *Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer*,
-#     `Quantum 5, 392
-#     <https://quantum-journal.org/papers/q-2021-02-04-392/>`_.
+#   J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer, Ashlesha Patil, Ilan Tzitrin, 
+#   Takaya Matsuura, Daiqin Su, Ben Q. Baragiola, Saikat Guha, Guillaume Dauphinais, Krishna K. 
+#   Sabapathy, Nicolas C. Menicucci, and Ish Dhand (2021) *Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer*,
+#   `Quantum 5, 392 <https://quantum-journal.org/papers/q-2021-02-04-392/>`_.
 #
 # .. [#XanaduPassiveArchitecture]
 #
