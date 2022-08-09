@@ -193,7 +193,7 @@ def one_bit_teleportation(input_state):
 # We then apply the teleportation protocol and see if the resulting density matrix of the output
 # state of the second qubit is the same as the input state of the first qubit.
 
-# Define helper function for random input states
+# Define helper function for random input state on n qubits
 def generate_random_state(n=1):
     input_state = np.random.random(2**n) + 1j * np.random.random(2**n)
     return input_state / np.linalg.norm(input_state)
