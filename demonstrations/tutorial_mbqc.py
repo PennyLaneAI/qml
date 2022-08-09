@@ -287,7 +287,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # To demonstrate that this actually works, we will use PennyLane. For simplicity, we will just 
 # show the ability will to perform single-axis rotations :math:`R_z(\theta)` and 
-# :math:`R_x(\theta)`. Note these two plus the CNOT also constitute also a universal gate set. 
+# :math:`R_x(\theta)`. Note these two operations plus the CNOT also constitute a universal gate set. 
 # To start of, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach.
 
 # Let's implement an :math:`R_z` gate on an arbitrary state for comparison
