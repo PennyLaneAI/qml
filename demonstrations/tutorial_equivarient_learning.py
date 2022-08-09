@@ -299,6 +299,7 @@ restrict our gates to being unitary representations of the group.
 import torch
 import random
 from toolz import unique
+torch.manual_seed(0)
 
 #  create an empty board
 def create_board():
@@ -611,7 +612,7 @@ opt = optim.Adam([params], lr = 1e-2)
 
 import numpy as np
 
-max_epoch = 20
+max_epoch = 10
 max_step = 30
 batch_size = 15
 
@@ -684,7 +685,7 @@ def cost_function_no_sym(params, input, target):
 
 import numpy as np
 
-max_epoch = 20
+max_epoch = 10
 max_step = 30
 batch_size = 15
 
