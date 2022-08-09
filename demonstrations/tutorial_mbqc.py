@@ -607,10 +607,10 @@ RHG = SurfaceCode(code_distance)
 #   **A system that is capable of creating an entangled cluster state and performing adaptive 
 #   arbitrary single-qubit measurements on it is a universal quantum computer!**
 #
-# In this demo, we assumed that the hardware is capable of performing arbitrary
-# single-qubit measurements. This is not a strict requirement, as one can get the same capabilities
-# by sprinkling *magic states* into the cluster state. A discussion of this topic is beyond the 
-# scope of this tutorial, but a good place to start is TODO.
+# In this demo, we assumed that the system is capable of performing arbitrary
+# single-qubit measurements. This is not a strict requirement, as one can acquire the same 
+# capabilities by sprinkling *magic states* into the cluster state. A discussion of this topic is 
+# beyond the scope of this tutorial, but a good place to start is TODO.
 #
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
