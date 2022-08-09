@@ -603,6 +603,7 @@ RHG = SurfaceCode(code_distance)
 # off-line which is often simpler to implement. 
 #
 # .. container:: alert alert-block alert-info
+#   :align: center
 # 
 #   **A system that is capable of creating an entangled cluster state plus performing adaptive 
 #   arbitrary single-qubit measurements is a universal quantum computer!**
