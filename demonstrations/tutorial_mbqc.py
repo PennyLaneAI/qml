@@ -306,7 +306,7 @@ def RZ(theta, input_state):
 
 ##############################################################################
 #
-# Now let's implement an :math:`R_z` gate on an arbitrary state in MBQC formalism
+# Now he have a gate we can compare to, let's implement an :math:`R_z` gate on an arbitrary state in MBQC formalism
 #
 
 mbqc_dev = qml.device("default.qubit", wires=2)
@@ -333,6 +333,7 @@ def RZ_MBQC(theta, input_state):
 
 ##############################################################################
 #
+# Seems good! As we can see, the resulting states are practically the same as we wanted to show. 
 # Next, we will prepare a random input state and compare the two approaches.
 #
 
@@ -344,7 +345,7 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 
 ##############################################################################
 #
-# Now, let's have a look at the :math:`R_x(\theta)` gate.
+# For the :math:`R_x(\theta)` gate we take a similar approach.
 #
 
 dev = qml.device('default.qubit', wires=1)
