@@ -56,7 +56,7 @@ Measurement-based quantum computation
 # associated with qubits and the edges with entanglement between them. The associated quantum state
 # reads as follows
 #
-# .. math::    |\phi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
+# .. math::    |\Phi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
 #
 # where :math:`n` is the number of qubits, :math:`CZ_{ij}` is the controlled-:math:`Z`` gate between
 # qubits :math:`i` and :math:`j`, and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` 
