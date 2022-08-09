@@ -45,6 +45,8 @@ jobs:
     strategy:
       matrix:
         offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
+    env:
+      ignore_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v3
@@ -100,13 +102,14 @@ jobs:
       # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
       - name: Python Cache
         id: python_cache
+        if: env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: venv
           key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
 
       - name: Create venv
-        if: steps.python_cache.outputs.cache-hit != 'true'
+        if: steps.python_cache.outputs.cache-hit != 'true' || env.ignore_cache == 'true'
         run: |
           if [ -d "venv" ]; then rm -rf venv; fi
           python3 -m venv venv
@@ -126,7 +129,7 @@ jobs:
            --verbose
 
       - name: Gallery Cache (on Pull Request)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: demos
@@ -137,7 +140,7 @@ jobs:
 
       # Refreshes cache on 'push' event as that run on 'master' or 'dev'
       - name: Gallery Cache (on Push to default branches)
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: demos
@@ -146,6 +149,7 @@ jobs:
             gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
 
       - name: Sphinx Cache
+        if: steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: sphinx_cache-${{ hashFiles('matrix_info.txt') }}
