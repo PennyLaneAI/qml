@@ -568,7 +568,7 @@ RHG = SurfaceCode(code_distance)
 # figure above on the xy-plane. In principle, any quantum error correction code can be foliated into 
 # a graph state for measurement-based QEC. However, the foliations are particularly nice for *`CSS 
 # codes <https://errorcorrectionzoo.org/c/css>`_*, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
-# :math:`X`-checks *or* :math:`Z`-checks, and include the surface code and colour code families. 
+# :math:`X`-checks *or* :math:`Z`-checks, and include the *surface code* and *colour code* families. 
 # For these CSS codes, you can view the primal and dual sheets as measuring the 
 # :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
 #
