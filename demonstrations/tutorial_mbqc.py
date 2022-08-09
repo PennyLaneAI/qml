@@ -338,10 +338,7 @@ def RZ_MBQC(theta, input_state):
 # Note that we return `*density matrices* <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
 # functions above because we are dealing with a *quantum channel* that includes a measurement on a 
 # subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
-# pure state vectors also known as *kets*. In our specific case, the state on the output qubit is 
-# pure as can be seen by looking at the purity of the reduced density matrix. However, this only holds
-# for special cases and one should use the density matrix formalism to descibe channels that include 
-# mid-circuit measurements.
+# pure state vectors also known as *kets*.
 #
 # Next, we will prepare a random input state and compare the two approaches.
 #
