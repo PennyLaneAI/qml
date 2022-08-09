@@ -84,10 +84,11 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
     
+
 .. customgalleryitem::
     :tooltip: Learn how to simulate a large quantum circuit using a small quantum computer
-    :figure: demonstrations/CutQC/cutqc_logo.PNG
-    :description: :doc:`demos/tutorial_CutQC`
+    :figure: demonstrations/quantum_circuit_cutting/cutqc_logo.PNG
+    :description: :doc:`demos/tutorial_quantum_circuit_cutting`
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -105,5 +106,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_error_mitigation
 	demos/tutorial_sc_qubits
     demos/tutorial_photonics
-    demos/tutorial_CutQC
+    demos/tutorial_quantum_circuit_cutting
     
