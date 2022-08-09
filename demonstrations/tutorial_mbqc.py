@@ -592,19 +592,25 @@ RHG = SurfaceCode(code_distance)
 # Conclusion
 # -------------------------------
 #
-# In this demo, we have learned that a one-way quantum computer capable of cluster state 
-# entanglement together with adaptive arbitrary single-qubit measurements is universal. 
-# The MBQC framework is a powerful quantum computing approach and offers several advantages over
-# the gate-based model and is particularly useful in platforms that allow for many expendable
-# qubits. For example, it circumvents the need for applying in-line entangling gates which are 
-# often the most noisy operations in gate-based quantum computers with trapped-ions or 
-# superconducting circuits.
+# We have learned that a one-way quantum computer capable of cluster state 
+# entanglement together with adaptive arbitrary single-qubit measurements allows for universal 
+# quantum computation. The MBQC framework is a powerful quantum computing approach, particularly 
+# useful in platforms that allow for many expendable qubits, and offers
+# several advantages over the gate-based model. For example, it circumvents the need for applying 
+# in-line entangling gates which are often the most noisy operations in gate-based quantum computers 
+# with trapped-ions or superconducting circuits. Instead, the required entanglement is created 
+# off-line which is often simpler to implement. 
 #
 # .. container:: alert alert-block alert-info
 # 
 #   **A system that is capable of creating an entangled cluster state plus performing adaptive 
 #   arbitrary single-qubit measurements is a universal quantum computer!**
-#   
+#
+# In this demo, we assumed that the hardware is capable of performing arbitrary
+# single-qubit measurements. This is not a strict requirement, as one can get the same capabilities
+# by sprinkling *magic states* into the cluster state. A discussion of this topic is beyond the 
+# scope of this tutorial, but a good place to start is TODO.
+#
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
 # papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. We highly recommend watching `this 
