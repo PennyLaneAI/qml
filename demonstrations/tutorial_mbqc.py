@@ -602,7 +602,8 @@ RHG = SurfaceCode(code_distance)
 #
 # .. container:: alert alert-block alert-info
 # 
-#     **Cluster state entanglement + adaptive arbitrary single-qubit measurements = universal quantum computation**
+#   **A system that is capable of creating an entangled cluster state plus performing adaptive 
+#   arbitrary single-qubit measurements is a universal quantum computer!**
 #   
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
