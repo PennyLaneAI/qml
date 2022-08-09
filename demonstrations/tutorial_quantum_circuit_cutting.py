@@ -1,9 +1,16 @@
 """
-Introduction to Pauli circuit cutting
+Quantum Circuit Cutting
 -------------------------------------
 
 """
 
+##############################################################################
+#.. bio:: Gideon Uchehara, Matija Medvidović, Anuj Apte
+#
+
+######################################################################
+# **Introduction to Pauli circuit cutting**
+# ------------------------------------------------------
 
 ######################################################################
 # Quantum computers are projected to accomplish tasks that are far beyond
