@@ -600,9 +600,10 @@ RHG = SurfaceCode(code_distance)
 # often the most noisy operations in gate-based quantum computers with trapped-ions or 
 # superconducting circuits.
 #
-#
-#   Cluster state entanglement + adaptive arbitrary single-qubit measurements = universal quantum computer
-#
+# .. container:: alert alert-block alert-info
+# 
+#     **Cluster state entanglement + adaptive arbitrary single-qubit measurements = universal quantum computation**
+#   
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
 # papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. On the hardware side,
