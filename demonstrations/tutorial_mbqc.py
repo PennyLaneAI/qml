@@ -7,6 +7,10 @@ Measurement-based quantum computation
     :property="og:description": Learn about measurement-based quantum computation
     :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
 
+.. related::
+
+    tutorial_toric_code Toric code 
+
 *Authors: Joost Bus & Radoica Draškić. Posted: 08 August 2022. Last updated: 08 August 2022.*
 
 """
