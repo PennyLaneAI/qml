@@ -607,8 +607,9 @@ RHG = SurfaceCode(code_distance)
 #   
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
-# papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. On the hardware side,
-# efforts are made to develop the necessary technology. This includes the recent `Borealis
+# papers [#XanaduBlueprint]_ and [#XanaduPassiveArchitecture]_. We highly recommend watching `this 
+# video <https://www.youtube.com/watch?v=SD6TH7GZ1rM&feature=emb_title>`_ outlining the main ideas. 
+# On the hardware side, efforts are made to develop the necessary technology. This includes the recent `Borealis
 # experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where
 # a 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage.
 #
