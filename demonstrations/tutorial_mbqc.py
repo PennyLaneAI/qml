@@ -188,13 +188,13 @@ def one_bit_teleportation(input_state):
 
 ##############################################################################
 #
-# Note that we return `density matrices <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
+# Note that we return a `density matrix <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
 # function above because we are dealing with a *quantum channel* that includes a measurement on a 
-# subset of the qubits. These matrices allow for description of mixed quantum states and are a 
+# subset of the qubits. These matrices allow for description of mixed quantum states and are an
 # extension of pure state vectors. Using this formalism, we can describe operations beyond unitaries
 # such as the teleportation protocol.
 #
-# Now let's prepare a random qubit state and see if the teleportation protocol is working as
+# Now, let's prepare a random qubit state and see if the teleportation protocol is working as
 # expected. To do so, we generate a random complex vector and normalize it to create a valid
 # quantum state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
 # We then apply the teleportation protocol and see if the resulting density matrix of the output
