@@ -18,7 +18,7 @@ jobs:
   compute-build-strategy-matrix:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout PR
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
@@ -45,8 +45,10 @@ jobs:
     strategy:
       matrix:
         offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
+    env:
+      ignore_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
     steps:
-      - name: Checkout PR
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
@@ -100,13 +102,14 @@ jobs:
       # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
       - name: Python Cache
         id: python_cache
+        if: env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: venv
           key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
 
       - name: Create venv
-        if: steps.python_cache.outputs.cache-hit != 'true'
+        if: steps.python_cache.outputs.cache-hit != 'true' || env.ignore_cache == 'true'
         run: |
           if [ -d "venv" ]; then rm -rf venv; fi
           python3 -m venv venv
@@ -126,7 +129,7 @@ jobs:
            --verbose
 
       - name: Gallery Cache (on Pull Request)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: demos
@@ -137,7 +140,7 @@ jobs:
 
       # Refreshes cache on 'push' event as that run on 'master' or 'dev'
       - name: Gallery Cache (on Push to default branches)
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: demos
@@ -146,6 +149,7 @@ jobs:
             gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
 
       - name: Sphinx Cache
+        if: steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
           path: sphinx_cache-${{ hashFiles('matrix_info.txt') }}
@@ -224,23 +228,41 @@ jobs:
 
       # These two steps are required as the subsequent workflow_run will not have
       # the current context available to it.
-      - name: Save PR Number
+      # Will run to create an artifact containing key pull_request event information
+      - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request' && matrix.offset == 0
         run: |
           mkdir -p /tmp/pr
           cat >/tmp/pr/pr_info.json <<EOL
           {
             "id": "${{ github.event.pull_request.number }}",
-            "title": "${{ github.event.pull_request.title }}",
-            "author": "${{ github.event.pull_request.user.login }}",
             "ref": "${{ github.event.pull_request.head.sha }}",
             "ref_name": "${{ github.event.pull_request.head.ref }}"
           }
           EOL
-      - name: Upload PR Number as Artifact
+      - name: Upload Pull Request Event Context as Artifact
         if: github.event_name == 'pull_request' && matrix.offset == 0
         uses: actions/upload-artifact@v3
         with:
           name: pr_info.zip
           path: /tmp/pr
+          retention-days: 30
+
+      # Will run to create an artifact containing key push event information
+      - name: Save Push Event Context
+        if: github.event_name == 'push' && matrix.offset == 0
+        run: |
+          mkdir -p /tmp/push
+          cat >/tmp/push/push_info.json <<EOL
+          {
+            "ref": "${{ github.sha }}",
+            "ref_name": "${{ github.ref_name }}"
+          }
+          EOL
+      - name: Upload Push Event Context as Artifact
+        if: github.event_name == 'push' && matrix.offset == 0
+        uses: actions/upload-artifact@v3
+        with:
+          name: push_info.zip
+          path: /tmp/push
           retention-days: 30
