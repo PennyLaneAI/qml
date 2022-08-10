@@ -188,6 +188,11 @@ def one_bit_teleportation(input_state):
 
 ##############################################################################
 #
+# Note that we return `density matrices <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
+# functions above because we are dealing with a *quantum channel* that includes a measurement on a 
+# subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
+# pure state vectors also known as *kets*.
+#
 # Now let's prepare a random qubit state and see if the teleportation protocol is working as
 # expected. To do so, we generate a random complex vector and normalize it to create a valid
 # quantum state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
@@ -310,11 +315,6 @@ def RZ(theta, input_state):
     return qml.density_matrix(wires=[0])
 
 ##############################################################################
-#
-# Note that we return `density matrices <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
-# functions above because we are dealing with a *quantum channel* that includes a measurement on a 
-# subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
-# pure state vectors also known as *kets*.
 #
 # Now he have a base case, let's implement an :math:`R_z` gate on an arbitrary state 
 # in the MBQC formalism and compare it.
