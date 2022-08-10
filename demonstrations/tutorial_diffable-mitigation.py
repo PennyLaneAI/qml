@@ -95,10 +95,11 @@ qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 scale_factors = [1.0, 2.0, 3.0]
 
-qnode_mitigated = mitigate_with_zne(scale_factors = scale_factors, 
-                                    folding = qml.transforms.fold_global, 
-                                    extrapolate = qml.transforms.richardson_extrapolate
-                                    )(qnode_noisy)
+qnode_mitigated = mitigate_with_zne(
+    scale_factors=scale_factors,
+    folding=qml.transforms.fold_global,
+    extrapolate=qml.transforms.richardson_extrapolate,
+)(qnode_noisy)
 
 print("Ideal qnode: ", qnode_ideal(w1, w2))
 print("Mitigated qnode: ", qnode_mitigated(w1, w2))
@@ -107,7 +108,7 @@ print("Noisy qnode: ", qnode_noisy(w1, w2))
 ##############################################################################
 # The transforms provided for the ``folding`` and ``extrapolate`` arguments can be treated as default black boxes for the moment.
 # We will explain them in more detail in the following section.
-# 
+#
 # The cool thing about this new mitigated QNode is that it is still differentiable! That is, we can compute its gradient as usual:
 
 grad = qml.grad(qnode_mitigated)
@@ -130,14 +131,14 @@ print(grad(w1, w2))
 #
 # The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^{⚡}` for different scale factors,
 # and then extrapolate to :math:`\lambda \rightarrow 0`. Note that ``scale_factor=1`` corresponds to the original circuit, i.e. the noisy execution.
-# 
+#
 
 scale_factors = [1, 2, 3]
 folded_res = [qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors]
 
 ideal_res = qnode_ideal(w1, w2)
 
-# coefficients are ordered like 
+# coefficients are ordered like
 # coeffs[0] * x**2 + coeffs[1] * x + coeffs[0]
 # i.e. fitted_func(0)=coeff[-1]
 coeffs = np.polyfit(scale_factors, folded_res, 2)
@@ -161,7 +162,7 @@ plt.show()
 # limited from above by the noise as the noisy quantum function quickly decoheres under this folding. Therefore, one typically only uses ``scale_factors = [1, 2, 3]``, but you
 # can in principle think of more fine grained folding schemes and test them by providing custom folding operations, see details in :func:`~.pennylane.transforms.mitigate_with_zne`.
 #
-# Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy way to describe a polynomial fit of ``order = len(x) - 1``. Alternatively, 
+# Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy way to describe a polynomial fit of ``order = len(x) - 1``. Alternatively,
 # you can use :func:`~.pennylane.transforms.poly_extrapolate` and manually pass the order via a keyword argument ``extrapolate_kwargs={'order': 2}``.
 #
 # Differentiable mitigation in a variational quantum algorithm
@@ -213,7 +214,7 @@ plt.show()
 ##############################################################################
 #
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
-# executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way 
+# executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way
 # as described in the interfaces section of the documentation :doc:`introduction/interfaces`.
 #
 # Differentiating the mitigation transform itself
@@ -238,11 +239,11 @@ plt.show()
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device.
 #
 # Obtaining the gradient with respect to this parameter is difficult. There are formal and practical obstacles:
-# Formally, writing down the derivative of this transform with respect to the idle time in order to derive its parameter-shift 
+# Formally, writing down the derivative of this transform with respect to the idle time in order to derive its parameter-shift
 # rules would require access to the noise model.
 # This, on the other hand, is very difficult for a realistic scenario. Further, most mitigation parameters are integers and would have
 # to be smoothed in a differentiable way. A simple but effective strategy is using finite differences for the gradient with respect to mitigation parameters.
-# 
+#
 # Overall, this is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact to the simulation result.
 # It is therefore desirable to be able to optimize this parameter at the same time as we perform a variational quantum algorithm.
 #
@@ -263,7 +264,7 @@ plt.show()
 #     `arXiv:2112.05821 <https://arxiv.org/abs/2112.05821>`__, 2021.
 
 ##############################################################################
-#.. bio:: Korbinian Kottmann
+# .. bio:: Korbinian Kottmann
 #    :photo: ../static/qottmann.jpg
 #
 #    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
