@@ -311,7 +311,7 @@ def RZ(theta, input_state):
 
 ##############################################################################
 #
-# Note that we return `*density matrices* <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
+# Note that we return `density matrices <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
 # functions above because we are dealing with a *quantum channel* that includes a measurement on a 
 # subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
 # pure state vectors also known as *kets*.
