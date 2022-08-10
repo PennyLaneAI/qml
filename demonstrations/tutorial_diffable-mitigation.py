@@ -23,9 +23,11 @@ Most variational quantum algorithms (VQAs) are concerned with optimizing a `quan
 .. math:: f(\theta) = \langle 0 | U^\dagger(\theta) H U(\theta) | 0 \rangle
 
 for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H`. These algorithms are specifically designed
-to be executed on noisy hardware. This means that naturally we do not have direct access to :math:`f`, but rather a noisy version
-:math:`f^{⚡}(\theta) := \text{tr}\left[H \Phi(\rho(\theta)) \right]` where :math:`\Phi(\bullet)` is a noise channel and
-:math:`\rho(\theta) = U^\dagger(\theta)|0\rangle \langle 0|U(\theta)` the variational state.
+to be executed on noisy hardware. This means that naturally we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
+:math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|)`. Since noisy channels generally
+yield mixed states, we can formally write 
+
+.. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
 To be able to get the most out of these devices, it is advisable to use quantum error mitigation --- a method of
 altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
@@ -39,12 +41,12 @@ PennyLane now provides one such differentiable quantum error mitigation techniqu
 Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
 We will briefly introduce these new functionalities and afterwards go more in depth to explore what happens under the hood.
 
-We start by initializing a noisy device under the ``qml.DepolarizingChannel``:
+We start by initializing a noisy device under the :func:`~.pennylane.DepolarizingChannel`:
 """
 
 import pennylane as qml
 import pennylane.numpy as np
-from pennylane.transforms import mitigate_with_zne, fold_global, richardson_extrapolate
+from pennylane.transforms import mitigate_with_zne
 
 from matplotlib import pyplot as plt
 
@@ -71,7 +73,7 @@ H = qml.Hamiltonian(coeffs, observables)
 
 ##############################################################################
 # The quantum function can then be executed on the noisy or ideal device
-# by creating individual QNodes:
+# by creating individual QNodes. Here we use a :class:`~.pennylane.SimplifiedTwoDesign` with all-constant parameters set to ``1``:
 
 n_layers = 2
 
@@ -88,18 +90,24 @@ qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 ##############################################################################
-# We can then simply transform the noisy qnode :math:`f^{⚡}` with :func:`~.pennylane.mitigate_with_zne` to generate :math:`\tilde{f}`.
+# We can then simply transform the noisy qnode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}`.
 # If everything goes as planned, executing the mitigated ``qnode`` is then closer to the ideal result:
 
 scale_factors = [1.0, 2.0, 3.0]
 
-qnode_mitigated = mitigate_with_zne(scale_factors, fold_global, richardson_extrapolate)(qnode_noisy)
+qnode_mitigated = mitigate_with_zne(scale_factors = scale_factors, 
+                                    folding = qml.transforms.fold_global, 
+                                    extrapolate = qml.transforms.richardson_extrapolate
+                                    )(qnode_noisy)
 
 print("Ideal qnode: ", qnode_ideal(w1, w2))
 print("Mitigated qnode: ", qnode_mitigated(w1, w2))
 print("Noisy qnode: ", qnode_noisy(w1, w2))
 
 ##############################################################################
+# The transforms provided for the ``folding`` and ``extrapolate`` arguments can be treated as default black boxes for the moment.
+# We will explain them in more detail in the following section.
+# 
 # The cool thing about this new mitigated QNode is that it is still differentiable! That is, we can compute its gradient as usual:
 
 grad = qml.grad(qnode_mitigated)
@@ -124,12 +132,14 @@ print(grad(w1, w2))
 # and then extrapolate to :math:`\lambda \rightarrow 0`. Note that ``scale_factor=1`` corresponds to the original circuit, i.e. the noisy execution.
 # 
 
-scale_factors = [1.0, 2.0, 3.0]
+scale_factors = [1, 2, 3]
 folded_res = [qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors]
 
 ideal_res = qnode_ideal(w1, w2)
 
-# coefficients are ordered like coeffs[0] * x**2 + coeffs[1] * x + coeffs[0], i.e. fitted_func(0)=coeff[-1]
+# coefficients are ordered like 
+# coeffs[0] * x**2 + coeffs[1] * x + coeffs[0]
+# i.e. fitted_func(0)=coeff[-1]
 coeffs = np.polyfit(scale_factors, folded_res, 2)
 zne_res = coeffs[-1]
 
@@ -151,6 +161,8 @@ plt.show()
 # limited from above by the noise as the noisy quantum function quickly decoheres under this folding. Therefore, one typically only uses ``scale_factors = [1, 2, 3]``, but you
 # can in principle think of more fine grained folding schemes and test them by providing custom folding operations, see details in :func:`~.pennylane.transforms.mitigate_with_zne`.
 #
+# Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy way to describe a polynomial fit of ``order = len(x) - 1``. Alternatively, 
+# you can use :func:`~.pennylane.transforms.poly_extrapolate` and manually pass the order via a keyword argument ``extrapolate_kwargs={'order': 2}``.
 #
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
@@ -252,6 +264,6 @@ plt.show()
 
 ##############################################################################
 #.. bio:: Korbinian Kottmann
-#    :photo: demonstrations/diffable-mitigation/qottmann.jpg
+#    :photo: ../static/qottmann.jpg
 #
 #    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
