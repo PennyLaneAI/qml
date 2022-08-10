@@ -233,7 +233,7 @@ jobs:
         if: github.event_name == 'pull_request' && matrix.offset == 0
         run: |
           mkdir -p /tmp/pr
-          cat >/tmp/pr/info.json <<EOL
+          cat >/tmp/pr/pr_info.json <<EOL
           {
             "id": "${{ github.event.pull_request.number }}",
             "ref": "${{ github.event.pull_request.head.sha }}",
@@ -253,7 +253,7 @@ jobs:
         if: github.event_name == 'push' && matrix.offset == 0
         run: |
           mkdir -p /tmp/push
-          cat >/tmp/push/info.json <<EOL
+          cat >/tmp/push/push_info.json <<EOL
           {
             "ref": "${{ github.sha }}",
             "ref_name": "${{ github.ref_name }}"

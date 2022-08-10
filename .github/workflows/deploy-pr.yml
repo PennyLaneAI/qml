@@ -11,14 +11,23 @@ jobs:
     runs-on: ubuntu-20.04
     if: github.event.workflow_run.conclusion == 'success'
     steps:
+      - name: Set Build Context File Prefix
+        id: build_context_file_prefix
+        run: |
+          if [[ "${{ github.event.workflow_run.event }}" == "pull_request" ]]; then
+            echo "build_context_prefix=pr" >> $GITHUB_ENV
+          elif [[ "${{ github.event.workflow_run.event }}" == "push" ]]; then
+            echo "build_context_prefix=push" >> $GITHUB_ENV
+          fi
+
       - name: Download Build Context
         id: build_context
         uses: actions/github-script@v6
         with:
           result-encoding: string
           script: |
-            const workflowRunEventType = "${{ github.event.workflow_run.event }}"
-            const workflowContextFileName = workflowRunEventType === "pull_request" ? "pr_info.zip" : "push_info.zip"
+            const workflowContextFilePrefix = process.env.build_context_prefix;
+            const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
             let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -47,7 +56,8 @@ jobs:
         with:
           script: |
             let fs = require('fs');
-            const buildData = fs.readFileSync('info.json');
+            const workflowContextFilePrefix = process.env.build_context_prefix;
+            const buildData = fs.readFileSync(`${workflowContextFilePrefix}_info.json`);
             return JSON.parse(buildData);
 
       - name: Parse Pull Request Event Information
