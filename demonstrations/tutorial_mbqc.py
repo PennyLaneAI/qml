@@ -311,8 +311,13 @@ def RZ(theta, input_state):
 
 ##############################################################################
 #
-# Now he have a gate we can compare to, let's implement an :math:`R_z` gate on an arbitrary state 
-# in the MBQC formalism.
+# Note that we return `*density matrices* <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
+# functions above because we are dealing with a *quantum channel* that includes a measurement on a 
+# subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
+# pure state vectors also known as *kets*.
+#
+# Now he have a base case, let's implement an :math:`R_z` gate on an arbitrary state 
+# in the MBQC formalism and compare it.
 #
 
 mbqc_dev = qml.device("default.qubit", wires=2)
@@ -337,22 +342,17 @@ def RZ_MBQC(theta, input_state):
     # Return the density matrix of the output state
     return qml.density_matrix(wires=[1])
 
-##############################################################################
-#
-# Seems good! As we can see, the resulting states are practically the same as we wanted to show. 
-# Note that we return `*density matrices* <https://en.wikipedia.org/wiki/Density_matrix>`_ in the 
-# functions above because we are dealing with a *quantum channel* that includes a measurement on a 
-# subset of the qubits. These matrices allow for operations beyond unitaries and are a extension of 
-# pure state vectors also known as *kets*.
-#
-# Next, we will prepare a random input state and compare the two approaches.
-#
-
 # Generate a random input state
 input_state = generate_random_state()
 theta = 2 * np.pi * np.random.random()
 
 np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
+
+##############################################################################
+#
+# Seems good! As we can see, the resulting states are practically the same as we wanted to show. 
+# Next, we will prepare a random input state and compare the two approaches.
+#
 
 ##############################################################################
 #
