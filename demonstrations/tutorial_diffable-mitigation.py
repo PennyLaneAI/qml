@@ -111,8 +111,9 @@ print("Noisy qnode: ", qnode_noisy(w1, w2))
 #
 # The cool thing about this new mitigated QNode is that it is still differentiable! That is, we can compute its gradient as usual:
 
-grad = qml.grad(qnode_mitigated)
-print(grad(w1, w2))
+grad = qml.grad(qnode_mitigated)(w1, w2)
+print(grad[0])
+print(grad[1])
 
 
 ##############################################################################
