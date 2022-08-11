@@ -1,139 +1,123 @@
-"""
+""".. _cutting:
 Quantum Circuit Cutting
--------------------------------------
+=======================
+
+
+.. meta::
+    :property="og:description": Investigating why this demo won't work
+
+*Author: Joe Mama*
+
+**Introduction to Pauli circuit cutting**
+------------------------------------------------------
+
+Quantum computers are projected to accomplish tasks that are far beyond
+the reach of classical computers. However, today’s quantum computers do
+not have the sufficient amount of qubits required to achieve this feat,
+since they are limited by decoherence and low fidelity. This means that
+we cannot run large quantum circuits on existing quantum computers
+without significant errors in our results. An alternative approach is to
+simulate a quantum computer, but this requires exponentially more memory
+and runtime as the number of qubits increases. This is the reason it is
+intractable to simulate an ideal quantum computer classically.
+
+To run a quantum circuit that is larger than current small quantum
+computers and intractable to simulate with classical computers, we need
+to cut the it into smaller subcircuits. To do this, we need to make many
+measurements for the different subcircuits using our small quantum
+computer and then recombine the outcomes of our measurements using a
+classical computer. But the good news is that we can at least run our
+large quantum circuit using our small quantum computer with negligible
+errors.
+
+In this demo, we will first introduce the theory behind quantum circuit
+cutting based on Pauli measurements and see how it implemented in
+PennyLane. This method was first introduced in the paper `“Simulating
+Large Quantum Circuits on a Small Quantum
+Computer” <https://arxiv.org/abs/1904.00102>`__ by Peng et al. (2019).
+Thereafter, we discuss the theoretical basis on randomized circuit
+cutting with two-designs and demonstrate the resulting improvement in
+performance compared to Pauli measurement based circuit cutting for an
+instance of Quantum Approximate Optimization Algorithm (QAOA).
+
+The main idea behind the algorithm that allows you to simulate large
+quantum circuits on a small quantum computer is called *quantum circuit
+cutting*.
+
+A quantum circuit cutting algorithm takes a large quantum circuit,
+decomposes it into smaller subcircuits that can be executed on a smaller
+quantum device. The results from executing the smaller subcircuits are
+then recombined through some classical post-processing to obtain the
+original result of the large quantum circuit. The PennyLane function
+that implements this algorithm is called ``pennylane.cut_circuit``.
+Before we delve into PennyLane and work through some examples, let’s
+introduce the theory behind the Pauli circuit cutting method.
+
+**Background: Understanding the Pauli cutting method**
+------------------------------------------------------
+
+**Circuit Cutting**
+~~~~~~~~~~~~~~~~~~~
+
+Consider a :math:`2`-level quantum system in an arbitrary state, with a
+density matrix :math:`\rho`. :math:`\rho` can be expressed as a linear
+combination of the Pauli matrices as shown below.
+
+:raw-latex:`\begin{equation}
+\begin{split}
+\rho &= \frac{1}{2}\sum_{i=1}^{8} c_i Tr(\rho O_i)\rho_i
+\end{split}
+\end{equation}`
+
+Here, we have denoted Pauli matrices by :math:`O_i`, their
+eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
+:math:`c_i`. In the above equation, :math:`O_1 = O_2 = I`,
+:math:`O_3 = O_4 = X`, :math:`O_5 = O_6 = Y` and :math:`O_7 = O_8 = X`.
+Also,
+:math:`\rho_1 = \rho_7=\left | {0} \right\rangle \left\langle {0} \right |`,
+:math:`\rho_2 = \rho_8 = \left | {1} \right\rangle \left\langle {1} \right |`,
+:math:`\rho_3 = \left | {+} \right\rangle \left\langle {+} \right |`,
+:math:`\rho_4 = \left | {-} \right\rangle \left\langle {-} \right |`,
+:math:`\rho_5 = \left | {+i} \right\rangle \left\langle {+i} \right |`,
+:math:`\rho_6 = \left | {-i} \right\rangle \left\langle {-i} \right |`
+and :math:`c_i = \pm 1`.
+
+To implement the above equation, each term :math:`Tr(\rho O_i)\rho_i` in
+the equation is broken into two parts. The first part which corresponds
+to the the ``MeasureNode``, :math:`Tr(\rho O_i)` involves measuring the
+expectation value of :math:`O_i` for the first fragment
+(subcircuit-:math:`u`) of the state :math:`\rho`. The second part which
+corresponds to the ``PrepareNode``, :math:`\rho_i` involves preparing
+the corresponding eigenstate :math:`\rho_i` for the second fragment
+(subcircuit-:math:`v`) of the state :math:`\rho`.
+
+In general, if we picture the time evolution of a qubit state from time
+:math:`u` to time :math:`v` as a line between point :math:`u` and point
+:math:`v`, if we cut this line at some point, we can recover the qubit
+state at point :math:`v` using the above equation, as shown in figure 1.
+
+This means that we only have to do four measurements
+:math:`\left(Tr(\rho I), Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
+subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
+states: :math:`\left | {0} \right\rangle`,
+:math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
+:math:`\left | {+i} \right\rangle`. The other two nontrivial expectation
+values for states :math:`\left | {-} \right\rangle` and
+:math:`\left | {- i} \right\rangle` can be derived with classical
+postrocessing.
+
+Figure 1. The Pauli circuit cutting method for 1-qubit circuit. The
+first half of the cut circuit on the left (subcircuit-u) is the part
+with ``MeasureNode``. The second half of the cut circuit on the right
+(subcircuit-v) is the part with ``PrepareNode``
+
+**Pennylane Implementation of the Pauli cutting method**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let’s go through the steps involved in ``qcut`` implementation in
+Pennylane using the circuit below.
+
 """
-
-##############################################################################
-# .. bio:: Gideon Uchehara, Matija Medvidović, Anuj Apte
-#
-
-######################################################################
-# **Introduction to Pauli circuit cutting**
-# ------------------------------------------------------
-
-######################################################################
-# Quantum computers are projected to accomplish tasks that are far beyond
-# the reach of classical computers. However, today’s quantum computers do
-# not have the sufficient amount of qubits required to achieve this feat,
-# since they are limited by decoherence and low fidelity. This means that
-# we cannot run large quantum circuits on existing quantum computers
-# without significant errors in our results. An alternative approach is to
-# simulate a quantum computer, but this requires exponentially more memory
-# and runtime as the number of qubits increases. This is the reason it is
-# intractable to simulate an ideal quantum computer classically.
-#
-# To run a quantum circuit that is larger than current small quantum
-# computers and intractable to simulate with classical computers, we need
-# to cut the it into smaller subcircuits. To do this, we need to make many
-# measurements for the different subcircuits using our small quantum
-# computer and then recombine the outcomes of our measurements using a
-# classical computer. But the good news is that we can at least run our
-# large quantum circuit using our small quantum computer with negligible
-# errors.
-#
-# In this demo, we will first introduce the theory behind quantum circuit
-# cutting based on Pauli measurements and see how it implemented in
-# PennyLane. This method was first introduced in the paper `“Simulating
-# Large Quantum Circuits on a Small Quantum
-# Computer” <https://arxiv.org/abs/1904.00102>`__ by Peng et al. (2019).
-# Thereafter, we discuss the theoretical basis on randomized circuit
-# cutting with two-designs and demonstrate the resulting improvement in
-# performance compared to Pauli measurement based circuit cutting for an
-# instance of Quantum Approximate Optimization Algorithm (QAOA).
-#
-
-
-######################################################################
-# The main idea behind the algorithm that allows you to simulate large
-# quantum circuits on a small quantum computer is called *quantum circuit
-# cutting*.
-#
-# A quantum circuit cutting algorithm takes a large quantum circuit,
-# decomposes it into smaller subcircuits that can be executed on a smaller
-# quantum device. The results from executing the smaller subcircuits are
-# then recombined through some classical post-processing to obtain the
-# original result of the large quantum circuit. The PennyLane function
-# that implements this algorithm is called ``pennylane.cut_circuit``.
-# Before we delve into PennyLane and work through some examples, let’s
-# introduce the theory behind the Pauli circuit cutting method.
-#
-
-
-######################################################################
-# **Background: Understanding the Pauli cutting method**
-# ------------------------------------------------------
-#
-
-
-######################################################################
-# **Circuit Cutting**
-# ~~~~~~~~~~~~~~~~~~~
-#
-# Consider a :math:`2`-level quantum system in an arbitrary state, with a
-# density matrix :math:`\rho`. :math:`\rho` can be expressed as a linear
-# combination of the Pauli matrices as shown below.
-#
-# :raw-latex:`\begin{equation}
-# \begin{split}
-# \rho &= \frac{1}{2}\sum_{i=1}^{8} c_i Tr(\rho O_i)\rho_i
-# \end{split}
-# \end{equation}`
-#
-# Here, we have denoted Pauli matrices by :math:`O_i`, their
-# eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
-# :math:`c_i`. In the above equation, :math:`O_1 = O_2 = I`,
-# :math:`O_3 = O_4 = X`, :math:`O_5 = O_6 = Y` and :math:`O_7 = O_8 = X`.
-# Also,
-# :math:`\rho_1 = \rho_7=\left | {0} \right\rangle \left\langle {0} \right |`,
-# :math:`\rho_2 = \rho_8 = \left | {1} \right\rangle \left\langle {1} \right |`,
-# :math:`\rho_3 = \left | {+} \right\rangle \left\langle {+} \right |`,
-# :math:`\rho_4 = \left | {-} \right\rangle \left\langle {-} \right |`,
-# :math:`\rho_5 = \left | {+i} \right\rangle \left\langle {+i} \right |`,
-# :math:`\rho_6 = \left | {-i} \right\rangle \left\langle {-i} \right |`
-# and :math:`c_i = \pm 1`.
-#
-# To implement the above equation, each term :math:`Tr(\rho O_i)\rho_i` in
-# the equation is broken into two parts. The first part which corresponds
-# to the the ``MeasureNode``, :math:`Tr(\rho O_i)` involves measuring the
-# expectation value of :math:`O_i` for the first fragment
-# (subcircuit-:math:`u`) of the state :math:`\rho`. The second part which
-# corresponds to the ``PrepareNode``, :math:`\rho_i` involves preparing
-# the corresponding eigenstate :math:`\rho_i` for the second fragment
-# (subcircuit-:math:`v`) of the state :math:`\rho`.
-#
-# In general, if we picture the time evolution of a qubit state from time
-# :math:`u` to time :math:`v` as a line between point :math:`u` and point
-# :math:`v`, if we cut this line at some point, we can recover the qubit
-# state at point :math:`v` using the above equation, as shown in figure 1.
-#
-
-
-######################################################################
-# This means that we only have to do four measurements
-# :math:`\left(Tr(\rho I), Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
-# subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
-# states: :math:`\left | {0} \right\rangle`,
-# :math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
-# :math:`\left | {+i} \right\rangle`. The other two nontrivial expectation
-# values for states :math:`\left | {-} \right\rangle` and
-# :math:`\left | {- i} \right\rangle` can be derived with classical
-# postrocessing.
-#
-# Figure 1. The Pauli circuit cutting method for 1-qubit circuit. The
-# first half of the cut circuit on the left (subcircuit-u) is the part
-# with ``MeasureNode``. The second half of the cut circuit on the right
-# (subcircuit-v) is the part with ``PrepareNode``
-#
-#
-
-
-######################################################################
-# **Pennylane Implementation of the Pauli cutting method**
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Let’s go through the steps involved in ``qcut`` implementation in
-# Pennylane using the circuit below.
-#
 
 # Import the relevant libraries
 import pennylane as qml
