@@ -168,7 +168,7 @@ plt.show()
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
 #
-# We now use mitigation while we optimize the parameters our variational circuit to obtain the ground state of the Hamiltonian. We compare VQE optimization runs for
+# We now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian. We compare VQE optimization runs for
 # the ideal, noisy and mitigated QNodes and see that the mitigated one comes close to the ideal results, whereas the noisy execution is further off.
 
 
