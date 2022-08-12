@@ -91,10 +91,11 @@ such as benchmarking and characterizing quantum processors.
     :tags: errorcorrection
     
 .. customgalleryitem::
-    :tooltip: Learn how to simulate a large quantum circuit using a small quantum computer
+    :tooltip: Learn how to simulate a large quantum circuits with smaller ones
     :figure: demonstrations/quantum_circuit_cutting/cutqc_logo.png
     :description: :doc:`demos/tutorial_quantum_circuit_cutting`
     :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
