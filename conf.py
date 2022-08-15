@@ -108,7 +108,7 @@ warnings.filterwarnings(
 )
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates", "xanadu_theme"]
+templates_path = ["xanadu_theme"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -129,7 +129,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "venv"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*venv"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -157,7 +157,7 @@ html_theme_options = {
     # "homepage": "index.html",
     # Set the name of the project to appear in the left sidebar.
     "project_nav_name": "Quantum Machine Learning",
-    "project_logo": "_static/pennylane.png",
+    "project_logo": "_static/pennylane.svg",
     "touch_icon": "_static/xanadu.png",
     "touch_icon_small": "_static/xanadu_small.png",
     "large_toc": True,
@@ -189,7 +189,7 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-html_sidebars = {"**": ["logo-text.html", "searchbox.html", "localtoc.html"]}
+html_sidebars = {"**": ["logo-text.html", "localtoc.html"]}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
