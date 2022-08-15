@@ -5,7 +5,7 @@ Quantum Circuit Cutting
 .. meta:: 
     :property="og:description": insert cool description here 
 
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte
+*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*
 
 Introduction to Pauli circuit cutting
 -------------------------------------
