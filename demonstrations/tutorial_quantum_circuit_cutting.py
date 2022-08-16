@@ -55,15 +55,12 @@ introduce the theory behind the Pauli circuit cutting method.
 Background: Understanding the Pauli cutting method
 --------------------------------------------------
 
-Circuit Cutting
-~~~~~~~~~~~~~~~
-
 Consider a :math:`2`-level quantum system in an arbitrary state, with a
 density matrix :math:`\rho`. :math:`\rho` can be expressed as a linear
 combination of the Pauli matrices as shown below.
 
 .. math::
-    \rho &= \frac{1}{2}\sum_{i=1}^{8} c_i Tr(\rho O_i)\rho_i
+    \rho = \frac{1}{2}\sum_{i=1}^{8} c_i Tr(\rho O_i)\rho_i
 
 Here, we have denoted Pauli matrices by :math:`O_i`, their
 eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
@@ -92,8 +89,8 @@ In general, if we picture the time evolution of a qubit state from time
 :math:`v`, if we cut this line at some point, we can recover the qubit
 state at point :math:`v` using the above equation, as shown in figure 1.
 
-This means that we only have to do four measurements
-:math:`\left(Tr(\rho I), Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
+This means that we only have to do three measurements
+:math:`Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
 subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
 states: :math:`\left | {0} \right\rangle`,
 :math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
@@ -102,7 +99,7 @@ values for states :math:`\left | {-} \right\rangle` and
 :math:`\left | {- i} \right\rangle` can be derived with classical
 postrocessing.
 
-.. figure:: ../demonstrations/quantum_circuit_cutting/1Qubit-circuit-cutting.png
+.. figure:: ../demonstrations/quantum_circuit_cutting/1Qubit-Circuit-Cutting.png
     :align: center
     :width: 80%
 
@@ -111,7 +108,6 @@ postrocessing.
     with ``MeasureNode``. The second half of the cut circuit on the right
     (subcircuit-v) is the part with ``PrepareNode``
 
-Pennylane Implementation of the Pauli cutting method
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let’s go through the steps involved in ``qcut`` implementation in
@@ -185,7 +181,7 @@ fig, ax = qml.draw_mpl(circuit)(x)  # Drawing circuit
 # above figure shows where we have chosen to cut. Cutting in this position
 # gives two subcircuits with 2 qubits each.
 #
-# Next, we have to apply Pennylane’s ``qml.cut_circuit`` operation as a
+# Next, we have to apply ``qml.cut_circuit`` operation as a
 # decorator to the ``circuit`` function. Under the hood, executing
 # ``circuit`` runs multiple configurations of the 2-qubit subcircuits
 # which are then postprocessed to give the result of the original circuit
