@@ -147,8 +147,13 @@ rng = np.random.default_rng(seed=seed)
 # Breaking down the layers:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
+<<<<<<< HEAD
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
+=======
+# The convolutional layer requires the weights of the two-qubit unitary as input. These weights are
+# to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
+>>>>>>> origin/demo-fewdata
 # with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
 # parametrized by one parameter), and end with two additional ``qml.U3`` gates in each of the two
@@ -250,7 +255,6 @@ def conv_net(weights, last_layer_weights, features):
 # In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
 # These are 8 by 8 pixel arrays of hand-written digits as shown below.
 
-digits = datasets.load_digits();
 digits = datasets.load_digits()
 images, labels = digits.data, digits.target
 
