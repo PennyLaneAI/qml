@@ -249,7 +249,6 @@ def conv_net(weights, last_layer_weights, features):
 # In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
 # These are 8 by 8 pixel arrays of hand-written digits as shown below.
 
-digits = datasets.load_digits();
 digits = datasets.load_digits()
 images, labels = digits.data, digits.target
 
