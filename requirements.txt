@@ -5,7 +5,7 @@ numpy~=1.21
 numba==0.53.1
 networkx==2.5.1
 nlopt==2.6.2
-semantic_version==2.6
+semantic_version==2.10
 strawberryfields==0.22
 sympy==1.6.2
 pillow==9.0.1
@@ -17,7 +17,7 @@ cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
 pennylane-lightning
-pennylane==0.24.0
+pennylane==0.25.0
 pennylane-sf==0.20.1
 pennylane-cirq==0.24.0
 pennylane-qiskit==0.24.0
@@ -47,3 +47,4 @@ jax==0.3.14
 jaxlib==0.3.14
 neural-tangents==0.6.0
 optax==0.1.3
+
