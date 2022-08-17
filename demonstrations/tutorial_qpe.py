@@ -50,7 +50,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # to a global quantum phase. Importantly, the acquired phase is not
 # random, for each eigenstate it is related to its energy in a known way.
 # 
-# energies might look like. Suppose we have the ground state of some
+# Then, suppose we have the ground state of some
 # system at our disposal — then, we can just let it evolve for some known
 # time :math:`t`, measure the accumulated phase
 # :math:`\varphi_0 = -\frac{E_{0}t}{\hbar}` and deduce the energy from it
