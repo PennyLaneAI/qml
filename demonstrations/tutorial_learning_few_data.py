@@ -141,7 +141,7 @@ rng = np.random.default_rng(seed=seed)
 # of the feature vector. In a qubit circuit, the convolutional layer, consisting of a kernel swept
 # along the entire image, is now translated to a two-qubit unitary that correlates neighboring
 # qubits.  As for the pooling layer, we will use a conditioned single-qubit unitary that depends
-# on the measurement of a neighboring qubit. Finally, we use a “dense layer” that entangles all
+# on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
 # qubits of the final state using an all-to-all unitary gate.
 #
 # **Let's break down each layer:**
