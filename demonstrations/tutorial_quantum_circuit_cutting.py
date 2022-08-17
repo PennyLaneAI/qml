@@ -31,9 +31,7 @@ errors.
 
 In this demo, we will first introduce the theory behind quantum circuit
 cutting based on Pauli measurements and see how it implemented in
-PennyLane. This method was first introduced in the paper `"Simulating
-Large Quantum Circuits on a Small Quantum
-Computer" <https://arxiv.org/abs/1904.00102>`__ by Peng et al. (2019).
+PennyLane. This method was first introduced in the paper [#Peng2019]_.
 Thereafter, we discuss the theoretical basis on randomized circuit
 cutting with two-designs and demonstrate the resulting improvement in
 performance compared to Pauli measurement based circuit cutting for an
@@ -483,8 +481,7 @@ qml.transforms.qcut.qcut_processing_fn(
 # on single qubits, we are now ready to discuss an improved circuit
 # cutting protocol that uses randomized measurements to speed up circuit
 # cutting. Our description of this method will be based on the recently
-# published work `"Fast quantum circuit cutting with randomized
-# measurements" <https://arxiv.org/abs/2207.14734>`__ by Lowe et. al. .
+# published work [#Lowe2022]_.
 #
 # The key idea behind this approach is to use measurements in an entagled
 # basis that is based on a unitary 2-design to get more information about
@@ -494,7 +491,8 @@ qml.transforms.qcut.qcut_processing_fn(
 # The concept of 2-designs is simple - a unitary 2-design is finite
 # collection of unitaries such that the average of any degree 2 polynomial
 # function of a linear operator over the design is exactly the same as the
-# average over Haar random measure.
+# average over Haar random measure. For further explanation of the Haar measure read
+# the demo <https://pennylane.ai/qml/demos/tutorial_haar_measure.html>`__.
 #
 # Let :math:`P(U)` be a polynomial with homogeneous degree at most two in
 # the entries of a unitary matrix :math:`U`, and degree two in the complex
@@ -1015,6 +1013,17 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 # References
 # ----------
+# 
+# .. [#Peng2019]
+#
+#     T. Peng, A. Harrow, M. Ozols, and X. Wu (2019) "Simulating Large Quantum Circuits on a Small Quantum Computer".
+#     (`arXiv <https://arxiv.org/abs/1904.00102>`__)
+#
+# .. [#Lowe2022]
+#
+#     A. Lowe et. al. (2022) "Fast quantum circuit cutting with randomized measurements".
+#     (`arXiv <https://arxiv.org/abs/2207.14734>`__)
+#
 #
 # About the author
 # ----------------
@@ -1023,4 +1032,3 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #    :photo: ../_static/avatar.webp
 #
 #    Gideon is a super cool person who works at Xanadu.
-#
