@@ -491,8 +491,8 @@ qml.transforms.qcut.qcut_processing_fn(
 # The concept of 2-designs is simple - a unitary 2-design is finite
 # collection of unitaries such that the average of any degree 2 polynomial
 # function of a linear operator over the design is exactly the same as the
-# average over Haar random measure. For further explanation of the Haar measure read
-# the demo <https://pennylane.ai/qml/demos/tutorial_haar_measure.html>`__.
+# average over Haar random measure. For further explanation of this measure read
+# the `Haar Measure demo <https://pennylane.ai/qml/demos/tutorial_haar_measure.html>`__.
 #
 # Let :math:`P(U)` be a polynomial with homogeneous degree at most two in
 # the entries of a unitary matrix :math:`U`, and degree two in the complex
