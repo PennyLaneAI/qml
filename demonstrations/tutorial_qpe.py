@@ -162,7 +162,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # about the phase :math:`\varphi_{u}` is encoded in the first register
 # and the full system state is:
 # 
-# .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
+# .. math:: |\Psi_1\rangle = \left[ \bigotimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
 #
 #
 # The approach we used is called *phase kickback* and
