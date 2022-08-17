@@ -147,16 +147,11 @@ rng = np.random.default_rng(seed=seed)
 # Breaking down the layers:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-<<<<<<< HEAD
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
-=======
-# The convolutional layer requires the weights of the two-qubit unitary as input. These weights are
-# to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
->>>>>>> origin/demo-fewdata
-# with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three
+# with a particular sequence of gates: two single-qubit gates :class:`~.pennylane.U3` (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
-# parametrized by one parameter), and end with two additional ``qml.U3`` gates in each of the two
+# parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates in each of the two
 # qubits.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
@@ -182,7 +177,7 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
 
 ##############################################################################
 # The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in
-# this case, are ``qml.U3`` gates. Then, we apply these conditional measurements to half of the
+# this case, are :class:`~.pennylane.U3` gates. Then, we apply these conditional measurements to half of the
 # unmeasured wires, reducing our system size by half.
 
 def pooling_layer(weights, wires):
@@ -327,7 +322,7 @@ value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 ##############################################################################
 # We are going to perform the classification for differently sized training sets. Therefore, we
 # define the classification procedure once and then perform it for different datasets.
-# Finally, we update the weights using the ``qml.AdamOptimizer`` and use these updated weights to
+# Finally, we update the weights using the :class:`pennylane.AdamOptimizer` and use these updated weights to
 # calculate the cost and accurracy on the testing and training set.
 
 def train_qcnn(n_train, n_test, n_epochs):
