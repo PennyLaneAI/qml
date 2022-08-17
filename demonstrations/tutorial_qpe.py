@@ -218,7 +218,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # i.e. :math:`\varphi_u = \varphi_{u, K} 2^{-1} + \varphi_{u, K - 1} 2^{-2} + \ldots \varphi_{u, 0} 2^{-K}`,
 # where :math:`\varphi_{u, k} \in \{0, 1\} \ \forall k \in [1..K]`.
 # Equivalently, there exists an integer
-# :math:`l_{\varphi_{u}} \in [0..2^K - 1]` such that
+# :math:`l_{\varphi_{u}} \in [0,...,2^K - 1]` such that
 # :math:`\varphi_{u} \cdot 2^{K} = l_{\varphi_{u}}`. In this case the
 # expression for the amplitudes of the readout register is simple:
 #
