@@ -381,7 +381,7 @@ def train_qcnn(n_train, n_test, n_epochs):
 
 ##############################################################################
 # .. note::
-
+#
 #     There are some small intricacies for speeding up this code that are worth mentioning: We are using ``jax`` for our training
 #     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution
 #     and cached for future executions. This means the first execution will take longer, but all subsequent executions are substantially faster.
