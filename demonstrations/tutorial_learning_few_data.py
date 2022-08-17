@@ -110,9 +110,14 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These
 # layers are used to reduce the dimensionality of the 2D array being processed (whereas inverse pooling increases the
 # dimensionality of a 2D array). Finally, one takes these two layers and applies them repeatedly and
-# interchangeably. We want to build something similar for a quantum circuit.
+# interchangeably as show in the figure below. 
 #
-# First, we import the necessary libraries we will need in this demo and set a seed for reproducibility.
+# .. figure:: /demonstrations/learning_few_data/cnn_pic.png
+#     :width: 75%
+#     :align: center
+#
+# We want to build something similar for a quantum circuit. First, we import the necessary 
+# libraries we will need in this demo and set a seed for reproducibility.
 
 import matplotlib.pyplot as plt
 import numpy as np
