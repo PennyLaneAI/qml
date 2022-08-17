@@ -62,7 +62,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # Indeed, any textbook on quantum physics will tell you that the global
 # phase is *unobservable*, i.e. it can’t be detected by any measurements
 # performed on the isolated system. Well, our system should not be
-# isolated, right? We can make it interact with another, *ancilla* system
+# isolated, right? To solve this problem, we can make it interact with another, *ancilla* system
 # controlled by us. Then, the global phase will (in a sense) become local
 # for a composite quantum system and we will be able to detect it — and
 # that is exactly what the QPE algorithm does in a clever way. So, bear
