@@ -151,7 +151,7 @@ rng = np.random.default_rng(seed=seed)
 # to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
 # with a particular sequence of gates: two single-qubit gates :class:`~.pennylane.U3` (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
-# parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates in each of the two
+# parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates on each of the two
 # qubits.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
