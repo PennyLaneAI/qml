@@ -38,7 +38,7 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 # :math:`\hat{U}(t) = e^{-\frac{i\hat{H}t}{\hbar}}`. We can decompose it
 # in the basis of the Hamiltonian eigenvectors as follows:
 #
-# .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|
+# .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|.
 #
 # Now, let’s act with :math:`\hat{U}(t)` on any of
 # Hamiltonian eigenstates: 
