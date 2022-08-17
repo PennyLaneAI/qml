@@ -146,7 +146,7 @@ rng = np.random.default_rng(seed=seed)
 #
 # **Let's break down each layer:**
 #
-# The convolutional layer should have as an input the weights of the two-qubit unitary, which are
+# The convolutional layer requires the weights of the two-qubit unitary as input. These weights are
 # to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
 # with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
