@@ -7,7 +7,7 @@ Quantum Circuit Cutting
 
 *Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*
 
-Introduction to Pauli circuit cutting
+Introduction
 -------------------------------------
 
 Quantum computers are projected to accomplish tasks that are far beyond
@@ -476,7 +476,7 @@ qml.transforms.qcut.qcut_processing_fn(
 )
 
 ######################################################################
-# Theory of Randomized Circuit Cutting
+# Randomized Circuit Cutting
 # ------------------------------------
 #
 # After reviewing the standard circuit cutting based on Pauli measurements
@@ -557,7 +557,7 @@ qml.transforms.qcut.qcut_processing_fn(
 # over the :math:`k` qubits has to implemented when randomized measurement
 # is performed.
 #
-# Numerical experiments
+# Comparison
 # ---------------------
 #
 # We have seen that looking at circuit cutting through the lens of
