@@ -31,7 +31,7 @@ called the *generalization error* and indicates how well the model has learned t
     :width: 75%
     :align: center
 
-It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
+It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models that
 perfectly fit the training data, i.e., which admit a low bias, have a higher variance, typically perform poorly on unseen
 test data and don't generalize well. In the classical machine learning community, this trade-off has been extensively
 studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
