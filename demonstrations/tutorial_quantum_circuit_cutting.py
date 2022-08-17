@@ -332,9 +332,7 @@ cut_graph = qml.transforms.qcut.find_and_place_cuts(
     cut_strategy=qml.transforms.qcut.CutStrategy(max_free_wires=2),
 )
 
-print(
-    qml.transforms.qcut.graph_to_tape(cut_graph).draw()
-)  # visualize the cut QuantumTape
+print(qml.transforms.qcut.graph_to_tape(cut_graph).draw())  # visualize the cut QuantumTape
 
 
 ######################################################################
@@ -401,9 +399,7 @@ print(fragment_tapes[1].draw())  # Subcircuit-v fragment
 #
 
 dev = qml.device("default.qubit", wires=2)
-fragment_tapes = [
-    qml.transforms.qcut.remap_tape_wires(t, dev.wires) for t in fragment_tapes
-]
+fragment_tapes = [qml.transforms.qcut.remap_tape_wires(t, dev.wires) for t in fragment_tapes]
 
 ######################################################################
 # Based on the number of cuts and the resulting subcircuits, each circuit
@@ -462,9 +458,7 @@ for t in tapes:
 # multiplied to the corresponding measurement from subcircuit-:math:`v`.
 #
 
-results = qml.execute(
-    tapes, dev, gradient_fn=None
-)  # executing each subcircuit configuration
+results = qml.execute(tapes, dev, gradient_fn=None)  # executing each subcircuit configuration
 
 qml.transforms.qcut.qcut_processing_fn(
     results,
@@ -532,12 +526,12 @@ qml.transforms.qcut.qcut_processing_fn(
 #
 # .. math::
 #
-#     \Psi_{1}(X) \xrightarrow{} \left\{ \frac{|i\rangle \langle j|}{\sqrt{d}} \right\} \quad
-#    \Psi_{0}(X) \xrightarrow{} \left\{ \frac{\mathbf{1}}{\sqrt{d+1}} \right\} \cup \left\{ \frac{|i\rangle \langle j|}{\sqrt{d+1}} \right\}~,
+#   \Psi_{1}(X) \xrightarrow{} \left\{ \frac{|i\rangle \langle j|}{\sqrt{d}} \right\} \quad
+#   \Psi_{0}(X) \xrightarrow{} \left\{ \frac{\mathbf{1}}{\sqrt{d+1}} \right\} \cup \left\{ \frac{|i\rangle \langle j|}{\sqrt{d+1}} \right\}~,
 #
 # where indices :math:`i,j` run over the :math:`d` basis elements.
 #
-# Together these two channels can be used to obtain a resoltuion of the
+# Together these two channels can be used to obtain a resolution of the
 # Identity channel on the :math:`k`-qubits as follows
 #
 # .. math::   X = (d+1)\Psi_0(X)-d\Psi_1(X)~.
@@ -564,12 +558,9 @@ qml.transforms.qcut.qcut_processing_fn(
 # `Quantum Approximate Optimization
 # Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
-# lowest-energy state of a *cost hamiltonian* $ H
-# \_:raw-latex:`\mathcal{C}` $:
+# lowest-energy state of a *cost hamiltonian* :math:`H_{\mathcal{C}}`:
 #
-# .. math::
-#
-#    H_\mathcal{C} = \frac{1}{|E|} \sum _{(i, j) \in E} Z_i Z_j
+# .. math::   H_\mathcal{C} = \frac{1}{|E|} \sum _{(i, j) \in E} Z_i Z_j
 #
 # on a graph :math:`G=(V,E)`, where :math:`Z_i` is a Pauli-:math:`Z`
 # operator. The normalization factor is just here so that expectation
@@ -588,7 +579,7 @@ qml.transforms.qcut.qcut_processing_fn(
 #     :width: 90%
 #
 #     Figure 5. An example of mapping an input interaction graph to a QAOA
-#     circuit.(Note: the “stick” gates represent the ZZ rotation gates, to avoid
+#     circuit. (Note: the “stick” gates represent the ZZ rotation gates, to avoid
 #     overcrowding the diagram.)
 #
 # Let’s generate a similar QAOA graph to the one in the figure this using
@@ -632,7 +623,7 @@ optimal_params = np.array([-0.240, 0.327])
 optimal_cost = -0.248
 
 ######################################################################
-# We also define our cost operator :math:`H_\mathcal{C}` as a function.
+# We also define our cost operator :math:`H_{\mathcal{C}}` as a function.
 # Because it is diagonal in the computational basis, we only need to
 # define its action on computational basis bitstrings.
 #
@@ -749,15 +740,17 @@ for i, shots in enumerate(shot_counts):
 # As noted earlier, the easiest way to mathematically represent the
 # randomized channel-based method is to write down Kraus operators for the
 # relevant channels, :math:`\Psi _0` and :math:`\Psi _1`. Once we have
-# represented them in explicit matrix form, we can simply use PennyLane’s
-# ```qml.QubitChannel`` <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.QubitChannel.html>`__.
+# represented them in explicit matrix form, we can simply use ``qml.QubitChannel``.
+#
 #
 # To get our matrices, we represent the computational basis set along the
 # :math:`k` cut wires as a unit vector
-# $:raw-latex:`\left`:raw-latex:`\vert `i
-# :raw-latex:`\right`:raw-latex:`\rangle `:raw-latex:`\mapsto `(0,
-# :raw-latex:`\ldots`, 1,:raw-latex:`\ldots`, 0) $ with the 1 positioned
-# at index :math:`i`. Therefore:
+#
+# .. math::
+#
+#   \left\vert i \right\rangle \mapsto (0, \ldots, 1,\ldots,0)
+#
+# with the 1 positioned at index :math:`i`. Therefore:
 #
 # .. math::
 #
@@ -804,9 +797,8 @@ def make_kraus_ops(num_wires: int):
 # In code, this looks like:
 #
 
-with QuantumTape(do_queue=False) as tape0, QuantumTape(
-    do_queue=False
-) as tape1:  # Record on new "fragment" tapes
+with QuantumTape(do_queue=False) as tape0, QuantumTape(do_queue=False) as tape1:
+    # Record on new "fragment" tapes
 
     for op in tape:
 
@@ -816,9 +808,7 @@ with QuantumTape(do_queue=False) as tape0, QuantumTape(
             d = 2**k
 
             K0, K1 = make_kraus_ops(k)  # Generate Kraus operators on the fly
-            probs = (d + 1) / (2 * d + 1), d / (
-                2 * d + 1
-            )  # Probabilities of the two channels
+            probs = (d + 1) / (2 * d + 1), d / (2 * d + 1)  # Probabilities of the two channels
 
             psi_0 = qml.QubitChannel(K0, wires=op.wires, do_queue=False)
             psi_1 = qml.QubitChannel(K1, wires=op.wires, do_queue=False)
@@ -837,8 +827,6 @@ with QuantumTape(do_queue=False) as tape0, QuantumTape(
 
 print(f"Cut size: k={k}")
 print(f"Channel probabilities: p0={probs[0]:.2f}; p1={probs[1]:.2f}", "\n")
-
-print("Processed circuit")
 
 fig, _ = qml.drawer.tape_mpl(tape0, expansion_strategy="device")
 fig.set_size_inches(12, 6)
@@ -929,6 +917,7 @@ ax.semilogx(
     markeredgecolor="k",
     label="Pauli",
 )
+
 ax.semilogx(
     shot_counts,
     randomized_cost_values,
@@ -938,6 +927,7 @@ ax.semilogx(
     markeredgecolor="k",
     label="Randomized",
 )
+
 ax.axhline(optimal_cost, color="k", linestyle="--", label="Exact value")
 
 ax.tick_params(axis="x", labelsize=18)
@@ -958,11 +948,11 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 # .. figure:: ../demonstrations/quantum_circuit_cutting/shots_vs_cost_p1.svg
 #     :align: center
-#     :width: 90%
+#     :width: 70%
 #
 # .. figure:: ../demonstrations/quantum_circuit_cutting/shots_vs_cost_p2.svg
 #     :align: center
-#     :width: 90%
+#     :width: 70%
 #
 #     Figure 6. An example of QAOA cost convergence for a circuit cut both
 #     with the Pauli method and randomized channel method.
@@ -1013,7 +1003,7 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 # References
 # ----------
-# 
+#
 # .. [#Peng2019]
 #
 #     T. Peng, A. Harrow, M. Ozols, and X. Wu (2019) "Simulating Large Quantum Circuits on a Small Quantum Computer".
@@ -1032,3 +1022,13 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #    :photo: ../_static/avatar.webp
 #
 #    Gideon is a super cool person who works at Xanadu.
+#
+# .. bio:: Matija Medvidović
+#    :photo: ../_static/matija_medvidovic.jpeg
+#
+#    Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu residency program. He is a firm believer in keeping bios short and concise.
+#
+# .. bio:: Anuj Apte
+#    :photo: ../_static/avatar.webp
+#
+#    Anuj is a super cool person who works at Xanadu.
