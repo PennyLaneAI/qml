@@ -908,6 +908,7 @@ for i, cutoff in enumerate(shot_counts):
 #
 
 fig, ax = plt.subplots(figsize=(12, 6))
+
 ax.semilogx(
     shot_counts,
     pauli_cost_values,
@@ -1015,8 +1016,8 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #     (`arXiv <https://arxiv.org/abs/2207.14734>`__)
 #
 #
-# About the author
-# ----------------
+# About the authors
+# -----------------
 #
 # .. bio:: Gideon Uchehara
 #    :photo: ../_static/avatar.webp
