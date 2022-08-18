@@ -18,9 +18,9 @@ can be combined with variational workflows, allowing you to differentiate `throu
 Differentiating quantum error mitigation transforms
 ---------------------------------------------------
 
-Most variational quantum algorithms (VQAs) are concerned with optimizing a `quantum function` 
+Most variational quantum algorithms (VQAs) are concerned with optimizing a `quantum function`, 
 
-.. math:: f(\theta) = \langle 0 | U^\dagger(\theta) H U(\theta) | 0 \rangle
+.. math:: f(\theta) = \langle 0 | U^\dagger(\theta) H U(\theta) | 0 \rangle,
 
 for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H`. These algorithms are specifically designed
 to be executed on noisy hardware. This means that naturally we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
@@ -39,7 +39,7 @@ Formally, we can treat error mitigation as yet another transform that maps the n
 In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable --- both formally and practically in our implementation.
 PennyLane now provides one such differentiable quantum error mitigation technique with `zero noise extrapolation` (ZNE), which can be used and differentiated in simulation and on hardware.
 Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
-We will briefly introduce these new functionalities and afterwards go more in depth to explore what happens under the hood.
+We will briefly introduce these functionalities and afterwards go more in depth to explore what happens under the hood.
 
 We start by initializing a noisy device under the :func:`~.pennylane.DepolarizingChannel`:
 """
@@ -62,7 +62,7 @@ dev_ideal = qml.device("default.mixed", wires=n_wires)
 dev_noisy = qml.transforms.insert(noise_gate, noise_strength, position="all")(dev_ideal)
 
 ##############################################################################
-# We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable, and a simplified unitary 2-design as our ansatz:
+# We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable:
 
 coeffs = [1.0] * (n_wires - 1) + [0.5] * n_wires
 observables = [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(n_wires - 1)]
@@ -72,26 +72,24 @@ H = qml.Hamiltonian(coeffs, observables)
 
 
 ##############################################################################
-# The quantum function can then be executed on the noisy or ideal device
-# by creating individual QNodes. Here we use a :class:`~.pennylane.SimplifiedTwoDesign` with all-constant parameters set to ``1``:
+# The quantum function, the expectation value of $H$, can then be executed on the noisy or ideal device
+# by creating respective QNodes for both. As our ansatz, we'll use a :class:`~.pennylane.SimplifiedTwoDesign` with all-constant parameters set to ``1``:
 
 n_layers = 2
 
 w1 = np.ones((n_wires), requires_grad=True)
 w2 = np.ones((n_layers, n_wires - 1, 2), requires_grad=True)
 
-
 def qfunc(w1, w2):
     qml.SimplifiedTwoDesign(w1, w2, wires=range(n_wires))
     return qml.expval(H)
-
 
 qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 ##############################################################################
-# We can then simply transform the noisy qnode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}`.
-# If everything goes as planned, executing the mitigated ``qnode`` is then closer to the ideal result:
+# We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}`.
+# If everything goes as planned, executing the mitigated QNode is then closer to the ideal result:
 
 scale_factors = [1.0, 2.0, 3.0]
 
@@ -101,9 +99,9 @@ qnode_mitigated = mitigate_with_zne(
     extrapolate=qml.transforms.richardson_extrapolate,
 )(qnode_noisy)
 
-print("Ideal qnode: ", qnode_ideal(w1, w2))
-print("Mitigated qnode: ", qnode_mitigated(w1, w2))
-print("Noisy qnode: ", qnode_noisy(w1, w2))
+print("Ideal QNode: ", qnode_ideal(w1, w2))
+print("Mitigated QNode: ", qnode_mitigated(w1, w2))
+print("Noisy QNode: ", qnode_noisy(w1, w2))
 
 ##############################################################################
 # The transforms provided for the ``folding`` and ``extrapolate`` arguments can be treated as default black boxes for the moment.
@@ -120,18 +118,18 @@ print(grad[1])
 # Under the hood of Zero Noise Extrapolation
 # ------------------------------------------
 # What is happening here under the hood? The basic idea of ZNE is to artificially increase the noise in a circuit,
-# controlled by a parameter :math:`\lambda` that is called the ``scale_factor``, to be able to then extrapolate in :math:`\lambda` to zero noise.
+# controlled by a parameter :math:`\lambda` that is called the ``scale_factor``, to then be able to extrapolate back to zero noise.
 #
-# Notice how the two circuits :math:`U` and :math:`U U^\dagger U` are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
+# Consider two circuits: :math:`U` and :math:`U U^\dagger U`. They are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
 # This is the underlying concept of unitary folding, which is used to artificially increase the noise of a quantum function. Given a unitary circuit :math:`U = L_d .. L_1`,
 # where :math:`L_i` can be either a gate or layer, we use :func:`~.pennylane.transforms.fold_global` to construct
 #
-# .. math:: \text{fold_global}(U) = U (U^\dagger U)^n (L^\dagger_d L^\dagger_{d-1} .. L^\dagger_s) (L_s .. L_d),
+# .. math:: \texttt{fold_global}(U) = U (U^\dagger U)^n (L^\dagger_d L^\dagger_{d-1} .. L^\dagger_s) (L_s .. L_d),
 #
-# where :math:`n = \lfloor (\lambda - 1)/2 \rfloor` and :math:`s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor` are determined via the ``scale_factor`` :math:`=\lambda`.
+# where :math:`n = \lfloor (\lambda - 1)/2 \rfloor` and :math:`s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor` are determined via the ``scale_factor`` :math:`\lambda`.
 #
 # The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^{⚡}` for different scale factors,
-# and then extrapolate to :math:`\lambda \rightarrow 0`. Note that ``scale_factor=1`` corresponds to the original circuit, i.e. the noisy execution.
+# and then extrapolate to :math:`\lambda \rightarrow 0` (zero noise). Note that ``scale_factor = 1`` corresponds to the original circuit, i.e. the noisy execution.
 #
 
 scale_factors = [1, 2, 3]
@@ -169,8 +167,8 @@ plt.show()
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
 #
-# We now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian. We compare VQE optimization runs for
-# the ideal, noisy and mitigated QNodes and see that the mitigated one comes close to the ideal results, whereas the noisy execution is further off.
+# We'll now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian --- this is the variational quantum eigensolving (VQE) `<https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ algorithm. Then, we'll compare VQE optimization runs for
+# the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results, whereas the noisy execution is further off.
 
 
 def VQE_run(cost_fn, max_iter, stepsize=0.1):
@@ -203,13 +201,13 @@ energy_mitigated = VQE_run(qnode_mitigated, max_iter)
 energy_exact = np.min(np.linalg.eigvalsh(qml.matrix(H)))
 
 plt.figure(figsize=(8, 5))
-plt.plot(energy_mitigated, ".--", label="VQE E_mitigated")
-plt.plot(energy_noisy, ".--", label="VQE E_noisy")
-plt.plot(energy_ideal, ".--", label="VQE E_ideal")
-plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label="E_exact")
+plt.plot(energy_mitigated, ".--", label=r"VQE $E_{\text{mitigated}}$")
+plt.plot(energy_noisy, ".--", label=r"VQE $E_{\text{noisy}}$")
+plt.plot(energy_ideal, ".--", label=r"VQE $E_{\text{ideal}}$")
+plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label=r"$E_{\text{exact}}$")
 plt.legend(fontsize=14)
-plt.xlabel("epoch", fontsize=18)
-plt.ylabel("energy", fontsize=18)
+plt.xlabel("Iteration", fontsize=18)
+plt.ylabel("Energy", fontsize=18)
 plt.show()
 
 ##############################################################################
@@ -232,17 +230,17 @@ plt.show()
 #
 #     Time-sensitive dynamical decoupling scheme.
 #
-# In this mitigation technique, the single qubit state is put into equal superposition
+# In this mitigation technique, the single qubit state is put into an equal superposition: 
 # :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}`. During the first idle time :math:`t_1`, the state is altered due to noise.
 # Applying :math:`X` reverses the roles of each computational basis state. The idea is that the noise in the second idle time
-# :math:`T-t_1` is canceling out the effect of the first time window. We see that the output fidelity with respect to the noise-free
+# :math:`T-t_1` is cancelling out the effect of the first time window. We see that the output fidelity with respect to the noise-free
 # execution is a smooth function of :math:`t_1`. This was executed on ``ibm_perth``, and we note that simple noise models,
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device.
 #
-# Obtaining the gradient with respect to this parameter is difficult. There are formal and practical obstacles:
+# Obtaining the gradient with respect to this parameter is difficult. 
 # Formally, writing down the derivative of this transform with respect to the idle time in order to derive its parameter-shift
 # rules would require access to the noise model.
-# This, on the other hand, is very difficult for a realistic scenario. Further, most mitigation parameters are integers and would have
+# This is very difficult for a realistic scenario. Further, most mitigation parameters are integers and would have
 # to be smoothed in a differentiable way. A simple but effective strategy is using finite differences for the gradient with respect to mitigation parameters.
 #
 # Overall, this is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact to the simulation result.
