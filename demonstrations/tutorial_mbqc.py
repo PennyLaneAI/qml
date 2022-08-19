@@ -65,9 +65,9 @@ Measurement-based quantum computation
 # where :math:`n` is the number of qubits, :math:`CZ_{ij}` is the controlled-:math:`Z`` gate between
 # qubits :math:`i` and :math:`j`, and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` 
 # is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator. The distinction between graph 
-# states and a cluster states is rather technical. For now, suffice to say that cluster states are
-# a subset of graph states with some additional conditions. Details of the definition can be found
-# in Ref. [#PersistentEntanglement]_.
+# states and a cluster states is rather technical and details can be found in Ref. 
+# [#PersistentEntanglement]_. For now, suffice to say that cluster states are a subset of graph 
+# states with some additional conditions.
 #
 # We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
