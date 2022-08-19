@@ -595,7 +595,7 @@ RHG = SurfaceCode(code_distance)
 #
 # For the sake of intuition, you can think of the graph shown above as having two spatial dimensions (:math:`x`
 # and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown in the
-# figure above on the :math:`xy`-plane. In principle, any quantum error correction code can be `foliated <https://arxiv.org/abs/1607.02579>` into
+# figure above on the :math:`xy`-plane. In principle, any quantum error correction code can be `foliated <https://arxiv.org/abs/1607.02579>`_ into
 # a graph state for measurement-based QEC [#FoliatedQuantumCodes]_. However, the foliations are particularly nice for `CSS
 # codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
 # :math:`X`-checks *or* :math:`Z`-checks, and include the *surface code* and *colour code* families.
