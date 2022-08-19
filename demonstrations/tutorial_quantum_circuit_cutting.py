@@ -40,16 +40,21 @@ combination of the Pauli matrices as shown below.
 Here, we have denoted Pauli matrices by :math:`O_i`, their
 eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
 :math:`c_i`. In the above equation,
+
 .. math::
     O_1 = O_2 = I,
 .. math::
     O_3 = O_4 = X,
 .. math::
     O_5 = O_6 = Y
-    and
+
+and
+
 .. math::
     O_7 = O_8 = X.
+
 Also,
+
 .. math::
     \rho_1 = \rho_7=\left | {0} \right\rangle \left\langle {0} \right |,
 .. math::
@@ -62,7 +67,9 @@ Also,
     \rho_5 = \left | {+i} \right\rangle \left\langle {+i} \right |,
 .. math::
     \rho_6 = \left | {-i} \right\rangle \left\langle {-i} \right |
+
 and
+
 .. math::
     c_i = \pm 1.
 
@@ -72,14 +79,14 @@ is broken into two parts. The first part, :math:`Tr(\rho O_i)` corresponds
 to the measurement of Pauli observables :math:`O_i` for a quantum circuit
 representing the left part of the cut quantum state :math:`\rho`. Let's call
 this first circuit subcircuit-:math:`u`. The second part, :math:`\rho_i`
-corresponds to initializing or preparing  the right part of the cut quantum
+corresponds to initialization or preparation of the right part of the cut quantum
 state :math:`\rho` with the corresponding Pauli eigenstate, :math:`\rho_i`.
 Let's call this Second circuit subcircuit-:math:`v`. The above equation shows
-how we can recover a quantum state after a cut made on one of its qubits as
+how we can recover a quantum state after a is cut made on one of its qubits as
 shown in figure 1. This forms the core of quantum circuit cutting.
 
 This means that we only have to do three measurements
-:math:`Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
+:math:`\left (Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
 subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
 states: :math:`\left | {0} \right\rangle`,
 :math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
@@ -185,7 +192,7 @@ fig, ax = qml.draw_mpl(circuit)(x)  # Drawing circuit
 ######################################################################
 # The double vertical lines between the two ``CZ`` gates on qubit 1 in the
 # above figure shows where we have chosen to cut. This is where the ``WireCut``
-# operation was inserted. ``WireCut`` is used to manually mark locations for
+# operation is inserted. ``WireCut`` is used to manually mark locations for
 # wire cuts.
 #
 # Next, we apply ``qml.cut_circuit`` operation as a decorator to the
@@ -195,9 +202,8 @@ dev = qml.device("default.qubit", wires=3)
 
 # Quantum Circuit with QNode
 
-qml.cut_circuit()         # Applying qml.cut_circuit for circuit cut operation
 
-
+@qml.cut_circuit()  # Applying qml.cut_circuit for circuit cut operation
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -853,7 +859,7 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 # -----------------
 #
 # .. bio:: Gideon Uchehara
-#    :photo: ../_static/avatar.webp
+#    :photo: ../_static/gideon_uchehara.jpg
 #
 #    Gideon is a PhD student at the University of British Columbia, Canada.
 #    His research is in quantum algorithms and quantum Machine Learning. He
