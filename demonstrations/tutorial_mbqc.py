@@ -240,8 +240,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #   4. How to implement **arbitrary quantum circuits**.
 #
 # In the previous section, we have already seen how the quantum information propagates from one
-# side of the cluster to the other. In this section, we will tackle the remaining parts concerning
-# logical operations.
+# side of the cluster to the other - that is, how the *identity gate* can be implemented. In this
+# section, we will tackle the remaining parts concerning logical operations.
 #
 
 ##############################################################################
@@ -572,7 +572,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    A distance-3 surface code. Circles represent qubits and bubbles represent operators, called
 #    stabilizers, used to detect errors. The stabilizers are tensor products of Pauli-X or Pauli-Z
 #    operators and each is associated with its own ancilla qubit. The combined system encodes one
-#    logical qubit and can correct any combination of :math:`\lfloor (d-1)/2 \rfloor` errors. 
+#    logical qubit and can correct any combination of :math:`\lfloor (d-1)/2 \rfloor` errors.
 #    [#FowlerPolyestimate]_
 #
 # In the measurement-based picture, quantum error correction requires us to go beyond a 2-dimensional cluster state
