@@ -55,20 +55,19 @@ Measurement-based quantum computation
 # ----------------
 #
 # *Cluster states* are the universal substrate for measurement-based quantum computation
-# [#OneWay2001]_. They are a special instance of *graph states* [#EntanglementGraphStates]_, a class of entangled multi-qubit
-# states that can be represented by an undirected graph :math:`G = (V,E)` whose vertices are
-# associated with qubits and the edges with entanglement between them. The associated quantum state
-# reads as follows
+# [#OneWay2001]_. They are a special instance of *graph states* [#EntanglementGraphStates]_, a 
+# class of entangled multi-qubit states that can be represented by an undirected graph 
+# :math:`G = (V,E)` whose vertices are associated with qubits and the edges with entanglement 
+# between them. The associated quantum state reads as follows
 #
 # .. math::    |\Phi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
 #
 # where :math:`n` is the number of qubits, :math:`CZ_{ij}` is the controlled-:math:`Z`` gate between
 # qubits :math:`i` and :math:`j`, and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` 
-# is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator.
-#
-# The distinction between a term graph state and a cluster state is that the latter has the additional
-# condition that the underlying graph has to be a lattice [#PersistentEntanglement]_ 
-# [#MultiPartyEntanglement]_ []. 
+# is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator. The distinction between graph 
+# states and a cluster states is rather technical. For now, suffice to say that cluster states are
+# a subset of graph states with some additional conditions. Details of the definition can be found
+# in Ref. [#PersistentEntanglement]_.
 #
 # We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
