@@ -502,7 +502,11 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 #    ..
 #
-#    We can also consume the cluster state while we grow it [#OpticalQuantumComputing].
+#   We can also consume the cluster state while we grow it. The blue qubits are in a cluster state, 
+#   where the bonds between them represent entanglement. The gray qubits have been measured, 
+#   destroying the entanglement and removing them from the cluster. At the same time, the green 
+#   qubits are being added to the cluster by entangling them with it. Prior measurement outcomes 
+#   determine the basis for future measurements [#OpticalQuantumComputing].
 #
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
