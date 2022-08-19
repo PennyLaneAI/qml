@@ -5,7 +5,8 @@
   paper: https://projecteuclid.org/journals/statistical-science/volume-8/issue-1/Simulated-Annealing/10.1214/ss/1177011077.full
   color: heavy-rain-gradient
   description: |
-    In this tutorial, a variational quantum circuit is optimized by using simulated annealing. This algorithm returns a stochastic global optima for the optimization problem.
+    In this tutorial, a variational quantum circuit is optimized by using simulated annealing. This algorithm returns a stochastic global optimum for the optimization problem.
+
 
 - title: Continuous Variable Quantum Classifiers -  MNIST
   author: Sophie Choe
