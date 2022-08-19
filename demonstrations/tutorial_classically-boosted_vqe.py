@@ -3,7 +3,7 @@ Classically-Boosted Variational Quantum Eigensolver
 ===================================================
 
 .. meta::
-    :property="og:description": Learn how to implement classically-boosted VQE.
+    :property="og:description": Learn how to implement classically-boosted VQE in PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/CB_VQE.png
 
 .. related::
@@ -21,12 +21,12 @@ to tackle these problems when fault-tolerant quantum computation comes
 into play, we currently live in the
 `NISQ <https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era>`__
 era, meaning that we can only access very noisy and limited devices.
-That is why a large part of the research on quantum algorithms is
+That is why a large part of the current research on quantum algorithms is
 focusing on what can be done with few resources. In particular, most
 proposals rely on variational quantum algorithms (VQA), which are
 optimized classically and adapt to the limitations of the quantum
 devices. For the specific problem of computing ground-state energies,
-this reduces to the very well-known Variational Quantum Eigensolver
+the paradigmatic algorithm is the Variational Quantum Eigensolver
 (VQE) algorithm.
 
 .. figure:: ../demonstrations/classically_boosted-vqe/quantum_algorithms.png
@@ -34,7 +34,7 @@ this reduces to the very well-known Variational Quantum Eigensolver
     :width: 50%
 
 Although VQE is intended to run on NISQ devices, it is nonetheless
-sensitive to noise. This is in particular problematic when applying a
+sensitive to noise. This is particularly problematic when applying a
 large number of gates. As a consequence, several modifications to the
 original VQE algorithm have been proposed. These variants are usually
 intended to improve the algorithm’s performance on NISQ-era devices.
@@ -43,7 +43,7 @@ Here we will go through one of these proposals step-by-step: the
 Classically-Boosted Variational Quantum Eigensolver (CB-VQE), which was
 recently proposed in this
 `paper <https://arxiv.org/abs/2106.04755>`__. Implementing CB-VQE
-allows to reduce the number of measurements required to obtain the
+reduces the number of measurements required to obtain the
 ground-state energy with a certain precision. This is done by making use
 of classical states which already contain some information about the
 ground-state of the problem.
@@ -52,14 +52,14 @@ ground-state of the problem.
     :align: center
     :width: 50%
 
-In this demo, we will restrict ourselves to the :math:`H_2` molecule for
+We will restrict ourselves to the :math:`H_2` molecule for
 the sake of simplicity. First, we will give a short introduction on how
 to perform standard VQE for the molecule of interest. For more details,
-we recommend the following
-`demo <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ to learn
-how to implement VQE for molecules step-by-step. Then, we will implement
+we recommend
+`this brief overview of VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ to learn
+how to implement VQE for molecules step by step. Then, we will implement
 the CB-VQE algorithm for the specific case in which we rely only on one
-classical state, that being the Hartree-Fock state. Finally, we will
+classical state⁠—that being the Hartree-Fock state. Finally, we will
 discuss the number of measurements needed to obtain a certain
 error-threshold by comparing the two methods.
 
@@ -72,14 +72,14 @@ Let’s get started!
 # -------------------------
 # 
 # If you are not already familiar with the VQE family of algorithms and
-# wish to see how one can apply it the :math:`H_2` molecule, feel free to
+# wish to see how one can apply it to the :math:`H_2` molecule, feel free to
 # work through
 # `VQE overview demo <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__
-# before reading this Section. Here, we will only briefly review the main
+# before reading this section. Here, we will only briefly review the main
 # idea behind standard VQE and highlight the important concepts in
 # connection with CB-VQE.
 # 
-# The main goal of VQE is to find the ground energy of the Schrödinger
+# Given an Hamiltonian :math:`H`, the main goal of VQE is to find the ground energy of the Schrödinger
 # equation
 # 
 # .. math:: H \vert \phi \rangle = E  \vert \phi \rangle.
@@ -159,7 +159,7 @@ def circuit_VQE(theta, wires):
 # Once this is defined, we can run the VQE algorithm. We first need to
 # define a circuit for the cost function. For our purposes of studying the
 # performance of VQE with the number of measurements, we will take a
-# finite number of shots ``num_shots = 100``
+# finite number of shots ``num_shots = 100.``
 # 
 
 num_shots = 100
@@ -182,7 +182,7 @@ theta = np.zeros(num_theta, requires_grad=True)
 
 
 ######################################################################
-# and finally we run the algorithm
+# Finally, we run the algorithm
 # 
 
 for n in range(max_iterations):
@@ -193,13 +193,13 @@ for n in range(max_iterations):
 energy_VQE = cost_fn(theta)
 theta_opt = theta
 
-print('VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_VQE))
+print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 
 
 ######################################################################
 # Note that as an output we obtain the VQE approximation to the ground
 # state energy and a set of optimized parameters :math:`\Theta` that
-# define the grounstate through the ansatz :math:`A(\Theta)`. We will need
+# define the ground state through the ansatz :math:`A(\Theta)`. We will need
 # to save these two quantities, as they are necessary to implement CB-VQE
 # in the following steps.
 # 
@@ -232,7 +232,7 @@ print('VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_VQE))
 # 
 # and the matrix :math:`\bar{S}` contains the overlaps between the basis
 # states. For a complete orthonormal basis, the overlap matrix
-# :math:`\hat{S}` would simply be the identity matrix. However, we need to
+# :math:`\bar{S}` would simply be the identity matrix. However, we need to
 # take a more general approach which works for a subspace spanned by
 # potentially non-orthogonal states. We can retrieve the representation of
 # :math:`S` in terms of :math:`\{\vert \phi_\alpha \rangle\}_\alpha` by
@@ -242,7 +242,7 @@ print('VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_VQE))
 # 
 # Note that :math:`\vec{v}` and :math:`\lambda` are the eigenvectors and
 # eigenvalues respectively. In particular, our goal is to find the lowest
-# eigenvalue :math:`\lambda_0`.
+# eigenvalue :math:`\lambda_0.`
 # 
 
 
@@ -260,21 +260,21 @@ print('VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_VQE))
 # which directly hints towards using the *Hartree-Fock* state for several
 # reasons. First of all, it is well-known that the Hartree-Fock state is a
 # good candidate to approximate the ground state in the mean-field limit.
-# Secondly, we already compute it when we build the molecular Hamiltonian
+# Secondly, we already computed it when we built the molecular Hamiltonian
 # for the standard VQE!
 # 
 
 
 ######################################################################
-# To summarize, our goal is to build the hamiltonian :math:`\bar{H}` and
+# To summarize, our goal is to build the Hamiltonian :math:`\bar{H}` and
 # the overlap matrix :math:`\bar{S}`, which act on the subspace
 # :math:`\mathcal{H}^{\prime} \subseteq \mathcal{H}` spanned by
 # :math:`\{\vert \phi_{HF} \rangle, \vert \phi_q \rangle\}`. These will be
-# two-dimensional matrices, and in the following Sections we will show how
+# two-dimensional matrices, and in the following sections we will show how
 # to compute all their entries step by step.
 # 
 # As done previously, we start by importing *PennyLane*, *Qchem* and
-# differentiable *NumPy* followed by defining the molecular hamiltonian in
+# differentiable *NumPy* followed by defining the molecular Hamiltonian in
 # the Hartree-Fock basis for :math:`H_2`.
 # 
 
@@ -318,7 +318,7 @@ H, qubits = qchem.molecular_hamiltonian(
 # Using PennyLane, we can access the Hartree-Fock energy by looking at the
 # fermionic Hamiltonian, which is the Hamiltonian in the basis of Slater
 # determinants. The basis is organized in lexicographic order, meaning
-# that if we want the entry corresponding to the Hartree Fock determinant
+# that if we want the entry corresponding to the Hartree-Fock determinant
 # :math:`\vert 1100 \rangle`, we will have to take the entry
 # :math:`H_{i,i}`, where :math:`1100` is the binary representation of the
 # index :math:`i`.
@@ -347,7 +347,7 @@ S11 = 1
 # 
 # where :math:`\vert \phi_q \rangle` is the quantum state. This state is
 # just the output of the standard VQE with a given ansatz, following the
-# steps in the first Section. Therefore the entry :math:`H_{22}` just
+# steps in the first section. Therefore, the entry :math:`H_{22}` just
 # corresponds to the final energy of the VQE. In particular, note that the
 # quantum state can be written as
 # :math:`\vert \phi_{q} \rangle = A(\theta^*) \vert \phi_{HF} \rangle`
@@ -388,11 +388,11 @@ S22 = 1
 # 
 # In our case, we are interested in calculating the quantities
 # 
-# .. math:: H_{12} = \sum_{i} Re(\langle \phi_q \vert i \rangle) \langle i \vert H \vert \phi_{HF} \rangle
+# .. math:: H_{12} = \sum_{i} Re(\langle \phi_q \vert i \rangle) \langle i \vert H \vert \phi_{HF} \rangle,
 # 
-# .. math:: S_{12} = Re(\langle \phi_q \vert \phi_{HF} \rangle) 
+# .. math:: S_{12} = Re(\langle \phi_q \vert \phi_{HF} \rangle),
 # 
-# where :math:`i` are the computational basis states of the system,
+# where :math:`\lvert i \rangle` are the computational basis states of the system,
 # i.e. the basis of single Slater determinants. For the problem under
 # consideration, the set of relevant computational basis states for which
 # :math:`\langle i \vert H \vert \phi_{HF}\rangle \neq 0` contains all the
@@ -401,7 +401,7 @@ S22 = 1
 # .. math:: \vert 1100 \rangle, \vert 1001 \rangle, \vert 0110 \rangle, \vert 0011 \rangle.
 # 
 # Note that the set of computational basis states includes the
-# *Hartree-Fock* state :math:`i_0 = \phi_{HF} = \vert 1100 \rangle`. The
+# *Hartree-Fock* state :math:`\lvert i_0 \rangle = \phi_{HF} = \vert 1100 \rangle`. The
 # projections :math:`\langle i \vert H \vert \phi_{HF} \rangle` can be
 # extracted analytically from the fermionic Hamiltonian that we computed
 # above, by accessing the entries by the index given by the binary
@@ -450,8 +450,8 @@ def hadamard_test(Uq, Ucl, component='real'):
 
 
 ######################################################################
-# Once we have built the Hadamard test we can compute the Hamiltonian
-# crossed terms.
+# Now, we can compute the Hamiltonian
+# cross-terms.
 # 
 
 def circuit_product_state(state):
@@ -516,7 +516,7 @@ print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
 ######################################################################
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
-# In the `paper <https://arxiv.org/abs/2106.04755>`__, they estimate
+# In the `paper <https://arxiv.org/abs/2106.04755>`__, the authors estimate
 # these numbers by computing the variances associated to both standard VQE
 # and CB-VQE for different molecules, showing that for very small systems
 # the classically-boosted method reduces the number of measurements by a
