@@ -11,8 +11,8 @@ r"""Differentiating quantum error mitigation transforms
 
 *Author: Korbinian Kottmann, Posted: 23 August 2022*
 
-Error mitigation is an important strategy for minimizing noise when using noisy-intermediate scale quantum (NISQ) hardware.
-This can be very important when designing and testing variational algorithms. In this demo, we will show how error mitigation
+Error mitigation is an important strategy for minimizing noise when using noisy-intermediate scale quantum (NISQ) hardware,
+especially when designing and testing variational algorithms. In this demo, we will show how error mitigation
 can be combined with variational workflows, allowing you to differentiate `through` the error mitigation.
 
 Differentiating quantum error mitigation transforms
@@ -26,7 +26,7 @@ for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and
 These algorithms arose due to the constraints of noisy near-term quantum hardware.
 This means that naturally in that scenario we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
 :math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|)`. Since noisy channels generally
-yield mixed states, we can formally write 
+yield mixed states (see e.g. :doc:`demos/tutorial_noisy_circuits`), we can formally write 
 
 .. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
@@ -210,16 +210,18 @@ energy_mitigated = VQE_run(qnode_mitigated, max_iter)
 energy_exact = np.min(np.linalg.eigvalsh(qml.matrix(H)))
 
 plt.figure(figsize=(8, 5))
-plt.plot(energy_mitigated, ".--", label=r"VQE $E_{\\text{mitigated}}$")
-plt.plot(energy_noisy, ".--", label=r"VQE $E_{\\text{noisy}}$")
-plt.plot(energy_ideal, ".--", label=r"VQE $E_{\\text{ideal}}$")
-plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label=r"$E_{\\text{exact}}$")
+plt.plot(energy_mitigated, ".--", label="VQE E_mitigated")
+plt.plot(energy_noisy, ".--", label="VQE E_noisy")
+plt.plot(energy_ideal, ".--", label="VQE E_ideal")
+plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label="E_exact")
 plt.legend(fontsize=14)
 plt.xlabel("Iteration", fontsize=18)
 plt.ylabel("Energy", fontsize=18)
 plt.show()
 
 ##############################################################################
+# We see that during the optimization we are for the most part significantly closer to the ideal simulation and
+# end up with a better energy compared to executing the noisy device without ZNE.
 #
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
 # executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way
@@ -228,7 +230,7 @@ plt.show()
 # Differentiating the mitigation transform itself
 # ------------------------------------------------
 #
-# So far we have been concerned with differentiating `through` the mitigation transform. An interesting direction for future work
+# In the previous sections, we have been concerned with differentiating `through` the mitigation transform. An interesting direction for future work
 # is differentiating the transform itself [#DiffableTransforms]_. In particular, the authors in [#VAQEM]_ make the interesting observation
 # that for some error mitigation schemes, the cost function is smooth in some of the mitigation parameters. Here, we show one of their
 # examples, which is a time-sensitive dynamical decoupling scheme:
@@ -242,8 +244,8 @@ plt.show()
 # In this mitigation technique, the single qubit state is put into an equal superposition: 
 # :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}`. During the first idle time :math:`t_1`, the state is altered due to noise.
 # Applying :math:`X` reverses the roles of each computational basis state. The idea is that the noise in the second idle time
-# :math:`T-t_1` is cancelling out the effect of the first time window. We see that the output fidelity with respect to the noise-free
-# execution is a smooth function of :math:`t_1`. This was executed on ``ibm_perth``, and we note that simple noise models,
+# :math:`T-t_1` is cancelling out the effect of the first time window. We see that the output fidelity is a smooth function of :math:`t_1`.
+# This was executed on ``ibm_perth``, and we note that simple noise models,
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device.
 #
 # Obtaining the gradient with respect to this parameter is difficult. 
