@@ -69,7 +69,8 @@ Measurement-based quantum computation
 # The distinction between a graph state and a cluster state is that the latter has the additional
 # condition that the underlying graph has to be a lattice. Physically, this means that TODO ... 
 # - require Pauli measurements 
-# - fully disentangle
+# - fully disentangle 
+# - [#MultiPartyEntanglement]_
 #
 # We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
@@ -738,6 +739,11 @@ RHG = SurfaceCode(code_distance)
 #
 #   Sergey Bravyi and Alexei Kitaev. (2004) *Universal quantum computation with ideal Clifford gates and noisy ancillas*,
 #   `arXiv <https://arxiv.org/abs/quant-ph/0403025>`_.
+#
+# .. [#QuantumTeleportation]
+#
+#   M. Hein, J. Eisert and H.J. Briegel. (2003) *Multi-party entanglement in graph states*,
+#   `arXiv <https://arxiv.org/abs/quant-ph/0307130>`_.
 #
 # .. [#OpticalQuantumComputing]
 #
