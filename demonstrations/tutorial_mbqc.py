@@ -554,10 +554,10 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Due to the peculiarities of quantum physics, we have to be careful when implementing error
 # correction. First of all, we can not simply look inside our quantum computer and see if an error occurred. This would collapse the
 # wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
-# state to create redundancy because of the *no-cloning theorem*. Lastly, there are infinitely many 
-# more errors in quantum computing, whereas the only errors in classical computing are bitflips; a 1 
+# state to create redundancy because of the *no-cloning theorem*. Lastly, there are infinitely many
+# more errors in quantum computing, whereas the only errors in classical computing are bitflips; a 1
 # being flipped to a 0 or vice versa.
-# 
+#
 # A whole research field is devoted
 # to combating these challenges since Peter Shor published the seminal paper in 1995 [#ShorQEC1995]_.
 # Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is
@@ -609,7 +609,7 @@ RHG = SurfaceCode(code_distance)
 #
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary
-# outcomes of these measurements determine the measurement bases for future measurements, and the 
+# outcomes of these measurements determine the measurement bases for future measurements, and the
 # last sheet of the lattice contains the encoded result of the computation which can be read out by yet another measurement.
 #
 # .. figure:: ../demonstrations/mbqc/gif_measuring.gif
