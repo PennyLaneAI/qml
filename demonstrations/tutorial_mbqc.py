@@ -563,7 +563,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # MBQC framework by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as
 # an example.
 #
-# .. figure:: ../demonstrations/mbqc/surface_code_d3.png
+# .. figure:: ../demonstrations/mbqc/surface_code_d3.PNG
 #    :align: center
 #    :width: 50%
 #
