@@ -528,7 +528,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    where the bonds between them represent entanglement. The gray qubits have been measured,
 #    destroying the entanglement and removing them from the cluster. At the same time, the green
 #    qubits are being added to the cluster by entangling them with it. Prior measurement outcomes
-#    determine the basis for future measurements [#OpticalQuantumComputing].
+#    determine the basis for future measurements [#OpticalQuantumComputing]_.
 #
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
@@ -641,7 +641,7 @@ RHG = SurfaceCode(code_distance)
 # single-qubit measurements. This is not a strict requirement, as one can acquire the same
 # capabilities by sprinkling *magic states* into the cluster state. A discussion of this topic is
 # beyond the scope of this tutorial, but a good place to start is `this
-# paper <https://arxiv.org/abs/quant-ph/0403025>`_ [#MagicStates].
+# paper <https://arxiv.org/abs/quant-ph/0403025>`_ [#MagicStates]_.
 #
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
