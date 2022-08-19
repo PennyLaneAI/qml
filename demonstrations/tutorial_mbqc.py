@@ -556,7 +556,10 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 #    ..
 #
-#    A distance-3 surface code [#FowlerSurfaceCode]_
+#   A distance-3 surface code. Circles represent qubits and bubbles represent operators, called 
+#   stabilizers, used to detect errors. The stabilizers are tensor products of Pauli-X or Pauli-Z 
+#   operators and each is associated with its own ancilla qubit. The combined system encodes one 
+#   logical qubit and can correct any combination of :math:`\floor{(d-1)/2}` errors. [#FowlerPolyestimate]_
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
@@ -750,7 +753,7 @@ RHG = SurfaceCode(code_distance)
 #   Jeremy L. O'Brien. (2007) *Optical quantum computing*, `Science Vol. 318, Issue 5856, 1567-1570 
 #   <https://www.science.org/doi/10.1126/science.1142892>`_.
 #
-# .. [#FowlerSurfaceCode]
+# .. [#FowlerPolyestimate]
 #
 #   Austin G. Fowler. (2013) *Polyestimate: instantaneous open source surface code analysis*, `arXiv
 #   <https://arxiv.org/abs/1307.0689>`_.
