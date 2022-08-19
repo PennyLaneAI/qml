@@ -42,7 +42,7 @@ PennyLane now provides one such differentiable quantum error mitigation techniqu
 Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
 We will briefly introduce these functionalities and afterwards go more in depth to explore what happens under the hood.
 
-We start by initializing a noisy device under the :func:`~.pennylane.DepolarizingChannel`:
+We start by initializing a noisy device under the :class:`~.pennylane.DepolarizingChannel`:
 """
 
 import pennylane as qml
