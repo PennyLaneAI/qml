@@ -66,7 +66,7 @@ Measurement-based quantum computation
 # qubits :math:`i` and :math:`j`, and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)` 
 # is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator.
 #
-# The distinction between a graph state and a cluster state is that the latter has the additional
+# The distinction between a term graph state and a cluster state is that the latter has the additional
 # condition that the underlying graph has to be a lattice. Physically, this means that TODO ... 
 # - require Pauli measurements 
 # - fully disentangle 
@@ -550,13 +550,13 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # MBQC framework by using the surface code [#FowlerSurfaceCode]_ [#GoogleQEC2022]_ as
 # an example.
 #
-# .. figure:: ../demonstrations/mbqc/surfacecode.jpg
+# .. figure:: ../demonstrations/mbqc/surface_code_d3.png
 #    :align: center
 #    :width: 50%
 #
 #    ..
 #
-#    A distance-3 surface code
+#    A distance-3 surface code [#FowlerSurfaceCode]_
 #
 # In the measurement-based picture, quantum error correction requires a 3-dimensional cluster state
 # [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
@@ -747,8 +747,13 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#OpticalQuantumComputing]
 #
-#   Jeremy L. O'Brien. (2007) *Optical quantum computing.*, `Science Vol. 318, Issue 5856, 1567-1570 
+#   Jeremy L. O'Brien. (2007) *Optical quantum computing*, `Science Vol. 318, Issue 5856, 1567-1570 
 #   <https://www.science.org/doi/10.1126/science.1142892>`_.
+#
+# .. [#FowlerSurfaceCode]
+#
+#   Austin G. Fowler. (2013) *Polyestimate: instantaneous open source surface code analysis*, `arXiv
+#   <https://arxiv.org/abs/1307.0689>`_.
 #
 
 ##############################################################################
