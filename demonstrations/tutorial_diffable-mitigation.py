@@ -26,7 +26,7 @@ for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and
 These algorithms arose due to the constraints of noisy near-term quantum hardware.
 This means that naturally in that scenario we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
 :math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|)`. Since noisy channels generally
-yield mixed states (see e.g. :doc:`demos/tutorial_noisy_circuits`), we can formally write 
+yield mixed states (see e.g. :doc:`tutorial_noisy_circuits`), we can formally write 
 
 .. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
@@ -228,7 +228,7 @@ plt.show()
 # as described in the interfaces section of the documentation :doc:`introduction/interfaces`.
 #
 # Differentiating the mitigation transform itself
-# ------------------------------------------------
+# -----------------------------------------------
 #
 # In the previous sections, we have been concerned with differentiating `through` the mitigation transform. An interesting direction for future work
 # is differentiating the transform itself [#DiffableTransforms]_. In particular, the authors in [#VAQEM]_ make the interesting observation
@@ -256,7 +256,13 @@ plt.show()
 #
 # Overall, this is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact to the simulation result.
 # It is therefore desirable to be able to optimize this parameter at the same time as we perform a variational quantum algorithm.
-#
+
+# Conclusion
+# ----------
+# 
+# We demonstrated how zero-noise extrapolation can be seemlessly incorporated in a differentiable workflow in PennyLane to achieve better results.
+# Further, the possibility of differentiating error mitigation transforms themselves has been discussed and we have seen
+# that some mitigation schemes require executing on real devices or more advanced noise simulators.
 #
 # References
 # ----------
