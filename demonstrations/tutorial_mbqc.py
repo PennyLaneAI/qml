@@ -597,7 +597,7 @@ RHG = SurfaceCode(code_distance)
 #
 #    ..
 #
-#    Performing a computation with measurements using the RHG lattice. [#XanaduBlueprint]_
+#    Performing an error corrected computation with measurements using the RHG lattice. [#XanaduBlueprint]_
 #
 
 
