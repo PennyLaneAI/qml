@@ -493,8 +493,9 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # wonder - is it even feasible to construct the large cluster states that one-way quantum 
 # computation requires?
 #
-# The number of qubits needed to construct a circuit can grow to be very large, as it depends on the
-# amount of logical gates. At this point, it's good to reiterate that the entanglement of the cluster
+# The number of qubits needed to construct a circuit can grow to be very large, as it not only 
+# depends on the number of logical qubits, but also on the depth of the circuit. At this point, 
+# it's good to reiterate that the entanglement of the cluster
 # state is created *off-line*. This means that the entanglement is made independently from the
 # computation, like how a blank sheet of paper is made separately from the text of a book.
 # Interestingly enough, we do not have to prepare all the entanglement at once. Just like we can
