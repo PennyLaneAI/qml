@@ -55,7 +55,7 @@ Measurement-based quantum computation
 # ----------------
 #
 # *Cluster states* are the universal substrate for measurement-based quantum computation
-# [#OneWay2001]_. They are a special instance of *graph states*, a class of entangled multi-qubit
+# [#OneWay2001]_. They are a special instance of *graph states* [#EntanglementGraphStates]_, a class of entangled multi-qubit
 # states that can be represented by an undirected graph :math:`G = (V,E)` whose vertices are
 # associated with qubits and the edges with entanglement between them. The associated quantum state
 # reads as follows
@@ -67,10 +67,8 @@ Measurement-based quantum computation
 # is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator.
 #
 # The distinction between a term graph state and a cluster state is that the latter has the additional
-# condition that the underlying graph has to be a lattice. Physically, this means that TODO ... 
-# - require Pauli measurements 
-# - fully disentangle 
-# - [#MultiPartyEntanglement]_
+# condition that the underlying graph has to be a lattice [#PersistentEntanglement]_ 
+# [#MultiPartyEntanglement]_ []. 
 #
 # We can also describe the creation of a cluster state in the gate-based model. Let us first
 # define a graph we want to look at, and then construct a circuit in PennyLane to create the
@@ -757,6 +755,17 @@ RHG = SurfaceCode(code_distance)
 #
 #   Austin G. Fowler. (2013) *Polyestimate: instantaneous open source surface code analysis*, `arXiv
 #   <https://arxiv.org/abs/1307.0689>`_.
+#
+# .. [#EntanglementGraphStates]
+#
+#   M. Hein, W. Dür, J. Eisert, R. Raussendorf, M. Van den Nest, H.J. Briegel. (2006) *Entanglement 
+#   in Graph States and its Applications*, `arXiv <https://arxiv.org/abs/quant-ph/0602096>`_.
+#
+# .. [#PersistentEntanglement]
+#
+#   Hans J. Briegel and Robert Raussendorf (2001) *Persistent Entanglement in Arrays of 
+#   Interacting Particles*, `Phys. Rev. Lett. 86, 910
+#   <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.910>`_.
 #
 
 ##############################################################################
