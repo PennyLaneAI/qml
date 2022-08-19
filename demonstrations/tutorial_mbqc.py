@@ -609,9 +609,8 @@ RHG = SurfaceCode(code_distance)
 #
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary
-# outcomes of these measurements determine the measurement bases for future measurements, and the
-# last sheet of the lattice encodes the result of the computation which can be read out by yet
-# another measurement.
+# outcomes of these measurements determine the measurement bases for future measurements, and the 
+# last sheet of the lattice contains the encoded result of the computation which can be read out by yet another measurement.
 #
 # .. figure:: ../demonstrations/mbqc/gif_measuring.gif
 #    :align: center
