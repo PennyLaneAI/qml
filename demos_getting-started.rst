@@ -94,12 +94,6 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
 
-.. customgalleryitem::
-    :tooltip: Learn how to use zne error mitigation and maintain differentiability.
-    :figure: demonstrations/diffable-mitigation/diffable_mitigation_thumb.png
-    :description: :doc:`demos/tutorial_diffable-mitigation`
-    :tags: mitigation zero noise extrapolation differentiability
-
 
 :html:`</div></div><div style='clear:both'>`
 
