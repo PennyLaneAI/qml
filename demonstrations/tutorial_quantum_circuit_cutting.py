@@ -861,21 +861,12 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 # .. bio:: Gideon Uchehara
 #    :photo: ../_static/gideon_uchehara.jpg
 #
-#    Gideon is a PhD student at the University of British Columbia, Canada.
-#    His research is in quantum algorithms and quantum Machine Learning. He
-#    works at Xanadu as a Quantum Computing Educator Intern. He recently
-#    started the Blacks In Quantum (BIQ) initiative and also serves as the
-#    student representative on the International Program Committee for
-#    the Quantum Computing NSERC CREATE Program, British Columbia, Canada.
+#    Gideon is a PhD student at the University of British Columbia, Canada. His research is in quantum algorithms and quantum Machine Learning. He works at Xanadu as a Quantum Computing Educator Intern. He recently started the Blacks In Quantum (BIQ) initiative and also serves as the student representative on the International Program Committee for the Quantum Computing NSERC CREATE Program, British Columbia, Canada.
 #
 # .. bio:: Matija Medvidović
 #    :photo: ../_static/matija_medvidovic.jpeg
 #
-#    Matija is a PhD student at Columbia University and the Flatiron Institute
-#    in New York. He works with machine learning methods to study quantum
-#    many-body physics and quantum computers. He is currently a part of the
-#    Xanadu residency program. He is a firm believer in keeping bios short
-#    and concise.
+#    Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu residency program. He is a firm believer in keeping bios short and concise.
 #
 # .. bio:: Anuj Apte
 #    :photo: ../_static/avatar.webp
