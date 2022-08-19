@@ -176,8 +176,10 @@ plt.show()
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
 #
-# We'll now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian --- this is the variational quantum eigensolving (VQE) `<https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ algorithm. Then, we'll compare VQE optimization runs for
-# the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results, whereas the noisy execution is further off.
+# We will now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian 
+# --- this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
+# Then, we will compare VQE optimization runs for  the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results,
+# whereas the noisy execution is further off.
 
 
 def VQE_run(cost_fn, max_iter, stepsize=0.1):
@@ -210,8 +212,8 @@ energy_mitigated = VQE_run(qnode_mitigated, max_iter)
 energy_exact = np.min(np.linalg.eigvalsh(qml.matrix(H)))
 
 plt.figure(figsize=(8, 5))
-plt.plot(energy_mitigated, ".--", label="VQE E_mitigated")
 plt.plot(energy_noisy, ".--", label="VQE E_noisy")
+plt.plot(energy_mitigated, ".--", label="VQE E_mitigated")
 plt.plot(energy_ideal, ".--", label="VQE E_ideal")
 plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label="E_exact")
 plt.legend(fontsize=14)
