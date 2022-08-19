@@ -502,7 +502,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 #    ..
 #
-#    We can also consume the cluster state while we grow it [TODO: CITATION].
+#    We can also consume the cluster state while we grow it [#OpticalQuantumComputing].
 #
 # This feature makes it particularly interesting for photonic-based quantum computers: we can use
 # expendable qubits that don't have to stick around for the full calculation. If we can find a
@@ -720,6 +720,11 @@ RHG = SurfaceCode(code_distance)
 #
 #   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes*,
 #    `arXiv <https://arxiv.org/abs/1607.02579>`_.
+#
+# .. [#OpticalQuantumComputing]
+#
+#   Jeremy L. O'Brien. (2007) *Optical quantum computing*, `Science Vol. 318, Issue 5856, 1567-1570 
+#   <https://www.science.org/doi/10.1126/science.1142892>`_.
 #
 
 ##############################################################################
