@@ -554,7 +554,11 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Due to the peculiarities of quantum physics, we have to be careful when implementing error
 # correction. First of all, we can not simply look inside our quantum computer and see if an error occurred. This would collapse the
 # wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
-# state to create redundancy because of the *no-cloning theorem*. A whole research field is devoted
+# state to create redundancy because of the *no-cloning theorem*. Lastly, there are infinitely many 
+# more errors in quantum computing, whereas the only errors in classical computing are bitflips; a 1 
+# being flipped to a 0 or vice versa.
+# 
+# A whole research field is devoted
 # to combating these challenges since Peter Shor published the seminal paper in 1995 [#ShorQEC1995]_.
 # Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by
