@@ -714,28 +714,28 @@ RHG = SurfaceCode(code_distance)
 # .. [#Nielsen1998]
 #
 #   M. A. Nielsen, E. Knill & R. Laflamme. (1998) *Complete quantum teleportation using nuclear 
-#   magnetic resonance* `Nature volume 396, 52–55 <https://www.nature.com/articles/23891>`_.
+#   magnetic resonance*, `Nature volume 396, 52–55 <https://www.nature.com/articles/23891>`_.
 #
 # .. [#Hermans2022]
 #
 #    S. L. N. Hermans, M. Pompili, H. K. C. Beukers, S. Baier, J. Borregaard & R. Hanson. (2022) 
-#    *Qubit teleportation between non-neighbouring nodes in a quantum network*  
+#    *Qubit teleportation between non-neighbouring nodes in a quantum network*, 
 #    `Nature 605, 663–668 <https://www.nature.com/articles/s41586-022-04697-y>`_.
 #
 # .. [#Riebe2004]
 #
 #   M. Riebe, H. Häffner, C. F. Roos, W. Hänsel, J. Benhelm, G. P. T. Lancaster, T. W. Körber, 
 #   C. Becher, F. Schmidt-Kaler, D. F. V. James & R. Blatt. (2002) *Deterministic quantum 
-#   teleportation with atoms* `Nature 429, 734-737 <https://www.nature.com/articles/nature02570>`_.
+#   teleportation with atoms*, `Nature 429, 734-737 <https://www.nature.com/articles/nature02570>`_.
 #
 # .. [#FoliatedQuantumCodes]
 #
-#   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes*,
+#   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes.*,
 #    `arXiv <https://arxiv.org/abs/1607.02579>`_.
 #
 # .. [#OpticalQuantumComputing]
 #
-#   Jeremy L. O'Brien. (2007) *Optical quantum computing*, `Science Vol. 318, Issue 5856, 1567-1570 
+#   Jeremy L. O'Brien. (2007) *Optical quantum computing.*, `Science Vol. 318, Issue 5856, 1567-1570 
 #   <https://www.science.org/doi/10.1126/science.1142892>`_.
 #
 
