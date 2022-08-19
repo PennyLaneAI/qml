@@ -318,7 +318,7 @@ def RZ(theta, input_state):
 ##############################################################################
 #
 # Now he have a base case, let's implement an :math:`R_z` gate on an arbitrary state 
-# in the MBQC formalism and compare it.
+# in the MBQC formalism.
 #
 
 mbqc_dev = qml.device("default.qubit", wires=2)
@@ -343,6 +343,11 @@ def RZ_MBQC(theta, input_state):
     # Return the density matrix of the output state
     return qml.density_matrix(wires=[1])
 
+##############################################################################
+#
+# Next, we will prepare a random input state and compare the two approaches.
+#
+
 # Generate a random input state
 input_state = generate_random_state()
 theta = 2 * np.pi * np.random.random()
@@ -352,11 +357,6 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 ##############################################################################
 #
 # Seems good! As we can see, the resulting states are practically the same as we wanted to show. 
-# Next, we will prepare a random input state and compare the two approaches.
-#
-
-##############################################################################
-#
 # For the :math:`R_x(\theta)` gate we take a similar approach.
 #
 
@@ -403,7 +403,7 @@ def RX_MBQC(theta, input_state):
 
 ##############################################################################
 #
-# And finally we can compare the two implementations with random state as an input.
+# Finally, we again compare the two implementations with random state as an input.
 #
 
 # Generate a random input state
@@ -411,6 +411,12 @@ input_state = generate_random_state()
 theta = 2 * np.pi * np.random.random()
 
 np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
+
+##############################################################################
+#
+# Perfect! We have shown that we can implement any single-axis rotation on an arbitrary state in the 
+# MBQC formalism. In the following section we will look at a two-qubit gate to complete our 
+# universal gate set.
 
 ##############################################################################
 # The two-qubit gate: CNOT
