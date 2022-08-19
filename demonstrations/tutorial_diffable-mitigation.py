@@ -256,13 +256,14 @@ plt.show()
 #
 # Overall, this is a nice example of a mitigation scheme where varying the mitigation parameter has direct impact to the simulation result.
 # It is therefore desirable to be able to optimize this parameter at the same time as we perform a variational quantum algorithm.
-
+#
 # Conclusion
 # ----------
 # 
 # We demonstrated how zero-noise extrapolation can be seemlessly incorporated in a differentiable workflow in PennyLane to achieve better results.
 # Further, the possibility of differentiating error mitigation transforms themselves has been discussed and we have seen
 # that some mitigation schemes require executing on real devices or more advanced noise simulators.
+#
 #
 # References
 # ----------
