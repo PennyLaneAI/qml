@@ -264,7 +264,7 @@ plt.show()
 # 
 # We demonstrated how zero-noise extrapolation can be seemlessly incorporated in a differentiable workflow in PennyLane to achieve better results.
 # Further, the possibility of differentiating error mitigation transforms themselves has been discussed and we have seen
-# that some mitigation schemes require executing on real devices or more advanced noise simulators.
+# that some mitigation schemes require execution on real devices or more advanced noise simulations.
 #
 #
 # References
