@@ -596,8 +596,8 @@ RHG = SurfaceCode(code_distance)
 #
 # For the sake of intuition, you can think of the graph shown above as having two spatial dimensions (:math:`x`
 # and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown in the
-# figure above on the :math:`xy`-plane. In principle, any quantum error correction code can be `foliated <https://arxiv.org/abs/1607.02579>`_ into
-# a graph state for measurement-based QEC [#FoliatedQuantumCodes]_. However, the foliations are particularly nice for `CSS
+# figure above on the :math:`xy`-plane. In principle, any quantum error correction stabilizer code can be `foliated <https://arxiv.org/abs/1607.02579>`_ into
+# a graph state for measurement-based QEC [#FoliatedQuantumCodes]_, [#UniversalFTMBQC]_. However, the foliations are particularly nice for `CSS
 # codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
 # :math:`X`-checks *or* :math:`Z`-checks, and include the *surface code* and *colour code* families.
 # For these CSS codes, you can view the primal and dual sheets as measuring the
@@ -782,6 +782,11 @@ RHG = SurfaceCode(code_distance)
 #   Hans J. Briegel and Robert Raussendorf (2001) *Persistent Entanglement in Arrays of
 #   Interacting Particles*, `Phys. Rev. Lett. 86, 910
 #   <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.910>`_.
+#
+# .. [#UniversalFTMBQC]
+#
+#   Benjamin J. Brown, Sam Roberts. (2018) *Universal fault-tolerant measurement-based quantum computation*, `arXiv
+#   <https://arxiv.org/abs/1811.11780>`_.
 #
 
 ##############################################################################
