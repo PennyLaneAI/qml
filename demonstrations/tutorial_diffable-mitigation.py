@@ -9,7 +9,7 @@ r"""Differentiating quantum error mitigation transforms
 
     tutorial_error_mitigation Error mitigation with Mitiq and PennyLane
 
-*Author: Korbinian Kottmann, Posted: 27 July 2022*
+*Author: Korbinian Kottmann, Posted: 23 August 2022*
 
 Error mitigation is an important strategy for minimizing noise when using noisy-intermediate scale quantum (NISQ) hardware.
 This can be very important when designing and testing variational algorithms. In this demo, we will show how error mitigation
@@ -22,8 +22,9 @@ Most variational quantum algorithms (VQAs) are concerned with optimizing a `quan
 
 .. math:: f(\theta) = \langle 0 | U^\dagger(\theta) H U(\theta) | 0 \rangle,
 
-for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H`. These algorithms are specifically designed
-to be executed on noisy hardware. This means that naturally we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
+for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H`. 
+These algorithms arose due to the constraints of noisy near-term quantum hardware.
+This means that naturally in that scenario we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
 :math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|)`. Since noisy channels generally
 yield mixed states, we can formally write 
 
@@ -129,11 +130,14 @@ print(grad[1])
 # where :math:`n = \lfloor (\lambda - 1)/2 \rfloor` and :math:`s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor` are determined via the ``scale_factor`` :math:`\lambda`.
 #
 # The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^{⚡}` for different scale factors,
-# and then extrapolate to :math:`\lambda \rightarrow 0` (zero noise). Note that ``scale_factor = 1`` corresponds to the original circuit, i.e. the noisy execution.
+# and then extrapolate to :math:`\lambda \rightarrow 0` (zero noise). This is done with a polynomial fit in :math:`f^{⚡}` as a function of :math:`\lambda`.
+# Note that ``scale_factor = 1`` corresponds to the original circuit, i.e. the noisy execution.
 #
 
 scale_factors = [1, 2, 3]
-folded_res = [qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors]
+folded_res = [
+    qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors
+]
 
 ideal_res = qnode_ideal(w1, w2)
 
@@ -147,10 +151,12 @@ x_fit = np.linspace(0, scale_factors[-1], 20)
 y_fit = np.poly1d(coeffs)(x_fit)
 
 plt.figure(figsize=(8, 5))
-plt.plot(scale_factors, folded_res, "x--", label="folded")
-plt.plot(0, ideal_res, "X", label="ideal res")
-plt.plot(0, zne_res, "X", label="ZNE res", color="tab:red")
+plt.plot(scale_factors, folded_res, "x--", label="folded result")
+plt.plot(0, ideal_res, "X", label="ideal result")
+plt.plot(0, zne_res, "X", label="ZNE result", color="tab:red")
 plt.plot(x_fit, y_fit, label="fit", color="tab:red", alpha=0.5)
+plt.xlabel("$\\lambda$")
+plt.ylabel("f⚡")
 plt.legend()
 plt.show()
 
@@ -158,11 +164,14 @@ plt.show()
 # We see that the mitigated result comes close to the ideal result, whereas the noisy result is further off (see value at ``scale_factor=1``).
 #
 # Note that this folding scheme is relatively simple and only really is sensible for integer values of ``scale_factor``. At the same time, ``scale_factor`` is
-# limited from above by the noise as the noisy quantum function quickly decoheres under this folding. Therefore, one typically only uses ``scale_factors = [1, 2, 3]``, but you
-# can in principle think of more fine grained folding schemes and test them by providing custom folding operations, see details in :func:`~.pennylane.transforms.mitigate_with_zne`.
+# limited from above by the noise as the noisy quantum function quickly decoheres under this folding. I.e., for :math:`\lambda\geq 4` the results are typically already decohered.
+# Therefore, one typically only uses ``scale_factors = [1, 2, 3]``.
+# In principle, one can think of more fine grained folding schemes and test them by providing custom folding operations. How this can be done in PennyLane with the given 
+# API is described in :func:`~.pennylane.transforms.mitigate_with_zne`.
 #
-# Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy way to describe a polynomial fit of ``order = len(x) - 1``. Alternatively,
-# you can use :func:`~.pennylane.transforms.poly_extrapolate` and manually pass the order via a keyword argument ``extrapolate_kwargs={'order': 2}``.
+# Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy
+# way to describe a polynomial fit of ``order = len(x) - 1``.
+# Alternatively, you can use :func:`~.pennylane.transforms.poly_extrapolate` and manually pass the order via a keyword argument ``extrapolate_kwargs={'order': 2}``.
 #
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
@@ -201,10 +210,10 @@ energy_mitigated = VQE_run(qnode_mitigated, max_iter)
 energy_exact = np.min(np.linalg.eigvalsh(qml.matrix(H)))
 
 plt.figure(figsize=(8, 5))
-plt.plot(energy_mitigated, ".--", label=r"VQE $E_{\text{mitigated}}$")
-plt.plot(energy_noisy, ".--", label=r"VQE $E_{\text{noisy}}$")
-plt.plot(energy_ideal, ".--", label=r"VQE $E_{\text{ideal}}$")
-plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label=r"$E_{\text{exact}}$")
+plt.plot(energy_mitigated, ".--", label=r"VQE $E_{\\text{mitigated}}$")
+plt.plot(energy_noisy, ".--", label=r"VQE $E_{\\text{noisy}}$")
+plt.plot(energy_ideal, ".--", label=r"VQE $E_{\\text{ideal}}$")
+plt.plot([1, max_iter + 1], [energy_exact] * 2, "--", label=r"$E_{\\text{exact}}$")
 plt.legend(fontsize=14)
 plt.xlabel("Iteration", fontsize=18)
 plt.ylabel("Energy", fontsize=18)
