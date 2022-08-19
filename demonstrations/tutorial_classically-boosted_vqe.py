@@ -18,9 +18,9 @@ One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
 and materials. Even though there are already some solid proposals on how
 to tackle these problems when fault-tolerant quantum computation comes
-into play, we currently live in the
-`NISQ <https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era>`__
-era, meaning that we can only access very noisy and limited devices.
+into play, we currently live in the `noisy intermediate-scale quantum 
+(NISQ)<https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era>`__
+era, meaning that we can only access noisy and limited devices.
 That is why a large part of the current research on quantum algorithms is
 focusing on what can be done with few resources. In particular, most
 proposals rely on variational quantum algorithms (VQA), which are
@@ -40,10 +40,8 @@ original VQE algorithm have been proposed. These variants are usually
 intended to improve the algorithm’s performance on NISQ-era devices.
 
 Here we will go through one of these proposals step-by-step: the
-Classically-Boosted Variational Quantum Eigensolver (CB-VQE), which was
-recently proposed in this
-`paper <https://arxiv.org/abs/2106.04755>`__. Implementing CB-VQE
-reduces the number of measurements required to obtain the
+Classically-Boosted Variational Quantum Eigensolver (CB-VQE) [#Radin2021]_. 
+Implementing CB-VQE reduces the number of measurements required to obtain the
 ground-state energy with a certain precision. This is done by making use
 of classical states which already contain some information about the
 ground-state of the problem.
@@ -73,11 +71,9 @@ Let’s get started!
 # 
 # If you are not already familiar with the VQE family of algorithms and
 # wish to see how one can apply it to the :math:`H_2` molecule, feel free to
-# work through
-# `VQE overview demo <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__
-# before reading this section. Here, we will only briefly review the main
-# idea behind standard VQE and highlight the important concepts in
-# connection with CB-VQE.
+# work through the aforementioned demo before reading this section. 
+# Here, we will only briefly review the main idea behind standard VQE 
+# and highlight the important concepts in connection with CB-VQE.
 # 
 # Given an Hamiltonian :math:`H`, the main goal of VQE is to find the ground energy of the Schrödinger
 # equation
@@ -92,11 +88,11 @@ Let’s get started!
 # .. math:: E = \langle \phi \vert H \vert \phi \rangle.
 # 
 # In VQE, we prepare a statevector :math:`\vert \phi \rangle` by applying
-# a parameterized ansatz :math:`A(\Theta)` to an inital state
-# :math:`\vert 0^N \rangle`. Then, the parameters :math:`\Theta` are
+# the parameterized ansatz :math:`A(\Theta)`, represented by a unitary matrix, 
+# to an inital state :math:`\vert 0^N \rangle`. Then, the parameters :math:`\Theta` are
 # optimized to minimize a cost function, which in this case is the energy:
 # 
-# .. math::  E(\Theta) = \langle 0^{N} \vert A(\Theta)^{\dagger} H A(\Theta) \vert 0^{N} \rangle. 
+# .. math::  E(\Theta) = \langle 0 \vert^{\otimes N} A(\Theta)^{\dagger} H A(\Theta) \vert 0 \rangle^{\otimes N}. 
 # 
 # This is done using a classical optimization method, which is typically
 # gradient descent.
@@ -350,9 +346,9 @@ S11 = 1
 # steps in the first section. Therefore, the entry :math:`H_{22}` just
 # corresponds to the final energy of the VQE. In particular, note that the
 # quantum state can be written as
-# :math:`\vert \phi_{q} \rangle = A(\theta^*) \vert \phi_{HF} \rangle`
-# where :math:`A(\theta^*)` is the ansatz of the VQE with the optimised
-# parameters :math:`\theta^*`. Once again, we have
+# :math:`\vert \phi_{q} \rangle = A(\Theta^*) \vert \phi_{HF} \rangle`
+# where :math:`A(\Theta^*)` is the ansatz of the VQE with the optimised
+# parameters :math:`\Theta^*`. Once again, we have
 # :math:`S_{22}=\langle \phi_{q} \vert \phi_{q} \rangle = 1` for the
 # overlap matrix.
 # 
@@ -386,15 +382,16 @@ S22 = 1
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 # 
-# In our case, we are interested in calculating the quantities
+# As the Hadamard test returns the real part of a coefficient from a unitary representing 
+# an operation, we will focus on calculating the quantities
 # 
 # .. math:: H_{12} = \sum_{i} Re(\langle \phi_q \vert i \rangle) \langle i \vert H \vert \phi_{HF} \rangle,
 # 
 # .. math:: S_{12} = Re(\langle \phi_q \vert \phi_{HF} \rangle),
 # 
 # where :math:`\lvert i \rangle` are the computational basis states of the system,
-# i.e. the basis of single Slater determinants. For the problem under
-# consideration, the set of relevant computational basis states for which
+# i.e. the basis of single Slater determinants. Note that we have to decompose the Hamiltonian 
+# into a sum of unitaries. For the problem under consideration, the set of relevant computational basis states for which
 # :math:`\langle i \vert H \vert \phi_{HF}\rangle \neq 0` contains all the
 # single and double excitations (allowed by spin symmteries)
 # 
@@ -516,11 +513,8 @@ print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
 ######################################################################
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
-# In the `paper <https://arxiv.org/abs/2106.04755>`__, the authors estimate
-# these numbers by computing the variances associated to both standard VQE
-# and CB-VQE for different molecules, showing that for very small systems
-# the classically-boosted method reduces the number of measurements by a
-# factor of :math:`1000`.
+# For very small systems it can be shown that the classically-boosted method 
+# reduces the number of required measurements by a factor of :math:`1000` [#Radin2021]_.
 # 
 # For this demo, we run the standard VQE and CB-VQE algorihtms :math:`100`
 # times for different values of ``num_shots``. We then compute the mean
@@ -535,5 +529,12 @@ print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
 # by standard VQE. For the limit of large ``num_shots`` we see that, as
 # expected, both algorithms converge to the same value of the ground state
 # energy.
-# 
+#
+# # References
+# ----------
+#
+# .. [#Radin2021]
+#
+#     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
+#     (`arXiv <https://arxiv.org/abs/2106.04755>`__) 
 
