@@ -623,7 +623,8 @@ RHG = SurfaceCode(code_distance)
 # In this demo, we assumed that the system is capable of performing arbitrary
 # single-qubit measurements. This is not a strict requirement, as one can acquire the same 
 # capabilities by sprinkling *magic states* into the cluster state. A discussion of this topic is 
-# beyond the scope of this tutorial, but a good place to start is TODO.
+# beyond the scope of this tutorial, but a good place to start is `this 
+# paper <https://arxiv.org/abs/quant-ph/0403025>`_ [#MagicStates].
 #
 # Xanadu's approach toward a universal quantum computer involves *continuous-variable* cluster states
 # [#CV-MBQC]_. If you would like to learn more about the architecture, you can read our blueprint
@@ -730,8 +731,13 @@ RHG = SurfaceCode(code_distance)
 #
 # .. [#FoliatedQuantumCodes]
 #
-#   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes.*,
+#   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes*,
 #    `arXiv <https://arxiv.org/abs/1607.02579>`_.
+#
+# .. [#MagicStates]
+#
+#   Sergey Bravyi and Alexei Kitaev. (2004) *Universal quantum computation with ideal Clifford gates and noisy ancillas*,
+#   `arXiv <https://arxiv.org/abs/quant-ph/0403025>`_.
 #
 # .. [#OpticalQuantumComputing]
 #
