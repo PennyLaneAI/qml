@@ -157,7 +157,7 @@ html_theme_options = {
     # "homepage": "index.html",
     # Set the name of the project to appear in the left sidebar.
     "project_nav_name": "Quantum Machine Learning",
-    "project_logo": "_static/pennylane.png",
+    "project_logo": "_static/pennylane.svg",
     "touch_icon": "_static/xanadu.png",
     "touch_icon_small": "_static/xanadu_small.png",
     "large_toc": True,
