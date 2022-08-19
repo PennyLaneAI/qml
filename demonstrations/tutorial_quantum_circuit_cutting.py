@@ -2,53 +2,30 @@ r""".. _quantum_circuit_cutting:
 Quantum Circuit Cutting
 =======================
 
-.. meta:: 
-    :property="og:description": insert cool description here 
+.. meta::
+    :property="og:description": insert cool description here
 
 *Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*
 
 Introduction
 -------------------------------------
 
-Quantum computers are projected to accomplish tasks that are far beyond
-the reach of classical computers. However, today’s quantum computers do
-not have the sufficient amount of qubits required to achieve this feat,
-since they are limited by decoherence and low fidelity. This means that
-we cannot run large quantum circuits on existing quantum computers
-without significant errors in our results. An alternative approach is to
-simulate a quantum computer, but this requires exponentially more memory
-and runtime as the number of qubits increases. This is the reason it is
-intractable to simulate an ideal quantum computer classically.
-
-To run a quantum circuit that is larger than current small quantum
-computers and intractable to simulate with classical computers, we need
-to cut the it into smaller subcircuits. To do this, we need to make many
-measurements for the different subcircuits using our small quantum
-computer and then recombine the outcomes of our measurements using a
-classical computer. But the good news is that we can at least run our
-large quantum circuit using our small quantum computer with negligible
-errors.
+Quantum circuits with large number of qubits are difficult to simulate.
+They cannot be programmed on actual hardware due to size constraints
+(insufficient qubits), and they are also error-prone. What if we "cut"
+a large circuit into smaller, more manageable pieces? This is the main
+idea behind the algorithm that allows you to simulate large quantum
+circuits on a small quantum computer called *quantum circuit cutting*.
 
 In this demo, we will first introduce the theory behind quantum circuit
-cutting based on Pauli measurements and see how it implemented in
+cutting based on Pauli measurements and see how it is implemented in
 PennyLane. This method was first introduced in the paper [#Peng2019]_.
 Thereafter, we discuss the theoretical basis on randomized circuit
 cutting with two-designs and demonstrate the resulting improvement in
 performance compared to Pauli measurement based circuit cutting for an
 instance of Quantum Approximate Optimization Algorithm (QAOA).
 
-The main idea behind the algorithm that allows you to simulate large
-quantum circuits on a small quantum computer is called *quantum circuit
-cutting*.
 
-A quantum circuit cutting algorithm takes a large quantum circuit,
-decomposes it into smaller subcircuits that can be executed on a smaller
-quantum device. The results from executing the smaller subcircuits are
-then recombined through some classical post-processing to obtain the
-original result of the large quantum circuit. The PennyLane function
-that implements this algorithm is called ``pennylane.cut_circuit``.
-Before we delve into PennyLane and work through some examples, let’s
-introduce the theory behind the Pauli circuit cutting method.
 
 Background: Understanding the Pauli cutting method
 --------------------------------------------------
@@ -62,30 +39,44 @@ combination of the Pauli matrices as shown below.
 
 Here, we have denoted Pauli matrices by :math:`O_i`, their
 eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
-:math:`c_i`. In the above equation, :math:`O_1 = O_2 = I`,
-:math:`O_3 = O_4 = X`, :math:`O_5 = O_6 = Y` and :math:`O_7 = O_8 = X`.
+:math:`c_i`. In the above equation,
+.. math::
+    O_1 = O_2 = I,
+.. math::
+    O_3 = O_4 = X,
+.. math::
+    O_5 = O_6 = Y
+    and
+.. math::
+    O_7 = O_8 = X.
 Also,
-:math:`\rho_1 = \rho_7=\left | {0} \right\rangle \left\langle {0} \right |`,
-:math:`\rho_2 = \rho_8 = \left | {1} \right\rangle \left\langle {1} \right |`,
-:math:`\rho_3 = \left | {+} \right\rangle \left\langle {+} \right |`,
-:math:`\rho_4 = \left | {-} \right\rangle \left\langle {-} \right |`,
-:math:`\rho_5 = \left | {+i} \right\rangle \left\langle {+i} \right |`,
-:math:`\rho_6 = \left | {-i} \right\rangle \left\langle {-i} \right |`
-and :math:`c_i = \pm 1`.
+.. math::
+    \rho_1 = \rho_7=\left | {0} \right\rangle \left\langle {0} \right |,
+.. math::
+    \rho_2 = \rho_8 = \left | {1} \right\rangle \left\langle {1} \right |,
+.. math::
+    \rho_3 = \left | {+} \right\rangle \left\langle {+} \right |,
+.. math::
+    \rho_4 = \left | {-} \right\rangle \left\langle {-} \right |,
+.. math::
+    \rho_5 = \left | {+i} \right\rangle \left\langle {+i} \right |,
+.. math::
+    \rho_6 = \left | {-i} \right\rangle \left\langle {-i} \right |
+and
+.. math::
+    c_i = \pm 1.
 
-To implement the above equation, each term :math:`Tr(\rho O_i)\rho_i` in
-the equation is broken into two parts. The first part which corresponds
-to the the ``MeasureNode``, :math:`Tr(\rho O_i)` involves measuring the
-expectation value of :math:`O_i` for the first fragment
-(subcircuit-:math:`u`) of the state :math:`\rho`. The second part which
-corresponds to the ``PrepareNode``, :math:`\rho_i` involves preparing
-the corresponding eigenstate :math:`\rho_i` for the second fragment
-(subcircuit-:math:`v`) of the state :math:`\rho`.
-
-In general, if we picture the time evolution of a qubit state from time
-:math:`u` to time :math:`v` as a line between point :math:`u` and point
-:math:`v`, if we cut this line at some point, we can recover the qubit
-state at point :math:`v` using the above equation, as shown in figure 1.
+The above equation can be implemented as a quantum circuit on a quantum
+computer. To do this, each term :math:`Tr(\rho O_i)\rho_i` in the equation
+is broken into two parts. The first part, :math:`Tr(\rho O_i)` corresponds
+to the measurement of Pauli observables :math:`O_i` for a quantum circuit
+representing the left part of the cut quantum state :math:`\rho`. Let's call
+this first circuit subcircuit-:math:`u`. The second part, :math:`\rho_i`
+corresponds to initializing or preparing  the right part of the cut quantum
+state :math:`\rho` with the corresponding Pauli eigenstate, :math:`\rho_i`.
+Let's call this Second circuit subcircuit-:math:`v`. The above equation shows
+how we can recover a quantum state after a cut made on one of its qubits as
+shown in figure 1. This forms the core of quantum circuit cutting.
 
 This means that we only have to do three measurements
 :math:`Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
@@ -96,6 +87,11 @@ states: :math:`\left | {0} \right\rangle`,
 values for states :math:`\left | {-} \right\rangle` and
 :math:`\left | {- i} \right\rangle` can be derived with classical
 postrocessing.
+
+In general, there is a resolution of the identity along a wire (qubit) that
+we can interpret as circuit cutting. In the following section, we want to be
+able to say that there is actually a more clever way of resolving the same
+identity that leads to fewer shots needed to estimate observables.
 
 .. figure:: ../demonstrations/quantum_circuit_cutting/1Qubit-Circuit-Cutting.png
     :align: center
@@ -108,11 +104,20 @@ postrocessing.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let’s go through the steps involved in ``qcut`` implementation in
-Pennylane using the circuit below.
+PennyLane has a quantum circuit cutting algorithm, ``qml.cut_circuit`` that
+takes a large quantum circuit, decomposes it into smaller subcircuits that
+are executed on a small quantum device. The results from executing the
+smaller subcircuits are then recombined through some classical post-processing
+to obtain the original result of the large quantum circuit.
+
+Let’s simulate a "real-world" scenario with ``qml.cut_circuit`` using the
+circuit below.
 """
 
 # Import the relevant libraries
+import matplotlib.pyplot as plt
+import networkx as nx
+from itertools import product, combinations
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane.tape import QuantumTape
@@ -139,21 +144,24 @@ fig, ax = qml.draw_mpl(circuit)(x)
 
 
 ######################################################################
-# With the above 3-qubit quantum circuit, we will assume the following:
-# our quantum computer has less than 3 qubits, say we can execute at most
-# two qubits on it. This means that we have to cut the circuit such that
-# the resulting subcircuits have at most 2 qubits.
+# Given the above quantum circuit, our goal is to simulate a 3-qubit quantum
+# circuit on a 2-qubit quantum computer. This means that we have to cut
+# the circuit such that the resulting subcircuits have at most 2 qubits.
 #
-# Our first decision would be to chose a cut location that separates the
-# circuit into subcircuits with at most 2 qubits. By inspection, it is
-# obvious that the best cut location would be between the two ``CZ`` gates
-# on qubit 1. Hence, we place a ``WireCut`` operation at that location as
-# shown below:
+# Apart from ensuring that the number of qubits for each subcircuit does not
+# exceed the number of qubits on our quantum device, we also have to ensure
+# that the resulting subcircuits have the most efficient classical
+# postprocessing. This is not quite trivial to determine in most cases, but
+# for the above circuit, we have determined the best cut location to be between
+# the two ``CZ`` gates on qubit 1 (more on this later). Hence, we place a
+# ``WireCut`` operation at that location as shown below:
 #
 
 dev = qml.device("default.qubit", wires=3)
 
 # Quantum Circuit with QNode
+
+
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -176,19 +184,20 @@ fig, ax = qml.draw_mpl(circuit)(x)  # Drawing circuit
 
 ######################################################################
 # The double vertical lines between the two ``CZ`` gates on qubit 1 in the
-# above figure shows where we have chosen to cut. Cutting in this position
-# gives two subcircuits with 2 qubits each.
+# above figure shows where we have chosen to cut. This is where the ``WireCut``
+# operation was inserted. ``WireCut`` is used to manually mark locations for
+# wire cuts.
 #
-# Next, we have to apply ``qml.cut_circuit`` operation as a
-# decorator to the ``circuit`` function. Under the hood, executing
-# ``circuit`` runs multiple configurations of the 2-qubit subcircuits
-# which are then postprocessed to give the result of the original circuit
-# as follows:
-#
+# Next, we apply ``qml.cut_circuit`` operation as a decorator to the
+# ``circuit`` function to perform circuit cutting on the quantum circuit.
 
 dev = qml.device("default.qubit", wires=3)
 
 # Quantum Circuit with QNode
+
+qml.cut_circuit()         # Applying qml.cut_circuit for circuit cut operation
+
+
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -210,42 +219,64 @@ circuit(x)  # Executing the quantum circuit
 
 
 ######################################################################
-# **Graph partitioning and automatic cut placement with Pennylane**
+# Let's explore what happens behind the scene in  ``qml.cut_circuit``. When the
+# ``circuit`` qnode function is executed, the quantum circuit is converted to a
+# a quantum tape and then to a graph. Any ``WireCut`` in the quantum
+# circuit graph is replaced with ``MeasureNode`` and ``PrepareNode`` pairs as
+# shown in figure 2. ``MeasureNode`` and ``PrepareNode`` are placeholder
+# operations that allow us to cut the quantum circuit graph and then iterate
+# over measurement of Pauli observables and preparation of their corresponding
+# eigenstates configurations at cut locations.
+
+###################################################################
+# .. figure:: ../demonstrations/quantum_circuit_cutting/MeasurePrepareNodes.png
+#     :align: center
+#     :width: 90%
+#
+#     Figure 2. Replace WireCut with MeasureNode and PrepareNode
+#
+# Cutting at the said location gives two graph fragments with 2 qubits each. To
+# separete these fragments into different subcircuit graphs, the
+# ``fragment_graph()`` function is called to pull apart the quantum circuit
+# graph as shown in figure 3. The subcircuit graphs are reconverted back to
+# quantum tapes and ``qml.cut_circuit`` runs multiple configurations of the
+# 2-qubit subcircuit tapes which are then postprocessed to replicate the result
+# of the uncut circuit.
+#
+
+
+######################################################################
+# .. figure:: ../demonstrations/quantum_circuit_cutting/separateMeasurePrepareNodes.png
+#     :align: center
+#     :width: 90%
+#
+#     Figure 3. Separate fragmments into different subcircuits
+#
+#
+
+
+######################################################################
+# **Automatic cut placement**
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 
 ######################################################################
-# It was easy to identify the optimal cut location for the above circuit
-# by inspection. But this is just one way to cut the circuit. Another
-# person may decide to choose more than one cut locations and still
-# achieve the same result. The question then is - how are results affected
-# by different choices of cut location? The short answer is that the more
-# cuts on a circuit, the more classical post-processing overhead you
-# incur.
+# We manually found a good cut position, but what if we didn't know where it
+# was in general? All cut positions don't have the same outcomes in terms of
+# efficiency for simulating the larger circuit, so choosing the optimal one is
+# important.
 #
-# A closer look at QCut would reveal that circuit cutting has a lot to do
-# with finding the optimal cut that fragments a circuit such that it
-# results in the least classical postprocessing overhead after
-# measurement.What happens if the optimal wire-cut placement location(s)
-# cannot be determined by mere inspection for an arbitrary circuit? If we
-# visualize a quantum circuit as a graph with gates as nodes and qubits as
-# edges, this problem becomes synonymous with the graph partitioning
-# problem. Graph partitioning involves the fragmentation of the vertices
-# of a graph into mutually exclusive groups of smaller subgraphs. This
-# problem falls under the category of NP-hard problems. This means that
-# only heuristic or approximation algorithms have been developed to solve
-# this problem.
+# Automatic cut placment is employed in quantum circuit cutting to help  with
+# finding the optimal cut that fragments a circuit such that it results in the
+# least classical postprocessing overhead after measurement. The main algorithm
+# behind automatic cut placement is graph partitioning.
 #
-# To avoid boring you with details, PennyLane has functions that implement
-# the graph partitioning operation as part of ``qml.cut_circuit``. One of
-# them is the ``auto_cutter``. This option can be enabled in
-# ``qml.cut_circuit`` to make attempts in finding an optimal cut. Where it
-# is difficult to manually determine the optimal cut location, decorating
-# the QNode with the ``cut_circuit()`` batch transform and enabling
-# ``auto_cutter`` is the recommended approach into circuit cutting. The
-# following examples shows this capability on the same circuit as above
-# but with the ``WireCut`` removed.
+# If ``auto_cutter`` is enabled in ``qml.cut_circuit`` it make attempts in
+# finding an optimal cut using graph partitioning. Where it is difficult to
+# manually determine the optimal cut location, this is the recommended
+# approach into circuit cutting. The following examples shows this capability
+# on the same circuit as above but with the ``WireCut`` removed.
 #
 
 dev = qml.device("default.qubit", wires=3)
@@ -261,8 +292,6 @@ def circuit(x):
     qml.CZ(wires=[0, 1])
     qml.RY(-0.4, wires=0)
 
-    qml.WireCut(wires=1)  # Cut location
-
     qml.CZ(wires=[1, 2])
 
     return qml.expval(qml.grouping.string_to_pauli_word("ZZZ"))
@@ -273,199 +302,7 @@ circuit(x)
 
 
 ######################################################################
-# To get a handle on graph partitioning for circuit cutting, let’s
-# interact with one of pennylane’s functionalities —
-# ``find_and_place_cuts()``. This is another operation in PennyLane that
-# solves graph partitioning for ``cut_circuit``. It makes attempts in
-# automatically finding a cut given the device constraints. Using the same
-# circuit as above but with the ``WireCut`` removed, the same (optimal)
-# cut can be recovered with automatic cutting using
-# ``find_and_place_cuts()``.
-#
-# To use this functionality, we first convert the quantum circuit to a
-# ``QuantumTape`` and then to a graph. By converting the quantum circuit
-# to a ``QuantumTape``, we can apply the elementary steps in
-# ``cut_circuit`` transform and manipulate the quantum tape to perform
-# circuit cutting. This is done in Pennylane by passing the quantum
-# circuit as a quantum tape to ``qml.transforms.qcut.tape_to_graph``.
-# Let’s see how this is done.
-#
-# First, we define our quantum circuit as a ``QuantumTape`` as show below:
-#
 
-# Defining a QuantumTape
-with QuantumTape() as uncut_tape:
-    qml.RX(0.531, wires=0)
-    qml.RY(0.9, wires=1)
-    qml.RX(0.3, wires=2)
-
-    qml.CZ(wires=[0, 1])
-    qml.RY(-0.4, wires=0)
-
-    qml.CZ(wires=[1, 2])
-
-    qml.expval(qml.grouping.string_to_pauli_word("ZZZ"))
-
-print(uncut_tape.draw())
-
-
-######################################################################
-# Our next step is to convert quantum tape to graph:
-#
-
-graph = qml.transforms.qcut.tape_to_graph(uncut_tape)
-
-
-######################################################################
-# Let’s use ``find_and_place_cuts()`` to find the optimal cut given the
-# device constraints
-#
-# The `find_and_place_cuts` function takes as its input, the graph to cut,
-# and a cut strategy for optimizing cutting parameters based on device
-# constraints. Please refer to
-# `the documentation <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.transforms.qcut.find_and_place_cuts.html>`__
-# for further details
-#
-
-cut_graph = qml.transforms.qcut.find_and_place_cuts(
-    graph=graph,
-    cut_strategy=qml.transforms.qcut.CutStrategy(max_free_wires=2),
-)
-
-print(qml.transforms.qcut.graph_to_tape(cut_graph).draw())  # visualize the cut QuantumTape
-
-
-######################################################################
-# As you can see, the same (optimal) cut has been recovered with automatic
-# cutting using ``find_and_place_cuts()``.
-#
-# Next, we must remove the ``WireCut`` nodes in the graph and replace with
-# ``MeasureNode`` and ``PrepareNode`` pairs.
-#
-
-qml.transforms.qcut.replace_wire_cut_nodes(cut_graph)
-
-######################################################################
-# .. figure:: ../demonstrations/quantum_circuit_cutting/MeasurePrepareNodes.png
-#     :align: center
-#     :width: 90%
-#
-#     Figure 2. Replace WireCut with MeasureNode and PrepareNode
-#
-# The ``MeasureNode`` and ``PrepareNode`` pairs are placeholder operations
-# that allow us to cut the circuit graph and then iterate over measurement
-# of Pauli observables and preparation of corresponding eigenstates
-# configurations at cut locations.
-#
-# As a recap, after applying ``find_and_place_cuts()``, we identified an
-# optimal cut location on the ``QuantumTape`` and applied the ``WireCut``
-# node at this location. This node was later replaced with ``MeasureNode``
-# and ``PrepareNode`` pairs. Note that we have not separated the fragments
-# that resulted after the cut into two different subcircuits.
-#
-# To separete these fragments into different subcircuits, we use the
-# ``fragment_graph()`` function that pulls apart the quantum circuit graph
-# into disconnected components as well as returning the
-# ``communication_graph`` detailing the connectivity between the
-# components.
-#
-
-fragments, communication_graph = qml.transforms.qcut.fragment_graph(cut_graph)
-
-######################################################################
-# .. figure:: ../demonstrations/quantum_circuit_cutting/separateMeasurePrepareNodes.png
-#     :align: center
-#     :width: 90%
-#
-#     Figure 3. Separate fragmments into different subcircuits
-#
-# Next, we convert the subcircuit fragments back to QuantumTape objects
-#
-
-fragment_tapes = [qml.transforms.qcut.graph_to_tape(f) for f in fragments]
-
-######################################################################
-# Let’s visualize the two subcircuit fragments:
-#
-
-print(fragment_tapes[0].draw())  # Subcircuit-u fragment
-print(fragment_tapes[1].draw())  # Subcircuit-v fragment
-
-######################################################################
-# After separating the subcircuit fragments, we must remap the tape wires
-# to match those available on our small quantum device using
-# ``remap_tape_wires``. This means that we have to re-number each qubit’s
-# wire for the two subcircuit.
-#
-
-dev = qml.device("default.qubit", wires=2)
-fragment_tapes = [qml.transforms.qcut.remap_tape_wires(t, dev.wires) for t in fragment_tapes]
-
-######################################################################
-# Based on the number of cuts and the resulting subcircuits, each circuit
-# fragment is expanded over ``MeasureNode`` and ``PrepareNode``
-# configurations and a flat list of tapes is created using
-# ``expand_fragment_tape``. Recall that from equation
-# (`7 <#mjx-eqn-eq7>`__), with each cut, we only have to do four
-# measurements
-# :math:`\left(Tr(\rho I), Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
-# subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
-# states: :math:`\left | {0} \right\rangle`,
-# :math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
-# :math:`\left | {+i} \right\rangle`
-#
-# This means that for the subcircuit with the ``MeasureNode``, we measure
-# the 4 Pauli observables. This generates 4 different subcircuit
-# configurations for subcircuit-:math:`u`. Also, for the subcircuit with
-# ``PrepareNode``, we initialize (or parepare) the qubit states with the 4
-# different eigenstates (:math:`\left | {0} \right\rangle`,
-# :math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
-# :math:`\left | {+i} \right\rangle`). This generates 4 different
-# subcircuit configuration for subcircuit-:math:`v`. In total, we have
-# generated 8 subcircuit configurations by expanding the ``MeasureNode``
-# and the ``PrepareNode``.
-#
-
-expanded = [
-    qml.transforms.qcut.expand_fragment_tape(t) for t in fragment_tapes
-]  # expanding MeasureNode
-# and PrepareNode
-
-configurations = []  # A list of subcircuit configurations
-prepare_nodes = []  # A list of prepareNodes in the circuit
-measure_nodes = []  # A list of MeasureNodes in the circuit
-for tapes, p, m in expanded:
-    configurations.append(tapes)
-    prepare_nodes.append(p)
-    measure_nodes.append(m)
-
-tapes = tuple(tape for c in configurations for tape in c)
-
-######################################################################
-# Let’s visualize the subcircuit configurations of the expanded quantum
-# tape fragments. We expect a total of 8 subcircuit configurations.
-#
-for t in tapes:
-    print(qml.drawer.tape_text(t), "\n")
-
-######################################################################
-# In this last step, we execute all the tapes (on our small quantum
-# computer) by passing them as a tupple to ``execute``. The results from
-# executing each subcircuit configuration is passed into
-# ``qcut_processing_fn()`` for postprocessing which involves combing the
-# results to obtain the original full circuit output via a tensor network
-# contraction. This means that each measure for subcircuit-:math:`u` is
-# multiplied to the corresponding measurement from subcircuit-:math:`v`.
-#
-
-results = qml.execute(tapes, dev, gradient_fn=None)  # executing each subcircuit configuration
-
-qml.transforms.qcut.qcut_processing_fn(
-    results,
-    communication_graph,
-    prepare_nodes,
-    measure_nodes,
-)
 
 ######################################################################
 # Randomized Circuit Cutting
@@ -586,10 +423,6 @@ qml.transforms.qcut.qcut_processing_fn(
 # `NetworkX <https://networkx.org/>`__!
 #
 
-from itertools import product, combinations
-
-import networkx as nx
-import matplotlib.pyplot as plt
 
 np.random.seed(1337)
 
@@ -1022,12 +855,21 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 # .. bio:: Gideon Uchehara
 #    :photo: ../_static/avatar.webp
 #
-#    Gideon is a super cool person who works at Xanadu.
+#    Gideon is a PhD student at the University of British Columbia, Canada.
+#    His research is in quantum algorithms and quantum Machine Learning. He
+#    works at Xanadu as a Quantum Computing Educator Intern. He recently
+#    started the Blacks In Quantum (BIQ) initiative and also serves as the
+#    student representative on the International Program Committee for
+#    the Quantum Computing NSERC CREATE Program, British Columbia, Canada.
 #
 # .. bio:: Matija Medvidović
 #    :photo: ../_static/matija_medvidovic.jpeg
 #
-#    Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu residency program. He is a firm believer in keeping bios short and concise.
+#    Matija is a PhD student at Columbia University and the Flatiron Institute
+#    in New York. He works with machine learning methods to study quantum
+#    many-body physics and quantum computers. He is currently a part of the
+#    Xanadu residency program. He is a firm believer in keeping bios short
+#    and concise.
 #
 # .. bio:: Anuj Apte
 #    :photo: ../_static/avatar.webp
