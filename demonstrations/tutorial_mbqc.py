@@ -749,7 +749,7 @@ RHG = SurfaceCode(code_distance)
 # .. [#FoliatedQuantumCodes]
 #
 #   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes*,
-#    `arXiv <https://arxiv.org/abs/1607.02579>`_.
+#   `arXiv <https://arxiv.org/abs/1607.02579>`_.
 #
 # .. [#MagicStates]
 #
