@@ -566,8 +566,8 @@ RHG = SurfaceCode(code_distance)
 #
 # For the sake of intuition, you can think of the graph shown above as having two spatial dimensions (:math:`x`
 # and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown in the
-# figure above on the xy-plane. In principle, any quantum error correction code can be foliated into 
-# a graph state for measurement-based QEC. However, the foliations are particularly nice for `CSS 
+# figure above on the xy-plane. In principle, any quantum error correction code can be `foliated <https://arxiv.org/abs/1607.02579>` into 
+# a graph state for measurement-based QEC [#FoliatedQuantumCodes]_. However, the foliations are particularly nice for `CSS 
 # codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
 # :math:`X`-checks *or* :math:`Z`-checks, and include the *surface code* and *colour code* families. 
 # For these CSS codes, you can view the primal and dual sheets as measuring the 
@@ -715,6 +715,11 @@ RHG = SurfaceCode(code_distance)
 #   M. Riebe, H. Häffner, C. F. Roos, W. Hänsel, J. Benhelm, G. P. T. Lancaster, T. W. Körber, 
 #   C. Becher, F. Schmidt-Kaler, D. F. V. James & R. Blatt. (2002) *Deterministic quantum 
 #   teleportation with atoms* `Nature 429, 734-737 <https://www.nature.com/articles/nature02570>`_.
+#
+# .. [#FoliatedQuantumCodes]
+#
+#   A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace. (2016) *Foliated Quantum Codes*,
+#    `arXiv <https://arxiv.org/abs/1607.02579>`_.
 #
 
 ##############################################################################
