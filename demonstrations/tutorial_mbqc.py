@@ -298,10 +298,12 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # To demonstrate that this actually works, we will use PennyLane. For simplicity, we will just 
 # show the ability will to perform single-axis rotations :math:`R_z(\theta)` and 
-# :math:`R_x(\theta)` for arbitrary :math:`\theta \in [0, 2 \pi)`. Note these two operations plus the CNOT also constitute a universal gate set. 
-# To start of, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach.
+# :math:`R_x(\theta)` for arbitrary :math:`\theta \in [0, 2 \pi)`. Note that these two operations 
+# plus the CNOT also constitute a universal gate set. 
+# 
+# To start of, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach
+# so we can later compare our MBQC approach to it.
 
-# Let's implement an :math:`R_z` gate on an arbitrary state for comparison
 dev = qml.device('default.qubit', wires=1)
 
 @qml.qnode(dev)
