@@ -579,9 +579,10 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    logical qubit and can correct any combination of :math:`\lfloor (d-1)/2 \rfloor` errors.
 #    [#FowlerPolyestimate]_
 #
-# In the measurement-based picture, quantum error correction requires us to go beyond a 2-dimensional cluster state
-# [#XanaduBlueprint]_. The error correcting code that you want to implement dictates the structure
-# of the cluster state. The cluster state that is associated with the surface code is known as the RHG lattice,
+# In the measurement-based picture, quantum error correction requires cluster states that are at 
+# least 3-dimensional [#XanaduBlueprint]_, contrary to the 2-dimensional cluster states required for 
+# universal quantum computation discussed above. The error correcting code that you want to implement 
+# dictates the structure of the cluster state. The cluster state that is associated with the surface code is known as the RHG lattice,
 # named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster
 # state with FlamingPy.
 #
