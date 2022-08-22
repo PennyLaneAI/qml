@@ -1,41 +1,36 @@
-"""
-Title: Quantum Phase Estimation for molecular energies Date: 2022-07-25
-16:42 Modified: 2022-07-25 16:42 Category: Demo Tags: quantum computing,
-quantum chemistry, algorithms Summary: This demo introduces to the
-Quantum Phase Estimation algorithm and shows users how to implement a
-QPE subroutine in a quantum program with PennyLane for estimating
-molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
-(Xanadu residents)
-
-"""
 r"""
-Quantum Phase Estimation for Molecular Energies
-===============================================
+.. tutorial_qpe:
+    Finding Ground State Energies via Quantum Phase Estimation
+    ======================================================
+    .. meta::
+        :property="og:description": This demo introduces to the
+        Quantum Phase Estimation algorithm and shows users how to implement a
+        QPE subroutine in a quantum program with PennyLane for estimating
+        molecular energies.
+        :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png 
+                    
+*Author: Davide Castaldo and Aleksei Malyshev (Xanadu residents). Posted: 25 July 2022*
 
-.. meta::
-    :property="og:description": Learn how to build electronic Hamiltonians of molecules.
-    :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
-.. related::
-    tutorial_quantum chemistry Building molecular Hamiltonians
-*Author: Davide Castaldo, Aleksei Malyshev (Xanadu Residents). Last updated: 22 August 2022*
 """
-
 
 
 ######################################################################
 # Hi! It seems that you were wandering around the PennyLane website and
 # opened the demo called “Finding Ground State Energies via Quantum Phase
-# Estimation”. We guess it happened because you’ve heard that a) quantum
-# computers will make finding the ground state energies easier; b) the
-# quantum phase estimation (QPE) algorithm should be somehow involved
+# Estimation”. We guess it happened because you’ve heard that:
+# 1. Quantum computers will make finding the ground state energies easier.
+# 2. The  quantum phase estimation (QPE) algorithm should be somehow involved
 # there — and you are keen to learn how ground state energies and QPE go
-# together :sup:`1` . Well, in this case you
-# are in the right place indeed, because in this demo we will: 1. Explain
-# the connection between the ground state energies and quantum phases; 2.
-# Recap the quantum phase estimation algorithm, which is great in, well,
-# estimating the quantum phases; 3. Show how to make the QPE estimate the
-# phases related to the ground state energies; 4. Mention the possible
-# caveats; 5. And, of course, provide the PennyLane implementation!
+# together.
+#
+# Well, in this case you
+# are in the right place indeed, because in this demo we will: 
+# 1. Explain the connection between the ground state energies and quantum phases.
+# 2. Recap the quantum phase estimation algorithm, which is great in, well,
+# estimating the quantum phases. 
+# 3. Show how to make the QPE estimate the phases related to the ground state energies.
+# 4. Mention the possible caveats. 
+# 5. Of course, provide the PennyLane implementation!
 # 
 
 ######################################################################
@@ -50,7 +45,7 @@ Quantum Phase Estimation for Molecular Energies
 # :math:`\hat{U}(t) = e^{-\frac{i\hat{H}t}{\hbar}}`. We can decompose it
 # in the basis of the Hamiltonian eigenvectors as follows:
 #
-# .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|.
+# .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|
 #
 # Now, let’s act with :math:`\hat{U}(t)` on any of
 # Hamiltonian eigenstates: 
@@ -62,7 +57,8 @@ Quantum Phase Estimation for Molecular Energies
 # to a global quantum phase. Importantly, the acquired phase is not
 # random, for each eigenstate it is related to its energy in a known way.
 # 
-# Then, suppose we have the ground state of some
+# Okay, now it is clear what the recipe for finding the ground state
+# energies might look like. Suppose we have the ground state of some
 # system at our disposal — then, we can just let it evolve for some known
 # time :math:`t`, measure the accumulated phase
 # :math:`\varphi_0 = -\frac{E_{0}t}{\hbar}` and deduce the energy from it
@@ -74,7 +70,7 @@ Quantum Phase Estimation for Molecular Energies
 # Indeed, any textbook on quantum physics will tell you that the global
 # phase is *unobservable*, i.e. it can’t be detected by any measurements
 # performed on the isolated system. Well, our system should not be
-# isolated, right? To solve this problem, we can make it interact with another, *ancilla* system
+# isolated, right? We can make it interact with another, *ancilla* system
 # controlled by us. Then, the global phase will (in a sense) become local
 # for a composite quantum system and we will be able to detect it — and
 # that is exactly what the QPE algorithm does in a clever way. So, bear
@@ -109,7 +105,7 @@ Quantum Phase Estimation for Molecular Energies
 # 
 # As we have already mentioned, the Quantum Phase Estimation algorithm
 # does a seemingly impossible thing — it allows us to figure out the
-# global phase acquired by an evolved quantum state :sup:`2` . Let us formalize this
+# global phase acquired by an evolved quantum state. Let us formalize this
 # statement a bit and say that in the simplest form QPE solves the
 # following problem:
 # 
@@ -157,7 +153,7 @@ Quantum Phase Estimation for Molecular Energies
 # .. math:: |\Psi_0\rangle = \left(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\right)^{\otimes K} \otimes |u\rangle
 #
 # 1. **Phase encoding.** Here we apply a sequence of :math:`K` controlled
-#    unitaries. The :math:`k`-th unitary is controlled by the :math:`k`-th
+#    unitaries. The :math:`k`-th unitary is controlled by :math:`k`-th
 #    qubit in the readout register and applies the operator
 #    :math:`\hat{U}^{2^{k - 1}}` to the system register. As a result, the
 #    information about quantum phase :math:`\varphi_{u}` appears in the
@@ -174,7 +170,7 @@ Quantum Phase Estimation for Molecular Energies
 # about the phase :math:`\varphi_{u}` is encoded in the first register
 # and the full system state is:
 # 
-# .. math:: |\Psi_1\rangle = \left[ \bigotimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
+# .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle.
 #
 #
 # The approach we used is called *phase kickback* and
@@ -230,7 +226,7 @@ Quantum Phase Estimation for Molecular Energies
 # i.e. :math:`\varphi_u = \varphi_{u, K} 2^{-1} + \varphi_{u, K - 1} 2^{-2} + \ldots \varphi_{u, 0} 2^{-K}`,
 # where :math:`\varphi_{u, k} \in \{0, 1\} \ \forall k \in [1..K]`.
 # Equivalently, there exists an integer
-# :math:`l_{\varphi_{u}} \in [0,...,2^K - 1]` such that
+# :math:`l_{\varphi_{u}} \in [0..2^K - 1]` such that
 # :math:`\varphi_{u} \cdot 2^{K} = l_{\varphi_{u}}`. In this case the
 # expression for the amplitudes of the readout register is simple:
 #
@@ -451,7 +447,7 @@ def build_hf_prep_circuit(n_system,
                           n_electrons,
                           target_wires):
     def hf_prep_circuit():
-        hf_state = np.asarray(n_electrons * [1] + (n_system - n_electrons) * [0])
+        hf_state = qchem.hf_state(n_electrons=2, orbitals=len(target_wires))
         qml.BasisState(hf_state, wires=target_wires)
         
     return hf_prep_circuit
@@ -471,10 +467,10 @@ hf_qpe_circuit = build_qpe_circuit(qpe_unitary,
 # The quantum function follows very closely the steps reported in Fig. 1.
 # Particularly, we have a first step that concerns the initialization of
 # the system register. We chose as initial state for our system the
-# Hartree Fock (HF) wavefunction.
+# Hartree Fock (HF) wavefunction which is a good approximation of the exact ground state.
 # 
 # Then we use the
-# `template <https://pennylane.readthedocs.io/en/stable/_modules/pennylane/templates/subroutines/qpe.html>`__
+# `template <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`__
 # for the QPE circuit implemented in PennyLane which automatically
 # provides the gates corresponding to the phase encoding and decoding
 # steps of the algorithm.
@@ -548,8 +544,8 @@ print(f"Energy QPE = {energies['HF']}")
 
 ######################################################################
 # The output estimated energy is :math:`E_{\rm QPE} = -1.27627` Ha which
-# has to be compared with exact value at the FCI level of
-# :math:`E_{\rm FCI} = -1.27443` Ha.
+# has to be compared with exact value at the Full Configuration Interaction level
+# (i.e., exact diagonalization of the Hamiltonian) of :math:`E_{\rm FCI} = -1.27443` Ha.
 # 
 # In the next section we will look at the effects of changing the initial
 # state and increasing the number of readout qubits.
@@ -570,9 +566,10 @@ print(f"Energy QPE = {energies['HF']}")
 # state on the energy estimation and on the measurement result.
 # 
 # Particularly, we have seen in the introduction section that the
-# probability of measuring a bitstring is influenced by two factors: (i)
-# how well the binary representation of the string approximates a given
-# eigenvalue and (ii) the overlap of a given eigenvector with the initial
+# probability of measuring a bitstring is influenced by two factors: 
+# 1. How well the binary representation of the string approximates a given
+# eigenvalue.
+# 2. The overlap of a given eigenvector with the initial
 # state prepared into the system register.
 # 
 # Now we will consider two different scenarios to compare with the results
@@ -590,8 +587,6 @@ from scipy.stats import unitary_group
 def build_random_prep_circuit(n_system,
                               target_wires):
     def random_prep_circuit():
-        # We start with a zero initialization of the system register
-        qml.BasisState(np.zeros(n_system), wires=target_wires)
         # And apply a random unitary matrix
         qml.QubitUnitary(unitary_group.rvs(2**n_system),
                          wires=target_wires) 
@@ -617,8 +612,6 @@ def build_fci_prep_circuit(n_system,
         qml.DoubleExcitation(theta_fci[1], wires=[0, 1, 4, 5]) 
         
     return fci_prep_circuit
-
-theta_fci = [0.14497247, 0.17033575]
 
 
 ######################################################################
@@ -687,6 +680,7 @@ with plt.xkcd():
     ax.set_xlabel("Readout bitstring index ($l$)")
     ax.set_ylabel(r"Measurement probability ($\left|\alpha_l\right|^2$)")
     ax.legend()
+    plt.show()
 
 
 ######################################################################
@@ -758,15 +752,16 @@ errors = np.asarray(errors) - FCI_ENERGY
 with plt.xkcd():
     fig, ax = plt.subplots()
 
-    ax.scatter(list(range(n_readout, n_readout + max_n_additional)), 
+    ax.plot(list(range(n_readout, n_readout + max_n_additional)), 
                np.abs(errors), 
                label=f"Init. state: HF", 
-               marker='*')
+               linestyle='o-')
 
     ax.set_xlabel(r"$K + \Delta$")
     ax.set_ylabel(r"$\left|E_0 - E_{\rm FCI} \right|$ [Ha]")
     ax.legend()
     ax.set_yscale('log')
+    plt.show()
 
 
 ######################################################################
@@ -788,13 +783,6 @@ with plt.xkcd():
 # 
 
 ######################################################################
-# [1] If not, no worries, but briefly yes, we hope that the
-# future quantum computers will make calculations of ground state energies
-# more efficient and more accurate. Possible implications include, for
-# example, better prediction of chemical reactions rates — just because
-# the latter (roughly) depend on the difference between ground state
-# energies of reagents. If you are as excited now as we are (and we are!),
-# you are welcome to keep reading the demo.
 #
 # [2] And, as it turns out, it is a pretty valuable feature, 
 # so QPE is an important subroutine of many advanced quantum algorithms.
@@ -805,10 +793,20 @@ with plt.xkcd():
 
 
 ######################################################################
-# {% from ‘author_bio.html’ import author_bio %} {{
-# author_bio(“../../../images/davide_castaldo.jpg”, “Davide Castaldo”,
-# “Davide is a PhD student at the University of Padova where is studying
+# .. bio:: Davide Castaldo
+#    :photo: ../_static/authors/jay_soni.png
+#
+#    Davide is a PhD student at the University of Padova where is studying
 # how to use quantum computers to simulate molecular systems. Currently he
 # is also working at Xanadu as part of the residency program. He is a firm
-# believer that one day racoons will take over humans in Toronto.”) }}
-# 
+# believer that one day racoons will take over humans in Toronto..
+#
+#
+#
+# .. bio:: Aleksei Malyshev
+#    :photo: ../_static/authors/jay_soni.png
+#
+#    Aleksei's Bio.
+#
+#
+#
