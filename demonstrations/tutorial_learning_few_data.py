@@ -78,7 +78,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
-# of training samples and increases with the number of parametrized gates. However, as is the case for 
+# of training samples and increases with the number of parametrized gates. However, as is the case for
 # quantum convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number :math:`M` of gates which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
 # :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
 # :math:`\tilde{\mathcal{O}}` includes logarithmic factors). However, the authors of Ref. [#CaroGeneralization]_ found
@@ -111,13 +111,13 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These
 # layers are used to reduce the dimensionality of the 2D array being processed (whereas inverse pooling increases the
 # dimensionality of a 2D array). Finally, one takes these two layers and applies them repeatedly and
-# interchangeably as show in the figure below. 
+# interchangeably as show in the figure below.
 #
 # .. figure:: /demonstrations/learning_few_data/cnn_pic.png
 #     :width: 75%
 #     :align: center
 #
-# We want to build something similar for a quantum circuit. First, we import the necessary 
+# We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a seed for reproducibility.
 
 import matplotlib.pyplot as plt
@@ -130,7 +130,7 @@ from tqdm.auto import trange
 import jax
 import jax.numpy as jnp
 
-import optax # optimization using jax
+import optax  # optimization using jax
 
 import pennylane as qml
 import pennylane.numpy as pnp
@@ -154,7 +154,7 @@ rng = np.random.default_rng(seed=seed)
 #     :width: 75%
 #     :align: center
 #
-#     QCNN architecture. Taken from [#CongQuantumCNN]_.        
+#     QCNN architecture. Taken from [#CongQuantumCNN]_.
 #
 # Breaking down the layers
 # --------------------------
@@ -166,7 +166,8 @@ rng = np.random.default_rng(seed=seed)
 # parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates on each of the two
 # qubits. At the circuit level, to have a neighboring qubit interaction, we can apply the two-qubit unitary
 # in one time step on half of the neighboring qubit pairs (0-1, 1-2, ...) and on a next time step on the other half of
-# the neighboring qubit pairs (1-2, 3-4, ...). 
+# the neighboring qubit pairs (1-2, 3-4, ...).
+
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     """Adds a convolutional layer to a circuit.
@@ -180,7 +181,7 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
     for p in [0, 1]:
         for indx, w in enumerate(wires):
             if indx % 2 == p and indx < n_wires - 1:
-                if indx % 2 == 0 and skip_first_layer:
+                if indx % 2 == 0 and not skip_first_layer:
                     qml.U3(*weights[:3], wires=[w])
                     qml.U3(*weights[3:6], wires=[wires[indx + 1]])
                 qml.IsingXX(weights[6], wires=[w, wires[indx + 1]])
@@ -189,10 +190,12 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
                 qml.U3(*weights[9:12], wires=[w])
                 qml.U3(*weights[12:], wires=[wires[indx + 1]])
 
+
 ##############################################################################
 # The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in
 # this case, are :class:`~.pennylane.U3` gates. Then, we apply these conditional measurements to half of the
 # unmeasured wires, reducing our system size by half.
+
 
 def pooling_layer(weights, wires):
     """Adds a pooling layer to a circuit.
@@ -215,6 +218,7 @@ def pooling_layer(weights, wires):
 # an embedding map, apply rounds of convolutional and pooling layers, and eventually get the
 # desired measurement statistics of the circuit.
 
+
 def conv_and_pooling(kernel_weights, n_wires):
     """Apply both the convolutional and pooling layer."""
     convolutional_layer(kernel_weights[:15], n_wires)
@@ -225,8 +229,10 @@ def dense_layer(weights, wires):
     """Apply an arbitrary unitary gate to a specified set of wires."""
     qml.ArbitraryUnitary(weights, wires)
 
+
 num_wires = 6
-device = qml.device('default.qubit', wires=num_wires)
+device = qml.device("default.qubit", wires=num_wires)
+
 
 @qml.qnode(device, interface="jax")
 def conv_net(weights, last_layer_weights, features):
@@ -244,11 +250,11 @@ def conv_net(weights, last_layer_weights, features):
 
     # adds convolutional and pooling layers
     for j in range(layers):
-        conv_and_pooling(weights[:, j], wires)
+        conv_and_pooling(weights[:, j], wires, skip_first_layer=(not j == 0))
         wires = wires[::2]
 
     assert (
-            last_layer_weights.size == 4 ** (len(wires)) - 1
+        last_layer_weights.size == 4 ** (len(wires)) - 1
     ), f"The size of the last layer weights vector is incorrect! \n Expected {4 ** (len(wires)) - 1}, Given {last_layer_weights.size}"
     dense_layer(last_layer_weights, wires)
     return qml.probs(wires=(0))
@@ -270,11 +276,11 @@ images, labels = digits.data, digits.target
 images = images[np.where((labels == 0) | (labels == 1))]
 labels = labels[np.where((labels == 0) | (labels == 1))]
 
-fig, axes = plt.subplots(nrows=1,ncols=12, figsize=(3, 3));
+fig, axes = plt.subplots(nrows=1, ncols=12, figsize=(3, 3))
 
 for i, ax in enumerate(axes.flatten()):
-    ax.imshow(images[i].reshape((8,8)), cmap='gray')
-    ax.axis('off')
+    ax.imshow(images[i].reshape((8, 8)), cmap="gray")
+    ax.axis("off")
 
 plt.tight_layout()
 plt.subplots_adjust(wspace=0, hspace=0)
@@ -283,6 +289,7 @@ plt.show()
 ##############################################################################
 # For convenience, we create a ``load_digits_data`` function that will make random training and
 # testing sets from the ``digits`` dataset from ``sklearn.dataset``.
+
 
 def load_digits_data(num_train, num_test, rng):
     """Return training and testing data of digits dataset."""
@@ -298,38 +305,57 @@ def load_digits_data(num_train, num_test, rng):
 
     # subsample train and test split
     train_indices = rng.choice(len(labels), num_train, replace=False)
-    test_indices = rng.choice(np.setdiff1d(range(len(labels)), train_indices), num_test, replace=False)
+    test_indices = rng.choice(
+        np.setdiff1d(range(len(labels)), train_indices), num_test, replace=False
+    )
 
     x_train, y_train = features[train_indices], labels[train_indices]
     x_test, y_test = features[test_indices], labels[test_indices]
 
-    return jnp.asarray(x_train), jnp.asarray(y_train), jnp.asarray(x_test), jnp.asarray(y_test)
+    return (
+        jnp.asarray(x_train),
+        jnp.asarray(y_train),
+        jnp.asarray(x_test),
+        jnp.asarray(y_test),
+    )
+
 
 ##############################################################################
 # To optimize the weights of our variational model, we define the cost and accuracy functions
 # to train and quantify the performance on the classification task of the previously described QCNN.
 
+
 @jax.jit
 def compute_out(weights, weights_last, features, labels):
     """Computes the output of the corresponding label in the qcnn"""
-    cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[label]
-    return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(weights, weights_last, features, labels)
+    cost = lambda weights, weights_last, feature, label: conv_net(
+        weights, weights_last, feature
+    )[label]
+    return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(
+        weights, weights_last, features, labels
+    )
+
 
 def compute_accuracy(weights, weights_last, features, labels):
     """Computes the accuracy over the provided features and labels"""
     out = compute_out(weights, weights_last, features, labels)
-    return jnp.sum(out > 0.5)/len(out)
+    return jnp.sum(out > 0.5) / len(out)
+
 
 def compute_cost(weights, weights_last, features, labels):
     """Computes the cost over the provided features and labels"""
     out = compute_out(weights, weights_last, features, labels)
     return 1.0 - jnp.sum(out) / len(labels)
 
+
 def init_weights():
     """Initializes random weights for the QCNN model."""
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
-    weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
+    weights_last = pnp.random.normal(
+        loc=0, scale=1, size=4**2 - 1, requires_grad=True
+    )
     return jnp.array(weights), jnp.array(weights_last)
+
 
 value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 
@@ -338,6 +364,7 @@ value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 # define the classification procedure once and then perform it for different datasets.
 # Finally, we update the weights using the :class:`pennylane.AdamOptimizer` and use these updated weights to
 # calculate the cost and accurracy on the testing and training set.
+
 
 def train_qcnn(n_train, n_test, n_epochs):
     """
@@ -358,16 +385,25 @@ def train_qcnn(n_train, n_test, n_epochs):
     weights, weights_last = init_weights()
 
     # learning rate decay
-    cosine_decay_scheduler = optax.cosine_decay_schedule(0.1, decay_steps=n_epochs, alpha=0.95)
+    cosine_decay_scheduler = optax.cosine_decay_schedule(
+        0.1, decay_steps=n_epochs, alpha=0.95
+    )
     optimizer = optax.adam(learning_rate=cosine_decay_scheduler)
     opt_state = optimizer.init((weights, weights_last))
 
     # data containers
-    train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = [], [], [], []
+    train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = (
+        [],
+        [],
+        [],
+        [],
+    )
 
     for step in range(n_epochs):
         # Training step with (adam) optimizer
-        train_cost, grad_circuit = value_and_grad(weights, weights_last, x_train, y_train)
+        train_cost, grad_circuit = value_and_grad(
+            weights, weights_last, x_train, y_train
+        )
         updates, opt_state = optimizer.update(grad_circuit, opt_state)
         weights, weights_last = optax.apply_updates((weights, weights_last), updates)
 
@@ -379,19 +415,20 @@ def train_qcnn(n_train, n_test, n_epochs):
 
         # compute accuracy and cost on testing data
         test_out = compute_out(weights, weights_last, x_test, y_test)
-        test_acc = jnp.sum(test_out > 0.5)/len(test_out)
+        test_acc = jnp.sum(test_out > 0.5) / len(test_out)
         test_acc_epochs.append(test_acc)
         test_cost = 1.0 - jnp.sum(test_out) / len(test_out)
         test_cost_epochs.append(test_cost)
 
     return dict(
         n_train=[n_train] * n_epochs,
-        step=np.arange(1, n_epochs+1, dtype=int),
+        step=np.arange(1, n_epochs + 1, dtype=int),
         train_cost=train_cost_epochs,
         train_acc=train_acc_epochs,
         test_cost=test_cost_epochs,
-        test_acc=test_acc_epochs
+        test_acc=test_acc_epochs,
     )
+
 
 ##############################################################################
 # .. note::
@@ -409,15 +446,21 @@ n_test = 100
 n_epochs = 100
 n_reps = 100
 
+
 def run_iterations(n_train):
-    results_df = pd.DataFrame(columns=['train_acc', 'train_cost', 'test_acc', 'test_cost', 'step', 'n_train'])
-    pbar = trange(n_reps, desc='train qcnn')
+    results_df = pd.DataFrame(
+        columns=["train_acc", "train_cost", "test_acc", "test_cost", "step", "n_train"]
+    )
+    pbar = trange(n_reps, desc="train qcnn")
 
     for _ in pbar:
         results = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs)
-        results_df = pd.concat([results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True)
+        results_df = pd.concat(
+            [results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True
+        )
 
     return results_df
+
 
 results_df = run_iterations(n_train=40)
 
@@ -425,40 +468,51 @@ results_df = run_iterations(n_train=40)
 # Finally, we plot the loss and accuracy for both the training and testing set
 # for all training epochs, and compare the test and train accuracy of the model.
 
-def make_plot(df, n_train):
-    fig, axs = plt.subplots(ncols=3, figsize=(14,5))
 
-    df_agg = df.groupby(['step']).agg(['mean', 'std'])
+def make_plot(df, n_train):
+    fig, axs = plt.subplots(ncols=3, figsize=(14, 5))
+
+    df_agg = df.groupby(["step"]).agg(["mean", "std"])
 
     # plot epoch vs loss
     ax = axs[0]
-    ax.plot(df_agg.index, df_agg.train_cost['mean'], "o--", label="train", markevery=10)
-    ax.plot(df_agg.index, df_agg.test_cost['mean'], "x--", label="test", markevery=10)
+    ax.plot(df_agg.index, df_agg.train_cost["mean"], "o--", label="train", markevery=10)
+    ax.plot(df_agg.index, df_agg.test_cost["mean"], "x--", label="test", markevery=10)
     ax.set_ylabel("loss", fontsize=18)
     ax.set_xlabel("epoch", fontsize=18)
     ax.legend(fontsize=14)
 
     # plot epoch vs acc (train + test)
     ax = axs[1]
-    ax.plot(df_agg.index, df_agg.train_acc['mean'],"o:", label=f"train", markevery=10)
-    ax.plot(df_agg.index, df_agg.test_acc['mean'],"x--", label=f"test", markevery=10)
+    ax.plot(df_agg.index, df_agg.train_acc["mean"], "o:", label=f"train", markevery=10)
+    ax.plot(df_agg.index, df_agg.test_acc["mean"], "x--", label=f"test", markevery=10)
     ax.set_ylabel("accuracy", fontsize=18)
     ax.set_xlabel("epoch", fontsize=18)
     ax.legend(fontsize=14)
 
-
     # plot train acc vs test acc
     ax = axs[2]
-    ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker='D')
-    beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
+    ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker="D")
+    beta, m = np.polyfit(
+        np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1
+    )
     reg = np.poly1d([beta, m])
-    ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)),"-", color='black', lw=0.75)
+    ax.plot(
+        df.train_acc,
+        reg(np.array(df.train_acc, dtype=float)),
+        "-",
+        color="black",
+        lw=0.75,
+    )
     ax.set_ylabel("test accuracy", fontsize=18)
     ax.set_xlabel("train accuracy", fontsize=18)
 
-    fig.suptitle(f'Performance Measures for Training Set of Size $N=${n_train}', fontsize=20)
+    fig.suptitle(
+        f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20
+    )
     plt.tight_layout()
     plt.show()
+
 
 make_plot(results_df, n_train=40)
 
