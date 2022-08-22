@@ -80,7 +80,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
     'reference_url': {
          # The module you locally document uses None
-        'pennylane': "https://pennylane.readthedocs.io/en/latest/",
+        'pennylane': "https://docs.pennylane.ai/en/stable/",
     },
     'backreferences_dir'  : 'backreferences',
     'doc_module'          : ('pennylane'),
