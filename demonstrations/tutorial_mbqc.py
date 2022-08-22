@@ -200,7 +200,6 @@ def generate_random_state(n=1):
     input_state = np.random.random(2 ** n) + 1j * np.random.random(2 ** n)
     return input_state / np.linalg.norm(input_state)
 
-
 # Generate a random input state for n=1 qubit
 input_state = generate_random_state()
 
