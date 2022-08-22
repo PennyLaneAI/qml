@@ -220,7 +220,7 @@ with open("demos_community.rst", 'w') as f:
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://pennylane.readthedocs.io/en/latest/": None}
+intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
 
 from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective, Bio
 
