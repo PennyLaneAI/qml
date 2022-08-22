@@ -447,7 +447,7 @@ def build_hf_prep_circuit(n_system,
                           n_electrons,
                           target_wires):
     def hf_prep_circuit():
-        hf_state = qchem.hf_state(n_electrons=2, orbitals=len(target_wires))
+        hf_state = qchem.hf_state(electrons=2, orbitals=len(target_wires))
         qml.BasisState(hf_state, wires=target_wires)
         
     return hf_prep_circuit
