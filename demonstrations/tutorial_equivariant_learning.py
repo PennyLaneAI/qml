@@ -61,7 +61,7 @@ representation: Let :math:`\varphi` be a map sending :math:`g` in group
 vector space :math:`V`, which satisfies
  .. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G
 
-then we call :math:`\varphi` a representation of a group :math:`G` on a
+Then we call :math:`\varphi` a representation of a group :math:`G` on a
 vector space :math:`V` which we can see is a group homomorphism
 :math:`\varphi: G \rightarrow G L(V, F)` for some field :math:`F` (like
 :math:`\mathbb{R}` or :math:`\mathbb{C}` which are the spaces that the
