@@ -361,7 +361,6 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 
 dev = qml.device("default.qubit", wires=1)
 
-
 @qml.qnode(dev)
 def RX(theta, input_state):
     # Prepare the input state
