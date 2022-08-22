@@ -247,17 +247,20 @@ def conv_net(weights, last_layer_weights, features):
 
     # inputs the state input_state
     qml.AmplitudeEmbedding(features=features, wires=wires, pad_with=0.5)
+    qml.Barrier(wires=wires, only_visual=True)
 
     # adds convolutional and pooling layers
     for j in range(layers):
         conv_and_pooling(weights[:, j], wires, skip_first_layer=(not j == 0))
         wires = wires[::2]
+        qml.Barrier(wires=wires, only_visual=True)
 
     assert (
         last_layer_weights.size == 4 ** (len(wires)) - 1
     ), f"The size of the last layer weights vector is incorrect! \n Expected {4 ** (len(wires)) - 1}, Given {last_layer_weights.size}"
     dense_layer(last_layer_weights, wires)
     return qml.probs(wires=(0))
+
 
 qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**16))
 
