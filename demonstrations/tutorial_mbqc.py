@@ -221,7 +221,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 ##############################################################################
 # Universality of MBQC
 # ----------------------
-# How do we know if this measurement-based scheme is just as powerful as its gate-based brother? We
+# How do we know if this measurement-based scheme is just as powerful as its gate-based counterpart? We
 # have to prove it! In particular, we want to show that a measurement-based quantum computer is a
 # quantum Turing machine (QTM) also known as a universal quantum computer. To do this, we
 # need to show 4 things [#OneWay2001]_:
