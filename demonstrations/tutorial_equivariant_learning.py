@@ -140,7 +140,7 @@ restrict our gates to being unitary representations of the group.
 # turns to place a 0 or an X, depending on which player you are, in a 3X3
 # grid. The aim is to get a 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
-# on the choices of the players a draw is possible. Our learning task
+# on the choices of the players there could be a draw. Our learning task
 # is to take a set of completed games labelled with their outcomes and
 # teach the algorithm to identify these correctly.
 #
