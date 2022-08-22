@@ -315,7 +315,7 @@ def RZ(theta, input_state):
 
 ##############################################################################
 #
-# Now he have a base case, let's implement an :math:`R_z` gate on an arbitrary state
+# Let's now implement an :math:`R_z` gate on an arbitrary state
 # in the MBQC formalism.
 #
 
