@@ -80,7 +80,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
     'reference_url': {
          # The module you locally document uses None
-        'pennylane': "https://pennylane.readthedocs.io/en/latest/",
+        'pennylane': "https://docs.pennylane.ai/en/stable/",
     },
     'backreferences_dir'  : 'backreferences',
     'doc_module'          : ('pennylane'),
@@ -157,7 +157,7 @@ html_theme_options = {
     # "homepage": "index.html",
     # Set the name of the project to appear in the left sidebar.
     "project_nav_name": "Quantum Machine Learning",
-    "project_logo": "_static/pennylane.png",
+    "project_logo": "_static/pennylane.svg",
     "touch_icon": "_static/xanadu.png",
     "touch_icon_small": "_static/xanadu_small.png",
     "large_toc": True,
@@ -220,7 +220,7 @@ with open("demos_community.rst", 'w') as f:
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://pennylane.readthedocs.io/en/latest/": None}
+intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
 
 from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective, Bio
 
