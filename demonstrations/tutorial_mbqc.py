@@ -321,7 +321,6 @@ def RZ(theta, input_state):
 
 mbqc_dev = qml.device("default.qubit", wires=2)
 
-
 @qml.qnode(mbqc_dev)
 def RZ_MBQC(theta, input_state):
     # Prepare the input state
