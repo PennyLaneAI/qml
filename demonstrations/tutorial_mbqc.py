@@ -210,7 +210,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 
 ##############################################################################
 #
-# As we can see, we found that the output state is identical to the input state!
+# As we can see, :math:`|\psi\rangle`, originally the state of the first qubit, has been *transported* to the second qubit!
 #
 # This protocol is one of the main ingredients of one-way quantum computing. Essentially, we
 # propagate the information in one end of our cluster state to the other end by using the
