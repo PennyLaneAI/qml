@@ -208,7 +208,7 @@ restrict our gates to being unitary representations of the group.
 # :math:`s \in \mathcal{S}`. To see why this works for yourself apply the
 # map to an arbitrary unitary representation and see if you can see how you
 # can move it to the other side (remember the representation commutes with
-# the group action), you might change the element of the group you're now
+# the group action). You might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
 # matter!
 #
