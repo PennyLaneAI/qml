@@ -654,7 +654,7 @@ RHG = SurfaceCode(code_distance)
 # video <https://www.youtube.com/watch?v=SD6TH7GZ1rM&feature=emb_title>`_ outlining the main ideas.
 # On the hardware side, efforts are made to develop the necessary technology. This includes the recent `Borealis
 # experiment <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_ [#Borealis]_ where
-# a 3-dimensional photonic graph state was created that was used to demonstrate quantum advantage.
+# a 3-dimensional photonic graph state was created that was used to demonstrate quantum computational advantage.
 #
 
 ##############################################################################
