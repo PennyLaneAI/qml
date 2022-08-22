@@ -128,7 +128,7 @@ print(qml.draw(cluster_state)())
 # teleportation is very real and has been experimentally demonstrated multiple times in the last few decades
 # [#Hermans2022]_, [#Furusawa1998]_, [#Riebe2004]_, [#Nielsen1998]_. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication. So, it's certainly
-# worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
+# worth learning about. In this protocol, we transport *information*, not matter, between systems. Admittedly, it has a
 # rather delusive name because it is not instantaneous but requires communication of additional classical information,
 # which is naturally limited by the speed of light.
 #
