@@ -470,3 +470,20 @@ make_plot(results_df, n_train=40)
 #     "Quantum Convolutional Neural Networks"
 #     `arxiv:1810.03787 <https://arxiv.org/abs/1810.03787>`__, 2018.
 #
+##############################################################################
+# .. bio:: Korbinian Kottmann
+#    :photo: ../_static/authors/qottmann.jpg
+#
+#    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
+
+##############################################################################
+# .. bio:: Luis Mantilla Calderon
+#    :photo: ../_static/authors/qottmann.jpg
+#
+#    Luis is a cool dude studying in Vancouver, he likes to lose money on crypto and the stock market
+
+##############################################################################
+# .. bio:: Maurice Weber
+#    :photo: ../_static/authors/qottmann.jpg
+#
+#    Maurice is a cool dude from ETH that does fancy computer science stuff!
