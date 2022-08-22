@@ -162,7 +162,6 @@ import pennylane.numpy as np
 
 dev = qml.device("default.qubit", wires=2)
 
-
 @qml.qnode(dev)
 def one_bit_teleportation(input_state):
     # Prepare the input state
