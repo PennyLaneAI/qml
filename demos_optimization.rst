@@ -145,6 +145,12 @@ in quantum neural networks.
     :description: :doc:`demos/qnspsa`   
     :tags: braket
 
+.. customgalleryitem::
+    :tooltip: Learn how to use zne error mitigation and maintain differentiability.
+    :figure: demonstrations/diffable-mitigation/diffable_mitigation_thumb.png
+    :description: :doc:`demos/tutorial_diffable-mitigation`
+    :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
+
 :html:`</div></div><div style='clear:both'>`
 
 
