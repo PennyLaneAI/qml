@@ -73,7 +73,7 @@ H = qml.Hamiltonian(coeffs, observables)
 
 
 ##############################################################################
-# The quantum function, the expectation value of $H$, can then be executed on the noisy or ideal device
+# The quantum function, the expectation value of :math:`H`, can then be executed on the noisy or ideal device
 # by creating respective QNodes for both. As our ansatz, we'll use a :class:`~.pennylane.SimplifiedTwoDesign` with all-constant parameters set to ``1``:
 
 n_layers = 2
