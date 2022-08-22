@@ -355,7 +355,7 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 
 ##############################################################################
 #
-# Seems good! As we can see, the resulting states are practically the same as we wanted to show.
+# Seems good! As we can see, the resulting states are practically the same.
 # For the :math:`R_x(\theta)` gate we take a similar approach.
 #
 
