@@ -92,7 +92,7 @@ qnode_ideal = qml.QNode(qfunc, dev_ideal)
 # We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}`.
 # If everything goes as planned, executing the mitigated QNode is then closer to the ideal result:
 
-scale_factors = [1.0, 2.0, 3.0]
+scale_factors = [1, 2, 3]
 
 qnode_mitigated = mitigate_with_zne(
     scale_factors=scale_factors,
