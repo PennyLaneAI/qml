@@ -40,7 +40,7 @@ ecourages our results to be more genralisable.
 In classical machine learning this often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
-deep neural networks. We will refer to the quantum computing verison of
+deep neural networks (see `Bronstein et al. (2019) <https://arxiv.org/abs/2104.13478>`__ for a broad introduction). We will refer to the quantum computing verison of
 this as quantum geometric machine learning (QGML).
 
 
@@ -55,42 +55,7 @@ Fundamentally representation theory is based on the prosaic observation
 that linear algebra is easy and group theory is weird: So what if we can
 study groups as linear maps?
 
-To understand this let's look at the following definition of a
-representation: Let :math:`\varphi` be a map sending :math:`g` in group
-:math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
-vector space :math:`V`, which satisfies
- .. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G
-
-then we call :math:`\varphi` a representation of a group :math:`G` on a
-vector space :math:`V` which we can see is a group homomorphism
-:math:`\varphi: G \rightarrow G L(V, F)` for some field :math:`F` (like
-:math:`\mathbb{R}` or :math:`\mathbb{C}` which are the spaces that the
-elements of our matrices will belong to).
-
-Now due to the importance of unitarity in quantum mechnics we are
-particularly interested in the unitary representations: Representations
-where the linear maps are unitary matrices. If we can
-identify these then we will have a way to naturally encode groups in
-quantum circuits (which are mostly made up of unitary gates remember). 
-
-
-Now how does all this relate to symmetries? Well a large class of
-symmetries can be charecterised as a group. Let's consider an example:
-The symmetries of a sphere. Now when we think of this symmetry we
-probably think something along the lines of "it's the same no matter how
-I rotate it or flip it left to right etc". There is this idea of being
-invarient under some operation, we also have the idea of being able to
-undo these actions, if we rotate one way, we can rotate it back. If we
-flip the ball right-to-left we can flip it left-to-right to get back to
-where we started (notice too all these inverses are unique). Trivially
-we can also do nothing. What exactly are we describing here? We have
-elements that corespond to an action on a sphere that can be inverted and
-for which there exists an identity. It is also trivially the case here
-that if I consider three operations a,b,c from the set of rotations and
-reflections of the sphere then if I combine two of them together then
-:math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
-associative. These features turn out to literally define a group!
- 
+First let's define what we mean by a group:
 
 **Definition**: A group is a set :math:`G` together with a binary operation
 on :math:`G`, here denoted :math:`\circ`, that combines any two elements
@@ -107,7 +72,7 @@ For all :math:`a, b, c` in :math:`G`, one has
 
 There exists an element :math:`e` in :math:`G` such that, for every
 :math:`a` in :math:`G`, one has :math:`e \circ a=a` and
-:math:`a \circ e=a`. Such an element is unique (see below). It is called
+:math:`a \circ e=a`. Such an element is unique. It is called
 the identity element of the group.
 
 
@@ -119,15 +84,54 @@ For each :math:`a` in :math:`G`, there exists an element :math:`b` in
 :math:`b` is unique (see below); it is called the inverse of :math:`a`
 and is commonly denoted :math:`a^{-1}`.
 
-Now the group in itself is a very abstract creature this is why we look to
-its representations. The group explains what symmetries we care about,
-the unitary representations show us how those symmetries look on a particular
+
+With groups defined we are in a position to ariculate what a
+representation is: Let :math:`\varphi` be a map sending :math:`g` in group
+:math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
+vector space :math:`V`, which satisfies
+ .. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G
+
+then we call :math:`\varphi` a representation of a group :math:`G` on a
+vector space :math:`V` which is a group homomorphism from our group of interest to the 
+general linear group (the space of nxn matrices along with matrix multiplication)
+:math:`\varphi: G \rightarrow G L(V, F)` for some field :math:`F` (like
+:math:`\mathbb{R}` or :math:`\mathbb{C}` which are the spaces that the
+elements of our matrices will belong to). Where we understand that a group homomorphism
+is a map that commutes with the group structure i.e :math:`\varphi(g\circ h )=\varphi(g)\varphi(h)`
+for :math:`g,h \in G``
+
+Now due to the importance of unitarity in quantum mechnics we are
+particularly interested in the unitary representations: Representations
+where the linear maps are unitary matrices. If we can
+identify these then we will have a way to naturally encode groups in
+quantum circuits (which are mostly made up of unitary gates remember).
+
+How does all this relate to symmetries? Well a large class of
+symmetries can be charecterised as a group. Let's consider an example:
+The symmetries of a sphere. Now when we think of this symmetry we
+probably think something along the lines of "it's the same no matter how
+I rotate it or flip it left to right etc". There is this idea of being
+invarient under some operation, we also have the idea of being able to
+undo these actions, if we rotate one way, we can rotate it back. If we
+flip the ball right-to-left we can flip it left-to-right to get back to
+where we started (notice too all these inverses are unique). Trivially
+we can also do nothing. What exactly are we describing here? We have
+elements that corespond to an action on a sphere that can be inverted and
+for which there exists an identity. It is also trivially the case here
+that if I consider three operations a,b,c from the set of rotations and
+reflections of the sphere then if I combine two of them together then
+:math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
+associative. These features turn out to literally define a group!
+ 
+AS we've seen the group in itself is a very abstract creature this is why we look to
+its representations. The group labels what symmetries we care about, they tell
+us the mappings that our system is invariant under, the unitary representations 
+show us how those symmetries look on a particular
 space of unitary matrices. Given that quantum circuits are largely
 constructed from unitaries this gives us a direct connection between the
-characterisation of symmetries and quantumc circutis. If we want to
+characterisation of symmetries and quantumc circuits. If we want to
 encode the structure of the symmeteries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
-
 """
 
 
@@ -136,7 +140,7 @@ restrict our gates to being unitary representations of the group.
 # Noughts and Crosses
 # ----------------
 # Let's look again at the game of noughts and crosses. Two players take
-# turns to place a 0 or an X, depending on which player you are, in a 9X9
+# turns to place a 0 or an X, depending on which player you are, in a 3X3
 # grid. The aim is to get a 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
 # on the choices of the players a draw is possible. Our learning task
@@ -176,8 +180,8 @@ restrict our gates to being unitary representations of the group.
 # rotations on individual qubits, encoding each of the
 # possibilites in the board squares at an angle of
 # :math:`\frac{2\pi}{3}` from each other. For our parameterised gates we
-# will have a single qubit :math:`R_x(\theta)` and :math:`R_y(\theta)`
-# rotation at each point, we will then use :math:`CR_Y(\phi)` for 2 qubit
+# will have a single qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
+# rotation at each point, we will then use :math:`CR_Y(\theta_3)` for 2 qubit
 # entangling gates. This implies that, for each encoding, crudely, we'll
 # need 18 single qubit rotation parameters and :math:`\binom{9}{2}=36` two
 # qubit gate rotations. Let's see how by using symmetries we can reduce
@@ -215,7 +219,7 @@ restrict our gates to being unitary representations of the group.
 
 ######################################################################
 # So let's look again at our choice of gates, single qubit
-# :math:`R_X(\theta)` rotations, and entangling 2 qubit :math:`CR_Y(\phi)`
+# :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling 2 qubit :math:`CR_Y(\phi)`
 # gates. What will we get by twirling these?
 #
 
@@ -223,7 +227,7 @@ restrict our gates to being unitary representations of the group.
 ######################################################################
 # In this particular instance we can see the action of the twirling
 # operation geometrically as the symmtries involved are all
-# permutations. Let's consider the R_x rotation acting on one qubit. Now
+# permutations. Let's consider the :math:R_x` rotation acting on one qubit. Now
 # if it is in the centre then you can flip around any symmetry axis you
 # like, this operation is invarient, so we've identified one equivariant
 # gate immediately. If it's on the corners then the flipping will send
@@ -288,7 +292,7 @@ restrict our gates to being unitary representations of the group.
 # Let's now impliment this!
 # First lets generate some games
 #
-# Here we are creating a small program that will play noughts and crosses against itself.
+# Here we are creating a small program that will play noughts and crosses against itself in a random fashion.
 # On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 
 import torch
