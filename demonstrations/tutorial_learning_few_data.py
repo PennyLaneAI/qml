@@ -549,10 +549,10 @@ make_plot(results_df, n_train=40)
 # .. bio:: Luis Mantilla Calderon
 #    :photo: ../_static/authors/luis_mantilla.jpg
 #
-#    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, BCI technology.
+#    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.
 
 ##############################################################################
 # .. bio:: Maurice Weber
-#    :photo: ../_static/authors/qottmann.jpg
+#    :photo: ../_static/authors/maurice_weber.jpg
 #
 #    Maurice is a cool dude from ETH that does fancy computer science stuff!
