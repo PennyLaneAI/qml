@@ -497,7 +497,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # it's good to reiterate that the entanglement of the cluster
 # state is created *off-line*. This means that the entanglement is made independently from the
 # computation, like how a blank sheet of paper is made separately from the text of a book.
-# Interestingly enough, we do not have to prepare all the entanglement at once. Just like we can
+# Interestingly enough, we do not have to prepare all of the entanglement at once. Just like we can
 # already start printing text upon the first few pages, we can apply measurements to one end of the
 # cluster, while growing it at the same time, as shown in the figure below. That is, we can start
 # printing the text on the first few pages while at the same time reloading the printer's paper
