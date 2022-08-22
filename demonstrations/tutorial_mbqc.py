@@ -489,7 +489,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
 # gate, the final step is to show that we can implement arbitrary quantum circuits. To do so,
 # we simply have to note that we have a *universal gate set* [#DiVincenzo]_. However, you might
-# wonder - is it even feasible to construct the large cluster states that one-way quantum
+# wonder if it's even feasible to construct the large cluster states that one-way quantum
 # computation requires?
 #
 # The number of qubits needed to construct a circuit can grow to be very large, as it not only
