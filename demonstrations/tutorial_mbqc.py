@@ -17,7 +17,7 @@ Measurement-based quantum computation
 
 ##############################################################################
 #
-# **Measurement-based quantum computing (MBQC)** also known as one-way quantum computing is an
+# **Measurement-based quantum computing (MBQC)**, also known as one-way quantum computing, is an
 # inventive approach to quantum computing that makes use of *off-line* entanglement as a resource
 # for computation. A one-way quantum computer starts out with an entangled state, a so-called
 # *cluster state*, and applies particular single-qubit measurements that correspond to the desired quantum circuit. In this context,
