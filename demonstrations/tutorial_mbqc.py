@@ -95,7 +95,6 @@ import pennylane as qml
 qubits = [str(node) for node in G.nodes]
 dev = qml.device("default.qubit", wires=qubits)
 
-
 @qml.qnode(dev)
 def cluster_state():
     for node in qubits:
