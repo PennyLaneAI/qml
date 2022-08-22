@@ -191,10 +191,9 @@ def one_bit_teleportation(input_state):
 # such as the teleportation protocol.
 #
 # Now, let's prepare a random qubit state and see if the teleportation protocol is working as
-# expected. To do so, we generate a random complex vector and normalize it to create a valid
-# quantum state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`.
-# We then apply the teleportation protocol and see if the resulting density matrix of the output
-# state of the second qubit is the same as the input state of the first qubit.
+# expected. To do so, we'll generate a random normalized state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`
+# and apply the teleportation protocol to see if the resulting density matrix 
+# describing the second qubit is the same as our input state :math:`|\psi\rangle`.
 
 # Define helper function for random input state on n qubits
 def generate_random_state(n=1):
