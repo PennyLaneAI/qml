@@ -106,7 +106,6 @@ def cluster_state():
 
     return qml.state()
 
-
 print(qml.draw(cluster_state)())
 
 ##############################################################################
