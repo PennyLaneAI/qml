@@ -289,7 +289,7 @@ restrict our gates to being unitary representations of the group.
 # Let's now impliment this!
 # First lets generate some games.
 #
-# Here we are creating a small program that will play noughts and crosses against itself.
+# Here we are creating a small program that will play Noughts and Crosses against itself.
 # On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 
 import torch
