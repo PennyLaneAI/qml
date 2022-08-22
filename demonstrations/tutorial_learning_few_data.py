@@ -149,9 +149,15 @@ rng = np.random.default_rng(seed=seed)
 # along the entire image, is now translated to a two-qubit unitary that correlates neighboring
 # qubits.  As for the pooling layer, we will use a conditioned single-qubit unitary that depends
 # on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
-# qubits of the final state using an all-to-all unitary gate.
+# qubits of the final state using an all-to-all unitary gate as shown in the figure below.
 #
-# Breaking down the layers:
+# .. figure:: /demonstrations/learning_few_data/qcnn-architecture.png
+#     :width: 75%
+#     :align: center
+#
+#     QCNN architecture. Taken from [#CongQuantumCNN]_.        
+#
+# Breaking down the layers
 # --------------------------
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
@@ -159,7 +165,9 @@ rng = np.random.default_rng(seed=seed)
 # with a particular sequence of gates: two single-qubit gates :class:`~.pennylane.U3` (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
 # parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates on each of the two
-# qubits.
+# qubits. At the circuit level, to have a neighboring qubit interaction, we can apply the two-qubit unitary
+# in one time step on half of the neighboring qubit pairs (0-1, 1-2, ...) and on a next time step on the other half of
+# the neighboring qubit pairs (1-2, 3-4, ...). 
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     """Adds a convolutional layer to a circuit.
@@ -493,7 +501,7 @@ make_plot(results_df, n_train=40)
 # .. bio:: Luis Mantilla Calderon
 #    :photo: ../_static/authors/qottmann.jpg
 #
-#    Luis is a cool dude studying in Vancouver, he likes to lose money on crypto and the stock market
+#    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML and quantum compilation. As a part-time hobby, he plays with BCI.
 
 ##############################################################################
 # .. bio:: Maurice Weber
