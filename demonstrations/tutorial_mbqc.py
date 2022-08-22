@@ -404,7 +404,7 @@ def RX_MBQC(theta, input_state):
 
 ##############################################################################
 #
-# Finally, we again compare the two implementations with random state as an input.
+# Finally, we again compare the two implementations with a random state as an input.
 #
 
 # Generate a random input state
