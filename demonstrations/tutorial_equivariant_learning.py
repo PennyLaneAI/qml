@@ -59,7 +59,8 @@ To understand this let's look at the following definition of a
 representation: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
- .. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G
+
+.. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G.
 
 Then we call :math:`\varphi` a representation of a group :math:`G` on a
 vector space :math:`V` which we can see is a group homomorphism
