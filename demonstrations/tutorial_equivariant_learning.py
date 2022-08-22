@@ -72,7 +72,7 @@ Now due to the importance of unitarity in quantum mechnics we are
 particularly interested in the unitary representations: Representations
 where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in
-quantum circuits (which are mostly made up of unitary gates remember). 
+quantum circuits (which are mostly made up of unitary gates). 
 
 
 Now how does all this relate to symmetries? Well a large class of
