@@ -25,7 +25,7 @@ reducting the parameter space and improving generalisation.
 
 Suppose we have a learning task and the data we are learning from has an
 underlying symmetry. For example, consider a game of Noughts and
-crosses: if we win a game, we would have won it if the board was rotated
+Crosses: if we win a game, we would have won it if the board was rotated
 or flipped along any of the lines of symmetry. Now if we want to train
 an algorithm to spot the outcome of these games, we can either ignore
 the existence of this symmetry or we can somehow include it. The
@@ -40,8 +40,8 @@ ecourages our results to be more genralisable.
 In classical machine learning this often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
-deep neural networks (see `Bronstein et al. (2019) <https://arxiv.org/abs/2104.13478>`__ for a broad introduction). We will refer to the quantum computing verison of
-this as quantum geometric machine learning (QGML).
+deep neural networks (see `Bronstein et al. (2019) <https://arxiv.org/abs/2104.13478>`__ for a broad introduction).
+We will refer to the quantum computing verison of this as quantum geometric machine learning (QGML).
 
 
 Representation theory in circuits
@@ -89,22 +89,18 @@ With groups defined we are in a position to ariculate what a
 representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
- .. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G
+.. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G.
+this structure indicates this is a group homomorphism as it sends our 
+group of interest to the another group such that the group action commutes
+with the mapping. For a representation our mapping must send us to the general linear
+group :math:`GL(n)` (the space of nxn matrices with matrix multiplication as the group multiplication).
 
-then we call :math:`\varphi` a representation of a group :math:`G` on a
-vector space :math:`V` which is a group homomorphism from our group of interest to the 
-general linear group (the space of nxn matrices along with matrix multiplication)
-:math:`\varphi: G \rightarrow G L(V, F)` for some field :math:`F` (like
-:math:`\mathbb{R}` or :math:`\mathbb{C}` which are the spaces that the
-elements of our matrices will belong to). Where we understand that a group homomorphism
-is a map that commutes with the group structure i.e :math:`\varphi(g\circ h )=\varphi(g)\varphi(h)`
-for :math:`g,h \in G``
 
 Now due to the importance of unitarity in quantum mechnics we are
 particularly interested in the unitary representations: Representations
 where the linear maps are unitary matrices. If we can
-identify these then we will have a way to naturally encode groups in
-quantum circuits (which are mostly made up of unitary gates remember).
+identify these then we will have a way to naturally encode groups in 
+quantum circuits (which are mostly made up of unitary gates). 
 
 How does all this relate to symmetries? Well a large class of
 symmetries can be charecterised as a group. Let's consider an example:
@@ -143,7 +139,7 @@ restrict our gates to being unitary representations of the group.
 # turns to place a 0 or an X, depending on which player you are, in a 3X3
 # grid. The aim is to get a 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
-# on the choices of the players a draw is possible. Our learning task
+# on the choices of the players there could be a draw. Our learning task
 # is to take a set of completed games labelled with their outcomes and
 # teach the algorithm to identify these correctly.
 #
@@ -173,7 +169,7 @@ restrict our gates to being unitary representations of the group.
 
 
 ######################################################################
-# To create the quantum model let us initialise all the qubits in \|0>,
+# To create the quantum model let us initialise all the qubits in :math:`|0\rangle`,
 # which we note is invaraint under the problems symmetries (flip and
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply single qubit :math:`R_x(\theta)`
@@ -211,7 +207,7 @@ restrict our gates to being unitary representations of the group.
 # :math:`s \in \mathcal{S}`. To see why this works for yourself apply the
 # map to an arbitrary unitary representation and see if you can see how you
 # can move it to the other side (remember the representation commutes with
-# the group action), you might change the element of the group you're now
+# the group action). You might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
 # matter!
 #
@@ -235,7 +231,7 @@ restrict our gates to being unitary representations of the group.
 # edge then it will be sent round the other edges. So we can see that the
 # twirl operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
-# We can see that for a single qubit rotation the inavarient maps are rotations
+# we can see that for a single qubit rotation the inavarient maps are rotations
 # on the central qubit, at all the corners, and at all the central
 # edges.
 #
@@ -290,9 +286,9 @@ restrict our gates to being unitary representations of the group.
 
 ######################################################################
 # Let's now impliment this!
-# First lets generate some games
+# First lets generate some games.
 #
-# Here we are creating a small program that will play noughts and crosses against itself in a random fashion.
+# Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
 # On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 
 import torch
