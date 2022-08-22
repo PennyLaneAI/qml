@@ -279,7 +279,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # with :math:`m_{\mathrm{in}}, m_1, m_2, m_3 \in \{0, 1\}` being the measurement outcomes on nodes
 # :math:`t_\mathrm{in}`, :math:`a_1`, :math:`a_2`, and :math:`a_3`, respectively. Note that the
 # measurement basis is adaptive; the measurement on :math:`a_3`, for example, depends on the outcome
-# of earlier measurements on the chain. After these operations, the state of qubit
+# of earlier measurements in the chain. After these operations, the state of qubit
 # :math:`t_\mathrm{out}` is given by
 #
 # .. math:: |\psi_{\mathrm{out}}\rangle = \hat{U}(\alpha, \beta, \gamma)|\psi_{\mathrm{in}}\rangle
