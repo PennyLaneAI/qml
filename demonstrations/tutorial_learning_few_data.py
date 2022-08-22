@@ -32,22 +32,23 @@ called the *generalization error* and indicates how well the model has learned t
     :align: center
 
 It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models that
-perfectly fit the training data, i.e., which admit a low bias, have a higher variance, typically perform poorly on unseen
-test data and don't generalize well. In the classical machine learning community, this trade-off has been extensively
+perfectly fit the training data admit a low bias at the cost of a higher variance, and hence typically perform poorly on unseen
+test data. In the classical machine learning community, this trade-off has been extensively
 studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
 their variance [#NamkoongVariance]_.
 
 Let us now dive deeper into generalization properties of quantum machine learning (QML) models. We start by describing
 the typical data processing pipeline of a QML model. A classical data input :math:`x` is first encoded in a quantum
-state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a parametrized quantum
-channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` and a measurement is performed on the resulting state
+state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a quantum
+channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` with learnable parameters :math:`\alpha`. Finally, a measurement is performed on the resulting state
 to get the final prediction. Now, the goal is to minimize the expected loss over the data generating distribution
 :math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
 expected loss is given by
 
-.. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)].
+.. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)]
 
-In practice, as :math:`P` is generally unknown, this quantity has to be estimated from a finite amount of data. Given
+where :math:`x` are the features and :math:`y` are the labels. In practice, as :math:`P` is generally 
+unknown, this quantity has to be estimated from a finite amount of data. Given
 a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N`, we estimate the performance of our QML model by calculating the
 average loss over the training set
 
@@ -56,7 +57,7 @@ average loss over the training set
 which is referred to as the training loss and is an unbiased estimate of :math:`R(\alpha)`. This is only a proxy
 to the true quantity of interest :math:`R(\alpha)` and their difference is called the generalization error
 
-.. math:: \mathrm{gen}(\alpha) = \hat{R}_S(\alpha) - R(\alpha)
+.. math:: \mathrm{gen}(\alpha) =  R(\alpha) - \hat{R}_S(\alpha)
 
 which is the quantity that we explore in this tutorial. Keeping in mind the bias-variance trade-off, one would expect
 that more complex models, i.e., models with a larger number of parameters, achieve a lower error on the training data
@@ -77,9 +78,8 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
-# of training samples and increases with the number of parametrized gates. However, as is the case for quantum
-# convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number of
-# gates :math:`M` which have been reused. Naively, one could suspect that the generalization error scales as
+# of training samples and increases with the number of parametrized gates. However, as is the case for 
+# quantum convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number :math:`M` of gates which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
 # :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
 # :math:`\tilde{\mathcal{O}}` includes logarithmic factors). However, the authors of Ref. [#CaroGeneralization]_ found
 # that such models actually adhere to the better scaling
@@ -89,7 +89,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # With this, we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon`, we need a
 # training set of size :math:`N \sim T \log MT / \epsilon^2`. For the special case of QCNNs, we can explicitly connect
 # the number of samples needed for good generalization to the system size :math:`n` since these models
-# use :math:`\mathcal{O}(\log(n))` independently parametrized gates, each of which is used at most :math:`n` times.
+# use :math:`\mathcal{O}(\log(n))` independently parametrized gates, each of which is used at most :math:`n` times [#CongQuantumCNN]_.
 # Putting the pieces together, we find that a training set of size
 #
 # .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
@@ -102,8 +102,9 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # Quantum convolutional neural network
 # ------------------------------------
 # Before we start building a quantum CNN, let us remember the idea of their classical counterpart.
-# Classical CNNs are a family of neural networks with a specific architecture to
-# perform image processing. To achieve this goal, one uses what is known as a *convolutional layer*,
+# Classical CNNs are a family of neural networks which make use of convolutions and pooling operations to
+# insert an inductive bias, favoring invariances to spatial transformation like translations, rotations and scaling.
+# In particular, one uses what is known as a *convolutional layer*,
 # which consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local
 # information about such an array. In addition, depending on the purpose of your CNN, one might want
 # to make classification or feature predictions, which are arrays much smaller than the original image.
