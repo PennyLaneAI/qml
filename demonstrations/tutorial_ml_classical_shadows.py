@@ -786,4 +786,4 @@ plt.show()
 #    :photo: ../_static/authors/utkarsh_azad.png
 #
 #    Utkarsh is a quantum software researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences. Whenever he's not tinkering with code, he will be walking miles searching either for fractals in nature or a cup of filter coffee.
-
+#
