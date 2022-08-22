@@ -150,7 +150,7 @@ rng = np.random.default_rng(seed=seed)
 # on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
 # qubits of the final state using an all-to-all unitary gate.
 #
-# Breaking down the layers:
+# Breaking down the layers
 # --------------------------
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
