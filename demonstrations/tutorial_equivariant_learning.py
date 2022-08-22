@@ -137,7 +137,7 @@ restrict our gates to being unitary representations of the group.
 # Noughts and Crosses
 # ----------------
 # Let's look again at the game of noughts and crosses. Two players take
-# turns to place a 0 or an X, depending on which player you are, in a 9X9
+# turns to place a 0 or an X, depending on which player you are, in a 3X3
 # grid. The aim is to get a 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
 # on the choices of the players a draw is possible. Our learning task
