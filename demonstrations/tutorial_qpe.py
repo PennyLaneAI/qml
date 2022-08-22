@@ -377,7 +377,7 @@ from matplotlib import pyplot as plt
 
 import pennylane as qml
 from pennylane import numpy as np
-from pennylane import hf
+from pennylane import qchem
 
 #### build your molecular hamiltonian ###
 
@@ -388,8 +388,8 @@ geometry = BOHR_TO_ANGSTROM * np.array([[ 0.0056957528, 0.0235477326, 0.0],
                                         [0.5224540730, 0.8628715457, 0.0],
                                         [0.9909500019, -0.0043172515, 0.0]])
 
-mol = hf.Molecule(symbols, geometry, charge=1)
-hamiltonian = qml.qchem.diff_hamiltonian(mol)(geometry)
+mol = qchem.Molecule(symbols, geometry, charge=1)
+hamiltonian = qchem.diff_hamiltonian(mol)(geometry)
 
 
 ######################################################################
