@@ -227,7 +227,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #   4. How to implement **arbitrary quantum circuits**.
 #
 # In the previous section, we have already seen how the quantum information propagates from one
-# side of the cluster to the other - that is, how the *identity gate* can be implemented. In this
+# side of the cluster to the other. In this
 # section, we will tackle the remaining parts concerning logical operations.
 #
 
