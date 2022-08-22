@@ -150,7 +150,7 @@ rng = np.random.default_rng(seed=seed)
 # qubits of the final state using an all-to-all unitary gate.
 #
 # Breaking down the layers:
-# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# --------------------------
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
