@@ -328,9 +328,9 @@ def load_digits_data(num_train, num_test, rng):
 @jax.jit
 def compute_out(weights, weights_last, features, labels):
     """Computes the output of the corresponding label in the qcnn"""
-    cost = lambda weights, weights_last, feature, label: conv_net(
-        weights, weights_last, feature
-    )[label]
+    cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[
+        label
+    ]
     return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(
         weights, weights_last, features, labels
     )
@@ -351,9 +351,7 @@ def compute_cost(weights, weights_last, features, labels):
 def init_weights():
     """Initializes random weights for the QCNN model."""
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
-    weights_last = pnp.random.normal(
-        loc=0, scale=1, size=4**2 - 1, requires_grad=True
-    )
+    weights_last = pnp.random.normal(loc=0, scale=1, size=4**2 - 1, requires_grad=True)
     return jnp.array(weights), jnp.array(weights_last)
 
 
@@ -385,9 +383,7 @@ def train_qcnn(n_train, n_test, n_epochs):
     weights, weights_last = init_weights()
 
     # learning rate decay
-    cosine_decay_scheduler = optax.cosine_decay_schedule(
-        0.1, decay_steps=n_epochs, alpha=0.95
-    )
+    cosine_decay_scheduler = optax.cosine_decay_schedule(0.1, decay_steps=n_epochs, alpha=0.95)
     optimizer = optax.adam(learning_rate=cosine_decay_scheduler)
     opt_state = optimizer.init((weights, weights_last))
 
@@ -401,9 +397,7 @@ def train_qcnn(n_train, n_test, n_epochs):
 
     for step in range(n_epochs):
         # Training step with (adam) optimizer
-        train_cost, grad_circuit = value_and_grad(
-            weights, weights_last, x_train, y_train
-        )
+        train_cost, grad_circuit = value_and_grad(weights, weights_last, x_train, y_train)
         updates, opt_state = optimizer.update(grad_circuit, opt_state)
         weights, weights_last = optax.apply_updates((weights, weights_last), updates)
 
@@ -493,9 +487,7 @@ def make_plot(df, n_train):
     # plot train acc vs test acc
     ax = axs[2]
     ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker="D")
-    beta, m = np.polyfit(
-        np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1
-    )
+    beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
     reg = np.poly1d([beta, m])
     ax.plot(
         df.train_acc,
@@ -507,9 +499,7 @@ def make_plot(df, n_train):
     ax.set_ylabel("test accuracy", fontsize=18)
     ax.set_xlabel("train accuracy", fontsize=18)
 
-    fig.suptitle(
-        f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20
-    )
+    fig.suptitle(f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20)
     plt.tight_layout()
     plt.show()
 
