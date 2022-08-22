@@ -78,7 +78,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
-# of training samples and increases with the number of parametrized gates. However, as is the case for 
+# of training samples and increases with the number of parametrized gates. However, as is the case for
 # quantum convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number :math:`M` of gates which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
 # :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
 # :math:`\tilde{\mathcal{O}}` includes logarithmic factors). However, the authors of Ref. [#CaroGeneralization]_ found
@@ -118,7 +118,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #     :width: 75%
 #     :align: center
 #
-# We want to build something similar for a quantum circuit. First, we import the necessary 
+# We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a seed for reproducibility.
 
 import matplotlib.pyplot as plt
@@ -131,7 +131,7 @@ from tqdm.auto import trange
 import jax
 import jax.numpy as jnp
 
-import optax # optimization using jax
+import optax  # optimization using jax
 
 import pennylane as qml
 import pennylane.numpy as pnp
@@ -260,6 +260,7 @@ def conv_net(weights, last_layer_weights, features):
     dense_layer(last_layer_weights, wires)
     return qml.probs(wires=(0))
 
+qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**16))
 
 ##############################################################################
 # In the problem we will address, we need to encode 64 features
@@ -277,7 +278,7 @@ images, labels = digits.data, digits.target
 images = images[np.where((labels == 0) | (labels == 1))]
 labels = labels[np.where((labels == 0) | (labels == 1))]
 
-fig, axes = plt.subplots(nrows=1,ncols=12, figsize=(3, 1))
+fig, axes = plt.subplots(nrows=1, ncols=12, figsize=(3, 1))
 
 for i, ax in enumerate(axes.flatten()):
     ax.imshow(images[i].reshape((8, 8)), cmap="gray")
@@ -352,9 +353,7 @@ def compute_cost(weights, weights_last, features, labels):
 def init_weights():
     """Initializes random weights for the QCNN model."""
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
-    weights_last = pnp.random.normal(
-        loc=0, scale=1, size=4**2 - 1, requires_grad=True
-    )
+    weights_last = pnp.random.normal(loc=0, scale=1, size=4**2 - 1, requires_grad=True)
     return jnp.array(weights), jnp.array(weights_last)
 
 
@@ -386,9 +385,7 @@ def train_qcnn(n_train, n_test, n_epochs):
     weights, weights_last = init_weights()
 
     # learning rate decay
-    cosine_decay_scheduler = optax.cosine_decay_schedule(
-        0.1, decay_steps=n_epochs, alpha=0.95
-    )
+    cosine_decay_scheduler = optax.cosine_decay_schedule(0.1, decay_steps=n_epochs, alpha=0.95)
     optimizer = optax.adam(learning_rate=cosine_decay_scheduler)
     opt_state = optimizer.init((weights, weights_last))
 
@@ -487,15 +484,13 @@ def make_plot(df, n_train):
     # plot train acc vs test acc
     ax = axs[2]
     ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker="D")
-    beta, m = np.polyfit(
-        np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1
-    )
+    beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
     reg = np.poly1d([beta, m])
     ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)),"-", color='black', lw=0.75)
     ax.set_ylabel("test accuracy", fontsize=18)
     ax.set_xlabel("train accuracy", fontsize=18)
 
-    fig.suptitle(f'Performance Measures for Training Set of Size $N=${n_train}', fontsize=20)
+    fig.suptitle(f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20)
     plt.tight_layout()
     plt.show()
 
@@ -537,12 +532,12 @@ make_plot(results_df, n_train=40)
 
 ##############################################################################
 # .. bio:: Luis Mantilla Calderon
-#    :photo: ../_static/authors/qottmann.jpg
+#    :photo: ../_static/authors/luis_mantilla.jpg
 #
-#    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML and quantum compilation. As a part-time hobby, he plays with BCI.
+#    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.
 
 ##############################################################################
 # .. bio:: Maurice Weber
-#    :photo: ../_static/authors/qottmann.jpg
+#    :photo: ../_static/authors/maurice_weber.jpg
 #
 #    Maurice is a cool dude from ETH that does fancy computer science stuff!
