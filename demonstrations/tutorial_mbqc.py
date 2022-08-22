@@ -145,7 +145,7 @@ print(qml.draw(cluster_state)())
 # Let's take a deeper look at the principles behind quantum teleportation using a simple example of one-bit
 # teleportation. We start with one qubit in the state :math:`|\psi\rangle` that we want to transfer
 # to the second qubit initially in the state :math:`|0\rangle`. The figure below represents the
-# one-bit teleportation protocol. The green box represents the creation of a cluster state while
+# protocol. The green box represents the creation of a cluster state, while
 # the red box represents the measurement of a qubit with the appropriate correction applied to
 # the second qubit based on the single bit acquired through the measurement.
 #
