@@ -170,7 +170,7 @@ restrict our gates to being unitary representations of the group.
 
 
 ######################################################################
-# To create the quantum model let us initialise all the qubits in \|0>,
+# To create the quantum model let us initialise all the qubits in :math:`|0\rangle`,
 # which we note is invaraint under the problems symmetries (flip and
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply single qubit :math:`R_x(\theta)`
