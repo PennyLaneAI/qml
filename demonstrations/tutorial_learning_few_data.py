@@ -101,17 +101,18 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 ##############################################################################
 # Quantum convolutional neural network
 # ------------------------------------
-# Before we start building a quantum CNN, let us remember the idea of their classical counterpart.
+# Before we start building a quantum CNN, let us briefly review the idea of classical CNNs which have shown
+# tremendous success in tasks like image recognition, recommender systems or sound classification, to name a few.
+# For a more in-depth explanation of CNNs, we highly recommend `chapter 9 <https://www.deeplearningbook.org/contents/convnets.html>`
+# in [#DLBook]_ which is dedicated to CNNs.
 # Classical CNNs are a family of neural networks which make use of convolutions and pooling operations to
 # insert an inductive bias, favoring invariances to spatial transformation like translations, rotations and scaling.
-# In particular, one uses what is known as a *convolutional layer*,
-# which consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local
-# information about such an array. In addition, depending on the purpose of your CNN, one might want
-# to make classification or feature predictions, which are arrays much smaller than the original image.
-# To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These
-# layers are used to reduce the dimensionality of the 2D array being processed (whereas inverse pooling increases the
-# dimensionality of a 2D array). Finally, one takes these two layers and applies them repeatedly and
-# interchangeably as show in the figure below.
+# A *convolutional layer* consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local
+# information while sharing parameters across the spatial dimensions. In addition to the convolutional layers,
+# one typically uses pooling layers which reduce the size of the input and provide a mechanism to summarize
+# information from a neighbourhood in the input. Next to reducing the dimensionality, these types of layers have the advantage
+# of making the model more agnostic to certain transformations like scaling and rotations.
+# These two types of layers are applied repeatedly in an alternating manner as shown in the figure below.
 #
 # .. figure:: /demonstrations/learning_few_data/cnn_pic.png
 #     :width: 75%
@@ -280,7 +281,7 @@ images, labels = digits.data, digits.target
 images = images[np.where((labels == 0) | (labels == 1))]
 labels = labels[np.where((labels == 0) | (labels == 1))]
 
-fig, axes = plt.subplots(nrows=1, ncols=12, figsize=(3, 3))
+fig, axes = plt.subplots(nrows=1, ncols=12, figsize=(3, 1))
 
 for i, ax in enumerate(axes.flatten()):
     ax.imshow(images[i].reshape((8, 8)), cmap="gray")
@@ -332,9 +333,9 @@ def load_digits_data(num_train, num_test, rng):
 @jax.jit
 def compute_out(weights, weights_last, features, labels):
     """Computes the output of the corresponding label in the qcnn"""
-    cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[
-        label
-    ]
+    cost = lambda weights, weights_last, feature, label: conv_net(
+        weights, weights_last, feature
+    )[label]
     return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(
         weights, weights_last, features, labels
     )
@@ -392,12 +393,7 @@ def train_qcnn(n_train, n_test, n_epochs):
     opt_state = optimizer.init((weights, weights_last))
 
     # data containers
-    train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = (
-        [],
-        [],
-        [],
-        [],
-    )
+    train_cost_epochs, test_cost_epochs, train_acc_epochs, test_acc_epochs = [], [], [], []
 
     for step in range(n_epochs):
         # Training step with (adam) optimizer
@@ -493,20 +489,13 @@ def make_plot(df, n_train):
     ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker="D")
     beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
     reg = np.poly1d([beta, m])
-    ax.plot(
-        df.train_acc,
-        reg(np.array(df.train_acc, dtype=float)),
-        "-",
-        color="black",
-        lw=0.75,
-    )
+    ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)),"-", color='black', lw=0.75)
     ax.set_ylabel("test accuracy", fontsize=18)
     ax.set_xlabel("train accuracy", fontsize=18)
 
     fig.suptitle(f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20)
     plt.tight_layout()
     plt.show()
-
 
 make_plot(results_df, n_train=40)
 
@@ -519,6 +508,11 @@ make_plot(results_df, n_train=40)
 #     Matthias C. Caro, Hsin-Yuan Huang, M. Cerezo, Kunal Sharma, Andrew Sornborger, Lukasz Cincio, Patrick J. Coles.
 #     "Generalization in quantum machine learning from few training data"
 #     `arxiv:2111.05292 <https://arxiv.org/abs/2111.05292>`__, 2021.
+#
+# .. [#DLBook]
+#
+#     Ian Goodfellow, Yoshua Bengio and Aaron Courville.
+#     `"Deep Learning"2 <http://www.deeplearningbook.org>`__, 2016.
 #
 # .. [#NamkoongVariance]
 #
