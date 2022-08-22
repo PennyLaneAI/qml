@@ -621,11 +621,6 @@ RHG = SurfaceCode(code_distance)
 # with trapped-ions or superconducting circuits. Instead, the required entanglement is created
 # off-line which is often simpler to implement.
 #
-# .. container:: alert alert-block alert-info
-#
-#   **A system that is capable of creating an entangled cluster state and performing adaptive
-#   arbitrary single-qubit measurements on it is a universal quantum computer!**
-#
 # In this demo, we assumed that the system is capable of performing arbitrary
 # single-qubit measurements. This is not a strict requirement, as one can acquire the same
 # capabilities by sprinkling *magic states* into the cluster state. A discussion of this topic is
