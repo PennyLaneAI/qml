@@ -1,7 +1,7 @@
 r"""
-.. tutorial_qpe:
-    Finding Ground State Energies via Quantum Phase Estimation
-    ======================================================
+Finding Ground State Energies via Quantum Phase Estimation
+==========================================================
+
     .. meta::
         :property="og:description": This demo introduces to the
         Quantum Phase Estimation algorithm and shows users how to implement a
