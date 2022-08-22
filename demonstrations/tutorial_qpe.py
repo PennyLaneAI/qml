@@ -8,6 +8,18 @@ molecular energies. Authors: Davide Castaldo and Aleksei Malyshev
 (Xanadu residents)
 
 """
+r"""
+Quantum Phase Estimation for Molecular Energies
+===============================================
+
+.. meta::
+    :property="og:description": Learn how to build electronic Hamiltonians of molecules.
+    :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
+.. related::
+    tutorial_quantum chemistry Building molecular Hamiltonians
+*Author: Davide Castaldo, Aleksei Malyshev (Xanadu Residents). Last updated: 22 August 2022*
+"""
+
 
 
 ######################################################################
