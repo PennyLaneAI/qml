@@ -31,7 +31,7 @@ called the *generalization error* and indicates how well the model has learned t
     :width: 75%
     :align: center
 
-It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models which
+It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models that
 perfectly fit the training data, i.e., which admit a low bias, have a higher variance, typically perform poorly on unseen
 test data and don't generalize well. In the classical machine learning community, this trade-off has been extensively
 studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
@@ -110,9 +110,14 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # To deal with this dimensionality difference, one uses what is known as a *pooling layer*. These
 # layers are used to reduce the dimensionality of the 2D array being processed (whereas inverse pooling increases the
 # dimensionality of a 2D array). Finally, one takes these two layers and applies them repeatedly and
-# interchangeably. We want to build something similar for a quantum circuit.
+# interchangeably as show in the figure below. 
 #
-# First, we import the necessary libraries we will need in this demo and set a seed for reproducibility.
+# .. figure:: /demonstrations/learning_few_data/cnn_pic.png
+#     :width: 75%
+#     :align: center
+#
+# We want to build something similar for a quantum circuit. First, we import the necessary 
+# libraries we will need in this demo and set a seed for reproducibility.
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -141,16 +146,17 @@ rng = np.random.default_rng(seed=seed)
 # of the feature vector. In a qubit circuit, the convolutional layer, consisting of a kernel swept
 # along the entire image, is now translated to a two-qubit unitary that correlates neighboring
 # qubits.  As for the pooling layer, we will use a conditioned single-qubit unitary that depends
-# on the measurement of a neighboring qubit. Finally, we use a “dense layer” that entangles all
+# on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
 # qubits of the final state using an all-to-all unitary gate.
 #
-# **Let's break down each layer:**
+# Breaking down the layers:
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
-# to be updated in each training round.  In ``pennylane``, we model this arbitrary two-qubit unitary
-# with a particular sequence of gates: two single-qubit gates ``qml.U3`` (parametrized by three 
-# parameters, each), followed by three Ising interactions between both qubits (each interaction is 
-# parametrized by one parameter), and end with two additional ``qml.U3`` gates in each of the two 
+# to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
+# with a particular sequence of gates: two single-qubit gates :class:`~.pennylane.U3` (parametrized by three
+# parameters, each), followed by three Ising interactions between both qubits (each interaction is
+# parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates on each of the two
 # qubits.
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
@@ -176,7 +182,7 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
 
 ##############################################################################
 # The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in
-# this case, are ``qml.U3`` gates. Then, we apply these conditional measurements to half of the
+# this case, are :class:`~.pennylane.U3` gates. Then, we apply these conditional measurements to half of the
 # unmeasured wires, reducing our system size by half.
 
 def pooling_layer(weights, wires):
@@ -249,14 +255,13 @@ def conv_net(weights, last_layer_weights, features):
 # In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
 # These are 8 by 8 pixel arrays of hand-written digits as shown below.
 
-digits = datasets.load_digits();
 digits = datasets.load_digits()
 images, labels = digits.data, digits.target
 
 images = images[np.where((labels == 0) | (labels == 1))]
 labels = labels[np.where((labels == 0) | (labels == 1))]
 
-fig, axes = plt.subplots(nrows=12,ncols=12, figsize=(3, 3));
+fig, axes = plt.subplots(nrows=1,ncols=12, figsize=(3, 3));
 
 for i, ax in enumerate(axes.flatten()):
     ax.imshow(images[i].reshape((8,8)), cmap='gray')
@@ -322,7 +327,7 @@ value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 ##############################################################################
 # We are going to perform the classification for differently sized training sets. Therefore, we
 # define the classification procedure once and then perform it for different datasets.
-# Finally, we update the weights using the ``qml.AdamOptimizer`` and use these updated weights to
+# Finally, we update the weights using the :class:`pennylane.AdamOptimizer` and use these updated weights to
 # calculate the cost and accurracy on the testing and training set.
 
 def train_qcnn(n_train, n_test, n_epochs):
@@ -381,12 +386,13 @@ def train_qcnn(n_train, n_test, n_epochs):
 
 ##############################################################################
 # .. note::
-
+#
 #     There are some small intricacies for speeding up this code that are worth mentioning: We are using ``jax`` for our training
 #     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution
 #     and cached for future executions. This means the first execution will take longer, but all subsequent executions are substantially faster.
 #     Further, we use ``jax.vmap`` to vectorize the execution of the QCNN over all input states (as opposed to looping through the training and test set at every execution)
 
+##############################################################################
 # Training for different training set sizes yields different accuracies, as seen below. As we increase the training data size, the overall test accuracy,
 # a proxy for the models' generalization capabilities, increases.
 
