@@ -755,7 +755,7 @@ with plt.xkcd():
     ax.plot(list(range(n_readout, n_readout + max_n_additional)), 
                np.abs(errors), 
                label=f"Init. state: HF", 
-               linestyle='o-')
+               linestyle='.-')
 
     ax.set_xlabel(r"$K + \Delta$")
     ax.set_ylabel(r"$\left|E_0 - E_{\rm FCI} \right|$ [Ha]")
