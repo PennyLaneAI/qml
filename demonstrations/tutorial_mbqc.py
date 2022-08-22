@@ -95,6 +95,7 @@ import pennylane as qml
 qubits = [str(node) for node in G.nodes]
 dev = qml.device("default.qubit", wires=qubits)
 
+
 @qml.qnode(dev)
 def cluster_state():
     for node in qubits:
@@ -105,6 +106,7 @@ def cluster_state():
         qml.CZ(wires=[str(i), str(j)])
 
     return qml.state()
+
 
 print(qml.draw(cluster_state)())
 
@@ -129,7 +131,7 @@ print(qml.draw(cluster_state)())
 # [#Hermans2022]_, [#Furusawa1998]_, [#Riebe2004]_, [#Nielsen1998]_. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we transport *information*, not matter, between systems. Admittedly, it has a
-# rather delusive name because it is not instantaneous. Notably, it requires communication of 
+# rather delusive name because it is not instantaneous. Notably, it requires communication of
 # additional classical information, which is still limited by the speed of light.
 #
 # One-bit Teleportation
@@ -153,6 +155,7 @@ import pennylane as qml
 import pennylane.numpy as np
 
 dev = qml.device("default.qubit", wires=2)
+
 
 @qml.qnode(dev)
 def one_bit_teleportation(input_state):
@@ -184,13 +187,14 @@ def one_bit_teleportation(input_state):
 #
 # Now, let's prepare a random qubit state and see if the teleportation protocol is working as
 # expected. To do so, we'll generate a random normalized state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`
-# and apply the teleportation protocol to see if the resulting density matrix 
+# and apply the teleportation protocol to see if the resulting density matrix
 # describing the second qubit is the same as our input state :math:`|\psi\rangle`.
 
 # Define helper function for random input state on n qubits
 def generate_random_state(n=1):
     input_state = np.random.random(2 ** n) + 1j * np.random.random(2 ** n)
     return input_state / np.linalg.norm(input_state)
+
 
 # Generate a random input state for n=1 qubit
 input_state = generate_random_state()
@@ -293,6 +297,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 
 dev = qml.device("default.qubit", wires=1)
 
+
 @qml.qnode(dev)
 def RZ(theta, input_state):
     # Prepare the input state
@@ -312,6 +317,7 @@ def RZ(theta, input_state):
 #
 
 mbqc_dev = qml.device("default.qubit", wires=2)
+
 
 @qml.qnode(mbqc_dev)
 def RZ_MBQC(theta, input_state):
@@ -353,6 +359,7 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 
 dev = qml.device("default.qubit", wires=1)
 
+
 @qml.qnode(dev)
 def RX(theta, input_state):
     # Prepare the input state
@@ -366,6 +373,7 @@ def RX(theta, input_state):
 
 
 mbqc_dev = qml.device("default.qubit", wires=3)
+
 
 @qml.qnode(mbqc_dev)
 def RX_MBQC(theta, input_state):
@@ -430,6 +438,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 
 dev = qml.device("default.qubit", wires=2)
 
+
 @qml.qnode(dev)
 def CNOT(input_state):
     # Prepare the input state
@@ -438,7 +447,9 @@ def CNOT(input_state):
 
     return qml.density_matrix(wires=[0, 1])
 
+
 mbqc_dev = qml.device("default.qubit", wires=4)
+
 
 @qml.qnode(mbqc_dev)
 def CNOT_MBQC(input_state):
@@ -481,24 +492,24 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Once we have established the ability to implement arbitrary single-qubit rotations and a two-qubit
 # gate, the final step is to show that we can implement arbitrary quantum circuits. To do so,
 # we simply have to note that we have a *universal gate set* [#DiVincenzo]_. The complete computation
-# can be performed as shown in the figure below. The qubits are teleported along the arrows in the 
+# can be performed as shown in the figure below. The qubits are teleported along the arrows in the
 # cluster and single-qubit gates are applied through choosing the measurement bases along these arrays.
 # Two-qubit gates are implemented along vertical arrows, and the rest of the qubits is measured in the
-# :math:`Z`-basis effectively taking them out of the cluster without affecting the neighboring nodes. 
-# 
+# :math:`Z`-basis effectively taking them out of the cluster without affecting the neighboring nodes.
+#
 # .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
 #    :align: center
 #    :width: 75%
 #
 #    ..
 #
-#    A complete measurement-based quantum computation. Circles :math:`\odot` symbolize measurements 
-#    of Pauli-:math:`Z`, vertical arrows are measurements of Pauli-:math:`X`, while tilted arrows refer to 
+#    A complete measurement-based quantum computation. Circles :math:`\odot` symbolize measurements
+#    of Pauli-:math:`Z`, vertical arrows are measurements of Pauli-:math:`X`, while tilted arrows refer to
 #    measurements in the :math:`xy`-plane. [#OneWay2001]_
-# 
-# However, you might wonder - is it even feasible to construct the large cluster states that 
-# one-way quantum computation requires? The number of qubits needed to construct a circuit can grow 
-# to be very large, as it not only depends on the number of logical qubits, but also on the depth 
+#
+# However, you might wonder - is it even feasible to construct the large cluster states that
+# one-way quantum computation requires? The number of qubits needed to construct a circuit can grow
+# to be very large, as it not only depends on the number of logical qubits, but also on the depth
 # of the circuit. At this point, it's good to reiterate that the entanglement of the cluster
 # state is created *off-line*. This means that the entanglement is made independently from the
 # computation, like how a blank sheet of paper is made separately from the text of a book.
@@ -569,9 +580,9 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    logical qubit and can correct any combination of :math:`\lfloor (d-1)/2 \rfloor` errors.
 #    [#FowlerPolyestimate]_
 #
-# In the measurement-based picture, quantum error correction requires cluster states that are at 
-# least 3-dimensional [#XanaduBlueprint]_, contrary to the 2-dimensional cluster states required for 
-# universal quantum computation discussed above. The error correcting code that you want to implement 
+# In the measurement-based picture, quantum error correction requires cluster states that are at
+# least 3-dimensional [#XanaduBlueprint]_, contrary to the 2-dimensional cluster states required for
+# universal quantum computation discussed above. The error correcting code that you want to implement
 # dictates the structure of the cluster state. The cluster state that is associated with the surface code is known as the RHG lattice,
 # named after its architects Raussendorf, Harrington, and Goyal. We can visualize this cluster
 # state with FlamingPy.
