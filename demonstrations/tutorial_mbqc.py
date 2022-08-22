@@ -301,7 +301,6 @@ np.allclose(density_matrix, density_matrix_mbqc)
 
 dev = qml.device("default.qubit", wires=1)
 
-
 @qml.qnode(dev)
 def RZ(theta, input_state):
     # Prepare the input state
