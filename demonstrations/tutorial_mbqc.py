@@ -131,16 +131,8 @@ print(qml.draw(cluster_state)())
 # [#Hermans2022]_, [#Furusawa1998]_, [#Riebe2004]_, [#Nielsen1998]_. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
-# rather delusive name because it is not instantaneous but requires communication of additional classical information,
-# which is naturally limited by the speed of light.
-#
-# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
-#    :align: center
-#    :width: 75%
-#
-#    ..
-#
-#    The flow of information in a measurement-based quantum computation [#OneWay2001]_
+# rather delusive name because it is not instantaneous. Instead, it requires communication of 
+# additional classical information, which is naturally limited by the speed of light.
 #
 # One-bit Teleportation
 # `````````````````````
