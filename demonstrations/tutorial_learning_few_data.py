@@ -547,7 +547,7 @@ make_plot(results_df, n_train=40)
 
 ##############################################################################
 # .. bio:: Luis Mantilla Calderon
-#    :photo: ../_static/authors/qottmann.jpg
+#    :photo: ../_static/authors/luis_mantilla.jpg
 #
 #    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML and quantum compilation. As a part-time hobby, he plays with BCI.
 
