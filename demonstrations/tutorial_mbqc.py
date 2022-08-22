@@ -547,8 +547,8 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
-# introduction. Instead, what we will do here is show how to implement error correction in the
-# MBQC framework by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as
+# introduction. Instead, what we will do here is giving you the gist of quantum error correction in the
+# MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as
 # an example.
 #
 # .. figure:: ../demonstrations/mbqc/surface_code_d3.png
