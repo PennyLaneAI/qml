@@ -25,7 +25,7 @@ reducting the parameter space and improving generalisation.
 
 Suppose we have a learning task and the data we are learning from has an
 underlying symmetry. For example, consider a game of Noughts and
-crosses: if we win a game, we would have won it if the board was rotated
+Crosses: if we win a game, we would have won it if the board was rotated
 or flipped along any of the lines of symmetry. Now if we want to train
 an algorithm to spot the outcome of these games, we can either ignore
 the existence of this symmetry or we can somehow include it. The
