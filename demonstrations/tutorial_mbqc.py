@@ -603,7 +603,7 @@ RHG = SurfaceCode(code_distance)
 # and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown in the
 # figure above on the :math:`xy`-plane. In principle, any quantum error correction stabilizer code can be `foliated <https://arxiv.org/abs/1607.02579>`_ into
 # a graph state for measurement-based QEC [#FoliatedQuantumCodes]_, [#UniversalFTMBQC]_. However, the foliations are particularly nice for `CSS
-# codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor and Steane. CSS codes have stabilizers that exclusively contain
+# codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor, and Steane. CSS codes have stabilizers that exclusively contain
 # :math:`X`-stabilizers *or* :math:`Z`-stabilizers, and include the *surface code* and *colour code* families.
 # For these CSS codes, you can view the primal and dual sheets as measuring the
 # :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
