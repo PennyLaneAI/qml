@@ -125,7 +125,7 @@ print(qml.draw(cluster_state)())
 #
 # Measurement-based quantum computation heavily relies on the idea of information propagation. In
 # particular, we make use of a protocol called *quantum teleportation*, one of the driving concepts behind MBQC. Despite its esoteric name, quantum
-# teleportation is very real and experimentally demonstrated multiple times in the last few decades
+# teleportation is very real and has been experimentally demonstrated multiple times in the last few decades
 # [#Hermans2022]_, [#Furusawa1998]_, [#Riebe2004]_, [#Nielsen1998]_. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we do not transport matter but *information* between systems. Admittedly, it has a
