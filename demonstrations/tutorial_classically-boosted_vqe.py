@@ -32,7 +32,8 @@ the paradigmatic algorithm is the `Variational Quantum Eigensolver
 .. figure:: ../demonstrations/classically_boosted-vqe/quantum_algorithms.png
     :align: center
     :width: 50%
-    :alt: Examples of well-known quantum algorithms including variational quantum eigensolver, Grover's algorithm, Shor's algorihtm and quantum phase estimation.
+    
+    Examples of well-known quantum algorithms including variational quantum eigensolver (VQE), Grover's algorithm, Shor's algorihtm and quantum phase estimation (QPE).
 
 Although VQE is intended to run on NISQ devices, it is nonetheless
 sensitive to noise. This is particularly problematic when applying VQE to complicated molecules which requires a large number of gates. 
@@ -58,7 +59,7 @@ in which the electrons occupy the molecular orbitals with lowest energy.
 We will restrict ourselves to the :math:`H_2` molecule for
 the sake of simplicity. First, we will give a short introduction on how
 to perform standard VQE for the molecule of interest. For more details,
-we recommend :doc:`this brief overview of VQE <introduction/operations>` to learn
+we recommend the tutorial :doc:`tutorial_vqe` to learn
 how to implement VQE for molecules step by step. Then, we will implement
 the CB-VQE algorithm for the specific case in which we rely only on one
 classical state⁠—that being the Hartree-Fock state. Finally, we will
@@ -86,14 +87,14 @@ Let’s get started!
 #
 # This corresponds to the problem of diagonalizing the Hamiltonian and
 # finding the smallest eigenvalue. Alternatively, one can formulate the
-# problem using the `variational principle <https://en.wikipedia.org/wiki/Variational_principle>__`, in which we are interested in
-# minimizing the energy
+# problem using the `variational principle <https://en.wikipedia.org/wiki/Variational_principle>__` , 
+# in which we are interested in minimizing the energy
 #
 # .. math:: E = \langle \phi \vert H \vert \phi \rangle.
 #
 # In VQE, we prepare a statevector :math:`\vert \phi \rangle` by applying
 # the parameterized ansatz :math:`A(\Theta)`, represented by a unitary matrix,
-# to an inital state :math:`\vert 0^N \rangle`. Then, the parameters :math:`\Theta` are
+# to an inital state :math:`\vert 0 \rangle^{\otimes N}`. Then, the parameters :math:`\Theta` are
 # optimized to minimize a cost function, which in this case is the energy:
 #
 # .. math::  E(\Theta) = \langle 0 \vert^{\otimes N} A(\Theta)^{\dagger} H A(\Theta) \vert 0 \rangle^{\otimes N}.
@@ -153,13 +154,10 @@ def circuit_VQE(theta, wires):
 
 ######################################################################
 # Once this is defined, we can run the VQE algorithm. We first need to
-# define a circuit for the cost function. For our purposes of studying the
-# performance of VQE with the number of measurements, we will take a
-# finite number of shots ``num_shots = 100.``
+# define a circuit for the cost function. 
 #
 
-num_shots = 100
-dev = qml.device('default.qubit', wires=qubits, shots=int(num_shots))
+dev = qml.device('default.qubit', wires=qubits)
 @qml.qnode(dev)
 def cost_fn(theta):
     circuit_VQE(theta,range(qubits))
@@ -172,7 +170,7 @@ def cost_fn(theta):
 #
 
 stepsize = 0.4
-max_iterations = 10
+max_iterations = 30
 opt = qml.GradientDescentOptimizer(stepsize=stepsize)
 theta = np.zeros(num_theta, requires_grad=True)
 
@@ -189,7 +187,7 @@ for n in range(max_iterations):
 energy_VQE = cost_fn(theta)
 theta_opt = theta
 
-print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
+print('VQE energy: %.4f' %(energy_VQE))
 
 
 ######################################################################
@@ -216,7 +214,7 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 # of our algorithm on classical hardware and thus reduce the number of
 # measurements needed to reach a certain precision threshold. For a
 # subspace spanned by the states
-# :math:`\{\vert \phi_{\alpha} \rangle\}_{\vert \phi_{\alpha} \rangle \in \mathcal{H}^{\prime}}`,
+# :math:`\{\vert \phi_{\alpha} \rangle\}_{\phi_{\alpha} \in \mathcal{H}^{\prime}}`,
 # the generalized eigenvalue problem is expressed as
 #
 # .. math:: \bar{H} \vec{v}=  \lambda \bar{S} \vec{v},
@@ -232,12 +230,13 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 # :math:`\bar{S}` would simply be the identity matrix. However, we need to
 # take a more general approach which works for a subspace spanned by
 # potentially non-orthogonal states. We can retrieve the representation of
-# :math:`S` in terms of :math:`\{\vert \phi_{\alpha} \rangle\} \vert \phi_{\alpha} \rangle \in \mathcal{H}^{\prime}}` by
+# :math:`S` in terms of :math:`\{\vert \phi_{\alpha} \rangle\}_{\phi_{\alpha} \in \mathcal{H}^{\prime}}` by
 # calculating
 #
-# .. math:: \bar{S}_{\alpha, \beta} = \langle \phi_\alpha \vert \phi_\beta \rangle.
+# .. math:: \bar{S}_{\alpha, \beta} = \langle \phi_\alpha \vert \phi_\beta \rangle,
 #
-# Note that :math:`\vec{v}` and :math:`\lambda` are the eigenvectors and
+# for all :math:`\phi_\alpha` and :math:`\phi_\beta` in :math:`\mathcal{H}^{\prime}`.
+# Finally, note that :math:`\vec{v}` and :math:`\lambda` are the eigenvectors and
 # eigenvalues respectively. Our goal is to find the lowest
 # eigenvalue :math:`\lambda_0.`
 #
@@ -324,9 +323,9 @@ H, qubits = qchem.molecular_hamiltonian(
 hf_state = qml.qchem.hf_state(electrons, qubits)
 fermionic_Hamiltonian = qml.utils.sparse_hamiltonian(H).toarray()
 
-binary_string = ''.join([str(i) for i in hf_state])
-idx0 = int(binary_string, 2)
-H11 = fermionic_Hamiltonian[idx0][idx0]
+binary_string = ''.join([str(i) for i in hf_state]) #string representing the HF state
+idx0 = int(binary_string, 2) #binary number corresponding to the string
+H11 = fermionic_Hamiltonian[idx0][idx0] #entry of interest
 S11 = 1
 
 
@@ -372,7 +371,7 @@ S22 = 1
 #
 # This part of the algorithm is slightly more complicated than the
 # previous steps, since we still want make use of the classical component
-# of the problem in order to minimize the number of required shots.
+# of the problem in order to minimize the number of required measurements.
 #
 # Keep in mind that most algorithms usually perform computations either on
 # fully classically or quantum tractable Hilbert spaces. CB-VQE takes
@@ -419,8 +418,8 @@ S22 = 1
 #
 # In order to generate :math:`\langle \phi_q \vert i \rangle`, we take
 # :math:`U_q` such that
-# :math:`U_q \vert 0^N \rangle = \vert \phi_q \rangle`. In particular,
-# this is equivalent to using the standard VQE ansatz with the optimized
+# :math:`U_q \vert 0^N \rangle = \vert \phi_q \rangle`. 
+# This is equivalent to using the standard VQE ansatz with the optimized
 # parameters :math:`\Theta^*` that we obtained in the previous section
 # :math:`U_q = A(\Theta^*)` applied on the *Hartree-Fock* state. Moreover,
 # we also need :math:`U_i` such that
@@ -430,9 +429,8 @@ S22 = 1
 # function ``qml.BasisState(i, N))``.
 #
 
-num_shots = 100
 wires = range(qubits + 1)
-dev = qml.device("default.qubit", wires=wires, shots=num_shots)
+dev = qml.device("default.qubit", wires=wires)
 
 @qml.qnode(dev)
 def hadamard_test(Uq, Ucl, component='real'):
@@ -455,18 +453,18 @@ def hadamard_test(Uq, Ucl, component='real'):
 def circuit_product_state(state):
     qml.BasisState(state, range(qubits))
 
-Uq = qml.matrix(circuit_VQE)(theta_opt, range(qubits)) @ qml.matrix(circuit_product_state)([1,1,0,0])
+Uq = qml.matrix(circuit_VQE)(theta_opt, range(qubits))
 
 H12 = 0
 relevant_basis_states = np.array([[1,1,0,0], [0,1,1,0], [1,0,0,1], [0,0,1,1]], requires_grad=True)
 for j, basis_state in enumerate(relevant_basis_states):
     Ucl = qml.matrix(circuit_product_state)(basis_state)
     probs = hadamard_test(Uq, Ucl)
-    y = 2*abs(probs[0])-1
+    y = 2*probs[0]-1
     binary_string = ''.join([str(coeff) for coeff in basis_state])
     idx = int(binary_string, 2)
-    overlap_H = fermionic_Hamiltonian[idx0][idx]
-    H12 += y * overlap_H
+    overlap_H = fermionic_Hamiltonian[idx0][idx] #entry
+    H12 += y * overlap_H #sum
     if j == 0:
         y0 = y
 
@@ -502,7 +500,7 @@ H = np.array([[H11, H12],[H21, H22]])
 evals = linalg.eigvals(H, S)
 energy_CBVQE = np.min(evals).real
 
-print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
+print('CB-VQE energy %.4f' %(energy_CBVQE))
 
 
 ######################################################################
@@ -514,22 +512,29 @@ print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
 ######################################################################
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
-# For very small systems it can be shown that the classically-boosted method
+# In fact, for very small systems it can be shown that the classically-boosted method
 # reduces the number of required measurements by a factor of :math:`1000` [#Radin2021]_.
 #
-# For this demo, we run the standard VQE and CB-VQE algorihtms :math:`100`
-# times for different values of ``num_shots``. We then compute the mean
-# value of the energies and the standard deviation for both cases.
-#
+# Let's see if this is the case for the example above. 
+# Now that we know how to run standard VQE and CB-VQE algorihtms, we can compute the energies
+# resulting from a finite number of measurements. This is done by specifying the number of
+# shots in the definition of the devices, for example ``num_shots = 100`. 
+# If we then run our code several times and compute the mean value and the 
+# standard deviation of the energies for both cases, 
+# we obtain the following results
 #
 # .. figure:: ../demonstrations/classically_boosted-vqe/energy_deviation.png
 #     :align: center
 #     :width: 80%
 #
-# We see that CB-VQE leads to lower energies improving the results given
-# by standard VQE. For the limit of large ``num_shots`` we see that, as
-# expected, both algorithms converge to the same value of the ground state
-# energy.
+# In the plot, the dashed line corresponds to the true ground state energy. As expected, 
+# CB-VQE leads to a better approximation of the ground state energy and also to much smaller
+# standard deviations, therefore improving the results given
+# by standard VQE. 
+#
+# `Note: In order to obtain these results, we had to discard the cases in which the shot noise 
+# underestimated the true ground state energy of the problem, since this was leading to large
+# variances on the CB-VQE estimation of the energy.`
 #
 # # References
 # ----------
@@ -540,6 +545,11 @@ print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
 
 ##############################################################################
+# .. bio:: Joana Fraxanet
+#    :photo: ../_static/avatar_joana_fraxanet.jpeg
+#
+#    Joana is a PhD student at The Institute of Photonic Sciences in Barcelona, where she studies quantum many-body systems. She is also currently working as a summer resident at Xanadu.
+#
 # .. bio:: Isidor Schoch
 #    :photo: ../_static/avatar_isidor_schoch.png
 #
