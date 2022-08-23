@@ -195,7 +195,7 @@ def generate_random_state(n=1):
     return input_state / np.linalg.norm(input_state)
 
 
-# Generate a random input state for n=1 qubit
+# Generate a random input state |psi> for n=1 qubit
 input_state = generate_random_state()
 
 density_matrix = np.outer(input_state, np.conj(input_state))
