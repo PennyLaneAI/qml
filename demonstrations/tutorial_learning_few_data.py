@@ -220,9 +220,9 @@ def pooling_layer(weights, wires):
 # desired measurement statistics of the circuit.
 
 
-def conv_and_pooling(kernel_weights, n_wires):
+def conv_and_pooling(kernel_weights, n_wires, skip_first_layer = True):
     """Apply both the convolutional and pooling layer."""
-    convolutional_layer(kernel_weights[:15], n_wires)
+    convolutional_layer(kernel_weights[:15], n_wires, skip_first_layer = skip_first_layer)
     pooling_layer(kernel_weights[15:], n_wires)
 
 
