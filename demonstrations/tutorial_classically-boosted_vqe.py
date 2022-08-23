@@ -60,7 +60,7 @@ to perform standard VQE for the molecule of interest. For more details,
 we recommend :doc:`this brief overview of VQE <introduction/operations>` to learn
 how to implement VQE for molecules step by step. Then, we will implement
 the CB-VQE algorithm for the specific case in which we rely only on one
-classical state⁠—that being the Hartree-Fock state . Finally, we will
+classical state⁠—that being the Hartree-Fock state. Finally, we will
 discuss the number of measurements needed to obtain a certain
 error-threshold by comparing the two methods.
 
@@ -215,7 +215,7 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 # of our algorithm on classical hardware and thus reduce the number of
 # measurements needed to reach a certain precision threshold. For a
 # subspace spanned by the states
-# :math:`\{\vert \phi \rangle\}_{\phi \in \mathcal{H}^{\prime}}`,
+# :math:`\{\vert \phi_{\alpha} \rangle\}_{\vert \phi_{\alpha} \rangle \in \mathcal{H}^{\prime}}`,
 # the generalized eigenvalue problem is expressed as
 #
 # .. math:: \bar{H} \vec{v}=  \lambda \bar{S} \vec{v},
@@ -231,7 +231,7 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 # :math:`\bar{S}` would simply be the identity matrix. However, we need to
 # take a more general approach which works for a subspace spanned by
 # potentially non-orthogonal states. We can retrieve the representation of
-# :math:`S` in terms of :math:`\{\vert \phi \rangle\}_\phi \in \mathcal{H}^{\prime}}` by
+# :math:`S` in terms of :math:`\{\vert \phi_{\alpha} \rangle\} \vert \phi_{\alpha} \rangle \in \mathcal{H}^{\prime}}` by
 # calculating
 #
 # .. math:: \bar{S}_{\alpha, \beta} = \langle \phi_\alpha \vert \phi_\beta \rangle.
@@ -245,7 +245,7 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 ######################################################################
 # Equipped with the useful mathematical description of generalized
 # eigenvalue problems, we can now choose our subspace such that some of
-# the states :math:`\phi_{\alpha} \in \mathcal{H}^{\prime}` are
+# the states :math:`\vert \phi_{\alpha} \rangle \in \mathcal{H}^{\prime}` are
 # classically tractable.
 #
 # We will consider the simplest case in which the subspace is spanned only
@@ -398,7 +398,7 @@ S22 = 1
 # .. math:: \vert 1100 \rangle, \vert 1001 \rangle, \vert 0110 \rangle, \vert 0011 \rangle.
 #
 # Note that the set of computational basis states includes the
-# *Hartree-Fock* state :math:`\lvert i_0 \rangle = \phi_{HF} = \vert 1100 \rangle`. The
+# *Hartree-Fock* state :math:`\lvert i_0 \rangle = \vert \phi_{HF} \rangle = \vert 1100 \rangle`. The
 # projections :math:`\langle i \vert H \vert \phi_{HF} \rangle` can be
 # extracted analytically from the fermionic Hamiltonian that we computed
 # above, by accessing the entries by the index given by the binary
@@ -420,8 +420,8 @@ S22 = 1
 # :math:`U_q` such that
 # :math:`U_q \vert 0^N \rangle = \vert \phi_q \rangle`. In particular,
 # this is equivalent to using the standard VQE ansatz with the optimized
-# parameters :math:`\Theta*` that we obtained in the previous section
-# :math:`U_q = A(\Theta*)` applied on the *Hartree-Fock* state. Moreover,
+# parameters :math:`\Theta^*` that we obtained in the previous section
+# :math:`U_q = A(\Theta^*)` applied on the *Hartree-Fock* state. Moreover,
 # we also need :math:`U_i` such that
 # :math:`U_i \vert 0^N \rangle = \vert \phi_i \rangle`. In this case, this
 # is just a mapping of a classical basis state into the circuit consisting
