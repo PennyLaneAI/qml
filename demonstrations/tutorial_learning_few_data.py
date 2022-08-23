@@ -528,6 +528,7 @@ make_plot(results_df, n_train=40)
 #     "Quantum Convolutional Neural Networks"
 #     `arxiv:1810.03787 <https://arxiv.org/abs/1810.03787>`__, 2018.
 #
+
 ##############################################################################
 # .. bio:: Korbinian Kottmann
 #    :photo: ../_static/authors/qottmann.jpeg
