@@ -606,7 +606,8 @@ RHG = SurfaceCode(code_distance)
 # codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor, and Steane. CSS codes have stabilizers that exclusively contain
 # :math:`X`-stabilizers *or* :math:`Z`-stabilizers, and include the *surface code* and *colour code* families.
 # For these CSS codes, you can view the primal and dual sheets as measuring the
-# :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
+# :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively. We encourage you to have another 
+# look at the distance-3 surface code and try to link it with the dual and primal sheets shown here!
 #
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/primal_dual.html
