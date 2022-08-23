@@ -561,7 +561,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # A whole research field is devoted to combating these challenges since Peter Shor published the 
 # seminal paper in 1995 [#ShorQEC1995]_. The main idea in QEC is using redundancy to encode 
 # information - just like classical error correction. However, to 
-# surpass the quantum problems we look at correlation between constituent qubits instead - meaning 
+# surpass the quantum problems we look at correlations between constituent qubits instead. That is, 
 # we don't measure individual qubits but groups of qubits to observe errors. More technically, we measure
 # operators that involve multiple qubits called *stabilizers*. Based on the outcome of these stabilizer
 # measurements we can apply a correction (but in some cases keeping track of the outcomes suffices too). 
