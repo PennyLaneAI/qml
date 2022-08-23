@@ -26,8 +26,8 @@ focusing on what can be done with few resources. In particular, most
 proposals rely on variational quantum algorithms (VQA), which are
 optimized classically and adapt to the limitations of the quantum
 devices. For the specific problem of computing ground-state energies,
-the paradigmatic algorithm is the Variational Quantum Eigensolver
-(VQE) algorithm.
+the paradigmatic algorithm is the `Variational Quantum Eigensolver
+(VQE) <https://en.wikipedia.org/wiki/Variational_quantum_eigensolver>`__ algorithm.
 
 .. figure:: ../demonstrations/classically_boosted-vqe/quantum_algorithms.png
     :align: center
@@ -35,18 +35,19 @@ the paradigmatic algorithm is the Variational Quantum Eigensolver
     :alt: Examples of well-known quantum algorithms including variational quantum eigensolver, Grover's algorithm, Shor's algorihtm and quantum phase estimation.
 
 Although VQE is intended to run on NISQ devices, it is nonetheless
-sensitive to noise. This is particularly problematic when applying a
-large number of gates. As a consequence, several modifications to the
+sensitive to noise. This is particularly problematic when applying VQE to complicated molecules which requires a large number of gates. 
+As a consequence, several modifications to the
 original VQE algorithm have been proposed. These variants are usually
 intended to improve the algorithm’s performance on NISQ-era devices.
 
-Here we will go through one of these proposals step-by-step: the
+In this demo, we will go through one of these proposals step-by-step: the
 Classically-Boosted Variational Quantum Eigensolver (CB-VQE) [#Radin2021]_.
 Implementing CB-VQE reduces the number of measurements required to obtain the
 ground-state energy with a certain precision. This is done by making use
 of classical states, which in this context are product states that can be
 written as a single `Slater determinant  <https://en.wikipedia.org/wiki/Slater_determinant>`__
 and that already contain some information about the ground-state of the problem.
+Their structure allows for efficient classical computation of expectation values. 
 An example of such classical state would be the `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__ ,
 in which the electrons occupy the molecular orbitals with lowest energy.
 
@@ -78,7 +79,7 @@ Let’s get started!
 # Here, we will only briefly review the main idea behind standard VQE
 # and highlight the important concepts in connection with CB-VQE.
 #
-# Given an Hamiltonian :math:`H`, the main goal of VQE is to find the ground energy of the Schrödinger
+# Given an Hamiltonian :math:`H`, the main goal of VQE is to find the ground state energy of a system governed by the Schrödinger
 # equation
 #
 # .. math:: H \vert \phi \rangle = E  \vert \phi \rangle.
@@ -133,7 +134,7 @@ hf = qml.qchem.hf_state(electrons, qubits)
 # and implement the ansatz :math:`A(\Theta)`. In this case, we use the
 # class :class:`~.pennylane.AllSinglesDoubles`, which enables us to apply all possible combinations of single and
 # double excitations obeying the Pauli principle to the Hartree-Fock
-# state. Single and double excitation gates :math:`G^{(1, 2)}(\Theta)` are
+# state. Single and double excitation gates, denoted :math:`G^{(1)}(\Theta)` and :math:`G^{(2)}(\Theta)` respectively, are
 # conveniently implemented in PennyLane with :class:`~.pennylane.SingleExcitation`
 # and :class:`~.pennylane.DoubleExcitation` classes.
 #
@@ -220,7 +221,7 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 #
 # .. math:: \bar{H} \vec{v}=  \lambda \bar{S} \vec{v},
 #
-# where the matrix :math:`\bar{S}` contains the overlaps between the basis  and :math:`\bar{H}`
+# where the matrix :math:`\bar{S}` contains the overlaps between the basis states and :math:`\bar{H}`
 # is the Hamiltonian :math:`H` projected into the
 # subspace of interest, i.e. with the entries
 #
@@ -237,7 +238,7 @@ print('VQE for num. of shots: %.0f \nEnergy: %.4f' %(num_shots, energy_VQE))
 # .. math:: \bar{S}_{\alpha, \beta} = \langle \phi_\alpha \vert \phi_\beta \rangle.
 #
 # Note that :math:`\vec{v}` and :math:`\lambda` are the eigenvectors and
-# eigenvalues respectively. In particular, our goal is to find the lowest
+# eigenvalues respectively. Our goal is to find the lowest
 # eigenvalue :math:`\lambda_0.`
 #
 
@@ -393,7 +394,7 @@ S22 = 1
 # i.e. the basis of single Slater determinants. Note that we have to decompose the Hamiltonian
 # into a sum of unitaries. For the problem under consideration, the set of relevant computational basis states for which
 # :math:`\langle i \vert H \vert \phi_{HF}\rangle \neq 0` contains all the
-# single and double excitations (allowed by spin symmteries)
+# single and double excitations (allowed by spin symmteries), namely, the states 
 #
 # .. math:: \vert 1100 \rangle, \vert 1001 \rangle, \vert 0110 \rangle, \vert 0011 \rangle.
 #
@@ -537,3 +538,9 @@ print('CB-VQE for num. of shots %.0f \nEnergy %.4f' %(num_shots, energy_CBVQE))
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
+
+##############################################################################
+# .. bio:: Isidor Schoch
+#    :photo: ../_static/avatar_isidor_schoch.png
+#
+#    Isidor is a Quantum Engineering MSc student at ETH Zurich. He is passionate about exploring the connections between mathematics, physics and computer science. Besides his studies, he currently also works in the PennyLane performance team as a summer resident.
