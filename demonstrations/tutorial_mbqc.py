@@ -277,11 +277,11 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # of earlier measurements in the chain. After these operations, the state of qubit
 # :math:`t_\mathrm{out}` is given by
 #
-# .. math:: |\psi_{\mathrm{out}}\rangle = \hat{U}(\alpha, \beta, \gamma)|\psi_{\mathrm{in}}\rangle
+# .. math:: |\psi_{\mathrm{out}}\rangle = \tilde{U}(\alpha, \beta, \gamma)|\psi_{\mathrm{in}}\rangle
 #    = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
-# Now note that this unitary :math:`\hat{U}` is related to our desired unitary :math:`U` up to
+# Now note that this unitary :math:`\tilde{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
 # choosing the measurement basis of qubit :math:`t_\mathrm{out}` appropriately or correcting for them classically after
 # the quantum computation.
