@@ -546,7 +546,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # To mitigate the physical errors that can (and will) happen during a quantum computation, we
 # require some kind of error correction. Error correction is a technique for detecting errors and
 # reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
-# it is also used in "classical" computing, memories, and communication where one also has to deal `with
+# it is also used in "classical" information processing such as computation, data storage, and communication where one also has to deal `with
 # noise coming from the environment <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_. However, it is
 # a stringent requirement in the quantum realm as the systems one works with are much more
 # precarious and therefore prone to environmental factors, causing errors.
