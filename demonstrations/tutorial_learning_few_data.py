@@ -220,9 +220,9 @@ def pooling_layer(weights, wires):
 # desired measurement statistics of the circuit.
 
 
-def conv_and_pooling(kernel_weights, n_wires, skip_first_layer = True):
+def conv_and_pooling(kernel_weights, n_wires, skip_first_layer=True):
     """Apply both the convolutional and pooling layer."""
-    convolutional_layer(kernel_weights[:15], n_wires, skip_first_layer = skip_first_layer)
+    convolutional_layer(kernel_weights[:15], n_wires, skip_first_layer=skip_first_layer)
     pooling_layer(kernel_weights[15:], n_wires)
 
 
@@ -256,14 +256,17 @@ def conv_net(weights, last_layer_weights, features):
         wires = wires[::2]
         qml.Barrier(wires=wires, only_visual=True)
 
-    assert (
-        last_layer_weights.size == 4 ** (len(wires)) - 1
-    ), f"The size of the last layer weights vector is incorrect! \n Expected {4 ** (len(wires)) - 1}, Given {last_layer_weights.size}"
+    assert last_layer_weights.size == 4 ** (len(wires)) - 1, (
+        "The size of the last layer weights vector is incorrect!"
+        f" \n Expected {4 ** (len(wires)) - 1}, Given {last_layer_weights.size}"
+    )
     dense_layer(last_layer_weights, wires)
     return qml.probs(wires=(0))
 
 
-fig, ax = qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**num_wires))
+fig, ax = qml.draw_mpl(conv_net)(
+    np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**num_wires)
+)
 
 ##############################################################################
 # In the problem we will address, we need to encode 64 features
