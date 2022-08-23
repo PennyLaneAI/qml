@@ -87,7 +87,7 @@ Let’s get started!
 #
 # This corresponds to the problem of diagonalizing the Hamiltonian and
 # finding the smallest eigenvalue. Alternatively, one can formulate the
-# problem using the `variational principle <https://en.wikipedia.org/wiki/Variational_principle>__` , 
+# problem using the `variational principle <https://en.wikipedia.org/wiki/Variational_principle>`__ , 
 # in which we are interested in minimizing the energy
 #
 # .. math:: E = \langle \phi \vert H \vert \phi \rangle.
@@ -188,6 +188,7 @@ energy_VQE = cost_fn(theta)
 theta_opt = theta
 
 print('VQE energy: %.4f' %(energy_VQE))
+print('Optimal parameters:', theta_opt)
 
 
 ######################################################################
@@ -212,10 +213,8 @@ print('VQE energy: %.4f' %(energy_VQE))
 # complete Hilbert space :math:`\mathcal{H}`. If this subspace is spanned
 # by a combination of both classical and quantum states, we can run parts
 # of our algorithm on classical hardware and thus reduce the number of
-# measurements needed to reach a certain precision threshold. For a
-# subspace spanned by the states
-# :math:`\{\vert \phi_{\alpha} \rangle\}_{\phi_{\alpha} \in \mathcal{H}^{\prime}}`,
-# the generalized eigenvalue problem is expressed as
+# measurements needed to reach a certain precision threshold. The generalized 
+# eigenvalue problem is expressed as
 #
 # .. math:: \bar{H} \vec{v}=  \lambda \bar{S} \vec{v},
 #
@@ -225,17 +224,16 @@ print('VQE energy: %.4f' %(energy_VQE))
 #
 # .. math:: \bar{H}_{\alpha, \beta} = \langle \phi_\alpha \vert H \vert \phi_\beta \rangle,
 #
-# for all :math:`\phi_\alpha` and :math:`\phi_\beta` in :math:`\mathcal{H}^{\prime}`.
+# for all :math:`\vert \phi_\alpha \rangle` and :math:`\vert \phi_\beta \rangle` in :math:`\mathcal{H}^{\prime}`.
 # For a complete orthonormal basis, the overlap matrix
 # :math:`\bar{S}` would simply be the identity matrix. However, we need to
 # take a more general approach which works for a subspace spanned by
 # potentially non-orthogonal states. We can retrieve the representation of
-# :math:`S` in terms of :math:`\{\vert \phi_{\alpha} \rangle\}_{\phi_{\alpha} \in \mathcal{H}^{\prime}}` by
-# calculating
+# :math:`S` by calculating
 #
 # .. math:: \bar{S}_{\alpha, \beta} = \langle \phi_\alpha \vert \phi_\beta \rangle,
 #
-# for all :math:`\phi_\alpha` and :math:`\phi_\beta` in :math:`\mathcal{H}^{\prime}`.
+# for all :math:`\vert \phi_\alpha \rangle` and :math:`\vert \phi_\beta \rangle` in :math:`\mathcal{H}^{\prime}`.
 # Finally, note that :math:`\vec{v}` and :math:`\lambda` are the eigenvectors and
 # eigenvalues respectively. Our goal is to find the lowest
 # eigenvalue :math:`\lambda_0.`
@@ -323,9 +321,12 @@ H, qubits = qchem.molecular_hamiltonian(
 hf_state = qml.qchem.hf_state(electrons, qubits)
 fermionic_Hamiltonian = qml.utils.sparse_hamiltonian(H).toarray()
 
-binary_string = ''.join([str(i) for i in hf_state]) #string representing the HF state
-idx0 = int(binary_string, 2) #binary number corresponding to the string
-H11 = fermionic_Hamiltonian[idx0][idx0] #entry of interest
+# we first convert the HF slater determinant to a string
+binary_string = ''.join([str(i) for i in hf_state]) 
+# we then obtain the integer corresponding to its binary representation
+idx0 = int(binary_string, 2) 
+# finally we access the entry that corresponds to the HF energy
+H11 = fermionic_Hamiltonian[idx0][idx0] 
 S11 = 1
 
 
@@ -397,8 +398,8 @@ S22 = 1
 #
 # .. math:: \vert 1100 \rangle, \vert 1001 \rangle, \vert 0110 \rangle, \vert 0011 \rangle.
 #
-# Note that the set of computational basis states includes the
-# *Hartree-Fock* state :math:`\lvert i_0 \rangle = \vert \phi_{HF} \rangle = \vert 1100 \rangle`. The
+# Specifically, the set of computational basis states includes the
+# *Hartree-Fock* state :math:`\lvert i_0 \rangle = \vert \phi_{HF} \rangle = \vert 1100 \rangle` and the
 # projections :math:`\langle i \vert H \vert \phi_{HF} \rangle` can be
 # extracted analytically from the fermionic Hamiltonian that we computed
 # above, by accessing the entries by the index given by the binary
@@ -409,19 +410,20 @@ S22 = 1
 #
 # .. figure:: ../demonstrations/classically_boosted-vqe/hadamard_test.png
 #     :align: center
-#     :width: 50%
+#     :width: 60%
+#
 #
 # To implement the Hadamard test, we need a register of :math:`N` qubits
 # given by the size of the molecular Hamiltonian (:math:`N=4` in our case)
-# initialized in the state :math:`\rvert 0^N \rangle` and an ancillary
+# initialized in the state :math:`\rvert 0 \rangle^{\otimes N}` and an ancillary
 # qubit prepared in the :math:`\rvert 0 \rangle` state.
 #
 # In order to generate :math:`\langle \phi_q \vert i \rangle`, we take
 # :math:`U_q` such that
-# :math:`U_q \vert 0^N \rangle = \vert \phi_q \rangle`. 
+# :math:`U_q \vert 0 \rangle^{\otimes N} = \vert \phi_q \rangle`. 
 # This is equivalent to using the standard VQE ansatz with the optimized
 # parameters :math:`\Theta^*` that we obtained in the previous section
-# :math:`U_q = A(\Theta^*)` applied on the *Hartree-Fock* state. Moreover,
+# :math:`U_q = A(\Theta^*)`. Moreover,
 # we also need :math:`U_i` such that
 # :math:`U_i \vert 0^N \rangle = \vert \phi_i \rangle`. In this case, this
 # is just a mapping of a classical basis state into the circuit consisting
@@ -446,7 +448,7 @@ def hadamard_test(Uq, Ucl, component='real'):
 
 
 ######################################################################
-# Now, we can compute the Hamiltonian
+# Now, we are ready to compute the Hamiltonian
 # cross-terms.
 #
 
@@ -460,11 +462,15 @@ relevant_basis_states = np.array([[1,1,0,0], [0,1,1,0], [1,0,0,1], [0,0,1,1]], r
 for j, basis_state in enumerate(relevant_basis_states):
     Ucl = qml.matrix(circuit_product_state)(basis_state)
     probs = hadamard_test(Uq, Ucl)
+    # The projection Re(<phi_q|i>) corresponds to 2p-1
     y = 2*probs[0]-1
+    # We retrieve the quantities <i|H|HF> from the ferimionic Hamiltonian
     binary_string = ''.join([str(coeff) for coeff in basis_state])
     idx = int(binary_string, 2)
-    overlap_H = fermionic_Hamiltonian[idx0][idx] #entry
-    H12 += y * overlap_H #sum
+    overlap_H = fermionic_Hamiltonian[idx0][idx] 
+    # We sum over all computational basis states
+    H12 += y * overlap_H 
+    # y0 corresponds to Re(<phi_q|HF>)
     if j == 0:
         y0 = y
 
@@ -472,7 +478,7 @@ H21 = np.conjugate(H12)
 
 
 ######################################################################
-# Finally, we can define the cross terms of the :math:`S` matrix making
+# The cross terms of the :math:`S` matrix are defined making
 # use of the projections with the *Hartree-Fock* state.
 #
 
@@ -487,8 +493,8 @@ S21 = y0.conjugate()
 
 
 ######################################################################
-# Finally, we are ready to solve the generalized eigenvalue problem. For
-# this, we will build the matrices :math:`H` and :math:`S` and use scipy
+# We are ready to solve the generalized eigenvalue problem. For
+# this, we will build the matrices :math:`H` and :math:`S` and use `scipy`
 # to obtain the lowest eigenvalue.
 #
 
@@ -518,7 +524,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # Let's see if this is the case for the example above. 
 # Now that we know how to run standard VQE and CB-VQE algorihtms, we can compute the energies
 # resulting from a finite number of measurements. This is done by specifying the number of
-# shots in the definition of the devices, for example ``num_shots = 100`. 
+# shots in the definition of the devices, for example ``num_shots = 100``. 
 # If we then run our code several times and compute the mean value and the 
 # standard deviation of the energies for both cases, 
 # we obtain the following results
@@ -529,12 +535,12 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 #
 # In the plot, the dashed line corresponds to the true ground state energy. As expected, 
 # CB-VQE leads to a better approximation of the ground state energy and also to much smaller
-# standard deviations, therefore improving the results given
-# by standard VQE. 
+# standard deviations, improving on the results given
+# by standard VQE by several orders of magnitude when considering a finite amount of measurements. 
 #
-# `Note: In order to obtain these results, we had to discard the cases in which the shot noise 
+# `Note: In order to obtain these results, we had to discard the cases in which the VQE shot noise 
 # underestimated the true ground state energy of the problem, since this was leading to large
-# variances on the CB-VQE estimation of the energy.`
+# variances in the CB-VQE estimation of the energy.`
 #
 # # References
 # ----------
