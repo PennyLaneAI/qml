@@ -570,8 +570,8 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
 # introduction. Instead, what we will do here is giving you the gist of quantum error correction in the
 # MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as
-# an example. This code makes use of stabilizers that involve tensor products :math:`\otimes_i X_i` and :math:`\otimes_j Z_j` 
-# as depicted below.
+# an example. This code makes use of stabilizers of the form :math:`\bigotimes_i X_i` or 
+# :math:`\bigotimes_j Z_j` as depicted below.
 #
 # .. _fig-surfacecode:
 #
