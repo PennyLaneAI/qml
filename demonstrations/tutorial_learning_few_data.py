@@ -20,7 +20,7 @@ function of the number of training samples. This demo is based on the paper
 *"Generalization in quantum machine learning from few training data"*. by Caro et al. [#CaroGeneralization]_.
 
 What is Generalization in (Q)ML?
-------------------------
+---------------------------------
 When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
 distribution of interest, for example, images of cats and dogs. However, in practice, we are limited to a finite amount of
 data, which is why it is necessary to reason about how our model performs on new, previously unseen data. The difference
@@ -69,7 +69,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 
 ##############################################################################
 # Generalization Bounds for Quantum Machine Learning Models
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # As hinted at earlier, we expect the generalization error to depend both on the richness of the model class, as well as
 # on the amount of training data available. As a first result, the authors of Ref. [#CaroGeneralization]_ found that for
 # a QML model with at most :math:`T` parametrized local quantum channels, the generalization error depends on :math:`T`
@@ -248,17 +248,20 @@ def conv_net(weights, last_layer_weights, features):
 
     # inputs the state input_state
     qml.AmplitudeEmbedding(features=features, wires=wires, pad_with=0.5)
+    qml.Barrier(wires=wires, only_visual=True)
 
     # adds convolutional and pooling layers
     for j in range(layers):
         conv_and_pooling(weights[:, j], wires, skip_first_layer=(not j == 0))
         wires = wires[::2]
+        qml.Barrier(wires=wires, only_visual=True)
 
     assert (
         last_layer_weights.size == 4 ** (len(wires)) - 1
     ), f"The size of the last layer weights vector is incorrect! \n Expected {4 ** (len(wires)) - 1}, Given {last_layer_weights.size}"
     dense_layer(last_layer_weights, wires)
     return qml.probs(wires=(0))
+
 
 qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**16))
 
@@ -330,9 +333,9 @@ def load_digits_data(num_train, num_test, rng):
 @jax.jit
 def compute_out(weights, weights_last, features, labels):
     """Computes the output of the corresponding label in the qcnn"""
-    cost = lambda weights, weights_last, feature, label: conv_net(
-        weights, weights_last, feature
-    )[label]
+    cost = lambda weights, weights_last, feature, label: conv_net(weights, weights_last, feature)[
+        label
+    ]
     return jax.vmap(cost, in_axes=(None, None, 0, 0), out_axes=0)(
         weights, weights_last, features, labels
     )
@@ -486,13 +489,14 @@ def make_plot(df, n_train):
     ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker="D")
     beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
     reg = np.poly1d([beta, m])
-    ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)),"-", color='black', lw=0.75)
+    ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)), "-", color="black", lw=0.75)
     ax.set_ylabel("test accuracy", fontsize=18)
     ax.set_xlabel("train accuracy", fontsize=18)
 
     fig.suptitle(f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20)
     plt.tight_layout()
     plt.show()
+
 
 make_plot(results_df, n_train=40)
 
@@ -524,20 +528,17 @@ make_plot(results_df, n_train=40)
 #     "Quantum Convolutional Neural Networks"
 #     `arxiv:1810.03787 <https://arxiv.org/abs/1810.03787>`__, 2018.
 #
-#
 ##############################################################################
 # .. bio:: Korbinian Kottmann
 #    :photo: ../_static/authors/qottmann.jpeg
 #
 #    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
-
-##############################################################################
+#
 # .. bio:: Luis Mantilla Calderon
 #    :photo: ../_static/authors/luis_mantilla.jpg
 #
 #    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.
-
-##############################################################################
+#
 # .. bio:: Maurice Weber
 #    :photo: ../_static/authors/maurice_weber.jpeg
 #
