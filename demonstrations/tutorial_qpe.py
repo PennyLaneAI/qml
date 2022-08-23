@@ -2,44 +2,42 @@ r"""
 Finding Ground State Energies via Quantum Phase Estimation
 ==========================================================
 
-    .. meta::
-        :property="og:description": This demo introduces to the
-        Quantum Phase Estimation algorithm and shows users how to implement a
-        QPE subroutine in a quantum program with PennyLane for estimating
-        molecular energies.
-        :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png 
+ .. meta::
+    :property="og:description": This demo introduces to the
+    Quantum Phase Estimation algorithm and shows users how to implement a
+    QPE subroutine in a quantum program with PennyLane for estimating
+    molecular energies.
+    :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png 
                     
-*Author: Davide Castaldo and Aleksei Malyshev (Xanadu residents). Posted: 25 July 2022*
-
+*Authors: Davide Castaldo and Aleksei Malyshev (Xanadu residents). Posted: 25 July 2022*
 """
-
-
 ######################################################################
+#
 # Hi! It seems that you were wandering around the PennyLane website and
 # opened the demo called “Finding Ground State Energies via Quantum Phase
 # Estimation”. We guess it happened because you’ve heard that:
+#
 # 1. Quantum computers will make finding the ground state energies easier.
-# 2. The  quantum phase estimation (QPE) algorithm should be somehow involved
-# there — and you are keen to learn how ground state energies and QPE go
-# together.
+# 2. The  quantum phase estimation (QPE) algorithm should be somehow involved there — and you are keen to learn how ground state energies and QPE go together.
 #
 # Well, in this case you
-# are in the right place indeed, because in this demo we will: 
+# are in the right place indeed, because in this demo we will:
+#
 # 1. Explain the connection between the ground state energies and quantum phases.
-# 2. Recap the quantum phase estimation algorithm, which is great in, well,
-# estimating the quantum phases. 
+# 2. Recap the quantum phase estimation algorithm, which is great in, well, estimating the quantum phases.
 # 3. Show how to make the QPE estimate the phases related to the ground state energies.
-# 4. Mention the possible caveats. 
+# 4. Mention the possible caveats.
 # 5. Of course, provide the PennyLane implementation!
-# 
+#
+#
 
 ######################################################################
 # Relating energies to quantum phases
-# -----------------------------------
+# ===================================
 # 
 # Suppose we have a system described by a Hamiltonian :math:`\hat{H}` and
 # :math:`|n\rangle` are its eigenstates,
-# i.e. :math:`\hat{H}|n\rangle = E_n|n\rangle`. Let us now let the system
+# i.e. :math:`\hat{H}|n\rangle = E_n|n\rangle, \ E_n \in \mathbb{R}`. Let us now let the system
 # evolve for a time :math:`t`. The time-dependent Schrödinger equation
 # tells us that the evolution operator should be
 # :math:`\hat{U}(t) = e^{-\frac{i\hat{H}t}{\hbar}}`. We can decompose it
@@ -52,6 +50,10 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # .. math::  \hat{U}(t)|m\rangle = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \underbrace{\langle n|m\rangle}_{\delta_{nm}} = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \delta_{nm} = e^{-\frac{i E_m t}{\hbar}} |m\rangle.
 #
+# We have used orthogonality condition for Hamiltonian eigenstates expressed as
+# :math:`{\langle n|m\rangle} = \delta_{nm}`, where :math:`\delta_{nm} = 1` if :math:`n = m` and
+# :math:`\delta_{nm} = 0` otherwise.
+#
 # What we have just obtained? Well, our derivation says
 # that as the system evolves, its eigenstates basically stay the same — up
 # to a global quantum phase. Importantly, the acquired phase is not
@@ -62,13 +64,13 @@ Finding Ground State Energies via Quantum Phase Estimation
 # system at our disposal — then, we can just let it evolve for some known
 # time :math:`t`, measure the accumulated phase
 # :math:`\varphi_0 = -\frac{E_{0}t}{\hbar}` and deduce the energy from it
-# as :math:`E_{0} = -\frac{\hbar \varphi_0}{t}`. However, at least three
-# possible complications might immediately come to your mind:
+# as :math:`E_{0} = -\frac{\hbar \varphi_0}{t}`. Woop-woop, isn't it great!
+#
+# However, at least three possible complications might immediately come to your mind:
 # 
 # 1. **How on Earth we could measure the global phase?**
-# 
 # Indeed, any textbook on quantum physics will tell you that the global
-# phase is *unobservable*, i.e. it can’t be detected by any measurements
+# phase is *unobservable*, i.e. it can’t be detected by any measurements
 # performed on the isolated system. Well, our system should not be
 # isolated, right? We can make it interact with another, *ancilla* system
 # controlled by us. Then, the global phase will (in a sense) become local
@@ -76,21 +78,17 @@ Finding Ground State Energies via Quantum Phase Estimation
 # that is exactly what the QPE algorithm does in a clever way. So, bear
 # with us, we’ll come back to the QPE shortly.
 # 
-# 2. **Phases are defined modulo :math:`2\pi` — how on Earth we can be
-#    sure we have measured the correct one?**
-# 
-# You are right, we can’t. However, we can easily get over it with a
-# couple of tricks which we will explain later.
+# 2. **Phases are defined modulo** :math:`2\pi` **— how on Earth we can be
+# sure we have measured the correct one?** You are right, we can’t.
+# However, we can easily get over it with a couple of tricks which we will explain later.
 # 
 # 3. **How on Earth we can have the ground state at our disposal when we
-#    even don’t know its energy?**
-# 
-# Alright, this is a serious one. Finding the ground state of a system is
-# indeed barely simpler than finding the ground state energy, and so it
+# even don’t know its energy?**  Alright, this is a serious one.
+# Finding the ground state of a system is indeed barely simpler than finding the ground state energy, and so it
 # seems ridiculous to presume that we can use the former to get the
 # latter. However, as it turns out having *a good approximation* of the
 # ground state also suffices in many cases, albeit it complicates the
-# matters to an extent — we will demonstrate later how the this inaccuracy
+# matters to an extent — we will demonstrate later how the this inaccuracy
 # manifests itself and how to deal with its consequences.
 # 
 # All in all, for now we have the high-level picture — measuring the
@@ -118,7 +116,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 #    <!-- Just in case, don't be afraid of an ominous requirement for $\varphi_{u}$ to be a $k$-bit binary fraction — it just makes the QPE succeed after one run. We will mention later that if $\varphi_{u}$ is not a $k$-bit binary fraction, then it will take several executions of QPE to get $\varphi_{u}$ to a desired accuracy. -->
 # 
-# Now, let’s go through the main stages of QPE :sup:`3` . First, let’s have a look
+# Now, let’s go through the main stages of QPE. First, let’s have a look
 # at the circuit implementing the algorithm.
 # 
 
@@ -132,8 +130,8 @@ Finding Ground State Energies via Quantum Phase Estimation
 
 ######################################################################
 # You can see that the circuit has two registers of qubits. The first one
-# consists of :math:`K` qubits and is a *readout* register (and, of
-# course, it’s not accidental that it has as many qubits as there are bits
+# consists of :math:`K` qubits and is a *readout* register (and it’s not
+# accidental that it has as many qubits as there are bits
 # in the binary representation of :math:`\varphi_{u}`). The second
 # register is called *system* register and it has :math:`N` qubits, where
 # :math:`n` is the number of qubits in the considered Hamiltonian
@@ -144,26 +142,28 @@ Finding Ground State Energies via Quantum Phase Estimation
 # includes four main steps:
 # 
 # 0. **Initialization.** We prepare the system register in the state
-#    :math:`|u\rangle` (let us call the preparation gate :math:`\hat{P}`).
-#    Also, we apply Hadamard gate to each qubit in the readout register,
-#    which creates a uniform superposition of all computational basis
-#    states in that register. By the end of this stage the state of the
-#    system is:
+# :math:`|u\rangle` (let us call the preparation gate :math:`\hat{P}`).
+# Also, we apply Hadamard gate to each qubit in the readout register,
+# which creates a uniform superposition of all computational basis
+# states in that register. By the end of this stage the state of the
+# system is:
 #
 # .. math:: |\Psi_0\rangle = \left(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\right)^{\otimes K} \otimes |u\rangle
 #
-# 1. **Phase encoding.** Here we apply a sequence of :math:`K` controlled
-#    unitaries. The :math:`k`-th unitary is controlled by :math:`k`-th
-#    qubit in the readout register and applies the operator
-#    :math:`\hat{U}^{2^{k - 1}}` to the system register. As a result, the
-#    information about quantum phase :math:`\varphi_{u}` appears in the
-#    readout register. To see that, let’s consider the action of
-#    :math:`k`-th unitary on :math:`k`-th qubit of the readout register
-#    and the system register (i.e. on qubits actually affected by the
-#    unitary):
 #
-# .. math:: \widehat{CU^{2^{k - 1}}} \left[\left(\frac{|0\rangle_k + |1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right] &= \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes \hat{U}^{2^{k - 1}} |u\rangle \right] \\
-#                                                    &= \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |u\rangle \right] = \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
+# 1. **Phase encoding.** Here we apply a sequence of :math:`K` controlled
+# unitaries. The :math:`k`-th unitary is controlled by :math:`k`-th
+# qubit in the readout register and applies the operator
+# :math:`\hat{U}^{2^{k - 1}}` to the system register. As a result, the
+# information about quantum phase :math:`\varphi_{u}` appears in the
+# readout register. To see that, let’s consider the action of
+# :math:`k`-th unitary on :math:`k`-th qubit of the readout register
+# and the system register (i.e. on qubits actually affected by the
+# unitary):
+#
+# .. math:: \widehat{CU^{2^{k - 1}}} \left[\left(\frac{|0\rangle_k + |1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right] &= \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes \hat{U}^{2^{k - 1}} |u\rangle \right] = \\
+#                                                    &= \frac{1}{\sqrt{2}}\left[|0\rangle_k \otimes |u\rangle + |1\rangle_k \otimes e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |u\rangle \right] = \\
+#                                                    &= \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
 #
 #
 # As a result, by the end of this stage the information
@@ -177,11 +177,12 @@ Finding Ground State Energies via Quantum Phase Estimation
 # as you have just seen it indeed *kicks back* the global phase from
 # one register to another.
 #
+#
 # 2. **Phase decoding.** Now the QPE algorithm does seemingly little but
-#    in fact achieves a lot. Namely, it applies the *inverse* quantum
-#    Fourier transform to the readout register. Why it does so? Well, if
-#    we expand the brackets in the expression for :math:`|\Psi_1\rangle`,
-#    we can see that it is equivalent to:
+# in fact achieves a lot. Namely, it applies the *inverse* quantum
+# Fourier transform (quantum FT, QFT) to the readout register. Why it does so? Well, if
+# we expand the brackets in the expression for :math:`|\Psi_1\rangle`,
+# we can see that it is equivalent to:
 #
 # .. math:: |\Psi_1\rangle = \left[ \otimes_{k=1}^{K} \left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u} |1\rangle_k}{\sqrt{2}}\right)\right] \otimes |u\rangle = \sum_{j=0}^{2^K - 1} e^{i \cdot 2 \pi \varphi_u j} |j\rangle |u\rangle.
 #
@@ -189,7 +190,9 @@ Finding Ground State Energies via Quantum Phase Estimation
 # Here by :math:`|j\rangle` we mean a state of the
 # readout register given by the binary expansion of :math:`j`, i.e. if
 # :math:`j = j_K \cdot 2^{K - 1} + \ldots + j_2 \cdot 2^1 + j_1 \cdot 2^0`,
-# then :math:`|j\rangle = |j_1 j_2 \ldots j_k\rangle`.
+# then :math:`|j\rangle = |j_1 j_2 \ldots j_K\rangle` (it differs from the
+# ordinary PennyLane convention, but in practice this wouldn't matter — for now we
+# are interested in understanding the QPE, not implementing it).
 # 
 # Now, if we define :math:`\omega = 2 \pi \varphi_u`, then we can see that
 # the amplitudes of the readout register encode the function
@@ -202,19 +205,21 @@ Finding Ground State Energies via Quantum Phase Estimation
 # conventionally defined direct FT outputs :math:`\omega` for
 # :math:`g(t) = e^{-i \omega t}`). The only difference is that in our case
 # “the time” is discrete, and therefore we will have to use the inverse
-# *discrete* Fourier Transform — but thankfully it is *exactly* what the
-# quantum Fourier tranform does.
+# *discrete* Fourier Transform — and in the language of quantum computing
+# it means that we have to apply a unitary corresponding to the inverse QFT, just
+# because *by definition* QFT performs Fourier transform on the state amplitudes.
 # 
 # Long story short, the state of the system at the end of this stage is:
 #
 # .. math:: |\Psi_2\rangle = \sum_{l = 0}^{2^K - 1} \alpha_l |l\rangle |u\rangle,
 #
 # where :math:`\alpha_l := \mathfrak{F}^{-1}\left[e^{i 2 \pi \varphi_u j}\right](l)`,
-# i.e. to calculate :math:`\alpha_l` one applies the inverse DFT to the
-# function :math:`e^{i 2 \pi \varphi_u j}` and then takes its value at the
+# i.e. to calculate :math:`\alpha_l` one applies the inverse DFT (denoted as :math:`\mathfrak{F}^{-1}`)
+# to the function :math:`e^{i 2 \pi \varphi_u j}` and then takes its value at the
 # point (at the discrete frequency) :math:`l`.
 #
 # Phew, let’s proceed to the final stage! 
+#
 #
 # 3. **Measurement.** On the one hand, this stage is very
 # straightforward: we just measure the readout register. On the other
@@ -223,7 +228,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # First, let’s suppose :math:`\varphi_u` can be exactly represented as a
 # :math:`K`-bit binary fraction,
-# i.e. :math:`\varphi_u = \varphi_{u, K} 2^{-1} + \varphi_{u, K - 1} 2^{-2} + \ldots \varphi_{u, 0} 2^{-K}`,
+# i.e. :math:`\varphi_u = \varphi_{u, K} 2^{-1} + \varphi_{u, K - 1} 2^{-2} + \ldots \varphi_{u, 1} 2^{-K}`,
 # where :math:`\varphi_{u, k} \in \{0, 1\} \ \forall k \in [1..K]`.
 # Equivalently, there exists an integer
 # :math:`l_{\varphi_{u}} \in [0..2^K - 1]` such that
@@ -232,10 +237,10 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # .. math:: \alpha_l = \begin{cases}1, \text{if } l=l_{\varphi_{u}} \\ 0, \text{otherwise.} \end{cases}
 #
-# Indeed, in this case the function
-# :math:`f(j) = e^{i 2 \pi \varphi_{u} j}` is just one of the complex
-# harmonics used in the IFFT, and we will have only non-zero coefficient
-# corresponding to this harmonic. Hence, the measurement of the readout
+# Indeed, in this case we apply the inverse FFT to a function
+# :math:`f(j) = e^{i 2 \pi \varphi_{u} j}` which is represented by a *single*
+# complex harmonic. Again, *by definition* of the inverse FFT, it will be non-zero only at a single
+# point — namely at the angular frequency of this harmonic. Hence, the measurement of the readout
 # register always brings it to the state :math:`|l_{\varphi_{u}}\rangle`,
 # from which we can deduce the value of :math:`\varphi_{u}`.
 # 
@@ -253,7 +258,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # :math:`\alpha_l`, and therefore after the measurement we will be
 # observing the readout register in different states :math:`|l\rangle`
 # with probabilities :math:`\left|\alpha_l\right|^2`. Thus, the QPE
-# algorithm becomes *stochastic*, i.e. from run to run we will be seeing
+# algorithm becomes *stochastic*, i.e. from run to run we will be seeing
 # different results.
 # 
 # How bad is that? To answer this question, let’s plot
@@ -261,8 +266,17 @@ Finding Ground State Energies via Quantum Phase Estimation
 # equal to, say, :math:`0.27` (in this case
 # :math:`\tilde{\varphi}_u = 0.0100010100_2` and we would like to obtain
 # :math:`|l_{\tilde{\varphi}_u}\rangle = |276\rangle` as the state of the
-# readout register after the measurement). |QPE Probability Leaking|
-# 
+# readout register after the measurement).
+#
+
+######################################################################
+# .. figure:: ../demonstrations/qpe/qpe_leaking.png
+#    :align: center
+#    :alt: Leaking probabilities
+#    :width: 70%
+#
+
+######################################################################
 # We see that the probability to measure the “best approximation” value of
 # :math:`l_{\tilde{\varphi}_u}=276` is not equal to 1, in some sense it
 # “leaked” to other possible values of :math:`l`. In fact,
@@ -281,7 +295,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # “optimal” value :math:`l_{\tilde{\varphi}_u}`. Hence, even though we
 # might be getting wrong values for the least significant bits, we are
 # likely to get the values of the most significant ones correctly. More
-# formally, the probability to get an incorrect value for
+# formally, the probability to get an error in
 # :math:`K^\prime < K` the most significant bits of :math:`\varphi_u` is
 # equal to
 # :math:`p = \sum_{l: \left|l - l_{\tilde{\varphi}_u} \right| > 2^{K - K^\prime}} \left|\alpha_l\right|^2`
@@ -298,11 +312,6 @@ Finding Ground State Energies via Quantum Phase Estimation
 # additional qubits to the readout register — one can check by a simple
 # substitution to the formula above that in this case
 # :math:`p < \varepsilon`.
-# 
-# .. figure:: ../demonstrations/qpe/qpe_leaking.png
-#    :align: center
-#    :alt: QPE Circuit
-#
 
 
 ######################################################################
@@ -321,11 +330,16 @@ Finding Ground State Energies via Quantum Phase Estimation
 # methods we can usually find rather good bounds :math:`E_0^{\min}` and
 # :math:`E_0^{\max}` for :math:`E_0` such that
 # :math:`E_0^{\min} \leq E_0 \leq E_0^{\max}`. These give us two possible
-# workarounds: 1. Use :math:`E_0^{\min}` and :math:`E_0^{\max}` to bound
+# workarounds:
+#
+# 1.  Use :math:`E_0^{\min}` and :math:`E_0^{\max}` to bound
 # the absolute value of :math:`E_0` from above as :math:`|E_0| \leq C_0`
 # and then choose such evolution time :math:`t` that
 # :math:`t \leq \frac{2 \pi \hbar}{C_0}` — in this case :math:`\varphi_0`
-# is guaranteed to be in :math:`[0, 1)`. 2. Due to the fact that phases
+# is guaranteed to be in :math:`[0, 1)`.
+#
+#
+# 2. Due to the fact that phases
 # are defined modulo :math:`2 \pi` the phase :math:`\tilde{\varphi}_0`
 # estimated by QPE relates to :math:`\varphi_0` as follows:
 #
@@ -363,7 +377,6 @@ Finding Ground State Energies via Quantum Phase Estimation
 # previously chosen the parameters of our circuit such that the error
 # probability is :math:`\varepsilon`
 # 
-
 
 ######################################################################
 # Quantum phase estimation with PennyLane
