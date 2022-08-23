@@ -530,7 +530,7 @@ make_plot(results_df, n_train=40)
 #
 ##############################################################################
 # .. bio:: Korbinian Kottmann
-#    :photo: ../_static/authors/qottmann.jpg
+#    :photo: ../_static/authors/qottmann.jpeg
 #
 #    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
 #
@@ -540,6 +540,6 @@ make_plot(results_df, n_train=40)
 #    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.
 #
 # .. bio:: Maurice Weber
-#    :photo: ../_static/authors/maurice_weber.jpg
+#    :photo: ../_static/authors/maurice_weber.jpeg
 #
-#    Maurice is a cool dude from ETH that does fancy computer science stuff!
+#    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing and in developing robustness guarantees for (quantum) machine learning.
