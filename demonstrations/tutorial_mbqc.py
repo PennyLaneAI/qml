@@ -609,6 +609,10 @@ RHG = SurfaceCode(code_distance)
 # For these CSS codes, you can view the primal and dual sheets as measuring the
 # :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively.
 #
+# .. raw:: html
+#    :file: ../demonstrations/mbqc/primal_dual.html
+#
+#
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary
 # outcomes of these measurements determine the measurement bases for future measurements, and the
