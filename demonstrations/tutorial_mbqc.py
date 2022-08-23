@@ -609,7 +609,7 @@ RHG = SurfaceCode(code_distance)
 # :math:`X`-stabilizers *or* :math:`Z`-stabilizers, and include the *surface code* and *colour code* families.
 # For these CSS codes, you can view the primal and dual sheets as measuring the
 # :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively. We encourage you to have another 
-# look at the distance-3 surface code in Fig. :numref:`fig-surfacecode` and try to link it with the dual and primal sheets shown here!
+# look at the :ref:`distance-3 surface code <fig-surfacecode>` and try to link it with the dual and primal sheets shown here!
 #
 # .. raw:: html
 #    :file: ../demonstrations/mbqc/primal_dual.html
