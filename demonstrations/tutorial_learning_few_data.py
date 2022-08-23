@@ -263,7 +263,7 @@ def conv_net(weights, last_layer_weights, features):
     return qml.probs(wires=(0))
 
 
-qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**num_wires))
+fig, ax = qml.draw_mpl(conv_net)(np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**num_wires))
 
 ##############################################################################
 # In the problem we will address, we need to encode 64 features
