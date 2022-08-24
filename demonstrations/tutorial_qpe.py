@@ -522,7 +522,7 @@ def compute_energy(probs, n_readout):
 # is made modulo :math:`2\pi`.
 # 
 # In general, therefore, to convert the estimated phase into the correct
-# eigenvalue we may want to use a function like the following:
+# eigenvalue we use a function like the following:
 # 
 
 def extended_compute_energy(probs, n_readout, m, t):
