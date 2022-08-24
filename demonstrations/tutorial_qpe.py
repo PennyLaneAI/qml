@@ -731,7 +731,7 @@ with plt.xkcd():
 # This means that the previous energy estimate, although apparently very
 # precise, is not enough for our purposes!
 # 
-# How do we do to increase the accuracy of our estimate? It is very
+# How do we increase the accuracy of our estimate? It is very
 # simple: we only need to add more qubits to the readout register. Indeed,
 # by doing so, we will increase the resolution with which we are able to
 # estimate our phase as the number of binary fractions that we are able to
