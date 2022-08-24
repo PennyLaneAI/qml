@@ -79,7 +79,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # 2. **Phases are defined modulo** :math:`2\pi` **— how on Earth we can be
 # sure we have measured the correct one?** You are right, we can’t.
-# However, we can easily get over it with a couple of tricks which we will explain later.
+# However, we can easily get overcome this with a couple of tricks which we will explain later.
 # 
 # 3. **How on Earth we can have the ground state at our disposal when we
 # even don’t know its energy?**  Alright, this is a serious one.
