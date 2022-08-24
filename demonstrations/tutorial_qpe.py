@@ -49,7 +49,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # .. math::  \hat{U}(t)|m\rangle = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \underbrace{\langle n|m\rangle}_{\delta_{nm}} = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \delta_{nm} = e^{-\frac{i E_m t}{\hbar}} |m\rangle.
 #
-# We have used orthogonality condition for Hamiltonian eigenstates expressed as
+# We have used the orthogonality condition for Hamiltonian eigenstates
 # :math:`{\langle n|m\rangle} = \delta_{nm}`, where :math:`\delta_{nm} = 1` if :math:`n = m` and
 # :math:`\delta_{nm} = 0` otherwise.
 #
