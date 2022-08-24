@@ -808,7 +808,7 @@ with plt.xkcd():
 # .. bio:: Davide Castaldo
 #    :photo: ../_static/authors/jay_soni.png
 #
-#    Davide is a PhD student at the University of Padova where is studying
+#    Davide is a PhD student at the University of Padova where he is studying
 # how to use quantum computers to simulate molecular systems. Currently he
 # is also working at Xanadu as part of the residency program. He is a firm
 # believer that one day racoons will take over humans in Toronto..
