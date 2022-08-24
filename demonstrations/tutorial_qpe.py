@@ -723,7 +723,7 @@ with plt.xkcd():
 # ===============================
 # 
 # Depending on the application different levels of accuracy may
-# be needed to estimate our energy. In quantum chemistry usually we want
+# be needed in our estimate of the energy. In quantum chemistry we usually want
 # to estimate our energies with a precision that is below 1 kcal/mol to
 # ensure quantitative predictions. This value is approximatively equal to
 # 0.0016 Ha.
