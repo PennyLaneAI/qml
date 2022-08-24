@@ -402,7 +402,7 @@ S22 = 1
 # *Hartree-Fock* state :math:`\lvert i_0 \rangle = \vert \phi_{HF} \rangle = \vert 1100 \rangle` and the
 # projections :math:`\langle i \vert H \vert \phi_{HF} \rangle` can be
 # extracted analytically from the fermionic Hamiltonian that we computed
-# above, by accessing the entries by the index given by the binary
+# above. This is done by accessing the entries by the index given by the binary
 # expression of each Slater determinant.
 #
 # The Hadamard test is required in order to compute the real part of
@@ -536,7 +536,21 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # CB-VQE leads to a better approximation of the ground state energy and also to much smaller
 # standard deviations, improving on the results given
 # by standard VQE by several orders of magnitude when considering a finite amount of measurements. 
-#
+
+
+######################################################################
+# Conclusion
+# ----------
+# We have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
+# fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
+# Such algorithms could be executed on smaller quantum computers, potentially allowing us to exectute useful 
+# quantum algorithms on real hardware sooner than expected.
+# 
+# 
+# seen how the CB-VQE algorithm can be used to reduce the number of measurements that need to 
+# be executed on a quantum computer. 
+
+######################################################################
 # `Note: In order to obtain these results, we had to discard the cases in which the VQE shot noise 
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
