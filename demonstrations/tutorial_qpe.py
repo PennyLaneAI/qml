@@ -722,7 +722,7 @@ with plt.xkcd():
 # Improving the estimate accuracy
 # ===============================
 # 
-# Depending on the application in mind different levels of accuracy could
+# Depending on the application different levels of accuracy may
 # be needed to estimate our energy. In quantum chemistry usually we want
 # to estimate our energies with a precision that is below 1 kcal/mol to
 # ensure quantitative predictions. This value is approximatively equal to
