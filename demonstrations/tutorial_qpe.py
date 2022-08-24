@@ -699,7 +699,7 @@ with plt.xkcd():
 # Initializing the system register with a random state implies that the
 # measurement distribution is dramatically changed as now we have non
 # negligible overlaps with many more eigenstates than previously. This occurs because we are
-# generating a state which is including also contribution from
+# generating a state with contributions from
 # determinants with different number of electrons.
 # 
 # Altogether all this completely spoils the estimate of the QPE circuit
