@@ -21,7 +21,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 2. The  quantum phase estimation (QPE) algorithm is likely to be involved — and you are keen to learn how ground state energies and QPE go together.
 #
 # Well, in this case you
-# are in the right place indeed, because in this demo we will:
+# You've come to the right place, because in this demo we will:
 #
 # 1. Explain the connection between the ground state energies and quantum phases.
 # 2. Recap the quantum phase estimation algorithm, which is great in, well, estimating the quantum phases.
