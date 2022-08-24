@@ -132,7 +132,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # consists of :math:`K` qubits and is a *readout* register (and it’s not
 # accidental that it has as many qubits as there are bits
 # in the binary representation of :math:`\varphi_{u}`). The second
-# register is called *system* register and it has :math:`N` qubits, where
+# register is called the *system* register and it has :math:`N` qubits, where
 # :math:`n` is the number of qubits in the considered Hamiltonian
 # :math:`\hat{H}`. Perhaps, you can already guess that we will encode the
 # state :math:`|u\rangle` in the system register, entangle it in some
