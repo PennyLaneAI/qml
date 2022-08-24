@@ -599,7 +599,7 @@ from flamingpy.codes import SurfaceCode
 
 code_distance = 3
 RHG = SurfaceCode(code_distance)
-RHG.draw(backend="plotly", showbackground=True)
+# RHG.draw(backend="plotly", label=["type"], showbackground=True) #TODO: uncomment this line after merging FP#103
 
 ##############################################################################
 #
