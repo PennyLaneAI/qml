@@ -40,7 +40,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # i.e. :math:`\hat{H}|n\rangle = E_n|n\rangle, \ E_n \in \mathbb{R}`. Let us now allow the system
 # evolve for a time :math:`t`. The time-dependent Schrödinger equation
 # tells us that the evolution operator is
-# :math:`\hat{U}(t) = e^{-\frac{i\hat{H}t}{\hbar}}`. We can decompose it
+# :math:`\hat{U}(t) = e^{-\frac{i\hat{H}t}{\hbar}}` which can be decomposed as:
 # in the basis of the Hamiltonian eigenvectors as follows:
 #
 # .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|
