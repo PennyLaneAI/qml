@@ -631,7 +631,7 @@ def build_fci_prep_circuit(n_system,
 # As we can see the new functions include additional gates in the state
 # preparation part. In the first function we have added the random gate
 # feeding ``qml.QubitUnitary`` with a randomly generate unitary matrix.
-# To prepare the FCI state we are using the result of a VQE calculation;
+# In the second function, to prepare the FCI state we are using the result of a VQE calculation;
 # for a closer look at how to implement the VQE with PennyLane see the
 # tutorial `A brief overview of
 # VQE <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__. The structure
