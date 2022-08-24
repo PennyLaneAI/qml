@@ -19,7 +19,7 @@ For the example of a Quantum Convolutional Neural Network (QCNN), we show how it
 function of the number of training samples. This demo is based on the paper
 *"Generalization in quantum machine learning from few training data"*. by Caro et al. [#CaroGeneralization]_.
 
-What is Generalization in (Q)ML?
+What is generalization in (Q)ML?
 ---------------------------------
 When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
 distribution of interest, for example, images of cats and dogs. However, in practice, we are limited to a finite amount of
@@ -31,7 +31,7 @@ called the *generalization error* and indicates how well the model has learned t
     :width: 75%
     :align: center
 
-It is good to know that generalization can be seen as a manifestation of the bias-variance trade-off: models that
+Generalization can be seen as a manifestation of the bias-variance trade-off: models that
 perfectly fit the training data admit a low bias at the cost of a higher variance, and hence typically perform poorly on unseen
 test data. In the classical machine learning community, this trade-off has been extensively
 studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
@@ -52,12 +52,12 @@ unknown, this quantity has to be estimated from a finite amount of data. Given
 a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N`, we estimate the performance of our QML model by calculating the
 average loss over the training set
 
-.. math:: \hat{R}_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i)
+.. math:: \hat{R}_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i),
 
 which is referred to as the training loss and is an unbiased estimate of :math:`R(\alpha)`. This is only a proxy
 to the true quantity of interest :math:`R(\alpha)` and their difference is called the generalization error
 
-.. math:: \mathrm{gen}(\alpha) =  R(\alpha) - \hat{R}_S(\alpha)
+.. math:: \mathrm{gen}(\alpha) =  R(\alpha) - \hat{R}_S(\alpha),
 
 which is the quantity that we explore in this tutorial. Keeping in mind the bias-variance trade-off, one would expect
 that more complex models, i.e., models with a larger number of parameters, achieve a lower error on the training data
@@ -68,7 +68,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 """
 
 ##############################################################################
-# Generalization Bounds for Quantum Machine Learning Models
+# Generalization bounds for Quantum Machine Learning models
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # As hinted at earlier, we expect the generalization error to depend both on the richness of the model class, as well as
 # on the amount of training data available. As a first result, the authors of Ref. [#CaroGeneralization]_ found that for
@@ -103,8 +103,8 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # ------------------------------------
 # Before we start building a quantum CNN, let us briefly review the idea of classical CNNs which have shown
 # tremendous success in tasks like image recognition, recommender systems or sound classification, to name a few.
-# For a more in-depth explanation of CNNs, we highly recommend `chapter 9 <https://www.deeplearningbook.org/contents/convnets.html>`
-# in [#DLBook]_ which is dedicated to CNNs.
+# For a more in-depth explanation of CNNs, we highly recommend `chapter 9 <https://www.deeplearningbook.org/contents/convnets.html>`_
+# in [#DLBook]_.
 # Classical CNNs are a family of neural networks which make use of convolutions and pooling operations to
 # insert an inductive bias, favoring invariances to spatial transformation like translations, rotations and scaling.
 # A *convolutional layer* consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local
@@ -143,7 +143,7 @@ rng = np.random.default_rng(seed=seed)
 
 ##############################################################################
 # To construct a convolutional and pooling layer in a quantum circuit, we will
-# follow the QCNN construction proposed by [#CongQuantumCNN]_. The former layer
+# follow the QCNN construction proposed in [#CongQuantumCNN]_. The former layer
 # will extract local correlations, while the latter allows reducing the dimensionality
 # of the feature vector. In a qubit circuit, the convolutional layer, consisting of a kernel swept
 # along the entire image, is now translated to a two-qubit unitary that correlates neighboring
@@ -162,7 +162,7 @@ rng = np.random.default_rng(seed=seed)
 #
 # The convolutional layer should have as an input the weights of the two-qubit unitary, which are
 # to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
-# with a particular sequence of gates: two single-qubit gates :class:`~.pennylane.U3` (parametrized by three
+# with a particular sequence of gates: two single-qubit  :class:`~.pennylane.U3` gates (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
 # parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates on each of the two
 # qubits. At the circuit level, to have a neighboring qubit interaction, we can apply the two-qubit unitary
@@ -193,7 +193,7 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
 
 
 ##############################################################################
-# The pooling layer has as inputs the weights of the single-qubit conditional unitaries, which in
+# The pooling layer's inputs are the weights of the single-qubit conditional unitaries, which in
 # this case, are :class:`~.pennylane.U3` gates. Then, we apply these conditional measurements to half of the
 # unmeasured wires, reducing our system size by half.
 
