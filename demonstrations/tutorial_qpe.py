@@ -592,7 +592,7 @@ print(f"Energy QPE = {energies['HF']}")
 # Slater determinant, then we will look at the opposite scenario in which
 # we prepare the system register in order to encode the actual FCI state.
 # 
-# To do so we modify our quantum function in the two following ways:
+# To do so we define the two following functions:
 # 
 
 from scipy.stats import unitary_group
