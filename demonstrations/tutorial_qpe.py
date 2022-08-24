@@ -92,7 +92,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # All in all, for now we have the high-level picture: measuring the
 # quantum phase of an evolved state brings us information about its energy.
-# — so let’s proceed to a more detailed consideration of the low-level
+# So let’s proceed to a more detailed consideration of the low-level
 # components.
 # 
 
