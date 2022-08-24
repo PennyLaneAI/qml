@@ -69,7 +69,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # 1. **How on Earth we could measure the global phase?**
 # Indeed, any textbook on quantum physics will tell you that the global
-# phase is *unobservable*, i.e. it can’t be detected by any measurements
+# phase for an isolated system is *unobservable*, i.e. it can’t be detected by any measurements
 # performed on the isolated system. Well, our system should not be
 # isolated, right? We can make it interact with another, *ancilla* system
 # controlled by us. Then, the global phase will (in a sense) become local
