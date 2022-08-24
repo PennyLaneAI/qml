@@ -101,7 +101,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # ========================
 # 
 # As we have already mentioned, the Quantum Phase Estimation algorithm
-# does a seemingly impossible thing — it allows us to figure out the
+# does a seemingly impossible thing: it allows us to figure out the
 # global phase acquired by an evolved quantum state. Let us formalize this
 # statement a bit and say that in the simplest form QPE solves the
 # following problem:
