@@ -570,7 +570,7 @@ print(f"Energy QPE = {energies['HF']}")
 # 
 # In the previous section we have seen how to implement a QPE routine to
 # estimate the ground state energy of the H\ :math:`_3^{+}` molecule.
-# this point, it is time to make a few more considerations about the
+# It is now time to consider
 # possible scenarios one might encounter when using QPE for quantum
 # chemistry and how to do it cleverly!
 # 
