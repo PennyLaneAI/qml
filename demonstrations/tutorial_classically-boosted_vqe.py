@@ -132,7 +132,7 @@ hf = qml.qchem.hf_state(electrons, qubits)
 
 
 ######################################################################
-# and implement the ansatz :math:`A(\Theta)`. In this case, we use the
+# Next, we implement the ansatz :math:`A(\Theta)`. In this case, we use the
 # class :class:`~.pennylane.AllSinglesDoubles`, which enables us to apply all possible combinations of single and
 # double excitations obeying the Pauli principle to the Hartree-Fock
 # state. Single and double excitation gates, denoted :math:`G^{(1)}(\Theta)` and :math:`G^{(2)}(\Theta)` respectively, are
@@ -206,7 +206,7 @@ print('Optimal parameters:', theta_opt)
 #
 # Now we are ready to present the classically-boosted version of VQE.
 #
-# The key of this new method relies on the notion of
+# The key of this new method relies on the notion of the
 # `generalized eigenvalue problem <https://en.wikipedia.org/wiki/Generalized_eigenvalue_problem>`__.
 # The main idea is to restrict the problem of finding the ground state to
 # an eigenvalue problem in a subspace :math:`\mathcal{H}^{\prime}` of the
