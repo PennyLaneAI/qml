@@ -43,13 +43,14 @@ state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then proces
 channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` with learnable parameters :math:`\alpha`. Finally, a measurement is performed on the resulting state
 to get the final prediction. Now, the goal is to minimize the expected loss over the data generating distribution
 :math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
-expected loss is given by
+expected loss, denoted by :math:`R`, is given by
 
 .. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)]
 
-where :math:`x` are the features and :math:`y` are the labels. In practice, as :math:`P` is generally 
-unknown, this quantity has to be estimated from a finite amount of data. Given
-a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N`, we estimate the performance of our QML model by calculating the
+where :math:`x` are the features, :math:`y` are the labels and :math:`P` is their joint distribution.
+In practice, as the joint distribution :math:`P` is generally unknown, this quantity has to be 
+estimated from a finite amount of data. Given a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N` 
+with :math:`N` samples, we estimate the performance of our QML model by calculating the 
 average loss over the training set
 
 .. math:: \hat{R}_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i),
