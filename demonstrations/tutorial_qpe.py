@@ -18,7 +18,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # Estimation”. We guess this happened because you’ve heard that:
 #
 # 1. Quantum computers will make finding the ground state energies easier.
-# 2. The  quantum phase estimation (QPE) algorithm should be somehow involved there — and you are keen to learn how ground state energies and QPE go together.
+# 2. The  quantum phase estimation (QPE) algorithm is likely to be involved — and you are keen to learn how ground state energies and QPE go together.
 #
 # Well, in this case you
 # are in the right place indeed, because in this demo we will:
