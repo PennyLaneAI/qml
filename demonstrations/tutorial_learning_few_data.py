@@ -27,7 +27,7 @@ data, which is why it is necessary to reason about how our model performs on new
 between the model's performance on the true data distribution and the performance estimated from our training data is
 called the *generalization error* and indicates how well the model has learned to generalize to unseen data.
 
-.. figure:: /demonstrations/learning_few_data/true_vs_sample.png
+.. figure:: /demonstrations/learning_few_data/overfitting.png
     :width: 75%
     :align: center
 
