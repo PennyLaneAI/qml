@@ -53,7 +53,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # :math:`{\langle n|m\rangle} = \delta_{nm}`, where :math:`\delta_{nm} = 1` if :math:`n = m` and
 # :math:`\delta_{nm} = 0` otherwise.
 #
-# What we have just obtained? Well, our derivation says
+# What we have just obtained? Well, our derivation shows
 # that as the system evolves, its eigenstates basically stay the same — up
 # to a global quantum phase. Importantly, the acquired phase is not
 # random, for each eigenstate it is related to its energy in a known way.
