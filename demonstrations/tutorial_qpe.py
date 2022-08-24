@@ -87,7 +87,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # seems ridiculous to presume that we can use the former to get the
 # latter. However, as it turns out having *a good approximation* of the
 # ground state also suffices in many cases, although it complicates
-# matters to an extent — we will demonstrate later how the this inaccuracy
+# matters to an extent. We will demonstrate later how the this inaccuracy
 # manifests itself and how to deal with its consequences.
 # 
 # All in all, for now we have the high-level picture — measuring the
