@@ -588,7 +588,7 @@ print(f"Energy QPE = {energies['HF']}")
 # Now we will consider two different scenarios to compare with the results
 # obtained previously by initializing the system register into the
 # :math:`|HF\rangle` state. First we will initialize the state randomly
-# applying a random gate to a doubly excited (w.r.t. HF configuration)
+# applying a random gate to a doubly excited (w.r.t. the HF configuration)
 # Slater determinant, then we will look at the opposite scenario in which
 # we prepare the system register in order to encode the actual FCI state.
 # 
