@@ -15,7 +15,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # Hi! It seems that you were wandering around the PennyLane website and
 # opened the demo called “Finding Ground State Energies via Quantum Phase
-# Estimation”. We guess it happened because you’ve heard that:
+# Estimation”. We guess this happened because you’ve heard that:
 #
 # 1. Quantum computers will make finding the ground state energies easier.
 # 2. The  quantum phase estimation (QPE) algorithm should be somehow involved there — and you are keen to learn how ground state energies and QPE go together.
