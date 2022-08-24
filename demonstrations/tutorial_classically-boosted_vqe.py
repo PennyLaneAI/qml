@@ -94,10 +94,10 @@ Let’s get started!
 #
 # In VQE, we prepare a statevector :math:`\vert \phi \rangle` by applying
 # the parameterized ansatz :math:`A(\Theta)`, represented by a unitary matrix,
-# to an inital state :math:`\vert 0 \rangle^{\otimes N}`. Then, the parameters :math:`\Theta` are
+# to an inital state :math:`\vert 0 \rangle^{\otimes n}` where :math:`n` is the number of qubits. Then, the parameters :math:`\Theta` are
 # optimized to minimize a cost function, which in this case is the energy:
 #
-# .. math::  E(\Theta) = \langle 0 \vert^{\otimes N} A(\Theta)^{\dagger} H A(\Theta) \vert 0 \rangle^{\otimes N}.
+# .. math::  E(\Theta) = \langle 0 \vert^{\otimes n} A(\Theta)^{\dagger} H A(\Theta) \vert 0 \rangle^{\otimes n}.
 #
 # This is done using a classical optimization method, which is typically
 # gradient descent.
@@ -412,23 +412,22 @@ S22 = 1
 #     :align: center
 #     :width: 60%
 #
-#
-# To implement the Hadamard test, we need a register of :math:`N` qubits
-# given by the size of the molecular Hamiltonian (:math:`N=4` in our case)
-# initialized in the state :math:`\rvert 0 \rangle^{\otimes N}` and an ancillary
+# To implement the Hadamard test, we need a register of :math:`n` qubits
+# given by the size of the molecular Hamiltonian (:math:`n=4` in our case)
+# initialized in the state :math:`\rvert 0 \rangle^{\otimes n}` and an ancillary
 # qubit prepared in the :math:`\rvert 0 \rangle` state.
 #
 # In order to generate :math:`\langle \phi_q \vert i \rangle`, we take
 # :math:`U_q` such that
-# :math:`U_q \vert 0 \rangle^{\otimes N} = \vert \phi_q \rangle`. 
+# :math:`U_q \vert 0 \rangle^{\otimes n} = \vert \phi_q \rangle`. 
 # This is equivalent to using the standard VQE ansatz with the optimized
 # parameters :math:`\Theta^*` that we obtained in the previous section
 # :math:`U_q = A(\Theta^*)`. Moreover,
 # we also need :math:`U_i` such that
-# :math:`U_i \vert 0^N \rangle = \vert \phi_i \rangle`. In this case, this
+# :math:`U_i \vert 0^n \rangle = \vert \phi_i \rangle`. In this case, this
 # is just a mapping of a classical basis state into the circuit consisting
 # of :math:`X` gates and can be easily implemented using PennyLane’s
-# function ``qml.BasisState(i, N))``.
+# function ``qml.BasisState(i, n))``.
 #
 
 wires = range(qubits + 1)
@@ -531,7 +530,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 #
 # .. figure:: ../demonstrations/classically_boosted-vqe/energy_deviation.png
 #     :align: center
-#     :width: 80%
+#     :width: 60%
 #
 # In the plot, the dashed line corresponds to the true ground state energy. As expected, 
 # CB-VQE leads to a better approximation of the ground state energy and also to much smaller
