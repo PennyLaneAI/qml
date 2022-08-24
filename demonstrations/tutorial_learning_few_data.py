@@ -26,16 +26,20 @@ distribution of interest, for example, images of cats and dogs. However, in prac
 data, which is why it is necessary to reason about how our model performs on new, previously unseen data. The difference
 between the model's performance on the true data distribution and the performance estimated from our training data is
 called the *generalization error* and indicates how well the model has learned to generalize to unseen data.
-
-.. figure:: /demonstrations/learning_few_data/overfitting.png
-    :width: 75%
-    :align: center
-
 Generalization can be seen as a manifestation of the bias-variance trade-off: models that
 perfectly fit the training data admit a low bias at the cost of a higher variance, and hence typically perform poorly on unseen
 test data. In the classical machine learning community, this trade-off has been extensively
 studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
 their variance [#NamkoongVariance]_.
+Below, we see a canoncial example of this trade-off, with a model having low bias, but high variance
+and therefore high generalization error. The low variance maodel, on the other hand, has a higher 
+bias but generalizes better.
+
+.. figure:: /demonstrations/learning_few_data/overfitting.png
+    :width: 65%
+    :align: center
+
+
 
 Let us now dive deeper into generalization properties of quantum machine learning (QML) models. We start by describing
 the typical data processing pipeline of a QML model. A classical data input :math:`x` is first encoded in a quantum
