@@ -23,7 +23,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # Well, in this case you
 # You've come to the right place, because in this demo we will:
 #
-# 1. Explain the connection between the ground state energies and quantum phases.
+# 1. Explain the connection between ground state energies and quantum phases.
 # 2. Recap the quantum phase estimation algorithm, which is great in, well, estimating the quantum phases.
 # 3. Show how to make the QPE estimate the phases related to the ground state energies.
 # 4. Mention the possible caveats.
