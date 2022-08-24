@@ -578,7 +578,7 @@ print(f"Energy QPE = {energies['HF']}")
 # The first thing we will look at is the effect of the initial quantum
 # state on the energy estimation and on the measurement result.
 # 
-# Particularly, we have seen in the introduction section that the
+# In particular, we saw in the introduction that the
 # probability of measuring a bitstring is influenced by two factors: 
 # 1. How well the binary representation of the string approximates a given
 # eigenvalue.
