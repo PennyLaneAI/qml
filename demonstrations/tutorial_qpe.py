@@ -517,7 +517,7 @@ def compute_energy(probs, n_readout):
 # :math:`\lambda_u = e^{i 2 \pi \varphi_u}`.
 # 
 # Another detail that is important to keep in mind 
-# is to remember that the estimate of our eigenvalue provided by the QPE
+# is that the estimate of our eigenvalue provided by the QPE
 # is made modulo :math:`2\pi`.
 # 
 # In general, therefore, to convert the estimated phase into the correct
