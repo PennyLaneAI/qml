@@ -787,7 +787,7 @@ with plt.xkcd():
 # 
 # In this tutorial we have reviewed the Quantum Phase Estimation algorithm
 # and we have seen how to use it to compute molecular energies.
-# Furthermore we have seen it in action both through varying the initial state
+# Furthermore, we have seen it in action both through varying the initial state
 # preparation step and the number of qubits to estimate the desired
 # eigenvalue. Now it’s time for you to step in and try to use the QPE in
 # different settings with PennyLane!
