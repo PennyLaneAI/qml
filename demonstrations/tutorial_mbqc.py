@@ -494,7 +494,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # gate, the final step is to show that we can implement arbitrary quantum circuits. To do so,
 # we simply have to note that we have a *universal gate set* [#DiVincenzo]_. The complete computation
 # can be performed as shown in the figure below. The qubits are teleported along the arrows in the
-# cluster and single-qubit gates are applied through choosing the measurement bases along these arrays.
+# cluster and single-qubit gates are applied through a selection of measurement bases along these arrays.
 # Two-qubit gates are implemented along vertical arrows, and the rest of the qubits is measured in the
 # :math:`Z`-basis effectively taking them out of the cluster without affecting the neighboring nodes.
 #
