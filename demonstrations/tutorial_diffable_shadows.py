@@ -74,7 +74,7 @@ There are two ways of computing expectation values with classical shadows in Pen
 import pennylane as qml
 import pennylane.numpy as np
 from matplotlib import pyplot as plt
-from pennylane import classical_shadow, shadow_expval, ClassicalShadow
+from pennylane import classical_shadow, ClassicalShadow
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
@@ -193,32 +193,33 @@ shotss = np.arange(20, 220, 20)
 for shots in shotss:
     for _ in range(10):
 
-        
+        # execute qwc measurements
         dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
         @qml.qnode(dev_finite)
         def qnode_finite(H):
             circuit()
             return qml.expval(H)
 
-        with qml.Tracker(dev_finite) as tracker:
+        with qml.Tracker(dev_finite) as tracker_finite:
             res_finite = qnode_finite(H_qwc)
 
+        # execute shadows measurements
         dev_shadow = qml.device("default.qubit", wires=range(n_wires), shots=int(shots)*n_groups)
-
         @qml.qnode(dev_shadow)
         def qnode():
             circuit()
             return classical_shadow(wires=range(n_wires))
         
-        bits, recipes = qnode()
-        shadow = ClassicalShadow(bits, recipes)
+        with qml.Tracker(dev_finite) as tracker_shadows:
+            bits, recipes = qnode()
 
+        shadow = ClassicalShadow(bits, recipes)
         res_shadow = shadow.expval(H, k=1)
 
         # Guarantuee that we are not cheating and its a fair fight
-        assert tracker.totals["shots"] <=  int(shots)*n_groups
+        assert tracker_finite.totals["shots"] <=  tracker_shadows.totals["shots"]
         if not _%25:
-            print(tracker.totals["shots"], int(shots)*n_groups)
+            print(tracker_finite.totals["shots"], tracker_shadows.totals["shots"])
 
         d_qwc.append(rmsd(res_finite, res_exact))
         d_sha.append(rmsd(res_shadow, res_exact))
