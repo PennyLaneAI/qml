@@ -531,7 +531,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    determine the basis for future measurements [#OpticalQuantumComputing]_.
 #
 # This feature makes it particularly attractive for photonic quantum computers: we can use
-# expendable qubits that don't have to stick around for the full calculation. If we can find a
+# expendable qubits that can't stick around for the full calculation. If we can find a
 # reliable way to produce qubits and stitch them together through entanglement, we can use it to
 # produce our cluster state resource! Essentially, we need some kind of qubit factory and a
 # stitching mechanism that puts it all together. The stitching mechanism depends on the physical
