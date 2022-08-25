@@ -181,7 +181,7 @@ def one_bit_teleportation(input_state):
 #
 # Note that we return a `density matrix <https://en.wikipedia.org/wiki/Density_matrix>`_ in the
 # function above.
-# This allows for us to describe operations beyond unitaries
+# This allows for us to describe operations beyond unitaries,
 # such as the teleportation protocol.
 #
 # Now, let's prepare a random qubit state and see if the teleportation protocol is working as
