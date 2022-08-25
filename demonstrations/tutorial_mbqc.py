@@ -231,7 +231,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # In the previous section, we have already seen how the quantum information propagates from one
 # side of the cluster to the other. In this
-# section, we will tackle the remaining parts concerning logical operations.
+# section, we will tackle the remaining parts concerning logical operations. Throughout, we will
+# assume the ability to measure in arbitrary bases.
 #
 
 ##############################################################################
