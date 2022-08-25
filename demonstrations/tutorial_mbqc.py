@@ -495,7 +495,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # we simply have to note that we have a *universal gate set* [#DiVincenzo]_. The complete computation
 # can be performed as shown in the figure below. The qubits are teleported along the arrows in the
 # cluster and single-qubit gates are applied through a selection of measurement bases along these arrays.
-# Two-qubit gates are implemented along vertical arrows, and the rest of the qubits is measured in the
+# Two-qubit gates are implemented along vertical arrows, and the rest of the qubits are measured in the
 # :math:`Z`-basis effectively taking them out of the cluster without affecting the neighboring nodes.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
