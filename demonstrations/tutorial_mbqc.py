@@ -648,11 +648,10 @@ fig.show()
 # We have learned that a one-way quantum computer capable of cluster state
 # entanglement together with adaptive arbitrary single-qubit measurements allows for universal
 # quantum computation. The MBQC framework is a powerful quantum computing approach, particularly
-# useful in platforms that allow for many expendable qubits, and offers
-# several advantages over the gate-based model. For example, it circumvents the need for applying
-# in-line entangling gates which are often the most noisy operations in gate-based quantum computers
-# with trapped-ions or superconducting circuits. Instead, the required entanglement is created
-# off-line which is often simpler to implement.
+# useful in platforms that allow for many expendable flying qubits and easy physical entangling 
+# gates. It circumvents the need for applying in-line entangling gates which are often the most 
+# noisy operations in gate-based quantum computers with trapped-ions or superconducting circuits. 
+# Instead, the required entanglement is created off-line which is often simpler to implement.
 #
 # In this demo, we assumed that the system is capable of performing arbitrary
 # single-qubit measurements. This is not a strict requirement, as one can acquire the same
