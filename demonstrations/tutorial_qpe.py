@@ -4,7 +4,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 
  .. meta::
     :property="og:description": This demo introduces the
-    Quantum Phase Estimation algorithm and shows users how to implement a
+    Quantum Phase Estimation (QPE) algorithm and shows users how to implement a
     QPE subroutine in a quantum program with PennyLane for estimating
     molecular energies.
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png 
