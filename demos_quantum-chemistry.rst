@@ -81,6 +81,12 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :description: :doc:`demos/tutorial_qubit_tapering`
     :tags: chemistry
 
+.. customgalleryitem::
+    :tooltip: Quantum Resource Estimation.
+    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
+    :description: :doc:`demos/tutorial_resource_estimation`
+    :tags: chemistry
+
 
 :html:`</div></div><div style='clear:both'>`
 

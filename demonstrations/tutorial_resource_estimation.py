@@ -66,16 +66,24 @@ as
 
 where :math:`a^\dagger` and :math:`a` are the fermionic creation and annihilation operators,
 respectively. This Hamiltonian can then be transformed to the qubit basis and be written as a linear
-combination of the tensor products of Pauli and Identity operators
+combination of unitary operators constructed as tensor products of Pauli and Identity operators
 
 .. math:: H=\sum_{i} c_i P_i.
 
-The cost of computing the ground state energy of this Hamiltonian using the QPE algorithm typically
-depends on two parameters: the 1-norm of the Hamiltonian, which in the simplest case is a sum over
-the coefficients $c_i$, and the complexity of implementing the unitary operator, which is typically
-constructed as $U = e^{-i \arccos (H)}$.
+Tthe cost of computing the ground state energy of this Hamiltonian using the QPE algorithm depends
+on the complexity of implementing the unitary operator which can be constructed as
+$U = e^{-i \arccos (H / \lambda)}$ and implemented using a quantum walk operator [Cao et al.]. The
+eigenvalues of the quantum walk operator are $e^{-i \arccos (E / \lambda)}$ which give the
+eigenvalues of the Hamiltonian $E$. The parameter $\lambda$, which in the simplest case is a sum
+over the coefficients $c_i$, is needed for normalization. The Toffoli complexity of this
+implementation is proportional to the number of repetitions of the quantum walk which is related to
+$\lambda$ and the QPE error $\epsilon_{QPE}$.
 
+.. math:: \left \lceil \frac{\pi \lambda}{2 \epsilon_{QPE}} \right \rceil.
 
+The overall complexity of the QPE algorithm depends directly on the construction of the Hamiltonian.
+In PennyLane, the QPE complexity of a second-quantized molecular Hamiltonian is estimated for a
+double-factorized construction of the Hamiltonian which has a very low implementation cost.
 """
 # About the author
 # ----------------
