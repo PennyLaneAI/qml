@@ -241,7 +241,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # Single-qubit rotations
 # ```````````````````````
-# Arbitrary single-qubit rotations are an essential operation for a universal quantum computer. In
+# Arbitrary single-qubit rotations are essential operations for a universal quantum computer. In
 # MBQC, we can implement these rotations by using the entanglement of the cluster state. Any
 # single-qubit gate can be represented as a composition of three rotations along two different axes,
 # for example :math:`U(\alpha, \beta, \gamma) = R_x(\gamma)R_z(\beta)R_x(\alpha)` where
