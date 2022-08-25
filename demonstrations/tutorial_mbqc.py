@@ -649,7 +649,7 @@ fig.show()
 # entanglement together with adaptive arbitrary single-qubit measurements allows for universal
 # quantum computation. The MBQC framework is a powerful quantum computing approach, particularly
 # useful in platforms that allow for many expendable flying qubits and easy physical entangling 
-# gates. It circumvents the need for applying in-line entangling gates which are often the most 
+# gates. It circumvents the need for applying in-line entangling gates that are often the most 
 # noisy operations in gate-based quantum computers with trapped-ions or superconducting circuits. 
 # Instead, the required entanglement is created off-line which is often simpler to implement.
 #
