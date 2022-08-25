@@ -546,7 +546,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # -------------------------
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation, we
-# require some kind of error correction. Error correction is a technique for detecting errors and
+# require some kind of error correction scheme. Error correction is a technique for detecting errors and
 # reconstructing the logical data without losing any information. It is not exclusive to quantum computing;
 # it is also used in "classical" information processing such as computation, data storage, and communication where one also has to deal `with
 # noise coming from the environment <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_. However, it is
@@ -554,10 +554,10 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # precarious and therefore prone to environmental factors, causing errors.
 #
 # Due to the peculiarities of quantum physics, we have to be careful when implementing error
-# correction. First of all, we can not simply look inside our quantum computer and see if an error occurred. This would collapse the
-# wavefunction which carries valuable information. Secondly, we can not make copies of a quantum
+# correction. First of all, we can not simply look inside our quantum computer and see if an error occurred; this would collapse the
+# wavefunction, which carries valuable information. Secondly, we can not make copies of a quantum
 # state to create redundancy because of the *no-cloning theorem*. Lastly, there are infinitely many
-# more errors in quantum computing, whereas the only errors in classical computing are bitflips; a 1
+# more errors in quantum computing, whereas the only errors in classical computing are bit flips: a 1
 # being flipped to a 0 or vice versa.
 #
 # A whole research field is devoted to combating these challenges since Peter Shor published the 
@@ -583,7 +583,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 #    ..
 #
-#    A distance-3 surface code. Circles represent qubits and bubbles represent operators, called
+#    A distance :math:`d=3` surface code. Circles represent qubits and bubbles represent operators, called
 #    stabilizers, used to detect errors. The stabilizers are tensor products of Pauli-:math:`X` or Pauli-:math:`Z`
 #    operators and each is associated with its own ancilla qubit. The combined system encodes one
 #    logical qubit and can correct any combination of :math:`\lfloor (d-1)/2 \rfloor` errors.
