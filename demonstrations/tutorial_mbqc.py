@@ -538,7 +538,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # produce our cluster state resource! Essentially, we need some kind of qubit factory and a
 # stitching mechanism that puts it all together. The stitching mechanism depends on the physical
 # platform; for example, it can be implemented with an Ising interaction [#OneWay2001]_ or by 
-# interfering two optical modes with a beamsplitter.
+# interfering two optical modes with a beamsplitter [#XanaduPassiveArchitecture]_.
 #
 
 ##############################################################################
