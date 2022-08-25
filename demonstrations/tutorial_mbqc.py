@@ -651,7 +651,10 @@ fig.show()
 # useful in platforms that allow for many expendable flying qubits and easy physical entangling 
 # gates. It circumvents the need for applying in-line entangling gates that are often the most 
 # noisy operations in gate-based quantum computers with trapped-ions or superconducting circuits. 
-# Instead, the required entanglement is created off-line which is often simpler to implement.
+# Instead, the required entanglement is created off-line which is often simpler to implement. 
+# Furthermore, it's advantageous for photonics because the depth of the optical circuit can remain 
+# constant. This means that it does not grow with the depth of the logical circuit, preventing 
+# intolerable losses.
 #
 # In this demo, we assumed that the system is capable of performing arbitrary
 # single-qubit measurements. This is not a strict requirement, as one can acquire the same
