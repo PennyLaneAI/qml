@@ -139,27 +139,25 @@ print(shadow.expval(H, k=1))
 # molecular Hamiltonian
 symbols = ["H", "O", "H"]
 coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
-electrons = 10
-orbitals = 7
-core, active = qml.qchem.active_space(electrons, orbitals, active_electrons=4, active_orbitals=4)
-multiplicity = 1
-charge = 0
+
 basis_set = "sto-3g"
 H, n_wires = qml.qchem.molecular_hamiltonian(
     symbols,
     coordinates,
-    charge=charge,
-    mult=multiplicity,
+    charge=0,
+    mult=1,
     basis=basis_set,
     active_electrons=4,
     active_orbitals=4,
     mapping="bravyi_kitaev",
     method="pyscf"
 )
+
 coeffs, obs = H.coeffs, H.ops
 H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
 
-len(qml.grouping.group_observables(obs))
+n_groups = len(qml.grouping.group_observables(obs))
+
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)
 hf = qml.qchem.hf_state(4, n_wires)
 theta = np.array([ 2.20700008e-02,  8.29716448e-02,  2.19227085e+00,
@@ -180,21 +178,13 @@ def circuit():
         hf_state = hf,
         singles = singles,
         doubles = doubles)
-dev_exact = qml.device("default.qubit", wires=range(n_wires))
-@qml.qnode(dev_exact)
-def qnode_exact(obs):
-    circuit()
-    return qml.expval(obs)
 
-res_exact = qnode_exact(H)
 def rmsd(x, y):
     """root mean square difference"""
     return np.sqrt(np.mean((x - y)**2))
-n_groups = len(qml.grouping.group_observables(obs))
+
 d_qwc = []
 d_sha = []
-
-res_finites, res_shadows = [], []
 
 n_wires = 8
 
@@ -225,15 +215,15 @@ for shots in shotss:
 
         res_shadow = shadow.expval(H, k=1)
 
+        # Guarantuee that we are not cheating and its a fair fight
         assert tracker.totals["shots"] <=  int(shots)*n_groups
         if not _%25:
             print(tracker.totals["shots"], int(shots)*n_groups)
 
-        res_finites.append(res_finite)
-        res_shadows.append(res_shadow)
-
         d_qwc.append(rmsd(res_finite, res_exact))
         d_sha.append(rmsd(res_shadow, res_exact))
+
+
 dq = np.array(d_qwc).reshape(len(shotss), 10)
 dq, ddq = np.mean(dq, axis=1), np.var(dq, axis=1)
 ds = np.array(d_sha).reshape(len(shotss), 10)
@@ -241,6 +231,7 @@ ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 plt.errorbar(shotss*n_groups, ds, yerr=dds, fmt="x-", label="shadow")
 plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.legend()
+plt.show()
 
 
 
