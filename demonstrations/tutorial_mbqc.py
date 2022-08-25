@@ -272,8 +272,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # .. math:: \theta_{\mathrm{in}} = 0, \qquad \theta_{1} = (-1)^{m_{\mathrm{in}} + 1} \alpha, \qquad
 #   \theta_{2} = (-1)^{m_1} \beta, \quad \text{and} \quad \theta_{3} = (-1)^{m_{\mathrm{in}} + m_2} \gamma
 #
-# with :math:`m_{\mathrm{in}}, m_1, m_2, m_3 \in \{0, 1\}` being the measurement outcomes on nodes
-# :math:`t_\mathrm{in}`, :math:`a_1`, :math:`a_2`, and :math:`a_3`, respectively. Note that the
+# with :math:`m_{\mathrm{in}}, m_1, m_2 \in \{0, 1\}` being the measurement outcomes on nodes
+# :math:`t_\mathrm{in}`, :math:`a_1` and :math:`a_2`, respectively. Note that the
 # measurement basis is adaptive; the measurement on :math:`a_3`, for example, depends on the outcome
 # of earlier measurements in the chain. After these operations, the state of qubit
 # :math:`t_\mathrm{out}` is given by
@@ -282,7 +282,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #    = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
-# Now note that this unitary :math:`\tilde{U}` is related to our desired unitary :math:`U` up to
+# with :math:`m_3` being the measurement outcome on node :math:`a_3`. Now note that this unitary 
+# :math:`\tilde{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
 # choosing the measurement basis of qubit :math:`t_\mathrm{out}` appropriately or correcting for them classically after
 # the quantum computation.
