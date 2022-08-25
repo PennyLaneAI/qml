@@ -91,11 +91,12 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 # algorithm of Su et al. for Hamiltonians in first quantization assuming constructed with a
 # plane wave basis. We first need to define the number of plane waves, the number of electrons and
 # the volume of the unit cell that constructs the periodic material. Let's use dilithium iron
-# silicate Li:math:`_2`FeSiO:math:`_4` as an example.
+# silicate :math:`\text{Li}_2\text{FeSiO}_4` as an example. Note that atomic units must be used
+# for the cell volume.
 
 planewaves = 100000
 electrons = 156
-volume = 1145  # in atomic units
+volume = 1145
 
 ##############################################################################
 # We now initiate the ``FirstQuantization`` class of the ``qml.resource`` module
@@ -105,43 +106,30 @@ algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 # and obtain the estimated number of non-Clifford gates and logical qubits
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
-""".
-Second quantization
-*******************
-A `second-quantized <https://en.wikipedia.org/wiki/Second_quantization>`_ molecular Hamiltonian is
-constructed from one- and two-body electron integrals in the basis of molecular orbitals,
- :math:`\phi`,
+##############################################################################
+# Computing the 1-Norm of the Hamiltonian
+# ***************************************
+# The resource estimation functionality assumes that the molecular and material Hamiltonian can be
+# constructed as a linear combination of unitary operators.
+#
+# .. math:: H=\sum_{i} c_i U_i.
+#
+# The cost of computing the ground state energy of this Hamiltonian using the QPE algorithm depends
+# on the complexity of implementing the unitary operator for encoding the Hamiltonian, which can be
+# constructed as `U = e^{-i \arccos (H / \lambda)}` and implemented using a quantum walk operator
+# [Cao et al.]. The eigenvalues of the quantum walk operator are
+# :math:`e^{-i \arccos (E / \lambda)}` which can be post-processed classically to give the
+# eigenvalues of the Hamiltonian :math:`E`. The parameter :math:`\lambda` is the 1-Norm of the
+# Hamiltonian and plays an important role in determining the cost of implementing the QPE algorithm.
+# In PennyLane, :math:`\lambda` can be obtained with
 
-.. math:: h_{pq} =\int dx \,\phi_p^*(x)\left(-\frac{\nabla^2}{2}-\sum_{i=1}^N\frac{Z_i}{|r-R_i|}\right)\phi_q(x),\\\\
-.. math:: h_{pqrs} = \int dx_1 dx_2\, \frac{\phi_p^*(x_1)\phi_q^*(x_2)\phi_r(x_2)\phi_s(x_1)}{|r_1-r_2|}.
+print(f'1-Norm of the Hamiltonian: {algo.lamb}')
 
-as
+##############################################################################
+# The 1-Norm of the Hamiltonian can also be directly computed using the ``norm`` function. For the
+# first-quantized Hamiltonian it can be computed for a target error in the algorithm with
 
-.. math:: H=\sum_{pq} h_{pq}a_p^\dagger a_q +\frac{1}{2}\sum_{pqrs}h_{pqrs}a_p^\dagger a_q^\dagger a_r a_s,
-
-where  :math:`a^\dagger` and  :math:`a` are the fermionic creation and annihilation operators,
-respectively. This Hamiltonian can then be transformed to the qubit basis and be written as a linear
-combination of unitary operators constructed as tensor products of Pauli and Identity operators
-
-.. math:: H=\sum_{i} c_i P_i.
-
-The cost of computing the ground state energy of this Hamiltonian using the QPE algorithm depends
-on the complexity of implementing the unitary operator which can be constructed as
-`U = e^{-i \arccos (H / \lambda)}` and implemented using a quantum walk operator [Cao et al.]. The
-eigenvalues of the quantum walk operator are :math:`e^{-i \arccos (E / \lambda)}` which give the
-eigenvalues of the Hamiltonian :math:`E`. The parameter :math:`\lambda`, which in the simplest case
-is a sum over the coefficients :math:`c_i`, is needed for normalization. The Toffoli complexity of
-this implementation is proportional to the number of repetitions of the quantum walk which is
-related to `\lambda` and the QPE error :math:`\epsilon_{QPE}`.
-
-.. math:: \left \lceil \frac{\pi \lambda}{2 \epsilon_{QPE}} \right \rceil.
-
-The overall complexity of the QPE algorithm depends directly on the construction of the Hamiltonian.
-In PennyLane, the QPE complexity of a second-quantized molecular Hamiltonian is estimated for a
-double-factorized construction of the Hamiltonian which has a very low implementation cost.
-"""
-# About the author
-# ----------------
+qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 
 ##############################################################################
 #.. bio:: Soran Jahangiri
