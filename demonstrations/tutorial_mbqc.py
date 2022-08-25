@@ -496,7 +496,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # can be performed as shown in the figure below. The qubits are teleported along the arrows in the
 # cluster and single-qubit gates are applied through a selection of measurement bases along these arrays.
 # Two-qubit gates are implemented along vertical arrows, and the rest of the qubits are measured in the
-# :math:`Z`-basis effectively taking them out of the cluster without affecting the neighboring nodes.
+# :math:`Z`-basis, effectively taking them out of the cluster without affecting the neighboring nodes.
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
 #    :align: center
@@ -508,7 +508,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    of Pauli-:math:`Z`, vertical arrows are measurements of Pauli-:math:`X`, while tilted arrows refer to
 #    measurements in the :math:`xy`-plane. [#OneWay2001]_
 #
-# However, you might wonder - is it even feasible to construct the large cluster states that
+# However, you might wonder: Is it even feasible to construct the large cluster states that
 # one-way quantum computation requires? The number of qubits needed to construct a circuit can grow
 # to be very large, as it not only depends on the number of logical qubits, but also on the depth
 # of the circuit. At this point, it's good to reiterate that the entanglement of the cluster
@@ -537,8 +537,8 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # reliable way to produce qubits and stitch them together through entanglement, we can use it to
 # produce our cluster state resource! Essentially, we need some kind of qubit factory and a
 # stitching mechanism that puts it all together. The stitching mechanism depends on the physical
-# platform, and can, for example, be implemented with an Ising interaction [#OneWay2001]_ or, in the
-# context of photonics, by interfering two modes with a beamsplitter.
+# platform; for example, it can be implemented with an Ising interaction [#OneWay2001]_ or by 
+# interfering two optical modes with a beamsplitter.
 #
 
 ##############################################################################
