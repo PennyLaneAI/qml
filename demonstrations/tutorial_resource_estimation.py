@@ -48,10 +48,64 @@ operator.
 We are interested to estimate the number of logical qubits and the number of non-Clifford gates,
 which are hard to implement, for a QPE algorithm that implements a second-quantized Hamiltonian
 describing an isolated molecule and a first-quantized Hamiltonian describing a periodic material.
-The PennyLane functionality in the ``resource`` module allows estimating such QPE resources by
-simply defining system specifications such as atomic symbols and geometries and a target error for
-estimating the ground state energy of the Hamiltonian. Let's see how!
+We assume Gaussian and plane wave basis sets for describing the molecular and periodic systems,
+respectively. The PennyLane functionality in the ``resource`` module allows estimating such QPE
+resources by simply defining system specifications such as atomic symbols and geometries and a
+target error for estimating the ground state energy of the Hamiltonian. Let's see how!
 
+QPE cost for simulating isolated molecules
+******************************************
+The cost of performing QPE simulations for isolated molecules is estimated based on the double low
+rank Hamiltonian factorization algorithm. We first need to define the atomic symbols and
+coordinates for the given molecule. Here we use the water molecule at its equilibrium geometry as an
+example
+"""
+import pennylane as qml
+from pennylane import numpy as np
+
+symbols = ['O', 'H', 'H']
+geometry = np.array([[0.00000000,  0.00000000,  0.28377432],
+                     [0.00000000,  1.45278171, -1.00662237],
+                     [0.00000000, -1.45278171, -1.00662237]], requires_grad=False)
+
+##############################################################################
+# Then we construct a molecule object by selecting a basis set and compute the one- and two-electron
+# integrals in the molecular orbital basis.
+mol = qml.qchem.Molecule(symbols, geometry, basis_name='sto-3g')
+core, one, two = qml.qchem.electron_integrals(mol)()
+
+##############################################################################
+# We now initiate the ``DoubleFactorization`` class of the ``qml.resource`` module
+
+algo = qml.resource.DoubleFactorization(one, two)
+
+##############################################################################
+# and obtain the estimated number of non-Clifford gates and logical qubits
+
+print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
+
+##############################################################################
+# QPE cost for simulating periodic materials
+# ******************************************
+# The cost of implementing the QPE algorithm for periodic materials is estimated following the
+# algorithm of Su et al. for Hamiltonians in first quantization assuming constructed with a
+# plane wave basis. We first need to define the number of plane waves, the number of electrons and
+# the volume of the unit cell that constructs the periodic material. Let's use dilithium iron
+# silicate Li:math:`_2`FeSiO:math:`_4` as an example.
+
+planewaves = 100000
+electrons = 156
+volume = 1145  # in atomic units
+
+##############################################################################
+# We now initiate the ``FirstQuantization`` class of the ``qml.resource`` module
+algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
+
+##############################################################################
+# and obtain the estimated number of non-Clifford gates and logical qubits
+print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
+
+""".
 Second quantization
 *******************
 A `second-quantized <https://en.wikipedia.org/wiki/Second_quantization>`_ molecular Hamiltonian is
@@ -71,7 +125,7 @@ combination of unitary operators constructed as tensor products of Pauli and Ide
 
 .. math:: H=\sum_{i} c_i P_i.
 
-Tthe cost of computing the ground state energy of this Hamiltonian using the QPE algorithm depends
+The cost of computing the ground state energy of this Hamiltonian using the QPE algorithm depends
 on the complexity of implementing the unitary operator which can be constructed as
 `U = e^{-i \arccos (H / \lambda)}` and implemented using a quantum walk operator [Cao et al.]. The
 eigenvalues of the quantum walk operator are :math:`e^{-i \arccos (E / \lambda)}` which give the
