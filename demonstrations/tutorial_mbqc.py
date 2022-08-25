@@ -134,9 +134,9 @@ print(qml.draw(cluster_state)())
 # somewhat misleading name because it is not instantaneous: it requires communication of
 # additional classical information, which is still limited by the speed of light.
 #
-# One-bit Teleportation
+# One-qubit Teleportation
 # `````````````````````
-# Let's take a deeper look at the principles behind quantum teleportation using a simple example of one-bit
+# Let's take a deeper look at the principles behind quantum teleportation using a simple example of one-qubit
 # teleportation. We start with one qubit in the state :math:`|\psi\rangle` that we want to transfer
 # to the second qubit initially in the state :math:`|0\rangle`. The figure below represents the
 # protocol. The green box represents the creation of a cluster state, while
@@ -149,7 +149,7 @@ print(qml.draw(cluster_state)())
 #
 #    ..
 #
-# Let's implement one-bit teleportation in PennyLane.
+# Let's implement one-qubit teleportation in PennyLane.
 
 import pennylane as qml
 import pennylane.numpy as np
