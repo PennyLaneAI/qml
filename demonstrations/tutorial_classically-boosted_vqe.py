@@ -272,11 +272,6 @@ print('Optimal parameters:', theta_opt)
 # the Hartree-Fock basis for :math:`H_2`.
 #
 
-import pennylane as qml
-from pennylane import qchem
-from pennylane import numpy as np
-
-# Define the molecular Hamiltonian
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 basis_set = "sto-3g"
@@ -537,23 +532,20 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # standard deviations, improving on the results given
 # by standard VQE by several orders of magnitude when considering a finite amount of measurements. 
 
-
-######################################################################
-# Conclusion
-# ----------
-# We have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
-# fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
-# Such algorithms could be executed on smaller quantum computers, potentially allowing us to exectute useful 
-# quantum algorithms on real hardware sooner than expected.
-# 
-# 
-# seen how the CB-VQE algorithm can be used to reduce the number of measurements that need to 
-# be executed on a quantum computer. 
-
 ######################################################################
 # `Note: In order to obtain these results, we had to discard the cases in which the VQE shot noise 
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
+#
+######################################################################
+# Conclusion
+# ----------
+# In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
+# fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
+# Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
+# quantum algorithms on real hardware sooner than expected.
+# 
+# 
 #
 # # References
 # ----------
