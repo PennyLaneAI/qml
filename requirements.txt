@@ -47,3 +47,4 @@ jax==0.3.15
 jaxlib==0.3.15
 neural-tangents==0.6.0
 git+https://github.com/XanaduAI/flamingpy@mbqc-demo
+plotly>=4.5.0
