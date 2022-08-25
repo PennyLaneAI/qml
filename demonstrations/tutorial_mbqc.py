@@ -131,7 +131,7 @@ print(qml.draw(cluster_state)())
 # [#Hermans2022]_, [#Furusawa1998]_, [#Riebe2004]_, [#Nielsen1998]_. Moreover, it has related applications
 # in safe communication protocols that are impossible with classical communication so it's certainly
 # worth learning about. In this protocol, we transport *information*, not matter, between systems. Admittedly, it has a
-# rather delusive name because it is not instantaneous. Notably, it requires communication of
+# somewhat misleading name because it is not instantaneous: it requires communication of
 # additional classical information, which is still limited by the speed of light.
 #
 # One-bit Teleportation
