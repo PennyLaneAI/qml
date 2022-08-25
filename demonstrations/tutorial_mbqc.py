@@ -208,8 +208,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # As we can see, :math:`|\psi\rangle`, originally the state of the first qubit, has been transported to the second qubit!
 #
 # This protocol is one of the main ingredients of one-way quantum computing. Essentially, we
-# propagate the information in one end of our cluster state to the other end by using the
-# teleportation protocol. In addition, we can "write" our circuit onto the cluster state by
+# propagate the information in one end of our cluster state to the other end through
+# successive teleportations. In addition, we can "write" our circuit onto the cluster state by
 # choosing adaptive measurements. In the next section, we will see how we can actually do this.
 #
 
