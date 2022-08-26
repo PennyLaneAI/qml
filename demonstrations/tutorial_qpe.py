@@ -154,7 +154,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # unitaries. The :math:`k`-th unitary is controlled by the :math:`k`-th
 # qubit in the readout register and applies the operator
 # :math:`\hat{U}^{2^{k - 1}}` to the system register. As a result, the
-# information about quantum phase :math:`\varphi_{u}` appears in the
+# information about the quantum phase :math:`\varphi_{u}` appears in the
 # readout register. To see that, let’s consider the action of
 # :math:`k`-th unitary on :math:`k`-th qubit of the readout register
 # and the system register (i.e. on qubits actually affected by the
