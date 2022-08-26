@@ -46,12 +46,7 @@ The snapshot expectation value then reduces to
 
 For that trace we find three different cases
 
-..math:: \left(\tr{\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i}\right) =
-    \begin{cases}
-       \text{0} &\quad\text{if } \tilde{P}_i \neq P_i \\
-       \text{1} &\quad\text{if } \tilde{P}_i = \mathbb{1} \\
-       (1-2b_i) &\quad\text{else}\\
-     \end{cases}
+..math:: \left(\tr{\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i}\right) = \begin{cases}\text{0} &\quad\text{if } \tilde{P}_i \neq P_i \\ \text{1} &\quad\text{if } \tilde{P}_i = \mathbb{1} \\(1-2b_i) &\quad\text{else}\\ \end{cases}
 
 The cases where :math:`\tilde{P}_i=\mathbb{1}` yield a trivial factor :math:`1` to the product.
 The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do not match :math:`P_i`. So in total, in the case that all Pauli operators match, we find
@@ -274,7 +269,7 @@ plt.show()
 # is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
 # There has been intensive research in recent years on optimizing qwc measurement schemes.
 # Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
-# Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen].
+# Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen]_.
 
 
 ##############################################################################
