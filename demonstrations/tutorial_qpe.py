@@ -151,7 +151,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 #
 # 1. **Phase encoding.** Here we apply a sequence of :math:`K` controlled
-# unitaries. The :math:`k`-th unitary is controlled by :math:`k`-th
+# unitaries. The :math:`k`-th unitary is controlled by the :math:`k`-th
 # qubit in the readout register and applies the operator
 # :math:`\hat{U}^{2^{k - 1}}` to the system register. As a result, the
 # information about quantum phase :math:`\varphi_{u}` appears in the
