@@ -540,8 +540,8 @@ axes[1].set_yscale('log', base=2)
 plt.show()
 
 ##############################################################################
-# Summary
-# -------
+# Conclusion
+# -----------
 # In this demo, we studied the work by Caro et al. [#CaroGeneralization]_ on generalization bounds 
 # for quantum machine learning models. The key takeaway of this work is that some quantum learning 
 # models can achieve high-fidelity predictions using a few training data points. 
