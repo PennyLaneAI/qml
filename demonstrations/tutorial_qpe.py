@@ -77,7 +77,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # that is exactly what the QPE algorithm does in a clever way. So, bear
 # with us, we’ll come back to the QPE shortly.
 # 
-# 2. **Phases are defined modulo** :math:`2\pi` **— how on Earth we can be
+# 2. **Phases are defined modulo** :math:`2\pi` **— how on Earth can we be
 # sure we have measured the correct one?** You are right, we can’t.
 # However, we can easily get overcome this with a couple of tricks which we will explain later.
 # 
