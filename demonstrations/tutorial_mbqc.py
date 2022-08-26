@@ -141,7 +141,7 @@ print(qml.draw(cluster_state)())
 # to the second qubit initially in the state :math:`|0\rangle`. The figure below represents the
 # protocol. The green box represents the creation of a cluster state, while
 # the red box represents the measurement of a qubit with the appropriate correction applied to
-# the second qubit based on the single bit acquired through the measurement.
+# the second qubit based on the measurement outcome.
 #
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
