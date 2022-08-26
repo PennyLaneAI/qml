@@ -12,7 +12,7 @@ r"""Classical shadows in the Pauli basis
 
 *Author: Korbinian Kottmann, Posted: 22 September 2022*
 
-abstract
+We introduce and demonstrate PennyLane's new classical shadow functionalities and argue why you are most likely better advised not to use it to estimate groups of observables (like molecular Hamiltonian terms).
 
 Classical shadow theory
 -----------------------
