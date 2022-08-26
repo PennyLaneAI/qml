@@ -564,20 +564,19 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # more errors in quantum computing, whereas the only errors in classical computing are bit flips: a 1
 # being flipped to a 0 or vice versa.
 #
-# A whole research field is devoted to combating these challenges since Peter Shor published the 
+# A whole research field devoted to combating these challenges has formed since Peter Shor published his
 # seminal paper in 1995 [#ShorQEC1995]_. The main idea in QEC is using redundancy to encode 
-# information - just like classical error correction. However, to 
-# surpass the quantum problems we look at correlations between constituent qubits instead. That is, 
-# we don't measure individual qubits but groups of qubits to observe errors. More technically, we measure
-# operators that involve multiple qubits called *stabilizers*. Based on the outcome of these stabilizer
-# measurements we can apply a correction (but in some cases keeping track of the outcomes suffices too). 
+# information, just like classical error correction. However, to 
+# overcome the quantum-specific problems, we must measure groups of qubits and observe correlations 
+# between rather than measuring individual qubits.  More technically, we measure
+# operators that involve multiple qubits, called *stabilizers*. Based on the outcome of these stabilizer
+# measurements, we can apply a correction and recover our information. 
 # Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
-# introduction. Instead, what we will do here is giving you the gist of quantum error correction in the
-# MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as
-# an example. This code makes use of stabilizers of the form :math:`\bigotimes_i X_i` or 
-# :math:`\bigotimes_j Z_j` as depicted below.
+# introduction. Instead, we will give you the gist of quantum error correction in the
+# MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as an example. This code makes use of stabilizers of the form :math:`\bigotimes_i X_i` or 
+# :math:`\bigotimes_j Z_j`, as depicted below.
 #
 # .. _fig-surfacecode:
 #
