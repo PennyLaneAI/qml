@@ -801,9 +801,11 @@ with plt.xkcd():
 # [3] For a more detailed analysis of all the derivations presented in this
 # section please look at Quantum Information and Quantum computation by
 # Michael A. Nielsen and Isaac L. Chuang.
+#
+# About the author
+# ----------------
 
-
-######################################################################
+##############################################################################```
 # .. bio:: Davide Castaldo
 #    :photo: ../_static/authors/jay_soni.png
 #
