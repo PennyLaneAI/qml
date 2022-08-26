@@ -81,7 +81,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # sure we have measured the correct one?** You are right, we can’t.
 # However, we can easily overcome this with a couple of tricks which we will explain later.
 # 
-# 3. **How on Earth we can have the ground state at our disposal when we
+# 3. **How on Earth can we have the ground state at our disposal when we
 # even don’t know its energy?**  Alright, this is a serious one.
 # Finding the ground state of a system is indeed barely simpler than finding the ground state energy, and so it
 # seems ridiculous to presume that we can use the former to get the
