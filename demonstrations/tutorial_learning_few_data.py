@@ -15,24 +15,24 @@ Generalization in QML from few training data
 *Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber. Posted: 01 June 2022*
 
 In this tutorial, we dive into the generalization capabilities of quantum machine learning models.
-For the example of a Quantum Convolutional Neural Network (QCNN), we show how its generalization error behaves as a
+For the example of a `Quantum Convolutional Neural Network (QCNN) <https://pennylane.ai/qml/glossary/qcnn.html>`_, we show how its generalization error behaves as a
 function of the number of training samples. This demo is based on the paper
 *"Generalization in quantum machine learning from few training data"*. by Caro et al. [#CaroGeneralization]_.
 
 What is generalization in (Q)ML?
 ---------------------------------
 When optimizing a machine learning model, be it classical or quantum, we aim to maximize its performance over the data
-distribution of interest, for example, images of cats and dogs. However, in practice, we are limited to a finite amount of
+distribution of interest (e.g., images of cats and dogs). However, in practice, we are limited to a finite amount of
 data, which is why it is necessary to reason about how our model performs on new, previously unseen data. The difference
 between the model's performance on the true data distribution and the performance estimated from our training data is
-called the *generalization error* and indicates how well the model has learned to generalize to unseen data.
-Generalization can be seen as a manifestation of the bias-variance trade-off: models that
+called the *generalization error*, and it indicates how well the model has learned to generalize to unseen data.
+Generalization can be seen as a manifestation of the bias-variance trade-off; models that
 perfectly fit the training data admit a low bias at the cost of a higher variance, and hence typically perform poorly on unseen
 test data. In the classical machine learning community, this trade-off has been extensively
 studied and has led to optimization techniques that favour generalization, for example, by regularizing models via
 their variance [#NamkoongVariance]_.
 Below, we see a canoncial example of this trade-off, with a model having low bias, but high variance
-and therefore high generalization error. The low variance maodel, on the other hand, has a higher 
+and therefore high generalization error. The low variance model, on the other hand, has a higher 
 bias but generalizes better.
 
 .. figure:: /demonstrations/learning_few_data/overfitting.png
