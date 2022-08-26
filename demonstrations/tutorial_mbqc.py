@@ -426,7 +426,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
 # show how to perform a CNOT operation in the measurement-based framework. The input state is given on two qubits,
 # control qubit :math:`c` and target qubit :math:`t_\mathrm{in}`. Preparing the cluster state shown in
-# the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the Hadamard basis,
+# the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the :math:`X`-basis,
 # we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections [#MBQCRealization]_.
 #
 # .. figure:: ../demonstrations/mbqc/cnot.png
