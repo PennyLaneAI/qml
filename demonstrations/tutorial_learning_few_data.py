@@ -84,12 +84,12 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
 # of training samples and increases with the number of parametrized gates. However, as is the case for
-# quantum convolutional neural networks, it is possible to get a more fine-grained bound by including knowledge on the number :math:`M` of gates which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
+# quantum convolutional neural networks (QCNNs), it is possible to get a more fine-grained bound by including knowledge on the number of gates :math:`M` which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
 # :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
 # :math:`\tilde{\mathcal{O}}` includes logarithmic factors). However, the authors of Ref. [#CaroGeneralization]_ found
 # that such models actually adhere to the better scaling
 #
-# .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log MT}{N}}\right).
+# .. math:: \mathrm{gen}(\alpha) \sim \mathcal{O}\left(\sqrt{\frac{T\log MT}{N}}\right).
 #
 # With this, we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon`, we need a
 # training set of size :math:`N \sim T \log MT / \epsilon^2`. For the special case of QCNNs, we can explicitly connect
@@ -97,25 +97,25 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # use :math:`\mathcal{O}(\log(n))` independently parametrized gates, each of which is used at most :math:`n` times [#CongQuantumCNN]_.
 # Putting the pieces together, we find that a training set of size
 #
-# .. math::  N \in \mathcal{O}(\mathrm{poly}(\log n))
+# .. math::  N \sim \mathcal{O}(\mathrm{poly}(\log n))
 #
 # is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon`.
 # In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different
 # digits in the classical ``digits`` dataset. Before that, we set up our QCNN.
 
 ##############################################################################
-# Quantum convolutional neural network
+# Quantum convolutional neural networks
 # ------------------------------------
-# Before we start building a quantum CNN, let us briefly review the idea of classical CNNs which have shown
-# tremendous success in tasks like image recognition, recommender systems or sound classification, to name a few.
+# Before we start building a QCNN, let us briefly review the idea of classical CNNs, which have shown
+# tremendous success in tasks like image recognition, recommender systems, and sound classification, to name a few.
 # For a more in-depth explanation of CNNs, we highly recommend `chapter 9 <https://www.deeplearningbook.org/contents/convnets.html>`_
 # in [#DLBook]_.
 # Classical CNNs are a family of neural networks which make use of convolutions and pooling operations to
-# insert an inductive bias, favoring invariances to spatial transformation like translations, rotations and scaling.
-# A *convolutional layer* consists of a small kernel (a window) that sweeps a 2D array (an image) and extracts local
+# insert an inductive bias, favouring invariances to spatial transformations like translations, rotations, and scaling.
+# A *convolutional layer* consists of a small kernel (a window) that sweeps over a 2D array representation of an image and extracts local
 # information while sharing parameters across the spatial dimensions. In addition to the convolutional layers,
-# one typically uses pooling layers which reduce the size of the input and provide a mechanism to summarize
-# information from a neighbourhood in the input. Next to reducing the dimensionality, these types of layers have the advantage
+# one typically uses pooling layers to reduce the size of the input and to provide a mechanism for summarizing
+# information from a neighbourhood of values in the input. On top of reducing dimensionality, these types of layers have the advantage
 # of making the model more agnostic to certain transformations like scaling and rotations.
 # These two types of layers are applied repeatedly in an alternating manner as shown in the figure below.
 #
@@ -124,7 +124,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #     :align: center
 #
 # We want to build something similar for a quantum circuit. First, we import the necessary
-# libraries we will need in this demo and set a seed for reproducibility.
+# libraries we will need in this demo and set a random seed for reproducibility:
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -150,8 +150,8 @@ rng = np.random.default_rng(seed=seed)
 # To construct a convolutional and pooling layer in a quantum circuit, we will
 # follow the QCNN construction proposed in [#CongQuantumCNN]_. The former layer
 # will extract local correlations, while the latter allows reducing the dimensionality
-# of the feature vector. In a qubit circuit, the convolutional layer, consisting of a kernel swept
-# along the entire image, is now translated to a two-qubit unitary that correlates neighboring
+# of the feature vector. In a quantum circuit, the convolutional layer, consisting of a kernel swept
+# along the entire image, is a two-qubit unitary that correlates neighbouring
 # qubits.  As for the pooling layer, we will use a conditioned single-qubit unitary that depends
 # on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
 # qubits of the final state using an all-to-all unitary gate as shown in the figure below.
@@ -165,7 +165,7 @@ rng = np.random.default_rng(seed=seed)
 # Breaking down the layers
 # --------------------------
 #
-# The convolutional layer should have as an input the weights of the two-qubit unitary, which are
+# The convolutional layer should have the weights of the two-qubit unitary as an input, which are
 # to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
 # with a particular sequence of gates: two single-qubit  :class:`~.pennylane.U3` gates (parametrized by three
 # parameters, each), followed by three Ising interactions between both qubits (each interaction is
