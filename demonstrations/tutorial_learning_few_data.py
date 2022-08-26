@@ -123,7 +123,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #     :width: 75%
 #     :align: center
 #       
-#     A graphical representation of a CNN.
+#     A graphical representation of a CNN. Obtained using [#LeNailNNSVG]_.
 #
 # We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a random seed for reproducibility:
@@ -578,7 +578,12 @@ plt.show()
 #     Iris Cong, Soonwon Choi, Mikhail D. Lukin.
 #     "Quantum Convolutional Neural Networks"
 #     `arxiv:1810.03787 <https://arxiv.org/abs/1810.03787>`__, 2018.
+# 
+# .. [#LeNailNNSVG]
 #
+#     Alexander LeNail.
+#     "NN-SVG: Publication-Ready Neural Network Architecture Schematics"
+#     `Journal of Open Source Software <https://doi.org/10.21105/joss.00747>`__, 2019.
 
 ##############################################################################
 # .. bio:: Korbinian Kottmann
