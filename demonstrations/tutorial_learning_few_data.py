@@ -132,6 +132,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a random seed for reproducibility:
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -472,49 +473,78 @@ def run_iterations(n_train):
     return results_df
 
 
-results_df = run_iterations(n_train=40)
+# run training for multiple sizes
+train_sizes = [2, 5, 10, 20, 40, 80]
+results_df = run_iterations(n_train=2)
+for n_train in train_sizes[1:]:
+    results_df = pd.concat([results_df, run_iterations(n_train=n_train)])
 
 ##############################################################################
 # Finally, we plot the loss and accuracy for both the training and testing set
 # for all training epochs, and compare the test and train accuracy of the model:
 
+# aggregate dataframe
+df_agg = results_df.groupby(["n_train", "step"]).agg(["mean", "std"])
+df_agg = df_agg.reset_index()
 
-def make_plot(df, n_train):
-    fig, axs = plt.subplots(ncols=3, figsize=(14, 5))
+sns.set_style('whitegrid')
+colors = sns.color_palette()
+fig, axes = plt.subplots(ncols=3, figsize=(16.5, 5))
 
-    df_agg = df.groupby(["step"]).agg(["mean", "std"])
+generalization_errors = []
 
-    # plot epoch vs loss
-    ax = axs[0]
-    ax.plot(df_agg.index, df_agg.train_cost["mean"], "o--", label="train", markevery=10)
-    ax.plot(df_agg.index, df_agg.test_cost["mean"], "x--", label="test", markevery=10)
-    ax.set_ylabel("loss", fontsize=18)
-    ax.set_xlabel("epoch", fontsize=18)
-    ax.legend(fontsize=14)
+# plot losses and accuracies
+for i, n_train in enumerate(train_sizes):
+    df = df_agg[df_agg.n_train == n_train]
 
-    # plot epoch vs acc (train + test)
-    ax = axs[1]
-    ax.plot(df_agg.index, df_agg.train_acc["mean"], "o:", label=f"train", markevery=10)
-    ax.plot(df_agg.index, df_agg.test_acc["mean"], "x--", label=f"test", markevery=10)
-    ax.set_ylabel("accuracy", fontsize=18)
-    ax.set_xlabel("epoch", fontsize=18)
-    ax.legend(fontsize=14)
+    # plot losses
+    ax = axes[0]
+    ax.plot(df.step, df.train_cost["mean"], "o-", label=fr"$N={n_train}$", markevery=10, color=colors[i], alpha=0.8)
+    ax.plot(df.step, df.test_cost["mean"], "x--", markevery=10, color=colors[i], alpha=0.8)
 
-    # plot train acc vs test acc
-    ax = axs[2]
-    ax.scatter(df.train_acc, df.test_acc, alpha=0.1, marker="D")
-    beta, m = np.polyfit(np.array(df.train_acc, dtype=float), np.array(df.test_acc, dtype=float), 1)
-    reg = np.poly1d([beta, m])
-    ax.plot(df.train_acc, reg(np.array(df.train_acc, dtype=float)), "-", color="black", lw=0.75)
-    ax.set_ylabel("test accuracy", fontsize=18)
-    ax.set_xlabel("train accuracy", fontsize=18)
+    # plot accuracies
+    ax = axes[2]
+    ax.plot(df.step, df.train_acc["mean"], "o-", label=fr"$N={n_train}$", markevery=10, color=colors[i], alpha=0.8)
+    ax.plot(df.step, df.test_acc["mean"], "x--", markevery=10, color=colors[i], alpha=0.8)
 
-    fig.suptitle(f"Performance Measures for Training Set of Size $N=${n_train}", fontsize=20)
-    plt.tight_layout()
-    plt.show()
+    # plot final loss difference
+    generalization_errors.append(df[df.step == 100].test_cost["mean"] - df[df.step == 100].train_cost["mean"])
+
+# format loss plot
+ax = axes[0]
+ax.set_title('Train and Test Losses', fontsize=14)
+ax.set_xlabel('Epoch')
+ax.set_ylabel('Loss')
+
+# format generalization error plot
+ax = axes[1]
+ax.plot(train_sizes, generalization_errors, "o-", label=r"$gen(\alpha)$")
+ax.set_xscale('log')
+ax.set_xticks(train_sizes)
+ax.set_xticklabels(train_sizes)
+ax.set_title(r'Generalization Error $gen(\alpha) = R(\alpha) - \hat{R}_N(\alpha)$', fontsize=14)
+ax.set_xlabel('Training Set Size')
+
+# format loss plot
+ax = axes[2]
+ax.set_title('Train and Test Accuracies', fontsize=14)
+ax.set_xlabel('Epoch')
+ax.set_ylabel('Accuracy')
+ax.set_ylim(0.5, 1.05)
+
+legend_elements = [
+                      mpl.lines.Line2D([0], [0], label=f'N={n}', color=colors[i]) for i, n in enumerate(train_sizes)
+                  ] + [
+                      mpl.lines.Line2D([0], [0], marker='o', ls='-', label='Train', color='Black'),
+                      mpl.lines.Line2D([0], [0], marker='x', ls='--', label='Test', color='Black')
+                  ]
+axes[0].legend(handles=legend_elements, ncol=3)
+axes[2].legend(handles=legend_elements, ncol=3)
+
+axes[1].set_yscale('log', base=2)
+plt.show()
 
 
-make_plot(results_df, n_train=40)
 
 ##############################################################################
 # References
