@@ -129,12 +129,8 @@ circuit below.
 """
 
 # Import the relevant libraries
-import matplotlib.pyplot as plt
-import networkx as nx
-from itertools import product, combinations
 import pennylane as qml
 from pennylane import numpy as np
-from pennylane.tape import QuantumTape
 
 dev = qml.device("default.qubit", wires=3)
 
@@ -438,6 +434,8 @@ circuit(x)
 # `NetworkX <https://networkx.org/>`__!
 #
 
+import networkx as nx
+from itertools import product, combinations
 
 np.random.seed(1337)
 
@@ -526,6 +524,8 @@ def qaoa_template(params):
 # Let’s construct the ``QuantumTape`` corresponding to this template and
 # draw the circuit:
 #
+
+from pennylane.tape import QuantumTape
 
 all_wires = list(range(len(graph)))
 
@@ -754,6 +754,8 @@ for i, cutoff in enumerate(shot_counts):
 ######################################################################
 # Let’s plot the results comparing the two methods:
 #
+
+import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(figsize=(12, 6))
 
