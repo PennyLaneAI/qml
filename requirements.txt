@@ -43,6 +43,6 @@ matplotlib==3.3.3
 noisyopt==0.2.2
 Jinja2==2.11.3
 pyyaml==5.4.1
-jax==0.3.14
-jaxlib==0.3.14
+jax==0.3.15
+jaxlib==0.3.15
 neural-tangents==0.6.0
