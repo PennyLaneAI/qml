@@ -181,7 +181,7 @@ coeffs, obs = H.coeffs, H.ops
 H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
 
 n_groups = len(qml.grouping.group_observables(obs))
-print(f"number of ops in H: {len(obs)}, number of qwc {len(n_groups)}")
+print(f"number of ops in H: {len(obs)}, number of qwc {n_groups}")
 
 ##############################################################################
 # We use a pre-prepared Ansatz that approximates the H2O ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
