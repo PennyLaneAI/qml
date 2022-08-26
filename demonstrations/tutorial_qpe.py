@@ -44,7 +44,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # .. math:: \hat{U}(t) = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle\langle n|
 #
-# Now, let’s act with :math:`\hat{U}(t)` on any of
+# Now, let’s act with :math:`\hat{U}(t)` on any of the
 # Hamiltonian eigenstates: 
 #
 # .. math::  \hat{U}(t)|m\rangle = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \underbrace{\langle n|m\rangle}_{\delta_{nm}} = \sum_{n} e^{-\frac{i E_n t}{\hbar}} |n\rangle \delta_{nm} = e^{-\frac{i E_m t}{\hbar}} |m\rangle.
