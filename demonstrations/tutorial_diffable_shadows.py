@@ -74,7 +74,7 @@ There are two ways of computing expectation values with classical shadows in Pen
 import pennylane as qml
 import pennylane.numpy as np
 from matplotlib import pyplot as plt
-from pennylane import classical_shadow, ClassicalShadow
+from pennylane import classical_shadow, shadow_expval, ClassicalShadow
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
