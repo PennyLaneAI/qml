@@ -3,7 +3,14 @@ Quantum Circuit Cutting
 =======================
 
 .. meta::
-    :property="og:description": insert cool description here
+    :property="og:description": We dive into two algorithms for splitting a large quantum circuit into smaller ones. Or, combining multiple smaller ones, directly addressing the IS in NISQ.
+
+.. related::
+   tutorial_qaoa_intro Intro to QAOA
+   tutorial_qaoa_maxcut QAOA for MaxCut
+   tutorial_haar_measure Understanding the Haar Measure
+   tutorial_unitary_designs Unitary Designs
+
 
 *Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*
 
