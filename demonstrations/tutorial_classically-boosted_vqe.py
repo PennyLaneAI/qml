@@ -378,6 +378,10 @@ S22 = 1
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 #
+# .. figure:: ../demonstrations/classically_boosted-vqe/hadamard_test.png
+#     :align: center
+#     :width: 50%
+#
 # As the Hadamard test returns the real part of a coefficient from a unitary representing
 # an operation, we will focus on calculating the quantities
 #
@@ -399,11 +403,6 @@ S22 = 1
 # extracted analytically from the fermionic Hamiltonian that we computed
 # above. This is done by accessing the entries by the index given by the binary
 # expression of each Slater determinant.
-#
-#
-# .. figure:: ../demonstrations/classically_boosted-vqe/hadamard_test.png
-#     :align: center
-#     :width: 50%
 #
 # The Hadamard test is required in order to compute the real part of
 # :math:`\langle \phi_q \vert i \rangle`.
@@ -506,11 +505,8 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 
 ######################################################################
 # Measurement analysis
-# --------------------
+# -----------------------
 #
-
-
-######################################################################
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
 # In fact, for very small systems it can be shown that the classically-boosted method
@@ -541,10 +537,6 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 ######################################################################
 # Conclusion
 # ----------
-#
-
-
-######################################################################
 #
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
 # fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
