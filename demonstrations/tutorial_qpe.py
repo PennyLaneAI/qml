@@ -67,7 +67,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # However, at least three possible complications might immediately come to your mind:
 # 
-# 1. **How on Earth we could measure the global phase?**
+# 1. **How on Earth could we measure the global phase?**
 # Indeed, any textbook on quantum physics will tell you that the global
 # phase for an isolated system is *unobservable*, i.e. it can’t be detected by any measurements
 # performed on the system. Well, our system need not be
