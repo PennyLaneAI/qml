@@ -166,13 +166,13 @@ rng = np.random.default_rng(seed=seed)
 # --------------------------
 #
 # The convolutional layer should have the weights of the two-qubit unitary as an input, which are
-# to be updated in each training round.  In PennyLane, we model this arbitrary two-qubit unitary
+# updated at every training step.  In PennyLane, we model this arbitrary two-qubit unitary
 # with a particular sequence of gates: two single-qubit  :class:`~.pennylane.U3` gates (parametrized by three
-# parameters, each), followed by three Ising interactions between both qubits (each interaction is
-# parametrized by one parameter), and end with two additional :class:`~.pennylane.U3` gates on each of the two
-# qubits. At the circuit level, to have a neighboring qubit interaction, we can apply the two-qubit unitary
+# parameters, each), three Ising interactions between both qubits (each interaction is
+# parametrized by one parameter), and two additional :class:`~.pennylane.U3` gates on each of the two
+# qubits. At the circuit level, to have a neighbouring qubit interaction we can apply the two-qubit unitary
 # in one time step on half of the neighboring qubit pairs (0-1, 1-2, ...) and on a next time step on the other half of
-# the neighboring qubit pairs (1-2, 3-4, ...).
+# the neighboring qubit pairs (1-2, 3-4, ...):
 
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
@@ -180,7 +180,8 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
     Args:
         weights (np.array): 1D array with 15 weights of the parametrized gates.
         wires (list[int]): Wires where the convolutional layer acts on.
-        skip_first_layer (bool): Skips the first two U3 gates of a layer."""
+        skip_first_layer (bool): Skips the first two U3 gates of a layer.
+    """
     n_wires = len(wires)
     assert n_wires >= 3, "this circuit is too small!"
 
@@ -199,8 +200,8 @@ def convolutional_layer(weights, wires, skip_first_layer=True):
 
 ##############################################################################
 # The pooling layer's inputs are the weights of the single-qubit conditional unitaries, which in
-# this case, are :class:`~.pennylane.U3` gates. Then, we apply these conditional measurements to half of the
-# unmeasured wires, reducing our system size by half.
+# this case are :class:`~.pennylane.U3` gates. Then, we apply these conditional measurements to half of the
+# unmeasured wires, reducing our system size by a factor of 2.
 
 
 def pooling_layer(weights, wires):
@@ -219,9 +220,9 @@ def pooling_layer(weights, wires):
 
 
 ##############################################################################
-# We can construct a quantum CNN by combining both layers and using an arbitrary unitary to model
-# a dense layer. It will take as input a set of features (the image), encode these features using
-# an embedding map, apply rounds of convolutional and pooling layers, and eventually get the
+# We can construct a QCNN by combining both layers and using an arbitrary unitary to model
+# a dense layer. It will take a set of features --- the image --- as input, encode these features using
+# an embedding map, apply rounds of convolutional and pooling layers, and eventually output the
 # desired measurement statistics of the circuit.
 
 
@@ -276,13 +277,13 @@ plt.show()
 
 ##############################################################################
 # In the problem we will address, we need to encode 64 features
-# in the state to be processed by the QCNN. Thus, we require six qubits to encode
+# in our quantum state. Thus, we require six qubits (:math:`2^6 = 64`) to encode
 # each feature value in the amplitude of each computational basis state.
 #
 # Training the QCNN on the digits dataset
 # ---------------------------------------
 # In this demo, we are going to classify the digits ``0`` and ``1`` from the classical ``digits`` dataset.
-# These are 8 by 8 pixel arrays of hand-written digits as shown below.
+# Each hand-written digit image is represented as an :math:`8 \times 8` array of pixels as shown below:
 
 digits = datasets.load_digits()
 images, labels = digits.data, digits.target
@@ -302,7 +303,7 @@ plt.show()
 
 ##############################################################################
 # For convenience, we create a ``load_digits_data`` function that will make random training and
-# testing sets from the ``digits`` dataset from ``sklearn.dataset``.
+# testing sets from the ``digits`` dataset from ``sklearn.dataset``:
 
 
 def load_digits_data(num_train, num_test, rng):
@@ -336,7 +337,7 @@ def load_digits_data(num_train, num_test, rng):
 
 ##############################################################################
 # To optimize the weights of our variational model, we define the cost and accuracy functions
-# to train and quantify the performance on the classification task of the previously described QCNN.
+# to train and quantify the performance on the classification task of the previously described QCNN:
 
 
 @jax.jit
