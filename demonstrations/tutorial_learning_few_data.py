@@ -173,10 +173,7 @@ rng = np.random.default_rng(seed=seed)
 # with a particular sequence of gates: two single-qubit  :class:`~.pennylane.U3` gates (parametrized by three
 # parameters, each), three Ising interactions between both qubits (each interaction is
 # parametrized by one parameter), and two additional :class:`~.pennylane.U3` gates on each of the two
-# qubits. At the circuit level, to have a neighbouring qubit interaction we can apply the two-qubit unitary
-# in one time step on half of the neighboring qubit pairs (0-1, 1-2, ...) and on a next time step on the other half of
-# the neighboring qubit pairs (1-2, 3-4, ...):
-
+# qubits. 
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     """Adds a convolutional layer to a circuit.
