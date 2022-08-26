@@ -123,11 +123,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #     :width: 75%
 #     :align: center
 #       
-#     A graphical representation of a CNN. The main layers of this network are the convolution layer
-#     and the pooling layer. The former consists of several windows, known as kernels, that sweep a
-#     picture and multiply pixel values in a particular way. The latter consists of windows that 
-#     reduce the quality of the picture by picking relevant pixels of a given local spot. You can
-#     think of pooling as a pixelation process of the given image.
+#     A graphical representation of a CNN.
 #
 # We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a random seed for reproducibility:
