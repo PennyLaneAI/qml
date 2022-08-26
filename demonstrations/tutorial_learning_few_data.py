@@ -45,42 +45,42 @@ Let us now dive deeper into generalization properties of quantum machine learnin
 the typical data processing pipeline of a QML model. A classical data input :math:`x` is first encoded in a quantum
 state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a quantum
 channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` with learnable parameters :math:`\alpha`. Finally, a measurement is performed on the resulting state
-to get the final prediction. Now, the goal is to minimize the expected loss over the data generating distribution
-:math:`P` indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
+to get the final prediction. Now, the goal is to minimize the expected loss over the data-generating distribution
+:math:`P`, indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
 expected loss, denoted by :math:`R`, is given by
 
 .. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)]
 
-where :math:`x` are the features, :math:`y` are the labels and :math:`P` is their joint distribution.
+where :math:`x` are the features, :math:`y` are the labels, and :math:`P` is their joint distribution.
 In practice, as the joint distribution :math:`P` is generally unknown, this quantity has to be 
 estimated from a finite amount of data. Given a training set :math:`S = \{(x_i,\,y_i)\}_{i=1}^N` 
 with :math:`N` samples, we estimate the performance of our QML model by calculating the 
 average loss over the training set
 
-.. math:: \hat{R}_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i),
+.. math:: R_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i),
 
 which is referred to as the training loss and is an unbiased estimate of :math:`R(\alpha)`. This is only a proxy
-to the true quantity of interest :math:`R(\alpha)` and their difference is called the generalization error
+to the true quantity of interest :math:`R(\alpha)`, and their difference is called the generalization error
 
 .. math:: \mathrm{gen}(\alpha) =  R(\alpha) - \hat{R}_S(\alpha),
 
 which is the quantity that we explore in this tutorial. Keeping in mind the bias-variance trade-off, one would expect
-that more complex models, i.e., models with a larger number of parameters, achieve a lower error on the training data
+that more complex models, i.e. models with a larger number of parameters, achieve a lower error on the training data
 but a higher generalization error. Having more training data, on the other hand, leads to a better approximation of the
-true expected loss and hence lower generalization error. This intuition is made precise in Ref. [#CaroGeneralization]_
-where it is shown that :math:`\mathrm{gen}(\alpha)` roughly scales as :math:`\mathcal{O}(\sqrt{T / N})` where :math:`T`
+true expected loss and hence a lower generalization error. This intuition is made precise in Ref. [#CaroGeneralization]_, 
+where it is shown that :math:`\mathrm{gen}(\alpha)` roughly scales as :math:`\mathcal{O}(\sqrt{T / N})`, where :math:`T`
 is the number of parametrized gates and :math:`N` is the number of training samples.
 """
 
 ##############################################################################
-# Generalization bounds for Quantum Machine Learning models
+# Generalization bounds for QML models
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # As hinted at earlier, we expect the generalization error to depend both on the richness of the model class, as well as
 # on the amount of training data available. As a first result, the authors of Ref. [#CaroGeneralization]_ found that for
 # a QML model with at most :math:`T` parametrized local quantum channels, the generalization error depends on :math:`T`
 # and :math:`N` according to
 #
-# .. math:: \mathrm{gen}(\alpha) \in \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
+# .. math:: \mathrm{gen}(\alpha) \sim \mathcal{O}\left(\sqrt{\frac{T\log T}{N}}\right).
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
 # of training samples and increases with the number of parametrized gates. However, as is the case for
