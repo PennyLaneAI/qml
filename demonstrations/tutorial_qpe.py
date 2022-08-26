@@ -142,7 +142,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # 0. **Initialization.** We prepare the system register in the state
 # :math:`|u\rangle` (let us call the preparation gate :math:`\hat{P}`).
-# Also, we apply Hadamard gate to each qubit in the readout register,
+# Also, we apply a Hadamard gate to each qubit in the readout register,
 # which creates a uniform superposition of all computational basis
 # states in that register. By the end of this stage the state of the
 # system is:
