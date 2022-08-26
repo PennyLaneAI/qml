@@ -540,6 +540,18 @@ axes[1].set_yscale('log', base=2)
 plt.show()
 
 ##############################################################################
+# Summary
+# -------
+# In this demo, we studied the work by Caro et al. [#CaroGeneralization]_ on generalization
+# bounds for quantum machine learning models. The key take-away of this work is that some quantum 
+# learning models can achieve high fidelity predictions using few training data points. We
+# implemented a model known as the quantum convolutional neural network (QCNN) using PennyLane
+# and trained it to solve a binary classification task: distinguishing between handwritten digits
+# of :math:`0`'s and :math:`1`'s. Moreover, we have compared the test and train accurracy of this 
+# model for a different number of training samples and found a scaling on the generalization error
+# that agrees with the theoretical bounds.
+#  
+# 
 # References
 # ----------
 #
