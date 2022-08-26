@@ -12,7 +12,7 @@ Quantum computing with superconducting qubits
    tutorial_trapped_ions Quantum computation with trapped ions
    tutorial_photonics Photonic quantum computers
 
-*Author: Alvaro Ballon. Posted: 22 March 2022. Last updated: 22 March 2022.*
+*Author: Alvaro Ballon. Posted: 22 March 2022. Last updated: 26 August 2022.*
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
