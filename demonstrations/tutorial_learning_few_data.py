@@ -84,7 +84,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #
 # We see that this scaling is in line with our intuition that the generalization error scales inversely with the number
 # of training samples and increases with the number of parametrized gates. However, as is the case for
-# quantum convolutional neural networks (QCNNs), it is possible to get a more fine-grained bound by including knowledge on the number of gates :math:`M` which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
+# `quantum convolutional neural networks (QCNNs) <https://pennylane.ai/qml/glossary/qcnn.html>`_, it is possible to get a more fine-grained bound by including knowledge on the number of gates :math:`M` which have been reused (i.e. whose parameters are shared across wires). Naively, one could suspect that the generalization error scales as
 # :math:`\tilde{\mathcal{O}}(\sqrt{MT/N})` by directly applying the above result (and where
 # :math:`\tilde{\mathcal{O}}` includes logarithmic factors). However, the authors of Ref. [#CaroGeneralization]_ found
 # that such models actually adhere to the better scaling
