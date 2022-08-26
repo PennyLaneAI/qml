@@ -261,12 +261,15 @@ ds = np.array(d_sha).reshape(len(shotss), 10)
 ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 plt.errorbar(shotss*n_groups, ds, yerr=dds, fmt="x-", label="shadow")
 plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
+plt.xlabel("total number of shots T", fontsize=20)
+plt.ylabel("Accuracy (RMSD)", fontsize=20)
 plt.legend()
 plt.show()
 
 ##############################################################################
 # We see that we are better advised to use the qwc approach compared to the random shadow approach. 
-# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables` is based on the largest first (LF) approach.
+# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables`
+# is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
 # There has been intensive research in recent years on optimizing qwc measurement schemes.
 # Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
 # Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen].
