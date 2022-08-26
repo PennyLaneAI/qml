@@ -364,7 +364,7 @@ circuit(x)
 #
 # .. math::  \Psi_{1}(X) = \textrm{Tr}(X)\frac{\mathbf{1}}{d}~.
 #
-# Otherwise, we perform a randomized measure-and-prepare protocol based on
+# Otherwise, we perform measure-and-prepare protocol based on
 # a unitary 2-design (e.g. a random Clifford) with probability
 # :math:`(d+1)/(2d+1)`, corresponding to the channel
 #
@@ -476,16 +476,19 @@ optimal_cost = -0.248
 
 
 def qaoa_cost(bitstring):
+
     bitstring = np.atleast_2d(bitstring)
-    z = (-1) ** bitstring[:, graph.edges()]
-    costs = z.prod(axis=-1).sum(axis=-1)
-    return np.squeeze(costs) / len(graph.edges)
+    # Make sure that we operate correctly on a batch of bitstrings
+
+    z = (-1) ** bitstring[:, graph.edges()]  # Filter out pairs of bits correspondimg to graph edges
+    costs = z.prod(axis=-1).sum(axis=-1)  # Do products and sums
+    return np.squeeze(costs) / len(graph.edges)  # Normalize
 
 
 ######################################################################
-# Let’s make a quick and simple QAOA circuit in PennyLane. Before we, we
-# have to briefly think about the cut placement. First, we want to apply
-# all ZZ rotation gates corresponding to the ``top_edges``, place the wire
+# Let’s make a quick and simple QAOA circuit in PennyLane. Before we actually
+# cut the circuit, we have to briefly think about the cut placement. First, we
+# want to apply all ZZ rotation gates corresponding to the ``top_edges``, place the wire
 # cut, and then the ``bottom_edges``, to ensure that the circuit actually splits
 # in two after cutting.
 #
@@ -621,13 +624,21 @@ def make_kraus_ops(num_wires: int):
 
     d = 2**num_wires
 
-    kraus0 = np.identity(d**2).reshape(d**2, d, d)
-    kraus0 = np.concatenate([kraus0, np.identity(d)[None, :, :]], axis=0)
-    kraus0 /= np.sqrt(d + 1)
+    # High level idea: Take the identity operator on d^2 x d^2 and look at each row independently.
+    # When reshaped into a matrix, it gives exactly the matrix representation of |i><j|:
 
+    kraus0 = np.identity(d**2).reshape(d**2, d, d)
+
+    kraus0 = np.concatenate([kraus0, np.identity(d)[None, :, :]], axis=0)
+    # Add the identity op' to the mix
+
+    kraus0 /= np.sqrt(d + 1)  # Normalize
+
+    # Same trick for the other Kraus op'
     kraus1 = np.identity(d**2).reshape(d**2, d, d)
     kraus1 /= np.sqrt(d)
 
+    # Finally, return a list of NumPy arrays, as per `qml.QubitChannel` docs.
     return list(kraus0.astype(complex)), list(kraus1.astype(complex))
 
 
@@ -787,7 +798,7 @@ ax.tick_params(axis="y", labelsize=18)
 ax.set_ylabel("QAOA cost", fontsize=20)
 ax.set_xlabel("Number of shots", fontsize=20)
 
-ax.legend(frameon=True, loc="lower right", fontsize=20)
+_ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 
 ######################################################################
 # We see that the randomized method converges faster than the Pauli method
