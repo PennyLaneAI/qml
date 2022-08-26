@@ -400,12 +400,13 @@ S22 = 1
 # above. This is done by accessing the entries by the index given by the binary
 # expression of each Slater determinant.
 #
-# The Hadamard test is required in order to compute the real part of
-# :math:`\langle \phi_q \vert i \rangle`.
 #
 # .. figure:: ../demonstrations/classically_boosted-vqe/hadamard_test.png
 #     :align: center
-#     :width: 60%
+#     :width: 50%
+#
+# The Hadamard test is required in order to compute the real part of
+# :math:`\langle \phi_q \vert i \rangle`.
 #
 # To implement the Hadamard test, we need a register of :math:`n` qubits
 # given by the size of the molecular Hamiltonian (:math:`n=4` in our case)
@@ -525,14 +526,14 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 #
 # .. figure:: ../demonstrations/classically_boosted-vqe/energy_deviation.png
 #     :align: center
-#     :width: 60%
+#     :width: 80%
 #
 # In the plot, the dashed line corresponds to the true ground state energy. As expected, 
 # CB-VQE leads to a better approximation of the ground state energy and also to much smaller
 # standard deviations, improving on the results given
 # by standard VQE by several orders of magnitude when considering a finite amount of measurements. 
-
-######################################################################
+#
+#
 # `Note: In order to obtain these results, we had to discard the cases in which the VQE shot noise 
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
@@ -540,13 +541,18 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 ######################################################################
 # Conclusion
 # ----------
+#
+
+
+######################################################################
+#
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
 # fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
 # Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
 # quantum algorithms on real hardware sooner than expected.
 # 
 # 
-#
+#######################################################################
 # # References
 # ----------
 #
