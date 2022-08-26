@@ -174,10 +174,12 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     active_orbitals=4,
     mapping="bravyi_kitaev",
     method="pyscf",
-    grouping_type="qwc"
 )
+#TODO: use new way of grouping in molecular hamiltonian
 
 coeffs, obs = H.coeffs, H.ops
+H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
+
 n_groups = len(qml.grouping.group_observables(obs))
 print(f"number of ops in H: {len(obs)}, number of qwc {len(n_groups)}")
 
