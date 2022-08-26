@@ -44,10 +44,19 @@ The snapshot expectation value then reduces to
 
 .. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = \prod_{i=1}^n \left(\tr{\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i}\right).
 
-The cases where :math:`\tilde{P}_i=\mathbb{1}` yield a trivial factor :math:`1` to the product.
-The full product is always zero if any of the non-trivial :math:`\tilde{P}_i```` do not match :math:`P_i`. So in total, in the case that all Pauli operators match, we find
+For that trace we find three different cases
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
+..math:: \left(\tr{\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i}\right) =
+    \begin{cases}
+       \text{0} &\quad\text{if } \tilde{P}_i \neq P_i \\
+       \text{1} &\quad\text{if } \tilde{P}_i = \mathbb{1} \\
+       (1-2b_i) &\quad\text{else}\\
+     \end{cases}
+
+The cases where :math:`\tilde{P}_i=\mathbb{1}` yield a trivial factor :math:`1` to the product.
+The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do not match :math:`P_i`. So in total, in the case that all Pauli operators match, we find
+
+.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i)
 
 This implies that in order to compute the expectation value of a Pauli string
 
@@ -133,10 +142,24 @@ print(shadow.expval(H, k=1))
 # Comparing quantum resources with conventional measurement methods 
 # -----------------------------------------------------------------
 # 
-# Simultaneously measuring qubit-wise-commuting observables
+# The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more straight-forward methods
+# like simultaneously measuring qubit-wise-commuting (qwc) groups. We are going to look at three different cases: The two extreme scenarios of measuring one single
+# and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian.
+# 
+# We start with the case of one single measurement. From the analysis above it should be quite clear that in the case of random Pauli measurement in the classical shadows
+# formalism, a lot of quantum resources are wasted as all the measurements that do not match the observable are discarded.
+# 
+# 
 
-# 3 cases: extreme 1: one observable, intermediate: H2O Hamiltonian, extreme 3: all q-local operators.
-# molecular Hamiltonian
+
+##############################################################################
+# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield the same results. Let us put that to test:#
+
+
+##############################################################################
+# We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example, find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
+# We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
+
 symbols = ["H", "O", "H"]
 coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
 
@@ -150,13 +173,17 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     active_electrons=4,
     active_orbitals=4,
     mapping="bravyi_kitaev",
-    method="pyscf"
+    method="pyscf",
+    grouping_type="qwc"
 )
 
 coeffs, obs = H.coeffs, H.ops
-H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
-
 n_groups = len(qml.grouping.group_observables(obs))
+print(f"number of ops in H: {len(obs)}, number of qwc {len(n_groups)}")
+
+##############################################################################
+# We use a pre-prepared Ansatz that approximates the H2O ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
+# We ran this once on an ideal simulator to get the exact result of the energy for the given Ansatz.
 
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)
 hf = qml.qchem.hf_state(4, n_wires)
@@ -170,7 +197,6 @@ theta = np.array([ 2.20700008e-02,  8.29716448e-02,  2.19227085e+00,
     6.84640451e-03,  3.02313759e-01, -1.23117023e-03,
     4.42283398e-03,  6.02542038e-03])
 
-# result on an ideal simulator
 res_exact = -74.57076341
 def circuit():
     qml.AllSinglesDoubles(weights = theta,
@@ -179,14 +205,18 @@ def circuit():
         singles = singles,
         doubles = doubles)
 
+##############################################################################
+# We now estimate the ground state energy for different number of total shots. We follow a relatively simple strategy of just
+# allocating ``T/n_groups`` shots to each member of the qwc group. This way we guarantee that the total number of shots ``T``
+# is the same for both the shadow and qwc approach. We then compute the root mean suqare difference between the exact result
+# and each approach.
+
 def rmsd(x, y):
     """root mean square difference"""
     return np.sqrt(np.mean((x - y)**2))
 
 d_qwc = []
 d_sha = []
-
-n_wires = 8
 
 shotss = np.arange(20, 220, 20)
 
@@ -210,7 +240,7 @@ for shots in shotss:
             circuit()
             return classical_shadow(wires=range(n_wires))
         
-        with qml.Tracker(dev_finite) as tracker_shadows:
+        with qml.Tracker(dev_shadow) as tracker_shadows:
             bits, recipes = qnode()
 
         shadow = ClassicalShadow(bits, recipes)
@@ -234,6 +264,12 @@ plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.legend()
 plt.show()
 
+##############################################################################
+# We see that we are better advised to use the qwc approach compared to the random shadow approach. 
+# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables` is based on the largest first (LF) approach.
+# There has been intensive research in recent years on optimizing qwc measurement schemes.
+# Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
+# Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen].
 
 
 ##############################################################################
@@ -258,6 +294,12 @@ plt.show()
 #     Hsin-Yuan Huang, Richard Kueng, John Preskill
 #     "Efficient estimation of Pauli observables by derandomization."
 #     `arXiv:2103.07510 <https://arxiv.org/abs/2103.07510>`__, 2021.
+#
+# .. [#Yen] 
+# 
+#     Tzu-Ching Yen, Aadithya Ganeshram, Artur F. Izmaylov
+#     "Deterministic improvements of quantum measurements with grouping of compatible operators, non-local transformations, and covariance estimates."
+#     `arXiv:2201.01471 <https://arxiv.org/abs/2201.01471>`__, 2022.
 
 ##############################################################################
 # .. bio:: Korbinian Kottmann
