@@ -373,10 +373,10 @@ def init_weights():
 value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 
 ##############################################################################
-# We are going to perform the classification for differently sized training sets. Therefore, we
+# We are going to perform the classification for training sets with different values of :math:`N`. Therefore, we
 # define the classification procedure once and then perform it for different datasets.
 # Finally, we update the weights using the :class:`pennylane.AdamOptimizer` and use these updated weights to
-# calculate the cost and accurracy on the testing and training set.
+# calculate the cost and accuracy on the testing and training set:
 
 
 def train_qcnn(n_train, n_test, n_epochs):
@@ -437,14 +437,14 @@ def train_qcnn(n_train, n_test, n_epochs):
 ##############################################################################
 # .. note::
 #
-#     There are some small intricacies for speeding up this code that are worth mentioning: We are using ``jax`` for our training
-#     because it allows for just-in-time (``jit``) compilation, see `jax docs <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. A function decorated with ``@jax.jit`` will be compiled upon its first execution
+#     There are some small intricacies for speeding up this code that are worth mentioning. We are using ``jax`` for our training
+#     because it allows for `just-in-time <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_ (``jit``) compilation. A function decorated with ``@jax.jit`` will be compiled upon its first execution
 #     and cached for future executions. This means the first execution will take longer, but all subsequent executions are substantially faster.
-#     Further, we use ``jax.vmap`` to vectorize the execution of the QCNN over all input states (as opposed to looping through the training and test set at every execution)
+#     Further, we use ``jax.vmap`` to vectorize the execution of the QCNN over all input states, as opposed to looping through the training and test set at every execution.
 
 ##############################################################################
 # Training for different training set sizes yields different accuracies, as seen below. As we increase the training data size, the overall test accuracy,
-# a proxy for the models' generalization capabilities, increases.
+# a proxy for the models' generalization capabilities, increases:
 
 n_test = 100
 n_epochs = 100
@@ -470,7 +470,7 @@ results_df = run_iterations(n_train=40)
 
 ##############################################################################
 # Finally, we plot the loss and accuracy for both the training and testing set
-# for all training epochs, and compare the test and train accuracy of the model.
+# for all training epochs, and compare the test and train accuracy of the model:
 
 
 def make_plot(df, n_train):
