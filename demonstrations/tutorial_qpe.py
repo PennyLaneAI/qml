@@ -55,7 +55,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # What have we just obtained? Well, our derivation shows
 # that as the system evolves, its eigenstates stay the same — up
-# to a global quantum phase. Importantly, the acquired phase is not
+# to a global quantum phase. Importantly the acquired phase is not
 # random, for each eigenstate it is related to its energy in a known way.
 # 
 # Okay, now it is clear what the recipe for finding the ground state
