@@ -133,7 +133,7 @@ from sklearn import datasets
 import seaborn as sns
 from tqdm.auto import trange
 
-import jax
+import jax; jax.config.update('jax_platform_name', 'cpu')
 import jax.numpy as jnp
 
 import optax  # optimization using jax
