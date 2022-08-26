@@ -46,5 +46,5 @@ pyyaml==5.4.1
 jax==0.3.15
 jaxlib==0.3.15
 neural-tangents==0.6.0
-git+https://github.com/XanaduAI/flamingpy
-plotly>=4.5.0
+git+https://github.com/XanaduAI/flamingpy # required by mbqc tutorial. Should be replaced by FlamingPy August 2022 PyPI version once released.
+plotly>=4.5.0 # required by mbqc tutorial. Should be removed after using FlamingPy August 2022 PyPI release.
