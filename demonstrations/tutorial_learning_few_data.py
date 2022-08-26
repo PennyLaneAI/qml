@@ -134,9 +134,9 @@ import numpy as np
 import pandas as pd
 from sklearn import datasets
 import seaborn as sns
-from tqdm.auto import trange
+import jax;
 
-import jax; jax.config.update('jax_platform_name', 'cpu')
+jax.config.update('jax_platform_name', 'cpu')
 import jax.numpy as jnp
 
 import optax  # optimization using jax
@@ -148,6 +148,7 @@ sns.set()
 
 seed = 0
 rng = np.random.default_rng(seed=seed)
+
 
 ##############################################################################
 # To construct a convolutional and pooling layer in a quantum circuit, we will
@@ -274,7 +275,7 @@ def conv_net(weights, last_layer_weights, features):
 
 
 fig, ax = qml.draw_mpl(conv_net)(
-    np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**num_wires)
+    np.random.rand(18, 2), np.random.rand(4 ** 2 - 1), np.random.rand(2 ** num_wires)
 )
 plt.show()
 
@@ -303,6 +304,7 @@ for i, ax in enumerate(axes.flatten()):
 plt.tight_layout()
 plt.subplots_adjust(wspace=0, hspace=0)
 plt.show()
+
 
 ##############################################################################
 # For convenience, we create a ``load_digits_data`` function that will make random training and
@@ -369,11 +371,12 @@ def compute_cost(weights, weights_last, features, labels):
 def init_weights():
     """Initializes random weights for the QCNN model."""
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
-    weights_last = pnp.random.normal(loc=0, scale=1, size=4**2 - 1, requires_grad=True)
+    weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
     return jnp.array(weights), jnp.array(weights_last)
 
 
 value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
+
 
 ##############################################################################
 # We are going to perform the classification for training sets with different values of :math:`N`. Therefore, we
@@ -458,9 +461,8 @@ def run_iterations(n_train):
     results_df = pd.DataFrame(
         columns=["train_acc", "train_cost", "test_acc", "test_cost", "step", "n_train"]
     )
-    pbar = trange(n_reps, desc="train qcnn")
 
-    for _ in pbar:
+    for _ in range(n_reps):
         results = train_qcnn(n_train=n_train, n_test=n_test, n_epochs=n_epochs)
         results_df = pd.concat(
             [results_df, pd.DataFrame.from_dict(results)], axis=0, ignore_index=True
@@ -539,8 +541,6 @@ axes[2].legend(handles=legend_elements, ncol=3)
 
 axes[1].set_yscale('log', base=2)
 plt.show()
-
-
 
 ##############################################################################
 # References
