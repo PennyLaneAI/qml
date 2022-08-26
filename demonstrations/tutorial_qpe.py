@@ -508,7 +508,7 @@ def compute_energy(probs, n_readout):
 
 
 ######################################################################
-# As you can see, beside using the most frequent bitstring as per our
+# As you can see, besides using the most frequent bitstring as per our
 # estimate of the phase, we also have to multiply it by :math:`-2\pi` and
 # divide it by the overall number of bistrings spanning the readout qubit
 # register space. This is a result of the prefactor in the QFT operator
