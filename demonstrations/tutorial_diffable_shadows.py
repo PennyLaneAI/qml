@@ -137,21 +137,154 @@ print(shadow.expval(H, k=1))
 # Comparing quantum resources with conventional measurement methods 
 # -----------------------------------------------------------------
 # 
-# The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more straight-forward methods
+# The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more conventional methods
 # like simultaneously measuring qubit-wise-commuting (qwc) groups. We are going to look at three different cases: The two extreme scenarios of measuring one single
 # and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian.
 # 
+# Measuring one single observable
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We start with the case of one single measurement. From the analysis above it should be quite clear that in the case of random Pauli measurement in the classical shadows
-# formalism, a lot of quantum resources are wasted as all the measurements that do not match the observable are discarded.
+# formalism, a lot of quantum resources are wasted as all the measurements that do not match the observable are discarded. This is certainly not what classical shadows were intended for
+# in the first place, but it helps to stress the point of wasted measurements. 
 # 
-# 
+# We start by fixing a circuit and an observable, for which we compute the exact result for infinite shots.
+
+def rmsd(x, y):
+    """root mean square difference"""
+    return np.sqrt(np.mean((x - y)**2))
+
+x = np.arange(20, dtype="float64")
+def circuit():
+    for i in range(10):
+        qml.RY(x[i], i)
+    for i in range(9):
+        qml.CNOT((i, i+1))
+    for i in range(10):
+        qml.RY(x[i+10], i)
+
+obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
+
+dev_ideal = qml.device("default.qubit", wires=range(10), shots=None)
+@qml.qnode(dev_ideal)
+def qnode_ideal():
+    circuit()
+    return qml.expval(obs)
+
+exact = qnode_ideal()
+
+##############################################################################
+# We now compare estimating the observable with classical shadows vs the canonical estimation.
+
+finite = []
+shadow = []
+shotss = range(50, 1000, 100)
+for shots in shotss:
+    for _ in range(10):
+        dev = qml.device("default.qubit", wires=range(10), shots=shots)
+
+        @qml.qnode(dev)
+        def qnode_finite():
+            circuit()
+            return qml.expval(obs)
+
+        @qml.qnode(dev)
+        def qnode_shadow():
+            circuit()
+            return qml.shadow_expval(obs)
+
+        finite.append(rmsd(qnode_finite(), exact))
+        shadow.append(rmsd(qnode_shadow(), exact))
+
+
+dq = np.array(finite).reshape(len(shotss), 10)
+dq, ddq = np.mean(dq, axis=1), np.var(dq, axis=1)
+ds = np.array(shadow).reshape(len(shotss), 10)
+ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
+
+plt.errorbar(shotss, ds, yerr=dds, fmt="x-", label="shadow")
+plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="qwc")
+plt.xlabel("total number of shots T", fontsize=20)
+plt.ylabel("Accuracy (RMSD)", fontsize=20)
+plt.legend()
+plt.show()
+
+##############################################################################
+# Unsurprisingly, the accuracy is consistently better by directly measuring the observable since we are not discarding any measurement results.
+
+##############################################################################
+# All q-local observables
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield more or less the same results. Let us put that to test:
+
+from itertools import product, combinations
+from functools import reduce
+
+all_observables = []
+n = 5
+q = 2
+for w in combinations(range(n), q):
+    observables = []
+    # Create all combinations of possible Pauli products P_i P_j P_k.... for w wires
+    for obs in product(
+    *[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]
+        ):
+        # Perform tensor product (((P_i @ P_j) @ P_k ) @ ....)
+        observables.append(reduce(lambda a, b: a @ b, [ob(wire) for ob, wire in zip(obs, w)]))
+    all_observables.extend(observables)
+n_groups = len(qml.grouping.group_observables(all_observables))
+dev_ideal = qml.device("default.qubit", wires=range(5), shots=None)
+
+x = np.arange(10, dtype="float64")
+def circuit():
+    for i in range(5):
+        qml.RY(x[i], i)
+    for i in range(4):
+        qml.CNOT((i, i+1))
+    for i in range(5):
+        qml.RY(x[i+5], i)
+
+@qml.qnode(dev_ideal)
+def qnode_ideal():
+    circuit()
+    return [qml.expval(o) for o in all_observables]
+
+exact = qnode_ideal()
+finite = []
+shadow = []
+shotss = range(20, 2200, 400)
+for shots in shotss:
+    for _ in range(5):
+        dev = qml.device("default.qubit", wires=range(5), shots=shots)
+
+        @qml.qnode(dev)
+        def qnode_finite():
+            circuit()
+            return [qml.expval(o) for o in all_observables]
+
+        dev = qml.device("default.qubit", wires=range(5), shots=shots*n_groups)
+        @qml.qnode(dev)
+        def qnode_shadow():
+            circuit()
+            return qml.shadow_expval(all_observables)
+
+        finite.append(rmsd(qnode_finite(), exact))
+        shadow.append(rmsd(qnode_shadow(), exact))
+dq = np.array(finite).reshape(len(shotss), 5)
+dq, ddq = np.mean(dq, axis=1), np.var(dq, axis=1)
+ds = np.array(shadow).reshape(len(shotss), 5)
+ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
+plt.errorbar(shotss, ds, yerr=dds, fmt="x-", label="shadow")
+plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="qwc")
+plt.xlabel("total number of shots T", fontsize=20)
+plt.ylabel("Accuracy (RMSD)", fontsize=20)
+plt.legend()
+plt.show()
 
 
 ##############################################################################
-# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield the same results. Let us put that to test:#
-
-
-##############################################################################
+# Molecular Hamiltonians
+# ~~~~~~~~~~~~~~~~~~~~~~
 # We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example, find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
@@ -207,10 +340,6 @@ def circuit():
 # allocating ``T/n_groups`` shots to each member of the qwc group. This way we guarantee that the total number of shots ``T``
 # is the same for both the shadow and qwc approach. We then compute the root mean suqare difference between the exact result
 # and each approach.
-
-def rmsd(x, y):
-    """root mean square difference"""
-    return np.sqrt(np.mean((x - y)**2))
 
 d_qwc = []
 d_sha = []
@@ -305,4 +434,4 @@ plt.show()
 # .. bio:: Korbinian Kottmann
 #    :photo: ../_static/authors/qottmann.jpg
 #
-#    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
+#    Korbinian is a summer resident at Xanadu, interested in quantum simulation and quantum software.
