@@ -608,3 +608,7 @@ plt.show()
 #
 #    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing and in developing robustness guarantees for QML.
 #
+# .. bio:: Maurice Weber
+#    :photo: ../_static/authors/qottmann.jpeg
+#
+#    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing
