@@ -392,7 +392,12 @@ def train_qcnn(n_train, n_test, n_epochs):
         desc  (string): displayed string during optimization
 
     Returns:
-        dict: n_train, steps, train_cost_epochs, train_acc_epochs, test_cost_epochs, test_acc_epochs
+        dict: n_train,
+        steps,
+        train_cost_epochs,
+        train_acc_epochs,
+        test_cost_epochs,
+        test_acc_epochs
 
     """
     # load data
@@ -495,16 +500,41 @@ for i, n_train in enumerate(train_sizes):
 
     # plot losses
     ax = axes[0]
-    ax.plot(df.step, df.train_cost["mean"], "o-", label=fr"$N={n_train}$", markevery=10, color=colors[i], alpha=0.8)
-    ax.plot(df.step, df.test_cost["mean"], "x--", markevery=10, color=colors[i], alpha=0.8)
+    
+    ax.plot(df.step,
+            df.train_cost["mean"],
+            "o-",
+            label=fr"$N={n_train}$",
+            markevery=10, color=colors[i],
+            alpha=0.8)
+    
+    ax.plot(df.step,
+            df.test_cost["mean"],
+            "x--",
+            markevery=10,
+            color=colors[i],
+            alpha=0.8)
 
     # plot accuracies
     ax = axes[2]
-    ax.plot(df.step, df.train_acc["mean"], "o-", label=fr"$N={n_train}$", markevery=10, color=colors[i], alpha=0.8)
-    ax.plot(df.step, df.test_acc["mean"], "x--", markevery=10, color=colors[i], alpha=0.8)
+    
+    ax.plot(df.step,
+            df.train_acc["mean"],
+            "o-",
+            label=fr"$N={n_train}$",
+            markevery=10,
+            color=colors[i],
+            alpha=0.8)
+    
+    ax.plot(df.step,
+            df.test_acc["mean"],
+            "x--", markevery=10,
+            color=colors[i],
+            alpha=0.8)
 
     # plot final loss difference
-    generalization_errors.append(df[df.step == 100].test_cost["mean"] - df[df.step == 100].train_cost["mean"])
+    dif = df[df.step == 100].test_cost["mean"] - df[df.step == 100].train_cost["mean"]
+    generalization_errors.append(dif)
 
 # format loss plot
 ax = axes[0]
@@ -529,11 +559,12 @@ ax.set_ylabel('Accuracy')
 ax.set_ylim(0.5, 1.05)
 
 legend_elements = [
-                      mpl.lines.Line2D([0], [0], label=f'N={n}', color=colors[i]) for i, n in enumerate(train_sizes)
-                  ] + [
-                      mpl.lines.Line2D([0], [0], marker='o', ls='-', label='Train', color='Black'),
-                      mpl.lines.Line2D([0], [0], marker='x', ls='--', label='Test', color='Black')
-                  ]
+    mpl.lines.Line2D([0], [0], label=f'N={n}', color=colors[i]) for i, n in enumerate(train_sizes)
+    ] + [
+    mpl.lines.Line2D([0], [0], marker='o', ls='-', label='Train', color='Black'),
+    mpl.lines.Line2D([0], [0], marker='x', ls='--', label='Test', color='Black')
+    ]
+
 axes[0].legend(handles=legend_elements, ncol=3)
 axes[2].legend(handles=legend_elements, ncol=3)
 
