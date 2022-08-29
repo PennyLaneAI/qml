@@ -548,6 +548,7 @@ axes[1].set_yscale('log', base=2)
 plt.show()
 
 ##############################################################################
+# ------------
 # The key takeaway of this work is that some quantum learning 
 # models can achieve high-fidelity predictions using a few training data points. 
 # We implemented a model known as the quantum convolutional neural network (QCNN) using PennyLane 
@@ -604,11 +605,6 @@ plt.show()
 #    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.
 #
 # .. bio:: Maurice Weber
-#    :photo: ../_static/authors/qottmann.jpeg
+#    :photo: ../_static/authors/maurice_weber.jpeg
 #
-#    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing and in developing robustness guarantees for QML.
-#
-# .. bio:: Maurice Weber
-#    :photo: ../_static/authors/qottmann.jpeg
-#
-#    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing
+#    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing.
