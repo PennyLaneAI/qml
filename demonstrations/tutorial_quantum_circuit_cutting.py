@@ -106,7 +106,7 @@ we can interpret as circuit cutting. In the following section, we will
 provide a more clever way of resolving the same identity that leads
 to fewer shots needed to estimate observables.
 
-.. figure:: ../demonstrations/quantum_circuit_cutting/1Qubit-Circuit-Cutting.svg
+.. figure:: ../demonstrations/quantum_circuit_cutting/1Qubit-Circuit-Cutting.png
     :align: center
     :width: 80%
 
@@ -243,7 +243,7 @@ circuit(x)  # Executing the quantum circuit
 # eigenstates configurations at cut locations.
 
 ###################################################################
-# .. figure:: ../demonstrations/quantum_circuit_cutting/MeasurePrepareNodes.svg
+# .. figure:: ../demonstrations/quantum_circuit_cutting/MeasurePrepareNodes.png
 #     :align: center
 #     :width: 90%
 #
@@ -260,7 +260,7 @@ circuit(x)  # Executing the quantum circuit
 
 
 ######################################################################
-# .. figure:: ../demonstrations/quantum_circuit_cutting/separateMeasurePrepareNodes.svg
+# .. figure:: ../demonstrations/quantum_circuit_cutting/separateMeasurePrepareNodes.png
 #     :align: center
 #     :width: 90%
 #
