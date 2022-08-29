@@ -137,6 +137,7 @@ import seaborn as sns
 import jax;
 
 jax.config.update('jax_platform_name', 'cpu')
+jax.config.update("jax_enable_x64", True)
 import jax.numpy as jnp
 
 import optax  # optimization using jax
