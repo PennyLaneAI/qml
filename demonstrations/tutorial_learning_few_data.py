@@ -123,7 +123,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #     :width: 75%
 #     :align: center
 #       
-#     A graphical representation of a CNN. Obtained using [#LeNailNNSVG]_.
+#     A graphical representation of a CNN. Obtained using Ref. [#LeNailNNSVG]_.
 #
 # We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a random seed for reproducibility:
