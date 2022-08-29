@@ -15,7 +15,7 @@ Qubit tapering
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
-*Author: Soran Jahangiri. Posted: 16 May 2022. Last updated: 24 May 2022*
+*Authors: Soran Jahangiri and Utkarsh. Posted: 16 May 2022. Last updated: 28 Aug 2022*
 
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
@@ -227,18 +227,29 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # VQE simulation
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
-# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We use the
-# tapered Hartree-Fock state to build a circuit that prepares an entangled state by applying Pauli
-# rotation gates [#ryabinkin2018]_ since we cannot use the typical particle-conserving gates
-# with the tapered state.
+# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. To build
+# a tapered UCCSD-based variational ansatze [#ryabinkin2018]_ we first obtain the tapered excitation
+# operators that are built by tapering typical particle-conserving :func:`~.pennylane.SingleExcitation`
+# and :func:`~.pennylane.DoubleExcitation` gates.
+
+singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
+tapered_singles, tapered_doubles = qml.qchem.taper_excitations(
+                                        generators, paulixops, paulix_sector, singles, doubles
+                                    )
+tapered_excitations = tapered_doubles + tapered_singles
+
+##############################################################################
+# In our circuit we begin with the tapered Hartree-Fock state and evolve it by applying the
+# exponentiated tapered excitation operators that we obtain from above.
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
 @qml.qnode(dev)
 def circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
-    qml.PauliRot(params[2], 'Y',  wires=[0])
-    qml.PauliRot(params[1], 'Y',  wires=[1])
-    qml.PauliRot(params[0], 'YX', wires=[0, 1])
+    for idx, excitation in enumerate(tapered_excitations):
+        for itx, op in enumerate(excitation.ops):
+            qml.PauliRot(params[idx][itx],
+                        qml.grouping.pauli_word_to_string(op), op.wires)
     return qml.expval(H_tapered)
 
 ##############################################################################
@@ -246,11 +257,11 @@ def circuit(params):
 # parameters with respect to the ground state energy.
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-params = np.zeros(3)
+params = np.zeros((3, 2), requires_grad=True)
 
-for n in range(1, 20):
+for n in range(1, 41):
     params, energy = optimizer.step_and_cost(circuit, params)
-    if n % 2:
+    if not n % 5:
         print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
 
 ##############################################################################
@@ -294,3 +305,9 @@ for n in range(1, 20):
 #    :photo: ../_static/Soran.png
 #
 #    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
+#
+#.. bio:: Utkarsh Azad
+#    :photo: ../_static/authors/utkarsh_azad.png
+#
+#    Utkarsh is a quantum software researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences.
+#
