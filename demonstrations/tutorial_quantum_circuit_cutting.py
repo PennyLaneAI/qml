@@ -99,7 +99,7 @@ states: :math:`\left | {0} \right\rangle`,
 :math:`\left | {+i} \right\rangle`. The other two nontrivial expectation
 values for states :math:`\left | {-} \right\rangle` and
 :math:`\left | {- i} \right\rangle` can be derived with classical
-postrocessing.
+post-processing.
 
 In general, there is a resolution of the identity along a wire (qubit) that
 we can interpret as circuit cutting. In the following section, we will
@@ -254,7 +254,7 @@ circuit(x)  # Executing the quantum circuit
 # ``fragment_graph()`` function is called to pull apart the quantum circuit
 # graph as shown in figure 3. The subcircuit graphs are reconverted back to
 # quantum tapes and ``qml.cut_circuit`` runs multiple configurations of the
-# 2-qubit subcircuit tapes which are then postprocessed to replicate the result
+# 2-qubit subcircuit tapes which are then post-processed to replicate the result
 # of the uncut circuit.
 #
 
@@ -739,7 +739,7 @@ samples[choices == 1] = shots1
 
 ######################################################################
 # Now that we have the result stored in ``samples``, we still need to do
-# some postprocessing to obtain final estimates of the QAOA cost. In the
+# some post-processing to obtain final estimates of the QAOA cost. In the
 # case of a single cut, the resolution of the identity discussed earlier
 # implies
 #
