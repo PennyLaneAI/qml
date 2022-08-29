@@ -230,7 +230,7 @@ circuit(x)  # Executing the quantum circuit
 ######################################################################
 # Let's explore what happens behind the scenes in  ``qml.cut_circuit``. When the
 # ``circuit`` qnode function is executed, the quantum circuit is converted to
-# a `quantum tape <https://pennylane.ai/blog/2021/08/how-to-write-quantum-function-transforms-in-pennylane/>`
+# a `quantum tape <https://pennylane.ai/blog/2021/08/how-to-write-quantum-function-transforms-in-pennylane/>`__
 # and then to a graph. Any ``WireCut`` in the quantum
 # circuit graph is replaced with ``MeasureNode`` and ``PrepareNode`` pairs as
 # shown in figure 2. The ``MeasureNode`` is the point on the cut qubit that
@@ -284,7 +284,7 @@ circuit(x)  # Executing the quantum circuit
 # Automatic cut placment is a PennyLane functionality that aids us in
 # finding the optimal cut that fragments a circuit such that
 # the classical post-processing overhead is minimized. The main algorithm
-# behind automatic cut placement is `graph partitioning <https://kahypar.org/>`
+# behind automatic cut placement is `graph partitioning <https://kahypar.org/>`__
 #
 # If ``auto_cutter`` is enabled in ``qml.cut_circuit``, PennyLane makes attempts
 # to find an optimal cut using graph partitioning. Whenever it is difficult to
