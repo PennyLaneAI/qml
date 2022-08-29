@@ -498,39 +498,15 @@ generalization_errors = []
 for i, n_train in enumerate(train_sizes):
     df = df_agg[df_agg.n_train == n_train]
 
-    # plot losses
-    ax = axes[0]
+    dfs = [df.train_cost["mean"], df.test_cost["mean"], df.train_acc["mean"], df.test_acc["mean"]]
+    lines = ["o-", "x--", "o-", "x--"]
+    labels = [fr"$N={n_train}$", None, fr"$N={n_train}$", None]
+    axs = [0,0,2,2]
     
-    ax.plot(df.step,
-            df.train_cost["mean"],
-            "o-",
-            label=fr"$N={n_train}$",
-            markevery=10, color=colors[i],
-            alpha=0.8)
-    
-    ax.plot(df.step,
-            df.test_cost["mean"],
-            "x--",
-            markevery=10,
-            color=colors[i],
-            alpha=0.8)
+    for k in range(4):
+        ax = axes[axs[k]]   
+        ax.plot(df.step, dfs[k], lines[k], label=labels[k], markevery=10, color=colors[i], alpha=0.8)
 
-    # plot accuracies
-    ax = axes[2]
-    
-    ax.plot(df.step,
-            df.train_acc["mean"],
-            "o-",
-            label=fr"$N={n_train}$",
-            markevery=10,
-            color=colors[i],
-            alpha=0.8)
-    
-    ax.plot(df.step,
-            df.test_acc["mean"],
-            "x--", markevery=10,
-            color=colors[i],
-            alpha=0.8)
 
     # plot final loss difference
     dif = df[df.step == 100].test_cost["mean"] - df[df.step == 100].train_cost["mean"]
