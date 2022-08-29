@@ -3,7 +3,14 @@ Quantum Circuit Cutting
 =======================
 
 .. meta::
-    :property="og:description": insert cool description here
+    :property="og:description": We dive into two algorithms for splitting a large quantum circuit into smaller ones. Or, combining multiple smaller ones, directly addressing the IS in NISQ.
+
+.. related::
+   tutorial_qaoa_intro Intro to QAOA
+   tutorial_qaoa_maxcut QAOA for MaxCut
+   tutorial_haar_measure Understanding the Haar Measure
+   tutorial_unitary_designs Unitary Designs
+
 
 *Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*
 
@@ -122,12 +129,8 @@ circuit below.
 """
 
 # Import the relevant libraries
-import matplotlib.pyplot as plt
-import networkx as nx
-from itertools import product, combinations
 import pennylane as qml
 from pennylane import numpy as np
-from pennylane.tape import QuantumTape
 
 dev = qml.device("default.qubit", wires=3)
 
@@ -327,13 +330,13 @@ circuit(x)
 # the state with fewer measurements compared to single qubit Pauli
 # measurements.
 #
-# The concept of 2-designs is simple - a unitary 2-design is finite
+# The concept of 2-designs is simple — a unitary 2-design is finite
 # collection of unitaries such that the average of any degree 2 polynomial
 # function of a linear operator over the design is exactly the same as the
 # average over Haar random measure. For further explanation of this measure read
 # the `Haar Measure demo <https://pennylane.ai/qml/demos/tutorial_haar_measure.html>`__.
 #
-# Let :math:`P(U)` be a polynomial with homogeneous degree at most two in
+# More precisely, let :math:`P(U)` be a polynomial with homogeneous degree at most two in
 # the entries of a unitary matrix :math:`U`, and degree two in the complex
 # conjugates of those entries. A unitary 2-design is a set of :math:`L`
 # unitaries :math:`\{U_{L}\}` such that
@@ -354,20 +357,20 @@ circuit(x)
 #
 # If :math:`k` qubits are being cut, then the dimensionality of the
 # Hilbert space is :math:`d=2^{k}`. In the randomized measurement circuit
-# cutting procedure, we trace out the qubits and a prepare a random basis
+# cutting procedure, we trace out the :math:`k` qubits and prepare a random basis
 # state with probability :math:`d/(2d+1)`. For a linear operator
-# :math:`X \in \mathbf{L}(\mathbb{C}^{d})` acting on the :math:`k`-qubits,
+# :math:`X \in \mathbf{L}(\mathbb{C}^{d})` acting on the :math:`k` qubits,
 # this operation corresponds to the completely depolarizing channel
 #
 # .. math::  \Psi_{1}(X) = \textrm{Tr}(X)\frac{\mathbf{1}}{d}~.
 #
-# Otherwise, we perform a randomized measure-and-prepare protocol based on
+# Otherwise, we perform measure-and-prepare protocol based on
 # a unitary 2-design (e.g. a random Clifford) with probability
 # :math:`(d+1)/(2d+1)`, corresponding to the channel
 #
 # .. math::  \Psi_{0}(X) = \frac{1}{d+1}\left(\textrm{Tr}(X)\mathbf{1} + X\right)~.
 #
-# The set of Kraus operators for channels :math:`\Psi_{1}, \Psi_{0}` are
+# The sets of Kraus operators for the channels :math:`\Psi_{1} and \Psi_{0}` are
 #
 # .. math::
 #
@@ -376,7 +379,7 @@ circuit(x)
 #
 # where indices :math:`i,j` run over the :math:`d` basis elements.
 #
-# Together these two channels can be used to obtain a resolution of the
+# Together, these two channels can be used to obtain a resolution of the
 # Identity channel on the :math:`k`-qubits as follows
 #
 # .. math::   X = (d+1)\Psi_0(X)-d\Psi_1(X)~.
@@ -386,12 +389,12 @@ circuit(x)
 # :math:`\varepsilon`, the associated overhead is
 # :math:`O(4^{k}(n+k^{2})/\varepsilon^{2})`. When :math:`k` is a small
 # constant and the circuit is cut into roughly two equal halves, this
-# procecdure effectively doubles the number of qubits which can be
-# simulated given a quantum device since the overhead is :math:`O(4^k)`
+# procedure effectively doubles the number of qubits that can be
+# simulated given a quantum device, since the overhead is :math:`O(4^k)`
 # compared with the :math:`O(16^k)` overhead of cutting with single-qubit
-# measurements. Note that although the overhead incurred is smaller, the
+# measurements. Note that, although the overhead incurred is smaller, the
 # average depth of the circuit is greater since a random Clifford unitary
-# over the :math:`k` qubits has to implemented when randomized measurement
+# over the :math:`k` qubits has to be implemented when randomized measurement
 # is performed.
 #
 # Comparison
@@ -399,7 +402,7 @@ circuit(x)
 #
 # We have seen that looking at circuit cutting through the lens of
 # 2-designs can be a source of considerable speedups. A good test case
-# where one may care about accurately estiamting an observale is the
+# where one may care about accurately estimating an observable is the
 # `Quantum Approximate Optimization
 # Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
@@ -409,13 +412,13 @@ circuit(x)
 #
 # on a graph :math:`G=(V,E)`, where :math:`Z_i` is a Pauli-:math:`Z`
 # operator. The normalization factor is just here so that expectation
-# values do not leave the :math:`[-1,1]` interval.
+# values do not lie outside the :math:`[-1,1]` interval.
 #
 # Setup
 # ~~~~~
 #
 # Suppose that we have a specific class of graphs we care about and
-# someone already provided us with optimal QAOA angles :math:`\gamma` and
+# someone already provided us with optimal angles :math:`\gamma` and
 # :math:`\beta` for QAOA of depth :math:`p=1`. Here’s how to map the input
 # graph :math:`G` to the QAOA circuit that solves our problem:
 #
@@ -431,6 +434,8 @@ circuit(x)
 # `NetworkX <https://networkx.org/>`__!
 #
 
+import networkx as nx
+from itertools import product, combinations
 
 np.random.seed(1337)
 
@@ -471,17 +476,20 @@ optimal_cost = -0.248
 
 
 def qaoa_cost(bitstring):
+
     bitstring = np.atleast_2d(bitstring)
-    z = (-1) ** bitstring[:, graph.edges()]
-    costs = z.prod(axis=-1).sum(axis=-1)
-    return np.squeeze(costs) / len(graph.edges)
+    # Make sure that we operate correctly on a batch of bitstrings
+
+    z = (-1) ** bitstring[:, graph.edges()]  # Filter out pairs of bits correspondimg to graph edges
+    costs = z.prod(axis=-1).sum(axis=-1)  # Do products and sums
+    return np.squeeze(costs) / len(graph.edges)  # Normalize
 
 
 ######################################################################
-# Let’s make a quick and simple QAOA circuit in PennyLane. Before we, we
-# have to briefly think about the cut placement. First, we want to apply
-# all ZZ rotation gates corresponding to the ``top`` edges, place the wire
-# cut, and then the ``bottom``, to ensure that the circuit actually splits
+# Let’s make a quick and simple QAOA circuit in PennyLane. Before we actually
+# cut the circuit, we have to briefly think about the cut placement. First, we
+# want to apply all ZZ rotation gates corresponding to the ``top_edges``, place the wire
+# cut, and then the ``bottom_edges``, to ensure that the circuit actually splits
 # in two after cutting.
 #
 
@@ -519,6 +527,8 @@ def qaoa_template(params):
 # Let’s construct the ``QuantumTape`` corresponding to this template and
 # draw the circuit:
 #
+
+from pennylane.tape import QuantumTape
 
 all_wires = list(range(len(graph)))
 
@@ -614,13 +624,21 @@ def make_kraus_ops(num_wires: int):
 
     d = 2**num_wires
 
-    kraus0 = np.identity(d**2).reshape(d**2, d, d)
-    kraus0 = np.concatenate([kraus0, np.identity(d)[None, :, :]], axis=0)
-    kraus0 /= np.sqrt(d + 1)
+    # High level idea: Take the identity operator on d^2 x d^2 and look at each row independently.
+    # When reshaped into a matrix, it gives exactly the matrix representation of |i><j|:
 
+    kraus0 = np.identity(d**2).reshape(d**2, d, d)
+
+    kraus0 = np.concatenate([kraus0, np.identity(d)[None, :, :]], axis=0)
+    # Add the identity op' to the mix
+
+    kraus0 /= np.sqrt(d + 1)  # Normalize
+
+    # Same trick for the other Kraus op'
     kraus1 = np.identity(d**2).reshape(d**2, d, d)
     kraus1 /= np.sqrt(d)
 
+    # Finally, return a list of NumPy arrays, as per `qml.QubitChannel` docs.
     return list(kraus0.astype(complex)), list(kraus1.astype(complex))
 
 
@@ -675,7 +693,7 @@ fig.set_size_inches(12, 6)
 ######################################################################
 # You may have noticed that both generarated tapes have the same size as
 # the original ``tape``. It may seem that no circuit cutting actually took
-# place. However, this is just an artefact of the way we chose to
+# place. However, this is just an artifact of the way we chose to
 # represent **classical communication** between subcircuits.
 # Measure-and-prepare channels at work here are more naturally implemented
 # on a mixed-state simulator. On a real quantum device however,
@@ -722,14 +740,14 @@ samples[choices == 1] = shots1
 ######################################################################
 # Now that we have the result stored in ``samples``, we still need to do
 # some postprocessing to obtain final estimates of the QAOA cost. In the
-# case of a single cut, the general expression discussed earlier
-# specializes to:
+# case of a single cut, the resolution of the identity discussed earlier
+# implies
 #
 # .. math::
 #
-#    \left\langle H_\mathcal{C} (x) \right\rangle  = (d +1) \left\langle H_\mathcal{C} (x) \right\rangle _{z=0} - d \left\langle H_\mathcal{C} (x) \right\rangle _{z=1}
+#    \left\langle H_\mathcal{C} (x) \right\rangle  = (d +1) \left\langle H_\mathcal{C} (x) \right\rangle _{z=0} - d \left\langle H_\mathcal{C} (x) \right\rangle _{z=1},
 #
-# where :math:`d=2^k`, :math:`z=0,1` correspond to circuits with inserted
+# where :math:`d=2^k` and :math:`z=0,1` corresponds to circuits with inserted
 # channels :math:`\Psi _{0,1}`.
 #
 
@@ -747,6 +765,8 @@ for i, cutoff in enumerate(shot_counts):
 ######################################################################
 # Let’s plot the results comparing the two methods:
 #
+
+import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(figsize=(12, 6))
 
@@ -778,7 +798,7 @@ ax.tick_params(axis="y", labelsize=18)
 ax.set_ylabel("QAOA cost", fontsize=20)
 ax.set_xlabel("Number of shots", fontsize=20)
 
-ax.legend(frameon=True, loc="lower right", fontsize=20)
+_ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 
 ######################################################################
 # We see that the randomized method converges faster than the Pauli method
@@ -800,8 +820,8 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #     with the Pauli method and randomized channel method.
 #
 # The randomized method offers a quadratic overhead reduction. In
-# practice, for larger cuts, we see that it offers orders of magnitude
-# better performance than the Pauli method. For larger circuits, even at
+# practice, for larger cuts, we see that it offers a performance that is orders of magnitude
+# better than that of the Pauli method. For larger circuits, even at
 # :math:`10^6` shots, Pauli estimates still sometimes leave the allowed
 # interval of :math:`[-1,1]`.
 #
@@ -821,11 +841,11 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 # The measurement performed as a part of the first cut always induces a
 # reduced state on the remaining wires. If the circuit has an MPS
-# structure, we can just measure all qubits at once - a part of the
+# structure, we can just measure all qubits at once —a part of the
 # measured bitstring gets passed into the second fragment and the
 # remaining bits go directly into the output bitstring. However, when we
 # try the same thing on a non-MPS circuit, additional gates need to be
-# applied on the wires what now hold a reduced state. This is the other
+# applied on the wires that now hold a reduced state. This is the other
 # reason why it is easier to simulate circuit cutting of a non-MPS circuit
 # with a mixed-state simulator.
 #
@@ -840,7 +860,7 @@ ax.legend(frameon=True, loc="lower right", fontsize=20)
 # are increased from :math:`O(2^n)` to :math:`O(4^n)`. However, this is
 # only a constraint for classical simulation where we have to choose
 # between state-vector and density-matrix approaches. Real quantum
-# deveices don’t have such limitations, of course.
+# devices don’t have such limitations, of course.
 #
 #
 # References
