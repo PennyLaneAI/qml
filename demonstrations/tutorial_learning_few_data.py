@@ -165,7 +165,7 @@ rng = np.random.default_rng(seed=seed)
 #     :width: 75%
 #     :align: center
 #
-#     QCNN architecture. Taken from [#CongQuantumCNN]_.
+#     QCNN architecture. Taken from Ref. [#CongQuantumCNN]_.
 #
 # Breaking down the layers
 # --------------------------
