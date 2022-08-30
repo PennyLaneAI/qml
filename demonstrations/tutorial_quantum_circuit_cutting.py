@@ -91,7 +91,7 @@ The above equation shows how we can recover a quantum state after a is cut made
 on one of its qubits as shown in figure 1. This forms the core of quantum
 circuit cutting.
 
-This means that we only have to do three measurements
+It turns out that we only have to do three measurements
 :math:`\left (Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
 subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
 states: :math:`\left | {0} \right\rangle`,
