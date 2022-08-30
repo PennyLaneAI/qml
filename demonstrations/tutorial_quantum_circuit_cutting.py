@@ -115,7 +115,7 @@ to fewer shots needed to estimate observables.
     with ``MeasureNode``. The second half of the cut circuit on the right
     (subcircuit-v) is the part with ``PrepareNode``
 
-PennyLane Implementation
+PennyLane implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PennyLane's built-in  circuit cutting algorithm, ``qml.cut_circuit``,
