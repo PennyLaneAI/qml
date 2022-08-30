@@ -356,7 +356,9 @@ circuit(x)
 #     Figure 4. Illustration of Randomized Circuit Cutting based on Two-Designs
 #
 # If :math:`k` qubits are being cut, then the dimensionality of the
-# Hilbert space is :math:`d=2^{k}`. In the randomized measurement circuit
+# Hilbert space is :math:`d=2^{k}`. The key idea of Randomized Circuit Cutting
+# is to employ two different quantum channels with probabilities such that together 
+# they comprise a resolution of Identity. In the randomized measurement circuit
 # cutting procedure, we trace out the :math:`k` qubits and prepare a random basis
 # state with probability :math:`d/(2d+1)`. For a linear operator
 # :math:`X \in \mathbf{L}(\mathbb{C}^{d})` acting on the :math:`k` qubits,
@@ -375,7 +377,7 @@ circuit(x)
 # .. math::
 #
 #   \Psi_{1}(X) \xrightarrow{} \left\{ \frac{|i\rangle \langle j|}{\sqrt{d}} \right\} \quad
-#   \Psi_{0}(X) \xrightarrow{} \left\{ \frac{\mathbf{1}}{\sqrt{d+1}} \right\} \cup \left\{ \frac{|i\rangle \langle j|}{\sqrt{d+1}} \right\}~,
+#   \Psi_{0}(X) \xrightarrow{} \left\{ \frac{\mathbf{1}}{\sqrt{d+1}} ~,~ \frac{|i\rangle \langle j|}{\sqrt{d+1}} \right\}~,
 #
 # where indices :math:`i,j` run over the :math:`d` basis elements.
 #
@@ -891,6 +893,6 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #    Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu residency program. He is a firm believer in keeping bios short and concise.
 #
 # .. bio:: Anuj Apte
-#    :photo: ../_static/avatar.webp
+#    :photo: ../_static/aapte.jpg
 #
-#    Anuj is a super cool person who works at Xanadu.
+#    Anuj is a PhD student at the University of Chicago. His research interests include Quantum Field Theory which applications to Topological Phases and Quantum Computing. 
