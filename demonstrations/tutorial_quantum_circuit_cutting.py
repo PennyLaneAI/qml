@@ -353,7 +353,7 @@ circuit(x)
 #     :align: center
 #     :width: 90%
 #
-#     Figure 4. Illustration of Randomized Circuit Cutting based on Two-Designs
+#     Figure 4. Illustration of Randomized Circuit Cutting based on Two-Designs. Taken from [#Lowe2022]_.
 #
 # If :math:`k` qubits are being cut, then the dimensionality of the
 # Hilbert space is :math:`d=2^{k}`. The key idea of Randomized Circuit Cutting
@@ -393,7 +393,7 @@ circuit(x)
 # constant and the circuit is cut into roughly two equal halves, this
 # procedure effectively doubles the number of qubits that can be
 # simulated given a quantum device, since the overhead is :math:`O(4^k)`
-# compared with the :math:`O(16^k)` overhead of cutting with single-qubit
+# which is much lower than the :math:`O(16^k)` overhead of cutting with single-qubit
 # measurements. Note that, although the overhead incurred is smaller, the
 # average depth of the circuit is greater since a random Clifford unitary
 # over the :math:`k` qubits has to be implemented when randomized measurement
@@ -408,7 +408,7 @@ circuit(x)
 # `Quantum Approximate Optimization
 # Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
-# lowest-energy state of a *cost hamiltonian* :math:`H_{\mathcal{C}}`:
+# lowest energy state of a *cost hamiltonian* :math:`H_{\mathcal{C}}`:
 #
 # .. math::   H_\mathcal{C} = \frac{1}{|E|} \sum _{(i, j) \in E} Z_i Z_j
 #
@@ -653,7 +653,7 @@ def make_kraus_ops(num_wires: int):
 # -  If the gate is a ``qml.WireCut``, we apply the ``qml.QubitChannel``
 #    corresponding to :math:`\Psi _0` or :math:`\Psi _1` to different new
 #    tapes.
-# -  Otherwise, just apply the same exisitng gate to both new tapes
+# -  Otherwise, just apply the same exisiting gate to both new tapes.
 #
 # In code, this looks like:
 #
@@ -709,8 +709,8 @@ fig.set_size_inches(12, 6)
 device = qml.device("default.mixed", wires=tape.wires)
 
 ######################################################################
-# We only need to run each of the two generated tapes, ``tape0`` and
-# ``tape1``, once, collecting the appropriate number of samples. NumPy can
+# We only need a single run each of the two generated tapes, ``tape0`` and
+# ``tape1``, collecting the appropriate number of samples. NumPy can
 # take care of this for us - we let ``np.choice`` make our decision on
 # which tape to run for each shot:
 #
