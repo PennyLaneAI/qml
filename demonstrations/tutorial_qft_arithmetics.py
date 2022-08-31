@@ -393,9 +393,7 @@ def factorization(n, wires_m, wires_k, wires_sol):
     multiplication(wires_m, wires_k, wires_sol)
 
     # Change sign to n
-    qml.BasisEmbedding(2 ** len(wires_sol) - n - 1, wires=wires_sol)
-    qml.ctrl(qml.PauliZ, control=wires_sol[:-1])(wires=wires_sol[-1])
-    qml.BasisEmbedding(2 ** len(wires_sol) - n - 1, wires=wires_sol)
+    qml.FlipSign(n, wires=wires_sol)
 
     # Uncompute multiplication
     qml.adjoint(multiplication)(wires_m, wires_k, wires_sol)
