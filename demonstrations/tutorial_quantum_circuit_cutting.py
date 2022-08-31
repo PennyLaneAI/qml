@@ -653,7 +653,7 @@ def make_kraus_ops(num_wires: int):
 # -  If the gate is a ``qml.WireCut``, we apply the ``qml.QubitChannel``
 #    corresponding to :math:`\Psi _0` or :math:`\Psi _1` to different new
 #    tapes.
-# -  Otherwise, just apply the same exisiting gate to both new tapes.
+# -  Otherwise, just apply the same existing gate to both new tapes.
 #
 # In code, this looks like:
 #
