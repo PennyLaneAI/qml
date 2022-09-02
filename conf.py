@@ -212,6 +212,8 @@ html_theme_options = {
     "table_header_background_colour": "#edf7f4",
     "text_accent_colour": "#19b37b",
     "toc_marker_colour": "#19b37b",
+    "toc_global": False,
+    "relations": False
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -265,12 +267,8 @@ with open("demos_community.rst", 'w') as f:
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
 
-from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective, Bio
+from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective
 
 def setup(app):
     app.add_directive("customgalleryitem", CustomGalleryItemDirective)
     app.add_directive("youtube", YoutubeItemDirective)
-    app.add_directive("community-card", CommunityCardDirective)
-    app.add_directive("related", RelatedDirective)
-    app.add_stylesheet("xanadu_gallery.css")
-    app.add_directive("bio", Bio)
