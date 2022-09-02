@@ -12,7 +12,7 @@ Quantum Circuit Cutting
    tutorial_unitary_designs Unitary Designs
 
 
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*
+*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*. Posted: 06 September 2022. Last updated: 06 September 2022.
 
 Introduction
 -------------------------------------
@@ -91,7 +91,7 @@ The above equation shows how we can recover a quantum state after a is cut made
 on one of its qubits as shown in figure 1. This forms the core of quantum
 circuit cutting.
 
-This means that we only have to do three measurements
+It turns out that we only have to do three measurements
 :math:`\left (Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
 subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
 states: :math:`\left | {0} \right\rangle`,
@@ -115,7 +115,7 @@ to fewer shots needed to estimate observables.
     with ``MeasureNode``. The second half of the cut circuit on the right
     (subcircuit-v) is the part with ``PrepareNode``
 
-PennyLane Implementation
+PennyLane implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PennyLane's built-in  circuit cutting algorithm, ``qml.cut_circuit``,
@@ -353,10 +353,12 @@ circuit(x)
 #     :align: center
 #     :width: 90%
 #
-#     Figure 4. Illustration of Randomized Circuit Cutting based on Two-Designs
+#     Figure 4. Illustration of Randomized Circuit Cutting based on Two-Designs. Taken from [#Lowe2022]_.
 #
 # If :math:`k` qubits are being cut, then the dimensionality of the
-# Hilbert space is :math:`d=2^{k}`. In the randomized measurement circuit
+# Hilbert space is :math:`d=2^{k}`. The key idea of Randomized Circuit Cutting
+# is to employ two different quantum channels with probabilities such that together 
+# they comprise a resolution of Identity. In the randomized measurement circuit
 # cutting procedure, we trace out the :math:`k` qubits and prepare a random basis
 # state with probability :math:`d/(2d+1)`. For a linear operator
 # :math:`X \in \mathbf{L}(\mathbb{C}^{d})` acting on the :math:`k` qubits,
@@ -375,7 +377,7 @@ circuit(x)
 # .. math::
 #
 #   \Psi_{1}(X) \xrightarrow{} \left\{ \frac{|i\rangle \langle j|}{\sqrt{d}} \right\} \quad
-#   \Psi_{0}(X) \xrightarrow{} \left\{ \frac{\mathbf{1}}{\sqrt{d+1}} \right\} \cup \left\{ \frac{|i\rangle \langle j|}{\sqrt{d+1}} \right\}~,
+#   \Psi_{0}(X) \xrightarrow{} \left\{ \frac{\mathbf{1}}{\sqrt{d+1}} ~,~ \frac{|i\rangle \langle j|}{\sqrt{d+1}} \right\}~,
 #
 # where indices :math:`i,j` run over the :math:`d` basis elements.
 #
@@ -391,7 +393,7 @@ circuit(x)
 # constant and the circuit is cut into roughly two equal halves, this
 # procedure effectively doubles the number of qubits that can be
 # simulated given a quantum device, since the overhead is :math:`O(4^k)`
-# compared with the :math:`O(16^k)` overhead of cutting with single-qubit
+# which is much lower than the :math:`O(16^k)` overhead of cutting with single-qubit
 # measurements. Note that, although the overhead incurred is smaller, the
 # average depth of the circuit is greater since a random Clifford unitary
 # over the :math:`k` qubits has to be implemented when randomized measurement
@@ -406,7 +408,7 @@ circuit(x)
 # `Quantum Approximate Optimization
 # Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
-# lowest-energy state of a *cost hamiltonian* :math:`H_{\mathcal{C}}`:
+# lowest energy state of a *cost hamiltonian* :math:`H_{\mathcal{C}}`:
 #
 # .. math::   H_\mathcal{C} = \frac{1}{|E|} \sum _{(i, j) \in E} Z_i Z_j
 #
@@ -651,7 +653,7 @@ def make_kraus_ops(num_wires: int):
 # -  If the gate is a ``qml.WireCut``, we apply the ``qml.QubitChannel``
 #    corresponding to :math:`\Psi _0` or :math:`\Psi _1` to different new
 #    tapes.
-# -  Otherwise, just apply the same exisitng gate to both new tapes
+# -  Otherwise, just apply the same existing gate to both new tapes.
 #
 # In code, this looks like:
 #
@@ -707,8 +709,8 @@ fig.set_size_inches(12, 6)
 device = qml.device("default.mixed", wires=tape.wires)
 
 ######################################################################
-# We only need to run each of the two generated tapes, ``tape0`` and
-# ``tape1``, once, collecting the appropriate number of samples. NumPy can
+# We only need a single run each of the two generated tapes, ``tape0`` and
+# ``tape1``, collecting the appropriate number of samples. NumPy can
 # take care of this for us - we let ``np.choice`` make our decision on
 # which tape to run for each shot:
 #
@@ -891,6 +893,6 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #    Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu residency program. He is a firm believer in keeping bios short and concise.
 #
 # .. bio:: Anuj Apte
-#    :photo: ../_static/avatar.webp
+#    :photo: ../_static/aapte.jpg
 #
-#    Anuj is a super cool person who works at Xanadu.
+#    Anuj is a PhD student at the University of Chicago. His research interests include Quantum Field Theory which applications to Topological Phases and Quantum Computing. 
