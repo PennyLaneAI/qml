@@ -145,7 +145,7 @@ html_favicon = "_static/favicon.ico"
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "xanadu_theme"
+html_theme = "xanadu"
 html_theme_path = ["."]
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -153,27 +153,65 @@ html_theme_path = ["."]
 # documentation.
 #
 html_theme_options = {
-    # Set the path to a special layout to include for the homepage
-    # "homepage": "index.html",
-    # Set the name of the project to appear in the left sidebar.
-    "project_nav_name": "Quantum Machine Learning",
-    "project_logo": "_static/pennylane.svg",
-    "touch_icon": "_static/xanadu.png",
-    "touch_icon_small": "_static/xanadu_small.png",
-    "large_toc": True,
-    # Set GA account ID to enable tracking
-    "google_analytics_account": "UA-130507810-1",
-    # colors
-    "navigation_button": "#19b37b",
-    "navigation_button_hover": "#0e714d",
-    "toc_caption": "#19b37b",
-    "toc_hover": "#19b37b",
-    "table_header_bg": "#edf7f4",
-    "table_header_border": "#19b37b",
-    "download_button": "#19b37b",
-    # gallery options
-    "github_repo": "XanaduAI/qml",
-    "gallery_dirs": "tutorials",
+    "navbar_logo_path": "_static/logo.png",
+    "navbar_wordmark_path": "_static/pennylane.svg",
+    # Specifying #19b37b is more correct but does not match the other PL websites.
+    "navbar_logo_colour": "#2d7c7f",
+    "navbar_home_link": "https://pennylane.ai",
+    "navbar_left_links": [
+        {
+            "name": "Quantum machine learning",
+            "href": "https://pennylane.ai/qml/",
+        },
+        {
+            "name": "Demos",
+            "href": "https://pennylane.ai/qml/demonstrations.html",
+        },
+        {
+            "name": "Install",
+            "href": "https://pennylane.ai/install.html",
+        },
+        {
+            "name": "Plugins",
+            "href": "https://pennylane.ai/plugins.html",
+        },
+        {
+            "name": "Documentation",
+            "href": "index.html",
+            "active": True,
+        },
+        {
+            "name": "Blog",
+            "href": "https://pennylane.ai/blog/",
+        },
+    ],
+    "navbar_right_links": [
+        {
+            "name": "FAQ",
+            "href": "https://pennylane.ai/faq.html",
+            "icon": "fas fa-question",
+        },
+        {
+            "name": "Support",
+            "href": "https://discuss.pennylane.ai/",
+            "icon": "fab fa-discourse",
+        },
+        {
+            "name": "GitHub",
+            "href": "https://github.com/PennyLaneAI/pennylane",
+            "icon": "fab fa-github",
+        },
+    ],
+    "extra_copyrights": [
+        "TensorFlow, the TensorFlow logo, and any related marks are trademarks " "of Google Inc."
+    ],
+    "google_analytics_tracking_id": "UA-130507810-2",
+    "border_colour": "#19b37b",
+    "prev_next_button_colour": "#19b37b",
+    "prev_next_button_hover_colour": "#0e714d",
+    "table_header_background_colour": "#edf7f4",
+    "text_accent_colour": "#19b37b",
+    "toc_marker_colour": "#19b37b",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -189,7 +227,12 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-html_sidebars = {"**": ["logo-text.html", "localtoc.html"]}
+html_sidebars = {
+    "**": [
+        "searchbox.html",
+        "globaltoc.html",
+    ]
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
