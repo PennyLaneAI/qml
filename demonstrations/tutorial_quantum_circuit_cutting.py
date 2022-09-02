@@ -3,7 +3,7 @@ Quantum Circuit Cutting
 =======================
 
 .. meta::
-    :property="og:description": We dive into two algorithms for splitting a large quantum circuit into smaller ones. Or, combining multiple smaller ones, directly addressing the IS in NISQ.
+    :property="og:description": We dive into two algorithms for splitting a large quantum circuit into smaller ones.
 
 .. related::
    tutorial_qaoa_intro Intro to QAOA
@@ -12,7 +12,7 @@ Quantum Circuit Cutting
    tutorial_unitary_designs Unitary Designs
 
 
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*. Posted: 06 September 2022. Last updated: 06 September 2022.
+*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*. Posted: 02 September 2022. Last updated: 02 September 2022.
 
 Introduction
 -------------------------------------
