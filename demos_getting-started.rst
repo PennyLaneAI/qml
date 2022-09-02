@@ -1,4 +1,4 @@
- .. role:: html(raw)
+.. role:: html(raw)
    :format: html
 
 Getting Started

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{%- block comments -%}
+    {% if pagename in ["demos_getting-started", "demos_qml", "demos_optimization", "demos_quantum-computing", "demos_quantum-chemistry"] %}
+        {% include "demo-gallery.html" %}
+    {% elif pagename == "videos" %}
+    {% else %}
+        {% include "localtoc.html" %}
+    {% endif %}
+{%- endblock %}
+
+{% block body %}
+    {{ body }}
+{% endblock %}

@@ -2,26 +2,40 @@ Videos
 ======
 
 .. meta::
-   :property="og:description": Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.
-   :property="og:image": https://pennylane.ai/qml/_static/videos_card.png
+   :property="og:description": Sit back and explore quantum machine learning and quantum programming with our curated selection of expert youtube-videos.
+   :property="og:image": https://pennylane.ai/qml/_static/youtube-videos_card.png
 
-Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.
+Sit back and explore quantum machine learning and quantum programming with our curated selection of expert youtube-videos.
 
 .. raw:: html
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
     <style>
-        .up-button {
-            position: absolute;
-            top: 40px;
+        .youtube-video-gallery {
+          width: 150%;
+          margin-left: calc(100% - 990px);
         }
+
+        @media screen and (max-width: 768px) {
+          .youtube-video-gallery {
+            margin-left: 0px !important;
+            width: 100%!important;
+          }
+        }
+
+        @media screen and (max-width: 1400px) and (min-width: 768px){
+          .youtube-video-gallery {
+            margin-left: 0px !important;
+            width: 100%!important;
+          }
+        }
+
     </style>
 
 .. raw:: html
 
-    <br><div class="video-gallery gallery-grid row">
+    <br><div class="youtube-video-gallery gallery-grid row">
 
-.. youtube:: o377m0doD6M
+.. youtube-video:: o377m0doD6M
     :title: What are quantum computers, and how can we train them in Python?
     :author: Josh Izaac (Xanadu)
 
@@ -30,7 +44,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     we can integrate these quantum programs directly into larger differentiable programs in Python, and 
     train/optimize the full (hybrid quantum-classical!) program. 
 
-.. youtube:: EwGaU-qOPUQ
+.. youtube-video:: EwGaU-qOPUQ
     :title: Using Multiple QPUs
     :author: Nathan Killoran (Xanadu)
 
@@ -39,7 +53,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
     provide a benefit over a single QPU, even for today's small and noisy devices.
 
-.. youtube:: WBVnE8ChGX8
+.. youtube-video:: WBVnE8ChGX8
     :title: Welcome to QHACK'19
     :author: Nathan Killoran (Xanadu)
 
@@ -47,7 +61,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     Nov 25–26, 2019, bringing together experts and enthusiasts in quantum computing
     and quantum machine learning.
 
-.. youtube:: cobp2Sf5f3o
+.. youtube-video:: cobp2Sf5f3o
     :title: Quantum Gates and Gradients
     :author: Gavin Crooks (X, The Moonshot Factory)
 
@@ -56,34 +70,34 @@ Sit back and explore quantum machine learning and quantum programming with our c
     decompositions, the parameter-shift rule for calculating quantum gradients
     on hardware can be extended to any 2-qubit unitary operation.
 
-.. youtube:: 7ALa_JZvV3o
+.. youtube-video:: 7ALa_JZvV3o
     :title: Using Quantum Circuits as Machine Learning Models
     :author: Maria Schuld (Xanadu)
 
     Exploring links between quantum circuits, neural networks, kernel methods, and generative models.
 
-.. youtube:: QRt5wKwzzFQ
+.. youtube-video:: QRt5wKwzzFQ
     :title: Everything and the (Quantum) Kitchen Sink: Quantum Machine Learning at Rigetti
     :author: Max Henderson (Rigetti)
 
     Learn about two of the best-named quantum machine learning models—Quantum Kitchen Sinks and
     Quanvolutional Neural Networks—courtesy of Max Henderson of Rigetti Computing.
 
-.. youtube:: eShyPOLIfYk
+.. youtube-video:: eShyPOLIfYk
     :title: Quantum Machine Learning with PennyLane
     :author: Josh Izaac (Xanadu)
 
     A 20-minute crash-course on PennyLane, its features,
     and how it can be used to streamline quantum machine learning.
 
-.. youtube:: ijY7WSa7u-4
+.. youtube-video:: ijY7WSa7u-4
     :title: Barren Plateau Issues for Variational Quantum-Classical Algorithms
     :author: Patrick Coles (Los Alamos National Lab)
 
     In order to train quantum circuits, we need to pay careful attention to the cost functions
     that we choose to optimize, otherwise the training can suffer from barren plateau problems.
 
-.. youtube:: uf_BRg5ovtg
+.. youtube-video:: uf_BRg5ovtg
     :title: Machine Learning With Quantum Computers
     :author: Maria Schuld (Xanadu)
 
@@ -91,14 +105,14 @@ Sit back and explore quantum machine learning and quantum programming with our c
     Learn what makes quantum computing so different from classical computing,
     and explore techniques for training and machine learning with quantum computers.
 
-.. youtube:: tvVnjVa3ErY
+.. youtube-video:: tvVnjVa3ErY
     :title: PennyLane - Automatic differentiation and machine learning of quantum computations
     :author: Josh Izaac (Xanadu)
 
     Introducing PennyLane, a Python-based software framework for optimization and
     machine learning of quantum and hybrid quantum-classical computations.
 
-.. youtube:: Xh9pUu3-WxM
+.. youtube-video:: Xh9pUu3-WxM
     :title: Innovating machine learning with near-term quantum computing
     :author: Maria Schuld (Xanadu)
 
@@ -107,7 +121,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     strategies of automatic differentiation, and how to integrate quantum circuits with
     machine learning frameworks such as PyTorch and Tensorflow using open-source software.
 
-.. youtube:: YBHzT5V1SzU
+.. youtube-video:: YBHzT5V1SzU
     :title: Quantum Deep Learning
     :author: Nathan Killoran (Xanadu)
 
@@ -115,7 +129,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     programming, and quantum computing. Learn how quantum circuits can be
     trained just like neural networks!
 
-.. youtube:: McgBeSVIGus
+.. youtube-video:: McgBeSVIGus
     :title: Automatic Differentiation of Quantum Circuits
     :author: Nathan Killoran (Xanadu)
 
@@ -123,7 +137,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     rule, and how derivatives of quantum circuits can be computed
     automatically in software.
 
-.. youtube:: YtepXvx5zdI
+.. youtube-video:: YtepXvx5zdI
     :title: Variational Quantum Algorithms
     :author: Nathan Killoran (Xanadu)
 
@@ -131,7 +145,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     for the techniques and challenges involved in implementing methods like the
     VQE, QAOA, and quantum GANs.
 
-.. youtube:: t9ytqPTij7k
+.. youtube-video:: t9ytqPTij7k
     :title: Hybrid Quantum-Classical Machine Learning
     :author: Nathan Killoran (Xanadu)
 

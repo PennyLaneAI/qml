@@ -108,7 +108,7 @@ warnings.filterwarnings(
 )
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["xanadu_theme"]
+templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -213,6 +213,7 @@ html_theme_options = {
     "text_accent_colour": "#19b37b",
     "toc_marker_colour": "#19b37b",
     "toc_global": False,
+    "toc_subset": False,
     "relations": False
 }
 
@@ -267,7 +268,3 @@ with open("demos_community.rst", 'w') as f:
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
 
-from custom_directives import YoutubeItemDirective
-
-def setup(app):
-    app.add_directive("youtube", YoutubeItemDirective)
