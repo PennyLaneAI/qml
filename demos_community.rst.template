@@ -51,6 +51,7 @@ Community
 .. raw:: html
 
     <div class="row">
+        <div class="col-lg-6 mb-4">
 
 .. community-card::
     :title: {{ card1["title"] }}
@@ -67,6 +68,11 @@ Community
     {%- endif %}
 
     {{ card1["description"] | replace("\n", " ") }}
+
+.. raw:: html
+
+    </div>
+    <div class="col-lg-6 mb-4">
 
 {% if "title" in card2 %}
 
@@ -94,6 +100,7 @@ Community
 
 .. raw:: html
 
+        </div>
     </div>
 
 {% endfor %}

@@ -162,6 +162,7 @@ html_theme_options = {
         {
             "name": "Quantum machine learning",
             "href": "https://pennylane.ai/qml/",
+            "active": True,
         },
         {
             "name": "Demos",
@@ -177,8 +178,7 @@ html_theme_options = {
         },
         {
             "name": "Documentation",
-            "href": "index.html",
-            "active": True,
+            "href": "https://doc.pennylane.ai",
         },
         {
             "name": "Blog",
@@ -267,8 +267,7 @@ with open("demos_community.rst", 'w') as f:
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
 
-from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective
+from custom_directives import YoutubeItemDirective
 
 def setup(app):
-    app.add_directive("customgalleryitem", CustomGalleryItemDirective)
     app.add_directive("youtube", YoutubeItemDirective)
