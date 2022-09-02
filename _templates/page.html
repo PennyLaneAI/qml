@@ -2,7 +2,7 @@
 
 {%- block comments -%}
     {% if pagename in ["demos_getting-started", "demos_qml", "demos_optimization", "demos_quantum-computing", "demos_quantum-chemistry"] %}
-        {% include "demo-gallery.html" %}
+        {% include "filters.html" %}
     {% elif pagename == "videos" %}
     {% else %}
         {% include "localtoc.html" %}
@@ -11,4 +11,16 @@
 
 {% block body %}
     {{ body }}
+
+    <script type="text/javascript">
+        var pagename = document.location.href.match(/[^\/]+$/)[0];
+        var dir = document.URL.substr(0,document.URL.lastIndexOf('/')).match(/[^\/]+$/)[0];
+
+        if (pagename.includes("demos") || pagename.includes("demonstrations") || dir.includes("demos")) {
+
+            $(".nav-item.active").removeClass("active");
+            var demos_link = $('a').filter(function(index) { return $(this).text() === "Demos"; })[1]
+            $(demos_link).parent().addClass("active");
+        }
+    </script>
 {% endblock %}
