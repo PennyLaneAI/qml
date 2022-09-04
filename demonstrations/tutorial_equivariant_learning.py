@@ -10,9 +10,6 @@ Introduction to Equivariant Learning
 *Author: Richard East. Posted: August 2022*
 
 
-
-
-
 Introduction
 ~~~~~~~~~~~~~
 
@@ -40,7 +37,7 @@ ecourages our results to be more genralisable.
 In classical machine learning this often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
-deep neural networks (see `Bronstein et al. (2019) <https://arxiv.org/abs/2104.13478>`__ for a broad introduction).
+deep neural networks (see [#Bronstein2021]_ for a broad introduction).
 We will refer to the quantum computing verison of this as quantum geometric machine learning (QGML).
 
 
@@ -89,11 +86,13 @@ With groups defined we are in a position to ariculate what a
 representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
-.. math:: \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G.
-this structure indicates this is a group homomorphism as it sends our 
-group of interest to the another group such that the group action commutes
+
+:math:`\varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G`.
+
+This structure indicates this is a group homomorphism as it sends our 
+group of interest to another group such that the group action commutes
 with the mapping. For a representation our mapping must send us to the general linear
-group :math:`GL(n)` (the space of nxn matrices with matrix multiplication as the group multiplication).
+group :math:`GL(n)` (the space of :math:`n \times n` matrices with matrix multiplication as the group multiplication).
 
 
 Now due to the importance of unitarity in quantum mechnics we are
@@ -103,7 +102,8 @@ identify these then we will have a way to naturally encode groups in
 quantum circuits (which are mostly made up of unitary gates). 
 
 How does all this relate to symmetries? Well a large class of
-symmetries can be charecterised as a group. Let's consider an example:
+symmetries can be charecterised as a group where all the elements of the group leave 
+some space we are considering unchanged. Let's consider an example:
 The symmetries of a sphere. Now when we think of this symmetry we
 probably think something along the lines of "it's the same no matter how
 I rotate it or flip it left to right etc". There is this idea of being
@@ -119,7 +119,7 @@ reflections of the sphere then if I combine two of them together then
 :math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
 associative. These features turn out to literally define a group!
  
-AS we've seen the group in itself is a very abstract creature this is why we look to
+As we've seen the group in itself is a very abstract creature this is why we look to
 its representations. The group labels what symmetries we care about, they tell
 us the mappings that our system is invariant under, the unitary representations 
 show us how those symmetries look on a particular
@@ -128,6 +128,28 @@ constructed from unitaries this gives us a direct connection between the
 characterisation of symmetries and quantumc circuits. If we want to
 encode the structure of the symmeteries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
+
+There remain one question. What is equivariance? With our new found knowledge
+of group representation theory we are ready to tackle this. Let :math:`G` be our group, and
+:math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
+over some field :math:`F` with a map :math:`f` between them.
+Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
+and :math:`\psi: G \rightarrow GL(W)` then, in representation theory terms, where we will write
+:math:`\varphi_g` and :math:`\psi_g` to represent the representation of the group element :math:`g`
+as linear maps on :math:`V` and :math:`W` respectively. We call :math:`f` equivariant if
+
+:math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`
+
+The importance of such a maps in machine learning is that if, for example, our neural network layers are
+equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
+preserve this information in the outputs. Which we can see because we could instead input the same input
+twice and get the second by applying the group action to one of the outputs. Given the vast amount
+of input data required to train a neural network the principle that one can pre-encode known symetry structures
+into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
+analysis where it is known they are euivarient with respect to translations; They naturally encode the idea that
+a picture of a dog is symetrically related to the same picture slid to the left by n pixels). With our focus on
+unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
+
 """
 
 
@@ -135,7 +157,7 @@ restrict our gates to being unitary representations of the group.
 #
 # Noughts and Crosses
 # ----------------
-# Let's look again at the game of noughts and crosses. Two players take
+# Let's look at the game of noughts and crosses as ispired by [#Meyer2022]_. Two players take
 # turns to place a 0 or an X, depending on which player you are, in a 3X3
 # grid. The aim is to get a 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
@@ -209,7 +231,7 @@ restrict our gates to being unitary representations of the group.
 # can move it to the other side (remember the representation commutes with
 # the group action). You might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
-# matter!
+# matter! The result is that out gate choices commute with the group action - this is equivariance.
 #
 
 
@@ -223,7 +245,7 @@ restrict our gates to being unitary representations of the group.
 ######################################################################
 # In this particular instance we can see the action of the twirling
 # operation geometrically as the symmtries involved are all
-# permutations. Let's consider the :math:R_x` rotation acting on one qubit. Now
+# permutations. Let's consider the :math:`R_x` rotation acting on one qubit. Now
 # if it is in the centre then you can flip around any symmetry axis you
 # like, this operation is invarient, so we've identified one equivariant
 # gate immediately. If it's on the corners then the flipping will send
@@ -251,14 +273,19 @@ restrict our gates to being unitary representations of the group.
 
 
 ######################################################################
-# :math:`O_{-}=Z_{\text {middle }}=Z_{8}`
+# :math:`O_{-}=Z_{\text {middle }}=Z_{4}`
 #
-# :math:`O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{4}+Z_{6}+Z_{7}\right]`
+# :math:`O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{2}+Z_{6}+Z_{8}\right]`
 #
-# :math:`O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{3}+Z_{7}+Z_{9}\right]`
+# :math:`O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{6}+Z_{7}\right]`
 #
 # :math:`\hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)`
 #
+
+##############################################################################
+# .. figure:: ../demonstrations/equivariant_learning/grid.png
+#     :align: center
+#     :width: 35%
 
 
 ######################################################################
@@ -275,7 +302,7 @@ restrict our gates to being unitary representations of the group.
 
 ######################################################################
 # We will use an :math:`l_2` loss function acting on pairs of games and
-# labels :math:`D={(g,y)}`
+# labels :math:`D={(g,y)}` where math:`D` is our dataset.
 #
 
 
@@ -289,13 +316,16 @@ restrict our gates to being unitary representations of the group.
 # First lets generate some games.
 #
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
-# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
+# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1. 
+# There are 26,830 different possible games but we will only sample a few hundred.
 
 import torch
 import random
 from toolz import unique
 
-torch.manual_seed(0)
+#Fix for reproducability
+torch.backends.cudnn.deterministic = True
+torch.manual_seed(99)
 
 #  create an empty board
 def create_board():
@@ -440,7 +470,7 @@ ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-# A reuploadable model for the edge qubit observable
+# Now let's encode the data in the following qubit models, firslt with symmetry
 @qml.qnode(dev, interface="torch")
 def circuit(x, p):
 
@@ -469,7 +499,7 @@ def circuit(x, p):
     qml.RY(p[3], wires=6)
     qml.RY(p[3], wires=8)
 
-    # Edge single qubte rotation
+    # Edge single qubit rotation
     qml.RX(p[4], wires=1)
     qml.RX(p[4], wires=3)
     qml.RX(p[4], wires=5)
@@ -480,35 +510,37 @@ def circuit(x, p):
     qml.RY(p[5], wires=5)
     qml.RY(p[5], wires=7)
 
-    qml.IsingYY(p[6], wires=[0, 1])
-    qml.IsingYY(p[6], wires=[2, 1])
-    qml.IsingYY(p[6], wires=[2, 5])
-    qml.IsingYY(p[6], wires=[8, 5])
-    qml.IsingYY(p[6], wires=[8, 7])
-    qml.IsingYY(p[6], wires=[6, 7])
-    qml.IsingYY(p[6], wires=[6, 3])
-    qml.IsingYY(p[6], wires=[0, 3])
+    qml.CRY(p[6], wires=[0, 1])
+    qml.CRY(p[6], wires=[2, 1])
+    qml.CRY(p[6], wires=[2, 5])
+    qml.CRY(p[6], wires=[8, 5])
+    qml.CRY(p[6], wires=[8, 7])
+    qml.CRY(p[6], wires=[6, 7])
+    qml.CRY(p[6], wires=[6, 3])
+    qml.CRY(p[6], wires=[0, 3])
 
-    qml.IsingYY(p[7], wires=[4, 0])
-    qml.IsingYY(p[7], wires=[4, 2])
-    qml.IsingYY(p[7], wires=[4, 6])
-    qml.IsingYY(p[7], wires=[4, 8])
+    qml.CRY(p[7], wires=[4, 0])
+    qml.CRY(p[7], wires=[4, 2])
+    qml.CRY(p[7], wires=[4, 6])
+    qml.CRY(p[7], wires=[4, 8])
 
-    qml.IsingYY(p[8], wires=[1, 4])
-    qml.IsingYY(p[8], wires=[3, 4])
-    qml.IsingYY(p[8], wires=[5, 4])
-    qml.IsingYY(p[8], wires=[7, 4])
+    qml.CRY(p[8], wires=[1, 4])
+    qml.CRY(p[8], wires=[3, 4])
+    qml.CRY(p[8], wires=[5, 4])
+    qml.CRY(p[8], wires=[7, 4])
+
+    #qml.CRY(p[6], wires=[0, 1])
 
     return [qml.expval(ob_center), qml.expval(ob_corner), qml.expval(ob_edge)]
 
 
-fig, ax = qml.draw_mpl(circuit)([0] * 9, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+fig, ax = qml.draw_mpl(circuit)([0] * 9, 18*[0])
 
 ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-# A reuploadable model for the edge qubit observable without symmetry
+# ... and then without symmetry
 @qml.qnode(dev, interface="torch")
 def circuit_no_sym(x, p):
 
@@ -537,7 +569,7 @@ def circuit_no_sym(x, p):
     qml.RY(p[8], wires=6)
     qml.RY(p[9], wires=8)
 
-    # Edge single qubte rotation
+    # Edge single qubit rotation
     qml.RX(p[10], wires=1)
     qml.RX(p[11], wires=3)
     qml.RX(p[12], wires=5)
@@ -599,10 +631,7 @@ def encode_game(game):
 # :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
 # we need to define this and then we can begin our optimisation.
 
-# calculate cross entropy for classification problem
-from math import log
-
-
+# calculate mean square error for this classification problem
 def cost_function(params, input, target):
     output = torch.stack([circuit(x, params) for x in input])
     vec = output - target
@@ -620,7 +649,7 @@ import numpy as np
 
 max_epoch = 10
 max_step = 30
-batch_size = 15
+batch_size = 10
 
 encoded_dataset = list(zip(*[encode_game(game) for game in dataset]))
 encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
@@ -679,7 +708,7 @@ params = 0.01 * torch.randn(34)
 params.requires_grad = True
 opt = optim.Adam([params], lr=1e-2)
 
-# calculate cross entropy for classification problem
+# calculate mean square error for this classification problem
 
 
 def cost_function_no_sym(params, input, target):
@@ -760,7 +789,37 @@ plt.xlabel("Optimization steps")
 plt.legend()
 plt.show()
 
-
 ######################################################################
-# This example is inspired by the model used in `Meyer et al. (2022) <https://arxiv.org/abs/2205.06217>`.
+# What we can see then is that by paying attention to the symmetries intrinsic
+# to the learning problem and reflecting this in an equivariant gate set
+# we have managed to improve our learning accuracies. It is notable however that
+# we can also see that paying attention to symmetries isn't a magic bullet
+# as the learning accuracies in both cases are hardly ideal given this is a solved game
+# though the symmerty aware circuit clearly outperforms the other.
+
+
+##############################################################################
+# References
+# ----------
+#
+# .. [#Bronstein2021]
+#
+#   Michael M. Bronstein, Joan Bruna, Taco Cohen, Petar Veličković (2021).
+#   Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges.
+#   `arXiv:2104.13478 <https://arxiv.org/abs/2104.13478>`__
+#
+# .. [#Meyer2022]
+#
+#   Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele,
+#   Francesco Arzani, Alissa Wilms, Jens Eisert (2022).
+#   Exploiting symmetry in variational quantum machine learning.
+#   `arXiv:2205.06217 <https://arxiv.org/abs/2205.06217>`__
+#
+
+##############################################################################
+# Acknowledgements
+# ----------
+#
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
+#
+
