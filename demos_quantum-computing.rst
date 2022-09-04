@@ -83,6 +83,19 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/photonics/photonics_tn.png
     :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
+
+.. customgalleryitem::
+    :tooltip: Learn about the toric code and its excitations
+    :figure: demonstrations/toric_code/types_of_loops.png
+    :description: :doc:`demos/tutorial_toric_code`
+    :tags: errorcorrection
+    
+.. customgalleryitem::
+    :tooltip: Learn how to simulate a large quantum circuits with smaller ones
+    :figure: demonstrations/quantum_circuit_cutting/cutqc_logo.png
+    :description: :doc:`demos/tutorial_quantum_circuit_cutting`
+    :tags: quantumcomputing
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -100,4 +113,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_error_mitigation
 	demos/tutorial_sc_qubits
     demos/tutorial_photonics
+    demos/tutorial_toric_code
+    demos/tutorial_quantum_circuit_cutting
     

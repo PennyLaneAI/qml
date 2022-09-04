@@ -129,10 +129,17 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: pytorch
 
 .. customgalleryitem::
+    :tooltip: Generalization in quantum machine learning from few training data
+    :figure: demonstrations/learning_few_data/few_data_thumbnail.png
+    :description: :doc:`demos/tutorial_learning_few_data`
+    :tags: qcnn advantage 
+
+.. customgalleryitem::
     :tooltip: Learn how use symmetries to improve training with equivariant learning.
     :figure: demonstrations/equivariant_learning/D4_sym_thumbnail.png
     :description: :doc:`demos/tutorial_equivariant_learning`
     :tags: pytorch
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -157,4 +164,6 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
     demos/function_fitting_qsp
+    demos/tutorial_learning_few_data
     demos/tutorial_equivariant_learning
+
