@@ -46,7 +46,7 @@ and can be downloaded as Jupyter notebooks and Python scripts.
 ## Contributing
 
 You can contribute by submitting a demo via pull request implementing a recent
-quantum machine learning paper/result.
+quantum computing paper/result.
 
 ### Adding demos
 

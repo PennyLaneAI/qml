@@ -316,14 +316,14 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # First lets generate some games.
 #
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
-# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1. 
+# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 # There are 26,830 different possible games but we will only sample a few hundred.
 
 import torch
 import random
 from toolz import unique
 
-#Fix for reproducability
+# Fix for reproducability
 torch.backends.cudnn.deterministic = True
 torch.manual_seed(99)
 
@@ -532,10 +532,10 @@ def circuit(x, p):
     return [qml.expval(ob_center), qml.expval(ob_corner), qml.expval(ob_edge)]
 
 
-fig, ax = qml.draw_mpl(circuit)([0] * 9, 18*[0])
+fig, ax = qml.draw_mpl(circuit)([0] * 9, 18 * [0])
 
 ######################################################################
-# Let's also look at the same series of gates 
+# Let's also look at the same series of gates
 # three operators into the loss function and use this to update our
 # parameters
 
@@ -826,4 +826,3 @@ plt.show()
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
 #
-

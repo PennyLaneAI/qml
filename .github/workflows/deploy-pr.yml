@@ -11,18 +11,30 @@ jobs:
     runs-on: ubuntu-20.04
     if: github.event.workflow_run.conclusion == 'success'
     steps:
-      - name: Download PR Info
-        if: github.event.workflow_run.event == 'pull_request'
+      - name: Set Build Context File Prefix
+        id: build_context_file_prefix
+        run: |
+          if [[ "${{ github.event.workflow_run.event }}" == "pull_request" ]]; then
+            echo "build_context_prefix=pr" >> $GITHUB_ENV
+          elif [[ "${{ github.event.workflow_run.event }}" == "push" ]]; then
+            echo "build_context_prefix=push" >> $GITHUB_ENV
+          fi
+
+      - name: Download Build Context
+        id: build_context
         uses: actions/github-script@v6
         with:
+          result-encoding: string
           script: |
+            const workflowContextFilePrefix = process.env.build_context_prefix;
+            const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
             let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
             let prArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == 'pr_info.zip'
+              return artifact.name == workflowContextFileName
             })[0];
             let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
@@ -31,42 +43,66 @@ jobs:
               archive_format: 'zip'
             });
             let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_info.zip`, Buffer.from(download.data));
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${workflowContextFileName}`, Buffer.from(download.data));
+            return workflowContextFileName;
 
-      - name: Unpack PR Info
-        if: github.event.workflow_run.event == 'pull_request'
+      - name: Unpack Build Information
         run: |
-          unzip pr_info.zip
+          unzip ${{ steps.build_context.outputs.result }}
 
-      - name: Read PR Info
-        id: read_pr_info
-        if: github.event.workflow_run.event == 'pull_request'
+      - name: Read Build Information
+        id: read_build_info
         uses: actions/github-script@v6
         with:
           script: |
             let fs = require('fs');
-            const prData = fs.readFileSync('pr_info.json');
-            return JSON.parse(prData);
+            const workflowContextFilePrefix = process.env.build_context_prefix;
+            const buildData = fs.readFileSync(`${workflowContextFilePrefix}_info.json`);
+            return JSON.parse(buildData);
 
-      - name: Parse PR Info
+      - name: Parse Pull Request Event Information
         id: pr_info
         if: github.event.workflow_run.event == 'pull_request'
         run: |
-          PR_ID=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.id')
+          PR_ID=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.id')
           PR_ID_NO_QUOTE="${PR_ID%\"}"
           PR_ID_NO_QUOTE="${PR_ID_NO_QUOTE#\"}"
+          echo "pr_id => $PR_ID_NO_QUOTE"
           echo "::set-output name=pr_id::$PR_ID_NO_QUOTE"
           echo "::set-output name=pr_site::https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html"
           
-          PR_REF=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.ref')
+          PR_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
           PR_REF_NO_QUOTE="${PR_REF%\"}"
           PR_REF_NO_QUOTE="${PR_REF_NO_QUOTE#\"}"
+          echo "pr_ref => $PR_REF_NO_QUOTE"
           echo "::set-output name=pr_ref::$PR_REF_NO_QUOTE"
           
-          PR_REF_NAME=$(echo '${{ steps.read_pr_info.outputs.result }}' | jq '.ref_name')
+          PR_REF_NAME=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref_name')
           PR_REF_NAME_NO_QUOTE="${PR_REF_NAME%\"}"
           PR_REF_NAME_NO_QUOTE="${PR_REF_NAME_NO_QUOTE#\"}"
+          echo "pr_ref_name => $PR_REF_NAME_NO_QUOTE"
           echo "::set-output name=pr_ref_name::$PR_REF_NAME_NO_QUOTE"
+
+      - name: Parse Push Event Information
+        id: push_info
+        if: github.event.workflow_run.event == 'push'
+        run: |
+          PUSH_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
+          PUSH_REF_NO_QUOTE="${PUSH_REF%\"}"
+          PUSH_REF_NO_QUOTE="${PUSH_REF_NO_QUOTE#\"}"
+          echo "push_ref => $PUSH_REF_NO_QUOTE"
+          echo "::set-output name=push_ref::$PUSH_REF_NO_QUOTE"
+
+          PUSH_REF_NAME=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref_name')
+          PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME%\"}"
+          PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME_NO_QUOTE#\"}"
+          echo "push_ref_name_raw => $PUSH_REF_NAME_NO_QUOTE"
+          echo "::set-output name=push_ref_name_raw::$PUSH_REF_NAME_NO_QUOTE"
+
+          BRANCH_NAME=${PUSH_REF_NAME_NO_QUOTE#refs/heads/}
+          BRANCH_NAME_FORMATTED=${BRANCH_NAME^^}
+          echo "push_ref_name => $BRANCH_NAME_FORMATTED"
+          echo "::set-output name=push_ref_name::$BRANCH_NAME_FORMATTED"
 
       - name: Get Build IDs
         id: build_ids
@@ -86,14 +122,6 @@ jobs:
               return artifact.name.split('.')[0].split('-')[1];
             });
             return buildIds
-
-      - name: Get Branch name (on Push)
-        id: push_branch_info
-        if: github.event.workflow_run.event == 'push'
-        run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          echo "${BRANCH_NAME^^}"
-          echo "::set-output name=branch_name::${BRANCH_NAME^^}"
 
       - name: Create Deployment
         id: deployment
@@ -209,14 +237,14 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_ACTIONS_ID: ${{ format('AWS_ENV_S3_BUCKET_{0}', steps.push_branch_info.outputs.branch_name) }}
+          BUCKET_ACTIONS_ID: ${{ format('AWS_ENV_S3_BUCKET_{0}', steps.push_info.outputs.push_ref_name) }}
         run: |
           echo "Got actions Bucket ID: ${{ env.BUCKET_ACTIONS_ID }}"
           AWS_BUCKET_NAME=${{ secrets[env.BUCKET_ACTIONS_ID] }}
           aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
 
       - name: Invalidate Cloudfront cache (Prod)
-        if: github.event.workflow_run.event == 'push' && steps.push_branch_info.outputs.branch_name == 'master'
+        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master'
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
