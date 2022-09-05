@@ -529,12 +529,16 @@ def circuit(x, p):
     qml.CRY(p[8], wires=[5, 4])
     qml.CRY(p[8], wires=[7, 4])
 
-    #qml.CRY(p[6], wires=[0, 1])
-
     return [qml.expval(ob_center), qml.expval(ob_corner), qml.expval(ob_edge)]
 
 
 fig, ax = qml.draw_mpl(circuit)([0] * 9, 18*[0])
+
+######################################################################
+# Let's also look at the same series of gates 
+# three operators into the loss function and use this to update our
+# parameters
+
 
 ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
@@ -647,7 +651,7 @@ opt = optim.Adam([params], lr=1e-2)
 
 import numpy as np
 
-max_epoch = 10
+max_epoch = 15
 max_step = 30
 batch_size = 10
 
@@ -720,7 +724,7 @@ def cost_function_no_sym(params, input, target):
 
 import numpy as np
 
-max_epoch = 10
+max_epoch = 15
 max_step = 30
 batch_size = 15
 
