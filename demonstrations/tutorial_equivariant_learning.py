@@ -323,9 +323,10 @@ import torch
 import random
 from toolz import unique
 
-# Fix for reproducability
+# Fix seeds for reproducability
 torch.backends.cudnn.deterministic = True
-torch.manual_seed(99)
+torch.manual_seed(16)
+random.seed(16)
 
 #  create an empty board
 def create_board():
