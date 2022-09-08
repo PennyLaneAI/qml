@@ -91,10 +91,18 @@ such as benchmarking and characterizing quantum processors.
     :tags: errorcorrection
     
 .. customgalleryitem::
+    :tooltip: Learn how to simulate a large quantum circuits with smaller ones
+    :figure: demonstrations/quantum_circuit_cutting/cutqc_logo.png
+    :description: :doc:`demos/tutorial_quantum_circuit_cutting`
+    :tags: quantumcomputing
+
+.. customgalleryitem::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/mbqc_blueprint.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing
+
+:html:`</div></div><div style='clear:both'>`
 
 .. toctree::
     :maxdepth: 2
@@ -112,5 +120,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_sc_qubits
     demos/tutorial_photonics
     demos/tutorial_toric_code
+    demos/tutorial_quantum_circuit_cutting
     demos/tutorial_mbqc
     
