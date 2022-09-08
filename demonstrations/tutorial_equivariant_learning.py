@@ -636,7 +636,7 @@ def encode_game(game):
 # :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
 # we need to define this and then we can begin our optimisation.
 
-# calculate mean square error for this classification problem
+# calculate the mean square error for this classification problem
 def cost_function(params, input, target):
     output = torch.stack([circuit(x, params) for x in input])
     vec = output - target
