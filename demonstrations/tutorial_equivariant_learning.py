@@ -471,7 +471,7 @@ ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-# Now let's encode the data in the following qubit models, firslt with symmetry
+# Now let's encode the data in the following qubit models, first with symmetry
 @qml.qnode(dev, interface="torch")
 def circuit(x, p):
 
