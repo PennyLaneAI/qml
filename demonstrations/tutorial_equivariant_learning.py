@@ -302,7 +302,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # We will use an :math:`l_2` loss function acting on pairs of games and
-# labels :math:`D={(g,y)}` where math:`D` is our dataset.
+# labels :math:`D={(g,y)}` where :math:`D` is our dataset.
 #
 
 
