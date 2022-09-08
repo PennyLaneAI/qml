@@ -19,34 +19,39 @@ Throughout our demos we have seen a wide array of
 applications of quantum computing to the fields of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
 `chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ and `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems.
 
-All of them are complex topics. So we might wonder: can we apply quantum computing to more fundamental
-tasks? Throughout this tutorial we will answer this question by showing
-how we can perform basic arithmetic computations using an ubiquitous tool in quantum computing:
-the Quantum Fourier Transform (QFT).
+These are all advanced topics. So we might ask: can we apply quantum computing to more fundamental tasks?
+The answer is yes! In fact, we will see how to perform operations as simple as addition, subtraction or multiplication with these computers.
+To do so, we will make use of a well-known tool in this field, the Quantum Fourier Transform (QFT).
 
 In this demo, we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
 `Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
-intuition of how it works and what applications we can give it.
+intuition of how it works and how we can take advantage of it.
 
 Motivation
 ----------
 
-The first question we have to answer before we start developing the whole idea is to understand if it makes sense. Is the
+The first question we have to ask ourselves is whether it makes sense to perform these basic operations on a quantum computer. Is the
 goal purely academic or is it really something that is needed in certain algorithms?  Why implement in a quantum computer
 something that I can do with a calculator?
 
-The first thing we might think is that this is something we have not needed so far. In algorithms like Deustch-Jozsa or
-Grover we have never needed it, or maybe we do? When working with this algorithm there is a concept that we will not get
-tired of hearing, the :math:`\textit{oracle}`. This is a gate that behaves like a black box that provides us with results that interest
-us for the algorithm.  However, this is not as nice as it seems. I am sorry to tell you that but oracles are not black boxes
-that are going to give you. You have to build them, and of course, it is not an easy task!
-Normally, these oracles perform certain operations to define a function so in this demo we will look at building the most
-basic operations.
+One thing we might think is that for basic algorithms like Deustch-Jozsa or
+Grover, we have never needed to apply any arithmetic operations such as addition or multiplication.
+However, the reality is different. When we learn these algorithms, from an academic point of view,
+we work with an operator that we are given ready-made and that we never worry about, the :math:`\textit{oracle}`.
+But this operator that seems so magical, is something that in real situations, we will have to build it by hand.
+To give an example, let's imagine that we want to use Grover's algorithm to search for `Magic Squares <https://en.wikipedia.org/wiki/Magic_square>`__.
+To define the oracle, which determines whether a solution is valid or not, we must perform sums over the rows and
+columns to check that they all have the same value. Therefore, we can see here that we will need to define a
+sum operator within the quantum computer to be able to create this oracle.
 
-The second question is why do we work with the QFT? There are other procedures to perform the basic operations, for example
-imitating the classical algorithm, but it has been seen that QFT needs less qubits to perform these operations, which is
+The second question is why do we work with the QFT? There are other procedures to perform this basic operations, for example
+imitating the classical algorithm. But it has been seen that QFT needs less qubits to perform them, which is
 nowadays of vital importance.
+
+We will organize the demo as follows. Initially, we will talk about the Fourier basis giving an intuitive idea of how
+it works. After that we will see different basic arithmetic operations. Finally, we will move on to a practical example
+in which we will factor numbers using Grover's algorithm.
 
 
 QFT representation
