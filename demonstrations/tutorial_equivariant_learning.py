@@ -822,7 +822,7 @@ plt.show()
 #
 
 ##############################################################################
-# Acknowledgements
+# Acknowledgments
 # ----------
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
