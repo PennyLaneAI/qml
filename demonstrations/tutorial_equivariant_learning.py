@@ -401,7 +401,7 @@ def diag_win(board, player):
     return win1 or win2
 
 
-# Check if the win conditions have been met or if a draw has occured
+# Check if the win conditions have been met or if a draw has occurred
 def evaluate_game(board):
     winner = 99
     for player in [1, -1]:
