@@ -800,7 +800,7 @@ plt.show()
 # we have managed to improve our learning accuracies. It is notable however that
 # we can also see that paying attention to symmetries isn't a magic bullet
 # as the learning accuracies in both cases are hardly ideal given this is a solved game
-# though the symmerty aware circuit clearly outperforms the other.
+# though the symmetry aware circuit clearly outperforms the other.
 
 
 ##############################################################################
