@@ -2,10 +2,10 @@ Videos
 ======
 
 .. meta::
-   :property="og:description": Sit back and explore quantum machine learning and quantum programming with our curated selection of expert youtube-videos.
+   :property="og:description": Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.
    :property="og:image": https://pennylane.ai/qml/_static/youtube-videos_card.png
 
-Sit back and explore quantum machine learning and quantum programming with our curated selection of expert youtube-videos.
+Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.
 
 .. raw:: html
 
