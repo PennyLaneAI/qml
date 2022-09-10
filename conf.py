@@ -27,10 +27,7 @@ sys.path.insert(0, os.path.abspath("."))
 
 project = "PennyLane"
 
-copyright = """
-    Ville Bergholm, Josh Izaac, Maria Schuld, Christian Gogolin, Carsten Blank, Keri McKiernan, and Nathan Killoran. <br>
-PennyLane: Automatic differentiation of hybrid quantum-classical computations. arXiv:1811.04968, 2018.<br>
-&copy; Copyright 2018-2019, Xanadu Quantum Technologies Inc."""
+copyright = "2022, Xanadu Quantum Technologies, Inc."
 
 author = "Xanadu Inc."
 
@@ -214,6 +211,7 @@ html_theme_options = {
     "toc_marker_colour": "#19b37b",
     "toc_global": False,
     "toc_subset": False,
+    "toc_hover": False,
     "relations": False
 }
 

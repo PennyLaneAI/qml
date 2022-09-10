@@ -10,6 +10,15 @@ Sit back and explore quantum machine learning and quantum programming with our c
 .. raw:: html
 
     <style>
+        .up-button {
+          position: absolute;
+          top: 60px;
+        }
+
+        .video-card h4 {
+          font-weight: 500 !important;
+        }
+
         .youtube-video-gallery {
           width: 150%;
           margin-left: calc(100% - 990px);

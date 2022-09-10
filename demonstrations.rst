@@ -50,7 +50,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/board.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>Getting started</strong>
+                                    Getting started
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto "><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -67,7 +67,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/optimization.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>Optimization</strong>
+                                    Optimization
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Learn how to train quantum circuits like neural networks, using the latest tips and tricks from the literature.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -84,7 +84,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/wigner.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>QML</strong>
+                                    QML
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -104,7 +104,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/quantum-chemistry.png" class="img-fluid" style="max-width: 110px;"></img>
                                     <br>
-                                    <strong>Quantum Chemistry</strong>
+                                    Quantum Chemistry
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Study the properties of molecules and materials using quantum computing.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -121,7 +121,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/quantum-computing.png" class="img-fluid" style="max-width: 66px;"></img>
                                     <br>
-                                    <strong>Quantum Computing</strong>
+                                    Quantum Computing
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore general quantum computing tasks and algorithms, from quantum volume to boson sampling.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -138,7 +138,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/community.png" class="img-fluid" style="max-width: 130px;"></img>
                                     <br>
-                                    <strong>Community</strong>
+                                    Community
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
