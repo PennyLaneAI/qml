@@ -231,3 +231,7 @@ def setup(app):
     app.add_directive("related", RelatedDirective)
     app.add_css_file("xanadu_gallery.css")
     app.add_directive("bio", Bio)
+
+# -- Plotly output -----------------------------------------------------------
+import plotly.io as pio
+pio.renderers.default = 'sphinx_gallery'
