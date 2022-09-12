@@ -32,7 +32,7 @@ is concerned, this means we can reduce our parameter space and so the
 amount of data our algorithm must sift through is immediately reduced.
 Along the way the fact that our learning model must encode a symmetry
 that actually exists in the system we are trying to represent naturally
-ecourages our results to be more genralisable.
+encourages our results to be more generalisable.
 
 In classical machine learning, this is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
