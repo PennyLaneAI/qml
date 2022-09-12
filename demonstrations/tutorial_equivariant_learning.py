@@ -126,7 +126,7 @@ show us how those symmetries look on a particular
 space of unitary matrices. Given that quantum circuits are largely
 constructed from unitaries this gives us a direct connection between the
 characterisation of symmetries and quantumc circuits. If we want to
-encode the structure of the symmeteries in a quantum circuit we must
+encode the structure of the symmetries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
 
 There remain one question. What is equivariance? With our new found knowledge
