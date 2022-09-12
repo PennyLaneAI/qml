@@ -253,7 +253,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # edge then it will be sent round the other edges. So we can see that the
 # twirl operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
-# we can see that for a single qubit rotation the inavarient maps are rotations
+# we can see that for a single qubit rotation the inavariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
 # edges.
 #
