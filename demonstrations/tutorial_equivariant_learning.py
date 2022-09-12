@@ -316,7 +316,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # First lets generate some games.
 #
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
-# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
+# On completion, it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 # There are 26,830 different possible games but we will only sample a few hundred.
 
 import torch
