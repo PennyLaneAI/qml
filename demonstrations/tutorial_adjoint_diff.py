@@ -176,7 +176,7 @@ bra_n = dev._create_basis_state(0)
 for op in ops:
     bra_n = dev._apply_operation(bra_n, op)
 bra_n = dev._apply_operation(bra_n, M)
-bra_n = dev._apply_operation(bra_n, qml.adjoint(op[-1]))
+bra_n = dev._apply_operation(bra_n, qml.adjoint(ops[-1]))
 
 ket_n = dev._create_basis_state(0)
 
