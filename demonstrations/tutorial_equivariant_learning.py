@@ -101,7 +101,7 @@ where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
 quantum circuits (which are mostly made up of unitary gates). 
 
-How does all this relate to symmetries? Well a large class of
+How does all this relate to symmetries? Well, a large class of
 symmetries can be characterised as a group where all the elements of the group leave 
 some space we are considering unchanged. Let's consider an example:
 The symmetries of a sphere. Now when we think of this symmetry we
