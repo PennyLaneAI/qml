@@ -17,7 +17,7 @@ Introduction
 Symmetries are at the heart of physics, indeed in condensed matter and
 particle physics we often define a thing simply by the symmetries it
 adheres to. What does symmetry mean for those in machine learning? In
-this context the ambition is straight forward - it is a means to
+this context the ambition is straightforward - it is a means to
 reducting the parameter space and improving generalisation.
 
 Suppose we have a learning task and the data we are learning from has an
