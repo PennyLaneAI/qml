@@ -146,7 +146,7 @@ preserve this information in the outputs. We can see this because we could inste
 twice and get the second by applying the group action to one of the outputs. Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symmetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
-analysis where it is known they are euivarient with respect to translations; They naturally encode the idea that
+analysis where it is known they are equivariant with respect to translations; They naturally encode the idea that
 a picture of a dog is symmetrically related to the same picture slid to the left by n pixels). With our focus on
 unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
 
