@@ -312,7 +312,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# Let's now impliment this!
+# Let's now implement this!
 # First let's generate some games.
 #
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
