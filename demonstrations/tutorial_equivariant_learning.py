@@ -182,7 +182,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # **The question is, how do we encode this in our QML problem?**
 #
 # First, let us encode this problem classically, we will consider a 9
-# element vector :math:`V`, each element of which indentifies a square of
+# elements vector :math:`V`, each element of which identifies a square of
 # the board. The entries themselves can be
 # :math:`+1`,\ :math:`0`,\ :math:`-1` representing a cross, no symbol, or
 # a nought. The label is one hot encoded in a vector
