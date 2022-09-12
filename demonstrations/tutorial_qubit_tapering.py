@@ -15,7 +15,7 @@ Qubit tapering
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
-*Authors: Soran Jahangiri and Utkarsh. Posted: 16 May 2022. Last updated: 28 Aug 2022*
+*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 12 Sept 2022*
 
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
@@ -227,11 +227,11 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # VQE simulation
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
-# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. To build
-# a tapered UCCSD-based variational ansatze [#ryabinkin2018]_, we taper the particle-conserving
-# :func:`~.pennylane.SingleExcitation` and :func:`~.pennylane.DoubleExcitation` gates using the
-# :func:`~.pennylane.qchem.taper_operation`. We then use this tapered ansatz to evolve the
-# tapered Hartree-Fock state to a trial ground state.
+# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build
+# a tapered UCCSD-based variational ansatz [#ryabinkin2018]_ that prepares an entangled state
+# by evolving the tapered Hartree-Fock state using the tapered particle-conserving gates, i.e.,
+# the :func:~.pennylane.SingleExcitation and :func:~.pennylane.DoubleExcitation operators tapered
+# using :func:`~.pennylane.qchem.taper_operation`.
 
 singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
 
