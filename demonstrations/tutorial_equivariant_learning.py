@@ -31,7 +31,7 @@ configurations of the board as 'the same thing' as far as the symmetry
 is concerned, this means we can reduce our parameter space and so the
 amount of data our algorithm must sift through is immediately reduced.
 Along the way the fact that our learning model must encode a symmetry
-that actually exists in the system we are trying to represent natually
+that actually exists in the system we are trying to represent naturally
 ecourages our results to be more genralisable.
 
 In classical machine learning, this is often referred to as geometric deep
