@@ -144,7 +144,7 @@ The importance of such maps in machine learning is that if, for example, our neu
 equivariant maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
 preserve this information in the outputs. We can see this because we could instead input the same input
 twice and get the second by applying the group action to one of the outputs. Given the vast amount
-of input data required to train a neural network the principle that one can pre-encode known symetry structures
+of input data required to train a neural network the principle that one can pre-encode known symmetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
 analysis where it is known they are euivarient with respect to translations; They naturally encode the idea that
 a picture of a dog is symetrically related to the same picture slid to the left by n pixels). With our focus on
