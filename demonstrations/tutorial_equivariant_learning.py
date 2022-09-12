@@ -194,7 +194,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # To create the quantum model let us initialise all the qubits in :math:`|0\rangle`,
 # which we note is invariant under the symmetries of the problem (flip and
 # rotate all you want, it's still going to be zeroes whatever your
-# mapping). We will then look to apply single qubit :math:`R_x(\theta)`
+# mapping). We will then look to apply a single qubit :math:`R_x(\theta)`
 # rotations on individual qubits, encoding each of the
 # possibilities in the board squares at an angle of
 # :math:`\frac{2\pi}{3}` from each other. For our parameterised gates we
