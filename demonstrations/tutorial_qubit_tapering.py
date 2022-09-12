@@ -228,28 +228,23 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
 # simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. To build
-# a tapered UCCSD-based variational ansatze [#ryabinkin2018]_ we first obtain the tapered excitation
-# operators that are built by tapering typical particle-conserving :func:`~.pennylane.SingleExcitation`
-# and :func:`~.pennylane.DoubleExcitation` gates.
+# a tapered UCCSD-based variational ansatze [#ryabinkin2018]_, we taper the particle-conserving
+# :func:`~.pennylane.SingleExcitation` and :func:`~.pennylane.DoubleExcitation` gates using the
+# :func:`~.pennylane.qchem.taper_operation`. We then use this tapered ansatz to evolve the
+# tapered Hartree-Fock state to a trial ground state.
 
 singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
-tapered_singles, tapered_doubles = qml.qchem.taper_excitations(
-                                        generators, paulixops, paulix_sector, singles, doubles
-                                    )
-tapered_excitations = tapered_doubles + tapered_singles
-
-##############################################################################
-# In our circuit we begin with the tapered Hartree-Fock state and evolve it by applying the
-# exponentiated tapered excitation operators that we obtain from above.
 
 dev = qml.device('default.qubit', wires=H_tapered.wires)
 @qml.qnode(dev)
 def circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
-    for idx, excitation in enumerate(tapered_excitations):
-        for itx, op in enumerate(excitation.ops):
-            qml.PauliRot(params[idx][itx],
-                        qml.grouping.pauli_word_to_string(op), op.wires)
+    for idx, double in enumerate(doubles):
+        qml.qchem.taper_operation(qml.DoubleExcitation(params[idx], wires=double),
+                                generators, paulixops, paulix_sector, n_electrons, len(H.wires))
+    for idx, single in enumerate(singles):
+        qml.qchem.taper_operation(qml.SingleExcitation(params[len(doubles) + idx], wires=single),
+                                generators, paulixops, paulix_sector, n_electrons, len(H.wires))
     return qml.expval(H_tapered)
 
 ##############################################################################
@@ -257,7 +252,7 @@ def circuit(params):
 # parameters with respect to the ground state energy.
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-params = np.zeros((3, 2), requires_grad=True)
+params = np.zeros(len(doubles)+len(singles), requires_grad=True)
 
 for n in range(1, 41):
     params, energy = optimizer.step_and_cost(circuit, params)
