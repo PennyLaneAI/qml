@@ -503,14 +503,15 @@ for n in range(max_iterations):
             f"Energy = {energy:.8f} Ha"
         )
 
-h2_grad_energies_ibm.append(cost(params))
+final_energy = cost(params)
+h2_grad_energies_ibm.append(final_energy)
 
 true_energy = -1.136189454088
 
 print()
-print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
+print(f"Final estimated value of the ground-state energy = {final_energy:.8f} Ha")
 print(
-    f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha"
+    f"Accuracy with respect to the true energy: {np.abs(final_energy - true_energy):.8f} Ha"
 )
 
 ##############################################################################
@@ -615,10 +616,12 @@ res = minimizeSPSA(
     callback=callback_fn,
 )
 
+final_energy = h2_spsa_energies_ibm[-1]
+
 print()
-print(f"Final estimated value of the ground-state energy = {energy:.8f} Ha")
+print(f"Final estimated value of the ground-state energy = {final_energy:.8f} Ha")
 print(
-    f"Accuracy with respect to the true energy: {np.abs(energy - true_energy):.8f} Ha"
+    f"Accuracy with respect to the true energy: {np.abs(final_energy - true_energy):.8f} Ha"
 )
 
 ##############################################################################
