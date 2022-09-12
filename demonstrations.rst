@@ -106,7 +106,7 @@ Demos
                                     <br>
                                     <strong>Quantum Computing</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Explore general quantum computing tasks and algorithms, from measuring quantum volume to boson sampling.</p>
+                                    <p class="mb-1 grey-text px-3">Explore general quantum computing concepts and algorithms, from quantum volume to boson sampling.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
