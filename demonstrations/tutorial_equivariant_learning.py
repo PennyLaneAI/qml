@@ -210,7 +210,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # The secret will be to encode the symmetries into the gate set so the
 # observables we are interested in inherently respect the symmetries. How do
 # we do this? We need to select the collections of gates that commute with
-# the symmetries. In general we can use the twirling formula for this:
+# the symmetries. In general, we can use the twirling formula for this:
 #
 
 
