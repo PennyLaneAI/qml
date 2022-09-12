@@ -52,7 +52,7 @@ Fundamentally representation theory is based on the prosaic observation
 that linear algebra is easy and group theory is weird: So what if we can
 study groups as linear maps?
 
-First let's define what we mean by a group:
+First, let's define what we mean by a group:
 
 **Definition**: A group is a set :math:`G` together with a binary operation
 on :math:`G`, here denoted :math:`\circ`, that combines any two elements
