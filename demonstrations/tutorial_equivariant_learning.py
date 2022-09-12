@@ -142,7 +142,7 @@ as linear maps on :math:`V` and :math:`W` respectively. We call :math:`f` equiva
 
 The importance of such maps in machine learning is that if, for example, our neural network layers are
 equivariant maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
-preserve this information in the outputs. Which we can see because we could instead input the same input
+preserve this information in the outputs. We can see this because we could instead input the same input
 twice and get the second by applying the group action to one of the outputs. Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
