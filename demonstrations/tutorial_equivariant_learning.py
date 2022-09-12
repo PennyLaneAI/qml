@@ -260,7 +260,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# For entangling gates the situation is similar. There are three invarient
+# For entangling gates the situation is similar. There are three invariant
 # classes, the centre entagled with all corners, with all edges, and the
 # edges paired in a ring.
 #
