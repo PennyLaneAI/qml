@@ -244,7 +244,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # In this particular instance we can see the action of the twirling
-# operation geometrically as the symmtries involved are all
+# operation geometrically as the symmetries involved are all
 # permutations. Let's consider the :math:`R_x` rotation acting on one qubit. Now
 # if it is in the centre then you can flip around any symmetry axis you
 # like, this operation is invarient, so we've identified one equivariant
