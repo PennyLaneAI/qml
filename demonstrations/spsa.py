@@ -525,13 +525,13 @@ print(
 #
 #  .. code-block:: none
 #
-#     Iteration = 0, Number of device executions = 333,  Energy = -0.66345346 Ha
-#     Iteration = 5, Number of device executions = 1998,  Energy = -0.99124272 Ha
-#     Iteration = 10, Number of device executions = 3663,  Energy = -1.00105536 Ha
-#     Iteration = 15, Number of device executions = 5328,  Energy = -0.99592924 Ha
+#     Iteration = 0, Number of device executions = 333,  Energy = -0.75215552 Ha
+#     Iteration = 5, Number of device executions = 1998,  Energy = -1.07779739 Ha
+#     Iteration = 10, Number of device executions = 3663,  Energy = -1.06789006 Ha
+#     Iteration = 15, Number of device executions = 5328,  Energy = -1.07183096 Ha
 #
-#     Final estimated value of the ground-state energy = -0.98134253 Ha
-#     Accuracy with respect to the true energy: 0.15484692 Ha
+#     Final estimated value of the ground-state energy = -1.07234725 Ha
+#     Accuracy with respect to the true energy: 0.06384221 Ha
 #
 
 
@@ -635,29 +635,29 @@ print(
 #
 #  .. code-block:: none
 #
-#     Iteration = 10, Number of device executions = 210,  Energy = -0.93065488 Ha
-#     Iteration = 20, Number of device executions = 435,  Energy = -0.97890496 Ha
-#     Iteration = 30, Number of device executions = 660,  Energy = -0.96639933 Ha
-#     Iteration = 40, Number of device executions = 885,  Energy = -0.96915750 Ha
-#     Iteration = 50, Number of device executions = 1110,  Energy = -0.96290227 Ha
-#     Iteration = 60, Number of device executions = 1335,  Energy = -0.98274165 Ha
-#     Iteration = 70, Number of device executions = 1560,  Energy = -0.98002812 Ha
-#     Iteration = 80, Number of device executions = 1785,  Energy = -0.98027459 Ha
-#     Iteration = 90, Number of device executions = 2010,  Energy = -0.99295116 Ha
-#     Iteration = 100, Number of device executions = 2235,  Energy = -0.96745352 Ha
-#     Iteration = 110, Number of device executions = 2460,  Energy = -0.96522842 Ha
-#     Iteration = 120, Number of device executions = 2685,  Energy = -0.98482781 Ha
-#     Iteration = 130, Number of device executions = 2910,  Energy = -0.98701641 Ha
-#     Iteration = 140, Number of device executions = 3135,  Energy = -0.97656477 Ha
-#     Iteration = 150, Number of device executions = 3360,  Energy = -0.98735587 Ha
-#     Iteration = 160, Number of device executions = 3585,  Energy = -0.98969587 Ha
-#     Iteration = 170, Number of device executions = 3810,  Energy = -0.96972110 Ha
-#     Iteration = 180, Number of device executions = 4035,  Energy = -0.98354804 Ha
-#     Iteration = 190, Number of device executions = 4260,  Energy = -0.96640637 Ha
-#     Iteration = 200, Number of device executions = 4485,  Energy = -0.98526135 Ha
+#     Iteration = 10, Number of device executions = 210,  Energy = -0.99688324 Ha
+#     Iteration = 20, Number of device executions = 435,  Energy = -1.04312008 Ha
+#     Iteration = 30, Number of device executions = 660,  Energy = -1.03970506 Ha
+#     Iteration = 40, Number of device executions = 885,  Energy = -1.06597461 Ha
+#     Iteration = 50, Number of device executions = 1110,  Energy = -1.05903336 Ha
+#     Iteration = 60, Number of device executions = 1335,  Energy = -1.06411252 Ha
+#     Iteration = 70, Number of device executions = 1560,  Energy = -1.05110851 Ha
+#     Iteration = 80, Number of device executions = 1785,  Energy = -1.05976187 Ha
+#     Iteration = 90, Number of device executions = 2010,  Energy = -1.05210819 Ha
+#     Iteration = 100, Number of device executions = 2235,  Energy = -1.05398727 Ha
+#     Iteration = 110, Number of device executions = 2460,  Energy = -1.06207447 Ha
+#     Iteration = 120, Number of device executions = 2685,  Energy = -1.06248090 Ha
+#     Iteration = 130, Number of device executions = 2910,  Energy = -1.06514374 Ha
+#     Iteration = 140, Number of device executions = 3135,  Energy = -1.05176108 Ha
+#     Iteration = 150, Number of device executions = 3360,  Energy = -1.05679187 Ha
+#     Iteration = 160, Number of device executions = 3585,  Energy = -1.06176909 Ha
+#     Iteration = 170, Number of device executions = 3810,  Energy = -1.04974101 Ha
+#     Iteration = 180, Number of device executions = 4035,  Energy = -1.06182034 Ha
+#     Iteration = 190, Number of device executions = 4260,  Energy = -1.05587549 Ha
+#     Iteration = 200, Number of device executions = 4485,  Energy = -1.05229175 Ha
 #
-#     Final estimated value of the ground-state energy = -0.98134253 Ha
-#     Accuracy with respect to the true energy: 0.15484692 Ha
+#     Final estimated value of the ground-state energy = -1.06069987 Ha
+#     Accuracy with respect to the true energy: 0.07548958 Ha
 #
 
 plt.figure(figsize=(10, 6))
