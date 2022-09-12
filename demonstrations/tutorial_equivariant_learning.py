@@ -199,7 +199,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # possibilites in the board squares at an angle of
 # :math:`\frac{2\pi}{3}` from each other. For our parameterised gates we
 # will have a single qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
-# rotation at each point, we will then use :math:`CR_Y(\theta_3)` for 2 qubit
+# rotation at each point, we will then use :math:`CR_Y(\theta_3)` for 2 qubits
 # entangling gates. This implies that, for each encoding, crudely, we'll
 # need 18 single qubit rotation parameters and :math:`\binom{9}{2}=36` two
 # qubit gate rotations. Let's see how by using symmetries we can reduce
