@@ -34,7 +34,7 @@ Along the way the fact that our learning model must encode a symmetry
 that actually exists in the system we are trying to represent natually
 ecourages our results to be more genralisable.
 
-In classical machine learning this often referred to as geometric deep
+In classical machine learning, this is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
 deep neural networks (see [#Bronstein2021]_ for a broad introduction).
