@@ -107,7 +107,7 @@ some space we are considering unchanged. Let's consider an example:
 The symmetries of a sphere. Now when we think of this symmetry we
 probably think something along the lines of "it's the same no matter how
 I rotate it or flip it left to right etc". There is this idea of being
-invarient under some operation, we also have the idea of being able to
+invariant under some operation, we also have the idea of being able to
 undo these actions, if we rotate one way, we can rotate it back. If we
 flip the ball right-to-left we can flip it left-to-right to get back to
 where we started (notice too all these inverses are unique). Trivially
