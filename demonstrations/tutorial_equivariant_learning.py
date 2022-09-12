@@ -196,7 +196,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply single qubit :math:`R_x(\theta)`
 # rotations on individual qubits, encoding each of the
-# possibilites in the board squares at an angle of
+# possibilities in the board squares at an angle of
 # :math:`\frac{2\pi}{3}` from each other. For our parameterised gates we
 # will have a single qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
 # rotation at each point, we will then use :math:`CR_Y(\theta_3)` for 2 qubits
