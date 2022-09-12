@@ -129,7 +129,7 @@ characterisation of symmetries and quantumc circuits. If we want to
 encode the structure of the symmetries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
 
-There remain one question. What is equivariance? With our new found knowledge
+There remains one question. What is equivariance? With our newfound knowledge
 of group representation theory we are ready to tackle this. Let :math:`G` be our group, and
 :math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
