@@ -505,7 +505,8 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    ..
 #
 #    A complete measurement-based quantum computation. Circles :math:`\odot` symbolize measurements
-#    of Pauli-:math:`Z`, vertical arrows are measurements of Pauli-:math:`X`, while tilted arrows refer to
+#    of Pauli-:math:`Z`, vertical arrows :math:`\uparrow` are measurements of Pauli-:math:`X`, while 
+#    tilted arrows :math:`\nwarrow` or :math:`\nearrow` refer to
 #    measurements in the :math:`xy`-plane. [#OneWay2001]_
 #
 # However, you might wonder: Is it even feasible to construct the large cluster states that
