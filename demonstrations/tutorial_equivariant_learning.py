@@ -26,7 +26,7 @@ Crosses: if we win a game, we would have won it if the board was rotated
 or flipped along any of the lines of symmetry. Now if we want to train
 an algorithm to spot the outcome of these games, we can either ignore
 the existence of this symmetry or we can somehow include it. The
-advantage in paying attention to the symmetry is it identifies multiple
+advantage of paying attention to the symmetry is it identifies multiple
 configurations of the board as 'the same thing' as far as the symmetry
 is concenred, this means we can reduce our parameter space and so the
 amount of data our algorithm must sift through is immediately reduced.
