@@ -177,7 +177,9 @@ dev_sampler_spsa = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 # We seed so that we can simulate the same circuit every time.
 np.random.seed(50)
 
-all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
+all_pauliz_tensor_prod = qml.operation.Tensor(
+    *[qml.PauliZ(i) for i in range(num_wires)]
+)
 
 
 def circuit(params):
@@ -191,7 +193,9 @@ def circuit(params):
 # be a flattened array. As a result, our cost function must accept a flat array of parameters
 # to be optimized.
 flat_shape = num_layers * num_wires * 3
-param_shape = qml.templates.StronglyEntanglingLayers.shape(n_wires=num_wires, n_layers=num_layers)
+param_shape = qml.templates.StronglyEntanglingLayers.shape(
+    n_wires=num_wires, n_layers=num_layers
+)
 init_params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 
 init_params_spsa = init_params.reshape(flat_shape)
@@ -463,17 +467,17 @@ from qiskit.providers.aer import noise
 # List the providers to pick an available backend:
 # IBMQ.providers()    # List all available providers
 
-dev = qml.device(
-    "qiskit.ibmq", wires=num_qubits, backend="ibmq_lima"
-)
+dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 noise_model = noise.NoiseModel.from_backend(dev.backend)
 dev_noisy = qml.device(
     "qiskit.aer", wires=dev.num_wires, shots=1000, noise_model=noise_model
 )
 
+
 def exp_val_circuit(params):
     circuit(params, range(dev.num_wires))
     return qml.expval(h2_ham)
+
 
 # Initialize the optimizer - optimal step size was found through a grid search
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
