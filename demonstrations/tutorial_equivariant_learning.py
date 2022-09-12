@@ -82,7 +82,7 @@ For each :math:`a` in :math:`G`, there exists an element :math:`b` in
 and is commonly denoted :math:`a^{-1}`.
 
 
-With groups defined we are in a position to ariculate what a
+With groups defined we are in a position to articulate what a
 representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
