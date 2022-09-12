@@ -95,7 +95,7 @@ with the mapping. For a representation, our mapping must send us to the general 
 group :math:`GL(n)` (the space of :math:`n \times n` matrices with matrix multiplication as the group multiplication).
 
 
-Now due to the importance of unitarity in quantum mechnics we are
+Now due to the importance of unitarity in quantum mechnics, we are
 particularly interested in the unitary representations: Representations
 where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
