@@ -249,7 +249,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # if it is in the centre then you can flip around any symmetry axis you
 # like, this operation is invarient, so we've identified one equivariant
 # gate immediately. If it's on the corners then the flipping will send
-# this qubit rotation to each of the other corners. Similairly if it's on the central
+# this qubit rotation to each of the other corners. Similairly, if it's on the central
 # edge then it will be sent round the other edges. So we can see that the
 # twirl operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
