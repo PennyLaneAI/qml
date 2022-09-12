@@ -38,7 +38,7 @@ In classical machine learning, this is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
 deep neural networks (see [#Bronstein2021]_ for a broad introduction).
-We will refer to the quantum computing verison of this as quantum geometric machine learning (QGML).
+We will refer to the quantum computing version of this as quantum geometric machine learning (QGML).
 
 
 Representation theory in circuits
