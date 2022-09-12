@@ -91,7 +91,7 @@ vector space :math:`V`, which satisfies
 
 This structure indicates this is a group homomorphism as it sends our 
 group of interest to another group such that the group action commutes
-with the mapping. For a representation our mapping must send us to the general linear
+with the mapping. For a representation, our mapping must send us to the general linear
 group :math:`GL(n)` (the space of :math:`n \times n` matrices with matrix multiplication as the group multiplication).
 
 
