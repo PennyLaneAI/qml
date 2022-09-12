@@ -13,6 +13,10 @@
     {{ body }}
 
     <script type="text/javascript">
+        // This script ensures that the active navbar entry switches
+        // from 'QML' to 'Demos' for any webpage within the demos/ directory,
+        // or for any of the demonstration landing pages
+        // (e.g., demos_optimization).
         var pagename = document.location.href.match(/[^\/]+$/)[0];
         var dir = document.URL.substr(0,document.URL.lastIndexOf('/')).match(/[^\/]+$/)[0];
 
