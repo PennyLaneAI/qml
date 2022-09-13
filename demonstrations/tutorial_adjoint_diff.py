@@ -353,19 +353,19 @@ ket = state
 grads = []
 
 for op in reversed(ops):
-    inv_op = qml.adjoint(op)
-    ket = dev._apply_operation(ket, inv_op)
+    adj_op = qml.adjoint(op)
+    ket = dev._apply_operation(ket, adj_op)
 
     # Calculating the derivative
-    if inv_op.num_params != 0:
-        dU = qml.operation.operation_derivative(inv_op)
+    if adj_op.num_params != 0:
+        dU = qml.operation.operation_derivative(adj_op)
 
-        bra_temp = dev._apply_unitary(bra, dU, inv_op.wires)
+        bra_temp = dev._apply_unitary(bra, dU, adj_op.wires)
 
         dM = 2 * np.real(np.vdot(bra_temp, ket))
         grads.append(dM)
 
-    bra = dev._apply_operation(bra, inv_op)
+    bra = dev._apply_operation(bra, adj_op)
 
 
 # Finally reverse the order of the gradients
