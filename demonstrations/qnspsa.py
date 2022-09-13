@@ -5,8 +5,8 @@ Quantum natural SPSA optimizer
 .. meta::
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
-
-*Author: Yiheng Duan (yiheng@amazon.com). Posted: 18 July 2022*
+    
+*Author: Yiheng Duan (yiheng@amazon.com). Posted: 18 July 2022. Last updated: 5 Sep 2022.*
 
 In this tutorial, we show how we can implement the
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer
@@ -118,7 +118,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # where
 #
-# .. math:: \delta F = F(\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) - F (\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1}) - F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) + F(\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1})\label{eq:deltaf}\tag{8},
+# .. math:: \delta F = F(\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) - F (\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1}) - F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) + F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1})\label{eq:deltaf}\tag{8},
 #
 # and :math:`\mathbf{h}_1, \mathbf{h}_2 \in \mathcal{U}(\{-1, 1\}^d)` are
 # two randomly sampled directions.
