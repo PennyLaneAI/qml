@@ -153,8 +153,8 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` within the
 # chemical accuracy, 0.0016 :math:`\text{Ha}`, can be obtained with
 
-m = qml.resource.estimate_samples(H.coeffs, H.ops, error=0.0016)
-print(m)
+# m = qml.resource.estimate_samples(H.coeffs, H.ops, error=0.0016)
+# print(m)
 
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
@@ -163,8 +163,8 @@ print(m)
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)[0]
 
-m = qml.resource.estimate_samples(coeffs, ops, error=0.0016)
-print(m)
+# m = qml.resource.estimate_samples(coeffs, ops, error=0.0016)
+# print(m)
 
 ##############################################################################
 #.. bio:: Soran Jahangiri
