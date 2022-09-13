@@ -161,7 +161,7 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)
 # independently. This number can be significantly reduced by partitioning the Pauli words into
 # groups of commuting terms that can be measured simultaneously.
 
-ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)[0]
+ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
 # m = qml.resource.estimate_samples(coeffs, ops, error=0.0016)
 # print(m)
