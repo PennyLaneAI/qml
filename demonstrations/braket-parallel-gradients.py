@@ -141,9 +141,9 @@ def circuit(params):
     for i in range(n_wires):
         qml.CNOT(wires=[i, (i + 1) % n_wires])
 
-    main_obs = qml.PauliZ(n_wires - 1)
-    identities = [qml.Identity(i) for i in range(n_wires - 1)]
-    return qml.expval(qml.operation.Tensor(main_pauliz + identities))
+    # Measure all qubits to make sure all's good with Braket
+    observables = [qml.PauliZ(n_wires - 1)] + [qml.Identity(i) for i in range(n_wires - 1)]
+    return qml.expval(qml.operation.Tensor(*observables))
 
 
 ##############################################################################
