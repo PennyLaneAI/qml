@@ -5,7 +5,7 @@ Quantum natural SPSA optimizer
 .. meta::
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
-    
+
 *Author: Yiheng Duan (yiheng@amazon.com). Posted: 18 July 2022. Last updated: 5 Sep 2022.*
 
 In this tutorial, we show how we can implement the
@@ -357,6 +357,8 @@ print("Estimated SPSA gradient:\n", grad)
 # 0 (minimum overlap) and 1 (perfect overlap).
 #
 
+from copy import copy
+
 
 def get_operations(qnode, params):
     qnode.construct([params], {})
@@ -371,7 +373,7 @@ def get_overlap_tape(qnode, params1, params2):
         for op in op_forward:
             qml.apply(op)
         for op in reversed(op_inv):
-            qml.adjoint(op)
+            qml.adjoint(copy(op))
         qml.probs(wires=qnode.tape.wires.labels)
     return tape
 
