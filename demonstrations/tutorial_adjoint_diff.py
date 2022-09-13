@@ -213,10 +213,10 @@ print(M_expval_n)
 bra_n_v2 = dev._apply_operation(state, M)
 ket_n_v2 = state
 
-inv_op = qml.adjoint(ops[-1])
+adj_op = qml.adjoint(ops[-1])
 
-bra_n_v2 = dev._apply_operation(bra_n_v2, inv_op)
-ket_n_v2 = dev._apply_operation(ket_n_v2, inv_op)
+bra_n_v2 = dev._apply_operation(bra_n_v2, adj_op)
+ket_n_v2 = dev._apply_operation(ket_n_v2, adj_op)
 
 M_expval_n_v2 = np.vdot(bra_n_v2, ket_n_v2)
 print(M_expval_n_v2)
@@ -244,9 +244,9 @@ bra_loop = dev._apply_operation(state, M)
 ket_loop = state
 
 for op in reversed(ops):
-    inv_op = qml.adjoint(op)
-    bra_loop = dev._apply_operation(bra_loop, inv_op)
-    ket_loop = dev._apply_operation(ket_loop, inv_op)
+    adj_op = qml.adjoint(op)
+    bra_loop = dev._apply_operation(bra_loop, adj_op)
+    ket_loop = dev._apply_operation(ket_loop, adj_op)
     print(np.vdot(bra_loop, ket_loop))
 
 ##############################################################################
