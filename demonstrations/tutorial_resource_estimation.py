@@ -147,7 +147,7 @@ qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 #
 # First, we construct the molecular Hamiltonian
 
-H = qml.qchem.molecular_hamiltonian(symbols, geometry)
+H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` within the
