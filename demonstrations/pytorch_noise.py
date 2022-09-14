@@ -160,8 +160,8 @@ print(cost(phi, theta, 400))
 #
 #    tensor(-0.7055, requires_grad=True)
 #    tensor(6.1330, requires_grad=True)
-#    tensor(0.9551, dtype=torch.float64, grad_fn=<_TorchQNodeBackward>)
-#    tensor(3.7162, dtype=torch.float64, grad_fn=<SqueezeBackward0>)
+#    tensor(0.9551, dtype=torch.float64, grad_fn=<SqueezeBackward0>)
+#    tensor(3.7162, dtype=torch.float64, grad_fn=<PowBackward0>)
 
 
 ##############################################################################
