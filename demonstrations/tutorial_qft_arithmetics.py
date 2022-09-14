@@ -15,18 +15,16 @@ Basic arithmetic with the QFT
 
 *Author: Guillermo Alonso-Linaje. Posted:  2022. Last updated: 13 June 2022*
 
-Throughout our demos we have seen a wide array of
-applications of quantum computing to the fields of `machine learning <https://pennylane.ai/qml/demos_qml.html>`__,
-`chemistry <https://pennylane.ai/qml/demos_quantum-chemistry.html>`__ and `optimization <https://pennylane.ai/qml/demos_optimization.html>`__ problems.
+Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such
+as addition, multiplication, subtraction or division. It is arithmetic that helps us understand the world around us and
+facilitates many of our daily tasks.
 
-These are all advanced topics. So we might ask: can we apply quantum computing to more fundamental tasks?
-The answer is yes! In fact, we will see how to perform operations as simple as addition, subtraction or multiplication with these computers.
-To do so, we will make use of a well-known tool in this field, the Quantum Fourier Transform (QFT).
-
+It becomes a fundamental pillar in computing to implement any type of algorithm. Therefore,  we will
+make an approach to arithmetic in quantum computers using the well-known Quantum Fourier Transform (QFT).
 In this demo, we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
 `Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
-intuition of how it works and how we can take advantage of it.
+intuition of how it works and how we can take advantage of it!
 
 Motivation
 ----------
@@ -47,7 +45,8 @@ sum operator within the quantum computer to be able to create this oracle.
 
 The second question is why do we work with the QFT? There are other procedures to perform this basic operations, for example
 imitating the classical algorithm. But it has been seen that QFT needs less qubits to perform them, which is
-nowadays of vital importance.
+nowadays of vital importance (`Thomas G. Draper
+(1998) <https://arxiv.org/abs/quant-ph/0008033>`__.
 
 We will organize the demo as follows. Initially, we will talk about the Fourier basis giving an intuitive idea of how
 it works. After that we will see different basic arithmetic operations. Finally, we will move on to a practical example
@@ -169,7 +168,7 @@ plt.show()
 #
 # In the following image we can see the procedure to add :math:`3+4`.
 #
-# .. figure:: /demonstrations/qft_arithmetics/qft_add.gif
+# .. figure:: /demonstrations/qft_arithmetics/qft_add1.gif
 #   :width: 90%
 #   :align: center
 #
