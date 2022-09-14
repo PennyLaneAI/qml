@@ -55,10 +55,10 @@ The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do
 
 This implies that in order to compute the expectation value of a Pauli string
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i} = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \braket{\bigotimes_i\tilde{P}_i}^{(t)}
+.. math:: \braket{\bigotimes_i\tilde{P}_i} = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \prod_{\text{i non-trivial}}(1-2b_i)
 
-we simply need to sum the result bits for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
-indicated by the special index :math:`\tilde{t}` for the matching measurements.
+we simply need average over the product of :math:`1 - 2b_i = \pm 1` for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
+indicated by the special index :math:`\tilde{t}` for the matching measurements. Note that the probability of a match is :math:`3^q` such that we have :math:`\tilde{T} = T / 3^q`.
 
 This implies that computing expectation values with classical shadows comes down to picking the specific subset of snapshots where those specific observables
 were already measured and discarding the remaining. If the desired observables are known prior to the measurement, one is thus advised to directly perform those measurements.
@@ -66,7 +66,7 @@ This was referred to as `derandomization` by the authors in a follow-up paper [#
 Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^\ell/\epsilon^2 \right)` guarantee that sufficiently many correct measurements
 were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`.
 
-We will later compare this to directly measuring the desired observables and making use of simultaneously measuring qubit-wise-commuting observables. Before that, let us
+We will later compare this to directly measuring the desired observables and make use of simultaneously measuring qubit-wise-commuting observables. Before that, let us
 demonstrate how to perform classical shadow measurements in a differentiable manner in PennyLane.
 
 PennyLane implementation
