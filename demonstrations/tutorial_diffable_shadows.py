@@ -22,7 +22,7 @@ We provide two additional demos in :doc:`tutorial_classical_shadows` and :doc:`t
 
 We are here focussing on the case where measurements are performed in the Pauli basis. The idea of classical shadows is to measure each qubit in a random Pauli basis.
 While doing so, one keeps track of the performed measurement (its ``recipes``) in form of bits ``[0, 1, 2]`` corresponding to the measurement bases ``[X, Y, Z]``, respectively.
-At the same time, the measurement outcome (its ``bits``) are recorded, where ``[0, 1]`` corresponds to the eigenvalues ``[1, -1]``, respectrively.
+At the same time, the measurement outcome (its ``bits``) are recorded, where ``[0, 1]`` corresponds to the eigenvalues ``[1, -1]``, respectively.
 
 We record :math:`T` of such measurements, and for the :math:`t`-th measurement, we can reconstruct the ``local_snapshots``
 
