@@ -298,12 +298,12 @@ for op in reversed(ops):
 # These formulas differ from the ones we used when just calculating the expectation value.
 # For the actual derivative calculation, we use a temporary version of the bra,
 #
-# .. math:: \langle \tilde{b}_i | = \langle b_i | \frac{\text{d} U_i}{\text{d} \theta_i},
+# .. math:: | \tilde{k}_i \rangle = \frac{\text{d} U_i}{\text{d} \theta_i} | k_i \rangle
 #
 # and use these to get the derivative
 #
 # .. math::
-#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Re}\left( \langle \tilde{b}_i | k_i \rangle \right).
+#       \frac{\partial \langle M \rangle}{\partial \theta_i} = 2 \text{Re}\left( \langle b_i | \tilde{k}_i \rangle \right).
 #
 # Both the bra and the ket can be calculated recursively:
 #
@@ -345,7 +345,7 @@ print(grad_op0)
 # We loop over the reversed operations, just as before.  But if the operation has a parameter,
 # we calculate its derivative and append it to a list before moving on. Since the ``operation_derivative``
 # function spits back out a matrix instead of an operation,
-# we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{b}_i\rangle`.
+# we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{k}_i\rangle`.
 
 bra = dev._apply_operation(state, M)
 ket = state
@@ -357,12 +357,12 @@ for op in reversed(ops):
     ket = dev._apply_operation(ket, adj_op)
 
     # Calculating the derivative
-    if adj_op.num_params != 0:
-        dU = qml.operation.operation_derivative(adj_op)
+    if op.num_params != 0:
+        dU = qml.operation.operation_derivative(op)
 
-        bra_temp = dev._apply_unitary(bra, dU, adj_op.wires)
+        ket_temp = dev._apply_unitary(ket, dU, op.wires)
 
-        dM = 2 * np.real(np.vdot(bra_temp, ket))
+        dM = 2 * np.real(np.vdot(bra, ket_temp))
         grads.append(dM)
 
     bra = dev._apply_operation(bra, adj_op)
