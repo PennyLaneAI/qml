@@ -13,7 +13,7 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: PennyLane dev team. Last updated: 16 Jun 2021.*
+*Author: PennyLane dev team. Last updated: 14 Sep 2022.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
@@ -161,7 +161,7 @@ print(cost(phi, theta, 400))
 #    tensor(-0.7055, requires_grad=True)
 #    tensor(6.1330, requires_grad=True)
 #    tensor(0.9551, dtype=torch.float64, grad_fn=<_TorchQNodeBackward>)
-#    tensor(3.7162, dtype=torch.float64, grad_fn=<PowBackward0>)
+#    tensor(3.7162, dtype=torch.float64, grad_fn=<SqueezeBackward0>)
 
 
 ##############################################################################
