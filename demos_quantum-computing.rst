@@ -89,6 +89,13 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/toric_code/types_of_loops.png
     :description: :doc:`demos/tutorial_toric_code`
     :tags: errorcorrection
+
+.. customgalleryitem::
+    :tooltip: Learn how to use classical shadows in PennyLane and perform efficient measurements
+    :figure: demonstrations/diffable_shadows/thumb.png
+    :description: :doc:`demos/tutorial_diffable_shadows`
+    :tags: classical shadows quantum measurement
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
