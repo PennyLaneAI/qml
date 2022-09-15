@@ -338,19 +338,19 @@ plt.show()
 
 
 ##############################################################################
-# The accuracy is more or less the same with a slight advantage to classical shadows for low total number of shots.
+# The accuracy is more or less the same with a slight advantage to classical shadows for low total numbers of shots.
 #
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
 # We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example. 
-# Find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
+# You can find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
 symbols = ["H", "O", "H"]
 coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
 
 basis_set = "sto-3g"
-H_qwc, n_wires = qml.qchem.molecular_hamiltonian(
+H, n_wires = qml.qchem.molecular_hamiltonian(
     symbols,
     coordinates,
     charge=0,
@@ -360,12 +360,15 @@ H_qwc, n_wires = qml.qchem.molecular_hamiltonian(
     active_orbitals=4,
     mapping="bravyi_kitaev",
     method="pyscf",
-    grouping_type="qwc"
 )
 
-coeffs, obs = H_qwc.coeffs, H_qwc.ops
-n_groups = len(qml.grouping.group_observables(obs))
-print(f"number of ops in H: {len(obs)}, number of qwc {n_groups}")
+coeffs, obs = H.coeffs, H.ops
+H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
+
+groups = qml.grouping.group_observables(obs)
+n_groups = len(groups)
+print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
+print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 ##############################################################################
 # We use a pre-prepared Ansatz that approximates the H2O ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
