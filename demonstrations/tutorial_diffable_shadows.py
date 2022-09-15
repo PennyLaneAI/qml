@@ -1,9 +1,9 @@
-r"""Classical shadows in the Pauli basis
-========================================
+r"""Estimating observables with classical shadows in the Pauli basis
+====================================================================
 
 .. meta::
     :property="og:description": Classical shadows in the Pauli basis
-    :property="og:image": https://pennylane.ai/qml/_images/diffable_mitigation_thumb.png
+    :property="og:image": https://pennylane.ai/qml/demonstrations/diffable_shadows/thumb.png
 
 .. related::
 
@@ -12,7 +12,8 @@ r"""Classical shadows in the Pauli basis
 
 *Author: Korbinian Kottmann, Posted: 22 September 2022*
 
-We introduce and demonstrate PennyLane's new classical shadow functionalities and argue why you are most likely better advised not to use it to estimate groups of observables (like molecular Hamiltonian terms).
+We introduce and demonstrate PennyLane's new classical shadow functionalities and
+argue why you are most likely better advised not to use it to estimate groups of observables (like molecular Hamiltonian terms).
 
 Classical shadow theory
 -----------------------
@@ -79,6 +80,8 @@ import pennylane as qml
 import pennylane.numpy as np
 from matplotlib import pyplot as plt
 from pennylane import classical_shadow, shadow_expval, ClassicalShadow
+
+np.random.seed(1234)
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
@@ -181,6 +184,7 @@ shadow = []
 shotss = range(50, 1000, 100)
 for shots in shotss:
     for _ in range(10):
+        # repeating experiment 10 times to obtain averages and standard deviations
         dev = qml.device("default.qubit", wires=range(10), shots=shots)
 
         @qml.qnode(dev)
@@ -203,7 +207,7 @@ ds = np.array(shadow).reshape(len(shotss), 10)
 ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 
 plt.errorbar(shotss, ds, yerr=dds, fmt="x-", label="shadow")
-plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="qwc")
+plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="direct")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Accuracy (RMSD)", fontsize=20)
 plt.legend()
@@ -215,7 +219,8 @@ plt.show()
 ##############################################################################
 # All q-local observables
 # ~~~~~~~~~~~~~~~~~~~~~~~
-# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield more or less the same results. Let us put that to test:
+# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield more or less the same results. 
+# Let us put that to test. First, we generate a list of all q-local observables for n qubits.
 
 from itertools import product, combinations
 from functools import reduce
@@ -223,8 +228,11 @@ from functools import reduce
 all_observables = []
 n = 5
 q = 2
+# create all combination of q entries of range(n)
 for w in combinations(range(n), q):
+    
     observables = []
+
     # Create all combinations of possible Pauli products P_i P_j P_k.... for w wires
     for obs in product(
     *[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]
@@ -232,17 +240,31 @@ for w in combinations(range(n), q):
         # Perform tensor product (((P_i @ P_j) @ P_k ) @ ....)
         observables.append(reduce(lambda a, b: a @ b, [ob(wire) for ob, wire in zip(obs, w)]))
     all_observables.extend(observables)
+
+print(all_observables[:10])
+
+##############################################################################
+# We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.grouping.group_observables` to learn the number of
+# groups. We need this number to make a fair comparison with classical shadows as we allow for only ``T/n_groups`` shots per group, such that
+# the total number of shots is the same as for the classical shadow execution. We again compare both approaches 
+
 n_groups = len(qml.grouping.group_observables(all_observables))
 dev_ideal = qml.device("default.qubit", wires=range(5), shots=None)
 
-x = np.arange(10, dtype="float64")
+
+x = np.random.rand(20)
 def circuit():
     for i in range(5):
-        qml.RY(x[i], i)
-    for i in range(4):
-        qml.CNOT((i, i+1))
+        qml.RX(x[i], i)
+
+    for i in range(5):
+        qml.CNOT((i, (i+1)%5))
+
     for i in range(5):
         qml.RY(x[i+5], i)
+
+    for i in range(5):
+        qml.CNOT((i, (i+1)%5))
 
 @qml.qnode(dev_ideal)
 def qnode_ideal():
@@ -252,9 +274,9 @@ def qnode_ideal():
 exact = qnode_ideal()
 finite = []
 shadow = []
-shotss = range(20, 2200, 400)
+shotss = range(100, 10000, 2000)
 for shots in shotss:
-    for _ in range(5):
+    for _ in range(10):
         dev = qml.device("default.qubit", wires=range(5), shots=shots)
 
         @qml.qnode(dev)
@@ -270,9 +292,11 @@ for shots in shotss:
 
         finite.append(rmsd(qnode_finite(), exact))
         shadow.append(rmsd(qnode_shadow(), exact))
-dq = np.array(finite).reshape(len(shotss), 5)
+
+
+dq = np.array(finite).reshape(len(shotss), 10)
 dq, ddq = np.mean(dq, axis=1), np.var(dq, axis=1)
-ds = np.array(shadow).reshape(len(shotss), 5)
+ds = np.array(shadow).reshape(len(shotss), 10)
 ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 plt.errorbar(shotss, ds, yerr=dds, fmt="x-", label="shadow")
 plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="qwc")
@@ -283,6 +307,8 @@ plt.show()
 
 
 ##############################################################################
+# The accuracy is more or less the same with a slight advantage to classical shadows in this extreme case.
+#
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
 # We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example, find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
@@ -374,8 +400,6 @@ for shots in shotss:
 
         # Guarantuee that we are not cheating and its a fair fight
         assert tracker_finite.totals["shots"] <=  tracker_shadows.totals["shots"]
-        if not _%25:
-            print(tracker_finite.totals["shots"], tracker_shadows.totals["shots"])
 
         d_qwc.append(rmsd(res_finite, res_exact))
         d_sha.append(rmsd(res_shadow, res_exact))
@@ -390,6 +414,7 @@ plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Accuracy (RMSD)", fontsize=20)
 plt.legend()
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
