@@ -12,68 +12,82 @@ r"""Estimating observables with classical shadows in the Pauli basis
 
 *Author: Korbinian Kottmann, Posted: 22 September 2022*
 
-We introduce and demonstrate PennyLane's new classical shadow functionalities and
-argue why you are most likely better advised not to use it to estimate groups of observables (like molecular Hamiltonian terms).
+We briefly introduce the classical shadow formalism in the Pauli basis and showcase PennyLane's new implementation of it.
+Classical shadows are sometimes believed to provide advantages in quantum resources to simultaneously estimate multiple observables.
+We demystify this misconception and perform fair comparisons between classical shadow measurements and simultaneously measuring
+qubit-wise-commuting observable groups.
 
 Classical shadow theory
 -----------------------
 
 A `classical shadow` is a classical description of a quantum state that is capable of reproducing expectation values of local Pauli observables, see [#Huang2020]_.
-We provide two additional demos in :doc:`tutorial_classical_shadows` and :doc:`tutorial_ml_classical_shadows`.
+We briefly go through their theory here, and note the two additional demos in :doc:`tutorial_classical_shadows` and :doc:`tutorial_ml_classical_shadows`.
 
 We are here focussing on the case where measurements are performed in the Pauli basis. The idea of classical shadows is to measure each qubit in a random Pauli basis.
-While doing so, one keeps track of the performed measurement (its ``recipes``) in form of bits ``[0, 1, 2]`` corresponding to the measurement bases ``[X, Y, Z]``, respectively.
+While doing so, one keeps track of the performed measurement (its ``recipes``) in form of integers ``[0, 1, 2]`` corresponding to the measurement bases ``[X, Y, Z]``, respectively.
 At the same time, the measurement outcome (its ``bits``) are recorded, where ``[0, 1]`` corresponds to the eigenvalues ``[1, -1]``, respectively.
 
 We record :math:`T` of such measurements, and for the :math:`t`-th measurement, we can reconstruct the ``local_snapshots``
 
 .. math:: \rho^{(t)} = \bigotimes_{i=1}^{n} 3 U^\dagger_i |b_i \rangle \langle b_i | U_i - \mathbb{I},
 
-where :math:`U_i` is rotating the qubit :math:`i` into the corresponding Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) at snapshot :math:`t`.
+where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) at snapshot :math:`t`.
 :math:`|b_i\rangle = (1 - b_i, b_i)` is the corresponding computational basis state given by the output bit :math:`b_i`.
 
 From these local snapshots, one can compute expectation values of q-local Pauli strings, where locality refers to the number of non-Identity operators.
+The expectation value of any Pauli string :math:`\bigotimes_i\tilde{P}_i` with :math:`\tilde{P}_i \in \{X, Y, Z, \mathbb{1}\}` can be estimated
+by computing 
 
-We show how to efficiently compute such expectation values without reconstructing any local density matrices using algebraic properties of Pauli operators.
-Let us start by looking at individual snapshot expectation values :math:`\braket{\bigotimes_i\tilde{P}_i}^{(t)} = \text{tr}\left(\rho^{(t)} \left(\bigotimes_i\tilde{P}_i \right)\right)`
-with :math:`\tilde{P}_i \in \{X, Y, Z, \mathbb{1}\}`. First, we convince ourselves of the identity
+.. math:: \langle \bigotimes_i\tilde{P}_i \rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotitrivial\mes_i\tilde{P}_i \right).
+
+Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^\ell/\varepsilon^2 \right)` guarantee that sufficiently many correct measurements
+were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`.
+
+
+Unraveling the mystery
+~~~~~~~~~~~~~~~~~~~~~~
+Using algebraic properties of Pauli operators, we show how to exactly compute the above expression from just the ``bits`` and ``recipes``
+without explicitly reconstructing any snpshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
+
+Let us start by looking at individual snapshot expectation values
+:math:`\braket{\bigotimes_i\tilde{P}_i}^{(t)} = \text{tr}\left(\rho^{(t)} \left(\bigotimes_i\tilde{P}_i \right)\right)`.
+First, we convince ourselves of the identity
 
 .. math:: U_i^\dagger |b_i\rangle \langle b_i| U_i = \frac{1}{2}\left((1-2b_i) P_i + \mathbb{1}\right),
 
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (Note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = \prod_{i=1}^n \left(\tr{\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i}\right).
+.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i\right).
 
-For that trace we find three different cases
-
-..math:: \left(\tr{\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i}\right) = \begin{cases}\text{0} &\quad\text{if } \tilde{P}_i \neq P_i \\ \text{1} &\quad\text{if } \tilde{P}_i = \mathbb{1} \\(1-2b_i) &\quad\text{else}\\ \end{cases}
-
+For that trace we find three different cases.
 The cases where :math:`\tilde{P}_i=\mathbb{1}` yield a trivial factor :math:`1` to the product.
-The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do not match :math:`P_i`. So in total, in the case that all Pauli operators match, we find
+The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do not match :math:`P_i`. So in total, `only` in the case that all Pauli operators match, we find
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i)
+.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
 
 This implies that in order to compute the expectation value of a Pauli string
 
 .. math:: \braket{\bigotimes_i\tilde{P}_i} = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \prod_{\text{i non-trivial}}(1-2b_i)
 
 we simply need average over the product of :math:`1 - 2b_i = \pm 1` for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
-indicated by the special index :math:`\tilde{t}` for the matching measurements. Note that the probability of a match is :math:`3^q` such that we have :math:`\tilde{T} = T / 3^q`.
+indicated by the special index :math:`\tilde{t}` for the matching measurements. Note that the probability of a match is :math:`1/3^q` such that we have
+:math:`\tilde{T} = T / 3^q`.
 
 This implies that computing expectation values with classical shadows comes down to picking the specific subset of snapshots where those specific observables
-were already measured and discarding the remaining. If the desired observables are known prior to the measurement, one is thus advised to directly perform those measurements.
+were already measured and discarding the remaining. If the desired observables are known prior to the measurement,
+one is thus advised to directly perform those measurements.
 This was referred to as `derandomization` by the authors in a follow-up paper [#Huang2021]_.
-Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^\ell/\epsilon^2 \right)` guarantee that sufficiently many correct measurements
-were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`.
 
-We will later compare this to directly measuring the desired observables and make use of simultaneously measuring qubit-wise-commuting observables. Before that, let us
-demonstrate how to perform classical shadow measurements in a differentiable manner in PennyLane.
+
+We will later compare the naive classical shadow approach to directly measuring the desired observables and make use of simultaneously
+measuring qubit-wise-commuting observables. Before that, let us demonstrate how to perform classical shadow measurements in a differentiable manner in PennyLane.
 
 PennyLane implementation
 ------------------------
 
 There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`~.pennylane.shadow_expval` directly from the qnode.
+This has the advantage that it preserves the typical PennyLane syntax `and` is differentiable.
 """
 
 import pennylane as qml
@@ -81,7 +95,7 @@ import pennylane.numpy as np
 from matplotlib import pyplot as plt
 from pennylane import classical_shadow, shadow_expval, ClassicalShadow
 
-np.random.seed(1234)
+np.random.seed(12345)
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
@@ -96,12 +110,13 @@ def qnode(x, H):
 x = np.array(0.5, requires_grad=True)
 
 ##############################################################################
-# The big advantage of this way of computing expectation values is that it is differentiable.
+# Compute expectation values and derivatives thereof in the common way in PennyLane.
 
 print(qnode(x, H), qml.grad(qnode)(x, H))
 
 ##############################################################################
-# Note that to avoid unnecessary device executions you can provide a list of observables to :func:`~.pennylane.shadow_expval`.
+# Each call of ``shadow_expval()`` performs the number of shots dictated by the device.
+# So to avoid unnecessary device executions you can provide a list of observables to :func:`~.pennylane.shadow_expval`.
 
 Hs = [H, qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 print(qnode(x, Hs))
@@ -134,6 +149,9 @@ print(shadow.expval(qml.PauliX(0) @ qml.PauliX(1), k=1))
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 print(shadow.expval(H, k=1))
 
+##############################################################################
+# This way of computing expectation values is not automatically differentiable in PennyLane though.
+
 
 
 ##############################################################################
@@ -142,14 +160,15 @@ print(shadow.expval(H, k=1))
 # 
 # The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more conventional methods
 # like simultaneously measuring qubit-wise-commuting (qwc) groups. We are going to look at three different cases: The two extreme scenarios of measuring one single
-# and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian.
+# and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian. We find that for a fix budget of measurements, one is
+# almost never advised to use classical shadows for estimating expectation values.
 # 
 # Measuring one single observable
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We start with the case of one single measurement. From the analysis above it should be quite clear that in the case of random Pauli measurement in the classical shadows
 # formalism, a lot of quantum resources are wasted as all the measurements that do not match the observable are discarded. This is certainly not what classical shadows were intended for
-# in the first place, but it helps to stress the point of wasted measurements. 
+# in the first place, but it helps to stress the point of wasted measurements.
 # 
 # We start by fixing a circuit and an observable, for which we compute the exact result for infinite shots.
 
@@ -181,7 +200,7 @@ exact = qnode_ideal()
 
 finite = []
 shadow = []
-shotss = range(50, 1000, 100)
+shotss = range(100, 1000, 100)
 for shots in shotss:
     for _ in range(10):
         # repeating experiment 10 times to obtain averages and standard deviations
@@ -219,7 +238,8 @@ plt.show()
 ##############################################################################
 # All q-local observables
 # ~~~~~~~~~~~~~~~~~~~~~~~
-# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield more or less the same results. 
+# For the case of measuring `all` q-local Pauli strings we expect both strategies to yield more or less the same results.
+# In this extreme case, no measurements are discarded in the classical shadow protocol.
 # Let us put that to test. First, we generate a list of all q-local observables for n qubits.
 
 from itertools import product, combinations
@@ -230,10 +250,10 @@ n = 5
 q = 2
 # create all combination of q entries of range(n)
 for w in combinations(range(n), q):
-    
+    # w = [0, 1], [0, 2], .., [1, 2], [1, 3], .., [n-1, n]
     observables = []
 
-    # Create all combinations of possible Pauli products P_i P_j P_k.... for w wires
+    # Create all combinations of possible Pauli products P_i P_j P_k.... for wires w
     for obs in product(
     *[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]
         ):
@@ -249,10 +269,10 @@ print(all_observables[:10])
 # the total number of shots is the same as for the classical shadow execution. We again compare both approaches 
 
 n_groups = len(qml.grouping.group_observables(all_observables))
+
 dev_ideal = qml.device("default.qubit", wires=range(5), shots=None)
 
-
-x = np.random.rand(20)
+x = np.random.rand(10)
 def circuit():
     for i in range(5):
         qml.RX(x[i], i)
@@ -269,26 +289,37 @@ def circuit():
 @qml.qnode(dev_ideal)
 def qnode_ideal():
     circuit()
-    return [qml.expval(o) for o in all_observables]
+    return qml.expval(H)
 
 exact = qnode_ideal()
 finite = []
 shadow = []
 shotss = range(100, 10000, 2000)
 for shots in shotss:
+    # random Hamiltonian with all q-local observables
+    coeffs = np.random.rand(len(all_observables))
+    H = qml.Hamiltonian(coeffs, all_observables, grouping_type="qwc")
+
+    @qml.qnode(dev_ideal)
+    def qnode_ideal():
+        circuit()
+        return qml.expval(H)
+
+    exact = qnode_ideal()
+
     for _ in range(10):
         dev = qml.device("default.qubit", wires=range(5), shots=shots)
 
         @qml.qnode(dev)
         def qnode_finite():
             circuit()
-            return [qml.expval(o) for o in all_observables]
+            return qml.expval(H)
 
         dev = qml.device("default.qubit", wires=range(5), shots=shots*n_groups)
         @qml.qnode(dev)
         def qnode_shadow():
             circuit()
-            return qml.shadow_expval(all_observables)
+            return qml.shadow_expval(H)
 
         finite.append(rmsd(qnode_finite(), exact))
         shadow.append(rmsd(qnode_shadow(), exact))
@@ -307,7 +338,7 @@ plt.show()
 
 
 ##############################################################################
-# The accuracy is more or less the same with a slight advantage to classical shadows in this extreme case.
+# The accuracy is more or less the same with a slight advantage to classical shadows for low total number of shots.
 #
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
