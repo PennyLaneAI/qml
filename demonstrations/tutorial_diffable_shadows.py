@@ -338,7 +338,8 @@ plt.show()
 
 
 ##############################################################################
-# The accuracy is more or less the same with a slight advantage to classical shadows for low total numbers of shots.
+# We see that as expected the performance is more or less the same since no quantum measurements are discarded for the shadows in this case.
+# Depending on the chosen random seed there are quantitative variations to this image, but the overall qualitative result remains the same.
 #
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
