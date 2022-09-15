@@ -55,7 +55,7 @@ First, we convince ourselves of the identity
 
 .. math:: U_i^\dagger |b_i\rangle \langle b_i| U_i = \frac{1}{2}\left((1-2b_i) P_i + \mathbb{1}\right),
 
-where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (Note that in this case :math:`P_i` is never the identity). 
+where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
 .. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i\right).
@@ -450,7 +450,7 @@ plt.show()
 
 ##############################################################################
 # For this realistic example, one is clearly better advised to directly compute the expectation values
-# and not waste precious quantum resources on unused measurements in the classical shadow protocol. #
+# and not waste precious quantum resources on unused measurements in the classical shadow protocol.
 
 
 
