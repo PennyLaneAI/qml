@@ -95,7 +95,7 @@ import pennylane.numpy as np
 from matplotlib import pyplot as plt
 from pennylane import classical_shadow, shadow_expval, ClassicalShadow
 
-np.random.seed(12345)
+np.random.seed(666)
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
