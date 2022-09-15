@@ -20,25 +20,26 @@ adheres to. What does symmetry mean for those in machine learning? In
 this context the ambition is straight forward - it is a means to
 reduce the parameter space and improve generalisation..
 
+
 Suppose we have a learning task and the data we are learning from has an
 underlying symmetry. For example, consider a game of Noughts and
 Crosses: if we win a game, we would have won it if the board was rotated
 or flipped along any of the lines of symmetry. Now if we want to train
 an algorithm to spot the outcome of these games, we can either ignore
 the existence of this symmetry or we can somehow include it. The
-advantage in paying attention to the symmetry is it identifies multiple
+advantage of paying attention to the symmetry is it identifies multiple
 configurations of the board as 'the same thing' as far as the symmetry
-is concenred, this means we can reduce our parameter space and so the
+is concerned, this means we can reduce our parameter space and so the
 amount of data our algorithm must sift through is immediately reduced.
 Along the way the fact that our learning model must encode a symmetry
-that actually exists in the system we are trying to represent natually
-ecourages our results to be more genralisable.
+that actually exists in the system we are trying to represent naturally
+encourages our results to be more generalisable.
 
-In classical machine learning this often referred to as geometric deep
+In classical machine learning, this is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
 deep neural networks (see [#Bronstein2021]_ for a broad introduction).
-We will refer to the quantum computing verison of this as quantum geometric machine learning (QGML).
+We will refer to the quantum computing version of this as quantum geometric machine learning (QGML).
 
 
 Representation theory in circuits
@@ -52,7 +53,7 @@ Fundamentally representation theory is based on the prosaic observation
 that linear algebra is easy and group theory is weird: So what if we can
 study groups as linear maps?
 
-First let's define what we mean by a group:
+First, let's define what we mean by a group:
 
 **Definition**: A group is a set :math:`G` together with a binary operation
 on :math:`G`, here denoted :math:`\circ`, that combines any two elements
@@ -82,7 +83,7 @@ For each :math:`a` in :math:`G`, there exists an element :math:`b` in
 and is commonly denoted :math:`a^{-1}`.
 
 
-With groups defined we are in a position to ariculate what a
+With groups defined we are in a position to articulate what a
 representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
@@ -91,28 +92,28 @@ vector space :math:`V`, which satisfies
 
 This structure indicates this is a group homomorphism as it sends our 
 group of interest to another group such that the group action commutes
-with the mapping. For a representation our mapping must send us to the general linear
+with the mapping. For a representation, our mapping must send us to the general linear
 group :math:`GL(n)` (the space of :math:`n \times n` matrices with matrix multiplication as the group multiplication).
 
 
-Now due to the importance of unitarity in quantum mechnics we are
+Now due to the importance of unitarity in quantum mechnics, we are
 particularly interested in the unitary representations: Representations
 where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
 quantum circuits (which are mostly made up of unitary gates). 
 
-How does all this relate to symmetries? Well a large class of
-symmetries can be charecterised as a group where all the elements of the group leave 
+How does all this relate to symmetries? Well, a large class of
+symmetries can be characterised as a group where all the elements of the group leave 
 some space we are considering unchanged. Let's consider an example:
 The symmetries of a sphere. Now when we think of this symmetry we
 probably think something along the lines of "it's the same no matter how
 I rotate it or flip it left to right etc". There is this idea of being
-invarient under some operation, we also have the idea of being able to
+invariant under some operation, we also have the idea of being able to
 undo these actions, if we rotate one way, we can rotate it back. If we
 flip the ball right-to-left we can flip it left-to-right to get back to
 where we started (notice too all these inverses are unique). Trivially
 we can also do nothing. What exactly are we describing here? We have
-elements that corespond to an action on a sphere that can be inverted and
+elements that correspond to an action on a sphere that can be inverted and
 for which there exists an identity. It is also trivially the case here
 that if I consider three operations a,b,c from the set of rotations and
 reflections of the sphere then if I combine two of them together then
@@ -121,7 +122,7 @@ associative. These features turn out to literally define a group!
  
 As we've seen the group in itself is a very abstract creature this is why we look to
 its representations. The group labels what symmetries we care about, they tell
-us the mappings that our system is invariant under, the unitary representations 
+us the mappings that our system is invariant under, and the unitary representations 
 show us how those symmetries look on a particular
 space of unitary matrices. Given that quantum circuits are largely
 constructed from unitaries this gives us a direct connection between the
@@ -129,7 +130,7 @@ characterisation of symmetries and quantum circuits. If we want to
 encode the structure of the symmeteries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
 
-There remain one question. What is equivariance? With our new found knowledge
+There remains one question. What is equivariance? With our newfound knowledge
 of group representation theory we are ready to tackle this. Let :math:`G` be our group, and
 :math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
@@ -154,8 +155,8 @@ twice and get the second by applying the group action to one of the outputs.
 Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
-analysis where it is known they are euivarient with respect to translations; They naturally encode the idea that
-a picture of a dog is symetrically related to the same picture slid to the left by n pixels). With our focus on
+analysis where it is known they are equivariant with respect to translations; They naturally encode the idea that
+a picture of a dog is symmetrically related to the same picture slid to the left by n pixels). With our focus on
 unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
 
 """
@@ -165,8 +166,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # Noughts and Crosses
 # ----------------
-# Let's look at the game of noughts and crosses as ispired by [#Meyer2022]_. Two players take
-# turns to place a 0 or an X, depending on which player you are, in a 3X3
+# Let's look at the game of noughts and crosses as inspired by [#Meyer2022]_. Two players take
+# turns to place a 0 or an X, depending on which player you are, in a 3x3
 # grid. The aim is to get a 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
 # on the choices of the players there could be a draw. Our learning task
@@ -189,8 +190,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ##############################################################################
 # **The question is, how do we encode this in our QML problem?**
 #
-# First let us encode this problem classically, we will consider a 9
-# element vector :math:`V`, each element of which indentifies a square of
+# First, let us encode this problem classically, we will consider a 9
+# elements vector :math:`V`, each element of which identifies a square of
 # the board. The entries themselves can be
 # :math:`+1`,\ :math:`0`,\ :math:`-1` representing a cross, no symbol, or
 # a nought. The label is one hot encoded in a vector
@@ -200,14 +201,14 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # To create the quantum model let us initialise all the qubits in :math:`|0\rangle`,
-# which we note is invaraint under the problems symmetries (flip and
+# which we note is invariant under the symmetries of the problem (flip and
 # rotate all you want, it's still going to be zeroes whatever your
-# mapping). We will then look to apply single qubit :math:`R_x(\theta)`
+# mapping). We will then look to apply a single qubit :math:`R_x(\theta)`
 # rotations on individual qubits, encoding each of the
-# possibilites in the board squares at an angle of
+# possibilities in the board squares at an angle of
 # :math:`\frac{2\pi}{3}` from each other. For our parameterised gates we
 # will have a single qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
-# rotation at each point, we will then use :math:`CR_Y(\theta_3)` for 2 qubit
+# rotation at each point, we will then use :math:`CR_Y(\theta_3)` for 2 qubits
 # entangling gates. This implies that, for each encoding, crudely, we'll
 # need 18 single qubit rotation parameters and :math:`\binom{9}{2}=36` two
 # qubit gate rotations. Let's see how by using symmetries we can reduce
@@ -218,7 +219,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # The secret will be to encode the symmetries into the gate set so the
 # observables we are interested in inherently respect the symmetries. How do
 # we do this? We need to select the collections of gates that commute with
-# the symmetries. In general we can use the twirling formula for this:
+# the symmetries. In general, we can use the twirling formula for this:
 #
 
 
@@ -251,12 +252,12 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # In this particular instance we can see the action of the twirling
-# operation geometrically as the symmtries involved are all
+# operation geometrically as the symmetries involved are all
 # permutations. Let's consider the :math:`R_x` rotation acting on one qubit. Now
 # if it is in the centre then you can flip around any symmetry axis you
 # like, this operation is invarient, so we've identified one equivariant
 # gate immediately. If it's on the corners then the flipping will send
-# this qubit rotation to each of the other corners. Similairly if it's on the central
+# this qubit rotation to each of the other corners. Similairly, if it's on the central
 # edge then it will be sent round the other edges. So we can see that the
 # twirl operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
@@ -267,8 +268,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# For entangling gates the situation is similar. There are three invarient
-# classes, the centre entangled with all corners, with all edges, and the
+# For entangling gates the situation is similar. There are three invariant
+# classes, the centre entagled with all corners, with all edges, and the
 # edges paired in a ring.
 #
 
@@ -309,7 +310,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # We will use an :math:`l_2` loss function acting on pairs of games and
-# labels :math:`D={(g,y)}` where math:`D` is our dataset.
+# labels :math:`D={(g,y)}` where :math:`D` is our dataset.
 #
 
 
@@ -319,11 +320,11 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# Let's now impliment this!
-# First lets generate some games.
+# Let's now implement this!
+# First let's generate some games.
 #
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
-# On completion it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
+# On completion, it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 # There are 26,830 different possible games but we will only sample a few hundred.
 
 import torch
@@ -408,7 +409,7 @@ def diag_win(board, player):
     return win1 or win2
 
 
-# Check if the win conditions have been met or if a draw has occured
+# Check if the win conditions have been met or if a draw has occurred
 def evaluate_game(board):
     winner = 99
     for player in [1, -1]:
@@ -478,7 +479,7 @@ ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-# Now let's encode the data in the following qubit models, firslt with symmetry
+# Now let's encode the data in the following qubit models, first with symmetry
 @qml.qnode(dev, interface="torch")
 def circuit(x, p):
 
@@ -643,7 +644,7 @@ def encode_game(game):
 # :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
 # we need to define this and then we can begin our optimisation.
 
-# calculate mean square error for this classification problem
+# calculate the mean square error for this classification problem
 def cost_function(params, input, target):
     output = torch.stack([circuit(x, params) for x in input])
     vec = output - target
@@ -807,7 +808,7 @@ plt.show()
 # we have managed to improve our learning accuracies. It is notable however that
 # we can also see that paying attention to symmetries isn't a magic bullet
 # as the learning accuracies in both cases are hardly ideal given this is a solved game
-# though the symmerty aware circuit clearly outperforms the other.
+# though the symmetry aware circuit clearly outperforms the other.
 
 
 ##############################################################################
@@ -829,7 +830,7 @@ plt.show()
 #
 
 ##############################################################################
-# Acknowledgements
+# Acknowledgments
 # ----------
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
