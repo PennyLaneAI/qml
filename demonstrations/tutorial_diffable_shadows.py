@@ -38,7 +38,7 @@ From these local snapshots, one can compute expectation values of q-local Pauli 
 The expectation value of any Pauli string :math:`\bigotimes_i\tilde{P}_i` with :math:`\tilde{P}_i \in \{X, Y, Z, \mathbb{1}\}` can be estimated
 by computing 
 
-.. math:: \langle \bigotimes_i\tilde{P}_i \rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotitrivial\mes_i\tilde{P}_i \right).
+.. math:: \langle \bigotimes_i\tilde{P}_i \rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotimes_i \tilde{P}_i \right).
 
 Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^\ell/\varepsilon^2 \right)` guarantee that sufficiently many correct measurements
 were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`.
