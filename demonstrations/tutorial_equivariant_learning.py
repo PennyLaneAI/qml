@@ -18,7 +18,7 @@ Symmetries are at the heart of physics, indeed in condensed matter and
 particle physics we often define a thing simply by the symmetries it
 adheres to. What does symmetry mean for those in machine learning? In
 this context the ambition is straight forward - it is a means to
-reducting the parameter space and improving generalisation.
+reduce the parameter space and improve generalisation..
 
 Suppose we have a learning task and the data we are learning from has an
 underlying symmetry. For example, consider a game of Noughts and
@@ -125,7 +125,7 @@ us the mappings that our system is invariant under, the unitary representations
 show us how those symmetries look on a particular
 space of unitary matrices. Given that quantum circuits are largely
 constructed from unitaries this gives us a direct connection between the
-characterisation of symmetries and quantumc circuits. If we want to
+characterisation of symmetries and quantum circuits. If we want to
 encode the structure of the symmeteries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
 
@@ -143,7 +143,15 @@ as linear maps on :math:`V` and :math:`W` respectively. We call :math:`f` equiva
 The importance of such a maps in machine learning is that if, for example, our neural network layers are
 equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
 preserve this information in the outputs. Which we can see because we could instead input the same input
-twice and get the second by applying the group action to one of the outputs. Given the vast amount
+twice and get the second by applying the group action to one of the outputs. 
+
+
+.. figure:: ../demonstrations/equivariant_learning/equivariant-example.png
+    :align: center
+    :width: 50%
+
+
+Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
 analysis where it is known they are euivarient with respect to translations; They naturally encode the idea that
@@ -218,10 +226,9 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # Let S be the group that encodes our symmetries and :math:`U_{s}` be a
 # unitary representation of :math:`\mathcal{S}`. Then,
 #
-# .. math::
+# .. container:: alert alert-block alert-info
 #
-#
-#    \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
+#       .. math:: \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
 #
 # defines a projector onto the set of operators commuting with all
 # elements of the representation, i.e.,
@@ -253,15 +260,15 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # edge then it will be sent round the other edges. So we can see that the
 # twirl operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
-# we can see that for a single qubit rotation the inavarient maps are rotations
+# we can see that for a single qubit rotation the inavariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
-# edges.
+# edges (when their rotation angles are fixed to be the same).
 #
 
 
 ######################################################################
 # For entangling gates the situation is similar. There are three invarient
-# classes, the centre entagled with all corners, with all edges, and the
+# classes, the centre entangled with all corners, with all edges, and the
 # edges paired in a ring.
 #
 
@@ -827,3 +834,9 @@ plt.show()
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
 #
+
+##############################################################################
+# .. bio:: Richard East
+#    :photo: ../_static/authors/reast.jpg
+#
+#    Richard is a theorist working at Xanadu interested in quantum information theory and its insights into theoretical physics and (quantum) machine learning.
