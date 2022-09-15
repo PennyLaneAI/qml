@@ -46,7 +46,7 @@ sum operator within the quantum computer to be able to create this oracle.
 The second question is why do we work with the QFT? There are other procedures to perform this basic operations, for example
 imitating the classical algorithm. But it has been seen that QFT needs less qubits to perform them, which is
 nowadays of vital importance (`Thomas G. Draper
-(1998) <https://arxiv.org/abs/quant-ph/0008033>`__.
+(1998) <https://arxiv.org/abs/quant-ph/0008033>`__).
 
 We will organize the demo as follows. Initially, we will talk about the Fourier basis giving an intuitive idea of how
 it works. After that we will see different basic arithmetic operations. Finally, we will move on to a practical example
@@ -168,7 +168,7 @@ plt.show()
 #
 # In the following image we can see the procedure to add :math:`3+4`.
 #
-# .. figure:: /demonstrations/qft_arithmetics/qft_add1.gif
+# .. figure:: /demonstrations/qft_arithmetics/qft_add.gif
 #   :width: 90%
 #   :align: center
 #
