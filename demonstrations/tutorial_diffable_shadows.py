@@ -266,7 +266,7 @@ print(all_observables[:10])
 ##############################################################################
 # We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.grouping.group_observables` to learn the number of
 # groups. We need this number to make a fair comparison with classical shadows as we allow for only ``T/n_groups`` shots per group, such that
-# the total number of shots is the same as for the classical shadow execution. We again compare both approaches 
+# the total number of shots is the same as for the classical shadow execution. We again compare both approaches.
 
 n_groups = len(qml.grouping.group_observables(all_observables))
 
@@ -342,14 +342,15 @@ plt.show()
 #
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
-# We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example, find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
+# We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example. 
+# Find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
 symbols = ["H", "O", "H"]
 coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
 
 basis_set = "sto-3g"
-H, n_wires = qml.qchem.molecular_hamiltonian(
+H_qwc, n_wires = qml.qchem.molecular_hamiltonian(
     symbols,
     coordinates,
     charge=0,
@@ -359,12 +360,10 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     active_orbitals=4,
     mapping="bravyi_kitaev",
     method="pyscf",
+    grouping_type="qwc"
 )
-#TODO: use new way of grouping in molecular hamiltonian
 
-coeffs, obs = H.coeffs, H.ops
-H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
-
+coeffs, obs = H_qwc.coeffs, H_qwc.ops
 n_groups = len(qml.grouping.group_observables(obs))
 print(f"number of ops in H: {len(obs)}, number of qwc {n_groups}")
 
@@ -393,10 +392,7 @@ def circuit():
         doubles = doubles)
 
 ##############################################################################
-# We now estimate the ground state energy for different number of total shots. We follow a relatively simple strategy of just
-# allocating ``T/n_groups`` shots to each member of the qwc group. This way we guarantee that the total number of shots ``T``
-# is the same for both the shadow and qwc approach. We then compute the root mean suqare difference between the exact result
-# and each approach.
+# We again follow the same simple strategy of giving each group the same number of shots ``T/n_groups`` for ``T`` total shots.
 
 d_qwc = []
 d_sha = []
@@ -449,20 +445,22 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
-# We see that we are better advised to use the qwc approach compared to the random shadow approach. 
-# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables`
-# is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
-# There has been intensive research in recent years on optimizing qwc measurement schemes.
-# Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
-# Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen]_.
+# For this realistic example, one is clearly better advised to directly compute the expectation values
+# and not waste precious quantum resources on unused measurements in the classical shadow protocol. #
+
 
 
 ##############################################################################
 #
 # Conclusion
 # ----------
+# Overall, we saw that classical shadows always waste unused quantum resources for measurements that are not used, except some extreme cases.
+# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables`
+# is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
+# There has been intensive research in recent years on optimizing qwc measurement schemes.
+# Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
+# Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen]_.
 # 
-# conclusion
 #
 #
 # References
