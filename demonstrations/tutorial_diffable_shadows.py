@@ -87,7 +87,7 @@ measuring qubit-wise-commuting observables. Before that, let us demonstrate how 
 PennyLane implementation
 ------------------------
 
-There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`~pennylane.shadow_expval` directly from the qnode.
+There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`shadow_expval` directly from the qnode.
 This has the advantage that it preserves the typical PennyLane syntax `and` is differentiable.
 """
 
@@ -117,7 +117,7 @@ print(qnode(x, H), qml.grad(qnode)(x, H))
 
 ##############################################################################
 # Each call of ``shadow_expval()`` performs the number of shots dictated by the device.
-# So to avoid unnecessary device executions you can provide a list of observables to :func:`~.pennylane.shadow_expval`.
+# So to avoid unnecessary device executions you can provide a list of observables to :func:`shadow_expval`.
 
 Hs = [H, qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 print(qnode(x, Hs))
