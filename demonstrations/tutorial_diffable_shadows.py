@@ -38,7 +38,7 @@ From these local snapshots, one can compute expectation values of q-local Pauli 
 The expectation value of any Pauli string :math:`\bigotimes_i\tilde{P}_i` with :math:`\tilde{P}_i \in \{X, Y, Z, \mathbb{I}\}` can be estimated
 by computing 
 
-.. math:: \langle \bigotimes_i\tilde{P}_i \rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotimes_i \tilde{P}_i \right).
+.. math:: \Big\langle \bigotimes_i\tilde{P}_i \Big\rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotimes_i \tilde{P}_i \right).
 
 Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^\ell/\varepsilon^2 \right)` guarantee that sufficiently many correct measurements
 were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`.
@@ -58,17 +58,17 @@ First, we convince ourselves of the identity
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i\right).
+.. math:: \Big\langle\bigotimes_i\tilde{P}_i\Big\rangle^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i\right).
 
 For that trace we find three different cases.
 The cases where :math:`\tilde{P}_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
 The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do not match :math:`P_i`. So in total, `only` in the case that all Pauli operators match, we find
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
+.. math:: \Big\langle\bigotimes_i\tilde{P}_i\Big\rangle^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
 
 This implies that in order to compute the expectation value of a Pauli string
 
-.. math:: \braket{\bigotimes_i\tilde{P}_i} = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \prod_{\text{i non-trivial}}(1-2b_i)
+.. math:: \Big\langle\bigotimes_i\tilde{P}_i\Big\rangle = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \prod_{\text{i non-trivial}}(1-2b_i)
 
 we simply need average over the product of :math:`1 - 2b_i = \pm 1` for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
 indicated by the special index :math:`\tilde{t}` for the matching measurements. Note that the probability of a match is :math:`1/3^q` such that we have
