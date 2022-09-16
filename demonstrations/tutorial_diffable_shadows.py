@@ -35,7 +35,7 @@ where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (
 :math:`|b_i\rangle = (1 - b_i, b_i)` is the corresponding computational basis state given by the output bit :math:`b_i`.
 
 From these local snapshots, one can compute expectation values of q-local Pauli strings, where locality refers to the number of non-Identity operators.
-The expectation value of any Pauli string :math:`\bigotimes_i\tilde{P}_i` with :math:`\tilde{P}_i \in \{X, Y, Z, \mathbb{1}\}` can be estimated
+The expectation value of any Pauli string :math:`\bigotimes_i\tilde{P}_i` with :math:`\tilde{P}_i \in \{X, Y, Z, \mathbb{I}\}` can be estimated
 by computing 
 
 .. math:: \langle \bigotimes_i\tilde{P}_i \rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotimes_i \tilde{P}_i \right).
@@ -53,7 +53,7 @@ Let us start by looking at individual snapshot expectation values
 :math:`\braket{\bigotimes_i\tilde{P}_i}^{(t)} = \text{tr}\left(\rho^{(t)} \left(\bigotimes_i\tilde{P}_i \right)\right)`.
 First, we convince ourselves of the identity
 
-.. math:: U_i^\dagger |b_i\rangle \langle b_i| U_i = \frac{1}{2}\left((1-2b_i) P_i + \mathbb{1}\right),
+.. math:: U_i^\dagger |b_i\rangle \langle b_i| U_i = \frac{1}{2}\left((1-2b_i) P_i + \mathbb{I}\right),
 
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
@@ -61,7 +61,7 @@ The snapshot expectation value then reduces to
 .. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b_i)P_i \tilde{P}_i + \frac{1}{2}\tilde{P}_i\right).
 
 For that trace we find three different cases.
-The cases where :math:`\tilde{P}_i=\mathbb{1}` yield a trivial factor :math:`1` to the product.
+The cases where :math:`\tilde{P}_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
 The full product is always zero if any of the non-trivial :math:`\tilde{P}_i` do not match :math:`P_i`. So in total, `only` in the case that all Pauli operators match, we find
 
 .. math:: \braket{\bigotimes_i\tilde{P}_i}^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
