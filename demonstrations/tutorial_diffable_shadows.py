@@ -31,7 +31,7 @@ We record :math:`T` of such measurements, and for the :math:`t`-th measurement, 
 
 .. math:: \rho^{(t)} = \bigotimes_{i=1}^{n} 3 U^\dagger_i |b_i \rangle \langle b_i | U_i - \mathbb{I},
 
-where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) at snapshot :math:`t`.
+where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) for qubit `i`.
 :math:`|b_i\rangle = (1 - b_i, b_i)` is the corresponding computational basis state given by the output bit :math:`b_i`.
 
 From these local snapshots, one can compute expectation values of q-local Pauli strings, where locality refers to the number of non-Identity operators.
