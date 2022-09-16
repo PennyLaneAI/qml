@@ -63,7 +63,7 @@ The snapshot expectation value then reduces to
 
 For that trace we find three different cases.
 The cases where :math:`O_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
-The full product is always zero if any of the non-trivial :math:`O_i` do not match :math:`P_i`. So in total, `only` in the case that all Pauli operators match, we find
+The full product is always zero if any of the non-trivial :math:`O_i` do not match :math:`P_i`. So in total, `only` in the case that all :math:`q` Pauli operators match, we find
 
 .. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
 
@@ -73,7 +73,7 @@ This implies that in order to compute the expectation value of a Pauli string
 
 we simply need average over the product of :math:`1 - 2b_i = \pm 1` for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
 indicated by the special index :math:`\tilde{t}` for the matching measurements. Note that the probability of a match is :math:`1/3^q` such that we have
-:math:`\tilde{T} = T / 3^q`.
+:math:`\tilde{T} \approx T / 3^q` on average.
 
 This implies that computing expectation values with classical shadows comes down to picking the specific subset of snapshots where those specific observables
 were already measured and discarding the remaining. If the desired observables are known prior to the measurement,
@@ -87,7 +87,7 @@ measuring qubit-wise-commuting observables. Before that, let us demonstrate how 
 PennyLane implementation
 ------------------------
 
-There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`~.pennylane.shadow_expval` directly from the qnode.
+There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`~pennylane.shadow_expval` directly from the qnode.
 This has the advantage that it preserves the typical PennyLane syntax `and` is differentiable.
 """
 
@@ -177,18 +177,20 @@ def rmsd(x, y):
     """root mean square difference"""
     return np.sqrt(np.mean((x - y)**2))
 
+n_wires = 10
+
 x = np.arange(20, dtype="float64")
 def circuit():
-    for i in range(10):
+    for i in range(n_wires):
         qml.RY(x[i], i)
-    for i in range(9):
+    for i in range(n_wires-1):
         qml.CNOT((i, i+1))
-    for i in range(10):
-        qml.RY(x[i+10], i)
+    for i in range(n_wires):
+        qml.RY(x[i+n_wires], i)
 
 obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
 
-dev_ideal = qml.device("default.qubit", wires=range(10), shots=None)
+dev_ideal = qml.device("default.qubit", wires=range(n_wires), shots=None)
 @qml.qnode(dev_ideal)
 def qnode_ideal():
     circuit()
@@ -256,7 +258,7 @@ for w in combinations(range(n), q):
 
     # Create all combinations of possible Pauli products P_i P_j P_k.... for wires w
     for obs in product(
-    *[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]
+        *[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]
         ):
         # Perform tensor product (((P_i @ P_j) @ P_k ) @ ....)
         observables.append(reduce(lambda a, b: a @ b, [ob(wire) for ob, wire in zip(obs, w)]))
@@ -271,21 +273,21 @@ print(all_observables[:10])
 
 n_groups = len(qml.grouping.group_observables(all_observables))
 
-dev_ideal = qml.device("default.qubit", wires=range(5), shots=None)
+dev_ideal = qml.device("default.qubit", wires=range(n), shots=None)
 
-x = np.random.rand(10)
+x = np.random.rand(n*2)
 def circuit():
-    for i in range(5):
+    for i in range(n):
         qml.RX(x[i], i)
 
-    for i in range(5):
-        qml.CNOT((i, (i+1)%5))
+    for i in range(n):
+        qml.CNOT((i, (i+1)%n))
 
-    for i in range(5):
-        qml.RY(x[i+5], i)
+    for i in range(n):
+        qml.RY(x[i+n], i)
 
-    for i in range(5):
-        qml.CNOT((i, (i+1)%5))
+    for i in range(n):
+        qml.CNOT((i, (i+1)%n))
 
 @qml.qnode(dev_ideal)
 def qnode_ideal():
