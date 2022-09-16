@@ -179,7 +179,7 @@ def rmsd(x, y):
 
 n_wires = 10
 
-x = np.arange(20, dtype="float64")
+x = np.arange(2*n_wires, dtype="float64")
 def circuit():
     for i in range(n_wires):
         qml.RY(x[i], i)
@@ -462,6 +462,8 @@ plt.show()
 # Conclusion
 # ----------
 # Overall, we saw that classical shadows always waste unused quantum resources for measurements that are not used, except some extreme cases.
+# For the rare case that the observables that are to be determined are not known before the measurement, classical shadows may prove advantageous.
+# 
 # We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables`
 # is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
 # There has been intensive research in recent years on optimizing qwc measurement schemes.
