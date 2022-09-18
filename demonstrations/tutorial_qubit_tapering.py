@@ -240,11 +240,11 @@ dev = qml.device('default.qubit', wires=H_tapered.wires)
 def circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
     for idx, double in enumerate(doubles):
-        qml.qchem.taper_operation(qml.DoubleExcitation(params[idx], wires=double),
-                                generators, paulixops, paulix_sector, n_electrons, H.wires)
+        qml.taper_operation(qml.DoubleExcitation(params[idx], wires=double),
+                                generators, paulixops, paulix_sector, H.wires)
     for idx, single in enumerate(singles):
-        qml.qchem.taper_operation(qml.SingleExcitation(params[len(doubles) + idx], wires=single),
-                                generators, paulixops, paulix_sector, n_electrons, H.wires)
+        qml.taper_operation(qml.SingleExcitation(params[len(doubles) + idx], wires=single),
+                                generators, paulixops, paulix_sector, H.wires)
     return qml.expval(H_tapered)
 
 ##############################################################################
