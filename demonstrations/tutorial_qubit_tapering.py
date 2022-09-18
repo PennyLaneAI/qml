@@ -15,7 +15,7 @@ Qubit tapering
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
-*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 12 Sept 2022*
+*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 19 Sept 2022*
 
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
@@ -292,17 +292,17 @@ for n in range(1, 41):
 #     method: A systematic approach to quantum chemistry on a quantum computer".
 #     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
 #
-# About the author
-# ----------------
+# About the authors
+# -----------------
 
 ##############################################################################
+#.. bio:: Utkarsh Azad
+#    :photo: ../_static/authors/utkarsh_azad.png
+#
+#    Utkarsh is a quantum researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences.
+#
 #.. bio:: Soran Jahangiri
 #    :photo: ../_static/Soran.png
 #
 #    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
-#
-#.. bio:: Utkarsh Azad
-#    :photo: ../_static/authors/utkarsh_azad.png
-#
-#    Utkarsh is a quantum software researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences.
 #
