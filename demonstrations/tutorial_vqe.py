@@ -156,7 +156,7 @@ def cost_fn(param):
 # Now we proceed to minimize the cost function to find the ground state of
 # the :math:`\mathrm{H}_2` molecule. To start, we need to define the classical optimizer.
 # PennyLane offers many different built-in
-# `optimizers <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_.
+# `optimizers <https://docs.pennylane.ai/en/stable/introduction/interfaces.html?highlight=optimizers#optimizers>`_.
 # Here we use a basic gradient-descent optimizer.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
