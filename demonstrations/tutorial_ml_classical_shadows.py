@@ -313,7 +313,7 @@ def snapshot_state(meas_list, obs_list):
     # undo the rotations done for performing Pauli measurements in the specific basis
     rotations = [
         qml.matrix(qml.Hadamard(wires=0)), # X-basis
-        qml.matrix(qml.Hadamard(wires=0)) @ qml.matrix(qml.S(wires=0).inv()), # Y-basis
+        qml.matrix(qml.Hadamard(wires=0)) @ qml.matrix(qml.adjoint(qml.S(wires=0))), # Y-basis
         qml.matrix(qml.Identity(wires=0)), # Z-basis
     ]
 
