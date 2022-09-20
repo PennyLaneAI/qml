@@ -104,9 +104,9 @@ n_gates = []
 n_qubits = []
 
 for tol in threshold:
-    algo = qml.resource.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
-    n_gates.append(algo.gates)
-    n_qubits.append(algo.qubits)
+    algo_ = qml.resource.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
+    n_gates.append(algo_.gates)
+    n_qubits.append(algo_.qubits)
 
 ##############################################################################
 # We now plot the estimated numbers
@@ -166,9 +166,9 @@ for er in error:
     n_qubits_ = []
 
     for pw in planewaves:
-        algo = qml.resource.FirstQuantization(pw, electrons, volume, error=er)
-        n_gates_.append(algo.gates)
-        n_qubits_.append(algo.qubits)
+        algo_ = qml.resource.FirstQuantization(pw, electrons, volume, error=er)
+        n_gates_.append(algo_.gates)
+        n_qubits_.append(algo_.qubits)
     n_gates.append(n_gates_)
     n_qubits.append(n_qubits_)
 
@@ -209,6 +209,9 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 # The 1-norm of the Hamiltonian can also be directly computed using the ``norm`` function. For the
 # first-quantized Hamiltonian it can be computed for a target error in the algorithm with
 
+planewaves = 100000
+electrons = 156
+volume = 1145
 qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 
 ##############################################################################
