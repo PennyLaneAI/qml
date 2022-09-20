@@ -252,6 +252,7 @@ ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 # m = qml.resource.estimate_shots(coeffs, ops, error=0.0016)
 # print(m)
 
+##############################################################################
 # Conclusions
 # -----------
 # This tutorial shows how to use the resource estimation functionality in PennyLane to compute the
