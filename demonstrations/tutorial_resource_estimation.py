@@ -97,41 +97,36 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 ##############################################################################
 # Computing the 1-norm of the Hamiltonian
 # ***************************************
-# The resource estimation functionality assumes that the molecular and material Hamiltonian can be
-# constructed as a linear combination of unitary operators.
+# The algorithm uses a decomposition of the Hamiltonian as a linear combination of unitaries.
 #
 # .. math:: H=\sum_{i} c_i U_i.
 #
-# The cost of computing the ground state energy of this Hamiltonian using the QPE algorithm depends
-# on the complexity of implementing the unitary operator for encoding the Hamiltonian, which can be
-# constructed as :math:`U = e^{-i \arccos (H / \lambda)}` and implemented using a quantum walk
-# operator [Cao et al.]. The eigenvalues of the quantum walk operator are
-# :math:`e^{-i \arccos (E / \lambda)}` which can be post-processed classically to give the
-# eigenvalues of the Hamiltonian :math:`E`. The parameter :math:`\lambda` is the 1-Norm of the
+# The parameter :math:`\lambda=\sum_i c_i` can be interpreted as a 1-norm of the
 # Hamiltonian and plays an important role in determining the cost of implementing the QPE algorithm.
 # In PennyLane, :math:`\lambda` can be obtained with
 
-print(f'1-Norm of the Hamiltonian: {algo.lamb}')
+print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
-# The 1-Norm of the Hamiltonian can also be directly computed using the ``norm`` function. For the
+# The 1-norm of the Hamiltonian can also be directly computed using the ``norm`` function. For the
 # first-quantized Hamiltonian it can be computed for a target error in the algorithm with
 
 qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 
 ##############################################################################
-# Measurement Complexity Estimation
-# ---------------------------------
-# In variational quantum algorithms, such as VQE, the expectation value of an observable is
-# typically computed by decomposing the observable to the tensor products of Pauli and Identity
-# operators apply to a limited number of qubits and then measure the expectation value for each of
-# these local terms. The number of qubits required for the measurement is trivially determined by
+# Variational quantum eigensolver
+# ------------------------------------------
+# In variational quantum algorithms such as VQE, the expectation value of an observable is
+# typically computed by decomposing the observable into a linear combination of Pauli strings,
+# which are tensor products of Pauli and Identity operators. The expectation values is calculated
+# through linearity by measuring the expectation value for each of these terms and combining the results. 
+# The number of qubits required for the measurement is trivially determined by
 # the number of qubits the observable acts on. The number of gates required to implement the
 # variational algorithm is determined by a circuit ansatz that is also known a priori. However,
 # estimating the number of circuit measurements required to achieve a certain error in computing the
-# expectation value is not typically trivial. Let's now use the PennyLane functionality that
-# estimates such measurement requirements for computing the expectation value of the water
-# Hamiltonian as an example.
+# expectation value is not as straightforward. Let's now use PennyLane to estimate
+# the number of measurements needed to computing the expectation value of the water
+# Hamiltonian.
 #
 # First, we construct the molecular Hamiltonian
 
