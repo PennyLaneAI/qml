@@ -239,7 +239,16 @@ ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
 # Conclusions
 # -----------
-# This tutorial
+# This tutorial shows how to use the resource estimation functionality in PennyLane to compute the
+# total number of non-Clifford gates and logical qubits required to simulate a Hamiltonian with the
+# quantum phase estimation algorithms. The estimation can be obtained for simulating
+# second-quantized molecular Hamiltonians obtained with the double low-rank factorization algorithm
+# and first-quantized Hamiltonians of periodic materials in the plane wave basis. We also discuss
+# the estimation of the total number of shots required to obtain the expectation value of an
+# observable with a target error using the variational quantum eigensolver algorithm. We estimated
+# the required resources by changing different factors in the algorithms, for instance, the
+# target error and the number of basis functions. Can you use this PennyLane functionality to draw
+# other interesting conclusions about quantum resources need to simulate interesting systems?
 #
 ##############################################################################
 #.. bio:: Soran Jahangiri
