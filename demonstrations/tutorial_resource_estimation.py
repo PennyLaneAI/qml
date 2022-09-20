@@ -96,6 +96,39 @@ algo = qml.resource.DoubleFactorization(one, two, error=0.016)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
+# We can also estimate the number of non-Clifford gates and logical qubits by changing the threshold
+# error values for discarding the negligible factors in the factorized Hamiltonian
+
+threshold = [10**-n for n in range(10)]
+n_gates = []
+n_qubits = []
+
+for tol in threshold:
+    algo = qml.resource.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
+    n_gates.append(algo.gates)
+    n_qubits.append(algo.qubits)
+
+##############################################################################
+# We now plot the estimated numbers
+
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(threshold, n_gates, 'o', markerfacecolor='none', color='teal')
+ax[1].plot(threshold, n_qubits, 'o', markerfacecolor='none', color='teal')
+
+ax[0].set_ylabel('n gates')
+ax[1].set_ylabel('n qubits')
+
+for i in [0, 1]:
+    ax[i].set_xlabel('threshold')
+    ax[i].set_xscale('log')
+    ax[i].tick_params(axis='x', labelrotation = 90)
+    ax[i].set_xticks(threshold)
+    ax[i].set_xticklabels(threshold)
+
+fig.tight_layout()
+
+##############################################################################
 # QPE cost for simulating periodic materials
 # ******************************************
 # For periodic materials, we estimate the cost of implementing the QPE algorithm of Su et al.
@@ -118,6 +151,34 @@ algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
+
+##############################################################################
+# We can also plot the estimated numbers as a function of the number of plane waves
+
+planewaves = [10**n for n in range(1, 10)]
+n_gates = []
+n_qubits = []
+
+for pw in planewaves:
+    algo = qml.resource.FirstQuantization(pw, electrons, volume)
+    n_gates.append(algo.gates)
+    n_qubits.append(algo.qubits)
+
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(planewaves, n_gates, 'o', markerfacecolor='none', color='teal')
+ax[1].plot(planewaves, n_qubits, 'o', markerfacecolor='none', color='teal')
+
+ax[0].set_ylabel('n gates')
+ax[1].set_ylabel('n qubits')
+
+for i in [0, 1]:
+    ax[i].set_xlabel('planewaves')
+    ax[i].set_xscale('log')
+    ax[i].tick_params(axis='x', labelrotation=90)
+    ax[i].set_xticks(planewaves)
+    ax[i].set_xticklabels(planewaves)
+
+fig.tight_layout()
 
 ##############################################################################
 # Computing the 1-norm of the Hamiltonian
