@@ -133,7 +133,7 @@ qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 
 ##############################################################################
-# The number of measurements needed to compute :math:`\left \langle H \right \rangle` within the
+# The number of measurements needed to compute :math:`\left \langle H \right \rangle` with
 # chemical accuracy, 0.0016 :math:`\text{Ha}`, can be obtained with
 
 # m = qml.resource.estimate_shots(H.coeffs, H.ops, error=0.0016)
