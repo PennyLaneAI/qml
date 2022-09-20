@@ -43,11 +43,9 @@ We assume Gaussian and plane wave basis sets for describing the molecular and pe
 respectively. The PennyLane functionality in the ``resource`` module allows us to estimate these
 resources by simply defining system specifications and a target error for estimation. Let's see how!
 
-QPE cost for simulating isolated molecules
+QPE cost for simulating molecules
 ******************************************
-The cost of performing QPE simulations for isolated molecules is estimated based on the double low
-rank Hamiltonian factorization algorithm. We first need to define the atomic symbols and
-coordinates for the given molecule. Here we use the water molecule at its equilibrium geometry as an
+We study the double low-rank Hamiltonian factorization algorithm of Ref. [1]. We first need to define the atomic symbols and coordinates for the given molecule. Here we use the water molecule at its equilibrium geometry as an
 example
 """
 import pennylane as qml
@@ -78,7 +76,7 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 # QPE cost for simulating periodic materials
 # ******************************************
 # The cost of implementing the QPE algorithm for periodic materials is estimated following the
-# algorithm of Su et al. for Hamiltonians in first quantization assuming constructed with a
+# algorithm of Su et al. for Hamiltonians in first quantization in a
 # plane wave basis. We first need to define the number of plane waves, the number of electrons and
 # the volume of the unit cell that constructs the periodic material. Let's use dilithium iron
 # silicate :math:`\text{Li}_2\text{FeSiO}_4` as an example. Note that atomic units must be used
@@ -97,7 +95,7 @@ algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
-# Computing the 1-Norm of the Hamiltonian
+# Computing the 1-norm of the Hamiltonian
 # ***************************************
 # The resource estimation functionality assumes that the molecular and material Hamiltonian can be
 # constructed as a linear combination of unitary operators.
