@@ -153,30 +153,42 @@ algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
-# We can also plot the estimated numbers as a function of the number of plane waves
+# We can also plot the estimated numbers as a function of the number of plane waves for different
+# target errors
 
-planewaves = [10**n for n in range(1, 10)]
+error = [0.05, 0.01, 0.005, 0.001]  # in atomic units
+planewaves = [10 ** n for n in range(1, 10)]
 n_gates = []
 n_qubits = []
 
-for pw in planewaves:
-    algo = qml.resource.FirstQuantization(pw, electrons, volume)
-    n_gates.append(algo.gates)
-    n_qubits.append(algo.qubits)
+for er in error:
+    n_gates_ = []
+    n_qubits_ = []
+
+    for pw in planewaves:
+        algo = qml.resource.FirstQuantization(pw, electrons, volume, error=er)
+        n_gates_.append(algo.gates)
+        n_qubits_.append(algo.qubits)
+    n_gates.append(n_gates_)
+    n_qubits.append(n_qubits_)
 
 fig, ax = plt.subplots(1, 2)
-ax[0].plot(planewaves, n_gates, 'o', markerfacecolor='none', color='teal')
-ax[1].plot(planewaves, n_qubits, 'o', markerfacecolor='none', color='teal')
+
+for i in range(len(n_gates)):
+    ax[0].plot(planewaves, n_gates[i], 'o', markerfacecolor='none', label=error[i])
+    ax[1].plot(planewaves, n_qubits[i], 'o', markerfacecolor='none', label=error[i])
 
 ax[0].set_ylabel('n gates')
 ax[1].set_ylabel('n qubits')
 
 for i in [0, 1]:
-    ax[i].set_xlabel('planewaves')
-    ax[i].set_xscale('log')
+    ax[i].set_xlabel('n planewaves')
     ax[i].tick_params(axis='x', labelrotation=90)
-    ax[i].set_xticks(planewaves)
-    ax[i].set_xticklabels(planewaves)
+    ax[i].grid(True)
+    ax[0].set_yscale('log')
+    ax[i].set_xscale('log')
+
+    ax[i].legend()
 
 fig.tight_layout()
 
