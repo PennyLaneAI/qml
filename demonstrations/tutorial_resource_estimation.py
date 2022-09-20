@@ -4,7 +4,7 @@ Quantum Resource Estimation
 ===========================
 
 .. meta::
-    :property="og:description": Learn how to estimate quantum resources
+    :property="og:description": Learn how to estimate the number of qubits and gates needed to implement quantum algorithms
     :property="og:image": https://pennylane.ai/qml/_images/differentiable_HF.png
 
 .. related::
@@ -14,44 +14,34 @@ Quantum Resource Estimation
 
 *Author: Soran Jahangiri. Posted: 17 August 2022. Last updated: 17 August 2022*
 
-Quantum algorithms such s quantum phase estimation and the variational quantum eigensolver
-implemented on a suitable quantum hardware are expected to tackle problems that are
-intractable for conventional classical computers. In the absence of quantum devices, the
-implementation of such algorithms is limited to computationally inefficient classical simulators.
-This makes it difficult to properly explore the accuracy and efficiency of these algorithms for
-relatively large problem sizes where the actual advantage of quantum algorithms is expected to be
-seen. Despite the simulation difficulties, it is possible to estimate the amount of resources
-required to implement such quantum algorithms without performing computationally expensive
-simulations.
+Quantum algorithms such as quantum phase estimation and the variational quantum eigensolver
+are studied as avenues to tackle problems that are intractable for conventional computers. However, we
+currently do not have quantum computers or simulators capable of implementing large-scale versions of these 
+algorithms. This makes it difficult to properly explore their accuracy and efficiency for problem sizes where the actual advantage of quantum algorithms can potentially occur. Despite these difficulties, it is still possible to estimate the amount of resources required to implement such quantum algorithms .
 
-In this demo, we introduce a functionality in PennyLane that allows estimating the total number of
+In this demo, we describe how to estimate the total number of
 non-Clifford gates and logical qubits required to implement the quantum phase estimation (QPE)
 algorithm for simulating molecular Hamiltonians represented in first and second quantization. We
-also present the functionality for estimating the total number of measurements needed to compute
-expectation values within a given error using algorithms such as the variational quantum eigensolver
-(VQE). Estimating the number of gates and qubits is rather straightforward for the VQE algorithm.
+also explain how to estimate the total number of measurements needed to compute
+expectation values using algorithms such as the variational quantum eigensolver
+(VQE). 
 
 Quantum Phase Estimation
 ------------------------
-The QPE algorithm can be used to compute the phase of a unitary operator within an error
-:math:`\epsilon`. The unitary operator :math:`U` can be selected to share eigenvectors
-:math:`| \Psi \rangle` with a molecular Hamiltonian :math:`H` by having, for example,
-:math:`U = e^{-iH}` to compute the eigenvalues of :math:`H`. A QPE conceptual circuit diagram is
-shown in the following. The circuit contains a set of target wires initialized at the eigenstate
-:math:`| \Psi \rangle` which encode the unitary operator and a set of estimation wires initialized
-in :math:`| 0 \rangle` which are measured after applying an inverse quantum Fourier transform. The
+The QPE algorithm can be used to compute the phase associated with an eigenstate of a unitary operator. For the purpose of quantum simulation, the unitary operator :math:`U` can be chosen to share eigenvectors
+with a molecular Hamiltonian :math:`H`, for example by setting :math:`U = e^{-iH}`. Estimating the phase of such a unitary then permits recovering the corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
+shown below. The circuit contains target wires, here initialized in the ground state
+:math:`| \psi_0 \rangle`,  and a set of estimation wires, initialized
+in :math:`| 0 \rangle`. The algorithm repeatedly applies powers of `U` controlled on the state of estimation wires, which are measured after applying an inverse quantum Fourier transform. The
 measurement results give a binary string that can be used to estimate the phase of the unitary and
-the ground state energy of the Hamiltonian. The precision in estimating the phase depends on the
-number of estimation wires while the number of gates in the circuit is determined by the unitary
-operator.
+thus also the ground state energy of the Hamiltonian. The precision in estimating the phase depends on the
+number of estimation wires.
 
-We are interested to estimate the number of logical qubits and the number of non-Clifford gates,
-which are hard to implement, for a QPE algorithm that implements a second-quantized Hamiltonian
-describing an isolated molecule and a first-quantized Hamiltonian describing a periodic material.
+For most cases of interest, this algorithm requires more qubits and longer circuit depths than what can be implemented on existing hardware. We are instead interested in estimating the number of logical qubits and the number of gates which are needed to implement the algorithm. We focus on non-Clifford gates, which are the most expensive to implement in a fault-tolerant setting. We noe explain how to perform this resource estimation for QPE algorithms based on a second-quantized Hamiltonian
+describing a molecule, and a first-quantized Hamiltonian describing a periodic material.
 We assume Gaussian and plane wave basis sets for describing the molecular and periodic systems,
-respectively. The PennyLane functionality in the ``resource`` module allows estimating such QPE
-resources by simply defining system specifications such as atomic symbols and geometries and a
-target error for estimating the ground state energy of the Hamiltonian. Let's see how!
+respectively. The PennyLane functionality in the ``resource`` module allows us to estimate these
+resources by simply defining system specifications and a target error for estimation. Let's see how!
 
 QPE cost for simulating isolated molecules
 ******************************************
