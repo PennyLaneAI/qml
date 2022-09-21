@@ -124,7 +124,7 @@ plt.show()
 # We can represent them in different bases such as the so-called :math:`\textit{Fourier base}`.
 #
 # In this basis, all the basic states will be represented via qubits in
-# the XY plane of the Bloch sphere, each rotated by a certain
+# the XY-plane of the Bloch sphere, each rotated by a certain
 # amount.
 #
 #
