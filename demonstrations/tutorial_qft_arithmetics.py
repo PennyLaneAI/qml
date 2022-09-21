@@ -396,7 +396,7 @@ def factorization(n, wires_m, wires_k, wires_sol):
     # Apply the multiplication
     multiplication(wires_m, wires_k, wires_sol)
 
-    # Change sign to n
+    # Change sign of n
     qml.FlipSign(n, wires=wires_sol)
 
     # Uncompute multiplication
