@@ -44,7 +44,7 @@ columns to check that they all have the same value. Therefore, to create this or
 we will need to define a sum operator within the quantum computer.
 
 The second question we face is why we should work with the QFT at all. There are other procedures that could be used to perform these basic operations; for example, by
-imitating the classical algorithm. But it has been seen that QFT needs less qubits to perform them, which is
+imitating the classical algorithm. But it has already been proven that QFT needs less qubits to perform these operations, which is
 nowadays of vital importance (`Thomas G. Draper
 (1998) <https://arxiv.org/abs/quant-ph/0008033>`__).
 
