@@ -232,7 +232,7 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 # have to add 1 to the counter if :math:`q_2 = 1` and nothing
 # otherwise. In general, we should add :math:`2^{n-i-1}` units if the :math:`i`-th
 # qubit is in state :math:`\vert 1 \rangle` and 0 otherwise. As we can see, this is the same idea that is also
-# behind the concept of a controlled gate. Indeed, observe that we will apply a corresponding
+# behind the concept of a controlled gate. Indeed, observe that we will, indeed, apply a corresponding
 # phase if indeed the control qubit is in the state :math:`\vert 1\rangle`.
 # Let us now code the :math:`\text{Sum}_2` operator.
 
