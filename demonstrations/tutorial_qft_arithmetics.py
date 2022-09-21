@@ -15,7 +15,7 @@ Basic arithmetic with the QFT
 
 *Author: Guillermo Alonso-Linaje. Posted:  2022. Last updated: 13 June 2022*
 
-Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such
+Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations on numbers such
 as addition, multiplication, subtraction or division. It is arithmetic that helps us understand the world around us and
 facilitates many of our daily tasks.
 
