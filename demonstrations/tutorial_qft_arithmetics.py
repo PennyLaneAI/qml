@@ -144,7 +144,7 @@ plt.show()
 #   Representation of integers using using the Fourier basis with three qubits
 #
 # As we can see, the third qubit will rotate
-# :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
+# :math:`\frac{1}{8}` of a turn counterclockwise with each number. The next qubit
 # rotates :math:`\frac{1}{4}` turn and, finally, the first qubit will revolve
 # half a turn every time we add one to the number we are representing.
 #
