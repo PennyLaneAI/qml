@@ -95,7 +95,7 @@ Let’s see how we would represent all the integers from 0 to 7 using the produc
     At the top of the sphere we place the state :math:`\vert 0 \rangle`, at the bottom
     :math:`\vert 1 \rangle`, and in the rest of the
     sphere we will place the possible states in superposition. It is a very useful
-    representation that helps to interpret gates such as rotations.
+    representation that helps better visualize and interpret quantum gates such as rotations.
 
 We can use
 the :class:`qml.BasisEmbedding <pennylane.BasisEmbedding>`
