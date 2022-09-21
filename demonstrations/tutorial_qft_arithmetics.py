@@ -61,7 +61,7 @@ operations that are done on them. To apply the QFT to basic arithmetic operation
 subtract and multiply numbers using quantum devices. As we are working with qubits,
 —which, like bits, can take the 
 values 0 or 1—we will represent the numbers in binary. For the
-purposes of this tutorial, we will assume that we are working with
+purposes of this tutorial, we will assume that we are working only with
 integers. Therefore, if we have :math:`n` qubits, we will be able to
 represent the numbers from :math:`0` to :math:`2^n-1`.
 
