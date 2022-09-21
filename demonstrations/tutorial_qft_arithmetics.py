@@ -202,7 +202,7 @@ def sum(m, k):
 print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 
 ######################################################################
-# Perfect, we have obtained :math:`0111` which is equivalent to the number :math:`7` in binary!
+# Perfect, we have obtained :math:`0111`, which is equivalent to the number :math:`7` in binary!
 # Note that this is a deterministic algorithm so that by executing a single shot we have the desired solution.
 # On the other hand, if the result of an operation is greater than the maximum
 # value :math:`2^n-1`, we will start again from zero, that is to say, we
