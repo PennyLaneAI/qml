@@ -426,7 +426,7 @@ plt.show()
 # prime factors have been amplified! Factorization via Grover’s algorithm
 # does not achieve exponential improvement that
 # `Shor's algorithm <https://en.wikipedia.org/wiki/Shor%27s_algorithm>`_ does, but we
-# can see that the construction is simple and is a great example to
+# can see that this construction is simple and a great example to
 # illustrate basic arithmetic!
 #
 # I hope we are starting to see that oracles are not something magical and that there
