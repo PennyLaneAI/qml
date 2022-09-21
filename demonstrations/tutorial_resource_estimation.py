@@ -218,16 +218,15 @@ qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 # Variational quantum eigensolver
 # ------------------------------------------
 # In variational quantum algorithms such as VQE, the expectation value of an observable is
-# typically computed by decomposing the observable into a linear combination of Pauli strings,
+# typically computed by decomposing the observable into a linear combination of Pauli words,
 # which are tensor products of Pauli and Identity operators. The expectation values is calculated
 # through linearity by measuring the expectation value for each of these terms and combining the
 # results. The number of qubits required for the measurement is trivially determined by
 # the number of qubits the observable acts on. The number of gates required to implement the
 # variational algorithm is determined by a circuit ansatz that is also known a priori. However,
-# estimating the number of circuit measurements required to achieve a certain error in computing the
-# expectation value is not as straightforward. Let's now use PennyLane to estimate
-# the number of measurements needed to computing the expectation value of the water
-# Hamiltonian.
+# estimating the number of circuit evaluations, shots, required to achieve a certain error in
+# computing the expectation value is not as straightforward. Let's now use PennyLane to estimate
+# the number of shots needed to computing the expectation value of the water Hamiltonian.
 #
 # First, we construct the molecular Hamiltonian
 
@@ -239,8 +238,8 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 # Hamiltonian coefficients and observables as input. The number of measurements required for a
 # target error set to the chemical accuracy, 0.0016 :math:`\text{Ha}`, can be obtained with
 
-# m = qml.resource.estimate_shots(H.coeffs, H.ops, error=0.0016)
-# print(m)
+m = qml.resource.estimate_shots(H.coeffs, H.ops, error=0.0016)
+print(m)
 
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
@@ -249,8 +248,8 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
-# m = qml.resource.estimate_shots(coeffs, ops, error=0.0016)
-# print(m)
+m = qml.resource.estimate_shots(coeffs, ops, error=0.0016)
+print(m)
 
 ##############################################################################
 # Conclusions
