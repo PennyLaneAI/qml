@@ -38,7 +38,7 @@ Grover's algorithm, we might think that we have never needed to apply any arithm
 However, the reality is different. When we learn about these algorithms from an academic point of view,
 we work with a ready-made operator that we never have to worry about, the :math:`\textit{oracle}`.
 Unfortunately, in real-world situations, we will have to build this seemingly magical operator by hand.
-To give an example, let's imagine that we want to use Grover's algorithm to search for `Magic Squares <https://en.wikipedia.org/wiki/Magic_square>`__.
+To give an example, let's imagine that we want to use Grover's algorithm to search for `magic squares <https://en.wikipedia.org/wiki/Magic_square>`__.
 To define the oracle, which determines whether a solution is valid or not, we must perform sums over the rows and
 columns to check that they all have the same value. Therefore, we can see here that we will need to define a
 sum operator within the quantum computer to be able to create this oracle.
