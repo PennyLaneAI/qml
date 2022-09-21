@@ -141,7 +141,7 @@ plt.show()
 #   :width: 90%
 #   :align: center
 #
-#   Representation of the Fourier basis with 3 qubits
+#   Representation of integers using using the Fourier basis with three qubits
 #
 # As we can see, the third qubit will rotate
 # :math:`\frac{1}{8}` of a turn counterclockwise as we increase the number. The next qubit
