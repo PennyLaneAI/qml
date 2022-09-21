@@ -146,7 +146,7 @@ plt.show()
 # As we can see, the third qubit will rotate
 # :math:`\frac{1}{8}` of a turn counterclockwise with each number. The next qubit
 # rotates :math:`\frac{1}{4}` of a full turn and, finally, the first qubit rotates
-# half a turn every time we add one to the number we are representing.
+# half a turn for each increase in number.
 #
 # Adding :math:`k` to a register
 # ------------------------------
