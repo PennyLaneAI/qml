@@ -208,7 +208,7 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 # value :math:`2^n-1`, we will start again from zero, that is to say, we
 # will calculate the sum modulo :math:`2^n-1.` For instance, in our three-qubit example, suppose that
 # we want to calculate :math:`6+3.` We see that we do not have
-# enough space since :math:`6+3 = 9 > 2^3-1`. The result we will get will
+# enough memory space, as :math:`6+3 = 9 > 2^3-1`. The result we will get will
 # be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. Make sure to use
 # enough qubits to represent your solutions!
 # Finally, it is important to point out that it is not necessary to know how the
