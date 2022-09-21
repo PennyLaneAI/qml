@@ -34,7 +34,7 @@ goal purely academic or is it really something that is needed in certain algorit
 something that we can do with a calculator?
 
 When it comes to basic quantum computing algorithms like the Deustch–Jozsa or
-Grover, we have never needed to apply any arithmetic operations such as addition or multiplication.
+Grover's algorithm, we might think that we have never needed to apply any arithmetic operations such as addition or multiplication.
 However, the reality is different. When we learn these algorithms, from an academic point of view,
 we work with an operator that we are given ready-made and that we never worry about, the :math:`\textit{oracle}`.
 But this operator that seems so magical, is something that in real situations, we will have to build it by hand.
