@@ -135,7 +135,7 @@ plt.show()
 #
 # .. math:: \alpha_j = \frac{2m\pi}{2^{j}}.
 #
-# Let’s see how to represent numbers in the Fourier basis using 3 qubits:
+# Now we can represent numbers in the Fourier basis using 3 qubits:
 #
 # .. figure:: /demonstrations/qft_arithmetics/qft_basis.gif
 #   :width: 90%
