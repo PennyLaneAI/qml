@@ -221,7 +221,7 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 # In this previous algorithm, we have had to say manually which :math:`k` we want to add.
 # But suppose that what we are in specifying the integer to be added using another register of qubits.
 # That is,
-# we are looking look for a new operator :math:`\text{Sum}_2` such that
+# we are looking for a new operator :math:`\text{Sum}_2` such that
 #
 # .. math:: \text{Sum}_2\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
 #
