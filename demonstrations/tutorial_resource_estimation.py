@@ -252,6 +252,29 @@ m = qml.resource.estimate_shots(coeffs, ops, error=0.0016)
 print(m)
 
 ##############################################################################
+# It is interesting to illustrate how the number of shots depends on the target error. We compute
+# and plot the number of shots for different target errors. We also plot a line showing the
+# dependency of the shots to the error as :math:`shots = 1.4e4 * 1/\epsilon^2` for comparison.
+
+error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
+m = [qml.resource.estimate_shots(H.coeffs, error=er) for er in error]
+
+e_ = np.linspace(error[0], error[-1], num=50)
+m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50)**2
+
+fig, ax = plt.subplots(figsize=(5, 3))
+ax.plot(error, m, 'o', markerfacecolor='none', color='teal', label='estimated')
+ax.plot(e_, m_, ':', markerfacecolor='none', color='navy', label='$ 1.4e4 * 1/\epsilon^2 $')
+
+ax.set_ylabel('shots')
+ax.set_xlabel('error [Ha]')
+ax.set_yscale('log')
+ax.grid(True)
+ax.tick_params(axis='x', labelrotation = 90)
+ax.legend()
+fig.tight_layout()
+
+##############################################################################
 # Conclusions
 # -----------
 # This tutorial shows how to use the resource estimation functionality in PennyLane to compute the
