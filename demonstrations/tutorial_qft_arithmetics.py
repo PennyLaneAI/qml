@@ -423,7 +423,7 @@ plt.show()
 
 ######################################################################
 # By plotting the probabilities of obtaining each basic state we see that
-# prime factors are amplified! Factorization via Grover’s algorithm
+# prime factors have been amplified! Factorization via Grover’s algorithm
 # does not achieve exponential improvement that
 # `Shor's algorithm <https://en.wikipedia.org/wiki/Shor%27s_algorithm>`_ does, but we
 # can see that the construction is simple and is a great example to
