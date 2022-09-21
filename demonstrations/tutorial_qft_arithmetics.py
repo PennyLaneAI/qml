@@ -174,7 +174,7 @@ plt.show()
 #
 #   Addition process with QFT
 #
-# Let's see how it would look in PennyLane.
+# Let's see how this process would look in PennyLane.
 
 import pennylane as qml
 from pennylane import numpy as np
