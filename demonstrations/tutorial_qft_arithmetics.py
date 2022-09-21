@@ -31,7 +31,7 @@ Motivation
 
 The first question we have to ask ourselves is whether it makes sense to perform these basic operations on a quantum computer. Is the
 goal purely academic or is it really something that is needed in certain algorithms?  Why implement in a quantum computer
-something that I can do with a calculator?
+something that we can do with a calculator?
 
 One thing we might think is that for basic algorithms like Deustch-Jozsa or
 Grover, we have never needed to apply any arithmetic operations such as addition or multiplication.
