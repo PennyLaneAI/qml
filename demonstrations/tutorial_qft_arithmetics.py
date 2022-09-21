@@ -431,7 +431,7 @@ plt.show()
 #
 # I hope we can now all see that oracles are not something magical and that there
 # is a lot of work behind their construction! This will help us in the future to build
-# more complicated operators, but until then, let’s keep on learning 🚀
+# more complicated operators, but until then, let’s keep on learning. 🚀
 #
 # About the author
 # ----------------
