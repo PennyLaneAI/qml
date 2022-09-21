@@ -131,7 +131,7 @@ plt.show()
 # How do we know how much we must rotate each qubit to represent a certain number?
 # It is actually very easy! Suppose we are working with
 # :math:`n` qubits and we want to represent the number :math:`m` in the
-# Fourier basis. Then the j-th qubit will have a phase:
+# Fourier basis. Then the j-th qubit will have the phase:
 #
 # .. math:: \alpha_j = \frac{2m\pi}{2^{j}}.
 #
