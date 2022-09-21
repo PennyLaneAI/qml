@@ -158,7 +158,7 @@ plt.show()
 # to the state :math:`\vert m + k\rangle`. A procedure to implement such unitary
 # is the following.
 #
-# 1.    We convert the computational basis into Fourier basis by applying QFT on
+# 1.    We convert the state from the computational basis into the Fourier basis by applying the QFT to
 # the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
 #
 # 2.    We rotate the j-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}` with
