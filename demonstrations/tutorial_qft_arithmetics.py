@@ -203,7 +203,7 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 
 ######################################################################
 # Perfect, we have obtained :math:`0111`, which is equivalent to the number :math:`7` in binary!
-# Note that this is a deterministic algorithm so that by executing a single shot we have the desired solution.
+# Note that this is a deterministic algorithm, which means that we have obtained the desired solution by executing a single shot.
 # On the other hand, if the result of an operation is greater than the maximum
 # value :math:`2^n-1`, we will start again from zero, that is to say, we
 # will calculate the sum modulo :math:`2^n-1.` For instance, in our three-qubit example, suppose that
