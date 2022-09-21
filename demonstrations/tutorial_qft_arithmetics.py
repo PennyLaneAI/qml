@@ -90,7 +90,7 @@ Let’s see how we would represent all the integers from 0 to 7 using product st
 
 .. note::
 
-    The `Bloch Sphere <https://en.wikipedia.org/wiki/Bloch_sphere>`_
+    The `Bloch sphere <https://en.wikipedia.org/wiki/Bloch_sphere>`_
     is a way of graphically representing the state of a qubit.
     At the top of the sphere we will place the state :math:`\vert 0 \rangle`, at the bottom
     :math:`\vert 1 \rangle` and in the rest of the
