@@ -119,7 +119,7 @@ qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
 plt.show()
 
 ######################################################################
-# As we can see, the first qubit —the 0-th wire— is placed on top and the rest of the qubits are
+# As we can see, the first qubit—the 0-th wire—is placed on top and the rest of the qubits are
 # below it. However, this is not the only way we have to represent numbers.
 # We can represent them in different bases such as the so-called :math:`\textit{Fourier base}`.
 #
