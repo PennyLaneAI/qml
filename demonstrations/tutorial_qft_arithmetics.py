@@ -120,7 +120,7 @@ plt.show()
 
 ######################################################################
 # As we can see, the first qubit—the 0-th wire—is placed on top and the rest of the qubits are
-# below it. However, this is not the only way we have to represent numbers.
+# below it. However, this is not the only way we could represent numbers.
 # We can represent them in different bases such as the so-called :math:`\textit{Fourier base}`.
 #
 # In this basis, all the basic states will be represented via qubits in
