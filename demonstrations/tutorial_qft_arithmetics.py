@@ -402,7 +402,7 @@ def factorization(n, wires_m, wires_k, wires_sol):
     # Uncompute multiplication
     qml.adjoint(multiplication)(wires_m, wires_k, wires_sol)
 
-    # Apply Grover Operator
+    # Apply Grover operator
     qml.GroverOperator(wires=wires_m + wires_k)
 
     return qml.probs(wires=wires_m)
