@@ -1,6 +1,6 @@
 r"""
 
-Basic arithmetic with the QFT
+Basic arithmetic with the quantum Fourier transform (QFT)
 =======================================
 
 .. meta::
