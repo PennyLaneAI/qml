@@ -153,7 +153,7 @@ plt.show()
 #
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this in practice,
-# let’s look at the following situation. We want to create an operator
+# let’s look at the situation in which want to create an operator
 # that takes a state :math:`\vert m \rangle`
 # to the state :math:`\vert m + k\rangle`. A procedure to implement such unitary
 # is the following.
