@@ -19,7 +19,7 @@ Arithmetic is a fundamental branch of mathematics that consists of the study of 
 as addition, multiplication, subtraction or division. Using arithmetic operations we can understand the world around us and
 solve many of our daily tasks.
 
-It becomes a fundamental pillar in computing to implement any type of algorithm. Therefore,  we will
+In computing, arithmetic is crucial to the implementation of any type of algorithm. Therefore, we will
 make an approach to arithmetic in quantum computers using the well-known Quantum Fourier Transform (QFT).
 In this demo, we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
