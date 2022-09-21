@@ -356,7 +356,7 @@ plt.show()
 #
 # Let’s imagine now that we want just the opposite: to factor the
 # number 21 as a product of two terms. Is this something we could do
-# following our previous reasoning? The answer is yes! We can make use of
+# using our previous reasoning? The answer is yes! We can make use of
 # `Grover's algorithm <https://en.wikipedia.org/wiki/Grover%27s_algorithm>`_ to
 # amplify the states whose product is the number we
 # are looking for. All we would need is to construct the oracle U, i.e., an
