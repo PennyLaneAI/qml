@@ -40,7 +40,7 @@ we work with a ready-made operator that we never have to worry about, the :math:
 Unfortunately, in real-world situations, we will have to build this seemingly magical operator by hand.
 To give an example, let's imagine that we want to use Grover's algorithm to search for `magic squares <https://en.wikipedia.org/wiki/Magic_square>`__.
 To define the oracle, which determines whether a solution is valid or not, we must perform sums over the rows and
-columns to check that they all have the same value. Therefore, we can see here that we will need to define a
+columns to check that they all have the same value. Therefore, to create this oracle,
 sum operator within the quantum computer to be able to create this oracle.
 
 The second question is why do we work with the QFT? There are other procedures to perform this basic operations, for example
