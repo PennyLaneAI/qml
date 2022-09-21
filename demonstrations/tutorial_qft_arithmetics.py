@@ -49,7 +49,7 @@ nowadays of vital importance (`Thomas G. Draper
 (1998) <https://arxiv.org/abs/quant-ph/0008033>`__).
 
 We will organize the demo as follows. Initially, we will talk about the Fourier basis to give an intuitive idea of how
-it works. After that we will see different basic arithmetic operations. Finally, we will move on to a practical example
+it works, after which we will address different basic arithmetic operations. Finally, we will move on to a practical example
 in which we will factor numbers using Grover's algorithm.
 
 
