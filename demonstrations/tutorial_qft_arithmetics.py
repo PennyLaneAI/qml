@@ -33,7 +33,7 @@ The first question we have to ask ourselves is whether it makes sense to perform
 goal purely academic or is it really something that is needed in certain algorithms?  Why implement in a quantum computer
 something that we can do with a calculator?
 
-One thing we might think is that for basic algorithms like Deustch-Jozsa or
+When it comes to basic quantum computing algorithms like the Deustch–Jozsa or
 Grover, we have never needed to apply any arithmetic operations such as addition or multiplication.
 However, the reality is different. When we learn these algorithms, from an academic point of view,
 we work with an operator that we are given ready-made and that we never worry about, the :math:`\textit{oracle}`.
