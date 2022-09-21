@@ -17,7 +17,7 @@ Basic arithmetic with the QFT
 
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations on numbers such
 as addition, multiplication, subtraction or division. Using arithmetic operations we can understand the world around us and
-facilitates many of our daily tasks.
+solve many of our daily tasks.
 
 It becomes a fundamental pillar in computing to implement any type of algorithm. Therefore,  we will
 make an approach to arithmetic in quantum computers using the well-known Quantum Fourier Transform (QFT).
