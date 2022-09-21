@@ -429,7 +429,7 @@ plt.show()
 # can see that this construction is simple and a great example to
 # illustrate basic arithmetic!
 #
-# I hope we are starting to see that oracles are not something magical and that there
+# I hope we can now all see that oracles are not something magical and that there
 # is a lot of work behind their construction! This will help us in the future to build
 # more complicated operators, but until then, let’s keep on learning 🚀
 #
