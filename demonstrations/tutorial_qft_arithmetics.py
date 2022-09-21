@@ -37,7 +37,7 @@ When it comes to basic quantum computing algorithms like the Deustch–Jozsa or
 Grover's algorithm, we might think that we have never needed to apply any arithmetic operations such as addition or multiplication.
 However, the reality is different. When we learn about these algorithms from an academic point of view,
 we work with a ready-made operator that we never have to worry about, the :math:`\textit{oracle}`.
-But this operator that seems so magical, is something that in real situations, we will have to build it by hand.
+Unfortunately, in real-world situations, we will have to build this seemingly magical operator by hand.
 To give an example, let's imagine that we want to use Grover's algorithm to search for `Magic Squares <https://en.wikipedia.org/wiki/Magic_square>`__.
 To define the oracle, which determines whether a solution is valid or not, we must perform sums over the rows and
 columns to check that they all have the same value. Therefore, we can see here that we will need to define a
