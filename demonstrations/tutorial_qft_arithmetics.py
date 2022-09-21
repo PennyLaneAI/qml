@@ -86,7 +86,7 @@ Let’s see how we would represent all the integers from 0 to 7 using the produc
    :width: 90%
    :align: center
 
-   Representation of the computational basis with 3 qubits
+   Representation of integers using a computational basis of three qubits
 
 .. note::
 
