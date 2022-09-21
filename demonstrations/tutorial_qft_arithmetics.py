@@ -43,7 +43,7 @@ To define the oracle, which determines whether a solution is valid or not, we mu
 columns to check that they all have the same value. Therefore, to create this oracle,
 we will need to define a sum operator within the quantum computer.
 
-The second question is why do we work with the QFT? There are other procedures to perform this basic operations, for example
+The second question we face is why we should work with the QFT at all. There are other procedures that could be used to perform these basic operations; for example, by
 imitating the classical algorithm. But it has been seen that QFT needs less qubits to perform them, which is
 nowadays of vital importance (`Thomas G. Draper
 (1998) <https://arxiv.org/abs/quant-ph/0008033>`__).
