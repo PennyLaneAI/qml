@@ -1,4 +1,7 @@
-r""".. _quantum_circuit_cutting:
+r"""
+
+.. _quantum_circuit_cutting:
+
 Quantum Circuit Cutting
 =======================
 
@@ -15,7 +18,7 @@ Quantum Circuit Cutting
 *Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte. Posted: 02 September 2022. Last updated: 02 September 2022.*
 
 Introduction
--------------------------------------
+------------
 
 Quantum circuits with a large number of qubits are difficult to simulate.
 They cannot be programmed on actual hardware due to size constraints
