@@ -392,8 +392,9 @@ for n in range(36):
 # ----------------
 
 ##############################################################################
-#.. bio:: Soran Jahangiri
+#
+# .. bio:: Soran Jahangiri
 #    :photo: ../_static/Soran.png
 #
 #    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
-#
+# 
