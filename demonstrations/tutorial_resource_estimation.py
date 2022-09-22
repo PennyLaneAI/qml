@@ -238,8 +238,8 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 # Hamiltonian coefficients and observables as input. The number of measurements required for a
 # target error set to the chemical accuracy, 0.0016 :math:`\text{Ha}`, can be obtained with
 
-m = qml.resource.estimate_shots(H.coeffs, H.ops, error=0.0016)
-print(m)
+m = qml.resource.estimate_shots(H.coeffs, error=0.0016)
+print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
@@ -248,8 +248,8 @@ print(m)
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
-m = qml.resource.estimate_shots(coeffs, ops, error=0.0016)
-print(m)
+m = qml.resource.estimate_shots(coeffs, error=0.0016)
+print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # It is interesting to illustrate how the number of shots depends on the target error. We compute
@@ -264,7 +264,7 @@ m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50)**2
 
 fig, ax = plt.subplots(figsize=(5, 3))
 ax.plot(error, m, 'o', markerfacecolor='none', color='teal', label='estimated')
-ax.plot(e_, m_, ':', markerfacecolor='none', color='navy', label='$ 1.4e4 * 1/\epsilon^2 $')
+ax.plot(e_, m_, ':', markerfacecolor='none', color='olive', label='$ 1.4e4 * 1/\epsilon^2 $')
 
 ax.set_ylabel('shots')
 ax.set_xlabel('error [Ha]')
