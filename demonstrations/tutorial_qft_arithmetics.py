@@ -13,8 +13,9 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 
 
 
-*Author: Guillermo Alonso-Linaje.
-Posted:  2022. Last updated: 13 June 2022*
+*Author: Guillermo Alonso-Linaje.*
+
+*Posted:  2022. Last updated: 13 June 2022*
 
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
 addition, multiplication, subtraction and division. Through arithmetic operations we can understand the world around us
@@ -157,8 +158,9 @@ plt.show()
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this in practice,
 # let’s look at the situation in which want to create an operator Sum
-# such as :math:`\text{Sum(k)}\vert m \rangle = \vert m + k \rangle`. A procedure to implement such unitary
-# is the following.
+# such as:
+# .. math:: \text{Sum(k)}\vert m \rangle = \vert m + k \rangle.
+#A procedure to implement such unitary is the following:
 #
 # #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
 #
@@ -242,11 +244,11 @@ def addition(wires_m, wires_k, wires_sol):
 
     # add m to the counter
     for i in range(len(wires_m)):
-        qml.ctrl(add_k_fourier, control=wires_m[i])(2 ** (len(wires_m) - i - 1), wires_solution)
+        qml.ctrl(add_k_fourier, control=wires_m[i])(2 **(len(wires_m) - i - 1), wires_solution)
 
     # add k to the counter
     for i in range(len(wires_k)):
-        qml.ctrl(add_k_fourier, control=wires_k[i])(2 ** (len(wires_k) - i - 1), wires_solution)
+        qml.ctrl(add_k_fourier, control=wires_k[i])(2 **(len(wires_k) - i - 1), wires_solution)
 
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_solution)
@@ -422,7 +424,7 @@ plt.show()
 #
 # .. [#Draper2000]
 #
-#     Thomas G. Draper, "Addition on a Quantum Computer". `ArXiv: (2000) <https://arxiv.org/abs/quant-ph/0008033>`__.
+#     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
 #
 # About the author
