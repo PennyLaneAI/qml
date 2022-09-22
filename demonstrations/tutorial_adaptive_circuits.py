@@ -232,7 +232,7 @@ for n in range(20):
 
 ##############################################################################
 # Sparse Hamiltonians
-# -------------
+# -------------------
 #
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for LiH. We can compute its matrix representation in the computational basis using the

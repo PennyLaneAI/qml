@@ -12,7 +12,7 @@ Quantum Circuit Cutting
    tutorial_unitary_designs Unitary Designs
 
 
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*. Posted: 02 September 2022. Last updated: 02 September 2022.
+*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte. Posted: 02 September 2022. Last updated: 02 September 2022.*
 
 Introduction
 -------------------------------------

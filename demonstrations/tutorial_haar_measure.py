@@ -73,7 +73,7 @@ two small, infinitesimal elements of area with the same difference in
     :align: center
     :width: 50%
 
-    |
+|
 
 Even though the differences :math:`d\theta` and :math:`d\phi` themselves are the
 same, there is way more "stuff" near the equator of the sphere than there is

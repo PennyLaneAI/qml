@@ -105,7 +105,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 
 ##############################################################################
 # Quantum convolutional neural networks
-# ------------------------------------
+# -------------------------------------
 # Before we start building a QCNN, let us briefly review the idea of classical CNNs, which have shown
 # tremendous success in tasks like image recognition, recommender systems, and sound classification, to name a few.
 # For a more in-depth explanation of CNNs, we highly recommend `chapter 9 <https://www.deeplearningbook.org/contents/convnets.html>`_
