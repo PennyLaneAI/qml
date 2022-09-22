@@ -16,16 +16,6 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 *Author: Guillermo Alonso-Linaje.
 Posted:  2022. Last updated: 13 June 2022*
 
-.. carousel::
-
-    .. figure:: ../_static/authors/guillermo_alonso.jpeg
-    .. figure:: ../_static/authors/jay_soni.png
-    .. figure:: ../_static/authors/utkarsh_azad.png
-
-        An Example Image
-
-        example example bla bla bla
-
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
 addition, multiplication, subtraction and division. Through arithmetic operations we can understand the world around us
 and solve many of our daily tasks.
@@ -94,7 +84,7 @@ is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert
 
 Let’s see how we would represent all the integers from :math:`0` to :math:`7` using the product state of three qubits, visualized by separate Bloch spheres for each qubit.
 
-.. figure:: /demonstrations/qft_arithmetics/qft_com.gif
+.. figure:: /demonstrations/qft_arithmetics/3_qubits_computational_basis.gif
    :width: 90%
    :align: center
 
@@ -149,7 +139,7 @@ plt.show()
 #
 # Now we can represent numbers in the Fourier basis using three qubits:
 #
-# .. figure:: /demonstrations/qft_arithmetics/qft_basis.gif
+# .. figure:: /demonstrations/qft_arithmetics/3_qubits_fourier_basis.gif
 #   :width: 90%
 #   :align: center
 #
@@ -175,13 +165,6 @@ plt.show()
 #
 # #.    We apply the QFT inverse to return to the computational basis and obtain :math:`m+k`.
 #
-# In the following image we can see the procedure to add :math:`3+4`.
-#
-# .. figure:: /demonstrations/qft_arithmetics/qft_add.gif
-#   :width: 90%
-#   :align: center
-#
-#   Addition performed using the quantum Fourier transform
 #
 # Let's see how this process would look in PennyLane.
 
