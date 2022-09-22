@@ -55,6 +55,7 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
     "sphinx_sitemap",
+    "sphinx_carousel.carousel",
 ]
 
 
