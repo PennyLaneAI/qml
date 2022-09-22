@@ -30,7 +30,7 @@ sphinx==3.5.3
 sphinx-sitemap
 pypandoc==1.5
 sphinx_gallery==0.10.0
-sphinx-carousel==1.0.0
+sphinx-carousel==0.0.1
 seaborn==0.10.1
 keras==2.8.0
 tensorflow==2.8.1
