@@ -77,7 +77,7 @@ mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# We now initiate the ``DoubleFactorization`` class of the ``qml.resource`` module
+# We now initiate the :class:`~.pennylane.resource.DoubleFactorization` class
 
 algo = qml.resource.DoubleFactorization(one, two)
 
@@ -145,7 +145,7 @@ electrons = 156
 volume = 1145
 
 ##############################################################################
-# We now initiate the ``FirstQuantization`` class of the ``qml.resource`` module
+# We now initiate the :class:`~.pennylane.resource.FirstQuantization` class
 algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 
 ##############################################################################
