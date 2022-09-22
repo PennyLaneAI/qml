@@ -48,7 +48,7 @@ columns to check that they all have the same value. Therefore, to create this or
 we will need to define a sum operator within the quantum computer.
 
 The second question we face is why we should work with the QFT at all. There are other procedures that could be used to perform these basic operations; for example, by
-imitating the classical algorithm. But, as we can see in [#Draper2000], it has already been proven that QFT needs less qubits to perform these operations, which is
+imitating the classical algorithm. But, as we can see in [#Draper2000]_, it has already been proven that QFT needs less qubits to perform these operations, which is
 nowadays of vital importance.
 
 We will organize the demo as follows. Initially, we will talk about the Fourier basis to give an intuitive idea of how
@@ -88,7 +88,7 @@ Let’s see how we would represent all the integers from :math:`0` to :math:`7` 
    :width: 90%
    :align: center
 
-   Representation of integers using a computational basis of three qubits
+   Representation of integers using a computational basis of three qubits.
 
 .. note::
 
@@ -116,7 +116,8 @@ def basis_embedding_circuit(m):
     qml.BasisEmbedding(m, wires=range(3))
     return qml.state()
 
-m = 6
+m = 6 # number to be encoded
+
 qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
 plt.show()
 
@@ -156,7 +157,7 @@ plt.show()
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this in practice,
 # let’s look at the situation in which want to create an operator Sum
-# such as Sum:math:`(k) \vert m \rangle = \vert m + k\rangle`. A procedure to implement such unitary
+# such as :math:`\text{Sum(k)}\vert m \rangle = \vert m + k \rangle`. A procedure to implement such unitary
 # is the following.
 #
 # #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
@@ -227,13 +228,13 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 # phase if indeed the control qubit is in the state :math:`\vert 1\rangle`.
 # Let us now code the :math:`\text{Sum}_2` operator.
 
-wires_m = [0, 1, 2]
-wires_k = [3, 4, 5]
-wires_solution = [6, 7, 8, 9]
+wires_m = [0, 1, 2]             # required qubits to encode m
+wires_k = [3, 4, 5]             # required qubits to encode k
+wires_solution = [6, 7, 8, 9]   # required qubits to encode the solution
 
 dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shots=1)
 
-n_wires = len(dev.wires)
+n_wires = len(dev.wires) # total number of qubits used
 
 def addition(wires_m, wires_k, wires_sol):
     # prepare solution qubits to counting
@@ -281,9 +282,9 @@ plt.show()
 #
 # .. math:: \text{Mul}\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m\cdot k \rangle.
 #
-# To understand the multiplication process, let’s suppose that we have to
-# multiply :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
-# :math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i`. In this case, the result would
+# To understand the multiplication process, let's work with binary decomposition of
+# :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
+# :math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i`. In this case, the product would
 # be:
 #
 # .. math:: k \cdot m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \cdot 2^{l-j-1}).
@@ -293,26 +294,26 @@ plt.show()
 # are the number of qubits with which we encode :math:`m` and :math:`k` respectively.
 # Let's code to see how it works!
 
-wires_m = [0, 1, 2]
-wires_k = [3, 4, 5]
-wires_sol = [6, 7, 8, 9, 10]
+wires_m = [0, 1, 2]           # required qubits to encode m
+wires_k = [3, 4, 5]           # required qubits to encode k
+wires_solution = [6, 7, 8, 9, 10]  # required qubits to encode the solution
 
-dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_sol, shots=1)
+dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shots=1)
 
 n_wires = len(dev.wires)
 
-def multiplication(wires_m, wires_k, wires_sol):
+def multiplication(wires_m, wires_k, wires_solution):
     # prepare sol-qubits to counting
-    qml.QFT(wires=wires_sol)
+    qml.QFT(wires=wires_solution)
 
     # add m to the counter
     for i in range(len(wires_k)):
         for j in range(len(wires_m)):
             coeff = 2 ** (len(wires_m) + len(wires_k) - i - j - 2)
-            qml.ctrl(add_k_fourier, control=[wires_k[i], wires_m[j]])(coeff, wires_sol)
+            qml.ctrl(add_k_fourier, control=[wires_k[i], wires_m[j]])(coeff, wires_solution)
 
     # return to computational basis
-    qml.adjoint(qml.QFT)(wires=wires_sol)
+    qml.adjoint(qml.QFT)(wires=wires_solution)
 
 @qml.qnode(dev)
 def mul(m, k):
@@ -321,9 +322,9 @@ def mul(m, k):
     qml.BasisEmbedding(k, wires=wires_k)
 
     # Apply multiplication
-    multiplication(wires_m, wires_k, wires_sol)
+    multiplication(wires_m, wires_k, wires_solution)
 
-    return qml.sample(wires=wires_sol)
+    return qml.sample(wires=wires_solution)
 
 
 print(f"The ket representation of the multiplication of 3 and 7 is {mul(3,7)}")
@@ -359,16 +360,17 @@ plt.show()
 # The idea of the oracle is as simple as this:
 #
 # #.  use auxiliary registers to store the product,
-# #.  check if the product state is :math:` \vert 10101 \rangle` and, in that case, change the sign,
+# #.  check if the product state is :math:`\vert 10101 \rangle` and, in that case, change the sign,
 # #.  execute the inverse of the circuit to clear the auxiliary qubits.
+# #.  calculate the probabilities and see which states have been amplified.
 #
 # Let's go back to PennyLane to implement this idea.
 
-n = 21
+n = 21 # number we want to factor
 
-wires_m = [0, 1, 2]
-wires_k = [3, 4, 5]
-wires_solution = [6, 7, 8, 9, 10]
+wires_m = [0, 1, 2]                 # required qubits to encode m
+wires_k = [3, 4, 5]                 # required qubits to encode k
+wires_solution = [6, 7, 8, 9, 10]   # required qubits to encode the solution
 
 dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
@@ -398,16 +400,6 @@ def factorization(n, wires_m, wires_k, wires_solution):
     return qml.probs(wires=wires_m)
 
 
-qml.draw_mpl(factorization)(n, wires_m, wires_k, wires_solution)
-plt.show()
-
-######################################################################
-#
-#
-# A very cool circuit! let’s calculate the probabilities to see each basic
-# state:
-#
-
 plt.bar(range(2 ** len(wires_m)), factorization(n, wires_m, wires_k, wires_solution))
 plt.xlabel("Basic states")
 plt.ylabel("Probability")
@@ -430,10 +422,9 @@ plt.show()
 #
 # .. [#Draper2000]
 #
-#     Thomas G. Draper, "Addition on a Quantum Computer". `Arxiv (2000).
-#      <https://arxiv.org/abs/quant-ph/0008033>`__
+#     Thomas G. Draper, "Addition on a Quantum Computer". `ArXiv: (2000) <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
-
+#
 # About the author
 # ----------------
 #
