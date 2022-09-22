@@ -135,7 +135,7 @@ fig.tight_layout()
 # using Hamiltonians in first quantization and in a plane wave basis. We first need to define the
 # number of plane waves, the number of electrons and the volume of the unit cell that constructs
 # the periodic material. Let's use dilithium iron silicate :math:`\text{Li}_2\text{FeSiO}_4` as an
-# example taken from [#delgado2022]. For this material, the unit cell contains 156 electrons
+# example taken from [#delgado2022]_. For this material, the unit cell contains 156 electrons
 # and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units which amount to a volume
 # of :math:`1145 a_0^3` where :math:`a_0` is the
 # `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use 100000 plane waves.
