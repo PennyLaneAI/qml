@@ -184,11 +184,9 @@ ax[1].set_ylabel('n qubits')
 for i in [0, 1]:
     ax[i].set_xlabel('n planewaves')
     ax[i].tick_params(axis='x', labelrotation=90)
-    ax[i].grid(True)
     ax[0].set_yscale('log')
     ax[i].set_xscale('log')
-
-    ax[i].legend()
+    ax[i].legend(title='error [Ha]')
 
 fig.tight_layout()
 
@@ -253,8 +251,7 @@ print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # It is interesting to illustrate how the number of shots depends on the target error. We compute
-# and plot the number of shots for different target errors. We also plot a line showing the
-# dependency of the shots to the error as :math:`shots = 1.4e4 * 1/\epsilon^2` for comparison.
+# and plot the number of shots for different target errors.
 
 error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
 m = [qml.resource.estimate_shots(H.coeffs, error=er) for er in error]
@@ -269,12 +266,14 @@ ax.plot(e_, m_, ':', markerfacecolor='none', color='olive', label='$ 1.4e4 * 1/\
 ax.set_ylabel('shots')
 ax.set_xlabel('error [Ha]')
 ax.set_yscale('log')
-ax.grid(True)
 ax.tick_params(axis='x', labelrotation = 90)
 ax.legend()
 fig.tight_layout()
 
 ##############################################################################
+# We have also added a line showing the dependency of the shots to the error as
+# :math:`shots = 1.4e4 * 1/\epsilon^2` for comparison.
+#
 # Conclusions
 # -----------
 # This tutorial shows how to use the resource estimation functionality in PennyLane to compute the
@@ -288,6 +287,9 @@ fig.tight_layout()
 # target error and the number of basis functions. Can you use this PennyLane functionality to draw
 # other interesting conclusions about quantum resources need to simulate interesting systems?
 #
+# About the author
+# ----------
+
 ##############################################################################
 #.. bio:: Soran Jahangiri
 #    :photo: ../_static/Soran.png
