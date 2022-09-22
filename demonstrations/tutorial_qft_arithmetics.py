@@ -68,7 +68,7 @@ The first thing we need to know is PennyLane's
 standard for encoding numbers in binary. A binary number can be
 represented as a string of :math:`1`s and :math:`0`s, which we can represent as the multi-qubit state
 
-.. math:: \vert m \rangle = \vert q_0q_1...q_{n-1}\rangle,
+.. math:: \vert m \rangle = \vert \overline{q_0q_1...q_{n-1}}\rangle,
 
 where the formula to obtain the equivalent decimal number :math:`m` will be:
 
@@ -118,7 +118,6 @@ qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
 plt.show()
 
 ######################################################################
-#---------------------------
 # As we can see, the first qubit—the :math:`0`-th wire—is placed on top and the rest of the qubits are
 # below it. However, this is not the only way we could represent numbers.
 # We can also represent them in different bases, such as the so-called *Fourier base*.
@@ -153,16 +152,13 @@ plt.show()
 #
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this in practice,
-# let’s look at the situation in which want to create an operator
-# that takes a state :math:`\vert m \rangle`
-# to the state :math:`\vert m + k\rangle`. A procedure to implement such unitary
+# let’s look at the situation in which want to create an operator Sum
+# such as Sum:math:(k)`\vert m \rangle = \vert m + k\rangle`. A procedure to implement such unitary
 # is the following.
 #
-# #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to
-# the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
+# #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
 #
-# #.    We rotate the :math:`j`-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}` using
-# the :math:`R_Z` gate. Therefore, the new phases are :math:`\frac{2(m + k)\pi}{2^{j}}`.
+# #.    We rotate the :math:`j`-th qubit by an angle :math:`\frac{2k\pi}{2^{j}}` using the :math:`R_Z` gate. Therefore, the new phases are :math:`\frac{2(m + k)\pi}{2^{j}}`.
 #
 # #.    We apply the QFT inverse to return to the computational basis and obtain :math:`m+k`.
 #
@@ -363,7 +359,7 @@ plt.show()
 #
 # .. math:: U\vert m \rangle \vert k \rangle = \vert m \rangle \vert k \rangle \text{ if }m\cdot k \not = 21,
 #
-# .. math:: U\vert m \rangle \vert k \rangle = -\vert m \rangle \vert k \rangle \text{ if }m\times k  = 21
+# .. math:: U\vert m \rangle \vert k \rangle = -\vert m \rangle \vert k \rangle \text{ if }m\cdot k  = 21
 #
 # The idea of the oracle is as simple as this:
 #
@@ -411,7 +407,6 @@ qml.draw_mpl(factorization)(n, wires_m, wires_k, wires_solution)
 plt.show()
 
 ######################################################################
-# ------------------
 # A very cool circuit! let’s calculate the probabilities to see each basic
 # state:
 #
@@ -422,7 +417,6 @@ plt.ylabel("Probability")
 plt.show()
 
 ######################################################################
-# ----------------
 # By plotting the probabilities of obtaining each basic state we see that
 # prime factors have been amplified! Factorization via Grover’s algorithm
 # does not achieve exponential improvement that
