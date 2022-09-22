@@ -13,18 +13,22 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 
 
 
-*Author: Guillermo Alonso-Linaje. Posted:  2022. Last updated: 13 June 2022*
+*Author: Guillermo Alonso-Linaje.
+Posted:  2022. Last updated: 13 June 2022*
 
-Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations on numbers such
-as addition, multiplication, subtraction or division. Using arithmetic operations we can understand the world around us and
-solve many of our daily tasks.
+Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
+addition, multiplication, subtraction and division. Through arithmetic operations we can understand the world around us
+and solve many of our daily tasks.
 
-In computing, arithmetic is crucial to the implementation of any type of algorithm. Therefore, we will
-make an approach to arithmetic in quantum computers using the quantum Fourier transform (QFT).
-In this demo, we will not focus on understanding how the QFT is built,
+In computer science, arithmetic is crucial for the implementation of any kind of algorithm and in quantum computing
+this is also the case. For this reason, throughout the demo we are going to do
+an approach to arithmetic in quantum computers.  The simplest and most direct way to achieve this goal is to use the
+quantum Fourier transform (QFT), so we will give the basic ideas of how to do it.
+
+In this demo, we will not focus on understanding how the QFT is built
 as we can find a great explanation in the
 `Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
-intuition for how it works and how we can take advantage of it!
+intuition of how it works and how we can take advantage of it.
 
 Motivation
 ----------
@@ -44,9 +48,8 @@ columns to check that they all have the same value. Therefore, to create this or
 we will need to define a sum operator within the quantum computer.
 
 The second question we face is why we should work with the QFT at all. There are other procedures that could be used to perform these basic operations; for example, by
-imitating the classical algorithm. But it has already been proven that QFT needs less qubits to perform these operations, which is
-nowadays of vital importance (`Thomas G. Draper
-(1998) <https://arxiv.org/abs/quant-ph/0008033>`__).
+imitating the classical algorithm. But, as we can see in [#Draper2000], it has already been proven that QFT needs less qubits to perform these operations, which is
+nowadays of vital importance.
 
 We will organize the demo as follows. Initially, we will talk about the Fourier basis to give an intuitive idea of how
 it works, after which we will address different basic arithmetic operations. Finally, we will move on to a practical example
@@ -66,7 +69,7 @@ represent the numbers from :math:`0` to :math:`2^n-1`.
 
 The first thing we need to know is PennyLane's
 standard for encoding numbers in binary. A binary number can be
-represented as a string of :math:`1`s and :math:`0`s, which we can represent as the multi-qubit state
+represented as a string of :math:`1` s and :math:`0` s, which we can represent as the multi-qubit state
 
 .. math:: \vert m \rangle = \vert \overline{q_0q_1...q_{n-1}}\rangle,
 
@@ -91,8 +94,8 @@ Let’s see how we would represent all the integers from :math:`0` to :math:`7` 
 
     The `Bloch sphere <https://en.wikipedia.org/wiki/Bloch_sphere>`_
     is a way of graphically representing the state of a qubit.
-    At the top of the sphere we place the state :math:`\vert 0 \rangle`, at the bottom
-    :math:`\vert 1 \rangle`, and in the rest of the
+    At the top of the sphere we place the state :math:`\vert 0 \rangle,` at the bottom
+    :math:`\vert 1 \rangle,` and in the rest of the
     sphere we will place the possible states in superposition. It is a very useful
     representation that helps better visualize and interpret quantum gates such as rotations.
 
@@ -153,7 +156,7 @@ plt.show()
 # The fact that the states encoding the numbers are now in phase gives us great
 # flexibility in carrying out our arithmetic operations. To see this in practice,
 # let’s look at the situation in which want to create an operator Sum
-# such as Sum:math:(k)`\vert m \rangle = \vert m + k\rangle`. A procedure to implement such unitary
+# such as Sum:math:`(k) \vert m \rangle = \vert m + k\rangle`. A procedure to implement such unitary
 # is the following.
 #
 # #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
@@ -198,14 +201,14 @@ def sum(m, k):
 print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 
 ######################################################################
-# Perfect, we have obtained :math:`0111`, which is equivalent to the number :math:`7` in binary!
+# Perfect, we have obtained :math:`\vert 0111 \rangle,` which is equivalent to the number :math:`7` in binary!
 # Note that this is a deterministic algorithm, which means that we have obtained the desired solution by executing a single shot.
 # On the other hand, if the result of an operation is greater than the maximum
-# value :math:`2^n-1`, we will start again from zero, that is to say, we
+# value :math:`2^n-1,` we will start again from zero, that is to say, we
 # will calculate the sum modulo :math:`2^n-1.` For instance, in our three-qubit example, suppose that
 # we want to calculate :math:`6+3.` We see that we do not have
 # enough memory space, as :math:`6+3 = 9 > 2^3-1`. The result we will get will
-# be :math:`9 \pmod 8 = 1`, or :math:`001` in binary. Make sure to use
+# be :math:`9 \pmod 8 = 1,` or :math:`\vert 001 \rangle` in binary. Make sure to use
 # enough qubits to represent your solutions!
 # Finally, it is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
@@ -214,17 +217,16 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 # Adding two different registers
 # ------------------------------
 #
-# In this previous algorithm, we have had to say manually which :math:`k` we want to add.
-# But suppose that what we are in specifying the integer to be added using another register of qubits.
-# That is,
-# we are looking for a new operator :math:`\text{Sum}_2` such that
+# In this previous algorithm, we had to pass to the operator the value of :math:`k` that we wanted to add.
+# But at other times, instead of passing that value to the operator, we would like it to pull the information from another register.
+# That is, we are looking for a new operator :math:`\text{Sum}_2` such that
 #
 # .. math:: \text{Sum}_2\vert m \rangle \vert k \rangle \vert 0 \rangle = \vert m \rangle \vert k \rangle \vert m+k \rangle.
 #
 # In this case, we can understand the third register (which is initially
 # at :math:`0`) as a counter that will tally as many units as :math:`m` and
 # :math:`k` combined. The binary decomposition will
-# make this simple. If we have :math:`\vert m \rangle = \vert q_0q_1q_2 \rangle`, we will
+# make this simple. If we have :math:`\vert m \rangle = \vert \overline{q_0q_1q_2} \rangle,` we will
 # have to add :math:`1` to the counter if :math:`q_2 = 1` and nothing
 # otherwise. In general, we should add :math:`2^{n-i-1}` units if the :math:`i`-th
 # qubit is in state :math:`\vert 1 \rangle` and 0 otherwise. As we can see, this is the same idea that is also
@@ -275,7 +277,7 @@ plt.show()
 ######################################################################
 # Great! We have just seen how to add a number to a counter. In the example above,
 # we added :math:`3 + 7` to get :math:`10`, which in binary
-# is :math:`1010`.
+# is :math:`\vert 1010 \rangle`.
 #
 # Multiplying qubits
 # -------------------
@@ -339,7 +341,7 @@ plt.show()
 
 ######################################################################
 # Awesome! We have multiplied :math:`7 \cdot 3` and, as a result, we have
-# :math:`10101,` which is :math:`21` in binary.
+# :math:`\vert 10101 \rangle`, which is :math:`21` in binary.
 #
 #
 # Factorization with Grover
@@ -364,7 +366,7 @@ plt.show()
 # The idea of the oracle is as simple as this:
 #
 # #.  use auxiliary registers to store the product,
-# #.  check if the product state is :math:`10101` and, in that case, change the sign,
+# #.  check if the product state is :math:` \vert 10101 \rangle` and, in that case, change the sign,
 # #.  execute the inverse of the circuit to clear the auxiliary qubits.
 #
 # Let's go back to PennyLane to implement this idea.
@@ -407,6 +409,8 @@ qml.draw_mpl(factorization)(n, wires_m, wires_k, wires_solution)
 plt.show()
 
 ######################################################################
+#
+#
 # A very cool circuit! let’s calculate the probabilities to see each basic
 # state:
 #
@@ -428,6 +432,15 @@ plt.show()
 # is a lot of work behind their construction! This will help us in the future to build
 # more complicated operators, but until then, let’s keep on learning. 🚀
 #
+# References
+# ----------
+#
+# .. [#Draper2000]
+#
+#     Thomas G. Draper, "Addition on a Quantum Computer". `Arxiv (2000).
+#      <https://arxiv.org/abs/quant-ph/0008033>`__
+#
+
 # About the author
 # ----------------
 #
