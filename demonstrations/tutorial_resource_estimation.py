@@ -56,11 +56,11 @@ resources by simply defining system specifications and a target error for estima
 
 QPE cost for simulating molecules
 *********************************
-We study the double low-rank Hamiltonian factorization algorithm of Ref. [1]. This algorithm
-requires the one- and two-electron integrals as input which can be obtained in different ways. Here,
-we use PennyLane to obtain these integrals. We first need to define the atomic symbols and
-coordinates for the given molecule. Let's use the water molecule at its equilibrium geometry as an
-example
+We study the double low-rank Hamiltonian factorization algorithm of [#vonburg2021]_ and [#lee2021]_.
+This algorithm requires the one- and two-electron integrals as input which can be obtained in
+different ways. Here, we use PennyLane to obtain these integrals. We first need to define the atomic
+symbols and coordinates for the given molecule. Let's use the water molecule at its equilibrium
+geometry as an example
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -135,7 +135,7 @@ fig.tight_layout()
 # using Hamiltonians in first quantization and in a plane wave basis. We first need to define the
 # number of plane waves, the number of electrons and the volume of the unit cell that constructs
 # the periodic material. Let's use dilithium iron silicate :math:`\text{Li}_2\text{FeSiO}_4` as an
-# example taken from Ref. [battery paper]. For this material, the unit cell contains 156 electrons
+# example taken from [#delgado2022]. For this material, the unit cell contains 156 electrons
 # and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units which amount to a volume
 # of :math:`1145 a_0^3` where :math:`a_0` is the
 # `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use 100000 plane waves.
@@ -287,6 +287,30 @@ fig.tight_layout()
 # target error and the number of basis functions. Can you use this PennyLane functionality to draw
 # other interesting conclusions about quantum resources need to simulate interesting systems?
 #
+# References
+# ----------
+#
+# .. [#vonburg2021]
+#
+#     Vera von Burg, Guang Hao Low, Thomas Haner, Damian S. Steiger, *et al.*,
+#     "Quantum computing enhanced computational catalysis".
+#     `Phys. Rev. Research 3, 033055 (2021)
+#     <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.3.033055>`__
+#
+# .. [#lee2021]
+#
+#     Joonho Lee, Dominic W. Berry, Craig Gidney, William J. Huggins, *et al.*,
+#     "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction".
+#     `PRX Quantum 2, 030305 (2021)
+#     <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305>`__
+#
+# .. [#delgado2022]
+#
+#     Alain Delgado, Pablo A. M. Casares, Roberto dos Reis, Modjtaba Shokrian Zini, *et al.*,
+#     "How to simulate key properties of lithium-ion batteries with a fault-tolerant quantum
+#     computer".
+#     `arXiv:2204.11890
+#     <https://arxiv.org/abs/2204.11890>`__
 # About the author
 # ----------
 
