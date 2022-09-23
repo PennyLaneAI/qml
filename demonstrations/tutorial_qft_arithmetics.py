@@ -123,6 +123,7 @@ qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
 plt.show()
 
 ######################################################################
+#
 # As we can see, the first qubit—the :math:`0`-th wire—is placed on top and the rest of the qubits are
 # below it. However, this is not the only way we could represent numbers.
 # We can also represent them in different bases, such as the so-called *Fourier base*.
@@ -159,7 +160,9 @@ plt.show()
 # flexibility in carrying out our arithmetic operations. To see this in practice,
 # let’s look at the situation in which want to create an operator Sum
 # such as:
+#
 # .. math:: \text{Sum(k)}\vert m \rangle = \vert m + k \rangle.
+#
 #A procedure to implement such unitary is the following:
 #
 # #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
@@ -170,6 +173,7 @@ plt.show()
 #
 #
 # Let's see how this process would look in PennyLane.
+#
 
 import pennylane as qml
 from pennylane import numpy as np
