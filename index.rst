@@ -40,6 +40,20 @@ Quantum machine learning
                             </div>
                         </div>
                     </div>
+                    <a href="whatisqchem.html">
+                    <div class="card rounded-lg">
+                        <div class="text-center d-flex align-items-center pb-2">
+                            <div>
+                                <h3 class="card-title">
+                                <img src="_static/brain_board.png" class="img-fluid" style="max-width: 86px;"></img>
+                                <br>
+                                <strong>What is QML?</strong>
+                                </h3>
+                                <p class="mb-1 grey-text px-3">Find out why quantum chemistry is the leading application for quantum computing.</p>
+                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                            </div>
+                        </div>
+                    </div>
                 </a>
                 </div>
                 <div class="col-lg-3 mb-5">
@@ -155,6 +169,7 @@ Quantum machine learning
     :hidden:
 
     whatisqml
+    whatisqchem
     glossary
     demonstrations
     videos

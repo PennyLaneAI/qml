@@ -292,6 +292,9 @@ Key Concepts
     :doc:`Quantum Machine Learning <whatisqml>`
         A research area that explores ideas at the intersection of machine learning and quantum computing.
 
+    :doc:`Quantum Chemistry <whatisqchem>`
+        An area of research focused on addressing classically intractable chemistry problems with quantum computing.
+
     :doc:`Quantum Neural Network </glossary/quantum_neural_network>`
         A term with many different meanings, usually referring to a generalization of artificial neural 
         networks to quantum information processing. Also increasingly used to refer to :doc:`variational circuits </glossary/variational_circuit>` in the context of quantum machine learning.
