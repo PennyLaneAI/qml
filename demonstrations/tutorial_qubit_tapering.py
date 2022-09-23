@@ -230,7 +230,7 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build
 # a tapered UCCSD-based variational ansatz [#ryabinkin2018]_ that prepares an entangled state
 # by evolving the tapered Hartree-Fock state using the tapered particle-conserving gates, i.e.,
-# the :func:~.pennylane.SingleExcitation and :func:~.pennylane.DoubleExcitation operators tapered
+# the :func:`~.pennylane.SingleExcitation` and :func:`~.pennylane.DoubleExcitation` operators tapered
 # using :func:`~.pennylane.qchem.taper_operation`.
 
 singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
