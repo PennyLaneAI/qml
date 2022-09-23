@@ -6,7 +6,7 @@ Quantum Resource Estimation
 .. meta::
     :property="og:description": Learn how to estimate the number of qubits and gates needed to
      implement quantum algorithms
-    :property="og:image": https://pennylane.ai/qml/_images/differentiable_HF.png
+    :property="og:image": https://pennylane.ai/qml/_images/resource_estimation.png
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
@@ -57,16 +57,17 @@ non-Clifford gates, which are the most expensive to implement in a fault-toleran
 explain how to perform this resource estimation for QPE algorithms based on a second-quantized
 Hamiltonian describing a molecule, and a first-quantized Hamiltonian describing a periodic material.
 We assume Gaussian and plane wave basis sets for describing the molecular and periodic systems,
-respectively. The PennyLane functionality in the ``resource`` module allows us to estimate these
-resources by simply defining system specifications and a target error for estimation. Let's see how!
+respectively. The PennyLane functionality in the :mod:`qml.resource  <pennylane.resource>`
+module allows us to estimate these resources by simply defining system specifications and a target
+error for estimation. Let's see how!
 
 QPE cost for simulating molecules
 *********************************
 We study the double low-rank Hamiltonian factorization algorithm of [#vonburg2021]_ and [#lee2021]_.
-This algorithm requires the one- and two-electron integrals as input which can be obtained in
-different ways. Here, we use PennyLane to obtain these integrals. We first need to define the atomic
-symbols and coordinates for the given molecule. Let's use the water molecule at its equilibrium
-geometry as an example
+This algorithm requires the one- and two-electron integrals as input. These integrals can be
+obtained in different ways and here we use PennyLane to compute them. We first need to define the
+atomic symbols and coordinates for the given molecule. Let's use the water molecule at its
+equilibrium geometry as an example.
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -79,6 +80,7 @@ geometry = np.array([[0.00000000,  0.00000000,  0.28377432],
 ##############################################################################
 # Then we construct a molecule object by selecting a basis set and compute the one- and two-electron
 # integrals in the molecular orbital basis.
+
 mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
@@ -94,16 +96,16 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
 # This estimation is for a target error that is set to the chemical accuracy, 0.0016
-# :math:`\text{Ha}`, by default. We can change the target error and estimate the number of
-# non-Clifford gates and logical qubits. For instance, setting the target error to a larger value
-# leads to a smaller number of non-Clifford gates and logical qubits
+# :math:`\text{Ha}`, by default. We can change the target error to a larger value which leads to a
+# smaller number of non-Clifford gates and logical qubits.
 
 algo = qml.resource.DoubleFactorization(one, two, error=0.016)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
 # We can also estimate the number of non-Clifford gates and logical qubits by changing the threshold
-# error values for discarding the negligible factors in the factorized Hamiltonian
+# error values for discarding the negligible factors in the factorized Hamiltonian and plot the
+# estimated numbers.
 
 threshold = [10**-n for n in range(10)]
 n_gates = []
@@ -114,10 +116,8 @@ for tol in threshold:
     n_gates.append(algo_.gates)
     n_qubits.append(algo_.qubits)
 
-##############################################################################
-# We now plot the estimated numbers
-
 import matplotlib.pyplot as plt
+
 fig, ax = plt.subplots(1, 2)
 ax[0].plot(threshold, n_gates, 'o', markerfacecolor='none', color='teal')
 ax[1].plot(threshold, n_qubits, 'o', markerfacecolor='none', color='teal')
@@ -137,7 +137,7 @@ fig.tight_layout()
 ##############################################################################
 # QPE cost for simulating periodic materials
 # ******************************************
-# For periodic materials, we estimate the cost of implementing the QPE algorithm of Su et al.
+# For periodic materials, we estimate the cost of implementing the QPE algorithm of [#su2021]_
 # using Hamiltonians in first quantization and in a plane wave basis. We first need to define the
 # number of plane waves, the number of electrons and the volume of the unit cell that constructs
 # the periodic material. Let's use dilithium iron silicate :math:`\text{Li}_2\text{FeSiO}_4` as an
@@ -151,11 +151,11 @@ electrons = 156
 volume = 1145
 
 ##############################################################################
-# We now initiate the :class:`~.pennylane.resource.FirstQuantization` class
+# We initiate the :class:`~.pennylane.resource.FirstQuantization` class
 algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 
 ##############################################################################
-# and obtain the estimated number of non-Clifford gates and logical qubits
+# and obtain the estimated number of non-Clifford gates and logical qubits.
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
@@ -197,8 +197,8 @@ for i in [0, 1]:
 fig.tight_layout()
 
 ##############################################################################
-# Computing the 1-norm of the Hamiltonian
-# ***************************************
+# Can you interpret the plotted results?
+#
 # The algorithm uses a decomposition of the Hamiltonian as a linear combination of unitaries.
 #
 # .. math:: H=\sum_{i} c_i U_i.
@@ -208,15 +208,6 @@ fig.tight_layout()
 # In PennyLane, :math:`\lambda` can be obtained with
 
 print(f'1-norm of the Hamiltonian: {algo.lamb}')
-
-##############################################################################
-# The 1-norm of the Hamiltonian can also be directly computed using the ``norm`` function. For the
-# first-quantized Hamiltonian it can be computed for a target error in the algorithm with
-
-planewaves = 100000
-electrons = 156
-volume = 1145
-qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 
 ##############################################################################
 # Variational quantum eigensolver
@@ -230,7 +221,7 @@ qml.resource.FirstQuantization.norm(planewaves, electrons, volume, error=0.001)
 # variational algorithm is determined by a circuit ansatz that is also known a priori. However,
 # estimating the number of circuit evaluations, shots, required to achieve a certain error in
 # computing the expectation value is not as straightforward. Let's now use PennyLane to estimate
-# the number of shots needed to computing the expectation value of the water Hamiltonian.
+# the number of shots needed to compute the expectation value of the water Hamiltonian.
 #
 # First, we construct the molecular Hamiltonian
 
@@ -239,16 +230,17 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
 # obtained with the :func:`~.pennylane.resource.estimate_shots` function which requires the
-# Hamiltonian coefficients and observables as input. The number of measurements required for a
-# target error set to the chemical accuracy, 0.0016 :math:`\text{Ha}`, can be obtained with
+# Hamiltonian coefficients and observables as input. The number of measurements required to compute
+# :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
+# :math:`\text{Ha}`, is obtained with
 
 m = qml.resource.estimate_shots(H.coeffs, error=0.0016)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
-# independently. This number can be significantly reduced by partitioning the Pauli words into
-# groups of commuting terms that can be measured simultaneously.
+# independently. The number can be reduced by partitioning the Pauli words into groups of commuting
+# terms that can be measured simultaneously.
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
@@ -256,8 +248,7 @@ m = qml.resource.estimate_shots(coeffs, error=0.0016)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
-# It is interesting to illustrate how the number of shots depends on the target error. We compute
-# and plot the number of shots for different target errors.
+# It is also interesting to illustrate how the number of shots depends on the target error.
 
 error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
 m = [qml.resource.estimate_shots(H.coeffs, error=er) for er in error]
@@ -277,21 +268,23 @@ ax.legend()
 fig.tight_layout()
 
 ##############################################################################
-# We have also added a line showing the dependency of the shots to the error as
-# :math:`shots = 1.4e4 * 1/\epsilon^2` for comparison.
+# We have added a line showing the dependency of the shots to the error as
+# :math:`shots = 1.4e4 * 1/\epsilon^2` for comparison. Can you draw any interesting information form
+# the plot?
 #
 # Conclusions
 # -----------
 # This tutorial shows how to use the resource estimation functionality in PennyLane to compute the
-# total number of non-Clifford gates and logical qubits required to simulate a Hamiltonian with the
-# quantum phase estimation algorithms. The estimation can be obtained for simulating
-# second-quantized molecular Hamiltonians obtained with the double low-rank factorization algorithm
+# total number of non-Clifford gates and logical qubits required to simulate a Hamiltonian with
+# quantum phase estimation algorithms. The estimation can be performed for second-quantized
+# molecular Hamiltonians obtained with a double low-rank factorization algorithm,
 # and first-quantized Hamiltonians of periodic materials in the plane wave basis. We also discuss
 # the estimation of the total number of shots required to obtain the expectation value of an
-# observable with a target error using the variational quantum eigensolver algorithm. We estimated
-# the required resources by changing different factors in the algorithms, for instance, the
-# target error and the number of basis functions. Can you use this PennyLane functionality to draw
-# other interesting conclusions about quantum resources need to simulate interesting systems?
+# observable using the variational quantum eigensolver algorithm. The functionality allows to obtain
+# interesting results about the cost of implementing important quantum algorithms. For instance, we
+# estimated the costs with respect to factors such as the target error in obtaining energies and
+# the number of basis functions used to simulate a system. Can you think of other interesting
+# information that can be obtained using this PennyLane functionality?!
 #
 # References
 # ----------
@@ -309,6 +302,13 @@ fig.tight_layout()
 #     "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction".
 #     `PRX Quantum 2, 030305 (2021)
 #     <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305>`__
+#
+# .. [#su2021]
+#
+#     Yuan Su, Dominic W. Berry, Nathan Wiebe, Nicholas Rubin, and Ryan Babbush,
+#     "Fault-Tolerant Quantum Simulations of Chemistry in First Quantization".
+#     `PRX Quantum 2, 040332 (2021)
+#     <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040332>`__
 #
 # .. [#delgado2022]
 #
