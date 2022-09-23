@@ -191,11 +191,11 @@ def QSP_circ(phi, W):
     representation of the final unitary are polynomials!
     """
     qml.Hadamard(wires=0)  # set initial state |+>
-    for i in range(len(phi) - 1):  # iterate through rotations in reverse order
-        qml.RZ(phi[i], wires=0)
+    for angle in phi[1:].flip(0):  # iterate through rotations in reverse order
+        qml.RZ(angle, wires=0)
         qml.QubitUnitary(W, wires=0)
 
-    qml.RZ(phi[-1], wires=0)  # final rotation
+    qml.RZ(phi[0], wires=0)  # final rotation
     qml.Hadamard(wires=0)  # change of basis |+> , |->
     return
 
