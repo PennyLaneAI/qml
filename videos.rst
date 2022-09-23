@@ -52,7 +52,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Optimizing a quantum circuit with PennyLane
     :author: Catalina Albornoz (Xanadu)
 
-    Understand one of the most fundamental ingredients used in quantum algorithms and quantum
+    Understand one of the most fundamental ingredients used in near-term quantum algorithms and quantum
     machine learning: optimizing quantum circuits.
 
 .. youtube:: eRBk1_qA86Y
