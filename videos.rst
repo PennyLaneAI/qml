@@ -21,6 +21,12 @@ Sit back and explore quantum machine learning and quantum programming with our c
 
     <br><div class="video-gallery gallery-grid row">
 
+.. youtube:: 4Xnxa6tzPeA
+    :title: Variational Quantum Eigensolver (VQE)    
+    :author: Alvaro Ballon (Xanadu)
+
+    Introduce yourself to quantum chemistry's crown jewel: the variational quantum eigensolver
+    (VQE) algorithm.
 
 .. youtube:: YJhv4bhNf6M
     :title: How to solve the QUBO problem 
@@ -32,13 +38,8 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Introduction to Quantum Chemistry 
     :author: Alvaro Ballon (Xanadu)
 
-<<<<<<< HEAD
-    Learn some theory on how to model molecules on quantum circuits and then implement
-    some basic calculations using PennyLane
-=======
     Learn how to model molecules on quantum circuits and then implement
     some basic calculations using PennyLane.
->>>>>>> master
 
 .. youtube:: yMXJ0irhPZY
     :title: Differentiation on quantum hardware
@@ -51,11 +52,7 @@ Sit back and explore quantum machine learning and quantum programming with our c
     :title: Optimizing a quantum circuit with PennyLane
     :author: Catalina Albornoz (Xanadu)
 
-<<<<<<< HEAD
     Understand one of the most fundamental ingredients used in quantum algorithms and quantum
-=======
-    Understand one of the most fundamental ingredients used in near-term quantum algorithms and quantum
->>>>>>> master
     machine learning: optimizing quantum circuits.
 
 .. youtube:: eRBk1_qA86Y
