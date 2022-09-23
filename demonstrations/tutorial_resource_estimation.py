@@ -23,12 +23,11 @@ efficiency for problem sizes where the actual advantage of quantum algorithms ca
 Despite these difficulties, it is still possible to estimate the amount of resources required to
 implement such quantum algorithms .
 
-In this demo, we describe how to estimate the total number of
-non-Clifford gates and logical qubits required to implement the quantum phase estimation (QPE)
-algorithm for simulating molecular Hamiltonians represented in first and second quantization. We
-also explain how to estimate the total number of measurements needed to compute
-expectation values using algorithms such as the variational quantum eigensolver
-(VQE). 
+In this demo, we describe how to estimate the total number of non-Clifford gates and logical qubits
+required to implement the quantum phase estimation (QPE) algorithm for simulating molecular
+Hamiltonians represented in first and second quantization. We also explain how to estimate the
+total number of measurements needed to compute expectation values using algorithms such as the
+variational quantum eigensolver (VQE).
 
 Quantum Phase Estimation
 ------------------------
@@ -36,13 +35,20 @@ The QPE algorithm can be used to compute the phase associated with an eigenstate
 operator. For the purpose of quantum simulation, the unitary operator :math:`U` can be chosen to
 share eigenvectors with a molecular Hamiltonian :math:`H`, for example by setting
 :math:`U = e^{-iH}`. Estimating the phase of such a unitary then permits recovering the
-corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below. The
-circuit contains target wires, here initialized in the ground state :math:`| \psi_0 \rangle`,and a
-set of estimation wires, initialized in :math:`| 0 \rangle`. The algorithm repeatedly applies powers
-of `U` controlled on the state of estimation wires, which are measured after applying an inverse
-quantum Fourier transform. The measurement results give a binary string that can be used to estimate
-the phase of the unitary and thus also the ground state energy of the Hamiltonian. The precision in
-estimating the phase depends on the number of estimation wires.
+corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below.
+
+.. figure:: /demonstrations/resource_estimation/qpe.svg
+    :width: 60%
+    :align: center
+
+    Circuit representing the implementation of the quantum phase estimation algorithm.
+
+The circuit contains target wires, here initialized in the ground state :math:`| \psi_0 \rangle`,
+and a set of estimation wires, initialized in :math:`| 0 \rangle`. The algorithm repeatedly applies
+powers of `U` controlled on the state of estimation wires, which are measured after applying an
+inverse quantum Fourier transform. The measurement results give a binary string that can be used to
+estimate the phase of the unitary and thus also the ground state energy of the Hamiltonian. The
+precision in estimating the phase depends on the number of estimation wires.
 
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
 can be implemented on existing hardware. We are instead interested in estimating the number of
