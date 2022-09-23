@@ -163,7 +163,7 @@ plt.show()
 #
 # .. math:: \text{Sum(k)}\vert m \rangle = \vert m + k \rangle.
 #
-#A procedure to implement such unitary is the following:
+# A procedure to implement such unitary is the following:
 #
 # #.    We convert the state from the computational basis into the Fourier basis by applying the QFT to the :math:`\vert m \rangle` state via the :class:`~pennylane.QFT` operator.
 #
