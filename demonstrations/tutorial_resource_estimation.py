@@ -16,7 +16,9 @@ Quantum Resource Estimation
 *Author: Soran Jahangiri. Posted: 17 August 2022. Last updated: 17 August 2022*
 
 Quantum algorithms such as quantum phase estimation and the variational quantum eigensolver
-are widely studied in quantum chemistry as potential avenues to tackle problems that are intractable for conventional computers. However, we currently do not have quantum computers or simulators capable of implementing large-scale
+are widely studied in quantum chemistry as potential avenues to tackle problems that are intractable
+for conventional computers. However, we currently do not have quantum computers or simulators
+capable of implementing large-scale
 versions of these algorithms. This makes it difficult to properly explore their accuracy and
 efficiency for problem sizes where the actual advantage of quantum algorithms can potentially occur.
 Despite these difficulties, it is still possible to estimate the amount of resources required to
@@ -128,8 +130,8 @@ fig.tight_layout()
 # number of plane waves, the number of electrons and the volume of the unit cell that constructs
 # the periodic material. Let's use dilithium iron silicate :math:`\text{Li}_2\text{FeSiO}_4` as an
 # example taken from [#delgado2022]_. For this material, the unit cell contains 156 electrons
-# and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units, which amount to a volume
-# of :math:`1145 a_0^3`, where :math:`a_0` is the
+# and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units, which amount to a
+# volume of :math:`1145 a_0^3`, where :math:`a_0` is the
 # `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use 100000 plane waves.
 
 planewaves = 100000
@@ -207,9 +209,10 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 # results. The number of qubits required for the measurement is trivially determined by
 # the number of qubits the observable acts on. The number of gates required to implement the
 # variational algorithm is determined by a circuit ansatz that is also known a priori. However,
-# estimating the number of circuit evaluations, i.e., the number of shots, required to achieve a certain error in
-# computing the expectation value is not as straightforward. Let's now use PennyLane to estimate
-# the number of shots needed to compute the expectation value of the water Hamiltonian.
+# estimating the number of circuit evaluations, i.e., the number of shots, required to achieve a
+# certain error in computing the expectation value is not as straightforward. Let's now use
+# PennyLane to estimate the number of shots needed to compute the expectation value of the water
+# Hamiltonian.
 #
 # First, we construct the molecular Hamiltonian
 
@@ -257,8 +260,8 @@ fig.tight_layout()
 
 ##############################################################################
 # We have added a line showing the dependency of the shots to the error as
-# :math:`shots = 1.4e4 * 1/\epsilon^2` for comparison. Can you draw any interesting information form
-# the plot?
+# :math:`\text{shots} = 1.4\text{e}4 \times 1/\epsilon^2` for comparison. Can you draw any
+# interesting information form the plot?
 #
 # Conclusions
 # -----------
