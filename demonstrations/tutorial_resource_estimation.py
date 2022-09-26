@@ -16,8 +16,7 @@ Quantum Resource Estimation
 *Author: Soran Jahangiri. Posted: 17 August 2022. Last updated: 17 August 2022*
 
 Quantum algorithms such as quantum phase estimation and the variational quantum eigensolver
-are studied as avenues to tackle problems that are intractable for conventional computers. However,
-we currently do not have quantum computers or simulators capable of implementing large-scale
+are widely studied in quantum chemistry as potential avenues to tackle problems that are intractable for conventional computers. However, we currently do not have quantum computers or simulators capable of implementing large-scale
 versions of these algorithms. This makes it difficult to properly explore their accuracy and
 efficiency for problem sizes where the actual advantage of quantum algorithms can potentially occur.
 Despite these difficulties, it is still possible to estimate the amount of resources required to
@@ -41,7 +40,7 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
     :width: 60%
     :align: center
 
-    Circuit representing the implementation of the quantum phase estimation algorithm.
+    Circuit representing the quantum phase estimation algorithm.
 
 The circuit contains target wires, here initialized in the ground state :math:`| \psi_0 \rangle`,
 and a set of estimation wires, initialized in :math:`| 0 \rangle`. The algorithm repeatedly applies
@@ -142,8 +141,8 @@ fig.tight_layout()
 # number of plane waves, the number of electrons and the volume of the unit cell that constructs
 # the periodic material. Let's use dilithium iron silicate :math:`\text{Li}_2\text{FeSiO}_4` as an
 # example taken from [#delgado2022]_. For this material, the unit cell contains 156 electrons
-# and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units which amount to a volume
-# of :math:`1145 a_0^3` where :math:`a_0` is the
+# and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units, which amount to a volume
+# of :math:`1145 a_0^3`, where :math:`a_0` is the
 # `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use 100000 plane waves.
 
 planewaves = 100000
@@ -214,12 +213,12 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 # ------------------------------------------
 # In variational quantum algorithms such as VQE, the expectation value of an observable is
 # typically computed by decomposing the observable into a linear combination of Pauli words,
-# which are tensor products of Pauli and Identity operators. The expectation values is calculated
+# which are tensor products of Pauli and Identity operators. The expectation values are calculated
 # through linearity by measuring the expectation value for each of these terms and combining the
 # results. The number of qubits required for the measurement is trivially determined by
 # the number of qubits the observable acts on. The number of gates required to implement the
 # variational algorithm is determined by a circuit ansatz that is also known a priori. However,
-# estimating the number of circuit evaluations, shots, required to achieve a certain error in
+# estimating the number of circuit evaluations, i.e., the number of shots, required to achieve a certain error in
 # computing the expectation value is not as straightforward. Let's now use PennyLane to estimate
 # the number of shots needed to compute the expectation value of the water Hamiltonian.
 #
