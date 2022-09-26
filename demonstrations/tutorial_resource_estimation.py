@@ -24,10 +24,11 @@ Despite these difficulties, it is still possible to estimate the amount of resou
 implement such quantum algorithms .
 
 In this demo, we describe how to estimate the total number of non-Clifford gates and logical qubits
-required to implement the quantum phase estimation (QPE) algorithm for simulating molecular
-Hamiltonians represented in first and second quantization. We also explain how to estimate the
-total number of measurements needed to compute expectation values using algorithms such as the
-variational quantum eigensolver (VQE).
+required to implement the `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
+(QPE) algorithm for simulating molecular Hamiltonians represented in first and second quantization.
+We also explain how to estimate the total number of measurements needed to compute expectation
+values using algorithms such as the
+`variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ (VQE).
 
 Quantum Phase Estimation
 ------------------------
@@ -43,13 +44,6 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
 
     Circuit representing the implementation of the quantum phase estimation algorithm.
 
-The circuit contains target wires, here initialized in the ground state :math:`| \psi_0 \rangle`,
-and a set of estimation wires, initialized in :math:`| 0 \rangle`. The algorithm repeatedly applies
-powers of `U` controlled on the state of estimation wires, which are measured after applying an
-inverse quantum Fourier transform. The measurement results give a binary string that can be used to
-estimate the phase of the unitary and thus also the ground state energy of the Hamiltonian. The
-precision in estimating the phase depends on the number of estimation wires.
-
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
 can be implemented on existing hardware. We are instead interested in estimating the number of
 logical qubits and the number of gates which are needed to implement the algorithm. We focus on
@@ -63,11 +57,12 @@ error for estimation. Let's see how!
 
 QPE cost for simulating molecules
 *********************************
-We study the double low-rank Hamiltonian factorization algorithm of [#vonburg2021]_ and [#lee2021]_.
+We study the double low-rank Hamiltonian factorization algorithm of [#vonburg2021]_ and use its cost
+equations as provided in APPENDIX C of [#lee2021]_.
 This algorithm requires the one- and two-electron integrals as input. These integrals can be
 obtained in different ways and here we use PennyLane to compute them. We first need to define the
 atomic symbols and coordinates for the given molecule. Let's use the water molecule at its
-equilibrium geometry as an example.
+equilibrium geometry with the 6-31g basis set as an example.
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -85,7 +80,7 @@ mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# We now initiate the :class:`~.pennylane.resource.DoubleFactorization` class
+# We now create an instance of the :class:`~.pennylane.resource.DoubleFactorization` class
 
 algo = qml.resource.DoubleFactorization(one, two)
 
@@ -103,9 +98,9 @@ algo = qml.resource.DoubleFactorization(one, two, error=0.016)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
-# We can also estimate the number of non-Clifford gates and logical qubits by changing the threshold
-# error values for discarding the negligible factors in the factorized Hamiltonian and plot the
-# estimated numbers.
+# We can also estimate the number of non-Clifford gates with respect to the threshold error values
+# for discarding the negligible factors in the factorized Hamiltonian and plot the estimated
+# numbers.
 
 threshold = [10**-n for n in range(10)]
 n_gates = []
@@ -118,20 +113,12 @@ for tol in threshold:
 
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots(1, 2)
-ax[0].plot(threshold, n_gates, 'o', markerfacecolor='none', color='teal')
-ax[1].plot(threshold, n_qubits, 'o', markerfacecolor='none', color='teal')
+fig, ax = plt.subplots(figsize=(5, 3))
+ax.plot(threshold, n_gates, ':o', markerfacecolor='none', color='teal')
 
-ax[0].set_ylabel('n gates')
-ax[1].set_ylabel('n qubits')
-
-for i in [0, 1]:
-    ax[i].set_xlabel('threshold')
-    ax[i].set_xscale('log')
-    ax[i].tick_params(axis='x', labelrotation = 90)
-    ax[i].set_xticks(threshold)
-    ax[i].set_xticklabels(threshold)
-
+ax.set_ylabel('n gates')
+ax.set_xlabel('threshold')
+ax.set_xscale('log')
 fig.tight_layout()
 
 ##############################################################################
@@ -151,7 +138,7 @@ electrons = 156
 volume = 1145
 
 ##############################################################################
-# We initiate the :class:`~.pennylane.resource.FirstQuantization` class
+# We now create an instance of the :class:`~.pennylane.resource.FirstQuantization` class
 algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
 
 ##############################################################################
@@ -197,19 +184,21 @@ for i in [0, 1]:
 fig.tight_layout()
 
 ##############################################################################
-# Can you interpret the plotted results?
-#
 # The algorithm uses a decomposition of the Hamiltonian as a linear combination of unitaries.
 #
 # .. math:: H=\sum_{i} c_i U_i.
 #
-# The parameter :math:`\lambda=\sum_i c_i` can be interpreted as a 1-norm of the
-# Hamiltonian and plays an important role in determining the cost of implementing the QPE algorithm.
-# In PennyLane, :math:`\lambda` can be obtained with
+# The parameter :math:`\lambda=\sum_i c_i` can be interpreted as a 1-norm of the Hamiltonian and
+# plays an important role in determining the cost of implementing the QPE algorithm. In PennyLane,
+# :math:`\lambda` can be obtained with
 
 print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
+# PennyLane allows you to get more detailed information about the cost of the algorithms as
+# explained in the documentations of :class:`~.pennylane.resource.FirstQuantization`
+# and :class:`~.pennylane.resource.DoubleFactorization`.
+#
 # Variational quantum eigensolver
 # ------------------------------------------
 # In variational quantum algorithms such as VQE, the expectation value of an observable is
