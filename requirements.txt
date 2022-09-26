@@ -48,4 +48,4 @@ jaxlib==0.3.15
 neural-tangents==0.6.0
 kahypar==1.1.7
 optax==0.1.3
-git+https://github.com/XanaduAI/xanadu-sphinx-theme.git
+pennylane-sphinx-theme
