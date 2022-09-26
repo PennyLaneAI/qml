@@ -38,7 +38,7 @@ share eigenvectors with a molecular Hamiltonian :math:`H`, for example by settin
 corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below.
 
 .. figure:: /demonstrations/resource_estimation/qpe.svg
-    :width: 60%
+    :width: 50%
     :align: center
 
     Circuit representing the implementation of the quantum phase estimation algorithm.
