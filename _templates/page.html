@@ -23,7 +23,7 @@
         if (pagename.includes("demos") || pagename.includes("demonstrations") || dir.includes("demos")) {
 
             $(".nav-item.active").removeClass("active");
-            var demos_link = $('a').filter(function(index) { return $(this).text() === "Demos"; })[1]
+            var demos_link = $('.navbar-nav a').filter(function(index) { return $(this).text() === "Demos"; })[0]
             $(demos_link).parent().addClass("active");
         }
     </script>
