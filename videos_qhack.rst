@@ -6,11 +6,11 @@
         }
     </style>
 
-Videos
-======
+QHack
+=====
 
 .. meta::
-   :property="og:description": Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.
+   :property="og:description": Re-experience the excitement of every QHack event.
    :property="og:image": https://pennylane.ai/qml/_static/videos_card.png
 
 .. raw:: html
@@ -20,22 +20,22 @@ Videos
     <div class="container">
         <!-- Section: Features v.1 -->
         <p class="lead grey-text text-center mx-auto mb-5">
-        Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.
+        Re-experience the excitement of every QHack event.
         </p>
 
         <section class="my-5">
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
-                    <a href="videos_pennylane.html">
+                    <a href="videos_qhack2022.html">
                         <div class="card rounded-lg h-100">
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
                                     <img src="_static/???.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>PennyLane Tutorials</strong>
+                                    <strong>QHack 2022</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Learn advanced quantum computing concepts with hands-on PennyLane tutorials.</p>
+                                    <p class="mb-1 grey-text px-3">The seventies-inspired quantum hackathon!</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
@@ -43,33 +43,33 @@ Videos
                     </a>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <a href="videos_qhack.html">
+                    <a href="videos_qhack2021.html">
                         <div class="card rounded-lg h-100">
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
                                     <img src="_static/???.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>QHack</strong>
+                                    <strong>QHack 2021</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Re-experience the excitement of every QHack event.</p>
-                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
+                                    <p class="mb-1 grey-text px-3">???</p>
+                                    <div class="white-text d-flex justify-content-center mt-auto "><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <a href="videos_talks.html">
+                    <a href="videos_qhack2019.html">
                         <div class="card rounded-lg h-100">
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
                                     <img src="_static/???.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>Talks</strong>
+                                    <strong>QHack 2019</strong>
                                     </h3>
-                                    <p class="mb-1 grey-text px-3">Listen to top experts in quantum machine learning, computing, chemistry, and programming.</p>
+                                    <p class="mb-1 grey-text px-3">???</p>
                                     <div class="white-text d-flex justify-content-center mt-auto "><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
                                 </div>
                             </div>
@@ -82,9 +82,9 @@ Videos
 
 .. toctree::
     :maxdepth: 2
-    :caption: Videos
+    :caption: QHack
     :hidden:
 
-    videos_pennylane
-    videos_qhack
-    videos_talks
+    videos_qhack2022
+    videos_qhack2021
+    videos_qhack2019
