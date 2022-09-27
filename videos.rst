@@ -44,6 +44,12 @@ Sit back and explore quantum machine learning and quantum programming with our c
 
     <br><div class="youtube-video-gallery gallery-grid row">
 
+.. youtube:: 4Xnxa6tzPeA
+    :title: Variational Quantum Eigensolver (VQE)    
+    :author: Alvaro Ballon (Xanadu)
+
+    Introduce yourself to quantum chemistry's crown jewel: the variational quantum eigensolver
+    (VQE) algorithm.
 
 .. youtube-video:: YJhv4bhNf6M
     :title: How to solve the QUBO problem
