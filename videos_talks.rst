@@ -9,14 +9,32 @@ Listen to top experts in quantum machine learning, computing, chemistry, and pro
 
 .. raw:: html
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
     <style>
         .up-button {
-            position: absolute;
-            top: 40px;
+          position: absolute;
+          top: 60px;
+        }
+        .video-card h4 {
+          font-weight: 500 !important;
+        }
+        .youtube-video-gallery {
+          width: 150%;
+          margin-left: calc(100% - 990px);
+        }
+        @media screen and (max-width: 768px) {
+          .youtube-video-gallery {
+            margin-left: 0px !important;
+            width: 100%!important;
+          }
+        }
+        @media screen and (max-width: 1400px) and (min-width: 768px){
+          .youtube-video-gallery {
+            margin-left: 0px !important;
+            width: 100%!important;
+          }
         }
     </style>
 
 .. raw:: html
 
-    <br><div class="video-gallery gallery-grid row">
+    <br><div class="youtube-video-gallery gallery-grid row">
