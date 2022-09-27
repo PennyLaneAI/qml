@@ -38,3 +38,31 @@ Listen to top experts in quantum machine learning, computing, chemistry, and pro
 .. raw:: html
 
     <br><div class="youtube-video-gallery gallery-grid row">
+
+.. youtube-video:: YBHzT5V1SzU
+    :title: Quantum Deep Learning
+    :author: Nathan Killoran (Xanadu)
+
+    PennyLane lead developer Nathan Killoran shares some insights on the connections between deep learning and quantum computing.
+
+.. youtube-video:: McgBeSVIGus
+    :title: Automatic Differentiation of Quantum Circuits
+    :author: Nathan Killoran (Xanadu)
+
+    PennyLane lead developer Nathan Killoran walks through how quantum computer algorithms are compatible with automatic differentiation tools like those used by TensorFlow and PyTorch.
+
+.. youtube-video:: YtepXvx5zdI
+    :title: Variational Quantum Algorithms
+    :author: Nathan Killoran (Xanadu)
+
+    PennyLane lead developer Nathan Killoran gives an overview of variational quantum algorithms such as VQE, QAOA, QGANs, and more.
+
+.. youtube-video:: t9ytqPTij7k
+    :title: Hybrid Quantum-Classical Machine Learning
+    :author: Nathan Killoran (Xanadu)
+
+    PennyLane lead developer Nathan Killoran shares how you can connect the quantum and classical worlds to build end-to-end trainable hybrid models.
+  
+.. raw:: html
+
+    </div><div style='clear:both'>
