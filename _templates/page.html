@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{%- block comments -%}
+    {% if pagename in ["demos_getting-started", "demos_qml", "demos_optimization", "demos_quantum-computing", "demos_quantum-chemistry"] %}
+        {% include "filters.html" %}
+    {% elif pagename == "videos" %}
+    {% else %}
+        {% include "localtoc.html" %}
+    {% endif %}
+{%- endblock %}
+
+{% block body %}
+    {{ body }}
+
+    <script type="text/javascript">
+        // This script ensures that the active navbar entry switches
+        // from 'QML' to 'Demos' for any webpage within the demos/ directory,
+        // or for any of the demonstration landing pages
+        // (e.g., demos_optimization).
+        var pagename = document.location.href.match(/[^\/]+$/)[0];
+        var dir = document.URL.substr(0,document.URL.lastIndexOf('/')).match(/[^\/]+$/)[0];
+
+        if (pagename.includes("demos") || pagename.includes("demonstrations") || dir.includes("demos")) {
+
+            $(".nav-item.active").removeClass("active");
+            var demos_link = $('.navbar-nav a').filter(function(index) { return $(this).text() === "Demos"; })[0]
+            $(demos_link).parent().addClass("active");
+        }
+    </script>
+{% endblock %}

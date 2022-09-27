@@ -46,7 +46,7 @@ and can be downloaded as Jupyter notebooks and Python scripts.
 ## Contributing
 
 You can contribute by submitting a demo via pull request implementing a recent
-quantum machine learning paper/result.
+quantum computing paper/result.
 
 ### Adding demos
 
@@ -96,7 +96,7 @@ quantum machine learning paper/result.
   snippet below to `demos_getting-started.rst` for introductory demos.
 
   ```rest
-  .. customgalleryitem::
+  .. gallery-item::
       :tooltip: An extended description of the demo
       :figure: demonstrations/<demo name>/thumbnail.png
       :description: :doc:`demos/pytorch_noise`

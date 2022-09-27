@@ -171,7 +171,7 @@ jobs:
           python3 .github/workflows/github_job_scheduler.py \
             clean-sitemap \
             ${{  github.workspace }} \
-            --html-files="search.html,demos/sg_execution_times.html" \
+            --html-files="demos/sg_execution_times.html" \
             --verbose
 
       # Removes built html files that are not relevant to current node
