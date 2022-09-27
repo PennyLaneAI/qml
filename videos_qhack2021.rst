@@ -39,7 +39,7 @@ Relive the glory of QHack 2021.
 
     <br><div class="youtube-video-gallery gallery-grid row">
 
-.. youtube:: o377m0doD6M
+.. youtube-video:: o377m0doD6M
     :title: What are quantum computers, and how can we train them in Python?
     :author: Josh Izaac (Xanadu)
 
@@ -48,7 +48,7 @@ Relive the glory of QHack 2021.
     we can integrate these quantum programs directly into larger differentiable programs in Python, and 
     train/optimize the full (hybrid quantum-classical!) program. 
 
-.. youtube:: EwGaU-qOPUQ
+.. youtube-video:: EwGaU-qOPUQ
     :title: Using Multiple QPUs
     :author: Nathan Killoran (Xanadu)
 
