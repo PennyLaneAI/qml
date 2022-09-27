@@ -15,76 +15,113 @@ QHack
 
 .. raw:: html
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+    <style>
+        .up-button {
+          position: absolute;
+          top: 60px;
+        }
+        .video-card h4 {
+          font-weight: 500 !important;
+        }
+        .youtube-video-gallery {
+          width: 150%;
+          margin-left: calc(100% - 990px);
+        }
+        @media screen and (max-width: 768px) {
+          .youtube-video-gallery {
+            margin-left: 0px !important;
+            width: 100%!important;
+          }
+        }
+        @media screen and (max-width: 1400px) and (min-width: 768px){
+          .youtube-video-gallery {
+            margin-left: 0px !important;
+            width: 100%!important;
+          }
+        }
+    </style>
 
-    <div class="container">
-        <!-- Section: Features v.1 -->
-        <p class="lead grey-text text-center mx-auto mb-5">
-        Re-experience the excitement of every QHack event.
-        </p>
+.. raw:: html
 
-        <section class="my-5">
-            <div class="row justify-content-center main-cards">
-                <div class="col-lg-3 mb-4">
-                    <a href="videos_qhack2022.html">
-                        <div class="card rounded-lg h-100">
-                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
-                                <div class="d-flex flex-column h-100">
-                                    <h3 class="card-title">
-                                    <img src="_static/???.png" class="img-fluid" style="max-width: 105px;"></img>
-                                    <br>
-                                    <strong>QHack 2022</strong>
-                                    </h3>
-                                    <p class="mb-1 grey-text px-3">The seventies-inspired quantum hackathon!</p>
-                                    <div class="white-text d-flex justify-content-center mt-auto"><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 mb-4">
-                    <a href="videos_qhack2021.html">
-                        <div class="card rounded-lg h-100">
-                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
-                                <div class="d-flex flex-column h-100">
-                                    <h3 class="card-title">
-                                    <img src="_static/???.png" class="img-fluid" style="max-width: 105px;"></img>
-                                    <br>
-                                    <strong>QHack 2021</strong>
-                                    </h3>
-                                    <p class="mb-1 grey-text px-3">???</p>
-                                    <div class="white-text d-flex justify-content-center mt-auto "><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 mb-4">
-                    <a href="videos_qhack2019.html">
-                        <div class="card rounded-lg h-100">
-                            <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
-                                <div class="d-flex flex-column h-100">
-                                    <h3 class="card-title">
-                                    <img src="_static/???.png" class="img-fluid" style="max-width: 105px;"></img>
-                                    <br>
-                                    <strong>QHack 2019</strong>
-                                    </h3>
-                                    <p class="mb-1 grey-text px-3">???</p>
-                                    <div class="white-text d-flex justify-content-center mt-auto "><h5>See more <i class="fas fa-angle-double-right"></i></h5></div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </div>
+    <br><div class="youtube-video-gallery gallery-grid row">
 
-.. toctree::
-    :maxdepth: 2
-    :caption: QHack
-    :hidden:
+QHack 2022
+==========
 
-    videos_qhack2022
-    videos_qhack2021
-    videos_qhack2019
+Relive the glory of QHack 2022.
+
+.. youtube-video:: o377m0doD6M
+    :title: What are quantum computers, and how can we train them in Python?
+    :author: Josh Izaac (Xanadu)
+
+    Using a mixture of real Python examples and illustrated diagrams, we show how to not only evaluate, 
+    but also differentiate small quantum programs directly on quantum hardware. By extracting the gradients, 
+    we can integrate these quantum programs directly into larger differentiable programs in Python, and 
+    train/optimize the full (hybrid quantum-classical!) program. 
+
+.. youtube-video:: EwGaU-qOPUQ
+    :title: Using Multiple QPUs
+    :author: Nathan Killoran (Xanadu)
+
+    What would you do with 1000 QPUs? In the latest release of PennyLane,
+    we've introduced a number of new features to make computations involving multiple QPUs more
+    seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
+    provide a benefit over a single QPU, even for today's small and noisy devices.
+
+.. raw:: html
+
+    </div><div style='clear:both'>
+
+QHack 2021
+==========
+
+Relive the glory of QHack 2021.
+
+.. youtube-video:: o377m0doD6M
+    :title: What are quantum computers, and how can we train them in Python?
+    :author: Josh Izaac (Xanadu)
+
+    Using a mixture of real Python examples and illustrated diagrams, we show how to not only evaluate, 
+    but also differentiate small quantum programs directly on quantum hardware. By extracting the gradients, 
+    we can integrate these quantum programs directly into larger differentiable programs in Python, and 
+    train/optimize the full (hybrid quantum-classical!) program. 
+
+.. youtube-video:: EwGaU-qOPUQ
+    :title: Using Multiple QPUs
+    :author: Nathan Killoran (Xanadu)
+
+    What would you do with 1000 QPUs? In the latest release of PennyLane,
+    we've introduced a number of new features to make computations involving multiple QPUs more
+    seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
+    provide a benefit over a single QPU, even for today's small and noisy devices.
+
+.. raw:: html
+
+    </div><div style='clear:both'>
+
+QHack 2019
+==========
+
+Relive the glory of QHack 2019.
+
+.. youtube-video:: o377m0doD6M
+    :title: What are quantum computers, and how can we train them in Python?
+    :author: Josh Izaac (Xanadu)
+
+    Using a mixture of real Python examples and illustrated diagrams, we show how to not only evaluate, 
+    but also differentiate small quantum programs directly on quantum hardware. By extracting the gradients, 
+    we can integrate these quantum programs directly into larger differentiable programs in Python, and 
+    train/optimize the full (hybrid quantum-classical!) program. 
+
+.. youtube-video:: EwGaU-qOPUQ
+    :title: Using Multiple QPUs
+    :author: Nathan Killoran (Xanadu)
+
+    What would you do with 1000 QPUs? In the latest release of PennyLane,
+    we've introduced a number of new features to make computations involving multiple QPUs more
+    seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
+    provide a benefit over a single QPU, even for today's small and noisy devices.
+
+.. raw:: html
+
+    </div><div style='clear:both'>
