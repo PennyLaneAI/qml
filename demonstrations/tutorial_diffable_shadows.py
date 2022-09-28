@@ -48,7 +48,7 @@ were performed to estimate :math:`M` different observables up to additive error 
 Unraveling the mystery
 ~~~~~~~~~~~~~~~~~~~~~~
 Using algebraic properties of Pauli operators, we show how to exactly compute the above expression from just the ``bits`` and ``recipes``
-without explicitly reconstructing any snpshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
+without explicitly reconstructing any snapshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
 
 Let us start by looking at individual snapshot expectation values
 :math:`\braket{\bigotimes_iO_i}^{(t)} = \text{tr}\left(\rho^{(t)} \left(\bigotimes_iO_i \right)\right)`.
