@@ -96,7 +96,7 @@ quantum computing paper/result.
   snippet below to `demos_getting-started.rst` for introductory demos.
 
   ```rest
-  .. customgalleryitem::
+  .. gallery-item::
       :tooltip: An extended description of the demo
       :figure: demonstrations/<demo name>/thumbnail.png
       :description: :doc:`demos/pytorch_noise`

@@ -51,6 +51,7 @@ Community
 .. raw:: html
 
     <div class="row">
+        <div class="col-lg-6 mb-4">
 
 .. community-card::
     :title: {{ card1["title"] }}
@@ -67,6 +68,11 @@ Community
     {%- endif %}
 
     {{ card1["description"] | replace("\n", " ") }}
+
+.. raw:: html
+
+    </div>
+    <div class="col-lg-6 mb-4">
 
 {% if "title" in card2 %}
 
@@ -94,6 +100,7 @@ Community
 
 .. raw:: html
 
+        </div>
     </div>
 
 {% endfor %}
@@ -137,7 +144,7 @@ Community
             });
 
             var handleCardDescriptionOverflow = function(isWindowResizing) {
-                $('.plugin-card').each(function(index, card) {
+                $('.community-card.plugin-card').each(function(index, card) {
                     var $card = $(card);
                     var description = $card.find('p.plugin-card__description')[0];
                     var readMoreLink = $card.find('.plugin-card__read-more')[0];
