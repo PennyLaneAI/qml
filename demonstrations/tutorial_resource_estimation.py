@@ -39,7 +39,7 @@ share eigenvectors with a molecular Hamiltonian :math:`H`, for example by settin
 :math:`U = e^{-iH}`. Estimating the phase of such a unitary then permits recovering the
 corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below.
 
-.. figure:: /demonstrations/resource_estimation/qpe.pdf
+.. figure:: /demonstrations/resource_estimation/qpe.png
     :width: 50%
     :align: center
 
@@ -150,7 +150,7 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 # We can also plot the estimated numbers as a function of the number of plane waves for different
 # target errors
 
-error = [0.05, 0.01, 0.005, 0.001]  # in atomic units
+error = [0.1, 0.01, 0.001]  # in atomic units
 planewaves = [10 ** n for n in range(1, 10)]
 n_gates = []
 n_qubits = []
@@ -166,18 +166,18 @@ for er in error:
     n_gates.append(n_gates_)
     n_qubits.append(n_qubits_)
 
-fig, ax = plt.subplots(1, 2)
+fig, ax = plt.subplots(2, 1)
 
 for i in range(len(n_gates)):
     ax[0].plot(planewaves, n_gates[i], 'o', markerfacecolor='none', label=error[i])
-    ax[1].plot(planewaves, n_qubits[i], 'o', markerfacecolor='none', label=error[i])
+ax[1].plot(planewaves, n_qubits[i], 'o', markerfacecolor='none', label=error[-1])
 
 ax[0].set_ylabel('n gates')
 ax[1].set_ylabel('n qubits')
 
 for i in [0, 1]:
     ax[i].set_xlabel('n planewaves')
-    ax[i].tick_params(axis='x', labelrotation=90)
+    ax[i].tick_params(axis='x')
     ax[0].set_yscale('log')
     ax[i].set_xscale('log')
     ax[i].legend(title='error [Ha]')
@@ -276,7 +276,7 @@ fig.tight_layout()
 # interesting results about the cost of implementing important quantum algorithms. For instance, we
 # estimated the costs with respect to factors such as the target error in obtaining energies and
 # the number of basis functions used to simulate a system. Can you think of other interesting
-# information that can be obtained using this PennyLane functionality?!
+# information that can be obtained using this PennyLane functionality?
 #
 # References
 # ----------
