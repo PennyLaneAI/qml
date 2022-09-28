@@ -39,7 +39,7 @@ share eigenvectors with a molecular Hamiltonian :math:`H`, for example by settin
 :math:`U = e^{-iH}`. Estimating the phase of such a unitary then permits recovering the
 corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below.
 
-.. figure:: /demonstrations/resource_estimation/qpe.svg
+.. figure:: /demonstrations/resource_estimation/qpe.pdf
     :width: 50%
     :align: center
 
@@ -132,7 +132,7 @@ fig.tight_layout()
 # example taken from [#delgado2022]_. For this material, the unit cell contains 156 electrons
 # and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units, which amount to a
 # volume of :math:`1145 a_0^3`, where :math:`a_0` is the
-# `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use 100000 plane waves.
+# `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use :math:`10^5` plane waves.
 
 planewaves = 100000
 electrons = 156
@@ -191,7 +191,7 @@ fig.tight_layout()
 #
 # The parameter :math:`\lambda=\sum_i c_i` can be interpreted as a 1-norm of the Hamiltonian and
 # plays an important role in determining the cost of implementing the QPE algorithm. In PennyLane,
-# :math:`\lambda` can be obtained with
+# the 1-norm of the Hamiltonian can be obtained with
 
 print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
@@ -225,7 +225,8 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha}`, is obtained with
 
-m = qml.resource.estimate_shots(H.coeffs, error=0.0016)
+chemical_accuracy = 0.0016
+m = qml.resource.estimate_shots(H.coeffs, error=chemical_accuracy)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -235,7 +236,7 @@ print(f'Shots : {m:.2e}')
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
-m = qml.resource.estimate_shots(coeffs, error=0.0016)
+m = qml.resource.estimate_shots(coeffs, error=chemical_accuracy)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -304,10 +305,9 @@ fig.tight_layout()
 # .. [#delgado2022]
 #
 #     Alain Delgado, Pablo A. M. Casares, Roberto dos Reis, Modjtaba Shokrian Zini, *et al.*,
-#     "How to simulate key properties of lithium-ion batteries with a fault-tolerant quantum
-#     computer".
-#     `arXiv:2204.11890
-#     <https://arxiv.org/abs/2204.11890>`__
+#     "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer".
+#     `Phys. Rev. A 106, 032428 (2022)
+#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
 # About the author
 # ----------
 
