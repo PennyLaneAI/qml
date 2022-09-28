@@ -169,8 +169,8 @@ for er in error:
 fig, ax = plt.subplots(2, 1)
 
 for i in range(len(n_gates)):
-    ax[0].plot(planewaves, n_gates[i], 'o', markerfacecolor='none', label=error[i])
-ax[1].plot(planewaves, n_qubits[i], 'o', markerfacecolor='none', label=error[-1])
+    ax[0].plot(planewaves, n_gates[i], ':o', markerfacecolor='none', label=error[i])
+ax[1].plot(planewaves, n_qubits[i], ':o', markerfacecolor='none', label=error[-1])
 
 ax[0].set_ylabel('n gates')
 ax[1].set_ylabel('n qubits')
