@@ -16,6 +16,7 @@ We briefly introduce the classical shadow formalism in the Pauli basis and showc
 Classical shadows are sometimes believed to provide advantages in quantum resources to simultaneously estimate multiple observables.
 We demystify this misconception and perform fair comparisons between classical shadow measurements and simultaneously measuring
 qubit-wise-commuting observable groups.
+some local change
 
 Classical shadow theory
 -----------------------
