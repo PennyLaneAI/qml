@@ -40,7 +40,7 @@ share eigenvectors with a molecular Hamiltonian :math:`H`, for example by settin
 corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below.
 
 .. figure:: /demonstrations/resource_estimation/qpe.png
-    :width: 50%
+    :width: 60%
     :align: center
 
     Circuit representing the quantum phase estimation algorithm.
@@ -95,7 +95,8 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 # :math:`\text{Ha}`, by default. We can change the target error to a larger value which leads to a
 # smaller number of non-Clifford gates and logical qubits.
 
-algo = qml.resource.DoubleFactorization(one, two, error=0.016)
+chemical_accuracy = 0.0016
+algo = qml.resource.DoubleFactorization(one, two, error=chemical_accuracy)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
@@ -225,7 +226,6 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha}`, is obtained with
 
-chemical_accuracy = 0.0016
 m = qml.resource.estimate_shots(H.coeffs, error=chemical_accuracy)
 print(f'Shots : {m:.2e}')
 
