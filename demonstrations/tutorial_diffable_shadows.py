@@ -24,22 +24,25 @@ Classical shadow theory
 A `classical shadow` is a classical description of a quantum state that is capable of reproducing expectation values of local Pauli observables, see [#Huang2020]_.
 We briefly go through their theory here, and note the two additional demos in :doc:`tutorial_classical_shadows` and :doc:`tutorial_ml_classical_shadows`.
 
-We are here focussing on the case where measurements are performed in the Pauli basis. The idea of classical shadows is to measure each qubit in a random Pauli basis.
-While doing so, one keeps track of the performed measurement (its ``recipes``) in form of integers ``[0, 1, 2]`` corresponding to the measurement bases ``[X, Y, Z]``, respectively.
-At the same time, the measurement outcome (its ``bits``) are recorded, where ``[0, 1]`` corresponds to the eigenvalues ``[1, -1]``, respectively.
+We are here focussing on the case where measurements are performed in the Pauli basis.
+The idea of classical shadows is to measure each qubit in a random Pauli basis.
+While doing so, one keeps track of the performed measurement (its ``recipes``) in form
+of integers ``[0, 1, 2]`` corresponding to the measurement bases ``[X, Y, Z]``, respectively.
+At the same time, the measurement outcome (its ``bits``) are recorded, where ``[0, 1]``
+corresponds to the eigenvalues ``[1, -1]``, respectively.
 
-We record :math:`T` of such measurements, and for the :math:`t`-th measurement, we can reconstruct the ``local_snapshots``
+We record :math:`T` of such measurements, and for the :math:`t`-th measurement, we can reconstruct the ``local_snapshot`` for :math:`n` qubits via
 
-.. math:: \rho^{(t)} = \bigotimes_{i=1}^{n} 3 U^\dagger_i |b_i \rangle \langle b_i | U_i - \mathbb{I},
+.. math:: \rho^{(t)} = \bigotimes_{i=1}^{n} 3 U^\dagger_i |b^{(t)}_i \rangle \langle b^{(t)}_i | U_i - \mathbb{I},
 
 where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) for qubit `i`.
-:math:`|b_i\rangle = (1 - b_i, b_i)` is the corresponding computational basis state given by the output bit :math:`b_i`.
+:math:`|b^{(t)}_i\rangle = (1 - b^{(t)}_i, b^{(t)}_i)` is the corresponding computational basis state given by the output bit :math:`b^{(t)}_i \in \{0, 1\}`.
 
 From these local snapshots, one can compute expectation values of q-local Pauli strings, where locality refers to the number of non-Identity operators.
 The expectation value of any Pauli string :math:`\bigotimes_iO_i` with :math:`O_i \in \{X, Y, Z, \mathbb{I}\}` can be estimated
 by computing 
 
-.. math:: \Big\langle \bigotimes_iO_i \Big\rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left( \rho^{(t)} \bigotimes_i O_i \right).
+.. math:: \Big\langle \bigotimes_iO_i \Big\rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left[ \rho^{(t)} \left(\bigotimes_i O_i\right) \right].
 
 Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^q/\varepsilon^2 \right)` guarantee that sufficiently many correct measurements
 were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`. This :math:`\log(M)` factor may lead one to think that with classical shadows one can
@@ -55,24 +58,24 @@ Let us start by looking at individual snapshot expectation values
 :math:`\braket{\bigotimes_iO_i}^{(t)} = \text{tr}\left(\rho^{(t)} \left(\bigotimes_iO_i \right)\right)`.
 First, we convince ourselves of the identity
 
-.. math:: U_i^\dagger |b_i\rangle \langle b_i| U_i = \frac{1}{2}\left((1-2b_i) P_i + \mathbb{I}\right),
+.. math:: U_i^\dagger |b^{(t)}_i\rangle \langle b^{(t)}_i| U_i = \frac{1}{2}\left((1-2b^{(t)}_i) P_i + \mathbb{I}\right),
 
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
-.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b_i)P_i O_i + \frac{1}{2}O_i\right).
+.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right).
 
 For that trace we find three different cases.
 The cases where :math:`O_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
 The full product is always zero if any of the non-trivial :math:`O_i` do not match :math:`P_i`. So in total, `only` in the case that all :math:`q` Pauli operators match, we find
 
-.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b_i).
+.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b^{(t)}_i).
 
 This implies that in order to compute the expectation value of a Pauli string
 
-.. math:: \Big\langle\bigotimes_iO_i\Big\rangle = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \prod_{\text{i non-trivial}}(1-2b_i)
+.. math:: \Big\langle\bigotimes_iO_i\Big\rangle = \frac{1}{\tilde{T}} \sum_{\tilde{t}} \prod_{\text{i non-trivial}}(1-2b^{(t)}_i)
 
-we simply need average over the product of :math:`1 - 2b_i = \pm 1` for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
+we simply need average over the product of :math:`1 - 2b^{(t)}_i = \pm 1` for those  :math:`\tilde{T}` snapshots where the measurement recipe matches the observable,
 indicated by the special index :math:`\tilde{t}` for the matching measurements. Note that the probability of a match is :math:`1/3^q` such that we have
 :math:`\tilde{T} \approx T / 3^q` on average.
 
@@ -136,20 +139,21 @@ def qnode(x):
     qml.RX(x, wires=0)
     return classical_shadow(wires=range(2))
 
-bits, recipes = qnode(0)
+bits, recipes = qnode(0.5)
 shadow = ClassicalShadow(bits, recipes)
+print(bits.shape, recipes.shape)
 
 ##############################################################################
 # After recording these ``T=1000`` quantum measurements, we can post-process the results to arbitrary local expectation values of Pauli strings.
 # For example, we can compute the expectation value of a Pauli string
 
-print(shadow.expval(qml.PauliX(0) @ qml.PauliX(1), k=1))
+print(shadow.expval(qml.PauliX(0) @ qml.PauliX(1)))
 
 ##############################################################################
 # or of a Hamiltonian:
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
-print(shadow.expval(H, k=1))
+print(shadow.expval(H))
 
 ##############################################################################
 # This way of computing expectation values is not automatically differentiable in PennyLane though.
@@ -232,12 +236,13 @@ ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 plt.errorbar(shotss, ds, yerr=dds, fmt="x-", label="shadow")
 plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="direct")
 plt.xlabel("total number of shots T", fontsize=20)
-plt.ylabel("Accuracy (RMSD)", fontsize=20)
+plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
 plt.show()
 
 ##############################################################################
-# Unsurprisingly, the accuracy is consistently better by directly measuring the observable since we are not discarding any measurement results.
+#
+# Unsurprisingly, the deviation is consistently smaller by directly measuring the observable since we are not discarding any measurement results.
 
 ##############################################################################
 # All q-local observables
@@ -265,7 +270,8 @@ for w in combinations(range(n), q):
         observables.append(reduce(lambda a, b: a @ b, [ob(wire) for ob, wire in zip(obs, w)]))
     all_observables.extend(observables)
 
-print(all_observables[:10])
+for observable in all_observables[:10]:
+    print(observable)
 
 ##############################################################################
 # We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.grouping.group_observables` to learn the number of
@@ -336,12 +342,13 @@ ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 plt.errorbar(shotss, ds, yerr=dds, fmt="x-", label="shadow")
 plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
-plt.ylabel("Accuracy (RMSD)", fontsize=20)
+plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
 plt.show()
 
 
 ##############################################################################
+# 
 # We see that as expected the performance is more or less the same since no quantum measurements are discarded for the shadows in this case.
 # Depending on the chosen random seed there are quantitative variations to this image, but the overall qualitative result remains the same.
 #
@@ -447,7 +454,7 @@ ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
 plt.errorbar(shotss*n_groups, ds, yerr=dds, fmt="x-", label="shadow")
 plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
-plt.ylabel("Accuracy (RMSD)", fontsize=20)
+plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
 plt.tight_layout()
 plt.show()
