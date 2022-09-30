@@ -44,6 +44,13 @@ Sit back and explore quantum machine learning and quantum programming with our c
 
     <br><div class="youtube-video-gallery gallery-grid row">
 
+.. youtube:: _WvH3H3-aFw
+    :title: Measurements and quantum circuits  
+    :author: Isaac De Vlugt (Xanadu)
+
+    What are the implications of measuring a quantum circuit? Find out in this informative video
+    on measurements.
+
 .. youtube:: 4Xnxa6tzPeA
     :title: Variational Quantum Eigensolver (VQE)    
     :author: Alvaro Ballon (Xanadu)
