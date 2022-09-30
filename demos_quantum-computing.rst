@@ -96,6 +96,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_quantum_circuit_cutting`
     :tags: quantumcomputing
 
+.. gallery-item::
+    :tooltip: Compare simultaneously measuring qubit-wise-commuting observables with classical shadows
+    :figure: demonstrations/diffable_shadows/thumb.png
+    :description: :doc:`demos/tutorial_diffable_shadows`
+    :tags: classical shadows qubit wise commuting observables
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
