@@ -98,7 +98,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Compare simultaneously measuring qubit-wise-commuting observables with classical shadows
-    :figure: demonstrations/diffable_shadows/thumb.png
+    :figure: demonstrations/diffable_shadows/pauli_shadows.jpg
     :description: :doc:`demos/tutorial_diffable_shadows`
     :tags: classical shadows qubit wise commuting observables
 
