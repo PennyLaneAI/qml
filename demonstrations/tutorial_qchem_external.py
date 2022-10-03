@@ -23,6 +23,14 @@ Using external libraries
 # backend can be selected by setting ``method='pyscf'`` in
 # :func:`~.pennylane.qchem.molecular_hamiltonian`:
 
+import numpy as np
+from pennylane import qchem
+
+symbols = ["H", "O", "H"]
+coordinates = np.array([[-0.0399, -0.0038, 0.0],
+                        [1.5780, 0.8540, 0.0],
+                        [2.7909, -0.5159, 0.0]])
+
 H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method="pyscf")
 print(H)
 
