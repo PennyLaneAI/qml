@@ -179,7 +179,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # 2. **Phase decoding.** Now the QPE algorithm does seemingly little but
 # in fact achieves a lot. Namely, it applies the *inverse* Quantum
-# Fourier transform (quantum FT, QFT) to the readout register. Why it does so? Well, if
+# Fourier Transform (quantum FT, QFT) to the readout register. Why? Well, if
 # we expand the brackets in the expression for :math:`|\Psi_1\rangle`,
 # we can see that it is equivalent to:
 #
