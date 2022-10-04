@@ -489,7 +489,7 @@ hf_qpe_circuit = build_qpe_circuit(qpe_unitary,
 # 
 # In order to correctly use the template we have to provide a unitary
 # matrix as a numpy array that corresponds to the evolution operator. This
-# can be done constructing the molecular Hamiltonian expressed as a
+# can be done by constructing the molecular Hamiltonian expressed as a
 # combination of Pauli matrices and then obtaining its representation in
 # the computational basis which we can finally exponentiate.
 # 
