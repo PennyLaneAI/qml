@@ -344,7 +344,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # .. math:: \varphi_0 = \tilde{\varphi}_0 + m, \ m \in \mathbb{Z}.
 #
-# As a matter of fact, it is usually possible to find such
+# It is usually possible to find
 # :math:`E_0^{\min}` and :math:`E_0^{\max}` that only one integer
 # :math:`m` would satisfy the relation between :math:`\varphi_0` and
 # :math:`\tilde{\varphi}_0`, and thus the former would be uniqely obtained
