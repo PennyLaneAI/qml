@@ -292,7 +292,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # not that hopeless. Indeed, have a look at the plot one more time: the
 # probability leaks, but it still is mostly concentrated around the
 # “optimal” value :math:`l_{\tilde{\varphi}_u}`. Hence, even though we
-# might be getting wrong values for the least significant bits, we are
+# might be getting the wrong values for the least significant bits, we are
 # likely to get the values of the most significant ones correctly. More
 # formally, the probability to get an error in
 # :math:`K^\prime < K` the most significant bits of :math:`\varphi_u` is
