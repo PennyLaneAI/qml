@@ -303,7 +303,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # As a result, it becomes clear how to mitigate the stochastic nature of
 # QPE: we accept that QPE can give us an erroneous result, but instead we
-# aim to make the probability of an error to be small. In particular, if
+# aim to make the error probability small. In particular, if
 # we want to estimate :math:`K` most significant bits of :math:`\varphi_u`
 # with probability of success at least :math:`1-\varepsilon`, we just need
 # to add
