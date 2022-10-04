@@ -191,7 +191,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # :math:`j = j_K \cdot 2^{K - 1} + \ldots + j_2 \cdot 2^1 + j_1 \cdot 2^0`,
 # then :math:`|j\rangle = |j_1 j_2 \ldots j_K\rangle`. (This differs from the
 # ordinary PennyLane convention, but in practice this wouldn't matter — for now we
-# are interested in understanding the QPE, not implementing it).
+# are interested in understanding QPE, not implementing it.)
 # 
 # Now, if we define :math:`\omega = 2 \pi \varphi_u`, then we can see that
 # the amplitudes of the readout register encode the function
