@@ -206,7 +206,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # “the time” is discrete, and therefore we will have to use the inverse
 # *discrete* Fourier Transform — and in the language of quantum computing
 # it means that we have to apply a unitary corresponding to the inverse QFT, just
-# because *by definition* QFT performs Fourier transform on the state amplitudes.
+# because *by definition* QFT performs the Fourier transform on the state amplitudes.
 # 
 # Long story short, the state of the system at the end of this stage is:
 #
