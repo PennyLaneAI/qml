@@ -305,7 +305,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # QPE: we accept that QPE can give us an erroneous result, but instead we
 # aim to make the error probability small. In particular, if
 # we want to estimate :math:`K` most significant bits of :math:`\varphi_u`
-# with probability of success at least :math:`1-\varepsilon`, we just need
+# with a probability of success of at least :math:`1-\varepsilon`, we just need
 # to add
 # :math:`\Delta = \left \lceil \log_2\left(2 + \frac{1}{2\varepsilon} \right) \right\rceil`
 # additional qubits to the readout register — one can check by a simple
