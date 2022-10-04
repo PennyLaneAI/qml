@@ -165,7 +165,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #                                                    &= \left[\left(\frac{|0\rangle_k + e^{i 2 \pi \cdot 2^{k - 1} \varphi_u}|1\rangle_k}{\sqrt{2}}\right)\otimes |u\rangle\right]
 #
 #
-# As a result, by the end of this stage the information
+# As a result, by the end of this stage, the information
 # about the phase :math:`\varphi_{u}` is encoded in the first register
 # and the full system state is:
 # 
