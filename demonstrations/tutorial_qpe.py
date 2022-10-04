@@ -189,7 +189,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # Here by :math:`|j\rangle` we mean a state of the
 # readout register given by the binary expansion of :math:`j`, i.e. if
 # :math:`j = j_K \cdot 2^{K - 1} + \ldots + j_2 \cdot 2^1 + j_1 \cdot 2^0`,
-# then :math:`|j\rangle = |j_1 j_2 \ldots j_K\rangle` (it differs from the
+# then :math:`|j\rangle = |j_1 j_2 \ldots j_K\rangle`. (This differs from the
 # ordinary PennyLane convention, but in practice this wouldn't matter — for now we
 # are interested in understanding the QPE, not implementing it).
 # 
