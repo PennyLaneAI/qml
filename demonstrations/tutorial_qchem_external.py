@@ -13,7 +13,7 @@ Using external libraries
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
-*Author: Soran Jahangiri. Posted: 19 September 2022. Last updated: 19 September 2022*
+*Author: Soran Jahangiri. Posted: 6 October 2022. Last updated: 6 October 2022*
 
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
 methods for computing molecular integrals, solving Hartree-Fock equations and constructing
