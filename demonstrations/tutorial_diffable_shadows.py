@@ -165,7 +165,7 @@ print(shadow.expval(H))
 # -----------------------------------------------------------------
 # 
 # The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more conventional methods
-# like simultaneously measuring qubit-wise-commuting (qwc) groups. We are going to look at three different cases: The two extreme scenarios of measuring one single
+# like simultaneously measuring qubit-wise-commuting (qwc) groups, see :doc:`tutorial_measurement_optimize`. We are going to look at three different cases: The two extreme scenarios of measuring one single
 # and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian. We find that for a fix budget of measurements, one is
 # almost never advised to use classical shadows for estimating expectation values.
 # 
