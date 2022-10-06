@@ -78,12 +78,44 @@ print(H)
 # with a smaller number of resources. These molecular integrals can be computed with the
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
 # can be computed with the `PySCF <https://github.com/sunqm/pyscf>`_ package and used in PennyLane
-# workflows such as quantum resource estimation. Here is an example for water in the 6-311G** basis
-# set:
-#
-# manipulated in different ways to
-#
-#
+# workflows such as quantum resource estimation. Let's use water in the 6-311G** basis as an
+# example. First, we define the PySCF molecule object and run the restricted Hartree-Fock
+# calculations to compute:
+
+from pyscf import gto, ao2mo, scf
+mol_pyscf = gto.M(atom = 'O 0 0 0; H 0 1 0; H 0 0 1', basis = '6-31g')
+rhf = scf.RHF(mol_pyscf)
+energy = rhf.kernel()
+
+##############################################################################
+# Then, we obtain the molecular integrals in the basis of atomic orbitals and map them to the basis
+# of molecular orbitals:
+
+one_ao = mol_pyscf.intor_symmetric('int1e_kin') + mol_pyscf.intor_symmetric('int1e_nuc')
+two_ao = mol_pyscf.intor('int2e_sph')
+
+one_mo = np.einsum('pi,pq,qj->ij', rhf.mo_coeff, one_ao, rhf.mo_coeff)
+two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
+
+##############################################################################
+# Note that the two-electron integral tensor is represented in the
+# `chemist notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_. It needs to
+# be converted to the
+# `physicist notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_ to be
+# used in PennyLane:
+
+two_mo = np.swapaxes(two_mo, 1, 3)
+
+##############################################################################
+# Let's not look at an interesting example where these molecular integrals can be used to estimate
+# the number of non-Clifford gates and logical qubits needed to implement a quantum phase estimation
+# algorithm in second quantization with a double-factorized Hamiltonian:
+
+algo = qml.resource.DoubleFactorization(one_mo, two_mo)
+print(f'Estimated number of non-Clifford gates: {algo.gates:.2e}')
+print(f'Estimated number of logical qubits: {algo.qubits}')
+
+##############################################################################
 # About the author
 # ----------
 
