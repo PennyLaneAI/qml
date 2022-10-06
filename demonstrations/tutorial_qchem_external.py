@@ -37,11 +37,13 @@ electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. This
 backend can be selected by setting ``method='pyscf'`` in
 :func:`~.pennylane.qchem.molecular_hamiltonian`. # This backend requires the ``OpenFermion-PySCF``
 plugin to be installed by the user with
-"""
-pip install openfermionpyscf
 
-##############################################################################
-# The molecular Hamiltonian can then be constructed with
+.. code-block:: bash
+
+   pip install openfermionpyscf
+
+The molecular Hamiltonian can then be constructed with
+"""
 
 import pennylane as qml
 from pennylane import numpy as np
@@ -117,7 +119,7 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 
 ##############################################################################
 # About the author
-# ----------
+# ----------------
 
 ##############################################################################
 #.. bio:: Soran Jahangiri
