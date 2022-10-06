@@ -91,8 +91,8 @@ measuring qubit-wise-commuting observables. Before that, let us demonstrate how 
 PennyLane implementation
 ------------------------
 
-There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`shadow_expval` directly from the qnode.
-This has the advantage that it preserves the typical PennyLane syntax `and` is differentiable.
+There are two ways of computing expectation values with classical shadows in PennyLane. The first is to return :func:`qml.shadow_expval <pennylane.shadow_expval>` directly from the qnode.
+This has the advantage that it preserves the typical PennyLane syntax *and* is differentiable.
 """
 
 import pennylane as qml
@@ -120,8 +120,8 @@ x = np.array(0.5, requires_grad=True)
 print(qnode(x, H), qml.grad(qnode)(x, H))
 
 ##############################################################################
-# Each call of ``shadow_expval()`` performs the number of shots dictated by the device.
-# So to avoid unnecessary device executions you can provide a list of observables to :func:`shadow_expval`.
+# Each call of :func:`qml.shadow_expval <pennylane.shadow_expval>` performs the number of shots dictated by the device.
+# So to avoid unnecessary device executions you can provide a list of observables to :func:`qml.shadow_expval <pennylane.shadow_expval>`.
 
 Hs = [H, qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 print(qnode(x, Hs))
@@ -354,7 +354,7 @@ plt.show()
 #
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
-# We now look at the more realistic case of measuring a molecular Hamiltonian. We take H2O as an example. 
+# We now look at the more realistic case of measuring a molecular Hamiltonian. We tak :math:`\text{H}_2\text{O}` as an example. 
 # You can find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
@@ -383,7 +383,7 @@ print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
 print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 ##############################################################################
-# We use a pre-prepared Ansatz that approximates the H2O ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
+# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
 # We ran this once on an ideal simulator to get the exact result of the energy for the given Ansatz.
 
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)
@@ -456,7 +456,6 @@ plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
-plt.tight_layout()
 plt.show()
 
 ##############################################################################
