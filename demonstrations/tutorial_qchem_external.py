@@ -5,7 +5,7 @@ Using external libraries
 
 .. meta::
     :property="og:description": Learn how to use external quantum libraries with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
+    :property="og:image": https://pennylane.ai/qml/_images/external_libs.png
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
