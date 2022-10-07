@@ -51,7 +51,7 @@ from pennylane import numpy as np
 symbols = ["H", "O", "H"]
 geometry = np.array([[-0.0399, -0.0038, 0.0000],
                      [ 1.5780,  0.8540, 0.0000],
-                     [ 2.7909, -0.5159, 0.0000]])
+                     [ 2.7909, -0.5159, 0.0000]], requires_grad = False)
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, method="pyscf")
 print(H)
@@ -88,7 +88,9 @@ print(f'Hamiltonian: \n {H}')
 
 from pyscf import gto, ao2mo, scf
 
-mol_pyscf = gto.M(atom = '-0.02111417, -0.00201087,  0.; H 0 1 0; H 0 0 1', basis = '6-31g')
+mol_pyscf = gto.M(atom = '''H -0.02111417 -0.00201087  0.;
+                            O  0.83504162  0.45191733  0.;
+                            H  1.47688065 -0.27300252  0.''', basis = '6-31g')
 rhf = scf.RHF(mol_pyscf)
 energy = rhf.kernel()
 
