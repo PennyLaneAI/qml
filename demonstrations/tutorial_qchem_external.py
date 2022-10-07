@@ -49,11 +49,11 @@ import pennylane as qml
 from pennylane import numpy as np
 
 symbols = ["H", "O", "H"]
-coordinates = np.array([[-0.0399, -0.0038, 0.0],
-                        [1.5780, 0.8540, 0.0],
-                        [2.7909, -0.5159, 0.0]])
+geometry = np.array([[-0.0399, -0.0038, 0.0000],
+                     [ 1.5780,  0.8540, 0.0000],
+                     [ 2.7909, -0.5159, 0.0000]])
 
-H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates, method="pyscf")
+H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, method="pyscf")
 print(H)
 
 ##############################################################################
@@ -66,10 +66,12 @@ print(H)
 # :func:`~.pennylane.qchem.import_operator` function. Here is an example:
 
 from openfermion.ops import QubitOperator
+
 H = 0.1 * QubitOperator('X0 X1') + 0.2 * QubitOperator('Z0')
 H = qml.qchem.import_operator(H)
-print(type(H))
-print(H)
+
+print(f'Type: \n {type(H)} \n')
+print(f'Hamiltonian: \n {H}')
 
 ##############################################################################
 # Computing molecular integrals
@@ -85,7 +87,8 @@ print(H)
 # calculations to compute:
 
 from pyscf import gto, ao2mo, scf
-mol_pyscf = gto.M(atom = 'O 0 0 0; H 0 1 0; H 0 0 1', basis = '6-31g')
+
+mol_pyscf = gto.M(atom = '-0.02111417, -0.00201087,  0.; H 0 1 0; H 0 0 1', basis = '6-31g')
 rhf = scf.RHF(mol_pyscf)
 energy = rhf.kernel()
 
@@ -114,6 +117,7 @@ two_mo = np.swapaxes(two_mo, 1, 3)
 # algorithm in second quantization with a double-factorized Hamiltonian:
 
 algo = qml.resource.DoubleFactorization(one_mo, two_mo)
+
 print(f'Estimated number of non-Clifford gates: {algo.gates:.2e}')
 print(f'Estimated number of logical qubits: {algo.qubits}')
 
