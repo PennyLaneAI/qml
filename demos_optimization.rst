@@ -151,6 +151,13 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_diffable-mitigation`
     :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
 
+.. gallery-item::
+    :tooltip: Aprende QUBO
+    :figure: demonstrations/qubo/qubo_thumbnail.jpg
+    :description: :doc:`demos/tutorial_QUBO`
+    :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
