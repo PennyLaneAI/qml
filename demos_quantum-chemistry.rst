@@ -84,7 +84,7 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
 .. gallery-item::
     :tooltip: Using external libraries
     :figure: demonstrations/external_libs/external_libs.png
-    :description: :doc:`demos/tutorial_external_libs`
+    :description: :doc:`demos/tutorial_qchem_external`
     :tags: chemistry
 
 
