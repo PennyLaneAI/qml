@@ -1,0 +1,1 @@
+Shahnawaz works on developing useful machine learning techniques for scientific applications with a focus on quantum information and computing.

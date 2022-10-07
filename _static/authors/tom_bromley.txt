@@ -1,0 +1,1 @@
+Tom is a quantum scientist working at Xanadu. His work is focused on developing software to execute quantum algorithms on simulators and hardware.
