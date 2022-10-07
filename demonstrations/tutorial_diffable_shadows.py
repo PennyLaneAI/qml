@@ -10,13 +10,14 @@ r"""Estimating observables with classical shadows in the Pauli basis
     classical_shadows
     ml_classical_shadows
 
-*Author: Korbinian Kottmann, Posted: 22 September 2022*
+*Author: Korbinian Kottmann*
+ 
+*Posted: 7 October 2022*
 
 We briefly introduce the classical shadow formalism in the Pauli basis and showcase PennyLane's new implementation of it.
 Classical shadows are sometimes believed to provide advantages in quantum resources to simultaneously estimate multiple observables.
 We demystify this misconception and perform fair comparisons between classical shadow measurements and simultaneously measuring
 qubit-wise-commuting observable groups.
-some local change
 
 Classical shadow theory
 -----------------------
@@ -238,6 +239,7 @@ plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="direct")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
@@ -344,6 +346,7 @@ plt.errorbar(shotss, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
+plt.tight_layout()
 plt.show()
 
 
@@ -456,6 +459,7 @@ plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
@@ -501,6 +505,8 @@ plt.show()
 #     `arXiv:2201.01471 <https://arxiv.org/abs/2201.01471>`__, 2022.
 
 ##############################################################################
+# About the author
+# ----------------
 # .. bio:: Korbinian Kottmann
 #    :photo: ../_static/authors/qottmann.jpg
 #
