@@ -155,7 +155,7 @@ in quantum neural networks.
     :tooltip: Aprende QUBO
     :figure: demonstrations/qubo/qubo_thumbnail.jpg
     :description: :doc:`demos/tutorial_QUBO`
-    :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
+    :tags: qubo quadrado quadrilatero
 
 
 :html:`</div></div><div style='clear:both'>`
@@ -186,3 +186,4 @@ in quantum neural networks.
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
     demos/qnspsa
+    demos/tutorial_QUBO
