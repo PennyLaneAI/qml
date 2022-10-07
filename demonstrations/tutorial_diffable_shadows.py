@@ -382,8 +382,8 @@ H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
 
 groups = qml.grouping.group_observables(obs)
 n_groups = len(groups)
-#print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
-#print(f"Each group has sizes {[len(_) for _ in groups]}")
+print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
+print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 ##############################################################################
 # We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
