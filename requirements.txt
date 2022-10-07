@@ -12,10 +12,10 @@ pillow==9.0.1
 pip==21.1
 wheel==0.37.0
 h5py<=3.2.1
-pyscf==1.7.6
+pyscf==2.1.1
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
-openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
+openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
 pennylane-lightning
 pennylane==0.26.0
 pennylane-sf==0.20.1
