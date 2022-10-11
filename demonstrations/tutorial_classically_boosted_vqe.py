@@ -29,7 +29,7 @@ devices. For the specific problem of computing ground-state energies,
 the paradigmatic algorithm is the `Variational Quantum Eigensolver
 (VQE) <https://en.wikipedia.org/wiki/Variational_quantum_eigensolver>`__ algorithm.
 
-.. figure:: ../demonstrations/classically_boosted-vqe/quantum_algorithms.png
+.. figure:: ../demonstrations/classically_boosted_vqe/quantum_algorithms.png
     :align: center
     :width: 50%
     
@@ -52,7 +52,7 @@ Their structure allows for efficient classical computation of expectation values
 An example of such classical state would be the `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__ ,
 in which the electrons occupy the molecular orbitals with lowest energy.
 
-.. figure:: ../demonstrations/classically_boosted-vqe/CB_VQE.png
+.. figure:: ../demonstrations/classically_boosted_vqe/CB_VQE.png
     :align: center
     :width: 50%
 
@@ -378,7 +378,7 @@ S22 = 1
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 #
-# .. figure:: ../demonstrations/classically_boosted-vqe/hadamard_test.png
+# .. figure:: ../demonstrations/classically_boosted_vqe/hadamard_test.png
 #     :align: center
 #     :width: 50%
 #
@@ -520,7 +520,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # standard deviation of the energies for both cases, 
 # we obtain the following results
 #
-# .. figure:: ../demonstrations/classically_boosted-vqe/energy_deviation.png
+# .. figure:: ../demonstrations/classically_boosted_vqe/energy_deviation.png
 #     :align: center
 #     :width: 80%
 #
@@ -535,7 +535,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # variances in the CB-VQE estimation of the energy.`
 #
 ######################################################################
-# Conclusion 
+# Conclusion
 # ----------
 #
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require

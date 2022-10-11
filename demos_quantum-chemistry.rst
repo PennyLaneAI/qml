@@ -83,8 +83,8 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
 
 .. customgalleryitem::
     :tooltip: Classically-boosted Variational Quantum Eigensolver
-    :figure: demonstrations/classically_boosted-vqe/CB_VQE.png
-    :description: :doc:`demos/tutorial_classically-boosted_vqe`
+    :figure: demonstrations/classically_boosted_vqe/CB_VQE.png
+    :description: :doc:`demos/tutorial_classically_boosted_vqe`
     :tags: chemistry
 
 
