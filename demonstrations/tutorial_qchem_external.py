@@ -24,8 +24,8 @@ will learn how to use PennyLane with the electronic structure package
 `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools to compute molecular
 integrals and construct molecular Hamiltonians.
 
-Building a molecular Hamiltonian
---------------------------------
+Building molecular Hamiltonians
+-------------------------------
 In PennyLane, molecular Hamiltonians are built with the
 :func:`~.pennylane.qchem.molecular_hamiltonian` function by specifying a backend for solving the
 Hartree-Fock equations and then constructing the Hamiltonian. The default backend is the
@@ -124,6 +124,10 @@ print(f'Estimated number of non-Clifford gates: {algo.gates:.2e}')
 print(f'Estimated number of logical qubits: {algo.qubits}')
 
 ##############################################################################
+# This tutorial demonstrates using pennylane with external quantum chemistry libraries such as
+# PySCF and OpenFermion-PySCF to build molecular Hamiltonians and compute molecular integrals. It
+# also shows how to convert a Hamiltonian built with OpenFermion to a PennyLane Hamiltonian.
+#
 # About the author
 # ----------------
 
