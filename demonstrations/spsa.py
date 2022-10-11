@@ -741,4 +741,4 @@ plt.show()
 #    10.1109/TAC.2000.880982.
 #
 #
-#   .. include:: ../_static/antal_szava.txt
+#   .. include:: ../_static/authors/antal_szava.txt
