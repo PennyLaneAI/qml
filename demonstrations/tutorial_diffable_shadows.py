@@ -5,6 +5,7 @@ r"""Estimating observables with classical shadows in the Pauli basis
     :property="og:description": Classical shadows in the Pauli basis
     :property="og:image": https://pennylane.ai/qml/_images/pauli_shadows.jpg
 
+
 .. related::
 
     tutorial_classical_shadows Introduction to classic shadows
