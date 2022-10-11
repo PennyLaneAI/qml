@@ -535,7 +535,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # variances in the CB-VQE estimation of the energy.`
 #
 ######################################################################
-# Conclusion
+# Conclusion 
 # ----------
 #
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
