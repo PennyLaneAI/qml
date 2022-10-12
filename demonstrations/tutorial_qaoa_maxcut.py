@@ -11,7 +11,8 @@ QAOA for MaxCut
 .. related::
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: PennyLane dev team. Last updated: 13 April 2021.*
+*Author: Angus Lowe*
+*Posted: 11 October 2019. Last updated: 13 April 2021.*
 
 """
 ##############################################################################
@@ -312,3 +313,11 @@ plt.xticks(xticks, xtick_labels, rotation="vertical")
 plt.hist(bitstrings2, bins=bins)
 plt.tight_layout()
 plt.show()
+
+##############################################################################
+# About the author
+# ----------------
+# .. bio:: Angus Lowe
+#    :photo: ../_static/authors/angus_lowe.jpg
+#
+#    .. include:: ../_static/authors/angus_lowe.txt
