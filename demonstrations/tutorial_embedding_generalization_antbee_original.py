@@ -12,15 +12,15 @@ Generalization Performance of Quantum Metric Learning Classifiers (Ants & Bees I
 
 *Authors: Jonathan Kim and Stefan Bekiranov*
 
-This tutorial uses the idea of quantum embeddings for metric learning presented in
-`Lloyd, Schuld, Ijaz, Izaac, Killoran (2020) <https://arxiv.org/abs/2001.03622>`_,
-by training a hybrid classical-quantum data embedding to classify images of ants and bees.
-Their example was inspired by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_,
-(see also this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_).
+This tutorial uses the idea of quantum embeddings for metric learning presented in 
+`Lloyd, Schuld, Ijaz, Izaac, Killoran (2020) <https://arxiv.org/abs/2001.03622>`_ 
+by training a hybrid classical-quantum data embedding to classify images of ants and bees. 
+Their example was inspired by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_ 
+(see also this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_). 
 Data preparation is handled by the ``antbees_original.py`` file in the 
 `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_.
 
-More details on this topic can be found in the research paper, "Generalization Performance of Quantum Metric Learning Classifiers",
+More details on this topic can be found in the research paper, "Generalization Performance of Quantum Metric Learning Classifiers", 
 currently in review with Biomolecules.
 
 Illustrated below is the general circuit used.
@@ -36,11 +36,11 @@ Illustrated below is the general circuit used.
 After all necessary data pre-processing steps, ``n`` input features are reduced via matrix multiplication 
 to ``x_1``, ``x_2`` intermediate values, which are then fed into a quantum feature map consisting of ZZ 
 entanglers, as well as RX and RY rotational gates. This results in ``2n + 12`` total parameters 
-(``2n`` from the classical part, ``12`` from the quantum feature map) which are trained and updated over
-a set number of iterations, resulting in a trained embedding. The trained embedding is able to embed
-input datapoints in Hilbert space such that the Hilbert-Schmidt distance between datapoints of different
-classes is maximized. A linear decision boundary can then be drawn across the datapoints in Hilbert space,
-which corresponds to a complex decision boundary in classical space. This form of embedding training is
+(``2n`` from the classical part, ``12`` from the quantum feature map) which are trained and updated over 
+a set number of iterations, resulting in a trained embedding. The trained embedding is able to embed 
+input datapoints in Hilbert space such that the Hilbert-Schmidt distance between datapoints of different 
+classes is maximized. A linear decision boundary can then be drawn across the datapoints in Hilbert space, 
+which corresponds to a complex decision boundary in classical space. This form of embedding training is 
 known as Quantum Metric Learning.
 
 When using the ImageNet Ants & Bees image dataset in this demo, we observe poor generalization. 
@@ -75,17 +75,17 @@ np.random.seed(seed=123)
 # Embedding
 # ----
 #
-# Quantum metric learning is used to train a quantum embedding, which is
-# used for classifying data. Quantum embeddings are learned by maximizing
-# Hilbert-Schmidt distance of datapoints from two classes. After training,
-# the datapoints of different clases become maximally separated in Hilbert
-# space. This results in a simple linear decision boundary in Hilbert space
+# Quantum metric learning is used to train a quantum embedding, which is 
+# used for classifying data. Quantum embeddings are learned by maximizing 
+# Hilbert-Schmidt distance of datapoints from two classes. After training, 
+# the datapoints of different clases become maximally separated in Hilbert 
+# space. This results in a simple linear decision boundary in Hilbert space 
 # which represents a complex decision boundary in the original feature space.
 #
-# A cost function is used to track the progress of the training; the lower
+# A cost function is used to track the progress of the training; the lower 
 # the cost function, the greater the class separation in Hilbert space.
 #
-# The model is ultimately optimized with the RMSPropOptimizer and data are
+# The model is ultimately optimized with the ``RMSPropOptimizer`` and data are 
 # classified according to a KNN-style classifier.
 
 def feature_encoding_hamiltonian(features, wires):
@@ -117,13 +117,13 @@ def QAOAEmbedding(features, weights, wires):
 
 
 ######################################################################
-# By default, the model has 1024 + 12 trainable parameters - 1024 for the
+# By default, the model has 1024 + 12 trainable parameters - 1024 for the 
 # classical part of the model and 12 for the quantum part.
 #
-# The following datafiles were created by standardizing, normalizing and
-# passing images of ants and bees through a ResNet18 network (without its
+# The following datafiles were created by standardizing, normalizing and 
+# passing images of ants and bees through a ResNet18 network (without its 
 # final layer).
-# The data preparation code used to create these files can be found in the
+# The data preparation code used to create these files can be found in the 
 # `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_.
 
 X = np.loadtxt("embedding_metric_learning/X_antbees.txt", ndmin=2)  # pre-prepared training inputs
@@ -217,9 +217,9 @@ def cost(weights, A=None, B=None):
 #
 # The intial classical and quantum parameters are generated at random.
 #
-# The lattermost integer belonging to the ``size`` attribute of the
-# ``init_pars_classical`` variable is set to 512, which corresponds to
-# the 512 output features of the ResNet (as generated by the corresponding
+# The lattermost integer belonging to the ``size`` attribute of the 
+# ``init_pars_classical`` variable is set to 512, which corresponds to 
+# the 512 output features of the ResNet (as generated by the corresponding 
 # data preparation file in the `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_).
 
 # generate initial parameters for the quantum component, such that
@@ -238,11 +238,11 @@ init_pars = [init_pars_classical, init_pars_quantum]
 
 
 ######################################################################
-# The ``RMSPropOptimizer`` is used with a step size of 0.01 and batch size
-# of 5 to optimize the model over 400 iterations. The ``pars`` variable
+# The ``RMSPropOptimizer`` is used with a step size of 0.01 and batch size 
+# of 5 to optimize the model over 400 iterations. The ``pars`` variable 
 # is updated after every iteration.
 #
-# Note: All subsequent figure results in this demo used a batch
+# Note: All subsequent figure results in this demo used a batch 
 # size of 10 over 1500 iterations.
 
 optimizer = qml.RMSPropOptimizer(stepsize=0.01)
@@ -271,8 +271,8 @@ for i in range(400):
 
 
 ######################################################################
-# The quantum and classical parameters are saved into txt files so
-# they may be used at a future time without having to re-train the
+# The quantum and classical parameters are saved into txt files so 
+# they may be used at a future time without having to re-train the 
 # initial parameters.
 
 print("quantum pars: ", pars[1])
@@ -290,19 +290,19 @@ with open(r"x1x2.txt", "w") as file2:
 # Analysis
 # --------
 #
-# Hilbert space mutual data overlap gram matrices can be used to assess
-# the separation in embedded test set datapoints. Scatter plots
-# depicting the pre-training and post-training positions of the
+# Hilbert space mutual data overlap gram matrices can be used to assess 
+# the separation in embedded test set datapoints. Scatter plots 
+# depicting the pre-training and post-training positions of the 
 # ``x_1``, ``x_2`` intermediate points can also be plotted.
 #
-# For generating mutual data overlap gram matrices, a smaller subset of
+# For generating mutual data overlap gram matrices, a smaller subset of 
 # the test set data is used, as determined by the ``select`` variable.
 
 select = 10
 
 
 ######################################################################
-# Final cost values can be printed out here.
+# Final cost values can be printed out here:
 
 # cost_train = cost(pars, A=A[:select], B=B[:select])
 # cost_val = cost(pars, A=A_val[:select], B=B_val[:select])
@@ -343,9 +343,9 @@ plt.colorbar(im, cax=cax)
 #
 # |
 #
-# After training, the goal is for there to be a clear separation between
-# the two classes, such that there are four clearly defined squares of
-# mutual overlap (two yellow, two purple). However, it is clear that in this
+# After training, the goal is for there to be a clear separation between 
+# the two classes, such that there are four clearly defined squares of 
+# mutual overlap (two yellow, two purple). However, it is clear that in this 
 # case there is still a lack of test set separation after training.
 
 gram_after = [[overlaps(pars, X1=[x1], X2=[x2]) for x1 in A_B] for x2 in A_B]
@@ -368,8 +368,8 @@ plt.colorbar(im, cax=cax)
 #
 # |
 #
-# The two-dimensional intermediate (``x_1``, ``x_2``) points can be graphed in the
-# form of scatter plots to help visualize the separation progress from
+# The two-dimensional intermediate (``x_1``, ``x_2``) points can be graphed in the 
+# form of scatter plots to help visualize the separation progress from 
 # a different perspective.
 #
 # The code below results in the pre-training scatter plot:
@@ -413,9 +413,9 @@ plt.legend(handles=[blue_patch, cornflowerblue_patch, red_patch, lightcoral_patc
 #
 # |
 #
-# The below code results in the post-training scatter plot.
-# It is clear only the training set intermediate values are
-# separated well. There are too many features in image
+# The below code results in the post-training scatter plot. 
+# It is clear only the training set intermediate values are 
+# separated well. There are too many features in image 
 # data, resulting in poor generalization due to overfitting.
 
 for b in B:
@@ -454,12 +454,12 @@ plt.legend(handles=[blue_patch, cornflowerblue_patch, red_patch, lightcoral_patc
 # Classification
 # --------------
 #
-# A KNN-style classifier can be used to determine the class for each new
-# datapoint based on the datapoint's degree of overlap with each of the two
+# A KNN-style classifier can be used to determine the class for each new 
+# datapoint based on the datapoint's degree of overlap with each of the two 
 # separated classes of the training set data.
 #
-# Below, test set classification is evaluated by means of a ``predict``
-# function to yield subsequent F1, precision, recall, accuracy and specificity
+# Below, test set classification is evaluated by means of a ``predict`` 
+# function to yield subsequent F1, precision, recall, accuracy and specificity 
 # scores. A confusion matrix of the form (TP, FN, FP, TN) is also returned.
 
 def predict(n_samples, pred_low, pred_high, choice):
@@ -534,11 +534,11 @@ print("F1 Score: ", f1)
 # References
 # ----------
 #
-# Seth Lloyd, Maria Schuld, Aroosa Ijaz, Josh Izaac, Nathan Killoran: "Quantum embeddings for machine learning"
+# Seth Lloyd, Maria Schuld, Aroosa Ijaz, Josh Izaac, Nathan Killoran: "Quantum embeddings for machine learning" 
 # arXiv preprint arXiv:2001.03622.
 #
-# Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, Nathan Killoran: "Transfer learning
+# Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, Nathan Killoran: "Transfer learning 
 # in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
 #
-# Jonathan Kim and Stefan Bekiranov: "Generalization of Quantum Metric Learning Classifiers"
+# Jonathan Kim and Stefan Bekiranov: "Generalization of Quantum Metric Learning Classifiers" 
 # submitted to Biomolecules, currently in review stage.
