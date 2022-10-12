@@ -93,6 +93,24 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
+    
+.. gallery-item::
+    :tooltip: Explore Quantum Metric Learning classifers and their ability to generalize.
+    :figure: demonstrations/embedding_metric_learning/figures/All_Figures/3.4.2.png
+    :description: :doc:`demos/tutorial_embedding_generalization
+    :tags: quantum_metric_learning
+
+.. gallery-item::
+    :tooltip: Explore Quantum Metric Learning classifers and their ability to generalize (supplementary).
+    :figure: demonstrations/embedding_metric_learning/figures/All_Figures/1.1.2_train.png
+    :description: :doc:`demos/tutorial_embedding_generalization_antbee_original
+    :tags: quantum_metric_learning
+
+.. gallery-item::
+    :tooltip: Explore Quantum Metric Learning classifers and their ability to generalize (supplementary).
+    :figure: demonstrations/embedding_metric_learning/figures/All_Figures/1.3.2.png
+    :description: :doc:`demos/tutorial_embedding_generalization_antbee_pca
+    :tags: quantum_metric_learning
 
 
 :html:`</div></div><div style='clear:both'>`
@@ -114,4 +132,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_state_preparation
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_embedding_generalization
+    demos/tutorial_embedding_generalization_antbee_original
+    demos/tutorial_embedding_generalization_antbee_pca
 
