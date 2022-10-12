@@ -12,13 +12,11 @@ Quantum circuit structure learning
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: Angus Lowe*
-
-*Posted: 16 October 2019. Last updated: 20 Jan 2021.*
+*Author: Angus Lowe — Posted: 16 October 2019. Last updated: 20 Jan 2021.*
 
 """
 ##############################################################################
