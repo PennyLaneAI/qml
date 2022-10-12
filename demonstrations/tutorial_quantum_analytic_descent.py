@@ -12,12 +12,12 @@ Quantum analytic descent
 .. related::
 
    tutorial_vqe A brief overview of VQE
-   tutorial_quantum_natural_gradient Quantum Natural Gradient (QNG)
-   tutorial_rotoselect Leveraging trigonometry with Rotoselect
-   tutorial_stochastic_parameter_shift Obtaining gradients stochastically
+   tutorial_quantum_natural_gradient Quantum natural gradient
+   tutorial_rotoselect Quantum circuit structure learning
+   tutorial_stochastic_parameter_shift The stochastic parameter-shift rule
 
 
-*Authors: Elies Gil-Fuster, David Wierichs (Xanadu residents). Posted: 30 June 2021.*
+*Authors: Elies Gil-Fuster, David Wierichs (Xanadu Residents) — Posted: 30 June 2021. Last updated: 18 November 2021*
 
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
@@ -705,3 +705,10 @@ leg = ax.legend()
 #     "Estimating the gradient and higher-order derivatives on quantum hardware".
 #     `Phys. Rev. A 103, 012405 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.012405>`__, 2021.
 #     `arXiv preprint arXiv:2008.06517 <https://arxiv.org/abs/2008.06517>`__.
+#
+###############################################################################
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/elies_gil-fuster.txt
+#
+# .. include:: ../_static/authors/david_wierichs.txt
