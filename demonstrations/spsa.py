@@ -13,7 +13,7 @@ Optimization using SPSA
    tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQE with the QNG
 
-*Author: PennyLane dev team. Posted: 19 Mar 2021. Last updated: 13 Sept 2022.*
+*Author: Antal Szava — Posted: 19 Mar 2021. Last updated: 13 Sept 2022.*
 
 In this tutorial, we investigate using a gradient-free optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
@@ -739,6 +739,8 @@ plt.show()
 #    perturbation method," in IEEE Transactions on Automatic Control,
 #    vol. 45, no. 10, pp. 1839-1853, Oct 2020, doi:
 #    10.1109/TAC.2000.880982.
-#
-#
-#   .. include:: ../_static/authors/antal_szava.txt
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/antal_szava.txt
