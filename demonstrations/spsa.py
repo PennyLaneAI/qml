@@ -11,7 +11,7 @@ Optimization using SPSA
 .. related::
 
    tutorial_vqe A brief overview of VQE
-   tutorial_vqe_qng Accelerating VQE with the QNG
+   tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
 
 *Author: Antal Szava — Posted: 19 Mar 2021. Last updated: 13 Sept 2022.*
 
