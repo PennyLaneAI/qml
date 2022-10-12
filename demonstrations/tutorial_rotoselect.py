@@ -17,6 +17,7 @@ Quantum circuit structure learning
    tutorial_rosalin Frugal shot optimization with Rosalin
 
 *Author: Angus Lowe*
+
 *Posted: 16 October 2019. Last updated: 20 Jan 2021.*
 
 """
@@ -466,7 +467,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. bio:: Angus Lowe
-#    :photo: ../_static/authors/angus_lowe.jpg
-#
-#    .. include:: ../_static/authors/angus_lowe.txt
+# .. include:: ../_static/authors/angus_lowe.txt
