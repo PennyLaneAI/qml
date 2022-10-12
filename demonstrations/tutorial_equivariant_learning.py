@@ -60,7 +60,7 @@ First, let's define what we mean by a group:
 on :math:`G`, here denoted :math:`\circ`, that combines any two elements
 :math:`a` and :math:`b` to form an element of :math:`G`, denoted
 :math:`a \circ b`, such that the following three requirements, known as
-group axioms, are satisfied, these are as follows:
+group axioms, are satisfied as follows:
 
 **Associativity**:
 
