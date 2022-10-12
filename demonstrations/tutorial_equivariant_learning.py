@@ -49,7 +49,8 @@ The first thing to discuss is how do we work with symmetries in the
 first place? The answer lies in the world of representation
 theory.
 
-Fundamentally representation theory is based on the prosaic observation
+    Fundamentally, representation theory is based on the prosaic observation
+```
 that linear algebra is easy and group theory is weird: So what if we can
 study groups as linear maps?
 
