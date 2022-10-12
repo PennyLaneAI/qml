@@ -240,7 +240,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # can move it to the other side (remember the representation commutes with
 # the group action). You might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
-# matter! The result is that out gate choices commute with the group action - this is equivariance.
+# matter! The result is that our gate choices commute with the group action - this is equivariance.
 #
 
 
