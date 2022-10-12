@@ -3,7 +3,7 @@ r"""
 .. _quantum_analytic_descent:
 
 Quantum analytic descent
-============================
+========================
 
 .. meta::
     :property="og:description": Implement the Quantum analytic descent algorithm for VQE.
