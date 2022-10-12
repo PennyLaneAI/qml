@@ -158,7 +158,8 @@ html_theme_options = {
     "toc_global": False,
     "toc_subset": False,
     "toc_hover": False,
-    "relations": False
+    "relations": False,
+    "github_repo":'PennyLaneAI/qml'
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
