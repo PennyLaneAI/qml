@@ -1,1 +1,4 @@
-Roeland is a PhD student at the university of Waterloo and the Vector Institute doing research in the field of variational quantum computing for quantum many-body simulation.
+.. bio:: Roeland Wiersema
+   :photo: ../_static/authors/roeland_wiersema.jpg
+
+   Roeland is a PhD student at the university of Waterloo and the Vector Institute doing research in the field of variational quantum computing for quantum many-body simulation.
