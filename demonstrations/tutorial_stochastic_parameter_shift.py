@@ -1,5 +1,5 @@
 r"""
-The Stochastic Parameter-Shift Rule
+The stochastic parameter-shift rule
 ===================================
 
 .. meta::
