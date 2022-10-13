@@ -1,1 +1,4 @@
-Tom is a quantum scientist working at Xanadu. His work is focused on developing software to execute quantum algorithms on simulators and hardware.
+.. bio:: Tom Bromley
+   :photo: ../_static/authors/tom_bromley.png
+
+   Tom is a quantum scientist working at Xanadu. His work is focused on developing software to execute quantum algorithms on simulators and hardware.

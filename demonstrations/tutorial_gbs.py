@@ -15,9 +15,9 @@ Quantum advantage with Gaussian Boson Sampling
     tutorial_gaussian_transformation Gaussian transformation
     qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
-    tutorial_photonics Photonic Quantum Computers
+    tutorial_photonics Photonic quantum computers
 
-*Author: PennyLane dev team. Posted: 4 Dec 2020. Last updated: 4 Dec 2020.*
+*Authors: Josh Izaac and Nathan Killoran — Posted: 04 December 2020. Last updated: 4 Dec 2020.*
 
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
@@ -385,3 +385,9 @@ print(probs[2, 0, 0, 0])
 #     Bourassa, J. E., Alexander, R. N., Vasmer, et al. (2020). Blueprint for a scalable
 #     photonic fault-tolerant quantum computer. arXiv preprint arXiv:2010.02905.
 #
+##############################################################################
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/josh_izaac.txt
+#
+# .. include:: ../_static/authors/nathan_killoran.txt

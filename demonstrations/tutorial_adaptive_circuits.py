@@ -8,12 +8,12 @@ Adaptive circuits for quantum chemistry
     :property="og:image": https://pennylane.ai/qml/_images/adaptive_circuits.png
 
 .. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
     tutorial_givens_rotations Givens rotations for quantum chemistry
 
 
-*Author: PennyLane dev team. Posted:  2021. Last updated: 13 September 2021*
+*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 13 September 2021*
 
 The key component of variational quantum algorithms for quantum chemistry is the circuit used to
 prepare electronic ground states of a molecule. The variational quantum eigensolver (VQE)
@@ -232,7 +232,7 @@ for n in range(20):
 
 ##############################################################################
 # Sparse Hamiltonians
-# -------------
+# -------------------
 #
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for LiH. We can compute its matrix representation in the computational basis using the
@@ -328,3 +328,8 @@ for n in range(20):
 #     variational algorithm for exact molecular simulations on a quantum computer".
 #     `Nat. Commun. 2019, 10, 3007.
 #     <https://www.nature.com/articles/s41467-019-10988-2>`__
+#
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/soran_jahangiri.txt

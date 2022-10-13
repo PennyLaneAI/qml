@@ -8,14 +8,14 @@ Qubit tapering
     :property="og:image": https://pennylane.ai/qml/_images/qubit_tapering.png
 
 .. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
 
-*Author: Soran Jahangiri. Posted: 16 May 2022. Last updated: 24 May 2022*
+*Author: Soran Jahangiri — Posted: 16 May 2022. Last updated: 24 May 2022.*
 
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
@@ -286,11 +286,7 @@ for n in range(1, 20):
 #     method: A systematic approach to quantum chemistry on a quantum computer".
 #     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
 #
+##############################################################################
 # About the author
 # ----------------
-
-##############################################################################
-#.. bio:: Soran Jahangiri
-#    :photo: ../_static/Soran.png
-#
-#    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
+# .. include:: ../_static/authors/soran_jahangiri.txt

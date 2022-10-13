@@ -97,4 +97,4 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     demos/tutorial_mol_geo_opt
     demos/tutorial_vqe_spin_sectors
     demos/tutorial_measurement_optimize
-    demos/tutorial_vqe_parallel
+    demos/vqe_parallel

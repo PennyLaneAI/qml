@@ -8,7 +8,7 @@ VQE in different spin sectors
 
 .. related::
    tutorial_vqe Variational Quantum Eigensolver
-   tutorial_vqe_parallel VQE with parallel QPUs
+   vqe_parallel VQE with parallel QPUs on Rigetti Forest
 
 *Author: Alain Delgado. Last updated: 25 June 2022.*
 

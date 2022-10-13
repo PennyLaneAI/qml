@@ -16,9 +16,9 @@ Variational classifier
 
    tutorial_data_reuploading_classifier Data-reuploading classifier
    tutorial_multiclass_classification Multiclass margin classifier
-   tutorial_ensemble_multi_qpu Ensemble classification
+   tutorial_ensemble_multi_qpu Ensemble classification with Forest and Qiskit devices
 
-*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
@@ -579,3 +579,8 @@ plt.scatter(
 
 plt.legend()
 plt.show()
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/maria_schuld.txt

@@ -8,11 +8,11 @@ Computing gradients in parallel with Amazon Braket
 
 .. related::
 
-    tutorial_qaoa_intro Learn how to implement QAOA workflows with PennyLane
-    tutorial_vqe_parallel Evaluate the potential energy surface of H2 with parallel QPUs
+    tutorial_qaoa_intro Intro to QAOA
+    vqe_parallel VQE with parallel QPUs on Rigetti Forest
 
 
-*Author: PennyLane dev team. Posted: 8 Dec 2020.*
+*Authors: Tom Bromley and Maria Schuld — Posted: 08 December 2020. Last updated: 30 September 2021.*
 
 PennyLane integrates with `Amazon Braket <https://aws.amazon.com/braket/>`__ to enable quantum
 machine learning and optimization on high-performance simulators and quantum processing
@@ -440,3 +440,10 @@ print("Parameters saved to params.npy")
 # :download:`here </demonstrations/braket/params.npy>` to your working directory. See if you can
 # analyze the performance of this optimized circuit following a similar strategy to the
 # :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a large graph cut?
+#
+##############################################################################
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/tom_bromley.txt
+#
+# .. include:: ../_static/authors/maria_schuld.txt

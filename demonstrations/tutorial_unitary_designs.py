@@ -13,7 +13,7 @@ Unitary Designs
 
     tutorial_haar_measure Understanding the Haar measure
 
-*Author: PennyLane dev team. Posted: 7 Sept 2021. Last updated: 7 Sept 2021.*
+*Author: Olivia Di Matteo — Posted: 07 September 2021. Last updated: 07 September 2021.*
 
 
 .. note::
@@ -734,3 +734,8 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 #    M. Gaeta, O. Di Matteo, A. B. Klimov, and H. de Guise (2014) *Discrete phase-space
 #    approach to mutually orthogonal Latin squares*. J. Phys. A: Math. Theor. 47 (43) 435303.
 #    `(arXiv) <https://arxiv.org/abs/1408.6742>`__.
+#
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/olivia_di_matteo.txt

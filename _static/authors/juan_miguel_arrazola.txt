@@ -1,1 +1,4 @@
-Juan Miguel is the Head of Algorithms at Xanadu. His work focuses on developing new and better quantum algorithms for simulating molecules and materials.
+.. bio:: Juan Miguel Arrazola
+   :photo: ../_static/authors/juan_miguel_arrazola.jpg
+
+   Juan Miguel is the Head of Algorithms at Xanadu. His work focuses on developing new and better quantum algorithms for simulating molecules and materials.

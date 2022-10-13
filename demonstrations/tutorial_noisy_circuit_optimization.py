@@ -10,7 +10,7 @@ Optimizing noisy circuits with Cirq
 
    pytorch_noise PyTorch and noisy devices
 
-*Author: PennyLane dev team. Posted: 1 June 2020.  Last updated: 16 Jun 2021.*
+*Author: Nathan Killoran — Posted: 01 June 2020.  Last updated: 16 June 2021.*
 
 .. figure:: ../demonstrations/noisy_circuit_optimization/noisy_qubit.png
     :align: center
@@ -535,3 +535,8 @@ plt.show()
 #    `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
 #
+#
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/nathan_killoran.txt

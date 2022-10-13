@@ -9,14 +9,13 @@ Quantum GANs
     :property="og:image": https://pennylane.ai/qml/_images/patch.jpeg
 
 .. related::
-    tutorial_QGAN QGANs with Cirq + TensorFlow
+    tutorial_QGAN Quantum Generative Adversarial Networks with Cirq + TensorFlow
 
 """
 
 
 ######################################################################
-# *Author: James Ellis. Contact: jamesellis9570@yahoo.co.uk. Last updated:
-# 27 Jan 2022.*
+# *Author: James Ellis — Posted: 01 February 2022. Last updated: 27 January 2022.*
 #
 # In this tutorial, we will explore quantum GANs to generate hand-written
 # digits of zero. We will first cover the theory of the classical case,
@@ -591,11 +590,7 @@ plt.show()
 
 ######################################################################
 # References
-# ~~~~~~~~~~
-#
-
-
-######################################################################
+# ----------
 # [1] Ian J. Goodfellow et al. *Generative Adversarial Networks*.
 # `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
 #
@@ -603,3 +598,8 @@ plt.show()
 # Networks for Image Generation*. 
 # `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/james_ellis.txt

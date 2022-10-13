@@ -8,10 +8,10 @@ Learning to learn with quantum neural networks
 
 .. related::
 
-   tutorial_qaoa_intro QAOA
+   tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 15 Sep 2021.*
+*Author: Stefano Mangini — Posted: 02 March 2021. Last updated: 15 September 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -1177,3 +1177,7 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #     other data structures, like graphs or functions taking graphs as
 #     input, like ``qaoa_from_graph``.
 #
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/stefano_mangini.txt
