@@ -18,7 +18,8 @@ Symmetries are at the heart of physics, indeed in condensed matter and
 particle physics we often define a thing simply by the symmetries it
 adheres to. What does symmetry mean for those in machine learning? In
 this context the ambition is straight forward - it is a means to
-reduce the parameter space and improve generalisation..
+reduce the parameter space and improve the trained models ability to
+sucessfully label unseen data, i.e its ability to generalise.
 
 
 Suppose we have a learning task and the data we are learning from has an
@@ -33,9 +34,15 @@ is concerned, this means we can reduce our parameter space and so the
 amount of data our algorithm must sift through is immediately reduced.
 Along the way the fact that our learning model must encode a symmetry
 that actually exists in the system we are trying to represent naturally
-encourages our results to be more generalisable.
+encourages our results to be more generalisable. The encoding of symmetries
+into our learning models is where the term equivariance will appear. We will see that
+demanding that certain symmetries are included in our models means that the 
+mappings that make up our algorithms must be such that we could transform our input data
+with respect to a certain symmetry and apply our maps and this would be the same as applying
+the maps and then transforming the output data vwith the same symmetry. It is the technical property
+that gives us the name equavariant learning.
 
-In classical machine learning, this is often referred to as geometric deep
+In classical machine learning, this is area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
 deep neural networks (see [#Bronstein2021]_ for a broad introduction).
@@ -48,11 +55,6 @@ Representation theory in circuits
 The first thing to discuss is how do we work with symmetries in the
 first place? The answer lies in the world of representation
 theory.
-
-    Fundamentally, representation theory is based on the prosaic observation
-```
-that linear algebra is easy and group theory is weird: So what if we can
-study groups as linear maps?
 
 First, let's define what we mean by a group:
 
@@ -80,7 +82,7 @@ the identity element of the group.
 For each :math:`a` in :math:`G`, there exists an element :math:`b` in
 :math:`G` such that :math:`a \circ b=e` and :math:`b \circ a=e`, where
 :math:`e` is the identity element. For each :math:`a`, the element
-:math:`b` is unique (see below); it is called the inverse of :math:`a`
+:math:`b` is unique:  it is called the inverse of :math:`a`
 and is commonly denoted :math:`a^{-1}`.
 
 
@@ -91,11 +93,14 @@ vector space :math:`V`, which satisfies
 
 :math:`\varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G`.
 
-This structure indicates this is a group homomorphism as it sends our 
-group of interest to another group such that the group action commutes
-with the mapping. For a representation, our mapping must send us to the general linear
-group :math:`GL(n)` (the space of :math:`n \times n` matrices with matrix multiplication as the group multiplication).
-
+The idea here is that just as elements in a group act on each other to 
+reach further elements i.e :math:`g\circ h = k` a representation sends us 
+to a mappings acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k)`.
+In this way we are representing the strucutre of the group as a linea map. For a representation, our mapping must send us to the general linear
+group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication): note how this is
+is both a group and by virtue of being a collection of invertible matrices also linear maps (they're all invertble matrices that can act on row vectors). 
+Fundamentally, representation theory is based on the prosaic observationthat linear algebra is easy and group theory is abstract: So what if we can
+study groups as linear maps?
 
 Now due to the importance of unitarity in quantum mechnics, we are
 particularly interested in the unitary representations: Representations
@@ -136,16 +141,20 @@ of group representation theory we are ready to tackle this. Let :math:`G` be our
 :math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
 Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
-and :math:`\psi: G \rightarrow GL(W)` then, in representation theory terms, where we will write
-:math:`\varphi_g` and :math:`\psi_g` to represent the representation of the group element :math:`g`
-as linear maps on :math:`V` and :math:`W` respectively. We call :math:`f` equivariant if
+and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write that
+:math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
+as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` equivariant if
 
-:math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`
+:math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`.
 
 The importance of such a maps in machine learning is that if, for example, our neural network layers are
-equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
+equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections etc)
 preserve this information in the outputs. Which we can see because we could instead input the same input
-twice and get the second by applying the group action to one of the outputs. 
+twice and get the second by applying the group action to one of the outputs. Consider the following figure for 
+example, what we see is a board with a cross in a certain square on the left and some numerical encoding of this
+on the right, where the the 1 is where the X is in the number grid. This is an equivariant map between these two spaces
+with respect to a group action that is a rotation or a swap etc (here a :math:`\pi` rotation) either to the original grid
+and then map to the number grid or we could map to the number grid and then apply the group action.
 
 
 .. figure:: ../demonstrations/equivariant_learning/equivariant-example.png
@@ -157,7 +166,8 @@ Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
 analysis where it is known they are equivariant with respect to translations; They naturally encode the idea that
-a picture of a dog is symmetrically related to the same picture slid to the left by n pixels). With our focus on
+a picture of a dog is symmetrically related to the same picture slid to the left by n pixels) and they do this by having 
+neural network layers that are equivariant maps. With our focus on
 unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
 
 """
@@ -201,8 +211,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# To create the quantum model let us initialise all the qubits in :math:`|0\rangle`,
-# which we note is invariant under the symmetries of the problem (flip and
+# To create the quantum model let us initialise take 9 qubits and let them reprsent squares of our board. We'll initialise them all as :math:`|0\rangle`,
+# which we note leaves the board invariant under the symmetries of the problem (flip and
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply a single qubit :math:`R_x(\theta)`
 # rotations on individual qubits, encoding each of the
@@ -225,7 +235,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# Let S be the group that encodes our symmetries and :math:`U_{s}` be a
+# Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U_{s}` be a
 # unitary representation of :math:`\mathcal{S}`. Then,
 #
 # .. container:: alert alert-block alert-info
@@ -235,9 +245,10 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # defines a projector onto the set of operators commuting with all
 # elements of the representation, i.e.,
 # :math:`\left[\mathcal{T}_{U}[X], U(s)\right]=` 0 for all :math:`X` and
-# :math:`s \in \mathcal{S}`. To see why this works for yourself apply the
-# map to an arbitrary unitary representation and see if you can see how you
-# can move it to the other side (remember the representation commutes with
+# :math:`s \in \mathcal{S}`. The twirl of applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
+# For the more mathematical reader you can see why this works for yourself by applying the
+# map to an arbitrary unitary representation and seeing
+# can move the unitary from the left-hand side of the equationand seeing if you can commute it to the right (remember the representation commutes with
 # the group action). You might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
 # matter! The result is that out gate choices commute with the group action - this is equivariance.
@@ -264,8 +275,14 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # the symmetry action (the sum over the symmetry group actions). Having done this
 # we can see that for a single qubit rotation the inavariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
-# edges (when their rotation angles are fixed to be the same).
-#
+# edges (when their rotation angles are fixed to be the same). As an example consider the follwing figure
+# where we can see the invariant unitary made from applying :math:`R_x` gate in the corner and then applying all the symmetries
+# of a square is the same gate is that unitary made up of applying the same gate at all the corners.
+
+##############################################################################
+# .. figure:: ../demonstrations/equivariant_learning/twirl.png
+#     :align: center
+#     :width: 70%
 
 
 ######################################################################
@@ -520,6 +537,8 @@ def circuit(x, p):
     qml.RY(p[5], wires=5)
     qml.RY(p[5], wires=7)
 
+    # Entagling 2-qubit gates
+    # circling the edge of the board
     qml.CRY(p[6], wires=[0, 1])
     qml.CRY(p[6], wires=[2, 1])
     qml.CRY(p[6], wires=[2, 5])
@@ -529,11 +548,13 @@ def circuit(x, p):
     qml.CRY(p[6], wires=[6, 3])
     qml.CRY(p[6], wires=[0, 3])
 
+    # To the corners from the centre
     qml.CRY(p[7], wires=[4, 0])
     qml.CRY(p[7], wires=[4, 2])
     qml.CRY(p[7], wires=[4, 6])
     qml.CRY(p[7], wires=[4, 8])
 
+    # To the centre from the edges
     qml.CRY(p[8], wires=[1, 4])
     qml.CRY(p[8], wires=[3, 4])
     qml.CRY(p[8], wires=[5, 4])
@@ -545,16 +566,17 @@ def circuit(x, p):
 fig, ax = qml.draw_mpl(circuit)([0] * 9, 18 * [0])
 
 ######################################################################
-# Let's also look at the same series of gates
-# three operators into the loss function and use this to update our
-# parameters
+# Now let's also look at the same series of gates but this time they
+# are applied idependently from one another, so we won't be preserving
+# the symmetries with our gate operations. Practically this also means
+# more parameters as previously groups of gates were updated together.
 
 
 ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
-# ... and then without symmetry
+
 @qml.qnode(dev, interface="torch")
 def circuit_no_sym(x, p):
 
@@ -571,6 +593,11 @@ def circuit_no_sym(x, p):
     # Centre single qubit rotation
     qml.RX(p[0], wires=4)
     qml.RY(p[1], wires=4)
+
+    # Note in this circuit the parameters aren't all the same.
+    # Previously they were identical to ensure they were applied
+    # as one combined gate. The fact they can all vary independently
+    # here means we aren't respecting the symmetry.
 
     # Corner single qubit rotation
     qml.RX(p[2], wires=0)
@@ -594,6 +621,8 @@ def circuit_no_sym(x, p):
     qml.RY(p[16], wires=5)
     qml.RY(p[17], wires=7)
 
+    # Entagling 2-qubit gates
+    # circling the edge of the board
     qml.CRY(p[18], wires=[0, 1])
     qml.CRY(p[19], wires=[2, 1])
     qml.CRY(p[20], wires=[2, 5])
@@ -603,11 +632,13 @@ def circuit_no_sym(x, p):
     qml.CRY(p[24], wires=[6, 3])
     qml.CRY(p[25], wires=[0, 3])
 
+    # To the corners from the centre
     qml.CRY(p[26], wires=[4, 0])
     qml.CRY(p[27], wires=[4, 2])
     qml.CRY(p[28], wires=[4, 6])
     qml.CRY(p[29], wires=[4, 8])
 
+    # To the centre from the edges
     qml.CRY(p[30], wires=[1, 4])
     qml.CRY(p[31], wires=[3, 4])
     qml.CRY(p[32], wires=[5, 4])
@@ -653,13 +684,17 @@ def cost_function(params, input, target):
     return torch.mean(sum_sqr)
 
 
+######################################################################
+# Let's now train our symmetry preserving circuit on the data.
+
+
 from torch import optim
+import numpy as np
 
 params = 0.01 * torch.randn(9)
 params.requires_grad = True
 opt = optim.Adam([params], lr=1e-2)
 
-import numpy as np
 
 max_epoch = 15
 max_step = 30
@@ -718,6 +753,10 @@ for epoch in range(max_epoch):
         print("Epoch: {:2d} | Loss: {:3f} | Validation accuracy: {:3f}".format(*res))
 
 
+######################################################################
+# Now we train the non-symmetry preserving circuit.
+
+
 params = 0.01 * torch.randn(34)
 params.requires_grad = True
 opt = optim.Adam([params], lr=1e-2)
@@ -731,8 +770,6 @@ def cost_function_no_sym(params, input, target):
     sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
 
-
-import numpy as np
 
 max_epoch = 15
 max_step = 30
@@ -751,6 +788,7 @@ def accuracy_no_sym(p, x_val, y_val):
 
 
 print(f"accuracy without training = {accuracy_no_sym(params, *encoded_dataset_val)}")
+
 
 x_dataset = torch.stack(encoded_dataset[0])
 y_dataset = torch.tensor(encoded_dataset[1], requires_grad=False)
@@ -789,6 +827,9 @@ for epoch in range(max_epoch):
 
         res = [epoch + 1, cost, acc_val]
         print("Epoch: {:2d} | Loss: {:3f} | Validation accuracy: {:3f}".format(*res))
+
+######################################################################
+# Finally let's plot the results and see how the two training regimes differ.
 
 
 from matplotlib import pyplot as plt
