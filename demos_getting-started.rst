@@ -97,19 +97,19 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 .. gallery-item::
     :tooltip: Explore Quantum Metric Learning classifers and their ability to generalize.
     :figure: demonstrations/embedding_metric_learning/figures/All_Figures/3.4.2.png
-    :description: :doc:`demos/tutorial_embedding_generalization
+    :description: :doc:`demos/tutorial_embedding_generalization`
     :tags: quantum_metric_learning
 
 .. gallery-item::
     :tooltip: Explore Quantum Metric Learning classifers and their ability to generalize (supplementary demo 1).
     :figure: demonstrations/embedding_metric_learning/figures/All_Figures/1.1.2_train.png
-    :description: :doc:`demos/tutorial_embedding_generalization_antbee_original
+    :description: :doc:`demos/tutorial_embedding_generalization_antbee_original`
     :tags: quantum_metric_learning
 
 .. gallery-item::
     :tooltip: Explore Quantum Metric Learning classifers and their ability to generalize (supplementary demo 2).
     :figure: demonstrations/embedding_metric_learning/figures/All_Figures/1.3.2.png
-    :description: :doc:`demos/tutorial_embedding_generalization_antbee_pca
+    :description: :doc:`demos/tutorial_embedding_generalization_antbee_pca`
     :tags: quantum_metric_learning
 
 
