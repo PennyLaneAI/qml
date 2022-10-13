@@ -99,8 +99,8 @@ to a mappings acting on a vector space such that :math:`\varphi(g)\circ \varphi(
 In this way we are representing the strucutre of the group as a linea map. For a representation, our mapping must send us to the general linear
 group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication): note how this is
 is both a group and by virtue of being a collection of invertible matrices also linear maps (they're all invertble matrices that can act on row vectors). 
-Fundamentally, representation theory is based on the prosaic observationthat linear algebra is easy and group theory is abstract: So what if we can
-study groups as linear maps?
+Fundamentally, representation theory is based on the prosaic observation that linear algebra is easy and group theory is abstract: So what if we can
+study groups via linear maps?
 
 Now due to the importance of unitarity in quantum mechnics, we are
 particularly interested in the unitary representations: Representations
