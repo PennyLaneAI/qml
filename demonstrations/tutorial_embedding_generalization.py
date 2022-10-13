@@ -91,6 +91,8 @@ np.random.seed(seed=1)
 #
 # The model is ultimately optimized with the ``RMSPropOptimizer`` and data are 
 # classified according to a KNN-style classifier.
+#
+# Below is the code that makes up the quantum feature map:
 
 def feature_encoding_hamiltonian(features, wires):
 
@@ -229,13 +231,13 @@ def cost(weights, A=None, B=None):
 
 # generate initial parameters for the quantum component, such that
 # the resulting number of trainable quantum parameters is equal to
-# the product of the elements that make up the ``size`` attribute
+# the product of the elements that make up the 'size' attribute
 # (4 * 3 = 12).
 init_pars_quantum = np.random.normal(loc=0, scale=0.1, size=(4, 3))
 
 # generate initial parameters for the classical component, such that
 # the resulting number of trainable classical parameters is equal to
-# the product of the elements that make up the ``size`` attribute.
+# the product of the elements that make up the 'size' attribute.
 init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, 16))
 
 init_pars = [init_pars_classical, init_pars_quantum]
