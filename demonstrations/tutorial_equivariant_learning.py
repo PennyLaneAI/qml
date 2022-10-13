@@ -62,7 +62,7 @@ First, let's define what we mean by a group:
 on :math:`G`, here denoted :math:`\circ`, that combines any two elements
 :math:`a` and :math:`b` to form an element of :math:`G`, denoted
 :math:`a \circ b`, such that the following three requirements, known as
-group axioms, are satisfied, these are as follows:
+group axioms, are satisfied as follows:
 
 **Associativity**:
 
@@ -251,7 +251,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # can move the unitary from the left-hand side of the equationand seeing if you can commute it to the right (remember the representation commutes with
 # the group action). You might change the element of the group you're now
 # working with, but since this is a sum over all of them that doesn't necessarily
-# matter! The result is that out gate choices commute with the group action - this is equivariance.
+# matter! The result is that our gate choices commute with the group action - this is equivariance.
 #
 
 
@@ -303,7 +303,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # :math:`O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{2}+Z_{6}+Z_{8}\right]`
 #
-# :math:`O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{6}+Z_{7}\right]`
+# :math:`O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{5}+Z_{7}\right]`
 #
 # :math:`\hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)`
 #
