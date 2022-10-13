@@ -20,7 +20,7 @@ Their example was inspired by `Mari et al. (2019) <https://arxiv.org/abs/1912.08
 This tutorial and its preparation steps (as included in ``the antsbees_general.py`` and 
 ``antsbees_general_no_resnet.py`` files in the `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_) 
 adapts the work of Lloyd et al. by changing the data pre-processing steps, which includes the use of principal component analysis for feature reduction. 
-This tutorial aims to produce good generalization performance for test set data (something which 
+This tutorial aims to produce good generalization performance for test set data (something that 
 was not demonstrated in the original quantum metric learning code).
 
 More details on this topic can be found in the research paper, "Generalization Performance of Quantum Metric Learning Classifiers", 
@@ -247,8 +247,9 @@ init_pars = [init_pars_classical, init_pars_quantum]
 # of 5 to optimize the model over 400 iterations. The ``pars`` variable 
 # is updated after every iteration.
 #
-# Note: All subsequent figure results in this demo were generated with 
-# a batch size of 10 over 1500 iterations.
+# .. note:: Despite the code steps shown below, all figure results in 
+#           this demo were generated with a batch size of 10 over 1500 
+#           iterations.
 
 optimizer = qml.RMSPropOptimizer(stepsize=0.01)
 batch_size = 5

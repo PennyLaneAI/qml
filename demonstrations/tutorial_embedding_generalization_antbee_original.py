@@ -242,8 +242,9 @@ init_pars = [init_pars_classical, init_pars_quantum]
 # of 5 to optimize the model over 400 iterations. The ``pars`` variable 
 # is updated after every iteration.
 #
-# Note: All subsequent figure results in this demo were generated with 
-# a batch size of 10 over 1500 iterations.
+# .. note:: Despite the code steps shown below, all figure results in 
+#           this demo were generated with a batch size of 10 over 1500 
+#           iterations.
 
 optimizer = qml.RMSPropOptimizer(stepsize=0.01)
 batch_size = 5
