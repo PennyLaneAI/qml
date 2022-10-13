@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
-np.random.seed(seed=123)
+np.random.seed(seed=1)
 pc = 16
 
 breast = load_breast_cancer()
