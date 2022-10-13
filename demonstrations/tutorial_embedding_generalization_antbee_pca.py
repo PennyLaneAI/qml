@@ -302,7 +302,7 @@ with open(r"x1x2.txt", "w") as file2:
 # ``x_1``, ``x_2`` intermediate points can also be plotted.
 #
 # For generating mutual data overlap gram matrices, a smaller subset of 
-# the test set data is used, as determined by the 'select' variable.
+# the test set data is used, as determined by the ``select`` variable.
 
 select = 10
 
