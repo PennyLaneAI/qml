@@ -102,8 +102,8 @@ The measurement problem
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
 has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`, using PennyLane
-QChem to verify the number of terms. In this tutorial, we use the :func:`~.pennylane_qchem.qchem.read_structure`
+structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
 function to read the geometry of the molecule from an external file.
 
 """
@@ -170,7 +170,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in over triple the number of qubits required and 2050 measurements that must be made!
+# resulted in over triple the number of qubits required and 2110 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -295,7 +295,7 @@ print("\n", H)
 # .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 #
 # Luckily, this tensor product structure allows us to take a bit of a shortcut. Rather than consider
-# **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
+# **full commutativity**, we can consider a more strict condition known as **qubit-wise
 # commutativity** (QWC).
 #
 # To start with, let's consider single-qubit Pauli operators and the identity. We know that the Pauli operators
@@ -481,33 +481,7 @@ print(new_obs)
 # terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.grouping <pennylane.grouping>`
 # documentation for more details on its provided functionality and how it works.
 #
-# What happens, though, if we (in a moment of reckless abandon!) ask a QNode to simultaneously
-# measure two observables that *aren't* qubit-wise commuting? For example, let's consider
-# :math:`X\otimes Y` and :math:`Z\otimes Z`:
-#
-# .. code-block:: python
-#
-#     @qml.qnode(dev)
-#     def circuit(weights):
-#         qml.StronglyEntanglingLayers(weights, wires=range(3))
-#         return [
-#             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
-#             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-#         ]
-#
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#     pennylane.qnodes.base.QuantumFunctionError: Only observables that are qubit-wise commuting
-#     Pauli words can be returned on the same wire
-#
-# The QNode has detected that the two observables are not qubit-wise commuting, and
-# has raised an error.
-#
-# So, a strategy begins to take shape: given a Hamiltonian containing a large number of Pauli terms,
+# Given a Hamiltonian containing a large number of Pauli terms,
 # there is a high likelihood of there being a significant number of terms that qubit-wise commute. Can
 # we somehow partition the terms into **fewest** number of QWC groups to minimize the number of measurements
 # we need to take?
@@ -751,12 +725,14 @@ print("<H> = ", np.sum(np.hstack(result)))
 ##############################################################################
 # Finally, we don't need to go through this process manually every time; if our cost function can be
 # written in the form of an expectation value of a Hamiltonian (as is the case for most VQE and QAOA
-# problems), we can use the :class:`qml.ExpvalCost <pennylane.ExpvalCost>` function
-# to generate our cost function with the number of measurement automatically
-# optimized:
+# problems), we can use the option ``grouping_type="qwc"`` in :class:`~.pennylane.Hamiltonian` to
+# automatically optimize the measurements.
 
-H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.StronglyEntanglingLayers, H, dev, optimize=True)
+H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+@qml.qnode(dev)
+def cost_fn(weights):
+    qml.StronglyEntanglingLayers(weights, wires=range(4))
+    return qml.expval(H)
 print(cost_fn(weights))
 
 ##############################################################################
@@ -776,7 +752,7 @@ groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf'
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2050 required measurements/circuit evaluations to 523 (just over *two thousand*
+# We went from 2110 required measurements/circuit evaluations to 556 (just over *two thousand*
 # down to *five hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.

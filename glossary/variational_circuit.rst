@@ -52,7 +52,7 @@ The intriguing idea of variational circuit for near-term devices is to merge
 this two-step procedure into a single step by "learning" the circuit on the noisy device for a given task.
 This way, the "natural" tunable gates of a device can be used to formulate the algorithm, without the
 detour via a fixed elementary gate set. Furthermore, systematic errors can automatically be corrected
-during optmization.
+during optimization.
 
 
 Building the circuit

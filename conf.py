@@ -27,10 +27,7 @@ sys.path.insert(0, os.path.abspath("."))
 
 project = "PennyLane"
 
-copyright = """
-    Ville Bergholm, Josh Izaac, Maria Schuld, Christian Gogolin, Carsten Blank, Keri McKiernan, and Nathan Killoran. <br>
-PennyLane: Automatic differentiation of hybrid quantum-classical computations. arXiv:1811.04968, 2018.<br>
-&copy; Copyright 2018-2019, Xanadu Quantum Technologies Inc."""
+copyright = "2022, Xanadu Quantum Technologies, Inc."
 
 author = "Xanadu Inc."
 
@@ -80,7 +77,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
     'reference_url': {
          # The module you locally document uses None
-        'pennylane': "https://pennylane.readthedocs.io/en/stable/",
+        'pennylane': "https://docs.pennylane.ai/en/stable/",
     },
     'backreferences_dir'  : 'backreferences',
     'doc_module'          : ('pennylane'),
@@ -108,7 +105,7 @@ warnings.filterwarnings(
 )
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates", "xanadu_theme"]
+templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -129,7 +126,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "venv"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*venv"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -145,7 +142,7 @@ html_favicon = "_static/favicon.ico"
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "xanadu_theme"
+html_theme = "pennylane"
 html_theme_path = ["."]
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -153,33 +150,23 @@ html_theme_path = ["."]
 # documentation.
 #
 html_theme_options = {
-    # Set the path to a special layout to include for the homepage
-    # "homepage": "index.html",
-    # Set the name of the project to appear in the left sidebar.
-    "project_nav_name": "Quantum Machine Learning",
-    "project_logo": "_static/pennylane.png",
-    "touch_icon": "_static/xanadu.png",
-    "touch_icon_small": "_static/xanadu_small.png",
-    "large_toc": True,
-    # Set GA account ID to enable tracking
-    "google_analytics_account": "UA-130507810-1",
-    # colors
-    "navigation_button": "#19b37b",
-    "navigation_button_hover": "#0e714d",
-    "toc_caption": "#19b37b",
-    "toc_hover": "#19b37b",
-    "table_header_bg": "#edf7f4",
-    "table_header_border": "#19b37b",
-    "download_button": "#19b37b",
-    # gallery options
-    "github_repo": "XanaduAI/qml",
-    "gallery_dirs": "tutorials",
+    "navbar_active_link": 0,
+    "extra_copyrights": [
+        "TensorFlow, the TensorFlow logo, and any related marks are trademarks of Google Inc."
+    ],
+    "google_analytics_tracking_id": "UA-130507810-2",
+    "toc_global": False,
+    "toc_subset": False,
+    "toc_hover": False,
+    "relations": False,
+    "github_repo": "PennyLaneAI/qml"
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+html_css_files = ["css/light-slider.css"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -189,7 +176,12 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-html_sidebars = {"**": ["logo-text.html", "searchbox.html", "localtoc.html"]}
+# html_sidebars = {
+#     "**": [
+#         "searchbox.html",
+#         "globaltoc.html",
+#     ]
+# }
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
@@ -220,13 +212,5 @@ with open("demos_community.rst", 'w') as f:
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://pennylane.readthedocs.io/en/stable/": None}
+intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
 
-from custom_directives import CustomGalleryItemDirective, YoutubeItemDirective, CommunityCardDirective, RelatedDirective
-
-def setup(app):
-    app.add_directive("customgalleryitem", CustomGalleryItemDirective)
-    app.add_directive("youtube", YoutubeItemDirective)
-    app.add_directive("community-card", CommunityCardDirective)
-    app.add_directive("related", RelatedDirective)
-    app.add_stylesheet("xanadu_gallery.css")

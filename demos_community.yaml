@@ -1,3 +1,64 @@
+- title: Optimizing a Variational Quantum Circuit via Simulated Annealing
+  author: Mahnoor Fatima
+  date: 24/08/2022
+  code: https://github.com/maxwell04-wq/simulated-annealing-pennylane/blob/main/Simulated_Annealing_Tutorial_Pennylane.ipynb
+  paper: https://projecteuclid.org/journals/statistical-science/volume-8/issue-1/Simulated-Annealing/10.1214/ss/1177011077.full
+  color: heavy-rain-gradient
+  description: |
+    In this tutorial, a variational quantum circuit is optimized by using simulated annealing. This algorithm returns a stochastic global optimum for the optimization problem.
+
+
+- title: Continuous Variable Quantum Classifiers -  MNIST
+  author: Sophie Choe
+  date: 04/06/2022
+  code: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers
+
+  paper: https://github.com/sophchoe/Continous-Variable-Quantum-MNIST-Classifiers/blob/main/MNIST_QNN.pdf
+  color: heavy-rain-gradient
+  description: |
+    We built 8 MNIST dataset classifiers using 2-8 qumodes. This family of MNIST classifiers are classical-quantum hybrid circuits using Keras and PennyLane. The quantum circuit is composed of a data encoding circuit and a quantum neural network circuit as proposed in the paper "Continuous variable quantum neural networks" by Killoran et al. The PennyLane-TensorFlow interface converts the quantum circuit into a Keras layer, and the whole network is treated as a Keras network, to which Keras' built-in loss function and optimizer can be applied for parameter updates. Categorical cross-entropy is used as the loss function and Stochastic Gradient Descent is used for the optimizer.
+
+
+    Author affiliation: Portland State University, Electrical and Computer Engineering.
+
+
+- title: Weighted SubSpace VQE to find kth excited state energies
+  author: Jay Patel, Siddharth Patel, and Amit Hirpara
+  date: 03/07/2022
+  code: https://github.com/Jay-Patel-257/Qhack-2022/blob/main/SSVQE.ipynb
+
+  paper: https://arxiv.org/pdf/1810.09434.pdf
+  color: heavy-rain-gradient
+  description: |
+    The variational quantum eigensolver (VQE) is generally used for finding 
+    the ground state energy of a given hamiltonian. To find the kth excited 
+    state energy of the hamiltonian we need to run the VQE optimization 
+    process at least k+1 times. Each time we also need to calculate 
+    the hamiltonian again, taking into account the state of the previous iteration. 
+    Even after that, the accuracy decreases as the value of k increases.
+    
+    The Subspace Search VQE (SSVQE) algorithm is used to find the kth excited-state energy of a hamiltonian in 
+    two subsequent optimization processes.
+    Research on a more generalized version of SSVQE, namely Weighted SSVQE, shows that by using the weights as hyperparameters we can find the 
+    kth excited-state energy in just a single optimization process. There are two variants of this algorithm:
+    Weighted SSVQE to find kth excited state energy, and weighted SSVQE to find all 
+    energies up to the kth excited state.
+
+- title: Implementing a unitary quantum perceptron with quantum computing
+  author: Katerina Gratsea
+  date: 03/02/2022
+  code: https://github.com/KaterinaGratsea/Unitary_quantum_perceptron
+
+  paper: https://iopscience.iop.org/article/10.1209/0295-5075/125/30004
+  color: heavy-rain-gradient
+  description: |
+    Here, we simulate a unitary quantum perceptron with quantum computing. 
+    The quantum perceptron can be implemented as a single (fast) adiabatic 
+    passage in a model of interacting spins. To demonstrate the learning ability 
+    of the quantum perceptron, we train it to perform the XOR gate and discuss 
+    its power consumption. Author affiliation: ICFO.
+
+
 - title: quantum Case-Based Reasoning (qCBR) learning by cases
   author: Parfait Atchade
   date: 12/22/2021
@@ -31,7 +92,7 @@
   date: 11/04/2021
   code: https://github.com/nsansen/Quantum-Machine-Learning/blob/main/Pennylane%20DEMO%20v4.ipynb
 
-  paper: https://arxiv.org/pdf/2111.03372.pdf
+  paper: https://link.springer.com/content/pdf/10.1038/s41598-022-14876-6.pdf
   color: heavy-rain-gradient
   description: |
     We combine a standard Variational Classifier with a Data-Reuploading Classifier,

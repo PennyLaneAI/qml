@@ -4,18 +4,21 @@ Trapped ion quantum computers
 =============================
 
 .. meta::
-    :property="og:description": Description and assessment of trapped ion quantum computers
+    :property="og:description": Learn all about trapped ion quantum computers, developed by companies such as IonQ and Honeywell.
     :property="og:image": https://pennylane.ai/qml/_images/trapped_ions_tn.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
+   tutorial_sc_qubits Quantum computing with superconducting qubits
+   tutorial_photonics Photonic quantum computers
 
-*Author: PennyLane dev team. Posted: 10 November 2021. Last updated: 10 November 2021.*
+*Author: Alvaro Ballon. Posted: 10 November 2021. Last updated: 26 August 2022.*
 
 The race for quantum advantage is on! 
 A host of competitors are using different technologies to build a useful quantum
 computer. Some common approaches are **trapped ions,
-superconducting circuits**, and **photons**, among others. Discussing whether there
+:doc:`superconducting qubits </demos/tutorial_sc_qubits>`, and 
+:doc:`photonics </demos/tutorial_photonics>`, among others. Discussing whether there
 is a superior framework leads to a neverending debate. All of them pose
 complex technological challenges, which we can only solve through
 innovation, inventiveness, hard work, and a bit of luck. It is difficult
@@ -26,8 +29,9 @@ of this race is not easy at all!
 Here, we introduce **trapped ion quantum
 computers**. It is the preferred technology that research groups use at
 several universities around the world, and at research companies like
-Honeywell and IonQ. In particular, Honeywell has achieved a `quantum
-volume <https://pennylane.ai/qml/demos/quantum_volume.html>`_
+`Honeywell <https://www.honeywell.com/us/en/company/quantum>`_ and `IonQ <https://ionq.com/>`_. 
+In particular, Honeywell has achieved a 
+:doc:`quantum volume </demos/quantum_volume>`
 of 128, the largest in the market! As the name suggests, the
 qubits are ions trapped by electric fields and manipulated with lasers.
 Trapped ions have relatively long coherence times, which means that the qubits are
@@ -1095,3 +1099,12 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 #     `Nature volume 586, pages538–542
 #     <https://www.nature.com/articles/s41586-020-2811-x>`__.
 #     (`arXiv <https://arxiv.org/abs/2001.05052>`__)
+#
+# About the author
+# ----------------
+
+##############################################################################
+# .. bio:: Alvaro Ballon
+#    :photo: ../_static/Alvaro.png
+#
+#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.

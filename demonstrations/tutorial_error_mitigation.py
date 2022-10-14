@@ -121,12 +121,12 @@ print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
 
-ideal_qnode(w1, w2).numpy()
+ideal_qnode(w1, w2)
 
 ##############################################################################
 # On the other hand, we obtain a noisy result when running on ``dev_noisy``:
 
-noisy_qnode(w1, w2).numpy()
+noisy_qnode(w1, w2)
 
 ##############################################################################
 # So, we have set ourselves up with a benchmark circuit and seen that executing on a noisy device
@@ -212,7 +212,7 @@ folded_circuits = [fold_global(circuit, scale_factor=s) for s in scale_factors]
 
 for s, c in zip(scale_factors, folded_circuits):
     print(f"Globally-folded circuit with a scale factor of {s}:")
-    print(c.draw())
+    print(qml.drawer.tape_text(c, decimals=2, max_length=80))
 
 ##############################################################################
 # Although these circuits are a bit deep, if you look carefully, you might be able to convince
@@ -377,7 +377,7 @@ mitigated_qnode(w1, w2)
 # circuits are all folded with a scale factor of :math:`s=1.1`:
 
 for _ in range(3):
-    print(folding(circuit, scale_factor=1.1).draw())
+    print(qml.drawer.tape_text(folding(circuit, scale_factor=1.1), decimals=2, max_length=80))
 
 ##############################################################################
 # To accommodate for this randomness, we can perform multiple repetitions of random folding for a
@@ -461,16 +461,6 @@ params = np.load("error_mitigation/params.npy")
 # These parameters can be downloaded by clicking
 # :download:`here <../demonstrations/error_mitigation/params.npy>`. We are now ready to set up the
 # variational circuit and run on the ideal and noisy devices.
-#
-# .. note::
-#
-#     The following code requires installation of PennyLane's
-#     `QChem <https://pennylane.readthedocs.io/en/stable/introduction/chemistry.html>`__ package,
-#     which can be installed using:
-#
-#     .. code-block:: bash
-#
-#         pip install pennylane-qchem
 
 from pennylane import qchem
 
