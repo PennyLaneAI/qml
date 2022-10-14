@@ -376,9 +376,9 @@ S22 = 1
 # `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`__
 # to construct :math:`H_{12}`. The Hadamard test is a prime example of an
 # indirect measurement, which allows us to measure properties of a state
-# without (completely) destroying it.
+# without (completely) destroying it. !!CAMBIARRRRRRR
 #
-# .. figure:: ../demonstrations/classically_boosted_vqe/hadamard_test.png
+# .. figure:: ../demonstrations/classically_boosted_vqe/quantum_algorithms.png
 #     :align: center
 #     :width: 50%
 #
