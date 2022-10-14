@@ -43,7 +43,7 @@ the VQE algorithm to compute the energy of the states.
 Let's get started!
 
 Building the Hamiltonian and the total spin operator :math:`\hat{S}^2`
-----------------------------------------------------------------
+----------------------------------------------------------------------
 First, we need to specify the structure of the molecule. This is done by providing a list
 with the symbols of the constituent atoms and a one-dimensional array with the corresponding
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.

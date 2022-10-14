@@ -13,7 +13,7 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: PennyLane dev team. Last updated: 14 Sep 2022.*
+*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 14 September 2022.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
@@ -238,3 +238,8 @@ for i in range(400):
 # automatically copy it back to the GPU for any further classical processing.
 #
 # .. note:: For more details on the PyTorch interface, see :doc:`introduction/interfaces/torch`.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

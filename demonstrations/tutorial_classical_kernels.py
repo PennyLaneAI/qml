@@ -6,8 +6,7 @@ How to approximate a classical kernel with a quantum computer
 =============================================================
 
 .. meta::
-    :property="og:description": Finding a QK to approximate the Gaussian
-    kernel.
+    :property="og:description": Finding a QK to approximate the Gaussian kernel.
     :property="og:image": https://pennylane.ai/qml/_images/toy_qek.png
 
 .. related::
