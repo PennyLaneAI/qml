@@ -4,7 +4,7 @@ Using external libraries
 ========================
 
 .. meta::
-    :property="og:description": Learn how to use external quantum libraries with PennyLane.
+    :property="og:description": Learn how to integrate external quantum chemistry libraries with PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/external_libs.png
 
 .. related::
@@ -19,7 +19,7 @@ The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, 
 methods for computing molecular integrals, solving Hartree-Fock equations and constructing
 fully-differentiable molecular Hamiltonians. PennyLane also allows users to use external libraries
 to perform these tasks and integrate the results within a desired workflow. In this tutorial, you
-will learn how to use PennyLane with the electronic structure package
+will learn how to integrate PennyLane with the electronic structure packages
 `PySCF <https://github.com/sunqm/pyscf>`_ and
 `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools to compute molecular
 integrals and construct molecular Hamiltonians.
@@ -35,7 +35,8 @@ molecular Hamiltonian with a non-differentiable backend that uses the
 `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin interfaced with the
 electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. This
 backend can be selected by setting ``method='pyscf'`` in
-:func:`~.pennylane.qchem.molecular_hamiltonian`. # This backend requires the ``OpenFermion-PySCF``
+:func:`~.pennylane.qchem.molecular_hamiltonian`. This requires the ``OpenFermion-PySCF``
+
 plugin to be installed by the user with
 
 .. code-block:: bash
@@ -77,7 +78,7 @@ print(f'Hamiltonian: \n {H}')
 # Computing molecular integrals
 # -----------------------------
 # The one- and two-electron integrals in the molecular orbital basis are necessary for constructing
-# fermionic Hamiltonians which can be mapped to a qubit Hamiltonian. The two-electron integrals
+# fermionic Hamiltonians which can be mapped to a qubit Hamiltonian. The two-electron integral
 # tensor can be factorized and used to construct factorized Hamiltonians which can be simulated
 # with a smaller number of resources. These molecular integrals can be computed with the
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
@@ -114,7 +115,7 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 two_mo = np.swapaxes(two_mo, 1, 3)
 
 ##############################################################################
-# Let's not look at an interesting example where these molecular integrals can be used to estimate
+# Let's now look at an example where these molecular integrals can be used to estimate
 # the number of non-Clifford gates and logical qubits needed to implement a quantum phase estimation
 # algorithm in second quantization with a double-factorized Hamiltonian:
 
