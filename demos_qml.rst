@@ -134,7 +134,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_learning_few_data`
     :tags: qcnn advantage 
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn how use symmetries to improve training with equivariant learning.
     :figure: demonstrations/equivariant_learning/D4_sym_thumbnail.png
     :description: :doc:`demos/tutorial_equivariant_learning`
