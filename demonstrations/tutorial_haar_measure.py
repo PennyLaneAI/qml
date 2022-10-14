@@ -1,7 +1,7 @@
 r""".. role:: html(raw)
    :format: html
 
-Understanding the Haar Measure
+Understanding the Haar measure
 ==============================
 
 .. meta::

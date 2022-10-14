@@ -10,7 +10,7 @@ Using JAX with PennyLane
 
     tutorial_qubit_rotation Basic tutorial: qubit rotation
     tutorial_vqe A brief overview of VQE
-    tutorial_vqt The Variational Quantum Thermalizer
+    tutorial_vqt Variational Quantum Thermalizer
 
 *Author: Chase Roberts — Posted: 12 April 2021. Last updated: 12 April 2021.*
 

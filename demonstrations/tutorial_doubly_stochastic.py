@@ -9,7 +9,7 @@ Doubly stochastic gradient descent
 
 .. related::
 
-   tutorial_backprop Quantum gradients with backprop
+   tutorial_backprop Quantum gradients with backpropagation
    tutorial_quantum_natural_gradient Quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 

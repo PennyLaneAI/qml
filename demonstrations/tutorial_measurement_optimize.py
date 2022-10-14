@@ -8,8 +8,8 @@ Measurement optimization
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
-   tutorial_quantum_chemistry Quantum chemistry with PennyLane
+   tutorial_vqe A brief overview of VQE
+   tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
 *Author: PennyLane dev team. Posted: 18 Jan 2021. Last updated: 8 Apr 2021.*

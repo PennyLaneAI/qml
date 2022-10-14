@@ -11,7 +11,7 @@ Coherent Variational Quantum Linear Solver
 
 .. related::
 
-   tutorial_vqls Variational quantum linear solver
+   tutorial_vqls Variational Quantum Linear Solver
 
 *Author: Andrea Mari. Last updated: 15 Jan 2021.*
 

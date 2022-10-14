@@ -1,5 +1,5 @@
 """
-The Variational Quantum Thermalizer
+Variational Quantum Thermalizer
 ===================================
 
 .. meta::

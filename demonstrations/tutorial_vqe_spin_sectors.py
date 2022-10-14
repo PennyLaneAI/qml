@@ -7,7 +7,7 @@ VQE in different spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 .. related::
-   tutorial_vqe Variational Quantum Eigensolver
+   tutorial_vqe A brief overview of VQE
    vqe_parallel VQE with parallel QPUs on Rigetti Forest
 
 *Author: Alain Delgado. Last updated: 25 June 2022.*

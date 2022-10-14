@@ -8,7 +8,7 @@ r"""Training and evaluating quantum kernels
 .. related::
 
     tutorial_kernel_based_training Kernel-based training with scikit-learn
-    tutorial_data_reuploading_classifier Classification with data reuploading
+    tutorial_data_reuploading_classifier Data-reuploading classifier
 
 *Authors: Peter-Jan Derks, Paul Fährmann, Elies Gil-Fuster, Tom
 Hubregtsen, Johannes Jakob Meyer and David Wierichs. Posted: 24 June 2021*

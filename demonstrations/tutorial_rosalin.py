@@ -9,7 +9,7 @@ Frugal shot optimization with Rosalin
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
    tutorial_doubly_stochastic Doubly stochastic gradient descent
    tutorial_rotoselect Quantum circuit structure learning

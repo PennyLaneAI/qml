@@ -12,8 +12,8 @@ Quantum natural gradient
 
 .. related::
 
-   tutorial_backprop Quantum gradients with backprop
-   tutorial_vqe_qng Accelerating VQE with QNG
+   tutorial_backprop Quantum gradients with backpropagation
+   tutorial_vqe_qng Accelerating VQE with quantum natural gradient
 
 *Author: PennyLane dev team. Last updated: 25 Jan 2021.*
 

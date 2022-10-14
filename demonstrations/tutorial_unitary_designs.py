@@ -1,7 +1,7 @@
 r""".. role:: html(raw)
    :format: html
 
-Unitary Designs
+Unitary designs
 ===============
 
 .. meta::
