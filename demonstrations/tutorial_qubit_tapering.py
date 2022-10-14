@@ -286,7 +286,7 @@ for n in range(1, 20):
 #     method: A systematic approach to quantum chemistry on a quantum computer".
 #     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
 #
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/soran_jahangiri.txt

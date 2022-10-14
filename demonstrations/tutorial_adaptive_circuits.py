@@ -329,7 +329,7 @@ for n in range(20):
 #     `Nat. Commun. 2019, 10, 3007.
 #     <https://www.nature.com/articles/s41467-019-10988-2>`__
 #
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/soran_jahangiri.txt
