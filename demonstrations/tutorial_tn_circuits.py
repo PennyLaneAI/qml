@@ -1,7 +1,7 @@
 r"""
 .. _tn_circuits:
 
-Tensor-Network Quantum Circuits
+Tensor-network quantum circuits
 ===============================
 
 .. meta::
@@ -417,7 +417,7 @@ for image in BAS:
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
 #
-##############################################################################
+#
 # About the authors
 # -----------------
 # .. include:: ../_static/authors/diego_guala.txt

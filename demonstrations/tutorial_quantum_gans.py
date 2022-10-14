@@ -9,7 +9,7 @@ Quantum GANs
     :property="og:image": https://pennylane.ai/qml/_images/patch.jpeg
 
 .. related::
-    tutorial_QGAN Quantum Generative Adversarial Networks with Cirq + TensorFlow
+    tutorial_QGAN Quantum generative adversarial networks with Cirq + TensorFlow
 
 """
 
@@ -598,8 +598,7 @@ plt.show()
 # Networks for Image Generation*. 
 # `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
-
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/james_ellis.txt

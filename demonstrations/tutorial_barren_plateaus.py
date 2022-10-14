@@ -208,7 +208,7 @@ plt.show()
 #    An initialization strategy for addressing barren plateaus in
 #    parametrized quantum circuits. arXiv preprint arXiv:1903.05076 (2019).
 #
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/shahnawaz_ahmed.txt

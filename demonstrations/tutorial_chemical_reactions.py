@@ -426,9 +426,9 @@ print(f"Ratio of reaction rates is {ratio:.0f}")
 #    <https://medium.com/qiskit/a-tale-of-colliding-electrons-boosting-the-accuracy-of-chemical
 #    -simulations-on-quantum-computers-50a4b4ee5c64>`__
 #
-##############################################################################
-# About the author
-# ----------------
+#
+# About the authors
+# -----------------
 # .. include:: ../_static/authors/varun_rishi.txt
 #
 # .. include:: ../_static/authors/juan_miguel_arrazola.txt

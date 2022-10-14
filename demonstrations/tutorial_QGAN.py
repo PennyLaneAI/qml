@@ -1,7 +1,7 @@
 """
 .. _quantum_GAN:
 
-Quantum Generative Adversarial Networks with Cirq + TensorFlow
+Quantum generative adversarial networks with Cirq + TensorFlow
 ==============================================================
 
 .. meta::

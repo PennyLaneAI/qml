@@ -706,7 +706,7 @@ leg = ax.legend()
 #     `Phys. Rev. A 103, 012405 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.012405>`__, 2021.
 #     `arXiv preprint arXiv:2008.06517 <https://arxiv.org/abs/2008.06517>`__.
 #
-###############################################################################
+#
 # About the authors
 # -----------------
 # .. include:: ../_static/authors/elies_gil-fuster.txt

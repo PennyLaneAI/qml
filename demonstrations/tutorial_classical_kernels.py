@@ -764,7 +764,7 @@ plt.show();
 #       "Supervised quantum machine learning models are kernel methods".
 #       `arXiv preprint arXiv:2101.11020 <https://arxiv.org/abs/2101.11020>`__.
 #
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/elies_gil-fuster.txt

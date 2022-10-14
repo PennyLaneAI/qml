@@ -441,7 +441,7 @@ print("Parameters saved to params.npy")
 # analyze the performance of this optimized circuit following a similar strategy to the
 # :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a large graph cut?
 #
-##############################################################################
+#
 # About the authors
 # -----------------
 # .. include:: ../_static/authors/tom_bromley.txt

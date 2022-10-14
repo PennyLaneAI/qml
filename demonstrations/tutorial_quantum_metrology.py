@@ -362,7 +362,7 @@ plt.show()
 #    "A variational toolbox for quantum multi-parameter estimation." `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
 #
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/johannes_jakob_meyer.txt

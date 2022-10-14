@@ -1,5 +1,5 @@
 r"""
-Classical Shadows
+Classical shadows
 =================
 .. meta::
     :property="og:description": Learn how to construct classical shadows
@@ -704,8 +704,8 @@ plt.show()
 # .. [#Gottesman1997] Gottesman, Daniel,
 #             `"Stabilizer Codes and Quantum Error Correction", <https://arxiv.org/abs/quant-ph/9705052>`_
 #             Ph.D. thesis, Caltech, eprint quantph/9705052.
-
-##############################################################################
+#
+#
 # About the authors
 # -----------------
 # .. include:: ../_static/authors/roeland_wiersema.txt

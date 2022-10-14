@@ -413,7 +413,7 @@ plt.show()
 #     Nathan Killoran. "Evaluating analytic gradients on quantum hardware."
 #     `arXiv:1811.11184 <https://arxiv.org/abs/1811.11184>`__ (2019).
 #
-##############################################################################
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/nathan_killoran.txt
