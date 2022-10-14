@@ -378,7 +378,7 @@ S22 = 1
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 #
-# .. figure:: ../demonstrations/classically_boosted_vqe/hadamard_test.png
+# .. figure:: ../demonstrations/classically_boosted_vqe/boosted_hadamard_test.png
 #     :align: center
 #     :width: 50%
 #
