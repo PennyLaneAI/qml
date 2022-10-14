@@ -157,7 +157,7 @@ with respect to a group action that is a rotation or a swap etc (here a :math:`\
 and then map to the number grid or we could map to the number grid and then apply the group action.
 
 
-.. figure:: ../demonstrations/equivariant_learning/equivariant-example.png
+.. figure:: ../demonstrations/equivariant_learning/equivariant-example.jpg
     :align: center
     :width: 50%
 
@@ -194,7 +194,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # a square (vertical, horizontal, and diagonal).
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/NandC_sym.png
+# .. figure:: ../demonstrations/equivariant_learning/NandC_sym.jpg
 #     :align: center
 #     :width: 70%
 
@@ -280,7 +280,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # of a square is the same gate is that unitary made up of applying the same gate at all the corners.
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/twirl.png
+# .. figure:: ../demonstrations/equivariant_learning/twirl.jpg
 #     :align: center
 #     :width: 70%
 
@@ -309,7 +309,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/grid.png
+# .. figure:: ../demonstrations/equivariant_learning/grid.jpg
 #     :align: center
 #     :width: 35%
 
@@ -879,7 +879,9 @@ plt.show()
 #
 
 ##############################################################################
+# About the author
+# ----------------
 # .. bio:: Richard East
-#    :photo: ../_static/authors/reast.jpg
+#    :photo: ../_static/authors/reast.jpeg
 #
 #    Richard is a theorist working at Xanadu interested in quantum information theory and its insights into theoretical physics and (quantum) machine learning.
