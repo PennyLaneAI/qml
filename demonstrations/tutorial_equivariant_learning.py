@@ -7,7 +7,9 @@ Introduction to Equivariant Learning
     :property="og:description": Using the natural symmetries in a learning problem can improve learning.
 
 
-*Author: Richard East. Posted: August 2022*
+*Author: Richard East.*
+
+ *Posted: August 2022*
 
 
 Introduction
@@ -280,7 +282,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # of a square is the same gate is that unitary made up of applying the same gate at all the corners.
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/twirl.jpg
+# .. figure:: ../demonstrations/equivariant_learning/twirl.png
 #     :align: center
 #     :width: 70%
 
