@@ -20,115 +20,115 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 :html:`<div class="gallery-grid row">`
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Understand the link between variational quantum models and Fourier series.
     :figure: demonstrations/expressivity_fourier_series/expressivity_thumbnail.png
     :description: :doc:`demos/tutorial_expressivity_fourier_series`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Kernels and alignment training with PennyLane.
     :figure: demonstrations/kernels_module/QEK_thumbnail.png
     :description: :doc:`demos/tutorial_kernels_module`
     :tags: kernels alignment classification
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Kernel-based training with scikit-learn.
     :figure: demonstrations/kernel_based_training/scaling.png
     :description: :doc:`demos/tutorial_kernel_based_training`
     :tags: pytorch sklearn kernels
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: A quantum variational classifier.
     :figure: demonstrations/variational_classifier/classifier_output_59_0.png
     :description: :doc:`demos/tutorial_variational_classifier`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Universal Quantum Classifier with data-reuploading.
     :figure: demonstrations/data_reuploading/universal_dnn.png
     :description: :doc:`demos/tutorial_data_reuploading_classifier`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Quantum transfer learning.
     :figure: demonstrations/quantum_transfer_learning/transfer_images.png
     :description: :doc:`demos/tutorial_quantum_transfer_learning`
     :tags: autograd pytorch
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Create a simple QGAN with Cirq and TensorFlow.
     :figure: demonstrations/QGAN/qgan3.png
     :description: :doc:`demos/tutorial_QGAN`
     :tags: cirq tensorflow
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Fit one-dimensional noisy data with a quantum neural network.
     :figure: demonstrations/quantum_neural_net/qnn_output_28_0.png
     :description: :doc:`demos/quantum_neural_net`
     :tags: autograd strawberryfields photonics
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Using a quantum graph recurrent neural network to learn quantum dynamics.
     :figure: demonstrations/qgrnn/qgrnn_thumbnail.png
     :description: :doc:`demos/tutorial_qgrnn`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Meta-learning technique for variational quantum algorithms.
     :figure: demonstrations/learning2learn/l2l_thumbnail.png
     :description: :doc:`demos/learning2learn`
     :tags: tensorflow
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Pre-process images with a quantum convolution.
     :figure: demonstrations/quanvolution/zoom.png
     :description: :doc:`demos/tutorial_quanvolution`
     :tags: tensorflow
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
     :description: :doc:`demos/ensemble_multi_qpu`
     :tags: pytorch forest qiskit
     
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Generate images with Quantums GANs.
     :figure: demonstrations/quantum_gans/patch.jpeg
     :description: :doc:`demos/tutorial_quantum_gans`
     :tags: pytorch 
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Estimate a classical kernel function on a quantum computer.
     :figure: demonstrations/classical_kernels/flowchart.PNG
     :description: :doc:`demos/tutorial_classical_kernels`
     :tags: kernels approximation
     
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Tensor network quantum circuits
     :figure: demonstrations/tn_circuits/thumbnail_tn_circuits.png
     :description: :doc:`demos/tutorial_tn_circuits`
     :tags: tensor network
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Quantum advantage in learning from experiments
     :figure: demonstrations/learning_from_experiments/learning_from_exp_thumbnail.png
     :description: :doc:`demos/tutorial_learning_from_experiments`
     :tags: advantage experiments
     
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Machine learning for quantum many-body problems
     :figure: demonstrations/ml_classical_shadows/ml_classical_shadow.png
     :description: :doc:`demos/tutorial_ml_classical_shadows`
     :tags: kernels manybodyphysics classicalml
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Train polynomial approximations to functions using QSP.
     :figure: demonstrations/function_fitting_qsp/cover.png
     :description: :doc:`demos/function_fitting_qsp`
     :tags: pytorch
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Generalization in quantum machine learning from few training data
     :figure: demonstrations/learning_few_data/few_data_thumbnail.png
     :description: :doc:`demos/tutorial_learning_few_data`

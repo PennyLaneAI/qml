@@ -140,7 +140,10 @@ def circuit(params):
         qml.RX(params[i], wires=i)
     for i in range(n_wires):
         qml.CNOT(wires=[i, (i + 1) % n_wires])
-    return qml.expval(qml.PauliZ(n_wires - 1))
+
+    # Measure all qubits to make sure all's good with Braket
+    observables = [qml.PauliZ(n_wires - 1)] + [qml.Identity(i) for i in range(n_wires - 1)]
+    return qml.expval(qml.operation.Tensor(*observables))
 
 
 ##############################################################################

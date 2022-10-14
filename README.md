@@ -90,20 +90,30 @@ quantum computing paper/result.
   #    Write the author bio content here. It must be preceded by a blank line.
   ```
 
-  Leave the selected photo as above to display the default avatar, or add and select an author photo from the `_static` folder.
+  Leave the selected photo as above to display the default avatar, or add and select an author photo from the `_static/authors` folder.
 
 - When complete, create a gallery link to your demo. This can be done by adding the
   snippet below to `demos_getting-started.rst` for introductory demos.
 
   ```rest
-  .. customgalleryitem::
+  .. gallery-item::
       :tooltip: An extended description of the demo
       :figure: demonstrations/<demo name>/thumbnail.png
-      :description: :doc:`demos/pytorch_noise`
+      :description: :doc:`demos/tutorial_name`
   ```
 
-  You should also add a link to your demo to the table of contents, by adding to the
+  You should also add there a link to your demo to the table of contents, by adding to the
   end of the `.. toctree::` in the appropriate file.
+
+```rest
+.. toctree::
+    :maxdepth: 2
+    :caption: Getting Started
+    :hidden:
+
+    demos/tutorial_qubit_rotation
+    demos/tutorial_name
+  ```
 
   If you're unsure which file to put your demo in, choose the one you think is best,
   and we will work together to sort it during the review process.

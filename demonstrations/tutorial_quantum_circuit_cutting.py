@@ -895,4 +895,4 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 # .. bio:: Anuj Apte
 #    :photo: ../_static/aapte.jpg
 #
-#    Anuj is a PhD student at the University of Chicago. His research interests include Quantum Field Theory which applications to Topological Phases and Quantum Computing. 
+#    Anuj is a PhD student at the University of Chicago. His research interests include Quantum Field Theory with applications to Topological Phases and Quantum Computing.
