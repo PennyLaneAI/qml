@@ -15,7 +15,7 @@ h5py<=3.2.1
 pyscf==2.1.1
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
-openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits
+openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
 pennylane-lightning
 pennylane==0.26.0
 pennylane-sf==0.20.1
@@ -48,4 +48,4 @@ jaxlib==0.3.15
 neural-tangents==0.6.0
 kahypar==1.1.7
 optax==0.1.3
-pennylane-sphinx-theme
+pennylane-sphinx-theme  # Not pinned so that it always uses the latest theme

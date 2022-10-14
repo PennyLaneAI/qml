@@ -12,3 +12,4 @@ Jinja2==3.0.3 # downgraded from 3.0.8
 pyyaml==6.0
 numpy==1.22.3
 yaml8==0.1.2
+pennylane-sphinx-theme
