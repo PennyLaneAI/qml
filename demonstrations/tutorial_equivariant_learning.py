@@ -237,6 +237,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ######################################################################
 #
 # .. container:: alert alert-block alert-info
+#
 #    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U_{s}` be a
 #    unitary representation of :math:`\mathcal{S}`. Then,
 #
@@ -857,7 +858,7 @@ plt.show()
 
 ##############################################################################
 # References
-# ----------
+# ------------
 #
 # .. [#Bronstein2021]
 #
@@ -875,14 +876,14 @@ plt.show()
 
 ##############################################################################
 # Acknowledgments
-# ----------
+# -----------------
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
 #
 
 ##############################################################################
 # About the author
-# ----------------
+# -------------------
 # .. bio:: Richard East
 #    :photo: ../_static/authors/reast.jpeg
 #
