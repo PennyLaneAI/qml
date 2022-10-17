@@ -7,9 +7,7 @@ Introduction to Equivariant Learning
     :property="og:description": Using the natural symmetries in a learning problem can improve learning.
 
 
-*Author: Richard East.*
-
- *Posted: August 2022*
+*Author: Richard East. Posted: August 2022*
 
 
 Introduction
@@ -237,17 +235,19 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U_{s}` be a
-# unitary representation of :math:`\mathcal{S}`. Then,
 #
 # .. container:: alert alert-block alert-info
+#    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U_{s}` be a
+#    unitary representation of :math:`\mathcal{S}`. Then,
 #
-#       .. math:: \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
+#    .. math:: \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
 #
-# defines a projector onto the set of operators commuting with all
-# elements of the representation, i.e.,
-# :math:`\left[\mathcal{T}_{U}[X], U(s)\right]=` 0 for all :math:`X` and
-# :math:`s \in \mathcal{S}`. The twirl of applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
+#    defines a projector onto the set of operators commuting with all
+#    elements of the representation, i.e.,
+#    :math:`\left[\mathcal{T}_{U}[X], U(s)\right]=` 0 for all :math:`X` and
+#    :math:`s \in \mathcal{S}`.
+#
+# The twirl of applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
 # For the more mathematical reader you can see why this works for yourself by applying the
 # map to an arbitrary unitary representation and seeing
 # can move the unitary from the left-hand side of the equationand seeing if you can commute it to the right (remember the representation commutes with
@@ -710,8 +710,8 @@ def accuracy(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
         y_out = torch.stack([circuit(x, p) for x in x_val])
-        acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1)) / len(x_val)
-        return acc
+        acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1))
+        return acc / len(x_val)
 
 
 print(f"accuracy without training = {accuracy(params, *encoded_dataset_val)}")
@@ -733,7 +733,7 @@ for epoch in range(max_epoch):
         x_batch = x_dataset[step * batch_size : (step + 1) * batch_size]
         y_batch = y_dataset[step * batch_size : (step + 1) * batch_size]
 
-        # Following https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
+        # https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
         def opt_func():
             opt.zero_grad()
             loss = cost_function(params, x_batch, y_batch)
@@ -785,8 +785,8 @@ def accuracy_no_sym(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
         y_out = torch.stack([circuit_no_sym(x, p) for x in x_val])
-        acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1)) / len(x_val)
-        return acc
+        acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1))
+        return acc / len(x_val)
 
 
 print(f"accuracy without training = {accuracy_no_sym(params, *encoded_dataset_val)}")
@@ -809,7 +809,7 @@ for epoch in range(max_epoch):
         x_batch = x_dataset[step * batch_size : (step + 1) * batch_size]
         y_batch = y_dataset[step * batch_size : (step + 1) * batch_size]
 
-        # Following https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
+        # https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
         def opt_func():
             opt.zero_grad()
             loss = cost_function_no_sym(params, x_batch, y_batch)
