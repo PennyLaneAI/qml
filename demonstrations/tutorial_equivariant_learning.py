@@ -11,7 +11,7 @@ Introduction to Equivariant Learning
 
 
 Introduction
-~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 
 Symmetries are at the heart of physics, indeed in condensed matter and
