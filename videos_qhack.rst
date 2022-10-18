@@ -1,17 +1,11 @@
-.. raw:: html
-
-    <style>
-        h1 {
-            text-align: center;
-        }
-    </style>
-
 QHack
 =====
 
 .. meta::
    :property="og:description": Re-experience the excitement of every QHack event.
    :property="og:image": https://pennylane.ai/qml/_static/videos_card.png
+
+Re-experience the excitement of every QHack event.
 
 .. raw:: html
 
@@ -41,14 +35,12 @@ QHack
         }
     </style>
 
-.. raw:: html
-
-    <br><div class="youtube-video-gallery gallery-grid row">
-
 QHack 2022
 ==========
 
-Relive the glory of QHack 2022.
+.. raw:: html
+
+    <br><div class="youtube-video-gallery gallery-grid row">
 
 .. youtube-video:: o377m0doD6M
     :title: What are quantum computers, and how can we train them in Python?
@@ -75,7 +67,9 @@ Relive the glory of QHack 2022.
 QHack 2021
 ==========
 
-Relive the glory of QHack 2021.
+.. raw:: html
+
+    <br><div class="youtube-video-gallery gallery-grid row">
 
 .. youtube-video:: o377m0doD6M
     :title: What are quantum computers, and how can we train them in Python?
@@ -102,7 +96,9 @@ Relive the glory of QHack 2021.
 QHack 2019
 ==========
 
-Relive the glory of QHack 2019.
+.. raw:: html
+
+    <br><div class="youtube-video-gallery gallery-grid row">
 
 .. youtube-video:: WBVnE8ChGX8
     :title: Welcome to QHACK
