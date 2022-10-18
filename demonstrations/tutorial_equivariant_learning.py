@@ -116,7 +116,7 @@ probably think something along the lines of "it's the same no matter how
 I rotate it or flip it left to right etc". There is this idea of being
 invariant under some operation, we also have the idea of being able to
 undo these actions, if we rotate one way, we can rotate it back. If we
-flip the ball right-to-left we can flip it left-to-right to get back to
+flip the sphere right-to-left we can flip it left-to-right to get back to
 where we started (notice too all these inverses are unique). Trivially
 we can also do nothing. What exactly are we describing here? We have
 elements that correspond to an action on a sphere that can be inverted and
