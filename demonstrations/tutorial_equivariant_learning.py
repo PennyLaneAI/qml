@@ -340,12 +340,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ######################################################################
 # Now that we have a specific encoding and have decided on our observables
 # we need to choose a suitable cost function to optimise.
-#
-
-
-######################################################################
 # We will use an :math:`l_2` loss function acting on pairs of games and
-# labels :math:`D={(g,y)}` where :math:`D` is our dataset.
+# labels :math:`D={(g,y)}`, where :math:`D` is our dataset.
 #
 
 
@@ -357,8 +353,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # Let's now implement this!
+# 
 # First let's generate some games.
-#
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
 # On completion, it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 # There are 26,830 different possible games but we will only sample a few hundred.
@@ -407,7 +403,6 @@ def row_win(board, player):
                 win = False
 
         if win:
-            # print("row win")
             break
 
     return win
@@ -423,7 +418,6 @@ def col_win(board, player):
                 win = False
 
         if win:
-            # print("col win")
             break
 
     return win
@@ -446,7 +440,7 @@ def diag_win(board, player):
 
 # Check if the win conditions have been met or if a draw has occurred
 def evaluate_game(board):
-    winner = 99
+    winner = None
     for player in [1, -1]:
         if row_win(board, player) or col_win(board, player) or diag_win(board, player):
             winner = player
@@ -460,15 +454,12 @@ def evaluate_game(board):
 # Main function to start the game
 def play_game():
     board, winner, counter = create_board(), 99, 1
-    # print(board)
-    while winner == 99:
+    while winner == None:
         for player in [1, -1]:
             board = random_place(board, player)
-            # print("Board after " + str(counter) + " move")
-            # print(board)
             counter += 1
             winner = evaluate_game(board)
-            if winner != 99:
+            if winner != None:
                 break
 
     return [board.flatten(), winner]
