@@ -79,7 +79,7 @@ print(f'Hamiltonian: \n {H}')
 # In order to build a
 # `molecular Hamiltonian <https://pennylane.ai/qml/demos/tutorial_quantum_chemistry.html>`_, we need
 # one- and two-electron integrals in the molecular orbital basis. These integrals are used to
-# construct a fermionic Hamiltonians which is then mapped onto the qubit basis. The two-electron
+# construct a fermionic Hamiltonian which is then mapped onto the qubit basis. The two-electron
 # integral tensor can be factorized and used to construct factorized Hamiltonians which can be
 # simulated with a smaller number of resources. These molecular integrals can be computed with the
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
@@ -98,7 +98,7 @@ rhf = scf.RHF(mol_pyscf)
 energy = rhf.kernel()
 
 ##############################################################################
-# We obtain the molecular integrals ``one_ao`` and ``two_ao` in the basis of atomic orbitals
+# We obtain the molecular integrals ``one_ao`` and ``two_ao`` in the basis of atomic orbitals
 # following the example `here <https://pyscf.org/quickstart.html#and-2-electron-integrals>`_:
 
 one_ao = mol_pyscf.intor_symmetric('int1e_kin') + mol_pyscf.intor_symmetric('int1e_nuc')
@@ -114,8 +114,7 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 # Note that the two-electron integral tensor is represented in
 # `chemists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_. To use it
 # in PennyLane, we need be convert it into
-# `physicists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_ to be
-# used in PennyLane:
+# `physicists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_:
 
 two_mo = np.swapaxes(two_mo, 1, 3)
 
