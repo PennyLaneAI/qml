@@ -42,23 +42,157 @@ QHack 2022
 
     <br><div class="youtube-video-gallery gallery-grid row">
 
-.. youtube-video:: o377m0doD6M
-    :title: What are quantum computers, and how can we train them in Python?
+.. youtube-video:: 4virmUzoIa4
+    :title: Get started contributing to quantum open source
+    :author: Sarah Kaiser (Unitary Fund)
+
+    Get started contributing to quantum open source
+
+.. youtube-video:: GEcIDVQaNp4
+    :title: Is quantum advantage the right goal for QML?
+    :author: Maria Schuld
+
+    Is quantum advantage the right goal for QML? 
+
+.. youtube-video:: G2Azkg23_sQ
+    :title: NISQ applications and the geometry of quantum states
+    :author: Johannes Jakob Meyer (Dahlem Center for Complex Quantum Systems and Freie Universität Berlin)
+
+    NISQ applications and the geometry of quantum states
+
+.. youtube-video:: rErONNdHbjg
+    :title: Barren plateaus and overparametrization in quantum neural networks
+    :author: Marco Cerezo (Los Alamos National Laboratory)
+
+    Barren plateaus and overparametrization in quantum neural networks 
+
+.. youtube-video:: uGpbP1tRDyQ
+    :title: A path to near-term quantum advantage with QML models
+    :author: Alejandro Perdomo-Ortiz (Zapata Computing)
+
+    A path to near-term quantum advantage with QML models
+
+.. youtube-video:: BhSGuKDwjvQ
+    :title: Differentiable quantum transforms
     :author: Josh Izaac (Xanadu)
 
-    Using a mixture of real Python examples and illustrated diagrams, we show how to not only evaluate, 
-    but also differentiate small quantum programs directly on quantum hardware. By extracting the gradients, 
-    we can integrate these quantum programs directly into larger differentiable programs in Python, and 
-    train/optimize the full (hybrid quantum-classical!) program. 
+    Differentiable quantum transforms
 
-.. youtube-video:: EwGaU-qOPUQ
-    :title: Using Multiple QPUs
-    :author: Nathan Killoran (Xanadu)
+.. youtube-video:: CPmoQsRhdTY
+    :title: General parameter-shift rules
+    :author: Cody Wang (Amazon Braket)
 
-    What would you do with 1000 QPUs? In the latest release of PennyLane,
-    we've introduced a number of new features to make computations involving multiple QPUs more
-    seamless and accessible. See a number of simple ideas and use-cases where many QPUs could
-    provide a benefit over a single QPU, even for today's small and noisy devices.
+    General parameter-shift rules
+
+.. youtube-video:: AQtGx2e1QMw
+    :title: The emotional and financial costs of 100+ qubit computations
+    :author: Tommaso Demarie (Entropica Labs)
+
+    The emotional and financial costs of 100+ qubit computations
+
+.. youtube-video:: kHyRPB-vodQ
+    :title: How powerful is classical AI from the standpoint of quantum AI?
+    :author: Hsin-Yuan Huang (Caltech)
+
+    How powerful is classical AI from the standpoint of quantum AI?
+
+.. youtube-video:: 482HtVDhg4Y
+    :title: Training quantum neural networks with an unbounded loss function
+    :author: Marika Kieferova (University of Technology Sydney)
+
+    Training quantum neural networks with an unbounded loss function
+
+.. youtube-video:: M6ho8jdbQaU
+    :title: NISQ algorithms for chemistry and machine learning
+    :author: Kosuke Mitarai (Osaka University)
+
+    NISQ algorithms for chemistry and machine learning
+
+.. youtube-video:: RO3g7B0-IKA 
+    :title: Expressibility & trainability: balancing the ingredients of an effective VQA
+    :author: Zoe Holmes (Los Alamos National Lab)
+
+    Expressibility & trainability: balancing the ingredients of an effective VQA
+
+.. youtube-video:: fDIGmkq9xNE
+    :title: Model capacity in machine learning
+    :author: Amira Abbas (University of KwaZulu-Natal and IBM)
+
+    Model capacity in machine learning 
+
+.. youtube-video:: unxgUmrk6Jo
+    :title: Quantum advantage in learning from experiments & notes on dequantization
+    :author: Jarrod McClean (Google Quantum AI)
+
+    Quantum advantage in learning from experiments & notes on dequantization 
+
+.. youtube-video:: gY5lisUprLg
+    :title: A song of shapes and rotations
+    :author: Guillaume Verdon (Alphabet X)
+
+    A song of shapes and rotations
+
+.. youtube-video:: IK__LFzgcNY
+    :title: Reliable ground state preparation on early fault-tolerant quantum computers
+    :author: Dylan Sim (Zapata Computing)
+
+    Reliable ground state preparation on early fault-tolerant quantum computers
+
+.. youtube-video:: U2VwtkTguX0
+    :title: How to design a variational quantum algorithm
+    :author: Patrick Coles (Los Alamos National Laboratory)
+
+    How to design a variational quantum algorithm
+
+.. youtube-video:: x2gc6GTBJJ4
+    :title: Rydberg atom quantum simulation
+    :author: Roger Melko (PIQuIL 🥒)
+
+    PIQuIL founder Roger Melko and acronym connoisseur discusses Rydberg atom quantum simulation.
+
+.. youtube-video:: I5SRFABCCc 
+    :title: Mitiq, a Python library for quantum error mitigation
+    :author: Andrea Mari (Unitary Fund)
+
+    Mitiq, a Python library for quantum error mitigation
+
+.. youtube-video:: 5Yc3iMiG6UA
+    :title: Aprendiendo computación cuántica usando el Xanadu Quantum Codebook 
+    :author: Alvaro Ballon (Xanadu)
+
+    Aprendiendo computación cuántica usando el Xanadu Quantum Codebook 
+
+.. youtube-video:: iGAOUhOd6l8
+    :title: QSVM, una introducción a las funciones kernel
+    :author: Guillermo Alonso (Xanadu)
+
+    QSVM, una introducción a las funciones kernel 
+
+.. youtube-video:: w0BZdc7xVbY
+    :title: Pruebas de supremacía cuántica respecto al adversario clásico 
+    :author: Benjamin Villalonga (Google Quantum AI)
+
+    Pruebas de supremacía cuántica respecto al adversario clásico 
+    
+.. youtube-video:: ELdgPR-hyGc
+    :title: QHack 2022: Track 1
+    :author: Xanadu 
+
+.. youtube-video:: efBpu_GtpSc
+    :title: QHack 2022: Track 2
+    :author: Xanadu
+
+.. youtube-video:: n1r_tQHB2sQ
+    :title: QHack 2022: Meme Contest
+    :author: Nathan Killoran and Guillaume Verdon
+ 
+.. youtube-video:: zcJiKw_DplE
+    :title: Coding Challenge Tutorial — QChem 500: Mind the Gap
+    :author: Isaac De Vlugt (Xanadu)
+
+.. youtube-video:: 0e_rPIGTkT0
+    :title: Coding Challenge Tutorial — PennyLane101 300: Superdense Coding
+    :author: Parham Pashaei (Xanadu)
 
 .. raw:: html
 
