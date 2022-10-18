@@ -494,11 +494,10 @@ with torch.no_grad():
 # the symmetry classes we defined over the single-site and two-site measurements
 
 
-# %matplotlib inline
 import pennylane as qml
 import matplotlib.pyplot as plt
 
-# Set up a 9 qubit system
+# Set up a nine-qubit system
 dev = qml.device("default.qubit.torch", wires=9)
 
 ob_center = qml.PauliZ(4)
@@ -519,11 +518,11 @@ def circuit(x, p):
     qml.RX(x[7], wires=7)
     qml.RX(x[8], wires=8)
 
-    # Centre single qubit rotation
+    # Centre single-qubit rotation
     qml.RX(p[0], wires=4)
     qml.RY(p[1], wires=4)
 
-    # Corner single qubit rotation
+    # Corner single-qubit rotation
     qml.RX(p[2], wires=0)
     qml.RX(p[2], wires=2)
     qml.RX(p[2], wires=6)
@@ -534,7 +533,7 @@ def circuit(x, p):
     qml.RY(p[3], wires=6)
     qml.RY(p[3], wires=8)
 
-    # Edge single qubit rotation
+    # Edge single-qubit rotation
     qml.RX(p[4], wires=1)
     qml.RX(p[4], wires=3)
     qml.RX(p[4], wires=5)
@@ -545,7 +544,7 @@ def circuit(x, p):
     qml.RY(p[5], wires=5)
     qml.RY(p[5], wires=7)
 
-    # Entagling 2-qubit gates
+    # Entagling two-qubit gates
     # circling the edge of the board
     qml.CRY(p[6], wires=[0, 1])
     qml.CRY(p[6], wires=[2, 1])
