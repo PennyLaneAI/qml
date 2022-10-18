@@ -143,7 +143,7 @@ over some field :math:`F` with a map :math:`f` between them.
 Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
 and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write that
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
-as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` equivariant if
+as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
 :math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`.
 
