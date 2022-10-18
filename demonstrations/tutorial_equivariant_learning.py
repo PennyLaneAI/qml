@@ -113,7 +113,7 @@ symmetries can be characterised as a group, where all the elements of the group 
 some space we are considering unchanged. Let's consider an example:
 the symmetries of a sphere. Now when we think of this symmetry we
 probably think something along the lines of "it's the same no matter how
-I rotate it or flip it left to right etc". There is this idea of being
+I rotate it or flip it left to right, etc". There is this idea of being
 invariant under some operation, we also have the idea of being able to
 undo these actions: if we rotate one way, we can rotate it back. If we
 flip the sphere right-to-left we can flip it left-to-right to get back to
