@@ -653,7 +653,7 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 
 ######################################################################
-# Note again how though these circuits have a similar form to before they are paraemeterised differently.
+# Note again how though these circuits have a similar form to before they are parameterised differently.
 # We need to feed the vector :math:`\boldsymbol{y}` made up of the expectation value of these
 # three operators into the loss function and use this to update our
 # parameters.
@@ -675,8 +675,8 @@ def encode_game(game):
 
 ######################################################################
 # Recall that the loss function we're interested in is
-# :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
-# we need to define this and then we can begin our optimisation.
+# :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`.
+# We need to define this and then we can begin our optimisation.
 
 # calculate the mean square error for this classification problem
 def cost_function(params, input, target):
@@ -687,7 +687,7 @@ def cost_function(params, input, target):
 
 
 ######################################################################
-# Let's now train our symmetry preserving circuit on the data.
+# Let's now train our symmetry-preserving circuit on the data.
 
 
 from torch import optim
@@ -733,7 +733,6 @@ for epoch in range(max_epoch):
         x_batch = x_dataset[step * batch_size : (step + 1) * batch_size]
         y_batch = y_dataset[step * batch_size : (step + 1) * batch_size]
 
-        # https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
         def opt_func():
             opt.zero_grad()
             loss = cost_function(params, x_batch, y_batch)
@@ -809,7 +808,6 @@ for epoch in range(max_epoch):
         x_batch = x_dataset[step * batch_size : (step + 1) * batch_size]
         y_batch = y_dataset[step * batch_size : (step + 1) * batch_size]
 
-        # https://pennylane.readthedocs.io/en/stable/introduction/interfaces/torch.html
         def opt_func():
             opt.zero_grad()
             loss = cost_function_no_sym(params, x_batch, y_batch)
@@ -841,7 +839,7 @@ plt.title("Validation accuracies")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
 plt.plot(saved_accs, "g", label="Standard")
 
-plt.ylabel("Validation accuracy")
+plt.ylabel("Validation accuracy (%)")
 plt.xlabel("Optimization steps")
 plt.legend()
 plt.show()
@@ -849,15 +847,16 @@ plt.show()
 ######################################################################
 # What we can see then is that by paying attention to the symmetries intrinsic
 # to the learning problem and reflecting this in an equivariant gate set
-# we have managed to improve our learning accuracies, while also using fewer parameters. It is notable however that
-# we can also see that paying attention to symmetries isn't a magic bullet
-# as the learning accuracies in both cases are hardly ideal given this is a solved game
-# though the symmetry aware circuit clearly outperforms the other.
+# we have managed to improve our learning accuracies, while also using fewer parameters.
+# While the symmetry-aware circuit clearly outperforms the naive one, it is notable however that
+# the learning accuracies in both cases are hardly ideal given this is a solved game.
+# So paying attention to symmetries definitely helps, but it also isn't a magic bullet!
+#
 
 ######################################################################
-# The use of symmetries in both quantum and classsical M.L is a developing field so we
+# The use of symmetries in both quantum and classsical machine learning is a developing field, so we
 # can expect new results to emerge over the coming years. If you want to get
-# involved the refrences given below are a great place to start.
+# involved, the references given below are a great place to start.
 
 
 ##############################################################################
