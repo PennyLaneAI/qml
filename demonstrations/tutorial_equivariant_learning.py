@@ -126,7 +126,7 @@ reflections of the sphere, that if we combine two of them together then
 :math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
 associative. These features turn out to literally define a group!
  
-As we've seen the group in itself is a very abstract creature this is why we look to
+As we've seen the group in itself is a very abstract creature; this is why we look to
 its representations. The group labels what symmetries we care about, they tell
 us the mappings that our system is invariant under, and the unitary representations 
 show us how those symmetries look on a particular
