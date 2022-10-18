@@ -1,7 +1,7 @@
 r"""
 
-Introduction to Equivariant Learning
-====================================
+Introduction to Geometric Quantum Machine Learning
+==================================================
 
 .. meta::
     :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
