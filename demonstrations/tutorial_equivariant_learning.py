@@ -266,11 +266,15 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # working with, but since twirling is a sum over all of them that doesn't necessarily
 # matter! The result is that our new twirled gates commute with the group action — this is equivariance.
 #
-
-We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`. If each term in the twirling formula commutes (e.g., if they act on different qubits), then this unitary would further simplify to 
-
-    .. math:: W' = \otimes_{s\in\mathcal{S}}U(s)\exp(-i\frac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
-
+#
+# We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian 
+# matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary 
+# that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate 
+# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`. If each term in the twirling formula 
+# commutes (e.g., if they act on different qubits), then this unitary would further simplify to 
+#
+#    .. math:: W' = \otimes_{s\in\mathcal{S}}U(s)\exp(-i\frac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
+#
 ######################################################################
 # So let's look again at our choice of gates: single-qubit
 # :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling two-qubit :math:`CR_y(\phi)`
