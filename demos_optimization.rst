@@ -151,6 +151,11 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_diffable-mitigation`
     :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
 
+.. gallery-item::
+    :tooltip: Use perturbative gadgets to avoid cost-function-dependent barren plateaus
+    :figure: demonstrations/barren_gadgets/gadget-terms-tutorial.png
+    :description: :doc:`demos/tutorial_barren_gadgets`
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -179,3 +184,4 @@ in quantum neural networks.
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
     demos/qnspsa
+    demos/tutorial_barren_gadgets
