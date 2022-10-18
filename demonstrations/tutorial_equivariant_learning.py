@@ -181,7 +181,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # ----------------
 # Let's look at the game of noughts and crosses as inspired by [#Meyer2022]_. Two players take
 # turns to place a O or an X, depending on which player they are, in a 3x3
-# grid. The aim is to get a 3 of your symbols in a row, column, or
+# grid. The aim is to get 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
 # on the choices of the players there could be a draw. Our learning task
 # is to take a set of completed games labelled with their outcomes and
