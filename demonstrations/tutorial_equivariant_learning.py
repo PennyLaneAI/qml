@@ -111,7 +111,7 @@ quantum circuits (which are mostly made up of unitary gates).
 How does all this relate to symmetries? Well, a large class of
 symmetries can be characterised as a group, where all the elements of the group leave 
 some space we are considering unchanged. Let's consider an example:
-The symmetries of a sphere. Now when we think of this symmetry we
+the symmetries of a sphere. Now when we think of this symmetry we
 probably think something along the lines of "it's the same no matter how
 I rotate it or flip it left to right etc". There is this idea of being
 invariant under some operation, we also have the idea of being able to
