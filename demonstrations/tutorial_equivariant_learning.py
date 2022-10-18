@@ -1,7 +1,7 @@
 r"""
 
 Introduction to Equivariant Learning
-======================================================
+====================================
 
 .. meta::
     :property="og:description": Using the natural symmetries in a learning problem can improve learning.
