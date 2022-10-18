@@ -38,7 +38,7 @@ encourages our results to be more generalisable. The encoding of symmetries
 into our learning models is where the term equivariance will appear. We will see that
 demanding that certain symmetries are included in our models means that the 
 mappings that make up our algorithms must be such that we could transform our input data
-with respect to a certain symmetry and apply our maps and this would be the same as applying
+with respect to a certain symmetry, then apply our mappings, and this would be the same as applying
 the mappings and then transforming the output data with the same symmetry. This is the technical property
 that gives us the name *equavariant learning*.
 
@@ -356,7 +356,6 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 import torch
 import random
-from toolz import unique
 
 # Fix seeds for reproducability
 torch.backends.cudnn.deterministic = True
@@ -660,9 +659,10 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 
 ######################################################################
+# Note again how though these circuits have a similar form to before they are paraemeterised differently.
 # We need to feed the vector :math:`\boldsymbol{y}` made up of the expectation value of these
 # three operators into the loss function and use this to update our
-# parameters
+# parameters.
 
 
 import math
@@ -681,7 +681,7 @@ def encode_game(game):
 
 
 ######################################################################
-# Remember this is the loss function that we're after
+# Recall that the loss function we're interested in is
 # :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
 # we need to define this and then we can begin our optimisation.
 
