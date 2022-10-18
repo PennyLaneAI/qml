@@ -256,7 +256,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # .. container:: alert alert-block alert-info
 #
-#    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U_{s}` be a
+#    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U` be a
 #    unitary representation of :math:`\mathcal{S}`. Then,
 #
 #    .. math:: \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
