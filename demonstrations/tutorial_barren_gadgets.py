@@ -95,9 +95,9 @@ To give an idea, this is what would result from working with a Hamiltonian
 acting on a total of :math:`8` qubits, that has :math:`3` terms, each of them being a 
 :math:`4`-body interaction. 
 
-#.. figure:: ../demonstrations/barren_gadgets/gadget-terms-tutorial.png
-#    :align: center
-#    :width: 90%
+.. figure:: ../demonstrations/barren_gadgets/gadget-terms-tutorial.png
+    :align: center
+    :width: 90%
 
 For each of the terms :math:`h_1`, :math:`h_2` and :math:`h_3` we add :math:`4` auxiliary qubits.
 In the end, our gadget Hamiltonian thus acts on :math:`8+3\cdot 4 = 20` qubits.
