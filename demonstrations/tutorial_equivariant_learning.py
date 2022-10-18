@@ -45,7 +45,7 @@ that gives us the name equavariant learning.
 In classical machine learning, this is area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
-deep neural networks (see [#Bronstein2021]_ for a broad introduction).
+deep neural networks (see [#Bronstein2021]_ or [#Nguyen2022]_ for a broad introduction).
 We will refer to the quantum computing version of this as quantum geometric machine learning (QGML).
 
 
@@ -290,7 +290,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # For entangling gates the situation is similar. There are three invariant
-# classes, the centre entagled with all corners, with all edges, and the
+# classes, the centre entangled with all corners, with all edges, and the
 # edges paired in a ring.
 #
 
@@ -866,6 +866,13 @@ plt.show()
 #   Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges.
 #   `arXiv:2104.13478 <https://arxiv.org/abs/2104.13478>`__
 #
+# .. [#Nguyen2022]
+#
+#   Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone,
+#   Patrick J. Coles, Frédéric Sauvage, Martín Larocca, and M. Cerezo (2022).
+#   Theory for Equivariant Quantum Neural Networks.
+#   `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
+#
 # .. [#Meyer2022]
 #
 #   Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele,
@@ -873,6 +880,7 @@ plt.show()
 #   Exploiting symmetry in variational quantum machine learning.
 #   `arXiv:2205.06217 <https://arxiv.org/abs/2205.06217>`__
 #
+
 
 ##############################################################################
 # Acknowledgments
