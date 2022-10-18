@@ -189,9 +189,9 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # ----------------
 # Let's look at the game of noughts and crosses as inspired by [[#Meyer2022]_]. Two players take
 # turns to place a O or an X, depending on which player they are, in a 3x3
-# grid. The aim is to get 3 of your symbols in a row, column, or
+# grid. The aim is to get three of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
-# on the choices of the players there could be a draw. Our learning task
+# on the choices of the players, there could be a draw. Our learning task
 # is to take a set of completed games labelled with their outcomes and
 # teach the algorithm to identify these correctly.
 #
@@ -212,18 +212,18 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ##############################################################################
 # **The question is, how do we encode this in our QML problem?**
 #
-# First, let us encode this problem classically. We will consider a 9-element
+# First, let us encode this problem classically. We will consider a nine-element
 # vector :math:`V`, each element of which identifies a square of
 # the board. The entries themselves can be
-# :math:`+1`,\ :math:`0`,\ :math:`-1` representing a cross, no symbol, or
-# a nought. The label is one hot encoded in a vector
-# :math:`y=(y_o,y_- , y_x)` with :math:`+1` in the correct label and
-# :math:`-1` in the others. For instance (-1,-1,1) would represent and x in
+# :math:`+1`,\ :math:`0`,\ :math:`-1` representing a nought, no symbol, or
+# a cross. The label is one-hot encoded in a vector
+# :math:`y=(y_O,y_- , y_X)` with :math:`+1` in the correct label and
+# :math:`-1` in the others. For instance (-1,-1,1) would represent an X in
 # the relevant position.
 
 
 ######################################################################
-# To create the quantum model let us initialise take 9 qubits and let them reprsent squares of our board. We'll initialise them all as :math:`|0\rangle`,
+# To create the quantum model let us take nine qubits and let them represent squares of our board. We'll initialise them all as :math:`|0\rangle`,
 # which we note leaves the board invariant under the symmetries of the problem (flip and
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply a single qubit :math:`R_x(\theta)`
