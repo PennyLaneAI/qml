@@ -19,7 +19,7 @@ particle physics we often define a thing simply by the symmetries it
 adheres to. What does symmetry mean for those in machine learning? In
 this context the ambition is straight forward - it is a means to
 reduce the parameter space and improve the trained models ability to
-sucessfully label unseen data, i.e its ability to generalise.
+sucessfully label unseen data, i.e., its ability to generalise.
 
 
 Suppose we have a learning task and the data we are learning from has an
