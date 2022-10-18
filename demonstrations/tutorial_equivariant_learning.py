@@ -147,7 +147,7 @@ as the same group element represented as a linear map on :math:`W` respectively.
 
 :math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`.
 
-The importance of such a maps in machine learning is that if, for example, our neural network layers are
+The importance of such a map in machine learning is that if, for example, our neural network layers are
 equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections etc)
 preserve this information in the outputs. Which we can see because we could instead input the same input
 twice and get the second by applying the group action to one of the outputs. Consider the following figure for 
