@@ -42,7 +42,7 @@ with respect to a certain symmetry and apply our maps and this would be the same
 the mappings and then transforming the output data with the same symmetry. This is the technical property
 that gives us the name equavariant learning.
 
-In classical machine learning, this is area is often referred to as geometric deep
+In classical machine learning, this area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
 deep neural networks (see [#Bronstein2021]_ or [#Nguyen2022]_ for a broad introduction).
