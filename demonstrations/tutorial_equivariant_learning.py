@@ -14,7 +14,7 @@ Introduction
 ~~~~~~~~~~~~
 
 
-Symmetries are at the heart of physics, indeed in condensed matter and
+Symmetries are at the heart of physics. Indeed in condensed matter and
 particle physics we often define a thing simply by the symmetries it
 adheres to. What does symmetry mean for those in machine learning? In
 this context the ambition is straightforward — it is a means to
