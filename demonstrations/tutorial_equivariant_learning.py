@@ -298,7 +298,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # on the central qubit, at all the corners, and at all the central
 # edges (when their rotation angles are fixed to be the same). 
 
-As an example consider the following figure
+# As an example consider the following figure, 
 # where we can see the invariant unitary made from applying :math:`R_x` gate in the corner and then applying all the symmetries
 # of a square is the same gate is that unitary made up of applying the same gate at all the corners.
 
