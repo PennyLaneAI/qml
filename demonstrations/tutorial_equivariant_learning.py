@@ -30,9 +30,9 @@ an algorithm to spot the outcome of these games, we can either ignore
 the existence of this symmetry or we can somehow include it. The
 advantage of paying attention to the symmetry is it identifies multiple
 configurations of the board as 'the same thing' as far as the symmetry
-is concerned, this means we can reduce our parameter space and so the
+is concerned. This means we can reduce our parameter space, and so the
 amount of data our algorithm must sift through is immediately reduced.
-Along the way the fact that our learning model must encode a symmetry
+Along the way, the fact that our learning model must encode a symmetry
 that actually exists in the system we are trying to represent naturally
 encourages our results to be more generalisable. The encoding of symmetries
 into our learning models is where the term *equivariance* will appear. We will see that
@@ -44,7 +44,7 @@ that gives us the name "equavariant learning".
 
 In classical machine learning, this area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
-world of geometry and the fact that these considerations usually focus on
+world of geometry, and the fact that these considerations usually focus on
 deep neural networks (see [[#Bronstein2021]_] or [[#Nguyen2022]_] for a broad introduction).
 We will refer to the quantum computing version of this as *quantum geometric machine learning* (QGML).
 
@@ -53,7 +53,7 @@ Representation theory in circuits
 ---------------------------------
 
 The first thing to discuss is how do we work with symmetries in the
-first place? The answer lies in the world of representation
+first place? The answer lies in the world of group representation
 theory.
 
 First, let's define what we mean by a group:
@@ -64,29 +64,21 @@ on :math:`G`, here denoted :math:`\circ`, that combines any two elements
 :math:`a \circ b`, such that the following three requirements, known as
 group axioms, are satisfied as follows:
 
-**Associativity**:
 
-For all :math:`a, b, c` in :math:`G`, one has
-:math:`(a \circ b) \circ c=a \circ (b \circ c)`.
+1. **Associativity**: For all :math:`a, b, c` in :math:`G`, one has :math:`(a \circ b) \circ c=a \circ (b \circ c)`.
 
-**Identity element**:
-
-There exists an element :math:`e` in :math:`G` such that, for every
-:math:`a` in :math:`G`, one has :math:`e \circ a=a` and
-:math:`a \circ e=a`. Such an element is unique. It is called
-the identity element of the group.
+2. **Identity element**: There exists an element :math:`e` in :math:`G` such that, for every :math:`a` in :math:`G`, one 
+    has :math:`e \circ a=a` and :math:`a \circ e=a`. Such an element is unique. It is called the identity element of the
+    group.
 
 
-**Inverse element**:
-
-For each :math:`a` in :math:`G`, there exists an element :math:`b` in
-:math:`G` such that :math:`a \circ b=e` and :math:`b \circ a=e`, where
-:math:`e` is the identity element. For each :math:`a`, the element
-:math:`b` is unique:  it is called the inverse of :math:`a`
-and is commonly denoted :math:`a^{-1}`.
+3. **Inverse element**: For each :math:`a` in :math:`G`, there exists an element :math:`b` in :math:`G`
+    such that :math:`a \circ b=e` and :math:`b \circ a=e`, where :math:`e` is the identity element.
+    For each :math:`a`, the element :math:`b` is unique:  it is called the inverse of :math:`a` 
+    and is commonly denoted :math:`a^{-1}`.
 
 
-With groups defined we are in a position to articulate what a
+With groups defined, we are in a position to articulate what a
 representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
