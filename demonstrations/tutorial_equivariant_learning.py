@@ -667,7 +667,6 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 import math
 
-
 def encode_game(game):
     board, res = game
     x = board * (2 * math.pi) / 3
