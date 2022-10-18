@@ -40,7 +40,7 @@ demanding that certain symmetries are included in our models means that the
 mappings that make up our algorithms must be such that we could transform our input data
 with respect to a certain symmetry and apply our maps and this would be the same as applying
 the mappings and then transforming the output data with the same symmetry. This is the technical property
-that gives us the name equavariant learning.
+that gives us the name *equavariant learning*.
 
 In classical machine learning, this area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
