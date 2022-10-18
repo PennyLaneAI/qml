@@ -445,7 +445,7 @@ def evaluate_game(board):
         if row_win(board, player) or col_win(board, player) or diag_win(board, player):
             winner = player
 
-    if torch.all(board != 0) and winner == 99:
+    if torch.all(board != 0) and winner == None:
         winner = 0
 
     return winner
@@ -453,7 +453,7 @@ def evaluate_game(board):
 
 # Main function to start the game
 def play_game():
-    board, winner, counter = create_board(), 99, 1
+    board, winner, counter = create_board(), None, 1
     while winner == None:
         for player in [1, -1]:
             board = random_place(board, player)
