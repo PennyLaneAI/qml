@@ -845,9 +845,8 @@ for epoch in range(max_epoch):
 
 
 from matplotlib import pyplot as plt
-import seaborn as sns
-sns.set_theme()
 
+plt.style.use("seaborn")
 plt.title("Validation accuracies")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
 plt.plot(saved_accs, "g", label="Standard")
