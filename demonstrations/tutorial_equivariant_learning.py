@@ -139,7 +139,7 @@ of group representation theory we are ready to tackle this. Let :math:`G` be our
 :math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
 Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
-and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write that
+and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
 as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
@@ -150,8 +150,8 @@ equivariant maps then two inputs that are related by some intrinsic symmetry (ma
 preserve this information in the outputs.
 
 Consider the following figure for 
-example, what we see is a board with a cross in a certain square on the left and some numerical encoding of this
-on the right, where the the 1 is where the X is in the number grid. This is an equivariant map between these two spaces
+example. What we see is a board with a cross in a certain square on the left and some numerical encoding of this
+on the right, where the 1 is where the X is in the number grid. We present an equivariant mapping between these two spaces
 with respect to a group action that is a rotation or a swap etc (here a :math:`\pi` rotation) either to the original grid
 and then map to the number grid or we could map to the number grid and then apply the group action.
 
