@@ -5,9 +5,9 @@ Introduction to Equivariant Learning
 
 .. meta::
     :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
+    :property="og:image": https://pennylane.ai/qml/_images/equivariant_thumbnail.jpeg
 
-
-*Author: Richard East. Posted: August 2022*
+*Author: Richard East. Posted: 18 October 2022*
 
 
 Introduction
@@ -45,7 +45,7 @@ that gives us the name *equavariant learning*.
 In classical machine learning, this area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
-deep neural networks (see [[#Bronstein2021]]_ or [[#Nguyen2022]]_ for a broad introduction).
+deep neural networks (see [[#Bronstein2021]_] or [[#Nguyen2022]_] for a broad introduction).
 We will refer to the quantum computing version of this as quantum geometric machine learning (QGML).
 
 
@@ -91,7 +91,8 @@ representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
 
-:math:`\varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G`.
+.. math:
+    \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G.
 
 The idea here is that just as elements in a group act on each other to 
 reach further elements, i.e., :math:`g\circ h = k`, a representation sends us 
@@ -143,7 +144,9 @@ and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
 as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
-:math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`.
+.. math:
+
+    f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G.
 
 The importance of such a map in machine learning is that if, for example, our neural network layers are
 equivariant maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
@@ -178,7 +181,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # Noughts and Crosses
 # ----------------
-# Let's look at the game of noughts and crosses as inspired by [[#Meyer2022]]_. Two players take
+# Let's look at the game of noughts and crosses as inspired by [[#Meyer2022]_]. Two players take
 # turns to place a O or an X, depending on which player they are, in a 3x3
 # grid. The aim is to get 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
@@ -195,7 +198,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # a square (vertical, horizontal, and both diagonals).
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/NandC_sym.jpg
+# .. figure:: ../demonstrations/equivariant_learning/NandC_sym.png
 #     :align: center
 #     :width: 70%
 #     :alt: Examples of games that are equivalent under relevant symmetries.
@@ -312,13 +315,11 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# :math:`O_{-}=Z_{\text {middle }}=Z_{4}`
-#
-# :math:`O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{2}+Z_{6}+Z_{8}\right]`
-#
-# :math:`O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{5}+Z_{7}\right]`
-#
-# :math:`\hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)`
+# .. math:
+#   O_{-}=Z_{\text {middle }}=Z_{4}
+#   O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{2}+Z_{6}+Z_{8}\right]
+#   O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{5}+Z_{7}\right]
+#   \hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)
 #
 
 
@@ -341,7 +342,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`
+# .. :math:
+#   \mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}
 #
 
 
@@ -841,6 +843,7 @@ for epoch in range(max_epoch):
 
 from matplotlib import pyplot as plt
 import seaborn as sns
+sns.set_theme()
 
 plt.title("Validation accuracies")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
@@ -867,7 +870,7 @@ plt.show()
 
 ##############################################################################
 # References
-# ------------
+# ----------
 #
 # .. [#Bronstein2021]
 #
@@ -893,14 +896,14 @@ plt.show()
 
 ##############################################################################
 # Acknowledgments
-# -----------------
+# ---------------
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
 #
 
 ##############################################################################
 # About the author
-# -------------------
+# ----------------
 # .. bio:: Richard East
 #    :photo: ../_static/authors/reast.jpeg
 #
