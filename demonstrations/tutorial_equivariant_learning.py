@@ -35,7 +35,7 @@ amount of data our algorithm must sift through is immediately reduced.
 Along the way the fact that our learning model must encode a symmetry
 that actually exists in the system we are trying to represent naturally
 encourages our results to be more generalisable. The encoding of symmetries
-into our learning models is where the term equivariance will appear. We will see that
+into our learning models is where the term *equivariance* will appear. We will see that
 demanding that certain symmetries are included in our models means that the 
 mappings that make up our algorithms must be such that we could transform our input data
 with respect to a certain symmetry, then apply our mappings, and this would be the same as applying
@@ -207,8 +207,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ##############################################################################
 # **The question is, how do we encode this in our QML problem?**
 #
-# First, let us encode this problem classically, we will consider a 9
-# element vector :math:`V`, each element of which identifies a square of
+# First, let us encode this problem classically. We will consider a 9-element
+# vector :math:`V`, each element of which identifies a square of
 # the board. The entries themselves can be
 # :math:`+1`,\ :math:`0`,\ :math:`-1` representing a cross, no symbol, or
 # a nought. The label is one hot encoded in a vector
