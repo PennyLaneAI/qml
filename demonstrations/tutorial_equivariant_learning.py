@@ -262,11 +262,13 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian 
 # matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary 
 # that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate 
-# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`. If each term in the twirling formula 
-# commutes (e.g., if they act on different qubits), then this unitary would further simplify to 
+# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`. 
+# When each term in the twirling formula acts on different qubits, then this unitary 
+# would further simplify to 
 #
 #    .. math:: W' = \otimes_{s\in\mathcal{S}}U(s)\exp(-i\frac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
 #
+# For simplicity, we can absorb the normalization factor :math:`\vert\mathcal{S}\vert` into the free parameter :math:`\theta`.
 ######################################################################
 # So let's look again at our choice of gates: single-qubit
 # :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling two-qubit :math:`CR_y(\phi)`
