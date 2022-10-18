@@ -653,7 +653,7 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 
 ######################################################################
-# Note again how though these circuits have a similar form to before they are parameterised differently.
+# Note again how though these circuits have a similar form to before, they are parameterised differently.
 # We need to feed the vector :math:`\boldsymbol{y}` made up of the expectation value of these
 # three operators into the loss function and use this to update our
 # parameters.
