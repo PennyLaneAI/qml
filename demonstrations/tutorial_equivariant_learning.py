@@ -207,7 +207,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ##############################################################################
 # **The question is, how do we encode this in our QML problem?**
 #
-# First, let us encode this problem classically. We will consider a 9-element
+# First, let us encode this problem classically. We will consider a nine-element
 # vector :math:`V`, each element of which identifies a square of
 # the board. The entries themselves can be
 # :math:`+1`,\ :math:`0`,\ :math:`-1` representing a nought, no symbol, or
@@ -218,7 +218,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# To create the quantum model let us take nine qubits and let them reprsent squares of our board. We'll initialise them all as :math:`|0\rangle`,
+# To create the quantum model let us take nine qubits and let them represent squares of our board. We'll initialise them all as :math:`|0\rangle`,
 # which we note leaves the board invariant under the symmetries of the problem (flip and
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply a single qubit :math:`R_x(\theta)`
