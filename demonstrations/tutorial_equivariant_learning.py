@@ -165,7 +165,7 @@ and then map to the number grid or we could map to the number grid and then appl
 
 
 Given the vast amount
-of input data required to train a neural network the principle that one can pre-encode known symetry structures
+of input data required to train a neural network the principle that one can pre-encode known symmetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of convolutional neural networks (CNNs) for image
 analysis, where it is known they are equivariant with respect to translations. They naturally encode the idea that
 a picture of a dog is symmetrically related to the same picture slid to the left by n pixels, and they do this by having 
