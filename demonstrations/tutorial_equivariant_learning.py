@@ -1,30 +1,30 @@
 r"""
 
 Introduction to Equivariant Learning
-======================================================
+====================================
 
 .. meta::
-    :property="og:description": Using the natural symmetries in a learning problem can improve learning.
+    :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
 
 
 *Author: Richard East. Posted: August 2022*
 
 
 Introduction
-~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 
 Symmetries are at the heart of physics, indeed in condensed matter and
 particle physics we often define a thing simply by the symmetries it
 adheres to. What does symmetry mean for those in machine learning? In
-this context the ambition is straight forward - it is a means to
-reduce the parameter space and improve the trained models ability to
-sucessfully label unseen data, i.e its ability to generalise.
+this context the ambition is straightforward — it is a means to
+reduce the parameter space and improve the trained model's ability to
+sucessfully label unseen data, i.e., its ability to generalise.
 
 
 Suppose we have a learning task and the data we are learning from has an
 underlying symmetry. For example, consider a game of Noughts and
-Crosses: if we win a game, we would have won it if the board was rotated
+Crosses (aka Tic-tac-toe): if we win a game, we would have won it if the board was rotated
 or flipped along any of the lines of symmetry. Now if we want to train
 an algorithm to spot the outcome of these games, we can either ignore
 the existence of this symmetry or we can somehow include it. The
@@ -39,10 +39,10 @@ into our learning models is where the term equivariance will appear. We will see
 demanding that certain symmetries are included in our models means that the 
 mappings that make up our algorithms must be such that we could transform our input data
 with respect to a certain symmetry and apply our maps and this would be the same as applying
-the maps and then transforming the output data vwith the same symmetry. It is the technical property
-that gives us the name equavariant learning.
+the mappings and then transforming the output data with the same symmetry. This is the technical property
+that gives us the name *equavariant learning*.
 
-In classical machine learning, this is area is often referred to as geometric deep
+In classical machine learning, this area is often referred to as geometric deep
 learning (GDL) due to the traditional association of symmetry to the
 world of geometry and the fact that these considerations usually focus on
 deep neural networks (see [#Bronstein2021]_ or [#Nguyen2022]_ for a broad introduction).
@@ -50,7 +50,7 @@ We will refer to the quantum computing version of this as quantum geometric mach
 
 
 Representation theory in circuits
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first thing to discuss is how do we work with symmetries in the
 first place? The answer lies in the world of representation
@@ -159,14 +159,15 @@ and then map to the number grid or we could map to the number grid and then appl
 
 .. figure:: ../demonstrations/equivariant_learning/equivariant-example.jpg
     :align: center
-    :width: 50%
+    :width: 80%
     :alt: The commuting square of an equivariant map.
+
 
 
 Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
-analysis where it is known they are equivariant with respect to translations; They naturally encode the idea that
+analysis where it is known they are equivariant with respect to translations. They naturally encode the idea that
 a picture of a dog is symmetrically related to the same picture slid to the left by n pixels) and they do this by having 
 neural network layers that are equivariant maps. With our focus on
 unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
@@ -190,7 +191,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # This board of nine elements has the symmetry of the square, also known
-# as the 'dihedral group'. This means it is symmetric under
+# as the *dihedral group*. This means it is symmetric under
 # :math:`\frac{\pi}{2}` rotations and flips about the lines of symmetry of
 # a square (vertical, horizontal, and diagonal).
 
@@ -841,9 +842,9 @@ for epoch in range(max_epoch):
 
 
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 plt.title("Validation accuracies")
-plt.style.use("seaborn")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
 plt.plot(saved_accs, "g", label="Standard")
 
