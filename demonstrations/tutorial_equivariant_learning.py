@@ -233,8 +233,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # will have a single qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
 # rotation at each point. We will then use :math:`CR_y(\theta_3)` for 2-qubit
 # entangling gates. This implies that, for each encoding, crudely, we'll
-# need 18 single qubit rotation parameters and :math:`\binom{9}{2}=36` two
-# qubit gate rotations. Let's see how by using symmetries we can reduce
+# need 18 single-qubit rotation parameters and :math:`\binom{9}{2}=36` 
+# two-qubit gate rotations. Let's see how, by using symmetries, we can reduce
 # this.
 
 ##############################################################################
