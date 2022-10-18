@@ -13,9 +13,11 @@ Quantum Resource Estimation
     tutorial_vqe A brief overview of VQE
 
 
-*Author: Soran Jahangiri. Posted: 17 August 2022. Last updated: 17 August 2022*
+*Author: Soran Jahangiri. Posted: 18 October 2022. Last updated: 18 October 2022*
 
-Quantum algorithms such as quantum phase estimation and the variational quantum eigensolver
+Quantum algorithms such as
+`quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
+(QPE) and the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ (VQE)
 are widely studied in quantum chemistry as potential avenues to tackle problems that are intractable
 for conventional computers. However, we currently do not have quantum computers or simulators
 capable of implementing large-scale
@@ -24,12 +26,11 @@ efficiency for problem sizes where the actual advantage of quantum algorithms ca
 Despite these difficulties, it is still possible to estimate the amount of resources required to
 implement such quantum algorithms .
 
-In this demo, we describe how to estimate the total number of non-Clifford gates and logical qubits
-required to implement the `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
-(QPE) algorithm for simulating molecular Hamiltonians represented in first and second quantization.
-We also explain how to estimate the total number of measurements needed to compute expectation
-values using algorithms such as the
-`variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ (VQE).
+In this demo, we describe how to estimate the total number of
+`non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_ and logical qubits
+required to implement the QPE algorithm for simulating molecular Hamiltonians represented in first
+and second quantization. We also explain how to estimate the total number of measurements needed to
+compute expectation values using algorithms such as VQE.
 
 Quantum Phase Estimation
 ------------------------
@@ -86,7 +87,7 @@ core, one, two = qml.qchem.electron_integrals(mol)()
 algo = qml.resource.DoubleFactorization(one, two)
 
 ##############################################################################
-# and obtain the estimated number of non-Clifford gates and logical qubits
+# and obtain the estimated number of non-Clifford gates and logical qubits.
 
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
@@ -95,8 +96,8 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 # :math:`\text{Ha}`, by default. We can change the target error to a larger value which leads to a
 # smaller number of non-Clifford gates and logical qubits.
 
-chemical_accuracy = 0.0016
-algo = qml.resource.DoubleFactorization(one, two, error=chemical_accuracy)
+error = 0.016
+algo = qml.resource.DoubleFactorization(one, two, error=error)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
@@ -127,12 +128,12 @@ fig.tight_layout()
 # QPE cost for simulating periodic materials
 # ******************************************
 # For periodic materials, we estimate the cost of implementing the QPE algorithm of [#su2021]_
-# using Hamiltonians in first quantization and in a plane wave basis. We first need to define the
-# number of plane waves, the number of electrons and the volume of the unit cell that constructs
-# the periodic material. Let's use dilithium iron silicate :math:`\text{Li}_2\text{FeSiO}_4` as an
-# example taken from [#delgado2022]_. For this material, the unit cell contains 156 electrons
-# and has dimensions :math:`9.49 \times 10.20 \times 11.83` in atomic units, which amount to a
-# volume of :math:`1145 a_0^3`, where :math:`a_0` is the
+# using Hamiltonians represented in first quantization and in a plane wave basis. We first need to
+# define the number of plane waves, the number of electrons, and the volume of the unit cell that
+# constructs the periodic material. Let's use dilithium iron silicate
+# :math:`\text{Li}_2\text{FeSiO}_4` as an example taken from [#delgado2022]_. For this material, the
+# unit cell contains 156 electrons and has dimensions :math:`9.49 \times 10.20 \times 11.83` in
+# atomic units, amounting to a volume of :math:`1145 a_0^3`, where :math:`a_0` is the
 # `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use :math:`10^5` plane waves.
 
 planewaves = 100000
@@ -186,7 +187,7 @@ for i in [0, 1]:
 fig.tight_layout()
 
 ##############################################################################
-# The algorithm uses a decomposition of the Hamiltonian as a linear combination of unitaries.
+# The algorithm uses a decomposition of the Hamiltonian as a linear combination of unitaries,
 #
 # .. math:: H=\sum_{i} c_i U_i.
 #
@@ -198,7 +199,7 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
-# explained in the documentations of :class:`~.pennylane.resource.FirstQuantization`
+# explained in the documentation of :class:`~.pennylane.resource.FirstQuantization`
 # and :class:`~.pennylane.resource.DoubleFactorization`.
 #
 # Variational quantum eigensolver
@@ -210,29 +211,31 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 # results. The number of qubits required for the measurement is trivially determined by
 # the number of qubits the observable acts on. The number of gates required to implement the
 # variational algorithm is determined by a circuit ansatz that is also known a priori. However,
-# estimating the number of circuit evaluations, i.e., the number of shots, required to achieve a
+# estimating the number of circuit evaluations, i.e. the number of shots, required to achieve a
 # certain error in computing the expectation value is not as straightforward. Let's now use
 # PennyLane to estimate the number of shots needed to compute the expectation value of the water
 # Hamiltonian.
 #
-# First, we construct the molecular Hamiltonian
+# First, we construct the molecular Hamiltonian.
 
 H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
-# obtained with the :func:`~.pennylane.resource.estimate_shots` function which requires the
+# obtained with the :func:`~.pennylane.resource.estimate_shots` function, which requires the
 # Hamiltonian coefficients and observables as input. The number of measurements required to compute
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
-# :math:`\text{Ha}`, is obtained with
+# :math:`\text{Ha}`, is obtained as follows.
 
+chemical_accuracy = 0.0016
 m = qml.resource.estimate_shots(H.coeffs, error=chemical_accuracy)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
-# independently. The number can be reduced by partitioning the Pauli words into groups of commuting
-# terms that can be measured simultaneously.
+# independently. The number can be reduced by using
+# :func:`~.pennylane.grouping.group_observables()`, which partitions the Pauli words into groups of
+# commuting terms that can be measured simultaneously.
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
@@ -262,7 +265,7 @@ fig.tight_layout()
 ##############################################################################
 # We have added a line showing the dependency of the shots to the error as
 # :math:`\text{shots} = 1.4\text{e}4 \times 1/\epsilon^2` for comparison. Can you draw any
-# interesting information form the plot?
+# interesting information form the plot :stonks: ?
 #
 # Conclusions
 # -----------
@@ -270,13 +273,13 @@ fig.tight_layout()
 # total number of non-Clifford gates and logical qubits required to simulate a Hamiltonian with
 # quantum phase estimation algorithms. The estimation can be performed for second-quantized
 # molecular Hamiltonians obtained with a double low-rank factorization algorithm,
-# and first-quantized Hamiltonians of periodic materials in the plane wave basis. We also discuss
+# and first-quantized Hamiltonians of periodic materials in the plane wave basis. We also discussed
 # the estimation of the total number of shots required to obtain the expectation value of an
-# observable using the variational quantum eigensolver algorithm. The functionality allows to obtain
-# interesting results about the cost of implementing important quantum algorithms. For instance, we
-# estimated the costs with respect to factors such as the target error in obtaining energies and
-# the number of basis functions used to simulate a system. Can you think of other interesting
-# information that can be obtained using this PennyLane functionality?
+# observable using the variational quantum eigensolver algorithm. The functionality allows one to
+# obtain interesting results about the cost of implementing important quantum algorithms. For
+# instance, we estimated the costs with respect to factors such as the target error in obtaining
+# energies and the number of basis functions used to simulate a system. Can you think of other
+# interesting information that can be obtained using this PennyLane functionality?
 #
 # References
 # ----------
