@@ -50,7 +50,7 @@ We will refer to the quantum computing version of this as quantum geometric mach
 
 
 Representation theory in circuits
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first thing to discuss is how do we work with symmetries in the
 first place? The answer lies in the world of representation
