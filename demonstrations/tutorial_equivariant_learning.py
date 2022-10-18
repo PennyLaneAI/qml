@@ -160,6 +160,7 @@ and then map to the number grid or we could map to the number grid and then appl
 .. figure:: ../demonstrations/equivariant_learning/equivariant-example.jpg
     :align: center
     :width: 50%
+    :alt: The commuting square of an equivariant map.
 
 
 Given the vast amount
@@ -197,17 +198,19 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # .. figure:: ../demonstrations/equivariant_learning/NandC_sym.jpg
 #     :align: center
 #     :width: 70%
+#     :alt: Examples of games that are equivalent under relevant symmetries.
 
 ##############################################################################
 # **The question is, how do we encode this in our QML problem?**
 #
 # First, let us encode this problem classically, we will consider a 9
-# elements vector :math:`V`, each element of which identifies a square of
+# element vector :math:`V`, each element of which identifies a square of
 # the board. The entries themselves can be
 # :math:`+1`,\ :math:`0`,\ :math:`-1` representing a cross, no symbol, or
 # a nought. The label is one hot encoded in a vector
 # :math:`y=(y_o,y_- , y_x)` with :math:`+1` in the correct label and
-# :math:`-1` in the others.
+# :math:`-1` in the others. For instance (-1,-1,1) would represent and x in
+# the relevant position.
 
 
 ######################################################################
@@ -224,6 +227,12 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # need 18 single qubit rotation parameters and :math:`\binom{9}{2}=36` two
 # qubit gate rotations. Let's see how by using symmetries we can reduce
 # this.
+
+##############################################################################
+# .. figure:: ../demonstrations/equivariant_learning/grid.jpg
+#     :align: center
+#     :width: 35%
+#     :alt: The indexing of our game board.
 
 
 ######################################################################
@@ -286,6 +295,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # .. figure:: ../demonstrations/equivariant_learning/twirl.png
 #     :align: center
 #     :width: 70%
+#     :alt: The effect of twirling a rotation gate applied in one corner with a under the symmetires of a square.
 
 
 ######################################################################
@@ -310,11 +320,6 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # :math:`\hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)`
 #
-
-##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/grid.jpg
-#     :align: center
-#     :width: 35%
 
 
 ######################################################################
@@ -854,6 +859,11 @@ plt.show()
 # we can also see that paying attention to symmetries isn't a magic bullet
 # as the learning accuracies in both cases are hardly ideal given this is a solved game
 # though the symmetry aware circuit clearly outperforms the other.
+
+######################################################################
+# The use of symmetries in both quantum and classsical M.L is a developing field so we
+# can expect new results to emerge over the coming years. If you want to get
+# involved the refrences given below are a great place to start.
 
 
 ##############################################################################
