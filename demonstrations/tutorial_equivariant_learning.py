@@ -259,14 +259,6 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #    :math:`s \in \mathcal{S}`.
 #
 # The twirling process applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
-# For the more mathematical reader, you can see why this works for yourself by applying the
-# twirling map to an arbitrary unitary representation and seeing that we
-# can move the unitary from the left-hand side of the equation to the right (remember the representation commutes with
-# the group action). You might change the element of the group you're now
-# working with, but since twirling is a sum over all of them that doesn't necessarily
-# matter! The result is that our new twirled gates commute with the group action — this is equivariance.
-#
-#
 # We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian 
 # matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary 
 # that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate 
