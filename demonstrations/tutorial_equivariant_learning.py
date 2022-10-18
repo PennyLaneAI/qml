@@ -111,7 +111,7 @@ quantum circuits (which are mostly made up of unitary gates).
 
 .. figure:: ../demonstrations/equivariant_learning/sphere_equivariant.png
     :align: center
-    :width: 80%
+    :width: 45%
     :alt: Basic symmetries of the sphere.
 
 How does all this relate to symmetries? Well, a large class of
