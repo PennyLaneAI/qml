@@ -490,8 +490,8 @@ with torch.no_grad():
 
 
 ######################################################################
-# Now let's create the relevant expectation value circuits that respect
-# the symmetry classes we defined over the single site and two site measurements
+# Now let's create the relevant circuit expectation values that respect
+# the symmetry classes we defined over the single-site and two-site measurements
 
 
 # %matplotlib inline
