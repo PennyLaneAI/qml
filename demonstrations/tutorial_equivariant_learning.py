@@ -291,10 +291,10 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # like, and this operation leaves the qubit invariant, so we've identified one equivariant
 # gate immediately. If the qubit is on the corners, then the flipping will send
 # this qubit rotation to each of the other corners. Similarly, if a qubit is on the central
-# edge then it the rotation gate be sent round the other edges. So we can see that the
+# edge then the rotation gate will be sent round the other edges. So we can see that the
 # twirling operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
-# we can see that for a single qubit rotation the invariant maps are rotations
+# we can see that for a single-qubit rotation the invariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
 # edges (when their rotation angles are fixed to be the same). 
 
