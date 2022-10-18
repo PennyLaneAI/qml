@@ -193,7 +193,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # This board of nine elements has the symmetry of the square, also known
 # as the *dihedral group*. This means it is symmetric under
 # :math:`\frac{\pi}{2}` rotations and flips about the lines of symmetry of
-# a square (vertical, horizontal, and diagonal).
+# a square (vertical, horizontal, and both diagonals).
 
 ##############################################################################
 # .. figure:: ../demonstrations/equivariant_learning/NandC_sym.jpg
