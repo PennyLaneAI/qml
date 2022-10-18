@@ -150,7 +150,7 @@ QHack 2022
 
     PIQuIL founder Roger Melko and acronym connoisseur discusses Rydberg atom quantum simulation.
 
-.. youtube-video:: I5SRFABCCc 
+.. youtube-video:: tI5SRFABCCc
     :title: Mitiq, a Python library for quantum error mitigation
     :author: Andrea Mari (Unitary Fund)
 
