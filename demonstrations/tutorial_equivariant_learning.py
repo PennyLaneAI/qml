@@ -103,7 +103,7 @@ Fundamentally, representation theory is based on the prosaic observation that li
 study groups via linear maps?
 
 Now due to the importance of unitarity in quantum mechnics, we are
-particularly interested in the unitary representations: Representations
+particularly interested in the unitary representations: representations
 where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
 quantum circuits (which are mostly made up of unitary gates). 
