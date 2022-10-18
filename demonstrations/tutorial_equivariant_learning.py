@@ -303,7 +303,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # of a square. The result of this twirling leads us to have the same gate at all the corners.
 
 ##############################################################################
-# .. figure:: ../demonstrations/equivariant_learning/twirl.png
+# .. figure:: ../demonstrations/equivariant_learning/twirl.jpeg
 #     :align: center
 #     :width: 70%
 #     :alt: The effect of twirling a rotation gate applied in one corner with the symmetries of a square.
