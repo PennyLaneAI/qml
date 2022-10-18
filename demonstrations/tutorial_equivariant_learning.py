@@ -155,8 +155,9 @@ preserve this information in the outputs.
 Consider the following figure for 
 example. What we see is a board with a cross in a certain square on the left and some numerical encoding of this
 on the right, where the 1 is where the X is in the number grid. We present an equivariant mapping between these two spaces
-with respect to a group action that is a rotation or a swap etc (here a :math:`\pi` rotation) either to the original grid
-and then map to the number grid or we could map to the number grid and then apply the group action.
+with respect to a group action that is a rotation or a swap (here a :math:`\pi` rotation). We can either apply a group action to the original grid
+and then map to the number grid, or we could map to the number grid and then apply the group action.
+Equivariance demands that the result of either of these procedures should be the same.
 
 
 .. figure:: ../demonstrations/equivariant_learning/equivariant-example.jpg
