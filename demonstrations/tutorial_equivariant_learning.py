@@ -137,7 +137,7 @@ of group representation theory we are ready to tackle this. Let :math:`G` be our
 :math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
 Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
-and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write
+and :math:`\psi: G \rightarrow GL(W)`. Furthermore, let's write
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
 as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
@@ -179,7 +179,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # Noughts and Crosses
 # -------------------
-# Let's look at the game of noughts and crosses as inspired by [[#Meyer2022]_]. Two players take
+# Let's look at the game of noughts and crosses, as inspired by [[#Meyer2022]_]. Two players take
 # turns to place a O or an X, depending on which player they are, in a 3x3
 # grid. The aim is to get three of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
@@ -205,9 +205,9 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # **The question is, how do we encode this in our QML problem?**
 #
 # First, let us encode this problem classically. We will consider a nine-element
-# vector :math:`V`, each element of which identifies a square of
+# vector :math:`v`, each element of which identifies a square of
 # the board. The entries themselves can be
-# :math:`+1`,\ :math:`0`,\ :math:`-1` representing a nought, no symbol, or
+# :math:`+1`,\ :math:`0`,\ :math:`-1,` representing a nought, no symbol, or
 # a cross. The label is one-hot encoded in a vector
 # :math:`y=(y_O,y_- , y_X)` with :math:`+1` in the correct label and
 # :math:`-1` in the others. For instance (-1,-1,1) would represent an X in
@@ -483,7 +483,7 @@ with torch.no_grad():
 
 ######################################################################
 # Now let's create the relevant circuit expectation values that respect
-# the symmetry classes we defined over the single-site and two-site measurements
+# the symmetry classes we defined over the single-site and two-site measurements.
 
 
 import pennylane as qml
@@ -565,10 +565,10 @@ def circuit(x, p):
 fig, ax = qml.draw_mpl(circuit)([0] * 9, 18 * [0])
 
 ######################################################################
-# Now let's also look at the same series of gates but this time they
+# Let's also look at the same series of gates but this time they
 # are applied independently from one another, so we won't be preserving
 # the symmetries with our gate operations. Practically this also means
-# more parameters as previously groups of gates were updated together.
+# more parameters, as previously groups of gates were updated together.
 
 
 @qml.qnode(dev, interface="torch")
@@ -645,7 +645,7 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 
 ######################################################################
-# Note again how though these circuits have a similar form to before, they are parameterised differently.
+# Note again how, though these circuits have a similar form to before, they are parameterised differently.
 # We need to feed the vector :math:`\boldsymbol{y}` made up of the expectation value of these
 # three operators into the loss function and use this to update our
 # parameters.
