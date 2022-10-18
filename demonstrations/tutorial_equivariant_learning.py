@@ -297,7 +297,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # we can see that for a single-qubit rotation the invariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
 # edges (when their rotation angles are fixed to be the same). 
-
+#
 # As an example consider the following figure, 
 # where we take a :math:`R_x` gate in the corner and then apply all the symmetries
 # of a square. The result of this twirling leads us to have the same gate at all the corners.
