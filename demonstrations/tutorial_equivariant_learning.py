@@ -230,7 +230,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # rotations on individual qubits, encoding each of the
 # possibilities in the board squares at an angle of
 # :math:`\frac{2\pi}{3}` from each other. For our parameterised gates we
-# will have a single qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
+# will have a single-qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
 # rotation at each point. We will then use :math:`CR_y(\theta_3)` for two-qubit
 # entangling gates. This implies that, for each encoding, crudely, we'll
 # need 18 single-qubit rotation parameters and :math:`\binom{9}{2}=36` 
@@ -256,7 +256,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #
 # .. container:: alert alert-block alert-info
 #
-#    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U_{s}` be a
+#    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U` be a
 #    unitary representation of :math:`\mathcal{S}`. Then,
 #
 #    .. math:: \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
