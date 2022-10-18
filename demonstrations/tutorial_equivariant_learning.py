@@ -159,7 +159,7 @@ and then map to the number grid or we could map to the number grid and then appl
 
 .. figure:: ../demonstrations/equivariant_learning/equivariant-example.jpg
     :align: center
-    :width: 50%
+    :width: 80%
 
 
 Given the vast amount
