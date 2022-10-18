@@ -94,39 +94,39 @@ vector space :math:`V`, which satisfies
 :math:`\varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G`.
 
 The idea here is that just as elements in a group act on each other to 
-reach further elements i.e :math:`g\circ h = k` a representation sends us 
-to a mappings acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k)`.
-In this way we are representing the strucutre of the group as a linea map. For a representation, our mapping must send us to the general linear
-group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication): note how this is
-is both a group and by virtue of being a collection of invertible matrices also linear maps (they're all invertble matrices that can act on row vectors). 
-Fundamentally, representation theory is based on the prosaic observation that linear algebra is easy and group theory is abstract: So what if we can
+reach further elements, i.e., :math:`g\circ h = k`, a representation sends us 
+to a mapping acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k)`.
+In this way we are representing the structure of the group as a linear map. For a representation, our mapping must send us to the general linear
+group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication). Note how this
+is both a group, and by virtue of being a collection of invertible matrices, also a set of linear maps (they're all invertble matrices that can act on row vectors). 
+Fundamentally, representation theory is based on the prosaic observation that linear algebra is easy and group theory is abstract. So what if we can
 study groups via linear maps?
 
 Now due to the importance of unitarity in quantum mechnics, we are
-particularly interested in the unitary representations: Representations
+particularly interested in the unitary representations: representations
 where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
 quantum circuits (which are mostly made up of unitary gates). 
 
 How does all this relate to symmetries? Well, a large class of
-symmetries can be characterised as a group where all the elements of the group leave 
+symmetries can be characterised as a group, where all the elements of the group leave 
 some space we are considering unchanged. Let's consider an example:
-The symmetries of a sphere. Now when we think of this symmetry we
+the symmetries of a sphere. Now when we think of this symmetry we
 probably think something along the lines of "it's the same no matter how
-I rotate it or flip it left to right etc". There is this idea of being
+I rotate it or flip it left to right, etc". There is this idea of being
 invariant under some operation, we also have the idea of being able to
-undo these actions, if we rotate one way, we can rotate it back. If we
-flip the ball right-to-left we can flip it left-to-right to get back to
+undo these actions: if we rotate one way, we can rotate it back. If we
+flip the sphere right-to-left we can flip it left-to-right to get back to
 where we started (notice too all these inverses are unique). Trivially
 we can also do nothing. What exactly are we describing here? We have
 elements that correspond to an action on a sphere that can be inverted and
 for which there exists an identity. It is also trivially the case here
-that if I consider three operations a,b,c from the set of rotations and
-reflections of the sphere then if I combine two of them together then
+that if we consider three operations a, b, c from the set of rotations and
+reflections of the sphere, that if we combine two of them together then
 :math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
 associative. These features turn out to literally define a group!
  
-As we've seen the group in itself is a very abstract creature this is why we look to
+As we've seen the group in itself is a very abstract creature; this is why we look to
 its representations. The group labels what symmetries we care about, they tell
 us the mappings that our system is invariant under, and the unitary representations 
 show us how those symmetries look on a particular
@@ -136,19 +136,19 @@ characterisation of symmetries and quantum circuits. If we want to
 encode the structure of the symmeteries in a quantum circuit we must
 restrict our gates to being unitary representations of the group.
 
-There remains one question. What is equivariance? With our newfound knowledge
+There remains one question: *what is equivariance?* With our newfound knowledge
 of group representation theory we are ready to tackle this. Let :math:`G` be our group, and
 :math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
 Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
 and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write that
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
-as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` equivariant if
+as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
 :math:`f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G`.
 
-The importance of such a maps in machine learning is that if, for example, our neural network layers are
-equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections etc)
+The importance of such a map in machine learning is that if, for example, our neural network layers are
+equivarient maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
 preserve this information in the outputs. Which we can see because we could instead input the same input
 twice and get the second by applying the group action to one of the outputs. Consider the following figure for 
 example, what we see is a board with a cross in a certain square on the left and some numerical encoding of this
@@ -165,10 +165,10 @@ and then map to the number grid or we could map to the number grid and then appl
 
 
 Given the vast amount
-of input data required to train a neural network the principle that one can pre-encode known symetry structures
-into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
-analysis where it is known they are equivariant with respect to translations. They naturally encode the idea that
-a picture of a dog is symmetrically related to the same picture slid to the left by n pixels) and they do this by having 
+of input data required to train a neural network the principle that one can pre-encode known symmetry structures
+into the network allows us to learn better and faster. Indeed it is the reason for the success of convolutional neural networks (CNNs) for image
+analysis, where it is known they are equivariant with respect to translations. They naturally encode the idea that
+a picture of a dog is symmetrically related to the same picture slid to the left by n pixels, and they do this by having 
 neural network layers that are equivariant maps. With our focus on
 unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
 
@@ -180,8 +180,8 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # Noughts and Crosses
 # ----------------
 # Let's look at the game of noughts and crosses as inspired by [#Meyer2022]_. Two players take
-# turns to place a 0 or an X, depending on which player you are, in a 3x3
-# grid. The aim is to get a 3 of your symbols in a row, column, or
+# turns to place a O or an X, depending on which player they are, in a 3x3
+# grid. The aim is to get 3 of your symbols in a row, column, or
 # diagonal. As this is not always possible depending
 # on the choices of the players there could be a draw. Our learning task
 # is to take a set of completed games labelled with their outcomes and
@@ -193,7 +193,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # This board of nine elements has the symmetry of the square, also known
 # as the *dihedral group*. This means it is symmetric under
 # :math:`\frac{\pi}{2}` rotations and flips about the lines of symmetry of
-# a square (vertical, horizontal, and diagonal).
+# a square (vertical, horizontal, and both diagonals).
 
 ##############################################################################
 # .. figure:: ../demonstrations/equivariant_learning/NandC_sym.jpg
@@ -666,7 +666,6 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 
 import math
-
 
 def encode_game(game):
     board, res = game
