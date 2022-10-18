@@ -153,7 +153,7 @@ preserve this information in the outputs. Which we can see because we could inst
 twice and get the second by applying the group action to one of the outputs. 
 
 Consider the following figure for 
-example, what we see is a board with a cross in a certain square on the left and some numerical encoding of this
+example. What we see is a board with a cross in a certain square on the left and some numerical encoding of this
 on the right, where the the 1 is where the X is in the number grid. This is an equivariant map between these two spaces
 with respect to a group action that is a rotation or a swap etc (here a :math:`\pi` rotation) either to the original grid
 and then map to the number grid or we could map to the number grid and then apply the group action.
