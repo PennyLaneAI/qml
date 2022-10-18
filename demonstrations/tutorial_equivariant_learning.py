@@ -266,19 +266,19 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #    :math:`\left[\mathcal{T}_{U}[X], U(s)\right]=` 0 for all :math:`X` and
 #    :math:`s \in \mathcal{S}`.
 #
-# The twirl of applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
-# For the more mathematical reader you can see why this works for yourself by applying the
-# map to an arbitrary unitary representation and seeing
-# can move the unitary from the left-hand side of the equationand seeing if you can commute it to the right (remember the representation commutes with
+# The twirling process applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
+# For the more mathematical reader, you can see why this works for yourself by applying the
+# twirling map to an arbitrary unitary representation and seeing that we
+# can move the unitary from the left-hand side of the equation to the right (remember the representation commutes with
 # the group action). You might change the element of the group you're now
-# working with, but since this is a sum over all of them that doesn't necessarily
-# matter! The result is that our gate choices commute with the group action - this is equivariance.
+# working with, but since twirling is a sum over all of them that doesn't necessarily
+# matter! The result is that our new twirled gates commute with the group action — this is equivariance.
 #
 
 
 ######################################################################
-# So let's look again at our choice of gates, single qubit
-# :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling 2 qubit :math:`CR_Y(\phi)`
+# So let's look again at our choice of gates: single-qubit
+# :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling two-qubit :math:`CR_y(\phi)`
 # gates. What will we get by twirling these?
 #
 
@@ -287,16 +287,18 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # In this particular instance we can see the action of the twirling
 # operation geometrically as the symmetries involved are all
 # permutations. Let's consider the :math:`R_x` rotation acting on one qubit. Now
-# if it is in the centre then you can flip around any symmetry axis you
-# like, this operation is invarient, so we've identified one equivariant
-# gate immediately. If it's on the corners then the flipping will send
-# this qubit rotation to each of the other corners. Similairly, if it's on the central
-# edge then it will be sent round the other edges. So we can see that the
-# twirl operation is a sum over all the possible outcomes of performing
+# if this qubit is in the centre location on the grid, then we can flip around any symmetry axis we
+# like, and this operation leaves the qubit invariant, so we've identified one equivariant
+# gate immediately. If the qubit is on the corners, then the flipping will send
+# this qubit rotation to each of the other corners. Similarly, if a qubit is on the central
+# edge then it the rotation gate be sent round the other edges. So we can see that the
+# twirling operation is a sum over all the possible outcomes of performing
 # the symmetry action (the sum over the symmetry group actions). Having done this
-# we can see that for a single qubit rotation the inavariant maps are rotations
+# we can see that for a single qubit rotation the invariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
-# edges (when their rotation angles are fixed to be the same). As an example consider the follwing figure
+# edges (when their rotation angles are fixed to be the same). 
+
+As an example consider the following figure
 # where we can see the invariant unitary made from applying :math:`R_x` gate in the corner and then applying all the symmetries
 # of a square is the same gate is that unitary made up of applying the same gate at all the corners.
 
