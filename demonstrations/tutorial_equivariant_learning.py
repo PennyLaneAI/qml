@@ -299,14 +299,14 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # edges (when their rotation angles are fixed to be the same). 
 
 # As an example consider the following figure, 
-# where we can see the invariant unitary made from applying :math:`R_x` gate in the corner and then applying all the symmetries
-# of a square is the same gate is that unitary made up of applying the same gate at all the corners.
+# where we take a :math:`R_x` gate in the corner and then apply all the symmetries
+# of a square. The result of this twirling leads us to have the same gate at all the corners.
 
 ##############################################################################
 # .. figure:: ../demonstrations/equivariant_learning/twirl.png
 #     :align: center
 #     :width: 70%
-#     :alt: The effect of twirling a rotation gate applied in one corner with a under the symmetires of a square.
+#     :alt: The effect of twirling a rotation gate applied in one corner with the symmetries of a square.
 
 
 ######################################################################
