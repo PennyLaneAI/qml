@@ -168,7 +168,7 @@ Given the vast amount
 of input data required to train a neural network the principle that one can pre-encode known symetry structures
 into the network allows us to learn better and faster. Indeed it is the reason for the success of CNN's for image
 analysis where it is known they are equivariant with respect to translations. They naturally encode the idea that
-a picture of a dog is symmetrically related to the same picture slid to the left by n pixels) and they do this by having 
+a picture of a dog is symmetrically related to the same picture slid to the left by n pixels, and they do this by having 
 neural network layers that are equivariant maps. With our focus on
 unitary representations (and so quantum circuits) we are looking to extend this idea to quantum machine learning.
 
