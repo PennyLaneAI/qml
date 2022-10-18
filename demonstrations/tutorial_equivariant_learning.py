@@ -4,7 +4,7 @@ Introduction to Equivariant Learning
 ====================================
 
 .. meta::
-    :property="og:description": Using the natural symmetries in a learning problem can improve learning.
+    :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
 
 
 *Author: Richard East. Posted: August 2022*
