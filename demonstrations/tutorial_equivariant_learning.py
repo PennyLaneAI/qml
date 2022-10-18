@@ -11,7 +11,7 @@ Introduction to Equivariant Learning
 
 
 Introduction
-~~~~~~~~~~~~
+------------
 
 
 Symmetries are at the heart of physics, indeed in condensed matter and
@@ -50,7 +50,7 @@ We will refer to the quantum computing version of this as quantum geometric mach
 
 
 Representation theory in circuits
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 
 The first thing to discuss is how do we work with symmetries in the
 first place? The answer lies in the world of representation
@@ -186,7 +186,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ##############################################################################
 #
 # Noughts and Crosses
-# ----------------
+# -------------------
 # Let's look at the game of noughts and crosses as inspired by [[#Meyer2022]_]. Two players take
 # turns to place a O or an X, depending on which player they are, in a 3x3
 # grid. The aim is to get three of your symbols in a row, column, or
