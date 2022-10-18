@@ -836,6 +836,7 @@ for epoch in range(max_epoch):
 
 
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 plt.title("Validation accuracies")
 plt.style.use("seaborn")
