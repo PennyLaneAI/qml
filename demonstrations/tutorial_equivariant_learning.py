@@ -39,7 +39,7 @@ into our learning models is where the term equivariance will appear. We will see
 demanding that certain symmetries are included in our models means that the 
 mappings that make up our algorithms must be such that we could transform our input data
 with respect to a certain symmetry and apply our maps and this would be the same as applying
-the maps and then transforming the output data vwith the same symmetry. It is the technical property
+the mappings and then transforming the output data with the same symmetry. This is the technical property
 that gives us the name equavariant learning.
 
 In classical machine learning, this is area is often referred to as geometric deep
