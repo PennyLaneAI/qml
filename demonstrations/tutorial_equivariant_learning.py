@@ -91,7 +91,7 @@ representation is: Let :math:`\varphi` be a map sending :math:`g` in group
 :math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
 vector space :math:`V`, which satisfies
 
-.. math:
+.. math::
     \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G.
 
 The idea here is that just as elements in a group act on each other to 
@@ -149,7 +149,7 @@ and :math:`\psi: G \rightarrow GL(W)`. Furthermore to let's write
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
 as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
-.. math:
+.. math::
 
     f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G.
 
@@ -323,7 +323,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# .. math:
+# .. math::
 #   O_{-}=Z_{\text {middle }}=Z_{4}
 #   O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{2}+Z_{6}+Z_{8}\right]
 #   O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{5}+Z_{7}\right]
