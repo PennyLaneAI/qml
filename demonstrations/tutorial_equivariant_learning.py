@@ -574,7 +574,7 @@ fig, ax = qml.draw_mpl(circuit)([0] * 9, 18 * [0])
 
 ######################################################################
 # Now let's also look at the same series of gates but this time they
-# are applied idependently from one another, so we won't be preserving
+# are applied independently from one another, so we won't be preserving
 # the symmetries with our gate operations. Practically this also means
 # more parameters as previously groups of gates were updated together.
 
@@ -592,7 +592,7 @@ def circuit_no_sym(x, p):
     qml.RX(x[7], wires=7)
     qml.RX(x[8], wires=8)
 
-    # Centre single qubit rotation
+    # Centre single-qubit rotation
     qml.RX(p[0], wires=4)
     qml.RY(p[1], wires=4)
 
@@ -601,7 +601,7 @@ def circuit_no_sym(x, p):
     # as one combined gate. The fact they can all vary independently
     # here means we aren't respecting the symmetry.
 
-    # Corner single qubit rotation
+    # Corner single-qubit rotation
     qml.RX(p[2], wires=0)
     qml.RX(p[3], wires=2)
     qml.RX(p[4], wires=6)
@@ -612,7 +612,7 @@ def circuit_no_sym(x, p):
     qml.RY(p[8], wires=6)
     qml.RY(p[9], wires=8)
 
-    # Edge single qubit rotation
+    # Edge single-qubit rotation
     qml.RX(p[10], wires=1)
     qml.RX(p[11], wires=3)
     qml.RX(p[12], wires=5)
@@ -623,7 +623,7 @@ def circuit_no_sym(x, p):
     qml.RY(p[16], wires=5)
     qml.RY(p[17], wires=7)
 
-    # Entagling 2-qubit gates
+    # Entagling two-qubit gates
     # circling the edge of the board
     qml.CRY(p[18], wires=[0, 1])
     qml.CRY(p[19], wires=[2, 1])
