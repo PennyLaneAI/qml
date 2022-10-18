@@ -122,7 +122,7 @@ we can also do nothing. What exactly are we describing here? We have
 elements that correspond to an action on a sphere that can be inverted and
 for which there exists an identity. It is also trivially the case here
 that if we consider three operations a, b, c from the set of rotations and
-reflections of the sphere then if I combine two of them together then
+reflections of the sphere, that if we combine two of them together then
 :math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
 associative. These features turn out to literally define a group!
  
