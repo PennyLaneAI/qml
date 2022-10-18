@@ -16,17 +16,17 @@ Using PennyLane with PySCF and OpenFermion
 *Author: Soran Jahangiri. Posted: 6 October 2022. Last updated: 6 October 2022*
 
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
-methods for computing molecular integrals, solving Hartree-Fock equations and constructing
+methods for computing molecular integrals, solving Hartree-Fock equations, and constructing
 `fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
 Hamiltonians. PennyLane also allows using external libraries to perform these tasks and integrate
 the results within a desired workflow. In this tutorial, you will learn how to integrate PennyLane
-with the electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_ and
-`OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools to compute molecular integrals and
+with `PySCF <https://github.com/sunqm/pyscf>`_ and
+`OpenFermion <https://github.com/quantumlib/OpenFermion>`_ to compute molecular integrals and
 construct molecular Hamiltonians.
 
 Building molecular Hamiltonians
 -------------------------------
-In PennyLane, molecular Hamiltonians are built with the
+In PennyLane, Hamiltonians for quantum chemistry are built with the
 :func:`~.pennylane.qchem.molecular_hamiltonian` function by specifying a backend for solving the
 Hartree-Fock equations and then constructing the Hamiltonian. The default backend is the
 differentiable Hartree-Fock solver of the :mod:`qml.qchem <pennylane.qchem>` module. The
@@ -42,7 +42,7 @@ plugin to be installed by the user with
 
    pip install openfermionpyscf
 
-The molecular Hamiltonian can then be constructed for a water molecule, as an example, with
+For example, the molecular Hamiltonian can then be constructed for a water molecule:
 """
 
 import pennylane as qml
@@ -85,8 +85,8 @@ print(f'Hamiltonian: \n {H}')
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
 # can be computed with the `PySCF <https://github.com/sunqm/pyscf>`_ package and used in PennyLane
 # workflows such as quantum resource estimation. Let's use water in the
-# `6-31G basis <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Pople_basis_sets>`_ for
-# example. First, we define the PySCF molecule object and run a restricted Hartree-Fock
+# `6-31G basis <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Pople_basis_sets>`_ as
+# an example. First, we define the PySCF molecule object and run a restricted Hartree-Fock
 # calculation:
 
 from pyscf import gto, ao2mo, scf
@@ -134,13 +134,13 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # Conclusions
 # -----------
 # This tutorial demonstrates how to use pennylane with external quantum chemistry libraries such as
-# PySCF and OpenFermion-PySCF. It shows that we can construct molecular Hamiltonians using a
-# user-installed version of PySCF by passing the argument ``method=pyscf`` to
-# :func:`~.pennylane.qchem.molecular_hamiltonian` function. We can also directly use one- and
-# two-electron integrals from PySCF, but we need to convert the tensor containing the two-electron
-# integrals from chemists' notation to physicists' notation. Finally, We can easily convert
-# OpenFermion operators to PennyLane operators using the :func:`~.pennylane.qchem.import_operator`
-# function.
+# PySCF and OpenFermion-PySCF. To summarize:
+# 1. We can construct molecular Hamiltonians using a user-installed version of PySCF by passing
+# the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function. 
+# 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
+# tensor containing the two-electron integrals from chemists' notation to physicists' notation. 
+# 3. Finally, we can easily convert OpenFermion operators to PennyLane operators using the 
+# :func:`~.pennylane.qchem.import_operator` function.
 #
 # About the author
 # ----------------
