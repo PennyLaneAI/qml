@@ -318,8 +318,14 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 ######################################################################
 # .. math::
 #   O_{-}=Z_{\text {middle }}=Z_{4}
+#
+# .. math::
 #   O_{\circ}=\frac{1}{4} \sum_{i \in \text { corners }} Z_{i}=\frac{1}{4}\left[Z_{0}+Z_{2}+Z_{6}+Z_{8}\right]
+#
+# .. math::
 #   O_{\times}=\frac{1}{4} \sum_{i \in \text { edges }} Z_{i}=\frac{1}{4}\left[Z_{1}+Z_{3}+Z_{5}+Z_{7}\right]
+#
+# .. math::
 #   \hat{\boldsymbol{y}}=\left(\left\langle O_{\circ}\right\rangle,\left\langle O_{-}\right\rangle,\left\langle O_{\times}\right\rangle\right)
 #
 
