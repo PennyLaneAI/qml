@@ -94,7 +94,7 @@ vector space :math:`V`, which satisfies
 :math:`\varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G`.
 
 The idea here is that just as elements in a group act on each other to 
-reach further elements i.e :math:`g\circ h = k` a representation sends us 
+reach further elements, i.e., :math:`g\circ h = k`, a representation sends us 
 to a mappings acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k)`.
 In this way we are representing the strucutre of the group as a linea map. For a representation, our mapping must send us to the general linear
 group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication): note how this is
