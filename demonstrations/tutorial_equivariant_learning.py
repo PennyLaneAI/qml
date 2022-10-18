@@ -96,7 +96,7 @@ vector space :math:`V`, which satisfies
 The idea here is that just as elements in a group act on each other to 
 reach further elements, i.e., :math:`g\circ h = k`, a representation sends us 
 to a mappings acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k)`.
-In this way we are representing the strucutre of the group as a linea map. For a representation, our mapping must send us to the general linear
+In this way we are representing the structure of the group as a linear map. For a representation, our mapping must send us to the general linear
 group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication): note how this is
 is both a group and by virtue of being a collection of invertible matrices also linear maps (they're all invertble matrices that can act on row vectors). 
 Fundamentally, representation theory is based on the prosaic observation that linear algebra is easy and group theory is abstract: So what if we can
