@@ -143,7 +143,7 @@ as the same group element represented as a linear map on :math:`W` respectively.
 
 .. math::
 
-    f(\varphi_g(v))=\psi_g(f(v))` :math:`\forall g\in G.
+    f(\varphi_g(v))=\psi_g(f(v)) \quad \text { for all } g\in G.
 
 The importance of such a map in machine learning is that if, for example, our neural network layers are
 equivariant maps then two inputs that are related by some intrinsic symmetry (maybe they are reflections)
