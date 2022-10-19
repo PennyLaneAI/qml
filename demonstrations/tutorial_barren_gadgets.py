@@ -11,10 +11,9 @@ barren plateaus, as proposed in Ref.[#cichy2022]_
 Some context
 ------------
 
-If you are not familiar yet with the concept of barren plateaus, I recomend you
-first check out these other tutorials: 
-- https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html
-- https://pennylane.ai/qml/demos/tutorial_local_cost_functions.html  
+If you are not familiar yet with the concept of barren plateaus, I recommend you
+first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
+and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
 
 As presented in the second, barren plateaus are more severe when using global
 cost functions compared to local ones. 
