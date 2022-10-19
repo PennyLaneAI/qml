@@ -137,11 +137,11 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # PySCF and OpenFermion-PySCF. To summarize:
 #
 # 1. We can construct molecular Hamiltonians using a user-installed version of PySCF by passing
-# the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function. 
+#    the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
-# tensor containing the two-electron integrals from chemists' notation to physicists' notation. 
+#    tensor containing the two-electron integrals from chemists' notation to physicists' notation.
 # 3. Finally, we can easily convert OpenFermion operators to PennyLane operators using the 
-# :func:`~.pennylane.qchem.import_operator` function.
+#    :func:`~.pennylane.qchem.import_operator` function.
 #
 # About the author
 # ----------------
