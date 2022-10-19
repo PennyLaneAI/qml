@@ -265,7 +265,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # When each term in the twirling formula acts on different qubits, then this unitary 
 # would further simplify to 
 #
-# .. math:: W' = \otimes_{s\in\mathcal{S}}U(s)\exp(-i\frac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
+# .. math:: W' = \bigotimes_{s\in\mathcal{S}}U(s)\exp(-i\tfrac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
 #
 # For simplicity, we can absorb the normalization factor :math:`\vert\mathcal{S}\vert` into the free parameter :math:`\theta`.
 #
