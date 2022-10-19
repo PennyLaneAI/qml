@@ -1,6 +1,6 @@
 r"""
 
-Resource Estimation for Quantum Chemistry
+Resource estimation for quantum chemistry
 =========================================
 
 .. meta::
