@@ -13,7 +13,7 @@ Coherent Variational Quantum Linear Solver
 
    tutorial_vqls Variational Quantum Linear Solver
 
-*Author: Andrea Mari. Last updated: 15 Jan 2021.*
+*Author: Andrea Mari — 06 November 2019. Last updated: 15 January 2021.*
 
 In this tutorial we propose and implement an algorithm that we call
 *coherent variational quantum linear solver* (CVQLS).
@@ -556,3 +556,6 @@ plt.show()
 #    PhD thesis, University of Waterloo, 2014.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/andrea_mari.txt

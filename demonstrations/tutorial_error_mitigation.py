@@ -580,3 +580,9 @@ plt.show()
 #             `"Digital zero noise extrapolation for quantum error mitigation" <https://ieeexplore.ieee.org/document/9259940>`_,
 #             IEEE International Conference on Quantum Computing and Engineering (2020).
 #
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/tom_bromley.txt
+#
+# .. include:: ../_static/authors/andrea_mari.txt

@@ -10,8 +10,8 @@ r"""Training and evaluating quantum kernels
     tutorial_kernel_based_training Kernel-based training with scikit-learn
     tutorial_data_reuploading_classifier Data-reuploading classifier
 
-*Authors: Peter-Jan Derks, Paul Fährmann, Elies Gil-Fuster, Tom
-Hubregtsen, Johannes Jakob Meyer and David Wierichs. Posted: 24 June 2021*
+*Authors: Peter-Jan Derks, Paul K. Faehrmann, Elies Gil-Fuster, Tom
+Hubregtsen, Johannes Jakob Meyer and David Wierichs — Posted: 24 June 2021. Last updated: 18 November 2021.*
 
 Kernel methods are one of the cornerstones of classical machine learning.
 Here we are concerned with kernels that can be evaluated on quantum computers,
@@ -624,3 +624,23 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 #     Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian.
 #     "An overview of kernel alignment and its applications."
 #     `Artificial Intelligence Review 43.2: 179-192 <https://link.springer.com/article/10.1007/s10462-012-9369-4>`__, 2015.
+#
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/peter-jan_derks.txt
+#
+#
+# .. include:: ../_static/authors/paul_k_faehrmann.txt
+#
+#
+# .. include:: ../_static/authors/elies_gil-fuster.txt
+#
+#
+# .. include:: ../_static/authors/tom_hubregtsen.txt
+#
+#
+# .. include:: ../_static/authors/johannes_jakob_meyer.txt
+#
+#
+# .. include:: ../_static/authors/david_wierichs.txt
