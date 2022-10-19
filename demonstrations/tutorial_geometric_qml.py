@@ -242,11 +242,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # we do this? We need to select the collections of gates that commute with
 # the symmetries. In general, we can use the twirling formula for this:
 #
-
-
-######################################################################
-#
-# .. container:: alert alert-block alert-info
+# .. tip::
 #
 #    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U` be a
 #    unitary representation of :math:`\mathcal{S}`. Then,
@@ -269,7 +265,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # .. math:: W' = \otimes_{s\in\mathcal{S}}U(s)\exp(-i\frac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
 #
 # For simplicity, we can absorb the normalization factor :math:`\vert\mathcal{S}\vert` into the free parameter :math:`\theta`.
-######################################################################
+#
 # So let's look again at our choice of gates: single-qubit
 # :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling two-qubit :math:`CR_y(\phi)`
 # gates. What will we get by twirling these?
