@@ -6,7 +6,7 @@ Perturbative Gadgets for Variational Quantum Algorithms
 
 In this tutorial, we will explore the application of perturbative gadgets in 
 variational quantum algorithms to outgo the issue of cost function dependent
-barren plateaus, as proposed in Ref.[#cichy2022]_
+barren plateaus, as proposed in Ref. [#cichy2022]_ 
 
 Some context
 ------------
@@ -318,6 +318,7 @@ plt.show()
 ##############################################################################
 # References
 # ----------
+#
 # .. [#cichy2022]
 #
 #    Cichy, S., Faehrmann, P.K., Khatri, S., Eisert, J.
