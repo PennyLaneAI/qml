@@ -6,7 +6,7 @@ Perturbative Gadgets for Variational Quantum Algorithms
 
 In this tutorial, we will explore the application of perturbative gadgets in 
 variational quantum algorithms to outgo the issue of cost function dependent
-barren plateaus, as proposed in Ref.[#cichy2022]
+barren plateaus, as proposed in Ref.[#cichy2022]_
 
 Some context
 ------------
@@ -104,7 +104,7 @@ In the end, our gadget Hamiltonian thus acts on :math:`8+3\cdot 4 = 20` qubits.
 The penalization (red) acts only on the auxiliary registers, penalizing each 
 qubit individually, while the perturbations couple target with auxiliary qubits.
 
-As shown in Ref. [#cichy2022], this construction results in a spectrum that is similar
+As shown in Ref. [#cichy2022]_, this construction results in a spectrum that is similar
 to that of the original Hamiltonian for low energies. 
 This means that minimizing the gadget Hamiltonian, if reaching its global
 minimum, the resulting state will be close to the global minimum of 
@@ -199,7 +199,7 @@ Hgad = gadgetizer.gadgetize(Hcomp)
 # As ansatz, we will use a variation of the
 # `qml.SimplifiedTwoDesign <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.SimplifiedTwoDesign.html#pennylane.SimplifiedTwoDesign>`_,
 # which was proposed in previous
-# works on cost function dependent barren plateaus [#cerezo2021].
+# works on cost function dependent barren plateaus [#cerezo2021]_.
 # I will skip the details of the construction, since it is not our focus here,
 # and just show how it looks like.
 # Here is the circuit for a small example
