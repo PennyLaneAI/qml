@@ -135,6 +135,7 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # -----------
 # This tutorial demonstrates how to use pennylane with external quantum chemistry libraries such as
 # PySCF and OpenFermion-PySCF. To summarize:
+#
 # 1. We can construct molecular Hamiltonians using a user-installed version of PySCF by passing
 # the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function. 
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
