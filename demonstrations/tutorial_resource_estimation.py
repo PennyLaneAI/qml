@@ -1,7 +1,7 @@
 r"""
 
-Quantum Resource Estimation
-===========================
+Resource Estimation for Quantum Chemistry
+=========================================
 
 .. meta::
     :property="og:description": Learn how to estimate the number of qubits and gates needed to
@@ -13,7 +13,7 @@ Quantum Resource Estimation
     tutorial_vqe A brief overview of VQE
 
 
-*Author: Soran Jahangiri. Posted: 18 October 2022. Last updated: 18 October 2022*
+*Author: Soran Jahangiri. Posted: 19 October 2022. Last updated: 19 October 2022*
 
 Quantum algorithms such as
 `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
