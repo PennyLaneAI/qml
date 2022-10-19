@@ -138,7 +138,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Learn how to use symmetries to improve training with equivariant learning
     :figure: demonstrations/geometric_qml/equivariant_thumbnail.jpeg
     :description: :doc:`demos/tutorial_geometric_qml`
-    :tags: pytorch
+    :tags: pytorch geometric qml
 
 
 :html:`</div></div><div style='clear:both'>`

@@ -234,7 +234,10 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #     :align: center
 #     :width: 35%
 #     :alt: The indexing of our game board.
-
+#
+#     ..
+#
+#     The indexing of our game board.
 
 ######################################################################
 # The secret will be to encode the symmetries into the gate set so the
