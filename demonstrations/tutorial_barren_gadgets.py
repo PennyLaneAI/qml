@@ -351,3 +351,11 @@ plt.show()
 #    Cerezo, M., Sone, A., Volkoff, T. et al.
 #    "Cost function dependent barren plateaus in shallow parametrized quantum circuits." `Nat Commun 12, 1791
 #    <https://doi.org/10.1038/s41467-021-21728-w>`__, 2021.
+#
+# About the author
+# ----------------
+#
+# .. bio:: Simon Cichy
+#    :photo: ../_static/authors/simon_cichy.jpg
+# 
+#    Simon is...
