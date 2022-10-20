@@ -123,14 +123,15 @@ of this tutorial.
 # from a user-given target Hamiltonian in an automated way. 
 # For those who want to check the inner workings,
 # you can find the code here (
-# :file:`../demonstrations/barren_gadgets/barren_gadgets.py`).
+# :file:`../demonstrations/barren_gadgets/barren_gadgets.py` 
+# ).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
-# :file:`../demonstrations/barren_gadgets/layered ansatz.py`)
-# are there to build the parapeterized quantum circuit we use in this demo.
+# :file:`../demonstrations/barren_gadgets/layered ansatz.py` 
+# ) are there to build the parapeterized quantum circuit we use in this demo.
 # The first computes the shape of the array of trainable parameters that the 
 # circuit will need. The second generates a random sequence of Pauli rotations
-# from :math:\{R_x, R_Y, R_Z\}`` with the right dimension.
+# from :math:`\{R_X, R_Y, R_Z\}` with the right dimension.
 # Finally, ``build_ansatz`` puts the pieces together. 
 
 import pennylane as qml
@@ -327,6 +328,8 @@ plt.figure()
 plt.plot(costs_lists["training"])
 plt.plot(costs_lists["monitoring"])
 plt.legend(["training", "monitoring"])
+plt.xlabel("Number of iterations")
+plt.ylabel("Cost values")
 plt.show()
 
 ##############################################################################
@@ -334,7 +337,21 @@ plt.show()
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
 # It is a very simple example. but we see that the training of our circuit using
 # the gadget Hamiltonian as cost function did indeed allow to reach the
-# global minimum of the target cost function.
+# global minimum of the target cost function.  
+# 
+# Now that you have an idea of how you can use perturbative gadgets in 
+# variational quantum algorithms, you can try applying it to more interesting
+# problems! However, be reminded of the exponential scaling of classical 
+# simulations of quantum systems, adding linearly many auxiliary qubits
+# quickly becomes a lot.
+# For those interested in the theory behind it or more formal statements of 
+# "how close" the results using the gadget are from the targeted ones, check out
+# the original paper [#cichy2022]_ .
+# There you will also find a more general recipe to design other gadget 
+# constructions with similar properties.  
+# Also, the complete repository with explanations on how to reproduce the 
+# figures can be found from the paper
+# `here <https://github.com/SimonCichy/barren-gadgets>`_ . 
 
 ##############################################################################
 # References
