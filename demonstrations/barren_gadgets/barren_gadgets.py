@@ -121,46 +121,5 @@ class PerturbativeGadgets:
                              ' computational locality is divisible by the' + 
                              ' target locality - 2')
 
-    def zero_projector(self, Hamiltonian, target_locality=3):
-        """Generation of a projector on the zero state |00...0>
-        as a sum of projectors |0><0| on each qubit
-        to be used as a cost function with qml.ExpvalCost
-        Args: 
-            Hamiltonian (qml.Hamiltonian) : Hamiltonian to be gadgetized
-        Returns:
-            projector (qml.Hamiltonian)   : projector that can be used as 
-                                            an observable to measure
-        """
-        n_comp, k, r = self.get_params(Hamiltonian)
-        ktilde = int(k/(target_locality-2))
-        ancillary_qubits = r * ktilde
-        coeffs = [1/ancillary_qubits] * ancillary_qubits
-        obs = []
-        for qubit in range(n_comp, n_comp+ancillary_qubits):
-            zero_state = np.array([1, 0])
-            zero_projector = qml.Hermitian(np.outer(zero_state, zero_state), 
-                                           qubit)
-            obs.append(zero_projector)
-        projector = qml.Hamiltonian(coeffs, obs)
-        return projector
-    
-    def all_zero_projector(self, Hamiltonian, target_locality=3):
-        """Generation of a rank 1 projector on the zero state |00...0>
-        to be used as a cost function with qml.ExpvalCost
-        Args: 
-            Hamiltonian (qml.Hamiltonian) : Hamiltonian to be gadgetized
-        Returns:
-            projector (qml.Hamiltonian)   : projector that can be used as 
-                                            an observable to measure
-        """
-        n_comp, k, r = self.get_params(Hamiltonian)
-        ktilde = int(k/(target_locality-2))
-        ancillary_qubits = r * ktilde
-        zero_state = np.zeros((2**ancillary_qubits))
-        zero_state[0] = 1
-        zero_projector = qml.Hermitian(np.outer(zero_state, zero_state), 
-                                       range(n_comp, n_comp + ancillary_qubits, 1))
-        projector = qml.Hamiltonian([1], [zero_projector])
-        return projector
 
 
