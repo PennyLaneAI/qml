@@ -48,7 +48,7 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
 
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
 can be implemented on existing hardware. We are instead interested in estimating the number of
-logical qubits and the number of gates which are needed to implement the algorithm. We focus on
+logical qubits and the number of gates that are needed to implement the algorithm. We focus on
 non-Clifford gates, which are the most expensive to implement in a fault-tolerant setting. We now
 explain how to perform this resource estimation for QPE algorithms based on a second-quantized
 Hamiltonian describing a molecule, and a first-quantized Hamiltonian describing a periodic material.
@@ -265,7 +265,7 @@ fig.tight_layout()
 ##############################################################################
 # We have added a line showing the dependency of the shots to the error as
 # :math:`\text{shots} = 1.4\text{e}4 \times 1/\epsilon^2` for comparison. Can you draw any
-# interesting information form the plot :stonks: ?
+# interesting information form the plot?
 #
 # Conclusions
 # -----------
