@@ -8,8 +8,8 @@ What is Quantum Chemistry?
    :property="og:description": Quantum chemistry is an area of research focused on addressing classically intractable chemistry problems with quantum computing.
    :property="og:image": 
 
-Quantum chemistry is an area of research focused on addressing classically intractable chemistry problems with 
-quantum computing. It is paramount to the commercial adoption of quantum computing, as simulating properties of
+Quantum chemistry is an area of research focused on calculating properties of molecules, and the materials built out of them, using quantum mechanics. 
+As an application of quantum computing, it is paramount to the commercial adoption of quantum computers, as simulating properties of
 matter is a ubiquitous task in many industries.
 
 Traditional methods for simulating the properties of matter are hindered, in some way, by representational capacity. 
