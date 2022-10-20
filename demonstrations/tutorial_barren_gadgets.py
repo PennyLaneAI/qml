@@ -121,8 +121,8 @@ of this tutorial.
 # functions specific to our tutorial. 
 # The ``PerturbativeGadget`` class allows to generate the gadget Hamiltonian
 # from a user-given target Hamiltonian in an automated way. 
-# For those who want to check how it's 
-# done, you can find the code here (
+# For those who want to check the inner workings,
+# you can find the code here (
 # :file:`../demonstrations/barren_gadgets/barren_gadgets.py`).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
@@ -313,7 +313,7 @@ for it in range(max_iter):
     weights = opt.step(training_cost, weights)
     costs_lists["training"].append(training_cost(weights))
     costs_lists["monitoring"].append(monitoring_cost(weights))
-    if (it + 1) % 20 == 0:
+    if (it + 1) % 50 == 0:
         print(
             f"Iteration = {it+1:5d} of {max_iter:5d} | "
             + "Training cost = {:12.8f} | ".format(costs_lists["training"][-1])
