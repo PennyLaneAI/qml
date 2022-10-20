@@ -118,7 +118,6 @@ of this tutorial.
 
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
 from barren_gadgets.barren_gadgets import PerturbativeGadgets
 from barren_gadgets.layered_ansatz import (
     build_ansatz,
@@ -214,7 +213,8 @@ def display_circuit(weights):
     return qml.expval(qml.PauliZ(wires=0))
 
 
-print(qml.draw(display_circuit)(weights))
+# print(qml.draw(display_circuit)(weights))
+qml.draw_mpl(display_circuit)(weights)
 
 ##############################################################################
 # Now we build the circuit for our actual experiment
@@ -303,6 +303,10 @@ for it in range(max_iter):
             + "Monitoring cost = {:12.8f} | ".format(costs_lists["monitoring"][-1])
         )
 
+import matplotlib.pyplot as plt
+plt.style.use("seaborn")
+
+plt.figure()
 plt.plot(costs_lists["training"])
 plt.plot(costs_lists["monitoring"])
 plt.legend(["training", "monitoring"])
