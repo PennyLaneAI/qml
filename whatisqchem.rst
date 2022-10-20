@@ -27,9 +27,7 @@ Nature is quantum mechanical
     :target: javascript:void(0);
 
 
-Classical computers are simply not able to simulate general quantum systems efficiently due to the computational 
-complexity of nature. Richard Feynman famously said that "If you want to make a simulation of nature, you'd better make 
-it quantum mechanical..."
+Richard Feynman famously said that "Nature isn't classical, dammit, and if you want to make a simulation of nature, you'd better make it quantum mechanical." To simulate a general quantum system on a classical computer, the resources need to scale exponentially with the size of the system. Therefore, a classical computer cannot efficiently simulate a general quantum system.
 
 **Nature is quantum, which is why using quantum computers as a simulation platform will enable us to simulate nature
 efficiently.** We can leverage the physical laws of nature to tell us its secrets.
