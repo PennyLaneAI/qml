@@ -116,13 +116,30 @@ and using that for training instead. That is what we will do in the following
 of this tutorial.
 """
 
+##############################################################################
+# First, a few imports. Pennylane and numpy of course, and additionally a few
+# functions specific to our tutorial. 
+# The ``PerturbativeGadget`` class allows to generate the gadget Hamiltonian
+# from a user-given target Hamiltonian in an automated way. 
+# For those who want to check how it's 
+# done, you can find the code here (
+# :file:`../demonstrations/barren_gadgets/barren_gadgets.py`).
+# The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
+# ``build_ansatz`` (for the details:
+# :file:`../demonstrations/barren_gadgets/layered ansatz.py`)
+# are there to build the parapeterized quantum circuit we use in this demo.
+# The first computes the shape of the array of trainable parameters that the 
+# circuit will need. The second generates a random sequence of Pauli rotations
+# from :math:\{R_x, R_Y, R_Z\}`` with the right dimension.
+# Finally, ``build_ansatz`` puts the pieces together. 
+
 import pennylane as qml
 from pennylane import numpy as np
 from barren_gadgets.barren_gadgets import PerturbativeGadgets
 from barren_gadgets.layered_ansatz import (
-    build_ansatz,
     generate_random_gate_sequence,
     get_parameter_shape,
+    build_ansatz,
 )
 
 np.random.seed(42)
