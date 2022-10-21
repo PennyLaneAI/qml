@@ -71,9 +71,10 @@ Pauli words, acting on :math:`k` qubits
 with :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`
 and :math:`\sigma_{i,j} \in \{ X, Y, Z \}`, :math:`c_i \in \mathbb{R}`.  
 Now we construct the gadget Hamiltonian.
-For each term :math:`h_i`, we will need :math:`k` additional qubits which we call 
-auxiliary qubits, and add two terms to the Hamiltonian: 
-an "unperturbed" part :math:`H^\text{aux}_s` and a perturbation :math:`\lambda V_s`. 
+For each term :math:`h_i`, we will need :math:`k` additional qubits which we 
+call auxiliary qubits, and add two terms to the Hamiltonian: 
+an "unperturbed" part :math:`H^\text{aux}_i` and a perturbation :math:`V_i` 
+of strength :math:`\lambda`. 
 The unperturbed part penalizes each of the newly added qubits for not being in 
 the :math:`|0\rangle` state
 
@@ -155,9 +156,6 @@ np.random.seed(42)
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
 # class
 
-# term1 = qml.operation.Tensor(qml.PauliX(0), qml.PauliX(1), qml.PauliY(2), qml.PauliZ(3))
-# term2 = qml.operation.Tensor(qml.PauliZ(0), qml.PauliY(1), qml.PauliX(2), qml.PauliX(3))
-# Hcomp = qml.Hamiltonian([1, 1], [term1, term2])
 Hcomp = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
       + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 
@@ -203,9 +201,7 @@ print(Hgad)
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
-# term1 = qml.operation.Tensor(qml.PauliX(0), qml.PauliY(1), qml.PauliZ(2), qml.PauliZ(3))
-# Hcomp = qml.Hamiltonian([1], [term1])
-Hcomp = 1*qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
+Hcomp = 1 * qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
 perturbation_factor = 10
 gadgetizer = PerturbativeGadgets(perturbation_factor)
 Hgad = gadgetizer.gadgetize(Hcomp)
@@ -234,7 +230,6 @@ def display_circuit(weights):
     return qml.expval(qml.PauliZ(wires=0))
 
 
-# print(qml.draw(display_circuit)(weights))
 qml.draw_mpl(display_circuit)(weights)
 
 ##############################################################################
