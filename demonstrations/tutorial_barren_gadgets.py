@@ -77,7 +77,7 @@ an "unperturbed" part :math:`H^\text{aux}_s` and a perturbation :math:`\lambda V
 The unperturbed part penalizes each of the newly added qubits for not being in 
 the :math:`|0\rangle` state
 
-.. math:: H^\text{aux}_i = \sum_{j=1}^k |1\rangle \langle 1|_{i,j} = \sum_{j=1}^k \frac{1}{2}(\mathbb{I} - Z_{i,j})
+.. math:: H^\text{aux}_i = \sum_{j=1}^k |1\rangle \langle 1|_{i,j} = \sum_{j=1}^k \frac{1}{2}(\mathbb{I} - Z_{i,j}).
 
 On the other hand, the perturbation part implements one of the operators in the Pauli word
 :math:`\sigma_{i,j}` on the corresponding qubit of the computational register and a 
@@ -127,7 +127,7 @@ of this tutorial.
 # ).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
-# :download:`../demonstrations/barren_gadgets/layered ansatz.py` 
+# :download:`../demonstrations/barren_gadgets/layered_ansatz.py` 
 # ) are there to build the parapeterized quantum circuit we use in this demo.
 # The first computes the shape of the array of trainable parameters that the 
 # circuit will need. The second generates a random sequence of Pauli rotations
@@ -155,9 +155,11 @@ np.random.seed(42)
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
 # class
 
-term1 = qml.operation.Tensor(qml.PauliX(0), qml.PauliX(1), qml.PauliY(2), qml.PauliZ(3))
-term2 = qml.operation.Tensor(qml.PauliZ(0), qml.PauliY(1), qml.PauliX(2), qml.PauliX(3))
-Hcomp = qml.Hamiltonian([1, 1], [term1, term2])
+# term1 = qml.operation.Tensor(qml.PauliX(0), qml.PauliX(1), qml.PauliY(2), qml.PauliZ(3))
+# term2 = qml.operation.Tensor(qml.PauliZ(0), qml.PauliY(1), qml.PauliX(2), qml.PauliX(3))
+# Hcomp = qml.Hamiltonian([1, 1], [term1, term2])
+Hcomp = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
+      + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 
 ##############################################################################
 # Now we can check that we constructed what we wanted.
@@ -201,8 +203,9 @@ print(Hgad)
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
-term1 = qml.operation.Tensor(qml.PauliX(0), qml.PauliY(1), qml.PauliZ(2), qml.PauliZ(3))
-Hcomp = qml.Hamiltonian([1], [term1])
+# term1 = qml.operation.Tensor(qml.PauliX(0), qml.PauliY(1), qml.PauliZ(2), qml.PauliZ(3))
+# Hcomp = qml.Hamiltonian([1], [term1])
+Hcomp = 1*qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
 perturbation_factor = 10
 gadgetizer = PerturbativeGadgets(perturbation_factor)
 Hgad = gadgetizer.gadgetize(Hcomp)
@@ -375,4 +378,7 @@ plt.show()
 # .. bio:: Simon Cichy
 #    :photo: ../_static/authors/simon_cichy.jpg
 # 
-#    Simon is...
+#    Simon is a graduate in quantum engineering and PhD student at the
+#    Freie Universität Berlin. He is interested in quantum machine learning
+#    and near-term quantum algorithms in general. 
+#    You can find out more about him `here <https://simoncichy.github.io/>`_ .
