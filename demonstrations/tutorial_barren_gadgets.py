@@ -201,7 +201,7 @@ print(Hgad)
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
-Hcomp = 1 * qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
+Hcomp = 1 * qml.PauliX(0) @ qml.PauliY(1) @ qml.PauliZ(2) @ qml.PauliZ(3)
 perturbation_factor = 10
 gadgetizer = PerturbativeGadgets(perturbation_factor)
 Hgad = gadgetizer.gadgetize(Hcomp)
