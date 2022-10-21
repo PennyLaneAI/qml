@@ -22,7 +22,7 @@ strategy.
 Thinking about VQE applications, let us consider cost functions that are 
 expectation values of Hamiltonians like
 
-.. math:: C = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \langle 00\ldots 0| V(\theta)^\dagger\right].
+.. math:: C(\theta) = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \langle 00\ldots 0| V(\theta)^\dagger\right].
 
 Here :math:`|00\ldots 0\rangle` is our initial state, 
 :math:`V(\theta)` is the circuit ansatz and :math:`H` the Hamiltonian
@@ -71,7 +71,7 @@ Pauli words, acting on :math:`k` qubits
 with :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`
 and :math:`\sigma_{i,j} \in \{ X, Y, Z \}`, :math:`c_i \in \mathbb{R}`.  
 Now we construct the gadget Hamiltonian.
-For each term :math:`h_i`, we will need :math:`k` additional qubits qubits which we call 
+For each term :math:`h_i`, we will need :math:`k` additional qubits which we call 
 auxiliary qubits, and add two terms to the Hamiltonian: 
 an "unperturbed" part :math:`H^\text{aux}_s` and a perturbation :math:`\lambda V_s`. 
 The unperturbed part penalizes each of the newly added qubits for not being in 
@@ -79,7 +79,7 @@ the :math:`|0\rangle` state
 
 .. math:: H^\text{aux}_i = \sum_{j=1}^k |1\rangle \langle 1|_{i,j} = \sum_{j=1}^k \frac{1}{2}(\mathbb{I} - Z_{i,j})
 
-while the perturbation part implements one of the operators in the Pauli word
+On the other hand, the perturbation part implements one of the operators in the Pauli word
 :math:`\sigma_{i,j}` on the corresponding qubit of the computational register and a 
 pair of Pauli :math:`X` gates on two of the auxiliary qubits
 
@@ -168,7 +168,7 @@ print(Hcomp)
 # We indeed have a Hamiltonian composed of two terms, with the expected Pauli
 # words.
 # Next, we can construct the corresponding gadget Hamiltonian.
-# Using the class PerturbativeGadgets, we can automatedly
+# Using the class ``PerturbativeGadgets``, we can automatically
 # generate the gadget Hamiltonian from the computational Hamiltonian.
 # The object gadgetizer will contain all the information about the settings of
 # the gadgetization procedure (there are quite a few knobs one can tweak on,
@@ -335,7 +335,7 @@ plt.show()
 ##############################################################################
 # Since our example of target Hamiltonian is a single Pauli string, we know
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
-# It is a very simple example. but we see that the training of our circuit using
+# It is a very simple example but we see that the training of our circuit using
 # the gadget Hamiltonian as cost function did indeed allow to reach the
 # global minimum of the target cost function.  
 # 
