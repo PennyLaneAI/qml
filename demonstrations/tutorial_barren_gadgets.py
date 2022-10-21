@@ -124,7 +124,7 @@ of this tutorial.
 # from a user-given target Hamiltonian in an automated way. 
 # For those who want to check the inner workings,
 # you can find the code here (
-# :download:`../demonstrations/barren_gadgets/barren_gadgets.py` 
+# :download:`barren_gadgets.py <../demonstrations/barren_gadgets/barren_gadgets.py>` 
 # ).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
