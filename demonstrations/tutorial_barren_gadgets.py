@@ -128,7 +128,7 @@ of this tutorial.
 # ).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
-# :download:`../demonstrations/barren_gadgets/layered_ansatz.py` 
+# :download:`layered_ansatz.py <../demonstrations/barren_gadgets/layered_ansatz.py>` 
 # ) are there to build the parapeterized quantum circuit we use in this demo.
 # The first computes the shape of the array of trainable parameters that the 
 # circuit will need. The second generates a random sequence of Pauli rotations
