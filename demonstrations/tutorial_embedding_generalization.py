@@ -230,10 +230,10 @@ def QAOAEmbedding(features, weights, wires):
 # features in this dataset, meaning there are 60 classical parameters 
 # and 12 quantum parameters.
 #
-# Earlier, we reduced the number of classical features on via PCA, 
+# Earlier, we reduced the number of classical features via PCA, 
 # resulting in a smaller number of trainable parameters. 
 # With 16 principal components, we have now have 32 linear parameters, 
-# giving 44 parameters in total.
+# meaning 44 parameters in total.
 #
 # Here, we load the PCA features we generated:
 
