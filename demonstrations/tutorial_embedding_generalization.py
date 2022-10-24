@@ -74,7 +74,7 @@ from pennylane import RX, RY, RZ, CNOT
 ######################################################################
 # The following random seed is used:
 
-np.random.seed(seed=1)
+np.random.seed(seed=123)
 
 ######################################################################
 # In this example, we will be reducing each sample to 16 principle 
