@@ -26,11 +26,11 @@ efficiency for problem sizes where the actual advantage of quantum algorithms ca
 Despite these difficulties, it is still possible to estimate the amount of resources required to
 implement such quantum algorithms .
 
-In this demo, we describe how to estimate the total number of
-`non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_ and logical qubits
-required to implement the QPE algorithm for simulating molecular Hamiltonians represented in first
-and second quantization. We also explain how to estimate the total number of measurements needed to
-compute expectation values using algorithms such as VQE.
+In this demo, we describe how to estimate the total number of and logical qubits required to
+implement the QPE algorithm for simulating molecular Hamiltonians represented in first and second
+quantization. We focus on `non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_ which
+are the most expensive to implement in a fault-tolerant setting. We also explain how to estimate the
+total number of measurements needed to compute expectation values using algorithms such as VQE.
 
 Quantum Phase Estimation
 ------------------------
@@ -48,23 +48,20 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
 
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
 can be implemented on existing hardware. We are instead interested in estimating the number of
-logical qubits and the number of gates that are needed to implement the algorithm. We focus on
-non-Clifford gates, which are the most expensive to implement in a fault-tolerant setting. We now
-explain how to perform this resource estimation for QPE algorithms based on a second-quantized
-Hamiltonian describing a molecule, and a first-quantized Hamiltonian describing a periodic material.
-We assume Gaussian and plane wave basis sets for describing the molecular and periodic systems,
-respectively. The PennyLane functionality in the :mod:`qml.resource  <pennylane.resource>`
-module allows us to estimate these resources by simply defining system specifications and a target
-error for estimation. Let's see how!
+logical qubits and the number of non-Clifford gates that are needed to implement the algorithm. The
+PennyLane functionality in the :mod:`qml.resource  <pennylane.resource>` module allows us to
+estimate these resources by simply defining system specifications and a target error for estimation.
+Let's see how!
 
 QPE cost for simulating molecules
 *********************************
 We study the double low-rank Hamiltonian factorization algorithm of [#vonburg2021]_ and use its cost
 equations as provided in APPENDIX C of [#lee2021]_.
-This algorithm requires the one- and two-electron integrals as input. These integrals can be
-obtained in different ways and here we use PennyLane to compute them. We first need to define the
-atomic symbols and coordinates for the given molecule. Let's use the water molecule at its
-equilibrium geometry with the 6-31g basis set as an example.
+This algorithm requires the one- and two-electron
+`integrals <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html#the-hartree-fock-method>`_
+as input. These integrals can be obtained in different ways and here we use PennyLane to compute
+them. We first need to define the atomic symbols and coordinates for the given molecule. Let's use
+the water molecule at its equilibrium geometry with the 6-31g basis set as an example.
 """
 import pennylane as qml
 from pennylane import numpy as np
