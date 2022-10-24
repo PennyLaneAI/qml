@@ -28,10 +28,9 @@ Building molecular Hamiltonians
 -------------------------------
 In PennyLane, Hamiltonians for quantum chemistry are built with the
 :func:`~.pennylane.qchem.molecular_hamiltonian` function by specifying a backend for solving the
-Hartree-Fock equations and then constructing the Hamiltonian. The default backend is the
-differentiable Hartree-Fock solver of the :mod:`qml.qchem <pennylane.qchem>` module. The
-:func:`~.pennylane.qchem.molecular_hamiltonian` function can also be used to construct the
-molecular Hamiltonian with a non-differentiable backend that uses the
+Hartree-Fock equations. The default backend is the differentiable Hartree-Fock solver of the
+:mod:`qml.qchem <pennylane.qchem>` module. A Molecular Hamiltonian can also be constructed with a
+non-differentiable backend that uses the
 `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin, interfaced with the
 electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. This
 backend can be selected by setting ``method='pyscf'`` in
@@ -42,7 +41,7 @@ plugin to be installed by the user with
 
    pip install openfermionpyscf
 
-For example, the molecular Hamiltonian can then be constructed for a water molecule:
+For example, the molecular Hamiltonian for a water molecule can be constructed with
 """
 
 import pennylane as qml
@@ -58,7 +57,9 @@ print(H)
 
 ##############################################################################
 # This generates a PennyLane :func:`~.pennylane.Hamiltonian` that can be used in a VQE workflow or
-# converted to a sparse matrix in the computational basis.
+# converted to a
+# `sparse matrix <https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html#sparse-hamiltonians>`_
+# in the computational basis.
 #
 # Additionally, if you have built your electronic Hamiltonian independently using
 # `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools, it can
@@ -79,14 +80,15 @@ print(f'Hamiltonian: \n {H}')
 # In order to build a
 # `molecular Hamiltonian <https://pennylane.ai/qml/demos/tutorial_quantum_chemistry.html>`_, we need
 # one- and two-electron integrals in the molecular orbital basis. These integrals are used to
-# construct a fermionic Hamiltonian which is then mapped onto the qubit basis. The two-electron
-# integral tensor can be factorized and used to construct factorized Hamiltonians which can be
-# simulated with a smaller number of resources. These molecular integrals can be computed with the
+# construct a fermionic Hamiltonian which is then mapped onto the qubit basis. These molecular
+# integrals can be computed with the
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
 # can be computed with the `PySCF <https://github.com/sunqm/pyscf>`_ package and used in PennyLane
 # workflows such as quantum resource estimation. Let's use water in the
 # `6-31G basis <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Pople_basis_sets>`_ as
-# an example. First, we define the PySCF molecule object and run a restricted Hartree-Fock
+# an example.
+#
+# First, we define the PySCF molecule object and run a restricted Hartree-Fock
 # calculation:
 
 from pyscf import gto, ao2mo, scf
@@ -133,8 +135,11 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 ##############################################################################
 # Conclusions
 # -----------
-# This tutorial demonstrates how to use pennylane with external quantum chemistry libraries such as
-# PySCF and OpenFermion-PySCF. To summarize:
+# This tutorial demonstrates how to use PennyLane with external libraries such as
+# `PySCF <https://github.com/sunqm/pyscf>`_ and
+# `OpenFermion <https://github.com/quantumlib/OpenFermion>`_.
+#
+# To summarize:
 #
 # 1. We can construct molecular Hamiltonians using a user-installed version of PySCF by passing
 #    the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
