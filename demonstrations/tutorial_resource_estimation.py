@@ -47,11 +47,11 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
     Circuit representing the quantum phase estimation algorithm.
 
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
-can be implemented on existing hardware. We are instead interested in estimating the number of
-logical qubits and the number of non-Clifford gates that are needed to implement the algorithm. The
-PennyLane functionality in the :mod:`qml.resource  <pennylane.resource>` module allows us to
-estimate these resources by simply defining system specifications and a target error for estimation.
-Let's see how!
+can be implemented on existing hardware. The PennyLane functionality in the
+:mod:`qml.resource <pennylane.resource>` module allows us to estimate the number of logical qubits
+and the number of non-Clifford gates that are needed to implement the algorithm. We can estimate
+these resources by simply defining system specifications and a target error for estimation. Let's
+see how!
 
 QPE cost for simulating molecules
 *********************************
