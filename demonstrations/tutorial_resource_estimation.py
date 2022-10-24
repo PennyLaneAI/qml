@@ -75,7 +75,7 @@ geometry = np.array([[0.00000000,  0.00000000,  0.28377432],
                      [0.00000000, -1.45278171, -1.00662237]], requires_grad=False)
 
 ##############################################################################
-# Then we construct a molecule object by selecting a basis set and compute the one- and two-electron
+# Then we construct a molecule object and compute the one- and two-electron
 # integrals in the molecular orbital basis.
 
 mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
@@ -102,8 +102,8 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
 # We can also estimate the number of non-Clifford gates with respect to the threshold error values
-# for discarding the negligible factors in the factorized Hamiltonian and plot the estimated
-# numbers.
+# for discarding the negligible factors in the factorized Hamiltonian [#vonburg2021]_ and plot the
+# estimated numbers.
 
 threshold = [10**-n for n in range(10)]
 n_gates = []
@@ -191,16 +191,16 @@ fig.tight_layout()
 #
 # .. math:: H=\sum_{i} c_i U_i.
 #
-# The parameter :math:`\lambda=\sum_i c_i` can be interpreted as a 1-norm of the Hamiltonian and
-# plays an important role in determining the cost of implementing the QPE algorithm. In PennyLane,
-# the 1-norm of the Hamiltonian can be obtained with
+# The parameter :math:`\lambda=\sum_i c_i`, which can be interpreted as the 1-norm of the
+# Hamiltonian, plays an important role in determining the cost of implementing the QPE
+# algorithm [#delgado2022]_. In PennyLane, the 1-norm of the Hamiltonian can be obtained with
 
 print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
 # explained in the documentation of :class:`~.pennylane.resource.FirstQuantization`
-# and :class:`~.pennylane.resource.DoubleFactorization`.
+# and :class:`~.pennylane.resource.DoubleFactorization` classes.
 #
 # Variational quantum eigensolver
 # ------------------------------------------
