@@ -172,10 +172,10 @@ y_test_array = test_df[['label']].to_numpy()
 # We can save our generated test-train splits as txt files, allowing
 # them to simply be imported in future:
 
-np.savetxt('bc_x_array.txt', x_train_array)
-np.savetxt('bc_x_test_array.txt', x_test_array)
-np.savetxt('bc_y_array.txt', y_train_array)
-np.savetxt('bc_y_test_array.txt', y_test_array)
+np.savetxt('embedding_metric_learning/bc_x_array.txt', x_train_array)
+np.savetxt('embedding_metric_learning/bc_x_test_array.txt', x_test_array)
+np.savetxt('embedding_metric_learning/bc_y_array.txt', y_train_array)
+np.savetxt('embedding_metric_learning/bc_y_test_array.txt', y_test_array)
 
 ######################################################################
 # Embedding
@@ -384,12 +384,12 @@ for i in range(400):
 # initial parameters.
 
 print("quantum pars: ", pars[1])
-with open(r"thetas.txt", "w") as file1:
+with open(r"embedding_metric_learning/thetas.txt", "w") as file1:
     for item in pars[1]:
         file1.write("%s\n" % item)
 
 print("classical pars: ", pars[0])
-with open(r"x1x2.txt", "w") as file2:
+with open(r"embedding_metric_learning/x1x2.txt", "w") as file2:
     for item in pars[0]:
         file2.write("%s\n" % item)
 
