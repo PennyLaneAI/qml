@@ -17,9 +17,8 @@ This tutorial uses the idea of quantum embeddings for metric learning presented 
 by training a hybrid classical-quantum data embedding to classify breast cancer data. 
 Lloyd et al.'s appraoch was inspired by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_ 
 (see also this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_). 
-This tutorial and its corresponding preparation steps (as included in the ``cancer_general.py`` and 
-``cancer_non-PCA.py`` files in the `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_) 
-adapts the work of Lloyd et al. by changing the data pre-processing steps, which includes the use of principal component analysis for feature reduction. 
+This tutorial adapts the work of Lloyd et al. by changing the data pre-processing steps, 
+including the use of principal component analysis for feature reduction. 
 This tutorial aims to produce good generalization peformance for test set data (something that 
 was not demonstrated in the original quantum metric learning code).
 
@@ -52,15 +51,18 @@ just 30 features per sample.
 
 Let us begin!
 """
-
-
 ######################################################################
-# Setup
+# Setup & Preparation
 # ----
 #
 # The tutorial requires the following imports:
 
 # %matplotlib inline
+from sklearn.datasets import load_breast_cancer
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -74,6 +76,106 @@ from pennylane import RX, RY, RZ, CNOT
 
 np.random.seed(seed=1)
 
+######################################################################
+# In this example, we will be reducing each sample to 16 principle 
+# components:
+
+pc = 16
+
+######################################################################
+# We now load in the breast cancer dataset as follows:
+
+breast = load_breast_cancer()
+
+breast_data = breast.data
+breast_labels = breast.target
+
+labels = np.reshape(breast_labels,(569,1))
+final_breast_data = np.concatenate([breast_data,labels],axis=1)
+
+######################################################################
+# We can now convert the data into a pandas dataframe:
+
+breast_dataset = pd.DataFrame(final_breast_data)
+features = breast.feature_names
+
+features_labels = np.append(features,'label')
+breast_dataset.columns = features_labels
+
+breast_dataset['label'].replace(0, 'Benign',inplace=True)
+breast_dataset['label'].replace(1, 'Malignant',inplace=True)
+
+print(breast_dataset.head(5))
+
+######################################################################
+# To apply PCA, we must first normalise the data:
+
+x = breast_dataset.loc[:, features].values
+x = StandardScaler().fit_transform(x)
+
+feat_cols = ['feature'+str(i) for i in range(x.shape[1])]
+normalised_breast = pd.DataFrame(x,columns=feat_cols)
+
+print(normalised_breast.head(5))
+
+######################################################################
+# We now apply reduce the number of features by applying PCA:
+
+pca_breast = PCA(n_components=pc)
+principalComponents_breast = pca_breast.fit_transform(x)
+
+principal_breast_Df = pd.DataFrame(data = principalComponents_breast)
+principal_breast_Df.columns = ["PC"+str(i+1) for i in range(pc)]
+
+copy = principal_breast_Df.copy()
+extracted_column = breast_dataset['label']
+copy = copy.join(extracted_column)
+
+print(copy.head(5))
+
+######################################################################
+# To see how well the principal components account for the whole data, 
+# we can assess the explained variance ratio:
+
+print('Explained variation per principal component: {}'.format(
+    pca_breast.explained_variance_ratio_
+))
+
+######################################################################
+# We now separate the data based on its label, then split each 
+# separated set into training and test data in the ratio of 3:2. 
+# This gives us four final arrays:
+
+b = copy[copy['label'] == 'Benign']
+m = copy[copy['label'] == 'Malignant']
+
+b['label'] = np.where(b['label'] == 'Benign', -1, 1)
+m['label'] = np.where(m['label'] == 'Benign', -1, 1)
+
+b = b.sample(frac=1).reset_index(drop=True)
+m = m.sample(frac=1).reset_index(drop=True)
+
+b_train_df = b.head(127)
+b_test_df = b.tail(85)
+m_train_df = m.head(214)
+m_test_df = m.tail(143)
+
+train_df = b_train_df.append(m_train_df)
+test_df = b_test_df.append(m_test_df)
+
+x_train_array = train_df.iloc[:,:-1].to_numpy()
+x_test_array = test_df.iloc[:,:-1].to_numpy()
+y_train_array = train_df[['label']].to_numpy()
+y_test_array = test_df[['label']].to_numpy()
+
+######################################################################
+# We can save our generated test-train splits as txt files, allowing
+# them to simply be imported in future:
+
+np.savetxt('bc_x_array.txt', x_train_array)
+np.savetxt('bc_x_test_array.txt', x_test_array)
+np.savetxt('bc_y_array.txt', y_train_array)
+np.savetxt('bc_y_test_array.txt', y_test_array)
 
 ######################################################################
 # Embedding
@@ -123,14 +225,17 @@ def QAOAEmbedding(features, weights, wires):
 
 
 ######################################################################
-# By default, the model has 30 + 12 trainable parameters - 30 for the 
-# classical part of the model and 12 for the quantum part.
+# The model has ``2n + 12`` trainable parameters, where ``n`` is the 
+# number of classical features. There are by default 30 clinical 
+# features in this dataset, meaning there are 60 classical parameters 
+# and 12 quantum parameters.
 #
-# The following datafiles were created by normalizing the 30 clinical 
-# features of the data, then carrying out principal component analysis 
-# on them to reduce the number of trainable parameters. 
-# The data preparation code used to create these files can be found in 
-# the `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_.
+# Earlier, we reduced the number of classical features on via PCA, 
+# resulting in a smaller number of trainable parameters. 
+# With 16 principal components, we have now have 32 linear parameters, 
+# giving 44 parameters in total.
+#
+# Here, we load the PCA features we generated:
 
 X = np.loadtxt("embedding_metric_learning/bc_x_array.txt", ndmin=2)  # pre-prepared training inputs
 Y = np.loadtxt("embedding_metric_learning/bc_y_array.txt")  # training labels
@@ -152,7 +257,7 @@ print(B_val.shape)
 
 
 ######################################################################
-# Quantum node initialization:
+# Next, we turn to quantum node initialization:
 
 n_features = 2
 n_qubits = 2 * n_features + 1
@@ -161,11 +266,7 @@ dev = qml.device("default.qubit", wires=n_qubits)
 
 
 ######################################################################
-# SWAP test for overlap measurement:
-
-x1list = []
-x2list = []
-
+# Defined below is the SWAP test we will use for overlap measurement:
 
 @qml.qnode(dev)
 def swap_test(q_weights, x1, x2):
@@ -203,8 +304,8 @@ def overlaps(weights, X1=None, X2=None):
 
 
 ######################################################################
-# Below is the cost function, which takes both inter-cluster overlaps and intra-
-# cluster overlaps into consideration:
+# Finally, below is the cost function, which takes both inter-cluster 
+# overlaps and intra-cluster overlaps into consideration:
 
 def cost(weights, A=None, B=None):
 
@@ -238,7 +339,7 @@ init_pars_quantum = np.random.normal(loc=0, scale=0.1, size=(4, 3))
 # generate initial parameters for the classical component, such that
 # the resulting number of trainable classical parameters is equal to
 # the product of the elements that make up the 'size' attribute.
-init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, 16))
+init_pars_classical = np.random.normal(loc=0, scale=0.1, size=(2, pc))
 
 init_pars = [init_pars_classical, init_pars_quantum]
 
