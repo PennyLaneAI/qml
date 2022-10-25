@@ -47,5 +47,3 @@ For each spin system, we obtain the following data for `100` different `paramete
 .. toctree::
     :maxdepth: 2
     :hidden:
-
-    datasets

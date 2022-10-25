@@ -72,4 +72,3 @@ For each molecule, we obtain the following data for `40` different `geometries`.
     :maxdepth: 2
     :hidden:
 
-    datasets

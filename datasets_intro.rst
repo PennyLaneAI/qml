@@ -75,5 +75,3 @@ check out the `Accessing Datasets` section of :doc:`quantum datasets <datasets>`
 .. toctree::
     :maxdepth: 2
     :hidden:
-    
-    datasets
