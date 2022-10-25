@@ -640,10 +640,11 @@ print("F1 Score: ", f1)
 # Below is an example table of results based on varying the the number  
 # of principal components. In each row, training was performed for
 # 1500 iterations with a batch size of 10. The features in row 1 did
-# not undergo PCA, while the features from the rest of the rows did:
+# not undergo PCA, while the features from the rest of the rows did.
+# The optimal value of each column is given in bold:
 #
 # +-----------------+---------------+-----------+-----------+----------+----------+
-# |    Features     | Training Cost | Test Cost | Precision |  Recall  | F1-Score |
+# | No. of Features | Training Cost | Test Cost | Precision |  Recall  | F1-Score |
 # +=================+===============+===========+===========+==========+==========+
 # |       30        |    0.2026     |  0.2791   |  0.9205   |  0.9720  |  0.9456  |
 # +-----------------+---------------+-----------+-----------+----------+----------+
