@@ -36,7 +36,7 @@ Illustrated below is the general circuit used.
 |
 
 After all necessary data pre-processing steps, ``n`` input features are reduced via matrix multiplication 
-to ``x:sub:1``, ``x:sub:2`` intermediate values, which are then fed into a quantum feature map consisting of ZZ 
+to ``x1``, ``x2`` intermediate values, which are then fed into a quantum feature map consisting of ZZ 
 entanglers, as well as RX and RY rotational gates. This results in ``2n + 12`` total parameters 
 (``2n`` from the classical part, ``12`` from the quantum feature map) which are trained and updated over 
 a set number of iterations, resulting in a trained embedding. The trained embedding is able to embed 
@@ -404,7 +404,7 @@ with open(r"embedding_metric_learning/x1x2.txt", "w") as file2:
 # Hilbert space mutual data overlap gram matrices can be used to assess 
 # the separation in embedded test set datapoints. Scatter plots 
 # depicting the pre-training and post-training positions of the 
-# ``x:sub:1``, ``x:sub:2`` intermediate points can also be plotted.
+# ``x1``, ``x2`` intermediate points can also be plotted.
 #
 # For generating mutual data overlap gram matrices, a smaller subset of 
 # the test set data is used, as determined by the ``select`` variable.
@@ -479,7 +479,7 @@ plt.colorbar(im, cax=cax)
 #
 # |
 #
-# The two-dimensional intermediate (``x:sub:1``, ``x:sub:2``) points can be graphed in the 
+# The two-dimensional intermediate (``x1``, ``x2``) points can be graphed in the 
 # form of scatter plots to help visualize the separation progress from 
 # a different perspective.
 #
