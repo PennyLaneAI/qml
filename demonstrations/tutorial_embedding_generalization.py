@@ -59,7 +59,6 @@ Let us begin!
 
 # %matplotlib inline
 from sklearn.datasets import load_breast_cancer
-import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
