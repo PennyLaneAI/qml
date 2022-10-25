@@ -75,7 +75,7 @@ from pennylane import RX, RY, RZ, CNOT
 #           demo.
 
 ######################################################################
-# The following random seed is used:
+# Next, the following random seed is used:
 
 np.random.seed(seed=22)
 
