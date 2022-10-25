@@ -101,6 +101,7 @@ Quantum Datasets
 
 .. toctree::
     :maxdepth: 2
+    :caption: Quantum Datasets
     :hidden:
 
     datasets_intro
