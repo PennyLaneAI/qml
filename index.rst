@@ -158,3 +158,4 @@ Quantum machine learning
     glossary
     demonstrations
     videos
+    datasets

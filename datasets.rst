@@ -103,7 +103,6 @@ Quantum Datasets
     :maxdepth: 2
     :hidden:
 
-    datasets
     datasets_intro
     datasets_module
     datasets_qchem

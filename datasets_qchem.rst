@@ -72,8 +72,3 @@ For each molecule, we obtain the following data for `40` different `geometries`.
     :maxdepth: 2
     :hidden:
 
-    datasets
-    datasets_intro
-    datasets_module
-    datasets_qchem
-    datasets_qspin

@@ -81,9 +81,3 @@ attributes can then be used within the usual PennyLane workflow. For example, us
 .. toctree::
     :maxdepth: 2
     :hidden:
-
-    datasets
-    datasets_intro
-    datasets_module
-    datasets_qchem
-    datasets_qspin
