@@ -643,6 +643,7 @@ print("F1 Score: ", f1)
 # not undergo PCA, while the features from the rest of the rows did.
 # The optimal value of each column is given in bold:
 #
+# .. _tbl-grid:
 # +-----------------+---------------+-----------+-----------+----------+----------+
 # | No. of Features | Training Cost | Test Cost | Precision |  Recall  | F1-Score |
 # +=================+===============+===========+===========+==========+==========+
