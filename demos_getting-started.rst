@@ -113,6 +113,8 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: quantum_metric_learning
 
 
+
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::

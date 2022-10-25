@@ -134,6 +134,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_learning_few_data`
     :tags: qcnn advantage 
 
+.. gallery-item::
+    :tooltip: Learn how to use symmetries to improve training with equivariant learning
+    :figure: demonstrations/geometric_qml/equivariant_thumbnail.jpeg
+    :description: :doc:`demos/tutorial_geometric_qml`
+    :tags: pytorch geometric qml
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -159,3 +165,5 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_ml_classical_shadows
     demos/function_fitting_qsp
     demos/tutorial_learning_few_data
+    demos/tutorial_geometric_qml
+
