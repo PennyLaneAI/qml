@@ -10,7 +10,7 @@ Quantum Datasets
 ================
 
 .. meta::
-   :property="og:description": Every second spent in training parameterized circuits is a second spent doing further greater things in quantum computing.
+   :property="og:description": Every second spent in training parameterized circuits is a second spent not doing further greater things in quantum computing.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
