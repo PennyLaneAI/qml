@@ -71,6 +71,11 @@ from pennylane import numpy as np
 from pennylane import RX, RY, RZ, CNOT
 
 ######################################################################
+# .. note:: Despite the code steps shown below, all figure results in 
+#           this demo were generated with a batch size of 10 over 1500 
+#           iterations.
+
+######################################################################
 # The following random seed is used:
 
 np.random.seed(seed=22)
