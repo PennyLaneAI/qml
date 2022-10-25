@@ -66,8 +66,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-import pkg_resources
-pkg_resources.require("pennylane==0.18.0")
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane import RX, RY, RZ, CNOT
