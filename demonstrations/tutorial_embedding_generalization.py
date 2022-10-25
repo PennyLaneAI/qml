@@ -645,7 +645,7 @@ print("F1 Score: ", f1)
 #.. list-table::
 #   :header-rows: 1
 #
-#   * - No. of Features
+#   * - Features
 #     - Training Cost
 #     - Test Cost
 #     - Precision
