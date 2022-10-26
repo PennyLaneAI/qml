@@ -99,6 +99,8 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
         | `tapered_hf_state`         | Hartree-Fock state of the molecule                                                |
         +----------------------------+-----------------------------------------------------------------------------------+
+        | `tapered_wire_map`         | Wire map for the tapered Hamiltonian and tapered HF state                         |
+        +----------------------------+-----------------------------------------------------------------------------------+
         | `tapered_dipole_op`        | Tapered dipole moment operator                                                    |
         +----------------------------+-----------------------------------------------------------------------------------+
         | `tapered_num_op`           | Tapered number operator                                                           |

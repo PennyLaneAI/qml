@@ -13,12 +13,12 @@ Data Module in PennyLane
 The `data` module provides functionality to access, store and manipulate the quantum datasets within the PennyLane framework.
 
 Dataset Structure
-------------------
+~~~~~~~~~~~~~~~~~~~
 
 PennyLane's quantum dataset currently contains two subcategories: `qchem` and `qspin`, which
 contains data regarding molecules and spin systems, respectively. Users can use the 
 :func:`~.pennylane.qdata.list_datasets` method to get a snapshot of the current state of the
-datasets as we show below:
+datasets as a nested dictionary as we show below:
 
 .. code-block:: python
 
@@ -31,52 +31,54 @@ datasets as we show below:
     {'qchem': {'H2': {...}, 'LiH': {...}, 'NH3': {...}, ...},
      'qspin': {'Heisenberg': {...}, 'Ising': {...}, ...}}
 
-This nested-dictionary structure can also be used to generate arguments for the :func:`~.pennylane.qdata.load`
-function that allows us to downlaod the dataset to be stored and accessed locally. The main purpose of these
-arguments is to proivde users with the flexibility of filtering data as per their needs and downloading what
-matches their specified criteria. For example, 
+
+Loading Datasets in PennyLane
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can then download data of the desired type with the :func: `~pennylande.data.load` function, and if the data that has already been downloaded will be loaded from the disk. We make sure to include all of the necessary attributes for the desired data. 
+For 'qchem' this includes the `molname`, `basis` and `bondlength`, and for 'qspin' this includes `sys_name`, `periodic`, `lattice` and `layout`. Ideally, the :func:`~pennylande.data.load` returns a list with the desired data which can then be used within
+the usual PennyLane workflow.
 
 .. code-block:: python
 
-    >>> qdata.get_params(qdata.list_datasets(), "qchem", basis=["STO3G"])
-    [{'molname': ['full'], 'basis': ['STO3G'], 'bondlength': ['full']}]
-    >>> qdata.get_keys("qchem", qdata.get_params(qdata.list_datasets(), "qchem",)[0])
-    ['full']
+    >>> H2_dataset=qml.data.load(data_type='qchem',molname='H2', basis='6-31G', bondlength='0.46')
+    >>> print(H2_dataset)
+    [<pennylane.data.dataset.Dataset object at 0x7f14e4369640>]
 
-These arguments can be supplied as it is with the load function or users can manually built these arguments
-as per their liking. Upon doing so, they can simply load the data as follows:
 
-.. code-block:: python
+Using Dataset in PennyLane
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    >>> data_type = "qchem"
-    >>> data_params = {"molname":"full", "basis":"full", "bondlength":"full"}
-    >>> dataset = qdata.load(data_type, data_params)
-    Downloading data to datasets/qchem
-    [███████████████████████████████████████████████████████ 100.0 %] 146.48 KB/146.48 KB
-    >>> dataset
-    [<pennylane.qdata.chemdata.Chemdata at 0x1666b2c50>,
-     <pennylane.qdata.chemdata.Chemdata at 0x1666b2500>,
-     <pennylane.qdata.chemdata.Chemdata at 0x28917aec0>]
-
-Using Datasets in PennyLane
-----------------------------
-
-Once downloaded and loaded to the memory, users can access various attributes from each of these datasets. These
-attributes can then be used within the usual PennyLane workflow. For example, using the dataset downloaded above
+Once loaded, one can access the attributes in the dataset.
 
 .. code-block:: python
 
-    >>> qchem_dataset = dataset[0]
-    >>> {"mol":qchem_dataset.molecule.symbols, "ham":qchem_dataset.hamiltonian}
-    {'mol: ['N', 'H', 'H', 'H'],
-     'ham': <Hamiltonian: terms=4409, wires=[0, 1, 2, ... , 15]>}
-    >>> dev = qml.device('lightning.qubit', wires=16, batch_obs=True)
-    >>> @qml.qnode(dev, diff_method="parameter-shift")
-    >>> def cost_fn_2():
-    ...     qchem_dataset.adaptive_circuit(qchem_dataset.adaptive_params, range(16))
-    ...     return qml.expval(qchem_dataset.num_op)
-    >>> cost_fn_2()
-    tensor(10., requires_grad=True)
+    >>> H2_dataset[0].molecule
+    <pennylane.qchem.molecule.Molecule object at 0x7f890b409280>
+    >>> H2_dataset[0].hf_state
+    [1 1 0 0 0 0 0 0]
+
+Since the loaded data items are compatible with PennyLane whenever possible, so we can use them directly in PennyLane worflow as follows:
+
+.. code-block:: python
+
+    >>> dev = qml.device('default.qubit',wires=H2_dataset[0].hamiltonian.wires)
+    >>> @qml.qnode(dev)
+    ... def circuit():
+    ...     return qml.expval(H2_dataset[0].hamiltonian)
+    >>> print(circuit())
+    2.173913043478261
+
+Filtering Datasets
+~~~~~~~~~~~~~~~~~~~
+
+In the case that we only wish to download or load portions of a large dataset, we can specify the desired attributes. For example, we can download only the molecule and hamiltonian of a dataset as follows:
+
+.. code-block:: python
+
+    >>> H2_hamiltonian = qml.data.load(data_type='qchem',molname='H2', basis='6-31G', bondlength='0.46', attributes=['molecule','hamiltonian'])
+    >>> H2_hamiltonian
+    <Hamiltonian: terms=185, wires=[0, 1, 2, 3, 4, 5, 6, 7]>
 
 .. toctree::
     :maxdepth: 2
