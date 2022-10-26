@@ -13,7 +13,7 @@ Optimization using SPSA
    tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
 
-*Author: Antal Szava — Posted: 19 Mar 2021. Last updated: 13 Sept 2022.*
+*Author: Antal Szava — Posted: 19 March 2021. Last updated: 13 September 2022.*
 
 In this tutorial, we investigate using a gradient-free optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum

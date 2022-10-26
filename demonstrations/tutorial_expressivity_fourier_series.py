@@ -10,7 +10,7 @@ Quantum models as Fourier series
 
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
-*Authors: Maria Schuld and Johannes Jakob Meyer — Posted: 24 August 2020. Last updated: 15 Jan 2021.*
+*Authors: Maria Schuld and Johannes Jakob Meyer — Posted: 24 August 2020. Last updated: 15 January 2021.*
 
 """
 
