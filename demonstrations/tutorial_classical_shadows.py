@@ -691,8 +691,9 @@ plt.show()
 # calculate entanglement witnesses, and even find a way to approximate the von Neumann entropy.
 # These applications illustrate the potential power
 # of classical shadows for the characterization of quantum systems.
-# 
-# 
+ 
+
+##############################################################################
 # References
 # ----------
 # .. [#Mauro2003] G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi,

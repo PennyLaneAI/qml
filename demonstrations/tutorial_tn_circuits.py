@@ -12,8 +12,8 @@ Tensor-network quantum circuits
 
    tutorial_variational_classifier Variational classifier
 
-*Authors: Diego Guala*:superscript:`1`*, Esther Cruz-Rico*:superscript:`2`*,
-Shaoming Zhang*:superscript:`2`*, Juan Miguel Arrazola*:superscript:`1`* — Posted: 29 March 2022. Last updated: 27 June 2022.*
+*Authors: Diego Guala*:superscript:`1` *, Esther Cruz-Rico*:superscript:`2` *,
+Shaoming Zhang*:superscript:`2` *, Juan Miguel Arrazola*:superscript:`1` * — Posted: 29 March 2022. Last updated: 27 June 2022.*
 
 | :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
 | :sup:`2` BMW Group, Munich, Germany

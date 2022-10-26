@@ -34,7 +34,7 @@ Quantum GANs
 
 
 ######################################################################
-# The goal of generative adversarial networks (GANs) [1] is to generate
+# The goal of generative adversarial networks (GANs) [#goodfellow2014]_ is to generate
 # data that resembles the original data used in training. To achieve this,
 # we train two neural networks simulatenously: a generator and a
 # discriminator. The job of the generator is to create fake data which
@@ -82,7 +82,7 @@ Quantum GANs
 #
 # where :math:`y` is a binary label for real (:math:`y=1`) or fake
 # (:math:`y=0`) data. In practice, generator training is shown to be more
-# stable [1] when made to maximise :math:`\log(D(G(z)))` instead of
+# stable [#goodfellow2014]_ when made to maximise :math:`\log(D(G(z)))` instead of
 # minimising :math:`\log(1-D(G(z)))`. Hence, the generator loss function to
 # be minimised becomes,
 #
@@ -98,7 +98,7 @@ Quantum GANs
 
 ######################################################################
 # In this tutorial, we re-create one of the quantum GAN methods presented
-# by Huang et al.[2]: the patch method. This method uses several quantum
+# by Huang et al. [#huang2020]_: the patch method. This method uses several quantum
 # generators, with each sub-generator, :math:`G^{(i)}`, responsible for
 # constructing a small patch of the final image. The final image is
 # contructed by concatenting all of the patches together as shown below.
@@ -591,12 +591,15 @@ plt.show()
 ######################################################################
 # References
 # ----------
-# [1] Ian J. Goodfellow et al. *Generative Adversarial Networks*.
-# `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
+# .. [#goodfellow2014]
+# 
+#    Ian J. Goodfellow et al. *Generative Adversarial Networks*.
+#    `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
 #
-# [2] He-Liang Huang et al. *Experimental Quantum Generative Adversarial
-# Networks for Image Generation*. 
-# `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
+# .. [#huang2020]
+# 
+#    He-Liang Huang et al. *Experimental Quantum Generative Adversarial Networks for Image Generation*. 
+#    `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
 #
 # About the author
