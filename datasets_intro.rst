@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
 
 
-What is Quantum Data?
+What is a Quantum Dataset?
 =====================
 
 .. meta::
@@ -17,25 +17,23 @@ What is Quantum Data?
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
-Quantum dataset is just a collection of **quantum data** obtained from various quantum systems.
+Quantum dataset is just a collection of **quantum data** obtained from various quantum systems that describes it and its evolution.
 
-Quantum data can be defined as the **information** that describes a quantum system and its evolution.
-
-
-Describing Quantum Data
-~~~~~~~~~~~~~~~~~~~~~~~~
+Quantum Data
+~~~~~~~~~~~~~~
 
 .. image:: /_static/datasets/qdata-illustration.png
     :align: right
     :width: 30%
     :target: javascript:void(0);
 
+In a more general sense, we consider the quantum data to encompass the following things:
 
-#. Hamiltonian of the system and any other auxillary observables
-#. System's quantum state and ab efficient state-preparation circuit
-#. Any useful unitary transformations of the system
-#. Measurement operators for the systems, and obtained measurement distributions and expectation values
-#. Control parameters for system evolution and data related to noise description
+#. **Hamiltonian** of the system and any other auxillary observables for other relevant properties of interest.
+#. **Quantum state** of interest for the system such as the ground state, and an efficient **state-preparation circuit** for it.
+#. Any useful **unitary transformations** of the system such as the Clifford operator required for tapering.
+#. **Measurement or projection operators** for the systems and any resulting distributions and expectation values.
+#. Control parameters for **system evolution** and data related to **noise description** such as the Kraus operators for channels.
 
 
 Motivating Quantum Datasets
@@ -46,26 +44,17 @@ Motivating Quantum Datasets
     :width: 25%
     :target: javascript:void(0);
 
-#. **Lesson from the success of machine learning:** Availability of multi-scale, high quality accessible datasets acts as a catalysis of developing new algorithms and benchmarks. 
+#. **A lesson from the success of machine learning:** Availability of multi-scale, high-quality accessible datasets for training and benchmarking acts as a catalysis of developing new and improving older algorithms. 
+#. **Challenge of finding quantum advantage:** Learning from quantum data might be more intuitive for quantum computers than classical ones, leading to an ideal candidate for quantum computational advantage.
+#. **Never-ending quest for useful research:** Readily available data makes cross-collaboration among different disciplines much more effortless, ultimately fostering better advancements in current algorithmic techniques. 
 
-
-#. **Challenge of finding quantum advantage:** Learning from quantum data might be more intuitive for quantum computers than classical ones
-
-
-#. **Never-ending quest for useful research:** Enables cross-collaboration among different disciplines much easier which can foster better advancements in current techniques. 
-
-|
 
 Exploring quantum datasets using PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**. It seamlessly integrates classical machine learning libraries
-with quantum simulators and hardware, giving users the power to use the provided datasets as a benchmark data for their novel algorithms and also to use it to solve problems in
-the areas of applied quantum computation, such as simulation of physical systems. We provide the `data` module in PennyLane to readily access the hosted dataset, and also to store 
-and manipulate them locally.
+PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**. It seamlessly integrates quantum simulators and hardware with machine-learning libraries, giving users the power to use the provided datasets to develop novel algorithms and benchmark them for problems in applied quantum computation, such as the simulation of physical systems. We also provide the **`data` module** in PennyLane to access the hosted dataset readily and store and manipulate them locally.
 
-To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or
-check out the `Accessing Datasets` section of :doc:`quantum datasets <datasets>`.
+To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or check out the `Accessing Datasets` section of :doc:`quantum datasets <datasets>`.
 
 .. figure:: /_static/whatisqml/jigsaw.png
     :align: center

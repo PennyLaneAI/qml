@@ -33,7 +33,6 @@ Data Features
 For each of the molecules mentioned above, users will be able to extract the following characteristics for a geometry:
 
 #. **Molecular Data**
-
     .. table::
         :widths: auto 
 
@@ -51,7 +50,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
 
     .. table::
         :widths: auto 
-      
+        
         +----------------------------+-----------------------------------------------------------------------------------+
         | `hamiltonian`              | PennyLane Hamiltonian in string format                                            |
         +----------------------------+-----------------------------------------------------------------------------------+
