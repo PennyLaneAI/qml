@@ -19,9 +19,9 @@ Quantum Datasets
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div class="container">
         <!-- Section: Features v.1 -->
-            <p class="lead grey-text text-center mx-auto mb-5">In our effort to build <span class="teal-text">PennyLane</span> as a resource hub for qunatum computing education and research, we are providing access to datasets related quantum systems.
+            <p class="lead grey-text text-center mx-auto mb-5">In our effort to build <span class="teal-text">PennyLane</span> as a resource hub for quantum computing education and research, we provide access to <span class="teal-text">datasets</span> related to quantum systems.
             <br><br>
-            Why spend time simulating them when you can simply download? 😉</p>
+            Why spend time simulating when you can simply download them? 😉</p>
 
         <section class="my-5">
             <div class="row main-cards">
@@ -35,7 +35,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Quantum Data</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Find out what does quantum data mean, the motivation for it and its potential use cases.</p>
+                                <p class="mb-1 grey-text px-3">Find out what quantum data means and explore the ground for its potential use cases.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Chemical Systems</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Take a dive into the dataset comprising of molecules and their various properties.</p>
+                                <p class="mb-1 grey-text px-3">Dive into the quantum chemistry dataset comprising molecules and their various properties.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Spin Systems</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Get key insights into the dataset comprising of spin systems and their various properties.</p>
+                                <p class="mb-1 grey-text px-3">Get insights into the datasets comprising quantum spin systems and their various properties.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Accessing Datasets</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Find out how these datasets can be accessed using PennyLane's new data module.</p>
+                                <p class="mb-1 grey-text px-3">Uncover how quantum datasets can be utilized with PennyLane's latest data module.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
