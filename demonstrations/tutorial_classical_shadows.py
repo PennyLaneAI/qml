@@ -695,7 +695,7 @@ plt.show()
 
 ##############################################################################
 # References
-# ----------
+# ##########
 # .. [#Mauro2003] G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi,
 #             `"Quantum Tomography" <https://arxiv.org/pdf/quant-ph/0302028.pdf>`_,
 #             Advances in Imaging and Electron Physics, 128 (2003): 205-308.
@@ -708,7 +708,7 @@ plt.show()
 #
 #
 # About the authors
-# -----------------
+# #################
 # .. include:: ../_static/authors/roeland_wiersema.txt
 #
 # .. include:: ../_static/authors/brian_doolittle.txt

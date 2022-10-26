@@ -590,7 +590,7 @@ plt.show()
 
 ######################################################################
 # References
-# ----------
+# ~~~~~~~~~~
 # .. [#goodfellow2014]
 # 
 #    Ian J. Goodfellow et al. *Generative Adversarial Networks*.
@@ -603,5 +603,5 @@ plt.show()
 #
 #
 # About the author
-# ----------------
+# ~~~~~~~~~~~~~~~~
 # .. include:: ../_static/authors/james_ellis.txt
