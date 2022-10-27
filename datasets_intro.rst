@@ -29,7 +29,7 @@ Quantum Data
 
 In a more general sense, we consider the quantum data to encompass the following things:
 
-#. **Hamiltonian** of the system and any other auxillary observables for other relevant properties of interest.
+#. **Hamiltonian** of the system and any other auxiliary observables for other relevant properties of interest.
 #. **Quantum state** of interest for the system such as the ground state, and an efficient **state-preparation circuit** for it.
 #. Any useful **unitary transformations** of the system such as the Clifford operator required for tapering.
 #. **Measurement or projection operators** for the systems and any resulting distributions and expectation values.
