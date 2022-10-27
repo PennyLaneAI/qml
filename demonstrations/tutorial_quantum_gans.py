@@ -582,8 +582,10 @@ plt.show()
 # regarding his paper. I am also indebited to the Pennylane community for
 # their help over the past few years.
 #
+#
 # References
 # ~~~~~~~~~~
+#
 # .. [#goodfellow2014]
 # 
 #    Ian J. Goodfellow et al. *Generative Adversarial Networks*.
