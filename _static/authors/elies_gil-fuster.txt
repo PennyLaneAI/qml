@@ -1,0 +1,4 @@
+.. bio:: Elies Gil-Fuster
+   :photo: ../_static/authors/elies_gil-fuster.jpg
+
+   Elies is a QML researcher in Berlin interested in board games and the maths of data re-uploading PQCs. He was a Xanadu Summer Resident of the first cohort, and you can find more about him at https://eliesgilfuster.eu.
