@@ -21,7 +21,7 @@ Spin Systems
 
 Through this dataset, it would be possible to access data for the following spin systems having up to 16 particles:
 
-* Transeverse-Field Ising model.
+* Transverse-Field Ising model.
 * XXZ Heisenberg model
 * Fermi-Hubbard model.
 * Bose-Hubbard model.
