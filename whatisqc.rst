@@ -2,13 +2,13 @@
    :format: html
 
 What Is Quantum Computing?
-=================================
+==========================
 
 .. meta::
    :property="og:description": Quantum computing is a research area that explores what quantum computers can do and how to make them do it.
    :property="og:image": https://pennylane.ai/qml/_static/whatisqml/gpu_to_qpu.png
 
-Quantum computing is a research area that explores **what quantum computers can do and how to make them do it**. It is a highly interdisciplinary field of quantum science and technology, sitting at the meeting point of algorithm design, complexity theory, system architecture and hardware development.
+Quantum computing is a research area that explores **what quantum computers can do and how to make them do it**. It is a highly interdisciplinary field of quantum science and technology, sitting at the meeting point of algorithm design, complexity theory, system architecture, and hardware development.
 
 Examples span the gamut from low-level hardware problems that engage a variety of phenomena in quantum mechanics, such as the implementation of physical schemes to control and stabilize quantum units of information, qubits, or the best way to synthesize a quantum circuit, to high-level problems like breaking classical and devising post-quantum approaches to encryption schemes, simulating quantum systems, or even training quantum neural networks.
 
@@ -22,7 +22,7 @@ Advantage and challenge of quantum computing
     :target: javascript:void(0);
 
 
-Quantum computers **extend the set of physical laws** classical computers operate on by accessing quantum aspects of the physical world and—as a result—gain new ways to process information. For example, quantum computers have the ability to explore many possibilities at once, a phenomenon known as *superposition*.
+Quantum computers **extend the set of physical laws** classical computers operate on by accessing quantum aspects of the physical world and, as a result, gain new ways of processing information. For example, quantum computers have the ability to explore many possibilities at once, a phenomenon known as *superposition*.
 
 Even though the original motivation for studying quantum computers was the efficient simulation of quantum systems, after a sequence of breakthroughs in algorithm research in the ‘90s demonstrated that quantum computers may be able to outperform their classical counterparts at specific tasks like searching lists, factoring numbers, and combinatorial optimization, research in this field began in earnest.
 
@@ -36,7 +36,7 @@ Quantum computing on near-term quantum devices
     :width: 60%
     :target: javascript:void(0);
 
-Real devices that can carry out useful quantum algorithms consist of **many interacting components** and they must be able to correct errors that arise, inevitably, from **device–environment interactions** as computations proceed. Architectures that support error correction are referred to as *fault-tolerant*.
+Real devices that can carry out useful quantum algorithms consist of **many interacting components** and they must be able to correct errors that inevitably arise from **device–environment interactions**. Architectures that support error correction are referred to as *fault-tolerant*.
 
 Perhaps the primary ambition of the field of quantum computing nowadays is to **develop a scalable, fault-tolerant device on which any and all quantum algorithms can be implemented**. Research in specialized fields like quantum machine learning and quantum chemistry is already underway, but existing quantum hardware is currently limited to devices that are either small, noisy, or non-universal—a computing paradigm known as **noisy intermediate-scale quantum, or NISQ**.
 
@@ -64,7 +64,7 @@ PennyLane for quantum computing
 
 PennyLane is an **open-source cross-platform Python library** that supports a wide array of tasks in quantum computing, quantum machine learning, and quantum chemistry. Its capabilities for the differentiable programming of quantum computers have been designed to seamlessly integrate with classical machine learning libraries, quantum simulators and hardware, giving users the power to train quantum circuits.
 
-To find out more, visit the [PennyLane Documentation](https://pennylane.readthedocs.io/) or check out the gallery of hands-on :doc:`quantum machine learning demonstrations <demonstrations>`.
+To find out more, visit the [PennyLane Documentation](https://pennylane.readthedocs.io/) or check out the gallery of hands-on :doc:`demonstrations <demonstrations>`.
 
 .. figure:: /_static/whatisqml/jigsaw.png
     :align: center
