@@ -45,7 +45,7 @@ For each spin system, we obtain the following data for `100` different `paramete
         | `parameters`               | Tunable parameters that determine the spin system                                 |
         +----------------------------+-----------------------------------------------------------------------------------+    
 
-#. **Hamiltonian and Ground-state Data**
+#. **Hamiltonian and Ground-State Data**
     .. table::
         :widths: auto 
 
