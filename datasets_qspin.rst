@@ -26,7 +26,7 @@ Through this dataset, it would be possible to access data for the following spin
 * Fermi-Hubbard model.
 * Bose-Hubbard model.
 
-We vary a tunable parameter in their Hamiltonian for each spin system to obtain 100 different configurations. For each such configuration, data is being made available for 1-D lattices (linear chain) and 2-D lattices (rectangular grid) with and without the periodic boundary conditions. Additionally, we also offer classical shadows for each configuration obtained with a 1000-shot randomized measurement in the Pauli basis.
+We vary a tunable parameter in their Hamiltonian for each spin system to obtain 100 different configurations. For each such configuration, data is being made available for 1-D lattices (linear chain) and 2-D lattices (rectangular grid) with and without the periodic boundary conditions. Additionally, we offer classical shadows for each configuration obtained with a 1000-shot randomized measurement in the Pauli basis.
 
 
 Data Features
