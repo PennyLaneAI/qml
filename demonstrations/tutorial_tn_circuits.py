@@ -1,8 +1,8 @@
 r"""
 .. _tn_circuits:
 
-Tensor-Network Quantum Circuits
-================================
+Tensor-network quantum circuits
+===============================
 
 .. meta::
     :property="og:description": This demonstration explains how to simulate tensor-network quantum circuits.
@@ -13,7 +13,7 @@ Tensor-Network Quantum Circuits
    tutorial_variational_classifier Variational classifier
 
 *Authors: Diego Guala*:superscript:`1` *, Esther Cruz-Rico*:superscript:`2` *,
-Shaoming Zhang*:superscript:`2` *, Juan Miguel Arrazola*:superscript:`1` *Last updated: 27 June 2022.*
+Shaoming Zhang*:superscript:`2` *, Juan Miguel Arrazola*:superscript:`1` *— Posted: 29 March 2022. Last updated: 27 June 2022.*
 
 | :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
 | :sup:`2` BMW Group, Munich, Germany
@@ -111,7 +111,7 @@ i.e., as meta-templates.
 
 
 PennyLane Implementation
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 We now demonstrate how to use PennyLane to build and simulate tensor-network quantum circuits.
 
 The first step is to define the circuit that will be broadcast into the tensor network shape.
@@ -403,7 +403,7 @@ for image in BAS:
 # .. _tn_circuits_references:
 #
 # References
-# ----------
+# ^^^^^^^^^^
 #
 #
 # .. [#huggins]
@@ -416,21 +416,14 @@ for image in BAS:
 #
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
+#
+#
 # About the authors
-# -----------------
-
-##############################################################################
-# .. bio:: Diego Guala
-#    :photo: ../_static/authors/diego_guala.jpg
+# ^^^^^^^^^^^^^^^^^
+# .. include:: ../_static/authors/diego_guala.txt
 #
-#    Diego Guala is a quantum scientist working at Xanadu. His work is focused on developing and implementing quantum algorithms for industrial applications.
+# .. include:: ../_static/authors/esther_cruz-rico.txt
 #
-# .. bio:: Esther Cruz-Rico
-#    :photo: ../_static/authors/esther_cruz.jpeg
+# .. include:: ../_static/authors/shaoming_zhang.txt
 #
-#    Esther is a graduate in physics and mathematics, currently pursuing her PhD in quantum algorithms at the Max-Planck Institute of Quantum Optics.
-#
-# .. bio:: Shaoming Zhang
-#    :photo: ../_static/authors/shaoming_zhang.png
-#
-#    Shaoming Zhang is a graduate student at TU Munich and BMW. His research interests are numerical methods for quantum many-body systems and quantum algorithms.
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

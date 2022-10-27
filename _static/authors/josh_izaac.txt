@@ -1,0 +1,4 @@
+.. bio:: Josh Izaac
+   :photo: ../_static/authors/josh_izaac.png
+
+   Josh is a theoretical physicist, software tinkerer, and occasional baker. At Xanadu, he contributes to the development and growth of Xanadu’s open-source quantum software products.

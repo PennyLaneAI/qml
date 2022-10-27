@@ -10,11 +10,11 @@ Givens rotations for quantum chemistry
     :property="og:image": https://pennylane.ai/qml/_images/Givens_rotations.png
 
 .. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
 
 
-*Author: PennyLane dev team. Posted: June 30, 2021. Last updated: June 30, 2021*
+*Author: Juan Miguel Arrazola — Posted: 30 June 2021. Last updated: 30 June 2021.*
 
 In the book `"Sophie's world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
@@ -493,3 +493,6 @@ print("Output state =", output)
 #   quantum circuits for quantum chemistry", arXiv:2106.13839, (2021)
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt
