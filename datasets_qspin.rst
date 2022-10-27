@@ -9,7 +9,7 @@
 Quantum many-body Physics Datasets
 ===================================
 
-Another area for exploring practical quantum advantage is quantum many-body physics, which involves exploring quantum spin models that while being more straightforward than molecular Hamiltonian, foster similar quantum-correlations-enabled phenomena. Therefore, in the first offering of our datasets, we include a quantum many-body physics dataset containing data related to some popularly studied spin systems.
+Another area for exploring practical quantum advantage is quantum many-body physics, which involves exploring quantum spin models that foster similar quantum-correlations-enabled phenomena than molecular Hamiltonians, while also being more straightforward. Therefore, in the our quantum datasets, we include a quantum many-body physics dataset containing data related to some popularly studied spin systems.
 
 Spin Systems
 ~~~~~~~~~~~~~

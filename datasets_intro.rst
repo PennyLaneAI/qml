@@ -44,15 +44,15 @@ Motivating Quantum Datasets
     :width: 25%
     :target: javascript:void(0);
 
-#. **A lesson from the success of machine learning:** Availability of multi-scale, high-quality accessible datasets for training and benchmarking acts as a catalysis of developing new and improving older algorithms. 
-#. **Challenge of finding quantum advantage:** Learning from quantum data might be more intuitive for quantum computers than classical ones, leading to an ideal candidate for quantum computational advantage.
-#. **Never-ending quest for useful research:** Readily available data makes cross-collaboration among different disciplines much more effortless, ultimately fostering better advancements in current algorithmic techniques. 
+#. **A lesson from the success of machine learning:** Availability of multi-scale, high-quality accessible datasets for training and benchmarking acts as a catalysis of both developing new algorithms, and improving older ones. 
+#. **Challenge of achieving quantum advantage:** Learning from quantum data might be more intuitive for quantum computers than classical ones, leading to an ideal candidate for quantum computational advantage.
+#. **Never-ending quest for useful research:** Readily available data reduces the work required for cross-collaboration among different disciplines, ultimately fostering better advancements in current algorithmic techniques. 
 
 
 Exploring quantum datasets using PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**. It seamlessly integrates quantum simulators and hardware with machine-learning libraries, giving users the power to use the provided datasets to develop novel algorithms and benchmark them for problems in applied quantum computation, such as the simulation of physical systems. We also provide the **`data` module** in PennyLane to access the hosted dataset readily and store and manipulate them locally.
+PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**. It seamlessly integrates quantum simulators and hardware with machine-learning libraries, giving users the power to use the provided datasets to develop novel algorithms and benchmark them for problems in applied quantum computation, such as the simulation of physical systems. We also provide the **``data`` module** in PennyLane to access the hosted dataset readily and store and manipulate them locally.
 
 To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or check out the `Accessing Datasets` section of :doc:`quantum datasets <datasets>`.
 
