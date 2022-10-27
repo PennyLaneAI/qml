@@ -33,7 +33,7 @@ In a more general sense, we consider the quantum data to encompass the following
 #. **Quantum state** of interest for the system such as the ground state, and an efficient **state-preparation circuit** for it.
 #. Any useful **unitary transformations** of the system such as the Clifford operator required for tapering.
 #. **Measurement or projection operators** for the systems and any resulting distributions and expectation values.
-#. Control parameters for **system evolution** and data related to **noise description** such as the Kraus operators for channels.
+#. Control parameters for **system evolution** and data related to **noise descriptions** such as the Kraus operators for channels.
 
 
 Motivating Quantum Datasets
