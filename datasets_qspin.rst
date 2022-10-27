@@ -36,7 +36,6 @@ For each spin system, we obtain the following data for `100` different `paramete
 
 
 #. **Spin Systems Data**
-
     .. table::
         :widths: auto 
 
@@ -47,7 +46,6 @@ For each spin system, we obtain the following data for `100` different `paramete
         +----------------------------+-----------------------------------------------------------------------------------+    
 
 #. **Hamiltonian and Ground-state Data**
-
     .. table::
         :widths: auto 
 
@@ -60,7 +58,6 @@ For each spin system, we obtain the following data for `100` different `paramete
         +----------------------------+-----------------------------------------------------------------------------------+   
 
 #. **Phase Transition Data**
-
     .. table::
         :widths: auto 
 
@@ -71,7 +68,6 @@ For each spin system, we obtain the following data for `100` different `paramete
         +----------------------------+-----------------------------------------------------------------------------------+    
 
 #. **Classical Shadow Data**
-
     .. table::
         :widths: auto 
 

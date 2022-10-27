@@ -47,7 +47,6 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Hamiltonian Data**
-
     .. table::
         :widths: auto 
         
@@ -60,7 +59,6 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Auxillary Observables**
- 
     .. table::
         :widths: auto
 
@@ -75,7 +73,6 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Tapering Data**
-
     .. table::
         :widths: auto
 
@@ -89,7 +86,6 @@ For each of the molecules mentioned above, users will be able to extract the fol
 
 
 #. **Tapered Observables Data**
-
     .. table::
         :widths: auto
 
@@ -110,7 +106,6 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **VQE Data**
-
     .. table::
         :widths: auto
 
