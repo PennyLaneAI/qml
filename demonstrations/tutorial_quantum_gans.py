@@ -577,18 +577,11 @@ plt.show()
 ######################################################################
 # Acknowledgements
 # ~~~~~~~~~~~~~~~~
-#
-
-
-######################################################################
 # Many thanks to Karolis Špukas who I co-developed much of the code with.
 # I also extend my thanks to Dr. Yuxuan Du for answering my questions
 # regarding his paper. I am also indebited to the Pennylane community for
 # their help over the past few years.
 #
-
-
-######################################################################
 # References
 # ~~~~~~~~~~
 # .. [#goodfellow2014]
