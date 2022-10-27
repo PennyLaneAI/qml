@@ -9,7 +9,7 @@
 Quantum Chemistry Datasets
 ===========================
 
-One of the most promising directions for the current research in quantum algorithms is quantum chemistry, a field of critical importance as it allows one to enquire about the quantum properties of matter. To foster this momentum in the ongoing effort by the scientific community further, we share the first offering of our quantum chemistry dataset, which contains data related to some popularly examined molecular systems.
+One of the most promising directions for current research in quantum algorithms is quantum chemistry, a field of critical importance, as it allows one to inquire about the quantum properties of matter. To further foster this momentum in the scientific community, we share our quantum chemistry dataset, which contains data related to some popularly examined molecular systems.
 
 Molecules
 ~~~~~~~~~~
@@ -19,13 +19,13 @@ Molecules
     :width: 45%
     :target: javascript:void(0);
 
-Through this dataset, it would be possible to access electronic structure data for the 42 different geometries of the following molecules:
+Through this dataset, it is possible to access electronic structure data for the 42 different geometries of the following molecules:
 
 * Linear hydrogen chains - H\ :sub:`2`, H\ :sub:`4`, H\ :sub:`6`, H\ :sub:`8`.
-* Metallic and Non-metallic hydrides - LiH, BeH\ :sub:`2`, BH\ :sub:`3`, CH\ :sub:`4`, NH\ :sub:`3`, H\ :sub:`2`\ O, HF.
+* Metallic and non-metallic hydrides - LiH, BeH\ :sub:`2`, BH\ :sub:`3`, CH\ :sub:`4`, NH\ :sub:`3`, H\ :sub:`2`\ O, HF.
 * Charged species - HeH\ :sup:`+`, H\ :sub:`3`\ :sup:`+`, OH\ :sup:`-`.
 
-For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :sup:`+`, data has been obtained for both minimal basis-set `STO-3G` and the split-valence double-zeta basis set `6-31G`. Whereas, for the rest of the other molecules, available data is for the former basis-set only. Moreover, for each molecule, the geometry is defined by equidistantly varying bond length around their central atom between :math:`[0.5 - 2.5]` Angstroms in 41 steps. In addition to these, we also include data for the optimal ground-state geometry of each molecule. 
+For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :sup:`+`, data has been obtained for both minimal basis-set `STO-3G` and the split-valence double-zeta basis set `6-31G`. For the remaining molecules, available data is for the former basis-set only. Moreover, for each molecule, the geometry is defined by equidistantly varying bond lengths around their central atom between :math:`[0.5 - 2.5]` Angstroms in 41 steps. In addition to these, we also include data for the optimal ground-state geometry of each molecule. 
 
 Data Features
 ~~~~~~~~~~~~~~
@@ -58,7 +58,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
         | `wire_map`                 | Wire map for the Hamiltonian                                                      |
         +----------------------------+-----------------------------------------------------------------------------------+
 
-#. **Auxillary Observables**
+#. **Auxiliary Observables**
     .. table::
         :widths: auto
 
