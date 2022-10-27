@@ -17,7 +17,7 @@ What is a Quantum Dataset?
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
-Quantum dataset is just a collection of **quantum data** obtained from various quantum systems that describes it and its evolution.
+A quantum dataset is a collection of **quantum data** obtained from various quantum systems that describes it and its evolution.
 
 Quantum Data
 ~~~~~~~~~~~~~~
