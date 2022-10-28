@@ -23,6 +23,9 @@ and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_lo
 
 As presented in the second, barren plateaus are more severe when using global
 cost functions compared to local ones. 
+A global cost function is on that requires simultaneous measurement of all
+qubits at once. In contrast, a local one is constructed from terms that only 
+act on a small subset of the qubits in the register.
 We want to explore this topic further and learn about one possible mitigation
 strategy.  
 Thinking about VQE applications, let us consider cost functions that are 
