@@ -29,11 +29,6 @@ devices. For the specific problem of computing ground-state energies,
 the paradigmatic algorithm is the `Variational Quantum Eigensolver
 (VQE) <https://en.wikipedia.org/wiki/Variational_quantum_eigensolver>`__ algorithm.
 
-.. figure:: ../demonstrations/classically_boosted_vqe/quantum_algorithms.png
-    :align: center
-    :width: 50%
-    
-    Examples of well-known quantum algorithms include variational quantum eigensolver (VQE), Grover's algorithm, Shor's algorithm and quantum phase estimation (QPE).
 
 Although VQE is intended to run on NISQ devices, it is nonetheless
 sensitive to noise. This is particularly problematic when applying VQE to complicated molecules which requires a large number of gates. 
@@ -137,7 +132,8 @@ hf = qchem.hf_state(electrons, qubits)
 # double excitations obeying the Pauli principle to the Hartree-Fock
 # state. Single and double excitation gates, denoted :math:`G^{(1)}(\Theta)` and :math:`G^{(2)}(\Theta)` respectively, are
 # conveniently implemented in PennyLane with :class:`~.pennylane.SingleExcitation`
-# and :class:`~.pennylane.DoubleExcitation` classes.
+# and :class:`~.pennylane.DoubleExcitation` classes. You can find more information
+# about how these gates work in this `video <https://youtu.be/4Xnxa6tzPeA>`__.
 #
 
 singles, doubles = qchem.excitations(electrons=electrons, orbitals=qubits)
@@ -165,8 +161,8 @@ def cost_fn(theta):
 
 
 ######################################################################
-# we then fix the classical optimization parameters ``stepsize`` and
-# ``max_iteration``
+# We then fix the classical optimization parameters ``stepsize`` and
+# ``max_iteration``:
 #
 
 stepsize = 0.4
@@ -176,7 +172,7 @@ theta = np.zeros(num_theta, requires_grad=True)
 
 
 ######################################################################
-# Finally, we run the algorithm
+# Finally, we run the algorithm.
 #
 
 for n in range(max_iterations):
