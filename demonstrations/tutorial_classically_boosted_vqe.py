@@ -33,7 +33,7 @@ the paradigmatic algorithm is the `Variational Quantum Eigensolver
     :align: center
     :width: 50%
     
-    Examples of well-known quantum algorithms including variational quantum eigensolver (VQE), Grover's algorithm, Shor's algorihtm and quantum phase estimation (QPE).
+    Examples of well-known quantum algorithms include variational quantum eigensolver (VQE), Grover's algorithm, Shor's algorithm and quantum phase estimation (QPE).
 
 Although VQE is intended to run on NISQ devices, it is nonetheless
 sensitive to noise. This is particularly problematic when applying VQE to complicated molecules which requires a large number of gates. 
@@ -49,17 +49,17 @@ of classical states, which in this context are product states that can be
 written as a single `Slater determinant  <https://en.wikipedia.org/wiki/Slater_determinant>`__
 and that already contain some information about the ground-state of the problem.
 Their structure allows for efficient classical computation of expectation values. 
-An example of such classical state would be the `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__ ,
-in which the electrons occupy the molecular orbitals with lowest energy.
+An example of such classical state would be the `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__,
+in which the electrons occupy the molecular orbitals with the lowest energy.
 
 .. figure:: ../demonstrations/classically_boosted_vqe/CB_VQE.png
     :align: center
     :width: 50%
 
 We will restrict ourselves to the :math:`H_2` molecule for
-the sake of simplicity. First, we will give a short introduction on how
+the sake of simplicity. First, we will give a short introduction to how
 to perform standard VQE for the molecule of interest. For more details,
-we recommend the tutorial :doc:`tutorial_vqe` to learn
+we recommend the tutorial ":doc:`tutorial_vqe`" to learn
 how to implement VQE for molecules step by step. Then, we will implement
 the CB-VQE algorithm for the specific case in which we rely only on one
 classical state⁠—that being the Hartree-Fock state. Finally, we will
@@ -71,8 +71,8 @@ Let’s get started!
 """
 
 ######################################################################
-# Prequisites: Standard VQE
-# -------------------------
+# Prerequisites: Standard VQE
+# ---------------------------
 #
 # If you are not already familiar with the VQE family of algorithms and
 # wish to see how one can apply it to the :math:`H_2` molecule, feel free to
@@ -80,21 +80,21 @@ Let’s get started!
 # Here, we will only briefly review the main idea behind standard VQE
 # and highlight the important concepts in connection with CB-VQE.
 #
-# Given an Hamiltonian :math:`H`, the main goal of VQE is to find the ground state energy of a system governed by the Schrödinger
+# Given a Hamiltonian :math:`H`, the main goal of VQE is to find the ground state energy of a system governed by the Schrödinger
 # equation
 #
 # .. math:: H \vert \phi \rangle = E  \vert \phi \rangle.
 #
 # This corresponds to the problem of diagonalizing the Hamiltonian and
 # finding the smallest eigenvalue. Alternatively, one can formulate the
-# problem using the `variational principle <https://en.wikipedia.org/wiki/Variational_principle>`__ , 
+# problem using the `variational principle <https://en.wikipedia.org/wiki/Variational_principle>`__,
 # in which we are interested in minimizing the energy
 #
 # .. math:: E = \langle \phi \vert H \vert \phi \rangle.
 #
 # In VQE, we prepare a statevector :math:`\vert \phi \rangle` by applying
 # the parameterized ansatz :math:`A(\Theta)`, represented by a unitary matrix,
-# to an inital state :math:`\vert 0 \rangle^{\otimes n}` where :math:`n` is the number of qubits. Then, the parameters :math:`\Theta` are
+# to an initial state :math:`\vert 0 \rangle^{\otimes n}` where :math:`n` is the number of qubits. Then, the parameters :math:`\Theta` are
 # optimized to minimize a cost function, which in this case is the energy:
 #
 # .. math::  E(\Theta) = \langle 0 \vert^{\otimes n} A(\Theta)^{\dagger} H A(\Theta) \vert 0 \rangle^{\otimes n}.
@@ -298,14 +298,14 @@ H, qubits = qchem.molecular_hamiltonian(
 # .. math:: H_{11} = \langle \phi_{HF} \vert H \vert \phi_{HF} \rangle \quad \text{and} \quad S_{11} = \langle \phi_{HF} \vert \phi_{HF} \rangle
 #
 # which is tractable using classical methods. This energy corresponds to
-# the Hatree-Fock energy due to our convenient choice of the classical
-# state. Note that the computation of the classical compononent of the
+# the Hartree-Fock energy due to our convenient choice of the classical
+# state. Note that the computation of the classical component of the
 # overlap matrix
 # :math:`S_{11} = \langle \phi_{HF} \vert \phi_{HF} \rangle = 1` is
 # trivial.
 #
 # Using PennyLane, we can access the Hartree-Fock energy by looking at the
-# fermionic Hamiltonian, which is the Hamiltonian in the basis of Slater
+# fermionic Hamiltonian, which is the Hamiltonian on the basis of Slater
 # determinants. The basis is organized in lexicographic order, meaning
 # that if we want the entry corresponding to the Hartree-Fock determinant
 # :math:`\vert 1100 \rangle`, we will have to take the entry
@@ -326,7 +326,7 @@ S11 = 1
 
 
 ######################################################################
-# Computing Quatum Quantities
+# Computing Quantum Quantities
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
@@ -366,7 +366,7 @@ S22 = 1
 # .. math:: H_{12} = \langle \phi_{HF} \vert H \vert \phi_{q} \rangle = H_{21}^{\dagger}.
 #
 # This part of the algorithm is slightly more complicated than the
-# previous steps, since we still want make use of the classical component
+# previous steps, since we still want to make use of the classical component
 # of the problem in order to minimize the number of required measurements.
 #
 # Keep in mind that most algorithms usually perform computations either on
@@ -393,7 +393,7 @@ S22 = 1
 # i.e. the basis of single Slater determinants. Note that we have to decompose the Hamiltonian
 # into a sum of unitaries. For the problem under consideration, the set of relevant computational basis states for which
 # :math:`\langle i \vert H \vert \phi_{HF}\rangle \neq 0` contains all the
-# single and double excitations (allowed by spin symmteries), namely, the states 
+# single and double excitations (allowed by spin symmetries), namely, the states
 #
 # .. math:: \vert 1100 \rangle, \vert 1001 \rangle, \vert 0110 \rangle, \vert 0011 \rangle.
 #
@@ -404,7 +404,7 @@ S22 = 1
 # above. This is done by accessing the entries by the index given by the binary
 # expression of each Slater determinant.
 #
-# The Hadamard test is required in order to compute the real part of
+# The Hadamard test is required to compute the real part of
 # :math:`\langle \phi_q \vert i \rangle`.
 #
 # To implement the Hadamard test, we need a register of :math:`n` qubits
@@ -458,7 +458,7 @@ for j, basis_state in enumerate(relevant_basis_states):
     probs = hadamard_test(Uq, Ucl)
     # The projection Re(<phi_q|i>) corresponds to 2p-1
     y = 2*probs[0]-1
-    # We retrieve the quantities <i|H|HF> from the ferimionic Hamiltonian
+    # We retrieve the quantities <i|H|HF> from the fermionic Hamiltonian
     binary_string = ''.join([str(coeff) for coeff in basis_state])
     idx = int(binary_string, 2)
     overlap_H = fermionic_Hamiltonian[idx0][idx] 
@@ -516,9 +516,9 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # reduces the number of required measurements by a factor of :math:`1000` [#Radin2021]_.
 #
 # Let's see if this is the case for the example above. 
-# Now that we know how to run standard VQE and CB-VQE algorihtms, we can re-run the code above
+# Now that we know how to run standard VQE and CB-VQE algorithms, we can re-run the code above
 # for a finite number of measurements. This is done by specifying the number of
-# shots in the definition of the devices, for example ``num_shots = 20``. By doing this, Pennylane
+# shots in the definition of the devices, for example, ``num_shots = 20``. By doing this, Pennylane
 # will output the expectation value of the energy computed from a sample of 20 measurements.
 # Then, we simply run both VQE and CB-VQE enough times to obtain statistics on the results. 
 #
@@ -527,12 +527,12 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 #     :width: 80%
 #
 # In the plot above, the dashed line corresponds to the true ground state energy of the :math:`H_2` molecule. 
-# In the x-axis we represent the number of measurements that are used to compute the expectation value of the 
+# In the x-axis we represent the number of measurements that are used to compute the expected value of the
 # Hamiltonian (`num_shots`). In the y-axis, we plot the mean value and the standard deviation of the energies 
 # obtained from a sample of 100 circuit evaluations. 
 # As expected, CB-VQE leads to a better approximation of the ground state energy - the mean energies are lower-
 # and, most importantly, to a much smaller standard deviation, improving on the results given 
-# by standard VQE by several orders of magnitude when considering a small amount of measurements. 
+# by standard VQE by several orders of magnitude when considering a small number of measurements.
 # As expected, for a large number of measurements both algorithms start to converge to similar 
 # results and the standard deviation decreases.
 #
@@ -550,7 +550,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 #
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
 # fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
-# Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
+# Such algorithms could be executed on smaller quantum computers, potentially allowing us to implement useful
 # quantum algorithms on real hardware sooner than expected.
 # 
 #
