@@ -130,11 +130,11 @@ of this tutorial.
 # from a user-given target Hamiltonian in an automated way. 
 # For those who want to check the inner workings,
 # you can find the code here (
-# :download:`../demonstrations/barren_gadgets/barren_gadgets.py` 
+# :download:`barren_gadgets.py <../demonstrations/barren_gadgets/barren_gadgets.py>` 
 # ).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
-# :download:`../demonstrations/barren_gadgets/layered_ansatz.py` 
+# :download:`layered_ansatz.py <../demonstrations/barren_gadgets/layered_ansatz.py>` 
 # ) are there to build the parapeterized quantum circuit we use in this demo.
 # The first computes the shape of the array of trainable parameters that the 
 # circuit will need. The second generates a random sequence of Pauli rotations
