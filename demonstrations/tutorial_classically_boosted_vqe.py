@@ -12,7 +12,7 @@ Classically-Boosted Variational Quantum Eigensolver
     tutorial_vqe Variational Quantum Eigensolver
 
 *Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 27 July 2022. Last updated: 27 July 2022.*
+Posted: 31 October 2022. Last updated: 31 October 2022.*
 
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
@@ -128,7 +128,7 @@ H, qubits = qchem.molecular_hamiltonian(
 # :math:`\vert \phi_{HF}\rangle=\vert 1100 \rangle`
 #
 
-hf = qml.qchem.hf_state(electrons, qubits)
+hf = qchem.hf_state(electrons, qubits)
 
 
 ######################################################################
@@ -140,7 +140,7 @@ hf = qml.qchem.hf_state(electrons, qubits)
 # and :class:`~.pennylane.DoubleExcitation` classes.
 #
 
-singles, doubles = qml.qchem.excitations(electrons=electrons, orbitals=qubits)
+singles, doubles = qchem.excitations(electrons=electrons, orbitals=qubits)
 num_theta = len(singles) + len(doubles)
 
 def circuit_VQE(theta, wires):
@@ -313,7 +313,7 @@ H, qubits = qchem.molecular_hamiltonian(
 # index :math:`i`.
 #
 
-hf_state = qml.qchem.hf_state(electrons, qubits)
+hf_state = qchem.hf_state(electrons, qubits)
 fermionic_Hamiltonian = qml.utils.sparse_hamiltonian(H).toarray()
 
 # we first convert the HF slater determinant to a string
@@ -510,38 +510,40 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 
 
 ######################################################################
+#
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
 # In fact, for very small systems it can be shown that the classically-boosted method
 # reduces the number of required measurements by a factor of :math:`1000` [#Radin2021]_.
 #
 # Let's see if this is the case for the example above. 
-# Now that we know how to run standard VQE and CB-VQE algorihtms, we can compute the energies
-# resulting from a finite number of measurements. This is done by specifying the number of
-# shots in the definition of the devices, for example ``num_shots = 100``. 
-# If we then run our code several times and compute the mean value and the 
-# standard deviation of the energies for both cases, 
-# we obtain the following results
+# Now that we know how to run standard VQE and CB-VQE algorihtms, we can re-run the code above
+# for a finite number of measurements. This is done by specifying the number of
+# shots in the definition of the devices, for example ``num_shots = 20``. By doing this, Pennylane
+# will output the expectation value of the energy computed from a sample of 20 measurements.
+# Then, we simply run both VQE and CB-VQE enough times to obtain statistics on the results. 
 #
 # .. figure:: ../demonstrations/classically_boosted_vqe/energy_deviation.png
 #     :align: center
 #     :width: 80%
 #
-#	Examples of well-known quantum algorithms including variational quantum eigensolver (VQE), Grover's algorithm, Shor's algorihtm and quantum #	phase #estimation (QPE).
-#    
+# In the plot above, the dashed line corresponds to the true ground state energy of the :math:`H_2` molecule. 
+# In the x-axis we represent the number of measurements that are used to compute the expectation value of the 
+# Hamiltonian (`num_shots`). In the y-axis, we plot the mean value and the standard deviation of the energies 
+# obtained from a sample of 100 circuit evaluations. 
+# As expected, CB-VQE leads to a better approximation of the ground state energy - the mean energies are lower-
+# and also, and most importantly, to a much smaller standard deviation, improving on the results given 
+# by standard VQE by several orders of magnitude when considering a small amount of measurements. 
+# As expected, for a large number of measurements both algorithms start to converge to similar 
+# results and the standard deviation decreases.
 #
-# In the plot, the dashed line corresponds to the true ground state energy. As expected, 
-# CB-VQE leads to a better approximation of the ground state energy and also to much smaller
-# standard deviations, improving on the results given
-# by standard VQE by several orders of magnitude when considering a finite amount of measurements. 
 #
-#
-# `Note: In order to obtain these results, we had to discard the cases in which the VQE shot noise 
+# `Note: In order to obtain these results, we had to discard the samples in which the VQE shot noise 
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
 #
 #
-#######################################################################
+######################################################################
 # Conclusion
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -553,7 +555,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
 # quantum algorithms on real hardware sooner than expected.
 # 
-# 
+#
 #######################################################################
 # References
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -561,20 +563,13 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 
 
 ######################################################################
-#
 # .. [#Radin2021]
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joana_fraxanet.txt
 #
-##############################################################################
-# .. bio:: Joana Fraxanet
-#    :photo: ../_static/avatar_joana_fraxanet.jpeg
-#
-#    Joana is a PhD student at The Institute of Photonic Sciences in Barcelona, where she studies quantum many-body systems. She is also currently working as a summer resident at Xanadu.
-#
-# .. bio:: Isidor Schoch
-#    :photo: ../_static/avatar_isidor_schoch.png
-#
-#    Isidor is a Quantum Engineering MSc student at ETH Zurich. He is passionate about exploring the connections between mathematics, physics and computer science. Besides his studies, he currently also works in the PennyLane performance team as a summer resident.
+# .. include:: ../_static/authors/isidor_schoch.txt
