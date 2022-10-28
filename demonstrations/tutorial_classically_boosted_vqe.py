@@ -505,8 +505,11 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 
 ######################################################################
 # Measurement analysis
-# -----------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
+
+
+######################################################################
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
 # In fact, for very small systems it can be shown that the classically-boosted method
@@ -524,6 +527,9 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 #     :align: center
 #     :width: 80%
 #
+#	Examples of well-known quantum algorithms including variational quantum eigensolver (VQE), Grover's algorithm, Shor's algorihtm and quantum #	phase #estimation (QPE).
+#    
+#
 # In the plot, the dashed line corresponds to the true ground state energy. As expected, 
 # CB-VQE leads to a better approximation of the ground state energy and also to much smaller
 # standard deviations, improving on the results given
@@ -534,10 +540,14 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
 #
-######################################################################
-# Conclusion
-# ----------
 #
+#######################################################################
+# Conclusion
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+######################################################################
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
 # fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
 # Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
@@ -545,14 +555,19 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # 
 # 
 #######################################################################
-# # References
-# ----------
+# References
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+######################################################################
 #
 # .. [#Radin2021]
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
-
+#
+#
 ##############################################################################
 # .. bio:: Joana Fraxanet
 #    :photo: ../_static/avatar_joana_fraxanet.jpeg
