@@ -503,13 +503,12 @@ energy_CBVQE = np.min(evals).real
 print('CB-VQE energy %.4f' %(energy_CBVQE))
 
 
+
+
 ######################################################################
 # Measurement analysis
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------
 #
-
-
-######################################################################
 #
 # CB-VQE is helpful when it comes to reducing the number of measurements
 # that are required to reach a given precision in the ground state energy.
@@ -532,7 +531,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # Hamiltonian (`num_shots`). In the y-axis, we plot the mean value and the standard deviation of the energies 
 # obtained from a sample of 100 circuit evaluations. 
 # As expected, CB-VQE leads to a better approximation of the ground state energy - the mean energies are lower-
-# and also, and most importantly, to a much smaller standard deviation, improving on the results given 
+# and, most importantly, to a much smaller standard deviation, improving on the results given 
 # by standard VQE by several orders of magnitude when considering a small amount of measurements. 
 # As expected, for a large number of measurements both algorithms start to converge to similar 
 # results and the standard deviation decreases.
@@ -543,26 +542,24 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # variances in the CB-VQE estimation of the energy.`
 #
 #
+
+
 ######################################################################
-# Conclusion
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Conclusions
+# -----------------------
 #
-
-
-######################################################################
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
 # fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
 # Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
 # quantum algorithms on real hardware sooner than expected.
 # 
 #
-#######################################################################
-# References
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
 
 
 ######################################################################
+# References
+# -----------------------
+#
 # .. [#Radin2021]
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
