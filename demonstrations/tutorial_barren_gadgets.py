@@ -352,9 +352,11 @@ plt.show()
 # simulations of quantum systems, adding linearly many auxiliary qubits
 # quickly becomes a lot.
 # For those interested in the theory behind it or more formal statements of 
-# "how close" the results using the gadget are from the targeted ones, check out
-# the original paper [#cichy2022]_ .
-# There you will also find a more general recipe to design other gadget 
+# "how close" the results using the gadget are from the targeted ones, 
+# check out the original paper [#cichy2022]_ .
+# There you will also find further discussions on the advantages and limits of
+# this proposal,  
+# as well as a more general recipe to design other gadget 
 # constructions with similar properties.  
 # Also, the complete repository with explanations on how to reproduce the 
 # figures can be found from the paper
